@@ -2,88 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4C24721E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD1B4721F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 08:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbhLMHr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 02:47:26 -0500
-Received: from verein.lst.de ([213.95.11.211]:46472 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230053AbhLMHr0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 02:47:26 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 1D9C468AA6; Mon, 13 Dec 2021 08:47:22 +0100 (CET)
-Date:   Mon, 13 Dec 2021 08:47:21 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Christoph Lameter <cl@gentwo.org>
-Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
-        robin.murphy@arm.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, vbabka@suse.cz, m.szyprowski@samsung.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org
-Subject: Re: [PATCH RESEND v2 0/5] Avoid requesting page from DMA zone when
- no managed pages
-Message-ID: <20211213074721.GB20758@lst.de>
-References: <20211207030750.30824-1-bhe@redhat.com> <alpine.DEB.2.22.394.2112070859420.201880@gentwo.de>
+        id S232629AbhLMHuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 02:50:14 -0500
+Received: from out162-62-57-252.mail.qq.com ([162.62.57.252]:58891 "EHLO
+        out162-62-57-252.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231407AbhLMHuL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 02:50:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1639381808;
+        bh=+9zpwVH7/8zpy6rB3XifZdvk+wYtdwLHCiHdBMgpeBk=;
+        h=From:To:Cc:Subject:Date;
+        b=GPSvgffKi+y6N4UbbQOSYSO7pQ+sPLa5+c+EMxjeWEObXPNl2ck+ZHjB+MHBG2GEX
+         gQwYt3GbwzDDYxJpGrWnSsrMfKzzK+E55FpyH/2yfGO9zC6/rHBrKEeFHoQx3fymZ9
+         96H7LealnwJXj27PY80Q+e3v0qAiiRXc++C6kcHw=
+Received: from localhost.localdomain ([43.227.136.188])
+        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
+        id C382A62D; Mon, 13 Dec 2021 15:48:56 +0800
+X-QQ-mid: xmsmtpt1639381736tg4k1nbca
+Message-ID: <tencent_07FF16C8253370EE140700057438B052FD06@qq.com>
+X-QQ-XMAILINFO: M3vv73qU6a4um1Sg2+RZMQQDAHB9eIxlliAtOeUzIymUvINy+AUk7+XKJ9qT/G
+         xxdwtlWgjQva0FOABEi4WzwmXq+1ig+cXlc2EwSKwcd7x0dNocuk8ouiBIsj7sJ3bHG8bgFQMfhf
+         C1Wz9yN0n1ky2dDMXVBsD/TgKNoCd89T5L9QqawknU41PJIMFEm8CkHHlIR2J6b1c/5BkHqE/8VH
+         bGtvuq12CGF97sHkxY16jAs1WO9f3FJ054b2HPCH2VEqJe4xAM9KMMQ09oxyXj2NRQnOZMSK+38Q
+         lyBhdSa+dIAKRx3hRQE4Fg7jC1g8c9KyG+4lhsabjRsXuAgmBsb0cbomxSICMEV5BaWSUY3eMraT
+         mVs1D7cuFvwQcfCkRW4vFSk9Tm4SF4CMkH8AvR3DEWw3PVwfJ3pNeY+W4Q73s4D8VfLDBwbdGrkx
+         sv/648Ps2CQfp0NCy+RJMY8rqu+hc0yCBAmriihX8k9edW0tkjplphxZtjQLsvJvRG2qZ/LR54RQ
+         ZQzQ7lkpVUCxkQeTlkvKL4P9PTjJ4/4fy+fxT7xPCktSiPsPZCI/m4ol/FiuOU1El8Q/LQaee0z5
+         qtwf6jmOoCasb9ZoU0NvtC39NPxJ89r1d4lYbhRRwPQOdHw6UdEVRsbn4csmEA5SqSnkBKX5xp8H
+         sQakiWCDQgM9xPS+lpZ4JTqBGlJUoTzJMR8QkUSxrndWUccAyHv9iUSGBydkcbDfY/kKajm1/o/k
+         OnPh+pNPHrSuKgjQjSzHjmFHdrR1u8G5o9acvyykxe7tnEZeq0phAc9c0kWjk6eOxBI8wMtT73Tr
+         nYAi9Y2IXxPant+saD28CnvbAAakOR8nDdi+H1tmRXYMwtf2Xs/HTFszqGc45tR+eVq4QzpTHH0s
+         oVhQrOjKZ2vjs1zhFlVwg=
+From:   Xiaoke Wang <xkernel.wang@foxmail.com>
+To:     crope@iki.fi, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] media: usb: dvb-usb-v2: check the return value of kstrdup()
+Date:   Mon, 13 Dec 2021 15:48:33 +0800
+X-OQ-MSGID: <20211213074833.4286-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2112070859420.201880@gentwo.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 09:05:26AM +0100, Christoph Lameter wrote:
-> On Tue, 7 Dec 2021, Baoquan He wrote:
-> 
-> > into ZONE_DMA32 by default. The zone DMA covering low 16M is used to
-> > take care of antique ISA devices. In fact, on 64bit system, it rarely
-> > need ZONE_DMA (which is low 16M) to support almost extinct ISA devices.
-> > However, some components treat DMA as a generic concept, e.g
-> > kmalloc-dma, slab allocator initializes it for later any DMA related
-> > buffer allocation, but not limited to ISA DMA.
-> 
-> The idea of the slab allocator DMA support is to have memory available
-> for devices that can only support a limited range of physical addresses.
-> These are only to be enabled for platforms that have such requirements.
-> 
-> The slab allocators guarantee that all kmalloc allocations are DMA able
-> indepent of specifying ZONE_DMA/ZONE_DMA32
+Note: Compare with the last email, this one is using my full name.
+kstrdup() returns NULL if some internal memory errors happen, it is
+better to check the return value of it. Since the return type of
+dvb_usbv2_disconnect() is void, so only raise the error info.
 
-Yes.  And we never supported slab for ZONE_DMA32 and should work on
-getting rid of it for ZONE_DMA as well.  The only thing that guarantees
-device addressability is the DMA API.  The DMA API needs ZONE_DMA/DMA32
-to back its page allocations, but supporting this in slab is a bad idea
-only explained by historic reasons from before when we had a DMA API.
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/media/usb/dvb-usb-v2/dvb_usb_core.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-> > On arm64, even though both CONFIG_ZONE_DMA and CONFIG_ZONE_DMA32
-> > are enabled, it makes ZONE_DMA covers the low 4G area, and ZONE_DMA32
-> > empty. Unless on specific platforms (e.g. 30-bit on Raspberry Pi 4),
-> > then zone DMA covers the 1st 1G area, zone DMA32 covers the rest of
-> > the 32-bit addressable memory.
-> 
-> ZONE_NORMAL should cover all memory. ARM does not need ZONE_DMA32.
-
-arm32 not, arm64 does.  And the Pi 4 is an arm64 device.
-
-> > I am wondering if we can also change the size of DMA and DMA32 ZONE as
-> > dynamically adjusted, just as arm64 is doing? On x86_64, we can make
-> > zone DMA covers the 32-bit addressable memory, and empty zone DMA32 by
-> > default. Once ISA_DMA_API is enabled, we go back to make zone DMA covers
-> > low 16M area, zone DMA32 covers the rest of 32-bit addressable memory.
-> > (I am not familiar with ISA_DMA_API, will it require 24-bit addressable
-> > memory when enabled?)
-> 
-> The size of ZONE_DMA is traditionally depending on the platform. On some
-> it is 16MB, on some 1G and on some 4GB. ZONE32 is always 4GB and should
-> only be used if ZONE_DMA has already been used.
-
-ZONE32 should be (and generally is) used whenever there is zone covering
-the 32-bit CPU physical address limit.
-
-> 
-> ZONE_DMA is dynamic in the sense of being different on different
-> platforms.
-
-Agreed.
+diff --git a/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c b/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
+index f1c79f3..a43a310 100644
+--- a/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
++++ b/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
+@@ -1009,6 +1009,9 @@ void dvb_usbv2_disconnect(struct usb_interface *intf)
+ 	const char *devname = kstrdup(dev_name(&d->udev->dev), GFP_KERNEL);
+ 	const char *drvname = d->name;
+ 
++	if (!devname)
++		dev_err(&d->udev->dev, "%s: kstrdup() failed\n", KBUILD_MODNAME);
++
+ 	dev_dbg(&d->udev->dev, "%s: bInterfaceNumber=%d\n", __func__,
+ 			intf->cur_altsetting->desc.bInterfaceNumber);
+ 
+@@ -1023,9 +1026,14 @@ void dvb_usbv2_disconnect(struct usb_interface *intf)
+ 	kfree(d->priv);
+ 	kfree(d);
+ 
+-	pr_info("%s: '%s:%s' successfully deinitialized and disconnected\n",
+-		KBUILD_MODNAME, drvname, devname);
+-	kfree(devname);
++	if (devname) {
++		pr_info("%s: '%s:%s' successfully deinitialized and disconnected\n",
++			KBUILD_MODNAME, drvname, devname);
++		kfree(devname);
++	} else {
++		pr_info("%s: '%s:UNKNOWN' successfully deinitialized and disconnected\n",
++			KBUILD_MODNAME, drvname);
++	}
+ }
+ EXPORT_SYMBOL(dvb_usbv2_disconnect);
+ 
+-- 

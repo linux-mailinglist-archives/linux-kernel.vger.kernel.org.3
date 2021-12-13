@@ -2,337 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3AC472685
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC35472608
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238607AbhLMJxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:53:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237090AbhLMJrz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:47:55 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FB9C08E6DF;
-        Mon, 13 Dec 2021 01:43:16 -0800 (PST)
-Date:   Mon, 13 Dec 2021 09:43:12 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639388593;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=svqrTD6VHoZJGnE0m0eOVSgUOVPAq5hRF1icC3qt9zI=;
-        b=o3cV5E9VRMdMiykjf8WhQKAsI8cXpm+izneDUma8cT8g2FSPHqLlRkFPGtofoBC+cmGXl+
-        rdqNIpLPkh58LtSCkBC4GdBRfcjSqTtSkbMmxDx1SVKEolRmRsPj+hrfK9t+DL6OGgKt6s
-        VO46srkHFAT1m4Rz3zz6ez4tsbfe8f3HqzbDXd2QOg82Wp4AjymF/kbH/BOVZIC0UgBKrz
-        J1La37DTL+bj9hANbCjd1LKK3O/0/GjfSf6stfR4boeG8622aY37VDQl2imAIdGGS3Zwbb
-        qeIuXftkvP469iZPv9jdgnr+z0n5p6Fnw6BQYk2z0HhID8g3icV2vpa/lWNyvQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639388593;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=svqrTD6VHoZJGnE0m0eOVSgUOVPAq5hRF1icC3qt9zI=;
-        b=vgsYnllc3QLgQ3kZ4JMCAKhMs2FyrRyrWX/0oYpL1vN0g0GUZDVxXQBdulLlXp0+a6fl+K
-        Mq7BymV46zXmfSDQ==
-From:   "tip-bot2 for Dietmar Eggemann" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Replace CFS internal cpu_util() with
- cpu_util_cfs()
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211118164240.623551-1-dietmar.eggemann@arm.com>
-References: <20211118164240.623551-1-dietmar.eggemann@arm.com>
+        id S235764AbhLMJst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:48:49 -0500
+Received: from mail-eopbgr1300112.outbound.protection.outlook.com ([40.107.130.112]:14432
+        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235161AbhLMJoY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 04:44:24 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OpMVt4upiNcA3WsJ4E0MjIPMCd83kwJPVvw30yeZ5xN5Nyfqoje3x69FZ8E2gNDlLMaeGqexDxoUeFah3ESHwDusQtK6T6JtBmPWC8u2THavNRsOTWNKIgwOKeeVzQGj71MQ25xIAwK2Ms3cX/1o5kQNJIPLizYMWg3Q+1piRi2sKpia4YfaB6RxareHiAsh3HDoGHHI3O/BdVZq5bHDHyz7XsmotKk4Jf2T9/pcGkAqHYxmHWTPN0D/dNselsCCuskfZuTDqBUedY2HTCfoCm32VYFCd7BWitildus3iJotst/dyDdYJl1I72Snf7Wa4OW66RTzufMJvziJ4C4w+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AhJrxzhf3syilMnfEqZH2jkxXJ1IpvnOgHUVEDnRurU=;
+ b=WBwJOf3Me+SzKstnBHBvYwlusbw6IwO9xb0sNYKcfj4vH8O16fT9Tc4cKBnQEHWnCifu6B+lx0gnpMe/zXOp5bLXvEo9ewrsuPpemVR7Df/hIR78I5E1LIfnQL3JkSgNLB+O522uUvEceo7pZ73BzCkiOd4IBHtto21IJIuIpaHJLnYsyLedXlAXKFhxLdXK9AlHOAiUCHPvt0IG7oly9gxUvVYcoVlW+iy4/QAA9IX3HCUTrGXnCtxXU1HBbmroziK7no8JF8inLp3WPktxkuKtb2bSRkLMLtNk9fngiRR+ZrV5e+SfXJtND3aQqgmf0LbEoqHDairAwXWJIgBAIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AhJrxzhf3syilMnfEqZH2jkxXJ1IpvnOgHUVEDnRurU=;
+ b=VX5/ZXXQ8HEDN+kORYRYKmlhrJEn7uHhqSIPywLrtEe6FKIMJCE8DE684dFm5jqdA10Gkk7uv0j2JAr5Et5G4lFuIrSudv+yNljpcuivv0TLQu9WKQcNW1T1P6HG+RX3yzGfIW1E9kcNxQXR1PWhI+vfpsARTeWWwsLX6ef0OrA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
+ by SL2PR06MB3050.apcprd06.prod.outlook.com (2603:1096:100:39::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
+ 2021 09:43:42 +0000
+Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::a0cf:a0e2:ee48:a396]) by SL2PR06MB3082.apcprd06.prod.outlook.com
+ ([fe80::a0cf:a0e2:ee48:a396%4]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
+ 09:43:42 +0000
+From:   Qing Wang <wangqing@vivo.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Wang Qing <wangqing@vivo.com>
+Subject: [PATCH] bus: arm-cci: add missing of_node_put before break
+Date:   Mon, 13 Dec 2021 01:43:29 -0800
+Message-Id: <1639388609-63796-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR01CA0070.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::34) To SL2PR06MB3082.apcprd06.prod.outlook.com
+ (2603:1096:100:37::17)
 MIME-Version: 1.0
-Message-ID: <163938859236.23020.740890235122745442.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4b732578-be4a-4e2d-f003-08d9be1d0c7e
+X-MS-TrafficTypeDiagnostic: SL2PR06MB3050:EE_
+X-Microsoft-Antispam-PRVS: <SL2PR06MB30500C162AB537C2A3AD9101BD749@SL2PR06MB3050.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:935;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8scA9ZC/Uglv0JAVaCPOM8Uly7Gthn0zxR3uOH3uKN1bGskDp8bV+QIKsG4Nw0Zj0Hpw4WpVIiu3Cs9W1mqs1E2WhQ374pXPJl2XAlme/GP2DMdXG7MXtrRG+CFVnsTbYhqbxzsuOZaF98bNeNyk7GD2eWC9vG/K4/wbS+IaOvtElGoGdZeT5oqQJRBq3UO/03G3dfB9xFlUtdO/sVD52FAaTV2jOgCUUng9HatWL1OxKYu9AugIQSdbAVbJgLU4sv3mwsBOWNkMFsaxtsRWxRZW+6sZisiZp7/xfpKsYXC6ZcRpBxiWeaumLRU5BpvF0E9I+zV2RPebloQgGx/WBtoVmSIlTmbnnI8RRqVyn8xExZmuT9Ulxs+SosLqtPaILkUF2mQexxrt4+EtSVxurbSfwRWMwFSKKBUoJ4xehmd/VjsdNitEgZv4jaAp5lg0TfVXcsHjODk/Fo+52EX10ywOQHsPiUA65t40OQHGEMGM+CYszufhc0PCFQNbhH/AH+KFmXmFA2xWJgg6eYS31x+88UoQkGXGo7Wqf452M0yrI4PkIIOU7ehHWlduAkZN+DeiT0p6Kf7y79mcgon0cX4RIkDEpZUVkW0tRLMyg0pUsT25VJfaxDid/6qVA8xO3swaVTrlYE28N8N9c0KOX2SzH8mLQBVJDzex6l4r7mT6KRn2GVxpyRryt7k4u7XFMBLpbXlD24rxnz0Zz0RLsA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(83380400001)(52116002)(6506007)(2906002)(316002)(508600001)(26005)(186003)(66946007)(36756003)(107886003)(66476007)(2616005)(66556008)(6916009)(8936002)(6512007)(8676002)(4326008)(5660300002)(6486002)(38100700002)(4744005)(38350700002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Gr3KAF8SldQ2gHVFFVPxZtsshnIyk6xtrg3m8YN0W/eRrvgummntMfh5Cwch?=
+ =?us-ascii?Q?0LyCZziXN4epHxMekvGM2I/UM/Jwhvx1T8azetulOFfo5q/fchOXPgO9ugWo?=
+ =?us-ascii?Q?nuDSWzZqCmxrDfx1leOiVNp6nH3FpjJDSs6Ttn2C/qwjKaCDplXIWF1uG+Wo?=
+ =?us-ascii?Q?xPyJdjcxx52+a2QKWU3Y0wEDV7bm4FNdRjPOUTmoSQ0k/X6VIxFzOuoKGPfq?=
+ =?us-ascii?Q?Husojhe2vJ2Qu96Pkix4AqX2z8ltYV2bewRgElA7PtqjtI2hzN959QpxU4F+?=
+ =?us-ascii?Q?wVN2bFh39GAZ0i50X60N0lYnIPwB1SrkLw+e+5KF8+Qg8agtHQuctQB9FW/a?=
+ =?us-ascii?Q?YlLLhIV8I2cFirmVeVTUTrgfsEHg4RJ0y2lsDGIdZUXHsjHcaUy7uSQzap7n?=
+ =?us-ascii?Q?pUYa0tl0bozZWAYl1HnyogxKAaPKOlfKYrDGKvNiWuBg7LPNRVjMv48oay+s?=
+ =?us-ascii?Q?t7YYn6oZCn+k0Uj+ngbV7aoo1F1VZ05yJrfyKObffjrJag1iE8JYL/m0bA2L?=
+ =?us-ascii?Q?O0lUBiGNj97zsgP7AeUp8n8iU7q/AS28n8NVMVITq4fGti4tr0ktCoJuq8f3?=
+ =?us-ascii?Q?fkZjkeoBYBV7h1EuqUPiHDYO/q73b0aExY9w0bc65e1QLovdKDH+8nJNH4L9?=
+ =?us-ascii?Q?WDurk15iKiFyEwaPCBetZe9AQxZSZBsgfpZIPF21vnMJJeVFB9EJNBLUzVzh?=
+ =?us-ascii?Q?VBSC1aYL1SDtnz9A8LTVe43nRyUPrCqShobcX0uP6QJ8O1dDzE6+uCt2tnCH?=
+ =?us-ascii?Q?sZ5f2ljFW9wAXR97qsy9rd+qYHpK5KUFNaOGHWulu/623aL6ceo80AmHejtR?=
+ =?us-ascii?Q?31nkOf83SrUkLDWZ52GndQ9IqLTrfHXO2DMIV0PhNZdG9Zeft/aIfefEh6rE?=
+ =?us-ascii?Q?HRwWe8q9JCM4hrjIBuo7fySAP5SzYO4OaeEW/S2Jou6d/0RzUn0b7n0gKW5L?=
+ =?us-ascii?Q?olujipowGEwDEbnaoa8b7s0UuvW9Yisam3pgO+jDur978DdfICuwD5zadQ4a?=
+ =?us-ascii?Q?s35wvEPREKc9gEFa+rsMJnTpdmlIcfxY+4mAj9IPJ1sIRkR6Kk0DZZgn1T6d?=
+ =?us-ascii?Q?pFONGNkgX3GIioMh2QK/FDquQbuZ3xxRCLbukQx/KiY1G8iNwYBRQMlCgoVg?=
+ =?us-ascii?Q?yGw3TvBBE3ykbUUwM1ZNTykGxRO5klzei4GWfUfeL+559NJ/aydz9B2B1ukN?=
+ =?us-ascii?Q?GnwRQAoHWckAtpc5rh+m6MzEpiec+jPPWNw9Wu7svWhw3dm2BTtPE00GFMHj?=
+ =?us-ascii?Q?mJKEaB4XqnRpHR+MgMmK4+zQSWd8p/ZZaCBRdEFEk/O0ykEf52CN77R4iZJq?=
+ =?us-ascii?Q?4KqA5PPbX25ywn2/RA4M217h0LBIfmJXyoP8Kc2rDv22sU5C0Rxgy2DqvD4a?=
+ =?us-ascii?Q?EKmUM28nbQaR8e114TLEU5qZibVa6W9qKxZlSAsVThvlFKjITMqSaVz+C8wj?=
+ =?us-ascii?Q?lEA8K/HdbVEY9OFgt38+mVOpRhm+Mu76kUMysJEpln8jfUMRdderxP7w8KQC?=
+ =?us-ascii?Q?W/r/7y5DHsWhxIme0p0kFwV+Ndofe1xHlk4y4rVENHysaJ6G5ZxKS4a1lR/3?=
+ =?us-ascii?Q?XjSOlukqyWVMYpCz2t+yBlNdlLeaUNcwNbOfinI1oFHec77yzLAMJfBah6Qo?=
+ =?us-ascii?Q?DMTV9QAOBpIZdwe8PQpkm0E=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b732578-be4a-4e2d-f003-08d9be1d0c7e
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 09:43:42.4319
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cGC5hX1gRwj/l+9ankIMfKcrd8xtAc5SJ9nAU4oYMfheN4A12HwR+9WR7bq0KtktS/O/MQXL4nveSGp1NT5Yew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR06MB3050
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+From: Wang Qing <wangqing@vivo.com>
 
-Commit-ID:     82762d2af31a60081162890983a83499c9c7dd74
-Gitweb:        https://git.kernel.org/tip/82762d2af31a60081162890983a83499c9c7dd74
-Author:        Dietmar Eggemann <dietmar.eggemann@arm.com>
-AuthorDate:    Thu, 18 Nov 2021 17:42:40 +01:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 11 Dec 2021 09:10:00 +01:00
+Fix following coccicheck warning:
+WARNING: Function "for_each_available_child_of_node" 
+should have of_node_put() before return.
 
-sched/fair: Replace CFS internal cpu_util() with cpu_util_cfs()
+Early exits from for_each_available_child_of_node should decrement the
+node reference counter.
 
-cpu_util_cfs() was created by commit d4edd662ac16 ("sched/cpufreq: Use
-the DEADLINE utilization signal") to enable the access to CPU
-utilization from the Schedutil CPUfreq governor.
-
-Commit a07630b8b2c1 ("sched/cpufreq/schedutil: Use util_est for OPP
-selection") added util_est support later.
-
-The only thing cpu_util() is doing on top of what cpu_util_cfs() already
-does is to clamp the return value to the [0..capacity_orig] capacity
-range of the CPU. Integrating this into cpu_util_cfs() is not harming
-the existing users (Schedutil and CPUfreq cooling (latter via
-sched_cpu_util() wrapper)).
-
-For straightforwardness, prefer to keep using `int cpu` as the function
-parameter over using `struct rq *rq` which might avoid some calls to
-cpu_rq(cpu) -> per_cpu(runqueues, cpu) -> RELOC_HIDE().
-Update cfs_util()'s documentation and reuse it for cpu_util_cfs().
-Remove cpu_util().
-
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20211118164240.623551-1-dietmar.eggemann@arm.com
+Signed-off-by: Wang Qing <wangqing@vivo.com>
 ---
- kernel/sched/core.c              |  2 +-
- kernel/sched/cpufreq_schedutil.c |  2 +-
- kernel/sched/fair.c              | 71 +++----------------------------
- kernel/sched/sched.h             | 44 +++++++++++++++++--
- 4 files changed, 50 insertions(+), 69 deletions(-)
+ drivers/bus/arm-cci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index beaa8be..fe53e51 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -7166,7 +7166,7 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+diff --git a/drivers/bus/arm-cci.c b/drivers/bus/arm-cci.c
+index b8184a903..1f84a55
+--- a/drivers/bus/arm-cci.c
++++ b/drivers/bus/arm-cci.c
+@@ -461,8 +461,10 @@ static int cci_probe_ports(struct device_node *np)
  
- unsigned long sched_cpu_util(int cpu, unsigned long max)
- {
--	return effective_cpu_util(cpu, cpu_util_cfs(cpu_rq(cpu)), max,
-+	return effective_cpu_util(cpu, cpu_util_cfs(cpu), max,
- 				  ENERGY_UTIL, NULL);
- }
- #endif /* CONFIG_SMP */
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index e7af188..2677888 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -168,7 +168,7 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
+ 		i = nb_ace + nb_ace_lite;
  
- 	sg_cpu->max = max;
- 	sg_cpu->bw_dl = cpu_bw_dl(rq);
--	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(rq), max,
-+	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu), max,
- 					  FREQUENCY_UTIL, NULL);
- }
- 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index ac5e554..095b0aa 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1502,7 +1502,6 @@ struct task_numa_env {
- 
- static unsigned long cpu_load(struct rq *rq);
- static unsigned long cpu_runnable(struct rq *rq);
--static unsigned long cpu_util(int cpu);
- static inline long adjust_numa_imbalance(int imbalance,
- 					int dst_running, int dst_weight);
- 
-@@ -1569,7 +1568,7 @@ static void update_numa_stats(struct task_numa_env *env,
- 
- 		ns->load += cpu_load(rq);
- 		ns->runnable += cpu_runnable(rq);
--		ns->util += cpu_util(cpu);
-+		ns->util += cpu_util_cfs(cpu);
- 		ns->nr_running += rq->cfs.h_nr_running;
- 		ns->compute_capacity += capacity_of(cpu);
- 
-@@ -3240,7 +3239,7 @@ static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)
- 		 * As is, the util number is not freq-invariant (we'd have to
- 		 * implement arch_scale_freq_capacity() for that).
- 		 *
--		 * See cpu_util().
-+		 * See cpu_util_cfs().
- 		 */
- 		cpufreq_update_util(rq, flags);
- 	}
-@@ -5510,11 +5509,9 @@ static inline void hrtick_update(struct rq *rq)
- #endif
- 
- #ifdef CONFIG_SMP
--static inline unsigned long cpu_util(int cpu);
--
- static inline bool cpu_overutilized(int cpu)
- {
--	return !fits_capacity(cpu_util(cpu), capacity_of(cpu));
-+	return !fits_capacity(cpu_util_cfs(cpu), capacity_of(cpu));
- }
- 
- static inline void update_overutilized_status(struct rq *rq)
-@@ -6459,58 +6456,6 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	return target;
- }
- 
--/**
-- * cpu_util - Estimates the amount of capacity of a CPU used by CFS tasks.
-- * @cpu: the CPU to get the utilization of
-- *
-- * The unit of the return value must be the one of capacity so we can compare
-- * the utilization with the capacity of the CPU that is available for CFS task
-- * (ie cpu_capacity).
-- *
-- * cfs_rq.avg.util_avg is the sum of running time of runnable tasks plus the
-- * recent utilization of currently non-runnable tasks on a CPU. It represents
-- * the amount of utilization of a CPU in the range [0..capacity_orig] where
-- * capacity_orig is the cpu_capacity available at the highest frequency
-- * (arch_scale_freq_capacity()).
-- * The utilization of a CPU converges towards a sum equal to or less than the
-- * current capacity (capacity_curr <= capacity_orig) of the CPU because it is
-- * the running time on this CPU scaled by capacity_curr.
-- *
-- * The estimated utilization of a CPU is defined to be the maximum between its
-- * cfs_rq.avg.util_avg and the sum of the estimated utilization of the tasks
-- * currently RUNNABLE on that CPU.
-- * This allows to properly represent the expected utilization of a CPU which
-- * has just got a big task running since a long sleep period. At the same time
-- * however it preserves the benefits of the "blocked utilization" in
-- * describing the potential for other tasks waking up on the same CPU.
-- *
-- * Nevertheless, cfs_rq.avg.util_avg can be higher than capacity_curr or even
-- * higher than capacity_orig because of unfortunate rounding in
-- * cfs.avg.util_avg or just after migrating tasks and new task wakeups until
-- * the average stabilizes with the new running time. We need to check that the
-- * utilization stays within the range of [0..capacity_orig] and cap it if
-- * necessary. Without utilization capping, a group could be seen as overloaded
-- * (CPU0 utilization at 121% + CPU1 utilization at 80%) whereas CPU1 has 20% of
-- * available capacity. We allow utilization to overshoot capacity_curr (but not
-- * capacity_orig) as it useful for predicting the capacity required after task
-- * migrations (scheduler-driven DVFS).
-- *
-- * Return: the (estimated) utilization for the specified CPU
-- */
--static inline unsigned long cpu_util(int cpu)
--{
--	struct cfs_rq *cfs_rq;
--	unsigned int util;
--
--	cfs_rq = &cpu_rq(cpu)->cfs;
--	util = READ_ONCE(cfs_rq->avg.util_avg);
--
--	if (sched_feat(UTIL_EST))
--		util = max(util, READ_ONCE(cfs_rq->avg.util_est.enqueued));
--
--	return min_t(unsigned long, util, capacity_orig_of(cpu));
--}
--
- /*
-  * cpu_util_without: compute cpu utilization without any contributions from *p
-  * @cpu: the CPU which utilization is requested
-@@ -6531,7 +6476,7 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
- 
- 	/* Task has no contribution or is new */
- 	if (cpu != task_cpu(p) || !READ_ONCE(p->se.avg.last_update_time))
--		return cpu_util(cpu);
-+		return cpu_util_cfs(cpu);
- 
- 	cfs_rq = &cpu_rq(cpu)->cfs;
- 	util = READ_ONCE(cfs_rq->avg.util_avg);
-@@ -6595,7 +6540,7 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
- 	/*
- 	 * Utilization (estimated) can exceed the CPU capacity, thus let's
- 	 * clamp to the maximum CPU capacity to ensure consistency with
--	 * the cpu_util call.
-+	 * cpu_util.
- 	 */
- 	return min_t(unsigned long, util, capacity_orig_of(cpu));
- }
-@@ -6627,7 +6572,7 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
- 		 * During wake-up, the task isn't enqueued yet and doesn't
- 		 * appear in the cfs_rq->avg.util_est.enqueued of any rq,
- 		 * so just add it (if needed) to "simulate" what will be
--		 * cpu_util() after the task has been enqueued.
-+		 * cpu_util after the task has been enqueued.
- 		 */
- 		if (dst_cpu == cpu)
- 			util_est += _task_util_est(p);
-@@ -8689,7 +8634,7 @@ static inline void update_sg_lb_stats(struct lb_env *env,
- 		struct rq *rq = cpu_rq(i);
- 
- 		sgs->group_load += cpu_load(rq);
--		sgs->group_util += cpu_util(i);
-+		sgs->group_util += cpu_util_cfs(i);
- 		sgs->group_runnable += cpu_runnable(rq);
- 		sgs->sum_h_nr_running += rq->cfs.h_nr_running;
- 
-@@ -9707,7 +9652,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+-		if (i >= nb_cci_ports)
++		if (i >= nb_cci_ports) {
++			of_node_put(cp);
  			break;
++		}
  
- 		case migrate_util:
--			util = cpu_util(cpu_of(rq));
-+			util = cpu_util_cfs(i);
- 
- 			/*
- 			 * Don't try to pull utilization from a CPU with one
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index eb97115..de53be9 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2966,16 +2966,52 @@ static inline unsigned long cpu_util_dl(struct rq *rq)
- 	return READ_ONCE(rq->avg_dl.util_avg);
- }
- 
--static inline unsigned long cpu_util_cfs(struct rq *rq)
-+/**
-+ * cpu_util_cfs() - Estimates the amount of CPU capacity used by CFS tasks.
-+ * @cpu: the CPU to get the utilization for.
-+ *
-+ * The unit of the return value must be the same as the one of CPU capacity
-+ * so that CPU utilization can be compared with CPU capacity.
-+ *
-+ * CPU utilization is the sum of running time of runnable tasks plus the
-+ * recent utilization of currently non-runnable tasks on that CPU.
-+ * It represents the amount of CPU capacity currently used by CFS tasks in
-+ * the range [0..max CPU capacity] with max CPU capacity being the CPU
-+ * capacity at f_max.
-+ *
-+ * The estimated CPU utilization is defined as the maximum between CPU
-+ * utilization and sum of the estimated utilization of the currently
-+ * runnable tasks on that CPU. It preserves a utilization "snapshot" of
-+ * previously-executed tasks, which helps better deduce how busy a CPU will
-+ * be when a long-sleeping task wakes up. The contribution to CPU utilization
-+ * of such a task would be significantly decayed at this point of time.
-+ *
-+ * CPU utilization can be higher than the current CPU capacity
-+ * (f_curr/f_max * max CPU capacity) or even the max CPU capacity because
-+ * of rounding errors as well as task migrations or wakeups of new tasks.
-+ * CPU utilization has to be capped to fit into the [0..max CPU capacity]
-+ * range. Otherwise a group of CPUs (CPU0 util = 121% + CPU1 util = 80%)
-+ * could be seen as over-utilized even though CPU1 has 20% of spare CPU
-+ * capacity. CPU utilization is allowed to overshoot current CPU capacity
-+ * though since this is useful for predicting the CPU capacity required
-+ * after task migrations (scheduler-driven DVFS).
-+ *
-+ * Return: (Estimated) utilization for the specified CPU.
-+ */
-+static inline unsigned long cpu_util_cfs(int cpu)
- {
--	unsigned long util = READ_ONCE(rq->cfs.avg.util_avg);
-+	struct cfs_rq *cfs_rq;
-+	unsigned long util;
-+
-+	cfs_rq = &cpu_rq(cpu)->cfs;
-+	util = READ_ONCE(cfs_rq->avg.util_avg);
- 
- 	if (sched_feat(UTIL_EST)) {
- 		util = max_t(unsigned long, util,
--			     READ_ONCE(rq->cfs.avg.util_est.enqueued));
-+			     READ_ONCE(cfs_rq->avg.util_est.enqueued));
- 	}
- 
--	return util;
-+	return min(util, capacity_orig_of(cpu));
- }
- 
- static inline unsigned long cpu_util_rt(struct rq *rq)
+ 		if (of_property_read_string(cp, "interface-type",
+ 					&match_str)) {
+-- 
+2.7.4
+

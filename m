@@ -2,147 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7814729D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5E24727EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237692AbhLMKZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:25:37 -0500
-Received: from mail-eopbgr1300109.outbound.protection.outlook.com ([40.107.130.109]:9906
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236748AbhLMJr3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:47:29 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eMtxs+4i6FsvaMXD4QvGkIRk5z7L3Z5v7ETXerBa86HLqvVRzmLsXjLdcxkufjE/RQGBYx1yb208XJMYkLO1kbC/Gks9l8f/18DXnUd9AGG6py04/4RXr4aBhd3F2DK00CNexV9isHAHPm6YufEqMk14nXByIbnwjdtV6GVlIKpuNllL6z0erIg2iefjYv7EBWcQnIX3vFocbrEZnMqJUeYRVe8flO0DxoF/uxHq2PJ4QPpv73ZUAgjWo0t/u9Vb31ROf9Y20nwLGZ7+yz8Bw86tV6F5flRVj9yP9HV0BhnRKAiM+jLq/Ei2aKFaJSQ+Tb8Z8Ayv0dc0UgHBiV2xQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wdBQMSDMDyKQT07xS0aRoF30kNJqZrN9OhCx4/3qop4=;
- b=Ay1hfFgoMvB6fubb+0hvYRsmCTJk9EuB22fwgzvleHCbqbg4jpwUBom8OBSx9ghT7lLzmSkbAu5no8DBTuUDg7/nf003LVPJRikKZDGhVw4WugA7xFuZfo8QYL2Gy29UtyJI/i1yBULw17+28vRegNIeSX36hJrvSKRR4wKF1QAD0q898Q2zIc5Aj34CWyLJRRcTeV6B+fMvQygaCExkiVSe3g4rr+6J8Atm7Sahv85LmnIsW5pPdeUNlQ/fhs9ssdIaPFnWTWYrAoXT9NyXqdqTtla26k4YO+IHz0E3k/AN8g1XgVu8FC67wbELiIXIFHyaROEf6HwFWhOmBghEUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wdBQMSDMDyKQT07xS0aRoF30kNJqZrN9OhCx4/3qop4=;
- b=WeyWMYGjN3TWj2ZWkYY9hXC5PMisPX9p4RACRT2+9qY/ZVruB+IvsuLxNz5R5xEwO9tNsKTw2uyx+9thecsC9J3+pr0Me6yLiPaw32xUA0xEObWvCxiTKe0yFzK/cIitNviBiXJLpXeaDrm/02An5l150tWGdNQe+2Zd/J46+Vg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by SL2PR06MB3050.apcprd06.prod.outlook.com (2603:1096:100:39::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Mon, 13 Dec
- 2021 09:46:18 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::a0cf:a0e2:ee48:a396]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::a0cf:a0e2:ee48:a396%4]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
- 09:46:18 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] soc: dove: add missing of_node_put before break
-Date:   Mon, 13 Dec 2021 01:46:09 -0800
-Message-Id: <1639388769-64240-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0156.apcprd02.prod.outlook.com
- (2603:1096:201:1f::16) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+        id S237402AbhLMKGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240292AbhLMKBA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 05:01:00 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AF5C09B133
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 01:49:09 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id i8-20020a7bc948000000b0030db7b70b6bso13593927wml.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 01:49:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mcSDirnuruPYtCN32bQ78CUK9bGGfX21Psk5mubRymc=;
+        b=rx86q3KyeOaDPbmRyuxzvLBUSlHYCv4JC/1G0pwjzcdS1VIR3XaYXGb5cFsnaZK2ZX
+         V7+w9fU2jsxuiU79JaVhajtALFAB/FyHQKiogR2VH+nlh9VzJI8jua/mcgGx2TmFL4i8
+         mPLsdrQVtk0HaW45aCnIzH8X2N9RHvTcBMDINJJENW+Z6YCsfZiTjH3OPjaFCkRrryTc
+         LcA+rCiUYLBZYbE7KqXnx7rQTdDyllJLKIymh0EUSBLHGPoDH5NCpNPuf1hbwceKDydx
+         4opHq2T1wUhJY7PPo3wROeBOC0TZZDKeCb3GnZ+nzc+hcChIfTzw88EVO1zcXB18j77c
+         yGpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mcSDirnuruPYtCN32bQ78CUK9bGGfX21Psk5mubRymc=;
+        b=Y61GM8wqPeDw4fJ0ex0Ezc8rHNrXIipsSOxe/ZF1oy+csWHPPBSFSV/lrG0aD1xICo
+         8hSo/cjI5IylmxaFvKlCkM9/axG5RUj7PQ9HpAewZ8vMlU9g5sB2NWfiSYd6BQAla61h
+         wdpWLsxZsahnn3f7W6AdzyxoLUkuRtv13H85XeFyj4MiRdLGq7by0M2RN0IM2oHHEK5d
+         JEQSCVCIldCviC+Djw6x6v3+c+6eLOiEOe3CAkbuaeQBu4UCdN3DhejVMeADg9tzDVNh
+         CdnfybTsg2jh4RpwopYw5UaZ7a7T3eb/uu3X+R0Liz6aOpvmV2q4t1l6Eo1HWa6EhMuH
+         UoKA==
+X-Gm-Message-State: AOAM530s1vxzJvbR+CSpmsc4VIuMXgHY6Fn0UiXDnKAAKyQs3lK2bI4O
+        lt7/YaCpfjkzvwWZ4vjB87xcNS/7YG78sijr/ZYLaw==
+X-Google-Smtp-Source: ABdhPJwGPvf897zKrfEaiVQJPiIpbfihpMX+HCalDhTRUPfCDbostdOtET6QWAEYoG0Z+/501Ad5gXEmSDuLKQR2nzs=
+X-Received: by 2002:a1c:a5c3:: with SMTP id o186mr36876304wme.63.1639388947467;
+ Mon, 13 Dec 2021 01:49:07 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 68ac3152-2bfd-49a1-2e9a-08d9be1d6937
-X-MS-TrafficTypeDiagnostic: SL2PR06MB3050:EE_
-X-Microsoft-Antispam-PRVS: <SL2PR06MB30501E7C28DFA83D5076D1BFBD749@SL2PR06MB3050.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1227;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PBv7C7qX1X7AE1RjEKg7XNtPwejYF0sJvK328SJ7MBPO4rwGDJf93LHUJHM+ZrrlYwCMtKku94gftLsT74CBXe37Fknpm4sngLE4sbMF0Vuy251l/uhEuKcxnWPopjjsS1aMdHYH9yN/8DhTywC1Qz/GPMlNLeOLj8thlf8ndePb0+Ur3h7hWvyoJG/pANUFte7SfJT3NrR3RlHEq+Za8KLLmdqgRRZBJjUtoK/co2ft1Gebo5VnyGtYuMYNTWfq/QlGrgF6+QTUDrFCIhIlDDk/mA4rJ6zK9N0e4dBitTHC54NiRPg/XrfuceNyePFynmmEWXBzLdPt54CQywJrtwYVFr6cEQdW6y6TSc4MvIuJg5K6HBCIcwNVIb8mOuqrHGyUmFPN3k/O3LEmbzEBQNsd8zUQrZyjBKZ9zjKP0+JswOe1ovNdeSQi53uZWXy1gWDQnP9LBlwQFZsjghqRrhw7r08xkhheAg2GTqS84Q3hXUfV/wZXbGvKu87q7G3aopkv5jbhoRcCPayrT92dKoulkLnmegyFmeeswDFx8sAT3ybXSttZBSkLFVK9j9RK77Yed/WP1a+RztGZiOoY6yXsDy4VvKw+qROlTmNSG6UnJQ2HD94sdG7q6AGDOrl9Ff6f5+FPXI5RlkdJ9cn93PEIgpl99sqXY9018fALwyLRlyMLK2muJugwzlLdBxyOl7gSDQAwd9cryUbD7U45tQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(83380400001)(52116002)(6506007)(110136005)(2906002)(316002)(508600001)(26005)(186003)(66946007)(36756003)(107886003)(66476007)(2616005)(66556008)(8936002)(6512007)(8676002)(4326008)(5660300002)(6486002)(38100700002)(4744005)(38350700002)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GB7RPRO/vxOO7LQ8vEQyBbJ1a/1DjPYMmr3CIRKtZP2Ly2fNKpXCXg3PtFP1?=
- =?us-ascii?Q?4iVjJWNlf+Ktf8hqN0vdUtJK/c5lvDuwOBa0+eipnG1GhusEBNhEiS2pK0++?=
- =?us-ascii?Q?iQETeyU1sXH0EOobm0v2fzZvRs85fpiaRCPMYiJ6N3KvnUBKcCWyjuXgQkxK?=
- =?us-ascii?Q?7VtOqta8qyBJHbUssiCaX14WeViE1DoBeshGMYzZ7Z2a9zencHj5HwwL6L8O?=
- =?us-ascii?Q?QK+QHKFpMOUmC6ezhKxRLDqtquPbF4QuuVw0XOFdB4NhGdWB+CDjd+WyROEZ?=
- =?us-ascii?Q?Il4Oinh/H16V5LNhNswqbmq9Rk0uFOLev7rbPoZXHyVwhlPKAlLIo59Oj8xU?=
- =?us-ascii?Q?R5Fyyyjl13fOWpdCdeuygx2A3xhz1wCmUAMroBJtpV03AXpOq5BPJuANhJ/y?=
- =?us-ascii?Q?UPXJfmxpH5KEYvtBtFlP/y3I+g0boumVOz23XMkZSexOhHRRqNs6sShjdz4k?=
- =?us-ascii?Q?Zc7SOjDvwcmScIhf23JeiePT0EwJXK/A+FlQUfJkRpTEZ31SG5jJuuo6oNod?=
- =?us-ascii?Q?bCznEcY9KWftBmtfUh3LgDXnHpuRmnQ0aUfX8i2Fh7g53EbwG0ipq149B29B?=
- =?us-ascii?Q?ekQwl/VzB+niafGLyxfgSCbku41dSak2t0SqP67mMlV0izzVGx6gp9oRyy2+?=
- =?us-ascii?Q?qF3BMFbxcyZl8E1mje9YPDevHDZI9JvTFcaAyKcYQwlmRqTFhfL+bVsJ6XXd?=
- =?us-ascii?Q?3TlyEB7obHRCZf8EBg+pNYosDmMB0kTlEyeTE5pcVH2kPTAVZul8cJefuw1a?=
- =?us-ascii?Q?QHjNr0qIjloyBmtZzXGvwEg0vHCE2U+IKuM4Diy9Gf4HIKSgBEsuZzRx64Ly?=
- =?us-ascii?Q?HrZp1Ax+tzToSgtEfC1vMVbFwdYAgGqYvr2ByjO05ZmVwi1iFCGI8UMZt8Ol?=
- =?us-ascii?Q?0VrJVuhcvw2czFhJPzoxOMM2qpYF8kZDsRAH2rDva1TpdjfeykRRDAy96X33?=
- =?us-ascii?Q?svqYLTN5KR0Ut/SCsqzQtDaUSb6GYONAv8wufX8bMVXLieWDi/Ol44eNIZ4Z?=
- =?us-ascii?Q?+glhv9TZZcHsb3SUZSLb5gUOcscaH83EzX/TGq/d5Iw10CKTdxgQT+lviP07?=
- =?us-ascii?Q?6bXI6FajaHblb432YV5WbEcZMQe8jNFgn54jES+o8Pzbu8lpa6J71tMRM0m/?=
- =?us-ascii?Q?HigbUDtil+PkOEKmN8quUDKegGY1g9KbLe64uGF/wroAQVxjLRc9jbXjSy1e?=
- =?us-ascii?Q?2JOUINobO3F/162uHSBBNa5T3K87j0Os/A5QA6+EdQ0WVej37Jde1R47iPvA?=
- =?us-ascii?Q?XF39MkKxlUwg8CYUjh1Ky2Xntvgf/L0jkyNcMhbLjoON2SHeiOZBe8VCuIXc?=
- =?us-ascii?Q?dbJaHlZMTrCjejdyy7XdvqxvAKD8mWBrO8+F5NjUnL7DNmL38LGD+oekSpWK?=
- =?us-ascii?Q?5p+7g/8fPJl3SYzRJBMyZ36MCiexB2pqCVYFJAkhN5VoWFfemqVRrfNXdHgI?=
- =?us-ascii?Q?qVD6SAyadt+aiNIcsTraqmDoTo1NxhoWb3g+d88TIrfnm0vTQ7u79gZ9Kffi?=
- =?us-ascii?Q?/wMDEvzyEgBdkMAxwMv+MhUGSfWZiMF8Watxrfxzl+tl005mE1DmaUb6pOvs?=
- =?us-ascii?Q?jZUMW164yET3fZRPupMVA6O8hK+H1JTsNSbpL2QYleTXm2OaK9MiqJoO+tLa?=
- =?us-ascii?Q?Ufc0eAS3qAdtgtxU4kIVCCA=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68ac3152-2bfd-49a1-2e9a-08d9be1d6937
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 09:46:17.9848
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SwLlrWTUHo2PWjbPDxWdrZu1DSkRyAGULX00azae0sqQhRFRY9JAHDXH2TXmvgtN9kQSXeFuniqA4PLgFoiNmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR06MB3050
+References: <20211208160907.749482-1-james.clark@arm.com> <20211208160907.749482-2-james.clark@arm.com>
+ <b52ef2f3-9e30-59a6-2aea-e46c93915868@arm.com> <b61ef2e3-e573-4867-af5d-fd5fabece4b1@arm.com>
+ <20211210172220.GA1238770@p14s>
+In-Reply-To: <20211210172220.GA1238770@p14s>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Mon, 13 Dec 2021 09:48:55 +0000
+Message-ID: <CAJ9a7VgBxO0-R4jX6+-Vu10DtcsOeMiq9YrPkEEFQ=6ixNXXVQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] coresight: Fail to open with return stacks if they
+ are unavailable
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     James Clark <James.Clark@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+Hi James,
 
-Fix following coccicheck warning:
-WARNING: Function "for_each_available_child_of_node" 
-should have of_node_put() before return.
+A couple of points - relating mainly to docs:
 
-Early exits from for_each_available_child_of_node should decrement the
-node reference counter.
+1. Activating branch broadcast overrides any setting of return stack.
+As a minimum there needs to be a documentation update to reflect this
+-Setting both options is not prohibited in hardware - and in the case
+where we can use branch broadcast over a range both are then relevant.
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- drivers/soc/dove/pmu.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+2. A documented note to reflect that choosing this option will result
+in a significant increase in the amount of trace generated - possible
+danger of overflows, or less actual instructions covered. In addition
+perhaps documents could reflect the intended use-case for this option,
+given the disadvantages.
 
-diff --git a/drivers/soc/dove/pmu.c b/drivers/soc/dove/pmu.c
-index ffc5311..6202dbc
---- a/drivers/soc/dove/pmu.c
-+++ b/drivers/soc/dove/pmu.c
-@@ -410,13 +410,16 @@ int __init dove_init_pmu(void)
- 		struct pmu_domain *domain;
- 
- 		domain = kzalloc(sizeof(*domain), GFP_KERNEL);
--		if (!domain)
-+		if (!domain) {
-+			of_node_put(np);
- 			break;
-+		}
- 
- 		domain->pmu = pmu;
- 		domain->base.name = kasprintf(GFP_KERNEL, "%pOFn", np);
- 		if (!domain->base.name) {
- 			kfree(domain);
-+			of_node_put(np);
- 			break;
- 		}
- 
+3. Has this been tested in a situation where it will be of use?
+Testing against static code images will show the same decoded trace
+output as not using branch broadcast. (although the packet dumps will
+show additional output)
+
+Given a primary use is for situations where code is patched or
+dynamically altered at runtime - then this can affect the full decode
+output. If the code is being patched to only alter the branch
+addresses then decode should work against static images.
+If, however, we are tracing code that adds in new branches, on top of
+NOPs for example, then the decoding against the original static image
+will be wrong, as the image will have the NOPs, rather than the branch
+instructions so the apparent location of E atoms will be in a
+different position to the actual code. Is there anything in perf that
+will ensure that the patched code is presented to the decoder?
+
+If there are potential decode issues - these too need documenting.
+
+Other than the documents and testing,  I cannot see any issues with
+this patch set in terms of setting and enabling the option.
+
+Regards
+
+Mike
+
+
+On Fri, 10 Dec 2021 at 17:22, Mathieu Poirier
+<mathieu.poirier@linaro.org> wrote:
+>
+> Hi James,
+>
+> On Thu, Dec 09, 2021 at 11:13:55AM +0000, James Clark wrote:
+> >
+> >
+> > On 09/12/2021 11:00, Suzuki K Poulose wrote:
+> > > On 08/12/2021 16:09, James Clark wrote:
+> > >> Maintain consistency with the other options by failing to open when they
+> > >> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
+> > >> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
+> > >> requested but not supported by hardware.
+> > >>
+> > >> The consequence of not doing this is that the user may not be
+> > >> aware that they are not enabling the feature as it is silently disabled.
+> > >>
+> > >> Signed-off-by: James Clark <james.clark@arm.com>
+> > >> ---
+> > >>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
+> > >>   1 file changed, 9 insertions(+), 4 deletions(-)
+> > >>
+> > >> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> > >> index d2bafb50c66a..0a9bb943a5e5 100644
+> > >> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> > >> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> > >> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
+> > >>       }
+> > >>         /* return stack - enable if selected and supported */
+> > >> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
+> > >> -        /* bit[12], Return stack enable bit */
+> > >> -        config->cfg |= BIT(12);
+> > >> -
+> > >> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
+> > >> +        if (!drvdata->retstack) {
+> > >> +            ret = -EINVAL;
+> > >> +            goto out;
+> > >> +        } else {
+> > >> +            /* bit[12], Return stack enable bit */
+> > >> +            config->cfg |= BIT(12);
+> > >> +        }
+> > >
+> > > nit: While at this, please could you change the hard coded value
+> > > to ETM4_CFG_BIT_RETSTK ?
+> > >
+> > I started changing them all because I had trouble searching for bits by name but then
+> > I thought it would snowball into a bigger change so I undid it.
+> >
+> > I think I'll just go and do it now if it's an issue here.
+>
+> I can apply this set right away and you send another patch to fix all hard coded
+> bitfields or you can send another revision with all 4 patches included in it
+> (bitfields fix plus these 3).  Just let me know what you want to do.  And next
+> time please add a cover letter.
+>
+> Thanks,
+> Mathieu
+>
+> >
+> > > Otherwise, looks good to me
+> > >
+> > > Suzuki
+
+
+
 -- 
-2.7.4
-
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

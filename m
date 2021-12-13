@@ -2,391 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9984735C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F298E4735CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 21:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242830AbhLMUV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 15:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
+        id S242835AbhLMUYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 15:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235878AbhLMUV1 (ORCPT
+        with ESMTP id S235878AbhLMUY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:21:27 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE2AC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 12:21:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 39143CE12C4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 20:21:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF694C34600;
-        Mon, 13 Dec 2021 20:21:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639426882;
-        bh=XZ6mgUW/ix6CfgZVt5/YmNjbgM5F5ZlpY2fstHAEneM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=BfYmcxJLCrFzr3c7Gn4SMrhqPnbPD7E1OtsEKhlX5RJQ6x0Xt4Ci2efdhvkKex3IZ
-         mRSvztbQqZhr8EpeXUHDWkJumm3WuJS9dDJJAvmd39UJKHro/55KYeehF78GZjNcjx
-         pDSZujEob+KiScU14a/AMlIMUJWwkaoeweiUxEH5S712/YK/7HeFNH7pR6iiL2Qhwb
-         a9BV0omW+hfd21c+1b09aYPtxjGEnr1Av4Ci+PBBiz5dS2E3YYm1hmaxA/X+TRXZ4L
-         VGGbfY9VgWB0BjgAiiBlCMKuDsAgft2cDPAWTUqbP15s+RSFEtmjiUAgpyN9e9jp0Q
-         66oceQipTXjCA==
-Message-ID: <9d2efb1b6e92b02e918294f1458f6c90cfcfc09a.camel@kernel.org>
-Subject: Re: [PATCH v4 3/4] tracing: Add helper functions to simplify
- event_command.parse() callback handling
-From:   Tom Zanussi <zanussi@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org
-Date:   Mon, 13 Dec 2021 14:21:19 -0600
-In-Reply-To: <20211213224641.565ec75ffccca6fc8783c035@kernel.org>
-References: <cover.1639170140.git.zanussi@kernel.org>
-         <4579e8fbf60ca9f471a3ff680ffc5c469be83f06.1639170140.git.zanussi@kernel.org>
-         <20211213224641.565ec75ffccca6fc8783c035@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
+        Mon, 13 Dec 2021 15:24:27 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E98C061574;
+        Mon, 13 Dec 2021 12:24:27 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id j11so15554535pgs.2;
+        Mon, 13 Dec 2021 12:24:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lMLRO/bB2xq3kiJL8NNPtAclQEmhmVhdhS5X1C2OHaw=;
+        b=qY07egjRRDwVWfuXUYFvODIfp3GHG1r7UiDxfttS1qEd3OcZR5yL6ybksufLqvFzEu
+         Pe/Yz0R820YlTWF+Q7isR+IV9pB+C5dWhgIzGArBUvDVXDoOf9uBmKzcY+vE5dY6yWZY
+         rQv890knzSA6i5EAfuI0v7sIjk7w5sXTPj2Db81kJc1Ck5dWlpIxFEIvWt25/vtV63ir
+         jBwBt6+6ZDyVCMwqsAB8+WiScvaUTtmRH3at/Y1+8EDY8B7nYPw8G8Ngq1sbjxT9m8Kl
+         LWkXejhQK8pWLMKkoCORjXscXT2w3ZRffLmhOyWOPEygUKZl1ZL41n743YUJwNfhTrQf
+         1u6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lMLRO/bB2xq3kiJL8NNPtAclQEmhmVhdhS5X1C2OHaw=;
+        b=Xa2g6Ayyvx2gP6YtUr3zAt7VFv4Pqt2j3xySG9tYdVD77Y2S34T+rXGStHNJQ7WkPr
+         bM5XoQNxF4NcurG+erbHCTyeuyuRvsMDlXiZ20sk/AHhvlW3qRfvcpMVbeO7dUbBFEcN
+         nVuCQTqS6T3KF5Rlpy/bBYqugk/M7R24CuOhKzoeA6KYJTIuXoVCOol+5cmr+Cb40eFT
+         B3LnoL9WN8jezSmdqHsOvPwTez5+kGkuxHYTpBi6lN0/5cC33h3VX+SzM9u+jIvef/V3
+         2oxUqrkI1NcdooqxwRqIjFJDf7AYxboKXRl1D9NSwhhrKeBnTLChtxLAVTlfMfVqVv3w
+         7DUg==
+X-Gm-Message-State: AOAM533UscnM+rdyJtmCjN8JaVr4bEFE//I3rUfzNT0k8DHKs/nNsbw8
+        zXVNTYlR/xnnKxRKOkuIg5vo+8mgq34=
+X-Google-Smtp-Source: ABdhPJwAFHFlUHwWQSeb1u25egrMIblb/VoVxrnpwCUxUDw0p2qM34HNiEzLqD7kaIA/WaKeW6KrEg==
+X-Received: by 2002:a63:565b:: with SMTP id g27mr609583pgm.564.1639427066712;
+        Mon, 13 Dec 2021 12:24:26 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id w20sm13919946pfu.146.2021.12.13.12.24.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 12:24:26 -0800 (PST)
+Subject: Re: [PATCH 5.4 00/88] 5.4.165-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20211213092933.250314515@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <a2e9b8ca-bbd5-4437-8fd0-1438b6262b36@gmail.com>
+Date:   Mon, 13 Dec 2021 12:24:24 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masami,
+On 12/13/21 1:29 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.165 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.165-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-On Mon, 2021-12-13 at 22:46 +0900, Masami Hiramatsu wrote:
-> Hi Tom,
-> 
-> On Fri, 10 Dec 2021 15:16:24 -0600
-> Tom Zanussi <zanussi@kernel.org> wrote:
-> 
-> > +/*
-> > + * Event trigger parsing helper functions.
-> > + *
-> > + * These functions help make it easier to write an event trigger
-> > + * parsing function i.e. the struct event_command.parse() callback
-> > + * function responsible for parsing and registering a trigger
-> > command
-> > + * written to the 'trigger' file.
-> > + *
-> > + * A trigger command (or just 'trigger' for short) takes the form:
-> > + *   [trigger] [if filter]
-> > + *
-> > + * The struct event_command.parse() callback (and other struct
-> > + * event_command functions) refer to several components of a
-> > trigger
-> > + * command.  Those same components are referenced by the event
-> > trigger
-> > + * parsing helper functions defined below.  These components are:
-> > + *
-> > + *   cmd     - the trigger command name
-> > + *   glob    - the trigger command name optionally prefaced with
-> > '!'
-> > + *   param   - text remaining after the command is stripped of cmd
-> > and ':'
-> > + *   filter  - the optional filter text following (and including)
-> > 'if'
-> > + *
-> > + * To illustrate the use of these componenents, here are some
-> > concrete
-> > + * examples. For the following triggers:
-> > + *
-> > + *   echo 'traceon:5 if pid == 0' > trigger
-> > + *     - 'traceon' is both cmd and glob
-> > + *     - '5 if pid == 0' is the param
-> > + *     - 'if pid == 0' is the filter
-> 
-> I would like to know why both 'param' and 'filter' has "if pid == 0".
-> I thought that part is (generic) filter and not a parameter.
-> 
-> If I missed any discussion on this point, sorry about that.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-No discussion about this in particular, but from Steve's review I did
-change 'param' to 'param_and_filter' in the code.  So I guess I should
-change these to strip the filter from the param when describing them,
-and then it's obvious that param_and_filter refers to the combination. 
-I'll change that in the next version.
-
-> 
-> > + *
-> > + *   echo 'enable_event:sys:event:n' > trigger
-> > + *     - 'enable_event' is both cmd and glob
-> > + *     - 'sys:event:n' is the param
-> > + *     - there is no filter
-> > + *
-> > + *   echo 'hist:keys=pid if prio > 50' > trigger
-> > + *     - 'hist' is both cmd and glob
-> > + *     - 'keys=pid if prio > 50' is the param
-> > + *     - 'if prio > 50' is the filter
-> > + *
-> > + *   echo '!enable_event:sys:event:n' > trigger
-> > + *     - 'enable_event' the cmd
-> > + *     - '!enable_event' is the glob
-> > + *     - 'sys:event:n' is the param
-> > + *     - there is no filter
-> > + *
-> > + *   echo 'traceoff' > trigger
-> > + *     - 'traceoff' is both cmd and glob
-> > + *     - there is no param
-> > + *     - there is no filter
-> > + *
-> > + * There are a few different categories of event trigger covered
-> > by
-> > + * these helpers:
-> > + *
-> > + *  - triggers that don't require a parameter e.g. traceon
-> > + *  - triggers that do require a parameter e.g. enable_event and
-> > hist
-> > + *  - triggers that though they may not require a param may
-> > support an
-> > + *    optional 'n' param (n = number of times the trigger should
-> > fire)
-> > + *    e.g.: traceon:5 or enable_event:sys:event:n
-> > + *  - triggers that do not support an 'n' param e.g. hist
-> > + *
-> > + * These functions can be used or ignored as necessary - it all
-> > + * depends on the complexity of the trigger, and the granularity
-> > of
-> > + * the functions supported reflects the fact that some
-> > implementations
-> > + * may need to customize certain aspects of their implementations
-> > and
-> > + * won't need certain functions.  For instance, the hist trigger
-> > + * implementation doesn't use event_trigger_separate_filter()
-> > because
-> > + * it has special requirements for handling the filter.
-> > + */
-> > +
-> > +/**
-> > + * event_trigger_check_remove - check whether an event trigger
-> > specifies remove
-> > + * @glob: The trigger command string, with optional remove(!)
-> > operator
-> > + *
-> > + * The event trigger callback implementations pass in 'glob' as a
-> > + * parameter.  This is the command name either with or without a
-> > + * remove(!)  operator.  This function simply parses the glob and
-> > + * determines whether the command corresponds to a trigger removal
-> > or
-> > + * a trigger addition.
-> > + *
-> > + * Return: true if this is a remove command, false otherwise
-> > + */
-> > +bool event_trigger_check_remove(const char *glob)
-> > +{
-> > +	return (glob && glob[0] == '!') ? true : false;
-> > +}
-> > +
-> > +/**
-> > + * event_trigger_empty_param - check whether the param is empty
-> > + * @param: The trigger param string
-> > + *
-> > + * The event trigger callback implementations pass in 'param' as a
-> > + * parameter.  This corresponds to the string following the
-> > command
-> > + * name minus the command name.  This function can be called by a
-> > + * callback implementation for any command that requires a param;
-> > a
-> > + * callback that doesn't require a param can ignore it.
-> > + *
-> > + * Return: true if this is an empty param, false otherwise
-> > + */
-> > +bool event_trigger_empty_param(const char *param)
-> > +{
-> > +	return !param;
-> > +}
-> > +
-> > +/**
-> > + * event_trigger_separate_filter - separate an event trigger from
-> > a filter
-> > + * @param: The param string containing trigger and possibly filter
-> > + * @trigger: outparam, will be filled with a pointer to the
-> > trigger
-> > + * @filter: outparam, will be filled with a pointer to the filter
-> > + * @param_required: Specifies whether or not the param string is
-> > required
-> > + *
-> > + * Given a param string of the form '[trigger] [if filter]', this
-> > + * function separates the filter from the trigger and returns the
-> > + * trigger in *trigger and the filter in *filter.  Either the
-> > *trigger
-> > + * or the *filter may be set to NULL by this function - if not set
-> > to
-> > + * NULL, they will contain strings corresponding to the trigger
-> > and
-> > + * filter.
-> > + *
-> > + * There are two cases that need to be handled with respect to the
-> > + * passed-in param: either the param is required, or it is not
-> > + * required.  If @param_required is set, and there's no param, it
-> > will
-> > + * return -EINVAL.  If @param_required is not set and there's a
-> > param
-> > + * that starts with a number, that corresponds to the case of a
-> > + * trigger with :n (n = number of times the trigger should fire)
-> > and
-> > + * the parsing continues normally; otherwise the function just
-> > returns
-> > + * and assumes param just contains a filter and there's nothing
-> > else
-> > + * to do.
-> > + *
-> > + * Return: 0 on success, errno otherwise
-> > + */
-> > +int event_trigger_separate_filter(char *param_and_filter, char
-> > **param,
-> > +				  char **filter, bool param_required)
-> > +{
-> > +	int ret = 0;
-> > +
-> > +	*param = *filter = NULL;
-> > +
-> > +	if (!param_and_filter) {
-> > +		if (param_required)
-> > +			ret = -EINVAL;
-> > +		goto out;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Here we check for an optional param. The only legal
-> > +	 * optional param is :n, and if that's the case, continue
-> > +	 * below. Otherwise we assume what's left is a filter and
-> > +	 * return it as the filter string for the caller to deal with.
-> > +	 */
-> > +	if (!param_required && param_and_filter &&
-> > !isdigit(param_and_filter[0])) {
-> > +		*filter = param_and_filter;
-> > +		goto out;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Separate the param from the filter (param [if filter]).
-> > +	 * Here we have either an optional :n param or a required
-> > +	 * param and an optional filter.
-> > +	 */
-> > +	*param = strsep(&param_and_filter, " \t");
-> > +	if (!*param) {
-> > +		ret = -EINVAL;
-> 
-> This seems not happen because this means "!param_and_filter" and
-> that is already checked at the entry of this function.
-
-Yes, I think you're correct.  I can just remove that check.
-
-> 
-> > +		goto out;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Here we have a filter, though it may be empty.
-> > +	 */
-> > +	if (param_and_filter) {
-> > +		*filter = skip_spaces(param_and_filter);
-> > +		if (!**filter)
-> > +			*filter = NULL;
-> > +	}
-> > +out:
-> > +	return ret;
-> > +}
-> > +
-> > +/**
-> > + * event_trigger_alloc - allocate and init event_trigger_data for
-> > a trigger
-> > + * @cmd_ops: The event_command operations for the trigger
-> > + * @cmd: The cmd string
-> > + * @param: The param string
-> > + * @private_data: User data to associate with the event trigger
-> > + *
-> > + * Allocate an event_trigger_data instance and initialize it.  The
-> > + * @cmd_ops are used along with the @cmd and @param to get the
-> > + * trigger_ops to assign to the event_trigger_data.  @private_data
-> > can
-> > + * also be passed in and associated with the event_trigger_data.
-> > + *
-> > + * Use event_trigger_free() to free an event_trigger_data object.
-> > + *
-> > + * Return: The trigger_data object success, NULL otherwise
-> > + */
-> > +struct event_trigger_data *event_trigger_alloc(struct
-> > event_command *cmd_ops,
-> > +					       char *cmd,
-> > +					       char *param,
-> > +					       void *private_data)
-> > +{
-> > +	struct event_trigger_data *trigger_data;
-> > +	struct event_trigger_ops *trigger_ops;
-> > +
-> > +	trigger_ops = cmd_ops->get_trigger_ops(cmd, param);
-> > +
-> > +	trigger_data = kzalloc(sizeof(*trigger_data), GFP_KERNEL);
-> > +	if (!trigger_data)
-> > +		return NULL;
-> > +
-> > +	trigger_data->count = -1;
-> > +	trigger_data->ops = trigger_ops;
-> > +	trigger_data->cmd_ops = cmd_ops;
-> > +	trigger_data->private_data = private_data;
-> > +
-> > +	INIT_LIST_HEAD(&trigger_data->list);
-> > +	INIT_LIST_HEAD(&trigger_data->named_list);
-> > +	RCU_INIT_POINTER(trigger_data->filter, NULL);
-> > +
-> > +	return trigger_data;
-> > +}
-> > +
-> > +/**
-> > + * event_trigger_parse_num - parse and return the number param for
-> > a trigger
-> > + * @trigger: The trigger string
-> 
-> Does this mean trigger parameter?
-
-Yes, I'll change this to 'param'.
-
-> 
-> > + * @trigger_data: The trigger_data for the trigger
-> > + *
-> > + * Parse the :n (n = number of times the trigger should fire)
-> > param
-> > + * and set the count variable in the trigger_data to the parsed
-> > count.
-> > + *
-> > + * Return: 0 on success, errno otherwise
-> > + */
-> > +int event_trigger_parse_num(char *trigger,
-> > +			    struct event_trigger_data *trigger_data)
-> > +{
-> > +	char *number;
-> > +	int ret = 0;
-> > +
-> > +	if (trigger) {
-> > +		number = strsep(&trigger, ":");
-> > +
-> > +		if (!strlen(number))
-> > +			return -EINVAL;
-> > +
-> > +		/*
-> > +		 * We use the callback data field (which is a pointer)
-> > +		 * as our counter.
-> > +		 */
-> > +		ret = kstrtoul(number, 0, &trigger_data->count);
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> 
-> Does this work with '!enable_event:sys:event:n' case?
-> (we need to find the last parameter.)
-
-Yes, because :n isn't used in that case. Since you can't have multiple
-'enable_event:sys:event:n' where sys:event are the same, whether using
-:n or not, it suffices for delete to use only sys:event and ignore :n.
-
-Thanks,
-
-Tom
-
-> 
-> Thank you,
-> 
-> 
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

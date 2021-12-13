@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 785B0473777
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BBB47377A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243584AbhLMW3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:29:31 -0500
-Received: from ale.deltatee.com ([204.191.154.188]:35772 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243417AbhLMW3a (ORCPT
+        id S241277AbhLMWbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240176AbhLMWbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:29:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=7iaOSPYC++rVBoYT3QRUQDaMarUdPJ3RFeXKP6p9rM4=; b=b3dBhIgajJAvUk635a5T6J+46S
-        lWGtZao8HbOE8FQzCpvd1HGkyAd8ZKQCD7KmVuvwCjqFnOdp1/6fBQqIqviPbBW3OAlA7rK5mYuJp
-        ISX4VUGcdu+eaAVoI4XiQfUSuYbsqkyzs9pinzLkr8frDEOIvCPGPHWNLRXiDfjEtx6iopkOFseh7
-        3nVLEpOS4Euq+Xe2yxnR8Oqycsa1pui0qvcMZaJQZ7Y60d7xioQ6c13dSL4wCD4OmLA/3MOcr2wjy
-        ErkKSypS9r+JtZqxUMXBuukP7mxIR+F+TYmxzDEHKJktVg54mBubaL0dovEnkeXllV049o5n8uat3
-        N8KqHCbA==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1mwtoY-0042Rf-6n; Mon, 13 Dec 2021 15:28:59 -0700
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-Cc:     Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>
-References: <20211117215410.3695-1-logang@deltatee.com>
- <20211117215410.3695-12-logang@deltatee.com>
- <e4fda995-6b50-0f74-0af7-4d790ab66ba9@nvidia.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <af6cda4f-9996-0aad-9278-1d41f824a070@deltatee.com>
-Date:   Mon, 13 Dec 2021 15:28:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 13 Dec 2021 17:31:49 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7475C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:31:48 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso19051729otr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:31:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7GNt3+ytkxOOCBKUiZb2RI1k+EL5kuClexcB/h1/ebo=;
+        b=HlXAnJWV0V5Zijv7Z6WiL8LWTUjhLwICYWwfF9xns9m4JefYgv3J/DyoRJBL9e+95g
+         CN6BmgcwJ0XRebobnOTYhZNjbTmYt8eYiTbBEJ6NUNwU8K+Ge2Sf6grD/7t18AoJTYL1
+         VYmsiao7NTonfa5aAlQxOX+0k+4ejwnaw/pJJ1fLIoJSPPzpDRx6mqn4IMo1owSyEaXn
+         dRRkpzOvHE9H7Ec7wLESedOsR89tRHAOrtK31YhsqEo4lNHeaf8OhcuBSzRk1qCcxkgq
+         xPligA/+9NnYnaR3N4Le3CplJHOazw4oA9UwAoXoUPz900s2UZuD8qFABwGNa0CyvyzF
+         sfRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7GNt3+ytkxOOCBKUiZb2RI1k+EL5kuClexcB/h1/ebo=;
+        b=V+UrS4iQWE8Wyz+NpilBiit8PqnF1hWyMMCaf5VO1nEJaNXV0h3yVaiucXGk+Z7Ztz
+         wjSk50MZbrRcb1G/KgGzR3LUjmznxI2TYfkdV8oHzaZ+b+XKpkUMj6FkebgfX34NQnxx
+         gtZpHA9MKTemEGEQ/WMM7Oj1lmHjdvdY/xTt3cChXu57zdJdQZS8E1VmKa+GrG66TPtB
+         81Q2GGiHtwNGIU9RFGXvYUMDyCx/lNL9jHhfME8Gh/EoaMRqj7P270kTA59daaX4bsn3
+         gJYYHmqHbdBp8lJWnI7kcH/47zK/Vso9OBTDFCsHvQ9zJfdV5TBHudS6cCoOvPHU3oPe
+         uVvg==
+X-Gm-Message-State: AOAM5312J0aluI43znAxnbgsL/c66zNXmBHQX1waM/txzluyeCq+7Vft
+        1uR42i4GH0FeyHmKipWXp6+wXg==
+X-Google-Smtp-Source: ABdhPJwuCHh8yAGFAx4GVCYKrGZNBwGBwCiHyaa8Wc1qTy6ZEj29vhik8ncIkCG7LYsTyYoqDTUBUQ==
+X-Received: by 2002:a05:6830:270c:: with SMTP id j12mr1140169otu.231.1639434708148;
+        Mon, 13 Dec 2021 14:31:48 -0800 (PST)
+Received: from [192.168.11.48] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id h14sm2462401ots.22.2021.12.13.14.31.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 14:31:47 -0800 (PST)
+Message-ID: <bf54a838-b053-8a55-92f1-91bd3199489f@kali.org>
+Date:   Mon, 13 Dec 2021 16:31:43 -0600
 MIME-Version: 1.0
-In-Reply-To: <e4fda995-6b50-0f74-0af7-4d790ab66ba9@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH] arm64: dts: qcom: sdm845: fix microphone bias properties
+ and values
+Content-Language: en-US
+To:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Caleb Connolly <caleb@connolly.tech>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211213195105.114596-1-david@ixit.cz>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <20211213195105.114596-1-david@ixit.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: mgurtovoy@nvidia.com, ckulkarnilinux@gmail.com, martin.oliveira@eideticom.com, robin.murphy@arm.com, ira.weiny@intel.com, helgaas@kernel.org, jianxin.xiong@intel.com, dave.hansen@linux.intel.com, jason@jlekstrand.net, dave.b.minturn@intel.com, andrzej.jakowski@intel.com, daniel.vetter@ffwll.ch, willy@infradead.org, ddutile@redhat.com, jhubbard@nvidia.com, christian.koenig@amd.com, jgg@ziepe.ca, dan.j.williams@intel.com, hch@lst.de, sbates@raithlin.com, iommu@lists.linux-foundation.org, linux-mm@kvack.org, linux-pci@vger.kernel.org, linux-block@vger.kernel.org, linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org, chaitanyak@nvidia.com
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v4 11/23] nvme-pci: convert to using dma_map_sgtable()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2021-12-13 3:21 p.m., Chaitanya Kulkarni wrote:
-> 
->>   static blk_status_t nvme_pci_setup_sgls(struct nvme_dev *dev,
->> -		struct request *req, struct nvme_rw_command *cmd, int entries)
->> +		struct request *req, struct nvme_rw_command *cmd)
->>   {
->>   	struct nvme_iod *iod = blk_mq_rq_to_pdu(req);
->>   	struct dma_pool *pool;
->>   	struct nvme_sgl_desc *sg_list;
->> -	struct scatterlist *sg = iod->sg;
->> +	struct scatterlist *sg = iod->sgt.sgl;
->> +	int entries = iod->sgt.nents;
-> 
-> I don't see use of newly added entries variable anywhere in
-> nvme_pci_setup_sgls(), what am I missing ?
+On 12/13/21 1:51 PM, David Heidelberg wrote:
+> replace millivolt with correct microvolt and adjust value to
+> the minimal value allowed by documentation.
+>
+> Found with `make qcom/sdm845-oneplus-fajita.dtb`.
+>
+> Fixes:
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias1-microvolt' is a required property
+>          From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias2-microvolt' is a required property
+>          From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias3-microvolt' is a required property
+>          From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias4-microvolt' is a required property
+>          From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias1-millivolt', 'qcom,micbias2-millivolt', 'qcom,micbias3-millivolt', 'qcom,micbias4-millivolt' do not match any of the regexes: '^.*@[0-9a-f]+$', 'pinctrl-[0-9]+'
+>
+> Fixes: 27ca1de07dc3 ("arm64: dts: qcom: sdm845: add slimbus nodes")
+>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>   arch/arm64/boot/dts/qcom/sdm845.dtsi | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index cfdeaa81f1bb..1bb4d98db96f 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -3613,10 +3613,10 @@ wcd9340: codec@1{
+>   					#clock-cells = <0>;
+>   					clock-frequency = <9600000>;
+>   					clock-output-names = "mclk";
+> -					qcom,micbias1-millivolt = <1800>;
+> -					qcom,micbias2-millivolt = <1800>;
+> -					qcom,micbias3-millivolt = <1800>;
+> -					qcom,micbias4-millivolt = <1800>;
+> +					qcom,micbias1-microvolt = <1800000>;
+> +					qcom,micbias2-microvolt = <1800000>;
+> +					qcom,micbias3-microvolt = <1800000>;
+> +					qcom,micbias4-microvolt = <1800000>;
+>   
+>   					#address-cells = <1>;
+>   					#size-cells = <1>;
 
-'entries' is being moved out from the argument list of
-nvme_pci_setup_sgls(), so there are already uses in the function that
-don't show in the diff.
+Tested on the Lenovo Yoga C630
 
-> Also, type of entries variable should be unsigned int to match
-> the iod->sgt.nents.
+Tested-By: Steev Klimaszewski <steev@kali.org>
 
-Sure, I will fix that in the next version.
-
-Thanks for the reviews!
-
-Logan

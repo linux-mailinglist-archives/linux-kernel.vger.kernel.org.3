@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3A6473143
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500CA473141
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240435AbhLMQIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235140AbhLMQH7 (ORCPT
+        id S240390AbhLMQHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:07:51 -0500
+Received: from imap3.hz.codethink.co.uk ([176.9.8.87]:36386 "EHLO
+        imap3.hz.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236246AbhLMQHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:07:59 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4420EC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:07:59 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id de30so14364429qkb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:07:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5VPAU6dvYOzvsB1kyIfMQv3U9XrNMQlDiY7WbCBmBes=;
-        b=aqwHs4+TE4DLSYVktWLA8eauGvZ1M5mb9cmFWB9dGS9HT8aI1sizuWcY2hhiH7yN1Z
-         XBwpxbiE3gKBaxK02sOgWhToQa1yxkGCGb/WDUCYGP+Ps0LA4n9syrEqUWRfEUJxFyIM
-         e17dClHwtHeJwNhWM6uak6lwCn+LwuB3upWF0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5VPAU6dvYOzvsB1kyIfMQv3U9XrNMQlDiY7WbCBmBes=;
-        b=fmvQ3TjG0AVJW/9vb4F07qJhxrIayi2wQ8hhFV5Grn9crojd3GqB9YgqDGkQQZz5I5
-         fOho5nofu/+iFlb/ol0G3mmS0aN4HTe48O4pexgk/4kdCIvZXxVX9DEYZYcLtAeLpl2i
-         Y4AsiiSYfPrI04i0tpHBRWsew43z5OT0D4KzCc/t5pChumevQf5uWFh/WkaWime+tH7u
-         ndwId4vQ6RxKGsOnmFnTCMEG8C5ceOxu8U48rvu9dJNlEJp2A5nva6LPsgOv23isMJjS
-         5YqbQ0kNNjTZ209EjCVqfJAiqP1GKXXOusR/OFaiGwfvNoDTfyOWTLpQWC0X7oQ/k36m
-         EzCw==
-X-Gm-Message-State: AOAM532ERHSewXTZNcd03nXTUcjPx//TF1hnqg0PuYIHPjlmD4yfbr2u
-        GjKzIsjFFA74vrL9LmDN6mmS+g==
-X-Google-Smtp-Source: ABdhPJwVk+NpCyiYqBuxb8qXr1TTL8u2eezR/uX5Vhpcpw+L1CidoZGT5Lo5wmw1ZpnAXNALFjKJ1Q==
-X-Received: by 2002:a37:a411:: with SMTP id n17mr33513759qke.722.1639411678428;
-        Mon, 13 Dec 2021 08:07:58 -0800 (PST)
-Received: from markyacoub.nyc.corp.google.com ([2620:0:1003:314:435a:1eff:4bc4:107d])
-        by smtp.gmail.com with ESMTPSA id d23sm6054390qkl.70.2021.12.13.08.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 08:07:57 -0800 (PST)
-From:   Mark Yacoub <markyacoub@chromium.org>
-To:     linux-mediatek@lists.infradead.org
-Cc:     seanpaul@chromium.org, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, matthias.bgg@gmail.com,
-        jason-jh.lin@mediatek.com, tzungbi@google.com,
-        Mark Yacoub <markyacoub@chromium.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/mediatek: Set the default value of rotation to DRM_MODE_ROTATE_0
-Date:   Mon, 13 Dec 2021 11:07:22 -0500
-Message-Id: <20211213160742.744333-1-markyacoub@chromium.org>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-In-Reply-To: <20211027162806.2014022-1-markyacoub@chromium.org>
-References: <20211027162806.2014022-1-markyacoub@chromium.org>
+        Mon, 13 Dec 2021 11:07:49 -0500
+Received: from [167.98.27.226] (helo=[10.35.4.115])
+        by imap3.hz.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
+        id 1mwnrg-0002E3-2U; Mon, 13 Dec 2021 16:07:48 +0000
+Message-ID: <7d39d3af-ced8-13cd-bfd0-3a84d96992fa@codethink.co.uk>
+Date:   Mon, 13 Dec 2021 16:07:47 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] irqdomain: check irq mapping against domain size
+Content-Language: en-GB
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+References: <20211105090601.243416-1-ben.dooks@codethink.co.uk>
+ <87y262953h.wl-maz@kernel.org>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <87y262953h.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the reset hook, call __drm_atomic_helper_plane_reset which is
-called at the initialization of the plane and sets the default value of
-rotation on all planes to DRM_MODE_ROTATE_0 which is equal to 1.
+On 05/11/2021 12:09, Marc Zyngier wrote:
+> Hi Ben,
+> 
+> On Fri, 05 Nov 2021 09:06:01 +0000,
+> Ben Dooks <ben.dooks@codethink.co.uk> wrote:
+>>
+>> The irq translate code does not check the irq number against
+>> the maximum a domain can handle. This can cause an OOPS if
+>> the firmware data has been damaged in any way. Check the intspec
+>> or fwdata against the irqdomain and return -EINVAL if over.
+>>
+>> This is the result of bug somewhere in the boot of a SiFive Unmatched
+>> board where the 5th argument of the pcie node is being damaged which
+>> causes an OOPS in the startup code.
+>>
+>> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+>> ---
+>>   kernel/irq/irqdomain.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+>> index 6284443b87ec..e61397420723 100644
+>> --- a/kernel/irq/irqdomain.c
+>> +++ b/kernel/irq/irqdomain.c
+>> @@ -906,6 +906,8 @@ int irq_domain_xlate_onecell(struct irq_domain *d, struct device_node *ctrlr,
+>>   {
+>>   	if (WARN_ON(intsize < 1))
+>>   		return -EINVAL;
+>> +	if (WARN_ON(intspec[0] > d->hwirq_max))
+>> +		return -EINVAL;
+> 
+> This doesn't seem right.
+> 
+> For a start, d->hwirq_max is 0 when the domain is backed by a radix
+> tree. Also, nothing says that what you read from the DT is something
+> that should be directly meaningful to the irqdomain. A driver could
+> well call into this and perform some extra processing on the data
+> before it lands into the irqdomain.
 
-Tested on Jacuzzi (MTK).
-Resolves IGT@kms_properties@plane-properties-{legacy,atomic}
+Thanks, didn't know that.
 
-Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
----
- drivers/gpu/drm/mediatek/mtk_drm_plane.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+would doing:
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-index e6dcb34d30522..accd26481b9fb 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-@@ -44,9 +44,10 @@ static void mtk_plane_reset(struct drm_plane *plane)
- 		state = kzalloc(sizeof(*state), GFP_KERNEL);
- 		if (!state)
- 			return;
--		plane->state = &state->base;
- 	}
- 
-+	__drm_atomic_helper_plane_reset(plane, &state->base);
-+
- 	state->base.plane = plane;
- 	state->pending.format = DRM_FORMAT_RGB565;
- }
++	if (WARN_ON(d->hwirq_max && intspec[0] > d->hwirq_max))
++		return -EINVAL;
+
+be acceptable?
+
+> In general, this looks like DT validation code, and I'm not keen on
+> that in the core code.
+
+I thought the core was probably the only place to do this, I didn't
+think the DT code would know about the hardware capabilities of the
+DT controller.
+
+It seems bad that some corrupted data can just crash the kernel in
+a non-recoverable and early way that requires some specific debug
+features like early-printk enabled. Would anyone else have a way of
+fixing this?
+
 -- 
-2.34.1.173.g76aa8bc2d0-goog
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
 
+https://www.codethink.co.uk/privacy.html

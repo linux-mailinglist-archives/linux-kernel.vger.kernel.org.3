@@ -2,102 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF470472C7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD154472C7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 13:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236932AbhLMMmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 07:42:15 -0500
-Received: from smtpcmd03117.aruba.it ([62.149.158.117]:46337 "EHLO
-        smtpcmd03117.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236878AbhLMMmK (ORCPT
+        id S236918AbhLMMmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 07:42:23 -0500
+Received: from mickerik.phytec.de ([195.145.39.210]:64516 "EHLO
+        mickerik.phytec.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236963AbhLMMmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 07:42:10 -0500
-Received: from smtpclient.apple ([146.241.138.59])
-        by Aruba Outgoing Smtp  with ESMTPA
-        id wkeYmWeD7Ni3cwkeZm3tZn; Mon, 13 Dec 2021 13:42:09 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1639399329; bh=HW8jnezXIp3XT9vHzTfAeit8KDYul5E/X+S8lIqCFzA=;
-        h=Content-Type:From:Mime-Version:Subject:Date:To;
-        b=bW3CLmmFgM9n0qt/F1+oAVzlHW1KaA7xfMT070F5NMPjdRZ5hWmmBluO4pAjko8/4
-         0uQHuJHjh2temvPV2ixXykmgaKp4IuDnV7gyp6WvpshPPBH7XffP5lgdr/CEV+xQvs
-         dGCIyTBvKycd3okFGdmY8kZuYnk2/Ar+gseo4RnbaYCFbiRd8KB/PmgD04lQXHspju
-         6cc4BH/0hG5VQM7uCpunOlqgsDdH+zcT3ImLxsVZiUY1F2J73gtL9re2/L1gnyIrSx
-         scXub6a9KanbmbW1+eyNhYCxSney0v5U9RrZp8H7htgb7Z76RSAL//kbtebRcm4oIx
-         8NJSNbOKo71qw==
-Content-Type: text/plain; charset=utf-8
+        Mon, 13 Dec 2021 07:42:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1639399339; x=1641991339;
+        h=From:Sender:Reply-To:Subject:Date:Message-Id:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=slIfKGrVuz5t76T3hpjAzPyqInZyHHf+61nyzGh7cP8=;
+        b=F3fOU5wi+B18JmfxJzvzwGYpABpNSohPNPnE4wT0s+p8aYI372oDRK4mJ1zYcUWV
+        wFoIAIEzUiHdJw8cg3KLAHU/zJj7Si0W8uXzM6hcblHUUO1Wu2e3uFWDsfsDy9gf
+        lusv75YkpX6HuhUHHBvTXjPW7kAmtBoGknEAli09SAE=;
+X-AuditID: c39127d2-4ef327000000426a-42-61b73fabbcec
+Received: from idefix.phytec.de (Unknown_Domain [172.16.0.10])
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 29.E3.17002.BAF37B16; Mon, 13 Dec 2021 13:42:19 +0100 (CET)
+Received: from augenblix2.phytec.de ([172.16.0.56])
+          by idefix.phytec.de (IBM Domino Release 9.0.1FP7)
+          with ESMTP id 2021121313421947-2360042 ;
+          Mon, 13 Dec 2021 13:42:19 +0100 
+From:   Yunus Bas <y.bas@phytec.de>
+To:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org
+Cc:     festevam@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] ARM: dts: imx6dl: Add a label to cpu1 node
+Date:   Mon, 13 Dec 2021 13:42:18 +0100
+Message-Id: <20211213124219.3065974-1-y.bas@phytec.de>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+X-MIMETrack: Itemize by SMTP Server on Idefix/Phytec(Release 9.0.1FP7|August  17, 2016) at
+ 13.12.2021 13:42:19,
+        Serialize by Router on Idefix/Phytec(Release 9.0.1FP7|August  17, 2016) at
+ 13.12.2021 13:42:19
+X-TNEFEvaluated: 1
 Content-Transfer-Encoding: quoted-printable
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v4 07/13] clk: imx: Add initial support for i.MXRT clock driver
-Date:   Mon, 13 Dec 2021 13:42:02 +0100
-Message-Id: <3109BC68-D1F8-4972-9480-F26606085ECD@benettiengineering.com>
-References: <CAOMZO5D9ytHBACojwk3mtaypdc4s5gWT7ctJQiUzmmP15hzGww@mail.gmail.com>
-Cc:     Abel Vesa <abel.vesa@nxp.com>,
-        Jesse Taube <mr.bossman075@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-serial@vger.kernel.org
-In-Reply-To: <CAOMZO5D9ytHBACojwk3mtaypdc4s5gWT7ctJQiUzmmP15hzGww@mail.gmail.com>
-To:     Fabio Estevam <festevam@gmail.com>
-X-Mailer: iPhone Mail (19B74)
-X-CMAE-Envelope: MS4wfPDFt+eQTTflaIECVpAthF57sEYmn4Q2RvQhp7B+4VH2gu3iPMFODYUJjPPdHcfy0G6Olr6hvCyb7WbX68JVtMjscZHWb2lZHmJjosX1cRt7ibrFNqkx
- yF4kBPlqZgYTMtUOcVITfQfiy8VN4ivJgsklw/wIfMFkAaz5W4l+GIk5DlnbnTKasmv8O1VOWWFvDB9xXJ9rs7cKmMBXSZqagQ+7bcGB8eJmRs8pt4c7BBP5
- h8jwR/Xvwg/l0J0Sse6morf+GOhc4gtceJsUYyxByex/TN6/8sg6ndnpGsvIEwngpHu1kbO9dxv3CTGNYWHPufEbxudq34t0e/h5yHqf75HBf0cl3fDNjUzP
- vuCw1NQxNTL070XUcwWKHJHv25LhfHdbqbmWgDNh3rfg/WioktumTv17QRmidJM4cwyZ7xIrFda/3mLcYoHtjzLPui8KhJZAUrohDju+malebuF6Yx409YuS
- tf6InUpQg6WS07uIRu96HGDbpY80pOmkk/+4oBPuvHe1dQNJLwWO/M2kIZ06Jl6zLXSqIL+CjCBmdGdeaW/YNcS/ZF8MpU1FPi0ZEVvUS+BFeNscbVqVoP/T
- oI9igbJe+gzbmG9oSUOng9LZVe8tJ9+3ra1S3HioTmsF9xV+4E/qsDucSg+2JmXFMcaQLDpEliHoyJOwPpWSegkMpVumYTXcZQTkKcuShJa41AwKinGtORjc
- yz7Yo8ByOADmKT6C7zPiigPbKclb3VoEQvHo1VC0/R/kdeLtmyevT9v7KqrwQUZXLRfp7sInHHi0TE4gGKHaRX0tL7/Y5fwvADXrWe4SnpkUwLXvbmh6WUXC
- mmxOm9wVGMQsQ8J/AOE5zHu/xaGBMIkAHKCkBDIiTVCTuycnJsl8msxybTbFdnD3dO0iaN+cCDqv2kukEKc4WzBSYx22mUvptrinTtEtI5m8v3F2vwRF2E0i
- nA5lw7ar99z1ELSnw4lOzhVik6K9W/PWVQ+MRGCUUd3kXFXbQoJDMzwYr1tRlAe3o21zoA/IoQhOOU4BgfW7ogB28mKV0UFdD1PUjL2EWoz6qvkyGUfGTqGq
- DVRGthEjuA7rVNjOX+LkyY7aA3c0b0kBU1nrOoeXdDbzQT4QPcUxc+tTsiOGtwuhenm9GhKHEOoig7xzgy3CHtnrjIqH+w+S3hE=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrILMWRmVeSWpSXmKPExsWyRoCBS3e1/fZEgzW3DSzmHznHavHwqr/F
+        psfXWC0u75rDZtG69wi7xd/tm1gsXmwRd2D32DnrLrvHplWdbB6bl9R79P818Pi8SS6ANYrL
+        JiU1J7MstUjfLoEr49+VvawFH1grPtzvYGpgvMfSxcjJISFgIrH90EWmLkYuDiGBrYwSvx9O
+        ZgNJCAlcYJRYeN0AxGYTUJQ4f/staxcjB4eIQLzEizfuIGFmgSiJD79WsYGEhQXsJSY0a4GE
+        WQRUJd7Mns8KYvMKmEn86J3DDrFKXmLmpe/sEHFBiZMzn7CArJUQuMIocWDia2aIIiGJ04vP
+        MkPM15ZYtvA18wRGvllIemYhSS1gZFrFKJSbmZydWpSZrVeQUVmSmqyXkrqJERiMhyeqX9rB
+        2DfH4xAjEwfjIUYJDmYlEd6X1lsThXhTEiurUovy44tKc1KLDzFKc7AoifPe72FKFBJITyxJ
+        zU5NLUgtgskycXBKNTAWfrnJJbN/bq+WbdfWFzkMm/1ZljjfPjvpdsCCfS8ar/028Etf3fbh
+        4GfRvX8da3gXnVdaeyNPafu+HQHeuaH3MpdrW3IwiOn8mmZ/Uc3lf03u29caW/TKXp14tEDM
+        hOvrzZcuBcosmzm03qW9/vL5EKOsTIitelCCNXO6Gs/0IN/bc/Xie6qUWIozEg21mIuKEwHR
+        UMN7NAIAAA==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabio,
+The cpu1 is missing a label for further reference. Since cpu0 has
+already a label, add also one for cpu1 node, so it can be referenced to
+add or modify cpu specific properties the same way as cpu0.
 
-> Il giorno 13 dic 2021, alle ore 13:15, Fabio Estevam <festevam@gmail.com> h=
-a scritto:
->=20
-> =EF=BB=BFHi Giulio,
->=20
-> On Mon, Dec 13, 2021 at 9:06 AM Giulio Benetti
-> <giulio.benetti@benettiengineering.com> wrote:
->=20
->>> I would suggest module platform driver instead.
->>=20
->> Can you please point us an example?
->=20
-> Here is an example of a commit that converts the imx8mm clk driver to
-> platform driver:
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=
-=3Dv5.15.7&id=3Daf7e7ee0e4280c29c41b6ec64b892bb53987a997
+Signed-off-by: Yunus Bas <y.bas@phytec.de>
+---
+ arch/arm/boot/dts/imx6dl.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks a lot, this ease us
-
-Best regards
-Giulio=
+diff --git a/arch/arm/boot/dts/imx6dl.dtsi b/arch/arm/boot/dts/imx6dl.dtsi
+index fdd81fdc3f35..d49a9b99f33f 100644
+--- a/arch/arm/boot/dts/imx6dl.dtsi
++++ b/arch/arm/boot/dts/imx6dl.dtsi
+@@ -48,7 +48,7 @@ cpu0: cpu@0 {
+ 			nvmem-cell-names =3D "speed=5Fgrade";
+ 		};
+=20
+-		cpu@1 {
++		cpu1: cpu@1 {
+ 			compatible =3D "arm,cortex-a9";
+ 			device=5Ftype =3D "cpu";
+ 			reg =3D <1>;
+--=20
+2.25.1
 

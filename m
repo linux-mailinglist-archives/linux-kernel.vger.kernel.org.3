@@ -2,89 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7944733B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8E44733B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 19:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241300AbhLMSLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 13:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S241779AbhLMSMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 13:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241724AbhLMSLn (ORCPT
+        with ESMTP id S241489AbhLMSMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 13:11:43 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD8CC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:11:43 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so12151118wmc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 10:11:43 -0800 (PST)
+        Mon, 13 Dec 2021 13:12:44 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77B5C061574;
+        Mon, 13 Dec 2021 10:12:43 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id u17so11734174plg.9;
+        Mon, 13 Dec 2021 10:12:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=anky/pj7/rcmax3ozqQQ2mqz0Ex4H2mV+LKwnahctPA=;
-        b=C6Ksw4ZmqTccE99SjXGbEk3og3sAvMwKdQENu5l4qeq7vt6NrZtM6kQqobQj3FClPk
-         eqg8aPYhegvZ2AsO/kk9ZcV21cX4u4pXU3Os7anXkoFvbMpLzkcIiM15QX6ynmQxs+mX
-         vNHTXSgz2G7rNm2L/tnwB9qI4k7MPYLHBG7J+ay5J6+i7LuXAV1T/Z6pkbHYdW8xQace
-         +kX1SxObYd1bmM7Oo1ikya0GqneMIquWMPoVvDCC6NnMZwfaIAfHVg37jwrJC+GfED89
-         PXQKql2/LqJs2Sp/kGnZq3aY8MVyCLPRM7H/AtEjAHtSZlYay/EgwpY2umLjCSpuXRcz
-         uHVA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=u0ZO5JNvqSiBr1Gz4xtJA4SS1i/fXSTFkbeq5Cx27ng=;
+        b=Gt0GqgJY2L29P7aI/85Q+Ze3nCh9Wex/Sk+1PpD07cGxKQWV/jXdliEWfftL5WMNBn
+         vWqC2xhhTLM861YeNbvtUYOBKwFM6qtcja9lpVvu33wpfQwrP2SKPPqgiBpRTCgf0rBF
+         kELoiDBW/A0w6vxkiG++zPLLBu3sSMEqGUV/W88C6yrcLVbxIgQ515r2eWm7wcV0k7iW
+         j9pognslXsdQMSHgGUtxnz5fmdaSORW4QajwoYfyJcmHjuP8E41znbj92qPfKlkCWl7d
+         L5RBdJkaWa5RdmPw3CpOOVhfExg2Sn8UeOsuLsyhX2/EjE6Eg1XeZydTQDaWYerPuqND
+         OA7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=anky/pj7/rcmax3ozqQQ2mqz0Ex4H2mV+LKwnahctPA=;
-        b=bBp6HuD8Yq/vo7+gt+e8WQbYRDt6BzQt/K4vPnoFSizRTKhERV24T1ERdVr/4wOpFX
-         +hMJC4cANCbKi3uADQ+t8r09HXPjiGyfHp1CQCHx4C5Irx3/kXej4qbW6sMi6eLYGk74
-         kBtBy3jpmaBOFxZDBKN0cBGO8/tSM4zYypOoLq1jkH58++4JOzueeMABITElwmP+DzGy
-         jf6PYSvr9/vLiqcec/r1bQjEHU71YSmmyjvgYh950Y/4CGQDbarGdwqG5nFkMYOP+/9Q
-         CzXR5UdbFr8k+iGcEcApOzZFUfDHoGF/LS5DtCnNLjVHSlIoST/11NXvubHlN9KXcE0w
-         K9qg==
-X-Gm-Message-State: AOAM531+/i32/oplLn2/bsozsnNgmrkWtNmd/tkmUCpYwTNY03BXCwMB
-        Weples2rImXUqRjG6JM6WNw=
-X-Google-Smtp-Source: ABdhPJyoyFlW4lEPr6DsCtti6saUfqve3Q+d0k+LKKOlrYyVg9C0Nr+BYqJy0BUwrdTzoJLvxrMYxA==
-X-Received: by 2002:a1c:7907:: with SMTP id l7mr321247wme.72.1639419101745;
-        Mon, 13 Dec 2021 10:11:41 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id t127sm8750956wma.9.2021.12.13.10.11.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 10:11:41 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     rodrigosiqueiramelo@gmail.com
-Cc:     melissa.srw@gmail.com, hamohammed.sa@gmail.com, daniel@ffwll.ch,
-        airlied@linux.ie, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH 3/3] drm/vkms: drop "Multiple overlay planes" TODO
-Date:   Mon, 13 Dec 2021 19:11:31 +0100
-Message-Id: <20211213181131.17223-4-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211213181131.17223-1-jose.exposito89@gmail.com>
-References: <20211213181131.17223-1-jose.exposito89@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=u0ZO5JNvqSiBr1Gz4xtJA4SS1i/fXSTFkbeq5Cx27ng=;
+        b=Xgee228QAl8nMkbXJbR7Gzt82jopCvLr1AOBC8QZciTwYLtFJJJz2DhUJMTmDgOQco
+         wEMswPPlVU5ZPMuF+PISD37q24oexUnS4WitQUscW9luoWY8E9LM6EY/4RPjgQyPRx60
+         PXBjZXseVhGXER9lXJlYp3FlLBc6HW/lKrjY+T3Liw3Y6nF9WmoYeImIn/BiV1RDx507
+         YARqxqeyfmRs7PRTwnTDY2E+hqlyI5F1jd6vIUA1AkaRJk2s+t+m7y+XNubyprs8GeCh
+         kbbXA4YdAnrkDIsJ3+csxehThMTdjXldkUoNMMlE+D3PgEbhUGnvkJlNOdTeG/GArTYu
+         DihQ==
+X-Gm-Message-State: AOAM530pWbNMjqTM/d3y2hxKfhRHFcP7jigCUGhrUrqk+Iosv5b12Sjv
+        NdTrIALKtu6kwNp7fO1lkqaPyYcTEhc=
+X-Google-Smtp-Source: ABdhPJxgQPoTrHihd4oCjP/iXlWAJIQKycxrzp0sBWaGpDPvPv+Cj2TaTgRm7aP291CZRzVz/pPR7g==
+X-Received: by 2002:a17:903:2344:b0:142:25b4:76c1 with SMTP id c4-20020a170903234400b0014225b476c1mr98519066plh.43.1639419163018;
+        Mon, 13 Dec 2021 10:12:43 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y11sm12697567pfg.204.2021.12.13.10.12.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 10:12:42 -0800 (PST)
+Subject: Re: [PATCH v2 1/1] of: unittest: fix warning on PowerPC frame size
+ warning
+To:     Jim Quinlan <jim2101024@gmail.com>, Christoph Hellwig <hch@lst.de>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211210184636.7273-1-jim2101024@gmail.com>
+ <20211210184636.7273-2-jim2101024@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <3322403d-78e8-6d83-d466-f48bd723cbf4@gmail.com>
+Date:   Mon, 13 Dec 2021 10:12:40 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211210184636.7273-2-jim2101024@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- Documentation/gpu/vkms.rst | 2 --
- 1 file changed, 2 deletions(-)
+On 12/10/21 10:46 AM, Jim Quinlan wrote:
+> The struct device variable "dev_bogus" was triggering this warning
+> on a PowerPC build:
+> 
+>     drivers/of/unittest.c: In function 'of_unittest_dma_ranges_one.constprop':
+>     [...] >> The frame size of 1424 bytes is larger than 1024 bytes
+>              [-Wframe-larger-than=]
+> 
+> This variable is now dynamically allocated.
+> 
+> Fixes: e0d072782c734 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
 
-diff --git a/Documentation/gpu/vkms.rst b/Documentation/gpu/vkms.rst
-index 941f0e7e5eef..9c873c3912cc 100644
---- a/Documentation/gpu/vkms.rst
-+++ b/Documentation/gpu/vkms.rst
-@@ -124,8 +124,6 @@ Add Plane Features
- 
- There's lots of plane features we could add support for:
- 
--- Multiple overlay planes. [Good to get started]
--
- - Clearing primary plane: clear primary plane before plane composition (at the
-   start) for correctness of pixel blend ops. It also guarantees alpha channel
-   is cleared in the target buffer for stable crc. [Good to get started]
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.25.1
-
+Florian

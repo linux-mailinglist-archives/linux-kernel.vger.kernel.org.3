@@ -2,128 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDE04730C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAA04730C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 16:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240185AbhLMPpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 10:45:12 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52212 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234484AbhLMPpK (ORCPT
+        id S238544AbhLMPp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 10:45:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234484AbhLMPpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:45:10 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BDEvQOV017736;
-        Mon, 13 Dec 2021 15:45:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=k/TuME2AJGqJsBHTZ2Rb+3YeCtineC0vq6GNn0aKE8Y=;
- b=TpkVnzz12XYRPqWnvJXYzU805DMGf1Ygk2HCGAVklWhdc5du6+QH0OdGq2GZlE05aB2n
- MIZRNvn2YLZB5szjvI0KGvGhztK1D0auab85KYR5ni8GVxKotvm2s2s7HfSxyJxZTP71
- 0j9ktduE6x+eml5jobhIVa3moTmrq+uRFxgilTR/fla9/7xzvTwqiMrbSPHCkQHPNmhf
- q+xV8RzKnGjg8w2UUwccWIfaamjjS4b721ctiGyYdI83XEAcKOF52SJbQrposqlfo8NY
- Q0JmLmngRL/s5uOH7kMkqYiGZP2kGV43Uoyz2I6Yg99TkU3+kMuWha2acFm0mIX8jQlV kA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx8d4h6q4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 15:45:10 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BDEwnRw023469;
-        Mon, 13 Dec 2021 15:45:09 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx8d4h6p9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 15:45:09 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BDFiWkW001673;
-        Mon, 13 Dec 2021 15:45:07 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3cvkma6fet-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Dec 2021 15:45:07 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BDFj3rp44761536
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Dec 2021 15:45:03 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D060511C058;
-        Mon, 13 Dec 2021 15:45:03 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4B14B11C05E;
-        Mon, 13 Dec 2021 15:45:03 +0000 (GMT)
-Received: from [9.171.24.181] (unknown [9.171.24.181])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Dec 2021 15:45:03 +0000 (GMT)
-Message-ID: <1b2903fa-7b83-418d-8fa6-9bdf9ad19640@linux.ibm.com>
-Date:   Mon, 13 Dec 2021 16:46:07 +0100
+        Mon, 13 Dec 2021 10:45:25 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3047C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:45:24 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so17840541otl.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 07:45:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dQ0iYUP0JWxWxyVvkeGeGLlGPIXkHbinLcx5o3bfw2o=;
+        b=GT2LUf8AZMMbJBvm19dhzHYN+vNChABVOEFBTkozsYpZC7hM/deocMT5X5GMYIDOek
+         5LBXg6Ot9xO7cq/Jk7zgArH4zvnKvrbCFxFNX8dsF13FJEKUga57PYX+I8Hi1ZfJAIK/
+         lbC6PuujBugYWprOiaNoUFWcBjLuSQX8QIWYLTNOIErrR3PFA/R/NZ5OZ1BQe0cyH2u0
+         nAxuEZuXTWTPI8uD3iiMIhXC+C6hwff7Bfdc2WEeE81/t/APcJ7o3YcoRbMbC+3Gxrb6
+         F71aYRG/1GESx3DTZCuueBZ/iX706Ujvo4hj5uB/ty469INRnDEZrTlkBjMLNWhE+0OQ
+         nJPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dQ0iYUP0JWxWxyVvkeGeGLlGPIXkHbinLcx5o3bfw2o=;
+        b=0RAzHgNvduOjKulOvAVR9wMHsh2DxjF6w56ghS6I9HwMwhqyVZwygnAycCvzHLkd6Y
+         O7uP1ZLSW424/QGJNUvJDBofTOIpKAtoH6oMnHlQlCdeY5hCvZpFhV6VscyxkVDmSgZ/
+         7/ucY9jLFq6vwMvA999CFOhag78NiezNPIG9hRQhuu5AU0eSbUPiCWHyMc6G09B2FTrj
+         7ziq6+NlEwXiE9wn331JB/8nWS02+WdET0bEUBsfo3SapoczEf3BW22R3dOMrpb8LVWc
+         c7gXK2eKaNCm2CJ1BHQuOaFMW9DRuqRg6kcRFAHrVDJE46ZhEkJKOjnB8hOx3wBHlAkO
+         Srig==
+X-Gm-Message-State: AOAM533+U4iIoLSPLMdKzlkyccg7bwExBt0bd1bqwVZfte45JuHAbkJu
+        zBoQ5hs5ov6QbYxF5delqiW3/A==
+X-Google-Smtp-Source: ABdhPJzNsAq/rJmgcNdCPksFNXX6L/lDEXt5jzOfIQryTdTz3diL0hIrAXJ+3WKe0bwcch9hGMFEwQ==
+X-Received: by 2002:a9d:6f13:: with SMTP id n19mr24707012otq.317.1639410324291;
+        Mon, 13 Dec 2021 07:45:24 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id c8sm2281168otk.40.2021.12.13.07.45.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 07:45:23 -0800 (PST)
+Date:   Mon, 13 Dec 2021 07:46:42 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, ekangupt@qti.qualcomm.com,
+        jeyr@codeaurora.org, bkumar@qti.qualcomm.com,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 5/8] dt-bindings: misc: add property to support
+ non-secure DSP
+Message-ID: <Ybdq4qAeqK8C8Yvc@ripper>
+References: <20211209120626.26373-1-srinivas.kandagatla@linaro.org>
+ <20211209120626.26373-6-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v5 1/1] s390x: KVM: accept STSI for CPU topology
- information
-Content-Language: en-US
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, gor@linux.ibm.com
-References: <20211122131443.66632-1-pmorel@linux.ibm.com>
- <20211122131443.66632-2-pmorel@linux.ibm.com>
- <20211209133616.650491fd@p-imbrenda> <YbImqX/NEus71tZ1@osiris>
- <fbc46b35-10af-2c7e-6e47-e4987070ad83@linux.ibm.com>
- <YbdlDFLjZzpC6RRd@osiris>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <YbdlDFLjZzpC6RRd@osiris>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4D2Z7C5qDideuvog92lsq0xClxYEDLjc
-X-Proofpoint-ORIG-GUID: OW728l3AKLNzJEcC8le5Ufmenxx2dXzv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-13_07,2021-12-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 spamscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=904
- malwarescore=0 bulkscore=0 impostorscore=0 clxscore=1015 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112130099
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209120626.26373-6-srinivas.kandagatla@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu 09 Dec 04:06 PST 2021, Srinivas Kandagatla wrote:
 
-
-On 12/13/21 16:21, Heiko Carstens wrote:
-> On Mon, Dec 13, 2021 at 03:26:58PM +0100, Pierre Morel wrote:
->>> Why is this assumption necessary? The statement that Linux runs only
->>> with horizontal polarization is not true.
->>>
->>
->> Right, I will rephrase this as:
->>
->> "Polarization change is not taken into account, QEMU intercepts queries for
->> polarization change (PTF) and only provides horizontal polarization
->> indication to Guest's Linux."
->>
->> @Heiko, I did not find any usage of the polarization in the kernel other
->> than an indication in the sysfs. Is there currently other use of the
->> polarization that I did not see?
+> From: Jeya R <jeyr@codeaurora.org>
 > 
-> You can change polarization by writing to /sys/devices/system/cpu/dispatching.
+> Add property to set DSP domain as non-secure.
 > 
-> Or alternativel use the chcpu tool to change polarization. There is
-> however no real support for vertical polarization implemented in the
-> kernel. Therefore changing to vertical polarization is _not_
-> recommended, since it will most likely have negative performance
-> impacts on your Linux system.
-> However the interface is still there for experimental purposes.
+> ADSP/MDSP/SDSP are by default secured, where as CDSP can be either be
+> secured/unsecured.
+> non-secured Compute DSP would allow users to load unsigned process
+> and run hexagon instructions, but limiting access to secured hardware
+> within the DSP.
 > 
+> Based on this flag device nodes for secured and unsecured are created.
+> 
+> Signed-off-by: Jeya R <jeyr@codeaurora.org>
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> ---
+> 
+> This patch has dependency this yaml conversion patch:
+> https://lore.kernel.org/lkml/20211208101508.24582-1-david@ixit.cz/T/
+> 
+>  Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> index f42ab208a7fc..f0df0a3bf69f 100644
+> --- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> +++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> @@ -29,6 +29,11 @@ properties:
+>          - sdsp
+>          - cdsp
+>  
+> +  qcom,non-secure-domain:
+> +    type: boolean
+> +    description: >
+> +      Property to specify that dsp domain is non-secure.
 
-Thanks, so I guess that not reflecting polarization changes to the guest 
-topology will be OK for the moment.
-Of course, I will change the wrong comment.
+"non-secure" feels vague, how about expressing it as "Specifies that the
+domains of this DSP instance may run unsigned programs."
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+Perhaps even go so far to name the property
+qcom,allow-unsigned-programs? (Or some other word for "program"?)
+
+Regards,
+Bjorn
+
+> +
+>    '#address-cells':
+>      const: 1
+>  
+> -- 
+> 2.21.0
+> 

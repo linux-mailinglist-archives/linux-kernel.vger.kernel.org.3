@@ -2,170 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5C4473788
+	by mail.lfdr.de (Postfix) with ESMTP id 40494473786
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 23:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243685AbhLMWdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 17:33:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
+        id S243665AbhLMWds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 17:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243607AbhLMWdk (ORCPT
+        with ESMTP id S243608AbhLMWdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Dec 2021 17:33:40 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E370C061751
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDB7C0613FE
         for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:33:39 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so14519228pjq.4
+Received: by mail-pf1-x430.google.com with SMTP id z6so16191762pfe.7
         for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 14:33:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XePop71BAe68mw50RwS+N6TSHJsYbygZ4JZ1GxvcihU=;
-        b=dScK2HMeuPUGKcjaC1DKQzJcpkOZj35YD+Mh6NQoy4B9ST7blxSpJ6NvgyEgIAFOzu
-         rYlxvTFRD9YS92x2/j3JMPs///couZD5oAHVnctJvoEoMo3TXLSE6rtdDCdXLna0yr6v
-         gH1hvDRa2/EosZvjArpWGHkFrSd9OvpOIO7Qc=
+        bh=ypAqfpDLyABO9VWd+7q/zjxqivhps6ZCyCGIhUJeNUo=;
+        b=HYmmpRXYw9np+KrjXksOTVvhJk0hzDZeScnf9C7zBXEwa5722xBZplzxqHkk8K+wM4
+         x22paAjEOeVuthEIWSgYEmtRdyL5TKg6eREa9ytfvORoA0AaohsVTGUhnh4EB8VyJeAC
+         pQT/0Unsm2FNNqR364Q9Q2aBpcGImYaZf1Y+Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XePop71BAe68mw50RwS+N6TSHJsYbygZ4JZ1GxvcihU=;
-        b=jmskJJIs/Rwf9Qta6tDcTFw58AsUzE6pTwv4l+w4MB1UkYF3ZBScLvxVkH6TBBlktw
-         YyupxhuWtrz6pZsC0bef0B6HsNfzrglnVVTP3Ws0KG8bNjUWwNaaHq4ix+ZmuhD5BGZ9
-         nqCuZphSz3rcEXweZTFJ0dQ+qqG5M0c7qvq1u9MlLO9f7Mu96iXf7Y0j0m2oOSK9Segv
-         /NUYQymOE98fMA8tsKuxiBOtOmyLdxAThA9MV3E7j2qv3JwLngSFbIsTA2nvyU1jvL/a
-         7svQFRr9Mg/uEPiygtxRg8Gh+s4GBeLgwe7ZT8HH5+o1qaEz5ieyfDfgAsFtWkhH+y0M
-         727Q==
-X-Gm-Message-State: AOAM530McjKHfE9rZRv/vNgBTXD7DwXnlB54zdBiChZ4mZzfmf6n//KF
-        OFouzBkRUxaRzhHFt5SAM+ewKQ==
-X-Google-Smtp-Source: ABdhPJxl9GAQQlALJjrqIQ2B0q6YXKTnZ0OV/Ee29gsgRwDEvjbHkuGLjcqNrNC5cxQt+eL87ewVoA==
-X-Received: by 2002:a17:90a:df96:: with SMTP id p22mr1237496pjv.129.1639434818946;
-        Mon, 13 Dec 2021 14:33:38 -0800 (PST)
+        bh=ypAqfpDLyABO9VWd+7q/zjxqivhps6ZCyCGIhUJeNUo=;
+        b=gqXYt8bTT25lE6dv9BBEcYudlDyVs8QFQmommRp2sJbujMJnpGw9sI5r3nbfi2/u75
+         avQj/NB0YNOVv7phA1sQKi2tp+6kiEEnS84HMxXxkiQiG1SZ32xSeAejtRjlu+jQHesY
+         F5kVG4PmYLAAsbPgao1FIxWoI7vPzKvW2kG7bZO88xvtCvmfHB5YFio/A+WFBYSHxKt/
+         qjIjj3jXIVowFaldx3WrUFDp1Bb4Bv81FcctyUC1io0RI+J9whFqrqmezUc2+dm+vhI1
+         k1TerQ07czd5GGqM5Lfk/Z9wkKIziygeCSa6mbG24KB9fUCOnK99LVgy/AZpe7/0FjpA
+         EMtw==
+X-Gm-Message-State: AOAM532xZliZ8IFuxbmkijGVAZ3ncIzbEhfXF9ug685b35qXeHM71309
+        k8EIjjfqT3m1Qe9xUVaN6C/xaGK+6v5TmA==
+X-Google-Smtp-Source: ABdhPJzszKffG7hEVNrsqgjUaqXQV6JWoKj4r0PQL/u6NXJoP3YaNuhktq12bKwSnBSjLUJ1jff2Ig==
+X-Received: by 2002:a05:6a00:728:b0:4b0:b1c:6fd9 with SMTP id 8-20020a056a00072800b004b00b1c6fd9mr931373pfm.27.1639434819126;
+        Mon, 13 Dec 2021 14:33:39 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u17sm11967327pfk.179.2021.12.13.14.33.37
+        by smtp.gmail.com with ESMTPSA id n6sm12607167pfa.28.2021.12.13.14.33.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 13 Dec 2021 14:33:37 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-hardening@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 07/17] fortify: Detect struct member overflows in memmove() at compile-time
-Date:   Mon, 13 Dec 2021 14:33:21 -0800
-Message-Id: <20211213223331.135412-8-keescook@chromium.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 08/17] ath11k: Use memset_startat() for clearing queue descriptors
+Date:   Mon, 13 Dec 2021 14:33:22 -0800
+Message-Id: <20211213223331.135412-9-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211213223331.135412-1-keescook@chromium.org>
 References: <20211213223331.135412-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3921; h=from:subject; bh=NHgKQ5zNG6IM/0vHoqNXCgmZkQClPEP+xhPUVBbQFRw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBht8o4bumukIHwp8QcWHEiGg9puPl0+xIA9Rkye74Z Nt0WOfCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbfKOAAKCRCJcvTf3G3AJpvEEA CFBRB1E1dILWQu8Dj2b44G7xaYXtSY6P712CwCYX6RbALNSjK6VFp7uvft+AK36zdHrYBX0v6L/jqC qY6Ol+54FildRWZCtpjdzEK1MWMtfS044s/ew4iag8BP6oEGjCBIgGnD8iUz3Kg0lGcipA4Qtecypi nE7p7FxQhYgDEhzTn7UChhMpWTiFkm2pRRkDWwSAPKBdQaxEsQnpJqPYIWJnpskJFZEz7mHfMpftVK UJq1O3D/lSmuZYbXPbkbcO21PXA3Klv4qOCvWXfiRscJWdanKMMoWIxOCG5wO6us9TdKR8CxefTX6r ph/DtkKyo6FrHJJ7PWv96mycudBOmVoBMIeDLLRkX8EALu47Vrt3OXIr9dDBtt75BTP0C4SwnfXnaw UILF/b3RK4taKXlogdJIJpHCqm70m/uj760oI4b8Xr9Q2XmZwoTgvg345FiiEoPjbY+Ck4wxlNfpXw Q/DOf2boQWEAux7jHftB0bRqNobfT1Ie1ply4CSu3u5UdEE3mrKIV2CshU3DHiJCR3zxq7GpYtP2aG X3hypGMb4EX6xGCD8zfIN2L2LvDcYhW6tsprD13LRzYn634UCwQGdwkV2aJXEcRUUBTO16udNzr1n0 VoM3KTmbf8SbvkQCf0UPG7x4Q1VVj5pY3RORGa0MQMcl7hhjMF7T+umECLeQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3372; h=from:subject; bh=axAygS4thk+uvbzO1moZ1VRjcqDhXcfP4Vyjt/i9h9M=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBht8o4MSeELfzO6H9fAjm8hu3Uuu54uiFqPasTWcda Tt84i++JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbfKOAAKCRCJcvTf3G3AJg6UD/ 9gv7gsrwjC3trNa3bqE7ASZwIKkSV3jhOCULnnlAT6TpZapvVHloCauOe9Ak3kdSyLU2+YLoH6d9oP uQssQ49+Z90FyBh5emo/KJCJ4sMgBRpll+uOJfCswRp/CcqW9EylGTrhnIN30velUf4G3BYdw6ZKpE SVjvVrn6G9P2O5q7P/i9ylYPuylcQD8ON+n/NZHUTfqjJ1hFLVsMUv2j52yGA8dSQj4mAIDbao1EJc shIWDyhCXdTvlOBvAJRAkHm15rGNigJT7KwYk02RC5xnN6ScOurvW7G0IL+/UqWrAJ8lvkcyYvX10Y QBM6MbTZHh/4u6lVad/yxGEf5HdixHSLa3Pai8MhD69OVpm3IkVIKKwutpVcZ+xECf3pdjIGGx5omH r96QH6cu5J+ffvGzxCDEse2Gt3XA2Fp2UF2rm4a6gph4+0FYYrys8j0sRZkPpu3NpMHitpbyLcRz2l UfX2cxTiFr9Q+ERqtJga9+XGJlcNK/4ELfdNws/B63tcQ+bYP/Sf1Wzl+y3aHzNANidROlMbt6hiXq 9+WjpjvJD9QcPRJ97roicypuAOgGUGOUAKX6/0+YQa8nuQNBrJjG/UyhG5AMzXvvc6xOF1Hm1K8IeF bZfkQZJuNx7BPw1+ejSvtegHLr9aaclfNTDjDugQ+0gUU1C4y4EaostljlpA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As done for memcpy(), also update memmove() to use the same tightened
-compile-time checks under CONFIG_FORTIFY_SOURCE.
+In preparation for FORTIFY_SOURCE performing compile-time and run-time
+field bounds checking for memset(), avoid intentionally writing across
+neighboring fields.
 
+Use memset_startat() so memset() doesn't get confused about writing
+beyond the destination member that is intended to be the starting point
+of zeroing through the end of the struct. Additionally split up a later
+field-spanning memset() so that memset() can reason about the size.
+
+Cc: Kalle Valo <kvalo@codeaurora.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: ath11k@lists.infradead.org
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/boot/compressed/misc.c               |  3 ++-
- arch/x86/lib/memcpy_32.c                      |  1 +
- include/linux/fortify-string.h                | 21 ++++---------------
- .../read_overflow2_field-memmove.c            |  5 +++++
- .../write_overflow_field-memmove.c            |  5 +++++
- 5 files changed, 17 insertions(+), 18 deletions(-)
- create mode 100644 lib/test_fortify/read_overflow2_field-memmove.c
- create mode 100644 lib/test_fortify/write_overflow_field-memmove.c
+ drivers/net/wireless/ath/ath11k/hal_rx.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
-index a4339cb2d247..1cdcaf34ee36 100644
---- a/arch/x86/boot/compressed/misc.c
-+++ b/arch/x86/boot/compressed/misc.c
-@@ -37,10 +37,11 @@
-  * try to define their own functions if these are not defined as macros.
-  */
- #define memzero(s, n)	memset((s), 0, (n))
-+#ifndef memmove
- #define memmove		memmove
--
- /* Functions used by the included decompressor code below. */
- void *memmove(void *dest, const void *src, size_t n);
-+#endif
+diff --git a/drivers/net/wireless/ath/ath11k/hal_rx.c b/drivers/net/wireless/ath/ath11k/hal_rx.c
+index 329c404cfa80..0e43e215c10a 100644
+--- a/drivers/net/wireless/ath/ath11k/hal_rx.c
++++ b/drivers/net/wireless/ath/ath11k/hal_rx.c
+@@ -29,8 +29,7 @@ static int ath11k_hal_reo_cmd_queue_stats(struct hal_tlv_hdr *tlv,
+ 		  FIELD_PREP(HAL_TLV_HDR_LEN, sizeof(*desc));
  
- /*
-  * This is set up by the setup-routine at boot-time
-diff --git a/arch/x86/lib/memcpy_32.c b/arch/x86/lib/memcpy_32.c
-index e565d1c9019e..f19b7fd07f04 100644
---- a/arch/x86/lib/memcpy_32.c
-+++ b/arch/x86/lib/memcpy_32.c
-@@ -4,6 +4,7 @@
+ 	desc = (struct hal_reo_get_queue_stats *)tlv->value;
+-	memset(&desc->queue_addr_lo, 0,
+-	       (sizeof(*desc) - sizeof(struct hal_reo_cmd_hdr)));
++	memset_startat(desc, 0, queue_addr_lo);
  
- #undef memcpy
- #undef memset
-+#undef memmove
+ 	desc->cmd.info0 &= ~HAL_REO_CMD_HDR_INFO0_STATUS_REQUIRED;
+ 	if (cmd->flag & HAL_REO_CMD_FLG_NEED_STATUS)
+@@ -62,8 +61,7 @@ static int ath11k_hal_reo_cmd_flush_cache(struct ath11k_hal *hal, struct hal_tlv
+ 		  FIELD_PREP(HAL_TLV_HDR_LEN, sizeof(*desc));
  
- __visible void *memcpy(void *to, const void *from, size_t n)
- {
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index 132efa1ff49f..c07871a3fcd0 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -309,22 +309,10 @@ __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
- 		__builtin_object_size(p, 0), __builtin_object_size(q, 0), \
- 		__builtin_object_size(p, 1), __builtin_object_size(q, 1), \
- 		memcpy)
--
--__FORTIFY_INLINE void *memmove(void *p, const void *q, __kernel_size_t size)
--{
--	size_t p_size = __builtin_object_size(p, 0);
--	size_t q_size = __builtin_object_size(q, 0);
--
--	if (__builtin_constant_p(size)) {
--		if (p_size < size)
--			__write_overflow();
--		if (q_size < size)
--			__read_overflow2();
--	}
--	if (p_size < size || q_size < size)
--		fortify_panic(__func__);
--	return __underlying_memmove(p, q, size);
--}
-+#define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,			\
-+		__builtin_object_size(p, 0), __builtin_object_size(q, 0), \
-+		__builtin_object_size(p, 1), __builtin_object_size(q, 1), \
-+		memmove)
+ 	desc = (struct hal_reo_flush_cache *)tlv->value;
+-	memset(&desc->cache_addr_lo, 0,
+-	       (sizeof(*desc) - sizeof(struct hal_reo_cmd_hdr)));
++	memset_startat(desc, 0, cache_addr_lo);
  
- extern void *__real_memscan(void *, int, __kernel_size_t) __RENAME(memscan);
- __FORTIFY_INLINE void *memscan(void *p, int c, __kernel_size_t size)
-@@ -413,7 +401,6 @@ __FORTIFY_INLINE char *strcpy(char *p, const char *q)
- /* Don't use these outside the FORITFY_SOURCE implementation */
- #undef __underlying_memchr
- #undef __underlying_memcmp
--#undef __underlying_memmove
- #undef __underlying_memset
- #undef __underlying_strcat
- #undef __underlying_strcpy
-diff --git a/lib/test_fortify/read_overflow2_field-memmove.c b/lib/test_fortify/read_overflow2_field-memmove.c
-new file mode 100644
-index 000000000000..6cc2724c8f62
---- /dev/null
-+++ b/lib/test_fortify/read_overflow2_field-memmove.c
-@@ -0,0 +1,5 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#define TEST	\
-+	memmove(large, instance.buf, sizeof(instance.buf) + 1)
-+
-+#include "test_fortify.h"
-diff --git a/lib/test_fortify/write_overflow_field-memmove.c b/lib/test_fortify/write_overflow_field-memmove.c
-new file mode 100644
-index 000000000000..377fcf9bb2fd
---- /dev/null
-+++ b/lib/test_fortify/write_overflow_field-memmove.c
-@@ -0,0 +1,5 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#define TEST	\
-+	memmove(instance.buf, large, sizeof(instance.buf) + 1)
-+
-+#include "test_fortify.h"
+ 	desc->cmd.info0 &= ~HAL_REO_CMD_HDR_INFO0_STATUS_REQUIRED;
+ 	if (cmd->flag & HAL_REO_CMD_FLG_NEED_STATUS)
+@@ -101,8 +99,7 @@ static int ath11k_hal_reo_cmd_update_rx_queue(struct hal_tlv_hdr *tlv,
+ 		  FIELD_PREP(HAL_TLV_HDR_LEN, sizeof(*desc));
+ 
+ 	desc = (struct hal_reo_update_rx_queue *)tlv->value;
+-	memset(&desc->queue_addr_lo, 0,
+-	       (sizeof(*desc) - sizeof(struct hal_reo_cmd_hdr)));
++	memset_startat(desc, 0, queue_addr_lo);
+ 
+ 	desc->cmd.info0 &= ~HAL_REO_CMD_HDR_INFO0_STATUS_REQUIRED;
+ 	if (cmd->flag & HAL_REO_CMD_FLG_NEED_STATUS)
+@@ -764,15 +761,17 @@ void ath11k_hal_reo_qdesc_setup(void *vaddr, int tid, u32 ba_window_size,
+ 	 * size changes and also send WMI message to FW to change the REO
+ 	 * queue descriptor in Rx peer entry as part of dp_rx_tid_update.
+ 	 */
+-	memset(ext_desc, 0, 3 * sizeof(*ext_desc));
++	memset(ext_desc, 0, sizeof(*ext_desc));
+ 	ath11k_hal_reo_set_desc_hdr(&ext_desc->desc_hdr, HAL_DESC_REO_OWNED,
+ 				    HAL_DESC_REO_QUEUE_EXT_DESC,
+ 				    REO_QUEUE_DESC_MAGIC_DEBUG_PATTERN_1);
+ 	ext_desc++;
++	memset(ext_desc, 0, sizeof(*ext_desc));
+ 	ath11k_hal_reo_set_desc_hdr(&ext_desc->desc_hdr, HAL_DESC_REO_OWNED,
+ 				    HAL_DESC_REO_QUEUE_EXT_DESC,
+ 				    REO_QUEUE_DESC_MAGIC_DEBUG_PATTERN_2);
+ 	ext_desc++;
++	memset(ext_desc, 0, sizeof(*ext_desc));
+ 	ath11k_hal_reo_set_desc_hdr(&ext_desc->desc_hdr, HAL_DESC_REO_OWNED,
+ 				    HAL_DESC_REO_QUEUE_EXT_DESC,
+ 				    REO_QUEUE_DESC_MAGIC_DEBUG_PATTERN_3);
 -- 
 2.30.2
 

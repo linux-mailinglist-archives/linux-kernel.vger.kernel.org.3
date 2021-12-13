@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 759004724FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B09A2472409
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbhLMJkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S232305AbhLMJdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbhLMJiZ (ORCPT
+        with ESMTP id S233847AbhLMJdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:38:25 -0500
+        Mon, 13 Dec 2021 04:33:20 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB65C08E856;
-        Mon, 13 Dec 2021 01:37:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284F6C061748;
+        Mon, 13 Dec 2021 01:33:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF6C1B80E0B;
-        Mon, 13 Dec 2021 09:37:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32475C341C5;
-        Mon, 13 Dec 2021 09:37:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8F76B80E0E;
+        Mon, 13 Dec 2021 09:33:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E54C341CD;
+        Mon, 13 Dec 2021 09:33:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388225;
-        bh=WIWdys5//IC5POQNm2wp3TJhcElEgJF+rtvRr0nj37I=;
+        s=korg; t=1639387997;
+        bh=5t8scmo4m+XuF42L3XZDTsP6ozDM7kPXw2gUi9HJSEc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SrRuJzUTFETThCODwlmXMXcJ9zsqdSlfKxL7UjPdaFppBThMXHWprERczegHgz41O
-         dC4NA/jbWR6mV5vP4UjMpdfqyAwKKFEfEi/Ia9BdMoXY7M+lQkV81CZctbMZtWE7l6
-         D3AH7Seb0b8iJmme8UEmKJtzJAibaA022EyBtrEI=
+        b=cj6osa/klwa0t7XzOEdkE1tePzE80chpmsIPO8qpz1DQpOn8hkepygdd5uw6SC8g5
+         XLXkeuo2hePvQmx4NwO4lDvz6v40SMcgfl0OV5T7RdBrFgrLOyhAU+CS62H073gxN8
+         2LoD1pHSLq2aLp3ZSLM3a+dUef+DAo4bTT97EbJA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 29/53] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset or zero
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+Subject: [PATCH 4.4 30/37] usb: core: config: fix validation of wMaxPacketValue entries
 Date:   Mon, 13 Dec 2021 10:30:08 +0100
-Message-Id: <20211213092929.327616807@linuxfoundation.org>
+Message-Id: <20211213092926.358935422@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
-References: <20211213092928.349556070@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,70 +48,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lee Jones <lee.jones@linaro.org>
+From: Pavel Hofman <pavel.hofman@ivitera.com>
 
-commit 2be6d4d16a0849455a5c22490e3c5983495fed00 upstream.
+commit 1a3910c80966e4a76b25ce812f6bea0ef1b1d530 upstream.
 
-Currently, due to the sequential use of min_t() and clamp_t() macros,
-in cdc_ncm_check_tx_max(), if dwNtbOutMaxSize is not set, the logic
-sets tx_max to 0.  This is then used to allocate the data area of the
-SKB requested later in cdc_ncm_fill_tx_frame().
+The checks performed by commit aed9d65ac327 ("USB: validate
+wMaxPacketValue entries in endpoint descriptors") require that initial
+value of the maxp variable contains both maximum packet size bits
+(10..0) and multiple-transactions bits (12..11). However, the existing
+code assings only the maximum packet size bits. This patch assigns all
+bits of wMaxPacketSize to the variable.
 
-This does not cause an issue presently because when memory is
-allocated during initialisation phase of SKB creation, more memory
-(512b) is allocated than is required for the SKB headers alone (320b),
-leaving some space (512b - 320b = 192b) for CDC data (172b).
-
-However, if more elements (for example 3 x u64 = [24b]) were added to
-one of the SKB header structs, say 'struct skb_shared_info',
-increasing its original size (320b [320b aligned]) to something larger
-(344b [384b aligned]), then suddenly the CDC data (172b) no longer
-fits in the spare SKB data area (512b - 384b = 128b).
-
-Consequently the SKB bounds checking semantics fails and panics:
-
-  skbuff: skb_over_panic: text:ffffffff830a5b5f len:184 put:172   \
-     head:ffff888119227c00 data:ffff888119227c00 tail:0xb8 end:0x80 dev:<NULL>
-
-  ------------[ cut here ]------------
-  kernel BUG at net/core/skbuff.c:110!
-  RIP: 0010:skb_panic+0x14f/0x160 net/core/skbuff.c:106
-  <snip>
-  Call Trace:
-   <IRQ>
-   skb_over_panic+0x2c/0x30 net/core/skbuff.c:115
-   skb_put+0x205/0x210 net/core/skbuff.c:1877
-   skb_put_zero include/linux/skbuff.h:2270 [inline]
-   cdc_ncm_ndp16 drivers/net/usb/cdc_ncm.c:1116 [inline]
-   cdc_ncm_fill_tx_frame+0x127f/0x3d50 drivers/net/usb/cdc_ncm.c:1293
-   cdc_ncm_tx_fixup+0x98/0xf0 drivers/net/usb/cdc_ncm.c:1514
-
-By overriding the max value with the default CDC_NCM_NTB_MAX_SIZE_TX
-when not offered through the system provided params, we ensure enough
-data space is allocated to handle the CDC data, meaning no crash will
-occur.
-
-Cc: Oliver Neukum <oliver@neukum.org>
-Fixes: 289507d3364f9 ("net: cdc_ncm: use sysfs for rx/tx aggregation tuning")
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Reviewed-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/20211202143437.1411410-1-lee.jones@linaro.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: aed9d65ac327 ("USB: validate wMaxPacketValue entries in endpoint descriptors")
+Cc: stable <stable@vger.kernel.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+Link: https://lore.kernel.org/r/20211210085219.16796-1-pavel.hofman@ivitera.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/cdc_ncm.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/core/config.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -177,6 +177,8 @@ static u32 cdc_ncm_check_tx_max(struct u
- 	/* clamp new_tx to sane values */
- 	min = ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct usb_cdc_ncm_nth16);
- 	max = min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_parm.dwNtbOutMaxSize));
-+	if (max == 0)
-+		max = CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
- 
- 	/* some devices set dwNtbOutMaxSize too low for the above default */
- 	min = min(min, max);
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -375,7 +375,7 @@ static int usb_parse_endpoint(struct dev
+ 	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
+ 	 * (see the end of section 5.6.3), so don't warn about them.
+ 	 */
+-	maxp = usb_endpoint_maxp(&endpoint->desc);
++	maxp = le16_to_cpu(endpoint->desc.wMaxPacketSize);
+ 	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
+ 		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has invalid wMaxPacketSize 0\n",
+ 		    cfgno, inum, asnum, d->bEndpointAddress);
 
 

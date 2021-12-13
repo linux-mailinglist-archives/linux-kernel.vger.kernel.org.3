@@ -2,376 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A404732CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8774732D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241230AbhLMRVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 12:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236018AbhLMRVK (ORCPT
+        id S241249AbhLMRWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 12:22:34 -0500
+Received: from esa.hc3962-90.iphmx.com ([216.71.142.165]:26975 "EHLO
+        esa.hc3962-90.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236018AbhLMRWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 12:21:10 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B62C061574;
-        Mon, 13 Dec 2021 09:21:10 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id n6so30469232uak.1;
-        Mon, 13 Dec 2021 09:21:10 -0800 (PST)
+        Mon, 13 Dec 2021 12:22:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0wJeJrSF9Mra0gCsmyTZmFusMoi1eRBEtRdMCYndmKo=;
-        b=iaK/AIvhlQL9v9NK6cmbiG44uZnl2jk4+C98eP8aEqLSE+8/H+XtHXJ5yUZCrZq+/u
-         PMe50c7tFFG8qSckZy+aEHnHS5Cb5uNkUzaatYiNypkk8HFroBVg5lqo8p4JmBkDeNJ4
-         OLmXwDKJ5E1XQ36xPL6nDv/YdNKPJwFtGgtoCdQyQ/MSnxC5cxUf2ISfrL7DlEJ6ijf+
-         K5juseNzPVcsn+MuV+g3WQP/J7wUxj9hxtZj8fk3WFVFUlaPWkAST7z3EqXesDKIRIRy
-         aoVAPs8UAFW0N0HvGpzqVzKRqWROly8feDvruoG6xXEKLP3W5x0JMkzrLRgIkiycQwGI
-         KFKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0wJeJrSF9Mra0gCsmyTZmFusMoi1eRBEtRdMCYndmKo=;
-        b=Sjbc/VaFec+fXGV7pNIvGt8yTTQy6lmwiUCZK8Ywt9+tKLl/9SSjO0tM+KH2f92lEw
-         waYtkY54fQ8Han8LuwyuiDL3X/PB1PaXKbBP6QbqZV3/8AWoFQCiVkd68Jv1ePAtNr5p
-         34c0RpCElZsq+bvMfX9iBPBm2SAMlZS1OxnzmHdAQ+liVv/hZxbdlFJBQHHW+WHGjWDs
-         OpLtfTuuQkd0kGS1MPPaUDwzg0l5PYWpfc1KbsCa8f+dklfBr0O/oliAu9U0T4ybMUXS
-         dKNsYuIrgrh3+lzmK6F5DPMRbC5idQK1QRpehZWwmE7P8tAzM0C2Z2SAYWoic3Jsok9g
-         25Wg==
-X-Gm-Message-State: AOAM530prqe8tEpTWGx8Kxv1CcFyaSUJYzc0EzvIXWLWEGG1VSyUuM3m
-        3GsECLg7fuSB4m6+YMk/nIa7QyDU6UndN9+jMwg=
-X-Google-Smtp-Source: ABdhPJw4EvbNTlJviy0T8PvZmLVL9xI6zB6kyh3Vapljc21/dsvg0nhrsA9kah1XuNpNPZN8WbO44Y/iauHmvI+sxOY=
-X-Received: by 2002:a67:e0d6:: with SMTP id m22mr28970882vsl.15.1639416067450;
- Mon, 13 Dec 2021 09:21:07 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1639416151; x=1640020951;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=K01p1AmThlZBsA76elncZubIv48IrOtOkYgW+l0YMxA=;
+  b=2PR0YOEGg//WoF3FgnWCD3IGRbhvcnbpeu98+AOHKGpLzyabsK+HVtxV
+   lnf6C7G27E5q+ni6tj4N/NqV0USGfVoEftEYD4i+9o8w/75ORTaLKGfPw
+   ooRcCQcCTt3TzkJbJndZ2G3b4i8alZl59rTmGfiS1jbTDpkhZFezSz2nt
+   s=;
+Received: from mail-bn1nam07lp2048.outbound.protection.outlook.com (HELO NAM02-BN1-obe.outbound.protection.outlook.com) ([104.47.51.48])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 17:22:28 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q5Cj168b0AcjXQlvXF92F5LOMrThyrEgrUUs+Qet8NS909lulCYJI1vDQ5Zue9L8QhNRf2W6ZnlKUAgSVvTcuPphdEDpEygO649XyYH7alpVC/bZmYFw0f656EGeBDagOdT9OZjS0wMoAPJ0UZYLnxJ8w0oRn86XasDP9qQkt+A471fsOJ8+Gp0v3Z88K+jgHyv7QQSg7grDmTyE+V6DT3KnTG03KH1ZUUFdiSGE2mDhorN4pxBPl9PGDtFP+yLWsaStcfwC/BcOQGGnoQ1G0AHMFFXGuQ9W3qqmDQ7dlqSn3SAJo0Izfi/uTpvHuqukBFKrs16Q0HRu0ttTXJiitQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K01p1AmThlZBsA76elncZubIv48IrOtOkYgW+l0YMxA=;
+ b=Y0iLfQtPDdWandDZ9kwbmgsmnMfeUbEFoqU4UqITu2O0bgricClLS46mczA4ZXYEEyZ7qbkc1DG1lwWkd4Ki1Pshwuh1gOFNWk8GUF5lhFvkHb/BTqL/qjpH6Vo9CVW1iKyt4+Tcm6MLH/zUd3kUpa2q/KUinO+BVmgb1FA2s8v+1I+c41rGrTLUKf/5Lj5Y0HGnFw/ilXxBEUyN5pf2TLIM+Xc66mb4SV7SQjSWQSj0sSTs7dWAp8Yx49G8vPbebTpWIGXGq4420dvDpNHNo3dKRMmFDs0zJX3eqN+EFcDwCl6Rb5y8WvUAaqUVxXqHEqKLxku06trfIwNhH4j+LA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
+ dkim=pass header.d=quicinc.com; arc=none
+Received: from SJ0PR02MB8449.namprd02.prod.outlook.com (2603:10b6:a03:3f5::8)
+ by SJ0PR02MB7773.namprd02.prod.outlook.com (2603:10b6:a03:318::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.11; Mon, 13 Dec
+ 2021 17:22:27 +0000
+Received: from SJ0PR02MB8449.namprd02.prod.outlook.com
+ ([fe80::6837:9c03:af16:e6a9]) by SJ0PR02MB8449.namprd02.prod.outlook.com
+ ([fe80::6837:9c03:af16:e6a9%3]) with mapi id 15.20.4778.018; Mon, 13 Dec 2021
+ 17:22:26 +0000
+From:   "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>
+To:     Doug Anderson <dianders@chromium.org>,
+        "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>
+CC:     Doug Anderson <dianders@chromium.org>,
+        "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stummala@codeaurora.org" <stummala@codeaurora.org>,
+        "vbadigan@codeaurora.org" <vbadigan@codeaurora.org>,
+        "Ram Prakash Gupta (QUIC)" <quic_rampraka@quicinc.com>,
+        "Pradeep Pragallapati (QUIC)" <quic_pragalla@quicinc.com>,
+        "sartgarg@codeaurora.org" <sartgarg@codeaurora.org>
+Subject: RE: [PATCH V2] mtd: spi-nor: winbond: Add support for winbond chip
+Thread-Topic: [PATCH V2] mtd: spi-nor: winbond: Add support for winbond chip
+Thread-Index: AQHX50c/AxvFsMywYUa9+bTRjnnN0awwpEgAgAAZIbA=
+Date:   Mon, 13 Dec 2021 17:22:26 +0000
+Message-ID: <SJ0PR02MB8449CB45F47541CC84C7136BCD749@SJ0PR02MB8449.namprd02.prod.outlook.com>
+References: <1638427092-9139-1-git-send-email-quic_c_sbhanu@quicinc.com>
+ <CAD=FV=VB6hsEHEb8yZmB=xA__47p4vC6dBc528RV37dvAKTgOQ@mail.gmail.com>
+In-Reply-To: <CAD=FV=VB6hsEHEb8yZmB=xA__47p4vC6dBc528RV37dvAKTgOQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quicinc.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3e3e98fc-fc69-47cb-c6fa-08d9be5d2270
+x-ms-traffictypediagnostic: SJ0PR02MB7773:EE_
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-microsoft-antispam-prvs: <SJ0PR02MB77736A29F3C0405C54654218B1749@SJ0PR02MB7773.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jfWFned8Yl34z+0eWeJYprNHuD/P9hx/lGFR1FUrhq9rj7dPHRuTTp9797byFbonqaYb7lhLSIaW1GMWgkQtC5oXzoA3UwEneTKFsB8yR4svMkRXYGAXNq1JStPhSReisoB9LON9IZnQ5APWq/GYOEZzGum20q+rPwDee5EsmRKQiPan2vKM0iHYRPPHtnmFbEmEKv5L+hMms81a3uJp+wbFkbP2p7lZ9kaiPsayhpD9HlyJzY45YFcWKZqD513gc5Q3cEIdJNRhl+iSHf/laI7ZaGqEERc8CewwcO3PUzMcDqhE/gZCHMBbOEtd/bgf26q5ANXCn3x2IJ2IO5KsfJQ/2UaPdGy9f07Xwxen1ERKh8WfRfI27w5r5N8NW1F8yXD4Bp3+rvA+tmQKP8xIgPyJqd3z4ywlJPVVOHY4Dckw+DvRc5wiDr+qlpwGrlrJDH9PV73pQQh3FUNYFzZfQDqB+xT4HMrosEJEXLVId8VvGcIspWE6PMC2qJSPDqSJEhmdWOLRxIged4gTF57n0GQNxURi1AS2eW8kCh+l57jZPimNMZ35IW+IoA3aCJchAQo6ZSkfDOkOsN0uw+MAi3MkfH67A+ECMN2rBpM2WY24ssxetzaM0JYojtpoFE7RP2hklOc79PTiCVdv82u0jm0PNSSC5lFhMsuY1li7I/HhFxN/FRaYvPkKSzU7fhg51PloV/1DzQfEC3kuozP4RexPxV8keZBXdV9nkbXjJPbfdngk0qkZ2fEgLuXoeocQKUZCt1M163IGfx+q/Ctz0LtmlMwpwQIY17O33nIjOfw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR02MB8449.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(76116006)(316002)(66446008)(64756008)(38100700002)(54906003)(66946007)(66476007)(66556008)(110136005)(122000001)(5660300002)(86362001)(7416002)(55016003)(8676002)(9686003)(26005)(83380400001)(8936002)(33656002)(2906002)(71200400001)(4326008)(38070700005)(508600001)(52536014)(6506007)(186003)(7696005)(966005)(53546011);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Nm1PMDlBN09JQUtuelk2bWxoUHNLOFA0Y2ZTaHV6aUlVSmI3Yll6Yk9vcnZ3?=
+ =?utf-8?B?Z1dZb3VnR3NBY0o4VnExakdTNEZHZFBnRjNBTXNoZVRqM2FSbE1tQzZOOVF2?=
+ =?utf-8?B?R21XNWxOMlZxSjZ3MFBXNmhjaXNMeE1sakdBTW9RTWNpSmYxSG9PL0hQREFu?=
+ =?utf-8?B?bm4xdGd1R0tQRk5ZalpVbkFqcEo2M0N1WTRtU01qelMwTnVWY3Z5cVRXTVpl?=
+ =?utf-8?B?M0llS3Q2QUhQVGRRd1NycHNGODEzYkdoTjZDR1ZVUmpwU0E0K0Z1Q3RsK2xW?=
+ =?utf-8?B?UEdSc3hsdVBVSVN1cE5RMzByS0Mvc1kweUVBL1k4TlRSdWUzT0FaaXFSbHR3?=
+ =?utf-8?B?LzdHaGRuYm1sbTRKNWRHa3F2WXdockQ3ZTlRYnQwZWJreDNyMjVWRUdFYlpI?=
+ =?utf-8?B?T2FicVJob05BQ0JVU1BRSHdNcmg2U2c5bWszUmlQNmVEMW85dXFMR3E5QjNT?=
+ =?utf-8?B?bDdIbDhBeWRoVnN1cGc3bXNCN0R3TnVzZEFQMkVQRmdXODRwV3gzTUVwMVZH?=
+ =?utf-8?B?bldPVE42T3ZIdmFiRjZMZkMySnhYbDkyWFFuZzlmRXRtQWdWL2tXQS9kRTVz?=
+ =?utf-8?B?dFN0L212TzBYcnhpY3p3VnF1VEJoSHJZQzZGYXJIeXJaSlVxTm5KblYrbnZU?=
+ =?utf-8?B?ZFNrMmxBU0hRSDBzeEEvczhRUTNlL2tLMTNMb2E4dXVkWDlldWFrS1lMZzBk?=
+ =?utf-8?B?ZkFJYUlyb1lGNko0OFJwMmNYQlJWVzROQ0RSbGw0VGJYMWNzdXFyNHVpclhx?=
+ =?utf-8?B?a1FSYnI2eFRPK25NZVBFUUM1ZURlc0U5angwNmRBejZjK2h6N3RVYVo3by8x?=
+ =?utf-8?B?MllDRUJBSzJVSXRjb2RuSGl2elBiUmFDdnlqV0JXY1JkTHJNZFROYmVMUXRD?=
+ =?utf-8?B?cTRNUmhtR0lxOFFWT0k3NFVYQzN6aTFNbHZteUlKaEd2SnFJbDFqc1RvVlJV?=
+ =?utf-8?B?UXUwLzhRZDB3MDNCeWt3OWlud3JVR1hVeWM5Y2xSSWhsR1BxNE9kdFRsV0Vw?=
+ =?utf-8?B?aUs2NGRPT1N0eWczL2NmcE5PTnRFbTdqU3NTQnNXVkhhZDZPZ0NiSDZ5YnJj?=
+ =?utf-8?B?L1RjNE1rSGt4aEpITStqWDJKZUY3enpXVlFZSW4wWWJCUWF3RTcvTEJpTU8z?=
+ =?utf-8?B?NktrMThBSzFxMHc0cnZHdEVpVHVhc0NjTXdBM1J1NWwvRUhycWRzdVJRaWYr?=
+ =?utf-8?B?YnZDR2NucmQ1TVBlVitkb0ZSa0N1Vjk1V3V3MStJTlNIcjcvQnlVWnRQYkdE?=
+ =?utf-8?B?Q1h5QzAyOWRoT0lMNGlCbllHTnVvTzJZNzFRTXRtZXNwb3BjNE5TQVFYUWVV?=
+ =?utf-8?B?OGV4bDVCRGRHTmc1SkJBcjNOcmR3enRmQlZJTEhiZzk3VFJLMFVJWk5nV3BG?=
+ =?utf-8?B?dGcyZDBlSVl3TWhLR3ZBSjB1S0djUXB5eGVNbFVkOFU0VnN3dWlnYnB1ZHFh?=
+ =?utf-8?B?K3QvbWZuQWlYS0lNaDErVEQrdU9MNTZ4ZDZyclBoZFVUc3l0V2l4R3pLdkRL?=
+ =?utf-8?B?MDlWUEVZUmFURHJrVmp0SVpaLzVDb0hVVWNBMzhYbEc5N1dmeDFNR29rTXhE?=
+ =?utf-8?B?OTY1NHRZaXNSVklkU05Ba0p3U043NjRLTklnSWxHWmNMbkw1WjNKT2U4cm81?=
+ =?utf-8?B?amFZMDBTMUlOdk9MeC9ORzZCSXJJYjZKWEJHMlZmQS81Zm9oZ2pJYWgrOHZs?=
+ =?utf-8?B?SmVDNGVuMVpiSkZqRGpVZUF4UUwyRWJZbWxwU0ZMNkZuUC9oWVlDSmdDWlRZ?=
+ =?utf-8?B?S0FIaXZYOFdPS016dlVaRlZudWJtMUJabW9CNDM1ck13bWYrM1FaN1QxVmll?=
+ =?utf-8?B?UTRja3pJZzhVcUV2ditPZHJrWXhqZTB1YWpMNXJ6QWtkSlFCU1NaZHBsUFhw?=
+ =?utf-8?B?amVhQzJLVzBUUHQ0MEIyS1p2V3VQSmhzK3lQQitVVDF2SEx2Z3lpMFZkUTlU?=
+ =?utf-8?B?eU5kMVVEaWZnU2tyWTBHNk9hQVBROGhwOEtjdWdlcE1BUWpleHdVVmVVYXRR?=
+ =?utf-8?B?c2JQaUFsV3BCb0dtT2d0SGpXdyt6TGVLc0RQa3E1MjdUMkJRd0FldWxnTnFU?=
+ =?utf-8?B?SVdMZjhZalpYU3lVOUlGbTJiNEV2OWhDb1BpYXA3R3JYVmEvUnIrc2ZOQmdz?=
+ =?utf-8?B?TURSY1VvaFBxYlhPVHNKTTl1STFWZE1YVjJxTG9EVDdkR0NvSG5JVThDZndB?=
+ =?utf-8?B?VDY0ZFRQYUl4VjUvalRGM241MnNST3pTVDE2aEoxVTladS9PYi9RRkJUa1Nv?=
+ =?utf-8?B?aHBwcVlvNWZZbXNDSGNLVUNqSXV3PT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211202231123.v7.1.Ic0a40b84dee3825302890aaea690e73165c71820@changeid>
- <20211202231123.v7.2.I9eda306e4c542010535dc49b5488946af592795e@changeid>
- <CABBYNZJPEhALUyevLAAP9Nhzda8M0emmsPwaXCcQWOSD+ytm5A@mail.gmail.com> <CAGPPCLDreZm2m_ZmymVumu5s1tDeXi7-UGFDFnxd8ZuzW6oVPA@mail.gmail.com>
-In-Reply-To: <CAGPPCLDreZm2m_ZmymVumu5s1tDeXi7-UGFDFnxd8ZuzW6oVPA@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 13 Dec 2021 09:20:56 -0800
-Message-ID: <CABBYNZKxaKtHYyAjxHVOqiKqLDhULtJAwa+AwgbT3_32ceho6g@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] bluetooth: Add MGMT Adv Monitor Device Found/Lost events
-To:     Manish Mandlik <mmandlik@google.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        Miao-chen Chou <mcchou@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB8449.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e3e98fc-fc69-47cb-c6fa-08d9be5d2270
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 17:22:26.6657
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uOVzRBmmBRhB7rtCZ5p8MA/DPqbX1cxVNRnd0nFQx/8hNKJ6r7WojRjhxy7CGNCgOdDPZhaS23irQAtDbp+5FQOU/AqQAvf99dYfYFs/Cp4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7773
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manish,
-
-On Mon, Dec 6, 2021 at 8:39 AM Manish Mandlik <mmandlik@google.com> wrote:
->
-> Hi Luiz,
->
-> On Fri, Dec 3, 2021 at 5:19 PM Luiz Augusto von Dentz <luiz.dentz@gmail.com> wrote:
->>
->> Hi Manish,
->>
->> On Thu, Dec 2, 2021 at 11:16 PM Manish Mandlik <mmandlik@google.com> wrote:
->> >
->> > This patch introduces two new MGMT events for notifying the bluetoothd
->> > whenever the controller starts/stops monitoring a device.
->> >
->> > Test performed:
->> > - Verified by logs that the MSFT Monitor Device is received from the
->> >   controller and the bluetoothd is notified whenever the controller
->> >   starts/stops monitoring a device.
->> >
->> > Signed-off-by: Manish Mandlik <mmandlik@google.com>
->> > Reviewed-by: Miao-chen Chou <mcchou@google.com>
->> >
->> > ---
->> >
->> > Changes in v7:
->> > - Refactor mgmt_device_found() to fix stack frame size limit
->> >
->> > Changes in v6:
->> > - Fix compiler warning for mgmt_adv_monitor_device_found().
->> >
->> > Changes in v5:
->> > - New patch in the series. Split previous patch into two.
->> > - Update the Device Found logic to send existing Device Found event or
->> >   Adv Monitor Device Found event depending on the active scanning state.
->> >
->> >  include/net/bluetooth/hci_core.h |   3 +
->> >  include/net/bluetooth/mgmt.h     |  16 +++++
->> >  net/bluetooth/mgmt.c             | 106 +++++++++++++++++++++++++++++--
->> >  net/bluetooth/msft.c             |  15 ++++-
->> >  4 files changed, 134 insertions(+), 6 deletions(-)
->> >
->> > diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
->> > index 5ccd19dec77c..3b53214ff49f 100644
->> > --- a/include/net/bluetooth/hci_core.h
->> > +++ b/include/net/bluetooth/hci_core.h
->> > @@ -599,6 +599,7 @@ struct hci_dev {
->> >         struct delayed_work     interleave_scan;
->> >
->> >         struct list_head        monitored_devices;
->> > +       bool                    advmon_pend_notify;
->> >
->> >  #if IS_ENABLED(CONFIG_BT_LEDS)
->> >         struct led_trigger      *power_led;
->> > @@ -1847,6 +1848,8 @@ void mgmt_adv_monitor_removed(struct hci_dev *hdev, u16 handle);
->> >  int mgmt_phy_configuration_changed(struct hci_dev *hdev, struct sock *skip);
->> >  int mgmt_add_adv_patterns_monitor_complete(struct hci_dev *hdev, u8 status);
->> >  int mgmt_remove_adv_monitor_complete(struct hci_dev *hdev, u8 status);
->> > +void mgmt_adv_monitor_device_lost(struct hci_dev *hdev, u16 handle,
->> > +                                 bdaddr_t *bdaddr, u8 addr_type);
->> >
->> >  u8 hci_le_conn_update(struct hci_conn *conn, u16 min, u16 max, u16 latency,
->> >                       u16 to_multiplier);
->> > diff --git a/include/net/bluetooth/mgmt.h b/include/net/bluetooth/mgmt.h
->> > index 107b25deae68..99266f7aebdc 100644
->> > --- a/include/net/bluetooth/mgmt.h
->> > +++ b/include/net/bluetooth/mgmt.h
->> > @@ -1104,3 +1104,19 @@ struct mgmt_ev_controller_resume {
->> >  #define MGMT_WAKE_REASON_NON_BT_WAKE           0x0
->> >  #define MGMT_WAKE_REASON_UNEXPECTED            0x1
->> >  #define MGMT_WAKE_REASON_REMOTE_WAKE           0x2
->> > +
->> > +#define MGMT_EV_ADV_MONITOR_DEVICE_FOUND       0x002f
->> > +struct mgmt_ev_adv_monitor_device_found {
->> > +       __le16 monitor_handle;
->> > +       struct mgmt_addr_info addr;
->> > +       __s8   rssi;
->> > +       __le32 flags;
->> > +       __le16 eir_len;
->> > +       __u8   eir[0];
->> > +} __packed;
->> > +
->> > +#define MGMT_EV_ADV_MONITOR_DEVICE_LOST                0x0030
->> > +struct mgmt_ev_adv_monitor_device_lost {
->> > +       __le16 monitor_handle;
->> > +       struct mgmt_addr_info addr;
->> > +} __packed;
->> > diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
->> > index bf989ae03f9f..06e0769f350d 100644
->> > --- a/net/bluetooth/mgmt.c
->> > +++ b/net/bluetooth/mgmt.c
->> > @@ -174,6 +174,8 @@ static const u16 mgmt_events[] = {
->> >         MGMT_EV_ADV_MONITOR_REMOVED,
->> >         MGMT_EV_CONTROLLER_SUSPEND,
->> >         MGMT_EV_CONTROLLER_RESUME,
->> > +       MGMT_EV_ADV_MONITOR_DEVICE_FOUND,
->> > +       MGMT_EV_ADV_MONITOR_DEVICE_LOST,
->> >  };
->> >
->> >  static const u16 mgmt_untrusted_commands[] = {
->> > @@ -9524,6 +9526,100 @@ static bool is_filter_match(struct hci_dev *hdev, s8 rssi, u8 *eir,
->> >         return true;
->> >  }
->> >
->> > +void mgmt_adv_monitor_device_lost(struct hci_dev *hdev, u16 handle,
->> > +                                 bdaddr_t *bdaddr, u8 addr_type)
->> > +{
->> > +       struct mgmt_ev_adv_monitor_device_lost ev;
->> > +
->> > +       ev.monitor_handle = cpu_to_le16(handle);
->> > +       bacpy(&ev.addr.bdaddr, bdaddr);
->> > +       ev.addr.type = addr_type;
->> > +
->> > +       mgmt_event(MGMT_EV_ADV_MONITOR_DEVICE_LOST, hdev, &ev, sizeof(ev),
->> > +                  NULL);
->> > +}
->> > +
->> > +static void mgmt_adv_monitor_device_found(struct hci_dev *hdev,
->> > +                                         struct mgmt_ev_device_found *ev,
->> > +                                         size_t ev_size, bool discovering)
->> > +{
->> > +       char buf[518];
->>
->> We should try to avoid declaring such big stack variable, instead Im
->> working on a set the should enable you to use skb_put/skb_put_data
->> directly into the skb, here are the current changes I have for
->> device_found:
->>
->> https://gist.github.com/Vudentz/ffce584912eb7dc4add9c3bb25466fa5
->>
->> I'm addressing Marcel's comments and will send the set to the list later today.
->
-> Please let me know once these changes land bluetooth-next, I'll update my patch and send out the new revision.
-
-Those changes are already in bluetooth-next.
-
->>
->>
->> > +       struct mgmt_ev_adv_monitor_device_found *advmon_ev = (void *)buf;
->> > +       size_t advmon_ev_size;
->> > +       struct monitored_device *dev, *tmp;
->> > +       bool matched = false;
->> > +       bool notified = false;
->> > +
->> > +       /* We have received the Advertisement Report because:
->> > +        * 1. the kernel has initiated active discovery
->> > +        * 2. if not, we have pend_le_reports > 0 in which case we are doing
->> > +        *    passive scanning
->> > +        * 3. if none of the above is true, we have one or more active
->> > +        *    Advertisement Monitor
->> > +        *
->> > +        * For case 1 and 2, report all advertisements via MGMT_EV_DEVICE_FOUND
->> > +        * and report ONLY one advertisement per device for the matched Monitor
->> > +        * via MGMT_EV_ADV_MONITOR_DEVICE_FOUND event.
->> > +        *
->> > +        * For case 3, since we are not active scanning and all advertisements
->> > +        * received are due to a matched Advertisement Monitor, report all
->> > +        * advertisements ONLY via MGMT_EV_ADV_MONITOR_DEVICE_FOUND event.
->> > +        */
->> > +       if (discovering) {
->> > +               mgmt_event(MGMT_EV_DEVICE_FOUND, hdev, ev, ev_size, NULL);
->> > +
->> > +               if (!hdev->advmon_pend_notify)
->> > +                       return;
->> > +       }
->> > +
->> > +       /* Make sure that the buffer is big enough */
->> > +       advmon_ev_size = ev_size + (sizeof(*advmon_ev) - sizeof(*ev));
->> > +       if (advmon_ev_size > sizeof(buf))
->> > +               return;
->> > +
->> > +       /* ADV_MONITOR_DEVICE_FOUND is similar to DEVICE_FOUND event except
->> > +        * that it also has 'monitor_handle'. Make a copy of DEVICE_FOUND and
->> > +        * store monitor_handle of the matched monitor.
->> > +        */
->> > +       memcpy(&advmon_ev->addr, ev, ev_size);
->> > +
->> > +       hdev->advmon_pend_notify = false;
->> > +
->> > +       list_for_each_entry_safe(dev, tmp, &hdev->monitored_devices, list) {
->> > +               if (!bacmp(&dev->bdaddr, &advmon_ev->addr.bdaddr)) {
->> > +                       matched = true;
->> > +
->> > +                       if (!dev->notified) {
->> > +                               advmon_ev->monitor_handle =
->> > +                                               cpu_to_le16(dev->handle);
->> > +
->> > +                               mgmt_event(MGMT_EV_ADV_MONITOR_DEVICE_FOUND,
->> > +                                          hdev, advmon_ev, advmon_ev_size,
->> > +                                          NULL);
->> > +
->> > +                               notified = true;
->> > +                               dev->notified = true;
->> > +                       }
->> > +               }
->> > +
->> > +               if (!dev->notified)
->> > +                       hdev->advmon_pend_notify = true;
->> > +       }
->> > +
->> > +       if (!discovering &&
->> > +           ((matched && !notified) || !msft_monitor_supported(hdev))) {
->> > +               /* Handle 0 indicates that we are not active scanning and this
->> > +                * is a subsequent advertisement report for an already matched
->> > +                * Advertisement Monitor or the controller offloading support
->> > +                * is not available.
->> > +                */
->> > +               advmon_ev->monitor_handle = 0;
->> > +
->> > +               mgmt_event(MGMT_EV_ADV_MONITOR_DEVICE_FOUND, hdev, advmon_ev,
->> > +                          advmon_ev_size, NULL);
->> > +       }
->> > +}
->> > +
->> >  void mgmt_device_found(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
->> >                        u8 addr_type, u8 *dev_class, s8 rssi, u32 flags,
->> >                        u8 *eir, u16 eir_len, u8 *scan_rsp, u8 scan_rsp_len)
->> > @@ -9531,6 +9627,7 @@ void mgmt_device_found(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
->> >         char buf[512];
->> >         struct mgmt_ev_device_found *ev = (void *)buf;
->> >         size_t ev_size;
->> > +       bool report_device_found = hci_discovery_active(hdev);
->> >
->> >         /* Don't send events for a non-kernel initiated discovery. With
->> >          * LE one exception is if we have pend_le_reports > 0 in which
->> > @@ -9539,11 +9636,10 @@ void mgmt_device_found(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
->> >         if (!hci_discovery_active(hdev)) {
->> >                 if (link_type == ACL_LINK)
->> >                         return;
->> > -               if (link_type == LE_LINK &&
->> > -                   list_empty(&hdev->pend_le_reports) &&
->> > -                   !hci_is_adv_monitoring(hdev)) {
->> > +               if (link_type == LE_LINK && !list_empty(&hdev->pend_le_reports))
->> > +                       report_device_found = true;
->> > +               else if (!hci_is_adv_monitoring(hdev))
->> >                         return;
->> > -               }
->> >         }
->> >
->> >         if (hdev->discovery.result_filtering) {
->> > @@ -9606,7 +9702,7 @@ void mgmt_device_found(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
->> >         ev->eir_len = cpu_to_le16(eir_len + scan_rsp_len);
->> >         ev_size = sizeof(*ev) + eir_len + scan_rsp_len;
->> >
->> > -       mgmt_event(MGMT_EV_DEVICE_FOUND, hdev, ev, ev_size, NULL);
->> > +       mgmt_adv_monitor_device_found(hdev, ev, ev_size, report_device_found);
->> >  }
->> >
->> >  void mgmt_remote_name(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
->> > diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
->> > index aadabe78baf6..3e2385562d2b 100644
->> > --- a/net/bluetooth/msft.c
->> > +++ b/net/bluetooth/msft.c
->> > @@ -579,8 +579,16 @@ void msft_do_close(struct hci_dev *hdev)
->> >
->> >         hci_dev_lock(hdev);
->> >
->> > -       /* Clear any devices that are being monitored */
->> > +       /* Clear any devices that are being monitored and notify device lost */
->> > +
->> > +       hdev->advmon_pend_notify = false;
->> > +
->> >         list_for_each_entry_safe(dev, tmp_dev, &hdev->monitored_devices, list) {
->> > +               if (dev->notified)
->> > +                       mgmt_adv_monitor_device_lost(hdev, dev->handle,
->> > +                                                    &dev->bdaddr,
->> > +                                                    dev->addr_type);
->> > +
->> >                 list_del(&dev->list);
->> >                 kfree(dev);
->> >         }
->> > @@ -639,6 +647,7 @@ static void msft_device_found(struct hci_dev *hdev, bdaddr_t *bdaddr,
->> >
->> >         INIT_LIST_HEAD(&dev->list);
->> >         list_add(&dev->list, &hdev->monitored_devices);
->> > +       hdev->advmon_pend_notify = true;
->> >  }
->> >
->> >  /* This function requires the caller holds hdev->lock */
->> > @@ -649,6 +658,10 @@ static void msft_device_lost(struct hci_dev *hdev, bdaddr_t *bdaddr,
->> >
->> >         list_for_each_entry_safe(dev, tmp, &hdev->monitored_devices, list) {
->> >                 if (dev->handle == mgmt_handle) {
->> > +                       if (dev->notified)
->> > +                               mgmt_adv_monitor_device_lost(hdev, mgmt_handle,
->> > +                                                            bdaddr, addr_type);
->> > +
->> >                         list_del(&dev->list);
->> >                         kfree(dev);
->> >
->> > --
->> > 2.34.0.384.gca35af8252-goog
->> >
->>
->>
->> --
->> Luiz Augusto von Dentz
->
->
-> Thanks,
-> Manish.
-
-
-
--- 
-Luiz Augusto von Dentz
+SGkgLA0KDQpUaGFua3MgZm9yIHRoZSByZXZpZXcuDQoNClN1cmUsIFdpbGwgbWFrZSB0aGUgY2hh
+bmdlLg0KDQpUaGFua3MsDQpTYWppZGENCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZy
+b206IERvdWcgQW5kZXJzb24gPGRpYW5kZXJzQGNocm9taXVtLm9yZz4gDQpTZW50OiBNb25kYXks
+IERlY2VtYmVyIDEzLCAyMDIxIDk6MjIgUE0NClRvOiBTYWppZGEgQmhhbnUgKFRlbXApIChRVUlD
+KSA8cXVpY19jX3NiaGFudUBxdWljaW5jLmNvbT4NCkNjOiB0dWRvci5hbWJhcnVzQG1pY3JvY2hp
+cC5jb207IG1pY2hhZWxAd2FsbGUuY2M7IHAueWFkYXZAdGkuY29tOyBtaXF1ZWwucmF5bmFsQGJv
+b3RsaW4uY29tOyByaWNoYXJkQG5vZC5hdDsgdmlnbmVzaHJAdGkuY29tOyBsaW51eC1tdGRAbGlz
+dHMuaW5mcmFkZWFkLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgc3R1bW1hbGFA
+Y29kZWF1cm9yYS5vcmc7IHZiYWRpZ2FuQGNvZGVhdXJvcmEub3JnOyBSYW0gUHJha2FzaCBHdXB0
+YSAoUVVJQykgPHF1aWNfcmFtcHJha2FAcXVpY2luYy5jb20+OyBQcmFkZWVwIFByYWdhbGxhcGF0
+aSAoUVVJQykgPHF1aWNfcHJhZ2FsbGFAcXVpY2luYy5jb20+OyBzYXJ0Z2FyZ0Bjb2RlYXVyb3Jh
+Lm9yZw0KU3ViamVjdDogUmU6IFtQQVRDSCBWMl0gbXRkOiBzcGktbm9yOiB3aW5ib25kOiBBZGQg
+c3VwcG9ydCBmb3Igd2luYm9uZCBjaGlwDQoNCkhpLA0KDQpPbiBXZWQsIERlYyAxLCAyMDIxIGF0
+IDEwOjM4IFBNIFNoYWlrIFNhamlkYSBCaGFudSA8cXVpY19jX3NiaGFudUBxdWljaW5jLmNvbT4g
+d3JvdGU6DQo+DQo+IEFkZCBzdXBwb3J0IGZvciB3aW5ib25kIFcyNVE1MTJOVy1JTSBjaGlwLg0K
+Pg0KPiBTaWduZWQtb2ZmLWJ5OiBTaGFpayBTYWppZGEgQmhhbnUgPHF1aWNfY19zYmhhbnVAcXVp
+Y2luYy5jb20+DQo+IC0tLQ0KPiBDaGFuZ2VzIHNpbmNlIFYxOg0KPiAgICAgICAgIEFkZGVkIHNw
+YWNlIGJlZm9yZSBuYW1lIG9mIHRoZSBmbGFzaCBwYXJ0IGFzIHN1Z2dlc3RlZCBieSBEb3VnLg0K
+DQpXaGVuIHNvbWVvbmUgY29tbWVudHMgb24gVjEsIGl0J3MgbmljZSB0byBDQyB0aGVtIG9uIFYy
+LiA7LSkNCg0KPiAtLS0NCj4gIGRyaXZlcnMvbXRkL3NwaS1ub3Ivd2luYm9uZC5jIHwgMyArKysN
+Cj4gIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKykNCj4NCj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvbXRkL3NwaS1ub3Ivd2luYm9uZC5jIA0KPiBiL2RyaXZlcnMvbXRkL3NwaS1ub3Ivd2lu
+Ym9uZC5jIGluZGV4IDk2NTczZjYuLjQ0ZjE5ZjIgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbXRk
+L3NwaS1ub3Ivd2luYm9uZC5jDQo+ICsrKyBiL2RyaXZlcnMvbXRkL3NwaS1ub3Ivd2luYm9uZC5j
+DQo+IEBAIC0xMDAsNiArMTAwLDkgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBmbGFzaF9pbmZvIHdp
+bmJvbmRfcGFydHNbXSA9IHsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRUNUXzRL
+IHwgU1BJX05PUl9EVUFMX1JFQUQgfCBTUElfTk9SX1FVQURfUkVBRCkgfSwNCj4gICAgICAgICB7
+ICJ3MjVtNTEyanYiLCBJTkZPKDB4ZWY3MTE5LCAwLCA2NCAqIDEwMjQsIDEwMjQsDQo+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBTRUNUXzRLIHwgU1BJX05PUl9RVUFEX1JFQUQgfCANCj4g
+U1BJX05PUl9EVUFMX1JFQUQpIH0sDQo+ICsgICAgICAgeyAidzI1cTUxMm53IiwgSU5GTygweGVm
+ODAyMCwgMCwgNjQgKiAxMDI0LCAxMDI0LA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICBT
+RUNUXzRLIHwgU1BJX05PUl9EVUFMX1JFQUQgfCBTUElfTk9SX1FVQURfUkVBRCB8DQo+ICsgICAg
+ICAgICAgICAgICAgICAgICAgICAgIFNQSV9OT1JfSEFTX0xPQ0sgfCBTUElfTk9SX0hBU19UQikg
+fSwNCg0KSSBoYWQgYSBxdWljayBsb29rLiBUaG91Z2ggSSdtIG5vIGV4cGVydCBvbiB0aGlzIGRy
+aXZlciwgSSBiZWxpZXZlIHRoYXQgdGhlIG5hbWUgc2hvdWxkIGJlICJ3MjVxNTEybndtIiwgbm90
+ICJ3MjVxNTEybnciICh5b3UgbmVlZCBhbiAibSINCmF0IHRoZSBlbmQpLiBFdmlkZW5jZToNCg0K
+VGhlIFdpbmJvbmQgZG9jIFsxXSBzaG93czoNCg0KVzI1UTUxMk5XLUlNIGlzIDB4ZWY4MDIwDQpX
+MjVRNTEyTlctSVEvSU4gaXMgMHhlZjYwMjANCg0KQ29tcGFyaW5nIHRvIGEgZGlmZmVyZW50IGRh
+dGFzaGVldCBbMl0sIEkgc2VlIHRoYXQ6DQoNClcyNVEyNTZKVy1JTSBpcyAweGVmODAxOQ0KVzI1
+UTI1NkpXIGlzIDB4ZWY2MDE5DQoNClNpbmNlICJXMjVRMjU2SlctSU0iIGlzIGluIGNvZGUgYXMg
+IncyNXEyNTZqd20iIGl0IGltcGxpZXMgdG8gbWUgdGhhdCBmb3IgdGhlICItSU0iIHN1ZmZpeCB5
+b3UganVzdCBhZGQgYSAibSIgdG8gdGhlIGVuZCBvZiB0aGUgbmFtZS4NCg0KWzFdIGh0dHBzOi8v
+d3d3LndpbmJvbmQuY29tL3Jlc291cmNlLWZpbGVzL1cyNVE1MTJOVyUyMFJldkIlMjAwNzE5MjAy
+MS5wZGYNClsyXSBodHRwczovL3d3dy53aW5ib25kLmNvbS9yZXNvdXJjZS1maWxlcy9XMjVRMjU2
+SlclMjBTUEklMjBSZXZKJTIwMDMxMDIwMjElMjBQbHVzLnBkZg0KDQpBZnRlciBjaGFuZ2luZyB0
+aGUgbmFtZSwgZmVlbCBmcmVlIHRvIGFkZCBteSBSZXZpZXdlZC1ieSAoYW5kIHBsZWFzZSBDQyBt
+ZSBvbiB2MykuDQoNCi1Eb3VnDQo=

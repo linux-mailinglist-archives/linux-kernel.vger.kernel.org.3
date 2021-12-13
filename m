@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34192472441
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 870EC472570
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234345AbhLMJfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S234617AbhLMJnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234212AbhLMJeY (ORCPT
+        with ESMTP id S233834AbhLMJkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:34:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1B4C0698C9;
-        Mon, 13 Dec 2021 01:34:23 -0800 (PST)
+        Mon, 13 Dec 2021 04:40:45 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CA6C034633;
+        Mon, 13 Dec 2021 01:39:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66EE2B80E07;
-        Mon, 13 Dec 2021 09:34:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2281C00446;
-        Mon, 13 Dec 2021 09:34:20 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 62846CE0E90;
+        Mon, 13 Dec 2021 09:39:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D1CEC341C5;
+        Mon, 13 Dec 2021 09:39:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388061;
-        bh=ChuHUdCQyAwFWEoDBF9myeSt+aUzVylG3NwzADQkuq4=;
+        s=korg; t=1639388346;
+        bh=MeRg8lA81d7g4EPB3wdfZZLPlc69DM4wB0KE1IuHVWg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gqfhEMbiciOKpm0rdJwZaNIra99aTsqXtA+v3yB+dK9EWVBQ2FePedZi5sEdFFAwf
-         RNFMjHefcob3QmAsf5UwxBUVqG/IOmGORs3LZepV0zjoaNFWQjQbhMvaaLdP1C/0oq
-         ojDGjZCoPsHtTTdwfx/Mzp8aTeSbrB5YUJ8qsJTE=
+        b=v/7jeDMUfgsOE3H+yl1iPz7lo07/jcXSBYcKQtYx4Be1lyAvhg+lCdzuRCJDZzE9j
+         lfI+qSgdSOXwPp6HYHboqvb+kinY1q+lce2Z1ty/GM18L4PhtQujpeYSecqroeKIwo
+         SJGiMPQMzTZv3eMAsp0CPO9MDy3WPaHL0wwtLGR8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Michael Zaidman <michael.zaidman@gmail.com>,
-        Stefan Achatz <erazor_de@users.sourceforge.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-input@vger.kernel.org
-Subject: [PATCH 4.9 07/42] HID: check for valid USB device for many HID drivers
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.19 18/74] bonding: make tx_rebalance_counter an atomic
 Date:   Mon, 13 Dec 2021 10:29:49 +0100
-Message-Id: <20211213092926.819545180@linuxfoundation.org>
+Message-Id: <20211213092931.402769941@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092926.578829548@linuxfoundation.org>
-References: <20211213092926.578829548@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+References: <20211213092930.763200615@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,334 +49,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 93020953d0fa7035fd036ad87a47ae2b7aa4ae33 upstream.
+commit dac8e00fb640e9569cdeefd3ce8a75639e5d0711 upstream.
 
-Many HID drivers assume that the HID device assigned to them is a USB
-device as that was the only way HID devices used to be able to be
-created in Linux.  However, with the additional ways that HID devices
-can be created for many different bus types, that is no longer true, so
-properly check that we have a USB device associated with the HID device
-before allowing a driver that makes this assumption to claim it.
+KCSAN reported a data-race [1] around tx_rebalance_counter
+which can be accessed from different contexts, without
+the protection of a lock/mutex.
 
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: Michael Zaidman <michael.zaidman@gmail.com>
-Cc: Stefan Achatz <erazor_de@users.sourceforge.net>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: linux-input@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Tested-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-[bentiss: amended for thrustmater.c hunk to apply]
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Link: https://lore.kernel.org/r/20211201183503.2373082-3-gregkh@linuxfoundation.org
+[1]
+BUG: KCSAN: data-race in bond_alb_init_slave / bond_alb_monitor
+
+write to 0xffff888157e8ca24 of 4 bytes by task 7075 on cpu 0:
+ bond_alb_init_slave+0x713/0x860 drivers/net/bonding/bond_alb.c:1613
+ bond_enslave+0xd94/0x3010 drivers/net/bonding/bond_main.c:1949
+ do_set_master net/core/rtnetlink.c:2521 [inline]
+ __rtnl_newlink net/core/rtnetlink.c:3475 [inline]
+ rtnl_newlink+0x1298/0x13b0 net/core/rtnetlink.c:3506
+ rtnetlink_rcv_msg+0x745/0x7e0 net/core/rtnetlink.c:5571
+ netlink_rcv_skb+0x14e/0x250 net/netlink/af_netlink.c:2491
+ rtnetlink_rcv+0x18/0x20 net/core/rtnetlink.c:5589
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x5fc/0x6c0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x6e1/0x7d0 net/netlink/af_netlink.c:1916
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg net/socket.c:724 [inline]
+ ____sys_sendmsg+0x39a/0x510 net/socket.c:2409
+ ___sys_sendmsg net/socket.c:2463 [inline]
+ __sys_sendmsg+0x195/0x230 net/socket.c:2492
+ __do_sys_sendmsg net/socket.c:2501 [inline]
+ __se_sys_sendmsg net/socket.c:2499 [inline]
+ __x64_sys_sendmsg+0x42/0x50 net/socket.c:2499
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+read to 0xffff888157e8ca24 of 4 bytes by task 1082 on cpu 1:
+ bond_alb_monitor+0x8f/0xc00 drivers/net/bonding/bond_alb.c:1511
+ process_one_work+0x3fc/0x980 kernel/workqueue.c:2298
+ worker_thread+0x616/0xa70 kernel/workqueue.c:2445
+ kthread+0x2c7/0x2e0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+
+value changed: 0x00000001 -> 0x00000064
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 1082 Comm: kworker/u4:3 Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: bond1 bond_alb_monitor
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-chicony.c         |    8 ++++++--
- drivers/hid/hid-corsair.c         |    7 ++++++-
- drivers/hid/hid-elo.c             |    3 +++
- drivers/hid/hid-holtek-kbd.c      |    9 +++++++--
- drivers/hid/hid-holtek-mouse.c    |    9 +++++++++
- drivers/hid/hid-lg.c              |   10 ++++++++--
- drivers/hid/hid-prodikeys.c       |   10 ++++++++--
- drivers/hid/hid-roccat-arvo.c     |    3 +++
- drivers/hid/hid-roccat-isku.c     |    3 +++
- drivers/hid/hid-roccat-kone.c     |    3 +++
- drivers/hid/hid-roccat-koneplus.c |    3 +++
- drivers/hid/hid-roccat-konepure.c |    3 +++
- drivers/hid/hid-roccat-kovaplus.c |    3 +++
- drivers/hid/hid-roccat-lua.c      |    3 +++
- drivers/hid/hid-roccat-pyra.c     |    3 +++
- drivers/hid/hid-roccat-ryos.c     |    3 +++
- drivers/hid/hid-roccat-savu.c     |    3 +++
- drivers/hid/hid-samsung.c         |    3 +++
- drivers/hid/hid-uclogic.c         |    3 +++
- 19 files changed, 83 insertions(+), 9 deletions(-)
+ drivers/net/bonding/bond_alb.c |   14 ++++++++------
+ include/net/bond_alb.h         |    2 +-
+ 2 files changed, 9 insertions(+), 7 deletions(-)
 
---- a/drivers/hid/hid-chicony.c
-+++ b/drivers/hid/hid-chicony.c
-@@ -61,8 +61,12 @@ static int ch_input_mapping(struct hid_d
- static __u8 *ch_switch12_report_fixup(struct hid_device *hdev, __u8 *rdesc,
- 		unsigned int *rsize)
- {
--	struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
--	
-+	struct usb_interface *intf;
-+
-+	if (!hid_is_usb(hdev))
-+		return rdesc;
-+
-+	intf = to_usb_interface(hdev->dev.parent);
- 	if (intf->cur_altsetting->desc.bInterfaceNumber == 1) {
- 		/* Change usage maximum and logical maximum from 0x7fff to
- 		 * 0x2fff, so they don't exceed HID_MAX_USAGES */
---- a/drivers/hid/hid-corsair.c
-+++ b/drivers/hid/hid-corsair.c
-@@ -553,7 +553,12 @@ static int corsair_probe(struct hid_devi
- 	int ret;
- 	unsigned long quirks = id->driver_data;
- 	struct corsair_drvdata *drvdata;
--	struct usb_interface *usbif = to_usb_interface(dev->dev.parent);
-+	struct usb_interface *usbif;
-+
-+	if (!hid_is_usb(dev))
-+		return -EINVAL;
-+
-+	usbif = to_usb_interface(dev->dev.parent);
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -1530,14 +1530,14 @@ void bond_alb_monitor(struct work_struct
+ 	struct slave *slave;
  
- 	drvdata = devm_kzalloc(&dev->dev, sizeof(struct corsair_drvdata),
- 			       GFP_KERNEL);
---- a/drivers/hid/hid-elo.c
-+++ b/drivers/hid/hid-elo.c
-@@ -230,6 +230,9 @@ static int elo_probe(struct hid_device *
- 	struct elo_priv *priv;
- 	int ret;
+ 	if (!bond_has_slaves(bond)) {
+-		bond_info->tx_rebalance_counter = 0;
++		atomic_set(&bond_info->tx_rebalance_counter, 0);
+ 		bond_info->lp_counter = 0;
+ 		goto re_arm;
+ 	}
  
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
---- a/drivers/hid/hid-holtek-kbd.c
-+++ b/drivers/hid/hid-holtek-kbd.c
-@@ -143,12 +143,17 @@ static int holtek_kbd_input_event(struct
- static int holtek_kbd_probe(struct hid_device *hdev,
- 		const struct hid_device_id *id)
- {
--	struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
--	int ret = hid_parse(hdev);
-+	struct usb_interface *intf;
-+	int ret;
+ 	rcu_read_lock();
  
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
-+	ret = hid_parse(hdev);
- 	if (!ret)
- 		ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
+-	bond_info->tx_rebalance_counter++;
++	atomic_inc(&bond_info->tx_rebalance_counter);
+ 	bond_info->lp_counter++;
  
-+	intf = to_usb_interface(hdev->dev.parent);
- 	if (!ret && intf->cur_altsetting->desc.bInterfaceNumber == 1) {
- 		struct hid_input *hidinput;
- 		list_for_each_entry(hidinput, &hdev->inputs, list) {
---- a/drivers/hid/hid-holtek-mouse.c
-+++ b/drivers/hid/hid-holtek-mouse.c
-@@ -65,6 +65,14 @@ static __u8 *holtek_mouse_report_fixup(s
- 	return rdesc;
- }
+ 	/* send learning packets */
+@@ -1559,7 +1559,7 @@ void bond_alb_monitor(struct work_struct
+ 	}
  
-+static int holtek_mouse_probe(struct hid_device *hdev,
-+			      const struct hid_device_id *id)
-+{
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+	return 0;
-+}
-+
- static const struct hid_device_id holtek_mouse_devices[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_HOLTEK_ALT,
- 			USB_DEVICE_ID_HOLTEK_ALT_MOUSE_A067) },
-@@ -86,6 +94,7 @@ static struct hid_driver holtek_mouse_dr
- 	.name = "holtek_mouse",
- 	.id_table = holtek_mouse_devices,
- 	.report_fixup = holtek_mouse_report_fixup,
-+	.probe = holtek_mouse_probe,
- };
+ 	/* rebalance tx traffic */
+-	if (bond_info->tx_rebalance_counter >= BOND_TLB_REBALANCE_TICKS) {
++	if (atomic_read(&bond_info->tx_rebalance_counter) >= BOND_TLB_REBALANCE_TICKS) {
+ 		bond_for_each_slave_rcu(bond, slave, iter) {
+ 			tlb_clear_slave(bond, slave, 1);
+ 			if (slave == rcu_access_pointer(bond->curr_active_slave)) {
+@@ -1569,7 +1569,7 @@ void bond_alb_monitor(struct work_struct
+ 				bond_info->unbalanced_load = 0;
+ 			}
+ 		}
+-		bond_info->tx_rebalance_counter = 0;
++		atomic_set(&bond_info->tx_rebalance_counter, 0);
+ 	}
  
- module_hid_driver(holtek_mouse_driver);
---- a/drivers/hid/hid-lg.c
-+++ b/drivers/hid/hid-lg.c
-@@ -714,12 +714,18 @@ static int lg_raw_event(struct hid_devic
+ 	if (bond_info->rlb_enabled) {
+@@ -1639,7 +1639,8 @@ int bond_alb_init_slave(struct bonding *
+ 	tlb_init_slave(slave);
  
- static int lg_probe(struct hid_device *hdev, const struct hid_device_id *id)
- {
--	struct usb_interface *iface = to_usb_interface(hdev->dev.parent);
--	__u8 iface_num = iface->cur_altsetting->desc.bInterfaceNumber;
-+	struct usb_interface *iface;
-+	__u8 iface_num;
- 	unsigned int connect_mask = HID_CONNECT_DEFAULT;
- 	struct lg_drv_data *drv_data;
- 	int ret;
+ 	/* order a rebalance ASAP */
+-	bond->alb_info.tx_rebalance_counter = BOND_TLB_REBALANCE_TICKS;
++	atomic_set(&bond->alb_info.tx_rebalance_counter,
++		   BOND_TLB_REBALANCE_TICKS);
  
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
-+	iface = to_usb_interface(hdev->dev.parent);
-+	iface_num = iface->cur_altsetting->desc.bInterfaceNumber;
-+
- 	/* G29 only work with the 1st interface */
- 	if ((hdev->product == USB_DEVICE_ID_LOGITECH_G29_WHEEL) &&
- 	    (iface_num != 0)) {
---- a/drivers/hid/hid-prodikeys.c
-+++ b/drivers/hid/hid-prodikeys.c
-@@ -803,12 +803,18 @@ static int pk_raw_event(struct hid_devic
- static int pk_probe(struct hid_device *hdev, const struct hid_device_id *id)
- {
- 	int ret;
--	struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
--	unsigned short ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
-+	struct usb_interface *intf;
-+	unsigned short ifnum;
- 	unsigned long quirks = id->driver_data;
- 	struct pk_device *pk;
- 	struct pcmidi_snd *pm = NULL;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
-+	intf = to_usb_interface(hdev->dev.parent);
-+	ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
-+
- 	pk = kzalloc(sizeof(*pk), GFP_KERNEL);
- 	if (pk == NULL) {
- 		hid_err(hdev, "can't alloc descriptor\n");
---- a/drivers/hid/hid-roccat-arvo.c
-+++ b/drivers/hid/hid-roccat-arvo.c
-@@ -347,6 +347,9 @@ static int arvo_probe(struct hid_device
- {
- 	int retval;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	retval = hid_parse(hdev);
- 	if (retval) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-roccat-isku.c
-+++ b/drivers/hid/hid-roccat-isku.c
-@@ -327,6 +327,9 @@ static int isku_probe(struct hid_device
- {
- 	int retval;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	retval = hid_parse(hdev);
- 	if (retval) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-roccat-kone.c
-+++ b/drivers/hid/hid-roccat-kone.c
-@@ -752,6 +752,9 @@ static int kone_probe(struct hid_device
- {
- 	int retval;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	retval = hid_parse(hdev);
- 	if (retval) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-roccat-koneplus.c
-+++ b/drivers/hid/hid-roccat-koneplus.c
-@@ -434,6 +434,9 @@ static int koneplus_probe(struct hid_dev
- {
- 	int retval;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	retval = hid_parse(hdev);
- 	if (retval) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-roccat-konepure.c
-+++ b/drivers/hid/hid-roccat-konepure.c
-@@ -136,6 +136,9 @@ static int konepure_probe(struct hid_dev
- {
- 	int retval;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	retval = hid_parse(hdev);
- 	if (retval) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-roccat-kovaplus.c
-+++ b/drivers/hid/hid-roccat-kovaplus.c
-@@ -504,6 +504,9 @@ static int kovaplus_probe(struct hid_dev
- {
- 	int retval;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	retval = hid_parse(hdev);
- 	if (retval) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-roccat-lua.c
-+++ b/drivers/hid/hid-roccat-lua.c
-@@ -163,6 +163,9 @@ static int lua_probe(struct hid_device *
- {
- 	int retval;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	retval = hid_parse(hdev);
- 	if (retval) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-roccat-pyra.c
-+++ b/drivers/hid/hid-roccat-pyra.c
-@@ -452,6 +452,9 @@ static int pyra_probe(struct hid_device
- {
- 	int retval;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	retval = hid_parse(hdev);
- 	if (retval) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-roccat-ryos.c
-+++ b/drivers/hid/hid-roccat-ryos.c
-@@ -144,6 +144,9 @@ static int ryos_probe(struct hid_device
- {
- 	int retval;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	retval = hid_parse(hdev);
- 	if (retval) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-roccat-savu.c
-+++ b/drivers/hid/hid-roccat-savu.c
-@@ -116,6 +116,9 @@ static int savu_probe(struct hid_device
- {
- 	int retval;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	retval = hid_parse(hdev);
- 	if (retval) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-samsung.c
-+++ b/drivers/hid/hid-samsung.c
-@@ -157,6 +157,9 @@ static int samsung_probe(struct hid_devi
- 	int ret;
- 	unsigned int cmask = HID_CONNECT_DEFAULT;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	ret = hid_parse(hdev);
- 	if (ret) {
- 		hid_err(hdev, "parse failed\n");
---- a/drivers/hid/hid-uclogic.c
-+++ b/drivers/hid/hid-uclogic.c
-@@ -791,6 +791,9 @@ static int uclogic_tablet_enable(struct
- 	__u8 *p;
- 	s32 v;
- 
-+	if (!hid_is_usb(hdev))
-+		return -EINVAL;
-+
- 	/*
- 	 * Read string descriptor containing tablet parameters. The specific
- 	 * string descriptor and data were discovered by sniffing the Windows
+ 	if (bond->alb_info.rlb_enabled)
+ 		bond->alb_info.rlb_rebalance = 1;
+@@ -1676,7 +1677,8 @@ void bond_alb_handle_link_change(struct
+ 			rlb_clear_slave(bond, slave);
+ 	} else if (link == BOND_LINK_UP) {
+ 		/* order a rebalance ASAP */
+-		bond_info->tx_rebalance_counter = BOND_TLB_REBALANCE_TICKS;
++		atomic_set(&bond_info->tx_rebalance_counter,
++			   BOND_TLB_REBALANCE_TICKS);
+ 		if (bond->alb_info.rlb_enabled) {
+ 			bond->alb_info.rlb_rebalance = 1;
+ 			/* If the updelay module parameter is smaller than the
+--- a/include/net/bond_alb.h
++++ b/include/net/bond_alb.h
+@@ -142,7 +142,7 @@ struct tlb_slave_info {
+ struct alb_bond_info {
+ 	struct tlb_client_info	*tx_hashtbl; /* Dynamically allocated */
+ 	u32			unbalanced_load;
+-	int			tx_rebalance_counter;
++	atomic_t		tx_rebalance_counter;
+ 	int			lp_counter;
+ 	/* -------- rlb parameters -------- */
+ 	int rlb_enabled;
 
 

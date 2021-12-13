@@ -2,68 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAC0472B3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95AF472B3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235376AbhLMLWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        id S235399AbhLMLWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234381AbhLMLWr (ORCPT
+        with ESMTP id S235386AbhLMLWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:22:47 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7798CC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:22:47 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id g14so50098683edb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 03:22:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=wb4A0z3ZOTSBAIpVUUx5876ZVziir9x7KaZ3LnTJZl0=;
-        b=GWQYB/1ccMRBbe1r30EqiIjn7aJvss+LEWt4l8+kVpKoDuSdP+KiRCgrSfXWgOcZfz
-         YcSqZ9dbVab8t/mRi6cjnaInVZreZHv/uOqWiS4NfL+bERyofCgPYt1bPPIT3i94D5wY
-         a0pI9QggSvIduxyMm0FQ3s1wm7dZSOPc4HE+AcXK8GbB5oqOW7ZCXNzDCSgYDN3S/Bq4
-         Ek9BTs+hCadXSolOjcsF4TkVLUTtovx6S5ME7q9JyuIWV/7hwa+Qg1qBRYT16a8THLrd
-         Od0gd1NB39pI3x+8kcRRNFEWm52Y/24S7HEcEqz73GJt9PnAVrGm+aog0G3o9OPF0Szz
-         Gg6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=wb4A0z3ZOTSBAIpVUUx5876ZVziir9x7KaZ3LnTJZl0=;
-        b=T4DgGuW6hgNlEt5tMS0XyDjR016vYG9xwaALT6W7qQ9yYr9wCZ/P1Zv6cnMdb1+8NN
-         L2kvLKZbtTy2+OuocwS5efBhnvOhQ8HKMBj3jUzuWOUWqfAGi2j3dnoyl4/0Y6VU2a0S
-         wHuzdtEjkTriGqqHg6GDY55PoWz11C0QmZVOoOY5w6dhB51HOLo7cgeprK+2b9THFX8d
-         +3Tg+ZkgqDz1Vc3dOxP93e5vk/4cN/lS4eHnbx7UpD9QPn4CgY80K4wn2+UZzohwpsiy
-         KBvSRsawGj+UUq4uQA7uWmjIjC6yLtijAK2RsY9kZkGcHxHo33SCdi3tCwHgASTvmCC0
-         RaIA==
-X-Gm-Message-State: AOAM533OObHVBqDF5/l8ZuCttZdRnD0jj9nI/TXBeKXJ7xdUUiMz/k2d
-        9t+LXzSuRJxYNraiu6ys9LuGAVqBKlt0AIl1yO4=
-X-Google-Smtp-Source: ABdhPJy+a7Ky5Km67fBl6c87IVzaFwhHkOvqCPUJtC/b/JH3tIC0PJt3CitdGNTCSvMhdwOulZwxvpNaaUnZqFULTOA=
-X-Received: by 2002:a17:907:972a:: with SMTP id jg42mr44689899ejc.398.1639394563167;
- Mon, 13 Dec 2021 03:22:43 -0800 (PST)
+        Mon, 13 Dec 2021 06:22:53 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC81C061574;
+        Mon, 13 Dec 2021 03:22:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F3029CE1006;
+        Mon, 13 Dec 2021 11:22:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E9DDC34602;
+        Mon, 13 Dec 2021 11:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639394569;
+        bh=e31rACSDwO09OV+OGZVlhs9MP9neG53Vroa0SKMJkks=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dnv1lzRaZZWjsJ6fRNHwiwJqrcIJQC8xMnrfW3f0tYudpZ07TbSiqje0RxZdpnvTG
+         bwOt3ppt/BbPcWBJN5LFpxwaiqqzbe+qVHCA5Y3f5mGbISc1exKyY79eyUQGJJP2Hh
+         kuiHOcNy2AQLfEARu3R2HsNxl60gL9E32NCMrfkox6QQyQ72nNZFFQNoRiko8lB37j
+         m80kIREUDpQd1I0IvzJ1KSXQGGbF/iriTK300hPvvi1Lb3CRizsRGsao+Q4AHxe0zN
+         3sAVUekYmLO2I0DDUTN/c3UOcACRnf8lTOzbHANgHm6LHACL9HJVLMW5x94cVzf/us
+         QqmtKLDaa+Xng==
+Date:   Mon, 13 Dec 2021 12:22:46 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc:     David Woodhouse <dwmw2@infradead.org>, paulmck@kernel.org,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, urezki@gmail.com,
+        boqun.feng@gmail.com
+Subject: Re: [PATCH v2] rcu/nocb: Handle concurrent nocb kthreads creation
+Message-ID: <20211213112246.GA782195@lothringen>
+References: <20211211170139.27711-1-quic_neeraju@quicinc.com>
+ <6c184b9ffc5c641736d53bb7598f814d6b4c3fe0.camel@infradead.org>
+ <601ecb12-ae2e-9608-7127-c2cddc8038a6@quicinc.com>
 MIME-Version: 1.0
-Reply-To: salah.ibrahim6778@gmail.com
-Sender: sherifabello348@gmail.com
-Received: by 2002:a05:6400:4210:0:0:0:0 with HTTP; Mon, 13 Dec 2021 03:22:42
- -0800 (PST)
-From:   Salah Ibrahim <ibrahimsala29@gmail.com>
-Date:   Mon, 13 Dec 2021 12:22:42 +0100
-X-Google-Sender-Auth: CqlXyqEpRTJl2-VKOc_m-VpIukQ
-Message-ID: <CAE3VYrQxBsPYMn=1qXr9g-wVDp1yjUHyriUGWJo_k0hUc6ouJg@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <601ecb12-ae2e-9608-7127-c2cddc8038a6@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend.
+On Mon, Dec 13, 2021 at 02:25:30PM +0530, Neeraj Upadhyay wrote:
+> Hi David,
+> 
+> Thanks for the review; some replies inline.
+> 
+> On 12/13/2021 1:48 PM, David Woodhouse wrote:
+> > On Sat, 2021-12-11 at 22:31 +0530, Neeraj Upadhyay wrote:
+> > > When multiple CPUs in the same nocb gp/cb group concurrently
+> > > come online, they might try to concurrently create the same
+> > > rcuog kthread. Fix this by using nocb gp CPU's spawn mutex to
+> > > provide mutual exclusion for the rcuog kthread creation code.
+> > > 
+> > > Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > > ---
+> > > Change in v2:
+> > >   Fix missing mutex_unlock in nocb gp kthread creation err path.
+> > 
+> > I think this ends up being not strictly necessary in the short term too
+> > because we aren't currently planning to run rcutree_prepare_cpu()
+> > concurrently anyway. But harmless and worth fixing in the longer term.
+> > 
+> > Although, if I've already added a mutex for adding the boost thread,
+> > could we manage to use the *same* mutex instead of adding another one?
+> > 
+> 
+> Let me think about it; the nocb-gp and nocb-cb kthreads are grouped based on
+> rcu_nocb_gp_stride; whereas, boost kthreads are per rnp. So, I need to see
+> how we can use a common mutex for both.
+> 
+> 
+> > Acked-by: David Woodhouse <dwmw@amazon.co.uk>
+> > +                       mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
+> > >                          return;
+> > > +               }
+> > >                  WRITE_ONCE(rdp_gp->nocb_gp_kthread, t);
+> > >          }
+> > > +        mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
+> > > 
+> > >          /* Spawn the kthread for this CPU. */
+> > 
+> > Some whitespace damage there.
+> 
+> Will fix in next version.
 
-I have a business proposal of $35 Million USD which i want to transact
-with you Get back for more details.
+I was about to ack the patch but, should we really add code that isn't going to
+be necessary before a long while?
 
-Best Regards
+Thanks!
 
-From Salah Ibrahim
+
+> 
+> Thanks
+> Neeraj
+> 
+> > 

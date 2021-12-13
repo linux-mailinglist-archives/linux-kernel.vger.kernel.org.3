@@ -2,133 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A64E472AD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07021472AE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 12:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbhLMLHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 06:07:06 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37340 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbhLMLHF (ORCPT
+        id S234145AbhLMLI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 06:08:58 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:49280 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229644AbhLMLI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 06:07:05 -0500
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 0FB331F44952;
-        Mon, 13 Dec 2021 11:07:02 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1639393622; bh=04bequcs/NusDXEPCLT88FK1oMcTVoR+NRtV8yyK19Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HPNa0pEfIv5hz6GQwg7ADSOI51qVUCd/TfMdvCH8ku4dokzLlTwYUlnHF+7KdlYVC
-         es/+H7R0Wapod9i7t5ThTjnFFIPLAcnnWoAAjAp1aaBSMcUVmMOn+nTln1rkvFoCur
-         GLWAgdzgdri+jR4cx8wNswkEeY7Op9czgpY97qLRd0JUWL7QWBiNJm8jnNNgiCVMME
-         dMSSxK2M+9N2zlQ4HU+MLN59N0bjXqM/VePCWMoJwabqapJlGKVMBSYfc/LLeBIgWl
-         lzVPj72aHm+EwDEEpZC7pc/BTaRun+PpKExRo/DnLECuZq7Mos0BWQ4BhiN0caVfQC
-         VyhDvSBVm/OJw==
-Date:   Mon, 13 Dec 2021 12:06:58 +0100
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Sean Nyekjaer <sean@geanix.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v5 3/4] mtd: core: protect access to MTD devices while
- in suspend
-Message-ID: <20211213120658.45f312a6@collabora.com>
-In-Reply-To: <20211213105012.65jk4rylxzncqdfy@skn-laptop>
-References: <20211130132912.v6v45boce2zbnoy3@skn-laptop>
-        <20211130143705.5d0404aa@collabora.com>
-        <20211203143958.40645506@xps13>
-        <20211209140721.6ki7gznvxwyn3cze@skn-laptop.hinnerup>
-        <20211209152811.318bdf17@xps13>
-        <20211210132535.gy7rqj5zblqlnz5y@skn-laptop.hadsten>
-        <20211213101025.42c27b43@xps13>
-        <20211213102801.569b50b1@collabora.com>
-        <20211213103350.22590c13@xps13>
-        <20211213105336.7be369b7@collabora.com>
-        <20211213105012.65jk4rylxzncqdfy@skn-laptop>
-Organization: Collabora
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        Mon, 13 Dec 2021 06:08:57 -0500
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BD3hWx0021575;
+        Mon, 13 Dec 2021 06:08:38 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3cwc4kkm3b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Dec 2021 06:08:38 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 1BDB8bwY057234
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 13 Dec 2021 06:08:37 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 13 Dec
+ 2021 06:08:36 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 13 Dec 2021 06:08:36 -0500
+Received: from ubuntuservermchindri.ad.analog.com ([10.32.225.18])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 1BDB8XLY017333;
+        Mon, 13 Dec 2021 06:08:33 -0500
+From:   Mihail Chindris <mihail.chindris@analog.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <lars@metafoo.de>, <Michael.Hennerich@analog.com>,
+        <jic23@kernel.org>, <nuno.sa@analog.com>,
+        <dragos.bogdan@analog.com>, <alexandru.ardelean@analog.com>,
+        Mihail Chindris <mihail.chindris@analog.com>
+Subject: [PATCH v7 0/2] drivers:iio:dac: Add AD3552R driver support
+Date:   Mon, 13 Dec 2021 11:08:23 +0000
+Message-ID: <20211213110825.244347-1-mihail.chindris@analog.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: G-wjsQvBxjLPMMQM576g6m8p1hRJ91OJ
+X-Proofpoint-ORIG-GUID: G-wjsQvBxjLPMMQM576g6m8p1hRJ91OJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-13_04,2021-12-13_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 mlxlogscore=590 malwarescore=0 mlxscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112130072
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 12:50:12 +0200
-Sean Nyekjaer <sean@geanix.com> wrote:
+Changelog v6 -> v7:
+  - https://lore.kernel.org/all/20211129152254.1645-1-mihail.chindris@analog.com/
+  - Fix yaml errors
+  - Fix yaml styling (blank lines and indentation)
+  - set adi,output-range-microvolt: true
 
-> Hi Miquel and Boris,
->=20
-> On Mon, Dec 13, 2021 at 10:53:36AM +0100, Boris Brezillon wrote:
-> > On Mon, 13 Dec 2021 10:33:50 +0100
-> > Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> >  =20
-> > > Hello,
-> > >=20
-> > > boris.brezillon@collabora.com wrote on Mon, 13 Dec 2021 10:28:01 +010=
-0:
-> > >  =20
-> > > > On Mon, 13 Dec 2021 10:10:25 +0100
-> > > > Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> > > >    =20
-> > > > > Hi Sean,
-> > > > >=20
-> > > > > sean@geanix.com wrote on Fri, 10 Dec 2021 14:25:35 +0100:
-> > > > >      =20
-> > > > > > On Thu, Dec 09, 2021 at 03:28:11PM +0100, Miquel Raynal wrote: =
-      =20
-> > > > > > > Hi Sean,
-> > > > > > >=20
-> > > > > > > sean@geanix.com wrote on Thu, 9 Dec 2021 15:07:21 +0100:
-> > > > > > >          =20
-> > > > > > > > On Fri, Dec 03, 2021 at 02:39:58PM +0100, Miquel Raynal wro=
-te:         =20
-> > > > > > > > > Hello,
-> > > > > > > > >            =20
-> > > > > > > > > > > Fine by me, lets drop this series.           =20
-> > > > > > > > >=20
-> > > > > > > > > FYI I've dropped the entire series from mtd/next. I'm wai=
-ting for the
-> > > > > > > > > fix discussed below (without abusing the chip mutex ;-) )=
-.           =20
-> > > > > > > >=20
-> > > > > > > > Cool, looking forward to test a patch series :)         =20
-> > > > > > >=20
-> > > > > > > Test? You mean "write"? :)
-> > > > > > >=20
-> > > > > > > Cheers,
-> > > > > > > Miqu=C3=A8l         =20
-> > > > > >=20
-> > > > > > Hi Miquel,
-> > > > > >=20
-> > > > > > Should we us a atomic for the suspended variable?       =20
-> > > > >=20
-> > > > > I haven't thought about it extensively, an atomic variable sound =
-fine
-> > > > > but I am definitely not a locking expert...     =20
-> > > >=20
-> > > > No need to use an atomic if the variable is already protected by a =
-lock
-> > > > when accessed, and this seems to be case.   =20
-> > >=20
-> > > Maybe there was a confusion about this lock: I think Boris just do not
-> > > want the core to take any lock during a suspend operation. But you can
-> > > still use locks, as long as you release them before suspending.
-> > >=20
-> > > And also, that chip lock might not be the one you want to take because
-> > > it's been introduced for another purpose. =20
-> >=20
-> > Access to the suspended field is already protected by the chip lock,
-> > and I think it's just fine to keep it this way. =20
->=20
-> I'm reading the suspended variable in wait_event() outside the lock :/
+Changelog v5 -> v6:
+  - https://lore.kernel.org/all/20211108082447.116663-1-mihail.chindris@analog.com/
+  - Add dt maintainers (forgotten on previous emails)
+  - (1 << 7) -> BIT(7)
+  - Remove buf_data from ad3552r_desc to use spi_write_then_read and update lock comment
+  - Remove useless comments
+  - Remove unused mask from ad3552r_configure_custom_gain
+  - In ad3552r_configure_device refactor regulator code, add regulator_enable
+     and add ad3552r_reg_disable
+  - Remove unused code like: 
+      AD3552R_CH_TRIGGER_SOFTWARE_LDAC and AD3552R_CH_HW_LDAC_MASK
 
-It doesn't matter because you're checking it again with the lock held
-when doing a new loop iteration.
+Changelog v4 -> v5:
+  - https://lore.kernel.org/all/20211022120427.99516-1-mihail.chindris@analog.com
+  - Add changelog for previous version
+  - Extend lock comment
+  - Remove unused variable is_custom
+
+Changelog v3 -> v4:
+  - https://lore.kernel.org/all/20211021070924.18626-1-mihail.chindris@analog.com
+  - Remove trigger.h
+  - Use dev_err_probe only where needed
+  - Add comment about buff size
+  - Fix mutex order
+  - Return from all switch cases
+  - Return int in ad3552r_read_reg_wrapper
+  - Add goto put_child where missing
+  - Restructure ad3552r_write_codes
+  - Move ad3552r_write_codes nex to ad3552r_trigger_handler
+  - Use memcpy and memcmp in ad3552r_write_codes
+  - Remove endieness functions in ad3552r_write_codes
+
+Changelog v2 -> v3:
+  - https://lore.kernel.org/all/20211008123909.1901-1-mihail.chindris@analog.com
+  - Order compatilbe in alphabetic order
+  - Fix comments in yaml
+  - Grup struct by types
+  - Drop usless "if (err)"
+  - Handle error in ad3552r_read_reg_wrapper
+  - ad3552r_find_range: u32 -> s32
+  - Add fwnode_handle_put(custom_gain_child); in good path too
+  - Vals[0] -> val
+  - Fix: fwnode_handle_put in ad3552r_configure_device
+  - Fix indio_dev->name
+  - Rename custom_gain_child -> gain_child
+  - Remove intermediary functions and write code inline where possible
+  - Add ad3552r_field_prep helper function
+  - Dev_err -> dev_warn for vref supply check
+  - Replace dev_err with dev_err_probe
+  - Remove channel for simultaneous update and do update mask register if both
+    channels values are the same.
+
+Changelog v0 -> v2:
+  - Split https://lore.kernel.org/all/20210820165927.4524-1-mihail.chindris@analog.com
+    and move ad3552r driver to this serie.
+  - Remove precision_mode abi
+  - Remove adi,synch_channels dt property
+  - Use vref-supply instead of adi,vref-select
+  - Remove unimplemented spi modes
+  - Change output-range format and use enums
+  - Update description for custom-output-range-config to be more clear
+  - Add datasheet tag
+  - Use GENMASK for defines
+  - Remove tomicro define
+  - Use get_unaligned_be16 and put_unaligned_be16
+  - Remove unnecessary checks
+  - Add comment for AD3552R_CH_DAC_PAGE channel
+  - Fix indent
+  - Remove irq trigger
+  - Remove irelevant checks
+  - Rename ad3552r_read_reg_pool to ad3552r_read_reg_wrapper.
+  - Add support for ad3542r
+
+V0:
+  * Add ad3552r example to https://lore.kernel.org/linux-iio/20210219124012.92897-1-alexandru.ardelean@analog.com
+
+Mihail Chindris (2):
+  dt-bindings: iio: dac: Add adi,ad3552r.yaml
+  drivers:iio:dac: Add AD3552R driver support
+
+ .../bindings/iio/dac/adi,ad3552r.yaml         |  217 ++++
+ drivers/iio/dac/Kconfig                       |   10 +
+ drivers/iio/dac/Makefile                      |    1 +
+ drivers/iio/dac/ad3552r.c                     | 1138 +++++++++++++++++
+ 4 files changed, 1366 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml
+ create mode 100644 drivers/iio/dac/ad3552r.c
+
+
+base-commit: 29adf99733e95621dfbebaf9ae548b4da8316aaf
+-- 
+2.27.0
+

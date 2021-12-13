@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 700E7472802
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD260472670
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242051AbhLMKHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:07:04 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45932 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240115AbhLMJ7n (ORCPT
+        id S237739AbhLMJwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:52:03 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:36804 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235835AbhLMJpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:59:43 -0500
+        Mon, 13 Dec 2021 04:45:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 953D0B80E0B;
-        Mon, 13 Dec 2021 09:59:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4642C34600;
-        Mon, 13 Dec 2021 09:59:39 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2976DCE0E9A;
+        Mon, 13 Dec 2021 09:45:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC950C341C8;
+        Mon, 13 Dec 2021 09:45:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389580;
-        bh=EKvmEC6DFUYpWCBl1Vae3ZFfwaR41nGzQPj+1IJMSes=;
+        s=korg; t=1639388718;
+        bh=yfNeD6G1Kmy4bh+5KjrMiAOg/1LhcK5/ZAnxbPSOvRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c6Ee0q31NT/3cZGicxUkFK6cuv14aWh5pT2xPyR0urrwa5yaCj17jfK8nrhMyeSZB
-         3dGJB6QzgBM7P1q0gWfn0iBhF8KgoJWyuLYlNswqmv5F63ENFGPJKAMjk4/1bbDcVp
-         qV2YAquA7kmMY/C+y+RGXyUAmZKKWOz8bfYDpGvo=
+        b=ORmpq+ok+ST3ZYduwlRJy4NzPeIivqTGeoYFLHuWFNjqhoBQWDD6GZZb/CJWKbwzC
+         OHZpLlvzRA1uZe+006RWH9flYy7Lk0ArG2A05yqC4ztxwy7RWFAiZFVBaX+qnBiDi6
+         xe7YtW04B/RVnmeA04/UC5Bm5yUBsYwBI/D3+7ts=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>
-Subject: [PATCH 5.15 128/171] dt-bindings: net: Reintroduce PHY no lane swap binding
+        stable@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.4 73/88] iio: mma8452: Fix trigger reference couting
 Date:   Mon, 13 Dec 2021 10:30:43 +0100
-Message-Id: <20211213092949.351293227@linuxfoundation.org>
+Message-Id: <20211213092935.762739047@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+References: <20211213092933.250314515@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,45 +46,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Lars-Peter Clausen <lars@metafoo.de>
 
-commit 96db48c9d777a73a33b1d516c5cfed7a417a5f40 upstream.
+commit cd0082235783f814241a1c9483fb89e405f4f892 upstream.
 
-This binding was already documented in phy.txt, commit 252ae5330daa
-("Documentation: devicetree: Add PHY no lane swap binding"), but got
-accidently removed during YAML conversion in commit d8704342c109
-("dt-bindings: net: Add a YAML schemas for the generic PHY options").
+The mma8452 driver directly assigns a trigger to the struct iio_dev. The
+IIO core when done using this trigger will call `iio_trigger_put()` to drop
+the reference count by 1.
 
-Note: 'enet-phy-lane-no-swap' and the absence of 'enet-phy-lane-swap' are
-not identical, as the former one disable this feature, while the latter
-one doesn't change anything.
+Without the matching `iio_trigger_get()` in the driver the reference count
+can reach 0 too early, the trigger gets freed while still in use and a
+use-after-free occurs.
 
-Fixes: d8704342c109 ("dt-bindings: net: Add a YAML schemas for the generic PHY options")
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20211130082756.713919-1-alexander.stein@ew.tq-group.com
-Signed-off-by: Rob Herring <robh@kernel.org>
+Fix this by getting a reference to the trigger before assigning it to the
+IIO device.
+
+Fixes: ae6d9ce05691 ("iio: mma8452: Add support for interrupt driven triggers.")
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+Link: https://lore.kernel.org/r/20211024092700.6844-1-lars@metafoo.de
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/net/ethernet-phy.yaml |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/iio/accel/mma8452.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
-+++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
-@@ -91,6 +91,14 @@ properties:
-       compensate for the board being designed with the lanes
-       swapped.
+--- a/drivers/iio/accel/mma8452.c
++++ b/drivers/iio/accel/mma8452.c
+@@ -1473,7 +1473,7 @@ static int mma8452_trigger_setup(struct
+ 	if (ret)
+ 		return ret;
  
-+  enet-phy-lane-no-swap:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      If set, indicates that PHY will disable swap of the
-+      TX/RX lanes. This property allows the PHY to work correcly after
-+      e.g. wrong bootstrap configuration caused by issues in PCB
-+      layout design.
-+
-   eee-broken-100tx:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description:
+-	indio_dev->trig = trig;
++	indio_dev->trig = iio_trigger_get(trig);
+ 
+ 	return 0;
+ }
 
 

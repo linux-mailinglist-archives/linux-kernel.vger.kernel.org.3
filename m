@@ -2,176 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C46A347320B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F80047320E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 17:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236989AbhLMQls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 11:41:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42580 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbhLMQlr (ORCPT
+        id S237965AbhLMQmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 11:42:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234738AbhLMQmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:41:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77437B80D99;
-        Mon, 13 Dec 2021 16:41:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47AFEC34604;
-        Mon, 13 Dec 2021 16:41:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639413705;
-        bh=f94qWxFspTfdg3kYbQ5GYdB9m2vzdlhU/yXAOzV90aI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=EcDs2OedUlWpcxRedO/v2gRvHgXOk4RkJTxNYxSsYa8z9lKlY9Mp1qbN2X/EVOQV9
-         o0Z9A+spXXbvquHOewB5PFCjdpgvQuQmw8qK3/kZbf09iN3ZSa4X5l4qV4w4O3K02O
-         UT8MTHtmDrsdxDFatrqFIZUV8RZl3K8b9po63ijBgbeOrVjyit6LTeIWDMUAmpYhQl
-         /KJLMD/KdfVuaxseau37jS916eJp3nGmHUKoXx7H910KUB9KHZxP8I/q9oxtxDlWmX
-         Vm2Bz33odKoqc9HwPBlkZ/YIMJIImXlzS31Wsx/i7lDyl/+U0EdwlZK40zMrgM/rGX
-         IkFoZcsEg9AFw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E06385C0E5E; Mon, 13 Dec 2021 08:41:44 -0800 (PST)
-Date:   Mon, 13 Dec 2021 08:41:44 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        mtosatti <mtosatti@redhat.com>, frederic <frederic@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v2] Documentation: Fill the gaps about entry/noinstr
- constraints
-Message-ID: <20211213164144.GN641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <875ys9dacq.ffs@tglx>
- <20211130091356.7336e277@gandalf.local.home>
- <878rx5b7i5.ffs@tglx>
- <YadU1aSE6/0yGWny@FVFF77S0Q05N>
- <87v9088a5q.ffs@tglx>
- <Yae9tbtZW5mjcBVt@FVFF77S0Q05N>
- <87ee6w83yw.ffs@tglx>
- <87bl2083mu.ffs@tglx>
- <20211203200808.GT641268@paulmck-ThinkPad-P17-Gen-1>
- <09e4a37b390479baa4e0947670d49c44d58c2855.camel@redhat.com>
+        Mon, 13 Dec 2021 11:42:36 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C5BC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:42:35 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id y12so53229284eda.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 08:42:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=OoyZdpbqT5Z3wyU/USbcnWnYz2BKH2cz4anuEz8Evk8=;
+        b=qA1zXgrSpvzhGXFG7CGJebwec0nxStKD07NruMf18N9Gs5PrmW6XU3+/YDnBMryAL0
+         XX66k/V0ZfCdrcKnN1/MrbDmd/BahDYRifVwYP0JAto6LdDWIvEDoGKmgbJfBushys64
+         c94GWhUCxnqxLlT2TDLVoKURhCv/1dxWVFbajiwnqcxNoeMiJpHZRzuIJN9V52M301kT
+         uCWbQpBRWQSlTXIwI8Wa3RYODj2yGmUKpl8uhlx/zM6bP8Q1vaADDJrAfTJmUO7W7mae
+         h4NITDawXF8SqcaRKrYMS8R6htQC0EJK84DW070GQw2vljwoZbeY60QuKIOcFhdhcvcT
+         7KTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OoyZdpbqT5Z3wyU/USbcnWnYz2BKH2cz4anuEz8Evk8=;
+        b=oFkKO3S5pWMmar2JakxDXT64ke2ItFgA5Qyfxg/cqmESCLoJIxBUazoq1kBegoP2qP
+         QJy4/aGgOMou5oaTWlOgFq9k5MRSkA5WQgIixugNe9lwVsGsJD81RFfFFTJsQgtZMSll
+         662F17dueqkMCW93xPUN9wGq4avJoNWtUCzXH8ghO3HGgzrlH+bHIakHTfGYj8hIteLx
+         M80QEw61Lu4Efz1MtxP8rhIoq13xGqm907CdwQpOTFgLpq2l4lw+0s9D+Os+j8sO5wGy
+         e8QBFaYRypGMRz+leNHrvYRG/00Ksh4A88/huGcUS/tYyWBM0E254Eb/RwvqktQfLYL2
+         Olzg==
+X-Gm-Message-State: AOAM530XBHRf+rsMSLjlGJ+tl/bsjWCNN9JZ3pcdX02OqHpVQWGQUb9r
+        M1LpRx3qhywZbthNd2WBc4SIpJ9/Bvii7KxUGeYeCw==
+X-Google-Smtp-Source: ABdhPJwI1xgtoGccXHW3zHjr023WnjqGMlH0Yrrzk9tlXXRKtz2dSqN/DzzTKheiiisqqIazsdEak+wAifzCNCcQ8ws=
+X-Received: by 2002:a05:6402:4b:: with SMTP id f11mr2604824edu.267.1639413754237;
+ Mon, 13 Dec 2021 08:42:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <09e4a37b390479baa4e0947670d49c44d58c2855.camel@redhat.com>
+References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 13 Dec 2021 22:12:23 +0530
+Message-ID: <CA+G9fYtW1USHtpgQ0x_iyRg1q2OKX5BXmoq96FuA0gqYnd=L8A@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/171] 5.15.8-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:36:56AM +0100, Nicolas Saenz Julienne wrote:
-> Hi All,
-> now that this is good shape I'm taking over Thomas and preparing v3.
-> 
-> Paul, I introduced most (if not all) your paragraph corrections. Some questions
-> below.
+On Mon, 13 Dec 2021 at 15:24, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.8 release.
+> There are 171 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.8-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thank you for taking this on!
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> On Fri, 2021-12-03 at 12:08 -0800, Paul E. McKenney wrote:
-> > > +The update order depends on the transition type and is explained below in
-> > > +the transition type sections.
-> > @@@
-> 
-> Sorry, I'm not 100% sure I get what you meant by this. Maybe introducing some
-> sort of link?
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-What this sentence is trying to get across is that there are different
-orders of state updates, depending on the type of transition.  It would
-be good to link to the following sections, if that can be done reasonably.
+## Build
+* kernel: 5.15.8-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.15.y
+* git commit: 5eac0dfa371b154308861ff6fc0d6ae0ad568e56
+* git describe: v5.15.7-172-g5eac0dfa371b
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.7-172-g5eac0dfa371b
 
-> [...]
-> 
-> > > +syscall_exit_to_user_mode() handles all work which needs to be done before
-> > > +returning to user space like tracing, audit, signals, task work etc. After
-> > > +that it invokes exit_to_user_mode() which again handles the state
-> > > +transition in the reverse order:
-> > > +
-> > > +  * Tracing
-> > > +  * RCU / Context tracking
-> > > +  * Lockdep
-> > > +
-> > > +syscall_enter_from_user_mode() and syscall_exit_to_user_mode() are also
-> > > +available as fine grained subfunctions in cases where the architecture code
-> > > +has to do extra work between the various steps. In such cases it has to
-> > > +ensure that enter_from_user_mode() is called first on entry and
-> > > +exit_to_user_mode() is called last on exit.
-> > 
-> > !!! Here I have a question.  Can calls to enter_from_user_mode()
-> > be nested?  RCU is OK with this, but I am not so sure that everything
-> > else is.  If nesting is prohibited, this paragraph should explicitly
-> > say that.  If nesting is theoretically possible, but should be avoided,
-> > it would be good to say that as well.  (Otherwise "It looks like it
-> > might work, so let's go for it!")
-> 
-> 
-> In __enter_from_user_mode() I see:
-> 
-> 	CT_WARN_ON(ct_state() != CONTEXT_USER);
-> 
-> IIUC this signals that a nested syscall entry isn't expected from CT's point of
-> view. I remember reading through RCU's dyntick code that the rationale for
-> nesting in the syscall path was half interrupts (or upcalls). I did some
-> research, but couldn't find an example of this. Is this something we can
-> discard as an old technique not used anymore?
+## No Test Regressions (compared to v5.15.7)
 
-Indeed, there are thankfully no more half interrupts.
+## No Test Fixes (compared to v5.15.7)
 
-> On the other hand, interrupts are prone to nesting:
->  - Weird interrupt handlers that re-enable interrupts
->  - NMIs interrupting Hard IRQ context
->  - NMIs interrupting NMIs
+## Test result summary
+total: 95983, pass: 81995, fail: 721, skip: 12474, xfail: 793
 
-Plus there are odd cases where (from RCU's viewpoint) an interrupt can
-happen within an NMI handler.
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 255 passed, 4 failed
+* arm64: 37 total, 37 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 36 total, 36 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 30 passed, 4 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* riscv: 24 total, 16 passed, 8 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 37 total, 37 passed, 0 failed
 
-> Please let me know if I'm off-base, but I think the topic of nesting is worth a
-> sentence or two in each section.
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
 
-I completely agree.  We should be clear on what nesting is permitted and
-not.
-
-> [...]
-> 
-> > > +Interrupts and regular exceptions
-> > > +---------------------------------
-> > > +
-> > > +Interrupts entry and exit handling is slightly more complex than syscalls
-> > > +and KVM transitions.
-> > > +
-> > > +If an interrupt is raised while the CPU executes in user space, the entry
-> > > +and exit handling is exactly the same as for syscalls.
-> > > +
-> > > +If the interrupt is raised while the CPU executes in kernel space the entry
-> > > +and exit handling is slightly different. RCU state is only updated when the
-> > > +interrupt was raised in context of the CPU's idle task because that's the
-> > > +only kernel context where RCU can be not watching on NOHZ enabled kernels.
-> > > +Lockdep and tracing have to be updated unconditionally.
-> > 
-> > !!! You lost me on this one.  Does that second-to-last sentence instead
-> > want to end something like this?  "... where RCU will not be watching
-> > when running on non-nohz_full CPUs."
-> 
-> The paragraph covers IRQ entry from kernel space. In that context RCU is only
-> shut-off during idle. That only happens on a NOHZ-enabled kernel, be it
-> NO_HZ_IDLE or NO_HZ_FULL.
-
-OK, good.  So the RCU-not-watching case is on a nohz-full CPU.
-
-> I'll try to reword it a bit so it's more explicit.
-
-Sounds good!  And thank you again for taking this on!
-
-							Thanx, Paul
-
-> Thanks!
-> 
-> -- 
-> Nicolás Sáenz
-> 
+--
+Linaro LKFT
+https://lkft.linaro.org

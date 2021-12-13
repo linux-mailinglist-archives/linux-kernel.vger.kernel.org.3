@@ -2,80 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D725B471F45
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 03:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D938471F48
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 03:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbhLMCJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 21:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhLMCJX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 21:09:23 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF59C06173F;
-        Sun, 12 Dec 2021 18:09:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3F213CE0DDC;
-        Mon, 13 Dec 2021 02:09:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD330C341C5;
-        Mon, 13 Dec 2021 02:09:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639361359;
-        bh=kKK5aRuD8GLLmMZ/kg6jCHDmTgm6coyqV/sEujXK4Cc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vC2ZCkSqA5EHbnQFZDHlkt6v9CQqB5/pQpip2tANZ+ELYhhdP+HizAMhzz6U6EqJs
-         0dUuM/EJkyWQNAVOxzP1qudLGo2liyhURyjwxX3b0x1UPtrx15Vg1iozF01WM4lfbS
-         Kki5HpdDjkbv34d/+YLby8GeTBylxzzppfgkgMKtFCmC38xlgnJyolJ8hbeGRvKy4S
-         8iu8/z4V4qJWs5O6HKFgXVpFbJiL0nRfB/v9LRbmojZVd/Np0+L9DYYVX3CaccIZcV
-         GaRanmcXPCB+aq0mGIvCVCuTtSolg3KDZf3HhFldK1WMpWOHta+hg9Q4M5lqMrExHF
-         B457Qa3/eoAHw==
-Date:   Sun, 12 Dec 2021 19:09:14 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-Cc:     masahiroy@kernel.org, yangtiezhu@loongson.cn,
-        tsbogend@alpha.franken.de, jason@bluehome.net,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: Makefile: Remove "ifdef need-compiler" for
- Kbuild.platforms
-Message-ID: <YbarSpe7zhTi+2h4@archlinux-ax161>
-References: <1639109105-1545-1-git-send-email-yangtiezhu@loongson.cn>
- <YbN+0NrHmsFKfNWP@archlinux-ax161>
- <CAK7LNAS7=qYs7NdDRY+4Dz5Zt0tLDo-W-EMcx+9TaNazNVcX=Q@mail.gmail.com>
- <20211213.093520.538389512409174784.ryutaroh@ict.e.titech.ac.jp>
+        id S231272AbhLMCL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 21:11:58 -0500
+Received: from mga04.intel.com ([192.55.52.120]:6813 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229436AbhLMCL5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 21:11:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639361517; x=1670897517;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=jJL5MVBY9oPCNTX1JPSPpaOc+27f5b5MXMTvK3vwx5k=;
+  b=TbBOvUZXVcUrNqaMxgLbXr05UNRv05XjTyh/cwUbbildP3/9ZMK1gvq3
+   nupGT6/dbtF4tD8wkwma5XeSbsZDqplj0UZpKpEV9MMMAEjVBWTw7LBLa
+   1F+wW0ORPJPmoE6fcSGWlw/S6dRwHw5lw3ukRFWN4o9otjjyRS342UJes
+   BHTIu+d9MmlRIt5unMh9mf2URRLthDl9Zz91Dh6JUnpNj3hOzOG6d7F5v
+   0+AGh+fM0lmj1r/WFPOi4QuRwcmEdsIyCgQK682O6qBwMRIc3PG/Oqu4p
+   oT19e2EYSSHFS8bzJ0EScwj9W8gGJNtk2ELUUbFT94Nf1t7xXhirHyTTp
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10196"; a="237384055"
+X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
+   d="scan'208";a="237384055"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 18:11:57 -0800
+X-IronPort-AV: E=Sophos;i="5.88,201,1635231600"; 
+   d="scan'208";a="517561797"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.159.50])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2021 18:11:54 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>, Mel Gorman <mgorman@suse.de>
+Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        <stable@vger.kernel.org>
+Subject: Re: [PATCH -V2] numa balancing: move some document to make it
+ consistent with the code
+References: <20211213020422.2580612-1-ying.huang@intel.com>
+Date:   Mon, 13 Dec 2021 10:11:52 +0800
+In-Reply-To: <20211213020422.2580612-1-ying.huang@intel.com> (Huang Ying's
+        message of "Mon, 13 Dec 2021 10:04:22 +0800")
+Message-ID: <877dc9w8wn.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213.093520.538389512409174784.ryutaroh@ict.e.titech.ac.jp>
+Content-Type: text/plain; charset=ascii
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 09:35:20AM +0900, Ryutaroh Matsumoto wrote:
-> From: Masahiro Yamada <masahiroy@kernel.org>
-> Subject: Re: [PATCH v2] MIPS: Makefile: Remove "ifdef need-compiler" for Kbuild.platforms
-> Date: Sat, 11 Dec 2021 01:39:10 +0900
-> > Nathan's patch cleaned up  arch/mips/loognson2ef/Platform,
-> > but I still see similar code in arch/mips/sgi-ip22/Platform.
-> > 
-> > 
-> > ifdef CONFIG_SGI_IP28
-> >   ifeq ($(call cc-option-yn,-march=r10000 -mr10k-cache-barrier=store), n)
-> >       $(error gcc doesn't support needed option -mr10k-cache-barrier=store)
-> >   endif
-> > endif
-> > 
-> > 
-> > Doesn't this cause a failure of *-pkg builds for sgi-ip22 platform?
-> 
-> Yes, it does, as reported at
-> https://github.com/ClangBuiltLinux/linux/issues/1543
+Hi,
 
-It seems like that section can be removed for the same reason as my
-patch (that flag is supported with GCC 5.1.0) then this patch can be
-applied without any issues.
+Sorry for confusing, the subject prefix should be [PATCH -V3].
 
-Cheers,
-Nathan
+Best Regards,
+Huang, Ying

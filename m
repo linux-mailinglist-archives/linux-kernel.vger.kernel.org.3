@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E19F47354B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951CA47354D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241040AbhLMTyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:54:14 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:56746 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233215AbhLMTyN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:54:13 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B34901EC01FC;
-        Mon, 13 Dec 2021 20:54:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639425247;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=NEd6OKPHSoD8z7vKqqXLJ4dgN74etwHjBxhrJTz6IH0=;
-        b=RzwMR29Ko727bo6cOrhi74hHmC2Y27PBIAzfQnbe+PrtFhDVPHOaCqm2Xtsg1GwGVIrViW
-        QS8pYfJh7LuKxOGOPQW+9vWT4xgXazUDRAwp59pXLY9r2vrBKBHqyiM6hOD5UTBzjGsNa+
-        k87NSZrYVOvhM0vGa5wVBrClq3M7VLg=
-Date:   Mon, 13 Dec 2021 20:54:09 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-Subject: Re: [PATCH v17 01/10] x86: kdump: replace the hard-coded alignment
- with macro CRASH_ALIGN
-Message-ID: <Ybek4VRr8RaLM7kD@zn.tnic>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-2-thunder.leizhen@huawei.com>
+        id S242540AbhLMTyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242533AbhLMTyR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 14:54:17 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC9BC061574;
+        Mon, 13 Dec 2021 11:54:17 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso18647794otj.1;
+        Mon, 13 Dec 2021 11:54:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bAU5673VCbs50eoF7jJ5jNPYdl9rCy0WVWW/ejjhY8c=;
+        b=hdI4SOEGjhhPqVHx0iwVtaMo46KZ1AR6uH9aPknNcHxtact9zPzifwBpJp5l39+Rrv
+         Lw60OvJchxDthYnEuSFD4jBcu0PEYC2EEHfkTjutdNaQmNQadsYOIvHeCUj410U33XEt
+         exIq56q3TI+hDIyv2bBBdTmrd9V3Hit5dkRfFBeNGFl3uMxfoOTrjhy119HsXF8F8VVt
+         SWd1dE+LWpBfQJVxJDVSq1IiBHW26q5YDPzFzivlOBomDFEVQbTF8bqLHC2T8lCD+St9
+         sO4/GaughT2ge6aK21CeDlS94BW7GL8vmJqb3WKxmZVnA24QJhLv319BL8Ofo6rbheqr
+         yDvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=bAU5673VCbs50eoF7jJ5jNPYdl9rCy0WVWW/ejjhY8c=;
+        b=oUJZHy/5AQhh00ZJJnF5WS8sMOPFipzvj9nk8vHbGewfnjV63YhilxiDD7kJg2ndJU
+         WfqTm9xlePxazo4fhi7fJDJ4qm8xSkrniHdVV2XTEErMEdT6oq+KoclPa9lRoDrj31vC
+         1SKvNvuaRnjYBYACApOURnSe14ze4oNGFFRsJGKwnpgQ5SgxWja+Kb3W3U7PKAipHjSP
+         /Wrr8/HwwJYX2cfTVIZYyiy+fB7gBMPKcnEgguiMof+NHGWfQdj4Ewpp6XqliFj/1TOz
+         IwdKvjh0v4qnGYJDrRaBYV7G2XTl/8OxxeJoSB1XdxRlVXNubL/A/5meraz7FtrnIqju
+         Pphw==
+X-Gm-Message-State: AOAM532pRn0XnLPne8deCm3hLsAHFipwF2OyUTRhX8MfXSB7kFXTCRVf
+        XD2io7gwtH9oqTYX3nSwldM=
+X-Google-Smtp-Source: ABdhPJx4nbzbSOoyeJJt7J0XiUyOCtQY6UM1ZDn8VyM6kU+sGwgAeAtIJXR4DbE22O88JVbM46vX+A==
+X-Received: by 2002:a9d:578a:: with SMTP id q10mr527732oth.149.1639425256409;
+        Mon, 13 Dec 2021 11:54:16 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bb7sm2445631oob.14.2021.12.13.11.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 11:54:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 13 Dec 2021 11:54:14 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.4 00/37] 4.4.295-rc1 review
+Message-ID: <20211213195414.GA2950232@roeck-us.net>
+References: <20211213092925.380184671@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210065533.2023-2-thunder.leizhen@huawei.com>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH v17 01/10] x86: kdump: replace the hard-coded alignment with macro CRASH_ALIGN
+On Mon, Dec 13, 2021 at 10:29:38AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.4.295 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> Anything received after that time might be too late.
+> 
 
-From Documentation/process/maintainer-tip.rst:
+Build results:
+	total: 160 pass: 160 fail: 0
+Qemu test results:
+	total: 339 pass: 339 fail: 0
 
-"Patch subject
- ^^^^^^^^^^^^^
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-The tip tree preferred format for patch subject prefixes is
-'subsys/component:', e.g. 'x86/apic:', 'x86/mm/fault:', 'sched/fair:',
-'genirq/core:'. Please do not use file names or complete file paths as
-prefix. 'git log path/to/file' should give you a reasonable hint in most
-cases.
-
-The condensed patch description in the subject line should start with a
-uppercase letter and should be written in imperative tone."
-
-Please fix 1-5 for your next submission.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Guenter

@@ -2,71 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2276473534
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45222473539
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 20:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242500AbhLMTqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 14:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
+        id S242514AbhLMTqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 14:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242466AbhLMTqJ (ORCPT
+        with ESMTP id S241743AbhLMTqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:46:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B69C061574;
-        Mon, 13 Dec 2021 11:46:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EBB0B812A7;
-        Mon, 13 Dec 2021 19:46:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 126BBC34600;
-        Mon, 13 Dec 2021 19:46:04 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 14:46:03 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>
-Subject: Re: [PATCH v1 0/5] Implement livepatch on PPC32
-Message-ID: <20211213144603.47d7c908@gandalf.local.home>
-In-Reply-To: <8df90f94-9939-0178-b92b-6ae6ea81784c@csgroup.eu>
-References: <cover.1635423081.git.christophe.leroy@csgroup.eu>
-        <20211028093547.48c69dfe@gandalf.local.home>
-        <6209682d-0caa-b779-8763-376a984d8ed8@csgroup.eu>
-        <20211213121536.25e5488d@gandalf.local.home>
-        <5511f43c-192a-622b-7c72-52e07f0032c2@csgroup.eu>
-        <20211213123338.65eda5a0@gandalf.local.home>
-        <fc3099b8-9f12-3e47-08a0-05abc37a0482@csgroup.eu>
-        <20211213135410.12642d8f@gandalf.local.home>
-        <8df90f94-9939-0178-b92b-6ae6ea81784c@csgroup.eu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 13 Dec 2021 14:46:38 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC7EC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 11:46:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yUSgcqoB9v9UUpBon7RSqOh5MUtdO61wMOqjvq6oJNk=; b=B5ZWXD56kjUw4KfwJOypMp0C31
+        nW5u3ZzPvRm8RQ5ExTBhSLHh6t5T97AVQeqDnksjCmkMGwNPK+/fDvyY2z72hAZsdAtgQ6rCsxJ1b
+        4ap4/7ROxqqzmFk3Djlex9uZ0sTc94txldKaeJQfFJ6i8gFxpohT7jS/AVFvSnVoMAZQidy4c6/rI
+        fNicncnvXIyQGz6HFsifBbZm8C22AMfvmGHp+Xxb5cAYfRNM37JqYyI7/OWPtJRB5BuB7Xs4g0jH3
+        5YpAQk18cmDix7Y9mBHkPL019VhXEAw/fnUyP16V1hUnFrknpzDiARYQ4c7xHEZWOIljbNShgssuN
+        BzlAyM9A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mwrHF-00D6mx-11; Mon, 13 Dec 2021 19:46:25 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BCFCF981767; Mon, 13 Dec 2021 20:46:24 +0100 (CET)
+Date:   Mon, 13 Dec 2021 20:46:24 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 1/3] X86/db: Change __this_cpu_read() to this_cpu_read()
+ in hw_breakpoint_active()
+Message-ID: <20211213194624.GZ16608@worktop.programming.kicks-ass.net>
+References: <20211213042215.3096-1-jiangshanlai@gmail.com>
+ <20211213042215.3096-2-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213042215.3096-2-jiangshanlai@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 19:33:47 +0000
-Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+On Mon, Dec 13, 2021 at 12:22:13PM +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <laijs@linux.alibaba.com>
+> 
+> __this_cpu_read() can not be instrumented except its own debugging code
+> when CONFIG_DEBUG_PREEMPT.  The debugging code will call
+> __this_cpu_preempt_check().  __this_cpu_preempt_check() itself is also
+> noinstr, so __this_cpu_read() can be used in noinstr.
+> 
+> But these is one exception when exc_debug_kernel() calls local_db_save()
+> which calls hw_breakpoint_active() which calls __this_cpu_read().  If
+> the data accessed by __this_cpu_preempt_check() is also watched by
+> hw_breakpoints, it would cause recursive #DB.
+> 
+> this_cpu_read() in X86 is also non instrumentable, and it doesn't access
+> to any extra data except the percpu cpu_dr7, and cpu_dr7 is disallowed
+> to be watched in arch_build_bp_info().  So this_cpu_read() is safe to
+> be used when hw_breakpoints is still active, and __this_cpu_read() here
+> should be changed to this_cpu_read().
+> 
+> This problem can only happen when the system owner uses a kernel with
+> CONFIG_DEBUG_PREEMPT enabled and deliberately use hw_breakpoints on
+> the data that __this_cpu_preempt_check() accesses.  Sot it is just a
+> problem with no significance.
+> 
+> One might suggest that, all the data accessed by noinstr functions
+> should be marked in denylist for hw_breakpoints.  That would complexify
+> the noinstrment framework and add hurdles to anyone that who want to
+> add a new noinstr function.  All we need is to suppress #DB in the IST
+> interrupt entry path until safe place where #DB is disabled in hardware
+> or #DB handler can handle well even it hits data accessed by noinstr
+> function.  Changing __this_cpu_read() to this_cpu_read() is fit for it.
+> 
+> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+> ---
+>  arch/x86/include/asm/debugreg.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugreg.h
+> index cfdf307ddc01..20189ce41578 100644
+> --- a/arch/x86/include/asm/debugreg.h
+> +++ b/arch/x86/include/asm/debugreg.h
+> @@ -87,7 +87,7 @@ static inline void hw_breakpoint_disable(void)
+>  
+>  static __always_inline bool hw_breakpoint_active(void)
+>  {
+> -	return __this_cpu_read(cpu_dr7) & DR_GLOBAL_ENABLE_MASK;
+> +	return this_cpu_read(cpu_dr7) & DR_GLOBAL_ENABLE_MASK;
 
-> STill the same Oops, below
+I don't really follow the argument for why this_cpu_read(); why not
+raw_cpu_read() instead, which is what __this_cpu_read() is based on.
+Also, this really needs a comment.
 
-Unfortunately, I don't have a PPC machine (32 nor 64 bit) to help debug
-this.
+Alternatively, we should remove noinstr from check_preemption_disabled()
+and fix up all the fallout, but that seems like far more work than it's
+worth.
 
+	/*
+	 * Must not hit a breakpoint in check_preempt_disabled()
+	 */
+	return raw_cpu_read(cpu_dr7) & DR_GLOBAL_ENABLE_MASK;
 
-> I will look more closely tomorrow.
-
-OK, thanks.
-
--- Steve
+>  }
+>  
+>  extern void hw_breakpoint_restore(void);
+> -- 
+> 2.19.1.6.gb485710b
+> 

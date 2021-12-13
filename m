@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2BD4725E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35834723F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236620AbhLMJrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:47:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56768 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234006AbhLMJnK (ORCPT
+        id S233879AbhLMJcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:32:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233861AbhLMJct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:43:10 -0500
+        Mon, 13 Dec 2021 04:32:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DD5C06173F;
+        Mon, 13 Dec 2021 01:32:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B689BB80E18;
-        Mon, 13 Dec 2021 09:43:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B7FDC341C5;
-        Mon, 13 Dec 2021 09:43:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E58EBB80E25;
+        Mon, 13 Dec 2021 09:32:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22118C341CB;
+        Mon, 13 Dec 2021 09:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388587;
-        bh=358cc6biuXzcWuxLqdSCu4a/bL8/JwfgpIK8do492PM=;
+        s=korg; t=1639387966;
+        bh=vXPFzQLaBF29hV6jLFqudBEPSt3FP/nRi/7VK6MyRw0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h9dPB+MaEm5oZwIq5+3xDUZqEUGQO2f7eg+0nhye/Kwv8Xz3+XSRU2bICIcMOIGfL
-         MZcYIVj7a7GmmyFyzh4z/sBnCQJako+iMpWNRwi8DAhtBMXXmEtnRS7/pNL7Z0kUyl
-         BjIEwjWnwg4AiwC5jVZ3+RLRJMO6QSbhc1n8UIPA=
+        b=VfMMyUpfjsSf7zXeIn+142ledJliD11AUmsa+LleKTdklQqwETpeSBeLfinv04uPq
+         s1lBo5szFymwwulXqeW7AQ2qbm2GzvWhR+NSdwvO+Xw9Lg2Os1gZK7kKybbLezFVWk
+         fxp0H3CW2YLn0pHNb5NlA8EHPoOQD1aAi2I32CSo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Young <consult.awy@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 28/88] ALSA: ctl: Fix copy of updated id with element read/write
+        "linux-kernel@vger.kernel.org, Linus Torvalds" 
+        <torvalds@linux-foundation.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.4 20/37] signalfd: use wake_up_pollfree()
 Date:   Mon, 13 Dec 2021 10:29:58 +0100
-Message-Id: <20211213092934.191083027@linuxfoundation.org>
+Message-Id: <20211213092926.025980351@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-References: <20211213092933.250314515@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,51 +50,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Young <consult.awy@gmail.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit b6409dd6bdc03aa178bbff0d80db2a30d29b63ac upstream.
+commit 9537bae0da1f8d1e2361ab6d0479e8af7824e160 upstream.
 
-When control_compat.c:copy_ctl_value_to_user() is used, by
-ctl_elem_read_user() & ctl_elem_write_user(), it must also copy back the
-snd_ctl_elem_id value that may have been updated (filled in) by the call
-to snd_ctl_elem_read/snd_ctl_elem_write().
+wake_up_poll() uses nr_exclusive=1, so it's not guaranteed to wake up
+all exclusive waiters.  Yet, POLLFREE *must* wake up all waiters.  epoll
+and aio poll are fortunately not affected by this, but it's very
+fragile.  Thus, the new function wake_up_pollfree() has been introduced.
 
-This matches the functionality provided by snd_ctl_elem_read_user() and
-snd_ctl_elem_write_user(), via snd_ctl_build_ioff().
+Convert signalfd to use wake_up_pollfree().
 
-Without this, and without making additional calls to snd_ctl_info()
-which are unnecessary when using the non-compat calls, a userspace
-application will not know the numid value for the element and
-consequently will not be able to use the poll/read interface on the
-control file to determine which elements have updates.
-
-Signed-off-by: Alan Young <consult.awy@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211202150607.543389-1-consult.awy@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: d80e731ecab4 ("epoll: introduce POLLFREE to flush ->signalfd_wqh before kfree()")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211209010455.42744-4-ebiggers@kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/core/control_compat.c |    3 +++
- 1 file changed, 3 insertions(+)
+ fs/signalfd.c |   12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
---- a/sound/core/control_compat.c
-+++ b/sound/core/control_compat.c
-@@ -266,6 +266,7 @@ static int copy_ctl_value_to_user(void _
- 				  struct snd_ctl_elem_value *data,
- 				  int type, int count)
- {
-+	struct snd_ctl_elem_value32 __user *data32 = userdata;
- 	int i, size;
+--- a/fs/signalfd.c
++++ b/fs/signalfd.c
+@@ -34,17 +34,7 @@
  
- 	if (type == SNDRV_CTL_ELEM_TYPE_BOOLEAN ||
-@@ -282,6 +283,8 @@ static int copy_ctl_value_to_user(void _
- 		if (copy_to_user(valuep, data->value.bytes.data, size))
- 			return -EFAULT;
- 	}
-+	if (copy_to_user(&data32->id, &data->id, sizeof(data32->id)))
-+		return -EFAULT;
- 	return 0;
+ void signalfd_cleanup(struct sighand_struct *sighand)
+ {
+-	wait_queue_head_t *wqh = &sighand->signalfd_wqh;
+-	/*
+-	 * The lockless check can race with remove_wait_queue() in progress,
+-	 * but in this case its caller should run under rcu_read_lock() and
+-	 * sighand_cachep is SLAB_DESTROY_BY_RCU, we can safely return.
+-	 */
+-	if (likely(!waitqueue_active(wqh)))
+-		return;
+-
+-	/* wait_queue_t->func(POLLFREE) should do remove_wait_queue() */
+-	wake_up_poll(wqh, POLLHUP | POLLFREE);
++	wake_up_pollfree(&sighand->signalfd_wqh);
  }
  
+ struct signalfd_ctx {
 
 

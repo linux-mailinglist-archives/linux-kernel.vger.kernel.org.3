@@ -2,70 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5923471FC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 04:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2316471FC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 05:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbhLMDzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Dec 2021 22:55:48 -0500
-Received: from marcansoft.com ([212.63.210.85]:33182 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229724AbhLMDzp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Dec 2021 22:55:45 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id D3E2C4258C;
-        Mon, 13 Dec 2021 03:55:41 +0000 (UTC)
-Subject: Re: [PATCH 0/2] Apple mailbox fixup: switch to generic compatibles
-To:     Sven Peter <sven@svenpeter.dev>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20211209055049.99205-1-marcan@marcan.st>
- <3fb087c1-2d67-4527-ad63-1f8ce54e6965@www.fastmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <caf8a7a4-bdb9-e1c9-871d-12c8d146376c@marcan.st>
-Date:   Mon, 13 Dec 2021 12:55:39 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S231578AbhLMEBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Dec 2021 23:01:02 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:29187 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229748AbhLMEBC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Dec 2021 23:01:02 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JC76K1yCVz970c;
+        Mon, 13 Dec 2021 11:58:49 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 12:00:59 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 12:00:58 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Nadav Amit <namit@vmware.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>
+Subject: [PATCH] smp: Fix the comments of smp_call_function_many()
+Date:   Mon, 13 Dec 2021 11:57:55 +0800
+Message-ID: <20211213035755.73-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-In-Reply-To: <3fb087c1-2d67-4527-ad63-1f8ce54e6965@www.fastmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/2021 01.33, Sven Peter wrote:
-> On Thu, Dec 9, 2021, at 06:50, Hector Martin wrote:
->> Hi folks,
->>
->> Just a quick fix for the Apple mailbox compatible. Similar to [1], we
->> intend to use SoC-specific compatibles only for potential quirks, and
->> rely on a generic compatible to allow for forward-compatibility as long
->> as things don't break.
-> 
-> I vaguely remember a brief discussion about this and I think we thought about
-> using "t6000-asc", "t8103-asc" in this case since this specific mailbox hardware
-> was only introduced in the M1. I think Apple calls this variant ascwrap-v4
-> and m3wrap-v2.
-> 
-> Doing it like you suggested is also fine with me though.
+As commit a32a4d8a815c ("smp: Run functions concurrently in
+smp_call_function_many_cond()") itself says:
+                  "Keep other smp_call_function_many() semantic as it is
+today for backward compatibility: the called function is not executed in
+this case locally."
 
-I think I remember that one... seems this is ascwrap-v4 in t8101 too, so 
-not quite introduced with M1. But that one doesn't have m3wraps (or 
-doesn't use them).
+It's clear that, the function header comments of smp_call_function_many()
+does not need to be changed.
 
-Since Apple do have some kind of sane versioning for these it seems, 
-maybe we should follow their numbers and call them apple,asc-mailbox-v4 
-and apple,m3-mailbox-v2?
+So move the comment about 'scf_flags' to smp_call_function_many_cond(),
+and restore the original comments of smp_call_function_many().
 
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ kernel/smp.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/smp.c b/kernel/smp.c
+index 01a7c1706a58b1d..6ec884f41b7506d 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -861,6 +861,13 @@ EXPORT_SYMBOL_GPL(smp_call_function_any);
+ #define SCF_WAIT	(1U << 0)
+ #define SCF_RUN_LOCAL	(1U << 1)
+ 
++/**
++ * smp_call_function_many_cond(): Run a function on a set of CPUs.
++ * @scf_flags: Bitmask that controls the operation. If %SCF_WAIT is set,
++ *        wait (atomically) until function has completed on other CPUs. If
++ *        %SCF_RUN_LOCAL is set, the function will also be run locally
++ *        if the local CPU is set in the @cpumask.
++ */
+ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 					smp_call_func_t func, void *info,
+ 					unsigned int scf_flags,
+@@ -972,14 +979,12 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ }
+ 
+ /**
+- * smp_call_function_many(): Run a function on a set of CPUs.
++ * smp_call_function_many(): Run a function on a set of other CPUs.
+  * @mask: The set of cpus to run on (only runs on online subset).
+  * @func: The function to run. This must be fast and non-blocking.
+  * @info: An arbitrary pointer to pass to the function.
+- * @wait: Bitmask that controls the operation. If %SCF_WAIT is set, wait
+- *        (atomically) until function has completed on other CPUs. If
+- *        %SCF_RUN_LOCAL is set, the function will also be run locally
+- *        if the local CPU is set in the @cpumask.
++ * @wait: If true, wait (atomically) until function has completed
++ *        on other CPUs.
+  *
+  * If @wait is true, then returns once @func has returned.
+  *
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.25.1
+

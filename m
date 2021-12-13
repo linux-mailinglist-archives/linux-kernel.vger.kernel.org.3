@@ -2,373 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6DC472933
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46483472839
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235923AbhLMKSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:18:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:48786 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240693AbhLMKPN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:15:13 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF050D6E;
-        Mon, 13 Dec 2021 02:06:05 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.67.68])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FF623F793;
-        Mon, 13 Dec 2021 02:06:04 -0800 (PST)
-Date:   Mon, 13 Dec 2021 10:06:01 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     will@kernel.org, boqun.feng@gmail.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org, elver@google.com,
-        keescook@chromium.org, hch@infradead.org,
-        torvalds@linux-foundation.org, axboe@kernel.dk
-Subject: Re: [PATCH v2 3/9] atomic: Introduce
- atomic_{inc,dec,dec_and_test}_overflow()
-Message-ID: <YbcbCQ/ySN8ZpTWR@FVFF77S0Q05N>
-References: <20211210161618.645249719@infradead.org>
- <20211210162313.464256797@infradead.org>
+        id S235422AbhLMKJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:09:22 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:41446 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236043AbhLMKGj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 05:06:39 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3B86E210F4;
+        Mon, 13 Dec 2021 10:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639389998; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x8PtASu7vSwnUJwQTU1wmcrUqlQCjVjwWb73urhJRZc=;
+        b=QzLyPqAQK0T4DRACOufOUqEhQvGxSxDeYqqYHhMksaumhy3oEFCg66bsovffDT/58E2642
+        3NBn2Ydfu+pkYGilIm57CDEZuu/G6XI7v5g7TWhNfZPR3Do0dpm3r35fklNJf4yPU4W4GG
+        VMGpaqKS/fRFZo++657Lgug91FOV04I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639389998;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x8PtASu7vSwnUJwQTU1wmcrUqlQCjVjwWb73urhJRZc=;
+        b=khVe4Ie+IlLN10cGXe+QWqewcf2nMHnVkU/pI9OXempBeTJbvOOyX88dLpdHMoaiOCDtLy
+        PzO3J2Y4WeLuo5Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84A6B13BB2;
+        Mon, 13 Dec 2021 10:06:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KjAiHi0bt2FVNQAAMHmgww
+        (envelope-from <nstange@suse.de>); Mon, 13 Dec 2021 10:06:37 +0000
+From:   Nicolai Stange <nstange@suse.de>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Nicolai Stange <nstange@suse.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Stephan =?utf-8?Q?M=C3=BCller?= <smueller@chronox.de>,
+        Torsten Duwe <duwe@suse.de>, Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org
+Subject: Re: [PATCH v2 03/18] crypto: dh - optimize domain parameter serialization for well-known groups
+In-Reply-To: <86157a11-7daa-876a-d80b-e6bda36e6368@suse.de> (Hannes Reinecke's
+        message of "Fri, 10 Dec 2021 12:33:34 +0100")
+References: <20211209090358.28231-1-nstange@suse.de>
+        <20211209090358.28231-4-nstange@suse.de>
+        <86157a11-7daa-876a-d80b-e6bda36e6368@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
+Date:   Mon, 13 Dec 2021 11:06:36 +0100
+Message-ID: <87r1agrf83.fsf@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210162313.464256797@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 05:16:21PM +0100, Peter Zijlstra wrote:
-> In order to facilitate architecture support for refcount_t, introduce
-> a number of new atomic primitives that have a uaccess style exception
-> for overflow.
-> 
-> Notably:
-> 
->   atomic_inc_overflow(v, Label):
-> 
-> 	increment and goto Label when the old value of v is zero or
-> 	negative.
-> 
->   atomic_dec_overflow(v, Label):
-> 
-> 	decrement and goto Label when the new value of v is zero or
-> 	negative
-> 
->   atomic_dec_and_test_overflow(v, Label):
-> 
-> 	decrement and return true when the result is zero and goto
-> 	Label when the new value of v is negative
+Hannes Reinecke <hare@suse.de> writes:
 
-Maybe it's worth adding these as comments in the fallback, which we have for a
-few existing functions, e.g.
+> On 12/9/21 10:03 AM, Nicolai Stange wrote:
+>> diff --git a/crypto/dh_helper.c b/crypto/dh_helper.c
+>> index aabc91e4f63f..9f21204e5dee 100644
+>> --- a/crypto/dh_helper.c
+>> +++ b/crypto/dh_helper.c
+>> @@ -45,18 +72,24 @@ int crypto_dh_encode_key(char *buf, unsigned int len=
+, const struct dh *params)
+>>  		.type =3D CRYPTO_KPP_SECRET_TYPE_DH,
+>>  		.len =3D len
+>>  	};
+>> +	int group_id;
+>>=20=20
+>>  	if (unlikely(!len))
+>>  		return -EINVAL;
+>>=20=20
+>>  	ptr =3D dh_pack_data(ptr, end, &secret, sizeof(secret));
+>> +	group_id =3D (int)params->group_id;
+>> +	ptr =3D dh_pack_data(ptr, end, &group_id, sizeof(group_id));
+>
+> Me being picky again.
+> To my knowledge, 'int' doesn't have a fixed width, but is rather only
+> guaranteed to hold certain values.
+> So as soon as one relies on any fixed size (as this one does) I tend to
+> use fixed size type like 'u32' to make it absolutely clear what is to be
+> expected here.
+>
+> But the I don't know the conventions in the crypto code; if an 'int' is
+> assumed to be 32 bits throughout the crypto code I guess we should be fin=
+e.
 
-| /**
-|  * arch_${atomic}_add_negative - add and test if negative
-|  * @i: integer value to add 
-|  * @v: pointer of type ${atomic}_t
-|  *
-|  * Atomically adds @i to @v and returns true
-|  * if the result is negative, or false when
-|  * result is greater than or equal to zero.
-|  */
-| static __always_inline bool
-| arch_${atomic}_add_negative(${int} i, ${atomic}_t *v) 
-| {
-|         return arch_${atomic}_add_return(i, v) < 0;
-| }
+Yes, I thought about this, too. However, the other, already existing
+fields like ->key_size and ->p_size are getting serialized as unsigned
+ints and I decided to stick to that for ->group_id as well. Except for
+the testmgr vectors, the encoding is internal to the
+crypto_dh_encode_key() and crypto_dh_decode_key() pair anyway -- all
+that would happen if sizeof(int) !=3D 4 is that the tests would fail.
 
-Not a big deal either way.
+So, IMO, making the serialization of struct dh to use u32 throughout is
+not really in scope for this series and would probably deserve a patch
+on its own, if desired.
 
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  include/linux/atomic/atomic-arch-fallback.h    |   64 ++++++++++++++++++++++++
->  include/linux/atomic/atomic-instrumented.h     |   65 ++++++++++++++++++++++++-
->  include/linux/atomic/atomic-long.h             |   32 +++++++++++-
->  scripts/atomic/atomics.tbl                     |    3 +
->  scripts/atomic/fallbacks/dec_and_test_overflow |   12 ++++
->  scripts/atomic/fallbacks/dec_overflow          |    8 +++
->  scripts/atomic/fallbacks/inc_overflow          |    8 +++
->  7 files changed, 189 insertions(+), 3 deletions(-)
-> 
-> --- a/include/linux/atomic/atomic-arch-fallback.h
-> +++ b/include/linux/atomic/atomic-arch-fallback.h
-> @@ -1250,6 +1250,37 @@ arch_atomic_dec_if_positive(atomic_t *v)
->  #define arch_atomic_dec_if_positive arch_atomic_dec_if_positive
->  #endif
->  
-> +#ifndef arch_atomic_inc_overflow
-> +#define arch_atomic_inc_overflow(_v, _label)				\
-> +do {									\
-> +	int __old = arch_atomic_fetch_inc(_v);			\
-> +	if (unlikely(__old <= 0))					\
-> +		goto _label;						\
-> +} while (0)
-> +#endif
-> +
-> +#ifndef arch_atomic_dec_overflow
-> +#define arch_atomic_dec_overflow(_v, _label)				\
-> +do {									\
-> +	int __new = arch_atomic_dec_return(_v);			\
-> +	if (unlikely(__new <= 0))					\
-> +		goto _label;						\
-> +} while (0)
-> +#endif
-> +
-> +#ifndef arch_atomic_dec_and_test_overflow
-> +#define arch_atomic_dec_and_test_overflow(_v, _label)		\
-> +({									\
-> +	bool __ret = false;						\
-> +	int __new = arch_atomic_dec_return(_v);			\
-> +	if (unlikely(__new < 0))					\
-> +		goto _label;						\
-> +	if (unlikely(__new == 0))					\
-> +		__ret = true;						\
-> +	__ret;								\
-> +})
-> +#endif
+Thanks,
 
-I had wanted to move at least part of this to a function to ensure
-single-evaluation and avoid accidental symbol aliasing, but (as we discussed
-over IRC) I couldn't find any good way to do so, and given this is sufficiently
-specialise I think we should be ok with this as-is. It's certainly no worse
-than the existing stuff for xchg/cmpxchg.
+Nicolai
 
-With that in mind, these (and the other variants, and the underlying fallback
-templates) all look good to me.
-
-With or without the comments as above:
-
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-
-Mark.
-
-> +
->  #ifdef CONFIG_GENERIC_ATOMIC64
->  #include <asm-generic/atomic64.h>
->  #endif
-> @@ -2357,5 +2388,36 @@ arch_atomic64_dec_if_positive(atomic64_t
->  #define arch_atomic64_dec_if_positive arch_atomic64_dec_if_positive
->  #endif
->  
-> +#ifndef arch_atomic64_inc_overflow
-> +#define arch_atomic64_inc_overflow(_v, _label)				\
-> +do {									\
-> +	s64 __old = arch_atomic64_fetch_inc(_v);			\
-> +	if (unlikely(__old <= 0))					\
-> +		goto _label;						\
-> +} while (0)
-> +#endif
-> +
-> +#ifndef arch_atomic64_dec_overflow
-> +#define arch_atomic64_dec_overflow(_v, _label)				\
-> +do {									\
-> +	s64 __new = arch_atomic64_dec_return(_v);			\
-> +	if (unlikely(__new <= 0))					\
-> +		goto _label;						\
-> +} while (0)
-> +#endif
-> +
-> +#ifndef arch_atomic64_dec_and_test_overflow
-> +#define arch_atomic64_dec_and_test_overflow(_v, _label)		\
-> +({									\
-> +	bool __ret = false;						\
-> +	s64 __new = arch_atomic64_dec_return(_v);			\
-> +	if (unlikely(__new < 0))					\
-> +		goto _label;						\
-> +	if (unlikely(__new == 0))					\
-> +		__ret = true;						\
-> +	__ret;								\
-> +})
-> +#endif
-> +
->  #endif /* _LINUX_ATOMIC_FALLBACK_H */
-> -// cca554917d7ea73d5e3e7397dd70c484cad9b2c4
-> +// e4c677b23b3fd5e8dc4bce9d6c055103666cfc4a
-> --- a/include/linux/atomic/atomic-instrumented.h
-> +++ b/include/linux/atomic/atomic-instrumented.h
-> @@ -599,6 +599,27 @@ atomic_dec_if_positive(atomic_t *v)
->  	return arch_atomic_dec_if_positive(v);
->  }
->  
-> +#define atomic_inc_overflow(v, L) \
-> +({ \
-> +	typeof(v) __ai_v = (v); \
-> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
-> +	arch_atomic_inc_overflow(__ai_v, L); \
-> +})
-> +
-> +#define atomic_dec_overflow(v, L) \
-> +({ \
-> +	typeof(v) __ai_v = (v); \
-> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
-> +	arch_atomic_dec_overflow(__ai_v, L); \
-> +})
-> +
-> +#define atomic_dec_and_test_overflow(v, L) \
-> +({ \
-> +	typeof(v) __ai_v = (v); \
-> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
-> +	arch_atomic_dec_and_test_overflow(__ai_v, L); \
-> +})
-> +
->  static __always_inline s64
->  atomic64_read(const atomic64_t *v)
->  {
-> @@ -1177,6 +1198,27 @@ atomic64_dec_if_positive(atomic64_t *v)
->  	return arch_atomic64_dec_if_positive(v);
->  }
->  
-> +#define atomic64_inc_overflow(v, L) \
-> +({ \
-> +	typeof(v) __ai_v = (v); \
-> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
-> +	arch_atomic64_inc_overflow(__ai_v, L); \
-> +})
-> +
-> +#define atomic64_dec_overflow(v, L) \
-> +({ \
-> +	typeof(v) __ai_v = (v); \
-> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
-> +	arch_atomic64_dec_overflow(__ai_v, L); \
-> +})
-> +
-> +#define atomic64_dec_and_test_overflow(v, L) \
-> +({ \
-> +	typeof(v) __ai_v = (v); \
-> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
-> +	arch_atomic64_dec_and_test_overflow(__ai_v, L); \
-> +})
-> +
->  static __always_inline long
->  atomic_long_read(const atomic_long_t *v)
->  {
-> @@ -1755,6 +1797,27 @@ atomic_long_dec_if_positive(atomic_long_
->  	return arch_atomic_long_dec_if_positive(v);
->  }
->  
-> +#define atomic_long_inc_overflow(v, L) \
-> +({ \
-> +	typeof(v) __ai_v = (v); \
-> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
-> +	arch_atomic_long_inc_overflow(__ai_v, L); \
-> +})
-> +
-> +#define atomic_long_dec_overflow(v, L) \
-> +({ \
-> +	typeof(v) __ai_v = (v); \
-> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
-> +	arch_atomic_long_dec_overflow(__ai_v, L); \
-> +})
-> +
-> +#define atomic_long_dec_and_test_overflow(v, L) \
-> +({ \
-> +	typeof(v) __ai_v = (v); \
-> +	instrument_atomic_read_write(__ai_v, sizeof(*__ai_v)); \
-> +	arch_atomic_long_dec_and_test_overflow(__ai_v, L); \
-> +})
-> +
->  #define xchg(ptr, ...) \
->  ({ \
->  	typeof(ptr) __ai_ptr = (ptr); \
-> @@ -1912,4 +1975,4 @@ atomic_long_dec_if_positive(atomic_long_
->  
->  
->  #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
-> -// 66cdf9a0e0a995cba29c61baf018f7ef35974ae5
-> +// 702806891ef1d01d76767c55088264ab6a1ef77d
-> --- a/include/linux/atomic/atomic-long.h
-> +++ b/include/linux/atomic/atomic-long.h
-> @@ -515,6 +515,21 @@ arch_atomic_long_dec_if_positive(atomic_
->  	return arch_atomic64_dec_if_positive(v);
->  }
->  
-> +#define arch_atomic_long_inc_overflow(v, L) \
-> +({ \
-> +	arch_atomic64_inc_overflow((v), L) \
-> +})
-> +
-> +#define arch_atomic_long_dec_overflow(v, L) \
-> +({ \
-> +	arch_atomic64_dec_overflow((v), L) \
-> +})
-> +
-> +#define arch_atomic_long_dec_and_test_overflow(v, L) \
-> +({ \
-> +	arch_atomic64_dec_and_test_overflow((v), L) \
-> +})
-> +
->  #else /* CONFIG_64BIT */
->  
->  static __always_inline long
-> @@ -1009,6 +1024,21 @@ arch_atomic_long_dec_if_positive(atomic_
->  	return arch_atomic_dec_if_positive(v);
->  }
->  
-> +#define arch_atomic_long_inc_overflow(v, L) \
-> +({ \
-> +	arch_atomic_inc_overflow((v), L) \
-> +})
-> +
-> +#define arch_atomic_long_dec_overflow(v, L) \
-> +({ \
-> +	arch_atomic_dec_overflow((v), L) \
-> +})
-> +
-> +#define arch_atomic_long_dec_and_test_overflow(v, L) \
-> +({ \
-> +	arch_atomic_dec_and_test_overflow((v), L) \
-> +})
-> +
->  #endif /* CONFIG_64BIT */
->  #endif /* _LINUX_ATOMIC_LONG_H */
-> -// e8f0e08ff072b74d180eabe2ad001282b38c2c88
-> +// 487bc4fea91f23f2a4b42af7d5b49ef9172ae792
-> --- a/scripts/atomic/atomics.tbl
-> +++ b/scripts/atomic/atomics.tbl
-> @@ -44,3 +44,6 @@ inc_not_zero		b	v
->  inc_unless_negative	b	v
->  dec_unless_positive	b	v
->  dec_if_positive		i	v
-> +inc_overflow			n	v	L
-> +dec_overflow			n	v	L
-> +dec_and_test_overflow	m	v	L
-> --- /dev/null
-> +++ b/scripts/atomic/fallbacks/dec_and_test_overflow
-> @@ -0,0 +1,12 @@
-> +cat << EOF
-> +#define arch_${atomic}_dec_and_test_overflow(_v, _label)		\\
-> +({									\\
-> +	bool __ret = false;						\\
-> +	${int} __new = arch_${atomic}_dec_return(_v);			\\
-> +	if (unlikely(__new < 0))					\\
-> +		goto _label;						\\
-> +	if (unlikely(__new == 0))					\\
-> +		__ret = true;						\\
-> +	__ret;								\\
-> +})
-> +EOF
-> --- /dev/null
-> +++ b/scripts/atomic/fallbacks/dec_overflow
-> @@ -0,0 +1,8 @@
-> +cat << EOF
-> +#define arch_${atomic}_dec_overflow(_v, _label)				\\
-> +do {									\\
-> +	${int} __new = arch_${atomic}_dec_return(_v);			\\
-> +	if (unlikely(__new <= 0))					\\
-> +		goto _label;						\\
-> +} while (0)
-> +EOF
-> --- /dev/null
-> +++ b/scripts/atomic/fallbacks/inc_overflow
-> @@ -0,0 +1,8 @@
-> +cat << EOF
-> +#define arch_${atomic}_inc_overflow(_v, _label)				\\
-> +do {									\\
-> +	${int} __old = arch_${atomic}_fetch_inc(_v);			\\
-> +	if (unlikely(__old <= 0))					\\
-> +		goto _label;						\\
-> +} while (0)
-> +EOF
-> 
-> 
+--=20
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, G=
+ermany
+(HRB 36809, AG N=C3=BCrnberg), GF: Ivo Totev

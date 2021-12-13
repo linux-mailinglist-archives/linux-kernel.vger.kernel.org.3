@@ -2,220 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C6B47332E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1F3473334
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 18:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238474AbhLMRrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 12:47:08 -0500
-Received: from mail-bn8nam12on2042.outbound.protection.outlook.com ([40.107.237.42]:51680
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S238412AbhLMRs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 12:48:26 -0500
+Received: from mail-mw2nam08on2048.outbound.protection.outlook.com ([40.107.101.48]:28289
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238326AbhLMRrG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 12:47:06 -0500
+        id S230404AbhLMRsY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 12:48:24 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M5hlZII1pqC1/Ua+KZj7nYFRwA2ObqODau+X6+JANnubr8jtV8NBIcDWieaXoMznYd1We8VNrCOcanwo1H+DDnr1dtQ40SXU2fpUk9sp/i5mkB5lWsYYn2vJUUXtoB+300SMSRpU7+4tiDt+2B/L2+9JGhxQgmWK0gZ0ZAShNX/jbVR88hGaelkzw0WuFCDKoL7PLe9VzcaK7+ckQxQW5L2oU2pi1DzyzkmAadRfXDNQ4Ue+XIkJ/ZPcsgZFn92PFxlI96/dPseDi6ND1+yJ4Uvwscz/uhXOg0Ke5GZ3WR1jIgDxvvEYxb/yLtQZ4JvMiQDvlGaBdQ68hAdKaUx/cQ==
+ b=Ck6ET7BZw8qEq16xNJXJ7X1oYGBIyatkL+IJjr1TXdccp9MzXgisZ39WD2/Dx2KpZ6wHwsaZ3ivbS7M34vR+U4D8kujQyGFIfxfo9hSjxhGpty9IKUb1QCtiNP0jjIAvbpi8xPIuikVVkU2IYR3k60Mc8zQUeUGaWGHuafzmShVvsew6OYxuym6mxBo+rTm9oVv8Khc0FEuy0TeLCmtEXWt+/kDRt6okeXp2/7lWujpGsllIVd8T5u4aCc825oH5aUf2M0aVQZa7RYmTHFncAtQCycolhOOLwjBnw3K7D9CgyM4j2F62ZHz+TN97f6HdCc/wkQL96DmxxgQJxc3n8Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YaQ6bgckXgTXpuTktyB/0b4IGn8AYC2ObARb7Cn+vWk=;
- b=I5FmBiD7ukyjlsAyNb4WEqjYDnT7OeJKYfcv2OTeLkl3fxPd4zJvvmnpY9K+KzZNXPqXVZvRHYxacFAXfSENJ/9TdPymBaicX0F2r9xiRuxkVkgas+kkx46KeI8ECl8ga0xtqOKghUYAeiJw4DRNWV49HKhNVLrfa1T5zplHsfmYUBcO8KUnXbazBLHnVm+o0oZZW0SjQiqm8aPcTE5O3QY+6AIHp5yOjevjjjpCkUKY9ur7Afzy8teH0RDQZS3OEoN4u891f4avaQQDc3V2kTuTj0zVnrbG2nlbuo7bXc2Q+aseQqK/3P1iY7AQDKR8olGacC2NoSp0TVUB26QjCw==
+ bh=+B56nxxv4XJg1PnkGOlmII28PMfg4ePiLGPRbIa8d2A=;
+ b=iWa2JoFxc53YZHM9LLZ971QS6fFb+Y2wwL+0kce8c67YJqTY22jKt8GQoDw/acFbWLB64jF413JbH2eP46DIjgfi/WbMOAN4qpjpCJk+TiiKsEZ/dc0sdDYCgoTgoWB1BUoMeUNJWtwhjpHZvcUpOSuKTur8VZu9O8FSxhLsGc+24wGNnxJrj+VsxRwTadmzrQOCJ3ccYVHHO8g//ccVou2p57rhtwvFppIwpgeyFggYYyJ/CQgBEsryT0gfzVAeFinBWZ9C3RIp1mVmuzNq8vBM2aeXCX83ol9N27/zoDegfMsnEtSkNduGGfvTGU4o7cUqktJPaTr5tVmp+5iPIg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YaQ6bgckXgTXpuTktyB/0b4IGn8AYC2ObARb7Cn+vWk=;
- b=DlollWFYKRJy5R1KsSZVBMWypP3u4pXXUzL3kxZ1+mbuiaPWL9hTs9WRuNzK5sHQYVnwTByy1VCIPgedzKluXFo5VnQHgrEK/58xO0y6h6KZN2OHBIO5el+3A6lbvPHWw00c4RWWwcRtcJBJvAISrBIWHHNRpume3SeX6ibBVHo=
+ bh=+B56nxxv4XJg1PnkGOlmII28PMfg4ePiLGPRbIa8d2A=;
+ b=3XURui7eUy1PM64RX5VGDM56w+bqxbsPYLdYPdu877obQGzocY9Mv/gnC+FkYA1UKgnUwRAPAzb35Gyg8T+tS5zHqpEd+joI1zl41akPQN1TQdWtGEO1mAggBEWtzwDiqRU9CrN2ypNhGLzh2F02PNmZ3kFQjR3GW2wnsFMXby8=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BN8PR12MB3442.namprd12.prod.outlook.com (2603:10b6:408:43::33) with
+Received: from CH0PR12MB5346.namprd12.prod.outlook.com (2603:10b6:610:d5::24)
+ by CH0PR12MB5106.namprd12.prod.outlook.com (2603:10b6:610:bd::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.13; Mon, 13 Dec
- 2021 17:47:04 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::a192:7073:258c:28b3]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::a192:7073:258c:28b3%6]) with mapi id 15.20.4778.018; Mon, 13 Dec 2021
- 17:47:04 +0000
-Date:   Mon, 13 Dec 2021 17:46:55 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com,
-        william.roche@oracle.com
-Subject: Re: [PATCH 4/4] EDAC/amd64: Add DDR5 support and related register
- changes
-Message-ID: <YbeHD5PW0sv4O13r@yaz-ubuntu>
-References: <20211208174356.1997855-1-yazen.ghannam@amd.com>
- <20211208174356.1997855-5-yazen.ghannam@amd.com>
- <YbNK9jV06al93XDN@zn.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbNK9jV06al93XDN@zn.tnic>
-X-ClientProxiedBy: CH0PR04CA0071.namprd04.prod.outlook.com
- (2603:10b6:610:74::16) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.15; Mon, 13 Dec
+ 2021 17:48:22 +0000
+Received: from CH0PR12MB5346.namprd12.prod.outlook.com
+ ([fe80::f154:648:177d:297b]) by CH0PR12MB5346.namprd12.prod.outlook.com
+ ([fe80::f154:648:177d:297b%5]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
+ 17:48:22 +0000
+Message-ID: <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com>
+Date:   Mon, 13 Dec 2021 11:48:18 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Reply-To: Terry.Bowman@amd.com
+Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
+ io accesses with mmio accesses
+Content-Language: en-US
+To:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, thomas.lendacky@amd.com
+References: <20210715221828.244536-1-Terry.Bowman@amd.com>
+ <20210907183720.6e0be6b6@endymion> <20211105170550.746443b9@endymion>
+From:   Terry Bowman <Terry.Bowman@amd.com>
+In-Reply-To: <20211105170550.746443b9@endymion>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN6PR04CA0078.namprd04.prod.outlook.com
+ (2603:10b6:805:f2::19) To CH0PR12MB5346.namprd12.prod.outlook.com
+ (2603:10b6:610:d5::24)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2bce8a4b-a691-4a67-faa1-08d9be60929b
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3442:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB34424D607BF758A22180AE2CF8749@BN8PR12MB3442.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 4add9057-647f-4735-de6b-08d9be60c149
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5106:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB5106EF7FB6C132AADF93E0E483749@CH0PR12MB5106.namprd12.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: s54czoo3qKm6qIGPsOK2pd6WAju/QLe9GJWmfnr3mInrJ4FTJ/NKHMfqQb+QgVaAPcKyutuyJChPFQwszCtmKcmSqN2KGG36aaqQCxPBH2sxqSyTTXpQpaKyU+wZg0LtLik1hQIpwSNvuPcRFGa7TfhQCZ+omDTPej6AjI4s7BI4wOvt57wlXbqxG3/sjw1qt3pg3vyuA8LlWi4S6ccaAlVC2xPUMm3vt6iAyTpSW2FtmKnvYypdlYpJ9oy07Q/A+ubMzpea7jISYUzCxlL4T+SmTPoWjyEpHzJQDx4cjrQy7hpq+Tzm1pcRinekrStk6wWqUjfNuYXvMKeTD/rjJX9xRSGV2G7PmY+nWgIifXtkQDwNq0WedqyJqUBHSJV+hKxBSa47n4JIeSSfTsL0LHXM+BULRgZn5vNQeZ+Mq9Rky37Ki/h7TYKT4o1Vn8mPqbdJGVveHdKH4e2ELQro6Nftl5MJ7UrXbJwWEEc3vIsmfW+KG9TXqNwh8yTiPABhCngYM+wa5IgpKdMGBWIdEn0h+Mtz7YIT6beg3j8zhoxS/z30Hmk316ddTORY5TRREh/hiC+pVuveMeCp0AepkDyp9WH8D7bcRU0pWDVhZY1B76+nLj1SiHMZDmINxXLH8sr5oaV/tr8aOIsCX3TQRg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(6666004)(186003)(316002)(26005)(4326008)(6916009)(6512007)(83380400001)(9686003)(38100700002)(66476007)(66946007)(33716001)(6486002)(8936002)(6506007)(2906002)(8676002)(508600001)(5660300002)(86362001)(44832011)(66556008);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: wvt2ECth+KXiayuUOT8hHxHegi9O6XutjFyAV7JK/dA/tpIEVI/hdwefS1Tz+l9qgg9WA8/H24KhkZuu3RtQjfi3t83rqqR6t3ycHb9AfzFRPgmi96bFEQ1+d9GHN4NikMLQMj2IUeSJ/aOe491E47iIZLbcbcd+cxwNOGFFWmzEAytll9vE68DIIl6qRbmrTcHAO9fHNV8UgKjC6WIzN45X8wS1SPHjS3JNjSgk9C+MGWih3Dvfek9t2QuUeaJqPcS9ZzUoF0ECTUb8qv0o34k4xKEEwDI00NQ9FrY0p9Lwu44JDxCi8dW3NghLqRcbPOxrF75X6Y+HWzxbcupNAKCkdVZb68qDtlxlNdUTBH0KQTc9Je7kl+mUVRUbZmMRfDVjQSsPADDzRZGYR8U6qRpBkFvadYZo3ZYMhuGVUvO2D/swoyGDTuUZ5fioK5CxhX0nsJpjEqyBaUgHCzK6f/DNbDwpQQH+dpiTKz+F0bboXTi6aDvUO3UrU2irYD/l9Msh4mJvgsy2qBCNzIEJSbA3VZXryt0E/9g1SnCHP5H33ywyCc0ma9IX/LyHBDFSeUqt4DSNpYyyo8iQY0PBL46LD7SSc/IoGDZG5JwB/f3YLQYDvccsJyC9drFQJDPad4D04HdGLI6cL6d9Qk4RimNeWr667rjbTeL5Agw1hL4oBxjajtMjcXTp0BhRiBQdZFXDFIemyisBz7Qo9Aw5QzgZAoD20qNhUq9P6wvx+cn/oZ0tzpXamc92X/lLg8eYdNplOjuVC2HdlpRvlgwaFA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5346.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6512007)(83380400001)(508600001)(31686004)(31696002)(8936002)(3450700001)(2616005)(66556008)(186003)(66946007)(6666004)(5660300002)(4326008)(26005)(66476007)(8676002)(53546011)(6506007)(6486002)(36756003)(110136005)(38100700002)(316002)(86362001)(2906002)(32563001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Kn9SeSEICjj0t49gDtBSlBhHPf/NQXT+1kRuj8BEVhLxhVakcpRLuZAtXUiS?=
- =?us-ascii?Q?+qN40W16TnRUJs7b5S5MqYqFp8S3hOz3Y/DcBejLj7uiCVHAGc/KmEo6YgKG?=
- =?us-ascii?Q?Vbpqen2e5OhCq54v0+5ikkyWPAtwweX7g4nx1vkTpcfaFHeEaRA0vhObnRFC?=
- =?us-ascii?Q?1vTYzLJSxsrvv6xNDoxGp4WrbJnMyDY05eDlE6UIxMFlzimFN7qwnaEgi0QL?=
- =?us-ascii?Q?doYsXgSnr2FdTExPeeVEaE6aXgmVXimD62i+ifUQ2leozeM6D9QN1g4rgvCJ?=
- =?us-ascii?Q?xQutv4qbdi6LDHgEsZpqAH6Ies/vNjHLXIaKSnIXhCBxqTpzmQOouSIy1MK0?=
- =?us-ascii?Q?tQuD92dQzfNrgQRfoZt2TFcZbc1fBhQ0frT3/bp93kvdV5azL8PHGYmIy1me?=
- =?us-ascii?Q?vkxzDAfeUyc/BnPkN/rTeB3B/egPgJvJ/hWjyvEwoLyZZawZOmoPa+9dBc+o?=
- =?us-ascii?Q?DCPPYS6iQrY6c0chMOPkgKDne7Qf/lDGHjHyX4GhpZqtOtVEkjNx9a2OPn/b?=
- =?us-ascii?Q?9a3dZEhuS3DOfohiDuH3awPe+9K6g9ZWsm9FwAEobvGhk++Aj1FS+xWfSRra?=
- =?us-ascii?Q?g4ig8WlskE/XxamDJBPJ2c5IuIDlos/JjRAz7DmmhkUEwLqsBld0F5EMxDq1?=
- =?us-ascii?Q?dYt9ivtugHY/D47aWqxd27z4hSZNHszxawdpsgcL6bMdFTVTiJ9ZZJVJfDzU?=
- =?us-ascii?Q?/vFWvmbkkdE9sHowfhHXHYX6QTsKv+8gQSX21CzWJGvQtuI/D4wUk8X4RsaP?=
- =?us-ascii?Q?ClAVM7eHM9oEHH0TBYSGl3C6/UaojxA83wra/HqjH5s2VV3djVmhNxCa7b6a?=
- =?us-ascii?Q?SRcoug9lMsa+ETL7Nc7XGI/v0DnTEkiV085PedYDRrOVIGht5LtP6+QknHAF?=
- =?us-ascii?Q?ubhHY9SMJPNsgDdPQ72XWpynvLlIvYA2kUoOdvuJsq5AsdAehSgojIZKpljn?=
- =?us-ascii?Q?94M/G+fpgHZavGqv6EPDZAUjR+TXLMKnUQ7py9QoLhVNK8HORrhZBlF9BLEY?=
- =?us-ascii?Q?vFlkqVR2cX9TQO27EDQTKwXMbgcTqY1CgYR/e5EXBR9riwGXyA0OvFn4ocPv?=
- =?us-ascii?Q?sz+CVoDmpzct5k+8Opm338CUYvFhh4haesj+7YmKMBYsJalAxN+nWViu+g1G?=
- =?us-ascii?Q?pwXQRI9ul1M+7wS+BVC4Y1+ex44GKyutU9K0oHpO9WuM570h4Ztp/JIgDCyv?=
- =?us-ascii?Q?n8ueAyM7+n8l+XvDlxQ+ZfSuu3t3An6oF3QEL6VzHez/5TBdwKJJsfiYvbP+?=
- =?us-ascii?Q?2BDIgCitXRl8iJKAy2P/7fQSFx+APyY/hGyyBkxTjsfXgyv14KnYoW121MrL?=
- =?us-ascii?Q?PCjnsfZlAStVHygYlZ6V+aTlPuigj4HT/tecSEo1536QlZrnA/11GH3TB7tK?=
- =?us-ascii?Q?50J00wkL1NPoEWtOK0DQO7wp6I2mlQoU78ay9kltct35o8TPumXs11/o49Bn?=
- =?us-ascii?Q?ilB/Sv3NQ4RpdN8pDq3MwEEHhPUQqI60T8NFn3Ovplj4jLjPkJPmdUg4xz4+?=
- =?us-ascii?Q?1WaPvOYmn3y6SYvmz6tqjyRrs/PemEFv20wINCsXKRmD8OM/cWoG5T4HukvT?=
- =?us-ascii?Q?i4UWJSWqakQW9zmfW/VfRmnANq+nM0S1UpMPx5BZmkl7GZ0wuwcN9NcgDKFT?=
- =?us-ascii?Q?LDTFEFX7poAZaXLg28nZrvA=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YVNvR1YwdEhONzB2SkxnV0tzY3VaUms5ZEFhb3hvckViR1JoYnJoeS9tT0JM?=
+ =?utf-8?B?UVZRUVFlZUJnTk5pV24rcHNKOGpIZUY0YVhDNDJsVTlEcE5TakxQdmJubTBi?=
+ =?utf-8?B?QjZZdWhpY08yZXRJdjM3SlhTRERuOERZdGZOaVk3aUFYMm1NLzlvN2loR0FJ?=
+ =?utf-8?B?czVVbCtxNWZZSndRZjMvcVllUW9jUUFvNEczWU15ZlRXK3pKb2lMOGo3TFFs?=
+ =?utf-8?B?UXQ2U3FhczhmZWZiaEJvcTRNbCtWUHhVVEk0SUthVXYxQUlqd0JHSzU3RWlT?=
+ =?utf-8?B?dVJya3krY2tVNnJPZ1l2S2xFT0ljOUJOaklxNnVLcmZjL2F6OGMvQmVzWGhN?=
+ =?utf-8?B?eVVFRzJsckl1VHIydXlSaVF1a2ZHSFNJWGk2dEpNYTRzR3dSdy9XWVA4QXhL?=
+ =?utf-8?B?MXVwOXNKNWZaRU1DV0ZCc2xZeTFBNjJabDJ6Q1dLT3ljREF4N2hFVjR0OUJM?=
+ =?utf-8?B?MElNRFlnM3J2alk5TWQydnRpbS83UnEyM1hLcE5uNnpMdW83VldoQUwxc1h0?=
+ =?utf-8?B?ZFVCVnZ5azAxUytRZUtlRHFnaUY1bU1KTFVEY0p6UUFRVW9oemt1TlBLYy80?=
+ =?utf-8?B?ZllIaUdmTld0RTNUbkMyamg3K3JnSmVOWUlnUEk2TkRkbHRrUEtyM1hEQ0pC?=
+ =?utf-8?B?K1NTVndXUXBzVmpDbEJiMWJwYVhCUmVoWk8vVERJSzE1TDcvdWxmTmpYRUFm?=
+ =?utf-8?B?M3huUXE3R1VHSVAxSmxCeVN4OEozWmhYaGN2dG1JL0dxOTk2a3l0dHZXY0p1?=
+ =?utf-8?B?QWtMdDVnd1JoVHhOejZnbTVtY3pkNmJwUEM1MHluemJjcTc3Mm40UW81UlR5?=
+ =?utf-8?B?QkI4eGl2UnpxeEppdXNQaklFMFEzYTNycmhZbjhkVEJ5NUZQanZVbXBRYVhC?=
+ =?utf-8?B?T2QvSm8zZ2llOVZyNjBwOWhLSTR0alJXVlNITnlJczhNM1orNWNIS05YQ2ZL?=
+ =?utf-8?B?ekFoUTY0VktibEZXb2dJZHJVMWI1eFhDSE5oYnZzUkdsc3FiWjdRb0k5TDlt?=
+ =?utf-8?B?dVdpTnRDS2NsS0NQUG95VGFKWFVSL1hkQmZLZDF3QXVIN093NE8yR0xFYklk?=
+ =?utf-8?B?TGFpTU5obUFsbzBZanlTQm05Y3FEQ2ozTlhTL0NvZWxjTWlLRHRuS3YvSlk0?=
+ =?utf-8?B?VGpPaHdCTHZPN2ZlQi9IUHZTZTBQY09vc2V4ZWk0UXRNc2pMV1BscGN2QUV0?=
+ =?utf-8?B?d2RBYmtjVVAzUDhWZ01nNURRVm5iRnBTOFpqRnZLQlRNeHlYanlHSjVSSHRF?=
+ =?utf-8?B?L1F0YVBCbnZWVXdrcy9yQTQ5Qm8vT1NZODdISDR5VkNUTnN2V1BXYmpkRnMr?=
+ =?utf-8?B?WExyKyttdlRQbS9VcFVzWU1CZ1F5SGZpKzV0ckR4MzA2OVJkTVloQWQvd1ZC?=
+ =?utf-8?B?R1g4bEN0ZDV1L3pBUlptY3g4c3FTdXZJM2NJUnIwcFpzbTJncnJrc3R6VFZJ?=
+ =?utf-8?B?eGtIZVZ0SHMrRzllOEpoWmwrV2h0NmczakE1QjVVTHZ2VU1CRHprMUR5akdD?=
+ =?utf-8?B?VGhPRkJlNmRsd2huTksyd1BzRml1YkZLZE1rT3lkYnpYQ2NVRjQzMkYxQVBr?=
+ =?utf-8?B?WDM5eTYzYnV5WUh3MzR1SUkwV0UrUUZWbW5kZFIyUlB5Zi9qZ0tYQTVubzVv?=
+ =?utf-8?B?RnN1TDBLUkZmVE52M2dLLzhMbXNuTHMrakczUnZRZk9hV2JOL05jdUhFeklK?=
+ =?utf-8?B?RE1Ra1hHL2E0ZUNjN1A1VnhtMUk3UnV5VTk4TUpOcFFDTUtQQjNJQjIwYlpj?=
+ =?utf-8?B?RW8vT2JqaTU5NkhaWFpVdERTelhxenpTZWdvUmpTS3h2MDNjQVlnejkyR0lJ?=
+ =?utf-8?B?bEtKKzViQmdkN0hlWUtuVlJWVWFySEF1cW5XNEdPaGNZU0NMOWpCMEZxNWk1?=
+ =?utf-8?B?YTY0V1JPbE9XRHBDVWpGZ0VTWGM0Nzk4cFJZYVZUQlRCMEpYMVBPcTBvQW04?=
+ =?utf-8?B?ODBNS00yY3FhMUUrRlJZanY5UzZTZ2gzVDYyM2ZNdXJzdFFUUUc4Nm0wbWJG?=
+ =?utf-8?B?d1BSYzdEZGFvZ2ZtRlRDSEpyckNHemUzZFdPOXFHZTR6WW9mWXFrdERZR0k4?=
+ =?utf-8?B?SDRnd1I2NDRhWnN4S2dSY1YyU2Z4MDVoRFFJTGZ4ZVdQbGRqbFBPaWVUdG5z?=
+ =?utf-8?B?NVBYTTd3ZHF6MnZGd1BUUUF4aGkvMWg2N3ZVLzlaOUwrSk9zVHBQdFJ1cnFX?=
+ =?utf-8?Q?PGODiCAxnsDoZ+ArCupflQ8=3D?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2bce8a4b-a691-4a67-faa1-08d9be60929b
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4add9057-647f-4735-de6b-08d9be60c149
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5346.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 17:47:03.7969
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 17:48:22.0035
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fZLtcwmfyqChwp3IEr3IgTkMZw7iNOWNYGBEPpOuvbGqdtLIZbayr9bbE3NqZeh8dV19ZrnRYqdYyzt8k9jv5Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3442
+X-MS-Exchange-CrossTenant-UserPrincipalName: COtuPYbL6zfbvlr2KEVUTzHvXPGFy9zs05uj/BzzkrKGUpxFb8vsQX/GPSYsE4ksJg18PbTcXSMj1/8qH0UfHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5106
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 01:41:26PM +0100, Borislav Petkov wrote:
-> On Wed, Dec 08, 2021 at 05:43:56PM +0000, Yazen Ghannam wrote:
-> > Future AMD systems will support DDR5.
-> > 
-> > Add support for changes in register addresses for these systems.
-> > 
-> > Introduce a "family flags" bitmask that can be used to indicate any
-> > special behavior needed on a per-family basis.
-> > 
-> > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> > ---
-> >  drivers/edac/amd64_edac.c | 61 +++++++++++++++++++++++++++++++++++----
-> >  drivers/edac/amd64_edac.h | 11 +++++++
-> >  2 files changed, 66 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-> > index 1df763128483..e37a8e0cef7e 100644
-> > --- a/drivers/edac/amd64_edac.c
-> > +++ b/drivers/edac/amd64_edac.c
-> > @@ -15,6 +15,36 @@ static struct msr __percpu *msrs;
-> >  
-> >  static struct amd64_family_type *fam_type;
-> >  
-> > +/* Family flag helpers */
-> > +static inline bool has_ddr5(void)
-> > +{
-> > +	return fam_type->flags.has_ddr5;
-> 
-> A flag about ddr5 *and* a function of the same name. Kinda too much,
-> don't ya think?
->
+Hi Jean and Guenter,
 
-Yeah, you're right. I didn't think about that. I think I'll drop this function
-and just check the flag directly.
- 
-> > @@ -1628,6 +1660,17 @@ static void determine_memory_type(struct amd64_pvt *pvt)
-> >  			dimm_cfg |= pvt->umc[i].dimm_cfg;
-> >  		}
-> >  
-> > +		/* Check if system supports DDR5 and has DDR5 DIMMs in use. */
-> > +		if (has_ddr5() && (umc_cfg & BIT(0))) {
-> > +			if (dimm_cfg & BIT(5))
-> > +				pvt->dram_type = MEM_LRDDR5;
-> > +			else if (dimm_cfg & BIT(4))
-> > +				pvt->dram_type = MEM_RDDR5;
-> > +			else
-> > +				pvt->dram_type = MEM_DDR5;
-> > +			return;
-> > +		}
-> > +
-> >  		if (dimm_cfg & BIT(5))
-> >  			pvt->dram_type = MEM_LRDDR4;
-> >  		else if (dimm_cfg & BIT(4))
-> > @@ -2174,8 +2217,13 @@ static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
-> >  	 * There is one mask per DIMM, and two Chip Selects per DIMM.
-> >  	 *	CS0 and CS1 -> DIMM0
-> >  	 *	CS2 and CS3 -> DIMM1
-> > +	 *
-> > +	 *	Systems with DDR5 support have one mask per Chip Select.
-> >  	 */
-> > -	dimm = csrow_nr >> 1;
-> > +	if (has_ddr5())
-> > +		dimm = csrow_nr;
-> > +	else
-> > +		dimm = csrow_nr >> 1;
-> >  
-> >  	/* Asymmetric dual-rank DIMM support. */
-> >  	if ((csrow_nr & 1) && (cs_mode & CS_ODD_SECONDARY))
-> > @@ -2937,6 +2985,7 @@ static struct amd64_family_type family_types[] = {
-> >  		.f0_id = PCI_DEVICE_ID_AMD_19H_M10H_DF_F0,
-> >  		.f6_id = PCI_DEVICE_ID_AMD_19H_M10H_DF_F6,
-> >  		.max_mcs = 12,
-> > +		.flags.has_ddr5 = 1,
-> 
-> So judging by the name, this means that model 0x10 has DDR5. But I think
-> you wanna say whether it supports DDR5 or not?
-> 
-> Or does M10 support DDR5 only?
-> 
-> But it doesn't look like it from the comment above:
-> 
-> 	"Check if system supports DDR5 and has DDR5 DIMMs in use."
-> 
-> So why is this thing set statically only for this model instead of
-> detecting from the hw whether there are ddr5 or ddr5 DIMMs and what it
-> supports?
-> 
-> And then you can use the defines you just added in patch 1.
-> 
-> I'm confused.
->
+Jean, Thanks for your responses. I added comments below.
 
-Yeah, sorry it's not clear. The purpose of the flag is to indicate some minor
-changes that show up with future systems like register offsets changes, etc. I
-didn't want to tie the name to a specific model or core name. I went with DDR5
-as a new feature that shows up with these changes, but they're not directly
-tied to DDR5.
+I added Guenter to this email because his input is needed for adding the same
+changes to the sp5100_tco driver. The sp5100_tco and piix4_smbus driver
+must use the same synchronization logic for the shared register.
 
-But yes, a system may support DDR5 and DDR4. And this can be detected from the
-hardware.
+On 11/5/21 11:05, Jean Delvare wrote:
+> On Tue, 7 Sep 2021 18:37:20 +0200, Jean Delvare wrote:
+>> More generally, I am worried about the overall design. The driver
+>> originally used per-access I/O port requesting because keeping the I/O
+>> ports busy all the time would prevent other drivers from working. Do we
+>> still need to do the same with the new code? If it is possible and safe
+>> to have a permanent mapping to the memory ports, that would be a lot
+>> faster.
+>>
 
-What do you think about calling the flag "uses_f19h_m10h_offsets" or something
-like that? I was trying to avoid family/model in the name, but the code
-already does this all over. And the convention has been to call something by
-the first family/model where it shows up.
+Permanent mapping would likely improve performance but will not provide the
+needed synchronization. As you mentioned below the sp5100 driver only uses
+the DECODEEN register during initialization but the access must be
+synchronized or an i2c transaction or sp5100_tco timer enable access may be
+lost. I considered alternatives but most lead to driver coupling or considerable
+complexity.
 
-Thanks,
-Yazen
+>> On the other hand, the read-modify-write cycle in
+>> piix4_setup_sb800_smba() is unsafe if 2 drivers can actually call
+>> request_mem_region() on the same memory area successfully.
+>>
+>> I'm not opposed to taking your patch with minimal changes (as long as
+>> the code is safe) and working on performance improvements later.
+> 
+
+I confirmed through testing the request_mem_region() and request_muxed_region() 
+macros provide exclusive locking. One difference between the 2 macros is the 
+flag parameter, IORESOURCE_MUXED. request_muxed_region() uses the 
+IORESOURCE_MUXED flag to retry the region lock if it's already locked. 
+request_mem_region() does not use the IORESOURCE_MUXED and as a result will 
+return -EBUSY immediately if the region is already locked.
+
+I must clarify: the piix4_smbus v1 patch uses request_mem_region() which is not 
+correct because it doesn't retry locking an already locked region.  The driver 
+must support retrying the lock or piix4_smbus and sp5100_tco drivers may 
+potentially fail loading. I added proposed piix4_smbus v2 changes below to solve.
+
+I propose reusing the existing request_*() framework from include/linux/ioport.h 
+and kernel/resource.c. A new helper macro will be required to provide an 
+interface to the "muxed" iomem locking functionality already present in 
+kernel/resource.c. The new macro will be similar to request_muxed_region() 
+but will instead operate on iomem. This should provide the same performance 
+while using the existing framework.
+
+My plan is to add the following to include/linux/ioport.h in v2. This macro
+will add the interface for using "muxed" iomem support:
+#define request_mem_muxed_region(start,n,name)  __request_region(&iomem_resource, (start), (n), (name), IORESOURCE_MUXED)
+
+The proposed changes will need review from more than one subsystem maintainer.
+The macro addition in include/linux/ioport.h would reside in a
+different maintainer's tree than this driver. The change to use the
+request_mem_muxed_region() macro will also be made to the sp5100_tco driver.
+The v2 review will include maintainers from subsystems owning piix4_smbus
+driver, sp5100_tco driver, and include/linux/ioport.h.
+
+The details provided above are described in a piix4_smbus context but would also be 
+applied to the sp5100_tco driver for synchronizing the shared register.
+
+Jean and Guenter, do you have concerns or changes you prefer to the proposal I 
+described above? 
+
+> I looked some more at the code. I was thinking that maybe if the
+> registers accessed by the two drivers (i2c-piix4 and sp5100_tco) were
+> disjoint, then each driver could simply request subsets of the mapped
+> memory.
+> 
+> Unfortunately, while most registers are indeed exclusively used by one
+> of the drivers, there's one register (0x00 = IsaDecode) which is used
+> by both. So this simple approach isn't possible.
+> 
+> That being said, the register in question is only accessed at device
+> initialization time (on the sp5100_tco side, that's in function
+> sp5100_tco_setupdevice) and only for some devices (Embedded FCH). So
+> one approach which may work is to let the i2c-piix4 driver instantiate
+> the watchdog platform device in that case, instead of having sp5100_tco
+> instantiate its own device as is currently the case. That way, the
+> i2c-piix4 driver would request the "shared" memory area, perform the
+> initialization steps for both functions (SMBus and watchdog) and then
+> instantiate the watchdog device so that sp5100_tco gets loaded and goes
+> on with the runtime management of the watchdog device.
+> 
+> If I'm not mistaken, this is what the i2c-i801 driver is already doing
+> for the watchdog device in all recent Intel chipsets. So maybe the same
+> approach can work for the i2c-piix4 driver for the AMD chipsets.
+> However I must confess that I did not try to do it nor am I familiar
+> with the sp5100_tco driver details, so maybe it's not possible for some
+> reason.
+> 
+> If it's not possible then the only safe approach would be to migrate
+> i2c-piix4 and sp5100_tco to a true MFD setup with 3 separate drivers:
+> one new MFD PCI driver binding to the PCI device, providing access to
+> the registers with proper locking, and instantiating the platform
+> device, one driver for SMBus (basically i2c-piix4 converted to a
+> platform driver and relying on the MFD driver for register access) and
+> one driver for the watchdog (basically sp5100_tco converted to a
+> platform driver and relying on the MFD driver for register access).
+> That's a much larger change though, so I suppose we'd try avoid it if
+> at all possible.
+> 

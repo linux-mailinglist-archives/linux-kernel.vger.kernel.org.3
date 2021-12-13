@@ -2,136 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F274472A66
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6B7472A21
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240783AbhLMKkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:40:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240026AbhLMKkX (ORCPT
+        id S236474AbhLMKcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 05:32:55 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:41142 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236431AbhLMKbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 05:40:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1238AC053AF0;
-        Mon, 13 Dec 2021 02:31:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1CB7B8104D;
-        Mon, 13 Dec 2021 10:31:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C450BC34601;
-        Mon, 13 Dec 2021 10:31:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639391475;
-        bh=YqTqbD22bE3nbM3gT9uMbugvqLUIVy1xvqjX4jOnawo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VnSTRR8x0Qi3FwpeicOeUIzpUGuXMcdl8//Eixs5/LlOJ42Wqsf1Bpxiw1/v5DvvQ
-         u9XyrnMcbnZa8ldqRHNNy/FpFgHA3PYJy6yVkDyb8n5wlS3zjAB6BdZNmpIBJI0j+w
-         hZ/Ht2+Mws4JlRQU7vWC/istzB7AQXvey27yhFKb2faxntxTKGBXcJSMjLUYP75HL1
-         sze5PsU/Db9Qk8XqWQrKyomukom+2bdWtlTC+B112b8kTJbrprUY8wFdNdTZy1bzGa
-         ktK6VcMq2zCJ2HEPuDIEUyd+DnuI1CmKH5G7CsVBS9XwR0ep1k6FqUsEUBlUvPAEAs
-         yD6oHRRyRj0bQ==
-Date:   Mon, 13 Dec 2021 12:31:05 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Cc:     stable@vger.kernel.org, akpm@linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux@armlinux.org.uk, rppt@linux.ibm.com,
-        tony@atomide.com, wangkefeng.wang@huawei.com,
-        yj.chiang@mediatek.com
-Subject: Re: [PATCH 5.4 1/5] memblock: free_unused_memmap: use pageblock
- units instead of MAX_ORDER
-Message-ID: <Ybcg6ZmQCSLbsy17@kernel.org>
-References: <20211213085710.28962-1-mark-pk.tsai@mediatek.com>
- <20211213085710.28962-2-mark-pk.tsai@mediatek.com>
+        Mon, 13 Dec 2021 05:31:34 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id E4CA41C0B79; Mon, 13 Dec 2021 11:31:32 +0100 (CET)
+Date:   Mon, 13 Dec 2021 11:31:32 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.4 00/37] 4.4.295-rc1 review
+Message-ID: <20211213103131.GA17683@duo.ucw.cz>
+References: <20211213092925.380184671@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="45Z9DzgjV8m4Oswq"
 Content-Disposition: inline
-In-Reply-To: <20211213085710.28962-2-mark-pk.tsai@mediatek.com>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 04:57:06PM +0800, Mark-PK Tsai wrote:
 
-> Subject: [PATCH 5.4 1/5] memblock: free_unused_memmap: use pageblock units instead of MAX_ORDER
+--45Z9DzgjV8m4Oswq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'd replace memblock: with arm: in the subject. I believe it's clearer this
-way.
+Hi!
 
-The same applies for the second patch in the series and for 5.10 posting.
+> This is the start of the stable review cycle for the 4.4.295 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> commit e2a86800d58639b3acde7eaeb9eb393dca066e08 upstream.
-> 
-> The code that frees unused memory map uses rounds start and end of the
-> holes that are freed to MAX_ORDER_NR_PAGES to preserve continuity of the
-> memory map for MAX_ORDER regions.
-> 
-> Lots of core memory management functionality relies on homogeneity of the
-> memory map within each pageblock which size may differ from MAX_ORDER in
-> certain configurations.
-> 
-> Although currently, for the architectures that use free_unused_memmap(),
-> pageblock_order and MAX_ORDER are equivalent, it is cleaner to have common
-> notation thought mm code.
-> 
-> Replace MAX_ORDER_NR_PAGES with pageblock_nr_pages and update the comments
-> to make it more clear why the alignment to pageblock boundaries is
-> required.
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> Tested-by: Tony Lindgren <tony@atomide.com>
-> Link: https://lore.kernel.org/lkml/20210630071211.21011-1-rppt@kernel.org/
-> [backport upstream modification in mm/memblock.c to arch/arm/mm/init.c]
-> Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-> ---
->  arch/arm/mm/init.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
-> index 7ea4d3b43444..6905dd8bc03f 100644
-> --- a/arch/arm/mm/init.c
-> +++ b/arch/arm/mm/init.c
-> @@ -381,11 +381,11 @@ static void __init free_unused_memmap(void)
->  				 ALIGN(prev_end, PAGES_PER_SECTION));
->  #else
->  		/*
-> -		 * Align down here since the VM subsystem insists that the
-> -		 * memmap entries are valid from the bank start aligned to
-> -		 * MAX_ORDER_NR_PAGES.
-> +		 * Align down here since many operations in VM subsystem
-> +		 * presume that there are no holes in the memory map inside
-> +		 * a pageblock
->  		 */
-> -		start = round_down(start, MAX_ORDER_NR_PAGES);
-> +		start = round_down(start, pageblock_nr_pages);
->  #endif
->  		/*
->  		 * If we had a previous bank, and there is a space
-> @@ -395,12 +395,12 @@ static void __init free_unused_memmap(void)
->  			free_memmap(prev_end, start);
->  
->  		/*
-> -		 * Align up here since the VM subsystem insists that the
-> -		 * memmap entries are valid from the bank end aligned to
-> -		 * MAX_ORDER_NR_PAGES.
-> +		 * Align up here since many operations in VM subsystem
-> +		 * presume that there are no holes in the memory map inside
-> +		 * a pageblock
->  		 */
->  		prev_end = ALIGN(memblock_region_memory_end_pfn(reg),
-> -				 MAX_ORDER_NR_PAGES);
-> +				 pageblock_nr_pages);
->  	}
->  
->  #ifdef CONFIG_SPARSEMEM
-> -- 
-> 2.18.0
-> 
+CIP testing did not find any problems here:
 
--- 
-Sincerely yours,
-Mike.
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+4.4.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--45Z9DzgjV8m4Oswq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYbchAwAKCRAw5/Bqldv6
+8rLxAJ9CSKO8VOgJ9JVwOCpjKMeEmXGRfgCfTB6tcXuTTeYK4r8bpSZCWn2PmaU=
+=vxmB
+-----END PGP SIGNATURE-----
+
+--45Z9DzgjV8m4Oswq--

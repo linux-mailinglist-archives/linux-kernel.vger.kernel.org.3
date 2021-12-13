@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 751F2472543
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2FA472425
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbhLMJnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 04:43:07 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:33882 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbhLMJkW (ORCPT
+        id S234227AbhLMJe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:34:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234095AbhLMJdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:40:22 -0500
+        Mon, 13 Dec 2021 04:33:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01A8C0698CE;
+        Mon, 13 Dec 2021 01:33:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 63C00CE0E96;
-        Mon, 13 Dec 2021 09:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D669C00446;
-        Mon, 13 Dec 2021 09:40:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBE24B80E17;
+        Mon, 13 Dec 2021 09:33:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E660C341C5;
+        Mon, 13 Dec 2021 09:33:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639388419;
-        bh=CBr674McNsAPoIZr7+OlnKy5ptBcp9BcM6Fsm5OT0G8=;
+        s=korg; t=1639388032;
+        bh=wkxb4IER6WP7MxNqEpaJIXsI5XtSIHnRc7ei7EB40G4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yKNfZQlv8soHmg3xOL0ezU/0eRAMyOVzFpcwjGrsCDrTaYOhyGM9q3bYwTnloqqgi
-         rLxniaW74LgsZgwq8PHYrTyxxw/TTKjrrmoECNGiyDBZIMBY8YlBo0k+55WeUmHwPj
-         7eiM7ygQ647lVmMbZMKNn+JXhYqR6Mb0rqwqrth0=
+        b=Nsu69mZQwUHuiR8li92g0D105HH76w3oTGPTyd1cEXZYw7+pBUwVpVlMauIwpMZ/o
+         G4ghnPjOP+xyqn6+Sywv88IZ5QylQB2APBnYa8PrKs9EgYvs59H2ratUjS5rOndvVN
+         wrPBEHkdm5W9WXyewD0nynWiFiGsxmYyxbDsa2aQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Grzegorz Szczurek <grzegorzx.szczurek@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Bindushree P <Bindushree.p@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 4.19 43/74] i40e: Fix pre-set max number of queues for VF
+        stable@vger.kernel.org, Wudi Wang <wangwudi@hisilicon.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 4.4 36/37] irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
 Date:   Mon, 13 Dec 2021 10:30:14 +0100
-Message-Id: <20211213092932.259198926@linuxfoundation.org>
+Message-Id: <20211213092926.560909720@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
-References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
+References: <20211213092925.380184671@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,38 +49,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mateusz Palczewski <mateusz.palczewski@intel.com>
+From: Wudi Wang <wangwudi@hisilicon.com>
 
-commit 8aa55ab422d9d0d825ebfb877702ed661e96e682 upstream.
+commit b383a42ca523ce54bcbd63f7c8f3cf974abc9b9a upstream.
 
-After setting pre-set combined to 16 queues and reserving 16 queues by
-tc qdisc, pre-set maximum combined queues returned to default value
-after VF reset being 4 and this generated errors during removing tc.
-Fixed by removing clear num_req_queues before reset VF.
+INVALL CMD specifies that the ITS must ensure any caching associated with
+the interrupt collection defined by ICID is consistent with the LPI
+configuration tables held in memory for all Redistributors. SYNC is
+required to ensure that INVALL is executed.
 
-Fixes: e284fc280473 (i40e: Add and delete cloud filter)
-Signed-off-by: Grzegorz Szczurek <grzegorzx.szczurek@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Bindushree P <Bindushree.p@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Currently, LPI configuration data may be inconsistent with that in the
+memory within a short period of time after the INVALL command is executed.
+
+Signed-off-by: Wudi Wang <wangwudi@hisilicon.com>
+Signed-off-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Fixes: cc2d3216f53c ("irqchip: GICv3: ITS command queue")
+Link: https://lore.kernel.org/r/20211208015429.5007-1-zhangshaokun@hisilicon.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |    5 -----
- 1 file changed, 5 deletions(-)
+ drivers/irqchip/irq-gic-v3-its.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c
-@@ -3580,11 +3580,6 @@ static int i40e_vc_add_qch_msg(struct i4
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -356,7 +356,7 @@ static struct its_collection *its_build_
  
- 	/* set this flag only after making sure all inputs are sane */
- 	vf->adq_enabled = true;
--	/* num_req_queues is set when user changes number of queues via ethtool
--	 * and this causes issue for default VSI(which depends on this variable)
--	 * when ADq is enabled, hence reset it.
--	 */
--	vf->num_req_queues = 0;
+ 	its_fixup_cmd(cmd);
  
- 	/* reset the VF in order to allocate resources */
- 	i40e_vc_notify_vf_reset(vf);
+-	return NULL;
++	return desc->its_invall_cmd.col;
+ }
+ 
+ static u64 its_cmd_ptr_to_offset(struct its_node *its,
 
 

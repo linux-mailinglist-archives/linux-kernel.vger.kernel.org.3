@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 375A347279A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 11:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4EC472523
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Dec 2021 10:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241103AbhLMKDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 05:03:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44714 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236336AbhLMJ6T (ORCPT
+        id S235397AbhLMJlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 04:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234772AbhLMJj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 04:58:19 -0500
+        Mon, 13 Dec 2021 04:39:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898FAC0698CE;
+        Mon, 13 Dec 2021 01:38:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFC25B80E7F;
-        Mon, 13 Dec 2021 09:58:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA963C34601;
-        Mon, 13 Dec 2021 09:58:15 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D6153CE0E85;
+        Mon, 13 Dec 2021 09:37:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81AC8C341C5;
+        Mon, 13 Dec 2021 09:37:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639389496;
-        bh=EUrFmyZfPd6lDLgotjYjhCq6dQ/9VTl4agq8A+F+6EM=;
+        s=korg; t=1639388277;
+        bh=irIT6cFm4AtfXyXW5+1xoGp+O06qu0zyxDUvqmeHhDY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d3/9yVGgeUD/jOp1Fid9zOa/v0QFFSMvmXMWZ4TWIyxIAZm2DVVmrWapyEALZZqmf
-         Xp3JuhXchBepvvl7NFNhKd94MCK1rYny6B+YvKHfEaWFpuk7+R2tBEvLl7kLZKyYpY
-         BLPRX5l+t6ZHq4quX4wnCB8J8+F9jWHWD5FmPORM=
+        b=ohTQsjyJMSDtcN1YfQlW+nlWnpMHf+hoFazORTE0yJok3ysVZr7+14+wX5FhSbnFf
+         7LR0MRZFetl0+PEW5DgwRHxq6RNCU04zwkOc9ZZM3CPUkrH5XpF8jqjyDvWii0ixrE
+         CJY1heR9e//s6McLJb6TOVHxiwtE7GZ5Ko2xqNlw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 112/171] ASoC: codecs: wcd934x: return correct value from mixer put
+        stable@vger.kernel.org, Evgeny Boger <boger@wirenboard.com>,
+        Chen-Yu Tsai <wens@csie.org>, Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 4.14 48/53] iio: adc: axp20x_adc: fix charging current reporting on AXP22x
 Date:   Mon, 13 Dec 2021 10:30:27 +0100
-Message-Id: <20211213092948.828971436@linuxfoundation.org>
+Message-Id: <20211213092929.953652764@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211213092945.091487407@linuxfoundation.org>
-References: <20211213092945.091487407@linuxfoundation.org>
+In-Reply-To: <20211213092928.349556070@linuxfoundation.org>
+References: <20211213092928.349556070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,46 +49,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Evgeny Boger <boger@wirenboard.com>
 
-commit d9be0ff4796d1b6f5ee391c1b7e3653a43cedfab upstream.
+commit 92beafb76a31bdc02649eb44e93a8e4f4cfcdbe8 upstream.
 
-wcd934x_compander_set() currently returns zero eventhough it changes the value.
-Fix this, so that change notifications are sent correctly.
+Both the charging and discharging currents on AXP22x are stored as
+12-bit integers, in accordance with the datasheet.
+It's also confirmed by vendor BSP (axp20x_adc.c:axp22_icharge_to_mA).
 
-Fixes: 1cde8b822332 ("ASoC: wcd934x: add basic controls")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20211130160507.22180-4-srinivas.kandagatla@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The scale factor of 0.5 is never mentioned in datasheet, nor in the
+vendor source code. I think it was here to compensate for
+erroneous addition bit in register width.
+
+Tested on custom A40i+AXP221s board with external ammeter as
+a reference.
+
+Fixes: 0e34d5de961d ("iio: adc: add support for X-Powers AXP20X and AXP22X PMICs ADCs")
+Signed-off-by: Evgeny Boger <boger@wirenboard.com>
+Acked-by: Chen-Yu Tsai <wens@csie.org>
+Link: https://lore.kernel.org/r/20211116213746.264378-1-boger@wirenboard.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/wcd934x.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/iio/adc/axp20x_adc.c |   18 +++---------------
+ 1 file changed, 3 insertions(+), 15 deletions(-)
 
---- a/sound/soc/codecs/wcd934x.c
-+++ b/sound/soc/codecs/wcd934x.c
-@@ -3256,6 +3256,9 @@ static int wcd934x_compander_set(struct
- 	int value = ucontrol->value.integer.value[0];
- 	int sel;
+--- a/drivers/iio/adc/axp20x_adc.c
++++ b/drivers/iio/adc/axp20x_adc.c
+@@ -224,19 +224,8 @@ static int axp22x_adc_raw(struct iio_dev
+ 			  struct iio_chan_spec const *chan, int *val)
+ {
+ 	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+-	int size;
  
-+	if (wcd->comp_enabled[comp] == value)
-+		return 0;
-+
- 	wcd->comp_enabled[comp] = value;
- 	sel = value ? WCD934X_HPH_GAIN_SRC_SEL_COMPANDER :
- 		WCD934X_HPH_GAIN_SRC_SEL_REGISTER;
-@@ -3279,10 +3282,10 @@ static int wcd934x_compander_set(struct
- 	case COMPANDER_8:
- 		break;
- 	default:
--		break;
-+		return 0;
- 	}
+-	/*
+-	 * N.B.: Unlike the Chinese datasheets tell, the charging current is
+-	 * stored on 12 bits, not 13 bits. Only discharging current is on 13
+-	 * bits.
+-	 */
+-	if (chan->type == IIO_CURRENT && chan->channel == AXP22X_BATT_DISCHRG_I)
+-		size = 13;
+-	else
+-		size = 12;
+-
+-	*val = axp20x_read_variable_width(info->regmap, chan->address, size);
++	*val = axp20x_read_variable_width(info->regmap, chan->address, 12);
+ 	if (*val < 0)
+ 		return *val;
  
--	return 0;
-+	return 1;
- }
+@@ -329,9 +318,8 @@ static int axp22x_adc_scale(struct iio_c
+ 		return IIO_VAL_INT_PLUS_MICRO;
  
- static int wcd934x_rx_hph_mode_get(struct snd_kcontrol *kc,
+ 	case IIO_CURRENT:
+-		*val = 0;
+-		*val2 = 500000;
+-		return IIO_VAL_INT_PLUS_MICRO;
++		*val = 1;
++		return IIO_VAL_INT;
+ 
+ 	case IIO_TEMP:
+ 		*val = 100;
 
 

@@ -2,187 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FCA474690
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B48474699
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbhLNPhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbhLNPha (ORCPT
+        id S234740AbhLNPiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:38:25 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:36524 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234470AbhLNPiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:37:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6ECC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:37:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C73961584
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:37:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45E90C34604;
-        Tue, 14 Dec 2021 15:37:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639496248;
-        bh=RsqIxw7l181YP8CsMrHMkGZWM3eQKUjSOlAiEt1c9Z0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X/ot4IoekuSM4yLL1UUyI+1dPtb3HVfplV1+ex5sYgFnpg32AlhbJlga1P+xLbvRB
-         m68qNKuZ0AjmmhiJZT80bpwuuFy3AhoW2kYTAeLe+9/UFMSnWFIKMbxsZodICte8FW
-         7XCRckyPKHOkLhvc4o88hxVaXQWuC59eCg/5EW6gD9HEvBkBWP/3dGn2y21pPtux5D
-         A4C7V58JkeE1IwGQmIlg3uQfLyN622kMzdUasowwlnVUEJoD8i0b7vCvkakk3H+3FP
-         lJXIM99ArskFYH4zq1+vL0RZHhT3rVdoZqInX8B0qR/1ISuFT+vbKfeDmLEHN1nZe+
-         /0dSqFlT8MTSA==
-Date:   Tue, 14 Dec 2021 15:37:22 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        freedreno@lists.freedesktop.org,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] iommu/io-pgtable-arm: Add way to debug pgtable
- walk
-Message-ID: <20211214153722.GA15416@willie-the-truck>
-References: <20211005151633.1738878-1-robdclark@gmail.com>
- <20211005151633.1738878-2-robdclark@gmail.com>
+        Tue, 14 Dec 2021 10:38:20 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BEE7ZFO021142;
+        Tue, 14 Dec 2021 16:38:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=55TRlyPa1csvltjFSGJc7MC8zSTcqi9KhSJ8TqVGvPo=;
+ b=n4+2qguQFrO2LYPE3fxelbRizl65JB5BEn63gFRrVQmTMRUTJDZ66gtp4iEFhwdVz7X7
+ fbajk/6aI96BMvzNELKmpPIJsB/of0mFT88fv5jJus/KUlRFl9a3ydTEsQlI9XAdz4Gb
+ mHuUm+7sk3df/dZ1fARuuxutN8fI0F7nusZKlc2kyd/LoatRFmwBrtHyxBFyVQC3iVH7
+ j4aI1G4Na2zhfKFP+w1JAe8IDFA/zVS3ShfCa8w131v2mTZIdwI0IZJlnxrwxDgygerf
+ oJI8FqZW8myIDqstxY4mGQ2bFaXnMAIZUmoWVzjGcURYbUX7P05yZWigPjE0rAd96fx5 3A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cxr8rabpj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 16:38:09 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8B8A910002A;
+        Tue, 14 Dec 2021 16:38:08 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7E662231DEF;
+        Tue, 14 Dec 2021 16:38:08 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 14 Dec
+ 2021 16:38:07 +0100
+Subject: Re: [PATCH] tty: rpmsg: Fix race condition releasing tty port
+To:     Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20211213195346.12894-1-arnaud.pouliquen@foss.st.com>
+ <8bbd1a77-5f88-bb97-db88-6842df2e3e3c@kernel.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <2008dd33-5d23-961c-ca61-53ff3e34479a@foss.st.com>
+Date:   Tue, 14 Dec 2021 16:38:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211005151633.1738878-2-robdclark@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <8bbd1a77-5f88-bb97-db88-6842df2e3e3c@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-14_07,2021-12-14_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 05, 2021 at 08:16:25AM -0700, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
+Hello Jiri,
+
+On 12/14/21 7:43 AM, Jiri Slaby wrote:
+> Hi,
 > 
-> Add an io-pgtable method to retrieve the raw PTEs that would be
-> traversed for a given iova access.
+> On 13. 12. 21, 20:53, Arnaud Pouliquen wrote:
+>> In current implementation the tty_port struct is part of the
+>> rpmsg_tty_port structure.The issue is that the rpmsg_tty_port structure is
+>> freed on rpmsg_tty_remove but also referenced in the tty_struct.
+>> Its release is not predictable due to workqueues.
+>>
+>> For instance following ftrace shows that rpmsg_tty_close is called after
+>> rpmsg_tty_release_cport:
+>>
+>>       nr_test.sh-389     [000] .....   212.093752: rpmsg_tty_remove <-rpmsg_dev_
+>> remove
+>>               cat-1191    [001] .....   212.095697: tty_release <-__fput
+>>        nr_test.sh-389     [000] .....   212.099166: rpmsg_tty_release_cport <-rpm
+>> sg_tty_remove
+>>               cat-1191    [001] .....   212.115352: rpmsg_tty_close <-tty_release
+>>               cat-1191    [001] .....   212.115371: release_tty <-tty_release_str
+>>
+>> As consequence, the port must be free only when user has released the TTY
+>> interface.
+>>
+>> This path (inspired from vcc.c):
+>> - moves the management of the port in the install and clean-up tty ops,
+>> - allocates the tty_port struct independently of the rpmsg_tty_port structure,
 > 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/iommu/io-pgtable-arm.c | 40 +++++++++++++++++++++++++++-------
->  include/linux/io-pgtable.h     |  9 ++++++++
->  2 files changed, 41 insertions(+), 8 deletions(-)
+> This looks rather wrong. Why not to use tty_port refcounting?
+
+Please could you detail what seems rather wrong for you? Everything or do the
+tty_port port struct independently of the rpmsg_tty_port structure?
+
+Concerning the tty_port refcounting:
+Yes it also an option that I have already tried without success, before
+implementing this patch.
+That said, as you pointed it out, I reimplemented it today in another way, and
+this time it seems that it works without any runtime warning or error.
+I need to perform more test to confirm, then I will propose a V2 based on
+tty_port refcountingt and the .destruct tty_port_operations.
+
 > 
-> diff --git a/drivers/iommu/io-pgtable-arm.c b/drivers/iommu/io-pgtable-arm.c
-> index dd9e47189d0d..c470fc0b3c2b 100644
-> --- a/drivers/iommu/io-pgtable-arm.c
-> +++ b/drivers/iommu/io-pgtable-arm.c
-> @@ -700,38 +700,61 @@ static size_t arm_lpae_unmap(struct io_pgtable_ops *ops, unsigned long iova,
->  	return arm_lpae_unmap_pages(ops, iova, size, 1, gather);
->  }
->  
-> -static phys_addr_t arm_lpae_iova_to_phys(struct io_pgtable_ops *ops,
-> -					 unsigned long iova)
-> +static int arm_lpae_pgtable_walk(struct io_pgtable_ops *ops, unsigned long iova,
-> +				 void *_ptes, int *num_ptes)
->  {
->  	struct arm_lpae_io_pgtable *data = io_pgtable_ops_to_data(ops);
->  	arm_lpae_iopte pte, *ptep = data->pgd;
-> +	arm_lpae_iopte *ptes = _ptes;
-> +	int max_ptes = *num_ptes;
->  	int lvl = data->start_level;
->  
-> +	*num_ptes = 0;
-> +
->  	do {
-> +		if (*num_ptes >= max_ptes)
-> +			return -ENOSPC;
-> +
->  		/* Valid IOPTE pointer? */
->  		if (!ptep)
-> -			return 0;
-> +			return -EFAULT;
->  
->  		/* Grab the IOPTE we're interested in */
->  		ptep += ARM_LPAE_LVL_IDX(iova, lvl, data);
->  		pte = READ_ONCE(*ptep);
->  
-> +		ptes[(*num_ptes)++] = pte;
-> +
->  		/* Valid entry? */
->  		if (!pte)
-> -			return 0;
-> +			return -EFAULT;
->  
->  		/* Leaf entry? */
->  		if (iopte_leaf(pte, lvl, data->iop.fmt))
-> -			goto found_translation;
-> +			return 0;
->  
->  		/* Take it to the next level */
->  		ptep = iopte_deref(pte, data);
->  	} while (++lvl < ARM_LPAE_MAX_LEVELS);
->  
-> -	/* Ran out of page tables to walk */
-> -	return 0;
-> +	return -EFAULT;
-> +}
-> +
-> +static phys_addr_t arm_lpae_iova_to_phys(struct io_pgtable_ops *ops,
-> +					 unsigned long iova)
-> +{
-> +	struct arm_lpae_io_pgtable *data = io_pgtable_ops_to_data(ops);
-> +	arm_lpae_iopte pte, ptes[ARM_LPAE_MAX_LEVELS];
-> +	int lvl, num_ptes = ARM_LPAE_MAX_LEVELS;
-> +	int ret;
-> +
-> +	ret = arm_lpae_pgtable_walk(ops, iova, ptes, &num_ptes);
-> +	if (ret)
-> +		return 0;
-> +
-> +	pte = ptes[num_ptes - 1];
-> +	lvl = num_ptes - 1 + data->start_level;
->  
-> -found_translation:
->  	iova &= (ARM_LPAE_BLOCK_SIZE(lvl, data) - 1);
->  	return iopte_to_paddr(pte, data) | iova;
->  }
-> @@ -816,6 +839,7 @@ arm_lpae_alloc_pgtable(struct io_pgtable_cfg *cfg)
->  		.unmap		= arm_lpae_unmap,
->  		.unmap_pages	= arm_lpae_unmap_pages,
->  		.iova_to_phys	= arm_lpae_iova_to_phys,
-> +		.pgtable_walk	= arm_lpae_pgtable_walk,
->  	};
->  
->  	return data;
-> diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
-> index 86af6f0a00a2..501f362a929c 100644
-> --- a/include/linux/io-pgtable.h
-> +++ b/include/linux/io-pgtable.h
-> @@ -148,6 +148,13 @@ struct io_pgtable_cfg {
->   * @unmap:        Unmap a physically contiguous memory region.
->   * @unmap_pages:  Unmap a range of virtually contiguous pages of the same size.
->   * @iova_to_phys: Translate iova to physical address.
-> + * @pgtable_walk: Return details of a page table walk for a given iova.
-> + *                This returns the array of PTEs in a format that is
-> + *                specific to the page table format.  The number of
-> + *                PTEs can be format specific.  The num_ptes parameter
-> + *                on input specifies the size of the ptes array, and
-> + *                on output the number of PTEs filled in (which depends
-> + *                on the number of PTEs walked to resolve the iova)
+>> - uses tty_vhangup and tty_port_hangup.
+> 
+> OK, but don't store a tty pointer as it looks racy. You should use
+> tty_port_tty_get instead.
+> 
+> Hm, we look we need tty_port_tty_vhangup (aside from tty_port_tty_hangup). There
+> are plenty of drivers doing:
+>     tty = tty_port_tty_get(port);
+>     if (tty) {
+>             tty_vhangup(port->tty);
+>             tty_kref_put(tty);
 
-I think this would be a fair bit cleaner if the interface instead took a
-callback function to invoke at each page-table level. It would be invoked
-with the pte value and the level. Depending on its return value the walk
-could be terminated early. That would also potentially scale to walking
-ranges of iovas as well if we ever need it and it may be more readily
-implementable by other formats too.
+I would like to first fix the issue in rpmsg_tty.c in separate thread.
+But yes this should not take me too much time to propose this helper next.
 
->   *
->   * These functions map directly onto the iommu_ops member functions with
->   * the same names.
+Thanks,
+Arnaud
 
-This bit of the comment is no longer true with your change.
-
-Will
+> 
+> 
+>> Fixes: 7c0408d80579 ("tty: add rpmsg driver")
+>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> 
+> thanks,

@@ -2,113 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D35F473E11
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42BE473E0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbhLNIMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:12:03 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:28314 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbhLNIMC (ORCPT
+        id S231756AbhLNILs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:11:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36434 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229579AbhLNILr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:12:02 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JCrgh0gDdzbhrt;
-        Tue, 14 Dec 2021 16:11:44 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 16:12:01 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 16:12:00 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Nadav Amit <namit@vmware.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>
-Subject: [PATCH v2] smp: Fix the comments of smp_call_function_many()
-Date:   Tue, 14 Dec 2021 16:10:59 +0800
-Message-ID: <20211214081100.126-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        Tue, 14 Dec 2021 03:11:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B1FDB8172C;
+        Tue, 14 Dec 2021 08:11:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748D8C34601;
+        Tue, 14 Dec 2021 08:11:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639469505;
+        bh=5X1v+ZC31dDevWkuoDLSrjyETrgJ6WGs+ZsJZlLVjXE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SguaaNt0ULlCypQ/OjPRRnBj1btpkBo8nJrSMPzd3X00e8VReiVEk6e0EPAH2Wijz
+         Ahhk4JUPXJvKzYQpZSOoDjowZGhxhX4s+dAMGeAbtxG858UZ4r4z3euWQs5cSyz8t9
+         h2spMMS6rLabL+EDKEiuwxPs3sts6eV6IKcN53EYOh/7IUejuuFK/cw/Z/m0QY0WvW
+         hlltE0bCnUPerH1VWi5SU7Cx+bJTcCkZwCyoZmSNlJHEaD6QeuA4SJipzvJx7ufyE1
+         Q63ecvKeEemVECYyDqG/LiXVdLvznSoXxQZJyBWVfbCAagmzOZUBNb/DNSisoZG07S
+         a9RrCyFMnspNw==
+Date:   Tue, 14 Dec 2021 16:11:39 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: fsl: imx8mq-evk: link regulator to VPU domain
+Message-ID: <20211214081139.GB14056@dragon>
+References: <20211205210144.1072721-1-aford173@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211205210144.1072721-1-aford173@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As commit a32a4d8a815c ("smp: Run functions concurrently in
-smp_call_function_many_cond()") itself says:
-                  "Keep other smp_call_function_many() semantic as it is
-today for backward compatibility: the called function is not executed in
-this case locally."
+On Sun, Dec 05, 2021 at 03:01:43PM -0600, Adam Ford wrote:
+> The SW1C regulator powers the VPU and the state isn't guaranteed
+> to always be on.  Link the VPU power-domain to the regulator to
+> ensure it is turned on before using the power domain.
+> 
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-It's clear that, the function header comments of smp_call_function_many()
-does not need to be changed.
-
-So move the comment about 'scf_flags' to smp_call_function_many_cond(),
-and restore the original comments of smp_call_function_many().
-
-Finally, the comments have been simplified slightly to avoid duplication.
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- kernel/smp.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
-
-v1 --> v2:
-Delete some duplicate comments.
-
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 01a7c1706a58b1d..9cbe2509d1010ea 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -853,14 +853,17 @@ int smp_call_function_any(const struct cpumask *mask,
- EXPORT_SYMBOL_GPL(smp_call_function_any);
- 
- /*
-- * Flags to be used as scf_flags argument of smp_call_function_many_cond().
-- *
-  * %SCF_WAIT:		Wait until function execution is completed
-  * %SCF_RUN_LOCAL:	Run also locally if local cpu is set in cpumask
-  */
- #define SCF_WAIT	(1U << 0)
- #define SCF_RUN_LOCAL	(1U << 1)
- 
-+/**
-+ * smp_call_function_many_cond(): Run a function on a set of CPUs.
-+ * @scf_flags: Bitmask that controls the operation. Such as SCF_WAIT,
-+ *             SCF_RUN_LOCAL.
-+ */
- static void smp_call_function_many_cond(const struct cpumask *mask,
- 					smp_call_func_t func, void *info,
- 					unsigned int scf_flags,
-@@ -972,14 +975,12 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- }
- 
- /**
-- * smp_call_function_many(): Run a function on a set of CPUs.
-+ * smp_call_function_many(): Run a function on a set of other CPUs.
-  * @mask: The set of cpus to run on (only runs on online subset).
-  * @func: The function to run. This must be fast and non-blocking.
-  * @info: An arbitrary pointer to pass to the function.
-- * @wait: Bitmask that controls the operation. If %SCF_WAIT is set, wait
-- *        (atomically) until function has completed on other CPUs. If
-- *        %SCF_RUN_LOCAL is set, the function will also be run locally
-- *        if the local CPU is set in the @cpumask.
-+ * @wait: If true, wait (atomically) until function has completed
-+ *        on other CPUs.
-  *
-  * If @wait is true, then returns once @func has returned.
-  *
--- 
-2.25.1
-
+Applied, thanks!

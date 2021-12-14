@@ -2,110 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4A9474C40
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A1D474C4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237535AbhLNTrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:47:01 -0500
-Received: from relay05.th.seeweb.it ([5.144.164.166]:51993 "EHLO
-        relay05.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237522AbhLNTrA (ORCPT
+        id S237536AbhLNTwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231757AbhLNTwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:47:00 -0500
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id CD3993F3BC;
-        Tue, 14 Dec 2021 20:46:57 +0100 (CET)
-Date:   Tue, 14 Dec 2021 20:46:56 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v3 0/2] Use "ref" clocks from firmware for DSI PLL VCO
- parent
-Message-ID: <20211214194656.mayiy4xhcshjluwf@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-References: <20210911131922.387964-1-marijn.suijten@somainline.org>
- <163165584152.763609.4056232270079096475@swboyd.mtv.corp.google.com>
- <20210918144038.6q352hzqopx7vvdu@SoMainline.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210918144038.6q352hzqopx7vvdu@SoMainline.org>
+        Tue, 14 Dec 2021 14:52:12 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80150C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:52:12 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id e131-20020a25d389000000b005fb5e6eb757so38486734ybf.22
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:52:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=L86jfhQydnQXL6CamLYct86bySYxzVKAkcuD/e27KRQ=;
+        b=aMJ9Kzugd7pZU8r6r6E7GF9dNicFjDFEUyWh8T291/4qwmpNg9RHCPTrhY61fakNTK
+         CkoLXML5fIEWHR3zF8dXH1NNI+20G9BjewaD96LAqiNp/syyssY8li2AcEPTciqKahLy
+         28QXHVPTPl0iMizHy6T1oAzZ/GmISGCDVvQuiG69Ea2nPjojHuMx6Qxrb5Cz98k60XYb
+         tt6VCUFs7ompA298s84PNh2CVirOG5+RvwvFNW2gtibnN3505P8CMEGmMTx+qsQFiY0p
+         nCS+1gCC6x3eNKQz8kiDraPyu7efp/N8SowM8twmog/JoQbv62Qr24Gmgj/LX9k3M48B
+         N5IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=L86jfhQydnQXL6CamLYct86bySYxzVKAkcuD/e27KRQ=;
+        b=vmt5c/aSkNrB9/LKUw/RxWGWLZzEzYNo9fAJ8O/8G2J1HuUJY6mUrUsm8VxsbUEW87
+         D+b4tRZeRVFEN5qZ9p0Z+jNQOOHQD6pHPdXSPnvCX4/w+GwgySeFxoQZWxQMHU5zH7NF
+         plT/D94ys6UBCdAu6kft3mMaCCi9A/noSd+G1K96PfC3p1dGtFURV8otbuRXcD0J0cN9
+         AYDrNM/jTdp2GlEDaQK0xSYFtSKRxSRND+eh2B3+oVmd0AnbZBYvLaaneJ3rt+9gZrQr
+         80Yce1A6PGQJmfivQiFCwWzykJIj2urY9ZoV6TcRB9JMMMtoNCxcimiRF/etTJsKnpmo
+         cLUg==
+X-Gm-Message-State: AOAM533xmskOk5yKS/Th/tg0SqDQve1rfJrRgGuAjtkRCc3zWsa2D4EG
+        5tzbr9OhDUO7P5cNeebnlNkt6JYSfZ78XQ==
+X-Google-Smtp-Source: ABdhPJz2TXX8k/Y6k9WtYGdCPIeNQCnoE0BPOHAaJTGJoCgfPMW6df4b0jc7OpWR0nUTDEPM26RStVbtUvAoAQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1a10:bb1b:63e:864a])
+ (user=dlatypov job=sendgmr) by 2002:a25:348b:: with SMTP id
+ b133mr1160287yba.251.1639511531784; Tue, 14 Dec 2021 11:52:11 -0800 (PST)
+Date:   Tue, 14 Dec 2021 11:52:03 -0800
+Message-Id: <20211214195203.174080-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH] kunit: tool: fix newly introduced typechecker errors
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+After upgrading mypy and pytype from pip, we see 2 new errors when
+running ./tools/testing/kunit/run_checks.py.
 
-On 2021-09-18 16:40:38, Marijn Suijten wrote:
-> On 2021-09-14 14:44:01, Stephen Boyd wrote:
-> > Quoting Marijn Suijten (2021-09-11 06:19:19)
-> > > All DSI PHY/PLL drivers were referencing their VCO parent clock by a
-> > > global name, most of which don't exist or have been renamed.  These
-> > > clock drivers seem to function fine without that except the 14nm driver
-> > > for sdm6xx [1].
-> > > 
-> > > At the same time all DTs provide a "ref" clock as per the requirements
-> > > of dsi-phy-common.yaml, but the clock is never used.  This patchset puts
-> > > that clock to use without relying on a global clock name, so that all
-> > > dependencies are explicitly defined in DT (the firmware) in the end.
-> > 
-> > I can take this through clk tree if it helps avoid conflicts. There are
-> > some other patches to sdm660.c in the clk tree already.
-> 
-> Might be useful to maintain proper ordering of these dependent patches
-> but it's up to Dmitry and Rob to decide, whom I'm sending this mail
-> directly to so that they can chime in.
+Error #1: mypy and pytype
+They now deduce that importlib.util.spec_from_file_location() can return
+None and note that we're not checking for this.
 
-Dependent patch [3] landed in 5.15 and [2] made it into 5.16 rc's - is
-it time to pick this series up and if so through what tree?
+We validate that the arch is valid (i.e. the file exists) beforehand.
+Add in an `asssert spec is not None` to appease the checkers.
 
-Repeating the links from patch 1/2:
-[2]: https://lore.kernel.org/linux-arm-msm/20210830175739.143401-1-marijn.suijten@somainline.org/
-[3]: https://lore.kernel.org/linux-arm-msm/20210829203027.276143-2-marijn.suijten@somainline.org/
+Error #2: pytype bug https://github.com/google/pytype/issues/1057
+It doesn't like `from datetime import datetime`, specifically that a
+type shares a name with a module.
 
-Thanks!
+We can workaround this by either
+* renaming the import or just using `import datetime`
+* passing the new `--fix-module-collisions` flag to pytype.
 
-- marijn
+We pick the first option for now because
+* the flag is quite new, only in the 2021.11.29 release.
+* I'd prefer if people can just run `pytype <file>`
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit_kernel.py | 1 +
+ tools/testing/kunit/kunit_parser.py | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 12085e04a80c..44bbe54f25f1 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -209,6 +209,7 @@ def get_source_tree_ops_from_qemu_config(config_path: str,
+ 	# exists as a file.
+ 	module_path = '.' + os.path.join(os.path.basename(QEMU_CONFIGS_DIR), os.path.basename(config_path))
+ 	spec = importlib.util.spec_from_file_location(module_path, config_path)
++	assert spec is not None
+ 	config = importlib.util.module_from_spec(spec)
+ 	# See https://github.com/python/typeshed/pull/2626 for context.
+ 	assert isinstance(spec.loader, importlib.abc.Loader)
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 8e42b6ef3fe3..0850cb4bce89 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -13,7 +13,7 @@ from __future__ import annotations
+ import re
+ 
+ from collections import namedtuple
+-from datetime import datetime
++import datetime
+ from enum import Enum, auto
+ from functools import reduce
+ from typing import Iterable, Iterator, List, Optional, Tuple
+@@ -520,7 +520,7 @@ ANSI_LEN = len(red(''))
+ 
+ def print_with_timestamp(message: str) -> None:
+ 	"""Prints message with timestamp at beginning."""
+-	print('[%s] %s' % (datetime.now().strftime('%H:%M:%S'), message))
++	print('[%s] %s' % (datetime.datetime.now().strftime('%H:%M:%S'), message))
+ 
+ def format_test_divider(message: str, len_message: int) -> str:
+ 	"""
+
+base-commit: 7fa7ffcf9babaea2f0a81681b4ef460ee4b93278
+-- 
+2.34.1.173.g76aa8bc2d0-goog
+

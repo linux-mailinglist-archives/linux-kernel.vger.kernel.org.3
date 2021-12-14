@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE324740C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709854740CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbhLNKtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:49:45 -0500
-Received: from mail-ua1-f48.google.com ([209.85.222.48]:45827 "EHLO
-        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbhLNKta (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:49:30 -0500
-Received: by mail-ua1-f48.google.com with SMTP id ay21so34045407uab.12;
-        Tue, 14 Dec 2021 02:49:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g3XtNHu0m7Ih3Mq0LbQ5xM/zIwyARHBTJDqSktTzsjY=;
-        b=SbiiYaRnNPBc1KANSyHp0b8aDYQoYoK1AaeodgkUMG/TjtVZ/ewfGJJ3qwqiyrJPaf
-         iVkIAw8XwcAhhTFEpjduvys6czI50Cj6Lybn/iGRR/s0+Pm6p1TCKYUxS47H3s7YqW/z
-         CakxknzhPr1vHrtTdGa0LaEuS4HbE8nWWnAmEcrR+Lv025DFVsPr1Z9bzVoxrOtYo5zI
-         rpkb16+NFgb3aOC+a/+X0hCZhmhT95P+JoXT2D5E54WGYchhvNmXZAFUVv9UUyuERPEB
-         a560jZCMmnlGPOY5y2ax8Ia0YbiLV9Eljg7SntZYGACYGZrzbVBFXTFdKP7Chz0HAHN4
-         /x1g==
-X-Gm-Message-State: AOAM531pvs09SNs0+8TZ+qTtcWaUeS1U2S44YY9Ew9WeG9Y7rwDN7YU3
-        9PFCD6k2IKXsiEOnzVjQ8fSs3GAEOxzeDw==
-X-Google-Smtp-Source: ABdhPJyTlh3uugAxFSTp71tofHfOfP+GAjA+I+BJlDOJKBl9TWgZXYTrarr0wOg4yOBNMGK4DIEkng==
-X-Received: by 2002:a9f:2c4a:: with SMTP id s10mr4253448uaj.50.1639478967114;
-        Tue, 14 Dec 2021 02:49:27 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id f188sm4351581vsc.16.2021.12.14.02.49.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 02:49:26 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id w23so34111997uao.5;
-        Tue, 14 Dec 2021 02:49:26 -0800 (PST)
-X-Received: by 2002:a05:6102:c89:: with SMTP id f9mr4134352vst.68.1639478966486;
- Tue, 14 Dec 2021 02:49:26 -0800 (PST)
+        id S233233AbhLNKt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:49:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:51666 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231363AbhLNKt6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:49:58 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B05E26D;
+        Tue, 14 Dec 2021 02:49:57 -0800 (PST)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6138A3F5A1;
+        Tue, 14 Dec 2021 02:49:56 -0800 (PST)
+Date:   Tue, 14 Dec 2021 10:49:49 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
+        f.fainelli@gmail.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
+Subject: Re: [PATCH v7 06/16] firmware: arm_scmi: Add configurable polling
+ mode for transports
+Message-ID: <20211214104949.GE6207@e120937-lin>
+References: <20211129191156.29322-1-cristian.marussi@arm.com>
+ <20211129191156.29322-7-cristian.marussi@arm.com>
+ <20211213112555.vhjhu3xopesvxmio@bogus>
 MIME-Version: 1.0
-References: <20211130164311.2909616-1-kieran.bingham+renesas@ideasonboard.com> <20211130164311.2909616-3-kieran.bingham+renesas@ideasonboard.com>
-In-Reply-To: <20211130164311.2909616-3-kieran.bingham+renesas@ideasonboard.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Dec 2021 11:49:15 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW81VE=J+ChT5jVMhHmVnMi_eQix7aXjLQPJk+qKp-EdQ@mail.gmail.com>
-Message-ID: <CAMuHMdW81VE=J+ChT5jVMhHmVnMi_eQix7aXjLQPJk+qKp-EdQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] arm64: dts: renesas: r8a779a0: falcon-cpu: Add DSI
- display output
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213112555.vhjhu3xopesvxmio@bogus>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kieran,
+On Mon, Dec 13, 2021 at 11:25:55AM +0000, Sudeep Holla wrote:
+> On Mon, Nov 29, 2021 at 07:11:46PM +0000, Cristian Marussi wrote:
+> > SCMI communications along TX channels can optionally be provided of a
+> > completion interrupt; when such interrupt is not available, command
+> > transactions should rely on polling, where the SCMI core takes care to
+> > repeatedly evaluate the transport-specific .poll_done() function, if
+> > available, to determine if and when a request was fully completed or
+> > timed out.
+> > 
 
-On Tue, Nov 30, 2021 at 5:43 PM Kieran Bingham
-<kieran.bingham+renesas@ideasonboard.com> wrote:
-> Provide the display output using the sn65dsi86 MIPI DSI bridge
->
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Hi Sudeep, 
 
-LGTM, so
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.17.
+thanks for the review.
 
-> --- a/arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi
+> > Such mechanism is already present and working on a single transfer base:
+> > SCMI protocols can indeed enable hdr.poll_completion on specific commands
+> > ahead of each transfer and cause that transaction to be handled with
+> > polling.
+> > 
+> > Introduce a couple of flags to be able to enforce such polling behaviour
+> > globally at will:
+> > 
+> >  - scmi_desc.force_polling: to statically switch the whole transport to
+> >    polling mode.
+> > 
+> >  - scmi_chan_info.no_completion_irq: to switch a single channel dynamically
+> >    to polling mode if, at runtime, is determined that no completion
+> >    interrupt was available for such channel.
+> > 
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > ---
+> > v5 --> v6
+> > - removed check on replies received by IRQs when xfer was requested
+> >   as poll_completion (not all transport can suppress IRQs on an xfer basis)
+> > v4 --> v5
+> > - make force_polling const
+> > - introduce polling_enabled flag to simplify checks on do_xfer
+> > v3 --> v4:
+> > - renamed .needs_polling flag to .no_completion_irq
+> > - refactored error path when polling needed but not supported
+> > ---
+> >  drivers/firmware/arm_scmi/common.h | 11 +++++++++++
+> >  drivers/firmware/arm_scmi/driver.c | 17 +++++++++++++++++
+> >  2 files changed, 28 insertions(+)
+> > 
+> > diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
+> > index 6438b5248c24..99b74f4d39b6 100644
+> > --- a/drivers/firmware/arm_scmi/common.h
+> > +++ b/drivers/firmware/arm_scmi/common.h
+> > @@ -339,11 +339,19 @@ void scmi_protocol_release(const struct scmi_handle *handle, u8 protocol_id);
+> >   * @dev: Reference to device in the SCMI hierarchy corresponding to this
+> >   *	 channel
+> >   * @handle: Pointer to SCMI entity handle
+> > + * @no_completion_irq: Flag to indicate that this channel has no completion
+> > + *		       interrupt mechanism for synchronous commands.
+> > + *		       This can be dynamically set by transports at run-time
+> > + *		       inside their provided .chan_setup().
+> > + * @polling_enabled: Flag used to annotate if polling mode is currently enabled
+> > + *		     on this channel.
+> >   * @transport_info: Transport layer related information
+> >   */
+> >  struct scmi_chan_info {
+> >  	struct device *dev;
+> >  	struct scmi_handle *handle;
+> > +	bool no_completion_irq;
+> > +	bool polling_enabled;
+> 
+> Do we really need a separate flag for polling_enabled ?
+> no_completion_irq means you need to enable polling and force_polling too.
+> Just trying to see if we can get rid of unnecessary flags.
+> 
 
-> @@ -146,6 +190,41 @@ &i2c1 {
->
->         status = "okay";
->         clock-frequency = <400000>;
-> +
-> +       sn65dsi86@2c {
-> +               compatible = "ti,sn65dsi86";
-> +               reg = <0x2c>;
-> +
-> +               clocks = <&sn65dsi86_refclk>;
-> +               clock-names = "refclk";
-> +
-> +               interrupt-parent = <&gpio1>;
-> +               interrupts = <24 IRQ_TYPE_LEVEL_HIGH>;
+Not really needed indeed, I was just trying to avoid multiple conditions
+checks later on the TX path (given no_completion_irq and force_polling
+never change after channel setup so I can just note down at setup that
+polling is enabled and then just check that later) and improve readability,
+but I can just use macros for readability and just ignore the multiple
+unneeded checks.
 
-Does the driver use this interrupt, and is it triggered?
-If yes, as GP1_24 == IRQ0, you can switch from a GPIO to an INTC_EX IRQ,
-(don't forget to configure pinctrl) and test the INTC_EX driver.
+Same holds later on the series for polling_capable flag that I similarly
+setup early during probe to avoid unneeded multiple condition checks.
 
-Gr{oetje,eeting}s,
+I'll remove both this internal flags and resort to macros, if it's fine
+for you.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Cristian

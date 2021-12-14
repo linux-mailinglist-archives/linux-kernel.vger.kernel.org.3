@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF10473F3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343F7473F3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbhLNJTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 04:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        id S232308AbhLNJTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 04:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbhLNJTg (ORCPT
+        with ESMTP id S230399AbhLNJTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 04:19:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58990C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 01:19:36 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1mx3y4-000709-GS; Tue, 14 Dec 2021 10:19:28 +0100
-Message-ID: <be86f831da91ff44ff627f605d03b315260a2b7c.camel@pengutronix.de>
-Subject: Re: [PATCH V4 8/9] arm64: dts: imx8mn: add DISP blk-ctrl
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Adam Ford <aford173@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     aford@beaconembedded.com, tharvey@gateworks.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 14 Dec 2021 10:19:27 +0100
-In-Reply-To: <20211128131853.15125-9-aford173@gmail.com>
-References: <20211128131853.15125-1-aford173@gmail.com>
-         <20211128131853.15125-9-aford173@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Tue, 14 Dec 2021 04:19:40 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14779C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 01:19:40 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id o29so13773058wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 01:19:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=k3efaQzs9TBXZxHbVU2KdU9tRh/DmlHzVjWIjnkrNxI=;
+        b=kydxewF9zwdRMWfXv+6E/2rinWs78wMfy76ZGOOrTe4lwtVn0YgmjNy+oopCfMhWpR
+         57tNQpfJ4xCFqVdrvRMUZ0maOMJT6d1uRgyGwJpMqpkLzLAqBxJiWOsUVVV9aygawP9s
+         SJQlYNOl0PvM6LMFD/9hujyOcecbuDd52hYdRb0u5/+BgPELEf4W977j43r2IROaDaZ5
+         RfAtG0SoXguF+lpjl6XTLH6Acu45KDbws/lGW/rydkK+zLOj7qbkq0ydEJvnUT/NSJKZ
+         c2oSbUmKn/0fFFtphY83VHtai39Cdr0D/b5mE6TIyN/u1k8Zn4ircvLLX7c3qUHwBRfX
+         eL2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=k3efaQzs9TBXZxHbVU2KdU9tRh/DmlHzVjWIjnkrNxI=;
+        b=tlsXqAuoW5MokSQs8wox4s74FO0EUXVSTP2uE8idBcPlZDGiUWyq4WYpdBWI1NbY1f
+         a43F3vrvh0MdOrjDr+Iy+k2dLJNj0PjsAtx5YHTJkxgB2EQdoGEkdCZku3J4AiuPw7kO
+         Wiblf9xwKW51TCWQ5Fvh7j/g/oRQQ3lZt1wag8sa2LzMiL0QoAMlh5fpFgaWSkBYHt6h
+         NdUAMxKjJ0JBfbl9L1UJQgdrWof8szKdi4J1LGv4vlLLRLzi3xlwF71kryL141cokvaL
+         3sqFOiOFeyiBVjSOambvevMRmgbsX8uBlionaRSyQvfLhOlkcQLeT4QIvkd+9f9mXX5l
+         H+ew==
+X-Gm-Message-State: AOAM530tfUmuOZdBIipXayVIzNEXkqekLeBtHUl8mX7k3UHiKe3HAhnM
+        dRzXczSycRGjW5+RUxp8kBjY4g==
+X-Google-Smtp-Source: ABdhPJxEKXuoToRSOSqbspo1zrgNmcoM6MdqePSeCkHWRALaGVXkQFyvg9LgrzN/Qfy1CSym0nmzFg==
+X-Received: by 2002:a7b:ca4c:: with SMTP id m12mr5685603wml.119.1639473578522;
+        Tue, 14 Dec 2021 01:19:38 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:73fb:501f:c3de:9d49? ([2a01:e34:ed2f:f020:73fb:501f:c3de:9d49])
+        by smtp.googlemail.com with ESMTPSA id i3sm12027614wro.117.2021.12.14.01.19.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Dec 2021 01:19:37 -0800 (PST)
+Subject: Re: [PATCH 1/2] clocksource/drivers/imx-sysctr: mark two variable
+ with __ro_after_init
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "van.freenix@gmail.com" <van.freenix@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+References: <20211201125030.2307746-1-peng.fan@oss.nxp.com>
+ <1c7ecec9-6a1c-3940-4b4e-e9011c916870@linaro.org>
+ <DU0PR04MB94177C2C02E5DC01CE33A5C788759@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <2dab0938-5f3b-8da9-795e-f875376fd908@linaro.org>
+Date:   Tue, 14 Dec 2021 10:19:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <DU0PR04MB94177C2C02E5DC01CE33A5C788759@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=koi8-r
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, dem 28.11.2021 um 07:18 -0600 schrieb Adam Ford:
-> Add the DT node for the DISP blk-ctrl. With this in place the
-> display/mipi power domains should be functional.
+On 14/12/2021 09:25, Peng Fan wrote:
+> Hi Daniel,
 > 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-
-> ---
->  arch/arm64/boot/dts/freescale/imx8mn.dtsi | 28 +++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
+>> Subject: Re: [PATCH 1/2] clocksource/drivers/imx-sysctr: mark two variable
+>> with __ro_after_init
+>>
+>> On 01/12/2021 13:50, Peng Fan (OSS) wrote:
+>>> From: Peng Fan <peng.fan@nxp.com>
+>>>
+>>> sys_ctr_base and cmpcr will not be updated after init, so mark as
+>>> __ro_after_init.
+>>>
+>>> Cc: Kees Cook <keescook@chromium.org>
+>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>> ---
+>>>  drivers/clocksource/timer-imx-sysctr.c | 4 ++--
+>>
+>> Applied, thanks
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> index 902d5725dc55..d8726d0ce326 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> @@ -1039,6 +1039,34 @@ aips4: bus@32c00000 {
->  			#size-cells = <1>;
->  			ranges;
-> 
-> +			disp_blk_ctrl: blk-ctrl@32e28000 {
-> +				compatible = "fsl,imx8mn-disp-blk-ctrl", "syscon";
-> +				reg = <0x32e28000 0x100>;
-> +				power-domains = <&pgc_dispmix>, <&pgc_dispmix>,
-> +						<&pgc_dispmix>, <&pgc_mipi>,
-> +						<&pgc_mipi>;
-> +				power-domain-names = "bus", "isi",
-> +						     "lcdif", "mipi-dsi",
-> +						     "mipi-csi";
-> +				clocks = <&clk IMX8MN_CLK_DISP_AXI>,
-> +					 <&clk IMX8MN_CLK_DISP_APB>,
-> +					 <&clk IMX8MN_CLK_DISP_AXI_ROOT>,
-> +					 <&clk IMX8MN_CLK_DISP_APB_ROOT>,
-> +					 <&clk IMX8MN_CLK_DISP_AXI_ROOT>,
-> +					 <&clk IMX8MN_CLK_DISP_APB_ROOT>,
-> +					 <&clk IMX8MN_CLK_DISP_PIXEL_ROOT>,
-> +					 <&clk IMX8MN_CLK_DSI_CORE>,
-> +					 <&clk IMX8MN_CLK_DSI_PHY_REF>,
-> +					 <&clk IMX8MN_CLK_CSI1_PHY_REF>,
-> +					 <&clk IMX8MN_CLK_CAMERA_PIXEL_ROOT>;
-> +				clock-names = "disp_axi", "disp_apb",
-> +					      "disp_axi_root", "disp_apb_root",
-> +					      "lcdif-axi", "lcdif-apb", "lcdif-pix",
-> +					      "dsi-pclk", "dsi-ref",
-> +					      "csi-aclk", "csi-pclk";
-> +				#power-domain-cells = <1>;
-> +			};
-> +
->  			usbotg1: usb@32e40000 {
->  				compatible = "fsl,imx8mn-usb", "fsl,imx7d-usb";
->  				reg = <0x32e40000 0x200>;
-> --
-> 2.32.0
-> 
+> I not see this patch in your tree.
+> https://git.linaro.org/people/daniel.lezcano/linux.git/log/?h=timers/drivers/next
 
 
+You should see it now
+
+Thanks
+
+  -- Daniel
+
+
+-- 
+<http://www.linaro.org/> Linaro.org Å Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

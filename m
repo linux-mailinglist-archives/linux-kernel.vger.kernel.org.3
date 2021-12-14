@@ -2,204 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4447E474B73
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB62A474B81
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237288AbhLNTDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234469AbhLNTDe (ORCPT
+        id S237284AbhLNTHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:07:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41483 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229910AbhLNTHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:03:34 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDACC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:03:33 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id a2so19328410qtx.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:03:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mPut++DE9oSDA7Chd0SjdQdqRXfrEo4dk9mIHr0IEwI=;
-        b=kmpqKRnXneoYfsEoIjy2oU4gKiI3YIyrYivpL88Ce7gsi6vwsJWmiAM6ovLZgU14QL
-         AWE8I3rlIbmWVDIt2WAsh6rnlRbqJ8yNvF+9CpYvVbjnFg9DFimIJ/CR6spR9kYPcEts
-         k/RJYsmNVVlkYMBmLW2w5dJ7/2QY3zdO0Od6+mtG9mo4Ycl6Zz7QvNugwNLkcyib8nQD
-         kdhm9AhH4HZ8EpHMYoy9Y9IQE3584FpiwovBTlmGIUNB9s/It8xRpfLRkH0R7ZhNP4VO
-         krwitEO0V0hVyz/znayeGuu6H3HBfpwxRZIYLKn71ovidZ/HECUkZPJMz7zbyav9HkxJ
-         jp0A==
+        Tue, 14 Dec 2021 14:07:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639508826;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:in-reply-to:in-reply-to:  references:references;
+        bh=HOzCAE3c6dRn8HPfbf96Cq/1+14h4R0XM0GEA+jE+MI=;
+        b=HDldfEp6BPFgZcjOYL+/9H9e69/tkHs9ACkuZJ9Ere17hGnbN47FzBvnBg/+0RyCWbnMom
+        YJifKpV35klTkeyowGZtSmTy64i5CavBFFQsTlEUbux0BmwionIM12nUc1N/D8Wti3lM8c
+        iybIGqYeklwq8sgko+OcpZerO8klp7s=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-664-IfJOn_wqOZqAo86bKlcrsg-1; Tue, 14 Dec 2021 14:07:05 -0500
+X-MC-Unique: IfJOn_wqOZqAo86bKlcrsg-1
+Received: by mail-wr1-f71.google.com with SMTP id d7-20020a5d6447000000b00186a113463dso5028465wrw.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:07:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mPut++DE9oSDA7Chd0SjdQdqRXfrEo4dk9mIHr0IEwI=;
-        b=palNigSC8n1TEeIovdWShssytDuptx9rXFdN7grdCipA+J+BQtzgno3uBLcJQrkxpX
-         ULSr30XnRmgwsF1F7en+HJ62RkTWF1g04pspQtbGNUNFV25b1P+LjPG9MHiFwRxAuBZO
-         1qL+5eATpldDhhMmLyXf0/lmOQKT8cFFxlU421eFW3El98Hum9blwtODawQNhE2FsvJ7
-         jFc6QvkfrZO9Y36vzggeNX3Ykyp0yuuph8ZQ9UboEV5ZtOnIPAzl0HsYaBcpkNgQrK99
-         mbkPQDmQAwS0Tm5dIoTGQ20SA956JUkvj1sgSMWiFq2DTYT4MBFClC4nLGEXvog84QBh
-         MNag==
-X-Gm-Message-State: AOAM5317nshubb3nKeTtIAWaLc9WmffC+fRNZ8z2tu//cRmmhjPiOrae
-        Zgt70QCZASHuiEcA8dzNJFoDJEw8WyzXwTMcxpOKzQ==
-X-Google-Smtp-Source: ABdhPJzyRs/SkZa7rM8wtTsEOtQ+XLrgBbLZgqv/9SuBSu3jfTTmtv87+/mDKeEDQ/0sgKqI7jAue3Wsf24yk+u2F5w=
-X-Received: by 2002:a05:622a:40d:: with SMTP id n13mr8112713qtx.511.1639508612966;
- Tue, 14 Dec 2021 11:03:32 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :user-agent:reply-to:date:message-id:mime-version;
+        bh=HOzCAE3c6dRn8HPfbf96Cq/1+14h4R0XM0GEA+jE+MI=;
+        b=x8LhQgZ4evMQJbsxANyM3t+sOkxBF+wn0UGztZNQS9y5f0kPcRAH/z528GHUDX3o/H
+         Ru0pCqxOkqip3LZPjn0O8iGAVKKrb2tDH3JDpgS8AFcPG/v5feDMPWxyKY6ztqmCBGX6
+         A5RzMeFbdgxxGPDej1ZpymJUroJlKXO1NjIROTruIpZlRXZnU6AddPFqhe95XjjznRtr
+         TWCu4qHvWSAXQSxUcltUqLCQsMSqBV6heAWjsKQeiL/0SassvVhzuj/vdrIpPrbu/cFY
+         KfTUBIAZo9qWO9y3q/jKiHWj4rMYpXxTmdBQDM7tQRxu66Gu23zCrSrGKYUpT2QqGD30
+         QcFQ==
+X-Gm-Message-State: AOAM532mRxkl1Gp+KvqehCy5v6c0sWBhSd50F72BQH4KoQxf5dGy5Vny
+        FCO6xrDd0tIdfe5CLff8bMv/OmOIwNoFyu3A8FDEyVtApt2YXeCdmAPk924vvdXl2WU4C1w59mH
+        YpO2Pz9YRXam1bIGm5IkKrzzG
+X-Received: by 2002:a5d:670e:: with SMTP id o14mr950648wru.539.1639508824211;
+        Tue, 14 Dec 2021 11:07:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzphrkVErOHrCT2GDQz7ePk99TsQi6uw2NF/UWoHk3LfELoreZ0jajxipbEEGEJ5sYFpxhulw==
+X-Received: by 2002:a5d:670e:: with SMTP id o14mr950617wru.539.1639508823998;
+        Tue, 14 Dec 2021 11:07:03 -0800 (PST)
+Received: from localhost (static-58-87-86-188.ipcom.comunitel.net. [188.86.87.58])
+        by smtp.gmail.com with ESMTPSA id w8sm656462wrk.112.2021.12.14.11.07.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 11:07:03 -0800 (PST)
+From:   Juan Quintela <quintela@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Jing Liu <jing2.liu@linux.intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Sean Christoperson <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+Subject: Re: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
+In-Reply-To: <87r1afrrjx.ffs@tglx> (Thomas Gleixner's message of "Tue, 14 Dec
+        2021 19:04:50 +0100")
+References: <20211214022825.563892248@linutronix.de>
+        <20211214024948.048572883@linutronix.de>
+        <854480525e7f4f3baeba09ec6a864b80@intel.com> <87zgp3ry8i.ffs@tglx>
+        <b3ac7ba45c984cf39783e33e0c25274d@intel.com> <87r1afrrjx.ffs@tglx>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+Reply-To: quintela@redhat.com
+Date:   Tue, 14 Dec 2021 20:07:02 +0100
+Message-ID: <87k0g7qa3t.fsf@secure.mitica>
 MIME-Version: 1.0
-References: <20211214173917.1496290-1-robdclark@gmail.com> <20211214173917.1496290-4-robdclark@gmail.com>
-In-Reply-To: <20211214173917.1496290-4-robdclark@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 14 Dec 2021 22:03:22 +0300
-Message-ID: <CAA8EJpo2ng0mVk0Hsqmg5yTi3Wm0nUp8Lx8+CGF=RBeuYPmviQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] drm/msm/debugfs: Add display/kms state snapshot
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 at 20:34, Rob Clark <robdclark@gmail.com> wrote:
+Thomas Gleixner <tglx@linutronix.de> wrote:
+> Wei,
 >
-> From: Rob Clark <robdclark@chromium.org>
+> On Tue, Dec 14 2021 at 16:11, Wei W. Wang wrote:
+>> On Tuesday, December 14, 2021 11:40 PM, Thomas Gleixner wrote:
+>>> On Tue, Dec 14 2021 at 15:09, Wei W. Wang wrote:
+>>> > On Tuesday, December 14, 2021 10:50 AM, Thomas Gleixner wrote:
+>>> >> + * Return: 0 on success, error code otherwise  */ int
+>>> >> +__fpu_update_guest_features(struct fpu_guest *guest_fpu, u64 xcr0,
+>>> >> +u64
+>>> >> +xfd) {
+>>> >
+>>> > I think there would be one issue for the "host write on restore" case.
+>>> > The current QEMU based host restore uses the following sequence:
+>>> > 1) restore xsave
+>>> > 2) restore xcr0
+>>> > 3) restore XFD MSR
+>>> 
+>>> This needs to be fixed. Ordering clearly needs to be:
+>>> 
+>>>   XFD, XCR0, XSTATE
+>>
+>> Sorry, just to clarify that the ordering in QEMU isn't made by us
+>> for this specific XFD enabling.
+>> It has been there for long time for the general restoring of all the
+>> XCRs and MSRs.
+>> (if you are interested..FYI:
+>> https://github.com/qemu/qemu/blob/master/target/i386/kvm/kvm.c#L4168).
+>> - kvm_put_xsave()
+>> - kvm_put_xcrs()
+>> - kvm_put_msrs()
+>>
+>> We need to check with the QEMU migration maintainer (Dave and Juan CC-ed)
+>> if changing that ordering would be OK.
+>> (In general, I think there are no hard rules documented for this ordering)
 >
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/msm/msm_debugfs.c | 90 +++++++++++++++++++++++++++++++
->  1 file changed, 90 insertions(+)
+> There haven't been ordering requirements so far, but with dynamic
+> feature enablement there are.
 >
-> diff --git a/drivers/gpu/drm/msm/msm_debugfs.c b/drivers/gpu/drm/msm/msm_debugfs.c
-> index 956b1efc3721..088f1160c892 100644
-> --- a/drivers/gpu/drm/msm/msm_debugfs.c
-> +++ b/drivers/gpu/drm/msm/msm_debugfs.c
-> @@ -15,6 +15,11 @@
->  #include "msm_gpu.h"
->  #include "msm_kms.h"
->  #include "msm_debugfs.h"
-> +#include "disp/msm_disp_snapshot.h"
-> +
-> +/*
-> + * GPU Snapshot:
-> + */
->
->  struct msm_gpu_show_priv {
->         struct msm_gpu_state *state;
-> @@ -109,6 +114,88 @@ static const struct file_operations msm_gpu_fops = {
->         .release = msm_gpu_release,
->  };
->
-> +/*
-> + * Display Snapshot:
-> + */
-> +
-> +struct msm_kms_show_priv {
-> +       struct msm_disp_state *state;
-> +       struct drm_device *dev;
+> I really want to avoid going to the point to deduce it from the
+> xstate:xfeatures bitmap, which is just backwards and Qemu has all the
+> required information already.
 
-I don't see ->dev being used outside of _open() callback. So, I'd
-suggest removing it and using struct msm_disp_state instead of struct
-msm_kms_show_priv.
+Hi
 
-> +};
-> +
-> +static int msm_kms_show(struct seq_file *m, void *arg)
-> +{
-> +       struct drm_printer p = drm_seq_file_printer(m);
-> +       struct msm_kms_show_priv *show_priv = m->private;
-> +
-> +       msm_disp_state_print(show_priv->state, &p);
-> +
-> +       return 0;
-> +}
-> +
-> +static int msm_kms_release(struct inode *inode, struct file *file)
-> +{
-> +       struct seq_file *m = file->private_data;
-> +       struct msm_kms_show_priv *show_priv = m->private;
-> +
-> +       msm_disp_state_free(show_priv->state);
-> +       kfree(show_priv);
-> +
-> +       return single_release(inode, file);
-> +}
-> +
-> +static int msm_kms_open(struct inode *inode, struct file *file)
-> +{
-> +       struct drm_device *dev = inode->i_private;
-> +       struct msm_drm_private *priv = dev->dev_private;
-> +       struct msm_kms_show_priv *show_priv;
-> +       int ret;
-> +
-> +       if (!priv->kms)
-> +               return -ENODEV;
-> +
-> +       show_priv = kmalloc(sizeof(*show_priv), GFP_KERNEL);
-> +       if (!show_priv)
-> +               return -ENOMEM;
-> +
-> +       ret = mutex_lock_interruptible(&priv->kms->dump_mutex);
-> +       if (ret)
-> +               goto free_priv;
-> +
-> +       show_priv->state = msm_disp_snapshot_state_sync(priv->kms);
-> +
-> +       mutex_unlock(&priv->kms->dump_mutex);
-> +
-> +       if (IS_ERR(show_priv->state)) {
-> +               ret = PTR_ERR(show_priv->state);
-> +               goto free_priv;
-> +       }
-> +
-> +       show_priv->dev = dev;
-> +
-> +       ret = single_open(file, msm_kms_show, show_priv);
-> +       if (ret)
-> +               goto free_priv;
-> +
-> +       return 0;
-> +
-> +free_priv:
-> +       kfree(show_priv);
-> +       return ret;
-> +}
-> +
-> +static const struct file_operations msm_kms_fops = {
-> +       .owner = THIS_MODULE,
-> +       .open = msm_kms_open,
-> +       .read = seq_read,
-> +       .llseek = seq_lseek,
-> +       .release = msm_kms_release,
-> +};
-> +
-> +/*
-> + * Other debugfs:
-> + */
-> +
->  static unsigned long last_shrink_freed;
->
->  static int
-> @@ -239,6 +326,9 @@ void msm_debugfs_init(struct drm_minor *minor)
->         debugfs_create_file("gpu", S_IRUSR, minor->debugfs_root,
->                 dev, &msm_gpu_fops);
->
-> +       debugfs_create_file("kms", S_IRUSR, minor->debugfs_root,
-> +               dev, &msm_kms_fops);
-> +
->         debugfs_create_u32("hangcheck_period_ms", 0600, minor->debugfs_root,
->                 &priv->hangcheck_period);
->
-> --
-> 2.33.1
->
+First of all, I claim ZERO knowledge about low level x86_64.
+
+Once told that, this don't matter for qemu migration, code is at
+
+target/i386/kvm/kvm.c:kvm_arch_put_registers()
 
 
--- 
-With best wishes
-Dmitry
+    ret = kvm_put_xsave(x86_cpu);
+    if (ret < 0) {
+        return ret;
+    }
+    ret = kvm_put_xcrs(x86_cpu);
+    if (ret < 0) {
+        return ret;
+    }
+    /* must be before kvm_put_msrs */
+    ret = kvm_inject_mce_oldstyle(x86_cpu);
+    if (ret < 0) {
+        return ret;
+    }
+    ret = kvm_put_msrs(x86_cpu, level);
+    if (ret < 0) {
+        return ret;
+    }
+
+If it needs to be done in any other order, it is completely independent
+of whatever is inside the migration stream.
+
+I guess that Paolo will put some light here.
+
+Later, Juan.
+

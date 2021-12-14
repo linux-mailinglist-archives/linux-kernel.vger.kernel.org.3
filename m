@@ -2,91 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE99E47451E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D00B3474525
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbhLNOcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:32:06 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:38816 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234226AbhLNOcC (ORCPT
+        id S234038AbhLNOdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232685AbhLNOdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:32:02 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BEEVscT093615;
-        Tue, 14 Dec 2021 08:31:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639492314;
-        bh=RPYr9UpoyawkvTrP01Q5C0GP+NxGEo484fZSWJiwrsg=;
-        h=Subject:CC:References:From:Date:In-Reply-To;
-        b=ZyWteVf0Vqt0w0IjxBMQI6lUm9WDUZG6QSxAZNvwJM64HOT7Ck8+c7d5a7nrCch7i
-         TjKZZVB9Rntiu3c2eU9KmJq9UFdxz8jwQIe7bBfsNe7gygvttLE+UwjwNuWxJ0cHak
-         ajPMJ6smSQpr3fEGlWDSq+URR9XFPwaLwnZQMECQ=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BEEVspX028562
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Dec 2021 08:31:54 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 14
- Dec 2021 08:31:54 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 14 Dec 2021 08:31:54 -0600
-Received: from [10.250.232.185] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BEEVpVu029051;
-        Tue, 14 Dec 2021 08:31:52 -0600
-Subject: Re: [PATCH 0/2] CAN: Add support for setting mux
-CC:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <linux-can@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211202131002.12217-1-a-govindraju@ti.com>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <7c3a0ac9-308c-2ef1-b8ae-6aa4e1a10d73@ti.com>
-Date:   Tue, 14 Dec 2021 20:01:50 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 14 Dec 2021 09:33:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AA1C061574;
+        Tue, 14 Dec 2021 06:33:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 249F261528;
+        Tue, 14 Dec 2021 14:33:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF81C34601;
+        Tue, 14 Dec 2021 14:33:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639492396;
+        bh=z+GniNxRpwIBEVDVvQdypS1hPDj1bVLpv2u1xe80R8k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kUmVg0i87tOQyXFIQd5jn6W69jxo5QLUKY2LVDsFtUdVZzw3xQaIfjKtRpWsB4hbb
+         EKNvl1tTT9JVieZ/PCW1X6QFMJqmCfZUmQCK+ZGvGGw0Avo2RIIeaIUGeVC2dN4o7f
+         GoR6dDbZf7zUk5GyHA1Mjl+/M61jSrC0dirbtnMwhDa15G10ozacjpEcUZhE67r458
+         MHhbi82HFmXB+eqmN+Hl9OeQHn9VcOe579zUFcn9n42CoCoDFWTNVtHbeHw8ktgqUU
+         YtXba5YksEQzyhRdiZdiUUeAyYeNvvck+OUZ5r0FuvJZSNOhG853K0qXkc55hGSsEI
+         lvjynnHe3F7Qw==
+Date:   Tue, 14 Dec 2021 20:03:11 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     l.stach@pengutronix.de, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, marcel.ziswiler@toradex.com,
+        tharvey@gateworks.com, kishon@ti.com, robh@kernel.org,
+        galak@kernel.crashing.org, shawnguo@kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: Re: [PATCH v7 1/8] dt-bindings: phy: phy-imx8-pcie: Add binding for
+ the pad modes of imx8 pcie phy
+Message-ID: <YbirJxaCGIPKwXkU@matsya>
+References: <1638432158-4119-1-git-send-email-hongxing.zhu@nxp.com>
+ <1638432158-4119-2-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <20211202131002.12217-1-a-govindraju@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1638432158-4119-2-git-send-email-hongxing.zhu@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On 02-12-21, 16:02, Richard Zhu wrote:
+> Add binding for reference clock PAD modes of the i.MX8 PCIe PHY.
 
-On 02/12/21 6:40 pm, Aswath Govindraju wrote:
-> The following series of patches add support for setting
-> muxes to route signals from CAN controller to transceiver
-> by reading the property mux-states from the device tree
-> node
-> 
-> The following series of patches are dependent on,
-> - https://lkml.org/lkml/2021/12/2/423
-> 
+Applied, thanks
 
-Thank you for the comments. I have posted a respin(v2) for this series
-after making the fixes.
-
-Thanks,
-Aswath
-
-> Aswath Govindraju (2):
->   dt-bindings: phy: ti,tcan104x-can: Document mux-states property
->   phy: phy-can-transceiver: Add support for setting mux
-> 
->  .../bindings/phy/ti,tcan104x-can.yaml         | 13 +++++++++++
->  drivers/phy/Kconfig                           |  1 +
->  drivers/phy/phy-can-transceiver.c             | 22 +++++++++++++++++++
->  3 files changed, 36 insertions(+)
-> 
-
+-- 
+~Vinod

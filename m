@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0615C473EA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B64A4473EAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbhLNIsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:48:19 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32916 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbhLNIsT (ORCPT
+        id S230206AbhLNItz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:49:55 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:55200 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229577AbhLNItx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:48:19 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JCsTX0mNdzcbs5;
-        Tue, 14 Dec 2021 16:48:00 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 16:48:16 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 16:48:15 +0800
-Subject: Re: [PATCH v17 02/10] x86: kdump: make the lower bound of crash
- kernel reservation consistent
-To:     Baoquan He <bhe@redhat.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
+        Tue, 14 Dec 2021 03:49:53 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BE8nJYj011323;
+        Tue, 14 Dec 2021 02:49:19 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1639471759;
+        bh=cHnX/tiU2wcWzH72p6sr7/qnhRlo54nxLs6LlSfFEC0=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=eMKhfnJ+8/Bb6fs3wicmphZoqs5RyD6E+MF/Swe9tCW5KVxymdI17mYmDSzr+JU8d
+         ErLhyt8YOcy7GlYbkHdfqi9L6uIQK0/5Fip3e0Aqs4VdoW9a/HpBZ8q+s+Hz0n6Jcs
+         xsi2/tFBT7RHJLzRYhvI7mivwvxUUU9k/es1MSh0=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BE8nJk1063796
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 14 Dec 2021 02:49:19 -0600
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 14
+ Dec 2021 02:49:19 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 14 Dec 2021 02:49:19 -0600
+Received: from [10.250.232.32] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BE8nAV3071856;
+        Tue, 14 Dec 2021 02:49:12 -0600
+Subject: Re: [PATCH] arm64: defconfig: Increase the maximum number of
+ 8250/16550 serial ports
+To:     Aswath Govindraju <a-govindraju@ti.com>
+CC:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        Will Deacon <will@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        =?UTF-8?Q?Guido_G=c3=bcnther?= <agx@sigxcpu.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sameer Pujar <spujar@nvidia.com>,
+        Zenghui Yu <yuzenghui@huawei.com>, Nishanth Menon <nm@ti.com>,
+        Saravana Kannan <saravanak@google.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-3-thunder.leizhen@huawei.com>
- <20211213133735.GB23510@MiWiFi-R3L-srv>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <a6143bcb-e380-2270-7ccc-02309866ccab@huawei.com>
-Date:   Tue, 14 Dec 2021 16:48:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        <linux-kernel@vger.kernel.org>
+References: <20211208080737.10761-1-a-govindraju@ti.com>
+From:   Apurva Nandan <a-nandan@ti.com>
+Message-ID: <3ab9addf-7938-fcf3-6147-15a998e37d2d@ti.com>
+Date:   Tue, 14 Dec 2021 14:19:10 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211213133735.GB23510@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+In-Reply-To: <20211208080737.10761-1-a-govindraju@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 08/12/21 1:37 pm, Aswath Govindraju wrote:
+> On some TI SoCs the number of UART instances used can be greater than 4.
+> For example in TI's J721S2 SoC, 11th instance of UART is used as console.
+> So, increase the maximum number of instances to 16.
+>
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 
-On 2021/12/13 21:37, Baoquan He wrote:
-> On 12/10/21 at 02:55pm, Zhen Lei wrote:
->> From: Chen Zhou <chenzhou10@huawei.com>
->>
->> The lower bounds of crash kernel reservation and crash kernel low
->> reservation are different, use the consistent value CRASH_ALIGN.
->>
->> Suggested-by: Dave Young <dyoung@redhat.com>
->> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> 
-> You may need add Co-developed-by to clarify who is author, and who is
-> co-author. Please check section "When to use Acked-by:, Cc:, and Co-developed-by:"
-> of Documentation/process/submitting-patches.rst. Otherwise, 
+Reviewed-by: Apurva Nandan <a-nandan@ti.com>
 
-Okay, thanks for the heads-up. I will modify it.
-
-> 
-> Acked-by: Baoquan He <bhe@redhat.com>
-> 
->> Tested-by: John Donnelly <John.p.donnelly@oracle.com>
->> Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
->> ---
->>  arch/x86/kernel/setup.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
->> index 5cc60996eac56d6..6424ee4f23da2cf 100644
->> --- a/arch/x86/kernel/setup.c
->> +++ b/arch/x86/kernel/setup.c
->> @@ -441,7 +441,8 @@ static int __init reserve_crashkernel_low(void)
->>  			return 0;
->>  	}
->>  
->> -	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
->> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, CRASH_ALIGN,
->> +			CRASH_ADDR_LOW_MAX);
->>  	if (!low_base) {
->>  		pr_err("Cannot reserve %ldMB crashkernel low memory, please try smaller size.\n",
->>  		       (unsigned long)(low_size >> 20));
->> -- 
->> 2.25.1
->>
-> 
-> .
-> 
+> ---
+>   arch/arm64/configs/defconfig | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 0da6a944d5cd..adb9f1f0802d 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -409,6 +409,8 @@ CONFIG_SERIAL_8250_SHARE_IRQ=y
+>   CONFIG_SERIAL_8250_BCM2835AUX=y
+>   CONFIG_SERIAL_8250_DW=y
+>   CONFIG_SERIAL_8250_OMAP=y
+> +CONFIG_SERIAL_8250_NR_UARTS=16
+> +CONFIG_SERIAL_8250_RUNTIME_UARTS=16
+>   CONFIG_SERIAL_8250_MT6577=y
+>   CONFIG_SERIAL_8250_UNIPHIER=y
+>   CONFIG_SERIAL_OF_PLATFORM=y

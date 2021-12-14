@@ -2,84 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AED87473A5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA758473A6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235758AbhLNBlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 20:41:50 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:53136 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229579AbhLNBlu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 20:41:50 -0500
-Received: from localhost.localdomain (unknown [124.16.138.122])
-        by APP-05 (Coremail) with SMTP id zQCowACngUBH9rdhbAjzAg--.27977S2;
-        Tue, 14 Dec 2021 09:41:28 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     airlied@redhat.com, tzimmermann@suse.de, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] drm/ast: potential dereference of null pointer
-Date:   Tue, 14 Dec 2021 09:41:26 +0800
-Message-Id: <20211214014126.2211535-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S240091AbhLNBqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 20:46:14 -0500
+Received: from conssluserg-01.nifty.com ([210.131.2.80]:33611 "EHLO
+        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229593AbhLNBqM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 20:46:12 -0500
+X-Greylist: delayed 108911 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Dec 2021 20:46:11 EST
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 1BE1jwdd025815;
+        Tue, 14 Dec 2021 10:45:58 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 1BE1jwdd025815
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1639446358;
+        bh=8T5YBD0SbT8hN4Yx/A5u1O0M20Sl6k1S2CdKGVz6Y3U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZfFrDE1reKOnJzvz0drTawAsKKTP+zomRYHMgD3cPDWF7NyO//w6c/APxI53ohhX1
+         mcqo2rms66UlsJvljCalW8PWISakk4ghhWpwYlaOQLjgj6GyAIvjC1XmstxWT7RlTp
+         0prmKUVhY0PVcMb31p7YvtpGqpfHBDC7HwTzTV2KjJiYV75IsDwXQUtZhLbmr+4/dd
+         jGdpCGQB0qjJ6Agl7M5DAeINdDSFRrEuyCd8W+QFRt+JpVH5fXx1KDW4MHmthOxaCm
+         Ewz+z1FadGyRz724kXGbk4tTuVDnqBMSgMdmMthJ1xWBJWE2DD9/lkp+ILlNZlMxiR
+         TRCm5NZ6lQX5g==
+X-Nifty-SrcIP: [209.85.215.181]
+Received: by mail-pg1-f181.google.com with SMTP id r138so16053565pgr.13;
+        Mon, 13 Dec 2021 17:45:58 -0800 (PST)
+X-Gm-Message-State: AOAM531dujZrONsvDWUiRcH75Vc+VCRp2UHWCEElWK9AgDSGuzQGtfL+
+        wSbC9q7qzoGyQHCBnd/DEP63wjFOH62Jg53lUUY=
+X-Google-Smtp-Source: ABdhPJxrvr0qnfF5hod7LzeFLaiFe9CTKegtoDEceJuaJKt4xz74aC7K36R71IQSQm3XG4OTdgqZl05U7GLoxJBHw8c=
+X-Received: by 2002:a65:430a:: with SMTP id j10mr1684265pgq.126.1639446357619;
+ Mon, 13 Dec 2021 17:45:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACngUBH9rdhbAjzAg--.27977S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw4xtryftry7XrW7JF1UWrg_yoWkWFb_GF
-        4UW3Z5Gry3Ca4093W2vw4fKry09rZrZFs5Xw4UKFZ3A3s8Xry7C39Igr1rKr4UuF17XrWD
-        J3WUtFy3Crn7CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWk
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
-        WxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUChFxUUUUU=
-X-Originating-IP: [124.16.138.122]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+References: <20211212192941.1149247-1-masahiroy@kernel.org>
+ <20211212192941.1149247-2-masahiroy@kernel.org> <YbdD9nnoZnK0QKeg@buildd.core.avm.de>
+In-Reply-To: <YbdD9nnoZnK0QKeg@buildd.core.avm.de>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 14 Dec 2021 10:45:20 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQxvQ2U3y_eJi8EeO3SNbzVHWBmaAyEN_1rq-TMPfyLHw@mail.gmail.com>
+Message-ID: <CAK7LNAQxvQ2U3y_eJi8EeO3SNbzVHWBmaAyEN_1rq-TMPfyLHw@mail.gmail.com>
+Subject: Re: [PATCH 01/10] certs: use $@ to simplify the key generation rule
+To:     Nicolas Schier <n.schier@avm.de>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of kzalloc() needs to be checked.
-To avoid use of null pointer '&ast_state->base' in case of the
-failure of alloc.
+On Mon, Dec 13, 2021 at 10:30 PM Nicolas Schier <n.schier@avm.de> wrote:
+>
+> On Mon, Dec 13, 2021 at 04:29:32AM +0900, Masahiro Yamada wrote:
+> > Do not repeat $(obj)/signing_key.pem
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  certs/Makefile | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/certs/Makefile b/certs/Makefile
+> > index a702b70f3cb9..97fd6cc02972 100644
+> > --- a/certs/Makefile
+> > +++ b/certs/Makefile
+> > @@ -61,8 +61,7 @@ keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ECDSA) := -newkey ec -pkeyopt ec_paramgen_c
+> >  quiet_cmd_gen_key = GENKEY  $@
+> >        cmd_gen_key = openssl req -new -nodes -utf8 -$(CONFIG_MODULE_SIG_HASH) -days 36500 \
+> >               -batch -x509 -config $(obj)/x509.genkey \
+>
+> Don't you want to replace $< too?
 
-Fixes: f0adbc382b8b ("drm/ast: Allocate initial CRTC state of the correct size")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+Ah, goot catch! Thanks.
 
-v1 -> v2
+I will change it as well.
 
-*Change 1. Add the else statement that calling
-__drm_atomic_helper_crtc_reset() with a state of NULL.
----
- drivers/gpu/drm/ast/ast_mode.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index 36d9575aa27b..65099f0359f9 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -1120,7 +1120,10 @@ static void ast_crtc_reset(struct drm_crtc *crtc)
- 	if (crtc->state)
- 		crtc->funcs->atomic_destroy_state(crtc, crtc->state);
- 
--	__drm_atomic_helper_crtc_reset(crtc, &ast_state->base);
-+	if (ast_state)
-+		__drm_atomic_helper_crtc_reset(crtc, &ast_state->base);
-+	else
-+		__drm_atomic_helper_crtc_reset(crtc, NULL);
- }
- 
- static struct drm_crtc_state *
--- 
-2.25.1
 
+
+> Reviewed-by: Nicolas Schier <n.schier@avm.de>
+>
+> > -             -outform PEM -out $(obj)/signing_key.pem \
+> > -             -keyout $(obj)/signing_key.pem $(keytype-y) 2>&1
+> > +             -outform PEM -out $@ -keyout $@ $(keytype-y) 2>&1
+> >
+> >  $(obj)/signing_key.pem: $(obj)/x509.genkey FORCE
+> >       $(call if_changed,gen_key)
+> > --
+> > 2.32.0
+> >
+
+
+
+--
+Best Regards
+Masahiro Yamada

@@ -2,117 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9808474EB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4947E474EB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238310AbhLNXpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 18:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238186AbhLNXpS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 18:45:18 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C4DC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:45:18 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id w24so2168709ply.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LFIWXrhudzGmJHAnuVfONET3YfG5tuem416kroSKDJs=;
-        b=KrnYpFfEfLeJgKgEamLir3HXlMJAR1nZu7iGEm/hcuNjm/fjGeNxUpHpTDaXWc+zGI
-         PZXD88LKjB5KJX1NE1ZcjdMnJa89UDoqpJhcDGUTB5ii44UAMmL506rpOEArpU360Tql
-         LWSIadOKbS1ozIn1sRI8qNz4fNZKnvBX/BFBtDb8UlfzSTegjAQk2GRxcpC21uhF1qow
-         6BaxJESi1ASLnBI1C3balD+T2+XnR2daHFRJGCkgN+bt8Cpb57kEOrBu0rIJYfqy7c46
-         U58Z1ThWtJe3oUhGBGLq8EA6zzUEcrjrQ0Me+hFSn/CoNYcpvFxEtArVI0vFJtOGGOOD
-         3jEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LFIWXrhudzGmJHAnuVfONET3YfG5tuem416kroSKDJs=;
-        b=B475hMKVr3hyviq497SS9syRBTYChZosGx+SDsGqYP+HFZZ6RO0Uwo0K/WyqjD44Q7
-         lSwfmT73VvL7vjiJ2QfEFIG6fgdySZpEBzhCMlL7sMf96pOocMI1xQV9oxJG7SddIBhW
-         ymrTiIomIkt7PUnJ5cxcTzCFfODFDZWVtmRZ6KDxSKZr2Ih9rIS0qaszh+XUIr3OVNki
-         U31WaXMHiqPkgqhXPX5Nn2SyPBun4pY82RuIob4f76Jko+8gg/cVj8i8keP1IkV+YLJ/
-         fliS3KEM/jWh/GzX8x17uNN92fUx+BfQPpc/0SOLuCx+KW5hbSwgPmd6Bcl1F9yAm0xV
-         efag==
-X-Gm-Message-State: AOAM530VwuhaPE8wQ06VkHPukin3LyBUABaTBzgdmToYVF8amCgXOluX
-        G4Ag7y2Zb0SL5TwV/GLkGaffWQ==
-X-Google-Smtp-Source: ABdhPJwr9ENILtdbmn5JPRBGq6/87lKw1+7XI7lrRltyqX3WlXwUi9WFyJqtm+yZG0mqjF+QVrjZyA==
-X-Received: by 2002:a17:90b:3ecc:: with SMTP id rm12mr8691195pjb.75.1639525517550;
-        Tue, 14 Dec 2021 15:45:17 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id rj8sm3549236pjb.0.2021.12.14.15.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 15:45:16 -0800 (PST)
-Date:   Tue, 14 Dec 2021 23:45:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hou Wenlong <houwenlong93@linux.alibaba.com>
-Subject: Re: [PATCH 10/28] KVM: x86/mmu: Allow yielding when zapping GFNs for
- defunct TDP MMU root
-Message-ID: <YbksiTgVdzN0Z6Dn@google.com>
-References: <20211120045046.3940942-1-seanjc@google.com>
- <20211120045046.3940942-11-seanjc@google.com>
- <CANgfPd_H3CZn_rFfEZoZ7Sa==Lnwt4tXSMsO+eg5d8q9n39BSQ@mail.gmail.com>
+        id S238317AbhLNXqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 18:46:54 -0500
+Received: from ixit.cz ([94.230.151.217]:55366 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231447AbhLNXqx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 18:46:53 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id D0A952243C;
+        Wed, 15 Dec 2021 00:46:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1639525610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oHBpVI1zX0MdWA918+G1nEObZsRGP/0tTmp80DjrlbI=;
+        b=STWLsICsbmo6ZaAsoQCv9VQspc8ZlVlJPlkyADg3Ym0IKu4RM4mJ048ipk/kEI+2xS9thS
+        igrK6iFEHcUdYI3F+RSD8kPDUN9sarK9gaTY+CcSKGQgPNJxDLrUPrZS+e25IOLOE+S5K+
+        zlxKT9T+zPS04hAI4GJNHONHRSJr7FM=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Caleb Connolly <caleb@connolly.tech>,
+        David Heidelberg <david@ixit.cz>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: sdm845: rename memory@ nodes to more descriptive names
+Date:   Wed, 15 Dec 2021 00:46:47 +0100
+Message-Id: <20211214234648.23369-1-david@ixit.cz>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANgfPd_H3CZn_rFfEZoZ7Sa==Lnwt4tXSMsO+eg5d8q9n39BSQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021, Ben Gardon wrote:
-> On Fri, Nov 19, 2021 at 8:51 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > Allow yielding when zapping SPTEs for a defunct TDP MMU root.  Yielding
-> > is safe from a TDP perspective, as the root is unreachable.  The only
-> > potential danger is putting a root from a non-preemptible context, and
-> > KVM currently does not do so.
-> >
-> > Yield-unfriendly iteration uses for_each_tdp_mmu_root(), which doesn't
-> > take a reference to each root (it requires mmu_lock be held for the
-> > entire duration of the walk).
-> >
-> > tdp_mmu_next_root() is used only by the yield-friendly iterator.
-> >
-> > kvm_tdp_mmu_zap_invalidated_roots() is explicitly yield friendly.
-> >
-> > kvm_mmu_free_roots() => mmu_free_root_page() is a much bigger fan-out,
-> > but is still yield-friendly in all call sites, as all callers can be
-> > traced back to some combination of vcpu_run(), kvm_destroy_vm(), and/or
-> > kvm_create_vm().
-> >
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> 
-> Reviewed-by: Ben Gardon <bgardon@google.com>
-> 
-> I'm glad to see this fixed. I assume we don't usually hit this in
-> testing because most of the teardown happens in the zap-all path when
-> we unregister for MMU notifiers and actually deleting a fully
-> populated root while the VM is running is pretty rare.
+Pure effort to avoid `make dtbs_check` warnings about memory@ nodes, which
+should have property device_type set to memory.
 
-Another *sigh*.
+Fixes warnings as:
+arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: memory@f5b00000: 'device_type' is a required property
+        From schema: dtschema/schemas/memory.yaml
 
-AFAIK, the above analysis is 100% correct, but there's a subtle problem with
-yielding while putting the last reference to a root.  If the mmu_notifier runs
-in parallel, it (obviously) won't be able to get a reference to the root, and so
-KVM will fail to ensure all references to an unmapped range are removed prior to
-returning from the mmu_notifier.
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ .../boot/dts/qcom/sdm845-oneplus-common.dtsi  |  8 ++--
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          | 38 +++++++++----------
+ 2 files changed, 23 insertions(+), 23 deletions(-)
 
-But, I have a idea.  Instead of synchronously zapping the defunct root, mark it
-invalid, set the refcount back to '1', and then use a helper kthread to do the
-teardown.  Assuming there is exactly one helper, that would also address my
-concerns with kvm_tdp_mmu_zap_invalidated_roots() being unsafe to call in parallel,
-e.g. two zappers processing an invalid root would both put the last reference to
-a root and trigger use-after-free of a different kind.
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+index 7f42e5315ecb..511ca72f465e 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+@@ -54,7 +54,7 @@ reserved-memory {
+ 		 * it is otherwise possible for an allocation adjacent to the
+ 		 * rmtfs_mem region to trigger an XPU violation, causing a crash.
+ 		 */
+-		rmtfs_lower_guard: memory@f5b00000 {
++		rmtfs_lower_guard: rmtfs-lower-guard@f5b00000 {
+ 			no-map;
+ 			reg = <0 0xf5b00000 0 0x1000>;
+ 		};
+@@ -63,7 +63,7 @@ rmtfs_lower_guard: memory@f5b00000 {
+ 		 * but given the same address every time. Hard code it as this address is
+ 		 * where the modem firmware expects it to be.
+ 		 */
+-		rmtfs_mem: memory@f5b01000 {
++		rmtfs_mem: rmtfs-mem@f5b01000 {
+ 			compatible = "qcom,rmtfs-mem";
+ 			reg = <0 0xf5b01000 0 0x200000>;
+ 			no-map;
+@@ -71,7 +71,7 @@ rmtfs_mem: memory@f5b01000 {
+ 			qcom,client-id = <1>;
+ 			qcom,vmid = <15>;
+ 		};
+-		rmtfs_upper_guard: memory@f5d01000 {
++		rmtfs_upper_guard: rmtfs-upper-guard@f5d01000 {
+ 			no-map;
+ 			reg = <0 0xf5d01000 0 0x1000>;
+ 		};
+@@ -80,7 +80,7 @@ rmtfs_upper_guard: memory@f5d01000 {
+ 		 * It seems like reserving the old rmtfs_mem region is also needed to prevent
+ 		 * random crashes which are most likely modem related, more testing needed.
+ 		 */
+-		removed_region: memory@88f00000 {
++		removed_region: removed-region@88f00000 {
+ 			no-map;
+ 			reg = <0 0x88f00000 0 0x1c00000>;
+ 		};
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 5fac82f026fd..28f7dc5c886a 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -79,22 +79,22 @@ reserved-memory {
+ 		#size-cells = <2>;
+ 		ranges;
+ 
+-		hyp_mem: memory@85700000 {
++		hyp_mem: hyp-mem@85700000 {
+ 			reg = <0 0x85700000 0 0x600000>;
+ 			no-map;
+ 		};
+ 
+-		xbl_mem: memory@85e00000 {
++		xbl_mem: xbl-mem@85e00000 {
+ 			reg = <0 0x85e00000 0 0x100000>;
+ 			no-map;
+ 		};
+ 
+-		aop_mem: memory@85fc0000 {
++		aop_mem: aop-mem@85fc0000 {
+ 			reg = <0 0x85fc0000 0 0x20000>;
+ 			no-map;
+ 		};
+ 
+-		aop_cmd_db_mem: memory@85fe0000 {
++		aop_cmd_db_mem: aop-cmd-db-mem@85fe0000 {
+ 			compatible = "qcom,cmd-db";
+ 			reg = <0x0 0x85fe0000 0 0x20000>;
+ 			no-map;
+@@ -107,12 +107,12 @@ smem@86000000 {
+ 			hwlocks = <&tcsr_mutex 3>;
+ 		};
+ 
+-		tz_mem: memory@86200000 {
++		tz_mem: tz@86200000 {
+ 			reg = <0 0x86200000 0 0x2d00000>;
+ 			no-map;
+ 		};
+ 
+-		rmtfs_mem: memory@88f00000 {
++		rmtfs_mem: rmtfs@88f00000 {
+ 			compatible = "qcom,rmtfs-mem";
+ 			reg = <0 0x88f00000 0 0x200000>;
+ 			no-map;
+@@ -121,67 +121,67 @@ rmtfs_mem: memory@88f00000 {
+ 			qcom,vmid = <15>;
+ 		};
+ 
+-		qseecom_mem: memory@8ab00000 {
++		qseecom_mem: qseecom@8ab00000 {
+ 			reg = <0 0x8ab00000 0 0x1400000>;
+ 			no-map;
+ 		};
+ 
+-		camera_mem: memory@8bf00000 {
++		camera_mem: camera-mem@8bf00000 {
+ 			reg = <0 0x8bf00000 0 0x500000>;
+ 			no-map;
+ 		};
+ 
+-		ipa_fw_mem: memory@8c400000 {
++		ipa_fw_mem: ipa-fw@8c400000 {
+ 			reg = <0 0x8c400000 0 0x10000>;
+ 			no-map;
+ 		};
+ 
+-		ipa_gsi_mem: memory@8c410000 {
++		ipa_gsi_mem: ipa-gsi@8c410000 {
+ 			reg = <0 0x8c410000 0 0x5000>;
+ 			no-map;
+ 		};
+ 
+-		gpu_mem: memory@8c415000 {
++		gpu_mem: gpu@8c415000 {
+ 			reg = <0 0x8c415000 0 0x2000>;
+ 			no-map;
+ 		};
+ 
+-		adsp_mem: memory@8c500000 {
++		adsp_mem: adsp@8c500000 {
+ 			reg = <0 0x8c500000 0 0x1a00000>;
+ 			no-map;
+ 		};
+ 
+-		wlan_msa_mem: memory@8df00000 {
++		wlan_msa_mem: wlan-msa@8df00000 {
+ 			reg = <0 0x8df00000 0 0x100000>;
+ 			no-map;
+ 		};
+ 
+-		mpss_region: memory@8e000000 {
++		mpss_region: mpss@8e000000 {
+ 			reg = <0 0x8e000000 0 0x7800000>;
+ 			no-map;
+ 		};
+ 
+-		venus_mem: memory@95800000 {
++		venus_mem: venus@95800000 {
+ 			reg = <0 0x95800000 0 0x500000>;
+ 			no-map;
+ 		};
+ 
+-		cdsp_mem: memory@95d00000 {
++		cdsp_mem: cdsp@95d00000 {
+ 			reg = <0 0x95d00000 0 0x800000>;
+ 			no-map;
+ 		};
+ 
+-		mba_region: memory@96500000 {
++		mba_region: mba@96500000 {
+ 			reg = <0 0x96500000 0 0x200000>;
+ 			no-map;
+ 		};
+ 
+-		slpi_mem: memory@96700000 {
++		slpi_mem: slpi@96700000 {
+ 			reg = <0 0x96700000 0 0x1400000>;
+ 			no-map;
+ 		};
+ 
+-		spss_mem: memory@97b00000 {
++		spss_mem: spss@97b00000 {
+ 			reg = <0 0x97b00000 0 0x100000>;
+ 			no-map;
+ 		};
+-- 
+2.33.0
+

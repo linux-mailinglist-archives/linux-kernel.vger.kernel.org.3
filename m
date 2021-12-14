@@ -2,143 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 005334741A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C16664741A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbhLNLlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 06:41:09 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15731 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbhLNLlF (ORCPT
+        id S233624AbhLNLlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 06:41:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58130 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229554AbhLNLlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 06:41:05 -0500
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JCxFm4Df2zZdc8;
-        Tue, 14 Dec 2021 19:38:04 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 19:41:03 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 19:41:02 +0800
-Subject: Re: [PATCH v17 04/10] x86: kdump: move xen_pv_domain() check and
- insert_resource() to setup_arch()
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>
-CC:     Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Chen Zhou" <dingguo.cz@antgroup.com>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-5-thunder.leizhen@huawei.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <d328aede-1282-b4d5-f17a-aa9c3e9f6563@huawei.com>
-Date:   Tue, 14 Dec 2021 19:40:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20211210065533.2023-5-thunder.leizhen@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+        Tue, 14 Dec 2021 06:41:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C472EB818A0;
+        Tue, 14 Dec 2021 11:41:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607E7C34605;
+        Tue, 14 Dec 2021 11:40:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639482059;
+        bh=Y9cU4Rjmw8f1R7hT/PwYwvdBTVfEZRq/z2i+vhoiIkU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lvmwOe/fvHGCs0jnEH6qfpLn+9h0LVYxfzDbIsNaHPQoR8FMrseXXi4g3ARhxOKOS
+         uNQbXqM5OG5iMsJKrqa9iSPzK1Idi7P59bGaEchraKfIZNiBwn5nuUyx/BoEDOw/Lb
+         n71GDBVD9vO2F82tGIHqeEgAayDxylDjr1A9ip+YNc7qCreW2+zvx6UnBpAtrFE8Yv
+         Zflp3EATMqJ6Z1TYbegado4fwsWzZ06ni8dcCoMZO1tw4q5z8g2YJ6ZmzAP9fTDwxD
+         WTEr13dVTgr9xtyZtyX2C7X66J95VaJ3fwYqqYRpHWMBFCnqKOtvPJzrlKOGsph2wu
+         oi+XFENesCw3Q==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mx6Az-00C21t-HU; Tue, 14 Dec 2021 11:40:57 +0000
+Date:   Tue, 14 Dec 2021 11:40:57 +0000
+Message-ID: <875yrrjtx2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sunil Muthuswamy <sunilmut@microsoft.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [EXTERNAL] Re: [PATCH v6 2/2] arm64: PCI: hv: Add support for Hyper-V vPCI
+In-Reply-To: <BN8PR21MB114040F48FB7F3988BA95032C0759@BN8PR21MB1140.namprd21.prod.outlook.com>
+References: <1637225490-2213-1-git-send-email-sunilmut@linux.microsoft.com>
+        <1637225490-2213-3-git-send-email-sunilmut@linux.microsoft.com>
+        <875yso6tbi.wl-maz@kernel.org>
+        <BN8PR21MB114040F48FB7F3988BA95032C0759@BN8PR21MB1140.namprd21.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sunilmut@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de, x86@kernel.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2021/12/10 14:55, Zhen Lei wrote:
-> From: Chen Zhou <chenzhou10@huawei.com>
+On Tue, 14 Dec 2021 00:46:59 +0000,
+Sunil Muthuswamy <sunilmut@microsoft.com> wrote:
 > 
-> We will make the functions reserve_crashkernel() as generic, the
-> xen_pv_domain() check in reserve_crashkernel() is relevant only to
-> x86, the same as insert_resource() in reserve_crashkernel[_low]().
-> So move xen_pv_domain() check and insert_resource() to setup_arch()
-> to keep them in x86.
+> On Friday, November 19, 2021 7:47 AM,
+> Marc Zyngier <maz@kernel.org> wrote:
 > 
-> Suggested-by: Mike Rapoport <rppt@kernel.org>
-> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> Tested-by: John Donnelly <John.p.donnelly@oracle.com>
-> Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
-> Acked-by: Baoquan He <bhe@redhat.com>
-> ---
->  arch/x86/kernel/setup.c | 19 +++++++++++--------
->  1 file changed, 11 insertions(+), 8 deletions(-)
+> [nip..]
 > 
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index bb2a0973b98059e..7ae00716a208f82 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -456,7 +456,6 @@ static int __init reserve_crashkernel_low(void)
->  
->  	crashk_low_res.start = low_base;
->  	crashk_low_res.end   = low_base + low_size - 1;
-> -	insert_resource(&iomem_resource, &crashk_low_res);
->  #endif
->  	return 0;
->  }
-> @@ -480,11 +479,6 @@ static void __init reserve_crashkernel(void)
->  		high = true;
->  	}
->  
-> -	if (xen_pv_domain()) {
-> -		pr_info("Ignoring crashkernel for a Xen PV domain\n");
-> -		return;
-> -	}
-> -
->  	/* 0 means: find the address automatically */
->  	if (!crash_base) {
->  		/*
-> @@ -531,7 +525,6 @@ static void __init reserve_crashkernel(void)
->  
->  	crashk_res.start = crash_base;
->  	crashk_res.end   = crash_base + crash_size - 1;
-> -	insert_resource(&iomem_resource, &crashk_res);
->  }
->  #else
->  static void __init reserve_crashkernel(void)
-> @@ -1143,7 +1136,17 @@ void __init setup_arch(char **cmdline_p)
->  	 * Reserve memory for crash kernel after SRAT is parsed so that it
->  	 * won't consume hotpluggable memory.
->  	 */
-> -	reserve_crashkernel();
+> > > +static int hv_pci_vec_alloc_device_irq(struct irq_domain *domain,
+> > > +				       unsigned int nr_irqs,
+> > > +				       irq_hw_number_t *hwirq)
+> > > +{
+> > > +	struct hv_pci_chip_data *chip_data = domain->host_data;
+> > > +	unsigned int index;
+> > > +
+> > > +	/* Find and allocate region from the SPI bitmap */
+> > > +	mutex_lock(&chip_data->map_lock);
+> > > +	index = bitmap_find_free_region(chip_data->spi_map,
+> > > +					HV_PCI_MSI_SPI_NR,
+> > > +					get_count_order(nr_irqs));
+> > > +	mutex_unlock(&chip_data->map_lock);
+> > > +	if (index < 0)
+> > > +		return -ENOSPC;
+> > > +
+> > > +	*hwirq = index + HV_PCI_MSI_SPI_START;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int hv_pci_vec_irq_gic_domain_alloc(struct irq_domain *domain,
+> > > +					   unsigned int virq,
+> > > +					   irq_hw_number_t hwirq)
+> > > +{
+> > > +	struct irq_fwspec fwspec;
+> > > +
+> > > +	fwspec.fwnode = domain->parent->fwnode;
+> > > +	fwspec.param_count = 2;
+> > > +	fwspec.param[0] = hwirq;
+> > > +	fwspec.param[1] = IRQ_TYPE_EDGE_RISING;
+> > > +
+> > > +	return irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
+> > 
+> > I think you are missing the actual edge configuration here. Since the
+> > interrupt specifier doesn't come from either DT or ACPI, nobody will
+> > set the trigger type, and you have to do it yourself here. At the
+> > moment, you will get whatever is in the GIC configuration.
+> > 
+> 
+> I see, thanks. So, just a call of irq_set_irq_type(IRQ_TYPE_EDGE_RISING)?
 
-Hi Baoquan:
-  How about move "#ifdef CONFIG_KEXEC_CORE" here, so that we can remove the
-empty reserve_crashkernel(). In fact, xen_pv_domain() is invoked only
-when CONFIG_KEXEC_CORE is enabled before.
+You are already deep in the irq stack, and calling a high level
+function here is a pretty bad idea. You'll need something like:
 
-> +	if (xen_pv_domain())
-> +		pr_info("Ignoring crashkernel for a Xen PV domain\n");
-> +	else {
-> +		reserve_crashkernel();
-> +#ifdef CONFIG_KEXEC_CORE
-> +		if (crashk_res.end > crashk_res.start)
-> +			insert_resource(&iomem_resource, &crashk_res);
-> +		if (crashk_low_res.end > crashk_low_res.start)
-> +			insert_resource(&iomem_resource, &crashk_low_res);
-> +#endif
-> +	}
->  
->  	memblock_find_dma_reserve();
->  
+	struct irq_data *d;
+	d = irq_domain_get_irq_data(domain->parent, virq);
+	d->chip->irq_set_type(d, IRQ_TYPE_EDGE_RISING);
+
+on the return from the parent allocation.
+
+> > > +}
+> > > +
+> > > +static int hv_pci_vec_irq_domain_alloc(struct irq_domain *domain,
+> > > +				       unsigned int virq, unsigned int nr_irqs,
+> > > +				       void *args)
+> > > +{
+> > > +	irq_hw_number_t hwirq;
+> > > +	unsigned int i;
+> > > +	int ret;
+> > > +
+> > > +	ret = hv_pci_vec_alloc_device_irq(domain, nr_irqs, &hwirq);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	for (i = 0; i < nr_irqs; i++) {
+> > > +		ret = hv_pci_vec_irq_gic_domain_alloc(domain, virq + i,
+> > > +						      hwirq + i);
+> > > +		if (ret)
+> > > +			goto free_irq;
+> > > +
+> > > +		ret = irq_domain_set_hwirq_and_chip(domain, virq + i,
+> > > +						    hwirq + i,
+> > > +						    &hv_arm64_msi_irq_chip,
+> > > +						    domain->host_data);
+> > > +		if (ret)
+> > > +			goto free_irq;
+> > > +
+> > > +		pr_debug("pID:%d vID:%u\n", (int)(hwirq + i), virq + i);
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +
+> > > +free_irq:
+> > > +	hv_pci_vec_irq_domain_free(domain, virq, nr_irqs);
+> > > +
+> > > +	return ret;
+> > 
+> > How about the interrupts that have already been allocated?
 > 
+> Not sure I am fully following. If you are referring to the failure
+> path and the interrupts that were allocated, then I am calling '
+> hv_pci_vec_irq_domain_free' which should free the interrupts from
+> the bitmap and the parent irq domain.  Can you please clarify?
+
+I see several problems on the failure path:
+
+- You are freeing more than you actually configured. Not necessary a
+  big deal, but still (it is a common issue, and the core deals with
+  it)
+
+- hv_pci_vec_irq_domain_free() calls irq_domain_reset_irq_data() on a
+  single pointer. Why? Either you wipe them all, or you don't.
+
+>  
+> > 
+> > > +}
+> > > +
+> > > +/*
+> > > + * Pick the first online cpu as the irq affinity that can be temporarily used
+> > > + * for composing MSI from the hypervisor. GIC will eventually set the right
+> > > + * affinity for the irq and the 'unmask' will retarget the interrupt to that
+> > > + * cpu.
+> > > + */
+> > > +static int hv_pci_vec_irq_domain_activate(struct irq_domain *domain,
+> > > +					  struct irq_data *irqd, bool reserve)
+> > > +{
+> > > +	int cpu = cpumask_first(cpu_online_mask);
+> > > +
+> > > +	irq_data_update_effective_affinity(irqd, cpumask_of(cpu));
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static const struct irq_domain_ops hv_pci_domain_ops = {
+> > > +	.alloc	= hv_pci_vec_irq_domain_alloc,
+> > > +	.free	= hv_pci_vec_irq_domain_free,
+> > > +	.activate = hv_pci_vec_irq_domain_activate,
+> > > +};
+> > > +
+> > > +static int hv_pci_irqchip_init(void)
+> > > +{
+> > > +	static struct hv_pci_chip_data *chip_data;
+> > > +	struct fwnode_handle *fn = NULL;
+> > > +	int ret = -ENOMEM;
+> > > +
+> > > +	chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> > > +	if (!chip_data)
+> > > +		return ret;
+> > > +
+> > > +	mutex_init(&chip_data->map_lock);
+> > > +	fn = irq_domain_alloc_named_fwnode("Hyper-V ARM64 vPCI");
+> > 
+> > This will appear in debugfs. I'd rather you keep it short, sweet and
+> > without spaces. "hv_vpci_arm64" seems better to me.
+> 
+> Sure, will fix in next version.
+> 
+> > >
+> > > @@ -1619,6 +1820,7 @@ static struct irq_chip hv_msi_irq_chip = {
+> > >  	.irq_compose_msi_msg	= hv_compose_msi_msg,
+> > >  	.irq_set_affinity	= irq_chip_set_affinity_parent,
+> > >  	.irq_ack		= irq_chip_ack_parent,
+> > > +	.irq_eoi		= irq_chip_eoi_parent,
+> > >  	.irq_mask		= hv_irq_mask,
+> > >  	.irq_unmask		= hv_irq_unmask,
+> > 
+> > You probably want to avoid unconditionally setting callbacks that may
+> > have side effects on another architecture (ack on arm64, eoi on x86).
+> 
+> Thanks. Will fix in next version.
+> 
+> Is there some other feedback that would like to see get addressed in the
+> current patch? Trying to close down on all remaining feedback items here.
+
+Not at the moment, as I have paged this out a long time ago.
+Addressing feedback more often than once a month would definitely
+help. I usually complain about patches being sent too often, but
+you're squarely in the opposite camp.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

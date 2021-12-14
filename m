@@ -2,101 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B1347497E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08949474991
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236467AbhLNReC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:34:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49840 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233805AbhLNReB (ORCPT
+        id S236501AbhLNRfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:35:52 -0500
+Received: from www381.your-server.de ([78.46.137.84]:52118 "EHLO
+        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229755AbhLNRfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:34:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBE3A61639;
-        Tue, 14 Dec 2021 17:34:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90AF7C34606;
-        Tue, 14 Dec 2021 17:33:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639503240;
-        bh=a14UGs1HcGFj82qfqT6BrA/2RMCLBg5mQx9AVEK4VpU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZlNfM5dbjGpaDzMXebg0TsJnfkA5Czsy+vca92OsqdJw0F5cjEpoJo01rPHq/3rrJ
-         fuW0NaLq+vFPwBn5y4KGLJi7jFsGXAmEkMaF9RuphWRETj7RucU3CpLTqB4osHXdNL
-         UN20De1UpptLO/bPtLRtxHSyQ83o9UJY3Qwi2Is8=
-Date:   Tue, 14 Dec 2021 18:33:57 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 41/43] security: kmsan: fix interoperability with
- auto-initialization
-Message-ID: <YbjVhSbd+wkvihfm@kroah.com>
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-42-glider@google.com>
- <YbjIbpFRqMac/X8s@kroah.com>
- <CAG_fn=XSMbgyJZnivZCh30M3JYQsJZZ0yL+5z074B_WrEBkRDQ@mail.gmail.com>
+        Tue, 14 Dec 2021 12:35:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=fx0brtaLzlC9ryVIdnbGoXxwD8F3GVdqkl4gyT5mEoA=; b=agE5j1CI6tPVJI2Jm97qtKVwdi
+        5tJ/G4sDozsZyvr0TP0G33RWYFYVbGUMtf5/uvGpdXYA0b+PtVYCDohBpDlQEmob9iePaa3k82cVc
+        vNR8NpD50B/2OBIl6GxtjekdymZcdnBTbaa2NQ/QhRYx+eSxndjQtfSANkQ60LDaXKXeA9JRGKMv5
+        0XN7eNsLeSBm8WYhx/Sw575X704q/n3Tj91/a+wGksRWgDw5wEgd6kZ03XSmRreZoDrixibIVTdBI
+        64UBJNVv5StKYFHggJLMzovKPsJodcpd8bwBwKfmnnrewXQ8YAbpTD/PMX7q7l/xT9lzzePMkff7G
+        tH2LnDnQ==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <lars@metafoo.de>)
+        id 1mxBiM-0002p5-Lt; Tue, 14 Dec 2021 18:35:46 +0100
+Received: from [2001:a61:2bc8:8501:9e5c:8eff:fe01:8578]
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1mxBiM-000Jnk-Aw; Tue, 14 Dec 2021 18:35:46 +0100
+Subject: Re: [PATCH] ASoC: wcd934x: Fix a incorrect use of kstrndup
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Banajit Goswami <bgoswami@codeaurora.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+References: <20211214152530.23767-1-linmq006@gmail.com>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+Message-ID: <e7f2ce8d-b9e0-7f36-bff0-d799767c659d@metafoo.de>
+Date:   Tue, 14 Dec 2021 18:35:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=XSMbgyJZnivZCh30M3JYQsJZZ0yL+5z074B_WrEBkRDQ@mail.gmail.com>
+In-Reply-To: <20211214152530.23767-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.3/26387/Tue Dec 14 10:33:30 2021)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 06:00:41PM +0100, Alexander Potapenko wrote:
-> On Tue, Dec 14, 2021 at 5:38 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > > @@ -124,6 +125,7 @@ choice
-> > >       config INIT_STACK_ALL_ZERO
-> > >               bool "zero-init everything (strongest and safest)"
-> > >               depends on CC_HAS_AUTO_VAR_INIT_ZERO
-> > > +             depends on !KMSAN
-> >
-> > So this means KMSAN is a developer debugging feature only and should
-> > never be turned on on a real device/server that has users?
-> 
-> 100% correct. KMSAN is way slower than KASAN, it also eats 2/3 of your
-> memory to store the metadata.
-> I thought it was sort of self-evident, but I can surely mention this
-> explicitly in the cover letter.
+On 12/14/21 4:25 PM, Miaoqian Lin wrote:
+> In wcd934x_codec_enable_dec(), widget_name is allocated by kstrndup().
+> However, according to doc: "Note: Use kmemdup_nul() instead if the size
+> is known exactly." So we should use kmemdup_nul() here instead of
+> kstrndup(). It's similar to CVE-2019-12454.
+>
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>   sound/soc/codecs/wcd934x.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
+> index e63c6b723d76..c6677cfbce59 100644
+> --- a/sound/soc/codecs/wcd934x.c
+> +++ b/sound/soc/codecs/wcd934x.c
+> @@ -5005,7 +5005,7 @@ static int wcd934x_codec_enable_dec(struct snd_soc_dapm_widget *w,
+>   	char *dec;
+>   	u8 hpf_coff_freq;
+>   
+> -	widget_name = kstrndup(w->name, 15, GFP_KERNEL);
+> +	widget_name = kmemdup_nul(w->name, 15, GFP_KERNEL);
+I'm wondering if it isn't better to re-structure the code to not 
+allocate any memory.
 
-Please mention it here and in the Kconfig option for it as well (don't
-know if it was there or not.)
+something like
 
-Also you might want to print out very large "DO NOT USE THIS ON A REAL
-MACHINE" to the kernel log when booting, like other kernel options are
-starting to do that should not be enabled.
+ret = sscan(w->name, "ADC MUX%d", &decimator);
+if (ret != 1)
+     ...
 
-thanks,
 
-greg k-h

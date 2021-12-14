@@ -2,67 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AFA947481B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2712474818
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbhLNQbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:31:35 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:36178 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbhLNQbe (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:31:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
-        :Date:Message-ID:References:Cc:To:From:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=Z6zW5Qd6tfw+PKFZVRrNvKJyywIeqtC44M8EtfxF+44=; b=lKYiGTufYfVnndlG66V4Bdub3C
-        Zjo421LWIhcLg2+9DxHPcvEXuMBcA5CLm67TCPcbyEmgf80iMIEmbz87Y1oleiXY2SbRk26T4VTAJ
-        zyN+SYFYkDH1PlP/Bb5skD6nIfmIutnuuKkovgK0yiseshLTsxP5P0eBZL0PQyjLHIxi8WqiGpa2h
-        HtFlGnz5Ou/f0gahFeDL5yBqhgdKwNreGF3frz89+ZyV3HTkq0a4gXbP6Jan+1x4URJNLG64rPMyu
-        T5pv0cy92da6lb7F1B0ejKmoC/Q9zDy1uUJ+ZUaOKJdsk9KKwggTxL0t4J1QIlcCUtDRHAI7TNND7
-        dmEDTC1Q==;
-Received: from [177.103.99.151] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1mxAi0-0009ZL-D4; Tue, 14 Dec 2021 17:31:20 +0100
-Subject: Re: [PATCH 0/3] Some improvements on panic_print
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     linux-doc@vger.kernel.org, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, feng.tang@intel.com,
-        siglesias@igalia.com, kernel@gpiccoli.net
-References: <20211109202848.610874-1-gpiccoli@igalia.com>
- <4b710b02-b3a7-15ef-d1b9-c636352f41d1@igalia.com>
-Message-ID: <eb19ac0c-b2b2-337a-6b7d-a3bff57d016d@igalia.com>
-Date:   Tue, 14 Dec 2021 13:31:04 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S233798AbhLNQb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:31:29 -0500
+Received: from verein.lst.de ([213.95.11.211]:53114 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232043AbhLNQb2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 11:31:28 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 8628268AFE; Tue, 14 Dec 2021 17:31:24 +0100 (CET)
+Date:   Tue, 14 Dec 2021 17:31:24 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hch@lst.de, cl@linux.com,
+        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
+        stable@vger.kernel.org, Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no
+ managed pages in DMA zone
+Message-ID: <20211214163124.GA21762@lst.de>
+References: <20211213122712.23805-1-bhe@redhat.com> <20211213122712.23805-6-bhe@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <4b710b02-b3a7-15ef-d1b9-c636352f41d1@igalia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213122712.23805-6-bhe@redhat.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/11/2021 18:34, Guilherme G. Piccoli wrote:
-> Hi everybody, is there any feedback for this series?
-> Thanks in advance,
-> 
-> 
-> Guilherme
+On Mon, Dec 13, 2021 at 08:27:12PM +0800, Baoquan He wrote:
+> Dma-kmalloc will be created as long as CONFIG_ZONE_DMA is enabled.
+> However, it will fail if DMA zone has no managed pages. The failure
+> can be seen in kdump kernel of x86_64 as below:
 
-Hey folks, this is a(nother) bi-weekly ping - if anybody has any
-suggestions on how could we move forward with this series, that'd
-greatly appreciated!
+Please just switch the sr allocation to use GFP_KERNEL without GFP_DMA.
+The block layer will do the proper bounce buffering underneath for the
+very unlikely case that we're actually using the single HBA driver that
+has ISA DMA addressing limitations.
 
-Thanks in advance,
-
-
-Guilherme
-
+Same for the ch drive, btw.

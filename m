@@ -2,143 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0D8473CB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 06:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 144D3473CB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 06:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbhLNFqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 00:46:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
+        id S230026AbhLNFqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 00:46:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbhLNFq3 (ORCPT
+        with ESMTP id S230008AbhLNFqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 00:46:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A62C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:46:29 -0800 (PST)
+        Tue, 14 Dec 2021 00:46:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3625CC06173F;
+        Mon, 13 Dec 2021 21:46:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D319360E15
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:46:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648A9C34604;
-        Tue, 14 Dec 2021 05:46:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03D45B817EE;
+        Tue, 14 Dec 2021 05:46:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 763A5C34604;
+        Tue, 14 Dec 2021 05:46:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639460788;
-        bh=4Qo7hbcTtNKS5mtjhODUyZ/MjrS+eFwRhNLs731fQZA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZC1kHovldrO/ng2L/myr2+ZW9hicUC3ivk0+nYtrn6HkYRp8WQ1AHu0LkVPWTSYP7
-         8yuKDP2URNuJRkYmHc56y6XOjsEXQwT450Dp9+o2Ef8a1purL4YFd5CYA27fI/hZjz
-         v5Hot8X9oGTYRacS/Gp1lvhB3QA2axweLJO9m0m3KyRRn+5Q8aPvWht+t6d+yE259O
-         tKTDC8PupPgUEurHXaGFZECDx/LcB1H485/pNg9ygHBEZDRSWg5FupwMmU9JwhMPMc
-         fSj7RCv29GuhbcEVPwtO5cgum7bnMQmBQlB95MuOIoOCNLyig24dQ8RgkqVWyCxgJu
-         asAoBVd7E+87w==
-Date:   Tue, 14 Dec 2021 13:46:23 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Biwen Li <biwen.li@nxp.com>
-Subject: Re: [PATCH v2 2/8] arm64: dts: ls1028a: add ftm_alarm1 node to be
- used as wakeup source
-Message-ID: <20211214054619.GI10916@dragon>
-References: <20211204001718.8511-1-leoyang.li@nxp.com>
- <20211204001718.8511-3-leoyang.li@nxp.com>
+        s=k20201202; t=1639460807;
+        bh=Htj5hV27GPn/DWWnsutC64IYzEAA0cScppOui3dH0sU=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=rIQZYp0g/DJXkV+e/qskkf4lsny21T/0vD3DQ55hZsxPlL1VNpj2/OCxyvBvRymW/
+         HjOpDGiCPkTwcCUMbl4NN47meFIQ2E7v64x7M1HsswzuL90Do7sCDKwPF9Dkrv4s65
+         D0h69am7LD28GCQCFRIt0D/x3/nIWp/Sq3AgogKPU7LCGePVV5EaXGzO7asr3HI5xE
+         d8QQ4Sr2DQXE/DIcU8iX2kLhmUV0gPDJUglzyCcXGTQ2z+EjsV6N5eHm0VniHEKCW6
+         bHbngAOJA6PqWPx1JRrpOSv1ONUbqyykEt+/WiGBdMNjzkJzNvuh2gh8mSaQjnQgv+
+         ySVTJc6WV6ajQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     tony0620emma@gmail.com, pkshih@realtek.com, jian-hong@endlessm.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Po-Hao Huang <phhuang@realtek.com>,
+        Brian Norris <briannorris@chromium.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rtw88: Disable PCIe ASPM while doing NAPI poll on 8821CE
+References: <20211214053302.242222-1-kai.heng.feng@canonical.com>
+Date:   Tue, 14 Dec 2021 07:46:41 +0200
+In-Reply-To: <20211214053302.242222-1-kai.heng.feng@canonical.com> (Kai-Heng
+        Feng's message of "Tue, 14 Dec 2021 13:33:02 +0800")
+Message-ID: <874k7bkabi.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211204001718.8511-3-leoyang.li@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 06:17:12PM -0600, Li Yang wrote:
-> From: Biwen Li <biwen.li@nxp.com>
-> 
-> Add flextimer2 based ftm_alarm1 node and enable it to be the default rtc
-> wakeup source for rdb and qds boards instead of the original flextimer1
-> based ftm_alarm0.  The ftm_alarm0 node hence is disabled by default.
+Kai-Heng Feng <kai.heng.feng@canonical.com> writes:
 
-What's wrong with using ftm_alarm0?
+> Many Intel based platforms face system random freeze after commit
+> 9e2fd29864c5 ("rtw88: add napi support").
+>
+> The commit itself shouldn't be the culprit. My guess is that the 8821CE
+> only leaves ASPM L1 for a short period when IRQ is raised. Since IRQ is
+> masked during NAPI polling, the PCIe link stays at L1 and makes RX DMA
+> extremely slow. Eventually the RX ring becomes messed up:
+> [ 1133.194697] rtw_8821ce 0000:02:00.0: pci bus timeout, check dma status
+>
+> Since the 8821CE hardware may fail to leave ASPM L1, manually do it in
+> the driver to resolve the issue.
+>
+> Fixes: 9e2fd29864c5 ("rtw88: add napi support")
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215131
+> BugLink: https://bugs.launchpad.net/bugs/1927808
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-Shawn
+[...]
 
-> 
-> Signed-off-by: Biwen Li <biwen.li@nxp.com>
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts | 6 +++++-
->  arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts | 6 +++++-
->  arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi    | 9 +++++++++
->  3 files changed, 19 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-> index 6e2a1da662fb..00d5b81bdef3 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-> @@ -25,7 +25,7 @@ aliases {
->  		serial1 = &duart1;
->  		mmc0 = &esdhc;
->  		mmc1 = &esdhc1;
-> -		rtc1 = &ftm_alarm0;
-> +		rtc1 = &ftm_alarm1;
->  	};
->  
->  	chosen {
-> @@ -234,6 +234,10 @@ mt35xu02g0: flash@0 {
->  	};
->  };
->  
-> +&ftm_alarm1 {
-> +	status = "okay";
-> +};
-> +
->  &i2c0 {
->  	status = "okay";
->  
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> index 7719f44bcaed..41900d351a92 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
-> @@ -21,7 +21,7 @@ aliases {
->  		serial1 = &duart1;
->  		mmc0 = &esdhc;
->  		mmc1 = &esdhc1;
-> -		rtc1 = &ftm_alarm0;
-> +		rtc1 = &ftm_alarm1;
->  	};
->  
->  	chosen {
-> @@ -132,6 +132,10 @@ mt35xu02g0: flash@0 {
->  	};
->  };
->  
-> +&ftm_alarm1 {
-> +	status = "okay";
-> +};
-> +
->  &i2c0 {
->  	status = "okay";
->  
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> index 9efcaf68578c..ef9d17df2afa 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> @@ -1198,6 +1198,15 @@ ftm_alarm0: timer@2800000 {
->  			reg = <0x0 0x2800000 0x0 0x10000>;
->  			fsl,rcpm-wakeup = <&rcpm 0x0 0x0 0x0 0x0 0x4000 0x0 0x0>;
->  			interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
-> +			status = "disabled";
-> +		};
-> +
-> +		ftm_alarm1: timer@2810000 {
-> +			compatible = "fsl,ls1028a-ftm-alarm";
-> +			reg = <0x0 0x2810000 0x0 0x10000>;
-> +			fsl,rcpm-wakeup = <&rcpm 0x0 0x0 0x0 0x0 0x4000 0x0 0x0>;
-> +			interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
-> +			status = "disabled";
->  		};
->  	};
->  
-> -- 
-> 2.25.1
-> 
+>  static bool rtw_disable_msi;
+>  static bool rtw_pci_disable_aspm;
+> +static int rtw_rx_aspm = -1;
+>  module_param_named(disable_msi, rtw_disable_msi, bool, 0644);
+>  module_param_named(disable_aspm, rtw_pci_disable_aspm, bool, 0644);
+> +module_param_named(rx_aspm, rtw_rx_aspm, int, 0444);
+>  MODULE_PARM_DESC(disable_msi, "Set Y to disable MSI interrupt support");
+>  MODULE_PARM_DESC(disable_aspm, "Set Y to disable PCI ASPM support");
+> +MODULE_PARM_DESC(rx_aspm, "Use PCIe ASPM for RX (0=disable, 1=enable, -1=default)")
+
+We already have disable_aspm parameter, why do we need yet another one?
+There's a high bar for new module parameters.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

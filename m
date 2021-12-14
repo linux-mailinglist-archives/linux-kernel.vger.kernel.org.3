@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C323B473A45
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8C9473A48
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244709AbhLNBin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 20:38:43 -0500
+        id S244716AbhLNBiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 20:38:46 -0500
 Received: from mail-eopbgr60083.outbound.protection.outlook.com ([40.107.6.83]:44962
         "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237640AbhLNBik (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 20:38:40 -0500
+        id S244682AbhLNBil (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 20:38:41 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lHwxYSYCyO5ogPBB/yBfNlIlWGmry8Us9qjA4FP9stZmD8RP6XNpMNgujYP7CpYyV+tfMGMB7UbYIqyCXGyehYmwt80rGmrxuK5NxnbqF8uV5pPstNNXQuzsCvrqtt+HGKGkuCo4CIhMnWUz9dCpjMNU5TFiuL5otuvmwhIB1xUF0Rye6KV76eq9sr1F0QE384naJtB2bI/ZL1sfnX06PeTIzOPKXAy8v99pDaegx2KO1bFT26ZflnOYSy2xKkJZIzVtlJC3Esb7qXQWtgTKmMpQOp/YS+YpFQNX7DL4K1HJjKd+8HdQX/vDeqKk2e2P6mboma+SH28twE99At44ng==
+ b=D8QVoW2MKNlDa0PFQP3JLuYZfDioLwLTYbpXl0Dw/1tc6p3EYzn+Q6pv13Z/fbG/UmP+Ras4joBiewrneaA/KhJBSA8ikjNotIv2R2+Z66Yv1QrFgCLZ/LEbq9X89QRkM3ncAaYKTyLRkVRZgl6rx+P8sity5ideYtJ0Ymru97+tmdkb11lAj6TQtMk4h+QA2CEkt0L24Z8W24C5yuEk3tDrwDAlHG7R0JuwgVgh478omlmUNkAPpXswsYMczXH+lyWN+Ezr/HaqsOp0RWjnoMM014IE/NtHVTYXOUVvzwNrrSih1QUMGaDgJgXtynFiHd1G+RZhmNnPTCreFPNSaQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ngN5hoV5ELh9icSGKLXPvOhloA17bXGHC+gEQYm/sp4=;
- b=Kbv1tpBRO8AVgFmzvs4zmiGLGZW1WFrdJggCHUUsTQpwSjo/yjE5uj86Y8ETcAVMhyJY1d3OOp3PiiFZFgXWe3DJwhTaYUE8PhcGSJYZ70eAOCPoDZKqEgV7QwZ+O6k8qEUlDfSDVPQvsnk45SPrOl5yPaoJSUKXv6IIcIP23dO0v0Anr3BXKTbjoBBh7v2thXMY/uGs0k5520jUbhCSC2MEW+K3SuXr1PuzZvkI4kg1npT5ulcc+TmVUPqHH9BSng3SxHzGmnlmWTONQauqp1Y6yMvutMLdWuHfyaQplXXaaMTRiInH6P+nv6Y2DMynvNBTBTP0D7iMC/Cx5v9W+w==
+ bh=IH1M3zpTLOpFKNEbCBaMAJAGKmw9HWdaXt+TA6UNt9I=;
+ b=XNYIPYA9CdUklivd49QlWKrEnV2xiphYw6MWA9X0kPArcHJIpPVkgJGmErHRxzZK1bwCf6etNCq5KhfYYvr6CCXWl6S7WunLyktQBC82tkjYNhSk5fZ+VOVIrG2p6N87fidO9CfivHc/8LWC5fpRY1Sj2BJFKs79QT0oBdDorho0cSSrNnBDbTW5ayGRUzyBZxyGG0+PylXk/7mw96wD4yGPlyTwTNvF06pIji4P5iX9R4RDPoxqPVPuGjIJFpPa7Sw4q8kxtK8429th4i43EMF0tftjtCnUSXKELeJ13jmALOl55SyiWb5EI0PHtL4QJ0h/DzME9qJKcWmhi8MIog==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ngN5hoV5ELh9icSGKLXPvOhloA17bXGHC+gEQYm/sp4=;
- b=MYHqnUtjyXQRDuI46NbsMOrcOyGt5ieYcZimXLQ0+QxxtPkM6xvD5rbTUmUiGyWUBd9RuG1u/0I+M820/mvLwmo46rWrZ8y8LcTFLJe823GRx6KfXdam795HHYlZmxbpoMdKRmdUby+W2BBodg6j/AkVa+vdZOqDaaHTy2V+ibU=
+ bh=IH1M3zpTLOpFKNEbCBaMAJAGKmw9HWdaXt+TA6UNt9I=;
+ b=BXrlZtyd0lTKlOVylqNLr8LrH+CK109QrN7WLpc5ZvZ0gmYK2UwInUQO7bSrl/jqzo9XXKSPJyQI1eC1GRsKuF3UZEfAkf+ZI2S5NEoyAF4hJlsrowsntHg1qGolx301FjLAY0YGQ3md21wD2EyRz4ZwDmZ71HJomQPPBoa2TjI=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
  by VI1PR04MB6944.eurprd04.prod.outlook.com (2603:10a6:803:133::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Tue, 14 Dec
- 2021 01:38:37 +0000
+ 2021 01:38:38 +0000
 Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
  ([fe80::c84:1f0b:cc79:9226]) by VI1PR04MB5136.eurprd04.prod.outlook.com
  ([fe80::c84:1f0b:cc79:9226%3]) with mapi id 15.20.4755.028; Tue, 14 Dec 2021
- 01:38:36 +0000
+ 01:38:38 +0000
 From:   Vladimir Oltean <vladimir.oltean@nxp.com>
 To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
@@ -46,9 +46,9 @@ Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Zhiqiang Hou <Zhiqiang.Hou@nxp.com>,
         Kurt Kanzenbach <kurt@linutronix.de>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [RFC PATCH devicetree 02/10] Revert "arm64: dts: freescale: Fix 'interrupt-map' parent address cells"
-Date:   Tue, 14 Dec 2021 03:37:52 +0200
-Message-Id: <20211214013800.2703568-3-vladimir.oltean@nxp.com>
+Subject: [RFC PATCH devicetree 03/10] dt-bindings: ls-extirq: replace "interrupt-map" documentation with "fsl,extirq-map"
+Date:   Tue, 14 Dec 2021 03:37:53 +0200
+Message-Id: <20211214013800.2703568-4-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211214013800.2703568-1-vladimir.oltean@nxp.com>
 References: <20211214013800.2703568-1-vladimir.oltean@nxp.com>
@@ -58,191 +58,110 @@ X-ClientProxiedBy: AS8PR04CA0168.eurprd04.prod.outlook.com
  (2603:10a6:20b:331::23) To VI1PR04MB5136.eurprd04.prod.outlook.com
  (2603:10a6:803:55::19)
 MIME-Version: 1.0
-Received: from localhost.localdomain (188.25.173.50) by AS8PR04CA0168.eurprd04.prod.outlook.com (2603:10a6:20b:331::23) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Tue, 14 Dec 2021 01:38:35 +0000
+Received: from localhost.localdomain (188.25.173.50) by AS8PR04CA0168.eurprd04.prod.outlook.com (2603:10a6:20b:331::23) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Tue, 14 Dec 2021 01:38:37 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f29015bc-a122-4965-880a-08d9bea272af
+X-MS-Office365-Filtering-Correlation-Id: 003cbb92-386e-4486-f2fd-08d9bea2735f
 X-MS-TrafficTypeDiagnostic: VI1PR04MB6944:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR04MB6944DDF623306EF2E086D35AE0759@VI1PR04MB6944.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1303;
+X-Microsoft-Antispam-PRVS: <VI1PR04MB6944D5A230E5878C80089664E0759@VI1PR04MB6944.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OSwGaSJGZuVX63MXFkGVfPLEukCo+jN/2Lu4AHAnG9gFYNu50kSu2l9MDy7y66wZpzsWyemK03rVSlfHfNjuY9An7donwxlqk4KSK8Xb86RNssBnCquXcyctTtKS1AtLTd8e8XOQVa4jHA3iyrit5fX/nTl3caMERXFLX3Buim7WkUUogSFE3jA9HMuogLLkMgc9tGZbgKVx71iANXE49miLJmS51agHUX9k5zT36DzdpF1uOKsKKDl2IEGh5OlWcazR82zSLEkUHshwwlJ+C5jimKGWAraQe9n53Oe/eu8zsb91zmYFQgmc5QdkycVdyLimqlcKNKqODrHyIk832uHTO1gHPJgjiDSG9YQ9jk8aqxx5GKqa7Wbo8qN7LmMemtzU+mob9KY0f99WrY098B8oyMx6EXHB2t1lKGBN6Vh9XM8VWycWRRnLvzSuJESjCt6aE2ZzadoIkFKYv6TlVOZrzyvUjs/UovZK+ZNFn9yBjEb9gsI6OHikIZgwhML7UiC7IjVUxxjWuAyU5LgRsxmfUWcrey6t42W0FMiGrCDnC7WYJGU6DENWa033zQPoP52WEXmYh0zLrgv82KD7mM7cmw4+5S/GZSHYjR129QF5IzoGTGSW0VUknA50lFUKGEggNl1sYxSbdGUgMBBPE3qxg34bXUJhLwWBi5+vEgs2utsyreGzsjzzr+cQipERrUeoiiy/ofgvCyIRnRb0Iw==
+X-Microsoft-Antispam-Message-Info: O+65JZI/tS4bT3l5aHKgSHPT6kIBiS6UMQXR0Tbo/XG61KUEljrtpX6xgNZaPJieYD/IqEdNH06DoLdlfFR9l6F8arNaxW03GU1vVNsNcUn8cS/zUBil5x3yj9XDvB1v923GN7gUhK+PyhfMSiplq9UZe7PmoMCuLoWrK1jRb5+btQlDQUX2HC7l2h+0Q45b2s05WYCqJjZByFRcyNN4Ee9fUjER83+bMyFcCgf+1pP28NyDeCRXtLQ0YgacB7W8AgFpp2BQIh86WtenjB/1Vr8JSKO9I/0WDRHJPifJ+vjGvt3W+LIQW+6Zc9OxfeEodNSOKrwroupI6cWw4xeA3/Snkx9jZFmQ5WlOL3sHMtUs2X+EYworzRQg7vai+E6NmrUIiNkH+iwTh2IvTxi8ZyULg9DqbFaztoxfEfw75N1DbNZYPmiZo5+wt3gPcXW2K8VFNnPTJgc1MbCWNuAgq1uMd0RByiEp0fD6NmJP0RQPj8GZB/lcHLVXwcXhaJE63bVwjs/JivzaxVa1/IktGd41jugBhMfK4J8QQaS3TqoaaWhUKBE49FVP0aNppkE6lO5M9SySBlr5RyKF+QADKPsSddDYgFfRbXUaH513+aoNKAELxL1gVWysZ2luI4xx+LGdoqKaYAIrI15L0FGYMJDJs2JB9JTURx11XChw5rclzDKn1dXLGev79v+SongaJ7y//E/Y0RyDKVG4IBZokw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(1076003)(66556008)(956004)(54906003)(36756003)(8936002)(6506007)(2616005)(86362001)(508600001)(83380400001)(66476007)(66946007)(52116002)(316002)(6486002)(186003)(2906002)(4326008)(44832011)(38350700002)(6512007)(6666004)(38100700002)(26005)(5660300002)(8676002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6CBmPKef83YId35w+inbGnTcBidKY7l6ihn/Jgkre94qMbm7BwTsdGpfVR/i?=
- =?us-ascii?Q?SYFe6FGKHhTlVQ6EOYj9F22KD0p2AWvAgVGcP8EV/K2XZOdH4KVuHrDvl/aH?=
- =?us-ascii?Q?CWPRvihW5FOcfSJUTPnG0EybfARrnAejyU0mhbmlOiLcCjNsSK7Y3ZCw/XtI?=
- =?us-ascii?Q?zl0bhx6susJTGltqhckdZZtnRybn8e6zUZCfQ5GGkFaPD/+phGx78KXj3MXw?=
- =?us-ascii?Q?UONzzMzqu1sN8gOKVPKS3JGCLOX90KDwLyZM/3BTMWyGRDqm+jYFPTDCDiPF?=
- =?us-ascii?Q?mXXRHyTddakjH0D+GoSjpZQcDqLgZZh01tzsq2k0axlmode9Npxngl4P7GQX?=
- =?us-ascii?Q?GeOkDgCYY5yDwLvASd82GN9pSzXsnl9M6SUjjZMJQNqo9S/KxUtqjO0zQ2Br?=
- =?us-ascii?Q?+0vGUPjTK5fmyTb/v8b/FTkQkmBrv44kYY7sINZuVS1X7QcJkSH328NRr/ue?=
- =?us-ascii?Q?9YvXdsfcL74AosXsewtg6VZ+4EzwU6VtWrmEc62FnHNCT+Z23kgHHK84Kd/o?=
- =?us-ascii?Q?k9gIfi4qxlz9K95pvh+mQLBy+/u8uHtHO7selyc9EcgguBQacNyHo+/C0EEP?=
- =?us-ascii?Q?1DpomZNFxq7Ir8oqeVTCm0fmjQJMaBRlijo77KVEFAjerxvaqVbrDciQJVN4?=
- =?us-ascii?Q?xj5xNMHzqSNyRERVeos6L4b3Qkjo7C7/gd6YeR/ok64T5OEDkNYdIMei/w6J?=
- =?us-ascii?Q?2Ce+akj3Odc4QhHFXilCk0PPKQLg4JjoQUpTc8y0UFYyIHKFRL8yDvhNPY/u?=
- =?us-ascii?Q?7M+fu9QfXiLT9MbTbQK3R4l63ktyjt8zysgs8D7QVCQC/+NT+tcIMwfuk7xT?=
- =?us-ascii?Q?rhyKvHjn/U6P7GCllvDuKjRL73ibqUmzyKIj8mFMzyS1vmjF0nLftGUEgur9?=
- =?us-ascii?Q?agFtP+CY0NscY3lNBwP4rLFe9AV9FdYnlqTpiwO6IkcXZZ695CRbYqPyCDOX?=
- =?us-ascii?Q?YyMrGtaYiTob7TjlqSb/cOMXAmBUWCS0RiaBeFOWqAJsk0hyMENHOIDC3Scx?=
- =?us-ascii?Q?JdiDUwbkgHKTumAqmakpxclfKrnn1emyclg8vglMyteqpy3GmVtMknD+aR1G?=
- =?us-ascii?Q?tYqWMnblP6ym9T4MdsQUmCn5zqSp/FVkhbdROfivdit2VeCIAJj9fjAKmIOn?=
- =?us-ascii?Q?RcpTVB/AAR6pQ6zJGRgmdFvLfp/suDCRjLWfA0olhWERaRCPikoCcGris+KE?=
- =?us-ascii?Q?nOKFjaEPtUHvJb19bCfGeqv5THt677OivW/mF8fOgPn/Yji/55SgGxPPvuim?=
- =?us-ascii?Q?tR72KKVYIgNdKXs8oSOB4MUZFeDSVEWOidXqCI5O6x1tZQZSTxEY6vkQmiE9?=
- =?us-ascii?Q?X5KCGPrLcB1CFUjRoufTlBAl/Pkgg4WtVRKmYg7ja/J50oX4VsNAFoWDzLK1?=
- =?us-ascii?Q?SnZgX14zjb48s04iagaWWqBuRen0Wl8yIMlaVnY67lXZZxTwPTv4EbkOSEqL?=
- =?us-ascii?Q?O282WOA8V7acfnCMhU/nQb3LgEIfe4Z6kuvg/nnTxxsCLAEHBdhCey12FTjj?=
- =?us-ascii?Q?5jmHcwRa9RDORpBUFdfL3ELjCuwzhTEt8vSEEiyymMYLvXkuFsi4pZF6G+pk?=
- =?us-ascii?Q?039+LhyOedVqBfexEXq5NROyH74DpazS+eFOO8jkLBcLLvkgWpAWUIihXAtC?=
- =?us-ascii?Q?pQJK1rr0RoYxlTuvPhc3fC8=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1FnIGeNuh6/Myrd3e5VkJxY/dv2YvQ+veP6lU4xTPw1XYRXwi8xJf8rxA2+s?=
+ =?us-ascii?Q?M5jfvdqi1hi2hZIiBl8lSBMOGqKBkgStoK+LjEwSyVYfiiQ1NEYeNac6vVFk?=
+ =?us-ascii?Q?MRsGsS0MQsa3iopHOXg6RzqJD7X6QFP/JwsrWAALQBcXc/NjIJU9rFnWzVen?=
+ =?us-ascii?Q?/l/2Wduhp8HzY8LBLuCDRHEhjlGKC+TxGcC9+iT9L9nCf3H8DO2ePhjb7+Kk?=
+ =?us-ascii?Q?kzaWMa26Uzghrw1azLfUSYDVO8nwVrRj1axlEkj4mbT5DkS1pc9byzPmoT/+?=
+ =?us-ascii?Q?BPBc0WCqmb3VQHTz0TtRUt9PWxbCDjeQ+5OJb2H2QU0+KVbMVqov4SJ63SmY?=
+ =?us-ascii?Q?k8u8eKkGVWITbVndPu7iU9Q2llk4DT+NipBGFIybIU/Typ6/dgq1cqU5mqFV?=
+ =?us-ascii?Q?nlPQ1OwOVKKEOqP+2y1zAWz4HQet3fHU5duyC+fwY8iPPHiY3g87W0jzMNpd?=
+ =?us-ascii?Q?SB7B+MXqFeU3OJ/jmeAGZhUjx8yRk+0VTzj/0g5JxYopWZ50GI6hiBWf5bBi?=
+ =?us-ascii?Q?VCwIs9PdEbVawVnewJXSa7SG47F00vlngog8AKeslPZsd7rWIwkmQmx6Unng?=
+ =?us-ascii?Q?fxgETbaLrsugWIcz/7hS2BxvsnRIZKNYm5w0tXnsfIoWcVldXEfQxMjdbLJt?=
+ =?us-ascii?Q?alKZB6/QaCihzNijHeH1D/9gHYUhbr0/d/zyXLUaueUch/duF68Fx8K8gYPn?=
+ =?us-ascii?Q?wTy2P47CS3j/k351ilpJ6nIGr/PYuFaN1jKuJRuEi7/6WRPFBEIvUs5pKROb?=
+ =?us-ascii?Q?QK617p+roEfRgPDf977L8G5YhqITo1+dULbwZOixvVLLjm/dPd4XtO2jYPAQ?=
+ =?us-ascii?Q?H5jhm34t936n496BC2gnVa8sEXi/+CSHoOiyb5Q57esm15pgUa4Vltmgklv/?=
+ =?us-ascii?Q?ZmBC5l0EqJ+XO6fKOqwMN9x6D5ZDqp3sRH85l/JHGtERZsSRuQ4QYLe8TtP8?=
+ =?us-ascii?Q?WU0as7hlAAKzO0c1dxY5GONs6CddiBbmCtfxrSROYQMqB5vD1Tx2mbXOlIjT?=
+ =?us-ascii?Q?yCbNvHufQ8/V4iqhksMTKpl4vavwqhz0a0d9vjJ6YRp/ISjM1tviLgT2hmtm?=
+ =?us-ascii?Q?lON/BMS3WOX+xi8m51NVdRiJbNfTNR7L6SSV+irVNbquX7dYnia9yyqB4jtR?=
+ =?us-ascii?Q?nVLPVeOnn4rqhr1D+fewCHL+cP58jlCNvMwgTr/hFx/AzEmZJZaDyDIdXxhv?=
+ =?us-ascii?Q?ev+DE2XMG6K4eLLmfXpCJu5tLQFMmle/j47PYeWdSB89RchtpZ5yLSsWprC5?=
+ =?us-ascii?Q?eAR7zCBEAfMugW01ZvVyLxwMBT/9Ad/GePwwUx/E8iTNeDhXL9tCOZJxpSIg?=
+ =?us-ascii?Q?p/AfvQdWNPEJomrIdaI8ATg5d2/M0wnDLzewlpGbZZmvebtvwZCvCmFGmAmB?=
+ =?us-ascii?Q?tMamWEQg/lasoi/+gIMQt6Y8+MV4QJbfdKvTskUjQJ0QLyMKqy8y6I68x7ix?=
+ =?us-ascii?Q?0T+Unj1SyS31OUXn1dUkmfFlIaIg4a7qo4gdfkidtQXuGsybqhBlHwYE6ONV?=
+ =?us-ascii?Q?SwgdRCaH/maXdmo4XaOnTQRMDwZO5stwQ7mSMC+5vbpbK9gKs2WAwYcpo5Z4?=
+ =?us-ascii?Q?FweZ2cV2zrF1NjCrRF2EC4sI/aSRiR/7oi4Jb63+J15qWuH80xgudMNRQKij?=
+ =?us-ascii?Q?nE1lZ3Q2o+M998dVs254Kuo=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f29015bc-a122-4965-880a-08d9bea272af
+X-MS-Exchange-CrossTenant-Network-Message-Id: 003cbb92-386e-4486-f2fd-08d9bea2735f
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 01:38:36.8815
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 01:38:38.1001
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WiRk/tBn8jhfEJmEGZdpX/k3nXHCPvFgIe3/3HVhFIQy4TqLAXhHmOxjqE2kGA25iDFwGuqSmumuDKohgBxMXg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0yajUmPwI9+JV+WOHUNP40nh3ys9nxZGMY//cA2ckq9JWhMj0HVnOPUbOHd/vFO7EwVc9b4PSxrER5zU1BXRgA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6944
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 869f0ec048dc8fd88c0b2003373bd985795179fb. That
-updated the expected device tree binding format for the ls-extirq
-driver, without also updating the parsing code to the new format.
+This change does 3 things at once:
+- documents the recently added "fsl,extirq-map" property, which replaces
+  "interrupt-map"
+- clarifies the format of the property whose name is changing
+- hides the "interrupt-map" property, that the driver still supports for
+  backwards compatibility reasons, although not for long.
 
-While the fsl-extirq driver may have a non-standard format (one that
-doesn't take into consideration the #address-cells of the interrupt
-parent), it also has no business in making use of the "interrupt-map"
-property in the first place. So the argument for the blamed patch was
-kind of moot in the first place.
-
-This change restores LS1088A, LS2088A/LS2085A and LX2160A to their
-previous bindings. A follow-up change will also rename "interrupt-map"
-to "fsl,extirq-map" to prevent any further automatic conversions from
-causing breakage. Keeping the revert as a separate change allows those
-renaming changes to look the same on kernels that include the reverted
-patch as on kernels that don't.
-
-Fixes: 869f0ec048dc ("arm64: dts: freescale: Fix 'interrupt-map' parent address cells")
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- .../arm64/boot/dts/freescale/fsl-ls1088a.dtsi | 24 +++++++++----------
- .../arm64/boot/dts/freescale/fsl-ls208xa.dtsi | 24 +++++++++----------
- .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 24 +++++++++----------
- 3 files changed, 36 insertions(+), 36 deletions(-)
+ .../bindings/interrupt-controller/fsl,ls-extirq.txt | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-index f891ef6a3754..605072317243 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-@@ -241,18 +241,18 @@ extirq: interrupt-controller@14 {
- 				interrupt-controller;
- 				reg = <0x14 4>;
- 				interrupt-map =
--					<0 0 &gic 0 0 GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
--					<1 0 &gic 0 0 GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
--					<2 0 &gic 0 0 GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
--					<3 0 &gic 0 0 GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
--					<4 0 &gic 0 0 GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
--					<5 0 &gic 0 0 GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
--					<6 0 &gic 0 0 GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
--					<7 0 &gic 0 0 GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
--					<8 0 &gic 0 0 GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
--					<9 0 &gic 0 0 GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
--					<10 0 &gic 0 0 GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
--					<11 0 &gic 0 0 GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-+					<0 0 &gic GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-+					<1 0 &gic GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-+					<2 0 &gic GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-+					<3 0 &gic GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-+					<4 0 &gic GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-+					<5 0 &gic GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-+					<6 0 &gic GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-+					<7 0 &gic GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-+					<8 0 &gic GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-+					<9 0 &gic GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-+					<10 0 &gic GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-+					<11 0 &gic GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
- 				interrupt-map-mask = <0xffffffff 0x0>;
- 			};
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt b/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
+index 4d47df1a5c91..cddf1aa032be 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
++++ b/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
+@@ -18,9 +18,13 @@ Required properties:
+ - reg: Specifies the Interrupt Polarity Control Register (INTPCR) in
+   the SCFG or the External Interrupt Control Register (IRQCR) in
+   the ISC.
+-- interrupt-map: Specifies the mapping from external interrupts to GIC
+-  interrupts.
+-- interrupt-map-mask: Must be <0xffffffff 0>.
++- fsl,extirq-map: An array of elements through which the mapping between
++  external interrupts and GIC interrupts is specified. The first member of each
++  array element is the index of the extirq line. The second member must be
++  zero. The third member must be a phandle to the interrupt parent (the GIC).
++  The remaining number of members in an array element depends on the
++  #interrupt-cells property of the interrupt parent, and are used to specify
++  the parent interrupt.
+ 
+ Example:
+ 	scfg: scfg@1570000 {
+@@ -37,14 +41,13 @@ Example:
+ 			#address-cells = <0>;
+ 			interrupt-controller;
+ 			reg = <0x1ac 4>;
+-			interrupt-map =
++			fsl,extirq-map =
+ 				<0 0 &gic GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
+ 				<1 0 &gic GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>,
+ 				<2 0 &gic GIC_SPI 165 IRQ_TYPE_LEVEL_HIGH>,
+ 				<3 0 &gic GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
+ 				<4 0 &gic GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
+ 				<5 0 &gic GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
+-			interrupt-map-mask = <0xffffffff 0x0>;
  		};
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-index 3cb9c21d2775..1282b61da8a5 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-@@ -293,18 +293,18 @@ extirq: interrupt-controller@14 {
- 				interrupt-controller;
- 				reg = <0x14 4>;
- 				interrupt-map =
--					<0 0 &gic 0 0 GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
--					<1 0 &gic 0 0 GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
--					<2 0 &gic 0 0 GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
--					<3 0 &gic 0 0 GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
--					<4 0 &gic 0 0 GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
--					<5 0 &gic 0 0 GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
--					<6 0 &gic 0 0 GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
--					<7 0 &gic 0 0 GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
--					<8 0 &gic 0 0 GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
--					<9 0 &gic 0 0 GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
--					<10 0 &gic 0 0 GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
--					<11 0 &gic 0 0 GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-+					<0 0 &gic GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-+					<1 0 &gic GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-+					<2 0 &gic GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-+					<3 0 &gic GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-+					<4 0 &gic GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-+					<5 0 &gic GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-+					<6 0 &gic GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-+					<7 0 &gic GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-+					<8 0 &gic GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-+					<9 0 &gic GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-+					<10 0 &gic GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-+					<11 0 &gic GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
- 				interrupt-map-mask = <0xffffffff 0x0>;
- 			};
- 		};
-diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-index dc8661ebd1f6..c4b1a59ba424 100644
---- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-@@ -680,18 +680,18 @@ extirq: interrupt-controller@14 {
- 				interrupt-controller;
- 				reg = <0x14 4>;
- 				interrupt-map =
--					<0 0 &gic 0 0 GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
--					<1 0 &gic 0 0 GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
--					<2 0 &gic 0 0 GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
--					<3 0 &gic 0 0 GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
--					<4 0 &gic 0 0 GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
--					<5 0 &gic 0 0 GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
--					<6 0 &gic 0 0 GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
--					<7 0 &gic 0 0 GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
--					<8 0 &gic 0 0 GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
--					<9 0 &gic 0 0 GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
--					<10 0 &gic 0 0 GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
--					<11 0 &gic 0 0 GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-+					<0 0 &gic GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-+					<1 0 &gic GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-+					<2 0 &gic GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-+					<3 0 &gic GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-+					<4 0 &gic GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-+					<5 0 &gic GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-+					<6 0 &gic GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-+					<7 0 &gic GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-+					<8 0 &gic GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-+					<9 0 &gic GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-+					<10 0 &gic GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-+					<11 0 &gic GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
- 				interrupt-map-mask = <0xffffffff 0x0>;
- 			};
- 		};
+ 	};
+ 
 -- 
 2.25.1
 

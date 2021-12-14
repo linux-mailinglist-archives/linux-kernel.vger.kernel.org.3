@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDC84747BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15A64747C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235917AbhLNQXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S235937AbhLNQXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235886AbhLNQWz (ORCPT
+        with ESMTP id S235894AbhLNQW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:22:55 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779EAC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:54 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s7-20020a5b0447000000b005fb83901511so37469030ybp.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:54 -0800 (PST)
+        Tue, 14 Dec 2021 11:22:58 -0500
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2916BC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:58 -0800 (PST)
+Received: by mail-wm1-x349.google.com with SMTP id l34-20020a05600c1d2200b00344d34754e4so679489wms.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=xrXvVkI6r4Vmn+7KKReTw1DvnU9RNEXMh/9+RUR+L9Y=;
-        b=Sf/NXwY0Sja8M/PzUs1W+sY8VyA/Djybj8zo8xITaOYjOmAxm2jPwF1T6L9fwmnneP
-         IPag0hEreQOp5npdzJEAderB2zK/8azetsweUYqaC2pZWtDo8K6FwZJl7uwJ1gYr9tQS
-         QCLJNL5Nzb8WvzGLA1v5Risf+XOONz0kc7aMiFz7INAy72z3Yz+SfoeKd39ntJ1lnynL
-         VveKA/P4j1Cqgoi/v1qwzegffbhOteL0iqZW34xOZYPFV7AGuzwyOTrZaf5WBnl/IsMX
-         vHItLWbetXCgCXXM6PkvNRzL3C1XS63MTy0t4Kh7hY7rJ9tzmp71ZeQq4IwZAVp0zBrH
-         F8UQ==
+        bh=RahC8+o5lwzgAvVh7zx+7oLLYsmuRte28muTwb6Tt+E=;
+        b=kXx7p+TaPFKll9TwTsjKqgOr+UNTl28fMuejIwJkUW6waRnU3wWq6CRAGRiOmMac5D
+         gTwgJsYAX2xUIUEmYzvGp2hyPCP4Wm56BgSaKglv8p253lIAFKtOY7B1DPzLwsEBSgO3
+         v8bHgT4qtyZDjeAG+BxPNiXz6Qdhn2gdCfTrLJNeLq51/HcT+lJ2Ymj5ZoFxtQHe6oAH
+         IP/iLEHWxBPgmzVXkPVim068SXK6M2LIzTb5O32c/PJFtTHPYZt4cKS+VoyYpNtZVNo1
+         ucPlb5/R1XeuTBxqsz+siScqUDO0GJ60AvXx4VJ4v0JlBp6aMTl7d0fSj2nEnuPbOiBY
+         xwFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=xrXvVkI6r4Vmn+7KKReTw1DvnU9RNEXMh/9+RUR+L9Y=;
-        b=Ca4IwGU3eV7xcfacJgUc+FsCWees2TVBBArwJIIN5G5ecGNJPndW9P2t3e/xHlOEeb
-         +5NWC1BNhCVxBupVml2Ylc07MJ6NhMNqrQ9FBDRwMFnbdm5SJWE9OpJu+AC/RRp1kcNz
-         r+XSqELan37KgYiOsp4WbL3anBeRkUNPmgyRd3ByinS97P31Pn0tHMQylS1I5aclf14e
-         fWdWUpDzQdAHfzdTFJ36In4wrQgUTft9wKAK43X4sKiMFuJfP50kHkPuhDu8eF9DBaRy
-         blK61+Ry5eiyvsXmLrD3jCcun9rGz/SRNUASP3gwJ6QlO/kwdkwTd/L+WO+zZLjXYYCy
-         ETKg==
-X-Gm-Message-State: AOAM531qBavaDB7+fZMWks0ILlKaO346MKS2bmA5UejObvFxgu1oTEHe
-        rIY8sB4YAz/JHlKswOpjX28uoUbiT8Q=
-X-Google-Smtp-Source: ABdhPJxaoBdLntARzlcI6TdYmeYb+XZlVtgE1jknLgRjufiSnIl0WbIGjxFSocuh1vUQ39TfRs9x7ezE8HA=
+        bh=RahC8+o5lwzgAvVh7zx+7oLLYsmuRte28muTwb6Tt+E=;
+        b=eZUi3X4PyLUAtGV8NXNi4+nxKA26n+ioVUvK8EoA36jSqUb1e623kvhJZiMn8lns22
+         Xsv/R708CZFxZvmVEmHonjB7G4j0VtZPbV+HRNPy5hl17+mmaO2xl+OcbuJckgp81rhG
+         cAUCxz71/2sotjko3z/GR6SHF5Anxbh/bL7arOz83/OMCPX3NF4JHcVPWYelOrfE8+9u
+         sh0jV66Du9MZsBh2dNEy3zOAeB4aj/toKO7ZEoKXj43K6RAseMbVlmbdyYZSHY4eQ+bP
+         2s9JhJkfKoYKhcDw+/5HGUNCSM1YhBWXU55ae1THwxRCC5QfwEiWLum1h06KSqNEdA4n
+         VyMg==
+X-Gm-Message-State: AOAM5312GAzLIjrwy7SsYED1CJeBbwutj5DEmHkLffd2ZTgg3JOIo4Qz
+        4gGaxL1CkXlWfdprtIOaEOQSUcTSGRU=
+X-Google-Smtp-Source: ABdhPJyS0Vu024wH2nH284+5iPoP3BAzIuLrJ7O37SST95Qm9Dj5aepJ2oaLYM+pIKc9+sfuQR2fDWvghJc=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:a25:acc3:: with SMTP id x3mr6310ybd.332.1639498973606;
- Tue, 14 Dec 2021 08:22:53 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:29 +0100
+ (user=glider job=sendgmr) by 2002:a7b:c097:: with SMTP id r23mr46571900wmh.193.1639498976421;
+ Tue, 14 Dec 2021 08:22:56 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:30 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-23-glider@google.com>
+Message-Id: <20211214162050.660953-24-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 22/43] kmsan: initialize the output of READ_ONCE_NOCHECK()
+Subject: [PATCH 23/43] kmsan: make READ_ONCE_TASK_STACK() return initialized values
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -88,47 +88,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-READ_ONCE_NOCHECK() is already used by KASAN to ignore memory accesses
-from e.g. stack unwinders.
-Define READ_ONCE_NOCHECK() for KMSAN so that it returns initialized
-values. This helps defeat false positives from leftover stack contents.
+To avoid false positives, assume that reading from the task stack
+always produces initialized values.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I07499eb3e8e59c0ad2fd486cedc932d958b37afd
+Link: https://linux-review.googlesource.com/id/I9e2350bf3e88688dd83537e12a23456480141997
 ---
- include/asm-generic/rwonce.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/unwind.h | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/include/asm-generic/rwonce.h b/include/asm-generic/rwonce.h
-index 8d0a6280e9824..7cf993af8e1ea 100644
---- a/include/asm-generic/rwonce.h
-+++ b/include/asm-generic/rwonce.h
-@@ -25,6 +25,7 @@
- #include <linux/compiler_types.h>
- #include <linux/kasan-checks.h>
- #include <linux/kcsan-checks.h>
-+#include <linux/kmsan-checks.h>
+diff --git a/arch/x86/include/asm/unwind.h b/arch/x86/include/asm/unwind.h
+index 2a1f8734416dc..51173b19ac4d5 100644
+--- a/arch/x86/include/asm/unwind.h
++++ b/arch/x86/include/asm/unwind.h
+@@ -129,18 +129,19 @@ unsigned long unwind_recover_ret_addr(struct unwind_state *state,
+ }
  
  /*
-  * Yes, this permits 64-bit accesses on 32-bit architectures. These will
-@@ -69,14 +70,14 @@ unsigned long __read_once_word_nocheck(const void *addr)
- 
- /*
-  * Use READ_ONCE_NOCHECK() instead of READ_ONCE() if you need to load a
-- * word from memory atomically but without telling KASAN/KCSAN. This is
-+ * word from memory atomically but without telling KASAN/KCSAN/KMSAN. This is
-  * usually used by unwinding code when walking the stack of a running process.
+- * This disables KASAN checking when reading a value from another task's stack,
+- * since the other task could be running on another CPU and could have poisoned
+- * the stack in the meantime.
++ * This disables KASAN/KMSAN checking when reading a value from another task's
++ * stack, since the other task could be running on another CPU and could have
++ * poisoned the stack in the meantime. Frame pointers are uninitialized by
++ * default, so for KMSAN we mark the return value initialized unconditionally.
   */
- #define READ_ONCE_NOCHECK(x)						\
- ({									\
- 	compiletime_assert(sizeof(x) == sizeof(unsigned long),		\
- 		"Unsupported access size for READ_ONCE_NOCHECK().");	\
--	(typeof(x))__read_once_word_nocheck(&(x));			\
-+	kmsan_init((typeof(x))__read_once_word_nocheck(&(x)));		\
+-#define READ_ONCE_TASK_STACK(task, x)			\
+-({							\
+-	unsigned long val;				\
+-	if (task == current)				\
+-		val = READ_ONCE(x);			\
+-	else						\
+-		val = READ_ONCE_NOCHECK(x);		\
+-	val;						\
++#define READ_ONCE_TASK_STACK(task, x)				\
++({								\
++	unsigned long val;					\
++	if (task == current && !IS_ENABLED(CONFIG_KMSAN))	\
++		val = READ_ONCE(x);				\
++	else							\
++		val = READ_ONCE_NOCHECK(x);			\
++	val;							\
  })
  
- static __no_kasan_or_inline
+ static inline bool task_on_another_cpu(struct task_struct *task)
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 

@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95AFC47426F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD3147426C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbhLNMZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:25:31 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:34499 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233872AbhLNMZ3 (ORCPT
+        id S233891AbhLNMZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:25:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48596 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233872AbhLNMZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:25:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639484730; x=1671020730;
-  h=from:to:cc:subject:date:message-id;
-  bh=gcMacxEyDo30QltC6fQCSelGFEJ7rS/QRKo+F/IgMJM=;
-  b=deaxrayglTUcfkq1wl+Pb0AyIqihz57YQ93n1gAnXJq4wkcaWykftNT8
-   DO17ZoSZuvxDpC/PGBcLKhgvJ+214+28BwFfTuVql5GYQb9NP740208LF
-   cC0mClEy9kLTvgeb6U+RjTHIxwnbtCDjb6qyyAz+ajPsf95kWSc4Bgasz
-   s=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 14 Dec 2021 04:25:29 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Dec 2021 04:25:27 -0800
-X-QCInternal: smtphost
-Received: from hyd-lablnx229.qualcomm.com ([10.204.179.152])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 14 Dec 2021 17:55:09 +0530
-Received: by hyd-lablnx229.qualcomm.com (Postfix, from userid 2390365)
-        id 837642158D; Tue, 14 Dec 2021 17:55:08 +0530 (IST)
-From:   Panicker Harish <quic_pharish@quicinc.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com
-Cc:     mka@chromium.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, quic_hemantg@quicinc.com,
-        linux-arm-msm@vger.kernel.org, quic_bgodavar@quicinc.com,
-        rjliao@codeaurora.org, hbandi@codeaurora.org,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        quic_saluvala@quicinc.com,
-        Panicker Harish <quic_pharish@quicinc.com>
-Subject: [PATCH v3] Bluetooth: hci_qca: Stop IBS timer during BT OFF
-Date:   Tue, 14 Dec 2021 17:54:51 +0530
-Message-Id: <1639484691-28202-1-git-send-email-quic_pharish@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 14 Dec 2021 07:25:15 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30CDAB818CB;
+        Tue, 14 Dec 2021 12:25:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 647AEC34601;
+        Tue, 14 Dec 2021 12:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639484713;
+        bh=LkfGUfvFD+wuUSnndYTIRV0genugsEqlsotLmVgUpFs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N1JPppxRaFBP/q4CNAFpyT224TMXutjmOxmPTPtpBSyniTE//7qko6c9meT8C96bK
+         lQoBTbDsJhfVDDDWZBdp2Vy5H3q2QY8S5KBwLSxWKvd1Ee8ipMwSfFSBOPMNAASTGR
+         VDJ2xWXMcoYSF25puyufFJsDyVp1wekhWsQLea9BgkGZdZeJ0NY/Yl1ZOtxLNCusye
+         sYzew8KKiZMerHiT3P/aAt9TZ9VQ+ghjNFPD+oKnJPyYCOKLFHZ7pDedgW1m+FcciH
+         6UeG2RE9ZKd1Y7JIG+nuLPgCGlJRFxs4AbW98HIKFFPRL143ctSTEKr0TrZHT9GJnS
+         yEhZD3NJq0Hjg==
+Date:   Tue, 14 Dec 2021 12:25:08 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Bharat Bhushan <bbhushan2@marvell.com>
+Cc:     mark.rutland@arm.com, robh+dt@kernel.org, bbudiredla@marvell.com,
+        sgoutham@marvell.com, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 4/4] perf/marvell: cn10k DDR perf event core ownership
+Message-ID: <20211214122507.GC14247@willie-the-truck>
+References: <20211029115643.32351-1-bbhushan2@marvell.com>
+ <20211029115643.32351-5-bbhushan2@marvell.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211029115643.32351-5-bbhushan2@marvell.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The IBS timers are not stopped properly once BT OFF is triggered.
-we could see IBS commands being sent along with version command,
-so stopped IBS timers while Bluetooth is off.
+On Fri, Oct 29, 2021 at 05:26:43PM +0530, Bharat Bhushan wrote:
+> As DDR perf event counters are not per core, so they should be accessed
+> only by one core at a time. Select new core when previously owning core
+> is going offline.
+> 
+> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+> ---
+> v1->v6
+>  - No Change
+> 
+>  drivers/perf/marvell_cn10k_ddr_pmu.c | 50 ++++++++++++++++++++++++++--
+>  include/linux/cpuhotplug.h           |  1 +
+>  2 files changed, 49 insertions(+), 2 deletions(-)
 
-Fixes: 3e4be65eb82c ("Bluetooth: hci_qca: Add poweroff support during hci down for wcn3990")
+I don't think the driver is much use without this patch, so please can you
+move the Kconfig stuff to a patch at the end so that the driver can't be
+enabled in a broken state half way through the series?
 
-Signed-off-by: Panicker Harish <quic_pharish@quicinc.com>
----
- drivers/bluetooth/hci_qca.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index dd768a8..6f44b26 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1928,6 +1928,9 @@ static int qca_power_off(struct hci_dev *hdev)
- 	hu->hdev->hw_error = NULL;
- 	hu->hdev->cmd_timeout = NULL;
- 
-+	mod_timer(&qca->tx_idle_timer, 0);
-+	mod_timer(&qca->wake_retrans_timer, 0);
-+
- 	/* Stop sending shutdown command if soc crashes. */
- 	if (soc_type != QCA_ROME
- 		&& qca->memdump_state == QCA_MEMDUMP_IDLE) {
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
-
+Will

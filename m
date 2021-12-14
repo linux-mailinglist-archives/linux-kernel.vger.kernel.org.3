@@ -2,111 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2CB4741D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF794741E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbhLNLx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 06:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
+        id S233701AbhLNL6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 06:58:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbhLNLxz (ORCPT
+        with ESMTP id S229579AbhLNL6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 06:53:55 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE50DC061574;
-        Tue, 14 Dec 2021 03:53:54 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id e3so62992143edu.4;
-        Tue, 14 Dec 2021 03:53:54 -0800 (PST)
+        Tue, 14 Dec 2021 06:58:38 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D269EC061574;
+        Tue, 14 Dec 2021 03:58:37 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id r11so61401987edd.9;
+        Tue, 14 Dec 2021 03:58:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=x47UB4cctB2CldvAgcv0WT+3EDuXVlmZBLreEVjfGpY=;
-        b=OIMZ70B8/XXzIrLeRDPMrsuiFuwmWPnaUFA9IeVs58n3gXem/OVYAG3KdID1VIt55/
-         d23rV77R/z518hEY4d5ypLlf71b6UUKcBI+nuM/a2uMvPIuZzDuMqpdSyAxgqfNlBaLk
-         HCAWg9FCLFcfBJwGvJiORpcKkSJyx/9EdUC9rEl5sEXyWZPGuPcxIV9zqJkqmFh4oe8r
-         NwDUvTZKAW3hMdW8PaWokz45/Cf6G4qCUHzmL8C+nHH6eFaJ6u+eT2SnNEBcDGIslzo8
-         lBw5gN8J544Ja990FtfMpOHRpczNHHxEHQnBJuEwRUKU9iVpzkrc9xEIO4hCSrrAP7uF
-         e+wQ==
+        bh=9Yz7eU35vqRDb2z6sN8MYznQDPOspquHEIsAYoRHMKo=;
+        b=crUZ9vPwt6eX1JdysOVY5ooAd1RjhuZm8E1RTpcm6qUCJWz16hkXEznHIA1sGMi7Sb
+         4K5IsW59L/sdKwK5GNA33DsQPilDyHTC7a0HYFiecf5fj0K0xPXnO/VA+70diYxna3/T
+         yozXmg+GrB6pb2pyMS61LEGotetWw95G37HeGy+n/BHdBwmZH5gXJDa5oM0teKbJem1q
+         sBQV8VrooDTadO0wbKnnpHZxWkkaxcj8jMY+yKGqEECPha6Pw3uCWJOWVAjO1KKC31/P
+         KKOMSJ8AMjTB55JqekbQvfiRbZfu5E/sy4LY4RI29ClPetueHWkh7wmwxNVYpzInW6hd
+         b+ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=x47UB4cctB2CldvAgcv0WT+3EDuXVlmZBLreEVjfGpY=;
-        b=OPebSk6sxmUEACZpKJDyRMAl4Wvh597ygR9iJvm8JFCcZudaVN+FeDgwXZ8Jl7WD5N
-         Un7LUJAMx/TZlnGGSE5Ybqn3JiK18oHZkPd+1gIjKxOGLxLX5oTpZ+0IaqnbqVD2G7ww
-         nZtbccUgfmgDTxSu2b0J6o+NGYJ7g9bJ7NCmA3mArcTtmMP4Lk/1M+ax1Da6r08q24eX
-         giQnGMU7sxHu+0YV3NOMoT3OFmfYH0IKko6dzmiB9qGsi4z0zg2hnJUXpLtI0N1J9Ow1
-         hHdSxlu0Zy6tloJbrtQLL3M7xMq5rh3kVE8DZRGvonOJNU+MmEFt+GumB2GzxpdqVJhT
-         BZPw==
-X-Gm-Message-State: AOAM5308jweECbiFtAUFJ28byJSho2jrvUAFMbkydQl7Enu3bpsGuVck
-        Ol4PvGgTcu/t/SHXYIiUUVf/x7ztHh/qWLbu/DA=
-X-Google-Smtp-Source: ABdhPJx9yE1ynksPDmRxCGdZJ+y1IAKy1NSSrv3P8cLO/ayTrsJZiEoT2yvy+hc9QyJIJuSYPhQM7MdnneHW5zHw9hc=
-X-Received: by 2002:aa7:d495:: with SMTP id b21mr7273277edr.363.1639482833327;
- Tue, 14 Dec 2021 03:53:53 -0800 (PST)
+        bh=9Yz7eU35vqRDb2z6sN8MYznQDPOspquHEIsAYoRHMKo=;
+        b=uPMLCJvpDfn4hBOBflduHOUgqpTMbm4H8jK7ouvyuDwbnABHik80dMB7Tn42UbESru
+         XJd2weqGlEEcAuaJSM4h08h715+oRfcGdcQM3RG+MtnbBZMaVZzq7mrDOEbS1Cx2AhYE
+         7ejN37O0Bg1DsfjtelrVi38bOrApH6f+Se+frrZpwxUsAck1N5daiwchdazqPKEZa9Wj
+         7eoox+qqrxiKYu/lNyuqXo7ZGLtnpW6GrqCQ+bwaEcHKtanm1XqEvINms0+12dZFqrl3
+         GPn98uLWU33CN436xO1nZvVzGC82mwRdrNDXMsSqWBUwYW/JOdq2RcW2d3wj/OU8//Ci
+         +AQA==
+X-Gm-Message-State: AOAM5319XAggJqE2P53in5EBlZ7gaqn+VmDr9k/CrLH1zxGj6w97hGp6
+        iq+YS0sCtknhsB1frc8zfqKw61h+3OoSt4WREq4RP4+wA5M=
+X-Google-Smtp-Source: ABdhPJz1hiBiXGOUcreG+/Of5n2uneQz2aXfnvCnSmW7WT2ZBwmwo9wPrFJOwFncr/N/AwQQ+FfBPBaevPLiKUBiMl4=
+X-Received: by 2002:a17:907:75f0:: with SMTP id jz16mr5581618ejc.77.1639483116361;
+ Tue, 14 Dec 2021 03:58:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20211123151252.143631-1-ariel.dalessandro@collabora.com> <20211123151252.143631-6-ariel.dalessandro@collabora.com>
-In-Reply-To: <20211123151252.143631-6-ariel.dalessandro@collabora.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 14 Dec 2021 08:53:42 -0300
-Message-ID: <CAOMZO5CzowtF8XB9yXtoHSZsafGu_ZpDY6phep9biJYy9eDssw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] arm: dts: imx8ulz-bsh-smm-m2: Add BSH SMM-M2
- IMX6ULZ SystemMaster
-To:     "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>, matt@traverse.com.au,
-        Matteo Lisi <matteo.lisi@engicam.com>,
-        meenakshi.aggarwal@nxp.com,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        nathan@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>
+References: <20211214022100.14841-1-qianggui.song@amlogic.com> <20211214022100.14841-4-qianggui.song@amlogic.com>
+In-Reply-To: <20211214022100.14841-4-qianggui.song@amlogic.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 14 Dec 2021 13:57:06 +0200
+Message-ID: <CAHp75VczRGaKY_O3SV9xx-G95Rk8uFPwNFuVE1iy+HAxgL+oVg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] pinctrl: meson: add pinctrl driver support for
+ Meson-S4 Soc
+To:     Qianggui Song <qianggui.song@amlogic.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-amlogic <linux-amlogic@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 12:13 PM Ariel D'Alessandro
-<ariel.dalessandro@collabora.com> wrote:
+On Tue, Dec 14, 2021 at 6:27 AM Qianggui Song <qianggui.song@amlogic.com> wrote:
 >
-> From: Michael Trimarchi <michael@amarulasolutions.com>
->
-> Add DTS of BSH SMM-M2 SystemMaster.
->
-> This version comes with:
-> - 128 MiB DDR3 RAM
-> - 256 MiB Nand
-> - wifi
-> - bluetooth
->
-> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> ---
->  arch/arm/boot/dts/Makefile               |   3 +-
->  arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts | 153 +++++++++++++++++++++++
->  2 files changed, 155 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
->
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 0de64f237cd8..e6d4ad497985 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -693,7 +693,8 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
->         imx6ull-phytec-segin-ff-rdk-nand.dtb \
->         imx6ull-phytec-segin-ff-rdk-emmc.dtb \
->         imx6ull-phytec-segin-lc-rdk-nand.dtb \
-> -       imx6ulz-14x14-evk.dtb
-> +       imx6ulz-14x14-evk.dtb \
-> +       imx6ulz-bsh-smm-m2.dts
+> Add new pinctrl driver for Amlogic's Meson-S4 SoC which share the
+> same register laytout as the previous Meson-A1.
 
-This should be .dtb instead of .dts
+layout
+
+...
+
+> +config PINCTRL_MESON_S4
+> +       tristate "Meson s4 Soc pinctrl driver"
+> +       depends on ARM64
+> +       select PINCTRL_MESON_AXG_PMX
+
+> +       default y
+
+Why is it needed on other (non-MESON_S4) SoCs?
+
+...
+
+> +static const char * const i2c1_groups[] = {
+> +       "i2c1_sda_c", "i2c1_scl_c",
+> +       "i2c1_sda_d", "i2c1_scl_d",
+> +       "i2c1_sda_h", "i2c1_scl_h",
+> +       "i2c1_sda_x", "i2c1_scl_x"
+
+In this and all the rest similar cases leave a comma.
+
+> +};
+
+...
+
+> +static const struct of_device_id meson_s4_pinctrl_dt_match[] = {
+> +       {
+> +               .compatible = "amlogic,meson-s4-periphs-pinctrl",
+> +               .data = &meson_s4_periphs_pinctrl_data,
+> +       },
+
+> +       { },
+
+When it's a terminator entry, no comma is needed.
+
+> +};
+
+...
+
+> +static struct platform_driver meson_s4_pinctrl_driver = {
+> +       .probe  = meson_pinctrl_probe,
+> +       .driver = {
+> +               .name   = "meson-s4-pinctrl",
+> +               .of_match_table = meson_s4_pinctrl_dt_match,
+> +       },
+> +};
+
+> +
+> +module_platform_driver(meson_s4_pinctrl_driver);
+
+Swap above two lines, first module_...() followed by a blank line.
+
+> +MODULE_LICENSE("Dual BSD/GPL");
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,93 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B2F473E08
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CCB473E0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbhLNIJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:09:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
+        id S231748AbhLNILF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbhLNIJW (ORCPT
+        with ESMTP id S229579AbhLNILE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:09:22 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21837C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:09:22 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id p18so13609840wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:09:22 -0800 (PST)
+        Tue, 14 Dec 2021 03:11:04 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C15C061574;
+        Tue, 14 Dec 2021 00:11:04 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id a24so16687078qvb.5;
+        Tue, 14 Dec 2021 00:11:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9LFEFM4m/FM6B9UttvZC8dTAVnvNE7qpOruBGH+MXc8=;
-        b=WnRU34YNEMQLKuLu8RNrRX3ShARN+K+hdOjh7cOeFGjukVYBQgwFlM0E++ykW0coL6
-         LhHb6wZLfWmviZAvWEmeaWGC8EmGlpKCNswfJ9yHrMf74Vht8Q3306+70zsxQ4swEDGm
-         jWJZmdnI9BjZETW+chaNFp8ofSvXswnwaLHX4I7ufDR4ZkmSRJ+xYk+FP1rrGBiBZ6lb
-         YcnsdNsm0ab5p6lTaCHho8rQfhfZzuQ8d8ni6/XeRF9ql+STKaAlYOK0mYoJ4k+t8dpC
-         dMq1FTW1mHLStFpL8VGGvn51TfV8kel6H2dlgCm2jn3z5xq/hx89U649kzaW1Zp78Fk8
-         SE/g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=y4CwYy1oz5qCFH7hnn8EGWRG4TQi5zkgqW0pRWIQj40=;
+        b=Mi+R0O58z/Q7IJFNBeLTjlwQgH2+9zmqgrqFIpSpAkQIsBhalLD2mIy6EXtDcCOxIa
+         Nn9HUyJCbff3VzxFI7MhVie5A9vxvoRSB5AGd7SlxPLp70+M719iHJ1upI0YiIHTxeLT
+         c+TxwtvWy4RogW/gAAcm1Q/YfxqxYc7fFkdgzLcvLCIFLOeSYPMcjEOwmm5of8be4hdY
+         rtuhQf9DzHR2NdLc5LuRtBlebx1WaiTT1UIF2HZ/uJ9OvT4E2oKaFAQprbgw4s3vGG3m
+         EmtMwXpJfCpg8kCs94EM6QdGPuFBu2dePoJiYqtJ4+yCj/rtWhrEUXW7xyMiFXY5vEPg
+         nb1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9LFEFM4m/FM6B9UttvZC8dTAVnvNE7qpOruBGH+MXc8=;
-        b=MTO+4XjVLHzU3Hq7mS5wySKvucfioptxPq501eAw8vnhoxn/Qmb3yaJQAESCgx8pFN
-         UtY/twJlazfpAX1/nBfxICSDjoWTR8kxizpcZsSBqj/qQbi95pwxhvEy/HFh5O6AHaCB
-         iPacY3uE4YscMXl2fhT0BLuoTFqjmupEo61+fwMr+Y55eICXp788PDUJ1gTAEdvGhUn+
-         bqXxGFkOR91whtGobUqDHu7b5cxx1pbAoaEkhDxEwqUFGE/aFiySqiqpjCvuA5LSPmcF
-         aB3354laaa9BEBLlEbwj72eVjynp4Aq4v51Z6QqZUARbZL77zurVw6Ly/vMlh1AFCEcF
-         jqDQ==
-X-Gm-Message-State: AOAM531yYSVCepc85+ZKHq1+43lqsQjjWRtWy1QdFe+qCW+nvx+BJMdU
-        u8DlMwSFSG3U5TZHrgk5MD48Z5DCvIQTOA==
-X-Google-Smtp-Source: ABdhPJxGcWRTUD0o5dQo8U+dhNCH6feVXNtrDmCvYgAM1AKnR6fWm10Ohj+SmjdkDcPEtXomI96S9Q==
-X-Received: by 2002:a7b:c30e:: with SMTP id k14mr43354633wmj.156.1639469360692;
-        Tue, 14 Dec 2021 00:09:20 -0800 (PST)
-Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id n184sm1378761wme.2.2021.12.14.00.09.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=y4CwYy1oz5qCFH7hnn8EGWRG4TQi5zkgqW0pRWIQj40=;
+        b=s+Xg2oMo6zUCjFW2VdqnhrboFEBKqVAavJG4KSRkwDDdJ5QEjI/PreHOJgDZZo/wim
+         g7DaLXNTYxov1h4f1qjwUtMLUtHVdFSGxD18ayw4ccKf7LrzAWPegpm+SrEG1EgdK28h
+         Kx5W+2cJSnFs3ipPGsv89ARDzRFRBsiaiAfV1G421BzdH0eApsGST4YGaGFbVMKZNKCs
+         jPghh8UmTOz11cSEVkX9ZLlVkT6kGDv/4tGUITVsWIgwwUhvwEvQcQDe0FTUvUrh144v
+         fbUxUrd6zQS1T41DgZmGRivWbN5YmaK365nW7b7OnTRGct308GB63TIYGCTItuqqG9a5
+         yHTg==
+X-Gm-Message-State: AOAM533SaGz9nYLqcMPl7sAVuifwvEVmIeSBKKD+ugWpaaWz+/mrjSpf
+        6R38dfUFMtV8Iz/lOi436bI=
+X-Google-Smtp-Source: ABdhPJwXABuNpGgJ0qajPBlBDvDDJnzRFkSz9oNByYV4gj55Ga7Sezvy8zGGA/fQA6XJzw0ktzV3yw==
+X-Received: by 2002:a05:6214:2682:: with SMTP id gm2mr3888157qvb.64.1639469463364;
+        Tue, 14 Dec 2021 00:11:03 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id x15sm7155576qko.82.2021.12.14.00.10.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 00:09:20 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH -next] selftests: gpio: gpio-sim: avoid forking test twice
-Date:   Tue, 14 Dec 2021 09:09:19 +0100
-Message-Id: <20211214080919.22616-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.30.1
+        Tue, 14 Dec 2021 00:11:02 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     devesh.s.sharma@oracle.com
+Cc:     cgel.zte@gmail.com, chi.minghao@zte.com.cn,
+        dennis.dalessandro@cornelisnetworks.com, dledford@redhat.com,
+        galpress@amazon.com, jgg@ziepe.ca, leon@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        mbloch@nvidia.com, selvin.xavier@broadcom.com, trix@redhat.com,
+        zealci@zte.com.cm, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH v3 ocrdma-next] drivers: ocrdma: remove unneeded variable
+Date:   Tue, 14 Dec 2021 08:10:54 +0000
+Message-Id: <20211214081054.438166-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CO6PR10MB5635FDF74CA549F662C33F4DDD759@CO6PR10MB5635.namprd10.prod.outlook.com>
+References: <CO6PR10MB5635FDF74CA549F662C33F4DDD759@CO6PR10MB5635.namprd10.prod.outlook.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use '-o' within [] in order to avoid spawning two processes for test.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Return status directly from function called.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- tools/testing/selftests/gpio/gpio-sim.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+change since v2: [PATCHv2] drivers:ocrdma:remove unneeded variable
+             v3: [PATCH v3 ocrdma-next] drivers: ocrdma: remove unneeded variable 
+ drivers/infiniband/hw/ocrdma/ocrdma_verbs.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
-index c913d5aec768..341e3de00896 100755
---- a/tools/testing/selftests/gpio/gpio-sim.sh
-+++ b/tools/testing/selftests/gpio/gpio-sim.sh
-@@ -23,7 +23,7 @@ remove_chip() {
+diff --git a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
+index 735123d0e9ec..3bfbf4ec040d 100644
+--- a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
++++ b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
+@@ -1844,12 +1844,10 @@ int ocrdma_modify_srq(struct ib_srq *ibsrq,
  
- 	for FILE in $CONFIGFS_DIR/$CHIP/*; do
- 		BANK=`basename $FILE`
--		if [ "$BANK" = "live" ] || [ "$BANK" = "dev_name" ]; then
-+		if [ "$BANK" = "live" -o "$BANK" = "dev_name" ]; then
- 			continue
- 		fi
+ int ocrdma_query_srq(struct ib_srq *ibsrq, struct ib_srq_attr *srq_attr)
+ {
+-	int status;
+ 	struct ocrdma_srq *srq;
  
+ 	srq = get_ocrdma_srq(ibsrq);
+-	status = ocrdma_mbx_query_srq(srq, srq_attr);
+-	return status;
++	return ocrdma_mbx_query_srq(srq, srq_attr);
+ }
+ 
+ int ocrdma_destroy_srq(struct ib_srq *ibsrq, struct ib_udata *udata)
+@@ -1960,7 +1958,6 @@ static int ocrdma_build_inline_sges(struct ocrdma_qp *qp,
+ static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
+ 			     const struct ib_send_wr *wr)
+ {
+-	int status;
+ 	struct ocrdma_sge *sge;
+ 	u32 wqe_size = sizeof(*hdr);
+ 
+@@ -1972,8 +1969,7 @@ static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
+ 		sge = (struct ocrdma_sge *)(hdr + 1);
+ 	}
+ 
+-	status = ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
+-	return status;
++	return ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
+ }
+ 
+ static int ocrdma_build_write(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
 -- 
-2.30.1
+2.25.1
 

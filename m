@@ -2,100 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DA9474E05
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84273474E0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbhLNWnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:43:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        id S234374AbhLNWoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:44:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234225AbhLNWnK (ORCPT
+        with ESMTP id S234333AbhLNWoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 17:43:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C14C061574;
-        Tue, 14 Dec 2021 14:43:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1E30B81D5B;
-        Tue, 14 Dec 2021 22:43:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 935BAC34606;
-        Tue, 14 Dec 2021 22:43:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639521786;
-        bh=rhM5XuQgjU0FB5J77l3eetVj/6euawt62QZltfdep4M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=D9pgqehZL3xhnR2EKCxcwA0XCCtDeCQ8+Yk0jCnEwUG9V+RNmZQymhBqiG1aGnaN8
-         Kh/5d/kh0f7ItSvCUZXalJmx0b8wUPl2pSv/KCIPFnDlBnaXWPrboPsFRjmpcXTnPR
-         MT+EvO2maua+zKHSPsClnruL0KLHWPpU82bhMgjPUSQM1GdTgKLvnG921WGoU4mwrU
-         fO40nqOjJUd/v85SrD12SOgOYFyVHuZsLyb4jczeKgtwVg7XJCNkWLjnQLCzzhGMVD
-         Mqc9fxn9OQi7qME9osvMsjgPS0kpgHLZ/05Eys7lUHDsOIlfnVfloatESJlSRMoq/O
-         eLsWjkl0jL5tw==
-Received: by mail-ed1-f46.google.com with SMTP id r11so67443720edd.9;
-        Tue, 14 Dec 2021 14:43:06 -0800 (PST)
-X-Gm-Message-State: AOAM530Y49gie4g7PVrT0oTf8DYlOdnP0rgfmABEmyM9YI9x0nP1w/CW
-        TqRD35YrX2JiDTM0BSPpesd6K2FdJ3FfZ36CyA==
-X-Google-Smtp-Source: ABdhPJyLBisQ8v76tCGHaz4gb1oLFNf6AtEmBHSgFdgVVTp+4GenpNAUoex9e1Nwoja/jxIU+cUU7wDryEL42sk8Ak0=
-X-Received: by 2002:a17:906:3b18:: with SMTP id g24mr8501893ejf.27.1639521784863;
- Tue, 14 Dec 2021 14:43:04 -0800 (PST)
+        Tue, 14 Dec 2021 17:44:24 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB93C061574;
+        Tue, 14 Dec 2021 14:44:23 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id z5so68864999edd.3;
+        Tue, 14 Dec 2021 14:44:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fTMa6nBW2dVDD4ivSmBS0v0oje7pKvnZd8kC99gARJI=;
+        b=Fxw0CYlRA/rEAedZO5kF5CKN3BQwD02sxl4Lq6bT5RTpCZ6/4/RseRye/IvRIvoBiD
+         wBJzFBl+5/Di52mkNoyyqoLkW9H699aMvOB6+lDInWoZRdy9NOhM3NH26DaeA98QE6Sj
+         3jRzhUl2Lof9s8YY+cuenPKPLosYZX4WIefuat7AE69EliSar7XqMLr/6jfHLXcZKn3s
+         21txN34ccvzthz9yebpENjmLGQAElH6o/pWEXLFxiIzLXJUEcHX3AGjf7PbmP6mfgtCa
+         mPDcZO6+uJ2wrBFBuGuUrDdB39QnypctI0zKjLHM7syjudKfixEustlJuUoomKEOk2Af
+         ciCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fTMa6nBW2dVDD4ivSmBS0v0oje7pKvnZd8kC99gARJI=;
+        b=C7COfpdQq/mC1mzGMP4drQxXgG+dXWV28FesjkZvbhDM143s1jWqYqUVw9XImpQUlA
+         Vh6HU7je2yMBOrpDyIqQ/UG6G/G+LLu7653j67gnFHloVSfijj6yghr3TbM6aWU+q1v+
+         I/U7tIGbTZcrvNgkPRVfzXvq98VrXsGt7cguMm2a9JDYxtHRtT+BPMZqTLSfGImQqIAv
+         zxpmi2DHc51N/ni2+TjFkZiodQAb1tNZSBgv1nMEUO8xjt/UVLVPLgFTv94SIJISMB1a
+         Ve5ZLxMXGY77hmEPj58mh/9zOpQ1Zn0VoJVRc27rJ3juC9Venp53PivZZqgej25hULx1
+         IndA==
+X-Gm-Message-State: AOAM533IyGTCmFh25wY5Q57FfAaFHzQkYgc2ws1xVzQvHMeTuj4kuj2S
+        7mApitUiVznBIMOt8mt9KMMPAPncFNYcQQ==
+X-Google-Smtp-Source: ABdhPJwr5Z0Od7rOz1+ze0fDToJKfFx3uYByz5AHRNn29+pJx/C0/zie5/AEm5g8oKhApEipLvPmeA==
+X-Received: by 2002:a17:906:478e:: with SMTP id cw14mr1398725ejc.319.1639521862145;
+        Tue, 14 Dec 2021 14:44:22 -0800 (PST)
+Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.googlemail.com with ESMTPSA id b19sm39008ejl.152.2021.12.14.14.44.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 14:44:21 -0800 (PST)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [net-next PATCH RFC v6 00/16] Add support for qca8k mdio rw in Ethernet packet
+Date:   Tue, 14 Dec 2021 23:43:53 +0100
+Message-Id: <20211214224409.5770-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211214221450.589884-1-luca@lucaceresoli.net>
-In-Reply-To: <20211214221450.589884-1-luca@lucaceresoli.net>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 14 Dec 2021 16:42:53 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+GQTcx1EGKHug2ZcDZufrKM-4k6PB0vQeTCTG42MHzvA@mail.gmail.com>
-Message-ID: <CAL_Jsq+GQTcx1EGKHug2ZcDZufrKM-4k6PB0vQeTCTG42MHzvA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] PCI: dra7xx: Fix link removal on probe error
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     PCI <linux-pci@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sekhar Nori <nsekhar@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 4:15 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->
-> If a devm_phy_get() calls fails with phy_count==N (N > 0), then N links
-> have already been added by device_link_add() and won't be deleted by
-> device_link_del() because the code calls 'return' and not 'goto err_link'.
->
-> Fix in a very simple way by doing all the devm_phy_get() calls before all
-> the device_link_add() calls.
->
-> Fixes: 7a4db656a635 ("PCI: dra7xx: Create functional dependency between PCIe and PHY")
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  drivers/pci/controller/dwc/pci-dra7xx.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
-> index f7f1490e7beb..2ccc53869e13 100644
-> --- a/drivers/pci/controller/dwc/pci-dra7xx.c
-> +++ b/drivers/pci/controller/dwc/pci-dra7xx.c
-> @@ -757,7 +757,9 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
->                 phy[i] = devm_phy_get(dev, name);
->                 if (IS_ERR(phy[i]))
->                         return PTR_ERR(phy[i]);
-> +       }
->
-> +       for (i = 0; i < phy_count; i++) {
->                 link[i] = device_link_add(dev, &phy[i]->dev, DL_FLAG_STATELESS);
+Hi, this is ready but require some additional test on a wider userbase.
 
-I think this should happen automatically now with fw_devlink being
-enabled by default. Can you try?
+The main reason for this is that we notice some routing problem in the
+switch and it seems assisted learning is needed. Considering mdio is
+quite slow due to the indirect write using this Ethernet alternative way
+seems to be quicker.
 
->                 if (!link[i]) {
->                         ret = -EINVAL;
-> --
-> 2.25.1
->
+The qca8k switch supports a special way to pass mdio read/write request
+using specially crafted Ethernet packet.
+This works by putting some defined data in the Ethernet header where the
+mac source and dst should be placed. The Ethernet type header is set to qca
+header and is set to a mdio read/write type.
+This is used to communicate to the switch that this is a special packet
+and should be parsed differently.
+
+Currently we use Ethernet packet for
+- MIB counter
+- mdio read/write configuration
+- phy read/write for each port
+
+Current implementation of this use completion API to wait for the packet
+to be processed by the tagger and has a timeout that fallback to the
+legacy mdio way and mutex to enforce one transaction at time.
+
+We now have connect()/disconnect() ops for the tagger. They are used to
+allocate priv data in the dsa priv. The header still has to be put in
+global include to make it usable by a dsa driver.
+They are called when the tag is connect to the dst and the data is freed
+using discconect on tagger change.
+
+(if someone wonder why the bind function is put at in the general setup
+function it's because tag is set in the cpu port where the notifier is
+still not available and we require the notifier to sen the
+tag_proto_connect() event.
+
+We now have a tag_proto_connect() for the dsa driver used to put
+additional data in the tagger priv (that is actually the dsa priv).
+This is called using a switch event DSA_NOTIFIER_TAG_PROTO_CONNECT.
+Current use for this is adding handler for the Ethernet packet to keep
+the tagger code as dumb as possible.
+
+The tagger priv implement only the handler for the special packet. All the
+other stuff is placed in the qca8k_priv and the tagger has to access
+it under lock.
+
+We use the new API from Vladimir to track if the master port is
+operational or not. We had to track many thing to reach a usable state.
+Checking if the port is UP is not enough and tracking a NETDEV_CHANGE is
+also not enough since it use also for other task. The correct way was
+both track for interface UP and if a qdisc was assigned to the
+interface. That tells us the port (and the tagger indirectly) is ready
+to accept and process packet.
+
+I tested this with multicpu port and with port6 set as the unique port and
+it's sad.
+It seems they implemented this feature in a bad way and this is only
+supported with cpu port0. When cpu port6 is the unique port, the switch
+doesn't send ack packet. With multicpu port, packet ack are not duplicated
+and only cpu port0 sends them. This is the same for the MIB counter.
+For this reason this feature is enabled only when cpu port0 is enabled and
+operational.
+
+Current concern are:
+- Any hint about the naming? Is calling this mdio Ethernet correct?
+  Should we use a more ""standard""/significant name? (considering also
+  other switch will implement this)
+
+v6:
+- Fix some error in ethtool handler caused by rebase/cleanup
+v5:
+- Adapt to new API fixes
+- Fix a wrong logic for noop
+- Add additional lock for master_state change
+- Limit mdio Ethernet to cpu port0 (switch limitation)
+- Add priority to these special packet
+- Move mdio cache to qca8k_priv
+v4:
+- Remove duplicate patch sent by mistake.
+v3:
+- Include MIB with Ethernet packet.
+- Include phy read/write with Ethernet packet.
+- Reorganize code with new API.
+- Introuce master tracking by Vladimir
+v2:
+- Address all suggestion from Vladimir.
+  Try to generilize this with connect/disconnect function from the
+  tagger and tag_proto_connect for the driver.
+
+Ansuel Smith (12):
+  net: dsa: tag_qca: convert to FIELD macro
+  net: dsa: tag_qca: move define to include linux/dsa
+  net: dsa: tag_qca: enable promisc_on_master flag
+  net: dsa: tag_qca: add define for handling mdio Ethernet packet
+  net: dsa: tag_qca: add define for handling MIB packet
+  net: dsa: tag_qca: add support for handling mdio Ethernet and MIB
+    packet
+  net: dsa: qca8k: add tracking state of master port
+  net: dsa: qca8k: add support for mdio read/write in Ethernet packet
+  net: dsa: qca8k: add support for mib autocast in Ethernet packet
+  net: dsa: qca8k: add support for phy read/write with mdio Ethernet
+  net: dsa: qca8k: move page cache to driver priv
+  net: dsa: qca8k: cache lo and hi for mdio write
+
+Vladimir Oltean (4):
+  net: dsa: provide switch operations for tracking the master state
+  net: dsa: stop updating master MTU from master.c
+  net: dsa: hold rtnl_mutex when calling dsa_master_{setup,teardown}
+  net: dsa: replay master state events in
+    dsa_tree_{setup,teardown}_master
+
+ drivers/net/dsa/qca8k.c     | 600 ++++++++++++++++++++++++++++++++++--
+ drivers/net/dsa/qca8k.h     |  46 ++-
+ include/linux/dsa/tag_qca.h |  79 +++++
+ include/net/dsa.h           |  17 +
+ net/dsa/dsa2.c              |  81 ++++-
+ net/dsa/dsa_priv.h          |  13 +
+ net/dsa/master.c            |  29 +-
+ net/dsa/slave.c             |  32 ++
+ net/dsa/switch.c            |  15 +
+ net/dsa/tag_qca.c           |  81 +++--
+ 10 files changed, 901 insertions(+), 92 deletions(-)
+ create mode 100644 include/linux/dsa/tag_qca.h
+
+-- 
+2.33.1
+

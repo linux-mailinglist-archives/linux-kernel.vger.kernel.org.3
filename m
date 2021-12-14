@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4240047482F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE4E474832
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236084AbhLNQdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:33:36 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:25396 "EHLO
-        o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235981AbhLNQdX (ORCPT
+        id S235981AbhLNQeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:34:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235914AbhLNQeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:33:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
-        h=from:subject:in-reply-to:references:mime-version:to:cc:
-        content-transfer-encoding:content-type;
-        s=sgd; bh=yQXnRnX5mAV219nBVUMu6m7E3hTr67JRAHd87199Dpg=;
-        b=DXBRUXbnGdklKRKTxORhG97uAouv2hixXJA6lqRz1x7Q7c8ZgDKVlaA8tCIgpdHxxnaW
-        jP9wqIQP3WghJgM1CJWSHzstyp/dirsqbPcL3IqMyEwpawc06fX/wGZfJR2oTL9WrUAhZT
-        He22ZJFSEaMO43RqzlBrUbLfgvWNc19AAZuRk+rrAV2cPKMfnZoEFppgT0XAJ8kHJiPRt8
-        pIFqoR8+cJli0Jp2EUzUdu3yjbzYmJkMBW3JlSTyAUmRRrFVrqd7FRkSH4al6UXxQmYw+c
-        hLezr9NTY59CFUI77tnLr0Ql8d5qhbbudkO696BJi78zIDVcFmPDxj04apUrjhXw==
-Received: by filterdrecv-55446c4d49-ww7gg with SMTP id filterdrecv-55446c4d49-ww7gg-1-61B8C752-84
-        2021-12-14 16:33:22.516521248 +0000 UTC m=+8964793.130447238
-Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-1-0 (SG)
-        with ESMTP
-        id TK2IY_rHQcakZ4T_OtfL8Q
-        Tue, 14 Dec 2021 16:33:22.348 +0000 (UTC)
-Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id 083CE700269; Tue, 14 Dec 2021 09:33:22 -0700 (MST)
-From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH v4 2/2] wilc1000: Document enable-gpios and reset-gpios
- properties
-Date:   Tue, 14 Dec 2021 16:33:22 +0000 (UTC)
-Message-Id: <20211214163315.3769677-3-davidm@egauge.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211214163315.3769677-1-davidm@egauge.net>
-References: <20211214163315.3769677-1-davidm@egauge.net>
+        Tue, 14 Dec 2021 11:34:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAADC061574;
+        Tue, 14 Dec 2021 08:34:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CF64612FF;
+        Tue, 14 Dec 2021 16:34:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16AE6C34601;
+        Tue, 14 Dec 2021 16:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639499645;
+        bh=y9Tsf9OdTgQ1kMcJ/PUzR3f3WRy9zX8FGn4p772Rqxc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cem+MBYsmw3h/iOiG9hzHtrjGv9dTWO4AuNK0GROz1f2ChQbtSx4x27m1N4FRNlSr
+         lUZdkVcdmebi4sWJC3EbA3fvJm+96jGmFyIpijLHmBSyBC8RKlzHgzv5GoGSVy2vi9
+         Bnp25aHWWpPAetVN26ZiedYmVNPwyBFGy5rT7YSc=
+Date:   Tue, 14 Dec 2021 17:34:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 13/43] kmsan: add KMSAN runtime core
+Message-ID: <YbjHerrHit/ZqXYs@kroah.com>
+References: <20211214162050.660953-1-glider@google.com>
+ <20211214162050.660953-14-glider@google.com>
 MIME-Version: 1.0
-X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvH93Xhh=2FYR9spz2Bt?=
- =?us-ascii?Q?A5gO8dpXLqtzVT1vHEwdJSvMWZx2WdZTHyNXu1U?=
- =?us-ascii?Q?E5ARhbnTmdjbrbP9IjXyX8HUoKo0APkzGf8HqAB?=
- =?us-ascii?Q?vwjulIdyYz7upR0tlWWHsUZMpNHoehtQg36FFuJ?=
- =?us-ascii?Q?iHV7DWJlBW6WitI+fY6Hp6tu0o6NrYmHz04Tc3n?=
- =?us-ascii?Q?Da+MkegxJP=2F5VDfh5A5kA=3D=3D?=
-To:     Ajay Singh <ajay.kathat@microchip.com>
-Cc:     Adham Abozaeid <adham.abozaeid@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        David Mosberger-Tang <davidm@egauge.net>
-X-Entity-ID: Xg4JGAcGrJFIz2kDG9eoaQ==
-Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214162050.660953-14-glider@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the ENABLE and RESET GPIOs that may be needed by
-wilc1000-spi.
+On Tue, Dec 14, 2021 at 05:20:20PM +0100, Alexander Potapenko wrote:
+> This patch adds the core parts of KMSAN runtime and associated files:
+> 
+>   - include/linux/kmsan-checks.h: user API to poison/unpoison/check
+>     the kernel memory;
+>   - include/linux/kmsan.h: declarations of KMSAN hooks to be referenced
+>     outside of KMSAN runtime;
+>   - lib/Kconfig.kmsan: CONFIG_KMSAN and related declarations;
+>   - Makefile, mm/Makefile, mm/kmsan/Makefile: boilerplate Makefile code;
+>   - mm/kmsan/annotations.c: non-inlineable implementation of KMSAN_INIT();
+>   - mm/kmsan/core.c: core functions that operate with shadow and origin
+>     memory and perform checks, utility functions;
+>   - mm/kmsan/hooks.c: KMSAN hooks for kernel subsystems;
+>   - mm/kmsan/init.c: KMSAN initialization routines;
+>   - mm/kmsan/instrumentation.c: functions called by KMSAN instrumentation;
+>   - mm/kmsan/kmsan.h: internal KMSAN declarations;
+>   - mm/kmsan/shadow.c: routines that encapsulate metadata creation and
+>     addressing;
+>   - scripts/Makefile.kmsan: CFLAGS_KMSAN
+>   - scripts/Makefile.lib: KMSAN_SANITIZE and KMSAN_ENABLE_CHECKS macros
 
-Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
----
- .../net/wireless/microchip,wilc1000.yaml        | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml b/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
-index 6c35682377e6..790a774a19ee 100644
---- a/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
-+++ b/Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.yaml
-@@ -32,6 +32,21 @@ properties:
-   clock-names:
-     const: rtc
- 
-+  enable-gpios:
-+    maxItems: 1
-+    description: Used by wilc1000-spi to determine the GPIO line
-+      connected to the ENABLE line.  If specified, reset-gpios
-+      must be specified as well as otherwise the driver cannot
-+      ensure the timing required between asserting ENABLE
-+      and deasserting RESET.  This should be declared as an
-+      active-high signal.
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description: Used by wilc1000-spi to determine the GPIO line
-+      connected to the RESET line.  This should be declared as an
-+      active-low signal.
-+
- required:
-   - compatible
-   - interrupts
-@@ -51,6 +66,8 @@ examples:
-         interrupts = <27 0>;
-         clocks = <&pck1>;
-         clock-names = "rtc";
-+        enable-gpios = <&pioA 5 GPIO_ACTIVE_HIGH>;
-+        reset-gpios = <&pioA 6 GPIO_ACTIVE_LOW>;
-       };
-     };
- 
--- 
-2.25.1
+That's an odd way to write a changelog, don't you think?
 
+You need to describe what you are doing here and why you are doing it.
+Not a list of file names, we can see that in the diffstat.
+
+Also, you don't mention you are doing USB stuff here at all.  And why
+are you doing it here?  That should be added in a later patch.
+
+Break this up into smaller, logical, pieces that add the infrastructure
+and build on it.  Don't just chop your patches up on a logical-file
+boundry, as you are adding stuff in this patch that you do not need for
+many more later on, which means it was not needed here.
+
+thanks,
+
+greg k-h

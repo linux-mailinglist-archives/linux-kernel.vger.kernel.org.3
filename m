@@ -2,120 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF37473E50
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BAD473E80
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbhLNIig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:38:36 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:49628 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbhLNIif (ORCPT
+        id S229870AbhLNImC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:42:02 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:29190 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229708AbhLNImB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:38:35 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E076C1F3C4;
-        Tue, 14 Dec 2021 08:38:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639471113; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YxBgd60xxvmPh600wNZTY4w7KXnu0mHxHrDaqy+o98A=;
-        b=vVvheb2IkU+9MQvKe8kp/a+f0guikXyJAnX57LL0b9Spp1rmzBXcKVMYv7AC3h/HpFhznH
-        4wr8dnj3mj449LOYEcW1JhvRrJkjkhCS9WRL0TP5R29ZUhahxJicw5MR8xPg6AqsJNJF9A
-        YPeyptfBpPp3onsg+s/QHeycWIFUXgo=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 97D7DA3B88;
-        Tue, 14 Dec 2021 08:38:33 +0000 (UTC)
-Date:   Tue, 14 Dec 2021 09:38:33 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Nico Pache <npache@redhat.com>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <YbhYCT0z04la1vjZ@dhcp22.suse.cz>
-References: <YYrGpn/52HaLCAyo@fedora>
- <YYrSC7vtSQXz652a@dhcp22.suse.cz>
- <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
- <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
- <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
- <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
- <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
- <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
- <YbdhdySBaHJ/UxBZ@dhcp22.suse.cz>
- <ba5f460b-fc6c-601b-053c-086185fd3049@redhat.com>
+        Tue, 14 Dec 2021 03:42:01 -0500
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JCsJ33QHqz8vr0;
+        Tue, 14 Dec 2021 16:39:47 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 14 Dec 2021 16:41:59 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 14 Dec 2021 16:41:58 +0800
+Subject: Re: [PATCH v17 01/10] x86: kdump: replace the hard-coded alignment
+ with macro CRASH_ALIGN
+To:     Baoquan He <bhe@redhat.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>
+References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
+ <20211210065533.2023-2-thunder.leizhen@huawei.com>
+ <20211213131713.GA23510@MiWiFi-R3L-srv>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <6ad868b9-6c00-f515-074d-e6f980fea7fa@huawei.com>
+Date:   Tue, 14 Dec 2021 16:41:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ba5f460b-fc6c-601b-053c-086185fd3049@redhat.com>
+In-Reply-To: <20211213131713.GA23510@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 13-12-21 16:07:18, David Hildenbrand wrote:
-> On 13.12.21 16:06, Michal Hocko wrote:
-> > On Thu 09-12-21 11:48:42, Michal Hocko wrote:
-> > [...]
-> >> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> >> index 852041f6be41..2d38a431f62f 100644
-> >> --- a/mm/memory_hotplug.c
-> >> +++ b/mm/memory_hotplug.c
-> >> @@ -1161,19 +1161,21 @@ static void reset_node_present_pages(pg_data_t *pgdat)
-> >>  }
-> >>  
-> >>  /* we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG */
-> >> -static pg_data_t __ref *hotadd_new_pgdat(int nid)
-> >> +static pg_data_t __ref *hotadd_init_pgdat(int nid)
-> >>  {
-> >>  	struct pglist_data *pgdat;
-> >>  
-> >>  	pgdat = NODE_DATA(nid);
-> >> -	if (!pgdat) {
-> >> -		pgdat = arch_alloc_nodedata(nid);
-> >> -		if (!pgdat)
-> >> -			return NULL;
-> >>  
-> >> +	/*
-> >> +	 * NODE_DATA is preallocated (free_area_init) but its internal
-> >> +	 * state is not allocated completely. Add missing pieces.
-> >> +	 * Completely offline nodes stay around and they just need
-> >> +	 * reintialization.
-> >> +	 */
-> >> +	if (!pgdat->per_cpu_nodestats) {
-> >>  		pgdat->per_cpu_nodestats =
-> >>  			alloc_percpu(struct per_cpu_nodestat);
-> >> -		arch_refresh_nodedata(nid, pgdat);
-> > 
-> > This should really be 
-> > diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> > index 42211485bcf3..2daa88ce8c80 100644
-> > --- a/mm/memory_hotplug.c
-> > +++ b/mm/memory_hotplug.c
-> > @@ -1173,7 +1173,7 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
-> >  	 * Completely offline nodes stay around and they just need
-> >  	 * reintialization.
-> >  	 */
-> > -	if (!pgdat->per_cpu_nodestats) {
-> > +	if (pgdat->per_cpu_nodestats == &boot_nodestats) {
-> >  		pgdat->per_cpu_nodestats =
-> >  			alloc_percpu(struct per_cpu_nodestat);
-> >  	} else {
-> > 
-> 
-> I'll try giving this some churn later this week -- busy with other stuff.
 
-Please hang on, this needs to be done yet slightly differently. I will
-post something more resembling a final patch later today. For the
-purpose of the testing this should be sufficient for now.
--- 
-Michal Hocko
-SUSE Labs
+
+On 2021/12/13 21:17, Baoquan He wrote:
+> On 12/10/21 at 02:55pm, Zhen Lei wrote:
+>> From: Chen Zhou <chenzhou10@huawei.com>
+>>
+>> Move CRASH_ALIGN to header asm/kexec.h for later use.
+>>
+>> Suggested-by: Dave Young <dyoung@redhat.com>
+>> Suggested-by: Baoquan He <bhe@redhat.com>
+> 
+> I remember Dave and I discussed and suggested this when reviewing.
+> You can remove my Suggested-by.
+
+OK, I will do it.
+
+> 
+> For this one, I would like to add ack:
+> 
+> Acked-by: Baoquan He <bhe@redhat.com>
+> 
+>> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> Tested-by: John Donnelly <John.p.donnelly@oracle.com>
+>> Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+>> ---
+>>  arch/x86/include/asm/kexec.h | 3 +++
+>>  arch/x86/kernel/setup.c      | 3 ---
+>>  2 files changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
+>> index 11b7c06e2828c30..3a22e65262aa70b 100644
+>> --- a/arch/x86/include/asm/kexec.h
+>> +++ b/arch/x86/include/asm/kexec.h
+>> @@ -18,6 +18,9 @@
+>>  
+>>  # define KEXEC_CONTROL_CODE_MAX_SIZE	2048
+>>  
+>> +/* 16M alignment for crash kernel regions */
+>> +#define CRASH_ALIGN		SZ_16M
+>> +
+>>  #ifndef __ASSEMBLY__
+>>  
+>>  #include <linux/string.h>
+>> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+>> index 6a190c7f4d71b05..5cc60996eac56d6 100644
+>> --- a/arch/x86/kernel/setup.c
+>> +++ b/arch/x86/kernel/setup.c
+>> @@ -392,9 +392,6 @@ static void __init memblock_x86_reserve_range_setup_data(void)
+>>  
+>>  #ifdef CONFIG_KEXEC_CORE
+>>  
+>> -/* 16M alignment for crash kernel regions */
+>> -#define CRASH_ALIGN		SZ_16M
+>> -
+>>  /*
+>>   * Keep the crash kernel below this limit.
+>>   *
+>> -- 
+>> 2.25.1
+>>
+> 
+> .
+> 

@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E2E47470F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB423474717
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235481AbhLNQCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:02:46 -0500
-Received: from mga02.intel.com ([134.134.136.20]:22975 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231494AbhLNQCq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:02:46 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="226285125"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="226285125"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 08:02:43 -0800
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="614327874"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 08:02:40 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id F0AE820462;
-        Tue, 14 Dec 2021 18:02:38 +0200 (EET)
-Date:   Tue, 14 Dec 2021 18:02:38 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Bingbu Cao <bingbu.cao@intel.com>
-Cc:     linux-media@vger.kernel.org, rafael@kernel.org,
-        shawnx.tu@intel.com, tian.shu.qiu@intel.com,
-        chiranjeevi.rapolu@intel.com, hyungwoo.yang@intel.com,
-        tfiga@chromium.org, senozhatsky@chromium.org,
-        linux-kernel@vger.kernel.org, bingbu.cao@linux.intel.com
-Subject: Re: [PATCH 6/6] media: hi556: Support device probe in non-zero ACPI
- D state
-Message-ID: <YbjAHhDFJOSxFI+v@paasikivi.fi.intel.com>
-References: <1636447715-15526-1-git-send-email-bingbu.cao@intel.com>
- <1636447715-15526-7-git-send-email-bingbu.cao@intel.com>
+        id S235495AbhLNQFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231494AbhLNQFG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 11:05:06 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007C7C061574;
+        Tue, 14 Dec 2021 08:05:05 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1EC1C1EC01DF;
+        Tue, 14 Dec 2021 17:05:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639497900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=CvKZKs3K1S02aP8gGCL57BLEXwZ8163K5Z/pwHkvTYw=;
+        b=n7du2s5k71sYuAU9hRqtj10nW/i1hdOQeyxDRXOoV721Cd6Va+jNJxYyE4hfKuhZbgNNaM
+        KfWPAx4LAj7GUDCTIy96twOJeqTQwVq/LtoGn8wOzH0yJpWSY/a6vtWTLmDfd/L9kbOgQ5
+        amL+A6pTzbz30GvqWVxI54DllegLQ80=
+Date:   Tue, 14 Dec 2021 17:05:01 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, Tianyu.Lan@microsoft.com,
+        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
+        konrad.wilk@oracle.com, hch@lst.de, joro@8bytes.org,
+        parri.andrea@gmail.com, dave.hansen@intel.com
+Subject: Re: [PATCH V7 2/5] x86/hyper-v: Add hyperv Isolation VM check in the
+ cc_platform_has()
+Message-ID: <YbjArUL+biZMsFOL@zn.tnic>
+References: <20211213071407.314309-1-ltykernel@gmail.com>
+ <20211213071407.314309-3-ltykernel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1636447715-15526-7-git-send-email-bingbu.cao@intel.com>
+In-Reply-To: <20211213071407.314309-3-ltykernel@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bingbu,
-
-On Tue, Nov 09, 2021 at 04:48:35PM +0800, Bingbu Cao wrote:
-> Tell ACPI device PM code that the driver supports the device being in
-> non-zero ACPI D state when the driver's probe function is entered.
+On Mon, Dec 13, 2021 at 02:14:03AM -0500, Tianyu Lan wrote:
+> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 > 
-> Also do identification on the first access of the device, whether in probe
-> or when starting streaming.
-> 
-> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-> Signed-off-by: Kao, Arec <arec.kao@intel.com>
-> ---
->  drivers/media/i2c/hi556.c | 67 +++++++++++++++++++++++++++++------------------
->  1 file changed, 42 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/hi556.c b/drivers/media/i2c/hi556.c
-> index 8db1cbedc1fd..c8011467d1a4 100644
-> --- a/drivers/media/i2c/hi556.c
-> +++ b/drivers/media/i2c/hi556.c
-> @@ -495,6 +495,9 @@ struct hi556 {
->  
->  	/* Streaming on/off */
->  	bool streaming;
-> +
-> +	/* True if the device has been identified */
-> +	bool identified;
->  };
->  
->  static u64 to_pixel_rate(u32 f_index)
-> @@ -757,12 +760,38 @@ static void hi556_assign_pad_format(const struct hi556_mode *mode,
->  	fmt->field = V4L2_FIELD_NONE;
->  }
->  
-> +static int hi556_identify_module(struct hi556 *hi556)
-> +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&hi556->sd);
-> +	int ret;
-> +	u32 val;
+> Hyper-V provides Isolation VM for confidential computing support and
+> guest memory is encrypted in it. Places checking cc_platform_has()
+> with GUEST_MEM_ENCRYPT attr should return "True" in Isolation vm. e.g,
 
-If the sensor's already identified, you can return 0 here.
+Stick to a single spelling variant: "VM".
 
-> +
-> +	ret = hi556_read_reg(hi556, HI556_REG_CHIP_ID,
-> +			     HI556_REG_VALUE_16BIT, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (val != HI556_CHIP_ID) {
-> +		dev_err(&client->dev, "chip id mismatch: %x!=%x",
-> +			HI556_CHIP_ID, val);
-> +		return -ENXIO;
-> +	}
-> +
-> +	hi556->identified = true;
-> +
-> +	return 0;
-> +}
+> swiotlb bounce buffer size needs to adjust according to memory size
+> in the sev_setup_arch().
+
+So basically you wanna simply say here:
+
+"Hyper-V Isolation VMs need to adjust the SWIOTLB size just like SEV
+guests. Add a hyperv_cc_platform_has() variant which enables that."
+
+?
+
+With that addressed you can have my
+
+Acked-by: Borislav Petkov <bp@suse.de>
+
+Thx.
 
 -- 
-Sakari Ailus
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

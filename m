@@ -2,177 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F629473CF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24146473CF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbhLNGHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 01:07:03 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:59908
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230326AbhLNGHC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 01:07:02 -0500
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EB6E240192
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:07:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639462020;
-        bh=atZu+sVRTQVv1ZgYIjaMF+4PZzut5XqBDnscKf83G9Y=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=dpBPhlsqH3xG/SRTJtpYM4KHpTZTxWh9Dd1B7rhCqcagIBCET7Xvv46b9BVw+nxB4
-         f/SHbXYN1CxfbLtyaZZT4MuThYUAUB+W+YKu+HPTZM55scQK22Oo5ieQc0+Oh3pWVg
-         zYV0veOcj6lN9JqJAZuTk+b8cz0t3TuYiIcqcPqrcPHoTZymHSWyuHGDNGLmqR6mzm
-         XowGema20HWYW1nxXfBjeGwqfrHOleIKEAHW4kbJj17luE7XqMu3lBWRK3wbV6dRzI
-         RnsHGtnXrSEcH40uMTgNfR/VLI4pHpc43y0LX2asJpPDydMRYTRCkmE3LlQZno/A10
-         XRkFzR1uFz9fQ==
-Received: by mail-oo1-f72.google.com with SMTP id t199-20020a4a3ed0000000b002c296d691c4so12241113oot.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 22:07:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=atZu+sVRTQVv1ZgYIjaMF+4PZzut5XqBDnscKf83G9Y=;
-        b=DTd5UwTRqFqYVt9Lb/Xi1btFZcFBOw59tLjw7/LGAvBCXUFFs/hVtlQCwVKkZE7eIY
-         /yzNPBj4DyXi2PaHjZ8E65WJccanZUzBaOnidbLNFmkwmoXX2a9Vx05bodhGKJm9REZj
-         1MUUaD98daVhmjcVxItlzoNceyNYtd/jtgMDEiteLsFAXC6eyG5f8HVD1cjl1QrTskTd
-         DpkMKRk63jd0pB9zMYk89epNantDlJzlUxdT5aB7K+oTD1x24v7BzRcvB4aSrWE++F8j
-         ivTfcWkBQqw+YtSm6RsJqAbEcZ+h/6TpNWKVzfKD7jaayn+POKfbgsPpwUz1o29Z928T
-         y3Xg==
-X-Gm-Message-State: AOAM530vFXfDX8iNhDJfx0WGLrqGcv9pBKLQxg3AJx+BQ9dsGqBsIikF
-        6WhDoo6g1SioQcXnm/JGl7MDsHDBlGNQGvMGhZvHtEDonwlQMkds0M61ashu0yUWB/WjqJdx4if
-        cSAYNqz6aX5SHkGjvgZ0Mypu6/M24agn4MlSsDOjblNMmBHKWRWUJvYaYEg==
-X-Received: by 2002:a05:6808:199c:: with SMTP id bj28mr32526443oib.98.1639462019849;
-        Mon, 13 Dec 2021 22:06:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxsAc54cDrgKi0kQyNgUnH00P5/F+C7RE8loyA+HLGHegRIVZXctcN4iFxDQ6tC3Y7RZ9TcuvP9dr/mbgjL40Y=
-X-Received: by 2002:a05:6808:199c:: with SMTP id bj28mr32526433oib.98.1639462019636;
- Mon, 13 Dec 2021 22:06:59 -0800 (PST)
+        id S230309AbhLNGG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:06:58 -0500
+Received: from mga04.intel.com ([192.55.52.120]:44656 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229766AbhLNGG5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 01:06:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639462017; x=1670998017;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=KYM4tJorgOFuEGhs8LKAkno69WwgdojnQ33GO7vJocg=;
+  b=UEOzPkhgKXi8bd5XoI1SJdzq68sRdMXHnjO4nv/J+7J7Kt7G2506mOtZ
+   lAR4APlfQWoTaMKWY64TG/7fWHKqUkeN6oi2GrDq/bZQW5s/ayZCDZ0Hq
+   uHu1gGZOFk0Ll5ozQAJiTMoV090YTFoszjk5Y0FJqZs4oheQK7CQrd5b0
+   EuA6f92NbSrigcaV0LklDJyUlZQoLFh0Q+RQyo8D3yjIlF0DVXG5Dwd3C
+   5v/mjW6FLloH/8YLWO225sYueqPDz+pTBfKNAMUn6uYa2iwKtNtGxQm1n
+   vntUo/L6iwnefaliwrwpoehPFm1KJl9bJdOiWUeDtjqqKyEfb9yieXEtd
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="237643210"
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="237643210"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 22:06:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="681926788"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 13 Dec 2021 22:06:56 -0800
+Received: from shsmsx606.ccr.corp.intel.com (10.109.6.216) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 22:06:55 -0800
+Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
+ SHSMSX606.ccr.corp.intel.com (10.109.6.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 14 Dec 2021 14:06:54 +0800
+Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
+ SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
+ Tue, 14 Dec 2021 14:06:53 +0800
+From:   "Wang, Wei W" <wei.w.wang@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+CC:     "seanjc@google.com" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>
+Subject: RE: [PATCH 16/19] kvm: x86: Introduce KVM_{G|S}ET_XSAVE2 ioctl
+Thread-Topic: [PATCH 16/19] kvm: x86: Introduce KVM_{G|S}ET_XSAVE2 ioctl
+Thread-Index: AQHX63yobhR7xaimuUSU4jknnLqQN6wraUsAgABf8YCABEZs0P//mZ4AgAHaVHA=
+Date:   Tue, 14 Dec 2021 06:06:53 +0000
+Message-ID: <3ec6019a551249d6994063e56a448625@intel.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-17-yang.zhong@intel.com>
+ <d16aab21-0f81-f758-a61e-5919f223be78@redhat.com>
+ <26ea7039-3186-c23f-daba-d039bb8d6f48@redhat.com>
+ <86d3c3a5d61649079800a2038370365b@intel.com>
+ <bdda79b5-79e4-22fd-9af8-ec6e87a412ab@redhat.com>
+In-Reply-To: <bdda79b5-79e4-22fd-9af8-ec6e87a412ab@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.239.127.36]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211214053302.242222-1-kai.heng.feng@canonical.com> <4aaf5dd030004285a56bc55cc6b2731b@realtek.com>
-In-Reply-To: <4aaf5dd030004285a56bc55cc6b2731b@realtek.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Tue, 14 Dec 2021 14:06:48 +0800
-Message-ID: <CAAd53p6TWV=vciEPkM-_rPy4op1Nqpqye-UhHXnsUJ4MjoVk=w@mail.gmail.com>
-Subject: Re: [PATCH v2] rtw88: Disable PCIe ASPM while doing NAPI poll on 8821CE
-To:     Pkshih <pkshih@realtek.com>
-Cc:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "jian-hong@endlessm.com" <jhp@endlessos.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bernie Huang <phhuang@realtek.com>,
-        Brian Norris <briannorris@chromium.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 1:59 PM Pkshih <pkshih@realtek.com> wrote:
->
->
-> > -----Original Message-----
-> > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > Sent: Tuesday, December 14, 2021 1:33 PM
-> > To: tony0620emma@gmail.com; Pkshih <pkshih@realtek.com>
-> > Cc: jian-hong@endlessm.com; Kai-Heng Feng <kai.heng.feng@canonical.com>; Kalle Valo
-> > <kvalo@codeaurora.org>; David S. Miller <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Bernie
-> > Huang <phhuang@realtek.com>; Brian Norris <briannorris@chromium.org>; linux-wireless@vger.kernel.org;
-> > netdev@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: [PATCH v2] rtw88: Disable PCIe ASPM while doing NAPI poll on 8821CE
-> >
-> > Many Intel based platforms face system random freeze after commit
-> > 9e2fd29864c5 ("rtw88: add napi support").
-> >
-> > The commit itself shouldn't be the culprit. My guess is that the 8821CE
-> > only leaves ASPM L1 for a short period when IRQ is raised. Since IRQ is
-> > masked during NAPI polling, the PCIe link stays at L1 and makes RX DMA
-> > extremely slow. Eventually the RX ring becomes messed up:
-> > [ 1133.194697] rtw_8821ce 0000:02:00.0: pci bus timeout, check dma status
-> >
-> > Since the 8821CE hardware may fail to leave ASPM L1, manually do it in
-> > the driver to resolve the issue.
-> >
-> > Fixes: 9e2fd29864c5 ("rtw88: add napi support")
-> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215131
-> > BugLink: https://bugs.launchpad.net/bugs/1927808
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> > v2:
-> >  - Add default value for module parameter.
-> >
-> >  drivers/net/wireless/realtek/rtw88/pci.c | 74 ++++++++----------------
-> >  drivers/net/wireless/realtek/rtw88/pci.h |  1 +
-> >  2 files changed, 24 insertions(+), 51 deletions(-)
-> >
-> > diff --git a/drivers/net/wireless/realtek/rtw88/pci.c b/drivers/net/wireless/realtek/rtw88/pci.c
-> > index 3b367c9085eba..4ab75ac2500e9 100644
-> > --- a/drivers/net/wireless/realtek/rtw88/pci.c
-> > +++ b/drivers/net/wireless/realtek/rtw88/pci.c
-> > @@ -2,7 +2,6 @@
-> >  /* Copyright(c) 2018-2019  Realtek Corporation
-> >   */
-> >
-> > -#include <linux/dmi.h>
-> >  #include <linux/module.h>
-> >  #include <linux/pci.h>
-> >  #include "main.h"
-> > @@ -16,10 +15,13 @@
-> >
-> >  static bool rtw_disable_msi;
-> >  static bool rtw_pci_disable_aspm;
-> > +static int rtw_rx_aspm = -1;
-> >  module_param_named(disable_msi, rtw_disable_msi, bool, 0644);
-> >  module_param_named(disable_aspm, rtw_pci_disable_aspm, bool, 0644);
-> > +module_param_named(rx_aspm, rtw_rx_aspm, int, 0444);
-> >  MODULE_PARM_DESC(disable_msi, "Set Y to disable MSI interrupt support");
-> >  MODULE_PARM_DESC(disable_aspm, "Set Y to disable PCI ASPM support");
-> > +MODULE_PARM_DESC(rx_aspm, "Use PCIe ASPM for RX (0=disable, 1=enable, -1=default)");
-> >
-> >  static u32 rtw_pci_tx_queue_idx_addr[] = {
-> >       [RTW_TX_QUEUE_BK]       = RTK_PCI_TXBD_IDX_BKQ,
-> > @@ -1409,7 +1411,11 @@ static void rtw_pci_link_ps(struct rtw_dev *rtwdev, bool enter)
-> >        * throughput. This is probably because the ASPM behavior slightly
-> >        * varies from different SOC.
-> >        */
-> > -     if (rtwpci->link_ctrl & PCI_EXP_LNKCTL_ASPM_L1)
-> > +     if (!(rtwpci->link_ctrl & PCI_EXP_LNKCTL_ASPM_L1))
-> > +             return;
-> > +
-> > +     if ((enter && atomic_dec_return(&rtwpci->link_usage) == 0) ||
-> > +         (!enter && atomic_inc_return(&rtwpci->link_usage) == 1))
-> >               rtw_pci_aspm_set(rtwdev, enter);
-> >  }
-> >
->
-> I found calling pci_link_ps isn't always symmetric, so we need to reset
-> ref_cnt at pci_start() like below, or we can't enter rtw_pci_aspm_set()
-> anymore. The negative flow I face is
-> ifup -> connect AP -> ifdown -> ifup (ref_cnt isn't expected now).
-
-Is it expected to be asymmetric?
-If it's intended to be this way, I'll change where we set link_usage.
-Otherwise I think making it symmetric makes more sense.
-
-Kai-Heng
-
->
->
-> @@ -582,6 +582,8 @@ static int rtw_pci_start(struct rtw_dev *rtwdev)
->         rtw_pci_napi_start(rtwdev);
->
->         spin_lock_bh(&rtwpci->irq_lock);
-> +       atomic_set(&rtwpci->link_usage, 1);
->         rtwpci->running = true;
->         rtw_pci_enable_interrupt(rtwdev, rtwpci, false);
->         spin_unlock_bh(&rtwpci->irq_lock);
->
-> --
-> Ping-Ke
->
->
+T24gTW9uZGF5LCBEZWNlbWJlciAxMywgMjAyMSA1OjI0IFBNLCBQYW9sbyBCb256aW5pIHdyb3Rl
+Og0KPiBUaGVyZSBpcyBubyBuZWVkIGZvciBzdHJ1Y3Qga3ZtX3hzYXZlMiwgYmVjYXVzZSB0aGVy
+ZSBpcyBubyBuZWVkIGZvciBhICJzaXplIg0KPiBhcmd1bWVudC4NCj4gDQo+IC0gS1ZNX0dFVF9Y
+U0FWRTIgKmlzKiBuZWVkZWQsIGFuZCBpdCBjYW4gZXhwZWN0IGEgYnVmZmVyIGFzIGJpZyBhcyB0
+aGUgcmV0dXJuDQo+IHZhbHVlIG9mIEtWTV9DSEVDS19FWFRFTlNJT04oS1ZNX0NBUF9YU0FWRTIp
+DQoNCldoeSB3b3VsZCBLVk1fR0VUX1hTQVZFMiBzdGlsbCBiZSBuZWVkZWQgaW4gdGhpcyBjYXNl
+Pw0KDQpJJ20gdGhpbmtpbmcgaXQgd291bGQgYWxzbyBiZSBwb3NzaWJsZSB0byByZXVzZSBLVk1f
+R0VUX1hTQVZFOg0KDQotIElmIHVzZXJzcGFjZSBjYWxscyB0byBLVk1fQ0hFQ0tfRVhURU5TSU9O
+KEtWTV9DQVBfWFNBVkUyKSwNCiB0aGVuIEtWTSBrbm93cyB0aGF0IHRoZSB1c2Vyc3BhY2UgaXMg
+YSBuZXcgdmVyc2lvbiBhbmQgaXQgd29ya3Mgd2l0aCBsYXJnZXIgeHNhdmUgYnVmZmVyIHVzaW5n
+IHRoZSAic2l6ZSIgdGhhdCBpdCByZXR1cm5zIHZpYSBLVk1fQ0FQX1hTQVZFMi4NCiBTbyB3ZSBj
+YW4gYWRkIGEgZmxhZyAia3ZtLT54c2F2ZTJfZW5hYmxlZCIsIHdoaWNoIGdldHMgc2V0IHVwb24g
+dXNlcnNwYWNlIGNoZWNrcyBLVk1fQ0FQX1hTQVZFMi4NCg0KLSBPbiBLVk1fR0VUX1hTQVZFLCBp
+ZiAia3ZtLT54c2F2ZTJfZW5hYmxlZCIgaXMgc2V0LA0KIHRoZW4gS1ZNIGFsbG9jYXRlcyBidWZm
+ZXIgdG8gbG9hZCB4c3RhdGVzIGFuZCBjb3BpZXMgdGhlIGxvYWRlZCB4c3RhdGVzIGRhdGEgdG8g
+dGhlIHVzZXJzcGFjZSBidWZmZXINCiB1c2luZyB0aGUgInNpemUiIHRoYXQgd2FzIHJldHVybmVk
+IHRvIHVzZXJzcGFjZSBvbiBLVk1fQ0FQX1hTQVZFMi4NCiBJZiAia3ZtLT54c2F2ZTJfZW5hYmxl
+ZCIgaXNuJ3Qgc2V0LCB1c2luZyB0aGUgbGVnYWN5ICI0S0IiIHNpemUuDQoNClRoYW5rcywNCldl
+aQ0K

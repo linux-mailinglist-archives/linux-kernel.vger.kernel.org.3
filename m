@@ -2,94 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC304741E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 378844741ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233745AbhLNMBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:01:09 -0500
-Received: from mga11.intel.com ([192.55.52.93]:16769 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229579AbhLNMBI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:01:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639483268; x=1671019268;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oZJUHPH1yotOnSZkKJ/4AQ9YUNfC9FQ4k3ALhKElxTw=;
-  b=Hf2o6naKp9/aVyrbdMEcOtxXphJ8DIc/yT1cves2Dp7Z1rS+0qt5n8d3
-   YgZl9/e2CnSYqR5rZ8FcsKzC86vcKTv79kWaP3QUrwe6YfM34HxTj+nar
-   eolG0h6BF5Ik4ux3htv295mhxgqulqk8lmBdduo0U5i33V2CQG5/XuZdE
-   EfDT7XfWSVTvWmaqaw0zzBpV+Jr6/84JJ1lZ5jMTAr2cJQI8NIaEk6oRD
-   GebO40KRkBNltWcUla8Gnr+m/40OOFPVWmBiYHBMLhVZlMuWxxAusiUkO
-   Ei52k0QwX7dJWtH54twOrX9banwjF8rpuD0AGSelpzQlvFkCU4wuv9fM/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="236495785"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="236495785"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 04:01:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="465054778"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 04:01:06 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mx6UT-0000Fu-DF; Tue, 14 Dec 2021 12:01:05 +0000
-Date:   Tue, 14 Dec 2021 20:00:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [robh:for-kernelci 1/9] drivers/tty/serial/lantiq.c:732
- fetch_irq_lantiq() warn: unsigned 'ltq_port->tx_irq' is never less than
- zero.
-Message-ID: <202112141920.cCz4wG5n-lkp@intel.com>
+        id S233756AbhLNMCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229525AbhLNMCg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 07:02:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13538C061574;
+        Tue, 14 Dec 2021 04:02:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2EE3614A6;
+        Tue, 14 Dec 2021 12:02:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CAB6C34601;
+        Tue, 14 Dec 2021 12:02:30 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 12:02:27 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Yee Lee <yee.lee@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org, nicholas.Tang@mediatek.com,
+        Kuan-Ying.lee@mediatek.com, chinwen.chang@mediatek.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Marc Zyngier <maz@kernel.org>,
+        David Brazdil <dbrazdil@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Fuad Tabba <tabba@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH v3 1/1] arm64/cpufeature: Optionally disable MTE via
+ command-line
+Message-ID: <YbiH04yqEqW8p8EM@arm.com>
+References: <20210730144957.30938-1-yee.lee@mediatek.com>
+ <20210730144957.30938-2-yee.lee@mediatek.com>
+ <20210802153036.GH18685@arm.com>
+ <e055e71f0ca7bcb351b9097ba8f8f4a9d324623c.camel@mediatek.com>
+ <YapGyozjactAm8vp@arm.com>
+ <dc2fd1f8c68e78905f4242c2b530bc720b979cd8.camel@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <dc2fd1f8c68e78905f4242c2b530bc720b979cd8.camel@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci
-head:   0e59c9b64d3363b98201fc040101f8ff62c7eafb
-commit: e12887def507246bafed1c9b1b7f4f03ab225da5 [1/9] serial: lantiq: Remove usage of of_irq_to_resource_table()/of_irq_get()
-config: i386-randconfig-m021-20211210 (https://download.01.org/0day-ci/archive/20211214/202112141920.cCz4wG5n-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+On Tue, Dec 14, 2021 at 04:19:05PM +0800, Yee Lee wrote:
+> On Fri, 2021-12-03 at 16:33 +0000, Catalin Marinas wrote:
+> > On Thu, Nov 25, 2021 at 06:19:29PM +0800, Yee Lee wrote:
+> > > As pointed out earlier, the hardware has been verified that still has
+> > > transaction sending to DRAM due to mair_el1(Normal_tagged) is
+> > > setup.  That means the override in this patch would be incompleted and
+> > > cannot achieve to avoid undesired hardware confliction by disabling MTE.
+> > > 
+> > > Do we have other options to delay the configuration on MAIR_EL1 after
+> > > the override? Or maybe another CONFIG to bypass the init in __cpu_setup?
+> > 
+> > This register is trickier as it may be cached in the TLB (IIRC). I think
+> > deferring the setting of SCTLR_EL1.ATA(0) should be sufficient. Can you
+> > try the diff I sent in the previous email and confirm that the accesses
+> > to the allocation tag storage are blocked?
+> 
+> Yes, the previous diff is already online. 
+> 
+> In our experiment, with cmdline, "arm64.nomte", cpu_enable_mte() is
+> bypassed and the ATA0 is not set, but the access to tag memory still
+> dispatches. Only as MAIR_EL1 remains MAIR_ATTR_NORMAL, instead of
+> MAIR_ATTR_NORMAL_TAGGED, the access will stop.
+> 
+> From the manual, I think ATA only affects TAG instructions like STG,
+> IRG, but not the tag access within normal STR/LDR.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The ARM ARM states SCTLR_EL1.ATA0 == 0 means "access to allocation tags
+is prevented". The AArch64.MemSingle[] pseudocode ends up with similar
+checks:
 
-smatch warnings:
-drivers/tty/serial/lantiq.c:732 fetch_irq_lantiq() warn: unsigned 'ltq_port->tx_irq' is never less than zero.
-drivers/tty/serial/lantiq.c:735 fetch_irq_lantiq() warn: unsigned 'ltq_port->rx_irq' is never less than zero.
-drivers/tty/serial/lantiq.c:738 fetch_irq_lantiq() warn: unsigned 'ltq_port->err_irq' is never less than zero.
+https://developer.arm.com/documentation/ddi0596/2021-09/Shared-Pseudocode/AArch64-Functions?lang=en#AArch64.MemSingle.read.5
 
-vim +732 drivers/tty/serial/lantiq.c
+before reading the tags from memory in AArch64.CheckTag():
 
-   725	
-   726	static int fetch_irq_lantiq(struct device *dev, struct ltq_uart_port *ltq_port)
-   727	{
-   728		struct uart_port *port = &ltq_port->port;
-   729		struct platform_device *pdev = to_platform_device(dev);
-   730	
-   731		ltq_port->tx_irq = platform_get_irq(pdev, 0);
- > 732		if (ltq_port->tx_irq < 0)
-   733			return ltq_port->tx_irq;
-   734		ltq_port->rx_irq = platform_get_irq(pdev, 1);
- > 735		if (ltq_port->rx_irq < 0)
-   736			return ltq_port->rx_irq;
-   737		ltq_port->err_irq = platform_get_irq(pdev, 2);
- > 738		if (ltq_port->err_irq < 0)
-   739			return ltq_port->err_irq;
-   740	
-   741		port->irq = ltq_port->tx_irq;
-   742	
-   743		return 0;
-   744	}
-   745	
+https://developer.arm.com/documentation/ddi0596/2021-09/Shared-Pseudocode/AArch64-Functions?lang=en#AArch64.CheckTag.4
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+My suggestion is to raise this with support@arm.com (feel free to cc me)
+so that we clarify the hardware behaviour. I don't think it's entirely
+correct (it's more like, is there a risk of external aborts caused by
+access to allocation tag storage that's not present?)
+
+-- 
+Catalin

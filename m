@@ -2,198 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8854740A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150F34740A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233155AbhLNKmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:42:04 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:43002 "EHLO gloria.sntech.de"
+        id S233157AbhLNKmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:42:42 -0500
+Received: from mga14.intel.com ([192.55.52.115]:12164 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231415AbhLNKmD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:42:03 -0500
-Received: from p5b127e95.dip0.t-ipconnect.de ([91.18.126.149] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1mx5Fk-0007HP-OZ; Tue, 14 Dec 2021 11:41:48 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Christoph =?ISO-8859-1?Q?M=FCllner?= <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] riscv: prevent null-pointer dereference with sbi_remote_fence_i
-Date:   Tue, 14 Dec 2021 11:41:48 +0100
-Message-ID: <3268221.GhNKjUVvqv@phil>
-In-Reply-To: <CAOnJCUJ9YBOrNEj-nxAWctGPSTj6yUVOkiwQEpFELuf8B6SqLg@mail.gmail.com>
-References: <20211213112034.2896536-1-heiko@sntech.de> <CAOnJCUJ9YBOrNEj-nxAWctGPSTj6yUVOkiwQEpFELuf8B6SqLg@mail.gmail.com>
+        id S229752AbhLNKml (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:42:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639478561; x=1671014561;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=k6ZD6Mq3KcmcQkn7Bmfs9r1wBk3xW7vepalZr36D/9U=;
+  b=lD4jPRq7zK0DxL3lmPWGgiY20Qfn/5FOOTIqPgkRClHMjzUUeWWLqPZX
+   5276F8+NYFzf1prT2X4Lk1xgVerlJI3sR43hrn1O/d4p5DxSBS5cxIapq
+   KPwJ+ZORytiUEbswm+ib75l2A/pILZdjncImxe7uSib0b6E5BetQKvWE0
+   /Xh/2MTotUjjWWB8vZuUk3rfk83962VrZzTcz4wd2n4z5G7hn5Qo7vGQ4
+   Xpe6eZgLxUdM365Ub2NNWslT7yXd8zM02BlPBh42usmC27gDs/H0V6etr
+   hK7ch2h4emtqKshVnLcD5/YfR2jssfB7zNxyPwgH+d8NYBnJrpcRdIQXS
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="239174582"
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="239174582"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 02:42:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="465030400"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
+  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 02:42:21 -0800
+Subject: Re: [PATCH v2 2/2] mmc: sdhci-pci-gli: GL975[50]: Issue 8/16-bit MMIO
+ reads as 32-bit reads.
+To:     Hector Martin <marcan@marcan.st>,
+        Ben Chuang <benchuanggli@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20211212070210.141664-1-marcan@marcan.st>
+ <20211212070210.141664-3-marcan@marcan.st>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <bd1387bf-f549-61f0-4498-7c79552af024@intel.com>
+Date:   Tue, 14 Dec 2021 12:42:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20211212070210.141664-3-marcan@marcan.st>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Atish,
-
-Am Dienstag, 14. Dezember 2021, 02:51:17 CET schrieb Atish Patra:
-> On Mon, Dec 13, 2021 at 3:21 AM Heiko Stuebner <heiko@sntech.de> wrote:
-> >
-> > The callback used inside sbi_remote_fence_i is set at sbi probe time
-> > to the needed variant. Before that it is a NULL pointer.
-> >
-> > The selection between using sbi_remote_fence_i or ipi_remote_fence_i
-> > right now is solely done on the presence of the RISCV_SBI config option.
-> >
-> > On a multiplatform kernel, SBI will probably always be built in, but
-> > in the future not all machines using that kernel may have SBI
-> > on them, so in some cases this setup can lead to NULL pointer dereferences.
-> >
+On 12/12/2021 09:02, Hector Martin wrote:
+> For some reason, <32-bit reads do not work on Apple ARM64 platforms with
+> these chips (even though they do on other PCIe devices). Issue them as
+> 32-bit reads instead. This is done unconditionally, as it shouldn't hurt
+> even if not necessary.
 > 
-> I didn't quite understand this. The only platforms without SBI are
-> M-mode Linux based platforms.
-> All other platforms will require SBI if the kernel is running on
-> supervisor mode.
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-Ok ... but imagine a single-core board starting in S-mode.
-Not doing smp, kvm, etc.
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-So I can very well imagine the possibility that people
-might start it without an sbi instance running ;-) .
-
-
-> They may not need SBI IPI or SBI RFENCE extensions if an alternate
-> mechanism(ACLINT SSWI or AIA IMSIC)
-> is already available in hardware. IIRC, Anup's aclint & aia series
-> already takes care of that.
+> ---
+>  drivers/mmc/host/sdhci-pci-gli.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 > 
-> > Also if in future one of the flush_icache_all / flush_icache_mm functions
-> > gets called earlier in the boot process - before sbi_init - this would
-> > trigger the issue.
-> >
+> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> index ad742743a494..c6828e84db31 100644
+> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> @@ -906,7 +906,28 @@ static int gli_probe_slot_gl9763e(struct sdhci_pci_slot *slot)
+>  	return 0;
+>  }
+>  
+> +#define REG_OFFSET_IN_BITS(reg) ((reg) << 3 & 0x18)
+> +
+> +static u16 sdhci_gli_readw(struct sdhci_host *host, int reg)
+> +{
+> +	u32 val = readl(host->ioaddr + (reg & ~3));
+> +	u16 word;
+> +
+> +	word = (val >> REG_OFFSET_IN_BITS(reg)) & 0xffff;
+> +	return word;
+> +}
+> +
+> +static u8 sdhci_gli_readb(struct sdhci_host *host, int reg)
+> +{
+> +	u32 val = readl(host->ioaddr + (reg & ~3));
+> +	u8 byte = (val >> REG_OFFSET_IN_BITS(reg)) & 0xff;
+> +
+> +	return byte;
+> +}
+> +
+>  static const struct sdhci_ops sdhci_gl9755_ops = {
+> +	.read_w			= sdhci_gli_readw,
+> +	.read_b			= sdhci_gli_readb,
+>  	.set_clock		= sdhci_gl9755_set_clock,
+>  	.enable_dma		= sdhci_pci_enable_dma,
+>  	.set_bus_width		= sdhci_set_bus_width,
+> @@ -926,6 +947,8 @@ const struct sdhci_pci_fixes sdhci_gl9755 = {
+>  };
+>  
+>  static const struct sdhci_ops sdhci_gl9750_ops = {
+> +	.read_w			= sdhci_gli_readw,
+> +	.read_b			= sdhci_gli_readb,
+>  	.read_l                 = sdhci_gl9750_readl,
+>  	.set_clock		= sdhci_gl9750_set_clock,
+>  	.enable_dma		= sdhci_pci_enable_dma,
 > 
-> sbi_init is called before setup_smp. Do you think there is a use case where
-> flush_icache_xxx can be called before smp initialization ?
-
-I ran into the issue while experimenting with doing alternatives patching
-earlier. Works fine, but the flush_icache call then runs into that null-ptr.
-
-
-Heiko
-
-
-> > To prevent this, add a default __sbi_rfence_none returning an error code
-> > and adapt the callers to check for an error from the remote fence
-> > to then fall back to the other method.
-> >
-> 
-> Having said that, it is always good to have guards to avoid NULL
-> pointer dereferences.
-> However, the commit text may be updated based on the above questions.
-> 
-> > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> > ---
-> >  arch/riscv/kernel/sbi.c    | 10 +++++++++-
-> >  arch/riscv/mm/cacheflush.c | 25 +++++++++++++++++--------
-> >  2 files changed, 26 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> > index 7402a417f38e..69d0a96b97d0 100644
-> > --- a/arch/riscv/kernel/sbi.c
-> > +++ b/arch/riscv/kernel/sbi.c
-> > @@ -14,11 +14,19 @@
-> >  unsigned long sbi_spec_version __ro_after_init = SBI_SPEC_VERSION_DEFAULT;
-> >  EXPORT_SYMBOL(sbi_spec_version);
-> >
-> > +static int __sbi_rfence_none(int fid, const unsigned long *hart_mask,
-> > +                            unsigned long start, unsigned long size,
-> > +                            unsigned long arg4, unsigned long arg5)
-> > +{
-> > +       return -EOPNOTSUPP;
-> > +}
-> > +
-> >  static void (*__sbi_set_timer)(uint64_t stime) __ro_after_init;
-> >  static int (*__sbi_send_ipi)(const unsigned long *hart_mask) __ro_after_init;
-> >  static int (*__sbi_rfence)(int fid, const unsigned long *hart_mask,
-> >                            unsigned long start, unsigned long size,
-> > -                          unsigned long arg4, unsigned long arg5) __ro_after_init;
-> > +                          unsigned long arg4, unsigned long arg5)
-> > +                          __ro_after_init = __sbi_rfence_none;
-> >
-> >  struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
-> >                         unsigned long arg1, unsigned long arg2,
-> > diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-> > index 89f81067e09e..128e23c094ea 100644
-> > --- a/arch/riscv/mm/cacheflush.c
-> > +++ b/arch/riscv/mm/cacheflush.c
-> > @@ -16,11 +16,15 @@ static void ipi_remote_fence_i(void *info)
-> >
-> >  void flush_icache_all(void)
-> >  {
-> > +       int ret = -EINVAL;
-> > +
-> >         local_flush_icache_all();
-> >
-> >         if (IS_ENABLED(CONFIG_RISCV_SBI))
-> > -               sbi_remote_fence_i(NULL);
-> > -       else
-> > +               ret = sbi_remote_fence_i(NULL);
-> > +
-> > +       /* fall back to ipi_remote_fence_i if sbi failed or not available */
-> > +       if (ret)
-> >                 on_each_cpu(ipi_remote_fence_i, NULL, 1);
-> >  }
-> >  EXPORT_SYMBOL(flush_icache_all);
-> > @@ -66,13 +70,18 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
-> >                  * with flush_icache_deferred().
-> >                  */
-> >                 smp_mb();
-> > -       } else if (IS_ENABLED(CONFIG_RISCV_SBI)) {
-> > -               cpumask_t hartid_mask;
-> > -
-> > -               riscv_cpuid_to_hartid_mask(&others, &hartid_mask);
-> > -               sbi_remote_fence_i(cpumask_bits(&hartid_mask));
-> >         } else {
-> > -               on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
-> > +               int ret = -EINVAL;
-> > +
-> > +               if (IS_ENABLED(CONFIG_RISCV_SBI)) {
-> > +                       cpumask_t hartid_mask;
-> > +
-> > +                       riscv_cpuid_to_hartid_mask(&others, &hartid_mask);
-> > +                       ret = sbi_remote_fence_i(cpumask_bits(&hartid_mask));
-> 
-> This API is removed in sparse hartid series[1]. You may want to rebase
-> on top of it.
-> 
-> [1] https://patchwork.kernel.org/project/linux-riscv/list/?series=590195
-> 
-> > +               }
-> > +
-> > +               if (ret)
-> > +                       on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
-> >         }
-> >
-> >         preempt_enable();
-> > --
-> > 2.30.2
-> >
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> 
-> 
-> 
-> 
-
-
-
 

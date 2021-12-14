@@ -2,140 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEC3473A23
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCB7473A2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243001AbhLNBXJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Dec 2021 20:23:09 -0500
-Received: from mail-yb1-f178.google.com ([209.85.219.178]:43997 "EHLO
-        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237215AbhLNBXI (ORCPT
+        id S243364AbhLNB1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 20:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239113AbhLNB1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 20:23:08 -0500
-Received: by mail-yb1-f178.google.com with SMTP id f9so42646181ybq.10;
-        Mon, 13 Dec 2021 17:23:07 -0800 (PST)
+        Mon, 13 Dec 2021 20:27:02 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FDEC061574;
+        Mon, 13 Dec 2021 17:27:02 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so14791768pjq.4;
+        Mon, 13 Dec 2021 17:27:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/+jlMJzeNFSas4GV+hezSK4rMaaQSNcgMNgG+aLQtKs=;
+        b=aTvfRrmQtkIEbkxV6Zt5mfo/F3Ma4tVTdIJ9W2SmsUI4qnAbLsxvPZ3SwOWGr2fi3o
+         1P2/rIkbalIHq/7LIe1WX0B0Vj9Zw4QWzkTuAwdBwrxsjD2UBQbhznfx7aSfsrGfKF/V
+         8IEifDt3RFnYMiygqVR/+VpbUbzXKPy1sp+lALPrpPZpPMgEB4oRZSCCDaOLmbEomV/9
+         1vEln6VWBuDduI0/0C/Rz/6MwSoOXcApdh7u88DDQpMKw148EYA+NBrmxF8UEdXZSmVn
+         9jSga8yYJ+3fu4hPtIfTbHB7eNDzXxBefNJqow6YLy3j7+Yed7uGOJleago7oaMyurIk
+         5a4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YOnbhkb5rD+M/xTJPuPJV6KIC2CBbKF/2ZjwGXPRnmQ=;
-        b=C1hA5y6n+ze4+r9Na8Gv8+xZ3idkFw0XXBisWhDmHw2eHb9Nwv7faZSm+/P8Jb1CvL
-         1xdlIAMnQqqy3SJG053U2+iHWtX4ENFaoAA8M53wKPaYg7lvEhbKV6E7i9I+QZ7zFHk7
-         RKE9O6z3lusVqHy/RgNkw8iTI0erpU//0fyJ53Chr0U9Gf2WecJR/S29QZI/u6mM3f0/
-         dTsqFiy2maP/IoVMH6Rlm2r8uwJvgzWixxuYNUGrSRUMwgLJzyzyKoikILA446oPJBJY
-         yWHEgxEhKPRfqn5me6lKpq3qQzGDsfty32GqbpG+SWKdvJP6UTFJQIJvbtmVWUMbbThm
-         33IA==
-X-Gm-Message-State: AOAM5318RydJadlGRQJcnej6pb/RghL3BrzOxfVMr/cz4T1/k9P259ok
-        9Xd6w/XccusikmPkzxSjoVaL3c04ZAHORyagLqLL2O0RVT4=
-X-Google-Smtp-Source: ABdhPJxh0ee0v7OGTamylymH+rr74w1FeClp0ennIBJ7BobNJcKlq7EBM/H5MkG16mLesjrqjrkn/xZlhoQeq0uMTBg=
-X-Received: by 2002:a25:b3c3:: with SMTP id x3mr2480192ybf.25.1639444987305;
- Mon, 13 Dec 2021 17:23:07 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/+jlMJzeNFSas4GV+hezSK4rMaaQSNcgMNgG+aLQtKs=;
+        b=DqiIY27v/BXEf+EF4D6gVqkR4I1ujmuEimIQlSZ0G/B0jJMxuKzY8FclXXfFA8kv4C
+         71iGZEp5r39dCOwUCltKWLpCmqo2RyXc/4tDllERYo3QbrS3/5fzeqPk4moLzrIWzBqZ
+         M04wGH26sLGJuJyLV9vlvPyUKR69iQWv2iS1ljhKKqhgz97jSpCct68LvjHDdyc2jwtp
+         lqxFXhLyP+Gc445queOv/Opx3xloxC3elQfofuRNYM2cGIFT+3W1e/TQGVYGyj1U6Nnh
+         qTGRBpQLGypUJ6UD/Ldt1WblwCtCvKxQLFeYMJWJnfcu5gw0p98OUM/dYDW96Lqc0RRU
+         TIRw==
+X-Gm-Message-State: AOAM532ZZEkiE8/P3m/UKe+uOqF/UUnIlOEEYFjhj8smvXaOCAAIox+X
+        nRREh8j/Bi7tUC/2YTQOhPo=
+X-Google-Smtp-Source: ABdhPJz06MvLMMiXdDX7Sx2FS6Ofl4e5bEqY+2zRVI1Uo+hl+Sx9zSlwiI/FOXrvHLwfJtepJ9PYwg==
+X-Received: by 2002:a17:902:684b:b0:143:84c4:6561 with SMTP id f11-20020a170902684b00b0014384c46561mr1969050pln.33.1639445222001;
+        Mon, 13 Dec 2021 17:27:02 -0800 (PST)
+Received: from fedora.lenovo.com ([103.30.235.251])
+        by smtp.gmail.com with ESMTPSA id n71sm13944680pfd.50.2021.12.13.17.26.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 17:27:01 -0800 (PST)
+From:   Jimmy Wang <wangjm221@gmail.com>
+Cc:     wangjm23@lenovo.com, markpearson@lenovo.com,
+        Jimmy Wang <wangjm221@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Palatin <vpalatin@chromium.org>,
+        Ole Ernst <olebowle@gmx.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: NO_LPM quirk Lenovo USB-C to Ethernet Adapher(RTL8153-04)
+Date:   Tue, 14 Dec 2021 09:26:50 +0800
+Message-Id: <20211214012652.4898-1-wangjm221@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211213160226.56219-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20211213160226.56219-1-mailhol.vincent@wanadoo.fr>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 14 Dec 2021 10:22:57 +0900
-Message-ID: <CAMZ6RqLZA55W-fm3393_Fh-q3sxUpvzFdC+jMTEOo4+9r5yybA@mail.gmail.com>
-Subject: Re: [PATCH v6 0/4] report the controller capabilities through the
- netlink interface
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 14 Dec 2021 at 01:02, Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
-> The main purpose of this series is to report the CAN controller
-> capabilities. The proposed method reuses the existing struct
-> can_ctrlmode and thus do not need a new IFLA_CAN_* entry.
+This device doesn't work well with LPM, losing connectivity intermittently.
+Disable LPM to resolve the issue.
 
-I forgot to update this part of the cover letter since v4.
-This paragraph is outdated and should now be:
+Reviewed-by: <markpearson@lenovo.com>
+Signed-off-by: Jimmy Wang <wangjm221@gmail.com>
+---
+ drivers/usb/core/quirks.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-| The main purpose of this series is to report the CAN controller
-| capabilities. To do so, a new IFLA_CAN_* entry is
-| added: IFLA_CAN_CTRLMODE_EXT. This is done to guarantee forward
-| and backward compatibility in the netlink interface.
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 019351c0b52c..d3c14b5ed4a1 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -434,6 +434,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
+ 
++	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
++	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
++
+ 	/* Lenovo Powered USB-C Travel Hub (4X90S92381, RTL8153 GigE) */
+ 	{ USB_DEVICE(0x17ef, 0x721e), .driver_info = USB_QUIRK_NO_LPM },
+ 
+-- 
+2.33.1
 
-N.B. I do not plan to send a v7 because the patch descriptions
-are correct (only the cover letter was outdated).
-
-> While doing so, I also realized that can_priv::ctrlmode_static could
-> actually be derived from the other ctrlmode fields. So I added three
-> extra patches to the series: one to replace that field with a
-> function, one to add a safeguard on can_set_static_ctrlmode() and one
-> to repack struct can_priv and fill the hole created after removing
-> can_priv::ctrlmode_priv.
->
-> Please note that the first three patches are not required by the
-> fourth one. I am just grouping everything in the same series because
-> the patches all revolve around the controller modes.
->
->
-> ** Changelog **
->
-> v5 -> v6:
->
->   - Add back patches 1, 2 and 3 because those were removed from the
->     testing branch of linux-can-next since.
->
->   - Rebase the series on the latest version of net-next.
->
->   - Fix a typo in the comments of the forth patch: guaruanty ->
->     guaranty.
->
-> v4 -> v5:
->
->   - Implement IFLA_CAN_CTRLMODE_EXT in order to fix forward
->     compatibility issues as suggested by Marc in:
->     https://lore.kernel.org/linux-can/20211029124608.u7zbprvojifjpa7j@pengutronix.de/T/#m78118c94072083a6f8d2f0f769b120f847ac1384
->
-> v3 -> v4:
->
->   - Tag the union in struct can_ctrlmode as packed.
->
->   - Remove patch 1, 2 and 3 from the series because those were already
->     added to the testing branch of linux-can-next (and no changes
->     occurred on those first three patches).
->
-> v2 -> v3:
->
->   - Make can_set_static_ctrlmode() return an error and adjust the
->     drivers which use this helper function accordingly.
->
-> v1 -> v2:
->
->   - Add a first patch to replace can_priv::ctrlmode_static by the
->     inline function can_get_static_ctrlmode()
->
->   - Add a second patch to reorder the fields of struct can_priv for
->     better packing (save eight bytes on x86_64 \o/)
->
->   - Rewrite the comments of the third patch "can: netlink: report the
->     CAN controller mode supported flags" (no changes on the code
->     itself).
->
-> Vincent Mailhol (4):
->   can: dev: replace can_priv::ctrlmode_static by
->     can_get_static_ctrlmode()
->   can: dev: add sanity check in can_set_static_ctrlmode()
->   can: dev: reorder struct can_priv members for better packing
->   can: netlink: report the CAN controller mode supported flags
->
->  drivers/net/can/dev/dev.c         |  5 +++--
->  drivers/net/can/dev/netlink.c     | 33 +++++++++++++++++++++++++++++--
->  drivers/net/can/m_can/m_can.c     | 10 +++++++---
->  drivers/net/can/rcar/rcar_canfd.c |  4 +++-
->  include/linux/can/dev.h           | 24 +++++++++++++++-------
->  include/uapi/linux/can/netlink.h  | 13 ++++++++++++
->  6 files changed, 74 insertions(+), 15 deletions(-)
->
->
-> base-commit: 64445dda9d8384975eca54e3f01886fca61e1db6
-> prerequisite-patch-id: 84ffb60366d113cfbf6fb8e415217d9e09fadefd
-> --
-> 2.32.0
->

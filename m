@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C01473B4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99898473B50
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234381AbhLNDMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 22:12:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S235404AbhLNDMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 22:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbhLNDMJ (ORCPT
+        with ESMTP id S232655AbhLNDMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 22:12:09 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96CBC061574;
-        Mon, 13 Dec 2021 19:12:09 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id y9so3053679pgj.5;
-        Mon, 13 Dec 2021 19:12:09 -0800 (PST)
+        Mon, 13 Dec 2021 22:12:38 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31711C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:12:38 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id m15so16199948pgu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:12:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=quoR+TZ/qpdjmw0cQ/LVqVjG7Bub9Md1PQ4Qq09DCq0=;
-        b=Oc459qZZJkOYSlCEcviZfTFtW5PeeKXISKGhw1BzRWPLEk6jZh+jD/eHoSL7kyR5yC
-         zmmPTKmOHULKtkiVmSXo5btVMgp64Vb1ppMs3byI4aFl+i/x1LrGfYVVLYjTmTTYK4ac
-         81ldzWhbxn5jMvoosIl7z2GD3P/IdI8QaJBd/0oVl7HqUdRAy+6W1tVr7Esemulp48Dw
-         TJGYykC+kYX/EZR1lLGWtcsqe4kUFNXdD0hUITTHX7WrP1d7JWyke3suVHZKMslGVogw
-         oZIL/JIyqQWonCZ/El7Ck/q1hVG4DMn1/jOASlYZfdMuG6ZcgzWPqv4qtgBkagOjyKbf
-         KANQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DaUpjQsRXzDlNok3onB0tnTkJffX5UHYJGcB3WC+79I=;
+        b=n/GrE6WqmC75O6tMABEgMi0icLtjq1J/sVwOqg0xtjO22NaCgBcN5l4O1X30LDcOWL
+         tgRIRyjgwcjGqMWJ4+fhXiupYbO79FF6zhbtlLLEalFGUFe1SXdKengeNBji3XDUJD+q
+         3K465B4EC5w7R2ro5iynpzXLn6VdQHus524cczmRzZm5UW67WsVQ+HOMLcntdn9f90P7
+         gAJoy+vA2Vp3bZFfPmBO5TOWgYuCU1Fh6fmqSH81uPBw9fLeveOG14khDDCRIHZcRZ+R
+         9Y2DnSnd/PkioGxmHLt/8RJuRZg/tomtoZP0YaW277jW7ZK5DbEKbO+672gEP61Mmd91
+         1xoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=quoR+TZ/qpdjmw0cQ/LVqVjG7Bub9Md1PQ4Qq09DCq0=;
-        b=GeO5nSTsCLxpIoccBRi4/R8ueAfxaN26UYzoMYbnYPJ5itD3+225SKq/fziWxDQV8U
-         ztELxno7AZAibtDEdvTHItDkqnGHoDD8SEKsX/1e/qjA6FA0MTUhmH9ho3838FTB8Pwg
-         5XVy7iwiU5RiMkFQ2bc9oW6pNhbqn9sQ5yOjE+FGLYaaV2D7XgWs6zpIPd95mZtEUICn
-         ZyiqVfEEjZNG0K2ToLrqO+luSStpjiKTZq2GLpvv/STPp8TqSFrwjSEwDtQXHmHJc+bl
-         5M6U+yPbHmcbgWUR4kJNiB4PJj2ZX/XX5zgtWtZFcLhwMTGZ0JnDe6o253xDolS/y4zI
-         L0yg==
-X-Gm-Message-State: AOAM531EhtCmd/apMqeF/aNX9CSOIEO7iFFe7cvDjmRa2k11hAMmnyQL
-        iy6I8wP6BPHx8KxaQe8M7SJUS3/n/p8=
-X-Google-Smtp-Source: ABdhPJwzKHAdAmOr2NG3LeFomsLpG0Uuo10dMwvbuEwcDi4meuYIgvvnBpbtlhQsPeh95nCka5jePw==
-X-Received: by 2002:a63:8f06:: with SMTP id n6mr1901633pgd.95.1639451529088;
-        Mon, 13 Dec 2021 19:12:09 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id q2sm13825449pfj.62.2021.12.13.19.12.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 19:12:08 -0800 (PST)
-Message-ID: <b7f4804a-01dd-9dd9-01f1-2187a955cb13@gmail.com>
-Date:   Mon, 13 Dec 2021 19:12:05 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DaUpjQsRXzDlNok3onB0tnTkJffX5UHYJGcB3WC+79I=;
+        b=RqGzXK7SY+lW0Aar2tWKI730/TdBBgkIsWuFfRp4/YCBVrzaISXJCNN6iNOaAiWQd7
+         ZyeiD6DiyLIf53DfPG4aQw8vZWtxdgxo9WPZV9DGuSw4k8Br3jDvcK8dK0QqWFZ0Rgvs
+         AHSxoM0W9jAGLWQ2uSHeTdLKA7FLnWQHhEPShzgFouXyoRnJdKsR8VPtbWQCLAbbNMbR
+         YWKj/e2wx/DnDyLiTH6uAa1suyMxZqbfqsXzRwzPAcq5PoScan9mQ3gdPn8WN47+/CHl
+         vQtdAYy7jzvDj3UoOm6IT0XF2zMeqJRwalgI8DNGvPR6HYAZ+g8sJcoKXsyMbiysMhfP
+         q6BQ==
+X-Gm-Message-State: AOAM532xM/U5DAGV1MzJCKC6VMLojPCc7ChwLM5OZLKF9wTCPmTfLQk3
+        GFvx5Rou/sfDQyy8v6PEazCa9w==
+X-Google-Smtp-Source: ABdhPJxHgZ7+unda1WxLgv6UMe8FB2suboBfBniZ7oOLB/b+GY1BhQC1gNcfoKtYxYoLRDxeG1OxkQ==
+X-Received: by 2002:a05:6a00:1c56:b0:4a4:f8cb:2604 with SMTP id s22-20020a056a001c5600b004a4f8cb2604mr1910174pfw.34.1639451557474;
+        Mon, 13 Dec 2021 19:12:37 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u22sm14990479pfk.148.2021.12.13.19.12.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 19:12:36 -0800 (PST)
+Date:   Tue, 14 Dec 2021 03:12:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ignat Korchagin <ignat@cloudflare.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        bgardon@google.com, dmatlack@google.com, stevensd@chromium.org,
+        kernel-team <kernel-team@cloudflare.com>
+Subject: Re: [PATCH 0/2] KVM: x86: Fix dangling page reference in TDP MMU
+Message-ID: <YbgLoZjy1zuhIgK7@google.com>
+References: <20211213112514.78552-1-pbonzini@redhat.com>
+ <CALrw=nEM6LEAD8LA1Bd15=8BK=TFwwwAMKy_DWRrDkD=r+1Tqg@mail.gmail.com>
+ <Ybd5JJ/IZvcW/b2Y@google.com>
+ <YbeiiT9b350lYBiR@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
-Content-Language: en-US
-To:     broonie@kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Xiang wangx <wangxiang@cdjrlc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-gpio@vger.kernel.org
-References: <20211213203112.969238-1-broonie@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211213203112.969238-1-broonie@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbeiiT9b350lYBiR@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 13, 2021, Sean Christopherson wrote:
+> On Mon, Dec 13, 2021, Sean Christopherson wrote:
+> > On Mon, Dec 13, 2021, Ignat Korchagin wrote:
+> > > Unfortunately, this patchset does not fix the original issue reported in [1].
+> > 
+> > Can you provide your kernel config?  And any other version/config info that might
+> > be relevant, e.g. anything in gvisor or runsc?
+> 
+> Scratch that, I've reproduced this, with luck I'll have a root cause by end of day.
 
+Ok, the root cause is comically simple compared to all the theories we came up with.
+If tdp_mmu_iter_cond_resched() drops mmu_lock and restarts the iterator, the
+"continue" in the caller triggers tdp_iter_next().  tdp_iter_next() does what it's
+told and advances the iterator.  Because all users call tdp_mmu_iter_cond_resched()
+at the very beginning of the loop, this has the effect of skipping the current SPTE.
 
-On 12/13/2021 12:31 PM, broonie@kernel.org wrote:
-> Hi all,
-> 
-> After merging the gpio-brgl tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> /tmp/next/build/drivers/gpio/gpio-bcm-kona.c:508:34: error: duplicate 'const' declaration specifier [-Werror=duplicate-decl-specifier]
->    508 | static const struct of_device_id const bcm_kona_gpio_of_match[] = {
->        |                                  ^~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->    19784a059cf47b ("gpio: bcm-kona: add const to of_device_id")
-> 
-> I used the tree from yesterday instead.
+E.g. in the "zap all" case, where iter->level == iter->min_level == iter->root_level,
+we effectively end up with code like this, which is obviously wrong once the
+complexity of traversing a tree is simplified down to walking an array of SPTEs.
 
-Doh! Should have double checked the code as the diff was not giving 
-enough context. This patch should simply be dropped, not even build 
-tested by Xiang it seems.
--- 
-Florian
+	gfn_t end = tdp_mmu_max_gfn_host();
+        gfn_t start = 0;
+        gfn_t last;
+
+        for (i = last = start; i < end; i += 8, last = i) {
+                if (cond_resched()) {
+                        i = last;
+                        continue;
+                }
+
+                sp = &root->spt[i];
+                zap(sp);
+        }
+
+Patch incoming...

@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC387474E69
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B01B474E6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238012AbhLNXC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 18:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233875AbhLNXCy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 18:02:54 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7250CC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:02:54 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id z9so13427096edb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:02:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rn/GT7DgBbk/oW4rJC6hy7Ss/nDkJtDZDhoaw9Zw4iw=;
-        b=Wjdowxc4SEQi/KdHC722G96ed2+b8aJ33YzjtT0PxB3ueqGAuvTHpRnyvvkDLwgwPt
-         Q2iL7hhHhr34shhZO7Dob4M+sg+HOO0iU1kK/xl7nC1TkjddiSD2ZAKihyBcTrZkCYR+
-         fuljFo47FIzwz4KOnx8POArO1LIbYunQGuflLvWpwRAppOPCx4WAoAlw5n8o19hD74V7
-         xor2xVT/YA50NLy9PPV7tLyCn+nqe/sfVljhUiP6UoP+FyvlTAMUZTHvp+NiP0vKNM9R
-         D0ZEb+Btq4+VMlGRAwrumG5aBl0Z+n9q/M46asMWNsT5FCqF0NJICY9zLFyUYZX8ceMA
-         EePQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rn/GT7DgBbk/oW4rJC6hy7Ss/nDkJtDZDhoaw9Zw4iw=;
-        b=0WRJSvnKIovpv7FtxovvLqmji3VRK7nB/uf8p6rMaJaU/UnySZs6w/SXT6vuVLbFEQ
-         qmvj09y23PL6QCOW3XJ+6wK5b08Z71KBcZvJn6bW7nPk/OBwU7BUNVUR3jmf+auUHZ/e
-         L3QGhGeYjqQn5g8ka1V6rHOy3l3+Z176JNDowfs1yjMVU4HCjlmPMZNDUrrvazLvCFug
-         x6g1Da7DPajUuVcUx7zEIM1OYAE0zjoS4QfU/JjiO2rGWE8xpexvmcBDTVSx2345qmsj
-         jPH3uVpLDHGZOG0Gbla4Pw5n8hQPeFMvUWYcu4yZAesxf5QdYPdmHv+KhDGEwnDpLB9X
-         u6JA==
-X-Gm-Message-State: AOAM532aL20mhhep3mJBzVXT7DNOVUzU7czsqqKTbEHmDEhQKvJL0l/s
-        bHtvNrVMByaiCsV45qHZjvT2bGcnonm23I47YM+AAA==
-X-Google-Smtp-Source: ABdhPJyZzEXABB2jVKF7c+30I1OgLhDcmEEO6WPjfnmuxMXZu+L6pRvmmexrJotKJ33smKZItaGp0zyTMEguAYeW+2Q=
-X-Received: by 2002:a05:6402:354e:: with SMTP id f14mr11354625edd.245.1639522972746;
- Tue, 14 Dec 2021 15:02:52 -0800 (PST)
+        id S238079AbhLNXEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 18:04:34 -0500
+Received: from mga05.intel.com ([192.55.52.43]:21289 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233875AbhLNXEd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 18:04:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639523073; x=1671059073;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qt/0bX78cB03INx+HUiS9OiVed6/KeEubFO/mlgVDqs=;
+  b=YmJjlTRHSzqLhJFMj+aCjfdWeLB6/0CBu4nThRaXyKibT3+0o3Z9zjsW
+   y6hFIPk422pqZQ+9Mcvd8qZhDJ6CZuCcp0KtMQEy/Kcdw6/rA17Sxu9go
+   tP8a//CWKsLzy8mrJ5mxtN03gFxlxMNqjOrFjdLMee0TC3yXHdsC8LLQ4
+   3HrDMXFMFLvFXRqP8DlXzUAoBZ/Dm4rotgIzTReYKMUj3q5DpY0zYZe3H
+   Y4CWi/d9mQXfWP6d64a5zw7QKuQFvseLg+86d1UpKyDmfGYnw8Tuwp9ei
+   hfkK64dwAI21NJJxPHZzn+8bl2k6LAr5u6rSw/YpWzoQw0HB3Ve6ro6Az
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="325380902"
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="325380902"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 15:04:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="465290643"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 15:04:31 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxGqV-0000ts-2I; Tue, 14 Dec 2021 23:04:31 +0000
+Date:   Wed, 15 Dec 2021 07:04:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     kbuild-all@lists.01.org, Vinod Koul <vkoul@kernel.org>,
+        Kishon <kishon@ti.com>, linux-kernel@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: [phy:next 37/37] drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:41:
+ error: implicit declaration of function 'FIELD_PREP'
+Message-ID: <202112150757.4yrvwmKK-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211209143501.GA3041@kili>
-In-Reply-To: <20211209143501.GA3041@kili>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Tue, 14 Dec 2021 15:02:41 -0800
-Message-ID: <CABXOdTcny657JOxK-iau2Sj06a5hcDOdWFg8wKUNupgAceUU9w@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec: fix read overflow in cros_ec_lpc_readmem()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Bill Richardson <wfrichar@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Javier Martinez Canillas <javier@osg.samsung.com>,
-        Olof Johansson <olof@lixom.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- On Thu, Dec 9, 2021 at 6:35 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> If bytes is larger than EC_MEMMAP_SIZE (255) then "EC_MEMMAP_SIZE -
-> bytes" is a very high unsigned value and basically offset is
-> accepted.  The second problem is that it uses >= instead of > so this
-> means that we are not able to read the very last byte.
->
-> Fixes: ec2f33ab582b ("platform/chrome: Add cros_ec_lpc driver for x86 devices")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  drivers/platform/chrome/cros_ec_lpc.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-> index d6306d2a096f..7e1d175def9f 100644
-> --- a/drivers/platform/chrome/cros_ec_lpc.c
-> +++ b/drivers/platform/chrome/cros_ec_lpc.c
-> @@ -290,7 +290,8 @@ static int cros_ec_lpc_readmem(struct cros_ec_device *ec, unsigned int offset,
->         char *s = dest;
->         int cnt = 0;
->
-> -       if (offset >= EC_MEMMAP_SIZE - bytes)
-> +       if (offset > EC_MEMMAP_SIZE ||
-> +           bytes > EC_MEMMAP_SIZE - offset)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git next
+head:   1aa97b002258a190d7790a1a5c0c27829f82e569
+commit: 1aa97b002258a190d7790a1a5c0c27829f82e569 [37/37] phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20211215/202112150757.4yrvwmKK-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git/commit/?id=1aa97b002258a190d7790a1a5c0c27829f82e569
+        git remote add phy https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git
+        git fetch --no-tags phy next
+        git checkout 1aa97b002258a190d7790a1a5c0c27829f82e569
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-I think that means we have the same problem if offset >
-EC_MEMMAP_SIZE, only now that condition isn't detected anymore because
-EC_MEMMAP_SIZE - offset is a very large number.
-I think what we really want is
-        if (offset + bytes > EC_MEMMAP_SIZE)
-only without the overflow. Not sure how we can get there without
-checking each part.
-        if (offset > EC_MEMMAP_SIZE || bytes > EC_MEMMAP_SIZE || bytes
-+ offset > EC_MEMMAP_SIZE)
-                return -EINVAL;
-Maybe that ?
-        if ((u64) offset + bytes > EC_MEMMAP_SIZE)
-                return -EINVAL;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Guenter
+All errors (new ones prefixed by >>):
 
->                 return -EINVAL;
->
->         /* fixed length */
-> --
-> 2.20.1
->
+   drivers/phy/freescale/phy-fsl-imx8m-pcie.c: In function 'imx8_pcie_phy_init':
+>> drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:41: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+      41 | #define IMX8MM_GPR_PCIE_REF_CLK_EXT     FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x2)
+         |                                         ^~~~~~~~~~
+   drivers/phy/freescale/phy-fsl-imx8m-pcie.c:85:28: note: in expansion of macro 'IMX8MM_GPR_PCIE_REF_CLK_EXT'
+      85 |                            IMX8MM_GPR_PCIE_REF_CLK_EXT :
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/FIELD_PREP +41 drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+
+    38	
+    39	#define IMX8MM_GPR_PCIE_REF_CLK_SEL	GENMASK(25, 24)
+    40	#define IMX8MM_GPR_PCIE_REF_CLK_PLL	FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x3)
+  > 41	#define IMX8MM_GPR_PCIE_REF_CLK_EXT	FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x2)
+    42	#define IMX8MM_GPR_PCIE_AUX_EN		BIT(19)
+    43	#define IMX8MM_GPR_PCIE_CMN_RST		BIT(18)
+    44	#define IMX8MM_GPR_PCIE_POWER_OFF	BIT(17)
+    45	#define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
+    46	#define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
+    47	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

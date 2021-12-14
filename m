@@ -2,85 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 219DA474CDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F1C474CE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234721AbhLNU5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 15:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbhLNU5v (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 15:57:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34B3C061574;
-        Tue, 14 Dec 2021 12:57:51 -0800 (PST)
-Received: from mail.kernel.org (unknown [198.145.29.99])
+        id S234776AbhLNU7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 15:59:02 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:36068 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230382AbhLNU7B (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 15:59:01 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4415A616F3;
-        Tue, 14 Dec 2021 20:57:51 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5265A60385;
-        Tue, 14 Dec 2021 20:57:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1639515470;
-        bh=R9qmZKpcT5w0VsfJbKQW4+XRAWTvMIUvc+QUmb73qc8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qkPbNuPXw203FLrZEFtUEahnpUOxFmOk2L3oT9K4CLSyOgiR6GX4LNCsTttcIfG2a
-         nviKWftaaWKl4q4oexeadnqveVPKmev7+zRmj3deZqEf/CLSOQFYjtBC77RYNu5MII
-         E9XOQ9/TENrvRwyBdqA2YOZhhjEFyXlyPhmE4HcQ=
-Date:   Tue, 14 Dec 2021 12:57:48 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "mm-commits@vger.kernel.org" <mm-commits@vger.kernel.org>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "tj@kernel.org" <tj@kernel.org>
-Subject: Re: + mm-fix-panic-in-__alloc_pages.patch added to -mm tree
-Message-Id: <20211214125748.974a400f0b05a633f9b971b7@linux-foundation.org>
-In-Reply-To: <Ybht6kqwI0aPx3Jr@dhcp22.suse.cz>
-References: <20211108205031.UxDPHBZWa%akpm@linux-foundation.org>
-        <YYozLsIECu0Jnv0p@dhcp22.suse.cz>
-        <af7ab3ce-fed2-1ffc-13a8-f9acbd201841@redhat.com>
-        <YYpTy9eXZucxuRO/@dhcp22.suse.cz>
-        <YY6wZMcx/BeddUnH@fedora>
-        <YZI5TEW2BkBjOtC1@dhcp22.suse.cz>
-        <B8B7E3FA-6EAB-46B7-95EB-5A31395C8ADE@vmware.com>
-        <YZJZes9Gz9fe7bCC@dhcp22.suse.cz>
-        <ABEDED57-93A9-4601-8EB6-2FF348A0E0BB@vmware.com>
-        <YZMq++inSmJegJmj@fedora>
-        <Ybht6kqwI0aPx3Jr@dhcp22.suse.cz>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0DF941EC01DF;
+        Tue, 14 Dec 2021 21:58:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639515536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=MktwpOWLa2cY49EwlbrvmOr9KgEnQs/S2u9h9zMrhXE=;
+        b=dtRpBVMmF0KjeprDpz+PMzUc+ph0umJ/B3lJKYN3C8ZFemY1QLmkgGko7go+u7zxCxLCBS
+        naau1O+iCf6BcM7MMXFs5iOl/JvTTbPdaxa226kcUERh+uhzaK8v0qnzWF7N/F6l84y+qx
+        B8GOatULJZHcQX1BG8f35C6gZPzkOOY=
+Date:   Tue, 14 Dec 2021 21:58:57 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/26] x86/tdx: Detect running as a TDX guest in early
+ boot
+Message-ID: <YbkFkSPriw2bX2yC@zn.tnic>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-2-kirill.shutemov@linux.intel.com>
+ <Ybjf5g66cFHpUKMH@zn.tnic>
+ <20211214202106.uazcwby3365x2ymw@black.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211214202106.uazcwby3365x2ymw@black.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 11:11:54 +0100 Michal Hocko <mhocko@suse.com> wrote:
+On Tue, Dec 14, 2021 at 11:21:06PM +0300, Kirill A. Shutemov wrote:
+> But I think it should be pretty self-explanatory. I'll drop it.
 
-> > I need some clarification here. It sounds like memoryless nodes work on
-> > x86, but hotplug + memoryless nodes isn't a supported use case or you're
-> > introducing it as a new use case?
-> > 
-> > If this is a new use case, then I'm inclined to say this patch should
-> > NOT go in and a proper fix should be implemented on hotplug's side. I
-> > don't want to be in the business of having/seeing this conversation
-> > reoccur because we just papered over this issue in percpu.
-> 
-> The patch still seems to be in the mmotm tree. I have sent a different
-> fix candidate [1] which should be more robust and cover also other potential
-> places.
-> 
-> [1] http://lkml.kernel.org/r/20211214100732.26335-1-mhocko@kernel.org
+Right, otherwise we'd have to document all the depends in Kconfig which
+would be a pointless exercise in useless work.
 
-Is cool, I'm paying attention.
+:-)
 
-We do want something short and simple for backporting to -stable (like
-Alexey's patch) so please bear that in mind while preparing an
-alternative.
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

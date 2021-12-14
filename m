@@ -2,279 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52242473B90
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 491E8473B92
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbhLNDfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 22:35:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231939AbhLNDfb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 22:35:31 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F10C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:35:31 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id u4-20020a056a00098400b004946fc3e863so11169743pfg.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:35:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=NBpLGv/t9wf/4f1RGFvcWiVJe8a1tJa1MwRunYGXjVI=;
-        b=ShZbIAw74EXq7RDivJCLCruCXpuVH1M12LuQHOc4wHb13CBL1/oYs3U/eUCk0BMRCZ
-         48PsUeeBDeyfkfYg9wZdXWs2vAMT0rQVtllRd1oBUX6UXAj/l5cuIlzkLYsrmrhKFGDq
-         tsWgskZTImH12OTBF5/9c8QIncvcnV13QWCf/yR7O+Y8SDP8O3qmHp6dbQviOVT0EwQZ
-         v5ss18ReJt9UIU1b7Dy9S8P6yX8sM6ZOe68Q7N7Y+pA7mMl4uele5rc9ZM5lJWzOvTAC
-         RZyBLtv4GZIuZG+xuzSPRi+E7PL8d6Rn+ZgylZubgyLniNgbgWJ2fzo5HLs2/6/ntOy7
-         hpYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=NBpLGv/t9wf/4f1RGFvcWiVJe8a1tJa1MwRunYGXjVI=;
-        b=X8VCefSPuXbS2NPK2rd1cRMAsS52Got3DCmDERiCOmPNdsTBtvNqUjdtwwgVwdL+rz
-         B+0EDdDxMjzGKGlnN0ZAvyJMHEv2xoWn5VuF+RlXcV7QpcSvphWTKDFPq+3y1pWM3uYw
-         trttv/HNXuduKMd0BccdxcBdNYsDnFrEhUetLZb5sK/3MM2IGgqvDo4urLvf2OKtX5Dv
-         DdGIPG1YC1EZ8+sG3tq5h0g2fL4Vi05x06udjbeAn9653cN5kX0ZIW2YPlV4LU57zpmp
-         m+vxX+vo33qG2APoRiDwAoaCzQliSsR0yE3/kn9pEL7W0CT3aombU3kPSa2L7wWTS6aV
-         qREw==
-X-Gm-Message-State: AOAM531cFZE8/zKgLNu/OMSo+zYVvc21wQ0wp4aHFkM03W3J6eI/XreW
-        6d0jadf7wIcdw3Jt/uNR4FmumFk5cyg=
-X-Google-Smtp-Source: ABdhPJwsuqIk4kiVPiREgbQryGr9777gdR5BhdPDiVBf7FFTg/UYynFabLfKnFLUbkLyMXCjirmLOZEo2MA=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:c410:b0:142:2506:cb5b with SMTP id
- k16-20020a170902c41000b001422506cb5bmr3022587plk.36.1639452930838; Mon, 13
- Dec 2021 19:35:30 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Dec 2021 03:35:28 +0000
-Message-Id: <20211214033528.123268-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH] KVM: x86/mmu: Don't advance iterator after restart due to yielding
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ignat Korchagin <ignat@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S233128AbhLNDgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 22:36:12 -0500
+Received: from mga12.intel.com ([192.55.52.136]:61774 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231394AbhLNDgL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 22:36:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639452971; x=1670988971;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9X8UG/PSAPJSzARcUocrqkjaC+u7jpUig5cjawHTfbk=;
+  b=BORURE/aQaERREie7FnVo92eUYhZ6O2xg+3oiUbHmqTmi8iNMcW8Zyhz
+   1C4/LlBXX248rVL3upZSZSvB5CmrQoHqTwicLGO5w7NJFCQiOI8nSK860
+   x3WJNkJpbern8aRsX9GnMJU0HOLuWFR0Ht1k43RCEwYtJicQCoeJprSpW
+   A7BQbrW86Gjvgc60c6B3/TmHM5YC3fIplkF6IqkQqBQIjSBn/B+3zw+hC
+   Jh258ooIV6XM62yJz7ZgeSu9sy+fX2L++ydRni56Z2yC/0EH4mNhLKgHN
+   d0fSCSPohReQFOztlKx1WueYmoxDj3aZzgD+ToF9kRGep8NCToFz0lOyR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="218903900"
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="218903900"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 19:36:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="481754784"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 13 Dec 2021 19:36:08 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mwybn-0007O9-E3; Tue, 14 Dec 2021 03:36:07 +0000
+Date:   Tue, 14 Dec 2021 11:35:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next 27/33] kernel/rcu/tree.c:1180:19: warning:
+ variable 'rnp' set but not used
+Message-ID: <202112141117.jFtY2VyL-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After dropping mmu_lock in the TDP MMU, restart the iterator during
-tdp_iter_next() and do not advance the iterator.  Advancing the iterator
-results in skipping the top-level SPTE and all its children, which is
-fatal if any of the skipped SPTEs were not visited before yielding.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+head:   a4b57ded94e522e2870ae9504f776caa0f615148
+commit: ee418df93691657d27f6118d1ff8f681c52f4aa3 [27/33] rcu: Create and use a rcu_rdp_cpu_online()
+config: i386-randconfig-s001-20211213 (https://download.01.org/0day-ci/archive/20211214/202112141117.jFtY2VyL-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=ee418df93691657d27f6118d1ff8f681c52f4aa3
+        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+        git fetch --no-tags paulmck-rcu rcu/next
+        git checkout ee418df93691657d27f6118d1ff8f681c52f4aa3
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash kernel/rcu/
 
-When zapping all SPTEs, i.e. when min_level == root_level, restarting the
-iter and then invoking tdp_iter_next() is always fatal if the current gfn
-has as a valid SPTE, as advancing the iterator results in try_step_side()
-skipping the current gfn, which wasn't visited before yielding.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sprinkle WARNs on iter->yielded being true in various helpers that are
-often used in conjunction with yielding, and tag the helper with
-__must_check to reduce the probabily of improper usage.
+All warnings (new ones prefixed by >>):
 
-Failing to zap a top-level SPTE manifests in one of two ways.  If a valid
-SPTE is skipped by both kvm_tdp_mmu_zap_all() and kvm_tdp_mmu_put_root(),
-the shadow page will be leaked and KVM will WARN accordingly.
+   kernel/rcu/tree.c: In function 'rcu_lockdep_current_cpu_online':
+>> kernel/rcu/tree.c:1180:19: warning: variable 'rnp' set but not used [-Wunused-but-set-variable]
+    1180 |  struct rcu_node *rnp;
+         |                   ^~~
 
-  WARNING: CPU: 1 PID: 3509 at arch/x86/kvm/mmu/tdp_mmu.c:46 [kvm]
-  RIP: 0010:kvm_mmu_uninit_tdp_mmu+0x3e/0x50 [kvm]
-  Call Trace:
-   <TASK>
-   kvm_arch_destroy_vm+0x130/0x1b0 [kvm]
-   kvm_destroy_vm+0x162/0x2a0 [kvm]
-   kvm_vcpu_release+0x34/0x60 [kvm]
-   __fput+0x82/0x240
-   task_work_run+0x5c/0x90
-   do_exit+0x364/0xa10
-   ? futex_unqueue+0x38/0x60
-   do_group_exit+0x33/0xa0
-   get_signal+0x155/0x850
-   arch_do_signal_or_restart+0xed/0x750
-   exit_to_user_mode_prepare+0xc5/0x120
-   syscall_exit_to_user_mode+0x1d/0x40
-   do_syscall_64+0x48/0xc0
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-If kvm_tdp_mmu_zap_all() skips a gfn/SPTE but that SPTE is then zapped by
-kvm_tdp_mmu_put_root(), KVM triggers a use-after-free in the form of
-marking a struct page as dirty/accessed after it has been put back on the
-free list.  This directly triggers a WARN due to encountering a page with
-page_count() == 0, but it can also lead to data corruption and additional
-errors in the kernel.
+vim +/rnp +1180 kernel/rcu/tree.c
 
-  WARNING: CPU: 7 PID: 1995658 at arch/x86/kvm/../../../virt/kvm/kvm_main.c:171
-  RIP: 0010:kvm_is_zone_device_pfn.part.0+0x9e/0xd0 [kvm]
-  Call Trace:
-   <TASK>
-   kvm_set_pfn_dirty+0x120/0x1d0 [kvm]
-   __handle_changed_spte+0x92e/0xca0 [kvm]
-   __handle_changed_spte+0x63c/0xca0 [kvm]
-   __handle_changed_spte+0x63c/0xca0 [kvm]
-   __handle_changed_spte+0x63c/0xca0 [kvm]
-   zap_gfn_range+0x549/0x620 [kvm]
-   kvm_tdp_mmu_put_root+0x1b6/0x270 [kvm]
-   mmu_free_root_page+0x219/0x2c0 [kvm]
-   kvm_mmu_free_roots+0x1b4/0x4e0 [kvm]
-   kvm_mmu_unload+0x1c/0xa0 [kvm]
-   kvm_arch_destroy_vm+0x1f2/0x5c0 [kvm]
-   kvm_put_kvm+0x3b1/0x8b0 [kvm]
-   kvm_vcpu_release+0x4e/0x70 [kvm]
-   __fput+0x1f7/0x8c0
-   task_work_run+0xf8/0x1a0
-   do_exit+0x97b/0x2230
-   do_group_exit+0xda/0x2a0
-   get_signal+0x3be/0x1e50
-   arch_do_signal_or_restart+0x244/0x17f0
-   exit_to_user_mode_prepare+0xcb/0x120
-   syscall_exit_to_user_mode+0x1d/0x40
-   do_syscall_64+0x4d/0x90
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
+c0d6d01bffdce1 kernel/rcutree.c  Paul E. McKenney 2012-01-23  1163  
+c0d6d01bffdce1 kernel/rcutree.c  Paul E. McKenney 2012-01-23  1164  /*
+5554788e1d4253 kernel/rcu/tree.c Paul E. McKenney 2018-05-15  1165   * Is the current CPU online as far as RCU is concerned?
+2036d94a7b61ca kernel/rcutree.c  Paul E. McKenney 2012-01-30  1166   *
+5554788e1d4253 kernel/rcu/tree.c Paul E. McKenney 2018-05-15  1167   * Disable preemption to avoid false positives that could otherwise
+5554788e1d4253 kernel/rcu/tree.c Paul E. McKenney 2018-05-15  1168   * happen due to the current CPU number being sampled, this task being
+5554788e1d4253 kernel/rcu/tree.c Paul E. McKenney 2018-05-15  1169   * preempted, its old CPU being taken offline, resuming on some other CPU,
+49918a54e63c99 kernel/rcu/tree.c Paul E. McKenney 2018-07-07  1170   * then determining that its old CPU is now offline.
+c0d6d01bffdce1 kernel/rcutree.c  Paul E. McKenney 2012-01-23  1171   *
+5554788e1d4253 kernel/rcu/tree.c Paul E. McKenney 2018-05-15  1172   * Disable checking if in an NMI handler because we cannot safely
+5554788e1d4253 kernel/rcu/tree.c Paul E. McKenney 2018-05-15  1173   * report errors from NMI handlers anyway.  In addition, it is OK to use
+5554788e1d4253 kernel/rcu/tree.c Paul E. McKenney 2018-05-15  1174   * RCU on an offline processor during initial boot, hence the check for
+5554788e1d4253 kernel/rcu/tree.c Paul E. McKenney 2018-05-15  1175   * rcu_scheduler_fully_active.
+c0d6d01bffdce1 kernel/rcutree.c  Paul E. McKenney 2012-01-23  1176   */
+c0d6d01bffdce1 kernel/rcutree.c  Paul E. McKenney 2012-01-23  1177  bool rcu_lockdep_current_cpu_online(void)
+c0d6d01bffdce1 kernel/rcutree.c  Paul E. McKenney 2012-01-23  1178  {
+2036d94a7b61ca kernel/rcutree.c  Paul E. McKenney 2012-01-30  1179  	struct rcu_data *rdp;
+2036d94a7b61ca kernel/rcutree.c  Paul E. McKenney 2012-01-30 @1180  	struct rcu_node *rnp;
+b97d23c51c9fee kernel/rcu/tree.c Paul E. McKenney 2018-07-04  1181  	bool ret = false;
+c0d6d01bffdce1 kernel/rcutree.c  Paul E. McKenney 2012-01-23  1182  
+5554788e1d4253 kernel/rcu/tree.c Paul E. McKenney 2018-05-15  1183  	if (in_nmi() || !rcu_scheduler_fully_active)
+f6f7ee9af7554e kernel/rcu/tree.c Fengguang Wu     2013-10-10  1184  		return true;
+ff5c4f5cad3306 kernel/rcu/tree.c Thomas Gleixner  2020-03-13  1185  	preempt_disable_notrace();
+da1df50d16171f kernel/rcu/tree.c Paul E. McKenney 2018-07-03  1186  	rdp = this_cpu_ptr(&rcu_data);
+2036d94a7b61ca kernel/rcutree.c  Paul E. McKenney 2012-01-30  1187  	rnp = rdp->mynode;
+defd1f8a1f4efe kernel/rcu/tree.c David Woodhouse  2021-02-16  1188  	/*
+defd1f8a1f4efe kernel/rcu/tree.c David Woodhouse  2021-02-16  1189  	 * Strictly, we care here about the case where the current CPU is
+defd1f8a1f4efe kernel/rcu/tree.c David Woodhouse  2021-02-16  1190  	 * in rcu_cpu_starting() and thus has an excuse for rdp->grpmask
+defd1f8a1f4efe kernel/rcu/tree.c David Woodhouse  2021-02-16  1191  	 * not being up to date. So arch_spin_is_locked() might have a
+defd1f8a1f4efe kernel/rcu/tree.c David Woodhouse  2021-02-16  1192  	 * false positive if it's held by some *other* CPU, but that's
+defd1f8a1f4efe kernel/rcu/tree.c David Woodhouse  2021-02-16  1193  	 * OK because that just means a false *negative* on the warning.
+defd1f8a1f4efe kernel/rcu/tree.c David Woodhouse  2021-02-16  1194  	 */
+ee418df9369165 kernel/rcu/tree.c Paul E. McKenney 2021-12-10  1195  	if (rcu_rdp_cpu_online(rdp) || arch_spin_is_locked(&rcu_state.ofl_lock))
+b97d23c51c9fee kernel/rcu/tree.c Paul E. McKenney 2018-07-04  1196  		ret = true;
+ff5c4f5cad3306 kernel/rcu/tree.c Thomas Gleixner  2020-03-13  1197  	preempt_enable_notrace();
+b97d23c51c9fee kernel/rcu/tree.c Paul E. McKenney 2018-07-04  1198  	return ret;
+c0d6d01bffdce1 kernel/rcutree.c  Paul E. McKenney 2012-01-23  1199  }
+c0d6d01bffdce1 kernel/rcutree.c  Paul E. McKenney 2012-01-23  1200  EXPORT_SYMBOL_GPL(rcu_lockdep_current_cpu_online);
+c0d6d01bffdce1 kernel/rcutree.c  Paul E. McKenney 2012-01-23  1201  
 
-Note, the underlying bug existed even before commit 1af4a96025b3 ("KVM:
-x86/mmu: Yield in TDU MMU iter even if no SPTES changed") moved calls to
-tdp_mmu_iter_cond_resched() to the beginning of loops, as KVM could still
-incorrectly advance past a top-level entry when yielding on a lower-level
-entry.  But with respect to leaking shadow pages, the bug was introduced
-by yielding before processing the current gfn.
+:::::: The code at line 1180 was first introduced by commit
+:::::: 2036d94a7b61ca5032ce90f2bda06afec0fe713e rcu: Rework detection of use of RCU by offline CPUs
 
-Alternatively, tdp_mmu_iter_cond_resched() could simply fall through, or
-callers could jump to their "retry" label.  The downside of that approach
-is that tdp_mmu_iter_cond_resched() _must_ be called before anything else
-in the loop, and there's no easy way to enfornce that requirement.
+:::::: TO: Paul E. McKenney <paul.mckenney@linaro.org>
+:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
 
-Ideally, KVM would handling the cond_resched() fully within the iterator
-macro (the code is actually quite clean) and avoid this entire class of
-bugs, but that is extremely difficult do while also supporting yielding
-after tdp_mmu_set_spte_atomic() fails.  Yielding after failing to set a
-SPTE is very desirable as the "owner" of the REMOVED_SPTE isn't strictly
-bounded, e.g. if it's zapping a high-level shadow page, the REMOVED_SPTE
-may block operations on the SPTE for a significant amount of time.
-
-Fixes: faaf05b00aec ("kvm: x86/mmu: Support zapping SPTEs in the TDP MMU")
-Fixes: 1af4a96025b3 ("KVM: x86/mmu: Yield in TDU MMU iter even if no SPTES changed")
-Reported-by: Ignat Korchagin <ignat@cloudflare.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/tdp_iter.c |  6 ++++++
- arch/x86/kvm/mmu/tdp_iter.h |  6 ++++++
- arch/x86/kvm/mmu/tdp_mmu.c  | 29 ++++++++++++++++-------------
- 3 files changed, 28 insertions(+), 13 deletions(-)
-
-diff --git a/arch/x86/kvm/mmu/tdp_iter.c b/arch/x86/kvm/mmu/tdp_iter.c
-index b3ed302c1a35..caa96c270b95 100644
---- a/arch/x86/kvm/mmu/tdp_iter.c
-+++ b/arch/x86/kvm/mmu/tdp_iter.c
-@@ -26,6 +26,7 @@ static gfn_t round_gfn_for_level(gfn_t gfn, int level)
-  */
- void tdp_iter_restart(struct tdp_iter *iter)
- {
-+	iter->yielded = false;
- 	iter->yielded_gfn = iter->next_last_level_gfn;
- 	iter->level = iter->root_level;
- 
-@@ -160,6 +161,11 @@ static bool try_step_up(struct tdp_iter *iter)
-  */
- void tdp_iter_next(struct tdp_iter *iter)
- {
-+	if (iter->yielded) {
-+		tdp_iter_restart(iter);
-+		return;
-+	}
-+
- 	if (try_step_down(iter))
- 		return;
- 
-diff --git a/arch/x86/kvm/mmu/tdp_iter.h b/arch/x86/kvm/mmu/tdp_iter.h
-index b1748b988d3a..e19cabbcb65c 100644
---- a/arch/x86/kvm/mmu/tdp_iter.h
-+++ b/arch/x86/kvm/mmu/tdp_iter.h
-@@ -45,6 +45,12 @@ struct tdp_iter {
- 	 * iterator walks off the end of the paging structure.
- 	 */
- 	bool valid;
-+	/*
-+	 * True if KVM dropped mmu_lock and yielded in the middle of a walk, in
-+	 * which case tdp_iter_next() needs to restart the walk at the root
-+	 * level instead of advancing to the next entry.
-+	 */
-+	bool yielded;
- };
- 
- /*
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index b69e47e68307..7b1bc816b7c3 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -502,6 +502,8 @@ static inline bool tdp_mmu_set_spte_atomic(struct kvm *kvm,
- 					   struct tdp_iter *iter,
- 					   u64 new_spte)
- {
-+	WARN_ON_ONCE(iter->yielded);
-+
- 	lockdep_assert_held_read(&kvm->mmu_lock);
- 
- 	/*
-@@ -575,6 +577,8 @@ static inline void __tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
- 				      u64 new_spte, bool record_acc_track,
- 				      bool record_dirty_log)
- {
-+	WARN_ON_ONCE(iter->yielded);
-+
- 	lockdep_assert_held_write(&kvm->mmu_lock);
- 
- 	/*
-@@ -640,18 +644,19 @@ static inline void tdp_mmu_set_spte_no_dirty_log(struct kvm *kvm,
-  * If this function should yield and flush is set, it will perform a remote
-  * TLB flush before yielding.
-  *
-- * If this function yields, it will also reset the tdp_iter's walk over the
-- * paging structure and the calling function should skip to the next
-- * iteration to allow the iterator to continue its traversal from the
-- * paging structure root.
-+ * If this function yields, iter->yielded is set and the caller must skip to
-+ * the next iteration, where tdp_iter_next() will reset the tdp_iter's walk
-+ * over the paging structures to allow the iterator to continue its traversal
-+ * from the paging structure root.
-  *
-- * Return true if this function yielded and the iterator's traversal was reset.
-- * Return false if a yield was not needed.
-+ * Returns true if this function yielded.
-  */
--static inline bool tdp_mmu_iter_cond_resched(struct kvm *kvm,
--					     struct tdp_iter *iter, bool flush,
--					     bool shared)
-+static inline bool __must_check tdp_mmu_iter_cond_resched(struct kvm *kvm,
-+							  struct tdp_iter *iter,
-+							  bool flush, bool shared)
- {
-+	WARN_ON(iter->yielded);
-+
- 	/* Ensure forward progress has been made before yielding. */
- 	if (iter->next_last_level_gfn == iter->yielded_gfn)
- 		return false;
-@@ -671,12 +676,10 @@ static inline bool tdp_mmu_iter_cond_resched(struct kvm *kvm,
- 
- 		WARN_ON(iter->gfn > iter->next_last_level_gfn);
- 
--		tdp_iter_restart(iter);
--
--		return true;
-+		iter->yielded = true;
- 	}
- 
--	return false;
-+	return iter->yielded;
- }
- 
- /*
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,172 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B3C474554
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6E347454B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234971AbhLNOjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:39:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56941 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234943AbhLNOjX (ORCPT
+        id S233233AbhLNOjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:39:05 -0500
+Received: from mickerik.phytec.de ([195.145.39.210]:62960 "EHLO
+        mickerik.phytec.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230525AbhLNOjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:39:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639492763;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2rStoPL6fQLx4oCsX+/VBOg86v69CREOj9Z7qxiEeY0=;
-        b=eX3lc5jtQt+ufA6OF0YnlPxDX7g+6wRd+5dWlIOnz6flQcILLUHx6vCBSEK4WBdmfXLgnz
-        x/pcBwHH6RPH2Axxu25comt46iPnAxcMtzHWI6kl4A5eu/1NXSVxWZLsMQjolWOBLTe+Ix
-        jStw2fWH4wBprQfHuAzJibRvxHIAkAY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-21-W7EiWiWzOfW-CFqXGqaAPQ-1; Tue, 14 Dec 2021 09:39:21 -0500
-X-MC-Unique: W7EiWiWzOfW-CFqXGqaAPQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1AF778189D5;
-        Tue, 14 Dec 2021 14:39:16 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.195.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 98C7478C30;
-        Tue, 14 Dec 2021 14:39:13 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
+        Tue, 14 Dec 2021 09:39:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1639492743; x=1642084743;
+        h=From:Sender:Reply-To:Subject:Date:Message-Id:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=EzckGd9Ydqg+0+DJujflO9WgyKd1bNpDeZF5ujGoVhY=;
+        b=DqDx2r1oRSO4F6oBrNeuYJ5VJPc5m/wBJaXfPtKlMFkUflqOvEoYTZzDJPkHBSir
+        /9TaU84dyMgmFT4qwydtwH0af0uOQYzSeUIso/0BLEbP6bFZSP56eBsJ6WmEu8Ps
+        +lsOEvlZ3OIRsHSuzml4OIbL6a8HlEtvWcUfsSGSN+E=;
+X-AuditID: c39127d2-4f7337000000426a-e2-61b8ac8745be
+Received: from idefix.phytec.de (Unknown_Domain [172.16.0.10])
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id DA.A3.17002.78CA8B16; Tue, 14 Dec 2021 15:39:03 +0100 (CET)
+Received: from augenblix2.phytec.de ([172.16.0.56])
+          by idefix.phytec.de (IBM Domino Release 9.0.1FP7)
+          with ESMTP id 2021121415390342-2374257 ;
+          Tue, 14 Dec 2021 15:39:03 +0100 
+From:   Yunus Bas <y.bas@phytec.de>
+To:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org
+Cc:     yuehaibing@huawei.com, u.kleine-koenig@pengutronix.de,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] KVM: nVMX: Allow VMREAD when Enlightened VMCS is in use
-Date:   Tue, 14 Dec 2021 15:38:59 +0100
-Message-Id: <20211214143859.111602-6-vkuznets@redhat.com>
-In-Reply-To: <20211214143859.111602-1-vkuznets@redhat.com>
-References: <20211214143859.111602-1-vkuznets@redhat.com>
+Subject: [PATCH] Input: tsc200x-core - Add axis inversion and swapping support
+Date:   Tue, 14 Dec 2021 15:39:03 +0100
+Message-Id: <20211214143903.1324122-1-y.bas@phytec.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-MIMETrack: Itemize by SMTP Server on Idefix/Phytec(Release 9.0.1FP7|August  17, 2016) at
+ 14.12.2021 15:39:03,
+        Serialize by Router on Idefix/Phytec(Release 9.0.1FP7|August  17, 2016) at
+ 14.12.2021 15:39:03
+X-TNEFEvaluated: 1
+Content-Transfer-Encoding: quoted-printable
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOLMWRmVeSWpSXmKPExsWyRoCBS7d9zY5Eg/u75SwOL3rBaHHz0zdW
+        i8u75rBZ3J44mdHiztfnLA6sHjtn3WX3aDnyltWj/6+Bx+dNcgEsUVw2Kak5mWWpRfp2CVwZ
+        k99sYy04zVvRfusMewPjKu4uRk4OCQETiVuTf7N1MXJxCAlsZZS40rCEBcK5wCjxZf4bZpAq
+        NgFFifO337KC2CICVhKzmtsYQWxmgXCJRUuXANkcHMICfhJPTyqAhFkEVCX2HN/FDmLzCphJ
+        LFp3mQlimbzEzEvfoeKCEidnPgHbJSFwhVGiae80NogiIYnTi88yQ8zXlli28DXzBEa+WUh6
+        ZiFJLWBkWsUolJuZnJ1alJmtV5BRWZKarJeSuokRGHiHJ6pf2sHYN8fjECMTB+MhRgkOZiUR
+        3pfWWxOFeFMSK6tSi/Lji0pzUosPMUpzsCiJ897vYUoUEkhPLEnNTk0tSC2CyTJxcEo1MKaZ
+        p+x3a20xzKloXrb8bH3/dlb9pWGn70+vS5/X4iYiM715zz4D/9Xv6rh6555bdPH3wpnPru9N
+        n+bh4uV8WeW1y57v1VuMel0L7085vJjdM/sne3rYq5OqYhMn+2Wsk/vLOOFE9NGLq5+X1Ikk
+        3Lzcf8ojetu/s1tqXx6ZNcdmbWD7j+tZ/ycrsRRnJBpqMRcVJwIAS+TCfyoCAAA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hyper-V TLFS explicitly forbids VMREAD and VMWRITE instructions when
-Enlightened VMCS interface is in use:
+Since Commit ed7c9870c9bc ("Input: of=5Ftouchscreen - add support for
+inverted / swapped axes"), the of=5Ftouchscreen interface supports axis
+inverting and swapping through Devicetree properties. Make use of this
+feature.
 
-"Any VMREAD or VMWRITE instructions while an enlightened VMCS is
-active is unsupported and can result in unexpected behavior.""
-
-Windows 11 + WSL2 seems to ignore this, attempts to VMREAD VMCS field
-0x4404 ("VM-exit interruption information") are observed. Failing
-these attempts with nested_vmx_failInvalid() makes such guests
-unbootable.
-
-Microsoft confirms this is a Hyper-V bug and claims that it'll get fixed
-eventually but for the time being we need a workaround. (Temporary) allow
-VMREAD to get data from the currently loaded Enlightened VMCS.
-
-Note: VMWRITE instructions remain forbidden, it is not clear how to
-handle them properly and hopefully won't ever be needed.
-
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Yunus Bas <y.bas@phytec.de>
 ---
- arch/x86/kvm/vmx/evmcs.h  | 12 ++++++++++++
- arch/x86/kvm/vmx/nested.c | 38 ++++++++++++++++++++++++++++----------
- 2 files changed, 40 insertions(+), 10 deletions(-)
+ drivers/input/touchscreen/tsc200x-core.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-index 9bc2521b159e..8d70f9aea94b 100644
---- a/arch/x86/kvm/vmx/evmcs.h
-+++ b/arch/x86/kvm/vmx/evmcs.h
-@@ -98,6 +98,18 @@ static __always_inline int evmcs_field_offset(unsigned long field,
- 	return evmcs_field->offset;
- }
- 
-+static inline u64 evmcs_read_any(struct hv_enlightened_vmcs *evmcs,
-+				 unsigned long field, u16 offset)
-+{
-+	/*
-+	 * vmcs12_read_any() doesn't care whether the supplied structure
-+	 * is 'struct vmcs12' or 'struct hv_enlightened_vmcs' as it takes
-+	 * the exact offset of the required field, use it for convenience
-+	 * here.
-+	 */
-+	return vmcs12_read_any((void *)evmcs, field, offset);
-+}
+diff --git a/drivers/input/touchscreen/tsc200x-core.c b/drivers/input/touch=
+screen/tsc200x-core.c
+index 27810f6c69f6..72c7258b93a5 100644
+--- a/drivers/input/touchscreen/tsc200x-core.c
++++ b/drivers/input/touchscreen/tsc200x-core.c
+@@ -88,6 +88,8 @@ struct tsc200x {
+ 	int                     in=5Fz1;
+ 	int			in=5Fz2;
+=20
++	struct touchscreen=5Fproperties prop;
 +
- #if IS_ENABLED(CONFIG_HYPERV)
- 
- static __always_inline int get_evmcs_offset(unsigned long field,
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 0b990a6914c1..27fedb220a23 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -7,6 +7,7 @@
- #include <asm/mmu_context.h>
- 
- #include "cpuid.h"
-+#include "evmcs.h"
- #include "hyperv.h"
- #include "mmu.h"
- #include "nested.h"
-@@ -5074,27 +5075,44 @@ static int handle_vmread(struct kvm_vcpu *vcpu)
- 	if (!nested_vmx_check_permission(vcpu))
- 		return 1;
- 
-+	/* Normal or Enlightened VMPTRLD must be performed first */
-+	if (vmx->nested.current_vmptr == INVALID_GPA &&
-+	    !evmptr_is_valid(vmx->nested.hv_evmcs_vmptr))
-+		return nested_vmx_failInvalid(vcpu);
-+
- 	/*
- 	 * In VMX non-root operation, when the VMCS-link pointer is INVALID_GPA,
- 	 * any VMREAD sets the ALU flags for VMfailInvalid.
- 	 */
--	if (vmx->nested.current_vmptr == INVALID_GPA ||
--	    (is_guest_mode(vcpu) &&
--	     get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
-+	if (is_guest_mode(vcpu) &&
-+	    get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA)
- 		return nested_vmx_failInvalid(vcpu);
- 
- 	/* Decode instruction info and find the field to read */
- 	field = kvm_register_read(vcpu, (((instr_info) >> 28) & 0xf));
- 
--	offset = vmcs12_field_offset(field);
--	if (offset < 0)
--		return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
-+	/*
-+	 * Inside guest mode, Enlightened VMCS is not the ultimate source of
-+	 * truth, shadow VMCS12/VMCS02 are.
-+	 */
-+	if (evmptr_is_valid(vmx->nested.hv_evmcs_vmptr) && !is_guest_mode(vcpu)) {
-+		offset = evmcs_field_offset(field, NULL);
-+		if (offset < 0)
-+			return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
- 
--	if (!is_guest_mode(vcpu) && is_vmcs12_ext_field(field))
--		copy_vmcs02_to_vmcs12_rare(vcpu, vmcs12);
-+		/* Read the field, zero-extended to a u64 value */
-+		value = evmcs_read_any(vmx->nested.hv_evmcs, field, offset);
-+	} else {
-+		offset = vmcs12_field_offset(field);
-+		if (offset < 0)
-+			return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
- 
--	/* Read the field, zero-extended to a u64 value */
--	value = vmcs12_read_any(vmcs12, field, offset);
-+		if (!is_guest_mode(vcpu) && is_vmcs12_ext_field(field))
-+			copy_vmcs02_to_vmcs12_rare(vcpu, vmcs12);
-+
-+		/* Read the field, zero-extended to a u64 value */
-+		value = vmcs12_read_any(vmcs12, field, offset);
-+	}
- 
- 	/*
- 	 * Now copy part of this value to register or memory, as requested.
--- 
-2.33.1
+ 	spinlock=5Ft		lock;
+ 	struct timer=5Flist	penup=5Ftimer;
+=20
+@@ -113,8 +115,7 @@ static void tsc200x=5Fupdate=5Fpen=5Fstate(struct tsc20=
+0x *ts,
+ 				     int x, int y, int pressure)
+ {
+ 	if (pressure) {
+-		input=5Freport=5Fabs(ts->idev, ABS=5FX, x);
+-		input=5Freport=5Fabs(ts->idev, ABS=5FY, y);
++		touchscreen=5Freport=5Fpos(ts->idev, &ts->prop, x, y, false);
+ 		input=5Freport=5Fabs(ts->idev, ABS=5FPRESSURE, pressure);
+ 		if (!ts->pen=5Fdown) {
+ 			input=5Freport=5Fkey(ts->idev, BTN=5FTOUCH, !!pressure);
+@@ -533,7 +534,7 @@ int tsc200x=5Fprobe(struct device *dev, int irq, const =
+struct input=5Fid *tsc=5Fid,
+ 	input=5Fset=5Fabs=5Fparams(input=5Fdev, ABS=5FPRESSURE,
+ 			     0, MAX=5F12BIT, TSC200X=5FDEF=5FP=5FFUZZ, 0);
+=20
+-	touchscreen=5Fparse=5Fproperties(input=5Fdev, false, NULL);
++	touchscreen=5Fparse=5Fproperties(input=5Fdev, false, &ts->prop);
+=20
+ 	/* Ensure the touchscreen is off */
+ 	tsc200x=5Fstop=5Fscan(ts);
+--=20
+2.25.1
 

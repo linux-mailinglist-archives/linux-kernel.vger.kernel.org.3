@@ -2,162 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B5D473D19
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DDA473D1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbhLNGRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 01:17:32 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:60034 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbhLNGRa (ORCPT
+        id S230436AbhLNGTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230374AbhLNGTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 01:17:30 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1BE6H9d14009276, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1BE6H9d14009276
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 14 Dec 2021 14:17:09 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 14:17:09 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 14:17:08 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01]) by
- RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01%5]) with mapi id
- 15.01.2308.020; Tue, 14 Dec 2021 14:17:08 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "jian-hong@endlessm.com" <jhp@endlessos.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Bernie Huang <phhuang@realtek.com>,
-        Brian Norris <briannorris@chromium.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] rtw88: Disable PCIe ASPM while doing NAPI poll on 8821CE
-Thread-Topic: [PATCH v2] rtw88: Disable PCIe ASPM while doing NAPI poll on
- 8821CE
-Thread-Index: AQHX8KxEGsnToIDXSUCJmFSUmWAcOawxeDaA//+B4wCAAIbGIA==
-Date:   Tue, 14 Dec 2021 06:17:08 +0000
-Message-ID: <db0e4a43a09f4618b0ed0ad191140e34@realtek.com>
-References: <20211214053302.242222-1-kai.heng.feng@canonical.com>
- <4aaf5dd030004285a56bc55cc6b2731b@realtek.com>
- <CAAd53p6TWV=vciEPkM-_rPy4op1Nqpqye-UhHXnsUJ4MjoVk=w@mail.gmail.com>
-In-Reply-To: <CAAd53p6TWV=vciEPkM-_rPy4op1Nqpqye-UhHXnsUJ4MjoVk=w@mail.gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzEyLzE0IOS4iuWNiCAwNDo0NzowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 14 Dec 2021 01:19:03 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EDEC061574;
+        Mon, 13 Dec 2021 22:19:03 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id e3so60350281edu.4;
+        Mon, 13 Dec 2021 22:19:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=okXmE9n70i5mN9tZ3BS4jx1+GOye2/2pT9K5asNw8SE=;
+        b=amWbMm9XtgIGPc4+PzfMkJEjdfm9CIKgzOo+e2mdwZmsmXL7LG5xccgCLKi3m3jLLT
+         bbhzzBGVr66+vccfORZ1/J5id6U2j4e4y4lS+PUtInQDjZgyP5HA/E57aJ4vbs4+QSom
+         dBR4N0SKWVy/CSNtbupjPljp2GUsXcgDHe6WIjZ1VeVABcFAgSR7WqX+6xPxHmVyeZez
+         Qpf21jCHk5e+LPARZ4wg30qCqzObFqB/VvVj0VCTblGdphVJPKOaTemzlL/8Louu9LWY
+         5UHNYvPWItXMsxFGvTdFX/UO+HXCtV/JczCpiwFZ9slsL5J86ElTSqY8rZnMqAVEbflf
+         2dGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=okXmE9n70i5mN9tZ3BS4jx1+GOye2/2pT9K5asNw8SE=;
+        b=iubYYSupuB7DC/B+YlR+hu6JOZJ2E+Sx+XFq5wF5TVHPfFhtuh3YgjyKg0s5saAlqJ
+         s2Q0zBWANHPJkc+JzVuGgK+1qWv+k5Tdrg/6AetBT2EV7WctnWn+GBG2b1up6UT9kuec
+         VL1xOzAezFvzJ9YV+ebs6o02Ei/Mhra50IcKTh2Muqdg9BStF+Iz77G15xczv7bjhBeU
+         ZG8ZGrS3GRmGWWdKBmza4llPah4bUdzh18GqWIcbtY2RJS6fTvFKYDrTejyOg8C/CHht
+         jBC0nOhtZ7SqlB04ptj04aLdC0RfGcvaNDK8X1C8Y3Tfj/dbRD/VlekXBqKcg8fKKypZ
+         GfhA==
+X-Gm-Message-State: AOAM5324kEyVeenEnFyWfFm3+r5nyPxySPyz5/KifSd/SeiJp4tNyexd
+        ID/PW5QSb5pDPhtp5gFVnnc=
+X-Google-Smtp-Source: ABdhPJyqRkRHhs97Es6imNHslMAnqhjlRoNZKRYHUB0xKOPAM1grGFyr6V+8zeMqAWtYfCDXoNm1EQ==
+X-Received: by 2002:a05:6402:3549:: with SMTP id f9mr5396842edd.23.1639462741733;
+        Mon, 13 Dec 2021 22:19:01 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id u10sm7093813edo.16.2021.12.13.22.18.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 22:19:01 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <ba78d142-6a97-99dd-9d00-465f7d6aa712@redhat.com>
+Date:   Tue, 14 Dec 2021 07:18:57 +0100
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 16/19] kvm: x86: Introduce KVM_{G|S}ET_XSAVE2 ioctl
+Content-Language: en-US
+To:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Cc:     "seanjc@google.com" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-17-yang.zhong@intel.com>
+ <d16aab21-0f81-f758-a61e-5919f223be78@redhat.com>
+ <26ea7039-3186-c23f-daba-d039bb8d6f48@redhat.com>
+ <86d3c3a5d61649079800a2038370365b@intel.com>
+ <bdda79b5-79e4-22fd-9af8-ec6e87a412ab@redhat.com>
+ <3ec6019a551249d6994063e56a448625@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <3ec6019a551249d6994063e56a448625@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEthaS1IZW5nIEZlbmcgPGth
-aS5oZW5nLmZlbmdAY2Fub25pY2FsLmNvbT4NCj4gU2VudDogVHVlc2RheSwgRGVjZW1iZXIgMTQs
-IDIwMjEgMjowNyBQTQ0KPiBUbzogUGtzaGloIDxwa3NoaWhAcmVhbHRlay5jb20+DQo+IENjOiB0
-b255MDYyMGVtbWFAZ21haWwuY29tOyBqaWFuLWhvbmdAZW5kbGVzc20uY29tIDxqaHBAZW5kbGVz
-c29zLm9yZz47IEthbGxlIFZhbG8gPGt2YWxvQGNvZGVhdXJvcmEub3JnPjsNCj4gRGF2aWQgUy4g
-TWlsbGVyIDxkYXZlbUBkYXZlbWxvZnQubmV0PjsgSmFrdWIgS2ljaW5za2kgPGt1YmFAa2VybmVs
-Lm9yZz47IEJlcm5pZSBIdWFuZw0KPiA8cGhodWFuZ0ByZWFsdGVrLmNvbT47IEJyaWFuIE5vcnJp
-cyA8YnJpYW5ub3JyaXNAY2hyb21pdW0ub3JnPjsgbGludXgtd2lyZWxlc3NAdmdlci5rZXJuZWwu
-b3JnOw0KPiBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwu
-b3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjJdIHJ0dzg4OiBEaXNhYmxlIFBDSWUgQVNQTSB3
-aGlsZSBkb2luZyBOQVBJIHBvbGwgb24gODgyMUNFDQo+IA0KPiBPbiBUdWUsIERlYyAxNCwgMjAy
-MSBhdCAxOjU5IFBNIFBrc2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPiB3cm90ZToNCj4gPg0KPiA+
-DQo+ID4gPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+ID4gRnJvbTogS2FpLUhlbmcg
-RmVuZyA8a2FpLmhlbmcuZmVuZ0BjYW5vbmljYWwuY29tPg0KPiA+ID4gU2VudDogVHVlc2RheSwg
-RGVjZW1iZXIgMTQsIDIwMjEgMTozMyBQTQ0KPiA+ID4gVG86IHRvbnkwNjIwZW1tYUBnbWFpbC5j
-b207IFBrc2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPg0KPiA+ID4gQ2M6IGppYW4taG9uZ0BlbmRs
-ZXNzbS5jb207IEthaS1IZW5nIEZlbmcgPGthaS5oZW5nLmZlbmdAY2Fub25pY2FsLmNvbT47IEth
-bGxlIFZhbG8NCj4gPiA+IDxrdmFsb0Bjb2RlYXVyb3JhLm9yZz47IERhdmlkIFMuIE1pbGxlciA8
-ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD47IEpha3ViIEtpY2luc2tpIDxrdWJhQGtlcm5lbC5vcmc+OyBC
-ZXJuaWUNCj4gPiA+IEh1YW5nIDxwaGh1YW5nQHJlYWx0ZWsuY29tPjsgQnJpYW4gTm9ycmlzIDxi
-cmlhbm5vcnJpc0BjaHJvbWl1bS5vcmc+OyBsaW51eC13aXJlbGVzc0B2Z2VyLmtlcm5lbC5vcmc7
-DQo+ID4gPiBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwu
-b3JnDQo+ID4gPiBTdWJqZWN0OiBbUEFUQ0ggdjJdIHJ0dzg4OiBEaXNhYmxlIFBDSWUgQVNQTSB3
-aGlsZSBkb2luZyBOQVBJIHBvbGwgb24gODgyMUNFDQo+ID4gPg0KPiA+ID4gTWFueSBJbnRlbCBi
-YXNlZCBwbGF0Zm9ybXMgZmFjZSBzeXN0ZW0gcmFuZG9tIGZyZWV6ZSBhZnRlciBjb21taXQNCj4g
-PiA+IDllMmZkMjk4NjRjNSAoInJ0dzg4OiBhZGQgbmFwaSBzdXBwb3J0IikuDQo+ID4gPg0KPiA+
-ID4gVGhlIGNvbW1pdCBpdHNlbGYgc2hvdWxkbid0IGJlIHRoZSBjdWxwcml0LiBNeSBndWVzcyBp
-cyB0aGF0IHRoZSA4ODIxQ0UNCj4gPiA+IG9ubHkgbGVhdmVzIEFTUE0gTDEgZm9yIGEgc2hvcnQg
-cGVyaW9kIHdoZW4gSVJRIGlzIHJhaXNlZC4gU2luY2UgSVJRIGlzDQo+ID4gPiBtYXNrZWQgZHVy
-aW5nIE5BUEkgcG9sbGluZywgdGhlIFBDSWUgbGluayBzdGF5cyBhdCBMMSBhbmQgbWFrZXMgUlgg
-RE1BDQo+ID4gPiBleHRyZW1lbHkgc2xvdy4gRXZlbnR1YWxseSB0aGUgUlggcmluZyBiZWNvbWVz
-IG1lc3NlZCB1cDoNCj4gPiA+IFsgMTEzMy4xOTQ2OTddIHJ0d184ODIxY2UgMDAwMDowMjowMC4w
-OiBwY2kgYnVzIHRpbWVvdXQsIGNoZWNrIGRtYSBzdGF0dXMNCj4gPiA+DQo+ID4gPiBTaW5jZSB0
-aGUgODgyMUNFIGhhcmR3YXJlIG1heSBmYWlsIHRvIGxlYXZlIEFTUE0gTDEsIG1hbnVhbGx5IGRv
-IGl0IGluDQo+ID4gPiB0aGUgZHJpdmVyIHRvIHJlc29sdmUgdGhlIGlzc3VlLg0KPiA+ID4NCj4g
-PiA+IEZpeGVzOiA5ZTJmZDI5ODY0YzUgKCJydHc4ODogYWRkIG5hcGkgc3VwcG9ydCIpDQo+ID4g
-PiBCdWd6aWxsYTogaHR0cHM6Ly9idWd6aWxsYS5rZXJuZWwub3JnL3Nob3dfYnVnLmNnaT9pZD0y
-MTUxMzENCj4gPiA+IEJ1Z0xpbms6IGh0dHBzOi8vYnVncy5sYXVuY2hwYWQubmV0L2J1Z3MvMTky
-NzgwOA0KPiA+ID4gU2lnbmVkLW9mZi1ieTogS2FpLUhlbmcgRmVuZyA8a2FpLmhlbmcuZmVuZ0Bj
-YW5vbmljYWwuY29tPg0KPiA+ID4gLS0tDQo+ID4gPiB2MjoNCj4gPiA+ICAtIEFkZCBkZWZhdWx0
-IHZhbHVlIGZvciBtb2R1bGUgcGFyYW1ldGVyLg0KPiA+ID4NCj4gPiA+ICBkcml2ZXJzL25ldC93
-aXJlbGVzcy9yZWFsdGVrL3J0dzg4L3BjaS5jIHwgNzQgKysrKysrKystLS0tLS0tLS0tLS0tLS0t
-DQo+ID4gPiAgZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC9wY2kuaCB8ICAxICsN
-Cj4gPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDI0IGluc2VydGlvbnMoKyksIDUxIGRlbGV0aW9ucygt
-KQ0KPiA+ID4NCj4gPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVr
-L3J0dzg4L3BjaS5jIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OC9wY2kuYw0K
-PiA+ID4gaW5kZXggM2IzNjdjOTA4NWViYS4uNGFiNzVhYzI1MDBlOSAxMDA2NDQNCj4gPiA+IC0t
-LSBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcGNpLmMNCj4gPiA+ICsrKyBi
-L2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcGNpLmMNCj4gPiA+IEBAIC0yLDcg
-KzIsNiBAQA0KPiA+ID4gIC8qIENvcHlyaWdodChjKSAyMDE4LTIwMTkgIFJlYWx0ZWsgQ29ycG9y
-YXRpb24NCj4gPiA+ICAgKi8NCj4gPiA+DQo+ID4gPiAtI2luY2x1ZGUgPGxpbnV4L2RtaS5oPg0K
-PiA+ID4gICNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4gPiA+ICAjaW5jbHVkZSA8bGludXgv
-cGNpLmg+DQo+ID4gPiAgI2luY2x1ZGUgIm1haW4uaCINCj4gPiA+IEBAIC0xNiwxMCArMTUsMTMg
-QEANCj4gPiA+DQo+ID4gPiAgc3RhdGljIGJvb2wgcnR3X2Rpc2FibGVfbXNpOw0KPiA+ID4gIHN0
-YXRpYyBib29sIHJ0d19wY2lfZGlzYWJsZV9hc3BtOw0KPiA+ID4gK3N0YXRpYyBpbnQgcnR3X3J4
-X2FzcG0gPSAtMTsNCj4gPiA+ICBtb2R1bGVfcGFyYW1fbmFtZWQoZGlzYWJsZV9tc2ksIHJ0d19k
-aXNhYmxlX21zaSwgYm9vbCwgMDY0NCk7DQo+ID4gPiAgbW9kdWxlX3BhcmFtX25hbWVkKGRpc2Fi
-bGVfYXNwbSwgcnR3X3BjaV9kaXNhYmxlX2FzcG0sIGJvb2wsIDA2NDQpOw0KPiA+ID4gK21vZHVs
-ZV9wYXJhbV9uYW1lZChyeF9hc3BtLCBydHdfcnhfYXNwbSwgaW50LCAwNDQ0KTsNCj4gPiA+ICBN
-T0RVTEVfUEFSTV9ERVNDKGRpc2FibGVfbXNpLCAiU2V0IFkgdG8gZGlzYWJsZSBNU0kgaW50ZXJy
-dXB0IHN1cHBvcnQiKTsNCj4gPiA+ICBNT0RVTEVfUEFSTV9ERVNDKGRpc2FibGVfYXNwbSwgIlNl
-dCBZIHRvIGRpc2FibGUgUENJIEFTUE0gc3VwcG9ydCIpOw0KPiA+ID4gK01PRFVMRV9QQVJNX0RF
-U0MocnhfYXNwbSwgIlVzZSBQQ0llIEFTUE0gZm9yIFJYICgwPWRpc2FibGUsIDE9ZW5hYmxlLCAt
-MT1kZWZhdWx0KSIpOw0KPiA+ID4NCj4gPiA+ICBzdGF0aWMgdTMyIHJ0d19wY2lfdHhfcXVldWVf
-aWR4X2FkZHJbXSA9IHsNCj4gPiA+ICAgICAgIFtSVFdfVFhfUVVFVUVfQktdICAgICAgID0gUlRL
-X1BDSV9UWEJEX0lEWF9CS1EsDQo+ID4gPiBAQCAtMTQwOSw3ICsxNDExLDExIEBAIHN0YXRpYyB2
-b2lkIHJ0d19wY2lfbGlua19wcyhzdHJ1Y3QgcnR3X2RldiAqcnR3ZGV2LCBib29sIGVudGVyKQ0K
-PiA+ID4gICAgICAgICogdGhyb3VnaHB1dC4gVGhpcyBpcyBwcm9iYWJseSBiZWNhdXNlIHRoZSBB
-U1BNIGJlaGF2aW9yIHNsaWdodGx5DQo+ID4gPiAgICAgICAgKiB2YXJpZXMgZnJvbSBkaWZmZXJl
-bnQgU09DLg0KPiA+ID4gICAgICAgICovDQo+ID4gPiAtICAgICBpZiAocnR3cGNpLT5saW5rX2N0
-cmwgJiBQQ0lfRVhQX0xOS0NUTF9BU1BNX0wxKQ0KPiA+ID4gKyAgICAgaWYgKCEocnR3cGNpLT5s
-aW5rX2N0cmwgJiBQQ0lfRVhQX0xOS0NUTF9BU1BNX0wxKSkNCj4gPiA+ICsgICAgICAgICAgICAg
-cmV0dXJuOw0KPiA+ID4gKw0KPiA+ID4gKyAgICAgaWYgKChlbnRlciAmJiBhdG9taWNfZGVjX3Jl
-dHVybigmcnR3cGNpLT5saW5rX3VzYWdlKSA9PSAwKSB8fA0KPiA+ID4gKyAgICAgICAgICghZW50
-ZXIgJiYgYXRvbWljX2luY19yZXR1cm4oJnJ0d3BjaS0+bGlua191c2FnZSkgPT0gMSkpDQo+ID4g
-PiAgICAgICAgICAgICAgIHJ0d19wY2lfYXNwbV9zZXQocnR3ZGV2LCBlbnRlcik7DQo+ID4gPiAg
-fQ0KPiA+ID4NCj4gPg0KPiA+IEkgZm91bmQgY2FsbGluZyBwY2lfbGlua19wcyBpc24ndCBhbHdh
-eXMgc3ltbWV0cmljLCBzbyB3ZSBuZWVkIHRvIHJlc2V0DQo+ID4gcmVmX2NudCBhdCBwY2lfc3Rh
-cnQoKSBsaWtlIGJlbG93LCBvciB3ZSBjYW4ndCBlbnRlciBydHdfcGNpX2FzcG1fc2V0KCkNCj4g
-PiBhbnltb3JlLiBUaGUgbmVnYXRpdmUgZmxvdyBJIGZhY2UgaXMNCj4gPiBpZnVwIC0+IGNvbm5l
-Y3QgQVAgLT4gaWZkb3duIC0+IGlmdXAgKHJlZl9jbnQgaXNuJ3QgZXhwZWN0ZWQgbm93KS4NCj4g
-DQo+IElzIGl0IGV4cGVjdGVkIHRvIGJlIGFzeW1tZXRyaWM/DQo+IElmIGl0J3MgaW50ZW5kZWQg
-dG8gYmUgdGhpcyB3YXksIEknbGwgY2hhbmdlIHdoZXJlIHdlIHNldCBsaW5rX3VzYWdlLg0KPiBP
-dGhlcndpc2UgSSB0aGluayBtYWtpbmcgaXQgc3ltbWV0cmljIG1ha2VzIG1vcmUgc2Vuc2UuDQoN
-CkFncmVlIHdpdGggeW91ciB0aG91Z2h0LCBidXQgSSBkb24ndCByZW1lbWJlciBjbGVhcmx5IHdo
-eSBpdCBlbnRlcnMgaWRsZSB0d2ljZQ0KaW4gYWJvdmUgZmxvdy4gU28sIHlvdSBtYXkgdXNlIHR3
-byBmbGFncyB0byBpbmRpY2F0ZSB0aGUgc3RhdGUgd2FudGVkIGJ5DQp0d28gY2FsbGVycy4NCg0K
-LS0NClBpbmctS2UNCg0KDQo=
+On 12/14/21 07:06, Wang, Wei W wrote:
+> On Monday, December 13, 2021 5:24 PM, Paolo Bonzini wrote:
+>> There is no need for struct kvm_xsave2, because there is no need for a "size"
+>> argument.
+>>
+>> - KVM_GET_XSAVE2 *is* needed, and it can expect a buffer as big as the return
+>> value of KVM_CHECK_EXTENSION(KVM_CAP_XSAVE2)
+> 
+> Why would KVM_GET_XSAVE2 still be needed in this case?
+> 
+> I'm thinking it would also be possible to reuse KVM_GET_XSAVE:
+> 
+> - If userspace calls to KVM_CHECK_EXTENSION(KVM_CAP_XSAVE2),
+>   then KVM knows that the userspace is a new version and it works with larger xsave buffer using the "size" that it returns via KVM_CAP_XSAVE2.
+>   So we can add a flag "kvm->xsave2_enabled", which gets set upon userspace checks KVM_CAP_XSAVE2.
+
+You can use KVM_ENABLE_CAP(KVM_CAP_XSAVE2) for that, yes.  In that case 
+you don't need KVM_GET_XSAVE2.
+
+Paolo
+
+> - On KVM_GET_XSAVE, if "kvm->xsave2_enabled" is set,
+>   then KVM allocates buffer to load xstates and copies the loaded xstates data to the userspace buffer
+>   using the "size" that was returned to userspace on KVM_CAP_XSAVE2.
+>   If "kvm->xsave2_enabled" isn't set, using the legacy "4KB" size.
+> 
+> Thanks,
+> Wei
+> 
+

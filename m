@@ -2,281 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1B7474A89
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FE6474A94
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236927AbhLNSNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 13:13:23 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57016 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232235AbhLNSNW (ORCPT
+        id S236945AbhLNSPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:15:03 -0500
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:38609 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232235AbhLNSPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 13:13:22 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BEGVTRM029485;
-        Tue, 14 Dec 2021 18:13:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=yXCS/7lQ5vgFe+eQD9z5O+yp6ZJbtCb2/AkfsbYwFOg=;
- b=gOAd0QBdhu6qUnDDDaGlgzvMrM2qE6PS9lSB1jJZs9lC5+RTu/hMcS4LLa5A/U2Dw1Hx
- aexd4Z1pFx5NYY+I21cTT1MU0mnxfX+RrRnfUWh9E14dhnqg2LTRMRqTHUBtN+QrVOWN
- kP6ujD3JE5v5hzhcXJsXdon7iwECvMjwI0AL1gSnrlGH+uQgVXyzjnfBZ2I6k2VnuJ9p
- aN68kyfMncZ+XZZm5bfVAwYREesCHkyHTXG1AD0RZZHxQRYS1zDx1bUpLFcE5sgaEHaC
- +GaM/T8IwQHQ6rYh6D1tXjewNoN6HBnzo7tPnHUL2l89ieSLGCSTfXJ2NTALfl+Mo3QB +w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cxxv631xa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 18:13:22 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BEGVtPv030517;
-        Tue, 14 Dec 2021 18:13:21 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cxxv631wv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 18:13:21 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BEHwD9B012989;
-        Tue, 14 Dec 2021 18:13:20 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma05wdc.us.ibm.com with ESMTP id 3cvkmamftg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 18:13:20 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BEIDJpC21823852
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Dec 2021 18:13:19 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E3FE6AC077;
-        Tue, 14 Dec 2021 18:13:18 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27E9AAC06A;
-        Tue, 14 Dec 2021 18:13:13 +0000 (GMT)
-Received: from [9.211.79.24] (unknown [9.211.79.24])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Dec 2021 18:13:12 +0000 (GMT)
-Message-ID: <6472fa11-09f4-3e0f-dbec-cf76bcf342c4@linux.ibm.com>
-Date:   Tue, 14 Dec 2021 13:13:11 -0500
+        Tue, 14 Dec 2021 13:15:02 -0500
+Received: by mail-oi1-f173.google.com with SMTP id r26so28265242oiw.5;
+        Tue, 14 Dec 2021 10:15:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vag+lAwsqNqq0fP4rzjw0x3sQbls/iidOvu1coS0bZY=;
+        b=oHY20pRoBXN5795ma8OiEF5evEmEwI1zwrMniEmVc/98DwxUeE4yVKeGFffOTVbhyK
+         R65b1mnnzR+fv1SD1mTdMuBihUka3c3ClKPlRj/NmZmZBeJQBBKSRd9+mKYE4ZeDhjpn
+         Xszzuj2jy367k2mT7bJOcBp3Ww0p1MVPTxglpEoLjtKXldeq0/KApP4PkuQYU3kz5YTL
+         ZHD5pbG7UybBmt5jZXbaauUEkhfuTv7TSsBWykB9LjsV9MsBnHUEtzvA3txccqmHe8Ra
+         C+4WoWNvI2b8VN/lIo9EqnBMC05fw6mvKyksv0d4YrLxeNdSNpJgeC9CaWpodwjI3VNS
+         2vgQ==
+X-Gm-Message-State: AOAM530NuupYFGfG+vuRE+dRTvYAeD5nZoWVAWiOlKeMAYx4+aafRbKr
+        Md3Jd0PJW9Amm8XiWd2weg==
+X-Google-Smtp-Source: ABdhPJzYKtXuZ1cbb2NBfDqsXAjm8AA1okLgNyIQfMkCU4HE2uWXLuR7NttWnABQtzJg2OeP4wMItA==
+X-Received: by 2002:a05:6808:1644:: with SMTP id az4mr35387948oib.86.1639505701326;
+        Tue, 14 Dec 2021 10:15:01 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id u40sm94638oiw.56.2021.12.14.10.14.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 10:15:00 -0800 (PST)
+Received: (nullmailer pid 3663345 invoked by uid 1000);
+        Tue, 14 Dec 2021 18:14:58 -0000
+Date:   Tue, 14 Dec 2021 12:14:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Al Cooper <alcooperx@gmail.com>, linux-usb@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-ide@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-rtc@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-crypto@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pwm@vger.kernel.org,
+        Markus Mayer <mmayer@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 09/15] dt-bindings: interrupt-controller: Convert
+ Broadcom STB L2 to YAML
+Message-ID: <YbjfIk2m/WlJ6l+X@robh.at.kernel.org>
+References: <20211208003727.3596577-1-f.fainelli@gmail.com>
+ <20211208003727.3596577-10-f.fainelli@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 22/32] KVM: s390: pci: provide routines for
- enabling/disabling IOAT assist
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
- <20211207205743.150299-23-mjrosato@linux.ibm.com>
- <c1f1ca6b-916d-418a-5bc3-8debe53bfa5e@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <c1f1ca6b-916d-418a-5bc3-8debe53bfa5e@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: s6IONFe6IMq3KCUvLOt22jH7LD4LnVxY
-X-Proofpoint-GUID: CMPzJUg5HEFSct7Fct0hdJg-tTBGf_yZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-14_07,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 clxscore=1015 bulkscore=0 phishscore=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 malwarescore=0 adultscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112140098
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208003727.3596577-10-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/21 12:46 PM, Pierre Morel wrote:
+On Tue, 07 Dec 2021 16:37:20 -0800, Florian Fainelli wrote:
+> Convert the Broadcom STB L2 generic Level 2 interrupt controller Device
+> Tree binding to YAML to help with validation.
 > 
-> 
-> On 12/7/21 21:57, Matthew Rosato wrote:
->> These routines will be wired into the vfio_pci_zdev ioctl handlers to
->> respond to requests to enable / disable a device for PCI I/O Address
->> Translation assistance.
->>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
->>   arch/s390/include/asm/kvm_pci.h |  15 ++++
->>   arch/s390/include/asm/pci_dma.h |   2 +
->>   arch/s390/kvm/pci.c             | 133 ++++++++++++++++++++++++++++++++
->>   arch/s390/kvm/pci.h             |   2 +
->>   4 files changed, 152 insertions(+)
->>
->> diff --git a/arch/s390/include/asm/kvm_pci.h 
->> b/arch/s390/include/asm/kvm_pci.h
->> index 54a0afdbe7d0..254275399f21 100644
->> --- a/arch/s390/include/asm/kvm_pci.h
->> +++ b/arch/s390/include/asm/kvm_pci.h
->> @@ -16,11 +16,21 @@
->>   #include <linux/kvm_host.h>
->>   #include <linux/kvm.h>
->>   #include <linux/pci.h>
->> +#include <linux/mutex.h>
->>   #include <asm/pci_insn.h>
->> +#include <asm/pci_dma.h>
->> +
->> +struct kvm_zdev_ioat {
->> +    unsigned long *head[ZPCI_TABLE_PAGES];
->> +    unsigned long **seg;
->> +    unsigned long ***pt;
->> +    struct mutex lock;
->> +};
->>   struct kvm_zdev {
->>       struct zpci_dev *zdev;
->>       struct kvm *kvm;
->> +    struct kvm_zdev_ioat ioat;
->>       struct zpci_fib fib;
->>   };
->> @@ -33,6 +43,11 @@ extern int kvm_s390_pci_aif_enable(struct zpci_dev 
->> *zdev, struct zpci_fib *fib,
->>                      bool assist);
->>   extern int kvm_s390_pci_aif_disable(struct zpci_dev *zdev);
->> +extern int kvm_s390_pci_ioat_probe(struct zpci_dev *zdev);
->> +extern int kvm_s390_pci_ioat_enable(struct zpci_dev *zdev, u64 iota);
->> +extern int kvm_s390_pci_ioat_disable(struct zpci_dev *zdev);
->> +extern u8 kvm_s390_pci_get_dtsm(struct zpci_dev *zdev);
->> +
->>   extern int kvm_s390_pci_interp_probe(struct zpci_dev *zdev);
->>   extern int kvm_s390_pci_interp_enable(struct zpci_dev *zdev);
->>   extern int kvm_s390_pci_interp_disable(struct zpci_dev *zdev);
->> diff --git a/arch/s390/include/asm/pci_dma.h 
->> b/arch/s390/include/asm/pci_dma.h
->> index 3b8e89d4578a..e1d3c1d3fc8a 100644
->> --- a/arch/s390/include/asm/pci_dma.h
->> +++ b/arch/s390/include/asm/pci_dma.h
->> @@ -50,6 +50,8 @@ enum zpci_ioat_dtype {
->>   #define ZPCI_TABLE_ALIGN        ZPCI_TABLE_SIZE
->>   #define ZPCI_TABLE_ENTRY_SIZE        (sizeof(unsigned long))
->>   #define ZPCI_TABLE_ENTRIES        (ZPCI_TABLE_SIZE / 
->> ZPCI_TABLE_ENTRY_SIZE)
->> +#define ZPCI_TABLE_PAGES        (ZPCI_TABLE_SIZE >> PAGE_SHIFT)
->> +#define ZPCI_TABLE_ENTRIES_PAGES    (ZPCI_TABLE_ENTRIES * 
->> ZPCI_TABLE_PAGES)
->>   #define ZPCI_TABLE_BITS            11
->>   #define ZPCI_PT_BITS            8
->> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
->> index 3a29398dd53b..a1c0c0881332 100644
->> --- a/arch/s390/kvm/pci.c
->> +++ b/arch/s390/kvm/pci.c
->> @@ -12,6 +12,7 @@
->>   #include <asm/kvm_pci.h>
->>   #include <asm/pci.h>
->>   #include <asm/pci_insn.h>
->> +#include <asm/pci_dma.h>
->>   #include <asm/sclp.h>
->>   #include "pci.h"
->>   #include "kvm-s390.h"
->> @@ -315,6 +316,131 @@ int kvm_s390_pci_aif_disable(struct zpci_dev *zdev)
->>   }
->>   EXPORT_SYMBOL_GPL(kvm_s390_pci_aif_disable);
->> +int kvm_s390_pci_ioat_probe(struct zpci_dev *zdev)
->> +{
->> +    return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(kvm_s390_pci_ioat_probe);
->> +
->> +int kvm_s390_pci_ioat_enable(struct zpci_dev *zdev, u64 iota)
->> +{
->> +    gpa_t gpa = (gpa_t)(iota & ZPCI_RTE_ADDR_MASK);
->> +    struct kvm_zdev_ioat *ioat;
->> +    struct page *page;
->> +    struct kvm *kvm;
->> +    unsigned int idx;
->> +    void *iaddr;
->> +    int i, rc = 0;
->> +
->> +    if (!zdev->kzdev || !zdev->kzdev->kvm || zdev->kzdev->ioat.head[0])
->> +        return -EINVAL;
-> 
-> The only caller already checked zdev->kzdev.
-
-I tend to get overzealous with these checks..
-
-> Could we use a macro to replace zdev->kzdev->ioat.head[0] ?
-> like
-> #define shadow_pgtbl_initialized zdev->kzdev->ioat.head[0] >
-> Would be clearer for me.
-
-Sure
-
-> 
->> +
->> +    /* Ensure supported type specified */
->> +    if ((iota & ZPCI_IOTA_RTTO_FLAG) != ZPCI_IOTA_RTTO_FLAG)
->> +        return -EINVAL;
->> +
->> +    kvm = zdev->kzdev->kvm;
->> +    ioat = &zdev->kzdev->ioat;
->> +    mutex_lock(&ioat->lock);
->> +    idx = srcu_read_lock(&kvm->srcu);
->> +    for (i = 0; i < ZPCI_TABLE_PAGES; i++) {
->> +        page = gfn_to_page(kvm, gpa_to_gfn(gpa));
-
-In relation to your question below about where things are being pinned...
-
-Here the call to gfn_to_page does the pin (this call eventually drives 
-hva_to_pfn for pinning)
-
->> +        if (is_error_page(page)) {
->> +            srcu_read_unlock(&kvm->srcu, idx);
->> +            rc = -EIO;
->> +            goto out;
->> +        }
->> +        iaddr = page_to_virt(page) + (gpa & ~PAGE_MASK);
->> +        ioat->head[i] = (unsigned long *)iaddr;
-
-^^ here we store what was pinned above in ioat->head[] and can use it 
-later for unpinning.
-
-But looking again now I think for the is_error_page() case above here I 
-should also be going to unpin: to cleanup in case we were somewhere in 
-the middle of the loop and so have some pages pinned already.
-
->> +        gpa += PAGE_SIZE;
->> +    }
->> +    srcu_read_unlock(&kvm->srcu, idx);
->> +
->> +    zdev->kzdev->ioat.seg = kcalloc(ZPCI_TABLE_ENTRIES_PAGES,
->> +                    sizeof(unsigned long *), GFP_KERNEL);
->> +    if (!zdev->kzdev->ioat.seg)
->> +        goto unpin;
->> +    zdev->kzdev->ioat.pt = kcalloc(ZPCI_TABLE_ENTRIES,
->> +                       sizeof(unsigned long **), GFP_KERNEL);
->> +    if (!zdev->kzdev->ioat.pt)
->> +        goto free_seg;
->> +
->> +out:
->> +    mutex_unlock(&ioat->lock);
->> +    return rc;
->> +
->> +free_seg:
->> +    kfree(zdev->kzdev->ioat.seg);
->> +unpin:
->> +    for (i = 0; i < ZPCI_TABLE_PAGES; i++) {
->> +        kvm_release_pfn_dirty((u64)ioat->head[i] >> PAGE_SHIFT);
-> 
-> I did not find when the pages are pinned.
-
-See above.
-
-> 
->> +        ioat->head[i] = 0;
->> +    }
->> +    mutex_unlock(&ioat->lock);
->> +    return -ENOMEM;
->> +}
->> +EXPORT_SYMBOL_GPL(kvm_s390_pci_ioat_enable);
->> +
-> 
-> ...snip...
->>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../interrupt-controller/brcm,l2-intc.txt     | 31 --------
+>  .../interrupt-controller/brcm,l2-intc.yaml    | 71 +++++++++++++++++++
+>  2 files changed, 71 insertions(+), 31 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.txt
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.yaml
 > 
 
+Applied, thanks!

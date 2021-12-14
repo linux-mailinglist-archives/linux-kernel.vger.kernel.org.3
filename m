@@ -2,184 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F062E474048
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3D1474047
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbhLNKUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:20:04 -0500
-Received: from mga12.intel.com ([192.55.52.136]:32457 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231191AbhLNKUD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:20:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639477203; x=1671013203;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lB/96R8LtT4ubU1NkMbFVEKmi85F4Z2ZjCkVakV6Bug=;
-  b=FS3FVXakC17JqgS2NubHRuDcEY46w27dBZKowhCU+BkLU27KwqhSTGoD
-   D7w21jJhhXI6oYwlMoVfwpOC0UpqVcu8U8oqXojsXFDs/bLW0Qts+9tbi
-   aeOFUOoBsxBb1QDT8y7OmHd3GGeSp2VirFM2HUKB4Tkr06N8ya07PxCiu
-   79IbX/fZs6urxkMFmxSKKZkF+AV1+yoVPxkdXiTwcgg3DJazyTz5NDewA
-   gjt0U8ZKGLA14WEMB1xr7cZQoyBuh5rKn9o5vCzPJ9564zwXLKNn0fkcM
-   ZEuF0ulCjG97JyiXMauEDj+UyRQhSeMs0ims5Zusbu9WLGj4hkWG9yy9R
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="218963058"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="218963058"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 02:20:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="465019940"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 02:20:00 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mx4ue-0000BO-6A; Tue, 14 Dec 2021 10:20:00 +0000
-Date:   Tue, 14 Dec 2021 18:19:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wen Gong <quic_wgong@quicinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Kalle Valo <kvalo@codeaurora.org>, ath10k@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>
-Subject: [kvalo-ath:pending 53/57]
- drivers/net/wireless/ath/ath11k/wmi.c:5657:3: warning: variable 'len' is
- uninitialized when used here
-Message-ID: <202112141834.pliLIgBL-lkp@intel.com>
+        id S232953AbhLNKTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:19:55 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:52728 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231191AbhLNKTy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:19:54 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BEA48n0020430;
+        Tue, 14 Dec 2021 11:19:45 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=tPPEVf4sckt1JYE/uEUJVoM7f78T7b1GZhN89uRAoKU=;
+ b=tUh2n9AALsijC25Qu3fNzoNUDvyfFxB32LmgeJFiJsT8utznL+1R6vHBOmIj8f1TVuPp
+ iA7Pa9pF3C24NZ9doA3zYbq8K9GF8xfN0XTqcsPNTgQm2RHhTyyp5sbvsSy6XMCNs+li
+ lmp0LPEhzNGyd7k2ucVCHjlwULgVeLo3II/3rRci4gYVJ/kwdWWL0BCkg/26TDNEePST
+ cr4utfdemrK4/ok86ELNXkMSmj2dMIX8BZ/X4J+HRcTn+hUhFciqHkQ4eQ7Qt4xBIoV1
+ 57prXKsPo8UMmAOlSItjg3NCBURd7ab7r2HV6adeUB5r3W6IR57iIDDYKBNPDrF6pgEK fw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cxk4hjm90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 11:19:45 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D77B810002A;
+        Tue, 14 Dec 2021 11:19:44 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CE11323042B;
+        Tue, 14 Dec 2021 11:19:44 +0100 (CET)
+Received: from lmecxl0993.lme.st.com (10.75.127.51) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 14 Dec
+ 2021 11:19:43 +0100
+Subject: Re: [PATCH] drm/stm: ltdc: support of new hardware version
+To:     Yannick Fertre <yannick.fertre@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211203085618.11314-1-yannick.fertre@foss.st.com>
+From:   Philippe CORNU <philippe.cornu@foss.st.com>
+Message-ID: <73ed4015-c707-53e5-394f-c74cd2f69df2@foss.st.com>
+Date:   Tue, 14 Dec 2021 11:19:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211203085618.11314-1-yannick.fertre@foss.st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-14_05,2021-12-14_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git pending
-head:   6cce4964a399f7eb43e75e57de0def72561a162c
-commit: b368704018cc51a0908adf79649fd692624e75da [53/57] ath11k: report rssi of each chain to mac80211 for QCA6390/WCN6855
-config: x86_64-randconfig-a003-20211213 (https://download.01.org/0day-ci/archive/20211214/202112141834.pliLIgBL-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?id=b368704018cc51a0908adf79649fd692624e75da
-        git remote add kvalo-ath https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git
-        git fetch --no-tags kvalo-ath pending
-        git checkout b368704018cc51a0908adf79649fd692624e75da
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/wireless/ath/ath11k/wmi.c:5657:3: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-                   len -= sizeof(*src);
-                   ^~~
-   drivers/net/wireless/ath/ath11k/wmi.c:5637:9: note: initialize the variable 'len' to silence this warning
-           u32 len;
-                  ^
-                   = 0
-   1 warning generated.
 
 
-vim +/len +5657 drivers/net/wireless/ath/ath11k/wmi.c
+On 12/3/21 9:56 AM, Yannick Fertre wrote:
+> Add support of new hardware version 0x40100.
+> 
+> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> ---
+>   drivers/gpu/drm/stm/ltdc.c | 172 ++++++++++++++++++++++++++++++-------
+>   drivers/gpu/drm/stm/ltdc.h |   3 +-
+>   2 files changed, 145 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+> index dbdee954692a..c0619f372630 100644
+> --- a/drivers/gpu/drm/stm/ltdc.c
+> +++ b/drivers/gpu/drm/stm/ltdc.c
+> @@ -46,15 +46,15 @@
+>   #define HWVER_10200 0x010200
+>   #define HWVER_10300 0x010300
+>   #define HWVER_20101 0x020101
+> +#define HWVER_40100 0x040100
+>   
+>   /*
+>    * The address of some registers depends on the HW version: such registers have
+> - * an extra offset specified with reg_ofs.
+> + * an extra offset specified with layer_ofs.
+>    */
+> -#define REG_OFS_NONE	0
+> -#define REG_OFS_4	4		/* Insertion of "Layer Conf. 2" reg */
+> -#define REG_OFS		(ldev->caps.reg_ofs)
+> -#define LAY_OFS		0x80		/* Register Offset between 2 layers */
+> +#define LAY_OFS_0	0x80
+> +#define LAY_OFS_1	0x100
+> +#define LAY_OFS	(ldev->caps.layer_ofs)
+>   
+>   /* Global register offsets */
+>   #define LTDC_IDR	0x0000		/* IDentification */
+> @@ -75,29 +75,34 @@
+>   #define LTDC_LIPCR	0x0040		/* Line Interrupt Position Conf. */
+>   #define LTDC_CPSR	0x0044		/* Current Position Status */
+>   #define LTDC_CDSR	0x0048		/* Current Display Status */
+> +#define LTDC_FUT	0x0090		/* Fifo underrun Threshold */
+>   
+>   /* Layer register offsets */
+> -#define LTDC_L1LC1R	(0x80)		/* L1 Layer Configuration 1 */
+> -#define LTDC_L1LC2R	(0x84)		/* L1 Layer Configuration 2 */
+> -#define LTDC_L1CR	(0x84 + REG_OFS)/* L1 Control */
+> -#define LTDC_L1WHPCR	(0x88 + REG_OFS)/* L1 Window Hor Position Config */
+> -#define LTDC_L1WVPCR	(0x8C + REG_OFS)/* L1 Window Vert Position Config */
+> -#define LTDC_L1CKCR	(0x90 + REG_OFS)/* L1 Color Keying Configuration */
+> -#define LTDC_L1PFCR	(0x94 + REG_OFS)/* L1 Pixel Format Configuration */
+> -#define LTDC_L1CACR	(0x98 + REG_OFS)/* L1 Constant Alpha Config */
+> -#define LTDC_L1DCCR	(0x9C + REG_OFS)/* L1 Default Color Configuration */
+> -#define LTDC_L1BFCR	(0xA0 + REG_OFS)/* L1 Blend Factors Configuration */
+> -#define LTDC_L1FBBCR	(0xA4 + REG_OFS)/* L1 FrameBuffer Bus Control */
+> -#define LTDC_L1AFBCR	(0xA8 + REG_OFS)/* L1 AuxFB Control */
+> -#define LTDC_L1CFBAR	(0xAC + REG_OFS)/* L1 Color FrameBuffer Address */
+> -#define LTDC_L1CFBLR	(0xB0 + REG_OFS)/* L1 Color FrameBuffer Length */
+> -#define LTDC_L1CFBLNR	(0xB4 + REG_OFS)/* L1 Color FrameBuffer Line Nb */
+> -#define LTDC_L1AFBAR	(0xB8 + REG_OFS)/* L1 AuxFB Address */
+> -#define LTDC_L1AFBLR	(0xBC + REG_OFS)/* L1 AuxFB Length */
+> -#define LTDC_L1AFBLNR	(0xC0 + REG_OFS)/* L1 AuxFB Line Number */
+> -#define LTDC_L1CLUTWR	(0xC4 + REG_OFS)/* L1 CLUT Write */
+> -#define LTDC_L1YS1R	(0xE0 + REG_OFS)/* L1 YCbCr Scale 1 */
+> -#define LTDC_L1YS2R	(0xE4 + REG_OFS)/* L1 YCbCr Scale 2 */
+> +#define LTDC_L1C0R	(ldev->caps.layer_regs[0])	/* L1 configuration 0 */
+> +#define LTDC_L1C1R	(ldev->caps.layer_regs[1])	/* L1 configuration 1 */
+> +#define LTDC_L1RCR	(ldev->caps.layer_regs[2])	/* L1 reload control */
+> +#define LTDC_L1CR	(ldev->caps.layer_regs[3])	/* L1 control register */
+> +#define LTDC_L1WHPCR	(ldev->caps.layer_regs[4])	/* L1 window horizontal position configuration */
+> +#define LTDC_L1WVPCR	(ldev->caps.layer_regs[5])	/* L1 window vertical position configuration */
+> +#define LTDC_L1CKCR	(ldev->caps.layer_regs[6])	/* L1 color keying configuration */
+> +#define LTDC_L1PFCR	(ldev->caps.layer_regs[7])	/* L1 pixel format configuration */
+> +#define LTDC_L1CACR	(ldev->caps.layer_regs[8])	/* L1 constant alpha configuration */
+> +#define LTDC_L1DCCR	(ldev->caps.layer_regs[9])	/* L1 default color configuration */
+> +#define LTDC_L1BFCR	(ldev->caps.layer_regs[10])	/* L1 blending factors configuration */
+> +#define LTDC_L1BLCR	(ldev->caps.layer_regs[11])	/* L1 burst length configuration */
+> +#define LTDC_L1PCR	(ldev->caps.layer_regs[12])	/* L1 planar configuration */
+> +#define LTDC_L1CFBAR	(ldev->caps.layer_regs[13])	/* L1 color frame buffer address */
+> +#define LTDC_L1CFBLR	(ldev->caps.layer_regs[14])	/* L1 color frame buffer length */
+> +#define LTDC_L1CFBLNR	(ldev->caps.layer_regs[15])	/* L1 color frame buffer line number */
+> +#define LTDC_L1AFBA0R	(ldev->caps.layer_regs[16])	/* L1 auxiliary frame buffer address 0 */
+> +#define LTDC_L1AFBA1R	(ldev->caps.layer_regs[17])	/* L1 auxiliary frame buffer address 1 */
+> +#define LTDC_L1AFBLR	(ldev->caps.layer_regs[18])	/* L1 auxiliary frame buffer length */
+> +#define LTDC_L1AFBLNR	(ldev->caps.layer_regs[19])	/* L1 auxiliary frame buffer line number */
+> +#define LTDC_L1CLUTWR	(ldev->caps.layer_regs[20])	/* L1 CLUT write */
+> +#define LTDC_L1CYR0R	(ldev->caps.layer_regs[21])	/* L1 Conversion YCbCr RGB 0 */
+> +#define LTDC_L1CYR1R	(ldev->caps.layer_regs[22])	/* L1 Conversion YCbCr RGB 1 */
+> +#define LTDC_L1FPF0R	(ldev->caps.layer_regs[23])	/* L1 Flexible Pixel Format 0 */
+> +#define LTDC_L1FPF1R	(ldev->caps.layer_regs[24])	/* L1 Flexible Pixel Format 1 */
+>   
+>   /* Bit definitions */
+>   #define SSCR_VSH	GENMASK(10, 0)	/* Vertical Synchronization Height */
+> @@ -208,7 +213,10 @@ enum ltdc_pix_fmt {
+>   	/* Indexed formats */
+>   	PF_L8,			/* Indexed 8 bits [8 bits] */
+>   	PF_AL44,		/* Alpha:4 bits + indexed 4 bits [8 bits] */
+> -	PF_AL88			/* Alpha:8 bits + indexed 8 bits [16 bits] */
+> +	PF_AL88,		/* Alpha:8 bits + indexed 8 bits [16 bits] */
+> +	PF_ABGR8888,		/* ABGR [32 bits] */
+> +	PF_BGRA8888,		/* BGRA [32 bits] */
+> +	PF_BGR565		/* RGB [16 bits] */
+>   };
+>   
+>   /* The index gives the encoding of the pixel format for an HW version */
+> @@ -234,6 +242,102 @@ static const enum ltdc_pix_fmt ltdc_pix_fmt_a1[NB_PF] = {
+>   	PF_ARGB4444		/* 0x07 */
+>   };
+>   
+> +static const enum ltdc_pix_fmt ltdc_pix_fmt_a2[NB_PF] = {
+> +	PF_ARGB8888,		/* 0x00 */
+> +	PF_ABGR8888,		/* 0x01 */
+> +	PF_RGBA8888,		/* 0x02 */
+> +	PF_BGRA8888,		/* 0x03 */
+> +	PF_RGB565,		/* 0x04 */
+> +	PF_BGR565,		/* 0x05 */
+> +	PF_RGB888,		/* 0x06 */
+> +	PF_ARGB1555		/* 0x07 */
+> +};
+> +
+> +/* Layer register offsets */
+> +static const u32 ltdc_layer_regs_a0[] = {
+> +	0x80,	/* L1 configuration 0 */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x84,	/* L1 control register */
+> +	0x88,	/* L1 window horizontal position configuration */
+> +	0x8c,	/* L1 window vertical position configuration */
+> +	0x90,	/* L1 color keying configuration */
+> +	0x94,	/* L1 pixel format configuration */
+> +	0x98,	/* L1 constant alpha configuration */
+> +	0x9c,	/* L1 default color configuration */
+> +	0xa0,	/* L1 blending factors configuration */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0xac,	/* L1 color frame buffer address */
+> +	0xb0,	/* L1 color frame buffer length */
+> +	0xb4,	/* L1 color frame buffer line number */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0xc4,	/* L1 CLUT write */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00	/* not available */
+> +};
+> +
+> +static const u32 ltdc_layer_regs_a1[] = {
+> +	0x80,	/* L1 configuration 0 */
+> +	0x84,	/* L1 configuration 1 */
+> +	0x00,	/* L1 reload control */
+> +	0x88,	/* L1 control register */
+> +	0x8c,	/* L1 window horizontal position configuration */
+> +	0x90,	/* L1 window vertical position configuration */
+> +	0x94,	/* L1 color keying configuration */
+> +	0x98,	/* L1 pixel format configuration */
+> +	0x9c,	/* L1 constant alpha configuration */
+> +	0xa0,	/* L1 default color configuration */
+> +	0xa4,	/* L1 blending factors configuration */
+> +	0xa8,	/* L1 burst length configuration */
+> +	0x00,	/* not available */
+> +	0xac,	/* L1 color frame buffer address */
+> +	0xb0,	/* L1 color frame buffer length */
+> +	0xb4,	/* L1 color frame buffer line number */
+> +	0xb8,	/* L1 auxiliary frame buffer address 0 */
+> +	0xbc,	/* L1 auxiliary frame buffer address 1 */
+> +	0xc0,	/* L1 auxiliary frame buffer length */
+> +	0xc4,	/* L1 auxiliary frame buffer line number */
+> +	0xc8,	/* L1 CLUT write */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00,	/* not available */
+> +	0x00	/* not available */
+> +};
+> +
+> +static const u32 ltdc_layer_regs_a2[] = {
+> +	0x100,	/* L1 configuration 0 */
+> +	0x104,	/* L1 configuration 1 */
+> +	0x108,	/* L1 reload control */
+> +	0x10c,	/* L1 control register */
+> +	0x110,	/* L1 window horizontal position configuration */
+> +	0x114,	/* L1 window vertical position configuration */
+> +	0x118,	/* L1 color keying configuration */
+> +	0x11c,	/* L1 pixel format configuration */
+> +	0x120,	/* L1 constant alpha configuration */
+> +	0x124,	/* L1 default color configuration */
+> +	0x128,	/* L1 blending factors configuration */
+> +	0x12c,	/* L1 burst length configuration */
+> +	0x130,	/* L1 planar configuration */
+> +	0x134,	/* L1 color frame buffer address */
+> +	0x138,	/* L1 color frame buffer length */
+> +	0x13c,	/* L1 color frame buffer line number */
+> +	0x140,	/* L1 auxiliary frame buffer address 0 */
+> +	0x144,	/* L1 auxiliary frame buffer address 1 */
+> +	0x148,	/* L1 auxiliary frame buffer length */
+> +	0x14c,	/* L1 auxiliary frame buffer line number */
+> +	0x150,	/* L1 CLUT write */
+> +	0x16c,	/* L1 Conversion YCbCr RGB 0 */
+> +	0x170,	/* L1 Conversion YCbCr RGB 1 */
+> +	0x174,	/* L1 Flexible Pixel Format 0 */
+> +	0x178	/* L1 Flexible Pixel Format 1 */
+> +};
+> +
+>   static const u64 ltdc_format_modifiers[] = {
+>   	DRM_FORMAT_MOD_LINEAR,
+>   	DRM_FORMAT_MOD_INVALID
+> @@ -1158,7 +1262,8 @@ static int ltdc_get_caps(struct drm_device *ddev)
+>   	switch (ldev->caps.hw_version) {
+>   	case HWVER_10200:
+>   	case HWVER_10300:
+> -		ldev->caps.reg_ofs = REG_OFS_NONE;
+> +		ldev->caps.layer_ofs = LAY_OFS_0;
+> +		ldev->caps.layer_regs = ltdc_layer_regs_a0;
+>   		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a0;
+>   		/*
+>   		 * Hw older versions support non-alpha color formats derived
+> @@ -1174,12 +1279,21 @@ static int ltdc_get_caps(struct drm_device *ddev)
+>   		ldev->caps.nb_irq = 2;
+>   		break;
+>   	case HWVER_20101:
+> -		ldev->caps.reg_ofs = REG_OFS_4;
+> +		ldev->caps.layer_ofs = LAY_OFS_0;
+> +		ldev->caps.layer_regs = ltdc_layer_regs_a1;
+>   		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a1;
+>   		ldev->caps.non_alpha_only_l1 = false;
+>   		ldev->caps.pad_max_freq_hz = 150000000;
+>   		ldev->caps.nb_irq = 4;
+>   		break;
+> +	case HWVER_40100:
+> +		ldev->caps.layer_ofs = LAY_OFS_1;
+> +		ldev->caps.layer_regs = ltdc_layer_regs_a2;
+> +		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a2;
+> +		ldev->caps.non_alpha_only_l1 = false;
+> +		ldev->caps.pad_max_freq_hz = 90000000;
+> +		ldev->caps.nb_irq = 2;
+> +		break;
+>   	default:
+>   		return -ENODEV;
+>   	}
+> diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
+> index f153b908c70e..55a125f89af6 100644
+> --- a/drivers/gpu/drm/stm/ltdc.h
+> +++ b/drivers/gpu/drm/stm/ltdc.h
+> @@ -14,7 +14,8 @@
+>   struct ltdc_caps {
+>   	u32 hw_version;		/* hardware version */
+>   	u32 nb_layers;		/* number of supported layers */
+> -	u32 reg_ofs;		/* register offset for applicable regs */
+> +	u32 layer_ofs;		/* layer offset for applicable regs */
+> +	const u32 *layer_regs;	/* layer register offset */
+>   	u32 bus_width;		/* bus width (32 or 64 bits) */
+>   	const u32 *pix_fmt_hw;	/* supported pixel formats */
+>   	bool non_alpha_only_l1; /* non-native no-alpha formats on layer 1 */
+> 
 
-b368704018cc51 Wen Gong   2021-12-13  5628  
-b368704018cc51 Wen Gong   2021-12-13  5629  static int ath11k_wmi_tlv_fw_stats_data_parse(struct ath11k_base *ab,
-b368704018cc51 Wen Gong   2021-12-13  5630  					      struct wmi_tlv_fw_stats_parse *parse,
-b368704018cc51 Wen Gong   2021-12-13  5631  					      const void *ptr)
-b368704018cc51 Wen Gong   2021-12-13  5632  {
-b368704018cc51 Wen Gong   2021-12-13  5633  	struct ath11k_fw_stats *stats = parse->stats;
-b368704018cc51 Wen Gong   2021-12-13  5634  	const struct wmi_stats_event *ev = parse->ev;
-b368704018cc51 Wen Gong   2021-12-13  5635  	int i;
-b368704018cc51 Wen Gong   2021-12-13  5636  	const void *data = ptr;
-b368704018cc51 Wen Gong   2021-12-13  5637  	u32 len;
-b368704018cc51 Wen Gong   2021-12-13  5638  
-b368704018cc51 Wen Gong   2021-12-13  5639  	if (!ev) {
-b368704018cc51 Wen Gong   2021-12-13  5640  		ath11k_warn(ab, "failed to fetch update stats ev");
-b368704018cc51 Wen Gong   2021-12-13  5641  		return -EPROTO;
-b368704018cc51 Wen Gong   2021-12-13  5642  	}
-d5c65159f28953 Kalle Valo 2019-11-23  5643  
-d5c65159f28953 Kalle Valo 2019-11-23  5644  	stats->stats_id = 0;
-d5c65159f28953 Kalle Valo 2019-11-23  5645  
-d5c65159f28953 Kalle Valo 2019-11-23  5646  	for (i = 0; i < ev->num_pdev_stats; i++) {
-d5c65159f28953 Kalle Valo 2019-11-23  5647  		const struct wmi_pdev_stats *src;
-d5c65159f28953 Kalle Valo 2019-11-23  5648  		struct ath11k_fw_stats_pdev *dst;
-d5c65159f28953 Kalle Valo 2019-11-23  5649  
-d5c65159f28953 Kalle Valo 2019-11-23  5650  		src = data;
-b368704018cc51 Wen Gong   2021-12-13  5651  		if (len < sizeof(*src))
-d5c65159f28953 Kalle Valo 2019-11-23  5652  			return -EPROTO;
-d5c65159f28953 Kalle Valo 2019-11-23  5653  
-d5c65159f28953 Kalle Valo 2019-11-23  5654  		stats->stats_id = WMI_REQUEST_PDEV_STAT;
-d5c65159f28953 Kalle Valo 2019-11-23  5655  
-d5c65159f28953 Kalle Valo 2019-11-23  5656  		data += sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23 @5657  		len -= sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23  5658  
-d5c65159f28953 Kalle Valo 2019-11-23  5659  		dst = kzalloc(sizeof(*dst), GFP_ATOMIC);
-d5c65159f28953 Kalle Valo 2019-11-23  5660  		if (!dst)
-d5c65159f28953 Kalle Valo 2019-11-23  5661  			continue;
-d5c65159f28953 Kalle Valo 2019-11-23  5662  
-d5c65159f28953 Kalle Valo 2019-11-23  5663  		ath11k_wmi_pull_pdev_stats_base(&src->base, dst);
-d5c65159f28953 Kalle Valo 2019-11-23  5664  		ath11k_wmi_pull_pdev_stats_tx(&src->tx, dst);
-d5c65159f28953 Kalle Valo 2019-11-23  5665  		ath11k_wmi_pull_pdev_stats_rx(&src->rx, dst);
-d5c65159f28953 Kalle Valo 2019-11-23  5666  		list_add_tail(&dst->list, &stats->pdevs);
-d5c65159f28953 Kalle Valo 2019-11-23  5667  	}
-d5c65159f28953 Kalle Valo 2019-11-23  5668  
-d5c65159f28953 Kalle Valo 2019-11-23  5669  	for (i = 0; i < ev->num_vdev_stats; i++) {
-d5c65159f28953 Kalle Valo 2019-11-23  5670  		const struct wmi_vdev_stats *src;
-d5c65159f28953 Kalle Valo 2019-11-23  5671  		struct ath11k_fw_stats_vdev *dst;
-d5c65159f28953 Kalle Valo 2019-11-23  5672  
-d5c65159f28953 Kalle Valo 2019-11-23  5673  		src = data;
-b368704018cc51 Wen Gong   2021-12-13  5674  		if (len < sizeof(*src))
-d5c65159f28953 Kalle Valo 2019-11-23  5675  			return -EPROTO;
-d5c65159f28953 Kalle Valo 2019-11-23  5676  
-d5c65159f28953 Kalle Valo 2019-11-23  5677  		stats->stats_id = WMI_REQUEST_VDEV_STAT;
-d5c65159f28953 Kalle Valo 2019-11-23  5678  
-d5c65159f28953 Kalle Valo 2019-11-23  5679  		data += sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23  5680  		len -= sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23  5681  
-d5c65159f28953 Kalle Valo 2019-11-23  5682  		dst = kzalloc(sizeof(*dst), GFP_ATOMIC);
-d5c65159f28953 Kalle Valo 2019-11-23  5683  		if (!dst)
-d5c65159f28953 Kalle Valo 2019-11-23  5684  			continue;
-d5c65159f28953 Kalle Valo 2019-11-23  5685  
-d5c65159f28953 Kalle Valo 2019-11-23  5686  		ath11k_wmi_pull_vdev_stats(src, dst);
-d5c65159f28953 Kalle Valo 2019-11-23  5687  		list_add_tail(&dst->list, &stats->vdevs);
-d5c65159f28953 Kalle Valo 2019-11-23  5688  	}
-d5c65159f28953 Kalle Valo 2019-11-23  5689  
-d5c65159f28953 Kalle Valo 2019-11-23  5690  	for (i = 0; i < ev->num_bcn_stats; i++) {
-d5c65159f28953 Kalle Valo 2019-11-23  5691  		const struct wmi_bcn_stats *src;
-d5c65159f28953 Kalle Valo 2019-11-23  5692  		struct ath11k_fw_stats_bcn *dst;
-d5c65159f28953 Kalle Valo 2019-11-23  5693  
-d5c65159f28953 Kalle Valo 2019-11-23  5694  		src = data;
-b368704018cc51 Wen Gong   2021-12-13  5695  		if (len < sizeof(*src))
-d5c65159f28953 Kalle Valo 2019-11-23  5696  			return -EPROTO;
-d5c65159f28953 Kalle Valo 2019-11-23  5697  
-d5c65159f28953 Kalle Valo 2019-11-23  5698  		stats->stats_id = WMI_REQUEST_BCN_STAT;
-d5c65159f28953 Kalle Valo 2019-11-23  5699  
-d5c65159f28953 Kalle Valo 2019-11-23  5700  		data += sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23  5701  		len -= sizeof(*src);
-d5c65159f28953 Kalle Valo 2019-11-23  5702  
-d5c65159f28953 Kalle Valo 2019-11-23  5703  		dst = kzalloc(sizeof(*dst), GFP_ATOMIC);
-d5c65159f28953 Kalle Valo 2019-11-23  5704  		if (!dst)
-d5c65159f28953 Kalle Valo 2019-11-23  5705  			continue;
-d5c65159f28953 Kalle Valo 2019-11-23  5706  
-d5c65159f28953 Kalle Valo 2019-11-23  5707  		ath11k_wmi_pull_bcn_stats(src, dst);
-d5c65159f28953 Kalle Valo 2019-11-23  5708  		list_add_tail(&dst->list, &stats->bcn);
-d5c65159f28953 Kalle Valo 2019-11-23  5709  	}
-d5c65159f28953 Kalle Valo 2019-11-23  5710  
-d5c65159f28953 Kalle Valo 2019-11-23  5711  	return 0;
-d5c65159f28953 Kalle Valo 2019-11-23  5712  }
-d5c65159f28953 Kalle Valo 2019-11-23  5713  
-
-:::::: The code at line 5657 was first introduced by commit
-:::::: d5c65159f2895379e11ca13f62feabe93278985d ath11k: driver for Qualcomm IEEE 802.11ax devices
-
-:::::: TO: Kalle Valo <kvalo@codeaurora.org>
-:::::: CC: Kalle Valo <kvalo@codeaurora.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Hi Yannick,
+This looks great, many thanks for your patch.
+Acked-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Philippe :-)

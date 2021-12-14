@@ -2,166 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D60473C42
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 05:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E60473C46
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 06:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbhLNE6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 23:58:14 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:43056 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhLNE6N (ORCPT
+        id S229756AbhLNFEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 00:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229721AbhLNFET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 23:58:13 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BE4w2U7077351;
-        Mon, 13 Dec 2021 22:58:02 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639457882;
-        bh=u1SiXyoXvha8kIunLTdYBgkCe3ZZ6evhUXD3rFgFj5k=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=LKabUtzBOZAmPNHxfC8GgOxOhwZJarn54sRKskdLvfPcg+O099FJInNMwz1YBQv7M
-         iyoTATn+TQbodDWW0s9LKgtr02PguPhpCJ+BB8FHFWoQ8IH/G1qrJkyfdfAQco9xz8
-         UWQe8ZT5W7hf2giboxA7zNfEzvsg3aHcpFeCtVgI=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BE4w2wr002515
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 13 Dec 2021 22:58:02 -0600
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 13
- Dec 2021 22:58:01 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 13 Dec 2021 22:58:01 -0600
-Received: from [172.24.145.75] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BE4vwXC025119;
-        Mon, 13 Dec 2021 22:57:59 -0600
-Subject: Re: [PATCH v4] ASoC: dt-bindings: davinci-mcasp: convert McASP
- bindings to yaml schema
-To:     Rob Herring <robh@kernel.org>
-CC:     <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <peter.ujfalusi@gmail.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211203120243.24173-1-j-choudhary@ti.com>
- <YbPFjUpDl29f7SQa@robh.at.kernel.org>
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-Message-ID: <a3a80b4a-6555-9bae-2d39-013f080042eb@ti.com>
-Date:   Tue, 14 Dec 2021 10:27:58 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 14 Dec 2021 00:04:19 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD538C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:04:18 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id x15so60029002edv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9XjWK0aSq+pJUOyN3OhKYqGOzF0wMsi7YB2sa47N/l0=;
+        b=mWQUIgkmo973Bbtgyf4YmJ89rCSr325vstXzv5g1nzJB67ARIHUYCr2C1No/mpehF2
+         msbuz98v/Km8z5SMLSUhycW9t2nu+OEBTjCkbGa6K+s47LGATvU67lDp2jFUeod4Qw+4
+         8Y2IsrEzdHYHJ8oMx17hnIar3gJEvXG7D7xceRkTZm8KtjwzK2joIVawpMoJBeKo+h/v
+         k+AnOj6gdevzOerhmJcJNC3bpa/G1xAs00qpgtQ5KM0m27Vdx/VhzaiNGnwXtszDoLF6
+         v4z3IWXVDz5SqlVCiJoeXH3MezbdWRtEqSfCIAslPrKECv4Isj72UyzLnSOp/0DM9SON
+         wYzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9XjWK0aSq+pJUOyN3OhKYqGOzF0wMsi7YB2sa47N/l0=;
+        b=Llq6qJNhu8WxZOx0jXlUAhNhx8NusEG+H1NhMqgfjukjjUPQ6mN64lcrOqDw7JiC12
+         5vziVLpp/epuda1NDZHF+qUTIP+aSEISCRYJVTGSo3ihvUp+TIR9KlYy1XrnYg/d6m4+
+         o6MWrx0guQniEYMc2JrcpDDdfdTjEu1eL65BiNsRe3C6ixNTssLr6HnxMxtCDv9caijU
+         GUets9iigq7pcVLt41WsMhfM43wse6oPeuIPQmZTTnL5DpIST2m5AAGsnFovny5Ng6ds
+         cr+uvigngAuznpXyF05ZKULuwwgKb5xSEFJG03w+Gdtc1Xt6PiwJYmch3y6chqiaB5pd
+         HoTQ==
+X-Gm-Message-State: AOAM531smeHCEGkmarvrGMVaQL+AAL/MJza5PcQEALfUKJxIHNn8Mk6l
+        c8DstXJWGY47wSjxPrLVB3IvRsPF1tUE9rC2aSxrBw==
+X-Google-Smtp-Source: ABdhPJxMRGadaefB99dCp/iPLUu3c/1uiVlHsXE5AAGmtXVKD4/qbvdYLNhd+FOmfcf7TCipQY9TeaCnVq2WAKDLmWg=
+X-Received: by 2002:a05:6402:4b:: with SMTP id f11mr4585450edu.267.1639458257161;
+ Mon, 13 Dec 2021 21:04:17 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YbPFjUpDl29f7SQa@robh.at.kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20211213092930.763200615@linuxfoundation.org>
+In-Reply-To: <20211213092930.763200615@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 14 Dec 2021 10:34:05 +0530
+Message-ID: <CA+G9fYuCFSbLMarXOnapUXN_NRgQMkjfr_rSTPjzBJQ-FT-Q3g@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/74] 4.19.221-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 13 Dec 2021 at 15:09, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.221 release.
+> There are 74 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.221-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 
-On 11/12/21 2:54 am, Rob Herring wrote:
-> On Fri, Dec 03, 2021 at 05:32:43PM +0530, Jayesh Choudhary wrote:
->> Convert the bindings for McASP controllers for TI SOCs from txt
->> to YAML schema.
->>
->> Adds additional properties 'clocks', 'clock-names', 'power-domains',
->> '#sound-dai-cells' and 'port' which were missing from txt file.
->> Removes properties 'sram-size-playback' and 'sram-size-capture'
->> since they are not used.
->> Adds 'dmas' and 'dma-names' in the example which were missing from
->> the txt file.
->> Changes 'interrupts' and 'interrupt-names' from optional to
->> required properties.
->> Changes 'op-mode', 'serial-dir' and 'tdm-slots' to optional properties
->> as they are not needed if the McASP is used only as GPIO.
->>
->> Adds the yaml file in the 'MAINTAINERS' under the heading 'TEXAS
->> INSTRUMENTS ASoC DRIVERS'
->>
->> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
->> ---
+NOTE:
+Following warnings noticed on x86_64 and i386 with defconfig
+building with gcc-8/9/10/11 and clang-11/12/13 and nightly.
 
->> +
->> +  tdm-slots:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description: number of channels over one serializer
->> +    maxItems: 1
-> 
-> It's a uint32, so there's always 1 item. Drop.
-> 
+make --silent --keep-going --jobs=3D8
+O=3D/home/tuxbuild/.cache/tuxmake/builds/current ARCH=3Dx86_64
+CROSS_COMPILE=3Dx86_64-linux-gnu- 'CC=3Dsccache x86_64-linux-gnu-gcc'
+'HOSTCC=3Dsccache gcc' defconfig
 
-Will drop it from tdm-slots, tx-num-evt, rx-num-evt and auxclk-fs-ratio
-since they are also uint32.
+WARNING: unmet direct dependencies detected for ARCH_USE_MEMREMAP_PROT
+  Depends on [n]: AMD_MEM_ENCRYPT [=3Dn]
+  Selected by [y]:
+  - EFI [=3Dy] && ACPI [=3Dy]
 
-> No constraints? 0-2^32 is valid?
+WARNING: unmet direct dependencies detected for ARCH_USE_MEMREMAP_PROT
+  Depends on [n]: AMD_MEM_ENCRYPT [=3Dn]
+  Selected by [y]:
+  - EFI [=3Dy] && ACPI [=3Dy]
 
-Yes it should be between 2 to 32 as pointed out by Peter.
-Will add that.
+build link,
+https://builds.tuxbuild.com/22E1yyBLiIA9rwo90Cee5hMgOPR/
 
-> 
->> +
->> +
->> +  tx-num-evt:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description: configures WFIFO threshold
->> +    maxItems: 1
->> +
->> +  rx-num-evt:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description: configures RFIFO threshold
->> +    maxItems: 1
->> +
->> +
->> +  auxclk-fs-ratio:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description: ratio of AUCLK and FS rate if applicable
->> +    maxItems: 1
->> +
 
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    mcasp0: mcasp0@1d00000 {
-> 
-> Drop unused labels.
+## Build
+* kernel: 4.19.221-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.19.y
+* git commit: c65e8cddade7ba91d6b7438b4746b7b02a83bb72
+* git describe: v4.19.220-75-gc65e8cddade7
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.220-75-gc65e8cddade7
 
-Yeah okay.
+## No Test Regressions (compared to v4.19.220)
 
-> 
->> +      compatible = "ti,da830-mcasp-audio";
->> +      reg = <0x100000 0x3000>;
->> +      reg-names = "mpu";
->> +      interrupts = <82>, <83>;
->> +      interrupt-names = "tx", "rx";
->> +      op-mode = <0>;		/* MCASP_IIS_MODE */
->> +      tdm-slots = <2>;
->> +      dmas = <&main_udmap 0xc400>, <&main_udmap 0x4400>;
->> +      dma-names = "tx", "rx";
->> +      serial-dir = <
->> +          0 0 0 0	/* 0: INACTIVE, 1: TX, 2: RX */
->> +          0 0 0 0
->> +          0 0 0 1
->> +          2 0 0 0 >;
->> +      tx-num-evt = <1>;
->> +      rx-num-evt = <1>;
->> +    };
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 00ad0cb5cb05..3fdf1e23f7d7 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -18855,6 +18855,7 @@ TEXAS INSTRUMENTS ASoC DRIVERS
->>   M:	Peter Ujfalusi <peter.ujfalusi@gmail.com>
->>   L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
->>   S:	Maintained
->> +F:	Documentation/devicetree/bindings/sound/davinci-mcasp-audio.yaml
->>   F:	sound/soc/ti/
->>   
->>   TEXAS INSTRUMENTS' DAC7612 DAC DRIVER
->> -- 
->> 2.17.1
->>
->>
+## No Test Fixes (compared to v4.19.220)
+
+## Test result summary
+total: 81020, pass: 65995, fail: 642, skip: 12539, xfail: 1844
+
+## Build Summary
+* arm: 254 total, 186 passed, 68 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 26 total, 26 passed, 0 failed
+* powerpc: 52 total, 0 passed, 52 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

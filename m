@@ -2,84 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2356347399F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D0A4739A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244502AbhLNAf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 19:35:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42539 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244480AbhLNAf2 (ORCPT
+        id S244509AbhLNAgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 19:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244480AbhLNAgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 19:35:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639442128;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=44hPhyhxcmlQftiSK+6CWLQyreVx/0BjYdefYhyvGwg=;
-        b=RSClF8C+BgcLS9BCdi+7KoLvrCd+o+VTl7XrTWU39xXRgGO7Rwg0bsAFtte+6J1F+moiPQ
-        I7DSg5e1tkPuw9gFCsaVoZJFDDPmldM6YlnyW0rdtwwdcnZlyrVCpJHpK0JlMjAJ/FnocO
-        6NF0KgAPBdLIHTCb1ZSWHJrfzxJfkiM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-125-RqyHzlc_OsGcrKYRSNCR7Q-1; Mon, 13 Dec 2021 19:35:24 -0500
-X-MC-Unique: RqyHzlc_OsGcrKYRSNCR7Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C0F0801AC5;
-        Tue, 14 Dec 2021 00:35:23 +0000 (UTC)
-Received: from localhost (ovpn-12-46.pek2.redhat.com [10.72.12.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 94CF15C23A;
-        Tue, 14 Dec 2021 00:35:22 +0000 (UTC)
-Date:   Tue, 14 Dec 2021 08:35:19 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, hch@lst.de,
-        cl@linux.com, John.p.donnelly@oracle.com, kexec@lists.infradead.org
-Subject: Re: [PATCH v3 0/5] Avoid requesting page from DMA zone when no
- managed pages
-Message-ID: <20211214003519.GA2216@MiWiFi-R3L-srv>
-References: <20211213122712.23805-1-bhe@redhat.com>
- <20211213130534.af47c7956c219797e6b56687@linux-foundation.org>
+        Mon, 13 Dec 2021 19:36:07 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DDDC061574;
+        Mon, 13 Dec 2021 16:36:06 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id r25so57174841edq.7;
+        Mon, 13 Dec 2021 16:36:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=k6D7bydG+h+WxA2aq/kFkeCmdgG2RGXOzUIul9d5/ow=;
+        b=JRH8+qRZGG1TG8wzZBp+RioBZjOczlUTjlWMxmj/jw3xIISIHAfwyQt4CBGMQ3NVod
+         1rwrPMe61hRHJb7rFMJalTnGJ5snPSd9HGjCC2UcHpD7TiM5Y6ns3fIzLK1IdIibKlsW
+         cU2+eYUfJwOQIg0D3Dc7+8CN8luvAG6JDYS1/dmlSfdx4DthfUW0rHSoQLC0w5ZyBsAa
+         8AnLOt1NMUlrB54aCCcD8sBi+f2NF9qQqEWBqw2iz3K1SZeZ6AxqM7KKrD/vLzrmpa7E
+         WcY0iW4KsFKMYsO9DmogO3CaXaL9JNU0Jf9xFJ3Jr0ZRaTMbpiLNWpNwGxRQ1Hxoi5/s
+         zvGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=k6D7bydG+h+WxA2aq/kFkeCmdgG2RGXOzUIul9d5/ow=;
+        b=NpzZcai3ecLSUy1W6OOLL1EJe3+JPHPMXqpqj7qRDOPzHwlGN6VrWYgv+eE0zTzdZv
+         YoWogZwF+cDuK5Z3qqEWLhdL2WDt5t1+bjCpJemBccJ0yOnQ+oaXbErsaH/hi9w8VCu4
+         K53ui0wfQ55lPekmO0qnA9+B3dYIUoTo0rGtR5MTcjLECEMZUwFnNSPfeAFgjRTHWAn3
+         yQZrNnZ3pTmN8uh3lLU//QKKpAtA3gsKCz9e9BdjIxeoS51T372U9smR0U7Qh5aon3z2
+         Wuii2l7GRPcoQzdM5hqMmeTwftajqOozxsKT0udEwpfJncxkiOt8pHom+kXwh+O3Ax1d
+         /Yjw==
+X-Gm-Message-State: AOAM532Kn1RXRzKvuQVXdQpmbigkWIyMeV4G0Xke0PkOqyiFRq71/s5h
+        2Ur+2MV770QfI6xvtUffutw=
+X-Google-Smtp-Source: ABdhPJwdU8ZOUq/Yq5QNPcewxe4BAFQMhNQFawzNAFm04NfL5Q0DgxMNIeGlVudOtTERg4LjzSjnbQ==
+X-Received: by 2002:a17:907:9607:: with SMTP id gb7mr1941489ejc.441.1639442165391;
+        Mon, 13 Dec 2021 16:36:05 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id lv19sm6549132ejb.54.2021.12.13.16.36.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 13 Dec 2021 16:36:04 -0800 (PST)
+Date:   Tue, 14 Dec 2021 00:36:04 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup: return early if it is already on preloaded list
+Message-ID: <20211214003604.mvmqg4i4zj2t4toq@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20211211161729.10581-1-richard.weiyang@gmail.com>
+ <YbeekNeegXoP6F93@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213130534.af47c7956c219797e6b56687@linux-foundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+In-Reply-To: <YbeekNeegXoP6F93@slm.duckdns.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 at 01:05pm, Andrew Morton wrote:
-> On Mon, 13 Dec 2021 20:27:07 +0800 Baoquan He <bhe@redhat.com> wrote:
-> 
-> > Background information can be checked in cover letter of v2 RESEND POST
-> > as below:
-> > https://lore.kernel.org/all/20211207030750.30824-1-bhe@redhat.com/T/#u
-> 
-> Please include all relevant info right here, in the [0/n].  For a
-> number of reasons, one of which is that the text is more likely to be
-> up to date as the patchset evolves.
-> 
-> It's unusual that this patchset has two non-urgent patches and the
-> final three patches are cc:stable.  It makes one worry that patches 3-5
-> might have dependencies on 1-2.  Also, I'd expect to merge the three
-> -stable patches during 5.16-rcX which means I have to reorder things,
-> redo changelogs, update links and blah blah.
-> 
-> So can I ask that you redo all of this as two patch series?  A 3-patch
-> series which is targeted at -stable, followed by a separate two-patch
-> series which is targeted at 5.17-rc1.  Each series with its own fully
-> prepared [0/n] cover.
+On Mon, Dec 13, 2021 at 09:27:12AM -1000, Tejun Heo wrote:
+>On Sat, Dec 11, 2021 at 04:17:29PM +0000, Wei Yang wrote:
+>> If it is already on preloaded list, this means we have already setup
+>> this cset properly for migration.
+>> 
+>> Let's skip this cset on this condition.
+>
+>The patch looks fine but I think description can be improved. Can you just
+>say that it's just relocating the root cgrp lookup which isn't used anyway
+>when the cset is already on the preloaded list?
+>
 
-Sure, will do. Sorry for the mess.
+Sure, let me try to rephrase it :-)
 
-Before the 3-patch series posting, I may need to continue discussing and
-making clear if the current patch 5/5 is a good fix, or whether we need
-change to take other solution. So I will take the first two patches out
-and post them.
+>Thanks.
+>
+>-- 
+>tejun
 
+-- 
+Wei Yang
+Help you, Help me

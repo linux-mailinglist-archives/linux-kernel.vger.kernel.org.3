@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5074745FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D32DA4745F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235342AbhLNPGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:06:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34838 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbhLNPGF (ORCPT
+        id S235244AbhLNPGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:06:19 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40668 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233087AbhLNPGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:06:05 -0500
+        Tue, 14 Dec 2021 10:06:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C40EB81A01
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:06:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C9AC34605;
-        Tue, 14 Dec 2021 15:06:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F29D61513
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:06:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7BE1C34601;
+        Tue, 14 Dec 2021 15:06:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639494363;
-        bh=TdbOS8K6Z+aJHbCxdSmB2jTjSiPt8bbAFeALG8nz7sw=;
+        s=k20201202; t=1639494364;
+        bh=YPdsy0CCnzzsrfv824dM3Dv846GWF5si6p2hvjiOZWw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lp3um7h/TnqkRD2N8x1ujD4GqyiMjAtQxM38JQ3Tmdmas9SsDtMj1JVBJRC6dv4xx
-         ZRcLUjlfDmhQSu4zw/9E6xz8STJtRYtrSaZfot7THGDtDFfMV/wulXtbRE2pqEtriT
-         kW9z0LtipG7qNsIPJ3irPyqy5hpCCbpGa2NpH2v0o+jvmzW9EopKdtVO8bnGvciJA9
-         kXZ3wSMA8z0RS/qmNLEAbpOTI6nrR7m0XN4MKqKh1Ra5sGz+6LIK0vrc0p0Yx+qwlB
-         7Vi1wgGxYEJMKe+ONAV02puScXy4cs7JKBnITV405YP12sGqglfr/TTCEGo8cy21pB
-         e2KTViyYzX9xg==
+        b=A+1ZOK2+lgbPU25RwOi+T7F/gcy5I2R9+U1QXuvFwB0pum6wDwsHftv2z1gpzSK2K
+         om2mUc9RQvoWYTMfOyGS8+/NzeZTQFwWagZ+3kWfL5cld0XF3wUtvh6vQyYEU2CfmH
+         WXOIzWFwCHUJj6UO+YiUlbcUT9xlLND05P6FUdX00A1PXPHwqfyepTzXiF95u0ZJup
+         /h91M9T2OYVp/m7qW2zPOcO5XGP20+P72aSW24HLfc4YxCQAoJXnKgoWBp00fMk1S3
+         8VMGnpLE3xCPfnkcXdwNJzsgvuJxPPBXczoSvofDqD4+12hy9RYC9pyHrySbn/95t5
+         +39UsZFVgl5Iw==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 06/11] habanalabs: sysfs support for two infineon versions
-Date:   Tue, 14 Dec 2021 17:05:46 +0200
-Message-Id: <20211214150551.1568192-6-ogabbay@kernel.org>
+Subject: [PATCH 07/11] habanalabs: expose soft reset sysfs nodes for inference ASIC
+Date:   Tue, 14 Dec 2021 17:05:47 +0200
+Message-Id: <20211214150551.1568192-7-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211214150551.1568192-1-ogabbay@kernel.org>
 References: <20211214150551.1568192-1-ogabbay@kernel.org>
@@ -46,88 +46,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ofir Bitton <obitton@habana.ai>
 
-Currently sysfs support dumping a single infineon version, in
-future asics we will have two infineon versions.
+As we allow soft-reset to be performed only on inference devices,
+having the sysfs nodes may cause a confusion. Hence, we remove those
+nodes on training ASICs.
 
 Signed-off-by: Ofir Bitton <obitton@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/sysfs.c            |  9 +++++++--
- drivers/misc/habanalabs/include/common/cpucp_if.h | 13 ++++++++++---
- 2 files changed, 17 insertions(+), 5 deletions(-)
+ drivers/misc/habanalabs/common/sysfs.c | 32 ++++++++++++++++++++++++--
+ 1 file changed, 30 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/misc/habanalabs/common/sysfs.c b/drivers/misc/habanalabs/common/sysfs.c
-index 15e4ae65e515..39d449c712b6 100644
+index 39d449c712b6..8ce9884efe76 100644
 --- a/drivers/misc/habanalabs/common/sysfs.c
 +++ b/drivers/misc/habanalabs/common/sysfs.c
-@@ -163,8 +163,13 @@ static ssize_t infineon_ver_show(struct device *dev,
- {
- 	struct hl_device *hdev = dev_get_drvdata(dev);
+@@ -424,8 +424,6 @@ static struct attribute *hl_dev_attrs[] = {
+ 	&dev_attr_max_power.attr,
+ 	&dev_attr_pci_addr.attr,
+ 	&dev_attr_preboot_btl_ver.attr,
+-	&dev_attr_soft_reset.attr,
+-	&dev_attr_soft_reset_cnt.attr,
+ 	&dev_attr_status.attr,
+ 	&dev_attr_thermal_ver.attr,
+ 	&dev_attr_uboot_ver.attr,
+@@ -450,6 +448,21 @@ static const struct attribute_group *hl_dev_attr_groups[] = {
+ 	NULL,
+ };
  
--	return sprintf(buf, "0x%04x\n",
--			hdev->asic_prop.cpucp_info.infineon_version);
-+	if (hdev->asic_prop.cpucp_info.infineon_version2)
-+		return sprintf(buf, "%#04x %#04x\n",
-+			le32_to_cpu(hdev->asic_prop.cpucp_info.infineon_version),
-+			le32_to_cpu(hdev->asic_prop.cpucp_info.infineon_version2));
-+	else
-+		return sprintf(buf, "%#04x\n",
-+			le32_to_cpu(hdev->asic_prop.cpucp_info.infineon_version));
++static struct attribute *hl_dev_inference_attrs[] = {
++	&dev_attr_soft_reset.attr,
++	&dev_attr_soft_reset_cnt.attr,
++	NULL,
++};
++
++static struct attribute_group hl_dev_inference_attr_group = {
++	.attrs = hl_dev_inference_attrs,
++};
++
++static const struct attribute_group *hl_dev_inference_attr_groups[] = {
++	&hl_dev_inference_attr_group,
++	NULL,
++};
++
+ int hl_sysfs_init(struct hl_device *hdev)
+ {
+ 	int rc;
+@@ -465,10 +478,25 @@ int hl_sysfs_init(struct hl_device *hdev)
+ 		return rc;
+ 	}
+ 
++	if (!hdev->allow_inference_soft_reset)
++		return 0;
++
++	rc = device_add_groups(hdev->dev, hl_dev_inference_attr_groups);
++	if (rc) {
++		dev_err(hdev->dev,
++			"Failed to add groups to device, error %d\n", rc);
++		return rc;
++	}
++
+ 	return 0;
  }
  
- static ssize_t fuse_ver_show(struct device *dev, struct device_attribute *attr,
-diff --git a/drivers/misc/habanalabs/include/common/cpucp_if.h b/drivers/misc/habanalabs/include/common/cpucp_if.h
-index 078fb4bd0316..e4f44c4d20b5 100644
---- a/drivers/misc/habanalabs/include/common/cpucp_if.h
-+++ b/drivers/misc/habanalabs/include/common/cpucp_if.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0
-  *
-- * Copyright 2021 HabanaLabs, Ltd.
-+ * Copyright 2020-2021 HabanaLabs, Ltd.
-  * All Rights Reserved.
-  *
-  */
-@@ -761,6 +761,7 @@ struct cpucp_security_info {
-  * @fuse_version: silicon production FUSE information.
-  * @thermal_version: thermald S/W version.
-  * @cpucp_version: CpuCP S/W version.
-+ * @infineon_version2: Infineon 2nd stage DC-DC version.
-  * @dram_size: available DRAM size.
-  * @card_name: card name that will be displayed in HWMON subsystem on the host
-  * @sec_info: security information
-@@ -770,6 +771,10 @@ struct cpucp_security_info {
-  * @dram_binning_mask: DRAM binning mask, 1 bit per dram instance
-  *                     (0 = functional 1 = binned)
-  * @memory_repair_flag: eFuse flag indicating memory repair
-+ * @edma_binning_mask: EDMA binning mask, 1 bit per EDMA instance
-+ *                     (0 = functional 1 = binned)
-+ * @xbar_binning_mask: Xbar binning mask, 1 bit per Xbar instance
-+ *                     (0 = functional 1 = binned)
-  */
- struct cpucp_info {
- 	struct cpucp_sensor sensors[CPUCP_MAX_SENSORS];
-@@ -782,7 +787,7 @@ struct cpucp_info {
- 	__u8 fuse_version[VERSION_MAX_LEN];
- 	__u8 thermal_version[VERSION_MAX_LEN];
- 	__u8 cpucp_version[VERSION_MAX_LEN];
--	__le32 reserved2;
-+	__le32 infineon_version2;
- 	__le64 dram_size;
- 	char card_name[CARD_NAME_MAX_LEN];
- 	__le64 reserved3;
-@@ -790,7 +795,9 @@ struct cpucp_info {
- 	__u8 reserved5;
- 	__u8 dram_binning_mask;
- 	__u8 memory_repair_flag;
--	__u8 pad[5];
-+	__u8 edma_binning_mask;
-+	__u8 xbar_binning_mask;
-+	__u8 pad[3];
- 	struct cpucp_security_info sec_info;
- 	__le32 reserved6;
- 	__u8 pll_map[PLL_MAP_LEN];
+ void hl_sysfs_fini(struct hl_device *hdev)
+ {
+ 	device_remove_groups(hdev->dev, hl_dev_attr_groups);
++
++	if (!hdev->allow_inference_soft_reset)
++		return;
++
++	device_remove_groups(hdev->dev, hl_dev_inference_attr_groups);
+ }
 -- 
 2.25.1
 

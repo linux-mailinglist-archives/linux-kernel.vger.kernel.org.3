@@ -2,81 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6A5474A13
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 397E3474A15
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236635AbhLNRuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:50:51 -0500
-Received: from foss.arm.com ([217.140.110.172]:33824 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229812AbhLNRuu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:50:50 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A38B1D6E;
-        Tue, 14 Dec 2021 09:50:47 -0800 (PST)
-Received: from [10.57.34.58] (unknown [10.57.34.58])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 862113F5A1;
-        Tue, 14 Dec 2021 09:50:46 -0800 (PST)
-Message-ID: <ddbe509c-8e54-e653-040f-e7edc8774060@arm.com>
-Date:   Tue, 14 Dec 2021 17:50:41 +0000
+        id S236743AbhLNRvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:51:06 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:43436 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236645AbhLNRvE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 12:51:04 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DE5B821101;
+        Tue, 14 Dec 2021 17:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639504262; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9HYbUPArg5Npi8nSB59qNt54gDj1XOV5BLqPw1AnSX4=;
+        b=gINm6zX/x5w2pmFOctMsC5fGO6Bv7mdHF3OT5c1p0qxOZq9vVLQ87YcXK122UnD0rNts0a
+        aJ5FWDI7uTSQC+xcn7wgWdUmMhIxhX+EH5Vh9DUp2U3mF0eA4/B9OxjsbyCeOV7+sy9qUr
+        AX/8SsQU0u3L5kHBkh7CNpsBawuOZgM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639504262;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9HYbUPArg5Npi8nSB59qNt54gDj1XOV5BLqPw1AnSX4=;
+        b=V6ZYopLlXacqa+I+XpkvmQGbdo1R9mN6Z7HErFoNjZOg4rjfr2k9KDexhi+8JN7MOcdQxx
+        A9o96sepuAphMaCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E57E13EC8;
+        Tue, 14 Dec 2021 17:51:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OINjE4bZuGGaKQAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Tue, 14 Dec 2021 17:51:02 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 7150d799;
+        Tue, 14 Dec 2021 17:50:59 +0000 (UTC)
+From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
+        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+Subject: [PATCH v2] ext4: set csum seed in tmp inode while migrating to extents
+Date:   Tue, 14 Dec 2021 17:50:58 +0000
+Message-Id: <20211214175058.19511-1-lhenriques@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2 10/11] iommu/iova: Move flush queue code to iommu-dma
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
-        will@kernel.org
-Cc:     linux-kernel@vger.kernel.org, willy@infradead.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org
-References: <cover.1639157090.git.robin.murphy@arm.com>
- <0752bfc207b974e76eab7564058b5a7b9e8d5e6e.1639157090.git.robin.murphy@arm.com>
- <f0ec6978-4571-2d7c-f94c-cd92ba167074@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <f0ec6978-4571-2d7c-f94c-cd92ba167074@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-14 17:18, John Garry via iommu wrote:
-> On 10/12/2021 17:54, Robin Murphy wrote:
->> +    iovad->fq_domain = fq_domain;
->> +    iovad->fq = queue;
->> +
->> +    timer_setup(&iovad->fq_timer, fq_flush_timeout, 0);
->> +    atomic_set(&iovad->fq_timer_on, 0);
->> +
->> +    return 0;
->> +}
->> +
->> +
-> 
-> nit: a single blank line is standard, I think
+When migrating to extents, the temporary inode will have it's own checksum
+seed.  This means that, when swapping the inodes data, the inode checksums
+will be incorrect.
 
-Hmm, you're right - I've grown fond of leaving an extra little bit of 
-breathing space between logically-independent sections of code, and for 
-some reason I thought this file was already in that style, but indeed it 
-isn't.
+This can be fixed by recalculating the extents checksums again.  Or simply
+by copying the seed into the temporary inode.
 
-Joerg - let me know if you feel strongly enough that you'd like me to 
-change that. I'm going to have one last go at fixing tegra-drm, so I'm 
-happy to send a v3 of the whole series later this week if there are any 
-other minor tweaks too.
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=213357
+Reported-by: Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+---
+ fs/ext4/migrate.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-Thanks for all the reviews!
+changes since v1:
 
-Robin.
+* Dropped tmp_ei variable
+* ->i_csum_seed is now initialised immediately after tmp_inode is created
+* New comment about the seed initialization and stating that recovery
+  needs to be fixed.
 
-> 
-> Cheers
-> 
->>   static inline size_t cookie_msi_granule(struct iommu_dma_cookie 
->> *cookie)
->>   {
-> 
-> 
-> _______________________________________________
-> iommu mailing list
-> iommu@lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/iommu
+Cheers,
+--
+Luís
+
+diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
+index 7e0b4f81c6c0..36dfc88ce05b 100644
+--- a/fs/ext4/migrate.c
++++ b/fs/ext4/migrate.c
+@@ -459,6 +459,17 @@ int ext4_ext_migrate(struct inode *inode)
+ 		ext4_journal_stop(handle);
+ 		goto out_unlock;
+ 	}
++	/*
++	 * Use the correct seed for checksum (i.e. the seed from 'inode').  This
++	 * is so that the metadata blocks will have the correct checksum after
++	 * the migration.
++	 *
++	 * Note however that, if a crash occurs during the migration process,
++	 * the recovery process is broken because the tmp_inode checksums will
++	 * be wrong and the orphans cleanup will fail.
++	 */
++	ei = EXT4_I(inode);
++	EXT4_I(tmp_inode)->i_csum_seed = ei->i_csum_seed;
+ 	i_size_write(tmp_inode, i_size_read(inode));
+ 	/*
+ 	 * Set the i_nlink to zero so it will be deleted later
+@@ -502,7 +513,6 @@ int ext4_ext_migrate(struct inode *inode)
+ 		goto out_tmp_inode;
+ 	}
+ 
+-	ei = EXT4_I(inode);
+ 	i_data = ei->i_data;
+ 	memset(&lb, 0, sizeof(lb));
+ 

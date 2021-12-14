@@ -2,63 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B260473E41
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC00473E4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbhLNI3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:29:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S231855AbhLNIhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:37:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbhLNI3A (ORCPT
+        with ESMTP id S231748AbhLNIhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:29:00 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639E2C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:29:00 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so15691742wmj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:29:00 -0800 (PST)
+        Tue, 14 Dec 2021 03:37:41 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839BFC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:37:41 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id de30so16195650qkb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:37:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=IGse4qKU4JLBH1S45luocRcV6GpeECgK5A2GIqwAdmM=;
-        b=YloTHedaPf6ZbAfZX514PH+i8uZs98rTGg6aE78HrmeFO8IyVlSB6KPWUVDO2LXhy2
-         m1GCr6Om6blFEgtX+t2/YaqMzMfaPNyUfUcelBmzytgaNYyvg+5ng70+EoMhzxwH1ycp
-         h5B8hb6EGM7EwBaEUtJx3oPGvd4V+WE+Lm+Wfq44JtrXzdif2s/C/89hIuw+RH/JHSmT
-         zWgBe1CWJel7m5dBW91NNNj/B3G43BQuSVwcibHChn737sKRvOaGj6m0BsJj/wlzbzVj
-         dyXo9EmPjdxXilIul6azJafcPgRnV3ADgsb6/MHiOjBuLtjNpBlMccpS6HKeFz8f0wtU
-         dx9w==
+        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V775Jo7foyl5u33KO9wxNFO5Xpg512uth3xPug6/f9Y=;
+        b=NmsmnUQjon4giEIPURXak6DNfz2uv3mxLeDEiVc8iUJV+WQGHo0oIywd2C3DSI4pVI
+         4GuYtTQuyOG7798S3lnZcHyrILmqUoL50dlmbyCyTixojp/IGFP2EkTyKQgP170Pl3hq
+         3ZZTfp+NvlUjYXYlRC9z5TqZF86aF2Zr51JO3mvpkOaTvBpEAUi9RCW9TtSQfOeQOXhx
+         iHPWUKKEP3loANy/6Y5EPGU4/Y/NvufewNugTqqrzYw8tHGKjsES4Pu9OaWA58l7LcZH
+         8iUJjaT1SIRs1kDZ/7XPmBNEpbbLyESohomuDZ8Ply7kroWO48ooXLGjptuR/AuMiHbM
+         Rk5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=IGse4qKU4JLBH1S45luocRcV6GpeECgK5A2GIqwAdmM=;
-        b=YPgiM09xWyT44voAZzZF1hmDJwHjcuaOf0pQSQlckPQD+dcPDFO0TwgCWYGiOxO11Q
-         Q/X8cGfOKaqEjMn1nHP5mAwLOpfnJWB2oio7NEBbJ/kTS+ueNGblHQr0f2Z65MnDaVAi
-         GBJ8OIF/710+f4qp1Mswz238JB+NfhXebr/YVRzNTmW6ak5+o0IMCOO7WqUjDMO9CGXY
-         yrKHZWuwV2VlltRmYtK+3wVLt+/ELv7vMQrJE9ZWwZuG3VQKB6sFbOXgPHbIxhDjo/wC
-         aB00tUjYaDNDe4M8cB75JJNW740h22YXibInaJ7RUNPifTShqpkrDhmY5/y4dJpkSkWR
-         B0Yw==
-X-Gm-Message-State: AOAM5305L51Weer/NzSG/gWOw4Jla7+7e/kf/eYVW9F5m1MscfFVT8Fy
-        JgAREwGWBHaf/1Wz6c1VoyaKg66UBDdFJZne+Xg=
-X-Google-Smtp-Source: ABdhPJzJKF0LY/poBS5mHamj2r1sZ6rSxfFdkkZIm4cf1iu62Pq0Q3HSzHsrTAoxQ8sLI0eYKUB/fE+xtVdNhnKkrbw=
-X-Received: by 2002:a05:600c:220a:: with SMTP id z10mr5543613wml.20.1639470539039;
- Tue, 14 Dec 2021 00:28:59 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V775Jo7foyl5u33KO9wxNFO5Xpg512uth3xPug6/f9Y=;
+        b=VOz87ex9vzQr+0VZSTWUJ+jNXmUSLBfLH6G8cVdH5MD4wWaFZyvXSgAFfe9GCLqF2v
+         YJcV5LpvzTk4He1O43WL41VtuHQkhtsdZgRziUnp8vHHNDoEvEX6gdGRWhgVuJz2zfRW
+         +fVs75GQdyNUSvO5wWWvj+hfIMsNSRFvEHk0HYKFvCJvDvFJl8cgjwCOYOuOQH4sbIHh
+         8jHTnYZw3Mp1KX+sd3vVshJb1Dh+yDt2XhcUOihHw3tcWd/Q+98BlUUcFZ0GZNFOVJR2
+         HZO8J6uxLPOPuf6YJotAYVMPiPBhjD+VkUFWiznvH8IaubtdMjxEYFtZRxcqq3QS6Pa3
+         l3zg==
+X-Gm-Message-State: AOAM532a91lplMcbS3UVufxM1wMsxAOF7BsX99vzK4V7S963sB3aSwpe
+        1A3/F2fktVDr/kKglAHwJ2DgFVQs0r9sm5OL7IfPHQ==
+X-Google-Smtp-Source: ABdhPJwTLF1AMEeFod/l2CxZZeOst/LaOVrIJybQJ5YF/RyGQnZ4Krjx2+P/GvWwxeDL73OopPshCk3YG/laGaGdXjg=
+X-Received: by 2002:a05:620a:298a:: with SMTP id r10mr2844306qkp.447.1639471060440;
+ Tue, 14 Dec 2021 00:37:40 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:600c:4e42:0:0:0:0 with HTTP; Tue, 14 Dec 2021 00:28:58
- -0800 (PST)
-Reply-To: sgtkayla2001@gmail.com
-From:   kayla manthey <cherilatoubello@gmail.com>
-Date:   Tue, 14 Dec 2021 08:28:58 +0000
-Message-ID: <CAEtx=nC5DYXyC86ogF0pM4MVL6mu+HSnoSuim5oKRCPAg_Mc7w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20211212062407.138309-1-marcan@marcan.st> <20211212062407.138309-2-marcan@marcan.st>
+ <CABxcv=m4fu8h=FwY7R=thuvd13_ZbFqB9rNNN07QOAd__jdYSQ@mail.gmail.com>
+ <63334964-d63d-7625-e46f-a6e6ec19e908@marcan.st> <CABxcv=kbR5GX3yEfqchKJPkCqpWp_oKWjG=pu7LikBwoSX8W3A@mail.gmail.com>
+ <CAL_JsqLLTL-_H3XgsZRZaxE6qO6y8CDpoHfDkOgwekb1ysNQFw@mail.gmail.com>
+In-Reply-To: <CAL_JsqLLTL-_H3XgsZRZaxE6qO6y8CDpoHfDkOgwekb1ysNQFw@mail.gmail.com>
+From:   Javier Martinez Canillas <javier@dowhile0.org>
+Date:   Tue, 14 Dec 2021 09:37:29 +0100
+Message-ID: <CABxcv=nFx9r+=qMXop6kp6E4KoXaX_8duLY7S9fo6uqs_539jw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] of: Move simple-framebuffer device handling from
+ simplefb to of
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        devicetree@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0JzQvtC70Y8g0LLQuCwg0LHQuNGFINC40YHQutCw0Lsg0LTQsCDQt9C90LDQvCDQtNCw0LvQuCDR
-gdGC0LUg0L/QvtC70YPRh9C40LvQuCDQv9GA0LXQtNC40YjQvdC+0YLQviDQvNC4INGB0YrQvtCx
-0YnQtdC90LjQtSwNCtCx0LvQsNCz0L7QtNCw0YDRjyDQstC4Lg0K
+On Mon, Dec 13, 2021 at 3:50 PM Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Mon, Dec 13, 2021 at 5:30 AM Javier Martinez Canillas
+> <javier@dowhile0.org> wrote:
+
+[snip]
+
+> >
+> > You are right that passing NULL is a safe code path for now due the
+> > of_device_is_available(node) check, but that seems fragile to me since
+> > just adding a similar debug output to of_platform_device_create()
+> > could trigger the NULL pointer dereference.
+>
+> All/most DT functions work with a NULL node ptr, so why should this
+> one be different?
+>
+
+If you are OK with the patch as is, then I won't object :)
+
+> Rob
+
+Best regards,
+Javier

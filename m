@@ -2,177 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2ABE4744A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB94F4744B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234871AbhLNOSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:18:33 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39618 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234863AbhLNOSc (ORCPT
+        id S234883AbhLNOWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:22:01 -0500
+Received: from de-smtp-delivery-102.mimecast.com ([194.104.111.102]:49425 "EHLO
+        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234876AbhLNOWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:18:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52C03B819D9;
-        Tue, 14 Dec 2021 14:18:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92606C34605;
-        Tue, 14 Dec 2021 14:18:27 +0000 (UTC)
-Date:   Tue, 14 Dec 2021 15:18:24 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Anthony Iliopoulos <ailiop@suse.com>
-Cc:     NeilBrown <neilb@suse.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH - regression] devtmpfs: reconfigure on each mount
-Message-ID: <20211214141824.fvmtwvp57pqg7ost@wittgenstein>
-References: <163935794678.22433.16837658353666486857@noble.neil.brown.name>
- <20211213125906.ngqbjsywxwibvcuq@wittgenstein>
- <YbexPXpuI8RdOb8q@technoir>
- <20211214101207.6yyp7x7hj2nmrmvi@wittgenstein>
- <Ybik5dWF2w06JQM6@technoir>
-MIME-Version: 1.0
+        Tue, 14 Dec 2021 09:22:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1639491718;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mFmofHqybyurvnR6tUIudv3KgCPGIkQ1hnvnN2v66zQ=;
+        b=R4RiQ1JDSQ82Y0Hhyt9YXVKMAdEELMN5/EWnM3hG8zOjtMk+bvR/41O3rboX5YNQLIt9mR
+        byhRKAYDuJPk6lWE4LwyaBICybLkj62IjvA4/fLlXO1EFE3PjOF1MLXciGr7OQKxA7VeGg
+        MLyyfjy3SwgxOErMopoCojwPOkUO88o=
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com
+ (mail-vi1eur05lp2173.outbound.protection.outlook.com [104.47.17.173]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-20-MpUlIA-WPoqkdx_Zq8HAiQ-1; Tue, 14 Dec 2021 15:21:57 +0100
+X-MC-Unique: MpUlIA-WPoqkdx_Zq8HAiQ-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lg7TuWUc+xBhyjnEwfLc9V+aDiPsrFSJ9EvOw8S4Ii4eY+1P/d7FPsPndO9CfYsx7V7CkZr8OG7i5yPTGHn7bCO0bVsr6nFcgRrw9I7bqb3PbXe6CAsZk2X6VTTQCWX7LxGFCTRScvk7OQlcp4uKh4TIldHP840R/E8iogoKnCxwsxdm5OarCNXeoWZLdIs/pkTaYhqs4fjG0A4/uOsDSwkwF4ZjMMk8g0XFmBikr5T6XAnMUega2MIy6ynXN7I5H+/FjZ4j5w8DKb+sPDn9QZyT1Jt82Adq8pyfNH+tTzy1L4mdrXrniiFE+RQcqqPHSgPndgxOKcQ1UCRi9ChuLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7yZ7OUwR4+T0HiE/dnG8pI9mz97tGYUPfFLcleXt7wU=;
+ b=Imma52FHUZMIiWJQoT+FtKh/8A67QwuACZZo2pf7n+UNsr/OSU/v4/b/eusZ36rVH0vlzUzt6RMyDW7hszbyIzhE3WDh2V6J/S/dAquSPM0PIDQkJ0Ggdxsemtdlrtto/UmxDfmfZv3Z80u8PFl91A7LSydFzkahQDGCF0qKc2dtv7ph9Oh6fYQbo6LbKQnPwyRTBbxOVn6UFlVcA/p5gRXACSMq4ISxzs75h9FesL+Cgj1uMKwUPTdTPukHst/9ns2zo8YCiYkU7wgj2Dz5BUR1NVRMxiNVOzpME6N18B1yxwzldJQ12s2/XmZfPrbiPkyQLuGySPtmudpA6v2rKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
+ by DB7PR04MB5049.eurprd04.prod.outlook.com (2603:10a6:10:17::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Tue, 14 Dec
+ 2021 14:21:53 +0000
+Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
+ ([fe80::e9d6:1be9:d046:af1]) by DB7PR04MB5050.eurprd04.prod.outlook.com
+ ([fe80::e9d6:1be9:d046:af1%7]) with mapi id 15.20.4778.018; Tue, 14 Dec 2021
+ 14:21:52 +0000
+Subject: Re: [PATCH v1 1/2] HID: usbhid: enable remote wakeup function for
+ usbhid device
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Oliver Neukum <oneukum@suse.com>,
+        Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        mathias.nyman@linux.intel.com, stern@rowland.harvard.edu,
+        rajatja@google.com, chris.chiu@canonical.com,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
+ <caf93951-4c63-d0f1-e3f4-d0d49dec6a47@suse.com>
+ <d2e4a97a-b89b-eaf4-5aaf-89af22227746@loongson.cn>
+From:   Oliver Neukum <oneukum@suse.com>
+Message-ID: <654e90fb-2f04-1f87-f56c-792757e140a0@suse.com>
+Date:   Tue, 14 Dec 2021 15:21:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
+In-Reply-To: <d2e4a97a-b89b-eaf4-5aaf-89af22227746@loongson.cn>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ybik5dWF2w06JQM6@technoir>
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-ClientProxiedBy: AM7PR04CA0021.eurprd04.prod.outlook.com
+ (2603:10a6:20b:110::31) To DB7PR04MB5050.eurprd04.prod.outlook.com
+ (2603:10a6:10:22::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ff4956ad-4d94-48f1-f177-08d9bf0d1310
+X-MS-TrafficTypeDiagnostic: DB7PR04MB5049:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-Microsoft-Antispam-PRVS: <DB7PR04MB504966463C5ED4C52E833C9BC7759@DB7PR04MB5049.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LLGjvJefoq4Kq7w2DM2pRYBI4cYt3NGOrHg465QNHIJrsDRwHG7ONyvEHpxzzPzPR9FhNTOKZouC+Fr98y7x97tCHW94cjLRuHJBH33KOwE747FHPgIeN4saDsPKgdVMvLtHpYhQNkgHbfpHiqVz4cjaAKspv7nfMOGMsQNIY/qbA2ljAo1WCk1rnTrV9sBlYOzPzmP1ho5bBkXSQFhIjDuFYj+8JjyMarWiRGkI7G5y2mh/azopWlW2q+1XITewEo17cffwxfKwE+PPqztH80vT9pKokt6uVlwzORxAvrqu9VIymlBMZ7yGzSR9yKFwBYEu3mp3SxKVI7ba/sdPJOhiJnvHOvzSzzqekg83pQtVA0bVbEfEHAaYFP6TVcXG1ILkexepHmiMLlH/wDkZ2xqT+OQjfrIK1FZfOgfwfmeVDCe5x4dS/RH7Vu2N6Ybhqn64XvIILXHbpfUBYiomvpN4USHlsNRoiPq46W/1KHs0d2iExlN4Bg4B8Sphjf/PKqmYGM+Z+tDeuQg6b2WQ4VlkxGwHcEver2bRD906Psn/OI3YB3GcFh58SA7cepu/29IO/YYn5CpBgxNADnom5WwqHnGl8QnKPqFUIN7zkZUM/tggtQuJxKm091AMpccw5viBFe+XS4j8HV8zwcNz+W2zx0k6a4HqB3bNr8Mk3xIt3jusA2HYF0Op0IrBQKXJGndUafuvbXIogEeESqNj9RHcRezJbws1ds6M+HqFYYByiz8Td8/3IyJAovKSQK3B
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(31686004)(508600001)(316002)(2616005)(8936002)(110136005)(83380400001)(4744005)(2906002)(36756003)(7416002)(53546011)(6512007)(66946007)(6506007)(31696002)(86362001)(66476007)(66556008)(921005)(6486002)(186003)(38100700002)(5660300002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LtBMFOjdm8UXyIU8Olmt+iSWWAU9HN1VeOIZOOk5lKB5tANHb1F+aTIOVjlo?=
+ =?us-ascii?Q?lgAP8o193cm0yRYUXdQ4rxu2S0mv4NmWe5BGS3bVKWtWAnRUpATfkf3R6T+H?=
+ =?us-ascii?Q?Y9FSeD6rjYauHQCug2nzAqXoU6MsHUFugfThxonoG3WBEs1ulU0Y2zti0DfK?=
+ =?us-ascii?Q?sUqefZ/u+QLPGeJGS2gfmAs9S8otFBU2zHx9rjTuWoIw4vXealkJZsOAh/vD?=
+ =?us-ascii?Q?MWjmfuHwtSPqA9ZPl+Lc/lEcM8Hq5s0f9qo3E4V8VRdfa68u/sTKDcD7EsyE?=
+ =?us-ascii?Q?2NGZ3wHHMPwqV23iuYIrJvaZ9x/fzIrTCMICjx8crLQim6eeonxrFJa4mhUM?=
+ =?us-ascii?Q?oDaQ6Xblmv44CQiXhJy9okiN0fe1F5KX1lMbBjUhkBmeO7WMNGsbKavSsqxd?=
+ =?us-ascii?Q?MA0cVJktxlnHDqbdBqK5PMwfSCwpYRBoYi8sy9VXXEYv7N9AALLVi0D8co9G?=
+ =?us-ascii?Q?Jtr5rEI4fJGhmUyac8dXF9g6I9LO5xD5KA3p0ENkT+W0LUtqk1YdbMQbIdQU?=
+ =?us-ascii?Q?0VSx0cI3klJ13lh6IUjUhzG3qQVzjJwDObNEMQihQ1Zn5QBG2ceovdVX84H3?=
+ =?us-ascii?Q?94xsa2lxHWP2JAbIm5gaZikszuAG8k7PNKG/egTYqk5UPslUg5CuQjjIIb/z?=
+ =?us-ascii?Q?+uw1jgF1IIDp/wvgrkQq7rIeY2IUpuXZ4IkDuyKJxa5ATuVM6NYlyZ8ya0sn?=
+ =?us-ascii?Q?nXX2WRuUFGmXVviSn4oeR+HnKg+/LLaTgv83rhXWJ3wLBzbmKX2398cAwjBx?=
+ =?us-ascii?Q?+sOsV7BKz2p3XwCsWDFZYskrc0ad4myq2EHgQFpgXl02Ys/O3Ss38UdCRbFj?=
+ =?us-ascii?Q?I79h+cdFJg+QRxYVcUoxtM5M8Xqp+JrtD6hQCFZ48ShIxwbLEEunrSUDhJJF?=
+ =?us-ascii?Q?C49rmA7jodvT5wBYxHsxFqTLTn8FNM4jugfS/R/hmXQyerRy1w5r1qpxCC9e?=
+ =?us-ascii?Q?bKninEvLrLyzXeiPygDV5xiYeXoqmHqJPTD5IBVin7vX7QoMBpm9pk5LTsXr?=
+ =?us-ascii?Q?ZtXIXOsujIyt1+pGr7aNkcW4/C6K6gTVJdszLdLA4OHSW3dHSsGAXU+BP3vt?=
+ =?us-ascii?Q?9Ej/61oEr9X+y3s85hPfFxl+8+qOfaRGNOClK0L5koauxsGBrxHl/DzL7HHJ?=
+ =?us-ascii?Q?aRDJ7JIBIbjQtENmv+5OtmxYC0y1EmV7SOqB/1A7sfOWP0CG+4ejXFNIPZtw?=
+ =?us-ascii?Q?uU1PXyX52dVDV7btXR2VHuSmGSojeSoPweTD0qLulJh/+RpO3TerSNpGLxsb?=
+ =?us-ascii?Q?gOc+RdfGTquyNdPZmfl3/D72NZ+D5EJdmTIJpMjHyK/9g1SBUo7Ikpm2uwD/?=
+ =?us-ascii?Q?1vz4WjhT+16BlvHPDXkMpUhfVaGYHmvpCmMwN9BrFurRn2SQ+1lJyEp4b5Oa?=
+ =?us-ascii?Q?p3AK0bm/xLhMOewddyN5ldUsnGZb47xh9vflSm4RzZpiXNUapvHOurFkflPx?=
+ =?us-ascii?Q?Tm4XsNUKUKMkhU05qTD5YxGaIfJi7A3EhghmuOtlr8GFEqceeZZvw7K3caqE?=
+ =?us-ascii?Q?ktHgIOLRKJeeU8STBbdZHzwnz3iJbOzuGXlmCBM+ALPlKOIywAUjbczT+5XV?=
+ =?us-ascii?Q?KP4UPzhdn+iAwqLr6m+tw1Vy8PsPoau9ZTRvthI6UAwT5h5Jhj5dwiu95mZM?=
+ =?us-ascii?Q?JEX8s9R8U77kqGJALBoKh87gcQC6ObSTXawETSpP7O/Y0bI35exOydADnAHP?=
+ =?us-ascii?Q?osPtrenstWy2iGF8B32jVnrK94o=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff4956ad-4d94-48f1-f177-08d9bf0d1310
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 14:21:52.7182
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LITBIAYOd0nTPa0q7gUXj9mh0+AMcil/SypHeN6TP0QDZOLp2GzyhfMqBhsWzdQSHX2wRApIjl8RAAph8K6PQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5049
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 03:06:29PM +0100, Anthony Iliopoulos wrote:
-> On Tue, Dec 14, 2021 at 11:12:07AM +0100, Christian Brauner wrote:
-> > On Mon, Dec 13, 2021 at 09:46:53PM +0100, Anthony Iliopoulos wrote:
-> > > On Mon, Dec 13, 2021 at 01:59:06PM +0100, Christian Brauner wrote:
-> > > > On Mon, Dec 13, 2021 at 12:12:26PM +1100, NeilBrown wrote:
-> > > > > 
-> > > > > Prior to Linux v5.4 devtmpfs used mount_single() which treats the given
-> > > > > mount options as "remount" options, updating the configuration of the
-> > > > > single super_block on each mount.
-> > > > > Since that was changed, the mount options used for devtmpfs are ignored.
-> > > > > This is a regression which affects systemd - which mounts devtmpfs
-> > > > > with "-o mode=755,size=4m,nr_inodes=1m".
-> > > > > 
-> > > > > This patch restores the "remount" effect by calling reconfigure_single()
-> > > > > 
-> > > > > Fixes: d401727ea0d7 ("devtmpfs: don't mix {ramfs,shmem}_fill_super() with mount_single()")
-> > > > > Signed-off-by: NeilBrown <neilb@suse.de>
-> > > > > ---
-> > > > 
-> > > > Hey Neil,
-> > > > 
-> > > > So far this hasn't been an issue for us in systemd upstream. Is there a
-> > > > specific use-case where this is causing issues? I'm mostly asking
-> > > > because this change is fairly old.
-> > > 
-> > > This is standard init with systemd for SLE, where the systemd-provided
-> > > mount params for devtmpfs are being effectively ignored due to this
-> > > regression, so nr_inodes and size params are falling back to kernel
-> > > defaults. It is also not specific to systemd, and can be easily
-> > > reproduced by e.g. booting with devtmpfs.mount=0 and doing mount -t
-> > > devtmpfs none /dev -o nr_inodes=1024.
-> > > 
-> > > > What I actually find more odd is that there's no .reconfigure for
-> > > > devtmpfs for non-vfs generic mount options it supports.
-> > > 
-> > > There is a .reconfigure for devtmpfs, e.g. shmem_init_fs_context sets
-> > > fc->ops to shmem_fs_context_ops, so everything goes through
-> > > shmem_reconfigure.
-> > > 
-> > > > So it's possible to change vfs generic stuff like
-> > > > 
-> > > > mount -o remount,ro,nosuid /dev
-> > > > 
-> > > > but none of the other mount options it supports and there's no word lost
-> > > > anywhere about whether or not that's on purpose.
-> > > 
-> > > That's not the case: even after d401727ea0d7 a remount can change any
-> > > shmem-specific mount params.
-> > > 
-> > > > It feels odd because it uses the fs parameters from shmem/ramfs
-> > > > 
-> > > > const struct fs_parameter_spec shmem_fs_parameters[] = {
-> > > > 	fsparam_u32   ("gid",		Opt_gid),
-> > > > 	fsparam_enum  ("huge",		Opt_huge,  shmem_param_enums_huge),
-> > > > 	fsparam_u32oct("mode",		Opt_mode),
-> > > > 	fsparam_string("mpol",		Opt_mpol),
-> > > > 	fsparam_string("nr_blocks",	Opt_nr_blocks),
-> > > > 	fsparam_string("nr_inodes",	Opt_nr_inodes),
-> > > > 	fsparam_string("size",		Opt_size),
-> > > > 	fsparam_u32   ("uid",		Opt_uid),
-> > > > 	fsparam_flag  ("inode32",	Opt_inode32),
-> > > > 	fsparam_flag  ("inode64",	Opt_inode64),
-> > > > 	{}
-> > > > }
-> > > > 
-> > > > but doesn't allow to actually change them neither with your fix or with
-> > > > the old way of doing things. But afaict, all of them could be set via
-> > > 
-> > > As per above, all those mount params are changeable via remount
-> > > irrespective of the regression. What d401727ea0d7 regressed is that all
-> > 
-> > Ah, I missed that. So shmem_reconfigure simple ignores some options for
-> > remount instead of returning an error. That's annoying:
-> > 
-> > root@f2-vm:~# findmnt  | grep devtmpfs
-> > ├─/dev                         udev          devtmpfs    rw,nosuid,noexec,relatime,size=1842984k,nr_inodes=460746,mode=755,inode64
-> > 
-> > root@f2-vm:~# mount -o remount,gid=1000 /dev/
-> > root@f2-vm:~# findmnt  | grep devtmpfs
-> > ├─/dev                         udev          devtmpfs    rw,nosuid,noexec,relatime,size=1842984k,nr_inodes=460746,mode=755,inode64
-> > 
-> > root@f2-vm:~# mount -o remount,mode=600 /dev
-> > root@f2-vm:~# findmnt  | grep devtmpfs
-> > ├─/dev                         udev          devtmpfs    rw,nosuid,noexec,relatime,size=1842984k,nr_inodes=460746,mode=755,inode64
-> 
-> This is a slightly different issue: shmem_reconfigure intentionally and
-> specifically does not reconfigure any of the uid/gid/mode options that
-> you picked in the above examples, and those can only be set on initial
-> mounts (and only on tmpfs, not devtmpfs).
-> 
-> This was the case since devtmps inception given that there was always an
-> internal kernel mount with hardcoded mount options (mode=0755), and any
-> subsequent public mounts from userspace are simply remounts (thus for
-> devtmpfs specifying uid/gid/mode was never possible).
-> 
-> But any other shmem-specific mount option that can be reconfigured via
-> remounts is working irrespective of this regression. What has really
 
-Right, I understood all that. Just confusing from todays perspective
-that mount options that can't be changed on (superblock) remount are
-silently skipped instead of causing an error. But for historical reasons
-it obviously makes sense.
+On 10.12.21 10:50, zhuyinbo wrote:
+Hi,
+> system ask that must it must be accped a acpi lid open event then
+> system will always into resume state for laptop, otherwise, eventhough
+> that system be wakeuped by other event then system will continue into
+> suspend.
+Lid events are necesarily for the whole system.
+>
+> and for laptop usb wakeup that as general ask bios to enable usb
+> wakeup then if need do more things to enable usb wakeup I think this
+> usb wakeup function isn't friendly and inconveient, so enable it by
+> default.
+> after add this patch, if want to use usb wakeup function it only need
+> enable bios configure it think it is appropriate.
+>
+No. If you wish your laptop to be resumed by USB events, that is one thing.
+You can alter the system settings. That must work. But it is a different
+issue
 
-> regressed is the ability to set the rest of the shmem_fs_parameters on
-> devtmpfs on initial mounts (remounts work just fine).
-> 
-> > > those params are being ignored on new mounts only (and thus any init
-> > > that mounts devtmpfs with params would be affected).
-> > > 
-> > > > the "devtmpfs.mount" kernel command line option. So I could set gid=,
-> > > > uid=, and mpol= for devtmpfs via devtmpfs.mount but wouldn't be able to
-> > > > change it through remount or - in your case - with a mount with new
-> > > > parameters?
-> > > 
-> > > The devtmpfs.mount kernel boot param only controls if devtmpfs will be
-> > > automatically mounted by the kernel during boot, and has nothing to do
-> > > with the actual tmpfs mount params.
-> > 
-> > Thanks!
-> > I'm not a fan of a proper mount changing mount options tbh but if it is
-> > a regression for users then we should fix it.
-> > Though I'm surprised it took that such a long time to even realize that
-> > there was a regression.
-> 
-> I think this is due to the devtmpfs shmem options falling back to kernel
-> defaults, which are apparently good enough for most use-cases. The only
-> reason we observed the regression is due to a customer case where the
-> avail inodes in /dev where exhausted and thus userspace was getting
-> -ENOSPC. Subsequent attempts to raise the nr_inodes during boot were
-> failing due to the regression.
+from the default.
 
-Ah, that sucks.
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+In general any HID device must have wakeup capability to be usable for
+selective suspend. You cannot draw conclusions from that.
+
+=C2=A0=C2=A0=C2=A0 Regards
+=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
+

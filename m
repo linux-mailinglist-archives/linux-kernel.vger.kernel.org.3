@@ -2,194 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8348473B9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F22A473BB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbhLNDkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 22:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbhLNDka (ORCPT
+        id S233382AbhLNDrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 22:47:23 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:33394 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233216AbhLNDrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 22:40:30 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD53C061574;
-        Mon, 13 Dec 2021 19:40:29 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id e3so59506649edu.4;
-        Mon, 13 Dec 2021 19:40:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YGvjFXTcjcxmedBMr5Eg6ESipNuMk/cS8aRWqu3L/gQ=;
-        b=cbp6PXlg5GBnn2jNS4KPj4XdJJe/9dm3sOPF0h8RSD4P9owquu0LrKQCtB3Grgn1zj
-         97D/hthrYA8Blx7z+SU2Wkr0hF6WhM0JILrEHECFeqXHyTrbw/QsR5qDt1rQKP86bJKe
-         y54+G2q6WfMxATPn1tJKdjts0/NkvPFotnL5hhu7924jA7KJ47kOtOaLUP+8PGfWcSZB
-         jD83y96JZTv+Bund/hMYJvyffaMfS6tRy203uFgXMiv4u5B/eKyVfFd8pzOBHI0cght+
-         Mse6EigpU+JIMNGYX5PfzHbTDfmI6iiuDKtbb1uawc1zRLksQIG13UAHlcC2eU4VaYMW
-         1u2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YGvjFXTcjcxmedBMr5Eg6ESipNuMk/cS8aRWqu3L/gQ=;
-        b=ilffro7FRYYjlf23VvOlohH9E64XX9CZhFu3z71AJiY4NB/+fdEgWyN3EKI5JTaHvm
-         P8SR/z0t74NyCc2OMEXlFfpo6l63TSHKZRILsIabB055vPbHJ38kMq3rEUI9sW2jchTx
-         UoE11GBva2KZ+sg3IUn2kQIyVuHldTJQr9BGk0K7EbY28p4qi28vvDRtZnUP5c+SNK+D
-         ew7QeSaoO85yQ63+W/fObbb3uhlRMyDxOQIXBsPF7T8HP958GE9FS9UJMyRaa0rYSEVc
-         SFWvfD+9NtSsRld1clSkBetVO8nyZLZXTjRCMu2B2hW8+aIWluOHd+F72wIChK7D2R4h
-         qSRw==
-X-Gm-Message-State: AOAM530sSjrpCHUroAaKfe611Ce3xw2CUKBY9jYTOZGR+i8THkruGEmK
-        /MJOMvLl9Kg98AYPZ0m5pWBfahL15LSSclHJ1Zs/Vbl6
-X-Google-Smtp-Source: ABdhPJzPgfxGI1sJNvqcW5T0ES7dng/oYeWXHRMKJ14v8u60jjA6kpNpkNBo1/Rzo53PsL1ToLFSTUr+sFd1NfOkoMs=
-X-Received: by 2002:a05:6402:491:: with SMTP id k17mr4085276edv.333.1639453227988;
- Mon, 13 Dec 2021 19:40:27 -0800 (PST)
+        Mon, 13 Dec 2021 22:47:21 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BE3l0SI059276;
+        Mon, 13 Dec 2021 21:47:00 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1639453620;
+        bh=sSUI+3XbCkWJC8iuEmPzjq99OubAAA0oFQ31cA0MhpA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=HgmGgtYtjS/+21+jDL3Qdo38QnwnKO48L46s2HPUFDMkJt1nopdh1qkJXZUBj7SV0
+         CazYg45gzVKd/ZMPUeQAx7y2T7358XmGqqpThV3rP0ttGUs7QDSIimb4KtD+I3wdgG
+         XHAlzJ4TX0MlpERNQdl4j5C/iidTWKNwqbvkQDHA=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BE3l0CH054348
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 13 Dec 2021 21:47:00 -0600
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 13
+ Dec 2021 21:46:59 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 13 Dec 2021 21:46:59 -0600
+Received: from [10.250.232.185] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BE3kuDX023438;
+        Mon, 13 Dec 2021 21:46:57 -0600
+Subject: Re: [PATCH 1/2] dt-bindings: phy: ti,tcan104x-can: Document
+ mux-states property
+To:     Rob Herring <robh@kernel.org>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211202131002.12217-1-a-govindraju@ti.com>
+ <20211202131002.12217-2-a-govindraju@ti.com>
+ <Ybeq5dNYjN4GOzdV@robh.at.kernel.org>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <05d52ca2-424b-94b5-4f0c-56dbbc5a0c22@ti.com>
+Date:   Tue, 14 Dec 2021 09:16:55 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211128131853.15125-1-aford173@gmail.com> <20211128131853.15125-6-aford173@gmail.com>
-In-Reply-To: <20211128131853.15125-6-aford173@gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 13 Dec 2021 21:40:17 -0600
-Message-ID: <CAHCN7xJW14D8BVx1op+V9EAxcFFidSDkN1LN1rdHvG2TNHVtNg@mail.gmail.com>
-Subject: Re: [PATCH V4 5/9] soc: imx: imx8m-blk-ctrl: add i.MX8MN DISP blk-ctrl
-To:     arm-soc <linux-arm-kernel@lists.infradead.org>
-Cc:     Adam Ford-BE <aford@beaconembedded.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <Ybeq5dNYjN4GOzdV@robh.at.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 28, 2021 at 7:19 AM Adam Ford <aford173@gmail.com> wrote:
->
-> This adds the description for the i.MX8MN disp blk-ctrl.
->
-> Signed-off-by: Adam Ford <aford173@gmail.com>
+Hi Rob,
 
-Lucas,
+On 14/12/21 1:49 am, Rob Herring wrote:
+> On Thu, Dec 02, 2021 at 06:40:01PM +0530, Aswath Govindraju wrote:
+>> On some boards, for routing CAN signals from controller to transceivers,
+>> muxes might need to be set. This can be implemented using mux-states
+>> property. Therefore, document the same in the respective bindings.
+>>
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> ---
+>>  .../devicetree/bindings/phy/ti,tcan104x-can.yaml    | 13 +++++++++++++
+>>  1 file changed, 13 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+>> index 6107880e5246..5b2b08016635 100644
+>> --- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+>> +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+>> @@ -37,6 +37,18 @@ properties:
+>>        max bit rate supported in bps
+>>      minimum: 1
+>>  
+>> +  mux-states:
+>> +    description:
+>> +      mux controller node to route the signals from controller to
+>> +      transceiver. Depending on the mux chip and the control lines
+>> +      in it, the first and second parameters can be used for
+>> +      representing control line and state. The number of arguments
+>> +      is to be used based on '#mux-state-cells' property in the
+>> +      mux-controller node. If '#mux-state-cells' is equal to
+>> +      one then, then the argument to be used would be the state.
+>> +      If it is set to two, then the first argument is the control
+>> +      line and the second argument would be its corresponding state.
+> 
+> No need to redefine how a common property works here. What you do need 
+> to define is how many entries and what they are for if more than 1. 
+> 
 
-Is there any chance you could give this series some feedback?  In
-order to get more functionality on the Nano, we need the blk-ctrl on
-Nano working.
+Got it. So, I'll remove the common part that describes about the number
+of arguments and only include what the arguments would mean given the
+number of arguments
 
-thanks,
 
-adam
+  mux-states:
+    description:
+      mux controller node to route the signals from controller to
+      transceiver. Two arguments can be present depending on the mux
+      chip. If mux-states has one argument then it represents the state.
+      If there are two arguments then the first argument is the control
+      line and the second argument is its corresponding state.
 
-> ---
->  drivers/soc/imx/imx8m-blk-ctrl.c | 77 +++++++++++++++++++++++++++++++-
->  1 file changed, 76 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
-> index c2f076b56e24..511e74f0db8a 100644
-> --- a/drivers/soc/imx/imx8m-blk-ctrl.c
-> +++ b/drivers/soc/imx/imx8m-blk-ctrl.c
-> @@ -14,6 +14,7 @@
->  #include <linux/clk.h>
->
->  #include <dt-bindings/power/imx8mm-power.h>
-> +#include <dt-bindings/power/imx8mn-power.h>
->
->  #define BLK_SFT_RSTN   0x0
->  #define BLK_CLK_EN     0x4
-> @@ -517,6 +518,77 @@ static const struct imx8m_blk_ctrl_data imx8mm_disp_blk_ctl_dev_data = {
->         .num_domains = ARRAY_SIZE(imx8mm_disp_blk_ctl_domain_data),
->  };
->
-> +
-> +static int imx8mn_disp_power_notifier(struct notifier_block *nb,
-> +                                     unsigned long action, void *data)
-> +{
-> +       struct imx8m_blk_ctrl *bc = container_of(nb, struct imx8m_blk_ctrl,
-> +                                                power_nb);
-> +
-> +       if (action != GENPD_NOTIFY_ON && action != GENPD_NOTIFY_PRE_OFF)
-> +               return NOTIFY_OK;
-> +
-> +       /* Enable bus clock and deassert bus reset */
-> +       regmap_set_bits(bc->regmap, BLK_CLK_EN, BIT(8));
-> +       regmap_set_bits(bc->regmap, BLK_SFT_RSTN, BIT(8));
-> +
-> +       /*
-> +        * On power up we have no software backchannel to the GPC to
-> +        * wait for the ADB handshake to happen, so we just delay for a
-> +        * bit. On power down the GPC driver waits for the handshake.
-> +        */
-> +       if (action == GENPD_NOTIFY_ON)
-> +               udelay(5);
-> +
-> +
-> +       return NOTIFY_OK;
-> +}
-> +
-> +static const struct imx8m_blk_ctrl_domain_data imx8mn_disp_blk_ctl_domain_data[] = {
-> +       [IMX8MN_DISPBLK_PD_MIPI_DSI] = {
-> +               .name = "dispblk-mipi-dsi",
-> +               .clk_names = (const char *[]){ "dsi-pclk", "dsi-ref", },
-> +               .num_clks = 2,
-> +               .gpc_name = "mipi-dsi",
-> +               .rst_mask = BIT(0) | BIT(1),
-> +               .clk_mask = BIT(0) | BIT(1),
-> +               .mipi_phy_rst_mask = BIT(17),
-> +       },
-> +       [IMX8MN_DISPBLK_PD_MIPI_CSI] = {
-> +               .name = "dispblk-mipi-csi",
-> +               .clk_names = (const char *[]){ "csi-aclk", "csi-pclk" },
-> +               .num_clks = 2,
-> +               .gpc_name = "mipi-csi",
-> +               .rst_mask = BIT(2) | BIT(3),
-> +               .clk_mask = BIT(2) | BIT(3),
-> +               .mipi_phy_rst_mask = BIT(16),
-> +       },
-> +       [IMX8MN_DISPBLK_PD_LCDIF] = {
-> +               .name = "dispblk-lcdif",
-> +               .clk_names = (const char *[]){ "lcdif-axi", "lcdif-apb", "lcdif-pix", },
-> +               .num_clks = 3,
-> +               .gpc_name = "lcdif",
-> +               .rst_mask = BIT(4) | BIT(5),
-> +               .clk_mask = BIT(4) | BIT(5),
-> +       },
-> +       [IMX8MN_DISPBLK_PD_ISI] = {
-> +               .name = "dispblk-isi",
-> +               .clk_names = (const char *[]){ "disp_axi", "disp_apb", "disp_axi_root",
-> +                                               "disp_apb_root"},
-> +               .num_clks = 4,
-> +               .gpc_name = "isi",
-> +               .rst_mask = BIT(6) | BIT(7),
-> +               .clk_mask = BIT(6) | BIT(7),
-> +       },
-> +};
-> +
-> +static const struct imx8m_blk_ctrl_data imx8mn_disp_blk_ctl_dev_data = {
-> +       .max_reg = 0x84,
-> +       .power_notifier_fn = imx8mn_disp_power_notifier,
-> +       .domains = imx8mn_disp_blk_ctl_domain_data,
-> +       .num_domains = ARRAY_SIZE(imx8mn_disp_blk_ctl_domain_data),
-> +};
-> +
->  static const struct of_device_id imx8m_blk_ctrl_of_match[] = {
->         {
->                 .compatible = "fsl,imx8mm-vpu-blk-ctrl",
-> @@ -524,7 +596,10 @@ static const struct of_device_id imx8m_blk_ctrl_of_match[] = {
->         }, {
->                 .compatible = "fsl,imx8mm-disp-blk-ctrl",
->                 .data = &imx8mm_disp_blk_ctl_dev_data
-> -       } ,{
-> +       }, {
-> +               .compatible = "fsl,imx8mn-disp-blk-ctrl",
-> +               .data = &imx8mn_disp_blk_ctl_dev_data
-> +       }, {
->                 /* Sentinel */
->         }
->  };
-> --
-> 2.32.0
->
+
+Thanks,
+Aswath
+
+> Rob
+> 
+

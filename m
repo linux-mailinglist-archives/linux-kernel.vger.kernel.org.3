@@ -2,111 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE4E474832
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB60474835
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235981AbhLNQeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:34:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235914AbhLNQeH (ORCPT
+        id S236058AbhLNQeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:34:22 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:47430 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235989AbhLNQeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:34:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAADC061574;
-        Tue, 14 Dec 2021 08:34:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CF64612FF;
-        Tue, 14 Dec 2021 16:34:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16AE6C34601;
-        Tue, 14 Dec 2021 16:34:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639499645;
-        bh=y9Tsf9OdTgQ1kMcJ/PUzR3f3WRy9zX8FGn4p772Rqxc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cem+MBYsmw3h/iOiG9hzHtrjGv9dTWO4AuNK0GROz1f2ChQbtSx4x27m1N4FRNlSr
-         lUZdkVcdmebi4sWJC3EbA3fvJm+96jGmFyIpijLHmBSyBC8RKlzHgzv5GoGSVy2vi9
-         Bnp25aHWWpPAetVN26ZiedYmVNPwyBFGy5rT7YSc=
-Date:   Tue, 14 Dec 2021 17:34:02 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/43] kmsan: add KMSAN runtime core
-Message-ID: <YbjHerrHit/ZqXYs@kroah.com>
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-14-glider@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214162050.660953-14-glider@google.com>
+        Tue, 14 Dec 2021 11:34:21 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4AB3F1F381;
+        Tue, 14 Dec 2021 16:34:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639499660; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=77bABPJtSNxFAw/Xtugh+m2CCURtbLu9t56UQYXKviI=;
+        b=ltizkbQFfN1v1qDLj8gG/oO7fyxcQbvikRiUO50rlowAcfzxJVPVx8aAcAGjn5fEeYiG7s
+        PVHapEjw1sjiMZQPTYIze4vwX+CKzWhhQyWcj+s6uXtudd073XdEzlOZh39GEzAU9usTBo
+        vNNLWYGoyYA3lj2hjc0ZbmA1bUO6rVA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639499660;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=77bABPJtSNxFAw/Xtugh+m2CCURtbLu9t56UQYXKviI=;
+        b=a7pfyxVm1Jcrr30RkT/TIczCZlsHs9c4RavcxTF49sgmZlxy3T37Zgr0470H3dpi/+oNaO
+        M4MAhIlorR9T7XBA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 2C6D3A3B85;
+        Tue, 14 Dec 2021 16:34:20 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 17:34:20 +0100
+Message-ID: <s5hlf0n9mcz.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        <alsa-devel@alsa-project.org>, <linux-acpi@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 09/10] ALSA: hda/realtek: Add support for Legion 7 16ACHg6 laptop
+In-Reply-To: <20211214135959.1317949-10-tanureal@opensource.cirrus.com>
+References: <20211214135959.1317949-1-tanureal@opensource.cirrus.com>
+        <20211214135959.1317949-10-tanureal@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:20:20PM +0100, Alexander Potapenko wrote:
-> This patch adds the core parts of KMSAN runtime and associated files:
+On Tue, 14 Dec 2021 14:59:58 +0100,
+Lucas Tanure wrote:
 > 
->   - include/linux/kmsan-checks.h: user API to poison/unpoison/check
->     the kernel memory;
->   - include/linux/kmsan.h: declarations of KMSAN hooks to be referenced
->     outside of KMSAN runtime;
->   - lib/Kconfig.kmsan: CONFIG_KMSAN and related declarations;
->   - Makefile, mm/Makefile, mm/kmsan/Makefile: boilerplate Makefile code;
->   - mm/kmsan/annotations.c: non-inlineable implementation of KMSAN_INIT();
->   - mm/kmsan/core.c: core functions that operate with shadow and origin
->     memory and perform checks, utility functions;
->   - mm/kmsan/hooks.c: KMSAN hooks for kernel subsystems;
->   - mm/kmsan/init.c: KMSAN initialization routines;
->   - mm/kmsan/instrumentation.c: functions called by KMSAN instrumentation;
->   - mm/kmsan/kmsan.h: internal KMSAN declarations;
->   - mm/kmsan/shadow.c: routines that encapsulate metadata creation and
->     addressing;
->   - scripts/Makefile.kmsan: CFLAGS_KMSAN
->   - scripts/Makefile.lib: KMSAN_SANITIZE and KMSAN_ENABLE_CHECKS macros
+> Add Support for CS35L41 using the component binding
+> method
+> 
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+
+Through a quick glance, the patch looks almost fine, just a few
+nitpicking:
+
+> @@ -6497,6 +6502,105 @@ static void alc287_fixup_legion_15imhg05_speakers(struct hda_codec *codec,
+>  	}
+>  }
+>  
+> +static int comp_match_dev_name(struct device *dev, void *data)
+> +{
+> +	if (strcmp(dev_name(dev), data) == 0)
+> +		return 1;
+> +
+> +	return 0;
+
+This could be a oneliner:
+	return strcmp(dev_name(dev), data) == 0;
 
 
-That's an odd way to write a changelog, don't you think?
+> +void comp_generic_playback_hook(struct hda_pcm_stream *hinfo, struct hda_codec *codec,
+> +				struct snd_pcm_substream *sub, int action)
 
-You need to describe what you are doing here and why you are doing it.
-Not a list of file names, we can see that in the diffstat.
+Missing static?
 
-Also, you don't mention you are doing USB stuff here at all.  And why
-are you doing it here?  That should be added in a later patch.
+> +void alc287_legion_16achg6_playback_hook(struct hda_pcm_stream *hinfo, struct hda_codec *codec,
+> +					 struct snd_pcm_substream *sub, int action)
 
-Break this up into smaller, logical, pieces that add the infrastructure
-and build on it.  Don't just chop your patches up on a logical-file
-boundry, as you are adding stuff in this patch that you do not need for
-many more later on, which means it was not needed here.
+Ditto.
+
+> +{
+> +	struct alc_spec *spec = codec->spec;
+> +	unsigned int rx_slot;
+> +	int i = 0;
+
+A superfluous variable initialization.
+
 
 thanks,
 
-greg k-h
+Takashi

@@ -2,173 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A61474BCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D393A474BD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237380AbhLNTXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S237390AbhLNTXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237284AbhLNTXI (ORCPT
+        with ESMTP id S237284AbhLNTXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:23:08 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393C2C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:23:08 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id v11so34144349wrw.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:23:08 -0800 (PST)
+        Tue, 14 Dec 2021 14:23:35 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037ACC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:23:35 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id d1-20020a4a3c01000000b002c2612c8e1eso5203183ooa.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:23:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9MfX+ladgz8v1uPlUvt81YDUVI2BVYjumD0vKwEPZL8=;
-        b=WqDW2eYz3b7YYPBATttXaZ6buiyp4VM0CVsPBNwqwvYXLJqSfLdSDpj5RehBf1rzm8
-         0NGFCRKTByBHutzxvd6c3nFRfg7S5gUxzyjAsZRCB6ZNpHiZ2kV4SDb8uD7YJDElQvlZ
-         OKIIpRv009ozrHeUDnGuQDG22K2U2mBGC0ta7+gNfXDSXxmilG4PK8PLbtJqfFIzJDBA
-         z8MvgBO9eoTIaFj2zVPC3py7D9VrBVFftahzSaKfwtYSDwwnGClk+GUSkt5Geu8DLPDe
-         AYpoiIGXYQQWCabokDuhcVDYZs+WEqYPRuJCe9jGgGOnOOBFi7boE3CqCm1HAkh3//a8
-         O05g==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Ly7ashr0Abfix6SoCDJYNsr0pgjAfUrtoNa4BxcGFmI=;
+        b=DaubiwHwzJwXsWIRixjWAKO7YA+Njfarz7GWWLXaUfA2fcW40KoSMkWIh3y/Zkdxyh
+         BdXsnDNnEGn2GhdebKFdq7tXv/4MW3ZEK7emL9lvnOVwIPB8udu9qVCEX085iBt40FAe
+         eGrE6OmNnQjO/CHduWdRD9ucpoUFbkz+H6f+3IQox3dSQU4SYvd89vx/JvAJQFhrPmMl
+         D0h14/RP1SoYbCNAbMbEV5rI3Bnsc2shomrnanhui91YPDbEzrbz/2BQ6GPWWxUVpV6P
+         BsvQNY8RMOOQmXMxpnIi7V06SBq6apMW3fz80Tu4fpGNFJDDYjYP4qF0xN5mKRb3Vr+3
+         sSQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9MfX+ladgz8v1uPlUvt81YDUVI2BVYjumD0vKwEPZL8=;
-        b=Dfelmp3TOiBR7DFfag2L9JklUmP1KDnsgnUIUDjAH70vaC8YU+4R7k4D3jueUIIkEo
-         H733y3TMQAb97lujqBgKad72vRPykJPglvlSbl0A74CLHkEHSRK6BAEXj9x0GgY+MeYY
-         dRRpYJQQ2YCR0DDj613b6c/LMR11Szs+bSE5vh7pkpd8x4hIGZRoCiZLX/nleE7tpc63
-         v/u7JE/8aEIX4qfTaGuUrBXmxlwPL5abMbNo0WU1nPKqwA4AljEZU6VpqDRMnE3xx7qX
-         YcfhRJu7u1naSlbSOvFR9RvXoU4iXshokuRtJ6mGH896zeQIfmoegqojiOVTts8/IRwN
-         j/ww==
-X-Gm-Message-State: AOAM530IIoGNi/LQdU+A6ZIsHnEp6AsCt7YZIN9UqFhP11A09L5+3lzH
-        ikqYva7k6Z423Q7aqmGYJ4ikDA==
-X-Google-Smtp-Source: ABdhPJwoBMoW5TWXaHsl8SQQzk0cq/QVYi0kpQ4LMnACrafWI+8XOMMdce8J0U4u6zLy20HzGg6EZA==
-X-Received: by 2002:a5d:6211:: with SMTP id y17mr1055106wru.97.1639509786687;
-        Tue, 14 Dec 2021 11:23:06 -0800 (PST)
-Received: from localhost.localdomain ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id d7sm672169wrw.87.2021.12.14.11.23.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 11:23:06 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        lksctp developers <linux-sctp@vger.kernel.org>,
-        "H.P. Yarroll" <piggy@acm.org>,
-        Karl Knutson <karl@athena.chicago.il.us>,
-        Jon Grimm <jgrimm@us.ibm.com>,
-        Xingang Guo <xingang.guo@intel.com>,
-        Hui Huang <hui.huang@nokia.com>,
-        Sridhar Samudrala <sri@us.ibm.com>,
-        Daisy Chang <daisyc@us.ibm.com>,
-        Ryan Layer <rmlayer@us.ibm.com>,
-        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org
-Subject: [PATCH 2/2] sctp: hold cached endpoints to prevent possible UAF
-Date:   Tue, 14 Dec 2021 19:23:01 +0000
-Message-Id: <20211214192301.1496754-1-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ly7ashr0Abfix6SoCDJYNsr0pgjAfUrtoNa4BxcGFmI=;
+        b=Oci9MiBTID/gzPiDoVENRDRrfgpsrzb3GQlN4UkcDnzvDD1YgK3Pp+zJZ5CJfCcGd6
+         e2JyA1Ht2pCBNVqkMlCCHSooTMG0erOJs2lycLn7QJyO2dM9kpiq9gfKAPN9ZRF2gp+H
+         MIc9REyEkc9MEBbyIB+S0cU+xvo1n81vLFEto8Qp7AAHV4xKyPZpct8wkN1q9RrT2PMT
+         5C8ct7a/ytDsIrExORpXfdP9JFOrm7U6ReDydZ+dxvX2a34C1BiDfCjC8+z+mmyV6RXb
+         F9ugySorxrXMoVGAIVJHRWB3wtdmTP2IhxIokYs1TMIt/0LcFnxtJgp7OMh4NuaZnts5
+         POqw==
+X-Gm-Message-State: AOAM531F6YOWUo0yTYHF7dYOQsiZiLC/A7V6MTlTLc1l7yEtwWn7BAXO
+        kuaLgCfiVmzlnvBMyinl5Z52oU8O1VlpW3T2KJA/oD4A
+X-Google-Smtp-Source: ABdhPJz/pMYwME4RUdHlSZKIwCyCbYPbaG8SyeKTNS+1TSa4EuIzL7K2wrWvAQGoXRVaGW3cZxi1o4susTjozQai9T8=
+X-Received: by 2002:a4a:8701:: with SMTP id z1mr4746722ooh.68.1639509814392;
+ Tue, 14 Dec 2021 11:23:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211214135217.24444-1-wangxiang@cdjrlc.com> <ba96bb4f-1666-32a2-68a9-8fe3d6e2c10e@gmail.com>
+In-Reply-To: <ba96bb4f-1666-32a2-68a9-8fe3d6e2c10e@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 14 Dec 2021 14:23:23 -0500
+Message-ID: <CADnq5_M_VJ7jisaqJuq9x7GrUjQHCDLDJmwo+KNUpPuYgQEwxQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/radeon: Fix syntax errors in comments
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     Xiang wangx <wangxiang@cdjrlc.com>, Dave Airlie <airlied@linux.ie>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cause of the resultant dump_stack() reported below is a
-dereference of a freed pointer to 'struct sctp_endpoint' in
-sctp_sock_dump().
+Applied.  Thanks!
 
-This race condition occurs when a transport is cached into its
-associated hash table followed by an endpoint/sock migration to a new
-association in sctp_assoc_migrate() prior to their subsequent use in
-sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
-table calling into sctp_sock_dump() where the dereference occurs.
+Alex
 
-  BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
-  Call trace:
-   dump_backtrace+0x0/0x2dc
-   show_stack+0x20/0x2c
-   dump_stack+0x120/0x144
-   print_address_description+0x80/0x2f4
-   __kasan_report+0x174/0x194
-   kasan_report+0x10/0x18
-   __asan_load8+0x84/0x8c
-   sctp_sock_dump+0xa8/0x438 [sctp_diag]
-   sctp_for_each_transport+0x1e0/0x26c [sctp]
-   sctp_diag_dump+0x180/0x1f0 [sctp_diag]
-   inet_diag_dump+0x12c/0x168
-   netlink_dump+0x24c/0x5b8
-   __netlink_dump_start+0x274/0x2a8
-   inet_diag_handler_cmd+0x224/0x274
-   sock_diag_rcv_msg+0x21c/0x230
-   netlink_rcv_skb+0xe0/0x1bc
-   sock_diag_rcv+0x34/0x48
-   netlink_unicast+0x3b4/0x430
-   netlink_sendmsg+0x4f0/0x574
-   sock_write_iter+0x18c/0x1f0
-   do_iter_readv_writev+0x230/0x2a8
-   do_iter_write+0xc8/0x2b4
-   vfs_writev+0xf8/0x184
-   do_writev+0xb0/0x1a8
-   __arm64_sys_writev+0x4c/0x5c
-   el0_svc_common+0x118/0x250
-   el0_svc_handler+0x3c/0x9c
-   el0_svc+0x8/0xc
-
-To prevent this from happening we need to take a references to the
-to-be-used/dereferenced 'struct sock' and 'struct sctp_endpoint's
-until such a time when we know it can be safely released.
-
-When KASAN is not enabled, a similar, but slightly different NULL
-pointer derefernce crash occurs later along the thread of execution in
-inet_sctp_diag_fill() this time.
-
-Cc: Vlad Yasevich <vyasevich@gmail.com>
-Cc: Neil Horman <nhorman@tuxdriver.com>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: lksctp developers <linux-sctp@vger.kernel.org>
-Cc: "H.P. Yarroll" <piggy@acm.org>
-Cc: Karl Knutson <karl@athena.chicago.il.us>
-Cc: Jon Grimm <jgrimm@us.ibm.com>
-Cc: Xingang Guo <xingang.guo@intel.com>
-Cc: Hui Huang <hui.huang@nokia.com>
-Cc: Sridhar Samudrala <sri@us.ibm.com>
-Cc: Daisy Chang <daisyc@us.ibm.com>
-Cc: Ryan Layer <rmlayer@us.ibm.com>
-Cc: Kevin Gao <kevin.gao@intel.com>
-Cc: linux-sctp@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- net/sctp/diag.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-index 760b367644c12..2029b240b6f24 100644
---- a/net/sctp/diag.c
-+++ b/net/sctp/diag.c
-@@ -301,6 +301,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
- 	struct sctp_association *assoc;
- 	int err = 0;
- 
-+	sctp_endpoint_hold(ep);
-+	sock_hold(sk);
- 	lock_sock(sk);
- 	list_for_each_entry(assoc, &ep->asocs, asocs) {
- 		if (cb->args[4] < cb->args[1])
-@@ -341,6 +343,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
- 	cb->args[4] = 0;
- release:
- 	release_sock(sk);
-+	sock_put(sk);
-+	sctp_endpoint_put(ep);
- 	return err;
- }
- 
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+On Tue, Dec 14, 2021 at 9:54 AM Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
+>
+> Am 14.12.21 um 14:52 schrieb Xiang wangx:
+> > Delete the redundant word 'we'.
+> >
+> > Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+>
+> Well not a syntax error in the sense of a coding error, but valid fix
+> anyway :)
+>
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+>
+> > ---
+> >   drivers/gpu/drm/radeon/radeon_vce.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/radeon/radeon_vce.c b/drivers/gpu/drm/rade=
+on/radeon_vce.c
+> > index 511a942e851d..ca4a36464340 100644
+> > --- a/drivers/gpu/drm/radeon/radeon_vce.c
+> > +++ b/drivers/gpu/drm/radeon/radeon_vce.c
+> > @@ -513,7 +513,7 @@ int radeon_vce_cs_reloc(struct radeon_cs_parser *p,=
+ int lo, int hi,
+> >    * @allocated: allocated a new handle?
+> >    *
+> >    * Validates the handle and return the found session index or -EINVAL
+> > - * we we don't have another free session index.
+> > + * we don't have another free session index.
+> >    */
+> >   static int radeon_vce_validate_handle(struct radeon_cs_parser *p,
+> >                                     uint32_t handle, bool *allocated)
+>

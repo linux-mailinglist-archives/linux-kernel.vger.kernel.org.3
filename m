@@ -2,74 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80900473970
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E58473966
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244445AbhLNAQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 19:16:24 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:38150 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235953AbhLNAQX (ORCPT
+        id S244445AbhLNANP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 19:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235853AbhLNANO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 19:16:23 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639440981;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=182CaLkrudOaR+9Ew+vQUAetN9cb/2MIYW1GXOWGjoA=;
-        b=GWGVeMG40QTSveXTc3rkBeXKI9eyw46qJoI0vyBqATBJr0Joj1KiChZo/4Al3r2MWmsfN2
-        gYHC62DzBeFBuY5O2DmfErLAudZ6q/UQECi77x6gKiHT0jOzJoLK+2yKxZEv5+jk2ngVyX
-        yC8mRzY6O46VHB6YXUanElK3Jqq4GudVvqITfgMMsZYpK6nkboDLMiCx628tf0BgYmjHaZ
-        ypr/JDdsNH7BRSCqp93BKSKYtw6AoX0vSfrL/ZaCzFbJPhySP5KPQOB+tFa8MeHl29ydPs
-        cKQ2DsG1aTCtnz0NCKEacMIJ7dQ7/H4FixMidKjuDKzNVoYSroa2C0BI461lvQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639440981;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=182CaLkrudOaR+9Ew+vQUAetN9cb/2MIYW1GXOWGjoA=;
-        b=E2MPYqC0sxflE2h/d1TtY1INi1+74QLWTnDPqAEILIHKj70bQt+hRlXlsgZT3Y6XVPwuE/
-        H0yWaQk3jqbWwlDw==
-To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        pbonzini@redhat.com
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        yang.zhong@intel.com
-Subject: Re: [PATCH 01/19] x86/fpu: Extend prctl() with guest permissions
-In-Reply-To: <20211208000359.2853257-2-yang.zhong@intel.com>
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-2-yang.zhong@intel.com>
-Date:   Tue, 14 Dec 2021 01:16:21 +0100
-Message-ID: <87lf0ot50q.ffs@tglx>
+        Mon, 13 Dec 2021 19:13:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCAAC061574;
+        Mon, 13 Dec 2021 16:13:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07727B811E0;
+        Tue, 14 Dec 2021 00:13:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E44C34600;
+        Tue, 14 Dec 2021 00:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639440791;
+        bh=amJgLdWIZOt98JM4XfKKdY2rx8uE3I1QvBy2rLEOECQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lABwMARzbxF5ADfS9X6lyyf67QZvfOmvlF/Id6/NFtpHo4wc1J3QPVTerbV6Ik6LU
+         76MZX2JZm2VYpaWoRrCA8guCS2xpHWtCOegnj8XzoHOER+/e+sAu8eyvL8qLOxeB/H
+         Q4bhBosMTDzzFG5YC4IcLONid5nI0/feyurk0ESNoyG75u0H7JGDx4IHnp7XlqeHw8
+         nG7FQDOFSxK1M8B17htBcKUZ++TATkaVDaYbn0TBtVjH0KLMrzqJ+tnEtfcO6TZNJH
+         ow1twsGiSftYCa2tMtliz9quSVof5Phq2jfDxMuPUBjpT6G5PGA+ylwtHwqZVggeB1
+         ACNL4C1luEtNw==
+Date:   Mon, 13 Dec 2021 18:18:49 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: Re: [PATCH] drm/dp: Fix off-by-one in register cache size
+Message-ID: <20211214001849.GA62559@embeddedor>
+References: <20211203084333.3105038-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203084333.3105038-1-keescook@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07 2021 at 19:03, Yang Zhong wrote:
-> Similar to native permissions this doesn't actually enable the
-> permitted feature. KVM is expected to install a larger kernel buffer
-> and enable the feature when detecting the intention from the guest.
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Jing Liu <jing2.liu@intel.com>
-> Signed-off-by: Yang Zhong <yang.zhong@intel.com>
+On Fri, Dec 03, 2021 at 12:43:33AM -0800, Kees Cook wrote:
+> The pcon_dsc_dpcd array holds 13 registers (0x92 through 0x9E). Fix the
+> math to calculate the max size. Found from a -Warray-bounds build:
+> 
+> drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_pcon_dsc_bpp_incr':
+> drivers/gpu/drm/drm_dp_helper.c:3130:28: error: array subscript 12 is outside array bounds of 'const u8[12]' {aka 'const unsigned char[12]'} [-Werror=array-bounds]
+>  3130 |         buf = pcon_dsc_dpcd[DP_PCON_DSC_BPP_INCR - DP_PCON_DSC_ENCODER];
+>       |               ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/drm_dp_helper.c:3126:39: note: while referencing 'pcon_dsc_dpcd'
+>  3126 | int drm_dp_pcon_dsc_bpp_incr(const u8 pcon_dsc_dpcd[DP_PCON_DSC_ENCODER_CAP_SIZE])
+>       |                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Fixes: e2e16da398d9 ("drm/dp_helper: Add support for Configuring DSC for HDMI2.1 Pcon")
+
+This should be tagged for -stable:
+
+Cc: stable@vger.kernel.org
+
+> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks
+--
+Gustavo
+
 > ---
-> (To Thomas) We change the definition of xstate_get_guest_group_perm()
-> from xstate.h to api.h since this will be called by KVM.
-
-No.
-
-There is absolutely no need for that. After creating a vCPU the
-permissions are frozen and readily available via
-vcpu->arch.guest_fpu.perm.
-
-Thanks,
-
-        tglx
-
+>  include/drm/drm_dp_helper.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
+> index 30359e434c3f..472dac376284 100644
+> --- a/include/drm/drm_dp_helper.h
+> +++ b/include/drm/drm_dp_helper.h
+> @@ -456,7 +456,7 @@ struct drm_panel;
+>  #define DP_FEC_CAPABILITY_1			0x091   /* 2.0 */
+>  
+>  /* DP-HDMI2.1 PCON DSC ENCODER SUPPORT */
+> -#define DP_PCON_DSC_ENCODER_CAP_SIZE        0xC	/* 0x9E - 0x92 */
+> +#define DP_PCON_DSC_ENCODER_CAP_SIZE        0xD	/* 0x92 through 0x9E */
+>  #define DP_PCON_DSC_ENCODER                 0x092
+>  # define DP_PCON_DSC_ENCODER_SUPPORTED      (1 << 0)
+>  # define DP_PCON_DSC_PPS_ENC_OVERRIDE       (1 << 1)
+> -- 
+> 2.30.2
+> 

@@ -2,143 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D3C474028
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E8747402F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbhLNKMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:12:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60228 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232869AbhLNKMO (ORCPT
+        id S232901AbhLNKNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:13:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232869AbhLNKNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:12:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 771EB6144A;
-        Tue, 14 Dec 2021 10:12:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A609BC34600;
-        Tue, 14 Dec 2021 10:12:11 +0000 (UTC)
-Date:   Tue, 14 Dec 2021 11:12:07 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Anthony Iliopoulos <ailiop@suse.com>
-Cc:     NeilBrown <neilb@suse.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH - regression] devtmpfs: reconfigure on each mount
-Message-ID: <20211214101207.6yyp7x7hj2nmrmvi@wittgenstein>
-References: <163935794678.22433.16837658353666486857@noble.neil.brown.name>
- <20211213125906.ngqbjsywxwibvcuq@wittgenstein>
- <YbexPXpuI8RdOb8q@technoir>
+        Tue, 14 Dec 2021 05:13:36 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D81CC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 02:13:36 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id l18so12255232pgj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 02:13:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2rug4EuC9Ad8IFEiNCmMA6aYrYVML8F4r4iVetDTwr0=;
+        b=mwUnYoVqZeRIOlk3PSDwFfqhSLX+8xyxryjI6XRaL0TW8dzaheEvY6tw9NYijXSK53
+         bQRc9WqmUyRYE01lzA8RwVVwxfDhpHVeWFlT0UG2kEzMgxxFv1CvdN1OZ4tiz/YEML9l
+         Abd9VfhQkm46A2wnXsyf+HlGNK9+j416yRIbNeniVmIbitHlRqVF/cObYjvqywKKZKJq
+         jilG0TK5mofdbqF4US4Ka5bKSfnX/9U3J6l5MV/uYEM7aKTisIbVOfOoi79+OBqwgTq2
+         HAkTAEqe+I5+XfjqNc4AxpYzYDg1Lz3JL9YrTrEsJMKTB+Xwph7IA5kwImdd2oIwCp7L
+         0fPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2rug4EuC9Ad8IFEiNCmMA6aYrYVML8F4r4iVetDTwr0=;
+        b=e+hZWNXbzpf0ww8/vj2oqgw/myAlA4Cj1SJzrt/srgTqw+HJFObPdeCV1uckJ66axw
+         mOPHlnOjYpgXXswoVI3RSoO82qd7MMaRQIXWbSOagKdeieTNczgFTCYvwxB9kWEXETrK
+         u4VBkMZvV+QmBvb/VesaL6/+keYowh2RUkNVM1mZmKd6zNFbfL64hsIgO2O7D7yquou0
+         t8ZpUwyzJOeEz1osZrh+I1ZWch1hepcxhjPicHtk9jbSPm7O6UkkSCciFLMUhiHA/qcm
+         Va+iZXPenkh1qkVhHsZ9ZRwQQKrEMJXJb8iMJ4Sd+r4ya4c6RdzQAim405rLkouzjjkE
+         wBjw==
+X-Gm-Message-State: AOAM532pDDrn8mBYF5HYvlVevaqH/V0gw7udCpGPiwQTaFc7rJZEUT71
+        nVY7MDomuWdtwpt7brxhfjEj
+X-Google-Smtp-Source: ABdhPJxDKkg6hQUK1gsiN0fln+nUoRMFYCqFfoMwgPUn4A3o6KYCEMUlQqhnVT0bpXwTtmU4JUO7CA==
+X-Received: by 2002:a63:754c:: with SMTP id f12mr3173578pgn.161.1639476815884;
+        Tue, 14 Dec 2021 02:13:35 -0800 (PST)
+Received: from localhost.localdomain ([117.193.214.199])
+        by smtp.gmail.com with ESMTPSA id s3sm1922229pjk.41.2021.12.14.02.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 02:13:35 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     lorenzo.pieralisi@arm.com, bhelgaas@google.com
+Cc:     svarbanov@mm-sol.com, bjorn.andersson@linaro.org, robh@kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH] PCI: qcom: Add support for handling MSIs from 8 endpoints
+Date:   Tue, 14 Dec 2021 15:43:19 +0530
+Message-Id: <20211214101319.25258-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YbexPXpuI8RdOb8q@technoir>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 09:46:53PM +0100, Anthony Iliopoulos wrote:
-> On Mon, Dec 13, 2021 at 01:59:06PM +0100, Christian Brauner wrote:
-> > On Mon, Dec 13, 2021 at 12:12:26PM +1100, NeilBrown wrote:
-> > > 
-> > > Prior to Linux v5.4 devtmpfs used mount_single() which treats the given
-> > > mount options as "remount" options, updating the configuration of the
-> > > single super_block on each mount.
-> > > Since that was changed, the mount options used for devtmpfs are ignored.
-> > > This is a regression which affects systemd - which mounts devtmpfs
-> > > with "-o mode=755,size=4m,nr_inodes=1m".
-> > > 
-> > > This patch restores the "remount" effect by calling reconfigure_single()
-> > > 
-> > > Fixes: d401727ea0d7 ("devtmpfs: don't mix {ramfs,shmem}_fill_super() with mount_single()")
-> > > Signed-off-by: NeilBrown <neilb@suse.de>
-> > > ---
-> > 
-> > Hey Neil,
-> > 
-> > So far this hasn't been an issue for us in systemd upstream. Is there a
-> > specific use-case where this is causing issues? I'm mostly asking
-> > because this change is fairly old.
-> 
-> This is standard init with systemd for SLE, where the systemd-provided
-> mount params for devtmpfs are being effectively ignored due to this
-> regression, so nr_inodes and size params are falling back to kernel
-> defaults. It is also not specific to systemd, and can be easily
-> reproduced by e.g. booting with devtmpfs.mount=0 and doing mount -t
-> devtmpfs none /dev -o nr_inodes=1024.
-> 
-> > What I actually find more odd is that there's no .reconfigure for
-> > devtmpfs for non-vfs generic mount options it supports.
-> 
-> There is a .reconfigure for devtmpfs, e.g. shmem_init_fs_context sets
-> fc->ops to shmem_fs_context_ops, so everything goes through
-> shmem_reconfigure.
-> 
-> > So it's possible to change vfs generic stuff like
-> > 
-> > mount -o remount,ro,nosuid /dev
-> > 
-> > but none of the other mount options it supports and there's no word lost
-> > anywhere about whether or not that's on purpose.
-> 
-> That's not the case: even after d401727ea0d7 a remount can change any
-> shmem-specific mount params.
-> 
-> > It feels odd because it uses the fs parameters from shmem/ramfs
-> > 
-> > const struct fs_parameter_spec shmem_fs_parameters[] = {
-> > 	fsparam_u32   ("gid",		Opt_gid),
-> > 	fsparam_enum  ("huge",		Opt_huge,  shmem_param_enums_huge),
-> > 	fsparam_u32oct("mode",		Opt_mode),
-> > 	fsparam_string("mpol",		Opt_mpol),
-> > 	fsparam_string("nr_blocks",	Opt_nr_blocks),
-> > 	fsparam_string("nr_inodes",	Opt_nr_inodes),
-> > 	fsparam_string("size",		Opt_size),
-> > 	fsparam_u32   ("uid",		Opt_uid),
-> > 	fsparam_flag  ("inode32",	Opt_inode32),
-> > 	fsparam_flag  ("inode64",	Opt_inode64),
-> > 	{}
-> > }
-> > 
-> > but doesn't allow to actually change them neither with your fix or with
-> > the old way of doing things. But afaict, all of them could be set via
-> 
-> As per above, all those mount params are changeable via remount
-> irrespective of the regression. What d401727ea0d7 regressed is that all
+The DWC controller used in the Qcom Platforms are capable of addressing the
+MSIs generated from 8 different endpoints each with 32 vectors (256 in
+total). Currently the driver is using the default value of addressing the
+MSIs from 1 endpoint only. Extend it by passing the MAX_MSI_IRQS to the
+num_vectors field of pcie_port structure.
 
-Ah, I missed that. So shmem_reconfigure simple ignores some options for
-remount instead of returning an error. That's annoying:
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/pci/controller/dwc/pcie-qcom.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-root@f2-vm:~# findmnt  | grep devtmpfs
-├─/dev                         udev          devtmpfs    rw,nosuid,noexec,relatime,size=1842984k,nr_inodes=460746,mode=755,inode64
+diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+index 1c3d1116bb60..8a4c08d815a5 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -1550,6 +1550,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+ 	pci->dev = dev;
+ 	pci->ops = &dw_pcie_ops;
+ 	pp = &pci->pp;
++	pp->num_vectors = MAX_MSI_IRQS;
+ 
+ 	pcie->pci = pci;
+ 
+-- 
+2.25.1
 
-root@f2-vm:~# mount -o remount,gid=1000 /dev/
-root@f2-vm:~# findmnt  | grep devtmpfs
-├─/dev                         udev          devtmpfs    rw,nosuid,noexec,relatime,size=1842984k,nr_inodes=460746,mode=755,inode64
-
-root@f2-vm:~# mount -o remount,mode=600 /dev
-root@f2-vm:~# findmnt  | grep devtmpfs
-├─/dev                         udev          devtmpfs    rw,nosuid,noexec,relatime,size=1842984k,nr_inodes=460746,mode=755,inode64
-
-
-> those params are being ignored on new mounts only (and thus any init
-> that mounts devtmpfs with params would be affected).
-> 
-> > the "devtmpfs.mount" kernel command line option. So I could set gid=,
-> > uid=, and mpol= for devtmpfs via devtmpfs.mount but wouldn't be able to
-> > change it through remount or - in your case - with a mount with new
-> > parameters?
-> 
-> The devtmpfs.mount kernel boot param only controls if devtmpfs will be
-> automatically mounted by the kernel during boot, and has nothing to do
-> with the actual tmpfs mount params.
-
-Thanks!
-I'm not a fan of a proper mount changing mount options tbh but if it is
-a regression for users then we should fix it.
-Though I'm surprised it took that such a long time to even realize that
-there was a regression.

@@ -2,288 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF49D473CA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 06:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFE8473CA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 06:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbhLNFj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 00:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
+        id S229975AbhLNFkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 00:40:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbhLNFj4 (ORCPT
+        with ESMTP id S229931AbhLNFkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 00:39:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49CCC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:39:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5326AB817EE
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:39:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A34C34604;
-        Tue, 14 Dec 2021 05:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639460393;
-        bh=qfiuo3dM43mejhpX35RpHK07dow4DnaeMDT75/nCQC8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g0X3uxX/Xkz4aVPJ4Zo7ibKpzlaH7tdt+y5VeGeVGflhVafvA7IfFsNtDyqXq2SbX
-         UQIjC1KQYpWcRl+iCMR6kZfqE2fejRmBy4+WtWX8SB6pY7w2QrSXCYQ8KVNbsHZ2FV
-         J0dZ3oE7sEyUIWBg62wwIcIVw6abGJxyQVih52+ljMzkPPKSpLSHLFTO4wnIyl4X2U
-         jQREqzuRsS5MDxSjYHU46VFrEjZMYGUtps3TIBICj6Sd/IHKVe+DXXPGsAQpfk0pqt
-         FKgWt8TF2fzUw7mpOJzQgSvsqLCvHBeZwUHbQYOio8yT91KgX/Gn/i8IAnc0r6VsGq
-         Y4jws7fgD1bbA==
-Date:   Tue, 14 Dec 2021 13:39:46 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-Subject: Re: [PATCH v2 05/10] arm64: dts: lx2160a: update PCIe nodes to match
- rev2 silicon
-Message-ID: <20211214053945.GF10916@dragon>
-References: <20211203235446.8266-1-leoyang.li@nxp.com>
- <20211203235446.8266-6-leoyang.li@nxp.com>
+        Tue, 14 Dec 2021 00:40:31 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7743C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:40:30 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso15242954pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8JDQ3MQqde4N4IH+n3XX9fcwBopiKKaWQdwS/tyqbmg=;
+        b=JMRGQ3yC8cFgwlByku5wmFn/Vn6qivpe/xVabCxqWaQk8+ADkoKdCr5IrnsvBR6jXK
+         CxcwgvZOiTIQ/Mo/F+XtLqhGBWAt13JeE/CQeV3mB6TMEu4nGumkqwM8ZxaWZcrLBeyM
+         XJJJrbzNLAsV4PGgQ01bUe7Dc9V3yLbhge7X5kN9oMxFOgoUvUtIQEqRQe/hr0DvAsig
+         hki8AiK8lsqNj2xDXoDFwO5DZfzDdoFpgDNot88819bDo87fEm7stEsTTWYq8pAjYVqz
+         1JwvIK/lSk/lZGCPKkvhgm6hHh9vBTBnSpJ03p8DiDY3PAiZ1FLpr07IzP/bUnsQim7C
+         FUxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8JDQ3MQqde4N4IH+n3XX9fcwBopiKKaWQdwS/tyqbmg=;
+        b=4yHTTI1+0F9lK3I95KvVDxQKAaOgrdFKuapZEZdxnFtLpQPmLEkUC3X9rJNLq5ISmO
+         26rUGBGIrnSURfP3QDhsGoZ7O4FE9Nq/nW0QvliGptQYhr+EG+cU+Zl7qs+o+FCUXlri
+         Ar+ezeY8XNjYpjA8gYxnad2jjmaRVoJycbAhkru4z9TD59DQFj8B215gIwOLe6vdBkpX
+         t+mlhnDaRcktT8Crj4Ir6X8RgKQT3VrbSjGuHPVKGe4CqSlOhJXUc2KkEKfebKYjVub3
+         7FTzkUbDX5BS6m1ImqEbsW0LIyaEBzozghR2pLWrzKT1oAsUU9D8vYZ3dkRNdKZg92ls
+         RHFA==
+X-Gm-Message-State: AOAM532Mg7pavVgOdHM4iZwj05B5VyFVpo1WlKkJ6QKqRCEFXvBHPlgw
+        L/JTNe0VRcvTEL0wxnph3ic=
+X-Google-Smtp-Source: ABdhPJzuI5t1dM1LqRoGpWfjl6OfM6sIxTLiYd+vBRqoxfGSqb07+2RIXhG3hL3fBYBznZJiqj5zpQ==
+X-Received: by 2002:a17:90b:4c8b:: with SMTP id my11mr3433862pjb.96.1639460430094;
+        Mon, 13 Dec 2021 21:40:30 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:6d07:5ea2:4ced:3b3d])
+        by smtp.gmail.com with ESMTPSA id m6sm12613305pfh.87.2021.12.13.21.40.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 21:40:28 -0800 (PST)
+Date:   Mon, 13 Dec 2021 21:40:25 -0800
+From:   "dmitry.torokhov" <dmitry.torokhov@gmail.com>
+To:     lianzhi chang <changlianzhi@uniontech.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        jirislaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        282827961 <282827961@qq.com>, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH v20] tty: Fix the keyboard led light display problem
+Message-ID: <YbguSZFyWGUt+Nwh@google.com>
+References: <20211213061244.13732-1-changlianzhi@uniontech.com>
+ <YbdMTCVybK34HBSz@kroah.com>
+ <Ybehbz1LqRqcK+Hh@google.com>
+ <tencent_404C1E8253D7D34255D5026C@qq.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211203235446.8266-6-leoyang.li@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <tencent_404C1E8253D7D34255D5026C@qq.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 05:54:41PM -0600, Li Yang wrote:
-> The original dts was created based on the non-production rev1 silicon
-> which was only used for evaluation.  Update the PCIe nodes to align with
-> the different controller used in production rev2 silicon.
+On Tue, Dec 14, 2021 at 10:06:38AM +0800, lianzhi chang wrote:
+> > On Mon, Dec 13, 2021 at 02:12:44PM +0800, lianzhi chang wrote:
+> > > > Use the "ctrl+alt+Fn" key combination to switch the system from tty to
+> > > > +#define KDGKBLEDCTL  0x4B73  /* set whether to allow control of keyboard lights */
+> > > > +#define KDSKBLEDCTL  0x4B74  /* get whether the keyboard light is currently allowed to be set */
+> > >
+> > > What userspace code is going to use these new ioctls?
+> > >
+> > > I still don't understand the problem that this is supposed to be
+> > > solving.  How can we have never had a problem until now with regards to
+> > > LED settings on keyboards?  What commit caused this to change?  Has it
+> > > always been broken for 30 years and no one noticed?
+> > 
+> > Yes, it's been going on since forever (I guess at least 2.6 where input
+> > core was introduced) and nobody really cared as very few people bounce
+> > between graphical environment and VTs _and_ use CapsLock or NumLock
+> > _and_ have keyboards with these LEDs).
+> > 
+> > Now, there is a couple-line solution that was in v19, lianzhi chang just
+> > needed to drop condition that was being introduced in
+> > vt_set_leds_compute_shiftstate(). That would ensure that proper state of
+> > LEDs is restored on every VT switch. It also might have resulted in
+> > LEDs switching momentarily off before turning on according to the
+> > graphical desktop preferences, but I do not thing this is a big issue.
 > 
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> Reviewed-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-> ---
->  .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 96 +++++++++----------
->  1 file changed, 48 insertions(+), 48 deletions(-)
+> As you said, in the V19 version, there is a judgment condition in
+>  vt_set_leds_compute_shiftstate(). If you delete it, there will be 
+> some minor flaws. I always want to solve it perfectly. This may 
+> be my selfish intention, but my ability is lacking, which has led 
+> to iterating 21 versions.
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-> index fcde09f36018..de680521e1d1 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-> @@ -1088,10 +1088,10 @@ sata3: sata@3230000 {
->  		};
->  
->  		pcie1: pcie@3400000 {
-> -			compatible = "fsl,lx2160a-pcie";
+> > 
+> > Now we are building this new infra with new ioctls, etc, for miniscule
+> > gain of avoiding this blink. I do not believe this is worth it.
+> If the current solution is not worth it, or the solution optimized for v19
+> is easier to accept, I will go back to the v19 code to submit.
 
-Drop lx2160a specific compatible for lx2160a SoC?
+My recommendation would be to land the adjusted v19 (the one without the
+conditional) that fixes original issue of LED state not being restored
+on VT switch, and then as a followup, and if you so inclined, offer the
+patch that introduces special ioctls to notify keyboard driver that
+it should avoid touching LED state completely for a given VT, so that we
+can discuss it separately and decide if such functionality is
+needed/wanted.
 
-Shawn
+Thanks.
 
-> -			reg = <0x00 0x03400000 0x0 0x00100000>, /* controller registers */
-> -			      <0x80 0x00000000 0x0 0x00002000>; /* configuration space */
-> -			reg-names = "csr_axi_slave", "config_axi_slave";
-> +			compatible = "fsl,ls2088a-pcie";
-> +			reg = <0x00 0x03400000 0x0 0x00100000   /* controller registers */
-> +			       0x80 0x00000000 0x0 0x00002000>; /* configuration space */
-> +			reg-names = "regs", "config";
->  			interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>, /* AER interrupt */
->  				     <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>, /* PME interrupt */
->  				     <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>; /* controller interrupt */
-> @@ -1100,26 +1100,26 @@ pcie1: pcie@3400000 {
->  			#size-cells = <2>;
->  			device_type = "pci";
->  			dma-coherent;
-> -			apio-wins = <8>;
-> -			ppio-wins = <8>;
-> +			num-viewport = <8>;
->  			bus-range = <0x0 0xff>;
-> -			ranges = <0x82000000 0x0 0x40000000 0x80 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
-> +			ranges = <0x81000000 0x0 0x00000000 0x80 0x00010000 0x0 0x00010000
-> +				  0x82000000 0x0 0x40000000 0x80 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
->  			msi-parent = <&its>;
-> +			iommu-map = <0 &smmu 0 1>; /* This is fixed-up by u-boot */
->  			#interrupt-cells = <1>;
->  			interrupt-map-mask = <0 0 0 7>;
->  			interrupt-map = <0000 0 0 1 &gic 0 0 GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 2 &gic 0 0 GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 3 &gic 0 0 GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 4 &gic 0 0 GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
-> -			iommu-map = <0 &smmu 0 1>; /* Fixed-up by bootloader */
->  			status = "disabled";
->  		};
->  
->  		pcie2: pcie@3500000 {
-> -			compatible = "fsl,lx2160a-pcie";
-> -			reg = <0x00 0x03500000 0x0 0x00100000>, /* controller registers */
-> -			      <0x88 0x00000000 0x0 0x00002000>; /* configuration space */
-> -			reg-names = "csr_axi_slave", "config_axi_slave";
-> +			compatible = "fsl,ls2088a-pcie";
-> +			reg = <0x00 0x03500000 0x0 0x00100000   /* controller registers */
-> +			       0x88 0x00000000 0x0 0x00002000>; /* configuration space */
-> +			reg-names = "regs", "config";
->  			interrupts = <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>, /* AER interrupt */
->  				     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>, /* PME interrupt */
->  				     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>; /* controller interrupt */
-> @@ -1128,26 +1128,26 @@ pcie2: pcie@3500000 {
->  			#size-cells = <2>;
->  			device_type = "pci";
->  			dma-coherent;
-> -			apio-wins = <8>;
-> -			ppio-wins = <8>;
-> +			num-viewport = <8>;
->  			bus-range = <0x0 0xff>;
-> -			ranges = <0x82000000 0x0 0x40000000 0x88 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
-> +			ranges = <0x81000000 0x0 0x00000000 0x88 0x00010000 0x0 0x00010000
-> +				  0x82000000 0x0 0x40000000 0x88 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
->  			msi-parent = <&its>;
-> +			iommu-map = <0 &smmu 0 1>; /* This is fixed-up by u-boot */
->  			#interrupt-cells = <1>;
->  			interrupt-map-mask = <0 0 0 7>;
->  			interrupt-map = <0000 0 0 1 &gic 0 0 GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 2 &gic 0 0 GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 3 &gic 0 0 GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 4 &gic 0 0 GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
-> -			iommu-map = <0 &smmu 0 1>; /* Fixed-up by bootloader */
->  			status = "disabled";
->  		};
->  
->  		pcie3: pcie@3600000 {
-> -			compatible = "fsl,lx2160a-pcie";
-> -			reg = <0x00 0x03600000 0x0 0x00100000>, /* controller registers */
-> -			      <0x90 0x00000000 0x0 0x00002000>; /* configuration space */
-> -			reg-names = "csr_axi_slave", "config_axi_slave";
-> +			compatible = "fsl,ls2088a-pcie";
-> +			reg = <0x00 0x03600000 0x0 0x00100000   /* controller registers */
-> +			       0x90 0x00000000 0x0 0x00002000>; /* configuration space */
-> +			reg-names = "regs", "config";
->  			interrupts = <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>, /* AER interrupt */
->  				     <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>, /* PME interrupt */
->  				     <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>; /* controller interrupt */
-> @@ -1156,26 +1156,26 @@ pcie3: pcie@3600000 {
->  			#size-cells = <2>;
->  			device_type = "pci";
->  			dma-coherent;
-> -			apio-wins = <256>;
-> -			ppio-wins = <24>;
-> +			num-viewport = <256>;
->  			bus-range = <0x0 0xff>;
-> -			ranges = <0x82000000 0x0 0x40000000 0x90 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
-> +			ranges = <0x81000000 0x0 0x00000000 0x90 0x00010000 0x0 0x00010000
-> +				  0x82000000 0x0 0x40000000 0x90 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
->  			msi-parent = <&its>;
-> +			iommu-map = <0 &smmu 0 1>; /* This is fixed-up by u-boot */
->  			#interrupt-cells = <1>;
->  			interrupt-map-mask = <0 0 0 7>;
->  			interrupt-map = <0000 0 0 1 &gic 0 0 GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 2 &gic 0 0 GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 3 &gic 0 0 GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 4 &gic 0 0 GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
-> -			iommu-map = <0 &smmu 0 1>; /* Fixed-up by bootloader */
->  			status = "disabled";
->  		};
->  
->  		pcie4: pcie@3700000 {
-> -			compatible = "fsl,lx2160a-pcie";
-> -			reg = <0x00 0x03700000 0x0 0x00100000>, /* controller registers */
-> -			      <0x98 0x00000000 0x0 0x00002000>; /* configuration space */
-> -			reg-names = "csr_axi_slave", "config_axi_slave";
-> +			compatible = "fsl,ls2088a-pcie";
-> +			reg = <0x00 0x03700000 0x0 0x00100000   /* controller registers */
-> +			       0x98 0x00000000 0x0 0x00002000>; /* configuration space */
-> +			reg-names = "regs", "config";
->  			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>, /* AER interrupt */
->  				     <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>, /* PME interrupt */
->  				     <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>; /* controller interrupt */
-> @@ -1184,26 +1184,26 @@ pcie4: pcie@3700000 {
->  			#size-cells = <2>;
->  			device_type = "pci";
->  			dma-coherent;
-> -			apio-wins = <8>;
-> -			ppio-wins = <8>;
-> +			num-viewport = <8>;
->  			bus-range = <0x0 0xff>;
-> -			ranges = <0x82000000 0x0 0x40000000 0x98 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
-> +			ranges = <0x81000000 0x0 0x00000000 0x98 0x00010000 0x0 0x00010000
-> +				  0x82000000 0x0 0x40000000 0x98 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
->  			msi-parent = <&its>;
-> +			iommu-map = <0 &smmu 0 1>; /* This is fixed-up by u-boot */
->  			#interrupt-cells = <1>;
->  			interrupt-map-mask = <0 0 0 7>;
->  			interrupt-map = <0000 0 0 1 &gic 0 0 GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 2 &gic 0 0 GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 3 &gic 0 0 GIC_SPI 126 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 4 &gic 0 0 GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>;
-> -			iommu-map = <0 &smmu 0 1>; /* Fixed-up by bootloader */
->  			status = "disabled";
->  		};
->  
->  		pcie5: pcie@3800000 {
-> -			compatible = "fsl,lx2160a-pcie";
-> -			reg = <0x00 0x03800000 0x0 0x00100000>, /* controller registers */
-> -			      <0xa0 0x00000000 0x0 0x00002000>; /* configuration space */
-> -			reg-names = "csr_axi_slave", "config_axi_slave";
-> +			compatible = "fsl,ls2088a-pcie";
-> +			reg = <0x00 0x03800000 0x0 0x00100000   /* controller registers */
-> +			       0xa0 0x00000000 0x0 0x00002000>; /* configuration space */
-> +			reg-names = "regs", "config";
->  			interrupts = <GIC_SPI 128 IRQ_TYPE_LEVEL_HIGH>, /* AER interrupt */
->  				     <GIC_SPI 128 IRQ_TYPE_LEVEL_HIGH>, /* PME interrupt */
->  				     <GIC_SPI 128 IRQ_TYPE_LEVEL_HIGH>; /* controller interrupt */
-> @@ -1212,26 +1212,26 @@ pcie5: pcie@3800000 {
->  			#size-cells = <2>;
->  			device_type = "pci";
->  			dma-coherent;
-> -			apio-wins = <256>;
-> -			ppio-wins = <24>;
-> +			num-viewport = <256>;
->  			bus-range = <0x0 0xff>;
-> -			ranges = <0x82000000 0x0 0x40000000 0xa0 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
-> +			ranges = <0x81000000 0x0 0x00000000 0xa0 0x00010000 0x0 0x00010000
-> +				  0x82000000 0x0 0x40000000 0xa0 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
->  			msi-parent = <&its>;
-> +			iommu-map = <0 &smmu 0 1>; /* This is fixed-up by u-boot */
->  			#interrupt-cells = <1>;
->  			interrupt-map-mask = <0 0 0 7>;
->  			interrupt-map = <0000 0 0 1 &gic 0 0 GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 2 &gic 0 0 GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 3 &gic 0 0 GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 4 &gic 0 0 GIC_SPI 132 IRQ_TYPE_LEVEL_HIGH>;
-> -			iommu-map = <0 &smmu 0 1>; /* Fixed-up by bootloader */
->  			status = "disabled";
->  		};
->  
->  		pcie6: pcie@3900000 {
-> -			compatible = "fsl,lx2160a-pcie";
-> -			reg = <0x00 0x03900000 0x0 0x00100000>, /* controller registers */
-> -			      <0xa8 0x00000000 0x0 0x00002000>; /* configuration space */
-> -			reg-names = "csr_axi_slave", "config_axi_slave";
-> +			compatible = "fsl,ls2088a-pcie";
-> +			reg = <0x00 0x03900000 0x0 0x00100000   /* controller registers */
-> +			       0xa8 0x00000000 0x0 0x00002000>; /* configuration space */
-> +			reg-names = "regs", "config";
->  			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>, /* AER interrupt */
->  				     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>, /* PME interrupt */
->  				     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>; /* controller interrupt */
-> @@ -1240,18 +1240,18 @@ pcie6: pcie@3900000 {
->  			#size-cells = <2>;
->  			device_type = "pci";
->  			dma-coherent;
-> -			apio-wins = <8>;
-> -			ppio-wins = <8>;
-> +			num-viewport = <8>;
->  			bus-range = <0x0 0xff>;
-> -			ranges = <0x82000000 0x0 0x40000000 0xa8 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
-> +			ranges = <0x81000000 0x0 0x00000000 0xa8 0x00010000 0x0 0x00010000
-> +				  0x82000000 0x0 0x40000000 0xa8 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
->  			msi-parent = <&its>;
-> +			iommu-map = <0 &smmu 0 1>; /* This is fixed-up by u-boot */
->  			#interrupt-cells = <1>;
->  			interrupt-map-mask = <0 0 0 7>;
->  			interrupt-map = <0000 0 0 1 &gic 0 0 GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 2 &gic 0 0 GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 3 &gic 0 0 GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
->  					<0000 0 0 4 &gic 0 0 GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
-> -			iommu-map = <0 &smmu 0 1>; /* Fixed-up by bootloader */
->  			status = "disabled";
->  		};
->  
-> -- 
-> 2.25.1
-> 
+-- 
+Dmitry

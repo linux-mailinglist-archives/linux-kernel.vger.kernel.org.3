@@ -2,118 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B77D47473F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAE4474726
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235559AbhLNQMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:12:54 -0500
-Received: from mga07.intel.com ([134.134.136.100]:1123 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231215AbhLNQMw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:12:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639498372; x=1671034372;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=x1BztRLHTFRFEg8Z0YOuA4q7ZTHvBkBUxlUcWZdiZHE=;
-  b=gnnqlx8NQ2F0L8mB1yQalZc8Gip42ClvA85PBWefbT4hqANAs5p5CHRp
-   AOgMNNXNzPO3vNu4ODgIvqdjhMycH3P5WFcAroCg+Drpzn+QNOaAC4aJw
-   bKrmfAy6+VHcRogFsfczG8lerzDJs8g0/KQvBkKL9utsaYyb+6awMmN/Y
-   sS/266ZhbNEE5UX8O2Z5+3sFmXC0hAdp1AmfQSiny0mjJei+TmfDUmmRI
-   lR1F0klG1dEq8fmOPuXYDEhIIgZ7ix+zahPLddIUqOG66wHmiDTpTZAcj
-   M5OGCmtroXtBtpetc+8+pf/eBSbhbKoH3BZQbB2Esj34cRFmASRnLfSuU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="302388382"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="302388382"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 08:11:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="545217825"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2021 08:11:50 -0800
-Received: from shsmsx602.ccr.corp.intel.com (10.109.6.142) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 08:11:49 -0800
-Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
- SHSMSX602.ccr.corp.intel.com (10.109.6.142) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 00:11:47 +0800
-Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
- SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
- Wed, 15 Dec 2021 00:11:47 +0800
-From:   "Wang, Wei W" <wei.w.wang@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Juan Quintela <quintela@redhat.com>
-CC:     Jing Liu <jing2.liu@linux.intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Sean Christoperson" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Subject: RE: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
-Thread-Topic: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
-Thread-Index: AQHX8JWhvlRQU5T/lU6dpNiL1wIQjqwyEDNg//+KXYCAAIkxEA==
-Date:   Tue, 14 Dec 2021 16:11:47 +0000
-Message-ID: <b3ac7ba45c984cf39783e33e0c25274d@intel.com>
-References: <20211214022825.563892248@linutronix.de>
- <20211214024948.048572883@linutronix.de>
- <854480525e7f4f3baeba09ec6a864b80@intel.com> <87zgp3ry8i.ffs@tglx>
-In-Reply-To: <87zgp3ry8i.ffs@tglx>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.239.127.36]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S235516AbhLNQJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231494AbhLNQJg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 11:09:36 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3883C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:09:35 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id o1so35693180uap.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:09:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=X4/dmy9KlF2y5J8EBw2nTz9iMP7ZTiT3R0zWWUj0jJ0=;
+        b=fUR1nww9UxFYmuXB4VhCfDVMvZPHIfpDFY468NczY0yq+uzcuvaTZ51tPOE/c3zw5S
+         mXOFLAAomKRvcbMx2FIBifF9rjvpHwcY3kw9myiONfCdzDGdSBZWZTeHiuuU1Cv5nxr6
+         yNVK2+olJPP+ee0ftFjiYic+ttNzPDAXt2iZ0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=X4/dmy9KlF2y5J8EBw2nTz9iMP7ZTiT3R0zWWUj0jJ0=;
+        b=ZEzUEuRHQYZI9y7KdxRc7TqsnXETF/j6PT0JCqVnD11ZyqMmLhMTqiUSLd3DXpGv+m
+         obXvIngixWAUzDZS5rq8C+jTa6uEKUQSGB9/SZgabm96oPKotsBS/wj8DrtiHhAlRYW8
+         hW55s8k1yFoQuBnCH44UzRPwjnFNvxkuwH3WDEVWAk3AIhu2fmsACTbmlqP7Ayow2RRx
+         IvfDDfnPzd/drYgSY0aePvqCIHsPrnmhvj0PhOMIrRZjfBlF15ConsCsCT+3OeAjrcRY
+         1rf6EfSB6p/JK8EHd0KuEf4EKme+zL1sJgnMoSK1JXZp4weyFdYEJ7kadFRdMxCsjg6Q
+         Ph1A==
+X-Gm-Message-State: AOAM533OiwLH0UoRUZTA2v5hRkzrek6X92X6OWCBaVZ9PTkutzrb50B0
+        Nw86KJIv3cH89VQV1+TOOJgAZNFKZAj34OQa5AM88g==
+X-Google-Smtp-Source: ABdhPJx5J7/CFvA9cSKERMhPB9uz6KDyk3QRneBpXxMm88syPU1qmaFmnztQmTg3u9wMfwYY+Jub4VxAAlp+KKEM2bc=
+X-Received: by 2002:a05:6102:3a0c:: with SMTP id b12mr5705909vsu.48.1639498174752;
+ Tue, 14 Dec 2021 08:09:34 -0800 (PST)
 MIME-Version: 1.0
+References: <20211213100112.1791192-1-daniel@0x0f.com> <20211213100112.1791192-3-daniel@0x0f.com>
+ <CABgxDo+8VK+HQVfts6gxLnm1xW5fBog5rEfvoLN+tjk6KYwMTw@mail.gmail.com>
+In-Reply-To: <CABgxDo+8VK+HQVfts6gxLnm1xW5fBog5rEfvoLN+tjk6KYwMTw@mail.gmail.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Wed, 15 Dec 2021 01:12:37 +0900
+Message-ID: <CAFr9PXmihQSeDagG7Yt7kfvpJxurjiLsnPPB68uvKbQh52m7eg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: arm: mstar: Add compatible for Miyoo Mini
+To:     Romain Perier <romain.perier@gmail.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, December 14, 2021 11:40 PM, Thomas Gleixner wrote:
-> On Tue, Dec 14 2021 at 15:09, Wei W. Wang wrote:
-> > On Tuesday, December 14, 2021 10:50 AM, Thomas Gleixner wrote:
-> >> + * Return: 0 on success, error code otherwise  */ int
-> >> +__fpu_update_guest_features(struct fpu_guest *guest_fpu, u64 xcr0,
-> >> +u64
-> >> +xfd) {
-> >
-> > I think there would be one issue for the "host write on restore" case.
-> > The current QEMU based host restore uses the following sequence:
-> > 1) restore xsave
-> > 2) restore xcr0
-> > 3) restore XFD MSR
->=20
-> This needs to be fixed. Ordering clearly needs to be:
->=20
->   XFD, XCR0, XSTATE
+Hi Romain,
 
-Sorry, just to clarify that the ordering in QEMU isn't made by us for this =
-specific XFD enabling.
-It has been there for long time for the general restoring of all the XCRs a=
-nd MSRs.
-(if you are interested..FYI: https://github.com/qemu/qemu/blob/master/targe=
-t/i386/kvm/kvm.c#L4168).
-- kvm_put_xsave()
-- kvm_put_xcrs()
-- kvm_put_msrs()
+On Wed, 15 Dec 2021 at 00:07, Romain Perier <romain.perier@gmail.com> wrote=
+:
+>> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+>> Link: http://linux-chenxing.org/infinity2/miyoomini/
+>
+>
+> 'Link:' should not be used for that purpose. Usually it is used for refer=
+encing discussions
+> or patches on lore.k.o . This is typically what I used in the last pull r=
+equest I sent to Arnd for 5.15.
 
-We need to check with the QEMU migration maintainer (Dave and Juan CC-ed)
-if changing that ordering would be OK.
-(In general, I think there are no hard rules documented for this ordering)
+I sort of remember having this pointed out somewhere else and then
+looking at the text in submitting patches and thinking it background
+info seemed to be what Link was for with the note that if it's a link
+to an on list discussion to use a link to lore:
 
-Thanks,
-Wei
+`If related discussions or any other background information behind the
+change can be found on the web, add =E2=80=98Link:=E2=80=99 tags pointing t=
+o it.
+....
+When linking to mailing list archives, preferably use the
+lore.kernel.org message archiver service."
 
+mmm I need to send a v2 anyhow as I messed up the vendor prefix commit
+so I'll move the links out into the message.
+
+Cheers,
+
+Daniel

@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96ED04748D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A89B4748D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbhLNRFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
+        id S235889AbhLNRGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbhLNRFj (ORCPT
+        with ESMTP id S231544AbhLNRGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:05:39 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21034C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:05:39 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id v16so1635154pjn.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:05:39 -0800 (PST)
+        Tue, 14 Dec 2021 12:06:21 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083F3C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:06:21 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso17741488pji.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:06:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=A6836gc0s76HSfL2ZiuDjKE+np84sI4oL8Iom/KwxZU=;
-        b=Il8Xs0i7yKcGaPdWUSDd/OkT3CZc4f7Sh+8OtZOHt5cw/LrudBWuKIHPYCZV3FTrUk
-         ZCxzlJ6YFhcdIDnKAZH3Iqz22CWaTY2lG178hVvPcNC1hDfdjqi6tv0VEcfafKKWKB8K
-         dnyvY9pIEtiiYdtB0dnO0Lz00on3mBZZYm2BQ=
+        bh=IvqOA246pz6MpJ2Qx8Vk8PM4dTJlnXdWQbQp45Jo7eU=;
+        b=AGLcpSoCRP3mDHqZy9q6CHC/f/cQL4x6F2nPdN5iAtowhi/xHCfoPYeaYA5s2BUZFr
+         XM03O7Z8KGaszQlBTNjAm+2lZkdPb6RAsdCxlWStWODnyBHc97RCmXTuXjrG5nVSFFdz
+         pbwjXtm5k/DnTwAob5ndMTz3YmBpTezQn8hxM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=A6836gc0s76HSfL2ZiuDjKE+np84sI4oL8Iom/KwxZU=;
-        b=0oEGuESDQZqPcrqK+P7ZydGXd/k99F+5jzjoT4VRt4slxdKVmhx0+mbNTMEknaJvmu
-         T83xPYGQnHkTX7ZwxkY6oHS3KnI/xfTg3qoND2L9/VxtN2YBQsQOu+iSW0AzJWHB0VXa
-         5yes9HPKNfBlKEHiJJj86ksNO6voTj8YNX0Hqo8Caf+Zq3PgzCFOaVo51qafKdaibjLr
-         8O+fFsBBprfg5AwfW3bbuVQML+rvPZAqs+VIYpMHwSvfQaFWc3jBIJgO4zAiETAXxX/s
-         N+/g6eK14/vzjORX7owr6sqUzEmD5gPvYw+qPJ+ZyoFCBj6ka16YIYZNtcviHYWSApax
-         zlxg==
-X-Gm-Message-State: AOAM531SuTl/NRVVyDxhJTt/BkRI5cAVdsFeO4+4k0jZ0iVO5DzAp5XY
-        +f0eVdTJeZlL/4Wi2INrxZElWg==
-X-Google-Smtp-Source: ABdhPJyid4WvM6SF/FMb0ie7qooR8i+hL7xAAAtPkfmxyGyhk6umYMIjfNB8BB80oKo2BZX9lXr/IQ==
-X-Received: by 2002:a17:90b:19d4:: with SMTP id nm20mr2745434pjb.106.1639501538563;
-        Tue, 14 Dec 2021 09:05:38 -0800 (PST)
+        bh=IvqOA246pz6MpJ2Qx8Vk8PM4dTJlnXdWQbQp45Jo7eU=;
+        b=brSIhupCBfh0+5nFxsvt7Pus4365Alhf1Ln6DSHywWafIGMPGtQcWbXIus/sQvaAUd
+         KjoLNdlZOMxjScyFzm24WiYG8pm5M261avq5EAJtCuXeH/OMOg5lYykaRyiSjIKg1iAL
+         d2CKrzfsDLWsruw8EURBHKqrZ3MoT2xV5Al2CcuJogmssC81FJVWZSSDggebk3l2jo0a
+         z4Zw98xTC1WF0t0BAtp2cSlNXEwSwUDck5MXNZE2r8N+nQqW3PuuPppH3NwoNWsm71QM
+         usiUk2W8Qk1X8EGDasQCUtY+wC17aQ4Q7P7CgkTKDUiKyylXfKCwsukrTwjpzdgmOSks
+         gF8g==
+X-Gm-Message-State: AOAM531IgDIlFKMsGxTrsn3toKlrtv1QKlRuKAzq+aso2v10dzmWo+cK
+        oG4/k+x/iADO8GoNLDdBGAlRM8f9A2FHEg==
+X-Google-Smtp-Source: ABdhPJxVwqDR4+vDuC91Bf9YfHuFRkh+AN9IOxfGAait4qoh9fmClkfVrhdtcTc/ZF4Ld0JJiXNP3A==
+X-Received: by 2002:a17:902:ecc4:b0:148:a2e8:2784 with SMTP id a4-20020a170902ecc400b00148a2e82784mr248013plh.139.1639501580488;
+        Tue, 14 Dec 2021 09:06:20 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l6sm436804pfc.30.2021.12.14.09.05.38
+        by smtp.gmail.com with ESMTPSA id 204sm280350pgb.63.2021.12.14.09.06.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 09:05:38 -0800 (PST)
-Date:   Tue, 14 Dec 2021 09:05:37 -0800
+        Tue, 14 Dec 2021 09:06:20 -0800 (PST)
+Date:   Tue, 14 Dec 2021 09:06:19 -0800
 From:   Kees Cook <keescook@chromium.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     linux-hardening@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/17] ath11k: Use memset_startat() for clearing queue
- descriptors
-Message-ID: <202112140904.2D64E570@keescook>
-References: <20211213223331.135412-1-keescook@chromium.org>
- <20211213223331.135412-9-keescook@chromium.org>
- <87v8zriv1c.fsf@codeaurora.org>
- <877dc7i3zc.fsf@codeaurora.org>
+To:     Thibaut Sautereau <thibaut.sautereau@clip-os.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Daniel Micay <danielmicay@gmail.com>,
+        Levente Polyak <levente@leventepolyak.net>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
+Subject: Re: [PATCH] mm/page_alloc: Fix __alloc_size attribute for
+ alloc_pages_exact_nid
+Message-ID: <202112140906.80FA30E@keescook>
+References: <YbjEgwhn4bGblp//@coeus>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <877dc7i3zc.fsf@codeaurora.org>
+In-Reply-To: <YbjEgwhn4bGblp//@coeus>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:46:31PM +0200, Kalle Valo wrote:
-> Kalle Valo <kvalo@kernel.org> writes:
+On Tue, Dec 14, 2021 at 05:21:23PM +0100, Thibaut Sautereau wrote:
+> From: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
 > 
-> > Kees Cook <keescook@chromium.org> writes:
-> >
-> >> In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> >> field bounds checking for memset(), avoid intentionally writing across
-> >> neighboring fields.
-> >>
-> >> Use memset_startat() so memset() doesn't get confused about writing
-> >> beyond the destination member that is intended to be the starting point
-> >> of zeroing through the end of the struct. Additionally split up a later
-> >> field-spanning memset() so that memset() can reason about the size.
-> >>
-> >> Cc: Kalle Valo <kvalo@codeaurora.org>
-> >> Cc: "David S. Miller" <davem@davemloft.net>
-> >> Cc: Jakub Kicinski <kuba@kernel.org>
-> >> Cc: ath11k@lists.infradead.org
-> >> Cc: linux-wireless@vger.kernel.org
-> >> Cc: netdev@vger.kernel.org
-> >> Signed-off-by: Kees Cook <keescook@chromium.org>
-> >
-> > What's the plan for this patch? I would like to take this via my ath
-> > tree to avoid conflicts.
+> The second parameter of alloc_pages_exact_nid is the one indicating the
+> size of memory pointed by the returned pointer.
 > 
-> Actually this has been already applied:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?h=ath-next&id=d5549e9a6b86
-> 
-> Why are you submitting the same patch twice?
+> Fixes: abd58f38dfb4 ("mm/page_alloc: add __alloc_size attributes for better bounds checking")
+> Cc: Daniel Micay <danielmicay@gmail.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Levente Polyak <levente@leventepolyak.net>
+> Signed-off-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
 
-These are all part of a topic branch, and the cover letter mentioned
-that a set of them have already been taken but haven't appeared in -next
-(which was delayed).
+Thanks! Andrew, can you take this?
 
-Sorry for the confusion!
+Acked-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+> ---
+>  include/linux/gfp.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+> index b976c4177299..8fcc38467af6 100644
+> --- a/include/linux/gfp.h
+> +++ b/include/linux/gfp.h
+> @@ -624,7 +624,7 @@ extern unsigned long get_zeroed_page(gfp_t gfp_mask);
+>  
+>  void *alloc_pages_exact(size_t size, gfp_t gfp_mask) __alloc_size(1);
+>  void free_pages_exact(void *virt, size_t size);
+> -__meminit void *alloc_pages_exact_nid(int nid, size_t size, gfp_t gfp_mask) __alloc_size(1);
+> +__meminit void *alloc_pages_exact_nid(int nid, size_t size, gfp_t gfp_mask) __alloc_size(2);
+>  
+>  #define __get_free_page(gfp_mask) \
+>  		__get_free_pages((gfp_mask), 0)
+> -- 
+> 2.34.1
+> 
 
 -- 
 Kees Cook

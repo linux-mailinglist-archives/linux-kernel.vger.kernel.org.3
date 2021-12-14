@@ -2,120 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 397E3474A15
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D56474A1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236743AbhLNRvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:51:06 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:43436 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236645AbhLNRvE (ORCPT
+        id S236751AbhLNRyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236744AbhLNRyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:51:04 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DE5B821101;
-        Tue, 14 Dec 2021 17:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639504262; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=9HYbUPArg5Npi8nSB59qNt54gDj1XOV5BLqPw1AnSX4=;
-        b=gINm6zX/x5w2pmFOctMsC5fGO6Bv7mdHF3OT5c1p0qxOZq9vVLQ87YcXK122UnD0rNts0a
-        aJ5FWDI7uTSQC+xcn7wgWdUmMhIxhX+EH5Vh9DUp2U3mF0eA4/B9OxjsbyCeOV7+sy9qUr
-        AX/8SsQU0u3L5kHBkh7CNpsBawuOZgM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639504262;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=9HYbUPArg5Npi8nSB59qNt54gDj1XOV5BLqPw1AnSX4=;
-        b=V6ZYopLlXacqa+I+XpkvmQGbdo1R9mN6Z7HErFoNjZOg4rjfr2k9KDexhi+8JN7MOcdQxx
-        A9o96sepuAphMaCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E57E13EC8;
-        Tue, 14 Dec 2021 17:51:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OINjE4bZuGGaKQAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Tue, 14 Dec 2021 17:51:02 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 7150d799;
-        Tue, 14 Dec 2021 17:50:59 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-Subject: [PATCH v2] ext4: set csum seed in tmp inode while migrating to extents
-Date:   Tue, 14 Dec 2021 17:50:58 +0000
-Message-Id: <20211214175058.19511-1-lhenriques@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Tue, 14 Dec 2021 12:54:20 -0500
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E79C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:54:20 -0800 (PST)
+Received: by mail-qt1-x84a.google.com with SMTP id d18-20020a05622a15d200b002acc9aa3e0cso27372324qty.17
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:54:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=x26zWPfrBQRxXuE5L7i13nFPpUxZ5JNoyR4YdrElef8=;
+        b=PDg+Mj8uBRzsS1XuMf6momFlNy4lNesGjwwCopXnBfIc3l4uoD3ZCDQpNPZ7glR949
+         fLcDzkwVYeDTl801lA002WrLVWNdg0NFttc8GPDGIeaxZ/OEU73XIQxX7gNXpkT7vNye
+         7pB7nqsJ2JRLIHCvK8FW384mKPUKvP6c11hMNuDgX6CBhhkkah8vOmiQ0mL4NYpC9Tbu
+         cmuRZTFSxHeJtl5nobY6Psiq3MLaH7llD/kEosxjOWSIYIdtWhIBhNA+hFd4loOde6mX
+         UCel3M48xQQQDyODI4ZqAHkcxkbFP1lDzcPiE8+oifSVnwccciK0ck94YNUUasumAUn/
+         Lo6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=x26zWPfrBQRxXuE5L7i13nFPpUxZ5JNoyR4YdrElef8=;
+        b=MZNMOvhk74BQp6q27HAAUot3qWZ7akTdUY2wRnPYFFMKoIjK1AFG45si0s/3L1CXep
+         /WsHCJbwAFaRnCKdEy0HqZojJYQRtaDsMoQot27rCGuSdDaWVZSt9BL94kgU7l6lk4OW
+         88+QUdTNRdlsTCC4fb8tO9ffAATbfW8nZguon+l8zDqmsaUb2C3lzFZclKbT77Ec3WE8
+         F8hNawF8NKrMamjUZBdWtNWb2+CVNIDdUudddBYcj90YpIqp0+hk8G2KDnmGLWDjD2++
+         3SHlE/rVS/GBeoOo7t0np3sWhMZXrq1CAEROrh7ee5jOl4T+jbKT61hBRcV8M232W9rb
+         pkzg==
+X-Gm-Message-State: AOAM532fR4VR3g2PLkgfYR1KbhKk0s3g7rExjMALIXkjt73WdeI/T5B8
+        Yyc2/tPibszQxazLZ59DUF3pgT4=
+X-Google-Smtp-Source: ABdhPJxVUcQ+ZyXGp8x5drls3THNIAsUk+DiJ8nq5JpQIwuxFCwoK+V4rs4p1rkSdyrVwpGCm9Rx2ak=
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:358b:a5f0:b6ba:1a07])
+ (user=sdf job=sendgmr) by 2002:a05:622a:f:: with SMTP id x15mr7532957qtw.481.1639504459617;
+ Tue, 14 Dec 2021 09:54:19 -0800 (PST)
+Date:   Tue, 14 Dec 2021 09:54:16 -0800
+In-Reply-To: <fa707ef9-d612-a3a4-1b2a-fc2b28a3ec5f@gmail.com>
+Message-Id: <YbjaSNBlW03rX6c7@google.com>
+Mime-Version: 1.0
+References: <d77b08bf757a8ea8dab3a495885c7de6ff6678da.1639102791.git.asml.silence@gmail.com>
+ <20211211003838.7u4lcqghcq2gqvho@kafai-mbp.dhcp.thefacebook.com>
+ <5f7d2f60-b833-04e5-7710-fdd2ef3b6f67@gmail.com> <20211211015656.tvufcnh5k4rrc7sw@kafai-mbp.dhcp.thefacebook.com>
+ <fa707ef9-d612-a3a4-1b2a-fc2b28a3ec5f@gmail.com>
+Subject: Re: [BPF PATCH for-next] cgroup/bpf: fast path for not loaded skb BPF filtering
+From:   sdf@google.com
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When migrating to extents, the temporary inode will have it's own checksum
-seed.  This means that, when swapping the inodes data, the inode checksums
-will be incorrect.
+On 12/11, Pavel Begunkov wrote:
+> On 12/11/21 01:56, Martin KaFai Lau wrote:
+> > On Sat, Dec 11, 2021 at 01:15:05AM +0000, Pavel Begunkov wrote:
+> > > On 12/11/21 00:38, Martin KaFai Lau wrote:
+> > > > On Fri, Dec 10, 2021 at 02:23:34AM +0000, Pavel Begunkov wrote:
+> > > > > cgroup_bpf_enabled_key static key guards from overhead in cases  
+> where
+> > > > > no cgroup bpf program of a specific type is loaded in any cgroup.  
+> Turn
+> > > > > out that's not always good enough, e.g. when there are many  
+> cgroups but
+> > > > > ones that we're interesting in are without bpf. It's seen in  
+> server
+> > > > > environments, but the problem seems to be even wider as apparently
+> > > > > systemd loads some BPF affecting my laptop.
+> > > > >
+> > > > > Profiles for small packet or zerocopy transmissions over fast  
+> network
+> > > > > show __cgroup_bpf_run_filter_skb() taking 2-3%, 1% of which is  
+> from
+> > > > > migrate_disable/enable(), and similarly on the receiving side.  
+> Also
+> > > > > got +4-5% of t-put for local testing.
+> > > > >
+> > > > > Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> > > > > ---
+> > > > >    include/linux/bpf-cgroup.h | 24 +++++++++++++++++++++---
+> > > > >    kernel/bpf/cgroup.c        | 23 +++++++----------------
+> > > > >    2 files changed, 28 insertions(+), 19 deletions(-)
+> > > > >
+> > > > > diff --git a/include/linux/bpf-cgroup.h  
+> b/include/linux/bpf-cgroup.h
+> > > > > index 11820a430d6c..99b01201d7db 100644
+> > > > > --- a/include/linux/bpf-cgroup.h
+> > > > > +++ b/include/linux/bpf-cgroup.h
+> > > > > @@ -141,6 +141,9 @@ struct cgroup_bpf {
+> > > > >    	struct list_head progs[MAX_CGROUP_BPF_ATTACH_TYPE];
+> > > > >    	u32 flags[MAX_CGROUP_BPF_ATTACH_TYPE];
+> > > > > +	/* for each type tracks whether effective prog array is not  
+> empty */
+> > > > > +	unsigned long enabled_mask;
+> > > > > +
+> > > > >    	/* list of cgroup shared storages */
+> > > > >    	struct list_head storages;
+> > > > > @@ -219,11 +222,25 @@ int bpf_percpu_cgroup_storage_copy(struct  
+> bpf_map *map, void *key, void *value);
+> > > > >    int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void  
+> *key,
+> > > > >    				     void *value, u64 flags);
+> > > > > +static inline bool __cgroup_bpf_type_enabled(struct cgroup_bpf  
+> *cgrp_bpf,
+> > > > > +					     enum cgroup_bpf_attach_type atype)
+> > > > > +{
+> > > > > +	return test_bit(atype, &cgrp_bpf->enabled_mask);
+> > > > > +}
+> > > > > +
+> > > > > +#define CGROUP_BPF_TYPE_ENABLED(sk, atype)				       \
+> > > > > +({									       \
+> > > > > +	struct cgroup *__cgrp =  
+> sock_cgroup_ptr(&(sk)->sk_cgrp_data);	       \
+> > > > > +									       \
+> > > > > +	__cgroup_bpf_type_enabled(&__cgrp->bpf, (atype));		       \
+> > > > > +})
+> > > > I think it should directly test if the array is empty or not  
+> instead of
+> > > > adding another bit.
+> > > >
+> > > > Can the existing __cgroup_bpf_prog_array_is_empty(cgrp, ...) test  
+> be used instead?
+> > >
+> > > That was the first idea, but it's still heavier than I'd wish.  
+> 0.3%-0.7%
+> > > in profiles, something similar in reqs/s. rcu_read_lock/unlock() pair  
+> is
+> > > cheap but anyway adds 2 barrier()s, and with bitmasks we can inline
+> > > the check.
+> > It sounds like there is opportunity to optimize
+> > __cgroup_bpf_prog_array_is_empty().
+> >
+> > How about using rcu_access_pointer(), testing with  
+> &empty_prog_array.hdr,
+> > and then inline it?  The cgroup prog array cannot be all
+> > dummy_bpf_prog.prog.  If that could be the case, it should be replaced
+> > with &empty_prog_array.hdr earlier, so please check.
 
-This can be fixed by recalculating the extents checksums again.  Or simply
-by copying the seed into the temporary inode.
+> I'd need to expose and export empty_prog_array, but that should do.
+> Will try it out, thanks
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=213357
-Reported-by: Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
- fs/ext4/migrate.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-changes since v1:
-
-* Dropped tmp_ei variable
-* ->i_csum_seed is now initialised immediately after tmp_inode is created
-* New comment about the seed initialization and stating that recovery
-  needs to be fixed.
-
-Cheers,
---
-Luís
-
-diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
-index 7e0b4f81c6c0..36dfc88ce05b 100644
---- a/fs/ext4/migrate.c
-+++ b/fs/ext4/migrate.c
-@@ -459,6 +459,17 @@ int ext4_ext_migrate(struct inode *inode)
- 		ext4_journal_stop(handle);
- 		goto out_unlock;
- 	}
-+	/*
-+	 * Use the correct seed for checksum (i.e. the seed from 'inode').  This
-+	 * is so that the metadata blocks will have the correct checksum after
-+	 * the migration.
-+	 *
-+	 * Note however that, if a crash occurs during the migration process,
-+	 * the recovery process is broken because the tmp_inode checksums will
-+	 * be wrong and the orphans cleanup will fail.
-+	 */
-+	ei = EXT4_I(inode);
-+	EXT4_I(tmp_inode)->i_csum_seed = ei->i_csum_seed;
- 	i_size_write(tmp_inode, i_size_read(inode));
- 	/*
- 	 * Set the i_nlink to zero so it will be deleted later
-@@ -502,7 +513,6 @@ int ext4_ext_migrate(struct inode *inode)
- 		goto out_tmp_inode;
- 	}
- 
--	ei = EXT4_I(inode);
- 	i_data = ei->i_data;
- 	memset(&lb, 0, sizeof(lb));
- 
+Note that we already use __cgroup_bpf_prog_array_is_empty in
+__cgroup_bpf_run_filter_setsockopt/__cgroup_bpf_run_filter_getsockopt
+for exactly the same purpose. If you happen to optimize it, pls
+update these places as well.

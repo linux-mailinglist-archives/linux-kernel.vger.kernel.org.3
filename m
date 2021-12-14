@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDD5474DA0
+	by mail.lfdr.de (Postfix) with ESMTP id D85C6474DA1
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234802AbhLNWFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:05:00 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56120 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234823AbhLNWEp (ORCPT
+        id S237967AbhLNWFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237876AbhLNWEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Dec 2021 17:04:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14963C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:04:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC35361723
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92FF461773
         for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:04:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C1DAC3463A;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED49C004DD;
         Tue, 14 Dec 2021 22:04:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1639519482;
-        bh=suMRtz9eOkx8t+TeoIoIqKiiGn2vIfRnCp0Lrdxlg8Q=;
+        bh=vNeKSLn4o3y/1sYJiczd9woV5aKJnJUJLzoNeRByzJ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b9AsQcoZz2vGuDYICcHP2kP07/8CCYN8K3euC/NCXmCqQBbKh4n0uQBY0vB6zYW2g
-         smLEfGzm0KCLT/kD0I16f84RsB/vCAWYE3zlfnmZTbBWUVPHvwZcWknr8fDnyNVlSP
-         m4/gJ0ymAA5prg+s2So3ZmJSKL8RVesMzyTBOLdALsoIPc2cIOqUdHMB+bKyVVQGDa
-         uP4uClCYxELN61Eij35aNwE2AsdOYCiAYBTfD3qbdCyWMB88RK8Zwvci86ui6Y1+f3
-         R3NCTp9Ywn+8dS19iaHK0u56fBAbqvmfeKwaWOiLX4ranj7vZQ1JqDxR8hgmgpRUan
-         7s+BgutSGbARQ==
+        b=kYKDFmh4M6fDFNBL9dA7uL+dwcbe8cYzkEjxLlRvseA6Dl2+fCfijxUKcm4ghvGXq
+         yPvnrUKlmNPtI2pQyNWM5/4DoffC5VrdnbgSQmOxbEy9oM1rwVUypkrhmrxhUTdtzZ
+         PCzKouIBxAPge564Vvux2eY4t/BZSD9OT88+jD0cqq+zBlqIAa5ajlTkytPhaJn2pr
+         LxJyjdHmWqA808QpmK3KSFcYXUebsywJ/JFTm//eDipfFIxo3VbrLyRZEIX5WP7umU
+         HzouYfkcuixkhybQAZeseP2W3zNP7Hy0ZXtEeci8XOBVwFs3JBmWdFzm0DTnWf/L7P
+         89yfBQrkPmykw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8A2C05C2147; Tue, 14 Dec 2021 14:04:41 -0800 (PST)
+        id 8C0185C2699; Tue, 14 Dec 2021 14:04:41 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
         kernel-team@fb.com, mingo@kernel.org
 Cc:     elver@google.com, andreyknvl@google.com, glider@google.com,
         dvyukov@google.com, cai@lca.pw, boqun.feng@gmail.com,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH kcsan 25/29] kcsan: Support WEAK_MEMORY with Clang where no objtool support exists
-Date:   Tue, 14 Dec 2021 14:04:35 -0800
-Message-Id: <20211214220439.2236564-25-paulmck@kernel.org>
+Subject: [PATCH kcsan 26/29] kcsan: Make barrier tests compatible with lockdep
+Date:   Tue, 14 Dec 2021 14:04:36 -0800
+Message-Id: <20211214220439.2236564-26-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1>
 References: <20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1>
@@ -51,75 +54,184 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marco Elver <elver@google.com>
 
-Clang and GCC behave a little differently when it comes to the
-__no_sanitize_thread attribute, which has valid reasons, and depending
-on context either one could be right.
+The barrier tests in selftest and the kcsan_test module only need the
+spinlock and mutex to test correct barrier instrumentation. Therefore,
+these were initially placed on the stack.
 
-Traditionally, user space ThreadSanitizer [1] still expects instrumented
-builtin atomics (to avoid false positives) and __tsan_func_{entry,exit}
-(to generate meaningful stack traces), even if the function has the
-attribute no_sanitize("thread").
+However, lockdep asserts that locks are in static storage, and will
+generate this warning:
 
-[1] https://clang.llvm.org/docs/ThreadSanitizer.html#attribute-no-sanitize-thread
+ | INFO: trying to register non-static key.
+ | The code is fine but needs lockdep annotation, or maybe
+ | you didn't initialize this object before use?
+ | turning off the locking correctness validator.
+ | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc1+ #3208
+ | Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+ | Call Trace:
+ |  <TASK>
+ |  dump_stack_lvl+0x88/0xd8
+ |  dump_stack+0x15/0x1b
+ |  register_lock_class+0x6b3/0x840
+ |  ...
+ |  test_barrier+0x490/0x14c7
+ |  kcsan_selftest+0x47/0xa0
+ |  ...
 
-GCC doesn't follow the same policy (for better or worse), and removes
-all kinds of instrumentation if no_sanitize is added. Arguably, since
-this may be a problem for user space ThreadSanitizer, we expect this may
-change in future.
+To fix, move the test locks into static storage.
 
-Since KCSAN != ThreadSanitizer, the likelihood of false positives even
-without barrier instrumentation everywhere, is much lower by design.
+Fixing the above also revealed that lock operations are strengthened on
+first use with lockdep enabled, due to lockdep calling out into
+non-instrumented files (recall that kernel/locking/lockdep.c is not
+instrumented with KCSAN).
 
-At least for Clang, however, to fully remove all sanitizer
-instrumentation, we must add the disable_sanitizer_instrumentation
-attribute, which is available since Clang 14.0.
+Only kcsan_test checks for over-instrumentation of *_lock() operations,
+where we can simply "warm up" the test locks to avoid the test case
+failing with lockdep.
 
+Reported-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Marco Elver <elver@google.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- include/linux/compiler_types.h | 13 ++++++++++++-
- lib/Kconfig.kcsan              |  2 +-
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ kernel/kcsan/kcsan_test.c | 37 +++++++++++++++++++++++--------------
+ kernel/kcsan/selftest.c   | 14 +++++++-------
+ 2 files changed, 30 insertions(+), 21 deletions(-)
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 1d32f4c03c9ef..3c1795fdb5686 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -198,9 +198,20 @@ struct ftrace_likely_data {
- # define __no_kasan_or_inline __always_inline
- #endif
+diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
+index 5bf94550bcdf6..2bad0820f73ad 100644
+--- a/kernel/kcsan/kcsan_test.c
++++ b/kernel/kcsan/kcsan_test.c
+@@ -300,6 +300,8 @@ static struct {
+ 	long val[8];
+ } test_struct;
+ static DEFINE_SEQLOCK(test_seqlock);
++static DEFINE_SPINLOCK(test_spinlock);
++static DEFINE_MUTEX(test_mutex);
  
--#define __no_kcsan __no_sanitize_thread
- #ifdef __SANITIZE_THREAD__
-+/*
-+ * Clang still emits instrumentation for __tsan_func_{entry,exit}() and builtin
-+ * atomics even with __no_sanitize_thread (to avoid false positives in userspace
-+ * ThreadSanitizer). The kernel's requirements are stricter and we really do not
-+ * want any instrumentation with __no_kcsan.
-+ *
-+ * Therefore we add __disable_sanitizer_instrumentation where available to
-+ * disable all instrumentation. See Kconfig.kcsan where this is mandatory.
-+ */
-+# define __no_kcsan __no_sanitize_thread __disable_sanitizer_instrumentation
- # define __no_sanitize_or_inline __no_kcsan notrace __maybe_unused
-+#else
-+# define __no_kcsan
+ /*
+  * Helper to avoid compiler optimizing out reads, and to generate source values
+@@ -523,8 +525,6 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	struct kcsan_scoped_access *reorder_access = NULL;
  #endif
+ 	arch_spinlock_t arch_spinlock = __ARCH_SPIN_LOCK_UNLOCKED;
+-	DEFINE_SPINLOCK(spinlock);
+-	DEFINE_MUTEX(mutex);
+ 	atomic_t dummy;
  
- #ifndef __no_sanitize_or_inline
-diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-index e4394ea8068b0..63b70b8c55519 100644
---- a/lib/Kconfig.kcsan
-+++ b/lib/Kconfig.kcsan
-@@ -198,7 +198,7 @@ config KCSAN_WEAK_MEMORY
- 	# We can either let objtool nop __tsan_func_{entry,exit}() and builtin
- 	# atomics instrumentation in .noinstr.text, or use a compiler that can
- 	# implement __no_kcsan to really remove all instrumentation.
--	depends on STACK_VALIDATION || CC_IS_GCC
-+	depends on STACK_VALIDATION || CC_IS_GCC || CLANG_VERSION >= 140000
- 	help
- 	  Enable support for modeling a subset of weak memory, which allows
- 	  detecting a subset of data races due to missing memory barriers.
+ 	KCSAN_TEST_REQUIRES(test, reorder_access != NULL);
+@@ -543,6 +543,15 @@ static void test_barrier_nothreads(struct kunit *test)
+ #define KCSAN_EXPECT_WRITE_BARRIER(b, o) __KCSAN_EXPECT_BARRIER(KCSAN_ACCESS_WRITE, b, o, #b)
+ #define KCSAN_EXPECT_RW_BARRIER(b, o)    __KCSAN_EXPECT_BARRIER(KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE, b, o, #b)
+ 
++	/*
++	 * Lockdep initialization can strengthen certain locking operations due
++	 * to calling into instrumented files; "warm up" our locks.
++	 */
++	spin_lock(&test_spinlock);
++	spin_unlock(&test_spinlock);
++	mutex_lock(&test_mutex);
++	mutex_unlock(&test_mutex);
++
+ 	/* Force creating a valid entry in reorder_access first. */
+ 	test_var = 0;
+ 	while (test_var++ < 1000000 && reorder_access->size != sizeof(test_var))
+@@ -592,10 +601,10 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	KCSAN_EXPECT_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
+ 	KCSAN_EXPECT_READ_BARRIER(arch_spin_lock(&arch_spinlock), false);
+ 	KCSAN_EXPECT_READ_BARRIER(arch_spin_unlock(&arch_spinlock), true);
+-	KCSAN_EXPECT_READ_BARRIER(spin_lock(&spinlock), false);
+-	KCSAN_EXPECT_READ_BARRIER(spin_unlock(&spinlock), true);
+-	KCSAN_EXPECT_READ_BARRIER(mutex_lock(&mutex), false);
+-	KCSAN_EXPECT_READ_BARRIER(mutex_unlock(&mutex), true);
++	KCSAN_EXPECT_READ_BARRIER(spin_lock(&test_spinlock), false);
++	KCSAN_EXPECT_READ_BARRIER(spin_unlock(&test_spinlock), true);
++	KCSAN_EXPECT_READ_BARRIER(mutex_lock(&test_mutex), false);
++	KCSAN_EXPECT_READ_BARRIER(mutex_unlock(&test_mutex), true);
+ 
+ 	KCSAN_EXPECT_WRITE_BARRIER(mb(), true);
+ 	KCSAN_EXPECT_WRITE_BARRIER(wmb(), true);
+@@ -638,10 +647,10 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	KCSAN_EXPECT_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
+ 	KCSAN_EXPECT_WRITE_BARRIER(arch_spin_lock(&arch_spinlock), false);
+ 	KCSAN_EXPECT_WRITE_BARRIER(arch_spin_unlock(&arch_spinlock), true);
+-	KCSAN_EXPECT_WRITE_BARRIER(spin_lock(&spinlock), false);
+-	KCSAN_EXPECT_WRITE_BARRIER(spin_unlock(&spinlock), true);
+-	KCSAN_EXPECT_WRITE_BARRIER(mutex_lock(&mutex), false);
+-	KCSAN_EXPECT_WRITE_BARRIER(mutex_unlock(&mutex), true);
++	KCSAN_EXPECT_WRITE_BARRIER(spin_lock(&test_spinlock), false);
++	KCSAN_EXPECT_WRITE_BARRIER(spin_unlock(&test_spinlock), true);
++	KCSAN_EXPECT_WRITE_BARRIER(mutex_lock(&test_mutex), false);
++	KCSAN_EXPECT_WRITE_BARRIER(mutex_unlock(&test_mutex), true);
+ 
+ 	KCSAN_EXPECT_RW_BARRIER(mb(), true);
+ 	KCSAN_EXPECT_RW_BARRIER(wmb(), true);
+@@ -684,10 +693,10 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	KCSAN_EXPECT_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
+ 	KCSAN_EXPECT_RW_BARRIER(arch_spin_lock(&arch_spinlock), false);
+ 	KCSAN_EXPECT_RW_BARRIER(arch_spin_unlock(&arch_spinlock), true);
+-	KCSAN_EXPECT_RW_BARRIER(spin_lock(&spinlock), false);
+-	KCSAN_EXPECT_RW_BARRIER(spin_unlock(&spinlock), true);
+-	KCSAN_EXPECT_RW_BARRIER(mutex_lock(&mutex), false);
+-	KCSAN_EXPECT_RW_BARRIER(mutex_unlock(&mutex), true);
++	KCSAN_EXPECT_RW_BARRIER(spin_lock(&test_spinlock), false);
++	KCSAN_EXPECT_RW_BARRIER(spin_unlock(&test_spinlock), true);
++	KCSAN_EXPECT_RW_BARRIER(mutex_lock(&test_mutex), false);
++	KCSAN_EXPECT_RW_BARRIER(mutex_unlock(&test_mutex), true);
+ 
+ 	kcsan_nestable_atomic_end();
+ }
+diff --git a/kernel/kcsan/selftest.c b/kernel/kcsan/selftest.c
+index 08c6b84b9ebed..b6d4da07d80a1 100644
+--- a/kernel/kcsan/selftest.c
++++ b/kernel/kcsan/selftest.c
+@@ -113,6 +113,7 @@ static bool __init test_matching_access(void)
+  * positives: simple test to check at boot certain barriers are always properly
+  * instrumented. See kcsan_test for a more complete test.
+  */
++static DEFINE_SPINLOCK(test_spinlock);
+ static bool __init test_barrier(void)
+ {
+ #ifdef CONFIG_KCSAN_WEAK_MEMORY
+@@ -122,7 +123,6 @@ static bool __init test_barrier(void)
+ #endif
+ 	bool ret = true;
+ 	arch_spinlock_t arch_spinlock = __ARCH_SPIN_LOCK_UNLOCKED;
+-	DEFINE_SPINLOCK(spinlock);
+ 	atomic_t dummy;
+ 	long test_var;
+ 
+@@ -172,8 +172,8 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_READ_BARRIER(arch_spin_unlock(&arch_spinlock));
+-	spin_lock(&spinlock);
+-	KCSAN_CHECK_READ_BARRIER(spin_unlock(&spinlock));
++	spin_lock(&test_spinlock);
++	KCSAN_CHECK_READ_BARRIER(spin_unlock(&test_spinlock));
+ 
+ 	KCSAN_CHECK_WRITE_BARRIER(mb());
+ 	KCSAN_CHECK_WRITE_BARRIER(wmb());
+@@ -202,8 +202,8 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_WRITE_BARRIER(arch_spin_unlock(&arch_spinlock));
+-	spin_lock(&spinlock);
+-	KCSAN_CHECK_WRITE_BARRIER(spin_unlock(&spinlock));
++	spin_lock(&test_spinlock);
++	KCSAN_CHECK_WRITE_BARRIER(spin_unlock(&test_spinlock));
+ 
+ 	KCSAN_CHECK_RW_BARRIER(mb());
+ 	KCSAN_CHECK_RW_BARRIER(wmb());
+@@ -235,8 +235,8 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_RW_BARRIER(arch_spin_unlock(&arch_spinlock));
+-	spin_lock(&spinlock);
+-	KCSAN_CHECK_RW_BARRIER(spin_unlock(&spinlock));
++	spin_lock(&test_spinlock);
++	KCSAN_CHECK_RW_BARRIER(spin_unlock(&test_spinlock));
+ 
+ 	kcsan_nestable_atomic_end();
+ 
 -- 
 2.31.1.189.g2e36527f23
 

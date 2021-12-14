@@ -2,69 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3158C473EBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D27473EC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbhLNIvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
+        id S231951AbhLNIvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:51:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbhLNIvR (ORCPT
+        with ESMTP id S229577AbhLNIvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:51:17 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EAEC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:51:16 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id t26so35588123lfk.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:51:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=lLKg5+si4bkxsbvGeNcSKDL9joZRAGyEtpR0PZy5CaM=;
-        b=Cl8LLWby/8KdABcGyeh0MkycZ6Bne7o3W4EQ1aLhfzqoIB93wwu6Omcu8d7IPLZg2y
-         ZeKJ4sPS+WM3T1+L/I2NPfeTGSFJ92n3q4GVcvljAPP7LNonT+u6hO/7uPzE6kEpQ5ui
-         IoWRZh4ta+RenvyOwXl7EQ+dVsks1MP5KrA4b60WpfADaghNRTV/Zap0xzKagC8t5ice
-         uN7Al+Irebm+kosNU9BMLVq3HO6sgrwbfI6shlOBkd412/IEwbuPlZBGQWVuOR4Xd+Ga
-         h3jSELCXHUg2nlzUR+eS9+I8DZbj/61BpikaOjTI1R6k5e2v69qA5l+ywAiPatCNJ0Ec
-         MI3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=lLKg5+si4bkxsbvGeNcSKDL9joZRAGyEtpR0PZy5CaM=;
-        b=OfvJPEaaf89DAqZxlt3MTXUSXLcZaJLSR7Us+y1U/XI6F9+1YyprwEDtfxlzex5Xbp
-         BS/unuEIF6S4O0tAcCUzBBPukIlbYdiKeQL1PXOA9d7mLVLNl8U1Ed4R+uFCc2iG+9Of
-         HEOUzH+afvntILEJel316xl1wlmmR3W3gsXhwFWVP6JjJLGpr9tWb/eQH4yDFb1BvGsf
-         4mMrglZS8Ix7NzkCdpN9rQca1lCe8y2oMgn/aQbl1cVdoBkjePFB743LH9j8V6uY601W
-         E2SMeSuKRBqzN63jVC0IsObjFL+lk/sAzmLe6NQZnYBSPvsRwKOdR2XGZIbBL7kKu9ti
-         92yg==
-X-Gm-Message-State: AOAM533jyFe3ErqQuKYWmBDjiSD9Q5JG3vw74xn5GLb3skbYYSnMO8hq
-        GdlXuejZTFv2ymSxiQleMq2lpL6cc4EkMgUYrw0=
-X-Google-Smtp-Source: ABdhPJyRC4cZwCG/oed0ui/tyS+4ZNcqyHPkxC6u212W0JORUw5H9JefZGKXSKzfQoBY2S5QhuDCCOxU2kAkISSO1Bw=
-X-Received: by 2002:a05:6512:370b:: with SMTP id z11mr3718297lfr.260.1639471875194;
- Tue, 14 Dec 2021 00:51:15 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a2e:978c:0:0:0:0:0 with HTTP; Tue, 14 Dec 2021 00:51:14
- -0800 (PST)
-Reply-To: mrs.aishaa@yahoo.com
-From:   Mrs Aisha Al-Qaddafi <adamam489@gmail.com>
-Date:   Tue, 14 Dec 2021 08:51:14 +0000
-Message-ID: <CAH-qvqUGtdC6-qJ749MfYw5Jp-knF-s1zRmcz1-mGreFW=KNKA@mail.gmail.com>
-Subject: Dear Partner,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 14 Dec 2021 03:51:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D09C061574;
+        Tue, 14 Dec 2021 00:51:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31154B81804;
+        Tue, 14 Dec 2021 08:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B52FCC34601;
+        Tue, 14 Dec 2021 08:51:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639471910;
+        bh=4QFkLIeG6dSbpdQ5ZnfEFBX1M1IgL3C5kDcWO3o8vhk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Gvx2YkAQ4toii5I+KUW+NH22TZv2b6sc4fXAanNXAENtZTLlE2TlQNfdxn4Fuuh6C
+         YEEpxZ6x4MCmAD7K5QiPnB5tXRLVKH3N0BwPRwgNMyAJtIxQJSpmCLE6FtMVI1eVbC
+         MyBULFOJppgzQI5OpL8L6a3fbNCHH/T6ApYE3K5v2I/iVU3HD7c77/75JowaQK7DPo
+         uspPFk5AevMeKsl9ZjzY6WoRHPtWENojl9XvnGkMz3W7NiWElOaoutQWc7qGRSl2Rz
+         VtC7i3qpiC03w7BFL0YSIIQmjckRh0Sifa02Nk4bCYiE0id65L6BY4Z+NQyfiEaLV2
+         9sZnCsvJ64Xyw==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mx3XI-00C0AS-Eq; Tue, 14 Dec 2021 08:51:48 +0000
+Date:   Tue, 14 Dec 2021 08:51:47 +0000
+Message-ID: <87ilvrk1r0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Biwen Li <biwen.li@nxp.com>,
+        Zhiqiang Hou <Zhiqiang.Hou@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [RFC PATCH devicetree 00/10] Do something about ls-extirq interrupt-map breakage
+In-Reply-To: <20211214013800.2703568-1-vladimir.oltean@nxp.com>
+References: <20211214013800.2703568-1-vladimir.oltean@nxp.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: vladimir.oltean@nxp.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, shawnguo@kernel.org, leoyang.li@nxp.com, biwen.li@nxp.com, Zhiqiang.Hou@nxp.com, kurt@linutronix.de, linux@rasmusvillemoes.dk
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Partner,
+On Tue, 14 Dec 2021 01:37:50 +0000,
+Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> 
+> Currently the ls-extirq driver's use of the "interrupt-map" property is
+> double-broken:
+> - once by Rob Herring's commit 869f0ec048dc ("arm64: dts: freescale: Fix
+>   'interrupt-map' parent address cells")
+> - twice by Marc Zyngier's commit 041284181226 ("of/irq: Allow matching
+>   of an interrupt-map local to an interrupt controller"), later revised,
+>   not very elegantly, through commit de4adddcbcc2 ("of/irq: Add a quirk
 
-I came across your contact during my private search Mrs Aisha Al-Qaddafi is
-my name, the only daughter of late Libyan president, I have funds the sum
-of $27.5 million USD for investment, I am interested in you for investment
-project assistance in your country, i shall compensate you 30% of the total
-sum after the funds are transfer into your account, Reply me urgent for
-more details. Please kindly respond quickly for further details through my
-private e_mail address:mrs.aishaa@yahoo.com
+Elegance is, I'm afraid to say, bloody overrated when dealing with
+this sort of crap.
 
-Mrs Aisha Al-Qaddafi.
+
+>   for controllers with their own definition of interrupt-map"). So this
+>   part works but we're on an offender list.
+
+Define 'part works'. Either it does, or it doesn't. There is no middle
+ground here.
+
+> 
+> Mark suggests that the problem may lie with the ls-extirq driver, and
+> its interpretation of the "interrupt-map" property, to be exact.
+
+s/Mark/Marc/, unless you are talking about someone else (who?).
+
+> 
+> This set of changes attempts to make the problem smaller by using a
+> vendor-specific name for the property, and reverts Rob's patch because
+> similarity with "interrupt-map" isn't actually a desirable feature after
+> all, it seems.
+> 
+> Vladimir Oltean (10):
+>   irqchip/ls-extirq: rename "interrupt-map" OF property to
+>     "fsl,extirq-map"
+>   Revert "arm64: dts: freescale: Fix 'interrupt-map' parent address
+>     cells"
+>   dt-bindings: ls-extirq: replace "interrupt-map" documentation with
+>     "fsl,extirq-map"
+>   arm64: dts: ls1043a: rename the "interrupt-map" of the extirq node to
+>     "fsl,extirq-map"
+>   arm64: dts: ls1046a: rename the "interrupt-map" of the extirq node to
+>     "fsl,extirq-map"
+>   arm64: dts: ls1088a: rename the "interrupt-map" of the extirq node to
+>     "fsl,extirq-map"
+>   arm64: dts: ls208xa: rename the "interrupt-map" of the extirq node to
+>     "fsl,extirq-map"
+>   arm64: dts: lx2160a: rename the "interrupt-map" of the extirq node to
+>     "fsl,extirq-map"
+>   ARM: dts: ls1021a: rename the "interrupt-map" of the extirq node to
+>     "fsl,extirq-map"
+>   dt-bindings: ls-extirq: add a YAML schema for the validator
+> 
+>  .../interrupt-controller/fsl,ls-extirq.txt    |  53 ---------
+>  .../interrupt-controller/fsl,ls-extirq.yaml   | 110 ++++++++++++++++++
+>  arch/arm/boot/dts/ls1021a.dtsi                |   3 +-
+>  .../arm64/boot/dts/freescale/fsl-ls1043a.dtsi |   3 +-
+>  .../arm64/boot/dts/freescale/fsl-ls1046a.dtsi |   3 +-
+>  .../arm64/boot/dts/freescale/fsl-ls1088a.dtsi |  27 +++--
+>  .../arm64/boot/dts/freescale/fsl-ls208xa.dtsi |  27 +++--
+>  .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi |  27 +++--
+>  drivers/irqchip/irq-ls-extirq.c               |  12 +-
+>  9 files changed, 161 insertions(+), 104 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
+
+This is totally pointless. These machines have been in the wild for
+years, and existing DTs will be there *forever*. The very notion of
+'backporting' DT changes is totally ludicrous when it is some firmware
+(ATF, u-boot, or something else *that isn't under your control*) that
+provides the DT. It also breaks backward compatibility (old kernel
+with new DT), which is just as important. Why do you think I went the
+elegance-deprived route and added a quirk?
+
+So no, I'm not taking the irqchip changes, as most of this churn
+serves no purpose. The revert of 869f0ec048dc is the only thing that
+makes some sense.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,87 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E204740BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376C04740C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbhLNKrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S231478AbhLNKsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:48:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233282AbhLNKrN (ORCPT
+        with ESMTP id S231358AbhLNKsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:47:13 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA67C061574;
-        Tue, 14 Dec 2021 02:47:13 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id f74so138498pfa.3;
-        Tue, 14 Dec 2021 02:47:13 -0800 (PST)
+        Tue, 14 Dec 2021 05:48:13 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F613C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 02:48:13 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id r26so26730636oiw.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 02:48:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UL296X80hfhHXgdxviFQfA4Kg0hAX2DoK5OWmb5VTAE=;
-        b=RRgeQnCWJjU/M2xSFrfJdPXJV2auAnzJqNZaLeyZobEEta5Iy81bI937EvW41lPklJ
-         I+3+fsEBv9teAo+vj2VDMvlscNxvI2snQgtqzr8aPRN+eFtziXeDjUq94oGLGIfRL+qj
-         empaiDF68auVTpIXVbYvGB4c9q3/0wJU80NuSDU5YfC7wSeYVn0b43O0P24bKIkjEJK1
-         7PE4z7pKqZMMzlNo8fCfDVhEaQ+Gx8aQ+kmjBiIXsaS9lAV0Fcvb4hoEu6e3Fk7g9mxU
-         kQhYUTo+B+12QC252L3QTATraXEX3gLHwM82SrJrVt31rQ8hEfd/j+TN3SI16X/JdkiR
-         GjQQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=S9zw/F47K7THYZ2d7GIYVG6YdMWwkmUBpYKDkksSix4=;
+        b=UBw8ousUP580ZDrEKJjSMxNqnWpebUtVr1eyE2PIuNCsh1gAmgBgHQT3KyCFOcZvQ+
+         8SNPFeeITFSfHqXtcFEGMLfYRdRbXGGkQyvAZ1VpE/LSORsmpWgN7gvV70dtFJPsNaHY
+         40ZPL+FfUPwpzD5Vz9uMMAJgvRaXdRrmhzHRoP+99CKQmPw0zBLbfdivpAhlwZrHys2b
+         a3LywTmM2EIOI3HGWQqyvLc/qE6qFQYjmcb62uJy65smPJoz1p+U/EPSCSJStAsRiDEx
+         UoqxDnGTm8RTY9htyAHVZq55lMaoon8aX6EhvgoMlvST7mbLhpw2I+jPP4pLbpME+QKi
+         MGhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UL296X80hfhHXgdxviFQfA4Kg0hAX2DoK5OWmb5VTAE=;
-        b=5uxQnfNVhcBHjVkm6bhpBy7jxpzO6dtwQ5jroiv6GkkqY8K/oKuKhmxOgKKmuHyMSL
-         ZteioCqrpOsANURoaHw2ABg9ZTHldv5shS+r6IdTKSijwKEx37uMbjIV8Oe3tqXW6S9/
-         DxrWtmJZaT1QcSq4PNLR/zy8ZOzpcmBnA+4V+gLhRvRnhVIovSwWEqROPKXynY6PTly8
-         +Z1AV6n8NOrI3wUVrwhWVVQiZoGk7YMa/Hm7yK9VnCwY+OscmhybupFp7NLxQjilFtn6
-         g/nXx+5t7vccAHMFCNjcpZQXSaZ8pdxMSP4hpj1x7/NPEkHGZpxuFBvTWEtibTe/hI5R
-         Ulew==
-X-Gm-Message-State: AOAM533ef6sesY8oeMBR9RBEmAtAG9DvQejuURc1anT37/E/+j8QLBZo
-        bqrq63rG7Rrm8MFqJMXuFL4=
-X-Google-Smtp-Source: ABdhPJwalddQByhX0UHxQvbkIDYv+Z3qM3CwDr1xgDMIZ1g8S4KA4TMrwWsqvTowcAlrvCoaCcpflw==
-X-Received: by 2002:a05:6a00:1a56:b0:4a3:3c0c:11c0 with SMTP id h22-20020a056a001a5600b004a33c0c11c0mr3483457pfv.42.1639478832744;
-        Tue, 14 Dec 2021 02:47:12 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.54])
-        by smtp.gmail.com with ESMTPSA id z22sm16796788pfe.93.2021.12.14.02.47.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 02:47:12 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     santosh.shilimkar@oracle.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH net] rds: memory leak in __rds_conn_create()
-Date:   Tue, 14 Dec 2021 18:46:59 +0800
-Message-Id: <20211214104659.51765-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=S9zw/F47K7THYZ2d7GIYVG6YdMWwkmUBpYKDkksSix4=;
+        b=ahY8iRsHwNHEfBOjz/ssqYJ+S5NlcrpNGK2yHAxzEGTNtfhp27GDcsq88UYATQOmol
+         zeSq8ii3Hq3Nx80eXv2LimaFvsSGLHnymgkfM0K0vmBlJltZC22rT7r0mHbj0/udRvx0
+         ncqJSn7CvDzr0qo9aFZvbhQZv0ABBTBnVt2026lS8zdlhPA3zBYyZUlmXCyTp6N/HpjR
+         G5F/EvJcSVS/gfvs5S1KkHmM4gYCOpz2G54+nq7cRvEKuSpvGjlCmbpTagzjL14ctHH+
+         fYy7Ie27gvtQR7/kSx3RjaEiaCUGDm2VW/dCtRAQdS30mNWbbaYtPlIYFKxz/tgd0HL4
+         GZ2g==
+X-Gm-Message-State: AOAM533FsjN7YAvE/dH1GENK4uZ6kViTdGxnWecHfXEAstzx3ztUlfOx
+        FF2WGEi7Glaa6R/iqZRDZ4EYqGjFEH4QqGWFK4A=
+X-Google-Smtp-Source: ABdhPJwb+2bXWWXL5HtI0DrjhXFtJMbC5ONFnT/NDaYgVBRvO+B5klBr/intN27ug68Wk58UbarVvk6XyLWvszrfnHw=
+X-Received: by 2002:aca:5b45:: with SMTP id p66mr3689724oib.9.1639478892285;
+ Tue, 14 Dec 2021 02:48:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a4a:d198:0:0:0:0:0 with HTTP; Tue, 14 Dec 2021 02:48:11
+ -0800 (PST)
+Reply-To: mrsbillchantal801@gmail.com
+From:   "Mrs.chanta" <atmvisacard039@gmail.com>
+Date:   Tue, 14 Dec 2021 11:48:11 +0100
+Message-ID: <CAD8ox31DNnxnajWzuSRSrGM19nPB9-u=Dai_P--c-ywLGsBXLA@mail.gmail.com>
+Subject: Attention
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__rds_conn_create() did not release conn->c_path when loop_trans != 0 and
-trans->t_prefer_loopback != 0 and is_outgoing == 0.
+Good day my dear,how are you?
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- net/rds/connection.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/net/rds/connection.c b/net/rds/connection.c
-index a3bc4b54d491..b4cc699c5fad 100644
---- a/net/rds/connection.c
-+++ b/net/rds/connection.c
-@@ -253,6 +253,7 @@ static struct rds_connection *__rds_conn_create(struct net *net,
- 				 * should end up here, but if it
- 				 * does, reset/destroy the connection.
- 				 */
-+				kfree(conn->c_path);
- 				kmem_cache_free(rds_conn_slab, conn);
- 				conn = ERR_PTR(-EOPNOTSUPP);
- 				goto out;
--- 
-2.25.1
+You have been compensated with the sum of 12.2  million dollars in this
+united nation the payment will be issue into atm visa  card and send
+to you from the santander bank we need your address and your
+Whatsapp number
 
+
+
+Thanks  mrs bill chantal

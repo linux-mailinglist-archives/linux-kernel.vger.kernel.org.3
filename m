@@ -2,199 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50270473B7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCDD473B83
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232146AbhLNDYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 22:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbhLNDYs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 22:24:48 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C17EC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:24:48 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 200so7412280pgg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:24:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/FP25EAS0jWe9Bmq1xKTTtZhdfUiLLbdKe0jZzbjmTg=;
-        b=JjM/bjXFKsWhsVueD0GfNyJfbJKjzqPTfF/ptMJ3m+MFnQ/dlMCZMjSYyiCOXk1TiN
-         lyRxMDBc/hbhJAiB46dd/DM51W1AbpXTs4xyIcHCA4EdxN+JXwjqw80o8PMsotzboZ1L
-         9K9LuPB+DRXC22uUFXl5LGSuqRW/4vnNBdrxTAKHvsZvU5NZUAHfExbKC8arFiMcnyF9
-         8lbssUZJqfACm7bn8Q3t2x1k+a0Cwkrl5LmaMrIpqPO1l6R1lWM9fycG1NoDKOZzST5N
-         X6XlFpsGntjn5l9wJxVNLgR2JChtqOgsdDBS+407YEuufF0Ct1eTNNdydjD5EgKwKMS1
-         CBGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/FP25EAS0jWe9Bmq1xKTTtZhdfUiLLbdKe0jZzbjmTg=;
-        b=fD2Ph1eVE9r04iHscGoyom3xrv57ypVNFrWlxa9FTicBHwTD5vz3vnNeMyoNqLChDx
-         DT7XxSGjT2IlSvyYozIDARRDtSPbW/SMTfhaRjU3b9PUDvFGOH/nlrI5kPd9Zc/lYy7S
-         6A64eXNn1EZy45EFgd4OZv1Vh99GJMxh0IBzg2Aav/mPEqVsqVTB2zZy1x7zeR72lwLg
-         YBz9zjhkiXxZOgm1KwemEao7/Si9j/B1BJ+PvYiQF5GEKyjaAkA47p9rN+2mpqGhBw+V
-         W+uFcICGn75zUArpaPcYH9mxfDYaUlKbPwPRtcXE5ef1F0tCAN75COUkgijM/sbTvD1b
-         rDeQ==
-X-Gm-Message-State: AOAM530VIHHt192YCR26jf2pIn0VMxf97qJcehArCkw4S6KL4jJJ2s0f
-        fMfyEa/rJ7tCr9e7PK/4vSN/BQ==
-X-Google-Smtp-Source: ABdhPJzGkMINKutzwLWAkv9ZT/ZuLyFvXUivYQOMJM0rW7WzL+i0zVRuVrlUPS+0PfxiYFMwS/SHVQ==
-X-Received: by 2002:a63:db17:: with SMTP id e23mr1940721pgg.420.1639452287590;
-        Mon, 13 Dec 2021 19:24:47 -0800 (PST)
-Received: from leoy-ThinkPad-X240s ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id k15sm12876168pff.215.2021.12.13.19.24.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 19:24:47 -0800 (PST)
-Date:   Tue, 14 Dec 2021 11:24:36 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        Yonatan Goldschmidt <yonatan.goldschmidt@granulate.io>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] perf evlist: Don't run perf in non-root PID
- namespace when launch workload
-Message-ID: <20211214032436.GA1884193@leoy-ThinkPad-X240s>
-References: <20211212134721.1721245-1-leo.yan@linaro.org>
- <20211212134721.1721245-3-leo.yan@linaro.org>
- <6cad0a2e-c4b8-9788-fa0d-05405453a0dd@arm.com>
+        id S233222AbhLND0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 22:26:08 -0500
+Received: from mga18.intel.com ([134.134.136.126]:59776 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231715AbhLND0H (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 22:26:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639452367; x=1670988367;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=71zIv+Njok8Xe+yhfXw+gCZCCrc8tzE51c0znQCgWKQ=;
+  b=d1PxBjg1/9sV6d6h6q7OiKReFtFTOT2uitiqLc7/BmnnB98OKRSYAxFD
+   CvNna4TqK9jhpFFUJmp/YIT5qq28Y/THPB16TZY0QjbWIWQIwiIDSxQjK
+   c/bQL77TQt/x2poLd4FrQ51fTAo729V6Rn34TR14cB/0AGct+AGTgrMaQ
+   fPZMhSrumZ3paGQ8lz4YpTVOEAHCv74DU2utvMcKNCsTKDvvkxF6kfk7E
+   /B9vQyzItPvVD8ruTsw7oO0i6iPT2ewnfiXodORknrPJ1bGS3FhOYycAx
+   qmtXm2xfYKQGiSBfz+M/Vs9oFrfn74mcbDIt6o4WVmCiZnBfMEgEQqdIR
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="225747884"
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="225747884"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 19:26:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="481753039"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 13 Dec 2021 19:26:03 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mwyS2-0007NX-Qh; Tue, 14 Dec 2021 03:26:02 +0000
+Date:   Tue, 14 Dec 2021 11:25:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Brazdil <dbrazdil@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Brazdil <dbrazdil@google.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] misc: open-dice: Add driver to expose DICE data
+ to userspace
+Message-ID: <202112141128.lBBmmIuE-lkp@intel.com>
+References: <20211213195833.772892-3-dbrazdil@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6cad0a2e-c4b8-9788-fa0d-05405453a0dd@arm.com>
+In-Reply-To: <20211213195833.772892-3-dbrazdil@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+Hi David,
 
-On Mon, Dec 13, 2021 at 01:54:33PM +0000, James Clark wrote:
-> 
-> 
-> On 12/12/2021 13:47, Leo Yan wrote:
-> > In function evlist__prepare_workload(), after perf forks a child process
-> > and launches a workload in the created process, it needs to retrieve
-> > process and namespace related info via '/proc/$PID/' node.
-> > 
-> > The process folders under 'proc' file system use the PID number from the
-> > root PID namespace, when perf tool runs in non-root PID namespace and
-> > creates new process for profiled program, this leads to the perf tool
-> > wrongly gather process info since it uses PID from non-root namespace to
-> > access nodes under '/proc'.
-> > 
-> > Let's see an example:
-> > 
-> >   unshare --fork --pid perf record -e cs_etm//u -a -- test_program
-> > 
-> > This command runs perf tool and the profiled program 'test_program' in
-> > the non-root PID namespace.  When perf tool launches 'test_program',
-> > e.g. the forked PID number is 2, perf tool retrieves process info for
-> > 'test_program' from the folder '/proc/2'.  But '/proc/2' is actually for
-> > a kernel thread so perf tool wrongly gather info for 'test_program'.
-> 
-> Hi Leo,
-> 
-> Which features aren't working exactly when you run in a non root namespace?
+Thank you for the patch! Perhaps something to improve:
 
-When perf tool lanches workload, it needs to synthesize samples for
-PERF_RECORD_COMM and PERF_RECORD_NAMESPACES, this can make sure the
-thread info has been prepared ahead before we decode hardware trace
-data (e.g. using Arm CoreSight, SPE, or Intel PT, etc).
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on char-misc/char-misc-testing soc/for-next v5.16-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Also please see the comment in perf record tool [1]:
+url:    https://github.com/0day-ci/linux/commits/David-Brazdil/Driver-for-Open-Profile-for-DICE/20211214-040051
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20211214/202112141128.lBBmmIuE-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/6fb8e9472d98abcc2dfabd43e95fc4ec5819ecd0
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review David-Brazdil/Driver-for-Open-Profile-for-DICE/20211214-040051
+        git checkout 6fb8e9472d98abcc2dfabd43e95fc4ec5819ecd0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/misc/
 
-"Some H/W events are generated before COMM event
-* which is emitted during exec(), so perf script
-* cannot see a correct process name for those events.
-* Synthesize COMM event to prevent it."
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Unfortunately, when using the command "unshare --fork --pid perf
-record -e cs_etm//u --namespaces -a -- test_program", it uses
-the PID from non-root namespace to synthesize RECORD_COMM and
-RECORD_NAMESPACES events, but the PID number doesn't match with the
-process folders under /proc folder (which uses the root namespace's PID
-to create file node).  As result, perf tool uses pid 2 (from non-root
-namespace to capture a kernel thread info rather than the info for
-created workload:
+All warnings (new ones prefixed by >>):
 
-0x1ea90 [0x40]: event: 3
-.
-. ... raw event: size 64 bytes
-.  0000:  03 00 00 00 00 00 40 00 02 00 00 00 02 00 00 00  ......@.........
-.  0010:  6b 74 68 72 65 61 64 64 00 00 00 00 00 00 00 00  kthreadd........
-.  0020:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-.  0030:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+   drivers/misc/open-dice.c:74: warning: Function parameter or member 'filp' not described in 'open_dice_read'
+   drivers/misc/open-dice.c:74: warning: Function parameter or member 'ptr' not described in 'open_dice_read'
+   drivers/misc/open-dice.c:74: warning: Function parameter or member 'len' not described in 'open_dice_read'
+   drivers/misc/open-dice.c:74: warning: Function parameter or member 'off' not described in 'open_dice_read'
+>> drivers/misc/open-dice.c:74: warning: expecting prototype for Returns the size of the reserved memory region. The user(). Prototype was for open_dice_read() instead
+   drivers/misc/open-dice.c:84: warning: Function parameter or member 'filp' not described in 'open_dice_write'
+   drivers/misc/open-dice.c:84: warning: Function parameter or member 'ptr' not described in 'open_dice_write'
+   drivers/misc/open-dice.c:84: warning: Function parameter or member 'len' not described in 'open_dice_write'
+   drivers/misc/open-dice.c:84: warning: Function parameter or member 'off' not described in 'open_dice_write'
+>> drivers/misc/open-dice.c:84: warning: expecting prototype for Triggers a wipe of the reserved memory region. The user(). Prototype was for open_dice_write() instead
+>> drivers/misc/open-dice.c:89: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Creates a mapping of the reserved memory region in a user address space.
 
-0 0 0x1ea90 [0x40]: PERF_RECORD_COMM: kthreadd:2/2
 
-0x1ead0 [0xa8]: event: 16
-.
-. ... raw event: size 168 bytes
-.  0000:  10 00 00 00 00 00 a8 00 02 00 00 00 02 00 00 00  ......?.........
-.  0010:  07 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00  ................
-.  0020:  91 00 00 f0 00 00 00 00 04 00 00 00 00 00 00 00  ...?............
-.  0030:  fe ff ff ef 00 00 00 00 04 00 00 00 00 00 00 00  ????............
-.  0040:  ff ff ff ef 00 00 00 00 04 00 00 00 00 00 00 00  ????............
-.  0050:  fc ff ff ef 00 00 00 00 04 00 00 00 00 00 00 00  ????............
-.  0060:  fd ff ff ef 00 00 00 00 04 00 00 00 00 00 00 00  ????............
-.  0070:  00 00 00 f0 00 00 00 00 04 00 00 00 00 00 00 00  ...?............
-.  0080:  fb ff ff ef 00 00 00 00 00 00 00 00 00 00 00 00  ????............
-.  0090:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-.  00a0:  00 00 00 00 00 00 00 00                          ........        
+vim +74 drivers/misc/open-dice.c
 
-0 0 0x1ead0 [0xa8]: PERF_RECORD_NAMESPACES 2/2 - nr_namespaces: 7
-                [0/net: 4/0xf0000091, 1/uts: 4/0xeffffffe, 2/ipc: 4/0xefffffff, 3/pid: 4/0xeffffffc, 
-                 4/user: 4/0xeffffffd, 5/mnt: 4/0xf0000000, 6/cgroup: 4/0xeffffffb]
+    67	
+    68	/**
+    69	 * Returns the size of the reserved memory region. The user-provided pointer is
+    70	 * never dereferenced.
+    71	 */
+    72	static ssize_t open_dice_read(struct file *filp, char __user *ptr, size_t len,
+    73				      loff_t *off)
+  > 74	{
+    75		return open_dice_size(to_open_dice_drvdata(filp));
+    76	}
+    77	
+    78	/**
+    79	 * Triggers a wipe of the reserved memory region. The user-provided pointer is
+    80	 * never dereferenced.
+    81	 */
+    82	static ssize_t open_dice_write(struct file *filp, const char __user *ptr,
+    83				       size_t len, loff_t *off)
+  > 84	{
+    85		return open_dice_wipe(to_open_dice_drvdata(filp));
+    86	}
+    87	
+    88	/**
+  > 89	 * Creates a mapping of the reserved memory region in a user address space.
+    90	 */
+    91	static int open_dice_mmap(struct file *filp, struct vm_area_struct *vma)
+    92	{
+    93		struct open_dice_drvdata *drvdata = to_open_dice_drvdata(filp);
+    94	
+    95		/* Do not allow userspace to modify the underlying data. */
+    96		if ((vma->vm_flags & VM_WRITE) && (vma->vm_flags & VM_SHARED))
+    97			return -EPERM;
+    98	
+    99		/* Create write-combine mapping so all clients observe a wipe. */
+   100		vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
+   101		vma->vm_flags |= VM_DONTCOPY | VM_DONTDUMP;
+   102		return vm_iomap_memory(vma, drvdata->rmem->base, drvdata->rmem->size);
+   103	}
+   104	
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/perf/builtin-record.c#n1823
-
-> I did "perf record -- ls" and it seemed to be working for me. At least kernel
-> sampling would be working in a namespace, even if there was something wrong
-> with userspace.
-
-The issue is relevant with the hardware trace events.
-
-> I think causing a failure might be too restrictive and would prevent people
-> from using perf in a container. Maybe we could show a warning instead, but
-> I'm not sure exactly what's not working because I thought perf looked up stuff
-> based on the path of the process not the pid.
-
-Good point.  I am also worry that it is arbitrary to prevent perf to be
-used in the namespace, so this patch it doesn't forbid all cases for
-perf tool.  It only returns failure when perf tool tries to fork a
-new program.
-
-When perf tool runs in non-root PID namespace, since it still can access
-the process info from root file system's /proc node, this causes mess that
-the perf tool gathers process info from the root PID namespace.
-
-One thing I think I should dig deeper: can we dynamically update (or mount)
-/proc node when perf tool runs in non-root PID namespace so can ensure
-perf tool to only see the process nodes in the same non-root namespace?
-This can be a solution to avoid the perf tool gathers mess process info.
-If anyone know for this, also welcome suggestion, thanks a lot!
-
-Otherwise if we cannot find method to update '/proc' nodes, I think we
-still need this patch to return failure when detects perf running in
-non-root PID namespace.
-
-Thanks,
-Leo
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,150 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8BF47409D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F954740A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbhLNKlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:41:31 -0500
-Received: from mail-ua1-f50.google.com ([209.85.222.50]:41927 "EHLO
-        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233126AbhLNKl2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:41:28 -0500
-Received: by mail-ua1-f50.google.com with SMTP id p37so34055135uae.8;
-        Tue, 14 Dec 2021 02:41:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qjahYurnjZXl2YAUO9JQ6AYI06sAOFdZUDV4b2nECo0=;
-        b=WzASmSvyMRZCB3mNIgkpD6rSPYOgZTciAXfw15JIH0OPiocEYl8gn4Ql2BS2p0R7Kk
-         o7xH/LiflwABnGXLmXnzZxbwbpj9BJbQvxJ7yuHz7WUYw+VhK4XmMf5nxPfTgtAv8lgD
-         JW/fSk7VFZBgq/yurM8nK/DB9yBhAWAK7W3tIIr6McgzVDEmnxcmhcB162zdaPuOMOHK
-         S1b7swpruqlHyRpbcMV7PMOu5inm2aerMKEev3MBmw+4yxl3dFgznxqRvGySTgsLtKkL
-         t/jv2zIU6yRtG4PHBjbIAEi/AmTy1mXZPakV4TMC+5o164g6FU+vxhgEVCA/O7gUyyBt
-         /lSQ==
-X-Gm-Message-State: AOAM531hUNX3TnhSPuXxjzWPEMCh9xDjMNgik9HAkJHvWWYWWquS8gLV
-        IYFMdQugYkva09Kxr+XM9dfzAyH+1w76zQ==
-X-Google-Smtp-Source: ABdhPJx0jcVwbIYsV4K+HY6g84d4/ECDG93to9knUpAipKc6SJgYBZq+uTu2CfzYDQuOhyR1XEO43A==
-X-Received: by 2002:a05:6102:3232:: with SMTP id x18mr3977549vsf.38.1639478487883;
-        Tue, 14 Dec 2021 02:41:27 -0800 (PST)
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
-        by smtp.gmail.com with ESMTPSA id o7sm4503584vkl.41.2021.12.14.02.41.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 02:41:27 -0800 (PST)
-Received: by mail-vk1-f178.google.com with SMTP id f7so12189553vkf.10;
-        Tue, 14 Dec 2021 02:41:27 -0800 (PST)
-X-Received: by 2002:a05:6122:2193:: with SMTP id j19mr4107170vkd.7.1639478487115;
- Tue, 14 Dec 2021 02:41:27 -0800 (PST)
+        id S233149AbhLNKlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:41:42 -0500
+Received: from mga18.intel.com ([134.134.136.126]:8412 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233140AbhLNKll (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:41:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639478501; x=1671014501;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=nD1dWC4ja2jEDV7QrfC4Kkllk7voDyF5NiShZMOJOkE=;
+  b=JxQ9Jtd3/m/W2roMAzPZe3Sw1XR5iX8926rYsXtg3yYxHzmkLnkpjpyb
+   1rtoyvERVz23wAb0kG+cCP832U4HyKKBepdn9XKYYzT7oSzE+klmac+8K
+   Zl480ywDkTgsG2YkF9dMPB8OzOg7qK8t6nnJpb3TeFMCTjDdfnzmJV9RQ
+   fy7e58jhz21xyK1SmbyJ5uwdxXSpTS/YjQ8EbIJqNjbfXyMGJU1zQMpB5
+   RcxUO5LTueHVZ4Av9JM0/vWHCrp/ivuCfXaSiYA9Ju7XxrO7XnlMLxhe7
+   YafmrJidu2RNEEBDOn2sf2MSIyUizQLsw84j/6ebIXk25qCuYp4kUQWfn
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="225810798"
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="225810798"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 02:41:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="465030158"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
+  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 02:41:38 -0800
+Subject: Re: [PATCH v2 1/2] mmc: sdhci-pci-gli: GL9755: Support for CD/WP
+ inversion on OF platforms
+To:     Hector Martin <marcan@marcan.st>,
+        Ben Chuang <benchuanggli@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20211212070210.141664-1-marcan@marcan.st>
+ <20211212070210.141664-2-marcan@marcan.st>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <72e29a9d-7e2a-5c2e-c44b-42172aae4f2d@intel.com>
+Date:   Tue, 14 Dec 2021 12:41:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211130164311.2909616-1-kieran.bingham+renesas@ideasonboard.com> <20211130164311.2909616-2-kieran.bingham+renesas@ideasonboard.com>
-In-Reply-To: <20211130164311.2909616-2-kieran.bingham+renesas@ideasonboard.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Dec 2021 11:41:16 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXT-SSqtx=_DT0J0Yus-WSPsYv2GOtehjGq2KbWQHbA5Q@mail.gmail.com>
-Message-ID: <CAMuHMdXT-SSqtx=_DT0J0Yus-WSPsYv2GOtehjGq2KbWQHbA5Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] arm64: dts: renesas: r8a779a0: Add DSI encoders
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211212070210.141664-2-marcan@marcan.st>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kieran,
+On 12/12/2021 09:02, Hector Martin wrote:
+> This is required on some Apple ARM64 laptops using this controller.
+> As is typical on DT platforms, pull these quirks from the device tree
+> using the standard mmc bindings.
+> 
+> See Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-On Tue, Nov 30, 2021 at 5:43 PM Kieran Bingham
-<kieran.bingham+renesas@ideasonboard.com> wrote:
-> Provide the two MIPI DSI encoders on the V3U and connect them to the DU
-> accordingly.
->
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+A couple of kernel style issues, but fix those and you can add:
 
-> --- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-> @@ -2290,12 +2290,14 @@ ports {
->                                 port@0 {
->                                         reg = <0>;
->                                         du_out_dsi0: endpoint {
-> +                                               remote-endpoint = <&dsi0_in>;
->                                         };
->                                 };
->
->                                 port@1 {
->                                         reg = <1>;
->                                         du_out_dsi1: endpoint {
-> +                                               remote-endpoint = <&dsi1_in>;
->                                         };
->                                 };
->                         };
-> @@ -2633,6 +2635,64 @@ isp3vin31: endpoint {
->                         };
->                 };
->
-> +               dsi0: dsi-encoder@fed80000 {
-> +                       compatible = "renesas,r8a779a0-dsi-csi2-tx";
-> +                       reg = <0 0xfed80000 0 0x10000>;
-> +                       power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-> +                       clocks = <&cpg CPG_MOD 415>,
-> +                                <&cpg CPG_CORE R8A779A0_CLK_DSI>,
-> +                                <&cpg CPG_CORE R8A779A0_CLK_CL16MCK>;
-> +                       clock-names = "fck", "dsi", "pll";
-> +
-> +                       resets = <&cpg 415>;
-> +                       status = "disabled";
-> +
-> +                       ports {
-> +                               #address-cells = <1>;
-> +                               #size-cells = <0>;
-> +
-> +                               port@0 {
-> +                                       reg = <0>;
-> +                                       dsi0_in: endpoint {
-> +                                               remote-endpoint = <&du_out_dsi0>;
-> +                                       };
-> +                               };
-> +
-> +                               port@1 {
-> +                                       reg = <1>;
-> +                               };
-> +                       };
-> +               };
-> +
-> +               dsi1: dsi-encoder@fed90000 {
-> +                       compatible = "renesas,r8a779a0-dsi-csi2-tx";
-> +                       reg = <0 0xfed90000 0 0x10000>;
-> +                       power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-> +                       clocks = <&cpg CPG_MOD 415>,
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-416?
+> ---
+>  drivers/mmc/host/sdhci-pci-gli.c | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> index 4fd99c1e82ba..ad742743a494 100644
+> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/pci.h>
+>  #include <linux/mmc/mmc.h>
+>  #include <linux/delay.h>
+> +#include <linux/of.h>
+>  #include "sdhci.h"
+>  #include "sdhci-pci.h"
+>  #include "cqhci.h"
+> @@ -114,8 +115,10 @@
+>  #define   GLI_9755_WT_EN_OFF    0x0
+>  
+>  #define PCI_GLI_9755_PECONF   0x44
+> -#define   PCI_GLI_9755_LFCLK    GENMASK(14, 12)
+> -#define   PCI_GLI_9755_DMACLK   BIT(29)
+> +#define   PCI_GLI_9755_LFCLK          GENMASK(14, 12)
+> +#define   PCI_GLI_9755_DMACLK         BIT(29)
 
-> +                                <&cpg CPG_CORE R8A779A0_CLK_DSI>,
-> +                                <&cpg CPG_CORE R8A779A0_CLK_CL16MCK>;
-> +                       clock-names = "fck", "dsi", "pll";
-> +
-> +                       resets = <&cpg 416>;
+Please don't mix in white space changes.
 
-That one is OK.
+> +#define   PCI_GLI_9755_INVERT_CD      BIT(30)
+> +#define   PCI_GLI_9755_INVERT_WP      BIT(31)
+>  
+>  #define PCI_GLI_9755_CFG2          0x48
+>  #define   PCI_GLI_9755_CFG2_L1DLY    GENMASK(28, 24)
+> @@ -570,6 +573,18 @@ static void gl9755_hw_setting(struct sdhci_pci_slot *slot)
+>  	gl9755_wt_on(pdev);
+>  
+>  	pci_read_config_dword(pdev, PCI_GLI_9755_PECONF, &value);
+> +#ifdef CONFIG_OF
+> +	if (pdev->dev.of_node) {
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.17 with the above fixed.
+As Robin wrote, please remove #ifdef and if (pdev->dev.of_node)
+because they are not needed.
 
-Gr{oetje,eeting}s,
+> +		/*
+> +		 * Apple ARM64 platforms using these chips may have
+> +		 * inverted CD/WP detection.
+> +		 */
+> +		if (of_property_read_bool(pdev->dev.of_node, "cd-inverted"))
+> +			value |= PCI_GLI_9755_INVERT_CD;
+> +		if (of_property_read_bool(pdev->dev.of_node, "wp-inverted"))
+> +			value |= PCI_GLI_9755_INVERT_WP;
+> +	}
+> +#endif
+>  	value &= ~PCI_GLI_9755_LFCLK;
+>  	value &= ~PCI_GLI_9755_DMACLK;
+>  	pci_write_config_dword(pdev, PCI_GLI_9755_PECONF, value);
+> 
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

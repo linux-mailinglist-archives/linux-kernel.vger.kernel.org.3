@@ -2,139 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D9D4743FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70D4474401
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbhLNN4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
+        id S234610AbhLNN5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 08:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbhLNN4Q (ORCPT
+        with ESMTP id S229653AbhLNN5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:56:16 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3B1C061574;
-        Tue, 14 Dec 2021 05:56:15 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id u3so36998074lfl.2;
-        Tue, 14 Dec 2021 05:56:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ov1iHx+DbaxD+iHI0Gl52GMo9SpDpJ2lnEERZMJTQc0=;
-        b=PCN+/1TXNrEnIWgXa9Ms5J/9ctNNSoMaK3CgAZuUEkyNZ5ljmYFglFOkxA7CRow2PB
-         +diaiwIvMw9UeUujxgonngIcbHvXYo0BVP0KWlk0gtfON9lMcEXPXUVMrYFXDi7v21xN
-         zer5d5ICKk58mX8MqKAwK4ff0FZCqFTrp/SdMMOYi8tBUzeqg7X72Y05OIf3gfqTswBo
-         wILCCniRxptpP9q+n2Oqg0VRg1xUyLOhSV+2Qj7HerA8u+uZO4ptYAjYLQb6vQseLUVd
-         iCCoI0sXF32rAhNJDFu7p9FqQxg/9GsXrJ1uuzm4E0NzFSaA887IVXBUoAWvfSRMyTvv
-         UQFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ov1iHx+DbaxD+iHI0Gl52GMo9SpDpJ2lnEERZMJTQc0=;
-        b=Vg3Rj2losi+Lccq++NtIJwtscnlwlafiJEC4ZywyBX/k+kaedhqLiQvsgetPUAfWRf
-         AHSOaNBTvNtUKvaMp1UT8FEJrPjejW/LwoyLZPCVuINkwjtOzkaHocteTw0vQQ9h5PO2
-         dG8i9FsZquVRs3GI8K7HuvOCYyfPJmbddP+klSTO1plyx7ofodkW1+R9fLmMAwuLA0wy
-         Q9IfPbPrQ+rkRkpzyw5gSONWoM3bJmZIGUNqHNJrA0NCOZjiCvLImZMK05zkaYRO+gw0
-         kGtC1PO95gCfcs1s7+GI+wE0Vl3hmfhpyLiKo15LBwxfrcVhcDUHIiucDLCv4A4nXhj+
-         rtFQ==
-X-Gm-Message-State: AOAM531UwR3otFyYgnOa2ew5aC3J7AuyDIexj3sXKucXpk+s7Dh18Xuv
-        t7vk374TGIWpJgYb+sBcjNk=
-X-Google-Smtp-Source: ABdhPJzir6qiHtR9sVJHfjCLkS//nrIH5PQaLZq8UcVv5KSRk4JLkxpk1YKgGvYjCBPB6t11uHsAqA==
-X-Received: by 2002:ac2:5615:: with SMTP id v21mr5340562lfd.112.1639490174001;
-        Tue, 14 Dec 2021 05:56:14 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id q24sm1838370lfp.103.2021.12.14.05.56.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 05:56:13 -0800 (PST)
-Subject: Re: [PATCH 1/3] ALSA: hda/tegra: Skip reset on BPMP devices
-To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
-        broonie@kernel.org, lgirdwood@gmail.com, thierry.reding@gmail.com,
-        perex@perex.cz
-Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Mohan Kumar <mkumard@nvidia.com>, robh+dt@kernel.org
-References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
- <1638858770-22594-2-git-send-email-spujar@nvidia.com>
- <7742adae-cdbe-a9ea-2cef-f63363298d73@gmail.com>
- <8fd704d9-43ce-e34a-a3c0-b48381ef0cd8@nvidia.com>
- <56bb43b6-8d72-b1de-4402-a2cb31707bd9@gmail.com>
- <4855e9c4-e4c2-528b-c9ad-2be7209dc62a@nvidia.com>
- <5d441571-c1c2-5433-729f-86d6396c2853@gmail.com>
- <f32cde65-63dc-67f8-ded8-b58ea5e89f4e@nvidia.com>
- <95cc7efa-251c-690b-9afa-53ee9e052c34@gmail.com>
- <148fba18-5d14-d342-0eb9-4ff224cc58ad@nvidia.com>
- <3b0de739-7866-3886-be9c-a853c746f8b7@gmail.com>
- <73d04377-9898-930b-09db-bb6c4b3eb90a@nvidia.com>
- <ad388f5e-6f60-cf78-8510-87aec8524e33@gmail.com>
- <50bf5a83-051e-8c12-6502-aabd8edd0a72@nvidia.com>
- <7230ad0b-2b04-4f1b-b616-b7d98789ded0@gmail.com>
- <48f891bc-d8f6-2634-6dd1-6ea4f14ae6a3@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <0761f6f2-27f8-4e1a-fabc-9d319f465a9e@gmail.com>
-Date:   Tue, 14 Dec 2021 16:56:12 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 14 Dec 2021 08:57:47 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F80C061574;
+        Tue, 14 Dec 2021 05:57:47 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639490265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3rX9sx3/Rg0XcX58GUjdtswXYZt0YUczNTsQIoAklfg=;
+        b=oc4HTFTol/r89SvaPNWCGhBJ0KP+kxOYyxFWFNlOCt/bXCUziuPWQPOHMFPS3+j0Y8vvS3
+        mtRwDeI1K7M7WS+w3RlYx5zgWrJSIHhnHlIbBbzH5bXEFUJ3SQLVkf+W60D1ogEzIk6O7B
+        YOzb6QSEjqZbW4ZAEGZyDZaOtjjdhW2CEt6iB1OZWSTmRvrq/Symdtz4i8AQmiIBo+HUNi
+        /GXjIUq6hbz2YatEYnY/qaAhZevTbb4Gsprd1UM52/smVMgcB0JNJVu+wLdOjxkUw+bS7p
+        GiR9D9xqnsh5YFej1oXYEQyCm+hsxrruBPTeHIui/Xoqh5d5/Z79ws/LllZJTg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639490265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3rX9sx3/Rg0XcX58GUjdtswXYZt0YUczNTsQIoAklfg=;
+        b=KXtFcINluHsAWrxcwLo8lDTAklWFUBm1nf5dgjlOoMONUoPpti0UqI1mOtEUCdezZhMBMJ
+        +G66Xq3dp5FpbVCQ==
+To:     Joel Daniels <jdaniels@sent.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, x86@kernel.org
+Subject: Re: Time keeping while suspended in the presence of persistent
+ clock drift
+In-Reply-To: <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
+References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
+ <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com>
+ <87wnkbuuuz.ffs@tglx>
+ <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
+Date:   Tue, 14 Dec 2021 14:57:45 +0100
+Message-ID: <8735mvthk6.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <48f891bc-d8f6-2634-6dd1-6ea4f14ae6a3@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-14.12.2021 10:22, Sameer Pujar пишет:
+Joel,
+
+On Mon, Dec 13 2021 at 06:39, Joel Daniels wrote:
+> On Sat, 11 Dec 2021 14:36 +0100, Thomas Gleixner wrote:
+>> Can you please verify that the problem persists with NTP enabled and
+>> synchronized?
+>
+> Yes, I just verified that the problem still exists while
+> synchronized to NTP.
 ...
->>> How the reset behavior is different? At this point when HDA driver is
->>> loaded the HW is already reset during display ungate. What matters,
->>> during HDA driver load, is whether the HW is in predictable state or not
->>> and the answer is yes. So I am not sure what problem you are referring
->>> to. Question is, if BPMP already ensures this, then why driver needs to
->>> take care of it.
->> 1. Enable display
->> 2. Play audio over HDMI
-> 
->> 3. HDA hardware now is in dirty state
-> 
-> Why this would be a dirty state? It is rather a functional state. Isn't
-> it? Power-domain is ON while all this happens.
+>     $ chronyc tracking && echo && chronyc sources
+>     [...]
+>     Ref time (UTC)  : Mon Dec 13 13:30:52 2021
+>     System time     : 5.597892284 seconds fast of NTP time
 
-In general state should be a functional, but we shouldn't assume that.
-There is always a possibility for a subtle bug in a driver that may put
-h/w into a bad state. Full hardware reset is encouraged by users.
+thanks for making sure that this is really a RTC issue on that machine.
 
-> Another point is, with present logic the reset is not applied for every
-> runtime PM resume of HDA device, which is confusing. It depends on the
-> state of 'chip->running' flag and I don't see this getting cleared
-> anywhere. Would you say subsequent HDA playback happen under a dirty state?
+> The "if" branch does not apply as I have no clock sources flagged as
+> CLOCK_SOURCE_SUSPEND_NONSTOP but the "else if" branch does apply.
 
-This is a good point. There should be another potential problem in the
-HDA driver for newer SoCs because apparently we don't re-initialize HDA
-controller properly after runtime PM resume.
+Which CPU is in that box?
 
-See hda_tegra_first_init() that is invoked only during driver probe, it
-configures FPCI_DBG_CFG_2 register on T194, which isn't done by
-hda_tegra_init(), and thus, this register may be  in reset state after
-resume from RPM suspend. It should be a bug in the HDA driver that needs
-to be fixed.
+> The kernel seems to believe that the time spent sleeping is exactly
+> the difference of two calls to read_persistent_clock64 with no option
+> to adjust for persistent clock drift.
 
-On older SoCs: HDA resides in the APB power domain which could be
-disabled only across system suspend/resume. HDA is only clock-gated
-during runtime PM suspend.
+The kernel does not believe. It relies on the accuracy of the CMOS clock
+which is usually pretty good.
 
-On newer SoCs: HDA power state could be lost after RPM suspend/resume,
-depending on the state of display. I'm wondering whether HDMI playback
-works after DPMS on T194+, I assume this case was never tested properly.
+> I would like to provide a way for user space to inform the kernel
+> that the persistent clock drifts so it can make a corresponding
+> adjustment when resuming from a long suspend period.
+>
+> In my use case it would be enough for me to set this parameter on
+> boot. In use cases with continuous network access, NTP daemons
+> could be enhanced to periodically update this parameter with the
+> daemon's best estimate of the persistent clock drift.
 
-It looks like it should be safe to reset HDA on runtime PM resume
-regardless of the chip->running, and thus, we could remove that check
-and reset HDA unconditionally. Will great if you could check/test and
-improve this in the driver.
+That needs some thought. The RTC people (cc'ed now) might have opionions
+on that.
 
-I'm also wondering whether snd_power_change_state() should be moved into
-RPM callbacks and whether this function does anything practically useful
-on Tegra at all.
+Thanks,
+
+        tglx

@@ -2,609 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 203424746ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6BF4746EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbhLNP4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S235158AbhLNP4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbhLNP4N (ORCPT
+        with ESMTP id S233361AbhLNP4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:56:13 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4B8C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:56:13 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id bn20so29003829ljb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:56:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=le21LsCaWIS9vOtL0SSTS+G7aPV1Knn2VDZmw5VgNKo=;
-        b=a47hadstVQRzYC8IK6SWe2hhStWhxo81yBIy+LW4Zl1YJ0LNIWBNPQJyEEEyzxQqu+
-         YmWCwj//Q5NtAdwfl8Ye8r18DfIABIt96Ma+1gJDPk/dbpejWdRIzkCpAaMdspVBLUbm
-         E2NDvSU2TPeAZTtDWTYlpEPZJJbFYvBRZxoPEzNVlUkAPHn7nLLsMrKe0c9l1J+Rvwlt
-         8VAqatYps7bHD0L+yNKD4ypNwe3ASFuvbw7PS2jF/aRwqMS+UTM74vANdWQdAepnlMlj
-         BHJccXv3Fg0Xp0shws1hIZGrj6hckeIEkAMwbrp2ki3JPR4zsc7F7S8NoA50jrwJgYuY
-         b/JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=le21LsCaWIS9vOtL0SSTS+G7aPV1Knn2VDZmw5VgNKo=;
-        b=GELzqJiEychuVTtWPlU7kjx/hOVf27bV1tsNHwYyOLGLyGf/llu43JB33N71Tth19g
-         tIVVFul8h9rrzsJXpLs5iSPnac7juUz1IoNpuljuK/INjKKNiFHvZL7FI5jKY8mTvnGD
-         VWkOPaoA+PPSCJxTf6d3pr9q4l1cYGd9an5XGaGZYndLxAnV040LQ+OfIesY2JcMpCNo
-         TtaKs4RKg0MCtFztF9/A53tpfNZTkgBTO8B3wFRQy/21AhNm6zqk9jO/wpA33P1XwQy9
-         APAMYUY1hBjkOcetjkpc8eaPE2CSCoDzwDHwfKaZsSceUFK+0mkI0Slm0tSAzpDnnKqa
-         RHnQ==
-X-Gm-Message-State: AOAM532IdOgtJaVVXTGLKkQB2TKSZ/0JELqS5UOrYVQoy043dMpQizeU
-        0X/vpS/OnIrvtAiJCmRCFKkIuVpJtJdnntvn0z2DE2kgI3OSp762jHI=
-X-Google-Smtp-Source: ABdhPJxlSEDcno7jGy/UF39fNmd/04S46bMRAbI/q67trVt9IDTZnRzLgoSKscxkJq6I0xssgfffyOGrVs45xDEM0+w=
-X-Received: by 2002:a2e:22c3:: with SMTP id i186mr5736387lji.417.1639497371219;
- Tue, 14 Dec 2021 07:56:11 -0800 (PST)
+        Tue, 14 Dec 2021 10:56:38 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA34C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:56:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=EGMW+jMaJWxqVYPoPoipt7V2zmjhBmVrUGJa9k6HAHU=; b=E9zYT8iMlGhC2RI2WMvOf5uV5B
+        DprpLVwzjl0CVGv28pSqLHdFcr8BgFHjEPJ+26EMq/fAXhUadZI0NcEBslpcA0PMcNjk48sR4Lf9n
+        x04qZcLHoR1MkyrI5yuKqqmjd/SKI5FK3Ceo3ef+FHjVD1xXRWKzLQRrI+yyZvl+hrJrNEc14vMXj
+        halCex387orY+verSGjm0lxLcik/26NnBe/mfC6VvMX3Dagpnnt0+NEyHhPs4VKYxMJwq2sEUEmAj
+        WZW2rCVhRk8keOxZ5MrbL+c8bIacguhztUHvuswSsu3knAHHwMsqQodDnaqo/rXRbUFivnMO64Pgn
+        LCqnfK1w==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxAAD-00DqlS-Ii; Tue, 14 Dec 2021 15:56:27 +0000
+Message-ID: <dda484cf-d974-dba3-db54-4df470a1ff2e@infradead.org>
+Date:   Tue, 14 Dec 2021 07:56:21 -0800
 MIME-Version: 1.0
-References: <20211207124002.59877-1-liuqi115@huawei.com> <20211213183851.GD12405@willie-the-truck>
- <20211214092657.5b9c26b4e3852602eced4fda@kernel.org>
-In-Reply-To: <20211214092657.5b9c26b4e3852602eced4fda@kernel.org>
-From:   Jianhua Liu <jianhua.ljh@gmail.com>
-Date:   Tue, 14 Dec 2021 23:55:58 +0800
-Message-ID: <CAAgTQPUKqFn9_ENKbfJkFjT3v9L2NiFAY2xvULEj_6wguqWYNg@mail.gmail.com>
-Subject: Re: [PATCH v5] arm64: kprobe: Enable OPTPROBE for arm64
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Qi Liu <liuqi115@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, song.bao.hua@hisilicon.com,
-        prime.zeng@hisilicon.com, robin.murphy@arm.com,
-        linuxarm@huawei.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2] smp: Fix the comments of smp_call_function_many()
+Content-Language: en-US
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Nadav Amit <namit@vmware.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20211214081100.126-1-thunder.leizhen@huawei.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20211214081100.126-1-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 8:27 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> On Mon, 13 Dec 2021 18:38:52 +0000
-> Will Deacon <will@kernel.org> wrote:
->
-> > Hi,
-> >
-> > [+Janet Liu]
-> >
-> > On Tue, Dec 07, 2021 at 08:40:02PM +0800, Qi Liu wrote:
-> > > This patch introduce optprobe for ARM64. In optprobe, probed
-> > > instruction is replaced by a branch instruction to trampoline.
-> > >
-> > > Performance of optprobe on Hip08 platform is test using kprobe
-> > > example module[1] to analyze the latency of a kernel function,
-> > > and here is the result:
-> > >
-> > > common kprobe:
-> > > [280709.846380] do_empty returned 0 and took 1530 ns to execute
-> > > [280709.852057] do_empty returned 0 and took 550 ns to execute
-> > > [280709.857631] do_empty returned 0 and took 440 ns to execute
-> > > [280709.863215] do_empty returned 0 and took 380 ns to execute
-> > > [280709.868787] do_empty returned 0 and took 360 ns to execute
-> > > [280709.874362] do_empty returned 0 and took 340 ns to execute
-> > > [280709.879936] do_empty returned 0 and took 320 ns to execute
-> > > [280709.885505] do_empty returned 0 and took 300 ns to execute
-> > > [280709.891075] do_empty returned 0 and took 280 ns to execute
-> > > [280709.896646] do_empty returned 0 and took 290 ns to execute
-> > >
-> > > optprobe:
-> > > [ 2965.964572] do_empty returned 0 and took 90 ns to execute
-> > > [ 2965.969952] do_empty returned 0 and took 80 ns to execute
-> > > [ 2965.975332] do_empty returned 0 and took 70 ns to execute
-> > > [ 2965.980714] do_empty returned 0 and took 60 ns to execute
-> > > [ 2965.986128] do_empty returned 0 and took 80 ns to execute
-> > > [ 2965.991507] do_empty returned 0 and took 70 ns to execute
-> > > [ 2965.996884] do_empty returned 0 and took 70 ns to execute
-> > > [ 2966.002262] do_empty returned 0 and took 80 ns to execute
-> > > [ 2966.007642] do_empty returned 0 and took 70 ns to execute
-> > > [ 2966.013020] do_empty returned 0 and took 70 ns to execute
-> > > [ 2966.018400] do_empty returned 0 and took 70 ns to execute
-> > >
-> > > As the result shows, optprobe can greatly reduce the latency. Big
-> > > latency of common kprobe will significantly impact the real result
-> > > while doing performance analysis or debugging performance issues
-> > > in lab, so optprobe is useful in this scenario.
-> > >
-> > > Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> > >
-> > > Note:
-> > > As branch instruction in Arm64 has a 128M range limitation, optprobe
-> > > could only used when offset between probe point and trampoline
-> > > is less than 128M, otherwise kernel will choose common kprobe
-> > > automaticly.
-> > >
-> > > Limitation caused by branch isn't unique to Arm64, but also to
-> > > x86/arm/powerpc.
-> > >
-> > > In fact, Module PLT has been tried to get rid of limiation, but
-> > > destination of PLT must be a fixed value, and we need to modify
-> > > the destination (as each optprobe has its own trampoline).
-> > >
-> > > As discussed with Masami[2], we can start with core-kernel point
-> > > (within 128M) as the first step, like other architectures.
-> > >
-> > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/kprobes/kretprobe_example.c
-> > > [2] https://lore.kernel.org/lkml/20211201105001.5164f98ba783e7207df1229c@kernel.org/
-> > > ---
-> > >  arch/arm64/Kconfig                            |   1 +
-> > >  arch/arm64/include/asm/kprobes.h              |  21 ++
-> > >  arch/arm64/kernel/probes/Makefile             |   2 +
-> > >  arch/arm64/kernel/probes/opt_arm64.c          | 199 ++++++++++++++++++
-> > >  .../arm64/kernel/probes/optprobe_trampoline.S |  97 +++++++++
-> > >  include/linux/kprobes.h                       |   2 +
-> > >  kernel/kprobes.c                              |  22 ++
-> > >  7 files changed, 344 insertions(+)
-> > >  create mode 100644 arch/arm64/kernel/probes/opt_arm64.c
-> > >  create mode 100644 arch/arm64/kernel/probes/optprobe_trampoline.S
-> >
-> > I've not looked at these changes in detail, but it looks like there is an
-> > independent patch from Janet Liu trying to do the same thing:
-> >
-> > https://lore.kernel.org/r/1635858706-27320-1-git-send-email-jianhua.ljh@gmail.com
-> >
->
-> Thanks for noticing. I missed it.
->
-> > The patch here from Qi Liu looks like it's a bit further along, but it
-> > would be good for Janet to at least test it out and confirm that it works
-> > for them.
->
-> Yeah, it's now v5.
-> But it seems Janet's one also has good points. I would like Janet's sharing
-> save_all_base_regs macro and the comment about the branch instruction.
->
-> >
-> > Cheers,
-> >
-> > Will
-> >
-> > [Kept diff inline for Janet]
->
-> Janet, please feel free to review and test it. It is important that you confirm
-> this can work with your envionment too.
-> I will review your KPROBE_ON_FTRACE patch.
->
-I have tested these patch on UNISOC s9863a platform before sending.
+Hi,
 
-The test case from:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/kprobes/
+On 12/14/21 00:10, Zhen Lei wrote:
+> As commit a32a4d8a815c ("smp: Run functions concurrently in
+> smp_call_function_many_cond()") itself says:
+>                   "Keep other smp_call_function_many() semantic as it is
+> today for backward compatibility: the called function is not executed in
+> this case locally."
+> 
+> It's clear that, the function header comments of smp_call_function_many()
+> does not need to be changed.
+> 
+> So move the comment about 'scf_flags' to smp_call_function_many_cond(),
+> and restore the original comments of smp_call_function_many().
+> 
+> Finally, the comments have been simplified slightly to avoid duplication.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  kernel/smp.c | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> v1 --> v2:
+> Delete some duplicate comments.
+> 
+> diff --git a/kernel/smp.c b/kernel/smp.c
+> index 01a7c1706a58b1d..9cbe2509d1010ea 100644
+> --- a/kernel/smp.c
+> +++ b/kernel/smp.c
+> @@ -853,14 +853,17 @@ int smp_call_function_any(const struct cpumask *mask,
+>  EXPORT_SYMBOL_GPL(smp_call_function_any);
+>  
+>  /*
+> - * Flags to be used as scf_flags argument of smp_call_function_many_cond().
+> - *
+>   * %SCF_WAIT:		Wait until function execution is completed
+>   * %SCF_RUN_LOCAL:	Run also locally if local cpu is set in cpumask
+>   */
+>  #define SCF_WAIT	(1U << 0)
+>  #define SCF_RUN_LOCAL	(1U << 1)
+>  
+> +/**
+> + * smp_call_function_many_cond(): Run a function on a set of CPUs.
+> + * @scf_flags: Bitmask that controls the operation. Such as SCF_WAIT,
+> + *             SCF_RUN_LOCAL.
+> + */
+>  static void smp_call_function_many_cond(const struct cpumask *mask,
+>  					smp_call_func_t func, void *info,
+>  					unsigned int scf_flags,
+> @@ -972,14 +975,12 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+>  }
+>  
+>  /**
+> - * smp_call_function_many(): Run a function on a set of CPUs.
+> + * smp_call_function_many(): Run a function on a set of other CPUs.
+>   * @mask: The set of cpus to run on (only runs on online subset).
+>   * @func: The function to run. This must be fast and non-blocking.
+>   * @info: An arbitrary pointer to pass to the function.
+> - * @wait: Bitmask that controls the operation. If %SCF_WAIT is set, wait
+> - *        (atomically) until function has completed on other CPUs. If
+> - *        %SCF_RUN_LOCAL is set, the function will also be run locally
+> - *        if the local CPU is set in the @cpumask.
+> + * @wait: If true, wait (atomically) until function has completed
+> + *        on other CPUs.
+>   *
+>   * If @wait is true, then returns once @func has returned.
+>   *
 
-And I do the following change for kprobe_example.c before testing:
-1. delete function handler_post,
-   kprobe_init does "kp.post_handler = handler_post; --->
-p.post_handler = NULL;"
-2. handler_pre calls dump_stack.
+After applying this patch, kernel-doc emits 4 warnings:
 
-Thanks for  the review.
+smp.c:871: warning: Function parameter or member 'mask' not described in 'smp_call_function_many_cond'
+smp.c:871: warning: Function parameter or member 'func' not described in 'smp_call_function_many_cond'
+smp.c:871: warning: Function parameter or member 'info' not described in 'smp_call_function_many_cond'
+smp.c:871: warning: Function parameter or member 'cond_func' not described in 'smp_call_function_many_cond'
 
-> Thank you,
->
-> >
-> > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > > index c4207cf9bb17..6b68ec498e67 100644
-> > > --- a/arch/arm64/Kconfig
-> > > +++ b/arch/arm64/Kconfig
-> > > @@ -200,6 +200,7 @@ config ARM64
-> > >     select HAVE_STACKPROTECTOR
-> > >     select HAVE_SYSCALL_TRACEPOINTS
-> > >     select HAVE_KPROBES
-> > > +   select HAVE_OPTPROBES
-> > >     select HAVE_KRETPROBES
-> > >     select HAVE_GENERIC_VDSO
-> > >     select IOMMU_DMA if IOMMU_SUPPORT
-> > > diff --git a/arch/arm64/include/asm/kprobes.h b/arch/arm64/include/asm/kprobes.h
-> > > index 05cd82eeca13..3838e4317877 100644
-> > > --- a/arch/arm64/include/asm/kprobes.h
-> > > +++ b/arch/arm64/include/asm/kprobes.h
-> > > @@ -39,6 +39,27 @@ void arch_remove_kprobe(struct kprobe *);
-> > >  int kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr);
-> > >  int kprobe_exceptions_notify(struct notifier_block *self,
-> > >                          unsigned long val, void *data);
-> > > +
-> > > +struct arch_optimized_insn {
-> > > +   kprobe_opcode_t orig_insn[1];
-> > > +   kprobe_opcode_t *trampoline;
-> > > +};
-> > > +
-> > > +#define MAX_OPTIMIZED_LENGTH       sizeof(kprobe_opcode_t)
-> > > +#define MAX_OPTINSN_SIZE                                                       \
-> > > +   ((unsigned long)optprobe_template_restore_end - (unsigned long)optprobe_template_entry)
-> > > +
-> > > +extern __visible kprobe_opcode_t optprobe_template_entry[];
-> > > +extern __visible kprobe_opcode_t optprobe_template_val[];
-> > > +extern __visible kprobe_opcode_t optprobe_template_common[];
-> > > +extern __visible kprobe_opcode_t optprobe_template_end[];
-> > > +extern __visible kprobe_opcode_t optprobe_template_restore_begin[];
-> > > +extern __visible kprobe_opcode_t optprobe_template_restore_orig_insn[];
-> > > +extern __visible kprobe_opcode_t optprobe_template_restore_end[];
-> > > +extern __visible kprobe_opcode_t optinsn_slot[];
-> > > +
-> > > +void optprobe_common(void);
-> > > +
-> > >  void __kretprobe_trampoline(void);
-> > >  void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
-> > >
-> > > diff --git a/arch/arm64/kernel/probes/Makefile b/arch/arm64/kernel/probes/Makefile
-> > > index 8e4be92e25b1..07105fd3261d 100644
-> > > --- a/arch/arm64/kernel/probes/Makefile
-> > > +++ b/arch/arm64/kernel/probes/Makefile
-> > > @@ -4,3 +4,5 @@ obj-$(CONFIG_KPROBES)               += kprobes.o decode-insn.o      \
-> > >                                simulate-insn.o
-> > >  obj-$(CONFIG_UPROBES)              += uprobes.o decode-insn.o      \
-> > >                                simulate-insn.o
-> > > +obj-$(CONFIG_OPTPROBES)            += opt_arm64.o                  \
-> > > +                              optprobe_trampoline.o
-> > > diff --git a/arch/arm64/kernel/probes/opt_arm64.c b/arch/arm64/kernel/probes/opt_arm64.c
-> > > new file mode 100644
-> > > index 000000000000..1bad5cddcdf2
-> > > --- /dev/null
-> > > +++ b/arch/arm64/kernel/probes/opt_arm64.c
-> > > @@ -0,0 +1,199 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Code for Kernel probes Jump optimization.
-> > > + *
-> > > + * Copyright (C) 2021 Hisilicon Limited
-> > > + */
-> > > +
-> > > +#include <linux/jump_label.h>
-> > > +#include <linux/kprobes.h>
-> > > +
-> > > +#include <asm/cacheflush.h>
-> > > +#include <asm/compiler.h>
-> > > +#include <asm/insn.h>
-> > > +#include <asm/kprobes.h>
-> > > +#include <asm/patching.h>
-> > > +
-> > > +#define OPTPROBE_BATCH_SIZE 64
-> > > +#define GET_LO_VAL(val)            FIELD_GET(GENMASK(31, 0), val)
-> > > +#define GET_HI_VAL(val)            FIELD_GET(GENMASK(63, 32), val)
-> > > +
-> > > +#define TMPL_VAL_IDX \
-> > > +   (optprobe_template_val - optprobe_template_entry)
-> > > +#define TMPL_CALL_COMMON \
-> > > +   (optprobe_template_common - optprobe_template_entry)
-> > > +#define TMPL_RESTORE_ORIGN_INSN \
-> > > +   (optprobe_template_restore_orig_insn - optprobe_template_entry)
-> > > +#define TMPL_RESTORE_END \
-> > > +   (optprobe_template_restore_end - optprobe_template_entry)
-> > > +#define TMPL_END_IDX \
-> > > +   (optprobe_template_end - optprobe_template_entry)
-> > > +
-> > > +static bool insn_page_in_use;
-> > > +
-> > > +void *alloc_optinsn_page(void)
-> > > +{
-> > > +   if (insn_page_in_use)
-> > > +           return NULL;
-> > > +   insn_page_in_use = true;
-> > > +   return &optinsn_slot;
-> > > +}
-> > > +
-> > > +void free_optinsn_page(void *page)
-> > > +{
-> > > +   insn_page_in_use = false;
-> > > +}
-> > > +
-> > > +int arch_check_optimized_kprobe(struct optimized_kprobe *op)
-> > > +{
-> > > +   return 0;
-> > > +}
-> > > +
-> > > +int arch_prepared_optinsn(struct arch_optimized_insn *optinsn)
-> > > +{
-> > > +   return optinsn->trampoline != NULL;
-> > > +}
-> > > +
-> > > +int arch_within_optimized_kprobe(struct optimized_kprobe *op, kprobe_opcode_t *addr)
-> > > +{
-> > > +   return op->kp.addr == addr;
-> > > +}
-> > > +
-> > > +static void optprobe_set_pc_value(struct optimized_kprobe *op, struct pt_regs *regs)
-> > > +{
-> > > +   regs->pc = (unsigned long)op->kp.addr;
-> > > +}
-> > > +
-> > > +static int optprobe_check_branch_limit(unsigned long pc, unsigned long addr)
-> > > +{
-> > > +   long offset;
-> > > +
-> > > +   if ((pc & 0x3) || (addr & 0x3))
-> > > +           return -ERANGE;
-> > > +
-> > > +   offset = (long)addr - (long)pc;
-> > > +   if (offset < -SZ_128M || offset >= SZ_128M)
-> > > +           return -ERANGE;
-> > > +
-> > > +   return 0;
-> > > +}
-> > > +
-> > > +int arch_prepare_optimized_kprobe(struct optimized_kprobe *op, struct kprobe *orig)
-> > > +{
-> > > +   kprobe_opcode_t *code, *buf;
-> > > +   u32 insn;
-> > > +   int ret = -ENOMEM;
-> > > +   int i;
-> > > +
-> > > +   buf = kcalloc(MAX_OPTINSN_SIZE, sizeof(kprobe_opcode_t), GFP_KERNEL);
-> > > +   if (!buf)
-> > > +           return ret;
-> > > +
-> > > +   code = get_optinsn_slot();
-> > > +   if (!code)
-> > > +           goto out;
-> > > +
-> > > +   if (optprobe_check_branch_limit((unsigned long)code, (unsigned long)orig->addr + 8)) {
-> > > +           ret = -ERANGE;
-> > > +           goto error;
-> > > +   }
-> > > +
-> > > +   op->set_pc = optprobe_set_pc_value;
-> > > +   memcpy(buf, optprobe_template_entry, MAX_OPTINSN_SIZE * sizeof(kprobe_opcode_t));
-> > > +
-> > > +   insn = aarch64_insn_gen_branch_imm((unsigned long)&code[TMPL_CALL_COMMON],
-> > > +                                      (unsigned long)&optprobe_common,
-> > > +                                      AARCH64_INSN_BRANCH_LINK);
-> > > +   buf[TMPL_CALL_COMMON] = insn;
-> > > +
-> > > +   insn = aarch64_insn_gen_branch_imm((unsigned long)&code[TMPL_RESTORE_END],
-> > > +                                      (unsigned long)op->kp.addr + 4,
-> > > +                                      AARCH64_INSN_BRANCH_NOLINK);
-> > > +   buf[TMPL_RESTORE_END] = insn;
-> > > +
-> > > +   buf[TMPL_VAL_IDX] = cpu_to_le32(GET_LO_VAL((unsigned long)op));
-> > > +   buf[TMPL_VAL_IDX + 1] = cpu_to_le32(GET_HI_VAL((unsigned long)op));
-> > > +   buf[TMPL_RESTORE_ORIGN_INSN] = orig->opcode;
-> > > +
-> > > +   /* Setup template */
-> > > +   for (i = 0; i < MAX_OPTINSN_SIZE; i++)
-> > > +           aarch64_insn_patch_text_nosync(code + i, buf[i]);
-> > > +
-> > > +   flush_icache_range((unsigned long)code, (unsigned long)(&code[TMPL_VAL_IDX]));
-> > > +   /* Set op->optinsn.trampoline means prepared. */
-> > > +   op->optinsn.trampoline = code;
-> > > +
-> > > +out:
-> > > +   kfree(buf);
-> > > +   return ret;
-> > > +
-> > > +error:
-> > > +   free_optinsn_slot(code, 0);
-> > > +   goto out;
-> > > +}
-> > > +
-> > > +void arch_optimize_kprobes(struct list_head *oplist)
-> > > +{
-> > > +   struct optimized_kprobe *op, *tmp;
-> > > +   kprobe_opcode_t insns[OPTPROBE_BATCH_SIZE];
-> > > +   void *addrs[OPTPROBE_BATCH_SIZE];
-> > > +   int i = 0;
-> > > +
-> > > +   list_for_each_entry_safe(op, tmp, oplist, list) {
-> > > +           WARN_ON(kprobe_disabled(&op->kp));
-> > > +
-> > > +           /*
-> > > +            * Backup instructions which will be replaced
-> > > +            * by jump address
-> > > +            */
-> > > +           memcpy(op->optinsn.orig_insn, op->kp.addr, AARCH64_INSN_SIZE);
-> > > +
-> > > +           addrs[i] = (void *)op->kp.addr;
-> > > +           insns[i] = aarch64_insn_gen_branch_imm((unsigned long)op->kp.addr,
-> > > +                                                  (unsigned long)op->optinsn.trampoline,
-> > > +                                                  AARCH64_INSN_BRANCH_NOLINK);
-> > > +
-> > > +           list_del_init(&op->list);
-> > > +           if (++i == OPTPROBE_BATCH_SIZE)
-> > > +                   break;
-> > > +   }
-> > > +
-> > > +   aarch64_insn_patch_text(addrs, insns, i);
-> > > +}
-> > > +
-> > > +void arch_unoptimize_kprobe(struct optimized_kprobe *op)
-> > > +{
-> > > +   arch_arm_kprobe(&op->kp);
-> > > +}
-> > > +
-> > > +/*
-> > > + * Recover original instructions and breakpoints from relative jumps.
-> > > + * Caller must call with locking kprobe_mutex.
-> > > + */
-> > > +void arch_unoptimize_kprobes(struct list_head *oplist,
-> > > +                       struct list_head *done_list)
-> > > +{
-> > > +   struct optimized_kprobe *op, *tmp;
-> > > +   kprobe_opcode_t insns[OPTPROBE_BATCH_SIZE];
-> > > +   void *addrs[OPTPROBE_BATCH_SIZE];
-> > > +   int i = 0;
-> > > +
-> > > +   list_for_each_entry_safe(op, tmp, oplist, list) {
-> > > +           addrs[i] = (void *)op->kp.addr;
-> > > +           insns[i] = BRK64_OPCODE_KPROBES;
-> > > +           list_move(&op->list, done_list);
-> > > +
-> > > +           if (++i == OPTPROBE_BATCH_SIZE)
-> > > +                   break;
-> > > +   }
-> > > +
-> > > +   aarch64_insn_patch_text(addrs, insns, i);
-> > > +}
-> > > +
-> > > +void arch_remove_optimized_kprobe(struct optimized_kprobe *op)
-> > > +{
-> > > +   if (op->optinsn.trampoline) {
-> > > +           free_optinsn_slot(op->optinsn.trampoline, 1);
-> > > +           op->optinsn.trampoline = NULL;
-> > > +   }
-> > > +}
-> > > diff --git a/arch/arm64/kernel/probes/optprobe_trampoline.S b/arch/arm64/kernel/probes/optprobe_trampoline.S
-> > > new file mode 100644
-> > > index 000000000000..1376daeae844
-> > > --- /dev/null
-> > > +++ b/arch/arm64/kernel/probes/optprobe_trampoline.S
-> > > @@ -0,0 +1,97 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +/*
-> > > + * trampoline entry and return code for optprobes.
-> > > + */
-> > > +
-> > > +#include <linux/linkage.h>
-> > > +#include <asm/asm-offsets.h>
-> > > +#include <asm/assembler.h>
-> > > +
-> > > +#define        OPT_SLOT_SIZE   65536
-> > > +
-> > > +   .global optinsn_slot
-> > > +optinsn_slot:
-> > > +   .space  OPT_SLOT_SIZE
-> > > +
-> > > +SYM_CODE_START(optprobe_common)
-> > > +   stp x2, x3, [sp, #S_X2]
-> > > +   stp x4, x5, [sp, #S_X4]
-> > > +   stp x6, x7, [sp, #S_X6]
-> > > +   stp x8, x9, [sp, #S_X8]
-> > > +   stp x10, x11, [sp, #S_X10]
-> > > +   stp x12, x13, [sp, #S_X12]
-> > > +   stp x14, x15, [sp, #S_X14]
-> > > +   stp x16, x17, [sp, #S_X16]
-> > > +   stp x18, x19, [sp, #S_X18]
-> > > +   stp x20, x21, [sp, #S_X20]
-> > > +   stp x22, x23, [sp, #S_X22]
-> > > +   stp x24, x25, [sp, #S_X24]
-> > > +   stp x26, x27, [sp, #S_X26]
-> > > +   stp x28, x29, [sp, #S_X28]
-> > > +   add x2, sp, #PT_REGS_SIZE
-> > > +   str x2, [sp, #S_SP]
-> > > +   /* Construct a useful saved PSTATE */
-> > > +   mrs x2, nzcv
-> > > +   mrs x3, daif
-> > > +   orr x2, x2, x3
-> > > +   mrs x3, CurrentEL
-> > > +   orr x2, x2, x3
-> > > +   mrs x3, SPSel
-> > > +   orr x2, x2, x3
-> > > +   stp xzr, x2, [sp, #S_PC]
-> > > +
-> > > +   /* set the pt_regs address to x1 */
-> > > +   mov     x1, sp
-> > > +   /* store lr of optprobe_common temporary */
-> > > +   sub sp, sp, #0x10
-> > > +   str lr, [sp, #0x8]
-> > > +
-> > > +   bl optprobe_optimized_callback
-> > > +
-> > > +   ldr lr, [sp, #0x8]
-> > > +   add sp, sp, #0x10
-> > > +   ldr x0, [sp, #S_PSTATE]
-> > > +   and x0, x0, #(PSR_N_BIT | PSR_Z_BIT | PSR_C_BIT | PSR_V_BIT)
-> > > +   msr nzcv, x0
-> > > +   ldp x0, x1, [sp, #S_X0]
-> > > +   ldp x2, x3, [sp, #S_X2]
-> > > +   ldp x4, x5, [sp, #S_X4]
-> > > +   ldp x6, x7, [sp, #S_X6]
-> > > +   ldp x8, x9, [sp, #S_X8]
-> > > +   ldp x10, x11, [sp, #S_X10]
-> > > +   ldp x12, x13, [sp, #S_X12]
-> > > +   ldp x14, x15, [sp, #S_X14]
-> > > +   ldp x16, x17, [sp, #S_X16]
-> > > +   ldp x18, x19, [sp, #S_X18]
-> > > +   ldp x20, x21, [sp, #S_X20]
-> > > +   ldp x22, x23, [sp, #S_X22]
-> > > +   ldp x24, x25, [sp, #S_X24]
-> > > +   ldp x26, x27, [sp, #S_X26]
-> > > +   ldp x28, x29, [sp, #S_X28]
-> > > +   ret
-> > > +SYM_CODE_END(optprobe_common)
-> > > +
-> > > +   .global optprobe_template_entry
-> > > +optprobe_template_entry:
-> > > +   sub sp, sp, #PT_REGS_SIZE
-> > > +   str lr, [sp, #S_LR]
-> > > +   stp x0, x1, [sp, #S_X0]
-> > > +   /* Get parameters to optimized_callback() */
-> > > +   ldr x0, 1f
-> > > +   .global optprobe_template_common
-> > > +optprobe_template_common:
-> > > +   nop
-> > > +   ldr lr, [sp, #S_LR]
-> > > +       add sp, sp, #PT_REGS_SIZE
-> > > +   .global optprobe_template_restore_orig_insn
-> > > +optprobe_template_restore_orig_insn:
-> > > +   nop
-> > > +   .global optprobe_template_restore_end
-> > > +optprobe_template_restore_end:
-> > > +   nop
-> > > +   .global optprobe_template_val
-> > > +optprobe_template_val:
-> > > +   1:      .long 0
-> > > +           .long 0
-> > > +   .global optprobe_template_end
-> > > +optprobe_template_end:
-> > > diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-> > > index 8c8f7a4d93af..7be680155df7 100644
-> > > --- a/include/linux/kprobes.h
-> > > +++ b/include/linux/kprobes.h
-> > > @@ -329,6 +329,7 @@ struct optimized_kprobe {
-> > >     struct kprobe kp;
-> > >     struct list_head list;  /* list for optimizing queue */
-> > >     struct arch_optimized_insn optinsn;
-> > > +   void (*set_pc)(struct optimized_kprobe *op, struct pt_regs *regs);
-> > >  };
-> > >
-> > >  /* Architecture dependent functions for direct jump optimization */
-> > > @@ -345,6 +346,7 @@ extern int arch_within_optimized_kprobe(struct optimized_kprobe *op,
-> > >                                     kprobe_opcode_t *addr);
-> > >
-> > >  extern void opt_pre_handler(struct kprobe *p, struct pt_regs *regs);
-> > > +extern void optprobe_optimized_callback(struct optimized_kprobe *op, struct pt_regs *regs);
-> > >
-> > >  DEFINE_INSN_CACHE_OPS(optinsn);
-> > >
-> > > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> > > index 21eccc961bba..d799e562a39a 100644
-> > > --- a/kernel/kprobes.c
-> > > +++ b/kernel/kprobes.c
-> > > @@ -430,6 +430,28 @@ void opt_pre_handler(struct kprobe *p, struct pt_regs *regs)
-> > >  }
-> > >  NOKPROBE_SYMBOL(opt_pre_handler);
-> > >
-> > > +void optprobe_optimized_callback(struct optimized_kprobe *op, struct pt_regs *regs)
-> > > +{
-> > > +   if (kprobe_disabled(&op->kp))
-> > > +           return;
-> > > +
-> > > +   preempt_disable();
-> > > +
-> > > +   if (kprobe_running()) {
-> > > +           kprobes_inc_nmissed_count(&op->kp);
-> > > +   } else {
-> > > +           op->set_pc(op, regs);
-> > > +           __this_cpu_write(current_kprobe, &op->kp);
-> > > +           get_kprobe_ctlblk()->kprobe_status = KPROBE_HIT_ACTIVE;
-> > > +           opt_pre_handler(&op->kp, regs);
-> > > +           __this_cpu_write(current_kprobe, NULL);
-> > > +   }
-> > > +
-> > > +   preempt_enable();
-> > > +}
-> > > +NOKPROBE_SYMBOL(optprobe_optimized_callback)
-> > > +
-> > > +
-> > >  /* Free optimized instructions and optimized_kprobe */
-> > >  static void free_aggr_kprobe(struct kprobe *p)
-> > >  {
-> > > --
-> > > 2.33.0
-> > >
->
->
-> --
-> Masami Hiramatsu <mhiramat@kernel.org>
+
+thanks.
+-- 
+~Randy

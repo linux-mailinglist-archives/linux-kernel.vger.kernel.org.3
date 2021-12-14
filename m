@@ -2,95 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C43AD4740A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0C94740AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbhLNKmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbhLNKmn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:42:43 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202A8C061574;
-        Tue, 14 Dec 2021 02:42:43 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id y12so60613190eda.12;
-        Tue, 14 Dec 2021 02:42:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AnfBROC71xRf+JvBM4jfcuJFiL3b8QlnTmkgDRdr5IA=;
-        b=oHC2JWM+GnuKKgM9IHIbbA8nGqLlQfUeFNSnnz+NwJmoxzeve3hIfePaRWkX8kSx8A
-         QgeQYApgNVZ6/tDtgb5wu7hZtTrFgdjc998HwktLHWlP7QGyzjROzpbi3StDHonDA6rQ
-         obkNQmTZG49ZwVvH8GQ9xAbhSJVysYLzAYDiq46MzIhyWGR67b9iyYqm6on6L+/UUdxQ
-         9eD8zdO8+AjH71U16yU7yz3tNQyNx7ni4WkhNHMZEHRJoSU1lz8zz10jW1tI/MXSXgd1
-         PnhUWXP9r6DiwBY+dyuZtD3b9CnUt2dzWzdKDzxoQshJxQRBeO2AsbpeCVhnQ1bkqFnZ
-         nfjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AnfBROC71xRf+JvBM4jfcuJFiL3b8QlnTmkgDRdr5IA=;
-        b=N3/fVdwfaHDX0nsLRqmu0j7ycYoN0MGPS4av5KiBNJb0mQf8SzIHS7fJdm3+K2jZhP
-         GlcZ/g/yXHGB3r1eArD1FsOrJU6FmQNmojxB5LZx09R8WZJ346sLxLWyhypocrbxMKYi
-         mKDkZqYIwO0MvhO7BvF7uwO7nPPTL4fVBFGdxPHorgqOPQmq5avIaE0PY8O5vHw7BBDh
-         9GRWP9op4tAZYd2rq7r53Endb/2lr+F4zsrDHiE9LV1K4z3AKOrDXE6DM6F602cRNDP5
-         ZWnV6uV80SmrTHLrR27O/DzH35iAO0ppUxEGwue5SebAGs7aJZtLME6i7o2iHuMuoiqp
-         /vlg==
-X-Gm-Message-State: AOAM532O9DDVjf9VABjwduUnpnHA3+sDU/TpEi4wIQ71LjpirsupnD4F
-        sPMJDhJk0IFAHyMPXJYqV0s=
-X-Google-Smtp-Source: ABdhPJxY+9n50EcsMrfPvrSu/WaOkXN78XkxDfv3w4XGxe8oQcVeWWb9zI/KGiEasCtHrX6sMswf7Q==
-X-Received: by 2002:a05:6402:5cb:: with SMTP id n11mr6741676edx.279.1639478560429;
-        Tue, 14 Dec 2021 02:42:40 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id u16sm7522373edr.43.2021.12.14.02.42.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 02:42:39 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <09e06d62-33f5-b41f-e913-a8c5e43ba881@redhat.com>
-Date:   Tue, 14 Dec 2021 11:42:36 +0100
+        id S233175AbhLNKp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:45:26 -0500
+Received: from mout.gmx.net ([212.227.15.15]:49489 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231415AbhLNKpZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:45:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639478711;
+        bh=drSjkyonQU7oy65m/aGuRAsYLy8dbe9fDUf7Dm9VbPI=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=IOMQaJSkEM4yO9yw4VLb5ZYDNq1/zGhdjacLXoUiZqwsxLXJ7hN/Oc7F+02t01ifH
+         DBwDq0wOAsS7KIj7AdCj/CLe9yaN1HjhxjDu6Ww2jtNKj/FcVMkzGenMdcdRTnaS7r
+         u513aAbZxklx8RsgYNt6DBWvvGwDxFuQKgx5Opps=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.139.19]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSKuA-1n3ad43xRA-00ScCO; Tue, 14
+ Dec 2021 11:45:11 +0100
+Message-ID: <0314b689-4445-def8-5f17-0c73f7567cf1@gmx.de>
+Date:   Tue, 14 Dec 2021 11:45:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [patch 0/6] x86/fpu: Preparatory changes for guest AMX support
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] parisc: decompressor: do not copy source files while
+ building
 Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Jing Liu <jing2.liu@linux.intel.com>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, Sean Christoperson <seanjc@google.com>,
-        Jin Nakajima <jun.nakajima@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>
-References: <20211214022825.563892248@linutronix.de>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211214022825.563892248@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-parisc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <20211213030915.1170219-1-masahiroy@kernel.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20211213030915.1170219-1-masahiroy@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:BC5ZmpRDbkwN6GVfkT0uC9g9xvx8/sQ0zFN2GqfOeAfnr67kV2X
+ ECzUDVu2koPvoQj46NxkqNeOV8D6A+OxKqLEuRyiQPqeGNQ3Hfc7nGQoHmGBbNCyR5vUkuW
+ mY9zTnIp5kVSReT9e3wP7NlyINhWmKv16qlupSknkbHJ1IZB7k2Q+yseMLZg4n33NpBQ8Y6
+ Uc7nqRKtgh/rQs8rs1abg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SuxwQnTSisE=:j76seZhXHwZ8ZjspwI4c8d
+ o8h7URu0xn9yQRXQnIfmb4n0/+Dj8ojiXy0PH8/Z0EUWJ1JBVov11RaQx2SEf9pQerlesrpZk
+ p5M5C29VACWZAm93Ivb0ix6jXhc86Wdeh8TjhyJJYjS/FBE1iUxVzjvALAWj07FwhLFINY2TI
+ u8t3DPmG4/9rQo3Nex4bCVbmnoKX5ANBkYoPkYzbKPzoHG0yXi03vf3E3YQTG/E7xO3X6O3fN
+ mVqvt7iGpAPog09i4m0U2QRPr43aJU9cOENtQu6ZGLRDUMo860Vh6Q/HSh+kVQ+q3ShRL0gbM
+ X1ts0OKPQZxbAU8Bs/0n/ZoS2dAq9HpAyghNmLFj6o10D7TYBE3E17ifhKkJrzRisD3VvTwoT
+ Y+e+0h5jDIX4hpDDFHy/q+cPXdOMiIzXFA8KD7aB9PKpJ0/gEhruPxKWgg+gZXXmskDpxkgrG
+ n6ZR+22EFbRZWaGIYoRUVbmtUOnJ9ka3nI8ZDC5VkfmaExQFjng1uhNAycrImjL+X1mdwdev7
+ p/0sswuL177MGNRVAeB9P0HITqKh3/w3pB3gJaXOvYc+w44YsPJj3aooqW/A1dX0I1ZNCGILw
+ kTwab4noqS01wOkMnvu7ynp3wKYGF/+wR9RJqpcpuKJqG0y+0YLFSjjVr/9xCoMF8uCmr0OFG
+ eHsKHJ+Jy7emRzpolE0uDc43aK4YzJWAWcm45aWUVonAT1az5czhtGXro3g1wD9jsgrWCbEh/
+ qZp170Dxc3jQdh0p5ZcXueRB5VBFZbyDokSTD9wSkLmYWvCCHM4YN+GtRCSV7vXMAa6H78Yf+
+ RZgV/lwhmCkeJLsTDqDJXOzIl9ZU7uz5yAbZgDTIhCraAwhUj7ZeoTVZwPxqW76nEQ8BtXamb
+ VQN2a1NN2PKLQSPGOjm+DXb85b2XZgpKGqEShcQrH0JCpSpIOgCeiibYr+vGjac5r/+6AKiVq
+ MNuSwIY+qYCXru0kb9Ou1x9hUDPFayg66iF+aZxdltQudV/M9ZZrxwV1QjgzpsguBS2Xdlzro
+ E2VllLY+xPTVX8M51igsPbm64mT1Z9FBIt+LHNmtQGw+IP3UTTYhTsJXb3Urb9qlkvStElUmu
+ UtUF0ICuE6Z5HU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/21 03:50, Thomas Gleixner wrote:
-> The only remaining issue is the KVM XSTATE save/restore size checking which
-> probably requires some FPU core assistance. But that requires some more
-> thoughts vs. the IOCTL interface extension and once that is settled it
-> needs to be solved in one go. But that's an orthogonal issue to the above.
+On 12/13/21 04:09, Masahiro Yamada wrote:
+> As commit 7ae4a78daacf ("ARM: 8969/1: decompressor: simplify libfdt
+> builds") stated, copying source files during the build time may not
+> end up with as clean code as expected.
+>
+> Do similar for parisc to clean up the Makefile.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-That's not a big deal because KVM uses the uncompacted format.  So 
-KVM_CHECK_EXTENSION and KVM_GET_XSAVE can just use CPUID to retrieve the 
-size and uncompacted offset of the largest bit that is set in 
-kvm_supported_xcr0, while KVM_SET_XSAVE can do the same with the largest 
-bit that is set in the xstate_bv.
+Acked-by: Helge Deller <deller@gmx.de>
 
-Paolo
+Thanks!
+Helge
 
-
-
-> The series is also available from git:
-> 
->     git://git.kernel.org/pub/scm/linux/kernel/git/people/tglx/devel.git x86/fpu-kvm
+> ---
+>
+>  arch/parisc/boot/compressed/.gitignore | 2 --
+>  arch/parisc/boot/compressed/Makefile   | 8 --------
+>  arch/parisc/boot/compressed/firmware.c | 2 ++
+>  arch/parisc/boot/compressed/real2.S    | 2 ++
+>  scripts/remove-stale-files             | 5 +++++
+>  5 files changed, 9 insertions(+), 10 deletions(-)
+>  create mode 100644 arch/parisc/boot/compressed/firmware.c
+>  create mode 100644 arch/parisc/boot/compressed/real2.S
+>
+> diff --git a/arch/parisc/boot/compressed/.gitignore b/arch/parisc/boot/c=
+ompressed/.gitignore
+> index b9853a356ab2..a5839aa16706 100644
+> --- a/arch/parisc/boot/compressed/.gitignore
+> +++ b/arch/parisc/boot/compressed/.gitignore
+> @@ -1,6 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> -firmware.c
+> -real2.S
+>  sizes.h
+>  vmlinux
+>  vmlinux.lds
+> diff --git a/arch/parisc/boot/compressed/Makefile b/arch/parisc/boot/com=
+pressed/Makefile
+> index bf4f2891d0b7..116bd5c1873c 100644
+> --- a/arch/parisc/boot/compressed/Makefile
+> +++ b/arch/parisc/boot/compressed/Makefile
+> @@ -13,7 +13,6 @@ OBJECTS :=3D head.o real2.o firmware.o misc.o piggy.o
+>  targets :=3D vmlinux.lds vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin=
+.bz2
+>  targets +=3D vmlinux.bin.xz vmlinux.bin.lzma vmlinux.bin.lzo vmlinux.bi=
+n.lz4
+>  targets +=3D $(OBJECTS) sizes.h
+> -targets +=3D real2.S firmware.c
+>
+>  KBUILD_CFLAGS :=3D -D__KERNEL__ -O2 -DBOOTLOADER
+>  KBUILD_CFLAGS +=3D -DDISABLE_BRANCH_PROFILING
+> @@ -42,14 +41,7 @@ $(obj)/head.o: $(obj)/sizes.h
+>  CFLAGS_misc.o +=3D -I$(objtree)/$(obj)
+>  $(obj)/misc.o: $(obj)/sizes.h
+>
+> -$(obj)/firmware.o: $(obj)/firmware.c
+> -$(obj)/firmware.c: $(srctree)/arch/$(SRCARCH)/kernel/firmware.c
+> -	$(call cmd,shipped)
+> -
+>  AFLAGS_real2.o +=3D -DBOOTLOADER
+> -$(obj)/real2.o: $(obj)/real2.S
+> -$(obj)/real2.S: $(srctree)/arch/$(SRCARCH)/kernel/real2.S
+> -	$(call cmd,shipped)
+>
+>  CPPFLAGS_vmlinux.lds +=3D -I$(objtree)/$(obj) -DBOOTLOADER
+>  $(obj)/vmlinux.lds: $(obj)/sizes.h
+> diff --git a/arch/parisc/boot/compressed/firmware.c b/arch/parisc/boot/c=
+ompressed/firmware.c
+> new file mode 100644
+> index 000000000000..16a07137fe92
+> --- /dev/null
+> +++ b/arch/parisc/boot/compressed/firmware.c
+> @@ -0,0 +1,2 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include "../../kernel/firmware.c"
+> diff --git a/arch/parisc/boot/compressed/real2.S b/arch/parisc/boot/comp=
+ressed/real2.S
+> new file mode 100644
+> index 000000000000..cdc6a4da3240
+> --- /dev/null
+> +++ b/arch/parisc/boot/compressed/real2.S
+> @@ -0,0 +1,2 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#include "../../kernel/real2.S"
+> diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
+> index f0d53227fe7b..80430b8fb617 100755
+> --- a/scripts/remove-stale-files
+> +++ b/scripts/remove-stale-files
+> @@ -33,4 +33,9 @@ if [ -n "${building_out_of_srctree}" ]; then
+>  	do
+>  		rm -f arch/mips/boot/compressed/${f}
+>  	done
+> +
+> +	for f in firmware.c real2.S
+> +	do
+> +		rm -f arch/parisc/boot/compressed/${f}
+> +	done
+>  fi
+>
 

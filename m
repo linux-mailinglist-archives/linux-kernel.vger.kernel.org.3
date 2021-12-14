@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 068C7474964
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E69474971
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236366AbhLNR2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:28:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39692 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233789AbhLNR2H (ORCPT
+        id S236301AbhLNR3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:29:53 -0500
+Received: from out02.mta.xmission.com ([166.70.13.232]:56336 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233666AbhLNR3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:28:07 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82E63B81BB9;
-        Tue, 14 Dec 2021 17:28:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5553BC34604;
-        Tue, 14 Dec 2021 17:28:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639502885;
-        bh=iWhZUpZug7nx6pfIKr0DItc2+D2cy9/JIdFzbQtsEhI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rYv9JVZ9YX6Z0mBpVDMKm5mu/TzapluDlyLScme2UrTuIXRhZgJB+QO6JHt2eHkyY
-         3+Jqu7AOYi1QgWWEksD+65gGuD0VjAq1acIcvtuXXbqs+tH8BEhJowarrvQvSWSPCS
-         8kJvbqQpEEGu3nXWKmkGoYBqfMPTzpI/yorx8TTNlK8WkzYco3Cu1XxPzAxUGbcxsY
-         iO+svhxl9Uio5GhrkOjfUMJ1zxy9eQVcWcj0E5w9TM/2/0tMICRAFO/Yhd+T1cWrb7
-         gJ3bLGn7U40/JibUXtbMYNVionNiTEfCchB2L6TzUJibY8OBopc2EEs98X8fh7TMjS
-         l3SaS41aVL9JQ==
-Received: by mail-yb1-f180.google.com with SMTP id d10so48128844ybe.3;
-        Tue, 14 Dec 2021 09:28:05 -0800 (PST)
-X-Gm-Message-State: AOAM530j4MZ4wwlvdqpMAD0OIlKF4S3mrXfdpeDpk1u9t+t3reWEPLgJ
-        05JFBUiN2cHil5aUB3xrTVjkaylQzmD5FUbWWUY=
-X-Google-Smtp-Source: ABdhPJzaIWhZ2KXfV3WBSipGqRCpcplKqZGV0U2L1BO8aObP0RNronSXvgKpJlPOO1T9RuBg8PP4FeHUtdss6/yaXVI=
-X-Received: by 2002:a25:8284:: with SMTP id r4mr383980ybk.47.1639502884465;
- Tue, 14 Dec 2021 09:28:04 -0800 (PST)
+        Tue, 14 Dec 2021 12:29:53 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:58034)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mxBcd-008v9o-8i; Tue, 14 Dec 2021 10:29:51 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:57450 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mxBcc-00FFmx-8Q; Tue, 14 Dec 2021 10:29:50 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+In-Reply-To: <202112140949.Uq5sFKR1-lkp@intel.com> (kernel test robot's
+        message of "Tue, 14 Dec 2021 10:03:44 +0800")
+References: <202112140949.Uq5sFKR1-lkp@intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Tue, 14 Dec 2021 11:29:05 -0600
+Message-ID: <87k0g7t7ry.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-References: <20211214031553.16435-1-yajun.deng@linux.dev>
-In-Reply-To: <20211214031553.16435-1-yajun.deng@linux.dev>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 14 Dec 2021 09:27:53 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5X+zewpKoJLjMMGOUeSiJ1EYqD+0i1bA8y7SFtJLkMeg@mail.gmail.com>
-Message-ID: <CAPhsuW5X+zewpKoJLjMMGOUeSiJ1EYqD+0i1bA8y7SFtJLkMeg@mail.gmail.com>
-Subject: Re: [PATCH] lib/raid6: fix abnormally high latency
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     stockhausen@collogia.de, open list <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org,
-        linux-raid <linux-raid@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-XM-SPF: eid=1mxBcc-00FFmx-8Q;;;mid=<87k0g7t7ry.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19h0VNo5s8nXykDpXipJKp9T2J51HuZjQY=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.5 required=8.0 tests=ALL_TRUSTED,BAYES_00,
+        DCC_CHECK_NEGATIVE,LotsOfNums_01,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
+        T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,T_TooManySym_04,
+        T_TooManySym_05,XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -3.0 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0004]
+        *  1.5 TR_Symld_Words too many words that have symbols inside
+        *  0.7 XMSubLong Long Subject
+        *  1.2 LotsOfNums_01 BODY: Lots of long strings of numbers
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_04 7+ unique symbols in subject
+        *  0.0 T_TooManySym_02 5+ unique symbols in subject
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+        *  0.0 T_TooManySym_03 6+ unique symbols in subject
+        *  0.0 T_TooManySym_05 8+ unique symbols in subject
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;kernel test robot <lkp@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 419 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 11 (2.7%), b_tie_ro: 10 (2.4%), parse: 0.96
+        (0.2%), extract_message_metadata: 17 (4.2%), get_uri_detail_list: 2.1
+        (0.5%), tests_pri_-1000: 17 (4.1%), tests_pri_-950: 1.45 (0.3%),
+        tests_pri_-900: 1.43 (0.3%), tests_pri_-90: 84 (20.0%), check_bayes:
+        81 (19.4%), b_tokenize: 8 (1.8%), b_tok_get_all: 6 (1.4%),
+        b_comp_prob: 2.5 (0.6%), b_tok_touch_all: 61 (14.5%), b_finish: 1.13
+        (0.3%), tests_pri_0: 265 (63.2%), check_dkim_signature: 0.47 (0.1%),
+        check_dkim_adsp: 4.8 (1.1%), poll_dns_idle: 0.47 (0.1%), tests_pri_10:
+        2.2 (0.5%), tests_pri_500: 14 (3.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [ebiederm-user-namespace:signal-for-v5.17 4/12] arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to next function show_opcodes()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 7:17 PM Yajun Deng <yajun.deng@linux.dev> wrote:
->
-> We found an abnormally high latency when executing modprobe raid6_pq, the
-> latency is greater than 1.2s when CONFIG_PREEMPT_VOLUNTARY=y, greater than
-> 67ms when CONFIG_PREEMPT=y, and greater than 16ms when CONFIG_PREEMPT_RT=y.
-> This is caused by disable the preemption, this time is too long and
-> unreasonable. We just need to disable migration. so used migrate_disable()/
-> migrate_enable() instead of preempt_disable()/preempt_enable(). This is
-> beneficial for CONFIG_PREEMPT=y or CONFIG_PREEMPT_RT=y, but no effect for
-> CONFIG_PREEMPT_VOLUNTARY=y.
->
-> Fixes: fe5cbc6e06c7 ("md/raid6 algorithms: delta syndrome functions")
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+kernel test robot <lkp@intel.com> writes:
 
-We measure the speed of different RAID algorithms.If we don't disable
-preempt, the result may be inaccurate, right? IIUC, we only disable preempt
-for 16 jiffies. Why do we see 1.2 second delay?
-
-Thanks,
-Song
-
-> ---
->  lib/raid6/algos.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git signal-for-v5.17
+> head:   6b1248798eb6f6d5285db214299996ecc5dc1e6b
+> commit: 0e25498f8cd43c1b5aa327f373dd094e9a006da7 [4/12] exit: Add and use make_task_dead.
+> config: x86_64-randconfig-a011-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140949.Uq5sFKR1-lkp@intel.com/config)
+> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+> reproduce (this is a W=1 build):
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=0e25498f8cd43c1b5aa327f373dd094e9a006da7
+>         git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
+>         git fetch --no-tags ebiederm-user-namespace signal-for-v5.17
+>         git checkout 0e25498f8cd43c1b5aa327f373dd094e9a006da7
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ kernel/ lib/kunit/
 >
-> diff --git a/lib/raid6/algos.c b/lib/raid6/algos.c
-> index 6d5e5000fdd7..21611d05c34c 100644
-> --- a/lib/raid6/algos.c
-> +++ b/lib/raid6/algos.c
-> @@ -162,7 +162,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 >
->                         perf = 0;
+> All warnings (new ones prefixed by >>):
 >
-> -                       preempt_disable();
-> +                       migrate_disable();
->                         j0 = jiffies;
->                         while ((j1 = jiffies) == j0)
->                                 cpu_relax();
-> @@ -171,7 +171,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
->                                 (*algo)->gen_syndrome(disks, PAGE_SIZE, *dptrs);
->                                 perf++;
->                         }
-> -                       preempt_enable();
-> +                       migrate_enable();
->
->                         if (perf > bestgenperf) {
->                                 bestgenperf = perf;
-> @@ -186,7 +186,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
->
->                         perf = 0;
->
-> -                       preempt_disable();
-> +                       migrate_disable();
->                         j0 = jiffies;
->                         while ((j1 = jiffies) == j0)
->                                 cpu_relax();
-> @@ -196,7 +196,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
->                                                       PAGE_SIZE, *dptrs);
->                                 perf++;
->                         }
-> -                       preempt_enable();
-> +                       migrate_enable();
->
->                         if (best == *algo)
->                                 bestxorperf = perf;
+>>> lib/kunit/kunit-example-test.o: warning: objtool: .text.unlikely: unexpected end of section
 > --
-> 2.32.0
->
+>>> arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to next function show_opcodes()
+
+I am confused.  This change patches objtool to rename
+rewind_stack_and_do_exit to rewind_stack_and_make_dead in the list
+global_noreturns in tools/objtool/check.c
+
+There is no other change to oops_end other than that renaming.
+
+Did the robot somehow mange to run an old version of objtool while
+building and this get this error?
+
+I tried and I am not currently able to reproduce this error.  Do you
+have any additional pointers on how I might reproduce this?
+
+Eric

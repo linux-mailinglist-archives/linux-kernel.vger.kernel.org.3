@@ -2,86 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A339E4749EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 110614749E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbhLNRpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:45:19 -0500
-Received: from mga04.intel.com ([192.55.52.120]:39347 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229593AbhLNRpR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:45:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639503917; x=1671039917;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F8wZFJ9eIhe2A/T3CaWak765dnWzf/E7CLYtFT1BJy0=;
-  b=hojZf01jyzRlStJf6g68ZSScBK7eAXkQDPaVrqR3rJEh7klyXLuch3sR
-   Y66nL/AvWI85I4iNrf+qULMV3oeAaJZVnjL0JjG/P3DXJDF/+tn1k8m/z
-   cjJSEk7NJ4XweiAXytnmmbkIdZJwF+nX5ESKFPI5dPlG/jfAvrLZDe32g
-   NXUMOGJ2ueHm3moX37iZbTBSk3Wr9JPigAUzqvCcdJfIySeLryLFiPru+
-   jbFoxuusRXwohEcTGiRcDw2tAJA91qdOgmCl4G9//IGba8mZjFed7ctV1
-   7VKWQ55MKMY0Q/+f/H1Ti6vORx5aDDCGTUihKYZr7ab4CfAal9mKNMpkk
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="237772361"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="237772361"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:45:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="682147017"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 14 Dec 2021 09:45:15 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxBrW-0000Zy-JO; Tue, 14 Dec 2021 17:45:14 +0000
-Date:   Wed, 15 Dec 2021 01:44:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
-        seanjc@google.com
-Cc:     kbuild-all@lists.01.org, dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH] KVM: Move VM's worker kthreads back to the original
- cgroups before exiting.
-Message-ID: <202112150131.MaZ9xOJx-lkp@intel.com>
-References: <20211214050708.4040200-1-vipinsh@google.com>
+        id S236691AbhLNRoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233430AbhLNRoQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 12:44:16 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285B4C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:44:16 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id j2so48063964ybg.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:44:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=PfoYgcipC9Y7C9digySG/2PxRiKalskspP/H05K47dw=;
+        b=V0WbstQ1d9LB2zEDON2R+nzQUVOJ2RHl95id8pu1UpgVrl+LBAUKeuK9CrIjAlSjf7
+         8TP/kNuBK8yRYMb1+qhJ9VielUmN0TGizcDV8yVQqwB9HxCSGVfX3/q9iS78Gj8PqNAk
+         PWLG75k1yz78bEuyt5Do6sYvw/DnJYYPKw10ugDICpgA3PpnIZdXkQflqq9YdQUI1TPf
+         pfgWhuqaduRiEhoF4AbUah9otYFVx9banigu4xKpG80untJzMa8r33p+qGuMcOj/9eIb
+         0MADQIfqcvK3LLm9Yskj3Bgc4bNSYXHnY9aBJYlphpTzDUDvHst4E93Gyu0PVMe40Wns
+         kkyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=PfoYgcipC9Y7C9digySG/2PxRiKalskspP/H05K47dw=;
+        b=Z0wvr8y/cNS1On61XZzTKLz/cIBeMYm7pbOjxiL0Jo8VgxDaPCo4sXGZwo2bcQGPQY
+         y6j0T6VRvsDXxt9akJZfYejpT6SQ9T6ebegyn9bIt8sK/Fkqeo/Uqw8esTzHTdiAnyfc
+         JIw0eQmDu1sUSbLV0f07cre3FyXQW8P8zvtqrlcZ5FMvUwGtnuHRD8mBDHX25ulA+Sq/
+         4AFzZDIRjV0VaMpXfmmb5J+kN38HD6e5+tj5aZhcXyuxSge5i92ZiBSwM34MNkCDcl8T
+         F2YW19vdxHXZ4ppf7YztZU18OOqGMlaIbyCWUAYz3GMO2/bM8nunue+4II37IAJ1Hiy2
+         PIbQ==
+X-Gm-Message-State: AOAM530B1YgeFZ7bMvn+3wMw5aMRxKNuicnwAxxPFTcmaaJke1uy3n9W
+        D/bQlBdMWpxzSj6aIv00AJdazyazXBPRlzmvSPo=
+X-Google-Smtp-Source: ABdhPJyYFnVfQdSo7cKo4C9ZYduStvOH8YhhwM3w8aSnmd31zN6E8qauVYy0+QxQapi0Cd1cI3SyInyY1IR7kWKKs3w=
+X-Received: by 2002:a25:cc91:: with SMTP id l139mr427645ybf.325.1639503855469;
+ Tue, 14 Dec 2021 09:44:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214050708.4040200-1-vipinsh@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Reply-To: garnerjulianne64@gmail.com
+Sender: merrynancy31@gmail.com
+Received: by 2002:a05:7010:5f2a:b0:1df:905f:9253 with HTTP; Tue, 14 Dec 2021
+ 09:44:15 -0800 (PST)
+From:   Garner Julianne <brownmonica152@gmail.com>
+Date:   Tue, 14 Dec 2021 17:44:15 +0000
+X-Google-Sender-Auth: 3f2wDb3ZPFZ1I9Rz-FVnmg3OPxo
+Message-ID: <CAKqzNawFGcjyLiqDgaiCuNWWQjGbDE_y7pP66tRU+mGQY+BGqg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vipin,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on d8f6ef45a623d650f9b97e11553adb4978f6aa70]
-
-url:    https://github.com/0day-ci/linux/commits/Vipin-Sharma/KVM-Move-VM-s-worker-kthreads-back-to-the-original-cgroups-before-exiting/20211214-130827
-base:   d8f6ef45a623d650f9b97e11553adb4978f6aa70
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20211215/202112150131.MaZ9xOJx-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/fd29d23507ef3f06b61d9de1b7ecd1a0d70136f3
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Vipin-Sharma/KVM-Move-VM-s-worker-kthreads-back-to-the-original-cgroups-before-exiting/20211214-130827
-        git checkout fd29d23507ef3f06b61d9de1b7ecd1a0d70136f3
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "kthreadd_task" [arch/x86/kvm/kvm.ko] undefined!
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Hello, did you receive my previous emails?

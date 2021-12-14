@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D437747480D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DFB474811
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235894AbhLNQ3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:29:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
+        id S236005AbhLNQ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235774AbhLNQ33 (ORCPT
+        with ESMTP id S235906AbhLNQ3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:29:29 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CBBC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:29:29 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 133so17721730pgc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:29:29 -0800 (PST)
+        Tue, 14 Dec 2021 11:29:31 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3D6C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:29:31 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id b13so13934277plg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:29:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
         h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
          :content-transfer-encoding;
-        bh=V+ydo3gew2SKxvpZ3hxRhW+QZ1Gz2SK9X1d8Iz9cNxo=;
-        b=R00rhPSQX8t8g4zJf1i1Il6quwQB+ml3G14WFmUpwHwFfoyrSR9upCnwgrVingJr+R
-         hEPSQv2Q8W9CMjQ/NglGNJIF8IO6zsakR2AB4z5QeEvDD8p8YroTGrFI0gfG7nGVWN77
-         biP52ICj9SCqUOTn7WxsL7tEuTzHU/lBb6rwuQgCLeeW8lyy8VhKVEuL4j0vwDPpVZLi
-         yKeD1nG3olaKzCBtwZvBoV1hsMy2AUCzEW6eN8LU/HFtcvFK9xAeND6NqLEehcom3jHL
-         37bKgpw0sHtsI1ZrjrW0+S9M+45CRsQAEHPCeazKdnoigJscg6pGD/Cdh+fmJqWyGLGg
-         D0tA==
+        bh=UtzwvPGJGsxSlX5yHONhsOG3Z07A2+rV1SqqO3BO/EM=;
+        b=NQSXVVpuoBWD7LQqRbZceG6VsWT9sGdtZlkIK0WEDUWkm79louNmrWzV1akuEiO9C6
+         DYmhBGdiTdKCEMizjZ4l02g6uJJ6J7N+pCUb86uV039Trb6DxUEjtXgZQ/GaXYoILF/H
+         WyuFcp2Pj1yecgyjU/ZdHEzsFKNB2rvJYLeD4JL2/E/u2oftX3xhqp75L2M48qe43Rvw
+         PLY8ZuKFiISF8J1Z29ThfWkgHc56zgQnO16XgRd3FsQIyzK3dRDNbCtkFwfNUf5J4c+a
+         IAW3735BLWBnqwmCcwS0TBXv665M2Bk/XMl7wGsoWMWhU1k17wWIog3EL+ezo7irH9an
+         kEJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
          :mime-version:content-transfer-encoding;
-        bh=V+ydo3gew2SKxvpZ3hxRhW+QZ1Gz2SK9X1d8Iz9cNxo=;
-        b=Vg5KfMTFvunXqn/WBTPzXCVYbtSlP7nR7cZvmcAjTQ/IRmp+0z7OkT1SjgFql/sNkK
-         v6vFs3Bj8NQt9OULjfvU1l/WBFxZB/z4p3gKHSl8aio//p1oUj09z1A+/h7TL1RexoFs
-         PM+hFGaiMe4FaHLEgicbCKugAI9OxNWN4BsrNHU6JMmqW3K9+xSQ7TXM5B7RnF5j7ACp
-         0+wccYcY0ipZ6Oc+4eot0sad3TjBfAdpgStKR+CgzC3bUHWq5rU8qY9HHwReDAqMPBaW
-         L6Z8l7byIaPwqN3W39KY7codMqDJcU4UTpWDF06t6pq70WuJ/NBAqRyFSqIxd/9Txwd+
-         OQTg==
-X-Gm-Message-State: AOAM5305j5q8F1pSaDS+AhMTcFxUszLaA2tbkTN+8vYNihA3m4zMbBgr
-        yLZXybUe1WoFTEYKxc7ZsJT5xQ==
-X-Google-Smtp-Source: ABdhPJyYKf1iQgpEISETh/1o3WuN6++61aQmoVgMfqwklhdicGoc4eqPhD8/epozrfONZ7jod4JW+w==
-X-Received: by 2002:a65:4941:: with SMTP id q1mr4513985pgs.123.1639499368927;
-        Tue, 14 Dec 2021 08:29:28 -0800 (PST)
+        bh=UtzwvPGJGsxSlX5yHONhsOG3Z07A2+rV1SqqO3BO/EM=;
+        b=VxFqRYyzXmgkBozWdlbvPcVCrgtlEwN6CXqj1iTLLEobd1ztMPyznJE2Es1C8AJeIt
+         MkiKpx5/Yh+7fsiKFunwvlSPZIGQOSimXnAW21jMx+6m7Qz7ZPqP1p1HomdHjIO0p/uE
+         yGy7t+sU0QtlggZgoeVwB8HZvAym8AanJZyfIy7ZSAtcJXIIE+nwwh+nACn2V7k4ZpvK
+         vkLEWNXCC4e4SL5KIKfwdZJg08aVPoDUp4dPCW9rcavaTNadeLliCTsuD3qaY6PIuh3l
+         T09Uu6gR6hV4sQGKhcek0K/+5+XzfPxU+FNweVKL9Dg3SWdc6xm8156fyZmtMAW4joV9
+         gUiw==
+X-Gm-Message-State: AOAM533FxSahw/pm0ByMAUFwpau07SUjLarptiiMoH8QkP9ieBqOPgbk
+        zukbwddSd2EuDkQlvatBeo9EhA==
+X-Google-Smtp-Source: ABdhPJzZfZK8Q8jExHWiMImmlWW+dHRzTFrYTgGnuAbNJwuBTr9CHS5VVcJ0wUjgObTaDPXiKaCBhg==
+X-Received: by 2002:a17:90a:5d98:: with SMTP id t24mr1068496pji.109.1639499370924;
+        Tue, 14 Dec 2021 08:29:30 -0800 (PST)
 Received: from localhost ([12.163.77.120])
-        by smtp.gmail.com with ESMTPSA id v13sm368582pfu.38.2021.12.14.08.29.28
+        by smtp.gmail.com with ESMTPSA id lb4sm3200381pjb.18.2021.12.14.08.29.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 08:29:28 -0800 (PST)
-Date:   Tue, 14 Dec 2021 08:29:28 -0800 (PST)
-X-Google-Original-Date: Mon, 13 Dec 2021 19:34:29 PST (-0800)
-Subject:     Re: [PATCH v9 07/17] riscv: Reset vector register
-In-Reply-To: <8612e69a10235e67fac8a55864e77a4ab8f771ac.1636362169.git.greentime.hu@sifive.com>
+        Tue, 14 Dec 2021 08:29:30 -0800 (PST)
+Date:   Tue, 14 Dec 2021 08:29:30 -0800 (PST)
+X-Google-Original-Date: Mon, 13 Dec 2021 19:41:25 PST (-0800)
+Subject:     Re: [PATCH v9 08/17] riscv: Add vector struct and assembler definitions
+In-Reply-To: <15d09938180ee45bc5481c4a2d41ad656ca23c82.1636362169.git.greentime.hu@sifive.com>
 CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         aou@eecs.berkeley.edu
 From:   Palmer Dabbelt <palmer@dabbelt.com>
 To:     greentime.hu@sifive.com
-Message-ID: <mhng-591e217f-9290-464e-ab17-91fd84bed22b@palmer-ri-x1c9>
+Message-ID: <mhng-a7a94a37-5791-4c76-8f2d-072130d71819@palmer-ri-x1c9>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -65,102 +65,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 Nov 2021 01:48:19 PST (-0800), greentime.hu@sifive.com wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On Tue, 09 Nov 2021 01:48:20 PST (-0800), greentime.hu@sifive.com wrote:
+> Add vector state context struct in struct thread and asm-offsets.c
+> definitions.
 >
-> Reset vector registers at boot-time and disable vector instructions
-> execution for kernel mode.
+> The vector registers will be saved in datap pointer of __riscv_v_state. It
+> will be dynamically allocated in kernel space. It will be put right after
+> the __riscv_v_state data structure in user space.
 >
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 > Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
 > Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
-> Co-developed-by: Han-Kuan Chen <hankuan.chen@sifive.com>
-> Signed-off-by: Han-Kuan Chen <hankuan.chen@sifive.com>
-> Co-developed-by: Greentime Hu <greentime.hu@sifive.com>
 > Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
 > ---
->  arch/riscv/kernel/entry.S |  6 +++---
->  arch/riscv/kernel/head.S  | 22 ++++++++++++++++++++--
->  2 files changed, 23 insertions(+), 5 deletions(-)
+>  arch/riscv/include/asm/processor.h   |  1 +
+>  arch/riscv/include/uapi/asm/ptrace.h | 11 +++++++++++
+>  arch/riscv/kernel/asm-offsets.c      |  6 ++++++
+>  3 files changed, 18 insertions(+)
 >
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index 98f502654edd..ad0fa80ada81 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -77,10 +77,10 @@ _save_context:
->  	 * Disable user-mode memory access as it should only be set in the
->  	 * actual user copy routines.
->  	 *
-> -	 * Disable the FPU to detect illegal usage of floating point in kernel
-> -	 * space.
-> +	 * Disable the FPU/Vector to detect illegal usage of floating point
-> +	 * or vector in kernel space.
->  	 */
-> -	li t0, SR_SUM | SR_FS
-> +	li t0, SR_SUM | SR_FS | SR_VS
+> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+> index 46b492c78cbb..a268f1382e52 100644
+> --- a/arch/riscv/include/asm/processor.h
+> +++ b/arch/riscv/include/asm/processor.h
+> @@ -35,6 +35,7 @@ struct thread_struct {
+>  	unsigned long s[12];	/* s[0]: frame pointer */
+>  	struct __riscv_d_ext_state fstate;
+>  	unsigned long bad_cause;
+> +	struct __riscv_v_state vstate;
+>  };
 >
->  	REG_L s0, TASK_TI_USER_SP(tp)
->  	csrrc s1, CSR_STATUS, t0
-> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> index 52c5ff9804c5..551afe1de85e 100644
-> --- a/arch/riscv/kernel/head.S
-> +++ b/arch/riscv/kernel/head.S
-> @@ -242,10 +242,10 @@ pmp_done:
->  .option pop
+>  /* Whitelist the fstate from the task_struct for hardened usercopy */
+> diff --git a/arch/riscv/include/uapi/asm/ptrace.h b/arch/riscv/include/uapi/asm/ptrace.h
+> index 882547f6bd5c..bd3b8a710246 100644
+> --- a/arch/riscv/include/uapi/asm/ptrace.h
+> +++ b/arch/riscv/include/uapi/asm/ptrace.h
+> @@ -77,6 +77,17 @@ union __riscv_fp_state {
+>  	struct __riscv_q_ext_state q;
+>  };
 >
->  	/*
-> -	 * Disable FPU to detect illegal usage of
-> +	 * Disable FPU & VECTOR to detect illegal usage of
->  	 * floating point in kernel space
+> +struct __riscv_v_state {
+> +	unsigned long vstart;
+> +	unsigned long vl;
+> +	unsigned long vtype;
+> +	unsigned long vcsr;
 
-Presumably that should be "floating point or vector", like the other 
-one?
+Don't we also need vlen to adequately determine the vector state?  
+Otherwise we're going to end up dropping some state when vl isn't vlmax, 
+which IIUC isn't legal.
 
->  	 */
-> -	li t0, SR_FS
-> +	li t0, SR_FS | SR_VS
->  	csrc CSR_STATUS, t0
->
->  #ifdef CONFIG_SMP
-> @@ -433,6 +433,24 @@ ENTRY(reset_regs)
->  	csrw	fcsr, 0
->  	/* note that the caller must clear SR_FS */
->  #endif /* CONFIG_FPU */
+> +	void *datap;
+> +#if __riscv_xlen == 32
+> +	__u32 __padding;
+> +#endif
+
+Why is there padding?
+
+> +};
 > +
-> +#ifdef CONFIG_VECTOR
-> +	csrr	t0, CSR_MISA
-> +	li	t1, (COMPAT_HWCAP_ISA_V >> 16)
-> +	slli	t1, t1, 16
-
-Why?  Shouldn't the "li" pseudo handle generating that constant fine?  
-It generates the expected lui for me.
-
-> +	and	t0, t0, t1
-> +	beqz	t0, .Lreset_regs_done
+>  #endif /* __ASSEMBLY__ */
+>
+>  #endif /* _UAPI_ASM_RISCV_PTRACE_H */
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> index 90f8ce64fa6f..34f43c84723a 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -72,6 +72,12 @@ void asm_offsets(void)
+>  	OFFSET(TSK_STACK_CANARY, task_struct, stack_canary);
+>  #endif
+>
+> +	OFFSET(RISCV_V_STATE_VSTART, __riscv_v_state, vstart);
+> +	OFFSET(RISCV_V_STATE_VL, __riscv_v_state, vl);
+> +	OFFSET(RISCV_V_STATE_VTYPE, __riscv_v_state, vtype);
+> +	OFFSET(RISCV_V_STATE_VCSR, __riscv_v_state, vcsr);
+> +	OFFSET(RISCV_V_STATE_DATAP, __riscv_v_state, datap);
 > +
-> +	li	t1, SR_VS
-> +	csrs	CSR_STATUS, t1
-> +	vsetvli t1, x0, e8, m8
-> +	vmv.v.i v0, 0
-> +	vmv.v.i v8, 0
-> +	vmv.v.i v16, 0
-> +	vmv.v.i v24, 0
-
-I don't see anything resetting vcsr here, which is explicitly required 
-by ISA manual.
-
-Otherwise this looks OK to me: I wasn't actually sure this was guaranteed 
-to hit every bit in the vector register file, but IIUC it does -- VLMAX 
-has a defined value, VLEN is a constant, and this form of vsetvli is 
-defined to set vl to VLMAX.  Probably worth a comment, though.
-
-> +	/* note that the caller must clear SR_VS */
-> +#endif /* CONFIG_VECTOR */
-> +
->  .Lreset_regs_done:
->  	ret
->  END(reset_regs)
-
-With those minor bits fixed,
-
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+>  	DEFINE(PT_SIZE, sizeof(struct pt_regs));
+>  	OFFSET(PT_EPC, pt_regs, epc);
+>  	OFFSET(PT_RA, pt_regs, ra);

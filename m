@@ -2,119 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54392474E89
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B8B474E8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238212AbhLNX0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 18:26:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32749 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231684AbhLNX0q (ORCPT
+        id S238222AbhLNX2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 18:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231684AbhLNX2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 18:26:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639524405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LDA9jVOy/ZRGCA3pqs+Olfx4vK3cOd0BCYRpSVgNd3U=;
-        b=gUujYyJvPIi5+p4RcZkgRxrDhGXzW/l73WEIFA/dtQ77ZqENG5WOPbV9H8F5uC5vcnJx91
-        GrRY4M+BMQl9yfQLbiml0YFqtiGR1RPhB/ANkWplI3f+dZjPHGIklKIBFQ7ikVqSNwctm1
-        f+BEPOI7rRZa73lEIfXKKnErbWXYO7c=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-142-tV2okwQRN2yDqWW9BwWa_A-1; Tue, 14 Dec 2021 18:26:44 -0500
-X-MC-Unique: tV2okwQRN2yDqWW9BwWa_A-1
-Received: by mail-ed1-f69.google.com with SMTP id l11-20020a056402254b00b003f6a9bd7e81so4232775edb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:26:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LDA9jVOy/ZRGCA3pqs+Olfx4vK3cOd0BCYRpSVgNd3U=;
-        b=4628SYFD9vapeu0Pa7AuPyVSiuJkjHAQ9WsyS0ZT6BWXKdZFXo2MdR6fqRe0a4nlyd
-         vir9AAAdAlGDS+IAMYc7/21qgg/vzDoks+NSMyW2Ece8pGo1lanWxcg/VrTZHW4avpKv
-         L1pAbOp9Ya0DmecNBVD0QE6esBnAn3/xTGvfXaDnl/BsL3SlecUsDS+1kYcz0rcQbE5/
-         pXqEHRVv/LARALVHhIRSLrU7EXOMGbxryGVybKI4yuQzC6nNto9Csw2t+FUJzpupzdGI
-         V6MAshoe779DWBbOywQMAqjDsS3nnQs8w1ps4jQUtqrPI813AMxE6LnmQ8D4wi65tzw5
-         JDSQ==
-X-Gm-Message-State: AOAM5337vsf0GHWwIsOo8JjrCbnd5wuEZ3ASIEcXzp4L4dqPbYfjn8Ll
-        rPT0UhB2ZxMvkbrvDf6UWQhEtGzILY1nL06AG/waJWQKmwSEYx8BuH/WNxurNY9iU8ZNTnVY2HZ
-        35WJRl9vZw0OgOIALI33+kuUR
-X-Received: by 2002:a17:907:8a13:: with SMTP id sc19mr8319056ejc.130.1639524403063;
-        Tue, 14 Dec 2021 15:26:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxY9VeEUwbwOQjfz6ubzWVYWdjmxkerIQ6XgtO+Jvoh1RAxswqJWM3ChpSChcFlpxDXjdGQtw==
-X-Received: by 2002:a17:907:8a13:: with SMTP id sc19mr8319045ejc.130.1639524402869;
-        Tue, 14 Dec 2021 15:26:42 -0800 (PST)
-Received: from redhat.com ([2.55.154.189])
-        by smtp.gmail.com with ESMTPSA id d18sm90019edj.23.2021.12.14.15.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 15:26:42 -0800 (PST)
-Date:   Tue, 14 Dec 2021 18:26:39 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Mikhail Golubev <Mikhail.Golubev@opensynergy.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Anton Yakovlev <Anton.Yakovlev@opensynergy.com>
-Subject: Re: [RFC PATCH] virtio: do not reset stateful devices on resume
-Message-ID: <20211214182611-mutt-send-email-mst@kernel.org>
-References: <20211214163249.GA253555@opensynergy.com>
+        Tue, 14 Dec 2021 18:28:17 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FC2C061574;
+        Tue, 14 Dec 2021 15:28:16 -0800 (PST)
+Date:   Wed, 15 Dec 2021 00:28:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1639524493;
+        bh=px2nFIrkc6EXmcu4jcTAUXb6pMFO2r05xDq53egOoME=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EAU4pwjLaQmMoR5/v19+wcHmzW5KAqg+VzG1JV6RhGhb/EdwkqG9RxJ9cYhnakaPU
+         D2r0VayD3Vbkmif7SYS2UZOXOQ3DgGQyVn6dJj++QnGo1QnLnOyJWP644ug67CPu1s
+         Kxsq8wQ9+CtibJ6iwR3FUNh29X0l54fpD/rY4uYY=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Hemant Kumar <hemantk@codeaurora.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        linux-kernel@vger.kernel.org, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org,
+        Mario Limonciello <Mario.Limonciello@amd.com>,
+        Richard Hughes <hughsient@gmail.com>,
+        Ivan Mikhanchuk <ivan.mikhanchuk@quectel.com>,
+        Aleksander Morgado <aleksander@aleksander.es>
+Subject: Re: [RFC] bus: mhi: core: Load firmware asynchronous
+Message-ID: <ee87c8a5-e95b-4a32-ac9d-c68b64348f6e@t-8ch.de>
+References: <20211210161645.10925-1-linux@weissschuh.net>
+ <403e93df-5b3c-acb3-2b65-df9a7834a9c5@codeaurora.org>
+ <02e32c9d-79d2-4237-bb6b-8bd27029e7a9@t-8ch.de>
+ <6c805ecd-4542-5533-7852-ecd9cea27955@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211214163249.GA253555@opensynergy.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6c805ecd-4542-5533-7852-ecd9cea27955@codeaurora.org>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:33:05PM +0100, Mikhail Golubev wrote:
-> From: Anton Yakovlev <Anton.Yakovlev@opensynergy.com>
+On 2021-12-14 14:55-0800, Hemant Kumar wrote:
+> On 12/13/2021 10:32 PM, Thomas Weißschuh wrote:
+> > On 2021-12-13 16:07-0800, Hemant Kumar wrote:
+> > > On 12/10/2021 8:16 AM, Thomas Weißschuh wrote:
+> > > > This gives userspace the possibility to provide the firehose bootloader
+> > > > via the sysfs-firmware-API instead of having to modify the global
+> > > > firmware loadpath.
+> > > > 
+> > > > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > > > 
+> > > > ---
+> > > > 
+> > > > Please note that this is not tested yet, as I don't have access to a matching
+> > > > firmware file.
+> > > > This submission is to gather general feedback from the maintainers and then
+> > > > Richard will do the actual testing, while I'll do the development.
+> > > > 
+> > > > This patch is should not have any impact beyond moving from request_firmware()
+> > > > to request_firmware_nowait() and the involved code reshuffle.
+> > > what are we achieving by moving to async ver of the firmware load ? MHI boot
+> > > flow can not do anything until BHI load is over. Is the intention eventually
+> > > to enable firmware fallback mechanism  and manually load the firmware ?
+> > 
+> > The goal is to provide the firehose bootloader (qcom/prog_firehose_sdx24.mbn)
+> > via the firmware fallback mechanism when upgrading the firmware on the device
+> > via the firehose protocol.
+> > 
+> > This bootloader firmware is not part of linux-firmware but provided as part of
+> > each firmware update package, so it is not installed statically on the system.
+> > 
+> > I will extend the commit message with this information.
 > 
-> We assume that stateful devices can maintain their state while
-> suspended. And for this reason they don't have a freeze callback. If
-> such a device is reset during resume, the device state/context will be
-> lost on the device side. And the virtual device will stop working.
-> 
-> Signed-off-by: Anton Yakovlev <Anton.Yakovlev@opensynergy.com>
-> Signed-off-by: Mikhail Golubev <mikhail.golubev@opensynergy.com>
+> For my understanding i have follow up question. As per the kernel doc
+> https://www.kernel.org/doc/html/latest/driver-api/firmware/fallback-mechanisms.html
 
-A bit more specific? Which configs does this patch fix?
+I'll try to answer, but please be aware that I have no previous experience with
+the firmware fallback mechanism and can not test this patch.
 
-> ---
->  drivers/virtio/virtio.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> index 236081afe9a2..defa15b56eb8 100644
-> --- a/drivers/virtio/virtio.c
-> +++ b/drivers/virtio/virtio.c
-> @@ -472,6 +472,13 @@ int virtio_device_restore(struct virtio_device *dev)
->  	struct virtio_driver *drv = drv_to_virtio(dev->dev.driver);
->  	int ret;
->  
-> +	/* Short path for stateful devices. Here we assume that if the device
-> +	 * does not have a freeze callback, its state was not changed when
-> +	 * suspended.
-> +	 */
-> +	if (drv && !drv->freeze)
-> +		goto on_config_enable;
-> +
->  	/* We always start by resetting the device, in case a previous
->  	 * driver messed it up. */
->  	dev->config->reset(dev);
-> @@ -503,6 +510,7 @@ int virtio_device_restore(struct virtio_device *dev)
->  	/* Finally, tell the device we're all set */
->  	virtio_add_status(dev, VIRTIO_CONFIG_S_DRIVER_OK);
->  
-> +on_config_enable:
->  	virtio_config_enable(dev);
->  
->  	return 0;
-> -- 
-> 2.34.1
-> 
-> 
-> -- 
+At this point in time I'm also hoping more for a general confirmation about
+using *some* fallback mechanism for MHI, so Richard and Ivan can test the patch
+(before it is committed) and then we can figure out exactly which of the
+fallback mechanisms fits best with feedback from them.
 
+> If CONFIG_FW_LOADER_USER_HELPER enabled but
+> CONFIG_FW_LOADER_USER_HELPER_FALLBACK is disabled, only the custom fallback
+> mechanism is available and for the request_firmware_nowait() call.
+> 
+> Custom fall back mechanism says
+> Users of the request_firmware_nowait() call have yet another option
+> available at their disposal: rely on the sysfs fallback mechanism but
+> request that no kobject uevents be issued to userspace. Original logic
+> behind this was that utilities other than udev might be required to lookup
+> firmware in non-traditional paths
+> 
+> Your patch is passing uevent flag as true which means you are relying on
+> uevent to be issued to userspace. How do you plan to update the firmware
+> path ? Alternatively firmware class provides a module param to specify the
+> firmware path /sys/module/firmware_class/parameters/path.
+
+Emitting the uevent would allow the firmware update tool
+(fwupd, https://github.com/fwupd/fwupd) to monitor uevents and recognize when
+the device is ready to receive the firmware and then trigger the upload.
+If I see it correctly uevent=0 and uevent=1 do the same things except uevent=1
+also publishes the uevent.
+
+Modifying /sys/module/firmware_class/parameters/path is what currently is being
+done.
+But modifying the global firmware load path has the potential for the following
+issues:
+
+* While the global firmware load path is modified to a custom location any
+  load_firmware() call from other devices will fail because the new path does
+  not have the normal linux-firmware.
+* If the tool modifying crashes while before restoring the original load path
+  all further load_firmware()-calls will also fail.
+
+> > 
+> > PS: The current patch is missing 'return' after calls to
+> > 'mhi_fw_load_finish()', this will be corrected in v2.
+
+Another point:
+
+For sdx55 and sdx65 there is not only an edl firmware specified but also a
+firmware for normal operation.
+This firmware is not part of linux-firmware.
+Currently the firmware load would fail and put the modem into an error
+condition (I think?).
+With this patch there would be a timeout before that error state is reached.
+
+I know that some people have the SDX55 running with Linux but I'm now wondering
+where they are getting the firmware "qcom/sdx55m/sbl1.mbn" from.
+
+Thomas

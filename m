@@ -2,141 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE3F474B6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C33474B05
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237286AbhLNTB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:01:59 -0500
-Received: from mga01.intel.com ([192.55.52.88]:51005 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234390AbhLNTB6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:01:58 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263200679"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="263200679"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 10:32:22 -0800
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="661540417"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 10:32:18 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id C7C0B20462;
-        Tue, 14 Dec 2021 20:32:16 +0200 (EET)
-Date:   Tue, 14 Dec 2021 20:32:16 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Jammy Huang <jammy_huang@aspeedtech.com>, hverkuil-cisco@xs4all.nl,
-        gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
-        eajames@linux.ibm.com, joel@jms.id.au, andrew@aj.id.au,
-        linux-media@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] media: aspeed: move err-handling together to the
- bottom
-Message-ID: <YbjjMDQ+V6ilbQvj@paasikivi.fi.intel.com>
-References: <20211206004811.1118-1-jammy_huang@aspeedtech.com>
- <20211214155300.0132946e@coco.lan>
+        id S237106AbhLNSfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237043AbhLNSfn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 13:35:43 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B92C061574;
+        Tue, 14 Dec 2021 10:35:42 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z7so5095809edc.11;
+        Tue, 14 Dec 2021 10:35:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2VijXhAq7PPoIytUtJiQziDQ+1sJ+YxGcblV5fEQi9Y=;
+        b=kMyj5kZcDc7vJ0G0r+olqpiyY+QcqHR82Kjmsy2TqzRUSyDQAFMeYsu0mozg71xDUp
+         Svz12WMWd9pJGQ8APIcDkva/fS10xPUOUpE7YNVoVQpTMIlBDlhwF7RgPPP9IlI6Rb7S
+         DwbdL3oeDqHbh6eHct5T5UEk0F+eHvhM/ckwPlp2YHso1C54xD+kEPFyPMTmRlwfsCia
+         DLu79no4dm6dAAs0l+tSK4xoNUSuAeiom17BfHzjCMkYfE3J9ZIxqvSbV0ceiWrWO9bs
+         5HWtaWf0iedK+rhSpTdUdOLSuzjAmlhkBXQG6dZSkjzDNl/FALqd+Pe0dU9GGKu/wfnk
+         DLmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2VijXhAq7PPoIytUtJiQziDQ+1sJ+YxGcblV5fEQi9Y=;
+        b=AtOkUBMz/q0b6NQfxD3wECwmYPSs2uxyezKLn48sRP0VZLbDrHb3QupdgPHKbd8KtO
+         VWbP/KBZ/Kq7GM3rw/dOZh805WP1QarHMXth/3daSDEUWoSkeVCmTcA59GZGdmoM5vYy
+         DfVw3Wx0DBXeIUEc22LwmLlX0eMnLNn+HRPepMPrBD1MDGmQPncpM8qprUq5lnMYCG6b
+         0u9aPj1ceI0CHxvLvaewuRlYup32VAEeh7BzJXqnWmZ/qXWOEfweoVFSWAR/81DfWXKQ
+         8tnKyOoTK3PnLryZiZcz3EQWQGNEl8hU9aHAE6iCo6qysiVsjAqCo/3gyMf8TfQhjLX6
+         XRMQ==
+X-Gm-Message-State: AOAM533wu8iprzhozhONOJvhLDuCoiCaUHCTvWRxpZjJCJ5K3wUH3CZm
+        y5PeH/jFK+Vfmd21jQ8XyXSR3Zj1Re8EoE3dm/5SOcvMa4U=
+X-Google-Smtp-Source: ABdhPJwN6qcuf6GilYEfxAcZRtvCiadUaXxDhk3n5lxZR+XInneXofDN2QeZQvdrNkCKp/577fNwvOUg1LNfeU1DZPw=
+X-Received: by 2002:aa7:c5c4:: with SMTP id h4mr10095409eds.386.1639506941061;
+ Tue, 14 Dec 2021 10:35:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214155300.0132946e@coco.lan>
+References: <20211212145956.1423755-1-martin.blumenstingl@googlemail.com>
+ <20211212145956.1423755-2-martin.blumenstingl@googlemail.com> <CAPDyKFq4Q2M=MimXAERtBy+UY79NwLQs8afGWvvXatOrP_LB7w@mail.gmail.com>
+In-Reply-To: <CAPDyKFq4Q2M=MimXAERtBy+UY79NwLQs8afGWvvXatOrP_LB7w@mail.gmail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 14 Dec 2021 19:35:30 +0100
+Message-ID: <CAFBinCAD1guDgrFW5Y3H7YBMKFFiDK92AzyoxnDoAPRsPV8xwQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] mmc: meson-mx-sdhc: Set MANUAL_STOP for
+ multi-block SDIO commands
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+Hi Ulf,
 
-On Tue, Dec 14, 2021 at 03:53:00PM +0100, Mauro Carvalho Chehab wrote:
-> Em Mon, 6 Dec 2021 08:48:11 +0800
-> Jammy Huang <jammy_huang@aspeedtech.com> escreveu:
-> 
-> > refine aspeed_video_setup_video() flow.
-> 
-> Why? It makes no difference where the error handling code is. Let's
-> keep it as preferred by the driver's author ;-)
-
-Doing error handling can be done in different ways of course, but I think
-it's easier to see it's right as it's done by this patch. Of course the
-original author's --- like anyone else's --- review wouldn't hurt. But I
-see he hasn't reviewed other recent patches to the driver either.
-
-A better description would be nice though, including capital letter
-beginning a sentence.
-
-> 
-> Regards,
-> Mauro
-> 
-> > 
-> > Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-> > ---
-> > v2:
-> >  - remove change-id in comment
-> > ---
-> >  drivers/media/platform/aspeed-video.c | 24 +++++++++++-------------
-> >  1 file changed, 11 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-> > index fea5e4d0927e..f5c40d6b4ece 100644
-> > --- a/drivers/media/platform/aspeed-video.c
-> > +++ b/drivers/media/platform/aspeed-video.c
-> > @@ -1641,11 +1641,8 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
-> >  
-> >  	rc = video->ctrl_handler.error;
-> >  	if (rc) {
-> > -		v4l2_ctrl_handler_free(&video->ctrl_handler);
-> > -		v4l2_device_unregister(v4l2_dev);
-> > -
-> >  		dev_err(video->dev, "Failed to init controls: %d\n", rc);
-> > -		return rc;
-> > +		goto err_ctrl_init;
-> >  	}
-> >  
-> >  	v4l2_dev->ctrl_handler = &video->ctrl_handler;
-> > @@ -1663,11 +1660,8 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
-> >  
-> >  	rc = vb2_queue_init(vbq);
-> >  	if (rc) {
-> > -		v4l2_ctrl_handler_free(&video->ctrl_handler);
-> > -		v4l2_device_unregister(v4l2_dev);
-> > -
-> >  		dev_err(video->dev, "Failed to init vb2 queue\n");
-> > -		return rc;
-> > +		goto err_vb2_init;
-> >  	}
-> >  
-> >  	vdev->queue = vbq;
-> > @@ -1685,15 +1679,19 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
-> >  	video_set_drvdata(vdev, video);
-> >  	rc = video_register_device(vdev, VFL_TYPE_GRABBER, 0);
-> >  	if (rc) {
-> > -		vb2_queue_release(vbq);
-> > -		v4l2_ctrl_handler_free(&video->ctrl_handler);
-> > -		v4l2_device_unregister(v4l2_dev);
-> > -
-> >  		dev_err(video->dev, "Failed to register video device\n");
-> > -		return rc;
-> > +		goto err_video_reg;
-> >  	}
-> >  
-> >  	return 0;
+On Tue, Dec 14, 2021 at 2:21 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+[...]
 > > +
-> > +err_video_reg:
-> > +	vb2_queue_release(vbq);
-> > +err_vb2_init:
-> > +err_ctrl_init:
-> > +	v4l2_ctrl_handler_free(&video->ctrl_handler);
-> > +	v4l2_device_unregister(v4l2_dev);
-> > +	return rc;
-> >  }
-> >  
-> >  static int aspeed_video_init(struct aspeed_video *video)
-> 
-> 
-> 
-> Thanks,
-> Mauro
+>
+> Maybe add a comment to explain a bit about this workaround here?
+sure, I'll add a paragraph for v2 because this workaround/fix is not obvious
 
--- 
-Sakari Ailus
+> > +               manual_stop = cmd->data->blocks > 1 &&
+> > +                             (cmd->opcode == SD_IO_RW_DIRECT ||
+>
+> SD_IO_RW_DIRECT doesn't have cmd->data, so checking for that command
+> doesn't make sense.
+This also means that you found a bug in the vendor driver :-)
+I'll drop SD_IO_RW_DIRECT, do another round of testing and then send
+an updated version.
+
+Thank you for taking a closer look!
+
+
+Best regards,
+Martin

@@ -2,148 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F33474510
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CC1474503
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234088AbhLNOaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:30:03 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:55368 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbhLNO34 (ORCPT
+        id S232901AbhLNO3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:29:23 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:59504 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230319AbhLNO3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:29:56 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BEETiaH103679;
-        Tue, 14 Dec 2021 08:29:44 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639492184;
-        bh=3nKHdU9Kh7/r0pzRbD51LK3XVndbk0YQCuGV0fG4vOg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=vVSp39ExUFwQfw9ZabSiJB8OASpB56TZZzI6pCm3e0K6Q8o42BAIs2KH/VadbyMOX
-         Lx3YYwJ1WnE2kaXw8wHeXANy8VmoSF6rZ6xB3eMeDwPfsmOnKoi1qEWc7aXSL4AZjG
-         H72W1EhZCLWVpzy1humgUeF6PVjNk+xeA/KEF6KE=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BEETixj055333
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Dec 2021 08:29:44 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 14
- Dec 2021 08:29:44 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 14 Dec 2021 08:29:44 -0600
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BEETVkP038465;
-        Tue, 14 Dec 2021 08:29:41 -0600
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     Aswath Govindraju <a-govindraju@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <linux-can@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] phy: phy-can-transceiver: Add support for setting mux
-Date:   Tue, 14 Dec 2021 19:59:08 +0530
-Message-ID: <20211214142908.27940-3-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211214142908.27940-1-a-govindraju@ti.com>
-References: <20211214142908.27940-1-a-govindraju@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-To:     unlisted-recipients:; (no To-header on input)
+        Tue, 14 Dec 2021 09:29:22 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 49FAE1F37C;
+        Tue, 14 Dec 2021 14:29:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639492161; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d7lElfo1JjyiNkLK1DnhHBlqCrDDlV8cw/kEYhI1B1A=;
+        b=Pbun/mO06fvHw/NWhoynPH31hikjiBUqyWTxNgjEjHR6IJNup+qaZA0ANgWYKpXzsOr5Bb
+        lfJqINzXsJX4gvTyFBE0umjlS4ZgQB4VTeW0CldgCJAq8rROqzD0WVpX6r1wQvyOoZsB4o
+        BdHb8Tuvt/n4SB8aB/JEvp5xGy442iQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639492161;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d7lElfo1JjyiNkLK1DnhHBlqCrDDlV8cw/kEYhI1B1A=;
+        b=gtETqHrKV7YpLtr/1U4uCNbTSv2pHg8jKMFX60xBvwf7pUT37DoMXroXPoahzFLzNQhaWj
+        pl+azC0GRCd44lAg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 2EE0DA3B88;
+        Tue, 14 Dec 2021 14:29:21 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 15:29:21 +0100
+Message-ID: <s5hv8zr9s5a.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
+        broonie@kernel.org, lgirdwood@gmail.com, thierry.reding@gmail.com,
+        perex@perex.cz, jonathanh@nvidia.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Mohan Kumar <mkumard@nvidia.com>, robh+dt@kernel.org
+Subject: Re: [PATCH 1/3] ALSA: hda/tegra: Skip reset on BPMP devices
+In-Reply-To: <0761f6f2-27f8-4e1a-fabc-9d319f465a9e@gmail.com>
+References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
+        <1638858770-22594-2-git-send-email-spujar@nvidia.com>
+        <7742adae-cdbe-a9ea-2cef-f63363298d73@gmail.com>
+        <8fd704d9-43ce-e34a-a3c0-b48381ef0cd8@nvidia.com>
+        <56bb43b6-8d72-b1de-4402-a2cb31707bd9@gmail.com>
+        <4855e9c4-e4c2-528b-c9ad-2be7209dc62a@nvidia.com>
+        <5d441571-c1c2-5433-729f-86d6396c2853@gmail.com>
+        <f32cde65-63dc-67f8-ded8-b58ea5e89f4e@nvidia.com>
+        <95cc7efa-251c-690b-9afa-53ee9e052c34@gmail.com>
+        <148fba18-5d14-d342-0eb9-4ff224cc58ad@nvidia.com>
+        <3b0de739-7866-3886-be9c-a853c746f8b7@gmail.com>
+        <73d04377-9898-930b-09db-bb6c4b3eb90a@nvidia.com>
+        <ad388f5e-6f60-cf78-8510-87aec8524e33@gmail.com>
+        <50bf5a83-051e-8c12-6502-aabd8edd0a72@nvidia.com>
+        <7230ad0b-2b04-4f1b-b616-b7d98789ded0@gmail.com>
+        <48f891bc-d8f6-2634-6dd1-6ea4f14ae6a3@nvidia.com>
+        <0761f6f2-27f8-4e1a-fabc-9d319f465a9e@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some boards, for routing CAN signals from controller to transceiver,
-muxes might need to be set. Therefore, add support for setting the mux by
-reading the mux-states property from the device tree node.
+On Tue, 14 Dec 2021 14:56:12 +0100,
+Dmitry Osipenko wrote:
+> 
+> 14.12.2021 10:22, Sameer Pujar пишет:
+> ...
+> >>> How the reset behavior is different? At this point when HDA driver is
+> >>> loaded the HW is already reset during display ungate. What matters,
+> >>> during HDA driver load, is whether the HW is in predictable state or not
+> >>> and the answer is yes. So I am not sure what problem you are referring
+> >>> to. Question is, if BPMP already ensures this, then why driver needs to
+> >>> take care of it.
+> >> 1. Enable display
+> >> 2. Play audio over HDMI
+> > 
+> >> 3. HDA hardware now is in dirty state
+> > 
+> > Why this would be a dirty state? It is rather a functional state. Isn't
+> > it? Power-domain is ON while all this happens.
+> 
+> In general state should be a functional, but we shouldn't assume that.
+> There is always a possibility for a subtle bug in a driver that may put
+> h/w into a bad state. Full hardware reset is encouraged by users.
+> 
+> > Another point is, with present logic the reset is not applied for every
+> > runtime PM resume of HDA device, which is confusing. It depends on the
+> > state of 'chip->running' flag and I don't see this getting cleared
+> > anywhere. Would you say subsequent HDA playback happen under a dirty state?
+> 
+> This is a good point. There should be another potential problem in the
+> HDA driver for newer SoCs because apparently we don't re-initialize HDA
+> controller properly after runtime PM resume.
+> 
+> See hda_tegra_first_init() that is invoked only during driver probe, it
+> configures FPCI_DBG_CFG_2 register on T194, which isn't done by
+> hda_tegra_init(), and thus, this register may be  in reset state after
+> resume from RPM suspend. It should be a bug in the HDA driver that needs
+> to be fixed.
+> 
+> On older SoCs: HDA resides in the APB power domain which could be
+> disabled only across system suspend/resume. HDA is only clock-gated
+> during runtime PM suspend.
+> 
+> On newer SoCs: HDA power state could be lost after RPM suspend/resume,
+> depending on the state of display. I'm wondering whether HDMI playback
+> works after DPMS on T194+, I assume this case was never tested properly.
+> 
+> It looks like it should be safe to reset HDA on runtime PM resume
+> regardless of the chip->running, and thus, we could remove that check
+> and reset HDA unconditionally. Will great if you could check/test and
+> improve this in the driver.
+> 
+> I'm also wondering whether snd_power_change_state() should be moved into
+> RPM callbacks and whether this function does anything practically useful
+> on Tegra at all.
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
----
- drivers/phy/Kconfig               |  1 +
- drivers/phy/phy-can-transceiver.c | 24 +++++++++++++++++++++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+This call is mostly for ALSA core stuff, and not necessarily
+reflecting the exact device power state.  The major role is for
+controlling / blocking the device accesses at the system
+suspend/resume, so it's correct to set only in the system
+suspend/resume callbacks, not in runtime PM.
 
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index 82b63e60c5a2..300b0f2b5f84 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -64,6 +64,7 @@ config USB_LGM_PHY
- config PHY_CAN_TRANSCEIVER
- 	tristate "CAN transceiver PHY"
- 	select GENERIC_PHY
-+	select MULTIPLEXER
- 	help
- 	  This option enables support for CAN transceivers as a PHY. This
- 	  driver provides function for putting the transceivers in various
-diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
-index 6f3fe37dee0e..95c6dbb52da7 100644
---- a/drivers/phy/phy-can-transceiver.c
-+++ b/drivers/phy/phy-can-transceiver.c
-@@ -10,6 +10,7 @@
- #include<linux/module.h>
- #include<linux/gpio.h>
- #include<linux/gpio/consumer.h>
-+#include <linux/mux/consumer.h>
- 
- struct can_transceiver_data {
- 	u32 flags;
-@@ -21,13 +22,22 @@ struct can_transceiver_phy {
- 	struct phy *generic_phy;
- 	struct gpio_desc *standby_gpio;
- 	struct gpio_desc *enable_gpio;
-+	struct mux_state *mux_state;
- };
- 
- /* Power on function */
- static int can_transceiver_phy_power_on(struct phy *phy)
- {
- 	struct can_transceiver_phy *can_transceiver_phy = phy_get_drvdata(phy);
--
-+	int ret;
-+
-+	if (can_transceiver_phy->mux_state) {
-+		ret = mux_state_select(can_transceiver_phy->mux_state);
-+		if (ret) {
-+			dev_err(&phy->dev, "Failed to select CAN mux: %d\n", ret);
-+			return ret;
-+		}
-+	}
- 	if (can_transceiver_phy->standby_gpio)
- 		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
- 	if (can_transceiver_phy->enable_gpio)
-@@ -45,6 +55,8 @@ static int can_transceiver_phy_power_off(struct phy *phy)
- 		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 1);
- 	if (can_transceiver_phy->enable_gpio)
- 		gpiod_set_value_cansleep(can_transceiver_phy->enable_gpio, 0);
-+	if (can_transceiver_phy->mux_state)
-+		mux_state_deselect(can_transceiver_phy->mux_state);
- 
- 	return 0;
- }
-@@ -95,6 +107,16 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
- 	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
- 	drvdata = match->data;
- 
-+	if (of_property_read_bool(dev->of_node, "mux-states")) {
-+		struct mux_state *mux_state;
-+
-+		mux_state = devm_mux_state_get(dev, NULL);
-+		if (IS_ERR(mux_state))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(mux_state),
-+					     "failed to get mux\n");
-+		can_transceiver_phy->mux_state = mux_state;
-+	}
-+
- 	phy = devm_phy_create(dev, dev->of_node,
- 			      &can_transceiver_phy_ops);
- 	if (IS_ERR(phy)) {
--- 
-2.17.1
 
+Takashi

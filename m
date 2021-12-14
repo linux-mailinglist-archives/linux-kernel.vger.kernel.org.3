@@ -2,169 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08084473FD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A059473FDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232686AbhLNJvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 04:51:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbhLNJvC (ORCPT
+        id S231171AbhLNJwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 04:52:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43650 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230467AbhLNJwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 04:51:02 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B83C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 01:51:01 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id i8-20020a7bc948000000b0030db7b70b6bso15841094wml.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 01:51:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QvL6cSotT6zCDdAPa4uv4YcC9fcfaO0IQCDs+UP7OhA=;
-        b=To0gur3eKFHJsX21w7cmkSkqz5iIr5w0YMiedtpEZKoVBK8D+1BQsiVDU7kkOoI3um
-         9T+9NrM3t4ZX9nW1MT1b+74RuOVJEv+GFPoWOjzkP+7FT3b+CwoYYR54Ts44X6pdTNtr
-         oDVsycxRgFYaw3If3u/E3cAY4Y4F9CPSf7VArxLXMWHyixqJgj1khkD7hQOYjSe6NZKT
-         mpemjX1G44qscgbayGdeT2PiMKLYFgINd/tvy4br9ThYNpGD5ZgkUQNJM+3c42xCAWuX
-         cv9THpGo/ZJUIuMNZWb81Nl5icftNZuHRibHY1yuePjJj1YPVELDer9UKjQBNd3wrGmA
-         yIdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QvL6cSotT6zCDdAPa4uv4YcC9fcfaO0IQCDs+UP7OhA=;
-        b=BnEoSuY4pYNSzqzglY9BBfQ01Gg7tKkaM8Hvj05jE+h/Zs7glF8MgXAv2pNBSNEpXu
-         DzIhCwVSGPwhaBmMCyOcdxoAo6Y+Ds+PWf5mudLOGA9/gZNjMYnhK07NnjBuW3KujgrM
-         cez+6F/WlmO7iUwi/mnV2RUlMK7nN+rYJQqKrtAkM3TSOY9zAvHQG3+T4QIzEFme4xDN
-         Ju9GqEogc2RdDkYdtGNHS+B09TwlkgIVOCkUR08WQWbOsmWZyJZi7P4XlbID5NhvNfap
-         HkcVK4EYnqpmV5euc4vtoX0wdZNnfsvepHnYAVpyL+10LDxp0zXOnSNeEglbX/ZPDlCP
-         fD/g==
-X-Gm-Message-State: AOAM531H/VdHfSIhJ6nAlzAOcxZSDjQIB6UDcMgELvmRoNBiAfelv77+
-        JDXTpr2W1ouLKLeBh0SBsqezHdYpQpLNtA==
-X-Google-Smtp-Source: ABdhPJwb27AiqA1Y3fkM3GDXYWJAC+nARejXPzWcWmTpXuBDmiJ2tkGELxbeHPoqaq3NC7uVSbIDfA==
-X-Received: by 2002:a05:600c:6006:: with SMTP id az6mr5954257wmb.5.1639475460298;
-        Tue, 14 Dec 2021 01:51:00 -0800 (PST)
-Received: from fedora.sec.9e.network (ip-88-153-139-166.hsi04.unitymediagroup.de. [88.153.139.166])
-        by smtp.gmail.com with ESMTPSA id s24sm1522757wmj.26.2021.12.14.01.50.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 01:50:59 -0800 (PST)
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] i2c-mux-pca954x: Add regulator support
-Date:   Tue, 14 Dec 2021 10:50:21 +0100
-Message-Id: <20211214095021.572799-4-patrick.rudolph@9elements.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211214095021.572799-1-patrick.rudolph@9elements.com>
-References: <20211214095021.572799-1-patrick.rudolph@9elements.com>
+        Tue, 14 Dec 2021 04:52:05 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EB69B817D4;
+        Tue, 14 Dec 2021 09:52:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB963C34600;
+        Tue, 14 Dec 2021 09:52:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639475522;
+        bh=SLNW3IwS0LNnygBiKF6+i/IabQApBZKzM8lQj2pvejs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aPi5AkexZv7y1TLp/lxSkOJzSI/iUGIw2V9TZuJolf/8fthDtT+MPwKhIw8OYBuIi
+         V9e1dVUZQ5vccylcWmm3ahIVgtRdEyhsloDWx9Vxa1jtj25G4/VlGXFNQPtelE0l5g
+         OjSti/wYPRIlQ5GybDrrY/AxHNQK4FNXaJYOK4XE=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.4.295
+Date:   Tue, 14 Dec 2021 10:51:58 +0100
+Message-Id: <16394755191947@kroah.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an optional vcc regulator and enable it when found for devices
-that are powered off by default.
+I'm announcing the release of the 4.4.295 kernel.
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 33 ++++++++++++++++++++++++-----
- 1 file changed, 28 insertions(+), 5 deletions(-)
+All users of the 4.4 kernel series must upgrade.
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 23e0f24bab04..5fa266cb02c0 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -48,6 +48,7 @@
- #include <linux/module.h>
- #include <linux/pm.h>
- #include <linux/property.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <dt-bindings/mux/mux.h>
-@@ -101,6 +102,7 @@ struct pca954x {
- 	struct irq_domain *irq;
- 	unsigned int irq_mask;
- 	raw_spinlock_t lock;
-+	struct regulator *supply;
- };
- 
- /* Provide specs for the PCA954x and MAX735x types we know about */
-@@ -425,6 +427,9 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
- 	struct pca954x *data = i2c_mux_priv(muxc);
- 	int c, irq;
- 
-+	if (!IS_ERR_OR_NULL(data->supply))
-+		regulator_disable(data->supply);
-+
- 	if (data->irq) {
- 		for (c = 0; c < data->chip->nchans; c++) {
- 			irq = irq_find_mapping(data->irq, c);
-@@ -484,15 +489,31 @@ static int pca954x_probe(struct i2c_client *client,
- 			     pca954x_select_chan, pca954x_deselect_mux);
- 	if (!muxc)
- 		return -ENOMEM;
-+
- 	data = i2c_mux_priv(muxc);
- 
- 	i2c_set_clientdata(client, muxc);
- 	data->client = client;
- 
-+	data->supply = devm_regulator_get(dev, "vcc");
-+	if (IS_ERR(data->supply)) {
-+		if ((PTR_ERR(data->supply) == -EPROBE_DEFER))
-+			return -EPROBE_DEFER;
-+		dev_warn(dev, "Failed to get regulator for vcc: %d\n", ret);
-+	} else {
-+		ret = regulator_enable(data->supply);
-+		if (ret) {
-+			dev_err(dev, "Failed to enable regulator vcc\n");
-+			return ret;
-+		}
-+	}
-+
- 	/* Reset the mux if a reset GPIO is specified. */
- 	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(gpio))
--		return PTR_ERR(gpio);
-+	if (IS_ERR(gpio)) {
-+		ret = PTR_ERR(gpio);
-+		goto fail_cleanup;
-+	}
- 	if (gpio) {
- 		udelay(1);
- 		gpiod_set_value_cansleep(gpio, 0);
-@@ -509,7 +530,7 @@ static int pca954x_probe(struct i2c_client *client,
- 
- 		ret = i2c_get_device_id(client, &id);
- 		if (ret && ret != -EOPNOTSUPP)
--			return ret;
-+			goto fail_cleanup;
- 
- 		if (!ret &&
- 		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
-@@ -517,7 +538,8 @@ static int pca954x_probe(struct i2c_client *client,
- 			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
- 				 id.manufacturer_id, id.part_id,
- 				 id.die_revision);
--			return -ENODEV;
-+			ret = -ENODEV;
-+			goto fail_cleanup;
- 		}
- 	}
- 
-@@ -536,7 +558,8 @@ static int pca954x_probe(struct i2c_client *client,
- 	ret = pca954x_init(client, data);
- 	if (ret < 0) {
- 		dev_warn(dev, "probe failed\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto fail_cleanup;
- 	}
- 
- 	ret = pca954x_irq_setup(muxc);
--- 
-2.33.1
+The updated 4.4.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.4.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Makefile                                      |    2 
+ block/ioprio.c                                |    3 +
+ drivers/android/binder.c                      |   21 +++----
+ drivers/ata/libata-core.c                     |    2 
+ drivers/hid/Kconfig                           |   10 +--
+ drivers/hid/hid-chicony.c                     |    8 ++
+ drivers/hid/hid-corsair.c                     |    7 ++
+ drivers/hid/hid-elo.c                         |    3 +
+ drivers/hid/hid-holtek-kbd.c                  |    9 ++-
+ drivers/hid/hid-holtek-mouse.c                |    9 +++
+ drivers/hid/hid-lg.c                          |   10 ++-
+ drivers/hid/hid-prodikeys.c                   |   10 ++-
+ drivers/hid/hid-roccat-arvo.c                 |    3 +
+ drivers/hid/hid-roccat-isku.c                 |    3 +
+ drivers/hid/hid-roccat-kone.c                 |    3 +
+ drivers/hid/hid-roccat-koneplus.c             |    3 +
+ drivers/hid/hid-roccat-konepure.c             |    3 +
+ drivers/hid/hid-roccat-kovaplus.c             |    3 +
+ drivers/hid/hid-roccat-lua.c                  |    3 +
+ drivers/hid/hid-roccat-pyra.c                 |    3 +
+ drivers/hid/hid-roccat-ryos.c                 |    3 +
+ drivers/hid/hid-roccat-savu.c                 |    3 +
+ drivers/hid/hid-samsung.c                     |    3 +
+ drivers/hid/hid-uclogic.c                     |    3 +
+ drivers/hid/i2c-hid/i2c-hid.c                 |    3 -
+ drivers/hid/uhid.c                            |    3 -
+ drivers/hid/usbhid/hid-core.c                 |    3 -
+ drivers/hid/wacom_sys.c                       |   17 ++++-
+ drivers/iio/accel/kxcjk-1013.c                |    5 -
+ drivers/iio/accel/mma8452.c                   |    2 
+ drivers/iio/gyro/itg3200_buffer.c             |    2 
+ drivers/iio/light/ltr501.c                    |    2 
+ drivers/iio/light/stk3310.c                   |    6 +-
+ drivers/irqchip/irq-gic-v3-its.c              |    2 
+ drivers/irqchip/irq-nvic.c                    |    2 
+ drivers/net/can/pch_can.c                     |    2 
+ drivers/net/can/sja1000/ems_pcmcia.c          |    7 ++
+ drivers/net/ethernet/altera/altera_tse_main.c |    9 ++-
+ drivers/net/ethernet/freescale/fec.h          |    3 +
+ drivers/net/ethernet/freescale/fec_main.c     |    2 
+ drivers/net/ethernet/qlogic/qla3xxx.c         |   19 +++---
+ drivers/net/usb/cdc_ncm.c                     |    2 
+ drivers/usb/core/config.c                     |    2 
+ drivers/usb/gadget/composite.c                |   14 ++++
+ drivers/usb/gadget/legacy/dbgp.c              |   15 ++++-
+ drivers/usb/gadget/legacy/inode.c             |   16 +++++
+ fs/signalfd.c                                 |   12 ----
+ fs/tracefs/inode.c                            |   76 ++++++++++++++++++++++++++
+ include/linux/hid.h                           |   16 +++++
+ include/linux/wait.h                          |   26 ++++++++
+ kernel/sched/wait.c                           |    8 ++
+ mm/backing-dev.c                              |    7 ++
+ net/bluetooth/hidp/core.c                     |    3 -
+ net/core/neighbour.c                          |    2 
+ net/nfc/netlink.c                             |    6 +-
+ sound/core/control_compat.c                   |    3 +
+ sound/core/oss/pcm_oss.c                      |   37 ++++++++----
+ 57 files changed, 371 insertions(+), 93 deletions(-)
+
+Alan Young (1):
+      ALSA: ctl: Fix copy of updated id with element read/write
+
+Dan Carpenter (3):
+      can: sja1000: fix use after free in ems_pcmcia_add_card()
+      net: altera: set a couple error code in probe()
+      net/qla3xxx: fix an error code in ql_adapter_up()
+
+Davidlohr Bueso (1):
+      block: fix ioprio_get(IOPRIO_WHO_PGRP) vs setuid(2)
+
+Eric Biggers (3):
+      wait: add wake_up_pollfree()
+      binder: use wake_up_pollfree()
+      signalfd: use wake_up_pollfree()
+
+Eric Dumazet (1):
+      net, neigh: clear whole pneigh_entry at alloc time
+
+Greg Kroah-Hartman (9):
+      HID: add hid_is_usb() function to make it simpler for USB detection
+      HID: add USB_HID dependancy to hid-prodikeys
+      HID: add USB_HID dependancy to hid-chicony
+      HID: add USB_HID dependancy on some USB HID drivers
+      HID: wacom: fix problems when device is not a valid USB device
+      HID: check for valid USB device for many HID drivers
+      USB: gadget: detect too-big endpoint 0 requests
+      USB: gadget: zero allocate endpoint 0 buffers
+      Linux 4.4.295
+
+Hannes Reinecke (1):
+      libata: add horkage for ASMedia 1092
+
+Jason Gerecke (1):
+      HID: introduce hid_is_using_ll_driver
+
+Joakim Zhang (1):
+      net: fec: only clear interrupt of handling queue in fec_enet_rx_queue()
+
+Krzysztof Kozlowski (1):
+      nfc: fix potential NULL pointer deref in nfc_genl_dump_ses_done
+
+Lars-Peter Clausen (4):
+      iio: stk3310: Don't return error code in interrupt handler
+      iio: mma8452: Fix trigger reference couting
+      iio: ltr501: Don't return error code in trigger handler
+      iio: itg3200: Call iio_trigger_notify_done() on error
+
+Lee Jones (1):
+      net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset or zero
+
+Manjong Lee (1):
+      mm: bdi: initialize bdi_min_ratio when bdi is unregistered
+
+Pavel Hofman (1):
+      usb: core: config: fix validation of wMaxPacketValue entries
+
+Steven Rostedt (VMware) (2):
+      tracefs: Have new files inherit the ownership of their parent
+      tracefs: Set all files to the same group ownership as the mount option
+
+Takashi Iwai (3):
+      ALSA: pcm: oss: Fix negative period/buffer sizes
+      ALSA: pcm: oss: Limit the period size to 16MB
+      ALSA: pcm: oss: Handle missing errors in snd_pcm_oss_change_params*()
+
+Vincent Mailhol (1):
+      can: pch_can: pch_can_rx_normal: fix use after free
+
+Vladimir Murzin (1):
+      irqchip: nvic: Fix offset for Interrupt Priority Offsets
+
+Wudi Wang (1):
+      irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
+
+Yang Yingliang (1):
+      iio: accel: kxcjk-1013: Fix possible memory leak in probe and remove
 

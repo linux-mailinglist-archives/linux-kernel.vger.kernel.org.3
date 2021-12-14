@@ -2,150 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C5A4743B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 524CF4743C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234504AbhLNNlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:41:39 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:36644 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbhLNNlg (ORCPT
+        id S234536AbhLNNog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 08:44:36 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52006 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234520AbhLNNof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:41:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1639489297; x=1671025297;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7RIc8kBGLS94DUip1gbTCJynyFkM5gL9bH9ry4sgvcE=;
-  b=KZ71xnU+Y+kIOobdxBOLVLQ+5lpGAVAE7ETOm+8PO9VuE4mWavI8Cgx8
-   unPrcquO2OzhQ9hS8Qyeds+q/7kwBNgaj84TD178dFO6aLj0NpL+vqJFk
-   8379yt/RRSv/axU76J2gR2pzL9Hor4EnnKZ8A/clwAnNQoL3i75o9Aj8p
-   UvEFi4NFXFlgJqmAVQ41dOWhsyC4O0k6LMRxAFjOMHrrJyWNAxq8xtQ10
-   m3lQCpyJYK+wBmfNOpkVP/zJQeW1BIosJudidyicRrFRAdHnWec/R+1q6
-   woWARlg5cpO5sh7hN3Hd7/PrYhMTn0oki0IbAAUU0ylOpXNfPB0ge1b6r
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,205,1635177600"; 
-   d="scan'208";a="189230855"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Dec 2021 21:41:36 +0800
-IronPort-SDR: 8K1y/VUd1IdO5YjLBebZStnun8XEGgarZWtmZfVBDH3OfG8Iu0335aopB00iEFA8ypx96lNdv8
- efYx+9CLLrlgQ4lGuCONM4nmF20359i7PxWMo1Omc1FftlIfSXDVP6egDrleCA/yPnnd3MVV/K
- y22kvX1AjyBiColqKi0C6VDgTatOi+lWX4nhg7O5jr66makE8rMdTfBXZ5Tgr5qSTfQjZO7prg
- 0wgPTS+Fc4WGfAdLDCNPwkKXVvBPdyjWbWXFGuvhaumCFyVqSa/u8ra4XLklBZlBKFAXeAXwcc
- q4RlbiCY6CG/rlh3dN+ue1PU
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 05:14:31 -0800
-IronPort-SDR: Y3KyB3kUTyy9KkvWYUwECJpIGxDHDloq71OsyCMBsq939Su5Atja/XrYvGusK1C3/gbTErry0n
- 1yhPdEXrPvckJB3ijYf58Fibw6PTyu9PJFfYrZ2lrlKe0Cz6b1yTRTvPC3ezK7k6K5o2pOvLAP
- mAbcP5zuS4zMU5qHS5M+dIidS7dNhOBNfhhlcY+CGvKW/wI/LgdqStj3+fSw6+jQXnDSmsicoo
- g6dJjqAZWvGyB95znUXs3OzTuKsC/C7Ark4u+QUfsSi7zu7BOura+ZUL2MvRn/xEPA0Ty6opDU
- xR8=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 05:41:35 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JD00G1qgxz1Rvlf
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:41:34 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1639489293; x=1642081294; bh=7RIc8kBGLS94DUip1gbTCJynyFkM5gL9bH9
-        ry4sgvcE=; b=Rjv6U6kO5n0p6LLiSlGe5lb3RF/ORfqOySXezMQWKVsbslH9aiT
-        0hysUybmLxR5XXZ07Ey/TO99S9M05+kc5Ipp49YQ2Pdqak2mtMOtdWrR9u1aRbNR
-        S2fwHPlrc2cQ8momxVVpEkoesMKSe1nURVbAh8qhbaif8HgselpC+so0MNWFnmbq
-        IlTCvZ5VWIbC/GC3KtpYhHS2IqgkkLAIwY2qfcv9+WPRERknJ/uOqNvm6xc2Abln
-        i1iYZS6BCQ4v0O0AqzccMZgTKKf2awjg0CCUngpB2fOoanqqAntrQjyihygkiAs+
-        +o4snp8SAOxi/i7wm/qBzZKYXU8H+uiUI8g==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id roMsAB8qMSqU for <linux-kernel@vger.kernel.org>;
-        Tue, 14 Dec 2021 05:41:33 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JD00D6rzyz1RtVG;
-        Tue, 14 Dec 2021 05:41:32 -0800 (PST)
-Message-ID: <1e512500-bcd2-2dff-0704-ccb52aad907b@opensource.wdc.com>
-Date:   Tue, 14 Dec 2021 22:41:31 +0900
+        Tue, 14 Dec 2021 08:44:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13F73B818AD;
+        Tue, 14 Dec 2021 13:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4385AC34601;
+        Tue, 14 Dec 2021 13:44:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639489472;
+        bh=rMKi4DJ3Qt32QMZ9f4myvhx7rHRcEUJW26Wm3InvQQg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zld5hdCXn2QMc/cM31ft6Ns58UNgukvagI3PKADiXGkN40ex/9cUyy2/kJF46Qzjz
+         6oywztC/T5MbGG2CgxdxwvowVWqEhFvBOUEtSOyWvxCDtT0vVRB0siXHwWo8UFOdor
+         39DIjm0HGPsIIA9E0P4EeRzHUX3exq2lkRvcod2g=
+Date:   Tue, 14 Dec 2021 14:44:30 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Rijo Thomas <Rijo-john.Thomas@amd.com>,
+        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
+        stable@vger.kernel.org, Lars Persson <larper@axis.com>,
+        Patrik Lantz <patrik.lantz@axis.com>
+Subject: Re: [PATCH] tee: handle lookup of shm with reference count 0
+Message-ID: <YbifvnSBjW5m19hZ@kroah.com>
+References: <20211214123540.1789434-1-jens.wiklander@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH RESEND 3] libata: if T_LENGTH is zero, dma direction
- should be DMA_NONE
-Content-Language: en-US
-To:     George Kennedy <george.kennedy@oracle.com>
-Cc:     linux-ide@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <a8cd9195-ab57-4067-d814-c9926eb36412@oracle.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <a8cd9195-ab57-4067-d814-c9926eb36412@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214123540.1789434-1-jens.wiklander@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/14 22:25, George Kennedy wrote:
-> Avoid data corruption by rejecting pass-through commands where
-> T_LENGTH is zero (No data is transferred) and the dma direction
-> is not DMA_NONE.
->=20
-> Cc:<stable@vger.kernel.org>
-> Reported-by: syzkaller<syzkaller@googlegroups.com>
-> Signed-off-by: George Kennedy<george.kennedy@oracle.com>
+On Tue, Dec 14, 2021 at 01:35:40PM +0100, Jens Wiklander wrote:
+> Since the tee subsystem does not keep a strong reference to its idle
+> shared memory buffers, it races with other threads that try to destroy a
+> shared memory through a close of its dma-buf fd or by unmapping the
+> memory.
+> 
+> In tee_shm_get_from_id() when a lookup in teedev->idr has been
+> successful, it is possible that the tee_shm is in the dma-buf teardown
+> path, but that path is blocked by the teedev mutex. Since we don't have
+> an API to tell if the tee_shm is in the dma-buf teardown path or not we
+> must find another way of detecting this condition.
+> 
+> Fix this by doing the reference counting directly on the tee_shm using a
+> new refcount_t refcount field. dma-buf is replaced by using
+> anon_inode_getfd() instead, this separates the life-cycle of the
+> underlying file from the tee_shm. tee_shm_put() is updated to hold the
+> mutex when decreasing the refcount to 0 and then remove the tee_shm from
+> teedev->idr before releasing the mutex. This means that the tee_shm can
+> never be found unless it has a refcount larger than 0.
+
+So you are dropping dma-buf support entirely?  And anon_inode_getfd()
+works instead?  Why do more people not do this as well?
+
+> 
+> Fixes: 967c9cca2cc5 ("tee: generic TEE subsystem")
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Lars Persson <larper@axis.com>
+> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+> Reported-by: Patrik Lantz <patrik.lantz@axis.com>
+> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 > ---
->  =C2=A0drivers/ata/libata-scsi.c | 6 ++++++
->  =C2=A01 file changed, 6 insertions(+)
->=20
-> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-> index 1b84d55..d428392 100644
-> --- a/drivers/ata/libata-scsi.c
-> +++ b/drivers/ata/libata-scsi.c
-> @@ -2859,6 +2859,12 @@ static unsigned int ata_scsi_pass_thru(struct=20
-> ata_queued_cmd *qc)
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto invalid_fld;
->  =C2=A0=C2=A0=C2=A0=C2=A0 }
->=20
-> +=C2=A0=C2=A0=C2=A0 /* if T_LENGTH is zero (No data is transferred), th=
-en dir should be=20
-> DMA_NONE */
-> +=C2=A0=C2=A0=C2=A0 if ((cdb[2 + cdb_offset] & 3) =3D=3D 0 && scmd->sc_=
-data_direction !=3D=20
-> DMA_NONE) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fp =3D 2 + cdb_offset;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto invalid_fld;
-> +=C2=A0=C2=A0=C2=A0 }
+>  drivers/tee/tee_shm.c   | 174 +++++++++++++++-------------------------
+>  include/linux/tee_drv.h |   2 +-
+>  2 files changed, 67 insertions(+), 109 deletions(-)
+> 
+> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> index 8a8deb95e918..0c82cf981c46 100644
+> --- a/drivers/tee/tee_shm.c
+> +++ b/drivers/tee/tee_shm.c
+> @@ -1,20 +1,17 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Copyright (c) 2015-2016, Linaro Limited
+> + * Copyright (c) 2015-2021, Linaro Limited
+
+Nit, did Linaro really make a copyrightable change in 2017, 2018, 2019
+and 2020 as well?  If not, please do not claim it.
+
+>   */
+> +#include <linux/anon_inodes.h>
+>  #include <linux/device.h>
+> -#include <linux/dma-buf.h>
+> -#include <linux/fdtable.h>
+>  #include <linux/idr.h>
+> +#include <linux/mm.h>
+>  #include <linux/sched.h>
+>  #include <linux/slab.h>
+>  #include <linux/tee_drv.h>
+>  #include <linux/uio.h>
+> -#include <linux/module.h>
+>  #include "tee_private.h"
+>  
+> -MODULE_IMPORT_NS(DMA_BUF);
+> -
+>  static void release_registered_pages(struct tee_shm *shm)
+>  {
+>  	if (shm->pages) {
+> @@ -31,16 +28,8 @@ static void release_registered_pages(struct tee_shm *shm)
+>  	}
+>  }
+>  
+> -static void tee_shm_release(struct tee_shm *shm)
+> +static void tee_shm_release(struct tee_device *teedev, struct tee_shm *shm)
+>  {
+> -	struct tee_device *teedev = shm->ctx->teedev;
+> -
+> -	if (shm->flags & TEE_SHM_DMA_BUF) {
+> -		mutex_lock(&teedev->mutex);
+> -		idr_remove(&teedev->idr, shm->id);
+> -		mutex_unlock(&teedev->mutex);
+> -	}
+> -
+>  	if (shm->flags & TEE_SHM_POOL) {
+>  		struct tee_shm_pool_mgr *poolm;
+>  
+> @@ -67,45 +56,6 @@ static void tee_shm_release(struct tee_shm *shm)
+>  	tee_device_put(teedev);
+>  }
+>  
+> -static struct sg_table *tee_shm_op_map_dma_buf(struct dma_buf_attachment
+> -			*attach, enum dma_data_direction dir)
+> -{
+> -	return NULL;
+> -}
+> -
+> -static void tee_shm_op_unmap_dma_buf(struct dma_buf_attachment *attach,
+> -				     struct sg_table *table,
+> -				     enum dma_data_direction dir)
+> -{
+> -}
+> -
+> -static void tee_shm_op_release(struct dma_buf *dmabuf)
+> -{
+> -	struct tee_shm *shm = dmabuf->priv;
+> -
+> -	tee_shm_release(shm);
+> -}
+> -
+> -static int tee_shm_op_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+> -{
+> -	struct tee_shm *shm = dmabuf->priv;
+> -	size_t size = vma->vm_end - vma->vm_start;
+> -
+> -	/* Refuse sharing shared memory provided by application */
+> -	if (shm->flags & TEE_SHM_USER_MAPPED)
+> -		return -EINVAL;
+> -
+> -	return remap_pfn_range(vma, vma->vm_start, shm->paddr >> PAGE_SHIFT,
+> -			       size, vma->vm_page_prot);
+> -}
+> -
+> -static const struct dma_buf_ops tee_shm_dma_buf_ops = {
+> -	.map_dma_buf = tee_shm_op_map_dma_buf,
+> -	.unmap_dma_buf = tee_shm_op_unmap_dma_buf,
+> -	.release = tee_shm_op_release,
+> -	.mmap = tee_shm_op_mmap,
+> -};
+> -
+>  struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+>  {
+>  	struct tee_device *teedev = ctx->teedev;
+> @@ -140,6 +90,7 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+>  		goto err_dev_put;
+>  	}
+>  
+> +	refcount_set(&shm->refcount, 1);
+>  	shm->flags = flags | TEE_SHM_POOL;
+>  	shm->ctx = ctx;
+>  	if (flags & TEE_SHM_DMA_BUF)
+> @@ -153,10 +104,7 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+>  		goto err_kfree;
+>  	}
+>  
+> -
+>  	if (flags & TEE_SHM_DMA_BUF) {
+> -		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+> -
+>  		mutex_lock(&teedev->mutex);
+>  		shm->id = idr_alloc(&teedev->idr, shm, 1, 0, GFP_KERNEL);
+>  		mutex_unlock(&teedev->mutex);
+> @@ -164,28 +112,11 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+>  			ret = ERR_PTR(shm->id);
+>  			goto err_pool_free;
+>  		}
+> -
+> -		exp_info.ops = &tee_shm_dma_buf_ops;
+> -		exp_info.size = shm->size;
+> -		exp_info.flags = O_RDWR;
+> -		exp_info.priv = shm;
+> -
+> -		shm->dmabuf = dma_buf_export(&exp_info);
+> -		if (IS_ERR(shm->dmabuf)) {
+> -			ret = ERR_CAST(shm->dmabuf);
+> -			goto err_rem;
+> -		}
+>  	}
+>  
+>  	teedev_ctx_get(ctx);
+>  
+>  	return shm;
+> -err_rem:
+> -	if (flags & TEE_SHM_DMA_BUF) {
+> -		mutex_lock(&teedev->mutex);
+> -		idr_remove(&teedev->idr, shm->id);
+> -		mutex_unlock(&teedev->mutex);
+> -	}
+>  err_pool_free:
+>  	poolm->ops->free(poolm, shm);
+>  err_kfree:
+> @@ -246,6 +177,7 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+>  		goto err;
+>  	}
+>  
+> +	refcount_set(&shm->refcount, 1);
+>  	shm->flags = flags | TEE_SHM_REGISTER;
+>  	shm->ctx = ctx;
+>  	shm->id = -1;
+> @@ -306,22 +238,6 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+>  		goto err;
+>  	}
+>  
+> -	if (flags & TEE_SHM_DMA_BUF) {
+> -		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+> -
+> -		exp_info.ops = &tee_shm_dma_buf_ops;
+> -		exp_info.size = shm->size;
+> -		exp_info.flags = O_RDWR;
+> -		exp_info.priv = shm;
+> -
+> -		shm->dmabuf = dma_buf_export(&exp_info);
+> -		if (IS_ERR(shm->dmabuf)) {
+> -			ret = ERR_CAST(shm->dmabuf);
+> -			teedev->desc->ops->shm_unregister(ctx, shm);
+> -			goto err;
+> -		}
+> -	}
+> -
+>  	return shm;
+>  err:
+>  	if (shm) {
+> @@ -339,6 +255,35 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+>  }
+>  EXPORT_SYMBOL_GPL(tee_shm_register);
+>  
+> +static int tee_shm_fop_release(struct inode *inode, struct file *filp)
+> +{
+> +	tee_shm_put(filp->private_data);
+> +	return 0;
+> +}
 > +
->  =C2=A0=C2=A0=C2=A0=C2=A0 if (ata_is_ncq(tf->protocol) && (cdb[2 + cdb_=
-offset] & 0x3) =3D=3D 0)
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tf->protocol =3D ATA_=
-PROT_NCQ_NODATA;
+> +static int tee_shm_fop_mmap(struct file *filp, struct vm_area_struct *vma)
+> +{
+> +	struct tee_shm *shm = filp->private_data;
+> +	size_t size = vma->vm_end - vma->vm_start;
+> +
+> +	/* Refuse sharing shared memory provided by application */
+> +	if (shm->flags & TEE_SHM_USER_MAPPED)
+> +		return -EINVAL;
+> +
+> +	/* check for overflowing the buffer's size */
+> +	if (vma->vm_pgoff + vma_pages(vma) > shm->size >> PAGE_SHIFT)
+> +		return -EINVAL;
+> +
+> +	return remap_pfn_range(vma, vma->vm_start, shm->paddr >> PAGE_SHIFT,
+> +			       size, vma->vm_page_prot);
+> +}
+> +
+> +static const struct file_operations tee_shm_fops = {
+> +	.owner = THIS_MODULE,
+> +	.release = tee_shm_fop_release,
+> +	.mmap = tee_shm_fop_mmap,
+> +};
+> +
+>  /**
+>   * tee_shm_get_fd() - Increase reference count and return file descriptor
+>   * @shm:	Shared memory handle
+> @@ -351,10 +296,11 @@ int tee_shm_get_fd(struct tee_shm *shm)
+>  	if (!(shm->flags & TEE_SHM_DMA_BUF))
+>  		return -EINVAL;
+>  
+> -	get_dma_buf(shm->dmabuf);
+> -	fd = dma_buf_fd(shm->dmabuf, O_CLOEXEC);
+> +	/* matched by tee_shm_put() in tee_shm_op_release() */
+> +	refcount_inc(&shm->refcount);
+> +	fd = anon_inode_getfd("tee_shm", &tee_shm_fops, shm, O_RDWR);
+>  	if (fd < 0)
+> -		dma_buf_put(shm->dmabuf);
+> +		tee_shm_put(shm);
+>  	return fd;
+>  }
+>  
+> @@ -364,17 +310,7 @@ int tee_shm_get_fd(struct tee_shm *shm)
+>   */
+>  void tee_shm_free(struct tee_shm *shm)
+>  {
+> -	/*
+> -	 * dma_buf_put() decreases the dmabuf reference counter and will
+> -	 * call tee_shm_release() when the last reference is gone.
+> -	 *
+> -	 * In the case of driver private memory we call tee_shm_release
+> -	 * directly instead as it doesn't have a reference counter.
+> -	 */
+> -	if (shm->flags & TEE_SHM_DMA_BUF)
+> -		dma_buf_put(shm->dmabuf);
+> -	else
+> -		tee_shm_release(shm);
+> +	tee_shm_put(shm);
+>  }
+>  EXPORT_SYMBOL_GPL(tee_shm_free);
+>  
+> @@ -481,10 +417,15 @@ struct tee_shm *tee_shm_get_from_id(struct tee_context *ctx, int id)
+>  	teedev = ctx->teedev;
+>  	mutex_lock(&teedev->mutex);
+>  	shm = idr_find(&teedev->idr, id);
+> +	/*
+> +	 * If the tee_shm was found in the IDR it must have a refcount
+> +	 * larger than 0 due to the guarantee in tee_shm_put() below. So
+> +	 * it's safe to use refcount_inc().
+> +	 */
+>  	if (!shm || shm->ctx != ctx)
+>  		shm = ERR_PTR(-EINVAL);
+> -	else if (shm->flags & TEE_SHM_DMA_BUF)
+> -		get_dma_buf(shm->dmabuf);
+> +	else
+> +		refcount_inc(&shm->refcount);
+>  	mutex_unlock(&teedev->mutex);
+>  	return shm;
+>  }
+> @@ -496,7 +437,24 @@ EXPORT_SYMBOL_GPL(tee_shm_get_from_id);
+>   */
+>  void tee_shm_put(struct tee_shm *shm)
+>  {
+> -	if (shm->flags & TEE_SHM_DMA_BUF)
+> -		dma_buf_put(shm->dmabuf);
+> +	struct tee_device *teedev = shm->ctx->teedev;
+> +	bool do_release = false;
+> +
+> +	mutex_lock(&teedev->mutex);
+> +	if (refcount_dec_and_test(&shm->refcount)) {
+> +		/*
+> +		 * refcount has reached 0, we must now remove it from the
+> +		 * IDR before releasing the mutex. This will guarantee that
+> +		 * the refcount_inc() in tee_shm_get_from_id() never starts
+> +		 * from 0.
+> +		 */
+> +		if (shm->flags & TEE_SHM_DMA_BUF)
+> +			idr_remove(&teedev->idr, shm->id);
+> +		do_release = true;
 
-Why didn't you change the code as I suggested ?
+As you are using a refcount in the "traditional" way, why not just use a
+kref instead?  That solves your "do_release" mess here.
 
-Since (cdb[2 + cdb_offset] & 3) =3D=3D 0 is also used on the condition be=
-low, you
-can clean this up like this:
+thanks,
 
-	if (!(cdb[2 + cdb_offset] & 0x3)) {
-		/*
-		 * When T_LENGTH is zero (No data is transferred), dir should
-		 * be DMA_NONE.
-		 */
-		if (scmd->sc_data_direction !=3D DMA_NONE) {
-			fp =3D 2 + cdb_offset;
-			goto invalid_fld;
-		}
-
-		if (ata_is_ncq(tf->protocol))
-			tf->protocol =3D ATA_PROT_NCQ_NODATA;
-	}
-
-
---=20
-Damien Le Moal
-Western Digital Research
+greg k-h

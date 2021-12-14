@@ -2,609 +2,486 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64412474B32
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F58474B34
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237170AbhLNStq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 13:49:46 -0500
-Received: from sonic306-27.consmr.mail.ne1.yahoo.com ([66.163.189.89]:35235
-        "EHLO sonic306-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237146AbhLNStp (ORCPT
+        id S237179AbhLNSuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:50:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237152AbhLNSuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 13:49:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1639507785; bh=UbSW3llBJqwEEFhPKIGIzqjjNKQEKk7txjnR3+gBPMs=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=fe3OSOR7FHAOrZ56jtLkwqAbQAFgOdqolv42VRFUqh8GbEQN4OM422WOYAahy/Z/eWBifCEJyUooOYoIWXbwnQNQjhwC13kUQBnP/fOtUyluEB9wDIO3GphXP+rmyIhDwzAtpGaqVeC+7SMnebT4c3m7oE741xYz0/YKVEoY5cfMqtymPO9RZ0fZ7/K8eetQs9PHWUY+FvYUpluqaokEpZK6uOiy8hBdRtq5rvPHsbcnZGcYI7Ddt0g8Wk2ddBQP4a+CHta/iBPAFK50tF1yiHKjy0Z5XW+i2P2X3VnJP3PnXn/VcJzIM+5KF2bP98PS3PDXIFVm9rm/IpwZ/aKoKA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1639507785; bh=CKo7PaV495aSnDyY+D0yOkyTBhcOJlqi2rusHkkSyOo=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Lz/8rjXejGnWdeb6B+khjvflnYhdrdOqAJiOT+zt1QAceHDqJEUGS/8cDGlBo6RZmR25oXiHYy6HpVAnoXosd+Sla/WsGuze1yB80IUm/cLaBbN1w+60k+32sI/cXzVuwdNsmi4YXhC41B9OM5Hv3mIHNOXPC0H1h8tTbNtGaSG2N/rdC6yIrSYHsdTrT0M5Z7HQaJJG5A+oMcmuFo5ssfm4fun0Q1NAohTefmKEjDN1YnE5j0bBXIXBJFN2ZCgmL1A+We4qlSksouWzeVlT7XlqQaZwHowEE4iUsI+q+fKNIWMsORFKqoG6+yanr6/pHKfvIiFEOcDu1SI0Ks1tdA==
-X-YMail-OSG: vVWM8rwVM1mjhn7aE1o8PvrE2m3SICFE8qAT3ahwLJuBmUPYJkjCl94PozWukCU
- 58p0pMyZQay2pVR1uIOYmwbDMU3Ypw_Z6rX9.i11MEKh2LDbfWuBWNLlGGj1nIvzyPUUu3ARtli2
- C5N.KuPnpkFrnlTiuK2B9qjpXAqPvOZNthkL9vzdZHEJsS0vdEWiX.FFK2Onr.2PpmlSpJxCeUCc
- S2mjbf58EGqGBiiFmBPJj.sL9gxKSvowVtqr2QhexY_87EHlc0nmJZBIURODmDTt3etJ9trBYN2W
- vCwrSFYk3AKXA802X.AQ5VPoRZONNDDcip4PQBMNagrwgKtpcwfXZrY0ReBJBKhfBIcIabmq93nH
- yA.CpcOVfFMH6UO9etvftb5N043e0UvEEGrUY8tzOBj5ees19qsVezPk3sAejlhz4waxAEILDJWy
- 3lJuu6WHAOZ9NmGGMBg9P8t6jhi3Fuw4UuxBgvhSbviOjzBOL0iHB.DjhmtebTRXaz4mUIP7CJJi
- VgHZ2rXJgMtC363WPK878F4muxqjaHB1DrJ0eWTe2W9vmrEi.Mth2aRJV2kn72ayBlbWLTf73nwU
- IEk7gtmphpO4KUSnrBXKHuw5FloUrzKhhneNOlVoXucUMRIo.4Z6fe719iFSCD3F5Z0TCRpZsdfp
- LsYxPRKJVP_lFNdpEcR1nysU4qzJ_OPbbEJOzsXPPJ.d408j.t7SWmdshIMN9rVs.3k36WyDPPNb
- yS4qB4..bv.7H1XAgnl8ylg.L3XYwUFebteRef9gO9NrGCBa5bp6NlqHhVSklIlQj._Lf55f2qh2
- l1yfJGnvtzo3RIQqQSDhTP7r0IRsmYVrdd8j5i1rL.b1AhN6CkkbkncsACx1YvTQlPiYX7.8eMXW
- EYrjMVAzzFx8UoV_W72TF1PefTEKVeGwRM17Pn2_HsN3Lw9eiQJJsUaKHnyWwn2h2sqsLFTerg_U
- Lez3mTF2hPD25jL9ytLYrEp2xUQ70VKhZuZD3ArxYrULD8bFwKRDPdFb_T_KsxYjwu2.NdoY3ufN
- ff.uvLNzSAyztm972_PXJj_vTY4oG0ja1bFvT7suMwVlVjmMP5A7foCX1M.VraeQFS4EEo7YwXS8
- ACuqH74fXP8J3VlVDckiA1goLNPpH2WpDrMEBkVQ8SAVyuJb9iECUG6e48EyXLb.AcR0aE8SEiB_
- JQXPIn5id3pNXOvLbGnOYOPW5igNqiYWTJADivMb3QSChB8zRZ0bLQm3_2ejysqon87EQoUN2RqV
- qpQWC7vcyF3GpgxHorG6xOk9K4B05UyoATSGi30aeCh4euZ5LHFFYekF502aBlNKxnRWeaSI3IZi
- JCoiaEUWvzH4o4SRAAe6fJ5wC.SmHgYmdyyRmuQ6pU8esLHjY852yOrIENaNUNJyDzAWeFKcpN55
- UPtZe.UV_zRb1ljxAVWvBsT3Xtz0.mhIixOTIJkd0t4oFGd3zqUnl5azLirddnzwQUMjlheCJZKS
- ZsHS9KkUeY_12kioz7BT4BgW2tHciOFamtrdzKdIPAOOg1b7LAqfwT7XwfOiMEE_hg4UjVgRy5ni
- QsSnFE0u3D0xkiC0MCe59FY_bg2bq4oqL9CTdzIVl6ebqgH4B5u8QpSkMSd4wjN4LYcDMFLUQcOV
- C2hM4z47e8L14m5PQtfdt3npWlto87ttRM8WfVLgTrrV0hq5rNDPeAiTLy4JAgluAKgTcjVYTsD4
- GUSXZpIwiBEnVoLNC7dnyvme4sTumvyT3hsHlGysSPedlNULEeF5ZUTmPITUbCEOZegYHju9c9jY
- cwghBGgONy7fv086qCed0OOc6VC_YNLjprOr0v8sSOLXHNUUGuORaPvR0NdJ.bqLJbgmv6rtAKqJ
- WKkyXCiQl8v0G.GZIYuyN2oif_hS2M7x87VQinkjy9An6rFLyLcemhyuT8B6A27hI.sUqbY4gykG
- WMxm4n6eGJBZVOlmM12T8AtmSNZDjT2c0g3.laAPPm96dULBdJmdCPXZcoJpFkn97uF.39SaTTyX
- uzYYXAcyox7liQAXoLYzm_DtiH37DUailNzBxwemjza7kXYN_q9CXZ6miwNjIgMNdnDPw4jsrLFe
- 8d9sYFtvGQqtmm_ILh4YyrqA6rVs2iD_8NjvOqtlxFqH8TIkQVjwzA8AoRRZTITjuQUQASHcREWe
- whaUUPMdpGS9NM0eOiG3NrDLh7ryhx1Qwe4gFnsY.SMIZJ3D1AVDQQcAK4Om8bP2KU6Dg4oYIOfq
- sbucuXG91A1Fz.nwd7lKGRaFdnfl9ptZqtu9J23TFB5c7gEHdANrww54Y.b4ZuyvGxJkCx3XT6He
- Z
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Tue, 14 Dec 2021 18:49:45 +0000
-Received: by kubenode516.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID d1ec1b0c730e4212d5606a5c05361bcd;
-          Tue, 14 Dec 2021 18:49:41 +0000 (UTC)
-Message-ID: <52758e36-63aa-a8e8-7aa7-e7217b81cbfe@schaufler-ca.com>
-Date:   Tue, 14 Dec 2021 10:49:39 -0800
+        Tue, 14 Dec 2021 13:50:15 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE8BC06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 10:50:14 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id l22so38593511lfg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 10:50:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M+PXQxxt+N6XJH12Z4pvxa1wJ+zPYfYqydFI8Bq2yqc=;
+        b=wj/hNF903N7aXm137ls3RRjkoi6lyRtKV7Rp4EaF0WEdW+2aOtI34Rgn3v7BBK9U34
+         xD5xeeEie/4pSlFOJRqzMSAZapXlCm3MSKFAqNce6RG9iAnsuCNJ5RtbWEouUZiVghw3
+         qMsiZHRHqLj3uHEGGZqzw73Xj/pbO37yEF8vHPLjaagEku0QDvUmSV4+FNHrH8f8/cz3
+         CB4wUts/KluwCkvt2SQ5LsDfLha8OHVcinBWcZOtXX5VCYvD7/iSmWn892At5QdWW11D
+         KoKl92rbPkEGKgoydzXqbwwcGVcM9/bX8jGc7jAkYqcved+IW2VdAWt7Woe3XOsmiiHP
+         QLoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M+PXQxxt+N6XJH12Z4pvxa1wJ+zPYfYqydFI8Bq2yqc=;
+        b=gwpd6Hz2tsNPIMpTobdmoUvOBltIsrEx2L/QkAs8fMzNB2/v5JWaVRm8skHto9VRNv
+         hJ2Ox4vNuVLxflpoLspo4PTJj2WCP7qOyeTxHiQ5o9TIvovCBxfkHagCJbKpwvKxwFQ+
+         j4wxpe/F/2pGoFwbWXkfBg08FlAnxxX5VDbrm4dpg2fX2+FFY0QVyU3JsgWS/lTlQMRI
+         sMyFhzrl4qnmz0NKPr/oF2WwM4KnerG/+Hrnx8XtyaQ3iX2p6FpJFANGQiOS9Xbpa9iI
+         ILf+MX6Yn2SsI52KxsG1JzforNpwMtUA92ch1jnjSN1BUAljxbR0FBjzQ4jIUPquyZ2g
+         DVHg==
+X-Gm-Message-State: AOAM530seTOsEfaz60CS6MjKJFB1SMcdsDj6zxySQam8NdPSTVpHqHAz
+        EAKqgwMTaeEyPYDiPkSWYz9F+g==
+X-Google-Smtp-Source: ABdhPJzfN4AHLpaP8s+TEXuEmvldRxvIq1pP5dpJNahbxhLU/UUykdSA3hegiD0squxAbqj4FzdiLQ==
+X-Received: by 2002:a05:6512:3c9a:: with SMTP id h26mr6082192lfv.155.1639507812414;
+        Tue, 14 Dec 2021 10:50:12 -0800 (PST)
+Received: from jade (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
+        by smtp.gmail.com with ESMTPSA id i18sm88035lfe.186.2021.12.14.10.50.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 10:50:12 -0800 (PST)
+Date:   Tue, 14 Dec 2021 19:50:10 +0100
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Rijo Thomas <Rijo-john.Thomas@amd.com>,
+        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
+        stable@vger.kernel.org, Lars Persson <larper@axis.com>,
+        Patrik Lantz <patrik.lantz@axis.com>
+Subject: Re: [PATCH] tee: handle lookup of shm with reference count 0
+Message-ID: <20211214185010.GA1816063@jade>
+References: <20211214123540.1789434-1-jens.wiklander@linaro.org>
+ <YbifvnSBjW5m19hZ@kroah.com>
+ <20211214145957.GA1800868@jade>
+ <Ybi3Vx1UzJ/tpTHq@kroah.com>
+ <20211214163144.GA1807724@jade>
+ <YbjLrkTcveIqD8PL@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v31 14/28] LSM: Specify which LSM to display
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>
-Cc:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>, linux-audit@redhat.com,
-        Kees Cook <keescook@chromium.org>, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        linux-kernel@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20211213234034.111891-1-casey@schaufler-ca.com>
- <20211213234034.111891-15-casey@schaufler-ca.com>
- <CAJ2a_Df3HOhBKR6B3NhMkQb8hbz98AMG+Rvh4aht4ZbUY-OfUQ@mail.gmail.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAJ2a_Df3HOhBKR6B3NhMkQb8hbz98AMG+Rvh4aht4ZbUY-OfUQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.19415 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YbjLrkTcveIqD8PL@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/2021 10:38 AM, Christian Göttsche wrote:
-> On Tue, 14 Dec 2021 at 00:56, Casey Schaufler <casey@schaufler-ca.com> wrote:
->> Create a new entry "interface_lsm" in the procfs attr directory for
->> controlling which LSM security information is displayed for a
->> process. A process can only read or write its own display value.
->>
->> The name of an active LSM that supplies hooks for
->> human readable data may be written to "interface_lsm" to set the
->> value. The name of the LSM currently in use can be read from
->> "interface_lsm". At this point there can only be one LSM capable
->> of display active. A helper function lsm_task_ilsm() is
->> provided to get the interface lsm slot for a task_struct.
->>
->> Setting the "interface_lsm" requires that all security modules using
->> setprocattr hooks allow the action. Each security module is
->> responsible for defining its policy.
->>
->> AppArmor hook provided by John Johansen <john.johansen@canonical.com>
->> SELinux hook provided by Stephen Smalley <stephen.smalley.work@gmail.com>
->>
->> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
->> Cc: Paul Moore <paul@paul-moore.com>
->> Cc: John Johansen <john.johansen@canonical.com>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: linux-api@vger.kernel.org
->> Cc: linux-doc@vger.kernel.org
->> ---
->>   .../ABI/testing/procfs-attr-lsm_display       |  22 +++
->>   Documentation/security/lsm.rst                |  14 ++
->>   fs/proc/base.c                                |   1 +
->>   include/linux/security.h                      |  17 ++
->>   security/apparmor/include/apparmor.h          |   3 +-
->>   security/apparmor/lsm.c                       |  32 ++++
->>   security/security.c                           | 166 ++++++++++++++++--
->>   security/selinux/hooks.c                      |  11 ++
->>   security/selinux/include/classmap.h           |   2 +-
->>   security/smack/smack_lsm.c                    |   7 +
->>   10 files changed, 256 insertions(+), 19 deletions(-)
->>   create mode 100644 Documentation/ABI/testing/procfs-attr-lsm_display
->>
->> diff --git a/Documentation/ABI/testing/procfs-attr-lsm_display b/Documentation/ABI/testing/procfs-attr-lsm_display
->> new file mode 100644
->> index 000000000000..0f60005c235c
->> --- /dev/null
->> +++ b/Documentation/ABI/testing/procfs-attr-lsm_display
->> @@ -0,0 +1,22 @@
->> +What:          /proc/*/attr/lsm_display
->> +Contact:       linux-security-module@vger.kernel.org,
->> +Description:   The name of the Linux security module (LSM) that will
->> +               provide information in the /proc/*/attr/current,
->> +               /proc/*/attr/prev and /proc/*/attr/exec interfaces.
->> +               The details of permissions required to read from
->> +               this interface are dependent on the LSMs active on the
->> +               system.
->> +               A process cannot write to this interface unless it
->> +               refers to itself.
->> +               The other details of permissions required to write to
->> +               this interface are dependent on the LSMs active on the
->> +               system.
->> +               The format of the data used by this interface is a
->> +               text string identifying the name of an LSM. The values
->> +               accepted are:
->> +                       selinux         - the SELinux LSM
->> +                       smack           - the Smack LSM
->> +                       apparmor        - The AppArmor LSM
->> +               By convention the LSM names are lower case and do not
->> +               contain special characters.
->> +Users:         LSM user-space
->> diff --git a/Documentation/security/lsm.rst b/Documentation/security/lsm.rst
->> index 6a2a2e973080..b77b4a540391 100644
->> --- a/Documentation/security/lsm.rst
->> +++ b/Documentation/security/lsm.rst
->> @@ -129,3 +129,17 @@ to identify it as the first security module to be registered.
->>   The capabilities security module does not use the general security
->>   blobs, unlike other modules. The reasons are historical and are
->>   based on overhead, complexity and performance concerns.
->> +
->> +LSM External Interfaces
->> +=======================
->> +
->> +The LSM infrastructure does not generally provide external interfaces.
->> +The individual security modules provide what external interfaces they
->> +require.
->> +
->> +The file ``/sys/kernel/security/lsm`` provides a comma
->> +separated list of the active security modules.
->> +
->> +The file ``/proc/pid/attr/interface_lsm`` contains the name of the security
->> +module for which the ``/proc/pid/attr/current`` interface will
->> +apply. This interface can be written to.
->> diff --git a/fs/proc/base.c b/fs/proc/base.c
->> index 13eda8de2998..50dbe5612a26 100644
->> --- a/fs/proc/base.c
->> +++ b/fs/proc/base.c
->> @@ -2828,6 +2828,7 @@ static const struct pid_entry attr_dir_stuff[] = {
->>          ATTR(NULL, "fscreate",          0666),
->>          ATTR(NULL, "keycreate",         0666),
->>          ATTR(NULL, "sockcreate",        0666),
->> +       ATTR(NULL, "interface_lsm",     0666),
->>   #ifdef CONFIG_SECURITY_SMACK
->>          DIR("smack",                    0555,
->>              proc_smack_attr_dir_inode_ops, proc_smack_attr_dir_ops),
->> diff --git a/include/linux/security.h b/include/linux/security.h
->> index 3b653fe331dd..872e543d37dd 100644
->> --- a/include/linux/security.h
->> +++ b/include/linux/security.h
->> @@ -219,6 +219,23 @@ static inline u32 lsmblob_value(const struct lsmblob *blob)
->>          return 0;
->>   }
->>
->> +/**
->> + * lsm_task_ilsm - the "interface_lsm" for this task
->> + * @task: The task to report on
->> + *
->> + * Returns the task's interface LSM slot.
->> + */
->> +static inline int lsm_task_ilsm(struct task_struct *task)
->> +{
->> +#ifdef CONFIG_SECURITY
->> +       int *ilsm = task->security;
->> +
->> +       if (ilsm)
->> +               return *ilsm;
->> +#endif
->> +       return LSMBLOB_INVALID;
->> +}
->> +
->>   /* These functions are in security/commoncap.c */
->>   extern int cap_capable(const struct cred *cred, struct user_namespace *ns,
->>                         int cap, unsigned int opts);
->> diff --git a/security/apparmor/include/apparmor.h b/security/apparmor/include/apparmor.h
->> index 1fbabdb565a8..b1622fcb4394 100644
->> --- a/security/apparmor/include/apparmor.h
->> +++ b/security/apparmor/include/apparmor.h
->> @@ -28,8 +28,9 @@
->>   #define AA_CLASS_SIGNAL                10
->>   #define AA_CLASS_NET           14
->>   #define AA_CLASS_LABEL         16
->> +#define AA_CLASS_DISPLAY_LSM   17
->>
->> -#define AA_CLASS_LAST          AA_CLASS_LABEL
->> +#define AA_CLASS_LAST          AA_CLASS_DISPLAY_LSM
->>
->>   /* Control parameters settable through module/boot flags */
->>   extern enum audit_mode aa_g_audit;
->> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
->> index 24241db8ec54..5ed40fd93ce9 100644
->> --- a/security/apparmor/lsm.c
->> +++ b/security/apparmor/lsm.c
->> @@ -621,6 +621,25 @@ static int apparmor_getprocattr(struct task_struct *task, char *name,
->>          return error;
->>   }
->>
->> +
->> +static int profile_interface_lsm(struct aa_profile *profile,
->> +                                struct common_audit_data *sa)
->> +{
->> +       struct aa_perms perms = { };
->> +       unsigned int state;
->> +
->> +       state = PROFILE_MEDIATES(profile, AA_CLASS_DISPLAY_LSM);
->> +       if (state) {
->> +               aa_compute_perms(profile->policy.dfa, state, &perms);
->> +               aa_apply_modes_to_perms(profile, &perms);
->> +               aad(sa)->label = &profile->label;
->> +
->> +               return aa_check_perms(profile, &perms, AA_MAY_WRITE, sa, NULL);
->> +       }
->> +
->> +       return 0;
->> +}
->> +
->>   static int apparmor_setprocattr(const char *name, void *value,
->>                                  size_t size)
->>   {
->> @@ -632,6 +651,19 @@ static int apparmor_setprocattr(const char *name, void *value,
->>          if (size == 0)
->>                  return -EINVAL;
->>
->> +       /* LSM infrastructure does actual setting of interface_lsm if allowed */
->> +       if (!strcmp(name, "interface_lsm")) {
->> +               struct aa_profile *profile;
->> +               struct aa_label *label;
->> +
->> +               aad(&sa)->info = "set interface lsm";
->> +               label = begin_current_label_crit_section();
->> +               error = fn_for_each_confined(label, profile,
->> +                                       profile_interface_lsm(profile, &sa));
->> +               end_current_label_crit_section(label);
->> +               return error;
->> +       }
->> +
->>          /* AppArmor requires that the buffer must be null terminated atm */
->>          if (args[size - 1] != '\0') {
->>                  /* null terminate */
->> diff --git a/security/security.c b/security/security.c
->> index 0e17620a60e2..1d734d9579f1 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -78,7 +78,16 @@ static struct kmem_cache *lsm_file_cache;
->>   static struct kmem_cache *lsm_inode_cache;
->>
->>   char *lsm_names;
->> -static struct lsm_blob_sizes blob_sizes __lsm_ro_after_init;
->> +
->> +/*
->> + * The task blob includes the "interface_lsm" slot used for
->> + * chosing which module presents contexts.
->> + * Using a long to avoid potential alignment issues with
->> + * module assigned task blobs.
->> + */
->> +static struct lsm_blob_sizes blob_sizes __lsm_ro_after_init = {
->> +       .lbs_task = sizeof(long),
->> +};
->>
->>   /* Boot-time LSM user choice */
->>   static __initdata const char *chosen_lsm_order;
->> @@ -672,6 +681,8 @@ int lsm_inode_alloc(struct inode *inode)
->>    */
->>   static int lsm_task_alloc(struct task_struct *task)
->>   {
->> +       int *ilsm;
->> +
->>          if (blob_sizes.lbs_task == 0) {
->>                  task->security = NULL;
->>                  return 0;
->> @@ -680,6 +691,15 @@ static int lsm_task_alloc(struct task_struct *task)
->>          task->security = kzalloc(blob_sizes.lbs_task, GFP_KERNEL);
->>          if (task->security == NULL)
->>                  return -ENOMEM;
->> +
->> +       /*
->> +        * The start of the task blob contains the "interface" LSM slot number.
->> +        * Start with it set to the invalid slot number, indicating that the
->> +        * default first registered LSM be displayed.
->> +        */
->> +       ilsm = task->security;
->> +       *ilsm = LSMBLOB_INVALID;
->> +
->>          return 0;
->>   }
->>
->> @@ -1736,14 +1756,26 @@ int security_file_open(struct file *file)
->>
->>   int security_task_alloc(struct task_struct *task, unsigned long clone_flags)
->>   {
->> +       int *oilsm = current->security;
->> +       int *nilsm;
->>          int rc = lsm_task_alloc(task);
->>
->> -       if (rc)
->> +       if (unlikely(rc))
->>                  return rc;
->> +
->>          rc = call_int_hook(task_alloc, 0, task, clone_flags);
->> -       if (unlikely(rc))
->> +       if (unlikely(rc)) {
->>                  security_task_free(task);
->> -       return rc;
->> +               return rc;
->> +       }
->> +
->> +       if (oilsm) {
->> +               nilsm = task->security;
->> +               if (nilsm)
->> +                       *nilsm = *oilsm;
->> +       }
->> +
->> +       return 0;
->>   }
->>
->>   void security_task_free(struct task_struct *task)
->> @@ -2175,23 +2207,110 @@ int security_getprocattr(struct task_struct *p, const char *lsm, char *name,
->>                                  char **value)
->>   {
->>          struct security_hook_list *hp;
->> +       int ilsm = lsm_task_ilsm(current);
->> +       int slot = 0;
->> +
->> +       if (!strcmp(name, "interface_lsm")) {
->> +               /*
->> +                * lsm_slot will be 0 if there are no displaying modules.
->> +                */
->> +               if (lsm_slot == 0)
->> +                       return -EINVAL;
->> +
->> +               /*
->> +                * Only allow getting the current process' interface_lsm.
->> +                * There are too few reasons to get another process'
->> +                * interface_lsm and too many LSM policy issues.
->> +                */
->> +               if (current != p)
->> +                       return -EINVAL;
->> +
->> +               ilsm = lsm_task_ilsm(p);
->> +               if (ilsm != LSMBLOB_INVALID)
->> +                       slot = ilsm;
->> +               *value = kstrdup(lsm_slotlist[slot]->lsm, GFP_KERNEL);
->> +               if (*value)
->> +                       return strlen(*value);
->> +               return -ENOMEM;
->> +       }
->>
->>          hlist_for_each_entry(hp, &security_hook_heads.getprocattr, list) {
->>                  if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
->>                          continue;
->> +               if (lsm == NULL && ilsm != LSMBLOB_INVALID &&
->> +                   ilsm != hp->lsmid->slot)
->> +                       continue;
->>                  return hp->hook.getprocattr(p, name, value);
->>          }
->>          return LSM_RET_DEFAULT(getprocattr);
->>   }
->>
->> +/**
->> + * security_setprocattr - Set process attributes via /proc
->> + * @lsm: name of module involved, or NULL
->> + * @name: name of the attribute
->> + * @value: value to set the attribute to
->> + * @size: size of the value
->> + *
->> + * Set the process attribute for the specified security module
->> + * to the specified value. Note that this can only be used to set
->> + * the process attributes for the current, or "self" process.
->> + * The /proc code has already done this check.
->> + *
->> + * Returns 0 on success, an appropriate code otherwise.
->> + */
->>   int security_setprocattr(const char *lsm, const char *name, void *value,
->>                           size_t size)
->>   {
->>          struct security_hook_list *hp;
->> +       char *termed;
->> +       char *copy;
->> +       int *ilsm = current->security;
->> +       int rc = -EINVAL;
->> +       int slot = 0;
->> +
->> +       if (!strcmp(name, "interface_lsm")) {
->> +               /*
->> +                * Change the "interface_lsm" value only if all the security
->> +                * modules that support setting a procattr allow it.
->> +                * It is assumed that all such security modules will be
->> +                * cooperative.
->> +                */
->> +               if (size == 0)
->> +                       return -EINVAL;
->> +
->> +               hlist_for_each_entry(hp, &security_hook_heads.setprocattr,
->> +                                    list) {
->> +                       rc = hp->hook.setprocattr(name, value, size);
->> +                       if (rc < 0)
->> +                               return rc;
->> +               }
->> +
->> +               rc = -EINVAL;
->> +
->> +               copy = kmemdup_nul(value, size, GFP_KERNEL);
->> +               if (copy == NULL)
->> +                       return -ENOMEM;
->> +
->> +               termed = strsep(&copy, " \n");
->> +
->> +               for (slot = 0; slot < lsm_slot; slot++)
->> +                       if (!strcmp(termed, lsm_slotlist[slot]->lsm)) {
->> +                               *ilsm = lsm_slotlist[slot]->slot;
->> +                               rc = size;
->> +                               break;
->> +                       }
->> +
->> +               kfree(termed);
->> +               return rc;
->> +       }
->>
->>          hlist_for_each_entry(hp, &security_hook_heads.setprocattr, list) {
->>                  if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
->>                          continue;
->> +               if (lsm == NULL && *ilsm != LSMBLOB_INVALID &&
->> +                   *ilsm != hp->lsmid->slot)
->> +                       continue;
->>                  return hp->hook.setprocattr(name, value, size);
->>          }
->>          return LSM_RET_DEFAULT(setprocattr);
->> @@ -2211,15 +2330,15 @@ EXPORT_SYMBOL(security_ismaclabel);
->>   int security_secid_to_secctx(struct lsmblob *blob, char **secdata, u32 *seclen)
->>   {
->>          struct security_hook_list *hp;
->> -       int rc;
->> +       int ilsm = lsm_task_ilsm(current);
->>
->>          hlist_for_each_entry(hp, &security_hook_heads.secid_to_secctx, list) {
->>                  if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
->>                          continue;
->> -               rc = hp->hook.secid_to_secctx(blob->secid[hp->lsmid->slot],
->> -                                             secdata, seclen);
->> -               if (rc != LSM_RET_DEFAULT(secid_to_secctx))
->> -                       return rc;
->> +               if (ilsm == LSMBLOB_INVALID || ilsm == hp->lsmid->slot)
->> +                       return hp->hook.secid_to_secctx(
->> +                                       blob->secid[hp->lsmid->slot],
->> +                                       secdata, seclen);
->>          }
->>
->>          return LSM_RET_DEFAULT(secid_to_secctx);
->> @@ -2230,16 +2349,15 @@ int security_secctx_to_secid(const char *secdata, u32 seclen,
->>                               struct lsmblob *blob)
->>   {
->>          struct security_hook_list *hp;
->> -       int rc;
->> +       int ilsm = lsm_task_ilsm(current);
->>
->>          lsmblob_init(blob, 0);
->>          hlist_for_each_entry(hp, &security_hook_heads.secctx_to_secid, list) {
->>                  if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
->>                          continue;
->> -               rc = hp->hook.secctx_to_secid(secdata, seclen,
->> -                                             &blob->secid[hp->lsmid->slot]);
->> -               if (rc != 0)
->> -                       return rc;
->> +               if (ilsm == LSMBLOB_INVALID || ilsm == hp->lsmid->slot)
->> +                       return hp->hook.secctx_to_secid(secdata, seclen,
->> +                                               &blob->secid[hp->lsmid->slot]);
->>          }
->>          return 0;
->>   }
->> @@ -2247,7 +2365,14 @@ EXPORT_SYMBOL(security_secctx_to_secid);
->>
->>   void security_release_secctx(char *secdata, u32 seclen)
->>   {
->> -       call_void_hook(release_secctx, secdata, seclen);
->> +       struct security_hook_list *hp;
->> +       int ilsm = lsm_task_ilsm(current);
->> +
->> +       hlist_for_each_entry(hp, &security_hook_heads.release_secctx, list)
->> +               if (ilsm == LSMBLOB_INVALID || ilsm == hp->lsmid->slot) {
->> +                       hp->hook.release_secctx(secdata, seclen);
->> +                       return;
->> +               }
->>   }
->>   EXPORT_SYMBOL(security_release_secctx);
->>
->> @@ -2388,8 +2513,15 @@ EXPORT_SYMBOL(security_sock_rcv_skb);
->>   int security_socket_getpeersec_stream(struct socket *sock, char __user *optval,
->>                                        int __user *optlen, unsigned len)
->>   {
->> -       return call_int_hook(socket_getpeersec_stream, -ENOPROTOOPT, sock,
->> -                               optval, optlen, len);
->> +       int ilsm = lsm_task_ilsm(current);
->> +       struct security_hook_list *hp;
->> +
->> +       hlist_for_each_entry(hp, &security_hook_heads.socket_getpeersec_stream,
->> +                            list)
->> +               if (ilsm == LSMBLOB_INVALID || ilsm == hp->lsmid->slot)
->> +                       return hp->hook.socket_getpeersec_stream(sock, optval,
->> +                                                                optlen, len);
->> +       return -ENOPROTOOPT;
->>   }
->>
->>   int security_socket_getpeersec_dgram(struct socket *sock, struct sk_buff *skb,
->> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
->> index c295b1035bc6..824a6e4fb126 100644
->> --- a/security/selinux/hooks.c
->> +++ b/security/selinux/hooks.c
->> @@ -6441,6 +6441,17 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
->>          /*
->>           * Basic control over ability to set these attributes at all.
->>           */
->> +
->> +       /*
->> +        * For setting interface_lsm, we only perform a permission check;
->> +        * the actual update to the interface_lsm value is handled by the
->> +        * LSM framework.
->> +        */
->> +       if (!strcmp(name, "interface_lsm"))
->> +               return avc_has_perm(&selinux_state,
->> +                                   mysid, mysid, SECCLASS_PROCESS2,
->> +                                   PROCESS2__SETDISPLAY, NULL);
->> +
->>          if (!strcmp(name, "exec"))
->>                  error = avc_has_perm(&selinux_state,
->>                                       mysid, mysid, SECCLASS_PROCESS,
->> diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
->> index 35aac62a662e..46a7cfaf392d 100644
->> --- a/security/selinux/include/classmap.h
->> +++ b/security/selinux/include/classmap.h
->> @@ -53,7 +53,7 @@ struct security_class_mapping secclass_map[] = {
->>              "execmem", "execstack", "execheap", "setkeycreate",
->>              "setsockcreate", "getrlimit", NULL } },
->>          { "process2",
->> -         { "nnp_transition", "nosuid_transition", NULL } },
->> +         { "nnp_transition", "nosuid_transition", "setdisplay", NULL } },
-> Was the suggestion to use a more descriptive permission verb[1]
-> accentdentially forgotten or dicarded for some reason?
+On Tue, Dec 14, 2021 at 05:51:58PM +0100, Greg KH wrote:
+> On Tue, Dec 14, 2021 at 05:31:44PM +0100, Jens Wiklander wrote:
+> > On Tue, Dec 14, 2021 at 04:25:11PM +0100, Greg KH wrote:
+> > > On Tue, Dec 14, 2021 at 03:59:57PM +0100, Jens Wiklander wrote:
+> > > > On Tue, Dec 14, 2021 at 02:44:30PM +0100, Greg KH wrote:
+> > > > > On Tue, Dec 14, 2021 at 01:35:40PM +0100, Jens Wiklander wrote:
+> > > > > > Since the tee subsystem does not keep a strong reference to its idle
+> > > > > > shared memory buffers, it races with other threads that try to destroy a
+> > > > > > shared memory through a close of its dma-buf fd or by unmapping the
+> > > > > > memory.
+> > > > > > 
+> > > > > > In tee_shm_get_from_id() when a lookup in teedev->idr has been
+> > > > > > successful, it is possible that the tee_shm is in the dma-buf teardown
+> > > > > > path, but that path is blocked by the teedev mutex. Since we don't have
+> > > > > > an API to tell if the tee_shm is in the dma-buf teardown path or not we
+> > > > > > must find another way of detecting this condition.
+> > > > > > 
+> > > > > > Fix this by doing the reference counting directly on the tee_shm using a
+> > > > > > new refcount_t refcount field. dma-buf is replaced by using
+> > > > > > anon_inode_getfd() instead, this separates the life-cycle of the
+> > > > > > underlying file from the tee_shm. tee_shm_put() is updated to hold the
+> > > > > > mutex when decreasing the refcount to 0 and then remove the tee_shm from
+> > > > > > teedev->idr before releasing the mutex. This means that the tee_shm can
+> > > > > > never be found unless it has a refcount larger than 0.
+> > > > > 
+> > > > > So you are dropping dma-buf support entirely?  And anon_inode_getfd()
+> > > > > works instead?  Why do more people not do this as well?
+> > > > 
+> > > > I don't know, but it should be noted that we're not doing very much with
+> > > > this file descriptor. We're only using it with mmap() and close().
+> > > > 
+> > > > > 
+> > > > > > 
+> > > > > > Fixes: 967c9cca2cc5 ("tee: generic TEE subsystem")
+> > > > > > Cc: stable@vger.kernel.org
+> > > > > > Reviewed-by: Lars Persson <larper@axis.com>
+> > > > > > Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+> > > > > > Reported-by: Patrik Lantz <patrik.lantz@axis.com>
+> > > > > > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> > > > > > ---
+> > > > > >  drivers/tee/tee_shm.c   | 174 +++++++++++++++-------------------------
+> > > > > >  include/linux/tee_drv.h |   2 +-
+> > > > > >  2 files changed, 67 insertions(+), 109 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> > > > > > index 8a8deb95e918..0c82cf981c46 100644
+> > > > > > --- a/drivers/tee/tee_shm.c
+> > > > > > +++ b/drivers/tee/tee_shm.c
+> > > > > > @@ -1,20 +1,17 @@
+> > > > > >  // SPDX-License-Identifier: GPL-2.0-only
+> > > > > >  /*
+> > > > > > - * Copyright (c) 2015-2016, Linaro Limited
+> > > > > > + * Copyright (c) 2015-2021, Linaro Limited
+> > > > > 
+> > > > > Nit, did Linaro really make a copyrightable change in 2017, 2018, 2019
+> > > > > and 2020 as well?  If not, please do not claim it.
+> > > > 
+> > > > Fair enough, I was a bit lazy 2018 shouldn't be there now that I've
+> > > > checked the log. I'll fix.
+> > > > 
+> > > > > 
+> > > > > >   */
+> > > > > > +#include <linux/anon_inodes.h>
+> > > > > >  #include <linux/device.h>
+> > > > > > -#include <linux/dma-buf.h>
+> > > > > > -#include <linux/fdtable.h>
+> > > > > >  #include <linux/idr.h>
+> > > > > > +#include <linux/mm.h>
+> > > > > >  #include <linux/sched.h>
+> > > > > >  #include <linux/slab.h>
+> > > > > >  #include <linux/tee_drv.h>
+> > > > > >  #include <linux/uio.h>
+> > > > > > -#include <linux/module.h>
+> > > > > >  #include "tee_private.h"
+> > > > > >  
+> > > > > > -MODULE_IMPORT_NS(DMA_BUF);
+> > > > > > -
+> > > > > >  static void release_registered_pages(struct tee_shm *shm)
+> > > > > >  {
+> > > > > >  	if (shm->pages) {
+> > > > > > @@ -31,16 +28,8 @@ static void release_registered_pages(struct tee_shm *shm)
+> > > > > >  	}
+> > > > > >  }
+> > > > > >  
+> > > > > > -static void tee_shm_release(struct tee_shm *shm)
+> > > > > > +static void tee_shm_release(struct tee_device *teedev, struct tee_shm *shm)
+> > > > > >  {
+> > > > > > -	struct tee_device *teedev = shm->ctx->teedev;
+> > > > > > -
+> > > > > > -	if (shm->flags & TEE_SHM_DMA_BUF) {
+> > > > > > -		mutex_lock(&teedev->mutex);
+> > > > > > -		idr_remove(&teedev->idr, shm->id);
+> > > > > > -		mutex_unlock(&teedev->mutex);
+> > > > > > -	}
+> > > > > > -
+> > > > > >  	if (shm->flags & TEE_SHM_POOL) {
+> > > > > >  		struct tee_shm_pool_mgr *poolm;
+> > > > > >  
+> > > > > > @@ -67,45 +56,6 @@ static void tee_shm_release(struct tee_shm *shm)
+> > > > > >  	tee_device_put(teedev);
+> > > > > >  }
+> > > > > >  
+> > > > > > -static struct sg_table *tee_shm_op_map_dma_buf(struct dma_buf_attachment
+> > > > > > -			*attach, enum dma_data_direction dir)
+> > > > > > -{
+> > > > > > -	return NULL;
+> > > > > > -}
+> > > > > > -
+> > > > > > -static void tee_shm_op_unmap_dma_buf(struct dma_buf_attachment *attach,
+> > > > > > -				     struct sg_table *table,
+> > > > > > -				     enum dma_data_direction dir)
+> > > > > > -{
+> > > > > > -}
+> > > > > > -
+> > > > > > -static void tee_shm_op_release(struct dma_buf *dmabuf)
+> > > > > > -{
+> > > > > > -	struct tee_shm *shm = dmabuf->priv;
+> > > > > > -
+> > > > > > -	tee_shm_release(shm);
+> > > > > > -}
+> > > > > > -
+> > > > > > -static int tee_shm_op_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+> > > > > > -{
+> > > > > > -	struct tee_shm *shm = dmabuf->priv;
+> > > > > > -	size_t size = vma->vm_end - vma->vm_start;
+> > > > > > -
+> > > > > > -	/* Refuse sharing shared memory provided by application */
+> > > > > > -	if (shm->flags & TEE_SHM_USER_MAPPED)
+> > > > > > -		return -EINVAL;
+> > > > > > -
+> > > > > > -	return remap_pfn_range(vma, vma->vm_start, shm->paddr >> PAGE_SHIFT,
+> > > > > > -			       size, vma->vm_page_prot);
+> > > > > > -}
+> > > > > > -
+> > > > > > -static const struct dma_buf_ops tee_shm_dma_buf_ops = {
+> > > > > > -	.map_dma_buf = tee_shm_op_map_dma_buf,
+> > > > > > -	.unmap_dma_buf = tee_shm_op_unmap_dma_buf,
+> > > > > > -	.release = tee_shm_op_release,
+> > > > > > -	.mmap = tee_shm_op_mmap,
+> > > > > > -};
+> > > > > > -
+> > > > > >  struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+> > > > > >  {
+> > > > > >  	struct tee_device *teedev = ctx->teedev;
+> > > > > > @@ -140,6 +90,7 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+> > > > > >  		goto err_dev_put;
+> > > > > >  	}
+> > > > > >  
+> > > > > > +	refcount_set(&shm->refcount, 1);
+> > > > > >  	shm->flags = flags | TEE_SHM_POOL;
+> > > > > >  	shm->ctx = ctx;
+> > > > > >  	if (flags & TEE_SHM_DMA_BUF)
+> > > > > > @@ -153,10 +104,7 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+> > > > > >  		goto err_kfree;
+> > > > > >  	}
+> > > > > >  
+> > > > > > -
+> > > > > >  	if (flags & TEE_SHM_DMA_BUF) {
+> > > > > > -		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+> > > > > > -
+> > > > > >  		mutex_lock(&teedev->mutex);
+> > > > > >  		shm->id = idr_alloc(&teedev->idr, shm, 1, 0, GFP_KERNEL);
+> > > > > >  		mutex_unlock(&teedev->mutex);
+> > > > > > @@ -164,28 +112,11 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+> > > > > >  			ret = ERR_PTR(shm->id);
+> > > > > >  			goto err_pool_free;
+> > > > > >  		}
+> > > > > > -
+> > > > > > -		exp_info.ops = &tee_shm_dma_buf_ops;
+> > > > > > -		exp_info.size = shm->size;
+> > > > > > -		exp_info.flags = O_RDWR;
+> > > > > > -		exp_info.priv = shm;
+> > > > > > -
+> > > > > > -		shm->dmabuf = dma_buf_export(&exp_info);
+> > > > > > -		if (IS_ERR(shm->dmabuf)) {
+> > > > > > -			ret = ERR_CAST(shm->dmabuf);
+> > > > > > -			goto err_rem;
+> > > > > > -		}
+> > > > > >  	}
+> > > > > >  
+> > > > > >  	teedev_ctx_get(ctx);
+> > > > > >  
+> > > > > >  	return shm;
+> > > > > > -err_rem:
+> > > > > > -	if (flags & TEE_SHM_DMA_BUF) {
+> > > > > > -		mutex_lock(&teedev->mutex);
+> > > > > > -		idr_remove(&teedev->idr, shm->id);
+> > > > > > -		mutex_unlock(&teedev->mutex);
+> > > > > > -	}
+> > > > > >  err_pool_free:
+> > > > > >  	poolm->ops->free(poolm, shm);
+> > > > > >  err_kfree:
+> > > > > > @@ -246,6 +177,7 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+> > > > > >  		goto err;
+> > > > > >  	}
+> > > > > >  
+> > > > > > +	refcount_set(&shm->refcount, 1);
+> > > > > >  	shm->flags = flags | TEE_SHM_REGISTER;
+> > > > > >  	shm->ctx = ctx;
+> > > > > >  	shm->id = -1;
+> > > > > > @@ -306,22 +238,6 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+> > > > > >  		goto err;
+> > > > > >  	}
+> > > > > >  
+> > > > > > -	if (flags & TEE_SHM_DMA_BUF) {
+> > > > > > -		DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+> > > > > > -
+> > > > > > -		exp_info.ops = &tee_shm_dma_buf_ops;
+> > > > > > -		exp_info.size = shm->size;
+> > > > > > -		exp_info.flags = O_RDWR;
+> > > > > > -		exp_info.priv = shm;
+> > > > > > -
+> > > > > > -		shm->dmabuf = dma_buf_export(&exp_info);
+> > > > > > -		if (IS_ERR(shm->dmabuf)) {
+> > > > > > -			ret = ERR_CAST(shm->dmabuf);
+> > > > > > -			teedev->desc->ops->shm_unregister(ctx, shm);
+> > > > > > -			goto err;
+> > > > > > -		}
+> > > > > > -	}
+> > > > > > -
+> > > > > >  	return shm;
+> > > > > >  err:
+> > > > > >  	if (shm) {
+> > > > > > @@ -339,6 +255,35 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+> > > > > >  }
+> > > > > >  EXPORT_SYMBOL_GPL(tee_shm_register);
+> > > > > >  
+> > > > > > +static int tee_shm_fop_release(struct inode *inode, struct file *filp)
+> > > > > > +{
+> > > > > > +	tee_shm_put(filp->private_data);
+> > > > > > +	return 0;
+> > > > > > +}
+> > > > > > +
+> > > > > > +static int tee_shm_fop_mmap(struct file *filp, struct vm_area_struct *vma)
+> > > > > > +{
+> > > > > > +	struct tee_shm *shm = filp->private_data;
+> > > > > > +	size_t size = vma->vm_end - vma->vm_start;
+> > > > > > +
+> > > > > > +	/* Refuse sharing shared memory provided by application */
+> > > > > > +	if (shm->flags & TEE_SHM_USER_MAPPED)
+> > > > > > +		return -EINVAL;
+> > > > > > +
+> > > > > > +	/* check for overflowing the buffer's size */
+> > > > > > +	if (vma->vm_pgoff + vma_pages(vma) > shm->size >> PAGE_SHIFT)
+> > > > > > +		return -EINVAL;
+> > > > > > +
+> > > > > > +	return remap_pfn_range(vma, vma->vm_start, shm->paddr >> PAGE_SHIFT,
+> > > > > > +			       size, vma->vm_page_prot);
+> > > > > > +}
+> > > > > > +
+> > > > > > +static const struct file_operations tee_shm_fops = {
+> > > > > > +	.owner = THIS_MODULE,
+> > > > > > +	.release = tee_shm_fop_release,
+> > > > > > +	.mmap = tee_shm_fop_mmap,
+> > > > > > +};
+> > > > > > +
+> > > > > >  /**
+> > > > > >   * tee_shm_get_fd() - Increase reference count and return file descriptor
+> > > > > >   * @shm:	Shared memory handle
+> > > > > > @@ -351,10 +296,11 @@ int tee_shm_get_fd(struct tee_shm *shm)
+> > > > > >  	if (!(shm->flags & TEE_SHM_DMA_BUF))
+> > > > > >  		return -EINVAL;
+> > > > > >  
+> > > > > > -	get_dma_buf(shm->dmabuf);
+> > > > > > -	fd = dma_buf_fd(shm->dmabuf, O_CLOEXEC);
+> > > > > > +	/* matched by tee_shm_put() in tee_shm_op_release() */
+> > > > > > +	refcount_inc(&shm->refcount);
+> > > > > > +	fd = anon_inode_getfd("tee_shm", &tee_shm_fops, shm, O_RDWR);
+> > > > > >  	if (fd < 0)
+> > > > > > -		dma_buf_put(shm->dmabuf);
+> > > > > > +		tee_shm_put(shm);
+> > > > > >  	return fd;
+> > > > > >  }
+> > > > > >  
+> > > > > > @@ -364,17 +310,7 @@ int tee_shm_get_fd(struct tee_shm *shm)
+> > > > > >   */
+> > > > > >  void tee_shm_free(struct tee_shm *shm)
+> > > > > >  {
+> > > > > > -	/*
+> > > > > > -	 * dma_buf_put() decreases the dmabuf reference counter and will
+> > > > > > -	 * call tee_shm_release() when the last reference is gone.
+> > > > > > -	 *
+> > > > > > -	 * In the case of driver private memory we call tee_shm_release
+> > > > > > -	 * directly instead as it doesn't have a reference counter.
+> > > > > > -	 */
+> > > > > > -	if (shm->flags & TEE_SHM_DMA_BUF)
+> > > > > > -		dma_buf_put(shm->dmabuf);
+> > > > > > -	else
+> > > > > > -		tee_shm_release(shm);
+> > > > > > +	tee_shm_put(shm);
+> > > > > >  }
+> > > > > >  EXPORT_SYMBOL_GPL(tee_shm_free);
+> > > > > >  
+> > > > > > @@ -481,10 +417,15 @@ struct tee_shm *tee_shm_get_from_id(struct tee_context *ctx, int id)
+> > > > > >  	teedev = ctx->teedev;
+> > > > > >  	mutex_lock(&teedev->mutex);
+> > > > > >  	shm = idr_find(&teedev->idr, id);
+> > > > > > +	/*
+> > > > > > +	 * If the tee_shm was found in the IDR it must have a refcount
+> > > > > > +	 * larger than 0 due to the guarantee in tee_shm_put() below. So
+> > > > > > +	 * it's safe to use refcount_inc().
+> > > > > > +	 */
+> > > > > >  	if (!shm || shm->ctx != ctx)
+> > > > > >  		shm = ERR_PTR(-EINVAL);
+> > > > > > -	else if (shm->flags & TEE_SHM_DMA_BUF)
+> > > > > > -		get_dma_buf(shm->dmabuf);
+> > > > > > +	else
+> > > > > > +		refcount_inc(&shm->refcount);
+> > > > > >  	mutex_unlock(&teedev->mutex);
+> > > > > >  	return shm;
+> > > > > >  }
+> > > > > > @@ -496,7 +437,24 @@ EXPORT_SYMBOL_GPL(tee_shm_get_from_id);
+> > > > > >   */
+> > > > > >  void tee_shm_put(struct tee_shm *shm)
+> > > > > >  {
+> > > > > > -	if (shm->flags & TEE_SHM_DMA_BUF)
+> > > > > > -		dma_buf_put(shm->dmabuf);
+> > > > > > +	struct tee_device *teedev = shm->ctx->teedev;
+> > > > > > +	bool do_release = false;
+> > > > > > +
+> > > > > > +	mutex_lock(&teedev->mutex);
+> > > > > > +	if (refcount_dec_and_test(&shm->refcount)) {
+> > > > > > +		/*
+> > > > > > +		 * refcount has reached 0, we must now remove it from the
+> > > > > > +		 * IDR before releasing the mutex. This will guarantee that
+> > > > > > +		 * the refcount_inc() in tee_shm_get_from_id() never starts
+> > > > > > +		 * from 0.
+> > > > > > +		 */
+> > > > > > +		if (shm->flags & TEE_SHM_DMA_BUF)
+> > > > > > +			idr_remove(&teedev->idr, shm->id);
+> > > > > > +		do_release = true;
+> > > > > 
+> > > > > As you are using a refcount in the "traditional" way, why not just use a
+> > > > > kref instead?  That solves your "do_release" mess here.
+> > > > 
+> > > > Yes, but it adds another problem. I don't want to hold the mutex when
+> > > > calling tee_shm_release() so that would mean moving idr_remove() to
+> > > > tee_shm_release() again and then use kref_get_unless_zero() in
+> > > > tee_shm_get_from_id() instead.
+> > > 
+> > > Why does the idr have anything to do with it here?  Once you are "done"
+> > > with the object, remove the entry from the idr and that's it.  You
+> > > should never have to mess with kref_get_unless_zero(), that's what locks
+> > > are for.
+> > 
+> > I hope it becomes more clear below.
+> > 
+> > > > With this approach the tee_shm is removed from the IDR so it cannot be
+> > > > seen any longer when the refcount is 0. I tried implementing it in both
+> > > > ways before and in my opinion this turned out better.
+> > > 
+> > > Really?  Something feels wrong here.  tee_release_device() should drop
+> > > the reference from the idr structure as then you know that userspace can
+> > > not grab any new references to it and should not need to look it up
+> > > again from anything.  Then in your final kref_put() call, in the release
+> > > callback for that, free the memory.
+> > 
+> > I assume you mean tee_shm_release().
+> > 
+> > As I understand it you're describing more or less how it worked before
+> > this patch, the only significant difference I see is that it was the
+> > release callback from the DMA-buf that called tee_shm_release() instead
+> > of kref_put() as you suggest. With that we have a window where the
+> > reference counter is 0, but the tee_shm is still in the IDR. If another
+> > thread, perhaps malicious, calls tee_shm_get_from_id() it may be able to
+> > grab the mutex before tee_shm_release(). If we just increase the
+> > reference counter without checking if it's 0 to start with or not then
+> > we're in trouble.
+> 
+> Your device has to have a lock outside of it in order for this to work
+> no matter what.  Your patch doesn't change that, you can't grab a lock
+> for yourself to then check if that pointer was valid or not :)
 
-The former. I realized I had missed it while the posting was
-in progress.
+That's what teedev->mutex is for, to protect those small critical
+sections. Where not dealing with the life time of the tee_device here,
+only the tee_shm protocted with the outside teedev->mutex.
 
->
-> [1]: https://lore.kernel.org/selinux/6cfc262c-1981-edcf-39bf-197a81cdebf3@schaufler-ca.com/T/#m66d868cf250928f0e8fdae6ffd5df775225036b8
->
->>          { "system",
->>            { "ipc_info", "syslog_read", "syslog_mod",
->>              "syslog_console", "module_request", "module_load", NULL } },
->> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
->> index 9c44327d8ea7..1069ba7abf40 100644
->> --- a/security/smack/smack_lsm.c
->> +++ b/security/smack/smack_lsm.c
->> @@ -3517,6 +3517,13 @@ static int smack_setprocattr(const char *name, void *value, size_t size)
->>          struct smack_known_list_elem *sklep;
->>          int rc;
->>
->> +       /*
->> +        * Allow the /proc/.../attr/current and SO_PEERSEC "interface_lsm"
->> +        * to be reset at will.
->> +        */
->> +       if (strcmp(name, "interface_lsm") == 0)
->> +               return 0;
->> +
->>          if (!smack_privileged(CAP_MAC_ADMIN) && list_empty(&tsp->smk_relabel))
->>                  return -EPERM;
->>
->> --
->> 2.31.1
->>
+I'm afraid I'm maybe missing your point though.
+
+> Why not properly reference count your shm objects in the tee object?
+
+I thought that was what I was doing.
+
+> That way when the last reference to a shm object is dropped, it cleans
+> itself up and gets rid of the idr entry (under the device mutex).  Then
+> it drops the reference to the tee object, and if that was the last
+> reference on the tee object, it too will be freed.
+
+That would work well _if_ we could hold teedev->mutex while calling
+tee_shm_release(). Unfortunately that's not possible because that
+function calls teedev->desc->ops->shm_unregister() (pointing to for
+instance optee_shm_unregister() in drivers/tee/optee/smc_abi.c). We
+can't hold teedev->mutex while calling into OP-TEE in secure world
+because we may need to allocate a new temporary tee_shm as part of the
+call into secure world. Even if there was a way around that it would be
+to ask for problems to hold such a mutex while doing calls into secure
+world.
+
+> That's what kobjects do, and while you probably don't want to use a full
+> kobject here, the same idea is relevant.
+> 
+> If people can randomly grab shm objects, then they need to be reference
+> counted properly.
+
+That's what tee_shm_get_from_id() is for. There is no need for a pure
+get function, the combined one is the only one needed.
+tee_shm_get_from_id() is called on all involved tee_shm's during the
+start of the syscall and then put at the end of the syscall.
+
+Thanks for you patience,
+Jens

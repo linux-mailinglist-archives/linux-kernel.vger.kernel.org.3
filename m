@@ -2,121 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFE8473CA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 06:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAF9473CAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 06:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbhLNFkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 00:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
+        id S229983AbhLNFkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 00:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbhLNFkb (ORCPT
+        with ESMTP id S229977AbhLNFku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 00:40:31 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7743C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:40:30 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso15242954pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:40:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8JDQ3MQqde4N4IH+n3XX9fcwBopiKKaWQdwS/tyqbmg=;
-        b=JMRGQ3yC8cFgwlByku5wmFn/Vn6qivpe/xVabCxqWaQk8+ADkoKdCr5IrnsvBR6jXK
-         CxcwgvZOiTIQ/Mo/F+XtLqhGBWAt13JeE/CQeV3mB6TMEu4nGumkqwM8ZxaWZcrLBeyM
-         XJJJrbzNLAsV4PGgQ01bUe7Dc9V3yLbhge7X5kN9oMxFOgoUvUtIQEqRQe/hr0DvAsig
-         hki8AiK8lsqNj2xDXoDFwO5DZfzDdoFpgDNot88819bDo87fEm7stEsTTWYq8pAjYVqz
-         1JwvIK/lSk/lZGCPKkvhgm6hHh9vBTBnSpJ03p8DiDY3PAiZ1FLpr07IzP/bUnsQim7C
-         FUxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8JDQ3MQqde4N4IH+n3XX9fcwBopiKKaWQdwS/tyqbmg=;
-        b=4yHTTI1+0F9lK3I95KvVDxQKAaOgrdFKuapZEZdxnFtLpQPmLEkUC3X9rJNLq5ISmO
-         26rUGBGIrnSURfP3QDhsGoZ7O4FE9Nq/nW0QvliGptQYhr+EG+cU+Zl7qs+o+FCUXlri
-         Ar+ezeY8XNjYpjA8gYxnad2jjmaRVoJycbAhkru4z9TD59DQFj8B215gIwOLe6vdBkpX
-         t+mlhnDaRcktT8Crj4Ir6X8RgKQT3VrbSjGuHPVKGe4CqSlOhJXUc2KkEKfebKYjVub3
-         7FTzkUbDX5BS6m1ImqEbsW0LIyaEBzozghR2pLWrzKT1oAsUU9D8vYZ3dkRNdKZg92ls
-         RHFA==
-X-Gm-Message-State: AOAM532Mg7pavVgOdHM4iZwj05B5VyFVpo1WlKkJ6QKqRCEFXvBHPlgw
-        L/JTNe0VRcvTEL0wxnph3ic=
-X-Google-Smtp-Source: ABdhPJzuI5t1dM1LqRoGpWfjl6OfM6sIxTLiYd+vBRqoxfGSqb07+2RIXhG3hL3fBYBznZJiqj5zpQ==
-X-Received: by 2002:a17:90b:4c8b:: with SMTP id my11mr3433862pjb.96.1639460430094;
-        Mon, 13 Dec 2021 21:40:30 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:6d07:5ea2:4ced:3b3d])
-        by smtp.gmail.com with ESMTPSA id m6sm12613305pfh.87.2021.12.13.21.40.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 21:40:28 -0800 (PST)
-Date:   Mon, 13 Dec 2021 21:40:25 -0800
-From:   "dmitry.torokhov" <dmitry.torokhov@gmail.com>
-To:     lianzhi chang <changlianzhi@uniontech.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        jirislaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        282827961 <282827961@qq.com>, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH v20] tty: Fix the keyboard led light display problem
-Message-ID: <YbguSZFyWGUt+Nwh@google.com>
-References: <20211213061244.13732-1-changlianzhi@uniontech.com>
- <YbdMTCVybK34HBSz@kroah.com>
- <Ybehbz1LqRqcK+Hh@google.com>
- <tencent_404C1E8253D7D34255D5026C@qq.com>
+        Tue, 14 Dec 2021 00:40:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B19C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:40:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01468612B3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:40:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5031BC34604;
+        Tue, 14 Dec 2021 05:40:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639460449;
+        bh=4z7FeS4gE+x7mTX3nQbO22qXp5q8+0QWEKkDTXrMqaU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kvv7r+I8RUEZvhgsbEe3whr7S8kCq72s7QEIVq3TUBSn8q3SMvbnQIJYNa8loOQBq
+         j6UADdwvso12ZLujJx6xm9/I+pWTupZyvVU8McQfxK4rWDKUf+797s8e/5rNbLcok9
+         aZQZut/wKEHW18eUmszJLgGIN3UBbCaNVGGPua4639bppBDmYz1+JIfnYVNGZJhkuC
+         4cneowc5W6EYJfdoUPDvodylPRxEpazhcm47hO8mXOvZV1q6HNLpjg+Arq9uPd8vUt
+         Kb32JdasANWU5Ga1BRUd6t41Y9IwwuqgjMQqOnfFBTdY4SRS1QlaWHBDnBuPHGCc1s
+         P6zKC/iJjZGeA==
+Date:   Tue, 14 Dec 2021 13:40:45 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Xiaowei Bao <xiaowei.bao@nxp.com>,
+        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+Subject: Re: [PATCH v2 06/10] arm64: dts: lx2160a: add pcie EP mode nodes
+Message-ID: <20211214054044.GG10916@dragon>
+References: <20211203235446.8266-1-leoyang.li@nxp.com>
+ <20211203235446.8266-7-leoyang.li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_404C1E8253D7D34255D5026C@qq.com>
+In-Reply-To: <20211203235446.8266-7-leoyang.li@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 10:06:38AM +0800, lianzhi chang wrote:
-> > On Mon, Dec 13, 2021 at 02:12:44PM +0800, lianzhi chang wrote:
-> > > > Use the "ctrl+alt+Fn" key combination to switch the system from tty to
-> > > > +#define KDGKBLEDCTL  0x4B73  /* set whether to allow control of keyboard lights */
-> > > > +#define KDSKBLEDCTL  0x4B74  /* get whether the keyboard light is currently allowed to be set */
-> > >
-> > > What userspace code is going to use these new ioctls?
-> > >
-> > > I still don't understand the problem that this is supposed to be
-> > > solving.  How can we have never had a problem until now with regards to
-> > > LED settings on keyboards?  What commit caused this to change?  Has it
-> > > always been broken for 30 years and no one noticed?
-> > 
-> > Yes, it's been going on since forever (I guess at least 2.6 where input
-> > core was introduced) and nobody really cared as very few people bounce
-> > between graphical environment and VTs _and_ use CapsLock or NumLock
-> > _and_ have keyboards with these LEDs).
-> > 
-> > Now, there is a couple-line solution that was in v19, lianzhi chang just
-> > needed to drop condition that was being introduced in
-> > vt_set_leds_compute_shiftstate(). That would ensure that proper state of
-> > LEDs is restored on every VT switch. It also might have resulted in
-> > LEDs switching momentarily off before turning on according to the
-> > graphical desktop preferences, but I do not thing this is a big issue.
+On Fri, Dec 03, 2021 at 05:54:42PM -0600, Li Yang wrote:
+> From: Xiaowei Bao <xiaowei.bao@nxp.com>
 > 
-> As you said, in the V19 version, there is a judgment condition in
->  vt_set_leds_compute_shiftstate(). If you delete it, there will be 
-> some minor flaws. I always want to solve it perfectly. This may 
-> be my selfish intention, but my ability is lacking, which has led 
-> to iterating 21 versions.
+> The LX2160A PCIe EP mode nodes based on controller used on lx2160a rev2.
 > 
-> > 
-> > Now we are building this new infra with new ioctls, etc, for miniscule
-> > gain of avoiding this blink. I do not believe this is worth it.
-> If the current solution is not worth it, or the solution optimized for v19
-> is easier to accept, I will go back to the v19 code to submit.
+> Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
+> Reviewed-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+> ---
+>  .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
+> index de680521e1d1..593c5a498ae3 100644
+> --- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
+> @@ -1115,6 +1115,16 @@ pcie1: pcie@3400000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		pcie_ep1: pcie_ep@3400000 {
 
-My recommendation would be to land the adjusted v19 (the one without the
-conditional) that fixes original issue of LED state not being restored
-on VT switch, and then as a followup, and if you so inclined, offer the
-patch that introduces special ioctls to notify keyboard driver that
-it should avoid touching LED state completely for a given VT, so that we
-can discuss it separately and decide if such functionality is
-needed/wanted.
+Hyphen is more recommended than underscore for node name.
 
-Thanks.
+Shawn
 
--- 
-Dmitry
+> +			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
+> +			reg = <0x00 0x03400000 0x0 0x00100000
+> +			       0x80 0x00000000 0x8 0x00000000>;
+> +			reg-names = "regs", "addr_space";
+> +			num-ob-windows = <8>;
+> +			num-ib-windows = <8>;
+> +			status = "disabled";
+> +		};
+> +
+>  		pcie2: pcie@3500000 {
+>  			compatible = "fsl,ls2088a-pcie";
+>  			reg = <0x00 0x03500000 0x0 0x00100000   /* controller registers */
+> @@ -1143,6 +1153,16 @@ pcie2: pcie@3500000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		pcie_ep2: pcie_ep@3500000 {
+> +			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
+> +			reg = <0x00 0x03500000 0x0 0x00100000
+> +			       0x88 0x00000000 0x8 0x00000000>;
+> +			reg-names = "regs", "addr_space";
+> +			num-ob-windows = <8>;
+> +			num-ib-windows = <8>;
+> +			status = "disabled";
+> +		};
+> +
+>  		pcie3: pcie@3600000 {
+>  			compatible = "fsl,ls2088a-pcie";
+>  			reg = <0x00 0x03600000 0x0 0x00100000   /* controller registers */
+> @@ -1171,6 +1191,16 @@ pcie3: pcie@3600000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		pcie_ep3: pcie_ep@3600000 {
+> +			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
+> +			reg = <0x00 0x03600000 0x0 0x00100000
+> +			       0x90 0x00000000 0x8 0x00000000>;
+> +			reg-names = "regs", "addr_space";
+> +			num-ob-windows = <256>;
+> +			num-ib-windows = <24>;
+> +			status = "disabled";
+> +		};
+> +
+>  		pcie4: pcie@3700000 {
+>  			compatible = "fsl,ls2088a-pcie";
+>  			reg = <0x00 0x03700000 0x0 0x00100000   /* controller registers */
+> @@ -1199,6 +1229,16 @@ pcie4: pcie@3700000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		pcie_ep4: pcie_ep@3700000 {
+> +			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
+> +			reg = <0x00 0x03700000 0x0 0x00100000
+> +			       0x98 0x00000000 0x8 0x00000000>;
+> +			reg-names = "regs", "addr_space";
+> +			num-ob-windows = <8>;
+> +			num-ib-windows = <8>;
+> +			status = "disabled";
+> +		};
+> +
+>  		pcie5: pcie@3800000 {
+>  			compatible = "fsl,ls2088a-pcie";
+>  			reg = <0x00 0x03800000 0x0 0x00100000   /* controller registers */
+> @@ -1227,6 +1267,16 @@ pcie5: pcie@3800000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		pcie_ep5: pcie_ep@3800000 {
+> +			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
+> +			reg = <0x00 0x03800000 0x0 0x00100000
+> +			       0xa0 0x00000000 0x8 0x00000000>;
+> +			reg-names = "regs", "addr_space";
+> +			num-ob-windows = <256>;
+> +			num-ib-windows = <24>;
+> +			status = "disabled";
+> +		};
+> +
+>  		pcie6: pcie@3900000 {
+>  			compatible = "fsl,ls2088a-pcie";
+>  			reg = <0x00 0x03900000 0x0 0x00100000   /* controller registers */
+> @@ -1255,6 +1305,16 @@ pcie6: pcie@3900000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		pcie_ep6: pcie_ep@3900000 {
+> +			compatible = "fsl,lx2160ar2-pcie-ep", "fsl,ls-pcie-ep";
+> +			reg = <0x00 0x03900000 0x0 0x00100000
+> +			       0xa8 0x00000000 0x8 0x00000000>;
+> +			reg-names = "regs", "addr_space";
+> +			num-ob-windows = <8>;
+> +			num-ib-windows = <8>;
+> +			status = "disabled";
+> +		};
+> +
+>  		smmu: iommu@5000000 {
+>  			compatible = "arm,mmu-500";
+>  			reg = <0 0x5000000 0 0x800000>;
+> -- 
+> 2.25.1
+> 

@@ -2,107 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4464474678
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB09C474681
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233874AbhLNPbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:31:35 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37094 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233800AbhLNPbe (ORCPT
+        id S234586AbhLNPdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:33:09 -0500
+Received: from mail-wm1-f49.google.com ([209.85.128.49]:45909 "EHLO
+        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233055AbhLNPdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:31:34 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BEElBpN017050;
-        Tue, 14 Dec 2021 15:31:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=GSwyNylE9n2DqEIhkIOpQhDxJpB1Ue9IcyTFoZPTrBA=;
- b=EbG6wF2c11XIMfwqaVA+yiGf+I3zESXehVDGINWfJZEbN50jv8W32c+UuDxZoodTn146
- IDjpYai9xxSgNQzl9nPGz/CejiqUkX23C2RpI6SR+MdT+FubYXovGp5ebTjHtsl/zyGG
- pKcRRrWEWMp0Do2Jix6ZZLSTjqTw7rHCVjGX4WiDRojCJ15COzyxtg8E4+zjTAU78NsU
- xaotCp8NlRabSqE+p3IyJF+DOKmdX4nrNtxzG/5GLnLXxCSsSYocaWmIfk8PH8PH/qJC
- rujKZg0GUlMM4DhBK0KFHAN/GuSLQ1WX8ltCEqC0eOTJPoZh/ftVYXvY0Wwa2TK6ryUv sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r8h2h4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 15:31:28 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BEElFv2017498;
-        Tue, 14 Dec 2021 15:31:28 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r8h2fv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 15:31:28 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BEEiDbk006167;
-        Tue, 14 Dec 2021 15:31:25 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3cvk8j0r5a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 15:31:25 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BEFVM2Z13435248
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Dec 2021 15:31:22 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCC9A11C050;
-        Tue, 14 Dec 2021 15:31:22 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29A4D11C058;
-        Tue, 14 Dec 2021 15:31:22 +0000 (GMT)
-Received: from sig-9-65-91-220.ibm.com (unknown [9.65.91.220])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Dec 2021 15:31:22 +0000 (GMT)
-Message-ID: <d99fc78005d8a245449dd6ca0158cf9e2a897465.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Fix undefined arch_ima_get_secureboot() and co
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Takashi Iwai <tiwai@suse.de>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Joey Lee <jlee@suse.com>
-Date:   Tue, 14 Dec 2021 10:31:21 -0500
-In-Reply-To: <20211213161145.3447-1-tiwai@suse.de>
-References: <20211213161145.3447-1-tiwai@suse.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9BUXuZ_tbKx_GBwnrMNVy16ohG_ofw7N
-X-Proofpoint-GUID: yv4D8U1mut7e6ZUTzx8cjriYNfHv9F9z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-14_07,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- bulkscore=0 clxscore=1011 mlxlogscore=999 lowpriorityscore=0
- malwarescore=0 spamscore=0 priorityscore=1501 impostorscore=0
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112140089
+        Tue, 14 Dec 2021 10:33:07 -0500
+Received: by mail-wm1-f49.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so14003662wme.4;
+        Tue, 14 Dec 2021 07:33:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gGTASyVvn36rhQtSc7TEVERHcrRg+7y0+ImLAER1pZU=;
+        b=52gmw2Lrs8NtuXs8v4/Faw/tv4kDP/WfvXe6yi5/oiyLhxp6ryPD4O67AP259oZt6N
+         4eydRsNXzxUzz2uYrf8ozt81iKbofH4tze4gv7XoZ/j+Qu2VSsXDPLww6CxMrxL+cly3
+         /txE49yu1qx6mFvKMfdmV0jpM+9Kv9Chnna/8i6XUWwJq/LI9M3BU0tDqv5Ha8T3/v/0
+         vWL6wzMW+dXolqCFOzWDwTyiXZFLbylES2ZVr4cN1sswvp+qzZvPphAIDAQBmn43KNkr
+         99jUmVmqeevcmUi41Nvlfg5xKyrNioEl9+uLrg+oXTbTbAZ2i9ewPAhLG3H9K2jqZgH+
+         GtzQ==
+X-Gm-Message-State: AOAM530Qm4azQK0p77qbimETDy6iVj18kTwuXiYvAEe8PMrNGYQfhAPq
+        sKxe0Sr8FrNIImtGap7rDTY=
+X-Google-Smtp-Source: ABdhPJxHhur3wQN8WmEyNxA+W1/sE24M3nO1TWjo2rJ0GnYL+t3NixDhtMD6glLsTC6egs0Kn3Dhjw==
+X-Received: by 2002:a7b:c1cb:: with SMTP id a11mr8027105wmj.30.1639495985661;
+        Tue, 14 Dec 2021 07:33:05 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id a198sm118170wmd.42.2021.12.14.07.33.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 07:33:05 -0800 (PST)
+Date:   Tue, 14 Dec 2021 15:33:03 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, davem@davemloft.net,
+        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        arnd@arndb.de, hch@infradead.org, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, thomas.lendacky@amd.com,
+        Tianyu.Lan@microsoft.com, michael.h.kelley@microsoft.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        hch@lst.de, joro@8bytes.org, parri.andrea@gmail.com,
+        dave.hansen@intel.com
+Subject: Re: [PATCH V7 2/5] x86/hyper-v: Add hyperv Isolation VM check in the
+ cc_platform_has()
+Message-ID: <20211214153303.qmhowu4lfpcp4gej@liuwe-devbox-debian-v2>
+References: <20211213071407.314309-1-ltykernel@gmail.com>
+ <20211213071407.314309-3-ltykernel@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213071407.314309-3-ltykernel@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Takashi,
-
-On Mon, 2021-12-13 at 17:11 +0100, Takashi Iwai wrote:
-> Currently arch_ima_get_secureboot() and arch_get_ima_policy() are
-> defined only when CONFIG_IMA is set, and this makes the code calling
-> those functions without CONFIG_IMA failing.  Although there is no such
-> in-tree users, but the out-of-tree users already hit it.
+On Mon, Dec 13, 2021 at 02:14:03AM -0500, Tianyu Lan wrote:
+> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 > 
-> Move the declaration and the dummy definition of those functions
-> outside ifdef-CONFIG_IMA block for fixing the undefined symbols.
+> Hyper-V provides Isolation VM for confidential computing support and
+> guest memory is encrypted in it. Places checking cc_platform_has()
+> with GUEST_MEM_ENCRYPT attr should return "True" in Isolation vm. e.g,
+> swiotlb bounce buffer size needs to adjust according to memory size
+> in the sev_setup_arch(). Add GUEST_MEM_ENCRYPT check for Hyper-V Isolation
+> VM.
 > 
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-Before lockdown was upstreamed, we made sure that IMA and lockdown
-could co-exist.  This patch makes the stub functions available even
-when IMA is not configured.  Do the remaining downstream patches
-require IMA to be disabled or can IMA co-exist?
+x86 maintainers, any comment on this patch?
 
-thanks,
-
-Mimi
-
+> ---
+> Change since v6:
+> 	* Change the order in the cc_platform_has() and check sev first.
+> 
+> Change since v3:
+> 	* Change code style of checking GUEST_MEM attribute in the
+> 	  hyperv_cc_platform_has().
+> ---
+>  arch/x86/kernel/cc_platform.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
+> index 03bb2f343ddb..6cb3a675e686 100644
+> --- a/arch/x86/kernel/cc_platform.c
+> +++ b/arch/x86/kernel/cc_platform.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/cc_platform.h>
+>  #include <linux/mem_encrypt.h>
+>  
+> +#include <asm/mshyperv.h>
+>  #include <asm/processor.h>
+>  
+>  static bool __maybe_unused intel_cc_platform_has(enum cc_attr attr)
+> @@ -58,12 +59,19 @@ static bool amd_cc_platform_has(enum cc_attr attr)
+>  #endif
+>  }
+>  
+> +static bool hyperv_cc_platform_has(enum cc_attr attr)
+> +{
+> +	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
+> +}
+>  
+>  bool cc_platform_has(enum cc_attr attr)
+>  {
+>  	if (sme_me_mask)
+>  		return amd_cc_platform_has(attr);
+>  
+> +	if (hv_is_isolation_supported())
+> +		return hyperv_cc_platform_has(attr);
+> +
+>  	return false;
+>  }
+>  EXPORT_SYMBOL_GPL(cc_platform_has);
+> -- 
+> 2.25.1
+> 

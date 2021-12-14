@@ -2,86 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B56D47443C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F24847446B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234745AbhLNOBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:01:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234696AbhLNOBw (ORCPT
+        id S232642AbhLNOEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:04:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42236 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230431AbhLNOEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:01:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4256BC061574;
-        Tue, 14 Dec 2021 06:01:52 -0800 (PST)
+        Tue, 14 Dec 2021 09:04:42 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBA7B614DA;
-        Tue, 14 Dec 2021 14:01:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC22CC34601;
-        Tue, 14 Dec 2021 14:01:49 +0000 (UTC)
-Date:   Tue, 14 Dec 2021 09:01:48 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>
-Subject: Re: [PATCH v1 0/5] Implement livepatch on PPC32
-Message-ID: <20211214090148.264f4660@gandalf.local.home>
-In-Reply-To: <aac75717-a3ac-c0b4-3e79-dc6eb9c26d8c@csgroup.eu>
-References: <cover.1635423081.git.christophe.leroy@csgroup.eu>
-        <20211028093547.48c69dfe@gandalf.local.home>
-        <6209682d-0caa-b779-8763-376a984d8ed8@csgroup.eu>
-        <20211213121536.25e5488d@gandalf.local.home>
-        <5511f43c-192a-622b-7c72-52e07f0032c2@csgroup.eu>
-        <20211213123338.65eda5a0@gandalf.local.home>
-        <fc3099b8-9f12-3e47-08a0-05abc37a0482@csgroup.eu>
-        <20211213135410.12642d8f@gandalf.local.home>
-        <8df90f94-9939-0178-b92b-6ae6ea81784c@csgroup.eu>
-        <20211213144603.47d7c908@gandalf.local.home>
-        <76ce2dd7-691e-df73-727c-110713c07cda@csgroup.eu>
-        <aac75717-a3ac-c0b4-3e79-dc6eb9c26d8c@csgroup.eu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDC4D6150C;
+        Tue, 14 Dec 2021 14:04:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24487C34601;
+        Tue, 14 Dec 2021 14:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639490681;
+        bh=88fh/EYw6Nm9NultqYdorTEVZ3dFC4vacY+2dZLYB7o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=am2C6nmOBes1GCqiev3sF25zvXCRmBC8aAQZw8sefjK/amqS5FcIvaTioKxC0+uzZ
+         3fOKx4PY+EYReAbBKzHytIYRUekvXAFCxgl5a5DYuk7SZ4b0kkLHxLXC93xo4iRIp2
+         UMGnG3z+gdm/PTz9lk7rglRMyySQ9ThREI2+E45hMI4Yq8V+hzmja8mSrdIAN00YDo
+         kXyehpPoXbmzgmOkrL5LjXly+pcQ3crGtG0tGK0eHIH3b2GJbXth97B+Wci2ia2ODn
+         +UrQhOgZ91JBDVQng1+hRnmDIPh60MI0x2Z9rGEm5zga9OnACJcGVeD0BJErd3UJMP
+         hUT7bMazKAv1w==
+From:   Will Deacon <will@kernel.org>
+To:     sgoutham@marvell.com, bbhushan2@marvell.com,
+        Bhaskara Budiredla <bbudiredla@marvell.com>,
+        mark.rutland@arm.com, robh+dt@kernel.org
+Cc:     catalin.marinas@arm.com, kernel-team@android.com,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 0/2] drivers: perf: Add Marvell CN10K LLC-TAD pmu driver
+Date:   Tue, 14 Dec 2021 14:04:32 +0000
+Message-Id: <163948458175.3584506.7943620757309501715.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20211115043506.6679-1-bbudiredla@marvell.com>
+References: <20211115043506.6679-1-bbudiredla@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 08:35:14 +0100
-Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
-
-> > Will continue investigating.
-> >   
+On Mon, 15 Nov 2021 10:05:04 +0530, Bhaskara Budiredla wrote:
+> This series introduces performance monitor driver to Last-level-cache
+> tag-and-data (LLC-TAD) PMU which is an integral part of Marvell CN10K SoCs.
+> The configuration and functionality of the TAD PMU is covered in patch 1.
+> The device tree bindings are dealt in patch 2.
 > 
-> trace_selftest_startup_function_graph() calls register_ftrace_direct() 
-> which returns -ENOSUPP because powerpc doesn't select 
-> CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS.
+> v7:
+>  - use braces around a multi-line conditional statement (Will Deacon)
+>  - remove mask doesn't do anything (Will Deacon)
+>  - restrict compile test dependency to aarch64
 > 
-> Should TEST_DIRECT_TRAMP depend on CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS ?
+> [...]
 
-Yes, that should be:
+Applied to arm64 (for-next/perf-cn10k), thanks!
 
-#if defined(CONFIG_DYNAMIC_FTRACE) && \
-    defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS)
-#define TEST_DIRECT_TRAMP
-noinline __noclone static void trace_direct_tramp(void) { }
-#endif
+[1/2] drivers: perf: Add LLC-TAD perf counter support
+      https://git.kernel.org/arm64/c/036a7584bede
+[2/2] dt-bindings: perf: Add YAML schemas for Marvell CN10K LLC-TAD pmu bindings
+      https://git.kernel.org/arm64/c/4cbf47728f8d
 
+Cheers,
+-- 
+Will
 
-And make it test it with or without the args.
-
-Thanks for finding this.
-
--- Steve
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev

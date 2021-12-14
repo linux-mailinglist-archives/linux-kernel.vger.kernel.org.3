@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 638214740D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1784740E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbhLNKwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:52:46 -0500
-Received: from foss.arm.com ([217.140.110.172]:51734 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233235AbhLNKwp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:52:45 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DE246D;
-        Tue, 14 Dec 2021 02:52:44 -0800 (PST)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D97DA3F5A1;
-        Tue, 14 Dec 2021 02:52:42 -0800 (PST)
-Date:   Tue, 14 Dec 2021 10:52:40 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
-        f.fainelli@gmail.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
-Subject: Re: [PATCH v7 08/16] firmware: arm_scmi: Add
- sync_cmds_atomic_replies transport flag
-Message-ID: <20211214105240.GF6207@e120937-lin>
-References: <20211129191156.29322-1-cristian.marussi@arm.com>
- <20211129191156.29322-9-cristian.marussi@arm.com>
- <20211213115437.23ecitnqztx5yl7g@bogus>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213115437.23ecitnqztx5yl7g@bogus>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S233316AbhLNKxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:53:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231486AbhLNKxp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:53:45 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBBBC061574;
+        Tue, 14 Dec 2021 02:53:45 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id l18so12328295pgj.9;
+        Tue, 14 Dec 2021 02:53:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=s32Q5IxQslkiM+08lVnILc8RgiNSWpcCVbn4fLntZlo=;
+        b=VczYifIIXTXrO2Mj9p4p9xjhD7B4LTnR3XCyA2IlkXG/RIAcL6rE6kGg+tpt0KRtQp
+         MIeqPQFcM41Zaf1s5UvC6S9EuAH01Q0jJr2bUvvOmpT6/mGrPUdtqekpwZ0tlGEEzmB0
+         H7dBwbt44svRkgsx3zJnGQa6Ldeb4S/rzZs+BznWsWPuzxXywPKUwgOoj/l68N67R/qn
+         Rwb2uel63ldvI06zvpv+LHffBPCRvcqZLQJo6I6MEOQ5wZ6z/iOwJKrhXut45tVN3cP5
+         CzzH9jmfCtFWy+WKhTOhFVCY0WsNSiC6vqizts1A7K+m3sroGtJptA0D4kGMvlZuI5i2
+         s5fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=s32Q5IxQslkiM+08lVnILc8RgiNSWpcCVbn4fLntZlo=;
+        b=R18QpiZR0RJaueInz7u/KZjqeZeEPMdAf3wv70QNme2XPHgUL8Gx2ULR9jz9sX6RPM
+         QFWg371+v9yialFZ8lBTLPLlyRoIT8s+t4+gzTHV8vwzTryVlVXVgIpTLAJyXoL6YYl7
+         M4WawyQ9AppEdC2THNosrd6fyULY0gzmKWx3HlgDA2W5SQ7IiAaUg7/ueEO042jaTNz9
+         b9dpSNUKCuo7wrDn+AXYSzQBswLinOTYQucZbPWLJJaDPQxlMZyhYDB1qVZ/pDJBVy3D
+         LPdC002FELe3Bcv8tiaHs35OBAAWNj0/nCKZOQoCHRM0ztV41Q5/fM7Hwm4SSwYXldfm
+         0Ziw==
+X-Gm-Message-State: AOAM531S916N80zWHsVkbhbbvdwpbeaHLJmz0Mb+k2WhMxAiF/rVUDp9
+        B/2n5S0E4O6pxHXsaBmYqWQ=
+X-Google-Smtp-Source: ABdhPJyq9SkW6BEPLk09UF9FveUWuMs/rwg1ox02zqj1R7qTnQMBuNYlSIVAPfwYcGyGXWSedbVDZw==
+X-Received: by 2002:a63:f706:: with SMTP id x6mr3205694pgh.69.1639479225077;
+        Tue, 14 Dec 2021 02:53:45 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id mm22sm2109303pjb.28.2021.12.14.02.53.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 Dec 2021 02:53:44 -0800 (PST)
+From:   Wells Lu <wellslutw@gmail.com>
+To:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     wells.lu@sunplus.com, dvorkin@tibbo.com,
+        Wells Lu <wellslutw@gmail.com>
+Subject: [PATCH v4 0/2] This is a patch series for pinctrl driver of Sunplus SP7021 SoC.
+Date:   Tue, 14 Dec 2021 18:53:07 +0800
+Message-Id: <1639479189-6693-1-git-send-email-wellslutw@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:54:37AM +0000, Sudeep Holla wrote:
-> On Mon, Nov 29, 2021 at 07:11:48PM +0000, Cristian Marussi wrote:
-> > Add a flag to let the transport signal to the core if its handling of sync
-> > command implies that, after .send_message has returned successfully, the
-> > requested command can be assumed to be fully and completely executed on
-> > SCMI platform side so that any possible response value is already
-> > immediately available to be retrieved by a .fetch_response: in other words
-> > the polling phase can be skipped in such a case and the response values
-> > accessed straight away.
-> > 
-> > Note that all of the above applies only when polling mode of operation was
-> > selected by the core: if instead a completion IRQ was found to be available
-> > the normal response processing path based on completions will still be
-> > followed.
-> > 
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> > v5 --> v6
-> > - added polling_capable helper flag
-> > v4 --> v5
-> > - removed RFC tag
-> > - consider sync_cmds_atomic_replies flag when deciding if polling is to be
-> >   supported and .poll_done() is not provided.
-> > - reviewed commit message
-> > ---
-> >  drivers/firmware/arm_scmi/common.h |  8 ++++++
-> >  drivers/firmware/arm_scmi/driver.c | 43 +++++++++++++++++++++++-------
-> >  2 files changed, 41 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
-> > index 99b74f4d39b6..bf25f0e89c78 100644
-> > --- a/drivers/firmware/arm_scmi/common.h
-> > +++ b/drivers/firmware/arm_scmi/common.h
-> > @@ -412,6 +412,13 @@ struct scmi_device *scmi_child_dev_find(struct device *parent,
-> >   * @max_msg_size: Maximum size of data per message that can be handled.
-> >   * @force_polling: Flag to force this whole transport to use SCMI core polling
-> >   *		   mechanism instead of completion interrupts even if available.
-> > + * @sync_cmds_atomic_replies: Flag to indicate that the transport assures
-> > + *			      synchronous-command messages are atomically
-> > + *			      completed on .send_message: no need to poll
-> > + *			      actively waiting for a response.
-> 
-> Not sure if atomic is right term to use. It is atomic w.r.t OSPM though.
-> Can we just say sync_cmd_complete_on_ret or something similar.
-> 
-Yes, I really never liked the naming so I'll happily take you suggestion :D
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control
+applications.
 
-Thanks,
-Cristian
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
+
+Wells Lu (2):
+  dt-bindings: pinctrl: Add dt-bindings for Sunplus SP7021
+  pinctrl: Add driver for Sunplus SP7021
+
+ .../bindings/pinctrl/sunplus,sp7021-pinctrl.yaml   |  375 ++++++
+ MAINTAINERS                                        |   10 +
+ drivers/pinctrl/Kconfig                            |    1 +
+ drivers/pinctrl/Makefile                           |    1 +
+ drivers/pinctrl/sunplus/Kconfig                    |   21 +
+ drivers/pinctrl/sunplus/Makefile                   |    5 +
+ drivers/pinctrl/sunplus/sppctl.c                   | 1192 ++++++++++++++++++++
+ drivers/pinctrl/sunplus/sppctl.h                   |  167 +++
+ drivers/pinctrl/sunplus/sppctl_sp7021.c            |  536 +++++++++
+ include/dt-bindings/pinctrl/sppctl-sp7021.h        |  173 +++
+ include/dt-bindings/pinctrl/sppctl.h               |   40 +
+ 11 files changed, 2521 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/sunplus,sp7021-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/sunplus/Kconfig
+ create mode 100644 drivers/pinctrl/sunplus/Makefile
+ create mode 100644 drivers/pinctrl/sunplus/sppctl.c
+ create mode 100644 drivers/pinctrl/sunplus/sppctl.h
+ create mode 100644 drivers/pinctrl/sunplus/sppctl_sp7021.c
+ create mode 100644 include/dt-bindings/pinctrl/sppctl-sp7021.h
+ create mode 100644 include/dt-bindings/pinctrl/sppctl.h
+
+-- 
+2.7.4
+

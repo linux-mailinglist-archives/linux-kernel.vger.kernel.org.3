@@ -2,99 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D77FE474414
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4075474426
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234646AbhLNN7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbhLNN7p (ORCPT
+        id S234672AbhLNOAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:00:37 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:13580 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234668AbhLNOAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:59:45 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8258FC061748
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:59:45 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id y16so24181347ioc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:59:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=DMsts4DALXAc/4OMVE7nKmsm4oHZCd35/gmAzU5+dTQ=;
-        b=lG6LuESlJ4B308I07WHHKuqx5O3r/OW65GXeh4wWWlyyI4EkzBAntlfV9dHOmlEolx
-         XaQzKVB/7WyJu3XPVzWIAPfOwvD4PVACuorAykKh2tjfEIF02MFBjXDliLF8086tRBv3
-         PrjZsxdgpLZTUoDcU16uFXTSHPMkR3PQ6+XemI3sNIQMaj2yvjlf3WlNOND8X824XtSF
-         E9UkZ0jg4ttFL8Xuwj3NHPQA0RP+Xuqa5Kb7UGHH05/nfa/S6XkFefA2llHOf65ioYcv
-         3E9BCfx5AmJv1g7/7RsnGo4Z3Iu1HDi2eLlwsQObttiLxJo9a+if8C+bO0YYeTodRAqY
-         Dg/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=DMsts4DALXAc/4OMVE7nKmsm4oHZCd35/gmAzU5+dTQ=;
-        b=rAWlcJXPOXem1zNw3F0P4Fu94EG0ooQHbCiIW46CbfrWtIAoKVUYrbGMa1QMrW8XQS
-         L8bDY6+UVd8wtcMowNE/iihDaOZ6yVC+41GGYnKlOSx/5fKowTw+vdMrHGiNlv8czq4U
-         YD/knNRYPOkvz/L0AJTpSme2bPtpuWQWyy6TSaq/35NuiISGI3gQQWw9nVR6wUWvJdHL
-         3wXwAnWknJv3q390SPVwb+sq4UdcL09qvo7wOknLSqb0I82XCSZ++fKdYnPlStuwG9rj
-         UzdvVSbEWIN3R9ma6NvYWedCIihSSt0LCZfFlt35pv1yskp4hGAj80l2XGx93IXd9cm3
-         1Lhg==
-X-Gm-Message-State: AOAM532tdrbC26TJ56mPqWrBWbeKozXlZu7y2tLZkJElyF4iPfE90VX/
-        awD/5qR4pmgSvhIytojiEv1CRZieOHr9SA==
-X-Google-Smtp-Source: ABdhPJy7KeYpJWVcc6tu3G+V+pMOg2OSAAl9uEPFaXTi58pXfepSftxLmnmO0y0O6J0QGX+ww67z8g==
-X-Received: by 2002:a05:6638:348f:: with SMTP id t15mr2867875jal.272.1639490384660;
-        Tue, 14 Dec 2021 05:59:44 -0800 (PST)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id r18sm8793747ilh.59.2021.12.14.05.59.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 05:59:44 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Philip Kelleher <pjk1939@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Joshua Morris <josh.h.morris@us.ibm.com>
-Cc:     linux-pci@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-block@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-In-Reply-To: <20211208192449.146076-1-helgaas@kernel.org>
-References: <20211208192449.146076-1-helgaas@kernel.org>
-Subject: Re: [PATCH v5 0/4] block: convert to generic power management
-Message-Id: <163949038206.174299.12080416577354381479.b4-ty@kernel.dk>
-Date:   Tue, 14 Dec 2021 06:59:42 -0700
+        Tue, 14 Dec 2021 09:00:30 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BE4Ko3j006814;
+        Tue, 14 Dec 2021 08:00:02 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=HxfX/SoFE0LgM6209wZqoglTHFuqx9omB1l1OGzjfZw=;
+ b=foz8zeSvrXrqg1fLlMilCuC8xmOKSeFqtHftwn5e/bEckIFKuG2gsj/mxo+63CweucR6
+ 47unlpW7ZSDn4PZpF+iWE6pw6Nf9hBbIm9xlj/7oJ0q0kHbGzGsemyPIgWlLqzar0UwY
+ JR9KabpVHEm1lpQSYYUQCryoZIA8c7qpiIeJ6wOdbFSDEs2xarljSh6kbFifkOMplSSH
+ D8bmQeWzHAz/4JI7Rf2oSp4xdC5yoJ2QdAwycZJ8CcihTh6OqyEbi9Tw8CQ6tvcq4R2w
+ 2ozkgjOlbmfZi8Z2hxglNs2/Ezv86ne3VSxyFzPGl4mKhF2O65J9np4AyHa6ZXoOz7Oz zA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3cxh14grht-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 14 Dec 2021 08:00:02 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 14 Dec
+ 2021 14:00:00 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 14 Dec 2021 14:00:00 +0000
+Received: from aryzen.ad.cirrus.com (unknown [198.61.64.39])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 34C4D7C;
+        Tue, 14 Dec 2021 14:00:00 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-acpi@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH v4 00/10] Add support for CS35L41 in HDA systems
+Date:   Tue, 14 Dec 2021 13:59:49 +0000
+Message-ID: <20211214135959.1317949-1-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: kzg2siUfDy0WOJbouaCNJPoYdExKSr7D
+X-Proofpoint-ORIG-GUID: kzg2siUfDy0WOJbouaCNJPoYdExKSr7D
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 13:24:45 -0600, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> This is a repost of patches from Vaibhav to convert from legacy PCI power
-> management to generic power management.  The most recent posting is here:
-> 
->   https://lore.kernel.org/all/20210114115423.52414-1-vaibhavgupta40@gmail.com/
-> 
-> [...]
+Add support for laptops that have CS35L41 connected to an HDA
+codec by I2S and direct I2C connection to the CPU.
 
-Applied, thanks!
+Laptops that use CS35L41 and are SPI will be added in the future,
+after the support for it is resolved at i2c-multi-instantiate driver.
+i2c-multi-instantiate thread: https://lkml.org/lkml/2021/12/10/557
 
-[1/4] mtip32xx: remove pointless drvdata checking
-      commit: 2920417c98dbe4b58200c12fc9dc152834b76e42
-[2/4] mtip32xx: remove pointless drvdata lookups
-      commit: 9e541f142dab67264075baaf8fd2eb4423742c16
-[3/4] mtip32xx: convert to generic power management
-      commit: cd97b7e0d78009b45e08b92441d9562f9f37968c
-[4/4] rsxx: Drop PCI legacy power management
-      commit: ac6f6548fcb3c6da8ff1653a16c66fc1719a2a3e
+Hardware:
+ - Some laptops have two CS35L41 amplifiers, connected to Realtek ALC287
+   by an I2S bus and by and direct I2C to the CPU.
+ - The ALC287 codec is connected to the CPU by an HDA bus.
+ - The CS35L41 has a DSP which will require firmware to be loaded.
 
-Best regards,
+Architecture:
+ - Creation of a library of shared functions for CS35L41 ASoC and HDA
+ - HDA codec driver (RealTek) and CS35L41 HDA driver are combined
+ by using component binding, where it uses device names to find the
+ components and bind to the master
+ - The HDA CS35L41 driver applies pre-defined registers sequences
+ for each action in playback for HDA Sound card
+
+Changes from V3:
+ - SPI bus driver starter added
+ - Use separate modules approach instead of liking library
+ - Add CSC3551 ACPI _HID for more I2C laptops
+ - Removed regulators from HDA driver
+ - Add note about Non-conforming _HID
+V3: https://lkml.org/lkml/2021/11/23/723
+
+Changes from V2:
+ - Not an RFC
+ - Create a new HDA driver for CS35L41 instead of using the ASoC one
+ - Use component binding and device names to find the CS35L41 driver
+ - Create a shared library for ASoC and HDA CS35L41 drivers
+v2: https://lkml.org/lkml/2021/10/8/344
+
+Lucas Tanure (9):
+  ASoC: cs35l41: Convert tables to shared source code
+  ASoC: cs35l41: Move cs35l41_otp_unpack to shared code
+  ASoC: cs35l41: Move power initializations to reg_sequence
+  ASoC: cs35l41: Create shared function for errata patches
+  ASoC: cs35l41: Create shared function for setting channels
+  ASoC: cs35l41: Create shared function for boost configuration
+  hda: cs35l41: Add support for CS35L41 in HDA systems
+  ACPI / scan: Create platform device for CLSA0100 and CSC3551 ACPI
+    nodes
+  ALSA: hda/realtek: Add support for Legion 7 16ACHg6 laptop
+
+Stefan Binding (1):
+  ALSA: hda/realtek: Add CS35L41 support for Thinkpad laptops
+
+ MAINTAINERS                                   |   2 +
+ drivers/acpi/scan.c                           |   3 +
+ drivers/platform/x86/i2c-multi-instantiate.c  |  11 +
+ include/sound/cs35l41.h                       | 739 ++++++++++++++++++
+ sound/pci/hda/Kconfig                         |  27 +
+ sound/pci/hda/Makefile                        |  10 +
+ sound/pci/hda/cs35l41_hda.c                   | 525 +++++++++++++
+ sound/pci/hda/cs35l41_hda.h                   |  68 ++
+ sound/pci/hda/cs35l41_hda_i2c.c               |  66 ++
+ sound/pci/hda/cs35l41_hda_spi.c               |  63 ++
+ sound/pci/hda/hda_component.h                 |  20 +
+ sound/pci/hda/patch_realtek.c                 | 147 ++++
+ sound/soc/codecs/Kconfig                      |   7 +
+ sound/soc/codecs/Makefile                     |   4 +-
+ sound/soc/codecs/cs35l41-i2c.c                |   1 -
+ .../{cs35l41-tables.c => cs35l41-lib.c}       | 353 ++++++++-
+ sound/soc/codecs/cs35l41-spi.c                |   1 -
+ sound/soc/codecs/cs35l41.c                    | 360 +--------
+ sound/soc/codecs/cs35l41.h                    | 734 -----------------
+ 19 files changed, 2049 insertions(+), 1092 deletions(-)
+ create mode 100644 sound/pci/hda/cs35l41_hda.c
+ create mode 100644 sound/pci/hda/cs35l41_hda.h
+ create mode 100644 sound/pci/hda/cs35l41_hda_i2c.c
+ create mode 100644 sound/pci/hda/cs35l41_hda_spi.c
+ create mode 100644 sound/pci/hda/hda_component.h
+ rename sound/soc/codecs/{cs35l41-tables.c => cs35l41-lib.c} (71%)
+
 -- 
-Jens Axboe
-
+2.34.1
 

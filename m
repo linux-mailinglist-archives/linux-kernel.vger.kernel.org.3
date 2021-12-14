@@ -2,114 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D23C473A0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F060A473A15
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241373AbhLNBKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 20:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbhLNBKh (ORCPT
+        id S242982AbhLNBNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 20:13:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20559 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242920AbhLNBN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 20:10:37 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE04C061574;
-        Mon, 13 Dec 2021 17:10:36 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id x5so16558574pfr.0;
-        Mon, 13 Dec 2021 17:10:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=lUu+bu7URw0KVLywB7Idrn3tSFU11ChSitfBhMfHIN0=;
-        b=KfscuHmPEC8q4PlFz/F9HD61zflzlTiWXSmCGDhiLMZtTDaDcwodhIIv1vtHE1LCG2
-         MnFcyGYArCmyWAN3r8Lg8TdMRwbN7f6k+obC49ovFNr3Y9lZwfJdvT22wKqMWEPmXaNo
-         MsULv2boPgZN3f67xV+UWCFqkWcUUqVkgdKQRoHL5UH70rFvuo2yUHNqc9Yt0g+X6mKc
-         JyU5uIuGOupTBUr68QVI3qM25dyzYH36NtnEB4hZXLwIrpp9DD095zvl9OPOxZwv/KEM
-         3jOZEz9Ej5wPRLRLuCDyV8pC0TZo/IvkXuKxHBQXjD5Uics/XZ/J42oZ60FFqs3f4YBD
-         giJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=lUu+bu7URw0KVLywB7Idrn3tSFU11ChSitfBhMfHIN0=;
-        b=Cca0ZQWE/tWDG3FcVamw+50nLPZRqd2UvgWBmEmGcJ/EYbOFLm6oN9qs5k44ECAXh2
-         142Rgb+uR+BBQaGanNDRsCq4eAwhf1wDUDacn4RxU0CaitVvTjW1oBXg4ytfguGdXRyk
-         YDBueKSkHigdVfsDvXQ131zJhSB0uQ/5lLu5L86+3GO5tVdVHxF6ht9syJSFODoRLgYy
-         kmqzuVOKVWW/PcRMRc22dww2Xvkuyzwl4ZJLQ6kC5D2b/imcUwMw3sW/85eMKpcBQOtX
-         XOJTazxMA8OHg0bMkodlYPguBaldyrRGj0lXg1Ck4BJl/4xNLyQm/t23/WGh7M463dnM
-         ZF+A==
-X-Gm-Message-State: AOAM533d9wI7nd2GItCrrssHaLWoEJ0eNb+Jv2l4KoanvPHt2GA62RRQ
-        Nh3p05hMesK+T+YTf1aeX58=
-X-Google-Smtp-Source: ABdhPJyI2d8ywYcmXhtLZ30IKHr7+IqYvjctMql6cLXNogZzELWmqL2BUimg/gFE4FRVucPbNxfRYQ==
-X-Received: by 2002:a63:175c:: with SMTP id 28mr1575950pgx.66.1639444236411;
-        Mon, 13 Dec 2021 17:10:36 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id d23sm5968461pgm.37.2021.12.13.17.10.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 17:10:36 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] perf expr: Fix return value of ids__new
-Date:   Tue, 14 Dec 2021 01:10:27 +0000
-Message-Id: <20211214011030.20200-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        Mon, 13 Dec 2021 20:13:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639444408;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3gTydd0924G7zLLa9vjnpFZ/IS4FVbudD6kWOndvAx0=;
+        b=TJQS5BKikq5gA6CJmDPEMH/GsYo/zpKLbiERc6qHygB4m6RVO8qixYvGKJ1hy+2yXRKC4c
+        qY6RunSXy7x+j7+G0j3IHGG06rXEgl3GPcm/m0rx0k/dN2yNbyMSDk+3gvPdqqYL+qIPCx
+        Qzm/xHUBiFzinFXp8+JQPUceoCavdCY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-594-J6NPJEsFN1m1ojS5zJyYrQ-1; Mon, 13 Dec 2021 20:13:25 -0500
+X-MC-Unique: J6NPJEsFN1m1ojS5zJyYrQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2DE441006AA0;
+        Tue, 14 Dec 2021 01:13:24 +0000 (UTC)
+Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DA4795F70B;
+        Tue, 14 Dec 2021 01:13:14 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 09:13:10 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Laibin Qiu <qiulaibin@huawei.com>, axboe@kernel.dk,
+        yi.zhang@huawei.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] block/wbt: fix negative inflight counter when
+ remove scsi device
+Message-ID: <YbfvplNrBkuZUIyf@T590>
+References: <20211213040907.2669480-1-qiulaibin@huawei.com>
+ <YbeAAyWbkh5frMGc@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbeAAyWbkh5frMGc@infradead.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-callers of ids__new() function only do NULL checking for the return
-value. ids__new() calles hashmap__new(), which may return
-ERR_PTR(-ENOMEM). Instead of changing the checking one-by-one.
-return NULL instead of ERR_PTR(-ENOMEM) to keep
-consistent.
+On Mon, Dec 13, 2021 at 09:16:51AM -0800, Christoph Hellwig wrote:
+> On Mon, Dec 13, 2021 at 12:09:07PM +0800, Laibin Qiu wrote:
+> > Submit_bio
+> >                                                          scsi_remove_device
+> >                                                          sd_remove
+> >                                                          del_gendisk
+> >                                                          blk_unregister_queue
+> >                                                          elv_unregister_queue
+> >                                                          wbt_enable_default
+> >                                                          <= Set rwb->enable_state (ON)
+> > q_qos_track
+> > <= rwb->enable_state (ON)
+> > ^^^^^^ this request will mark WBT_TRACKED without inflight add and will
+> > lead to drop rqw->inflight to -1 in wbt_done() which will trigger IO hung.
+> > 
+> > Fix this by judge whether QUEUE_FLAG_REGISTERED is marked to distinguish
+> > scsi remove scene.
+> > Fixes: 76a8040817b4b ("blk-wbt: make sure throttle is enabled properly")
+> > Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+> > ---
+> >  block/blk-wbt.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/block/blk-wbt.c b/block/blk-wbt.c
+> > index 3ed71b8da887..537f77bb1365 100644
+> > --- a/block/blk-wbt.c
+> > +++ b/block/blk-wbt.c
+> > @@ -637,6 +637,10 @@ void wbt_enable_default(struct request_queue *q)
+> >  {
+> >  	struct rq_qos *rqos = wbt_rq_qos(q);
+> >  
+> > +	/* Queue not registered? Maybe shutting down... */
+> > +	if (!blk_queue_registered(q))
+> > +		return;
+> 
+> Wouldn't it make more sense to simply not call wbt_enable_default from
+> elv_unregister_queue?
 
----
-Changes in v3:
-fix compilation error and add tags.
----
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Tested-by: German Gomez <german.gomez@arm.com>
-Reviewed-by: German Gomez <german.gomez@arm.com>
----
- tools/perf/util/expr.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+wbt_disable_default() is called in bfq_init_root_group(), so wbt_enable_default
+should be moved to bfq_exit_queue()?
 
-diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-index 1d532b9fed29..f225247acc01 100644
---- a/tools/perf/util/expr.c
-+++ b/tools/perf/util/expr.c
-@@ -12,6 +12,7 @@
- #include "expr-bison.h"
- #include "expr-flex.h"
- #include "smt.h"
-+#include <linux/err.h>
- #include <linux/kernel.h>
- #include <linux/zalloc.h>
- #include <ctype.h>
-@@ -65,7 +66,12 @@ static bool key_equal(const void *key1, const void *key2,
- 
- struct hashmap *ids__new(void)
- {
--	return hashmap__new(key_hash, key_equal, NULL);
-+	struct hashmap *hash;
-+
-+	hash = hashmap__new(key_hash, key_equal, NULL);
-+	if (IS_ERR(hash))
-+		return NULL;
-+	return hash;
- }
- 
- void ids__free(struct hashmap *ids)
--- 
-2.17.1
+
+Thanks,
+Ming
 

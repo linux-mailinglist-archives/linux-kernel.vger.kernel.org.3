@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBA24746DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F714746E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235052AbhLNPwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:52:49 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:57948 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234383AbhLNPwr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:52:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S235158AbhLNPxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:53:51 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:50680 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231951AbhLNPxv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 10:53:51 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E29F8CE1997;
-        Tue, 14 Dec 2021 15:52:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91897C34604;
-        Tue, 14 Dec 2021 15:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639497164;
-        bh=Tp0Z4PeXVqvqfrM0bGNPhLHKolo4FS5DT8mc4cPM5UM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NGH3uGC1SQyyQ+pPgl7XiaJ+0BkmIJsnP5kAXo/iD31v/69WiY2l4e+zcj8MXdO5Q
-         QQFKsni/8yXyWsH8moTQtYaB29UU9PgKRzEisTvAz7Ca13wojujxMYpW2LCp0n+c9L
-         rEGaE/IYzhmxOreDvdh2PlRgh8ANHCsG3f13toec=
-Date:   Tue, 14 Dec 2021 16:52:41 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     David Vernet <void@manifault.com>, linux-doc@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        joe.lawrence@redhat.com, corbet@lwn.net, yhs@fb.com,
-        songliubraving@fb.com
-Subject: Re: [PATCH] livepatch: Fix leak on klp_init_patch_early failure path
-Message-ID: <Ybi9yeEnKqq7HtS5@kroah.com>
-References: <20211213191734.3238783-1-void@manifault.com>
- <YbhZwVocHDX9ZBAc@alley>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 38EE91EC059D;
+        Tue, 14 Dec 2021 16:53:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639497225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=OlUC3lLRynZi+JY7FEvlz/ZRL8mKuuxtrhCfASCsERU=;
+        b=Mou9wxta1Vtvbw8Tn2z/E28PO17LKbLUS3B81uGspJgM8/CX1d5QbqQ6r4ZnpbUC9fPLNU
+        5K3Fz8G+kSCgyUTjaLA3+74zTDr78Fb5bqGmZWajsVeaDSdyykpOlAaRMtL1vhJCbGLNqX
+        h2ZHfnF4qXCvZi1bwVxagVu92iylrTk=
+Date:   Tue, 14 Dec 2021 16:53:46 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 03/40] x86/mm: Extend cc_attr to include AMD SEV-SNP
+Message-ID: <Ybi+ChUXwLRkWJY/@zn.tnic>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-4-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YbhZwVocHDX9ZBAc@alley>
+In-Reply-To: <20211210154332.11526-4-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ah, found the thread...
+On Fri, Dec 10, 2021 at 09:42:55AM -0600, Brijesh Singh wrote:
+> diff --git a/include/linux/cc_platform.h b/include/linux/cc_platform.h
+> index a075b70b9a70..ef5e2209c9b8 100644
+> --- a/include/linux/cc_platform.h
+> +++ b/include/linux/cc_platform.h
+> @@ -61,6 +61,14 @@ enum cc_attr {
+>  	 * Examples include SEV-ES.
+>  	 */
+>  	CC_ATTR_GUEST_STATE_ENCRYPT,
+> +
+> +	/**
+> +	 * @CC_ATTR_SEV_SNP: Guest SNP is active.
+> +	 *
+> +	 * The platform/OS is running as a guest/virtual machine and actively
+> +	 * using AMD SEV-SNP features.
+> +	 */
+> +	CC_ATTR_SEV_SNP = 0x100,
 
-On Tue, Dec 14, 2021 at 09:45:53AM +0100, Petr Mladek wrote:
-> On Mon 2021-12-13 11:17:35, David Vernet wrote:
-> > When enabling a KLP patch with `klp_enable_patch`, we invoke
-> > `klp_init_patch_early` to initialize the kobjects for the patch itself, as
-> > well as the `struct klp_object*`'s and `struct klp_func*`'s that comprise
-> > it. However, there are some paths where we may fail to do an
-> > early-initialization of an object or its functions if certain conditions
-> > are not met, such as an object having a `NULL` funcs pointer. In these
-> > paths, we may currently leak the `struct klp_patch*`'s kobject, as well as
-> > any of its objects or functions, as we don't free the patch in
-> > `klp_enable_patch` if `klp_init_patch_early` returns an error code.
-> 
-> Could you please explain what exactly are we leaking?
-> 
-> I do not see anything allocated in klp_init_*_early() functions.
-> Also I do not see anything allocated in kobject_init().
-> 
-> Documentation/core-api/kobject.rst says that kobject_put() must be
-> used after calling kobject_add():
-> 
->    "Once you registered your kobject via kobject_add(), you must never use
->     kfree() to free it directly. The only safe way is to use kobject_put(). It
->     is good practice to always use kobject_put() after kobject_init() to avoid
->     errors creeping in."
-> 
-> 
-> Hmm, the comment in lib/kobject.c says something else:
-> 
-> /**
->  * kobject_init() - Initialize a kobject structure.
->  * @kobj: pointer to the kobject to initialize
->  * @ktype: pointer to the ktype for this kobject.
->  *
->  * This function will properly initialize a kobject such that it can then
->  * be passed to the kobject_add() call.
->  *
->  * After this function is called, the kobject MUST be cleaned up by a call
->  * to kobject_put(), not by a call to kfree directly to ensure that all of
->  * the memory is cleaned up properly.
->  */
+I guess CC_ATTR_GUEST_SEV_SNP. The Intel is called CC_ATTR_GUEST_TDX so
+at least they all say it is a guest thing, this way.
 
-These say the same thing as "good practice" == "MUST" here.  You can NOT
-call kfree after calling kobject_init().  Bad things will happen if you
-try to do so.
+-- 
+Regards/Gruss,
+    Boris.
 
-> I believe that this comment is misleading. IMHO, kobject_init() allows
-> to call kobject_put().
-
-You are FORCED TO call kobject_put() after kobject_init() is called.
-Anything else is a bug.
-
-> And it might be used to free memory that has
-> already been allocated when initializing the structure where this
-> kobject is bundled. But simple free() is perfectly fine when nothing
-> else was allocated.
-
-Nope, sorry, you have to call kobject_put().
-
-thanks,
-
-greg k-h
+https://people.kernel.org/tglx/notes-about-netiquette

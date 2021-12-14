@@ -2,88 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5D34746BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 267F74746C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235347AbhLNPqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:46:14 -0500
-Received: from mga01.intel.com ([192.55.52.88]:29913 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235154AbhLNPqN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:46:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639496773; x=1671032773;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D1ie7p/wJUPFDq45hFFlAgkDToTHWRbYRCMmw5W3DLQ=;
-  b=Np2YYRb0WtnDK5eWeonoFFqkHLeNFlv5msgLl+Wj4snQfdAgCJXwm81n
-   tjxCLrl0hbujBL4QOPcj9/TFZwycMvygSCqi+TZKg7JvnNsfEWZLxgakA
-   KOois0YSKT/eYd1EE0MSGmBVzROqf5sh8pk+8TfhWZzquobWIJHbjxsRz
-   fFSCWPh1Beg4sGnnwO5IwTE67sXHa1H3bNDA016LBUknIjP3iiT8CgWZt
-   LdlfYIxqzwjxpVWZ1VpODKDXYCAaEU49+EnI7MUUplRtHUHFkUV8Sb8sW
-   TC/DUpV3o1mVbWYAQeDz6iWF28Uos/WgbXRxGX/JzDL/NRxI132vi/waz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263144950"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="263144950"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:46:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="682101390"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 14 Dec 2021 07:46:11 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxA0I-0000Sr-W3; Tue, 14 Dec 2021 15:46:10 +0000
-Date:   Tue, 14 Dec 2021 23:46:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
-        seanjc@google.com
-Cc:     kbuild-all@lists.01.org, dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH] KVM: Move VM's worker kthreads back to the original
- cgroups before exiting.
-Message-ID: <202112142328.a9ebDmd7-lkp@intel.com>
-References: <20211214050708.4040200-1-vipinsh@google.com>
+        id S235413AbhLNPqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234610AbhLNPqj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 10:46:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216C6C061574;
+        Tue, 14 Dec 2021 07:46:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5EB9615A0;
+        Tue, 14 Dec 2021 15:46:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C84FC34606;
+        Tue, 14 Dec 2021 15:46:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639496798;
+        bh=lpMJyBaryDhU6pdFEk23SJlqLoV1mD69gh70IqL8reE=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=ruvvT96NLYiBGRmzeo6xh7E28uyoreQQvj/Z2GhwLnGcaUERCJuq7NdKw5qo4g/rY
+         MpRaakxm3iRBkfb04Psdeui91kK7BAgLsZd+uUtja6HVHDqv4Aan6I3e1rROmXRLMZ
+         w9g2scAyGEpu2X7NLKHdzfb4b5bwt6tLOGH4P6buaidGL/YSatjfZ5TQMKn5OGLO+X
+         ka53aY+PbWRCFuYikHRVp+CqbsRJbIVzrEzwL+zkl6wMeV0aoRj4p45+2+oPKbeVRo
+         RAPGspKzXPkIelQm5L+a7G1KEzxXxKckTHYw5CVtZ9n3lA1ABKbO6l20p4VO9CBOaj
+         37vHLyPDq5fKw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/17] ath11k: Use memset_startat() for clearing queue descriptors
+References: <20211213223331.135412-1-keescook@chromium.org>
+        <20211213223331.135412-9-keescook@chromium.org>
+        <87v8zriv1c.fsf@codeaurora.org>
+Date:   Tue, 14 Dec 2021 17:46:31 +0200
+In-Reply-To: <87v8zriv1c.fsf@codeaurora.org> (Kalle Valo's message of "Tue, 14
+        Dec 2021 08:02:07 +0200")
+Message-ID: <877dc7i3zc.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214050708.4040200-1-vipinsh@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vipin,
+Kalle Valo <kvalo@kernel.org> writes:
 
-Thank you for the patch! Yet something to improve:
+> Kees Cook <keescook@chromium.org> writes:
+>
+>> In preparation for FORTIFY_SOURCE performing compile-time and run-time
+>> field bounds checking for memset(), avoid intentionally writing across
+>> neighboring fields.
+>>
+>> Use memset_startat() so memset() doesn't get confused about writing
+>> beyond the destination member that is intended to be the starting point
+>> of zeroing through the end of the struct. Additionally split up a later
+>> field-spanning memset() so that memset() can reason about the size.
+>>
+>> Cc: Kalle Valo <kvalo@codeaurora.org>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Jakub Kicinski <kuba@kernel.org>
+>> Cc: ath11k@lists.infradead.org
+>> Cc: linux-wireless@vger.kernel.org
+>> Cc: netdev@vger.kernel.org
+>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>
+> What's the plan for this patch? I would like to take this via my ath
+> tree to avoid conflicts.
 
-[auto build test ERROR on d8f6ef45a623d650f9b97e11553adb4978f6aa70]
+Actually this has been already applied:
 
-url:    https://github.com/0day-ci/linux/commits/Vipin-Sharma/KVM-Move-VM-s-worker-kthreads-back-to-the-original-cgroups-before-exiting/20211214-130827
-base:   d8f6ef45a623d650f9b97e11553adb4978f6aa70
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20211214/202112142328.a9ebDmd7-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/fd29d23507ef3f06b61d9de1b7ecd1a0d70136f3
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Vipin-Sharma/KVM-Move-VM-s-worker-kthreads-back-to-the-original-cgroups-before-exiting/20211214-130827
-        git checkout fd29d23507ef3f06b61d9de1b7ecd1a0d70136f3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?h=ath-next&id=d5549e9a6b86
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Why are you submitting the same patch twice?
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
->> ERROR: modpost: "kthreadd_task" [arch/riscv/kvm/kvm.ko] undefined!
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

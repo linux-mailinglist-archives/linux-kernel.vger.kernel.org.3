@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA681474DB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC04474DB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238314AbhLNWF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237936AbhLNWEr (ORCPT
+        id S238323AbhLNWF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:05:58 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:58722 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232778AbhLNWEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Dec 2021 17:04:47 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E09C06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:04:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A51B6CE1B04
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:04:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26EDBC34632;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 139D8CE1AFC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:04:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A947C34635;
         Tue, 14 Dec 2021 22:04:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1639519482;
-        bh=HhLjBkEHpVZ0JAagUlWYCBnXKfLZDHz4tuBGo2+1EFo=;
+        bh=NvNN940Rq8R495Pg5UCrAMHQScZ8jAZXj/dQvCIug1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IdvPLAJfaHYPO/ItNjl5CHFsK0zmvPvCoKWh24/jltLLJtLRe60A5vk3jAfu/oxyi
-         k3hy0OC/104yRk0dPzil5mBHvPBkJOLtxlgKL2oXHd37iwQRNqIXjNO6ipPsXDJCLd
-         c7KxIqqeNQ1dztBXQldpYK8oRGyz9DHhLWFvqC0IQCEA85lZEnk4dB6Cu16+L5JKOP
-         nXYnim46uBiWXLhWU6L8P3+eSK59XTxgKnzoM/0A9qN1hHjZWzIu/NpGuuRl+ko/RC
-         Aco9FEkVKeF2rVwKXmSHZinfIUKrXw0GfR/ooSyWFWg8+Q+UtR+Hk174O3JnP7qr94
-         K6g9bEvrjY6/w==
+        b=JEpl8RaL/9YDoOG4T3e4/jxgmv8/hSNJ9I20Kd1CF6dm39l6HvItKLXesboP6VrDB
+         oP7oO55Zv3z+ZGfYORcZXkYGHNreM6+0cbrqdopN52rlPutyx4xiQhdUChlqEiy4eu
+         tFn6y88krG+DEOkWQi33E93F5Iczeu4xqp80V7jhfWbFWhS8U3bB9WWeaZoxuuZ5RH
+         ESIyNqqxWXPL04u3RT5/kCUldgy6feygUjDffsJNdh9QPGVsqhdnx2oAZS7t7KmbZT
+         Y4xqZ6/1guOAyB29Hb9xrfvi+DmksbwD4bwdM0L9LtyRYViW4/ReV1/5EJl3KQKIzv
+         jefa0Hd72aOog==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7CF985C1D0D; Tue, 14 Dec 2021 14:04:41 -0800 (PST)
+        id 7EB695C1E82; Tue, 14 Dec 2021 14:04:41 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
         kernel-team@fb.com, mingo@kernel.org
 Cc:     elver@google.com, andreyknvl@google.com, glider@google.com,
         dvyukov@google.com, cai@lca.pw, boqun.feng@gmail.com,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH kcsan 18/29] x86/barriers, kcsan: Use generic instrumentation for non-smp barriers
-Date:   Tue, 14 Dec 2021 14:04:28 -0800
-Message-Id: <20211214220439.2236564-18-paulmck@kernel.org>
+Subject: [PATCH kcsan 19/29] x86/qspinlock, kcsan: Instrument barrier of pv_queued_spin_unlock()
+Date:   Tue, 14 Dec 2021 14:04:29 -0800
+Message-Id: <20211214220439.2236564-19-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1>
 References: <20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1>
@@ -54,43 +51,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marco Elver <elver@google.com>
 
-Prefix all barriers with __, now that asm-generic/barriers.h supports
-defining the final instrumented version of these barriers. The change is
-limited to barriers used by x86-64.
+If CONFIG_PARAVIRT_SPINLOCKS=y, queued_spin_unlock() is implemented
+using pv_queued_spin_unlock() which is entirely inline asm based. As
+such, we do not receive any KCSAN barrier instrumentation via regular
+atomic operations.
+
+Add the missing KCSAN barrier instrumentation for the
+CONFIG_PARAVIRT_SPINLOCKS case.
 
 Signed-off-by: Marco Elver <elver@google.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- arch/x86/include/asm/barrier.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/qspinlock.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
-index 3ba772a69cc8b..35389b2af88ee 100644
---- a/arch/x86/include/asm/barrier.h
-+++ b/arch/x86/include/asm/barrier.h
-@@ -19,9 +19,9 @@
- #define wmb() asm volatile(ALTERNATIVE("lock; addl $0,-4(%%esp)", "sfence", \
- 				       X86_FEATURE_XMM2) ::: "memory", "cc")
- #else
--#define mb() 	asm volatile("mfence":::"memory")
--#define rmb()	asm volatile("lfence":::"memory")
--#define wmb()	asm volatile("sfence" ::: "memory")
-+#define __mb()	asm volatile("mfence":::"memory")
-+#define __rmb()	asm volatile("lfence":::"memory")
-+#define __wmb()	asm volatile("sfence" ::: "memory")
- #endif
+diff --git a/arch/x86/include/asm/qspinlock.h b/arch/x86/include/asm/qspinlock.h
+index d86ab942219c4..d87451df480bd 100644
+--- a/arch/x86/include/asm/qspinlock.h
++++ b/arch/x86/include/asm/qspinlock.h
+@@ -53,6 +53,7 @@ static inline void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
  
- /**
-@@ -51,8 +51,8 @@ static inline unsigned long array_index_mask_nospec(unsigned long index,
- /* Prevent speculative execution past this barrier. */
- #define barrier_nospec() alternative("", "lfence", X86_FEATURE_LFENCE_RDTSC)
- 
--#define dma_rmb()	barrier()
--#define dma_wmb()	barrier()
-+#define __dma_rmb()	barrier()
-+#define __dma_wmb()	barrier()
- 
- #define __smp_mb()	asm volatile("lock; addl $0,-4(%%" _ASM_SP ")" ::: "memory", "cc")
+ static inline void queued_spin_unlock(struct qspinlock *lock)
+ {
++	kcsan_release();
+ 	pv_queued_spin_unlock(lock);
+ }
  
 -- 
 2.31.1.189.g2e36527f23

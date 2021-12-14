@@ -2,91 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA91474664
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B81474666
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233540AbhLNPZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:25:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S233466AbhLNP01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233487AbhLNPZh (ORCPT
+        with ESMTP id S231787AbhLNP0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:25:37 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050A3C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:25:37 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id iq11so14566887pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:25:37 -0800 (PST)
+        Tue, 14 Dec 2021 10:26:24 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30607C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:26:24 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id i63so28857495lji.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:26:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Vm1Fqs6tdlQlqFRvByXD9ZZ5ex3zALshKcVnK+T6aeE=;
-        b=ofJ4teTiF+PAhd90t9KU1GXvhu3kCeT87aeJAZV+EgB5ABSkMMVeikE32eklERyxXJ
-         plpbdFGxS98zl88Fv+fOD6GaqzxN2upiKJBSOmY73fsBPCp7r0hkMBld+zzkJx6gSAyh
-         +sAsranIVKeSbl3ZfSu2RfTO90Pw6NgC0qhoXvc+qkl3MQSMAKYRvnsG7hqksSZ8bgIm
-         QeN15HSpxht6QtDc3yace2C3nzSq5yy4WLgK5SViEPOKCQAf3dBJE0yBynhx0WeZxNKP
-         DVO256ES3/2nmf9vzPtcL2PWGfyHUWLVfTUtYpr4/czUEj/xMDEUfVSjxuVxtdBOEEh/
-         JBNA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=E1s89Tuk39UOoZlOnaYWQ3Z1+01yfMXbQponNEtbH2M=;
+        b=WwgkRYx3+StpmQOX5zWNZea0LTRzvre8BcRBHN+bQETXffydPPalqRgKWQ3fW+eAFI
+         KFzK2WFm26VKLSwNLWJGuC39mWkVXz6LUdX/VmLg5SCCbnB+dsBXv5wlewTxhAUmboEF
+         6hKcZV6qzTaHqqZb+PkOulHm19BA4/flkL+WM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Vm1Fqs6tdlQlqFRvByXD9ZZ5ex3zALshKcVnK+T6aeE=;
-        b=P/TlPq8FUbbWaA/TdebDgkw0ESKTfzQDqk4Zi/lq6DCPn/s6ZjhQtCYZ21M9wwmn4U
-         +apWeW73AmttiSVgwkxNLUjyiiZuIucIJ0O9S167rmQsqUHSvR3EdkVAJQLnsVjgErUB
-         4NAqz9Li5NVfAbIs91+2rWDySC5Ydl/kE1yn8JClzznkqaLpnn9mbZKJwKVh6ZRbVlHY
-         o94f+0fsEv+InTq1ew9TsDisEhfJ9GQyszQ7a08mhzmYtQwSuF4TReUuMV1mA8fyn2N7
-         RPrFBEhvrOTbChuG2oB7/hHYb9qzSVvRlbuaIoPky6EWffsUnYIeSjGjCFkweInlfP2P
-         C9og==
-X-Gm-Message-State: AOAM533/Bh818Zwi5PKlxQb1+BAdfhE+FbBJr2tvzV9kuuTTg9TNHOpj
-        Kgx3LJMvRpbKiKKxMAelgfE=
-X-Google-Smtp-Source: ABdhPJzu4M87hrW+1Y/9HZnnji6CqtIbx+N0tmAsFOXR2FraebwN2EVZQUi00br1VjVj7nJY62vxgA==
-X-Received: by 2002:a17:90b:4b0d:: with SMTP id lx13mr6342088pjb.146.1639495536527;
-        Tue, 14 Dec 2021 07:25:36 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id f5sm67707pju.15.2021.12.14.07.25.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 07:25:36 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: wcd934x: Fix a incorrect use of kstrndup
-Date:   Tue, 14 Dec 2021 15:25:30 +0000
-Message-Id: <20211214152530.23767-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=E1s89Tuk39UOoZlOnaYWQ3Z1+01yfMXbQponNEtbH2M=;
+        b=iH3U1/R8jXRpp4JyxZADul+r4zgB0hjJfojcXtk798uSXlshms8JXOhpLhRlFaornf
+         hOFkwn0YPU77Rhiuu7LlYewGRLEGs3r9QbQVchbl/fK1EOwKhzH8eiCOGg+ECU8cTMFG
+         PAK8qCWl2TBxJkQx0SKFcxVIWLbUWmP1vJauUxVtYraZGZjbruVBrTINVSi6AtY78g4d
+         LEb6/Ayz8GQAiewd0dyV2D0OWZG/iCnwqKmXPPN7uXl/9ts5vybpAvI72XZ32Sly7b6U
+         nEa7ER3yU5l4vRHy7kAUq3/aqiwYJi9VYM8e+wQogEaRY6c8zlI7OLoDpAbvlzXFL4S3
+         EkmA==
+X-Gm-Message-State: AOAM531DBX9kYuouYRuH2cTUfONaaJpm6HYSKZi1r8NN9fMgnzGI1bwG
+        /RAt7iJgm7AbfyF9e/TU9tWUoufLQnjZ7EUr9PR10Q==
+X-Google-Smtp-Source: ABdhPJxXEMFm5MO03ocP3YbIlaXlGoJzGI5gjZgD3+oeBt+anch+hjrguJ7Q8hdUWyFJf6G1XVFZ07wtaAndgQfCxnM=
+X-Received: by 2002:a05:651c:50c:: with SMTP id o12mr5639330ljp.88.1639495577542;
+ Tue, 14 Dec 2021 07:26:17 -0800 (PST)
+MIME-Version: 1.0
+References: <20211027162806.2014022-1-markyacoub@chromium.org>
+ <20211213160742.744333-1-markyacoub@chromium.org> <CAAOTY_81KaSEWAqTWgzmshDZ9BefO3pNrqQwWbB01E4L0+mqzg@mail.gmail.com>
+In-Reply-To: <CAAOTY_81KaSEWAqTWgzmshDZ9BefO3pNrqQwWbB01E4L0+mqzg@mail.gmail.com>
+From:   Mark Yacoub <markyacoub@chromium.org>
+Date:   Tue, 14 Dec 2021 10:26:06 -0500
+Message-ID: <CAJUqKUp_Q39S912_epc3pfT-uc3DN=u4sCSdLm9VetwqdH_Pzw@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/mediatek: Set the default value of rotation to DRM_MODE_ROTATE_0
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>, tzungbi@google.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In wcd934x_codec_enable_dec(), widget_name is allocated by kstrndup().
-However, according to doc: "Note: Use kmemdup_nul() instead if the size
-is known exactly." So we should use kmemdup_nul() here instead of
-kstrndup(). It's similar to CVE-2019-12454.
+Thank you so much!
 
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- sound/soc/codecs/wcd934x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
-index e63c6b723d76..c6677cfbce59 100644
---- a/sound/soc/codecs/wcd934x.c
-+++ b/sound/soc/codecs/wcd934x.c
-@@ -5005,7 +5005,7 @@ static int wcd934x_codec_enable_dec(struct snd_soc_dapm_widget *w,
- 	char *dec;
- 	u8 hpf_coff_freq;
- 
--	widget_name = kstrndup(w->name, 15, GFP_KERNEL);
-+	widget_name = kmemdup_nul(w->name, 15, GFP_KERNEL);
- 	if (!widget_name)
- 		return -ENOMEM;
- 
--- 
-2.17.1
-
+On Mon, Dec 13, 2021 at 6:27 PM Chun-Kuang Hu <chunkuang.hu@kernel.org> wro=
+te:
+>
+> Hi, Mark:
+>
+> Mark Yacoub <markyacoub@chromium.org> =E6=96=BC 2021=E5=B9=B412=E6=9C=881=
+4=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8812:08=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> >
+> > At the reset hook, call __drm_atomic_helper_plane_reset which is
+> > called at the initialization of the plane and sets the default value of
+> > rotation on all planes to DRM_MODE_ROTATE_0 which is equal to 1.
+>
+> Applied to mediatek-drm-next [1], thanks.
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.gi=
+t/log/?h=3Dmediatek-drm-next
+>
+> Regards,
+> Chun-Kuang.
+>
+> >
+> > Tested on Jacuzzi (MTK).
+> > Resolves IGT@kms_properties@plane-properties-{legacy,atomic}
+> >
+> > Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+> > ---
+> >  drivers/gpu/drm/mediatek/mtk_drm_plane.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm=
+/mediatek/mtk_drm_plane.c
+> > index e6dcb34d30522..accd26481b9fb 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+> > @@ -44,9 +44,10 @@ static void mtk_plane_reset(struct drm_plane *plane)
+> >                 state =3D kzalloc(sizeof(*state), GFP_KERNEL);
+> >                 if (!state)
+> >                         return;
+> > -               plane->state =3D &state->base;
+> >         }
+> >
+> > +       __drm_atomic_helper_plane_reset(plane, &state->base);
+> > +
+> >         state->base.plane =3D plane;
+> >         state->pending.format =3D DRM_FORMAT_RGB565;
+> >  }
+> > --
+> > 2.34.1.173.g76aa8bc2d0-goog
+> >

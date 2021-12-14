@@ -2,93 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 254354743F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9B14743F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234569AbhLNNye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbhLNNyc (ORCPT
+        id S234608AbhLNNzl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Dec 2021 08:55:41 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16807 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230038AbhLNNzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:54:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5360BC061574;
-        Tue, 14 Dec 2021 05:54:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13961B819BD;
-        Tue, 14 Dec 2021 13:54:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E0DC34601;
-        Tue, 14 Dec 2021 13:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639490069;
-        bh=CFSSHRmfjaMqqbUJcEc7poqXaoNhUH2xA9KZNHxIbos=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gP8m5WyJ6WOcQXKS3ff5BZwURbVUs7ncZxFb3BEX3QERZSZC4G0Rkn35jNch0fhkk
-         /Q/7gG98fPoMuE85UC5t8SoniDouNQkuZTNf6xSsUQbD3BFAtBvIaRokYK6fLbWXW9
-         Y/UvxCvwActxfi1CVZ+NAAm06JXNi9Lus1LjLD4GmJo9xCA3GNhovI2AOefHngyCUD
-         VAKEZvC+y1lXrcdBI73Jjgb1ovpGx+/XFHCfvKUW/dEXFFz9me+4CsckAQRQZq7Wdf
-         tqsxy7lstZnhAArQFCR4VazyX9hr1X9SJxJjJzCEGqVSgnZOcx4O6DLlblgbTdndLM
-         EFqSJP57tVs3Q==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mx8GB-003f6Q-Ju; Tue, 14 Dec 2021 14:54:27 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH] media: saa7146: fix error logic at saa7146_vv_init()
-Date:   Tue, 14 Dec 2021 14:54:26 +0100
-Message-Id: <841b07a8738778e3db88afc7c18757edf22f89c2.1639490063.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.33.1
+        Tue, 14 Dec 2021 08:55:40 -0500
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JD0Hg1Kkhz91h2;
+        Tue, 14 Dec 2021 21:54:55 +0800 (CST)
+Received: from dggpeml100025.china.huawei.com (7.185.36.37) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 14 Dec 2021 21:55:38 +0800
+Received: from dggpeml100016.china.huawei.com (7.185.36.216) by
+ dggpeml100025.china.huawei.com (7.185.36.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 14 Dec 2021 21:55:38 +0800
+Received: from dggpeml100016.china.huawei.com ([7.185.36.216]) by
+ dggpeml100016.china.huawei.com ([7.185.36.216]) with mapi id 15.01.2308.020;
+ Tue, 14 Dec 2021 21:55:38 +0800
+From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>
+To:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+CC:     "Gonglei (Arei)" <arei.gonglei@huawei.com>,
+        Huangzhichao <huangzhichao@huawei.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "Wanpeng Li" <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "Jim Mattson" <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: The vcpu won't be wakened for a long time
+Thread-Topic: The vcpu won't be wakened for a long time
+Thread-Index: Adfw8hOY5GAlKZgbTtqexw2IMvmqfA==
+Date:   Tue, 14 Dec 2021 13:55:38 +0000
+Message-ID: <73d46f3cc46a499c8e39fdf704b2deaf@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.148.223]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the first thing this function does is to call
-v4l2_device_register(), it should call v4l2_device_unregister()
-if an error occurs, the same way as done at saa7146_vv_release().
+Hi guys,
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/common/saa7146/saa7146_fops.c | 3 +++
- 1 file changed, 3 insertions(+)
+We find a problem in kvm_vcpu_block().
 
-diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index be3215977714..e9a15de6126e 100644
---- a/drivers/media/common/saa7146/saa7146_fops.c
-+++ b/drivers/media/common/saa7146/saa7146_fops.c
-@@ -487,6 +487,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
- 	if (hdl->error) {
- 		err = hdl->error;
- 		v4l2_ctrl_handler_free(hdl);
-+		v4l2_device_unregister(&dev->v4l2_dev);
- 		return err;
- 	}
- 	dev->v4l2_dev.ctrl_handler = hdl;
-@@ -495,6 +496,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
- 	if (vv == NULL) {
- 		ERR("out of memory. aborting.\n");
- 		v4l2_ctrl_handler_free(hdl);
-+		v4l2_device_unregister(&dev->v4l2_dev);
- 		return -ENOMEM;
- 	}
- 	ext_vv->vid_ops = saa7146_video_ioctl_ops;
-@@ -521,6 +523,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
- 		ERR("out of memory. aborting.\n");
- 		kfree(vv);
- 		v4l2_ctrl_handler_free(hdl);
-+		v4l2_device_unregister(&dev->v4l2_dev);
- 		return -ENOMEM;
- 	}
- 
--- 
-2.33.1
+The testcase is:
+ - VM configured with 1 vcpu and 1 VF (using vfio-pci passthrough)
+ - the vfio interrupt and the vcpu are bound to the same pcpu
+ - using remapped mode IRTE, NOT posted mode
 
+The bug was triggered when the vcpu executed HLT instruction:
+
+kvm_vcpu_block:
+    prepare_to_rcuwait(&vcpu->wait);
+    for (;;) {
+        set_current_state(TASK_INTERRUPTIBLE);
+
+        if (kvm_vcpu_check_block(vcpu) < 0)
+            break;
+					<------------ (*)
+        waited = true;
+        schedule();
+    }
+    finish_rcuwait(&vcpu->wait);
+
+The vcpu will go to sleep even if an interrupt from the VF is fired at (*) and
+the PIR and ON bit will be set ( in vmx_deliver_posted_interrupt ), so the vcpu
+won't be wakened by subsequent interrupts.
+
+Any suggestions ? Thanks.

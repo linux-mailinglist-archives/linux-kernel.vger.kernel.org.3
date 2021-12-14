@@ -2,122 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCB9473D11
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FB9473D12
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbhLNGPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 01:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbhLNGPt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 01:15:49 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3941C061574;
-        Mon, 13 Dec 2021 22:15:48 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id i63so26853723lji.3;
-        Mon, 13 Dec 2021 22:15:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=725ChSobD1VD4Ep/VU60OT9W4QyTtvRCLihRfx/XJFI=;
-        b=GmfHh5wtbAkMz0d5F80QG380DoERfkquzkQHI58BfCR6UCF/ppBX0QcILykcLGLCLR
-         bLSyfzKtL6fIji52++qq+XvXsRJErPWGut7/jVxOntewKVynrWajhoLJNr8KkIKNx/n9
-         UF5Pcg0fpFjUc0XUHuD3val8uMBCIl/jMoXVWkoYqZygHcN6wdc9WhgApBRH4Mn78tdP
-         v3jmzinXx8xdnr/9pHN4yFWYprcewMc4IefBDH5EmKOMRoZ3d2RnAAaPb9234eEeddkG
-         hs5lDo1Yl8e5E/2BD34LHsjsN/Bf0YOSqPWUHr3bFABdKJvvh6IOw5IZ4vpDCOAGa0RL
-         qZcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=725ChSobD1VD4Ep/VU60OT9W4QyTtvRCLihRfx/XJFI=;
-        b=TWGlEDDH1FIKQIT6+YSz8fm1J+0Saf0x9ZY5IU9bo/zopWv1cdR8zwsITfGd1Dvgph
-         +Knu1QRfYWes5nYUSEKcySHo9nE7PFI0Wjh/HWm2ckLoQ2rfxZbvt3xWTnPX2igLdCtI
-         xZLAZMfPg6C2vx3E3m7MtsVae9N4vHYN03qnklYX6oa72d1Y43Co6Xo5SodxmCglwaSk
-         sZ93j3yXfYnFFYU3t5YbWnLaxfp9qexFCAu6Z6kTS+HdvLLbsk3TU7N0U4UJJ0plUMK3
-         S6vN5cbCKYUSBiWxYF+QEHaL0ayioyzvFutDRa10zyXB043ZZR+tK4IzHgUmujFbi3Nk
-         Xb8g==
-X-Gm-Message-State: AOAM533uFF0kY5NWYNV/+0kI20hqP+3HuIP/vXf/NixjkSeFB7691TC9
-        xKcM1fjgRW9VkDepk6QO7Nzi2wHA+jo=
-X-Google-Smtp-Source: ABdhPJyRbqZooRhCMtT9QRyO1YM7LLBWlPUm2wZXVvfxkW5q+x6LMK0P9+LRK86sL3exSHwBjzHi4w==
-X-Received: by 2002:a05:651c:1791:: with SMTP id bn17mr3075419ljb.525.1639462546955;
-        Mon, 13 Dec 2021 22:15:46 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id v2sm1723169ljv.6.2021.12.13.22.15.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 22:15:46 -0800 (PST)
-Subject: Re: [PATCH 1/3] ALSA: hda/tegra: Skip reset on BPMP devices
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
-        broonie@kernel.org, lgirdwood@gmail.com, thierry.reding@gmail.com,
-        perex@perex.cz
-Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Mohan Kumar <mkumard@nvidia.com>, robh+dt@kernel.org
-References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
- <1638858770-22594-2-git-send-email-spujar@nvidia.com>
- <7742adae-cdbe-a9ea-2cef-f63363298d73@gmail.com>
- <8fd704d9-43ce-e34a-a3c0-b48381ef0cd8@nvidia.com>
- <56bb43b6-8d72-b1de-4402-a2cb31707bd9@gmail.com>
- <4855e9c4-e4c2-528b-c9ad-2be7209dc62a@nvidia.com>
- <5d441571-c1c2-5433-729f-86d6396c2853@gmail.com>
- <f32cde65-63dc-67f8-ded8-b58ea5e89f4e@nvidia.com>
- <95cc7efa-251c-690b-9afa-53ee9e052c34@gmail.com>
- <148fba18-5d14-d342-0eb9-4ff224cc58ad@nvidia.com>
- <3b0de739-7866-3886-be9c-a853c746f8b7@gmail.com>
- <73d04377-9898-930b-09db-bb6c4b3eb90a@nvidia.com>
- <ad388f5e-6f60-cf78-8510-87aec8524e33@gmail.com>
- <50bf5a83-051e-8c12-6502-aabd8edd0a72@nvidia.com>
- <7230ad0b-2b04-4f1b-b616-b7d98789ded0@gmail.com>
-Message-ID: <93276b40-9ff8-f401-2624-04c0ff02c755@gmail.com>
-Date:   Tue, 14 Dec 2021 09:15:44 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <7230ad0b-2b04-4f1b-b616-b7d98789ded0@gmail.com>
-Content-Type: text/plain; charset=utf-8
+        id S230410AbhLNGQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:16:37 -0500
+Received: from mail-am6eur05on2057.outbound.protection.outlook.com ([40.107.22.57]:50720
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229630AbhLNGQg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 01:16:36 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aMnPQcideax1D6WCfp5DVYg3zon9RdzSKsrBANIqS2orLtIhWHYnVsYflYAv5MxYZwdHcVkO+1TFeec7KdCFTSsWKzdpZ3jlAxeM9k1f88o5INlrnkXKKu4eQRkQzQ8rj+sPjFs3kcSneWcH1UcaV7wIxvQmSO05vK4XN9INmPegytwiKLFwiK8VMeLJMovjbJ4dG3DJ4bNwLlBRksSfE8QFVV1GNlYchHa2rwTJGT6/AX5m2D7G72e7OLpxCh1JSGYmzhlJJCJt1A62r9mgFUpdzq36Perq//32FLGA1XxI6MRZOrUX0XXQJhMQ+DwVmIitSao7pwTr6AM2QPb6Fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zeZ2/LTCoVEjtd5X4KFneffFPo17pHYmUAz38fsX7EA=;
+ b=oWH/hYwGNCYc2RvoyqMTgFqQCr76czHOmql1E/q9OOuG5oJhiMafay9EOwTbR9UVrqkrsGew+0RwFsaJALFoDT8lXX5S5cvyUqCJXwX3YwudGwqjeamnROboGKkidJKatusmlXRjsw/o6e/H6ZGvHJcX4gfDLuF1BFx+rDB+EREHRYYBlzduylSOfy0L9CsUKUXWCkKnixcVLxZf3Bz3JM4bpdZPjbxgq55fH6meY9TNoscuANbXfk8R4R87zJgErE6XG1X+xf/9aYTj+rrtM5NmZ4y8UhQUyY3FnG7eG3q/ICqMC/ecQjqONw7AsdI71eK+JoAgBLj4VkP6Ga/Yiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zeZ2/LTCoVEjtd5X4KFneffFPo17pHYmUAz38fsX7EA=;
+ b=KdDpGHX/ziyIgQx4MZgfYpbB2wNDCErpudValTndYGdzUu1jxfEvfyxZKLmOPyj+MyuYXhc/U0+PRjNBe7H8A29qSWl9D7pTmOBtfY3zObeOWt+S62VxQhCwU3xOS4aE7SHsgzFB/f7e+OR2A+KUjUvvm95pW7mSALCtRYetPJI=
+Received: from AS8PR04MB8946.eurprd04.prod.outlook.com (2603:10a6:20b:42d::18)
+ by AS8PR04MB9206.eurprd04.prod.outlook.com (2603:10a6:20b:44d::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Tue, 14 Dec
+ 2021 06:16:34 +0000
+Received: from AS8PR04MB8946.eurprd04.prod.outlook.com
+ ([fe80::60be:d568:a436:894b]) by AS8PR04MB8946.eurprd04.prod.outlook.com
+ ([fe80::60be:d568:a436:894b%7]) with mapi id 15.20.4778.014; Tue, 14 Dec 2021
+ 06:16:34 +0000
+From:   Leo Li <leoyang.li@nxp.com>
+To:     Shawn Guo <shawnguo@kernel.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Biwen Li <biwen.li@nxp.com>
+Subject: RE: [PATCH v2 2/8] arm64: dts: ls1028a: add ftm_alarm1 node to be
+ used as wakeup source
+Thread-Topic: [PATCH v2 2/8] arm64: dts: ls1028a: add ftm_alarm1 node to be
+ used as wakeup source
+Thread-Index: AQHX6KRQDmQ7ZD1sNkCrw1lrB/2GzKwxipGAgAAH/iA=
+Date:   Tue, 14 Dec 2021 06:16:34 +0000
+Message-ID: <AS8PR04MB89463CB1B95BD7C4333BE7DC8F759@AS8PR04MB8946.eurprd04.prod.outlook.com>
+References: <20211204001718.8511-1-leoyang.li@nxp.com>
+ <20211204001718.8511-3-leoyang.li@nxp.com> <20211214054619.GI10916@dragon>
+In-Reply-To: <20211214054619.GI10916@dragon>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d0f672d0-2895-40f0-a287-08d9bec9477d
+x-ms-traffictypediagnostic: AS8PR04MB9206:EE_
+x-microsoft-antispam-prvs: <AS8PR04MB920657BF8D90D7C61525D3DF8F759@AS8PR04MB9206.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Q52ni68zJrM21KcSGLLPJ+in0BzlSCQ5XIGCpQci9RVB/iXLUXRQiVzHtFw+Nq3giSwwND6EtuBCOdehCsPAj5XmjuJT7A8Q99C5A9CKHPkDLiBnTqTkibkaf8r7UtL7sk/0L79Y58Z5Ino/dq5vFgU5L6uT8nQ+jZY8mLfBMw7XzVqvJMQ42RN7/0INXVmP9H/Wt53aKWpviNfidgFcvOVTg6gHiEvtyurR2wePwuTY42REhPlNowy7/km90dsDRvqZkO0PA/AtI/VBAqtNpydTtgxmqnrUD4VaVKpN7cc8epZ8Blf8VzZYT+HcVjYbCObi2gaD4LRanMG4geHES4wysjc61bDvZekWaWDdBQIeQh0jZonAkqbZwAPhGUpuHJ+npmn7iRhcrsT7YLCbjKq4m5vziRwZ11DYjxi6bha9Lz1J3i1WG/ru6jFWXURe078X/sKTSWnIS7jlBvZKhFWMLnMHuPwvWNymvRadZFLbDFxPEr2MpwGtrxYBuPGR04RUYzvp3fpmnW8GysJsv1avRBQk8ITCs6jyoX2eoVHHx+HR7ymGzJV/hUmcgqy7kmT3XPQ3MhkpvDLCKN+OoGNP81HoysFSnuQZAPK4HsMyZEz/pRG3W/DU8J1HErTW4XCrfX5Elnk9llYt3UNSsDhAD6hHs2dFCmlfkFDzxKJgxphESWXh5gXTSFEyMejvy35NlLBJEcQcVHxh/d+Lvw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8946.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(5660300002)(316002)(6916009)(71200400001)(66556008)(186003)(86362001)(55016003)(66946007)(54906003)(8676002)(52536014)(7696005)(26005)(66476007)(38100700002)(53546011)(6506007)(64756008)(4326008)(8936002)(9686003)(122000001)(76116006)(33656002)(83380400001)(508600001)(38070700005)(66446008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ypByKiFV2GjyXXKDKKJoNrp4BDsCt4WelarnxQATSmeXzsHyulWgYy/jhvdQ?=
+ =?us-ascii?Q?DRuhTINlWSYkjgrJaCM0aJ5PTMPWFJOQgK3BzUIONitXvLAxPm4DmEady3v0?=
+ =?us-ascii?Q?AXglxaWSpC07C4rJC4G6J3WhKHQ5Go4e01SeuBD+PDztNwERRHfh57NGVdUx?=
+ =?us-ascii?Q?tdvoe8BsxivJdpRUSsDHbVuFBHQEPNalNNmCRz4pIWHG111gSabeG4+VPRJH?=
+ =?us-ascii?Q?e+PZx2mxAKKrREHSMTHtRiAAe5J9KsOm1UHHSe7O8DSv+16uWbtO0E5Symga?=
+ =?us-ascii?Q?FrdDhgZ5RYk0hkqdbTX3ppqPHjgOzlpY+Lqa2b1IFwzidj8kkwIYFZcmqOSG?=
+ =?us-ascii?Q?Jq+jtm9e2IDBiWBahkUDqO4JnSMEJM7DK1208ekjoOjqNaI3290RGYEFBOgw?=
+ =?us-ascii?Q?0SvGllDftI5FNdF7DHfOt1FNGko9syM5bsLDDIXnZq1zx5IihAN2KhmXMGEv?=
+ =?us-ascii?Q?blPX35kWWqHIFPDxL9o3c1cDIuRfQPxDwNsEVCxfUGUCeFToarRvlgRUpDpF?=
+ =?us-ascii?Q?6l1bDY7H4e1nDuHd3SCBdzxQ4t+Y7ZrKGj2EIJSAKEaNEIi66pdbsLPjMYdS?=
+ =?us-ascii?Q?TDXi3edxFhAxTIz8r9gYB1hovrztHgooFiXm1IGhrAAq7Jorl9sonCtiaqR3?=
+ =?us-ascii?Q?hBYBXwyr0CQBTL+cq9nNU9tEvb7UWNYWcvdYrSoeHBJnvC1VOu0407aIIeBM?=
+ =?us-ascii?Q?ZIZq3aNJcrLGLPzphXO2+BsiNZparSmKD9SbACBHiQg+Ao3Jl31O5Y0wDczW?=
+ =?us-ascii?Q?tF/MpXcrO1+co4oWg33J1mp0gL+MPIS3OBRMcuRzblMgBNGtq3NY+MGDuzno?=
+ =?us-ascii?Q?Dt42iNkhM4CeeoXU5SkUnDnfquB0ZhU14qgSgHFQsiFzJHzue9L7L5gGkqM+?=
+ =?us-ascii?Q?bmeo2L/XhoZifyNPcif6w0bbbUqxnHkrKSw2RdvbSGCsLg+um5mAQDrr66Oc?=
+ =?us-ascii?Q?sn0O3TSv9yF9/7NK6RioIxRqr/bnIoOFLhR/QBnohOJWPSjpyJpWOyX1p4md?=
+ =?us-ascii?Q?PBIWJFNady/ClBPx9UgqrChhy4nQXA+ovXvuTRKMSfy6P78f775lvIP4gPSk?=
+ =?us-ascii?Q?t9dk75vyatUMoIMBga2dq9TrNA8kaz1Vzlm11Do6+d3piYoj/+4AQXUe1jm4?=
+ =?us-ascii?Q?q0T3IMvEIRot1tji25HFnGBA9spbNLeOWKJBncP6B2v61EnhRHANKT/rh2Gs?=
+ =?us-ascii?Q?XumG2vKz5ZppsNaqOETZp6hdYsGSmmpYqU12YgR/ePtIf4fHkxsaBimz3pEX?=
+ =?us-ascii?Q?yRun3raoNMzq/QInGTPGpJPqcD7Kt8LuwZ5rikaQtcYDwPorQwb92yTOFI6g?=
+ =?us-ascii?Q?/ymwhZDaA5nfFFMlje5tFvrSJooX0QYtdkKqik6It/VM1bHwOW1DV9Gzn7jC?=
+ =?us-ascii?Q?4H3U+G7ik1uKAg04eWOmFZkDWTPO4uPYGbDRta4OKUSjf9nzcTIrtX8Wt/bX?=
+ =?us-ascii?Q?E8FvhEg8/BcUhtMzKJQgW14J54jG165mE2czLIAiUuswHrBLo80BH4CTIyqi?=
+ =?us-ascii?Q?DfyKxAb6+effA3O2DkUQZrQqdm1FmXc6OiQzNKzfzytwOFFYQz64HJCrq4ms?=
+ =?us-ascii?Q?RF1td71VyI+rIgLhC35CgEbJZo5T+PSUdjX1VRhwjXcimzPVX1D17B+HzDGQ?=
+ =?us-ascii?Q?KHDFrtZke+K7yonjpL/vSWs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8946.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0f672d0-2895-40f0-a287-08d9bec9477d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Dec 2021 06:16:34.6068
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dWmtI1IBc536zqIzPweShaIHyZEuzuicMt9qavjQJzsaiMmLT3iMcQQaP/PMNmRwHNysjxyr/IFEMDPwH+DLTQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9206
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-14.12.2021 09:09, Dmitry Osipenko пишет:
-> 14.12.2021 09:02, Sameer Pujar пишет:
->>
->>
->> On 12/8/2021 5:35 PM, Dmitry Osipenko wrote:
->>> 08.12.2021 08:22, Sameer Pujar пишет:
->>>>
->>>> On 12/7/2021 11:32 PM, Dmitry Osipenko wrote
->>>>> If display is already active, then shared power domain is already
->>>>> ungated.
->>>> If display is already active, then shared power domain is already
->>>> ungated. HDA reset is already applied during this ungate. In other
->>>> words, HDA would be reset as well when display ungates power-domain.
->>> Now, if you'll reload the HDA driver module while display is active,
->>> you'll get a different reset behaviour. HDA hardware will be reset on
->>> pre-T186, on T186+ it won't be reset.
->>
->> How the reset behavior is different? At this point when HDA driver is
->> loaded the HW is already reset during display ungate. What matters,
->> during HDA driver load, is whether the HW is in predictable state or not
->> and the answer is yes. So I am not sure what problem you are referring
->> to. Question is, if BPMP already ensures this, then why driver needs to
->> take care of it.
-> 
-> 1. Enable display
-> 2. Play audio over HDMI
-> 3. HDA hardware now is in dirty state
-> 4. Reload HDA driver
-> 5. In your case HDA is kept in dirty state, in my no
-> 
 
-The power domain is shared by display and HDA, is this correct?
 
-If yes, then the shared power domain will be turned off only when all
-its clients are turned off, i.e. both display and HDA simultaneously.
+> -----Original Message-----
+> From: Shawn Guo <shawnguo@kernel.org>
+> Sent: Tuesday, December 14, 2021 1:46 PM
+> To: Leo Li <leoyang.li@nxp.com>
+> Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+> Biwen Li <biwen.li@nxp.com>
+> Subject: Re: [PATCH v2 2/8] arm64: dts: ls1028a: add ftm_alarm1 node to b=
+e
+> used as wakeup source
+>=20
+> On Fri, Dec 03, 2021 at 06:17:12PM -0600, Li Yang wrote:
+> > From: Biwen Li <biwen.li@nxp.com>
+> >
+> > Add flextimer2 based ftm_alarm1 node and enable it to be the default
+> > rtc wakeup source for rdb and qds boards instead of the original
+> > flextimer1 based ftm_alarm0.  The ftm_alarm0 node hence is disabled by
+> default.
+>=20
+> What's wrong with using ftm_alarm0?
+
+Not 100% sure, but probably because we need to use flextimer1 as PWM.
+
+Biwen,  Can you comment?
+
+>=20
+> Shawn
+>=20
+> >
+> > Signed-off-by: Biwen Li <biwen.li@nxp.com>
+> > Signed-off-by: Li Yang <leoyang.li@nxp.com>
+> > ---
+> >  arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts | 6 +++++-
+> > arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts | 6 +++++-
+> >  arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi    | 9 +++++++++
+> >  3 files changed, 19 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
+> > b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
+> > index 6e2a1da662fb..00d5b81bdef3 100644
+> > --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
+> > +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
+> > @@ -25,7 +25,7 @@ aliases {
+> >  		serial1 =3D &duart1;
+> >  		mmc0 =3D &esdhc;
+> >  		mmc1 =3D &esdhc1;
+> > -		rtc1 =3D &ftm_alarm0;
+> > +		rtc1 =3D &ftm_alarm1;
+> >  	};
+> >
+> >  	chosen {
+> > @@ -234,6 +234,10 @@ mt35xu02g0: flash@0 {
+> >  	};
+> >  };
+> >
+> > +&ftm_alarm1 {
+> > +	status =3D "okay";
+> > +};
+> > +
+> >  &i2c0 {
+> >  	status =3D "okay";
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
+> > b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
+> > index 7719f44bcaed..41900d351a92 100644
+> > --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
+> > +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts
+> > @@ -21,7 +21,7 @@ aliases {
+> >  		serial1 =3D &duart1;
+> >  		mmc0 =3D &esdhc;
+> >  		mmc1 =3D &esdhc1;
+> > -		rtc1 =3D &ftm_alarm0;
+> > +		rtc1 =3D &ftm_alarm1;
+> >  	};
+> >
+> >  	chosen {
+> > @@ -132,6 +132,10 @@ mt35xu02g0: flash@0 {
+> >  	};
+> >  };
+> >
+> > +&ftm_alarm1 {
+> > +	status =3D "okay";
+> > +};
+> > +
+> >  &i2c0 {
+> >  	status =3D "okay";
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> > b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> > index 9efcaf68578c..ef9d17df2afa 100644
+> > --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> > @@ -1198,6 +1198,15 @@ ftm_alarm0: timer@2800000 {
+> >  			reg =3D <0x0 0x2800000 0x0 0x10000>;
+> >  			fsl,rcpm-wakeup =3D <&rcpm 0x0 0x0 0x0 0x0 0x4000
+> 0x0 0x0>;
+> >  			interrupts =3D <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
+> > +			status =3D "disabled";
+> > +		};
+> > +
+> > +		ftm_alarm1: timer@2810000 {
+> > +			compatible =3D "fsl,ls1028a-ftm-alarm";
+> > +			reg =3D <0x0 0x2810000 0x0 0x10000>;
+> > +			fsl,rcpm-wakeup =3D <&rcpm 0x0 0x0 0x0 0x0 0x4000
+> 0x0 0x0>;
+> > +			interrupts =3D <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
+> > +			status =3D "disabled";
+> >  		};
+> >  	};
+> >
+> > --
+> > 2.25.1
+> >

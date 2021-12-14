@@ -2,102 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 811744743A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA204743B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234493AbhLNNiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S234497AbhLNNlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 08:41:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234480AbhLNNiq (ORCPT
+        with ESMTP id S232183AbhLNNlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:38:46 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA06C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:38:45 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id p19so18289498qtw.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:38:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PYw3dTNxx1w6/rYOsPCI3bE5Vdi4GI8AS7An95Gx17o=;
-        b=tUe3gF9yl7uvFOGJXnZDGunLrwNeHUsuozlge/NZ0esl2wmx+9OuT9twoBCrogJXHR
-         U+wazLt8k85qXcdVdlEr2QiWsHWjffFixl9JczbvlcYNtmeYAEmWFswwvrf2w87ZZrvq
-         WrBqfJpvjakwAHIhRNOhg18W8LuPvroIdKQoOQRnU++rANlMZ6I+El/IZfP6vNfWdiK8
-         G8BcYPbMdTezYk0AYApyD6ptaX+f18/ftVFujPLH6n561NNxDfTrp22U3edtVm0zJLLY
-         M4kfHx2yE/xcYoqfmDuL+bzlIOAfap6ttSGzkp6IZ6XE2t7BnJ//QLefREQAx5CEcwRp
-         97+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PYw3dTNxx1w6/rYOsPCI3bE5Vdi4GI8AS7An95Gx17o=;
-        b=oCJgX+jlDaXsnNkEiFfnWpdSMTsQuSkovKzpXF+t2v/rc2HHWLjr/MUwPwEcml2Ex+
-         nd/WHSYGKheOiCdSATTH4HpE7IjbpXjPCR0FmFpP2YBUE/hqapLbhoqSOZelynz6B/nL
-         zf23rPZERszEsK24+iz1GqhjUnxWXK5BqfM/XUq/kLE1leMoiko0ckWqvD++VQliF/7Q
-         xuaZ4L7oujVW5elYyuSPLzrZ0pvHXRQeteIqxcXcsiqsnHWE3BaDmLuEW3v1ab+xM6mL
-         FDecBS/q2uIv2kHHy7tKtU6r0hT4mlYIICMgd5ibsSK0XVMTj5hzuFmcS94sEXFt06Z6
-         aiXw==
-X-Gm-Message-State: AOAM533zhhxxXCC0gMIKNE1/qcKiiUoWZW73KLxWDrRgfJ4CufAmHuJ1
-        YSM4iNS7Gr3Om1D47gdL4ZIVpg==
-X-Google-Smtp-Source: ABdhPJwe1RWdhQKAzec7IHklUmwTSxvNcuVGOWbGkmTG1+fmiDw0JM0mWzPgit/4twx8SXN+ZSxh3Q==
-X-Received: by 2002:ac8:5ccd:: with SMTP id s13mr5995548qta.510.1639489125026;
-        Tue, 14 Dec 2021 05:38:45 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:e1e4])
-        by smtp.gmail.com with ESMTPSA id ay42sm7612729qkb.40.2021.12.14.05.38.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 05:38:44 -0800 (PST)
-Date:   Tue, 14 Dec 2021 14:38:39 +0100
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     willy@infradead.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        vdavydov.dev@gmail.com, shakeelb@google.com, guro@fb.com,
-        shy828301@gmail.com, alexs@kernel.org, richard.weiyang@gmail.com,
-        david@fromorbit.com, trond.myklebust@hammerspace.com,
-        anna.schumaker@netapp.com, jaegeuk@kernel.org, chao@kernel.org,
-        kari.argillander@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, zhengqi.arch@bytedance.com,
-        duanxiongchun@bytedance.com, fam.zheng@bytedance.com,
-        smuchun@gmail.com
-Subject: Re: [PATCH v4 01/17] mm: list_lru: optimize memory consumption of
- arrays of per cgroup lists
-Message-ID: <YbieX3WCUt7hdZlW@cmpxchg.org>
-References: <20211213165342.74704-1-songmuchun@bytedance.com>
- <20211213165342.74704-2-songmuchun@bytedance.com>
+        Tue, 14 Dec 2021 08:41:36 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906C4C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:41:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+ZUy/3bMM7/nmZFCJ5b7/UZFV+jJUEvufcYBfP6xYjU=; b=GfKi/11PrvYEx70EAaVLotr8vc
+        zwwEmFew961wkODoSjsPlgKLxJJLLuFRvPPz1AQYqv5k95pVFT/vVlL3cgulHFAX4S1nFSd274l6r
+        BH76AFMYPU0k/fa2zxiiGVgoWJ+K452iLUuIDmJBjr8PZ5J+Jvl9bUK9Attte+ZymDz/hFgdU9GTc
+        Dwgg19UYxQm42eDgFpTLLQ5iTPyaQJ5kVCWardrCjqQOiagnANJ3i923Or+klVnYckY6Ffpk/Z3Hu
+        cZiA9PZs+ecltJtRGxvkTq8dfyy3s+RXpEUcGH3YeD+ydtVZraiXQRgD+4KAkM8OZL48mehP/0JBP
+        oyAAc6qg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56274)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mx83g-0004z8-QE; Tue, 14 Dec 2021 13:41:32 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mx83d-0003YC-K6; Tue, 14 Dec 2021 13:41:29 +0000
+Date:   Tue, 14 Dec 2021 13:41:29 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>
+Subject: Re: [PATCH v1 1/1] ARM: orion/gpio: Get rid of unused first
+ parameter in orion_gpio_init()
+Message-ID: <YbifCSYfbKoYuzDX@shell.armlinux.org.uk>
+References: <20211214133243.53199-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213165342.74704-2-songmuchun@bytedance.com>
+In-Reply-To: <20211214133243.53199-1-andriy.shevchenko@linux.intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 12:53:26AM +0800, Muchun Song wrote:
-> The list_lru uses an array (list_lru_memcg->lru) to store pointers
-> which point to the list_lru_one. And the array is per memcg per node.
-> Therefore, the size of the arrays will be 10K * number_of_node * 8 (
-> a pointer size on 64 bits system) when we run 10k containers in the
-> system. The memory consumption of the arrays becomes significant. The
-> more numa node, the more memory it consumes.
+On Tue, Dec 14, 2021 at 03:32:43PM +0200, Andy Shevchenko wrote:
+> The OF node pointer is always NULL, get rid of unused parameter in
+> orion_gpio_init(). As a side effect it will allow to switch GPIO
+> library to the fwnode API, as well as in case of resurrecting it here
+> it should be fwnode_handle anyways.
 
-The complexity for the lists themselves is still nrmemcgs * nrnodes
-right? But the rcu_head goes from that to nrmemcgs.
+Please ensure the new code follows the existing style - especially in
+terms of wrapping. Some of us still use 80 columns as a general rule.
+Thanks.
 
-> I have done a simple test, which creates 10K memcg and mount point
-> each in a two-node system. The memory consumption of the list_lru
-> will be 24464MB. After converting the array from per memcg per node
-> to per memcg, the memory consumption is going to be 21957MB. It is
-> reduces by 2.5GB. In our AMD servers, there are 8 numa nodes in
-> those system, the memory consumption could be more significant.
-
-The code looks good to me, but it would be useful to include a
-high-level overview of the new scheme, explain that the savings come
-from the rcu heads, that it simplifies the alloc/dealloc path etc.
-
-With that,
-
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

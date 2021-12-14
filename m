@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCA2474606
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F27F847460B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbhLNPHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbhLNPHw (ORCPT
+        id S233145AbhLNPHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:07:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23613 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231266AbhLNPHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:07:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8A0C061574;
-        Tue, 14 Dec 2021 07:07:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83D31B81A26;
-        Tue, 14 Dec 2021 15:07:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39B77C34608;
-        Tue, 14 Dec 2021 15:07:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639494469;
-        bh=rPVk2jDfAiR4nn6IGpYxU9DbCVEZmbX3NRqFQoR/jQs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n1a/Auo5GPfrYAN6BIrPFlMr16f70/duhx+xBXAmDtvldmoUfa1QwqdjTpNRonDpk
-         1NqP9cw8wUbGCyaH9EluR7qtxbvyP+pZE1MnP2C5tEBoMVMIdrc2V4ScPnf9cGqvwH
-         x0OLd8CUlhkfeQqj+oXHwDgRvcyR9OGyQwgBvlHUNv9Zd0oKYawKSxFmwLLyZn61Ge
-         4MXLmhNrzDuzec3RJd+/iccHwz2kpNBbxxRtjRYKEaPxZx0utFHiynKNZ0R1q4SzeH
-         lQgW6MUsLYDZzpzyecpyohd1DWFSrq+lruclmWBccK/wucP0SRKTBTRwnnm43hE7Rb
-         jUf5oXYiW5zeg==
-Received: by mail-ed1-f44.google.com with SMTP id r11so63319103edd.9;
+        Tue, 14 Dec 2021 10:07:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639494472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5TsrbpN2qcfX3aFt5wXOi5c4TqBdGXNyhO7JY9oJZus=;
+        b=N5bWILXcM5LpFt8RECYjIx62NVCaTyl6z5gCtMhRXWPtjm9dQkeDFa5waqPxxbRl780sWi
+        69eNZg2PbM80KDSzVPRcPleRM1SEDa+movigbeKePeS1/wqvE3ao6iBivp2F4TKo3B6pye
+        P11MFkRV0CHUGJ89r/M5W7YdezPBzhc=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-235-WnmuezwuNQCEti9ggojHHg-1; Tue, 14 Dec 2021 10:07:51 -0500
+X-MC-Unique: WnmuezwuNQCEti9ggojHHg-1
+Received: by mail-ed1-f71.google.com with SMTP id y9-20020aa7c249000000b003e7bf7a1579so17252840edo.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:07:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5TsrbpN2qcfX3aFt5wXOi5c4TqBdGXNyhO7JY9oJZus=;
+        b=f7Tig97EPQjELYvBG4cXMm7Z+ir3IxrVkyNOJmZ8U/zuBB84tG/DCcuzSz4DHuqSm1
+         Ab4WbQqML6V299HbXk48tl6HFVGfbKZaO1RvMJqCu23zhfhhyYymr0J5wUTRu2NmqnvZ
+         JqIddeL89hTKrX79D53ssImXTXa5OjZ2HFpw1JxDxNZB6VAglzgW4L+xTVITEBbLdXXa
+         H58YgcYjSBoiiJBvDCjP1WGD8H9L4IXR//c4G3vFXf8dr9ovdR1HjQyEB7vsCNse1n6K
+         tuAPyPf4BbnaAnkAo7nE4YPSa3K2A7ltjftamiHtnVhFeNY3DIWSdJm6rVKi2F33w1HP
+         qUvg==
+X-Gm-Message-State: AOAM530VfxOP9EXAvV/j8Qx37E5v8P6X3/lguG3vRce9ckHYFj20V56W
+        jk2ZRBJaGaO0zT49unfC67FSDPUt0N7CEyaim1IUL21UfVoXIQHhE4HI3W19sRzBydz/+Z5Eut+
+        9oisPQl5BPHes6E6iVGvyC/ju
+X-Received: by 2002:a17:906:b084:: with SMTP id x4mr6166811ejy.214.1639494470133;
+        Tue, 14 Dec 2021 07:07:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwL1sFNHf7cavCioNMSZSnQSUNNrFzXwlJAk7yQXbGZOLU6nga68ZKQWPGfuPU160cU7w/tZA==
+X-Received: by 2002:a17:906:b084:: with SMTP id x4mr6166795ejy.214.1639494469920;
         Tue, 14 Dec 2021 07:07:49 -0800 (PST)
-X-Gm-Message-State: AOAM530goB/LFR0w9RAxU8tIZlGg/aTjCtj4hqjRzINAo0n9lnP2+8HU
-        EO0Kn7WOF31F5NeB72FO3l2CdsS27xvSv1MJKA==
-X-Google-Smtp-Source: ABdhPJxf5YHSaPknEFNU2A9Af9vjayodsoldMQfptOk8XsIiNGL8Y+79xGZquCFPYdXox6JhXgRtWzFzb7ICr0iQ9pE=
-X-Received: by 2002:a17:906:229b:: with SMTP id p27mr6246957eja.264.1639494466650;
- Tue, 14 Dec 2021 07:07:46 -0800 (PST)
+Received: from gator.home (cst2-173-70.cust.vodafone.cz. [31.30.173.70])
+        by smtp.gmail.com with ESMTPSA id r3sm1233ejr.79.2021.12.14.07.07.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 07:07:49 -0800 (PST)
+Date:   Tue, 14 Dec 2021 16:07:47 +0100
+From:   Andrew Jones <drjones@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, vkuznets@redhat.com, mlevitsk@redhat.com,
+        joao.m.martins@oracle.com, stable@vger.kernel.org,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v3] selftests: KVM: avoid failures due to reserved
+ HyperTransport region
+Message-ID: <20211214150747.c5xcdjghenunyw5e@gator.home>
+References: <20211209223040.304355-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20211214013800.2703568-1-vladimir.oltean@nxp.com> <20211214013800.2703568-2-vladimir.oltean@nxp.com>
-In-Reply-To: <20211214013800.2703568-2-vladimir.oltean@nxp.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 14 Dec 2021 09:07:33 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqK2Shj6smam7HgNAmy3UG+vVQPkU3Q0OjyEHOEJB45n0A@mail.gmail.com>
-Message-ID: <CAL_JsqK2Shj6smam7HgNAmy3UG+vVQPkU3Q0OjyEHOEJB45n0A@mail.gmail.com>
-Subject: Re: [RFC PATCH devicetree 01/10] irqchip/ls-extirq: rename
- "interrupt-map" OF property to "fsl,extirq-map"
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Li Yang <leoyang.li@nxp.com>, Biwen Li <biwen.li@nxp.com>,
-        Zhiqiang Hou <Zhiqiang.Hou@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209223040.304355-1-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 7:38 PM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
->
-> This OF property was supposed to be named "fsl,extirq-map" since the
-> first patch submissions, but at Rob Herring's suggestion it was named
-> "interrupt-map":
-> https://lore.kernel.org/lkml/20190927161118.GA19333@bogus/
+On Thu, Dec 09, 2021 at 05:30:40PM -0500, Paolo Bonzini wrote:
+> AMD proceessors define an address range that is reserved by HyperTransport
+> and causes a failure if used for guest physical addresses.  Avoid
+> selftests failures by reserving those guest physical addresses; the
+> rules are:
+> 
+> - On parts with <40 bits, its fully hidden from software.
+> 
+> - Before Fam17h, it was always 12G just below 1T, even if there was more
+> RAM above this location.  In this case we just not use any RAM above 1T.
+> 
+> - On Fam17h and later, it is variable based on SME, and is either just
+> below 2^48 (no encryption) or 2^43 (encryption).
+> 
+> Fixes: ef4c9f4f6546 ("KVM: selftests: Fix 32-bit truncation of vm_get_max_gfn()")
+> Cc: stable@vger.kernel.org
+> Cc: David Matlack <dmatlack@google.com>
+> Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Message-Id: <20210805105423.412878-1-pbonzini@redhat.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  .../testing/selftests/kvm/include/kvm_util.h  |  9 +++
+>  tools/testing/selftests/kvm/lib/kvm_util.c    |  2 +-
+>  .../selftests/kvm/lib/x86_64/processor.c      | 69 +++++++++++++++++++
+>  3 files changed, 79 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index 6a1a37f30494..da2b702da71a 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -71,6 +71,15 @@ enum vm_guest_mode {
+>  
+>  #endif
+>  
+> +#if defined(__x86_64__)
+> +unsigned long vm_compute_max_gfn(struct kvm_vm *vm);
+> +#else
+> +static inline unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
+> +{
+> +	return ((1ULL << vm->pa_bits) >> vm->page_shift) - 1;
+> +}
 
-I'm still not okay with a custom property. The fact that multiple
-platforms need the same thing is an indication this should be common.
-Other cases are being fixed by using 'interrupts', but that's going to
-take some cleanups[1].
+This breaks compiling on non-x86 architectures because of how we keep
+the vm struct private. I'll send a patch that puts vm_compute_max_gfn
+in lib/kvm_util.c but as a weak symbol.
 
-> At that time, the "interrupt-map" was ignored by the core for OF nodes
-> that also had an "interrupt-controller" property, but that changed with
-> commit 041284181226 ("of/irq: Allow matching of an interrupt-map local
-> to an interrupt controller"), which made the consumer drivers of the
-> ls-extirq break. To work around this breakage, the OF bindings for IRQs
-> have introduced a table of "OF IRQ interrupt-map abusers".
-> This can be seen in commit de4adddcbcc2 ("of/irq: Add a quirk for
-> controllers with their own definition of interrupt-map").
->
-> To stop being abusers, let's go back to the original form of these
-> bindings, before Rob's review. Compatibility will be kept with the
-> current abusive bindings for a few more kernel cycles, to give people
-> some time to update. But to also give them an incentive, print a warning
-> that the support for "interrupt-map" will be removed. This will be seen
-> when running a new kernel with an old device tree.
->
-> While the breakage was introduced relatively recently, the device tree
-> changes are intended to backport stable kernels for quicker conversion
-> to an acceptable set of bindings, and this driver will need to support
-> the updated stable bindings.
+(Maybe we should stop keeping the vm struct private...)
 
-Using 'interrupts' is not going to work backporting to stable, but I
-don't think trying to switch this is worth it.
+Thanks,
+drew
 
-Rob
-
-[1] https://lore.kernel.org/all/CAL_Jsq+jyqbhA1jpgZ+yTwWGvCMRu9VmgoDq8MDM9SMqJ-XSBw@mail.gmail.com/

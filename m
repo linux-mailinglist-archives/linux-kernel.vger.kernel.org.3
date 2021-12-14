@@ -2,392 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 943D9474B4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693DB474B4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237219AbhLNS5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 13:57:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbhLNS5T (ORCPT
+        id S237224AbhLNS5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:57:41 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59674 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234299AbhLNS5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 13:57:19 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6986DC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 10:57:19 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id r130so18667912pfc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 10:57:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=z/9sabUvBDfJky/q2Pf4kKBUbChtD7NwCHSaPTfLq3c=;
-        b=UOTh0vR1kRkdKyigzue5IV3Wa7plih6LS2+mD3e/LezSYIxHuhudLxUaHDSwDKo9XS
-         Fg9/n9OaYme+R+JrtviCxJvsaeUkDxArn7Ke8Gc7Uf7R6Vgd1mrpUu8/ui6BfVWSSeC2
-         TIrgBJ3AA/8/mXRM6o+IX5Og4bIKiPpeIUsPdq3lOgg0BKe7zHjRDFbqSEtv1TUa5SXN
-         5ftt3mbU3gDMWUwfKcEe18bIXQmkRhZ5S4pLy6qX8SdLZO9EyItCgaILiCWoMBTbovb8
-         el6gWD9t19+wiW7Km7HpH0lDcay6xbK6lBxPsMOMfZ8F4FiRyFEy8qzinO8tjySWV6Ro
-         PT8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z/9sabUvBDfJky/q2Pf4kKBUbChtD7NwCHSaPTfLq3c=;
-        b=esDEGqha+jtDxfjQvJgyKRqRGPYqiWYqnUB/sU69DmDLwbj8J/txaTGVx69TYFJp/q
-         Va35Ev4GQSK1XtL43mZ1qQZ7lqulBBf02pekP2y2mDPFYPIuob2qCK5FeGDiBe6fTxE7
-         +PLicR74/1eF6sDCL2kXx3UMGRB7kS6+iqWKalU8KuIzZsK+wDW3BZaSv/Zb4ynnNZjJ
-         jng/Kl2XjswBfrgizV6YuxuZVIIyCMHkCAU4BV4v/Jqn0wt5RzwCszZS4Vcv7FrE+3ox
-         uIRnIhpxxrOQSRwinn8p+EufzwfXjnCm0lamcgn1+DtWHRnr4f8U8sXUcceyM5bBbcXy
-         2q1g==
-X-Gm-Message-State: AOAM532Dt1XpPRccFqxM7uDPY792to9s+fVdm05ufJTfco8J10M/H13h
-        Osux+9RoE1bAoZwhGTshvMfUiA==
-X-Google-Smtp-Source: ABdhPJzgsyYh10jCsoOLuPqUrO0k9IFRohrCCYhw80obOIddX5S4lpYd7V+a0Wbv9pIzbiy9koNn9Q==
-X-Received: by 2002:a05:6a00:2ab:b0:49f:997e:23e2 with SMTP id q11-20020a056a0002ab00b0049f997e23e2mr5728823pfs.22.1639508238879;
-        Tue, 14 Dec 2021 10:57:18 -0800 (PST)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id c19sm1471081pjr.2.2021.12.14.10.57.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 10:57:16 -0800 (PST)
-Date:   Tue, 14 Dec 2021 11:57:14 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 2/9] Coresight: Add coresight TPDM source driver
-Message-ID: <20211214185714.GB1549991@p14s>
-References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
- <20211209141543.21314-3-quic_jinlmao@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209141543.21314-3-quic_jinlmao@quicinc.com>
+        Tue, 14 Dec 2021 13:57:40 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 927136168F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 18:57:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B941C34600;
+        Tue, 14 Dec 2021 18:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639508259;
+        bh=+5H7tmXm5JL0z/Eb5YMmyedVcM3AXcxgFfl4LimxwK8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aySmg66q3zSt64rqtVqQIyxpG+v2Zbf7TAac4F7a2H4QBTcdSXeDhhjqxu5xlOieQ
+         44uWaN2hEnMk/s5+MP+Lt+lJAvpoZKsJBpxHLNSAyynrKhwz9Zg2KTJyBh6jfJvbVt
+         sDiHdzHtYxr+0CGL/QSAZz4W2sCRD8wVwLuTSuVGzzVQhiI5BiAhIr3md8OFwT6N40
+         VoQlLASXhkeGIy3GeymzirxE2wEJcVXQBcP9YI1T4EFIZH0HiuC1zd1oqOr33U36kl
+         AqddkzuilQcokrrm4J8YToWdvr3cKEM3FW2TpQ6Lk1UKyqWFzd7VGvkK3vzAFwBv+5
+         hsDhyBK2ZYscw==
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     rostedt@goodmis.org
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/4] tracing: Add and use event_command parsing func helpers
+Date:   Tue, 14 Dec 2021 12:57:28 -0600
+Message-Id: <cover.1639507505.git.zanussi@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 10:15:36PM +0800, Mao Jinlong wrote:
-> Add driver to support Coresight device TPDM (Trace, Profiling and
-> Diagnostics Monitor). TPDM is a monitor to collect data from
-> different datasets. This change is to add probe/enable/disable
-> functions for tpdm source.
-> 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
-> ---
->  MAINTAINERS                                  |   8 +
->  drivers/hwtracing/coresight/Kconfig          |  13 ++
->  drivers/hwtracing/coresight/Makefile         |   1 +
->  drivers/hwtracing/coresight/coresight-core.c |   3 +-
->  drivers/hwtracing/coresight/coresight-tpdm.c | 152 +++++++++++++++++++
->  drivers/hwtracing/coresight/coresight-tpdm.h |  31 ++++
->  include/linux/coresight.h                    |   1 +
->  7 files changed, 208 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
->  create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7a2345ce8521..59f39b3194f6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15560,6 +15560,14 @@ L:	netdev@vger.kernel.org
->  S:	Supported
->  F:	drivers/net/ipa/
->  
-> +QCOM CORESIGHT COMPONENTS DRIVER
-> +M:	Tao Zhang <quic_taozha@quicinc.com>
-> +M:	Jinlong Mao <quic_jinlmao@quicinc.com>
-> +M:	Mathieu Poirier <mathieu.poirier@linaro.org>
-> +M:	Suzuki K Poulose <suzuki.poulose@arm.com>
-> +S:	Maintained
-> +F:	drivers/hwtracing/coresight/coresight-tpdm.c
-> +
+With more event commands being implemented, it's been pointed out that
+it would make sense to clean up the existing ones and make it easier
+to implement new ones without copying a lot of boilerplate.  The main
+culprit here is the event_command.func() callback - the rest of the
+event_command infrastructure has default implementations that work for
+most implementations.  The func() callback is a little different in
+that every new command needs to customize parsing to some extent.
 
-There is no need for an extra entry in the MAINTAINERS file.  The checkpatch.pl
-script is smart enough to know when to CC you and Tao every time the TPDM/TPDA
-drivers are modified.  Suzuki and I will simply wait for you guys to add your RB
-tags before reviewing the patches.  I have explained this in the previous revision. 
+This patchset attempts to help clean that up and make it easier for
+new users to deal with.
 
->  QEMU MACHINE EMULATOR AND VIRTUALIZER SUPPORT
->  M:	Gabriel Somlo <somlo@cmu.edu>
->  M:	"Michael S. Tsirkin" <mst@redhat.com>
-> diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
-> index 514a9b8086e3..5c506a1cd08f 100644
-> --- a/drivers/hwtracing/coresight/Kconfig
-> +++ b/drivers/hwtracing/coresight/Kconfig
-> @@ -201,4 +201,17 @@ config CORESIGHT_TRBE
->  
->  	  To compile this driver as a module, choose M here: the module will be
->  	  called coresight-trbe.
-> +
-> +config CORESIGHT_TPDM
-> +	tristate "CoreSight Trace, Profiling & Diagnostics Monitor driver"
-> +	select CORESIGHT_LINKS_AND_SINKS
+v5: Changed the parsing helper function example components param and
+    filter to reflect only the param and filter components, and added
+    param_and_filter which now appears in the functions.
 
-Is this available on 32bit HW as well?  If not please make it dependent on ARM64
-as it for ETMv4x devices.
+    Removed the check for a NULL *param following the strsep
+    separating the param from the filter in
+    event_trigger_separate_filter() because it will never be true due
+    to the previous check for NULL param_and_filter previously.
 
-> +	help
-> +	  This driver provides support for configuring monitor. Monitors are
-> +	  primarily responsible for data set collection and support the
-> +	  ability to collect any permutation of data set types. Monitors are
-> +	  also responsible for interaction with system cross triggering.
-> +
-> +	  To compile this driver as a module, choose M here: the module will be
-> +	  called coresight-tpdm.
-> +
->  endif
-> diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
-> index b6c4a48140ec..e7392a0dddeb 100644
-> --- a/drivers/hwtracing/coresight/Makefile
-> +++ b/drivers/hwtracing/coresight/Makefile
-> @@ -25,5 +25,6 @@ obj-$(CONFIG_CORESIGHT_CPU_DEBUG) += coresight-cpu-debug.o
->  obj-$(CONFIG_CORESIGHT_CATU) += coresight-catu.o
->  obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
->  obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
-> +obj-$(CONFIG_CORESIGHT_TPDM) += coresight-tpdm.o
->  coresight-cti-y := coresight-cti-core.o	coresight-cti-platform.o \
->  		   coresight-cti-sysfs.o
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index cc6b6cabf85f..a7f1a6f09cfb 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -1071,7 +1071,8 @@ static int coresight_validate_source(struct coresight_device *csdev,
->  	}
->  
->  	if (subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_PROC &&
-> -	    subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE) {
-> +	    subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE &&
-> +	    subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SYS) {
->  		dev_err(&csdev->dev, "wrong device subtype in %s\n", function);
->  		return -EINVAL;
->  	}
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-> new file mode 100644
-> index 000000000000..f494cef4fb24
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-> @@ -0,0 +1,152 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/amba/bus.h>
-> +#include <linux/bitmap.h>
-> +#include <linux/coresight.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/fs.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/regulator/consumer.h>
-> +
-> +#include "coresight-priv.h"
-> +#include "coresight-tpdm.h"
-> +
-> +DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
-> +
-> +static int tpdm_enable(struct coresight_device *csdev,
-> +		       struct perf_event *event, u32 mode)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +
-> +	mutex_lock(&drvdata->lock);
-> +	if (drvdata->enable) {
-> +		mutex_unlock(&drvdata->lock);
-> +		return -EBUSY;
-> +	}
-> +
-> +	drvdata->enable = true;
-> +	mutex_unlock(&drvdata->lock);
-> +
-> +	dev_info(drvdata->dev, "TPDM tracing enabled\n");
-> +	return 0;
-> +}
-> +
-> +static void tpdm_disable(struct coresight_device *csdev,
-> +			 struct perf_event *event)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +
-> +	mutex_lock(&drvdata->lock);
-> +	if (!drvdata->enable) {
-> +		mutex_unlock(&drvdata->lock);
-> +		return;
-> +	}
-> +
-> +	drvdata->enable = false;
-> +	mutex_unlock(&drvdata->lock);
-> +
-> +	dev_info(drvdata->dev, "TPDM tracing disabled\n");
-> +}
-> +
-> +static int tpdm_trace_id(struct coresight_device *csdev)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +
-> +	return drvdata->traceid;
-> +}
-> +
-> +static const struct coresight_ops_source tpdm_source_ops = {
-> +	.trace_id	= tpdm_trace_id,
-> +	.enable		= tpdm_enable,
-> +	.disable	= tpdm_disable,
-> +};
-> +
-> +static const struct coresight_ops tpdm_cs_ops = {
-> +	.source_ops	= &tpdm_source_ops,
-> +};
-> +
-> +static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
-> +{
-> +	static int traceid = TPDM_TRACE_ID_START;
-> +
-> +	drvdata->traceid = traceid++;
-> +}
+    Changed the param name from trigger to param and updated the
+    function documentation in event_trigger_parse_num().
 
-I have been specific on how to properly do this in the last revision.  Given the
-above about the MAINTAINERS file, I am not sure that I will continue reviewing this set.
+v4: Added two patches changing the names of event_command.func() and
+    event_trigger_ops.func() to make them reflect their functions.
 
-There is also no need to rush another revision as I won't have the bandwidth to
-process it before the holidays.
+    Added back missing kfree(trigger_data) in event_trigger_callback().
 
-Thanks,
-Mathieu
+    Changed char *param to const char *param in
+    event_trigger_check_remove() and event_trigger_empty_param().
 
-> +
-> +static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
-> +{
-> +	struct device *dev = &adev->dev;
-> +	struct coresight_platform_data *pdata;
-> +	struct tpdm_drvdata *drvdata;
-> +	struct coresight_desc desc = { 0 };
-> +
-> +	desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
-> +	if (!desc.name)
-> +		return -ENOMEM;
-> +	pdata = coresight_get_platform_data(dev);
-> +	if (IS_ERR(pdata))
-> +		return PTR_ERR(pdata);
-> +	adev->dev.platform_data = pdata;
-> +
-> +	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-> +	if (!drvdata)
-> +		return -ENOMEM;
-> +	drvdata->dev = &adev->dev;
-> +	dev_set_drvdata(dev, drvdata);
-> +
-> +	drvdata->base = devm_ioremap_resource(dev, &adev->res);
-> +	if (!drvdata->base)
-> +		return -ENOMEM;
-> +
-> +	mutex_init(&drvdata->lock);
-> +
-> +	desc.type = CORESIGHT_DEV_TYPE_SOURCE;
-> +	desc.subtype.source_subtype = CORESIGHT_DEV_SUBTYPE_SOURCE_SYS;
-> +	desc.ops = &tpdm_cs_ops;
-> +	desc.pdata = adev->dev.platform_data;
-> +	desc.dev = &adev->dev;
-> +	drvdata->csdev = coresight_register(&desc);
-> +	if (IS_ERR(drvdata->csdev))
-> +		return PTR_ERR(drvdata->csdev);
-> +
-> +	tpdm_init_default_data(drvdata);
-> +	pm_runtime_put(&adev->dev);
-> +
-> +	return 0;
-> +}
-> +
-> +static void __exit tpdm_remove(struct amba_device *adev)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
-> +
-> +	coresight_unregister(drvdata->csdev);
-> +}
-> +
-> +static struct amba_id tpdm_ids[] = {
-> +	{
-> +		.id = 0x000f0e00,
-> +		.mask = 0x000fff00,
-> +	},
-> +	{ 0, 0},
-> +};
-> +
-> +static struct amba_driver tpdm_driver = {
-> +	.drv = {
-> +		.name   = "coresight-tpdm",
-> +		.owner	= THIS_MODULE,
-> +		.suppress_bind_attrs = true,
-> +	},
-> +	.probe          = tpdm_probe,
-> +	.id_table	= tpdm_ids,
-> +};
-> +
-> +module_amba_driver(tpdm_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Monitor driver");
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-> new file mode 100644
-> index 000000000000..980ae90ff1c8
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-> @@ -0,0 +1,31 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#ifndef _CORESIGHT_CORESIGHT_TPDM_H
-> +#define _CORESIGHT_CORESIGHT_TPDM_H
-> +
-> +/* Default value of the traceid */
-> +#define TPDM_TRACE_ID_START 128
-> +
-> +/**
-> + * struct tpdm_drvdata - specifics associated to an TPDM component
-> + * @base:       memory mapped base address for this component.
-> + * @dev:        The device entity associated to this component.
-> + * @csdev:      component vitals needed by the framework.
-> + * @lock:       lock for the enable value.
-> + * @enable:     enable status of the component.
-> + * @traceid:    value of the current ID for this component.
-> + */
-> +
-> +struct tpdm_drvdata {
-> +	void __iomem		*base;
-> +	struct device		*dev;
-> +	struct coresight_device	*csdev;
-> +	struct mutex		lock;
-> +	bool			enable;
-> +	int			traceid;
-> +};
-> +
-> +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
-> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-> index 93a2922b7653..e48d463be63b 100644
-> --- a/include/linux/coresight.h
-> +++ b/include/linux/coresight.h
-> @@ -65,6 +65,7 @@ enum coresight_dev_subtype_source {
->  	CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
->  	CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
->  	CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
-> +	CORESIGHT_DEV_SUBTYPE_SOURCE_SYS,
->  };
->  
->  enum coresight_dev_subtype_helper {
-> -- 
-> 2.17.1
-> 
+    Changed event_trigger_separate_filter() to use separate param and
+    filter outparams, and changed the name of the param inparam to
+    param_and_filter to better reflect its contents and avoid the
+    clash with new param outparam.  Changed all parse()
+    implementations to use this new scheme.
+
+    Fixed some typos and added more extensive comments with examples
+    explaining various things that were mentioned as causing confusion
+    and just in general tried to clarify things with respect to the
+    callbacks and parameters.
+
+v3: broke up event_trigger_check() into smaller functions instead of
+    parameterizing it, and added function documentation.
+
+v2: removed unused event_trigger_remove(). No change in functionality.
+
+The following changes since commit a6ed2aee54644cfa2d04ca86308767f5c3a087e8:
+
+  tracing: Switch to kvfree_rcu() API (2021-12-06 17:53:50 -0500)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zanussi/linux-trace.git ftrace/cleanup-hist-func-v5
+
+Tom Zanussi (4):
+  tracing: Change event_command func() to parse()
+  tracing: Change event_trigger_ops func() to trigger()
+  tracing: Add helper functions to simplify event_command.parse()
+    callback handling
+  tracing: Have existing event_command.parse() implementations use
+    helpers
+
+ kernel/trace/trace.h                |  63 +++-
+ kernel/trace/trace_eprobe.c         |  11 +-
+ kernel/trace/trace_events_hist.c    | 109 +++---
+ kernel/trace/trace_events_trigger.c | 564 ++++++++++++++++++++--------
+ 4 files changed, 519 insertions(+), 228 deletions(-)
+
+-- 
+2.17.1
+

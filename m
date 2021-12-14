@@ -2,106 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A89B4748D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB2D4748DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbhLNRGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        id S236301AbhLNRGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbhLNRGV (ORCPT
+        with ESMTP id S231544AbhLNRGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:06:21 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083F3C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:06:21 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso17741488pji.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:06:21 -0800 (PST)
+        Tue, 14 Dec 2021 12:06:45 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81814C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:06:45 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so21575949otj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IvqOA246pz6MpJ2Qx8Vk8PM4dTJlnXdWQbQp45Jo7eU=;
-        b=AGLcpSoCRP3mDHqZy9q6CHC/f/cQL4x6F2nPdN5iAtowhi/xHCfoPYeaYA5s2BUZFr
-         XM03O7Z8KGaszQlBTNjAm+2lZkdPb6RAsdCxlWStWODnyBHc97RCmXTuXjrG5nVSFFdz
-         pbwjXtm5k/DnTwAob5ndMTz3YmBpTezQn8hxM=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IemfCDmXWx/SPnnub7QAI6IhttPGClVQvWol1/Vo8hE=;
+        b=RfVV6DnVFt1imQzcrX+WIWydNs7BF19SXFkIHEtUg1n/CkWAkas8Z4tcWA0qcqEAPn
+         igA5N73E1RtEwHAS6CeM+ooIhpZdT0yw826Tf6CocThL1ho6KQHjWocZkVD7HClqKvNr
+         cY6G4qwOvCEaLjAmOvtoU0M4H/VJuFm9HRAa0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IvqOA246pz6MpJ2Qx8Vk8PM4dTJlnXdWQbQp45Jo7eU=;
-        b=brSIhupCBfh0+5nFxsvt7Pus4365Alhf1Ln6DSHywWafIGMPGtQcWbXIus/sQvaAUd
-         KjoLNdlZOMxjScyFzm24WiYG8pm5M261avq5EAJtCuXeH/OMOg5lYykaRyiSjIKg1iAL
-         d2CKrzfsDLWsruw8EURBHKqrZ3MoT2xV5Al2CcuJogmssC81FJVWZSSDggebk3l2jo0a
-         z4Zw98xTC1WF0t0BAtp2cSlNXEwSwUDck5MXNZE2r8N+nQqW3PuuPppH3NwoNWsm71QM
-         usiUk2W8Qk1X8EGDasQCUtY+wC17aQ4Q7P7CgkTKDUiKyylXfKCwsukrTwjpzdgmOSks
-         gF8g==
-X-Gm-Message-State: AOAM531IgDIlFKMsGxTrsn3toKlrtv1QKlRuKAzq+aso2v10dzmWo+cK
-        oG4/k+x/iADO8GoNLDdBGAlRM8f9A2FHEg==
-X-Google-Smtp-Source: ABdhPJxVwqDR4+vDuC91Bf9YfHuFRkh+AN9IOxfGAait4qoh9fmClkfVrhdtcTc/ZF4Ld0JJiXNP3A==
-X-Received: by 2002:a17:902:ecc4:b0:148:a2e8:2784 with SMTP id a4-20020a170902ecc400b00148a2e82784mr248013plh.139.1639501580488;
-        Tue, 14 Dec 2021 09:06:20 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 204sm280350pgb.63.2021.12.14.09.06.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 09:06:20 -0800 (PST)
-Date:   Tue, 14 Dec 2021 09:06:19 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Thibaut Sautereau <thibaut.sautereau@clip-os.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Daniel Micay <danielmicay@gmail.com>,
-        Levente Polyak <levente@leventepolyak.net>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
-Subject: Re: [PATCH] mm/page_alloc: Fix __alloc_size attribute for
- alloc_pages_exact_nid
-Message-ID: <202112140906.80FA30E@keescook>
-References: <YbjEgwhn4bGblp//@coeus>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IemfCDmXWx/SPnnub7QAI6IhttPGClVQvWol1/Vo8hE=;
+        b=64b+x/c/NdJv+DGY7BGT2X/c1Jw6v6YXOuHEofsE5lbq7UAVuKe9GF1j82OJBxtnou
+         34suHqFLh/H1Q1+MyQWkiMruTD+n+hdX0rzMGJ2Io1svD0HlQhMaPsYt8OllzY6e9szY
+         fVNFhap1ZAy23GsF1j0NcRaj2ehb2wdJtdby6x69BJXSoO0OqX1LwTFfRaAxCkZZKWpc
+         cLTWg0zIoMSY32KZo2WNc4Q0rqf4DGrfJVJJDJDxNxyHv3TupwVgkEczB7wqh4Mb2/aN
+         oYgmt4MdJkCQRsw2NeIc6qUue9sR2fid8ALG4eKcLP2C6nMkmlDc/DldxhcijB/aYrQW
+         GQHA==
+X-Gm-Message-State: AOAM5316NXGWTBYTR26cUXNHvGxa38fXRHBfkiXQF1UgGFOyi2m6fKpw
+        31i5YwfDStE2EfsV7ud2bPw9jOrLobCkVg==
+X-Google-Smtp-Source: ABdhPJzPXw827om0Y5Cd811nXaXL7/9e41CMccQTS2B8fiI1FTev8YKMtcA3PITQyHJiKz1ClqAf8Q==
+X-Received: by 2002:a05:6830:1d7c:: with SMTP id l28mr5241205oti.372.1639501604855;
+        Tue, 14 Dec 2021 09:06:44 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id bl33sm76949oib.47.2021.12.14.09.06.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Dec 2021 09:06:44 -0800 (PST)
+Subject: Re: linux-next: manual merge of the xarray tree with the kselftest
+ tree
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     broonie@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211213222443.474487-1-broonie@kernel.org>
+ <1dcd2d43-cf39-3b4c-49b5-138d94f34433@linuxfoundation.org>
+ <YbjMLHCRXNMwp4nU@casper.infradead.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <2ee0bba7-879f-40e2-dd7d-d9b264d4d493@linuxfoundation.org>
+Date:   Tue, 14 Dec 2021 10:06:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbjEgwhn4bGblp//@coeus>
+In-Reply-To: <YbjMLHCRXNMwp4nU@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:21:23PM +0100, Thibaut Sautereau wrote:
-> From: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
+On 12/14/21 9:54 AM, Matthew Wilcox wrote:
+> On Tue, Dec 14, 2021 at 09:39:25AM -0700, Shuah Khan wrote:
+>> On 12/13/21 3:24 PM, broonie@kernel.org wrote:
+>>> Hi all,
+>>>
+>>> Today's linux-next merge of the xarray tree got a conflict in:
+>>>
+>>>     tools/include/linux/kernel.h
+>>>
+>>> between commits:
+>>>
+>>>     d6e6a27d960f9 ("tools: Fix math.h breakage")
+>>>     066b34aa5461f ("tools: fix ARRAY_SIZE defines in tools and selftests hdrs")
+>>>
+>>> from the kselftest and origin trees and commit:
+>>>
+>>>     f2aa11fd51440 ("tools: Fix math.h breakage")
+>>>
+>>> from the xarray tree.
 > 
-> The second parameter of alloc_pages_exact_nid is the one indicating the
-> size of memory pointed by the returned pointer.
+> I've dropped that commit from the XArray tree since d6e6a27d960f9
+> was essentially f2aa11fd51440 applied to Linus' tree.  The only change
+> left in the XArray tree today is a documentation update.
 > 
-> Fixes: abd58f38dfb4 ("mm/page_alloc: add __alloc_size attributes for better bounds checking")
-> Cc: Daniel Micay <danielmicay@gmail.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Levente Polyak <levente@leventepolyak.net>
-> Signed-off-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
-
-Thanks! Andrew, can you take this?
-
-Acked-by: Kees Cook <keescook@chromium.org>
-
--Kees
-
-> ---
->  include/linux/gfp.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>> Thank you. I will keep track of this when I send pull request.
 > 
-> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> index b976c4177299..8fcc38467af6 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -624,7 +624,7 @@ extern unsigned long get_zeroed_page(gfp_t gfp_mask);
->  
->  void *alloc_pages_exact(size_t size, gfp_t gfp_mask) __alloc_size(1);
->  void free_pages_exact(void *virt, size_t size);
-> -__meminit void *alloc_pages_exact_nid(int nid, size_t size, gfp_t gfp_mask) __alloc_size(1);
-> +__meminit void *alloc_pages_exact_nid(int nid, size_t size, gfp_t gfp_mask) __alloc_size(2);
->  
->  #define __get_free_page(gfp_mask) \
->  		__get_free_pages((gfp_mask), 0)
-> -- 
-> 2.34.1
+> As long as what you have merges cleanly against Linus' tree (and I see
+> the "conflict" -- __round_mask() is defined adjacent to ARRAY_SIZE()),
+> then it'll be fine.  You might want to rebase to a more recent Linus
+> tree to get rid of the conflict.
 > 
 
--- 
-Kees Cook
+When I applied on rc4 base, I didn't see any problems. This is a minor
+one - I can mention this when I send my pull request. Shouldn't be a
+problem.
+
+thanks,
+-- Shuah

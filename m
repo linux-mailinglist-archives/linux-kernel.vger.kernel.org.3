@@ -2,127 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DD3474916
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:16:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9881E474921
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236385AbhLNRQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S236394AbhLNRSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236206AbhLNRQg (ORCPT
+        with ESMTP id S236388AbhLNRSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:16:36 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110E0C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:16:36 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so16571682pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:16:36 -0800 (PST)
+        Tue, 14 Dec 2021 12:18:22 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F55FC061574;
+        Tue, 14 Dec 2021 09:18:22 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id y12so64601258eda.12;
+        Tue, 14 Dec 2021 09:18:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DLIiHWejTvBczvMB4LaGo/x+JKahlOS065QQRy4QKls=;
-        b=TgAWkk1RgihXiWq6f70ui5/U8oLI+Up2x5oVLr+g8O5t6clJf9vmq6VHne4c/SDTWk
-         +Sk9Hn+gCzrsfeEPbUxUzKPfJTUZafnlALOlWBwwU7Wk4UuIa95qcWxDcYtEk6KlXPpq
-         1SEjBr0O0NSmet7rpfuUErsOmttjuIe8TQdDA+NHuvP+W+09fUlDUbPxW7f7SBS3MBSF
-         307N7Tw1Lvd9mB/OrAEo7d00EsteCEPUld/mZ/j8hO6Wf+GBqrvVp7ctprivqjnL1ftZ
-         CRWuaPnj5vBI6fY9qu4eBVWS2wp4qGOefJfIoT3uwWl2pBPyhswP7YBooqr8jXCta9xK
-         gdrg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n4k5xaxFhaWmmMpFWuwoV5BzpXXgW4I+HqRbm5rb7jQ=;
+        b=E/0G7D28L5ngV0FeoItTWxWCu93mlXAxXRQGbhVuVR/4XZx1fRJ30udAun2qn4uj5G
+         x+WdA2mCOnVS9EBKt3++NrkzRMRzd1225YRW0PXZuPOX/hyWYE3vt4VZPBZHAALjIoLl
+         3qjAFrCGDteLu5JFgajrUCBMaZsMiOI4N6WlGy12nTIlbmZmp14zXehZA7xnZyYTG16T
+         uF/IDmhPRBcENwdV7m8w6edfxhjEqYoDmo8VbI/v+WvFtPdW7GtUbevbwomTgfHUdDpG
+         dXY6LzDz4Ap5dlYCrL4K49eRnqBqBBq0osDjRwUPt+EZIRVkG0MvSFQLqoboygwLvfXl
+         0q2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DLIiHWejTvBczvMB4LaGo/x+JKahlOS065QQRy4QKls=;
-        b=m9aeGu0PTGLMbiIHt+yrU91Ut6Kma8oqqH+w3k+aDP1DE6cN6P3nttE91pyk5wqfhx
-         ELfpwZm0vc5rSvPYmULQxb9K9xl7RFUFgTexAiTf5ZGHLQDVfQfKVOwVrV0joWQetD0O
-         DNrB0Run4MgkS1Zx4VMop1fkR1cDsq1k1r0LRJkOLOFUj0P16yYMsfgINgmJmWF1G0nm
-         GPjOimSOmlOIJVHXbu6+eneX8TwfQburWWA+b95VreijoQMym0SZb6I0Gmv3AE6kzRVb
-         /oc2vhIe1Nzlv3ZFW3ul0zCreJ/dbcvoikIMFWU5+1TT0G2udqZ8lKIUjMFhOl6IGZ/A
-         pbfg==
-X-Gm-Message-State: AOAM533fJmYcIewsPShwqechYX9a+1rtfLA7Uph91tUjBc0WYmdHFy8Z
-        jxFb83/pAcuBIPWU33t8BDdxSWXrP2jGrQ==
-X-Google-Smtp-Source: ABdhPJzQmyeG2ksZ5pIDoEX8o40MojieVj9iFPK8wm5P1cfsFVeI/npALxTfLbDyJ1dtqzBqe0IGeg==
-X-Received: by 2002:a17:90b:17cc:: with SMTP id me12mr7049760pjb.179.1639502195385;
-        Tue, 14 Dec 2021 09:16:35 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id lb4sm3267104pjb.18.2021.12.14.09.16.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 09:16:34 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:16:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     pbonzini@redhat.com, dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: Move VM's worker kthreads back to the original
- cgroups before exiting.
-Message-ID: <YbjRb0XR7neyX/Gy@google.com>
-References: <20211214050708.4040200-1-vipinsh@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n4k5xaxFhaWmmMpFWuwoV5BzpXXgW4I+HqRbm5rb7jQ=;
+        b=hemOKwTgswOxM9CnV9j0C3AufB7oVB6VFv8ivrr4m2BHurWjQRlFJ2YZo4sgHlcL8C
+         5KGN1f7AtlXe4GpMUDVZiWm6LthU/fGF139H0nk1B915w9iqeNAOeg5lGBAx1EKBg+9p
+         RKTZy0GRH/St3CLFIUEYH3tzL68IYvZZnuvEx1+i3/Htdzlec51jwPftqiCmiZPpXWaw
+         8FIQt8G2dnrojCistUZfDQnACbTx0KBEdOO4bkmBn+++eW8x7pszzu5l4wy51ZDbycjT
+         CNzlbxRaVJ7S7p3KN0M8+JqAoLEyBUEk8rQlvhV8+AjMdDIhe0AhCComwuFU+tGTth8S
+         Uwmg==
+X-Gm-Message-State: AOAM530HfrqMQR9lDDRiPfLf1VXyhZL9f+XaDOeq51spKSqwNUyXKkOl
+        LQLaCvecvWgNiFiqp2H41Yu6QzvW3CR6pvNNlDg=
+X-Google-Smtp-Source: ABdhPJzvpULuko8jJTmI6gtokS4SL3ehpvJGK6X1x3V2r6BF2DkuActxc/xuzD9om2ud1n0bwycObZY3BBBvqdpIxMI=
+X-Received: by 2002:a17:906:af1a:: with SMTP id lx26mr7201191ejb.44.1639502300844;
+ Tue, 14 Dec 2021 09:18:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214050708.4040200-1-vipinsh@google.com>
+References: <1638891339-21806-1-git-send-email-quic_srivasam@quicinc.com>
+ <1638891339-21806-4-git-send-email-quic_srivasam@quicinc.com>
+ <CAHp75Vd=47Tv9Sf+styPhxS2=O1H2KUDeKQXTULUYU5fDgGwwA@mail.gmail.com> <0f6621e5-f014-27c9-be8b-6c32ab994304@quicinc.com>
+In-Reply-To: <0f6621e5-f014-27c9-be8b-6c32ab994304@quicinc.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 14 Dec 2021 19:16:50 +0200
+Message-ID: <CAHp75VdL3hmr23CcJLDpvbHaKv5HrDZjmVQpCnRNmPM7nEx6WQ@mail.gmail.com>
+Subject: Re: [PATCH v5 3/5] pinctrl: qcom: Extract chip specific LPASS LPI code
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, plai@codeaurora.org,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, judyhsiao@chromium.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021, Vipin Sharma wrote:
-> VM worker kthreads can linger in the VM process's cgroup for sometime
-> after KVM temrinates the VM process.
-> 
-> KVM terminates the worker kthreads by calling kthread_stop() which waits
-> on the signal generated by exit_mm() in do_exit() during kthread's exit.
-> However, these kthreads are removed from the cgroup using cgroup_exit()
-> call which happens after exit_mm() in do_exit(). A VM process can
-> terminate between the time window of exit_mm() to cgroup_exit(), leaving
-> only worker kthreads in the cgroup.
-> 
-> Moving worker kthreads back to the original cgroup (kthreadd_task's
-> cgroup) makes sure that cgroup is empty as soon as the main VM process
-> is terminated.
-> 
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->  virt/kvm/kvm_main.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index b0f7e6eb00ff..edd304a18f16 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -5785,7 +5785,7 @@ static int kvm_vm_worker_thread(void *context)
->  	init_context = NULL;
->  
->  	if (err)
-> -		return err;
-> +		goto out;
->  
->  	/* Wait to be woken up by the spawner before proceeding. */
->  	kthread_parkme();
-> @@ -5793,6 +5793,15 @@ static int kvm_vm_worker_thread(void *context)
->  	if (!kthread_should_stop())
->  		err = thread_fn(kvm, data);
->  
-> +out:
-> +	/*
-> +	 * We need to move the kthread back to its original cgroups, so that it
-> +	 * doesn't linger in the cgroups of the user process after that has
-> +	 * already terminated. exit_mm() in do_exit() signals kthread_stop() to
-> +	 * return, whereas, removal of the task from the cgroups happens in
-> +	 * cgroup_exit() which happens after exit_mm().
-> +	 */
-> +	WARN_ON(cgroup_attach_task_all(kthreadd_task, current));
+On Tue, Dec 14, 2021 at 7:15 PM Srinivasa Rao Mandadapu
+<quic_srivasam@quicinc.com> wrote:
+> On 12/8/2021 11:58 AM, Andy Shevchenko wrote:
 
-As the build bot noted, kthreadd_task isn't exported, and I doubt you'll convince
-folks to let you export it.
+...
 
-Why is it problematic for the kthread to linger in the cgroup?  Conceptually, it's
-not really wrong.
+> >> +#define NO_SLEW                                -1
+> > Naming sucks for the header.
+> >
+> > LPI_NO_SLEW ?
+>
+> Actually it's already mainline code. Just these patches are
+> rearrangement of old code.
+>
+> still do you suggest to change?
 
->  	return err;
->  }
->  
-> 
-> base-commit: d8f6ef45a623d650f9b97e11553adb4978f6aa70
-> -- 
-> 2.34.1.173.g76aa8bc2d0-goog
-> 
+I would, but this means it should be in a separate change.
+
+...
+
+> >> +struct lpi_pingroup {
+> >> +       const char *name;
+> >> +       const unsigned int *pins;
+> >> +       unsigned int npins;
+> >> +       unsigned int pin;
+> >> +       /* Bit offset in slew register for SoundWire pins only */
+> >> +       int slew_offset;
+> >> +       unsigned int *funcs;
+> >> +       unsigned int nfuncs;
+> >> +};
+> > Are you going to convert this to use struct group_desc?
+
+Any comments on this? It sounds like further improvements.
+
+-- 
+With Best Regards,
+Andy Shevchenko

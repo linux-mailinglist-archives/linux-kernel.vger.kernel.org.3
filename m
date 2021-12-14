@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B9F4747BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA8D4747BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbhLNQXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S235899AbhLNQXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235873AbhLNQWu (ORCPT
+        with ESMTP id S231609AbhLNQWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:22:50 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF30C061756
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:49 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id ay34-20020a05600c1e2200b00337fd217772so8124505wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:49 -0800 (PST)
+        Tue, 14 Dec 2021 11:22:52 -0500
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6336EC06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:52 -0800 (PST)
+Received: by mail-wr1-x449.google.com with SMTP id k8-20020a5d5248000000b001763e7c9ce5so4878583wrc.22
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=L9bpZFAJqwWr0sK9cJmNI2AyaK0oQbsHwHE0NZymKYw=;
-        b=psK3I4np4MgxxiZg24Ts6iYYQ66nfNvuOqGX5AV9cqUH1vZZOxWpAWjpD9z7asOJqr
-         A4CCuPFhy50SccNFOdcppzE9XFAmI2LJPzFGf5VLD1TaoeUH/M9J/OeKmNVCs56IuPTO
-         XgnJfweCAiaABHyvxz7o+vsCL0xBmxUIYsIMueUOq21Wm1yTojJtPI9Z3jNdrAqVvh/q
-         69vsjF1Kv8a5bNSD6N7FJS6B4Q4G4OBPOIfQJuhZPf/tLUF3Ro21MZoroHW2P5hUno3R
-         jrQ6N6CzhD5gex4V8nbCtj7x715xxTwRuMHnd9Toq71qs921Xei6dnI+DQpnY+bUI0/6
-         s/sw==
+        bh=n9hdbxHO53pPet9rVLXGJjutLvzY9K7ZBDkEw/sZKCE=;
+        b=JHEdQfKv7HR3RWanTG4ZydCDLNq2lrvP4HdZTn5IwnSpjM0qsm+p2r8ZUTpBiAafC8
+         AbZmuX3hs+QHumnreQKR/wXxbZbyh6O8uXOK660iyElIgkT34bHEwtakJkkMXVe2kIaY
+         r8eGAvVksDisZy1RRbBXmpjVGBbwjaAoK1MGxW8Nmq8+9wBg27pQsts9zu6ZTa9mzXHB
+         5QlQTAGVPBZ51vjVlHvv3fNVTZ2G4eq+0V7zlB2In/ViuSb06ajg56lchx7kFmT9VT5f
+         /7Yo3X6pCK0XEbrztcdPbAK2XNRMT4Z8dEGdUZCxnhqQylBUTRxGFuuec79E+ZaBC4Rc
+         7KUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=L9bpZFAJqwWr0sK9cJmNI2AyaK0oQbsHwHE0NZymKYw=;
-        b=xT4Yir+FKr1/T2gYD8SBj2kKu5+N59+O4PBNAOzFc32+amWDCZ+M4++79+Urm0GDUI
-         4ZqpZPvRxHh7gvObE6WeblL96ecfb23ILLvM/3p4Dp2X3ikXC/Bck9KCvecUKhXEGIK+
-         6z1AQHsGvL4d65HOG3drJAjZeBqoKxiK5pI0RNMglKXq+bZi1cMkrCTdgeJAorGdezM5
-         fkP5WjXZKtcBFJeVg8ysJsHHnJt3xO2cBaayrG89y6rvVwSZ5j37WDw0XzjqGY6FQVhp
-         KVnDgCcqC5I6A2vupwKIfo1ix4VqLk7VDr9hKesBn0ypKQqqJn0uyaB8a3Rjn81bL+DC
-         fEgQ==
-X-Gm-Message-State: AOAM533CBgRhekvHjhPWUX1P3uVoTAUl6fFfCw4HtAFCxCVM3ptx8aak
-        ifB9/oZv8SocsGaqbcy1b+IbX7n/EME=
-X-Google-Smtp-Source: ABdhPJzq0aOyE1rk6smoEKoJQb17yWIza1caNiEXRrMx6w9vfjQeetvWU3p7URL7lNRDdTsZsQQeu0EE/T0=
+        bh=n9hdbxHO53pPet9rVLXGJjutLvzY9K7ZBDkEw/sZKCE=;
+        b=Mx7l32pP6qxWhtdZuxKUmNd/UI0XfaWYWvmYKjp1VwFfgHKpaYLmWs7lcu2FICkIpf
+         Vfj9s4d+CTRUmM6/pJ1fPZWQCvN1g8WzkR6gCxhAiwGplYfFfsQbyT5XfjSfqgIGWl8T
+         dvBNDVD/UKLBBUWhJ0fqsay8dHI2ecCOiNp7mlzagDoZzSf8nBvUCfOBK5MXWbPLvspE
+         merlmSMKZVPEkKxrbZJK2bHeY6a0bSKFpkHXl9BPCyZf+r3O/bRWnxz6kaFL+RhYzONK
+         Kz/CbvEfwo1Lyy3LGS6byNhIbcUhHr3BIw3LjGrVyYaDvXYoe2gdwI9jLtsZ/2S05Xtj
+         Bekw==
+X-Gm-Message-State: AOAM530oryEwDGbQNAStFgfeJc6WHA3hHjUhnxiJbzRVgmccVpWaurVQ
+        gDAc76iCRUmRa2jtUhOSu/r71Ho4ksE=
+X-Google-Smtp-Source: ABdhPJysWuIKajBu41fBxQFQ/tie5K32G3b9ULI3MmpkCFPKsk2dJs2OmxSKdjDhXSGcDI1uWyhJxYHBE1s=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:adf:df0b:: with SMTP id y11mr6688786wrl.181.1639498968312;
- Tue, 14 Dec 2021 08:22:48 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:27 +0100
+ (user=glider job=sendgmr) by 2002:a7b:cb98:: with SMTP id m24mr2273632wmi.188.1639498970919;
+ Tue, 14 Dec 2021 08:22:50 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:28 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-21-glider@google.com>
+Message-Id: <20211214162050.660953-22-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 20/43] instrumented.h: add KMSAN support
+Subject: [PATCH 21/43] kmsan: mark noinstr as __no_sanitize_memory
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -88,54 +88,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid false positives, KMSAN needs to unpoison the data copied from
-the userspace. To detect infoleaks - check the memory buffer passed to
-copy_to_user().
+noinstr functions should never be instrumented, so make KMSAN skip them
+by applying the __no_sanitize_memory attribute.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I43e93b9c02709e6be8d222342f1b044ac8bdbaaf
+Link: https://linux-review.googlesource.com/id/I3c9abe860b97b49bc0c8026918b17a50448dec0d
 ---
- include/linux/instrumented.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ include/linux/compiler_types.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
-index ee8f7d17d34f5..c73c1b19e9227 100644
---- a/include/linux/instrumented.h
-+++ b/include/linux/instrumented.h
-@@ -2,7 +2,7 @@
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 1d32f4c03c9ef..37b82564e93e5 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -210,7 +210,8 @@ struct ftrace_likely_data {
+ /* Section for code which can't be instrumented at all */
+ #define noinstr								\
+ 	noinline notrace __attribute((__section__(".noinstr.text")))	\
+-	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
++	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage \
++	__no_sanitize_memory
  
- /*
-  * This header provides generic wrappers for memory access instrumentation that
-- * the compiler cannot emit for: KASAN, KCSAN.
-+ * the compiler cannot emit for: KASAN, KCSAN, KMSAN.
-  */
- #ifndef _LINUX_INSTRUMENTED_H
- #define _LINUX_INSTRUMENTED_H
-@@ -10,6 +10,7 @@
- #include <linux/compiler.h>
- #include <linux/kasan-checks.h>
- #include <linux/kcsan-checks.h>
-+#include <linux/kmsan-checks.h>
- #include <linux/types.h>
+ #endif /* __KERNEL__ */
  
- /**
-@@ -117,6 +118,7 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
- {
- 	kasan_check_read(from, n);
- 	kcsan_check_read(from, n);
-+	kmsan_copy_to_user(to, from, n, 0);
- }
- 
- /**
-@@ -151,6 +153,7 @@ static __always_inline void
- instrument_copy_from_user_after(const void *to, const void __user *from,
- 				unsigned long n, unsigned long left)
- {
-+	kmsan_unpoison_memory(to, n - left);
- }
- 
- #endif /* _LINUX_INSTRUMENTED_H */
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 

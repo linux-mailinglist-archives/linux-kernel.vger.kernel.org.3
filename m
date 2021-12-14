@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C5147479E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FA34747A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235814AbhLNQW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59394 "EHLO
+        id S235782AbhLNQWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235744AbhLNQWU (ORCPT
+        with ESMTP id S235775AbhLNQWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:22:20 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B892C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:19 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id o18-20020a05600c511200b00332fa17a02eso8123458wms.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:19 -0800 (PST)
+        Tue, 14 Dec 2021 11:22:22 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F27C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:22 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id d7-20020a5d6447000000b00186a113463dso4855518wrw.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:22:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Jjmj3NfcL4RIWWcjIe7Qu67hp42cRss+aplyHHmWX6A=;
-        b=dsYBdOhqGaaa9PjsEmjVgP7jb+SydcbxMgf/q2frLLdl6Ue4dxDmWMI1uSRnt9e4tl
-         8EN6fuqAN1pB07ffVjLKp68NQkEugitoVyjaWEXGt5URJy4AJ0/K/EJIzia7a8ifLLHH
-         Qdp5xARe4b4nPQ6LApIOirW8wjWL8FFt6TB/XT6z9uClOELYki2BZJTBvrbNuRnOix+n
-         DJeTnfHEFEc8sdPd09Y1lSle0Vt/+oaJvlHX484kHFA9gE4h3Y7MyhCz4sy8ZJ1NfP5c
-         8FYeQNEQyK3DKidsmLUkv+Q/Uw7+4laTzO9lkD8fN+gNuOLdKyKQ+sNof7Wvdz23qc7v
-         w0lg==
+        bh=ITyhCHO1UiX2DPCFkkqWNUvg7KfOdfMNTQoZ+QNE7bU=;
+        b=VBMgNGVHDe18Og0TwNncVl3ew6zMtrxStb1uB6st2XRmRBQ3tEQXjuXrYuoSm0prGY
+         K20SlkDHnXzsSFK83A1uOoPf7s8MoCjkMO60Pz4Bsrw5Zv3EFffTyroafyTpApie3f5m
+         nG6BxjJm7YHC0e0oJK8lMT2uRqxC1uWTQHEppiGgKAXQKqpaYr/YGuy4I6cjhoRPfjGj
+         aJvrRtPNJ75tOy8zCBClXxAQIrWbUSjbUhHVVIs8uDdSTyy0Rb+tOXzVFasYYZt5TqIc
+         i0ARL88+0gAlT2wgHGVsXU2gLTSMd4ju6zO7fLp36fAYYiZyasvP1IysAaRLHtGTDfz/
+         h1sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Jjmj3NfcL4RIWWcjIe7Qu67hp42cRss+aplyHHmWX6A=;
-        b=VcGNQr2dHK45c5y1zyZUIW7sLDFaFwyB1vLSbPzWGJ/8wHKQDXFSugE4sK7/FFd312
-         iAzlQ9c4xuD9gIsarjQqoBcfmvTRsqZF1jjiJeUmtKaf5CovNLcNMf/Ltm9C/x7HryDX
-         s77lwgrD0/Rnms4vVgA/L5yND1AxdJlG9UkHweAXkH/0O4lDYvrrW1BSbJJAtysIpzw9
-         2ia7ZNx4NyyCvpCib1owiBE8sJ/ZFiDFyaIm9Rh1XSeUrLoeeYlvUVXskfjnZJ5b23S9
-         0B3UdzIICmUYlt40a9djH88J41zgVYuBNPJljN0ACaLlT6bCRu+X0ZAEI7B+8Ts+q6rV
-         cdmA==
-X-Gm-Message-State: AOAM533ItcZGSSEkU8BCIcyPcSVpnP7bBCMaa6MPPskxPYagLD/HE9MQ
-        b2wrlJBC98GQHdZFNeCDiB+zvAonTBU=
-X-Google-Smtp-Source: ABdhPJx22gOJI63ONPs3T0E3/ieKvxRNELWcFZOjCmtKU2tJkN8ygCc56stf/zL88guIxkLENaHppDelx68=
+        bh=ITyhCHO1UiX2DPCFkkqWNUvg7KfOdfMNTQoZ+QNE7bU=;
+        b=Uew8fdQvcAjPrEfr/VDc/ATiy6IKUT1Mx6GAhyajv/rcXQ+DTn2RvpKDEP3rDQE9WS
+         0dHOcDSF+lSBi5KcfyaQfU5nQ+qChFFOcZCWockTrxWRJuB45dwxQqmyH+2QikIj6+rY
+         kZ1YyXaJnBUkExtPYcwMQyV7LYN4gRubwx5xv8TwPmxwnZDbdARYCA5QV1nscUuF+1pp
+         nK03MWk0dRdj+Sv+EfHlA+2JjzhlecXcuQjk4AUNTuNfscv8mDPstPPkiB2a5PaFf95B
+         wD856nOGbchUxZE2i3WeLC7XwopG4Y8gnt/aG1seTFyuKgkZICN04Qmy4JJoFibGHIQK
+         wjIQ==
+X-Gm-Message-State: AOAM530g6N4Ic3QWMcK8sOz0l1TDFxag3AdCT5UyaI9nfAvla1wZ3NeD
+        FIvhWrgyMyREiWXTgA/NlfZ6dmNHsV4=
+X-Google-Smtp-Source: ABdhPJynp7SO7nkkbS3IYqSUnN1vnEfdIZ95PUH2Mr7X6JqBGNbKrX/KoqtS/NjRGYPpNTG+FE367wmyggw=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:a1c:23cb:: with SMTP id j194mr47944273wmj.13.1639498938088;
- Tue, 14 Dec 2021 08:22:18 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:16 +0100
+ (user=glider job=sendgmr) by 2002:a5d:6ac2:: with SMTP id u2mr6665311wrw.486.1639498940724;
+ Tue, 14 Dec 2021 08:22:20 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:17 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-10-glider@google.com>
+Message-Id: <20211214162050.660953-11-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 09/43] kmsan: introduce __no_sanitize_memory and __no_kmsan_checks
+Subject: [PATCH 10/43] kmsan: pgtable: reduce vmalloc space
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -88,80 +88,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__no_sanitize_memory is a function attribute that instructs KMSAN to
-skip a function during instrumentation. This is needed to e.g. implement
-the noinstr functions.
-
-__no_kmsan_checks is a function attribute that makes KMSAN
-ignore the uninitialized values coming from the function's
-inputs, and initialize the function's outputs.
-
-Functions marked with this attribute can't be inlined into functions
-not marked with it, and vice versa.
-
-__SANITIZE_MEMORY__ is a macro that's defined iff the file is
-instrumented with KMSAN. This is not the same as CONFIG_KMSAN, which is
-defined for every file.
+KMSAN is going to use 3/4 of existing vmalloc space to hold the
+metadata, therefore we lower VMALLOC_END to make sure vmalloc() doesn't
+allocate past the first 1/4.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I004ff0360c918d3cd8b18767ddd1381c6d3281be
+Link: https://linux-review.googlesource.com/id/I9d8b7f0a88a639f1263bc693cbd5c136626f7efd
 ---
- include/linux/compiler-clang.h | 23 +++++++++++++++++++++++
- include/linux/compiler-gcc.h   |  6 ++++++
- 2 files changed, 29 insertions(+)
+ arch/x86/include/asm/pgtable_64_types.h | 41 ++++++++++++++++++++++++-
+ arch/x86/mm/init_64.c                   |  2 +-
+ 2 files changed, 41 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-index 3c4de9b6c6e3e..5f11a6f269e28 100644
---- a/include/linux/compiler-clang.h
-+++ b/include/linux/compiler-clang.h
-@@ -51,6 +51,29 @@
- #define __no_sanitize_undefined
- #endif
+diff --git a/arch/x86/include/asm/pgtable_64_types.h b/arch/x86/include/asm/pgtable_64_types.h
+index 91ac106545703..7f15d43754a34 100644
+--- a/arch/x86/include/asm/pgtable_64_types.h
++++ b/arch/x86/include/asm/pgtable_64_types.h
+@@ -139,7 +139,46 @@ extern unsigned int ptrs_per_p4d;
+ # define VMEMMAP_START		__VMEMMAP_BASE_L4
+ #endif /* CONFIG_DYNAMIC_MEMORY_LAYOUT */
  
-+#if __has_feature(memory_sanitizer)
-+#define __SANITIZE_MEMORY__
-+/*
-+ * Unlike other sanitizers, KMSAN still inserts code into functions marked with
-+ * no_sanitize("kernel-memory"). Using disable_sanitizer_instrumentation
-+ * provides the behavior consistent with other __no_sanitize_ attributes,
-+ * guaranteeing that __no_sanitize_memory functions remain uninstrumented.
-+ */
-+#define __no_sanitize_memory __disable_sanitizer_instrumentation
+-#define VMALLOC_END		(VMALLOC_START + (VMALLOC_SIZE_TB << 40) - 1)
++#define VMEMORY_END		(VMALLOC_START + (VMALLOC_SIZE_TB << 40) - 1)
 +
-+/*
-+ * The __no_kmsan_checks attribute ensures that a function does not produce
-+ * false positive reports by:
-+ *  - initializing all local variables and memory stores in this function;
-+ *  - skipping all shadow checks;
-+ *  - passing initialized arguments to this function's callees.
-+ */
-+#define __no_kmsan_checks __attribute__((no_sanitize("kernel-memory")))
++#ifndef CONFIG_KMSAN
++#define VMALLOC_END		VMEMORY_END
 +#else
-+#define __no_sanitize_memory
-+#define __no_kmsan_checks
-+#endif
-+
- /*
-  * Support for __has_feature(coverage_sanitizer) was added in Clang 13 together
-  * with no_sanitize("coverage"). Prior versions of Clang support coverage
-diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-index ccbbd31b3aae5..f6e69387aad05 100644
---- a/include/linux/compiler-gcc.h
-+++ b/include/linux/compiler-gcc.h
-@@ -129,6 +129,12 @@
- #define __SANITIZE_ADDRESS__
- #endif
- 
 +/*
-+ * GCC does not support KMSAN.
++ * In KMSAN builds vmalloc area is four times smaller, and the remaining 3/4
++ * are used to keep the metadata for virtual pages. The memory formerly
++ * belonging to vmalloc area is now laid out as follows:
++ *
++ * 1st quarter: VMALLOC_START to VMALLOC_END - new vmalloc area
++ * 2nd quarter: KMSAN_VMALLOC_SHADOW_START to
++ *              VMALLOC_END+KMSAN_VMALLOC_SHADOW_OFFSET - vmalloc area shadow
++ * 3rd quarter: KMSAN_VMALLOC_ORIGIN_START to
++ *              VMALLOC_END+KMSAN_VMALLOC_ORIGIN_OFFSET - vmalloc area origins
++ * 4th quarter: KMSAN_MODULES_SHADOW_START to KMSAN_MODULES_ORIGIN_START
++ *              - shadow for modules,
++ *              KMSAN_MODULES_ORIGIN_START to
++ *              KMSAN_MODULES_ORIGIN_START + MODULES_LEN - origins for modules.
 + */
-+#define __no_sanitize_memory
-+#define __no_kmsan_checks
++#define VMALLOC_QUARTER_SIZE	((VMALLOC_SIZE_TB << 40) >> 2)
++#define VMALLOC_END		(VMALLOC_START + VMALLOC_QUARTER_SIZE - 1)
 +
- /*
-  * Turn individual warnings and errors on and off locally, depending
-  * on version.
++/*
++ * vmalloc metadata addresses are calculated by adding shadow/origin offsets
++ * to vmalloc address.
++ */
++#define KMSAN_VMALLOC_SHADOW_OFFSET	VMALLOC_QUARTER_SIZE
++#define KMSAN_VMALLOC_ORIGIN_OFFSET	(VMALLOC_QUARTER_SIZE << 1)
++
++#define KMSAN_VMALLOC_SHADOW_START	(VMALLOC_START + KMSAN_VMALLOC_SHADOW_OFFSET)
++#define KMSAN_VMALLOC_ORIGIN_START	(VMALLOC_START + KMSAN_VMALLOC_ORIGIN_OFFSET)
++
++/*
++ * The shadow/origin for modules are placed one by one in the last 1/4 of
++ * vmalloc space.
++ */
++#define KMSAN_MODULES_SHADOW_START	(VMALLOC_END + KMSAN_VMALLOC_ORIGIN_OFFSET + 1)
++#define KMSAN_MODULES_ORIGIN_START	(KMSAN_MODULES_SHADOW_START + MODULES_LEN)
++#endif /* CONFIG_KMSAN */
+ 
+ #define MODULES_VADDR		(__START_KERNEL_map + KERNEL_IMAGE_SIZE)
+ /* The module sections ends with the start of the fixmap */
+diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+index 36098226a9573..8e884e44a8d1e 100644
+--- a/arch/x86/mm/init_64.c
++++ b/arch/x86/mm/init_64.c
+@@ -1287,7 +1287,7 @@ static void __init preallocate_vmalloc_pages(void)
+ 	unsigned long addr;
+ 	const char *lvl;
+ 
+-	for (addr = VMALLOC_START; addr <= VMALLOC_END; addr = ALIGN(addr + 1, PGDIR_SIZE)) {
++	for (addr = VMALLOC_START; addr <= VMEMORY_END; addr = ALIGN(addr + 1, PGDIR_SIZE)) {
+ 		pgd_t *pgd = pgd_offset_k(addr);
+ 		p4d_t *p4d;
+ 		pud_t *pud;
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 

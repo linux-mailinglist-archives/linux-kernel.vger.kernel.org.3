@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D141474DBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B55474DBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbhLNWJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
+        id S232756AbhLNWLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:11:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbhLNWJA (ORCPT
+        with ESMTP id S229723AbhLNWLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 17:09:00 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40804C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:09:00 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id y16so26824988ioc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:09:00 -0800 (PST)
+        Tue, 14 Dec 2021 17:11:51 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EABC061574;
+        Tue, 14 Dec 2021 14:11:51 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id g19so18990162pfb.8;
+        Tue, 14 Dec 2021 14:11:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tP6csCLv+Ba35Rqxl/QI5p1YOyxnicuG22GVHFYUF1U=;
-        b=Cc38oMKWk2brJxZDGoC8suov16Oq0YtG58O6cq6oiQTqRNg/SL4mIz90EmLVAnObiB
-         T7MdVO+WibnifiPKGbqd2HGhMmcWOMEn2wfqt1mhmUPmVvzMluNpItXKYi7r4obpZ14+
-         vEFYVpcIlu/68azAW/1nmUbUNTCpl7nYCIhSlSC4KANXjv8kfbJKMVYOKmujbfqthcLf
-         W4/BnybqvyIUBWy+8dQwZfyl/Sc2sVvnLpTESUfTCtXCnh6Hl6KPPW8y2+aFdxUu66nf
-         odPDm2tHTZN8EIG9pVT3cmkNAjRykGS+FWUaUZ2ew7iGjYi7CuY5sHtqr1yl4RqnBTd8
-         mLbA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wRt3Fh01KA5eeSEw2iv3iHWOrv3eO/SBn/6JbKjZZEE=;
+        b=h9rGd1j8L/8dqrG8q0zTLIbjQHvjSy/P7DrrvztSzKAH+x6p+fLt55yceKseki+Alt
+         /WEvEdLOicqCtB3krTMHJGixoa/SLelPAqRRF3rEZqjx1UetM9yimn8pW1IxKa+KW1W8
+         Mofz622KuoKmnceiI8R0rzCAUpCPMUUJIiMAWyz0bSXkP1oQK5FlRQmKMa+nbRhIOSWm
+         uZqc6XtSj0A/SG3pU/r9DP7dJVGwWU/966EH5et2LjBNUlG+sBHtbFA35tfG9PvdGIpB
+         Q5cGiWD39A9VYPG46CWMgLF7WrB3OpO8CNC/HvPNu0ZCuD4U0s3veKUzGIbjdRdB0+gz
+         yZDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tP6csCLv+Ba35Rqxl/QI5p1YOyxnicuG22GVHFYUF1U=;
-        b=H31WvnDwEvaCeGJR8sovt/wc50IFtupgP5WzSdHfER0veTHCthP0J2//0UaNW2oTKS
-         LvuJVeFqHd/Kd4WpmYrsNk9ozfGmBZj2DcwmJQpC2KhwzpeEL2NhMDlBrxAda5Txq2B6
-         lmXy5wrduBgywUzFq+swZsKra60HBt1dBxEmCVV7Zz97VR3xxWbmzo9MHTpYunaI4Mu1
-         l84B3fQdxnP3skOPGoqycYMUdBa4WavFJVa/YbFT4+mKvc5YgXoq54gwUAejgk/o7nKk
-         8NcN/K0hfMmncIr+/5a0TvD8e0cTc+SnBdrPkHxua48/hX3BKWwZ0pVebd8OAaOvfHT6
-         Sm7A==
-X-Gm-Message-State: AOAM533wfDptVtyypFjReLCvdfu78HVriCRbD9aJSiIQGTS0EYo4Ng2b
-        prEgtHNVZWlze0AgEBGgzVxMPTPCDBzmdgf1L3Q=
-X-Google-Smtp-Source: ABdhPJwZpEx7lKlhd9sQu94o+KABcOC4exIObwhJKgQluloyoysImPofu+FfrETOdJsyEK7m/4nW5u+WBFq9eHEUhNw=
-X-Received: by 2002:a5e:d502:: with SMTP id e2mr5381245iom.118.1639519739580;
- Tue, 14 Dec 2021 14:08:59 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wRt3Fh01KA5eeSEw2iv3iHWOrv3eO/SBn/6JbKjZZEE=;
+        b=gz7IIInVybz6QeevD3c7Q7hvWBE2u3QqAdH+fI9ZWs2J6+EOZrDYJKK5H9KmzBBGnv
+         3nGdJmHfPOLC4hQVv+MwsNOjuN0uDWQR5cPETXMsVyW104uUjeoNwElLPgyaGXHWiAM2
+         V+wqTFaRQPbcIiJ07Spk+nIVsdRqZtpEi6+1JhPupf/b3ZG74zSOErMLsm0lKPo8hzlZ
+         VQ6uj1PUmo2AnkiGeiHGNIid3zn6N23uILV8vkqnzGxCAZ+i7t49pGZwvlMLvVSiGJqp
+         7pgPuo8dY4cGtMg7OOGWJIDHU3kTpLk2mU7pQqPdovjd03tZ7B0vGAH/LqiJcDZR31jG
+         2rmA==
+X-Gm-Message-State: AOAM532eAUqvlyDX1ggF8fchTwj15OFKOiZ2NvH7TPXdpR8dlJ4jExEa
+        A3eqkiolPkSSsZKzJmuQFnM=
+X-Google-Smtp-Source: ABdhPJxLs3nQOphmY57FIE3V1CmWt0eb1aiFiqi5g4C3nfWbf0ZxtA+Egy99Bm8IZtfn1c3yoeSRXg==
+X-Received: by 2002:a63:131d:: with SMTP id i29mr3515419pgl.493.1639519910996;
+        Tue, 14 Dec 2021 14:11:50 -0800 (PST)
+Received: from devoptiplex ([70.102.108.170])
+        by smtp.gmail.com with ESMTPSA id f4sm84181pfj.61.2021.12.14.14.11.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 14:11:50 -0800 (PST)
+From:   Greg Jesionowski <jesionowskigreg@gmail.com>
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Jesionowski <jesionowskigreg@gmail.com>
+Subject: [PATCH] net: usb: lan78xx: add Allied Telesis AT29M2-AF
+Date:   Tue, 14 Dec 2021 15:10:27 -0700
+Message-Id: <20211214221027.305784-1-jesionowskigreg@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1639432170.git.andreyknvl@google.com> <af3819749624603ed5cb0cbd869d5e4b3ed116b3.1639432170.git.andreyknvl@google.com>
- <Ybj2zms+c6J3J/pf@elver.google.com>
-In-Reply-To: <Ybj2zms+c6J3J/pf@elver.google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 14 Dec 2021 23:08:49 +0100
-Message-ID: <CA+fCnZeY+AEXrPyuWjq9yQ+HOsDxqqp-gw9scvEdLqV5v7q2dA@mail.gmail.com>
-Subject: Re: [PATCH mm v3 29/38] kasan, vmalloc: add vmalloc tagging for HW_TAGS
-To:     Marco Elver <elver@google.com>
-Cc:     andrey.konovalov@linux.dev,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 8:56 PM Marco Elver <elver@google.com> wrote:
->
-> On Mon, Dec 13, 2021 at 10:54PM +0100, andrey.konovalov@linux.dev wrote:
-> [...]
-> >
-> > +     /*
-> > +      * Skip page_alloc poisoning and zeroing for pages backing VM_ALLOC
-> > +      * mappings. Only effective in HW_TAGS mode.
-> > +      */
-> > +     gfp &= __GFP_SKIP_KASAN_UNPOISON & __GFP_SKIP_ZERO;
->
-> This will turn gfp == 0 always. Should it have been
->
->         gfp |= __GFP_SKIP_KASAN_UNPOISON | __GFP_SKIP_ZERO
+This adds the vendor and product IDs for the AT29M2-AF which is a
+lan7801-based device.
 
-Oh, this is bad. Thanks for noticing! Will fix in v4.
+Signed-off-by: Greg Jesionowski <jesionowskigreg@gmail.com>
+---
+ drivers/net/usb/lan78xx.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> Also, not sure it matters, but on non-KASAN builds, this will now always
-> generate an extra instruction. You could conditionally define GFP_SKIP*
-> only in the KASAN modes that need them, otherwise they become 0, so the
-> compiler optimizes this out. (Although I think it does does complicate
-> GFP_SHIFT a little?)
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index f20376c1ef3f..474a720e8957 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -76,6 +76,8 @@
+ #define LAN7801_USB_PRODUCT_ID		(0x7801)
+ #define LAN78XX_EEPROM_MAGIC		(0x78A5)
+ #define LAN78XX_OTP_MAGIC		(0x78F3)
++#define AT29M2AF_USB_VENDOR_ID		(0x07C9)
++#define AT29M2AF_USB_PRODUCT_ID	(0x0012)
+ 
+ #define	MII_READ			1
+ #define	MII_WRITE			0
+@@ -4734,6 +4736,10 @@ static const struct usb_device_id products[] = {
+ 	/* LAN7801 USB Gigabit Ethernet Device */
+ 	USB_DEVICE(LAN78XX_USB_VENDOR_ID, LAN7801_USB_PRODUCT_ID),
+ 	},
++	{
++	/* ATM2-AF USB Gigabit Ethernet Device */
++	USB_DEVICE(AT29M2AF_USB_VENDOR_ID, AT29M2AF_USB_PRODUCT_ID),
++	},
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(usb, products);
+-- 
+2.25.1
 
-I can implement this, but I don't think a single extra instruction per
-vmalloc() matters.

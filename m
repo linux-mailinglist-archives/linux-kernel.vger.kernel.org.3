@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC53474842
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA5C47484A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236085AbhLNQgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S235629AbhLNQgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234195AbhLNQgD (ORCPT
+        with ESMTP id S234227AbhLNQgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:36:03 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB05C061574;
-        Tue, 14 Dec 2021 08:36:03 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639499761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jHkEiVG0BVT8V/9kbAcBq/GVsYt3jqgvF40FkGyKrlo=;
-        b=x+UREoz0tV0ByegvETONzIcJg/btHkYAeUTOB9Cwk6fF4WS4tcdqSKPZhosLY9Kw8fzkL2
-        iAO8dxlrohDcjOfDmK3UIx35hhe0gnfY1J6UUVxyO061FZZ9igOXoMxu0oZsfFw4GbgpYB
-        Q5rK3Ehp3GsvY/ZWFqOBDe34LxDsXDQAfeXwgAzwLGuRTF6/6fajjiB+l4faY58KyXYRd9
-        TRvQUMx4KhjpOhAQjyD53NZ44/KDHNZzen3o5CWSSmMuXJs7tSK49MGIkP5L/9Tw/0p3r8
-        ob+7BJIhXKuW4vpCWZYdUoDVrJaJ+Ar127CVhFKQjgeiplPgqNc0w3IVyPx/sg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639499761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jHkEiVG0BVT8V/9kbAcBq/GVsYt3jqgvF40FkGyKrlo=;
-        b=JRPDqiMesD5qMuzHSYGkN8LOEMskH9IhyPnRCqMbSThsy+YATwXU6QDtFhGJhGuZcxfILm
-        UyvW8q3ctT/IqHDg==
-To:     Nishanth Menon <nm@ti.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>, linux-wireless@vger.kernel.org,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
-In-Reply-To: <20211214162247.ocjm7ihg5oi7uiuv@slider>
-References: <20211210221642.869015045@linutronix.de>
- <20211213182958.ytj4m6gsg35u77cv@detonator> <87fsqvttfv.ffs@tglx>
- <20211214162247.ocjm7ihg5oi7uiuv@slider>
-Date:   Tue, 14 Dec 2021 17:36:00 +0100
-Message-ID: <87wnk7rvnz.ffs@tglx>
+        Tue, 14 Dec 2021 11:36:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF0DC06173E;
+        Tue, 14 Dec 2021 08:36:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A2D9615DE;
+        Tue, 14 Dec 2021 16:36:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD9EC34604;
+        Tue, 14 Dec 2021 16:36:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639499807;
+        bh=OM/bj46V1a07AE1+K/t3QvY0mvc4E7C7aoQrDPOjnRY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JUI22w1JjiBNlTMLZsBCngyrdWgnJIoY6Jp4+VtrBa//S74JmhBFaxosybCRMYupt
+         6imJKcKK8n9smFMtI0KZ6bzd11Ff8EJ4a/8WBJyqafM5UKv7AMKcjROuWckbJ10u/E
+         ioPJ4FgYnJi+96pkbSnadr3QFwPHGJUyoBNbAJ9Y=
+Date:   Tue, 14 Dec 2021 17:36:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/43] Add KernelMemorySanitizer infrastructure
+Message-ID: <YbjIHa/1Qr/v8Q8J@kroah.com>
+References: <20211214162050.660953-1-glider@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214162050.660953-1-glider@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14 2021 at 10:22, Nishanth Menon wrote:
-> On 10:41-20211214, Thomas Gleixner wrote:
-> Agreed that the warning is fine, the null pointer exception that follows
-> [1] [2] it however does'nt look right and it can be trivially fixed with the
-> following fixup for ee90787487bc ("genirq/msi: Provide
-> msi_device_populate/destroy_sysfs()") below, with that the log looks
-> like [3] - the warn is good, the null pointer exception and resultant
-> crash could be avoided (not saying this is the best solution):
+On Tue, Dec 14, 2021 at 05:20:07PM +0100, Alexander Potapenko wrote:
+> KernelMemorySanitizer (KMSAN) is a detector of errors related to uses of
+> uninitialized memory. It relies on compile-time Clang instrumentation
+> (similar to MSan in the userspace [1]) and tracks the state of every bit
+> of kernel memory, being able to report an error if uninitialized value is
+> used in a condition, dereferenced, or escapes to userspace, USB or DMA.
 
-Aaargh.
+Why is USB unique here?  What about serial data?  i2c?  spi?  w1?  We
+have a lot of different I/O bus types :)
 
-[   13.478122] Call trace:
-[   13.509042]  msi_device_destroy_sysfs+0x18/0x88
-[   13.509058]  msi_domain_free_irqs+0x34/0x58
-[   13.509064]  pci_msi_teardown_msi_irqs+0x30/0x3c
-[   13.509072]  free_msi_irqs+0x78/0xd4
-[   13.509077]  pci_disable_msix+0x138/0x164
-[   13.529930]  pcim_release+0x70/0x238
-[   13.529942]  devres_release_all+0x9c/0xfc
-[   13.529951]  device_release_driver_internal+0x1a0/0x244
-[   13.542725]  device_release_driver+0x18/0x24
-[   13.542741]  iwl_req_fw_callback+0x1a28/0x1ddc [iwlwifi]
-[   13.552308]  request_firmware_work_func+0x50/0x9c
-[   13.552320]  process_one_work+0x194/0x25c
+And how is DMA checked given that the kernel shouldn't be seeing dma
+memory?
 
-That's not a driver problem, that's an ordering issue vs. the devres
-muck. Let me go back to the drawing board. Sigh...
+thanks,
 
-Thanks,
-
-        tglx
-
+greg k-h

@@ -2,184 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73915474126
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F135547412E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbhLNLJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 06:09:57 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:25412 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229502AbhLNLJ4 (ORCPT
+        id S233442AbhLNLLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 06:11:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229502AbhLNLL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 06:09:56 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BEAU250004563;
-        Tue, 14 Dec 2021 11:09:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=+TzRgKpHH87DVJthjmXcebv4dgrD0vgcXhWS6+J3P1g=;
- b=zRBhirJzay/IMh5ym+5bL9hvTDddcf6aOudbl84yVh1wzwRYF6h7JHSyfi89SZAlWjKC
- PLbs6tdm4UFM2YEnS7hKjzIZZ5JBZ+1S07yI6Ot5GXNg3stegCZJJY3SZM1t3bIPGR7Q
- TnWTaHg4TGB3W9h9Hm1ZZLW145Qabiq8WglmXx90jGD/KBdxHL43oZwCeh7kwJ66uAF7
- qmvl2O3qZq5fy1iaZhDKlb7pawRtWzJ9mkyth00CRiohDneWyfRGdv14xZ8yTcPkXgld
- CgGc1zTn2yZEmgbFJtXPwdIt8PtT+swK8t1rucnAyd5UekXHUQSNGoHIqx8NDS4Et1sQ PA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cx3mruhtu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Dec 2021 11:09:52 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BEB5o65148662;
-        Tue, 14 Dec 2021 11:09:51 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
-        by aserp3030.oracle.com with ESMTP id 3cvj1dqn58-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Dec 2021 11:09:51 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PNlKRAcP5LHiKRgjKb15s4A+bHNmC9gzoyES1YTbnzSXvPbNG8nfD/aEkEz/Dz7q0MlV9Nzf7QGDbmBG3uGG9xy101mDSYFWigDA+KfjDL5vg753z1dVcRi9MYf/4vzalUhlf3YWyGWuPSn3A8sosDv2wk3/7kwadJ88Pq29mU9PoaRXptU58AKfRXhSQP7o40pm1c0x+aS6OqTbwk2bEmW2z64MJN2Mnt8dG3dyk5MsP86VZeN7wueabBLBb6DDXEc5TZ2Gr1B6DTkP7hWgG8WVCRO0qc+/ZeqJdzjHhPjCzvFBVxCNK+IPFcIIHkyRi8ITBbfi/drTyPD7WzDNLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+TzRgKpHH87DVJthjmXcebv4dgrD0vgcXhWS6+J3P1g=;
- b=WuXK0CHOscPIDUZkFeOAtw71SYbyQbMgNkKEkk/DNa2Rpik4IXZRCbL2x5dKfXrRYoxYLMifhKqKuMiBQ3ml4Q6X90DqqM810trP+Nj6lW6dWkFUObuvpL+hnuSOV6gg+mAOF/FHw1jh4kMY978HSQvI6nqHRbd1z1d59tgq11q4JjPp+KYc+rfeOLGF5d5X674PKq1VfNpJMAkIwQ1PxT3s9/7uWy6NNhx7oIV9HvyGur63PMgXwzlKlL8ONezKEy6mnnOXtYV3zuzu15xbRio+eWjFEFEYwewQKK9nEerF5gocgoPVs3BDrcGmKPBohArby2Zqo3NBQ5iN5fRCuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+TzRgKpHH87DVJthjmXcebv4dgrD0vgcXhWS6+J3P1g=;
- b=rWwTbYWjq+G6fLPDLtBJ7AZc9sgw7FiqF4IG/rsodbDt60OrmyX3TjwPyrAecl7xY+nUFXyl2JeOHtp79T52J/u+OnmClZhdMKPjTKwJGU+gc3qGViYNZlMt7GZmgUXl7NLmSAoTFKi81lEJcsrwz6/SU6AkYg3YY9e5g5q0WQg=
-Received: from DM5PR1001MB2409.namprd10.prod.outlook.com (2603:10b6:4:33::35)
- by DM5PR1001MB2057.namprd10.prod.outlook.com (2603:10b6:4:32::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 14 Dec
- 2021 11:09:48 +0000
-Received: from DM5PR1001MB2409.namprd10.prod.outlook.com
- ([fe80::d505:458f:8b5c:14db]) by DM5PR1001MB2409.namprd10.prod.outlook.com
- ([fe80::d505:458f:8b5c:14db%4]) with mapi id 15.20.4778.018; Tue, 14 Dec 2021
- 11:09:48 +0000
-Message-ID: <fef9d1be-54d5-ba1b-f7ae-fe5a063afb8f@oracle.com>
-Date:   Tue, 14 Dec 2021 03:09:34 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH net] rds: memory leak in __rds_conn_create()
-Content-Language: en-US
-To:     Hangyu Hua <hbh25y@gmail.com>, santosh.shilimkar@oracle.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-kernel@vger.kernel.org
-References: <20211214104659.51765-1-hbh25y@gmail.com>
-From:   Sharath Srinivasan <sharath.srinivasan@oracle.com>
-In-Reply-To: <20211214104659.51765-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0137.apcprd02.prod.outlook.com
- (2603:1096:4:188::17) To DM5PR1001MB2409.namprd10.prod.outlook.com
- (2603:10b6:4:33::35)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6d17ffb1-21b6-49ef-f08b-08d9bef23dda
-X-MS-TrafficTypeDiagnostic: DM5PR1001MB2057:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR1001MB2057234B7C5E1153526D12FDFC759@DM5PR1001MB2057.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1247;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D0rkuVB/ohp7L5BGMC0rgyg5lZCKOGuocw1A1R3OBJZfhoS2hDnbZgW9Or6rYh2zuJLjRjqhFMvddZQuVsbqMqOL1z61srB1RcAelWxXdNOMkFgpFibU8f8SsQCSLMmnZnHwe+KvX/R6wl9sQwpa//f7b3tGZqhq1l8Z+pP4kDu17qvCNNxCLe9kSf/j1o7QpKcQ1tWWhTI/O1rkRx7fpC/ru7M7MeUgn9YDo52Dbmn8dvABR7n4C9NSRR85mIgXSepKIYvs29pyFytUeE7TP2KECdFRDneEhvBgFL0yp+G4aGskjASDf0nZrH53uUf5nbGLniNMYUUShYoHwWF9p46AqtddZ5jgvVCqrqpyn3oSJVE7uURvyt2FISlU1fQTWLP+OOWk0Qhg2kYEarrhCOGhJ1coFTwAbuXsX1vDqQs/p9xvYh6A9r26hQ874xJNNshTeGVNtVSj90dTYht1OwwhvNXBc7cTCJVvdCmMDN8FDkcQcouDsCajSIv64zfjaCzTuAiOPJMddKhzEqiwhZlxZcubD+U5NXdYnSZFfFubc/MGr6PI21flcXTVnr5viGjulks6iZXFqzh9w5pe3tQj/jh0edlW4JAD7ePZ3y2ScmFI7NKeo7abLwWBZhxbOgO7OQXI9mItH+0DBg1TUNWAAUx+M9l+7fSzmYf3yxBQUDEXsulkIPQWjI6cn07EWDIcUoSH3qq1DLQooPoO4XYdJueDUJOugKahg1v0jvQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1001MB2409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6512007)(66946007)(38100700002)(31696002)(44832011)(6666004)(6506007)(66556008)(66476007)(2906002)(4326008)(316002)(8676002)(52116002)(53546011)(6486002)(2616005)(8936002)(4744005)(31686004)(186003)(36756003)(5660300002)(86362001)(508600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TW5ZVk5pWHV1b0NsRC9sRmdjSzRsc3haVWRMTlJBNjFaSjZzWXR5SkdqaUlE?=
- =?utf-8?B?cjNDbVhVS25WTlhTVjZZUUZwZGtYWG54R0NEbk8xdmZ3eTB0eTVPRG9YcEpS?=
- =?utf-8?B?SEtnVVB0TkJPZVFZK3ExR0piaEpkeVVWNTllNzY5K0lacmYranhQU3Y4Qnpx?=
- =?utf-8?B?NnN6NitIS3JoeXBvc3ZpVlM1NVRSS2I5eFI3cGRyVk9QM1F2QUx3L2Yzb3U5?=
- =?utf-8?B?QmV3ellYck1ZYkJVN0pldG1nVVFhV2dPSWlFVEw5eEdXc1lKV21wZUp2aW4w?=
- =?utf-8?B?N2h2TDlIWm54UCtxb0orUzd6UXhTMTVaUXRrRjBITWtQSFFPZlM4S052cE1K?=
- =?utf-8?B?Z250WXNwLzNQSlNJOEx2UzlCdmV6U2Jxc0IwS25QNVpzamUvMXdEYzlNWlha?=
- =?utf-8?B?bHZweUxBWFRBOThoY3Zjd2l5Uk9aQ1FweHpSdXE5NEdQa1J0bi8relIvYUdu?=
- =?utf-8?B?bURwdTl4ODJVYjBIU3ZROG5IUUtJbmQ4L2t5M0kzaG9kMDVxNHUrYmlWalNx?=
- =?utf-8?B?SWpiV29TWlU5OXBXNDJZRWwwYjM5MWRxYmpmWVhHY3h5ZnlYUjVNanhHRWoy?=
- =?utf-8?B?bTlQdWZNak42T041VUEwMlhtUW4yUEJWUHR4eUFGeVNKb1FWMlkvS2RmZU5y?=
- =?utf-8?B?aDROdC9jUWd0am5GTXZDUGE4SHFiWHVXVHk1MkdXRU9yeFdRQWZuUWY1VHZo?=
- =?utf-8?B?YmVNSCtpTTg0QSt5ZnZSeHBXTCtScDJtRFJhc0N6UTdZSEg0cGJMMUREQUpa?=
- =?utf-8?B?SndNbWtsQm5qanBrczViMGhDeHU1enNEc3NWMlhubWYzTDk1YmdOYjl0UTFK?=
- =?utf-8?B?VWFHZXZMYTRxYy9yQ0pqaHJ6T3ZmTmF6ckFVTmx2d1hJTW1Dc0NCeEFneXYz?=
- =?utf-8?B?V3BrSVZGTlVJRnhMazM2K0w1dXhOV1JzZ1VlU3NoL2FqVXlPQ09WQTZmL0hJ?=
- =?utf-8?B?Q28wblhZWVB3OW1wT3ZSK2h5TkpQQXZlUzc5TUhjZGpOTVN0TWdweGVrL1h0?=
- =?utf-8?B?cm9VQmFVUG5rV0QyK29xQWUwcnRtdHVBVkF4ZjJidzNLVHM3a0lnSnNIMzlX?=
- =?utf-8?B?WTNKTjV5a1JSaVJabktDd0NONzcrMHlBd3dKQ0UvYWVnNm1vNkRCby9BOElm?=
- =?utf-8?B?eENXcXFib1o3VGJoaGI2enJhdzFiR3E4bS8rZVJyc2tWdHR6bWl2Q0dQcDJw?=
- =?utf-8?B?b2J0VTNiOWFMVVRjb1F2NGNyV25PWlpXampaSzZGeCtRV0xSa2xLblRDSk13?=
- =?utf-8?B?d1Nacjl1WGpBQkhBY1ZwcGliQi9hL2sreVc2ek9uRGRpMVU4WGpBb0hvS1J0?=
- =?utf-8?B?N1hhNWlJWjJqYzUzY2g2TytUcVJCR2lXWXBFYitRUmQyaDhvSWFyTzIzOStj?=
- =?utf-8?B?TXExL2gyL3pGd0UwRFZWZ2o5TmdEK1ZFanNud2hDZTgyVWVTeis2dWtRSTlo?=
- =?utf-8?B?L25qUVRpWmZZV2lTR09aa2FnSkFlR1lVQ1ZHZHZuMDBnTnNsNXZPS2hpNzZX?=
- =?utf-8?B?WFNYVWUvaUVuNmZnU2hrNVM5S0xPdDlocDBnT0diL05XQnpsM3duL2RTbXd6?=
- =?utf-8?B?amZHdW12WEJ4bkd2eUJHL2hERlc3VEZwbXZFWWxZRFFUNDBmNjBSaldjd3dq?=
- =?utf-8?B?ZFNOVmlVQ2ZzcElmakJFZllGaGZkWVdEME1EeTQ3YTNiQm5HbStYN2Q1Mjlx?=
- =?utf-8?B?eUQ2Z0J6YnVWQXhlRzJqTGNmeEhSWFh4ckpnZU9ySzRTZ1BZNnBxREJ2NFlR?=
- =?utf-8?B?Y3FzZk9HTm1BTGpYUm9hUFdpYmlTQk5jUDB3ZmJFeTBFS1dnWFZsUnRTaWtF?=
- =?utf-8?B?N1E0dW1vTnQrNXFnaEZkQ243T2M0Y0UwNUxwdzZYc2dYZHBTZXFNVlRDVEhl?=
- =?utf-8?B?Uzh5cllIejI0TnZITUczVHpPRGIrb2FXN3gzV1kyU3BXc1BGTmZJeU5YMkdX?=
- =?utf-8?B?N1g4bFg1LytsMkZUbjZjQ1NKaHpXd2FLeWdVWXBWNkpGa2wxVXBZWW8zNlln?=
- =?utf-8?B?L0hkdkxQZnB0c0F4bm9EVFMrZW5IK1ExcGZXQmFHNDNvZ0dBQ3A0OHNjdFU2?=
- =?utf-8?B?TU9BTG5vSTYrSzJGWUVVbGtLakdzOGo0VDl4TjVMTVZuMXF0aU1CNW9kbTRx?=
- =?utf-8?B?eGtpYnFDSklqLzF1ZW5SNGhvTlQveVU4TVppL01OS2owemt2aFRIVlRobWkv?=
- =?utf-8?B?YkpudytuRnM4MUNITnpXUGVwUnIyVkJEOS9jbU1oSVlkbGR0NHlBVWRWR2Uw?=
- =?utf-8?B?UHc4TDVyRTdld2haelAvdDYzckhCVHdCTFZneDdBamQ4VktyOHBGVElsZkxF?=
- =?utf-8?Q?FQdyxg6u/OoTxSDNzZ?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d17ffb1-21b6-49ef-f08b-08d9bef23dda
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1001MB2409.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 11:09:48.2915
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BOCknkv+MTU0OZBFkiBhKR/EirCf6zIskPwIQFFfMkQNY3qF++pmnCDSbty+sGMDM2RJgGNLgSQ73Wa8sGCvESR+4P7l6TdTXgvBeVDCtHk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1001MB2057
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10197 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
- suspectscore=0 bulkscore=0 mlxscore=0 spamscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112140064
-X-Proofpoint-ORIG-GUID: 3gebZ5GmyO1vFlWuuA5bpXijJ14XbUZ4
-X-Proofpoint-GUID: 3gebZ5GmyO1vFlWuuA5bpXijJ14XbUZ4
+        Tue, 14 Dec 2021 06:11:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BD2C061574;
+        Tue, 14 Dec 2021 03:11:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A252A6147D;
+        Tue, 14 Dec 2021 11:11:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D47C34606;
+        Tue, 14 Dec 2021 11:11:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639480288;
+        bh=3vwoTDt+FYHzpmZUz7PHdcv1c6oH6F97ZVEaheZyOSM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=McSCgt8o5IzxGHrkJQ2nsaSpx9bsu4W++S+rWlemDcYaaOYhj+VUfzn7juZgDlK1T
+         5zCdzkGWn00RBEvHNH93PMirnDn/V3Jss+RLaP95bXyhypptO9U9Y+hiYokXsrbi4e
+         WY2tJF0jsalRts19cf9DrKJFrCin89j7yjG7SZ+2nEV3z2S9gPskHadFQs8FB224Pq
+         GNstVwgj602y7dFdRpugUXBfoxLCJvsHlzczMEpk09JmV6W6Ebwfs7p7BOyUJJSksW
+         oPTB7gIEgP0Z7Lw7savLDQH4ouqHl4O2EtMR+dkVQ/FTjmW4mHwrnFsbq+utY2QSnB
+         MbKnEiERDmukQ==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mx5iQ-00C1lL-3p; Tue, 14 Dec 2021 11:11:26 +0000
+Date:   Tue, 14 Dec 2021 11:11:25 +0000
+Message-ID: <877dc7jvaa.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
+        Biwen Li <biwen.li@nxp.com>, "Z.Q. Hou" <zhiqiang.hou@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [RFC PATCH devicetree 00/10] Do something about ls-extirq interrupt-map breakage
+In-Reply-To: <20211214105316.aibjmwdhg7a5wwlj@skbuf>
+References: <20211214013800.2703568-1-vladimir.oltean@nxp.com>
+        <87ilvrk1r0.wl-maz@kernel.org>
+        <20211214095853.4emzycaxkuqr4tun@skbuf>
+        <87czlzjxmz.wl-maz@kernel.org>
+        <20211214103025.wnzkfxr5xxeuhpln@skbuf>
+        <87a6h3jwrc.wl-maz@kernel.org>
+        <20211214105316.aibjmwdhg7a5wwlj@skbuf>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: vladimir.oltean@nxp.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, shawnguo@kernel.org, leoyang.li@nxp.com, biwen.li@nxp.com, zhiqiang.hou@nxp.com, kurt@linutronix.de, linux@rasmusvillemoes.dk
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/21 02:46, Hangyu Hua wrote:
+On Tue, 14 Dec 2021 10:53:16 +0000,
+Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> 
+> On Tue, Dec 14, 2021 at 10:39:35AM +0000, Marc Zyngier wrote:
+> > On Tue, 14 Dec 2021 10:30:26 +0000,
+> > Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> > > 
+> > > On Tue, Dec 14, 2021 at 10:20:36AM +0000, Marc Zyngier wrote:
+> > > > On Tue, 14 Dec 2021 09:58:54 +0000,
+> > > > Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> > > > > 
+> > > > > Hi Marc (with a c),
+> > > > > 
+> > > > > I wish the firmware for these SoCs was smart enough to be compatible
+> > > > > with the bindings that are in the kernel and provide a blob that the
+> > > > > kernel could actually use. Some work has been started there and this is
+> > > > > work in progress. True, I don't know what other OF-based firmware some
+> > > > > other customers may use, but I trust it isn't a lot more advanced than
+> > > > > what U-Boot currently has :)
+> > > > > 
+> > > > > Also, the machines may have been in the wild for years, but the
+> > > > > ls-extirq driver was added in November 2019. So not with the
+> > > > > introduction of the SoC device trees themselves. That isn't so long ago.
+> > > > > 
+> > > > > As for compatibility between old kernel and new DT: I guess you'll hear
+> > > > > various opinions on this one.
+> > > > > https://www.spinics.net/lists/linux-mips/msg07778.html
+> > > > > 
+> > > > > | > Are we okay with the new device tree blobs breaking the old kernel?
+> > > > > |
+> > > > > | From my point of view, newer device trees are not required to work on
+> > > > > | older kernel, this would impose an unreasonable limitation and the use
+> > > > > | case is very limited.
+> > > > 
+> > > > My views are on the opposite side. DT is an ABI, full stop. If you
+> > > > change something, you *must* guarantee forward *and* backward
+> > > > compatibility. That's because:
+> > > > 
+> > > > - you don't control how updatable the firmware is
+> > > > 
+> > > > - people may need to revert to other versions of the kernel because
+> > > >   the new one is broken
+> > > > 
+> > > > - there are plenty of DT users beyond Linux, and we are not creating
+> > > >   bindings for Linux only.
+> > > > 
+> > > > You may disagree with this, but for the subsystems I maintain, this is
+> > > > the rule I intent to stick to.
+> > > 
+> > > That's an honorable set of guiding principles, but how do you apply them
+> > > here? Reverting Rob's change won't fix the past, and updating the code
+> > > to account for one format will break the other. As for trying one
+> > > format, and if there's an error try the other, there may be situations
+> > > in which you accept invalid input as valid.
+> > 
+> > maz@hot-poop:~/arm-platforms$ git describe --contains 869f0ec048dc --match=v\*
+> > v5.16-rc1~125^2~19^2~16
+> > 
+> > This patch landed in -rc1, and isn't part of any release. Just revert
+> > it, and no damage is done.
+> 
+> The revert is one of the patches posted here. It will fix the problem
+> short-term but it may not be enough long-term. I think Rob is working on
+> some sort of validation for "interrupt-map" and this is how the apparently
+> non-conformant property was brought to his attention. It will trigger
+> validation warnings that I'm afraid will be tempting for many to "fix".
 
-> __rds_conn_create() did not release conn->c_path when loop_trans != 0 and
-> trans->t_prefer_loopback != 0 and is_outgoing == 0.
+Then build an annotation mechanism for the warning not to fire for
+quirked systems.
 
-Probably a good idea to include:
+> Thus the rest of the patches. Maybe it's just me, but between having to
+> play a whack-a-mole game and snapping compatibility of old kernels with
+> new DT blobs, I think more time is lost with the latter.
 
-Fixes: aced3ce57cd3 ("RDS tcp loopback connection can hang")
+I said what I had to say on the subject, and when it comes to wasted
+time, that's more than enough.
 
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-With that,
+	M.
 
-Reviewed-by: Sharath Srinivasan <sharath.srinivasan@oracle.com>
-
-Thanks,
-Sharath
-
-> ---
->   net/rds/connection.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/net/rds/connection.c b/net/rds/connection.c
-> index a3bc4b54d491..b4cc699c5fad 100644
-> --- a/net/rds/connection.c
-> +++ b/net/rds/connection.c
-> @@ -253,6 +253,7 @@ static struct rds_connection *__rds_conn_create(struct net *net,
->   				 * should end up here, but if it
->   				 * does, reset/destroy the connection.
->   				 */
-> +				kfree(conn->c_path);
->   				kmem_cache_free(rds_conn_slab, conn);
->   				conn = ERR_PTR(-EOPNOTSUPP);
->   				goto out;
+-- 
+Without deviation from the norm, progress is not possible.

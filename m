@@ -2,131 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F954740A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8854740A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233149AbhLNKlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:41:42 -0500
-Received: from mga18.intel.com ([134.134.136.126]:8412 "EHLO mga18.intel.com"
+        id S233155AbhLNKmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:42:04 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:43002 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233140AbhLNKll (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:41:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639478501; x=1671014501;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=nD1dWC4ja2jEDV7QrfC4Kkllk7voDyF5NiShZMOJOkE=;
-  b=JxQ9Jtd3/m/W2roMAzPZe3Sw1XR5iX8926rYsXtg3yYxHzmkLnkpjpyb
-   1rtoyvERVz23wAb0kG+cCP832U4HyKKBepdn9XKYYzT7oSzE+klmac+8K
-   Zl480ywDkTgsG2YkF9dMPB8OzOg7qK8t6nnJpb3TeFMCTjDdfnzmJV9RQ
-   fy7e58jhz21xyK1SmbyJ5uwdxXSpTS/YjQ8EbIJqNjbfXyMGJU1zQMpB5
-   RcxUO5LTueHVZ4Av9JM0/vWHCrp/ivuCfXaSiYA9Ju7XxrO7XnlMLxhe7
-   YafmrJidu2RNEEBDOn2sf2MSIyUizQLsw84j/6ebIXk25qCuYp4kUQWfn
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="225810798"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="225810798"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 02:41:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="465030158"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 02:41:38 -0800
-Subject: Re: [PATCH v2 1/2] mmc: sdhci-pci-gli: GL9755: Support for CD/WP
- inversion on OF platforms
-To:     Hector Martin <marcan@marcan.st>,
-        Ben Chuang <benchuanggli@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20211212070210.141664-1-marcan@marcan.st>
- <20211212070210.141664-2-marcan@marcan.st>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <72e29a9d-7e2a-5c2e-c44b-42172aae4f2d@intel.com>
-Date:   Tue, 14 Dec 2021 12:41:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.13.0
+        id S231415AbhLNKmD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:42:03 -0500
+Received: from p5b127e95.dip0.t-ipconnect.de ([91.18.126.149] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1mx5Fk-0007HP-OZ; Tue, 14 Dec 2021 11:41:48 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Christoph =?ISO-8859-1?Q?M=FCllner?= <cmuellner@linux.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] riscv: prevent null-pointer dereference with sbi_remote_fence_i
+Date:   Tue, 14 Dec 2021 11:41:48 +0100
+Message-ID: <3268221.GhNKjUVvqv@phil>
+In-Reply-To: <CAOnJCUJ9YBOrNEj-nxAWctGPSTj6yUVOkiwQEpFELuf8B6SqLg@mail.gmail.com>
+References: <20211213112034.2896536-1-heiko@sntech.de> <CAOnJCUJ9YBOrNEj-nxAWctGPSTj6yUVOkiwQEpFELuf8B6SqLg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211212070210.141664-2-marcan@marcan.st>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/2021 09:02, Hector Martin wrote:
-> This is required on some Apple ARM64 laptops using this controller.
-> As is typical on DT platforms, pull these quirks from the device tree
-> using the standard mmc bindings.
+Hi Atish,
+
+Am Dienstag, 14. Dezember 2021, 02:51:17 CET schrieb Atish Patra:
+> On Mon, Dec 13, 2021 at 3:21 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> >
+> > The callback used inside sbi_remote_fence_i is set at sbi probe time
+> > to the needed variant. Before that it is a NULL pointer.
+> >
+> > The selection between using sbi_remote_fence_i or ipi_remote_fence_i
+> > right now is solely done on the presence of the RISCV_SBI config option.
+> >
+> > On a multiplatform kernel, SBI will probably always be built in, but
+> > in the future not all machines using that kernel may have SBI
+> > on them, so in some cases this setup can lead to NULL pointer dereferences.
+> >
 > 
-> See Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> I didn't quite understand this. The only platforms without SBI are
+> M-mode Linux based platforms.
+> All other platforms will require SBI if the kernel is running on
+> supervisor mode.
+
+Ok ... but imagine a single-core board starting in S-mode.
+Not doing smp, kvm, etc.
+
+So I can very well imagine the possibility that people
+might start it without an sbi instance running ;-) .
+
+
+> They may not need SBI IPI or SBI RFENCE extensions if an alternate
+> mechanism(ACLINT SSWI or AIA IMSIC)
+> is already available in hardware. IIRC, Anup's aclint & aia series
+> already takes care of that.
 > 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-
-A couple of kernel style issues, but fix those and you can add:
-
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-
-> ---
->  drivers/mmc/host/sdhci-pci-gli.c | 19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
+> > Also if in future one of the flush_icache_all / flush_icache_mm functions
+> > gets called earlier in the boot process - before sbi_init - this would
+> > trigger the issue.
+> >
 > 
-> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
-> index 4fd99c1e82ba..ad742743a494 100644
-> --- a/drivers/mmc/host/sdhci-pci-gli.c
-> +++ b/drivers/mmc/host/sdhci-pci-gli.c
-> @@ -12,6 +12,7 @@
->  #include <linux/pci.h>
->  #include <linux/mmc/mmc.h>
->  #include <linux/delay.h>
-> +#include <linux/of.h>
->  #include "sdhci.h"
->  #include "sdhci-pci.h"
->  #include "cqhci.h"
-> @@ -114,8 +115,10 @@
->  #define   GLI_9755_WT_EN_OFF    0x0
->  
->  #define PCI_GLI_9755_PECONF   0x44
-> -#define   PCI_GLI_9755_LFCLK    GENMASK(14, 12)
-> -#define   PCI_GLI_9755_DMACLK   BIT(29)
-> +#define   PCI_GLI_9755_LFCLK          GENMASK(14, 12)
-> +#define   PCI_GLI_9755_DMACLK         BIT(29)
+> sbi_init is called before setup_smp. Do you think there is a use case where
+> flush_icache_xxx can be called before smp initialization ?
 
-Please don't mix in white space changes.
+I ran into the issue while experimenting with doing alternatives patching
+earlier. Works fine, but the flush_icache call then runs into that null-ptr.
 
-> +#define   PCI_GLI_9755_INVERT_CD      BIT(30)
-> +#define   PCI_GLI_9755_INVERT_WP      BIT(31)
->  
->  #define PCI_GLI_9755_CFG2          0x48
->  #define   PCI_GLI_9755_CFG2_L1DLY    GENMASK(28, 24)
-> @@ -570,6 +573,18 @@ static void gl9755_hw_setting(struct sdhci_pci_slot *slot)
->  	gl9755_wt_on(pdev);
->  
->  	pci_read_config_dword(pdev, PCI_GLI_9755_PECONF, &value);
-> +#ifdef CONFIG_OF
-> +	if (pdev->dev.of_node) {
 
-As Robin wrote, please remove #ifdef and if (pdev->dev.of_node)
-because they are not needed.
+Heiko
 
-> +		/*
-> +		 * Apple ARM64 platforms using these chips may have
-> +		 * inverted CD/WP detection.
-> +		 */
-> +		if (of_property_read_bool(pdev->dev.of_node, "cd-inverted"))
-> +			value |= PCI_GLI_9755_INVERT_CD;
-> +		if (of_property_read_bool(pdev->dev.of_node, "wp-inverted"))
-> +			value |= PCI_GLI_9755_INVERT_WP;
-> +	}
-> +#endif
->  	value &= ~PCI_GLI_9755_LFCLK;
->  	value &= ~PCI_GLI_9755_DMACLK;
->  	pci_write_config_dword(pdev, PCI_GLI_9755_PECONF, value);
+
+> > To prevent this, add a default __sbi_rfence_none returning an error code
+> > and adapt the callers to check for an error from the remote fence
+> > to then fall back to the other method.
+> >
 > 
+> Having said that, it is always good to have guards to avoid NULL
+> pointer dereferences.
+> However, the commit text may be updated based on the above questions.
+> 
+> > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> > ---
+> >  arch/riscv/kernel/sbi.c    | 10 +++++++++-
+> >  arch/riscv/mm/cacheflush.c | 25 +++++++++++++++++--------
+> >  2 files changed, 26 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+> > index 7402a417f38e..69d0a96b97d0 100644
+> > --- a/arch/riscv/kernel/sbi.c
+> > +++ b/arch/riscv/kernel/sbi.c
+> > @@ -14,11 +14,19 @@
+> >  unsigned long sbi_spec_version __ro_after_init = SBI_SPEC_VERSION_DEFAULT;
+> >  EXPORT_SYMBOL(sbi_spec_version);
+> >
+> > +static int __sbi_rfence_none(int fid, const unsigned long *hart_mask,
+> > +                            unsigned long start, unsigned long size,
+> > +                            unsigned long arg4, unsigned long arg5)
+> > +{
+> > +       return -EOPNOTSUPP;
+> > +}
+> > +
+> >  static void (*__sbi_set_timer)(uint64_t stime) __ro_after_init;
+> >  static int (*__sbi_send_ipi)(const unsigned long *hart_mask) __ro_after_init;
+> >  static int (*__sbi_rfence)(int fid, const unsigned long *hart_mask,
+> >                            unsigned long start, unsigned long size,
+> > -                          unsigned long arg4, unsigned long arg5) __ro_after_init;
+> > +                          unsigned long arg4, unsigned long arg5)
+> > +                          __ro_after_init = __sbi_rfence_none;
+> >
+> >  struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
+> >                         unsigned long arg1, unsigned long arg2,
+> > diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
+> > index 89f81067e09e..128e23c094ea 100644
+> > --- a/arch/riscv/mm/cacheflush.c
+> > +++ b/arch/riscv/mm/cacheflush.c
+> > @@ -16,11 +16,15 @@ static void ipi_remote_fence_i(void *info)
+> >
+> >  void flush_icache_all(void)
+> >  {
+> > +       int ret = -EINVAL;
+> > +
+> >         local_flush_icache_all();
+> >
+> >         if (IS_ENABLED(CONFIG_RISCV_SBI))
+> > -               sbi_remote_fence_i(NULL);
+> > -       else
+> > +               ret = sbi_remote_fence_i(NULL);
+> > +
+> > +       /* fall back to ipi_remote_fence_i if sbi failed or not available */
+> > +       if (ret)
+> >                 on_each_cpu(ipi_remote_fence_i, NULL, 1);
+> >  }
+> >  EXPORT_SYMBOL(flush_icache_all);
+> > @@ -66,13 +70,18 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
+> >                  * with flush_icache_deferred().
+> >                  */
+> >                 smp_mb();
+> > -       } else if (IS_ENABLED(CONFIG_RISCV_SBI)) {
+> > -               cpumask_t hartid_mask;
+> > -
+> > -               riscv_cpuid_to_hartid_mask(&others, &hartid_mask);
+> > -               sbi_remote_fence_i(cpumask_bits(&hartid_mask));
+> >         } else {
+> > -               on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
+> > +               int ret = -EINVAL;
+> > +
+> > +               if (IS_ENABLED(CONFIG_RISCV_SBI)) {
+> > +                       cpumask_t hartid_mask;
+> > +
+> > +                       riscv_cpuid_to_hartid_mask(&others, &hartid_mask);
+> > +                       ret = sbi_remote_fence_i(cpumask_bits(&hartid_mask));
+> 
+> This API is removed in sparse hartid series[1]. You may want to rebase
+> on top of it.
+> 
+> [1] https://patchwork.kernel.org/project/linux-riscv/list/?series=590195
+> 
+> > +               }
+> > +
+> > +               if (ret)
+> > +                       on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
+> >         }
+> >
+> >         preempt_enable();
+> > --
+> > 2.30.2
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> 
+> 
+> 
+> 
+
+
+
 

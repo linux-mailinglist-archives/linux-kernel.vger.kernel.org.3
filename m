@@ -2,117 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2413473D4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10992473D52
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbhLNGn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 01:43:26 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:45680
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231197AbhLNGnW (ORCPT
+        id S231204AbhLNGo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:44:26 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:28313 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231145AbhLNGoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 01:43:22 -0500
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1F7663F1AF
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:43:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639464201;
-        bh=xOTB2ScaHtWm2f/iOOdnjpT35u35gjMiJFm7sy9sIwE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=J9DhtuJ8425pFXSUtG34Rtupm6BeYfq7Q3Zy81dXKRyZJD2gjLeWvt3NUrFbEky2t
-         8RIBGEOllP0xgjk5xVVQGXjc9ZBg3g50OR5F4MCH6BWBiMk/VMX1otA+rqgipmPogk
-         PLd6vAj2DgnKB1RoMfxKOJVu9w5cedgLAgV4gW2M6+a19SHiW/kxyUd1lceviXpD1k
-         7McsO66/XdISr9dl0Wo8HAKSAFV6DmbdhXePf8ZVViPUPkM33VfmbzfefPWpvMhNSL
-         asWyPTgSJsc89+frqui2Y3/FqozRTjSfTBZyUMuvFF+QoTqaMtb1UffswakM54NweQ
-         /z4y6k8hyXSvg==
-Received: by mail-lf1-f70.google.com with SMTP id u20-20020a056512129400b0040373ffc60bso8519136lfs.15
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 22:43:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xOTB2ScaHtWm2f/iOOdnjpT35u35gjMiJFm7sy9sIwE=;
-        b=136Gy8MoKoP2b2lV7p3Pqd/QHT4lFIVOe3FWjfwDSbzMxdg03NoGZrkDCHH/poicVl
-         W5qSGFjTYtuZi/nwsZd3utjd3CSzai1skcNovoh58ZoRfWnaMA05Ey92yGILdvDeRz5T
-         PFitmWJ0WKKfz/cfHk9JlYcC8lzf85ZNL1DWTL1LlKHqHNmaPX2GaIY230i8wuJaC1iB
-         PcpwFAOkQt1DFn2jGOr7BHU7eyi+TNs9r3wEbftT7I+1NHmjV4yFxrp/iridMExBtjOX
-         +PClP0YqiGgM5Iu5f8fsPSJaZruQTrM9ojm4hs5Hlh+hFqSr3XfuyXSGgHJCxkrAG42u
-         1lzA==
-X-Gm-Message-State: AOAM533r5HKA9tbej+a5nmKB0rB3nfqHfLmYYCiMSQaGLoil7R8Ra0P8
-        CI6l2gz9ICe4UzLvnzSoXrZ+CzICJ3lD9u+4Z6dH2Wrq/GCadFwXlb7vMNLSf5ME//gfv8jWHcm
-        jAp4ZNNuiQs9/XrJwUDeWeXukpNrCLrULKyendF7G+g==
-X-Received: by 2002:a19:4f49:: with SMTP id a9mr3139488lfk.37.1639464200291;
-        Mon, 13 Dec 2021 22:43:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzeBwrExC4ewGvW0Yile/MhYCWIf8ovwjdrA0vvJewKVayS8VRGF+KmxD47iQBOtqm7nqGssA==
-X-Received: by 2002:a19:4f49:: with SMTP id a9mr3139462lfk.37.1639464200094;
-        Mon, 13 Dec 2021 22:43:20 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id v2sm1704897lfb.258.2021.12.13.22.43.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 22:43:19 -0800 (PST)
-Message-ID: <68145d95-1b6a-153e-42ba-43d18b705a70@canonical.com>
-Date:   Tue, 14 Dec 2021 07:43:18 +0100
+        Tue, 14 Dec 2021 01:44:25 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JCpkZ4nXKzbj23;
+        Tue, 14 Dec 2021 14:44:06 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 14 Dec 2021 14:44:23 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 14 Dec 2021 14:44:23 +0800
+From:   Yang Shen <shenyang39@huawei.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>
+Subject: [PATCH] crypto: hisilicon/zip - add new algorithms for uacce device
+Date:   Tue, 14 Dec 2021 14:45:09 +0800
+Message-ID: <20211214064509.58773-1-shenyang39@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 5.10 000/132] 5.10.85-rc1 review
-Content-Language: en-US
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Cc:     shuah@kernel.org, f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-References: <20211213092939.074326017@linuxfoundation.org>
- <52a7fa5d-6fa0-a0df-2e88-bd4bf443a671@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <52a7fa5d-6fa0-a0df-2e88-bd4bf443a671@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2021 19:17, Tadeusz Struk wrote:
-> On 12/13/21 01:29, Greg Kroah-Hartman wrote:
->> This is the start of the stable review cycle for the 5.10.85 release.
->> There are 132 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.85-rc1.gz
->> or in the git tree and branch at:
->> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
->> and the diffstat can be found below.
-> 
-> Hi,
-> In this release cycle there were two similar nfc fixes:
-> 
-> fd79a0cbf0b2 nfc: fix segfault in nfc_genl_dump_devices_done
-> 4cd8371a234d nfc: fix potential NULL pointer deref in nfc_genl_dump_ses_done
-> 
-> The list here only includes the second one. The first is still missing.
-> The same applies to 5.15
+Enable deflate/lz77_zstd algorithm for uacce device on Kunpeng930.
 
-With my review tag for this other fix I mentioned it needs Fixes and
-Cc-stable, but these were not added by Jakub when applying. It won't be
-picked up automatically by Greg.
+Signed-off-by: Yang Shen <shenyang39@huawei.com>
+---
+ drivers/crypto/hisilicon/zip/zip_main.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Jakub,
-What's weird, the cc-stable was also removed from my commit which is not
-good. Few other people add Fixes tag without Cc-stable when they want to
-annotate it should not go to stable. This one should go to stable, so it
-should have cc-stable (which I put there).
+diff --git a/drivers/crypto/hisilicon/zip/zip_main.c b/drivers/crypto/hisilicon/zip/zip_main.c
+index 49a5b6e6c825..74799b16e52b 100644
+--- a/drivers/crypto/hisilicon/zip/zip_main.c
++++ b/drivers/crypto/hisilicon/zip/zip_main.c
+@@ -830,7 +830,10 @@ static int hisi_zip_qm_init(struct hisi_qm *qm, struct pci_dev *pdev)
+ 
+ 	qm->pdev = pdev;
+ 	qm->ver = pdev->revision;
+-	qm->algs = "zlib\ngzip";
++	if (pdev->revision >= QM_HW_V3)
++		qm->algs = "zlib\ngzip\ndeflate\nlz77_zstd";
++	else
++		qm->algs = "zlib\ngzip";
+ 	qm->mode = uacce_mode;
+ 	qm->sqe_size = HZIP_SQE_SIZE;
+ 	qm->dev_name = hisi_zip_name;
+-- 
+2.33.0
 
-Best regards,
-Krzysztof

@@ -2,132 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D463474B83
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4447E474B73
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237301AbhLNTH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:07:57 -0500
-Received: from mga11.intel.com ([192.55.52.93]:56732 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234522AbhLNTH5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:07:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639508877; x=1671044877;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P+/CGotftVFAYTx3eNBpOednIJxvhi0vh4YNXRoDGus=;
-  b=VqRn54lV1YpJXJgEfFGeXIQDFfrNMKrjZfAFJ+zZ8fS8jHO21TqHxY/+
-   y62cQa/Q2DWsDXsEaTzk0BxSc0z4CSCq+Hl/elT734rUWF6/FcnN53jDL
-   vYwQO3XAytDEU9rlodjpOTSYJdEfUKarwewWoSI241ieGQg/BWxMcd6zy
-   UsbVYrJ/Meaklvn/0zXksmSfqpvDtuyAcy20LatvZaG8NHZQCciCP6etp
-   a98EKr/rA0juyD9h0tHb6smYtxjTzuBCn0PWCL/M8BBAs2gHHl4h2FXx3
-   Xilm7NOgBkHyJnSnEozhRvELdZpN8uJYzzRQg/bXnJyrHyKnWR4DmXW4S
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="236596025"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="236596025"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 10:47:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="465212682"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 10:47:16 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxCpX-0000dT-O6; Tue, 14 Dec 2021 18:47:15 +0000
-Date:   Wed, 15 Dec 2021 02:46:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [ebiederm-user-namespace:signal-for-v5.17 11/12]
- kernel/fork.c:2123:9: error: use of undeclared label
- 'bad_fork_cleanup_threadgroup_lock'
-Message-ID: <202112150208.ylx9t2Sc-lkp@intel.com>
+        id S237288AbhLNTDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234469AbhLNTDe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 14:03:34 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDACC06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:03:33 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id a2so19328410qtx.11
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:03:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mPut++DE9oSDA7Chd0SjdQdqRXfrEo4dk9mIHr0IEwI=;
+        b=kmpqKRnXneoYfsEoIjy2oU4gKiI3YIyrYivpL88Ce7gsi6vwsJWmiAM6ovLZgU14QL
+         AWE8I3rlIbmWVDIt2WAsh6rnlRbqJ8yNvF+9CpYvVbjnFg9DFimIJ/CR6spR9kYPcEts
+         k/RJYsmNVVlkYMBmLW2w5dJ7/2QY3zdO0Od6+mtG9mo4Ycl6Zz7QvNugwNLkcyib8nQD
+         kdhm9AhH4HZ8EpHMYoy9Y9IQE3584FpiwovBTlmGIUNB9s/It8xRpfLRkH0R7ZhNP4VO
+         krwitEO0V0hVyz/znayeGuu6H3HBfpwxRZIYLKn71ovidZ/HECUkZPJMz7zbyav9HkxJ
+         jp0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mPut++DE9oSDA7Chd0SjdQdqRXfrEo4dk9mIHr0IEwI=;
+        b=palNigSC8n1TEeIovdWShssytDuptx9rXFdN7grdCipA+J+BQtzgno3uBLcJQrkxpX
+         ULSr30XnRmgwsF1F7en+HJ62RkTWF1g04pspQtbGNUNFV25b1P+LjPG9MHiFwRxAuBZO
+         1qL+5eATpldDhhMmLyXf0/lmOQKT8cFFxlU421eFW3El98Hum9blwtODawQNhE2FsvJ7
+         jFc6QvkfrZO9Y36vzggeNX3Ykyp0yuuph8ZQ9UboEV5ZtOnIPAzl0HsYaBcpkNgQrK99
+         mbkPQDmQAwS0Tm5dIoTGQ20SA956JUkvj1sgSMWiFq2DTYT4MBFClC4nLGEXvog84QBh
+         MNag==
+X-Gm-Message-State: AOAM5317nshubb3nKeTtIAWaLc9WmffC+fRNZ8z2tu//cRmmhjPiOrae
+        Zgt70QCZASHuiEcA8dzNJFoDJEw8WyzXwTMcxpOKzQ==
+X-Google-Smtp-Source: ABdhPJzyRs/SkZa7rM8wtTsEOtQ+XLrgBbLZgqv/9SuBSu3jfTTmtv87+/mDKeEDQ/0sgKqI7jAue3Wsf24yk+u2F5w=
+X-Received: by 2002:a05:622a:40d:: with SMTP id n13mr8112713qtx.511.1639508612966;
+ Tue, 14 Dec 2021 11:03:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211214173917.1496290-1-robdclark@gmail.com> <20211214173917.1496290-4-robdclark@gmail.com>
+In-Reply-To: <20211214173917.1496290-4-robdclark@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 14 Dec 2021 22:03:22 +0300
+Message-ID: <CAA8EJpo2ng0mVk0Hsqmg5yTi3Wm0nUp8Lx8+CGF=RBeuYPmviQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] drm/msm/debugfs: Add display/kms state snapshot
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git signal-for-v5.17
-head:   6b1248798eb6f6d5285db214299996ecc5dc1e6b
-commit: 40966e316f86b8cfd83abd31ccb4df729309d3e7 [11/12] kthread: Ensure struct kthread is present for all kthreads
-config: arm64-buildonly-randconfig-r001-20211213 (https://download.01.org/0day-ci/archive/20211215/202112150208.ylx9t2Sc-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=40966e316f86b8cfd83abd31ccb4df729309d3e7
-        git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
-        git fetch --no-tags ebiederm-user-namespace signal-for-v5.17
-        git checkout 40966e316f86b8cfd83abd31ccb4df729309d3e7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Tue, 14 Dec 2021 at 20:34, Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/gpu/drm/msm/msm_debugfs.c | 90 +++++++++++++++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/msm/msm_debugfs.c b/drivers/gpu/drm/msm/msm_debugfs.c
+> index 956b1efc3721..088f1160c892 100644
+> --- a/drivers/gpu/drm/msm/msm_debugfs.c
+> +++ b/drivers/gpu/drm/msm/msm_debugfs.c
+> @@ -15,6 +15,11 @@
+>  #include "msm_gpu.h"
+>  #include "msm_kms.h"
+>  #include "msm_debugfs.h"
+> +#include "disp/msm_disp_snapshot.h"
+> +
+> +/*
+> + * GPU Snapshot:
+> + */
+>
+>  struct msm_gpu_show_priv {
+>         struct msm_gpu_state *state;
+> @@ -109,6 +114,88 @@ static const struct file_operations msm_gpu_fops = {
+>         .release = msm_gpu_release,
+>  };
+>
+> +/*
+> + * Display Snapshot:
+> + */
+> +
+> +struct msm_kms_show_priv {
+> +       struct msm_disp_state *state;
+> +       struct drm_device *dev;
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I don't see ->dev being used outside of _open() callback. So, I'd
+suggest removing it and using struct msm_disp_state instead of struct
+msm_kms_show_priv.
 
-All errors (new ones prefixed by >>):
+> +};
+> +
+> +static int msm_kms_show(struct seq_file *m, void *arg)
+> +{
+> +       struct drm_printer p = drm_seq_file_printer(m);
+> +       struct msm_kms_show_priv *show_priv = m->private;
+> +
+> +       msm_disp_state_print(show_priv->state, &p);
+> +
+> +       return 0;
+> +}
+> +
+> +static int msm_kms_release(struct inode *inode, struct file *file)
+> +{
+> +       struct seq_file *m = file->private_data;
+> +       struct msm_kms_show_priv *show_priv = m->private;
+> +
+> +       msm_disp_state_free(show_priv->state);
+> +       kfree(show_priv);
+> +
+> +       return single_release(inode, file);
+> +}
+> +
+> +static int msm_kms_open(struct inode *inode, struct file *file)
+> +{
+> +       struct drm_device *dev = inode->i_private;
+> +       struct msm_drm_private *priv = dev->dev_private;
+> +       struct msm_kms_show_priv *show_priv;
+> +       int ret;
+> +
+> +       if (!priv->kms)
+> +               return -ENODEV;
+> +
+> +       show_priv = kmalloc(sizeof(*show_priv), GFP_KERNEL);
+> +       if (!show_priv)
+> +               return -ENOMEM;
+> +
+> +       ret = mutex_lock_interruptible(&priv->kms->dump_mutex);
+> +       if (ret)
+> +               goto free_priv;
+> +
+> +       show_priv->state = msm_disp_snapshot_state_sync(priv->kms);
+> +
+> +       mutex_unlock(&priv->kms->dump_mutex);
+> +
+> +       if (IS_ERR(show_priv->state)) {
+> +               ret = PTR_ERR(show_priv->state);
+> +               goto free_priv;
+> +       }
+> +
+> +       show_priv->dev = dev;
+> +
+> +       ret = single_open(file, msm_kms_show, show_priv);
+> +       if (ret)
+> +               goto free_priv;
+> +
+> +       return 0;
+> +
+> +free_priv:
+> +       kfree(show_priv);
+> +       return ret;
+> +}
+> +
+> +static const struct file_operations msm_kms_fops = {
+> +       .owner = THIS_MODULE,
+> +       .open = msm_kms_open,
+> +       .read = seq_read,
+> +       .llseek = seq_lseek,
+> +       .release = msm_kms_release,
+> +};
+> +
+> +/*
+> + * Other debugfs:
+> + */
+> +
+>  static unsigned long last_shrink_freed;
+>
+>  static int
+> @@ -239,6 +326,9 @@ void msm_debugfs_init(struct drm_minor *minor)
+>         debugfs_create_file("gpu", S_IRUSR, minor->debugfs_root,
+>                 dev, &msm_gpu_fops);
+>
+> +       debugfs_create_file("kms", S_IRUSR, minor->debugfs_root,
+> +               dev, &msm_kms_fops);
+> +
+>         debugfs_create_u32("hangcheck_period_ms", 0600, minor->debugfs_root,
+>                 &priv->hangcheck_period);
+>
+> --
+> 2.33.1
+>
 
-   kernel/fork.c:763:20: warning: no previous prototype for function 'arch_task_cache_init' [-Wmissing-prototypes]
-   void __init __weak arch_task_cache_init(void) { }
-                      ^
-   kernel/fork.c:763:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak arch_task_cache_init(void) { }
-   ^
-   static 
->> kernel/fork.c:2123:9: error: use of undeclared label 'bad_fork_cleanup_threadgroup_lock'
-                           goto bad_fork_cleanup_threadgroup_lock;
-                                ^
-   1 warning and 1 error generated.
 
-
-vim +/bad_fork_cleanup_threadgroup_lock +2123 kernel/fork.c
-
-  2112	
-  2113		task_io_accounting_init(&p->ioac);
-  2114		acct_clear_integrals(p);
-  2115	
-  2116		posix_cputimers_init(&p->posix_cputimers);
-  2117	
-  2118		p->io_context = NULL;
-  2119		audit_set_context(p, NULL);
-  2120		cgroup_fork(p);
-  2121		if (p->flags & PF_KTHREAD) {
-  2122			if (!set_kthread_struct(p))
-> 2123				goto bad_fork_cleanup_threadgroup_lock;
-  2124		}
-  2125	#ifdef CONFIG_NUMA
-  2126		p->mempolicy = mpol_dup(p->mempolicy);
-  2127		if (IS_ERR(p->mempolicy)) {
-  2128			retval = PTR_ERR(p->mempolicy);
-  2129			p->mempolicy = NULL;
-  2130			goto bad_fork_cleanup_threadgroup_lock;
-  2131		}
-  2132	#endif
-  2133	#ifdef CONFIG_CPUSETS
-  2134		p->cpuset_mem_spread_rotor = NUMA_NO_NODE;
-  2135		p->cpuset_slab_spread_rotor = NUMA_NO_NODE;
-  2136		seqcount_spinlock_init(&p->mems_allowed_seq, &p->alloc_lock);
-  2137	#endif
-  2138	#ifdef CONFIG_TRACE_IRQFLAGS
-  2139		memset(&p->irqtrace, 0, sizeof(p->irqtrace));
-  2140		p->irqtrace.hardirq_disable_ip	= _THIS_IP_;
-  2141		p->irqtrace.softirq_enable_ip	= _THIS_IP_;
-  2142		p->softirqs_enabled		= 1;
-  2143		p->softirq_context		= 0;
-  2144	#endif
-  2145	
-  2146		p->pagefault_disabled = 0;
-  2147	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+With best wishes
+Dmitry

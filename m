@@ -2,233 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8199474CAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAD4474CB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237656AbhLNUdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 15:33:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
+        id S237663AbhLNUhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 15:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237649AbhLNUdM (ORCPT
+        with ESMTP id S234688AbhLNUhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 15:33:12 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB767C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 12:33:12 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id c3so26424671iob.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 12:33:12 -0800 (PST)
+        Tue, 14 Dec 2021 15:37:40 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A477C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 12:37:39 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id b40so39083577lfv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 12:37:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tJCqhOmZZA6x2NlKj8akS4dVZNVrCbm+0Yq/kMqKdow=;
-        b=hH2rQd48l1mVfYCj+XALrKV2SuTVaWHs4IUpdeDi/R+oZyNmbwVN9IYjZLS3KgCQvm
-         cRzLKJZ1JPWGiS+6+0hWJaJdMnaPR+uisR8Il5jd0Ck2qoanp65JRNwX5J1NBmFa2wop
-         tKYd1+xti/eqRTRx2jibSUyip1JWnDbJHc7lkI09eDjX6FibgEmFTVpktUgkTMBIbTG5
-         VJbI2RORkSSq8BKQzgTGugeW7LE2imvZTN2ubMhVeFp1B65BP2ycpaJBFNtUHLawxLUf
-         BvwjcVojnVjtLl+yvWwi5hOxOEWS+xtlSzeAvRZoQKLiC0FvDfmjhuzkOOfuUXq2GaAB
-         Kpxw==
+        bh=rjQbYZg8144iiip1tDYRKwr2CkrjM2gUKNnhrsXHc3k=;
+        b=pHi5A4/pju7+fEjLEURE3x/9YPiQ8cr+Fn8JARy+UxgdsrspFZFeswhb0HSOXv0pdH
+         rQuU3ofhNHdH3yaBwuwgBclDM2PMX37gMYXyN6Za6rDc/5CncCLnaN5ncYP+CXzgQ+3O
+         6Y1ZUqLqd4KtPnq/XwRudfhwvLDCqFVwE1pB2MxRhMjSHTL4IM/S+KQbh/xpOmygQVeK
+         VtBhwNjHAJgJgvGuewpnW2yBe8vwOI0KjdovQJX1COvMB2rAUXR14kdQpM+3U1lU+80s
+         tDNo+zK7bB3WiPvDoYU75d4fyXPJWZUD/taS4w19QVjzRTh1J/CszTfdqVQEStoRZOdz
+         kviA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tJCqhOmZZA6x2NlKj8akS4dVZNVrCbm+0Yq/kMqKdow=;
-        b=BLvfLAW2mh5CsCknalxql3GrLfDj1bYJFilHTuT5y+5MCofSGZ5Ei3Bhkhkm2iDBTA
-         yO0ZFbKCUWlagaOJjy6QtJPIqOYGxUvMtk1RpZfZpVS0tjT5VuNeLTfZ6hIMNIfmNpAF
-         lHStqjc88wJEepQeHzI+SQWR8AjgS+gaG9pzhp0kIw6IXQZ9ko+j3DJ4Jc/uKwL2LY5j
-         /m2OPCoaR+Z1f85kMCma9/cfGjxZEmpqZSZWwVscmUNFENGi1Y+76zSUDwQAN7cZkHdz
-         Q3wUL5+kxdaKDdNgNU7k62B23aZ0W6mFizdLUNEIcp8wXIZDOignofIq6G4d7a3eHzHQ
-         BDNg==
-X-Gm-Message-State: AOAM531BjPHRBmnaqCp4RMB/d9zvrvXrUuGapv4soMm5M9XoyJavK20R
-        jCREMo2n/6YP5f9wGdgrWZRCe9BTZdQzGR0iZ4eO3g==
-X-Google-Smtp-Source: ABdhPJyscJO8kfABWRq8D9hgRijq87/xLsIk9oMvf0+rWFTPFg0LobXGZV9CWifvSLU8g7uPwaumaJw7xsOhL45GsZY=
-X-Received: by 2002:a02:7fc3:: with SMTP id r186mr4377243jac.522.1639513991710;
- Tue, 14 Dec 2021 12:33:11 -0800 (PST)
+        bh=rjQbYZg8144iiip1tDYRKwr2CkrjM2gUKNnhrsXHc3k=;
+        b=rV7gxxAhbb+5oUQXb+b8ls/YUU6ngPYu+uh/SruQGFpVnuttu/aowIglJuqRC3mmMP
+         fB8e5s4vOv2CNZxBvnBXxC1GlftQvE3w0SubXdp29Gxa9/XQV0kW3VUbDPiyPHD+IglN
+         UkA3aV+Uki9b9pDhLWk7Xe4g4bS2rIOrkYslL/aLGBeLM7quhZmoqvaWrFjIBgkWbLO0
+         DnRz+c9ZQaUZtvFlxkEdqeoJFi3F4d7AgmHUZ01+gfhCUP5P4lNV7QnmdVegWiVk8dPZ
+         1F15seBLx8kmSjNzE70yPdvt6DaUcrr5fPCBqTFhbRbFU8pbsGl+XwEpevVoBtEc3gEy
+         g6KQ==
+X-Gm-Message-State: AOAM530yTD+JbWpR+l9PkXyoFAbpfW5U/LgHd0THWv0c52W/jKTnokuD
+        qFbounmZc3hwkD5L+wlfgGSEJsFqphkntZftuDbFkQ==
+X-Google-Smtp-Source: ABdhPJyyeNuwTAyrLnEyLCFCzpP8lh05uAdQDCf/Oea93kQ9DAout+5VOBH+u9xReGe8d4Q8RVZT8yy69+6PAvVLFdw=
+X-Received: by 2002:ac2:5607:: with SMTP id v7mr6855211lfd.71.1639514257788;
+ Tue, 14 Dec 2021 12:37:37 -0800 (PST)
 MIME-Version: 1.0
-References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
- <20211214184240.24215-1-andrew.kilroy@arm.com> <20211214184240.24215-2-andrew.kilroy@arm.com>
-In-Reply-To: <20211214184240.24215-2-andrew.kilroy@arm.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 14 Dec 2021 12:32:58 -0800
-Message-ID: <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
-To:     Andrew Kilroy <andrew.kilroy@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
+References: <3dd2473a-00ca-4c62-e17f-9392cf74cda4@intel.com> <20211214113653.4631-1-pshete@nvidia.com>
+In-Reply-To: <20211214113653.4631-1-pshete@nvidia.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 14 Dec 2021 21:37:01 +0100
+Message-ID: <CAPDyKFq1NMXrMw0Dn6T7-0J1C4QdNoi4dUfnB5=zMQKeyQoAdQ@mail.gmail.com>
+Subject: Re: [PATCH v4] mmc: sdhci-tegra: Fix switch to HS400ES mode
+To:     Prathamesh Shete <pshete@nvidia.com>
+Cc:     adrian.hunter@intel.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, p.zabel@pengutronix.de,
+        linux-mmc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, anrao@nvidia.com,
+        smangipudi@nvidia.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 10:43 AM Andrew Kilroy <andrew.kilroy@arm.com> wrote:
+On Tue, 14 Dec 2021 at 12:36, Prathamesh Shete <pshete@nvidia.com> wrote:
 >
-> This patch implements the --topdown option by making use of metrics to
-> dictate what counters are obtained in order to show the various topdown
-> columns, e.g.  Frontend Bound, Backend Bound, Retiring and Bad
-> Speculation.
+> When CMD13 is sent after switching to HS400ES mode, the bus
+> is operating at either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
+> To meet Tegra SDHCI requirement at HS400ES mode, force SDHCI
+> interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
+> controller CAR clock and the interface clock are rate matched.
 >
-> The MetricGroup name is used to identify which set of metrics are to be
-> shown.  For the moment use TopDownL1 and enable for arm64
->
-> Signed-off-by: Andrew Kilroy <andrew.kilroy@arm.com>
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+
+Applied for fixes and by adding a fixes and a stable tag, thanks!
+
+Fixes: dfc9700cef77 ("mmc: tegra: Implement HS400 enhanced strobe")
+
+Kind regards
+Uffe
+
+
 > ---
->  tools/perf/arch/arm64/util/Build     |  1 +
->  tools/perf/arch/arm64/util/topdown.c |  8 ++++++++
->  tools/perf/builtin-stat.c            | 13 +++++++++++++
->  tools/perf/util/metricgroup.c        | 12 ++++++++++++
->  tools/perf/util/metricgroup.h        |  7 +++++++
->  tools/perf/util/topdown.c            |  6 ++++++
->  tools/perf/util/topdown.h            |  1 +
->  7 files changed, 48 insertions(+)
->  create mode 100644 tools/perf/arch/arm64/util/topdown.c
+>  drivers/mmc/host/sdhci-tegra.c | 43 ++++++++++++++++++++--------------
+>  1 file changed, 26 insertions(+), 17 deletions(-)
 >
-> diff --git a/tools/perf/arch/arm64/util/Build b/tools/perf/arch/arm64/util/Build
-> index 9fcb4e68add9..9807aed981cd 100644
-> --- a/tools/perf/arch/arm64/util/Build
-> +++ b/tools/perf/arch/arm64/util/Build
-> @@ -4,6 +4,7 @@ perf-y += perf_regs.o
->  perf-y += tsc.o
->  perf-y += pmu.o
->  perf-y += kvm-stat.o
-> +perf-y += topdown.o
->  perf-$(CONFIG_DWARF)     += dwarf-regs.o
->  perf-$(CONFIG_LOCAL_LIBUNWIND) += unwind-libunwind.o
->  perf-$(CONFIG_LIBDW_DWARF_UNWIND) += unwind-libdw.o
-> diff --git a/tools/perf/arch/arm64/util/topdown.c b/tools/perf/arch/arm64/util/topdown.c
-> new file mode 100644
-> index 000000000000..a2b1f9c01148
-> --- /dev/null
-> +++ b/tools/perf/arch/arm64/util/topdown.c
-> @@ -0,0 +1,8 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <topdown.h>
-> +
-> +
-> +bool arch_topdown_use_json_metrics(void)
-> +{
-> +       return true;
-> +}
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index f6ca2b054c5b..08ef80ef345e 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -1856,6 +1856,18 @@ static int add_default_attributes(void)
->                 if (!force_metric_only)
->                         stat_config.metric_only = true;
->
-> +               if (arch_topdown_use_json_metrics()) {
-> +                       if (metricgroup__parse_groups_to_evlist(evsel_list, "TopDownL1",
-> +                                                               stat_config.metric_no_group,
-> +                                                               stat_config.metric_no_merge,
-> +                                                               &stat_config.metric_events) < 0) {
-> +                               pr_err("Could not form list of metrics for topdown\n");
-> +                               return -1;
-> +                       }
-> +
-> +                       goto end_of_topdown_setup;
-> +               }
-> +
->                 if (pmu_have_event("cpu", topdown_metric_L2_attrs[5])) {
->                         metric_attrs = topdown_metric_L2_attrs;
->                         max_level = 2;
-> @@ -1919,6 +1931,7 @@ static int add_default_attributes(void)
->                         fprintf(stderr, "System does not support topdown\n");
->                         return -1;
->                 }
-> +end_of_topdown_setup:
->                 free(str);
+> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
+> index 387ce9cdbd7c..7be6674eebd5 100644
+> --- a/drivers/mmc/host/sdhci-tegra.c
+> +++ b/drivers/mmc/host/sdhci-tegra.c
+> @@ -354,23 +354,6 @@ static void tegra_sdhci_set_tap(struct sdhci_host *host, unsigned int tap)
 >         }
->
-> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-> index 51c99cb08abf..9b0394372096 100644
-> --- a/tools/perf/util/metricgroup.c
-> +++ b/tools/perf/util/metricgroup.c
-> @@ -1535,6 +1535,18 @@ int metricgroup__parse_groups(const struct option *opt,
->                             metric_no_merge, NULL, metric_events, map);
 >  }
 >
-> +int metricgroup__parse_groups_to_evlist(struct evlist *perf_evlist,
-> +                                       const char *str,
-> +                                       bool metric_no_group,
-> +                                       bool metric_no_merge,
-> +                                       struct rblist *metric_events)
-> +{
-> +       const struct pmu_events_map *map = pmu_events_map__find();
-> +
-> +       return parse_groups(perf_evlist, str, metric_no_group,
-> +                           metric_no_merge, NULL, metric_events, map);
-> +}
-> +
->  int metricgroup__parse_groups_test(struct evlist *evlist,
->                                    const struct pmu_events_map *map,
->                                    const char *str,
-> diff --git a/tools/perf/util/metricgroup.h b/tools/perf/util/metricgroup.h
-> index 2b42b778d1bf..1f143ad1d9e1 100644
-> --- a/tools/perf/util/metricgroup.h
-> +++ b/tools/perf/util/metricgroup.h
-> @@ -70,6 +70,13 @@ int metricgroup__parse_groups(const struct option *opt,
->                               bool metric_no_group,
->                               bool metric_no_merge,
->                               struct rblist *metric_events);
-> +
-> +int metricgroup__parse_groups_to_evlist(struct evlist *perf_evlist,
-> +                                       const char *str,
-> +                                       bool metric_no_group,
-> +                                       bool metric_no_merge,
-> +                                       struct rblist *metric_events);
-> +
->  const struct pmu_event *metricgroup__find_metric(const char *metric,
->                                                  const struct pmu_events_map *map);
->  int metricgroup__parse_groups_test(struct evlist *evlist,
-> diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
-> index 1081b20f9891..57c0c5f2c6bd 100644
-> --- a/tools/perf/util/topdown.c
-> +++ b/tools/perf/util/topdown.c
-> @@ -56,3 +56,9 @@ __weak bool arch_topdown_sample_read(struct evsel *leader __maybe_unused)
+> -static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
+> -                                             struct mmc_ios *ios)
+> -{
+> -       struct sdhci_host *host = mmc_priv(mmc);
+> -       u32 val;
+> -
+> -       val = sdhci_readl(host, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> -
+> -       if (ios->enhanced_strobe)
+> -               val |= SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> -       else
+> -               val &= ~SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> -
+> -       sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> -
+> -}
+> -
+>  static void tegra_sdhci_reset(struct sdhci_host *host, u8 mask)
 >  {
->         return false;
+>         struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> @@ -791,6 +774,32 @@ static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
+>         }
 >  }
-> +
-> +__weak bool arch_topdown_use_json_metrics(void)
+>
+> +static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
+> +                                             struct mmc_ios *ios)
 > +{
-
-I like this extension! I've ranted in the past about weak symbols
-breaking with archives due to lazy loading [1]. In this case
-tools/perf/arch/arm64/util/topdown.c has no other symbols within it
-and so the weak symbol has an extra chance of being linked
-incorrectly. We could add a new command line of --topdown-json to
-avoid this, but there seems little difference in doing this over just
-doing '-M TopDownL1'. Is it possible to use the json metric approach
-for when the CPU version fails?
-
-Thanks,
-Ian
-
-[1] https://lore.kernel.org/lkml/CAP-5=fVS2AwZ9bP4BjF9GDcZqmw5fwUZ6OGXdgMnFj3w_2OTaw@mail.gmail.com/
-
-> +       return false;
+> +       struct sdhci_host *host = mmc_priv(mmc);
+> +       u32 val;
+> +
+> +       val = sdhci_readl(host, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> +
+> +       if (ios->enhanced_strobe) {
+> +               val |= SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> +               /*
+> +                * When CMD13 is sent from mmc_select_hs400es() after
+> +                * switching to HS400ES mode, the bus is operating at
+> +                * either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
+> +                * To meet Tegra SDHCI requirement at HS400ES mode, force SDHCI
+> +                * interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
+> +                * controller CAR clock and the interface clock are rate matched.
+> +                */
+> +               tegra_sdhci_set_clock(host, MMC_HS200_MAX_DTR);
+> +       } else {
+> +               val &= ~SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> +       }
+> +
+> +       sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
 > +}
 > +
-> diff --git a/tools/perf/util/topdown.h b/tools/perf/util/topdown.h
-> index 2f0d0b887639..0a5275a3f078 100644
-> --- a/tools/perf/util/topdown.h
-> +++ b/tools/perf/util/topdown.h
-> @@ -6,6 +6,7 @@
->  bool arch_topdown_check_group(bool *warn);
->  void arch_topdown_group_warn(void);
->  bool arch_topdown_sample_read(struct evsel *leader);
-> +bool arch_topdown_use_json_metrics(void);
->
->  int topdown_filter_events(const char **attr, char **str, bool use_group);
->
+>  static unsigned int tegra_sdhci_get_max_clock(struct sdhci_host *host)
+>  {
+>         struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
 > --
 > 2.17.1
 >

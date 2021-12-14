@@ -2,116 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D86DD473DF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B48473DF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbhLNIHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:07:30 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15494 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229494AbhLNIH1 (ORCPT
+        id S231730AbhLNIHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:07:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:32914 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231713AbhLNIHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:07:27 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BE7OGEd026971;
-        Tue, 14 Dec 2021 08:07:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=Rw/RSbaZ9R8PhgYkldknpdlNAwQ6MY5+0neDWly7nJM=;
- b=R7Q5QjZAAdUc5IA03RR/N8WbuoIRl6Yw4rPh8W9N6aZLz4xC58S10iekihkZ6pqocheL
- rtdkeVF2qNW0CHHI23ZvciSvPvGh+SMrgcZc7KPMhJ7vjqCB4INI9EIyPvyTYq8LP6Jh
- 5NXj3Bsw7LxmCDko9t7rDD4wsJ3i1e1u20jgmhwdncVAOJhryCdHZYAmQ8Up0Tt7WWUP
- c8cP7jAyMP2CBs2qC1RI7Qk1m4wcaElDPnU7ZeyOTzLdagvu3IB9WMSbsBkTpSh+CIgJ
- ym68lmXmNUirytCnWcce6dd9zIfbL4nO4Xl1aL0ZRYVgpz8FBUYkmt2WKe37n2ktkhIi yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx9ra441b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 08:07:16 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BE7tVx6029106;
-        Tue, 14 Dec 2021 08:07:16 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx9ra440m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 08:07:16 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BE7wAGZ007779;
-        Tue, 14 Dec 2021 08:07:14 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3cvk8hv0ya-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 08:07:14 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BE87CLO43843902
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Dec 2021 08:07:12 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 290234C04E;
-        Tue, 14 Dec 2021 08:07:12 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1D274C044;
-        Tue, 14 Dec 2021 08:07:10 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.195.34.55])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Dec 2021 08:07:10 +0000 (GMT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH] KVM: PPC: Book3S HV P9: Use kvm_arch_vcpu_get_wait() to
- get rcuwait object
-From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
-In-Reply-To: <20211213174556.3871157-1-seanjc@google.com>
-Date:   Tue, 14 Dec 2021 13:37:09 +0530
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6D5BB54E-442E-4097-932B-7E0AC949D47C@linux.vnet.ibm.com>
-References: <20211213174556.3871157-1-seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BGV6Wr3SFJP4GFYL8xA4dqnOBxrxuYeK
-X-Proofpoint-ORIG-GUID: KrXLSQwq0bBiSCDVbdBAeqysPFUe4fEt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-14_02,2021-12-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 suspectscore=0
- clxscore=1015 phishscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112140046
+        Tue, 14 Dec 2021 03:07:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3366C6134F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:07:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C605DC34601;
+        Tue, 14 Dec 2021 08:07:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639469251;
+        bh=XXkC7Q2463t2WWEDTlpY2qHzCT5oxbEAcAHkYIsIJCw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SKCDg9xsvVwwaMjNV5RKcE8ymsUACZDQ4m3L7WPyRz9Cf6I1lun3XOLpHAvxRDS/Q
+         MnBAlht15jndsb79Rge+SxKMABsgQ9MH/fKFHZ/5BtxLCxtqyqdzLNO5KiflWl8qL2
+         5EeLc7nslTY+vS8Y7YIHLHOZ4/1sX7gEsU4G4GfDOK5+HxJHErhqGCp7raXW3n0Geg
+         dXT2i5YU/64GIVB+a++uzM3R6CK8EgXQua0qI4ZRRzuwo5ormibU4ZWzd8tR7dsTPk
+         QLw3IwratBSgQ/dkzVSTyS8fpqs58UxVkJlblCipMokN5ZTEWaqij2/pXkcd8Xy1W1
+         zkK1oJHkNuW2A==
+Date:   Tue, 14 Dec 2021 16:07:26 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ashish Kumar <Ashish.Kumar@nxp.com>
+Subject: Re: [PATCH 1/2] arm64: dts: ls1088a: Add reboot nodes
+Message-ID: <20211214080725.GA14056@dragon>
+References: <20211204011537.8963-1-leoyang.li@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211204011537.8963-1-leoyang.li@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 03, 2021 at 07:15:36PM -0600, Li Yang wrote:
+> ls1088a has a separate reset register block.  Define it in dts and use
+> it for reboot.
+> 
+> Signed-off-by: Ashish Kumar <Ashish.Kumar@nxp.com>
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
 
-
-> On 13-Dec-2021, at 11:15 PM, Sean Christopherson <seanjc@google.com> =
-wrote:
->=20
-> Use kvm_arch_vcpu_get_wait() to get a vCPU's rcuwait object instead of
-> using vcpu->wait directly in kvmhv_run_single_vcpu().  Functionally, =
-this
-> is a nop as vcpu->arch.waitp is guaranteed to point at vcpu->wait.  =
-But
-> that is not obvious at first glance, and a future change coming in via
-> the KVM tree, commit 510958e99721 ("KVM: Force PPC to define its own
-> rcuwait object"), will hide vcpu->wait from architectures that define
-> __KVM_HAVE_ARCH_WQP to prevent generic KVM from attepting to wake a =
-vCPU
-> with the wrong rcuwait object.
->=20
-> Reported-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> =E2=80=94
->=20
-Thanks for the patch.
-
-Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-
+Applied both, thanks!

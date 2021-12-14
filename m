@@ -2,135 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0AB47425E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E836474260
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbhLNMT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:19:59 -0500
-Received: from mail-eopbgr1300109.outbound.protection.outlook.com ([40.107.130.109]:41616
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232035AbhLNMT6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:19:58 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iLt3hDdaWu1mJEYBCbwhhr37uRHeXTvQ9cDUZ3gepeif7EcaFEp6UFm5t1PkRV8lJKwL6kfTto7/81BOnGLusXhz513k8zeIRXXhg3YE29cmD1R7rQq9C1RwVATId1JqD2W+v0/FRoVEqfK6C/u1S1U6ZfY5tWjK/L89cOy8hgOVdqjJIsmaqMPKqARzfSCA2jOiCb0fpz2/BkkmtYM3KnwQ1+Ot3ieSQXWbHVd51Hjx3SLEY3bj6oLFQx2v7Tcpn6xxXVe6V7At9nSz68zhRTeh0Cwi0AtBpl66xmPNhHLqOLMsJwyqhqQnunMqSiUaAzFy4jrPmXgV0z2E7ZkZFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7X/n/Mz1DCKovD3uqTcqXURC7EQ6OmJLTdaFEh6MlHI=;
- b=Kia8UYHOhs13aDn/WpfoYQSEP0QZT+9T3MoCDmpjPzJcMsKWT5Rk0Fq/0JMvJUpStfEQaDZBW5buMOpXis+xX5QHhLWEnWHbVQ4yBd3lgRlrjvndraacjt6lOhcJdTa9UVgT5wJ9w/dSnTCszAagmgdD9gy1YKxwyEfWjyBNRyhm5T4dXWLRZot5R1bXhPA7IPoHIfwSb03wm6gsmIl+GSuGCOnIcpz9ylivf8KROecXHcWboW5UTJlnCJske0qN2Q5UvwXa8gLIZRQ5v7NJSufVslIbbAuC1c4be8iCNO/Gg68AWKv8DPXwX9FXFciwub8FrDdvr1a9itXgMcu3+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7X/n/Mz1DCKovD3uqTcqXURC7EQ6OmJLTdaFEh6MlHI=;
- b=iRLKt9BUAG+gKQEIdbN23Fa+59XbGFG3fzVa07p+LAYqGtfm2/RY2HHv4mzNxMjlrIx1bq8tR6ORu+aUXJu1N+8dkXVJZyT8CxeuP1BWvWNXq4DPvfIXM7V6Jk7UHda6nWorVW14MObMICO7a0Mkiec+WpN8+wAMJrwB4yKgke0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by SL2PR06MB3084.apcprd06.prod.outlook.com (2603:1096:100:32::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Tue, 14 Dec
- 2021 12:19:55 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::a0cf:a0e2:ee48:a396]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::a0cf:a0e2:ee48:a396%4]) with mapi id 15.20.4778.018; Tue, 14 Dec 2021
- 12:19:55 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Gilles Muller <Gilles.Muller@inria.fr>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Michal Marek <michal.lkml@markovi.net>, cocci@systeme.lip6.fr,
+        id S231994AbhLNMU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229791AbhLNMU2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 07:20:28 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC90BC061574;
+        Tue, 14 Dec 2021 04:20:27 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id b7so3115455edd.6;
+        Tue, 14 Dec 2021 04:20:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WcN8wDlG5PNay+ZlgpN4uIRDkjwlYVcGaRqvE1MmS3g=;
+        b=mrdKHVAa1KRct2FPvnrBu686J731EvXOUonV3JGeThWXyHZc2UDo8hCEcNvid1mggh
+         r0bHGEQ+oqjhLzWJSP4xettUtQ+v/MUPMm8ax28kU7SgUuXJUxOVpTMaLe/Vc1nCq6x6
+         jNeKNHpIi7Mzsjp2U+2vqKA57NPMnug+EN4rSxJjhgPdFgNdrE180r2m5F/b9UqM16ss
+         mFERey1jZUKkC1EFJCh5yzfJK3aouxbV3jAsOID5FYSXLEbd7TIGcOFgG8CMBLtZuBzf
+         e5p6M0FX3sNDz1PrXTaNRRlsuFJ3B7DWwI5q+Hqhkc6NYwdw9C6bIcojRIC77Ry0IciD
+         yfaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WcN8wDlG5PNay+ZlgpN4uIRDkjwlYVcGaRqvE1MmS3g=;
+        b=GS2m/Yn4WWDemxqH14LK2trQwbl7kyCJEs+OSDBYN2FufDqdjzJoIqmUzh+DqrSaZf
+         O09LAg8rsVwq4FrTMJ2cbwEnvpUj4ByTlR2tSkmqcmEaQ2FmnxnaJQNAn/XMKBrmAjFe
+         AfN+h145xpuiSYYVFYKXHyUwicq6lcVqrzst+ZZyX4ATlfGY4i/zRk1jbQUsQW4NW0/I
+         Ls0x3vvgCOD5exSAj5mTFgY1hKls9w1v/tPUSIuNIt8eBWYK/QQYE4FMr2Ws5IcL74Zk
+         S8ClhIL/027KObq3elZDfVGx+7f5Nzwgt2+btsHve+C/p0j2cNWrdRslqsfcYob7vZEE
+         XmHg==
+X-Gm-Message-State: AOAM533scJ6s+kLmPrPtq5oYNFCJS7ILK3pCa0j+mPcA/Jp8GRQ4clZ0
+        jwp8+XH7QjrWnggtqHqdyHEoH6uSYAGMYg==
+X-Google-Smtp-Source: ABdhPJyWDLpF+j0qspecZPM6JE+sBXgyNO/mc0jWbHN67DGTiXCSfqro2mnjM6wKAK07hf4jYJWh6w==
+X-Received: by 2002:a17:906:3408:: with SMTP id c8mr5423009ejb.41.1639484426442;
+        Tue, 14 Dec 2021 04:20:26 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id e4sm1003501ejl.196.2021.12.14.04.20.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Dec 2021 04:20:26 -0800 (PST)
+Subject: Re: [RFC PATCH v4 2/4] dt-bindings: phy: rockchip: Add Naneng combo
+ PHY bindings
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     heiko@sntech.de, robh+dt@kernel.org, kishon@ti.com,
+        p.zabel@pengutronix.de, yifeng.zhao@rock-chips.com,
+        kever.yang@rock-chips.com, cl@rock-chips.com,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] coccinelle: adjust the confidence of uninitialized_var.cocci
-Date:   Tue, 14 Dec 2021 04:19:47 -0800
-Message-Id: <1639484387-76107-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR04CA0063.apcprd04.prod.outlook.com
- (2603:1096:202:14::31) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+References: <20211208185449.16763-1-jbx6244@gmail.com>
+ <20211208185449.16763-3-jbx6244@gmail.com> <Ybhc0VW6JeJ4CNY9@matsya>
+From:   Johan Jonker <jbx6244@gmail.com>
+Message-ID: <2aef2271-6667-f6bf-0d7d-399b8ec450bf@gmail.com>
+Date:   Tue, 14 Dec 2021 13:20:24 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7b0366b7-745b-47d2-161e-08d9befc099a
-X-MS-TrafficTypeDiagnostic: SL2PR06MB3084:EE_
-X-Microsoft-Antispam-PRVS: <SL2PR06MB3084ABC3C2C819083399A6B7BD759@SL2PR06MB3084.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2657;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rqrwsxNO0KvKWNMnqXqYDWMlsE7k9QizfXkPCxDGdfboTdwsRi16VML6jWMMn3mCuwNSmDHUG2MVM5it9Hkx1DxD79KPXaA39AHKsjntXwgOQLPSGzTE+C6xO7O3CJ2ulEXSyyLdme/dGfj5TYZYGFBOvWLHqoOeas5lDE/YTmAB7hHpurPWatL/QcfqkQDodAbfqKYalAasKf01P0QQue0rBCtEumLkqALWjA8wjvNpr7HdYdeWdFuSo0O9UC8I2jjlwgrmp6lE+eqVkQtlJMLSk99mrHWUKijPyB/FXktRrHaMeppfGHfIii1IZgpVrI7T6w7mzdFJyS5FiT1sh/RyO4fxy113ZzZsyU9V0SPtLZIYX7wMB0+dJtF0oLe/NEK9g3OWwaAzb0rM3U0n5WoDfJP7HOnAt/6t5PSt/a0uPmrtWJiVOiWd4DRBizMdSd04qDqiHc+Qkmwejssf9hCHdwrZGkQPxQsPhOmC9Xif89zAhjEMYtLgfmje48b8kPhy72ggrwaijVHKRQ0HyP8Xc1N6lIxuE0YIjwqBwsl3nrJnDJEooI4kuLTkDvvcNecfOVN2v7+C8IhiqIYA/+RKCXyq0FZFSpOBKNsehrynIPb/950YG6O8ctOth4e4pIDsoYOZsIR/nG+wajNJsV+pwjJjnROr53BwjiFznvo2xglV6VDDUEtLJIClPzNnyc+hfZ3dd464BjCNuNPT7w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(107886003)(4326008)(316002)(186003)(6666004)(8936002)(2616005)(66946007)(66556008)(66476007)(6486002)(83380400001)(26005)(508600001)(5660300002)(6512007)(86362001)(4744005)(52116002)(36756003)(6506007)(38350700002)(38100700002)(110136005)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8MX58LH+lm0Vc7EyvLK3t0ltyKnhewlwkr2sE2w/VpqsAEmVY0QXja+2Tta/?=
- =?us-ascii?Q?AReEDHeBIfDnR/GHYZ3gsMDXK1/fHTJgMUfviNgsi6vpUWcMFyITjNwg1T3K?=
- =?us-ascii?Q?nrVmnpq6GOSWfXlncG8wF9+XmQ88e7KG2Q5ppRUrRWeo92DrDUf/ZAp0M+U5?=
- =?us-ascii?Q?g+k+/UEqlJ6DsG/WtTdE/bAKe2AKDAbfaFxuUSk4QhxhGqYQkIQ6kjWsQWNq?=
- =?us-ascii?Q?heaxyElHHZW31CsGnliZT0w6QssUZgzsgpi+EmMQKkGj/zQ9M3g8C0qfuAMk?=
- =?us-ascii?Q?bZxYrxifWMVqBG6Oyx8Oi8i1tOq8GomyXdHxuoweL4mw6So/YOpewXXN5XbT?=
- =?us-ascii?Q?m3fhBAq95RuFsG6zC4Y/E+Z/uKtmQ/DRyphujmiV3kBuNEMIMY3gkV3cqSXw?=
- =?us-ascii?Q?K9/iUvzQc5DNwKGerh8zAF3a7nLfUSUPt6sOSzUVIdiShJNY+IOTH6i8M8cA?=
- =?us-ascii?Q?ffnobxPSYFGp5ReQ6Bs5E9CmIi2feytraJe58gGk9AKz7E5EDyxF7+TBH0xA?=
- =?us-ascii?Q?p0MihbxLbOomIv2l8W/7YkMjlyVj0oGCyfp8tPbPNFQfxSS9ezy9p3RTVyH+?=
- =?us-ascii?Q?AMSUjQo/vmegYiQUxZ4lq+QuXW2Ur798NbOzUwO2NUSu43l6OGiQKQyQaHGe?=
- =?us-ascii?Q?Ki5Mk8gMp5uczkeXKLZ2pDdQCprxVbnqrTJA8ocFine0IaIsyiSQci2yIbPW?=
- =?us-ascii?Q?ElZ6iEcLE5Bdz4INurqyw4RvQxi6WPZeHkaHcSFo7fjFGLij9WqMC67i2J3F?=
- =?us-ascii?Q?IGqcY2wNNoc6be6G/9NQuLtJPwii3N15qHyxojikk73L8QgUOP0u9Lho5bL0?=
- =?us-ascii?Q?sVdl0wTb3aa5vtXRYGj1OZqndXX0R4vxc0KBUpdLlZ8JZBvoZ6OriUAFO/YA?=
- =?us-ascii?Q?D3fy6x498fcSBpmeng7gSF/mzG0UnxIHc6Ka3DZebWiDjnaYbJUSD5gXEWO5?=
- =?us-ascii?Q?VvLKpUQx6QZrizRDsQpfz4VBz6Eq4+DjeuqFY9P93UQi6BOmG5v5qgjc+iax?=
- =?us-ascii?Q?4BSURUybLWY/32VBgZqMZBmBxe4Tfi9fq2D/3LC0wsoKxw3Wg9AoECgOA55V?=
- =?us-ascii?Q?QwBrcNXOukaW2Vhep/FXNjih63KeToIZlyi0am3hMt1i5otVqtu3qn4VmNnO?=
- =?us-ascii?Q?b1Nh/I/W3jKbAXg95TMpIoG01Dk1u/ZU0iHIKn08yV1UXGe0xEjPdYvCEjlI?=
- =?us-ascii?Q?bUZo6lajTjonw/5RY+PTY6VhhFELrFOFID/3lyKq6N2/Zua09WBKZGE+LRv+?=
- =?us-ascii?Q?T64uKiCXYc/pe2SisRLOsWWGr3IWhRJKPS8b+xcdfUtq8kf83VXL/N4daAPx?=
- =?us-ascii?Q?jOaRo5k9huRfZUUYt38jsdhcJepnMDeL6JJNl4LtVj7pfu/g3QFx/nWrYE2H?=
- =?us-ascii?Q?HNiYeTKVZNuTCbRoZhwGiajaXJC+zOTrO5ZJ/8NaRSEpaCEoGQkbDkziTRmw?=
- =?us-ascii?Q?JkDDp8a4W/+o1izZNIip+u8IA3ekHIeF1iWZzh1KV34XnZlJjmbMHQuiVRjT?=
- =?us-ascii?Q?0OxSJpp47jppVp2KMUN4qNPh9m7HdxA76H85Vu8D9jl52teEo9gB2b0Lkmw6?=
- =?us-ascii?Q?/A4JmgSnRjmkFzyvyvHAiJ44ZK4XDIRZ5tMcub/Us5Ji2Bbg9Up5+dOUBLrL?=
- =?us-ascii?Q?+UUYNn6nxa1qkV3PM0vnovU=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b0366b7-745b-47d2-161e-08d9befc099a
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 12:19:55.4223
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I/1bsWcaV2R3C3aqR8gC84AhyEj3M6v3TbVUtaoKwcxZ/z9p3IRuAXWt04K99F/mZ6sJ1ApF4VdbbhC3CnRWTg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR06MB3084
+In-Reply-To: <Ybhc0VW6JeJ4CNY9@matsya>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+Hi,
 
-Since uninitialized_var() was removed, this cocci should reset its 
-confidence to low.
+On 12/14/21 9:58 AM, Vinod Koul wrote:
+> On 08-12-21, 19:54, Johan Jonker wrote:
+>> From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+>>
+>> Add the compatible strings for the Naneng combo PHY found on rockchip SoC.
+> 
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- scripts/coccinelle/misc/uninitialized_var.cocci | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Why is this series still tagged RFC..?
 
-diff --git a/scripts/coccinelle/misc/uninitialized_var.cocci b/scripts/coccinelle/misc/uninitialized_var.cocci
-index 69bbaae..79e02e3
---- a/scripts/coccinelle/misc/uninitialized_var.cocci
-+++ b/scripts/coccinelle/misc/uninitialized_var.cocci
-@@ -18,7 +18,7 @@
- /// this kind were cleaned-up from the kernel. This cocci rule checks that
- /// the macro is not explicitly or implicitly reintroduced.
- ///
--// Confidence: High
-+// Confidence: Low
- // Copyright: (C) 2020 Denis Efremov ISPRAS
- // Options: --no-includes --include-headers
- //
--- 
-2.7.4
+The phy DT nodes are urgent in need for other USB3, SATA and PCIe follow
+up series. When the author doesn't respond for some time I can kick the
+can a bit if it's for 'little' YAML, C style or DT changes. For larger
+changes it's better to have the hardware tested as well, so I
+carefully/politely marked it RFC as I don't know the author's intentions.
 
+> 
+>>
+>> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+>> ---
+>>
+>> Changed V4:
+>>   restyle
+>>   remove some minItems
+>>   add more properties
+>>   remove reset-names
+>>   move #phy-cells
+>>   add rockchip,rk3568-pipe-grf
+>>   add rockchip,rk3568-pipe-phy-grf
+>> ---
+>>  .../phy/phy-rockchip-naneng-combphy.yaml      | 127 ++++++++++++++++++
+>>  1 file changed, 127 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml b/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
+>> new file mode 100644
+>> index 000000000..d309e2008
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
+>> @@ -0,0 +1,127 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/phy/phy-rockchip-naneng-combphy.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Rockchip SoC Naneng Combo Phy Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Heiko Stuebner <heiko@sntech.de>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - rockchip,rk3568-naneng-combphy
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+
+>> +  clocks:
+>> +    items:
+>> +      - description: reference clock
+>> +      - description: apb clock
+>> +      - description: pipe clock
+> 
+> no maxItems or minItems for this?
+
+Documentation/devicetree/bindings/processed-schema.json
+
+      "clocks": {
+        "items": [
+          {},
+          {},
+          {}
+        ],
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "additionalItems": false
+      },
+
+With 3 items the properties minItems and maxItems are automatically
+added. Only when the number of clocks varies for example between 1 and 3
+one should add minItems.
+
+> 
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: ref
+>> +      - const: apb
+>> +      - const: pipe
+>> +
+>> +  resets:
+>> +    items:
+>> +      - description: exclusive apb reset line
+>> +      - description: exclusive PHY reset line
+> 
+> Ditto?
+> 
+>> +
+
+>> +  rockchip,dis-u3otg0-port:
+>> +    type: boolean
+>> +    description:
+>> +      Disable the u3otg0 port.
+> 
+> why not make it explicit and say rockchip,disable-u3otg0-port
+> 
+> Also why should this port be disabled?
+
+From Rockchip RK3568 Datasheet V1.0-20201210 page 16-17:
+
+Multi-PHY0 support one of the following interfaces
+USB3.0 OTG
+SATA0
+
+Multi-PHY1 support one of the following interfaces
+USB3.0 Host
+SATA1
+QSGMII/SGMII
+
+Multi-PHY2 support one of the following interfaces
+PCIe2.1
+SATA2
+QSGMII/SGMII
+
+===
+
+Rockchip RK3568 TRM Part1 V1.0-20210111
+page 233-234
+
+PIPE_GRF_USB3OTG0_CON1
+Address: Operational Base + offset (0x0104)
+
+usb3otg0_host_u3_port_disable
+USB 3.0 SS Port Disable control.
+1'b0: Port Enabled
+1'b1: Port Disabled
+
+page 235-236
+
+PIPE_GRF_USB3OTG1_CON1
+Address: Operational Base + offset (0x0144)
+
+usb3otg1_host_u3_port_disable
+USB 3.0 SS Port Disable control.
+1'b0: Port Enabled
+1'b1: Port Disabled
+
+===
+
+https://www.cnx-software.com/2020/12/01/rockchip-rk3568-processor-to-power-edge-computing-and-nvr-applications/
+https://eji4evk5kxx.exactdn.com/wp-content/uploads/2020/12/RK3568-multiplexed-sata-usb-3.0-pcie.jpg?lossy=1&ssl=1
+
+===
+
+USB3.0 OTG, USB3.0 HOT, SATA3.0, PCIE2.1, QSGMII are all multiplexed via
+three Serdes lanes.
+The driver in it's current state doesn't keep track of which phy[0-2]
+node it probes I think. Nodes can be probed in random order, so it's not
+able to tell if usb3otg0_host_u3_port_disable or
+usb3otg1_host_u3_port_disable should be used. That why the author
+probably choose to use a property.
+
+Please advise if we need more complex logic, state locking, etc.
+(Any example from the kernel source for that?)
+
+(with more complexity I sould better pass this serie to somebody else)
+
+Johan
+
+
+> 
+>> +
+>> +  rockchip,dis-u3otg1-port:
+>> +    type: boolean
+>> +    description:
+>> +      Disable the u3otg1 port.
+> 
+> ditto
+> 
+>> +
+>> +  rockchip,enable-ssc:
+>> +    type: boolean
+>> +    description:
+>> +      In U3 and SATA mode the SSC option is already disabled by default.
+>> +      In PCIE mode the option SSC can be enabled.
+>> +      If Spread Spectrum Clocking (SSC) is used it is
+>> +      required that a common reference clock is used by the link partners.
+>> +      Most commercially available platforms with PCIe backplanes use
+>> +      SSC to reduce EMI.
+>> +
+>> +  rockchip,ext-refclk:
+>> +    type: boolean
+>> +    description:
+>> +      Many PCIe connections, especially backplane connections,
+>> +      require a synchronous reference clock between the two link partners.
+>> +      To achieve this a common clock source, referred to as REFCLK in
+>> +      the PCI Express Card Electromechanical Specification,
+>> +      should be used by both ends of the PCIe link.
+>> +      The PCIe PHY provides 100MHz differential clock output
+>> +      (optional with SSC) in RC mode for system applications.
+>> +
+>> +  rockchip,pipe-grf:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description:
+>> +      Some additional phy settings are accessed through GRF regs.
+>> +
+>> +  rockchip,pipe-phy-grf:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description:
+>> +      Some additional pipe settings are accessed through GRF regs.
+>> +
+>> +  rockchip,sgmii-mac-sel:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    enum: [0, 1]
+>> +    default: 0
+>> +    description:
+>> +      Select gmac0 or gmac1 to be used as SGMII controller.
+>> +
+>> +  "#phy-cells":
+>> +    const: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - clock-names
+>> +  - resets
+>> +  - rockchip,pipe-grf
+>> +  - rockchip,pipe-phy-grf
+>> +  - "#phy-cells"
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/rk3568-cru.h>
+>> +
+>> +    pipegrf: syscon@fdc50000 {
+>> +      compatible = "rockchip,rk3568-pipe-grf", "syscon";
+>> +      reg = <0xfdc50000 0x1000>;
+>> +    };
+>> +
+>> +    pipe_phy_grf0: syscon@fdc70000 {
+>> +      compatible = "rockchip,rk3568-pipe-phy-grf", "syscon";
+>> +      reg = <0xfdc70000 0x1000>;
+>> +    };
+>> +
+>> +    combphy0: phy@fe820000 {
+>> +      compatible = "rockchip,rk3568-naneng-combphy";
+>> +      reg = <0xfe820000 0x100>;
+>> +      clocks = <&pmucru CLK_PCIEPHY0_REF>,
+>> +               <&cru PCLK_PIPEPHY0>,
+>> +               <&cru PCLK_PIPE>;
+>> +      clock-names = "ref", "apb", "pipe";
+>> +      assigned-clocks = <&pmucru CLK_PCIEPHY0_REF>;
+>> +      assigned-clock-rates = <100000000>;
+>> +      resets = <&cru SRST_P_PIPEPHY0>, <&cru SRST_PIPEPHY0>;
+>> +      rockchip,pipe-grf = <&pipegrf>;
+>> +      rockchip,pipe-phy-grf = <&pipe_phy_grf0>;
+>> +      #phy-cells = <1>;
+>> +    };
+>> -- 
+>> 2.20.1
+> 

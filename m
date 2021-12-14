@@ -2,241 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F174D47428D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA4447428F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233937AbhLNM3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:29:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbhLNM3Y (ORCPT
+        id S233948AbhLNMaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:30:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30933 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229703AbhLNMaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:29:24 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DD1C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 04:29:23 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id r25so61921673edq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 04:29:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=E4kFIQlYfEMdSdQHq59R2bHoiLI2p2NoG6TrGYgOLuk=;
-        b=NJ6oraqig8GGFKfjjiJvdrp6uCNr8eqiAFtZuLsv/XPmwFuSkMSPchuCg8P4gWpOIT
-         Ee5boJ3tpL5kDsRxIlVQNMmujA65K4tfvQRbZdM9H0vWuyTvukeFC31pPEp+wN5srIU8
-         pmPvguHkLJmAXjJYKlCLABiUDozkDBW1f8zIobPM9GTsy6PBdEQvAIYPYrMju8RSgwKN
-         zTAdVuJydfUEqzi5zHX5poj9GVP/Cia6vN2jm7Hl6QngDkK/qimcCqcknJDn7jPv/Ftc
-         CYtjJ8v2qbktIHy1jWwSkytwYl+HXNVpWGYnnssTp3fGS1yMFcKggHNzOrgAFZZWzp9I
-         GMdQ==
+        Tue, 14 Dec 2021 07:30:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639485010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eTyFG3YsB7tsSM37catQ8Lu85xm2DMPfWO+OkIfmBBA=;
+        b=I3q8W67chYcLkBoLRkk/iG2CcmfPBK8R7pSN8ILaY1pvRUp2gZZnA3bkQ1v3nTNYz3ufhW
+        ksFT+kPdpODqZSZ7nNs22+u6Y0AUe7wdkxgM9lDOkmgZbcLgoJEiACZHWW5hehd9nXaxkI
+        bnvtwMI5VnZP3nZHNRqsk8eKKib5rBc=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-265-romoSP4AN6GdzyJ5UtyBuQ-1; Tue, 14 Dec 2021 07:30:09 -0500
+X-MC-Unique: romoSP4AN6GdzyJ5UtyBuQ-1
+Received: by mail-pj1-f70.google.com with SMTP id mv1-20020a17090b198100b001a67d5901d2so15100750pjb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 04:30:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=E4kFIQlYfEMdSdQHq59R2bHoiLI2p2NoG6TrGYgOLuk=;
-        b=mZiX9VS8Xo5cNMa+3DhbdWO6sD5xk/Tn8Anaorx2QNO9Kbu1tdYPt91Ryk20DraD2O
-         EW9Hv7rrYtIv/9LVNaq/+zXGeX7TgrRDqtNwG3VMkUS+DcjhzbwZkF1hjQgehMEcotyx
-         piSBzLaRZAKpNyql3raopguVwf41NqtaKoX13046H97egPzNVKULezuSpfV4lavAfZRP
-         i2/DaAa6CJ2nPQ1d5cr1WXyv21xc+66HIOmHHwbRevtGsQvm40xtPgnoV6fEWYfhrWIF
-         vQJpN6fMOTn4DxiaYcWFpJiPvffJilMaiKcubUG+W+dDlWXEqAn5ilqHVyklKFq8d6Ks
-         TGDA==
-X-Gm-Message-State: AOAM5330orZtcwnV5BJ4OPSdVgOhZnopNOqIPmQP2QMfx2n3Ec2aFvaj
-        J6bGaGFMZv/fjLn6J7X9cz1Z2QLBqzqM8PcxV6uW5g==
-X-Google-Smtp-Source: ABdhPJyA4wxMScbUqp/hC1iePv7zro6Wj1o5KvfMibM8p3gaRDWfG0oKTp3Td3fW8Gr+U9HQzDW4SD66W75UyACR2mA=
-X-Received: by 2002:a17:907:7da5:: with SMTP id oz37mr5544947ejc.586.1639484962075;
- Tue, 14 Dec 2021 04:29:22 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=eTyFG3YsB7tsSM37catQ8Lu85xm2DMPfWO+OkIfmBBA=;
+        b=Brx/QekdfVuMaMqGPjI6aD87JYv5tHSaYCNH202leSyKgJJTP9M16DWV/6lHWouWLw
+         i8TiBOmb9+6YdWmiCp2rDPK3AJy1yTHAWWLTLMIBjPWv/GNqt8H4xBXD3XFVMcTU6Zdl
+         DuXP8GkyBB0KGMQOrcvhzpzqbmxTVza+LvdTvBli2ZwRcJhO4Ac4kgT5/3Qt8Donme0L
+         4Wu99ymQpepw+RIPo75caUehceL+dKbVRqR+zwcibLkLTmb9aDkZbk5VFxgoe0wMdIRP
+         lffk5NAM53IIF43yuNNIgcgE0NO4RBph7BaCP6JvpqkKIZzUqVZTOISjJtdXvASZCHB9
+         RI4A==
+X-Gm-Message-State: AOAM532s5ImhsuXbCNHb6FImgMidFHahIS4k96zH5cHmToYsPRBdBUAr
+        zD0imrHf42oN8QEaYOQjV1dLhW890xyvhXaAHbODG0Z4PFAXNys8pKFwIO1WTke19DL7jLGKcO1
+        t0QByQZaVwgy1Ax4lLX/SkxO2nY9CSZxg0t/lUUyb
+X-Received: by 2002:a17:902:6acb:b0:142:76c3:d35f with SMTP id i11-20020a1709026acb00b0014276c3d35fmr5472922plt.89.1639485008526;
+        Tue, 14 Dec 2021 04:30:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx6mDUnSBRe9EuywU5VMlaoigZvD5cthorjYWy2TS8h5Ou6Ps7fBokraV9xsXSIWnH5IKI0i8VhUTjngJhNgWo=
+X-Received: by 2002:a17:902:6acb:b0:142:76c3:d35f with SMTP id
+ i11-20020a1709026acb00b0014276c3d35fmr5472887plt.89.1639485008236; Tue, 14
+ Dec 2021 04:30:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20211213092933.250314515@linuxfoundation.org>
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 14 Dec 2021 17:59:10 +0530
-Message-ID: <CA+G9fYugo1bTbUu6Vk_pXoVEveWqhrTyftfddTx6FxRL5kiDFw@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/88] 5.4.165-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
+References: <20211109082610.131341-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20211109082610.131341-1-chi.minghao@zte.com.cn>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 14 Dec 2021 13:29:57 +0100
+Message-ID: <CAO-hwJL5wqfF48FFyGXFyLcuRJ0czJJjt9g=7jfdcSCumACfcQ@mail.gmail.com>
+Subject: Re: [PATCH] drivers:hid: use swap() to make code cleaner
+To:     cgel.zte@gmail.com
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        chiminghao <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 at 15:13, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Hi,
+
+On Tue, Nov 9, 2021 at 9:26 AM <cgel.zte@gmail.com> wrote:
 >
-> This is the start of the stable review cycle for the 5.4.165 release.
-> There are 88 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> From: chiminghao <chi.minghao@zte.com.cn>
 >
-> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
-> Anything received after that time might be too late.
+> Fix the following coccicheck REVIEW:
+> Use swap() instead of reimplementing it.
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.165-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
+> ---
+
+Amended the commit title to match what we do generally in the HID tree
+and applied to for-5.17/thrustmaster.
+
+Thanks for the patch!
+
+Cheers,
+Benjamin
+
+>  drivers/hid/hid-tmff.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 >
-> thanks,
+> diff --git a/drivers/hid/hid-tmff.c b/drivers/hid/hid-tmff.c
+> index 90acef304536..4040cd98dafe 100644
+> --- a/drivers/hid/hid-tmff.c
+> +++ b/drivers/hid/hid-tmff.c
+> @@ -78,7 +78,6 @@ static int tmff_play(struct input_dev *dev, void *data,
+>         struct hid_field *ff_field = tmff->ff_field;
+>         int x, y;
+>         int left, right;        /* Rumbling */
+> -       int motor_swap;
 >
-> greg k-h
+>         switch (effect->type) {
+>         case FF_CONSTANT:
+> @@ -104,11 +103,8 @@ static int tmff_play(struct input_dev *dev, void *data,
+>                                         ff_field->logical_maximum);
+>
+>                 /* 2-in-1 strong motor is left */
+> -               if (hid->product == THRUSTMASTER_DEVICE_ID_2_IN_1_DT) {
+> -                       motor_swap = left;
+> -                       left = right;
+> -                       right = motor_swap;
+> -               }
+> +               if (hid->product == THRUSTMASTER_DEVICE_ID_2_IN_1_DT)
+> +                       swap(left, right);
+>
+>                 dbg_hid("(left,right)=(%08x, %08x)\n", left, right);
+>                 ff_field->value[0] = left;
+> --
+> 2.25.1
+>
 
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.4.165-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 0896ccf9036401df1f284b0a02b954d71d071d74
-* git describe: v5.4.164-89-g0896ccf90364
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-64-89-g0896ccf90364
-
-## No Test Regressions (compared to v5.4.163-71-g9be61260aa6e)
-
-## No Test Fixes (compared to v5.4.163-71-g9be61260aa6e)
-
-## Test result summary
-total: 94642, pass: 78861, fail: 782, skip: 13447, xfail: 1552
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 258 total, 254 passed, 4 failed
-* arm64: 36 total, 31 passed, 5 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 20 total, 20 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 48 passed, 4 failed
-* riscv: 24 total, 24 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 36 total, 36 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

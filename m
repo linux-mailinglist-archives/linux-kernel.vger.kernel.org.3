@@ -2,74 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E754474869
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CD9474876
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbhLNQmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:42:16 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:47060
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229942AbhLNQmQ (ORCPT
+        id S235937AbhLNQqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:46:43 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:49412 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229942AbhLNQqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:42:16 -0500
-Received: from localhost (118-169-14-172.dynamic-ip.hinet.net [118.169.14.172])
+        Tue, 14 Dec 2021 11:46:42 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 0429C40078;
-        Tue, 14 Dec 2021 16:42:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639500134;
-        bh=K+yRgSpvTmfrvAWbE2pwn9hFz5pcnekh9nWPWqcrcso=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=WronaXwgpzzymZRsYX6m7VpaH7cDCkoDLknojE3E78fINOg/0DhR1cThBTHajXiz1
-         h1f6cF+GDW6QV3TkbXf06oZPLPf6XZ9dg9SpGvFruWdQhtcZxBLGq15ZYnJ0tga/m7
-         /pKP3+mWEXOrY7c0rDDr+d4pIu5Qor4364Yc00YtcKyNBhDlWDqMgXiYifA9uMLfnn
-         xn/gkdzH6clcqIzrSGuVa7ebsMTrQs+tmrwybJJNifWdy5wzaNNFXFf4F29XfdsNJm
-         vq7p5FTHqMLDn8ITJ6cVqtbAJs9MK5NPsmxEHJkMVJZ+V4W36Ej30/TsRfKvCKnDOa
-         yUwnZG91wiaAQ==
-From:   Jeremy Szu <jeremy.szu@canonical.com>
-To:     tiwai@suse.com
-Cc:     Jeremy Szu <jeremy.szu@canonical.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kailang Yang <kailang@realtek.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Sami Loone <sami@loone.fi>, Elia Devito <eliadevito@gmail.com>,
-        alsa-devel@alsa-project.org (moderated list:SOUND),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
-Date:   Wed, 15 Dec 2021 00:41:54 +0800
-Message-Id: <20211214164156.49711-1-jeremy.szu@canonical.com>
-X-Mailer: git-send-email 2.33.0
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 375651F37C;
+        Tue, 14 Dec 2021 16:46:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639500401; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Krx9ujt9U+CXGnLAv7z/kYbX8eg3fh5j6WLUs21e2BQ=;
+        b=R0DHQZA1hHW46jQPA5cyJ2mLrcj+9Gy8UcsF1azHs0BUAPxfW6uMFz+C0Xtc7XGzFvblAb
+        voSDvmRXJC+onqYGnxgaycPJZQxbojanWSV8YCEx1dI30MpkBHqhfWMjJajElt+SxElQbk
+        l6Gp6HW4QsZB1fTzRu7JG/7YSNQWBzA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639500401;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Krx9ujt9U+CXGnLAv7z/kYbX8eg3fh5j6WLUs21e2BQ=;
+        b=B8epb+tPC1YiOqb6J3L/qYNvRQTEqjWJcE/pr+z+3mwzE0LYI0AeBCN7Qf785QQRfX0+Kq
+        QOVKr+7o2kvDIQBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CA64F13A1D;
+        Tue, 14 Dec 2021 16:46:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id G39XLXDKuGFDDQAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Tue, 14 Dec 2021 16:46:40 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 8d974c9e;
+        Tue, 14 Dec 2021 16:46:38 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 16:46:38 +0000
+From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+Subject: Re: [PATCH] ext4: set csum seed in tmp inode while migrating to
+ extents
+Message-ID: <YbjKbqsVdK3LzKMm@suse.de>
+References: <bug-213357-13602@https.bugzilla.kernel.org>
+ <20211206143733.18918-1-lhenriques@suse.de>
+ <20211214120317.GA5503@quack2.suse.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211214120317.GA5503@quack2.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a HP ProBook which using ALC236 codec and need the
-ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF quirk to make mute LED and
-micmute LED work.
+On Tue, Dec 14, 2021 at 01:03:17PM +0100, Jan Kara wrote:
+> On Mon 06-12-21 14:37:33, Luís Henriques wrote:
+> > When migrating to extents, the temporary inode will have it's own checksum
+> > seed.  This means that, when swapping the inodes data, the inode checksums
+> > will be incorrect.
+> > 
+> > This can be fixed by recalculating the extents checksums again.  Or simply
+> > by copying the seed into the temporary inode.
+> > 
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=213357
+> > Reported-by: Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> 
+> Thanks for debugging this! Two comments below:
 
-Signed-off-by: Jeremy Szu <jeremy.szu@canonical.com>
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
+And thanks for the review!
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 3599f4c85ebf..e97b3cd1577b 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8705,6 +8705,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x103c, 0x8896, "HP EliteBook 855 G8 Notebook PC", ALC285_FIXUP_HP_MUTE_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8898, "HP EliteBook 845 G8 Notebook PC", ALC285_FIXUP_HP_LIMIT_INT_MIC_BOOST),
- 	SND_PCI_QUIRK(0x103c, 0x88d0, "HP Pavilion 15-eh1xxx (mainboard 88D0)", ALC287_FIXUP_HP_GPIO_LED),
-+	SND_PCI_QUIRK(0x103c, 0x89ca, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
- 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x103f, "ASUS TX300", ALC282_FIXUP_ASUS_TX300),
- 	SND_PCI_QUIRK(0x1043, 0x106d, "Asus K53BE", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
--- 
-2.33.0
+> > diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
+> > index 7e0b4f81c6c0..dd4ece38fc83 100644
+> > --- a/fs/ext4/migrate.c
+> > +++ b/fs/ext4/migrate.c
+> > @@ -413,7 +413,7 @@ int ext4_ext_migrate(struct inode *inode)
+> >  	handle_t *handle;
+> >  	int retval = 0, i;
+> >  	__le32 *i_data;
+> > -	struct ext4_inode_info *ei;
+> > +	struct ext4_inode_info *ei, *tmp_ei;
+> 
+> Probably no need for the new tmp_ei variable when you use it only once...
 
+Sure, I'll drop that new variable in v2.
+
+> > @@ -503,6 +503,10 @@ int ext4_ext_migrate(struct inode *inode)
+> >  	}
+> >  
+> >  	ei = EXT4_I(inode);
+> > +	tmp_ei = EXT4_I(tmp_inode);
+> > +	/* Use the right seed for checksumming */
+> > +	tmp_ei->i_csum_seed = ei->i_csum_seed;
+> > +
+> 
+> I think this is subtly broken in another way: If we crash in the middle of
+> migration, tmp_inode (and possibly attached extent tree blocks) will have
+> wrong checksums (remember that i_csum_seed is computed from inode number)
+> and so orphan cleanup will fail. On the other hand in that case the orphan
+> cleanup will free blocks we have already managed to attach to the tmp_inode
+> although they are still properly attached to the old 'inode'. So the
+> recovery from a crash in the middle of the migration seems to be broken
+> anyway. So I guess what you do is an improvement. But can you perhaps:
+> 
+> 1) Move i_csum_seed initialization to a bit earlier in ext4_ext_migrate()
+> just after we have got the tmp_inode from  ext4_new_inode()? That way all
+> inode writes will at least happen with the same csum.
+> 
+> 2) Add a comment you are updating the csum seed so that metadata blocks get
+> proper checksum for 'inode' and that recovery from a crash in the middle of
+> migration is currently broken.
+
+Obviously, I did not realize the recovery process was broken and I
+appreciate you took the time to explain _how_ it is broken.  I'll add a
+new item to (the bottom of) my to-do list and maybe one of these days I
+get to look into it.
+
+I'll send out v2 shortly, implementing your suggestions.
+
+Cheers,
+--
+Luís
+
+> 
+> Thanks!
+> 
+> 								Honza
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR

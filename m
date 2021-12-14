@@ -2,135 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7D3474370
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9AE474378
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbhLNN0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:26:47 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54466 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbhLNN0q (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:26:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S234407AbhLNN2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 08:28:03 -0500
+Received: from ixit.cz ([94.230.151.217]:50230 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232253AbhLNN2A (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 08:28:00 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC891614E3;
-        Tue, 14 Dec 2021 13:26:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B597C34605;
-        Tue, 14 Dec 2021 13:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639488405;
-        bh=8QGHE0fK7CigJKJp2gJvyAASZ/DUh8M98aUo7jPSPek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MQ7TfGCIQvFo2S76vgmZ19p4rzVNsg8h8E+r4DskC4zB+jd5btsFxzB4FT8sUOeyr
-         0dieCHKB6zHkbNsUI7hBaBCT0n2GFgb0lZGA5nlev0mWNU4Md5Fl5ySNX+kUd+7dzN
-         Rn4Hd0EI6QVdsdCE2coqcVtk2eUocaL9bdQ8/Y7/A9IKVwgHx9SElOLxn3SbdcdoEy
-         o3BpZxvdkfX0OgnEAx5Pj/w74md3eY7wja9DzF+wSADT8G+ra4+Ajw6pCGisucBaee
-         24vZiNuqbkl5Ohvfa60OviNTpnn1rQxnKkNUTv5lMNYmgxmlqZn28YB/D8GsUW2LTX
-         xJkE4mGAVPv2w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 91DEF405D8; Tue, 14 Dec 2021 10:26:40 -0300 (-03)
-Date:   Tue, 14 Dec 2021 10:26:40 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     German Gomez <german.gomez@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 0/3] Support register names of all architectures
-Message-ID: <YbibkI8NE81Qo5q6@kernel.org>
-References: <20211207180653.1147374-1-german.gomez@arm.com>
- <EAC4AC1D-A305-42E2-B22F-8B64B0968841@linux.vnet.ibm.com>
+        by ixit.cz (Postfix) with ESMTPSA id 09F6A24AF0;
+        Tue, 14 Dec 2021 14:27:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1639488477;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Bv9IMdk7PirNLUGfvz44l53MYOu+yMfaHuir8Nj0crw=;
+        b=tq6vc/DlnhqweQukweehbE68N8VmWn1McPvEbICZ2Xj/5VcoRxvxu0FFgNtMzPZ2GHKzxg
+        YMZ2Qx7U4xKqXAaH0j5S62nhI1MfQTPiG9nq316vnVs0oupx0gC097Pjnx953UfcllpX02
+        opvOAbanFHv6g7znMHxfmNP/017AGJU=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Caleb Connolly <caleb@connolly.tech>,
+        David Heidelberg <david@ixit.cz>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: fix thermal zones naming
+Date:   Tue, 14 Dec 2021 14:27:49 +0100
+Message-Id: <20211214132750.69782-1-david@ixit.cz>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <EAC4AC1D-A305-42E2-B22F-8B64B0968841@linux.vnet.ibm.com>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 14, 2021 at 02:20:26PM +0530, Athira Rajeev escreveu:
-> 
-> 
-> > On 07-Dec-2021, at 11:36 PM, German Gomez <german.gomez@arm.com> wrote:
-> > 
-> > The following changeset applies some corrections to the way system
-> > registers are processed and presented when reading perf.data files using
-> > the various perf tools.
-> > 
-> > The commit message from [3/3] shows how register names aren't correctly
-> > presented when performing x-arch analysis of perf.data files (recording
-> > in one arch, then reading the file from a different arch).
-> > 
-> >  - [PATCH 1/3] Fixes a potential out-of-bounds access when reading the
-> >    values of the registers in the perf.data file.
-> >  - [PATCH 2/3] Fixes an issue of ARM and ARM64 registers having the
-> >    same enum name.
-> >  - [PATCH 3/3] Refactors the function "perf_reg_name" declared in the
-> >   "tools/perf/util/perf_regs.h" header, in order to support every arch.
-> > 
-> > Thanks,
-> > German
-> 
-> Looks good to me. Tested this patchset in powerpc by capturing regs in powerpc and doing
-> perf report to read the data from x86.
-> 
-> Reviewed-and-Tested-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Rename thermal zones according to dt-schema.
+Fixes multiple `make dtbs_check` warnings about name convetion.
 
-Thanks, added to the commit log message.
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ arch/arm64/boot/dts/qcom/msm8996.dtsi |  4 ++--
+ arch/arm64/boot/dts/qcom/msm8998.dtsi |  4 ++--
+ arch/arm64/boot/dts/qcom/sdm845.dtsi  |  4 ++--
+ arch/arm64/boot/dts/qcom/sm8150.dtsi  |  4 ++--
+ arch/arm64/boot/dts/qcom/sm8250.dtsi  |  4 ++--
+ arch/arm64/boot/dts/qcom/sm8350.dtsi  | 16 ++++++++--------
+ 6 files changed, 18 insertions(+), 18 deletions(-)
 
-- Arnaldo
-
-> > --
-> > Changes since v1
-> > 
-> >  - Added "Reported-by" tags.
-> >  - Removed [PATCH 2/4] because it's not needed (suggested by Athira
-> >    Rajeev).
-> >  - Removed [PATCH 3/4] which created additional header files with the
-> >    register names of every arch.
-> >  - Introduced [PATCH 2/3] to deal with ARM and ARM64 registers having the
-> >    same enum name across "/tools/perf/".
-> >  - Reworked the refactor of "perf_reg_name" function (now implemented in
-> >    perf_regs.c, rather than in the header file) in [PATCH 3/3].
-> > 
-> > German Gomez (3):
-> >  perf tools: Prevent out-of-bounds access to registers
-> >  perf tools: Rename perf_event_arm_regs for ARM64 registers
-> >  perf tools: Support register names from all archs
-> > 
-> > tools/perf/arch/arm/include/perf_regs.h       |  42 --
-> > tools/perf/arch/arm64/include/perf_regs.h     |  78 +-
-> > tools/perf/arch/csky/include/perf_regs.h      |  82 ---
-> > tools/perf/arch/mips/include/perf_regs.h      |  69 --
-> > tools/perf/arch/powerpc/include/perf_regs.h   |  66 --
-> > tools/perf/arch/riscv/include/perf_regs.h     |  74 --
-> > tools/perf/arch/s390/include/perf_regs.h      |  78 --
-> > tools/perf/arch/x86/include/perf_regs.h       |  82 ---
-> > tools/perf/builtin-script.c                   |  18 +-
-> > tools/perf/util/event.h                       |   5 +-
-> > tools/perf/util/libunwind/arm64.c             |   2 +
-> > tools/perf/util/perf_regs.c                   | 671 +++++++++++++++++-
-> > tools/perf/util/perf_regs.h                   |  10 +-
-> > .../scripting-engines/trace-event-python.c    |  10 +-
-> > tools/perf/util/session.c                     |  25 +-
-> > 15 files changed, 709 insertions(+), 603 deletions(-)
-> > 
-> > -- 
-> > 2.25.1
-> > 
-
+diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+index 01643a1f574d..7eff331572f2 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+@@ -3273,7 +3273,7 @@ cpu3_crit: cpu_crit {
+ 			};
+ 		};
+ 
+-		gpu-thermal-top {
++		gpu-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -3295,7 +3295,7 @@ map0 {
+ 			};
+ 		};
+ 
+-		gpu-thermal-bottom {
++		gpu-bottom-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+index f273bc1ff629..453a049f693d 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+@@ -674,7 +674,7 @@ cpu7_crit: cpu_crit {
+ 			};
+ 		};
+ 
+-		gpu-thermal-bottom {
++		gpu-bottom-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -689,7 +689,7 @@ gpu1_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		gpu-thermal-top {
++		gpu-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 5d1d38eb1dfb..5fac82f026fd 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -5258,7 +5258,7 @@ cluster1_crit: cluster1_crit {
+ 			};
+ 		};
+ 
+-		gpu-thermal-top {
++		gpu-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -5273,7 +5273,7 @@ gpu1_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		gpu-thermal-bottom {
++		gpu-bottom-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index 6012322a5984..c1067b31b299 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -4265,7 +4265,7 @@ cluster1_crit: cluster1_crit {
+ 			};
+ 		};
+ 
+-		gpu-thermal-top {
++		gpu-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -4445,7 +4445,7 @@ modem_scl_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		gpu-thermal-bottom {
++		gpu-bottom-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 2272efd1506b..93570a61c2af 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -5172,7 +5172,7 @@ cluster1_crit: cluster1_crit {
+ 			};
+ 		};
+ 
+-		gpu-thermal-top {
++		gpu-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -5307,7 +5307,7 @@ npu_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		gpu-thermal-bottom {
++		gpu-bottom-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 7323ed74f41a..eb5c5bd9909c 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -2991,7 +2991,7 @@ aoss1_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		gpu-thermal-top {
++		gpu-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -3006,7 +3006,7 @@ gpu1_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		gpu-thermal-bottom {
++		gpu-bottom-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -3096,7 +3096,7 @@ mem_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		modem1-thermal-top {
++		modem1-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -3111,7 +3111,7 @@ modem1_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		modem2-thermal-top {
++		modem2-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -3126,7 +3126,7 @@ modem2_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		modem3-thermal-top {
++		modem3-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -3141,7 +3141,7 @@ modem3_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		modem4-thermal-top {
++		modem4-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -3156,7 +3156,7 @@ modem4_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		camera-thermal-top {
++		camera-top-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
+@@ -3171,7 +3171,7 @@ camera1_alert0: trip-point0 {
+ 			};
+ 		};
+ 
+-		cam-thermal-bottom {
++		cam-bottom-thermal {
+ 			polling-delay-passive = <250>;
+ 			polling-delay = <1000>;
+ 
 -- 
+2.33.0
 
-- Arnaldo

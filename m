@@ -2,77 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B104744E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7647A4744ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbhLNO1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:27:39 -0500
-Received: from mga06.intel.com ([134.134.136.31]:63265 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231845AbhLNO1g (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:27:36 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="299765346"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="299765346"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 06:27:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="519235252"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Dec 2021 06:27:34 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 675AC81; Tue, 14 Dec 2021 16:27:41 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Pavel Machek <pavel@ucw.cz>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Amireddy Mallikarjuna reddy 
-        <mallikarjunax.reddy@linux.intel.com>,
-        Yihao Han <hanyihao@vivo.com>, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] leds: lgm-sso: Get rid of duplicate of_node assignment
-Date:   Tue, 14 Dec 2021 16:27:39 +0200
-Message-Id: <20211214142739.60071-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211214142739.60071-1-andriy.shevchenko@linux.intel.com>
-References: <20211214142739.60071-1-andriy.shevchenko@linux.intel.com>
+        id S231845AbhLNO1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:27:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44152 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232512AbhLNO1u (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 09:27:50 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DECDB819D8;
+        Tue, 14 Dec 2021 14:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE7AC34605;
+        Tue, 14 Dec 2021 14:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639492068;
+        bh=dCz5ROLGxZLneatRf5FXTOfJtzRu8rVmoSoKBqTdjXE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RDShaVNVDy35TPyYZfgQGttZzray0L7j/zEehaC0dcgcknPO2ZJebJOmatrwsx1Mk
+         nVHTGNrko9R9EBj3Hs6AN+t1y8oTs+jBjUPSVdhdY/5v615ggvMD3uujz3RrByCCaq
+         KeqOjbJb8iV/NkfT0iHNBOe8Ik40Ken55lK70iXs=
+Date:   Tue, 14 Dec 2021 15:27:45 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     George Kennedy <george.kennedy@oracle.com>
+Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] libata: if T_LENGTH is zero, dma direction should be
+ DMA_NONE
+Message-ID: <Ybip4T50J3wCKpxH@kroah.com>
+References: <1639491411-14401-1-git-send-email-george.kennedy@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1639491411-14401-1-git-send-email-george.kennedy@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIO library does copy the of_node from the parent device of
-the GPIO chip, there is no need to repeat this in the individual
-drivers. Remove assignment here.
+On Tue, Dec 14, 2021 at 09:16:51AM -0500, George Kennedy wrote:
+> Avoid data corruption by rejecting pass-through commands where
+> T_LENGTH is zero (No data is transferred) and the dma direction
+> is not DMA_NONE.
+> 
+> Cc: <stable@vger.kernel.org>
+> Reported-by: syzkaller<syzkaller@googlegroups.com>
+> Signed-off-by: George Kennedy<george.kennedy@oracle.com>
+> ---
+>  drivers/ata/libata-scsi.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+> index 1b84d55..313e947 100644
+> --- a/drivers/ata/libata-scsi.c
+> +++ b/drivers/ata/libata-scsi.c
+> @@ -2859,8 +2859,19 @@ static unsigned int ata_scsi_pass_thru(struct ata_queued_cmd *qc)
+>  		goto invalid_fld;
+>  	}
+>  
+> -	if (ata_is_ncq(tf->protocol) && (cdb[2 + cdb_offset] & 0x3) == 0)
+> -		tf->protocol = ATA_PROT_NCQ_NODATA;
+> +	if ((cdb[2 + cdb_offset] & 0x3) == 0) {
+> +		/*
+> +		 * When T_LENGTH is zero (No data is transferred), dir should
+> +		 * be DMA_NONE.
+> +		 */
+> +		if (scmd->sc_data_direction != DMA_NONE) {
+> +			fp = 2 + cdb_offset;
+> +			goto invalid_fld;
+> +		}
+> +
+> +		if (ata_is_ncq(tf->protocol))
+> +			tf->protocol = ATA_PROT_NCQ_NODATA;
+> +	}
+>  
+>  	/* enable LBA */
+>  	tf->flags |= ATA_TFLAG_LBA;
+> -- 
+> 1.8.3.1
+> 
 
-For the details one may look into the of_gpio_dev_init() implementation.
+Hi,
 
-Call graph:
-   --> sso_gpio_gc_init()
-     --> devm_gpiochip_add_data
-       --> devm_gpiochip_add_data_with_key
-         --> gpiochip_add_data_with_key()
-           --> of_gpio_dev_init()
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: new patch
- drivers/leds/blink/leds-lgm-sso.c | 1 -
- 1 file changed, 1 deletion(-)
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-diff --git a/drivers/leds/blink/leds-lgm-sso.c b/drivers/leds/blink/leds-lgm-sso.c
-index fd8b7573285a..6f270c0272fb 100644
---- a/drivers/leds/blink/leds-lgm-sso.c
-+++ b/drivers/leds/blink/leds-lgm-sso.c
-@@ -477,7 +477,6 @@ static int sso_gpio_gc_init(struct device *dev, struct sso_led_priv *priv)
- 	gc->ngpio               = priv->gpio.pins;
- 	gc->parent              = dev;
- 	gc->owner               = THIS_MODULE;
--	gc->of_node             = dev->of_node;
- 
- 	return devm_gpiochip_add_data(dev, gc, priv);
- }
--- 
-2.33.0
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

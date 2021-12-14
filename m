@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 109B8474745
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55634474748
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235565AbhLNQOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
+        id S235592AbhLNQOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbhLNQOL (ORCPT
+        with ESMTP id S231215AbhLNQO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:14:11 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE65DC061574;
-        Tue, 14 Dec 2021 08:14:10 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id p8so29096204ljo.5;
-        Tue, 14 Dec 2021 08:14:10 -0800 (PST)
+        Tue, 14 Dec 2021 11:14:29 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620FFC061574;
+        Tue, 14 Dec 2021 08:14:29 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id m9so25163276iop.0;
+        Tue, 14 Dec 2021 08:14:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=e7PtDlj0mth27+bgBvDyP1PaVmibKSZKtcK9ZB7JRas=;
-        b=WDmoQgV5VlTLoi7Skx9OjojOP4C3E7Nve+DTDNEqtrUQkDID7QFNNf6DboZS2/8M/x
-         WgYBjlUNQ4EdUwaP6DxZ0IxesIGYGBdnHCnfIB4YPX+zjvTlI4TExZfCxS7wQUUzwg0S
-         OGIKasYrmfmsHH2L84Mjk8hCEub5UFz3XaORd4k5t78KSrhGKa0Qgpy7so0DGLq6qjFt
-         m3cpsuI098rcB4OMgbDZFlKdmSkgoW7lg27uLydJsRs7y91Gk7omDgVVeKYVjHs2j5fx
-         766ahOf1pwHIqaurmg8hfJ59mSjWs7sgN6/QQLt2CPw8x5g7Hv0D/Sfc2rNUeCZGApn0
-         mimA==
+        bh=mIUbm6GVaM2s8DkzRCMakgkhau0TGlKfc/bpfsLq9zc=;
+        b=GirMxCj/1duVgQYMjOhjt4PWDJoe0b/HBCI3Zop/SuqErp/V7eEu8UGbNoADtIi4UU
+         KlScah2rVNICUhRA4L+RuOJNoTnUVpfzmzjGFQeqtCKe+z5ZIpXfCk44riAUTFw9I9Hv
+         kBbymKub8u5VMvGT5bHj+wNohrJux48s/ZS+Tf6Br1E/RDodBTcpoFPQcvdMJfN9Y9w2
+         Zl8IItKlH8/7H+CTEA1bv+Rfsgs/5u7Lu/sSqSXKb9JZOVzX8IyAixS96pTk8evG2zO7
+         yglWYWYXxi+6o/29kGCswDXWkl59XWNx8e39kIeTXSjggoKpAqeVNgQFMhzN92l6l129
+         zy/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=e7PtDlj0mth27+bgBvDyP1PaVmibKSZKtcK9ZB7JRas=;
-        b=rBsSjHw4KmClYs/d7ypwHPHunBYPSy3CO9HahRlSjNvs5AqGu8hjmpX5z5GfLI6kzz
-         lWpi4XLONHwDqIphrbrjpdH7Rt4sQevEStSB0NplFRxa2CNfaWFPj5mAr7iJrlU/B9aK
-         VKrW2QNO2/jWS5rIXxV6B69UFTW/x5PybsFijr21E9Ric63jlChkdwYC1OOmarDstw7y
-         fu0YHwJulsRtQfiaz9AYtvalLEzdLCoKkIhW0PWNBJXFdQ7jDoCSZNtSSJ894kfY7Y95
-         qySi2+ng0xX3YEYQs7oeLfnTjjaYtI2S9MnwG7xnmcoR3GdhxE4jIWqK9JvA185XLD8a
-         5z5A==
-X-Gm-Message-State: AOAM530jAQbcd6HBMce8vUfNDh0SiKCpvqmfGfWLe32TgXwtlAqCqKru
-        GTUSwhM5UzkBxqoNbHeCG1hR5U9BHz/BaQUWvw6a6GeG
-X-Google-Smtp-Source: ABdhPJwaFhUmPowOhknAjENiJU2wmzO54MK8rvUGgjSOcYJS7DBEjVUPnPJ+6tDHDHJxk6I4cruojLgklofzu4v7178=
-X-Received: by 2002:a2e:e1a:: with SMTP id 26mr5764067ljo.199.1639498448760;
- Tue, 14 Dec 2021 08:14:08 -0800 (PST)
+        bh=mIUbm6GVaM2s8DkzRCMakgkhau0TGlKfc/bpfsLq9zc=;
+        b=jCR3jUfsYxk7HKu9i7oDvrHz0spqIN/AcB2RJSx2raWGZiNos3z7Kt8yluUnr03fCJ
+         RovPvBLbGAMEcZbLHjCWJ4DPdsZrBE+DEhHhSq28tNWktqzCcYZGfe2DUB32gY3uXqN+
+         FkJzsMR/KtA93Yby9y8aAxT7Ke9kMrOA/JmajJ9aqG+B5pf3MUzPwU4EbSJKLoj2lCe6
+         9lb2Ks8VOxcUbVC/VnXPD8PkjjGOOZ/ITvqp7RX4BZ+GLcVJaHf+RIwPOdeCNIM1NeYy
+         bkggFYPF74Ov8q3bJdu6rBb9BFi4mQGvMUJ9p2IIVYWwOzK58qDir71QUvkfTEPTklL7
+         U03Q==
+X-Gm-Message-State: AOAM533vqzK2bT9ZMO/Sz5mbcAKF4d/pr6q5jm9kpd3MRjqDk19pjytq
+        jmZajOpBmjo8T84viBwfzDUAbbrk28dEZ9oWgd+tDhArzjeEGA==
+X-Google-Smtp-Source: ABdhPJzPxfevKNVoBk+go/ISnf2ll2SwMCqK/o4jGaMBuidcRoj3fNVISbEWJIS3Pn/Cuhabd2F06BusOZ7xiC2BMm0=
+X-Received: by 2002:a02:830e:: with SMTP id v14mr3519638jag.644.1639498468518;
+ Tue, 14 Dec 2021 08:14:28 -0800 (PST)
 MIME-Version: 1.0
-References: <tencent_D6BF2948237359EE0A47338567B88512D106@qq.com>
-In-Reply-To: <tencent_D6BF2948237359EE0A47338567B88512D106@qq.com>
-From:   Stephen Smalley <stephen.smalley.work@gmail.com>
-Date:   Tue, 14 Dec 2021 11:14:10 -0500
-Message-ID: <CAEjxPJ4nT3LFqNNh7PRP5DuuJeVfOh_JQiDboskbpBATgoJkOQ@mail.gmail.com>
-Subject: Re: [PATCH] selinux: fix a wrong check condition of strcmp()
-To:     xkernel.wang@foxmail.com
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20211214050708.4040200-1-vipinsh@google.com>
+In-Reply-To: <20211214050708.4040200-1-vipinsh@google.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Wed, 15 Dec 2021 00:14:17 +0800
+Message-ID: <CAJhGHyDJ8XG6ZCC-NoATFgyeuyEq_A7zmF4TSFA5ubONv7Mx1g@mail.gmail.com>
+Subject: Re: [PATCH] KVM: Move VM's worker kthreads back to the original
+ cgroups before exiting.
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>, kvm@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 4:34 AM <xkernel.wang@foxmail.com> wrote:
+On Tue, Dec 14, 2021 at 4:13 PM Vipin Sharma <vipinsh@google.com> wrote:
 >
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+> VM worker kthreads can linger in the VM process's cgroup for sometime
+> after KVM temrinates the VM process.
 >
-> strcmp() will return 0 when two strings(s1, s2 for example) are equal.
-> And if a negative number means s1 < s2. Here seems should use == 0 as
-> the condition. Otherwise, the value of genfs->fstype can not be
-> guaranteed.
+> KVM terminates the worker kthreads by calling kthread_stop() which waits
+> on the signal generated by exit_mm() in do_exit() during kthread's exit.
+> However, these kthreads are removed from the cgroup using cgroup_exit()
+> call which happens after exit_mm() in do_exit(). A VM process can
+> terminate between the time window of exit_mm() to cgroup_exit(), leaving
+> only worker kthreads in the cgroup.
 >
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-
-NAK. Look more closely at the code that follows, and understand that
-the list is ordered to avoid needing to traverse all of it.
-
+> Moving worker kthreads back to the original cgroup (kthreadd_task's
+> cgroup) makes sure that cgroup is empty as soon as the main VM process
+> is terminated.
+>
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
 > ---
->  security/selinux/ss/services.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-> index 759d878..c9f6c3a 100644
-> --- a/security/selinux/ss/services.c
-> +++ b/security/selinux/ss/services.c
-> @@ -2883,7 +2883,7 @@ static inline int __security_genfs_sid(struct selinux_policy *policy,
->
->         for (genfs = policydb->genfs; genfs; genfs = genfs->next) {
->                 cmp = strcmp(fstype, genfs->fstype);
-> -               if (cmp <= 0)
-> +               if (cmp == 0)
->                         break;
->         }
->
-> --
+>  virt/kvm/kvm_main.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+
+Hello
+
+Off-topic, can this kvm worker_thread and the thread to do async pagefault
+be possibly changed to use something like io_uring's IOWQ (fs/io-wq.c)
+created by create_io_thread()?
+
+So that every resource the threads used are credited to the process
+of the vm.
+
+Thanks
+Lai

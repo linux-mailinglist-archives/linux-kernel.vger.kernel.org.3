@@ -2,89 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4F1474D52
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 22:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C227474D54
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 22:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234012AbhLNVl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 16:41:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
+        id S234302AbhLNVmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 16:42:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbhLNVl6 (ORCPT
+        with ESMTP id S232570AbhLNVmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 16:41:58 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5398CC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 13:41:58 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id 36-20020a17090a09a700b001b103e48cfaso82131pjo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 13:41:58 -0800 (PST)
+        Tue, 14 Dec 2021 16:42:49 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CB0C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 13:42:49 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id v16so2316393pjn.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 13:42:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Ksbw7wzte8Tmh9S3RxYMIuueBCNiof9dhDqnVIFaQDg=;
-        b=X2P4dXXxEmCuPazognWtAaFQyi9it5wHHJI/qXb91GIxLyrE1a8CLUHN5pSC0IUGow
-         lSWEFwrxe38fjO3oWHGVohI4Us+0aew7hhB68sYh7pUUU2SmFLqtgAucx458qJidAF+H
-         DnnB2PoOFKVNx3hoDnll3wIP6XBJVxTyVI6PbkF7KFpH65YAuxL8PD8SJFPp7UIRVApz
-         +4FyC4wRkf0Xxns05kKCHYKT/cDniT3Ll/fhnL0Jv4S+zWG9wEYFgMvUtVGaWeOFM5aV
-         BnDvJsbiyMsnZFnL9WhiJ2d8i2iRR708ddAx9w+q/wpaRVIrCAEb3fgIjR9CMxdRasJz
-         wXDg==
+        bh=LXswzQQIUbnsH89DKIsLGEHvU+q7ZhGpPZRWb6pLn40=;
+        b=h3X3g6TGJIjhj++PPZ4wYq4hvoC88IYObA7l+ZQAeBcGmsnsvphB8Niq0ZLwviEhMo
+         pV1DNGEfaujlz5Jfvz4TPBelKXdo7xcsSzeSefL1Z/3YS2LwPuTFRVTXuW/rTPwJe4ro
+         1Tzpt+6xn60Uy/KCwLe34O2sQDzqMk9Lrrh8dF6hDiROrQ/XgN2yKKQQcUVn9Dx3m1/M
+         iK7jhGXnoSX/xszyfhzRxLltPLtytBZzZPFJB5hi7+4oTYW9GXROXW3jMqQ4l3ei5IJC
+         zcfmtmhsDfds0enGEPOPw97unnXlBpYIq4AOKKU7/0CEaABFHuNyu7t2Jyr9b/Q9G5xe
+         jErw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Ksbw7wzte8Tmh9S3RxYMIuueBCNiof9dhDqnVIFaQDg=;
-        b=ES75cLaEnTjA89Gzw0gBJr2IvrQKGJcE1bZVBSBRxhxtvQ6xU6YBirONWAehgZMeiX
-         FWc909MFjVBMJ0pH80v/gcuxNSHwhxnHpUAMuli766KbZaalaoJwnFzCnJZXC+7Dei7O
-         fBv4DAGiM/Wk9dQ70m4jdVyn0OzWg/0VtCB+lr3MkGrl7g0tiVTs7ISnbsXg28SLNwlF
-         njvJFt9zLYj/3xPC75J0zRSKVNvpalRR6Af1Z3QAKXtb3FPtZlgATs1vy34wy+tbfIYa
-         7Uun4C+pGzhI24iyIWDcUQ/DMP/3PXbkk06RL0QVmtthGuY8Yos3BufDD8nFm2o055/Y
-         BsxA==
-X-Gm-Message-State: AOAM532XveuqTiaQcVXLefIb/U7VtUM4gQqADet1qLNLzJHJBaApV3/O
-        C0UDu0PW1yiFg597ed9RFDP8vDIlSItgCSul+loU5Q==
-X-Google-Smtp-Source: ABdhPJxk2PxVM18I3QoYtZH1ZI5/KUEcIdC7GyFKUAVr7z4yub9s2UbRDfX/2lw09PYf6hYDrQ0+VWiohOydTBhE7hY=
-X-Received: by 2002:a17:902:a717:b0:142:76bc:da69 with SMTP id
- w23-20020a170902a71700b0014276bcda69mr8592428plq.12.1639518117501; Tue, 14
- Dec 2021 13:41:57 -0800 (PST)
+        bh=LXswzQQIUbnsH89DKIsLGEHvU+q7ZhGpPZRWb6pLn40=;
+        b=ir+fg4+Zim1a7o6A1hEPqxxh3bBC9VRyIn/gZH8/2i+Pzvf6MSg/vzY6fUPkarz48x
+         Ves1CHqX1mSZMMQOGtt8FxkiO9XE4AfN3d9oQB7ZdfVNr4cGwwHRjzLClcpZjLDbONsQ
+         C4yfKf/TjK2Xkf1Qv+lxwStrKzHDRGgiA5GqZTTU9QQ0J2J31OAUtlIkGHxrzwpnVPpW
+         0WLwSd17o8ksQNl1uiwZNvNHZFUD7bYhMwPktvoFLuzJG8tYVYh3+r6uMcGvmglwihxT
+         xAcX4mwRQCVazz09rQhaH0iaboLZgbNDdd+A4QJ+llv0o+JtWkRncpHY7awztQ31fW5Q
+         DVtw==
+X-Gm-Message-State: AOAM533zGueZGWHdlGipI5wZiC7R7L3//UsTlNMaFE+EHcCG4gY6OgMp
+        P9NIaiFPwsgyy3vyXELhuh71trdTNppYo6oog3qJ6w==
+X-Google-Smtp-Source: ABdhPJxiGa9ZmzjqaVmXDV74capr+NY44f1yVhlLZw1Z4DCDaKQQ36BSQdJtpHiwE9VB3/7/bwUKVzeA3V0arZMc52k=
+X-Received: by 2002:a17:902:8f88:b0:148:a2e8:2c2f with SMTP id
+ z8-20020a1709028f8800b00148a2e82c2fmr1385004plo.126.1639518168819; Tue, 14
+ Dec 2021 13:42:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20211214195203.174080-1-dlatypov@google.com>
-In-Reply-To: <20211214195203.174080-1-dlatypov@google.com>
+References: <20211214193010.138458-1-dlatypov@google.com>
+In-Reply-To: <20211214193010.138458-1-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 14 Dec 2021 16:41:33 -0500
-Message-ID: <CAFd5g47LUiAhUgHCaaqbRRDdJyZTpk4MrWB+VkaLLHU0O5me2A@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: fix newly introduced typechecker errors
-To:     Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 14 Dec 2021 16:42:37 -0500
+Message-ID: <CAFd5g44LbKf_ZW1N7QhmpnTSKAc_yu57E++pk7BAbfT29mpBHA@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: tool: make `build` subcommand also reconfigure
+ if needed
+To:     Daniel Latypov <dlatypov@google.com>, skhan@linuxfoundation.org
 Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 2:52 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Tue, Dec 14, 2021 at 2:30 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> After upgrading mypy and pytype from pip, we see 2 new errors when
-> running ./tools/testing/kunit/run_checks.py.
+> If I created a kunitconfig file that was incomplete, then
+> $ ./tools/testing/kunit/kunit.py build --kunitconfig=my_kunitconfig
+> would silently drop all the options with unmet dependencies!
 >
-> Error #1: mypy and pytype
-> They now deduce that importlib.util.spec_from_file_location() can return
-> None and note that we're not checking for this.
+> This is because it doesn't do the config check that `kunit.py config`
+> does.
 >
-> We validate that the arch is valid (i.e. the file exists) beforehand.
-> Add in an `asssert spec is not None` to appease the checkers.
+> So if I want to safely build a kernel for testing, I have to do
+> $ ./tools/testing/kunit/kunit.py config <flags>
+> $ ./tools/testing/kunit/kunit.py build <flags, again>
 >
-> Error #2: pytype bug https://github.com/google/pytype/issues/1057
-> It doesn't like `from datetime import datetime`, specifically that a
-> type shares a name with a module.
->
-> We can workaround this by either
-> * renaming the import or just using `import datetime`
-> * passing the new `--fix-module-collisions` flag to pytype.
->
-> We pick the first option for now because
-> * the flag is quite new, only in the 2021.11.29 release.
-> * I'd prefer if people can just run `pytype <file>`
+> It seems unlikely that any user of kunit.py would want the current
+> `build` semantics.
+> So make it effectively do `kunit.py config` + `kunit.py build`.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Looks good. Thanks for rebasing this!

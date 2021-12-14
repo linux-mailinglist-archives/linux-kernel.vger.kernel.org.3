@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B412A474676
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 946AB474675
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbhLNPbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:31:17 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52538 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbhLNPbQ (ORCPT
+        id S233779AbhLNPbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:31:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232849AbhLNPbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Dec 2021 10:31:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DC85ECE1903;
-        Tue, 14 Dec 2021 15:31:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB5BC34601;
-        Tue, 14 Dec 2021 15:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639495873;
-        bh=nIm7IP3pOSVJnjnVXQ9Ds8xTD2Whp9+vyIKmyYPKwgE=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=YQQKXqAkpyiAUzSd8+pmM5QYb+q0hRrZUMjB1UhJH+/c9O6wofnbfe+cEipEBUH2B
-         HRqK6ThMBH26KhPpuFY6tmlVDNbFeL76CaFKCeE25/LrzXTiO6rujD3mBUZuNwwG6x
-         tyEvELkXhrfW6I1+9TDI+M1WLQdkl/SZkIyQDCyf+GIRU5LxZZ6Sc69jIMqXwBagGi
-         omI0S5WXSS1nhBoB8ETL1rFrXR/XFfJt5L33mbkZRxPoXXQamv1a4QEhbLw4Dfsmbx
-         rM+iR2OR3fVdJmpytXcuNAWeZcv1fHSiUJM0bssJom12t6jq8a2XxcOoygyL+FaPjo
-         OUPoggmB7D2HQ==
-Content-Type: text/plain; charset="utf-8"
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6F9C061574;
+        Tue, 14 Dec 2021 07:31:16 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id l22so37469522lfg.7;
+        Tue, 14 Dec 2021 07:31:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Cew1bsVh+uPPxFCPvivLMvnMySnBo7QVXMyLf4NUogc=;
+        b=EIBs/m05yVAVjNZxKsVu8Oh0Ra+ssLFinvG7LKfMOy1Tb+DDQFa83JoEpSp/kyJ20f
+         vtvaLZfleYaQEdO83kKRrCP8Y1G2P1VVBd1C8H/rC2FEvRABY4qZuLZF9MfzdbRNDmow
+         cGRJTZrbJmdGnvJe7MN8XhbpvUlkpK10PBqiVAoE8HuxHw13OwKud0XkPDg5fcAHJYnV
+         DUKRpnGNMPgJ7sbEiuJYUCWQTbbeQh0lDx39iMitKSXkglOeja3j0JlYaUtRccSzzC+C
+         igtqlbPFWaGY1CMcs+PW8sdRnRh3ONs1rCgNZ4xxe4sqUVtqBu0PNS8azfyALy+nPF5r
+         Y88A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Cew1bsVh+uPPxFCPvivLMvnMySnBo7QVXMyLf4NUogc=;
+        b=knUKAk8uNV1lprw14Hcbr+/SH7nj2mX79QYgu5IXDG+cS4xDfLWGZMzAQDnisXF4A7
+         EcmhOZR6dXQqDeFD5jW0KKfjn5dKSp729GaWjW4rwb9QkzTfIvl7vYLqKSVSLfSttntj
+         PaSW+tRscTHylXhvf03Z5FCY96FAJHZxs5yzHECKOslRV9JnBFgsCJ/t9SnS/7uSyXXT
+         t+ytQUOSyc3Wm/YEN9xMOMMETEFlqz1x7+UWm5kOl7F7XDV9POuq1E0PMnas7evl103y
+         htUaLF6lgb0hAXPRjCMQnBlcRLYzRxNtOAPSr5prmRFL06LKLCCkfU0DFWs5NP02H5qz
+         /wpA==
+X-Gm-Message-State: AOAM533WmYXJVtY4muqPeDaqCwhDkClne8DZySmmmRqVLhCmAbEFwssS
+        i0vpfllNr1f25y5/Au29aDE=
+X-Google-Smtp-Source: ABdhPJxmQNB9Dr/Fnytdwhc2WP3yKSVRtKMT+07lahidhyWpm3qWdRsLiGLH2I4Htvoh4G+FR0Ibzw==
+X-Received: by 2002:a05:6512:3053:: with SMTP id b19mr5387718lfb.276.1639495874691;
+        Tue, 14 Dec 2021 07:31:14 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id s4sm11501lfp.198.2021.12.14.07.31.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Dec 2021 07:31:14 -0800 (PST)
+Subject: Re: [PATCH v2 0/8] Host1x context isolation support
+To:     Mikko Perttunen <cyndis@kapsi.fi>,
+        Jon Hunter <jonathanh@nvidia.com>, joro@8bytes.org,
+        will@kernel.org, robh+dt@kernel.org, robin.murphy@arm.com,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Cc:     linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        thierry.reding@gmail.com
+References: <20210916143302.2024933-1-mperttunen@nvidia.com>
+ <10de82cf-27a5-8890-93a5-0e58c74e5bcc@kapsi.fi>
+ <c382fb0e-6b73-5ca0-7f63-d2843351325e@nvidia.com>
+ <91dddccd-a6c1-21b3-34d6-6a8082a386e7@nvidia.com>
+ <a507b10b-395b-1f6d-87b9-7c7c436cab0e@gmail.com>
+ <a62602df-91f6-783d-60f3-d9eba10da543@kapsi.fi>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <be8aec02-8651-0b12-ff13-237c75a5b29d@gmail.com>
+Date:   Tue, 14 Dec 2021 18:31:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2] ath11k: Fix a NULL pointer dereference in
- ath11k_mac_op_hw_scan()
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20211202155348.71315-1-zhou1615@umn.edu>
-References: <20211202155348.71315-1-zhou1615@umn.edu>
-To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     zhou1615@umn.edu, kjlu@umn.edu, Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Pradeep Kumar Chitrapu <pradeepc@codeaurora.org>,
-        Shashidhar Lakkavalli <slakkavalli@datto.com>,
-        Ganesh Sesetti <gseset@codeaurora.org>,
-        kbuild test robot <lkp@intel.com>,
-        John Crispin <john@phrozen.org>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <163949586478.10444.18327229880355423779.kvalo@kernel.org>
-Date:   Tue, 14 Dec 2021 15:31:09 +0000 (UTC)
+In-Reply-To: <a62602df-91f6-783d-60f3-d9eba10da543@kapsi.fi>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zhou Qingyang <zhou1615@umn.edu> wrote:
-
-> In ath11k_mac_op_hw_scan(), the return value of kzalloc() is directly
-> used in memcpy(), which may lead to a NULL pointer dereference on
-> failure of kzalloc().
+14.12.2021 17:53, Mikko Perttunen пишет:
+> On 12/14/21 16:35, Dmitry Osipenko wrote:
+>> 14.12.2021 11:05, Jon Hunter пишет:
+>>> Hi all,
+>>>
+>>> Still no response on this :-(
+>>
+>> I see only two patches on Tegra ML and others on DRI ML. Might be good
+>> to start with re-sending this whole series and CCing MLs properly.
+>>
 > 
-> Fix this bug by adding a check of arg.extraie.ptr.
-> 
-> This bug was found by a static analyzer. The analysis employs
-> differential checking to identify inconsistent security operations
-> (e.g., checks or kfrees) between two code paths and confirms that the
-> inconsistent operations are not recovered in the current function or
-> the callers, so they constitute bugs.
-> 
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
-> 
-> Builds with CONFIG_ATH11K=m show no new warnings, and our static
-> analyzer no longer warns about this code.
-> 
-> Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> All patches should have been sent to the same set of addresses. At least
+> LWN's archive seems to agree..
 
-Patch applied to ath-next branch of ath.git, thanks.
-
-eccd25136386 ath11k: Fix a NULL pointer dereference in ath11k_mac_op_hw_scan()
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20211202155348.71315-1-zhou1615@umn.edu/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Indeed, I see that Tegra ML was CCed and I see all patches on Tegra
+patchwork, but I don't see them all on lore and gmane.

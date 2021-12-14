@@ -2,76 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CC4474DB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D141474DBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbhLNWIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:08:53 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59942 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbhLNWIw (ORCPT
+        id S232419AbhLNWJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:09:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232587AbhLNWJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 17:08:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BFB33CE1AE3;
-        Tue, 14 Dec 2021 22:08:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F6AC34600;
-        Tue, 14 Dec 2021 22:08:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639519728;
-        bh=EBCK6cfvPK7Cn7mDPBKvjOcOPEz9uzpGWlhQmLLcX9k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lQPCRk71nBmpfZ5AXLT7WI+baE4psFduocX49AfCF6YI5CwyENAazWWdLRg/GKbfw
-         ky8q8+DNLl9L1RXUYiNOI/hT+JQBU9BgY2k9xsyjFET91BsZhRkFYYeAHjSCsC2SF6
-         IIJJKO6NPBQIwT87uIXvGWLkTosFoty/VTyPg6xLtf6CAY0hsv7lr9e6ND57TjxM9O
-         tbWPQjxk3JUnhGaf63GRIzH5+F+yP9S5PyMFqpHSm+TrGFDvY316BCExKjBaj/lye7
-         GwDaoKeDpy72b5lYQag123HgXLEUDLeKKRsMeqq2HIVC4C8KlI3rQ7Z1DfqJDY7Bes
-         0W58LeYULijTg==
-Received: by mail-ed1-f50.google.com with SMTP id z7so6816391edc.11;
-        Tue, 14 Dec 2021 14:08:48 -0800 (PST)
-X-Gm-Message-State: AOAM531HuQTy2ulvktL6NbAGOb4pcgDlB2fhOfqxx9xTA7D+QRTEd2v6
-        n9HeDWIcRkSkWawvblS4Llh4PCTZDDLw4SrLsg==
-X-Google-Smtp-Source: ABdhPJypuHgfwPsR657zl2ibcOgaM2Nuj68R9Nv3Uf4665ATnwZJAQvdfApuWhfKlV8TvOX5W5Xpxr133VMowxvjfKo=
-X-Received: by 2002:a17:907:94c2:: with SMTP id dn2mr8172545ejc.325.1639519727296;
- Tue, 14 Dec 2021 14:08:47 -0800 (PST)
+        Tue, 14 Dec 2021 17:09:00 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40804C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:09:00 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id y16so26824988ioc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:09:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tP6csCLv+Ba35Rqxl/QI5p1YOyxnicuG22GVHFYUF1U=;
+        b=Cc38oMKWk2brJxZDGoC8suov16Oq0YtG58O6cq6oiQTqRNg/SL4mIz90EmLVAnObiB
+         T7MdVO+WibnifiPKGbqd2HGhMmcWOMEn2wfqt1mhmUPmVvzMluNpItXKYi7r4obpZ14+
+         vEFYVpcIlu/68azAW/1nmUbUNTCpl7nYCIhSlSC4KANXjv8kfbJKMVYOKmujbfqthcLf
+         W4/BnybqvyIUBWy+8dQwZfyl/Sc2sVvnLpTESUfTCtXCnh6Hl6KPPW8y2+aFdxUu66nf
+         odPDm2tHTZN8EIG9pVT3cmkNAjRykGS+FWUaUZ2ew7iGjYi7CuY5sHtqr1yl4RqnBTd8
+         mLbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tP6csCLv+Ba35Rqxl/QI5p1YOyxnicuG22GVHFYUF1U=;
+        b=H31WvnDwEvaCeGJR8sovt/wc50IFtupgP5WzSdHfER0veTHCthP0J2//0UaNW2oTKS
+         LvuJVeFqHd/Kd4WpmYrsNk9ozfGmBZj2DcwmJQpC2KhwzpeEL2NhMDlBrxAda5Txq2B6
+         lmXy5wrduBgywUzFq+swZsKra60HBt1dBxEmCVV7Zz97VR3xxWbmzo9MHTpYunaI4Mu1
+         l84B3fQdxnP3skOPGoqycYMUdBa4WavFJVa/YbFT4+mKvc5YgXoq54gwUAejgk/o7nKk
+         8NcN/K0hfMmncIr+/5a0TvD8e0cTc+SnBdrPkHxua48/hX3BKWwZ0pVebd8OAaOvfHT6
+         Sm7A==
+X-Gm-Message-State: AOAM533wfDptVtyypFjReLCvdfu78HVriCRbD9aJSiIQGTS0EYo4Ng2b
+        prEgtHNVZWlze0AgEBGgzVxMPTPCDBzmdgf1L3Q=
+X-Google-Smtp-Source: ABdhPJwZpEx7lKlhd9sQu94o+KABcOC4exIObwhJKgQluloyoysImPofu+FfrETOdJsyEK7m/4nW5u+WBFq9eHEUhNw=
+X-Received: by 2002:a5e:d502:: with SMTP id e2mr5381245iom.118.1639519739580;
+ Tue, 14 Dec 2021 14:08:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20211214215630.4025090-1-robh@kernel.org>
-In-Reply-To: <20211214215630.4025090-1-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 14 Dec 2021 16:08:35 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+F1x-spV4hatHLFmFHo8e4U-gf8goz69_MPihfPirTXw@mail.gmail.com>
-Message-ID: <CAL_Jsq+F1x-spV4hatHLFmFHo8e4U-gf8goz69_MPihfPirTXw@mail.gmail.com>
-Subject: Re: [PATCH v8] libperf: Add arm64 support to perf_mmap__read_self()
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>
-Cc:     linux-perf-users@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
+References: <cover.1639432170.git.andreyknvl@google.com> <af3819749624603ed5cb0cbd869d5e4b3ed116b3.1639432170.git.andreyknvl@google.com>
+ <Ybj2zms+c6J3J/pf@elver.google.com>
+In-Reply-To: <Ybj2zms+c6J3J/pf@elver.google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Tue, 14 Dec 2021 23:08:49 +0100
+Message-ID: <CA+fCnZeY+AEXrPyuWjq9yQ+HOsDxqqp-gw9scvEdLqV5v7q2dA@mail.gmail.com>
+Subject: Re: [PATCH mm v3 29/38] kasan, vmalloc: add vmalloc tagging for HW_TAGS
+To:     Marco Elver <elver@google.com>
+Cc:     andrey.konovalov@linux.dev,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 3:56 PM Rob Herring <robh@kernel.org> wrote:
+On Tue, Dec 14, 2021 at 8:56 PM Marco Elver <elver@google.com> wrote:
 >
-> Add the arm64 variants for read_perf_counter() and read_timestamp().
-> Unfortunately the counter number is encoded into the instruction, so the
-> code is a bit verbose to enumerate all possible counters.
+> On Mon, Dec 13, 2021 at 10:54PM +0100, andrey.konovalov@linux.dev wrote:
+> [...]
+> >
+> > +     /*
+> > +      * Skip page_alloc poisoning and zeroing for pages backing VM_ALLOC
+> > +      * mappings. Only effective in HW_TAGS mode.
+> > +      */
+> > +     gfp &= __GFP_SKIP_KASAN_UNPOISON & __GFP_SKIP_ZERO;
 >
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> v8:
->  - Set attr.config1 to request user access on arm64
+> This will turn gfp == 0 always. Should it have been
+>
+>         gfp |= __GFP_SKIP_KASAN_UNPOISON | __GFP_SKIP_ZERO
 
-Hit send a bit too quick. The kernel side[1] has now been applied by
-Will, so hopefully the libperf enabling can land in 5.17 too.
+Oh, this is bad. Thanks for noticing! Will fix in v4.
 
-Rob
+> Also, not sure it matters, but on non-KASAN builds, this will now always
+> generate an extra instruction. You could conditionally define GFP_SKIP*
+> only in the KASAN modes that need them, otherwise they become 0, so the
+> compiler optimizes this out. (Although I think it does does complicate
+> GFP_SHIFT a little?)
 
-[1] https://lore.kernel.org/all/163948145564.2060329.17036263207999776606.b4-ty@kernel.org/
+I can implement this, but I don't think a single extra instruction per
+vmalloc() matters.

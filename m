@@ -2,146 +2,392 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A96A474B49
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 943D9474B4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237213AbhLNS4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 13:56:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51972 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237196AbhLNS4p (ORCPT
+        id S237219AbhLNS5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234299AbhLNS5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 13:56:45 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D1DAB81667
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 18:56:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9BD5C34600;
-        Tue, 14 Dec 2021 18:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639508202;
-        bh=Jku8PD9u6YzING5IrsfqdnR2FiqVRc94gowzLrYhrMU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fw9jlfuXdFWgiyQU72FVE4aD8jsnJm4xaWFvKv5HNlAPPZXckXuxckbJO+7TvRYEc
-         kftFJ8R0Wi7Qsk+YdUu7GHBp+4ScMp4jVYGudTnpDkDax06NwCNhtw3nWgsh/KqsO6
-         +WJnvMFbnuE0tOtQ5U6XR1raxzfSVNGaiHlhRkGnMQ4miKf0deVqu8lpRrIQcoSsh6
-         BX4FB+p3/JGdAxP6wAxQXYJhYtrLH66fYF5F1umuUKFpqRLhhjEsbRJTk80kgu7Ga7
-         +QVoFjp8/2ilTY9aosC1Ry83Icfakl2RT7sbND+bOuKAVhAMiHmXQ1G0Xc+QvoJt7J
-         0jM3H3lh1WEDg==
-Date:   Tue, 14 Dec 2021 10:56:41 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH] f2fs: skip f2fs_preallocate_blocks() for
- overwrite case
-Message-ID: <Ybjo6Zqpc7Wnev/r@google.com>
-References: <20210928151911.11189-1-chao@kernel.org>
- <YVNoHudG5c65X85G@google.com>
- <65f6c366-9e5b-fe7f-7c38-061996d1882b@kernel.org>
- <dec765de-407b-07c3-75f6-ec7f71c618b7@kernel.org>
- <YXwyvllUOm6jLiF5@google.com>
- <3e653a3d-ddb9-e115-d871-3659a1ba5530@kernel.org>
- <96959788-73b2-6e9b-3aa7-b1e23e9da417@kernel.org>
+        Tue, 14 Dec 2021 13:57:19 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6986DC06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 10:57:19 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id r130so18667912pfc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 10:57:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=z/9sabUvBDfJky/q2Pf4kKBUbChtD7NwCHSaPTfLq3c=;
+        b=UOTh0vR1kRkdKyigzue5IV3Wa7plih6LS2+mD3e/LezSYIxHuhudLxUaHDSwDKo9XS
+         Fg9/n9OaYme+R+JrtviCxJvsaeUkDxArn7Ke8Gc7Uf7R6Vgd1mrpUu8/ui6BfVWSSeC2
+         TIrgBJ3AA/8/mXRM6o+IX5Og4bIKiPpeIUsPdq3lOgg0BKe7zHjRDFbqSEtv1TUa5SXN
+         5ftt3mbU3gDMWUwfKcEe18bIXQmkRhZ5S4pLy6qX8SdLZO9EyItCgaILiCWoMBTbovb8
+         el6gWD9t19+wiW7Km7HpH0lDcay6xbK6lBxPsMOMfZ8F4FiRyFEy8qzinO8tjySWV6Ro
+         PT8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z/9sabUvBDfJky/q2Pf4kKBUbChtD7NwCHSaPTfLq3c=;
+        b=esDEGqha+jtDxfjQvJgyKRqRGPYqiWYqnUB/sU69DmDLwbj8J/txaTGVx69TYFJp/q
+         Va35Ev4GQSK1XtL43mZ1qQZ7lqulBBf02pekP2y2mDPFYPIuob2qCK5FeGDiBe6fTxE7
+         +PLicR74/1eF6sDCL2kXx3UMGRB7kS6+iqWKalU8KuIzZsK+wDW3BZaSv/Zb4ynnNZjJ
+         jng/Kl2XjswBfrgizV6YuxuZVIIyCMHkCAU4BV4v/Jqn0wt5RzwCszZS4Vcv7FrE+3ox
+         uIRnIhpxxrOQSRwinn8p+EufzwfXjnCm0lamcgn1+DtWHRnr4f8U8sXUcceyM5bBbcXy
+         2q1g==
+X-Gm-Message-State: AOAM532Dt1XpPRccFqxM7uDPY792to9s+fVdm05ufJTfco8J10M/H13h
+        Osux+9RoE1bAoZwhGTshvMfUiA==
+X-Google-Smtp-Source: ABdhPJzgsyYh10jCsoOLuPqUrO0k9IFRohrCCYhw80obOIddX5S4lpYd7V+a0Wbv9pIzbiy9koNn9Q==
+X-Received: by 2002:a05:6a00:2ab:b0:49f:997e:23e2 with SMTP id q11-20020a056a0002ab00b0049f997e23e2mr5728823pfs.22.1639508238879;
+        Tue, 14 Dec 2021 10:57:18 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id c19sm1471081pjr.2.2021.12.14.10.57.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 10:57:16 -0800 (PST)
+Date:   Tue, 14 Dec 2021 11:57:14 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 2/9] Coresight: Add coresight TPDM source driver
+Message-ID: <20211214185714.GB1549991@p14s>
+References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
+ <20211209141543.21314-3-quic_jinlmao@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <96959788-73b2-6e9b-3aa7-b1e23e9da417@kernel.org>
+In-Reply-To: <20211209141543.21314-3-quic_jinlmao@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12, Chao Yu wrote:
-> Ping,
+On Thu, Dec 09, 2021 at 10:15:36PM +0800, Mao Jinlong wrote:
+> Add driver to support Coresight device TPDM (Trace, Profiling and
+> Diagnostics Monitor). TPDM is a monitor to collect data from
+> different datasets. This change is to add probe/enable/disable
+> functions for tpdm source.
 > 
-> On 2021/10/30 11:02, Chao Yu wrote:
-> > On 2021/10/30 1:43, Jaegeuk Kim wrote:
-> > > On 10/29, Chao Yu wrote:
-> > > > Ping,
-> > > > 
-> > > > On 2021/9/29 8:05, Chao Yu wrote:
-> > > > > On 2021/9/29 3:08, Jaegeuk Kim wrote:
-> > > > > > On 09/28, Chao Yu wrote:
-> > > > > > > In f2fs_file_write_iter(), let's use f2fs_overwrite_io() to
-> > > > > > > check whethere it is overwrite case, for such case, we can skip
-> > > > > > > f2fs_preallocate_blocks() in order to avoid f2fs_do_map_lock(),
-> > > > > > > which may be blocked by checkpoint() potentially.
-> > > > > > > 
-> > > > > > > Signed-off-by: Chao Yu <chao@kernel.org>
-> > > > > > > ---
-> > > > > > >    fs/f2fs/file.c | 4 ++++
-> > > > > > >    1 file changed, 4 insertions(+)
-> > > > > > > 
-> > > > > > > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> > > > > > > index 13deae03df06..51fecb2f4db5 100644
-> > > > > > > --- a/fs/f2fs/file.c
-> > > > > > > +++ b/fs/f2fs/file.c
-> > > > > > > @@ -4321,6 +4321,10 @@ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
-> > > > > > >            preallocated = true;
-> > > > > > >            target_size = iocb->ki_pos + iov_iter_count(from);
-> > > > > > > +        if (f2fs_overwrite_io(inode, iocb->ki_pos,
-> > > > > > > +                        iov_iter_count(from)))
-> > > > > > > +            goto write;
-> > > > > > 
-> > > > > > This calls f2fs_map_blocks() which can be duplicate, if it's not the overwirte
-> > > > > > case. Do we have other benefit?
-> > > > > 
-> > > > > f2fs_overwrite_io() will break for append write case w/ below check:
-> > > > > 
-> > > > >       if (pos + len > i_size_read(inode))
-> > > > >           return false;
-> > > > > 
-> > > > > I guess we may only suffer double f2fs_map_blocks() for write hole
-> > > > > case, e.g. truncate to large size & write inside the filesize. For
-> > > > > this case, how about adding a condition to allow double f2fs_map_blocks()
-> > > > > only if write size is smaller than a threshold?
-> > > 
-> > > I still don't see the benefit much to do double f2fs_map_blocks. What is the
-> > > problem here?
-> > 
-> > There is potential hangtask happened during swapfile's writeback:
-> > 
-> > - loop_kthread_worker_fn
-> >   - kthread_worker_fn
-> >    - loop_queue_work
-> >     - lo_rw_aio
-> >      - f2fs_file_write_iter
-> >       - f2fs_preallocate_blocks
-> >        - f2fs_map_blocks
-> >         - down_read
-> >          - rwsem_down_read_slowpath
-> >           - schedule
-> > 
-> > I try to mitigate such issue by preallocating swapfile's block address and
-> > avoid f2fs_do_map_lock() as much as possible in swapfile's writeback path...
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> ---
+>  MAINTAINERS                                  |   8 +
+>  drivers/hwtracing/coresight/Kconfig          |  13 ++
+>  drivers/hwtracing/coresight/Makefile         |   1 +
+>  drivers/hwtracing/coresight/coresight-core.c |   3 +-
+>  drivers/hwtracing/coresight/coresight-tpdm.c | 152 +++++++++++++++++++
+>  drivers/hwtracing/coresight/coresight-tpdm.h |  31 ++++
+>  include/linux/coresight.h                    |   1 +
+>  7 files changed, 208 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+>  create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7a2345ce8521..59f39b3194f6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15560,6 +15560,14 @@ L:	netdev@vger.kernel.org
+>  S:	Supported
+>  F:	drivers/net/ipa/
+>  
+> +QCOM CORESIGHT COMPONENTS DRIVER
+> +M:	Tao Zhang <quic_taozha@quicinc.com>
+> +M:	Jinlong Mao <quic_jinlmao@quicinc.com>
+> +M:	Mathieu Poirier <mathieu.poirier@linaro.org>
+> +M:	Suzuki K Poulose <suzuki.poulose@arm.com>
+> +S:	Maintained
+> +F:	drivers/hwtracing/coresight/coresight-tpdm.c
+> +
 
-How about checking i_blocks and i_size instead of checking the entire map?
+There is no need for an extra entry in the MAINTAINERS file.  The checkpatch.pl
+script is smart enough to know when to CC you and Tao every time the TPDM/TPDA
+drivers are modified.  Suzuki and I will simply wait for you guys to add your RB
+tags before reviewing the patches.  I have explained this in the previous revision. 
 
-> > 
-> > Thanks,
-> > 
-> > > 
-> > > > > 
-> > > > > Thanks,
-> > > > > 
-> > > > > > 
-> > > > > > > +
-> > > > > > >            err = f2fs_preallocate_blocks(iocb, from);
-> > > > > > >            if (err) {
-> > > > > > >    out_err:
-> > > > > > > -- 
-> > > > > > > 2.32.0
-> > > > > 
-> > > > > 
-> > > > > _______________________________________________
-> > > > > Linux-f2fs-devel mailing list
-> > > > > Linux-f2fs-devel@lists.sourceforge.net
-> > > > > https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flists.sourceforge.net%2Flists%2Flistinfo%2Flinux-f2fs-devel&amp;data=04%7C01%7Cchao.yu%40oppo.com%7Cbb41006c3f6d4e4d600a08d99b51cbcd%7Cf1905eb1c35341c5951662b4a54b5ee6%7C0%7C0%7C637711597895400286%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=%2BlEAXWLpV5wGX2hL0Wj5p2qX0AqfUFI05Qiqdp8PK8g%3D&amp;reserved=0
-> > 
-> > 
-> > _______________________________________________
-> > Linux-f2fs-devel mailing list
-> > Linux-f2fs-devel@lists.sourceforge.net
-> > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+>  QEMU MACHINE EMULATOR AND VIRTUALIZER SUPPORT
+>  M:	Gabriel Somlo <somlo@cmu.edu>
+>  M:	"Michael S. Tsirkin" <mst@redhat.com>
+> diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
+> index 514a9b8086e3..5c506a1cd08f 100644
+> --- a/drivers/hwtracing/coresight/Kconfig
+> +++ b/drivers/hwtracing/coresight/Kconfig
+> @@ -201,4 +201,17 @@ config CORESIGHT_TRBE
+>  
+>  	  To compile this driver as a module, choose M here: the module will be
+>  	  called coresight-trbe.
+> +
+> +config CORESIGHT_TPDM
+> +	tristate "CoreSight Trace, Profiling & Diagnostics Monitor driver"
+> +	select CORESIGHT_LINKS_AND_SINKS
+
+Is this available on 32bit HW as well?  If not please make it dependent on ARM64
+as it for ETMv4x devices.
+
+> +	help
+> +	  This driver provides support for configuring monitor. Monitors are
+> +	  primarily responsible for data set collection and support the
+> +	  ability to collect any permutation of data set types. Monitors are
+> +	  also responsible for interaction with system cross triggering.
+> +
+> +	  To compile this driver as a module, choose M here: the module will be
+> +	  called coresight-tpdm.
+> +
+>  endif
+> diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
+> index b6c4a48140ec..e7392a0dddeb 100644
+> --- a/drivers/hwtracing/coresight/Makefile
+> +++ b/drivers/hwtracing/coresight/Makefile
+> @@ -25,5 +25,6 @@ obj-$(CONFIG_CORESIGHT_CPU_DEBUG) += coresight-cpu-debug.o
+>  obj-$(CONFIG_CORESIGHT_CATU) += coresight-catu.o
+>  obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
+>  obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
+> +obj-$(CONFIG_CORESIGHT_TPDM) += coresight-tpdm.o
+>  coresight-cti-y := coresight-cti-core.o	coresight-cti-platform.o \
+>  		   coresight-cti-sysfs.o
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index cc6b6cabf85f..a7f1a6f09cfb 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -1071,7 +1071,8 @@ static int coresight_validate_source(struct coresight_device *csdev,
+>  	}
+>  
+>  	if (subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_PROC &&
+> -	    subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE) {
+> +	    subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE &&
+> +	    subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SYS) {
+>  		dev_err(&csdev->dev, "wrong device subtype in %s\n", function);
+>  		return -EINVAL;
+>  	}
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> new file mode 100644
+> index 000000000000..f494cef4fb24
+> --- /dev/null
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -0,0 +1,152 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/amba/bus.h>
+> +#include <linux/bitmap.h>
+> +#include <linux/coresight.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/fs.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/regulator/consumer.h>
+> +
+> +#include "coresight-priv.h"
+> +#include "coresight-tpdm.h"
+> +
+> +DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
+> +
+> +static int tpdm_enable(struct coresight_device *csdev,
+> +		       struct perf_event *event, u32 mode)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
+> +
+> +	mutex_lock(&drvdata->lock);
+> +	if (drvdata->enable) {
+> +		mutex_unlock(&drvdata->lock);
+> +		return -EBUSY;
+> +	}
+> +
+> +	drvdata->enable = true;
+> +	mutex_unlock(&drvdata->lock);
+> +
+> +	dev_info(drvdata->dev, "TPDM tracing enabled\n");
+> +	return 0;
+> +}
+> +
+> +static void tpdm_disable(struct coresight_device *csdev,
+> +			 struct perf_event *event)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
+> +
+> +	mutex_lock(&drvdata->lock);
+> +	if (!drvdata->enable) {
+> +		mutex_unlock(&drvdata->lock);
+> +		return;
+> +	}
+> +
+> +	drvdata->enable = false;
+> +	mutex_unlock(&drvdata->lock);
+> +
+> +	dev_info(drvdata->dev, "TPDM tracing disabled\n");
+> +}
+> +
+> +static int tpdm_trace_id(struct coresight_device *csdev)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
+> +
+> +	return drvdata->traceid;
+> +}
+> +
+> +static const struct coresight_ops_source tpdm_source_ops = {
+> +	.trace_id	= tpdm_trace_id,
+> +	.enable		= tpdm_enable,
+> +	.disable	= tpdm_disable,
+> +};
+> +
+> +static const struct coresight_ops tpdm_cs_ops = {
+> +	.source_ops	= &tpdm_source_ops,
+> +};
+> +
+> +static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+> +{
+> +	static int traceid = TPDM_TRACE_ID_START;
+> +
+> +	drvdata->traceid = traceid++;
+> +}
+
+I have been specific on how to properly do this in the last revision.  Given the
+above about the MAINTAINERS file, I am not sure that I will continue reviewing this set.
+
+There is also no need to rush another revision as I won't have the bandwidth to
+process it before the holidays.
+
+Thanks,
+Mathieu
+
+> +
+> +static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
+> +{
+> +	struct device *dev = &adev->dev;
+> +	struct coresight_platform_data *pdata;
+> +	struct tpdm_drvdata *drvdata;
+> +	struct coresight_desc desc = { 0 };
+> +
+> +	desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
+> +	if (!desc.name)
+> +		return -ENOMEM;
+> +	pdata = coresight_get_platform_data(dev);
+> +	if (IS_ERR(pdata))
+> +		return PTR_ERR(pdata);
+> +	adev->dev.platform_data = pdata;
+> +
+> +	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +	drvdata->dev = &adev->dev;
+> +	dev_set_drvdata(dev, drvdata);
+> +
+> +	drvdata->base = devm_ioremap_resource(dev, &adev->res);
+> +	if (!drvdata->base)
+> +		return -ENOMEM;
+> +
+> +	mutex_init(&drvdata->lock);
+> +
+> +	desc.type = CORESIGHT_DEV_TYPE_SOURCE;
+> +	desc.subtype.source_subtype = CORESIGHT_DEV_SUBTYPE_SOURCE_SYS;
+> +	desc.ops = &tpdm_cs_ops;
+> +	desc.pdata = adev->dev.platform_data;
+> +	desc.dev = &adev->dev;
+> +	drvdata->csdev = coresight_register(&desc);
+> +	if (IS_ERR(drvdata->csdev))
+> +		return PTR_ERR(drvdata->csdev);
+> +
+> +	tpdm_init_default_data(drvdata);
+> +	pm_runtime_put(&adev->dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static void __exit tpdm_remove(struct amba_device *adev)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
+> +
+> +	coresight_unregister(drvdata->csdev);
+> +}
+> +
+> +static struct amba_id tpdm_ids[] = {
+> +	{
+> +		.id = 0x000f0e00,
+> +		.mask = 0x000fff00,
+> +	},
+> +	{ 0, 0},
+> +};
+> +
+> +static struct amba_driver tpdm_driver = {
+> +	.drv = {
+> +		.name   = "coresight-tpdm",
+> +		.owner	= THIS_MODULE,
+> +		.suppress_bind_attrs = true,
+> +	},
+> +	.probe          = tpdm_probe,
+> +	.id_table	= tpdm_ids,
+> +};
+> +
+> +module_amba_driver(tpdm_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Monitor driver");
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
+> new file mode 100644
+> index 000000000000..980ae90ff1c8
+> --- /dev/null
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
+> @@ -0,0 +1,31 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#ifndef _CORESIGHT_CORESIGHT_TPDM_H
+> +#define _CORESIGHT_CORESIGHT_TPDM_H
+> +
+> +/* Default value of the traceid */
+> +#define TPDM_TRACE_ID_START 128
+> +
+> +/**
+> + * struct tpdm_drvdata - specifics associated to an TPDM component
+> + * @base:       memory mapped base address for this component.
+> + * @dev:        The device entity associated to this component.
+> + * @csdev:      component vitals needed by the framework.
+> + * @lock:       lock for the enable value.
+> + * @enable:     enable status of the component.
+> + * @traceid:    value of the current ID for this component.
+> + */
+> +
+> +struct tpdm_drvdata {
+> +	void __iomem		*base;
+> +	struct device		*dev;
+> +	struct coresight_device	*csdev;
+> +	struct mutex		lock;
+> +	bool			enable;
+> +	int			traceid;
+> +};
+> +
+> +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
+> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+> index 93a2922b7653..e48d463be63b 100644
+> --- a/include/linux/coresight.h
+> +++ b/include/linux/coresight.h
+> @@ -65,6 +65,7 @@ enum coresight_dev_subtype_source {
+>  	CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
+>  	CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
+>  	CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
+> +	CORESIGHT_DEV_SUBTYPE_SOURCE_SYS,
+>  };
+>  
+>  enum coresight_dev_subtype_helper {
+> -- 
+> 2.17.1
+> 

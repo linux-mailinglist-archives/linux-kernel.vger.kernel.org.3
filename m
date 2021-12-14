@@ -2,100 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4614746AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B8D4746AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234988AbhLNPke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:40:34 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42458 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbhLNPkc (ORCPT
+        id S235392AbhLNPki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231219AbhLNPkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:40:32 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639496430;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JdRi1fUusSaZFU6+veHQvvEGaN/HvuhGxvZTbNDvuG4=;
-        b=MUl++k5kaG2h2LSFDN8+rccLzXeFytcaY2ck/MHlQ5Hbigzt6XheeGiOqo51Vh1Cln7j3m
-        PceU/CxC+6+h3sk7CkkIAVR8ay/9d9GF/ajjAmn7/jTd9Z/65XaA4FHL+0spILdCbp7+jK
-        krvHNYf5b44B3fnGKrpxYW3Kcsl3+pzkzgOyz3k267iw79Pq0WsVix29YI3VaiQ9//s9X7
-        Bu8cYcap1vMQqub2JHWX3ZKzORr4DMCAtEC/Ug5bB6kyDGImD8dJjWkN1RNxUbvYgvYqnF
-        egJI3T44rQVMibN9ZfIF5C9xjMxfrQM40hk5ygt3hD1whkazjuAyg8ViWP+NYQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639496430;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JdRi1fUusSaZFU6+veHQvvEGaN/HvuhGxvZTbNDvuG4=;
-        b=sbcSAwtuA+XWQOxtSMqnM/V9jjAfy8ZqBr1ulX39JijhSrSqYHAFiz47RVEMG3soLutEgA
-        QyNW7R6a87NBUEBw==
-To:     "Wang, Wei W" <wei.w.wang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Jing Liu <jing2.liu@linux.intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Sean Christoperson <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Subject: RE: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
-In-Reply-To: <854480525e7f4f3baeba09ec6a864b80@intel.com>
-References: <20211214022825.563892248@linutronix.de>
- <20211214024948.048572883@linutronix.de>
- <854480525e7f4f3baeba09ec6a864b80@intel.com>
-Date:   Tue, 14 Dec 2021 16:40:29 +0100
-Message-ID: <87zgp3ry8i.ffs@tglx>
+        Tue, 14 Dec 2021 10:40:37 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ACCC061574;
+        Tue, 14 Dec 2021 07:40:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DP7R5DQlRBuwKxAcekVF/e0Cj/7RMiSBN5vbq+wyWeY=; b=nQRaDyHAbRjSXMilHileHFVTOl
+        W98orjLaE9WRiJVUXJ3wC7zh8okI+Go27Xp/k7uI0yz+mZEIkFbRyxVl4DSS1ZG0Mp+awPJpMYfHY
+        LXkzmSK29bKyxXz/n/qTmaZNjtI7DFhl7Bh4qM7+VLJLF2YUsggkl7zC2d0JsM3amVPnA9ay1PL3v
+        91gTgh3+rzRVae1v90xpW3ySE43cn3ukT+pWG2PimwNctXf9yrrxnNCEJhFigoti3TDq8iOzDmreM
+        jok5306ShlfiSR9NmhONLA+t6CpLjNbnPj51Kl1eIQ5AwpC1CRl6DaI84ZWWZ9T8gObaGjiR7kQRA
+        nPSSWXqw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mx9uu-00Ej1C-74; Tue, 14 Dec 2021 15:40:36 +0000
+Date:   Tue, 14 Dec 2021 07:40:36 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, djwong@kernel.org,
+        dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
+        jane.chu@oracle.com
+Subject: Re: [PATCH v8 1/9] dax: Use percpu rwsem for dax_{read,write}_lock()
+Message-ID: <Ybi69MCK5sP4ebwG@infradead.org>
+References: <20211202084856.1285285-1-ruansy.fnst@fujitsu.com>
+ <20211202084856.1285285-2-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202084856.1285285-2-ruansy.fnst@fujitsu.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14 2021 at 15:09, Wei W. Wang wrote:
-> On Tuesday, December 14, 2021 10:50 AM, Thomas Gleixner wrote:
->> + * Return: 0 on success, error code otherwise  */ int
->> +__fpu_update_guest_features(struct fpu_guest *guest_fpu, u64 xcr0, u64
->> +xfd) {
->
-> I think there would be one issue for the "host write on restore" case.
-> The current QEMU based host restore uses the following sequence:
-> 1) restore xsave
-> 2) restore xcr0
-> 3) restore XFD MSR
+On Thu, Dec 02, 2021 at 04:48:48PM +0800, Shiyang Ruan wrote:
+> In order to introduce dax holder registration, we need a write lock for
+> dax.  Change the current lock to percpu_rw_semaphore and introduce a
+> write lock for registration.
 
-This needs to be fixed. Ordering clearly needs to be:
+Why do we need to change the existing, global locking for that?
 
-  XFD, XCR0, XSTATE
-
-> At the time of "1) restore xsave", KVM already needs fpstate expansion
-> before restoring the xsave data.
-
-> So the 2 APIs here might not be usable for this usage.
-> Our current solution to fpstate expansion at KVM_SET_XSAVE (i.e. step 1) above) is:
->
-> kvm_load_guest_fpu(vcpu);
-> guest_fpu->realloc_request = realloc_request;
-> kvm_put_guest_fpu(vcpu);
->
-> "realloc_request" above is generated from the "xstate_header" received from userspace.
-
-That's a horrible hack. Please fix the ordering in QEMU. Trying to
-accomodate for nonsensical use cases in the kernel is just wrong.
-
-That's like you expect the following to work:
-
-       u8 *p = mmap(NULL, 4096, ....);
-
-       p[8192] = x;
-
-It rightfully explodes in your face and you can keep the pieces.
-
-Having ordering constraints vs. these 3 involved parts is just sensible.
-
-Thanks,
-
-        tglx
+What is the impact of this to benchmarks?  Also if we stop using srcu
+protection, we should be able to get rid of grace periods or RCU frees.

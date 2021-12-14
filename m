@@ -2,132 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 316A0473F87
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB745473F99
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbhLNJdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 04:33:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbhLNJdb (ORCPT
+        id S232499AbhLNJe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 04:34:59 -0500
+Received: from out203-205-251-27.mail.qq.com ([203.205.251.27]:55412 "EHLO
+        out203-205-251-27.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230310AbhLNJe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 04:33:31 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07ED7C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 01:33:30 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D40A01EC0298;
-        Tue, 14 Dec 2021 10:33:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639474405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=IUU3KyuG0y6AIPf35/7xcu7MThUOtKdYlxLaIrajhXE=;
-        b=a8Z7HroF2N9rzpeG7SXfYKFurn9U3EisdaD8J+q5vSYNNDs4PbyLYD1NbK+duO91EHwQsL
-        Ksr1/XYAC0VlT/lHJRcx+jUXypaIc8YSCs1O8Dg/hfE+lRd89lcyfTJmpy8dV9OWIT8hhB
-        iUMoV2Z6AqZYMXFn6hxk6HwpuxVhxzk=
-Date:   Tue, 14 Dec 2021 10:33:26 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH 1/3] X86/db: Change __this_cpu_read() to this_cpu_read()
- in hw_breakpoint_active()
-Message-ID: <Ybhk5uRdxIKtWcQP@zn.tnic>
-References: <20211213042215.3096-1-jiangshanlai@gmail.com>
- <20211213042215.3096-2-jiangshanlai@gmail.com>
- <YbeaXT1Y80baey3t@zn.tnic>
- <CAJhGHyB=VY-m7fJ+bapWgPsczhH0q9oeMmCTP5cOYJAP0VW5ZA@mail.gmail.com>
+        Tue, 14 Dec 2021 04:34:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1639474495;
+        bh=55kVr0dlRkSZXsR+36o/Om7tpdn03/ssVT7jqMxOOgw=;
+        h=From:To:Cc:Subject:Date;
+        b=dYrouJd/PkvB+OW+zVkbai99lcvKf2skr8T9aSQ49YRKM6fSt8d/4oa17K/rocJyS
+         C8MxTBjcrIuOMYvBH0LYmwBaf/96d4dhMvfPyM8MJIjs0DV/MxLBo+BLGstPQnt3lo
+         QQEH5NsBpZYvEZp2XBYGiXO+RSozegGUllIgt5KU=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrsza23.qq.com (NewEsmtp) with SMTP
+        id 8B4AEE74; Tue, 14 Dec 2021 17:34:52 +0800
+X-QQ-mid: xmsmtpt1639474492tf5grh2gf
+Message-ID: <tencent_D6BF2948237359EE0A47338567B88512D106@qq.com>
+X-QQ-XMAILINFO: OTiXS/gPSsXglOJF3mLFeOzLbS3UUL5y3JXRYQ8mK9XYqNnQMxmCJi7lYLHhgM
+         bC/HxlsRN/59QASw2gt8sV6rtJlhVw3nWwHFGGkzI7kqge5NwX2xZyljQYveCSqknjSYlcUznOG0
+         NGoEy7sSXHK8iBgDUS1ykQxzuiIZkICTMiGXrdlc+bRXjgO9OF2f1ZSbOoe/DyG85zk0lrdAuXtv
+         LeVV5N3m8uVRASTKhVEmfRlCZa+NLWyvi9/tYMZ0Ne+q38HYy4SG7BMj7CPyD3igxrby0aLr3GO/
+         sS+dt8ETSKSlYNcrKYsOnW/KcT5TcyjvfEYLDJsV78Aevbmx8/Cg3TQG8//ixe9dA9tHmwrJjaSu
+         kcLaGDsLlNVaVRK6OP5duB8D0M7ro7vx8XcXwPgT8plbpKTfqEKATFTGq2+LleokB1LC5BZpoVVu
+         PYyXMIMRl9QU73oxLcxEbSOP1mJ85Fm9PY2YPA2uRAgAUi23AMEx19PyeuHTEVgzwjBs56WLNPPo
+         YJWfXKfbmMp4Fv8SSy+/tgPLZRXXNRv6ef9BHyQuyETZhf7z5P6XMsdlEwfH9w7eUl2Nm9vrVlFA
+         vW1zJlaSfur5U96bLEQZtG67rrGlqPx0QRnQ15/t4+Z7ocNKR8H4KPIQLqT2qwdilIh7iAhUGnwk
+         mxyP/lqP+7Xkj7TRLBA0xON8sBbqEybVl8dAuWOCYTWVBtQ4d/mpEE4qep5qWmygspKzuMFW2hDX
+         deo1UHPteQEV0nUEo6AmoQ1eWRGXJ5CfKGo/s284z27QNkM1Ht+9M8KyYCI72DWSPYyn25pjBO1I
+         7tBYd+CjdQXv6fwx2+WnhNgZ4+rVsFfx7LZLdm4VcxlFJsELtkQ/hCqTIWFhgFg1/CHQ8w8ic/OO
+         Ze++wBXvwLSizpLhmb6+HlbHnwcFST1gqaTyA3NCK0i4i2a2c5ZYP2aNfeKDDC9w==
+From:   xkernel.wang@foxmail.com
+To:     paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org
+Cc:     selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] selinux: fix a wrong check condition of strcmp()
+Date:   Tue, 14 Dec 2021 17:34:43 +0800
+X-OQ-MSGID: <20211214093443.2415-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJhGHyB=VY-m7fJ+bapWgPsczhH0q9oeMmCTP5cOYJAP0VW5ZA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 10:51:23AM +0800, Lai Jiangshan wrote:
-> The commit message was checked via VIM spellchecker.  It did highlight
-> denylist, noinstr, noinstrument, complexify, and a lot more.
-> 
-> There are too many false-negative results from VIM spellchecker, and
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-I don't know how your vim is configured but my vim spellchecker
-highlights only those words which I mentioned.
+strcmp() will return 0 when two strings(s1, s2 for example) are equal.
+And if a negative number means s1 < s2. Here seems should use == 0 as
+the condition. Otherwise, the value of genfs->fstype can not be
+guaranteed.
 
-> I searched denylist, complexify via google and they are used by some
-> other places so I kept them.
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ security/selinux/ss/services.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And this is where the problem is: you can't just search for words on the
-net and whether someone used them or created them and then assume that
-the reader would know them and understand what you mean.
-
-Writing commit messages is not an exercise in creative writing. Rather,
-your commit messages must be *maximally* *understandable* to the
-reviewer so that she/he doesn't have to
-
-a) decipher your commit message
-b) decipher your diff
-
-because that's twice the work.
-
-So the goal is to explain why you're doing a change in the clearest way
-possible - not do fancy.
-
-Also, even if you use known words, there's this other problem with
-formulation: a sentence full of only correct words doesn't make it
-understandable to others. So try to stick to simple, even boring
-formulations - you can be sure the reader would know what you mean.
-
-> I'm sorry for not searching in the kernel tree to find a proper
-> word for noinstrument, not searching the web for better words for
-> denylist, complexify.
-> 
-> I will change a spellchecker and improve my English.
-
-Thanks for the effort!
-
-> What I wanted to say in this paragraph is that why I chose this way to fix
-> it since there are several ways/policies to fix it.
-> 
-> "Changing __this_cpu_read() to this_cpu_read() is fit for" this policy.
-> 
-> I don't think it can be seen in the diff.
-
-What "policy"? Fit for what?
-
-This is what I mean: the formulation sounds weird and it makes me wonder
-what you're *actually* trying to say?
-
-> > I don't really follow the argument for why this_cpu_read();
-
-See, Peter has a hard time understanding your reasoning either.
-
-> >        /*
-> >         * Must not hit a breakpoint in check_preempt_disabled()
-> >         */
-> >        return raw_cpu_read(cpu_dr7) & DR_GLOBAL_ENABLE_MASK;
-> 
-> Although, this comment is describing raw_cpu_read() obviously, I often
-> can't get which code is a comment in other places referring to due
-> to later changes with new code added and removed.
-
-Each comment must belong to the code it comments - otherwise it needs to
-be fixed/removed.
-
-In this particular case, it could be over hw_breakpoint_active() too.
-
-Thx.
-
+diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
+index 759d878..c9f6c3a 100644
+--- a/security/selinux/ss/services.c
++++ b/security/selinux/ss/services.c
+@@ -2883,7 +2883,7 @@ static inline int __security_genfs_sid(struct selinux_policy *policy,
+ 
+ 	for (genfs = policydb->genfs; genfs; genfs = genfs->next) {
+ 		cmp = strcmp(fstype, genfs->fstype);
+-		if (cmp <= 0)
++		if (cmp == 0)
+ 			break;
+ 	}
+ 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

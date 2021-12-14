@@ -2,151 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EE8474480
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6197474486
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234831AbhLNOG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:06:59 -0500
-Received: from mga01.intel.com ([192.55.52.88]:19793 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234845AbhLNOGy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:06:54 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263122762"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="263122762"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 06:06:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="518259607"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 14 Dec 2021 06:06:50 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 01F6215C; Tue, 14 Dec 2021 16:06:57 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: [PATCH v2 1/1] ARM: orion/gpio: Get rid of unused first parameter in orion_gpio_init()
-Date:   Tue, 14 Dec 2021 16:06:56 +0200
-Message-Id: <20211214140656.53694-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
+        id S234681AbhLNOJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:09:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230295AbhLNOJu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 09:09:50 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11337C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:09:50 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id kj6so2026568qvb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:09:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=e/FTEzYorakqcCqN0foNPkMgFogJ8h7Uad16SL0Kod8=;
+        b=fiM4FWee3dul+2cfhZ6ic8ErBUv5+rkcAB8xBrNiE8/yU0VqkMKWUerZTWAglEdzdh
+         W6MJBZtSejf4gmfD42WSu62rv/jtlZnPptrfWvHKHYRp3yGdN/DseeN2LBRTj4+ECtd8
+         3mO5fl3fKCMNsVpWvdmBd7po3Bj4ugGiq9GghUy/aj2PGYjfX1EycYqSEDu6BdkEnAbx
+         9LbLh76pnG1R2zCG1pVaRNy/+TBgkJXcj2HZ8xXnbH32oEMIs1jrXRDNy0GmyW5QZuS7
+         FD/8lebSWnO/lhHAYtAk+tb49nMxdVn5qOEZtQWT4LL/tcnIOUVn4fRLYX8hzKZrQtu+
+         xuvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e/FTEzYorakqcCqN0foNPkMgFogJ8h7Uad16SL0Kod8=;
+        b=K88O7oNpiIYTGfc6nDcKzb6JURD11ipDIwlsfqZGzVMbucGrcC4DvpNmz/hQplhBYD
+         GSlIBQPWvicXVgRAgrL0ZJaViRxW9bKUxuFufHnXnWhMiDKwo8a+HiD1clMDrf2JWe6U
+         yPynXx1ac3x/Y6WjmWkpE3PUZixmtsnMb9qxtIus5Ag5IFtJTKuCKdimsSLQwGM4HlEz
+         5CH24JOR7wC6qDcISbUZUZ5umQujhNKThyPn+/xQD9gm6dhVF4RsO/kmeulHyvjn6vA5
+         zVJj2C7URLkmI3q/Lg1mTlFByk1shhJXrTRAuqGruSbDZJdc/EX6g5UMrnyv4xk2uqeG
+         R+OA==
+X-Gm-Message-State: AOAM5328vezMchcjVhK745QEtirg0pk5+SmpmEzaiydx4HrZ2iYTF9gF
+        mGTMmyvQfd6sOlPRbwYj5yOD9Q==
+X-Google-Smtp-Source: ABdhPJxD4XJX7z+NX4zxsgKTvBDdRu6CMymo1161/eZjp2r4yhFzTcY1TXXuJLhI8Hjhn6i4vHaVgQ==
+X-Received: by 2002:a05:6214:20e4:: with SMTP id 4mr5743250qvk.95.1639490989223;
+        Tue, 14 Dec 2021 06:09:49 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:e1e4])
+        by smtp.gmail.com with ESMTPSA id v12sm12189863qtx.80.2021.12.14.06.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 06:09:48 -0800 (PST)
+Date:   Tue, 14 Dec 2021 15:09:46 +0100
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     willy@infradead.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        vdavydov.dev@gmail.com, shakeelb@google.com, guro@fb.com,
+        shy828301@gmail.com, alexs@kernel.org, richard.weiyang@gmail.com,
+        david@fromorbit.com, trond.myklebust@hammerspace.com,
+        anna.schumaker@netapp.com, jaegeuk@kernel.org, chao@kernel.org,
+        kari.argillander@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org, zhengqi.arch@bytedance.com,
+        duanxiongchun@bytedance.com, fam.zheng@bytedance.com,
+        smuchun@gmail.com
+Subject: Re: [PATCH v4 09/17] mm: workingset: use xas_set_lru() to pass
+ shadow_nodes
+Message-ID: <YbilqnwnuTiQ2FEB@cmpxchg.org>
+References: <20211213165342.74704-1-songmuchun@bytedance.com>
+ <20211213165342.74704-10-songmuchun@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213165342.74704-10-songmuchun@bytedance.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OF node pointer is always NULL, get rid of unused parameter in
-orion_gpio_init(). As a side effect it will allow to switch GPIO
-library to the fwnode API, as well as in case of resurrecting it here
-it should be fwnode_handle anyways.
+On Tue, Dec 14, 2021 at 12:53:34AM +0800, Muchun Song wrote:
+> The workingset will add the xa_node to shadow_nodes, so we should use
+> xas_set_lru() to pass the list_lru which we want to insert xa_node
+> into to set up the xa_node reclaim context correctly.
+> 
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: wrapped to 80 limit (Russell)
- arch/arm/mach-dove/irq.c                      | 6 +++---
- arch/arm/mach-mv78xx0/irq.c                   | 3 +--
- arch/arm/mach-orion5x/irq.c                   | 2 +-
- arch/arm/plat-orion/gpio.c                    | 8 ++------
- arch/arm/plat-orion/include/plat/orion-gpio.h | 3 +--
- 5 files changed, 8 insertions(+), 14 deletions(-)
+Ah, you can't instantiate the list on-demand in list_lru_add() because
+that's happening in an atomic context. So you need the lru available
+in the broader xa update context and group the lru setup in with the
+other pre-atomic node allocation bits. Fair enough. I think it would
+be a bit easier to read if this patch and the previous one were
+squashed (workingset is the only user of xa_lru anyway) and you added
+that explanation. But other than that, the changes make sense to me;
+to a combined patch, please add:
 
-diff --git a/arch/arm/mach-dove/irq.c b/arch/arm/mach-dove/irq.c
-index 31ccbcee2627..d36f6b8269c2 100644
---- a/arch/arm/mach-dove/irq.c
-+++ b/arch/arm/mach-dove/irq.c
-@@ -73,12 +73,12 @@ void __init dove_init_irq(void)
- 	/*
- 	 * Initialize gpiolib for GPIOs 0-71.
- 	 */
--	orion_gpio_init(NULL, 0, 32, DOVE_GPIO_LO_VIRT_BASE, 0,
-+	orion_gpio_init(0, 32, DOVE_GPIO_LO_VIRT_BASE, 0,
- 			IRQ_DOVE_GPIO_START, gpio0_irqs);
- 
--	orion_gpio_init(NULL, 32, 32, DOVE_GPIO_HI_VIRT_BASE, 0,
-+	orion_gpio_init(32, 32, DOVE_GPIO_HI_VIRT_BASE, 0,
- 			IRQ_DOVE_GPIO_START + 32, gpio1_irqs);
- 
--	orion_gpio_init(NULL, 64, 8, DOVE_GPIO2_VIRT_BASE, 0,
-+	orion_gpio_init(64, 8, DOVE_GPIO2_VIRT_BASE, 0,
- 			IRQ_DOVE_GPIO_START + 64, gpio2_irqs);
- }
-diff --git a/arch/arm/mach-mv78xx0/irq.c b/arch/arm/mach-mv78xx0/irq.c
-index 788569e960e1..0b5f055ca1c3 100644
---- a/arch/arm/mach-mv78xx0/irq.c
-+++ b/arch/arm/mach-mv78xx0/irq.c
-@@ -67,7 +67,6 @@ void __init mv78xx0_init_irq(void)
- 	 * registers for core #1 are at an offset of 0x18 from those of
- 	 * core #0.)
- 	 */
--	orion_gpio_init(NULL, 0, 32, GPIO_VIRT_BASE,
--			mv78xx0_core_index() ? 0x18 : 0,
-+	orion_gpio_init(0, 32, GPIO_VIRT_BASE, mv78xx0_core_index() ? 0x18 : 0,
- 			IRQ_MV78XX0_GPIO_START, gpio0_irqs);
- }
-diff --git a/arch/arm/mach-orion5x/irq.c b/arch/arm/mach-orion5x/irq.c
-index ac4af2283bef..1ae775d02d90 100644
---- a/arch/arm/mach-orion5x/irq.c
-+++ b/arch/arm/mach-orion5x/irq.c
-@@ -49,6 +49,6 @@ void __init orion5x_init_irq(void)
- 	/*
- 	 * Initialize gpiolib for GPIOs 0-31.
- 	 */
--	orion_gpio_init(NULL, 0, 32, GPIO_VIRT_BASE, 0,
-+	orion_gpio_init(0, 32, GPIO_VIRT_BASE, 0,
- 			IRQ_ORION5X_GPIO_START, gpio0_irqs);
- }
-diff --git a/arch/arm/plat-orion/gpio.c b/arch/arm/plat-orion/gpio.c
-index 734f0be4f14a..3ef9ecdd6343 100644
---- a/arch/arm/plat-orion/gpio.c
-+++ b/arch/arm/plat-orion/gpio.c
-@@ -516,8 +516,7 @@ static void orion_gpio_mask_irq(struct irq_data *d)
- 	irq_gc_unlock(gc);
- }
- 
--void __init orion_gpio_init(struct device_node *np,
--			    int gpio_base, int ngpio,
-+void __init orion_gpio_init(int gpio_base, int ngpio,
- 			    void __iomem *base, int mask_offset,
- 			    int secondary_irq_base,
- 			    int irqs[4])
-@@ -545,9 +544,6 @@ void __init orion_gpio_init(struct device_node *np,
- 	ochip->chip.base = gpio_base;
- 	ochip->chip.ngpio = ngpio;
- 	ochip->chip.can_sleep = 0;
--#ifdef CONFIG_OF
--	ochip->chip.of_node = np;
--#endif
- 	ochip->chip.dbg_show = orion_gpio_dbg_show;
- 
- 	spin_lock_init(&ochip->lock);
-@@ -605,7 +601,7 @@ void __init orion_gpio_init(struct device_node *np,
- 			       IRQ_NOREQUEST, IRQ_LEVEL | IRQ_NOPROBE);
- 
- 	/* Setup irq domain on top of the generic chip. */
--	ochip->domain = irq_domain_add_legacy(np,
-+	ochip->domain = irq_domain_add_legacy(NULL,
- 					      ochip->chip.ngpio,
- 					      ochip->secondary_irq_base,
- 					      ochip->secondary_irq_base,
-diff --git a/arch/arm/plat-orion/include/plat/orion-gpio.h b/arch/arm/plat-orion/include/plat/orion-gpio.h
-index e856b073a9c8..25a2963e0e0f 100644
---- a/arch/arm/plat-orion/include/plat/orion-gpio.h
-+++ b/arch/arm/plat-orion/include/plat/orion-gpio.h
-@@ -30,8 +30,7 @@ int orion_gpio_led_blink_set(struct gpio_desc *desc, int state,
- void orion_gpio_set_valid(unsigned pin, int mode);
- 
- /* Initialize gpiolib. */
--void __init orion_gpio_init(struct device_node *np,
--			    int gpio_base, int ngpio,
-+void __init orion_gpio_init(int gpio_base, int ngpio,
- 			    void __iomem *base, int mask_offset,
- 			    int secondary_irq_base,
- 			    int irq[4]);
--- 
-2.33.0
-
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>

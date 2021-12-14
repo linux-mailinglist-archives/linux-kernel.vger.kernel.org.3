@@ -2,579 +2,592 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 369DD474B0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AD9474B12
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237004AbhLNShE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 13:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
+        id S237062AbhLNSih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbhLNShC (ORCPT
+        with ESMTP id S231756AbhLNSig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 13:37:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC8BC061574;
-        Tue, 14 Dec 2021 10:37:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D46E2616A3;
-        Tue, 14 Dec 2021 18:37:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DA6C34606;
-        Tue, 14 Dec 2021 18:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639507021;
-        bh=0j716t5FZtRn0U43qKPjcaZk5MxuoABRh7oLXjDE4qo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=hfe/gwuyava1ZKQqonyUUGwA/oXH6WEVlyf/R57C/yL4ynafCDaExYI8Fei+eGkNd
-         HomPQ5B+fDGhC/ntyxUr6gWB0TN7UFzsArVNJxIa9QtrPWM8XyKISSrcivdHD7/LRc
-         a5yKp7sCtENdRPtJjHoG9VBTw1vndVFIx6A8EmIFHFnVaT9lVLLiLT2s2LMjE66nU6
-         o8nSEYJHZmPKv7RzIfdkoakEbGH/p5E1uo72bkuAljDUguS6LQzfVW8zXSAqf2MMZG
-         Ucc9E8lzAqrvwangRk1ESXb3vbH16qa7t8YNvmc0rUhTDcNIBBnr6r3yOKF+PP1ufR
-         ho6MSldAY7eDg==
-Message-ID: <a23a1638bd39fdc314d36482a3155ca7b800a045.camel@kernel.org>
-Subject: Re: [PATCH v2 08/67] fscache: Implement cache registration
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 14 Dec 2021 13:36:58 -0500
-In-Reply-To: <163906889665.143852.10378009165231294456.stgit@warthog.procyon.org.uk>
-References: <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk>
-         <163906889665.143852.10378009165231294456.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        Tue, 14 Dec 2021 13:38:36 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7397AC061574;
+        Tue, 14 Dec 2021 10:38:36 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id x1-20020a4aea01000000b002c296d82604so5167436ood.9;
+        Tue, 14 Dec 2021 10:38:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YGfSrSGfIqBEGdNYo40++wMFrnXNApFMZdhUHkYYc9g=;
+        b=WoWZTx/dFb29pOK7U2d3v7mp6VmKHOUggggTu8gHEUUxJHklTapetgwk7T3tE5l4K4
+         l5dJoHdNyh6aCg49Djx47TfUeTnYcVf0hcpPtRiSNdTfBOoQWTxQDiv6/xudP9TwRvPP
+         +SH8Fk/tfUmszn/oLw7mUHVpSPmXSEWpRdAhzlA5N32jkSiBR6DknFii/sUFj1keoYsl
+         V1hAqA/1VmPXLDKTPsT2MndYX5MqF6S1GXDx5fNTT9iUKQXyEqzwkbCyynWY3dkSVu4x
+         /XGyJNG3KKtgu2B6u/abNPEwRgEjGO6Dkuf2ZmHwJXeq4l5Nb0IhrEYR/H1zuiCRdh6h
+         u9ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YGfSrSGfIqBEGdNYo40++wMFrnXNApFMZdhUHkYYc9g=;
+        b=ufu+uro9TKbkRTwwLE2JYg/oZwg2I1d3H8U53/kMr82Us4XcFTGHlzskMEWn1mpNZt
+         Prcf/X/9QXO/CBdRiAOvr26gRCaTxMc2bOUk/rq8Zu20LuqhaZxVrA2fx97oCy9spEv6
+         GcguO275ID83iY4wXqBO7DR+tEMLbhq7F7LwRMoJZxioAaL1qa2AwjDYWFgee5wvipuL
+         zhO8tihLsUTeOvxLHbbsFLOHOqjH42wQSwyjcAYIkVz8fFds9UC00PO+he6kmcMZ2ozT
+         s9ewPlnGXCrAZeMo/2op3cHn1Xg8pe23SNBXno83SUCrK66N/zKaSpb/Sg7coQpC84bz
+         jVTA==
+X-Gm-Message-State: AOAM533hBqI0fY11dwhOxx/3GZAJQHoRlUY6Sjhj/TEjL5XNRP3uVR9N
+        St+dVai0a1g98KCktJdd0LNGzff0BI8jK1YY4wY=
+X-Google-Smtp-Source: ABdhPJz0m2CdeR8tCa95Sp6XWZIB9ig2w2lYyoGy1d8GdFaSMTpcCGRwQkpchAyBk0UW+Z3j9nLcSUVvT+9/QyS4s8U=
+X-Received: by 2002:a4a:d486:: with SMTP id o6mr4540812oos.49.1639507115697;
+ Tue, 14 Dec 2021 10:38:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20211213234034.111891-1-casey@schaufler-ca.com> <20211213234034.111891-15-casey@schaufler-ca.com>
+In-Reply-To: <20211213234034.111891-15-casey@schaufler-ca.com>
+From:   =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Date:   Tue, 14 Dec 2021 19:38:24 +0100
+Message-ID: <CAJ2a_Df3HOhBKR6B3NhMkQb8hbz98AMG+Rvh4aht4ZbUY-OfUQ@mail.gmail.com>
+Subject: Re: [PATCH v31 14/28] LSM: Specify which LSM to display
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>, linux-audit@redhat.com,
+        Kees Cook <keescook@chromium.org>, john.johansen@canonical.com,
+        penguin-kernel@i-love.sakura.ne.jp,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        linux-kernel@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-09 at 16:54 +0000, David Howells wrote:
-> Implement a register of caches and provide functions to manage it.
-> 
-> Two functions are provided for the cache backend to use:
-> 
->  (1) Acquire a cache cookie:
-> 
-> 	struct fscache_cache *fscache_acquire_cache(const char *name)
-> 
->      This gets the cache cookie for a cache of the specified name and moves
->      it to the preparation state.  If a nameless cache cookie exists, that
->      will be given this name and used.
-> 
->  (2) Relinquish a cache cookie:
-> 
-> 	void fscache_relinquish_cache(struct fscache_cache *cache);
-> 
->      This relinquishes a cache cookie, cleans it and makes it available if
->      it's still referenced by a network filesystem.
-> 
-> Note that network filesystems don't deal with cache cookies directly, but
-> rather go straight to the volume registration.
-
-This final sentence is a bit vague. Netfs's do need to _track_ fscache
-cookies (generally on a per-inode basis). I get that you mean that they
-don't have to deal with cookies that refer to caches. Maybe the term
-cookie is just overloaded here. ;)
-
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: linux-cachefs@redhat.com
-> Link: https://lore.kernel.org/r/163819587157.215744.13523139317322503286.stgit@warthog.procyon.org.uk/ # v1
+On Tue, 14 Dec 2021 at 00:56, Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> Create a new entry "interface_lsm" in the procfs attr directory for
+> controlling which LSM security information is displayed for a
+> process. A process can only read or write its own display value.
+>
+> The name of an active LSM that supplies hooks for
+> human readable data may be written to "interface_lsm" to set the
+> value. The name of the LSM currently in use can be read from
+> "interface_lsm". At this point there can only be one LSM capable
+> of display active. A helper function lsm_task_ilsm() is
+> provided to get the interface lsm slot for a task_struct.
+>
+> Setting the "interface_lsm" requires that all security modules using
+> setprocattr hooks allow the action. Each security module is
+> responsible for defining its policy.
+>
+> AppArmor hook provided by John Johansen <john.johansen@canonical.com>
+> SELinux hook provided by Stephen Smalley <stephen.smalley.work@gmail.com>
+>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Stephen Smalley <stephen.smalley.work@gmail.com>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: John Johansen <john.johansen@canonical.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-api@vger.kernel.org
+> Cc: linux-doc@vger.kernel.org
 > ---
-> 
->  fs/fscache/Makefile            |    1 
->  fs/fscache/cache.c             |  274 ++++++++++++++++++++++++++++++++++++++++
->  fs/fscache/internal.h          |   33 +++++
->  fs/fscache/proc.c              |    4 +
->  include/linux/fscache-cache.h  |   34 +++++
->  include/trace/events/fscache.h |   43 ++++++
->  6 files changed, 389 insertions(+)
->  create mode 100644 fs/fscache/cache.c
-> 
-> diff --git a/fs/fscache/Makefile b/fs/fscache/Makefile
-> index f9722de32247..d9fc22c18090 100644
-> --- a/fs/fscache/Makefile
-> +++ b/fs/fscache/Makefile
-> @@ -4,6 +4,7 @@
->  #
->  
->  fscache-y := \
-> +	cache.o \
->  	main.o
->  
->  fscache-$(CONFIG_PROC_FS) += proc.o
-> diff --git a/fs/fscache/cache.c b/fs/fscache/cache.c
+>  .../ABI/testing/procfs-attr-lsm_display       |  22 +++
+>  Documentation/security/lsm.rst                |  14 ++
+>  fs/proc/base.c                                |   1 +
+>  include/linux/security.h                      |  17 ++
+>  security/apparmor/include/apparmor.h          |   3 +-
+>  security/apparmor/lsm.c                       |  32 ++++
+>  security/security.c                           | 166 ++++++++++++++++--
+>  security/selinux/hooks.c                      |  11 ++
+>  security/selinux/include/classmap.h           |   2 +-
+>  security/smack/smack_lsm.c                    |   7 +
+>  10 files changed, 256 insertions(+), 19 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/procfs-attr-lsm_display
+>
+> diff --git a/Documentation/ABI/testing/procfs-attr-lsm_display b/Documentation/ABI/testing/procfs-attr-lsm_display
 > new file mode 100644
-> index 000000000000..8db77bb9f8e2
+> index 000000000000..0f60005c235c
 > --- /dev/null
-> +++ b/fs/fscache/cache.c
-> @@ -0,0 +1,274 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/* FS-Cache cache handling
-> + *
-> + * Copyright (C) 2021 Red Hat, Inc. All Rights Reserved.
-> + * Written by David Howells (dhowells@redhat.com)
-> + */
+> +++ b/Documentation/ABI/testing/procfs-attr-lsm_display
+> @@ -0,0 +1,22 @@
+> +What:          /proc/*/attr/lsm_display
+> +Contact:       linux-security-module@vger.kernel.org,
+> +Description:   The name of the Linux security module (LSM) that will
+> +               provide information in the /proc/*/attr/current,
+> +               /proc/*/attr/prev and /proc/*/attr/exec interfaces.
+> +               The details of permissions required to read from
+> +               this interface are dependent on the LSMs active on the
+> +               system.
+> +               A process cannot write to this interface unless it
+> +               refers to itself.
+> +               The other details of permissions required to write to
+> +               this interface are dependent on the LSMs active on the
+> +               system.
+> +               The format of the data used by this interface is a
+> +               text string identifying the name of an LSM. The values
+> +               accepted are:
+> +                       selinux         - the SELinux LSM
+> +                       smack           - the Smack LSM
+> +                       apparmor        - The AppArmor LSM
+> +               By convention the LSM names are lower case and do not
+> +               contain special characters.
+> +Users:         LSM user-space
+> diff --git a/Documentation/security/lsm.rst b/Documentation/security/lsm.rst
+> index 6a2a2e973080..b77b4a540391 100644
+> --- a/Documentation/security/lsm.rst
+> +++ b/Documentation/security/lsm.rst
+> @@ -129,3 +129,17 @@ to identify it as the first security module to be registered.
+>  The capabilities security module does not use the general security
+>  blobs, unlike other modules. The reasons are historical and are
+>  based on overhead, complexity and performance concerns.
 > +
-> +#define FSCACHE_DEBUG_LEVEL CACHE
-> +#include <linux/export.h>
-> +#include <linux/slab.h>
-> +#include "internal.h"
+> +LSM External Interfaces
+> +=======================
 > +
-> +static LIST_HEAD(fscache_caches);
-> +DECLARE_RWSEM(fscache_addremove_sem);
-> +EXPORT_SYMBOL(fscache_addremove_sem);
+> +The LSM infrastructure does not generally provide external interfaces.
+> +The individual security modules provide what external interfaces they
+> +require.
 > +
-> +static atomic_t fscache_cache_debug_id;
+> +The file ``/sys/kernel/security/lsm`` provides a comma
+> +separated list of the active security modules.
 > +
-> +/*
-> + * Allocate a cache cookie.
-> + */
-> +static struct fscache_cache *fscache_alloc_cache(const char *name)
-> +{
-> +	struct fscache_cache *cache;
-> +
-> +	cache = kzalloc(sizeof(*cache), GFP_KERNEL);
-> +	if (cache) {
-> +		if (name) {
-> +			cache->name = kstrdup(name, GFP_KERNEL);
-> +			if (!cache->name) {
-> +				kfree(cache);
-> +				return NULL;
-> +			}
-> +		}
-> +		refcount_set(&cache->ref, 1);
-> +		INIT_LIST_HEAD(&cache->cache_link);
-> +		cache->debug_id = atomic_inc_return(&fscache_cache_debug_id);
-> +	}
-> +	return cache;
-> +}
-> +
-> +static bool fscache_get_cache_maybe(struct fscache_cache *cache,
-> +				    enum fscache_cache_trace where)
-> +{
-> +	bool success;
-> +	int ref;
-> +
-> +	success = __refcount_inc_not_zero(&cache->ref, &ref);
-> +	if (success)
-> +		trace_fscache_cache(cache->debug_id, ref + 1, where);
-> +	return success;
-> +}
-> +
-> +/*
-> + * Look up a cache cookie.
-> + */
-> +struct fscache_cache *fscache_lookup_cache(const char *name, bool is_cache)
-> +{
-> +	struct fscache_cache *candidate, *cache, *unnamed = NULL;
-> +
-> +	/* firstly check for the existence of the cache under read lock */
-> +	down_read(&fscache_addremove_sem);
-> +
-> +	list_for_each_entry(cache, &fscache_caches, cache_link) {
-> +		if (cache->name && name && strcmp(cache->name, name) == 0 &&
-> +		    fscache_get_cache_maybe(cache, fscache_cache_get_acquire))
-> +			goto got_cache_r;
-> +		if (!cache->name && !name &&
-> +		    fscache_get_cache_maybe(cache, fscache_cache_get_acquire))
-> +			goto got_cache_r;
-> +	}
-> +
-> +	if (!name) {
-> +		list_for_each_entry(cache, &fscache_caches, cache_link) {
-> +			if (cache->name &&
-> +			    fscache_get_cache_maybe(cache, fscache_cache_get_acquire))
-> +				goto got_cache_r;
-> +		}
-> +	}
-> +
-> +	up_read(&fscache_addremove_sem);
-> +
-> +	/* the cache does not exist - create a candidate */
-> +	candidate = fscache_alloc_cache(name);
-> +	if (!candidate)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	/* write lock, search again and add if still not present */
-> +	down_write(&fscache_addremove_sem);
-> +
-> +	list_for_each_entry(cache, &fscache_caches, cache_link) {
-> +		if (cache->name && name && strcmp(cache->name, name) == 0 &&
-> +		    fscache_get_cache_maybe(cache, fscache_cache_get_acquire))
-> +			goto got_cache_w;
-> +		if (!cache->name) {
-> +			unnamed = cache;
-> +			if (!name &&
-> +			    fscache_get_cache_maybe(cache, fscache_cache_get_acquire))
-> +				goto got_cache_w;
-> +		}
-> +	}
-> +
-> +	if (unnamed && is_cache &&
-> +	    fscache_get_cache_maybe(unnamed, fscache_cache_get_acquire))
-> +		goto use_unnamed_cache;
-> +
-> +	if (!name) {
-> +		list_for_each_entry(cache, &fscache_caches, cache_link) {
-> +			if (cache->name &&
-> +			    fscache_get_cache_maybe(cache, fscache_cache_get_acquire))
-> +				goto got_cache_w;
-> +		}
-> +	}
-> +
-> +	list_add_tail(&candidate->cache_link, &fscache_caches);
-> +	trace_fscache_cache(candidate->debug_id,
-> +			    refcount_read(&candidate->ref),
-> +			    fscache_cache_new_acquire);
-> +	up_write(&fscache_addremove_sem);
-> +	return candidate;
-> +
-> +got_cache_r:
-> +	up_read(&fscache_addremove_sem);
-> +	return cache;
-> +use_unnamed_cache:
-> +	cache = unnamed;
-> +	cache->name = candidate->name;
-> +	candidate->name = NULL;
-> +got_cache_w:
-> +	up_write(&fscache_addremove_sem);
-> +	kfree(candidate->name);
-> +	kfree(candidate);
-> +	return cache;
-> +}
-> +
+> +The file ``/proc/pid/attr/interface_lsm`` contains the name of the security
+> +module for which the ``/proc/pid/attr/current`` interface will
+> +apply. This interface can be written to.
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index 13eda8de2998..50dbe5612a26 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -2828,6 +2828,7 @@ static const struct pid_entry attr_dir_stuff[] = {
+>         ATTR(NULL, "fscreate",          0666),
+>         ATTR(NULL, "keycreate",         0666),
+>         ATTR(NULL, "sockcreate",        0666),
+> +       ATTR(NULL, "interface_lsm",     0666),
+>  #ifdef CONFIG_SECURITY_SMACK
+>         DIR("smack",                    0555,
+>             proc_smack_attr_dir_inode_ops, proc_smack_attr_dir_ops),
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 3b653fe331dd..872e543d37dd 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -219,6 +219,23 @@ static inline u32 lsmblob_value(const struct lsmblob *blob)
+>         return 0;
+>  }
+>
 > +/**
-> + * fscache_acquire_cache - Acquire a cache-level cookie.
-> + * @name: The name of the cache.
+> + * lsm_task_ilsm - the "interface_lsm" for this task
+> + * @task: The task to report on
 > + *
-> + * Get a cookie to represent an actual cache.  If a name is given and there is
-> + * a nameless cache record available, this will acquire that and set its name,
-> + * directing all the volumes using it to this cache.
-> + *
-> + * The cache will be switched over to the preparing state if not currently in
-> + * use, otherwise -EBUSY will be returned.
+> + * Returns the task's interface LSM slot.
 > + */
-> +struct fscache_cache *fscache_acquire_cache(const char *name)
+> +static inline int lsm_task_ilsm(struct task_struct *task)
 > +{
-> +	struct fscache_cache *cache;
+> +#ifdef CONFIG_SECURITY
+> +       int *ilsm = task->security;
 > +
-> +	ASSERT(name);
-> +	cache = fscache_lookup_cache(name, true);
-> +	if (IS_ERR(cache))
-> +		return cache;
-> +
-> +	if (!fscache_set_cache_state_maybe(cache,
-> +					   FSCACHE_CACHE_IS_NOT_PRESENT,
-> +					   FSCACHE_CACHE_IS_PREPARING)) {
-> +		pr_warn("Cache tag %s in use\n", name);
-> +		fscache_put_cache(cache, fscache_cache_put_cache);
-> +		return ERR_PTR(-EBUSY);
-> +	}
-> +
-> +	return cache;
-> +}
-> +EXPORT_SYMBOL(fscache_acquire_cache);
-> +
-> +/**
-> + * fscache_put_cache - Release a cache-level cookie.
-> + * @cache: The cache cookie to be released
-> + * @where: An indication of where the release happened
-> + *
-> + * Release the caller's reference on a cache-level cookie.  The @where
-> + * indication should give information about the circumstances in which the call
-> + * occurs and will be logged through a tracepoint.
-> + */
-> +void fscache_put_cache(struct fscache_cache *cache,
-> +		       enum fscache_cache_trace where)
-> +{
-> +	unsigned int debug_id = cache->debug_id;
-> +	bool zero;
-> +	int ref;
-> +
-> +	if (IS_ERR_OR_NULL(cache))
-> +		return;
-> +
-> +	zero = __refcount_dec_and_test(&cache->ref, &ref);
-> +	trace_fscache_cache(debug_id, ref - 1, where);
-> +
-> +	if (zero) {
-> +		down_write(&fscache_addremove_sem);
-> +		list_del_init(&cache->cache_link);
-> +		up_write(&fscache_addremove_sem);
-> +		kfree(cache->name);
-> +		kfree(cache);
-> +	}
-> +}
-> +
-> +/**
-> + * fscache_relinquish_cache - Reset cache state and release cookie
-> + * @cache: The cache cookie to be released
-> + *
-> + * Reset the state of a cache and release the caller's reference on a cache
-> + * cookie.
-> + */
-> +void fscache_relinquish_cache(struct fscache_cache *cache)
-> +{
-> +	enum fscache_cache_trace where =
-> +		(cache->state == FSCACHE_CACHE_IS_PREPARING) ?
-> +		fscache_cache_put_prep_failed :
-> +		fscache_cache_put_relinquish;
-> +
-> +	cache->cache_priv = NULL;
-> +	smp_store_release(&cache->state, FSCACHE_CACHE_IS_NOT_PRESENT);
-> +	fscache_put_cache(cache, where);
-> +}
-> +EXPORT_SYMBOL(fscache_relinquish_cache);
-> +
-> +#ifdef CONFIG_PROC_FS
-> +static const char fscache_cache_states[NR__FSCACHE_CACHE_STATE] = "-PAEW";
-> +
-> +/*
-> + * Generate a list of caches in /proc/fs/fscache/caches
-> + */
-> +static int fscache_caches_seq_show(struct seq_file *m, void *v)
-> +{
-> +	struct fscache_cache *cache;
-> +
-> +	if (v == &fscache_caches) {
-> +		seq_puts(m,
-> +			 "CACHE    REF   VOLS  OBJS  ACCES S NAME\n"
-> +			 "======== ===== ===== ===== ===== = ===============\n"
-> +			 );
-> +		return 0;
-> +	}
-> +
-> +	cache = list_entry(v, struct fscache_cache, cache_link);
-> +	seq_printf(m,
-> +		   "%08x %5d %5d %5d %5d %c %s\n",
-> +		   cache->debug_id,
-> +		   refcount_read(&cache->ref),
-> +		   atomic_read(&cache->n_volumes),
-> +		   atomic_read(&cache->object_count),
-> +		   atomic_read(&cache->n_accesses),
-> +		   fscache_cache_states[cache->state],
-> +		   cache->name ?: "-");
-> +	return 0;
-> +}
-> +
-> +static void *fscache_caches_seq_start(struct seq_file *m, loff_t *_pos)
-> +	__acquires(fscache_addremove_sem)
-> +{
-> +	down_read(&fscache_addremove_sem);
-> +	return seq_list_start_head(&fscache_caches, *_pos);
-> +}
-> +
-> +static void *fscache_caches_seq_next(struct seq_file *m, void *v, loff_t *_pos)
-> +{
-> +	return seq_list_next(v, &fscache_caches, _pos);
-> +}
-> +
-> +static void fscache_caches_seq_stop(struct seq_file *m, void *v)
-> +	__releases(fscache_addremove_sem)
-> +{
-> +	up_read(&fscache_addremove_sem);
-> +}
-> +
-> +const struct seq_operations fscache_caches_seq_ops = {
-> +	.start  = fscache_caches_seq_start,
-> +	.next   = fscache_caches_seq_next,
-> +	.stop   = fscache_caches_seq_stop,
-> +	.show   = fscache_caches_seq_show,
-> +};
-> +#endif /* CONFIG_PROC_FS */
-> diff --git a/fs/fscache/internal.h b/fs/fscache/internal.h
-> index 64767992bd15..2788435361f9 100644
-> --- a/fs/fscache/internal.h
-> +++ b/fs/fscache/internal.h
-> @@ -17,6 +17,39 @@
->  #include <linux/sched.h>
->  #include <linux/seq_file.h>
->  
-> +/*
-> + * cache.c
-> + */
-> +#ifdef CONFIG_PROC_FS
-> +extern const struct seq_operations fscache_caches_seq_ops;
+> +       if (ilsm)
+> +               return *ilsm;
 > +#endif
-> +struct fscache_cache *fscache_lookup_cache(const char *name, bool is_cache);
-> +void fscache_put_cache(struct fscache_cache *cache, enum fscache_cache_trace where);
-> +
-> +static inline enum fscache_cache_state fscache_cache_state(const struct fscache_cache *cache)
-> +{
-> +	return smp_load_acquire(&cache->state);
+> +       return LSMBLOB_INVALID;
 > +}
 > +
-> +static inline bool fscache_cache_is_live(const struct fscache_cache *cache)
+>  /* These functions are in security/commoncap.c */
+>  extern int cap_capable(const struct cred *cred, struct user_namespace *ns,
+>                        int cap, unsigned int opts);
+> diff --git a/security/apparmor/include/apparmor.h b/security/apparmor/include/apparmor.h
+> index 1fbabdb565a8..b1622fcb4394 100644
+> --- a/security/apparmor/include/apparmor.h
+> +++ b/security/apparmor/include/apparmor.h
+> @@ -28,8 +28,9 @@
+>  #define AA_CLASS_SIGNAL                10
+>  #define AA_CLASS_NET           14
+>  #define AA_CLASS_LABEL         16
+> +#define AA_CLASS_DISPLAY_LSM   17
+>
+> -#define AA_CLASS_LAST          AA_CLASS_LABEL
+> +#define AA_CLASS_LAST          AA_CLASS_DISPLAY_LSM
+>
+>  /* Control parameters settable through module/boot flags */
+>  extern enum audit_mode aa_g_audit;
+> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+> index 24241db8ec54..5ed40fd93ce9 100644
+> --- a/security/apparmor/lsm.c
+> +++ b/security/apparmor/lsm.c
+> @@ -621,6 +621,25 @@ static int apparmor_getprocattr(struct task_struct *task, char *name,
+>         return error;
+>  }
+>
+> +
+> +static int profile_interface_lsm(struct aa_profile *profile,
+> +                                struct common_audit_data *sa)
 > +{
-> +	return fscache_cache_state(cache) == FSCACHE_CACHE_IS_ACTIVE;
+> +       struct aa_perms perms = { };
+> +       unsigned int state;
+> +
+> +       state = PROFILE_MEDIATES(profile, AA_CLASS_DISPLAY_LSM);
+> +       if (state) {
+> +               aa_compute_perms(profile->policy.dfa, state, &perms);
+> +               aa_apply_modes_to_perms(profile, &perms);
+> +               aad(sa)->label = &profile->label;
+> +
+> +               return aa_check_perms(profile, &perms, AA_MAY_WRITE, sa, NULL);
+> +       }
+> +
+> +       return 0;
 > +}
 > +
-> +static inline void fscache_set_cache_state(struct fscache_cache *cache,
-> +					   enum fscache_cache_state new_state)
-> +{
-> +	smp_store_release(&cache->state, new_state);
+>  static int apparmor_setprocattr(const char *name, void *value,
+>                                 size_t size)
+>  {
+> @@ -632,6 +651,19 @@ static int apparmor_setprocattr(const char *name, void *value,
+>         if (size == 0)
+>                 return -EINVAL;
+>
+> +       /* LSM infrastructure does actual setting of interface_lsm if allowed */
+> +       if (!strcmp(name, "interface_lsm")) {
+> +               struct aa_profile *profile;
+> +               struct aa_label *label;
 > +
-> +}
+> +               aad(&sa)->info = "set interface lsm";
+> +               label = begin_current_label_crit_section();
+> +               error = fn_for_each_confined(label, profile,
+> +                                       profile_interface_lsm(profile, &sa));
+> +               end_current_label_crit_section(label);
+> +               return error;
+> +       }
 > +
-> +static inline bool fscache_set_cache_state_maybe(struct fscache_cache *cache,
-> +						 enum fscache_cache_state old_state,
-> +						 enum fscache_cache_state new_state)
-> +{
-> +	return try_cmpxchg_release(&cache->state, &old_state, new_state);
-> +}
-> +
->  /*
->   * main.c
->   */
-> diff --git a/fs/fscache/proc.c b/fs/fscache/proc.c
-> index b28003d7d63f..7400568bf85e 100644
-> --- a/fs/fscache/proc.c
-> +++ b/fs/fscache/proc.c
-> @@ -19,6 +19,10 @@ int __init fscache_proc_init(void)
->  	if (!proc_mkdir("fs/fscache", NULL))
->  		goto error_dir;
->  
-> +	if (!proc_create_seq("fs/fscache/caches", S_IFREG | 0444, NULL,
-> +			     &fscache_caches_seq_ops))
-> +		goto error;
-> +
->  #ifdef CONFIG_FSCACHE_STATS
->  	if (!proc_create_single("fs/fscache/stats", S_IFREG | 0444, NULL,
->  				fscache_stats_show))
-> diff --git a/include/linux/fscache-cache.h b/include/linux/fscache-cache.h
-> index d6910a913918..18cd5c9877bb 100644
-> --- a/include/linux/fscache-cache.h
-> +++ b/include/linux/fscache-cache.h
-> @@ -16,6 +16,40 @@
->  
->  #include <linux/fscache.h>
->  
-> +enum fscache_cache_trace;
-> +enum fscache_access_trace;
-> +
-> +enum fscache_cache_state {
-> +	FSCACHE_CACHE_IS_NOT_PRESENT,	/* No cache is present for this name */
-> +	FSCACHE_CACHE_IS_PREPARING,	/* A cache is preparing to come live */
-> +	FSCACHE_CACHE_IS_ACTIVE,	/* Attached cache is active and can be used */
-> +	FSCACHE_CACHE_GOT_IOERROR,	/* Attached cache stopped on I/O error */
-> +	FSCACHE_CACHE_IS_WITHDRAWN,	/* Attached cache is being withdrawn */
-> +#define NR__FSCACHE_CACHE_STATE (FSCACHE_CACHE_IS_WITHDRAWN + 1)
-> +};
+>         /* AppArmor requires that the buffer must be null terminated atm */
+>         if (args[size - 1] != '\0') {
+>                 /* null terminate */
+> diff --git a/security/security.c b/security/security.c
+> index 0e17620a60e2..1d734d9579f1 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -78,7 +78,16 @@ static struct kmem_cache *lsm_file_cache;
+>  static struct kmem_cache *lsm_inode_cache;
+>
+>  char *lsm_names;
+> -static struct lsm_blob_sizes blob_sizes __lsm_ro_after_init;
 > +
 > +/*
-> + * Cache cookie.
+> + * The task blob includes the "interface_lsm" slot used for
+> + * chosing which module presents contexts.
+> + * Using a long to avoid potential alignment issues with
+> + * module assigned task blobs.
 > + */
-> +struct fscache_cache {
-> +	struct list_head	cache_link;	/* Link in cache list */
-> +	void			*cache_priv;	/* Private cache data (or NULL) */
-> +	refcount_t		ref;
-> +	atomic_t		n_volumes;	/* Number of active volumes; */
-> +	atomic_t		n_accesses;	/* Number of in-progress accesses on the cache */
-> +	atomic_t		object_count;	/* no. of live objects in this cache */
-> +	unsigned int		debug_id;
-> +	enum fscache_cache_state state;
-> +	char			*name;
+> +static struct lsm_blob_sizes blob_sizes __lsm_ro_after_init = {
+> +       .lbs_task = sizeof(long),
 > +};
-> +
->  extern struct workqueue_struct *fscache_wq;
->  
-> +/*
-> + * out-of-line cache backend functions
-> + */
-> +extern struct rw_semaphore fscache_addremove_sem;
-> +extern struct fscache_cache *fscache_acquire_cache(const char *name);
-> +extern void fscache_relinquish_cache(struct fscache_cache *cache);
-> +
->  #endif /* _LINUX_FSCACHE_CACHE_H */
-> diff --git a/include/trace/events/fscache.h b/include/trace/events/fscache.h
-> index fe214c5cc87f..3b8e0597b2c1 100644
-> --- a/include/trace/events/fscache.h
-> +++ b/include/trace/events/fscache.h
-> @@ -19,11 +19,27 @@
->  #ifndef __FSCACHE_DECLARE_TRACE_ENUMS_ONCE_ONLY
->  #define __FSCACHE_DECLARE_TRACE_ENUMS_ONCE_ONLY
->  
-> +enum fscache_cache_trace {
-> +	fscache_cache_collision,
-> +	fscache_cache_get_acquire,
-> +	fscache_cache_new_acquire,
-> +	fscache_cache_put_cache,
-> +	fscache_cache_put_prep_failed,
-> +	fscache_cache_put_relinquish,
-> +};
-> +
->  #endif
->  
->  /*
->   * Declare tracing information enums and their string mappings for display.
+>
+>  /* Boot-time LSM user choice */
+>  static __initdata const char *chosen_lsm_order;
+> @@ -672,6 +681,8 @@ int lsm_inode_alloc(struct inode *inode)
 >   */
-> +#define fscache_cache_traces						\
-> +	EM(fscache_cache_collision,		"*COLLIDE*")		\
-> +	EM(fscache_cache_get_acquire,		"GET acq  ")		\
-> +	EM(fscache_cache_new_acquire,		"NEW acq  ")		\
-> +	EM(fscache_cache_put_cache,		"PUT cache")		\
-> +	EM(fscache_cache_put_prep_failed,	"PUT pfail")		\
-> +	E_(fscache_cache_put_relinquish,	"PUT relnq")
->  
->  /*
->   * Export enum symbols via userspace.
-> @@ -33,6 +49,8 @@
->  #define EM(a, b) TRACE_DEFINE_ENUM(a);
->  #define E_(a, b) TRACE_DEFINE_ENUM(a);
->  
-> +fscache_cache_traces;
+>  static int lsm_task_alloc(struct task_struct *task)
+>  {
+> +       int *ilsm;
 > +
->  /*
->   * Now redefine the EM() and E_() macros to map the enums to the strings that
->   * will be printed in the output.
-> @@ -43,6 +61,31 @@
->  #define E_(a, b)	{ a, b }
->  
->  
-> +TRACE_EVENT(fscache_cache,
-> +	    TP_PROTO(unsigned int cache_debug_id,
-> +		     int usage,
-> +		     enum fscache_cache_trace where),
+>         if (blob_sizes.lbs_task == 0) {
+>                 task->security = NULL;
+>                 return 0;
+> @@ -680,6 +691,15 @@ static int lsm_task_alloc(struct task_struct *task)
+>         task->security = kzalloc(blob_sizes.lbs_task, GFP_KERNEL);
+>         if (task->security == NULL)
+>                 return -ENOMEM;
 > +
-> +	    TP_ARGS(cache_debug_id, usage, where),
+> +       /*
+> +        * The start of the task blob contains the "interface" LSM slot number.
+> +        * Start with it set to the invalid slot number, indicating that the
+> +        * default first registered LSM be displayed.
+> +        */
+> +       ilsm = task->security;
+> +       *ilsm = LSMBLOB_INVALID;
 > +
-> +	    TP_STRUCT__entry(
-> +		    __field(unsigned int,		cache		)
-> +		    __field(int,			usage		)
-> +		    __field(enum fscache_cache_trace,	where		)
-> +			     ),
+>         return 0;
+>  }
+>
+> @@ -1736,14 +1756,26 @@ int security_file_open(struct file *file)
+>
+>  int security_task_alloc(struct task_struct *task, unsigned long clone_flags)
+>  {
+> +       int *oilsm = current->security;
+> +       int *nilsm;
+>         int rc = lsm_task_alloc(task);
+>
+> -       if (rc)
+> +       if (unlikely(rc))
+>                 return rc;
 > +
-> +	    TP_fast_assign(
-> +		    __entry->cache	= cache_debug_id;
-> +		    __entry->usage	= usage;
-> +		    __entry->where	= where;
-> +			   ),
+>         rc = call_int_hook(task_alloc, 0, task, clone_flags);
+> -       if (unlikely(rc))
+> +       if (unlikely(rc)) {
+>                 security_task_free(task);
+> -       return rc;
+> +               return rc;
+> +       }
 > +
-> +	    TP_printk("C=%08x %s r=%d",
-> +		      __entry->cache,
-> +		      __print_symbolic(__entry->where, fscache_cache_traces),
-> +		      __entry->usage)
-> +	    );
+> +       if (oilsm) {
+> +               nilsm = task->security;
+> +               if (nilsm)
+> +                       *nilsm = *oilsm;
+> +       }
 > +
->  #endif /* _TRACE_FSCACHE_H */
->  
->  /* This part must be outside protection */
-> 
-> 
+> +       return 0;
+>  }
+>
+>  void security_task_free(struct task_struct *task)
+> @@ -2175,23 +2207,110 @@ int security_getprocattr(struct task_struct *p, const char *lsm, char *name,
+>                                 char **value)
+>  {
+>         struct security_hook_list *hp;
+> +       int ilsm = lsm_task_ilsm(current);
+> +       int slot = 0;
+> +
+> +       if (!strcmp(name, "interface_lsm")) {
+> +               /*
+> +                * lsm_slot will be 0 if there are no displaying modules.
+> +                */
+> +               if (lsm_slot == 0)
+> +                       return -EINVAL;
+> +
+> +               /*
+> +                * Only allow getting the current process' interface_lsm.
+> +                * There are too few reasons to get another process'
+> +                * interface_lsm and too many LSM policy issues.
+> +                */
+> +               if (current != p)
+> +                       return -EINVAL;
+> +
+> +               ilsm = lsm_task_ilsm(p);
+> +               if (ilsm != LSMBLOB_INVALID)
+> +                       slot = ilsm;
+> +               *value = kstrdup(lsm_slotlist[slot]->lsm, GFP_KERNEL);
+> +               if (*value)
+> +                       return strlen(*value);
+> +               return -ENOMEM;
+> +       }
+>
+>         hlist_for_each_entry(hp, &security_hook_heads.getprocattr, list) {
+>                 if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
+>                         continue;
+> +               if (lsm == NULL && ilsm != LSMBLOB_INVALID &&
+> +                   ilsm != hp->lsmid->slot)
+> +                       continue;
+>                 return hp->hook.getprocattr(p, name, value);
+>         }
+>         return LSM_RET_DEFAULT(getprocattr);
+>  }
+>
+> +/**
+> + * security_setprocattr - Set process attributes via /proc
+> + * @lsm: name of module involved, or NULL
+> + * @name: name of the attribute
+> + * @value: value to set the attribute to
+> + * @size: size of the value
+> + *
+> + * Set the process attribute for the specified security module
+> + * to the specified value. Note that this can only be used to set
+> + * the process attributes for the current, or "self" process.
+> + * The /proc code has already done this check.
+> + *
+> + * Returns 0 on success, an appropriate code otherwise.
+> + */
+>  int security_setprocattr(const char *lsm, const char *name, void *value,
+>                          size_t size)
+>  {
+>         struct security_hook_list *hp;
+> +       char *termed;
+> +       char *copy;
+> +       int *ilsm = current->security;
+> +       int rc = -EINVAL;
+> +       int slot = 0;
+> +
+> +       if (!strcmp(name, "interface_lsm")) {
+> +               /*
+> +                * Change the "interface_lsm" value only if all the security
+> +                * modules that support setting a procattr allow it.
+> +                * It is assumed that all such security modules will be
+> +                * cooperative.
+> +                */
+> +               if (size == 0)
+> +                       return -EINVAL;
+> +
+> +               hlist_for_each_entry(hp, &security_hook_heads.setprocattr,
+> +                                    list) {
+> +                       rc = hp->hook.setprocattr(name, value, size);
+> +                       if (rc < 0)
+> +                               return rc;
+> +               }
+> +
+> +               rc = -EINVAL;
+> +
+> +               copy = kmemdup_nul(value, size, GFP_KERNEL);
+> +               if (copy == NULL)
+> +                       return -ENOMEM;
+> +
+> +               termed = strsep(&copy, " \n");
+> +
+> +               for (slot = 0; slot < lsm_slot; slot++)
+> +                       if (!strcmp(termed, lsm_slotlist[slot]->lsm)) {
+> +                               *ilsm = lsm_slotlist[slot]->slot;
+> +                               rc = size;
+> +                               break;
+> +                       }
+> +
+> +               kfree(termed);
+> +               return rc;
+> +       }
+>
+>         hlist_for_each_entry(hp, &security_hook_heads.setprocattr, list) {
+>                 if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
+>                         continue;
+> +               if (lsm == NULL && *ilsm != LSMBLOB_INVALID &&
+> +                   *ilsm != hp->lsmid->slot)
+> +                       continue;
+>                 return hp->hook.setprocattr(name, value, size);
+>         }
+>         return LSM_RET_DEFAULT(setprocattr);
+> @@ -2211,15 +2330,15 @@ EXPORT_SYMBOL(security_ismaclabel);
+>  int security_secid_to_secctx(struct lsmblob *blob, char **secdata, u32 *seclen)
+>  {
+>         struct security_hook_list *hp;
+> -       int rc;
+> +       int ilsm = lsm_task_ilsm(current);
+>
+>         hlist_for_each_entry(hp, &security_hook_heads.secid_to_secctx, list) {
+>                 if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
+>                         continue;
+> -               rc = hp->hook.secid_to_secctx(blob->secid[hp->lsmid->slot],
+> -                                             secdata, seclen);
+> -               if (rc != LSM_RET_DEFAULT(secid_to_secctx))
+> -                       return rc;
+> +               if (ilsm == LSMBLOB_INVALID || ilsm == hp->lsmid->slot)
+> +                       return hp->hook.secid_to_secctx(
+> +                                       blob->secid[hp->lsmid->slot],
+> +                                       secdata, seclen);
+>         }
+>
+>         return LSM_RET_DEFAULT(secid_to_secctx);
+> @@ -2230,16 +2349,15 @@ int security_secctx_to_secid(const char *secdata, u32 seclen,
+>                              struct lsmblob *blob)
+>  {
+>         struct security_hook_list *hp;
+> -       int rc;
+> +       int ilsm = lsm_task_ilsm(current);
+>
+>         lsmblob_init(blob, 0);
+>         hlist_for_each_entry(hp, &security_hook_heads.secctx_to_secid, list) {
+>                 if (WARN_ON(hp->lsmid->slot < 0 || hp->lsmid->slot >= lsm_slot))
+>                         continue;
+> -               rc = hp->hook.secctx_to_secid(secdata, seclen,
+> -                                             &blob->secid[hp->lsmid->slot]);
+> -               if (rc != 0)
+> -                       return rc;
+> +               if (ilsm == LSMBLOB_INVALID || ilsm == hp->lsmid->slot)
+> +                       return hp->hook.secctx_to_secid(secdata, seclen,
+> +                                               &blob->secid[hp->lsmid->slot]);
+>         }
+>         return 0;
+>  }
+> @@ -2247,7 +2365,14 @@ EXPORT_SYMBOL(security_secctx_to_secid);
+>
+>  void security_release_secctx(char *secdata, u32 seclen)
+>  {
+> -       call_void_hook(release_secctx, secdata, seclen);
+> +       struct security_hook_list *hp;
+> +       int ilsm = lsm_task_ilsm(current);
+> +
+> +       hlist_for_each_entry(hp, &security_hook_heads.release_secctx, list)
+> +               if (ilsm == LSMBLOB_INVALID || ilsm == hp->lsmid->slot) {
+> +                       hp->hook.release_secctx(secdata, seclen);
+> +                       return;
+> +               }
+>  }
+>  EXPORT_SYMBOL(security_release_secctx);
+>
+> @@ -2388,8 +2513,15 @@ EXPORT_SYMBOL(security_sock_rcv_skb);
+>  int security_socket_getpeersec_stream(struct socket *sock, char __user *optval,
+>                                       int __user *optlen, unsigned len)
+>  {
+> -       return call_int_hook(socket_getpeersec_stream, -ENOPROTOOPT, sock,
+> -                               optval, optlen, len);
+> +       int ilsm = lsm_task_ilsm(current);
+> +       struct security_hook_list *hp;
+> +
+> +       hlist_for_each_entry(hp, &security_hook_heads.socket_getpeersec_stream,
+> +                            list)
+> +               if (ilsm == LSMBLOB_INVALID || ilsm == hp->lsmid->slot)
+> +                       return hp->hook.socket_getpeersec_stream(sock, optval,
+> +                                                                optlen, len);
+> +       return -ENOPROTOOPT;
+>  }
+>
+>  int security_socket_getpeersec_dgram(struct socket *sock, struct sk_buff *skb,
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index c295b1035bc6..824a6e4fb126 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -6441,6 +6441,17 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
+>         /*
+>          * Basic control over ability to set these attributes at all.
+>          */
+> +
+> +       /*
+> +        * For setting interface_lsm, we only perform a permission check;
+> +        * the actual update to the interface_lsm value is handled by the
+> +        * LSM framework.
+> +        */
+> +       if (!strcmp(name, "interface_lsm"))
+> +               return avc_has_perm(&selinux_state,
+> +                                   mysid, mysid, SECCLASS_PROCESS2,
+> +                                   PROCESS2__SETDISPLAY, NULL);
+> +
+>         if (!strcmp(name, "exec"))
+>                 error = avc_has_perm(&selinux_state,
+>                                      mysid, mysid, SECCLASS_PROCESS,
+> diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+> index 35aac62a662e..46a7cfaf392d 100644
+> --- a/security/selinux/include/classmap.h
+> +++ b/security/selinux/include/classmap.h
+> @@ -53,7 +53,7 @@ struct security_class_mapping secclass_map[] = {
+>             "execmem", "execstack", "execheap", "setkeycreate",
+>             "setsockcreate", "getrlimit", NULL } },
+>         { "process2",
+> -         { "nnp_transition", "nosuid_transition", NULL } },
+> +         { "nnp_transition", "nosuid_transition", "setdisplay", NULL } },
 
--- 
-Jeff Layton <jlayton@kernel.org>
+Was the suggestion to use a more descriptive permission verb[1]
+accentdentially forgotten or dicarded for some reason?
+
+[1]: https://lore.kernel.org/selinux/6cfc262c-1981-edcf-39bf-197a81cdebf3@schaufler-ca.com/T/#m66d868cf250928f0e8fdae6ffd5df775225036b8
+
+>         { "system",
+>           { "ipc_info", "syslog_read", "syslog_mod",
+>             "syslog_console", "module_request", "module_load", NULL } },
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index 9c44327d8ea7..1069ba7abf40 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -3517,6 +3517,13 @@ static int smack_setprocattr(const char *name, void *value, size_t size)
+>         struct smack_known_list_elem *sklep;
+>         int rc;
+>
+> +       /*
+> +        * Allow the /proc/.../attr/current and SO_PEERSEC "interface_lsm"
+> +        * to be reset at will.
+> +        */
+> +       if (strcmp(name, "interface_lsm") == 0)
+> +               return 0;
+> +
+>         if (!smack_privileged(CAP_MAC_ADMIN) && list_empty(&tsp->smk_relabel))
+>                 return -EPERM;
+>
+> --
+> 2.31.1
+>

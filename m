@@ -2,142 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DFB474811
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9248D474815
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236005AbhLNQ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:29:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235906AbhLNQ3b (ORCPT
+        id S234030AbhLNQ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:29:54 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32738 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235973AbhLNQ3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:29:31 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3D6C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:29:31 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id b13so13934277plg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:29:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UtzwvPGJGsxSlX5yHONhsOG3Z07A2+rV1SqqO3BO/EM=;
-        b=NQSXVVpuoBWD7LQqRbZceG6VsWT9sGdtZlkIK0WEDUWkm79louNmrWzV1akuEiO9C6
-         DYmhBGdiTdKCEMizjZ4l02g6uJJ6J7N+pCUb86uV039Trb6DxUEjtXgZQ/GaXYoILF/H
-         WyuFcp2Pj1yecgyjU/ZdHEzsFKNB2rvJYLeD4JL2/E/u2oftX3xhqp75L2M48qe43Rvw
-         PLY8ZuKFiISF8J1Z29ThfWkgHc56zgQnO16XgRd3FsQIyzK3dRDNbCtkFwfNUf5J4c+a
-         IAW3735BLWBnqwmCcwS0TBXv665M2Bk/XMl7wGsoWMWhU1k17wWIog3EL+ezo7irH9an
-         kEJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=UtzwvPGJGsxSlX5yHONhsOG3Z07A2+rV1SqqO3BO/EM=;
-        b=VxFqRYyzXmgkBozWdlbvPcVCrgtlEwN6CXqj1iTLLEobd1ztMPyznJE2Es1C8AJeIt
-         MkiKpx5/Yh+7fsiKFunwvlSPZIGQOSimXnAW21jMx+6m7Qz7ZPqP1p1HomdHjIO0p/uE
-         yGy7t+sU0QtlggZgoeVwB8HZvAym8AanJZyfIy7ZSAtcJXIIE+nwwh+nACn2V7k4ZpvK
-         vkLEWNXCC4e4SL5KIKfwdZJg08aVPoDUp4dPCW9rcavaTNadeLliCTsuD3qaY6PIuh3l
-         T09Uu6gR6hV4sQGKhcek0K/+5+XzfPxU+FNweVKL9Dg3SWdc6xm8156fyZmtMAW4joV9
-         gUiw==
-X-Gm-Message-State: AOAM533FxSahw/pm0ByMAUFwpau07SUjLarptiiMoH8QkP9ieBqOPgbk
-        zukbwddSd2EuDkQlvatBeo9EhA==
-X-Google-Smtp-Source: ABdhPJzZfZK8Q8jExHWiMImmlWW+dHRzTFrYTgGnuAbNJwuBTr9CHS5VVcJ0wUjgObTaDPXiKaCBhg==
-X-Received: by 2002:a17:90a:5d98:: with SMTP id t24mr1068496pji.109.1639499370924;
-        Tue, 14 Dec 2021 08:29:30 -0800 (PST)
-Received: from localhost ([12.163.77.120])
-        by smtp.gmail.com with ESMTPSA id lb4sm3200381pjb.18.2021.12.14.08.29.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 08:29:30 -0800 (PST)
-Date:   Tue, 14 Dec 2021 08:29:30 -0800 (PST)
-X-Google-Original-Date: Mon, 13 Dec 2021 19:41:25 PST (-0800)
-Subject:     Re: [PATCH v9 08/17] riscv: Add vector struct and assembler definitions
-In-Reply-To: <15d09938180ee45bc5481c4a2d41ad656ca23c82.1636362169.git.greentime.hu@sifive.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        aou@eecs.berkeley.edu
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     greentime.hu@sifive.com
-Message-ID: <mhng-a7a94a37-5791-4c76-8f2d-072130d71819@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Tue, 14 Dec 2021 11:29:49 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BEElBMe039968;
+        Tue, 14 Dec 2021 16:29:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=I0IxPFhapMsOH/lCVPyc3/RwBpmdW3aagQn5YPiyCTk=;
+ b=pjbjd8VLYa9VpwgVrrV7EdtLV659O6+fmLaGLk3PtxlGAWtAzjhSIivVmEflrZcU6XQB
+ i02ouXPtsh8uURVOBdLRDan/GqdKj+9GfopRBVquvSoqK9/FsZWYCgOYssmA3+adb2Yt
+ YqTZx4oB3HFUDKgfCl6ON8Ywl9Uup+fjQYS7bcy1m81G8m0FKlw3CpMmCPvGzI1U4anW
+ AZFtYemY1lRbTII5nZEb0YtGfigLzyEPVgTIOV8p/Xb9SgutGe96FFbWjQ0Kccck3Mz2
+ EOlMd+x/X6G93RlDxWGR3LOlS6tnuSzR3tRpMHxZV7Z0n7HflCzSzgtMpjWpUFmtq/qe 5w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r935sd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 16:29:49 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BEFXLxj007069;
+        Tue, 14 Dec 2021 16:29:48 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r935qr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 16:29:48 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BEFgLG8031172;
+        Tue, 14 Dec 2021 16:29:46 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04fra.de.ibm.com with ESMTP id 3cvkma7waj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 16:29:46 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BEGLjGP48497080
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Dec 2021 16:21:45 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E02E6A4055;
+        Tue, 14 Dec 2021 16:29:42 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D846AA4051;
+        Tue, 14 Dec 2021 16:29:41 +0000 (GMT)
+Received: from [9.171.24.181] (unknown [9.171.24.181])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Dec 2021 16:29:41 +0000 (GMT)
+Message-ID: <b7952a40-7bc9-b46a-d675-ea26685adf74@linux.ibm.com>
+Date:   Tue, 14 Dec 2021 17:30:45 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 27/32] vfio-pci/zdev: wire up zPCI interpretive execution
+ support
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-28-mjrosato@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20211207205743.150299-28-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: O2_wivXN2sdsc0TlNayUla4D16w_VY2I
+X-Proofpoint-ORIG-GUID: qJ7-sw8IdKuX5ujtyRpioVJCcw9oxlfB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-14_07,2021-12-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ spamscore=0 phishscore=0 adultscore=0 malwarescore=0 priorityscore=1501
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112140090
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 Nov 2021 01:48:20 PST (-0800), greentime.hu@sifive.com wrote:
-> Add vector state context struct in struct thread and asm-offsets.c
-> definitions.
->
-> The vector registers will be saved in datap pointer of __riscv_v_state. It
-> will be dynamically allocated in kernel space. It will be put right after
-> the __riscv_v_state data structure in user space.
->
-> Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
-> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
-> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+
+
+On 12/7/21 21:57, Matthew Rosato wrote:
+> Introduce support for VFIO_DEVICE_FEATURE_ZPCI_INTERP, which is a new
+> VFIO_DEVICE_FEATURE ioctl.  This interface is used to indicate that an
+> s390x vfio-pci device wishes to enable/disable zPCI interpretive
+> execution, which allows zPCI instructions to be executed directly by
+> underlying firmware without KVM involvement.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 > ---
->  arch/riscv/include/asm/processor.h   |  1 +
->  arch/riscv/include/uapi/asm/ptrace.h | 11 +++++++++++
->  arch/riscv/kernel/asm-offsets.c      |  6 ++++++
->  3 files changed, 18 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-> index 46b492c78cbb..a268f1382e52 100644
-> --- a/arch/riscv/include/asm/processor.h
-> +++ b/arch/riscv/include/asm/processor.h
-> @@ -35,6 +35,7 @@ struct thread_struct {
->  	unsigned long s[12];	/* s[0]: frame pointer */
->  	struct __riscv_d_ext_state fstate;
->  	unsigned long bad_cause;
-> +	struct __riscv_v_state vstate;
->  };
->
->  /* Whitelist the fstate from the task_struct for hardened usercopy */
-> diff --git a/arch/riscv/include/uapi/asm/ptrace.h b/arch/riscv/include/uapi/asm/ptrace.h
-> index 882547f6bd5c..bd3b8a710246 100644
-> --- a/arch/riscv/include/uapi/asm/ptrace.h
-> +++ b/arch/riscv/include/uapi/asm/ptrace.h
-> @@ -77,6 +77,17 @@ union __riscv_fp_state {
->  	struct __riscv_q_ext_state q;
->  };
->
-> +struct __riscv_v_state {
-> +	unsigned long vstart;
-> +	unsigned long vl;
-> +	unsigned long vtype;
-> +	unsigned long vcsr;
+>   arch/s390/include/asm/kvm_pci.h  |  1 +
+>   drivers/vfio/pci/vfio_pci_core.c |  2 +
+>   drivers/vfio/pci/vfio_pci_zdev.c | 76 ++++++++++++++++++++++++++++++++
+>   include/linux/vfio_pci_core.h    | 10 +++++
+>   include/uapi/linux/vfio.h        |  7 +++
+>   include/uapi/linux/vfio_zdev.h   | 15 +++++++
+>   6 files changed, 111 insertions(+)
+> 
+> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
+> index 6526908ac834..062bac720428 100644
+> --- a/arch/s390/include/asm/kvm_pci.h
+> +++ b/arch/s390/include/asm/kvm_pci.h
+> @@ -35,6 +35,7 @@ struct kvm_zdev {
+>   	struct kvm_zdev_ioat ioat;
+>   	struct zpci_fib fib;
+>   	struct notifier_block nb;
+> +	bool interp;
+>   };
+>   
+>   extern int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index fc57d4d0abbe..2b2d64a2190c 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -1172,6 +1172,8 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
+>   			mutex_unlock(&vdev->vf_token->lock);
+>   
+>   			return 0;
+> +		case VFIO_DEVICE_FEATURE_ZPCI_INTERP:
+> +			return vfio_pci_zdev_feat_interp(vdev, feature, arg);
+>   		default:
+>   			return -ENOTTY;
+>   		}
+> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c b/drivers/vfio/pci/vfio_pci_zdev.c
+> index cfd7f44b06c1..b205e0ad1fd3 100644
+> --- a/drivers/vfio/pci/vfio_pci_zdev.c
+> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
+> @@ -54,6 +54,10 @@ static int zpci_group_cap(struct zpci_dev *zdev, struct vfio_info_cap *caps)
+>   		.version = zdev->version
+>   	};
+>   
+> +	/* Some values are different for interpreted devices */
+> +	if (zdev->kzdev && zdev->kzdev->interp)
+> +		cap.maxstbl = zdev->maxstbl;
 
-Don't we also need vlen to adequately determine the vector state?  
-Otherwise we're going to end up dropping some state when vl isn't vlmax, 
-which IIUC isn't legal.
+right did not see that so my comment on patch 30 is not right.
 
-> +	void *datap;
-> +#if __riscv_xlen == 32
-> +	__u32 __padding;
-> +#endif
+> +
+>   	return vfio_info_add_capability(caps, &cap.header, sizeof(cap));
+>   }
+>   
+> @@ -138,6 +142,70 @@ int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+>   	return ret;
+>   }
+>   
+> +int vfio_pci_zdev_feat_interp(struct vfio_pci_core_device *vdev,
+> +			      struct vfio_device_feature feature,
+> +			      unsigned long arg)
+> +{
+> +	struct zpci_dev *zdev = to_zpci(vdev->pdev);
+> +	struct vfio_device_zpci_interp *data;
+> +	struct vfio_device_feature *feat;
+> +	unsigned long minsz;
+> +	int size, rc;
+> +
+> +	if (!zdev || !zdev->kzdev)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * If PROBE requested and feature not found, leave immediately.
+> +	 * Otherwise, keep going as GET or SET may also be specified.
+> +	 */
+> +	if (feature.flags & VFIO_DEVICE_FEATURE_PROBE) {
+> +		rc = kvm_s390_pci_interp_probe(zdev);
+> +		if (rc)
+> +			return rc;
+> +	}
+> +	if (!(feature.flags & (VFIO_DEVICE_FEATURE_GET +
+> +			       VFIO_DEVICE_FEATURE_SET)))
+> +		return 0;
+> +
+> +	size = sizeof(*feat) + sizeof(*data);
+> +	feat = kzalloc(size, GFP_KERNEL);
+> +	if (!feat)
+> +		return -ENOMEM;
+> +
+> +	data = (struct vfio_device_zpci_interp *)&feat->data;
+> +	minsz = offsetofend(struct vfio_device_feature, flags);
+> +
+> +	/* Get the rest of the payload for GET/SET */
+> +	rc = copy_from_user(data, (void __user *)(arg + minsz),
+> +			    sizeof(*data));
 
-Why is there padding?
+Here as in patch 28, I think yo ushould take care of feature.argsz
 
+
+> +	if (rc)
+> +		rc = -EINVAL;
+> +
+> +	if (feature.flags & VFIO_DEVICE_FEATURE_GET) {
+> +		if (zdev->gd != 0)
+> +			data->flags = VFIO_DEVICE_ZPCI_FLAG_INTERP;
+> +		else
+> +			data->flags = 0;
+> +		data->fh = zdev->fh;
+> +		/* userspace is using host fh, give interpreted clp values */
+> +		zdev->kzdev->interp = true;
+> +
+> +		if (copy_to_user((void __user *)arg, feat, size))
+> +			rc = -EFAULT;
+> +	} else if (feature.flags & VFIO_DEVICE_FEATURE_SET) {
+> +		if (data->flags == VFIO_DEVICE_ZPCI_FLAG_INTERP)
+> +			rc = kvm_s390_pci_interp_enable(zdev);
+> +		else if (data->flags == 0)
+> +			rc = kvm_s390_pci_interp_disable(zdev);
+> +		else
+> +			rc = -EINVAL;
+> +	}
+> +
+> +	kfree(feat);
+> +	return rc;
+> +}
+> +
+>   static int vfio_pci_zdev_group_notifier(struct notifier_block *nb,
+>   					unsigned long action, void *data)
+>   {
+> @@ -167,6 +235,7 @@ int vfio_pci_zdev_open(struct vfio_pci_core_device *vdev)
+>   		return -ENODEV;
+>   
+>   	zdev->kzdev->nb.notifier_call = vfio_pci_zdev_group_notifier;
+> +	zdev->kzdev->interp = false;
+>   
+>   	ret = vfio_register_notifier(vdev->vdev.dev, VFIO_GROUP_NOTIFY,
+>   				     &events, &zdev->kzdev->nb);
+> @@ -186,6 +255,13 @@ int vfio_pci_zdev_release(struct vfio_pci_core_device *vdev)
+>   	vfio_unregister_notifier(vdev->vdev.dev, VFIO_GROUP_NOTIFY,
+>   				 &zdev->kzdev->nb);
+>   
+> +	/*
+> +	 * If the device was using interpretation, don't trust that userspace
+> +	 * did the appropriate cleanup
+> +	 */
+> +	if (zdev->gd != 0)
+> +		kvm_s390_pci_interp_disable(zdev);
+> +
+>   	kvm_s390_pci_dev_release(zdev);
+>   
+>   	return 0;
+> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+> index 14079da409f1..92dc43c827c9 100644
+> --- a/include/linux/vfio_pci_core.h
+> +++ b/include/linux/vfio_pci_core.h
+> @@ -198,6 +198,9 @@ static inline int vfio_pci_igd_init(struct vfio_pci_core_device *vdev)
+>   #ifdef CONFIG_VFIO_PCI_ZDEV
+>   extern int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+>   				       struct vfio_info_cap *caps);
+> +int vfio_pci_zdev_feat_interp(struct vfio_pci_core_device *vdev,
+> +			      struct vfio_device_feature feature,
+> +			      unsigned long arg);
+>   int vfio_pci_zdev_open(struct vfio_pci_core_device *vdev);
+>   int vfio_pci_zdev_release(struct vfio_pci_core_device *vdev);
+>   #else
+> @@ -207,6 +210,13 @@ static inline int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
+>   	return -ENODEV;
+>   }
+>   
+> +static inline int vfio_pci_zdev_feat_interp(struct vfio_pci_core_device *vdev,
+> +					    struct vfio_device_feature feature,
+> +					    unsigned long arg)
+> +{
+> +	return -ENOTTY;
+> +}
+> +
+>   static inline int vfio_pci_zdev_open(struct vfio_pci_core_device *vdev)
+>   {
+>   	return -ENODEV;
+> diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
+> index ef33ea002b0b..b9a75485b8e7 100644
+> --- a/include/uapi/linux/vfio.h
+> +++ b/include/uapi/linux/vfio.h
+> @@ -1002,6 +1002,13 @@ struct vfio_device_feature {
+>    */
+>   #define VFIO_DEVICE_FEATURE_PCI_VF_TOKEN	(0)
+>   
+> +/*
+> + * Provide support for enabling interpretation of zPCI instructions.  This
+> + * feature is only valid for s390x PCI devices.  Data provided when setting
+> + * and getting this feature is futher described in vfio_zdev.h
+> + */
+> +#define VFIO_DEVICE_FEATURE_ZPCI_INTERP		(1)
+> +
+>   /* -------- API for Type1 VFIO IOMMU -------- */
+>   
+>   /**
+> diff --git a/include/uapi/linux/vfio_zdev.h b/include/uapi/linux/vfio_zdev.h
+> index b4309397b6b2..575f0410dc66 100644
+> --- a/include/uapi/linux/vfio_zdev.h
+> +++ b/include/uapi/linux/vfio_zdev.h
+> @@ -75,4 +75,19 @@ struct vfio_device_info_cap_zpci_pfip {
+>   	__u8 pfip[];
+>   };
+>   
+> +/**
+> + * VFIO_DEVICE_FEATURE_ZPCI_INTERP
+> + *
+> + * This feature is used for enabling zPCI instruction interpretation for a
+> + * device.  No data is provided when setting this feature.  When getting
+> + * this feature, the following structure is provided which details whether
+> + * or not interpretation is active and provides the guest with host device
+> + * information necessary to enable interpretation.
+> + */
+> +struct vfio_device_zpci_interp {
+> +	__u64 flags;
+> +#define VFIO_DEVICE_ZPCI_FLAG_INTERP 1
+> +	__u32 fh;		/* Host device function handle */
 > +};
 > +
->  #endif /* __ASSEMBLY__ */
->
->  #endif /* _UAPI_ASM_RISCV_PTRACE_H */
-> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> index 90f8ce64fa6f..34f43c84723a 100644
-> --- a/arch/riscv/kernel/asm-offsets.c
-> +++ b/arch/riscv/kernel/asm-offsets.c
-> @@ -72,6 +72,12 @@ void asm_offsets(void)
->  	OFFSET(TSK_STACK_CANARY, task_struct, stack_canary);
->  #endif
->
-> +	OFFSET(RISCV_V_STATE_VSTART, __riscv_v_state, vstart);
-> +	OFFSET(RISCV_V_STATE_VL, __riscv_v_state, vl);
-> +	OFFSET(RISCV_V_STATE_VTYPE, __riscv_v_state, vtype);
-> +	OFFSET(RISCV_V_STATE_VCSR, __riscv_v_state, vcsr);
-> +	OFFSET(RISCV_V_STATE_DATAP, __riscv_v_state, datap);
-> +
->  	DEFINE(PT_SIZE, sizeof(struct pt_regs));
->  	OFFSET(PT_EPC, pt_regs, epc);
->  	OFFSET(PT_RA, pt_regs, ra);
+>   #endif
+> 
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

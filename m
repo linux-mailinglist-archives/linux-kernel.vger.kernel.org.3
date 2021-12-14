@@ -2,113 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDD6473BBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB88E473BC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbhLND5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 22:57:12 -0500
-Received: from mga05.intel.com ([192.55.52.43]:34169 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229752AbhLND5L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 22:57:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639454231; x=1670990231;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c80rvbuAJVfSyWz3CPd3UL10TlVQu2fDLQ3/tWNO5wM=;
-  b=Si7FxOgFWHgiokuEyDuQYOSislgB6WW2G3KZp+EdtkbKnuY1B4sp456u
-   t1WPuJZf2f1fO0mGR/7UwKWSseeVASY4i0aeKy03qox0B3WZp1l7ssPYl
-   m//Bwa0GMFdbiB/tgaaG83MHr0pt7LbSSyuC/G/UWb65oBqXHsrW4ThZ/
-   OHtnp3mVY1D/Ckei8hZzBFv2Yau9hY5KbVQdvt0J5AeF8HbarjjCAkUXV
-   cN+fXKhJeSgrS7ZX/WgRdyMA9zwXcNZhgJ1fjkipp/Qzaw0CrYDqzyXOx
-   McaETUc11PII4wEbd3Er2uqb6TqOK3hE6vfvFj1TR2QkbidpEyLrTysGZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="325163932"
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="325163932"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 19:57:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="545019569"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 13 Dec 2021 19:57:08 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwyw7-0007PV-RG; Tue, 14 Dec 2021 03:57:07 +0000
-Date:   Tue, 14 Dec 2021 11:56:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Brazdil <dbrazdil@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Brazdil <dbrazdil@google.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] misc: open-dice: Add driver to expose DICE data
- to userspace
-Message-ID: <202112141150.Hh48OleF-lkp@intel.com>
-References: <20211213195833.772892-3-dbrazdil@google.com>
+        id S233446AbhLND60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 22:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230000AbhLND6Z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 22:58:25 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28634C061574;
+        Mon, 13 Dec 2021 19:58:25 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso16226398pji.0;
+        Mon, 13 Dec 2021 19:58:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i6ywQ3A1KtqidaE+0D2HmIbIyiO+4BSqOAgoE1a7Uxg=;
+        b=R6q0LxicKsjZ3X2yLcD6aJWSLBX+XL+BWdND6uDim3SkuB8UP+ieim1v5jU7HDqG8x
+         1OYlsOMhw+KXkVOcIIv/sm/jhmPAjidAGk1xyQ2fCLyMKkkMQt7CIcWxFDMAFmyz6MMG
+         kwkdDJlVW16m0qPV9yWr5PfYZ0rtb0Xa0Sy2/ARrAkHe8nF2o8UG6U/wc7zynR/a8C2M
+         T1OfBD3S7mvyX6sgxrY+J4AkxrehuMlwC9vuh5A45aVLnZgOg4xokUwhTa1ejo6xBaIg
+         WlLlejnS5DoqbvH3bLrDWlejrwyl6+SEAxqKWz28yARb+FcUhPXgcMHBD0Or8IfG0n6Z
+         BeFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i6ywQ3A1KtqidaE+0D2HmIbIyiO+4BSqOAgoE1a7Uxg=;
+        b=nBT8i+wS3x3e+1GHUX9K4DAyEt1MrlEH1UfPswt+R1N0gSUUkVztEsgLg+N4putho8
+         XK+xysLcE91CT5AIaZbXnT/gY1YdRKJRKT7bS4juI/qY+lElnprsLMj1lUq9/DDMQP3k
+         KACAUdQJ4gmTin9LIgjnzGBKtSe578Pwcg7bjqB6wWkDoW1c649NUy8LjWxXQV2sjUzq
+         iqQUupReCKUsQ9cFNwJknNPlenF/ZPZREAojNZ6XcgIiECVJRNnhFEP/QoL7aAs8EpYD
+         HRBzqxKV30WnuNPyld1nUP4SwS8anekBV4pbbRWLtBvZBiU9aGcHcvGn8nVbAzPOo0Jx
+         ZzTg==
+X-Gm-Message-State: AOAM531vKJfzxSabg6ljlSh90f7UXPv4YDSggGW4po4jI87U86nW2SjG
+        NKYb2jgZINOqNI3/OrckCGzZ+CKAKk0=
+X-Google-Smtp-Source: ABdhPJya0TmJCT1/MKdQBuruOhYF1jsCSR/E+N4Aph5YoIv4e/Hf5PidcKVXrJeUNgULf/NouGGptw==
+X-Received: by 2002:a17:902:e88f:b0:141:f982:777 with SMTP id w15-20020a170902e88f00b00141f9820777mr2753159plg.68.1639454304336;
+        Mon, 13 Dec 2021 19:58:24 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id o17sm11430356pgb.42.2021.12.13.19.58.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 19:58:23 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     devicetree@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM IPROC ARM
+        ARCHITECTURE),
+        linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM IPROC ARM
+        ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v6 0/6] Convert iProc PCIe binding to YAML
+Date:   Mon, 13 Dec 2021 19:58:14 -0800
+Message-Id: <20211214035820.2984289-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213195833.772892-3-dbrazdil@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+This patch series converts the iProc PCIe binding to YAML. Given there
+is a majority of DTS changes, it would make sense for me to pull this
+via the Broadcom ARM SoC git tree.
 
-Thank you for the patch! Perhaps something to improve:
+Thanks!
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on char-misc/char-misc-testing soc/for-next v5.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Changes in v6:
+- corrected dependencies section to quote property names between
+  square brackets
 
-url:    https://github.com/0day-ci/linux/commits/David-Brazdil/Driver-for-Open-Profile-for-DICE/20211214-040051
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20211214/202112141150.Hh48OleF-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/6fb8e9472d98abcc2dfabd43e95fc4ec5819ecd0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review David-Brazdil/Driver-for-Open-Profile-for-DICE/20211214-040051
-        git checkout 6fb8e9472d98abcc2dfabd43e95fc4ec5819ecd0
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/
+Changes in v5:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+- Listed 'bus-ranges', '#address-cells', '#size-cells' and 'device_type'
+  as evaluated
+- fixed first patch to drop reference to 'interrupt-controller'
 
-All warnings (new ones prefixed by >>):
+Changes in v4:
 
-   drivers/misc/open-dice.c: In function 'open_dice_probe':
->> drivers/misc/open-dice.c:30:21: warning: format '%d' expects argument of type 'int', but argument 4 has type 'size_t' {aka 'long unsigned int'} [-Wformat=]
-      30 | #define DRIVER_NAME "open-dice"
-         |                     ^~~~~~~~~~~
-   drivers/misc/open-dice.c:160:49: note: in expansion of macro 'DRIVER_NAME'
-     160 |  snprintf(drvdata->name, sizeof(drvdata->name), DRIVER_NAME"%d", dev_idx++);
-         |                                                 ^~~~~~~~~~~
-   drivers/misc/open-dice.c:160:62: note: format string is defined here
-     160 |  snprintf(drvdata->name, sizeof(drvdata->name), DRIVER_NAME"%d", dev_idx++);
-         |                                                             ~^
-         |                                                              |
-         |                                                              int
-         |                                                             %ld
+- none, sent by mistake
+
+Changes in v3:
+
+- converted Cygnus PCIe PHY binding
+- removed interrupt-controller from being a mandatory property
+
+Changes in v2:
+
+- document msi sub-node compatible string
 
 
-vim +30 drivers/misc/open-dice.c
+Florian Fainelli (6):
+  ARM: dts: Cygnus: Fixed iProc PCIe controller properties
+  ARM: dts: Cygnus: Update PCIe PHY node unit name(s)
+  ARM: dts: HR2: Fixed iProc PCIe MSI sub-node
+  ARM: dts: NSP: Fixed iProc PCIe MSI sub-node
+  dt-bindings: phy: Convert Cygnus PCIe PHY to YAML
+  dt-bindings: pci: Convert iProc PCIe to YAML
 
-    29	
-  > 30	#define DRIVER_NAME "open-dice"
-    31	
+ .../bindings/pci/brcm,iproc-pcie.txt          | 133 -------------
+ .../bindings/pci/brcm,iproc-pcie.yaml         | 184 ++++++++++++++++++
+ .../bindings/phy/brcm,cygnus-pcie-phy.txt     |  47 -----
+ .../bindings/phy/brcm,cygnus-pcie-phy.yaml    |  76 ++++++++
+ arch/arm/boot/dts/bcm-cygnus.dtsi             |  18 +-
+ arch/arm/boot/dts/bcm-hr2.dtsi                |   4 +-
+ arch/arm/boot/dts/bcm-nsp.dtsi                |   6 +-
+ 7 files changed, 274 insertions(+), 194 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.txt
+ create mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/brcm,cygnus-pcie-phy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/brcm,cygnus-pcie-phy.yaml
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+2.25.1
+

@@ -2,94 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D484746B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FF14746B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235342AbhLNPlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:41:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54830 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233121AbhLNPlE (ORCPT
+        id S235394AbhLNPmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230092AbhLNPmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:41:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2219061360;
-        Tue, 14 Dec 2021 15:41:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 230C9C34604;
-        Tue, 14 Dec 2021 15:41:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639496463;
-        bh=i8FKSIqV2eS4/ooZi6RLJpb4SBS7G50iXyqn/X4rmJE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XYcMg4PyGtpbadSWa/qigudm/9GoS7I0mBQYuYwo41UHhowzQgi1ASsKvCUHGDy2Y
-         8pmW7iAznCKiuGXKXSvYhLF75OMuyZivPxnra1Fn5McTzyaP2zmbzpNW+AnhV/KdnZ
-         XD0K0BVDRz2u5+hBueF7QjCahrYoBLPhz1EdtylFiAXp9FSZR4HvonxgmeQ4xVeQyd
-         krXOVIcn/kO+MnsLdE6yFp96sD+9zLeiwkGjv81O6DZFYwclHAuA4MFjBs+wxDYt5p
-         yc4xPu7GwmkLokjyC3/J/8CTxypeP0YhU4yLvvRg49/cwTQYaSo854/Yayb0unQjvW
-         a55fXoSP9NX/g==
-Date:   Tue, 14 Dec 2021 15:40:57 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Christoph =?iso-8859-1?Q?M=FCllner?= <christophm30@gmail.com>,
-        Stafford Horne <shorne@gmail.com>
-Subject: Re: [PATCH] locking: Generic ticket lock
-Message-ID: <20211214154057.GB15416@willie-the-truck>
-References: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
+        Tue, 14 Dec 2021 10:42:15 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6847CC061574;
+        Tue, 14 Dec 2021 07:42:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Wjypj8Z4Rg2+/h76mxjfwvjNCwkDu0E5brw7BKK/Hgg=; b=tEcA6K5ehWXLXPQsfXCwOObarL
+        o9UpZ+PNLeaJUmIx3vlOncBNz490UxrZQ/NmCOjVKIwb5lN4VhmSGPZAwepg/YiyAY4AnACoFxINY
+        t8IdsbIknSUucM0SSZD6aszBSZXaJdL4CfYFmAssolfBUEYR+3X723Yu3Fh7clCmsBmi+H04ObrwW
+        pyt1MBkpdXUfw8bIez2ZYlkMN6/S1uQsngkzIAYHWskZbmvM8UYMP3MbJ1/arbc7RmVJrqK75epfW
+        9LKWCKpFSx2a5XzjKbbj9paf/ciMmgU0TKzYdT4tObMCSI9uwU4uwIB6eskGmkkaWDzH4U8Bh2z9a
+        wLYnR0bg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mx9wU-00EjQ3-QS; Tue, 14 Dec 2021 15:42:14 +0000
+Date:   Tue, 14 Dec 2021 07:42:14 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, djwong@kernel.org,
+        dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
+        jane.chu@oracle.com
+Subject: Re: [PATCH v8 5/9] fsdax: Introduce dax_lock_mapping_entry()
+Message-ID: <Ybi7VmfigwLpUrgO@infradead.org>
+References: <20211202084856.1285285-1-ruansy.fnst@fujitsu.com>
+ <20211202084856.1285285-6-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YXFli3mzMishRpEq@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211202084856.1285285-6-ruansy.fnst@fujitsu.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 03:05:15PM +0200, Peter Zijlstra wrote:
-> 
-> There's currently a number of architectures that want/have graduated
-> from test-and-set locks and are looking at qspinlock.
-> 
-> *HOWEVER* qspinlock is very complicated and requires a lot of an
-> architecture to actually work correctly. Specifically it requires
-> forward progress between a fair number of atomic primitives, including
-> an xchg16 operation, which I've seen a fair number of fundamentally
-> broken implementations of in the tree (specifically for qspinlock no
-> less).
-> 
-> The benefit of qspinlock over ticket lock is also non-obvious, esp.
-> at low contention (the vast majority of cases in the kernel), and it
-> takes a fairly large number of CPUs (typically also NUMA) to make
-> qspinlock beat ticket locks.
-> 
-> Esp. things like ARM64's WFE can move the balance a lot in favour of
-> simpler locks by reducing the cacheline pressure due to waiters (see
-> their smp_cond_load_acquire() implementation for details).
-> 
-> Unless you've audited qspinlock for your architecture and found it
-> sound *and* can show actual benefit, simpler is better.
-> 
-> Therefore provide ticket locks, which depend on a single atomic
-> operation (fetch_add) while still providing fairness.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  include/asm-generic/qspinlock.h         |   30 +++++++++
->  include/asm-generic/ticket_lock_types.h |   11 +++
->  include/asm-generic/ticket_lock.h       |   97 ++++++++++++++++++++++++++++++++
->  3 files changed, 138 insertions(+)
+On Thu, Dec 02, 2021 at 04:48:52PM +0800, Shiyang Ruan wrote:
+> The current dax_lock_page() locks dax entry by obtaining mapping and
+> index in page.  To support 1-to-N RMAP in NVDIMM, we need a new function
+> to lock a specific dax entry corresponding to this file's mapping,index.
+> And BTW, output the page corresponding to the specific dax entry for
+> caller use.
 
-Huh. I looked quite closely at this a while back but seems like I forgot to
-actually reply here. So, given that it doesn't seem to be in linux-next yet:
+s/BTW, //g
 
-Acked-by: Will Deacon <will@kernel.org>
+>  /*
+> - * dax_lock_mapping_entry - Lock the DAX entry corresponding to a page
+> + * dax_lock_page - Lock the DAX entry corresponding to a page
+>   * @page: The page whose entry we want to lock
+>   *
+>   * Context: Process context.
 
-Will
+This should probably got into a separate trivial fix.
+
+Otherwise looks good:
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>

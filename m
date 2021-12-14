@@ -2,93 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB03474BC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A61474BCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbhLNTWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:22:07 -0500
-Received: from mga18.intel.com ([134.134.136.126]:54560 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229671AbhLNTWG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:22:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639509726; x=1671045726;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vyRVHuRWEi9cD5IUb7C3Xi38X3r6IlSCHFYV7cx47BE=;
-  b=H4W9JVnhLdjOkn7nke/XpMvjEnC92pP75fv0aab3eG1NtRFY1TKpA9Dd
-   +4bkTOhNHksZKbCXVPn8UosajjVHR8/YXXX0nMzeuZ4mQ4l+tDvhY7SK+
-   lNdwNcRqe2J6A77TQffhaj3Lg+8wmChrQBLvKlzTJalReVypUBhXnvtux
-   2KcH6YzXD/ozGh7o3XGFsonz+29g8QLos/H8UHoDlu2p5iXb7r0WspH7c
-   GhJ8mfpTU013mXtqlKG7CdcCVhCxbPMQ2wH3mWOZK0Uv+9s2nWA+OHbaS
-   6uXc9b56i950EA/6tKqe1Z7ri8V3LUGnSUk1/SUzArd2SbUhR0KzOgBLW
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="225924701"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="225924701"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 11:17:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="614416036"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 14 Dec 2021 11:17:22 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxDIf-0000fG-AQ; Tue, 14 Dec 2021 19:17:21 +0000
-Date:   Wed, 15 Dec 2021 03:17:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nikita Travkin <nikita@trvn.ru>, thierry.reding@gmail.com,
-        lee.jones@linaro.org
-Cc:     kbuild-all@lists.01.org, u.kleine-koenig@pengutronix.de,
-        robh+dt@kernel.org, sboyd@kernel.org, linus.walleij@linaro.org,
-        masneyb@onstation.org, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] pwm: Add clock based PWM output driver
-Message-ID: <202112150357.lrG18diq-lkp@intel.com>
-References: <20211213150335.51888-3-nikita@trvn.ru>
+        id S237380AbhLNTXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237284AbhLNTXI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 14:23:08 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393C2C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:23:08 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id v11so34144349wrw.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:23:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9MfX+ladgz8v1uPlUvt81YDUVI2BVYjumD0vKwEPZL8=;
+        b=WqDW2eYz3b7YYPBATttXaZ6buiyp4VM0CVsPBNwqwvYXLJqSfLdSDpj5RehBf1rzm8
+         0NGFCRKTByBHutzxvd6c3nFRfg7S5gUxzyjAsZRCB6ZNpHiZ2kV4SDb8uD7YJDElQvlZ
+         OKIIpRv009ozrHeUDnGuQDG22K2U2mBGC0ta7+gNfXDSXxmilG4PK8PLbtJqfFIzJDBA
+         z8MvgBO9eoTIaFj2zVPC3py7D9VrBVFftahzSaKfwtYSDwwnGClk+GUSkt5Geu8DLPDe
+         AYpoiIGXYQQWCabokDuhcVDYZs+WEqYPRuJCe9jGgGOnOOBFi7boE3CqCm1HAkh3//a8
+         O05g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9MfX+ladgz8v1uPlUvt81YDUVI2BVYjumD0vKwEPZL8=;
+        b=Dfelmp3TOiBR7DFfag2L9JklUmP1KDnsgnUIUDjAH70vaC8YU+4R7k4D3jueUIIkEo
+         H733y3TMQAb97lujqBgKad72vRPykJPglvlSbl0A74CLHkEHSRK6BAEXj9x0GgY+MeYY
+         dRRpYJQQ2YCR0DDj613b6c/LMR11Szs+bSE5vh7pkpd8x4hIGZRoCiZLX/nleE7tpc63
+         v/u7JE/8aEIX4qfTaGuUrBXmxlwPL5abMbNo0WU1nPKqwA4AljEZU6VpqDRMnE3xx7qX
+         YcfhRJu7u1naSlbSOvFR9RvXoU4iXshokuRtJ6mGH896zeQIfmoegqojiOVTts8/IRwN
+         j/ww==
+X-Gm-Message-State: AOAM530IIoGNi/LQdU+A6ZIsHnEp6AsCt7YZIN9UqFhP11A09L5+3lzH
+        ikqYva7k6Z423Q7aqmGYJ4ikDA==
+X-Google-Smtp-Source: ABdhPJwoBMoW5TWXaHsl8SQQzk0cq/QVYi0kpQ4LMnACrafWI+8XOMMdce8J0U4u6zLy20HzGg6EZA==
+X-Received: by 2002:a5d:6211:: with SMTP id y17mr1055106wru.97.1639509786687;
+        Tue, 14 Dec 2021 11:23:06 -0800 (PST)
+Received: from localhost.localdomain ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id d7sm672169wrw.87.2021.12.14.11.23.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 11:23:06 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org
+Subject: [PATCH 2/2] sctp: hold cached endpoints to prevent possible UAF
+Date:   Tue, 14 Dec 2021 19:23:01 +0000
+Message-Id: <20211214192301.1496754-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213150335.51888-3-nikita@trvn.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikita,
+The cause of the resultant dump_stack() reported below is a
+dereference of a freed pointer to 'struct sctp_endpoint' in
+sctp_sock_dump().
 
-Thank you for the patch! Yet something to improve:
+This race condition occurs when a transport is cached into its
+associated hash table followed by an endpoint/sock migration to a new
+association in sctp_assoc_migrate() prior to their subsequent use in
+sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
+table calling into sctp_sock_dump() where the dereference occurs.
 
-[auto build test ERROR on thierry-reding-pwm/for-next]
-[also build test ERROR on v5.16-rc5 next-20211213]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+  BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
+  Call trace:
+   dump_backtrace+0x0/0x2dc
+   show_stack+0x20/0x2c
+   dump_stack+0x120/0x144
+   print_address_description+0x80/0x2f4
+   __kasan_report+0x174/0x194
+   kasan_report+0x10/0x18
+   __asan_load8+0x84/0x8c
+   sctp_sock_dump+0xa8/0x438 [sctp_diag]
+   sctp_for_each_transport+0x1e0/0x26c [sctp]
+   sctp_diag_dump+0x180/0x1f0 [sctp_diag]
+   inet_diag_dump+0x12c/0x168
+   netlink_dump+0x24c/0x5b8
+   __netlink_dump_start+0x274/0x2a8
+   inet_diag_handler_cmd+0x224/0x274
+   sock_diag_rcv_msg+0x21c/0x230
+   netlink_rcv_skb+0xe0/0x1bc
+   sock_diag_rcv+0x34/0x48
+   netlink_unicast+0x3b4/0x430
+   netlink_sendmsg+0x4f0/0x574
+   sock_write_iter+0x18c/0x1f0
+   do_iter_readv_writev+0x230/0x2a8
+   do_iter_write+0xc8/0x2b4
+   vfs_writev+0xf8/0x184
+   do_writev+0xb0/0x1a8
+   __arm64_sys_writev+0x4c/0x5c
+   el0_svc_common+0x118/0x250
+   el0_svc_handler+0x3c/0x9c
+   el0_svc+0x8/0xc
 
-url:    https://github.com/0day-ci/linux/commits/Nikita-Travkin/Clock-based-PWM-output-driver/20211213-230628
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git for-next
-config: microblaze-randconfig-r003-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150357.lrG18diq-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/454624747f4637529777274ae1b5ab7af33fd130
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Nikita-Travkin/Clock-based-PWM-output-driver/20211213-230628
-        git checkout 454624747f4637529777274ae1b5ab7af33fd130
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash
+To prevent this from happening we need to take a references to the
+to-be-used/dereferenced 'struct sock' and 'struct sctp_endpoint's
+until such a time when we know it can be safely released.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+When KASAN is not enabled, a similar, but slightly different NULL
+pointer derefernce crash occurs later along the thread of execution in
+inet_sctp_diag_fill() this time.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__udivdi3" [drivers/pwm/pwm-clk.ko] undefined!
-
+Cc: Vlad Yasevich <vyasevich@gmail.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: lksctp developers <linux-sctp@vger.kernel.org>
+Cc: "H.P. Yarroll" <piggy@acm.org>
+Cc: Karl Knutson <karl@athena.chicago.il.us>
+Cc: Jon Grimm <jgrimm@us.ibm.com>
+Cc: Xingang Guo <xingang.guo@intel.com>
+Cc: Hui Huang <hui.huang@nokia.com>
+Cc: Sridhar Samudrala <sri@us.ibm.com>
+Cc: Daisy Chang <daisyc@us.ibm.com>
+Cc: Ryan Layer <rmlayer@us.ibm.com>
+Cc: Kevin Gao <kevin.gao@intel.com>
+Cc: linux-sctp@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ net/sctp/diag.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/net/sctp/diag.c b/net/sctp/diag.c
+index 760b367644c12..2029b240b6f24 100644
+--- a/net/sctp/diag.c
++++ b/net/sctp/diag.c
+@@ -301,6 +301,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+ 	struct sctp_association *assoc;
+ 	int err = 0;
+ 
++	sctp_endpoint_hold(ep);
++	sock_hold(sk);
+ 	lock_sock(sk);
+ 	list_for_each_entry(assoc, &ep->asocs, asocs) {
+ 		if (cb->args[4] < cb->args[1])
+@@ -341,6 +343,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+ 	cb->args[4] = 0;
+ release:
+ 	release_sock(sk);
++	sock_put(sk);
++	sctp_endpoint_put(ep);
+ 	return err;
+ }
+ 
+-- 
+2.34.1.173.g76aa8bc2d0-goog
+

@@ -2,103 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BC2474099
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31727474071
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbhLNKlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:41:21 -0500
-Received: from mga11.intel.com ([192.55.52.93]:11473 "EHLO mga11.intel.com"
+        id S233038AbhLNK2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:28:05 -0500
+Received: from gentwo.de ([161.97.139.209]:58774 "EHLO gentwo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231272AbhLNKlU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:41:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639478480; x=1671014480;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RASC9tkX/qeuaKuqj+j/co1PDOniTmejosj0dqMzGoY=;
-  b=eLrf2ie+oolgksZuhA57dGNLMvdT1g4VmQkuuLkCDUawgbxQCJKaT55E
-   S+T6riA2KvoZbI5GeEKndRsDbdlC6xWe403fiKUVIlORzY4QpWV4FKAJX
-   JzLOCSrm9hJNFQrugWRxW7uaLlLtilZscHOeDUmduOJ6TGSKsRmR4PLGM
-   gKrzSiKnB1EY1F9DM4iiF3TWG2y2kUQe6rlVx9uqF6ylHRSoDy74uG2Wa
-   uhrLV+ePglyC2O/meisv1HCHJMYTQq9ma/FYVYXYLRwuEAFhndEhjyTG8
-   OSMLbb5qgegvENc/v3tDVFYDP5rfVnFkDoyWGKbAO6B41sDWCkVHHYg+8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="236483828"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="236483828"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 02:41:20 -0800
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="518181709"
-Received: from yangzhon-virtual.bj.intel.com (HELO yangzhon-Virtual) ([10.238.144.101])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA256; 14 Dec 2021 02:41:16 -0800
-Date:   Tue, 14 Dec 2021 18:26:19 +0800
-From:   Yang Zhong <yang.zhong@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, seanjc@google.com,
-        jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        yang.zhong@intel.com
-Subject: Re: [PATCH 10/19] kvm: x86: Emulate WRMSR of guest IA32_XFD
-Message-ID: <20211214102619.GA25456@yangzhon-Virtual>
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-11-yang.zhong@intel.com>
- <fd16797c-b80f-c414-a731-0b9b73a3732e@redhat.com>
+        id S233009AbhLNK2E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:28:04 -0500
+Received: by gentwo.de (Postfix, from userid 1001)
+        id E26D1B0024C; Tue, 14 Dec 2021 11:28:01 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by gentwo.de (Postfix) with ESMTP id DC483B00038;
+        Tue, 14 Dec 2021 11:28:01 +0100 (CET)
+Date:   Tue, 14 Dec 2021 11:28:01 +0100 (CET)
+From:   Christoph Lameter <cl@gentwo.org>
+X-X-Sender: cl@gentwo.de
+To:     Vlastimil Babka <vbabka@suse.cz>
+cc:     Baoquan He <bhe@redhat.com>, Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hch@lst.de, John.p.donnelly@oracle.com,
+        kexec@lists.infradead.org, stable@vger.kernel.org,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no managed
+ pages in DMA zone
+In-Reply-To: <f5ff82eb-73b6-55b5-53d7-04ab73ce5035@suse.cz>
+Message-ID: <alpine.DEB.2.22.394.2112141125290.370323@gentwo.de>
+References: <20211213122712.23805-1-bhe@redhat.com> <20211213122712.23805-6-bhe@redhat.com> <20211213134319.GA997240@odroid> <20211214053253.GB2216@MiWiFi-R3L-srv> <f5ff82eb-73b6-55b5-53d7-04ab73ce5035@suse.cz>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd16797c-b80f-c414-a731-0b9b73a3732e@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 05:02:49PM +0100, Paolo Bonzini wrote:
-> First, the MSR should be added to msrs_to_save_all and
-> kvm_cpu_cap_has(X86_FEATURE_XFD) should be checked in
-> kvm_init_msr_list.
-> 
-> It seems that RDMSR support is missing, too.
-> 
-> More important, please include:
-> 
-> - documentation for the new KVM_EXIT_* value
-> 
-> - a selftest that explains how userspace should react to it.
-> 
-> This is a strong requirement for any new API (the first has been for
-> years; but the latter is also almost always respected these days).
-> This series should not have been submitted without documentation.
-> 
-> Also:
-> 
-> On 12/8/21 01:03, Yang Zhong wrote:
-> >
-> >+		if (!guest_cpuid_has(vcpu, X86_FEATURE_XFD))
-> >+			return 1;
-> 
-> This should allow msr->host_initiated always (even if XFD is not
-> part of CPUID).  However, if XFD is nonzero and
-> kvm_check_guest_realloc_fpstate returns true, then it should return
-> 1.
-> 
-> The selftest should also cover using KVM_GET_MSR/KVM_SET_MSR.
-> 
+On Tue, 14 Dec 2021, Vlastimil Babka wrote:
 
-  Paolo, Seems we do not need new KVM_EXIT_* again from below thomas' new patchset:
-  git://git.kernel.org/pub/scm/linux/kernel/git/people/tglx/devel.git x86/fpu-kvm
+> If doesn't feel right to me to fix (or rather workaround) this on the level
+> of kmalloc caches just because the current reports come from there. If we
+> decide it's acceptable for kdump kernel to return !ZONE_DMA memory for
+> GFP_DMA requests, then it should apply at the page allocator level for all
+> allocations, not just kmalloc().
+>
+> Also you mention above you'd prefer ZONE_DMA32 memory, while chances are
+> this approach of using KMALLOC_NORMAL caches will end up giving you
+> ZONE_NORMAL. On the page allocator level it would be much easier to
+> implement a fallback from non-populated ZONE_DMA to ZONE_DMA32 specifically.
 
-  So the selftest stll need support KVM_GET_MSR/KVM_SET_MSR for MSR_IA32_XFD
-  and MSR_IA32_XFD_ERR? If yes, we only do some read/write test with vcpu_set_msr()/
-  vcpu_get_msr() from new selftest tool? or do wrmsr from guest side and check this value
-  from selftest side? 
-
-  I checked some msr selftest reference code, tsc_msrs_test.c, which maybe better for this
-  reference. If you have better suggestion, please share it to me. thanks!
-
-  Yang 
-
-
+Well this only works if the restrictions on the physical memory addresses
+of each platform make that possible.

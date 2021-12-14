@@ -2,233 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C16474D0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 22:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDB5474D1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 22:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237942AbhLNVK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 16:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237860AbhLNVKo (ORCPT
+        id S237818AbhLNVMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 16:12:23 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:44060 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234778AbhLNVMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 16:10:44 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD2FC06173E;
-        Tue, 14 Dec 2021 13:10:44 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id r11so66771999edd.9;
-        Tue, 14 Dec 2021 13:10:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jU2qbfx0AVTju8+6qe/EIDgAs10lLA29tkTsiudBudw=;
-        b=pKCdOxt2DXoY7THqxPkNUoo22pTg3DR+oKLGoZ4oCQpQRT+bdDCigmdRNHJhVxoQ7Y
-         aYrxI6nhpCuCnh/0F3Zjd/LRaLTydHhy7KtumLsn8RS+0ELZPiWHZ1UaxliM9SXgmFa+
-         BUvIsh0JUketwVsOMgTd+EfkS+TF45OrA8XPzFbqaFAFNoGlJm0aXFRvv2vVgD8bAtfl
-         bD12nuWuLPePmPK2rehohaoMb87HD4PuxVvtekclV7Rl+7ukU3PtL6s0ggaOwIk4sY0g
-         k1u3gG0y+3bbMeYBkwzNivrdXuYzpR/ML9rNfXcTF2RYbOllXipKZdzfuQwyu+mJVNmG
-         YZTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jU2qbfx0AVTju8+6qe/EIDgAs10lLA29tkTsiudBudw=;
-        b=Jamc6FPLM7Q7oqH36NICak4D6qHsOWOa5Gom30DpkW5cASguu2An/hFzie1oOBJtJm
-         0MejcLzBGeC9xMdvTPg19wmylZPuK0rvej4MNxoB12LmzuRHCBCZehxJSp5uj3PV+Cq8
-         qXCMENdhlumbCVo/XMjn9NPRkYyjV+vi5QHAkJ6FIT7nqCKy50VWt07SGVxv0o+cHA+p
-         OUPIm03Mh7VGedgXyqK7GM67+aM7FXhICaaCv82yvm6oxrxCfALMEsSJSmghI6YtDkwS
-         t8cRS17z+ASdsaPCkkE92pioiC1KOFcJQPnHgmeK3ZVhQoCgbQ0LJ/Q3sZu6HaieJ56W
-         2m3A==
-X-Gm-Message-State: AOAM531bwhBUD6b2vHPKCN2nhSsyr5LgmLMW+780H08Zvf4Nm+Fmwp1o
-        sDowY/x2dWEUNSrl5gEhU7g=
-X-Google-Smtp-Source: ABdhPJztbpWjk1qvaxf2dN0Xw7vLhgIa7fpVmBfX1GCFBpyRMWu70hR1JuYZ2JRfyyQH9QV5afXPmQ==
-X-Received: by 2002:a17:907:2cc5:: with SMTP id hg5mr8519021ejc.138.1639516242456;
-        Tue, 14 Dec 2021 13:10:42 -0800 (PST)
-Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id b4sm261034ejl.206.2021.12.14.13.10.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 13:10:42 -0800 (PST)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Tue, 14 Dec 2021 16:12:09 -0500
+Date:   Tue, 14 Dec 2021 21:12:06 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639516327;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rcii2iHyAkR9Kah3KUc4lSx3hIDJM4dLUBLakzw4z6E=;
+        b=B0rPXjbt1p4rP1GFra4RGExEArWK/VnsV3RQzG+kSZISyI8gUQklTnHVoHza/qViZ4xjSE
+        2rch1qW2B9EEoAkvSclf/c5dnC0leshpUBx8TCva0GYGlY7baBsDeRqjArN6bkAgw0fNko
+        YwQGpJAqlRLcC/TNCAGexGnJXT4BVQgXxjjX6GKtXd+XwU1LVgIwiBuosJznfP5YWh1MUH
+        V90pk7iC3QX+5sN+xLoWRXOmbH/+raJ+caNU5lsavdt8TNh/yYWEePeUhXt1BK7snKTzrY
+        6t/qR/7rPSkjUWLQbF/oCDy8a/sKHXprnJBLjkJhhFtcue0Ghize8MXhK5Ek9w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639516327;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rcii2iHyAkR9Kah3KUc4lSx3hIDJM4dLUBLakzw4z6E=;
+        b=xZEw/zMk3g/IMoezgazY85RpvDxMaCvVQtFZs9lhvsFQB+8uOSZ8EV96YXK2x/k+Fxqmsm
+        GwjKrSqhtTykzJDg==
+From:   "tip-bot2 for Chang S. Bae" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/urgent] signal: Skip the altstack update when not needed
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next PATCH RFC v5 16/16] net: dsa: qca8k: cache lo and hi for mdio write
-Date:   Tue, 14 Dec 2021 22:10:11 +0100
-Message-Id: <20211214211011.24850-17-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211214211011.24850-1-ansuelsmth@gmail.com>
-References: <20211214211011.24850-1-ansuelsmth@gmail.com>
+In-Reply-To: <20211210225503.12734-1-chang.seok.bae@intel.com>
+References: <20211210225503.12734-1-chang.seok.bae@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <163951632633.23020.9347613990471336482.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From Documentation, we can cache lo and hi the same way we do with the
-page. This massively reduce the mdio write as 3/4 of the time as we only
-require to write the lo or hi part for a mdio write.
+The following commit has been merged into the sched/urgent branch of tip:
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+Commit-ID:     6c3118c32129b4197999a8928ba776bcabd0f5c4
+Gitweb:        https://git.kernel.org/tip/6c3118c32129b4197999a8928ba776bcabd0f5c4
+Author:        Chang S. Bae <chang.seok.bae@intel.com>
+AuthorDate:    Fri, 10 Dec 2021 14:55:03 -08:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Tue, 14 Dec 2021 13:08:36 -08:00
+
+signal: Skip the altstack update when not needed
+
+== Background ==
+
+Support for large, "dynamic" fpstates was recently merged.  This
+included code to ensure that sigaltstacks are sufficiently sized for
+these large states.  A new lock was added to remove races between
+enabling large features and setting up sigaltstacks.
+
+== Problem ==
+
+The new lock (sigaltstack_lock()) is acquired in the sigreturn path
+before restoring the old sigaltstack.  Unfortunately, contention on the
+new lock causes a measurable signal handling performance regression [1].
+However, the common case is that no *changes* are made to the
+sigaltstack state at sigreturn.
+
+== Solution ==
+
+do_sigaltstack() acquires sigaltstack_lock() and is used for both
+sys_sigaltstack() and restoring the sigaltstack in sys_sigreturn().
+Check for changes to the sigaltstack before taking the lock.  If no
+changes were made, return before acquiring the lock.
+
+This removes lock contention from the common-case sigreturn path.
+
+[1] https://lore.kernel.org/lkml/20211207012128.GA16074@xsang-OptiPlex-9020/
+
+Fixes: 3aac3ebea08f ("x86/signal: Implement sigaltstack size validation")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lkml.kernel.org/r/20211210225503.12734-1-chang.seok.bae@intel.com
 ---
- drivers/net/dsa/qca8k.c | 60 ++++++++++++++++++++++++++++++++---------
- drivers/net/dsa/qca8k.h |  5 ++++
- 2 files changed, 53 insertions(+), 12 deletions(-)
+ kernel/signal.c |  9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-index 5c0a7c17da49..b34fa3483ac1 100644
---- a/drivers/net/dsa/qca8k.c
-+++ b/drivers/net/dsa/qca8k.c
-@@ -88,6 +88,42 @@ qca8k_split_addr(u32 regaddr, u16 *r1, u16 *r2, u16 *page)
- 	*page = regaddr & 0x3ff;
- }
+diff --git a/kernel/signal.c b/kernel/signal.c
+index a629b11..dfcee38 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -4185,6 +4185,15 @@ do_sigaltstack (const stack_t *ss, stack_t *oss, unsigned long sp,
+ 				ss_mode != 0))
+ 			return -EINVAL;
  
-+static int
-+qca8k_set_lo(struct mii_bus *bus, int phy_id, u32 regnum,
-+	     u16 lo, u16 *cached_lo)
-+{
-+	int ret;
++		/*
++		 * Return before taking any locks if no actual
++		 * sigaltstack changes were requested.
++		 */
++		if (t->sas_ss_sp == (unsigned long)ss_sp &&
++		    t->sas_ss_size == ss_size &&
++		    t->sas_ss_flags == ss_flags)
++			return 0;
 +
-+	if (lo == *cached_lo)
-+		return 0;
-+
-+	ret = bus->write(bus, phy_id, regnum, lo);
-+	if (ret < 0)
-+		dev_err_ratelimited(&bus->dev,
-+				    "failed to write qca8k 32bit lo register\n");
-+
-+	*cached_lo = lo;
-+	return 0;
-+}
-+
-+static int
-+qca8k_set_hi(struct mii_bus *bus, int phy_id, u32 regnum,
-+	     u16 hi, u16 *cached_hi)
-+{
-+	int ret;
-+
-+	if (hi == *cached_hi)
-+		return 0;
-+
-+	ret = bus->write(bus, phy_id, regnum, hi);
-+	if (ret < 0)
-+		dev_err_ratelimited(&bus->dev,
-+				    "failed to write qca8k 32bit hi register\n");
-+
-+	*cached_hi = hi;
-+	return 0;
-+}
-+
- static int
- qca8k_mii_read32(struct mii_bus *bus, int phy_id, u32 regnum, u32 *val)
- {
-@@ -111,7 +147,8 @@ qca8k_mii_read32(struct mii_bus *bus, int phy_id, u32 regnum, u32 *val)
- }
- 
- static void
--qca8k_mii_write32(struct mii_bus *bus, int phy_id, u32 regnum, u32 val)
-+qca8k_mii_write32(struct mii_bus *bus, struct qca8k_mdio_cache *cache,
-+		  int phy_id, u32 regnum, u32 val)
- {
- 	u16 lo, hi;
- 	int ret;
-@@ -119,12 +156,9 @@ qca8k_mii_write32(struct mii_bus *bus, int phy_id, u32 regnum, u32 val)
- 	lo = val & 0xffff;
- 	hi = (u16)(val >> 16);
- 
--	ret = bus->write(bus, phy_id, regnum, lo);
-+	ret = qca8k_set_lo(bus, phy_id, regnum, lo, &cache->lo);
- 	if (ret >= 0)
--		ret = bus->write(bus, phy_id, regnum + 1, hi);
--	if (ret < 0)
--		dev_err_ratelimited(&bus->dev,
--				    "failed to write qca8k 32bit register\n");
-+		ret = qca8k_set_hi(bus, phy_id, regnum + 1, hi, &cache->hi);
- }
- 
- static int
-@@ -368,7 +402,7 @@ qca8k_regmap_write(void *ctx, uint32_t reg, uint32_t val)
- 	if (ret < 0)
- 		goto exit;
- 
--	qca8k_mii_write32(bus, 0x10 | r2, r1, val);
-+	qca8k_mii_write32(bus, mdio_cache, 0x10 | r2, r1, val);
- 
- exit:
- 	mutex_unlock(&bus->mdio_lock);
-@@ -405,7 +439,7 @@ qca8k_regmap_update_bits(void *ctx, uint32_t reg, uint32_t mask, uint32_t write_
- 
- 	val &= ~mask;
- 	val |= write_val;
--	qca8k_mii_write32(bus, 0x10 | r2, r1, val);
-+	qca8k_mii_write32(bus, mdio_cache, 0x10 | r2, r1, val);
- 
- exit:
- 	mutex_unlock(&bus->mdio_lock);
-@@ -1042,14 +1076,14 @@ qca8k_mdio_write(struct mii_bus *bus, struct qca8k_mdio_cache *cache,
- 	if (ret)
- 		goto exit;
- 
--	qca8k_mii_write32(bus, 0x10 | r2, r1, val);
-+	qca8k_mii_write32(bus, cache, 0x10 | r2, r1, val);
- 
- 	ret = qca8k_mdio_busy_wait(bus, QCA8K_MDIO_MASTER_CTRL,
- 				   QCA8K_MDIO_MASTER_BUSY);
- 
- exit:
- 	/* even if the busy_wait timeouts try to clear the MASTER_EN */
--	qca8k_mii_write32(bus, 0x10 | r2, r1, 0);
-+	qca8k_mii_write32(bus, cache, 0x10 | r2, r1, 0);
- 
- 	mutex_unlock(&bus->mdio_lock);
- 
-@@ -1079,7 +1113,7 @@ qca8k_mdio_read(struct mii_bus *bus, struct qca8k_mdio_cache *cache,
- 	if (ret)
- 		goto exit;
- 
--	qca8k_mii_write32(bus, 0x10 | r2, r1, val);
-+	qca8k_mii_write32(bus, cache, 0x10 | r2, r1, val);
- 
- 	ret = qca8k_mdio_busy_wait(bus, QCA8K_MDIO_MASTER_CTRL,
- 				   QCA8K_MDIO_MASTER_BUSY);
-@@ -1090,7 +1124,7 @@ qca8k_mdio_read(struct mii_bus *bus, struct qca8k_mdio_cache *cache,
- 
- exit:
- 	/* even if the busy_wait timeouts try to clear the MASTER_EN */
--	qca8k_mii_write32(bus, 0x10 | r2, r1, 0);
-+	qca8k_mii_write32(bus, cache, 0x10 | r2, r1, 0);
- 
- 	mutex_unlock(&bus->mdio_lock);
- 
-@@ -2982,6 +3016,8 @@ qca8k_sw_probe(struct mdio_device *mdiodev)
- 	}
- 
- 	priv->mdio_cache.page = 0xffff;
-+	priv->mdio_cache.lo = 0xffff;
-+	priv->mdio_cache.hi = 0xffff;
- 
- 	/* Check the detected switch id */
- 	ret = qca8k_read_switch_id(priv);
-diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
-index c4800ee06c34..79cd35f48730 100644
---- a/drivers/net/dsa/qca8k.h
-+++ b/drivers/net/dsa/qca8k.h
-@@ -369,6 +369,11 @@ struct qca8k_mdio_cache {
-  * mdio writes
-  */
- 	u16 page;
-+/* lo and hi can also be cached and from Documentation we can skip one
-+ * extra mdio write if lo or hi is didn't change.
-+ */
-+	u16 lo;
-+	u16 hi;
- };
- 
- struct qca8k_priv {
--- 
-2.33.1
-
+ 		sigaltstack_lock();
+ 		if (ss_mode == SS_DISABLE) {
+ 			ss_size = 0;

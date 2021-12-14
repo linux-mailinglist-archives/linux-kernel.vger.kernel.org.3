@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EF7474DA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2264A474DAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238147AbhLNWF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:05:26 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58722 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237921AbhLNWEq (ORCPT
+        id S237989AbhLNWFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237950AbhLNWEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 17:04:46 -0500
+        Tue, 14 Dec 2021 17:04:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9FDC061747
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:04:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2EB39CE1AFF
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:04:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2602C34618;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7D7AACE1B0D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2408C34617;
         Tue, 14 Dec 2021 22:04:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1639519481;
-        bh=3tgi/sZEfVXOuV9GJDQAEE5SJoQkpPOmks3ld7BJRms=;
+        bh=Fh3EnHSrdMx0h7lv3lp8zzY+TMzt5T+67+Z56q4IvLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fsgP1WHmuuuY74nLGe8cIGRfWhJ/WmBfHCcfBiyxkGVcXMkdRDO8908oeTUI7SNwB
-         NAchEK3dJJe7LNTnuWZO0rBjB0DATqfiW5vN1KVXQB5qH0gesl22ZJIRPlRjwdv7Y7
-         pyOEto66hTvs4NwW7s8fgnM+yxZeOAr+LoGrDDr/C1UzRfFTB8TLSxQJtIIf/VY4RT
-         hZHQyFGRya3Pv4zENbMffJDLpx1q101FcgJtsNV8cLCqajQvG/8vxeoEJFWzJ8QqVN
-         0ex7BVU/0/zK+EJFTM3JkKYM8oDcdu2BQ3B/BUEWM0Sj3dL0jMetyqgItHaUrzXeBE
-         rxUbdYXofBOfg==
+        b=nPRdSJbvtcM9KFKONNpOjS5MHU+IAp019/+MsYBO/WJ4ijU4TQSy29fNZTloFbE+z
+         TVYVU9o3XwHguJd9Y6cw4eCWoVcMm+1OiBTBiQGzAsBpAaO07ZpHGQP+EkoqHvO73z
+         f28aWqQ2aMAUfVPNPtbPnvdt1eKkZy0qY4ZcpFtmZ4UznXBQ5KusV92nXg2liF9e+4
+         M2Dd6qccWQalJdoaaPpQVGXWu00cJwYbFiUozdQq8GsgdLICrFPPpzLp07SXOMi+T6
+         ym02ajDck5HedwjrTZfQt7e/eTQeerLw3nsf/KrRkjgH3JEIIil2jImtSpIQH5KVSw
+         KOA9Di3v/7ulg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6AEA55C1506; Tue, 14 Dec 2021 14:04:41 -0800 (PST)
+        id 6CDA95C1655; Tue, 14 Dec 2021 14:04:41 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
         kernel-team@fb.com, mingo@kernel.org
 Cc:     elver@google.com, andreyknvl@google.com, glider@google.com,
         dvyukov@google.com, cai@lca.pw, boqun.feng@gmail.com,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH kcsan 09/29] kcsan: Document modeling of weak memory
-Date:   Tue, 14 Dec 2021 14:04:19 -0800
-Message-Id: <20211214220439.2236564-9-paulmck@kernel.org>
+Subject: [PATCH kcsan 10/29] kcsan: test: Match reordered or normal accesses
+Date:   Tue, 14 Dec 2021 14:04:20 -0800
+Message-Id: <20211214220439.2236564-10-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1>
 References: <20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1>
@@ -51,116 +54,302 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marco Elver <elver@google.com>
 
-Document how KCSAN models a subset of weak memory and the subset of
-missing memory barriers it can detect as a result.
+Due to reordering accesses with weak memory modeling, any access can now
+appear as "(reordered)".
+
+Match any permutation of accesses if CONFIG_KCSAN_WEAK_MEMORY=y, so that
+we effectively match an access if it is denoted "(reordered)" or not.
 
 Signed-off-by: Marco Elver <elver@google.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- Documentation/dev-tools/kcsan.rst | 76 +++++++++++++++++++++++++------
- 1 file changed, 63 insertions(+), 13 deletions(-)
+ kernel/kcsan/kcsan_test.c | 92 +++++++++++++++++++++++++++------------
+ 1 file changed, 63 insertions(+), 29 deletions(-)
 
-diff --git a/Documentation/dev-tools/kcsan.rst b/Documentation/dev-tools/kcsan.rst
-index 7db43c7c09b8c..3ae866dcc9240 100644
---- a/Documentation/dev-tools/kcsan.rst
-+++ b/Documentation/dev-tools/kcsan.rst
-@@ -204,17 +204,17 @@ Ultimately this allows to determine the possible executions of concurrent code,
- and if that code is free from data races.
+diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
+index 6e3c2b8bc6083..ec054879201b3 100644
+--- a/kernel/kcsan/kcsan_test.c
++++ b/kernel/kcsan/kcsan_test.c
+@@ -151,7 +151,7 @@ struct expect_report {
  
- KCSAN is aware of *marked atomic operations* (``READ_ONCE``, ``WRITE_ONCE``,
--``atomic_*``, etc.), but is oblivious of any ordering guarantees and simply
--assumes that memory barriers are placed correctly. In other words, KCSAN
--assumes that as long as a plain access is not observed to race with another
--conflicting access, memory operations are correctly ordered.
--
--This means that KCSAN will not report *potential* data races due to missing
--memory ordering. Developers should therefore carefully consider the required
--memory ordering requirements that remain unchecked. If, however, missing
--memory ordering (that is observable with a particular compiler and
--architecture) leads to an observable data race (e.g. entering a critical
--section erroneously), KCSAN would report the resulting data race.
-+``atomic_*``, etc.), and a subset of ordering guarantees implied by memory
-+barriers. With ``CONFIG_KCSAN_WEAK_MEMORY=y``, KCSAN models load or store
-+buffering, and can detect missing ``smp_mb()``, ``smp_wmb()``, ``smp_rmb()``,
-+``smp_store_release()``, and all ``atomic_*`` operations with equivalent
-+implied barriers.
-+
-+Note, KCSAN will not report all data races due to missing memory ordering,
-+specifically where a memory barrier would be required to prohibit subsequent
-+memory operation from reordering before the barrier. Developers should
-+therefore carefully consider the required memory ordering requirements that
-+remain unchecked.
+ /* Check observed report matches information in @r. */
+ __no_kcsan
+-static bool report_matches(const struct expect_report *r)
++static bool __report_matches(const struct expect_report *r)
+ {
+ 	const bool is_assert = (r->access[0].type | r->access[1].type) & KCSAN_ACCESS_ASSERT;
+ 	bool ret = false;
+@@ -253,6 +253,40 @@ static bool report_matches(const struct expect_report *r)
+ 	return ret;
+ }
  
- Race Detection Beyond Data Races
- --------------------------------
-@@ -268,6 +268,56 @@ marked operations, if all accesses to a variable that is accessed concurrently
- are properly marked, KCSAN will never trigger a watchpoint and therefore never
- report the accesses.
++static __always_inline const struct expect_report *
++__report_set_scoped(struct expect_report *r, int accesses)
++{
++	BUILD_BUG_ON(accesses > 3);
++
++	if (accesses & 1)
++		r->access[0].type |= KCSAN_ACCESS_SCOPED;
++	else
++		r->access[0].type &= ~KCSAN_ACCESS_SCOPED;
++
++	if (accesses & 2)
++		r->access[1].type |= KCSAN_ACCESS_SCOPED;
++	else
++		r->access[1].type &= ~KCSAN_ACCESS_SCOPED;
++
++	return r;
++}
++
++__no_kcsan
++static bool report_matches_any_reordered(struct expect_report *r)
++{
++	return __report_matches(__report_set_scoped(r, 0)) ||
++	       __report_matches(__report_set_scoped(r, 1)) ||
++	       __report_matches(__report_set_scoped(r, 2)) ||
++	       __report_matches(__report_set_scoped(r, 3));
++}
++
++#ifdef CONFIG_KCSAN_WEAK_MEMORY
++/* Due to reordering accesses, any access may appear as "(reordered)". */
++#define report_matches report_matches_any_reordered
++#else
++#define report_matches __report_matches
++#endif
++
+ /* ===== Test kernels ===== */
  
-+Modeling Weak Memory
-+~~~~~~~~~~~~~~~~~~~~
-+
-+KCSAN's approach to detecting data races due to missing memory barriers is
-+based on modeling access reordering (with ``CONFIG_KCSAN_WEAK_MEMORY=y``).
-+Each plain memory access for which a watchpoint is set up, is also selected for
-+simulated reordering within the scope of its function (at most 1 in-flight
-+access).
-+
-+Once an access has been selected for reordering, it is checked along every
-+other access until the end of the function scope. If an appropriate memory
-+barrier is encountered, the access will no longer be considered for simulated
-+reordering.
-+
-+When the result of a memory operation should be ordered by a barrier, KCSAN can
-+then detect data races where the conflict only occurs as a result of a missing
-+barrier. Consider the example::
-+
-+    int x, flag;
-+    void T1(void)
-+    {
-+        x = 1;                  // data race!
-+        WRITE_ONCE(flag, 1);    // correct: smp_store_release(&flag, 1)
-+    }
-+    void T2(void)
-+    {
-+        while (!READ_ONCE(flag));   // correct: smp_load_acquire(&flag)
-+        ... = x;                    // data race!
-+    }
-+
-+When weak memory modeling is enabled, KCSAN can consider ``x`` in ``T1`` for
-+simulated reordering. After the write of ``flag``, ``x`` is again checked for
-+concurrent accesses: because ``T2`` is able to proceed after the write of
-+``flag``, a data race is detected. With the correct barriers in place, ``x``
-+would not be considered for reordering after the proper release of ``flag``,
-+and no data race would be detected.
-+
-+Deliberate trade-offs in complexity but also practical limitations mean only a
-+subset of data races due to missing memory barriers can be detected. With
-+currently available compiler support, the implementation is limited to modeling
-+the effects of "buffering" (delaying accesses), since the runtime cannot
-+"prefetch" accesses. Also recall that watchpoints are only set up for plain
-+accesses, and the only access type for which KCSAN simulates reordering. This
-+means reordering of marked accesses is not modeled.
-+
-+A consequence of the above is that acquire operations do not require barrier
-+instrumentation (no prefetching). Furthermore, marked accesses introducing
-+address or control dependencies do not require special handling (the marked
-+access cannot be reordered, later dependent accesses cannot be prefetched).
-+
- Key Properties
- ~~~~~~~~~~~~~~
- 
-@@ -290,8 +340,8 @@ Key Properties
- 4. **Detects Racy Writes from Devices:** Due to checking data values upon
-    setting up watchpoints, racy writes from devices can also be detected.
- 
--5. **Memory Ordering:** KCSAN is *not* explicitly aware of the LKMM's ordering
--   rules; this may result in missed data races (false negatives).
-+5. **Memory Ordering:** KCSAN is aware of only a subset of LKMM ordering rules;
-+   this may result in missed data races (false negatives).
- 
- 6. **Analysis Accuracy:** For observed executions, due to using a sampling
-    strategy, the analysis is *unsound* (false negatives possible), but aims to
+ static long test_sink;
+@@ -438,13 +472,13 @@ static noinline void test_kernel_xor_1bit(void)
+ __no_kcsan
+ static void test_basic(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_write, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+ 		},
+ 	};
+-	static const struct expect_report never = {
++	struct expect_report never = {
+ 		.access = {
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+@@ -469,14 +503,14 @@ static void test_basic(struct kunit *test)
+ __no_kcsan
+ static void test_concurrent_races(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			/* NULL will match any address. */
+ 			{ test_kernel_rmw_array, NULL, 0, __KCSAN_ACCESS_RW(KCSAN_ACCESS_WRITE) },
+ 			{ test_kernel_rmw_array, NULL, 0, __KCSAN_ACCESS_RW(0) },
+ 		},
+ 	};
+-	static const struct expect_report never = {
++	struct expect_report never = {
+ 		.access = {
+ 			{ test_kernel_rmw_array, NULL, 0, 0 },
+ 			{ test_kernel_rmw_array, NULL, 0, 0 },
+@@ -498,13 +532,13 @@ static void test_concurrent_races(struct kunit *test)
+ __no_kcsan
+ static void test_novalue_change(struct kunit *test)
+ {
+-	const struct expect_report expect_rw = {
++	struct expect_report expect_rw = {
+ 		.access = {
+ 			{ test_kernel_write_nochange, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+ 		},
+ 	};
+-	const struct expect_report expect_ww = {
++	struct expect_report expect_ww = {
+ 		.access = {
+ 			{ test_kernel_write_nochange, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_write_nochange, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+@@ -530,13 +564,13 @@ static void test_novalue_change(struct kunit *test)
+ __no_kcsan
+ static void test_novalue_change_exception(struct kunit *test)
+ {
+-	const struct expect_report expect_rw = {
++	struct expect_report expect_rw = {
+ 		.access = {
+ 			{ test_kernel_write_nochange_rcu, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+ 		},
+ 	};
+-	const struct expect_report expect_ww = {
++	struct expect_report expect_ww = {
+ 		.access = {
+ 			{ test_kernel_write_nochange_rcu, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_write_nochange_rcu, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+@@ -556,7 +590,7 @@ static void test_novalue_change_exception(struct kunit *test)
+ __no_kcsan
+ static void test_unknown_origin(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+ 			{ NULL },
+@@ -578,7 +612,7 @@ static void test_unknown_origin(struct kunit *test)
+ __no_kcsan
+ static void test_write_write_assume_atomic(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_write, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_write, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+@@ -604,7 +638,7 @@ static void test_write_write_assume_atomic(struct kunit *test)
+ __no_kcsan
+ static void test_write_write_struct(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_write_struct, &test_struct, sizeof(test_struct), KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_write_struct, &test_struct, sizeof(test_struct), KCSAN_ACCESS_WRITE },
+@@ -626,7 +660,7 @@ static void test_write_write_struct(struct kunit *test)
+ __no_kcsan
+ static void test_write_write_struct_part(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_write_struct, &test_struct, sizeof(test_struct), KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_write_struct_part, &test_struct.val[3], sizeof(test_struct.val[3]), KCSAN_ACCESS_WRITE },
+@@ -658,7 +692,7 @@ static void test_read_atomic_write_atomic(struct kunit *test)
+ __no_kcsan
+ static void test_read_plain_atomic_write(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+ 			{ test_kernel_write_atomic, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC },
+@@ -679,7 +713,7 @@ static void test_read_plain_atomic_write(struct kunit *test)
+ __no_kcsan
+ static void test_read_plain_atomic_rmw(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+ 			{ test_kernel_atomic_rmw, &test_var, sizeof(test_var),
+@@ -701,13 +735,13 @@ static void test_read_plain_atomic_rmw(struct kunit *test)
+ __no_kcsan
+ static void test_zero_size_access(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_write_struct, &test_struct, sizeof(test_struct), KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_write_struct, &test_struct, sizeof(test_struct), KCSAN_ACCESS_WRITE },
+ 		},
+ 	};
+-	const struct expect_report never = {
++	struct expect_report never = {
+ 		.access = {
+ 			{ test_kernel_write_struct, &test_struct, sizeof(test_struct), KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_read_struct_zero_size, &test_struct.val[3], 0, 0 },
+@@ -741,7 +775,7 @@ static void test_data_race(struct kunit *test)
+ __no_kcsan
+ static void test_assert_exclusive_writer(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_assert_writer, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT },
+ 			{ test_kernel_write_nochange, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+@@ -759,7 +793,7 @@ static void test_assert_exclusive_writer(struct kunit *test)
+ __no_kcsan
+ static void test_assert_exclusive_access(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_assert_access, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT | KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+@@ -777,19 +811,19 @@ static void test_assert_exclusive_access(struct kunit *test)
+ __no_kcsan
+ static void test_assert_exclusive_access_writer(struct kunit *test)
+ {
+-	const struct expect_report expect_access_writer = {
++	struct expect_report expect_access_writer = {
+ 		.access = {
+ 			{ test_kernel_assert_access, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT | KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_assert_writer, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT },
+ 		},
+ 	};
+-	const struct expect_report expect_access_access = {
++	struct expect_report expect_access_access = {
+ 		.access = {
+ 			{ test_kernel_assert_access, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT | KCSAN_ACCESS_WRITE },
+ 			{ test_kernel_assert_access, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT | KCSAN_ACCESS_WRITE },
+ 		},
+ 	};
+-	const struct expect_report never = {
++	struct expect_report never = {
+ 		.access = {
+ 			{ test_kernel_assert_writer, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT },
+ 			{ test_kernel_assert_writer, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT },
+@@ -813,7 +847,7 @@ static void test_assert_exclusive_access_writer(struct kunit *test)
+ __no_kcsan
+ static void test_assert_exclusive_bits_change(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_assert_bits_change, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT },
+ 			{ test_kernel_change_bits, &test_var, sizeof(test_var),
+@@ -844,13 +878,13 @@ static void test_assert_exclusive_bits_nochange(struct kunit *test)
+ __no_kcsan
+ static void test_assert_exclusive_writer_scoped(struct kunit *test)
+ {
+-	const struct expect_report expect_start = {
++	struct expect_report expect_start = {
+ 		.access = {
+ 			{ test_kernel_assert_writer_scoped, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT | KCSAN_ACCESS_SCOPED },
+ 			{ test_kernel_write_nochange, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+ 		},
+ 	};
+-	const struct expect_report expect_inscope = {
++	struct expect_report expect_inscope = {
+ 		.access = {
+ 			{ test_enter_scope, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT | KCSAN_ACCESS_SCOPED },
+ 			{ test_kernel_write_nochange, &test_var, sizeof(test_var), KCSAN_ACCESS_WRITE },
+@@ -871,16 +905,16 @@ static void test_assert_exclusive_writer_scoped(struct kunit *test)
+ __no_kcsan
+ static void test_assert_exclusive_access_scoped(struct kunit *test)
+ {
+-	const struct expect_report expect_start1 = {
++	struct expect_report expect_start1 = {
+ 		.access = {
+ 			{ test_kernel_assert_access_scoped, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_SCOPED },
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+ 		},
+ 	};
+-	const struct expect_report expect_start2 = {
++	struct expect_report expect_start2 = {
+ 		.access = { expect_start1.access[0], expect_start1.access[0] },
+ 	};
+-	const struct expect_report expect_inscope = {
++	struct expect_report expect_inscope = {
+ 		.access = {
+ 			{ test_enter_scope, &test_var, sizeof(test_var), KCSAN_ACCESS_ASSERT | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_SCOPED },
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+@@ -985,7 +1019,7 @@ static void test_atomic_builtins(struct kunit *test)
+ __no_kcsan
+ static void test_1bit_value_change(struct kunit *test)
+ {
+-	const struct expect_report expect = {
++	struct expect_report expect = {
+ 		.access = {
+ 			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
+ 			{ test_kernel_xor_1bit, &test_var, sizeof(test_var), __KCSAN_ACCESS_RW(KCSAN_ACCESS_WRITE) },
 -- 
 2.31.1.189.g2e36527f23
 

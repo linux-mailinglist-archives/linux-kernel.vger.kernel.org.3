@@ -2,792 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E707473D84
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 08:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284E2473D88
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 08:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbhLNHVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 02:21:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42402 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbhLNHVs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 02:21:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A73961351
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:21:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15B07C34601;
-        Tue, 14 Dec 2021 07:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639466507;
-        bh=KMksn7hhzypVulRq4Sg0Nwvw8z858MC88gpjfN22hnY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ive0ZQfcrEjTmX/aGQmuc96sM9rgrJxCGEjnqsw1j+ulpkkCyXHWVTExu2WKHf4xV
-         oHyyFNg1BP+LvMKwMJO9CPaH2b1Ar/H6zNbW+I+F7KQ5zezZ5KMGwryNPiFtJVGXXL
-         U+XYaUfKnOWTj8KzTzy1lvy8wC/C18LL8NJuMQ0G/fyWv0gEs+yITM6/gn4qMeOlEz
-         ERwuCp4DwbDoetWvlOgLoCP0WJPVl9UceudbRYMIc9ob0n0kQeOXj8gx309HTN9aRt
-         Era3a6Tytk2/YpIpxMPXb/E3tiC1PAdG4pRGFfKVbz3PnH4F6PvoF7JPFcPtpbUte3
-         o7il96RzvimGA==
-Date:   Tue, 14 Dec 2021 15:21:40 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Jason Liu <jason.hui.liu@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH v2 8/8] arm64: dts: ls1028a-qds: add overlays for various
- serdes protocols
-Message-ID: <20211214072139.GA13828@dragon>
-References: <20211204001718.8511-1-leoyang.li@nxp.com>
- <20211204001718.8511-9-leoyang.li@nxp.com>
+        id S231421AbhLNHWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 02:22:41 -0500
+Received: from mail-bn8nam12on2047.outbound.protection.outlook.com ([40.107.237.47]:6401
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230000AbhLNHWj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 02:22:39 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BpT+PNu9r/Nx9D+HkjSZ2VKdGIKwAwp8sLKpyS754rAwRk3fsUFey5Cz6dWKYIFOpvl5NwIdRIZquV8gcCMqeeMJapL0xAhyijnlEqOHwNZb0ylDMUDZXfy1PFq4c8Bdh/cSR021jV6q0jaJwUVADIwy5tl2U/Fll3Yv4AP9ekhLz1V4iJdeU11cOqgxCaU5HEir86PHWFzD5kNUPH7zHlXRy5sRIdq/j5Pv6KrmUx7dzoziaCGAzYeiJdKQiHaQzweJONDCCEAFSCRLm2Lw8Sx/DkrDCVONmCAuqCLfFeBpUAPnjVrM3Ahou2+uSxbKJY4zZCqdGME31Xi2KbiMoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EVgOrRO6rh6eAxz/3q1ufyQF1OeV1GqI6Q68lVGJhY0=;
+ b=MfYFJz4SrmM4J8lNm6Q96QL17WW8cagF4sggDADfSAfiAQPmyWqNNNbeKib5WSRldH333KMhJYYz5guJ5wHXqsO4gHtrhOQdG7mAm0cfZ6OU2L+1NoX3TZ68yog5MudWSEzt4qLs03DYD1bp2u1JPkkUXLmzaQ30kC61RzaeURD9PGqg9cSRnM/sgDcu92y1/moYufB7VYR3clfs2M2HsT/T/bS5XRHXPmaTgcFdEilR/CTk2sBdTIJ304UDLkmKUTxUbB9XKdpkox1cHbJg494HzCTIDJopnSyKZJEBbug5QYtjwQ5dPpnvVd+mA5LUKwgruL8oVVA06ujPA3ErAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EVgOrRO6rh6eAxz/3q1ufyQF1OeV1GqI6Q68lVGJhY0=;
+ b=Dje+EDPq3Gq7tPimDD95wuqMQ3JhRqog6ATVAtjr34yPNds46gOYmdElvONvGp4oygHS3/THjf/61m8/Ag3np57kp251MJNaKFlDgv4Sz20aRy1tXN2v9hFi/M2viXKQqSQoxUiyMroDnOkpj1rqlZAPLoR91DPL+UomWgqEPz2krAiaJVPz8eLwB545hfz8ttX3qofiDA7rbjlxIrY2w2YnFV2A0Mcb93e9R/9LofP4S87MpUxOH1Cpq7jpCQ6nJn8rTRZ3SOHj8G3AN6yiwA4nY5NqovgMfpt7zo5rA9kON1UXWnMH8zX8NXY8TiYtNAshnrm7Lb0b71J4nLpcUw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY4PR12MB1576.namprd12.prod.outlook.com (2603:10b6:910:10::9)
+ by CY4PR12MB1654.namprd12.prod.outlook.com (2603:10b6:910:3::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Tue, 14 Dec
+ 2021 07:22:37 +0000
+Received: from CY4PR12MB1576.namprd12.prod.outlook.com
+ ([fe80::24b0:46e7:d3c0:a77b]) by CY4PR12MB1576.namprd12.prod.outlook.com
+ ([fe80::24b0:46e7:d3c0:a77b%7]) with mapi id 15.20.4778.018; Tue, 14 Dec 2021
+ 07:22:37 +0000
+Subject: Re: [PATCH 1/3] ALSA: hda/tegra: Skip reset on BPMP devices
+To:     Dmitry Osipenko <digetx@gmail.com>, tiwai@suse.com,
+        broonie@kernel.org, lgirdwood@gmail.com, thierry.reding@gmail.com,
+        perex@perex.cz
+Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Mohan Kumar <mkumard@nvidia.com>, robh+dt@kernel.org
+References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
+ <1638858770-22594-2-git-send-email-spujar@nvidia.com>
+ <7742adae-cdbe-a9ea-2cef-f63363298d73@gmail.com>
+ <8fd704d9-43ce-e34a-a3c0-b48381ef0cd8@nvidia.com>
+ <56bb43b6-8d72-b1de-4402-a2cb31707bd9@gmail.com>
+ <4855e9c4-e4c2-528b-c9ad-2be7209dc62a@nvidia.com>
+ <5d441571-c1c2-5433-729f-86d6396c2853@gmail.com>
+ <f32cde65-63dc-67f8-ded8-b58ea5e89f4e@nvidia.com>
+ <95cc7efa-251c-690b-9afa-53ee9e052c34@gmail.com>
+ <148fba18-5d14-d342-0eb9-4ff224cc58ad@nvidia.com>
+ <3b0de739-7866-3886-be9c-a853c746f8b7@gmail.com>
+ <73d04377-9898-930b-09db-bb6c4b3eb90a@nvidia.com>
+ <ad388f5e-6f60-cf78-8510-87aec8524e33@gmail.com>
+ <50bf5a83-051e-8c12-6502-aabd8edd0a72@nvidia.com>
+ <7230ad0b-2b04-4f1b-b616-b7d98789ded0@gmail.com>
+From:   Sameer Pujar <spujar@nvidia.com>
+Message-ID: <48f891bc-d8f6-2634-6dd1-6ea4f14ae6a3@nvidia.com>
+Date:   Tue, 14 Dec 2021 12:52:24 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
+In-Reply-To: <7230ad0b-2b04-4f1b-b616-b7d98789ded0@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+X-ClientProxiedBy: MA1PR01CA0171.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:d::17) To CY4PR12MB1576.namprd12.prod.outlook.com
+ (2603:10b6:910:10::9)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211204001718.8511-9-leoyang.li@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 20d21862-5133-4114-13f8-08d9bed28148
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1654:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1654D64E3A8702A1D58B285AA7759@CY4PR12MB1654.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: baIN69Y6DIIc0rAtKt5EqhXB0ic/yS9mdosRjLL7Wn9GhAJl3qmdqq6YEhHZVo8uZmcfNWpcwB2It/tpGe3/iV311H2iq9CmCUVnZY84JW7K4h1tpZlXm36crLVmGrfVyl+lBlmCAB9wOL9tRMkb5vXRtcNv0873qZy+vk+aWHmWOw4pipGlsz2tPkvMRAFa1KbrB2lAVnPkv4YWgdljYegOElTQCctiHVzdpYoHOYHTMH34zigatASSomw0JFXjfEJ9emjJcbUwSwOThItaoC1T1s8B+KLdlpS+wLJ6yG/eVjoRC89QdcrPjKOhYIBElWJUGdHDBv4OMLZbvRC4DT+UEXrl+keBD6g6mS9rqUH3RYNr5KjahFIZwvvZLNQSstQJjOPJXXBeeCVySJJ9uOXJjzGsdF68wRHvyhyiZzpekHj2OaIMTynq60ppr6lXmnxiK2cjEB56J68IMo2fZzd+pTkK+GbpK2/u46AXyU5dQpaHlnAolgJUEdP0PcPLNxtMgZEHPFZEJJEatReYSkFW+pzCVkOuyHUFfrstEsiqCkDEPMbBc9bmvdkDBgXGybrc4sl+Rp69yf3yMSSCWm2qSbKRmiWdLaAHDxgGbnzzXCOrwI9ZDJ7bUUwOsVP/aOJa8EGNNSw0ye1P22NjYAdXLRa/dguXhUO8CH0dLCgSkgQsvStM4S9CN5Tw2ec0390fEpWRGh0mK6o3659C67QE9K1rAn/VQm2XpMOSHys=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1576.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(6512007)(66476007)(31686004)(66556008)(66946007)(8936002)(7416002)(6486002)(38100700002)(508600001)(2616005)(5660300002)(86362001)(36756003)(4326008)(53546011)(6506007)(8676002)(31696002)(186003)(316002)(26005)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VTVTaU82cktScThpcWdRQzc1MjNobVcvTDRvdGZjNmFUcUpsd3Z0UUtlM3lV?=
+ =?utf-8?B?aHFXRU1hOXozVGpaL3pLREc5ZkJZeitFRVJjcDg5a2VKU2tMSkhQOGVLaW44?=
+ =?utf-8?B?alozZjllTmRvT3IzTDdkb3ZIL3FoQTJwTG14M0pzT2VzNDJvOVExa3NsdWNB?=
+ =?utf-8?B?S2M1S1p0OUZoU1c2RXpML2NBQ0F0dURNamU4Y3ZrbTN2cC9MNHJxeSs0eDhS?=
+ =?utf-8?B?RWEyRlc3SWpNMkZ4N2NyZ3crZHZ2RThkUTd3S054ZFlsUUlGemUvbEFoUEMv?=
+ =?utf-8?B?QzNVYThIRWNKOU8vQ3kyYkRIN01zR2NlQThicG11UmoybENDUXVvZzY3RjdX?=
+ =?utf-8?B?OEwwQmJkM3RpTDJoTnBUam01ekJ6OXV0S2w3Y1pkbEN2NWY0NUh0MmhTR3pX?=
+ =?utf-8?B?bm9WUFZRSVY4QzFFaGNTSDdwL3grSGJQSnFESXNRTFFzME5hV2lEVkdHZVpR?=
+ =?utf-8?B?ZUtPai9nbVJjdTRYLzQzeTZaTUlWLy82QjMxd29HU0dvZlRvMEJYZ1poUmlp?=
+ =?utf-8?B?T29YTkVWTWlIcjZwWEIrVlhwTjFYb3VWS2t4SU1jWDhSWFpzb3duYU92UCtV?=
+ =?utf-8?B?RGRjOEdUa1JNeEl3dUpibjJUNlF5Vy9VdkhUMXVFQ3JrYXAyQmFKQ0NQZTBF?=
+ =?utf-8?B?STJGZTdoTDlnL3JVZW9MVE96UzlSVi94ZnR3UEVyTERRQStja0krLzFBd2Mx?=
+ =?utf-8?B?Z21WRnBwNDdWRXJ4cUpKM29QZm1KZm9aKzRVRDFGU0cxTkQrbzJGOW41MjdG?=
+ =?utf-8?B?eEZDQ3lpK1FiZlFNMUVVSjA4YnRHc3NzTHJEcGVFNk9weDhQNG9lYXdEbmNv?=
+ =?utf-8?B?MVlEWHdKUjBTdGVoRHJCVnkzMFExVENhZTVmbC9yY284VHNodlRqd2hOMXlO?=
+ =?utf-8?B?VE9kS1JsVmZQNStIbjVSVklnS3Njb1hNMkRJREpnMkp2RW14VTBSN0tVWDlz?=
+ =?utf-8?B?Uzc0cm9MNmo2eHgxaGdXR2ZHYVlnclptY1BxRmlNRHZmNUF4Rk53SE5FZTBt?=
+ =?utf-8?B?Tm1EMXFuUUlRbXBZOWUxcjQrc1FOVm9mWVJUMWprTE56R0dwck5hRlBWRFJl?=
+ =?utf-8?B?TDVUL00vcTZJWlBDVk05MVg3ZzdVTEk0Zi9nU3EvTG5DdndnUXJFNUlOMmN1?=
+ =?utf-8?B?dVpuekprTDY5VWhick1PaWszd1ZteXNDd0QwN0ZOc21BaWpOdk5YYUdlUk9z?=
+ =?utf-8?B?N3dCVVFaNXp5VXMydDZyN3VNNFBXdm1LOUk0R0xPQWoxcmtRa0RmV0tPanZ4?=
+ =?utf-8?B?NEVUelZsMjlhbVR3b1hpeXE0ZnZ2NTRnR0xDZ01iaVhRWW03VXVvYzZQNjlt?=
+ =?utf-8?B?QWJ3RklpSXpmaGJDcGJ6dll0N0kveVZKeW9WbnNzUEJ1Njc5dEk1Y1pkVVlS?=
+ =?utf-8?B?a3V6cmxZYjd5ZFo5bFFHUTRwQzQ2RTAwNk1CVEdJQTdXcmVwZS9MckNlK1NO?=
+ =?utf-8?B?ZXdZTkVkM1FZUHpWaU92MVh0U0hKWmtXU28vWVMyY3NqUlJyQW8wU1k2Qmla?=
+ =?utf-8?B?L0I0Nk9zdEpFcitGZ1k1YWtrSGFCYUxEVXhIOHMxV28yVE9ZZDZHRkNrVjAx?=
+ =?utf-8?B?aFEyQXRpaXdHVW56a2xReTFGdWlMOFoyZHBjYk41ZDBnTmh1UlJyOGJtdWNu?=
+ =?utf-8?B?S2crd2pqRCt0blFZRGw2ZmRRRDdyK090b2dQM0dsMHZLZjZEa1ZUZ1ROU3cw?=
+ =?utf-8?B?Z0xyekpWeUcyc09JYTFocGU2bjUvT0JoTHJ6RlZYeVFtTlZiNEVrc1V2Qko4?=
+ =?utf-8?B?Sjg4U3BZYnNBWlFYK3lqcUUzYkI0ZHlBeEZ2UVdBdEFXZGRyNytxNHYwK050?=
+ =?utf-8?B?emFpY05POWtqQ001SWM2ZWEzbms5N0RFeTN6QWtiVGtRc3RTbTI1RmdIRnNO?=
+ =?utf-8?B?aVlVVnBwUjJMZjErbGxMbFBsa2dHR1M3OEtCU0JHNWRubmVudVVjZ0tUZUFH?=
+ =?utf-8?B?TTcrb1RvQnFQNWlGNEFEM2d1Z0lGN2hPbG45VDVRRWpLRks0azZCSFl0UnI3?=
+ =?utf-8?B?QjJta3JBcktaZTN6elRoVGdHdEcvcXQ2NU8zYTdqaW45RmE0bkpvUTAwbFZY?=
+ =?utf-8?B?Y2t4cEhZalo2MWZkbUNuZFNlMm5oejFIbE1kbEc4QUt5YVVuKzFMbzZJNGxT?=
+ =?utf-8?B?NDdudjVEbTBoUUFUM2d0VXhERy9NV1JKVmNQV01JQVRHbWhkOTdneHBQMzA4?=
+ =?utf-8?Q?wB6uuwZzepD5aSzBLgW/rT8=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20d21862-5133-4114-13f8-08d9bed28148
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1576.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 07:22:37.2369
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JxqhfE/17CU0+KoHw7LfGIu+ehkhN8cPfgRTEvHrlu7QHhTZvafcKQEDf11e/GFKyj3OhKP6QhGWPaVncJ4eEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1654
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 06:17:18PM -0600, Li Yang wrote:
-> From: Alex Marginean <alexandru.marginean@nxp.com>
-> 
-> Add overlays for various serdes protocols on LS1028A QDS board using
-> different PHY cards.  These should be applied at boot, based on serdes
-> configuration.  If no overlay is applied, only the RGMII interface on
-> the QDS is available in Linux.
-> 
-> Building device tree fragments requires passing the "-@" argument to
-> dtc, which increases the base dtb size and might cause some platforms to
-> fail to store the new binary. To avoid that, it would be nice to only
-> pass "-@" for the platforms where fragments will be used, aka
-> LS1028A-QDS. One approach suggested by Rob Herring is used here:
-> 
-> https://lore.kernel.org/patchwork/patch/821645/
-> 
-> Also moved the enet* override nodes in dts file to be in alphabetic order.
-> 
-> Signed-off-by: Alex Marginean <alexandru.marginean@nxp.com>
-> Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
-> Signed-off-by: Jason Liu <jason.hui.liu@nxp.com>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/Makefile        |  16 +++
->  .../dts/freescale/fsl-ls1028a-qds-13bb.dts    | 113 ++++++++++++++++++
->  .../dts/freescale/fsl-ls1028a-qds-65bb.dts    | 108 +++++++++++++++++
->  .../dts/freescale/fsl-ls1028a-qds-7777.dts    |  82 +++++++++++++
->  .../dts/freescale/fsl-ls1028a-qds-85bb.dts    | 107 +++++++++++++++++
->  .../dts/freescale/fsl-ls1028a-qds-899b.dts    |  75 ++++++++++++
->  .../dts/freescale/fsl-ls1028a-qds-9999.dts    |  79 ++++++++++++
->  .../boot/dts/freescale/fsl-ls1028a-qds.dts    |  19 ++-
->  .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |   2 +-
->  9 files changed, 595 insertions(+), 6 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
->  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
->  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
->  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
->  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
->  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-> index a14a6173b765..f518eb1e1142 100644
-> --- a/arch/arm64/boot/dts/freescale/Makefile
-> +++ b/arch/arm64/boot/dts/freescale/Makefile
-> @@ -1,4 +1,14 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +
-> +# required for overlay support
-> +DTC_FLAGS_fsl-ls1028a-qds := -@
-> +DTC_FLAGS_fsl-ls1028a-qds-13bb := -@
-> +DTC_FLAGS_fsl-ls1028a-qds-65bb := -@
-> +DTC_FLAGS_fsl-ls1028a-qds-7777 := -@
-> +DTC_FLAGS_fsl-ls1028a-qds-85bb := -@
-> +DTC_FLAGS_fsl-ls1028a-qds-899b := -@
-> +DTC_FLAGS_fsl-ls1028a-qds-9999 := -@
-> +
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1012a-frdm.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1012a-frwy.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1012a-oxalis.dtb
-> @@ -11,6 +21,12 @@ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-kontron-sl28-var2.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-kontron-sl28-var3-ads2.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-kontron-sl28-var4.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds.dtb
-> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-13bb.dtb
-> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-65bb.dtb
-> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-7777.dtb
-> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-85bb.dtb
-> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-899b.dtb
-> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-9999.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-rdb.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1043a-qds.dtb
->  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1043a-rdb.dtb
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
-> new file mode 100644
-> index 000000000000..f748a2c12a70
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
-> @@ -0,0 +1,113 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Device Tree fragment for LS1028A QDS board, serdes 13bb
-> + *
-> + * Copyright 2019-2021 NXP
-> + *
-> + * Requires a LS1028A QDS board with lane B rework.
-> + * Requires a SCH-30841 card with lane A of connector rewired to PHY lane C.
-> + * Set-up is a SCH-30842 card in slot 1 and SCH-30841 in slot 2.
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +/ {
-> +	fragment@0 {
-> +		target = <&mdio_slot1>;
-> +
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			slot1_sgmii: ethernet-phy@2 {
-> +				/* AQR112 */
-> +				reg = <0x2>;
-> +				compatible = "ethernet-phy-ieee802.3-c45";
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@1 {
-> +		target = <&enetc_port0>;
-> +
-> +		__overlay__ {
-> +			phy-handle = <&slot1_sgmii>;
-> +			phy-mode = "usxgmii";
-> +			managed = "in-band-status";
-> +			status = "okay";
-> +		};
-> +	};
-> +
-> +	fragment@2 {
-> +		target = <&mdio_slot2>;
-> +
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			/* 4 ports on AQR412 */
-> +			slot2_qxgmii0: ethernet-phy@0 {
-> +				reg = <0x0>;
-> +				compatible = "ethernet-phy-ieee802.3-c45";
-> +			};
-> +
-> +			slot2_qxgmii1: ethernet-phy@1 {
-> +				reg = <0x1>;
-> +				compatible = "ethernet-phy-ieee802.3-c45";
-> +			};
-> +
-> +			slot2_qxgmii2: ethernet-phy@2 {
-> +				reg = <0x2>;
-> +				compatible = "ethernet-phy-ieee802.3-c45";
-> +			};
-> +
-> +			slot2_qxgmii3: ethernet-phy@3 {
-> +				reg = <0x3>;
-> +				compatible = "ethernet-phy-ieee802.3-c45";
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@3 {
-> +		target = <&mscc_felix_ports>;
-> +
-> +		__overlay__ {
-> +			port@0 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qxgmii0>;
-> +				phy-mode = "usxgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@1 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qxgmii1>;
-> +				phy-mode = "usxgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@2 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qxgmii2>;
-> +				phy-mode = "usxgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@3 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qxgmii3>;
-> +				phy-mode = "usxgmii";
-> +				managed = "in-band-status";
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@4 {
-> +		target = <&mscc_felix>;
-> +
-> +		__overlay__ {
-> +			status = "okay";
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
-> new file mode 100644
-> index 000000000000..8ffb707a1576
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
-> @@ -0,0 +1,108 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Device Tree fragment for LS1028A QDS board, serdes 69xx
-> + *
-> + * Copyright 2019-2021 NXP
-> + *
-> + * Requires a LS1028A QDS board with lane B rework.
-> + * Requires a SCH-30842 card in slot 1 and a SCH-28021 card in slot 2.
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +/ {
-> +	fragment@0 {
-> +		target = <&mdio_slot1>;
-> +
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			slot1_sgmii: ethernet-phy@2 {
-> +				/* AQR112 */
-> +				reg = <0x2>;
-> +				compatible = "ethernet-phy-ieee802.3-c45";
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@1 {
-> +		target = <&enetc_port0>;
-> +
-> +		__overlay__ {
-> +			phy-handle = <&slot1_sgmii>;
-> +			phy-mode = "2500base-x";
-> +			managed = "in-band-status";
-> +			status = "okay";
-> +		};
-> +	};
-> +
-> +	fragment@2 {
-> +		target = <&mdio_slot2>;
-> +
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			/* 4 ports on VSC8514 */
-> +			slot2_qsgmii0: ethernet-phy@8 {
-> +				reg = <0x8>;
-> +			};
-> +
-> +			slot2_qsgmii1: ethernet-phy@9 {
-> +				reg = <0x9>;
-> +			};
-> +
-> +			slot2_qsgmii2: ethernet-phy@a {
-> +				reg = <0xa>;
-> +			};
-> +
-> +			slot2_qsgmii3: ethernet-phy@b {
-> +				reg = <0xb>;
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@3 {
-> +		target = <&mscc_felix_ports>;
-> +
-> +		__overlay__ {
-> +			port@0 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qsgmii0>;
-> +				phy-mode = "qsgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@1 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qsgmii1>;
-> +				phy-mode = "qsgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@2 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qsgmii2>;
-> +				phy-mode = "qsgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@3 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qsgmii3>;
-> +				phy-mode = "qsgmii";
-> +				managed = "in-band-status";
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@4 {
-> +		target = <&mscc_felix>;
-> +
-> +		__overlay__ {
-> +			status = "okay";
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
-> new file mode 100644
-> index 000000000000..eb6a1e674f10
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
-> @@ -0,0 +1,82 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Device Tree fragment for LS1028A QDS board, serdes 7777
-> + *
-> + * Copyright 2019-2021 NXP
-> + *
-> + * Requires a LS1028A QDS board without lane B rework.
-> + * Requires a SCH-30841 card without lane A/C rewire and with a FW with muxing
-> + * disabled, plugged in slot 1.
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +/ {
-> +	fragment@0 {
-> +		target = <&mdio_slot1>;
-> +
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			/* 4 ports on AQR412 */
-> +			slot1_sxgmii0: ethernet-phy@0 {
-> +				reg = <0x0>;
-> +				compatible = "ethernet-phy-ieee802.3-c45";
-> +			};
-> +
-> +			slot1_sxgmii1: ethernet-phy@1 {
-> +				reg = <0x1>;
-> +				compatible = "ethernet-phy-ieee802.3-c45";
-> +			};
-> +
-> +			slot1_sxgmii2: ethernet-phy@2 {
-> +				reg = <0x2>;
-> +				compatible = "ethernet-phy-ieee802.3-c45";
-> +			};
-> +
-> +			slot1_sxgmii3: ethernet-phy@3 {
-> +				reg = <0x3>;
-> +				compatible = "ethernet-phy-ieee802.3-c45";
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@1 {
-> +		target = <&mscc_felix_ports>;
-> +
-> +		__overlay__ {
-> +			port@0 {
-> +				status = "okay";
-> +				phy-handle = <&slot1_sxgmii0>;
-> +				phy-mode = "2500base-x";
-> +			};
-> +
-> +			port@1 {
-> +				status = "okay";
-> +				phy-handle = <&slot1_sxgmii1>;
-> +				phy-mode = "2500base-x";
-> +			};
-> +
-> +			port@2 {
-> +				status = "okay";
-> +				phy-handle = <&slot1_sxgmii2>;
-> +				phy-mode = "2500base-x";
-> +			};
-> +
-> +			port@3 {
-> +				status = "okay";
-> +				phy-handle = <&slot1_sxgmii3>;
-> +				phy-mode = "2500base-x";
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@2 {
-> +		target = <&mscc_felix>;
-> +		__overlay__ {
-> +			status = "okay";
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
-> new file mode 100644
-> index 000000000000..8e90c3088ba1
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
-> @@ -0,0 +1,107 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Device Tree fragment for LS1028A QDS board, serdes 85bb
-> + *
-> + * Copyright 2019-2021 NXP
-> + *
-> + * Requires a LS1028A QDS board with lane B rework.
-> + * Requires a SCH-24801 card in slot 1 and a SCH-28021 card in slot 2.
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +/ {
-> +	fragment@0 {
-> +		target = <&mdio_slot1>;
-> +
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			slot1_sgmii: ethernet-phy@1c {
-> +				/* 1st port on VSC8234 */
-> +				reg = <0x1c>;
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@1 {
-> +		target = <&enetc_port0>;
-> +
-> +		__overlay__ {
-> +			phy-handle = <&slot1_sgmii>;
-> +			phy-mode = "sgmii";
-> +			managed = "in-band-status";
-> +			status = "okay";
-> +		};
-> +	};
-> +
-> +	fragment@2 {
-> +		target = <&mdio_slot2>;
-> +
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			/* 4 ports on VSC8514 */
-> +			slot2_qsgmii0: ethernet-phy@8 {
-> +				reg = <0x8>;
-> +			};
-> +
-> +			slot2_qsgmii1: ethernet-phy@9 {
-> +				reg = <0x9>;
-> +			};
-> +
-> +			slot2_qsgmii2: ethernet-phy@a {
-> +				reg = <0xa>;
-> +			};
-> +
-> +			slot2_qsgmii3: ethernet-phy@b {
-> +				reg = <0xb>;
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@3 {
-> +		target = <&mscc_felix_ports>;
-> +
-> +		__overlay__ {
-> +			port@0 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qsgmii0>;
-> +				phy-mode = "qsgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@1 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qsgmii1>;
-> +				phy-mode = "qsgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@2 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qsgmii2>;
-> +				phy-mode = "qsgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@3 {
-> +				status = "okay";
-> +				phy-handle = <&slot2_qsgmii3>;
-> +				phy-mode = "qsgmii";
-> +				managed = "in-band-status";
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@4 {
-> +		target = <&mscc_felix>;
-> +
-> +		__overlay__ {
-> +			status = "okay";
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
-> new file mode 100644
-> index 000000000000..5d0a094e6c44
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
-> @@ -0,0 +1,75 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Device Tree fragment for LS1028A QDS board, serdes 85xx
-> + *
-> + * Copyright 2019-2021 NXP
-> + *
-> + * Requires a LS1028A QDS board without lane B rework.
-> + * Requires a SCH-24801 card in slot 1.
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +/ {
-> +	fragment@0 {
-> +		target = <&mdio_slot1>;
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			/* VSC8234 */
-> +			slot1_sgmii0: ethernet-phy@1c {
-> +				reg = <0x1c>;
-> +			};
-> +
-> +			slot1_sgmii1: ethernet-phy@1d {
-> +				reg = <0x1d>;
-> +			};
-> +
-> +			slot1_sgmii2: ethernet-phy@1e {
-> +				reg = <0x1e>;
-> +			};
-> +
-> +			slot1_sgmii3: ethernet-phy@1f {
-> +				reg = <0x1f>;
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@1 {
-> +		target = <&enetc_port0>;
-> +		__overlay__ {
-> +			phy-handle = <&slot1_sgmii0>;
-> +			phy-mode = "sgmii";
-> +			managed = "in-band-status";
-> +			status = "okay";
-> +		};
-> +	};
-> +
-> +	fragment@2 {
-> +		target = <&mscc_felix_ports>;
-> +		__overlay__ {
-> +			port@1 {
-> +				status = "okay";
-> +				phy-handle = <&slot1_sgmii1>;
-> +				phy-mode = "sgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@2 {
-> +				status = "okay";
-> +				phy-handle = <&slot1_sgmii2>;
-> +				phy-mode = "sgmii";
-> +				managed = "in-band-status";
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@3 {
-> +		target = <&mscc_felix>;
-> +		__overlay__ {
-> +			status = "okay";
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
-> new file mode 100644
-> index 000000000000..1ef743c48e84
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
-> @@ -0,0 +1,79 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Device Tree fragment for LS1028A QDS board, serdes 85xx
-> + *
-> + * Copyright 2019-2021 NXP
-> + *
-> + * Requires a LS1028A QDS board without lane B rework.
-> + * Requires a SCH-24801 card in slot 1.
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +/ {
-> +	fragment@0 {
 
-Is fragment0 more appropriate maybe, as @unit-address requires a
-corresponding 'reg' property?
 
-Shawn
+On 12/14/2021 11:39 AM, Dmitry Osipenko wrote:
+> 14.12.2021 09:02, Sameer Pujar пишет:
+>>
+>> On 12/8/2021 5:35 PM, Dmitry Osipenko wrote:
+>>> 08.12.2021 08:22, Sameer Pujar пишет:
+>>>> On 12/7/2021 11:32 PM, Dmitry Osipenko wrote
+>>>>> If display is already active, then shared power domain is already
+>>>>> ungated.
+>>>> If display is already active, then shared power domain is already
+>>>> ungated. HDA reset is already applied during this ungate. In other
+>>>> words, HDA would be reset as well when display ungates power-domain.
+>>> Now, if you'll reload the HDA driver module while display is active,
+>>> you'll get a different reset behaviour. HDA hardware will be reset on
+>>> pre-T186, on T186+ it won't be reset.
+>> How the reset behavior is different? At this point when HDA driver is
+>> loaded the HW is already reset during display ungate. What matters,
+>> during HDA driver load, is whether the HW is in predictable state or not
+>> and the answer is yes. So I am not sure what problem you are referring
+>> to. Question is, if BPMP already ensures this, then why driver needs to
+>> take care of it.
+> 1. Enable display
+> 2. Play audio over HDMI
 
-> +		target = <&mdio_slot1>;
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			/* VSC8234 */
-> +			slot1_sgmii0: ethernet-phy@1c {
-> +				reg = <0x1c>;
-> +			};
-> +
-> +			slot1_sgmii1: ethernet-phy@1d {
-> +				reg = <0x1d>;
-> +			};
-> +
-> +			slot1_sgmii2: ethernet-phy@1e {
-> +				reg = <0x1e>;
-> +			};
-> +
-> +			slot1_sgmii3: ethernet-phy@1f {
-> +				reg = <0x1f>;
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@1 {
-> +		target = <&mscc_felix_ports>;
-> +		__overlay__ {
-> +			port@0 {
-> +				status = "okay";
-> +				phy-handle = <&slot1_sgmii0>;
-> +				phy-mode = "sgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@1 {
-> +				status = "okay";
-> +				phy-handle = <&slot1_sgmii1>;
-> +				phy-mode = "sgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@2 {
-> +				status = "okay";
-> +				phy-handle = <&slot1_sgmii2>;
-> +				phy-mode = "sgmii";
-> +				managed = "in-band-status";
-> +			};
-> +
-> +			port@3 {
-> +				status = "okay";
-> +				phy-handle = <&slot1_sgmii3>;
-> +				phy-mode = "sgmii";
-> +				managed = "in-band-status";
-> +			};
-> +		};
-> +	};
-> +
-> +	fragment@2 {
-> +		target = <&mscc_felix>;
-> +		__overlay__ {
-> +			status = "okay";
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-> index 782853a449cc..177bc1405f0f 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-> @@ -211,6 +211,16 @@ &duart1 {
->  	status = "okay";
->  };
->  
-> +&enetc_port1 {
-> +	phy-handle = <&qds_phy1>;
-> +	phy-mode = "rgmii-id";
-> +	status = "okay";
-> +};
-> +
-> +&enetc_port2 {
-> +	status = "okay";
-> +};
-> +
->  &esdhc {
->  	status = "okay";
->  };
-> @@ -326,17 +336,16 @@ rtc@51 {
->  	};
->  };
->  
-> -&enetc_port1 {
-> -	phy-handle = <&qds_phy1>;
-> -	phy-mode = "rgmii-id";
-> +&lpuart0 {
->  	status = "okay";
->  };
->  
-> -&lpuart0 {
-> +&lpuart1 {
->  	status = "okay";
->  };
->  
-> -&lpuart1 {
-> +&mscc_felix_port4 {
-> +	ethernet = <&enetc_port2>;
->  	status = "okay";
->  };
->  
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> index 5c17dfaa50de..f305ac2906d8 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> @@ -1115,7 +1115,7 @@ mscc_felix: ethernet-switch@0,5 {
->  				interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
->  				status = "disabled";
->  
-> -				ports {
-> +				mscc_felix_ports: ports {
->  					#address-cells = <1>;
->  					#size-cells = <0>;
->  
-> -- 
-> 2.25.1
-> 
+> 3. HDA hardware now is in dirty state
+
+Why this would be a dirty state? It is rather a functional state. Isn't 
+it? Power-domain is ON while all this happens.
+
+Another point is, with present logic the reset is not applied for every 
+runtime PM resume of HDA device, which is confusing. It depends on the 
+state of 'chip->running' flag and I don't see this getting cleared 
+anywhere. Would you say subsequent HDA playback happen under a dirty state?

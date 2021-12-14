@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A49C473D3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B038F473D4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbhLNGca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 01:32:30 -0500
-Received: from todd.t-8ch.de ([159.69.126.157]:46969 "EHLO todd.t-8ch.de"
+        id S231172AbhLNGnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:43:13 -0500
+Received: from mga06.intel.com ([134.134.136.31]:27637 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231148AbhLNGc3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 01:32:29 -0500
-Date:   Tue, 14 Dec 2021 07:32:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1639463546;
-        bh=hXNmItZsiKD0JSzD3KLOMTWJ0jfOkfqH2sC/iJs9ifQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aVzPSGvhvMtDzpZu8H+5eMmlIaQMiZ6jwn54ESTR8wnz5CWXaXVh2zu6lEwYx4DyO
-         ThvFjIP8z06A3xU/pqfxu7vYsMRr004taJ5ooPRRrnF6pFe+Qy6ks30idZXa6yUH9z
-         +133zoqds57ZIix5p5EEwjI35QuLXXnBNyUFEtAw=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Hemant Kumar <hemantk@codeaurora.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        linux-kernel@vger.kernel.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org,
-        Mario Limonciello <Mario.Limonciello@amd.com>,
-        Richard Hughes <hughsient@gmail.com>
-Subject: Re: [RFC] bus: mhi: core: Load firmware asynchronous
-Message-ID: <02e32c9d-79d2-4237-bb6b-8bd27029e7a9@t-8ch.de>
-References: <20211210161645.10925-1-linux@weissschuh.net>
- <403e93df-5b3c-acb3-2b65-df9a7834a9c5@codeaurora.org>
+        id S230494AbhLNGnM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 01:43:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639464192; x=1671000192;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zihrvfTZOHS81x6JjSCk9tbag0HqJyS22FPf4JWEsK8=;
+  b=AS48lQxxVQEOKtAM+7Z+8cWXIYLpfXpz1f5pFeesJyvxap3hPkz1KuQX
+   u9AcDQ8g48bmdXq1NqlvHzY24lAStHVN3SCMhyjaFeynenguzpX8zv4Pw
+   CA4Tlwv+4F6Gt9aMArUat1cWeswDABZ3PH7yu1naunutu3i9rE+LFSyCM
+   ibNYnNmLV/hCG7Rhbtq+ZQftBUsSzuKsrylnh0GX8IieF3AgSLm/H1SBx
+   zrzVhP2QXe1mPm1FOdpBZSVkbZ7v4U0IO1Rh2rEfeexctYqWhLWP+rqgO
+   fog6rBEfkpOCLUfC7RRysvsXdLCgg9waCKyfITlrVdStBdIG9rHTrtE/1
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="299690681"
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="299690681"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 22:43:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="463681529"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 13 Dec 2021 22:43:11 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mx1Wo-0007WK-A8; Tue, 14 Dec 2021 06:43:10 +0000
+Date:   Tue, 14 Dec 2021 14:42:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [ebiederm-user-namespace:signal-for-v5.17 10/12]
+ kernel/kthread.c:299: warning: expecting prototype for kthread_complete_and
+ exit(). Prototype was for kthread_complete_and_exit() instead
+Message-ID: <202112141422.Cykr6YUS-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <403e93df-5b3c-acb3-2b65-df9a7834a9c5@codeaurora.org>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-13 16:07-0800, Hemant Kumar wrote:
-> On 12/10/2021 8:16 AM, Thomas Weißschuh wrote:
-> > This gives userspace the possibility to provide the firehose bootloader
-> > via the sysfs-firmware-API instead of having to modify the global
-> > firmware loadpath.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > 
-> > ---
-> > 
-> > Please note that this is not tested yet, as I don't have access to a matching
-> > firmware file.
-> > This submission is to gather general feedback from the maintainers and then
-> > Richard will do the actual testing, while I'll do the development.
-> > 
-> > This patch is should not have any impact beyond moving from request_firmware()
-> > to request_firmware_nowait() and the involved code reshuffle.
-> what are we achieving by moving to async ver of the firmware load ? MHI boot
-> flow can not do anything until BHI load is over. Is the intention eventually
-> to enable firmware fallback mechanism  and manually load the firmware ?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git signal-for-v5.17
+head:   6b1248798eb6f6d5285db214299996ecc5dc1e6b
+commit: cead18552660702a4a46f58e65188fe5f36e9dfe [10/12] exit: Rename complete_and_exit to kthread_complete_and_exit
+config: i386-randconfig-a001-20211213 (https://download.01.org/0day-ci/archive/20211214/202112141422.Cykr6YUS-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=cead18552660702a4a46f58e65188fe5f36e9dfe
+        git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
+        git fetch --no-tags ebiederm-user-namespace signal-for-v5.17
+        git checkout cead18552660702a4a46f58e65188fe5f36e9dfe
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-The goal is to provide the firehose bootloader (qcom/prog_firehose_sdx24.mbn)
-via the firmware fallback mechanism when upgrading the firmware on the device
-via the firehose protocol.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This bootloader firmware is not part of linux-firmware but provided as part of
-each firmware update package, so it is not installed statically on the system.
+All warnings (new ones prefixed by >>):
 
-I will extend the commit message with this information.
+>> kernel/kthread.c:299: warning: expecting prototype for kthread_complete_and exit(). Prototype was for kthread_complete_and_exit() instead
 
-PS: The current patch is missing 'return' after calls to
-'mhi_fw_load_finish()', this will be corrected in v2.
+
+vim +299 kernel/kthread.c
+
+   285	
+   286	/**
+   287	 * kthread_complete_and exit - Exit the current kthread.
+   288	 * @comp: Completion to complete
+   289	 * @code: The integer value to return to kthread_stop().
+   290	 *
+   291	 * If present complete @comp and the reuturn code to kthread_stop().
+   292	 *
+   293	 * A kernel thread whose module may be removed after the completion of
+   294	 * @comp can use this function exit safely.
+   295	 *
+   296	 * Does not return.
+   297	 */
+   298	void __noreturn kthread_complete_and_exit(struct completion *comp, long code)
+ > 299	{
+   300		if (comp)
+   301			complete(comp);
+   302	
+   303		kthread_exit(code);
+   304	}
+   305	EXPORT_SYMBOL(kthread_complete_and_exit);
+   306	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

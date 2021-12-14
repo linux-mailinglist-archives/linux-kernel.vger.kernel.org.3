@@ -2,129 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A65474A73
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C3C474A70
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:07:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbhLNSHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 13:07:44 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:38606 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236897AbhLNSHc (ORCPT
+        id S236908AbhLNSHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:07:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36230 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236894AbhLNSH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 13:07:32 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BEI7N9d043041;
-        Tue, 14 Dec 2021 12:07:23 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639505243;
-        bh=7/Lq3gr5CfqZUCK4JGq5ja0aTUT16j0fbhezJn36e1I=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Jb8HQbjtrGIswKrRtH/TflZWZDzlDaSlUkc/n81EGM6+k0yPHkrg7yK4rq+k3UdeQ
-         I5xso83qT6WZgCM2m9hosl8nVnHIYDeMFQbzUEUS4xMcYA5TahqlLvOxljeyovvUf2
-         24fCqBAsXjRrNzm7jrcczXUxMYzsxdGRdwPux64g=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BEI7NPl099471
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Dec 2021 12:07:23 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 14
- Dec 2021 12:07:22 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 14 Dec 2021 12:07:22 -0600
-Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BEI741Y043960;
-        Tue, 14 Dec 2021 12:07:19 -0600
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Pratyush Yadav <p.yadav@ti.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>
-Subject: [PATCH v6 4/4] phy: dt-bindings: Add Cadence D-PHY Rx bindings
-Date:   Tue, 14 Dec 2021 23:37:03 +0530
-Message-ID: <20211214180703.3268-5-p.yadav@ti.com>
-X-Mailer: git-send-email 2.33.1.835.ge9e5ba39a7
-In-Reply-To: <20211214180703.3268-1-p.yadav@ti.com>
-References: <20211214180703.3268-1-p.yadav@ti.com>
+        Tue, 14 Dec 2021 13:07:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62B5661680;
+        Tue, 14 Dec 2021 18:07:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FBD6C34600;
+        Tue, 14 Dec 2021 18:07:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639505245;
+        bh=Stm5uOveGVCEyNV3RbZzb/wig7WP56mvtkLDAPKxtoA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=grnWu+CC+UXNtt2xIYImlpZizByi6T0+gtk3JgaEVIeeIgsFzsSj7i8fG4S+IBeql
+         IXuo0sqoqxBLEv45fLawcU4Y+tNfEK2XUKNhwRitLkDLFfA0yZqrv+kmylKzDSNSlB
+         9FXOlVc+5HtfxtHLLTLm1lmbUNHPVb37nvrM+QPurLe6HdtSd0sIMUxTVb0W3X9dXg
+         VNq+p5AQ2N8dCmAaWpIjI+9g4iARSly8c3fkWB4DF//Wz2KKpbvHDrGYh/gZ4nWsCa
+         vNikNhUFgBtRzA179V2KH4cUv6oZfFvds6UxQEqF9Hzo1zxBKKwm3gKFXv4RcjXUk8
+         vS+bj84vU8zIQ==
+Date:   Tue, 14 Dec 2021 11:07:21 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        list@opendingux.net, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/3] MIPS: boot/compressed: Build without LTO
+Message-ID: <YbjdWe+i6wQduHEq@archlinux-ax161>
+References: <20211213224914.1501303-1-paul@crapouillou.net>
+ <20211213224914.1501303-3-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213224914.1501303-3-paul@crapouillou.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Rx mode DPHY is different from Tx mode DPHY. Add a separate binding
-for it.
+On Mon, Dec 13, 2021 at 10:49:13PM +0000, Paul Cercueil wrote:
+> We need a valid ELF object for dummy.o, so that objcopy can insert the
+> vmlinuz payload.
+> 
+> Therefore, we must build the decompresser program without LTO, otherwise
+> dummy.o will be LLVM bytecode instead of a ELF object file.
+> 
+> Building the decompresser with LTO wouldn't make much sense anyway,
+> unlike building the vmlinuz itself with LTO.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+Seems reasonable.
 
----
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Changes in v6:
-- Add a new binding for DPHY Rx.
-
- .../devicetree/bindings/phy/cdns,dphy-rx.yaml | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-
-diff --git a/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-new file mode 100644
-index 000000000000..07be031d82e6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/cdns,dphy-rx.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/cdns,dphy-rx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cadence DPHY Rx Device Tree Bindings
-+
-+maintainers:
-+  - Pratyush Yadav <p.yadav@ti.com>
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: cdns,dphy-rx
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-+
-+    dphy0: phy@4580000 {
-+        compatible = "cdns,dphy-rx";
-+        reg = <0x4580000 0x1100>;
-+        #phy-cells = <0>;
-+        power-domains = <&k3_pds 147 TI_SCI_PD_EXCLUSIVE>;
-+    };
--- 
-2.33.1.835.ge9e5ba39a7
-
+> ---
+>  arch/mips/boot/compressed/Makefile | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+> index 4c9ecfbb0ef4..2d01c50fb0b1 100644
+> --- a/arch/mips/boot/compressed/Makefile
+> +++ b/arch/mips/boot/compressed/Makefile
+> @@ -27,6 +27,9 @@ ifdef CONFIG_CPU_LOONGSON64
+>  KBUILD_CFLAGS := $(filter-out -march=loongson3a, $(KBUILD_CFLAGS)) -march=mips64r2
+>  endif
+>  
+> +# Disable LTO
+> +KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+> +
+>  KBUILD_CFLAGS := $(KBUILD_CFLAGS) -mno-abicalls -D__KERNEL__ -D__DISABLE_EXPORTS \
+>  	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
+>  
+> -- 
+> 2.33.0
+> 
+> 

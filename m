@@ -2,86 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9B14743F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BEF34743F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234608AbhLNNzl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Dec 2021 08:55:41 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16807 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbhLNNzk (ORCPT
+        id S234599AbhLNNy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 08:54:56 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15732 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230038AbhLNNyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:55:40 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JD0Hg1Kkhz91h2;
-        Tue, 14 Dec 2021 21:54:55 +0800 (CST)
-Received: from dggpeml100025.china.huawei.com (7.185.36.37) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+        Tue, 14 Dec 2021 08:54:55 -0500
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JD0DB42qtzZdQ0;
+        Tue, 14 Dec 2021 21:51:54 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 21:55:38 +0800
-Received: from dggpeml100016.china.huawei.com (7.185.36.216) by
- dggpeml100025.china.huawei.com (7.185.36.37) with Microsoft SMTP Server
+ 15.1.2308.20; Tue, 14 Dec 2021 21:54:53 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.98) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 21:55:38 +0800
-Received: from dggpeml100016.china.huawei.com ([7.185.36.216]) by
- dggpeml100016.china.huawei.com ([7.185.36.216]) with mapi id 15.01.2308.020;
- Tue, 14 Dec 2021 21:55:38 +0800
-From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-To:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-CC:     "Gonglei (Arei)" <arei.gonglei@huawei.com>,
-        Huangzhichao <huangzhichao@huawei.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "Wanpeng Li" <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "Jim Mattson" <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: The vcpu won't be wakened for a long time
-Thread-Topic: The vcpu won't be wakened for a long time
-Thread-Index: Adfw8hOY5GAlKZgbTtqexw2IMvmqfA==
-Date:   Tue, 14 Dec 2021 13:55:38 +0000
-Message-ID: <73d46f3cc46a499c8e39fdf704b2deaf@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.148.223]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+ 15.1.2308.20; Tue, 14 Dec 2021 21:54:53 +0800
+From:   Pu Lehui <pulehui@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <shuah@kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <pulehui@huawei.com>
+Subject: [PATCH bpf-next] selftests/bpf: Fix building error when using userspace pt_regs
+Date:   Tue, 14 Dec 2021 21:55:55 +0800
+Message-ID: <20211214135555.125348-1-pulehui@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.98]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi guys,
+When building bpf selftests on arm64, the following error will occur:
 
-We find a problem in kvm_vcpu_block().
+progs/loop2.c:20:7: error: incomplete definition of type 'struct
+user_pt_regs'
 
-The testcase is:
- - VM configured with 1 vcpu and 1 VF (using vfio-pci passthrough)
- - the vfio interrupt and the vcpu are bound to the same pcpu
- - using remapped mode IRTE, NOT posted mode
+Some archs, like arm64 and riscv, use userspace pt_regs in
+bpf_tracing.h, which causes build failure when bpf prog use
+macro in bpf_tracing.h. So let's use vmlinux.h directly.
 
-The bug was triggered when the vcpu executed HLT instruction:
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ tools/testing/selftests/bpf/progs/loop1.c     |  8 ++------
+ tools/testing/selftests/bpf/progs/loop2.c     |  8 ++------
+ tools/testing/selftests/bpf/progs/loop3.c     |  8 ++------
+ tools/testing/selftests/bpf/progs/loop6.c     | 20 ++++++-------------
+ .../selftests/bpf/progs/test_overhead.c       |  8 ++------
+ .../selftests/bpf/progs/test_probe_user.c     |  6 +-----
+ 6 files changed, 15 insertions(+), 43 deletions(-)
 
-kvm_vcpu_block:
-    prepare_to_rcuwait(&vcpu->wait);
-    for (;;) {
-        set_current_state(TASK_INTERRUPTIBLE);
+diff --git a/tools/testing/selftests/bpf/progs/loop1.c b/tools/testing/selftests/bpf/progs/loop1.c
+index 50e66772c046..ea04c035719c 100644
+--- a/tools/testing/selftests/bpf/progs/loop1.c
++++ b/tools/testing/selftests/bpf/progs/loop1.c
+@@ -1,11 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Facebook
+-#include <linux/sched.h>
+-#include <linux/ptrace.h>
+-#include <stdint.h>
+-#include <stddef.h>
+-#include <stdbool.h>
+-#include <linux/bpf.h>
++
++#include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
+diff --git a/tools/testing/selftests/bpf/progs/loop2.c b/tools/testing/selftests/bpf/progs/loop2.c
+index 947bb7e988c2..edf07b1d310e 100644
+--- a/tools/testing/selftests/bpf/progs/loop2.c
++++ b/tools/testing/selftests/bpf/progs/loop2.c
+@@ -1,11 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Facebook
+-#include <linux/sched.h>
+-#include <linux/ptrace.h>
+-#include <stdint.h>
+-#include <stddef.h>
+-#include <stdbool.h>
+-#include <linux/bpf.h>
++
++#include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
+diff --git a/tools/testing/selftests/bpf/progs/loop3.c b/tools/testing/selftests/bpf/progs/loop3.c
+index 76e93b31c14b..c8d2f2c55547 100644
+--- a/tools/testing/selftests/bpf/progs/loop3.c
++++ b/tools/testing/selftests/bpf/progs/loop3.c
+@@ -1,11 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Facebook
+-#include <linux/sched.h>
+-#include <linux/ptrace.h>
+-#include <stdint.h>
+-#include <stddef.h>
+-#include <stdbool.h>
+-#include <linux/bpf.h>
++
++#include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
+diff --git a/tools/testing/selftests/bpf/progs/loop6.c b/tools/testing/selftests/bpf/progs/loop6.c
+index 38de0331e6b4..17ac4da5664d 100644
+--- a/tools/testing/selftests/bpf/progs/loop6.c
++++ b/tools/testing/selftests/bpf/progs/loop6.c
+@@ -1,8 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+-#include <linux/ptrace.h>
+-#include <stddef.h>
+-#include <linux/bpf.h>
++#include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
+@@ -25,12 +23,6 @@ char _license[] SEC("license") = "GPL";
+ #define SG_CHAIN	0x01UL
+ #define SG_END		0x02UL
+ 
+-struct scatterlist {
+-	unsigned long   page_link;
+-	unsigned int    offset;
+-	unsigned int    length;
+-};
+-
+ #define sg_is_chain(sg)		((sg)->page_link & SG_CHAIN)
+ #define sg_is_last(sg)		((sg)->page_link & SG_END)
+ #define sg_chain_ptr(sg)	\
+@@ -61,8 +53,8 @@ static inline struct scatterlist *get_sgp(struct scatterlist **sgs, int i)
+ 	return sgp;
+ }
+ 
+-int config = 0;
+-int result = 0;
++int g_config = 0;
++int g_result = 0;
+ 
+ SEC("kprobe/virtqueue_add_sgs")
+ int BPF_KPROBE(trace_virtqueue_add_sgs, void *unused, struct scatterlist **sgs,
+@@ -72,7 +64,7 @@ int BPF_KPROBE(trace_virtqueue_add_sgs, void *unused, struct scatterlist **sgs,
+ 	__u64 length1 = 0, length2 = 0;
+ 	unsigned int i, n, len;
+ 
+-	if (config != 0)
++	if (g_config != 0)
+ 		return 0;
+ 
+ 	for (i = 0; (i < VIRTIO_MAX_SGS) && (i < out_sgs); i++) {
+@@ -93,7 +85,7 @@ int BPF_KPROBE(trace_virtqueue_add_sgs, void *unused, struct scatterlist **sgs,
+ 		}
+ 	}
+ 
+-	config = 1;
+-	result = length2 - length1;
++	g_config = 1;
++	g_result = length2 - length1;
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_overhead.c b/tools/testing/selftests/bpf/progs/test_overhead.c
+index abb7344b531f..df035e6a3143 100644
+--- a/tools/testing/selftests/bpf/progs/test_overhead.c
++++ b/tools/testing/selftests/bpf/progs/test_overhead.c
+@@ -1,14 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2019 Facebook */
+-#include <stdbool.h>
+-#include <stddef.h>
+-#include <linux/bpf.h>
+-#include <linux/ptrace.h>
++
++#include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
+-struct task_struct;
+-
+ SEC("kprobe/__set_task_comm")
+ int BPF_KPROBE(prog1, struct task_struct *tsk, const char *buf, bool exec)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/test_probe_user.c b/tools/testing/selftests/bpf/progs/test_probe_user.c
+index 8812a90da4eb..bf6c0b864ace 100644
+--- a/tools/testing/selftests/bpf/progs/test_probe_user.c
++++ b/tools/testing/selftests/bpf/progs/test_probe_user.c
+@@ -1,10 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+-#include <linux/ptrace.h>
+-#include <linux/bpf.h>
+-
+-#include <netinet/in.h>
+-
++#include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
+-- 
+2.25.1
 
-        if (kvm_vcpu_check_block(vcpu) < 0)
-            break;
-					<------------ (*)
-        waited = true;
-        schedule();
-    }
-    finish_rcuwait(&vcpu->wait);
-
-The vcpu will go to sleep even if an interrupt from the VF is fired at (*) and
-the PIR and ON bit will be set ( in vmx_deliver_posted_interrupt ), so the vcpu
-won't be wakened by subsequent interrupts.
-
-Any suggestions ? Thanks.

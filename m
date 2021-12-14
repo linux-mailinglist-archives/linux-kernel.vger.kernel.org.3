@@ -2,92 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DD0474958
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068C7474964
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233755AbhLNR0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:26:00 -0500
-Received: from mga11.intel.com ([192.55.52.93]:46456 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233723AbhLNRZ7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:25:59 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="236566472"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="236566472"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:25:59 -0800
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="604415299"
-Received: from rtwoods-mobl.amr.corp.intel.com (HELO [10.213.169.152]) ([10.213.169.152])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:25:58 -0800
-Subject: Re: linux-next: Tree for Dec 13 (SND_AMD_ACP_CONFIG)
-To:     Daniel Baluta <daniel.baluta@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux-ALSA <alsa-devel@alsa-project.org>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211214030215.3181149-1-broonie@kernel.org>
- <8ff9d4b2-1905-2efa-cb86-e8f6cef06ef2@infradead.org>
- <CAEnQRZB9E4uBDuUidiJ+QJnQhGZp43jig4q93Pkw3pSr=K48YQ@mail.gmail.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <11ed7f0f-ad5a-cae1-035c-23e5d3736818@linux.intel.com>
-Date:   Tue, 14 Dec 2021 11:25:57 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S236366AbhLNR2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:28:10 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39692 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233789AbhLNR2H (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 12:28:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82E63B81BB9;
+        Tue, 14 Dec 2021 17:28:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5553BC34604;
+        Tue, 14 Dec 2021 17:28:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639502885;
+        bh=iWhZUpZug7nx6pfIKr0DItc2+D2cy9/JIdFzbQtsEhI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rYv9JVZ9YX6Z0mBpVDMKm5mu/TzapluDlyLScme2UrTuIXRhZgJB+QO6JHt2eHkyY
+         3+Jqu7AOYi1QgWWEksD+65gGuD0VjAq1acIcvtuXXbqs+tH8BEhJowarrvQvSWSPCS
+         8kJvbqQpEEGu3nXWKmkGoYBqfMPTzpI/yorx8TTNlK8WkzYco3Cu1XxPzAxUGbcxsY
+         iO+svhxl9Uio5GhrkOjfUMJ1zxy9eQVcWcj0E5w9TM/2/0tMICRAFO/Yhd+T1cWrb7
+         gJ3bLGn7U40/JibUXtbMYNVionNiTEfCchB2L6TzUJibY8OBopc2EEs98X8fh7TMjS
+         l3SaS41aVL9JQ==
+Received: by mail-yb1-f180.google.com with SMTP id d10so48128844ybe.3;
+        Tue, 14 Dec 2021 09:28:05 -0800 (PST)
+X-Gm-Message-State: AOAM530j4MZ4wwlvdqpMAD0OIlKF4S3mrXfdpeDpk1u9t+t3reWEPLgJ
+        05JFBUiN2cHil5aUB3xrTVjkaylQzmD5FUbWWUY=
+X-Google-Smtp-Source: ABdhPJzaIWhZ2KXfV3WBSipGqRCpcplKqZGV0U2L1BO8aObP0RNronSXvgKpJlPOO1T9RuBg8PP4FeHUtdss6/yaXVI=
+X-Received: by 2002:a25:8284:: with SMTP id r4mr383980ybk.47.1639502884465;
+ Tue, 14 Dec 2021 09:28:04 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAEnQRZB9E4uBDuUidiJ+QJnQhGZp43jig4q93Pkw3pSr=K48YQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211214031553.16435-1-yajun.deng@linux.dev>
+In-Reply-To: <20211214031553.16435-1-yajun.deng@linux.dev>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 14 Dec 2021 09:27:53 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5X+zewpKoJLjMMGOUeSiJ1EYqD+0i1bA8y7SFtJLkMeg@mail.gmail.com>
+Message-ID: <CAPhsuW5X+zewpKoJLjMMGOUeSiJ1EYqD+0i1bA8y7SFtJLkMeg@mail.gmail.com>
+Subject: Re: [PATCH] lib/raid6: fix abnormally high latency
+To:     Yajun Deng <yajun.deng@linux.dev>
+Cc:     stockhausen@collogia.de, open list <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        linux-raid <linux-raid@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 13, 2021 at 7:17 PM Yajun Deng <yajun.deng@linux.dev> wrote:
+>
+> We found an abnormally high latency when executing modprobe raid6_pq, the
+> latency is greater than 1.2s when CONFIG_PREEMPT_VOLUNTARY=y, greater than
+> 67ms when CONFIG_PREEMPT=y, and greater than 16ms when CONFIG_PREEMPT_RT=y.
+> This is caused by disable the preemption, this time is too long and
+> unreasonable. We just need to disable migration. so used migrate_disable()/
+> migrate_enable() instead of preempt_disable()/preempt_enable(). This is
+> beneficial for CONFIG_PREEMPT=y or CONFIG_PREEMPT_RT=y, but no effect for
+> CONFIG_PREEMPT_VOLUNTARY=y.
+>
+> Fixes: fe5cbc6e06c7 ("md/raid6 algorithms: delta syndrome functions")
+> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
 
+We measure the speed of different RAID algorithms.If we don't disable
+preempt, the result may be inaccurate, right? IIUC, we only disable preempt
+for 16 jiffies. Why do we see 1.2 second delay?
 
-On 12/14/21 11:21 AM, Daniel Baluta wrote:
-> Hi Randy,
-> 
-> This should be fixed by https://github.com/thesofproject/linux/pull/3284
+Thanks,
+Song
 
-no, this was precisely the change that exposed a new problem.
-
-https://github.com/thesofproject/linux/pull/3335 contains the suggested
-fix posted earlier. We should know tomorrow if the 0day bot finds any
-other issues.
-
-> 
-> Let me quickly send this to alsa-devel.
-> 
-> 
-> On Tue, Dec 14, 2021 at 12:08 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->>
->>
->> On 12/13/21 19:02, broonie@kernel.org wrote:
->>> Hi all,
->>>
->>> Non-merge commits (relative to Linus' tree): 5960
->>>  6555 files changed, 277265 insertions(+), 120864 deletions(-)
->>>
->>> ----------------------------------------------------------------------------
->>>
->>
->> on i386 or x86_64:
->>
->> when # CONFIG_ACPI is not set,
->> so SND_SOC_ACPI is not set:
->>
->> WARNING: unmet direct dependencies detected for SND_AMD_ACP_CONFIG
->>   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_ACPI [=n]
->>   Selected by [y]:
->>   - SND_SOC_AMD_ACP_COMMON [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && X86 [=y] && PCI [=y]
->>
->>
->> Full randconfig file is attached
->>
->> --
->> ~Randy
+> ---
+>  lib/raid6/algos.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/lib/raid6/algos.c b/lib/raid6/algos.c
+> index 6d5e5000fdd7..21611d05c34c 100644
+> --- a/lib/raid6/algos.c
+> +++ b/lib/raid6/algos.c
+> @@ -162,7 +162,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
+>
+>                         perf = 0;
+>
+> -                       preempt_disable();
+> +                       migrate_disable();
+>                         j0 = jiffies;
+>                         while ((j1 = jiffies) == j0)
+>                                 cpu_relax();
+> @@ -171,7 +171,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
+>                                 (*algo)->gen_syndrome(disks, PAGE_SIZE, *dptrs);
+>                                 perf++;
+>                         }
+> -                       preempt_enable();
+> +                       migrate_enable();
+>
+>                         if (perf > bestgenperf) {
+>                                 bestgenperf = perf;
+> @@ -186,7 +186,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
+>
+>                         perf = 0;
+>
+> -                       preempt_disable();
+> +                       migrate_disable();
+>                         j0 = jiffies;
+>                         while ((j1 = jiffies) == j0)
+>                                 cpu_relax();
+> @@ -196,7 +196,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
+>                                                       PAGE_SIZE, *dptrs);
+>                                 perf++;
+>                         }
+> -                       preempt_enable();
+> +                       migrate_enable();
+>
+>                         if (best == *algo)
+>                                 bestxorperf = perf;
+> --
+> 2.32.0
+>

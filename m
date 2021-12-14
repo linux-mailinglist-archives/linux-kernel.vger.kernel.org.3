@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D70D4474401
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08959474404
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:58:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234610AbhLNN5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        id S234621AbhLNN6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 08:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbhLNN5r (ORCPT
+        with ESMTP id S232428AbhLNN6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:57:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F80C061574;
-        Tue, 14 Dec 2021 05:57:47 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639490265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3rX9sx3/Rg0XcX58GUjdtswXYZt0YUczNTsQIoAklfg=;
-        b=oc4HTFTol/r89SvaPNWCGhBJ0KP+kxOYyxFWFNlOCt/bXCUziuPWQPOHMFPS3+j0Y8vvS3
-        mtRwDeI1K7M7WS+w3RlYx5zgWrJSIHhnHlIbBbzH5bXEFUJ3SQLVkf+W60D1ogEzIk6O7B
-        YOzb6QSEjqZbW4ZAEGZyDZaOtjjdhW2CEt6iB1OZWSTmRvrq/Symdtz4i8AQmiIBo+HUNi
-        /GXjIUq6hbz2YatEYnY/qaAhZevTbb4Gsprd1UM52/smVMgcB0JNJVu+wLdOjxkUw+bS7p
-        GiR9D9xqnsh5YFej1oXYEQyCm+hsxrruBPTeHIui/Xoqh5d5/Z79ws/LllZJTg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639490265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3rX9sx3/Rg0XcX58GUjdtswXYZt0YUczNTsQIoAklfg=;
-        b=KXtFcINluHsAWrxcwLo8lDTAklWFUBm1nf5dgjlOoMONUoPpti0UqI1mOtEUCdezZhMBMJ
-        +G66Xq3dp5FpbVCQ==
-To:     Joel Daniels <jdaniels@sent.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, x86@kernel.org
-Subject: Re: Time keeping while suspended in the presence of persistent
- clock drift
-In-Reply-To: <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
-References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
- <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com>
- <87wnkbuuuz.ffs@tglx>
- <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
-Date:   Tue, 14 Dec 2021 14:57:45 +0100
-Message-ID: <8735mvthk6.ffs@tglx>
+        Tue, 14 Dec 2021 08:58:23 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C019BC06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:58:22 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id d14so15163275ila.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:58:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=IeJEDuwrHuRaa+Ik/SvG/4JB6lqbm2wKrnNt11uuG4A=;
+        b=wMb1zuONQwHdeid8S1mJv4yX2A2Yx3Z/jQ3x4ORQDBB7GS1EzW2Fmb33wZTbX8v2H7
+         vlHWBrKTa1fuyiHpwFLEwGL4ByT9HaNvQNinFzQlphTwm/GTRuFGTP0nZEtPedwOJC4s
+         AlTZTc01fPcj+twJQ5FmKV0qBKTeGPyCVEg46rJ3Whua4tLY2av7mihgHt/8RyrQ5C4Z
+         nGeM3Pqadn4UvSal3UTyBkY+8qXs4RVhEnku3LPJfF52pbvKyzkPKLTYmTMnauD+asfC
+         vzeOe7HKQJIacSFtyKrCc9WWAzxumDw5Ad4/u9iklppC9Fv5nJ398Igz/W1wjr8iUdbT
+         5joA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=IeJEDuwrHuRaa+Ik/SvG/4JB6lqbm2wKrnNt11uuG4A=;
+        b=RSDz41sy+IL3aZcUeOhayhICeyxEw83dTSsZQcLmbDo6sWMoZ0ihZt3oX0fvBL+MzA
+         5aFUD6OtiTdLt/C6mu+Cu/tXT5D1Tx5M9sZTF6LsfVmfLHVzo+o8Wk5VeiwPjhdqjX+1
+         fqyFFvB5srn26Snqso3FJiFMlI9Gt2VXPqI9fO7gs9gw7Hc824QwRBG5pZZUuiA+6/aJ
+         /yNOKTdKHLxnMstsTHZE/TqlrtLCLN/qReFAtn/BrKyEjW7uzAtnxEKbeaa8XweeONGF
+         B5zMbC0SNzqFuRbGchXWW373cX7ACzUJHw21Cb7GzFfj9jGdc1rb7vIHU1SYr04Badf1
+         aGmA==
+X-Gm-Message-State: AOAM530CXzQZyGuHx3tpwdnyvv1D9QXsMzNN8zrd9qf7LYsH/AvSPtGW
+        CJ1TTvd3dzny9lkl1eimYFeVnCGPsk1ysg==
+X-Google-Smtp-Source: ABdhPJzS0xykloyo4HnzZbLCGjWJWacfLqAlkteSfczA+XZFmqRhXAa8qf2/F3kXzIhTSCgWu/URgQ==
+X-Received: by 2002:a05:6e02:1789:: with SMTP id y9mr3400069ilu.321.1639490302145;
+        Tue, 14 Dec 2021 05:58:22 -0800 (PST)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id q8sm9533638iow.47.2021.12.14.05.58.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 05:58:21 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, cgroups@vger.kernel.org
+In-Reply-To: <Ybfh86iSvpWKxhVM@slm.duckdns.org>
+References: <Ybfh86iSvpWKxhVM@slm.duckdns.org>
+Subject: Re: [PATCH for-5.16/block] iocost: Fix divide-by-zero on donation from low hweight cgroup
+Message-Id: <163949030003.173863.14081933851643062205.b4-ty@kernel.dk>
+Date:   Tue, 14 Dec 2021 06:58:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joel,
+On Mon, 13 Dec 2021 14:14:43 -1000, Tejun Heo wrote:
+> The donation calculation logic assumes that the donor has non-zero
+> after-donation hweight, so the lowest active hweight a donating cgroup can
+> have is 2 so that it can donate 1 while keeping the other 1 for itself.
+> Earlier, we only donated from cgroups with sizable surpluses so this
+> condition was always true. However, with the precise donation algorithm
+> implemented, f1de2439ec43 ("blk-iocost: revamp donation amount
+> determination") made the donation amount calculation exact enabling even low
+> hweight cgroups to donate.
+> 
+> [...]
 
-On Mon, Dec 13 2021 at 06:39, Joel Daniels wrote:
-> On Sat, 11 Dec 2021 14:36 +0100, Thomas Gleixner wrote:
->> Can you please verify that the problem persists with NTP enabled and
->> synchronized?
->
-> Yes, I just verified that the problem still exists while
-> synchronized to NTP.
-...
->     $ chronyc tracking && echo && chronyc sources
->     [...]
->     Ref time (UTC)  : Mon Dec 13 13:30:52 2021
->     System time     : 5.597892284 seconds fast of NTP time
+Applied, thanks!
 
-thanks for making sure that this is really a RTC issue on that machine.
+[1/1] iocost: Fix divide-by-zero on donation from low hweight cgroup
+      commit: edaa26334c117a584add6053f48d63a988d25a6e
 
-> The "if" branch does not apply as I have no clock sources flagged as
-> CLOCK_SOURCE_SUSPEND_NONSTOP but the "else if" branch does apply.
+Best regards,
+-- 
+Jens Axboe
 
-Which CPU is in that box?
 
-> The kernel seems to believe that the time spent sleeping is exactly
-> the difference of two calls to read_persistent_clock64 with no option
-> to adjust for persistent clock drift.
-
-The kernel does not believe. It relies on the accuracy of the CMOS clock
-which is usually pretty good.
-
-> I would like to provide a way for user space to inform the kernel
-> that the persistent clock drifts so it can make a corresponding
-> adjustment when resuming from a long suspend period.
->
-> In my use case it would be enough for me to set this parameter on
-> boot. In use cases with continuous network access, NTP daemons
-> could be enhanced to periodically update this parameter with the
-> daemon's best estimate of the persistent clock drift.
-
-That needs some thought. The RTC people (cc'ed now) might have opionions
-on that.
-
-Thanks,
-
-        tglx

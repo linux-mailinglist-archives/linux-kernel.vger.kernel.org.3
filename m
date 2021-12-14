@@ -2,181 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8F0474D7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 025CC474D99
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234662AbhLNWD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbhLNWD6 (ORCPT
+        id S237896AbhLNWEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:04:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55950 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230482AbhLNWEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 17:03:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D08C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:03:58 -0800 (PST)
+        Tue, 14 Dec 2021 17:04:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 816FF6171A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:03:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1A42C34600;
-        Tue, 14 Dec 2021 22:03:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27892616CF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:04:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89C3FC34605;
+        Tue, 14 Dec 2021 22:04:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639519436;
-        bh=vhBV0UB58aLarchcwMhDlOKOEHOzz9YOLWMMuy3eKow=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=qE8zVxADFHlfY70exVyzPUhewE1LR0A4BSs45ehH5SDYstL993kxg9qdR6aq9TJxE
-         gAIBLJQmOx7d0XGXiS2scy5JCUd1sDo2VYEXlf5iCFJOo/4Cz6E463Yrk4zZAcMAau
-         5jM4oW5lhmG247QoJJhNGCGyOcZKZuxXMkDTW1ZuphZPHMiSdB2RfjwL9swmM4gsmu
-         TJi4Y9ZdUq2BQuZINtm4HJSqxsw9h3WiInB/7uGI4LdUcSd8XSdxRuqOAVc7uF4v52
-         wTyNgXEzd5n8DAdZsmUmC6nz+ENz3ij+h2JNgrUaQJ9MNipzRrWMo8N56x5vP0kRyU
-         TelyT7TVMOeYA==
+        s=k20201202; t=1639519481;
+        bh=NutXZOjos+OXRguAypoyirmrM7rvyeKjGS7yQROX5V0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WWFffCBmKZQPHnZ1ZCv4xbrsk611RMlKdMfOoUDhsfXWMcPPzcPb22HQUGPecLs9V
+         WPNhvHwz9JfwNmNw9WwL0adiid3OJMZezhDB70tMRAmCIuzcdBdxKAkhQK2/AC4W2S
+         6ycswK3F0cOWCiK84VvRbVAVcLHEOPS94h8fzc90A1nuXvvNUFK12FfO5P9VpmVn8D
+         HSpw7mOc4k5chr7p3dK0EixThvV3TJhXXq34bZ7kZLLV/04YD/Kq3qaYWf63eMuGUK
+         +5LJdD0HqPyfspTtBd4xitrnyzq8ohHE/sSxYIciytkZ/RzRCT4gaMpgq3XX4mZllA
+         gLn2vEDFhUj8w==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 84BFF5C03AE; Tue, 14 Dec 2021 14:03:56 -0800 (PST)
-Date:   Tue, 14 Dec 2021 14:03:56 -0800
+        id 585B95C03AE; Tue, 14 Dec 2021 14:04:41 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
         kernel-team@fb.com, mingo@kernel.org
 Cc:     elver@google.com, andreyknvl@google.com, glider@google.com,
-        dvyukov@google.com, cai@lca.pw, boqun.feng@gmail.com
-Subject: [PATCH kcsan 0/29] Kernel Concurrency Sanitizer (KCSAN) updates for
- v5.17
-Message-ID: <20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        dvyukov@google.com, cai@lca.pw, boqun.feng@gmail.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH kcsan 01/29] kcsan: Refactor reading of instrumented memory
+Date:   Tue, 14 Dec 2021 14:04:11 -0800
+Message-Id: <20211214220439.2236564-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1>
+References: <20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+From: Marco Elver <elver@google.com>
 
-This series provides KCSAN updates, courtesy of Marco Elver and Alexander
-Potapenko:
+Factor out the switch statement reading instrumented memory into a
+helper read_instrumented_memory().
 
-1.	Refactor reading of instrumented memory, courtesy of Marco Elver.
+No functional change.
 
-2.	Remove redundant zero-initialization of globals, courtesy of
-	Marco Elver.
+Signed-off-by: Marco Elver <elver@google.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ kernel/kcsan/core.c | 51 +++++++++++++++------------------------------
+ 1 file changed, 17 insertions(+), 34 deletions(-)
 
-3.	Avoid checking scoped accesses from nested contexts, courtesy
-	of Marco Elver.
+diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
+index 4b84c8e7884b4..6bfd3040f46be 100644
+--- a/kernel/kcsan/core.c
++++ b/kernel/kcsan/core.c
+@@ -325,6 +325,21 @@ static void delay_access(int type)
+ 	udelay(delay);
+ }
+ 
++/*
++ * Reads the instrumented memory for value change detection; value change
++ * detection is currently done for accesses up to a size of 8 bytes.
++ */
++static __always_inline u64 read_instrumented_memory(const volatile void *ptr, size_t size)
++{
++	switch (size) {
++	case 1:  return READ_ONCE(*(const u8 *)ptr);
++	case 2:  return READ_ONCE(*(const u16 *)ptr);
++	case 4:  return READ_ONCE(*(const u32 *)ptr);
++	case 8:  return READ_ONCE(*(const u64 *)ptr);
++	default: return 0; /* Ignore; we do not diff the values. */
++	}
++}
++
+ void kcsan_save_irqtrace(struct task_struct *task)
+ {
+ #ifdef CONFIG_TRACE_IRQFLAGS
+@@ -482,23 +497,7 @@ kcsan_setup_watchpoint(const volatile void *ptr, size_t size, int type, unsigned
+ 	 * Read the current value, to later check and infer a race if the data
+ 	 * was modified via a non-instrumented access, e.g. from a device.
+ 	 */
+-	old = 0;
+-	switch (size) {
+-	case 1:
+-		old = READ_ONCE(*(const u8 *)ptr);
+-		break;
+-	case 2:
+-		old = READ_ONCE(*(const u16 *)ptr);
+-		break;
+-	case 4:
+-		old = READ_ONCE(*(const u32 *)ptr);
+-		break;
+-	case 8:
+-		old = READ_ONCE(*(const u64 *)ptr);
+-		break;
+-	default:
+-		break; /* ignore; we do not diff the values */
+-	}
++	old = read_instrumented_memory(ptr, size);
+ 
+ 	/*
+ 	 * Delay this thread, to increase probability of observing a racy
+@@ -511,23 +510,7 @@ kcsan_setup_watchpoint(const volatile void *ptr, size_t size, int type, unsigned
+ 	 * racy access.
+ 	 */
+ 	access_mask = ctx->access_mask;
+-	new = 0;
+-	switch (size) {
+-	case 1:
+-		new = READ_ONCE(*(const u8 *)ptr);
+-		break;
+-	case 2:
+-		new = READ_ONCE(*(const u16 *)ptr);
+-		break;
+-	case 4:
+-		new = READ_ONCE(*(const u32 *)ptr);
+-		break;
+-	case 8:
+-		new = READ_ONCE(*(const u64 *)ptr);
+-		break;
+-	default:
+-		break; /* ignore; we do not diff the values */
+-	}
++	new = read_instrumented_memory(ptr, size);
+ 
+ 	diff = old ^ new;
+ 	if (access_mask)
+-- 
+2.31.1.189.g2e36527f23
 
-4.	Add core support for a subset of weak memory modeling, courtesy
-	of Marco Elver.
-
-5.	Add core memory barrier instrumentation functions, courtesy of
-	Marco Elver.
-
-6.	kcsan, kbuild: Add option for barrier instrumentation only,
-	courtesy of Marco Elver.
-
-7.	Call scoped accesses reordered in reports, courtesy of Marco
-	Elver.
-
-8.	Show location access was reordered to, courtesy of Marco Elver.
-
-9.	Document modeling of weak memory, courtesy of Marco Elver.
-
-10.	test: Match reordered or normal accesses, courtesy of Marco Elver.
-
-11.	test: Add test cases for memory barrier instrumentation, courtesy
-	of Marco Elver.
-
-12.	Ignore GCC 11+ warnings about TSan runtime support, courtesy of
-	Marco Elver.
-
-13.	selftest: Add test case to check memory barrier instrumentation,
-	courtesy of Marco Elver.
-
-14.	locking/barriers, kcsan: Add instrumentation for barriers,
-	courtesy of Marco Elver.
-
-15.	locking/barriers, kcsan: Support generic instrumentation,
-	courtesy of Marco Elver.
-
-16.	locking/atomics, kcsan: Add instrumentation for barriers,
-	courtesy of Marco Elver.
-
-17.	asm-generic/bitops, kcsan: Add instrumentation for barriers,
-	courtesy of Marco Elver.
-
-18.	x86/barriers, kcsan: Use generic instrumentation for non-smp
-	barriers, courtesy of Marco Elver.
-
-19.	x86/qspinlock, kcsan: Instrument barrier of
-	pv_queued_spin_unlock(), courtesy of Marco Elver.
-
-20.	mm, kcsan: Enable barrier instrumentation, courtesy of Marco
-	Elver.
-
-21.	sched, kcsan: Enable memory barrier instrumentation, courtesy
-	of Marco Elver.
-
-22.	objtool, kcsan: Add memory barrier instrumentation to whitelist,
-	courtesy of Marco Elver.
-
-23.	objtool, kcsan: Remove memory barrier instrumentation from
-	noinstr, courtesy of Marco Elver.
-
-24.	compiler_attributes.h: Add __disable_sanitizer_instrumentation,
-	courtesy of Alexander Potapenko.
-
-25.	Support WEAK_MEMORY with Clang where no objtool support exists,
-	courtesy of Marco Elver.
-
-26.	Make barrier tests compatible with lockdep, courtesy of Marco
-	Elver.
-
-27.	Turn barrier instrumentation into macros, courtesy of Marco Elver.
-
-28.	Avoid nested contexts reading inconsistent reorder_access,
-	courtesy of Marco Elver.
-
-29.	Only test clear_bit_unlock_is_negative_byte if arch defines it,
-	courtesy of Marco Elver.
-
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
- b/Documentation/dev-tools/kcsan.rst                |   76 ++-
- b/arch/x86/include/asm/barrier.h                   |   10 
- b/arch/x86/include/asm/qspinlock.h                 |    1 
- b/include/asm-generic/barrier.h                    |   29 -
- b/include/asm-generic/bitops/instrumented-atomic.h |    3 
- b/include/asm-generic/bitops/instrumented-lock.h   |    3 
- b/include/linux/atomic/atomic-instrumented.h       |  135 ++++++
- b/include/linux/compiler_attributes.h              |   18 
- b/include/linux/compiler_types.h                   |   13 
- b/include/linux/kcsan-checks.h                     |   10 
- b/include/linux/kcsan.h                            |    1 
- b/include/linux/sched.h                            |    3 
- b/include/linux/spinlock.h                         |    2 
- b/init/init_task.c                                 |    5 
- b/kernel/kcsan/Makefile                            |    2 
- b/kernel/kcsan/core.c                              |   51 --
- b/kernel/kcsan/kcsan_test.c                        |    4 
- b/kernel/kcsan/report.c                            |   16 
- b/kernel/kcsan/selftest.c                          |  141 ++++++
- b/kernel/sched/Makefile                            |    7 
- b/lib/Kconfig.kcsan                                |   20 
- b/mm/Makefile                                      |    2 
- b/scripts/Makefile.kcsan                           |    9 
- b/scripts/Makefile.lib                             |    5 
- b/scripts/atomic/gen-atomic-instrumented.sh        |   41 +
- b/tools/objtool/check.c                            |    4 
- b/tools/objtool/include/objtool/elf.h              |    2 
- include/asm-generic/barrier.h                      |   25 +
- include/linux/kcsan-checks.h                       |   95 +++-
- include/linux/kcsan.h                              |   10 
- kernel/kcsan/core.c                                |  302 ++++++++++++-
- kernel/kcsan/kcsan_test.c                          |  456 ++++++++++++++++++---
- kernel/kcsan/report.c                              |   35 +
- kernel/kcsan/selftest.c                            |   22 -
- lib/Kconfig.kcsan                                  |    2 
- scripts/Makefile.kcsan                             |    6 
- tools/objtool/check.c                              |   37 +
- 37 files changed, 1389 insertions(+), 214 deletions(-)

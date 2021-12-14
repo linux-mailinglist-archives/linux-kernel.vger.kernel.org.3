@@ -2,116 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C08D474571
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD641474572
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234980AbhLNOoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbhLNOoR (ORCPT
+        id S234988AbhLNOoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:44:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40150 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232847AbhLNOod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:44:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CB5C061574;
-        Tue, 14 Dec 2021 06:44:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Dec 2021 09:44:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639493073;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=k0FLJWy51PC4iscIi4b8gQDcKZWR9NseSrkpHPzozGI=;
+        b=Vy7Ii1zFH8zdnrmIEkCdA8MZHAjPky9zaKI6znvwdmvG+XRjSs7puvCp8XDPe78szEX3hb
+        HojW0OdnJOyEU5XsLfXNLkO/FsYGVO4TSzS+vb215HPhegtpQU+Dw5THwhUrcVl8lDr92B
+        bMydjl2+KxzO8nSAvw9UGFdtiMnWumM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-549-GfPvWsqxNsutgrD8UQHE3A-1; Tue, 14 Dec 2021 09:44:29 -0500
+X-MC-Unique: GfPvWsqxNsutgrD8UQHE3A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FF9EB819E2;
-        Tue, 14 Dec 2021 14:44:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 951E5C34601;
-        Tue, 14 Dec 2021 14:44:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639493054;
-        bh=8kE25lHJX38zMYqV26wAuz0kRQbim0EKFMko/TuL3ys=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UrAA9n3JIlqfRx72ruF3mVgM9KP5nDEjQIBuPfresFgCEmarF5Fh4jk0icEhgErLY
-         uufVVRt2+yXAd/FKLgYN1JwjjhkOOwkl8miq9pBznBh9aE2MHIvSA7hbeHbtqSSmF3
-         7S63tDasO/FbzKIQkgNXJgCiDsgEO664LYvFOSk/ZaKeP4FT9QYgOPjrkvOqzaV+3x
-         n2ozNvt5EYWJK/r7CQNNmZbkU/5OC8vcFsnsCxm/L2AIyrKyJtt5Gn5PC1ibvMu3pB
-         DUyRfXU2trDc7hCV8hWeF1uZn/3obYcX7xAozSxGPSWePytP/WZfsCycrQ4wyo4KJJ
-         qMXZn9nLXNW3g==
-Date:   Tue, 14 Dec 2021 15:44:09 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org
-Subject: Re: [PATCH v2 0/4] uvc: Restore old vdev name
-Message-ID: <20211214154409.292c1173@coco.lan>
-In-Reply-To: <20211207003840.1212374-1-ribalda@chromium.org>
-References: <20211207003840.1212374-1-ribalda@chromium.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 21BE21023F51;
+        Tue, 14 Dec 2021 14:44:28 +0000 (UTC)
+Received: from llong.com (unknown [10.22.17.0])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C94EA78C2C;
+        Tue, 14 Dec 2021 14:44:16 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH-next v3] mm/memcg: Properly handle memcg_stock access for PREEMPT_RT
+Date:   Tue, 14 Dec 2021 09:44:12 -0500
+Message-Id: <20211214144412.447035-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue,  7 Dec 2021 01:38:36 +0100
-Ricardo Ribalda <ribalda@chromium.org> escreveu:
+Direct calls to local_irq_{save/restore}() and preempt_{enable/disable}()
+are not appropriate for PREEMPT_RT. To provide better PREEMPT_RT support,
+change local_irq_{save/restore}() to local_lock_irq{save/restore}() and
+add a local_lock_t to struct memcg_stock_pcp to cover the whole
+structure including the embedded obj_stock structures.
 
-> In order to have unique entity names, we decided to change the name of
-> the video devices with their functionality.
-> 
-> This has resulted in some (all?) GUIs showing not useful names.
-> 
-> This patchset reverts the original patch and introduces a new one to
-> allow having different entity and vdev names.
-> 
-> Since some distros have ported the reverted patch to their stable
-> kernels, it would be great if we can get this sent asap, to avoid making
-> more people angry ;).
+Also disable the task and interrupt context optimization for obj_stock as
+there will be no performance gain in the case of PREEMPT_RT. In this case,
+task obj_stock will be there but remain unused and preempt_{enable/disable}()
+will not be called for PREEMPT_RT.
 
-Yeah, patch 1 of this series makes a lot sense. Reporting a camera
-as "Video Capture" doesn't seem too nice, specially if multiple
-UVC cameras are present.
+Note that preempt_enable() and preempt_disable() in get_obj_stock() and
+put_obj_stock() are not replaced by local_lock() and local_unlock() as it
+is possible that a task accessing task_obj may get interrupted and then
+access irq_obj concurrently. So using local_lock for task_obj access
+may cause lockdep splat. Using separate local locks will complicate the
+interaction between obj_stock and the embedding memcg_stock_pcp
+structures.
 
-Yet, I'm a little in doubt about patch 4/4, for a couple of reasons:
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ mm/memcontrol.c | 51 +++++++++++++++++++++++++++++++------------------
+ 1 file changed, 32 insertions(+), 19 deletions(-)
 
-1. IMO, on *all* devices (not only uvc), it makes sense to add a "Metadata" 
-   at the name string for the metadata devnodes.
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index a09a7d2e0b1b..2c690eceda54 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2096,7 +2096,12 @@ struct obj_stock {
+ #endif
+ };
+ 
++/*
++ * The local_lock protects the whole memcg_stock_pcp structure including
++ * the embedded obj_stock structures.
++ */
+ struct memcg_stock_pcp {
++	local_lock_t lock;
+ 	struct mem_cgroup *cached; /* this never be root cgroup */
+ 	unsigned int nr_pages;
+ 	struct obj_stock task_obj;
+@@ -2145,7 +2150,7 @@ static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+ 	if (nr_pages > MEMCG_CHARGE_BATCH)
+ 		return ret;
+ 
+-	local_irq_save(flags);
++	local_lock_irqsave(&memcg_stock.lock, flags);
+ 
+ 	stock = this_cpu_ptr(&memcg_stock);
+ 	if (memcg == stock->cached && stock->nr_pages >= nr_pages) {
+@@ -2153,7 +2158,7 @@ static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+ 		ret = true;
+ 	}
+ 
+-	local_irq_restore(flags);
++	local_unlock_irqrestore(&memcg_stock.lock, flags);
+ 
+ 	return ret;
+ }
+@@ -2189,7 +2194,7 @@ static void drain_local_stock(struct work_struct *dummy)
+ 	 * drain_stock races is that we always operate on local CPU stock
+ 	 * here with IRQ disabled
+ 	 */
+-	local_irq_save(flags);
++	local_lock_irqsave(&memcg_stock.lock, flags);
+ 
+ 	stock = this_cpu_ptr(&memcg_stock);
+ 	drain_obj_stock(&stock->irq_obj);
+@@ -2198,7 +2203,7 @@ static void drain_local_stock(struct work_struct *dummy)
+ 	drain_stock(stock);
+ 	clear_bit(FLUSHING_CACHED_CHARGE, &stock->flags);
+ 
+-	local_irq_restore(flags);
++	local_unlock_irqrestore(&memcg_stock.lock, flags);
+ }
+ 
+ /*
+@@ -2210,7 +2215,7 @@ static void refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+ 	struct memcg_stock_pcp *stock;
+ 	unsigned long flags;
+ 
+-	local_irq_save(flags);
++	local_lock_irqsave(&memcg_stock.lock, flags);
+ 
+ 	stock = this_cpu_ptr(&memcg_stock);
+ 	if (stock->cached != memcg) { /* reset if necessary */
+@@ -2223,7 +2228,7 @@ static void refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+ 	if (stock->nr_pages > MEMCG_CHARGE_BATCH)
+ 		drain_stock(stock);
+ 
+-	local_irq_restore(flags);
++	local_unlock_irqrestore(&memcg_stock.lock, flags);
+ }
+ 
+ /*
+@@ -2779,29 +2784,34 @@ static struct mem_cgroup *get_mem_cgroup_from_objcg(struct obj_cgroup *objcg)
+  * which is cheap in non-preempt kernel. The interrupt context object stock
+  * can only be accessed after disabling interrupt. User context code can
+  * access interrupt object stock, but not vice versa.
++ *
++ * This task and interrupt context optimization is disabled for PREEMPT_RT
++ * as there is no performance gain in this case and changes will be made to
++ * irq_obj only.
++ *
++ * For non-PREEMPT_RT, we are not replacing preempt_disable() by local_lock()
++ * as nesting of task_obj and irq_obj are allowed which may cause lockdep
++ * splat if local_lock() is used. Using separate local locks will complicate
++ * the interaction between obj_stock and the broader memcg_stock object.
+  */
+ static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
+ {
+-	struct memcg_stock_pcp *stock;
+-
+-	if (likely(in_task())) {
++	if (likely(in_task()) && !IS_ENABLED(CONFIG_PREEMPT_RT)) {
+ 		*pflags = 0UL;
+ 		preempt_disable();
+-		stock = this_cpu_ptr(&memcg_stock);
+-		return &stock->task_obj;
++		return this_cpu_ptr(&memcg_stock.task_obj);
+ 	}
+ 
+-	local_irq_save(*pflags);
+-	stock = this_cpu_ptr(&memcg_stock);
+-	return &stock->irq_obj;
++	local_lock_irqsave(&memcg_stock.lock, *pflags);
++	return this_cpu_ptr(&memcg_stock.irq_obj);
+ }
+ 
+ static inline void put_obj_stock(unsigned long flags)
+ {
+-	if (likely(in_task()))
++	if (likely(in_task()) && !IS_ENABLED(CONFIG_PREEMPT_RT))
+ 		preempt_enable();
+ 	else
+-		local_irq_restore(flags);
++		local_unlock_irqrestore(&memcg_stock.lock, flags);
+ }
+ 
+ /*
+@@ -7088,9 +7098,12 @@ static int __init mem_cgroup_init(void)
+ 	cpuhp_setup_state_nocalls(CPUHP_MM_MEMCQ_DEAD, "mm/memctrl:dead", NULL,
+ 				  memcg_hotplug_cpu_dead);
+ 
+-	for_each_possible_cpu(cpu)
+-		INIT_WORK(&per_cpu_ptr(&memcg_stock, cpu)->work,
+-			  drain_local_stock);
++	for_each_possible_cpu(cpu) {
++		struct memcg_stock_pcp *stock = per_cpu_ptr(&memcg_stock, cpu);
++
++		INIT_WORK(&stock->work, drain_local_stock);
++		local_lock_init(&stock->lock);
++	}
+ 
+ 	for_each_node(node) {
+ 		struct mem_cgroup_tree_per_node *rtpn;
+-- 
+2.27.0
 
-   So, I would implement such logic at V4L2 core instead.
-
-2. Such metadata string should be there not only for the entity name,
-   but also for vdev->name;
-
-3. I would, instead, set the device name as:
-
-	vdev->name = "Meta: <foo>"
-
-   for the meta devnodes, as the string size is limited.
-
-4. As almost all devices have either video capture or video
-   output, I can't see any value to unconditionally add
-   "Video Capture"/"Video Output" strings. It would only make
-   sense to have them on devices that report having both.
-
-Regards,
-Mauro
-
-> 
-> v2:
->  - Add Documentation
->  - Mark maybe unused variables as __maybe_unused
->  - Add Suggested-by
-> 
-> Ricardo Ribalda (4):
->   Revert "media: uvcvideo: Set unique vdev name based in type"
->   media: v4l2-dev.c: Allow driver-defined entity names
->   media: Documentation/driver-api: Document entity name
->   media: uvcvideo: Set unique entity name based in type
-> 
->  Documentation/driver-api/media/v4l2-dev.rst |  4 ++++
->  drivers/media/usb/uvc/uvc_driver.c          | 14 +++++++++++---
->  drivers/media/v4l2-core/v4l2-dev.c          |  4 +++-
->  3 files changed, 18 insertions(+), 4 deletions(-
-
-Thanks,
-Mauro

@@ -2,215 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F462473AF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF13473AF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244872AbhLNCuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 21:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
+        id S244891AbhLNCvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 21:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244826AbhLNCu3 (ORCPT
+        with ESMTP id S244831AbhLNCui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 21:50:29 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A746C061574;
-        Mon, 13 Dec 2021 18:50:29 -0800 (PST)
-Message-ID: <20211214024948.048572883@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639450227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=KTh/MmV1NCI2VEvu8uI5K9xmC/2WyQ2j+jnNgVOSLT8=;
-        b=wM2coTx6Z4ewf2DL0BjWj/ed7LRCX+j2DxqO8RCJ7jU2/TUIAntmU8RR9KEJYoSem1FSJi
-        Q2pD3MlEzlNmvPoCSrETbQ/LdWj5XKHUl4UnBWUZdEdFS4sOBHRZCYvPbMDjyQvJ2zwq/7
-        DrP7sIlkeOB0hbeUVCQh9qUsLZt776quqzgfcm7GS5ErtoY2vGDuR4JunqIw8QKD5K60o2
-        afYh35R4ROKem/5mgPgzJS5g29apDTFuUcQB8IpWr+r1TqxuXBx5ySxJ/q0EB+B/wQifeW
-        uOx8882+Gui1XF+m+bZ+wGwEaGVhEpWWUERsJK00JotOxS5t8mUVSZRXjhuzgg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639450227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=KTh/MmV1NCI2VEvu8uI5K9xmC/2WyQ2j+jnNgVOSLT8=;
-        b=dFDey59X+3bPFQm33CFo+zocO1z9tezXaDdyu0O1dB+CaJ+aKrVp6eFEH73q5R7FMFijxt
-        Zx7GSBJe7cupcfCA==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Jing Liu <jing2.liu@linux.intel.com>,
-        Yang Zhong <yang.zhong@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, x86@kernel.org,
-        kvm@vger.kernel.org, Sean Christoperson <seanjc@google.com>,
-        Jin Nakajima <jun.nakajima@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>
-Subject: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
-References: <20211214022825.563892248@linutronix.de>
+        Mon, 13 Dec 2021 21:50:38 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3769C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 18:50:37 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso16134462pji.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 18:50:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:cc:references:subject
+         :content-language:from:in-reply-to:content-transfer-encoding;
+        bh=QWQlvQssHrsTkmhAcYEyHsS+/G2qMiumDXBWc6CQdPo=;
+        b=3h0OwKWCGXfI8pNcGzPhZHOkgihKsvKdmRRC2Gqv0AznLP9nxEcI3vAyIa3rjHnq0c
+         Ns7W5Yt7y0ycNFkN70oSiEjPUy4z+wcDE+7UVedsF563i/iVbNS4n2LoStcLHCiDItwF
+         QquCs6gnpalfdlidWc3DiJ932MrMOK4uhK0xVL01rTH5Ivn87KlomlLKXmjBvn3lAERt
+         t9n/k0uVMPChhJBsCSkM7DIJeAJ8X0kt7vuilgVHi9y3Bvo8sXn59VaikU19J9GJwJq3
+         DVXSFubI4QtWFikgeEoAqjSBDKC3HgmfUN/OfBCKTTUFlYhTfxNkxE8SXJE72EsDRtnX
+         7kvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QWQlvQssHrsTkmhAcYEyHsS+/G2qMiumDXBWc6CQdPo=;
+        b=fHNhi8ioNmYn67Q++6k14RNMXprwuyg+H0l7t75cH4Awo56imtmfRocjNVGKUi1WmY
+         jsnsUJAxGzrQVkjdyDQ2LCf1860Y1Yr3cMaRS44TSDQUXliKa2zPbOjukUtGKNyFIure
+         43IQQvMRtPekwYhWn1eMjVdnkxIGc95g5nmiOWWxh5+mlN51ziqZcrEgwkYQA5H6swb7
+         6CdEszqBvltENhRti0gsFeqMljyVTuQXDWoRizufxrFxJYWUA48tst3nd/dt9zGy4xYd
+         hVbgvORPGHJOuTBbT2wE0WV3pz4j3vVAXp8mdC5cjuYPw8aAaDdevk7zzIKkZBV1hwpQ
+         VbYQ==
+X-Gm-Message-State: AOAM533qc4pJZIytt7GaYQGnQsJeJCRFEHgLNWe5HB19k9zOrF7K/YVN
+        ePx60aEpcLs77NmN1+KqODI5Wg==
+X-Google-Smtp-Source: ABdhPJxIc8vigpQDm7p2mih+0Ad94BeKA2H3FSD+oGZxYF+k7+fBqF/V6PVRvu9C0sHUwpPfporoow==
+X-Received: by 2002:a17:902:c7c4:b0:141:deb4:1b2f with SMTP id r4-20020a170902c7c400b00141deb41b2fmr2812337pla.44.1639450237360;
+        Mon, 13 Dec 2021 18:50:37 -0800 (PST)
+Received: from [10.76.43.192] ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id g1sm12831489pfu.73.2021.12.13.18.50.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 18:50:36 -0800 (PST)
+Message-ID: <a6aa93b2-cb28-6d79-10ef-7b18bae11231@bytedance.com>
+Date:   Tue, 14 Dec 2021 10:50:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 14 Dec 2021 03:50:27 +0100 (CET)
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+To:     wanghonglei@didichuxing.com, tj@kernel.org
+Cc:     bristot@redhat.com, bsegall@google.com, cgroups@vger.kernel.org,
+        dietmar.eggemann@arm.com, hannes@cmpxchg.org,
+        jameshongleiwang@126.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, lizefan.x@bytedance.com,
+        mgorman@suse.de, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, tj@kernel.org, vincent.guittot@linaro.org
+References: <20211213150506.61780-1-wanghonglei@didichuxing.com>
+Subject: Re: [RESEND PATCH RFC] cgroup: support numabalancing disable in
+ cgroup level
+Content-Language: en-US
+From:   Gang Li <ligang.bdlg@bytedance.com>
+In-Reply-To: <20211213150506.61780-1-wanghonglei@didichuxing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM can require fpstate expansion due to updates to XCR0 and to the XFD
-MSR. In both cases it is required to check whether:
+Hi,
+How about my per-process numa balancning patch;)
 
-  - the requested values are correct or permitted
-
-  - the resulting xfeature mask which is relevant for XSAVES is a subset of
-    the guests fpstate xfeature mask for which the register buffer is sized.
-
-    If the feature mask does not fit into the guests fpstate then
-    reallocation is required.
-
-Provide a common update function which utilizes the existing XFD enablement
-mechanics and two wrapper functions, one for XCR0 and one for XFD.
-
-These wrappers have to be invoked from XSETBV emulation and the XFD MSR
-write emulation.
-
-XCR0 modification can only proceed when fpu_update_guest_xcr0() returns
-success.
-
-XFD modification is done by the FPU core code as it requires to update the
-software state as well.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
-New version to handle the restore case and XCR0 updates correctly.
----
- arch/x86/include/asm/fpu/api.h |   57 +++++++++++++++++++++++++++++++++++++++++
- arch/x86/kernel/fpu/core.c     |   57 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 114 insertions(+)
-
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -136,6 +136,63 @@ extern void fpstate_clear_xstate_compone
- extern bool fpu_alloc_guest_fpstate(struct fpu_guest *gfpu);
- extern void fpu_free_guest_fpstate(struct fpu_guest *gfpu);
- extern int fpu_swap_kvm_fpstate(struct fpu_guest *gfpu, bool enter_guest);
-+extern int __fpu_update_guest_features(struct fpu_guest *guest_fpu, u64 xcr0, u64 xfd);
-+
-+/**
-+ * fpu_update_guest_xcr0 - Update guest XCR0 from XSETBV emulation
-+ * @guest_fpu:	Pointer to the guest FPU container
-+ * @xcr0:	Requested guest XCR0
-+ *
-+ * Has to be invoked before making the guest XCR0 update effective. The
-+ * function validates that the requested features are permitted and ensures
-+ * that @guest_fpu->fpstate is properly sized taking @guest_fpu->fpstate->xfd
-+ * into account.
-+ *
-+ * If @guest_fpu->fpstate is not the current tasks active fpstate then the
-+ * caller has to ensure that @guest_fpu->fpstate cannot be concurrently in
-+ * use, i.e. the guest restore case.
-+ *
-+ * Return:
-+ * 0		- Success
-+ * -EPERM	- Feature(s) not permitted
-+ * -EFAULT	- Resizing of fpstate failed
-+ */
-+static inline int fpu_update_guest_xcr0(struct fpu_guest *guest_fpu, u64 xcr0)
-+{
-+	return __fpu_update_guest_features(guest_fpu, xcr0, guest_fpu->fpstate->xfd);
-+}
-+
-+/**
-+ * fpu_update_guest_xfd - Update guest XFD from MSR write emulation
-+ * @guest_fpu:	Pointer to the guest FPU container
-+ * @xcr0:	Current guest XCR0
-+ * @xfd:	Requested XFD value
-+ *
-+ * Has to be invoked to make the guest XFD update effective. The function
-+ * validates the XFD value and ensures that @guest_fpu->fpstate is properly
-+ * sized by taking @xcr0 into account.
-+ *
-+ * The caller must not modify @guest_fpu->fpstate->xfd or the XFD MSR
-+ * directly.
-+ *
-+ * If @guest_fpu->fpstate is not the current tasks active fpstate then the
-+ * caller has to ensure that @guest_fpu->fpstate cannot be concurrently in
-+ * use, i.e. the guest restore case.
-+ *
-+ * On success the buffer size is valid, @guest_fpu->fpstate.xfd == @xfd and
-+ * if the guest fpstate is active then MSR_IA32_XFD == @xfd.
-+ *
-+ * On failure the previous state is retained.
-+ *
-+ * Return:
-+ * 0		- Success
-+ * -ENOTSUPP	- XFD value not supported
-+ * -EFAULT	- Resizing of fpstate failed
-+ */
-+static inline int fpu_update_guest_xfd(struct fpu_guest *guest_fpu, u64 xcr0, u64 xfd)
-+{
-+	return __fpu_update_guest_features(guest_fpu, xcr0, xfd);
-+}
- 
- extern void fpu_copy_guest_fpstate_to_uabi(struct fpu_guest *gfpu, void *buf, unsigned int size, u32 pkru);
- extern int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf, u64 xcr0, u32 *vpkru);
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -261,6 +261,63 @@ void fpu_free_guest_fpstate(struct fpu_g
- }
- EXPORT_SYMBOL_GPL(fpu_free_guest_fpstate);
- 
-+/**
-+ * __fpu_update_guest_features - Validate and enable guest XCR0 and XFD updates
-+ * @guest_fpu:	Pointer to the guest FPU container
-+ * @xcr0:	Guest XCR0
-+ * @xfd:	Guest XFD
-+ *
-+ * Note: @xcr0 and @xfd must either be the already validated values or the
-+ * requested values (guest emulation or host write on restore).
-+ *
-+ * Do not invoke directly. Use the provided wrappers fpu_validate_guest_xcr0()
-+ * and fpu_update_guest_xfd() instead.
-+ *
-+ * Return: 0 on success, error code otherwise
-+ */
-+int __fpu_update_guest_features(struct fpu_guest *guest_fpu, u64 xcr0, u64 xfd)
-+{
-+	u64 expand, requested;
-+
-+	lockdep_assert_preemption_enabled();
-+
-+	/* Only permitted features are allowed in XCR0 */
-+	if (xcr0 & ~guest_fpu->perm)
-+		return -EPERM;
-+
-+	/* Check for unsupported XFD values */
-+	if (xfd & ~XFEATURE_MASK_USER_DYNAMIC || xfd & ~fpu_user_cfg.max_features)
-+		return -ENOTSUPP;
-+
-+	if (!IS_ENABLED(CONFIG_X86_64))
-+		return 0;
-+
-+	/*
-+	 * The requested features are set in XCR0 and not set in XFD.
-+	 * Feature expansion is required when the requested features are
-+	 * not a subset of the xfeatures for which @guest_fpu->fpstate
-+	 * is sized.
-+	 */
-+	requested = xcr0 & ~xfd;
-+	expand = requested & ~guest_fpu->xfeatures;
-+	if (!expand) {
-+		/*
-+		 * fpstate size is correct, update the XFD value in fpstate
-+		 * and if @guest_fpu->fpstate is active also the per CPU
-+		 * cache and the MSR.
-+		 */
-+		fpregs_lock();
-+		guest_fpu->fpstate->xfd = xfd;
-+		if (guest_fpu->fpstate->in_use)
-+			xfd_update_state(guest_fpu->fpstate);
-+		fpregs_unlock();
-+		return 0;
-+	}
-+
-+	return __xfd_enable_feature(expand, guest_fpu);
-+}
-+EXPORT_SYMBOL_GPL(__fpu_update_guest_features);
-+
- int fpu_swap_kvm_fpstate(struct fpu_guest *guest_fpu, bool enter_guest)
- {
- 	struct fpstate *guest_fps = guest_fpu->fpstate;
+https://lore.kernel.org/all/20211206024530.11336-1-ligang.bdlg@bytedance.com/
+-- 
+Thanks
+Gang Li
 

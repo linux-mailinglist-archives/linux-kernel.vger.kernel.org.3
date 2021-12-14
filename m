@@ -2,102 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35DE6474686
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FCA474690
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234610AbhLNPec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:34:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
+        id S234655AbhLNPhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbhLNPe2 (ORCPT
+        with ESMTP id S233034AbhLNPha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:34:28 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3688FC061574;
-        Tue, 14 Dec 2021 07:34:28 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id u3so37573946lfl.2;
-        Tue, 14 Dec 2021 07:34:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=m/qW6OJTq+PZMI2TVoFARae55ogXm1E7P0dFW1QTwws=;
-        b=EFQ3vqV+R8neb78NOg2W1d/+0znWSMA8y3MxU6ojmqf0dH1fgOK9iO8zQD9UJ4OA0N
-         Asz9VV2IMp0dtwlEvwCZezbmiosrhe8h7T2SJnx79NEtnKqGF8QHE6llglwGUz5wYvqz
-         Wrxd3OHTMFpD148w8gP4dKSmEFlPP83Ok/fGQBxXecb4+c0u2o0klPZGS0Zds4cMK6rt
-         vFaL4CaBZRvFpU04prw4VTWMcm8bBQohFwIaAEklLB/orovPO9Mz/2bUd5c7BwToFiR4
-         t59/inKbGK+L+Vx55dQWtRFuO8/NxVgGHoA567QqNGBQzIYzWSx/iNET4fNMLdzY/7LJ
-         6C/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=m/qW6OJTq+PZMI2TVoFARae55ogXm1E7P0dFW1QTwws=;
-        b=V0rYhgLKV4s2qhU0ym0y8Q74KYvIyJzqZ/vxUp+2U9IC9TF/1yuYhg7+YJKTc5CC/X
-         wYaNCYPTrZz8BKU9NgEbGArvmpj8atHt2j6miQNMay364nauTKz9iKxsQjHxXn2gkyaa
-         Bgx3wM901xRGUmlC1rH6G39lCZTdGClWl4BDDNcRMY0JfIcsTp4HPFE2d13YBtN/KpYL
-         ge4/5f9lu6NG9ekfUIAcUVMKyala/dsN+bH7qOsnYd+WHZokiPdggHxfiCEoamB9v9cJ
-         UMpEXWrVKfYNh+p0CoUULxoeoJdlsAHHPiZjB8n5oZygZJ+CHYyLjlAdv6zpnyVjqXQe
-         zyPQ==
-X-Gm-Message-State: AOAM533+fsVzZcY8npKshY6ba1fP7UId82xlS2rxAOqN/WBR8q0ehs+U
-        RkuZLRPbsZxLDScKl7DEDQU=
-X-Google-Smtp-Source: ABdhPJzwtl22wgbOJNUiLRvzjqIzb84KHkq1ypWVWnAF32iWfkeJGaGZLEBcU+zP+CWTwxWsKtRnog==
-X-Received: by 2002:a19:c350:: with SMTP id t77mr5415981lff.152.1639496066375;
-        Tue, 14 Dec 2021 07:34:26 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id g27sm14872lfe.55.2021.12.14.07.34.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 07:34:26 -0800 (PST)
-Subject: Re: [PATCH 1/3] ALSA: hda/tegra: Skip reset on BPMP devices
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
-        broonie@kernel.org, lgirdwood@gmail.com, thierry.reding@gmail.com,
-        perex@perex.cz, jonathanh@nvidia.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Mohan Kumar <mkumard@nvidia.com>, robh+dt@kernel.org
-References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
- <1638858770-22594-2-git-send-email-spujar@nvidia.com>
- <7742adae-cdbe-a9ea-2cef-f63363298d73@gmail.com>
- <8fd704d9-43ce-e34a-a3c0-b48381ef0cd8@nvidia.com>
- <56bb43b6-8d72-b1de-4402-a2cb31707bd9@gmail.com>
- <4855e9c4-e4c2-528b-c9ad-2be7209dc62a@nvidia.com>
- <5d441571-c1c2-5433-729f-86d6396c2853@gmail.com>
- <f32cde65-63dc-67f8-ded8-b58ea5e89f4e@nvidia.com>
- <95cc7efa-251c-690b-9afa-53ee9e052c34@gmail.com>
- <148fba18-5d14-d342-0eb9-4ff224cc58ad@nvidia.com>
- <3b0de739-7866-3886-be9c-a853c746f8b7@gmail.com>
- <73d04377-9898-930b-09db-bb6c4b3eb90a@nvidia.com>
- <ad388f5e-6f60-cf78-8510-87aec8524e33@gmail.com>
- <50bf5a83-051e-8c12-6502-aabd8edd0a72@nvidia.com>
- <7230ad0b-2b04-4f1b-b616-b7d98789ded0@gmail.com>
- <48f891bc-d8f6-2634-6dd1-6ea4f14ae6a3@nvidia.com>
- <0761f6f2-27f8-4e1a-fabc-9d319f465a9e@gmail.com>
- <s5hv8zr9s5a.wl-tiwai@suse.de>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b7ad34b4-02be-00ed-05e2-12ea31ababb2@gmail.com>
-Date:   Tue, 14 Dec 2021 18:34:25 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 14 Dec 2021 10:37:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6ECC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:37:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C73961584
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:37:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45E90C34604;
+        Tue, 14 Dec 2021 15:37:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639496248;
+        bh=RsqIxw7l181YP8CsMrHMkGZWM3eQKUjSOlAiEt1c9Z0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X/ot4IoekuSM4yLL1UUyI+1dPtb3HVfplV1+ex5sYgFnpg32AlhbJlga1P+xLbvRB
+         m68qNKuZ0AjmmhiJZT80bpwuuFy3AhoW2kYTAeLe+9/UFMSnWFIKMbxsZodICte8FW
+         7XCRckyPKHOkLhvc4o88hxVaXQWuC59eCg/5EW6gD9HEvBkBWP/3dGn2y21pPtux5D
+         A4C7V58JkeE1IwGQmIlg3uQfLyN622kMzdUasowwlnVUEJoD8i0b7vCvkakk3H+3FP
+         lJXIM99ArskFYH4zq1+vL0RZHhT3rVdoZqInX8B0qR/1ISuFT+vbKfeDmLEHN1nZe+
+         /0dSqFlT8MTSA==
+Date:   Tue, 14 Dec 2021 15:37:22 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        freedreno@lists.freedesktop.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] iommu/io-pgtable-arm: Add way to debug pgtable
+ walk
+Message-ID: <20211214153722.GA15416@willie-the-truck>
+References: <20211005151633.1738878-1-robdclark@gmail.com>
+ <20211005151633.1738878-2-robdclark@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <s5hv8zr9s5a.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211005151633.1738878-2-robdclark@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-14.12.2021 17:29, Takashi Iwai пишет:
->> I'm also wondering whether snd_power_change_state() should be moved into
->> RPM callbacks and whether this function does anything practically useful
->> on Tegra at all.
-> This call is mostly for ALSA core stuff, and not necessarily
-> reflecting the exact device power state.  The major role is for
-> controlling / blocking the device accesses at the system
-> suspend/resume, so it's correct to set only in the system
-> suspend/resume callbacks, not in runtime PM.
+On Tue, Oct 05, 2021 at 08:16:25AM -0700, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
 > 
+> Add an io-pgtable method to retrieve the raw PTEs that would be
+> traversed for a given iova access.
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/iommu/io-pgtable-arm.c | 40 +++++++++++++++++++++++++++-------
+>  include/linux/io-pgtable.h     |  9 ++++++++
+>  2 files changed, 41 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/iommu/io-pgtable-arm.c b/drivers/iommu/io-pgtable-arm.c
+> index dd9e47189d0d..c470fc0b3c2b 100644
+> --- a/drivers/iommu/io-pgtable-arm.c
+> +++ b/drivers/iommu/io-pgtable-arm.c
+> @@ -700,38 +700,61 @@ static size_t arm_lpae_unmap(struct io_pgtable_ops *ops, unsigned long iova,
+>  	return arm_lpae_unmap_pages(ops, iova, size, 1, gather);
+>  }
+>  
+> -static phys_addr_t arm_lpae_iova_to_phys(struct io_pgtable_ops *ops,
+> -					 unsigned long iova)
+> +static int arm_lpae_pgtable_walk(struct io_pgtable_ops *ops, unsigned long iova,
+> +				 void *_ptes, int *num_ptes)
+>  {
+>  	struct arm_lpae_io_pgtable *data = io_pgtable_ops_to_data(ops);
+>  	arm_lpae_iopte pte, *ptep = data->pgd;
+> +	arm_lpae_iopte *ptes = _ptes;
+> +	int max_ptes = *num_ptes;
+>  	int lvl = data->start_level;
+>  
+> +	*num_ptes = 0;
+> +
+>  	do {
+> +		if (*num_ptes >= max_ptes)
+> +			return -ENOSPC;
+> +
+>  		/* Valid IOPTE pointer? */
+>  		if (!ptep)
+> -			return 0;
+> +			return -EFAULT;
+>  
+>  		/* Grab the IOPTE we're interested in */
+>  		ptep += ARM_LPAE_LVL_IDX(iova, lvl, data);
+>  		pte = READ_ONCE(*ptep);
+>  
+> +		ptes[(*num_ptes)++] = pte;
+> +
+>  		/* Valid entry? */
+>  		if (!pte)
+> -			return 0;
+> +			return -EFAULT;
+>  
+>  		/* Leaf entry? */
+>  		if (iopte_leaf(pte, lvl, data->iop.fmt))
+> -			goto found_translation;
+> +			return 0;
+>  
+>  		/* Take it to the next level */
+>  		ptep = iopte_deref(pte, data);
+>  	} while (++lvl < ARM_LPAE_MAX_LEVELS);
+>  
+> -	/* Ran out of page tables to walk */
+> -	return 0;
+> +	return -EFAULT;
+> +}
+> +
+> +static phys_addr_t arm_lpae_iova_to_phys(struct io_pgtable_ops *ops,
+> +					 unsigned long iova)
+> +{
+> +	struct arm_lpae_io_pgtable *data = io_pgtable_ops_to_data(ops);
+> +	arm_lpae_iopte pte, ptes[ARM_LPAE_MAX_LEVELS];
+> +	int lvl, num_ptes = ARM_LPAE_MAX_LEVELS;
+> +	int ret;
+> +
+> +	ret = arm_lpae_pgtable_walk(ops, iova, ptes, &num_ptes);
+> +	if (ret)
+> +		return 0;
+> +
+> +	pte = ptes[num_ptes - 1];
+> +	lvl = num_ptes - 1 + data->start_level;
+>  
+> -found_translation:
+>  	iova &= (ARM_LPAE_BLOCK_SIZE(lvl, data) - 1);
+>  	return iopte_to_paddr(pte, data) | iova;
+>  }
+> @@ -816,6 +839,7 @@ arm_lpae_alloc_pgtable(struct io_pgtable_cfg *cfg)
+>  		.unmap		= arm_lpae_unmap,
+>  		.unmap_pages	= arm_lpae_unmap_pages,
+>  		.iova_to_phys	= arm_lpae_iova_to_phys,
+> +		.pgtable_walk	= arm_lpae_pgtable_walk,
+>  	};
+>  
+>  	return data;
+> diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
+> index 86af6f0a00a2..501f362a929c 100644
+> --- a/include/linux/io-pgtable.h
+> +++ b/include/linux/io-pgtable.h
+> @@ -148,6 +148,13 @@ struct io_pgtable_cfg {
+>   * @unmap:        Unmap a physically contiguous memory region.
+>   * @unmap_pages:  Unmap a range of virtually contiguous pages of the same size.
+>   * @iova_to_phys: Translate iova to physical address.
+> + * @pgtable_walk: Return details of a page table walk for a given iova.
+> + *                This returns the array of PTEs in a format that is
+> + *                specific to the page table format.  The number of
+> + *                PTEs can be format specific.  The num_ptes parameter
+> + *                on input specifies the size of the ptes array, and
+> + *                on output the number of PTEs filled in (which depends
+> + *                on the number of PTEs walked to resolve the iova)
 
-Thank you for the clarification.
+I think this would be a fair bit cleaner if the interface instead took a
+callback function to invoke at each page-table level. It would be invoked
+with the pte value and the level. Depending on its return value the walk
+could be terminated early. That would also potentially scale to walking
+ranges of iovas as well if we ever need it and it may be more readily
+implementable by other formats too.
+
+>   *
+>   * These functions map directly onto the iommu_ops member functions with
+>   * the same names.
+
+This bit of the comment is no longer true with your change.
+
+Will

@@ -2,99 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA11474C55
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAF0474C5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbhLNT4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:56:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbhLNT4H (ORCPT
+        id S237541AbhLNT5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:57:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21263 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229539AbhLNT5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:56:07 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C321C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:56:07 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id v11so34282770wrw.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:56:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wS77TqqTPnBTpmksYhdz3eSRMai6KqIllrvJewhLyWE=;
-        b=FK8LQs2jZHxN78dHSNnrvFkYm0T4xDtpiUBawSlgn169PaOnn1oebfe5XyxSi7S5B+
-         lC3qo7f10AVt794TSxtbhb5OLUExwX4AU+nvfA7Y9X94rElmxbAbVmBwFRB+9r2o+B45
-         1US5ap8R6GFmAEzPUbnFhap5TXHxhnVc2HxVgQuU9lx43GCEzPcuOXuLrx+s+vTDJejn
-         gSUGN+x/lZ5E88ho2XOdDyzNLg1p9SECnEcaQcuckkHyrEaYKjVIaJGRjXCKcmxm3Gnw
-         B6ZixaxPO9JnYFEQpJ3f35l6SUnVjBzRifD010ufEj066nu67da3ZzAgMd6fHwydEyHa
-         ytOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wS77TqqTPnBTpmksYhdz3eSRMai6KqIllrvJewhLyWE=;
-        b=bsYoaRY8OQuSuXMO2F4QpTJn4+iX84hbSQ2wkLJIUVLn88l2w68ziYk7MLuMqt+Vcw
-         m8eGF8JiCj4beUqQiXDcCHJr1iZ9wnF1/Zjwq6Zc2oF+t6r69SARv7LK3WJcrHgLRqKX
-         NymfcUUC3XhbR37SHbLCax7DWr4saxtIWYozd3svX3cj+ttOK/N9CqzWC8G8Pc4nFIFh
-         eBTTzs4RdWWWdWovWYjgVSC52Y/4VLvxcz6Q+DhOZWOMYmsPp+6WnOTF1BUnmfyMoPON
-         yUpSc8kVJNbmlae2i7FVttBdVayRG2O0PwtFswdfLwLE/W6EqxyoOgTYFPFsHX4yu1Kg
-         QGmg==
-X-Gm-Message-State: AOAM531z1u4GsOdgVDpGxVufkR2wKWon1KTWNDcOiGpUa58PoWs1iz+3
-        YzfWlxIhN1BNIKnu1xEaz/atvA==
-X-Google-Smtp-Source: ABdhPJzjOMfuJ4ickmlh1ep17YBYjPJwE4BK843Qs8UJvreheviMvgUN/HF6dUwCslE1l0bhNDQGRA==
-X-Received: by 2002:adf:c10e:: with SMTP id r14mr1212852wre.558.1639511765820;
-        Tue, 14 Dec 2021 11:56:05 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:15:13:f9c2:fca2:6c2e:7e9f])
-        by smtp.gmail.com with ESMTPSA id bg34sm3343256wmb.47.2021.12.14.11.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 11:56:05 -0800 (PST)
-Date:   Tue, 14 Dec 2021 20:55:58 +0100
-From:   Marco Elver <elver@google.com>
-To:     andrey.konovalov@linux.dev
-Cc:     Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH mm v3 29/38] kasan, vmalloc: add vmalloc tagging for
- HW_TAGS
-Message-ID: <Ybj2zms+c6J3J/pf@elver.google.com>
-References: <cover.1639432170.git.andreyknvl@google.com>
- <af3819749624603ed5cb0cbd869d5e4b3ed116b3.1639432170.git.andreyknvl@google.com>
+        Tue, 14 Dec 2021 14:57:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639511865;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lWNXdC7c4/QvF14/ly2qEacx83h1zt3femW1UptwI/g=;
+        b=PfOe/WQQn1HBqd+q4LOARqZhT63xQARnAqFS/qgiGuPFwU4gdSjWndv9Xfm3zQqN9yjMRj
+        7ewS/Nn+mLin+UexT3TqNoRyaLG07ivOBB5srJnd5Ue9XFE7QDQMk0qEKNe+YRQlTpwuXl
+        hd0+xOpfHIVgpUp4CAI+XGS3LRFkCqI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-93-LJ_2iVCRNWO_4MGxCIm4rg-1; Tue, 14 Dec 2021 14:57:39 -0500
+X-MC-Unique: LJ_2iVCRNWO_4MGxCIm4rg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C884F1926DA0;
+        Tue, 14 Dec 2021 19:57:36 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1D3C41017E27;
+        Tue, 14 Dec 2021 19:57:27 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <87e6960c660eaa883d6ee81c25449cf6fa3c9c19.camel@kernel.org>
+References: <87e6960c660eaa883d6ee81c25449cf6fa3c9c19.camel@kernel.org> <163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk> <163906890630.143852.13972180614535611154.stgit@warthog.procyon.org.uk>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 09/67] fscache: Implement volume registration
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af3819749624603ed5cb0cbd869d5e4b3ed116b3.1639432170.git.andreyknvl@google.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1082028.1639511847.1@warthog.procyon.org.uk>
+Date:   Tue, 14 Dec 2021 19:57:27 +0000
+Message-ID: <1082029.1639511847@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 10:54PM +0100, andrey.konovalov@linux.dev wrote:
-[...]
->  
-> +	/*
-> +	 * Skip page_alloc poisoning and zeroing for pages backing VM_ALLOC
-> +	 * mappings. Only effective in HW_TAGS mode.
-> +	 */
-> +	gfp &= __GFP_SKIP_KASAN_UNPOISON & __GFP_SKIP_ZERO;
+Jeff Layton <jlayton@kernel.org> wrote:
 
-This will turn gfp == 0 always. Should it have been
+> 
+> Do we need the last two parameters to fscache_acquire_volume? I'll note
+> that all of the callers in the current set just pass "NULL, 0" for them.
 
-	gfp |= __GFP_SKIP_KASAN_UNPOISON | __GFP_SKIP_ZERO
+cifs wants to set it.  I have a patch to make cachefiles store this.  afs
+should use it also.
 
-Also, not sure it matters, but on non-KASAN builds, this will now always
-generate an extra instruction. You could conditionally define GFP_SKIP*
-only in the KASAN modes that need them, otherwise they become 0, so the
-compiler optimizes this out. (Although I think it does does complicate
-GFP_SHIFT a little?)
+David
+

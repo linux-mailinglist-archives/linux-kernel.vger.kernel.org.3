@@ -2,130 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6BF4746EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DA64746FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235158AbhLNP4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:56:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbhLNP4i (ORCPT
+        id S235453AbhLNP6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:58:49 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:58654 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230000AbhLNP6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:56:38 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA34C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:56:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=EGMW+jMaJWxqVYPoPoipt7V2zmjhBmVrUGJa9k6HAHU=; b=E9zYT8iMlGhC2RI2WMvOf5uV5B
-        DprpLVwzjl0CVGv28pSqLHdFcr8BgFHjEPJ+26EMq/fAXhUadZI0NcEBslpcA0PMcNjk48sR4Lf9n
-        x04qZcLHoR1MkyrI5yuKqqmjd/SKI5FK3Ceo3ef+FHjVD1xXRWKzLQRrI+yyZvl+hrJrNEc14vMXj
-        halCex387orY+verSGjm0lxLcik/26NnBe/mfC6VvMX3Dagpnnt0+NEyHhPs4VKYxMJwq2sEUEmAj
-        WZW2rCVhRk8keOxZ5MrbL+c8bIacguhztUHvuswSsu3knAHHwMsqQodDnaqo/rXRbUFivnMO64Pgn
-        LCqnfK1w==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mxAAD-00DqlS-Ii; Tue, 14 Dec 2021 15:56:27 +0000
-Message-ID: <dda484cf-d974-dba3-db54-4df470a1ff2e@infradead.org>
-Date:   Tue, 14 Dec 2021 07:56:21 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2] smp: Fix the comments of smp_call_function_many()
-Content-Language: en-US
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Nadav Amit <namit@vmware.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20211214081100.126-1-thunder.leizhen@huawei.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20211214081100.126-1-thunder.leizhen@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Tue, 14 Dec 2021 10:58:48 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1923621136;
+        Tue, 14 Dec 2021 15:58:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639497527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UhhGDQnWony4j1hGbzPdaShVFEiYxyIjzLwj5SPn/zY=;
+        b=Mans+jxwM80rXKffxwZPuwyrgFGUnunDApPsVaknSF7XIeb//gG4+DWdrI0P/TET5JNp0g
+        M6OVM9k6krJbm0glqeYmksEVP2mT+eTQ5Lbzx/dyW2KoQw2uOeaeFAwfB2FBFXBuUyXyG0
+        jPSyCzxPy20J1mlohBUfZs0JOqE+93U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639497527;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UhhGDQnWony4j1hGbzPdaShVFEiYxyIjzLwj5SPn/zY=;
+        b=ZOkbvo6WQyXJ0KJHnt0N1UwvjcbR78RGSRKN89+621ruS61XRfS21t3ZkwH49XvykP5uiT
+        Vu2tKGlXxX7TWrDw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 10383A3B89;
+        Tue, 14 Dec 2021 15:58:47 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 16:58:47 +0100
+Message-ID: <s5hpmpz9o08.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Joey Lee <jlee@suse.com>
+Subject: Re: [PATCH] ima: Fix undefined arch_ima_get_secureboot() and co
+In-Reply-To: <d99fc78005d8a245449dd6ca0158cf9e2a897465.camel@linux.ibm.com>
+References: <20211213161145.3447-1-tiwai@suse.de>
+        <d99fc78005d8a245449dd6ca0158cf9e2a897465.camel@linux.ibm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 14 Dec 2021 16:31:21 +0100,
+Mimi Zohar wrote:
+> 
+> Hi Takashi,
+> 
+> On Mon, 2021-12-13 at 17:11 +0100, Takashi Iwai wrote:
+> > Currently arch_ima_get_secureboot() and arch_get_ima_policy() are
+> > defined only when CONFIG_IMA is set, and this makes the code calling
+> > those functions without CONFIG_IMA failing.  Although there is no such
+> > in-tree users, but the out-of-tree users already hit it.
+> > 
+> > Move the declaration and the dummy definition of those functions
+> > outside ifdef-CONFIG_IMA block for fixing the undefined symbols.
+> > 
+> > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> 
+> Before lockdown was upstreamed, we made sure that IMA and lockdown
+> could co-exist.  This patch makes the stub functions available even
+> when IMA is not configured.  Do the remaining downstream patches
+> require IMA to be disabled or can IMA co-exist?
 
-On 12/14/21 00:10, Zhen Lei wrote:
-> As commit a32a4d8a815c ("smp: Run functions concurrently in
-> smp_call_function_many_cond()") itself says:
->                   "Keep other smp_call_function_many() semantic as it is
-> today for backward compatibility: the called function is not executed in
-> this case locally."
-> 
-> It's clear that, the function header comments of smp_call_function_many()
-> does not need to be changed.
-> 
-> So move the comment about 'scf_flags' to smp_call_function_many_cond(),
-> and restore the original comments of smp_call_function_many().
-> 
-> Finally, the comments have been simplified slightly to avoid duplication.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  kernel/smp.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> v1 --> v2:
-> Delete some duplicate comments.
-> 
-> diff --git a/kernel/smp.c b/kernel/smp.c
-> index 01a7c1706a58b1d..9cbe2509d1010ea 100644
-> --- a/kernel/smp.c
-> +++ b/kernel/smp.c
-> @@ -853,14 +853,17 @@ int smp_call_function_any(const struct cpumask *mask,
->  EXPORT_SYMBOL_GPL(smp_call_function_any);
->  
->  /*
-> - * Flags to be used as scf_flags argument of smp_call_function_many_cond().
-> - *
->   * %SCF_WAIT:		Wait until function execution is completed
->   * %SCF_RUN_LOCAL:	Run also locally if local cpu is set in cpumask
->   */
->  #define SCF_WAIT	(1U << 0)
->  #define SCF_RUN_LOCAL	(1U << 1)
->  
-> +/**
-> + * smp_call_function_many_cond(): Run a function on a set of CPUs.
-> + * @scf_flags: Bitmask that controls the operation. Such as SCF_WAIT,
-> + *             SCF_RUN_LOCAL.
-> + */
->  static void smp_call_function_many_cond(const struct cpumask *mask,
->  					smp_call_func_t func, void *info,
->  					unsigned int scf_flags,
-> @@ -972,14 +975,12 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
->  }
->  
->  /**
-> - * smp_call_function_many(): Run a function on a set of CPUs.
-> + * smp_call_function_many(): Run a function on a set of other CPUs.
->   * @mask: The set of cpus to run on (only runs on online subset).
->   * @func: The function to run. This must be fast and non-blocking.
->   * @info: An arbitrary pointer to pass to the function.
-> - * @wait: Bitmask that controls the operation. If %SCF_WAIT is set, wait
-> - *        (atomically) until function has completed on other CPUs. If
-> - *        %SCF_RUN_LOCAL is set, the function will also be run locally
-> - *        if the local CPU is set in the @cpumask.
-> + * @wait: If true, wait (atomically) until function has completed
-> + *        on other CPUs.
->   *
->   * If @wait is true, then returns once @func has returned.
->   *
-
-After applying this patch, kernel-doc emits 4 warnings:
-
-smp.c:871: warning: Function parameter or member 'mask' not described in 'smp_call_function_many_cond'
-smp.c:871: warning: Function parameter or member 'func' not described in 'smp_call_function_many_cond'
-smp.c:871: warning: Function parameter or member 'info' not described in 'smp_call_function_many_cond'
-smp.c:871: warning: Function parameter or member 'cond_func' not described in 'smp_call_function_many_cond'
+I guess Joey (Cc'ed) can explain this better.  AFAIK, currently it's
+used in a part of MODSIGN stuff in SUSE kernels, and it's calling
+unconditionally this function for checking whether the system is with
+the Secure Boot or not.
 
 
-thanks.
--- 
-~Randy
+thanks,
+
+Takashi

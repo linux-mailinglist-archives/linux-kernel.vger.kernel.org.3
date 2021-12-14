@@ -2,88 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F1547435A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFEC47435E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234346AbhLNNYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:24:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        id S234359AbhLNNYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 08:24:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbhLNNYC (ORCPT
+        with ESMTP id S232033AbhLNNYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:24:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709E7C061574;
-        Tue, 14 Dec 2021 05:24:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 113DD614D8;
-        Tue, 14 Dec 2021 13:24:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10F5C34601;
-        Tue, 14 Dec 2021 13:23:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639488241;
-        bh=2S74gn7u7PuWik2kpPjlH1SoUisH+72JMDuC0K0kPhs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VjZrWCHtm7QDcAG69RpSxJWayTP2do7OraInWl7qNS4pULeobTdzZwhtpXYt3Zq54
-         EuGjAfsvb51bo0vL2zCg+DSmJNO/2bGFgtobr+lm9hPemF451EwehxotTG/6zyU459
-         t1k7n0cC7c6/N1SasNx28qTLsIf5qjOmejG/7HhPxWcjfitGQ7+H2uIP57h/ca9CnB
-         GWNcGTfnqMghfOIbr7KO+vlrkfwkvdch+oFIWxvnDASv5ehc0C/KoIhImn6UZatTXC
-         K1TIdd43k/UXtkJrXoM4pH+XTFKYdy/K+J3oaDkR9MkZjXVCRDeL5PUTwv7ARF+cH1
-         LMaJpLtBHMT8w==
-From:   broonie@kernel.org
-To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Stuart Summers <stuart.summers@intel.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: linux-next: manual merge of the drm-intel-gt tree with the drm-intel tree
-Date:   Tue, 14 Dec 2021 13:23:56 +0000
-Message-Id: <20211214132356.2833931-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 14 Dec 2021 08:24:54 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E82C061574;
+        Tue, 14 Dec 2021 05:24:54 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639488291;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ojo5CfB1kqd6Oz7Ue8byTDePBgU77WIcGI14kiPW2MY=;
+        b=FiWW4gr6J2vA6cw2HzsxieR2sV6BeH3/U/R6EURFyJOchc5jCxYyeEMD4AwsLOWHPZ/0yL
+        aXEMO8jEdM5B44wl92TbdB3kvlJOaX0muBcRsTZ4xwxFgV0+RFlNCTqwNb/INH2LJasbhA
+        H7IKpmLqrza3iZeEOcXfiTwvxnTviwdhHwtsFfW6WnJWF+Glh2DUYPgUmOHrpyPbbxlm9q
+        6S/fCR8477PuRcoX0nAEF06uqe4e7XM/K7zwHhGy1FmMLJjNkyovlVMn2HBwArYIDGz/d9
+        EIM7keOxwAHlX151vZPq7QeHmXkRTkmNwrIiE3yFZN4WDSutkBrEqIykS7FJ2g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639488291;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ojo5CfB1kqd6Oz7Ue8byTDePBgU77WIcGI14kiPW2MY=;
+        b=RceVS/6e5lVGJTjqWYYH9Syhhuib5UMpTVTmXSrR+sJvh59TQJFz4A6ibOewOmPReo9rhC
+        qbbH5gOecp7yc+CA==
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Jing Liu <jing2.liu@linux.intel.com>,
+        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, Sean Christoperson <seanjc@google.com>,
+        Jin Nakajima <jun.nakajima@intel.com>,
+        Kevin Tian <kevin.tian@intel.com>
+Subject: Re: [patch 0/6] x86/fpu: Preparatory changes for guest AMX support
+In-Reply-To: <09e06d62-33f5-b41f-e913-a8c5e43ba881@redhat.com>
+References: <20211214022825.563892248@linutronix.de>
+ <09e06d62-33f5-b41f-e913-a8c5e43ba881@redhat.com>
+Date:   Tue, 14 Dec 2021 14:24:51 +0100
+Message-ID: <877dc7tj30.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Tue, Dec 14 2021 at 11:42, Paolo Bonzini wrote:
+> On 12/14/21 03:50, Thomas Gleixner wrote:
+>> The only remaining issue is the KVM XSTATE save/restore size checking which
+>> probably requires some FPU core assistance. But that requires some more
+>> thoughts vs. the IOCTL interface extension and once that is settled it
+>> needs to be solved in one go. But that's an orthogonal issue to the above.
+>
+> That's not a big deal because KVM uses the uncompacted format.  So 
+> KVM_CHECK_EXTENSION and KVM_GET_XSAVE can just use CPUID to retrieve the 
+> size and uncompacted offset of the largest bit that is set in 
+> kvm_supported_xcr0, while KVM_SET_XSAVE can do the same with the largest 
+> bit that is set in the xstate_bv.
 
-Today's linux-next merge of the drm-intel-gt tree got a conflict in:
+For simplicity you can just get that information from guest_fpu. See
+below.
 
-  drivers/gpu/drm/i915/i915_pci.c
+Thanks,
 
-between commit:
-
-  6678916dfa012 ("drm/i915: Move pipe/transcoder/abox masks under intel_device_info.display")
-
-from the drm-intel tree and commit:
-
-  c83125bb2199b ("drm/i915: Add has_64k_pages flag")
-
-from the drm-intel-gt tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc drivers/gpu/drm/i915/i915_pci.c
-index ae36dfd77dcfa,332cb8b25e494..0000000000000
---- a/drivers/gpu/drm/i915/i915_pci.c
-+++ b/drivers/gpu/drm/i915/i915_pci.c
-@@@ -1027,6 -1015,8 +1027,7 @@@ static const struct intel_device_info x
-  	DGFX_FEATURES,
-  	PLATFORM(INTEL_XEHPSDV),
-  	.display = { },
-+ 	.has_64k_pages = 1,
- -	.pipe_mask = 0,
-  	.platform_engine_mask =
-  		BIT(RCS0) | BIT(BCS0) |
-  		BIT(VECS0) | BIT(VECS1) | BIT(VECS2) | BIT(VECS3) |
+        tglx
+---
+--- a/arch/x86/include/asm/fpu/types.h
++++ b/arch/x86/include/asm/fpu/types.h
+@@ -518,6 +518,11 @@ struct fpu_guest {
+ 	u64				perm;
+ 
+ 	/*
++	 * @uabi_size:			Size required for save/restore
++	 */
++	unsigned int			uabi_size;
++
++	/*
+ 	 * @fpstate:			Pointer to the allocated guest fpstate
+ 	 */
+ 	struct fpstate			*fpstate;
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -240,6 +240,7 @@ bool fpu_alloc_guest_fpstate(struct fpu_
+ 	gfpu->fpstate		= fpstate;
+ 	gfpu->xfeatures		= fpu_user_cfg.default_features;
+ 	gfpu->perm		= fpu_user_cfg.default_features;
++	gfpu->uabi_size		= fpu_user_cfg.default_size;
+ 	fpu_init_guest_permissions(gfpu);
+ 
+ 	return true;
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1545,6 +1545,7 @@ static int fpstate_realloc(u64 xfeatures
+ 		newfps->is_confidential = curfps->is_confidential;
+ 		newfps->in_use = curfps->in_use;
+ 		guest_fpu->xfeatures |= xfeatures;
++		guest_fpu->uabi_size = usize;
+ 	}
+ 
+ 	fpregs_lock();

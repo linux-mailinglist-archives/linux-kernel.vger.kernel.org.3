@@ -2,73 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA1B474C7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4646474C87
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237580AbhLNUIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 15:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S237600AbhLNUPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 15:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbhLNUIU (ORCPT
+        with ESMTP id S229795AbhLNUPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 15:08:20 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383B4C061574;
-        Tue, 14 Dec 2021 12:08:20 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id x6so26091811iol.13;
-        Tue, 14 Dec 2021 12:08:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CcClwwT0aibOVAXpgyfdacR5s8e062LtxNDnwr5pduI=;
-        b=jke2JviKVZYjqK3eDLqLuKr7zq2BANQ3c669+t6D3UzrxQFTQCjOTEnpwru8woCWpe
-         ZAetlNiP6qIk6q67QT1hjfTaIOVWY5WZSm9NmukSEdIxW3w4AqQLFFgkbDTExkkLv+Jh
-         1URyOc8ha0g82Xx2XEuwsOziVKlBPCQS+3UFf2wvrBuZmFGySJFrtEx1aXzfQIwlsAab
-         iC1uvL/iJmv7vMzIhSNRHJrnJuI1ckqCG0NX7KtbTGBzbg5uMMZrpDB4Yf7kGjKvwnP1
-         HSEgXkjWdWUwxDy+BAYSKY5YnFJ6PaEj76LsEPOsxC6nHJOijLsyjxkf1AusoKb9xYEX
-         zkqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CcClwwT0aibOVAXpgyfdacR5s8e062LtxNDnwr5pduI=;
-        b=jyenBk6Q++w2y/rUYzDf6C9LR6QSgU7zDBruz74SYAYkRJuSGhT2cl9SIRLS+3Tvl+
-         VqA/+H9twn9Qk0PP7GdP/egn4Li3ahBy5PelU6jC7+fY7e5N/uvSpTMcv81s1Y8G0x1H
-         swkYtk2WfElkybrDcsDEpt/JMzCfJTA83jBzm90Q5IMrFWA7i6D6eEvvzgriMqeOBFZx
-         dobQUydQkXDOOW51FxneknziN0OxHr7WFV5tNQ6v9cOE3fWunpMuggV/h2GZt2fsptV+
-         P+b/sl75Gwb1sCYIyAIsGL56FUuZ0KwvfVdgxISxPQYZR9x7eOwUNGYFEKwu0tYHiCId
-         qFsg==
-X-Gm-Message-State: AOAM530naGaMyCfRcct8C5lNrKN+EZkZ11/yEP/9XrZ38M2cIor8BQ7b
-        VWxJIRNtTKKkynI0lV8T6ct+lgmPIDeaDXnvYbFYJIELn/0=
-X-Google-Smtp-Source: ABdhPJzcxR8nevWNaJ1bvUP6+E7XxRI4o7E1CfcZmkHT7HbVsnBz+ZfyN2MFDde5aXpjC9kTrzPOquf6pPHJL+jKJSU=
-X-Received: by 2002:a05:6638:33a6:: with SMTP id h38mr4364530jav.185.1639512498688;
- Tue, 14 Dec 2021 12:08:18 -0800 (PST)
+        Tue, 14 Dec 2021 15:15:38 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796D9C061574;
+        Tue, 14 Dec 2021 12:15:38 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639512936;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d4wqcXY+MET+Bv0FcRzIRIc5XGvbPUI2bHV9pxD9Ydo=;
+        b=moChZUSho9BA78Zeq1WI5tu/U00oT82AtvfenvZ7wj4+/rbRuMvnEvgp06APrkesXoQIzl
+        7RPpBe3m0oONdQpdS7DAAUNLaW0sDBUgC0jenFPjG7Wr9CEB6Oy4B9l4Iuq/IfEVofBt4t
+        vnaGOWsnREceAU8uxY8NAKpNhml+AgXrJsZ6gKqMSiQL7bA9CFgw8w2TYZeEYT8V3NhbQ8
+        JAqpROxGWfe9cCXptM9xGI/fDzxgqMZx8ZITW8fq90knUugjlJY38p2e8sp+HmqqufWXbS
+        n3mRyaNC3MmjNNomr7JUos4qRao6JylFxbVwVGdREF91hazpGg2c9oB6BzqE4w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639512936;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d4wqcXY+MET+Bv0FcRzIRIc5XGvbPUI2bHV9pxD9Ydo=;
+        b=+ecmdjzCvUtoz/ixJ5pxFaVr7F21Ajeaa5ilYhIAuSfZy+n3tm1NOnNdHltlRFCs+3G/Mc
+        B5RpqeVcmdLBkuDA==
+To:     Nishanth Menon <nm@ti.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>, linux-wireless@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
+In-Reply-To: <87tufbrudl.ffs@tglx>
+References: <20211210221642.869015045@linutronix.de>
+ <20211213182958.ytj4m6gsg35u77cv@detonator> <87fsqvttfv.ffs@tglx>
+ <20211214162247.ocjm7ihg5oi7uiuv@slider> <87wnk7rvnz.ffs@tglx>
+ <87tufbrudl.ffs@tglx>
+Date:   Tue, 14 Dec 2021 21:15:34 +0100
+Message-ID: <87mtl3rli1.ffs@tglx>
 MIME-Version: 1.0
-References: <20211214191415.GA19070@kernel.org> <0f74ba31-aba2-0608-b383-9ab46766485b@infradead.org>
-In-Reply-To: <0f74ba31-aba2-0608-b383-9ab46766485b@infradead.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 14 Dec 2021 21:08:06 +0100
-Message-ID: <CANiq72=fHrp=9cbQizyhp1hgiyBYTTunX4odaXpTjxgr+aGqKQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] Remove mentions of the Trivial Patch Monkey
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Joe Perches <joe@perches.com>, Jiri Kosina <jikos@kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 8:55 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+Nishanth,
+
+On Tue, Dec 14 2021 at 18:03, Thomas Gleixner wrote:
+>     msi_device_data_release()
+>     ...
+>     pcim_release()
+>        pci_disable_msi[x]()
 >
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Groan....
 
-Thanks Randy -- I didn't add your Ack from a couple months ago since I
-added the Doc/ changes.
+I think I managed to distangle this. Can you please give:
 
-Cheers,
-Miguel
+   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v4-part-2
+
+and/or the full pile:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v4-part-3
+
+a test ride?
+
+Thanks,
+
+        tglx

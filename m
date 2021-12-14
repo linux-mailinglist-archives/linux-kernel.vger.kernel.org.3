@@ -2,103 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7614473D35
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAED473D39
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbhLNG2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 01:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S231132AbhLNGbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:31:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbhLNG2a (ORCPT
+        with ESMTP id S230314AbhLNGa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 01:28:30 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32C6C061574;
-        Mon, 13 Dec 2021 22:28:29 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id z8so26848152ljz.9;
-        Mon, 13 Dec 2021 22:28:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7Qe23kprRPn15Qn9MlkcTQ60k8cJNysIu/IrgKrQFE8=;
-        b=Cng1NsrqT214GmKegZwoXMErHG1XberzdF7SZ7bfQxLzqqqJAF+dWQq+RBi58/6GLR
-         6vg0eb7oNky+q6kOBcMIT7Li4m9Lsi27/2wPOeidCDtYftpRdiy4gTGb554lgG1a8Lwf
-         1VXAze3bErCnJiaxwiQn/7UTPma5mQbCMKGflVw4YVX99vWEtIIP31sO9QyQV5w9ybml
-         bmAYdPX1p9nNuSNlxzr0h0H2xcSRL3lhGV/L6OY8yr2LiHolfmA5tqndp37IhsAW7aEP
-         h+/n9MmftXuUyYrwSICBA4sFQCztqr0wZqjexr7QILWTleNV08oOthvwAV8D8vipQrD1
-         CCdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7Qe23kprRPn15Qn9MlkcTQ60k8cJNysIu/IrgKrQFE8=;
-        b=og2rE0AFA7KqxXYGKzXpla+asye6iu6YEWcHZFm5wzSumrEc5GKkVnOojt3xnR29x5
-         96NQWCthKEB5Ax9/PL6MnCO2TnMsscgtknkF3g2Fxduy/te3lQiM6adECEDszK5KJew9
-         QNoAK9vxdFDjQlyaFiIZk+itbVKWL3MjV2ncarBkNnS0WUNyP70SlX0e9kHlH8OZ2dMt
-         07owPdpx2f2f/W+O7i3jyYq/0Kz0WbOtdcbOubL5ua/mtNCVIJiGCNIIpP3vg/jkVSsD
-         1Gl4p3dOSZD5JFf5uO42Vd8jh9Qik8TFFPCCy0pcbkNfqW/wssgTvSXXPdJlA/RU7Ech
-         Y/Jw==
-X-Gm-Message-State: AOAM53089svImQwgwLuNx2PjKkBEyvL+AHIfZ5aLtPSorza944SKEw3+
-        i5BFtzK+72iBrHgeiK0VQ4AYD6LUhT4=
-X-Google-Smtp-Source: ABdhPJw5lks3O7sQuk+B+k3101CPYXFP98k09hURVGzhxtsLlNzyxbkJlo7tEMo5LHxb8Lknbv7+1A==
-X-Received: by 2002:a2e:a795:: with SMTP id c21mr3113631ljf.239.1639463307855;
-        Mon, 13 Dec 2021 22:28:27 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id i3sm1709217lfu.156.2021.12.13.22.28.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 22:28:27 -0800 (PST)
-Subject: Re: [PATCH] cpuidle: tegra: fix typo in a comment
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Jason Wang <wangborong@cdjrlc.com>, daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Tue, 14 Dec 2021 01:30:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261D7C061574;
+        Mon, 13 Dec 2021 22:30:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A4E2B8174C;
+        Tue, 14 Dec 2021 06:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E1DC34601;
+        Tue, 14 Dec 2021 06:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639463456;
+        bh=0p1rM/q46JUK9WO6BK2YedIuNMdeN/vzW89tj5gN5G0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DfH7wFr/rjMgOvfPqg948HYVrT+Z2QGxZKIqqjezqszMsvJ6Flh73/4/aVp7RXwbV
+         qTaIlkiLOx762xqbIE/Tro0ptva1OWJercgLAIrgdLtiac+eaCAu68mHHKib5XP/5M
+         TZN6Zjuuqe2xNkrCKgMHVt+wmC9OcqzasWu7XonGfBVnh6K/k/UaE2fN+WKnj6y3wy
+         f1tQASXW6P/i0nhu0O3zzqKP7vRpHL+bkCqooOrpVNBCB2p+8yNjHXWZbf74UIr7Db
+         Vu9gS3wROExfWivEwQfbV5zjtZSHC0VcD5dyYECjYydpnKRpFhxIlEBm/0yKtVzkn7
+         GkIPpGHn8qobA==
+Date:   Tue, 14 Dec 2021 15:30:52 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20211212033130.64032-1-wangborong@cdjrlc.com>
- <be88a80f-251f-638d-bf29-a0423db53e06@gmail.com>
-Message-ID: <1249c2ae-a7f0-3313-5fb1-06840a4f703b@gmail.com>
-Date:   Tue, 14 Dec 2021 09:28:27 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <be88a80f-251f-638d-bf29-a0423db53e06@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v7 13/13] user_events: Use __get_rel_str for relative
+ string fields
+Message-Id: <20211214153052.a1907198298e6da35a7afe47@kernel.org>
+In-Reply-To: <20211213184723.GA10317@kbox>
+References: <20211209223210.1818-1-beaub@linux.microsoft.com>
+        <20211209223210.1818-14-beaub@linux.microsoft.com>
+        <20211210102327.ab971d529613271ab1bf0073@kernel.org>
+        <20211210184551.GB2242@kbox>
+        <20211213001215.366afbe59715ed5aa1e2e865@kernel.org>
+        <20211213184723.GA10317@kbox>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-14.12.2021 09:02, Dmitry Osipenko пишет:
-> 12.12.2021 06:31, Jason Wang пишет:
->> The double `that' in the comment in line 275 is repeated. Remove one
->> of them from the comment.
->>
->> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
->> ---
->>  drivers/cpuidle/cpuidle-tegra.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
->> index 9845629aeb6d..93ed4b8e164a 100644
->> --- a/drivers/cpuidle/cpuidle-tegra.c
->> +++ b/drivers/cpuidle/cpuidle-tegra.c
->> @@ -272,7 +272,7 @@ static int tegra114_enter_s2idle(struct cpuidle_device *dev,
->>   * LP2 | C7	(CPU core power gating)
->>   * LP2 | CC6	(CPU cluster power gating)
->>   *
->> - * Note that that the older CPUIDLE driver versions didn't explicitly
->> + * Note that the older CPUIDLE driver versions didn't explicitly
->>   * differentiate the LP2 states because these states either used the same
->>   * code path or because CC6 wasn't supported.
->>   */
->>
+On Mon, 13 Dec 2021 10:47:23 -0800
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
+
+> On Mon, Dec 13, 2021 at 12:12:15AM +0900, Masami Hiramatsu wrote:
+> > On Fri, 10 Dec 2021 10:45:51 -0800
+> > Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > 
+> > > On Fri, Dec 10, 2021 at 10:23:27AM +0900, Masami Hiramatsu wrote:
+> > > > Hi Beau,
+> > > > 
+> > > > On Thu,  9 Dec 2021 14:32:10 -0800
+> > > > Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > > > 
+> > > > > Switch between __get_str and __get_rel_str within the print_fmt of
+> > > > > user_events. Add unit test to ensure print_fmt is correct on known
+> > > > > types.
+> > > > > 
+> > > > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> > > > > ---
+> > > > >  kernel/trace/trace_events_user.c              |  24 ++-
+> > > > >  .../selftests/user_events/ftrace_test.c       | 166 ++++++++++++++++++
+> > > > >  2 files changed, 182 insertions(+), 8 deletions(-)
+> > > > > 
+> > > > > diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> > > > > index 56eb58ddb4cf..3779fa2ca14a 100644
+> > > > > --- a/kernel/trace/trace_events_user.c
+> > > > > +++ b/kernel/trace/trace_events_user.c
+> > > > > @@ -257,7 +257,7 @@ static int user_event_add_field(struct user_event *user, const char *type,
+> > > > >  	goto add_field;
+> > > > >  
+> > > > >  add_validator:
+> > > > > -	if (strstr(type, "char[") != 0)
+> > > > > +	if (strstr(type, "char") != 0)
+> > > > >  		validator_flags |= VALIDATOR_ENSURE_NULL;
+> > > > 
+> > > > What is this change for? This seems not related to the other changes.
+> > > > (Also, what happen if it is a single char type?)
+> > > > 
+> > > 
+> > > I'm glad you asked, it appears like __data_loc / __rel_loc can take char
+> > > as it's type (It doesn't appear to be limited to char[] cases). I wanted
+> > > to ensure something malicious couldn't sneak past by using this corner
+> > > case.
+> > > 
+> > > IE: __data_loc char test
+> > > 
+> > > In trace_events_filter.c:
+> > > int filter_assign_type(const char *type)
+> > > {
+> > >         if (strstr(type, "__data_loc") && strstr(type, "char"))
+> > >                 return FILTER_DYN_STRING;
+> > > 
+> > >         if (strchr(type, '[') && strstr(type, "char"))
+> > >                 return FILTER_STATIC_STRING;
+> > > 
+> > >         if (strcmp(type, "char *") == 0 || strcmp(type, "const char *") == 0)
+> > >                 return FILTER_PTR_STRING;
+> > > 
+> > >         return FILTER_OTHER;
+> > > }
+> > > 
+> > > char[ is only checked if __data_loc is not specified.
+> > 
+> > OK, but in that case, is this patch good place for that change?
+> > 
 > 
-> This might be a candidate for <trivial@kernel.org>.
+> I'll move this to part 12.
 > 
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#select-the-recipients-for-your-patch
+> > > 
+> > > > >  
+> > > > >  	validator = kmalloc(sizeof(*validator), GFP_KERNEL);
+> > > > > @@ -456,14 +456,21 @@ static const char *user_field_format(const char *type)
+> > > > >  	return "%llu";
+> > > > >  }
+> > > > >  
+> > > > > -static bool user_field_is_dyn_string(const char *type)
+> > > > > +static bool user_field_is_dyn_string(const char *type, const char **str_func)
+> > > > >  {
+> > > > > -	if (str_has_prefix(type, "__data_loc ") ||
+> > > > > -	    str_has_prefix(type, "__rel_loc "))
+> > > > > -		if (strstr(type, "char[") != 0)
+> > > > > -			return true;
+> > > > > +	if (str_has_prefix(type, "__data_loc ")) {
+> > > > > +		*str_func = "__get_str";
+> > > > > +		goto check;
+> > > > > +	}
+> > > > > +
+> > > > > +	if (str_has_prefix(type, "__rel_loc ")) {
+> > > > > +		*str_func = "__get_rel_str";
+> > > > > +		goto check;
+> > > > > +	}
+> > > > >  
+> > > > >  	return false;
+> > > > > +check:
+> > > > > +	return strstr(type, "char") != 0;
+> > > > >  }
+> > > > >  
+> > > > >  #define LEN_OR_ZERO (len ? len - pos : 0)
+> > > > > @@ -472,6 +479,7 @@ static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
+> > > > >  	struct ftrace_event_field *field, *next;
+> > > > >  	struct list_head *head = &user->fields;
+> > > > >  	int pos = 0, depth = 0;
+> > > > > +	const char *str_func;
+> > > > >  
+> > > > >  	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
+> > > > >  
+> > > > > @@ -488,9 +496,9 @@ static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
+> > > > >  	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
+> > > > >  
+> > > > >  	list_for_each_entry_safe_reverse(field, next, head, link) {
+> > > > > -		if (user_field_is_dyn_string(field->type))
+> > > > > +		if (user_field_is_dyn_string(field->type, &str_func))
+> > > > >  			pos += snprintf(buf + pos, LEN_OR_ZERO,
+> > > > > -					", __get_str(%s)", field->name);
+> > > > > +					", %s(%s)", str_func, field->name);
+> > > > >  		else
+> > > > >  			pos += snprintf(buf + pos, LEN_OR_ZERO,
+> > > > >  					", REC->%s", field->name);
+> > > > > diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+> > > > 
+> > > > Just a nitpick, if possible, please split this part from the kernel update.
+> > > > 
+> > > 
+> > > I will try to do so, could you help me understand why I would split this
+> > > out? (For future patches)
+> > > 
+> > > I thought the intention of each would be to contain it's logical grouping:
+> > > I wanted to show, yes the code changed, and yes we have a unit test for
+> > > that new condition.
+> > 
+> > Hrm, in this specific case, maybe this can be acceptable. Following
+> > case you might need to take care of it.
+> > 
+> > - if the feature and the test code are maintained by different maintainer.
+> > - if the test code is added much later than the feature.
+> > 
+> > In both case, the piece of patches will be applied separately. The former
+> > case, by different maintainer, the latter case by different tree (e.g. 
+> > stable tree may not have the test case.)
+> > 
+> > BTW, I also think this change is a fix for the previous patches in the series.
+> > In that case, please update those patches so that the patch is completely works.
+> > That will be good for bisecting.
+> > 
+> 
+> Do you mean you want the rest of this change rolled into 04/13 (print_fmt
+> generation)?
+> 
+> And have the char vs char[ rolled into 12/13 (add validators)?
+
+Sure, both are yes :)
+
+> 
+> I can then roll the unit test for this case under 05/13 (ftrace
+> selftest).
+
+That's also good to me :)
+
+Thank you!
+
+> 
+> Thanks,
+> -Beau
 > 
 
-Although, probably not, because documentation should mean only
-Documentation/.
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

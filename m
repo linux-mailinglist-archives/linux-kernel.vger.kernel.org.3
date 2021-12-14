@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68366473FD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08084473FD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbhLNJvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 04:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
+        id S232686AbhLNJvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 04:51:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232647AbhLNJvA (ORCPT
+        with ESMTP id S232676AbhLNJvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 04:51:00 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E252C061751
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 01:51:00 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id d9so31414106wrw.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 01:51:00 -0800 (PST)
+        Tue, 14 Dec 2021 04:51:02 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B83C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 01:51:01 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id i8-20020a7bc948000000b0030db7b70b6bso15841094wml.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 01:51:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=9elements.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UoqofvZsTLn3SZWgvUrY2g8UHV9XmLPJnkQk172OXk4=;
-        b=hB68tQoQD6wtqjDpVCKgTzURxRcRL4C9GdnxcUZvBu6+I4BxO6ifeDBvAuZgmGzzhh
-         gbjn1KsaxSiHFhAkN/I1uJXEM11WgNkO7jr+tNlJ4e12NdNigaTM04CqZSFr+K95iRrL
-         xmlwuEjCqD7y7A5BKn9sagG5I3qsehYHDBUQGFSsiN8tTsmuT7UkJspiEsk4OFLojuvl
-         FXNNHtwLVoUSbIk5s7S2rX3NU/fl2BPgtDYhI3rzAw57UJTH9VueKbpEqKgOD3FZRkDK
-         94f5+6DX8H0ktrPEh0lBgU3kfXbK9dzMaClQHYrMv3FCoHkc6EWsu3tPffBKy73Qg4CF
-         cTpw==
+        bh=QvL6cSotT6zCDdAPa4uv4YcC9fcfaO0IQCDs+UP7OhA=;
+        b=To0gur3eKFHJsX21w7cmkSkqz5iIr5w0YMiedtpEZKoVBK8D+1BQsiVDU7kkOoI3um
+         9T+9NrM3t4ZX9nW1MT1b+74RuOVJEv+GFPoWOjzkP+7FT3b+CwoYYR54Ts44X6pdTNtr
+         oDVsycxRgFYaw3If3u/E3cAY4Y4F9CPSf7VArxLXMWHyixqJgj1khkD7hQOYjSe6NZKT
+         mpemjX1G44qscgbayGdeT2PiMKLYFgINd/tvy4br9ThYNpGD5ZgkUQNJM+3c42xCAWuX
+         cv9THpGo/ZJUIuMNZWb81Nl5icftNZuHRibHY1yuePjJj1YPVELDer9UKjQBNd3wrGmA
+         yIdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UoqofvZsTLn3SZWgvUrY2g8UHV9XmLPJnkQk172OXk4=;
-        b=zxkrmi2tGgLUQLX3Z0Dlp6RSwaUgSBET1UsbgR8beeNE8XwDLd5a4OXrPqfnBuOnbm
-         q6adG2l8qfKUWcbU90eEqMomUx+R/9+LOw5TRbzDmROrOTMZIGhQxm4x2psqQl99hPAY
-         Kuk/jwQzGsiY4xGiDRuNl/JBw8K/l9qP8xokTvFdZCRurvnQKXnXx42+as5t8dg2BDzV
-         zi902GR9juIiCloh81JBkbSmry0VSzKUCi9ohuscJV3Nt28vC1jC5FJeWBNIfe9UikV0
-         +zibwX02SQv/NgeegsVV+JtrrATfwxb9Xj3nh6lbg9z/9hvPc+t7Woq/hOTRJZ/NZPX8
-         Frsg==
-X-Gm-Message-State: AOAM5300aafjkgcJJOn689DNwKzgj2GiLqthk/SSDcPicK84THz430v4
-        tyJgoPqjEX7BFpSQj3Rdb0tAMcNEa5fXMg==
-X-Google-Smtp-Source: ABdhPJynnWm78M3TOb/T++5wTbkaJyEvCtnZXR+VoAoezYTUy8+XaDPydAauILAsPLk+jz38YwylZg==
-X-Received: by 2002:adf:fb09:: with SMTP id c9mr4578324wrr.223.1639475458598;
-        Tue, 14 Dec 2021 01:50:58 -0800 (PST)
+        bh=QvL6cSotT6zCDdAPa4uv4YcC9fcfaO0IQCDs+UP7OhA=;
+        b=BnEoSuY4pYNSzqzglY9BBfQ01Gg7tKkaM8Hvj05jE+h/Zs7glF8MgXAv2pNBSNEpXu
+         DzIhCwVSGPwhaBmMCyOcdxoAo6Y+Ds+PWf5mudLOGA9/gZNjMYnhK07NnjBuW3KujgrM
+         cez+6F/WlmO7iUwi/mnV2RUlMK7nN+rYJQqKrtAkM3TSOY9zAvHQG3+T4QIzEFme4xDN
+         Ju9GqEogc2RdDkYdtGNHS+B09TwlkgIVOCkUR08WQWbOsmWZyJZi7P4XlbID5NhvNfap
+         HkcVK4EYnqpmV5euc4vtoX0wdZNnfsvepHnYAVpyL+10LDxp0zXOnSNeEglbX/ZPDlCP
+         fD/g==
+X-Gm-Message-State: AOAM531H/VdHfSIhJ6nAlzAOcxZSDjQIB6UDcMgELvmRoNBiAfelv77+
+        JDXTpr2W1ouLKLeBh0SBsqezHdYpQpLNtA==
+X-Google-Smtp-Source: ABdhPJwb27AiqA1Y3fkM3GDXYWJAC+nARejXPzWcWmTpXuBDmiJ2tkGELxbeHPoqaq3NC7uVSbIDfA==
+X-Received: by 2002:a05:600c:6006:: with SMTP id az6mr5954257wmb.5.1639475460298;
+        Tue, 14 Dec 2021 01:51:00 -0800 (PST)
 Received: from fedora.sec.9e.network (ip-88-153-139-166.hsi04.unitymediagroup.de. [88.153.139.166])
-        by smtp.gmail.com with ESMTPSA id s24sm1522757wmj.26.2021.12.14.01.50.57
+        by smtp.gmail.com with ESMTPSA id s24sm1522757wmj.26.2021.12.14.01.50.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 01:50:58 -0800 (PST)
+        Tue, 14 Dec 2021 01:50:59 -0800 (PST)
 From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Peter Rosin <peda@axentia.se>
 Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] dt-bindings: i2c Add regulator to pca954x
-Date:   Tue, 14 Dec 2021 10:50:20 +0100
-Message-Id: <20211214095021.572799-3-patrick.rudolph@9elements.com>
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 4/4] i2c-mux-pca954x: Add regulator support
+Date:   Tue, 14 Dec 2021 10:50:21 +0100
+Message-Id: <20211214095021.572799-4-patrick.rudolph@9elements.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211214095021.572799-1-patrick.rudolph@9elements.com>
 References: <20211214095021.572799-1-patrick.rudolph@9elements.com>
@@ -66,36 +64,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a regulator called vcc and update the example.
+Add an optional vcc regulator and enable it when found for devices
+that are powered off by default.
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 ---
- Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/i2c/muxes/i2c-mux-pca954x.c | 33 ++++++++++++++++++++++++-----
+ 1 file changed, 28 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-index bd794cb80c11..5add7db02c0c 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-@@ -64,6 +64,9 @@ properties:
-     description: if present, overrides i2c-mux-idle-disconnect
-     $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
+diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+index 23e0f24bab04..5fa266cb02c0 100644
+--- a/drivers/i2c/muxes/i2c-mux-pca954x.c
++++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+@@ -48,6 +48,7 @@
+ #include <linux/module.h>
+ #include <linux/pm.h>
+ #include <linux/property.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <dt-bindings/mux/mux.h>
+@@ -101,6 +102,7 @@ struct pca954x {
+ 	struct irq_domain *irq;
+ 	unsigned int irq_mask;
+ 	raw_spinlock_t lock;
++	struct regulator *supply;
+ };
  
-+  vcc-supply:
-+    description: An optional voltage regulator supplying power to the chip.
-+
- required:
-   - compatible
-   - reg
-@@ -84,6 +87,8 @@ examples:
-             #size-cells = <0>;
-             reg = <0x74>;
+ /* Provide specs for the PCA954x and MAX735x types we know about */
+@@ -425,6 +427,9 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
+ 	struct pca954x *data = i2c_mux_priv(muxc);
+ 	int c, irq;
  
-+            vcc-supply = <&p3v3>;
++	if (!IS_ERR_OR_NULL(data->supply))
++		regulator_disable(data->supply);
 +
-             interrupt-parent = <&ipic>;
-             interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
-             interrupt-controller;
+ 	if (data->irq) {
+ 		for (c = 0; c < data->chip->nchans; c++) {
+ 			irq = irq_find_mapping(data->irq, c);
+@@ -484,15 +489,31 @@ static int pca954x_probe(struct i2c_client *client,
+ 			     pca954x_select_chan, pca954x_deselect_mux);
+ 	if (!muxc)
+ 		return -ENOMEM;
++
+ 	data = i2c_mux_priv(muxc);
+ 
+ 	i2c_set_clientdata(client, muxc);
+ 	data->client = client;
+ 
++	data->supply = devm_regulator_get(dev, "vcc");
++	if (IS_ERR(data->supply)) {
++		if ((PTR_ERR(data->supply) == -EPROBE_DEFER))
++			return -EPROBE_DEFER;
++		dev_warn(dev, "Failed to get regulator for vcc: %d\n", ret);
++	} else {
++		ret = regulator_enable(data->supply);
++		if (ret) {
++			dev_err(dev, "Failed to enable regulator vcc\n");
++			return ret;
++		}
++	}
++
+ 	/* Reset the mux if a reset GPIO is specified. */
+ 	gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+-	if (IS_ERR(gpio))
+-		return PTR_ERR(gpio);
++	if (IS_ERR(gpio)) {
++		ret = PTR_ERR(gpio);
++		goto fail_cleanup;
++	}
+ 	if (gpio) {
+ 		udelay(1);
+ 		gpiod_set_value_cansleep(gpio, 0);
+@@ -509,7 +530,7 @@ static int pca954x_probe(struct i2c_client *client,
+ 
+ 		ret = i2c_get_device_id(client, &id);
+ 		if (ret && ret != -EOPNOTSUPP)
+-			return ret;
++			goto fail_cleanup;
+ 
+ 		if (!ret &&
+ 		    (id.manufacturer_id != data->chip->id.manufacturer_id ||
+@@ -517,7 +538,8 @@ static int pca954x_probe(struct i2c_client *client,
+ 			dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
+ 				 id.manufacturer_id, id.part_id,
+ 				 id.die_revision);
+-			return -ENODEV;
++			ret = -ENODEV;
++			goto fail_cleanup;
+ 		}
+ 	}
+ 
+@@ -536,7 +558,8 @@ static int pca954x_probe(struct i2c_client *client,
+ 	ret = pca954x_init(client, data);
+ 	if (ret < 0) {
+ 		dev_warn(dev, "probe failed\n");
+-		return -ENODEV;
++		ret = -ENODEV;
++		goto fail_cleanup;
+ 	}
+ 
+ 	ret = pca954x_irq_setup(muxc);
 -- 
 2.33.1
 

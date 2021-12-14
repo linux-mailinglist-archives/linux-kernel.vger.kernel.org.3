@@ -2,385 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA45473A7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08075473A76
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243430AbhLNBvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 20:51:45 -0500
-Received: from conssluserg-03.nifty.com ([210.131.2.82]:41987 "EHLO
-        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243043AbhLNBvo (ORCPT
+        id S241551AbhLNBve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 20:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229593AbhLNBv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 20:51:44 -0500
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 1BE1pDfO028549;
-        Tue, 14 Dec 2021 10:51:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 1BE1pDfO028549
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1639446674;
-        bh=3/EkUoEcHBmkVRz3hiCyZKZAwoNv+2cx9sxfY7C4+KI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=0leVS9ar8ZWpC2TOGiHuHKcXdyZKSiiT2PgOPaKaY1r8JyaPYr331M0nUMBkYIItP
-         fGSwe5qJWFVu4sN/Y9KVC5jjeqbvlzUQIgfJqJg0XFnnzJAwlYrs/pBBTbay2QSqZ8
-         5fwBq1fOjI/QYD6H7GoF8uM7RTYX2CVhfqJl+6UWQ0qwZiALouqjofFhOABvSgE7tt
-         uai7SFzDYnQiQfzlG3FFMBVXzg4aJOvXxIu75kFhOu6MadtRroPpFCLsPxR1qhI9r/
-         XhtT0CMvKQyZUchGBXJVSx7ZvBrbRQq0L3Wfd6PRfC2MYPGleyELFMLHi5lszHD9Tm
-         dgnBgkM0k4pPw==
-X-Nifty-SrcIP: [209.85.215.178]
-Received: by mail-pg1-f178.google.com with SMTP id a23so11484187pgm.4;
-        Mon, 13 Dec 2021 17:51:13 -0800 (PST)
-X-Gm-Message-State: AOAM532Jht7kmnyQrON9c0FlM/MZsfsTABXhR4wSyl+F4cqyL48AKjmQ
-        umfu2comubSpecf9FuIHozjhww6+f191JxiyURw=
-X-Google-Smtp-Source: ABdhPJzVHprB5sjOfog2AdC1imtBW4s2pKycmVgVhkUJrBAsYSGHxMTDealFDdDt2adn8O7ETjwYJRRMBFpRcLwl2v4=
-X-Received: by 2002:a65:50c6:: with SMTP id s6mr1697806pgp.352.1639446672919;
- Mon, 13 Dec 2021 17:51:12 -0800 (PST)
+        Mon, 13 Dec 2021 20:51:29 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5724C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 17:51:28 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id v203so42767395ybe.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 17:51:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p+dWtLIBLgyf5m6vDOvHH1tJV2BCoBwz05I/KJmnKuE=;
+        b=DvFWLj+GQaI1l+qs3mCkJtfm275uA3mlNG/rJ3MKC64CXPslooLjSW2IySb6ZbbyX4
+         WakmaumR4drgF8FIOsOwjiO0bl4lCNg7l3oSyGyy0tO20GpuvyJwFYluWrSucFy4NRHJ
+         8yagRjniAuIDi2AgRQHCOBsakZE0axfKbP9qA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p+dWtLIBLgyf5m6vDOvHH1tJV2BCoBwz05I/KJmnKuE=;
+        b=xmy+NOJHUKuAqCtjI02KoG3N6LsFD03QRlyXmLDpJSkO14SvHYKuik+i930rnkWl77
+         JdMqGmcIAthtCaS4cQaLmg/3BkFp8qsG0CgfCpzsedpwcX7bnKXDAKtdrgFMzeF7Jn22
+         CVxNrSk4JLvhKd34UEqrGLk89WBwp+UZoH1quINF2Jcm9CVw8dnIq9/x3XIDFmUBxJ9P
+         Ot5YHCTkYsFSmtwpOTAxGR1X/AjH1K91IDPEb4g9QNArEfDeutOPzjPjq9W6vAyszZTg
+         l4GlDSZQva5gdQrNPZGcuV1cvWVV6b/cZE4Yu4yuIAmy46pR1F4ZjvcfkbDd6xtuzSjU
+         GJRg==
+X-Gm-Message-State: AOAM533eZqd4JwhLG8D8jXYn4LO550olUKxYi8Unidc1IaHDlYU9S1Rl
+        hKkoBGoB3R7B18yW3jgQ9KC6CSnCfxzLb/sdYkyd
+X-Google-Smtp-Source: ABdhPJxHzd4+EPUZtXUvL0GWI90tGFXbdfycif0Ag2i1gAVrb5q6B7nsd/r3q9M+hc1HPeciYyvnw+bw5t6Pw1eD/s0=
+X-Received: by 2002:a5b:b90:: with SMTP id l16mr2473159ybq.632.1639446687827;
+ Mon, 13 Dec 2021 17:51:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20211212192941.1149247-1-masahiroy@kernel.org>
- <20211212192941.1149247-9-masahiroy@kernel.org> <YbdH0xZHlG7TtV3n@buildd.core.avm.de>
-In-Reply-To: <YbdH0xZHlG7TtV3n@buildd.core.avm.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 14 Dec 2021 10:50:34 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQRe4LiFyGXYp2Khdj=RZ2es8UXMK8toOi5EqYUv_zV=A@mail.gmail.com>
-Message-ID: <CAK7LNAQRe4LiFyGXYp2Khdj=RZ2es8UXMK8toOi5EqYUv_zV=A@mail.gmail.com>
-Subject: Re: [PATCH 08/10] kbuild: do not include include/config/auto.conf
- from shell scripts
-To:     Nicolas Schier <n.schier@avm.de>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>
+References: <20211213112034.2896536-1-heiko@sntech.de>
+In-Reply-To: <20211213112034.2896536-1-heiko@sntech.de>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Mon, 13 Dec 2021 17:51:17 -0800
+Message-ID: <CAOnJCUJ9YBOrNEj-nxAWctGPSTj6yUVOkiwQEpFELuf8B6SqLg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] riscv: prevent null-pointer dereference with sbi_remote_fence_i
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        =?UTF-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 10:34 PM Nicolas Schier <n.schier@avm.de> wrote:
+On Mon, Dec 13, 2021 at 3:21 AM Heiko Stuebner <heiko@sntech.de> wrote:
 >
-> On Mon, Dec 13, 2021 at 04:29:39AM +0900, Masahiro Yamada wrote:
-> > Richard Weinberger pointed out the risk of sourcing the kernel config
-> > from shell scripts [1], and proposed some patches [2], [3]. It is a good
-> > point, but it took a long time because I was wondering how to fix this.
-> >
-> > This commit goes with simple grep approach because there are only a few
-> > scripts including the kernel configuration.
-> >
-> > scripts/link_vmlinux.sh has references to a bunch of CONFIG options,
-> > all of which are boolean. I added is_enabled() helper as
-> > scripts/package/{mkdebian,builddeb} do.
-> >
-> > scripts/gen_autoksyms.sh uses 'eval', stating "to expand the whitelist
-> > path". I removed it since it is the issue we are trying to fix.
-> >
-> > I was a bit worried about the cost of invoking the grep command over
-> > again. I extracted the grep parts from it, and measured the cost. It
-> > was approximately 0.03 sec, which I hope is acceptable.
-> >
-> > [test code]
-> >
-> >   $ cat test-grep.sh
-> >   #!/bin/sh
-> >
-> >   is_enabled() {
-> >           grep -q "^$1=y" include/config/auto.conf
-> >   }
-> >
-> >   is_enabled CONFIG_LTO_CLANG
-> >   is_enabled CONFIG_LTO_CLANG
-> >   is_enabled CONFIG_STACK_VALIDATION
-> >   is_enabled CONFIG_UNWINDER_ORC
-> >   is_enabled CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
-> >   is_enabled CONFIG_VMLINUX_VALIDATION
-> >   is_enabled CONFIG_FRAME_POINTER
-> >   is_enabled CONFIG_GCOV_KERNEL
-> >   is_enabled CONFIG_LTO_CLANG
-> >   is_enabled CONFIG_RETPOLINE
-> >   is_enabled CONFIG_X86_SMAP
-> >   is_enabled CONFIG_LTO_CLANG
-> >   is_enabled CONFIG_VMLINUX_MAP
-> >   is_enabled CONFIG_KALLSYMS_ALL
-> >   is_enabled CONFIG_KALLSYMS_ABSOLUTE_PERCPU
-> >   is_enabled CONFIG_KALLSYMS_BASE_RELATIVE
-> >   is_enabled CONFIG_DEBUG_INFO_BTF
-> >   is_enabled CONFIG_KALLSYMS
-> >   is_enabled CONFIG_DEBUG_INFO_BTF
-> >   is_enabled CONFIG_BPF
-> >   is_enabled CONFIG_BUILDTIME_TABLE_SORT
-> >   is_enabled CONFIG_KALLSYMS
-> >
-> >   $ time ./test-grep.sh
-> >   real    0m0.036s
-> >   user    0m0.027s
-> >   sys     m0.009s
-> >
-> > [1]: https://lore.kernel.org/all/1919455.eZKeABUfgV@blindfold/
-> > [2]: https://lore.kernel.org/all/20180219092245.26404-1-richard@nod.at/
-> > [3]: https://lore.kernel.org/all/20210920213957.1064-2-richard@nod.at/
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  scripts/gen_autoksyms.sh |  6 ++---
-> >  scripts/link-vmlinux.sh  | 47 ++++++++++++++++++++--------------------
-> >  scripts/setlocalversion  |  9 ++++----
-> >  3 files changed, 30 insertions(+), 32 deletions(-)
-> >
-> > diff --git a/scripts/gen_autoksyms.sh b/scripts/gen_autoksyms.sh
-> > index 6ed0d225c8b1..12ffb01f13cb 100755
-> > --- a/scripts/gen_autoksyms.sh
-> > +++ b/scripts/gen_autoksyms.sh
-> > @@ -26,10 +26,8 @@ if [ -n "$CONFIG_MODVERSIONS" ]; then
-> >       needed_symbols="$needed_symbols module_layout"
-> >  fi
+> The callback used inside sbi_remote_fence_i is set at sbi probe time
+> to the needed variant. Before that it is a NULL pointer.
 >
-> As kernel test robot pointed out, gen_autoksyms.sh still sources
-> include/config/auto.conf.  What about this:
+> The selection between using sbi_remote_fence_i or ipi_remote_fence_i
+> right now is solely done on the presence of the RISCV_SBI config option.
+>
+> On a multiplatform kernel, SBI will probably always be built in, but
+> in the future not all machines using that kernel may have SBI
+> on them, so in some cases this setup can lead to NULL pointer dereferences.
+>
 
-Ah, right.
-I missed to fix up this hunk somehow...
+I didn't quite understand this. The only platforms without SBI are
+M-mode Linux based platforms.
+All other platforms will require SBI if the kernel is running on
+supervisor mode.
 
-Thanks for the view.
+They may not need SBI IPI or SBI RFENCE extensions if an alternate
+mechanism(ACLINT SSWI or AIA IMSIC)
+is already available in hardware. IIRC, Anup's aclint & aia series
+already takes care of that.
 
+> Also if in future one of the flush_icache_all / flush_icache_mm functions
+> gets called earlier in the boot process - before sbi_init - this would
+> trigger the issue.
+>
 
+sbi_init is called before setup_smp. Do you think there is a use case where
+flush_icache_xxx can be called before smp initialization ?
 
+> To prevent this, add a default __sbi_rfence_none returning an error code
+> and adapt the callers to check for an error from the remote fence
+> to then fall back to the other method.
+>
 
+Having said that, it is always good to have guards to avoid NULL
+pointer dereferences.
+However, the commit text may be updated based on the above questions.
+
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> ---
+>  arch/riscv/kernel/sbi.c    | 10 +++++++++-
+>  arch/riscv/mm/cacheflush.c | 25 +++++++++++++++++--------
+>  2 files changed, 26 insertions(+), 9 deletions(-)
 >
-> diff --git a/scripts/gen_autoksyms.sh b/scripts/gen_autoksyms.sh
-> index 31872d95468b..be9ee250200e 100755
-> --- a/scripts/gen_autoksyms.sh
-> +++ b/scripts/gen_autoksyms.sh
-> @@ -16,13 +16,11 @@ case "$KBUILD_VERBOSE" in
->         ;;
->  esac
+> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+> index 7402a417f38e..69d0a96b97d0 100644
+> --- a/arch/riscv/kernel/sbi.c
+> +++ b/arch/riscv/kernel/sbi.c
+> @@ -14,11 +14,19 @@
+>  unsigned long sbi_spec_version __ro_after_init = SBI_SPEC_VERSION_DEFAULT;
+>  EXPORT_SYMBOL(sbi_spec_version);
 >
-> -# We need access to CONFIG_ symbols
-> -. include/config/auto.conf
+> +static int __sbi_rfence_none(int fid, const unsigned long *hart_mask,
+> +                            unsigned long start, unsigned long size,
+> +                            unsigned long arg4, unsigned long arg5)
+> +{
+> +       return -EOPNOTSUPP;
+> +}
+> +
+>  static void (*__sbi_set_timer)(uint64_t stime) __ro_after_init;
+>  static int (*__sbi_send_ipi)(const unsigned long *hart_mask) __ro_after_init;
+>  static int (*__sbi_rfence)(int fid, const unsigned long *hart_mask,
+>                            unsigned long start, unsigned long size,
+> -                          unsigned long arg4, unsigned long arg5) __ro_after_init;
+> +                          unsigned long arg4, unsigned long arg5)
+> +                          __ro_after_init = __sbi_rfence_none;
 >
->  needed_symbols=
+>  struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
+>                         unsigned long arg1, unsigned long arg2,
+> diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
+> index 89f81067e09e..128e23c094ea 100644
+> --- a/arch/riscv/mm/cacheflush.c
+> +++ b/arch/riscv/mm/cacheflush.c
+> @@ -16,11 +16,15 @@ static void ipi_remote_fence_i(void *info)
 >
->  # Special case for modversions (see modpost.c)
-> -if [ -n "$CONFIG_MODVERSIONS" ]; then
-> +if grep -qe "^CONFIG_MODVERSIONS=y" include/config/auto.conf; then
->         needed_symbols="$needed_symbols module_layout"
->  fi
+>  void flush_icache_all(void)
+>  {
+> +       int ret = -EINVAL;
+> +
+>         local_flush_icache_all();
+>
+>         if (IS_ENABLED(CONFIG_RISCV_SBI))
+> -               sbi_remote_fence_i(NULL);
+> -       else
+> +               ret = sbi_remote_fence_i(NULL);
+> +
+> +       /* fall back to ipi_remote_fence_i if sbi failed or not available */
+> +       if (ret)
+>                 on_each_cpu(ipi_remote_fence_i, NULL, 1);
+>  }
+>  EXPORT_SYMBOL(flush_icache_all);
+> @@ -66,13 +70,18 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
+>                  * with flush_icache_deferred().
+>                  */
+>                 smp_mb();
+> -       } else if (IS_ENABLED(CONFIG_RISCV_SBI)) {
+> -               cpumask_t hartid_mask;
+> -
+> -               riscv_cpuid_to_hartid_mask(&others, &hartid_mask);
+> -               sbi_remote_fence_i(cpumask_bits(&hartid_mask));
+>         } else {
+> -               on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
+> +               int ret = -EINVAL;
+> +
+> +               if (IS_ENABLED(CONFIG_RISCV_SBI)) {
+> +                       cpumask_t hartid_mask;
+> +
+> +                       riscv_cpuid_to_hartid_mask(&others, &hartid_mask);
+> +                       ret = sbi_remote_fence_i(cpumask_bits(&hartid_mask));
+
+This API is removed in sparse hartid series[1]. You may want to rebase
+on top of it.
+
+[1] https://patchwork.kernel.org/project/linux-riscv/list/?series=590195
+
+> +               }
+> +
+> +               if (ret)
+> +                       on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
+>         }
+>
+>         preempt_enable();
+> --
+> 2.30.2
 >
 >
-> For the other hunks:
->
-> Reviewed-by: Nicolas Schier <n.schier@avm.de>
->
->
-> >
-> > -ksym_wl=
-> > -if [ -n "$CONFIG_UNUSED_KSYMS_WHITELIST" ]; then
-> > -     # Use 'eval' to expand the whitelist path and check if it is relative
-> > -     eval ksym_wl="$CONFIG_UNUSED_KSYMS_WHITELIST"
-> > +ksym_wl=$(sed -n 's/^CONFIG_UNUSED_KSYMS_WHITELIST="\(.*\)"$/\1/p' include/config/auto.conf)
-> > +if [ -n "$ksym_wl" ]; then
-> >       [ "${ksym_wl}" != "${ksym_wl#/}" ] || ksym_wl="$abs_srctree/$ksym_wl"
-> >       if [ ! -f "$ksym_wl" ] || [ ! -r "$ksym_wl" ]; then
-> >               echo "ERROR: '$ksym_wl' whitelist file not found" >&2
-> > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> > index 5cdd9bc5c385..a4b61a2f65db 100755
-> > --- a/scripts/link-vmlinux.sh
-> > +++ b/scripts/link-vmlinux.sh
-> > @@ -34,6 +34,10 @@ LD="$1"
-> >  KBUILD_LDFLAGS="$2"
-> >  LDFLAGS_vmlinux="$3"
-> >
-> > +is_enabled() {
-> > +     grep -q "^$1=y" include/config/auto.conf
-> > +}
-> > +
-> >  # Nice output in kbuild format
-> >  # Will be supressed by "make -s"
-> >  info()
-> > @@ -80,11 +84,11 @@ modpost_link()
-> >               ${KBUILD_VMLINUX_LIBS}                          \
-> >               --end-group"
-> >
-> > -     if [ -n "${CONFIG_LTO_CLANG}" ]; then
-> > +     if is_enabled CONFIG_LTO_CLANG; then
-> >               gen_initcalls
-> >               lds="-T .tmp_initcalls.lds"
-> >
-> > -             if [ -n "${CONFIG_MODVERSIONS}" ]; then
-> > +             if is_enabled CONFIG_MODVERSIONS; then
-> >                       gen_symversions
-> >                       lds="${lds} -T .tmp_symversions.lds"
-> >               fi
-> > @@ -104,21 +108,21 @@ objtool_link()
-> >       local objtoolcmd;
-> >       local objtoolopt;
-> >
-> > -     if [ "${CONFIG_LTO_CLANG} ${CONFIG_STACK_VALIDATION}" = "y y" ]; then
-> > +     if is_enabled CONFIG_LTO_CLANG && is_enabled CONFIG_STACK_VALIDATION; then
-> >               # Don't perform vmlinux validation unless explicitly requested,
-> >               # but run objtool on vmlinux.o now that we have an object file.
-> > -             if [ -n "${CONFIG_UNWINDER_ORC}" ]; then
-> > +             if is_enabled CONFIG_UNWINDER_ORC; then
-> >                       objtoolcmd="orc generate"
-> >               fi
-> >
-> >               objtoolopt="${objtoolopt} --duplicate"
-> >
-> > -             if [ -n "${CONFIG_FTRACE_MCOUNT_USE_OBJTOOL}" ]; then
-> > +             if is_enabled CONFIG_FTRACE_MCOUNT_USE_OBJTOOL; then
-> >                       objtoolopt="${objtoolopt} --mcount"
-> >               fi
-> >       fi
-> >
-> > -     if [ -n "${CONFIG_VMLINUX_VALIDATION}" ]; then
-> > +     if is_enabled CONFIG_VMLINUX_VALIDATION; then
-> >               objtoolopt="${objtoolopt} --noinstr"
-> >       fi
-> >
-> > @@ -127,16 +131,16 @@ objtool_link()
-> >                       objtoolcmd="check"
-> >               fi
-> >               objtoolopt="${objtoolopt} --vmlinux"
-> > -             if [ -z "${CONFIG_FRAME_POINTER}" ]; then
-> > +             if ! is_enabled CONFIG_FRAME_POINTER; then
-> >                       objtoolopt="${objtoolopt} --no-fp"
-> >               fi
-> > -             if [ -n "${CONFIG_GCOV_KERNEL}" ] || [ -n "${CONFIG_LTO_CLANG}" ]; then
-> > +             if is_enabled CONFIG_GCOV_KERNEL || is_enabled CONFIG_LTO_CLANG; then
-> >                       objtoolopt="${objtoolopt} --no-unreachable"
-> >               fi
-> > -             if [ -n "${CONFIG_RETPOLINE}" ]; then
-> > +             if is_enabled CONFIG_RETPOLINE; then
-> >                       objtoolopt="${objtoolopt} --retpoline"
-> >               fi
-> > -             if [ -n "${CONFIG_X86_SMAP}" ]; then
-> > +             if is_enabled CONFIG_X86_SMAP; then
-> >                       objtoolopt="${objtoolopt} --uaccess"
-> >               fi
-> >               info OBJTOOL ${1}
-> > @@ -161,7 +165,7 @@ vmlinux_link()
-> >       # skip output file argument
-> >       shift
-> >
-> > -     if [ -n "${CONFIG_LTO_CLANG}" ]; then
-> > +     if is_enabled CONFIG_LTO_CLANG; then
-> >               # Use vmlinux.o instead of performing the slow LTO link again.
-> >               objs=vmlinux.o
-> >               libs=
-> > @@ -189,7 +193,7 @@ vmlinux_link()
-> >               ldflags="${ldflags} ${wl}--strip-debug"
-> >       fi
-> >
-> > -     if [ -n "${CONFIG_VMLINUX_MAP}" ]; then
-> > +     if is_enabled CONFIG_VMLINUX_MAP; then
-> >               ldflags="${ldflags} ${wl}-Map=${output}.map"
-> >       fi
-> >
-> > @@ -239,15 +243,15 @@ kallsyms()
-> >  {
-> >       local kallsymopt;
-> >
-> > -     if [ -n "${CONFIG_KALLSYMS_ALL}" ]; then
-> > +     if is_enabled CONFIG_KALLSYMS_ALL; then
-> >               kallsymopt="${kallsymopt} --all-symbols"
-> >       fi
-> >
-> > -     if [ -n "${CONFIG_KALLSYMS_ABSOLUTE_PERCPU}" ]; then
-> > +     if is_enabled CONFIG_KALLSYMS_ABSOLUTE_PERCPU; then
-> >               kallsymopt="${kallsymopt} --absolute-percpu"
-> >       fi
-> >
-> > -     if [ -n "${CONFIG_KALLSYMS_BASE_RELATIVE}" ]; then
-> > +     if is_enabled CONFIG_KALLSYMS_BASE_RELATIVE; then
-> >               kallsymopt="${kallsymopt} --base-relative"
-> >       fi
-> >
-> > @@ -312,9 +316,6 @@ if [ "$1" = "clean" ]; then
-> >       exit 0
-> >  fi
-> >
-> > -# We need access to CONFIG_ symbols
-> > -. include/config/auto.conf
-> > -
-> >  # Update version
-> >  info GEN .version
-> >  if [ -r .version ]; then
-> > @@ -343,7 +344,7 @@ tr '\0' '\n' < modules.builtin.modinfo | sed -n 's/^[[:alnum:]:_]*\.file=//p' |
-> >       tr ' ' '\n' | uniq | sed -e 's:^:kernel/:' -e 's/$/.ko/' > modules.builtin
-> >
-> >  btf_vmlinux_bin_o=""
-> > -if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
-> > +if is_enabled CONFIG_DEBUG_INFO_BTF; then
-> >       btf_vmlinux_bin_o=.btf.vmlinux.bin.o
-> >       if ! gen_btf .tmp_vmlinux.btf $btf_vmlinux_bin_o ; then
-> >               echo >&2 "Failed to generate BTF for vmlinux"
-> > @@ -355,7 +356,7 @@ fi
-> >  kallsymso=""
-> >  kallsymso_prev=""
-> >  kallsyms_vmlinux=""
-> > -if [ -n "${CONFIG_KALLSYMS}" ]; then
-> > +if is_enabled CONFIG_KALLSYMS; then
-> >
-> >       # kallsyms support
-> >       # Generate section listing all symbols and add it into vmlinux
-> > @@ -395,12 +396,12 @@ fi
-> >  vmlinux_link vmlinux "${kallsymso}" ${btf_vmlinux_bin_o}
-> >
-> >  # fill in BTF IDs
-> > -if [ -n "${CONFIG_DEBUG_INFO_BTF}" -a -n "${CONFIG_BPF}" ]; then
-> > +if is_enabled CONFIG_DEBUG_INFO_BTF && is_enabled CONFIG_BPF; then
-> >       info BTFIDS vmlinux
-> >       ${RESOLVE_BTFIDS} vmlinux
-> >  fi
-> >
-> > -if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
-> > +if is_enabled CONFIG_BUILDTIME_TABLE_SORT; then
-> >       info SORTTAB vmlinux
-> >       if ! sorttable vmlinux; then
-> >               echo >&2 Failed to sort kernel tables
-> > @@ -412,7 +413,7 @@ info SYSMAP System.map
-> >  mksysmap vmlinux System.map
-> >
-> >  # step a (see comment above)
-> > -if [ -n "${CONFIG_KALLSYMS}" ]; then
-> > +if is_enabled CONFIG_KALLSYMS; then
-> >       mksysmap ${kallsyms_vmlinux} .tmp_System.map
-> >
-> >       if ! cmp -s System.map .tmp_System.map; then
-> > diff --git a/scripts/setlocalversion b/scripts/setlocalversion
-> > index 6b54e46a0f12..d06137405190 100755
-> > --- a/scripts/setlocalversion
-> > +++ b/scripts/setlocalversion
-> > @@ -111,9 +111,7 @@ if $scm_only; then
-> >       exit
-> >  fi
-> >
-> > -if test -e include/config/auto.conf; then
-> > -     . include/config/auto.conf
-> > -else
-> > +if ! test -e include/config/auto.conf; then
-> >       echo "Error: kernelrelease not valid - run 'make prepare' to update it" >&2
-> >       exit 1
-> >  fi
-> > @@ -125,10 +123,11 @@ if test ! "$srctree" -ef .; then
-> >  fi
-> >
-> >  # CONFIG_LOCALVERSION and LOCALVERSION (if set)
-> > -res="${res}${CONFIG_LOCALVERSION}${LOCALVERSION}"
-> > +config_localversion=$(sed -n 's/^CONFIG_LOCALVERSION="\(.*\)"$/\1/p' include/config/auto.conf)
-> > +res="${res}${config_localversion}${LOCALVERSION}"
-> >
-> >  # scm version string if not at a tagged commit
-> > -if test "$CONFIG_LOCALVERSION_AUTO" = "y"; then
-> > +if grep -q "^CONFIG_LOCALVERSION_AUTO=y$" include/config/auto.conf; then
-> >       # full scm version string
-> >       res="$res$(scm_version)"
-> >  elif [ "${LOCALVERSION+set}" != "set" ]; then
-> > --
-> > 2.32.0
-> >
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
 
 
 -- 
-Best Regards
-Masahiro Yamada
+Regards,
+Atish

@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F95473D9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 08:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A8F473DA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 08:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbhLNHYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 02:24:55 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:29129 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbhLNHYz (ORCPT
+        id S231432AbhLNHZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 02:25:18 -0500
+Received: from mail-m17643.qiye.163.com ([59.111.176.43]:61632 "EHLO
+        mail-m17643.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229771AbhLNHZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 02:24:55 -0500
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JCqZC0kpnz1DJw6;
-        Tue, 14 Dec 2021 15:21:55 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 15:24:53 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 15:24:52 +0800
-Subject: Re: [PATCH] smp: Fix the comments of smp_call_function_many()
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Nadav Amit <namit@vmware.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20211213035755.73-1-thunder.leizhen@huawei.com>
- <4493a665-23f9-0a39-6d9a-ec3bb97e7015@intel.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <2871cf9d-ed8d-975f-ba46-429f8fe8560e@huawei.com>
-Date:   Tue, 14 Dec 2021 15:24:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <4493a665-23f9-0a39-6d9a-ec3bb97e7015@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+        Tue, 14 Dec 2021 02:25:17 -0500
+DKIM-Signature: a=rsa-sha256;
+        b=np0mnIbQZRcPL3ecjnxP5Ec/iyUJDD92KeXhYOR0YTWJJ2vqHBuyAo1rIPl1wP9fGMa3DhyiWZ/Pf9v7jceAIyFiPOQyq1Si/FMETPQmgHmjVZQrWmE3J+FAF8DS9MGTPXyZL8E7cQNIFIIOpItAJcZA/LnjLQGocKdwY3dvg3c=;
+        s=default; c=relaxed/relaxed; d=vivo.com; v=1;
+        bh=t2RMvbGFsTcBNEX0mFuf3aE1IjGCzIGg2vVVDrmznss=;
+        h=date:mime-version:subject:message-id:from;
+Received: from vivo-600-G6.vivo.xyz (unknown [58.251.74.232])
+        by mail-m17643.qiye.163.com (Hmail) with ESMTPA id AAFDE7E019F;
+        Tue, 14 Dec 2021 15:25:14 +0800 (CST)
+From:   Yaqin Pan <akingchen@vivo.com>
+To:     thinh.nguyen@synopsys.com
+Cc:     akingchen@vivo.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        kernel@vivo.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: add sprs_ctrl_trans_quirk
+Date:   Tue, 14 Dec 2021 15:25:05 +0800
+Message-Id: <20211214072505.9576-1-akingchen@vivo.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <2b09270f-eb8f-08bd-2133-1a92a34921c2@synopsys.com>
+References: <2b09270f-eb8f-08bd-2133-1a92a34921c2@synopsys.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWUJCQ0pWSEhCSRlOTxpPTU
+        gZVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OAg6Tzo5GT5MTD0uDk4KNEgw
+        MhJPCUhVSlVKTUhCT01NTEpOT0JDVTMWGhIXVRoQEhUcGBMeFTsNEg0UVRgUFkVZV1kSC1lBWU5D
+        VUlOSlVMT1VJSElZV1kIAVlBSUJLTDcG
+X-HM-Tid: 0a7db7d4c810d999kuwsaafde7e019f
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Thinh:
+> Add a quirk to set GUCTL.SPRSCTRLTRANSEN bit.
+>
+>Can you explain the problem in more detail?
 
+sure i will resend the  patch 
+>
+>> For example, TF card reader (aaaa:8816):
+>> usb 1-1: new high-speed USB device number 2 using xhci-hcd
+>> usb 1-1: device descriptor read/all, error -110
+>> From the usb analyzer, always return NAK in the data phase.
+>
+>And how this change help to resolve this issue.
 
-On 2021/12/14 2:05, Dave Hansen wrote:
-> On 12/12/21 7:57 PM, Zhen Lei wrote:
->> diff --git a/kernel/smp.c b/kernel/smp.c
->> index 01a7c1706a58b1d..6ec884f41b7506d 100644
->> --- a/kernel/smp.c
->> +++ b/kernel/smp.c
->> @@ -861,6 +861,13 @@ EXPORT_SYMBOL_GPL(smp_call_function_any);
->>  #define SCF_WAIT	(1U << 0)
->>  #define SCF_RUN_LOCAL	(1U << 1)
->>  
->> +/**
->> + * smp_call_function_many_cond(): Run a function on a set of CPUs.
->> + * @scf_flags: Bitmask that controls the operation. If %SCF_WAIT is set,
->> + *        wait (atomically) until function has completed on other CPUs. If
->> + *        %SCF_RUN_LOCAL is set, the function will also be run locally
->> + *        if the local CPU is set in the @cpumask.
->> + */
-> 
-> Fixing up the smp_call_function_many() comment is a good idea.  But, the
-> new smp_call_function_many_cond() comment duplicates these which are
-> _just_ above it:
+Some device are slow in responding to Control transfers. Scheduling mulitiple 
+transactions in one microframe/frame can cause the devices to misbehave.
+if this qurik is enabled, the host controller schedules transations for 
+a Control transfer in defferent microframes/frame.
 
-Yes, maybe we just need to list SCF_WAIT and SCF_RUN_LOCAL here.
+>
+>Also note in the patch that this is for host mode.
 
-> 
->> /*
->>  * Flags to be used as scf_flags argument of smp_call_function_many_cond().
->>  *
->>  * %SCF_WAIT:           Wait until function execution is completed
->>  * %SCF_RUN_LOCAL:      Run also locally if local cpu is set in cpumask
->>  */
->> #define SCF_WAIT        (1U << 0)
->> #define SCF_RUN_LOCAL   (1U << 1)
-> 
-> Could we comment the bits in one place?
-
-Yes, I think we should delete the line "Flags to be used ..."
-
-> .
-> 
+yes, this is only for host mode
+>
+>>
+>> Signed-off-by: Yaqin Pan <akingchen@xxxxxxxx>
+>> ---
+>> drivers/usb/dwc3/core.c | 4 ++++
+>> drivers/usb/dwc3/core.h | 3 +++
+>> 2 files changed, 7 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index ba74ad7f6995..93ac2c79a2c0 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -1071,6 +1071,8 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>> * packet with Retry=1 & Nump != 0)
+>> */
+>> reg |= DWC3_GUCTL_HSTINAUTORETRY;
+>> + if (dwc->sprs_ctrl_trans_quirk)
+>> + reg |= DWC3_GUCTL_SPRSCTRLTRANSEN;
+>>
+>> dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
+>> }
+>> @@ -1377,6 +1379,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>
+>> dwc->dis_split_quirk = device_property_read_bool(dev,
+>> "snps,dis-split-quirk");
+>> + dwc->sprs_ctrl_trans_quirk = device_property_read_bool(dev,
+>> + "snps,sprs-ctrl-trans-quirk");
+>
+>Since you're adding a new device property, please add another patch to
+>document it in Documentation/devicetree/bindings/usb
+I will upload a patch serials for that
+>
+I will renew the patch,thanks~
+Yaqin

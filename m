@@ -2,89 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8AD474A81
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65879474A5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236882AbhLNSKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 13:10:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234145AbhLNSKE (ORCPT
+        id S236846AbhLNSFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:05:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35266 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236881AbhLNSFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 13:10:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB011C061574;
-        Tue, 14 Dec 2021 10:10:04 -0800 (PST)
+        Tue, 14 Dec 2021 13:05:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80E17B81BF7;
-        Tue, 14 Dec 2021 18:10:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C46C3C34600;
-        Tue, 14 Dec 2021 18:10:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE3A761666;
+        Tue, 14 Dec 2021 18:05:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD9DC34600;
+        Tue, 14 Dec 2021 18:04:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639505402;
-        bh=SERQS1Iphdy72qEnbrPAj6PSYIpJdhFgGJyK9pnOnRY=;
+        s=k20201202; t=1639505101;
+        bh=38BfpnLT7pSh5gg1tbVifrBHY3fyw+pgfV+46h0GvJc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mR0s+hcKl8IRgGh5JAGwwjWWXyVG+Ya9TSuD7oyIvrOdE9y0T0BPsKLOIoVACANmj
-         +vij9i7luyFnNflu0Ehkr9mLx13U2nqIu4FcNs9WwL9Kkh892PDNjediPTVmys4kUx
-         Ve2an3O+UdiDTxGIn+6e28oB9ly4RkHNdgBXynEM/UBHQkrn8ZyMyIO/wQHLs7vE7m
-         9vIwaMQv3csy8Qo9jGHSFBHNlcd8E7+JUj8q8OwzSNI1LdaHMHOUSJaw7X+0v6qwHq
-         0yKubkvNa96k70B6HsVzjOUAZJayaaHGcbNAqkcsO1XyABylgdnxk+YHnCI4usuC2c
-         CYVnIhpARGxwA==
-Date:   Tue, 14 Dec 2021 11:09:58 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        list@opendingux.net, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3] MIPS: Add support for LTO
-Message-ID: <Ybjd9qQvYG4pFJYH@archlinux-ax161>
-References: <20211213224914.1501303-1-paul@crapouillou.net>
- <20211213224914.1501303-4-paul@crapouillou.net>
+        b=Bh2kFuPEDPBA3egL9WEH4Lb/0bjnQuzJGpLEx+cjS0XZRFDDJ5s8v0B5ePioWrBp1
+         NMBM2fHlVbaeVu9RxDureOm7jlcXauk/Egg5E4e9jV24w1udV4RDkj7a7SrDCxxhej
+         zbBeubJLYH9kOCDK1mblmSWaPuaSbuywtyaCC/BbdivRG9Q0iWDGlBRoa6DOqpIvDI
+         0eSnwfFTP6lzIp4Hf//v0s2Kql0RKTU9eoKAbp6P49Zo4LvgaR7yl8PxOoZt9KVp5N
+         ijSNHagXa8K7hzBXB/xCpxrZ03lj7UHJ/2L/DXX5pwEEWsEZ7SC3cu246SBjEX/UAw
+         rG8cRAzdehUBw==
+Date:   Tue, 14 Dec 2021 12:10:40 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     paul@paul-moore.com, eparis@redhat.com, keescook@chromium.org,
+        linux-audit@redhat.com, linux-kernel@vger.kernel.org,
+        wangweiyang2@huawei.com, linux-hardening@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: Re: [PATCH -next] audit: use struct_size() helper in kmalloc()
+Message-ID: <20211214181040.GA13575@embeddedor>
+References: <20211214114854.133328-1-xiujianfeng@huawei.com>
+ <20211214175448.GA13107@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213224914.1501303-4-paul@crapouillou.net>
+In-Reply-To: <20211214175448.GA13107@embeddedor>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 10:49:14PM +0000, Paul Cercueil wrote:
-> Allow CONFIG_LTO_CLANG to be enabled. The ThinLTO variant is not yet
-> supported.
-> 
-> While this option allows to build a LTO'd kernel, the result kernel file
-> ends up being *bigger* than the non-LTO variant (about 3.6 MiB with LTO
-> vs. 3.1 MiB without with a ZSTD-compressed kernel).
+On Tue, Dec 14, 2021 at 11:54:48AM -0600, Gustavo A. R. Silva wrote:
+> On Tue, Dec 14, 2021 at 07:48:54PM +0800, Xiu Jianfeng wrote:
+> > Make use of struct_size() helper instead of an open-coded calucation.
+> > 
+> > Link: https://github.com/KSPP/linux/issues/160
+> > Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> > ---
+> >  kernel/audit.c       | 2 +-
+> >  kernel/audit_tree.c  | 2 +-
+> >  kernel/auditfilter.c | 2 +-
+> >  3 files changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/kernel/audit.c b/kernel/audit.c
+> > index d4084751cfe6..f33028578c60 100644
+> > --- a/kernel/audit.c
+> > +++ b/kernel/audit.c
 
-I believe this happens because the linker is able to inline more, which
-should make the code faster but makes it larger. I believe we limit the
-inlining threshold so that it is not too bad but maybe that could be
-further tuned.
+This could use struct_size(), too:
 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+1461                 audit_send_reply(skb, seq, AUDIT_SIGNAL_INFO, 0, 0,
+1462                                  sig_data, sizeof(*sig_data) + len);
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > @@ -1446,7 +1446,7 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
+> >  			if (err)
+> >  				return err;
+> >  		}
+> > -		sig_data = kmalloc(sizeof(*sig_data) + len, GFP_KERNEL);
+> > +		sig_data = kmalloc(struct_size(sig_data, ctx, len), GFP_KERNEL);
+> >  		if (!sig_data) {
+> >  			if (audit_sig_sid)
+> >  				security_release_secctx(ctx, len);
+> > diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
+> > index 72324afcffef..e7315d487163 100644
+> > --- a/kernel/audit_tree.c
+> > +++ b/kernel/audit_tree.c
+> > @@ -94,7 +94,7 @@ static struct audit_tree *alloc_tree(const char *s)
+> >  {
+> >  	struct audit_tree *tree;
+> >  
+> > -	tree = kmalloc(sizeof(struct audit_tree) + strlen(s) + 1, GFP_KERNEL);
+> > +	tree = kmalloc(struct_size(tree, pathname, strlen(s) + 1), GFP_KERNEL);
+> >  	if (tree) {
+> >  		refcount_set(&tree->count, 1);
+> >  		tree->goner = 0;
+> > diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
+> > index 4173e771650c..19352820b274 100644
+> > --- a/kernel/auditfilter.c
+> > +++ b/kernel/auditfilter.c
 
-> ---
->  arch/mips/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+Also, in this same file the following piece of code could use
+struct_size(), too:
+
+1093                         skb = audit_make_reply(seq, AUDIT_LIST_RULES, 0, 1,
+1094                                                data,
+1095                                                sizeof(*data) + data->buflen);
+
+Thanks
+--
+Gustavo
+
+> > @@ -637,7 +637,7 @@ static struct audit_rule_data *audit_krule_to_data(struct audit_krule *krule)
+> >  	void *bufp;
+> >  	int i;
+> >  
+> > -	data = kmalloc(sizeof(*data) + krule->buflen, GFP_KERNEL);
+> > +	data = kmalloc(struct_size(data, buf, krule->buflen), GFP_KERNEL);
 > 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 0215dc1529e9..6987db8d5f64 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -22,6 +22,7 @@ config MIPS
->  	select ARCH_USE_QUEUED_RWLOCKS
->  	select ARCH_USE_QUEUED_SPINLOCKS
->  	select ARCH_SUPPORTS_HUGETLBFS if CPU_SUPPORTS_HUGEPAGES
-> +	select ARCH_SUPPORTS_LTO_CLANG if CPU_LITTLE_ENDIAN
->  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
->  	select ARCH_WANT_IPC_PARSE_VERSION
->  	select ARCH_WANT_LD_ORPHAN_WARN
-> -- 
-> 2.33.0
+> Why don't you also transform the zero-length array in struct
+> audit_rule_data into a flexible-array member:
 > 
+> 508 struct audit_rule_data {
+> 509         __u32           flags;  /* AUDIT_PER_{TASK,CALL}, AUDIT_PREPEND */
+> 510         __u32           action; /* AUDIT_NEVER, AUDIT_POSSIBLE, AUDIT_ALWAYS */
+> 511         __u32           field_count;
+> 512         __u32           mask[AUDIT_BITMASK_SIZE]; /* syscall(s) affected */
+> 513         __u32           fields[AUDIT_MAX_FIELDS];
+> 514         __u32           values[AUDIT_MAX_FIELDS];
+> 515         __u32           fieldflags[AUDIT_MAX_FIELDS];
+> 516         __u32           buflen; /* total length of string fields */
+> 517         char            buf[0]; /* string fields buffer */
+> 518 };
 > 
+> Thanks
+> --
+> Gustavo
+> 
+> >  	if (unlikely(!data))
+> >  		return NULL;
+> >  	memset(data, 0, sizeof(*data));
+> > -- 
+> > 2.17.1
+> > 
+> > 
+> > 
+> > 

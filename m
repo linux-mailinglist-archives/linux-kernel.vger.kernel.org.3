@@ -2,47 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 343D647446E
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBAA47446F
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234679AbhLNOEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:04:50 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33376 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbhLNOEt (ORCPT
+        id S234684AbhLNOEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:04:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234660AbhLNOEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:04:49 -0500
+        Tue, 14 Dec 2021 09:04:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841AAC061574;
+        Tue, 14 Dec 2021 06:04:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D70D4B819C8;
-        Tue, 14 Dec 2021 14:04:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D3FC34608;
-        Tue, 14 Dec 2021 14:04:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 246BC6150E;
+        Tue, 14 Dec 2021 14:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F62C34606;
+        Tue, 14 Dec 2021 14:04:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639490686;
-        bh=zrEpCYD1NVNo4oExLeQcs/vbny3ugkBOe+tK9tgu+kM=;
+        s=k20201202; t=1639490690;
+        bh=jD+hAXEJnh6UeOGOrFz3TYzQsO4CU3xfpx+9AcTlJko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A5WmV7rlsV8zeA68Ts/VGFnfrQuKbNd6hZ9nWpu059FQmZfZuRqS/TXDBCfGw+iVH
-         zhbN8QV8kbYxOmvsdzFz8kIz3nbQMznDZ4J/jdP6Bykq3/2KwGZFYPcDy1uTmaQL0E
-         hyzV5HCXM2k5oRlO9VqvAHOU3vfZYoh73g5e1n0JZC2lK4r3rgFOYqc3b1VJVV4k80
-         9WN+dEwTFU0Mu951UbtBdk5yHikBH8XB/MrYoLbau4z4FivXoBTiYR0j+kToc48+Nc
-         HH0kfpFsEQ1NlssOfjKNaH9K6kCk4B9jZbBgAlMVaFn7jjFUAXAxALf4tf8+UgCLlO
-         gBGX5gvDfuTZg==
+        b=JgPmF9hoseYABsDDYgAWN9QkYz0X27zT34P/gMG2Zxn3fADxaJ9XLgvdMchmHY2c1
+         kft8UacTk/5/vwUvYOxKfqy1pedpJjxXEcnV7/gQOEtx6lJHIH1nG7m8LQt8y1dv6G
+         AtsNDmaGNM01F/NMjOFZa1zU5m3t07Z+DPmVnl2OfGc/UNHPrY3hYJejYZZUgfV+3h
+         Lf2WKP4q+Nz/meKfuNFY1jSvzH2ig+E+lG0P59W/xLvaVAsJ4gKxSYRWtKfm3SbhEu
+         DEp7QbLDoApzEhS8JljTI/2x0Ci6/WbGdBikF1ekXLSA9ZgxsT5ZmCBdLAkS6oOAvw
+         fuVKS853ANugQ==
 From:   Will Deacon <will@kernel.org>
-To:     bhelgaas@google.com, Qi Liu <liuqi115@huawei.com>,
-        mark.rutland@arm.com
+To:     Mark Rutland <mark.rutland@arm.com>, Rob Herring <robh@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
 Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, zhangshaokun@hisilicon.com,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v13 0/2] drivers/perf: hisi: Add support for PCIe PMU
-Date:   Tue, 14 Dec 2021 14:04:34 +0000
-Message-Id: <163948502719.3585031.9796899117574080262.b4-ty@kernel.org>
+        Will Deacon <will@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Vince Weaver <vincent.weaver@maine.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v13 0/5] arm64 userspace counter support
+Date:   Tue, 14 Dec 2021 14:04:35 +0000
+Message-Id: <163948145564.2060329.17036263207999776606.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211202080633.2919-1-liuqi115@huawei.com>
-References: <20211202080633.2919-1-liuqi115@huawei.com>
+In-Reply-To: <20211208201124.310740-1-robh@kernel.org>
+References: <20211208201124.310740-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -50,23 +61,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Dec 2021 16:06:31 +0800, Qi Liu wrote:
-> This patchset adds support for HiSilicon PCIe Performance Monitoring
-> Unit(PMU). It is a PCIe Root Complex integrated End Point(RCiEP) device
-> added on Hip09. Each PCIe Core has a PMU RCiEP to monitor multi root
-> ports and all Endpoints downstream these root ports.
+On Wed, 8 Dec 2021 14:11:19 -0600, Rob Herring wrote:
+> Another version of arm64 userspace counter access support. No changes from
+> the last version except rebasing and rewriting a commit message.
 > 
-> HiSilicon PCIe PMU is supported to collect performance data of PCIe bus,
-> such as: bandwidth, latency etc.
+> The arm64 support departs from the x86 implementation by requiring the user
+> to explicitly request user access (via attr.config1) and only enables access
+> for task bound events. Since usage is explicitly requested, access is
+> enabled at perf_event_open() rather than on mmap() as that greatly
+> simplifies the implementation. Rather than trying to lock down the access
+> as the x86 implementation has been doing, we can start with only a limited
+> use case enabled and later expand it if needed.
 > 
 > [...]
 
-Applied to arm64 (for-next/perf-hisi), thanks!
+Applied to will (for-next/perf-user-counter-access), thanks!
 
-[1/2] docs: perf: Add description for HiSilicon PCIe PMU driver
-      https://git.kernel.org/arm64/c/c8602008e247
-[2/2] drivers/perf: hisi: Add driver for HiSilicon PCIe PMU
-      https://git.kernel.org/arm64/c/8404b0fbc7fb
+[1/5] x86: perf: Move RDPMC event flag to a common definition
+      https://git.kernel.org/arm64/c/369461ce8fb6
+[2/5] perf: Add a counter for number of user access events in context
+      https://git.kernel.org/arm64/c/82ff0c022d19
+[3/5] arm64: perf: Add userspace counter access disable switch
+      https://git.kernel.org/arm64/c/e2012600810c
+[4/5] arm64: perf: Enable PMU counter userspace access for perf event
+      https://git.kernel.org/arm64/c/83a7a4d643d3
+[5/5] Documentation: arm64: Document PMU counters access from userspace
+      https://git.kernel.org/arm64/c/aa1005d15d2a
 
 Cheers,
 -- 

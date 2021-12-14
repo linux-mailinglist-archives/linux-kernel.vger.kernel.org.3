@@ -2,142 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AFB4742B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 187AE4742B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbhLNMgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:36:02 -0500
-Received: from smtp-4.b-tu.de ([141.43.208.14]:36354 "EHLO smtp-4.b-tu.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231984AbhLNMgB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:36:01 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by smtp-4.b-tu.de (Postfix) with ESMTP id 4JCyXZ5z35zGsZXC;
-        Tue, 14 Dec 2021 13:35:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=b-tu.de; h=
-        content-transfer-encoding:mime-version:content-type:content-type
-        :user-agent:in-reply-to:references:subject:subject:from:from
-        :message-id:date:date:received:received:received:received; s=
-        smtp; t=1639485357; x=1640349358; bh=XVtulyaK/W/DAqPTeZF/THYrtre
-        zZmiGipuzdpH6rS0=; b=TMiSnvgBLbHm2O6SDvbSwhUTub6nIJEMdtV051s3Bv6
-        bCbCnNuEGHgoaZjS8XnKr6DEUfG+HOvYgaEWVy63JxNlfhtKY011mx6ZpbgqtaJn
-        nxIfoHRW+DKz9WkdVkfocakAHLdgdTkAsMYisf31Tc7wirWSOLOl85H09uOz5TZc
-        =
-X-Virus-Scanned: by AMaViS (at smtp-4.b-tu.de)
-Received: from smtp-4.b-tu.de ([127.0.0.1])
-        by localhost (smtp-4.b-tu.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id hq8HsVQDSztc; Tue, 14 Dec 2021 13:35:57 +0100 (CET)
-Received: from webmail.b-tu.de (webmail.b-tu.de [141.43.208.17])
-        by smtp-4.b-tu.de (Postfix) with ESMTPS id 4JCyXX0J49zGsZY1;
-        Tue, 14 Dec 2021 13:35:55 +0100 (CET)
-Received: from Webmail.b-tu.De (localhost [127.0.0.1])
-        (Authenticated sender: werneand)
-        by webmail.b-tu.de (Postfix) with ESMTPA id BCE691B11;
-        Tue, 14 Dec 2021 13:35:55 +0100 (CET)
-Received: from [212.185.67.148] (212.185.67.148 [212.185.67.148]) by
- www.b-tu.de (Horde Framework) with HTTPS; Tue, 14 Dec 2021 13:35:55 +0100
-Date:   Tue, 14 Dec 2021 13:35:55 +0100
-Message-ID: <20211214133555.Horde.vtlLH95Iq91Ch-lE2bqCnJL@webmail.b-tu.de>
-From:   =?utf-8?b?QW5kcsOp?= Werner <Andre.Werner@b-tu.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, anson.huang@nxp.com,
-        linux-kernel@vger.kernel.org, andre.werner@systec-electronic.com
-Subject: Re: [PATCH] regulator: pca9450.h: Correct register masks for LDOs
-References: <20211213082319.Horde.z0oaiJ-O4G6vhVbw4WSBjnN@webmail.b-tu.de>
- <YbegDDszsM4GyMyV@sirena.org.uk>
-In-Reply-To: <YbegDDszsM4GyMyV@sirena.org.uk>
-User-Agent: Horde Application Framework 5
-Content-Type: multipart/mixed; boundary="=_OBeE-xBfFQfKtudKvX3zzqp"
+        id S234000AbhLNMgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:36:13 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:40995 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229879AbhLNMgL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 07:36:11 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-126-ciDdlnKxPsGDPzgly2ZQ2g-1; Tue, 14 Dec 2021 12:36:08 +0000
+X-MC-Unique: ciDdlnKxPsGDPzgly2ZQ2g-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Tue, 14 Dec 2021 12:36:07 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Tue, 14 Dec 2021 12:36:07 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Noah Goldstein' <goldstein.w.n@gmail.com>,
+        'Eric Dumazet' <edumazet@google.com>
+CC:     "'tglx@linutronix.de'" <tglx@linutronix.de>,
+        "'mingo@redhat.com'" <mingo@redhat.com>,
+        'Borislav Petkov' <bp@alien8.de>,
+        "'dave.hansen@linux.intel.com'" <dave.hansen@linux.intel.com>,
+        'X86 ML' <x86@kernel.org>, "'hpa@zytor.com'" <hpa@zytor.com>,
+        "'peterz@infradead.org'" <peterz@infradead.org>,
+        "'alexanderduyck@fb.com'" <alexanderduyck@fb.com>,
+        'open list' <linux-kernel@vger.kernel.org>,
+        'netdev' <netdev@vger.kernel.org>
+Subject: RE: [PATCH] lib/x86: Optimise csum_partial of buffers that are not
+ multiples of 8 bytes.
+Thread-Topic: [PATCH] lib/x86: Optimise csum_partial of buffers that are not
+ multiples of 8 bytes.
+Thread-Index: AdfwSx7jhGb9mOkwS12sTJ1p5oR1JQAmTp2g
+Date:   Tue, 14 Dec 2021 12:36:07 +0000
+Message-ID: <3107b1e365f34df080feefb68be8a422@AcuMS.aculab.com>
+References: <f1cd1a19878248f09e2e7cffe88c8191@AcuMS.aculab.com>
+In-Reply-To: <f1cd1a19878248f09e2e7cffe88c8191@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This message is in MIME format.
-
---=_OBeE-xBfFQfKtudKvX3zzqp
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-
-
-Quoting Mark Brown <broonie@kernel.org>:
-
-> On Mon, Dec 13, 2021 at 08:23:19AM +0100, André Werner wrote:
->> Within the defines of the register masks for LDO3 and LDO4,
->> the most significant bit was missing. The datasheet said
->> the range is 4:0 bits. Thus, the output voltage cannot be
->> set above 1.7V for each.
->
-> This doesn't apply against current code, please check and resend.
-
- From ade25a42e56c341073fc4b35e8096d01522b9046 Mon Sep 17 00:00:00 2001
-From: Andre Werner <andre.werner@systec-electronic.com>
-Date: Tue, 14 Dec 2021 08:41:14 +0100
-Subject: [PATCH] linux: regulator: pca9450.h: Correct register masks for LDOs
-
-Within the defines of the register masks for LDO3 and LDO4,
-the most significant bit was missing. The datasheet said
-the range is 4:0 bits. Thus, the output voltage cannot be
-set above 1.7V for each.
-
-Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
----
-  include/linux/regulator/pca9450.h | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/regulator/pca9450.h  
-b/include/linux/regulator/pca9450.h
-index 71902f41c919..0c3edff6bdff 100644
---- a/include/linux/regulator/pca9450.h
-+++ b/include/linux/regulator/pca9450.h
-@@ -196,11 +196,11 @@ enum {
-
-  /* PCA9450_REG_LDO3_VOLT bits */
-  #define LDO3_EN_MASK                   0xC0
--#define LDO3OUT_MASK                   0x0F
-+#define LDO3OUT_MASK                   0x1F
-
-  /* PCA9450_REG_LDO4_VOLT bits */
-  #define LDO4_EN_MASK                   0xC0
--#define LDO4OUT_MASK                   0x0F
-+#define LDO4OUT_MASK                   0x1F
-
-  /* PCA9450_REG_LDO5_VOLT bits */
-  #define LDO5L_EN_MASK                  0xC0
--- 
-2.31.1
-
-
-
-
---=_OBeE-xBfFQfKtudKvX3zzqp
-Content-Type: application/pgp-keys
-Content-Description: PGP Public Key
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG v2.0.22 (GNU/Linux)
-
-mI0EX5/e0wEEAKhvN7nLqNpIrTL6k0d8yuhXahKc/1+lkUIxU6nAUGmVB3ONxUyn
-MuaBGJMWmSfDXQKoJFIm+09XdQAq9INtAleiFrcXWwMHLzvnBjTB8wF/tHTaU8EU
-CVDs7ZU+uNlnb9bLu9h0fIpW+7wIzlDYDPOci0VS/CFVPhbRqls7a51bABEBAAG0
-NHdlcm5lYW5kIChUaW1lIFRha2VzIFVzIEFsbC4pIDxBbmRyZS5XZXJuZXJAYi10
-dS5kZT6IuQQTAQIAIwUCX5/e0wIbLwYLCQgHAwIGFQgKCQsCBRYCAwEAAh4BAheA
-AAoJEN/s1QVADNUWof8EAISJiRgrfPaLTFpPHJpYrWz5Ea2CiHH2VkZv01WY9HCw
-6aYaDcBNOXf1bgvBO3RW4d4SRdE7fb6r6LvO1i5jB1v1JSCgUYZCv3aLX4tqvO8a
-inXXrpypbpqzefODrL/HirLu6LEuj6twwAdOPXKCU+yFQjWgUv5AA301QXmzIVFl
-uI0EX5/e0wEEAMCP4iXYB28hGFu2sLXraDKf75g2VqSnqy6kjX4kje3elq4fbscf
-fPywdgMtFBj3L1AvTw/QoRrKQGQtC9QSoReqv9Iqo8tJPagL+AX7q6AX/7sAJ9bn
-yByZ6Xw6cg52+yy4SmxXI4ki1aQuUuZvM8w3z79zkWk6JUlObe9od9uVABEBAAGJ
-AT0EGAECAAkFAl+f3tMCGy4AqAkQ3+zVBUAM1RadIAQZAQIABgUCX5/e0wAKCRDv
-leJKNd5FhfeqA/wOzcD+rpCaEXREcxBWC5rIO1ANhX9TqHuh83Y9+Lpea4kavm6h
-MMxXw/o6WSIdDIDlawa8gFN3eMOh+NEIVkD3j2sDJqnill40UMqSUmZQyK80X+aE
-WjuTfnxX30ZS3T7cSpf8PSj8ur4iF4UuJ7AV64T11wu88twsTkG6r75gYHC4A/9+
-E6eAM6+LgyhBQsodlF24r1jkWtF8MufFgxgeWrFVAXV6GSVh0bBolQXbYh3IRnU+
-lgO5YEiZ5Z3kvlGwClb8ieY29mHJ4rJz0ULVUrfV+/l2sggGMjf8y3bh/fVSl+8s
-d0A1F5CxhvfpQlHjuzXA8QvxhewqvkmeRr5qmtmFxQ==
-=W0cT
------END PGP PUBLIC KEY BLOCK-----
---=_OBeE-xBfFQfKtudKvX3zzqp--
+RnJvbTogRGF2aWQgTGFpZ2h0IDxEYXZpZC5MYWlnaHRAQUNVTEFCLkNPTT4NCj4gU2VudDogMTMg
+RGVjZW1iZXIgMjAyMSAxODowMQ0KPiANCj4gQWRkIGluIHRoZSB0cmFpbGluZyBieXRlcyBmaXJz
+dCBzbyB0aGF0IHRoZXJlIGlzIG5vIG5lZWQgdG8gd29ycnkNCj4gYWJvdXQgdGhlIHN1bSBleGNl
+ZWRpbmcgNjQgYml0cy4NCg0KVGhpcyBpcyBhbiBhbHRlcm5hdGUgdmVyc2lvbiB0aGF0IChtb3N0
+bHkpIGNvbXBpbGVzIHRvIHJlYXNvbmFibGUgY29kZS4NCkkndmUgYWxzbyBib290ZWQgYSBrZXJu
+ZWwgd2l0aCBpdCAtIG5ldHdvcmtpbmcgc3RpbGwgd29ya3MhDQoNCmh0dHBzOi8vZ29kYm9sdC5v
+cmcvei9LNnZZMzFHcXMNCg0KSSBjaGFuZ2VkIHRoZSB3aGlsZSAobGVuID49IDY0KSBsb29wIGlu
+dG8gYW4NCmlmIChsZW4gPj0gNjQpIGRvICguLi4pIHdoaWxlKGxlbiA+PSA2NCkgb25lLg0KQnV0
+IGdjYyBtYWtlcyBhIHBpZ3MgYnJlYWtmYXN0IG9mIGNvbXBpbGluZyBpdCAtIGl0IG9wdGltaXNl
+cw0KaXQgc28gdGhhdCBpdCBpcyB3aGlsZSAocHRyIDwgbGltKSBidXQgYWRkcyBhIGxvdCBvZiBj
+b2RlLg0KU28gSSd2ZSBkb25lIHRoYXQgYnkgaGFuZC4NClRoZW4gaXQgc3RpbGwgbWFrZXMgYSBt
+ZWFsIG9mIGl0IGJlY2F1c2UgaXQgcmVmdXNlcyB0byB0YWtlDQonYnVmZicgZnJvbSB0aGUgZmlu
+YWwgbG9vcCBpdGVyYXRpb24uDQpBbiBhc3NpZ25tZW50IHRvIHRoZSBsaW1pdCBoZWxwcy4NCg0K
+VGhlbiB0aGVyZSBpcyB0aGUgY2FsY3VsYXRpb24gb2YgKDggLSAobGVuICYgNykpICogOC4NCmdj
+YyBwcmlvciB0byA5LjIganVzdCBuZWdhdGUgKGxlbiAmIDcpIHRoZW4gdXNlIGxlYWwgNTYoLCVy
+czEsOCksJXJjeC4NCkJ1dCBsYXRlciBvbmVzIGFuZCBmYWlsIHRvIG5vdGljZS4NCkV2ZW4gZ2l2
+ZW4gKDY0ICsgOCAqIC0obGVuICYgNykpIGNsYW5nIGZhaWxzIHRvIHVzZSBsZWFsLg0KDQpJJ20g
+bm90IGV2ZW4gc3VyZSB0aGUgY29kZSBjbGFuZyBnZW5lcmF0ZXMgaXMgcmlnaHQ6DQooJXJzaSBp
+cyAobGVuICYgNykpDQogICAgICAgIG1vdnEgICAgLTgoJXJzaSwlcmF4KSwgJXJkeA0KICAgICAg
+ICBsZWFsICAgICgsJXJzaSw4KSwgJWVjeA0KICAgICAgICBhbmRiICAgICQ1NiwgJWNsDQogICAg
+ICAgIG5lZ2IgICAgJWNsDQogICAgICAgIHNocnEgICAgJWNsLCAlcmR4DQoNClRoZSAnbmVnYicg
+aXMgdGhlIHdyb25nIHNpemUgb2YgdGhlICdhbmRiJy4NCkl0IG1pZ2h0IGJlIG9rIGlmIGl0IGlz
+IGFzc3VtaW5nIHRoZSBjcHUgaWdub3JlcyB0aGUgaGlnaCAyIGJpdHMgb2YgJWNsLg0KQnV0IHRo
+YXQgaXMgYSBob3JyaWQgYXNzdW1wdGlvbiB0byBiZSBtYWtpbmcuDQoNCglEYXZpZA0KDQotDQpS
+ZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWls
+dG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMp
+DQo=
 

@@ -2,68 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 795A147474D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B49474751
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235601AbhLNQPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:15:34 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:43587 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbhLNQPb (ORCPT
+        id S235608AbhLNQPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235606AbhLNQPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:15:31 -0500
-Received: by mail-ot1-f43.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so21356806otu.10;
-        Tue, 14 Dec 2021 08:15:31 -0800 (PST)
+        Tue, 14 Dec 2021 11:15:46 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A1FC06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:15:45 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id t13so35687669uad.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:15:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u6FJi1chVbjhnnxyU13+cLRUgb7epxkD3A/uWK2BL6E=;
+        b=FCrnA9ABISsTiY1lnbiP9+rfCMgW2g08O6yQF8CfKnrrGmEpexA+SIvqrll1A3dPCq
+         BKPTXc/7IW1Ef4gZrAasmwlRo59LM5YWGm89jTjRndAUgOSlxjDlEuXLpzbmkGdRopsx
+         X2A431io7LiTaagHHLjONVFn7X004XUhAqFBhDUUt8s8ck/oDDC/rhdBs+v5bZvqTfYX
+         Cm2mM3+XNemXd4cDvRBBWMxTHQfZeY8Tm4kNjkPAEfrMRuCb+n8AEUtHq9otxZmqrnkj
+         3ppIu5zf4M9KYj9gb9sVqG+NRN5SougOKXnUuERI5Hgsuv7nvRKIRgudGZ3xeZ0pOz+T
+         9gUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0lsmMAdH+An2Dh+fjwu4HAFz0gVF5gV5ItKVtgfV1m8=;
-        b=5BCtbK8Oqr0ZyukRL/fr02pLZtAzsAY0S9W2cRI+JNA5WT/y4gTkvQDJPrTwUjpAnb
-         r33tsc3E7B7jNqwbNlzaPW7Kn/10oroYBvV2cbMeXOtRsWN8ufCoFU36goP4PQLHIm1K
-         HF+rtKDQuEr9BUDl4FBdjVm4Worq+3LrxicYslcFnVsRcMn6vSJeI9+wnhAvbD2X0ou7
-         8fN9amMAp8Ccqk+WY0pZh/cmZWaTqmA/c0NQ7jA1NpglDOQy+hwtDomO1y8q7zveSPGZ
-         PF71JjxdvOBqqcT71e0vEvl9aktjpEcANVGENELfGiI16HCWxvI4pX+V6Sbnzus6sxqJ
-         loHA==
-X-Gm-Message-State: AOAM533aShlkjBZAeEXTb+MymV07UOUqv3oTa5a6uzPxqYFJG6nRLgxZ
-        JOt50O6FoB4X+w3OjmUtymU+gpLDaQ==
-X-Google-Smtp-Source: ABdhPJwnbpug1eJO8ZQ8DAXWLA5qjPewBfQmB+TUTb5hi8x5hDwJnuqK8HvM6KL8yI+sA5YRqtE1Zw==
-X-Received: by 2002:a9d:6c14:: with SMTP id f20mr5110440otq.141.1639498531167;
-        Tue, 14 Dec 2021 08:15:31 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t11sm42961otj.24.2021.12.14.08.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 08:15:30 -0800 (PST)
-Received: (nullmailer pid 3488247 invoked by uid 1000);
-        Tue, 14 Dec 2021 16:15:29 -0000
-Date:   Tue, 14 Dec 2021 10:15:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mihail Chindris <mihail.chindris@analog.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexandru.ardelean@analog.com, jic23@kernel.org,
-        devicetree@vger.kernel.org, nuno.sa@analog.com,
-        Michael.Hennerich@analog.com, lars@metafoo.de,
-        dragos.bogdan@analog.com
-Subject: Re: [PATCH v7 1/2] dt-bindings: iio: dac: Add adi,ad3552r.yaml
-Message-ID: <YbjDIbXXoTV4Qu1D@robh.at.kernel.org>
-References: <20211213110825.244347-1-mihail.chindris@analog.com>
- <20211213110825.244347-2-mihail.chindris@analog.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u6FJi1chVbjhnnxyU13+cLRUgb7epxkD3A/uWK2BL6E=;
+        b=c0GekpAP+xNhTwBjTg0lAsJsezexJFBEUZ0qzmFsy0UezjLYnOx7Y+f+wqifF7YSFu
+         9DMQu1wX85ORy04SRLMGWoruVunzMPeb3TeFh61ucEbvt1/Bp9feLNK98ll3hYDRxlax
+         ZhwRd9JFD85KJPS18+LJPI0609x+m8anayi9NXBct5ypTZbVcgGPZgTxANiRVE+Y7bHf
+         k7oiW9PQ/UdNmWQTzXg9wx7TT8cJDU6mePycAsGC6UejVPjGrwqz3sDqjDpuuLvwWakg
+         oLW75kb/scPfrKrroFwg3yqyAtTX9C2B/qi2+l5T4lYoC9G/FLnyU/azFsG4noHI0ZOS
+         5U/A==
+X-Gm-Message-State: AOAM530amv9DsCLJKiM4kYjicmbGcoGu2eBSpjrm6SByYDFeQz3Y842K
+        S3vd+d/l9PutaVpzEXUZtssRhITQ0BimUJ94844UFw==
+X-Google-Smtp-Source: ABdhPJzEL887m0Kxg3sI2RmnzaW9Lu/RySFA8VRYAU3p3WJAo5Y3zuyk8/44Zjpq1FkqALrxnuD3wDw/WQyN5lfSdQo=
+X-Received: by 2002:ab0:7859:: with SMTP id y25mr2325675uaq.9.1639498543523;
+ Tue, 14 Dec 2021 08:15:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213110825.244347-2-mihail.chindris@analog.com>
+References: <20211126203641.24005-1-semen.protsenko@linaro.org>
+ <YagPWOj0CLxE/+ER@robh.at.kernel.org> <CAPLW+4=LTd8i2Tqr7Wa0NDRTJ5mRJXP=EvRCx84WxnwCDQ1eVg@mail.gmail.com>
+In-Reply-To: <CAPLW+4=LTd8i2Tqr7Wa0NDRTJ5mRJXP=EvRCx84WxnwCDQ1eVg@mail.gmail.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Tue, 14 Dec 2021 18:15:31 +0200
+Message-ID: <CAPLW+4nk7Y8Psg9ZVacvzJeAV3VAGWfi+9hTPWgTeAWqh67AKQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: clock: exynos850: Add bindings for
+ Exynos850 sysreg clocks
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-samsung-soc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        David Virag <virag.david003@gmail.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 11:08:24 +0000, Mihail Chindris wrote:
-> Add documentation for ad3552r and ad3542r
-> 
-> Signed-off-by: Mihail Chindris <mihail.chindris@analog.com>
-> ---
->  .../bindings/iio/dac/adi,ad3552r.yaml         | 217 ++++++++++++++++++
->  1 file changed, 217 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml
-> 
+On Tue, 7 Dec 2021 at 22:54, Sam Protsenko <semen.protsenko@linaro.org> wrote:
+>
+> On Thu, 2 Dec 2021 at 02:12, Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Fri, 26 Nov 2021 22:36:40 +0200, Sam Protsenko wrote:
+> > > System Register is used to configure system behavior, like USI protocol,
+> > > etc. SYSREG clocks should be provided to corresponding syscon nodes, to
+> > > make it possible to modify SYSREG registers.
+> > >
+> > > While at it, add also missing PMU and GPIO clocks, which looks necessary
+> > > and might be needed for corresponding Exynos850 features soon.
+> > >
+> > > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > > ---
+> > >  include/dt-bindings/clock/exynos850.h | 12 +++++++++---
+> > >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > >
+> >
+> > Acked-by: Rob Herring <robh@kernel.org>
+>
+> Hi Sylwester,
+>
+> Can you please review and apply this series, if it's ok?
+>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Hi Krzysztof,
+
+Do you think it's possible to take this series in your tree? Once it's
+applied, I can send the board support (dts) series -- this is the only
+remaining blocker for that right now.
+
+Thanks!
+
+> Thanks!

@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 946AB474675
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4464474678
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233779AbhLNPbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbhLNPbQ (ORCPT
+        id S233874AbhLNPbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:31:35 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37094 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233800AbhLNPbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:31:16 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6F9C061574;
-        Tue, 14 Dec 2021 07:31:16 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id l22so37469522lfg.7;
-        Tue, 14 Dec 2021 07:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Cew1bsVh+uPPxFCPvivLMvnMySnBo7QVXMyLf4NUogc=;
-        b=EIBs/m05yVAVjNZxKsVu8Oh0Ra+ssLFinvG7LKfMOy1Tb+DDQFa83JoEpSp/kyJ20f
-         vtvaLZfleYaQEdO83kKRrCP8Y1G2P1VVBd1C8H/rC2FEvRABY4qZuLZF9MfzdbRNDmow
-         cGRJTZrbJmdGnvJe7MN8XhbpvUlkpK10PBqiVAoE8HuxHw13OwKud0XkPDg5fcAHJYnV
-         DUKRpnGNMPgJ7sbEiuJYUCWQTbbeQh0lDx39iMitKSXkglOeja3j0JlYaUtRccSzzC+C
-         igtqlbPFWaGY1CMcs+PW8sdRnRh3ONs1rCgNZ4xxe4sqUVtqBu0PNS8azfyALy+nPF5r
-         Y88A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Cew1bsVh+uPPxFCPvivLMvnMySnBo7QVXMyLf4NUogc=;
-        b=knUKAk8uNV1lprw14Hcbr+/SH7nj2mX79QYgu5IXDG+cS4xDfLWGZMzAQDnisXF4A7
-         EcmhOZR6dXQqDeFD5jW0KKfjn5dKSp729GaWjW4rwb9QkzTfIvl7vYLqKSVSLfSttntj
-         PaSW+tRscTHylXhvf03Z5FCY96FAJHZxs5yzHECKOslRV9JnBFgsCJ/t9SnS/7uSyXXT
-         t+ytQUOSyc3Wm/YEN9xMOMMETEFlqz1x7+UWm5kOl7F7XDV9POuq1E0PMnas7evl103y
-         htUaLF6lgb0hAXPRjCMQnBlcRLYzRxNtOAPSr5prmRFL06LKLCCkfU0DFWs5NP02H5qz
-         /wpA==
-X-Gm-Message-State: AOAM533WmYXJVtY4muqPeDaqCwhDkClne8DZySmmmRqVLhCmAbEFwssS
-        i0vpfllNr1f25y5/Au29aDE=
-X-Google-Smtp-Source: ABdhPJxmQNB9Dr/Fnytdwhc2WP3yKSVRtKMT+07lahidhyWpm3qWdRsLiGLH2I4Htvoh4G+FR0Ibzw==
-X-Received: by 2002:a05:6512:3053:: with SMTP id b19mr5387718lfb.276.1639495874691;
-        Tue, 14 Dec 2021 07:31:14 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id s4sm11501lfp.198.2021.12.14.07.31.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 07:31:14 -0800 (PST)
-Subject: Re: [PATCH v2 0/8] Host1x context isolation support
-To:     Mikko Perttunen <cyndis@kapsi.fi>,
-        Jon Hunter <jonathanh@nvidia.com>, joro@8bytes.org,
-        will@kernel.org, robh+dt@kernel.org, robin.murphy@arm.com,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        thierry.reding@gmail.com
-References: <20210916143302.2024933-1-mperttunen@nvidia.com>
- <10de82cf-27a5-8890-93a5-0e58c74e5bcc@kapsi.fi>
- <c382fb0e-6b73-5ca0-7f63-d2843351325e@nvidia.com>
- <91dddccd-a6c1-21b3-34d6-6a8082a386e7@nvidia.com>
- <a507b10b-395b-1f6d-87b9-7c7c436cab0e@gmail.com>
- <a62602df-91f6-783d-60f3-d9eba10da543@kapsi.fi>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <be8aec02-8651-0b12-ff13-237c75a5b29d@gmail.com>
-Date:   Tue, 14 Dec 2021 18:31:13 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <a62602df-91f6-783d-60f3-d9eba10da543@kapsi.fi>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Tue, 14 Dec 2021 10:31:34 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BEElBpN017050;
+        Tue, 14 Dec 2021 15:31:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=GSwyNylE9n2DqEIhkIOpQhDxJpB1Ue9IcyTFoZPTrBA=;
+ b=EbG6wF2c11XIMfwqaVA+yiGf+I3zESXehVDGINWfJZEbN50jv8W32c+UuDxZoodTn146
+ IDjpYai9xxSgNQzl9nPGz/CejiqUkX23C2RpI6SR+MdT+FubYXovGp5ebTjHtsl/zyGG
+ pKcRRrWEWMp0Do2Jix6ZZLSTjqTw7rHCVjGX4WiDRojCJ15COzyxtg8E4+zjTAU78NsU
+ xaotCp8NlRabSqE+p3IyJF+DOKmdX4nrNtxzG/5GLnLXxCSsSYocaWmIfk8PH8PH/qJC
+ rujKZg0GUlMM4DhBK0KFHAN/GuSLQ1WX8ltCEqC0eOTJPoZh/ftVYXvY0Wwa2TK6ryUv sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r8h2h4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 15:31:28 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BEElFv2017498;
+        Tue, 14 Dec 2021 15:31:28 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r8h2fv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 15:31:28 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BEEiDbk006167;
+        Tue, 14 Dec 2021 15:31:25 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3cvk8j0r5a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 15:31:25 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BEFVM2Z13435248
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Dec 2021 15:31:22 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CCC9A11C050;
+        Tue, 14 Dec 2021 15:31:22 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 29A4D11C058;
+        Tue, 14 Dec 2021 15:31:22 +0000 (GMT)
+Received: from sig-9-65-91-220.ibm.com (unknown [9.65.91.220])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Dec 2021 15:31:22 +0000 (GMT)
+Message-ID: <d99fc78005d8a245449dd6ca0158cf9e2a897465.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fix undefined arch_ima_get_secureboot() and co
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Takashi Iwai <tiwai@suse.de>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Joey Lee <jlee@suse.com>
+Date:   Tue, 14 Dec 2021 10:31:21 -0500
+In-Reply-To: <20211213161145.3447-1-tiwai@suse.de>
+References: <20211213161145.3447-1-tiwai@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 9BUXuZ_tbKx_GBwnrMNVy16ohG_ofw7N
+X-Proofpoint-GUID: yv4D8U1mut7e6ZUTzx8cjriYNfHv9F9z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-14_07,2021-12-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ bulkscore=0 clxscore=1011 mlxlogscore=999 lowpriorityscore=0
+ malwarescore=0 spamscore=0 priorityscore=1501 impostorscore=0
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112140089
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-14.12.2021 17:53, Mikko Perttunen пишет:
-> On 12/14/21 16:35, Dmitry Osipenko wrote:
->> 14.12.2021 11:05, Jon Hunter пишет:
->>> Hi all,
->>>
->>> Still no response on this :-(
->>
->> I see only two patches on Tegra ML and others on DRI ML. Might be good
->> to start with re-sending this whole series and CCing MLs properly.
->>
-> 
-> All patches should have been sent to the same set of addresses. At least
-> LWN's archive seems to agree..
+Hi Takashi,
 
-Indeed, I see that Tegra ML was CCed and I see all patches on Tegra
-patchwork, but I don't see them all on lore and gmane.
+On Mon, 2021-12-13 at 17:11 +0100, Takashi Iwai wrote:
+> Currently arch_ima_get_secureboot() and arch_get_ima_policy() are
+> defined only when CONFIG_IMA is set, and this makes the code calling
+> those functions without CONFIG_IMA failing.  Although there is no such
+> in-tree users, but the out-of-tree users already hit it.
+> 
+> Move the declaration and the dummy definition of those functions
+> outside ifdef-CONFIG_IMA block for fixing the undefined symbols.
+> 
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+
+Before lockdown was upstreamed, we made sure that IMA and lockdown
+could co-exist.  This patch makes the stub functions available even
+when IMA is not configured.  Do the remaining downstream patches
+require IMA to be disabled or can IMA co-exist?
+
+thanks,
+
+Mimi
+

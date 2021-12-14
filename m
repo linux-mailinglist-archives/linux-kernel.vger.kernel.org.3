@@ -2,164 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E20E1474EBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 356E9474EC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238347AbhLNXsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 18:48:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:49913 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238338AbhLNXsl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 18:48:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639525721;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PxegsCUs4iHdn3Ce5+JXTq0Snzm5UCe6ZUE8seqhmhc=;
-        b=bFdQ17AOl3VqQ9ouwxhXCtEifTcaJUnHMC/trIFHYZ5rJCbMUv6DoU5cFnkwjjfK3qJkuK
-        OM2N+1zXX/+/Jbj3GumuS5Fuaqcm1R4sVcvJLlpPpCQ3uMUkoJGaV69+AflK9IV70eUULa
-        O8j+qCBaZE/J3M9QwM1+9BVYeGW+b+g=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-543-_KgT-5OuNAmtnlV1psHmBg-1; Tue, 14 Dec 2021 18:48:40 -0500
-X-MC-Unique: _KgT-5OuNAmtnlV1psHmBg-1
-Received: by mail-qk1-f198.google.com with SMTP id br9-20020a05620a460900b0046ad784c791so18200022qkb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:48:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PxegsCUs4iHdn3Ce5+JXTq0Snzm5UCe6ZUE8seqhmhc=;
-        b=eVJqyHEl4GzSwK/9k1++lffvgT8GNuqPhDt4R1yZltLLiT//eecrsn3MmXGC/kFAfO
-         LdEVRQhww1cOfxwRw7jd48F5ro+fxT9ywbOPyRncGYQ1bVD6OvEcFy7qcibUehxBMqEV
-         tzl7HoGTMxqyQ0yxYXb+EUoswqiILoA1rBPY6aVbnqh/zD+41dHhcAdiMDMUMkykF4WE
-         S+GP0O1H2/gPW+NJ0gDCKozwcscBi1DL9tLwQV7PYgc8j1yRwiAHlM61m0Me7zFbdvm+
-         hJZkqN5RWZqBxK0g3zHHdj9A+dUIVp5YsKGPSejS+ByrCc1QpOjf7CifPPf+q/AvtNgx
-         BqPg==
-X-Gm-Message-State: AOAM532MyKzPS8ok3gA4oz1V9MPrrAwNIwUkpDHAWPVJX1q6T7ZZ8/QJ
-        9mhluJDQuwM1Q0LVyLS7SLm9lerqWPay6USA7dDtcAcPF0D+DBRxFiU0LPI+5zAlkqkIz7SI/o1
-        Jbj0eMuPQbbOmpLnmB1NcQERQ
-X-Received: by 2002:a05:6214:da9:: with SMTP id h9mr8998405qvh.2.1639525719486;
-        Tue, 14 Dec 2021 15:48:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx6wUDPzah/26+HipUsYD/dw9JK8zhpppqGRr1+2gGylE/gSXGSBN1fnRur80e2G8cVi3I+Xw==
-X-Received: by 2002:a05:6214:da9:: with SMTP id h9mr8998389qvh.2.1639525719256;
-        Tue, 14 Dec 2021 15:48:39 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::49])
-        by smtp.gmail.com with ESMTPSA id o4sm143059qkh.107.2021.12.14.15.48.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 15:48:38 -0800 (PST)
-Date:   Tue, 14 Dec 2021 15:48:36 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Miroslav Benes <mbenes@suse.cz>, jikos@kernel.org,
-        joe.lawrence@redhat.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] livepatch: Allow user to specify functions to
- search for on a stack
-Message-ID: <20211214234836.3x3clp45ut6gtol6@treble>
-References: <20211210124449.21537-1-mbenes@suse.cz>
- <20211210124449.21537-2-mbenes@suse.cz>
- <20211213190008.r4rjeytfz5ycbstb@treble>
- <alpine.LSU.2.21.2112140857570.20187@pobox.suse.cz>
- <YbiNsVfoCPCJmOKj@alley>
- <Ybi6252hKwUM4KrP@alley>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S238348AbhLNXuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 18:50:20 -0500
+Received: from mail-bn7nam10on2058.outbound.protection.outlook.com ([40.107.92.58]:7488
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232938AbhLNXuT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 18:50:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S/5F/nXXJlVRIcitr+CmfMPB7JvqXqD3Q3yayUNPuDipeRorHkq5ie772wzQfBVGqSr6s2MfyIgORDFUwGuTZ8PAH/b5TFJ3ctE2guoKjw3FT7i/ZCNy1VoZ+boA2LabScgoZX32HKS0Ec8ij/YjTTFfr30Wi4tQKH/lyAv+/9MtWRNKxnayA3wBEtVj+wzF0Fv64g67/jKfKbdXHeUGpBFwW2qA5sv/M26csYGdog0UGMEHGPhPn4k7Vo7FmDLP9D0UmEEJbXO9lPfjvht/7KznzvfNiAd60Jviswx/xS1uzkM1vjKUfbU8KP5Zj52BRQGDS1oxnXM9ADeCpUqWkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2PGx5l6ey4q57UJib4s/wk91DBPh69PMMX+zYJdsXLo=;
+ b=mmcmGw3HvQ+wYI+JNjXPcNLqXn/XGoPEPK7ZfxYkrBeoMFTeJj90ZUSMvtZbfdgcnQBu8BrQn+DPamR+s2zlzdD8vgiT3hVazGw/loN86ydDBr0dzmRiOlTseJ2jRs6tJH/IiY2DCBl1ZoflSmk4W+N5z3DJRpeLqkwqzxRXfQ7FoxHFGescJUhNzn/RiHWPWtIwWUHYnPZYQrZwv90PVdKv3HZSE7fwUcZuNHdCtgMPp8GpLUhoAZeefwouj1+FNwWZBczcuY1qF0tz0zrsTd8x88j6ihUvtxka+xMd0WfmS7bnF+7c+0pa9cUhK25UFbzFtFVxWYPoa3J/FbYp6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2PGx5l6ey4q57UJib4s/wk91DBPh69PMMX+zYJdsXLo=;
+ b=dgVTR3tDMahMa0m12N70hmxG4Don74TInHbegB35C+OxfFz+ww4jFGC/BAjaEaU6ogg1YxZEPNzm+VZx0yse9PjQAida6ggqtjgta2OR7CeO5nW+A6/ouTh9zmhZh0jIVxy+2Pq9RzJoE52Vvx17BeX26zAJwZwqoruDyxLQJ7tADctzCTyDAC8md1+D5tjVg+d6z6XjT5mjDAR085NBAzlBEDqtTT0NqPvzxMouzW1Q2SnOkdjSOL7FWKRdXF6vUNLLVWqvyMqj0XVrzYBB22KvyFcZ1lh5RaVz9naU2CsbJ7fCnWPXp6otetHMPdXpUkp9XGHSc7O/GNL0CAb8Gg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB5520.namprd12.prod.outlook.com (2603:10b6:5:208::9) by
+ DM4PR12MB5101.namprd12.prod.outlook.com (2603:10b6:5:390::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4778.15; Tue, 14 Dec 2021 23:50:18 +0000
+Received: from DM6PR12MB5520.namprd12.prod.outlook.com
+ ([fe80::218e:ede8:15a4:f00d]) by DM6PR12MB5520.namprd12.prod.outlook.com
+ ([fe80::218e:ede8:15a4:f00d%4]) with mapi id 15.20.4801.014; Tue, 14 Dec 2021
+ 23:50:18 +0000
+Date:   Tue, 14 Dec 2021 19:50:15 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     cgel.zte@gmail.com
+Cc:     devesh.s.sharma@oracle.com, chi.minghao@zte.com.cn,
+        dennis.dalessandro@cornelisnetworks.com, dledford@redhat.com,
+        leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, mbloch@nvidia.com,
+        selvin.xavier@broadcom.com, trix@redhat.com,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH for-next v4] RDMA/ocrdma: remove unneeded variable
+Message-ID: <20211214235015.GA969883@nvidia.com>
+References: <CO6PR10MB5635347074DDA51CF2766B9DDD759@CO6PR10MB5635.namprd10.prod.outlook.com>
+ <20211214092339.438350-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ybi6252hKwUM4KrP@alley>
+In-Reply-To: <20211214092339.438350-1-chi.minghao@zte.com.cn>
+X-ClientProxiedBy: BYAPR03CA0021.namprd03.prod.outlook.com
+ (2603:10b6:a02:a8::34) To DM6PR12MB5520.namprd12.prod.outlook.com
+ (2603:10b6:5:208::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 53cdcdd9-c3b9-4387-bc2f-08d9bf5c7b6e
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5101:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB510141CA82656C433C6F2FCCC2759@DM4PR12MB5101.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1923;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QPOHPWfTQmQThKDgN+NRBHuQK8BMjPIi1apyMXw3Nl2xtOBq68yNbkJKwN+Qha8NZCk4uNRR9aPe+r88t93ktC8XTK5HqxW0FSo83Zt/I0dEx6p7PjFRqaoFDYxomZVmq1UiN+CCDbDz00HUZuen1RyCTpFidEBr6lDkqw7ad/7p3azzE7DpKSMp0HnPEtpo7zotCJo5jUfqXjZAmQlBmeOTD1npa6FZzpAkShIL45hvp44CHm/K68adL30lqgE+j16dOEi9jzJ3jlzT6GkW0svYCNe4NMdpK948YWCCe0W3HVZQ6o9Vjk8IlS8B0I+BMu8BWYlxwU+19ch7KIqWATDv6mtz+PzqqzeZLtBGLe0Hz8iY6xJKMQQSNyiiO7TO9vEGSqHqxkIa//wXuLDm24bxAe08+rQDEYw6ySCbC6YN72z9UCD/HZn6Oj5MPOMDNsoESRBksxabrrZ65ELy04QNxJfMCh4mfVfl7lLD7NKsH9EUtOQHxo04LmX6nYS73wPJ4NkSim9gNyMHktowIGCgl1wQziLPkAlPWWvMO7RhsHdomU1H7I58crxoWiez84fJNbTfePS0ZaAvLla2lwSdM7myqaCHNiUvp6HCvKEuweqyEN8eKHm9f5TzmAaLi1ur0nhRtjosXy9WAW37IRGJNBoq8n2E36Bgz2j3O6K55D97/wsIAkQ5QrJAyj/YE7bKACbhuWnolYpAQvePdA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB5520.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(316002)(6666004)(36756003)(66946007)(7416002)(26005)(33656002)(38100700002)(83380400001)(6506007)(66476007)(6512007)(4326008)(86362001)(2616005)(8936002)(6916009)(66556008)(2906002)(508600001)(6486002)(186003)(1076003)(5660300002)(4744005)(27376004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e3opWv4/ZiOKJbZWXGVvcOuxE8+3Tdz48SpEFXigAAkSFRjPZwPiqUJ9NVlx?=
+ =?us-ascii?Q?JIxCW+l4mtrLhDOLtAj2VDWSou/zJfnFFYSAT3sEvQmVol7q7jOzeVXfxGW0?=
+ =?us-ascii?Q?8HUDh5UVxnffb8ApXD5IU7vf6Wj9xxUOLggDaMcBVdmUOMC/YbaFSvrpnX1o?=
+ =?us-ascii?Q?LoaR6Egdx2rxGwZKnqZKWv88C/D5OeQNnhl6OG/Q6AjzQ25JKrUeiv4q5wkT?=
+ =?us-ascii?Q?26oAfqJU60GtnuyaE8AhYvTrJU15RMqV4t5X6Yvcrj73P87F2HyfbhnEz8M1?=
+ =?us-ascii?Q?bcnqDn2j9w6uozAUtM4I20TCxZMrE1G0Ww6N0H1okql6mZbvK+v3pXeGYR3S?=
+ =?us-ascii?Q?7IQwl0Ki6b8N3scDV8oQ7Gz890xHjj3M0LTaoUhYkswjGjcJDh40+JtXBeD/?=
+ =?us-ascii?Q?BOi+pYnG0lAMhb+mZteC7+K8VsqY4GnoBqP0L8+RXu6epy4+9c1hQn5bRKHv?=
+ =?us-ascii?Q?XwzaGA2bj0XnVnx2s8bpbM8MvbZKt8fdR7R/Fuds9OHzkZBv7HE/bpjBIgD7?=
+ =?us-ascii?Q?ZGbpbvwvuAhanIv0akxM5dfzRP7zWIkJNF+q9zaveU7YOdHIZ2hnJHOZchZv?=
+ =?us-ascii?Q?3iyEEAa7yVSYXA18fd9NIBnONq9eh7lPJMyjb4AKHiU+FbJnkZv/ChpiBXZL?=
+ =?us-ascii?Q?/PBn/CczW6N3Abq3t0reNWbEFiytsycbrDFnT9tvvNF766JB0i+RH3bdJ4r8?=
+ =?us-ascii?Q?SakU5JI84FEJ83r1YH3bO5ICj6xEbkd+VSN8thw75S78J6R5rukwAN3mCoeN?=
+ =?us-ascii?Q?QRKVml121hrkCcLIofJpnGI4pBg0cqgQIAw+EscCXhG7pUDHtn7l7fEua7sG?=
+ =?us-ascii?Q?Y31XxE8Qk0agxB015VyRf0sRH/8DdB2jmHqyoMB+hOKjWHzCo/Me3lgP9BNO?=
+ =?us-ascii?Q?s7BI/B9fzu3/IH7KZxd2o29FJK3d+z41ywd+LnAICQzeg086wSEvWvme26B2?=
+ =?us-ascii?Q?TtVmCyQoGP4nNJxw2zqBuz9AwSf2hH9PEEuyCeCjKAXX108uKIOO/G/TXJzR?=
+ =?us-ascii?Q?UT0wyKCQrhdSO+j8DWh/JBNUtV4rhIs+SyNF0aqP2uOtrkx7ILtWnBJPtir7?=
+ =?us-ascii?Q?ZauDjc9I9rQ0opQP3Kwp3+NyX7eTPMqM5TMhSFCWrXBriT2FGP35QLHhL8nh?=
+ =?us-ascii?Q?g+6U+dypkFUAzvFmWAK+Y3X4WXklSY+Gdccvl3BXk3TwUrJoe+0H8KbeWo7F?=
+ =?us-ascii?Q?dEgerCjM9lLhYWCGT1yNoFucMJIGmYuRXV7BJdvDI7P+o39hx38oJfGoMOs6?=
+ =?us-ascii?Q?t5ZH0bdqKHy385HzLgg2Vh6BA1nnaGRUDurHLUbnQ6D1tAZ/NanmpgjCW3R8?=
+ =?us-ascii?Q?yU+6FctvecndmIvrXoubpiFyu2cpo8mYjjJWOTUD/9QEPB4k3kRjoqkHLScw?=
+ =?us-ascii?Q?zklhiPYekd/E1qkEeGPLXLl6m6EigqX7wz7Nll1g8e/DmITs77NhjcHztwj6?=
+ =?us-ascii?Q?K6uPk57OAAXIh4dk9iI5lH+9tjxm5OZk1vzDu4Lj4rF9aiPBvLcyFslBdzOx?=
+ =?us-ascii?Q?DpSmbjrA1EzB1G02RAX/NvGSeqXKcXQID0Ds655OFL1MC7uzzj7/tJFHOqox?=
+ =?us-ascii?Q?m7HoYxV8NBHDKvra2Rg=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53cdcdd9-c3b9-4387-bc2f-08d9bf5c7b6e
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB5520.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 23:50:18.0886
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N8sAN9C2ITY9h1Ln8qiYrKNhxscBV9ysPzEBzbR21XGUaL6iKENCtjpszcAzvQUo
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5101
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 04:40:11PM +0100, Petr Mladek wrote:
-> > > > Hm, what does this mean for the unpatching case?  What if the new
-> > > > function's .cold child is on the stack when we're trying to unpatch?
-> > > 
-> > > Good question. I did not realize it worked both ways. Of course it does.
-> > > 
-> > > > Would it make sense to allow the user specify a 'new_func' for
-> > > > stack_only, which is a func to check on the stack when unpatching?  Then
-> > > > new_func could point to the new .cold child.  And then
-> > > > klp_check_stack_func() wouldn't need a special case.
-> > 
-> > I am confused. My understanding is that .cold child is explicitly
-> > livepatched to the new .cold child like it is done in the selftest:
-> > 
-> > static struct klp_func funcs_stack_only[] = {
-> > 	{
-> > 		.old_name = "child_function",
-> > 		.new_func = livepatch_child_function,
-> > 	}, {
-> > 
-> > We should not need anything special to check it on stack.
-> > We only need to make sure that we check all .stack_only functions of
-> > the to-be-disabled livepatch.
+On Tue, Dec 14, 2021 at 09:23:39AM +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> We have discussed this with Miroslav and it seems to be even more
-> complicated. My current understanding is that we actually have
-> three functions involved:
+> Return status directly from function called.
 > 
->   parent_func()
->     call child_func()
->       jmp child_func.cold
-> 
-> We livepatch child_func() that uses jmp and need not be on stack.
-> This is why we want to check parent_func() on stack.
-> For this, we define something like:
-> 
-> static struct klp_func funcs[] = {
-> 	{
-> 		.old_name = "child_func",
-> 		.new_func = livepatch_child_func,   // livepatched func
-> 	},
-> 	{
-> 		.old_name = "parent_func",
-> 		.stack_only = true,		    // stack only
-> 	},
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+> change since v2: [PATCHv2] drivers:ocrdma:remove unneeded variable
+>              v3: [PATCH v3 ocrdma-next] drivers: ocrdma: remove unneeded
+> variable
+>              v4: [PATCH for-next v4] RDMA/ocrdma: remove unneeded
+> variable
+> Thanks!
+>  drivers/infiniband/hw/ocrdma/ocrdma_verbs.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 
-Hm, this is different than how I understand it.
+This is white space mangled and won't apply, please fix your
+environment.
 
-In the past I referred to the "parent" as the function which jumps to
-the cold ("child") function.  So maybe we're getting confused by
-different terminology.  But here I'll go with the naming from your
-example.
-
-If parent_func() is stack_only, that could create some false positive
-scenarios where patching stalls unnecessarily.  Also, wouldn't all of
-child_func()'s callers have to be made stack_only?  How would you
-definitively find all the callers?
-
-Instead I was thinking child_func.cold() should be stack_only.
-
-e.g.:
-
-static struct klp_func funcs[] = {
-	{
-		.old_name = "child_func",
-		.new_func = livepatch_child_func,
-	},
-	{
-		.old_name = "child_func.cold",
-		.new_name = "livepatch_child_func.cold",
-		.stack_only = true,
-	},
-
-Any reason why that wouldn't work?
-
-> This is another argument that we should somehow reuse the nops code
-> also for stack_only checks.
-> 
-> Does it make sense, please? ;-)
-
-Yes, if parent_func() is stack_only.
-
-But if child_func.cold() is stack_only, that doesn't work, because it
-doesn't have a fentry hook.
-
--- 
-Josh
-
+Jason

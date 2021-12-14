@@ -2,92 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6197474486
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A015474490
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234681AbhLNOJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        id S234833AbhLNOOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:14:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbhLNOJu (ORCPT
+        with ESMTP id S234799AbhLNOOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:09:50 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11337C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:09:50 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id kj6so2026568qvb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:09:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=e/FTEzYorakqcCqN0foNPkMgFogJ8h7Uad16SL0Kod8=;
-        b=fiM4FWee3dul+2cfhZ6ic8ErBUv5+rkcAB8xBrNiE8/yU0VqkMKWUerZTWAglEdzdh
-         W6MJBZtSejf4gmfD42WSu62rv/jtlZnPptrfWvHKHYRp3yGdN/DseeN2LBRTj4+ECtd8
-         3mO5fl3fKCMNsVpWvdmBd7po3Bj4ugGiq9GghUy/aj2PGYjfX1EycYqSEDu6BdkEnAbx
-         9LbLh76pnG1R2zCG1pVaRNy/+TBgkJXcj2HZ8xXnbH32oEMIs1jrXRDNy0GmyW5QZuS7
-         FD/8lebSWnO/lhHAYtAk+tb49nMxdVn5qOEZtQWT4LL/tcnIOUVn4fRLYX8hzKZrQtu+
-         xuvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e/FTEzYorakqcCqN0foNPkMgFogJ8h7Uad16SL0Kod8=;
-        b=K88O7oNpiIYTGfc6nDcKzb6JURD11ipDIwlsfqZGzVMbucGrcC4DvpNmz/hQplhBYD
-         GSlIBQPWvicXVgRAgrL0ZJaViRxW9bKUxuFufHnXnWhMiDKwo8a+HiD1clMDrf2JWe6U
-         yPynXx1ac3x/Y6WjmWkpE3PUZixmtsnMb9qxtIus5Ag5IFtJTKuCKdimsSLQwGM4HlEz
-         5CH24JOR7wC6qDcISbUZUZ5umQujhNKThyPn+/xQD9gm6dhVF4RsO/kmeulHyvjn6vA5
-         zVJj2C7URLkmI3q/Lg1mTlFByk1shhJXrTRAuqGruSbDZJdc/EX6g5UMrnyv4xk2uqeG
-         R+OA==
-X-Gm-Message-State: AOAM5328vezMchcjVhK745QEtirg0pk5+SmpmEzaiydx4HrZ2iYTF9gF
-        mGTMmyvQfd6sOlPRbwYj5yOD9Q==
-X-Google-Smtp-Source: ABdhPJxD4XJX7z+NX4zxsgKTvBDdRu6CMymo1161/eZjp2r4yhFzTcY1TXXuJLhI8Hjhn6i4vHaVgQ==
-X-Received: by 2002:a05:6214:20e4:: with SMTP id 4mr5743250qvk.95.1639490989223;
-        Tue, 14 Dec 2021 06:09:49 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:e1e4])
-        by smtp.gmail.com with ESMTPSA id v12sm12189863qtx.80.2021.12.14.06.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 06:09:48 -0800 (PST)
-Date:   Tue, 14 Dec 2021 15:09:46 +0100
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     willy@infradead.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        vdavydov.dev@gmail.com, shakeelb@google.com, guro@fb.com,
-        shy828301@gmail.com, alexs@kernel.org, richard.weiyang@gmail.com,
-        david@fromorbit.com, trond.myklebust@hammerspace.com,
-        anna.schumaker@netapp.com, jaegeuk@kernel.org, chao@kernel.org,
-        kari.argillander@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, zhengqi.arch@bytedance.com,
-        duanxiongchun@bytedance.com, fam.zheng@bytedance.com,
-        smuchun@gmail.com
-Subject: Re: [PATCH v4 09/17] mm: workingset: use xas_set_lru() to pass
- shadow_nodes
-Message-ID: <YbilqnwnuTiQ2FEB@cmpxchg.org>
-References: <20211213165342.74704-1-songmuchun@bytedance.com>
- <20211213165342.74704-10-songmuchun@bytedance.com>
+        Tue, 14 Dec 2021 09:14:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53157C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:14:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A807B819AD
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A83C34601;
+        Tue, 14 Dec 2021 14:14:47 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 09:14:46 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     cgel.zte@gmail.com
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] sched/fair: fix boolreturn.cocci warning
+Message-ID: <20211214091446.383ec08e@gandalf.local.home>
+In-Reply-To: <20211214113845.439392-1-deng.changcheng@zte.com.cn>
+References: <20211214113845.439392-1-deng.changcheng@zte.com.cn>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213165342.74704-10-songmuchun@bytedance.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 12:53:34AM +0800, Muchun Song wrote:
-> The workingset will add the xa_node to shadow_nodes, so we should use
-> xas_set_lru() to pass the list_lru which we want to insert xa_node
-> into to set up the xa_node reclaim context correctly.
+
+I'll save Peter Zijlstra time from replying to this.
+
+On Tue, 14 Dec 2021 11:38:45 +0000
+cgel.zte@gmail.com wrote:
+
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
 > 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> ./kernel/sched/fair.c: 9781: 9-10: WARNING: return of 0/1 in function
+> 'imbalanced_active_balance' with return type bool
+> 
+> Return statements in functions returning bool should use true/false
+> instead of 1/0.
 
-Ah, you can't instantiate the list on-demand in list_lru_add() because
-that's happening in an atomic context. So you need the lru available
-in the broader xa update context and group the lru setup in with the
-other pre-atomic node allocation bits. Fair enough. I think it would
-be a bit easier to read if this patch and the previous one were
-squashed (workingset is the only user of xa_lru anyway) and you added
-that explanation. But other than that, the changes make sense to me;
-to a combined patch, please add:
+This is a stupid warning. In C "1" is the same as "true" and "0" is the
+same as "false". 
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+This is a bogus error message and something not needed to be fixed.
+
+Please remove these checks from your scripts.
+
+NACK
+
+-- Steve
+
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> ---
+>  kernel/sched/fair.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index ac5e55441cab..0e62fd7ac0e6 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9778,9 +9778,9 @@ imbalanced_active_balance(struct lb_env *env)
+>  	 */
+>  	if ((env->migration_type == migrate_task) &&
+>  	    (sd->nr_balance_failed > sd->cache_nice_tries+2))
+> -		return 1;
+> +		return true;
+>  
+> -	return 0;
+> +	return false;
+>  }
+>  
+>  static int need_active_balance(struct lb_env *env)
+

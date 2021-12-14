@@ -2,77 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA64473A88
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586BD473A8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243771AbhLNCEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 21:04:05 -0500
-Received: from mga06.intel.com ([134.134.136.31]:50263 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240299AbhLNCED (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 21:04:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639447443; x=1670983443;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=urFPua8fIWKXSWoYYPlVzPgYyKx7ZgIyn110YugwCfI=;
-  b=I8FR307/feyg8Fp9yaJgMva5h5QnZDYlZCK7pzU82BWWLULqMleiiomM
-   +jYKTIQJ4PpVPqkycCflDMPz4a98I5SaodZNNNhQQAQpk8oDzJZ0Hz2vo
-   lbjwCckRM4PzeX+QsYJO+0prgD9OWsJMqXDLbmJAZxdoXqIuJ9ULzs/Vt
-   1wjMrhLPj9DxqPdGaWCg3tdjoSPTZfLtmSNsVZMEHHCXNQ+nPUS6PaWa0
-   GOw7z792oR9HmRuCTpJy2HIBVeXfqjj3g3XtfjV/fR8Pq/X1pIG8paLXP
-   DjqHqp+id2NTXNNcfTTcHvKRTEfvLLn37uShypgUy2xLtz/R/ixUHnx2V
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="299656301"
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="299656301"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 18:04:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="614056731"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 13 Dec 2021 18:04:02 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwxAf-0007Il-Hz; Tue, 14 Dec 2021 02:04:01 +0000
-Date:   Tue, 14 Dec 2021 10:03:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [ebiederm-user-namespace:signal-for-v5.17 4/12]
- arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to
- next function show_regs()
-Message-ID: <202112140924.1TybLuIF-lkp@intel.com>
+        id S243848AbhLNCEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 21:04:43 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40152 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240299AbhLNCEj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 21:04:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95D57B8122A;
+        Tue, 14 Dec 2021 02:04:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0BD1C34603;
+        Tue, 14 Dec 2021 02:04:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639447477;
+        bh=t719aQBdqthRCMd09G9nJzrJtwmP+k0r75AlquttTKA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OL6eyJ2fqcDfo54yWNciMGtz2ZOA61bRGZAVRIzKEtDnAwORRAXAl+coHk6j5Mrgv
+         jrK/T5b/0fQb+fe9KU99x0kyOawkPWtWZPkzzeht2wX/gPZbJP7g4UQ+HEbfBjV4pb
+         vJC6X+PCztYwyCbT3mR/Zip0EsXI3s1KMH2vQYP83EhufwHsZ/fUPg/SLJcK0x50mb
+         j4D6nF99Gxf9DBJRLO87ue3rfrLu2v/bx4xNPPhk6En6irf4e2yafcRyiNdJ3EXr4h
+         aZf9F7byWrLAd/JtjY9MHqXmBOs+hTSEw2yzK3Rnow8524dzuNTNGYd/MsRgQO1rWJ
+         uwIOdK5amcLRg==
+Date:   Tue, 14 Dec 2021 10:04:28 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
+        festevam@gmail.com, ioana.ciornei@nxp.com,
+        jagan@amarulasolutions.com, kernel@pengutronix.de, krzk@kernel.org,
+        linux-imx@nxp.com, matt@traverse.com.au, matteo.lisi@engicam.com,
+        meenakshi.aggarwal@nxp.com, michael@amarulasolutions.com,
+        nathan@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        tharvey@gateworks.com
+Subject: Re: [PATCH v2 5/5] arm: dts: imx8ulz-bsh-smm-m2: Add BSH SMM-M2
+ IMX6ULZ SystemMaster
+Message-ID: <20211214020427.GL4216@dragon>
+References: <20211123151252.143631-1-ariel.dalessandro@collabora.com>
+ <20211123151252.143631-6-ariel.dalessandro@collabora.com>
+ <20211206013531.GO4216@dragon>
+ <4dbe2516-3a72-8c01-d0c9-fa4cfdddf4f6@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <4dbe2516-3a72-8c01-d0c9-fa4cfdddf4f6@collabora.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git signal-for-v5.17
-head:   6b1248798eb6f6d5285db214299996ecc5dc1e6b
-commit: 0e25498f8cd43c1b5aa327f373dd094e9a006da7 [4/12] exit: Add and use make_task_dead.
-config: x86_64-randconfig-a014-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140924.1TybLuIF-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=0e25498f8cd43c1b5aa327f373dd094e9a006da7
-        git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
-        git fetch --no-tags ebiederm-user-namespace signal-for-v5.17
-        git checkout 0e25498f8cd43c1b5aa327f373dd094e9a006da7
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+On Wed, Dec 08, 2021 at 03:15:52PM -0300, Ariel D'Alessandro wrote:
+> Hi Shawn,
+> 
+> On 12/5/21 10:35 PM, Shawn Guo wrote:
+> > On Tue, Nov 23, 2021 at 12:12:52PM -0300, Ariel D'Alessandro wrote:
+> >> From: Michael Trimarchi <michael@amarulasolutions.com>
+> >>
+> >> Add DTS of BSH SMM-M2 SystemMaster.
+> >>
+> >> This version comes with:
+> >> - 128 MiB DDR3 RAM
+> >> - 256 MiB Nand
+> >> - wifi
+> >> - bluetooth
+> >>
+> >> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+> >> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> >> ---
+> >>  arch/arm/boot/dts/Makefile               |   3 +-
+> >>  arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts | 153 +++++++++++++++++++++++
+> >>  2 files changed, 155 insertions(+), 1 deletion(-)
+> >>  create mode 100644 arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
+> >>
+> >> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> >> index 0de64f237cd8..e6d4ad497985 100644
+> >> --- a/arch/arm/boot/dts/Makefile
+> >> +++ b/arch/arm/boot/dts/Makefile
+> >> @@ -693,7 +693,8 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+> >>  	imx6ull-phytec-segin-ff-rdk-nand.dtb \
+> >>  	imx6ull-phytec-segin-ff-rdk-emmc.dtb \
+> >>  	imx6ull-phytec-segin-lc-rdk-nand.dtb \
+> >> -	imx6ulz-14x14-evk.dtb
+> >> +	imx6ulz-14x14-evk.dtb \
+> >> +	imx6ulz-bsh-smm-m2.dts
+> >>  dtb-$(CONFIG_SOC_IMX7D) += \
+> >>  	imx7d-cl-som-imx7.dtb \
+> >>  	imx7d-colibri-aster.dtb \
+> >> diff --git a/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts b/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
+> >> new file mode 100644
+> >> index 000000000000..9e82860469e3
+> >> --- /dev/null
+> >> +++ b/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
+> >> @@ -0,0 +1,153 @@
+> >> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> >> +/*
+> >> + * Copyright (C) 2021 BSH Hausgeraete GmbH
+> >> + */
+> >> +
+> >> +/dts-v1/;
+> >> +
+> >> +#include <dt-bindings/input/input.h>
+> >> +#include "imx6ulz.dtsi"
+> >> +
+> >> +/ {
+> >> +	model = "BSH SMM M2";
+> >> +	compatible = "bsh,imx6ulz-bsh-smm-m2", "fsl,imx6ull";
+> >> +
+> >> +	chosen {
+> >> +		stdout-path = &uart4;
+> >> +	};
+> >> +
+> >> +	usdhc2_pwrseq: usdhc2_pwrseq {
+> >> +		compatible = "mmc-pwrseq-simple";
+> >> +		reset-gpios = <&gpio2 21 GPIO_ACTIVE_LOW>;
+> >> +		status = "okay";
+> > 
+> > "okay" status is generally used to flip "disabled" devices.
+> 
+> Fixed in v3.
+> 
+> > 
+> >> +	};
+> >> +
+> >> +};
+> >> +
+> >> +&uart3 {
+> >> +	pinctrl-names = "default";
+> >> +	pinctrl-0 = <&pinctrl_bluetooth_uart>;
+> >> +	uart-has-rtscts;
+> >> +
+> > 
+> > Unneeded newline.
+> 
+> Fixed in v3.
+> 
+> > 
+> >> +	status = "okay";
+> >> +
+> >> +	bluetooth {
+> >> +		compatible = "brcm,bcm4330-bt";
+> >> +		max-speed = <3000000>;
+> >> +		shutdown-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
+> >> +		device-wakeup-gpios = <&gpio2 17 GPIO_ACTIVE_HIGH>;
+> >> +		host-wakeup-gpios = <&gpio2 13 GPIO_ACTIVE_HIGH>;
+> >> +	};
+> >> +};
+> >> +
+> >> +&uart4 {
+> >> +	pinctrl-names = "default";
+> >> +	pinctrl-0 = <&pinctrl_debug_uart>;
+> >> +	status = "okay";
+> >> +};
+> >> +
+> >> +&usbotg1 {
+> >> +	dr_mode = "peripheral";
+> >> +	srp-disable;
+> >> +	hnp-disable;
+> >> +	adp-disable;
+> >> +	status = "okay";
+> >> +};
+> >> +
+> >> +&usbphy1 {
+> >> +	fsl,tx-d-cal = <106>;
+> >> +};
+> >> +
+> >> +&usdhc2 {
+> >> +	#address-cells = <1>;
+> >> +	#size-cells = <0>;
+> >> +	pinctrl-names = "default";
+> >> +	pinctrl-0 = <&pinctrl_wlan>;
+> >> +	bus-width = <4>;
+> >> +	no-1-8-v;
+> >> +	non-removable;
+> >> +	cap-power-off-card;
+> >> +	pm-ignore-notify;
+> > 
+> > What is this?
+> 
+> Wrong vendor property, removed in v3.
+> 
+> Interesting there're other cases as well:
+> 
+> $ git grep -w pm-ignore-notify
+> arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts:       pm-ignore-notify;
+> arch/arm64/boot/dts/freescale/imx8mm-beacon-som.dtsi:   pm-ignore-notify;
+> arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-ctouch2.dts:
+> pm-ignore-notify;
+> arch/arm64/boot/dts/freescale/imx8mm-icore-mx8mm-edimm2.2.dts:
+> pm-ignore-notify;
+> arch/arm64/boot/dts/freescale/imx8mn-beacon-som.dtsi:   pm-ignore-notify;
+> arch/arm64/boot/dts/renesas/beacon-renesom-som.dtsi:    pm-ignore-notify;
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the reminding!  I will fix them.
 
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to next function show_regs()
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Shawn

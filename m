@@ -2,92 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B146847400D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF5D474014
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbhLNKDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:03:54 -0500
-Received: from mga06.intel.com ([134.134.136.31]:44145 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229550AbhLNKDw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:03:52 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="299725651"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="299725651"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 02:03:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="661256722"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Dec 2021 02:03:49 -0800
-To:     Jun Li <lijun.kernel@gmail.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Yun-Chien Yu <yun-chien.yu@mediatek.com>
-References: <20211209072218.21651-1-chunfeng.yun@mediatek.com>
- <c448da77-f2f3-8b79-fc4b-b9dcff727c6e@linux.intel.com>
- <CAKgpwJXxtLwOjxjg3vFHiqS92j6rx_b1+C-bRwDnp+PBvXCMTg@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] usb: xhci: skip re-check pending port event if hibernated
-Message-ID: <e7a6e45e-68ce-54a5-9632-80244dd1e4c7@linux.intel.com>
-Date:   Tue, 14 Dec 2021 12:05:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S232759AbhLNKHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:07:46 -0500
+Received: from mail-ed1-f47.google.com ([209.85.208.47]:40705 "EHLO
+        mail-ed1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229550AbhLNKHp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:07:45 -0500
+Received: by mail-ed1-f47.google.com with SMTP id r25so60657108edq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 02:07:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Wk+MHheap85NSi5Fjsd9/0VaLUSiOp+S2QJ2lixcuzs=;
+        b=SqjqZx0xspl6+Nrtqp08uF6jwf43JA0u8yyHp8EwTXHU5Cng1/bWz4q7c9NZvsNYMS
+         dWM09oOQN8O0jxT5gGloTrWDrrAuhVeCpfl5m/DSur/B1rguVQ4Kf2zvUbgEhb3Fe4Op
+         zauUFNBECYRUIpaBS4ECgTu2uVZjk6c8piuHXwpEoNqlIQxx+f4gqR4n9BqWK4hZ8qpL
+         fkMOmMKAALvKhka7fwV8/T5cU5LGYf/NPPBCruIijp4su+vqp7Ywis0gVKFd7LTU1cpj
+         hJeacGs5W3hUz/ANzCelSQUEC4ut7Lriggfm2ps8gWLB+1D8/NKTvXrAq5+/fmpyR9Ma
+         //cA==
+X-Gm-Message-State: AOAM532BTC8ly721UVUi3n69xcDOlG7QLGw/YSp4PInqThBN6hDzgrtC
+        5xzSfl2KwOC/1paFSn1lgI8=
+X-Google-Smtp-Source: ABdhPJzNIasWTrg2Vid0JO3xi4XxWEz/iMSD9CUbre67t6oQAPQSBo03SxTvl6wT/Twpd4lDcJKcbg==
+X-Received: by 2002:a17:906:8602:: with SMTP id o2mr4724148ejx.624.1639476464168;
+        Tue, 14 Dec 2021 02:07:44 -0800 (PST)
+Received: from localhost.localdomain (ip-85-160-4-65.eurotel.cz. [85.160.4.65])
+        by smtp.gmail.com with ESMTPSA id f5sm839766ejl.219.2021.12.14.02.07.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 02:07:43 -0800 (PST)
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alexey Makhalov <amakhalov@vmware.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Nico Pache <npache@redhat.com>
+Subject: [PATCH v2 0/4] mm, memory_hotplug: handle unitialized numa node gracefully
+Date:   Tue, 14 Dec 2021 11:07:28 +0100
+Message-Id: <20211214100732.26335-1-mhocko@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
+References: <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <CAKgpwJXxtLwOjxjg3vFHiqS92j6rx_b1+C-bRwDnp+PBvXCMTg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.12.2021 10.00, Jun Li wrote:
-> Mathias Nyman <mathias.nyman@linux.intel.com> 于2021年12月11日周六 01:56写道：
->>
->> On 9.12.2021 9.22, Chunfeng Yun wrote:
->>> When xHCI controller hibernated, the root hub lost power, if controller
->>> support Port Power Control (PPC), PP is not set at xhci_resume() and
->>> set by hub_reset_resume() later, so no need check pending port event.
->>> If PPC is not supported, device is disconneced, seems do not send out
->>> U3 LFPS wake signal, no need re-check again and drop 120ms delay to
->>> save resume time.
->>>
->>> Reported-by: Yun-Chien Yu <yun-chien.yu@mediatek.com>
->>> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
->>> ---
->>
->> Thanks, adding
-> 
-> Hi Mathias, Chunfeng
-> 
-> I have a question on this, if there is no any usb devices connected
-> before suspend, do we need this 120ms delay to check again?
-> So do we need one more condition to limit this like?
-> if (!pending_portevent && !hibernated && xhci_has_child_device())
+Hi,
+this should be the full bundle for now. I have ended up with 4 patches.
+The primary fix is patch 2 (should be reasonably easy to backport to
+older kernels if there is any need for that). Patches 3 and 4 are mere
+clean ups.
 
-The 120ms delay was added to make sure we catch the second wake signal
-from a device in case host missed the first U3 exit LFPS wakeup signal.
+I will repost once this can get some testing from Alexey. Shouldn't be
+too much different from http://lkml.kernel.org/r/YbHfBgPQMkjtuHYF@dhcp22.suse.cz
+with the follow up fix squashed in.
 
-Even if no devices are connected this might be helpful if a device is
-connected while host is suspended.
-I haven't checked any timing for the link training during enumeration,
-but it also uses LFPS signalling, and connected device isn't visible to
-driver until link is successfully trained.
+I would really appreciate to hear more about http://lkml.kernel.org/r/YbMZsczMGpChaWz0@dhcp22.suse.cz
+because I would like to add that information to the changelog as well.
 
-So the original 120ms delay patch might as a positive side effect ensure
-driver doesn't suspend host mid device enumeration.
+Thanks for the review and testing.
 
-Could be looked into more, but I don't think we should this patch by
-Chunfeng
 
-Thanks
-Mathias

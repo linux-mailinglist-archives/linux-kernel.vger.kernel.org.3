@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9976B4745E9
+	by mail.lfdr.de (Postfix) with ESMTP id 067B24745E7
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235298AbhLNPFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:05:01 -0500
-Received: from mga17.intel.com ([192.55.52.151]:16130 "EHLO mga17.intel.com"
+        id S235575AbhLNPE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:04:56 -0500
+Received: from mga18.intel.com ([134.134.136.126]:28585 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235233AbhLNPDb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:03:31 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="219677564"
+        id S235219AbhLNPDa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 10:03:30 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="225852744"
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="219677564"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:03:15 -0800
+   d="scan'208";a="225852744"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:03:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="753004219"
+   d="scan'208";a="519249961"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Dec 2021 07:03:09 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 14 Dec 2021 07:03:15 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id CBDBFC48; Tue, 14 Dec 2021 17:03:09 +0200 (EET)
+        id DA49BCC1; Tue, 14 Dec 2021 17:03:09 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -33,12 +33,10 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
         x86@kernel.org, linux-kernel@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH 14/26] x86/acpi, x86/boot: Add multiprocessor wake-up support
-Date:   Tue, 14 Dec 2021 18:02:52 +0300
-Message-Id: <20211214150304.62613-15-kirill.shutemov@linux.intel.com>
+Subject: [PATCH 15/26] x86/boot: Avoid #VE during boot for TDX platforms
+Date:   Tue, 14 Dec 2021 18:02:53 +0300
+Message-Id: <20211214150304.62613-16-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
 References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
@@ -48,217 +46,214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+From: Sean Christopherson <seanjc@google.com>
 
-TDX cannot use INIT/SIPI protocol to bring up secondary CPUs because it
-requires assistance from untrusted VMM.
+There are a few MSRs and control register bits that the kernel
+normally needs to modify during boot. But, TDX disallows
+modification of these registers to help provide consistent security
+guarantees. Fortunately, TDX ensures that these are all in the correct
+state before the kernel loads, which means the kernel does not need to
+modify them.
 
-For platforms that do not support SIPI/INIT, ACPI defines a wakeup
-model (using mailbox) via MADT multiprocessor wakeup structure. More
-details about it can be found in ACPI specification v6.4, the section
-titled "Multiprocessor Wakeup Structure". If a platform firmware
-produces the multiprocessor wakeup structure, then OS may use this
-new mailbox-based mechanism to wake up the APs.
+The conditions to avoid are:
 
-Add ACPI MADT wake structure parsing support for x86 platform and if
-MADT wake table is present, update apic->wakeup_secondary_cpu_64 with
-new API which uses MADT wake mailbox to wake-up CPU.
+ * Any writes to the EFER MSR
+ * Clearing CR0.NE
+ * Clearing CR3.MCE
 
-Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+This theoretically makes the guest boot more fragile. If, for instance,
+EFER was set up incorrectly and a WRMSR was performed, it will trigger
+early exception panic or a triple fault, if it's before early
+exceptions are set up. However, this is likely to trip up the guest
+BIOS long before control reaches the kernel. In any case, these kinds
+of problems are unlikely to occur in production environments, and
+developers have good debug tools to fix them quickly.
+
+Change the common boot code to work on TDX and non-TDX systems.
+This should have no functional effect on non-TDX systems.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/include/asm/apic.h |   5 ++
- arch/x86/kernel/acpi/boot.c | 114 ++++++++++++++++++++++++++++++++++++
- arch/x86/kernel/apic/apic.c |  10 ++++
- 3 files changed, 129 insertions(+)
+ arch/x86/Kconfig                     |  1 +
+ arch/x86/boot/compressed/head_64.S   | 25 +++++++++++++++++++++----
+ arch/x86/boot/compressed/pgtable.h   |  2 +-
+ arch/x86/kernel/head_64.S            | 24 ++++++++++++++++++++++--
+ arch/x86/realmode/rm/trampoline_64.S | 27 +++++++++++++++++++++++----
+ 5 files changed, 68 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
-index 35006e151774..bd8ae0a7010a 100644
---- a/arch/x86/include/asm/apic.h
-+++ b/arch/x86/include/asm/apic.h
-@@ -490,6 +490,11 @@ static inline unsigned int read_apic_id(void)
- 	return apic->get_apic_id(reg);
- }
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 8e781f166030..fc4771a07fc0 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -878,6 +878,7 @@ config INTEL_TDX_GUEST
+ 	depends on X86_64 && CPU_SUP_INTEL
+ 	depends on X86_X2APIC
+ 	select ARCH_HAS_CC_PLATFORM
++	select X86_MCE
+ 	help
+ 	  Support running as a guest under Intel TDX.  Without this support,
+ 	  the guest kernel can not boot or run under TDX.
+diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+index 572c535cf45b..dbbfafba553f 100644
+--- a/arch/x86/boot/compressed/head_64.S
++++ b/arch/x86/boot/compressed/head_64.S
+@@ -643,12 +643,25 @@ SYM_CODE_START(trampoline_32bit_src)
+ 	movl	$MSR_EFER, %ecx
+ 	rdmsr
+ 	btsl	$_EFER_LME, %eax
++	/* Avoid writing EFER if no change was made (for TDX guest) */
++	jc	1f
+ 	wrmsr
+-	popl	%edx
++1:	popl	%edx
+ 	popl	%ecx
  
-+#ifdef CONFIG_X86_64
-+typedef int (*wakeup_cpu_handler)(int apicid, unsigned long start_eip);
-+extern void acpi_wake_cpu_handler_update(wakeup_cpu_handler handler);
-+#endif
+ 	/* Enable PAE and LA57 (if required) paging modes */
+-	movl	$X86_CR4_PAE, %eax
++	movl	%cr4, %eax
 +
- extern int default_apic_id_valid(u32 apicid);
- extern int default_acpi_madt_oem_check(char *, char *);
- extern void default_setup_apic_routing(void);
-diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-index 5b6d1a95776f..af204a217575 100644
---- a/arch/x86/kernel/acpi/boot.c
-+++ b/arch/x86/kernel/acpi/boot.c
-@@ -65,6 +65,15 @@ static u64 acpi_lapic_addr __initdata = APIC_DEFAULT_PHYS_BASE;
- static bool acpi_support_online_capable;
- #endif
- 
-+#ifdef CONFIG_X86_64
-+/* Physical address of the Multiprocessor Wakeup Structure mailbox */
-+static u64 acpi_mp_wake_mailbox_paddr;
-+/* Virtual address of the Multiprocessor Wakeup Structure mailbox */
-+static struct acpi_madt_multiproc_wakeup_mailbox *acpi_mp_wake_mailbox;
-+/* Lock to protect mailbox (acpi_mp_wake_mailbox) from parallel access */
-+static DEFINE_SPINLOCK(mailbox_lock);
-+#endif
-+
- #ifdef CONFIG_X86_IO_APIC
- /*
-  * Locks related to IOAPIC hotplug
-@@ -336,6 +345,80 @@ acpi_parse_lapic_nmi(union acpi_subtable_headers * header, const unsigned long e
- 	return 0;
- }
- 
-+#ifdef CONFIG_X86_64
-+/* Virtual address of the Multiprocessor Wakeup Structure mailbox */
-+static int acpi_wakeup_cpu(int apicid, unsigned long start_ip)
-+{
-+	static physid_mask_t apic_id_wakemap = PHYSID_MASK_NONE;
-+	unsigned long flags;
-+	u8 timeout;
-+
-+	/* Remap mailbox memory only for the first call to acpi_wakeup_cpu() */
-+	if (physids_empty(apic_id_wakemap)) {
-+		acpi_mp_wake_mailbox = memremap(acpi_mp_wake_mailbox_paddr,
-+						sizeof(*acpi_mp_wake_mailbox),
-+						MEMREMAP_WB);
-+	}
-+
++#ifdef CONFIG_X86_MCE
 +	/*
-+	 * According to the ACPI specification r6.4, section titled
-+	 * "Multiprocessor Wakeup Structure" the mailbox-based wakeup
-+	 * mechanism cannot be used more than once for the same CPU.
-+	 * Skip wakeups if they are attempted more than once.
++	 * Preserve CR4.MCE if the kernel will enable #MC support.  Clearing
++	 * MCE may fault in some environments (that also force #MC support).
++	 * Any machine check that occurs before #MC support is fully configured
++	 * will crash the system regardless of the CR4.MCE value set here.
 +	 */
-+	if (physid_isset(apicid, apic_id_wakemap)) {
-+		pr_err("CPU already awake (APIC ID %x), skipping wakeup\n",
-+		       apicid);
-+		return -EINVAL;
-+	}
-+
-+	spin_lock_irqsave(&mailbox_lock, flags);
-+
-+	/*
-+	 * Mailbox memory is shared between firmware and OS. Firmware will
-+	 * listen on mailbox command address, and once it receives the wakeup
-+	 * command, CPU associated with the given apicid will be booted.
-+	 *
-+	 * The value of apic_id and wakeup_vector has to be set before updating
-+	 * the wakeup command. To let compiler preserve order of writes, use
-+	 * smp_store_release.
-+	 */
-+	smp_store_release(&acpi_mp_wake_mailbox->apic_id, apicid);
-+	smp_store_release(&acpi_mp_wake_mailbox->wakeup_vector, start_ip);
-+	smp_store_release(&acpi_mp_wake_mailbox->command,
-+			  ACPI_MP_WAKE_COMMAND_WAKEUP);
-+
-+	/*
-+	 * After writing the wakeup command, wait for maximum timeout of 0xFF
-+	 * for firmware to reset the command address back zero to indicate
-+	 * the successful reception of command.
-+	 * NOTE: 0xFF as timeout value is decided based on our experiments.
-+	 *
-+	 * XXX: Change the timeout once ACPI specification comes up with
-+	 *      standard maximum timeout value.
-+	 */
-+	timeout = 0xFF;
-+	while (READ_ONCE(acpi_mp_wake_mailbox->command) && --timeout)
-+		cpu_relax();
-+
-+	/* If timed out (timeout == 0), return error */
-+	if (!timeout) {
-+		spin_unlock_irqrestore(&mailbox_lock, flags);
-+		return -EIO;
-+	}
-+
-+	/*
-+	 * If the CPU wakeup process is successful, store the
-+	 * status in apic_id_wakemap to prevent re-wakeup
-+	 * requests.
-+	 */
-+	physid_set(apicid, apic_id_wakemap);
-+
-+	spin_unlock_irqrestore(&mailbox_lock, flags);
-+
-+	return 0;
-+}
++	andl	$X86_CR4_MCE, %eax
 +#endif
- #endif				/*CONFIG_X86_LOCAL_APIC */
++	orl	$X86_CR4_PAE, %eax
+ 	testl	%edx, %edx
+ 	jz	1f
+ 	orl	$X86_CR4_LA57, %eax
+@@ -662,8 +675,12 @@ SYM_CODE_START(trampoline_32bit_src)
+ 	pushl	$__KERNEL_CS
+ 	pushl	%eax
  
- #ifdef CONFIG_X86_IO_APIC
-@@ -1083,6 +1166,29 @@ static int __init acpi_parse_madt_lapic_entries(void)
- 	}
- 	return 0;
- }
-+
-+#ifdef CONFIG_X86_64
-+static int __init acpi_parse_mp_wake(union acpi_subtable_headers *header,
-+				     const unsigned long end)
-+{
-+	struct acpi_madt_multiproc_wakeup *mp_wake;
-+
-+	if (!IS_ENABLED(CONFIG_SMP))
-+		return -ENODEV;
-+
-+	mp_wake = (struct acpi_madt_multiproc_wakeup *)header;
-+	if (BAD_MADT_ENTRY(mp_wake, end))
-+		return -EINVAL;
-+
-+	acpi_table_print_madt_entry(&header->common);
-+
-+	acpi_mp_wake_mailbox_paddr = mp_wake->base_address;
-+
-+	acpi_wake_cpu_handler_update(acpi_wakeup_cpu);
-+
-+	return 0;
-+}
-+#endif				/* CONFIG_X86_64 */
- #endif				/* CONFIG_X86_LOCAL_APIC */
+-	/* Enable paging again */
+-	movl	$(X86_CR0_PG | X86_CR0_PE), %eax
++	/*
++	 * Enable paging again.  Keep CR0.NE set, FERR# is no longer used
++	 * to handle x87 FPU errors and clearing NE may fault in some
++	 * environments.
++	 */
++	movl	$(X86_CR0_PG | X86_CR0_NE | X86_CR0_PE), %eax
+ 	movl	%eax, %cr0
  
- #ifdef	CONFIG_X86_IO_APIC
-@@ -1278,6 +1384,14 @@ static void __init acpi_process_madt(void)
+ 	lret
+diff --git a/arch/x86/boot/compressed/pgtable.h b/arch/x86/boot/compressed/pgtable.h
+index 6ff7e81b5628..cc9b2529a086 100644
+--- a/arch/x86/boot/compressed/pgtable.h
++++ b/arch/x86/boot/compressed/pgtable.h
+@@ -6,7 +6,7 @@
+ #define TRAMPOLINE_32BIT_PGTABLE_OFFSET	0
  
- 				smp_found_config = 1;
- 			}
-+
-+#ifdef CONFIG_X86_64
-+			/*
-+			 * Parse MADT MP Wake entry.
-+			 */
-+			acpi_table_parse_madt(ACPI_MADT_TYPE_MULTIPROC_WAKEUP,
-+					      acpi_parse_mp_wake, 1);
+ #define TRAMPOLINE_32BIT_CODE_OFFSET	PAGE_SIZE
+-#define TRAMPOLINE_32BIT_CODE_SIZE	0x70
++#define TRAMPOLINE_32BIT_CODE_SIZE	0x80
+ 
+ #define TRAMPOLINE_32BIT_STACK_END	TRAMPOLINE_32BIT_SIZE
+ 
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index d8b3ebd2bb85..f503e97945d3 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -141,7 +141,17 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 1:
+ 
+ 	/* Enable PAE mode, PGE and LA57 */
+-	movl	$(X86_CR4_PAE | X86_CR4_PGE), %ecx
++	movq	%cr4, %rcx
++#ifdef CONFIG_X86_MCE
++	/*
++	 * Preserve CR4.MCE if the kernel will enable #MC support.  Clearing
++	 * MCE may fault in some environments (that also force #MC support).
++	 * Any machine check that occurs before #MC support is fully configured
++	 * will crash the system regardless of the CR4.MCE value set here.
++	 */
++	andl	$X86_CR4_MCE, %ecx
 +#endif
- 		}
- 		if (error == -EINVAL) {
- 			/*
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index b70344bf6600..3c8f2c797a98 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -2551,6 +2551,16 @@ u32 x86_msi_msg_get_destid(struct msi_msg *msg, bool extid)
- }
- EXPORT_SYMBOL_GPL(x86_msi_msg_get_destid);
++	orl	$(X86_CR4_PAE | X86_CR4_PGE), %ecx
+ #ifdef CONFIG_X86_5LEVEL
+ 	testl	$1, __pgtable_l5_enabled(%rip)
+ 	jz	1f
+@@ -229,13 +239,23 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	/* Setup EFER (Extended Feature Enable Register) */
+ 	movl	$MSR_EFER, %ecx
+ 	rdmsr
++	/*
++	 * Preserve current value of EFER for comparison and to skip
++	 * EFER writes if no change was made (for TDX guest)
++	 */
++	movl    %eax, %edx
+ 	btsl	$_EFER_SCE, %eax	/* Enable System Call */
+ 	btl	$20,%edi		/* No Execute supported? */
+ 	jnc     1f
+ 	btsl	$_EFER_NX, %eax
+ 	btsq	$_PAGE_BIT_NX,early_pmd_flags(%rip)
+-1:	wrmsr				/* Make changes effective */
  
-+#ifdef CONFIG_X86_64
-+void __init acpi_wake_cpu_handler_update(wakeup_cpu_handler handler)
-+{
-+	struct apic **drv;
-+
-+	for (drv = __apicdrivers; drv < __apicdrivers_end; drv++)
-+		(*drv)->wakeup_secondary_cpu_64 = handler;
-+}
-+#endif
-+
- /*
-  * Override the generic EOI implementation with an optimized version.
-  * Only called during early boot when only one CPU is active and with
++	/* Avoid writing EFER if no change was made (for TDX guest) */
++1:	cmpl	%edx, %eax
++	je	1f
++	xor	%edx, %edx
++	wrmsr				/* Make changes effective */
++1:
+ 	/* Setup cr0 */
+ 	movl	$CR0_STATE, %eax
+ 	/* Make changes effective */
+diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/trampoline_64.S
+index ae112a91592f..170f248d5769 100644
+--- a/arch/x86/realmode/rm/trampoline_64.S
++++ b/arch/x86/realmode/rm/trampoline_64.S
+@@ -143,13 +143,28 @@ SYM_CODE_START(startup_32)
+ 	movl	%eax, %cr3
+ 
+ 	# Set up EFER
++	movl	$MSR_EFER, %ecx
++	rdmsr
++	/*
++	 * Skip writing to EFER if the register already has desired
++	 * value (to avoid #VE for the TDX guest).
++	 */
++	cmp	pa_tr_efer, %eax
++	jne	.Lwrite_efer
++	cmp	pa_tr_efer + 4, %edx
++	je	.Ldone_efer
++.Lwrite_efer:
+ 	movl	pa_tr_efer, %eax
+ 	movl	pa_tr_efer + 4, %edx
+-	movl	$MSR_EFER, %ecx
+ 	wrmsr
+ 
+-	# Enable paging and in turn activate Long Mode
+-	movl	$(X86_CR0_PG | X86_CR0_WP | X86_CR0_PE), %eax
++.Ldone_efer:
++	/*
++	 * Enable paging and in turn activate Long Mode. Keep CR0.NE set, FERR#
++	 * is no longer used to handle x87 FPU errors and clearing NE may fault
++	 * in some environments.
++	 */
++	movl	$(X86_CR0_PG | X86_CR0_WP | X86_CR0_NE | X86_CR0_PE), %eax
+ 	movl	%eax, %cr0
+ 
+ 	/*
+@@ -169,7 +184,11 @@ SYM_CODE_START(pa_trampoline_compat)
+ 	movl	$rm_stack_end, %esp
+ 	movw	$__KERNEL_DS, %dx
+ 
+-	movl	$X86_CR0_PE, %eax
++	/*
++	 * Keep CR0.NE set, FERR# is no longer used to handle x87 FPU errors
++	 * and clearing NE may fault in some environments.
++	 */
++	movl	$(X86_CR0_NE | X86_CR0_PE), %eax
+ 	movl	%eax, %cr0
+ 	ljmpl   $__KERNEL32_CS, $pa_startup_32
+ SYM_CODE_END(pa_trampoline_compat)
 -- 
 2.32.0
 

@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B37474A55
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297B2474A59
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236851AbhLNSET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 13:04:19 -0500
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:33782 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbhLNSEN (ORCPT
+        id S236839AbhLNSEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231709AbhLNSEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 13:04:13 -0500
-Received: by mail-oi1-f171.google.com with SMTP id q25so28358285oiw.0;
-        Tue, 14 Dec 2021 10:04:13 -0800 (PST)
+        Tue, 14 Dec 2021 13:04:39 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E4AC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 10:04:39 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id b67so17571637qkg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 10:04:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iFd/RLtXfEa7FNow2Y8rcbCG+dp9BD0pUf8nWiAekpk=;
+        b=RMH5Ly2BBs8fnXFQqM2JB55l792ROrwUnODNiBAmUogeZbFnQM9v0Fm8YJGXzynWWN
+         iBgy6zFBfuUBmaMjnbcjt+O0mPQzqkE+uNCyhT1CkFYFxN7mUNtD7CN2xzRvO/PEJvIh
+         AZ8j0RQ70ni+Dim0OOSoPlIDC7PaalpWTaEfrGCUTg3n5BMLvKl8xBDJ4sSXjfG3h+sa
+         RhX9rjJxLmiEkT3lD+zeluLdIl5tT/IHwj4JLozPxe4GxlsrDyoz5zkQRI4uDPBtPeNx
+         SqfYmKrcsZi3oDZuZmCKrlMJpt2CPZUbbvE7oyuWwOXDENIkls72QGKKcLKPA0rOqWje
+         +U5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9hI2EmXHnui1ismThJSKFmhiVpetBd29iuU2vJbk3UE=;
-        b=3Sg+lihSxYxYGzFHTnxVSGxrpl7oGvMZSUC8s3Y6NTFty2EFe/c4petHdFj9pAcvcO
-         5fDUqRyzkVLlTaoTy4DVqtGyPfdgIN/gNlV0IXz0UeRAgn98F2Yw6ADF8L7ttWbPr8WE
-         E905iJhkVqOC42UVi/GsdRz3HNwXPpCXPgTJRXsELi3tlSyb2V75IlhxW/r8QIf/WAsN
-         DGihIXWNO2bYHFK9ueNwAmeQdz3VCi71QtVU3W6+5AS3jGH6+uS+RNaKvkk+6dmnzbsz
-         QXefyXK6bV38widZNHZhW+5XshYHAWcOj/qx35FxcZLxAn55WrNHKo+3cxGk7oCBI80g
-         HHqg==
-X-Gm-Message-State: AOAM5325zUzQO/hUUn7SyS4dfNI2O8jEUnI0L8bWtx4Uiw2EPOkqdyQ4
-        9wqOikq3N+pL3iupPAYloQ==
-X-Google-Smtp-Source: ABdhPJxYJ6B9y+lYradhAM8Cs39zXalN9xut86nZ8NeK2AN1p0yWqZxIAk0xBcaxbFIJZa3LaAypAg==
-X-Received: by 2002:aca:1c07:: with SMTP id c7mr34490624oic.133.1639505052816;
-        Tue, 14 Dec 2021 10:04:12 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id k4sm102058oij.54.2021.12.14.10.04.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 10:04:11 -0800 (PST)
-Received: (nullmailer pid 3647417 invoked by uid 1000);
-        Tue, 14 Dec 2021 18:04:10 -0000
-Date:   Tue, 14 Dec 2021 12:04:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-crypto@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>, linux-usb@vger.kernel.org,
-        Doug Berger <opendmb@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-ide@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-pwm@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-pm@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v3 06/15] dt-binding: interrupt-controller: Convert
- BCM7038 L1 intc to YAML
-Message-ID: <Ybjcmi3MlGOnOhK7@robh.at.kernel.org>
-References: <20211208003727.3596577-1-f.fainelli@gmail.com>
- <20211208003727.3596577-7-f.fainelli@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iFd/RLtXfEa7FNow2Y8rcbCG+dp9BD0pUf8nWiAekpk=;
+        b=339wAdhPdbFdVzxz3kn44fOaa0MvM8aOtCmJLJ11LAqdQeGXRRKWmuBw8KiAtbF5Cp
+         +UaLjxlZR9K8VtuCPRvVRlyv/2kefWtz2Rhfd/hh8U/APSdL6ZneAx3+umSboJ+JVCsR
+         VDiTF0bcLzhRpRhoPbGHpVVHvGyVbE+y5OIe5xIR7SWNkNWuFMxeawtMSJ0caI5Q7EcS
+         psbQsmMDyjUdWoY/awPSqacyjMSUg4T3EBG8JtaYyTI21DSa8ssN1WQOiHL1rA5UF4Vn
+         1FHAXqy/+ZhUebk7sfZeUbdWAxZHtAAYpxnVVyvYIQuXMRmZ82PT9pa7OBr8EdU1o4d6
+         Utqw==
+X-Gm-Message-State: AOAM532+UtinnkWi42RNLoY7hWKrnjVkcuAiICAxXYTBYrVJTbP1p1Uh
+        kjNyMJWkJBDbC5fCIcOPSVDssqngpRtODJeF/174zw==
+X-Google-Smtp-Source: ABdhPJye7k3sUDvQJ7lwsSrRua4khAyxdXGYT2S2jVYUAjbHSaYNzwa8bkYyZYIzsswpgXol0brDVu8fvH/ZamF2B7c=
+X-Received: by 2002:a37:8d84:: with SMTP id p126mr5465940qkd.684.1639505077989;
+ Tue, 14 Dec 2021 10:04:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208003727.3596577-7-f.fainelli@gmail.com>
+References: <d77b08bf757a8ea8dab3a495885c7de6ff6678da.1639102791.git.asml.silence@gmail.com>
+ <20211211003838.7u4lcqghcq2gqvho@kafai-mbp.dhcp.thefacebook.com>
+ <5f7d2f60-b833-04e5-7710-fdd2ef3b6f67@gmail.com> <20211211015656.tvufcnh5k4rrc7sw@kafai-mbp.dhcp.thefacebook.com>
+ <fa707ef9-d612-a3a4-1b2a-fc2b28a3ec5f@gmail.com> <YbjaSNBlW03rX6c7@google.com>
+ <5e2bc4bc-e844-9a8c-2a95-0f55645b4392@gmail.com>
+In-Reply-To: <5e2bc4bc-e844-9a8c-2a95-0f55645b4392@gmail.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 14 Dec 2021 10:04:27 -0800
+Message-ID: <CAKH8qBvRG3Zdpo0ZK_Mkji52HqMa=i9ftzMykZLQB5bnz1YAPA@mail.gmail.com>
+Subject: Re: [BPF PATCH for-next] cgroup/bpf: fast path for not loaded skb BPF filtering
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 07 Dec 2021 16:37:17 -0800, Florian Fainelli wrote:
-> Convert the Broadcom STB BCM7038 Level 1 interrupt controller Device
-> Tree binding to YAML to help with validation.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../brcm,bcm7038-l1-intc.txt                  | 61 -------------
->  .../brcm,bcm7038-l1-intc.yaml                 | 91 +++++++++++++++++++
->  2 files changed, 91 insertions(+), 61 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.txt
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.yaml
-> 
+On Tue, Dec 14, 2021 at 10:00 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>
+> On 12/14/21 17:54, sdf@google.com wrote:
+> > On 12/11, Pavel Begunkov wrote:
+> >> On 12/11/21 01:56, Martin KaFai Lau wrote:
+> >> > On Sat, Dec 11, 2021 at 01:15:05AM +0000, Pavel Begunkov wrote:
+> >> > > That was the first idea, but it's still heavier than I'd wish. 0.3%-0.7%
+> >> > > in profiles, something similar in reqs/s. rcu_read_lock/unlock() pair is
+> >> > > cheap but anyway adds 2 barrier()s, and with bitmasks we can inline
+> >> > > the check.
+> >> > It sounds like there is opportunity to optimize
+> >> > __cgroup_bpf_prog_array_is_empty().
+> >> >
+> >> > How about using rcu_access_pointer(), testing with &empty_prog_array.hdr,
+> >> > and then inline it?  The cgroup prog array cannot be all
+> >> > dummy_bpf_prog.prog.  If that could be the case, it should be replaced
+> >> > with &empty_prog_array.hdr earlier, so please check.
+> >
+> >> I'd need to expose and export empty_prog_array, but that should do.
+> >> Will try it out, thanks
+> >
+> > Note that we already use __cgroup_bpf_prog_array_is_empty in
+> > __cgroup_bpf_run_filter_setsockopt/__cgroup_bpf_run_filter_getsockopt
+> > for exactly the same purpose. If you happen to optimize it, pls
+> > update these places as well.
+>
+> Just like it's already done in the patch? Or maybe you mean something else?
 
-Applied, thanks!
+Ah, you already did it, looks good! I didn't scroll all the way to the
+bottom and got distracted by Martin's comment about
+__cgroup_bpf_prog_array_is_empty :-[

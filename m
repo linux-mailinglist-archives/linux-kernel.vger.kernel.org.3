@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C4C474338
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E83474340
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234280AbhLNNOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
+        id S234294AbhLNNPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 08:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbhLNNOJ (ORCPT
+        with ESMTP id S231987AbhLNNPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:14:09 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B39C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:14:08 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id u17so32345870wrt.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:14:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=tf7A8M8MW0cJL9m4DIttEClNLOA5QjszPUC9MV5ahVw=;
-        b=iKw0n5Kv7J4rA35x9o6XWDsMVkJlPLBJQaW4YOZVbgQJ+kpIDe7Mi9960e2NL5LfVC
-         va31/J3SGgPJRZDnOo2EQAp61lPekdYxkX2Dl0y92wAUgqeQCKLpEQeZiLur7Trm9lWL
-         q3XdFp7LyLfZbmSGkP+x0HWR4WQmpeh0JUv4cH2tmUJpXmKkwdfcsl41170FXGYrMkB/
-         xIhKjvT0C/CF4FzE3Dv8rQJGKT+bZlFpSThoqMw3ce+7jyn7h7eiyBKM/v8fFVEZsMMo
-         +JE5S/o5wDpcNUPz3pbl1nGY2LGCH10CsXMAIjoOE4jkb9cD9XZPcrVSIqRDdHcML17q
-         esQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=tf7A8M8MW0cJL9m4DIttEClNLOA5QjszPUC9MV5ahVw=;
-        b=gZCeSnsqvl3ugDEgms8CmSkSZ0wheEQfNNDG61MhhdgTFYW4v49Gk5cm6QJ9uJYCCg
-         6VibcmDRbDnJ3qLRuEW/cSvFbgQ84rX59vs1jG/lObtp2OIUw2j8fYzzr+QKrOyyL/CH
-         CV1Ct/xw8P3GdSeg6GJ8o4AJ2F/hmYC3OmbiNpKVIaAB162d7iAWG0r+Lrl9QYifHrk5
-         A7T3aS27QNIGHCjadTAFKZdAiOgJWYCuLNYkwI7FpBI9vE9m5SVzmTbodulrruOMTx59
-         AlHxvFnNh2ERxf9AR0mNTy3IEGO4X5c0UlZ0Fq/KhTCWkE8Cn/UGmzPX+KjnlojA21ED
-         3Mmg==
-X-Gm-Message-State: AOAM531by6IwM+bOTyLSwBeCmxj5kH/nex0uBFO0Tu3UgcdRYStAVlo/
-        3qAtQ5AOHxwOUJXi6Kl0PelnVyXS2kY/5gZpwn0=
-X-Google-Smtp-Source: ABdhPJxbR77bCZKBNNkhiV96xl3wY2ASUvJP9XMPGoXwPHXIj4hj0v+TDKzyecEtVfddYP0deUR00w/n2XBkvmHu1K4=
-X-Received: by 2002:a05:6000:162b:: with SMTP id v11mr5727803wrb.481.1639487647329;
- Tue, 14 Dec 2021 05:14:07 -0800 (PST)
+        Tue, 14 Dec 2021 08:15:02 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAE5C061574;
+        Tue, 14 Dec 2021 05:15:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+SjuTfMdZX234WsFLTKgVuTlJHNKJQ6+73Q7tXhFwCc=; b=XK2cZMDZBs7uBis/aCOTIfy5Id
+        Woqbhfb9Jy/KCZQKrZRNKBni0OPi2vhjbBCFXVTZZwdfNF56JsdsQ62OYcF94p2H7RI22o/MO9Gze
+        79MLQCmvpO5GoJH/Wc3U5bT1kFBO7szsOivwVrpgEe7O/dPOSpHXg5RQnCMxsxVg4sEL5yLxKaGaN
+        o2+DlolygGwKfZqa8tJ/Igl2vUcTDqbbAeBp3a6cbU7DI3cqvUrdvjVUunJvazeyk7h1+n8aLITmy
+        mHMZsUktXu9JXz8kjVqgNxu5akRJTqIaRWUcQM0R8KY9P3voRZitjZtMGV0nZpFi23pCL7fHt8sO7
+        e7KFAFsQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mx7do-00DjQw-6u; Tue, 14 Dec 2021 13:14:48 +0000
+Date:   Tue, 14 Dec 2021 13:14:48 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v2 0/2] kdump: simplify code
+Message-ID: <YbiYyDRW9aB9jFMD@casper.infradead.org>
+References: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
+ <0c5cb37139af4f3e85cc2c5115d7d006@AcuMS.aculab.com>
+ <YbXhVxRJfjvKw++W@casper.infradead.org>
+ <b7a75ae9253445af81ff2fedd5268af4@AcuMS.aculab.com>
+ <YbdcKK3Cq6ITTg/l@casper.infradead.org>
+ <36440c0f-8b8a-c401-684f-6f54ce9c061e@loongson.cn>
 MIME-Version: 1.0
-Reply-To: mcb_321@aol.com
-Sender: ouedraogoh307@gmail.com
-Received: by 2002:adf:9d81:0:0:0:0:0 with HTTP; Tue, 14 Dec 2021 05:14:06
- -0800 (PST)
-From:   Patrice Zengu <rm2568590@gmail.com>
-Date:   Tue, 14 Dec 2021 14:14:06 +0100
-X-Google-Sender-Auth: c0T1xuT3GnRwAptjupNww7QmaYw
-Message-ID: <CAJV1yA4xpJiGeLFeuZHfczAXxgYDeN885_T307q-Jip=3H6Y7A@mail.gmail.com>
-Subject: Please Work With Me
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <36440c0f-8b8a-c401-684f-6f54ce9c061e@loongson.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
+On Tue, Dec 14, 2021 at 06:03:11PM +0800, Tiezhu Yang wrote:
+> On 12/13/2021 10:43 PM, Matthew Wilcox wrote:
+> > On Mon, Dec 13, 2021 at 08:30:33AM +0000, David Laight wrote:
+> > > From: Matthew Wilcox
+> > > > Sent: 12 December 2021 11:48
+> > > > 
+> > > > On Sat, Dec 11, 2021 at 05:53:46PM +0000, David Laight wrote:
+> > > > > From: Tiezhu Yang
+> > > > > > Sent: 11 December 2021 03:33
+> > > > > > 
+> > > > > > v2:
+> > > > > >   -- add copy_to_user_or_kernel() in lib/usercopy.c
+> > > > > >   -- define userbuf as bool type
+> > > > > 
+> > > > > Instead of having a flag to indicate whether the buffer is user or kernel,
+> > > > > would it be better to have two separate buffer pointers.
+> > > > > One for a user space buffer, the other for a kernel space buffer.
+> > > > > Exactly one of the buffers should always be NULL.
+> > > > 
+> > > > No.  You should be using an iov_iter instead.  See
+> > > > https://lore.kernel.org/all/Ya4bdB0UBJCZhUSo@casper.infradead.org/
+> > > > for a start on this.
+> > > 
+> > > iov_iter gets horribly expensive...
+> > 
+> > Oh, right.  Reading the kcore is a high-performance path, my mistake.
+> > 
+> 
+> Hi,
+> 
+> Thank you for your discussions.
+> 
+> The intention of this patchset is to simplify the related code with no
+> functional changes and no side effects.
+> 
+> At this moment, if you are OK, I will send v3 used with inline function
+> copy_to_user_or_kernel() to keep it simple, maybe other more changes can
+> be done in the future if no any side effect.
 
-
--- 
-Dear Friend,
-
-I am Mr.Patrice Zengu ,from Burkina Faso and i am the new bank telex
-manager of our bank here in Africa.
-
-I have the opportunity to transfer the sum of US$ 10.5Million to your
-bank account which i personally placed on an Escrow account without a
-name.
-
-I must tell you that after revision of files both old and new as the
-new telex manager ,i discovered that if these funds remains here
-without transferring it offshore,it will be lawfully recovered
-andmoved to the  Government of Burkina Faso treasury as an abandoned
-funds without any name.
-
-I want to let you know that a Burkinabe cannot stand as the depositor
-of these US dollars  since we are not allowed to operate on foreign
-currrency.I do not intend to work  and stay in Africa till the rest of
-my life.
-
-Moreso,i will not want my bank to know about these funds and if they
-happens to know probably,the funds will be moved to the Burkina Faso
-Government public treasury as an abandoned funds.
-
-I will furnish you with more details of this transfer and how it ca
-nbe perfectly and legally executed without any hitch since i am now in
-control.
-
-I am waiting to hear from you urgently to proceed.
-
-
-Yours sincerely,
-Mr.Patrice Zengu.
+That would be pointless.  I already sent a series to remove this,
+which you were cc'd on.

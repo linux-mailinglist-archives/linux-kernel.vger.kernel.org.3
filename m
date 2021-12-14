@@ -2,152 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 216C2474EAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F11474EB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238284AbhLNXm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 18:42:56 -0500
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:24012 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235303AbhLNXmz (ORCPT
+        id S238336AbhLNXpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 18:45:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238315AbhLNXp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 18:42:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1639525373; x=1671061373;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JqMnR5JDEwVFhzJYd8UbG6LlmRhjhnIL+MAUSeClcjg=;
-  b=ELZbh2v0PEwuSWLB0ms5Wpdx0IDUVR+6q2wA5MOZvYYMCmXsnDEl4ImX
-   iQienxc84cMPqK7mxT/dIKinlF0rAiLLCXBRifK3eXgl3Cj6VWBS6PNA4
-   HZbMJgB0UXF3VJf1sCDkbESortSp9cGJGAuWgCE/lU9IzDI+VNxdCkt3U
-   nhTV4ONgBostt2ZW+Fiy6kI62YUJYFD8c8RCAsN+vtIkyuKF8w+m5WSU/
-   QB2JHKns6X1w4P51nnaQpWL3nvdxuj7xENsM31EV7IHr1DVOqz/PHHGnv
-   6sIa1Ji6EODVQHYNCCgnvvRdYL1H5CPxILOz8BAFWIVsQwEPDpdkyhPH1
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,206,1635177600"; 
-   d="scan'208";a="188252926"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Dec 2021 07:42:52 +0800
-IronPort-SDR: DLVYw+ZuQaAv0hcUmk8WLMh1FRtgjXc6kMXdGo+PVWXfd8XT1xwFTx7EV/9k+ttHSH00+c/OTM
- ctfjFpsZuyt/9LgtQiQWCGm4sWeAelD30oV4Lakm81mM3Dga+QSJH7yyOh+EI4J0cACnJZ6DVo
- ZfvMDyDNvXki5C12i/3Ncu4Mgz+iCkY0Wt68mBb7WnaLfW8tO0niZTsDmlxfc4O9kXd9oEbYJx
- V9/ZUMc86qQlPQeBohzuv5idoS0oHrjg4SdVnuuM5YuHELn9cDA+lXh40Bdqqcp37LrUhu4pB7
- OGYnCitc+D70pSZn9d1oVtEm
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 15:15:50 -0800
-IronPort-SDR: SVLrRnUfx6EexsjjeBw2VHGwkytmStBBWqz65FA27+a5yA42Hc1G4fAywov6U4iKHRhQsGa0sr
- RZQJ9yWV23Cet5cCPN84PiE4R0fHkreDm2+3uhh2rAW1CzKEVZNcj4p9W0PNqbi259pxR+Xdj6
- 9YjmyXMlHCw9/kuI3BZXLjGPYkQSWdEsMm7VjUoCfTS1mT3M38ENrfJGGbp+jb0L0iJgqLs2e2
- zHT10fpWxV0uGShGNLs5bKr9Z8LnM9y2uGubTXDWVQelUkn8XmX1aPSkHS+madiEDXVke7PyrT
- VS0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 15:42:54 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JDFL55LzYz1RvTh
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:42:53 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1639525373; x=1642117374; bh=JqMnR5JDEwVFhzJYd8UbG6LlmRhjhnIL+MA
-        USeClcjg=; b=lqoOl3jpVJmf3sHKq3qwXm/N6K48pIRKj6ClaQW7VAQogC9ona9
-        ir56LuYYLklVqJmyuw0ybqEmmsJwfgX9jS38uhnZnZG17VtuZqpdyQz/QcNNgHDE
-        fVaIuCFN7RBCjPJvfRobBUNn0wupmHryGngNOkWN58+1eDf45L6MOZSNVSqPPjBr
-        +Ya2yd8GI9oQfT5kg1kV+u0NUMBhww1oVJzGT3qQhE+bofm/BAHdfJlaO/XmCUbE
-        Hs83VpVSMYYd4yFCrqSBOZA6HI9bdpj58KK5UBfmbL9Bxdwb7LhHKi/rRU6ZIBqF
-        mSNBLCXeCX9J9NfJrjIrlh/WqTCeGJ3+Niw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id g94Ts3ktwnRi for <linux-kernel@vger.kernel.org>;
-        Tue, 14 Dec 2021 15:42:53 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JDFL43hl9z1RtVG;
-        Tue, 14 Dec 2021 15:42:52 -0800 (PST)
-Message-ID: <87d2345c-f878-1884-e344-25ac2b6862cd@opensource.wdc.com>
-Date:   Wed, 15 Dec 2021 08:42:50 +0900
+        Tue, 14 Dec 2021 18:45:29 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B16CC061574;
+        Tue, 14 Dec 2021 15:45:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=MCj3uEcu5c6UlruWu6bGSHyPZC5qkeb9xLdGlN1FpGc=; b=IsZndqkKv/JSXqxKDBEWJmdQZi
+        LlElMSIgl8FII2Vs4iJlldipr5nqbC21aV4g2bnlA08PoCockhqXBObbigf+rM+uED3RJYH4vjZeN
+        LnO4DGPj+2nEQE1Qmo0jtNMvSDQsAy9bHeIebw+F0Emun3JXLAIeimmcxeJ6GFyRRkQqEJimlN+7h
+        wGa6DmrR4jVXe2d3rOWaEu81gAGDXVtkh8NCSrGyiLsjOvqPh0jnBGPqxmjEwzwsorAsiH77K9LNF
+        8Y1+2N58wwsE0/rF1k3TBLjjUyPhthM5TJ1q2/LH1MWB0Hk4RlnL+Ttz+27vRzSWdXY2l2IPZZupb
+        RJXeq2qA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56288)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mxHTu-0005Yg-VW; Tue, 14 Dec 2021 23:45:14 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mxHTq-0003vk-2y; Tue, 14 Dec 2021 23:45:10 +0000
+Date:   Tue, 14 Dec 2021 23:45:10 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Marcin Wojtas <mw@semihalf.com>, UNGLinuxDriver@microchip.com,
+        "David S . Miller" <davem@davemloft.net>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] net: phylink: Pass state to pcs_config
+Message-ID: <YbkshnqgXP7Gd188@shell.armlinux.org.uk>
+References: <20211214233450.1488736-1-sean.anderson@seco.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH v2 RESEND] libata: if T_LENGTH is zero, dma direction
- should be DMA_NONE
-Content-Language: en-US
-To:     George Kennedy <george.kennedy@oracle.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1639493110-15900-1-git-send-email-george.kennedy@oracle.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <1639493110-15900-1-git-send-email-george.kennedy@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214233450.1488736-1-sean.anderson@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/14 23:45, George Kennedy wrote:
-> Avoid data corruption by rejecting pass-through commands where
-> T_LENGTH is zero (No data is transferred) and the dma direction
-> is not DMA_NONE.
+On Tue, Dec 14, 2021 at 06:34:50PM -0500, Sean Anderson wrote:
+> Although most PCSs only need the interface and advertising to configure
+> themselves, there is an oddly named "permit_pause_to_mac" parameter
+> included as well, and only used by mvpp2. This parameter indicates
+> whether pause settings should be autonegotiated or not. mvpp2 needs this
+> because it cannot both set the pause mode manually and and advertise
+> pause support. That is, if you want to set the pause mode, you have to
+> advertise that you don't support flow control. We can't just
+> autonegotiate the pause mode and then set it manually, because if
+> the link goes down we will start advertising the wrong thing. So
+> instead, we have to set it up front during pcs_config. However, we can't
+> determine whether we are autonegotiating flow control based on our
+> advertisement (since we advertise flow control even when it is set
+> manually).
 > 
-> Cc: <stable@vger.kernel.org>
+> So we have had this strange additional argument tagging along which is
+> used by one driver (though soon to be one more since mvneta has the same
+> problem). We could stick MLO_PAUSE_AN in the "mode" parameter, since
+> that contains other autonegotiation configuration. However, there are a
+> lot of places in the codebase which do a direct comparison (e.g. mode ==
+> MLO_AN_FIXED), so it would be difficult to add an extra bit without
+> breaking things. But this whole time, mac_config has been getting the
+> whole state, and it has not suffered unduly. So just pass state and
+> eliminate these other parameters.
 
-George,
+Please no. This is a major step backwards.
 
-FYI, you should not send patches that need backporting to
-stable@vger.kernel.org. The above Cc: tag will do that automatically.
+mac_config() suffers from the proiblem that people constantly
+mis-understand what they can access in "state" and what they can't.
+This patch introduces exactly the same problem but for a new API.
 
-> Reported-by: syzkaller<syzkaller@googlegroups.com>
-> Signed-off-by: George Kennedy<george.kennedy@oracle.com>
-> ---
-> Used the Maintainers suggested fix.
+I really don't want to make that same mistake again, and this patch
+is making that same mistake.
 
-The usual way of writing this is something like:
-
-Changes from v1:
-* Blah
-
-This way, if you need a v3, v4, etc, you can keep the previous changes
-description and add new ones on top.
-
-> 
->  drivers/ata/libata-scsi.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-> index 1b84d55..313e947 100644
-> --- a/drivers/ata/libata-scsi.c
-> +++ b/drivers/ata/libata-scsi.c
-> @@ -2859,8 +2859,19 @@ static unsigned int ata_scsi_pass_thru(struct ata_queued_cmd *qc)
->  		goto invalid_fld;
->  	}
->  
-> -	if (ata_is_ncq(tf->protocol) && (cdb[2 + cdb_offset] & 0x3) == 0)
-> -		tf->protocol = ATA_PROT_NCQ_NODATA;
-> +	if ((cdb[2 + cdb_offset] & 0x3) == 0) {
-> +		/*
-> +		 * When T_LENGTH is zero (No data is transferred), dir should
-> +		 * be DMA_NONE.
-> +		 */
-> +		if (scmd->sc_data_direction != DMA_NONE) {
-> +			fp = 2 + cdb_offset;
-> +			goto invalid_fld;
-> +		}
-> +
-> +		if (ata_is_ncq(tf->protocol))
-> +			tf->protocol = ATA_PROT_NCQ_NODATA;
-> +	}
->  
->  	/* enable LBA */
->  	tf->flags |= ATA_TFLAG_LBA;
-
-This look OK to me. Will apply.
-
+The reason mvpp2 and mvneta are different is because they have a
+separate bit to allow the results of pause mode negotiation to be
+forwarded to the MAC, and that bit needs to be turned off if the
+pause autonegotiation is disabled (which is entirely different
+from normal autonegotiation.)
 
 -- 
-Damien Le Moal
-Western Digital Research
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

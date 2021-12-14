@@ -2,106 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3F6473D4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2413473D4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbhLNGnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 01:43:16 -0500
-Received: from mail-ed1-f43.google.com ([209.85.208.43]:39747 "EHLO
-        mail-ed1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbhLNGnN (ORCPT
+        id S231226AbhLNGn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:43:26 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:45680
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231197AbhLNGnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 01:43:13 -0500
-Received: by mail-ed1-f43.google.com with SMTP id b7so361715edd.6;
-        Mon, 13 Dec 2021 22:43:12 -0800 (PST)
+        Tue, 14 Dec 2021 01:43:22 -0500
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1F7663F1AF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639464201;
+        bh=xOTB2ScaHtWm2f/iOOdnjpT35u35gjMiJFm7sy9sIwE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=J9DhtuJ8425pFXSUtG34Rtupm6BeYfq7Q3Zy81dXKRyZJD2gjLeWvt3NUrFbEky2t
+         8RIBGEOllP0xgjk5xVVQGXjc9ZBg3g50OR5F4MCH6BWBiMk/VMX1otA+rqgipmPogk
+         PLd6vAj2DgnKB1RoMfxKOJVu9w5cedgLAgV4gW2M6+a19SHiW/kxyUd1lceviXpD1k
+         7McsO66/XdISr9dl0Wo8HAKSAFV6DmbdhXePf8ZVViPUPkM33VfmbzfefPWpvMhNSL
+         asWyPTgSJsc89+frqui2Y3/FqozRTjSfTBZyUMuvFF+QoTqaMtb1UffswakM54NweQ
+         /z4y6k8hyXSvg==
+Received: by mail-lf1-f70.google.com with SMTP id u20-20020a056512129400b0040373ffc60bso8519136lfs.15
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 22:43:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=mES/VN9NDUylN7hikeYFALLjEFWfcxTzSl0FnDEQ4qo=;
-        b=QUttYACoGErkqDpq8YTWu3RDTmi0moLK916QoiQZT+4TYJIGojHij+GJ9WrG2q3GPe
-         HgRqIj//Pb3dxx6lFH7cHijW+d65bTsH9fTeRB9CMfpOiZslJnvdxisYp4FafmuSja+t
-         gFxblUOZGlVbmm+On2Vmi5E/oCcd/CPpSzuT+IYPbUENFXsh79fcNu11FHm5o9yx5O97
-         K1IgA99Z9QJrO8ObW4M4HeMp6Axnanio2fHDwbdtMELIT8KpyuwIVHIng3OrwBSf1iQT
-         Z6pHFn/HNC80uu6SObjOhyvwPB5xodQCCeOgKyX+jA9ZdxKsKCO5BGRCKbz7ejokhlfh
-         cMjQ==
-X-Gm-Message-State: AOAM531SPWtWup4ko5lMSfg4dkG/6HCgE8OtDtguu/y9P+XQ/VAuYMyg
-        ms2mKM7UddIcheYxRHXNzaDGqUIgWFA=
-X-Google-Smtp-Source: ABdhPJwoeQCTf8Mof4FF699wk5L77oT25Ghoc8KhHQrzUkQstWBRt8nQILINgn+e7vIb09ikundH8Q==
-X-Received: by 2002:a17:906:c08:: with SMTP id s8mr3626628ejf.673.1639464191777;
-        Mon, 13 Dec 2021 22:43:11 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id e19sm7251549edu.47.2021.12.13.22.43.10
+        bh=xOTB2ScaHtWm2f/iOOdnjpT35u35gjMiJFm7sy9sIwE=;
+        b=136Gy8MoKoP2b2lV7p3Pqd/QHT4lFIVOe3FWjfwDSbzMxdg03NoGZrkDCHH/poicVl
+         W5qSGFjTYtuZi/nwsZd3utjd3CSzai1skcNovoh58ZoRfWnaMA05Ey92yGILdvDeRz5T
+         PFitmWJ0WKKfz/cfHk9JlYcC8lzf85ZNL1DWTL1LlKHqHNmaPX2GaIY230i8wuJaC1iB
+         PcpwFAOkQt1DFn2jGOr7BHU7eyi+TNs9r3wEbftT7I+1NHmjV4yFxrp/iridMExBtjOX
+         +PClP0YqiGgM5Iu5f8fsPSJaZruQTrM9ojm4hs5Hlh+hFqSr3XfuyXSGgHJCxkrAG42u
+         1lzA==
+X-Gm-Message-State: AOAM533r5HKA9tbej+a5nmKB0rB3nfqHfLmYYCiMSQaGLoil7R8Ra0P8
+        CI6l2gz9ICe4UzLvnzSoXrZ+CzICJ3lD9u+4Z6dH2Wrq/GCadFwXlb7vMNLSf5ME//gfv8jWHcm
+        jAp4ZNNuiQs9/XrJwUDeWeXukpNrCLrULKyendF7G+g==
+X-Received: by 2002:a19:4f49:: with SMTP id a9mr3139488lfk.37.1639464200291;
+        Mon, 13 Dec 2021 22:43:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzeBwrExC4ewGvW0Yile/MhYCWIf8ovwjdrA0vvJewKVayS8VRGF+KmxD47iQBOtqm7nqGssA==
+X-Received: by 2002:a19:4f49:: with SMTP id a9mr3139462lfk.37.1639464200094;
+        Mon, 13 Dec 2021 22:43:20 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id v2sm1704897lfb.258.2021.12.13.22.43.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 22:43:11 -0800 (PST)
-Message-ID: <8bbd1a77-5f88-bb97-db88-6842df2e3e3c@kernel.org>
-Date:   Tue, 14 Dec 2021 07:43:10 +0100
+        Mon, 13 Dec 2021 22:43:19 -0800 (PST)
+Message-ID: <68145d95-1b6a-153e-42ba-43d18b705a70@canonical.com>
+Date:   Tue, 14 Dec 2021 07:43:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] tty: rpmsg: Fix race condition releasing tty port
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 5.10 000/132] 5.10.85-rc1 review
 Content-Language: en-US
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20211213195346.12894-1-arnaud.pouliquen@foss.st.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20211213195346.12894-1-arnaud.pouliquen@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Cc:     shuah@kernel.org, f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+References: <20211213092939.074326017@linuxfoundation.org>
+ <52a7fa5d-6fa0-a0df-2e88-bd4bf443a671@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <52a7fa5d-6fa0-a0df-2e88-bd4bf443a671@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 13. 12. 21, 20:53, Arnaud Pouliquen wrote:
-> In current implementation the tty_port struct is part of the
-> rpmsg_tty_port structure.The issue is that the rpmsg_tty_port structure is
-> freed on rpmsg_tty_remove but also referenced in the tty_struct.
-> Its release is not predictable due to workqueues.
+On 13/12/2021 19:17, Tadeusz Struk wrote:
+> On 12/13/21 01:29, Greg Kroah-Hartman wrote:
+>> This is the start of the stable review cycle for the 5.10.85 release.
+>> There are 132 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, please
+>> let me know.
+>>
+>> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+>> Anything received after that time might be too late.
+>>
+>> The whole patch series can be found in one patch at:
+>> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.85-rc1.gz
+>> or in the git tree and branch at:
+>> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+>> and the diffstat can be found below.
 > 
-> For instance following ftrace shows that rpmsg_tty_close is called after
-> rpmsg_tty_release_cport:
+> Hi,
+> In this release cycle there were two similar nfc fixes:
 > 
->       nr_test.sh-389     [000] .....   212.093752: rpmsg_tty_remove <-rpmsg_dev_
-> remove
->               cat-1191    [001] .....   212.095697: tty_release <-__fput
->        nr_test.sh-389     [000] .....   212.099166: rpmsg_tty_release_cport <-rpm
-> sg_tty_remove
->               cat-1191    [001] .....   212.115352: rpmsg_tty_close <-tty_release
->               cat-1191    [001] .....   212.115371: release_tty <-tty_release_str
+> fd79a0cbf0b2 nfc: fix segfault in nfc_genl_dump_devices_done
+> 4cd8371a234d nfc: fix potential NULL pointer deref in nfc_genl_dump_ses_done
 > 
-> As consequence, the port must be free only when user has released the TTY
-> interface.
-> 
-> This path (inspired from vcc.c):
-> - moves the management of the port in the install and clean-up tty ops,
-> - allocates the tty_port struct independently of the rpmsg_tty_port structure,
+> The list here only includes the second one. The first is still missing.
+> The same applies to 5.15
 
-This looks rather wrong. Why not to use tty_port refcounting?
+With my review tag for this other fix I mentioned it needs Fixes and
+Cc-stable, but these were not added by Jakub when applying. It won't be
+picked up automatically by Greg.
 
-> - uses tty_vhangup and tty_port_hangup.
+Jakub,
+What's weird, the cc-stable was also removed from my commit which is not
+good. Few other people add Fixes tag without Cc-stable when they want to
+annotate it should not go to stable. This one should go to stable, so it
+should have cc-stable (which I put there).
 
-OK, but don't store a tty pointer as it looks racy. You should use 
-tty_port_tty_get instead.
-
-Hm, we look we need tty_port_tty_vhangup (aside from 
-tty_port_tty_hangup). There are plenty of drivers doing:
-     tty = tty_port_tty_get(port);
-     if (tty) {
-             tty_vhangup(port->tty);
-             tty_kref_put(tty);
-
-
-> Fixes: 7c0408d80579 ("tty: add rpmsg driver")
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-
-thanks,
--- 
-js
-suse labs
+Best regards,
+Krzysztof

@@ -2,158 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CC7474D3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 22:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D903474D40
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 22:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232538AbhLNVcl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Dec 2021 16:32:41 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:50666 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231331AbhLNVck (ORCPT
+        id S232617AbhLNVft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 16:35:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56338 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231331AbhLNVfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 16:32:40 -0500
-Received: from [77.244.183.192] (port=62494 helo=[192.168.178.41])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mxFPa-0003ft-3B; Tue, 14 Dec 2021 22:32:38 +0100
-Subject: Re: drivers/pci/controller/dwc/pci-dra7xx.c:864 dra7xx_pcie_probe()
- warn: 'dra7xx->clk' not released on lines: 759.
-To:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org
-Cc:     lkp@intel.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-clk <linux-clk@vger.kernel.org>
-References: <202111301803.NOwoj4Jd-lkp@intel.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <1521f09a-605a-746c-aabd-9cb036578a6f@lucaceresoli.net>
-Date:   Tue, 14 Dec 2021 22:32:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 14 Dec 2021 16:35:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639517747;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:in-reply-to:in-reply-to:  references:references;
+        bh=o2cT5ggkWIKGyDNwgNiQey+aVDolDjsoQ/s1dXv95NY=;
+        b=R8QE8Vtah54+4pz/U0KCc2SsEOjGXy40ExWU370l8uKqeP2iaROMP+xE+ZFUfTSfTgZ7H7
+        w1r1E8HmjEbuZVbnzZNA2wyZwd7N5Ha4ENkq3uopBqdve4BfpZUEP9g/w77mLFXdCxesDk
+        RgKHzpRXNIqXAOTw9MpvaD76qN1SnEg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-gjwMNxZpMyOlBZidV1KnVw-1; Tue, 14 Dec 2021 16:35:46 -0500
+X-MC-Unique: gjwMNxZpMyOlBZidV1KnVw-1
+Received: by mail-wm1-f69.google.com with SMTP id 144-20020a1c0496000000b003305ac0e03aso13711788wme.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 13:35:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :user-agent:reply-to:date:message-id:mime-version;
+        bh=o2cT5ggkWIKGyDNwgNiQey+aVDolDjsoQ/s1dXv95NY=;
+        b=jwhH1mIlyJ2V5lQrqlXa/5iMPn8nNTE6loQw52XPww/xLgHAirHVZ0j8VuXH59phSt
+         AmItA2QHERVhVrfoCLnndl7IXMclnDlyfHSGM3UyQXZca04RjfOw7gpv0fyR+Znhucaw
+         JVvJPpJX8IpcmRQnL2ihJFFx81huD3H+LY9dEOxm7+kYGVAOBMURHIFxldZEWPf19q9j
+         Zn2tfvnTwiR5/8gb4HjmbMtk9x2RkgyMCwud2JXXtE3kX6r4bEiFIDTgYbNvN/yOq7I6
+         kXFccVuZ//RFG26QjZK8AJIS4DgWHB6A7Ms9whVVxxT4p86CD9iibDIdjjUrByLP0ovQ
+         OUpQ==
+X-Gm-Message-State: AOAM531E70YXS2h1aDJHNTbpvuukjCs8esDXONtZKK8FUfX4Cy0+WeGx
+        zerOgAWPwDjRa6Y29Lp7W4jXcdaWtBd9x4PjZC5e4Lcfv+bwdFQvT1MMihsVdBx5KxWGuToxqbk
+        spuZ+wpPTXv6yBwqCwhSEXoPD
+X-Received: by 2002:a5d:59ae:: with SMTP id p14mr1597637wrr.365.1639517744770;
+        Tue, 14 Dec 2021 13:35:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyecBHUIn82YQbtrUymxLlWCWfzV9H2x2nD6Qsq8dnjH7ObgGDJUMLpQ9PukDq7CFi71rPsvg==
+X-Received: by 2002:a5d:59ae:: with SMTP id p14mr1597622wrr.365.1639517744597;
+        Tue, 14 Dec 2021 13:35:44 -0800 (PST)
+Received: from localhost (static-174-144-85-188.ipcom.comunitel.net. [188.85.144.174])
+        by smtp.gmail.com with ESMTPSA id j11sm85226wrt.3.2021.12.14.13.35.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 13:35:44 -0800 (PST)
+From:   Juan Quintela <quintela@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Jing Liu <jing2.liu@linux.intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Sean Christoperson <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+Subject: Re: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
+In-Reply-To: <87k0g7rkwj.ffs@tglx> (Thomas Gleixner's message of "Tue, 14 Dec
+        2021 21:28:28 +0100")
+References: <20211214022825.563892248@linutronix.de>
+        <20211214024948.048572883@linutronix.de>
+        <854480525e7f4f3baeba09ec6a864b80@intel.com> <87zgp3ry8i.ffs@tglx>
+        <b3ac7ba45c984cf39783e33e0c25274d@intel.com> <87r1afrrjx.ffs@tglx>
+        <87k0g7qa3t.fsf@secure.mitica> <87k0g7rkwj.ffs@tglx>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+Reply-To: quintela@redhat.com
+Date:   Tue, 14 Dec 2021 22:35:43 +0100
+Message-ID: <878rwm7tu8.fsf@secure.mitica>
 MIME-Version: 1.0
-In-Reply-To: <202111301803.NOwoj4Jd-lkp@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: it-IT
-Content-Transfer-Encoding: 8BIT
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan, All,
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-On 30/11/21 12:04, Dan Carpenter wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   d58071a8a76d779eedab38033ae4c821c30295a5
-> commit: 5af9405397bfb90d6adab61d58f4d94c78166698 PCI: dra7xx: Get an optional clock
-> config: powerpc64-randconfig-m031-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301803.NOwoj4Jd-lkp@intel.com/config)
-> compiler: powerpc64-linux-gcc (GCC) 11.2.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
-> smatch warnings:
-> drivers/pci/controller/dwc/pci-dra7xx.c:864 dra7xx_pcie_probe() warn: 'dra7xx->clk' not released on lines: 759.
-> 
-> vim +864 drivers/pci/controller/dwc/pci-dra7xx.c
-> 
-> e259c2926c016d drivers/pci/controller/dwc/pci-dra7xx.c Tony Lindgren          2021-03-10  684  static int dra7xx_pcie_probe(struct platform_device *pdev)
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  685  {
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  686  	u32 reg;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  687  	int ret;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  688  	int irq;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  689  	int i;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  690  	int phy_count;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  691  	struct phy **phy;
-> 7a4db656a6350f drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-10-09  692  	struct device_link **link;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  693  	void __iomem *base;
-> 442ec4c04d1235 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-02-15  694  	struct dw_pcie *pci;
-> 442ec4c04d1235 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-02-15  695  	struct dra7xx_pcie *dra7xx;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  696  	struct device *dev = &pdev->dev;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  697  	struct device_node *np = dev->of_node;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  698  	char name[10];
-> 602d38bc65aa29 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-01-11  699  	struct gpio_desc *reset;
-> 608793e27b3313 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-03-27  700  	const struct of_device_id *match;
-> 608793e27b3313 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-03-27  701  	const struct dra7xx_pcie_of_data *data;
-> 608793e27b3313 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-03-27  702  	enum dw_pcie_device_mode mode;
-> c232c0df9610bf drivers/pci/controller/dwc/pci-dra7xx.c Kishon Vijay Abraham I 2019-01-24  703  	u32 b1co_mode_sel_mask;
-> 608793e27b3313 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-03-27  704  
-> 608793e27b3313 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-03-27  705  	match = of_match_device(of_match_ptr(of_dra7xx_pcie_match), dev);
-> 608793e27b3313 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-03-27  706  	if (!match)
-> 608793e27b3313 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-03-27  707  		return -EINVAL;
-> 608793e27b3313 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-03-27  708  
-> 608793e27b3313 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-03-27  709  	data = (struct dra7xx_pcie_of_data *)match->data;
-> 608793e27b3313 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-03-27  710  	mode = (enum dw_pcie_device_mode)data->mode;
-> c232c0df9610bf drivers/pci/controller/dwc/pci-dra7xx.c Kishon Vijay Abraham I 2019-01-24  711  	b1co_mode_sel_mask = data->b1co_mode_sel_mask;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  712  
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  713  	dra7xx = devm_kzalloc(dev, sizeof(*dra7xx), GFP_KERNEL);
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  714  	if (!dra7xx)
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  715  		return -ENOMEM;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  716  
-> 442ec4c04d1235 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-02-15  717  	pci = devm_kzalloc(dev, sizeof(*pci), GFP_KERNEL);
-> 442ec4c04d1235 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-02-15  718  	if (!pci)
-> 442ec4c04d1235 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-02-15  719  		return -ENOMEM;
-> 442ec4c04d1235 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-02-15  720  
-> 442ec4c04d1235 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-02-15  721  	pci->dev = dev;
-> 442ec4c04d1235 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-02-15  722  	pci->ops = &dw_pcie_ops;
-> 442ec4c04d1235 drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-02-15  723  
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  724  	irq = platform_get_irq(pdev, 0);
-> caecb05c800081 drivers/pci/controller/dwc/pci-dra7xx.c Krzysztof Wilczyński   2020-08-02  725  	if (irq < 0)
-> a0d21ba120d2c7 drivers/pci/dwc/pci-dra7xx.c            Gustavo A. R. Silva    2017-08-09  726  		return irq;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  727  
-> c8a119779f5609 drivers/pci/controller/dwc/pci-dra7xx.c Wei Yongjun            2020-04-29  728  	base = devm_platform_ioremap_resource_byname(pdev, "ti_conf");
-> c8a119779f5609 drivers/pci/controller/dwc/pci-dra7xx.c Wei Yongjun            2020-04-29  729  	if (IS_ERR(base))
-> c8a119779f5609 drivers/pci/controller/dwc/pci-dra7xx.c Wei Yongjun            2020-04-29  730  		return PTR_ERR(base);
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  731  
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  732  	phy_count = of_property_count_strings(np, "phy-names");
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  733  	if (phy_count < 0) {
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  734  		dev_err(dev, "unable to find the strings\n");
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  735  		return phy_count;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  736  	}
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  737  
-> a86854d0c599b3 drivers/pci/dwc/pci-dra7xx.c            Kees Cook              2018-06-12  738  	phy = devm_kcalloc(dev, phy_count, sizeof(*phy), GFP_KERNEL);
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  739  	if (!phy)
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  740  		return -ENOMEM;
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  741  
-> a86854d0c599b3 drivers/pci/dwc/pci-dra7xx.c            Kees Cook              2018-06-12  742  	link = devm_kcalloc(dev, phy_count, sizeof(*link), GFP_KERNEL);
-> 7a4db656a6350f drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-10-09  743  	if (!link)
-> 7a4db656a6350f drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-10-09  744  		return -ENOMEM;
-> 7a4db656a6350f drivers/pci/dwc/pci-dra7xx.c            Kishon Vijay Abraham I 2017-10-09  745  
-> 5af9405397bfb9 drivers/pci/controller/dwc/pci-dra7xx.c Luca Ceresoli          2021-05-31  746  	dra7xx->clk = devm_clk_get_optional(dev, NULL);
-> 5af9405397bfb9 drivers/pci/controller/dwc/pci-dra7xx.c Luca Ceresoli          2021-05-31  747  	if (IS_ERR(dra7xx->clk))
-> 5af9405397bfb9 drivers/pci/controller/dwc/pci-dra7xx.c Luca Ceresoli          2021-05-31  748  		return dev_err_probe(dev, PTR_ERR(dra7xx->clk),
-> 5af9405397bfb9 drivers/pci/controller/dwc/pci-dra7xx.c Luca Ceresoli          2021-05-31  749  				     "clock request failed");
-> 5af9405397bfb9 drivers/pci/controller/dwc/pci-dra7xx.c Luca Ceresoli          2021-05-31  750  
-> 5af9405397bfb9 drivers/pci/controller/dwc/pci-dra7xx.c Luca Ceresoli          2021-05-31  751  	ret = clk_prepare_enable(dra7xx->clk);
-> 5af9405397bfb9 drivers/pci/controller/dwc/pci-dra7xx.c Luca Ceresoli          2021-05-31  752  	if (ret)
-> 5af9405397bfb9 drivers/pci/controller/dwc/pci-dra7xx.c Luca Ceresoli          2021-05-31  753  		return ret;
-> 5af9405397bfb9 drivers/pci/controller/dwc/pci-dra7xx.c Luca Ceresoli          2021-05-31  754  
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  755  	for (i = 0; i < phy_count; i++) {
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  756  		snprintf(name, sizeof(name), "pcie-phy%d", i);
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  757  		phy[i] = devm_phy_get(dev, name);
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  758  		if (IS_ERR(phy[i]))
-> 47ff3de911a728 drivers/pci/host/pci-dra7xx.c           Kishon Vijay Abraham I 2014-07-22  759  			return PTR_ERR(phy[i]);
-> 
-> Smatch wants an clk_unprepare_disable(dra7xx->clk) on failure paths.
+Hi Thomas
 
-+linux-clk
+> On Tue, Dec 14 2021 at 20:07, Juan Quintela wrote:
+>> Thomas Gleixner <tglx@linutronix.de> wrote:
+>>> On Tue, Dec 14 2021 at 16:11, Wei W. Wang wrote:
+>>>> We need to check with the QEMU migration maintainer (Dave and Juan CC-ed)
+>>>> if changing that ordering would be OK.
+>>>> (In general, I think there are no hard rules documented for this ordering)
+>>>
+>>> There haven't been ordering requirements so far, but with dynamic
+>>> feature enablement there are.
+>>>
+>>> I really want to avoid going to the point to deduce it from the
+>>> xstate:xfeatures bitmap, which is just backwards and Qemu has all the
+>>> required information already.
+>>
+>> First of all, I claim ZERO knowledge about low level x86_64.
+>
+> Lucky you.
 
-Looks like I assumed a devm-managed clock is disabled and unprepared on
-error. But apparently I was wrong and only deallocation happens
-automatically, at least it's what I could get from reading the code.
+Well, that is true until I have to debug some bug, at that time I miss
+the knowledge O:-)
 
-I'm sending a patch to fix this.
+>> Once told that, this don't matter for qemu migration, code is at
+>
+> Once, that was at the time where rubber boots were still made of wood,
+> right? :)
 
--- 
-Luca
+I forgot to add: "famous last words".
+
+>> target/i386/kvm/kvm.c:kvm_arch_put_registers()
+>>
+>>
+>>     ret = kvm_put_xsave(x86_cpu);
+>>     if (ret < 0) {
+>>         return ret;
+>>     }
+>>     ret = kvm_put_xcrs(x86_cpu);
+>>     if (ret < 0) {
+>>         return ret;
+>>     }
+>>     /* must be before kvm_put_msrs */
+>>     ret = kvm_inject_mce_oldstyle(x86_cpu);
+>
+> So this has already ordering requirements.
+>
+>>     if (ret < 0) {
+>>         return ret;
+>>     }
+>>     ret = kvm_put_msrs(x86_cpu, level);
+>>     if (ret < 0) {
+>>         return ret;
+>>     }
+>>
+>> If it needs to be done in any other order, it is completely independent
+>> of whatever is inside the migration stream.
+>
+> From the migration data perspective that's correct, but I have the
+> nagging feeling that this in not that simple.
+
+Oh, I was not meaning that it was simple at all.
+
+We have backward compatibility baggage on x86_64 that is grotesque at
+this point.  We don't send a single msr (by that name) on the main
+migration stream.  And then we send them based on "conditions".  So the
+trick as somithing like:
+
+- qemu reads the msrs from kvm at some order
+- it stores them in a list of MSR's
+- On migration pre_save we "mangle" that msr's and other cpu state to
+  on the main (decades old) state
+- then we send the main state
+- then we send conditionally the variable state
+
+on reception side:
+
+- we receive everything that the sending side have sent
+- we "demangle" it on pre_load
+- then we create the list of MSR's that need to be transferred
+- at that point we send them to kvm in another random order
+
+So yes, I fully agree that it is not _that_ simple O:-)
+
+
+>> I guess that Paolo will put some light here.
+>
+> I fear shining light on that will unearth quite a few skeletons :)
+
+It is quite probable.
+
+When a bugzilla start with: We found a bug while we were trying to
+migrate during (BIOS) boot, I just ran for the hills O:-)
+
+Later, Juan.
 

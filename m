@@ -2,170 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D384473EBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3158C473EBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbhLNIu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:50:59 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:63062 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229577AbhLNIu4 (ORCPT
+        id S230321AbhLNIvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229577AbhLNIvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:50:56 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BE7RMvO008810;
-        Tue, 14 Dec 2021 08:50:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=BcpJ/UpqeJxNIiveNXiVlQEre/+90wWr4F5MRPHXDJY=;
- b=Ky5uk5Y6zntkdzwrpA5FLrpyAUgyNFuOxlMkaY8ptVdoW89pG1HmK7NnbhqEcRUJFsA+
- Aq9Ygw1DMkrY5aD88V9hO8yr1WTniXs8y8lztIgAPPdJsxTO21BfgTr8FaX0mHTKIk+W
- 8iL/rqhxPgA+Fvhrl6DTSuXjr8eolUgKu+g2DvYALYxWcphSxqVjAHA9TlvBvs5k1gM1
- rJP8YnQ432BgK1Ofiv3mDPQiw/R5HD7JNb36AOEDZ00LsqYcxrI9SQ68x+sQc+tVIDMv
- 9WRmsugZLP5cWKGrRf0GXkX7/j1D3m8AmuiTnIKqpjFaFoTosANmtdWGxwbXCYTqLTiL Bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r959qr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 08:50:44 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BE8d3SV009362;
-        Tue, 14 Dec 2021 08:50:44 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r959pt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 08:50:43 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BE8mImx010315;
-        Tue, 14 Dec 2021 08:50:41 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3cvkma3a2y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 08:50:41 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BE8ocVW23331222
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Dec 2021 08:50:38 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1B27D11C05C;
-        Tue, 14 Dec 2021 08:50:38 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8D58D11C050;
-        Tue, 14 Dec 2021 08:50:31 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.211.58.61])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 14 Dec 2021 08:50:31 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH v2 0/3] Support register names of all architectures
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-In-Reply-To: <20211207180653.1147374-1-german.gomez@arm.com>
-Date:   Tue, 14 Dec 2021 14:20:26 +0530
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EAC4AC1D-A305-42E2-B22F-8B64B0968841@linux.vnet.ibm.com>
-References: <20211207180653.1147374-1-german.gomez@arm.com>
-To:     German Gomez <german.gomez@arm.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4pYMR2650eenVfoF_xsIo28t9GtHCBeW
-X-Proofpoint-ORIG-GUID: -TQEdgAQJkuIRqdFhVg5trriuFWzZKJb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-14_03,2021-12-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 phishscore=0 impostorscore=0 adultscore=0 spamscore=0
- clxscore=1015 mlxlogscore=999 mlxscore=0 malwarescore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112140048
+        Tue, 14 Dec 2021 03:51:17 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EAEC06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:51:16 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id t26so35588123lfk.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:51:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=lLKg5+si4bkxsbvGeNcSKDL9joZRAGyEtpR0PZy5CaM=;
+        b=Cl8LLWby/8KdABcGyeh0MkycZ6Bne7o3W4EQ1aLhfzqoIB93wwu6Omcu8d7IPLZg2y
+         ZeKJ4sPS+WM3T1+L/I2NPfeTGSFJ92n3q4GVcvljAPP7LNonT+u6hO/7uPzE6kEpQ5ui
+         IoWRZh4ta+RenvyOwXl7EQ+dVsks1MP5KrA4b60WpfADaghNRTV/Zap0xzKagC8t5ice
+         uN7Al+Irebm+kosNU9BMLVq3HO6sgrwbfI6shlOBkd412/IEwbuPlZBGQWVuOR4Xd+Ga
+         h3jSELCXHUg2nlzUR+eS9+I8DZbj/61BpikaOjTI1R6k5e2v69qA5l+ywAiPatCNJ0Ec
+         MI3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=lLKg5+si4bkxsbvGeNcSKDL9joZRAGyEtpR0PZy5CaM=;
+        b=OfvJPEaaf89DAqZxlt3MTXUSXLcZaJLSR7Us+y1U/XI6F9+1YyprwEDtfxlzex5Xbp
+         BS/unuEIF6S4O0tAcCUzBBPukIlbYdiKeQL1PXOA9d7mLVLNl8U1Ed4R+uFCc2iG+9Of
+         HEOUzH+afvntILEJel316xl1wlmmR3W3gsXhwFWVP6JjJLGpr9tWb/eQH4yDFb1BvGsf
+         4mMrglZS8Ix7NzkCdpN9rQca1lCe8y2oMgn/aQbl1cVdoBkjePFB743LH9j8V6uY601W
+         E2SMeSuKRBqzN63jVC0IsObjFL+lk/sAzmLe6NQZnYBSPvsRwKOdR2XGZIbBL7kKu9ti
+         92yg==
+X-Gm-Message-State: AOAM533jyFe3ErqQuKYWmBDjiSD9Q5JG3vw74xn5GLb3skbYYSnMO8hq
+        GdlXuejZTFv2ymSxiQleMq2lpL6cc4EkMgUYrw0=
+X-Google-Smtp-Source: ABdhPJyRC4cZwCG/oed0ui/tyS+4ZNcqyHPkxC6u212W0JORUw5H9JefZGKXSKzfQoBY2S5QhuDCCOxU2kAkISSO1Bw=
+X-Received: by 2002:a05:6512:370b:: with SMTP id z11mr3718297lfr.260.1639471875194;
+ Tue, 14 Dec 2021 00:51:15 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a2e:978c:0:0:0:0:0 with HTTP; Tue, 14 Dec 2021 00:51:14
+ -0800 (PST)
+Reply-To: mrs.aishaa@yahoo.com
+From:   Mrs Aisha Al-Qaddafi <adamam489@gmail.com>
+Date:   Tue, 14 Dec 2021 08:51:14 +0000
+Message-ID: <CAH-qvqUGtdC6-qJ749MfYw5Jp-knF-s1zRmcz1-mGreFW=KNKA@mail.gmail.com>
+Subject: Dear Partner,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear Partner,
 
+I came across your contact during my private search Mrs Aisha Al-Qaddafi is
+my name, the only daughter of late Libyan president, I have funds the sum
+of $27.5 million USD for investment, I am interested in you for investment
+project assistance in your country, i shall compensate you 30% of the total
+sum after the funds are transfer into your account, Reply me urgent for
+more details. Please kindly respond quickly for further details through my
+private e_mail address:mrs.aishaa@yahoo.com
 
-> On 07-Dec-2021, at 11:36 PM, German Gomez <german.gomez@arm.com> =
-wrote:
->=20
-> The following changeset applies some corrections to the way system
-> registers are processed and presented when reading perf.data files =
-using
-> the various perf tools.
->=20
-> The commit message from [3/3] shows how register names aren't =
-correctly
-> presented when performing x-arch analysis of perf.data files =
-(recording
-> in one arch, then reading the file from a different arch).
->=20
->  - [PATCH 1/3] Fixes a potential out-of-bounds access when reading the
->    values of the registers in the perf.data file.
->  - [PATCH 2/3] Fixes an issue of ARM and ARM64 registers having the
->    same enum name.
->  - [PATCH 3/3] Refactors the function "perf_reg_name" declared in the
->   "tools/perf/util/perf_regs.h" header, in order to support every =
-arch.
->=20
-> Thanks,
-> German
-
-Looks good to me. Tested this patchset in powerpc by capturing regs in =
-powerpc and doing
-perf report to read the data from x86.
-
-Reviewed-and-Tested-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
->=20
-> --
-> Changes since v1
->=20
->  - Added "Reported-by" tags.
->  - Removed [PATCH 2/4] because it's not needed (suggested by Athira
->    Rajeev).
->  - Removed [PATCH 3/4] which created additional header files with the
->    register names of every arch.
->  - Introduced [PATCH 2/3] to deal with ARM and ARM64 registers having =
-the
->    same enum name across "/tools/perf/".
->  - Reworked the refactor of "perf_reg_name" function (now implemented =
-in
->    perf_regs.c, rather than in the header file) in [PATCH 3/3].
->=20
-> German Gomez (3):
->  perf tools: Prevent out-of-bounds access to registers
->  perf tools: Rename perf_event_arm_regs for ARM64 registers
->  perf tools: Support register names from all archs
->=20
-> tools/perf/arch/arm/include/perf_regs.h       |  42 --
-> tools/perf/arch/arm64/include/perf_regs.h     |  78 +-
-> tools/perf/arch/csky/include/perf_regs.h      |  82 ---
-> tools/perf/arch/mips/include/perf_regs.h      |  69 --
-> tools/perf/arch/powerpc/include/perf_regs.h   |  66 --
-> tools/perf/arch/riscv/include/perf_regs.h     |  74 --
-> tools/perf/arch/s390/include/perf_regs.h      |  78 --
-> tools/perf/arch/x86/include/perf_regs.h       |  82 ---
-> tools/perf/builtin-script.c                   |  18 +-
-> tools/perf/util/event.h                       |   5 +-
-> tools/perf/util/libunwind/arm64.c             |   2 +
-> tools/perf/util/perf_regs.c                   | 671 +++++++++++++++++-
-> tools/perf/util/perf_regs.h                   |  10 +-
-> .../scripting-engines/trace-event-python.c    |  10 +-
-> tools/perf/util/session.c                     |  25 +-
-> 15 files changed, 709 insertions(+), 603 deletions(-)
->=20
-> --=20
-> 2.25.1
->=20
-
+Mrs Aisha Al-Qaddafi.

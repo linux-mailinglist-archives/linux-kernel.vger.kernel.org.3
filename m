@@ -2,100 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B55474DBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EA5474DC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232756AbhLNWLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbhLNWLv (ORCPT
+        id S232797AbhLNWPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:15:13 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:50789 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232252AbhLNWPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 17:11:51 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EABC061574;
-        Tue, 14 Dec 2021 14:11:51 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id g19so18990162pfb.8;
-        Tue, 14 Dec 2021 14:11:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wRt3Fh01KA5eeSEw2iv3iHWOrv3eO/SBn/6JbKjZZEE=;
-        b=h9rGd1j8L/8dqrG8q0zTLIbjQHvjSy/P7DrrvztSzKAH+x6p+fLt55yceKseki+Alt
-         /WEvEdLOicqCtB3krTMHJGixoa/SLelPAqRRF3rEZqjx1UetM9yimn8pW1IxKa+KW1W8
-         Mofz622KuoKmnceiI8R0rzCAUpCPMUUJIiMAWyz0bSXkP1oQK5FlRQmKMa+nbRhIOSWm
-         uZqc6XtSj0A/SG3pU/r9DP7dJVGwWU/966EH5et2LjBNUlG+sBHtbFA35tfG9PvdGIpB
-         Q5cGiWD39A9VYPG46CWMgLF7WrB3OpO8CNC/HvPNu0ZCuD4U0s3veKUzGIbjdRdB0+gz
-         yZDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wRt3Fh01KA5eeSEw2iv3iHWOrv3eO/SBn/6JbKjZZEE=;
-        b=gz7IIInVybz6QeevD3c7Q7hvWBE2u3QqAdH+fI9ZWs2J6+EOZrDYJKK5H9KmzBBGnv
-         3nGdJmHfPOLC4hQVv+MwsNOjuN0uDWQR5cPETXMsVyW104uUjeoNwElLPgyaGXHWiAM2
-         V+wqTFaRQPbcIiJ07Spk+nIVsdRqZtpEi6+1JhPupf/b3ZG74zSOErMLsm0lKPo8hzlZ
-         VQ6uj1PUmo2AnkiGeiHGNIid3zn6N23uILV8vkqnzGxCAZ+i7t49pGZwvlMLvVSiGJqp
-         7pgPuo8dY4cGtMg7OOGWJIDHU3kTpLk2mU7pQqPdovjd03tZ7B0vGAH/LqiJcDZR31jG
-         2rmA==
-X-Gm-Message-State: AOAM532eAUqvlyDX1ggF8fchTwj15OFKOiZ2NvH7TPXdpR8dlJ4jExEa
-        A3eqkiolPkSSsZKzJmuQFnM=
-X-Google-Smtp-Source: ABdhPJxLs3nQOphmY57FIE3V1CmWt0eb1aiFiqi5g4C3nfWbf0ZxtA+Egy99Bm8IZtfn1c3yoeSRXg==
-X-Received: by 2002:a63:131d:: with SMTP id i29mr3515419pgl.493.1639519910996;
-        Tue, 14 Dec 2021 14:11:50 -0800 (PST)
-Received: from devoptiplex ([70.102.108.170])
-        by smtp.gmail.com with ESMTPSA id f4sm84181pfj.61.2021.12.14.14.11.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 14:11:50 -0800 (PST)
-From:   Greg Jesionowski <jesionowskigreg@gmail.com>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Jesionowski <jesionowskigreg@gmail.com>
-Subject: [PATCH] net: usb: lan78xx: add Allied Telesis AT29M2-AF
-Date:   Tue, 14 Dec 2021 15:10:27 -0700
-Message-Id: <20211214221027.305784-1-jesionowskigreg@gmail.com>
+        Tue, 14 Dec 2021 17:15:11 -0500
+Received: from [77.244.183.192] (port=63782 helo=melee.fritz.box)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mxG4j-000AP5-UT; Tue, 14 Dec 2021 23:15:10 +0100
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-pci@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sekhar Nori <nsekhar@ti.com>
+Subject: [PATCH 1/2] PCI: dra7xx: Fix link removal on probe error
+Date:   Tue, 14 Dec 2021 23:14:49 +0100
+Message-Id: <20211214221450.589884-1-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the vendor and product IDs for the AT29M2-AF which is a
-lan7801-based device.
+If a devm_phy_get() calls fails with phy_count==N (N > 0), then N links
+have already been added by device_link_add() and won't be deleted by
+device_link_del() because the code calls 'return' and not 'goto err_link'.
 
-Signed-off-by: Greg Jesionowski <jesionowskigreg@gmail.com>
+Fix in a very simple way by doing all the devm_phy_get() calls before all
+the device_link_add() calls.
+
+Fixes: 7a4db656a635 ("PCI: dra7xx: Create functional dependency between PCIe and PHY")
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- drivers/net/usb/lan78xx.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/pci/controller/dwc/pci-dra7xx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index f20376c1ef3f..474a720e8957 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -76,6 +76,8 @@
- #define LAN7801_USB_PRODUCT_ID		(0x7801)
- #define LAN78XX_EEPROM_MAGIC		(0x78A5)
- #define LAN78XX_OTP_MAGIC		(0x78F3)
-+#define AT29M2AF_USB_VENDOR_ID		(0x07C9)
-+#define AT29M2AF_USB_PRODUCT_ID	(0x0012)
+diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
+index f7f1490e7beb..2ccc53869e13 100644
+--- a/drivers/pci/controller/dwc/pci-dra7xx.c
++++ b/drivers/pci/controller/dwc/pci-dra7xx.c
+@@ -757,7 +757,9 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
+ 		phy[i] = devm_phy_get(dev, name);
+ 		if (IS_ERR(phy[i]))
+ 			return PTR_ERR(phy[i]);
++	}
  
- #define	MII_READ			1
- #define	MII_WRITE			0
-@@ -4734,6 +4736,10 @@ static const struct usb_device_id products[] = {
- 	/* LAN7801 USB Gigabit Ethernet Device */
- 	USB_DEVICE(LAN78XX_USB_VENDOR_ID, LAN7801_USB_PRODUCT_ID),
- 	},
-+	{
-+	/* ATM2-AF USB Gigabit Ethernet Device */
-+	USB_DEVICE(AT29M2AF_USB_VENDOR_ID, AT29M2AF_USB_PRODUCT_ID),
-+	},
- 	{},
- };
- MODULE_DEVICE_TABLE(usb, products);
++	for (i = 0; i < phy_count; i++) {
+ 		link[i] = device_link_add(dev, &phy[i]->dev, DL_FLAG_STATELESS);
+ 		if (!link[i]) {
+ 			ret = -EINVAL;
 -- 
 2.25.1
 

@@ -2,346 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E836474260
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF17474267
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbhLNMU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:20:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        id S233842AbhLNMWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbhLNMU2 (ORCPT
+        with ESMTP id S229809AbhLNMWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:20:28 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC90BC061574;
-        Tue, 14 Dec 2021 04:20:27 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id b7so3115455edd.6;
-        Tue, 14 Dec 2021 04:20:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WcN8wDlG5PNay+ZlgpN4uIRDkjwlYVcGaRqvE1MmS3g=;
-        b=mrdKHVAa1KRct2FPvnrBu686J731EvXOUonV3JGeThWXyHZc2UDo8hCEcNvid1mggh
-         r0bHGEQ+oqjhLzWJSP4xettUtQ+v/MUPMm8ax28kU7SgUuXJUxOVpTMaLe/Vc1nCq6x6
-         jNeKNHpIi7Mzsjp2U+2vqKA57NPMnug+EN4rSxJjhgPdFgNdrE180r2m5F/b9UqM16ss
-         mFERey1jZUKkC1EFJCh5yzfJK3aouxbV3jAsOID5FYSXLEbd7TIGcOFgG8CMBLtZuBzf
-         e5p6M0FX3sNDz1PrXTaNRRlsuFJ3B7DWwI5q+Hqhkc6NYwdw9C6bIcojRIC77Ry0IciD
-         yfaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WcN8wDlG5PNay+ZlgpN4uIRDkjwlYVcGaRqvE1MmS3g=;
-        b=GS2m/Yn4WWDemxqH14LK2trQwbl7kyCJEs+OSDBYN2FufDqdjzJoIqmUzh+DqrSaZf
-         O09LAg8rsVwq4FrTMJ2cbwEnvpUj4ByTlR2tSkmqcmEaQ2FmnxnaJQNAn/XMKBrmAjFe
-         AfN+h145xpuiSYYVFYKXHyUwicq6lcVqrzst+ZZyX4ATlfGY4i/zRk1jbQUsQW4NW0/I
-         Ls0x3vvgCOD5exSAj5mTFgY1hKls9w1v/tPUSIuNIt8eBWYK/QQYE4FMr2Ws5IcL74Zk
-         S8ClhIL/027KObq3elZDfVGx+7f5Nzwgt2+btsHve+C/p0j2cNWrdRslqsfcYob7vZEE
-         XmHg==
-X-Gm-Message-State: AOAM533scJ6s+kLmPrPtq5oYNFCJS7ILK3pCa0j+mPcA/Jp8GRQ4clZ0
-        jwp8+XH7QjrWnggtqHqdyHEoH6uSYAGMYg==
-X-Google-Smtp-Source: ABdhPJyWDLpF+j0qspecZPM6JE+sBXgyNO/mc0jWbHN67DGTiXCSfqro2mnjM6wKAK07hf4jYJWh6w==
-X-Received: by 2002:a17:906:3408:: with SMTP id c8mr5423009ejb.41.1639484426442;
-        Tue, 14 Dec 2021 04:20:26 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id e4sm1003501ejl.196.2021.12.14.04.20.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 04:20:26 -0800 (PST)
-Subject: Re: [RFC PATCH v4 2/4] dt-bindings: phy: rockchip: Add Naneng combo
- PHY bindings
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     heiko@sntech.de, robh+dt@kernel.org, kishon@ti.com,
-        p.zabel@pengutronix.de, yifeng.zhao@rock-chips.com,
-        kever.yang@rock-chips.com, cl@rock-chips.com,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211208185449.16763-1-jbx6244@gmail.com>
- <20211208185449.16763-3-jbx6244@gmail.com> <Ybhc0VW6JeJ4CNY9@matsya>
-From:   Johan Jonker <jbx6244@gmail.com>
-Message-ID: <2aef2271-6667-f6bf-0d7d-399b8ec450bf@gmail.com>
-Date:   Tue, 14 Dec 2021 13:20:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 14 Dec 2021 07:22:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073D5C061574;
+        Tue, 14 Dec 2021 04:22:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B96DB818C7;
+        Tue, 14 Dec 2021 12:22:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7106C34605;
+        Tue, 14 Dec 2021 12:22:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639484569;
+        bh=jtSbLpLidICr6sr83NY1+a4EwUXa2Kj6rtq92VlkTAU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dEz1SLgIpf5iqugJe8tBFcegn3WW9LXHv0Hbnnmq7yICD+EA/brh6IG3gyfYOGck+
+         i12rx6FtZcFzeAoAsX7PnJX9ItX2OjHO93xcuWFGY7AowfFpEOJCzqMV6mjqWc8NsM
+         YZR6QALZ5vm9MqxdOJoQnSLJuIIrY0U/oUnn7iz17JJM2Mc4681Ab6F32rwvnI2nDi
+         l/5dSLvf7VaS13uqezbV/XomBWgRRp9Aa8IQD/X+olewXpuIH4R3maIJnBXK3eSLaN
+         5o7EhrluJ9y4pNqsnDStrSZ3QWjcKt9W2KTdmNL44k0KlRuOBPUAoi8BRYaLRTmXWv
+         TjNKVUgso5pWg==
+Date:   Tue, 14 Dec 2021 12:22:43 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Bhaskara Budiredla <bbudiredla@marvell.com>
+Cc:     mark.rutland@arm.com, robh+dt@kernel.org, bbhushan2@marvell.com,
+        sgoutham@marvell.com, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/2] drivers: perf: Add LLC-TAD perf counter support
+Message-ID: <20211214122242.GA14247@willie-the-truck>
+References: <20211115043506.6679-1-bbudiredla@marvell.com>
+ <20211115043506.6679-2-bbudiredla@marvell.com>
 MIME-Version: 1.0
-In-Reply-To: <Ybhc0VW6JeJ4CNY9@matsya>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211115043506.6679-2-bbudiredla@marvell.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/14/21 9:58 AM, Vinod Koul wrote:
-> On 08-12-21, 19:54, Johan Jonker wrote:
->> From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
->>
->> Add the compatible strings for the Naneng combo PHY found on rockchip SoC.
+On Mon, Nov 15, 2021 at 10:05:05AM +0530, Bhaskara Budiredla wrote:
+> This driver adds support for Last-level cache tag-and-data unit
+> (LLC-TAD) PMU that is featured in some of the Marvell's CN10K
+> infrastructure silicons.
 > 
-
-> Why is this series still tagged RFC..?
-
-The phy DT nodes are urgent in need for other USB3, SATA and PCIe follow
-up series. When the author doesn't respond for some time I can kick the
-can a bit if it's for 'little' YAML, C style or DT changes. For larger
-changes it's better to have the hardware tested as well, so I
-carefully/politely marked it RFC as I don't know the author's intentions.
-
+> The LLC is divided into 2N slices distributed across N Mesh tiles
+> in a single-socket configuration. The driver always configures the
+> same counter for all of the TADs. The user would end up effectively
+> reserving one of eight counters in every TAD to look across all TADs.
+> The occurrences of events are aggregated and presented to the user
+> at the end of an application run. The driver does not provide a way
+> for the user to partition TADs so that different TADs are used for
+> different applications.
 > 
->>
->> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
->> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
->> ---
->>
->> Changed V4:
->>   restyle
->>   remove some minItems
->>   add more properties
->>   remove reset-names
->>   move #phy-cells
->>   add rockchip,rk3568-pipe-grf
->>   add rockchip,rk3568-pipe-phy-grf
->> ---
->>  .../phy/phy-rockchip-naneng-combphy.yaml      | 127 ++++++++++++++++++
->>  1 file changed, 127 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml b/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
->> new file mode 100644
->> index 000000000..d309e2008
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
->> @@ -0,0 +1,127 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/phy/phy-rockchip-naneng-combphy.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Rockchip SoC Naneng Combo Phy Device Tree Bindings
->> +
->> +maintainers:
->> +  - Heiko Stuebner <heiko@sntech.de>
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - rockchip,rk3568-naneng-combphy
->> +
->> +  reg:
->> +    maxItems: 1
->> +
-
->> +  clocks:
->> +    items:
->> +      - description: reference clock
->> +      - description: apb clock
->> +      - description: pipe clock
+> The event counters are zeroed to start event counting to avoid any
+> rollover issues. TAD perf counters are 64-bit, so it's not currently
+> possible to overflow event counters at current mesh and core
+> frequencies.
 > 
-> no maxItems or minItems for this?
-
-Documentation/devicetree/bindings/processed-schema.json
-
-      "clocks": {
-        "items": [
-          {},
-          {},
-          {}
-        ],
-        "type": "array",
-        "minItems": 3,
-        "maxItems": 3,
-        "additionalItems": false
-      },
-
-With 3 items the properties minItems and maxItems are automatically
-added. Only when the number of clocks varies for example between 1 and 3
-one should add minItems.
-
+> To measure tad pmu events use perf tool stat command. For instance:
 > 
->> +
->> +  clock-names:
->> +    items:
->> +      - const: ref
->> +      - const: apb
->> +      - const: pipe
->> +
->> +  resets:
->> +    items:
->> +      - description: exclusive apb reset line
->> +      - description: exclusive PHY reset line
+> perf stat -e tad_dat_msh_in_dss,tad_req_msh_out_any <application>
+> perf stat -e tad_alloc_any,tad_hit_any,tad_tag_rd <application>
 > 
-> Ditto?
+> Signed-off-by: Bhaskara Budiredla <bbudiredla@marvell.com>
+> ---
+>  drivers/perf/Kconfig                 |   7 +
+>  drivers/perf/Makefile                |   1 +
+>  drivers/perf/marvell_cn10k_tad_pmu.c | 429 +++++++++++++++++++++++++++
+>  3 files changed, 437 insertions(+)
+>  create mode 100644 drivers/perf/marvell_cn10k_tad_pmu.c
 > 
->> +
+> diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
+> index 77522e5efe11..53b8fa554343 100644
+> --- a/drivers/perf/Kconfig
+> +++ b/drivers/perf/Kconfig
+> @@ -137,6 +137,13 @@ config ARM_DMC620_PMU
+>  	  Support for PMU events monitoring on the ARM DMC-620 memory
+>  	  controller.
+>  
+> +config MARVELL_CN10K_TAD_PMU
+> +	tristate "Marvell CN10K LLC-TAD PMU"
+> +	depends on ARM64 || (COMPILE_TEST && 64BIT)
+> +	help
+> +	  Provides support for Last-Level cache Tag-and-data Units (LLC-TAD)
+> +	  performance monitors on CN10K family silicons.
+> +
+>  source "drivers/perf/hisilicon/Kconfig"
+>  
+>  endmenu
+> diff --git a/drivers/perf/Makefile b/drivers/perf/Makefile
+> index 5260b116c7da..2db5418d5b0a 100644
+> --- a/drivers/perf/Makefile
+> +++ b/drivers/perf/Makefile
+> @@ -14,3 +14,4 @@ obj-$(CONFIG_THUNDERX2_PMU) += thunderx2_pmu.o
+>  obj-$(CONFIG_XGENE_PMU) += xgene_pmu.o
+>  obj-$(CONFIG_ARM_SPE_PMU) += arm_spe_pmu.o
+>  obj-$(CONFIG_ARM_DMC620_PMU) += arm_dmc620_pmu.o
+> +obj-$(CONFIG_MARVELL_CN10K_TAD_PMU) += marvell_cn10k_tad_pmu.o
+> diff --git a/drivers/perf/marvell_cn10k_tad_pmu.c b/drivers/perf/marvell_cn10k_tad_pmu.c
+> new file mode 100644
+> index 000000000000..250dd4c52d70
+> --- /dev/null
+> +++ b/drivers/perf/marvell_cn10k_tad_pmu.c
+> @@ -0,0 +1,429 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Marvell CN10K LLC-TAD perf driver
+> + *
+> + * Copyright (C) 2021 Marvell
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 as
+> + * published by the Free Software Foundation.
+> + */
+> +
+> +#define pr_fmt(fmt) "tad_pmu: " fmt
+> +
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_device.h>
+> +#include <linux/cpuhotplug.h>
+> +#include <linux/perf_event.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define TAD_PFC_OFFSET		0x0
+> +#define TAD_PFC(counter)	(TAD_PFC_OFFSET | (counter << 3))
+> +#define TAD_PRF_OFFSET		0x100
+> +#define TAD_PRF(counter)	(TAD_PRF_OFFSET | (counter << 3))
+> +#define TAD_PRF_CNTSEL_MASK	0xFF
+> +#define TAD_MAX_COUNTERS	8
+> +
+> +#define to_tad_pmu(p) (container_of(p, struct tad_pmu, pmu))
+> +
+> +struct tad_region {
+> +	void __iomem	*base;
+> +};
+> +
+> +struct tad_pmu {
+> +	struct pmu pmu;
+> +	struct tad_region *regions;
+> +	u32 region_cnt;
+> +	unsigned int cpu;
+> +	struct hlist_node node;
+> +	struct perf_event *events[TAD_MAX_COUNTERS];
+> +	DECLARE_BITMAP(counters_map, TAD_MAX_COUNTERS);
+> +};
+> +
+> +static int tad_pmu_cpuhp_state;
+> +
+> +static void tad_pmu_event_counter_read(struct perf_event *event)
+> +{
+> +	struct tad_pmu *tad_pmu = to_tad_pmu(event->pmu);
+> +	struct hw_perf_event *hwc = &event->hw;
+> +	u32 counter_idx = hwc->idx;
+> +	u64 prev, new;
+> +	int i;
+> +
+> +	do {
+> +		prev = local64_read(&hwc->prev_count);
+> +		for (i = 0, new = 0; i < tad_pmu->region_cnt; i++)
+> +			new += readq(tad_pmu->regions[i].base +
+> +				     TAD_PFC(counter_idx));
+> +	} while (local64_cmpxchg(&hwc->prev_count, prev, new) != prev);
 
->> +  rockchip,dis-u3otg0-port:
->> +    type: boolean
->> +    description:
->> +      Disable the u3otg0 port.
-> 
-> why not make it explicit and say rockchip,disable-u3otg0-port
-> 
-> Also why should this port be disabled?
+I plan to queue this as-is, but I did remark on the previous version that
+this loop is needlessly expensive. Why are you not using readq_relaxed() and
+why are you doing that _inside_ the cmpxchg() loop?
 
-From Rockchip RK3568 Datasheet V1.0-20201210 page 16-17:
-
-Multi-PHY0 support one of the following interfaces
-USB3.0 OTG
-SATA0
-
-Multi-PHY1 support one of the following interfaces
-USB3.0 Host
-SATA1
-QSGMII/SGMII
-
-Multi-PHY2 support one of the following interfaces
-PCIe2.1
-SATA2
-QSGMII/SGMII
-
-===
-
-Rockchip RK3568 TRM Part1 V1.0-20210111
-page 233-234
-
-PIPE_GRF_USB3OTG0_CON1
-Address: Operational Base + offset (0x0104)
-
-usb3otg0_host_u3_port_disable
-USB 3.0 SS Port Disable control.
-1'b0: Port Enabled
-1'b1: Port Disabled
-
-page 235-236
-
-PIPE_GRF_USB3OTG1_CON1
-Address: Operational Base + offset (0x0144)
-
-usb3otg1_host_u3_port_disable
-USB 3.0 SS Port Disable control.
-1'b0: Port Enabled
-1'b1: Port Disabled
-
-===
-
-https://www.cnx-software.com/2020/12/01/rockchip-rk3568-processor-to-power-edge-computing-and-nvr-applications/
-https://eji4evk5kxx.exactdn.com/wp-content/uploads/2020/12/RK3568-multiplexed-sata-usb-3.0-pcie.jpg?lossy=1&ssl=1
-
-===
-
-USB3.0 OTG, USB3.0 HOT, SATA3.0, PCIE2.1, QSGMII are all multiplexed via
-three Serdes lanes.
-The driver in it's current state doesn't keep track of which phy[0-2]
-node it probes I think. Nodes can be probed in random order, so it's not
-able to tell if usb3otg0_host_u3_port_disable or
-usb3otg1_host_u3_port_disable should be used. That why the author
-probably choose to use a property.
-
-Please advise if we need more complex logic, state locking, etc.
-(Any example from the kernel source for that?)
-
-(with more complexity I sould better pass this serie to somebody else)
-
-Johan
-
-
-> 
->> +
->> +  rockchip,dis-u3otg1-port:
->> +    type: boolean
->> +    description:
->> +      Disable the u3otg1 port.
-> 
-> ditto
-> 
->> +
->> +  rockchip,enable-ssc:
->> +    type: boolean
->> +    description:
->> +      In U3 and SATA mode the SSC option is already disabled by default.
->> +      In PCIE mode the option SSC can be enabled.
->> +      If Spread Spectrum Clocking (SSC) is used it is
->> +      required that a common reference clock is used by the link partners.
->> +      Most commercially available platforms with PCIe backplanes use
->> +      SSC to reduce EMI.
->> +
->> +  rockchip,ext-refclk:
->> +    type: boolean
->> +    description:
->> +      Many PCIe connections, especially backplane connections,
->> +      require a synchronous reference clock between the two link partners.
->> +      To achieve this a common clock source, referred to as REFCLK in
->> +      the PCI Express Card Electromechanical Specification,
->> +      should be used by both ends of the PCIe link.
->> +      The PCIe PHY provides 100MHz differential clock output
->> +      (optional with SSC) in RC mode for system applications.
->> +
->> +  rockchip,pipe-grf:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description:
->> +      Some additional phy settings are accessed through GRF regs.
->> +
->> +  rockchip,pipe-phy-grf:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description:
->> +      Some additional pipe settings are accessed through GRF regs.
->> +
->> +  rockchip,sgmii-mac-sel:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum: [0, 1]
->> +    default: 0
->> +    description:
->> +      Select gmac0 or gmac1 to be used as SGMII controller.
->> +
->> +  "#phy-cells":
->> +    const: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +  - resets
->> +  - rockchip,pipe-grf
->> +  - rockchip,pipe-phy-grf
->> +  - "#phy-cells"
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/rk3568-cru.h>
->> +
->> +    pipegrf: syscon@fdc50000 {
->> +      compatible = "rockchip,rk3568-pipe-grf", "syscon";
->> +      reg = <0xfdc50000 0x1000>;
->> +    };
->> +
->> +    pipe_phy_grf0: syscon@fdc70000 {
->> +      compatible = "rockchip,rk3568-pipe-phy-grf", "syscon";
->> +      reg = <0xfdc70000 0x1000>;
->> +    };
->> +
->> +    combphy0: phy@fe820000 {
->> +      compatible = "rockchip,rk3568-naneng-combphy";
->> +      reg = <0xfe820000 0x100>;
->> +      clocks = <&pmucru CLK_PCIEPHY0_REF>,
->> +               <&cru PCLK_PIPEPHY0>,
->> +               <&cru PCLK_PIPE>;
->> +      clock-names = "ref", "apb", "pipe";
->> +      assigned-clocks = <&pmucru CLK_PCIEPHY0_REF>;
->> +      assigned-clock-rates = <100000000>;
->> +      resets = <&cru SRST_P_PIPEPHY0>, <&cru SRST_PIPEPHY0>;
->> +      rockchip,pipe-grf = <&pipegrf>;
->> +      rockchip,pipe-phy-grf = <&pipe_phy_grf0>;
->> +      #phy-cells = <1>;
->> +    };
->> -- 
->> 2.20.1
-> 
+Will

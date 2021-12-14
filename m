@@ -2,161 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2660D473AF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF7E473B2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234698AbhLNCvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 21:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbhLNCve (ORCPT
+        id S244951AbhLNC4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 21:56:15 -0500
+Received: from conuserg-11.nifty.com ([210.131.2.78]:41859 "EHLO
+        conuserg-11.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232282AbhLNCz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 21:51:34 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6615C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 18:51:34 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id l5so16621434ilv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 18:51:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3jsCu17UcfNVcbc00SJeDBruH8+M4d/e9QG8WaxESCQ=;
-        b=fzXsd0CgZZ72srj/m//lLXbIvPLOupij7fwNQ75VD3XgvZjWiNYZidyseu+uAhx41r
-         NGsv0l6les/fYmdjestNvt+gse2Ff9dqPDm64TuZ/QhyvMwvGI8OZNVUOaCIw+qcwbd5
-         2WQorZW7zRzdoio/7GwfAtZIcsuIM/pzgmkfnfDuuVKraZX6zhMi7VszGnNmHqvgr/1s
-         OG5/pjWmRGfVfFD7F2UyLJ3j5Lqi3p6Z20m2j65vtsiPkTwoi1gAvajdetz4UZzB7pQ+
-         XuoNqu08JCVGzFFGbTzYL88etzp2xsphRpOkZdxPy1UzGhTB/3NjkdMiYMk2mQ79onPl
-         YgTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3jsCu17UcfNVcbc00SJeDBruH8+M4d/e9QG8WaxESCQ=;
-        b=sSeFcAiLV3rW2HAKrjxakEEzEwbLY8AdLkTiT+ifGx//oNuRvzPiw4U3c0Rj/d6gPY
-         +sJIQu/wt2sTBcVJftHz8jsT4VZPggGgrGMMYjnF9KI0y2yUCxBz7QC5Atudcdfd60ZP
-         U4X9aiPXhl9AqwXHxWr+6Qrss62dO1Cjpvc8z17ZwUgcxdYvXoIobSsJc7LkPUcgVu1K
-         kFF8sOtOu0LS3ea80l7fuokQQ8sLAx2vlGJacS8ZSq6gpAMv4Aa835BOZVtzOcLvR9RA
-         qmDBfbAevskuJiiiWWZ77SXSO2XvosT5AS2iDPf520RoaSs7tYINrIMHnV+2RQ6zFE/p
-         vsvA==
-X-Gm-Message-State: AOAM532uQ6sLJ6zM5ub/UmLlZVEGT2RkFg8OeWscnS3ujVcGMTfkmGev
-        ory67RzUQ5Z9R/ZMU7PvGNDduWx5KKVLKXMc9sc=
-X-Google-Smtp-Source: ABdhPJy8WxFEeG2pN8CG05UVDaJE5hZSo4sZRqAyhs0pjLEbXEs+QPJPSwztg75vG5hi4lEGXiM9x+AIQnOCjHf0fs8=
-X-Received: by 2002:a92:cb4b:: with SMTP id f11mr1690559ilq.286.1639450294290;
- Mon, 13 Dec 2021 18:51:34 -0800 (PST)
+        Mon, 13 Dec 2021 21:55:28 -0500
+Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id 1BE2s0bb012823;
+        Tue, 14 Dec 2021 11:54:01 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 1BE2s0bb012823
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1639450441;
+        bh=EQ0afxQ76LqqjHsFnyzhOLlXVG7xCk9vL5KJdaj0vWU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ha8XVF3AHNb9NVlDtKwxSE1n17wM/tm96ATWaTythyxqTGRGW3+RIj9HfWLYEGOwd
+         NvUrGV8lZ50WBP+np6DUo90MrGgmSeubxpjQuzWtOZcVqZeUD1j5q+jBSJcNHtviq4
+         KnmA+/B5qOvGd/U/3mGf0OO3z7J/70EiIwFt3RVdme44MuRUUjcom6ubkMK+sUqYxA
+         lROzk35AJUxlnAaS2/U6im8sep1LAtC9DvrvqanBIZEZHNjnqJ9dXebMFgc0+r0eyV
+         YKOZ4zD+lvLgxPF+m9zNJ/LpkWys+iSZEQpBZ2kVRKwirigJRKDxvm34l/ipx+VTA4
+         q++ic5DWMsyIg==
+X-Nifty-SrcIP: [133.32.232.101]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arch@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Nicolas Schier <n.schier@avm.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v2 00/11] kbuild: do not quote string values in Makefile
+Date:   Tue, 14 Dec 2021 11:53:44 +0900
+Message-Id: <20211214025355.1267796-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20211213042215.3096-1-jiangshanlai@gmail.com> <20211213042215.3096-2-jiangshanlai@gmail.com>
- <YbeaXT1Y80baey3t@zn.tnic>
-In-Reply-To: <YbeaXT1Y80baey3t@zn.tnic>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Tue, 14 Dec 2021 10:51:23 +0800
-Message-ID: <CAJhGHyB=VY-m7fJ+bapWgPsczhH0q9oeMmCTP5cOYJAP0VW5ZA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] X86/db: Change __this_cpu_read() to this_cpu_read()
- in hw_breakpoint_active()
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
 
-On Tue, Dec 14, 2021 at 3:09 AM Borislav Petkov <bp@alien8.de> wrote:
+This patch refactors the code as outlined in:
 
-> So please try to restrain yourself and write proper English. Run your
-> commit message through a spellchecker at least so that there are no
-> funky words.
+  https://lore.kernel.org/linux-kbuild/CAK7LNAR-VXwHFEJqCcrFDZj+_4+Xd6oynbj_0eS8N504_ydmyw@mail.gmail.com/
 
-The commit message was checked via VIM spellchecker.  It did highlight
-denylist, noinstr, noinstrument, complexify, and a lot more.
+First some patches refactor certs/Makefile. This Makefile is written
+in a too complicated way.
 
-There are too many false-negative results from VIM spellchecker, and
-I searched denylist, complexify via google and they are used by some
-other places so I kept them.
-
-I'm sorry for not searching in the kernel tree to find a proper
-word for noinstrument, not searching the web for better words for
-denylist, complexify.
-
-I will change a spellchecker and improve my English.
+I will revert cd8c917a56f20f48748dd43d9ae3caff51d5b987
+after this lands in the upstream.
 
 
->
-> > to any extra data except the percpu cpu_dr7, and cpu_dr7 is disallowed
-> > to be watched in arch_build_bp_info().  So this_cpu_read() is safe to
-> > be used when hw_breakpoints is still active, and __this_cpu_read() here
-> > should be changed to this_cpu_read().
-> >
-> > This problem can only happen when the system owner uses a kernel with
-> > CONFIG_DEBUG_PREEMPT enabled and deliberately use hw_breakpoints on
-> > the data that __this_cpu_preempt_check() accesses.  Sot it is just a
-> > problem with no significance.
-> >
-> > One might suggest that, all the data accessed by noinstr functions
-> > should be marked in denylist for hw_breakpoints.  That would complexify
->
-> should be marked in denylist for hw_breakpoints.  That would complexify
-> Unknown word [denylist] in commit message, suggestions:
->         ['deny list', 'deny-list', 'dentistry']
->
-> should be marked in denylist for hw_breakpoints.  That would complexify
-> Unknown word [complexify] in commit message, suggestions:
->         ['complexity', 'complexion']
->
-> > the noinstrment framework and add hurdles to anyone that who want to
->
-> the noinstrment framework and add hurdles to anyone that who want to
-> Unknown word [noinstrment] in commit message, suggestions:
->         ['instrument']
->
-> So you need to restrain yourself and stop inventing new English words.
->
-> > add a new noinstr function.  All we need is to suppress #DB in the IST
->
-> Who is "we"?
->
-> > interrupt entry path until safe place where #DB is disabled in hardware
-> > or #DB handler can handle well even it hits data accessed by noinstr
-> > function.  Changing __this_cpu_read() to this_cpu_read() is fit for it.
->
-> You don't need to write *what* your patch is doing - that is clear from
-> the diff.
 
-What I wanted to say in this paragraph is that why I chose this way to fix
-it since there are several ways/policies to fix it.
+Masahiro Yamada (11):
+  certs: use $< and $@ to simplify the key generation rule
+  certs: unify duplicated cmd_extract_certs and improve the log
+  certs: remove unneeded -I$(srctree) option for system_certificates.o
+  certs: refactor file cleaning
+  certs: remove misleading comments about GCC PR
+  kbuild: stop using config_filename in scripts/Makefile.modsign
+  certs: simplify $(srctree)/ handling and remove config_filename macro
+  kbuild: do not include include/config/auto.conf from shell scripts
+  kbuild: do not quote string values in include/config/auto.conf
+  certs: move scripts/extract-cert to certs/
+  microblaze: use built-in function to get CPU_{MAJOR,MINOR,REV}
 
-"Changing __this_cpu_read() to this_cpu_read() is fit for" this policy.
+ MAINTAINERS                                   |  1 -
+ Makefile                                      |  6 +-
+ arch/arc/Makefile                             |  4 +-
+ arch/arc/boot/dts/Makefile                    |  4 +-
+ arch/h8300/boot/dts/Makefile                  |  6 +-
+ arch/microblaze/Makefile                      |  8 +--
+ arch/nds32/boot/dts/Makefile                  |  7 +--
+ arch/nios2/boot/dts/Makefile                  |  2 +-
+ arch/openrisc/boot/dts/Makefile               |  7 +--
+ arch/powerpc/boot/Makefile                    |  2 +-
+ arch/riscv/boot/dts/canaan/Makefile           |  4 +-
+ arch/sh/boot/dts/Makefile                     |  4 +-
+ arch/xtensa/Makefile                          |  2 +-
+ arch/xtensa/boot/dts/Makefile                 |  5 +-
+ certs/.gitignore                              |  1 +
+ certs/Makefile                                | 55 +++++++------------
+ {scripts => certs}/extract-cert.c             |  2 +-
+ drivers/acpi/Makefile                         |  2 +-
+ drivers/base/firmware_loader/builtin/Makefile |  4 +-
+ init/Makefile                                 |  2 +-
+ net/wireless/Makefile                         |  4 +-
+ scripts/.gitignore                            |  1 -
+ scripts/Kbuild.include                        | 47 ----------------
+ scripts/Makefile                              | 11 +---
+ scripts/Makefile.modinst                      |  4 +-
+ scripts/gen_autoksyms.sh                      | 11 +---
+ scripts/kconfig/confdata.c                    |  2 +-
+ scripts/link-vmlinux.sh                       | 47 ++++++++--------
+ scripts/remove-stale-files                    |  2 +
+ scripts/setlocalversion                       |  9 ++-
+ usr/Makefile                                  |  2 +-
+ 31 files changed, 87 insertions(+), 181 deletions(-)
+ rename {scripts => certs}/extract-cert.c (98%)
 
-I don't think it can be seen in the diff.
+-- 
+2.32.0
 
-> I don't really follow the argument for why this_cpu_read(); why not
-> raw_cpu_read() instead, which is what __this_cpu_read() is based on.
-> Also, this really needs a comment.
-
-Yes, raw_cpu_read() is better.
-
-Some other places in noinstr function use this_cpu_read(), so I did
-not search if there is a better alternative.  I just reviewed the
-definition of this_cpu_read() and concluded that it can be used.
-
->        /*
->         * Must not hit a breakpoint in check_preempt_disabled()
->         */
->        return raw_cpu_read(cpu_dr7) & DR_GLOBAL_ENABLE_MASK;
-
-Although, this comment is describing raw_cpu_read() obviously, I often
-can't get which code is a comment in other places referring to due
-to later changes with new code added and removed.
-
-Can I duplicate the code in the comments?
-  Use raw_cpu_read() instead of __this_cpu_read() to avoid hitting
-  a breakpoint in check_preempt_disabled().
-
-Thanks
-Lai

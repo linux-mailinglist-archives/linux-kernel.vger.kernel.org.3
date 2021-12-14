@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F35824741C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6425E4741BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbhLNLpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 06:45:25 -0500
-Received: from mga02.intel.com ([134.134.136.20]:65457 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231233AbhLNLpY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 06:45:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639482324; x=1671018324;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uxe3KXxNRLMySeq/nzGbJAEG8Rn4M5b9I8eEfKOMvJY=;
-  b=beMzo1sh5ltrejTon79Jj7pfe9g2GVSvoSxiUEaBsMOiiyGJyGakd9w+
-   /hODa3jphF8/6+iAiOiCTC+BQNxminyRfJmGcx+W5cx7GEHiJ6HsZtNaw
-   q/TpcChalO6z0dp9NShLRNeT3YR4BOHLXbsBkRjUM8GM8LeuQg/JqeRrs
-   k35UCDHDlVnFgng5Nu4dGGYzb0V3GsAqqR1YFshvNFiTETeBjzWdcQC3O
-   Mb+/Efe1qmYgdyGu2LQ1bpVL574U6dmY/S/fFb3KI+y1UhzBPhwJRaEUf
-   P6qe0ZaH3q9J21+LJTEHJWfbEYegnC9mpXnUUTUnJJLpo+1v1xLga6gz5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="226239055"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="226239055"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 03:45:24 -0800
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="682024130"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 03:45:22 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1mx6EM-0066XN-QD;
-        Tue, 14 Dec 2021 13:44:26 +0200
-Date:   Tue, 14 Dec 2021 13:44:26 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     broonie@kernel.org
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 13
-Message-ID: <YbiDmp3bJr9/Uctq@smile.fi.intel.com>
-References: <20211214030215.3181149-1-broonie@kernel.org>
+        id S233679AbhLNLo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 06:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231233AbhLNLoz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 06:44:55 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F7CC061574;
+        Tue, 14 Dec 2021 03:44:55 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id 8so18052740qtx.5;
+        Tue, 14 Dec 2021 03:44:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/WiGVwXD5szJpXekvLi+rIYbV6iDlKwEbmIuA9qTTxI=;
+        b=GTMy6m1uKE/Eu0kGasr5n9WaFtjJAnHIES4JWiDkpkGjJWF1a87bQftjj5DLtdr4YX
+         +pFBmBAhDLXbdVmZF9nJ8S8gs+6nPecI6+d7qb+qtBgRq+dmRVLx+7c2AJ+Mzp4UqTtp
+         eIwOL8Sin+37oB99VYIYTYmGYltJGbeMCsjQx58qTp5Z9l435FD1IgfbNWiC12flCtoz
+         iy8te2/GfNV4oQ/XtG+aBtY3+lPeDfk4ooR5VnBgnpkBABejmXzyh58beXbZlWhPR3bk
+         UWvJkf890b+HIo7ogZEVTDiUtHyxe9KZM4316YZH9jOcILc8/q1ysvWtLqHd/VtRbwdh
+         gcEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/WiGVwXD5szJpXekvLi+rIYbV6iDlKwEbmIuA9qTTxI=;
+        b=D3d+MCHCCTELJ/mQePM3NqiSaDUxiyhiSabNh4AQArWkXfY2iYWR9Paks62RT6ISVv
+         E+PbyO3VgI6+h7ihSHDtxqbUE1ZaMeFY9wgti+sMEB/IsjMsECpHDJtOnFmuDdx9bnqI
+         VMo4e8ctY+o/P6WRTTj0WqkydoEPpADEsmYPxWQ2nTTN5affrBpMyb2OAt/jAalJtt0q
+         GuAqZk5rHxueKfY0bcFsvzgW+Hnceb0+2Fg3ktF4C41GHqw6gQArsXsU0SNAUQuK00iQ
+         eM8/JNPZXXXZv8feE277OeRWK1Sf/ABxjSubPvLhSxbEGceDMDng/LEPuCaxVL1Fl+Hv
+         Q3Lg==
+X-Gm-Message-State: AOAM533fytV7VJgX1C7gVC+o2r3gpni2kT5AyO6xwna2vyMc99r6kTxu
+        UaH4yIny7mSMJDNT36c5j10=
+X-Google-Smtp-Source: ABdhPJzWVwOd87044dfW6ELeRVhrc9UnuAQSqzkdnDsQ6rNe+39K3w9DVsC5AtgSj4aqgLhSh7WCwA==
+X-Received: by 2002:ac8:7f06:: with SMTP id f6mr5325214qtk.258.1639482294417;
+        Tue, 14 Dec 2021 03:44:54 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id c8sm7225022qkp.8.2021.12.14.03.44.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 03:44:54 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     davem@davemloft.net
+Cc:     kuba@kernel.org, richardsonnick@google.com, edumazet@google.com,
+        zhudi21@huawei.com, songmuchun@bytedance.com,
+        yejune.deng@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] pktgen: use min() to make code cleaner
+Date:   Tue, 14 Dec 2021 11:44:47 +0000
+Message-Id: <20211214114447.439632-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214030215.3181149-1-broonie@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 03:02:15AM +0000, broonie@kernel.org wrote:
-> Hi all,
-> 
-> Non-merge commits (relative to Linus' tree): 5960
->  6555 files changed, 277265 insertions(+), 120864 deletions(-)
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Mark, is it possible to add tags to the releases, please?
+Use min() in order to make code cleaner. Issue found by coccinelle.
 
-When you do them tags are missed, I have to add them manually after my scripts
-out of a sudden switched from Linux Next base to latest used vanilla tag with
-all nice outcomes...
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ net/core/pktgen.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> ----------------------------------------------------------------------------
-> 
-> I have created today's linux-next tree at
-> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-> are tracking the linux-next tree using git, you should not use "git pull"
-> to do so as that will try to merge the new linux-next release with the
-> old one.  You should use "git fetch" and checkout or reset to the new
-> master.
-> 
-> You can see which trees have been included by looking in the Next/Trees
-> file in the source.  There are also quilt-import.log and merge.log
-> files in the Next directory.  Between each merge, the tree was built
-> with a defconfig for arm64, an allmodconfig for x86_64, a
-> multi_v7_defconfig for arm and a native build of tools/perf.
-> 
-> Below is a summary of the state of the merge.
-> 
-> I am currently merging 346 trees (counting Linus' and 94 trees of bug
-> fix patches pending for the current merge release).
-> 
-> Stats about the size of the tree over time can be seen at
-> http://neuling.org/linux-next-size.html .
-> 
-> Status of my local build tests will be at
-> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-> advice about cross compilers/configs that work, we are always open to add
-> more builds.
-> 
-> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-> Gortmaker for triage and bug fixes.
-> 
-
+diff --git a/net/core/pktgen.c b/net/core/pktgen.c
+index 84b62cd7bc57..7a0b07a22692 100644
+--- a/net/core/pktgen.c
++++ b/net/core/pktgen.c
+@@ -2778,8 +2778,7 @@ static void pktgen_finalize_skb(struct pktgen_dev *pkt_dev, struct sk_buff *skb,
+ 		}
+ 
+ 		i = 0;
+-		frag_len = (datalen/frags) < PAGE_SIZE ?
+-			   (datalen/frags) : PAGE_SIZE;
++		frag_len = min(datalen / frags, PAGE_SIZE);
+ 		while (datalen > 0) {
+ 			if (unlikely(!pkt_dev->page)) {
+ 				int node = numa_node_id();
+@@ -2796,7 +2795,7 @@ static void pktgen_finalize_skb(struct pktgen_dev *pkt_dev, struct sk_buff *skb,
+ 			/*last fragment, fill rest of data*/
+ 			if (i == (frags - 1))
+ 				skb_frag_size_set(&skb_shinfo(skb)->frags[i],
+-				    (datalen < PAGE_SIZE ? datalen : PAGE_SIZE));
++				    min(datalen, PAGE_SIZE));
+ 			else
+ 				skb_frag_size_set(&skb_shinfo(skb)->frags[i], frag_len);
+ 			datalen -= skb_frag_size(&skb_shinfo(skb)->frags[i]);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 

@@ -2,124 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B14474274
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA654474275
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbhLNMZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbhLNMZi (ORCPT
+        id S233900AbhLNM0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:26:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25501 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231744AbhLNM0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:25:38 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022C8C06173F;
-        Tue, 14 Dec 2021 04:25:38 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id f9so45750326ybq.10;
-        Tue, 14 Dec 2021 04:25:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=70ZpaJ3uo3igzKMIt1y9JPalUaB8ti9cw7hSBNZ1J7U=;
-        b=Gyzwa0v8wxz9jWlKX7+iVKGnsGbFmzgzc0C+17ffhE36858qFiNgKlXo/4adfIK81V
-         UMBoTjjB6CnGp3Rb1okXF1SUxduz7ExssOKZd5lryE5RMNV5sGSEkiRU6HhNToPPjRwo
-         MVcj/4e4x+3wLJwY4bkCFqdkQk/CJd+P0WGI/X5znVvkceKBu5QhxA9ufL4MeVSKDSWr
-         eT85VzgnjuyHZaUNrtv4WcYFFuiHE2doclV3DM+OhJeuNr4RGrl6Z0f9KatLnQjaqF7T
-         rDmX6irH803fnyGqz0AIfK6+xYaqHN2StQPsGZTHaCWJPgrfXRMu83esN4ETq5ZV2/Ku
-         ZS4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=70ZpaJ3uo3igzKMIt1y9JPalUaB8ti9cw7hSBNZ1J7U=;
-        b=luUngNRO9uJtBB+mDir7FiuuRwb9x+4hZvVEYJaW2oYaR9q83jwQ8/UoB9HG0hx8oW
-         aCIHB0bRwfnzltvoRD+R4U4wGPqVVYpbyI8YJfOZleVHOU2OszVzQzEoEyqNFQUtRAdZ
-         AlX88FxCMZeBNgVTbQ4BEwSzUgvc9pOUsq/V2oLrM2clHhqnAuzv+k6D9QVkkFd+KbKt
-         bcoygFFcwy1aBo0cXuYKImq5TBvEufeJjA94R+83Z1zBhiZ4Zhr2Uro9i4zKHdnWFQr9
-         0yiAt13Htd1vhwLwMqhsaiojUmCG3Zz4XywYEZgGuVIsKGIgS7GGVSUByJIo6EHFDVFh
-         4PqQ==
-X-Gm-Message-State: AOAM533ZL5Db3v5s1G+6tURJJUCMX6MhhFiyrbvvpMjrPT+AzkRjwNES
-        noOL18AUE4FGzGQvwId7N0LP200qgKG8W9pkhkA=
-X-Google-Smtp-Source: ABdhPJz+4V+tcLba303QzieS/yi2HpD3kWyd6W3ZqI+OTfrwA3EfIuCCEhaE9jk3B3hQ+zZzBCRPYa6wpqKdPc2r730=
-X-Received: by 2002:a25:cad5:: with SMTP id a204mr5608187ybg.234.1639484737157;
- Tue, 14 Dec 2021 04:25:37 -0800 (PST)
+        Tue, 14 Dec 2021 07:26:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639484781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fNWLhg1ntWwp5Ppu09h0Eh4UGAn0KphaoLRSOYk8nM8=;
+        b=eVtRvroIUm25LBT5UegrjVYI11halhJU8UXUpLdjV0uklb+I+Do8iqOTfuLWjYiLpDrPQx
+        MNYCStL2u3/F3r3jNJBiT5J3Uh2/daMKh/YXzAQjfMPaNViRW4NQSa8vznM2V3Id6ThpyR
+        bBKPel6cRP3zoF3xQ3nX0fdCy8nngMM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-540-BMYZV-O3O2KuLxy71sdZRg-1; Tue, 14 Dec 2021 07:26:18 -0500
+X-MC-Unique: BMYZV-O3O2KuLxy71sdZRg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 63D3B192CC40;
+        Tue, 14 Dec 2021 12:26:16 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 38EEE5E26D;
+        Tue, 14 Dec 2021 12:26:01 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 506EA416D862; Tue, 14 Dec 2021 09:25:58 -0300 (-03)
+Date:   Tue, 14 Dec 2021 09:25:58 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Christoph Lameter <cl@gentwo.org>
+Cc:     Mel Gorman <mgorman@suse.de>, Thomas Gleixner <tglx@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Christoph Lameter <cl@gentwo.de>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, peterz@infradead.org, nilal@redhat.com,
+        linux-rt-users@vger.kernel.org, vbabka@suse.cz, ppandit@redhat.com
+Subject: Re: [PATCH v2 3/3] mm/page_alloc: Remotely drain per-cpu lists
+Message-ID: <20211214122558.GB57271@fuller.cnet>
+References: <20211103170512.2745765-1-nsaenzju@redhat.com>
+ <20211103170512.2745765-4-nsaenzju@redhat.com>
+ <20211203141306.GG3301@suse.de>
+ <20211209174535.GA70283@fuller.cnet>
+ <20211210105549.GJ3301@suse.de>
+ <20211214105823.GA53878@fuller.cnet>
+ <alpine.DEB.2.22.394.2112141239550.371576@gentwo.de>
 MIME-Version: 1.0
-References: <20211213111642.11317-1-lukas.bulwahn@gmail.com>
- <20211213111642.11317-2-lukas.bulwahn@gmail.com> <cd01c62484faa9a5b364020c5c8985e3ea7fa643.camel@svanheule.net>
-In-Reply-To: <cd01c62484faa9a5b364020c5c8985e3ea7fa643.camel@svanheule.net>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 14 Dec 2021 13:25:26 +0100
-Message-ID: <CAKXUXMxQ_rCt0CQxKm7ym44vuMTT1cgnzSCdZZQN--DPwayG6Q@mail.gmail.com>
-Subject: Re: [PATCH 1/9] mips: drop selecting the non-existing config SYS_HAS_EARLY_PRINTK_8250
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Bert Vermeulen <bert@biot.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Daniel Silsby <dansilsby@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2112141239550.371576@gentwo.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 7:52 PM Sander Vanheule <sander@svanheule.net> wrote:
->
-> Hi Lukas,
->
-> Thanks for the patch!
->
-> On Mon, 2021-12-13 at 12:16 +0100, Lukas Bulwahn wrote:
-> > Commit 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic
-> > MIPS system") introduces config MACH_REALTEK_RTL, which selects the
-> > non-existing config SYS_HAS_EARLY_PRINTK_8250.
+On Tue, Dec 14, 2021 at 12:42:58PM +0100, Christoph Lameter wrote:
+> On Tue, 14 Dec 2021, Marcelo Tosatti wrote:
+> 
+> > > downside is that there will be a performance penalty if an application
+> > > running on a NOHZ_FULL CPU is page allocator intensive for whatever
+> > > reason.  However, I guess this is unlikely because if there was a lot
+> > > of kernel activity for a NOHZ_FULL CPU, the vmstat shepherd would also
+> > > cause interference.
 > >
-> > As the MACH_REALTEK_RTL config also selects SYS_HAS_EARLY_PRINTK and
-> > USE_GENERIC_EARLY_PRINTK_8250, an early printk with 8250 should be covered.
-> > Probably SYS_HAS_EARLY_PRINTK_8250 is just some left-over from an early
-> > draft version of this commit.
+> > Yes, it does, and its being fixed:
 > >
-> > Drop selecting the non-existing config SYS_HAS_EARLY_PRINTK_8250.
+> > https://lkml.org/lkml/2021/12/8/663
 > >
-> > Fixes: 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS system")
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > ---
-> >  arch/mips/Kconfig | 1 -
-> >  1 file changed, 1 deletion(-)
+> > Honestly i am not sure whether the association between a nohz_full CPU
+> > and "should be mostly in userspace" is desired. The RCU solution
+> > would be more generic. As Nicolas mentioned, for the usecases in
+> > questions, either solution is OK.
 > >
-> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> > index 00951bfdbab0..c89ce68d9580 100644
-> > --- a/arch/mips/Kconfig
-> > +++ b/arch/mips/Kconfig
-> > @@ -640,7 +640,6 @@ config MACH_REALTEK_RTL
-> >         select SYS_SUPPORTS_MULTITHREADING
-> >         select SYS_SUPPORTS_VPE_LOADER
-> >         select SYS_HAS_EARLY_PRINTK
-> > -       select SYS_HAS_EARLY_PRINTK_8250
-> >         select USE_GENERIC_EARLY_PRINTK_8250
-> >         select BOOT_RAW
-> >         select PINCTRL
->
-> MACH_REALTEK_RTL doesn't actually call setup_8250_early_printk_port(). That means
-> USE_GENERIC_EARLY_PRINTK_8250 is also not needed. Being MIPS_GENERIC, that additionaly
-> means SYS_HAS_EARLY_PRINTK doesn't need to be selected.
->
-> I only recently found the MIPS_GENERIC "early" console therefore doesn't actually work,
-> but we use the "ns16550a" earlycon console instead. So feel free to also drop the other
-> two other EARLY_PRINTK symbols, if you think this is in-scope for this patch. Otherwise I
-> can submit a separate patch later.
->
-> In any case:
-> Acked-by: Sander Vanheule <sander@svanheule.net>
->
+> > Thomas, Frederic, Christoph, do you have any opinion on this ?
+> 
+> Applications running would ideally have no performance penalty and there
+> is no  issue with kernel activity unless the application is in its special
+> low latency loop. NOHZ is currently only activated after spinning in that
+> loop for 2 seconds or so. Would be best to be able to trigger that
+> manually somehow.
 
-I am fine either way. Thomas, also feel free to just drop this patch
-in the series and take the full clean-up patch from Sander.
+Can add a task isolation feature to do that.
 
-Lukas
+> And I would prefer to be able to run the whole system as
+> NOHZ and have the ability to selectively enable the quiet mode if a
+> process requires it for its processing.
+
+IIRC Frederic has been working on that.
+
+Thanks.
+

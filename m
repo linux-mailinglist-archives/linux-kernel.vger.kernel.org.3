@@ -2,145 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A68644739D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A424739C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244573AbhLNAyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 19:54:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35705 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242836AbhLNAxz (ORCPT
+        id S244147AbhLNAxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 19:53:46 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:53422 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231908AbhLNAxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 19:53:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639443234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fq9s0r164LWy02TJ0Ub018+SzHlr28SqOgtzWxq+oV4=;
-        b=BifMK2XU+t2hZQq6ZeVB3dNHRoaGj8Pm+OGTlHJvcD7ArpAmCjNb0Txy9itgBuqpM9cvch
-        OKxxozA07RPllJB1SVIJi2SNUkfkaRjxl+jLAs5AkW46zAhYTGIc67IkHYG5iIFKrETSN4
-        j7B5Do++AtovQSC52KvPbKzCsbMkwNM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-207-XzTfXDBKOjW5cHPDf_ur3Q-1; Mon, 13 Dec 2021 19:53:51 -0500
-X-MC-Unique: XzTfXDBKOjW5cHPDf_ur3Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9F515593A8;
-        Tue, 14 Dec 2021 00:53:49 +0000 (UTC)
-Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 91D791007607;
-        Tue, 14 Dec 2021 00:53:31 +0000 (UTC)
-Date:   Tue, 14 Dec 2021 08:53:26 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, 'Christoph Hellwig' <hch@lst.de>,
-        "'linux-block@vger.kernel.org'" <linux-block@vger.kernel.org>,
-        Long Li <longli@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com
-Subject: Re: Random high CPU utilization in blk-mq with the none scheduler
-Message-ID: <YbfrBpcV4hasdqQB@T590>
-References: <BYAPR21MB1270C598ED214C0490F47400BF719@BYAPR21MB1270.namprd21.prod.outlook.com>
- <BYAPR21MB1270DCE17A0FE017AF3272F1BF729@BYAPR21MB1270.namprd21.prod.outlook.com>
- <b80bfe9a-bece-1f32-3d2a-fb4d94b1fa8c@kernel.dk>
- <BYAPR21MB1270B5DAD526C42C070ECB9EBF729@BYAPR21MB1270.namprd21.prod.outlook.com>
- <Yba8nL4x9R6rmTYL@T590>
- <BYAPR21MB127006555030F7BFA47FDAABBF749@BYAPR21MB1270.namprd21.prod.outlook.com>
- <Ybb4X00rfsjRgHj7@T590>
- <BYAPR21MB12706DCD5ED9FC7AB3EE2EEABF759@BYAPR21MB1270.namprd21.prod.outlook.com>
+        Mon, 13 Dec 2021 19:53:45 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BDL46tr021596;
+        Tue, 14 Dec 2021 00:53:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=hTC1WVhwXwmoUC2HH8zcaExQLghAPMbgDvXAVqJo+jo=;
+ b=0tLYKi2SGhIeCJS4GHOrXnauOsUrBy+YPQr5IRC9fBkNv+Yhm8e2MLS3C/zphL+C58cn
+ q+bDyCIMoop1zG86VMYdZaJnsy6cs2P8XVbOH9hSckxi/znjR1kynffAEWf2v3Z5+ECB
+ dtvvhE/VlGaP6Ixuehw4HoqWfUigVArcmPaq00wajRkP6XUfzbOVNSKbLLmLulkz3M+H
+ zBrjVz9AddEMUaaIIi9BO6LjebgXM2gYXVPloyI/vuwP2OkuE8DG/T9e3k9ASBb56szI
+ O3GOKjI/8J+4E0aHPbiU/AbMTWv1sfuocxfGb3t3ww62k3MyZji1IpYLq0PrLhH3UPVC ow== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cx3ukab9p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Dec 2021 00:53:43 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BE0fZF5190267;
+        Tue, 14 Dec 2021 00:53:42 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2169.outbound.protection.outlook.com [104.47.59.169])
+        by userp3030.oracle.com with ESMTP id 3cvh3weedd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Dec 2021 00:53:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EJE/8Zs6r5Y07LSJFnFJJmO5fLeDZ7sq3q1dVV/J7+e6USvtb84+H7ioLnECZKvgyCyU+LGAA8seHkx+i+v9rxwtOn4AGtwTKqVVRJ8iuJET/b3PMwWNOuFtOaiPYcqgav6ailPuLH+TeIc5H/zre8qFPHoeFknCnNYq6xz77qTqYla6kWnjP7Hd6Z9GNbxipP9472xu9Twjsd6saMyNH8DZBPBj+e7GiRHUKqUKgKRdnPgyctcVLTNr0Tu+6nb30cdqHZc3FDCOKW3yRc24WULySqGb8utFRbjOknkP3orG5OrCpJWOQpTm4bHQNNpLraCCTeU3E1qts/NgTOGQEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hTC1WVhwXwmoUC2HH8zcaExQLghAPMbgDvXAVqJo+jo=;
+ b=Qw9CFnDAj+N6qiQCbxA+PxghGHMkMOalZ4c2oa0sRfQ8JCJJ8pWhoNfHk7AUSznu5Kf7QPKaQs6rvn/vBhZz9/Njuo7LI2+VfPxB5SAonfFkwUUaZT/OQpidZApfUWuni5AqJL4JgPIPVV6lYXUhLPH0ZRp41DqehW1zXq+suR2+PBBh/LYoZQnJAtNCPhq6JzvqKupogf9p3g9cFF8jZGValeBsCFp7zgPBJEhSya38PZBwZ6RSIgRzRJmHklTnW/ga+449UAoVWIGFX4uaMlHMYDVpCGL+ALEBIbu9iWRwJqa2bBNNXCSrQcKGwqxXkRHqcIIocV/NcaGIa1e3Yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hTC1WVhwXwmoUC2HH8zcaExQLghAPMbgDvXAVqJo+jo=;
+ b=I09IhtgSVqK3ot1POoHTQziihP6axVT5Vf5NvL6as/J1KStdi1S7l8SkDUWwdzWsYddGBdendVfPUOBLh+ce6oDrss+GsfMrjeiKSy54bQVtcB+Tv1WxjGOEqI32+Kjp/DMsloOhlNOJUGpvCyZpS1LTaDJrCrhZd+M/HAdH3qE=
+Received: from CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
+ by CH2PR10MB3893.namprd10.prod.outlook.com (2603:10b6:610:f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Tue, 14 Dec
+ 2021 00:53:40 +0000
+Received: from CH2PR10MB4166.namprd10.prod.outlook.com
+ ([fe80::8c57:aca7:e90d:1026]) by CH2PR10MB4166.namprd10.prod.outlook.com
+ ([fe80::8c57:aca7:e90d:1026%9]) with mapi id 15.20.4778.018; Tue, 14 Dec 2021
+ 00:53:40 +0000
+From:   Stephen Brennan <stephen.s.brennan@oracle.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Gautham Ananthakrishna <gautham.ananthakrishna@oracle.com>,
+        Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH 0/4] Fix softlockup when adding inotify watch
+Date:   Mon, 13 Dec 2021 16:53:33 -0800
+Message-Id: <20211214005337.161885-1-stephen.s.brennan@oracle.com>
+X-Mailer: git-send-email 2.30.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SA9P223CA0008.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:806:26::13) To CH2PR10MB4166.namprd10.prod.outlook.com
+ (2603:10b6:610:78::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB12706DCD5ED9FC7AB3EE2EEABF759@BYAPR21MB1270.namprd21.prod.outlook.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b2a732df-34ad-4308-9a6a-08d9be9c2b76
+X-MS-TrafficTypeDiagnostic: CH2PR10MB3893:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR10MB3893347B9F01ED85266BA509DB759@CH2PR10MB3893.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j8OMEnFbUKpDCKKBRuLYA+vh/kE1jcCtFBHnaQlLFMx/E20qJ5c8uj8BeHFKIhI4YATe5m9AVQ/Je3WMjn30AZWoLAUuYw90pG6H5dWGHvm/Ck9DdXWpDiMZal6n5cF23torpg2tlox97XiqnAtfBqjnzUWqFy1I4ejG0y3vFiBoRfzBhjBeAKRONnoc8Cdz4iiH1rD/TTkmC0AM7OGdjW0Sl/aUzGKa0xwXBJ0iIe8CRWUHWrnwJVRMQ2YKaDjcb397qnUBnnRUYR3t4B9JUV+TKCT1ERUT9nDJmP0LWA9LvPm+QzQ+KbBXwKOmILW0jbc5Y2YWtABvqaIUQZKnUsvmeVWKHgleyRukOBJKhE0JhZlE6Xn1TnDED8BQIWswf1lNPQHS0J5GVRq5SXSaQ3iLhFqr4O/agLjvyTb6pswL/Zk0x4mV/HjWESjQurk/oIZPYfHGFLdb11LOjPyZ20caQHphsPwFwaL0OtUOocsDBEndVc/rW70myiEK7Xmw89igQqYlk95MQywfffeWBJ9zdrOy9W4YAk03RHUwaKzEg0N1TRH3qtWK1F+IEkH6syFYijVP1Mz5Y+8kjMlrWbdwkMbM/75VpnX6sCMRf9ra0xr6mTpaI7Sdql5PeD3tmyNdVMGbuMCFNCjevkFqYi02ObgcArwTlDPea5rG9d45MfwTwy1hYpo3JozdnkcdB3wuhbIF/NTDBoAkdaBnFhBltehs19p4iRs0kqZeNehmpDDbQww2nxQ97xW1GKSxgIfhUdIv8llvyGYzrf/EzrlbYlT/Vmsclkh8f/vWhZY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(86362001)(36756003)(66556008)(66476007)(26005)(6506007)(6486002)(83380400001)(103116003)(38100700002)(38350700002)(6512007)(66946007)(316002)(4326008)(966005)(1076003)(54906003)(8936002)(2906002)(186003)(6666004)(8676002)(52116002)(5660300002)(508600001)(2616005)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xl98IE/n9RF39homeP8Itfrl5YZdM4SpqW2YhlWNqiNOnmrooUyyzZdfukmg?=
+ =?us-ascii?Q?3mA2jFC3f42oco+naZG9kF/oUqWfdD7X1oTczKvfizpJZ3YmvpORYx02Re8h?=
+ =?us-ascii?Q?ofrLCZoiE+WO7AKMIaG7dkvVejlZMzYL42OJbQLdyPyp9rJqy74g9gxMkzg8?=
+ =?us-ascii?Q?OoRPfREje30XSzJGzGcNpV7Zbv+5nnngN0flSpwF2kt3OEwvkftYlU572OJj?=
+ =?us-ascii?Q?3tJV/GF5Y86fLpGIBjMAZTORD9SeSSylQpcId1PbyCsu6M4n2egy2ELINqVa?=
+ =?us-ascii?Q?qKAHaxF04Dj3VIEUuWNSDJlhrAgIODrt1a/0J4ev1exdrJTGdJjdJm3RryLs?=
+ =?us-ascii?Q?3lka7n5Q6NjvaLSKvrrlH8VnkbwclkdvnwB0McX0Uz8ycOUMEp/8rHHDlXHf?=
+ =?us-ascii?Q?2VCIxVNfJGKIx2qubdwVthaT5IWbz8kyN0o7bJoqsqG6eOPt5SvjIzH3rALX?=
+ =?us-ascii?Q?EYxUrd0sLX920j+Y4FFsDeGtel2apP26jc1QtWcGqNx4ps56LW5J9UhveztX?=
+ =?us-ascii?Q?1CPs3y18PM8cQa5pIHrQGy3LMCryZMzfTayuzPq2AX34oMSLSBLZXmZRnb3K?=
+ =?us-ascii?Q?NR2okbJyaAdeqZsPD/cfycSZhYuilONQNEn/xcNw62ybCsMwwDReL6rjVKgQ?=
+ =?us-ascii?Q?OWal/GcL1eq6n7YOHtuO8kvdNA8diCTksDKDR7R+tkuwSq4072KfiwTHjTki?=
+ =?us-ascii?Q?lBs5VPov9y9r6Or9ShCaOvUJMAGsNL60VWK2KGl9xToFHWI9CpAayOFnAq9Z?=
+ =?us-ascii?Q?lyULvYU1YL4ExLKQm3YMR43ZK25ukDCBmrH+kCgNoU/XpIpA8ZKWPDGaW+2H?=
+ =?us-ascii?Q?gdpKLTZLAER69cJmtldxgc5LinQ3vhFVW9ggbuwrYjKBfcIokiMo5rslKiWz?=
+ =?us-ascii?Q?XHo8IoVrVNcenX+Q0/tYNlQ+QItnn4d8nEHUtnJsKWwKoJEeXNQvO/ImE4R2?=
+ =?us-ascii?Q?KNW4rjxPJZLHbn0732ty/rxHXTQQpJz4uXvYIXNyMvb4SjrximMcwWXGJEaY?=
+ =?us-ascii?Q?tserch4TDWj0V77RR6rsvubIGohocwRf//8/dF6oWRnFxVdeBXH/TPU8fqEE?=
+ =?us-ascii?Q?BFxGrnTo39j5Qe4g/1i2gOfirtdCsbfpWgv49Tm8tCxFKmCKuoBbYB057u1u?=
+ =?us-ascii?Q?36mVysv2l4rP5VkmOUVSsNgEywNnhB/qkrNzijtUkrbH6cOh4Y9WW/YBnloA?=
+ =?us-ascii?Q?yqzZuadhvx+jD1u8p0atzlTzKFpxO030kkmOVV4CM7NNI0CNq/9i1kskOQzK?=
+ =?us-ascii?Q?pE0kNrQZz8gGb4wbnI8s3/1OtRwWROyDdkS8M5oXFBQ3o8m24svj1UoYZaul?=
+ =?us-ascii?Q?B+VhvnAuIz3ladr7yRXEuz8OT1e8JX0CfYgIcM0V799z0m+lMicu6TfJam2U?=
+ =?us-ascii?Q?otf1nAoWoWLBQy2/9ZQjE91lDhEYO+DyWLSl/RMs5I4ScysIEkoLfmo/i2r3?=
+ =?us-ascii?Q?WlaSZspm+N6VU+y54Ek6G6IUoiKb1QiTjmCYFADit//+9sErZ2SYqTdMM2d9?=
+ =?us-ascii?Q?+Q6uBxtw2ODspxUmlcZ0ilgcsdToVbHW8eUoOsjIZvEptCpE7KFu6EqaeSNx?=
+ =?us-ascii?Q?ZFzdX31eylu/ann5xozwZ8Z8UziEj/8KLYDh8QBlkpyXwgdwsJtMITBPqoUd?=
+ =?us-ascii?Q?CQDvHOp+TPWFGxbRFvczf+IMAofI9UAonKo69YHcPDddSwpp4Uw6yyqGW8zF?=
+ =?us-ascii?Q?vP0RTQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2a732df-34ad-4308-9a6a-08d9be9c2b76
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4166.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 00:53:40.4410
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: p+UC+kkCErOXnaoLQz6CLmX3YlIGxAY8G/YQVOxd1cj7yl/5AM8sX3m16ZEJyoC2lxlrTI1rfazSjUYu0r40cp4eLINDSheKKhji9f3ieXk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB3893
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10197 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 suspectscore=0
+ malwarescore=0 mlxlogscore=999 bulkscore=0 mlxscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112140001
+X-Proofpoint-GUID: pFoibDuK9EO4Q4l1GfATl_dbFhjaDQRk
+X-Proofpoint-ORIG-GUID: pFoibDuK9EO4Q4l1GfATl_dbFhjaDQRk
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 12:31:23AM +0000, Dexuan Cui wrote:
-> > From: Ming Lei <ming.lei@redhat.com>
-> > Sent: Sunday, December 12, 2021 11:38 PM
-> 
-> Ming, thanks so much for the detailed analysis!
-> 
-> > From the log:
-> > 
-> > 1) dm-mpath:
-> > - queue depth: 2048
-> > - busy: 848, and 62 of them are in sw queue, so run queue is often
-> >   caused
-> > - nr_hw_queues: 1
-> > - dm-2 is in use, and dm-1/dm-3 is idle
-> > - dm-2's dispatch busy is 8, that should be the reason why excessive CPU
-> > usage is observed when flushing plug list without commit dc5fc361d891 in
-> > which hctx->dispatch_busy is just bypassed
-> > 
-> > 2) iscsi
-> > - dispatch_busy is 0
-> > - nr_hw_queues: 1
-> > - queue depth: 113
-> > - busy=~33, active_queues is 3, so each LUN/iscsi host is saturated
-> > - 23 active LUNs, 23 * 33 = 759 in-flight commands
-> > 
-> > The high CPU utilization may be caused by:
-> > 
-> > 1) big queue depth of dm mpath, the situation may be improved much if it
-> > is reduced to 1024 or 800. The max allowed inflight commands from iscsi
-> > hosts can be figured out, if dm's queue depth is much more than this number,
-> > the extra commands need to dispatch, and run queue can be scheduled
-> > immediately, so high CPU utilization is caused.
-> 
-> I think you're correct:
-> with dm_mod.dm_mq_queue_depth=256, the max CPU utilization is 8%.
-> with dm_mod.dm_mq_queue_depth=400, the max CPU utilization is 12%. 
-> with dm_mod.dm_mq_queue_depth=800, the max CPU utilization is 88%.
-> 
-> The performance with queue_depth=800 is poor.
-> The performance with queue_depth=400 is good.
-> The performance with queue_depth=256 is also good, and there is only a 
-> small drop comared with the 400 case.
+When a system with large amounts of memory has several millions of 
+negative dentries in a single directory, a softlockup can occur while 
+adding an inotify watch:
 
-That should be the reason why the issue isn't triggered in case of real
-io scheduler.
+ watchdog: BUG: soft lockup - CPU#20 stuck for 9s! [inotifywait:9528]
+ CPU: 20 PID: 9528 Comm: inotifywait Kdump: loaded Not tainted 5.16.0-rc4.20211208.el8uek.rc1.x86_64 #1
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.4.1 12/03/2020
+ RIP: 0010:__fsnotify_update_child_dentry_flags+0xad/0x120
+ Call Trace:
+  <TASK>
+  fsnotify_add_mark_locked+0x113/0x160
+  inotify_new_watch+0x130/0x190
+  inotify_update_watch+0x11a/0x140
+  __x64_sys_inotify_add_watch+0xef/0x140
+  do_syscall_64+0x3b/0x90
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-So far blk-mq doesn't provide way to adjust tags queue depth
-dynamically.
+This patch series is a modified version of the following:
+https://lore.kernel.org/linux-fsdevel/1611235185-1685-1-git-send-email-gautham.ananthakrishna@oracle.com/
 
-But not understand reason of default dm_mq_queue_depth(2048), in this
-situation, each LUN can just queue 113/3 requests at most, and 3 LUNs
-are attached to single iscsi host.
+The strategy employed by this series is to move negative dentries to the 
+end of the d_subdirs list, and mark them with a flag as "tail negative".  
+Then, readers of the d_subdirs list, which are only interested in 
+positive dentries, can stop reading once they reach the first tail 
+negative dentry. By applying this patch, I'm able to avoid the above 
+softlockup caused by 200 million negative dentries on my test system.  
+Inotify watches are set up nearly instantly.
 
-Mike, can you share why the default dm_mq_queue_depth is so big? And
-seems it doesn't consider the underlying queue's queue depth. What is
-the biggest dm rq queue depth? which need to saturate all underlying paths?
+Previously, Al expressed concern for:
 
-> 
-> > 2) single hw queue, so contention should be big, which should be avoided
-> > in big machine, nvme-tcp might be better than iscsi here
-> > 
-> > 3) iscsi io latency is a bit big
-> > 
-> > Even CPU utilization is reduced by commit dc5fc361d891, io performance
-> > can't be good too with v5.16-rc, I guess.
-> > 
-> > Thanks,
-> > Ming
-> 
-> Actually the I/O performance of v5.16-rc4 (commit dc5fc361d891 is included)
-> is good -- it's about the same as the case where v5.16-rc4 + reverting
-> dc5fc361d891 + dm_mod.dm_mq_queue_depth=400 (or 256).
+1. Possible memory corruption due to use of lock_parent() in 
+sweep_negative(), see patch 01 for fix.
+2. The previous patch didn't catch all ways a negative dentry could 
+become positive (d_add, d_instantiate_new), see patch 01.
+3. The previous series contained a new negative dentry limit, which 
+capped the negative dentry count at around 3 per hash bucket. I've 
+dropped this patch from the series.
 
-The single hw queue may be the root cause of your issue, and there
-is only single run_work, which can be touched by all CPUs(~200) almost, so cache
-ping-pong could be very serious. 
+Patches 2-4 are unmodified from the previous posting.
 
-Jens patch may improve it more or less, please test it.
+Konstantin Khlebnikov (3):
+  fsnotify: stop walking child dentries if remaining tail is negative
+  dcache: add action D_WALK_SKIP_SIBLINGS to d_walk()
+  dcache: stop walking siblings if remaining dentries all negative
 
-Thanks,
-Ming
+Stephen Brennan (1):
+  dcache: sweep cached negative dentries to the end of list of siblings
+
+ fs/dcache.c            | 101 +++++++++++++++++++++++++++++++++++++++--
+ fs/libfs.c             |   3 ++
+ fs/notify/fsnotify.c   |   6 ++-
+ include/linux/dcache.h |   6 +++
+ 4 files changed, 110 insertions(+), 6 deletions(-)
+
+-- 
+2.30.2
 

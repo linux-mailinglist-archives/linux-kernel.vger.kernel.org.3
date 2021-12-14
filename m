@@ -2,97 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC00473E4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF37473E50
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbhLNIhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbhLNIhl (ORCPT
+        id S231872AbhLNIig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:38:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:49628 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbhLNIif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:37:41 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839BFC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:37:41 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id de30so16195650qkb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:37:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V775Jo7foyl5u33KO9wxNFO5Xpg512uth3xPug6/f9Y=;
-        b=NmsmnUQjon4giEIPURXak6DNfz2uv3mxLeDEiVc8iUJV+WQGHo0oIywd2C3DSI4pVI
-         4GuYtTQuyOG7798S3lnZcHyrILmqUoL50dlmbyCyTixojp/IGFP2EkTyKQgP170Pl3hq
-         3ZZTfp+NvlUjYXYlRC9z5TqZF86aF2Zr51JO3mvpkOaTvBpEAUi9RCW9TtSQfOeQOXhx
-         iHPWUKKEP3loANy/6Y5EPGU4/Y/NvufewNugTqqrzYw8tHGKjsES4Pu9OaWA58l7LcZH
-         8iUJjaT1SIRs1kDZ/7XPmBNEpbbLyESohomuDZ8Ply7kroWO48ooXLGjptuR/AuMiHbM
-         Rk5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V775Jo7foyl5u33KO9wxNFO5Xpg512uth3xPug6/f9Y=;
-        b=VOz87ex9vzQr+0VZSTWUJ+jNXmUSLBfLH6G8cVdH5MD4wWaFZyvXSgAFfe9GCLqF2v
-         YJcV5LpvzTk4He1O43WL41VtuHQkhtsdZgRziUnp8vHHNDoEvEX6gdGRWhgVuJz2zfRW
-         +fVs75GQdyNUSvO5wWWvj+hfIMsNSRFvEHk0HYKFvCJvDvFJl8cgjwCOYOuOQH4sbIHh
-         8jHTnYZw3Mp1KX+sd3vVshJb1Dh+yDt2XhcUOihHw3tcWd/Q+98BlUUcFZ0GZNFOVJR2
-         HZO8J6uxLPOPuf6YJotAYVMPiPBhjD+VkUFWiznvH8IaubtdMjxEYFtZRxcqq3QS6Pa3
-         l3zg==
-X-Gm-Message-State: AOAM532a91lplMcbS3UVufxM1wMsxAOF7BsX99vzK4V7S963sB3aSwpe
-        1A3/F2fktVDr/kKglAHwJ2DgFVQs0r9sm5OL7IfPHQ==
-X-Google-Smtp-Source: ABdhPJwTLF1AMEeFod/l2CxZZeOst/LaOVrIJybQJ5YF/RyGQnZ4Krjx2+P/GvWwxeDL73OopPshCk3YG/laGaGdXjg=
-X-Received: by 2002:a05:620a:298a:: with SMTP id r10mr2844306qkp.447.1639471060440;
- Tue, 14 Dec 2021 00:37:40 -0800 (PST)
+        Tue, 14 Dec 2021 03:38:35 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id E076C1F3C4;
+        Tue, 14 Dec 2021 08:38:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639471113; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YxBgd60xxvmPh600wNZTY4w7KXnu0mHxHrDaqy+o98A=;
+        b=vVvheb2IkU+9MQvKe8kp/a+f0guikXyJAnX57LL0b9Spp1rmzBXcKVMYv7AC3h/HpFhznH
+        4wr8dnj3mj449LOYEcW1JhvRrJkjkhCS9WRL0TP5R29ZUhahxJicw5MR8xPg6AqsJNJF9A
+        YPeyptfBpPp3onsg+s/QHeycWIFUXgo=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 97D7DA3B88;
+        Tue, 14 Dec 2021 08:38:33 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 09:38:33 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Nico Pache <npache@redhat.com>
+Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
+Message-ID: <YbhYCT0z04la1vjZ@dhcp22.suse.cz>
+References: <YYrGpn/52HaLCAyo@fedora>
+ <YYrSC7vtSQXz652a@dhcp22.suse.cz>
+ <BAE95F0C-FAA7-40C6-A0D6-5049B1207A27@vmware.com>
+ <YZN3ExwL7BiDS5nj@dhcp22.suse.cz>
+ <5239D699-523C-4F0C-923A-B068E476043E@vmware.com>
+ <YZYQUn10DrKhSE7L@dhcp22.suse.cz>
+ <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
+ <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
+ <YbdhdySBaHJ/UxBZ@dhcp22.suse.cz>
+ <ba5f460b-fc6c-601b-053c-086185fd3049@redhat.com>
 MIME-Version: 1.0
-References: <20211212062407.138309-1-marcan@marcan.st> <20211212062407.138309-2-marcan@marcan.st>
- <CABxcv=m4fu8h=FwY7R=thuvd13_ZbFqB9rNNN07QOAd__jdYSQ@mail.gmail.com>
- <63334964-d63d-7625-e46f-a6e6ec19e908@marcan.st> <CABxcv=kbR5GX3yEfqchKJPkCqpWp_oKWjG=pu7LikBwoSX8W3A@mail.gmail.com>
- <CAL_JsqLLTL-_H3XgsZRZaxE6qO6y8CDpoHfDkOgwekb1ysNQFw@mail.gmail.com>
-In-Reply-To: <CAL_JsqLLTL-_H3XgsZRZaxE6qO6y8CDpoHfDkOgwekb1ysNQFw@mail.gmail.com>
-From:   Javier Martinez Canillas <javier@dowhile0.org>
-Date:   Tue, 14 Dec 2021 09:37:29 +0100
-Message-ID: <CABxcv=nFx9r+=qMXop6kp6E4KoXaX_8duLY7S9fo6uqs_539jw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] of: Move simple-framebuffer device handling from
- simplefb to of
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        devicetree@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba5f460b-fc6c-601b-053c-086185fd3049@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 3:50 PM Rob Herring <robh+dt@kernel.org> wrote:
->
-> On Mon, Dec 13, 2021 at 5:30 AM Javier Martinez Canillas
-> <javier@dowhile0.org> wrote:
+On Mon 13-12-21 16:07:18, David Hildenbrand wrote:
+> On 13.12.21 16:06, Michal Hocko wrote:
+> > On Thu 09-12-21 11:48:42, Michal Hocko wrote:
+> > [...]
+> >> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> >> index 852041f6be41..2d38a431f62f 100644
+> >> --- a/mm/memory_hotplug.c
+> >> +++ b/mm/memory_hotplug.c
+> >> @@ -1161,19 +1161,21 @@ static void reset_node_present_pages(pg_data_t *pgdat)
+> >>  }
+> >>  
+> >>  /* we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG */
+> >> -static pg_data_t __ref *hotadd_new_pgdat(int nid)
+> >> +static pg_data_t __ref *hotadd_init_pgdat(int nid)
+> >>  {
+> >>  	struct pglist_data *pgdat;
+> >>  
+> >>  	pgdat = NODE_DATA(nid);
+> >> -	if (!pgdat) {
+> >> -		pgdat = arch_alloc_nodedata(nid);
+> >> -		if (!pgdat)
+> >> -			return NULL;
+> >>  
+> >> +	/*
+> >> +	 * NODE_DATA is preallocated (free_area_init) but its internal
+> >> +	 * state is not allocated completely. Add missing pieces.
+> >> +	 * Completely offline nodes stay around and they just need
+> >> +	 * reintialization.
+> >> +	 */
+> >> +	if (!pgdat->per_cpu_nodestats) {
+> >>  		pgdat->per_cpu_nodestats =
+> >>  			alloc_percpu(struct per_cpu_nodestat);
+> >> -		arch_refresh_nodedata(nid, pgdat);
+> > 
+> > This should really be 
+> > diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> > index 42211485bcf3..2daa88ce8c80 100644
+> > --- a/mm/memory_hotplug.c
+> > +++ b/mm/memory_hotplug.c
+> > @@ -1173,7 +1173,7 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
+> >  	 * Completely offline nodes stay around and they just need
+> >  	 * reintialization.
+> >  	 */
+> > -	if (!pgdat->per_cpu_nodestats) {
+> > +	if (pgdat->per_cpu_nodestats == &boot_nodestats) {
+> >  		pgdat->per_cpu_nodestats =
+> >  			alloc_percpu(struct per_cpu_nodestat);
+> >  	} else {
+> > 
+> 
+> I'll try giving this some churn later this week -- busy with other stuff.
 
-[snip]
-
-> >
-> > You are right that passing NULL is a safe code path for now due the
-> > of_device_is_available(node) check, but that seems fragile to me since
-> > just adding a similar debug output to of_platform_device_create()
-> > could trigger the NULL pointer dereference.
->
-> All/most DT functions work with a NULL node ptr, so why should this
-> one be different?
->
-
-If you are OK with the patch as is, then I won't object :)
-
-> Rob
-
-Best regards,
-Javier
+Please hang on, this needs to be done yet slightly differently. I will
+post something more resembling a final patch later today. For the
+purpose of the testing this should be sufficient for now.
+-- 
+Michal Hocko
+SUSE Labs

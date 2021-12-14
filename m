@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC194745D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFAE94745D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235174AbhLNPDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:03:23 -0500
-Received: from mga01.intel.com ([192.55.52.88]:25418 "EHLO mga01.intel.com"
+        id S235322AbhLNPDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:03:41 -0500
+Received: from mga07.intel.com ([134.134.136.100]:58318 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235159AbhLNPDV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:03:21 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263135014"
+        id S235186AbhLNPDX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 10:03:23 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="302372501"
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="263135014"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:03:21 -0800
+   d="scan'208";a="302372501"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:03:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="754837224"
+   d="scan'208";a="583475062"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Dec 2021 07:03:15 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 14 Dec 2021 07:03:15 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 01939D2E; Tue, 14 Dec 2021 17:03:09 +0200 (EET)
+        id 0AFF83C3; Tue, 14 Dec 2021 17:03:10 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -34,9 +34,9 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
         x86@kernel.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH 17/26] x86/tdx: Get page shared bit info from the TDX Module
-Date:   Tue, 14 Dec 2021 18:02:55 +0300
-Message-Id: <20211214150304.62613-18-kirill.shutemov@linux.intel.com>
+Subject: [PATCH 18/26] x86/tdx: Exclude shared bit from __PHYSICAL_MASK
+Date:   Tue, 14 Dec 2021 18:02:56 +0300
+Message-Id: <20211214150304.62613-19-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
 References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
@@ -46,19 +46,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intel TDX doesn't allow VMM to access guest private memory. Any memory
-that is required for communication with the VMM must be shared
-explicitly by setting a bit in the page table entry. Details about
-which bit in the page table entry to be used to indicate shared/private
-state can be determined by using the TDINFO TDCALL (call to TDX
-Module).
+In TDX guests, by default memory is protected from host access. If a
+guest needs to communicate with the VMM (like the I/O use case), it uses
+a single bit in the physical address to communicate the protected/shared
+attribute of the given page.
 
-Fetch and save the guest TD execution environment information at
-initialization time. The next patch will use the information.
+In the x86 ARCH code, __PHYSICAL_MASK macro represents the width of the
+physical address in the given architecture. It is used in creating
+physical PAGE_MASK for address bits in the kernel. Since in TDX guest,
+a single bit is used as metadata, it needs to be excluded from valid
+physical address bits to avoid using incorrect addresses bits in the
+kernel.
 
-More details about the TDINFO TDCALL can be found in
-Guest-Host-Communication Interface (GHCI) for Intel Trust Domain
-Extensions (Intel TDX) specification, sec titled "TDCALL[TDINFO]".
+Enable DYNAMIC_PHYSICAL_MASK to support updating the __PHYSICAL_MASK.
 
 Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -66,68 +66,37 @@ Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/kernel/tdx.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ arch/x86/Kconfig      | 1 +
+ arch/x86/kernel/tdx.c | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index fc4771a07fc0..fe0382f20445 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -879,6 +879,7 @@ config INTEL_TDX_GUEST
+ 	depends on X86_X2APIC
+ 	select ARCH_HAS_CC_PLATFORM
+ 	select X86_MCE
++	select DYNAMIC_PHYSICAL_MASK
+ 	help
+ 	  Support running as a guest under Intel TDX.  Without this support,
+ 	  the guest kernel can not boot or run under TDX.
 diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
-index 82e848006e3e..b55bc1879d1e 100644
+index b55bc1879d1e..cbfacc2af8bb 100644
 --- a/arch/x86/kernel/tdx.c
 +++ b/arch/x86/kernel/tdx.c
-@@ -11,6 +11,7 @@
- #include <asm/insn-eval.h>
+@@ -479,5 +479,13 @@ void __init tdx_early_init(void)
  
- /* TDX Module Call Leaf IDs */
-+#define TDX_GET_INFO			1
- #define TDX_GET_VEINFO			3
+ 	tdx_get_info();
  
- /* See Exit Qualification for I/O Instructions in VMX documentation */
-@@ -19,6 +20,12 @@
- #define VE_GET_PORT_NUM(exit_qual)	((exit_qual) >> 16)
- #define VE_IS_IO_STRING(exit_qual)	((exit_qual) & 16 ? 1 : 0)
- 
-+/* Guest TD execution environment information */
-+static struct {
-+	unsigned int gpa_width;
-+	unsigned long attributes;
-+} td_info __ro_after_init;
-+
- static bool tdx_guest_detected __ro_after_init;
- 
- /*
-@@ -45,6 +52,28 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14,
- 	return out->r10;
- }
- 
-+static void tdx_get_info(void)
-+{
-+	struct tdx_module_output out;
-+	u64 ret;
-+
 +	/*
-+	 * TDINFO TDX Module call is used to get the TD execution environment
-+	 * information like GPA width, number of available vcpus, debug mode
-+	 * information, etc. More details about the ABI can be found in TDX
-+	 * Guest-Host-Communication Interface (GHCI), sec 2.4.2 TDCALL
-+	 * [TDG.VP.INFO].
++	 * All bits above GPA width are reserved and kernel treats shared bit
++	 * as flag, not as part of physical address.
++	 *
++	 * Adjust physical mask to only cover valid GPA bits.
 +	 */
-+	ret = __tdx_module_call(TDX_GET_INFO, 0, 0, 0, 0, &out);
-+
-+	/* Non zero return value indicates buggy TDX module, so panic */
-+	if (ret)
-+		panic("TDINFO TDCALL failed (Buggy TDX module!)\n");
-+
-+	td_info.gpa_width = out.rcx & GENMASK(5, 0);
-+	td_info.attributes = out.rdx;
-+}
-+
- static __cpuidle u64 _tdx_halt(const bool irq_disabled, const bool do_sti)
- {
- 	/*
-@@ -448,5 +477,7 @@ void __init tdx_early_init(void)
- 
- 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
- 
-+	tdx_get_info();
++	physical_mask &= GENMASK_ULL(td_info.gpa_width - 2, 0);
 +
  	pr_info("Guest detected\n");
  }

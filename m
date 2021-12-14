@@ -2,157 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC984740F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FAB84740F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbhLNK65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:58:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52425 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233336AbhLNK64 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:58:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639479536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJFfcJSjeMg8fWyUYeS5TNuvh21SuSS14o7UlPfottI=;
-        b=IVE+uTcNOcRpwerkUhb1B9E6MRr5diXYxgvLL6ILncv1h9uQKO/CT05PB12rcLK6Wr++NL
-        J8zTjpGiFEcGbwI++bJHgOGVY5nJMSudikhJgZ1EqtwzhUowABuu3Dl6QitMn7cw3x59Uq
-        uAvc/KXFcxRphCNuyhon4j0D606/KCo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-546-hcdHxCoqOP6HY-u7w9SSCw-1; Tue, 14 Dec 2021 05:58:52 -0500
-X-MC-Unique: hcdHxCoqOP6HY-u7w9SSCw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DD7AC64083;
-        Tue, 14 Dec 2021 10:58:50 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E38CD68D90;
-        Tue, 14 Dec 2021 10:58:47 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 9CA5E4168B84; Tue, 14 Dec 2021 07:58:23 -0300 (-03)
-Date:   Tue, 14 Dec 2021 07:58:23 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Mel Gorman <mgorman@suse.de>, Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Christoph Lameter <cl@gentwo.de>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, frederic@kernel.org, tglx@linutronix.de,
-        peterz@infradead.org, nilal@redhat.com,
-        linux-rt-users@vger.kernel.org, vbabka@suse.cz, cl@linux.com,
-        ppandit@redhat.com
-Subject: Re: [PATCH v2 3/3] mm/page_alloc: Remotely drain per-cpu lists
-Message-ID: <20211214105823.GA53878@fuller.cnet>
-References: <20211103170512.2745765-1-nsaenzju@redhat.com>
- <20211103170512.2745765-4-nsaenzju@redhat.com>
- <20211203141306.GG3301@suse.de>
- <20211209174535.GA70283@fuller.cnet>
- <20211210105549.GJ3301@suse.de>
-MIME-Version: 1.0
+        id S233357AbhLNK71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:59:27 -0500
+Received: from mail-db8eur05on2052.outbound.protection.outlook.com ([40.107.20.52]:18400
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233336AbhLNK70 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:59:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L0++1zUP4rBhNfAmc5gcbquat5bz0Ez8A23T93niadM=;
+ b=dMCfqFUCnQ7DCswtUgpnP1HAzt8JQGCbpUTid9yCB9qisEIBsUY+PsHTulmJHvSO3bIPgsxDXmM0NssvYFNIufxG2BHm9syBUlxx7pFly68M8dgYBex7i34Pq7NFEV/M5f7ld7LqZErAmjrwKTN28yc6coSXvv7M7S/Uf2GU0Lo=
+Received: from DB6P18901CA0001.EURP189.PROD.OUTLOOK.COM (2603:10a6:4:16::11)
+ by AM9PR08MB6852.eurprd08.prod.outlook.com (2603:10a6:20b:30f::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Tue, 14 Dec
+ 2021 10:59:23 +0000
+Received: from DB5EUR03FT020.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:4:16:cafe::b) by DB6P18901CA0001.outlook.office365.com
+ (2603:10a6:4:16::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.13 via Frontend
+ Transport; Tue, 14 Dec 2021 10:59:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DB5EUR03FT020.mail.protection.outlook.com (10.152.20.134) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4778.12 via Frontend Transport; Tue, 14 Dec 2021 10:59:23 +0000
+Received: ("Tessian outbound c61f076cbd30:v110"); Tue, 14 Dec 2021 10:59:23 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: ddf12c7751255983
+X-CR-MTA-TID: 64aa7808
+Received: from 163d9da6a332.2
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 6DD672C9-1834-468C-B916-3F9E4E0F8A09.1;
+        Tue, 14 Dec 2021 10:59:18 +0000
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 163d9da6a332.2
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Tue, 14 Dec 2021 10:59:18 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TuKtQEHrznrMTs5c6Yc+ufj/hyx0WRwEEC6+16N1qLmj0QQAe62oUgdJmdgpKLGvJ9/SBW7IciPBSDgwol8beGQHffWWZIkpnEhL+9TKCt3HrA29l0D4AtpDnnmxO4kLHYjPoMn7NWNVPwu9fxkQl++g3dao0l/fe2EWeLnu8Rwt4zbt16z82jIzdUBbs0m0MNBg52+3H8WyGu7QAPLxrHhcIQYKX8r8ywYmVLkdz8w6TAz0+lNTIRV9Zt++3o8DXyzXXHVOmWdYhUmzokWqTygB5amrftPYa0KUroKRqKJJzX6ceqtCucy/r1NCYeE8dLOXTpG7hO9Z6QKv/xP8xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L0++1zUP4rBhNfAmc5gcbquat5bz0Ez8A23T93niadM=;
+ b=TgpTltiMmkGYCLWCbIq64r8qruTSqz6J1l8LqEqhUfWXqF3xXHt1KCK0q2UXTGw8cJkdhmjvz9iljN4F7IhtllKDLTFFugk9QIUd9wFNJsorILv+taMAjJVNIDiu/d/i4n7s61AnebNRwdame9p6NSFksKDnEv789nnwMr16jRDMdYp5w5Q3qKfPeygfEpupvleAFp0xt1Wn74GqAEP/gYlF1IIoXeTTvdqxGHRGta0ZGHc1ZBOuTB+TeInwGr3yH9g9+HkN9Ix/hSI2+n1g/nYJwac7OFOWeAlVyRTbr1Z4vuZnLa5DeSDpBPQrVAOVUez47EwIEYt0cBVcE2KpzA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L0++1zUP4rBhNfAmc5gcbquat5bz0Ez8A23T93niadM=;
+ b=dMCfqFUCnQ7DCswtUgpnP1HAzt8JQGCbpUTid9yCB9qisEIBsUY+PsHTulmJHvSO3bIPgsxDXmM0NssvYFNIufxG2BHm9syBUlxx7pFly68M8dgYBex7i34Pq7NFEV/M5f7ld7LqZErAmjrwKTN28yc6coSXvv7M7S/Uf2GU0Lo=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB6812.eurprd08.prod.outlook.com (2603:10a6:10:2a2::15)
+ by DB8PR08MB4028.eurprd08.prod.outlook.com (2603:10a6:10:a8::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Tue, 14 Dec
+ 2021 10:59:14 +0000
+Received: from DB9PR08MB6812.eurprd08.prod.outlook.com
+ ([fe80::fd1d:c45:53d5:79eb]) by DB9PR08MB6812.eurprd08.prod.outlook.com
+ ([fe80::fd1d:c45:53d5:79eb%9]) with mapi id 15.20.4778.013; Tue, 14 Dec 2021
+ 10:59:14 +0000
+Date:   Tue, 14 Dec 2021 10:59:10 +0000
+From:   Brian Starkey <brian.starkey@arm.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     liviu.dudau@arm.com, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nd@arm.com
+Subject: Re: [PATCH] drm/arm/mali: potential dereference of null pointer
+Message-ID: <20211214105910.zwmrgcaswgrtnb5t@000377403353>
+References: <20211214100000.23395-1-jiasheng@iscas.ac.cn>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210105549.GJ3301@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+In-Reply-To: <20211214100000.23395-1-jiasheng@iscas.ac.cn>
+X-ClientProxiedBy: LO4P123CA0367.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18e::12) To DB9PR08MB6812.eurprd08.prod.outlook.com
+ (2603:10a6:10:2a2::15)
+MIME-Version: 1.0
+X-MS-Office365-Filtering-Correlation-Id: 8409414b-3d67-4ded-6ea3-08d9bef0c9e5
+X-MS-TrafficTypeDiagnostic: DB8PR08MB4028:EE_|DB5EUR03FT020:EE_|AM9PR08MB6852:EE_
+X-Microsoft-Antispam-PRVS: <AM9PR08MB685254B73C8B59446140A8CFF0759@AM9PR08MB6852.eurprd08.prod.outlook.com>
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;OLM:4714;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: uJ5TT/YH+MAhT6wgi3w+MfxpxTh1+Q4pOILrx/BuYKfXPvzRDdk2kFeyf8a6bkK/66FknfequgBdJ7IzkXTTt3jE2fk32mwNZ3Xi8bNTRiL3l0K0/3lVbA/tK88fehADXndzRBEZKNbefGzT25lbj8HtiSiYsP2PK+3jBo4bvbNn4NS9I6n7ZvhNv4TrKWjEssxYgNQtHYtYhBCPW09nPIvcKkO18Cx+arXYXZxmFBdQjcvBhqSw5gDjx3n+Q2G4CBmqv5GBfW1q0S2MqqSEjV6JlAEO70JWC8QC0ovjzadvslz6o9JzfY63CYj+E3O15ZE1nF8BjG67hmypvEuIAlRsk1iR9QzemimBYz/WXkcHu57OvnUfqjVrspvSczhxr99sl0eMKHIe5yqkwsggXJbx840IfsajCzfXpUCNwIY1tLaQu/lPFYMsIOOon8GlGN9oEPZ8Hjx+gmdHuK9nmjT40mS/z+/6mjqXcuCQm63cQO3RRqd1nO3SbuwzK2eJp9ndKKlEmXRRuM67edkbXQkpPVyJ9yTxG0Ix68gSgubXSe3HZ6fJLldqkVTfb4NnehRTQV6CDHKCEZcwIleF+tiGQ5jG3ox5cwJs9R6mZ0OBKkjW9Gqyzh9dYI5K31gpa1FruZ6KNd+9T9Fhu2G1unMw1vPptezkgEKbyyzS4GgMWssoX6bzTwon6oGmKiqp09GR1WMrAQUL0KcX3d14Ww==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB6812.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(6486002)(38100700002)(6666004)(38350700002)(33716001)(86362001)(83380400001)(66556008)(66476007)(508600001)(66946007)(186003)(6916009)(316002)(2906002)(1076003)(44832011)(52116002)(6512007)(26005)(9686003)(8936002)(8676002)(5660300002)(6506007)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR08MB4028
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR03FT020.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 6a1534bb-1364-48eb-7d06-08d9bef0c417
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QN4iyyzs8M27wQs8paIl3izo0ErDRZ4Q1RS/qB0UhCRbAsObxDlMYBugBHUyr72GClzV7U6gtCQUJaH0HqYPAKRG3s0Zn1aZjzOQ7sKF6qKd/gRhLoY2xHcdaVcNeUIKAi6GHou2SQmr3vxyJiKErYZwWIrR8Zn/PkpqCSOG+mgMXOGBx2GAne9cA0wZLm07+sv/+GX1ZRHeCPbPtbIGUxRiuuWJYXg1+X71i83iHYJxJTBRyATPl32mEfUTCW40uC/kcdPyE0Ghg2twUM1Xo8lI4D1lOiurXJVz++SAZEZ7Ea9BQelRu7x1TQMoJTJFNv2OscRqU7ohoNMOfH7BZvMCAJ2Vh/O39DQJPSbgDgqK00K60d0Y/tBEyTmhFHdLtZHuZQV/MrLI+bpeiH4dzj2X5i+sybQEYUxV8PeO7LFj4vsGQjL4jj3/75834mEa5WLDUJUH9QkxuzBXtjAQdkmCRk4XWstt8CNgL0tIKlXmhQnzOFMxfqk9shP0YtwU21Ju3yfCr15rYzQHnA3NKMJk6trEYz75cmjL1aF0MOL1sVn32072vaU9h8pef/GHWdkEKSsOAsGRKv3OzBhYJQ0iS9dFBfDclS05AHAiP4dOpcl0nkLv5mYYz83KGoOYEM5EBa6CHOIJ3pGS4rW8TwEOEDXRrtYkpWbMFy7T5J/88++5KJaTxjkFkFITRO5K1TdvIxQO9xQT6bEIHLUKY/6LjR8DI/6x/kT3BTWWHulUzJ7VqpNJ3x9pPMsxsN6s/SfSKjoVtaJQRXjZGcVQcA==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(7916004)(4636009)(36840700001)(46966006)(40470700001)(9686003)(6512007)(6486002)(83380400001)(356005)(70206006)(36860700001)(6666004)(47076005)(81166007)(1076003)(33716001)(186003)(86362001)(6862004)(5660300002)(8676002)(70586007)(6506007)(316002)(508600001)(4326008)(8936002)(336012)(40460700001)(26005)(82310400004)(44832011)(2906002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 10:59:23.8230
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8409414b-3d67-4ded-6ea3-08d9bef0c9e5
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR03FT020.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB6852
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 10:55:49AM +0000, Mel Gorman wrote:
-> On Thu, Dec 09, 2021 at 02:45:35PM -0300, Marcelo Tosatti wrote:
-> > On Fri, Dec 03, 2021 at 02:13:06PM +0000, Mel Gorman wrote:
-> > > On Wed, Nov 03, 2021 at 06:05:12PM +0100, Nicolas Saenz Julienne wrote:
-> > > > Some setups, notably NOHZ_FULL CPUs, are too busy to handle the per-cpu
-> > > > drain work queued by __drain_all_pages(). So introduce new a mechanism
-> > > > to remotely drain the per-cpu lists. It is made possible by remotely
-> > > > locking 'struct per_cpu_pages' new per-cpu spinlocks. A benefit of this
-> > > > new scheme is that drain operations are now migration safe.
-> > > > 
-> > > > There was no observed performance degradation vs. the previous scheme.
-> > > > Both netperf and hackbench were run in parallel to triggering the
-> > > > __drain_all_pages(NULL, true) code path around ~100 times per second.
-> > > > The new scheme performs a bit better (~5%), although the important point
-> > > > here is there are no performance regressions vs. the previous mechanism.
-> > > > Per-cpu lists draining happens only in slow paths.
-> > > > 
-> > > 
-> > > netperf and hackbench are not great indicators of page allocator
-> > > performance as IIRC they are more slab-intensive than page allocator
-> > > intensive. I ran the series through a few benchmarks and can confirm
-> > > that there was negligible difference to netperf and hackbench.
-> > > 
-> > > However, on Page Fault Test (pft in mmtests), it is noticable. On a
-> > > 2-socket cascadelake machine I get
-> > > 
-> > > pft timings
-> > >                                  5.16.0-rc1             5.16.0-rc1
-> > >                                     vanilla    mm-remotedrain-v2r1
-> > > Amean     system-1         27.48 (   0.00%)       27.85 *  -1.35%*
-> > > Amean     system-4         28.65 (   0.00%)       30.84 *  -7.65%*
-> > > Amean     system-7         28.70 (   0.00%)       32.43 * -13.00%*
-> > > Amean     system-12        30.33 (   0.00%)       34.21 * -12.80%*
-> > > Amean     system-21        37.14 (   0.00%)       41.51 * -11.76%*
-> > > Amean     system-30        36.79 (   0.00%)       46.15 * -25.43%*
-> > > Amean     system-48        58.95 (   0.00%)       65.28 * -10.73%*
-> > > Amean     system-79       111.61 (   0.00%)      114.78 *  -2.84%*
-> > > Amean     system-80       113.59 (   0.00%)      116.73 *  -2.77%*
-> > > Amean     elapsed-1        32.83 (   0.00%)       33.12 *  -0.88%*
-> > > Amean     elapsed-4         8.60 (   0.00%)        9.17 *  -6.66%*
-> > > Amean     elapsed-7         4.97 (   0.00%)        5.53 * -11.30%*
-> > > Amean     elapsed-12        3.08 (   0.00%)        3.43 * -11.41%*
-> > > Amean     elapsed-21        2.19 (   0.00%)        2.41 * -10.06%*
-> > > Amean     elapsed-30        1.73 (   0.00%)        2.04 * -17.87%*
-> > > Amean     elapsed-48        1.73 (   0.00%)        2.03 * -17.77%*
-> > > Amean     elapsed-79        1.61 (   0.00%)        1.64 *  -1.90%*
-> > > Amean     elapsed-80        1.60 (   0.00%)        1.64 *  -2.50%*
-> > > 
-> > > It's not specific to cascade lake, I see varying size regressions on
-> > > different Intel and AMD chips, some better and worse than this result.
-> > > The smallest regression was on a single CPU skylake machine with a 2-6%
-> > > hit. Worst was Zen1 with a 3-107% hit.
-> > > 
-> > > I didn't profile it to establish why but in all cases the system CPU
-> > > usage was much higher. It *might* be because the spinlock in
-> > > per_cpu_pages crosses a new cache line and it might be cold although the
-> > > penalty seems a bit high for that to be the only factor.
-> > > 
-> > > Code-wise, the patches look fine but the apparent penalty for PFT is
-> > > too severe.
-> > 
-> > Mel,
-> > 
-> > Have you read Nicolas RCU patches?
-> > 
+Hi Jiasheng,
+
+Thanks for the patch, that's a careless copy-paste on my part :-(
+
+On Tue, Dec 14, 2021 at 06:00:00PM +0800, Jiasheng Jiang wrote:
+> The return value of kzalloc() needs to be checked.
+> To avoid use of null pointer '&mw_state->base' in case of the
+> failure of alloc.
 > 
-> I agree with Vlastimil's review on overhead.
+> Fixes: 8cbc5caf36ef ("drm: mali-dp: Add writeback connector")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
 
-Not sure those points are any fundamental performance problem with RCU: 
-https://paulmck.livejournal.com/31058.html
+Reviewed-by: Brian Starkey <brian.starkey@arm.com>
 
-> I think it would be more straight-forward to disable the pcp allocator for
-> NOHZ_FULL CPUs like what zone_pcp_disable except for individual CPUs with
-> care taken to not accidentally re-enable nohz CPus in zone_pcp_enable. The
-> downside is that there will be a performance penalty if an application
-> running on a NOHZ_FULL CPU is page allocator intensive for whatever
-> reason.  However, I guess this is unlikely because if there was a lot
-> of kernel activity for a NOHZ_FULL CPU, the vmstat shepherd would also
-> cause interference.
-
-Yes, it does, and its being fixed:
-
-https://lkml.org/lkml/2021/12/8/663
-
-Honestly i am not sure whether the association between a nohz_full CPU
-and "should be mostly in userspace" is desired. The RCU solution
-would be more generic. As Nicolas mentioned, for the usecases in
-questions, either solution is OK.
-
-Thomas, Frederic, Christoph, do you have any opinion on this ?
-
-
+>  drivers/gpu/drm/arm/malidp_mw.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/arm/malidp_mw.c b/drivers/gpu/drm/arm/malidp_mw.c
+> index f5847a79dd7e..612d386ee7d2 100644
+> --- a/drivers/gpu/drm/arm/malidp_mw.c
+> +++ b/drivers/gpu/drm/arm/malidp_mw.c
+> @@ -70,7 +70,11 @@ static void malidp_mw_connector_reset(struct drm_connector *connector)
+>  		__drm_atomic_helper_connector_destroy_state(connector->state);
+>  
+>  	kfree(connector->state);
+> -	__drm_atomic_helper_connector_reset(connector, &mw_state->base);
+> +
+> +	if (mw_state)
+> +		__drm_atomic_helper_connector_reset(connector, &mw_state->base);
+> +	else
+> +		__drm_atomic_helper_connector_reset(connector, NULL);
+>  }
+>  
+>  static enum drm_connector_status
+> -- 
+> 2.25.1
+> 

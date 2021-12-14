@@ -2,102 +2,792 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1B5473D83
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 08:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E707473D84
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 08:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbhLNHTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 02:19:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbhLNHTu (ORCPT
+        id S231407AbhLNHVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 02:21:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42402 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230000AbhLNHVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 02:19:50 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809BBC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 23:19:50 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id q3so30776183wru.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 23:19:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=VLp0o4sOHoE0u6tNwEQPnT/CZCV3x/l9Vu7pJeInEPw=;
-        b=kZ4ap6VlvW1Zq9DazrqYU3lTSDwzYeabpsNz851kDLLn4b1Har38I5+LzcKEAyaixz
-         dwoJA8BGDERxwO75/moXKWxVnYwY6Oqxc629PeJHMh6WjvClp++MQyKOAWYF5LOdZFas
-         ARscI3zBeDtXl5AvoV2+e3M5+xxP59CxSbbBRJB1puIac1/sQL0DIl1Yy2pOiBFeswMw
-         ZxlKmyUlmZLB62xdLZvfr2Znr9zRpltRSjh886ebHEn/st3t7St2aIDlcoLsQ2KY3anh
-         8IxwvRXEmPsCeq0rYNNYgfO9XmB3dwibWuI2LstzbCfLegr2PS0BVoWpo9ZumWGqshCZ
-         pH7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=VLp0o4sOHoE0u6tNwEQPnT/CZCV3x/l9Vu7pJeInEPw=;
-        b=Pi/0VIo4wK02DhZ864XHQvjtZVAYJYXKmheAkVp4+DyXmtMPYSQ+WPz9tH2xZwwDIa
-         jzxxm22PV2l7ydFZN5JbRzDiYOIKT0n/Q6nl9R/7LbNFlb8j8vnDhl34m0PCGoz6AkqY
-         dQ0p642NR07jgElIOJoUb/WNfQGLHHWh+yuYOzfEMkZkZdcUnF5T2ver1gCBda6ngPbC
-         kuYuS8xQIohz661u8DT0SoVSf2xFB0QzuE9J6mQjjCrd9HIHOXsAP76yonDdDRQ1RJr9
-         O7kmSxceevOdg89c/MMAA0fN9QjhcQcQiZ0pvDrWujuTCoahYyErPRlnsBi/ZpD8WiW1
-         RDEA==
-X-Gm-Message-State: AOAM530cQWnjCVbH3aIyGDAUC97v547NgGMC3YsjD7dAwVfPkbxATNvy
-        wOA+GdrbX+L/QeqBH+XVpKC443URtiU5pA==
-X-Google-Smtp-Source: ABdhPJwvCihaLdNWdpfAn/nDjFXK1f9rMYI9jAumtJIn4e+cH920UM9sLAO6Fgd9zXEWHewsOX7vjw==
-X-Received: by 2002:a5d:6a46:: with SMTP id t6mr4016335wrw.141.1639466388831;
-        Mon, 13 Dec 2021 23:19:48 -0800 (PST)
-Received: from [10.194.0.6] ([64.64.123.28])
-        by smtp.gmail.com with ESMTPSA id w22sm1249337wmi.27.2021.12.13.23.19.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 23:19:48 -0800 (PST)
-Subject: Re: [BUG] fs: ocfs2: possible ABBA deadlock in
- ocfs2_dio_end_io_write() and ocfs2_move_extents()
-To:     Joseph Qi <joseph.qi@linux.alibaba.com>, mark@fasheh.com,
-        jlbec@evilplan.org
-Cc:     ocfs2-devel@oss.oracle.com,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <8ae1bb9c-3e58-c8b6-8823-3d2ea8b241e2@gmail.com>
- <bd6dfb63-6d3d-c8f6-f401-8bdd5334afed@linux.alibaba.com>
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Message-ID: <093db193-baf8-b2c1-5667-7ded591a8437@gmail.com>
-Date:   Tue, 14 Dec 2021 15:19:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 14 Dec 2021 02:21:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A73961351
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 07:21:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15B07C34601;
+        Tue, 14 Dec 2021 07:21:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639466507;
+        bh=KMksn7hhzypVulRq4Sg0Nwvw8z858MC88gpjfN22hnY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ive0ZQfcrEjTmX/aGQmuc96sM9rgrJxCGEjnqsw1j+ulpkkCyXHWVTExu2WKHf4xV
+         oHyyFNg1BP+LvMKwMJO9CPaH2b1Ar/H6zNbW+I+F7KQ5zezZ5KMGwryNPiFtJVGXXL
+         U+XYaUfKnOWTj8KzTzy1lvy8wC/C18LL8NJuMQ0G/fyWv0gEs+yITM6/gn4qMeOlEz
+         ERwuCp4DwbDoetWvlOgLoCP0WJPVl9UceudbRYMIc9ob0n0kQeOXj8gx309HTN9aRt
+         Era3a6Tytk2/YpIpxMPXb/E3tiC1PAdG4pRGFfKVbz3PnH4F6PvoF7JPFcPtpbUte3
+         o7il96RzvimGA==
+Date:   Tue, 14 Dec 2021 15:21:40 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alex Marginean <alexandru.marginean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Jason Liu <jason.hui.liu@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH v2 8/8] arm64: dts: ls1028a-qds: add overlays for various
+ serdes protocols
+Message-ID: <20211214072139.GA13828@dragon>
+References: <20211204001718.8511-1-leoyang.li@nxp.com>
+ <20211204001718.8511-9-leoyang.li@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <bd6dfb63-6d3d-c8f6-f401-8bdd5334afed@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211204001718.8511-9-leoyang.li@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 03, 2021 at 06:17:18PM -0600, Li Yang wrote:
+> From: Alex Marginean <alexandru.marginean@nxp.com>
+> 
+> Add overlays for various serdes protocols on LS1028A QDS board using
+> different PHY cards.  These should be applied at boot, based on serdes
+> configuration.  If no overlay is applied, only the RGMII interface on
+> the QDS is available in Linux.
+> 
+> Building device tree fragments requires passing the "-@" argument to
+> dtc, which increases the base dtb size and might cause some platforms to
+> fail to store the new binary. To avoid that, it would be nice to only
+> pass "-@" for the platforms where fragments will be used, aka
+> LS1028A-QDS. One approach suggested by Rob Herring is used here:
+> 
+> https://lore.kernel.org/patchwork/patch/821645/
+> 
+> Also moved the enet* override nodes in dts file to be in alphabetic order.
+> 
+> Signed-off-by: Alex Marginean <alexandru.marginean@nxp.com>
+> Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+> Signed-off-by: Jason Liu <jason.hui.liu@nxp.com>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/Makefile        |  16 +++
+>  .../dts/freescale/fsl-ls1028a-qds-13bb.dts    | 113 ++++++++++++++++++
+>  .../dts/freescale/fsl-ls1028a-qds-65bb.dts    | 108 +++++++++++++++++
+>  .../dts/freescale/fsl-ls1028a-qds-7777.dts    |  82 +++++++++++++
+>  .../dts/freescale/fsl-ls1028a-qds-85bb.dts    | 107 +++++++++++++++++
+>  .../dts/freescale/fsl-ls1028a-qds-899b.dts    |  75 ++++++++++++
+>  .../dts/freescale/fsl-ls1028a-qds-9999.dts    |  79 ++++++++++++
+>  .../boot/dts/freescale/fsl-ls1028a-qds.dts    |  19 ++-
+>  .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |   2 +-
+>  9 files changed, 595 insertions(+), 6 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+> index a14a6173b765..f518eb1e1142 100644
+> --- a/arch/arm64/boot/dts/freescale/Makefile
+> +++ b/arch/arm64/boot/dts/freescale/Makefile
+> @@ -1,4 +1,14 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> +
+> +# required for overlay support
+> +DTC_FLAGS_fsl-ls1028a-qds := -@
+> +DTC_FLAGS_fsl-ls1028a-qds-13bb := -@
+> +DTC_FLAGS_fsl-ls1028a-qds-65bb := -@
+> +DTC_FLAGS_fsl-ls1028a-qds-7777 := -@
+> +DTC_FLAGS_fsl-ls1028a-qds-85bb := -@
+> +DTC_FLAGS_fsl-ls1028a-qds-899b := -@
+> +DTC_FLAGS_fsl-ls1028a-qds-9999 := -@
+> +
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1012a-frdm.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1012a-frwy.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1012a-oxalis.dtb
+> @@ -11,6 +21,12 @@ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-kontron-sl28-var2.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-kontron-sl28-var3-ads2.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-kontron-sl28-var4.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds.dtb
+> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-13bb.dtb
+> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-65bb.dtb
+> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-7777.dtb
+> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-85bb.dtb
+> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-899b.dtb
+> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-9999.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-rdb.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1043a-qds.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1043a-rdb.dtb
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
+> new file mode 100644
+> index 000000000000..f748a2c12a70
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
+> @@ -0,0 +1,113 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Device Tree fragment for LS1028A QDS board, serdes 13bb
+> + *
+> + * Copyright 2019-2021 NXP
+> + *
+> + * Requires a LS1028A QDS board with lane B rework.
+> + * Requires a SCH-30841 card with lane A of connector rewired to PHY lane C.
+> + * Set-up is a SCH-30842 card in slot 1 and SCH-30841 in slot 2.
+> + */
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +/ {
+> +	fragment@0 {
+> +		target = <&mdio_slot1>;
+> +
+> +		__overlay__ {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			slot1_sgmii: ethernet-phy@2 {
+> +				/* AQR112 */
+> +				reg = <0x2>;
+> +				compatible = "ethernet-phy-ieee802.3-c45";
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@1 {
+> +		target = <&enetc_port0>;
+> +
+> +		__overlay__ {
+> +			phy-handle = <&slot1_sgmii>;
+> +			phy-mode = "usxgmii";
+> +			managed = "in-band-status";
+> +			status = "okay";
+> +		};
+> +	};
+> +
+> +	fragment@2 {
+> +		target = <&mdio_slot2>;
+> +
+> +		__overlay__ {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			/* 4 ports on AQR412 */
+> +			slot2_qxgmii0: ethernet-phy@0 {
+> +				reg = <0x0>;
+> +				compatible = "ethernet-phy-ieee802.3-c45";
+> +			};
+> +
+> +			slot2_qxgmii1: ethernet-phy@1 {
+> +				reg = <0x1>;
+> +				compatible = "ethernet-phy-ieee802.3-c45";
+> +			};
+> +
+> +			slot2_qxgmii2: ethernet-phy@2 {
+> +				reg = <0x2>;
+> +				compatible = "ethernet-phy-ieee802.3-c45";
+> +			};
+> +
+> +			slot2_qxgmii3: ethernet-phy@3 {
+> +				reg = <0x3>;
+> +				compatible = "ethernet-phy-ieee802.3-c45";
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@3 {
+> +		target = <&mscc_felix_ports>;
+> +
+> +		__overlay__ {
+> +			port@0 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qxgmii0>;
+> +				phy-mode = "usxgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@1 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qxgmii1>;
+> +				phy-mode = "usxgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@2 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qxgmii2>;
+> +				phy-mode = "usxgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@3 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qxgmii3>;
+> +				phy-mode = "usxgmii";
+> +				managed = "in-band-status";
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@4 {
+> +		target = <&mscc_felix>;
+> +
+> +		__overlay__ {
+> +			status = "okay";
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
+> new file mode 100644
+> index 000000000000..8ffb707a1576
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
+> @@ -0,0 +1,108 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Device Tree fragment for LS1028A QDS board, serdes 69xx
+> + *
+> + * Copyright 2019-2021 NXP
+> + *
+> + * Requires a LS1028A QDS board with lane B rework.
+> + * Requires a SCH-30842 card in slot 1 and a SCH-28021 card in slot 2.
+> + */
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +/ {
+> +	fragment@0 {
+> +		target = <&mdio_slot1>;
+> +
+> +		__overlay__ {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			slot1_sgmii: ethernet-phy@2 {
+> +				/* AQR112 */
+> +				reg = <0x2>;
+> +				compatible = "ethernet-phy-ieee802.3-c45";
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@1 {
+> +		target = <&enetc_port0>;
+> +
+> +		__overlay__ {
+> +			phy-handle = <&slot1_sgmii>;
+> +			phy-mode = "2500base-x";
+> +			managed = "in-band-status";
+> +			status = "okay";
+> +		};
+> +	};
+> +
+> +	fragment@2 {
+> +		target = <&mdio_slot2>;
+> +
+> +		__overlay__ {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			/* 4 ports on VSC8514 */
+> +			slot2_qsgmii0: ethernet-phy@8 {
+> +				reg = <0x8>;
+> +			};
+> +
+> +			slot2_qsgmii1: ethernet-phy@9 {
+> +				reg = <0x9>;
+> +			};
+> +
+> +			slot2_qsgmii2: ethernet-phy@a {
+> +				reg = <0xa>;
+> +			};
+> +
+> +			slot2_qsgmii3: ethernet-phy@b {
+> +				reg = <0xb>;
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@3 {
+> +		target = <&mscc_felix_ports>;
+> +
+> +		__overlay__ {
+> +			port@0 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qsgmii0>;
+> +				phy-mode = "qsgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@1 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qsgmii1>;
+> +				phy-mode = "qsgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@2 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qsgmii2>;
+> +				phy-mode = "qsgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@3 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qsgmii3>;
+> +				phy-mode = "qsgmii";
+> +				managed = "in-band-status";
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@4 {
+> +		target = <&mscc_felix>;
+> +
+> +		__overlay__ {
+> +			status = "okay";
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
+> new file mode 100644
+> index 000000000000..eb6a1e674f10
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
+> @@ -0,0 +1,82 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Device Tree fragment for LS1028A QDS board, serdes 7777
+> + *
+> + * Copyright 2019-2021 NXP
+> + *
+> + * Requires a LS1028A QDS board without lane B rework.
+> + * Requires a SCH-30841 card without lane A/C rewire and with a FW with muxing
+> + * disabled, plugged in slot 1.
+> + */
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +/ {
+> +	fragment@0 {
+> +		target = <&mdio_slot1>;
+> +
+> +		__overlay__ {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			/* 4 ports on AQR412 */
+> +			slot1_sxgmii0: ethernet-phy@0 {
+> +				reg = <0x0>;
+> +				compatible = "ethernet-phy-ieee802.3-c45";
+> +			};
+> +
+> +			slot1_sxgmii1: ethernet-phy@1 {
+> +				reg = <0x1>;
+> +				compatible = "ethernet-phy-ieee802.3-c45";
+> +			};
+> +
+> +			slot1_sxgmii2: ethernet-phy@2 {
+> +				reg = <0x2>;
+> +				compatible = "ethernet-phy-ieee802.3-c45";
+> +			};
+> +
+> +			slot1_sxgmii3: ethernet-phy@3 {
+> +				reg = <0x3>;
+> +				compatible = "ethernet-phy-ieee802.3-c45";
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@1 {
+> +		target = <&mscc_felix_ports>;
+> +
+> +		__overlay__ {
+> +			port@0 {
+> +				status = "okay";
+> +				phy-handle = <&slot1_sxgmii0>;
+> +				phy-mode = "2500base-x";
+> +			};
+> +
+> +			port@1 {
+> +				status = "okay";
+> +				phy-handle = <&slot1_sxgmii1>;
+> +				phy-mode = "2500base-x";
+> +			};
+> +
+> +			port@2 {
+> +				status = "okay";
+> +				phy-handle = <&slot1_sxgmii2>;
+> +				phy-mode = "2500base-x";
+> +			};
+> +
+> +			port@3 {
+> +				status = "okay";
+> +				phy-handle = <&slot1_sxgmii3>;
+> +				phy-mode = "2500base-x";
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@2 {
+> +		target = <&mscc_felix>;
+> +		__overlay__ {
+> +			status = "okay";
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
+> new file mode 100644
+> index 000000000000..8e90c3088ba1
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
+> @@ -0,0 +1,107 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Device Tree fragment for LS1028A QDS board, serdes 85bb
+> + *
+> + * Copyright 2019-2021 NXP
+> + *
+> + * Requires a LS1028A QDS board with lane B rework.
+> + * Requires a SCH-24801 card in slot 1 and a SCH-28021 card in slot 2.
+> + */
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +/ {
+> +	fragment@0 {
+> +		target = <&mdio_slot1>;
+> +
+> +		__overlay__ {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			slot1_sgmii: ethernet-phy@1c {
+> +				/* 1st port on VSC8234 */
+> +				reg = <0x1c>;
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@1 {
+> +		target = <&enetc_port0>;
+> +
+> +		__overlay__ {
+> +			phy-handle = <&slot1_sgmii>;
+> +			phy-mode = "sgmii";
+> +			managed = "in-band-status";
+> +			status = "okay";
+> +		};
+> +	};
+> +
+> +	fragment@2 {
+> +		target = <&mdio_slot2>;
+> +
+> +		__overlay__ {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			/* 4 ports on VSC8514 */
+> +			slot2_qsgmii0: ethernet-phy@8 {
+> +				reg = <0x8>;
+> +			};
+> +
+> +			slot2_qsgmii1: ethernet-phy@9 {
+> +				reg = <0x9>;
+> +			};
+> +
+> +			slot2_qsgmii2: ethernet-phy@a {
+> +				reg = <0xa>;
+> +			};
+> +
+> +			slot2_qsgmii3: ethernet-phy@b {
+> +				reg = <0xb>;
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@3 {
+> +		target = <&mscc_felix_ports>;
+> +
+> +		__overlay__ {
+> +			port@0 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qsgmii0>;
+> +				phy-mode = "qsgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@1 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qsgmii1>;
+> +				phy-mode = "qsgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@2 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qsgmii2>;
+> +				phy-mode = "qsgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@3 {
+> +				status = "okay";
+> +				phy-handle = <&slot2_qsgmii3>;
+> +				phy-mode = "qsgmii";
+> +				managed = "in-band-status";
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@4 {
+> +		target = <&mscc_felix>;
+> +
+> +		__overlay__ {
+> +			status = "okay";
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
+> new file mode 100644
+> index 000000000000..5d0a094e6c44
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
+> @@ -0,0 +1,75 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Device Tree fragment for LS1028A QDS board, serdes 85xx
+> + *
+> + * Copyright 2019-2021 NXP
+> + *
+> + * Requires a LS1028A QDS board without lane B rework.
+> + * Requires a SCH-24801 card in slot 1.
+> + */
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +/ {
+> +	fragment@0 {
+> +		target = <&mdio_slot1>;
+> +		__overlay__ {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			/* VSC8234 */
+> +			slot1_sgmii0: ethernet-phy@1c {
+> +				reg = <0x1c>;
+> +			};
+> +
+> +			slot1_sgmii1: ethernet-phy@1d {
+> +				reg = <0x1d>;
+> +			};
+> +
+> +			slot1_sgmii2: ethernet-phy@1e {
+> +				reg = <0x1e>;
+> +			};
+> +
+> +			slot1_sgmii3: ethernet-phy@1f {
+> +				reg = <0x1f>;
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@1 {
+> +		target = <&enetc_port0>;
+> +		__overlay__ {
+> +			phy-handle = <&slot1_sgmii0>;
+> +			phy-mode = "sgmii";
+> +			managed = "in-band-status";
+> +			status = "okay";
+> +		};
+> +	};
+> +
+> +	fragment@2 {
+> +		target = <&mscc_felix_ports>;
+> +		__overlay__ {
+> +			port@1 {
+> +				status = "okay";
+> +				phy-handle = <&slot1_sgmii1>;
+> +				phy-mode = "sgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@2 {
+> +				status = "okay";
+> +				phy-handle = <&slot1_sgmii2>;
+> +				phy-mode = "sgmii";
+> +				managed = "in-band-status";
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@3 {
+> +		target = <&mscc_felix>;
+> +		__overlay__ {
+> +			status = "okay";
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
+> new file mode 100644
+> index 000000000000..1ef743c48e84
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
+> @@ -0,0 +1,79 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Device Tree fragment for LS1028A QDS board, serdes 85xx
+> + *
+> + * Copyright 2019-2021 NXP
+> + *
+> + * Requires a LS1028A QDS board without lane B rework.
+> + * Requires a SCH-24801 card in slot 1.
+> + */
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +/ {
+> +	fragment@0 {
 
+Is fragment0 more appropriate maybe, as @unit-address requires a
+corresponding 'reg' property?
 
-On 2021/12/14 15:08, Joseph Qi wrote:
-> Hi,
->
-> Thanks for the report. But I don't think this is a possible deadlock in
-> practice. Please see my comments below.
->
-> On 12/10/21 4:38 PM, Jia-Ju Bai wrote:
->> Hello,
->>
->> My static analysis tool reports a possible ABBA deadlock in the ocfs2 module in Linux 5.10:
->>
->> ocfs2_dio_end_io_write()
->>    down_write(&oi->ip_alloc_sem); --> Line 2322 (Lock A)
->>    ocfs2_del_inode_from_orphan()
->>      inode_lock(orphan_dir_inode);  --> Line 2701 (Lock B)
-> Just as the variable name indicates, it is orphan dir inode, which is a
-> system file (something hidden inside the filesystem) and not visible for
-> end user.
->
->> ocfs2_move_extents()
->>    inode_lock(inode); --> Line 916 (Lock B)
-> This is called from a ioctl from user, it a normal file inode.
+Shawn
 
-Okay, thanks for the explanation :)
-
-
-Best wishes,
-Jia-Ju Bai
+> +		target = <&mdio_slot1>;
+> +		__overlay__ {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			/* VSC8234 */
+> +			slot1_sgmii0: ethernet-phy@1c {
+> +				reg = <0x1c>;
+> +			};
+> +
+> +			slot1_sgmii1: ethernet-phy@1d {
+> +				reg = <0x1d>;
+> +			};
+> +
+> +			slot1_sgmii2: ethernet-phy@1e {
+> +				reg = <0x1e>;
+> +			};
+> +
+> +			slot1_sgmii3: ethernet-phy@1f {
+> +				reg = <0x1f>;
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@1 {
+> +		target = <&mscc_felix_ports>;
+> +		__overlay__ {
+> +			port@0 {
+> +				status = "okay";
+> +				phy-handle = <&slot1_sgmii0>;
+> +				phy-mode = "sgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@1 {
+> +				status = "okay";
+> +				phy-handle = <&slot1_sgmii1>;
+> +				phy-mode = "sgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@2 {
+> +				status = "okay";
+> +				phy-handle = <&slot1_sgmii2>;
+> +				phy-mode = "sgmii";
+> +				managed = "in-band-status";
+> +			};
+> +
+> +			port@3 {
+> +				status = "okay";
+> +				phy-handle = <&slot1_sgmii3>;
+> +				phy-mode = "sgmii";
+> +				managed = "in-band-status";
+> +			};
+> +		};
+> +	};
+> +
+> +	fragment@2 {
+> +		target = <&mscc_felix>;
+> +		__overlay__ {
+> +			status = "okay";
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
+> index 782853a449cc..177bc1405f0f 100644
+> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
+> @@ -211,6 +211,16 @@ &duart1 {
+>  	status = "okay";
+>  };
+>  
+> +&enetc_port1 {
+> +	phy-handle = <&qds_phy1>;
+> +	phy-mode = "rgmii-id";
+> +	status = "okay";
+> +};
+> +
+> +&enetc_port2 {
+> +	status = "okay";
+> +};
+> +
+>  &esdhc {
+>  	status = "okay";
+>  };
+> @@ -326,17 +336,16 @@ rtc@51 {
+>  	};
+>  };
+>  
+> -&enetc_port1 {
+> -	phy-handle = <&qds_phy1>;
+> -	phy-mode = "rgmii-id";
+> +&lpuart0 {
+>  	status = "okay";
+>  };
+>  
+> -&lpuart0 {
+> +&lpuart1 {
+>  	status = "okay";
+>  };
+>  
+> -&lpuart1 {
+> +&mscc_felix_port4 {
+> +	ethernet = <&enetc_port2>;
+>  	status = "okay";
+>  };
+>  
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> index 5c17dfaa50de..f305ac2906d8 100644
+> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> @@ -1115,7 +1115,7 @@ mscc_felix: ethernet-switch@0,5 {
+>  				interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
+>  				status = "disabled";
+>  
+> -				ports {
+> +				mscc_felix_ports: ports {
+>  					#address-cells = <1>;
+>  					#size-cells = <0>;
+>  
+> -- 
+> 2.25.1
+> 

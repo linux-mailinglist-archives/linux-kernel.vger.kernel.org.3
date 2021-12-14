@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E50A474647
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89ED5474650
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235385AbhLNPSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235369AbhLNPSp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:18:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8F5C061574;
-        Tue, 14 Dec 2021 07:18:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58F1B6156E;
-        Tue, 14 Dec 2021 15:18:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38CDBC34606;
-        Tue, 14 Dec 2021 15:18:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639495123;
-        bh=EtXNCqqEF5z7tNX4x034w1DmPhsexirc5bJSadieaTU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oVm5vp4S50b4rGVhdHXirrlW9wzjjz4QmXBPKuTPQVSv/iN+1KZIYc+ukAokyG3NL
-         5EYAUnXwYT8ooc8tJFGmtoEDjqtHvO/PwLht9tW7rIei49/5ZuWUxgnlpm7jakwUu4
-         RuZaKfNUYRG5L0hCu6TcCcKyzOWrAVuaD+FuRTe4jxKgYgYc9svs4ZyN6qkE8nUKwS
-         BBukGp4WcOJykx+A28YWnsysRITIEDLDwZiQ5HX90vpD9G0x8B4JfDDHdcfWMZtmGM
-         APhy0y3yr6Hpsir8HXkbr5sLUFrMdYOmyezphCTsrTIhyRE4DNECZMowppwfbBJRHo
-         peKqoXbWSIPFw==
-From:   Will Deacon <will@kernel.org>
-To:     yf.wang@mediatek.com
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, Guangming.Cao@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        iommu@lists.linux-foundation.org, wsd_upstream@mediatek.com,
-        Libo.Kang@mediatek.com, linux-kernel@vger.kernel.org,
-        robin.murphy@arm.com, matthias.bgg@gmail.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v3] iommu/io-pgtable-arm-v7s: Add error handle for page table allocation failure
-Date:   Tue, 14 Dec 2021 15:18:17 +0000
-Message-Id: <163949313634.2865984.16870619152235318237.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211207113315.29109-1-yf.wang@mediatek.com>
-References: <20211207094817.GA31382@willie-the-truck> <20211207113315.29109-1-yf.wang@mediatek.com>
+        id S234470AbhLNPV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:21:28 -0500
+Received: from mga04.intel.com ([192.55.52.120]:23843 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232651AbhLNPVZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 10:21:25 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="237735217"
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="237735217"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:21:11 -0800
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="614311910"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:21:09 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 7F2A220462;
+        Tue, 14 Dec 2021 17:21:07 +0200 (EET)
+Date:   Tue, 14 Dec 2021 17:21:07 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm
+Subject: Re: [PATCH v1 0/2] media: i2c: hi846: minor PM fixes
+Message-ID: <Ybi2Yylo718i8SLl@paasikivi.fi.intel.com>
+References: <20211109131013.2684058-1-martin.kepplinger@puri.sm>
+ <f08075656c83ff43947942c6f754936ced63dc01.camel@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <f08075656c83ff43947942c6f754936ced63dc01.camel@puri.sm>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 19:33:15 +0800, yf.wang@mediatek.com wrote:
-> From: Yunfei Wang <yf.wang@mediatek.com>
+On Tue, Dec 14, 2021 at 02:44:41PM +0100, Martin Kepplinger wrote:
+> Am Dienstag, dem 09.11.2021 um 14:10 +0100 schrieb Martin Kepplinger:
+> > hi Saraki and all,
+> > 
+> > Here are minor PM fixes for the hi846 sensor while testing system
+> > suspend:
+> > 
+> > thank you very much for your time,
+> > 
+> >                              martin
+> > 
+> > 
+> > Martin Kepplinger (2):
+> >   media: i2c: hi846: check return value of regulator_bulk_disable()
+> >   media: i2c: hi846: use pm_runtime_force_suspend/resume for system
+> >     suspend
+> > 
+> >  drivers/media/i2c/hi846.c | 14 ++++++++------
+> >  1 file changed, 8 insertions(+), 6 deletions(-)
+> > 
 > 
-> In __arm_v7s_alloc_table function:
-> iommu call kmem_cache_alloc to allocate page table, this function
-> allocate memory may fail, when kmem_cache_alloc fails to allocate
-> table, call virt_to_phys will be abnomal and return unexpected phys
-> and goto out_free, then call kmem_cache_free to release table will
-> trigger KE, __get_free_pages and free_pages have similar problem,
-> so add error handle for page table allocation failure.
-> 
-> [...]
+> hi all. Any objection or other thoughts about this? This fixes system
+> suspend.
 
-Applied to will (for-joerg/arm-smmu/updates), thanks!
+Thanks for the ping, Martin.
 
-[1/1] iommu/io-pgtable-arm-v7s: Add error handle for page table allocation failure
-      https://git.kernel.org/will/c/a556cfe4cabc
+The patches are in my tree now.
 
-Cheers,
 -- 
-Will
-
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+Sakari Ailus

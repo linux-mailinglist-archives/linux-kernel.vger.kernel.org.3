@@ -2,98 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F76473B9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8348473B9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbhLNDiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 22:38:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
+        id S233067AbhLNDkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 22:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbhLNDix (ORCPT
+        with ESMTP id S230147AbhLNDka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 22:38:53 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F6FC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:38:52 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so16144398pju.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:38:52 -0800 (PST)
+        Mon, 13 Dec 2021 22:40:30 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD53C061574;
+        Mon, 13 Dec 2021 19:40:29 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id e3so59506649edu.4;
+        Mon, 13 Dec 2021 19:40:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=P/BUX+Y9nC7B6aKulzNhO8FuVXdrMr2Yn3t9WCC93Bg=;
-        b=pns6Pb2fLGXltZ/26mjArO3E3emkL8IJm985LxGeHafczufRl41fsIwH+HQ3pxfYE7
-         Dcfo3oNtM8epPrtjZBg4j3zECMG/URtfWEdsxLzF8ju1xdPRPqhNnkToNvaGaq+wrb/D
-         6XMZpnAv+FrPCvfNJGPkRsYGn0qRbf2Jp/TgTN2nzJ9aGAozvrXu/2rTJS36XgkzTgAz
-         jieyK+TwcCUQXNhINkCceZmYgQ/ePT6HxLI23UbEEN18ZLI+BNwWvhiXdJ11YazvK2yT
-         LTRud+K9/R1PeAarr3+l10Ia35WwD54RRXURNIEus6p+Vj8QQTq6NMwkcSd6KTHva5I1
-         ubJQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YGvjFXTcjcxmedBMr5Eg6ESipNuMk/cS8aRWqu3L/gQ=;
+        b=cbp6PXlg5GBnn2jNS4KPj4XdJJe/9dm3sOPF0h8RSD4P9owquu0LrKQCtB3Grgn1zj
+         97D/hthrYA8Blx7z+SU2Wkr0hF6WhM0JILrEHECFeqXHyTrbw/QsR5qDt1rQKP86bJKe
+         y54+G2q6WfMxATPn1tJKdjts0/NkvPFotnL5hhu7924jA7KJ47kOtOaLUP+8PGfWcSZB
+         jD83y96JZTv+Bund/hMYJvyffaMfS6tRy203uFgXMiv4u5B/eKyVfFd8pzOBHI0cght+
+         Mse6EigpU+JIMNGYX5PfzHbTDfmI6iiuDKtbb1uawc1zRLksQIG13UAHlcC2eU4VaYMW
+         1u2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=P/BUX+Y9nC7B6aKulzNhO8FuVXdrMr2Yn3t9WCC93Bg=;
-        b=szV1E5bL/IOdTWWde0EQXCoYVZinDp0W04Klfl1DcsuigsQ3Q1saLB2gzkMMtXCymo
-         +SJ/MP+oPl0/maX8ic42dsHWP84N/i6qyHCuaT2ZxQSHeYW4zapPLrbeVIgZGQ3qbwQY
-         nUCSHwVvOGealEMf9vvURkeW42EPpUp2+ix8t2pSchowyTL6x34BHNIAM8o4iD/ZJRUK
-         s3TU7gGmjZ1645i8gD/3gGkay3qVLzf1rfB8OquMZC8KNL4cUQKd9c8iMqIojBYNZpX7
-         eEW878pbsdRROLlUWOvUoex4KQk8Exw2z7xvsa7NjZG/RRONkyhRjs26iXgNsj9Y993s
-         NUhw==
-X-Gm-Message-State: AOAM533YFwhmOT+Y2PBVkC+dYWbkXmyIftduSoPKB0sGudoCsg+kFoF4
-        Bkr6Pyoij8OTg1P6JCqDw2U=
-X-Google-Smtp-Source: ABdhPJyMCHtb5ok+qMsl/ISWomYHJmOz/EXbrl08JCq7AAnDXwSvABhDOkpmbPrtcuPRNHY5laI8EQ==
-X-Received: by 2002:a17:903:2292:b0:141:e76d:1b16 with SMTP id b18-20020a170903229200b00141e76d1b16mr2523999plh.21.1639453132433;
-        Mon, 13 Dec 2021 19:38:52 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id n16sm536390pja.46.2021.12.13.19.38.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 19:38:52 -0800 (PST)
-Message-ID: <bc9a960f-7577-c3cd-a58f-91c165f3e06c@gmail.com>
-Date:   Mon, 13 Dec 2021 19:38:50 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YGvjFXTcjcxmedBMr5Eg6ESipNuMk/cS8aRWqu3L/gQ=;
+        b=ilffro7FRYYjlf23VvOlohH9E64XX9CZhFu3z71AJiY4NB/+fdEgWyN3EKI5JTaHvm
+         P8SR/z0t74NyCc2OMEXlFfpo6l63TSHKZRILsIabB055vPbHJ38kMq3rEUI9sW2jchTx
+         UoE11GBva2KZ+sg3IUn2kQIyVuHldTJQr9BGk0K7EbY28p4qi28vvDRtZnUP5c+SNK+D
+         ew7QeSaoO85yQ63+W/fObbb3uhlRMyDxOQIXBsPF7T8HP958GE9FS9UJMyRaa0rYSEVc
+         SFWvfD+9NtSsRld1clSkBetVO8nyZLZXTjRCMu2B2hW8+aIWluOHd+F72wIChK7D2R4h
+         qSRw==
+X-Gm-Message-State: AOAM530sSjrpCHUroAaKfe611Ce3xw2CUKBY9jYTOZGR+i8THkruGEmK
+        /MJOMvLl9Kg98AYPZ0m5pWBfahL15LSSclHJ1Zs/Vbl6
+X-Google-Smtp-Source: ABdhPJzPgfxGI1sJNvqcW5T0ES7dng/oYeWXHRMKJ14v8u60jjA6kpNpkNBo1/Rzo53PsL1ToLFSTUr+sFd1NfOkoMs=
+X-Received: by 2002:a05:6402:491:: with SMTP id k17mr4085276edv.333.1639453227988;
+ Mon, 13 Dec 2021 19:40:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [GIT PULL 3/3] bcm2835-bindings-2021-12-13
-Content-Language: en-US
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20211213123040.184359-1-nsaenzju@redhat.com>
- <20211213123040.184359-3-nsaenzju@redhat.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211213123040.184359-3-nsaenzju@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211128131853.15125-1-aford173@gmail.com> <20211128131853.15125-6-aford173@gmail.com>
+In-Reply-To: <20211128131853.15125-6-aford173@gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 13 Dec 2021 21:40:17 -0600
+Message-ID: <CAHCN7xJW14D8BVx1op+V9EAxcFFidSDkN1LN1rdHvG2TNHVtNg@mail.gmail.com>
+Subject: Re: [PATCH V4 5/9] soc: imx: imx8m-blk-ctrl: add i.MX8MN DISP blk-ctrl
+To:     arm-soc <linux-arm-kernel@lists.infradead.org>
+Cc:     Adam Ford-BE <aford@beaconembedded.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Nov 28, 2021 at 7:19 AM Adam Ford <aford173@gmail.com> wrote:
+>
+> This adds the description for the i.MX8MN disp blk-ctrl.
+>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
+Lucas,
 
-On 12/13/2021 4:30 AM, Nicolas Saenz Julienne wrote:
-> Hi Florian,
-> 
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-> 
->    Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-> 
-> are available in the Git repository at:
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git tags/bcm2835-bindings-2021-12-13
-> 
-> for you to fetch changes up to 4e5be177f6d2545dd639f41138af3b138470c61d:
-> 
->    dt-bindings: soc: bcm: Convert brcm,bcm2835-vchiq to json-schema (2021-12-13 13:10:11 +0100)
-> 
-> ----------------------------------------------------------------
-> Stefan Wahren converts VCHIQ's bindings to YAML format.
-> 
-> ----------------------------------------------------------------
+Is there any chance you could give this series some feedback?  In
+order to get more functionality on the Nano, we need the blk-ctrl on
+Nano working.
 
-Merged into devicetree/next, thanks!
--- 
-Florian
+thanks,
+
+adam
+
+> ---
+>  drivers/soc/imx/imx8m-blk-ctrl.c | 77 +++++++++++++++++++++++++++++++-
+>  1 file changed, 76 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
+> index c2f076b56e24..511e74f0db8a 100644
+> --- a/drivers/soc/imx/imx8m-blk-ctrl.c
+> +++ b/drivers/soc/imx/imx8m-blk-ctrl.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/clk.h>
+>
+>  #include <dt-bindings/power/imx8mm-power.h>
+> +#include <dt-bindings/power/imx8mn-power.h>
+>
+>  #define BLK_SFT_RSTN   0x0
+>  #define BLK_CLK_EN     0x4
+> @@ -517,6 +518,77 @@ static const struct imx8m_blk_ctrl_data imx8mm_disp_blk_ctl_dev_data = {
+>         .num_domains = ARRAY_SIZE(imx8mm_disp_blk_ctl_domain_data),
+>  };
+>
+> +
+> +static int imx8mn_disp_power_notifier(struct notifier_block *nb,
+> +                                     unsigned long action, void *data)
+> +{
+> +       struct imx8m_blk_ctrl *bc = container_of(nb, struct imx8m_blk_ctrl,
+> +                                                power_nb);
+> +
+> +       if (action != GENPD_NOTIFY_ON && action != GENPD_NOTIFY_PRE_OFF)
+> +               return NOTIFY_OK;
+> +
+> +       /* Enable bus clock and deassert bus reset */
+> +       regmap_set_bits(bc->regmap, BLK_CLK_EN, BIT(8));
+> +       regmap_set_bits(bc->regmap, BLK_SFT_RSTN, BIT(8));
+> +
+> +       /*
+> +        * On power up we have no software backchannel to the GPC to
+> +        * wait for the ADB handshake to happen, so we just delay for a
+> +        * bit. On power down the GPC driver waits for the handshake.
+> +        */
+> +       if (action == GENPD_NOTIFY_ON)
+> +               udelay(5);
+> +
+> +
+> +       return NOTIFY_OK;
+> +}
+> +
+> +static const struct imx8m_blk_ctrl_domain_data imx8mn_disp_blk_ctl_domain_data[] = {
+> +       [IMX8MN_DISPBLK_PD_MIPI_DSI] = {
+> +               .name = "dispblk-mipi-dsi",
+> +               .clk_names = (const char *[]){ "dsi-pclk", "dsi-ref", },
+> +               .num_clks = 2,
+> +               .gpc_name = "mipi-dsi",
+> +               .rst_mask = BIT(0) | BIT(1),
+> +               .clk_mask = BIT(0) | BIT(1),
+> +               .mipi_phy_rst_mask = BIT(17),
+> +       },
+> +       [IMX8MN_DISPBLK_PD_MIPI_CSI] = {
+> +               .name = "dispblk-mipi-csi",
+> +               .clk_names = (const char *[]){ "csi-aclk", "csi-pclk" },
+> +               .num_clks = 2,
+> +               .gpc_name = "mipi-csi",
+> +               .rst_mask = BIT(2) | BIT(3),
+> +               .clk_mask = BIT(2) | BIT(3),
+> +               .mipi_phy_rst_mask = BIT(16),
+> +       },
+> +       [IMX8MN_DISPBLK_PD_LCDIF] = {
+> +               .name = "dispblk-lcdif",
+> +               .clk_names = (const char *[]){ "lcdif-axi", "lcdif-apb", "lcdif-pix", },
+> +               .num_clks = 3,
+> +               .gpc_name = "lcdif",
+> +               .rst_mask = BIT(4) | BIT(5),
+> +               .clk_mask = BIT(4) | BIT(5),
+> +       },
+> +       [IMX8MN_DISPBLK_PD_ISI] = {
+> +               .name = "dispblk-isi",
+> +               .clk_names = (const char *[]){ "disp_axi", "disp_apb", "disp_axi_root",
+> +                                               "disp_apb_root"},
+> +               .num_clks = 4,
+> +               .gpc_name = "isi",
+> +               .rst_mask = BIT(6) | BIT(7),
+> +               .clk_mask = BIT(6) | BIT(7),
+> +       },
+> +};
+> +
+> +static const struct imx8m_blk_ctrl_data imx8mn_disp_blk_ctl_dev_data = {
+> +       .max_reg = 0x84,
+> +       .power_notifier_fn = imx8mn_disp_power_notifier,
+> +       .domains = imx8mn_disp_blk_ctl_domain_data,
+> +       .num_domains = ARRAY_SIZE(imx8mn_disp_blk_ctl_domain_data),
+> +};
+> +
+>  static const struct of_device_id imx8m_blk_ctrl_of_match[] = {
+>         {
+>                 .compatible = "fsl,imx8mm-vpu-blk-ctrl",
+> @@ -524,7 +596,10 @@ static const struct of_device_id imx8m_blk_ctrl_of_match[] = {
+>         }, {
+>                 .compatible = "fsl,imx8mm-disp-blk-ctrl",
+>                 .data = &imx8mm_disp_blk_ctl_dev_data
+> -       } ,{
+> +       }, {
+> +               .compatible = "fsl,imx8mn-disp-blk-ctrl",
+> +               .data = &imx8mn_disp_blk_ctl_dev_data
+> +       }, {
+>                 /* Sentinel */
+>         }
+>  };
+> --
+> 2.32.0
+>

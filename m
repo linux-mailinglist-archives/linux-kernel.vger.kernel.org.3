@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D3A473FBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6560A473FC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbhLNJpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 04:45:12 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:48282 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbhLNJpL (ORCPT
+        id S232637AbhLNJp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 04:45:28 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:58320 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232635AbhLNJp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 04:45:11 -0500
+        Tue, 14 Dec 2021 04:45:26 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 71F3321125;
-        Tue, 14 Dec 2021 09:45:10 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 621C21F3C3;
+        Tue, 14 Dec 2021 09:45:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639475110; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1639475125; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=2sFGZ3vIx6scE9TlKuzUSQO07+U3oH6DGvHjvJNGCvQ=;
-        b=jHhFO3MSUIX2rHroDLvTVvJd3P/K+DQFiEnTSBZZlCg0y2RbcnpPV/EqHrHXGjmuHAELrC
-        dIpsPxyMy4SmgCVCiQeSOOS5BK8xHLOv29EtpPd0cB22yc8eFOIsYUjUcEJQyyN4IC8eUy
-        C4TZFYb/eCHWGyp7JL8nmbnTlrsQFFQ=
+        bh=TI5kviD+dqSerEnO5KOevJeO6Mn0wCLNgSEv+VcMT2A=;
+        b=A+1J34B1C20R9UATSnHlvenLIxPWPqPMeQQ3lN40KtS8TF0ggblC5ZV1MxHkpfUOL4D31x
+        AqYJDTOd2E+sTdXiIG8oYlZl8klWY5ki6RFRZKGrKZOsqifZLiz8ZiZUXs2f5UCQqV3I/4
+        AyM7OYQqm6tyiP00oquFp6e5I0tQEOE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639475110;
+        s=susede2_ed25519; t=1639475125;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=2sFGZ3vIx6scE9TlKuzUSQO07+U3oH6DGvHjvJNGCvQ=;
-        b=6g8MgNdD4+bNc1epbQ/ILAymwHFne7oCYO/NBpN64Uvvfv1Sq3pN86Yz1fCEzFaXBJFINd
-        W9Y7AHKvG+2dF4Dw==
+        bh=TI5kviD+dqSerEnO5KOevJeO6Mn0wCLNgSEv+VcMT2A=;
+        b=2Utf2qKhjezkgzxIFdZNpz4dG0fods7SqRr42863850+Nfvi/7MCkAVMmpD6X+KvPdXXgt
+        WcWZwNslQNEPRjDQ==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 8D4F5A3B81;
-        Tue, 14 Dec 2021 09:45:09 +0000 (UTC)
-Date:   Tue, 14 Dec 2021 10:45:09 +0100
-Message-ID: <s5hee6fbjve.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id 52A1CA3B8C;
+        Tue, 14 Dec 2021 09:45:25 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 10:45:25 +0100
+Message-ID: <s5hczlzbjuy.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Bradley Scott <Bradley.Scott@zebra.com>
+To:     Bradley Scott <bscott@teksavvy.com>
 Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Jeremy Szu <jeremy.szu@canonical.com>,
@@ -48,9 +48,9 @@ Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Sami Loone <sami@loone.fi>, Elia Devito <eliadevito@gmail.com>,
         alsa-devel@alsa-project.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ALSA: hda/realtek: Amp init fixup for HP ZBook 15 G6
-In-Reply-To: <20211213154938.503201-1-Bradley.Scott@zebra.com>
-References: <20211213154938.503201-1-Bradley.Scott@zebra.com>
+Subject: Re: [PATCH] ALSA: hda/realtek: Add new alc285-hp-amp-init model
+In-Reply-To: <20211213162246.506838-1-bscott@teksavvy.com>
+References: <20211213162246.506838-1-bscott@teksavvy.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -60,13 +60,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 16:49:39 +0100,
+On Mon, 13 Dec 2021 17:22:47 +0100,
 Bradley Scott wrote:
 > 
-> HP ZBook 15 G6 (SSID 103c:860f) needs the same speaker amplifier
-> initialization as used on several other HP laptops using ALC285.
+> Adds a new "alc285-hp-amp-init" model that can be used to apply the ALC285
+> HP speaker amplifier initialization fixup to devices that are not already
+> known by passing "hda_model=alc285-hp-amp-init" to the
+> snd-sof-intel-hda-common module or "model=alc285-hp-amp-init" to the
+> snd-hda-intel module, depending on which is being used.
 > 
-> Signed-off-by: Bradley Scott <Bradley.Scott@zebra.com>
+> Signed-off-by: Bradley Scott <bscott@teksavvy.com>
 
 Thanks, applied now.
 

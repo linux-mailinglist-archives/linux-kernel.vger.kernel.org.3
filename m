@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E3F474034
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87177474038
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232919AbhLNKPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:15:44 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:42008 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232910AbhLNKPo (ORCPT
+        id S232931AbhLNKQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232921AbhLNKQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:15:44 -0500
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BE90PHA021201;
-        Tue, 14 Dec 2021 11:15:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=nlbvaCpQQU3d8rdYZzHfsFBdcktl3fiaFrosAYYj4j8=;
- b=fEv2GzUAik9hz064aPegO+BHjhT79pdXStLPJSl73C6z0+mLA5o76esXkhCq4jDSDdCk
- RdXa6qG4tC+YHcB1w+gJYGxVIwXh5iCNnSpX3+GLnwN7LcBbWbR8lAX1Zvf7Kuwz8H+7
- bgDzYBypk1HN5aa5JJmQTfyYL++Y/UGQc9bQfBtq3xcTckh+LSCuAMNt3Nz4ACDOBI9/
- gRbycwczmUfrhe1/n36gBhQPwnHKwnO+wU6xtHdKY4Kk+E7mj06+26hN1YY3kz9qyWX0
- BrZsrRvP5N+87plQxCu9Wkc4Qfk3d6FouUCQ/xd7gpK8HQi44hgdfPoZ+BiEqIiLVsUS 6w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cxr8r8gy0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 11:15:30 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4777910002A;
-        Tue, 14 Dec 2021 11:15:28 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2B41222C8A9;
-        Tue, 14 Dec 2021 11:15:28 +0100 (CET)
-Received: from lmecxl0993.lme.st.com (10.75.127.48) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 14 Dec
- 2021 11:15:27 +0100
-Subject: Re: [PATCH] drm/stm: remove conflicting framebuffers
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211206134735.13537-1-yannick.fertre@foss.st.com>
- <10c5672d-a228-ed9e-2f32-1ce9ae86dbcc@suse.de>
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-Message-ID: <58cc264b-7b46-7869-1c38-f6d79a4daafe@foss.st.com>
-Date:   Tue, 14 Dec 2021 11:15:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 14 Dec 2021 05:16:19 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F1CC061574;
+        Tue, 14 Dec 2021 02:16:18 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id r25so60734072edq.7;
+        Tue, 14 Dec 2021 02:16:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=445u48yHpxCOH4+r5sFhiE6WEBZ/71ccqyhWQWuVdis=;
+        b=RCDvl+K1uMHvEyXw+Z4wTHm9twKhDwMHxW+HSfvYuOmwswM2jojklyv5vgszCrnLXH
+         MIQOBQV+d6FrsOKoSWe/SmLZ8V/M9nSoDdQAetx8v5Zk+CalB93A3qE8b5Bi8Y6LyvkN
+         d32jRQE9OteTLLV3bXqwN/GCOWYiDGzIkwxr+AZAAtDu5r5otmm5aLksC9pBSYI7Ia7g
+         I+fq37W7x9phzWhQV6cDtrY85t0/UdUeh8nsjsmuA7z32pDK3lCWVqKymtT27So5azKS
+         VGnN23EBVDagEZfshh5NmbsaArPgShgWPWfu2dy41mpXPAh6kbuerOlp/ol3RHckd3B3
+         mE5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=445u48yHpxCOH4+r5sFhiE6WEBZ/71ccqyhWQWuVdis=;
+        b=fCsSnK157sEBP/4YwUXuuMprWaXfpX3ZHVOFQjzxwjSUrMuBUJZooznlLxSS1+Ez+u
+         EHw+6O6yFGH3MW2snCcrIUlPHgOFOFpw5ETq7pPhTZioV7xKhvYqdnchwwI90mhLOuvU
+         EZUGnU+OI8XW33VDY48Gib5ztujkdVWMSJ9n4NoFHPlCQ3Q7c2XlpAo2v0hH1UdmLxVL
+         i3a/Lxjb5cTKbmj3ACt0joh8og9q7u9cOm88z9EftzjozygF5/NEnrdrmWoK/WsWzf4M
+         56/v0+VdjkW1F899OMz82Bug7Wlr2xiNSdJsg9mOWX29d3BdKkucmIS4FfNMNAaIFAeZ
+         iT3A==
+X-Gm-Message-State: AOAM530NF3FDwPdlPX3ub4iLuAR0/HwapKY4jzSu4EiogrsvibaXS+/F
+        jPRO5XxqjdJaDi4+561/21I=
+X-Google-Smtp-Source: ABdhPJwCA7dHJHDuJN80UV6qEdk9L1LwvE6ogZ1hYfSQHxhqq71VuvnIgHEvMp8lcXOQ0pp1UbVlwg==
+X-Received: by 2002:aa7:d445:: with SMTP id q5mr6459659edr.330.1639476976729;
+        Tue, 14 Dec 2021 02:16:16 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id cy26sm7583824edb.7.2021.12.14.02.16.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Dec 2021 02:16:16 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <d513db49-bb94-becf-be7e-f26dceb3e1bf@redhat.com>
+Date:   Tue, 14 Dec 2021 11:16:12 +0100
 MIME-Version: 1.0
-In-Reply-To: <10c5672d-a228-ed9e-2f32-1ce9ae86dbcc@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 09/19] kvm: x86: Prepare reallocation check
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-14_05,2021-12-14_01,2021-12-02_01
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Cc:     "Christopherson,, Sean" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-10-yang.zhong@intel.com>
+ <fc113a81-b5b8-aaae-5799-c6d49b77b2b4@redhat.com>
+ <BN9PR11MB5276416CED5892C20F56EB888C759@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <BN9PR11MB5276416CED5892C20F56EB888C759@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/14/21 08:06, Tian, Kevin wrote:
+>> - if (dynamic_enabled & ~guest_fpu->user_perm) != 0, then this is a
+>> userspace error and you can #GP the guest without any issue.  Userspace
+>> is buggy
+>
+> Is it a general guideline that an error caused by emulation itself (e.g.
+> due to no memory) can be reflected into the guest as #GP, even
+> when from guest p.o.v there is nothing wrong with its setting?
 
+No memory is a tricky one, if possible it should propagate -ENOMEM up to 
+KVM_RUN or KVM_SET_MSR.  But it's basically an impossible case anyway, 
+because even with 8K TILEDATA we're within the limit of 
+PAGE_ALLOC_COSTLY_ORDER.
 
-On 12/6/21 3:23 PM, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 06.12.21 um 14:47 schrieb Yannick Fertre:
->> In case of using simplefb or another conflicting framebuffer,
->> call drm_aperture_remove_framebuffers() to remove memory allocated.
->>
->> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
-> 
-> The patch should have contained a note that this is version 2 of the 
-> change with a short changelog. Anyway
-> 
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> 
-> Best regards
-> Thomas
-> 
->> ---
->>   drivers/gpu/drm/stm/drv.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
->> index 222869b232ae..9f441aadf2d5 100644
->> --- a/drivers/gpu/drm/stm/drv.c
->> +++ b/drivers/gpu/drm/stm/drv.c
->> @@ -14,6 +14,7 @@
->>   #include <linux/of_platform.h>
->>   #include <linux/pm_runtime.h>
->> +#include <drm/drm_aperture.h>
->>   #include <drm/drm_atomic.h>
->>   #include <drm/drm_atomic_helper.h>
->>   #include <drm/drm_drv.h>
->> @@ -183,6 +184,10 @@ static int stm_drm_platform_probe(struct 
->> platform_device *pdev)
->>       DRM_DEBUG("%s\n", __func__);
->> +    ret = drm_aperture_remove_framebuffers(false, &drv_driver);
->> +    if (ret)
->> +        return ret;
->> +
+So, since it's not easy to do it right now, we can look at it later.
 
-Hi Yannick,
-and many thanks for your patch.
-Acked-by: Philippe Cornu <philippe.cornu@foss.st.com>
-Philippe :-)
-
-
->>       dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
->>       ddev = drm_dev_alloc(&drv_driver, dev);
->>
-> 
+Paolo

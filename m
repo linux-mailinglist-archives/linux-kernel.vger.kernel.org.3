@@ -2,134 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B48474699
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E802D4746A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234740AbhLNPiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:38:25 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:36524 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234470AbhLNPiU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:38:20 -0500
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BEE7ZFO021142;
-        Tue, 14 Dec 2021 16:38:09 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=55TRlyPa1csvltjFSGJc7MC8zSTcqi9KhSJ8TqVGvPo=;
- b=n4+2qguQFrO2LYPE3fxelbRizl65JB5BEn63gFRrVQmTMRUTJDZ66gtp4iEFhwdVz7X7
- fbajk/6aI96BMvzNELKmpPIJsB/of0mFT88fv5jJus/KUlRFl9a3ydTEsQlI9XAdz4Gb
- mHuUm+7sk3df/dZ1fARuuxutN8fI0F7nusZKlc2kyd/LoatRFmwBrtHyxBFyVQC3iVH7
- j4aI1G4Na2zhfKFP+w1JAe8IDFA/zVS3ShfCa8w131v2mTZIdwI0IZJlnxrwxDgygerf
- oJI8FqZW8myIDqstxY4mGQ2bFaXnMAIZUmoWVzjGcURYbUX7P05yZWigPjE0rAd96fx5 3A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cxr8rabpj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 16:38:09 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8B8A910002A;
-        Tue, 14 Dec 2021 16:38:08 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7E662231DEF;
-        Tue, 14 Dec 2021 16:38:08 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 14 Dec
- 2021 16:38:07 +0100
-Subject: Re: [PATCH] tty: rpmsg: Fix race condition releasing tty port
-To:     Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20211213195346.12894-1-arnaud.pouliquen@foss.st.com>
- <8bbd1a77-5f88-bb97-db88-6842df2e3e3c@kernel.org>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Message-ID: <2008dd33-5d23-961c-ca61-53ff3e34479a@foss.st.com>
-Date:   Tue, 14 Dec 2021 16:38:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S234811AbhLNPjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:39:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:59110 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234762AbhLNPi7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 10:38:59 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 40EBBD6E;
+        Tue, 14 Dec 2021 07:38:59 -0800 (PST)
+Received: from [10.57.34.58] (unknown [10.57.34.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 549423F774;
+        Tue, 14 Dec 2021 07:38:54 -0800 (PST)
+Message-ID: <a1c8c438-72e6-0938-1b05-09694983164d@arm.com>
+Date:   Tue, 14 Dec 2021 15:38:50 +0000
 MIME-Version: 1.0
-In-Reply-To: <8bbd1a77-5f88-bb97-db88-6842df2e3e3c@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2 0/8] Host1x context isolation support
+Content-Language: en-GB
+To:     Mikko Perttunen <cyndis@kapsi.fi>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
+        will@kernel.org, robh+dt@kernel.org
+Cc:     linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20210916143302.2024933-1-mperttunen@nvidia.com>
+ <10de82cf-27a5-8890-93a5-0e58c74e5bcc@kapsi.fi>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <10de82cf-27a5-8890-93a5-0e58c74e5bcc@kapsi.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-14_07,2021-12-14_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jiri,
-
-On 12/14/21 7:43 AM, Jiri Slaby wrote:
-> Hi,
-> 
-> On 13. 12. 21, 20:53, Arnaud Pouliquen wrote:
->> In current implementation the tty_port struct is part of the
->> rpmsg_tty_port structure.The issue is that the rpmsg_tty_port structure is
->> freed on rpmsg_tty_remove but also referenced in the tty_struct.
->> Its release is not predictable due to workqueues.
+On 2021-11-08 10:36, Mikko Perttunen wrote:
+> On 9/16/21 5:32 PM, Mikko Perttunen wrote:
+>> Hi all,
 >>
->> For instance following ftrace shows that rpmsg_tty_close is called after
->> rpmsg_tty_release_cport:
+>> ***
+>> New in v2:
 >>
->>       nr_test.sh-389     [000] .....   212.093752: rpmsg_tty_remove <-rpmsg_dev_
->> remove
->>               cat-1191    [001] .....   212.095697: tty_release <-__fput
->>        nr_test.sh-389     [000] .....   212.099166: rpmsg_tty_release_cport <-rpm
->> sg_tty_remove
->>               cat-1191    [001] .....   212.115352: rpmsg_tty_close <-tty_release
->>               cat-1191    [001] .....   212.115371: release_tty <-tty_release_str
+>> Added support for Tegra194
+>> Use standard iommu-map property instead of custom mechanism
+>> ***
 >>
->> As consequence, the port must be free only when user has released the TTY
->> interface.
+>> this series adds support for Host1x 'context isolation'. Since
+>> when programming engines through Host1x, userspace can program in
+>> any addresses it wants, we need some way to isolate the engines'
+>> memory spaces. Traditionally this has either been done imperfectly
+>> with a single shared IOMMU domain, or by copying and verifying the
+>> programming command stream at submit time (Host1x firewall).
 >>
->> This path (inspired from vcc.c):
->> - moves the management of the port in the install and clean-up tty ops,
->> - allocates the tty_port struct independently of the rpmsg_tty_port structure,
+>> Since Tegra186 there is a privileged (only usable by kernel)
+>> Host1x opcode that allows setting the stream ID sent by the engine
+>> to the SMMU. So, by allocating a number of context banks and stream
+>> IDs for this purpose, and using this opcode at the beginning of
+>> each job, we can implement isolation. Due to the limited number of
+>> context banks only each process gets its own context, and not
+>> each channel.
+>>
+>> This feature also allows sharing engines among multiple VMs when
+>> used with Host1x's hardware virtualization support - up to 8 VMs
+>> can be configured with a subset of allowed stream IDs, enforced
+>> at hardware level.
+>>
+>> To implement this, this series adds a new host1x context bus, which
+>> will contain the 'struct device's corresponding to each context
+>> bank / stream ID, changes to device tree and SMMU code to allow
+>> registering the devices and using the bus, as well as the Host1x
+>> stream ID programming code and support in TegraDRM.
+>>
+>> Device tree bindings are not updated yet pending consensus that the
+>> proposed changes make sense.
+>>
+>> Thanks,
+>> Mikko
+>>
+>> Mikko Perttunen (8):
+>>    gpu: host1x: Add context bus
+>>    gpu: host1x: Add context device management code
+>>    gpu: host1x: Program context stream ID on submission
+>>    iommu/arm-smmu: Attach to host1x context device bus
+>>    arm64: tegra: Add Host1x context stream IDs on Tegra186+
+>>    drm/tegra: falcon: Set DMACTX field on DMA transactions
+>>    drm/tegra: vic: Implement get_streamid_offset
+>>    drm/tegra: Support context isolation
+>>
+>>   arch/arm64/boot/dts/nvidia/tegra186.dtsi  |  12 ++
+>>   arch/arm64/boot/dts/nvidia/tegra194.dtsi  |  12 ++
+>>   drivers/gpu/Makefile                      |   3 +-
+>>   drivers/gpu/drm/tegra/drm.h               |   2 +
+>>   drivers/gpu/drm/tegra/falcon.c            |   8 +
+>>   drivers/gpu/drm/tegra/falcon.h            |   1 +
+>>   drivers/gpu/drm/tegra/submit.c            |  13 ++
+>>   drivers/gpu/drm/tegra/uapi.c              |  34 ++++-
+>>   drivers/gpu/drm/tegra/vic.c               |  38 +++++
+>>   drivers/gpu/host1x/Kconfig                |   5 +
+>>   drivers/gpu/host1x/Makefile               |   2 +
+>>   drivers/gpu/host1x/context.c              | 174 ++++++++++++++++++++++
+>>   drivers/gpu/host1x/context.h              |  27 ++++
+>>   drivers/gpu/host1x/context_bus.c          |  31 ++++
+>>   drivers/gpu/host1x/dev.c                  |  12 +-
+>>   drivers/gpu/host1x/dev.h                  |   2 +
+>>   drivers/gpu/host1x/hw/channel_hw.c        |  52 ++++++-
+>>   drivers/gpu/host1x/hw/host1x06_hardware.h |  10 ++
+>>   drivers/gpu/host1x/hw/host1x07_hardware.h |  10 ++
+>>   drivers/iommu/arm/arm-smmu/arm-smmu.c     |  13 ++
+>>   include/linux/host1x.h                    |  21 +++
+>>   include/linux/host1x_context_bus.h        |  15 ++
+>>   22 files changed, 488 insertions(+), 9 deletions(-)
+>>   create mode 100644 drivers/gpu/host1x/context.c
+>>   create mode 100644 drivers/gpu/host1x/context.h
+>>   create mode 100644 drivers/gpu/host1x/context_bus.c
+>>   create mode 100644 include/linux/host1x_context_bus.h
+>>
 > 
-> This looks rather wrong. Why not to use tty_port refcounting?
+> IOMMU/DT folks, any thoughts about this approach? The patches that are 
+> of interest outside of Host1x/TegraDRM specifics are patches 1, 2, 4, 
+> and 5.
 
-Please could you detail what seems rather wrong for you? Everything or do the
-tty_port port struct independently of the rpmsg_tty_port structure?
+FWIW it looks fairly innocuous to me. I don't understand host1x - 
+neither hardware nor driver abstractions - well enough to meaningfully 
+review it all (e.g. maybe it's deliberate that the bus .dma_configure 
+method isn't used?), but the SMMU patch seems fine given the Kconfig 
+solution to avoid module linkage problems.
 
-Concerning the tty_port refcounting:
-Yes it also an option that I have already tried without success, before
-implementing this patch.
-That said, as you pointed it out, I reimplemented it today in another way, and
-this time it seems that it works without any runtime warning or error.
-I need to perform more test to confirm, then I will propose a V2 based on
-tty_port refcountingt and the .destruct tty_port_operations.
-
-> 
->> - uses tty_vhangup and tty_port_hangup.
-> 
-> OK, but don't store a tty pointer as it looks racy. You should use
-> tty_port_tty_get instead.
-> 
-> Hm, we look we need tty_port_tty_vhangup (aside from tty_port_tty_hangup). There
-> are plenty of drivers doing:
->     tty = tty_port_tty_get(port);
->     if (tty) {
->             tty_vhangup(port->tty);
->             tty_kref_put(tty);
-
-I would like to first fix the issue in rpmsg_tty.c in separate thread.
-But yes this should not take me too much time to propose this helper next.
-
-Thanks,
-Arnaud
-
-> 
-> 
->> Fixes: 7c0408d80579 ("tty: add rpmsg driver")
->> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> 
-> thanks,
+Cheers,
+Robin.

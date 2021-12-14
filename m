@@ -2,129 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E187474E3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB763474E62
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbhLNWzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:55:23 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:38900 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbhLNWzV (ORCPT
+        id S237943AbhLNW7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235030AbhLNW7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 17:55:21 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1639522521; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=j5mv+bwGF9Jb+6wwuoo79SpCjZvRHCfajqRMmmEmvBk=; b=F+N4KFeCO5MU6aP48hciD1o/1lvji11XRKMu7/5MP4sowAZJcgS/Cz3MFPv5kIB6RWYEBNjc
- abXIPKhNGo0CKUanTPkWAUKnLfcDBy3xcSEpXKpz/RLBXnkwtAB+QzgllevNcAL3o3VXlMRL
- MuKnOQHUqBHsPTKdkbGwJ89Rn/E=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
- 61b920d886d0e4d888a7a018 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 14 Dec 2021 22:55:20
- GMT
-Sender: hemantk=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 202E5C4360C; Tue, 14 Dec 2021 22:55:20 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.110.114.105] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: hemantk)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1BF48C4338F;
-        Tue, 14 Dec 2021 22:55:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 1BF48C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [RFC] bus: mhi: core: Load firmware asynchronous
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        linux-kernel@vger.kernel.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org,
-        Mario Limonciello <Mario.Limonciello@amd.com>,
-        Richard Hughes <hughsient@gmail.com>
-References: <20211210161645.10925-1-linux@weissschuh.net>
- <403e93df-5b3c-acb3-2b65-df9a7834a9c5@codeaurora.org>
- <02e32c9d-79d2-4237-bb6b-8bd27029e7a9@t-8ch.de>
-From:   Hemant Kumar <hemantk@codeaurora.org>
-Message-ID: <6c805ecd-4542-5533-7852-ecd9cea27955@codeaurora.org>
-Date:   Tue, 14 Dec 2021 14:55:16 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 14 Dec 2021 17:59:33 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D12EC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:59:33 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id t5so68095804edd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:59:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=khVptH+M0tfn36lg9TBFDzwD3VeLdbUmAWzNh6/qLO0=;
+        b=rJsbXgWLM3XVCagULFVF8jOXjqBhzFe4TGokRhLqIumiOWwYYAWMmkeXiQHhYh/Ihf
+         51DpW6Wy6mANL4BR0LqusesI0F4cnrPBmfX05RyU5zKCDTmvKz6+dXRrKgr7UXT+EAzl
+         yyuMhzhNCFa7hH5IPayUhM6IFvXZCyKqkUgv5yGFBp4S4NOOVGrj0w3JakoeSbKSqpqP
+         tVfDPb7ltetkGxdOSPgrdFnVh/aUB71mp0fhrp+OZbdMRIDlfVHecvoHt28yMo/vzH6I
+         HTHwDxd8BFGTI7OnhucdsHJ/+2D8S5rtq+McqwUgqd1aaI3peOFv0MPOIPI5qAaoLs7t
+         nyzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=khVptH+M0tfn36lg9TBFDzwD3VeLdbUmAWzNh6/qLO0=;
+        b=Q3Wbcxf26oktszIQfrWdhP9VHZsEpkqG9IfZrp3DqRagOZI99jEcTCfcopU9FHkf/g
+         jdTeV/QBAaarxzDllLstegzBO81ko9ep7ySgrOLUy/SnIBrtnC0RDPIkS5oi+TORLZCg
+         Hc9abypvse15q7wvrr/K09xQdteczycp9KiB7Oih+STX9PfnXO+PBm/9tEOy62x92TDZ
+         XDnv6Q1faTBVLU0Ajr2B2DyC3mbsK/1kaB+Y2Rvr/a2nTUvTLv9799JhDst7zn8x9qQ8
+         OVWE6vAdDNdBKjvfY/Y3LvEtn36RUUEDJTNDWSKADdpuKPkoJvy+qQ/aMyBp3rfeSK+p
+         SrFw==
+X-Gm-Message-State: AOAM533ATQeukL3BTAdbwffrC0DmN//9wsm5UEdaZ8BpAP2U9SY6CrP/
+        5Scl71oWI1TzRUkrFzDKkQ6qBBlU2X+LQmLkk3+b
+X-Google-Smtp-Source: ABdhPJwDaxZJiRGG8M2ITTDZmRyH/uAtqgn33PJ7PGjh9HnVGALZ16WyupWf4FRPUBGuiIBz54Ny1EOXpoRuxkdI4bk=
+X-Received: by 2002:a05:6402:520e:: with SMTP id s14mr11437825edd.213.1639522772037;
+ Tue, 14 Dec 2021 14:59:32 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <02e32c9d-79d2-4237-bb6b-8bd27029e7a9@t-8ch.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <tencent_D0F3F07E25927F681055E6A35C038E168A07@qq.com>
+In-Reply-To: <tencent_D0F3F07E25927F681055E6A35C038E168A07@qq.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 14 Dec 2021 17:59:21 -0500
+Message-ID: <CAHC9VhRa3H7_CxP_pTsXPgmkTt908k6epMUaK84-FWyvikofpA@mail.gmail.com>
+Subject: Re: [PATCH] selinux: check the return value of audit_log_start()
+To:     xkernel.wang@foxmail.com
+Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 14, 2021 at 1:20 AM <xkernel.wang@foxmail.com> wrote:
+>
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+>
+> audit_log_start() returns audit_buffer pointer on success or NULL on
+> error. It is better to check the return value of it so to prevent
+> potential memory access error.
 
+The audit_log_start() function can return NULL in normal use, it does
+not always indicate an error; returning NULL simply indicates that no
+auditing should be done for this particular instance, e.g. an audit
+filter is excluding the record.  Further, there is no potential memory
+access error as the audit_log_*() functions are designed to accept a
+NULL audit_buffer and return without error.
 
-On 12/13/2021 10:32 PM, Thomas Weißschuh wrote:
-> On 2021-12-13 16:07-0800, Hemant Kumar wrote:
->> On 12/10/2021 8:16 AM, Thomas Weißschuh wrote:
->>> This gives userspace the possibility to provide the firehose bootloader
->>> via the sysfs-firmware-API instead of having to modify the global
->>> firmware loadpath.
->>>
->>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->>>
->>> ---
->>>
->>> Please note that this is not tested yet, as I don't have access to a matching
->>> firmware file.
->>> This submission is to gather general feedback from the maintainers and then
->>> Richard will do the actual testing, while I'll do the development.
->>>
->>> This patch is should not have any impact beyond moving from request_firmware()
->>> to request_firmware_nowait() and the involved code reshuffle.
->> what are we achieving by moving to async ver of the firmware load ? MHI boot
->> flow can not do anything until BHI load is over. Is the intention eventually
->> to enable firmware fallback mechanism  and manually load the firmware ?
-> 
-> The goal is to provide the firehose bootloader (qcom/prog_firehose_sdx24.mbn)
-> via the firmware fallback mechanism when upgrading the firmware on the device
-> via the firehose protocol.
-> 
-> This bootloader firmware is not part of linux-firmware but provided as part of
-> each firmware update package, so it is not installed statically on the system.
-> 
-> I will extend the commit message with this information.
+There have been some cases where we check for a NULL audit_buffer and
+skip the following audit_log_*() calls, but that is typically in
+performance critical code where the additional function calls would
+have an impact (small as they might be).  In the case below, this is
+not a critical code path, it is an error path, and here I would rather
+have the code as it currently stands; I believe it is cleaner and
+easier to read this way.
 
-For my understanding i have follow up question. As per the kernel doc
-https://www.kernel.org/doc/html/latest/driver-api/firmware/fallback-mechanisms.html
+Regardless, thank you for taking the time to submit a patch.
 
-If CONFIG_FW_LOADER_USER_HELPER enabled but 
-CONFIG_FW_LOADER_USER_HELPER_FALLBACK is disabled, only the custom 
-fallback mechanism is available and for the request_firmware_nowait() call.
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+> ---
+>  security/selinux/ss/services.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
+> index e5f1b27..759d878 100644
+> --- a/security/selinux/ss/services.c
+> +++ b/security/selinux/ss/services.c
+> @@ -3277,11 +3277,13 @@ int security_sid_mls_copy(struct selinux_state *state,
+>                                 ab = audit_log_start(audit_context(),
+>                                                      GFP_ATOMIC,
+>                                                      AUDIT_SELINUX_ERR);
+> -                               audit_log_format(ab,
+> -                                                "op=security_sid_mls_copy invalid_context=");
+> -                               /* don't record NUL with untrusted strings */
+> -                               audit_log_n_untrustedstring(ab, s, len - 1);
+> -                               audit_log_end(ab);
+> +                               if (ab) {
+> +                                       audit_log_format(ab,
+> +                                                       "op=security_sid_mls_copy invalid_context=");
+> +                                       /* don't record NUL with untrusted strings */
+> +                                       audit_log_n_untrustedstring(ab, s, len - 1);
+> +                                       audit_log_end(ab);
+> +                               }
+>                                 kfree(s);
+>                         }
+>                         goto out_unlock;
 
-Custom fall back mechanism says
-Users of the request_firmware_nowait() call have yet another option 
-available at their disposal: rely on the sysfs fallback mechanism but 
-request that no kobject uevents be issued to userspace. Original logic 
-behind this was that utilities other than udev might be required to 
-lookup firmware in non-traditional paths
-
-Your patch is passing uevent flag as true which means you are relying on 
-uevent to be issued to userspace. How do you plan to update the firmware 
-path ? Alternatively firmware class provides a module param to specify 
-the firmware path /sys/module/firmware_class/parameters/path.
-> 
-> PS: The current patch is missing 'return' after calls to
-> 'mhi_fw_load_finish()', this will be corrected in v2.
-> 
-
-Thanks,
-Hemant
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
-Forum, a Linux Foundation Collaborative Project
+paul moore
+www.paul-moore.com

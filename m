@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECC547478D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A1647478E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbhLNQV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        id S233650AbhLNQWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:22:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbhLNQV4 (ORCPT
+        with ESMTP id S235669AbhLNQV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:21:56 -0500
+        Tue, 14 Dec 2021 11:21:57 -0500
 Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34711C06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:21:55 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id a64-20020a1c7f43000000b003335e5dc26bso11479687wmd.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:21:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF40C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:21:57 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id r129-20020a1c4487000000b00333629ed22dso13394489wma.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:21:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=bn0iluGQKzCqja/ee2bGyIYJAYCvHbjpJXxGFhRcops=;
-        b=Y2n8SR8JmlMveLo+koPjfKPSJSGX61o4FKxROGolBPysk5IwDsAh+aNlzhT2ZVOksX
-         XmfoPvvZhW+hF85/Mv8lzV0cPXk1f4jjFHOpX4DshxpeRmMUdkcBUY1OVojdPY5pdEuk
-         Ul1++SKPtqJUb3fAC2Aczc9vWkYioRAW22aTO39LgE2slzNFGV/uzfelgo1PqmlRBlh3
-         OR/zy0P2XseTkjhLvooC14X1LxvZInWS9cWrhbu5dMZIAMBhJiGSUloJ81NxdLIwljGO
-         aqX3akr5Or3myfYR47LmM9tc9zlChu4AZ08YXI2v/kVPqAncQ2dkElDljtNMkRlUoJsR
-         Tf+A==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=FXfeBchMfCdhuWi7P/c/cIQefpZCnVfOT656QFTkr+0=;
+        b=rq4gED9OFGTopBP/h6U7GjMpe16CAVeGeHHMWF1VLMCL/cqIp/qiPpx4glUgvShgk1
+         EkSX9gp/VQNQU3SylYvaqYyMvibQHhBg5sdPlaVPzR9GUxJfz4sDC+eO4p8B0yV/EnG5
+         Q+LNLpcH58pH4zk/c181fED98u9j5txn3fFQrK5ARbC8kqPipeyptURB3RM/buoMHqua
+         FrMvA+lEKucUHpWMNVWnqCh04HOhsUbN3S6yMJKEOl7kBKEyHO5xY3Q8cJtNiUGbu4X9
+         A6IQPDzxqIHzfa4rqaT8/nrZwD0lbINSsPAPp21LEr6Mleh7u7KaI/iVQ1abzcblJfJ1
+         2CTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=bn0iluGQKzCqja/ee2bGyIYJAYCvHbjpJXxGFhRcops=;
-        b=NoAs/akRpR8e9gGvp+CEc5H6HiLR+MAK4mDm59ERWtRj2pk/vlerBSc/H6Rupfiz86
-         QC57LNHoYcqNy8+ru2em5RY974QHliKTWFYx029GUcDT5BEfgzKmiUMcyykzddzCx233
-         uhlImRV5sAnlbF1SaEqtV4aMcZcoDFQ+fWUoYwBJlSb3sLLlkGZbUqBU4eqvvnRtKM0d
-         Pq11SvTjS6eBHYMIS9zI3hMiuYhufuXRo7CEWKSn38funfSwXHqthSBRBvt/ZLyK5rrj
-         ygkkPJwEt5PQRvqKusAQ1Yuz1Z99s7FeiXC+i0ECPPXIrUKZDHGxGMoMvfbbxD7lmf+b
-         dOfA==
-X-Gm-Message-State: AOAM532jS42SgK+Lku/ayGde9rt6xBeyS3FIQE8VxSANbgtzXhR2kMmx
-        n+FQlgad5R9QXVzlJQQtUX+Fgs6esJc=
-X-Google-Smtp-Source: ABdhPJzypdYTAcIE3JgTMJpzSN0Jl0LL/Fp598P/UZlSmQNIgXoesJ949oOdli/fhaL7Il2JsU/I8NTsxJ8=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=FXfeBchMfCdhuWi7P/c/cIQefpZCnVfOT656QFTkr+0=;
+        b=npMfCc52uYap5+uXXQ/MT1rfhj1ABq6bUWHyO40Ovf9h2G6kPMAH2RtmYUi/yNEmgD
+         VFLs9gdEOLoBfPPlnslyIh5a5nWEYPPB/AuQTfLU/SQubpkUhfNBFOBkTJKXqyIUWXDN
+         RaHxVOJxZ+cdnmzzQRrY8F+xSDAHH7OpxkmCtjWN+QxJf0qBLC5ERlVLd4tIxmYIbIVm
+         gjHfJ8RLGaKTjNJ2Bn+6x3kCtLvcQ2KoJOglzDjJTr/7buudQeNvxpPIOLhOGeimiL4P
+         eqwbGm8ATqJY+XxCh6+jJ041VDMDpvMBNYgJvgHHb8anmGm70c2+Uzv5NPZl7zbBGTT7
+         esZw==
+X-Gm-Message-State: AOAM531TCYRX19UuOV6TJFrW5BSteTEUansXyqsfToBweBJvU/uoao3L
+        FZVVxj8brt1pZkKAFzIKtTItnIpVrhA=
+X-Google-Smtp-Source: ABdhPJy4QNvRmDfM0eG011hD4RxNjSwaKd4qO7sKL/WYj9gWuHMNHmlS9FUP/lJt7VznT2PlfxW/ubfArUA=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:a05:600c:1d1b:: with SMTP id
- l27mr5818231wms.1.1639498912693; Tue, 14 Dec 2021 08:21:52 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:07 +0100
-Message-Id: <20211214162050.660953-1-glider@google.com>
+ (user=glider job=sendgmr) by 2002:a1c:4c04:: with SMTP id z4mr8271378wmf.11.1639498915988;
+ Tue, 14 Dec 2021 08:21:55 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:08 +0100
+In-Reply-To: <20211214162050.660953-1-glider@google.com>
+Message-Id: <20211214162050.660953-2-glider@google.com>
 Mime-Version: 1.0
+References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 00/43] Add KernelMemorySanitizer infrastructure
+Subject: [PATCH 01/43] arch/x86: add missing include to sparsemem.h
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -84,262 +88,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KernelMemorySanitizer (KMSAN) is a detector of errors related to uses of
-uninitialized memory. It relies on compile-time Clang instrumentation
-(similar to MSan in the userspace [1]) and tracks the state of every bit
-of kernel memory, being able to report an error if uninitialized value is
-used in a condition, dereferenced, or escapes to userspace, USB or DMA.
+From: Dmitry Vyukov <dvyukov@google.com>
 
-KMSAN has reported more than 300 bugs in the past few years (recently
-fixed bugs: [2]), most of them with the help of syzkaller. Such bugs
-keep getting introduced into the kernel despite new compiler warnings and
-other analyses (the 5.16 cycle already resulted in several KMSAN-reported
-bugs, e.g. [3]). Mitigations like total stack and heap initialization are
-unfortunately very far from being deployable.
+Somehow all existing inclusions of sparsemem.h are preceded by inclusion
+of <linux/types.h>, but KMSAN contains code that transitively includes
+sparsemem.h without that header, resulting in a compilation error:
 
-The proposed patchset contains KMSAN runtime implementation together with
-small changes to other subsystems needed to make KMSAN work.
+  sparsemem.h:34:32: error: unknown type name 'phys_addr_t'
+  extern int phys_to_target_node(phys_addr_t start);
+                                 ^
+  sparsemem.h:36:39: error: unknown type name 'u64'
+  extern int memory_add_physaddr_to_nid(u64 start);
+                                        ^
 
-The latter changes fall into several categories:
+Because sparsemem.h does actually use phys_addr_t and u64, include
+types.h explicitly.
 
-1. Changes and refactorings of existing code required to add KMSAN:
-- [1/43] arch/x86: add missing include to sparsemem.h
-- [2/43] stackdepot: reserve 5 extra bits in depot_stack_handle_t
-- [3/43] kasan: common: adapt to the new prototype of __stack_depot_save()
-- [4/43] instrumented.h: allow instrumenting both sides of copy_from_user()
-- [5/43] asm: x86: instrument usercopy in get_user() and __put_user_size()
-- [6/43] asm-generic: instrument usercopy in cacheflush.h
-- [7/43] compiler_attributes.h: add __disable_sanitizer_instrumentation
-- [11/43] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-- [12/43] kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
+Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
+---
+Link: https://linux-review.googlesource.com/id/Ifae221ce85d870d8f8d17173bd44d5cf9be2950f
+---
+ arch/x86/include/asm/sparsemem.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-2. KMSAN-related declarations in generic code, KMSAN runtime library,
-   docs and configs:
-- [8/43] kmsan: add ReST documentation
-- [9/43] kmsan: introduce __no_sanitize_memory and __no_kmsan_checks
-- [10/43] kmsan: pgtable: reduce vmalloc space
-- [13/43] kmsan: add KMSAN runtime core
-- [14/43] MAINTAINERS: add entry for KMSAN
-- [30/43] kmsan: add tests for KMSAN
-- [35/43] x86: kmsan: use __msan_ string functions where possible.
-- [42/43] objtool: kmsan: list KMSAN API functions as uaccess-safe
-- [43/43] x86: kmsan: enable KMSAN builds for x86
-
-3. Adding hooks from different subsystems to notify KMSAN about memory
-   state changes:
-- [15/43] kmsan: mm: maintain KMSAN metadata for page operations
-- [16/43] kmsan: mm: call KMSAN hooks from SLUB code
-- [17/43] kmsan: handle task creation and exiting
-- [19/43] kmsan: init: call KMSAN initialization routines
-- [20/43] instrumented.h: add KMSAN support
-- [26/43] kmsan: virtio: check/unpoison scatterlist in vring_map_one_sg()
-- [27/43] x86: kmsan: add iomem support
-- [28/43] kmsan: dma: unpoison DMA mappings
-- [29/43] kmsan: handle memory sent to/from USB
-- [36/43] x86: kmsan: sync metadata pages on page fault
-
-4. Changes that prevent false reports by explicitly initializing memory,
-   disabling optimized code that may trick KMSAN, selectively skipping
-   instrumentation:
-- [18/43] kmsan: unpoison @tlb in arch_tlb_gather_mmu()
-- [22/43] kmsan: initialize the output of READ_ONCE_NOCHECK()
-- [23/43] kmsan: make READ_ONCE_TASK_STACK() return initialized values
-- [24/43] kmsan: disable KMSAN instrumentation for certain kernel parts
-- [25/43] kmsan: skip shadow checks in files doing context switches
-- [31/43] kmsan: disable strscpy() optimization under KMSAN
-- [32/43] crypto: kmsan: disable accelerated configs under KMSAN
-- [33/43] kmsan: disable physical page merging in biovec
-- [34/43] kmsan: block: skip bio block merging logic for KMSAN
-- [37/43] x86: kasan: kmsan: support CONFIG_GENERIC_CSUM on x86, enable it for KASAN/KMSAN
-- [38/43] x86: fs: kmsan: disable CONFIG_DCACHE_WORD_ACCESS
-- [40/43] kmsan: kcov: unpoison area->list in kcov_remote_area_put()
-- [41/43] security: kmsan: fix interoperability with auto-initialization
-
-5. Noinstr handling:
-- [21/43] kmsan: mark noinstr as __no_sanitize_memory
-- [39/43] x86: kmsan: handle register passing from uninstrumented code
-
-This patchset allows one to boot and run a defconfig+KMSAN kernel on a
-QEMU without known false positives. It however doesn't guarantee there
-are no false positives in drivers of certain devices or less tested
-subsystems, although KMSAN is actively tested on syzbot with a large
-config.
-
-The patchset was generated relative to Linux v5.16-rc5. The most
-up-to-date KMSAN tree currently resides at
-https://github.com/google/kmsan/.
-One may find it handy to review these patches in Gerrit:
-https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/1081
-
-A huge thanks goes to the reviewers of the RFC patch series sent to LKML
-last year
-(https://lore.kernel.org/all/20200325161249.55095-1-glider@google.com/).
-
-[1] https://clang.llvm.org/docs/MemorySanitizer.html
-[2] https://syzkaller.appspot.com/upstream/fixed?manager=ci-upstream-kmsan-gce
-[3] https://lore.kernel.org/all/20211126124746.761278-1-glider@google.com/
-
-
-Alexander Potapenko (42):
-  stackdepot: reserve 5 extra bits in depot_stack_handle_t
-  kasan: common: adapt to the new prototype of __stack_depot_save()
-  instrumented.h: allow instrumenting both sides of copy_from_user()
-  asm: x86: instrument usercopy in get_user() and __put_user_size()
-  asm-generic: instrument usercopy in cacheflush.h
-  compiler_attributes.h: add __disable_sanitizer_instrumentation
-  kmsan: add ReST documentation
-  kmsan: introduce __no_sanitize_memory and __no_kmsan_checks
-  kmsan: pgtable: reduce vmalloc space
-  libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-  kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
-  kmsan: add KMSAN runtime core
-  MAINTAINERS: add entry for KMSAN
-  kmsan: mm: maintain KMSAN metadata for page operations
-  kmsan: mm: call KMSAN hooks from SLUB code
-  kmsan: handle task creation and exiting
-  kmsan: unpoison @tlb in arch_tlb_gather_mmu()
-  kmsan: init: call KMSAN initialization routines
-  instrumented.h: add KMSAN support
-  kmsan: mark noinstr as __no_sanitize_memory
-  kmsan: initialize the output of READ_ONCE_NOCHECK()
-  kmsan: make READ_ONCE_TASK_STACK() return initialized values
-  kmsan: disable KMSAN instrumentation for certain kernel parts
-  kmsan: skip shadow checks in files doing context switches
-  kmsan: virtio: check/unpoison scatterlist in vring_map_one_sg()
-  x86: kmsan: add iomem support
-  kmsan: dma: unpoison DMA mappings
-  kmsan: handle memory sent to/from USB
-  kmsan: add tests for KMSAN
-  kmsan: disable strscpy() optimization under KMSAN
-  crypto: kmsan: disable accelerated configs under KMSAN
-  kmsan: disable physical page merging in biovec
-  kmsan: block: skip bio block merging logic for KMSAN
-  x86: kmsan: use __msan_ string functions where possible.
-  x86: kmsan: sync metadata pages on page fault
-  x86: kasan: kmsan: support CONFIG_GENERIC_CSUM on x86, enable it for
-    KASAN/KMSAN
-  x86: fs: kmsan: disable CONFIG_DCACHE_WORD_ACCESS
-  x86: kmsan: handle register passing from uninstrumented code
-  kmsan: kcov: unpoison area->list in kcov_remote_area_put()
-  security: kmsan: fix interoperability with auto-initialization
-  objtool: kmsan: list KMSAN API functions as uaccess-safe
-  x86: kmsan: enable KMSAN builds for x86
-
-Dmitry Vyukov (1):
-  arch/x86: add missing include to sparsemem.h
-
- Documentation/dev-tools/index.rst       |   1 +
- Documentation/dev-tools/kmsan.rst       | 411 ++++++++++++++++++++++
- MAINTAINERS                             |  12 +
- Makefile                                |   1 +
- arch/x86/Kconfig                        |   9 +-
- arch/x86/boot/Makefile                  |   1 +
- arch/x86/boot/compressed/Makefile       |   1 +
- arch/x86/entry/common.c                 |   2 +
- arch/x86/entry/vdso/Makefile            |   3 +
- arch/x86/include/asm/checksum.h         |  16 +-
- arch/x86/include/asm/idtentry.h         |   5 +
- arch/x86/include/asm/page_64.h          |  13 +
- arch/x86/include/asm/pgtable_64_types.h |  41 ++-
- arch/x86/include/asm/sparsemem.h        |   2 +
- arch/x86/include/asm/string_64.h        |  23 +-
- arch/x86/include/asm/uaccess.h          |   7 +
- arch/x86/include/asm/unwind.h           |  23 +-
- arch/x86/kernel/Makefile                |   6 +
- arch/x86/kernel/cpu/Makefile            |   1 +
- arch/x86/kernel/cpu/mce/core.c          |   1 +
- arch/x86/kernel/kvm.c                   |   1 +
- arch/x86/kernel/nmi.c                   |   1 +
- arch/x86/kernel/sev.c                   |   2 +
- arch/x86/kernel/traps.c                 |   7 +
- arch/x86/lib/Makefile                   |   2 +
- arch/x86/lib/iomem.c                    |   5 +
- arch/x86/mm/Makefile                    |   2 +
- arch/x86/mm/fault.c                     |  23 +-
- arch/x86/mm/init_64.c                   |   2 +-
- arch/x86/mm/ioremap.c                   |   3 +
- arch/x86/realmode/rm/Makefile           |   1 +
- block/bio.c                             |   2 +
- block/blk.h                             |   7 +
- crypto/Kconfig                          |  30 ++
- drivers/firmware/efi/libstub/Makefile   |   1 +
- drivers/net/Kconfig                     |   1 +
- drivers/nvdimm/nd.h                     |   2 +-
- drivers/nvdimm/pfn_devs.c               |   2 +-
- drivers/usb/core/urb.c                  |   2 +
- drivers/virtio/virtio_ring.c            |  10 +-
- include/asm-generic/cacheflush.h        |   9 +-
- include/asm-generic/rwonce.h            |   5 +-
- include/linux/compiler-clang.h          |  23 ++
- include/linux/compiler-gcc.h            |   6 +
- include/linux/compiler_attributes.h     |  18 +
- include/linux/compiler_types.h          |   3 +-
- include/linux/fortify-string.h          |   2 +
- include/linux/highmem.h                 |   3 +
- include/linux/instrumented.h            |  26 +-
- include/linux/kmsan-checks.h            | 123 +++++++
- include/linux/kmsan.h                   | 365 +++++++++++++++++++
- include/linux/mm_types.h                |  12 +
- include/linux/sched.h                   |   5 +
- include/linux/stackdepot.h              |   8 +
- include/linux/uaccess.h                 |  19 +-
- init/main.c                             |   3 +
- kernel/Makefile                         |   1 +
- kernel/dma/mapping.c                    |   9 +-
- kernel/entry/common.c                   |   3 +
- kernel/exit.c                           |   2 +
- kernel/fork.c                           |   2 +
- kernel/kcov.c                           |   7 +
- kernel/locking/Makefile                 |   3 +-
- kernel/sched/Makefile                   |   4 +
- lib/Kconfig.debug                       |   1 +
- lib/Kconfig.kcsan                       |  11 -
- lib/Kconfig.kmsan                       |  34 ++
- lib/Makefile                            |   1 +
- lib/iomap.c                             |  40 +++
- lib/iov_iter.c                          |   9 +-
- lib/stackdepot.c                        |  29 +-
- lib/string.c                            |   8 +
- lib/usercopy.c                          |   3 +-
- mm/Makefile                             |   1 +
- mm/kasan/common.c                       |   2 +-
- mm/kmsan/Makefile                       |  26 ++
- mm/kmsan/annotations.c                  |  28 ++
- mm/kmsan/core.c                         | 427 +++++++++++++++++++++++
- mm/kmsan/hooks.c                        | 400 +++++++++++++++++++++
- mm/kmsan/init.c                         | 238 +++++++++++++
- mm/kmsan/instrumentation.c              | 233 +++++++++++++
- mm/kmsan/kmsan.h                        | 197 +++++++++++
- mm/kmsan/kmsan_test.c                   | 444 ++++++++++++++++++++++++
- mm/kmsan/report.c                       | 210 +++++++++++
- mm/kmsan/shadow.c                       | 332 ++++++++++++++++++
- mm/memory.c                             |   2 +
- mm/mmu_gather.c                         |  10 +
- mm/page_alloc.c                         |  18 +
- mm/slab.h                               |   1 +
- mm/slub.c                               |  26 +-
- mm/vmalloc.c                            |  20 +-
- scripts/Makefile.kmsan                  |   1 +
- scripts/Makefile.lib                    |   9 +
- security/Kconfig.hardening              |   4 +
- tools/objtool/check.c                   |  19 +
- 95 files changed, 4062 insertions(+), 68 deletions(-)
- create mode 100644 Documentation/dev-tools/kmsan.rst
- create mode 100644 include/linux/kmsan-checks.h
- create mode 100644 include/linux/kmsan.h
- create mode 100644 lib/Kconfig.kmsan
- create mode 100644 mm/kmsan/Makefile
- create mode 100644 mm/kmsan/annotations.c
- create mode 100644 mm/kmsan/core.c
- create mode 100644 mm/kmsan/hooks.c
- create mode 100644 mm/kmsan/init.c
- create mode 100644 mm/kmsan/instrumentation.c
- create mode 100644 mm/kmsan/kmsan.h
- create mode 100644 mm/kmsan/kmsan_test.c
- create mode 100644 mm/kmsan/report.c
- create mode 100644 mm/kmsan/shadow.c
- create mode 100644 scripts/Makefile.kmsan
-
+diff --git a/arch/x86/include/asm/sparsemem.h b/arch/x86/include/asm/sparsemem.h
+index 6a9ccc1b2be5d..64df897c0ee30 100644
+--- a/arch/x86/include/asm/sparsemem.h
++++ b/arch/x86/include/asm/sparsemem.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_X86_SPARSEMEM_H
+ #define _ASM_X86_SPARSEMEM_H
+ 
++#include <linux/types.h>
++
+ #ifdef CONFIG_SPARSEMEM
+ /*
+  * generic non-linear memory support:
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 

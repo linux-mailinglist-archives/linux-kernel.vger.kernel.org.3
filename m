@@ -2,90 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB7247471F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F37E474729
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235509AbhLNQG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:06:59 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:41980 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbhLNQG6 (ORCPT
+        id S235530AbhLNQKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:10:04 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:51376 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232256AbhLNQKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:06:58 -0500
-Received: by mail-ot1-f44.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so21341015otl.8;
-        Tue, 14 Dec 2021 08:06:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CWeglYX86Kh/jx6qsj0rbVo/zA4v+6dDtBcJ8ZfP9I8=;
-        b=ATx2CtZW8+uN1RxVBwQNl1zycF+FIBAExw/Rj52MkHnT1Rl5t+aLy+uFgVUVKHynAj
-         kJt/daxdNjPuFOgzXEJhPKnuEijsGtJI5Dd2wDxyUFv72wRqe7RuYh5piiwD+FPur5Aj
-         BU5q5ImYPzWP7/gIoHwQHwIDw9f3xXAf6oPRcbnxKN5v61Hx7HT7Pe3oi9Tcf8dxwNG+
-         SpwTeRJhhi72iWefDhF/Y4jirOiBjK5vTlXZiMUqLcV8vMTXogYYdTntwKtSAB3DDnxM
-         0igbq/WAIiBQjKpL3DdEy9VnqfmZXgNuEyGfXxrYs7oX7H6VPIwG6YAOBFKYA0MZF7Wm
-         yfgA==
-X-Gm-Message-State: AOAM530yVb1a7mUZaLj4DAWOrTLdgMLtiDvxIU2pDiX3h0K/2PAJ2CAl
-        5Or58YSzZ4Bb80E0rcZ5Ig==
-X-Google-Smtp-Source: ABdhPJzkIOmtEo5hn0+hMuoG7HvhDOIIqOzzWYSglSMtBtWvqRjpOAt28cIAYU9DiODBsaihaQ23kw==
-X-Received: by 2002:a9d:5190:: with SMTP id y16mr5121669otg.364.1639498017370;
-        Tue, 14 Dec 2021 08:06:57 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id j5sm48247oou.23.2021.12.14.08.06.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 08:06:56 -0800 (PST)
-Received: (nullmailer pid 3472932 invoked by uid 1000);
-        Tue, 14 Dec 2021 16:06:55 -0000
-Date:   Tue, 14 Dec 2021 10:06:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Fritz Koenig <frkoenig@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tomasz Figa <tfiga@google.com>, devicetree@vger.kernel.org,
-        Steve Cho <stevecho@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        Tue, 14 Dec 2021 11:10:01 -0500
+Received: from [IPv6:2a01:e0a:120:3210:f73a:96cd:3d21:2902] (unknown [IPv6:2a01:e0a:120:3210:f73a:96cd:3d21:2902])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 27C701F44EA6;
+        Tue, 14 Dec 2021 16:10:00 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1639498200; bh=0na2KJPuzWMG6eYK4qSPTD/w3/gdNZ7kdgsr3GSXzdU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=ohYUrkaSZv9wDQny19TkMRXpVyVGolydugIR7zU1CZDeAdnuDRVgL6DhlWA1gBW4p
+         FxBPSLi+dad6DSNgRC+QoLlLMgIizXYfr/PQTd2DSGED6b3nFjGTdfZEs/1JB+6msD
+         NXGimpMuA9mWUE7B5JD1rolG4Va3I5gmrhnPB2FKCmvWPs5uy7bTg5sHY+GQMiyG8m
+         iMW0DVDSv1xZ55gtH6icBjgRDO2XnT7zlxZW4zW7ku+8LEg2fbuKoVMmT1luwjW1tT
+         oqrxXYtFi6Xksx7Rah662pKB5ArKUp/6NqSaqy6m3r2k95BG8nmP1NScfJAPd6etMl
+         b5KEgVkComhag==
+Subject: Re: [PATCH v3 0/4] media: HEVC: RPS clean up
+To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH v13, 15/19] dt-bindings: media: mtk-vcodec: Adds decoder
- dt-bindings for mt8192
-Message-ID: <YbjBHwMXFwi/Sds4@robh.at.kernel.org>
-References: <20211213084141.13363-1-yunfei.dong@mediatek.com>
- <20211213084141.13363-16-yunfei.dong@mediatek.com>
+        linux-staging@lists.linux.dev, kernel@collabora.com
+References: <20211125155650.630977-1-benjamin.gaignard@collabora.com>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Message-ID: <3887bbab-b9e6-6147-5147-bad507065484@collabora.com>
+Date:   Tue, 14 Dec 2021 17:09:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213084141.13363-16-yunfei.dong@mediatek.com>
+In-Reply-To: <20211125155650.630977-1-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 16:41:37 +0800, Yunfei Dong wrote:
-> Adds decoder dt-bindings for mt8192.
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
-> Fix comments from rob.
-> ---
->  .../media/mediatek,vcodec-subdev-decoder.yaml | 265 ++++++++++++++++++
->  1 file changed, 265 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Le 25/11/2021 à 16:56, Benjamin Gaignard a écrit :
+> This series aims to clean up Reference Picture Set usage and flags.
+>
+> Long term flag was named with RPS prefix while it is not used for RPS
+> but for mark long term references in DBP. Remane it and remove the two
+> other useless RPS flags.
+>
+> Clarify documentation about RPS lists content and make sure that Hantro
+> driver use them correctly (i.e without look up in DBP).
+
+Dear reviewers,
+this series is waiting for feedback ;-)
+
+Thanks lot for your time.
+Benjamin
+
+>
+> version 3:
+> - rebased on top of v5.16-rc1
+>
+> version 2:
+> - change DPB field name from rps to flags
+>
+> Please note that the only purpose of commits 3 and 4 is to allow to test
+> G2 hardware block for IMX8MQ until a proper solution isuing power domain
+> can be found. Do not merge them.
+>
+> GStreamer HEVC plugin merge request can be found here:
+> https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1079
+>
+> With those piece of code fluster score is 77/147.
+>
+> Benjamin Gaignard (4):
+>    media: hevc: Remove RPS named flags
+>    media: hevc: Embedded indexes in RPS
+>    media: hantro: Use syscon instead of 'ctrl' register
+>    arm64: dts: imx8mq: Add node to G2 hardware
+>
+>   .../media/v4l/ext-ctrls-codec.rst             | 14 +++---
+>   arch/arm64/boot/dts/freescale/imx8mq.dtsi     | 43 +++++++++++++----
+>   drivers/staging/media/hantro/hantro.h         |  5 +-
+>   .../staging/media/hantro/hantro_g2_hevc_dec.c | 27 +++--------
+>   drivers/staging/media/hantro/imx8m_vpu_hw.c   | 48 ++++++++++++-------
+>   .../staging/media/sunxi/cedrus/cedrus_h265.c  |  2 +-
+>   include/media/hevc-ctrls.h                    |  6 +--
+>   7 files changed, 84 insertions(+), 61 deletions(-)
+>

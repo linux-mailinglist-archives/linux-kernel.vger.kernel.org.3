@@ -2,72 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E29854748FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46571474912
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236365AbhLNRN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:13:27 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:37608 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbhLNRN0 (ORCPT
+        id S236375AbhLNRPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:15:36 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:11262 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233758AbhLNRPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:13:26 -0500
-Received: by mail-ot1-f49.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so21566256otg.4;
-        Tue, 14 Dec 2021 09:13:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XgyDvIguawpGpPiLnkMUQAqaUkuE+oDjLxhmm8AED0o=;
-        b=cfFs6MYehtdaAk0/TG2iNNm4Pi5MZM8LKAclr7aDa7tiDCo0OmhBEmvZw4yO9RHLSN
-         2sw7CHWHuLFC2GG6xLdO6wukyNI+hV3XX5ME7zb5odV4UtoqQO5jD9OGEUuiBgIxTK5I
-         r4ItjfPfgs3k++mW/B/mPa31ksHdTDn7C75eYiTNlnp2ANy2IisbV31ZgLuhpOD2+gCc
-         Zx8hmtIF4OngtaZS0jnJOUZQbPBthMfg7m7WFO2cq06W5xwv7Em7Lcv3BqQ8OGV3sxnr
-         f3/BuN7aNA61BZInv5ssr46PpNTuf0YUGmglHF8EiAWSrKo0kDKV/CCns1KDM1wuN6n5
-         Z3zA==
-X-Gm-Message-State: AOAM5335WCsJggA2PW8r+/Q3cwarbcX/GYutRy9Bv58uoQUoH/xAhejB
-        KJ8tWKEukZElse7vbmJzMYrn3fRuGQ==
-X-Google-Smtp-Source: ABdhPJyAckwKtk2wmFYXo6y0KbBYQM8cVlvJ/bfKpPemke7He1uMLWSoaQXS9+lNxlD7t0/ISfJOSg==
-X-Received: by 2002:a05:6830:449e:: with SMTP id r30mr5389712otv.120.1639502005623;
-        Tue, 14 Dec 2021 09:13:25 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id r26sm64300otn.15.2021.12.14.09.13.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 09:13:25 -0800 (PST)
-Received: (nullmailer pid 3567854 invoked by uid 1000);
-        Tue, 14 Dec 2021 17:13:24 -0000
-Date:   Tue, 14 Dec 2021 11:13:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Wells Lu <wellslutw@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        wells.lu@sunplus.com, netdev@vger.kernel.org,
-        p.zabel@pengutronix.de, robh+dt@kernel.org, kuba@kernel.org,
-        vincent.shih@sunplus.com, davem@davemloft.net
-Subject: Re: [PATCH net-next v5 1/2] devicetree: bindings: net: Add bindings
- doc for Sunplus SP7021.
-Message-ID: <YbjQtOJW82EKFTNU@robh.at.kernel.org>
-References: <1639490743-20697-1-git-send-email-wellslutw@gmail.com>
- <1639490743-20697-2-git-send-email-wellslutw@gmail.com>
+        Tue, 14 Dec 2021 12:15:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639502135; x=1671038135;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=V3ZUoQpiArCEzg9uDWxQEPmkSZnIQmzZmlxrBFeYcTE=;
+  b=CKKRAcrUbaR2Y0WcVBE4SgetYhnl7EgXY7nWzRYxIcAiX3AtDWabjEE1
+   1NxxeO8796zFFmjbgvMox3lB8rZExolDbfN5rgsY0anvwzCq/JfC7Xdgp
+   IctMbcSB6Yjyo1tBejurLd1pEc9yUcV7n9ZlIhvOXbxoH2Pn3AqF3IupL
+   c=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Dec 2021 09:15:34 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:15:33 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 14 Dec 2021 09:15:33 -0800
+Received: from [10.216.27.180] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 14 Dec
+ 2021 09:15:26 -0800
+Subject: Re: [PATCH v5 3/5] pinctrl: qcom: Extract chip specific LPASS LPI
+ code
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, <plai@codeaurora.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        <rohitkr@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1638891339-21806-1-git-send-email-quic_srivasam@quicinc.com>
+ <1638891339-21806-4-git-send-email-quic_srivasam@quicinc.com>
+ <CAHp75Vd=47Tv9Sf+styPhxS2=O1H2KUDeKQXTULUYU5fDgGwwA@mail.gmail.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+Message-ID: <0f6621e5-f014-27c9-be8b-6c32ab994304@quicinc.com>
+Date:   Tue, 14 Dec 2021 22:45:23 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1639490743-20697-2-git-send-email-wellslutw@gmail.com>
+In-Reply-To: <CAHp75Vd=47Tv9Sf+styPhxS2=O1H2KUDeKQXTULUYU5fDgGwwA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 22:05:42 +0800, Wells Lu wrote:
-> Add bindings documentation for Sunplus SP7021 SoC.
-> 
-> Signed-off-by: Wells Lu <wellslutw@gmail.com>
-> ---
-> Changes in v5
->   - Addressed comments of Mr. Rob Herring.
-> 
->  .../bindings/net/sunplus,sp7021-emac.yaml          | 149 +++++++++++++++++++++
->  MAINTAINERS                                        |   7 +
->  2 files changed, 156 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/sunplus,sp7021-emac.yaml
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On 12/8/2021 11:58 AM, Andy Shevchenko wrote:
+Thanks for your time Andy!!!
+> On Wed, Dec 8, 2021 at 2:39 AM Srinivasa Rao Mandadapu
+> <quic_srivasam@quicinc.com> wrote:
+>> Extract the chip specific SM8250 data from the LPASS LPI pinctrl driver
+>> to allow reusing the common code in the addition of subsequent
+>> platforms.
+> ...
+>
+>> @@ -661,8 +454,10 @@ static int lpi_pinctrl_probe(struct platform_device *pdev)
+>>
+>>          return ret;
+>>   }
+>> +EXPORT_SYMBOL(lpi_pinctrl_probe);
+>> +
+> Stray change.
+>
+> ...
+
+okay. will remove it.
+
+>
+>> +#ifndef __PINCTRL_LPASS_LPI_H__
+>> +#define __PINCTRL_LPASS_LPI_H__
+> Missed headers.
+> At least bits.h.
+>
+> ...
+Okay. will add.
+>> +#define NO_SLEW                                -1
+> Naming sucks for the header.
+>
+> LPI_NO_SLEW ?
+
+Actually it's already mainline code. Just these patches are 
+rearrangement of old code.
+
+still do you suggest to change?
+
+>
+> ...
+>
+>> +struct lpi_pingroup {
+>> +       const char *name;
+>> +       const unsigned int *pins;
+>> +       unsigned int npins;
+>> +       unsigned int pin;
+>> +       /* Bit offset in slew register for SoundWire pins only */
+>> +       int slew_offset;
+>> +       unsigned int *funcs;
+>> +       unsigned int nfuncs;
+>> +};
+> Are you going to convert this to use struct group_desc?
+>
+> ...
+>
+>> +       LPI_MUX__,
+> Strange naming. Besides, if it is the terminator, drop the comma.
+okay will remove comma. but name is from existing code.
+>

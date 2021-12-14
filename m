@@ -2,110 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D76474C28
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E03474C30
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237465AbhLNTmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S237483AbhLNTnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232335AbhLNTmN (ORCPT
+        with ESMTP id S232335AbhLNTnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:42:13 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9227EC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:42:13 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id p65so26237214iof.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:42:13 -0800 (PST)
+        Tue, 14 Dec 2021 14:43:21 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BF7C061574;
+        Tue, 14 Dec 2021 11:43:21 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id z6so18701459pfe.7;
+        Tue, 14 Dec 2021 11:43:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=46avN96nbskMUAFWXD0G4IICxhuVMqWM0c7esNIiqMg=;
-        b=ew5BVOtU7X5oUwTQZlarYRrQHTSpfsszZXVQ0r8X5Bs2Vcymhf6eOzOKE3Ji49kpxr
-         zgI/89XMXPio0g8DWR5Uxztyd+MizHHtvVqKHcfJiUlpjXlaQ5xcilvaOvzJAwlGpIb5
-         /+svTql0qmsj1ig4VPS/Zysy4s51h8M3LTD3+1Uiv9P8G1m8ybV2QO/KZGG8Yb9Spepf
-         0wyJE4hDrI5D1XxUBrWDyB3SUhZKjd6wxRFEWSg1c7vOoKh3Kl2xVvZPbhUnhL52wFtt
-         /Vq2wRN4hlQPVVSaUt1AvCrUC9aisapMYJxTMH+dFQD/XGqa8GhKTjykvkdoRsiMdrdE
-         iFWA==
+         :cc:content-transfer-encoding;
+        bh=LCilH12wWw0seUa3hiJyDy0VxFX2Q3bA7Y0HXIYHhF8=;
+        b=mgUrMQhC4/CUdwucboxOLaDGWbb/3r/d8db3O9NgfZYUYEd6Zjz2nbba51SL7zLe8Y
+         HoPx+IQ/X0fM2kJmgKk06iLEcvvTYlX2h8Als5lC5pEfulogO+sUqemRF4n6m2Eekf4w
+         CtPoyJGaZ6slsRjff5y3xVucnMlyQBZjuB7TsLW/QfR5HbmU2eCSX+iDyn3uJA04puJa
+         dF//PJEuj31ulpS82MggltzR4G2RUQnzjtNrp/7HOGpfHVW7cNQpoT3ypqVvpPJEUhsf
+         QvGgSrM2kq5yWe5ythTOhC41utztrjpAcYlGjjw1vz9wzYdQhMtOLwSCYyXNwoJoZq7H
+         sX/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=46avN96nbskMUAFWXD0G4IICxhuVMqWM0c7esNIiqMg=;
-        b=HFEpnMA+Uww6DHq0oYV7y8Eod7dok4xSQSZ3yTAXj6QY18JE1ExYIkGZvMRGgoLjSn
-         L9DYQUofZQpEn3pOcvHxjRzukyj3U/+7W7lnb504HP2D6qEsCGiioj/Z1OPvq3+eo64w
-         TFOorVEL1/l2YiiR2oimcdSrjR3Ee48Qc8XdhN3t7mcNaAZL2lZ51+yXFaaNWAwHxpdv
-         zFzHZyM6kLlkX9sW/iIgeqTFHTQwBLOB7FZjBEyhLrrEQRXq6jcVVrYK1+zClDq7mMxd
-         1cNBrim9wX7883tRLuwiMSyOHzvfbqUczwYEp5X7yExpip+iIPjX6/uOz1QPzn9eIrhF
-         U5IA==
-X-Gm-Message-State: AOAM532EaXIRjyH0HwOSaUNqD3UfIH4ZOHBVdGoIudQF8mu7lcUjOs2n
-        envLVH3B937OgmK8RiVpN6WS16O03YdoMVBx7Eo=
-X-Google-Smtp-Source: ABdhPJxdsOqYQ1pKobWbQy/onfaa6DITWMD3VZOL7D7HM5A5kmhnFDRiADZ4ifd/Bo6glHWYCqsO7qRPFNji1uE5688=
-X-Received: by 2002:a02:830e:: with SMTP id v14mr4174019jag.644.1639510930962;
- Tue, 14 Dec 2021 11:42:10 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LCilH12wWw0seUa3hiJyDy0VxFX2Q3bA7Y0HXIYHhF8=;
+        b=ISs8iGmjulzRcyw/4adfQiamM2bLA3tYj4Sg2mBjKQfJej36Y8qqgtux5H2PY1v+h5
+         /LTKC/x9hDeUysiJ1hI9CwdEF9uJoPfLHiQnAriD/yRXKjjBixvEEd5fqtHuoDXraxPd
+         leDnrLOZgN75PBWfam6fVjHqDTYwkYybl8zAcm/Kj/nO02nDNMNJ/kyzsr2v1BibIjMI
+         SUTALArnDPKadExaDnJrTf6SRRU9n2LE5rwq4E9+Fh9Tm84OtQnCOvU5fzgD6q2eCqQq
+         So/LzfxiodAcCTt1rhEOdFkVDE3gscDycnEwAIWqb/fh5vC3EM7ECm0PhWbeTkrcsu2i
+         BoLg==
+X-Gm-Message-State: AOAM532CzldWSv+XJh+tm5YtzmT/yF/Nl3fs/q48+iMrYW7JfW/ImKjY
+        KgRufOPIjMuu4TWK67tTW+TOOaTRRHn+VNa/Nu0=
+X-Google-Smtp-Source: ABdhPJx1omsyXEH84uuE4kzYpPBu5v24anF9kQ0616INOFdPlqou2FDes2afxUGAuG2JNukP2+Sny94qEgWXdVVJ7J8=
+X-Received: by 2002:a63:3f4e:: with SMTP id m75mr4955451pga.587.1639511000707;
+ Tue, 14 Dec 2021 11:43:20 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1639432170.git.andreyknvl@google.com> <c77f819e87b9fefcb26c6448a027b25c939f079e.1639432170.git.andreyknvl@google.com>
-In-Reply-To: <c77f819e87b9fefcb26c6448a027b25c939f079e.1639432170.git.andreyknvl@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 14 Dec 2021 20:42:00 +0100
-Message-ID: <CA+fCnZfP+j6ra4vExsOg96yVHTHQy_NB65-TT=S=9Gr1X62yiA@mail.gmail.com>
-Subject: Re: [PATCH mm v3 30/38] kasan, vmalloc: don't tag executable vmalloc allocations
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
+References: <20211128035704.270739-1-yury.norov@gmail.com> <20211128035704.270739-3-yury.norov@gmail.com>
+ <YaPGDOvBzhiRFcOP@qmqm.qmqm.pl>
+In-Reply-To: <YaPGDOvBzhiRFcOP@qmqm.qmqm.pl>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Tue, 14 Dec 2021 11:43:09 -0800
+Message-ID: <CAAH8bW9-dbENFUrwPUQ-uJVVX_s=PWb2zpAJ8BqkV3vJE696mA@mail.gmail.com>
+Subject: Re: [PATCH 2/9] lib/bitmap: implement bitmap_{empty,full} with bitmap_weight_eq()
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
+        Mark Gross <markgross@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Roy Pledge <Roy.Pledge@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 10:54 PM <andrey.konovalov@linux.dev> wrote:
+On Sun, Nov 28, 2021 at 10:10 AM Micha=C5=82 Miros=C5=82aw
+<mirq-linux@rere.qmqm.pl> wrote:
 >
-
-[...]
-
-> @@ -3133,10 +3133,14 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
->          * (except for the should_skip_init() check) to make sure that memory
->          * is initialized under the same conditions regardless of the enabled
->          * KASAN mode.
-> +        * Tag-based KASAN modes only assign tags to non-executable
-> +        * allocations, see __kasan_unpoison_vmalloc().
->          */
->         kasan_flags = KASAN_VMALLOC_VM_ALLOC;
->         if (!want_init_on_free() && want_init_on_alloc(gfp_mask))
->                 kasan_flags |= KASAN_VMALLOC_INIT;
-> +       if (pgprot_val(prot) == pgprot_val(pgprot_nx(prot)))
-
-Can simply compare with PAGE_KERNEL here to match the check in
-arch_vmalloc_pgprot_modify(). Will do in v4.
-
-> +               kasan_flags |= KASAN_VMALLOC_NOEXEC;
->         addr = kasan_unpoison_vmalloc(addr, real_size, kasan_flags);
+> On Sat, Nov 27, 2021 at 07:56:57PM -0800, Yury Norov wrote:
+> > Now as we have bitmap_weight_eq(), switch bitmap_full() and
+> > bitmap_empty() to using it.
+> >
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > ---
+> >  include/linux/bitmap.h | 26 ++++++++++----------------
+> >  1 file changed, 10 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+> > index 996041f771c8..2d951e4dc814 100644
+> > --- a/include/linux/bitmap.h
+> > +++ b/include/linux/bitmap.h
+> > @@ -386,22 +386,6 @@ static inline int bitmap_subset(const unsigned lon=
+g *src1,
+> >               return __bitmap_subset(src1, src2, nbits);
+> >  }
+> >
+> > -static inline bool bitmap_empty(const unsigned long *src, unsigned nbi=
+ts)
+> > -{
+> > -     if (small_const_nbits(nbits))
+> > -             return ! (*src & BITMAP_LAST_WORD_MASK(nbits));
+> > -
+> > -     return find_first_bit(src, nbits) =3D=3D nbits;
+> > -}
 >
->         /*
-> @@ -3844,7 +3848,7 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
->         for (area = 0; area < nr_vms; area++)
->                 vms[area]->addr = kasan_unpoison_vmalloc(vms[area]->addr,
->                                                          vms[area]->size,
-> -                                                        KASAN_VMALLOC_NONE);
-> +                                                        KASAN_VMALLOC_NOEXEC);
+> Since this is supposed to be an optimization, I would go all the way and
+> replace this with the trivial implementation instead:
 >
->         kfree(vas);
->         return vms;
-> --
-> 2.25.1
+> bool bitmap_empty(long *bits, size_t nbits)
+> {
+>         for (; nbits >=3D BITS_PER_LONG; ++bits, nbits -=3D BITS_PER_LONG=
+)
+>                 if (*bits)
+>                         return false;
 >
+>         if (nbits && *bits & BITMAP_LAST_WORD_MASK(nbits))
+>                 return false;
+>
+>         return true;
+> }
+
+This is what current implementations basically do, based on find_first_bit(=
+).
+
+I think that for long bitmaps the most time consuming operation is moving
+data to L1, and for short bitmaps the difference between approaches is
+barely measurable.
+
+But hweght_long on each iteration can't be more effective than the current
+version. So, I'll drop this patch for v2 and keep things unchanged.

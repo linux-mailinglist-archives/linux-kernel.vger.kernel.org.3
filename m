@@ -2,141 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D69473D81
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 08:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1B5473D83
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 08:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbhLNHSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 02:18:51 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47906 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbhLNHSs (ORCPT
+        id S231397AbhLNHTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 02:19:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230000AbhLNHTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 02:18:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89754B80D69;
-        Tue, 14 Dec 2021 07:18:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC481C34604;
-        Tue, 14 Dec 2021 07:18:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639466326;
-        bh=fm5VAJuc2nsICxKROZf1JqvOwaw1kzkMmH18d81Lxbo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=txSO7P4F7E+uLvWfk0hOAooVKYhogclf/ZoPdSKAfbfkbm0HqUOltagy58Rj7gLiO
-         GaOImbldo0rPBX3UReZEGmt9k5vFxZGGWnimCDbH/vgWFLPUonBzIUpkis+9kIpOWt
-         148OlemOKJNCbWJKKvYfPqQvfDwF5ggGyrI/ZVwI=
-Date:   Tue, 14 Dec 2021 08:18:38 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     David Brazdil <dbrazdil@google.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Will Deacon <will@kernel.org>,
-        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] misc: open-dice: Add driver to expose DICE data
- to userspace
-Message-ID: <YbhFTj561N4Ir2RG@kroah.com>
-References: <20211213195833.772892-1-dbrazdil@google.com>
- <20211213195833.772892-3-dbrazdil@google.com>
+        Tue, 14 Dec 2021 02:19:50 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809BBC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 23:19:50 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id q3so30776183wru.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 23:19:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=VLp0o4sOHoE0u6tNwEQPnT/CZCV3x/l9Vu7pJeInEPw=;
+        b=kZ4ap6VlvW1Zq9DazrqYU3lTSDwzYeabpsNz851kDLLn4b1Har38I5+LzcKEAyaixz
+         dwoJA8BGDERxwO75/moXKWxVnYwY6Oqxc629PeJHMh6WjvClp++MQyKOAWYF5LOdZFas
+         ARscI3zBeDtXl5AvoV2+e3M5+xxP59CxSbbBRJB1puIac1/sQL0DIl1Yy2pOiBFeswMw
+         ZxlKmyUlmZLB62xdLZvfr2Znr9zRpltRSjh886ebHEn/st3t7St2aIDlcoLsQ2KY3anh
+         8IxwvRXEmPsCeq0rYNNYgfO9XmB3dwibWuI2LstzbCfLegr2PS0BVoWpo9ZumWGqshCZ
+         pH7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=VLp0o4sOHoE0u6tNwEQPnT/CZCV3x/l9Vu7pJeInEPw=;
+        b=Pi/0VIo4wK02DhZ864XHQvjtZVAYJYXKmheAkVp4+DyXmtMPYSQ+WPz9tH2xZwwDIa
+         jzxxm22PV2l7ydFZN5JbRzDiYOIKT0n/Q6nl9R/7LbNFlb8j8vnDhl34m0PCGoz6AkqY
+         dQ0p642NR07jgElIOJoUb/WNfQGLHHWh+yuYOzfEMkZkZdcUnF5T2ver1gCBda6ngPbC
+         kuYuS8xQIohz661u8DT0SoVSf2xFB0QzuE9J6mQjjCrd9HIHOXsAP76yonDdDRQ1RJr9
+         O7kmSxceevOdg89c/MMAA0fN9QjhcQcQiZ0pvDrWujuTCoahYyErPRlnsBi/ZpD8WiW1
+         RDEA==
+X-Gm-Message-State: AOAM530cQWnjCVbH3aIyGDAUC97v547NgGMC3YsjD7dAwVfPkbxATNvy
+        wOA+GdrbX+L/QeqBH+XVpKC443URtiU5pA==
+X-Google-Smtp-Source: ABdhPJwvCihaLdNWdpfAn/nDjFXK1f9rMYI9jAumtJIn4e+cH920UM9sLAO6Fgd9zXEWHewsOX7vjw==
+X-Received: by 2002:a5d:6a46:: with SMTP id t6mr4016335wrw.141.1639466388831;
+        Mon, 13 Dec 2021 23:19:48 -0800 (PST)
+Received: from [10.194.0.6] ([64.64.123.28])
+        by smtp.gmail.com with ESMTPSA id w22sm1249337wmi.27.2021.12.13.23.19.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 23:19:48 -0800 (PST)
+Subject: Re: [BUG] fs: ocfs2: possible ABBA deadlock in
+ ocfs2_dio_end_io_write() and ocfs2_move_extents()
+To:     Joseph Qi <joseph.qi@linux.alibaba.com>, mark@fasheh.com,
+        jlbec@evilplan.org
+Cc:     ocfs2-devel@oss.oracle.com,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <8ae1bb9c-3e58-c8b6-8823-3d2ea8b241e2@gmail.com>
+ <bd6dfb63-6d3d-c8f6-f401-8bdd5334afed@linux.alibaba.com>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Message-ID: <093db193-baf8-b2c1-5667-7ded591a8437@gmail.com>
+Date:   Tue, 14 Dec 2021 15:19:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213195833.772892-3-dbrazdil@google.com>
+In-Reply-To: <bd6dfb63-6d3d-c8f6-f401-8bdd5334afed@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 07:58:33PM +0000, David Brazdil wrote:
-> Open Profile for DICE is an open protocol for measured boot compatible
-> with the Trusted Computing Group's Device Identifier Composition
-> Engine (DICE) specification. The generated Compound Device Identifier
-> (CDI) certificates represent the hardware/software combination measured
-> by DICE, and can be used for remote attestation and sealing.
-> 
-> Add a driver that exposes reserved memory regions populated by firmware
-> with DICE CDIs and exposes them to userspace via a character device.
-> 
-> Userspace obtains the memory region's size from read() and calls mmap()
-> to create a mapping of the memory region in its address space. The
-> mapping is not allowed to be write+shared, giving userspace a guarantee
-> that the data were not overwritten by another process.
-> 
-> Userspace can also call write(), which triggers a wipe of the DICE data
-> by the driver. Because both the kernel and userspace mappings use
-> write-combine semantics, all clients observe the memory as zeroed after
-> the syscall has returned.
-> 
-> Cc: Andrew Scull <ascull@google.com>
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: David Brazdil <dbrazdil@google.com>
-> ---
->  drivers/misc/Kconfig     |  12 +++
->  drivers/misc/Makefile    |   1 +
->  drivers/misc/open-dice.c | 197 +++++++++++++++++++++++++++++++++++++++
->  3 files changed, 210 insertions(+)
->  create mode 100644 drivers/misc/open-dice.c
-> 
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 0f5a49fc7c9e..4d996485f5a7 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -470,6 +470,18 @@ config HISI_HIKEY_USB
->  	  switching between the dual-role USB-C port and the USB-A host ports
->  	  using only one USB controller.
->  
-> +config OPEN_DICE
-> +	tristate "Open Profile for DICE driver"
-> +	depends on OF_RESERVED_MEM
-> +	help
-> +	  This driver exposes a DICE reserved memory region to userspace via
-> +	  a character device. The memory region contains Compound Device
-> +	  Identifiers (CDIs) generated by firmware as an output of DICE
-> +	  measured boot flow. Userspace can uses CDIs for remote attestation
-> +	  and sealing.
-> +
-> +	  If unsure, say N.
-> +
->  source "drivers/misc/c2port/Kconfig"
->  source "drivers/misc/eeprom/Kconfig"
->  source "drivers/misc/cb710/Kconfig"
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index a086197af544..70e800e9127f 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
->  obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
->  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
->  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
-> +obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
-> diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
-> new file mode 100644
-> index 000000000000..ea7b1a8d49ac
-> --- /dev/null
-> +++ b/drivers/misc/open-dice.c
-> @@ -0,0 +1,197 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2021 - Google LLC
-> + * Author: David Brazdil <dbrazdil@google.com>
-> + *
-> + * Driver for Open Profile for DICE.
-> + *
-> + * This driver takes ownership of a reserved memory region containing secrets
-> + * derived following the Open Profile for DICE. The contents of the memory
-> + * region are not interpreted by the kernel but can be mapped into a userspace
-> + * process via a misc device. The memory region can also be wiped, removing
-> + * the secrets from memory.
-> + *
-> + * Userspace can access the data by (w/o error handling):
-> + *
-> + *     fd = open("/dev/open-dice0", O_RDWR);
-> + *     size = read(fd, NULL, 0);
 
-I was thinking you would return the value as a string in the buffer
-provided to the read call, not as the return value itself.  That is odd
-and probably breaks something.  What would happen if you ran 'cat' on
-the device node?
 
-thanks,
+On 2021/12/14 15:08, Joseph Qi wrote:
+> Hi,
+>
+> Thanks for the report. But I don't think this is a possible deadlock in
+> practice. Please see my comments below.
+>
+> On 12/10/21 4:38 PM, Jia-Ju Bai wrote:
+>> Hello,
+>>
+>> My static analysis tool reports a possible ABBA deadlock in the ocfs2 module in Linux 5.10:
+>>
+>> ocfs2_dio_end_io_write()
+>>    down_write(&oi->ip_alloc_sem); --> Line 2322 (Lock A)
+>>    ocfs2_del_inode_from_orphan()
+>>      inode_lock(orphan_dir_inode);  --> Line 2701 (Lock B)
+> Just as the variable name indicates, it is orphan dir inode, which is a
+> system file (something hidden inside the filesystem) and not visible for
+> end user.
+>
+>> ocfs2_move_extents()
+>>    inode_lock(inode); --> Line 916 (Lock B)
+> This is called from a ioctl from user, it a normal file inode.
 
-greg k-h
+Okay, thanks for the explanation :)
+
+
+Best wishes,
+Jia-Ju Bai

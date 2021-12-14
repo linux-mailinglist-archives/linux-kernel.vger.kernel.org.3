@@ -2,91 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 187AE4742B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9914742BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbhLNMgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:36:13 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:40995 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229879AbhLNMgL (ORCPT
+        id S234012AbhLNMiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:38:01 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:65524 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229879AbhLNMh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:36:11 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-126-ciDdlnKxPsGDPzgly2ZQ2g-1; Tue, 14 Dec 2021 12:36:08 +0000
-X-MC-Unique: ciDdlnKxPsGDPzgly2ZQ2g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Tue, 14 Dec 2021 12:36:07 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Tue, 14 Dec 2021 12:36:07 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Noah Goldstein' <goldstein.w.n@gmail.com>,
-        'Eric Dumazet' <edumazet@google.com>
-CC:     "'tglx@linutronix.de'" <tglx@linutronix.de>,
-        "'mingo@redhat.com'" <mingo@redhat.com>,
-        'Borislav Petkov' <bp@alien8.de>,
-        "'dave.hansen@linux.intel.com'" <dave.hansen@linux.intel.com>,
-        'X86 ML' <x86@kernel.org>, "'hpa@zytor.com'" <hpa@zytor.com>,
-        "'peterz@infradead.org'" <peterz@infradead.org>,
-        "'alexanderduyck@fb.com'" <alexanderduyck@fb.com>,
-        'open list' <linux-kernel@vger.kernel.org>,
-        'netdev' <netdev@vger.kernel.org>
-Subject: RE: [PATCH] lib/x86: Optimise csum_partial of buffers that are not
- multiples of 8 bytes.
-Thread-Topic: [PATCH] lib/x86: Optimise csum_partial of buffers that are not
- multiples of 8 bytes.
-Thread-Index: AdfwSx7jhGb9mOkwS12sTJ1p5oR1JQAmTp2g
-Date:   Tue, 14 Dec 2021 12:36:07 +0000
-Message-ID: <3107b1e365f34df080feefb68be8a422@AcuMS.aculab.com>
-References: <f1cd1a19878248f09e2e7cffe88c8191@AcuMS.aculab.com>
-In-Reply-To: <f1cd1a19878248f09e2e7cffe88c8191@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+        Tue, 14 Dec 2021 07:37:59 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BEC9FVr026528;
+        Tue, 14 Dec 2021 12:37:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=hbZqTvW5RpWfz1tHUyVuzB89t1W/UKtkT/ce8c4PuTM=;
+ b=AiCoTmCmwtSe9EgSNa7rl3KV2YbtNu9tE6yYyOtaOF0NCWSPRrf1vj3q9OPMYf1cyOAA
+ QLD0QP1H746M+zpFvHkWr7BfgZWH636nbCE4kswt4iyFlkTWt1+5wEKIMRKPoP3/IG2f
+ ntFR6EtWhoNvZ0WDmLp/SI03waXgbJ4m4lAWKafXmNBypFfatd2WKW4AASNumlVoCmgj
+ tyaCBSooJJWTRQxB/In/yrH1hp87iQgCWNk1uhIjve4Ye3qn0MVKOiSJjVTriK7UM8AR
+ 3b8r+GBKAZOVMATB+Fah+JpkVZCjfl5hgvfbI3nYiSUwCwrn3sEDHuvLkROkqAPcF5Qh ig== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx9raktus-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 12:37:38 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BEBiSas008727;
+        Tue, 14 Dec 2021 12:37:38 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cx9raktu2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 12:37:38 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BECWLqs017901;
+        Tue, 14 Dec 2021 12:37:36 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3cvkmaehnn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 12:37:36 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BECbXVC43647348
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Dec 2021 12:37:33 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EFC87A405B;
+        Tue, 14 Dec 2021 12:37:32 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B43FA4066;
+        Tue, 14 Dec 2021 12:37:31 +0000 (GMT)
+Received: from sig-9-65-91-220.ibm.com (unknown [9.65.91.220])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Dec 2021 12:37:31 +0000 (GMT)
+Message-ID: <ec2ec0a9a7ba1adc6e54bbf7051a83ba90a39c0b.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] Instantiate key with user-provided decrypted data.
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Yael Tiomkin <yaelt@google.com>, linux-integrity@vger.kernel.org
+Cc:     jejb@linux.ibm.com, jarkko@kernel.org, corbet@lwn.net,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Date:   Tue, 14 Dec 2021 07:37:30 -0500
+In-Reply-To: <20211213192030.125091-1-yaelt@google.com>
+References: <20211213192030.125091-1-yaelt@google.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: D5ObSYjxBMxL_UG1wLCE99QXZ86MxLfD
+X-Proofpoint-GUID: YPhVzS-YIZzTG2fikzYR2viNWL3Iff8S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-14_06,2021-12-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0 clxscore=1011
+ spamscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112140072
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2aWQgTGFpZ2h0IDxEYXZpZC5MYWlnaHRAQUNVTEFCLkNPTT4NCj4gU2VudDogMTMg
-RGVjZW1iZXIgMjAyMSAxODowMQ0KPiANCj4gQWRkIGluIHRoZSB0cmFpbGluZyBieXRlcyBmaXJz
-dCBzbyB0aGF0IHRoZXJlIGlzIG5vIG5lZWQgdG8gd29ycnkNCj4gYWJvdXQgdGhlIHN1bSBleGNl
-ZWRpbmcgNjQgYml0cy4NCg0KVGhpcyBpcyBhbiBhbHRlcm5hdGUgdmVyc2lvbiB0aGF0IChtb3N0
-bHkpIGNvbXBpbGVzIHRvIHJlYXNvbmFibGUgY29kZS4NCkkndmUgYWxzbyBib290ZWQgYSBrZXJu
-ZWwgd2l0aCBpdCAtIG5ldHdvcmtpbmcgc3RpbGwgd29ya3MhDQoNCmh0dHBzOi8vZ29kYm9sdC5v
-cmcvei9LNnZZMzFHcXMNCg0KSSBjaGFuZ2VkIHRoZSB3aGlsZSAobGVuID49IDY0KSBsb29wIGlu
-dG8gYW4NCmlmIChsZW4gPj0gNjQpIGRvICguLi4pIHdoaWxlKGxlbiA+PSA2NCkgb25lLg0KQnV0
-IGdjYyBtYWtlcyBhIHBpZ3MgYnJlYWtmYXN0IG9mIGNvbXBpbGluZyBpdCAtIGl0IG9wdGltaXNl
-cw0KaXQgc28gdGhhdCBpdCBpcyB3aGlsZSAocHRyIDwgbGltKSBidXQgYWRkcyBhIGxvdCBvZiBj
-b2RlLg0KU28gSSd2ZSBkb25lIHRoYXQgYnkgaGFuZC4NClRoZW4gaXQgc3RpbGwgbWFrZXMgYSBt
-ZWFsIG9mIGl0IGJlY2F1c2UgaXQgcmVmdXNlcyB0byB0YWtlDQonYnVmZicgZnJvbSB0aGUgZmlu
-YWwgbG9vcCBpdGVyYXRpb24uDQpBbiBhc3NpZ25tZW50IHRvIHRoZSBsaW1pdCBoZWxwcy4NCg0K
-VGhlbiB0aGVyZSBpcyB0aGUgY2FsY3VsYXRpb24gb2YgKDggLSAobGVuICYgNykpICogOC4NCmdj
-YyBwcmlvciB0byA5LjIganVzdCBuZWdhdGUgKGxlbiAmIDcpIHRoZW4gdXNlIGxlYWwgNTYoLCVy
-czEsOCksJXJjeC4NCkJ1dCBsYXRlciBvbmVzIGFuZCBmYWlsIHRvIG5vdGljZS4NCkV2ZW4gZ2l2
-ZW4gKDY0ICsgOCAqIC0obGVuICYgNykpIGNsYW5nIGZhaWxzIHRvIHVzZSBsZWFsLg0KDQpJJ20g
-bm90IGV2ZW4gc3VyZSB0aGUgY29kZSBjbGFuZyBnZW5lcmF0ZXMgaXMgcmlnaHQ6DQooJXJzaSBp
-cyAobGVuICYgNykpDQogICAgICAgIG1vdnEgICAgLTgoJXJzaSwlcmF4KSwgJXJkeA0KICAgICAg
-ICBsZWFsICAgICgsJXJzaSw4KSwgJWVjeA0KICAgICAgICBhbmRiICAgICQ1NiwgJWNsDQogICAg
-ICAgIG5lZ2IgICAgJWNsDQogICAgICAgIHNocnEgICAgJWNsLCAlcmR4DQoNClRoZSAnbmVnYicg
-aXMgdGhlIHdyb25nIHNpemUgb2YgdGhlICdhbmRiJy4NCkl0IG1pZ2h0IGJlIG9rIGlmIGl0IGlz
-IGFzc3VtaW5nIHRoZSBjcHUgaWdub3JlcyB0aGUgaGlnaCAyIGJpdHMgb2YgJWNsLg0KQnV0IHRo
-YXQgaXMgYSBob3JyaWQgYXNzdW1wdGlvbiB0byBiZSBtYWtpbmcuDQoNCglEYXZpZA0KDQotDQpS
-ZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWls
-dG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMp
-DQo=
+Hi Yael,
+
+On Mon, 2021-12-13 at 14:20 -0500, Yael Tiomkin wrote:
+> The encrypted.c class supports instantiation of encrypted keys with
+> either an already-encrypted key material, or by generating new key
+> material based on random numbers. To support encryption of
+> user-provided decrypted data, this patch defines a new datablob
+> format: [<format>] <master-key name> <decrypted data length>
+> <decrypted data>.
+> 
+> Signed-off-by: Yael Tiomkin <yaelt@google.com>
+
+Other than the comment below,
+    Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+
+Could you also provide an LTP test for defining, exporting, and loading
+an encrypted key based on user provided key data?
+
+thanks,
+
+Mimi
+
+> ---
+
+> @@ -303,6 +306,16 @@ Load an encrypted key "evm" from saved blob::
+>      82dbbc55be2a44616e4959430436dc4f2a7a9659aa60bb4652aeb2120f149ed197c564e0
+>      24717c64 5972dcb82ab2dde83376d82b2e3c09ffc
+>  
+> +Instantiate an encrypted key "evm" using user-provided decrypted data::
+> +
+> +    $ keyctl add encrypted evm "new default user:kmk 32 `cat evm.blob`" @u
+> +    794890253
+
+The existing references to "evm.blob" refer to the encrypted key data. 
+Here "evm.blob" is unencrypted data.  Perhaps name it something like
+"evm.user-provided-data" data.
+
+> +
+> +    $ keyctl print 794890253
+> +    default user:kmk 32 2375725ad57798846a9bbd240de8906f006e66c03af53b1b382d
+> +    bbc55be2a44616e4959430436dc4f2a7a9659aa60bb4652aeb2120f149ed197c564e0247
+> +    17c64 5972dcb82ab2dde83376d82b2e3c09ffc
+> +
 

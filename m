@@ -2,129 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBB2473CB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 06:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9E7473CBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 06:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbhLNFtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 00:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbhLNFtT (ORCPT
+        id S230064AbhLNFu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 00:50:26 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:24086 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229889AbhLNFuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 00:49:19 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7332EC061748
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:49:19 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id j11so16478969pgs.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 21:49:19 -0800 (PST)
+        Tue, 14 Dec 2021 00:50:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=hr5Wpg7ev5riau6J8AsCFp781PoK7TjuAKB0LRsYr3M=;
-        b=MGzriN/1d6rVkfghphGHEsPbps/B1r5OA9eMGSvm2IKrjCXb0PzoKrJDOzPDS7VoHB
-         +Dm8hdW4+kc1yTvSiKAs8t5CxMYVHJfvvEWl9iYvT4WOYrnSVZQQbJuWSusCeAkFMbhj
-         RyVNEnjVkS04PRGrKG0B6F8eiI63e6Mcrdnc5sePETXwcY0fRexAovoxestlOy9lKSty
-         ST7EC1CsMlXkgu2mD6xavaP2X1vIApimw+TabhmqiQDEBsBesiZoeN3EG5kCQ3SNA8/d
-         uDAiabvJF5LOP5OR1SzEvHDWQpPTmLP6LII/jI4pG1z0mPvt4q60SEC/38UQWW2lX6Dc
-         KBSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=hr5Wpg7ev5riau6J8AsCFp781PoK7TjuAKB0LRsYr3M=;
-        b=Z9p45nLy9EJqiU7FdBJfjfjjonaiMbkUY3/DwxawujtFHd6Spvo9JuGXFr+6E9cCHt
-         hJjWYHIqu+niRY7ZpJnnxJL0R63wEB7xaadlSuolYGpUd3hOXPL+kKHelQGtz+nv0+0m
-         +PP1yD70gqO0HqKBc5rBrqhRJj2OCO8pCwbijm/TNJTFjQ3SJIEHO7vKUYehL55fJ0eB
-         PTCBGYpSgJEiA4mjO++FNKt1CzVw93zfy+P4FV6SIomNaL9mDr2uvJkpH7n59Jp1Z/ye
-         ThPulsGmZzhs9mm94Cb+0NPy/Zehosq/XWtFDQPsUhQ/Jkrm71tOzAN+hT+D/fJeal6b
-         5gWQ==
-X-Gm-Message-State: AOAM533gHrJ7IFmrg5tIffNqzO7L7RUdZtErUbdBsOE57G/gd6X3SAXs
-        eipL5Yx/Hccyke4OnCV5GWZfn0XeOrxbhg==
-X-Google-Smtp-Source: ABdhPJwtcjX0i478P/HBWMUvhwLpZphrfwuE0Nb6BbP6+qiPvYmFDBBXmpwdnT2nBbQBfhimLlIQwA==
-X-Received: by 2002:a05:6a00:99e:b0:49f:f9e2:c116 with SMTP id u30-20020a056a00099e00b0049ff9e2c116mr2441444pfg.83.1639460958872;
-        Mon, 13 Dec 2021 21:49:18 -0800 (PST)
-Received: from localhost ([110.141.142.237])
-        by smtp.gmail.com with ESMTPSA id z13sm2005224pfj.160.2021.12.13.21.49.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 21:49:17 -0800 (PST)
-Date:   Tue, 14 Dec 2021 16:49:14 +1100
-From:   Balbir Singh <bsingharora@gmail.com>
-To:     yong w <yongw.pur@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, mingo@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, yang.yang29@zte.com.cn,
-        wang.yong12@zte.com.cn
-Subject: Re: [PATCH v2 linux-next] delayacct: track delays from memory compact
-Message-ID: <YbgwWir/Ymt/2gxE@balbir-desktop>
-References: <1638619795-71451-1-git-send-email-wang.yong12@zte.com.cn>
- <Yax01zjuzmNyyJK/@balbir-desktop>
- <CAOH5QeDhjyjAkS1bUju2cv67KFukUr0ov8uG+z3bM6Oa=iFrMA@mail.gmail.com>
- <Ya7uQingLC3fMJlt@balbir-desktop>
- <CAOH5QeC+0xDrgO+t3zwN4o48F9Q2CiTnzQDO78kuJLfyNJwoLA@mail.gmail.com>
- <CAOH5QeCO_EZzkU=B3L1=1OPiZa7XxnWZK87GbwXNOQXxZqYcoQ@mail.gmail.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639461025; x=1670997025;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jmsxtLcVGJrU2P7eH+4CDEuducZWSqhxMyBLil7wn5I=;
+  b=cYEnej/ps8NeE0JShDwUWPIapjz6802SYwVinLtX1cg/qBMJARdXhTs1
+   C0n/97DbhW0fAuPE8vwGSM4f06cLqhggDcJZfqiFtGVHShGf0aNbu1mKT
+   dqYY3+zvbUrz4tEoSPzTrtkZYEb0oXW00m8qQzqa9/2WIEym+3TRo+PTC
+   Y=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Dec 2021 21:50:25 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 21:50:24 -0800
+Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 13 Dec 2021 21:50:15 -0800
+Received: from [10.231.205.174] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 13 Dec
+ 2021 21:50:12 -0800
+Message-ID: <3b320028-33a7-4d3a-c671-8db80d061e47@quicinc.com>
+Date:   Tue, 14 Dec 2021 13:50:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [RESEND PATCH v3 10/10] dt-bindings: convert qcom,spmi-pmic-arb
+ binding to YAML format
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        <collinsd@codeaurora.org>, Andy Gross <agross@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <subbaram@codeaurora.org>, <tglx@linutronix.de>, <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <1638403212-29265-1-git-send-email-quic_fenglinw@quicinc.com>
+ <1638403212-29265-11-git-send-email-quic_fenglinw@quicinc.com>
+ <1638453489.532760.3736891.nullmailer@robh.at.kernel.org>
+ <20211210020549.BFA4DC004DD@smtp.kernel.org>
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+In-Reply-To: <20211210020549.BFA4DC004DD@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOH5QeCO_EZzkU=B3L1=1OPiZa7XxnWZK87GbwXNOQXxZqYcoQ@mail.gmail.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 09:56:08PM +0800, yong w wrote:
-> Hello,  is this patch OK?
-> 
-> Thanks.
-> 
-> yong w <yongw.pur@gmail.com> 于2021年12月8日周三 00:50写道：
-> >
-> > Balbir Singh <bsingharora@gmail.com> 于2021年12月7日周二 13:16写道：
-> > >
-> > > On Sun, Dec 05, 2021 at 07:08:02PM +0800, yong w wrote:
-> > > > Balbir Singh <bsingharora@gmail.com> 于2021年12月5日周日 16:17写道：
-> > > > >
-> > > > > On Sat, Dec 04, 2021 at 04:09:55AM -0800, yongw.pur@gmail.com wrote:
-> > > > > > From: wangyong <wang.yong12@zte.com.cn>
-> > > > > >
-> > > > > > Delay accounting does not track the delay of memory compact.
-> > > > > > When there is not enough free memory, tasks can spend
-> > > > > > a amount of their time waiting for compact.
-> > > > > >
-> > > > > > To get the impact of tasks in direct memory compact, measure
-> > > > > > the delay when allocating memory through memory compact.
-> > > > > >
-> > > > >
-> > > > > Should we call this DIRECT_COMPACT and through documentation
-> > > > > or name change imply that this won't work for kcompactd the
-> > > > > kernel thread - based on my reading of the patches.
-> > > > >
-> > > > Using DIRECT_COMPACT is a little redundant，because the
-> > > > delayacct stats of delay accounting is specific to tasks, it has
-> > > > nothing to do with kcompactd, which is similar to the RECLAIM field.
-> > > >
-> > >
-> > > What would we expect when we call delayacct -p <pidof kcompactd>
-> > > to be output?
-> > If the slow path of memory allocation is invoked in the kcompacd process,
-> > there may be delays being recorded.
-> >
-> > > Don't feel to strongly, but it can be confusing that kcompactd
-> > > has spent no time in compact'ing? Not that delayacct is used for
-> > > kernel threads, but I am not sure if that use case exists today.
-> > Yes, delayacct does not restrict the process of obtaining information，
-> > but kcompactd is used for  compaction,  the compact delay of
-> > kcompatd is not actually a delay.Maybe it can be added to the
-> > document later to make it clearer.
-> >
-> > Thanks for your reply!
+Sorry for late response. I had a check in the log and tried "make 
+dtbs_check" at my side.
+There are 5 types of warnings, I guess I can fix two types of them.
 
-Please avoid top posting, when you say added later, I presume more
-patches for documentation are coming. I am OK with the patch in that
-case.
+1) : qcom,spmi@400f000: 'pmic@0', 'pmic@1', 'pmic@2', 'pmic@3' do not 
+match any of the regexes: 'pinctrl-[0-9]+'
 
-Reviewed-by: Balbir Singh <bsingharora@gmail.com>
+This indicates the child nodes devices are not recognized, this can be 
+fixed by adding pattern
+properties similar to what defines in spmi.yaml. I will address it in 
+next patchset.
 
-Balbir Singh
+2) qcom,spmi@400f000: reg-names: 'oneOf' conditional failed, one must be 
+fixed:
+
+This is because of the "items" defined in "reg-name" does not match 
+between the dtsi nodes
+and the schema in sequence wise. I will update the scheme for "reg-name" 
+like this to fix it in
+next patchset:
+   reg-names:
+     anyOf:
+       - minItems: 3
+       - maxItems: 3
+       - enum: ["core", "intr", "cnfg"]
+
+       - minItems: 5
+       - maxItems: 5
+       - enum: ["core", "intr", "cnfg", "chnls", "obsrvr"]
+
+3) qcom,spmi@400f000: $nodename:0: 'qcom,spmi@400f000' does not match 
+'^spmi@.*'
+
+This indicates the mismatch of the device node name between the dtsi and 
+schema, I guess
+the fix should be in dtsi file instead of this binding, the spmi.yaml 
+file has defined
+the nodename with "spmi@" prefix, qcom,spmi-pmic-arb.yaml should follow 
+this.
+Should I make the change and update all the nodes names in dtsi file 
+like this? Or can this
+be ignored and leave it to dtsi file owners to update them accordingly?
+
+4) spmi@c440000: #address-cells:0:0: 2 was expected
+   spmi@c440000: #size-cells:0:0: 0 was expected
+
+Some of the spmi device nodes specify #address-cell = < 1>, and 
+#size-cell = <1>, the original
+.txt binding specified #address-cell = < 2>, and #size-cell = <0>. The 
+change should be in dtsi
+to update them following the binding. Let me know if I should do this, 
+or I can leave itto the
+dtsi file owners to update them accordingly.
+
+5) spmi@1c40000: 'cell-index' does not match any of the regexes: 
+'pinctrl-[0-9]+'
+
+"cell-index" is not used in the driver, also it doesn't exist in the 
+.txt binding, so this should
+be fixedin the corresponding dtsi file. Let me know if I need to fix it.
+
+Thanks
+
+
+On 2021/12/10 10:05, Stephen Boyd wrote:
+> Quoting Rob Herring (2021-12-02 05:58:09)
+>> On Thu, 02 Dec 2021 08:00:12 +0800, Fenglin Wu wrote:
+>>> Convert the SPMI PMIC arbiter documentation to JSON/yaml. While at it,
+>>> update SPMI bus "reg" items constraint for SPMI PMIC arbiter to carry
+>>> it and update it with a smaller range.
+>>>
+>>> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
+>>> ---
+>>>   .../bindings/spmi/qcom,spmi-pmic-arb.txt           |  67 -----------
+>>>   .../bindings/spmi/qcom,spmi-pmic-arb.yaml          | 128 +++++++++++++++++++++
+>>>   Documentation/devicetree/bindings/spmi/spmi.yaml   |   3 +-
+>>>   3 files changed, 130 insertions(+), 68 deletions(-)
+>>>   delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
+>>>   create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+>>>
+>> Running 'make dtbs_check' with the schema in this patch gives the
+>> following warnings. Consider if they are expected or the schema is
+>> incorrect. These may not be new warnings.
+>>
+>> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+>> This will change in the future.
+>>
+>> Full log is available here: https://patchwork.ozlabs.org/patch/1562483
+> Are any of these problems going to be fixed?

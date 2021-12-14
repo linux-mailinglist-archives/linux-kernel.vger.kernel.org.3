@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59895474B88
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDAD474B8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237316AbhLNTIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:08:38 -0500
-Received: from mail-wm1-f46.google.com ([209.85.128.46]:42871 "EHLO
-        mail-wm1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbhLNTIh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:08:37 -0500
-Received: by mail-wm1-f46.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso1544878wme.1;
-        Tue, 14 Dec 2021 11:08:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Q+SnTgHeOhxd9QlFHUExAaUf9EHnPJVK61QWmTyxHqU=;
-        b=V/AhT9qW2n2Dl30IJz4n0rEIKVKnlFiAbffxLhaIlH1WhO7RcwIBRNHVhNHBDoNcc0
-         SJf/G2JlONQTGiL1Lv+cste7BAJGpq2GWJ7SpS5DQeIRZyfK2WKjP/p+fFcwBxZj5LEq
-         amCKmMHbRyg4n85hvwgxQXtKpvHxxsjBtJiK2zoQVIOFfiYW3Nm5mNttNQKG0lgvwKq4
-         jdW/YNUT9szjJnkTonurTjB6TCmjw2pbjgTYwnfE88lbdczYddMqI3kWJd0cZNiUQdG6
-         HeqGw7as7E8AYyLRdcOgje4c1RZiW0KvLpod4RCFzBjQR2ye35z6EnyIGN1/vCeqW6R0
-         TEiA==
-X-Gm-Message-State: AOAM532HfEf3snMiNSpw093RnBsRc3B78Jjjtcd48S8IzKGjGXQIkC+r
-        PKKRuaQZVNhvIgNTw0J87Tw=
-X-Google-Smtp-Source: ABdhPJyRJQtMFbxbI28lZc+ybdfr4Llm0LQz2/J7lJb2XZsPO7ubhn3abhgW79+5QEv1Yqct6tILxA==
-X-Received: by 2002:a7b:cf10:: with SMTP id l16mr1136400wmg.17.1639508915786;
-        Tue, 14 Dec 2021 11:08:35 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id ay21sm3107963wmb.7.2021.12.14.11.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 11:08:35 -0800 (PST)
-Date:   Tue, 14 Dec 2021 19:08:33 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        kys@microsoft.com, sthemmin@microsoft.com, haiyangz@microsoft.com,
-        decui@microsoft.com, Michael Kelley <mikelley@microsoft.com>
-Subject: [GIT PULL] Hyper-V fixes for 5.16-rc6
-Message-ID: <20211214190833.a4cnzbygiph3ydl2@liuwe-devbox-debian-v2>
+        id S237331AbhLNTJT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Dec 2021 14:09:19 -0500
+Received: from aposti.net ([89.234.176.197]:52218 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237319AbhLNTJR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 14:09:17 -0500
+Date:   Tue, 14 Dec 2021 19:09:06 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/3] MIPS: boot/compressed: Disable abicalls
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        list@opendingux.net, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Message-Id: <67D44R.5C6XHAZPCYVU3@crapouillou.net>
+In-Reply-To: <YbjdQfrC+EjeJjRV@archlinux-ax161>
+References: <20211213224914.1501303-1-paul@crapouillou.net>
+        <20211213224914.1501303-2-paul@crapouillou.net>
+        <YbjdQfrC+EjeJjRV@archlinux-ax161>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Nathan,
 
-The following changes since commit f3e613e72f66226b3bea1046c1b864f67a3000a4:
+Le mar., déc. 14 2021 at 11:06:57 -0700, Nathan Chancellor 
+<nathan@kernel.org> a écrit :
+> On Mon, Dec 13, 2021 at 10:49:12PM +0000, Paul Cercueil wrote:
+>>  Avoid complaints from Clang/LLVM by building the decompress program 
+>> with
+>>  -mno-abicalls.
+> 
+> What is the message?
 
-  x86/hyperv: Move required MSRs check to initial platform probing (2021-11-15 12:37:08 +0000)
+ld.lld: warning: lto.tmp: linking abicalls code with non-abicalls code 
+arch/mips/kernel/head.o
 
-are available in the Git repository at:
+Cheers,
+-Paul
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-fixes-signed-20211214
+> 
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>   arch/mips/boot/compressed/Makefile | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>> 
+>>  diff --git a/arch/mips/boot/compressed/Makefile 
+>> b/arch/mips/boot/compressed/Makefile
+>>  index f27cf31b4140..4c9ecfbb0ef4 100644
+>>  --- a/arch/mips/boot/compressed/Makefile
+>>  +++ b/arch/mips/boot/compressed/Makefile
+>>  @@ -27,10 +27,10 @@ ifdef CONFIG_CPU_LOONGSON64
+>>   KBUILD_CFLAGS := $(filter-out -march=loongson3a, $(KBUILD_CFLAGS)) 
+>> -march=mips64r2
+>>   endif
+>> 
+>>  -KBUILD_CFLAGS := $(KBUILD_CFLAGS) -D__KERNEL__ -D__DISABLE_EXPORTS 
+>> \
+>>  +KBUILD_CFLAGS := $(KBUILD_CFLAGS) -mno-abicalls -D__KERNEL__ 
+>> -D__DISABLE_EXPORTS \
+>>   	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) 
+>> -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
+>> 
+>>  -KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+>>  +KBUILD_AFLAGS := $(KBUILD_AFLAGS) -mno-abicalls -D__ASSEMBLY__ \
+>>   	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) \
+>>   	-DKERNEL_ENTRY=$(VMLINUX_ENTRY_ADDRESS)
+>> 
+>>  --
+>>  2.33.0
+>> 
+>> 
 
-for you to fetch changes up to 1dc2f2b81a6a9895da59f3915760f6c0c3074492:
 
-  hv: utils: add PTP_1588_CLOCK to Kconfig to fix build (2021-11-28 21:22:35 +0000)
-
-----------------------------------------------------------------
-hyperv-fixes for 5.16-rc6
- - Fix build (Randy Dunlap)
-----------------------------------------------------------------
-Randy Dunlap (1):
-      hv: utils: add PTP_1588_CLOCK to Kconfig to fix build
-
- drivers/hv/Kconfig | 1 +
- 1 file changed, 1 insertion(+)

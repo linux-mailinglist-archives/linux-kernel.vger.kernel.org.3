@@ -2,157 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6D947397E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8391E47397D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244469AbhLNAXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 19:23:08 -0500
-Received: from mga04.intel.com ([192.55.52.120]:52155 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243593AbhLNAXD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 19:23:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639441383; x=1670977383;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pvjaaEJztaz2NKrU4E2NnRtD5QTLRaK2cd8iT/cBFAk=;
-  b=cpvmYe9VGwv3QBFUvxIxrjjav9MMzC27Xq7h8GLryoice1GbUCOkhCN/
-   NsZqWqqHlr9HQr+hPhD/kDbtRQkjhCapT4+L50IrbXnLjxySTMhOhdVNi
-   eUEzufrC7h9g5s6ETzGehpAsvXFLSvIiLtDGSRWQbqkX6P3ztOup03Kml
-   HC2FRC2kHkE1LJpphoOmcBheHOqEy9IRYbRgyrRCWAFRaDO2XLW6deFf9
-   iKpXRhnAHpvi1w11iiSKepQIHcshjrVLdIdEI0qGP7rDPhOpj4owGd7fY
-   wunBJUjLCNHIOwoHw5vDpbfyZO2rSRwDmBAxYVe48rbAbXGqdPJ6K33Sl
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="237597518"
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="237597518"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 16:23:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
-   d="scan'208";a="566889520"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Dec 2021 16:23:01 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwvau-0007F6-Ak; Tue, 14 Dec 2021 00:23:00 +0000
-Date:   Tue, 14 Dec 2021 08:22:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Pirko <jiri@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:linecards 55/109]
- drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:366:26: warning:
- variable 'linecards' set but not used
-Message-ID: <202112140859.ZE3HQNoo-lkp@intel.com>
+        id S244445AbhLNAWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 19:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242786AbhLNAWb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 19:22:31 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9E3C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 16:22:31 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id 14so21094036ioe.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 16:22:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xdDuB1YG6XTXDhWwkGkmln0E+/N5BEU+BrEQQgdpPmY=;
+        b=gwhbkJpHH5rTNp0Z6uxU5d66XAXmNYxGmy0drFgtfDh+geMk3+7EMaZf7sCjgI/5dp
+         WUIYDPOrkylCGZ0bu9Bmvw9tzrpkcO2HpVPhI6E+WKqfjWQhw05snOM3fHY6lwHZrPoM
+         oVsLRQuiea1Cw8ul/DTzFiVBFASI9arLmfmM5b28xIih0qSGDPqEHxI6tViuxe7/Fk17
+         Hd++hOSc1UsKmzQsFdOjfiu458/cgzOqhBOURC2RSjG1my9MG077fkZAmEVWI7bpDeMZ
+         Pwt8rSyuBUNWIAc0M4jGSRXGHzos9DXq+C1Vni+0z8ZOGAnnzrhS8c+Wtv001oejjzJX
+         BSzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xdDuB1YG6XTXDhWwkGkmln0E+/N5BEU+BrEQQgdpPmY=;
+        b=H0JPEBy1CbqFvr4xX/bEZwARa6fNbTXKQJudhnK/1vgG9sLrC4sjCpFRRA44ugnAr1
+         IvYACgSAhFl/L7HUJqBZwBZIJ1+DskV3cDVlJxaz77Yj7j8/efIH0AMia1sokG+6dnP5
+         qAk4pnoSYyZdFTNRHvx6zgTAGACNsKG8gH7s6HHncSb54kN/DfS41V53nDLD2gmdpKNU
+         hPEAJfs2wOM8BQkBq+3J14AcIyKGrosMuhjI+ShysSEcAi3I2SsvYuy25lLP7TmGT8na
+         Y7ppvMRNAyJQ0/VGlcrPqD7vOQBQlDCVwD1N7d96+gzDlz/FlFf6H9fDlTpSf/Li2+C+
+         UBSA==
+X-Gm-Message-State: AOAM533TgNsByf2wj7lyy2bx/wsoF3Ti1qijbugc3WKr7wSTk2WGjRaf
+        HK3NcbKPD31QnXni8yHJj0NlfxuZzJnA9ylPDoYQEQ==
+X-Google-Smtp-Source: ABdhPJyCHKaf9UKVoATEck3LTMSSftVTZ/0PQGYg+50WAy0eM15osVpyM19KBCZdRXcUqPPpyYL26Oca5akvBsAqT/w=
+X-Received: by 2002:a6b:ea0a:: with SMTP id m10mr1382455ioc.91.1639441350311;
+ Mon, 13 Dec 2021 16:22:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211123000102.4052105-1-almasrymina@google.com> <YaMBGQGNLqPd6D6f@casper.infradead.org>
+In-Reply-To: <YaMBGQGNLqPd6D6f@casper.infradead.org>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Mon, 13 Dec 2021 16:22:19 -0800
+Message-ID: <CAHS8izM5as_AmN4bSmZd1P7aSXZ86VAfXgyooZivyf7-E5gZcQ@mail.gmail.com>
+Subject: Re: [PATCH v7] mm: Add PM_THP_MAPPED to /proc/pid/pagemap
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        David Hildenbrand <david@redhat.com>,
+        "Paul E . McKenney" <paulmckrcu@fb.com>,
+        Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>,
+        Ivan Teterevkov <ivan.teterevkov@nutanix.com>,
+        Florian Schmidt <florian.schmidt@nutanix.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jpirko/linux_mlxsw linecards
-head:   2399de99a931630e05915fbcb4f84ca21a8e000a
-commit: 8693f5ee04deacc07510585fee350a2e30f7d4fc [55/109] mlxsw: core_linecards: Add line card objects and implement provisioning
-config: i386-randconfig-a001-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140859.ZE3HQNoo-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/8693f5ee04deacc07510585fee350a2e30f7d4fc
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw linecards
-        git checkout 8693f5ee04deacc07510585fee350a2e30f7d4fc
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlxsw/
+On Sat, Nov 27, 2021 at 8:10 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Mon, Nov 22, 2021 at 04:01:02PM -0800, Mina Almasry wrote:
+> > Add PM_THP_MAPPED MAPPING to allow userspace to detect whether a given virt
+> > address is currently mapped by a transparent huge page or not.  Example
+> > use case is a process requesting THPs from the kernel (via a huge tmpfs
+> > mount for example), for a performance critical region of memory.  The
+> > userspace may want to query whether the kernel is actually backing this
+> > memory by hugepages or not.
+>
+> But what is userspace going to _do_ differently if the kernel hasn't
+> backed the memory with huge pages?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sorry for the late reply here.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/mellanox/mlxsw/core_linecards.c:366:26: warning: variable 'linecards' set but not used [-Wunused-but-set-variable]
-           struct mlxsw_linecards *linecards;
-                                   ^
-   1 warning generated.
-
-
-vim +/linecards +366 drivers/net/ethernet/mellanox/mlxsw/core_linecards.c
-
-   359	
-   360	static int mlxsw_linecard_unprovision(struct devlink_linecard *devlink_linecard,
-   361					      void *priv,
-   362					      struct netlink_ext_ack *extack)
-   363	{
-   364		enum mlxsw_reg_mbct_fsm_state fsm_state;
-   365		struct mlxsw_linecard *linecard = priv;
- > 366		struct mlxsw_linecards *linecards;
-   367		enum mlxsw_reg_mbct_status status;
-   368		unsigned int ini_wait_retries = 0;
-   369		struct mlxsw_core *mlxsw_core;
-   370		int err;
-   371	
-   372		mutex_lock(&linecard->lock);
-   373	
-   374		linecards = linecard->linecards;
-   375		mlxsw_core = linecard->linecards->mlxsw_core;
-   376	
-   377	query_ini_status:
-   378		err = mlxsw_linecard_query_status(linecard, &status,
-   379						  &fsm_state, extack);
-   380		if (err)
-   381			goto err_out;
-   382	
-   383		switch (fsm_state) {
-   384		case MLXSW_REG_MBCT_FSM_STATE_INI_IN_USE:
-   385			if (ini_wait_retries++ > MLXSW_LINECARD_INI_WAIT_RETRIES) {
-   386				NL_SET_ERR_MSG_MOD(extack, "Failed to wait for linecard INI to be not used");
-   387				goto err_out;
-   388			}
-   389			mdelay(MLXSW_LINECARD_INI_WAIT_MS);
-   390			goto query_ini_status;
-   391		default:
-   392			break;
-   393		}
-   394	
-   395		mlxsw_reg_mbct_pack(linecard->mbct_pl, linecard->slot_index,
-   396				    MLXSW_REG_MBCT_OP_ERASE_INI_IMAGE, 0,
-   397				    false, false, NULL);
-   398		err = mlxsw_reg_write(mlxsw_core, MLXSW_REG(mbct),
-   399				      linecard->mbct_pl);
-   400		if (err) {
-   401			NL_SET_ERR_MSG_MOD(extack, "Failed to erase linecard INI");
-   402			goto err_out;
-   403		}
-   404		mlxsw_reg_mbct_unpack(linecard->mbct_pl, NULL, &status, &fsm_state);
-   405		switch (status) {
-   406		case MLXSW_REG_MBCT_STATUS_ERASE_COMPLETE:
-   407			break;
-   408		default:
-   409			/* Should not happen */
-   410			fallthrough;
-   411		case MLXSW_REG_MBCT_STATUS_ERASE_FAILED:
-   412			NL_SET_ERR_MSG_MOD(extack, "Failed to erase linecard INI");
-   413			goto fix_fsm_err_out;
-   414		case MLXSW_REG_MBCT_STATUS_ERROR_INI_IN_USE:
-   415			NL_SET_ERR_MSG_MOD(extack, "Failed to erase linecard INI while being used");
-   416			goto fix_fsm_err_out;
-   417		}
-   418		goto out;
-   419	
-   420	fix_fsm_err_out:
-   421		mlxsw_linecard_fix_fsm_state(linecard, fsm_state);
-   422	err_out:
-   423		mlxsw_linecard_provision_fail(linecard);
-   424	out:
-   425		mutex_unlock(&linecard->lock);
-   426		return err;
-   427	}
-   428	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+My plan is to expose this information as metrics right now and:
+1. Understand the kind of hugepage backing we're actually getting if any.
+2. If there are drops in hugepage backing we can investigate the
+cause, whether it's due to normal memory fragmentation or some
+bug/issue.
+3. Schedule machines for reboots to defragment the memory if the
+hugepage backing is too low.
+4. Possibly motivate future work to improve hugepage backing if our
+numbers are too low.

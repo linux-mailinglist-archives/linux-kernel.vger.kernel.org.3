@@ -2,116 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2745047418E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00C6474191
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233612AbhLNLha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 06:37:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233584AbhLNLh3 (ORCPT
+        id S233602AbhLNLhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 06:37:43 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:36570 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233581AbhLNLhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 06:37:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2646FC061574;
-        Tue, 14 Dec 2021 03:37:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6AA5B8189C;
-        Tue, 14 Dec 2021 11:37:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40AA7C34601;
-        Tue, 14 Dec 2021 11:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639481846;
-        bh=Oappbukov3UQnAjv69yWrBNllmlybdQiKY575a0/fwM=;
+        Tue, 14 Dec 2021 06:37:42 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C37BF8C4;
+        Tue, 14 Dec 2021 12:37:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1639481861;
+        bh=DWeOCNpggrbSb7+1z1pPA/5lS6KWoeYABLFQPY3a7KY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MwoUBIgxhmXvND8+XN4wLT/kAzYYpWUH+pQQWVqul52URFpWpv4lX/PLcWBhO2D00
-         3QfbMRBKJxHPSwyEFE40Yu+MEQt9/hmhf7WGLQQehiCvPqU9m18F2ZjRBxIAIJRt9V
-         50KiisYgFgcoCQxgNyLcNXgTvPOptyl2C2zd2U9Tjm0Fpq+DE5Lvl5ea0agq/+68Sn
-         wWiPspMs3nJsLxlnkSZkX+CBoX43iK7983L61R76TBu1tkKh/rgrVXU2Z+GMrExjQM
-         Uuwpy78SHupNIun6pXiog5+9yqQXWvsbBqnZWnS30v+CrWXo3YtWV8PbKvn2YbdIbt
-         KkgyMle++y9EQ==
-Date:   Tue, 14 Dec 2021 19:37:21 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jianhe@ambarella.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: cdnsp: Fix lack of
- spin_lock_irqsave/spin_lock_restore
-Message-ID: <20211214113721.GA4527@Peter>
-References: <20211214045527.26823-1-pawell@gli-login.cadence.com>
+        b=ZzMkQC39hzgoC2iHZ8/SF/9S0YLZszWJ4p3ihJj5cRfp34DIi0kc8O4W/do7bO2k2
+         RUZ8tG+L6xF8KYSoi4r9puRcRHN09zGj40XzBy6D1ekD+uJsTAE793d6ZaIVC7gqcx
+         U5nD9B+xZIUYpJcgTnA01X+jnCkic03DQJy3Qa8Q=
+Date:   Tue, 14 Dec 2021 13:37:39 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] dt-bindings: i2c Add regulator to pca954x
+Message-ID: <YbiCA3ryjof0hDXe@pendragon.ideasonboard.com>
+References: <20211214095021.572799-1-patrick.rudolph@9elements.com>
+ <20211214095021.572799-3-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211214045527.26823-1-pawell@gli-login.cadence.com>
+In-Reply-To: <20211214095021.572799-3-patrick.rudolph@9elements.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-12-14 05:55:27, Pawel Laszczak wrote:
-> From: Pawel Laszczak <pawell@cadence.com>
-> 
-> Patch puts content of cdnsp_gadget_pullup function inside
-> spin_lock_irqsave and spin_lock_restore section.
-> This construction is required here to keep the data consistency,
-> otherwise some data can be changed e.g. from interrupt context.
-> 
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> Reported-by: Ken (Jian) He <jianhe@ambarella.com>
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+Hi Patrick,
 
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
+Thank you for the patch.
 
-> --
+On Tue, Dec 14, 2021 at 10:50:20AM +0100, Patrick Rudolph wrote:
+> Add a regulator called vcc and update the example.
 > 
-> Changelog:
-> v2:
-> - added disable_irq/enable_irq as sugester by Peter Chen
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
->  drivers/usb/cdns3/cdnsp-gadget.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-> index f6d231760a6a..e07a65b980af 100644
-> --- a/drivers/usb/cdns3/cdnsp-gadget.c
-> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
-> @@ -1544,15 +1544,27 @@ static int cdnsp_gadget_pullup(struct usb_gadget *gadget, int is_on)
->  {
->  	struct cdnsp_device *pdev = gadget_to_cdnsp(gadget);
->  	struct cdns *cdns = dev_get_drvdata(pdev->dev);
-> +	unsigned long flags;
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> index bd794cb80c11..5add7db02c0c 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> @@ -64,6 +64,9 @@ properties:
+>      description: if present, overrides i2c-mux-idle-disconnect
+>      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
 >  
->  	trace_cdnsp_pullup(is_on);
+> +  vcc-supply:
+> +    description: An optional voltage regulator supplying power to the chip.
+
+The NXP datasheet names the supply VDD, could we use vdd-supply here ? I
+also wouldn't call it ooptional (even if it effectively is from a DT
+point of view as the property isn't listed as required), given that the
+power supply isn't optional for the chip to function. How about the
+following ?
+
+  vdd-supply:
+    description: The voltage regulator powering to the VDD supply.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -84,6 +87,8 @@ examples:
+>              #size-cells = <0>;
+>              reg = <0x74>;
 >  
-> +	/*
-> +	 * Disable events handling while controller is being
-> +	 * enabled/disabled.
-> +	 */
-> +	disable_irq(cdns->dev_irq);
-> +	spin_lock_irqsave(&pdev->lock, flags);
+> +            vcc-supply = <&p3v3>;
 > +
->  	if (!is_on) {
->  		cdnsp_reset_device(pdev);
->  		cdns_clear_vbus(cdns);
->  	} else {
->  		cdns_set_vbus(cdns);
->  	}
-> +
-> +	spin_unlock_irqrestore(&pdev->lock, flags);
-> +	enable_irq(cdns->dev_irq);
-> +
->  	return 0;
->  }
->  
-> -- 
-> 2.25.1
-> 
+>              interrupt-parent = <&ipic>;
+>              interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
+>              interrupt-controller;
 
 -- 
+Regards,
 
-Thanks,
-Peter Chen
-
+Laurent Pinchart

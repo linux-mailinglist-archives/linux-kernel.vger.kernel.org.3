@@ -2,77 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D56473FAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4582473FB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbhLNJj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 04:39:29 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:53930 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229744AbhLNJj2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 04:39:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=j+RmcVDTIeDOSJuZcBLUijsZL+mu256ZqxBjLPcGmew=; b=bMftSZdo18MuMjlDm+K0MuPhVc
-        bjMBPGvfceiSJzj/Y2abt0E06Vavz3L3vfEm/bwUicQ8D/rI6TcsnsVH79kSKT38PCeP22kvbeZkZ
-        gLmnYos48Cz8p0yBm8XrY6RCn8rfS1NwxFmIUF1rUpC1NqJuNwNPkanA3zvnAVOhJo8E=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mx4HN-00GUcp-Bh; Tue, 14 Dec 2021 10:39:25 +0100
-Date:   Tue, 14 Dec 2021 10:39:25 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Ismail, Mohammad Athari" <mohammad.athari.ismail@intel.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Voon, Weifeng" <weifeng.voon@intel.com>,
-        "Wong, Vee Khee" <vee.khee.wong@intel.com>
-Subject: Re: [BUG] net: phy: genphy_loopback: add link speed configuration
-Message-ID: <YbhmTcFITSD1dOts@lunn.ch>
-References: <CO1PR11MB4771251E6D2E59B1B413211FD5759@CO1PR11MB4771.namprd11.prod.outlook.com>
+        id S232605AbhLNJlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 04:41:13 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:40482 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229744AbhLNJlL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 04:41:11 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639474869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QERmxLNSvvFx6vzNSYmMrsv0e2X5CmwuAGyK1bazfj4=;
+        b=uVT3SzBcceVfCKVd9bfwP/mkrBbU6i6CXo8B0uqt0K0CoD5a4qXyBj1twarA7qhg9DUpCf
+        OrVbNB7kcn9ckbfr0CT2aeLTQTe7pl003+0ptW2EbYL49mtlKdiGcdgbTrY3LmUvHIDRVO
+        oUyYJTCLGbEKPL3lyqY4wNdexzr+WwLkloa+hbSAnazTQRKYFU/bmsDlS0IKdiZ6tW9GGx
+        HiqEkWnh0eDq6pt7S9pHkclWGxZU61oDJv8S9DVEIUgIkiP6c3yxVlpBmL8rJzB+H4TNe6
+        G8+D7456TbPXVtBVebfm1EMXeWbrmmtdvroOCyBCNYYLr4GmBNBW77LIxVu6Kg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639474869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QERmxLNSvvFx6vzNSYmMrsv0e2X5CmwuAGyK1bazfj4=;
+        b=KbnnQxJjrjwD3AUzOdrDHb83i5GFD5BYZ+EuPZBYHEXZFSMZ3bN/5+CPOSNQTQ/bGXXBRZ
+        h+7rXr2HbjWxd5Dw==
+To:     Nishanth Menon <nm@ti.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>, linux-wireless@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
+In-Reply-To: <20211213182958.ytj4m6gsg35u77cv@detonator>
+References: <20211210221642.869015045@linutronix.de>
+ <20211213182958.ytj4m6gsg35u77cv@detonator>
+Date:   Tue, 14 Dec 2021 10:41:08 +0100
+Message-ID: <87fsqvttfv.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CO1PR11MB4771251E6D2E59B1B413211FD5759@CO1PR11MB4771.namprd11.prod.outlook.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 07:00:37AM +0000, Ismail, Mohammad Athari wrote:
-> Hi Oleksij,
-> 
-> "net: phy: genphy_loopback: add link speed configuration" patch causes Marvell 88E1510 PHY not able to perform PHY loopback using ethtool command (ethtool -t eth0 offline). Below is the error message: 
-> 
-> "Marvell 88E1510 stmmac-3:01: genphy_loopback failed: -110" 
+On Mon, Dec 13 2021 at 12:29, Nishanth Menon wrote:
+> On 23:18-20211210, Thomas Gleixner wrote:
+> Also while testing on TI K3 platforms, I noticed:
+>
+> msi_device_data_release/msi_device_destroy_sysfs in am64xx-evm / j7200
 
--110 is ETIMEDOUT. So that points to the phy_read_poll_timeout().
+The warning complains about a device being released with MSI descriptors
+still attached to the device. This was added by:
 
-Ah, that points to the fact the Marvell PHYs are odd. You need to
-perform a software reset after changing some registers to actually
-execute the change.
+  5b012cede0f7 ("device: Add device::msi_data pointer and struct msi_device_data")
 
-As a quick test, please could you try:
+That's not a regression caused by this commit. The warning is just
+exposing an already existing problem in the iwlwifi driver, which seems
+to do:
 
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 74d8e1dc125f..b45f3ffc7c7f 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -2625,6 +2625,10 @@ int genphy_loopback(struct phy_device *phydev, bool enable)
- 
-                phy_modify(phydev, MII_BMCR, ~0, ctl);
- 
-+               ret = genphy_soft_reset(phydev);
-+               if (ret < 0)
-+                       return ret;
-+
-                ret = phy_read_poll_timeout(phydev, MII_BMSR, val,
-                                            val & BMSR_LSTATUS,
-                                    5000, 500000, true);
+   probe()
+     setup_pci_msi[x]_interrupts()
+     start_drv()
+       if (try_to_load_firmware() == FAIL)
+       	   device_release_driver()
+                ...
+                msi_device_data_release()
+                    WARN()
 
-If this fixes it for you, the actual fix will be more complex, Marvell
-cannot use genphy_loopback, it will need its own implementation.
+Thanks,
 
-       Andrew
+        tglx

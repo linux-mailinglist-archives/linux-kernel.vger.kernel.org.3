@@ -2,84 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7522D474C3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4A9474C40
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237513AbhLNTp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234555AbhLNTp4 (ORCPT
+        id S237535AbhLNTrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:47:01 -0500
+Received: from relay05.th.seeweb.it ([5.144.164.166]:51993 "EHLO
+        relay05.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237522AbhLNTrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:45:56 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BE1C061574;
-        Tue, 14 Dec 2021 11:45:56 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so16945747pjq.4;
-        Tue, 14 Dec 2021 11:45:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WXQ4L3qp7NpGXbdQ/vd/POJH3pL/Rk5cETFAlE06wQg=;
-        b=amqRniWefUWtIJ056Oy+3xDZEqFPheGvE9Orcx+F0E4zfdLvUazfQwtYHPu5kjhhAI
-         ofBNdFsIW7gp8WJfw4oI/yZSbxVjS29P+EKk9S+qTHMiGxouTUqfZYmPBVgcdvqpd86h
-         eaNolPyGzpGa3eWbqupzQv8eK969rcD/Bf8Cv6aXU2Clw+4iqUKy2oGW8XwlpM8s1n7c
-         q7uw2Zk9YV2J56oHbmmBM8Nf6UuLo3qUo8r+Uwp3F+MRoS3Xune4T/fBXoByn2sRE0QQ
-         KEJOoNUFEq/SvDfmUUp/35n53pN6BQxu7/J084YlL66sHAjS8J6XXd+m7UradoS8Ge9n
-         eo+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=WXQ4L3qp7NpGXbdQ/vd/POJH3pL/Rk5cETFAlE06wQg=;
-        b=V/lioLayIg6yxK0/3FaEk1h3A03u7XDZ2IiZdkvnaOlbEuIkscDfk9UpOn5YBKw7cv
-         qjHzLKbr6MaAU3/VaValny9lpTX4fl9d8PCLhIzvaNopa9SQdn9KqAU+sHVQ2KgM5U88
-         DKHkYcKVOYwiXuCe5sQPjBYxHB4bIkKu4ONtFyIq358RmMMJ1YwDUksVXb9bSWRMm+sS
-         qrcx33t3ACgFll78urATicWTLOTi9lJ/GeyY6p3jGbOn2qKPQlm98yKRmtc4D7dvXll5
-         zdVe9SmdaUqeScBSbYIMkqJWkiH44QtlcXNJ79XBRjtsEDYYNr6aSiq9JRyGUxYilt1y
-         gKcg==
-X-Gm-Message-State: AOAM532w2oDwyvcDfqlpqee8f/WH0JSHC7c1cwV0IFRT+mA2WDbxspvi
-        OtMv3SKj3jeY+Yic8Z8cAN8XS4o6kFs=
-X-Google-Smtp-Source: ABdhPJxJ4asMv9j+aC7K/2DaOHbqW56OIIjUP9y4PFtJOggcjiRcfYS3c5sBD6qydPRohZqm3kheOg==
-X-Received: by 2002:a17:902:7281:b0:148:a2e8:279d with SMTP id d1-20020a170902728100b00148a2e8279dmr964608pll.164.1639511156119;
-        Tue, 14 Dec 2021 11:45:56 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id w19sm465696pga.80.2021.12.14.11.45.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 11:45:55 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 14 Dec 2021 09:45:54 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch v2] cgroup: return early if it is already on preloaded
- list
-Message-ID: <Ybj0cicbccR2OM1I@slm.duckdns.org>
-References: <20211214004607.9296-1-richard.weiyang@gmail.com>
+        Tue, 14 Dec 2021 14:47:00 -0500
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id CD3993F3BC;
+        Tue, 14 Dec 2021 20:46:57 +0100 (CET)
+Date:   Tue, 14 Dec 2021 20:46:56 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v3 0/2] Use "ref" clocks from firmware for DSI PLL VCO
+ parent
+Message-ID: <20211214194656.mayiy4xhcshjluwf@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+References: <20210911131922.387964-1-marijn.suijten@somainline.org>
+ <163165584152.763609.4056232270079096475@swboyd.mtv.corp.google.com>
+ <20210918144038.6q352hzqopx7vvdu@SoMainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214004607.9296-1-richard.weiyang@gmail.com>
+In-Reply-To: <20210918144038.6q352hzqopx7vvdu@SoMainline.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 12:46:07AM +0000, Wei Yang wrote:
-> If a cset is already on preloaded list, this means we have already setup
-> this cset properly for migration.
-> 
-> This patch just relocate the root cgrp lookup which isn't used anyway
-> when the cset is already on the preloaded list.
-> 
-> [tj@kernel.org: rephrase the commit log]
-> 
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+Hi all,
 
-Applied to cgroup/for-5.17.
+On 2021-09-18 16:40:38, Marijn Suijten wrote:
+> On 2021-09-14 14:44:01, Stephen Boyd wrote:
+> > Quoting Marijn Suijten (2021-09-11 06:19:19)
+> > > All DSI PHY/PLL drivers were referencing their VCO parent clock by a
+> > > global name, most of which don't exist or have been renamed.  These
+> > > clock drivers seem to function fine without that except the 14nm driver
+> > > for sdm6xx [1].
+> > > 
+> > > At the same time all DTs provide a "ref" clock as per the requirements
+> > > of dsi-phy-common.yaml, but the clock is never used.  This patchset puts
+> > > that clock to use without relying on a global clock name, so that all
+> > > dependencies are explicitly defined in DT (the firmware) in the end.
+> > 
+> > I can take this through clk tree if it helps avoid conflicts. There are
+> > some other patches to sdm660.c in the clk tree already.
+> 
+> Might be useful to maintain proper ordering of these dependent patches
+> but it's up to Dmitry and Rob to decide, whom I'm sending this mail
+> directly to so that they can chime in.
 
-Thanks.
+Dependent patch [3] landed in 5.15 and [2] made it into 5.16 rc's - is
+it time to pick this series up and if so through what tree?
 
--- 
-tejun
+Repeating the links from patch 1/2:
+[2]: https://lore.kernel.org/linux-arm-msm/20210830175739.143401-1-marijn.suijten@somainline.org/
+[3]: https://lore.kernel.org/linux-arm-msm/20210829203027.276143-2-marijn.suijten@somainline.org/
+
+Thanks!
+
+- marijn

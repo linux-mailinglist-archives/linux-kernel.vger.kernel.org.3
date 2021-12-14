@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D1D4739B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0D94739BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242820AbhLNAoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 19:44:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
+        id S244477AbhLNAqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 19:46:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbhLNAop (ORCPT
+        with ESMTP id S233802AbhLNAqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 19:44:45 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD062C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 16:44:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=iZuPc4ELeOaliF8n7EP7QWMLU80qJKqmHcBNmIZWMSQ=; b=o4CYC9PGY++7qWTt9O8OOQ3YCK
-        Id16u1H/E+C7K3bmzxONwGyS9tj9l8x1x89YS+05yqgvAKZkoqlREeqXQUqqnC9Kt5Qs7veyaiz6s
-        i6WvPeimqsxO34b7nx0qgOkc65cUEbIOw9q6/SBGT8QasbwTWNvYK1c76b+ObXkTUaSQut8sye91g
-        C+8b3Gs9DBHDQn6jw0B/5HHTPclTV6uPgmI8xhwSuV+XcSCEkL3fnuqYwtfpHE9g5YNmFDXb6jcai
-        I4+nM9Rk2SgwfC3EYnLlR5D5iQdh8Z+bEUoNWS0CMIP7im2hNtcwn5efzEuCwOEbfahXz9ArI6ffj
-        8De1MqIQ==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mwvvx-00C5CF-Ac; Tue, 14 Dec 2021 00:44:45 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH] regulator: driver.h: fix kernel-doc warnings
-Date:   Mon, 13 Dec 2021 16:44:44 -0800
-Message-Id: <20211214004444.16932-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 13 Dec 2021 19:46:18 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A8DC061574;
+        Mon, 13 Dec 2021 16:46:18 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id y13so57295671edd.13;
+        Mon, 13 Dec 2021 16:46:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=kSriUcr2RHlsa/k2Omom4FRrCUVVZTUaNFBbTKOcsT8=;
+        b=naxeXMBFCpq38O3k+pVvJGj0gGYcPhbWVAT8G7ARuCaUZ7Tce88QMVO47ld3Coh+tB
+         /NKR85ihfLqmLPynGBFUnqrTrCHNmyLhBtr6uEVplKhcb2a3HKQEglQFSgEzXKMuMLc7
+         3wXCIXOYljRLJLErKfHoJb4JlfqZMcTC5NO17wzxzTTTroAMPD5FG7QwOq1R7w+YrPfY
+         2mRBRK4O2csy9BCUYb6fNJEuGjCFEjf1skmdwOvJN6lZ8Bst2eqtJYB5gTUxuyUKeuDQ
+         LpLUm8QkHCI3zoNm9Mt1uOSaUmnCOOzpkgDqkhYes9XbMqkyE12Tof6Xto/sLPIgprQn
+         FoMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kSriUcr2RHlsa/k2Omom4FRrCUVVZTUaNFBbTKOcsT8=;
+        b=eIdRSHqto8AfaBTw22BEMqakAZgfH8QuYB7ozFyXT7UP/RnSBLKY0b/0myq3lXLI2E
+         w2jfrIew3mtsQsi2vknHMG+5FivIEOqxTHdBZPfroEZ0FvCic3G9Dsr6ZQf3cGDTDXF6
+         H1cxGmCBwQJk+ss1Pq3rWcc9IZF7Tlse+tYCFYTS5yy5A33AecteAHs9cUsj4KUg6PXn
+         1d68GQJgG6oTSVQxGFe9PavWXcf+xdSqXbDqDbfwu8m1SJpY9GvwtW7WYmLHWTvr8S0l
+         0ZKlRCfXb/N85O+ZWyNQXh0mOJLhTPIOa1RzzA8Qb4LaZGaUF0VlAHshLxYUNdeKMM8M
+         4iPw==
+X-Gm-Message-State: AOAM531oBmnuQczgyFvs04bSuLmUrSpBKJVfLHQ86aemxtMqavILVwnR
+        EXCBP2dOqp4w6VOMIPmSr5U=
+X-Google-Smtp-Source: ABdhPJw06wXHR3finWEK0/mvxeqdKv0gWk14DzAQ39jyZ4YVt8/WtVRmE8InfiPMBIRhLSlz24aiWA==
+X-Received: by 2002:a17:906:7954:: with SMTP id l20mr2091942ejo.143.1639442776392;
+        Mon, 13 Dec 2021 16:46:16 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id 5sm627671ejm.132.2021.12.13.16.46.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 13 Dec 2021 16:46:16 -0800 (PST)
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wei Yang <richard.weiyang@gmail.com>
+Subject: [Patch v2] cgroup: return early if it is already on preloaded list
+Date:   Tue, 14 Dec 2021 00:46:07 +0000
+Message-Id: <20211214004607.9296-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quieten all kernel-doc warnings in <linux/regulator/driver.h>:
+If a cset is already on preloaded list, this means we have already setup
+this cset properly for migration.
 
-include/linux/regulator/driver.h:262: warning: contents before sections
-include/linux/regulator/driver.h:433: warning: Function parameter or member 'n_ramp_values' not described in 'regulator_desc'
-include/linux/regulator/driver.h:443: warning: contents before sections
+This patch just relocate the root cgrp lookup which isn't used anyway
+when the cset is already on the preloaded list.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
+[tj@kernel.org: rephrase the commit log]
+
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+
 ---
-Note: in MAINTAINERS, this following line seems to be incorrect:
-W:	http://www.slimlogic.co.uk/?p=48
+v2: rephrase commit log
+---
+ kernel/cgroup/cgroup.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- include/linux/regulator/driver.h |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 452a723d4a36..2cf729afe834 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -2648,11 +2648,11 @@ void cgroup_migrate_add_src(struct css_set *src_cset,
+ 	if (src_cset->dead)
+ 		return;
+ 
+-	src_cgrp = cset_cgroup_from_root(src_cset, dst_cgrp->root);
+-
+ 	if (!list_empty(&src_cset->mg_preload_node))
+ 		return;
+ 
++	src_cgrp = cset_cgroup_from_root(src_cset, dst_cgrp->root);
++
+ 	WARN_ON(src_cset->mg_src_cgrp);
+ 	WARN_ON(src_cset->mg_dst_cgrp);
+ 	WARN_ON(!list_empty(&src_cset->mg_tasks));
+-- 
+2.33.1
 
---- next-2021-1210.orig/include/linux/regulator/driver.h
-+++ next-2021-1210/include/linux/regulator/driver.h
-@@ -253,7 +253,6 @@ enum regulator_type {
- 
- /**
-  * struct regulator_desc - Static regulator descriptor
-- *
-  * Each regulator registered with the core is described with a
-  * structure of this type and a struct regulator_config.  This
-  * structure contains the non-varying parts of the regulator
-@@ -348,6 +347,7 @@ enum regulator_type {
-  * @ramp_delay_table:	Table for mapping the regulator ramp-rate values. Values
-  *			should be given in units of V/S (uV/uS). See the
-  *			regulator_set_ramp_delay_regmap().
-+ * @n_ramp_values:	Number of entries in the @ramp_delay_table
-  *
-  * @enable_time: Time taken for initial enable of regulator (in uS).
-  * @off_on_delay: guard time (in uS), before re-enabling a regulator
-@@ -434,7 +434,6 @@ struct regulator_desc {
- 
- /**
-  * struct regulator_config - Dynamic regulator descriptor
-- *
-  * Each regulator registered with the core is described with a
-  * structure of this type and a struct regulator_desc.  This structure
-  * contains the runtime variable parts of the regulator description.

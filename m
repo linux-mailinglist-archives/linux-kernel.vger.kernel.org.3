@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B038F473D4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3F6473D4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbhLNGnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S231190AbhLNGnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:43:16 -0500
+Received: from mail-ed1-f43.google.com ([209.85.208.43]:39747 "EHLO
+        mail-ed1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231145AbhLNGnN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Dec 2021 01:43:13 -0500
-Received: from mga06.intel.com ([134.134.136.31]:27637 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230494AbhLNGnM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 01:43:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639464192; x=1671000192;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zihrvfTZOHS81x6JjSCk9tbag0HqJyS22FPf4JWEsK8=;
-  b=AS48lQxxVQEOKtAM+7Z+8cWXIYLpfXpz1f5pFeesJyvxap3hPkz1KuQX
-   u9AcDQ8g48bmdXq1NqlvHzY24lAStHVN3SCMhyjaFeynenguzpX8zv4Pw
-   CA4Tlwv+4F6Gt9aMArUat1cWeswDABZ3PH7yu1naunutu3i9rE+LFSyCM
-   ibNYnNmLV/hCG7Rhbtq+ZQftBUsSzuKsrylnh0GX8IieF3AgSLm/H1SBx
-   zrzVhP2QXe1mPm1FOdpBZSVkbZ7v4U0IO1Rh2rEfeexctYqWhLWP+rqgO
-   fog6rBEfkpOCLUfC7RRysvsXdLCgg9waCKyfITlrVdStBdIG9rHTrtE/1
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="299690681"
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="299690681"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 22:43:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="463681529"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 13 Dec 2021 22:43:11 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mx1Wo-0007WK-A8; Tue, 14 Dec 2021 06:43:10 +0000
-Date:   Tue, 14 Dec 2021 14:42:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [ebiederm-user-namespace:signal-for-v5.17 10/12]
- kernel/kthread.c:299: warning: expecting prototype for kthread_complete_and
- exit(). Prototype was for kthread_complete_and_exit() instead
-Message-ID: <202112141422.Cykr6YUS-lkp@intel.com>
+Received: by mail-ed1-f43.google.com with SMTP id b7so361715edd.6;
+        Mon, 13 Dec 2021 22:43:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mES/VN9NDUylN7hikeYFALLjEFWfcxTzSl0FnDEQ4qo=;
+        b=QUttYACoGErkqDpq8YTWu3RDTmi0moLK916QoiQZT+4TYJIGojHij+GJ9WrG2q3GPe
+         HgRqIj//Pb3dxx6lFH7cHijW+d65bTsH9fTeRB9CMfpOiZslJnvdxisYp4FafmuSja+t
+         gFxblUOZGlVbmm+On2Vmi5E/oCcd/CPpSzuT+IYPbUENFXsh79fcNu11FHm5o9yx5O97
+         K1IgA99Z9QJrO8ObW4M4HeMp6Axnanio2fHDwbdtMELIT8KpyuwIVHIng3OrwBSf1iQT
+         Z6pHFn/HNC80uu6SObjOhyvwPB5xodQCCeOgKyX+jA9ZdxKsKCO5BGRCKbz7ejokhlfh
+         cMjQ==
+X-Gm-Message-State: AOAM531SPWtWup4ko5lMSfg4dkG/6HCgE8OtDtguu/y9P+XQ/VAuYMyg
+        ms2mKM7UddIcheYxRHXNzaDGqUIgWFA=
+X-Google-Smtp-Source: ABdhPJwoeQCTf8Mof4FF699wk5L77oT25Ghoc8KhHQrzUkQstWBRt8nQILINgn+e7vIb09ikundH8Q==
+X-Received: by 2002:a17:906:c08:: with SMTP id s8mr3626628ejf.673.1639464191777;
+        Mon, 13 Dec 2021 22:43:11 -0800 (PST)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id e19sm7251549edu.47.2021.12.13.22.43.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 22:43:11 -0800 (PST)
+Message-ID: <8bbd1a77-5f88-bb97-db88-6842df2e3e3c@kernel.org>
+Date:   Tue, 14 Dec 2021 07:43:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] tty: rpmsg: Fix race condition releasing tty port
+Content-Language: en-US
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20211213195346.12894-1-arnaud.pouliquen@foss.st.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20211213195346.12894-1-arnaud.pouliquen@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git signal-for-v5.17
-head:   6b1248798eb6f6d5285db214299996ecc5dc1e6b
-commit: cead18552660702a4a46f58e65188fe5f36e9dfe [10/12] exit: Rename complete_and_exit to kthread_complete_and_exit
-config: i386-randconfig-a001-20211213 (https://download.01.org/0day-ci/archive/20211214/202112141422.Cykr6YUS-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=cead18552660702a4a46f58e65188fe5f36e9dfe
-        git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
-        git fetch --no-tags ebiederm-user-namespace signal-for-v5.17
-        git checkout cead18552660702a4a46f58e65188fe5f36e9dfe
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 13. 12. 21, 20:53, Arnaud Pouliquen wrote:
+> In current implementation the tty_port struct is part of the
+> rpmsg_tty_port structure.The issue is that the rpmsg_tty_port structure is
+> freed on rpmsg_tty_remove but also referenced in the tty_struct.
+> Its release is not predictable due to workqueues.
+> 
+> For instance following ftrace shows that rpmsg_tty_close is called after
+> rpmsg_tty_release_cport:
+> 
+>       nr_test.sh-389     [000] .....   212.093752: rpmsg_tty_remove <-rpmsg_dev_
+> remove
+>               cat-1191    [001] .....   212.095697: tty_release <-__fput
+>        nr_test.sh-389     [000] .....   212.099166: rpmsg_tty_release_cport <-rpm
+> sg_tty_remove
+>               cat-1191    [001] .....   212.115352: rpmsg_tty_close <-tty_release
+>               cat-1191    [001] .....   212.115371: release_tty <-tty_release_str
+> 
+> As consequence, the port must be free only when user has released the TTY
+> interface.
+> 
+> This path (inspired from vcc.c):
+> - moves the management of the port in the install and clean-up tty ops,
+> - allocates the tty_port struct independently of the rpmsg_tty_port structure,
 
-All warnings (new ones prefixed by >>):
+This looks rather wrong. Why not to use tty_port refcounting?
 
->> kernel/kthread.c:299: warning: expecting prototype for kthread_complete_and exit(). Prototype was for kthread_complete_and_exit() instead
+> - uses tty_vhangup and tty_port_hangup.
+
+OK, but don't store a tty pointer as it looks racy. You should use 
+tty_port_tty_get instead.
+
+Hm, we look we need tty_port_tty_vhangup (aside from 
+tty_port_tty_hangup). There are plenty of drivers doing:
+     tty = tty_port_tty_get(port);
+     if (tty) {
+             tty_vhangup(port->tty);
+             tty_kref_put(tty);
 
 
-vim +299 kernel/kthread.c
+> Fixes: 7c0408d80579 ("tty: add rpmsg driver")
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 
-   285	
-   286	/**
-   287	 * kthread_complete_and exit - Exit the current kthread.
-   288	 * @comp: Completion to complete
-   289	 * @code: The integer value to return to kthread_stop().
-   290	 *
-   291	 * If present complete @comp and the reuturn code to kthread_stop().
-   292	 *
-   293	 * A kernel thread whose module may be removed after the completion of
-   294	 * @comp can use this function exit safely.
-   295	 *
-   296	 * Does not return.
-   297	 */
-   298	void __noreturn kthread_complete_and_exit(struct completion *comp, long code)
- > 299	{
-   300		if (comp)
-   301			complete(comp);
-   302	
-   303		kthread_exit(code);
-   304	}
-   305	EXPORT_SYMBOL(kthread_complete_and_exit);
-   306	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+thanks,
+-- 
+js
+suse labs

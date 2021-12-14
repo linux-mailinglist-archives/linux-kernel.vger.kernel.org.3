@@ -2,144 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B8B474E8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6FA474E95
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238222AbhLNX2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 18:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
+        id S238241AbhLNXaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 18:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbhLNX2R (ORCPT
+        with ESMTP id S238225AbhLNXaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 18:28:17 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FC2C061574;
-        Tue, 14 Dec 2021 15:28:16 -0800 (PST)
-Date:   Wed, 15 Dec 2021 00:28:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1639524493;
-        bh=px2nFIrkc6EXmcu4jcTAUXb6pMFO2r05xDq53egOoME=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EAU4pwjLaQmMoR5/v19+wcHmzW5KAqg+VzG1JV6RhGhb/EdwkqG9RxJ9cYhnakaPU
-         D2r0VayD3Vbkmif7SYS2UZOXOQ3DgGQyVn6dJj++QnGo1QnLnOyJWP644ug67CPu1s
-         Kxsq8wQ9+CtibJ6iwR3FUNh29X0l54fpD/rY4uYY=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Hemant Kumar <hemantk@codeaurora.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        linux-kernel@vger.kernel.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org,
-        Mario Limonciello <Mario.Limonciello@amd.com>,
-        Richard Hughes <hughsient@gmail.com>,
-        Ivan Mikhanchuk <ivan.mikhanchuk@quectel.com>,
-        Aleksander Morgado <aleksander@aleksander.es>
-Subject: Re: [RFC] bus: mhi: core: Load firmware asynchronous
-Message-ID: <ee87c8a5-e95b-4a32-ac9d-c68b64348f6e@t-8ch.de>
-References: <20211210161645.10925-1-linux@weissschuh.net>
- <403e93df-5b3c-acb3-2b65-df9a7834a9c5@codeaurora.org>
- <02e32c9d-79d2-4237-bb6b-8bd27029e7a9@t-8ch.de>
- <6c805ecd-4542-5533-7852-ecd9cea27955@codeaurora.org>
+        Tue, 14 Dec 2021 18:30:22 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B05C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:30:22 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id k21so27089439ioh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:30:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=egauge.net; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :organization:user-agent:mime-version:content-transfer-encoding;
+        bh=AVKBudmt9G81SkbUfzt3qtmKS50VDi84/QAtg5tb48o=;
+        b=fUCmXQBFmpf5Gr1QfyxLjFBDavTnDARaTFZ/rwQ2Ux3CneWhH+/BjTx6+Ce4lyxSCa
+         yFjOgno0JA6c5j1UJ6zn9fTwO8CEzeph97jI3TYlisVjnArc5NAneju5b+NIKeHY2FiD
+         eX2ZzxJc3sgApFL+56CixrE0V2E99mpp2+2eWFOgmBikf9tyYsJBc6Fo5AkAb0h57lr4
+         Qp9qnIBNQHw/VKqY08i0dM1XSuyI4mzPhnwCdD6DRIdxiSCFOqhHV3JBE8NGHeFWk4PR
+         BLnpZ2AREMMmv6ZIf+sZ6RtTn26Zvsnjq6JygaYOyNCA/H0E52trlmg6k/Y4T7grnPtU
+         7ALg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=AVKBudmt9G81SkbUfzt3qtmKS50VDi84/QAtg5tb48o=;
+        b=TQ5eos1oAg6XeoAFvjpUs0tWAiR8eiFRgyM3VDmto422F4lr/Xr0zsemiRP/uqU3GU
+         fIZhCjJQ6geS8Ddy+zKk08qfAuRq2Q6nMTTQChuGmBeeRlTtHlvKY3QAyv+yzb0zFc8Y
+         1efdWwQ5kIt8CdMwzFH07+vBi6hy5EUXub9V3NV5bRbwPbzQ+c5mZ5XzsyjVvhpY8klb
+         Urp6hdwELxatSSXgh+9X/b1vquNLtQ9s+HJcYwa02xeFUXv+gxHtq8HsvcTM9Kw8SGTo
+         +Rkk64s59iRIl+igUxk/T1xEHyUwQ2LioB50wqF1jMPqVR8qJ3MfASl0WJhbiGh5SopA
+         2X4Q==
+X-Gm-Message-State: AOAM5333rGpChkhCo1w0RqSLjQJxoCtrTOKHi9nGigi9H84kvXFxSFSx
+        nBceZ++cP+6YqqYH3nzw1Seq
+X-Google-Smtp-Source: ABdhPJw4SVrNuJhAydW0rdGa58Fa2riWaCU0ZYAwdxkxtptJsiAE1NaXtrf12CH0lf59HYeQ/IgAUg==
+X-Received: by 2002:a05:6638:4089:: with SMTP id m9mr4712723jam.187.1639524621556;
+        Tue, 14 Dec 2021 15:30:21 -0800 (PST)
+Received: from bixby.lan (c-73-181-115-211.hsd1.co.comcast.net. [73.181.115.211])
+        by smtp.gmail.com with ESMTPSA id k13sm174077iow.45.2021.12.14.15.30.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 15:30:21 -0800 (PST)
+Message-ID: <e88e908e720172d8571d48bd1ebdab3617534f73.camel@egauge.net>
+Subject: Re: [PATCH v4 2/2] wilc1000: Document enable-gpios and reset-gpios
+ properties
+From:   David Mosberger-Tang <davidm@egauge.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>, netdev@vger.kernel.org,
+        Adham Abozaeid <adham.abozaeid@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Ajay Singh <ajay.kathat@microchip.com>,
+        linux-wireless@vger.kernel.org, devicetree@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Date:   Tue, 14 Dec 2021 16:30:20 -0700
+In-Reply-To: <1639512290.330041.3819896.nullmailer@robh.at.kernel.org>
+References: <20211214163315.3769677-1-davidm@egauge.net>
+         <20211214163315.3769677-3-davidm@egauge.net>
+         <1639512290.330041.3819896.nullmailer@robh.at.kernel.org>
+Organization: eGauge Systems LLC
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6c805ecd-4542-5533-7852-ecd9cea27955@codeaurora.org>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-14 14:55-0800, Hemant Kumar wrote:
-> On 12/13/2021 10:32 PM, Thomas Weißschuh wrote:
-> > On 2021-12-13 16:07-0800, Hemant Kumar wrote:
-> > > On 12/10/2021 8:16 AM, Thomas Weißschuh wrote:
-> > > > This gives userspace the possibility to provide the firehose bootloader
-> > > > via the sysfs-firmware-API instead of having to modify the global
-> > > > firmware loadpath.
-> > > > 
-> > > > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > > > 
-> > > > ---
-> > > > 
-> > > > Please note that this is not tested yet, as I don't have access to a matching
-> > > > firmware file.
-> > > > This submission is to gather general feedback from the maintainers and then
-> > > > Richard will do the actual testing, while I'll do the development.
-> > > > 
-> > > > This patch is should not have any impact beyond moving from request_firmware()
-> > > > to request_firmware_nowait() and the involved code reshuffle.
-> > > what are we achieving by moving to async ver of the firmware load ? MHI boot
-> > > flow can not do anything until BHI load is over. Is the intention eventually
-> > > to enable firmware fallback mechanism  and manually load the firmware ?
+On Tue, 2021-12-14 at 14:04 -0600, Rob Herring wrote:
+> On Tue, 14 Dec 2021 16:33:22 +0000, David Mosberger-Tang wrote:
+> > Add documentation for the ENABLE and RESET GPIOs that may be needed by
+> > wilc1000-spi.
 > > 
-> > The goal is to provide the firehose bootloader (qcom/prog_firehose_sdx24.mbn)
-> > via the firmware fallback mechanism when upgrading the firmware on the device
-> > via the firehose protocol.
+> > Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
+> > ---
+> >  .../net/wireless/microchip,wilc1000.yaml        | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
 > > 
-> > This bootloader firmware is not part of linux-firmware but provided as part of
-> > each firmware update package, so it is not installed statically on the system.
-> > 
-> > I will extend the commit message with this information.
 > 
-> For my understanding i have follow up question. As per the kernel doc
-> https://www.kernel.org/doc/html/latest/driver-api/firmware/fallback-mechanisms.html
-
-I'll try to answer, but please be aware that I have no previous experience with
-the firmware fallback mechanism and can not test this patch.
-
-At this point in time I'm also hoping more for a general confirmation about
-using *some* fallback mechanism for MHI, so Richard and Ivan can test the patch
-(before it is committed) and then we can figure out exactly which of the
-fallback mechanisms fits best with feedback from them.
-
-> If CONFIG_FW_LOADER_USER_HELPER enabled but
-> CONFIG_FW_LOADER_USER_HELPER_FALLBACK is disabled, only the custom fallback
-> mechanism is available and for the request_firmware_nowait() call.
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > 
-> Custom fall back mechanism says
-> Users of the request_firmware_nowait() call have yet another option
-> available at their disposal: rely on the sysfs fallback mechanism but
-> request that no kobject uevents be issued to userspace. Original logic
-> behind this was that utilities other than udev might be required to lookup
-> firmware in non-traditional paths
+> yamllint warnings/errors:
 > 
-> Your patch is passing uevent flag as true which means you are relying on
-> uevent to be issued to userspace. How do you plan to update the firmware
-> path ? Alternatively firmware class provides a module param to specify the
-> firmware path /sys/module/firmware_class/parameters/path.
+> dtschema/dtc warnings/errors:
+> Error: Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.example.dts:30.37-38 syntax error
+> FATAL ERROR: Unable to parse input tree
+> make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.example.dt.yaml] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1413: dt_binding_check] Error 2
 
-Emitting the uevent would allow the firmware update tool
-(fwupd, https://github.com/fwupd/fwupd) to monitor uevents and recognize when
-the device is ready to receive the firmware and then trigger the upload.
-If I see it correctly uevent=0 and uevent=1 do the same things except uevent=1
-also publishes the uevent.
+So this error appears due to GPIO_ACTIVE_HIGH and GPIO_ACTIVE_LOW in these
+lines:
 
-Modifying /sys/module/firmware_class/parameters/path is what currently is being
-done.
-But modifying the global firmware load path has the potential for the following
-issues:
+        enable-gpios = <&pioA 5 GPIO_ACTIVE_HIGH>;
+        reset-gpios = <&pioA 6 GPIO_ACTIVE_LOW>;
 
-* While the global firmware load path is modified to a custom location any
-  load_firmware() call from other devices will fail because the new path does
-  not have the normal linux-firmware.
-* If the tool modifying crashes while before restoring the original load path
-  all further load_firmware()-calls will also fail.
+I can replace those with 0 and 1 respectively, but I doubt a lot of people would
+recognize what those integers standard for.  Is there a better way to get this
+to pass?
 
-> > 
-> > PS: The current patch is missing 'return' after calls to
-> > 'mhi_fw_load_finish()', this will be corrected in v2.
+  --david
 
-Another point:
-
-For sdx55 and sdx65 there is not only an edl firmware specified but also a
-firmware for normal operation.
-This firmware is not part of linux-firmware.
-Currently the firmware load would fail and put the modem into an error
-condition (I think?).
-With this patch there would be a timeout before that error state is reached.
-
-I know that some people have the SDX55 running with Linux but I'm now wondering
-where they are getting the firmware "qcom/sdx55m/sbl1.mbn" from.
-
-Thomas

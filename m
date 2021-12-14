@@ -2,95 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 029E6474A25
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 494EA474A28
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236619AbhLNR5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236635AbhLNR5F (ORCPT
+        id S236779AbhLNR5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:57:55 -0500
+Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:51262 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236731AbhLNR5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:57:05 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6660FC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:57:05 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso21708635otf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:57:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/H7rX83HhVfXFvq1heK100p2q6fw7H+xxgOW7PvMyko=;
-        b=Aktbnj7mjAJP1MHWOzJ25kUD9Mh2ep/OfmcCIE8BxEenkMXYs27EbwYE8zrcsjhe8U
-         MSm85rH2WWgDxPWLUjaJe1JUwK0IxnIYKPtUxgHo7GLaOoUT659BFebFXrcz3pkI/jb8
-         VlOnjzTtCVTj+4OvTLnY+e3ITHz7DMCd0yMfVg7a/1r7S4zRaIJ3izM+XBvkPZ340MeU
-         q+SACwTyrTEmo4nVeYe4woeygAfDe4PUagcKAGYD0Ot/S2CIAIjfGGcbVUBK8V8lRoLS
-         kxPqcNK+I8ST3wT/OEscw0uiqfO3mmCo4sYy2Q9rIXgkuUcq7eXZrjx9UDK+DppnZE+T
-         6t0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/H7rX83HhVfXFvq1heK100p2q6fw7H+xxgOW7PvMyko=;
-        b=mC0Qtz1A6NxSTrQ3VF6CTdH/H591IzU6jvn3BCpPFf3Wi48VOEYA1180L/IxfUlerd
-         ZCsM3UFAOoAqj1EZyhsOkgyxek5ZBZLiXKhfNlYBqdlG58lLhaLOQEVBQ7bm/xG7Smt7
-         Ob7GUrg9kqrjHhqbRLCbp0eBjcavK11Ul/6byzEX18XRIM2w9uPTR6Bq6eiKjxjo4igl
-         ucDa36UE4Pjw77ziYFf+Ec5vYuLTtN5EQ/RDPvDtRCc29bNBmycEuocyc2N4IzimFgMd
-         5YkqxrTeozE3ohpLMwkvtwl+Y7xUqGKf/okxJCmqqnyeNAHPkBUImVqbNZW3/4+WlqJN
-         gYIQ==
-X-Gm-Message-State: AOAM533JVCxAVpHn+zbfSP/di1A6UtSiQGAXbtAipIpKjS944I/d/GiJ
-        DlzLxQ5rT/wMWIWztoLl+feZvUwUvqcDuVAT4fyp7Q==
-X-Google-Smtp-Source: ABdhPJxBM3VWKaTJZcCayvxWwcLTYZ1GEYJE9ZsUHd6Q1M9Jw5ZUfs5BTGrjSyGxRoRSlVPVob+OXiYG1PPrWwGIiAA=
-X-Received: by 2002:a9d:4f0e:: with SMTP id d14mr5500879otl.137.1639504624541;
- Tue, 14 Dec 2021 09:57:04 -0800 (PST)
+        Tue, 14 Dec 2021 12:57:53 -0500
+Received: from [192.168.1.18] ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id xC3hmDtUWIEdlxC3hmHzWx; Tue, 14 Dec 2021 18:57:51 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 14 Dec 2021 18:57:51 +0100
+X-ME-IP: 86.243.171.122
+Subject: Re: [PATCH v2] xen-blkfront: Use the bitmap API when applicable
+To:     =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>
+Cc:     boris.ostrovsky@oracle.com, jgross@suse.com,
+        sstabellini@kernel.org, axboe@kernel.dk,
+        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Newsgroups: gmane.linux.kernel.janitors,gmane.comp.emulators.xen.devel,gmane.linux.block,gmane.linux.kernel
+References: <d6f31db1d2542e1b4ba66d4cea80d3891678aa5a.1638476031.git.christophe.jaillet@wanadoo.fr>
+ <Ybh5G2ziyRXkz3WF@Air-de-Roger> <Ybh7KgtQt0/MFtyw@Air-de-Roger>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-ID: <14dbcf69-afc1-c11b-e1ad-e8453a80cc6e@wanadoo.fr>
+Date:   Tue, 14 Dec 2021 18:57:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <0000000000005639cd05ce3a6d4d@google.com> <0000000000004e75ca05d316779f@google.com>
-In-Reply-To: <0000000000004e75ca05d316779f@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 14 Dec 2021 18:56:53 +0100
-Message-ID: <CACT4Y+bhSEMPO4wi+eS75G3FKBR-USF9a9EniLHFmg8rynBV3w@mail.gmail.com>
-Subject: Re: [syzbot] BUG: corrupted list in netif_napi_add
-To:     syzbot <syzbot+62e474dd92a35e3060d8@syzkaller.appspotmail.com>
-Cc:     alexandr.lobakin@intel.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        edumazet@google.com, hawk@kernel.org, hdanton@sina.com,
-        jesse.brandeburg@intel.com, joamaki@gmail.com,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org, maximmi@nvidia.com,
-        netdev@vger.kernel.org, pabeni@redhat.com, saeedm@nvidia.com,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
-        toke@toke.dk, vladbu@nvidia.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <Ybh7KgtQt0/MFtyw@Air-de-Roger>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 at 08:52, syzbot
-<syzbot+62e474dd92a35e3060d8@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 0315a075f1343966ea2d9a085666a88a69ea6a3d
-> Author: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Date:   Wed Nov 10 19:56:05 2021 +0000
->
->     net: fix premature exit from NAPI state polling in napi_disable()
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=138dffbeb00000
-> start commit:   911e3a46fb38 net: phy: Fix unsigned comparison with less t..
-> git tree:       net-next
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d36d2402e8523638
-> dashboard link: https://syzkaller.appspot.com/bug?extid=62e474dd92a35e3060d8
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=141592f2b00000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: net: fix premature exit from NAPI state polling in napi_disable()
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Le 14/12/2021 à 12:08, Roger Pau Monné a écrit :
+> On Tue, Dec 14, 2021 at 11:59:39AM +0100, Roger Pau Monné wrote:
+>> On Thu, Dec 02, 2021 at 09:16:04PM +0100, Christophe JAILLET wrote:
+>>> Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid some
+>>> open-coded arithmetic in allocator arguments.
+>>>
+>>> Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
+>>> consistency.
+>>>
+>>> Use 'bitmap_copy()' to avoid an explicit 'memcpy()'
+>>>
+>>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>>
+>> Acked-by: Roger Pau Monné <roger.pau@citrix.com>
+> 
+> Oh, I see there's been further discussion on this to avoid relying
+> implicitly on the size of the bitmap being rounded to the size of an
+> unsigned long. I think a new version is expected then?
+> 
+> Thanks, Roger.
+> 
 
+Yes, I'll send a patch in order to add a 'bitmap_size()'
+I'll update this patch when/if it is merged.
 
-Looks reasonable based on the subsystem:
+You can drop it for now.
 
-#syz fix: net: fix premature exit from NAPI state polling in napi_disable()
+CJ

@@ -2,105 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 285C047459A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BCB474598
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235061AbhLNOwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:52:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235056AbhLNOwg (ORCPT
+        id S235045AbhLNOwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:52:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56666 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232894AbhLNOwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:52:36 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE2EC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:52:35 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id jo22so17392137qvb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:52:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Xf7q3Jbcz4/LEcmcTeVISoI2B4bGeUUdk0hxUCLs5rs=;
-        b=FHi3n63QOeG6gLzhJVCdkONlfQpsuxOmAKW/cofmDUuTckCd4qt7wzrPBtLFf38Tb+
-         xczhmQro+FHcyY+W6wlhd2Sq+Q344IDjN7C31P+Vs/LqsdG1ym0O/AnPKb36EWvJW8y/
-         /pr28c+ss/0UsW6wYuaNVwi0NwfBGCtzMBbNmDR73IqCHGKJj/ek4Xq8F83t9by2FunU
-         IAFZ435a4UvJ5CbpXMzQ3/gEcwcr2pH08XvUHL//xRzEm2DOW9ur1GyrfFVnyu98v1kI
-         fMMtbJ3zynCSm7ZbK99IzJ36XpRZZ7cd4a8Qr+lFLn//i6QS7Q9xAIgsFhZFdC2LAwr8
-         hEcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xf7q3Jbcz4/LEcmcTeVISoI2B4bGeUUdk0hxUCLs5rs=;
-        b=bHKPBDVxVUd4q2UfHos327zx6UpD3eqbrLvVjcfx+in4mZuCqYMGyrCvvn+hTPBq7a
-         T7jE4jxCyKNq29rpjw3Na5EIkhPE1dsyMLwlLU1CUHFjCexpUay3stzFM/LExTD+bHMQ
-         M6dlO5WN9kxZKICqfmZ2uyikosn3AK2b+oghMJUuPJLceYKJiSjiLoFeJz2HERshwJ3u
-         xg2BCifshONNPc4W7GIHDEsDs4JQVp0VRB+LubAW0MhhdysKI82mY8tFROOkCLDL2IfY
-         wLJO977tV6R+X1amq+/2zO15jxS0VSqELzl4zDaACr10f5h/VjEqIUk6UrAZwPqfCTB8
-         oIkg==
-X-Gm-Message-State: AOAM532cJ8NpWzNgLxCCCsSSghKGF6GcQsERVY8bv5BeugZwPI902kHO
-        7W/cuIOIOcA29X14j9ll+8rpm+D2lCDR4i0BasHy4XSqap0=
-X-Google-Smtp-Source: ABdhPJwS/wVbUCr/fISQSZfIT4fbHE551R+9VucYnxwH9401gRXCgl3ytnT4zp3UABFRvuUFhflcOEQJnA9jSart4iY=
-X-Received: by 2002:ad4:5ce8:: with SMTP id iv8mr5919659qvb.21.1639493554305;
- Tue, 14 Dec 2021 06:52:34 -0800 (PST)
+        Tue, 14 Dec 2021 09:52:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0A20B819F0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D3B0C34605;
+        Tue, 14 Dec 2021 14:52:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639493548;
+        bh=yFfkRGn3Zbbf+escEJ2y5n1s3r/WuEZMooEpjeq9CYw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SsnSf7GM5HtnKJuYn9dOkq5YoMNVd8W+nxOoJ/qz9iFIAa941uF9l5n/Ryc2aUCtr
+         klQEkwyZ3TOQmN4iI8EvgK82iJnpzh3WppkGXUGSsurBhGIc7iPgU+Wq0KDRAEplK3
+         i7fbDFveAiL1lWaKB8Z/zi84imY6ze9oEQ5nUv5DZNfnkOFHvRN1FcN4Yzb/7NQlq3
+         1RGSM5K2VggUKKBmWvSXsScaPbRDxj6klDGMsYZ6HlUVKRxhWkyHtUcffWcH3pFLAg
+         pXpiwhG1zinyGz4xgwG6yaTo2wbUU2yEALRQDjhvEnlQNEaWSW3pAYYSpj42tq6zQC
+         PkwY9Dkj3HMvw==
+Date:   Tue, 14 Dec 2021 14:52:23 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Andrew Walbran <qwandor@google.com>
+Cc:     Quentin Perret <qperret@google.com>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 10/15] KVM: arm64: Introduce wrappers for host and hyp
+ spin lock accessors
+Message-ID: <20211214145222.GC14837@willie-the-truck>
+References: <20211201170411.1561936-1-qperret@google.com>
+ <20211201170411.1561936-11-qperret@google.com>
+ <CA+_y_2HKwtm5839QyEY9D8PaZWky_Zvn3msrw2gcR2Z7UZgObQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211210195005.2582884-1-bob.beckett@collabora.com> <e7cad6ca-d106-c529-6f22-93a7847cd7c0@intel.com>
-In-Reply-To: <e7cad6ca-d106-c529-6f22-93a7847cd7c0@intel.com>
-From:   Matthew Auld <matthew.william.auld@gmail.com>
-Date:   Tue, 14 Dec 2021 14:52:08 +0000
-Message-ID: <CAM0jSHNn4yq1u_Qwr9v9kUCcEexBmb+=LML2=OF1Rspyf-TDfA@mail.gmail.com>
-Subject: Re: [Intel-gfx] [PATCH] drm/i915/ttm: fix large buffer population trucation
-To:     Matthew Auld <matthew.auld@intel.com>
-Cc:     Robert Beckett <bob.beckett@collabora.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>, Oak Zeng <oak.zeng@intel.com>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+_y_2HKwtm5839QyEY9D8PaZWky_Zvn3msrw2gcR2Z7UZgObQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 at 13:03, Matthew Auld <matthew.auld@intel.com> wrote:
->
-> On 10/12/2021 19:50, Robert Beckett wrote:
-> > ttm->num_pages is uint32_t which was causing very large buffers to
-> > only populate a truncated size.
+On Tue, Dec 14, 2021 at 02:48:30PM +0000, Andrew Walbran wrote:
+> On Wed, 1 Dec 2021 at 17:04, 'Quentin Perret' via kernel-team
+> <kernel-team@android.com> wrote:
 > >
-> > This fixes gem_create@create-clear igt test on large memory systems.
+> > From: Will Deacon <will@kernel.org>
 > >
-> > Fixes: 7ae034590cea ("drm/i915/ttm: add tt shmem backend")
-> > Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
->
-> Nice catch,
-> Reviewed-by: Matthew Auld <matthew.auld@intel.com>
+> > In preparation for adding additional locked sections for manipulating
+> > page-tables at EL2, introduce some simple wrappers around the host and
+> > hypervisor locks so that it's a bit easier to read and bit more difficult
+> > to take the wrong lock (or even take them in the wrong order).
+> Looks good, but how does this help prevent taking locks in the wrong order?
 
-Pushed to drm-intel-gt-next. Thanks again for the fix.
+I just found that I would easily forget what exactly was protected by
+"pkvm_pgd_lock" and so relating that back to "take host before hyp" was
+error-prone. Having helpers with "host" and "hyp" in the name helps me with
+that, at least.
 
->
-> > ---
-> >   drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> > index 218a9b3037c7..923cc7ad8d70 100644
-> > --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> > +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-> > @@ -166,7 +166,7 @@ static int i915_ttm_tt_shmem_populate(struct ttm_device *bdev,
-> >       struct intel_memory_region *mr = i915->mm.regions[INTEL_MEMORY_SYSTEM];
-> >       struct i915_ttm_tt *i915_tt = container_of(ttm, typeof(*i915_tt), ttm);
-> >       const unsigned int max_segment = i915_sg_segment_size();
-> > -     const size_t size = ttm->num_pages << PAGE_SHIFT;
-> > +     const size_t size = (size_t)ttm->num_pages << PAGE_SHIFT;
-> >       struct file *filp = i915_tt->filp;
-> >       struct sgt_iter sgt_iter;
-> >       struct sg_table *st;
-> >
+Will

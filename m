@@ -2,84 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F525474538
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75383474543
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 15:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbhLNOfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 09:35:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        id S234375AbhLNOhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 09:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232645AbhLNOfm (ORCPT
+        with ESMTP id S230525AbhLNOhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:35:42 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0965C06173E;
-        Tue, 14 Dec 2021 06:35:41 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id 207so28554922ljf.10;
-        Tue, 14 Dec 2021 06:35:41 -0800 (PST)
+        Tue, 14 Dec 2021 09:37:20 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F99EC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:37:20 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id u17so32757410wrt.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:37:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bTETz2h6nLGm7FFtGoJfUkWZ0HDEaBtcfd+0ZBKXMvc=;
-        b=n/QGO+OnyCitcGbUPZx3Pj35kVxNPf9kyMvy5oC1xVP14DSmebuH3o1n1RLUTmhZNW
-         jM6Hftd6+0Vw9w4QOrJtPqLzTr6Galg4yDzcKYkvVGep2YoWV8jo/pooFE9d3VXAsAeF
-         yR8llmpsTF1yiyeK5dPv57cq4YatfdGdOUADCthaLZrBFNY+FGxjlBcyBM4UMIPgm1VE
-         xO5mVpHRw1w/fsdZ80+HXEBsv3ylsxaYXCUIGJ3CbSYDXio9oI3K/lT2Gnio7jEzV6RB
-         F/2VutcgJBnB2y0ChlsbRGZk0BEevFPcQuz/5M4fXccj1+qPIonzL3cgfU4xjqAc6dnv
-         rUJg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EjMvrwPSu7ED0UdbjvCYsAuuHexCnu6Rd7+A7M539WY=;
+        b=dHivwfu99zBaoXggDAdU8tINy/YbNw7tEGDydSVrQNIcGtbQQEyVTa8D5xWXr4E1+2
+         m+jTGwh1IrsR6Zk4JE7Kj475L94o0gDZw8sZ2g2E5D1IiOBOg09sxTTfkuu9wGumOixy
+         PaVxEXHkdo+Q02XgfmTfGSw8TQvi5xWWAI/MND109iYbWDRpu+lOXNE3DD23ilsXoXUs
+         qcoXLfMqCqdqKL9B81ytoj6TXQ7eYn9jSfHUPlY0pGiSXpMpO1x07HUGJy//iMD+Lmey
+         diX1MYrKq6w2R0sUaOy5M6t875FRaEjG3/E6nTAsAHlqRei/N/2R29ym2354GO9RI0/o
+         WQdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bTETz2h6nLGm7FFtGoJfUkWZ0HDEaBtcfd+0ZBKXMvc=;
-        b=twugRWzVb3xvyzC4+euMC7QfoV0BdvJ4YiiMoLbG5f8MH7O7mjCk/5aJn5mH0Krr4t
-         xv1h8TQ3iSrTHb5KG6XXm/4pwDHr5GQLhgntcX/UKdxcPP/5VpZIurw83I+NrCA4DdXK
-         InLj+obQWWklrsGjohXNr30VnPYsRdvlwxLG2oXBvCb5HRTvFIzgBdpQb0OmJGzWbglj
-         RYgnYVCfrS3ydRR94EQgpWKVaQM70nV7p5Dd5I90q+AEhogmLBhTjk86VdSNZBnRLRsY
-         3QR0axExuFKLLJ11PrHnxks+z38LKhuATBxPZcgO26MCJXiwsOLHPR6yX52YviQZ9BpO
-         b+iQ==
-X-Gm-Message-State: AOAM531IU22cnjNrmTdKHPBOo0NdARApjb9zi3j383EvdUOCZ8gTEg3I
-        GeHiN0nu3HPj/REUdz+kAiE=
-X-Google-Smtp-Source: ABdhPJxqBfOFfSpR6YQ9B8RrJ36CJEZUGHdsdWYWe/w8s6TzwBrY0PsUZf7c0DtQQSei90WL5dPVtA==
-X-Received: by 2002:a2e:91ca:: with SMTP id u10mr5429166ljg.414.1639492540268;
-        Tue, 14 Dec 2021 06:35:40 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id g36sm1857154lfv.16.2021.12.14.06.35.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 06:35:39 -0800 (PST)
-Subject: Re: [PATCH v2 0/8] Host1x context isolation support
-To:     Jon Hunter <jonathanh@nvidia.com>, joro@8bytes.org,
-        will@kernel.org, robh+dt@kernel.org, robin.murphy@arm.com,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Mikko Perttunen <cyndis@kapsi.fi>, thierry.reding@gmail.com
-References: <20210916143302.2024933-1-mperttunen@nvidia.com>
- <10de82cf-27a5-8890-93a5-0e58c74e5bcc@kapsi.fi>
- <c382fb0e-6b73-5ca0-7f63-d2843351325e@nvidia.com>
- <91dddccd-a6c1-21b3-34d6-6a8082a386e7@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a507b10b-395b-1f6d-87b9-7c7c436cab0e@gmail.com>
-Date:   Tue, 14 Dec 2021 17:35:39 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EjMvrwPSu7ED0UdbjvCYsAuuHexCnu6Rd7+A7M539WY=;
+        b=OkSpXGuktAoGeT8zcp+yvOPTDWrPB1m43muCDSdVCyMMR3XrXGQpF8igncNjI36jcX
+         BK6nVly9Iu/8u2aHm6YCg4POHJnaHAEoNo6Qw0ELdR1oEak2Pt6WWwfdRaiZ3nLZgP2M
+         InseCaAZLiYoSBJ7lp7Pn55s3+VtilQV+/cOAlKSAq4xKH7/BmLKTcoUzlmScI8k5S61
+         qz+qnRpvWfTXk1NIsvVrNp7ww5ycr7d9w+83KIvv4vkF/DRRQHJ8kz5fWmVOWlMM5gkj
+         nm01qvUEPGexXkpHVfHtEzy8RTRAKLOy+Z5wB98aT2I9QILXa++HUJG3MvN2lfd+vBIb
+         Gu7g==
+X-Gm-Message-State: AOAM531p2BBHPZMc9t96xXCOkWhukXP1xOJ6fBGcY3KhXAd8nBX9DKqt
+        UvhdIidL2M+7qtA/sgPsORfV4oeK37R4Zg==
+X-Google-Smtp-Source: ABdhPJyG+zjY5MrIPxKf5Nee627TYG9pySxms6E8tVqeZ/vgk9UWaetnUCOk9H7D1qx8VZmOJ9L3VQ==
+X-Received: by 2002:a05:6000:18a3:: with SMTP id b3mr6267651wri.343.1639492638881;
+        Tue, 14 Dec 2021 06:37:18 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:209:243:2f6a:9a1:5446])
+        by smtp.gmail.com with ESMTPSA id k187sm2669579wme.0.2021.12.14.06.37.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 06:37:18 -0800 (PST)
+Date:   Tue, 14 Dec 2021 14:37:12 +0000
+From:   David Brazdil <dbrazdil@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Will Deacon <will@kernel.org>,
+        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] misc: open-dice: Add driver to expose DICE data
+ to userspace
+Message-ID: <YbisGPqjLV8Chl8h@google.com>
+References: <20211213195833.772892-1-dbrazdil@google.com>
+ <20211213195833.772892-3-dbrazdil@google.com>
+ <YbhFTj561N4Ir2RG@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <91dddccd-a6c1-21b3-34d6-6a8082a386e7@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbhFTj561N4Ir2RG@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-14.12.2021 11:05, Jon Hunter пишет:
-> Hi all,
+On Tue, Dec 14, 2021 at 08:18:38AM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Dec 13, 2021 at 07:58:33PM +0000, David Brazdil wrote:
+> > Open Profile for DICE is an open protocol for measured boot compatible
+> > with the Trusted Computing Group's Device Identifier Composition
+> > Engine (DICE) specification. The generated Compound Device Identifier
+> > (CDI) certificates represent the hardware/software combination measured
+> > by DICE, and can be used for remote attestation and sealing.
+> > 
+> > Add a driver that exposes reserved memory regions populated by firmware
+> > with DICE CDIs and exposes them to userspace via a character device.
+> > 
+> > Userspace obtains the memory region's size from read() and calls mmap()
+> > to create a mapping of the memory region in its address space. The
+> > mapping is not allowed to be write+shared, giving userspace a guarantee
+> > that the data were not overwritten by another process.
+> > 
+> > Userspace can also call write(), which triggers a wipe of the DICE data
+> > by the driver. Because both the kernel and userspace mappings use
+> > write-combine semantics, all clients observe the memory as zeroed after
+> > the syscall has returned.
+> > 
+> > Cc: Andrew Scull <ascull@google.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Signed-off-by: David Brazdil <dbrazdil@google.com>
+> > ---
+> >  drivers/misc/Kconfig     |  12 +++
+> >  drivers/misc/Makefile    |   1 +
+> >  drivers/misc/open-dice.c | 197 +++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 210 insertions(+)
+> >  create mode 100644 drivers/misc/open-dice.c
+> > 
+> > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> > index 0f5a49fc7c9e..4d996485f5a7 100644
+> > --- a/drivers/misc/Kconfig
+> > +++ b/drivers/misc/Kconfig
+> > @@ -470,6 +470,18 @@ config HISI_HIKEY_USB
+> >  	  switching between the dual-role USB-C port and the USB-A host ports
+> >  	  using only one USB controller.
+> >  
+> > +config OPEN_DICE
+> > +	tristate "Open Profile for DICE driver"
+> > +	depends on OF_RESERVED_MEM
+> > +	help
+> > +	  This driver exposes a DICE reserved memory region to userspace via
+> > +	  a character device. The memory region contains Compound Device
+> > +	  Identifiers (CDIs) generated by firmware as an output of DICE
+> > +	  measured boot flow. Userspace can uses CDIs for remote attestation
+> > +	  and sealing.
+> > +
+> > +	  If unsure, say N.
+> > +
+> >  source "drivers/misc/c2port/Kconfig"
+> >  source "drivers/misc/eeprom/Kconfig"
+> >  source "drivers/misc/cb710/Kconfig"
+> > diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> > index a086197af544..70e800e9127f 100644
+> > --- a/drivers/misc/Makefile
+> > +++ b/drivers/misc/Makefile
+> > @@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
+> >  obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+> >  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+> >  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
+> > +obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
+> > diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
+> > new file mode 100644
+> > index 000000000000..ea7b1a8d49ac
+> > --- /dev/null
+> > +++ b/drivers/misc/open-dice.c
+> > @@ -0,0 +1,197 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2021 - Google LLC
+> > + * Author: David Brazdil <dbrazdil@google.com>
+> > + *
+> > + * Driver for Open Profile for DICE.
+> > + *
+> > + * This driver takes ownership of a reserved memory region containing secrets
+> > + * derived following the Open Profile for DICE. The contents of the memory
+> > + * region are not interpreted by the kernel but can be mapped into a userspace
+> > + * process via a misc device. The memory region can also be wiped, removing
+> > + * the secrets from memory.
+> > + *
+> > + * Userspace can access the data by (w/o error handling):
+> > + *
+> > + *     fd = open("/dev/open-dice0", O_RDWR);
+> > + *     size = read(fd, NULL, 0);
 > 
-> Still no response on this :-(
+> I was thinking you would return the value as a string in the buffer
+> provided to the read call, not as the return value itself.  That is odd
+> and probably breaks something.  What would happen if you ran 'cat' on
+> the device node?
 
-I see only two patches on Tegra ML and others on DRI ML. Might be good
-to start with re-sending this whole series and CCing MLs properly.
+Ah, I misunderstood. Yeah, running `cat` will endlessly print garbage.
+I'll do a quick respin and also change write() to appear to consume the
+buffer because 'echo 1 > /dev/open-dice0' currently blocks.
 
+David

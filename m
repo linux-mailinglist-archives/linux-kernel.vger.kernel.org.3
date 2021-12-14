@@ -2,126 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A1D474C4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E59A474C51
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237536AbhLNTwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:52:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S237538AbhLNTzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbhLNTwM (ORCPT
+        with ESMTP id S230380AbhLNTzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:52:12 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80150C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:52:12 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id e131-20020a25d389000000b005fb5e6eb757so38486734ybf.22
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:52:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=L86jfhQydnQXL6CamLYct86bySYxzVKAkcuD/e27KRQ=;
-        b=aMJ9Kzugd7pZU8r6r6E7GF9dNicFjDFEUyWh8T291/4qwmpNg9RHCPTrhY61fakNTK
-         CkoLXML5fIEWHR3zF8dXH1NNI+20G9BjewaD96LAqiNp/syyssY8li2AcEPTciqKahLy
-         28QXHVPTPl0iMizHy6T1oAzZ/GmISGCDVvQuiG69Ea2nPjojHuMx6Qxrb5Cz98k60XYb
-         tt6VCUFs7ompA298s84PNh2CVirOG5+RvwvFNW2gtibnN3505P8CMEGmMTx+qsQFiY0p
-         nCS+1gCC6x3eNKQz8kiDraPyu7efp/N8SowM8twmog/JoQbv62Qr24Gmgj/LX9k3M48B
-         N5IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=L86jfhQydnQXL6CamLYct86bySYxzVKAkcuD/e27KRQ=;
-        b=vmt5c/aSkNrB9/LKUw/RxWGWLZzEzYNo9fAJ8O/8G2J1HuUJY6mUrUsm8VxsbUEW87
-         D+b4tRZeRVFEN5qZ9p0Z+jNQOOHQD6pHPdXSPnvCX4/w+GwgySeFxoQZWxQMHU5zH7NF
-         plT/D94ys6UBCdAu6kft3mMaCCi9A/noSd+G1K96PfC3p1dGtFURV8otbuRXcD0J0cN9
-         AYDrNM/jTdp2GlEDaQK0xSYFtSKRxSRND+eh2B3+oVmd0AnbZBYvLaaneJ3rt+9gZrQr
-         80Yce1A6PGQJmfivQiFCwWzykJIj2urY9ZoV6TcRB9JMMMtoNCxcimiRF/etTJsKnpmo
-         cLUg==
-X-Gm-Message-State: AOAM533xmskOk5yKS/Th/tg0SqDQve1rfJrRgGuAjtkRCc3zWsa2D4EG
-        5tzbr9OhDUO7P5cNeebnlNkt6JYSfZ78XQ==
-X-Google-Smtp-Source: ABdhPJz2TXX8k/Y6k9WtYGdCPIeNQCnoE0BPOHAaJTGJoCgfPMW6df4b0jc7OpWR0nUTDEPM26RStVbtUvAoAQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1a10:bb1b:63e:864a])
- (user=dlatypov job=sendgmr) by 2002:a25:348b:: with SMTP id
- b133mr1160287yba.251.1639511531784; Tue, 14 Dec 2021 11:52:11 -0800 (PST)
-Date:   Tue, 14 Dec 2021 11:52:03 -0800
-Message-Id: <20211214195203.174080-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH] kunit: tool: fix newly introduced typechecker errors
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 14 Dec 2021 14:55:10 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFA2C061574;
+        Tue, 14 Dec 2021 11:55:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=iv01Pf6xrNRqNbiIiHIBFnovLsVBu7ZpwLTFS0Q02fI=; b=Zrj5wbU0SzoFaiXAjqyfK4imuu
+        WGxMd6r5exANbz/MatXyC7/8JsmQyHFzvrh110c5ERevUEY6sFgoM5D7WleVK64TQrnuYN6lXa6n4
+        nvRF0exoUYNCOzmhPnp0mAfuODaD8aJZNG4r/o/Tv4B802LZOneEU5OAM5BxkJVYE39tKvw1nYxIs
+        LSIifhxvTKf15bDprYom2PXJHlC0YYbKmVMqmh6nCGAW53cOA0xlGui00qLgeGllCFu1n+MecSmdM
+        lcGYpidpzHagFuMAcSoKKnT2fXeJwV3UhOVHby3Q2gpF1BCjFvdG4kIqcbTCd+O7gqSmfK95PIrKi
+        GdzsonIQ==;
+Received: from [2601:1c0:6280:3f0:7629:afff:fe72:e49d]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxDtF-00Ffi4-9i; Tue, 14 Dec 2021 19:55:09 +0000
+Subject: Re: [RFC PATCH] Remove mentions of the Trivial Patch Monkey
+To:     Miguel Ojeda <ojeda@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Joe Perches <joe@perches.com>, Jiri Kosina <jikos@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20211214191415.GA19070@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <0f74ba31-aba2-0608-b383-9ab46766485b@infradead.org>
+Date:   Tue, 14 Dec 2021 11:55:08 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20211214191415.GA19070@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After upgrading mypy and pytype from pip, we see 2 new errors when
-running ./tools/testing/kunit/run_checks.py.
+On 12/14/21 11:14 AM, Miguel Ojeda wrote:
+> Apparently, it was decided that trivial@kernel.org
+> is no longer used.
+> 
+> Link: https://lore.kernel.org/lkml/fe86efbd-4e03-76c8-55cf-dabd33e85823@infradead.org/
+> Co-developed-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Error #1: mypy and pytype
-They now deduce that importlib.util.spec_from_file_location() can return
-None and note that we're not checking for this.
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-We validate that the arch is valid (i.e. the file exists) beforehand.
-Add in an `asssert spec is not None` to appease the checkers.
+Cc: akpm
 
-Error #2: pytype bug https://github.com/google/pytype/issues/1057
-It doesn't like `from datetime import datetime`, specifically that a
-type shares a name with a module.
+Thanks.
 
-We can workaround this by either
-* renaming the import or just using `import datetime`
-* passing the new `--fix-module-collisions` flag to pytype.
+> ---
+> Sending this before we forget about it...
+> 
+> We may want to keep the definition of "trivial patch" somewhere else.
+> 
+>  Documentation/process/submitting-patches.rst | 19 -------------------
+>  MAINTAINERS                                  |  6 ------
+>  2 files changed, 25 deletions(-)
+> 
+> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+> index 6b3aaed66fba..31ea120ce531 100644
+> --- a/Documentation/process/submitting-patches.rst
+> +++ b/Documentation/process/submitting-patches.rst
+> @@ -271,25 +271,6 @@ least a notification of the change, so that some information makes its way
+>  into the manual pages.  User-space API changes should also be copied to
+>  linux-api@vger.kernel.org.
+>  
+> -For small patches you may want to CC the Trivial Patch Monkey
+> -trivial@kernel.org which collects "trivial" patches. Have a look
+> -into the MAINTAINERS file for its current manager.
+> -
+> -Trivial patches must qualify for one of the following rules:
+> -
+> -- Spelling fixes in documentation
+> -- Spelling fixes for errors which could break :manpage:`grep(1)`
+> -- Warning fixes (cluttering with useless warnings is bad)
+> -- Compilation fixes (only if they are actually correct)
+> -- Runtime fixes (only if they actually fix things)
+> -- Removing use of deprecated functions/macros
+> -- Contact detail and documentation fixes
+> -- Non-portable code replaced by portable code (even in arch-specific,
+> -  since people copy, as long as it's trivial)
+> -- Any fix by the author/maintainer of the file (ie. patch monkey
+> -  in re-transmission mode)
+> -
+> -
+>  
+>  No MIME, no links, no compression, no attachments.  Just plain text
+>  -------------------------------------------------------------------
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 13f9a84a617e..c88bac733e9e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19334,12 +19334,6 @@ W:	https://github.com/srcres258/linux-doc
+>  T:	git git://github.com/srcres258/linux-doc.git doc-zh-tw
+>  F:	Documentation/translations/zh_TW/
+>  
+> -TRIVIAL PATCHES
+> -M:	Jiri Kosina <trivial@kernel.org>
+> -S:	Maintained
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jikos/trivial.git
+> -K:	^Subject:.*(?i)trivial
+> -
+>  TTY LAYER
+>  M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>  M:	Jiri Slaby <jirislaby@kernel.org>
+> 
 
-We pick the first option for now because
-* the flag is quite new, only in the 2021.11.29 release.
-* I'd prefer if people can just run `pytype <file>`
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit_kernel.py | 1 +
- tools/testing/kunit/kunit_parser.py | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 12085e04a80c..44bbe54f25f1 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -209,6 +209,7 @@ def get_source_tree_ops_from_qemu_config(config_path: str,
- 	# exists as a file.
- 	module_path = '.' + os.path.join(os.path.basename(QEMU_CONFIGS_DIR), os.path.basename(config_path))
- 	spec = importlib.util.spec_from_file_location(module_path, config_path)
-+	assert spec is not None
- 	config = importlib.util.module_from_spec(spec)
- 	# See https://github.com/python/typeshed/pull/2626 for context.
- 	assert isinstance(spec.loader, importlib.abc.Loader)
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 8e42b6ef3fe3..0850cb4bce89 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -13,7 +13,7 @@ from __future__ import annotations
- import re
- 
- from collections import namedtuple
--from datetime import datetime
-+import datetime
- from enum import Enum, auto
- from functools import reduce
- from typing import Iterable, Iterator, List, Optional, Tuple
-@@ -520,7 +520,7 @@ ANSI_LEN = len(red(''))
- 
- def print_with_timestamp(message: str) -> None:
- 	"""Prints message with timestamp at beginning."""
--	print('[%s] %s' % (datetime.now().strftime('%H:%M:%S'), message))
-+	print('[%s] %s' % (datetime.datetime.now().strftime('%H:%M:%S'), message))
- 
- def format_test_divider(message: str, len_message: int) -> str:
- 	"""
-
-base-commit: 7fa7ffcf9babaea2f0a81681b4ef460ee4b93278
 -- 
-2.34.1.173.g76aa8bc2d0-goog
-
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+https://people.kernel.org/tglx/notes-about-netiquette

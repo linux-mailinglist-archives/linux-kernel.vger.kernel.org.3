@@ -2,150 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 972A0474D77
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE94474D79
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbhLNWCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:02:20 -0500
-Received: from mail-qv1-f51.google.com ([209.85.219.51]:35434 "EHLO
-        mail-qv1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbhLNWCT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 17:02:19 -0500
-Received: by mail-qv1-f51.google.com with SMTP id kj6so3307017qvb.2;
-        Tue, 14 Dec 2021 14:02:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BzSKy6jl8ogryfzgo3M4f4Lg4MSaREeaYzRGvq53Q00=;
-        b=2JF50y8Uj7ePavG7jkRnqr3UujPonmfrxHRdIx+t47nrvFUdtP4xgNWAmM9eAjGkpt
-         cD6e9XMtwj72uqVrkXwZGJuB7QeXkhmNe6PlK8P0kCzj8QssZkLteIjQk9FNS3aWAMi3
-         po3XxHpV1upX8SM8raBmKhTetqN/uvBYFNHqBxWMsFxHyHSDlLwGrx6PS/7/9Slkpd51
-         uc5kcwozfFCFYUFxbJfY0Rg6i1Z+8YFLalB1K6v1At2sE0JoOOIQkyKiLDVHgC3llXvb
-         tc3gCBGtPd//ExfUgPnRETNY1HbsMM1yYdz/HPBijSl69YcN1Vn8iqIs4qkkEEtRKiPE
-         4uOw==
-X-Gm-Message-State: AOAM530jxtpK4uOvOkaZh5YoF6nXaDJBd0uzf7xNF0RKxsIlWnfoveRq
-        SA+Qo3+n6jr/QoeM1urckrr4m2obgeE48w==
-X-Google-Smtp-Source: ABdhPJwZCQ6S3nTjm3PAci3cSf59mYQ7S1T+09xORi/L6LMHZjysp07k8knbhNyg2HJEz0ug8Mq55Q==
-X-Received: by 2002:a05:6214:e4c:: with SMTP id o12mr8365129qvc.60.1639519338703;
-        Tue, 14 Dec 2021 14:02:18 -0800 (PST)
-Received: from localhost (fwdproxy-ash-009.fbsv.net. [2a03:2880:20ff:9::face:b00c])
-        by smtp.gmail.com with ESMTPSA id i11sm16527qko.116.2021.12.14.14.02.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 14:02:18 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     pmladek@suse.com, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
-        jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
-        corbet@lwn.net
-Cc:     void@manifault.com, songliubraving@fb.com,
-        gregkh@linuxfoundation.org
-Subject: [PATCH v2] livepatch: Fix leak on klp_init_patch_early failure path
-Date:   Tue, 14 Dec 2021 14:01:26 -0800
-Message-Id: <20211214220124.2911264-1-void@manifault.com>
-X-Mailer: git-send-email 2.30.2
+        id S234607AbhLNWDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:03:34 -0500
+Received: from mga03.intel.com ([134.134.136.65]:25077 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229975AbhLNWDc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 17:03:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639519412; x=1671055412;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5PmAzK2/sfKUZ2BGAwAHafsf+NzQ82CfvTS31m6HQnA=;
+  b=dCQI9NQnT2e3AR3kkxQR1aGvtqDKw4mB7npukWFriEJM9LUmWlHe2J3w
+   mg5muFJs0Z0lCbZVP0xj4M7jFzS3fzwBB8o9VZHo9mEUtFwXSqwDRkoyb
+   oSYYJ/jJuSPkLFblw63sfMacVmmN9Nm1RHltqaz5aeB07sM3BBFrssYM7
+   x0gYDzbTVOPCGdk2in+DjhPSVCwHVm38p3OpMy7eL8E48MoWkeOtgBuhZ
+   88RAsONn73qepOd85D61XXjOyczGtwhk+AuQdN/MTaATxKxqobyoXatZG
+   VEfQK2JWyTVso4IWlKDtTKIbbG0q53kDtoV8h2hGMwf2jv4Q5KyFuBZdz
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="239042501"
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="239042501"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 14:03:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="465273457"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 14:03:30 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxFtR-0000ow-ES; Tue, 14 Dec 2021 22:03:29 +0000
+Date:   Wed, 15 Dec 2021 06:02:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Atish Patra <atish.patra@wdc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        linux-doc@vger.kernel.org
+Subject: [palmer:riscv-pmu 4/10] drivers/perf/riscv_pmu_legacy.c:76: warning:
+ This comment starts with '/**', but isn't a kernel-doc comment. Refer
+ Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202112150635.JSGg5exu-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When enabling a klp patch with klp_enable_patch(), klp_init_patch_early()
-is invoked to initialize the kobjects for the patch itself, as well as the
-'struct klp_object' and 'struct klp_func' objects that comprise it.
-However, there are some error paths in klp_enable_patch() where some
-kobjects may have been initialized with kobject_init(), but an error code
-is still returned due to e.g. a 'struct klp_object' having a NULL funcs
-pointer.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git riscv-pmu
+head:   7a94c6fb363cfe62906cb0503d763204b0fe32b8
+commit: e4d5f33e63b1260f378512c0f6e5a117ed6b894a [4/10] RISC-V: Add a simple platform driver for RISC-V legacy perf
+config: riscv-randconfig-r026-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150635.JSGg5exu-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?id=e4d5f33e63b1260f378512c0f6e5a117ed6b894a
+        git remote add palmer https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git
+        git fetch --no-tags palmer riscv-pmu
+        git checkout e4d5f33e63b1260f378512c0f6e5a117ed6b894a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/ drivers/perf/ drivers/power/supply/
 
-In these paths, the kobject of the 'struct klp_patch' may be leaked, along
-with one or more of its objects and their functions, as kobject_put() is
-not invoked on the cleanup path if klp_init_patch_early() returns an error
-code.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-For example, if an object entry such as the following were added to the
-sample livepatch module's klp patch, it would cause the vmlinux klp_object,
-and its klp_func which updates 'cmdline_proc_show', to be leaked:
+All warnings (new ones prefixed by >>):
 
-static struct klp_object objs[] = {
-	{
-		/* name being NULL means vmlinux */
-		.funcs = funcs,
-	},
-	{
-		.name = "kvm",
-		/* NULL funcs -- would cause leak */
-	}, { }
-};
+>> drivers/perf/riscv_pmu_legacy.c:76: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * This is just a simple implementation to allow legacy implementations
 
-Without this change, if CONFIG_DEBUG_KOBJECT is enabled, and the sample klp
-patch is loaded, the kobjects (the patch, the vmlinux 'struct klp_obj', and
-its func) are not observed to be released in the dmesg log output.  With
-the change, the kobjects are observed to be released.
 
-Signed-off-by: David Vernet <void@manifault.com>
+vim +76 drivers/perf/riscv_pmu_legacy.c
+
+    74	
+    75	/**
+  > 76	 * This is just a simple implementation to allow legacy implementations
+    77	 * compatible with new RISC-V PMU driver framework.
+    78	 * This driver only allows reading two counters i.e CYCLE & INSTRET.
+    79	 * However, it can not start or stop the counter. Thus, it is not very useful
+    80	 * will be removed in future.
+    81	 */
+    82	static void pmu_legacy_init(struct riscv_pmu *pmu)
+    83	{
+    84		pr_info("Legacy PMU implementation is available\n");
+    85	
+    86		pmu->num_counters = RISCV_PMU_LEGACY_NUM_CTR;
+    87		pmu->ctr_start = pmu_legacy_ctr_start;
+    88		pmu->ctr_stop = NULL;
+    89		pmu->event_map = pmu_legacy_event_map;
+    90		pmu->ctr_get_idx = pmu_legacy_ctr_get_idx;
+    91		pmu->ctr_get_width = NULL;
+    92		pmu->ctr_clear_idx = NULL;
+    93		pmu->ctr_read = pmu_legacy_read_ctr;
+    94	
+    95		perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
+    96	}
+    97	
+
 ---
-v2:
-  - Move try_module_get() and the patch->objs NULL check out of
-    klp_init_patch_early() to ensure that it's safe to jump to the 'err' label
-    on the error path in klp_enable_patch().
-  - Fix the patch description to not use markdown, and to use imperative
-    language.
-
- kernel/livepatch/core.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
-
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 335d988bd811..98c2b0d02770 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -867,9 +867,6 @@ static int klp_init_patch_early(struct klp_patch *patch)
- 	struct klp_object *obj;
- 	struct klp_func *func;
- 
--	if (!patch->objs)
--		return -EINVAL;
--
- 	INIT_LIST_HEAD(&patch->list);
- 	INIT_LIST_HEAD(&patch->obj_list);
- 	kobject_init(&patch->kobj, &klp_ktype_patch);
-@@ -889,9 +886,6 @@ static int klp_init_patch_early(struct klp_patch *patch)
- 		}
- 	}
- 
--	if (!try_module_get(patch->mod))
--		return -ENODEV;
--
- 	return 0;
- }
- 
-@@ -1025,7 +1019,7 @@ int klp_enable_patch(struct klp_patch *patch)
- {
- 	int ret;
- 
--	if (!patch || !patch->mod)
-+	if (!patch || !patch->mod || !patch->objs)
- 		return -EINVAL;
- 
- 	if (!is_livepatch_module(patch->mod)) {
-@@ -1051,11 +1045,12 @@ int klp_enable_patch(struct klp_patch *patch)
- 		return -EINVAL;
- 	}
- 
-+	if (!try_module_get(patch->mod))
-+		return -ENODEV;
-+
- 	ret = klp_init_patch_early(patch);
--	if (ret) {
--		mutex_unlock(&klp_mutex);
--		return ret;
--	}
-+	if (ret)
-+		goto err;
- 
- 	ret = klp_init_patch(patch);
- 	if (ret)
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

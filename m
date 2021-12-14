@@ -2,173 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF54D47416E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE24474174
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233540AbhLNLYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 06:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233532AbhLNLYx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 06:24:53 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEC7C061574;
-        Tue, 14 Dec 2021 03:24:52 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id z9so7321578edb.5;
-        Tue, 14 Dec 2021 03:24:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Gi8RWAGQiNmIoGHwdzspSi43uqAcj/GOO0MFBwRaPoI=;
-        b=IfWWiDX5jVFFu0B3ddGZNAusdJcyG9IX6+DRUAluS+eTvYJz9gNRJrx3M8AAby8hsD
-         ZSMQozk0iUTV4i9UzPxajlTN4+quIij+4k8Yb1s7+KpkkrIq+1DHehN1o8BmH1d1GuB+
-         8J4GC8aVJbrjDt8QupVMroIA9n5yIflNkTz48Jgn13283otm7udVvOyNs0PikOyIDUHK
-         0i6XRG9IEaYhG5ntprpwNScHueOl4pXXPpWJkqPL/IqX9ujF4kx7dJxil0l8l96RMZLv
-         0COXMWB+ghTNvfSe4DL444e2oFipg9XS/ISQX8ZAf2lbZSEhXUfzGx1vRjmB5/sxxjtl
-         JwWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Gi8RWAGQiNmIoGHwdzspSi43uqAcj/GOO0MFBwRaPoI=;
-        b=REHLwvMXry53ubKlELESwWJYId+xrJf3F9mYQjascSYU4MgioESrj+a1JfrOTRB46m
-         0wlrdxHoHRcyEERvyymTY53Kzz+JPHG4xxKVGq98HrgpSM2cyuGId/14q0V7t9nACC17
-         CHaRpJrAalZtBpdbAjpLfFswR8CilBgAvrs55GQQSJ+GnpHeW5vvMJGS+h93EHE44H87
-         R+dD9qLmRFsXnhSHcp751fZiBUqw8XFJbNgrnlGgUJxbIDK73lnngB6LfS7n3GgD5BhX
-         rLhdI0XLt9CRdIKc6cVO42sj6A15PpoxCLLgC9BwTD6MoQ27iY8qpq2iAtDKKiJ5Vc6r
-         pBkw==
-X-Gm-Message-State: AOAM532CzzDSfAjwN8mTykriNVlGAsA+G1Wp9x2y4pX3XKdElWExfhDN
-        /ISWWK6vEKfEalenCCZbvqE=
-X-Google-Smtp-Source: ABdhPJx1tJz+OIgYK8aRcvyHsWg1WHl3Xo63MeoukglXRXKNPTttkY02hGUDXONX/TAmsFLMu27KEA==
-X-Received: by 2002:a50:da48:: with SMTP id a8mr7036863edk.155.1639481090570;
-        Tue, 14 Dec 2021 03:24:50 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id v3sm7837607edc.69.2021.12.14.03.24.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 03:24:50 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <85401305-2c71-e57f-a01e-4850060d300a@redhat.com>
-Date:   Tue, 14 Dec 2021 12:24:48 +0100
+        id S233548AbhLNL1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 06:27:12 -0500
+Received: from mga07.intel.com ([134.134.136.100]:41245 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229737AbhLNL1L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 06:27:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639481231; x=1671017231;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=mHMIttm44k0SALwbBPZ8GQA5pWb2uLFnFCHHneRnJqU=;
+  b=C6VT/+wwo6hHSvDNKUNsgqbQM/Mi5vu6aAzETwttGUZ8Rpz8tsWabSBe
+   4FnUXBfyhIrW/wfvIZIrOn6PrxcQdUwWzjaT+VOUyzg9NyDT5nchj9nuq
+   l6Zw7N4fglbPzzo3r2hyuRfubBMslWAOyu2nAmbuhdxIz8JtgKtlTBTp2
+   L8XHgHJjXidxFXeo1wuhshNfr7ZAesu+ci80dn5+wDoD9fQvXcSGwWzJh
+   R+i/l6oeoVo7tWwo2rJTLgWPDlSvxlmOjsYbnpgMGG3BjTVe0/v9Q32lh
+   Fyh9KsJPyXrd53jXgy9++6hXf85kHcOYvsIlP9SAggFO/Xxnp/8YSARy9
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="302337375"
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="302337375"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 03:27:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="465046009"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
+  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 03:27:08 -0800
+Subject: Re: [PATCH v2 1/2] mmc: sdhci-pci-gli: GL9755: Support for CD/WP
+ inversion on OF platforms
+To:     Hector Martin <marcan@marcan.st>,
+        Ben Chuang <benchuanggli@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20211212070210.141664-1-marcan@marcan.st>
+ <20211212070210.141664-2-marcan@marcan.st>
+ <72e29a9d-7e2a-5c2e-c44b-42172aae4f2d@intel.com>
+ <82faec71-31f7-f64e-e8e7-cf698b29fa16@marcan.st>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <96b75b6a-d57f-a36a-1463-a36144fe763c@intel.com>
+Date:   Tue, 14 Dec 2021 13:27:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.13.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 10/19] kvm: x86: Emulate WRMSR of guest IA32_XFD
+In-Reply-To: <82faec71-31f7-f64e-e8e7-cf698b29fa16@marcan.st>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Yang Zhong <yang.zhong@intel.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, seanjc@google.com,
-        jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-11-yang.zhong@intel.com>
- <fd16797c-b80f-c414-a731-0b9b73a3732e@redhat.com>
- <20211214102619.GA25456@yangzhon-Virtual>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211214102619.GA25456@yangzhon-Virtual>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/21 11:26, Yang Zhong wrote:
->    Paolo, Seems we do not need new KVM_EXIT_* again from below thomas' new patchset:
->    git://git.kernel.org/pub/scm/linux/kernel/git/people/tglx/devel.git x86/fpu-kvm
+On 14/12/2021 13:17, Hector Martin wrote:
+> On 14/12/2021 19.41, Adrian Hunter wrote:
+>>>   #define PCI_GLI_9755_PECONF   0x44
+>>> -#define   PCI_GLI_9755_LFCLK    GENMASK(14, 12)
+>>> -#define   PCI_GLI_9755_DMACLK   BIT(29)
+>>> +#define   PCI_GLI_9755_LFCLK          GENMASK(14, 12)
+>>> +#define   PCI_GLI_9755_DMACLK         BIT(29)
+>>
+>> Please don't mix in white space changes.
 > 
->    So the selftest stll need support KVM_GET_MSR/KVM_SET_MSR for MSR_IA32_XFD
->    and MSR_IA32_XFD_ERR? If yes, we only do some read/write test with vcpu_set_msr()/
->    vcpu_get_msr() from new selftest tool? or do wrmsr from guest side and check this value
->    from selftest side?
+> This is aligning the existing code with the additions; is it preferable to have the new ifdefs below misaligned?
 
-You can write a test similar to state_test.c to cover XCR0, XFD and the
-new XSAVE extensions.  The test can:
+White space changes should be a separate patch
 
-- initialize AMX and write a nonzero value to XFD
+> 
+>>> +#define   PCI_GLI_9755_INVERT_CD      BIT(30)
+>>> +#define   PCI_GLI_9755_INVERT_WP      BIT(31)
+>>>     #define PCI_GLI_9755_CFG2          0x48
+>>>   #define   PCI_GLI_9755_CFG2_L1DLY    GENMASK(28, 24)
+>>> @@ -570,6 +573,18 @@ static void gl9755_hw_setting(struct sdhci_pci_slot *slot)
+>>>       gl9755_wt_on(pdev);
+>>>         pci_read_config_dword(pdev, PCI_GLI_9755_PECONF, &value);
+>>> +#ifdef CONFIG_OF
+>>> +    if (pdev->dev.of_node) {
+>>
+>> As Robin wrote, please remove #ifdef and if (pdev->dev.of_node)
+>> because they are not needed.
+> 
+> Ack, will send out a v3 soon with the requested changes and hopefully it should be good to go :)
+> 
 
-- load a matrix into TMM0
-
-- check that #NM is delivered (search for vm_install_exception_handler) and
-that XFD_ERR is correct
-
-- write 0 to XFD
-
-- load again the matrix, and check that #NM is not delivered
-
-- store it back into memory
-
-- compare it with the original data
-
-All of this can be done with a full save&restore after every step
-(though I suggest that you first get it working without save&restore,
-the relevant code in state_test.c is easy to identify and comment out).
-
-You will have to modify vcpu_load_state, so that it does
-first KVM_SET_MSRS, then KVM_SET_XCRS, then KVM_SET_XSAVE.
-See patch below.
-
-Paolo
-
->    I checked some msr selftest reference code, tsc_msrs_test.c, which maybe better for this
->    reference. If you have better suggestion, please share it to me. thanks!
-
-
------------------- 8< -----------------
-From: Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH] selftest: kvm: Reorder vcpu_load_state steps for AMX
-
-For AMX support it is recommended to load XCR0 after XFD, so that
-KVM does not see XFD=0, XCR=1 for a save state that will eventually
-be disabled (which would lead to premature allocation of the space
-required for that save state).
-
-It is also required to load XSAVE data after XCR0 and XFD, so that
-KVM can trigger allocation of the extra space required to store AMX
-state.
-
-Adjust vcpu_load_state to obey these new requirements.
-
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 82c39db91369..d805f63f7203 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1157,16 +1157,6 @@ void vcpu_load_state(struct kvm_vm *vm, uint32_t vcpuid, struct kvm_x86_state *s
-  	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
-  	int r;
-  
--	r = ioctl(vcpu->fd, KVM_SET_XSAVE, &state->xsave);
--        TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_XSAVE, r: %i",
--                r);
--
--	if (kvm_check_cap(KVM_CAP_XCRS)) {
--		r = ioctl(vcpu->fd, KVM_SET_XCRS, &state->xcrs);
--		TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_XCRS, r: %i",
--			    r);
--	}
--
-  	r = ioctl(vcpu->fd, KVM_SET_SREGS, &state->sregs);
-          TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_SREGS, r: %i",
-                  r);
-@@ -1175,6 +1165,16 @@ void vcpu_load_state(struct kvm_vm *vm, uint32_t vcpuid, struct kvm_x86_state *s
-          TEST_ASSERT(r == state->msrs.nmsrs, "Unexpected result from KVM_SET_MSRS, r: %i (failed at %x)",
-                  r, r == state->msrs.nmsrs ? -1 : state->msrs.entries[r].index);
-  
-+	if (kvm_check_cap(KVM_CAP_XCRS)) {
-+		r = ioctl(vcpu->fd, KVM_SET_XCRS, &state->xcrs);
-+		TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_XCRS, r: %i",
-+			    r);
-+	}
-+
-+	r = ioctl(vcpu->fd, KVM_SET_XSAVE, &state->xsave);
-+        TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_XSAVE, r: %i",
-+                r);
-+
-  	r = ioctl(vcpu->fd, KVM_SET_VCPU_EVENTS, &state->events);
-          TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_VCPU_EVENTS, r: %i",
-                  r);

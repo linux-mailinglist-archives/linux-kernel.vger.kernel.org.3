@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5DB473B9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB47473B9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbhLNDhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 22:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53852 "EHLO
+        id S233386AbhLNDie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 22:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbhLNDhf (ORCPT
+        with ESMTP id S230169AbhLNDic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 22:37:35 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0023C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:37:35 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso15056981pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:37:35 -0800 (PST)
+        Mon, 13 Dec 2021 22:38:32 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62E0C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:38:32 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id a23so11656072pgm.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:38:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IP4nuXjL8uTtqvqJmO5l+VgMYJPLmImMRMKwBfOLCJs=;
-        b=dYs4fsUc/ftGqhXsXLmmMPZQKS1qVnsCBazczVlKlS2mEa2kpWqnL1WMFDJBYxTHMS
-         fCG+mhCtl/kkf88/iR5H36PTVwIAcN+QG2Xg/4Z1CGYMamydrsnWIVkzDidbXh5UV/2z
-         WpeMQtyeBMrjXnm8NFMpLleHbDTrmoGpST1pRPYQOpb3ZbIklXGg6V/Fs/i99/hbh/Ca
-         F7kG5YWZO+w3kS8vBh2s4/Gjrw/0SeQhTO8FbtFN84o3HLf6W0ApiD/4O0r5QowTjv1G
-         XzNL5rhORolc1p539lJFNoEf+Phmo0ycqURbQy8zNlbBlPGjxp7thxH7U1p8TjkRmq4n
-         clew==
+        bh=2qHShe7MY+8PE2qolLnbnuDu55sdtZRID6G1qJA4piY=;
+        b=VucomVBX1aC4jUA/wGyYl8S0pG6ueKwh59eieLdb89BDd+VlR6PLwzK0GIQaATZpST
+         xUCcYNZly3lNc8GUNc1y3Moeov1iHQvXaOofRB1WrjSvHxtnbBOW6BDUcGhBbF/HAtHT
+         Bq2OfX1xq1ixSKf8nfnFXxeklWfSO32HHcaARRLSlgukIIcjX6QomGFX3Wzxx+WpcIhk
+         a9CtlPLbpz2g6clf0IzLf82pSEme3bQncM734hRDdzfwHny9GV+M+KUY5UwgLEOvkD7A
+         XCXQsaIEE/4+wmxAEt4Rd2oL3ccnekVWTHszZwb/ZG772ZSgAjhINPrSYWbwuwvcExUz
+         +tIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=IP4nuXjL8uTtqvqJmO5l+VgMYJPLmImMRMKwBfOLCJs=;
-        b=zkbbRuBWxPMByfBlhZZzdq/+qIe1kyl+/UJzCKr93u7IM6P9OSEvexlZp8XyoAoCSs
-         3VHNhq7ctEA299+a31BLj757z8rUG6Fsch1L6Tt8SnKtXmeJgHn/MScsq3lZjJmWvKMV
-         Tbw33NfU7998PHf3sVRgnZQceG1s2LGZJYVlxbJXAApcO+NbWgl0nMBkzf9VoDCI70ln
-         vXCRLPKfPtgkgUyN9FvBUzrQacOVgs0359uIiAB61vybnFS8E4rJI4yXQu3I2dEm+uAA
-         AnpNwli8q4iyv4fIpzqxQBqtuQ7lfqJGVGdrwNGtlN90wT60M52acccbOa5LemrC7bTq
-         YiLQ==
-X-Gm-Message-State: AOAM533OWy+EPZo9AEutP17Ou288Yv5vX4atNfOxEBaMLvfzq+d2D0Ch
-        r5+DhaMNwtmHPn2h4+Gq5UI=
-X-Google-Smtp-Source: ABdhPJyOXjepbtgN3txKAxlArBP0F+1RILwMvlbTzpk2gZ+lnyBNtrRK0MaC1+jlj3K6T4yfnkkL7g==
-X-Received: by 2002:a17:90a:c08a:: with SMTP id o10mr2750396pjs.44.1639453055301;
-        Mon, 13 Dec 2021 19:37:35 -0800 (PST)
+        bh=2qHShe7MY+8PE2qolLnbnuDu55sdtZRID6G1qJA4piY=;
+        b=hZjxpgyJ/94J9vA6SP/P84eot2PKiAbXnHu5HcHpcP5slPvrC3J4XBdJGIsbIzc/6Q
+         w8YUVvRWXUpgNW68oCQyi2BJydXVAkNkW9tq75DVP4cGqX8CWPy4tEf2fhpEAOftu5GE
+         nu1Sqx7KFX3KhLJ3y6M66eu5/ReMoAby8DPSX81XNqESEJIRbXw9cZ2sOZZbgs2uHjEn
+         cZ3ZSFUAixXsQgsLXcmq0IiGaYdz/KNN/TsBOgslVq15HZ9G/yIebmBMxeI37dCFC4QF
+         4tM25IgGNBzZ1Ay99VFEIhOpQ4E46rWcVbAVgaCwM8aig5RbqG7WDGjJbhSsJtHPfAbF
+         cR2Q==
+X-Gm-Message-State: AOAM532LFlF7WCHt6708ozPbzITO0CooJlxIO6Oy5Hcf7MB0TVlYIu2K
+        ioeKvbR9hZaH5e1j4Wf+E5M=
+X-Google-Smtp-Source: ABdhPJw9bh3Mf5C0pW/xayi4e61SkxUApHmT50j/831wRK2l99VMT58NOJ2mmaOiLlyAAUMErfhx5Q==
+X-Received: by 2002:a63:5906:: with SMTP id n6mr1839549pgb.563.1639453112192;
+        Mon, 13 Dec 2021 19:38:32 -0800 (PST)
 Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id s28sm15333226pfg.147.2021.12.13.19.37.34
+        by smtp.gmail.com with ESMTPSA id j7sm14285294pfu.164.2021.12.13.19.38.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 19:37:34 -0800 (PST)
-Message-ID: <bbdcf6cf-8275-ef57-9307-fd7e2b456718@gmail.com>
-Date:   Mon, 13 Dec 2021 19:37:33 -0800
+        Mon, 13 Dec 2021 19:38:31 -0800 (PST)
+Message-ID: <134050ec-c156-8361-7fe6-c4191f8c9873@gmail.com>
+Date:   Mon, 13 Dec 2021 19:38:30 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.2
-Subject: Re: [GIT PULL 2/3] bcm2835-dt-fixes-2021-12-13
+Subject: Re: [GIT PULL 1/3] bcm2835-dt-next-2021-12-13
 Content-Language: en-US
 To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
         Florian Fainelli <f.fainelli@gmail.com>
@@ -63,11 +63,10 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 References: <20211213123040.184359-1-nsaenzju@redhat.com>
- <20211213123040.184359-2-nsaenzju@redhat.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211213123040.184359-2-nsaenzju@redhat.com>
+In-Reply-To: <20211213123040.184359-1-nsaenzju@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -83,23 +82,21 @@ On 12/13/2021 4:30 AM, Nicolas Saenz Julienne wrote:
 > 
 > are available in the Git repository at:
 > 
->    https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git tags/bcm2835-dt-fixes-2021-12-13
+>    https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git tags/bcm2835-dt-next-2021-12-13
 > 
-> for you to fetch changes up to 6a56599b5a6b19adb21f8f0d9f2d33511426fb20:
+> for you to fetch changes up to 5e8c1bf1a0a5c728cee2b6c2162348a9dfddf1bf:
 > 
->    ARM: dts: gpio-ranges property is now required (2021-12-13 13:06:25 +0100)
+>    ARM: dts: bcm2711-rpi-4-b: Add gpio offsets to line name array (2021-12-13 13:08:04 +0100)
 > 
 > ----------------------------------------------------------------
-> A series of devicetree fixes aimed at the Raspberry Pi family of boards:
-> 
-> - Phil Elwell adds gpio-ranges to RPi's main GPIO/PINCTRL driver
-> - Phil Elwell and Stefan Wahren correct RPi400's GPIO expander's
->    labels
-> - Stefan Wahren drops fallback compatible from RPi2's vchiq devicetree
->    node
+> Uwe Kleine-König adds offsets to GPIO line names array for better
+> readability.
 > 
 > ----------------------------------------------------------------
 
-Merged into devicetree/fixes and sent out, thanks!
+Merged into devicetree/next, thanks!
+
+PS: please remove your older @suse.de email address from the CC list 
+otherwise people get bounces when replying to this mail, thanks!
 -- 
 Florian

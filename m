@@ -2,201 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E03474C30
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C15B3474C32
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237483AbhLNTnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S237492AbhLNTnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232335AbhLNTnV (ORCPT
+        with ESMTP id S232335AbhLNTnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:43:21 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BF7C061574;
-        Tue, 14 Dec 2021 11:43:21 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id z6so18701459pfe.7;
-        Tue, 14 Dec 2021 11:43:21 -0800 (PST)
+        Tue, 14 Dec 2021 14:43:42 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A220C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:43:41 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id c32so38961445lfv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:43:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LCilH12wWw0seUa3hiJyDy0VxFX2Q3bA7Y0HXIYHhF8=;
-        b=mgUrMQhC4/CUdwucboxOLaDGWbb/3r/d8db3O9NgfZYUYEd6Zjz2nbba51SL7zLe8Y
-         HoPx+IQ/X0fM2kJmgKk06iLEcvvTYlX2h8Als5lC5pEfulogO+sUqemRF4n6m2Eekf4w
-         CtPoyJGaZ6slsRjff5y3xVucnMlyQBZjuB7TsLW/QfR5HbmU2eCSX+iDyn3uJA04puJa
-         dF//PJEuj31ulpS82MggltzR4G2RUQnzjtNrp/7HOGpfHVW7cNQpoT3ypqVvpPJEUhsf
-         QvGgSrM2kq5yWe5ythTOhC41utztrjpAcYlGjjw1vz9wzYdQhMtOLwSCYyXNwoJoZq7H
-         sX/w==
+         :cc;
+        bh=/WNtdOExba0UareLlKons7fVsJWCyGRdBiOkJewabLU=;
+        b=qP9k2WtsLwhadv7Z98sXBcbuVgdLVZLF1yEoSBINi3s2x/zcZdiBiWTBshsR0ZCvHp
+         sWf3vM7oxiubP1xPpjtywPgHffA5ufiabkRBoqEB8MAQHzYqxCuCSg2zOvnsFrvPQqaY
+         yz1bSnDT9cBMlgT4wqhZ0CwoWxu1C11xIoXk1/KmX8xHN6hKV9RJ7i7VI2b3Of6PneW9
+         5FiwZmfjQZvJ5aX2o/r1fV9SMdFFFBAZqJB/c7pk1yBSC85m69rttz0tbIgeCM9rGen4
+         gwWRLYlf4F5c+AGEuxRNnNT5HNgHtZ3Mnjxz9JzmwtxrzR9PrNH8d7XMvIkvpIZJKWyB
+         F/iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LCilH12wWw0seUa3hiJyDy0VxFX2Q3bA7Y0HXIYHhF8=;
-        b=ISs8iGmjulzRcyw/4adfQiamM2bLA3tYj4Sg2mBjKQfJej36Y8qqgtux5H2PY1v+h5
-         /LTKC/x9hDeUysiJ1hI9CwdEF9uJoPfLHiQnAriD/yRXKjjBixvEEd5fqtHuoDXraxPd
-         leDnrLOZgN75PBWfam6fVjHqDTYwkYybl8zAcm/Kj/nO02nDNMNJ/kyzsr2v1BibIjMI
-         SUTALArnDPKadExaDnJrTf6SRRU9n2LE5rwq4E9+Fh9Tm84OtQnCOvU5fzgD6q2eCqQq
-         So/LzfxiodAcCTt1rhEOdFkVDE3gscDycnEwAIWqb/fh5vC3EM7ECm0PhWbeTkrcsu2i
-         BoLg==
-X-Gm-Message-State: AOAM532CzldWSv+XJh+tm5YtzmT/yF/Nl3fs/q48+iMrYW7JfW/ImKjY
-        KgRufOPIjMuu4TWK67tTW+TOOaTRRHn+VNa/Nu0=
-X-Google-Smtp-Source: ABdhPJx1omsyXEH84uuE4kzYpPBu5v24anF9kQ0616INOFdPlqou2FDes2afxUGAuG2JNukP2+Sny94qEgWXdVVJ7J8=
-X-Received: by 2002:a63:3f4e:: with SMTP id m75mr4955451pga.587.1639511000707;
- Tue, 14 Dec 2021 11:43:20 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=/WNtdOExba0UareLlKons7fVsJWCyGRdBiOkJewabLU=;
+        b=bC+RI1iUnbMEsk857ifYxOKqMu8CzgfWjlSdA2gj5PiyEOx4iSrFUu4D087UCuQ3pp
+         MPCGkO3HZ9BVdJpKGdy50SardtmrXSu2fjedqNAUYLqAgoYIzY3a+ODRAiLEi5FJADn3
+         VSTfMG8XD4ewcYgzB3njp7ORKCz4CRLie4rTiw8xS5RCsLgopMEzxMYfeUFzU6Hi3awT
+         tknZt2Ek8UPne/x0sf6lmxq0jbIXAQ7BHNAqhv9AXQQvUsbsgVXNfmsr8o//xabH4WLF
+         QbyXESX/DxAvVgeTp+im1mhZVcvhL2iL8eIy19jgFHiCGHZmmi5gdzSaU4KCPI785rKq
+         gfnA==
+X-Gm-Message-State: AOAM533U8iPXsqr8dNflGYhihyGitLIz4XynLB1ci80Nm71GgHRG9wO4
+        JkxO/+P2VXs1BSFo5hkHmnWwc45kNOErh2fH9BGEdw==
+X-Google-Smtp-Source: ABdhPJynoNYKno0o5Fc6TQq4M/7CoCk7fH7s/cK99AIXq3P6Mr1V2cvRGwyXL+wfaPmWTd+SLmaQp7RNHm0IJSN51FY=
+X-Received: by 2002:a05:6512:b1f:: with SMTP id w31mr6648969lfu.240.1639511019704;
+ Tue, 14 Dec 2021 11:43:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20211128035704.270739-1-yury.norov@gmail.com> <20211128035704.270739-3-yury.norov@gmail.com>
- <YaPGDOvBzhiRFcOP@qmqm.qmqm.pl>
-In-Reply-To: <YaPGDOvBzhiRFcOP@qmqm.qmqm.pl>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Tue, 14 Dec 2021 11:43:09 -0800
-Message-ID: <CAAH8bW9-dbENFUrwPUQ-uJVVX_s=PWb2zpAJ8BqkV3vJE696mA@mail.gmail.com>
-Subject: Re: [PATCH 2/9] lib/bitmap: implement bitmap_{empty,full} with bitmap_weight_eq()
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        David Laight <David.Laight@aculab.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
-        Mark Gross <markgross@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Roy Pledge <Roy.Pledge@nxp.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+References: <20211213224914.1501303-1-paul@crapouillou.net> <20211213224914.1501303-3-paul@crapouillou.net>
+In-Reply-To: <20211213224914.1501303-3-paul@crapouillou.net>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 14 Dec 2021 11:43:28 -0800
+Message-ID: <CAKwvOdm3x7pot9+DgujUrO795ip_nxd_LGtoAuePRzc=td90jQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] MIPS: boot/compressed: Build without LTO
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nathan Chancellor <nathan@kernel.org>, list@opendingux.net,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 28, 2021 at 10:10 AM Micha=C5=82 Miros=C5=82aw
-<mirq-linux@rere.qmqm.pl> wrote:
+On Mon, Dec 13, 2021 at 2:49 PM Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> On Sat, Nov 27, 2021 at 07:56:57PM -0800, Yury Norov wrote:
-> > Now as we have bitmap_weight_eq(), switch bitmap_full() and
-> > bitmap_empty() to using it.
-> >
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  include/linux/bitmap.h | 26 ++++++++++----------------
-> >  1 file changed, 10 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-> > index 996041f771c8..2d951e4dc814 100644
-> > --- a/include/linux/bitmap.h
-> > +++ b/include/linux/bitmap.h
-> > @@ -386,22 +386,6 @@ static inline int bitmap_subset(const unsigned lon=
-g *src1,
-> >               return __bitmap_subset(src1, src2, nbits);
-> >  }
-> >
-> > -static inline bool bitmap_empty(const unsigned long *src, unsigned nbi=
-ts)
-> > -{
-> > -     if (small_const_nbits(nbits))
-> > -             return ! (*src & BITMAP_LAST_WORD_MASK(nbits));
-> > -
-> > -     return find_first_bit(src, nbits) =3D=3D nbits;
-> > -}
+> We need a valid ELF object for dummy.o, so that objcopy can insert the
+> vmlinuz payload.
 >
-> Since this is supposed to be an optimization, I would go all the way and
-> replace this with the trivial implementation instead:
->
-> bool bitmap_empty(long *bits, size_t nbits)
-> {
->         for (; nbits >=3D BITS_PER_LONG; ++bits, nbits -=3D BITS_PER_LONG=
-)
->                 if (*bits)
->                         return false;
->
->         if (nbits && *bits & BITMAP_LAST_WORD_MASK(nbits))
->                 return false;
->
->         return true;
-> }
+> Therefore, we must build the decompresser program without LTO, otherwise
+> dummy.o will be LLVM bytecode instead of a ELF object file.
 
-This is what current implementations basically do, based on find_first_bit(=
-).
+While the below may work and follows the pattern observed in
+drivers/firmware/efi/libstub/Makefile
+43:KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
 
-I think that for long bitmaps the most time consuming operation is moving
-data to L1, and for short bitmaps the difference between approaches is
-barely measurable.
+I can't help but wonder whether we should instead be doing something like:
+arch/x86/power/Makefile
+9:CFLAGS_REMOVE_cpu.o := $(CC_FLAGS_LTO)
+scripts/mod/Makefile
+3:CFLAGS_REMOVE_empty.o += $(CC_FLAGS_LTO)
+drivers/misc/lkdtm/Makefile
+19:CFLAGS_REMOVE_rodata.o               += $(CC_FLAGS_LTO)
 
-But hweght_long on each iteration can't be more effective than the current
-version. So, I'll drop this patch for v2 and keep things unchanged.
+but for dummy.o?  ie.
+CFLAGS_REMOVE_dummy.o += $(CC_FLAGS_LTO)
+
+Can you please try that rather than disabling LTO for a large subset of files?
+
+>
+> Building the decompresser with LTO wouldn't make much sense anyway,
+> unlike building the vmlinuz itself with LTO.
+
+Why not? We do it for x86 and arm64 AFAICT.
+
+>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  arch/mips/boot/compressed/Makefile | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+> index 4c9ecfbb0ef4..2d01c50fb0b1 100644
+> --- a/arch/mips/boot/compressed/Makefile
+> +++ b/arch/mips/boot/compressed/Makefile
+> @@ -27,6 +27,9 @@ ifdef CONFIG_CPU_LOONGSON64
+>  KBUILD_CFLAGS := $(filter-out -march=loongson3a, $(KBUILD_CFLAGS)) -march=mips64r2
+>  endif
+>
+> +# Disable LTO
+> +KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+> +
+>  KBUILD_CFLAGS := $(KBUILD_CFLAGS) -mno-abicalls -D__KERNEL__ -D__DISABLE_EXPORTS \
+>         -DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
+>
+> --
+> 2.33.0
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers

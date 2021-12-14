@@ -2,160 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B55473AC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA25473AD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244048AbhLNCek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 21:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbhLNCek (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 21:34:40 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6F6C06173F;
-        Mon, 13 Dec 2021 18:34:39 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id b11so12528512pld.12;
-        Mon, 13 Dec 2021 18:34:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7JoIY6oUJ0zBsCLhP/nsE2AFGgRPq3Re0+GEf3kHWmU=;
-        b=oteFQPRRL3zrtEXyXM7j32VaLTs5731jYrEwIeBviSX3oG3PYXiqN51Q0DzZ/1PjeP
-         wftN6d+1eqyw9YfixGdCNEgigrqd3dnaftboGAjZVrHzwmnuN3ZSu4BAXnbLETMgZLtY
-         3l81YKyCKbFbEHAfELfSFHAfK7mwgPui3kyr1SjqoZq2aVI8J+sn8umiV4FoulAguRIV
-         mCtObZkYGU4w4sHEB4RXy5v5lMrLeBlhC/K8hTChV8y6sQCCBKJ5BQNLhAENuQ2f6/Bl
-         cVsklA35+k2Qz5qlbpYy/eqN+WU2rnwhg0rhmD9UhB076oZXdaPJH3h0RJnlBZMyVCZQ
-         JXPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7JoIY6oUJ0zBsCLhP/nsE2AFGgRPq3Re0+GEf3kHWmU=;
-        b=BVrojJYJiO1YrlLvpBw5gtpqVjnNMzniQIPXtzlO5Cqeh9kTy42Pi1LBOk6lMSMFXO
-         xBHGyK4pwxuMxSS69hmT2SSRuzZzWvAKTd8mUMW5+VBEkkVwLG0IJ+3vshjbgEaFwTGQ
-         OmXgWUeN+uOiDVpaVRnUwReDsp+hBzrFrqlhoI1v1SMWQB8q4OSeo+BvujTKt7CJqPxM
-         Vtk68Q3am+GNw9E6l7K2yebwssqiJDyL/tk+ZvCkDEd4UjzcbEQUt8zOvgsTjJQjsnTA
-         KsAB2S2DYhq8gUS620UJuCcJgBwe8UH/WJeXpiKuV30bruIjosPVavSDIGL9RX2UeXSy
-         WxdA==
-X-Gm-Message-State: AOAM530RXtrwr8lwMYdpBcCmi+CCpf3mwBmAu5XA5JxJnkfVbHAjXo/S
-        6KOLDKIk1W6zIOOu8qD0Rp8=
-X-Google-Smtp-Source: ABdhPJzQzbStbuGMWTr+zZcjpQH7q21rvxe70VtkljKniN2g47H4jrCDxzMTql7upQmu31Ox8STkFQ==
-X-Received: by 2002:a17:902:bc43:b0:148:9109:c60e with SMTP id t3-20020a170902bc4300b001489109c60emr424702plz.9.1639449279246;
-        Mon, 13 Dec 2021 18:34:39 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id lp12sm418422pjb.24.2021.12.13.18.34.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 18:34:38 -0800 (PST)
-Subject: [PATCH 5/3] docs: sphinx/kfigure.py: Delegate inkscape msgs to
- kernellog
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <de8def13-efbc-1d98-acb5-5cc1f6902e4b@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <ea41dd96-124a-9132-7659-1ae04d82188b@gmail.com>
-Date:   Tue, 14 Dec 2021 11:34:35 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S243168AbhLNClS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 21:41:18 -0500
+Received: from gate.crashing.org ([63.228.1.57]:47586 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229616AbhLNClR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 21:41:17 -0500
+Received: from ip6-localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 1BE2ZZfk008992;
+        Mon, 13 Dec 2021 20:35:37 -0600
+Message-ID: <0888eb83c8b2bd53d4c3e2355019052d0ab40db6.camel@kernel.crashing.org>
+Subject: Re: [PATCH v3 2/4] usb: aspeed-vhub: fix remote wakeup failure in
+ iKVM use case
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Tao Ren <rentao.bupt@gmail.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        kernel test robot <lkp@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
+Cc:     BMC-SW <BMC-SW@aspeedtech.com>
+Date:   Tue, 14 Dec 2021 13:35:35 +1100
+In-Reply-To: <HK0PR06MB320271524E51BDFA922F070780709@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20211208100545.1441397-1-neal_liu@aspeedtech.com>
+         <20211208100545.1441397-3-neal_liu@aspeedtech.com>
+         <391323f136e49387797d43e89b6e42cd95d916c2.camel@kernel.crashing.org>
+         <HK0PR06MB320271524E51BDFA922F070780709@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <de8def13-efbc-1d98-acb5-5cc1f6902e4b@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of redirecting to /dev/null, capture inkscape messages and
-output them via kernelloc.verbose or kerneldoc.warn depending on the
-exit code.
+On Thu, 2021-12-09 at 02:37 +0000, Neal Liu wrote:
+> I'm confused. Signaling Wakeup when wakeup_en is set if it has any ep
+> activities is not exactly what you said?
+> 
+> wakeup_en is set only if host allows this device have wakeup
+> capability and bus being suspended.
+> 
+> Normal ep activities would not write the MMIO because wakeup_en is
+> not set.
 
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
----
-Hi Mauro,
+Hrm... I didn't think wakeup_en was limited to the bus being suspended,
+but maybe I misremember, it's been a while.
 
-On second thought, I took the path of delegating inkscape warnings
-to kernellog.
-
-Now you can see those warning messages by "SPHINXOPTS=-v".
-
-Does this approach sound reasonable to you?
-
-        Thanks, Akira
---
- Documentation/sphinx/kfigure.py | 28 +++++++++++++---------------
- 1 file changed, 13 insertions(+), 15 deletions(-)
-
-diff --git a/Documentation/sphinx/kfigure.py b/Documentation/sphinx/kfigure.py
-index dbe75ee8ae61..a275ee0fec02 100644
---- a/Documentation/sphinx/kfigure.py
-+++ b/Documentation/sphinx/kfigure.py
-@@ -126,9 +126,6 @@ rsvg_convert_cmd = None
- inkscape_cmd = None
- # Inkscape prior to 1.0 uses different command options
- inkscape_ver_one = False
--# Show warning from inkscape(1), enabled by setting env var
--# SPHINX_SHOW_INKSCAPE_WARN
--inkscape_show_warn = False
- 
- 
- def setup(app):
-@@ -178,7 +175,7 @@ def setupTools(app):
-     This function is called once, when the builder is initiated.
-     """
-     global dot_cmd, dot_Tpdf, convert_cmd, rsvg_convert_cmd   # pylint: disable=W0603
--    global inkscape_cmd, inkscape_ver_one, inkscape_show_warn  # pylint: disable=W0603
-+    global inkscape_cmd, inkscape_ver_one  # pylint: disable=W0603
-     kernellog.verbose(app, "kfigure: check installed tools ...")
- 
-     dot_cmd = which('dot')
-@@ -211,12 +208,6 @@ def setupTools(app):
-         rsvg_convert_cmd = None
-         dot_Tpdf = False
- 
--        try:
--            if os.environ['SPHINX_SHOW_INKSCAPE_WARN']:
--                inkscape_show_warn = True
--        except KeyError:
--            pass
--
-     else:
-         if convert_cmd:
-             kernellog.verbose(app, "use convert(1) from: " + convert_cmd)
-@@ -384,14 +375,21 @@ def svg2pdf(app, svg_fname, pdf_fname):
-         else:
-             cmd = [inkscape_cmd, '-z', '--export-pdf=%s' % pdf_fname, svg_fname]
- 
--    # use stdout and stderr from parent
--    if inkscape_show_warn:
--        exit_code = subprocess.call(cmd)
--    else:
--        exit_code = subprocess.call(cmd, stderr=subprocess.DEVNULL)
-+    try:
-+        warning_msg = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-+        exit_code = 0
-+    except subprocess.CalledProcessError as err:
-+        warning_msg = err.output
-+        exit_code = 1
-+        pass
- 
-     if exit_code != 0:
-         kernellog.warn(app, "Error #%d when calling: %s" % (exit_code, " ".join(cmd)))
-+        kernellog.warn(app, "Warning msg from inkscape: %s" % str(warning_msg, 'utf-8'))
-+    if warning_msg:
-+        kernellog.verbose(app, "Warning msg from inkscape (likely harmless):\n%s"
-+                          % str(warning_msg, 'utf-8'))
-+
-     return bool(exit_code == 0)
- 
- def svg2pdf_by_rsvg(app, svg_fname, pdf_fname):
--- 
-2.17.1
+Cheers,
+Ben.
 
 

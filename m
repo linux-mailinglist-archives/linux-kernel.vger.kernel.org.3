@@ -2,124 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5375474BE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E535C474BE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234288AbhLNT2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:28:24 -0500
-Received: from mga12.intel.com ([192.55.52.136]:17315 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229491AbhLNT2X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:28:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639510103; x=1671046103;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hnMalQnj2NaFVd4xW9/X0H56XQiM/o5zsUGnaOAP68E=;
-  b=KuwkSg5/DA45QsE4txv0UySVKhmkpCmAYFKggH1uK7H/aZfbwyG9rEe8
-   Zi2xe3K1QbSPy+WwoUXuDvgYg3yuUtTuaJRToUWkC52NggHRxhuEQ2O/5
-   xrUNIE3mupBvCt6PF9/qeO+iEPtTQrm5XgfqprSoyW31aO4MdTe/gKCxV
-   ZVSen+l88WLcEydSTSzciFKUMF3U0xwTvzUt/tEc+w5o8MCMItSdtZVHJ
-   DjYSYlYnn05VKQVLVKpEo7o/FH2cvEC8oL78pWkjmhBqM1BIZniFgr/QZ
-   UB1N2Qer5ZYVWBw1RRiuNBjxktpjjPsfLFkUp9RTXo9xpaP6zWfUWqKtn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="219085130"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="219085130"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 11:28:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="505492787"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 14 Dec 2021 11:28:22 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxDTJ-0000g2-FG; Tue, 14 Dec 2021 19:28:21 +0000
-Date:   Wed, 15 Dec 2021 03:27:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [ardb:for-kernelci 2/2] <instantiation>:4:12: error: operand must be
- a register in range [r0, r14]
-Message-ID: <202112150319.rZuO4LiO-lkp@intel.com>
+        id S237416AbhLNT17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:27:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232135AbhLNT17 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 14:27:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF47AC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:27:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B519616C2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 19:27:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 174C0C34604;
+        Tue, 14 Dec 2021 19:27:54 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 19:27:51 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH mm v3 25/38] kasan, vmalloc, arm64: mark vmalloc mappings
+ as pgprot_tagged
+Message-ID: <YbjwN0YlDV4hm3x6@arm.com>
+References: <cover.1639432170.git.andreyknvl@google.com>
+ <d91e501aef74c5bb924cae90b469ff0dc1d56488.1639432170.git.andreyknvl@google.com>
+ <YbjQNdst07JqbG0j@arm.com>
+ <CA+fCnZftd93rARJ+xpUApimkgTsN0RRmiSVnrUMkCvdSu4-tcA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CA+fCnZftd93rARJ+xpUApimkgTsN0RRmiSVnrUMkCvdSu4-tcA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   e87ef81a2a09f584487c502ff4dfe618b298000f
-commit: e87ef81a2a09f584487c502ff4dfe618b298000f [2/2] fixup! ARM: assembler: use explicit relocation for ADR with a function symbol
-config: arm-randconfig-r031-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150319.rZuO4LiO-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=e87ef81a2a09f584487c502ff4dfe618b298000f
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb for-kernelci
-        git checkout e87ef81a2a09f584487c502ff4dfe618b298000f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Tue, Dec 14, 2021 at 07:27:09PM +0100, Andrey Konovalov wrote:
+> On Tue, Dec 14, 2021 at 6:11 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Mon, Dec 13, 2021 at 10:54:21PM +0100, andrey.konovalov@linux.dev wrote:
+> > > diff --git a/arch/arm64/include/asm/vmalloc.h b/arch/arm64/include/asm/vmalloc.h
+> > > index b9185503feae..3d35adf365bf 100644
+> > > --- a/arch/arm64/include/asm/vmalloc.h
+> > > +++ b/arch/arm64/include/asm/vmalloc.h
+> > > @@ -25,4 +25,14 @@ static inline bool arch_vmap_pmd_supported(pgprot_t prot)
+> > >
+> > >  #endif
+> > >
+> > > +#define arch_vmalloc_pgprot_modify arch_vmalloc_pgprot_modify
+> > > +static inline pgprot_t arch_vmalloc_pgprot_modify(pgprot_t prot)
+> > > +{
+> > > +     if (IS_ENABLED(CONFIG_KASAN_HW_TAGS) &&
+> > > +                     (pgprot_val(prot) == pgprot_val(PAGE_KERNEL)))
+> > > +             prot = pgprot_tagged(prot);
+> > > +
+> > > +     return prot;
+> > > +}
+> > > +
+> > >  #endif /* _ASM_ARM64_VMALLOC_H */
+> > > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> > > index 28becb10d013..760caeedd749 100644
+> > > --- a/include/linux/vmalloc.h
+> > > +++ b/include/linux/vmalloc.h
+> > > @@ -115,6 +115,13 @@ static inline int arch_vmap_pte_supported_shift(unsigned long size)
+> > >  }
+> > >  #endif
+> > >
+> > > +#ifndef arch_vmalloc_pgprot_modify
+> > > +static inline pgprot_t arch_vmalloc_pgprot_modify(pgprot_t prot)
+> > > +{
+> > > +     return prot;
+> > > +}
+> > > +#endif
+> > > +
+> > >  /*
+> > >   *   Highlevel APIs for driver use
+> > >   */
+> > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > > index 837ed355bfc6..58bd2f7f86d7 100644
+> > > --- a/mm/vmalloc.c
+> > > +++ b/mm/vmalloc.c
+> > > @@ -3060,6 +3060,8 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
+> > >               return NULL;
+> > >       }
+> > >
+> > > +     prot = arch_vmalloc_pgprot_modify(prot);
+> > > +
+> > >       if (vmap_allow_huge && !(vm_flags & VM_NO_HUGE_VMAP)) {
+> > >               unsigned long size_per_node;
+> >
+> > I wonder whether we could fix the prot bits in the caller instead and we
+> > won't need to worry about the exec or the module_alloc() case. Something
+> > like:
+> >
+> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > index d2a00ad4e1dd..4e8c61255b92 100644
+> > --- a/mm/vmalloc.c
+> > +++ b/mm/vmalloc.c
+> > @@ -3112,7 +3112,7 @@ void *__vmalloc_node(unsigned long size, unsigned long align,
+> >                             gfp_t gfp_mask, int node, const void *caller)
+> >  {
+> >         return __vmalloc_node_range(size, align, VMALLOC_START, VMALLOC_END,
+> > -                               gfp_mask, PAGE_KERNEL, 0, node, caller);
+> > +                       gfp_mask, pgprot_hwasan(PAGE_KERNEL), 0, node, caller);
+> >  }
+> >  /*
+> >   * This is only for performance analysis of vmalloc and stress purpose.
+> > @@ -3161,7 +3161,7 @@ EXPORT_SYMBOL(vmalloc);
+> >  void *vmalloc_no_huge(unsigned long size)
+> >  {
+> >         return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+> > -                                   GFP_KERNEL, PAGE_KERNEL, VM_NO_HUGE_VMAP,
+> > +                                   GFP_KERNEL, pgprot_hwasan(PAGE_KERNEL), VM_NO_HUGE_VMAP,
+> >                                     NUMA_NO_NODE, __builtin_return_address(0));
+> >  }
+> >  EXPORT_SYMBOL(vmalloc_no_huge);
+> >
+> > with pgprot_hwasan() defined to pgprot_tagged() only if KASAN_HW_TAGS is
+> > enabled.
+> 
+> And also change kasan_unpoison_vmalloc() to tag only if
+> pgprot_tagged() has been applied, I assume.
+> 
+> Hm. Then __vmalloc_node_range() callers will never get tagged memory
+> unless requested. I suppose that's OK, most of them untag the pointer
+> anyway.
+> 
+> But this won't work for SW_TAGS mode, which is also affected by the
+> exec issue and needs those kasan_reset_tag()s in module_alloc()/BPF.
+> We could invent some virtual protection bit for it and reuse
+> pgprot_hwasan(). Not sure if this would be acceptable.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Ah, a pgprot_hwasan() for the sw tags is probably not acceptable as this
+requires an unnecessary pte bit. An alternative could be a GFP flag that
+gets passed only from __vmalloc_node() etc.
 
-All errors (new ones prefixed by >>):
+Otherwise your original approach works as well.
 
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w r9, pc, #4
-              ^
-   arch/arm/kernel/entry-armv.S:490:2: note: while in macro instantiation
-    badr r9, ret_from_exception
-    ^
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w lr, pc, #4
-              ^
-   arch/arm/kernel/entry-armv.S:509:2: note: while in macro instantiation
-    badr lr, __und_usr_fault_32
-    ^
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w lr, pc, #4
-              ^
-   arch/arm/kernel/entry-armv.S:727:2: note: while in macro instantiation
-    badr lr, ret_from_exception
-    ^
---
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w lr, pc, #4
-              ^
-   <instantiation>:6:2: note: while in macro instantiation
-    badr lr, __ret_fast_syscall @ return address
-    ^
-   arch/arm/kernel/entry-common.S:255:2: note: while in macro instantiation
-    invoke_syscall tbl, scno, r10, __ret_fast_syscall
-    ^
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w lr, pc, #4
-              ^
-   <instantiation>:6:2: note: while in macro instantiation
-    badr lr, __sys_trace_return @ return address
-    ^
-   arch/arm/kernel/entry-common.S:289:2: note: while in macro instantiation
-    invoke_syscall tbl, scno, r10, __sys_trace_return, reload=1
-    ^
---
->> <instantiation>:4:12: error: operand must be a register in range [r0, r14]
-    sub.w lr, pc, #4
-              ^
-   arch/arm/kernel/sleep.S:92:2: note: while in macro instantiation
-    badr lr, cpu_suspend_abort
-    ^
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Catalin

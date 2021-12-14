@@ -2,65 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1249B474914
+	by mail.lfdr.de (Postfix) with ESMTP id 57DD3474916
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236366AbhLNRQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:16:36 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4280 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbhLNRQf (ORCPT
+        id S236385AbhLNRQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:16:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236206AbhLNRQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:16:35 -0500
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JD4gH1MyYz67xdg;
-        Wed, 15 Dec 2021 01:12:11 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 18:16:33 +0100
-Received: from [10.47.83.94] (10.47.83.94) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 14 Dec
- 2021 17:16:32 +0000
-Subject: Re: [PATCH v2 11/11] iommu: Move flush queue data into
- iommu_dma_cookie
-To:     Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>,
-        <will@kernel.org>
-CC:     <iommu@lists.linux-foundation.org>,
-        <suravee.suthikulpanit@amd.com>, <baolu.lu@linux.intel.com>,
-        <willy@infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>
-References: <cover.1639157090.git.robin.murphy@arm.com>
- <e2e24e5f4174a56c725cde3164f86a3e234f6d7f.1639157090.git.robin.murphy@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <e997d299-9f51-6d17-19ce-d9116c26c967@huawei.com>
-Date:   Tue, 14 Dec 2021 17:16:09 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Tue, 14 Dec 2021 12:16:36 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110E0C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:16:36 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so16571682pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 09:16:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DLIiHWejTvBczvMB4LaGo/x+JKahlOS065QQRy4QKls=;
+        b=TgAWkk1RgihXiWq6f70ui5/U8oLI+Up2x5oVLr+g8O5t6clJf9vmq6VHne4c/SDTWk
+         +Sk9Hn+gCzrsfeEPbUxUzKPfJTUZafnlALOlWBwwU7Wk4UuIa95qcWxDcYtEk6KlXPpq
+         1SEjBr0O0NSmet7rpfuUErsOmttjuIe8TQdDA+NHuvP+W+09fUlDUbPxW7f7SBS3MBSF
+         307N7Tw1Lvd9mB/OrAEo7d00EsteCEPUld/mZ/j8hO6Wf+GBqrvVp7ctprivqjnL1ftZ
+         CRWuaPnj5vBI6fY9qu4eBVWS2wp4qGOefJfIoT3uwWl2pBPyhswP7YBooqr8jXCta9xK
+         gdrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DLIiHWejTvBczvMB4LaGo/x+JKahlOS065QQRy4QKls=;
+        b=m9aeGu0PTGLMbiIHt+yrU91Ut6Kma8oqqH+w3k+aDP1DE6cN6P3nttE91pyk5wqfhx
+         ELfpwZm0vc5rSvPYmULQxb9K9xl7RFUFgTexAiTf5ZGHLQDVfQfKVOwVrV0joWQetD0O
+         DNrB0Run4MgkS1Zx4VMop1fkR1cDsq1k1r0LRJkOLOFUj0P16yYMsfgINgmJmWF1G0nm
+         GPjOimSOmlOIJVHXbu6+eneX8TwfQburWWA+b95VreijoQMym0SZb6I0Gmv3AE6kzRVb
+         /oc2vhIe1Nzlv3ZFW3ul0zCreJ/dbcvoikIMFWU5+1TT0G2udqZ8lKIUjMFhOl6IGZ/A
+         pbfg==
+X-Gm-Message-State: AOAM533fJmYcIewsPShwqechYX9a+1rtfLA7Uph91tUjBc0WYmdHFy8Z
+        jxFb83/pAcuBIPWU33t8BDdxSWXrP2jGrQ==
+X-Google-Smtp-Source: ABdhPJzQmyeG2ksZ5pIDoEX8o40MojieVj9iFPK8wm5P1cfsFVeI/npALxTfLbDyJ1dtqzBqe0IGeg==
+X-Received: by 2002:a17:90b:17cc:: with SMTP id me12mr7049760pjb.179.1639502195385;
+        Tue, 14 Dec 2021 09:16:35 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id lb4sm3267104pjb.18.2021.12.14.09.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 09:16:34 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:16:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     pbonzini@redhat.com, dmatlack@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: Move VM's worker kthreads back to the original
+ cgroups before exiting.
+Message-ID: <YbjRb0XR7neyX/Gy@google.com>
+References: <20211214050708.4040200-1-vipinsh@google.com>
 MIME-Version: 1.0
-In-Reply-To: <e2e24e5f4174a56c725cde3164f86a3e234f6d7f.1639157090.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.83.94]
-X-ClientProxiedBy: lhreml701-chm.china.huawei.com (10.201.108.50) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214050708.4040200-1-vipinsh@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/2021 17:54, Robin Murphy wrote:
-> Complete the move into iommu-dma by refactoring the flush queues
-> themselves to belong to the DMA cookie rather than the IOVA domain.
+On Tue, Dec 14, 2021, Vipin Sharma wrote:
+> VM worker kthreads can linger in the VM process's cgroup for sometime
+> after KVM temrinates the VM process.
 > 
-> The refactoring may as well extend to some minor cosmetic aspects
-> too, to help us stay one step ahead of the style police.
+> KVM terminates the worker kthreads by calling kthread_stop() which waits
+> on the signal generated by exit_mm() in do_exit() during kthread's exit.
+> However, these kthreads are removed from the cgroup using cgroup_exit()
+> call which happens after exit_mm() in do_exit(). A VM process can
+> terminate between the time window of exit_mm() to cgroup_exit(), leaving
+> only worker kthreads in the cgroup.
 > 
-> Signed-off-by: Robin Murphy<robin.murphy@arm.com>
+> Moving worker kthreads back to the original cgroup (kthreadd_task's
+> cgroup) makes sure that cgroup is empty as soon as the main VM process
+> is terminated.
+> 
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
 > ---
+>  virt/kvm/kvm_main.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index b0f7e6eb00ff..edd304a18f16 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -5785,7 +5785,7 @@ static int kvm_vm_worker_thread(void *context)
+>  	init_context = NULL;
+>  
+>  	if (err)
+> -		return err;
+> +		goto out;
+>  
+>  	/* Wait to be woken up by the spawner before proceeding. */
+>  	kthread_parkme();
+> @@ -5793,6 +5793,15 @@ static int kvm_vm_worker_thread(void *context)
+>  	if (!kthread_should_stop())
+>  		err = thread_fn(kvm, data);
+>  
+> +out:
+> +	/*
+> +	 * We need to move the kthread back to its original cgroups, so that it
+> +	 * doesn't linger in the cgroups of the user process after that has
+> +	 * already terminated. exit_mm() in do_exit() signals kthread_stop() to
+> +	 * return, whereas, removal of the task from the cgroups happens in
+> +	 * cgroup_exit() which happens after exit_mm().
+> +	 */
+> +	WARN_ON(cgroup_attach_task_all(kthreadd_task, current));
 
-Again, FWIW:
+As the build bot noted, kthreadd_task isn't exported, and I doubt you'll convince
+folks to let you export it.
 
-Reviewed-by: John Garry <john.garry@huawei.com>
+Why is it problematic for the kthread to linger in the cgroup?  Conceptually, it's
+not really wrong.
+
+>  	return err;
+>  }
+>  
+> 
+> base-commit: d8f6ef45a623d650f9b97e11553adb4978f6aa70
+> -- 
+> 2.34.1.173.g76aa8bc2d0-goog
+> 

@@ -2,89 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38152474B86
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59895474B88
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237315AbhLNTIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:08:02 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:50090 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237308AbhLNTIB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:08:01 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A9E571EC018B;
-        Tue, 14 Dec 2021 20:07:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639508875;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=O5l+/RcN/07Kl4BXvkg+d4wvjSGbu0tu/uIm4ulPS5E=;
-        b=KpyrcqBL1bMsZhEnaOVmzHhHXxk3lxdpD24NsiYNL8esi9Edi85U/xNazpOPFOGs2+t5Ru
-        NraCkvbLY083zCr9qw9AWnvtMtZDRzApPqPUYsdijhbRFepf3NT/DYk9RxMWiYGi+cl8Nj
-        8QBJn3wrP1yGzHWQ/rc2R5OabrDzbFQ=
-Date:   Tue, 14 Dec 2021 20:07:58 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-Subject: Re: [PATCH v17 02/10] x86: kdump: make the lower bound of crash
- kernel reservation consistent
-Message-ID: <YbjrjpehprvoRXbV@zn.tnic>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-3-thunder.leizhen@huawei.com>
+        id S237316AbhLNTIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:08:38 -0500
+Received: from mail-wm1-f46.google.com ([209.85.128.46]:42871 "EHLO
+        mail-wm1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232149AbhLNTIh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 14:08:37 -0500
+Received: by mail-wm1-f46.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso1544878wme.1;
+        Tue, 14 Dec 2021 11:08:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Q+SnTgHeOhxd9QlFHUExAaUf9EHnPJVK61QWmTyxHqU=;
+        b=V/AhT9qW2n2Dl30IJz4n0rEIKVKnlFiAbffxLhaIlH1WhO7RcwIBRNHVhNHBDoNcc0
+         SJf/G2JlONQTGiL1Lv+cste7BAJGpq2GWJ7SpS5DQeIRZyfK2WKjP/p+fFcwBxZj5LEq
+         amCKmMHbRyg4n85hvwgxQXtKpvHxxsjBtJiK2zoQVIOFfiYW3Nm5mNttNQKG0lgvwKq4
+         jdW/YNUT9szjJnkTonurTjB6TCmjw2pbjgTYwnfE88lbdczYddMqI3kWJd0cZNiUQdG6
+         HeqGw7as7E8AYyLRdcOgje4c1RZiW0KvLpod4RCFzBjQR2ye35z6EnyIGN1/vCeqW6R0
+         TEiA==
+X-Gm-Message-State: AOAM532HfEf3snMiNSpw093RnBsRc3B78Jjjtcd48S8IzKGjGXQIkC+r
+        PKKRuaQZVNhvIgNTw0J87Tw=
+X-Google-Smtp-Source: ABdhPJyRJQtMFbxbI28lZc+ybdfr4Llm0LQz2/J7lJb2XZsPO7ubhn3abhgW79+5QEv1Yqct6tILxA==
+X-Received: by 2002:a7b:cf10:: with SMTP id l16mr1136400wmg.17.1639508915786;
+        Tue, 14 Dec 2021 11:08:35 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id ay21sm3107963wmb.7.2021.12.14.11.08.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 11:08:35 -0800 (PST)
+Date:   Tue, 14 Dec 2021 19:08:33 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        kys@microsoft.com, sthemmin@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com, Michael Kelley <mikelley@microsoft.com>
+Subject: [GIT PULL] Hyper-V fixes for 5.16-rc6
+Message-ID: <20211214190833.a4cnzbygiph3ydl2@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210065533.2023-3-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 02:55:25PM +0800, Zhen Lei wrote:
-> From: Chen Zhou <chenzhou10@huawei.com>
-> 
-> The lower bounds of crash kernel reservation and crash kernel low
-> reservation are different, use the consistent value CRASH_ALIGN.
+Hi Linus,
 
-A big WHY is missing here to explain why the lower bound of the
-allocation range needs to be 16M and why was 0 wrong?
+The following changes since commit f3e613e72f66226b3bea1046c1b864f67a3000a4:
 
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index 5cc60996eac56d6..6424ee4f23da2cf 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -441,7 +441,8 @@ static int __init reserve_crashkernel_low(void)
->  			return 0;
->  	}
->  
-> -	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
-> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, CRASH_ALIGN,
-> +			CRASH_ADDR_LOW_MAX);
+  x86/hyperv: Move required MSRs check to initial platform probing (2021-11-15 12:37:08 +0000)
 
-You don't have to break this line.
+are available in the Git repository at:
 
-Thx.
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-fixes-signed-20211214
 
--- 
-Regards/Gruss,
-    Boris.
+for you to fetch changes up to 1dc2f2b81a6a9895da59f3915760f6c0c3074492:
 
-https://people.kernel.org/tglx/notes-about-netiquette
+  hv: utils: add PTP_1588_CLOCK to Kconfig to fix build (2021-11-28 21:22:35 +0000)
+
+----------------------------------------------------------------
+hyperv-fixes for 5.16-rc6
+ - Fix build (Randy Dunlap)
+----------------------------------------------------------------
+Randy Dunlap (1):
+      hv: utils: add PTP_1588_CLOCK to Kconfig to fix build
+
+ drivers/hv/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)

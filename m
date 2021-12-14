@@ -2,89 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BE8474B9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAC4474BAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237343AbhLNTLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbhLNTLh (ORCPT
+        id S237346AbhLNTOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:14:37 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42180 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234654AbhLNTOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:11:37 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB71EC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:11:37 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id t19so28529281oij.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 11:11:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9lcMaL71azwy/gh8eaJYAGrYAxsoa/MJIiNMV7gvXWg=;
-        b=NpT9S1paC+ds2Y2/UNFd3Hgq+csOrGK5MIUWqLVImmw9YpW7sSdH5yooc/8n71ytlV
-         UiZoMLuMdpvHq5DhvGrR19ea9cbQzCqNKH8Ap2IJbJ5eqt02W1SUltgZFI49Zt2vx10D
-         8W9ekUPA+MfhXapGwhzBtu6TnHl6FIdaXPQfHh/2P1FHMIfk93NhzZK3RKI0ROWSBiHr
-         6wEC03A39BLTR2Mj88M0a81eyzEYw422p/1coF6+glnEhKnsUCnEIunQ0juvWh4mqeXU
-         cjbxBDu5rjoIGtzkZve2kUs9qadHM5oueD+E23l8a8ZGyzqXV8IBDpt9VmgvgOTb544T
-         UNhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9lcMaL71azwy/gh8eaJYAGrYAxsoa/MJIiNMV7gvXWg=;
-        b=hFYPVMjeDpBl96Ifrf+2cFTBz2uEAOW4sFSADlgL3lPBJwZ/TyJtwxvKD4NVll12N7
-         v7fuhWZoGRD1ZMS2H16msD218nKZDI9GOulRGxeciRuaN1154p1vOHUJPHmjAsy+CA/I
-         uQg5ZPqJEc+DC0p2fSm5N6sES8EOIM77Y69rdxWuX2L55O9bGYKAEJo4oxmuVcKTu+iw
-         Yp3VBoSLhdxq6TRd0mjcbvxLGFxiin7dKsDjdNfsw9XLuG1UsSP/PNIUXmCSnG2d+ein
-         Doe/p64bp6wEtfDjjTSfsgeyrWBaV8pRTlEwEFLCKg9X+AhhyKKVGwkkQfK3T4XEyIrf
-         t83Q==
-X-Gm-Message-State: AOAM531DMhKbGrjlro22stysZ7qh4jU3ln9Ner5E6NVkLlVm8QHdtdnB
-        e2PbNJUPgRJ1yGq7Co7Q8Yryeid5OM1jeKrKmBf7bw==
-X-Google-Smtp-Source: ABdhPJyUyVqVnO18ScUmqo58JFcpGFMqCZNO1Z+dd3I9NuhM3/iV0ciz/FRq712bCn/IG8cTLWkcHNB5yx85UKKjQYY=
-X-Received: by 2002:a05:6808:118c:: with SMTP id j12mr5908484oil.65.1639509096871;
- Tue, 14 Dec 2021 11:11:36 -0800 (PST)
+        Tue, 14 Dec 2021 14:14:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD3A2616C1;
+        Tue, 14 Dec 2021 19:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84990C34604;
+        Tue, 14 Dec 2021 19:14:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639509275;
+        bh=lPacvQh2Gvb/22KWNJS7gFse+ojcEIZ+JHI8apcy0Ao=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tP2Yw9i7oiYLPRoDIE4Btlg2YWhtIDvUFRAcXSE6lQuCie6g7x21O5ycI/TFm0QJO
+         ///uWl6t7LZc08wNEZMCIxB4zQjcRViQJCwMr3WPUf47d8x0sX8T48tO+h/Akard3V
+         QOjAAIjMxDlw4E/Ch5l2mIf1SlvFSbXbW0t32ahJh2n36ZfKvEch7c1cpvL8RM5Gc2
+         /kvOvED8CRln15aZDATuQ7KkElmSJT18LN+k1r5kU4LdmJJUAN24qTm+UYErGWMwp7
+         vOPaKy4vmAEo2tT9ZlyJImG5MQESD/Oo5k0IhASqpJy+KTJJzffdXmKMwQoytJ6H5C
+         +AjFH/oB3sz1w==
+Date:   Tue, 14 Dec 2021 20:14:15 +0100
+From:   Miguel Ojeda <ojeda@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Joe Perches <joe@perches.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] Remove mentions of the Trivial Patch Monkey
+Message-ID: <20211214191415.GA19070@kernel.org>
 MIME-Version: 1.0
-References: <20211211131734.126874-1-wangkefeng.wang@huawei.com> <YbjhUaEP4Sqk7qRP@FVFF77S0Q05N>
-In-Reply-To: <YbjhUaEP4Sqk7qRP@FVFF77S0Q05N>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 14 Dec 2021 20:11:24 +0100
-Message-ID: <CANpmjNP_M2R9XD8GnCJVTmN17GPOR_5Y3jX8r5AAKcaDRUWJ4A@mail.gmail.com>
-Subject: Re: [PATCH v4] arm64: Enable KCSAN
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Joey Gouly <joey.gouly@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: elm/2
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 at 19:24, Mark Rutland <mark.rutland@arm.com> wrote:
-[...]
->
->   Reviewed-by: Mark Rutland <mark.rutland@arm.com>
->   Tested-by: Mark Rutland <mark.rutland@arm.com>
+Apparently, it was decided that trivial@kernel.org
+is no longer used.
 
-Thanks for taking a look and testing! Thought I'd update you re status
-of some of the reports below. :-)
+Link: https://lore.kernel.org/lkml/fe86efbd-4e03-76c8-55cf-dabd33e85823@infradead.org/
+Co-developed-by: Joe Perches <joe@perches.com>
+Signed-off-by: Joe Perches <joe@perches.com>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+---
+Sending this before we forget about it...
 
-[...]
-> * BUG: KCSAN: data-race in mutex_spin_on_owner+0xcc/0x150
-> * BUG: KCSAN: data-race in rwsem_spin_on_owner+0xa8/0x13c
+We may want to keep the definition of "trivial patch" somewhere else.
 
-These are going away, fixes are already in -tip/-next.
+ Documentation/process/submitting-patches.rst | 19 -------------------
+ MAINTAINERS                                  |  6 ------
+ 2 files changed, 25 deletions(-)
 
-> * UBSAN: object-size-mismatch in net/unix/af_unix.c:977:14
+diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+index 6b3aaed66fba..31ea120ce531 100644
+--- a/Documentation/process/submitting-patches.rst
++++ b/Documentation/process/submitting-patches.rst
+@@ -271,25 +271,6 @@ least a notification of the change, so that some information makes its way
+ into the manual pages.  User-space API changes should also be copied to
+ linux-api@vger.kernel.org.
+ 
+-For small patches you may want to CC the Trivial Patch Monkey
+-trivial@kernel.org which collects "trivial" patches. Have a look
+-into the MAINTAINERS file for its current manager.
+-
+-Trivial patches must qualify for one of the following rules:
+-
+-- Spelling fixes in documentation
+-- Spelling fixes for errors which could break :manpage:`grep(1)`
+-- Warning fixes (cluttering with useless warnings is bad)
+-- Compilation fixes (only if they are actually correct)
+-- Runtime fixes (only if they actually fix things)
+-- Removing use of deprecated functions/macros
+-- Contact detail and documentation fixes
+-- Non-portable code replaced by portable code (even in arch-specific,
+-  since people copy, as long as it's trivial)
+-- Any fix by the author/maintainer of the file (ie. patch monkey
+-  in re-transmission mode)
+-
+-
+ 
+ No MIME, no links, no compression, no attachments.  Just plain text
+ -------------------------------------------------------------------
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 13f9a84a617e..c88bac733e9e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19334,12 +19334,6 @@ W:	https://github.com/srcres258/linux-doc
+ T:	git git://github.com/srcres258/linux-doc.git doc-zh-tw
+ F:	Documentation/translations/zh_TW/
+ 
+-TRIVIAL PATCHES
+-M:	Jiri Kosina <trivial@kernel.org>
+-S:	Maintained
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jikos/trivial.git
+-K:	^Subject:.*(?i)trivial
+-
+ TTY LAYER
+ M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ M:	Jiri Slaby <jirislaby@kernel.org>
+-- 
+2.34.0
 
-The UBSAN object-size-mismatch warnings are going away, as
-fsanitize=object-size is broken/incomplete as it turns out --
-UBSAN_OBJECT_SIZE will be removed from 5.17:
-https://bugzilla.kernel.org/show_bug.cgi?id=214861#c4
-... because all its warnings can also be covered by -Warray-bounds,
-which Kees is working on enabling.
-
-Thanks,
--- Marco

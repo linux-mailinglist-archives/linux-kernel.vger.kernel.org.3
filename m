@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E79924745EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434FE4745D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235367AbhLNPFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:05:03 -0500
-Received: from mga18.intel.com ([134.134.136.126]:28602 "EHLO mga18.intel.com"
+        id S235239AbhLNPDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:03:32 -0500
+Received: from mga01.intel.com ([192.55.52.88]:25428 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235227AbhLNPDb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:03:31 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="225852766"
+        id S235175AbhLNPDW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 10:03:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263135026"
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="225852766"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:03:23 -0800
+   d="scan'208";a="263135026"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:03:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="463822560"
+   d="scan'208";a="754837231"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 14 Dec 2021 07:03:16 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 14 Dec 2021 07:03:15 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 2A63DDAF; Tue, 14 Dec 2021 17:03:10 +0200 (EET)
+        id 386FEE35; Tue, 14 Dec 2021 17:03:10 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -33,10 +33,12 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
         x86@kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH 20/26] x86/tdx: Add helper to convert memory between shared and private
-Date:   Tue, 14 Dec 2021 18:02:58 +0300
-Message-Id: <20211214150304.62613-21-kirill.shutemov@linux.intel.com>
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kai Huang <kai.huang@linux.intel.com>
+Subject: [PATCH 21/26] x86/mm/cpa: Add support for TDX shared memory
+Date:   Tue, 14 Dec 2021 18:02:59 +0300
+Message-Id: <20211214150304.62613-22-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
 References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
@@ -46,170 +48,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intel TDX protects guest memory from VMM access. Any memory that is
-required for communication with the VMM must be explicitly shared.
+TDX steals a bit from the physical address and uses it to indicate
+whether the page is private to the guest (bit set 0) or unprotected
+and shared with the VMM (bit set 1).
 
-It is a two-step process: the guest sets the shared bit in the page
-table entry and notifies VMM about the change. The notification happens
-using MapGPA hypercall.
+AMD SEV uses a similar scheme, repurposing a bit from the physical address
+to indicate encrypted or decrypted pages.
 
-Conversion back to private memory requires clearing the shared bit,
-notifying VMM with MapGPA hypercall following with accepting the memory
-with AcceptPage hypercall.
+The kernel already has the infrastructure to deal with encrypted/decrypted
+pages for AMD SEV. Modify the __set_memory_enc_pgtable() and make it
+aware about TDX.
 
-Provide a helper to do conversion between shared and private memory.
-It is going to be used by the following patch.
+After modifying page table entries, the kernel needs to notify VMM about
+the change with tdx_hcall_request_gpa_type().
 
+Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Tested-by: Kai Huang <kai.huang@linux.intel.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/include/asm/tdx.h | 18 +++++++++
- arch/x86/kernel/tdx.c      | 79 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 97 insertions(+)
+ arch/x86/kernel/cc_platform.c |  1 +
+ arch/x86/mm/pat/set_memory.c  | 39 +++++++++++++++++++++++++++++++----
+ 2 files changed, 36 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 286adda40fb7..20114af47db9 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -55,6 +55,15 @@ struct ve_info {
- 	u32 instr_info;
- };
+diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
+index a0fc329edc35..4a3064bf1eb5 100644
+--- a/arch/x86/kernel/cc_platform.c
++++ b/arch/x86/kernel/cc_platform.c
+@@ -20,6 +20,7 @@ static bool intel_cc_platform_has(enum cc_attr attr)
+ 	case CC_ATTR_GUEST_UNROLL_STRING_IO:
+ 	case CC_ATTR_HOTPLUG_DISABLED:
+ 	case CC_ATTR_GUEST_TDX:
++	case CC_ATTR_GUEST_MEM_ENCRYPT:
+ 		return true;
+ 	default:
+ 		return false;
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index b4072115c8ef..3a89966c30a9 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -32,6 +32,7 @@
+ #include <asm/set_memory.h>
+ #include <asm/hyperv-tlfs.h>
+ #include <asm/mshyperv.h>
++#include <asm/tdx.h>
  
-+/*
-+ * Page mapping types. This is software construct not part of any hardware
-+ * or VMM ABI.
-+ */
-+enum tdx_map_type {
-+	TDX_MAP_PRIVATE,
-+	TDX_MAP_SHARED,
-+};
-+
- #ifdef CONFIG_INTEL_TDX_GUEST
+ #include "../mm_internal.h"
  
- void __init tdx_early_init(void);
-@@ -78,6 +87,9 @@ bool tdx_early_handle_ve(struct pt_regs *regs);
- 
- phys_addr_t tdx_shared_mask(void);
- 
-+int tdx_hcall_request_gpa_type(phys_addr_t start, phys_addr_t end,
-+			       enum tdx_map_type map_type);
-+
- #else
- 
- static inline void tdx_early_init(void) { };
-@@ -87,6 +99,12 @@ static inline void tdx_guest_idle(void) { };
- static inline bool tdx_early_handle_ve(struct pt_regs *regs) { return false; }
- static inline phys_addr_t tdx_shared_mask(void) { return 0; }
- 
-+static inline int tdx_hcall_request_gpa_type(phys_addr_t start, phys_addr_t end,
-+					     enum tdx_map_type map_type)
-+{
-+	return -ENODEV;
-+}
-+
- #endif /* CONFIG_INTEL_TDX_GUEST */
- 
- #endif /* _ASM_X86_TDX_H */
-diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
-index d4aae2f139a8..9ef3cf0879d3 100644
---- a/arch/x86/kernel/tdx.c
-+++ b/arch/x86/kernel/tdx.c
-@@ -13,6 +13,10 @@
- /* TDX Module Call Leaf IDs */
- #define TDX_GET_INFO			1
- #define TDX_GET_VEINFO			3
-+#define TDX_ACCEPT_PAGE			6
-+
-+/* TDX hypercall Leaf IDs */
-+#define TDVMCALL_MAP_GPA		0x10001
- 
- /* See Exit Qualification for I/O Instructions in VMX documentation */
- #define VE_IS_IO_IN(exit_qual)		(((exit_qual) & 8) ? 1 : 0)
-@@ -83,6 +87,81 @@ static void tdx_get_info(void)
- 	td_info.attributes = out.rdx;
+@@ -1983,12 +1984,21 @@ int set_memory_global(unsigned long addr, int numpages)
+ 				    __pgprot(_PAGE_GLOBAL), 0);
  }
  
-+static bool tdx_accept_page(phys_addr_t gpa, enum pg_level pg_level)
++static pgprot_t pgprot_cc_mask(bool enc)
 +{
-+	/*
-+	 * Pass the page physical address to the TDX module to accept the
-+	 * pending, private page.
-+	 *
-+	 * Bits 2:0 if GPA encodes page size: 0 - 4K, 1 - 2M, 2 - 1G.
-+	 */
-+	switch (pg_level) {
-+	case PG_LEVEL_4K:
-+		break;
-+	case PG_LEVEL_2M:
-+		gpa |= 1;
-+		break;
-+	case PG_LEVEL_1G:
-+		gpa |= 2;
-+		break;
-+	default:
-+		return true;
-+	}
-+
-+	return __tdx_module_call(TDX_ACCEPT_PAGE, gpa, 0, 0, 0, NULL);
++	if (enc)
++		return pgprot_encrypted(__pgprot(0));
++	else
++		return pgprot_decrypted(__pgprot(0));
 +}
 +
-+/*
-+ * Inform the VMM of the guest's intent for this physical page: shared with
-+ * the VMM or private to the guest.  The VMM is expected to change its mapping
-+ * of the page in response.
-+ */
-+int tdx_hcall_request_gpa_type(phys_addr_t start, phys_addr_t end,
-+			       enum tdx_map_type map_type)
-+{
-+	u64 ret;
-+
-+	if (end <= start)
-+		return -EINVAL;
-+
-+	if (map_type == TDX_MAP_SHARED) {
-+		start |= tdx_shared_mask();
-+		end |= tdx_shared_mask();
-+	}
-+
-+	/*
-+	 * Notify the VMM about page mapping conversion. More info about ABI
-+	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
-+	 * sec "TDG.VP.VMCALL<MapGPA>"
-+	 */
-+	ret = _tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0, NULL);
-+
-+	if (ret)
-+		ret = -EIO;
-+
-+	if (ret || map_type == TDX_MAP_SHARED)
-+		return ret;
-+
-+	/*
-+	 * For shared->private conversion, accept the page using
-+	 * TDX_ACCEPT_PAGE TDX module call.
-+	 */
-+	while (start < end) {
-+		/* Try 2M page accept first if possible */
-+		if (!(start & ~PMD_MASK) && end - start >= PMD_SIZE &&
-+		    !tdx_accept_page(start, PG_LEVEL_2M)) {
-+			start += PMD_SIZE;
-+			continue;
-+		}
-+
-+		if (tdx_accept_page(start, PG_LEVEL_4K))
-+			return -EIO;
-+		start += PAGE_SIZE;
-+	}
-+
-+	return 0;
-+}
-+
- static __cpuidle u64 _tdx_halt(const bool irq_disabled, const bool do_sti)
+ /*
+  * __set_memory_enc_pgtable() is used for the hypervisors that get
+  * informed about "encryption" status via page tables.
+  */
+ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
  {
++	enum tdx_map_type map_type;
+ 	struct cpa_data cpa;
+ 	int ret;
+ 
+@@ -1999,8 +2009,11 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+ 	memset(&cpa, 0, sizeof(cpa));
+ 	cpa.vaddr = &addr;
+ 	cpa.numpages = numpages;
+-	cpa.mask_set = enc ? __pgprot(_PAGE_ENC) : __pgprot(0);
+-	cpa.mask_clr = enc ? __pgprot(0) : __pgprot(_PAGE_ENC);
++
++	cpa.mask_set = pgprot_cc_mask(enc);
++	cpa.mask_clr = pgprot_cc_mask(!enc);
++	map_type = enc ? TDX_MAP_PRIVATE : TDX_MAP_SHARED;
++
+ 	cpa.pgd = init_mm.pgd;
+ 
+ 	/* Must avoid aliasing mappings in the highmem code */
+@@ -2008,9 +2021,17 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+ 	vm_unmap_aliases();
+ 
  	/*
+-	 * Before changing the encryption attribute, we need to flush caches.
++	 * Before changing the encryption attribute, flush caches.
++	 *
++	 * For TDX, guest is responsible for flushing caches on private->shared
++	 * transition. VMM is responsible for flushing on shared->private.
+ 	 */
+-	cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
++	if (cc_platform_has(CC_ATTR_GUEST_TDX)) {
++		if (map_type == TDX_MAP_SHARED)
++			cpa_flush(&cpa, 1);
++	} else {
++		cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
++	}
+ 
+ 	ret = __change_page_attr_set_clr(&cpa, 1);
+ 
+@@ -2023,6 +2044,16 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+ 	 */
+ 	cpa_flush(&cpa, 0);
+ 
++	/*
++	 * For TDX Guest, raise hypercall to request memory mapping
++	 * change with the VMM.
++	 */
++	if (!ret && cc_platform_has(CC_ATTR_GUEST_TDX)) {
++		ret = tdx_hcall_request_gpa_type(__pa(addr),
++						 __pa(addr) + numpages * PAGE_SIZE,
++						 map_type);
++	}
++
+ 	/*
+ 	 * Notify hypervisor that a given memory range is mapped encrypted
+ 	 * or decrypted.
 -- 
 2.32.0
 

@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A52BB4747D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E441B4747D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbhLNQXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S231894AbhLNQXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:23:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235961AbhLNQXc (ORCPT
+        with ESMTP id S235974AbhLNQXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:23:32 -0500
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BE8C061763
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:23:11 -0800 (PST)
-Received: by mail-wr1-x449.google.com with SMTP id x17-20020a5d6511000000b0019838caab88so4859206wru.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:23:11 -0800 (PST)
+        Tue, 14 Dec 2021 11:23:35 -0500
+Received: from mail-lf1-x149.google.com (mail-lf1-x149.google.com [IPv6:2a00:1450:4864:20::149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB22C061792
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:23:14 -0800 (PST)
+Received: by mail-lf1-x149.google.com with SMTP id 24-20020ac25f58000000b0041799ebf529so8959035lfz.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:23:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=x5YBqNptwlSdtxXj6Mpbhns9uYlzM7sKdh+OiWmHV8E=;
-        b=Eq16fqo7/umIC+mRw+0mkHSO2SVMHikYc1m6jSZV8W6hhVaM9NMvFdQfrWKGA3yg/i
-         7vUEVTKL+jqzhdEkXU9xVd75uPZ4Rmx4C1qHm0ZEuH7q6SV7Qvuyq3wzniVYxjvJom4F
-         4OBdWZpawHisawFRRG9ZiNgKyC5uZphoOmN+OvbQMyHKkPhl4uA1SbeivqjtkKXkYXvj
-         ayyTsXbSYK8GBBsDpjliMHxRjjyXaQDfpdlmy8yxUniRXrvUu+NwM9AzRrogCDV9SX9P
-         LlNfxBQ96uMgIvTX+ftvkx34ETbts7JwLHCgfgsywDgA/Qo2UWkAtoDM5JW5QNO9UuHJ
-         Hb+g==
+        bh=olRZ/+DsKDaAFuaGG/j7BFeaFh0ExVig2xDV8tj79mY=;
+        b=AZMbPv6YU75omW1PCY67bzSuU/ZVSn7oXZSZ2epvS8xVB1tmOznv1nY4Ye3LciG8CF
+         SJbN8SvrgxgB1hrzotG9LvFYgvZrX2/O/92JBYMGvOozkVY2s7YDFK7i30mwJAStwLNU
+         GHjq6GKC2p7ur/RolwtuvKxhB5ZzIYEBCaPUAXV7ReSn4ANGtvtEHpsOG+2+CureWcYC
+         UhqRbNO9zV/IPkP7zKKl06hAU7vtjVbAe51+z4+t0/yP4Z/kvGehTffXMIQArgFRhFHw
+         LhMWPx1NUKj6vZ0vF7s29kb/5xBQApSzCLXoFS6UcZ4xXjKSz6rIzJTwiNS3U3UhE152
+         QeIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=x5YBqNptwlSdtxXj6Mpbhns9uYlzM7sKdh+OiWmHV8E=;
-        b=M1zRHMNBxGihh3THfmBqhlxf28t9RkSTJAbZnT+UpGf/WtejMC/kpnqtahCs0LWoiP
-         w7X9u1ZfOUc7KBrP2c9Wx8S06u8rsvkcExe9rNfuNKio40WhcTcqAj9D3feEofyZy0rK
-         BUPpzOwPfzQpM3McFIlUCz39Sr4lVNgJphCjNvrQnl9qyTTXfHkNfKvdrZ9cjJ52yQ9Y
-         ALHxmqck+tF9hhLuoVrSxCQ3yNHrerxx0R5zaZyyFQ//sf5YE13qh4eVCu7Ixq4A14aC
-         5hqU+qFNwq9Fvsp0/j9cUG5Xhu7w7TNdX1SPuptYeXFfMY4Zf2YjgmnojyO3AWbZQ0bu
-         RnUw==
-X-Gm-Message-State: AOAM532eooHhIOyjROMTpuSYktEyVNZ4wSrMAN03bPJ962e0usForEMZ
-        Ymf5Q2hzyYeo+k2HXn9oMEd4UP0BOus=
-X-Google-Smtp-Source: ABdhPJz2ZQuIEn5ZmHrH4VnKPAPp72t+EVJM3lTIPSyuDMPR4kQmFKNO01R60JjhCJQ/Lb82u7miTPMRVUQ=
+        bh=olRZ/+DsKDaAFuaGG/j7BFeaFh0ExVig2xDV8tj79mY=;
+        b=IHgoLPkSGyBG6LuVowv24kbBx6lXTwnfa1L7bNOiJo9jp2kj/NBOB+fkQCABhgI0Tl
+         Wyss/9kuJW3v4bbL5Tny6SlAdaizK8mKdxI57hUU56GNGdhVr/r75pdxyUxU5WQQ9xVn
+         snxTwHSWmfRI0rPSY+mj3Mgp35PBE+aR350dM+Y08dSrQz5494jcENLIUEaN/ldo3Ng4
+         jESLtsZOytSsZAJzqUeNG9j1z91JV3kZr0FqGPH4+Z7IFEwY2Kq57got713BhKht+t9Q
+         n15Hmso3TwzYpM/MzW870fDLyfNM57JiibhOCjnSZFhwZYF2SBPbJxWUBP7bHBLg4y1H
+         D25Q==
+X-Gm-Message-State: AOAM531/LLpLyQhmF9AS8018vo+mtmlONOQWdL/89MWPWNbgWhCXDEZW
+        1rCPy0/b9RBU4zlnc/mnp368azyg+eI=
+X-Google-Smtp-Source: ABdhPJxHTLK1yWIsE4vKmI5uGLTSba2Nc1bS0PGDcbFD0uKbOw3JLrJKYPGR2xP/idljX/8IJjgOdYVH8N8=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:adf:ed52:: with SMTP id u18mr6938942wro.609.1639498989844;
- Tue, 14 Dec 2021 08:23:09 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:35 +0100
+ (user=glider job=sendgmr) by 2002:a05:6512:2246:: with SMTP id
+ i6mr5863432lfu.24.1639498992700; Tue, 14 Dec 2021 08:23:12 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:36 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-29-glider@google.com>
+Message-Id: <20211214162050.660953-30-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 28/43] kmsan: dma: unpoison DMA mappings
+Subject: [PATCH 29/43] kmsan: handle memory sent to/from USB
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -88,46 +88,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KMSAN doesn't know about DMA memory writes performed by devices.
-We unpoison such memory when it's mapped to avoid false positive
-reports.
+Depending on the value of is_out kmsan_handle_urb() KMSAN either
+marks the data copied to the kernel from a USB device as initialized,
+or checks the data sent to the device for being initialized.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
----
-Link: https://linux-review.googlesource.com/id/Ia162dc4c5a92e74d4686c1be32a4dfeffc5c32cd
----
- kernel/dma/mapping.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-index 9478eccd1c8e6..0560080813761 100644
---- a/kernel/dma/mapping.c
-+++ b/kernel/dma/mapping.c
-@@ -156,6 +156,7 @@ dma_addr_t dma_map_page_attrs(struct device *dev, struct page *page,
- 		addr = dma_direct_map_page(dev, page, offset, size, dir, attrs);
- 	else
- 		addr = ops->map_page(dev, page, offset, size, dir, attrs);
-+	kmsan_handle_dma(page, offset, size, dir);
- 	debug_dma_map_page(dev, page, offset, size, dir, addr, attrs);
+---
+
+Link: https://linux-review.googlesource.com/id/Ifa67fb72015d4de14c30e971556f99fc8b2ee506
+---
+ drivers/usb/core/urb.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 30727729a44cc..0e84acc9aea53 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -8,6 +8,7 @@
+ #include <linux/bitops.h>
+ #include <linux/slab.h>
+ #include <linux/log2.h>
++#include <linux/kmsan-checks.h>
+ #include <linux/usb.h>
+ #include <linux/wait.h>
+ #include <linux/usb/hcd.h>
+@@ -426,6 +427,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+ 			URB_SETUP_MAP_SINGLE | URB_SETUP_MAP_LOCAL |
+ 			URB_DMA_SG_COMBINED);
+ 	urb->transfer_flags |= (is_out ? URB_DIR_OUT : URB_DIR_IN);
++	kmsan_handle_urb(urb, is_out);
  
- 	return addr;
-@@ -194,11 +195,13 @@ static int __dma_map_sg_attrs(struct device *dev, struct scatterlist *sg,
- 	else
- 		ents = ops->map_sg(dev, sg, nents, dir, attrs);
- 
--	if (ents > 0)
-+	if (ents > 0) {
-+		kmsan_handle_dma_sg(sg, nents, dir);
- 		debug_dma_map_sg(dev, sg, nents, ents, dir, attrs);
--	else if (WARN_ON_ONCE(ents != -EINVAL && ents != -ENOMEM &&
--			      ents != -EIO))
-+	} else if (WARN_ON_ONCE(ents != -EINVAL && ents != -ENOMEM &&
-+				ents != -EIO)) {
- 		return -EIO;
-+	}
- 
- 	return ents;
- }
+ 	if (xfertype != USB_ENDPOINT_XFER_CONTROL &&
+ 			dev->state < USB_STATE_CONFIGURED)
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 

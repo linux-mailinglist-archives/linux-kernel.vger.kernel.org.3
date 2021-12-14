@@ -2,182 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF17474267
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 018FF474269
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233842AbhLNMWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbhLNMWw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:22:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073D5C061574;
-        Tue, 14 Dec 2021 04:22:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B96DB818C7;
-        Tue, 14 Dec 2021 12:22:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7106C34605;
-        Tue, 14 Dec 2021 12:22:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639484569;
-        bh=jtSbLpLidICr6sr83NY1+a4EwUXa2Kj6rtq92VlkTAU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dEz1SLgIpf5iqugJe8tBFcegn3WW9LXHv0Hbnnmq7yICD+EA/brh6IG3gyfYOGck+
-         i12rx6FtZcFzeAoAsX7PnJX9ItX2OjHO93xcuWFGY7AowfFpEOJCzqMV6mjqWc8NsM
-         YZR6QALZ5vm9MqxdOJoQnSLJuIIrY0U/oUnn7iz17JJM2Mc4681Ab6F32rwvnI2nDi
-         l/5dSLvf7VaS13uqezbV/XomBWgRRp9Aa8IQD/X+olewXpuIH4R3maIJnBXK3eSLaN
-         5o7EhrluJ9y4pNqsnDStrSZ3QWjcKt9W2KTdmNL44k0KlRuOBPUAoi8BRYaLRTmXWv
-         TjNKVUgso5pWg==
-Date:   Tue, 14 Dec 2021 12:22:43 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Bhaskara Budiredla <bbudiredla@marvell.com>
-Cc:     mark.rutland@arm.com, robh+dt@kernel.org, bbhushan2@marvell.com,
-        sgoutham@marvell.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/2] drivers: perf: Add LLC-TAD perf counter support
-Message-ID: <20211214122242.GA14247@willie-the-truck>
-References: <20211115043506.6679-1-bbudiredla@marvell.com>
- <20211115043506.6679-2-bbudiredla@marvell.com>
-MIME-Version: 1.0
+        id S233871AbhLNMYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:24:06 -0500
+Received: from mail-zr0che01on2113.outbound.protection.outlook.com ([40.107.24.113]:11009
+        "EHLO CHE01-ZR0-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229809AbhLNMX7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 07:23:59 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h19j63ECPHesiODCqlefUXqbfEN6YB5L0Ad7oz+gkEklnsVPROoo0kANHtudIGQyhea/siUoQSvzY/bOObb8oYe4wEAK8YFvhL9fcTzLJU0+RMFths4Skl/yivDkA8BQrDwRuWcZ8ZijW52sxhC7qZhEC/zx0es1x15sOd+0yx+6+iDlvVJ6qyKkCH8kTU6PYzCnFx5fsuYBFFixIi0iQeaReIJKZfpraUTagUXJajj7XmEi0FF4j6JGaUgWlqJjA+J6dHK58GgANOrxcudoXhHvcnaAw3tsF+2UXaejxmlijXnpwDUiqv2ARlqmXV3E544pWQ7rKflyZ8TWHA/2Lg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JiiRRoeQMargmtNQb6Z6xemVPJMUJGdLH9snMWoe7+8=;
+ b=SghZW3fmKTUwQqVgGpZ7u5afBKSX/zUr0PFvnEoE9dLbf+sRPh4pHERCQTLLuhFCnsLQvyrDkyflrmuMHM1wz7A6F9pWpMNLLx5/qg/q32scqVwjL9g+NqlHWluntrY3Ge2ByaYgnObeI4oyIiGjACPSzOghmy4IvWWUNbB3n+wZiewYVh4XgQut3A/YOMVMpet4B1h1jFt3Ri0ru8Lzp4RW3v2xtB1Drt8yLttZMzCWzR5nnqGWnVDPio66hG+Rk28EH+gAZO1WXNptFDlY6Nb07JBXHxju9n2b+nGF3S1Kr9ozBjGQCQ34I74eVIspNNWPZDbt+emmj+S25nCjvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
+ dkim=pass header.d=toradex.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JiiRRoeQMargmtNQb6Z6xemVPJMUJGdLH9snMWoe7+8=;
+ b=WS4JhewaEaqtjAOgIB6eZzEb/XREMi6JkpY0hjKI72j5WwY7+mOzexunCWTCrzUsB2cRsXUxDDI/m0uh7vYXz2hZa4Y55jN2ncDfWANqn5kK63+RpQlf1IAW4msduDWe0Von4bmEsPO/xinToXOfvcbNmuuXgUkPUuwGfDMXafg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=toradex.com;
+Received: from ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3d::11)
+ by ZRAP278MB0061.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:14::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Tue, 14 Dec
+ 2021 12:23:56 +0000
+Received: from ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::d837:7398:e400:25f0]) by ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::d837:7398:e400:25f0%2]) with mapi id 15.20.4778.018; Tue, 14 Dec 2021
+ 12:23:56 +0000
+Date:   Tue, 14 Dec 2021 13:23:55 +0100
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Philippe Schenker <philippe.schenker@toradex.com>
+Cc:     netdev@vger.kernel.org, Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Fugang Duan <fugang.duan@nxp.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/3] Add Possiblity to Reset PHY After Power-up
+Message-ID: <20211214122355.GB13490@francesco-nb.int.toradex.com>
+References: <20211214121638.138784-1-philippe.schenker@toradex.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211115043506.6679-2-bbudiredla@marvell.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211214121638.138784-1-philippe.schenker@toradex.com>
+X-ClientProxiedBy: AS9PR06CA0107.eurprd06.prod.outlook.com
+ (2603:10a6:20b:465::31) To ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:3d::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9587441f-6571-4031-5a60-08d9befc9990
+X-MS-TrafficTypeDiagnostic: ZRAP278MB0061:EE_
+X-Microsoft-Antispam-PRVS: <ZRAP278MB0061A6EF7A21866BBE16D28AE2759@ZRAP278MB0061.CHEP278.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RrNqR3x+EtYhxHm+/NV91QpqxS9GuTMgN0zZ14KbWBoojJHxuCJ7z23WfvD+aEM+4uMfByDtzmHovdg4pI97W59pDMDPAuPuxkt1oFUQSP+mo4hMftuyKJE+CV8rDpYtDXhC7vk+3qXF05fp+7FS2yiAuMcADoyVQjTNS3Xtde0ssFS+ukOAdsWjPeR0peCFcOWv0jkpfO43ZftF6TKBaPxHTw3t9ABwHasBOLh+HQWQGpCgPr9Msub8uMAwwV23Mks42W3iGaoG+lyWgtCOkFJU4K4KuehWcVRKHco2vgJxcjRJC9ajRaU/wj3Wsg0GRfAckVI5kwQG5YEZ9QBXnX9bq/wQdNSfGR+M114xeqlgFBssP/R6kqba8bDE1x9BEok/3gW+l+xwJQUlE0yLzVUkWbkGUmwWfdnwZgAMDE38m7iNoLQQzo/2Ff8R/ZaJcaMCzmTnfQDsUjvAXKdM4ae9qfNXvmwvMGrMl7i2VlmmGMvOF+SdX/pcZ8JTRXCU7ITmy6d8nXdoQJZsgV0wTo5986QdSnj+Obo25iYUpbmuSoqsP7BbJaI4drWw+Dro6omXOWZH3hOq6bRCg2EMZ1nRJcKIQr9P4tV+8UfYC0y4w3CMuN6PJuld6wEGO2t4U4UlSUq2VR/9sTk/EoRyS2CLwCkQIsNnIoghrYd7CoxuLOS7P9I91ZxgnSgxojRsz6ghYWLqUZ9vvOeSxL3Ryhe7ScsRRovjrv0umgDNv39Jls5Nljulm8amVelBx0/hctxruhrGQt5C2ZVskq7wEgTbSW5+BieT3eBZS2fHAaQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(346002)(39850400004)(136003)(366004)(376002)(396003)(1076003)(4326008)(6636002)(86362001)(6862004)(966005)(6512007)(33656002)(26005)(2906002)(4744005)(52116002)(8936002)(38100700002)(38350700002)(508600001)(44832011)(6506007)(5660300002)(8676002)(186003)(6486002)(54906003)(316002)(83380400001)(7416002)(66476007)(66946007)(66556008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rHlGNuP5nmG5vlD7D/r5YFEi156aQ6HeRcey5oT+O0MzVBhf/nKVaCgKmnNc?=
+ =?us-ascii?Q?wnCPHaJND5dUMJMFITld/d/NnfBP/np8GlACqQwG3jyoow+inlhVpJ1NwQEZ?=
+ =?us-ascii?Q?iQ7L194myBKKf5tGE6yM8pClNpMyDkd2Nilr2HxXm7GpRngLId1olHhAu0jO?=
+ =?us-ascii?Q?hMJl0z8AH35iMBOANXuoHKs0PX/01zOWXfUbh5G0tTAxZ/kCs+bKKGoE9si0?=
+ =?us-ascii?Q?wh4U4zMv3V0zFjNQaLVo/jJFEREkLbA7ypum1m6kiyULQW/f9iOnr+SllmBr?=
+ =?us-ascii?Q?ybQwv+J8YQ/SplfHfk/WO3rMyN6v9oVhGE2hePIl5W7JQkab2VID6Q3K/vbB?=
+ =?us-ascii?Q?WzRiiYM/D8weRC2x6FM+ZGf5Bs8IZpX/a7YrLstay0e9bgUO/Q74ZQm5lNcK?=
+ =?us-ascii?Q?z6gIHhZ5CBJ/h3MonXpWLsuNrxs0p7v/9Dtkr+Eo2WN19KfZEdO7rgVyi5hY?=
+ =?us-ascii?Q?vHTEz1ev0OAUmAwooQM4Jf51bLWMl1JOxnxAjCo0Z7pU79TmSNzORWCq/a8G?=
+ =?us-ascii?Q?/NgL1s4t2F7eaH4Z7uIHp813MV5GsFWNM9DWwK7f6XEHBF817rmJu80RP7dh?=
+ =?us-ascii?Q?T8UuP+imwLNwqHnzCLx3hq3Tv73LKH6Sep5SJpk3qz6FC2SLk8RwWQPBSEe9?=
+ =?us-ascii?Q?yO1FJldvjn6Ne1ImvKeejWqu/RiwCJmdfqWvc3RMytAgzXB5zAM4GFdlhhue?=
+ =?us-ascii?Q?QilL75lh3ArxpWF70rW4Rl8+6gBYxIbMef5Js08iIAFC1ino7nw5x6KmTE4L?=
+ =?us-ascii?Q?u2c4iNatLReveh+p8GlrP8DY/uREhAdssDuk+mqkvPWHfHsRvz9smV2cEGqA?=
+ =?us-ascii?Q?GbssxvXC1OZ6Bj0bx74Gp6S4tu2iftULYHEwHo/DWHcFKIWcyFsVqrl2iTaG?=
+ =?us-ascii?Q?YegVjgRjpP0OVc0KA11LGD21XE9TkXU/UdB3A1gDa3UT2UWQZTNhoNC6/go5?=
+ =?us-ascii?Q?P/xCCS8fvydpJ35jAq/h/f/D1dd7xPZUdRel1SyGN//6ZTTdFV0k16AZ8vLn?=
+ =?us-ascii?Q?cPVRWDldNJzxMKh4elO8Z1lgtvdK1EPgodjuKcEZys7zhull8tzst1la4iXN?=
+ =?us-ascii?Q?aiH4G+sfEVL9OCeRZMfxKVUFtVfXpDp75RKuZ2LRfcmJWEIMIb8zHhOcpbW8?=
+ =?us-ascii?Q?W6i6Dd0ibtebTqAENxDZEZHojKPwg1G499lhmut6xSYxDZHOCQTm+F/9DmIo?=
+ =?us-ascii?Q?AJ1O7TMgpyducKv0V8hIHQvt0H9PBNaY7X63rP0bkQ0cU+wuZyvA681FSEaF?=
+ =?us-ascii?Q?n739wrvysISqeSOsJNx/oBjwD3wheBqrpSKw5B5yhaA97Qfn/VbdYvpcbrg8?=
+ =?us-ascii?Q?SqICUsN7pu5wwaK3vywQ0aYqYXfeC7jtPa8gE9Pr7vKX36syAxld3dOeVmz8?=
+ =?us-ascii?Q?MqmeWkyrsFZw8VwNT74xEq7T2F4G+0T30umSYKruF0YQz+AaCFh5xcwe4gLX?=
+ =?us-ascii?Q?N/YggcI65sEDuH56GLtopp1M/1qpwwt9UIqibaNlAxqmvTPm5g05OQmlN7sG?=
+ =?us-ascii?Q?yHzxE76HsqQv5Nsre+VGAKzRGRowv41UB8wItq5FDHuqyuUZFDgjHflUPHZP?=
+ =?us-ascii?Q?G1P3czzxA3VhrS6vHL5jy+G+/YeadtoM/4aMTWQJtBoepJ4Idf3OT55cqS0t?=
+ =?us-ascii?Q?Qz++JEo95a7+3QR1gJZBhS1hiEz+j7hyapTid+wWCVW7cti7zxK3u485piAG?=
+ =?us-ascii?Q?x3VUltHyczIm/dxmAjV9Iut/pm4=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9587441f-6571-4031-5a60-08d9befc9990
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 12:23:56.7653
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: t8NDBlOotVOlVnG8S7dOXXVBmP5wbCEPZyOkw8Kmgb+ekqFajHU/FigXvdsE4OMu4JXsBYytQShKJ5KkJyjPmLHwWH6rO5Q/ztKn5crec+U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0061
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 10:05:05AM +0530, Bhaskara Budiredla wrote:
-> This driver adds support for Last-level cache tag-and-data unit
-> (LLC-TAD) PMU that is featured in some of the Marvell's CN10K
-> infrastructure silicons.
+On Tue, Dec 14, 2021 at 01:16:35PM +0100, Philippe Schenker wrote:
+> We do have a hardware design in which the ethernet phy regulator and
+> reset are controlled by software. The ethernet PHY is a Microchip
+> KSZ9131 [1] and the power sequencing requires a reset after the power
+> goes up.
 > 
-> The LLC is divided into 2N slices distributed across N Mesh tiles
-> in a single-socket configuration. The driver always configures the
-> same counter for all of the TADs. The user would end up effectively
-> reserving one of eight counters in every TAD to look across all TADs.
-> The occurrences of events are aggregated and presented to the user
-> at the end of an application run. The driver does not provide a way
-> for the user to partition TADs so that different TADs are used for
-> different applications.
+> In our case the ethernet PHY is connected to a Freescale FEC and the
+> driver is shutting down the regulator on suspend, however on the resume
+> path the reset signal is never asserted and because of that the
+> ethernet is not working anymore.
 > 
-> The event counters are zeroed to start event counting to avoid any
-> rollover issues. TAD perf counters are 64-bit, so it's not currently
-> possible to overflow event counters at current mesh and core
-> frequencies.
+> To solve this adds a new phy_reset_after_power_on() function, similar
+> to the existing phy_reset_after_clk_enable(), and call it in the fec
+> resume path after the regulator is switched on as suggested by
+> Joakim Zhang <qiangqing.zhang@nxp.com>.
 > 
-> To measure tad pmu events use perf tool stat command. For instance:
-> 
-> perf stat -e tad_dat_msh_in_dss,tad_req_msh_out_any <application>
-> perf stat -e tad_alloc_any,tad_hit_any,tad_tag_rd <application>
-> 
-> Signed-off-by: Bhaskara Budiredla <bbudiredla@marvell.com>
-> ---
->  drivers/perf/Kconfig                 |   7 +
->  drivers/perf/Makefile                |   1 +
->  drivers/perf/marvell_cn10k_tad_pmu.c | 429 +++++++++++++++++++++++++++
->  3 files changed, 437 insertions(+)
->  create mode 100644 drivers/perf/marvell_cn10k_tad_pmu.c
-> 
-> diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
-> index 77522e5efe11..53b8fa554343 100644
-> --- a/drivers/perf/Kconfig
-> +++ b/drivers/perf/Kconfig
-> @@ -137,6 +137,13 @@ config ARM_DMC620_PMU
->  	  Support for PMU events monitoring on the ARM DMC-620 memory
->  	  controller.
->  
-> +config MARVELL_CN10K_TAD_PMU
-> +	tristate "Marvell CN10K LLC-TAD PMU"
-> +	depends on ARM64 || (COMPILE_TEST && 64BIT)
-> +	help
-> +	  Provides support for Last-Level cache Tag-and-data Units (LLC-TAD)
-> +	  performance monitors on CN10K family silicons.
-> +
->  source "drivers/perf/hisilicon/Kconfig"
->  
->  endmenu
-> diff --git a/drivers/perf/Makefile b/drivers/perf/Makefile
-> index 5260b116c7da..2db5418d5b0a 100644
-> --- a/drivers/perf/Makefile
-> +++ b/drivers/perf/Makefile
-> @@ -14,3 +14,4 @@ obj-$(CONFIG_THUNDERX2_PMU) += thunderx2_pmu.o
->  obj-$(CONFIG_XGENE_PMU) += xgene_pmu.o
->  obj-$(CONFIG_ARM_SPE_PMU) += arm_spe_pmu.o
->  obj-$(CONFIG_ARM_DMC620_PMU) += arm_dmc620_pmu.o
-> +obj-$(CONFIG_MARVELL_CN10K_TAD_PMU) += marvell_cn10k_tad_pmu.o
-> diff --git a/drivers/perf/marvell_cn10k_tad_pmu.c b/drivers/perf/marvell_cn10k_tad_pmu.c
-> new file mode 100644
-> index 000000000000..250dd4c52d70
-> --- /dev/null
-> +++ b/drivers/perf/marvell_cn10k_tad_pmu.c
-> @@ -0,0 +1,429 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Marvell CN10K LLC-TAD perf driver
-> + *
-> + * Copyright (C) 2021 Marvell
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License version 2 as
-> + * published by the Free Software Foundation.
-> + */
-> +
-> +#define pr_fmt(fmt) "tad_pmu: " fmt
-> +
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_device.h>
-> +#include <linux/cpuhotplug.h>
-> +#include <linux/perf_event.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define TAD_PFC_OFFSET		0x0
-> +#define TAD_PFC(counter)	(TAD_PFC_OFFSET | (counter << 3))
-> +#define TAD_PRF_OFFSET		0x100
-> +#define TAD_PRF(counter)	(TAD_PRF_OFFSET | (counter << 3))
-> +#define TAD_PRF_CNTSEL_MASK	0xFF
-> +#define TAD_MAX_COUNTERS	8
-> +
-> +#define to_tad_pmu(p) (container_of(p, struct tad_pmu, pmu))
-> +
-> +struct tad_region {
-> +	void __iomem	*base;
-> +};
-> +
-> +struct tad_pmu {
-> +	struct pmu pmu;
-> +	struct tad_region *regions;
-> +	u32 region_cnt;
-> +	unsigned int cpu;
-> +	struct hlist_node node;
-> +	struct perf_event *events[TAD_MAX_COUNTERS];
-> +	DECLARE_BITMAP(counters_map, TAD_MAX_COUNTERS);
-> +};
-> +
-> +static int tad_pmu_cpuhp_state;
-> +
-> +static void tad_pmu_event_counter_read(struct perf_event *event)
-> +{
-> +	struct tad_pmu *tad_pmu = to_tad_pmu(event->pmu);
-> +	struct hw_perf_event *hwc = &event->hw;
-> +	u32 counter_idx = hwc->idx;
-> +	u64 prev, new;
-> +	int i;
-> +
-> +	do {
-> +		prev = local64_read(&hwc->prev_count);
-> +		for (i = 0, new = 0; i < tad_pmu->region_cnt; i++)
-> +			new += readq(tad_pmu->regions[i].base +
-> +				     TAD_PFC(counter_idx));
-> +	} while (local64_cmpxchg(&hwc->prev_count, prev, new) != prev);
+> [1] https://ww1.microchip.com/downloads/en/DeviceDoc/00002841C.pdf
 
-I plan to queue this as-is, but I did remark on the previous version that
-this loop is needlessly expensive. Why are you not using readq_relaxed() and
-why are you doing that _inside_ the cmpxchg() loop?
+For the whole series.
 
-Will
+Reviewed-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+
+

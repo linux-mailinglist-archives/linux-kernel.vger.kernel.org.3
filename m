@@ -2,119 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29767474097
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6CF474095
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbhLNKkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:40:16 -0500
-Received: from mga01.intel.com ([192.55.52.88]:4654 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231272AbhLNKkP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:40:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639478415; x=1671014415;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CljH54yPGNFneOI/Y3tvixLkMHnPqoQd+s156aD+NlM=;
-  b=k4GqUd0xCIaP2iae/OSLDsQy5Xt0hPffqKt5IjemNqlBDYkQLZaw7BM3
-   xcN53kZx24tnNxQc7Tw85W2v3HKspoNzjJWnvD3/qMtYNDT3vd+YoRoc5
-   KYu0tIx/jWq5DlF9sjatFrh2EY3Cd3F8oLm/mscAKgUjhJI+yZOmJgDcK
-   8rtJr3Em/5VlbG0ja5OAm+dn9kshIcBKUQqx8r+VfpIqHeI6AgLSnylYJ
-   K9NwkHqSRQr2fit48sLMyEp3LUQvfNXezZ5zkejaI9dC/i4q8gLXE9BSK
-   qRIXG677nQDUlDXZ3Ys4uhni1mh/7sVa8dZG8gj2QJ0IKeAwBC5QWK50A
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263089325"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="263089325"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 02:40:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="545122888"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2021 02:40:01 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mx5E0-0000CC-Da; Tue, 14 Dec 2021 10:40:00 +0000
-Date:   Tue, 14 Dec 2021 18:39:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Julien Massot <julien.massot@iot.bzh>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: [remoteproc:rproc-next 13/13] drivers/remoteproc/rcar_rproc.c:28:12:
- sparse: sparse: incorrect type in assignment (different address spaces)
-Message-ID: <202112141828.E9RwMXA2-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S233108AbhLNKjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:39:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33722 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233092AbhLNKjk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 05:39:40 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CD63B81876;
+        Tue, 14 Dec 2021 10:39:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A2BC34601;
+        Tue, 14 Dec 2021 10:39:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639478378;
+        bh=CuR0WsrAKe4xFIouUMDiV6pFsJRveX5Kp1MoGEq8lUs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OWjSy5l1n3IUF4eAuzjEUm+inWDUPm+im3k8ruHPxVP88hPZkzvicD/h+2hRVv3Uk
+         e2QC5WaLK8rfBe7NdDpRMkApz1Uuf1xCZRN8z7vMNej9PB441ZcjtpR5e5VWYF1ywZ
+         CRu2cR5YQX6iIHwqkQgfDP5qeHLZmk4P7lH/oe4EUCg9s9Au2IIpkk1DgVyxxCFZ++
+         72oqsmkQyS9vicoJ/W1f1wo09au/+iDDLoeNJbfaoZtsvZdQz8gE1CPIBOW+XCaVJG
+         vKqRsc5nbICQIHjdNFMV0zeY6Xwto/aGDnG1yUu74G9oXrMDekqq1NfEokyhzMEzMQ
+         uOjDfw/abcTfw==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mx5Dc-00C1Ob-96; Tue, 14 Dec 2021 10:39:36 +0000
+Date:   Tue, 14 Dec 2021 10:39:35 +0000
+Message-ID: <87a6h3jwrc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
+        Biwen Li <biwen.li@nxp.com>, "Z.Q. Hou" <zhiqiang.hou@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [RFC PATCH devicetree 00/10] Do something about ls-extirq interrupt-map breakage
+In-Reply-To: <20211214103025.wnzkfxr5xxeuhpln@skbuf>
+References: <20211214013800.2703568-1-vladimir.oltean@nxp.com>
+        <87ilvrk1r0.wl-maz@kernel.org>
+        <20211214095853.4emzycaxkuqr4tun@skbuf>
+        <87czlzjxmz.wl-maz@kernel.org>
+        <20211214103025.wnzkfxr5xxeuhpln@skbuf>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: vladimir.oltean@nxp.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, shawnguo@kernel.org, leoyang.li@nxp.com, biwen.li@nxp.com, zhiqiang.hou@nxp.com, kurt@linutronix.de, linux@rasmusvillemoes.dk
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
-head:   285892a74f1370a12249f765c6a4e3b16194852e
-commit: 285892a74f1370a12249f765c6a4e3b16194852e [13/13] remoteproc: Add Renesas rcar driver
-config: arm64-randconfig-s031-20211214 (https://download.01.org/0day-ci/archive/20211214/202112141828.E9RwMXA2-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git/commit/?id=285892a74f1370a12249f765c6a4e3b16194852e
-        git remote add remoteproc git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git
-        git fetch --no-tags remoteproc rproc-next
-        git checkout 285892a74f1370a12249f765c6a4e3b16194852e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
+On Tue, 14 Dec 2021 10:30:26 +0000,
+Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> 
+> On Tue, Dec 14, 2021 at 10:20:36AM +0000, Marc Zyngier wrote:
+> > On Tue, 14 Dec 2021 09:58:54 +0000,
+> > Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> > > 
+> > > Hi Marc (with a c),
+> > > 
+> > > I wish the firmware for these SoCs was smart enough to be compatible
+> > > with the bindings that are in the kernel and provide a blob that the
+> > > kernel could actually use. Some work has been started there and this is
+> > > work in progress. True, I don't know what other OF-based firmware some
+> > > other customers may use, but I trust it isn't a lot more advanced than
+> > > what U-Boot currently has :)
+> > > 
+> > > Also, the machines may have been in the wild for years, but the
+> > > ls-extirq driver was added in November 2019. So not with the
+> > > introduction of the SoC device trees themselves. That isn't so long ago.
+> > > 
+> > > As for compatibility between old kernel and new DT: I guess you'll hear
+> > > various opinions on this one.
+> > > https://www.spinics.net/lists/linux-mips/msg07778.html
+> > > 
+> > > | > Are we okay with the new device tree blobs breaking the old kernel?
+> > > |
+> > > | From my point of view, newer device trees are not required to work on
+> > > | older kernel, this would impose an unreasonable limitation and the use
+> > > | case is very limited.
+> > 
+> > My views are on the opposite side. DT is an ABI, full stop. If you
+> > change something, you *must* guarantee forward *and* backward
+> > compatibility. That's because:
+> > 
+> > - you don't control how updatable the firmware is
+> > 
+> > - people may need to revert to other versions of the kernel because
+> >   the new one is broken
+> > 
+> > - there are plenty of DT users beyond Linux, and we are not creating
+> >   bindings for Linux only.
+> > 
+> > You may disagree with this, but for the subsystems I maintain, this is
+> > the rule I intent to stick to.
+> 
+> That's an honorable set of guiding principles, but how do you apply them
+> here? Reverting Rob's change won't fix the past, and updating the code
+> to account for one format will break the other. As for trying one
+> format, and if there's an error try the other, there may be situations
+> in which you accept invalid input as valid.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+maz@hot-poop:~/arm-platforms$ git describe --contains 869f0ec048dc --match=v\*
+v5.16-rc1~125^2~19^2~16
 
+This patch landed in -rc1, and isn't part of any release. Just revert
+it, and no damage is done.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/remoteproc/rcar_rproc.c:28:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
-   drivers/remoteproc/rcar_rproc.c:28:12: sparse:     expected void *va
-   drivers/remoteproc/rcar_rproc.c:28:12: sparse:     got void [noderef] __iomem *
->> drivers/remoteproc/rcar_rproc.c:45:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *va @@
-   drivers/remoteproc/rcar_rproc.c:45:20: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/remoteproc/rcar_rproc.c:45:20: sparse:     got void *va
+	M.
 
-vim +28 drivers/remoteproc/rcar_rproc.c
-
-    20	
-    21	static int rcar_rproc_mem_alloc(struct rproc *rproc,
-    22					 struct rproc_mem_entry *mem)
-    23	{
-    24		struct device *dev = &rproc->dev;
-    25		void *va;
-    26	
-    27		dev_dbg(dev, "map memory: %pa+%zx\n", &mem->dma, mem->len);
-  > 28		va = ioremap_wc(mem->dma, mem->len);
-    29		if (!va) {
-    30			dev_err(dev, "Unable to map memory region: %pa+%zx\n",
-    31				&mem->dma, mem->len);
-    32			return -ENOMEM;
-    33		}
-    34	
-    35		/* Update memory entry va */
-    36		mem->va = va;
-    37	
-    38		return 0;
-    39	}
-    40	
-    41	static int rcar_rproc_mem_release(struct rproc *rproc,
-    42					   struct rproc_mem_entry *mem)
-    43	{
-    44		dev_dbg(&rproc->dev, "unmap memory: %pa\n", &mem->dma);
-  > 45		iounmap(mem->va);
-    46	
-    47		return 0;
-    48	}
-    49	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Without deviation from the norm, progress is not possible.

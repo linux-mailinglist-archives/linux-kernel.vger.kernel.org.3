@@ -2,91 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E8747402F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E3F474034
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:15:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232901AbhLNKNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:13:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232869AbhLNKNg (ORCPT
+        id S232919AbhLNKPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:15:44 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:42008 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232910AbhLNKPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:13:36 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D81CC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 02:13:36 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id l18so12255232pgj.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 02:13:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2rug4EuC9Ad8IFEiNCmMA6aYrYVML8F4r4iVetDTwr0=;
-        b=mwUnYoVqZeRIOlk3PSDwFfqhSLX+8xyxryjI6XRaL0TW8dzaheEvY6tw9NYijXSK53
-         bQRc9WqmUyRYE01lzA8RwVVwxfDhpHVeWFlT0UG2kEzMgxxFv1CvdN1OZ4tiz/YEML9l
-         Abd9VfhQkm46A2wnXsyf+HlGNK9+j416yRIbNeniVmIbitHlRqVF/cObYjvqywKKZKJq
-         jilG0TK5mofdbqF4US4Ka5bKSfnX/9U3J6l5MV/uYEM7aKTisIbVOfOoi79+OBqwgTq2
-         HAkTAEqe+I5+XfjqNc4AxpYzYDg1Lz3JL9YrTrEsJMKTB+Xwph7IA5kwImdd2oIwCp7L
-         0fPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2rug4EuC9Ad8IFEiNCmMA6aYrYVML8F4r4iVetDTwr0=;
-        b=e+hZWNXbzpf0ww8/vj2oqgw/myAlA4Cj1SJzrt/srgTqw+HJFObPdeCV1uckJ66axw
-         mOPHlnOjYpgXXswoVI3RSoO82qd7MMaRQIXWbSOagKdeieTNczgFTCYvwxB9kWEXETrK
-         u4VBkMZvV+QmBvb/VesaL6/+keYowh2RUkNVM1mZmKd6zNFbfL64hsIgO2O7D7yquou0
-         t8ZpUwyzJOeEz1osZrh+I1ZWch1hepcxhjPicHtk9jbSPm7O6UkkSCciFLMUhiHA/qcm
-         Va+iZXPenkh1qkVhHsZ9ZRwQQKrEMJXJb8iMJ4Sd+r4ya4c6RdzQAim405rLkouzjjkE
-         wBjw==
-X-Gm-Message-State: AOAM532pDDrn8mBYF5HYvlVevaqH/V0gw7udCpGPiwQTaFc7rJZEUT71
-        nVY7MDomuWdtwpt7brxhfjEj
-X-Google-Smtp-Source: ABdhPJxDKkg6hQUK1gsiN0fln+nUoRMFYCqFfoMwgPUn4A3o6KYCEMUlQqhnVT0bpXwTtmU4JUO7CA==
-X-Received: by 2002:a63:754c:: with SMTP id f12mr3173578pgn.161.1639476815884;
-        Tue, 14 Dec 2021 02:13:35 -0800 (PST)
-Received: from localhost.localdomain ([117.193.214.199])
-        by smtp.gmail.com with ESMTPSA id s3sm1922229pjk.41.2021.12.14.02.13.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 02:13:35 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lorenzo.pieralisi@arm.com, bhelgaas@google.com
-Cc:     svarbanov@mm-sol.com, bjorn.andersson@linaro.org, robh@kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH] PCI: qcom: Add support for handling MSIs from 8 endpoints
-Date:   Tue, 14 Dec 2021 15:43:19 +0530
-Message-Id: <20211214101319.25258-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 14 Dec 2021 05:15:44 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BE90PHA021201;
+        Tue, 14 Dec 2021 11:15:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=nlbvaCpQQU3d8rdYZzHfsFBdcktl3fiaFrosAYYj4j8=;
+ b=fEv2GzUAik9hz064aPegO+BHjhT79pdXStLPJSl73C6z0+mLA5o76esXkhCq4jDSDdCk
+ RdXa6qG4tC+YHcB1w+gJYGxVIwXh5iCNnSpX3+GLnwN7LcBbWbR8lAX1Zvf7Kuwz8H+7
+ bgDzYBypk1HN5aa5JJmQTfyYL++Y/UGQc9bQfBtq3xcTckh+LSCuAMNt3Nz4ACDOBI9/
+ gRbycwczmUfrhe1/n36gBhQPwnHKwnO+wU6xtHdKY4Kk+E7mj06+26hN1YY3kz9qyWX0
+ BrZsrRvP5N+87plQxCu9Wkc4Qfk3d6FouUCQ/xd7gpK8HQi44hgdfPoZ+BiEqIiLVsUS 6w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cxr8r8gy0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Dec 2021 11:15:30 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4777910002A;
+        Tue, 14 Dec 2021 11:15:28 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2B41222C8A9;
+        Tue, 14 Dec 2021 11:15:28 +0100 (CET)
+Received: from lmecxl0993.lme.st.com (10.75.127.48) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 14 Dec
+ 2021 11:15:27 +0100
+Subject: Re: [PATCH] drm/stm: remove conflicting framebuffers
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211206134735.13537-1-yannick.fertre@foss.st.com>
+ <10c5672d-a228-ed9e-2f32-1ce9ae86dbcc@suse.de>
+From:   Philippe CORNU <philippe.cornu@foss.st.com>
+Message-ID: <58cc264b-7b46-7869-1c38-f6d79a4daafe@foss.st.com>
+Date:   Tue, 14 Dec 2021 11:15:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <10c5672d-a228-ed9e-2f32-1ce9ae86dbcc@suse.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-14_05,2021-12-14_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DWC controller used in the Qcom Platforms are capable of addressing the
-MSIs generated from 8 different endpoints each with 32 vectors (256 in
-total). Currently the driver is using the default value of addressing the
-MSIs from 1 endpoint only. Extend it by passing the MAX_MSI_IRQS to the
-num_vectors field of pcie_port structure.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 1c3d1116bb60..8a4c08d815a5 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1550,6 +1550,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 	pci->dev = dev;
- 	pci->ops = &dw_pcie_ops;
- 	pp = &pci->pp;
-+	pp->num_vectors = MAX_MSI_IRQS;
- 
- 	pcie->pci = pci;
- 
--- 
-2.25.1
+On 12/6/21 3:23 PM, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 06.12.21 um 14:47 schrieb Yannick Fertre:
+>> In case of using simplefb or another conflicting framebuffer,
+>> call drm_aperture_remove_framebuffers() to remove memory allocated.
+>>
+>> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> 
+> The patch should have contained a note that this is version 2 of the 
+> change with a short changelog. Anyway
+> 
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> 
+> Best regards
+> Thomas
+> 
+>> ---
+>>   drivers/gpu/drm/stm/drv.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
+>> index 222869b232ae..9f441aadf2d5 100644
+>> --- a/drivers/gpu/drm/stm/drv.c
+>> +++ b/drivers/gpu/drm/stm/drv.c
+>> @@ -14,6 +14,7 @@
+>>   #include <linux/of_platform.h>
+>>   #include <linux/pm_runtime.h>
+>> +#include <drm/drm_aperture.h>
+>>   #include <drm/drm_atomic.h>
+>>   #include <drm/drm_atomic_helper.h>
+>>   #include <drm/drm_drv.h>
+>> @@ -183,6 +184,10 @@ static int stm_drm_platform_probe(struct 
+>> platform_device *pdev)
+>>       DRM_DEBUG("%s\n", __func__);
+>> +    ret = drm_aperture_remove_framebuffers(false, &drv_driver);
+>> +    if (ret)
+>> +        return ret;
+>> +
 
+Hi Yannick,
+and many thanks for your patch.
+Acked-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Philippe :-)
+
+
+>>       dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
+>>       ddev = drm_dev_alloc(&drv_driver, dev);
+>>
+> 

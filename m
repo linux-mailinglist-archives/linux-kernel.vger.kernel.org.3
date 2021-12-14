@@ -2,141 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 969074739DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 01:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D39473A00
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237697AbhLNA6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 19:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbhLNA6w (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 19:58:52 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BF3C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 16:58:51 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id v64so42532633ybi.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 16:58:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DK6zjNxaM56y08cW9l0/eZH6KA52RZRKXCnMSTZm6GQ=;
-        b=r4oUCYh501EXd/gZuQfYAt0s2rTbK6MmxmU3077cEJ1QHC/9Gnc5rm5+B0cI19otfG
-         uVgz8H2hl5oDWhbF3NXerx7LUMB2Y2uYgCgXHFW0tY14V8dXov1MN5y4lr5rt6DTzhzq
-         zxZhoRvI5m0wJa7ptIO44i1Gv/VsIG2lUEAmw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DK6zjNxaM56y08cW9l0/eZH6KA52RZRKXCnMSTZm6GQ=;
-        b=B7fYPdIPgAYo1ZcmbRjC3QZDXYLAAs6IjQrphWFy9dIloXnfUrorexaWjWUBAuFOtc
-         rZwsJHasOVB3eUZ79PsEzLQdajk4kARa4pf9UlM2TYukZgLf3VuxfRXj+AoMRU9cOwZG
-         6w9gBiTlSIyy9JZd6Bc87MOwRS7xcHzrCJG6RmnYxjuaI15LMNaP7wfjZEXFmU8vJyaI
-         EO4MkupkhW7u2yum+S4eYEwNXRPDl25nScXSC4sjuTsz3gqHmzeMgCtL6lcx6E2acA4s
-         Qbc42e3o/li3b2RzG5kAISv07EzfiINhmua4LUhCWCTfsNLzsyVAaedQgVbIt7Ziyost
-         Wayg==
-X-Gm-Message-State: AOAM5320m6WR2PIWUX+Rm8DVMkxBGNh+ahLmMaHQlNM6sA5J/kgqwTp3
-        C6JHFhHtBlL4EAIEVFTDA13A4VPcYRIYAB3HStYc
-X-Google-Smtp-Source: ABdhPJzA01obrLKIOu5kQ51Q+3jIBhNOiwn4TybiXernS3MqCho7FRBxYDqhPVkB86beDZQMZo7IJ5Kw9mvGTIVLh7Y=
-X-Received: by 2002:a25:2412:: with SMTP id k18mr2267818ybk.121.1639443531041;
- Mon, 13 Dec 2021 16:58:51 -0800 (PST)
+        id S236883AbhLNBBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 20:01:37 -0500
+Received: from mga06.intel.com ([134.134.136.31]:19716 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232173AbhLNBBg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 20:01:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639443696; x=1670979696;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=5uDGe9wzNLo1NkxzgoszE/PoP+tXOQAQHadrDIs2r2s=;
+  b=GY72o72gwu202PwzQY0x1SzJ5tcN/4NwfwTSITvMLzMXN2iTBjr37lNu
+   umHaVmDzYDHnukhCPXfbx11QC1daMLc3gJcOIaIQWJKl7j67F3IKgD0NF
+   dnvmiH5vFRFOyoaHIe1P/uFQOsoHoSOuwNnxhNtu3jABil87bboDHT2Mg
+   b1DtOidKsIaQBDjoEqQdDN8lGRwPhAoAbUQZtzl6aCYslZ39YqMGJ+PpD
+   zS1m+SRx2tYc5VZ7arCEMbFdU+s/4XabWLzfavN0S4Skee5xyFLAHm6gQ
+   W4Tz8mt9E+Py/7vyucI4Hpy2MEzeM6Z9qoe7FbHwi0bFrK+BmJ1oGD0Fs
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="299647490"
+X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
+   d="scan'208";a="299647490"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 17:01:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
+   d="scan'208";a="505149513"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by orsmga007.jf.intel.com with ESMTP; 13 Dec 2021 17:01:35 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 17:01:34 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 17:01:34 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 13 Dec 2021 17:01:34 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.40) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 13 Dec 2021 17:01:34 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DhxHBKaG+pOOQ1IP4luLniLXT3Itu+PSbTXsek4Skg9hE7yfdARolKIetmCFyHR+m0gydV7A7cgfu763RW8UgVrQy5Zr/HaTf3oCHQLPwjHLN6aeIzwfX0tChWH9TezDsvOBfJHubZGfZ+2n+PpkTc4oOMQRZukaZjmjJFBpgqTDUsHRAByjJR/sYNFEVKU4XUHqZMVG/QDRBz9IfhBZ0PA1RpUxQxAja9pgw0Ej7rvfmJfjBIENAOB+l5jjCR9+yTW+SYbzCK71KeAhqqm7qlU2/UMENxo9Cy8g+xaVlQbRLS0LD0M8zgT6yDT5TMS5YLeahSIh92MmnKQ4BJU6ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5uDGe9wzNLo1NkxzgoszE/PoP+tXOQAQHadrDIs2r2s=;
+ b=leDvgZ1T/dAPcv3seTC5oyg5NXFQD+aQ0eQxqvkCLik6q3hbUhNtz+2EjbSuod7Dc8AvCLdHZdeJgozejY+p43IvBKQQ44BchyPp2L16mqZqVuIMB8tYCe6lcoIGrZ0CnB4SipYcofq56WeyEWEw7bUOuveKqCS3nnTGpAgg9hKjFKpfS76w/dQrZGvST2xHx0+QZimHPkeTi2tWITWWQJP+oIH7TjkpTsWoG80ujzRomDWzXZveiGU+vBZylnZD4TiAMwosnTNphkJPvsqbBdbzmg2fm02LfPbO5fo/I+aewwmqA1d+ZOTVmbe9GZhzWB8P8MqqUfXupJBX2wVAvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5uDGe9wzNLo1NkxzgoszE/PoP+tXOQAQHadrDIs2r2s=;
+ b=hZZi1cfdU13AuPdTnSgdaRph+ZkQD5hMG3CxsYl3N+fIvVFI86rTbv1f4mwKU+z1CKYdkna1VSAxmdzTqJ9/lZ7g+JxzwK2MWwLTxR+Mb01GDcPLy6EcN8AB7pP+HkbOmYNQo0doar0QnHdKWVswAcdhSJnJyXUC9598cQxc4ak=
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+ by PH0PR11MB5079.namprd11.prod.outlook.com (2603:10b6:510:3d::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Tue, 14 Dec
+ 2021 01:01:33 +0000
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::38cc:22c0:928a:95b7]) by PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::38cc:22c0:928a:95b7%6]) with mapi id 15.20.4778.018; Tue, 14 Dec 2021
+ 01:01:33 +0000
+From:   "Bae, Chang Seok" <chang.seok.bae@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "oleg@redhat.com" <oleg@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v2] signal: Skip the altstack update when not needed
+Thread-Topic: [PATCH v2] signal: Skip the altstack update when not needed
+Thread-Index: AQHX7hoBdqTG42NSTEeQRLqmNoRVxaww87yAgAA8U4A=
+Date:   Tue, 14 Dec 2021 01:01:32 +0000
+Message-ID: <637074F6-9595-4680-BC98-350EA5BE4B5D@intel.com>
+References: <87pmq0tcxa.ffs@tglx>
+In-Reply-To: <87pmq0tcxa.ffs@tglx>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3608.120.23.2.7)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a6dc67da-afb7-41e6-7beb-08d9be9d4547
+x-ms-traffictypediagnostic: PH0PR11MB5079:EE_
+x-microsoft-antispam-prvs: <PH0PR11MB5079A6CADD67D087D51322BBD8759@PH0PR11MB5079.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3383;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NuE2iugKUQ697pownn2H79NYbAQLkuS8042cxYXLGLqyscHVqS0Oe+rETJ+S4LZoUqU6La2KUUz2+n+9/5CudiQLhnE3jlTvKxFdGJ0BZ6gLm0Mj8WJbYrX5ZwzIljnH04mCbx0yJ6ktI/9lXziNyu4EsLRcRRWoBDaDk+jc74JhsYa0/xRpr5CA88z3FTP3zt9CO7qbcc1ok1QoCQkTbaFtdSCGxQ5+nIpHiR1iKDldTGayd68tPN0WE/W9mTW0aaRuOI0yOlkERvH1QCTdab99wStt3saH3SFn0p51KzQOO1tRng4I4B/UVJC9d9Qw26UNw6jeSNBUcPrnyiVuZbS/k9iGkptM8q0Gp5Ah3aWM7HEWOqaet/D7mBT0Uji2ozPa+mdPh3On5k1nBKjP9luo08VOIyk4i7UtwdBbxW0PPY5ySgWoelk1Ox8DWTZ8vIJh2oG1BIqj5u4gGjicbG6XopFDB6JcsNi2Pkxv+9yO2M+FYO/5zgsouONcIk/AnQyc7+qFq6OIx31zwRhghFbqXez/E48f0WRPGMOUbcwa3gl9QWQn7xZpnoaePje9Cllh16mk4j9TRcyfqoyml4P0pmHH/BJR47ruD20w7JgPRtpHjXUXxZZhmYUWISNc358CLnL4BYCJJtJxcM6WQmVeqH/juY2E2QS0S9c0jwarV6AT2HJLpHyPRnuL+kw4ZfiA1jaUTDXqKlwzcLOSRjTM1qmbamWHpFudyzNSpsSiJHqAmRK33A34ALX8nMIK
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(558084003)(82960400001)(54906003)(76116006)(66446008)(8676002)(6916009)(6486002)(33656002)(5660300002)(26005)(316002)(2906002)(186003)(64756008)(71200400001)(66476007)(53546011)(6512007)(4326008)(508600001)(122000001)(2616005)(66946007)(38070700005)(6506007)(36756003)(86362001)(66556008)(8936002)(38100700002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mrqYsoh7mtCHnR4GXZogHhiHFQW6lRSt1JjoSvKSf6iHrwbvn3Oo3YT6pzpP?=
+ =?us-ascii?Q?GFblbYE5Nt7oCI5TCPUXyYoJfAxKaz4nk6P03Eo0zbPcebYKJx8pxcVV5xR9?=
+ =?us-ascii?Q?Xz9KVqMoPK6MLT3k7BI51d7l/YIpIWlpMGp7MYfjIzzA7tvJAZySgWhda8aI?=
+ =?us-ascii?Q?wX/7ZQKgV6TWvHEV2mz7uHJol2njJgOCvRja+oE69kgfa1RgBELJbLCWE/Dq?=
+ =?us-ascii?Q?qQeI19+rd+zYLkNQ9PSdQHXuF5iewsGTe/tFSE1ordNCbeBOJfOpMciGIP0v?=
+ =?us-ascii?Q?l4FhCG9xTuQSdZypRwmcV81ON3rqTdxQRG7YUbBv/5BYZLOmj6bSDrqWS6Hs?=
+ =?us-ascii?Q?61sKFzEusO3XAaxfqFTIMydDYWfTjbHvZ/jmfvSucZzHFCg/LH6crtI6Ryia?=
+ =?us-ascii?Q?6iYKbXr9oWRoW7e569inSCKf0xcN7L433r1VyIedpWK7ZfXkpNryZmVpC7fi?=
+ =?us-ascii?Q?c5ttDWqmLB49wNFo4jmBNqudfUdek73O/1Hy1ZEJowYXSjarBN87IdyVSW8/?=
+ =?us-ascii?Q?ch/zMBg0IqLBuMM3EmPkjUrEF+H2x+tQ/wX3xf0zwmXAxrjfs/kAAbL6xtTZ?=
+ =?us-ascii?Q?6iJZaLdAtN3ln6lE2MUrRbNaot0Pi60jl2wRZesZnjzQW7kypa41gBtzWLRy?=
+ =?us-ascii?Q?zVHPZDYqkTQ2d1OXjertYLniPk1lO0o0mRq/3LPfqQ4jKThgRJI9wFnwz0xs?=
+ =?us-ascii?Q?YjUds7CRvsaNAW21cSgpbuYJJSr1j2RlVhjIGn6kknrLbo28e7i5xOga2Wq6?=
+ =?us-ascii?Q?2Lyf5kPuzPp2KV2EdT7cUg7b8a+jO9mRuFBvxKRWbc+bG94NUCucUJ72/0bd?=
+ =?us-ascii?Q?Di+WfwUCCOdf3vkzlxi+vdQH5fn2nsu16ghu3avv8mcuB5s3fe78UJfgZpt0?=
+ =?us-ascii?Q?rnLl3kNxubMAstEzmlu6YaJPwIbjM7pRLeoY3aXMKzw62tVbnBiFcoM1bs0U?=
+ =?us-ascii?Q?vr+7rw7zR7k1zZnBNc4hQLUi5bq2uM+9DeSbFUcpldpTKkebHuJ9WpvbDujt?=
+ =?us-ascii?Q?bIwU1OOYO9wiQEiy/F7uLk3FXSoaMYYzMi79lSzdCWKQHEcL+LKECcYJW8eC?=
+ =?us-ascii?Q?pBdfxKvqT2m+9tM4y5DgRadvhEeLAjP+/1uIrwAbbxDhixq9VdBL2wy4yloN?=
+ =?us-ascii?Q?4/4hD5lqToLiV9lNE5OvinT9sAQ/ZB90YL17kuurcu9mymzHhzKf0Pz4w2cw?=
+ =?us-ascii?Q?LPPB++HUd1kg17DsuoCDb30R83p5xojxMnd510KBtE+IPIed5JY0X/XRupQa?=
+ =?us-ascii?Q?w9GlnXSN7W7xzqGkzJJYH/OSRySF5Jd9a0zGLGOcy7uunmGt0txt9AqnRxpH?=
+ =?us-ascii?Q?n0QKrA6NAeYEFRgMzOlOBGkR1PdjScvaeLCYqrz3ubpV5ca/jDw+7YZ1XeLg?=
+ =?us-ascii?Q?tQqcYjRipKdhm77ZQ4poFzw6RrsfDNbIg4nH1CwDlhPC83zOcJq6OPjmEKgZ?=
+ =?us-ascii?Q?FS8J9VjEyZILGNgNEeIR0X78DY5TZIn0QCAj9QKu7P207w22mcUwPwp5NJgm?=
+ =?us-ascii?Q?AbxVVDR0hn/jCx9g1WS0F9XuUaaxm7Bht2B3vGPZ6y+B6Lyl3lqeyF+KrD7X?=
+ =?us-ascii?Q?MeGUdVwqSaM/xRkmRpnHXX0O3muIG8noa3TbVgM5t3qOsmvIq1HcE8zKy+g1?=
+ =?us-ascii?Q?ceHz2f6OjAbj8CBcAyLYF/77f2gUC/WvoPZ96b8fxPmdymnrffm5VhnuTvtv?=
+ =?us-ascii?Q?//3KkpQhMJg6dpHygZZ9ntOeuQc=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7765C1F910E11946BE6C5EECADD4AA94@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20211204002038.113653-1-atishp@atishpatra.org>
- <Ya4sDX974/dVEOQw@robh.at.kernel.org> <CAOnJCUKcYeWaDXY6OxQPrNwKV=4t9zbpSjfQLsL70P+3GE7F7A@mail.gmail.com>
- <CAL_JsqL_DXTJMdUGVwa1T9HqzcJkae=PS12dBbhFS9A22XK6=w@mail.gmail.com>
-In-Reply-To: <CAL_JsqL_DXTJMdUGVwa1T9HqzcJkae=PS12dBbhFS9A22XK6=w@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 13 Dec 2021 16:58:40 -0800
-Message-ID: <CAOnJCU+3cxXDZcnzFpXb+2CLYk7=0aiD6zyCU5=SCWMCFLKPzw@mail.gmail.com>
-Subject: Re: [RFC 0/6] Sparse HART id support
-To:     Rob Herring <robh@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Anup Patel <anup.patel@wdc.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Vitaly Wool <vitaly.wool@konsulko.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6dc67da-afb7-41e6-7beb-08d9be9d4547
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Dec 2021 01:01:32.9997
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4SLnHb4iB0WRRsO+IuB3kJTGZURFFPxNZ1+mOi4HNSO8a3WLVbBWrCKokSeMxaw8qoE9ea5zO0Q0RIRuezVDQPrpm5liCDthjLAdPzanZDA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5079
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 3:11 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Mon, Dec 13, 2021 at 3:27 PM Atish Patra <atishp@atishpatra.org> wrote:
-> >
-> > On Mon, Dec 6, 2021 at 7:28 AM Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Fri, Dec 03, 2021 at 04:20:32PM -0800, Atish Patra wrote:
-> > > > Currently, sparse hartid is not supported for Linux RISC-V for the following
-> > > > reasons.
-> > > > 1. Both spinwait and ordered booting method uses __cpu_up_stack/task_pointer
-> > > >    which is an array size of NR_CPUs.
-> > > > 2. During early booting, any hartid greater than NR_CPUs are not booted at all.
-> > > > 3. riscv_cpuid_to_hartid_mask uses struct cpumask for generating hartid bitmap.
-> > > > 4. SBI v0.2 implementation uses NR_CPUs as the maximum hartid number while
-> > > >    generating hartmask.
-> > > >
-> > > > In order to support sparse hartid, the hartid & NR_CPUS needs to be disassociated
-> > > > which was logically incorrect anyways. NR_CPUs represent the maximum logical|
-> > > > CPU id configured in the kernel while the hartid represent the physical hartid
-> > > > stored in mhartid CSR defined by the privilege specification. Thus, hartid
-> > > > can have much greater value than logical cpuid.
-> > >
-> > > We already have a couple of architectures with logical to physical CPU
-> > > id maps. See cpu_logical_map. Can we make that common and use it here?
-> >
-> > Yes. We can move the cpu_logical_map(which is a macro) &
-> > __cpu_logical_map(actual array with NR_CPUS size)
-> > to common code so that all the architecture can use it instead of
-> > defining it separately.
->
-> IIRC, the macro is what varies by arch and I would move to static
-> inlines rather than supporting:
->
-> cpu_logical_map(cpu) = 0xdeadbeef;
->
+On Dec 13, 2021, at 13:25, Thomas Gleixner <tglx@linutronix.de> wrote:
+>=20
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 
-Sounds good.
-
-
-> >
-> > > That would also possibly allow for common populating the map from DT.
-> > >
-> >
-> > I didn't understand this part. The mapping is populated at run time
-> > [1] as the boot cpu can be any hart in RISC-V.
-> > That booting hart will be mapped to cpu 0. All others will be mapped
-> > based on how the cpu node is laid out in the DT.
-> > Do you mean we can move the 2nd part to common code as well ?
->
-> Yes, as the DT platforms just loop thru the cpu nodes and fill the
-> logical map based on 'reg', I don't think that needs to be per arch
-> once we have a common map. But not asking for that now.
->
-
-It would make sense to keep them together in a series. I can take a stab
-at it once this series is merged so that we don't end up in
-conflicting changes between
-two series.
-
-> Rob
-
-
-
--- 
-Regards,
-Atish
+Thanks!
+Chang

@@ -2,92 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAA24747F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1C1474807
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235834AbhLNQ0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:26:46 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:42741 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235886AbhLNQ0f (ORCPT
+        id S232035AbhLNQ2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236199AbhLNQ1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:26:35 -0500
-Received: by mail-oi1-f169.google.com with SMTP id n66so27783257oia.9;
-        Tue, 14 Dec 2021 08:26:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ecdypzCN+U6v6zglYX7zDMYbOxt+qYg8f/j8Yv3wCxY=;
-        b=bZxrep6ngD/i1owByFMTEi6DxrQ2TsUSApU1h6zDyEj3mvjqzA4oLU5yqR4yTmPEJ6
-         Rfp19eqzpAqolUQyXbT7lgdgDeU3rthfEYM9SsB/8u8FEZG2VxQv2GGeXQh62/gqZtod
-         JA/5n+GacWNoI4533+13fxSRwFo+VRZ03JhhjObfojlsgSdNsYpik+uNyjBtPTtYiZio
-         6OltZJpmtjVVl9nwUyILS4sCzSwGRM4US60IevxXoLEpF735oQBmRmWcfdYi0gDNqhmQ
-         RLq6thHmfepajWO0Vq996v/cM9BhMyFKjnxrqSfEVM3x57NRocQsIWR0NsLPtVYuoTLY
-         HNNg==
-X-Gm-Message-State: AOAM532rGPgX3K/rwL4RIU3ALqdLmK/Cszi7XMw/6pOfwS7WzgZ2VcLr
-        bfJde4l/V4ChP/ER8ARb6w==
-X-Google-Smtp-Source: ABdhPJyGSv7DXMKuwKAuUktDv2PCkL1nzWMMyeVxqFI6hpsoBQPH6hLLO1tq01FrxwqqJFeG4ib/gw==
-X-Received: by 2002:a54:4701:: with SMTP id k1mr34049401oik.37.1639499194932;
-        Tue, 14 Dec 2021 08:26:34 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t11sm48314otj.24.2021.12.14.08.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 08:26:34 -0800 (PST)
-Received: (nullmailer pid 3502704 invoked by uid 1000);
-        Tue, 14 Dec 2021 16:26:33 -0000
-Date:   Tue, 14 Dec 2021 10:26:33 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     linus.walleij@linaro.org, matthias.bgg@gmail.com,
-        bgolaszewski@baylibre.com, sean.wang@mediatek.com,
-        bayi.cheng@mediatek.com, gch981213@gmail.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v6 2/4] dt-bindings: spi: add new clock name 'axi' for
- spi nor
-Message-ID: <YbjFuQxL+Wp8tU6r@robh.at.kernel.org>
-References: <20211211204014.8014-1-tinghan.shen@mediatek.com>
- <20211211204014.8014-3-tinghan.shen@mediatek.com>
- <YbdvIPq1hKPmKXXs@sirena.org.uk>
+        Tue, 14 Dec 2021 11:27:03 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D67C061574;
+        Tue, 14 Dec 2021 08:27:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=uslCgpNux7UCWvRrQn0jiboSZeFlAwPdMrox4AtO3lY=; b=NA69IeRgKaAKGVIPZOXkudrLma
+        LB4GLgor00uc8BI0/pGiViJ9hCO5G31dOaMt9n5+tGiVIKu1TJRf8W16fGRo5ZYEFdlQHSCN0htZn
+        jsOofBk7FUY03UCo4Z6WxML0kucfTzx6UlJagPU+Z+piEnDtGHmRfqbXubz66BSn8RtyW8mPNHii9
+        gX7ZEdDulliKRtIaGHZP31xYwF2pmYZY6B+TPPwejwrKVCdmCleglG35v8t7k+BuYa3CkmUQ62Dfb
+        sw9nIv4AV2FGjfRkkp1e6k+UzTcFUfkG7tsgM6jvLT4RwVrQ14YvcK012oih2gbxIm+2q7eW/Waox
+        vFUvJ+NQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxAdj-00DsaK-Fr; Tue, 14 Dec 2021 16:26:56 +0000
+Message-ID: <8ab0ed95-ce79-cd61-0440-20e0242b8930@infradead.org>
+Date:   Tue, 14 Dec 2021 08:26:52 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbdvIPq1hKPmKXXs@sirena.org.uk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: linux-next: Tree for Dec 13 (SND_AMD_ACP_CONFIG)
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        broonie@kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     alsa-devel@alsa-project.org,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211214030215.3181149-1-broonie@kernel.org>
+ <8ff9d4b2-1905-2efa-cb86-e8f6cef06ef2@infradead.org>
+ <15c3b6fe-b159-6cee-be67-11f2f2dd0d04@linux.intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <15c3b6fe-b159-6cee-be67-11f2f2dd0d04@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 04:04:48PM +0000, Mark Brown wrote:
-> On Sun, Dec 12, 2021 at 04:40:12AM +0800, Tinghan Shen wrote:
+Hi--
+
+On 12/14/21 05:51, Pierre-Louis Bossart wrote:
 > 
-> > Some mtk spi nor has dedicated dma(s) inside. Add a new clock name, axi,
-> > for spi nor dma bus clock.
 > 
-> >    clock-names:
-> > +    minItems: 2
-> >      items:
-> >        - const: spi
-> >        - const: sf
-> > +      - const: axi
+>> on i386 or x86_64:
+>>
+>> when # CONFIG_ACPI is not set,
+>> so SND_SOC_ACPI is not set:
+>>
+>> WARNING: unmet direct dependencies detected for SND_AMD_ACP_CONFIG
+>>   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_ACPI [=n]
+>>   Selected by [y]:
+>>   - SND_SOC_AMD_ACP_COMMON [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && X86 [=y] && PCI [=y]
+>>
+>>
+>> Full randconfig file is attached
 > 
-> This will cause any existing DTs that don't have both spi and sf clocks
-> defined to fail to validate which doesn't seem great.
+> It's probably triggered by my recent change to fix another problem.
+> 
+> d9b994cd7641 ASoC: AMD: acp-config: fix missing dependency on SND_SOC_ACPI
+> 
+> I didn't realize SND_AMD_ACP_CONFIG was selected by other configs.
+> Moving to a select seems to fix the issue reported by Randy, not sure if
+> it's the right thing to do though.
+> 
 
-That was true before this. The default for 'minItems' is the number of 
-entries in 'items' (this is not the default for json-schema, but default 
-for DT bindings as that's the common case).
+That works. You can add my Ack if you want to push this patch.
+Thanks.
 
-> Given that your
-> commit message says this is only required for some SoCs shouldn't the
-> minimum clocks requirement depend on which particular SoC/IP version is
-> being used?  Not exactly sure how one specifies that in the YAML format.
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-With an if/then schema adding maxItems/minItems constraints (e.g. 
-'maxItems: 2' for existing compatibles). There are many examples in the 
-tree.
+> 
+> diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
+> index bcfeb3fc2592..7a9e45094f37 100644
+> --- a/sound/soc/amd/Kconfig
+> +++ b/sound/soc/amd/Kconfig
+> @@ -98,7 +98,7 @@ config SND_SOC_AMD_YC_MACH
+> 
+>  config SND_AMD_ACP_CONFIG
+>         tristate "AMD ACP configuration selection"
+> -       depends on SND_SOC_ACPI
+> +       select SND_SOC_ACPI if ACPI
+>         help
+>          This option adds an auto detection to determine which ACP
+>          driver modules to use
+> 
+> 
 
-Rob
+-- 
+~Randy

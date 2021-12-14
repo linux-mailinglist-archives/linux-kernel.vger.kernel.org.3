@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBBE474DEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095A7474DEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbhLNWci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:32:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48070 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbhLNWch (ORCPT
+        id S233996AbhLNWf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:35:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230098AbhLNWfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 17:32:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 588C5B81B3A;
-        Tue, 14 Dec 2021 22:32:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56323C34605;
-        Tue, 14 Dec 2021 22:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639521155;
-        bh=M2HKluCE/kZx1ZzHL6O3FUtbfbX2HVGF4UavWiNkRvQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fn+37mqzSWa25v23lcVXr9iuHNGQpe/1G7xxQBV6OEx+Dj7WC5yNcG+kGWwO+B0J9
-         NAT/OYo1GbSfY1HmzMHR2PX7Av1j0Zl4pDvWLBxpiFXXGfXiG0vMNm4j1o3+v7WtZj
-         pEmYE6BH9fhF2rcFNbIE54HVKswtYTZ1Lyj+3w+ypip0MbmATDCLNuyGltI40CUkKO
-         Af59SzbMlI169T69Sahk7Zv0XoljZ3i0H9aMBjQW6AQyJf36ZJ/veqoqPLQiHkM7K7
-         KT+qYgsOWHKU62x+X+ZXd57HDidp1+KiQyvQCO+gdkJbB/LYwE2K2hZ0ReUF2Rs1WR
-         BbMIf2C0Q1yQA==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Dec 14
-Date:   Tue, 14 Dec 2021 22:32:22 +0000
-Message-Id: <20211214223228.1745315-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 14 Dec 2021 17:35:24 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CBCC06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:35:24 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id o20so68548113eds.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6Taqzw6uxeOIOz97UH1duZRnhJhqeOLAqf5B3wtCszw=;
+        b=3XQ3OzXwM28f7t6cRqcC2uz9L/EUC/1Vj7nj7y0cii9SH61V7WOztETWrUU9KGbXBu
+         fGsyXT/lDDb8GVMvNR4IG7HRO8XcoGg1pSnsdepdASsbb1DLx3dUdJF3a4pwG/b2Gc8z
+         QJ/+YvXTLuBd9ZVV01x6aAMCAciHqOm/3EYwriMLzvm9YaV5DOD6eaNv8t2Tf/IsA4QX
+         cKvns0LQkxNWKIe10shY8uWN/AsQb4T2mBr0MovuDZwxteAXUcIPOTTob5VeKyz44SEc
+         nwqBGigONGybMiTiNpcEBHETuv5N/yDVq4DAmdJQQanz27XS4PLIP68cS6437PxfXQBu
+         6Fng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6Taqzw6uxeOIOz97UH1duZRnhJhqeOLAqf5B3wtCszw=;
+        b=7pMrdGhJ/syyucQxAH4s2fkYOSTdtV6QG/1kEbam6T9ylOnzTMBwnkAn5C5JF7cQRj
+         l1vZeFcEddJluuXFdaOhqJ98W/bWyrIct35SwjzRLb14wxHKrTeoKn6dXItYxklS9G93
+         WHKDr67OgGVxjsNmyg9pc0CwNV0gFYdx92y+hw9z9ZO6fcqWQW6fZIozLrplyzXqYAiF
+         Oe4qJEqVDzNjaNukpNk8uFxA2vY+3N5cKSU7X9o9NSwKpjP0EY45kyM8xQ3X0tZv9q4z
+         L5H8lBIDNNa2ujJjZ43Srvu/XpDbHUxxEQurenYwLshzasNqMb7pzQLtfITFBlih5DnP
+         qRFg==
+X-Gm-Message-State: AOAM5306UOH9kNb9XUmqjAzB+kJiMUQjfqd8pKQA7Z6IzN0dAnw6wyiC
+        f6FqXU/8kSRHqXzG5Q3bIX7AfJIsO7o2jkYhI8I29SW9Iw==
+X-Google-Smtp-Source: ABdhPJzrhSLBszBAsbKMvRWAEL5mwarxpeHAo0Hs04BfQSDVdwA8FQLQOahYYlf86Z67Q5qzBqU1J0p2zVrmmqVZS/g=
+X-Received: by 2002:a17:906:9b86:: with SMTP id dd6mr8505011ejc.701.1639521322615;
+ Tue, 14 Dec 2021 14:35:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211208083320.472503-1-leo.yan@linaro.org> <20211208083320.472503-7-leo.yan@linaro.org>
+In-Reply-To: <20211208083320.472503-7-leo.yan@linaro.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 14 Dec 2021 17:35:11 -0500
+Message-ID: <CAHC9VhThB=kDsXr8Uc_65+gePucSstAbrab2TpLxcBSd0k39pQ@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] audit: Use task_is_in_init_pid_ns()
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
+        Eric Paris <eparis@redhat.com>,
+        Balbir Singh <bsingharora@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, codalist@coda.cs.cmu.edu,
+        linux-audit@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Wed, Dec 8, 2021 at 3:33 AM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> Replace open code with task_is_in_init_pid_ns() for checking root PID
+> namespace.
+>
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+>  kernel/audit.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-News: Releases may or may not happen over the next few days since I'm
-getting a vacciene dose tomorrow.
+I'm not sure how necessary this is, but it looks correct to me.
 
-Changes since 20211213:
+Acked-by: Paul Moore <paul@paul-moore.com>
 
-The drm-intel tree gained a conflict with the drm-intel-fixes tree.
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 121d37e700a6..56ea91014180 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -1034,7 +1034,7 @@ static int audit_netlink_ok(struct sk_buff *skb, u16 msg_type)
+>         case AUDIT_MAKE_EQUIV:
+>                 /* Only support auditd and auditctl in initial pid namespace
+>                  * for now. */
+> -               if (task_active_pid_ns(current) != &init_pid_ns)
+> +               if (!task_is_in_init_pid_ns(current))
+>                         return -EPERM;
+>
+>                 if (!netlink_capable(skb, CAP_AUDIT_CONTROL))
+> --
+> 2.25.1
 
-The dmaengine tree gained a conflict with the dmaengine-fixes tree.
-
-Non-merge commits (relative to Linus' tree): 6251
- 6873 files changed, 291130 insertions(+), 138903 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a defconfig for arm64, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After the
-final fixups (if any), I do an x86_64 modules_install followed by builds
-for x86_64 allnoconfig, arm64 allnoconfig, arm64 allyesconfig and i386,
-and arm64 and htmldocs.
-
-Below is a summary of the state of the merge.
-
-I am currently merging 346 trees (counting Linus' and 94 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+-- 
+paul moore
+www.paul-moore.com

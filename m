@@ -2,81 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8078473B2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B34D473B31
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244952AbhLNC4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 21:56:18 -0500
-Received: from conuserg-11.nifty.com ([210.131.2.78]:41871 "EHLO
-        conuserg-11.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbhLNCz2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 21:55:28 -0500
-Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 1BE2s0bm012823;
-        Tue, 14 Dec 2021 11:54:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 1BE2s0bm012823
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1639450451;
-        bh=Uo2wVxpq5SIkUQ/3oMi05zuPyyww+WvElNbVfIYdJLc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AIecPvYWD6lNmekG0+UAJrV6XABX8t59eeqEJaOO0VjCiO5j5qDOWro9hKhHKcV1c
-         nPthLbLAVJPyGpB7QxJI/DTFZXk5v+/IxYSwZnOgVKBWf+XN92NmMennHq3lzjw0up
-         5GKfr/bcNsF6omCaR/95DogWgKA0Lj8O05/GZhHUXCqxlR9rp9rJWxeYPIq9/dMxEc
-         3BANcXh1pEkaEg2SOYCHO7d7rzKV09fAL46XnBY1Tv60G8PPZfzUcDK2Ju/Sakimai
-         TvYbHbAP1uvkak3k4e/CERQirnmWQvR2R3DSNcm5s7mVCBRxvCFBB2sB7Xwbgzj27N
-         5H1kctIxDiayQ==
-X-Nifty-SrcIP: [133.32.232.101]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
+        id S232304AbhLNC6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 21:58:53 -0500
+Received: from out2.migadu.com ([188.165.223.204]:28094 "EHLO out2.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243863AbhLNC46 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 21:56:58 -0500
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1639450610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1vndxrNGB+WzR5xqhu3RD4FILb9wlm0/q3X11bIWkos=;
+        b=OJamnJam2w3CmX3nCKBYp4AUmgLh1vLvPAZ0neDu+FpW+67B7SSkaMy6qqLGBkX/9rUkcg
+        3LK728TiD6H/Phu2d/p/xQAlkkAQef5i3hEl7gm1icm5QYF04c6iHVam5DjNKGcH/UdFUv
+        tVFK+K0EXrRQR6M09J4YJOsaHskQb3c=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     stockhausen@collogia.de, neilb@suse.de
 Cc:     linux-kernel@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arch@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Nicolas Schier <n.schier@avm.de>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v2 11/11] microblaze: use built-in function to get CPU_{MAJOR,MINOR,REV}
-Date:   Tue, 14 Dec 2021 11:53:55 +0900
-Message-Id: <20211214025355.1267796-12-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211214025355.1267796-1-masahiroy@kernel.org>
-References: <20211214025355.1267796-1-masahiroy@kernel.org>
+        linux-rt-users.vger.kernel.org@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] lib/raid6: fix abnormally high latency
+Date:   Tue, 14 Dec 2021 10:55:41 +0800
+Message-Id: <20211214025541.15834-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: yajun.deng@linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use built-in functions instead of shell commands to avoid forking
-processes.
+We found an abnormally high latency when executing modprobe raid6_pq, the
+latency is greater than 1.2s when CONFIG_PREEMPT_VOLUNTARY=y, greater than
+67ms when CONFIG_PREEMPT=y, and greater than 16ms when CONFIG_PREEMPT_RT=y.
+This is caused by disable the preemption, this time is too long and
+unreasonable. We just need to disable migration. so used migrate_disable()/
+migrate_enable() instead of preempt_disable()/preempt_enable(). This is
+beneficial for CONFIG_PREEMPT=y or CONFIG_PREEMPT_RT=y, but no effect for
+CONFIG_PREEMPT_VOLUNTARY=y.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nicolas Schier <n.schier@avm.de>
+Fixes: fe5cbc6e06c7 ("md/raid6 algorithms: delta syndrome functions")
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
 ---
+ lib/raid6/algos.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-(no changes since v1)
-
- arch/microblaze/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/microblaze/Makefile b/arch/microblaze/Makefile
-index a25e76d89e86..1826d9ce4459 100644
---- a/arch/microblaze/Makefile
-+++ b/arch/microblaze/Makefile
-@@ -6,9 +6,9 @@ UTS_SYSNAME = -DUTS_SYSNAME=\"Linux\"
- # What CPU version are we building for, and crack it open
- # as major.minor.rev
- CPU_VER   := $(CONFIG_XILINX_MICROBLAZE0_HW_VER)
--CPU_MAJOR := $(shell echo $(CPU_VER) | cut -d '.' -f 1)
--CPU_MINOR := $(shell echo $(CPU_VER) | cut -d '.' -f 2)
--CPU_REV   := $(shell echo $(CPU_VER) | cut -d '.' -f 3)
-+CPU_MAJOR := $(word 1, $(subst ., , $(CPU_VER)))
-+CPU_MINOR := $(word 2, $(subst ., , $(CPU_VER)))
-+CPU_REV   := $(word 3, $(subst ., , $(CPU_VER)))
+diff --git a/lib/raid6/algos.c b/lib/raid6/algos.c
+index 6d5e5000fdd7..21611d05c34c 100644
+--- a/lib/raid6/algos.c
++++ b/lib/raid6/algos.c
+@@ -162,7 +162,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
  
- export CPU_VER CPU_MAJOR CPU_MINOR CPU_REV
+ 			perf = 0;
  
+-			preempt_disable();
++			migrate_disable();
+ 			j0 = jiffies;
+ 			while ((j1 = jiffies) == j0)
+ 				cpu_relax();
+@@ -171,7 +171,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
+ 				(*algo)->gen_syndrome(disks, PAGE_SIZE, *dptrs);
+ 				perf++;
+ 			}
+-			preempt_enable();
++			migrate_enable();
+ 
+ 			if (perf > bestgenperf) {
+ 				bestgenperf = perf;
+@@ -186,7 +186,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
+ 
+ 			perf = 0;
+ 
+-			preempt_disable();
++			migrate_disable();
+ 			j0 = jiffies;
+ 			while ((j1 = jiffies) == j0)
+ 				cpu_relax();
+@@ -196,7 +196,7 @@ static inline const struct raid6_calls *raid6_choose_gen(
+ 						      PAGE_SIZE, *dptrs);
+ 				perf++;
+ 			}
+-			preempt_enable();
++			migrate_enable();
+ 
+ 			if (best == *algo)
+ 				bestxorperf = perf;
 -- 
 2.32.0
 

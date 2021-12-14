@@ -2,206 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1BC4748E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7AE4748E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 18:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236322AbhLNRIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 12:08:23 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:40938 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231544AbhLNRIW (ORCPT
+        id S236307AbhLNRIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 12:08:20 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:38844 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231544AbhLNRIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 12:08:22 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BEFIo6k015351;
-        Tue, 14 Dec 2021 18:08:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=3Xtp4aP90kvDpm0AC8bVtGgEJLQdVLnsqjJXaa8DtyM=;
- b=zpZOjai97Le2JOpHJJBjOduoOrSHwk/frK7zZ9GHgRa/ZAjGxSEFF8mPu+iPpfp0FpCr
- /SylndrRd7Yb/F36hNnZYR25ETK23KKoVPhjXIcP9p0JwFxdIxYUijX5zJnXv3KF/3NI
- Gc58rmkNpgx+GQGyP9jTbja+sASHuQJacwWiWQh0oJjEgxPxl81lNBsG20n3PyfLg+2e
- TAiv0RTzeR6dmPj8YlTIrboBXt9vOjdSVuEM5E1HkPU4He8vcay/qiWv6p6xNHpnJhOH
- v/MniMAVpe5Y/ChyCJhH3p7YQnr/ZfCvSO2InN6J0iFJbfHsf91jCN/uroPZhD8w+geS Xg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cxrththv8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Dec 2021 18:08:09 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 64C6610002A;
-        Tue, 14 Dec 2021 18:08:09 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5981820AA86;
-        Tue, 14 Dec 2021 18:08:09 +0100 (CET)
-Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 14 Dec 2021 18:08:08
- +0100
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH v2] tty: rpmsg: Fix race condition releasing tty port
-Date:   Tue, 14 Dec 2021 18:06:46 +0100
-Message-ID: <20211214170646.25775-1-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 14 Dec 2021 12:08:19 -0500
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BEGXxDV002508;
+        Tue, 14 Dec 2021 17:07:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=KLIHJQADY73E8imzFzsI3TsbVmjiqc9rtyBek/Cbyss=;
+ b=j4ZcnAyh/WY8u3BJ1ZUW6XYwEVBYY3jJwWPd+2FGUxFbbpx89azZDrfkysrGkC+tYyrW
+ W1NxrB171JtzmXYaPRx29ZBRSDNZ6f63Ic8DTQ4qdL6/X7jySYWRe/ONBdgvh7nHY76O
+ UeAkhM20gmQC4rFnh8mItqnafDsSyNewZ7aAwqRsgTxS7ra8WP6Mq7Pz/GbqxoFByXnm
+ 5wdFLUeXHF8pL/uEsHeJ7IDklscDCUcuIgj8BN1a+l527rS1duGS4aMk+1BAxC9lqtgD
+ IAGj0bcOrQH+kcy7/DyuLbyQ3T8GK89RMBbPLa2jd5ebu1BiWngV+nMIrIrFJeVexDm9 0w== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cx56u448c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Dec 2021 17:07:50 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BEH5rGY144178;
+        Tue, 14 Dec 2021 17:07:49 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
+        by aserp3030.oracle.com with ESMTP id 3cvj1e6562-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Dec 2021 17:07:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EztiQvzK6onx2h5I8JA5TvFLd+z8BshetH//L7nxx/VZH0ovGOdo2cgOON5WmFortdhp7LZTZ7gpPl3+Th6UkRY9Op4rfDjtBapRJFvQ234TI1VoXbsi9oW9S9///P1KnFkJRIB4djuFJIjBl5VvG/bFaPUbsg7+ob2+YQpIvELot3kyUDF0UT0R4Vd+brtU6cWB00ETQltL0WIrG5/3fEgUelALR40ZhhT0jEqi6yOXhExQMskzzUYiLawlRP+HIrI80Xc2lgn/b0RGPSmeT65kdVAhe7UpwDSEHZncPTIpvqMaoTkASTChoEUE7OjYM6r/fR/9FEMpvnBeM7/Sqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KLIHJQADY73E8imzFzsI3TsbVmjiqc9rtyBek/Cbyss=;
+ b=oDF2nLgbaMnqOuyK2enqFTFZjpffKIf5sAtsm+szO/e1EerAKCtELSODxsY3G67OfnoiWI6JhqzNlmKRknMg+d8QLy4BM7d3Ex8qTr24an4lW636eZeftQwAJ8JGukI2WplPVPxLKM01WbLtdZcFodj8j4bbLzABZ7xg79iBKlk49juGYOGfOCJL9hIw/TlooiNvCdcy9M45A1z6YBF8eMNyme80grqamhufcLh2sXuhQwM9TcxrXlZS4Wqmrff6UTRo8O3gjZEwdO72XTo76gHCcYFvBbD+U8RuHhDPviYNNXTO+rhxgxt7R/tL/uMtg0qaUy6yrRTCnXiUWgb0ZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KLIHJQADY73E8imzFzsI3TsbVmjiqc9rtyBek/Cbyss=;
+ b=eEkmC9aMzOZ2X22Xt2YVpu54P+7Cbw7X7IuQMLws/GVOOEQshjzPMFSBMnty0TSOmCH+10eEDZvSPZkXUXGwEJu2CZGZoVScFBG4pqW9dXtKnzbJx1gbXkncvwLq+r0uwNrgu49e7dt0h7/senNhZm1xeAyT/T0hokVR5bHVxLc=
+Received: from CO1PR10MB4722.namprd10.prod.outlook.com (2603:10b6:303:9e::12)
+ by MWHPR10MB1711.namprd10.prod.outlook.com (2603:10b6:301:a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.13; Tue, 14 Dec
+ 2021 17:07:47 +0000
+Received: from CO1PR10MB4722.namprd10.prod.outlook.com
+ ([fe80::54ed:be86:184c:7d00]) by CO1PR10MB4722.namprd10.prod.outlook.com
+ ([fe80::54ed:be86:184c:7d00%8]) with mapi id 15.20.4778.018; Tue, 14 Dec 2021
+ 17:07:47 +0000
+Message-ID: <dc648afe-6dbe-55c9-ebf6-9334d71706b4@oracle.com>
+Date:   Tue, 14 Dec 2021 11:07:34 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no managed
+ pages in DMA zone
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>, Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, cl@linux.com, kexec@lists.infradead.org,
+        stable@vger.kernel.org, Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <20211213122712.23805-1-bhe@redhat.com>
+ <20211213122712.23805-6-bhe@redhat.com> <20211214163124.GA21762@lst.de>
+From:   john.p.donnelly@oracle.com
+In-Reply-To: <20211214163124.GA21762@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM0PR10CA0060.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:150::40) To CO1PR10MB4722.namprd10.prod.outlook.com
+ (2603:10b6:303:9e::12)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-14_07,2021-12-14_01,2021-12-02_01
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 41937d92-5a9d-449a-cf61-08d9bf24403a
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1711:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1711A8DBC8BC573E5BC4B45EC7759@MWHPR10MB1711.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nyML0UK2qys1CW3XYQSprhCTvlF646ins7OaDyzzGkjTF1XgJcBtvkQuWnUfE3FG6Y8mKvCmlp1n9Ypxe9a1ivR2alWiP2sGlxHMMd9Ggla0QMxBpzaNQCP45nfsslFANmlt7OS9nNFTnxe4KhUfnXBrl47W7uA2j2/nsp9gXsmXTvoUDueCKbLf4g2Aw+LVBtnEgux/lIyYpbOoboZ0fDZEKBRn3GcDoNSKh4f8rBfw97rVc/dgqHcpkAMq3jWyKKVNtOgdJpiykZpnjSxoR2IWrJ8FRyd833BIOc1ovUgDb/gE2YqFQ3ACixTo8VH+vz0/XT45ca+jOzOTqye3+dmSDtZ0Pl5Q6SmvhRUqov8zQRziAs5ZsB0mmNI7tZ5HXZcv2eRt3eBviNjx27FTJl5HSzDxCeBjl5w9O/Z93Sxf/Qgvs+P0BXHVgOyjibLNEdy5v5vzInzyvK7p+XHIP1m914903pFQwlT1ONrFyr8qaNMSIU/g8LXUhJOG/sG0IIxOeBwSBFsSBSGoCXNeQFV/wQmvkmJBoRyM0AT2ek39OhuCfdzcoYcIiKWmmy7UlOAcDbALkqrqSwcTqsJylxZXPJrvCk47vmn4dMx9P8X/5SmPX28ODdhSRAxzJ6yVNC2YKoyZzwhQgCA0Yq7E82htLuo3lFpa2ZnR9wmZcDUOZYahpbNOoc578GVbFr7ft6Gov5UReTOh6RLASfcSQw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4722.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(9686003)(53546011)(66476007)(83380400001)(6512007)(66556008)(36756003)(31696002)(6666004)(508600001)(4744005)(186003)(4326008)(66946007)(26005)(316002)(8676002)(2906002)(2616005)(8936002)(6486002)(5660300002)(54906003)(6506007)(31686004)(7416002)(38100700002)(86362001)(110136005)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SWY0U1BSNmVjaVlnQ1lEVkFDRVNLMnRXMkRyUW5qYjhCQi9TREUxcHhsN0o3?=
+ =?utf-8?B?V05UZyt1VzFBeGk1YlZzUUFhYUpWZ1ZTcm1CN2MzYUJKM0dac2p1UTdjTDJq?=
+ =?utf-8?B?TWxjTWppVjh0TkhvYWxLa3RMVGliNVlaRjEwT3hkSWp5SnNtdDB5YVFCVFRG?=
+ =?utf-8?B?czR1T0ZzMXJoR3BsQkVhVzJaZ29hRnl1YlhnNWJuK3RUcThXcnA1ZUU4U242?=
+ =?utf-8?B?bGQ4ZE1DRnB3Z3Z6TEV0MlVhZkZEZUFBRGJHODhmQXJMNU04WUlGMysyaVRS?=
+ =?utf-8?B?TjJZNmN6czBINWdHaWNabU1yVE5pdlBTSWloNXVzYTZFc2xJbFNOUEo5cTJN?=
+ =?utf-8?B?TW5UUy9tSWR3VzlFYmpYYUlkc0NwbkNOSGdWWHgvQTZBZGZacng3c240NGIz?=
+ =?utf-8?B?WXpuNUtlZTV6TnNQbHN0eHdpdVp1KzBNK0VKa1J5VHQ0NllLVVBRYkUvUkpG?=
+ =?utf-8?B?STRFZklXMHlWNU1qNWFFS1dJREpLUFYwcmtaWUJac3FDSENFc1MzOGlWWUNI?=
+ =?utf-8?B?Y3RVT1RQc2M0Q005VW1PVXFCUHl6WUhXRDdMR0FtUjMwNEF3OEZ2TnFVUzVO?=
+ =?utf-8?B?MTVYbDc2ZkhLNmQ1d2gyZnpNdDEzMXVVcHhJeldEcUNORUhhYXA4aEI5VFVQ?=
+ =?utf-8?B?VlRSTDhVeGI3d3lrQm9uSVBnMGhmQ21ZaXBMdnRNVmpYdGxvMXFWbTA3Zk03?=
+ =?utf-8?B?SmJITEE1UTI4OTg4b0ZDZnBlNStZWDRCTzBlQUllclhLOFB0Z3h5a2Uyb0l4?=
+ =?utf-8?B?T3hDWC9BNStoQzZacWp4ZHRlcDRXcGRvb3M0SnNvMFZRTEpkQmdBMHZXUlJ3?=
+ =?utf-8?B?UHE1SURrVExKV0F6RFdhVUdJWWNnUXVMV0xCbmxwOXRTaWQxb3ZMUC83SHhJ?=
+ =?utf-8?B?d3U4SUp3YWVvTVJHZ0N5UFI0VHh0cnpNbDZLd3JBb2dLSE92V2F5Mk1qL0Jm?=
+ =?utf-8?B?TTRhUUZNNUFYa3hnVWFlaFlhelVxb1VqeWhHQm8vWEtkN0dDWVQ2Z3Q3aEpl?=
+ =?utf-8?B?Z3c4dVd2UWViZkFmSGFkN2JSeDVZRGJ6cGxDTVE2Z2Z2ZEpTc2VHMXdLYmkv?=
+ =?utf-8?B?dk0xaFBSNzRMc1ZZTCt6aGlnUENqQnZhUXgrYXl0QjZZRVBMQTEvMHVXU2dh?=
+ =?utf-8?B?ekhINkNtVEhLQjBpZnV6K2p6eGFzZU5pb2FkOXdrWHhwUkRoMU5tY3dqZTQv?=
+ =?utf-8?B?emRoOGxYbnRlTTY3ak0zZU5LVjRiYTFGMCtBRlp2N09RUGF0WjdTazhFdW5a?=
+ =?utf-8?B?M0ZuOHlTSWVSbUM0WjM3N2NYRWlvNmZwYWlSNVpLUit1L3hyc2RjMHB3NU9J?=
+ =?utf-8?B?TTlnV1drQ0JKbGxWNUpTbzg5SUNOSmR3eldTcWp3U0R6d1hXOEw2NE5JVzJE?=
+ =?utf-8?B?SmtlSllsaWJVRWtiUzFwVzZpLzRlSUx4WlBDMEl2Q0RlU2hjOXhma2JZS01P?=
+ =?utf-8?B?bXJYaUhwU21EN3kvSTB5Q3hsOUpqTlBPSWxSME5kcDg3YmdIK3NMY2F2a3dp?=
+ =?utf-8?B?eUhSd2J1N3U3TTFzSGkrWjczdmVZSUdDalBPV2hyZFZIeFh5U0V5cmJadW05?=
+ =?utf-8?B?cVRxUFoyK2JGWVo5d0FKTnpaam1aWm5ITVYvZ3A0K3QyYWVLNUVpWVZtVlhi?=
+ =?utf-8?B?RjdGVVBBOEZHVW03NHNuOFpYWFNKVnA2d0dDQm1GZm8vOXNFTk9MNU1nV3hL?=
+ =?utf-8?B?SjBnRWpkSGtOVEwyejdHQ01pOTZJUWRMVEhCK0pSZlhKQjJ2cC82MmZQN3I1?=
+ =?utf-8?B?K0xSZmNUckM2MG9RRmxyZGlKSzFHQ3NhSWVpNDlxM1loalZMRUVzZURzdk1w?=
+ =?utf-8?B?MnQ3dVBZdHFKRlBiMk5hUDRITFpHdDVoRDVQZFBXVW9XazhhcXpBeGRtWUNH?=
+ =?utf-8?B?dy9Jc2cyemxtTUNJS0VNcXVMNUN0WkhjRHhIbys5RW93UEVBRTR5S0lENlpT?=
+ =?utf-8?B?dGo0Yzh5Vi8yMEJFRG9lNTd5VzRKU2xhYmo4aEFQdmJsUHRCd2xYcWFjV0Yx?=
+ =?utf-8?B?SWxVZlVTN0p4cmtFeS9McXBxNEowMnRPVk5MNnN0TkVCay9HS2pmOCtOaGhI?=
+ =?utf-8?B?d2pManR6R2svcSsxVVUwTVJwaERnN2p6N2JtUWJzU1NoVnhObGpvUnZ2MUxj?=
+ =?utf-8?B?RzlqRzBoVDdNTXNzc0tOSUlSLzgxMkVKSjN3eGtmRXoyZFFzQzNSSWpkQ2Fl?=
+ =?utf-8?B?M05NRlJIajVRSVpValc2aFlMb015S3c1U3lOTTg3enFULzhrNTdXREhJTXdR?=
+ =?utf-8?Q?TyxJW7UsO7lhM4t/ToiMQovQ5S89SsCqVKhZIgFCdg=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41937d92-5a9d-449a-cf61-08d9bf24403a
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4722.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 17:07:46.9772
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 66pDpSvujf6xLzeNXAMB13ou6ZndA3OhkmoHYgBfPF3j/FDep+49w/pzaNA460ggURIakeqtfkpr+quhjAhexKbFV+uFXlLeA5dNsUWwspM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1711
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10198 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=908
+ suspectscore=0 bulkscore=0 mlxscore=0 spamscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112140094
+X-Proofpoint-ORIG-GUID: rb0O88XurICMDszhKMMAIttZpas9hGe1
+X-Proofpoint-GUID: rb0O88XurICMDszhKMMAIttZpas9hGe1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In current implementation the tty_port struct is part of the
-rpmsg_tty_port structure.The issue is that the rpmsg_tty_port structure is
-freed on rpmsg_tty_remove but also referenced in the tty_struct.
-Its release is not predictable due to workqueues.
+On 12/14/21 10:31 AM, Christoph Hellwig wrote:
+> On Mon, Dec 13, 2021 at 08:27:12PM +0800, Baoquan He wrote:
+>> Dma-kmalloc will be created as long as CONFIG_ZONE_DMA is enabled.
+>> However, it will fail if DMA zone has no managed pages. The failure
+>> can be seen in kdump kernel of x86_64 as below:
+> 
+> Please just switch the sr allocation to use GFP_KERNEL without GFP_DMA.
+> The block layer will do the proper bounce buffering underneath for the
+> very unlikely case that we're actually using the single HBA driver that
+> has ISA DMA addressing limitations.
+> 
+> Same for the ch drive, btw.
 
-For instance following ftrace shows that rpmsg_tty_close is called after
-rpmsg_tty_release_cport:
+Hi,
 
-     nr_test.sh-389     [000] .....   212.093752: rpmsg_tty_remove <-rpmsg_dev_
-remove
-             cat-1191    [001] .....   212.095697: tty_release <-__fput
-      nr_test.sh-389     [000] .....   212.099166: rpmsg_tty_release_cport <-rpm
-sg_tty_remove
-             cat-1191    [001] .....   212.115352: rpmsg_tty_close <-tty_release
-             cat-1191    [001] .....   212.115371: release_tty <-tty_release_str
-
-As consequence, the port must be free only when user has released the TTY
-interface.
-
-This path :
-- manages the port refcounting to trig the .destruct port ops,
-- introduces the rpmsg_tty_cleanup function to ensure that the TTY is
-  removed before decreasing the port refcount.
-- calls rpmsg_tty_release_cport function in the rpmsg_tty_destruct_port
-  function instead of in the rpmsg_tty_remove function.
-- uses tty_vhangup and tty_port_hangup instead of tty_port_tty_hangup.
-
-Fixes: 7c0408d80579 ("tty: add rpmsg driver")
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
-diff vs V1:
- - rework patch based on port refcounting.
-Applied and tested on fa55b7dcdc43 ("Linux 5.16-rc1", 2021-11-14)
----
- drivers/tty/rpmsg_tty.c | 43 +++++++++++++++++++++++++++++++++++------
- 1 file changed, 37 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
-index dae2a4e44f38..69272ad92266 100644
---- a/drivers/tty/rpmsg_tty.c
-+++ b/drivers/tty/rpmsg_tty.c
-@@ -53,9 +53,19 @@ static int rpmsg_tty_install(struct tty_driver *driver, struct tty_struct *tty)
- 
- 	tty->driver_data = cport;
- 
-+	tty_port_get(&cport->port);
- 	return tty_port_install(&cport->port, driver, tty);
- }
- 
-+static void rpmsg_tty_cleanup(struct tty_struct *tty)
-+{
-+	struct tty_port *port = tty->port;
-+
-+	WARN_ON(!port);
-+
-+	tty_port_put(port);
-+}
-+
- static int rpmsg_tty_open(struct tty_struct *tty, struct file *filp)
- {
- 	return tty_port_open(tty->port, tty, filp);
-@@ -106,12 +116,19 @@ static unsigned int rpmsg_tty_write_room(struct tty_struct *tty)
- 	return size;
- }
- 
-+static void rpmsg_tty_hangup(struct tty_struct *tty)
-+{
-+	tty_port_hangup(tty->port);
-+}
-+
- static const struct tty_operations rpmsg_tty_ops = {
- 	.install	= rpmsg_tty_install,
- 	.open		= rpmsg_tty_open,
- 	.close		= rpmsg_tty_close,
- 	.write		= rpmsg_tty_write,
- 	.write_room	= rpmsg_tty_write_room,
-+	.hangup		= rpmsg_tty_hangup,
-+	.cleanup	= rpmsg_tty_cleanup,
- };
- 
- static struct rpmsg_tty_port *rpmsg_tty_alloc_cport(void)
-@@ -139,6 +156,8 @@ static struct rpmsg_tty_port *rpmsg_tty_alloc_cport(void)
- 
- static void rpmsg_tty_release_cport(struct rpmsg_tty_port *cport)
- {
-+	tty_port_destroy(&cport->port);
-+
- 	mutex_lock(&idr_lock);
- 	idr_remove(&tty_idr, cport->id);
- 	mutex_unlock(&idr_lock);
-@@ -146,7 +165,17 @@ static void rpmsg_tty_release_cport(struct rpmsg_tty_port *cport)
- 	kfree(cport);
- }
- 
--static const struct tty_port_operations rpmsg_tty_port_ops = { };
-+static void rpmsg_tty_destruct_port(struct tty_port *port)
-+{
-+	struct rpmsg_tty_port *cport = container_of(port, struct rpmsg_tty_port, port);
-+
-+	rpmsg_tty_release_cport(cport);
-+}
-+
-+static const struct tty_port_operations rpmsg_tty_port_ops = {
-+	.destruct = rpmsg_tty_destruct_port,
-+};
-+
- 
- static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
- {
-@@ -179,7 +208,6 @@ static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
- 	return 0;
- 
- err_destroy:
--	tty_port_destroy(&cport->port);
- 	rpmsg_tty_release_cport(cport);
- 
- 	return ret;
-@@ -188,17 +216,20 @@ static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
- static void rpmsg_tty_remove(struct rpmsg_device *rpdev)
- {
- 	struct rpmsg_tty_port *cport = dev_get_drvdata(&rpdev->dev);
-+	struct tty_struct *tty;
- 
- 	dev_dbg(&rpdev->dev, "Removing rpmsg tty device %d\n", cport->id);
- 
- 	/* User hang up to release the tty */
--	if (tty_port_initialized(&cport->port))
--		tty_port_tty_hangup(&cport->port, false);
-+	tty = tty_port_tty_get(&cport->port);
-+	if (tty) {
-+		tty_vhangup(tty);
-+		tty_kref_put(tty);
-+	}
- 
- 	tty_unregister_device(rpmsg_tty_driver, cport->id);
- 
--	tty_port_destroy(&cport->port);
--	rpmsg_tty_release_cport(cport);
-+	tty_port_put(&cport->port);
- }
- 
- static struct rpmsg_device_id rpmsg_driver_tty_id_table[] = {
--- 
-2.17.1
+Is CONFIG_ZONE_DMA even needed anymore in x86_64  ?
 

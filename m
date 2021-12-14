@@ -2,75 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 733C5473A98
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B992473AA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbhLNCLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 21:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
+        id S232377AbhLNCNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 21:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbhLNCLe (ORCPT
+        with ESMTP id S229883AbhLNCNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 21:11:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636B2C061574;
-        Mon, 13 Dec 2021 18:11:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46D6C612DC;
-        Tue, 14 Dec 2021 02:11:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 690B8C34600;
-        Tue, 14 Dec 2021 02:11:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639447892;
-        bh=ywX8EBMOa98jZfSDW0h+3ONlLByfYz43ou23F5UXt7g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YQS1GZbES3k3xgcG+lVaq0wnXEyRu+tJvtSgcR59nyNb2Ak0fhu/Clu/Xg+LiTkcW
-         s8kETeYsu1R3j9uciE+p/JQ85AeSI0eWhtJ6KiXfA5DUwWd6Dzx3cO9QL0zR4cYgu5
-         nWAW8vqSbFrmaXuwvejsgSakHq7TD9B6Y8fYfgzEASIiTMtpBDRz55IdjIDBdC0c3W
-         mRTm/y6oBTK9GTBCKQM9z1jcUpEUWsb6Qk/3P3eoSibX6V6gIXxGoUPRvDQyJU2ot7
-         wuQfLMg/7X7c4OUZWRhsstkv1j8yP3yRsQsB9O6/XbuShYMXoGcxIhuHe9M96p873C
-         QYd5EgKhGMjTA==
-Date:   Mon, 13 Dec 2021 18:11:31 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     George Kennedy <george.kennedy@oracle.com>
-Cc:     stephen@networkplumber.org, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tun: avoid double free in tun_free_netdev
-Message-ID: <20211213181131.771581d9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <1639415051-10245-1-git-send-email-george.kennedy@oracle.com>
-References: <1639415051-10245-1-git-send-email-george.kennedy@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Mon, 13 Dec 2021 21:13:07 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8379CC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 18:13:07 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 133so16104761pgc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 18:13:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QKMDIE0IaBxRo05jmQBpNWhyutL/m7nfLU+Qg5eoiTg=;
+        b=VuIkK7OEUiXdfuNKhtSkjGBX1D2Fl0/Q4JG8oHrxcCu6wmSzBgR2jdhusZNsJXLGNu
+         VTgsCBHloJJEU6/G/oyrJcU0ynTqnLyrf3O+Yf5hszqZaOtd5kHKzs115eoHMy6t/KlK
+         ZTEjJZlxyYdxUDFZupXlU/waZV0BERUsT/z9ISsgWW7r7zERMtAE0FdgLFQ8rxuBre8J
+         FcsC6wyvMg8EeWFq3xFuupwhKbY/AM57lUxHps26OH+Ni0e5PNQuH5yeSKgMnSfXWVQt
+         aqS1soSdqTuGex9nrf+iPggXmkkdd1mR2+MB/DOfTHVDVewSQA1GB486uPepDIvawd+j
+         oPgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=QKMDIE0IaBxRo05jmQBpNWhyutL/m7nfLU+Qg5eoiTg=;
+        b=6oM2rco28OEz91sUEDkUDxLctNTAeV270s2Aqw2CX/LD2z0Ju44IdWzAU/tmfgmg7j
+         4BKZVKTV6rXoKcLV7oPgF6NShZ1PaQwS/SidFgZoAxNd1kbA3lTxGUjXBzlPAzSHWJkc
+         Tj2oG2xOZjShZOZrabKTBsiCZLTcrV7E68NO+U+WXmNt7hR5sd1sLQKIjg5fqcsBdvMh
+         RADny8KaNchBJ9kaBEokMh2UBnAf6zdzuOLBtB80jsnKfE9GRU2P+OrZracqopx4W7OT
+         DFw3TZ+AhteS6T4AZsZ7fZqtiBXVY58jtK9Vi50/aPvGC8KSxSQDrGdMjoL+WxTcmckv
+         iEKg==
+X-Gm-Message-State: AOAM530yGp0JDcF+Mr2GgAP4ldixBSNkEVrluUQPe3fpg/e6unSOiEmI
+        2uwQWb0ow3DsWWsnDVEKBqj0hRf3yVAWjg==
+X-Google-Smtp-Source: ABdhPJwjUEJJZRgsRmKk0RKneMMh5n23pEZO3LTokMf0r5Bc9tfIe3z0cI70M+DtamHJ70COK+ouvw==
+X-Received: by 2002:a65:6a4b:: with SMTP id o11mr1685018pgu.305.1639447986646;
+        Mon, 13 Dec 2021 18:13:06 -0800 (PST)
+Received: from localhost ([12.163.77.120])
+        by smtp.gmail.com with ESMTPSA id qe12sm372145pjb.29.2021.12.13.18.13.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 18:13:06 -0800 (PST)
+Date:   Mon, 13 Dec 2021 18:13:06 -0800 (PST)
+X-Google-Original-Date: Mon, 13 Dec 2021 18:12:44 PST (-0800)
+Subject:     Re: [PATCH] riscv: dts: enable more DA9063 functions for the SiFive HiFive Unmatched
+In-Reply-To: <20211108214629.1730870-1-aurelien@aurel32.net>
+CC:     linux-kernel@vger.kernel.org, aurelien@aurel32.net,
+        robh+dt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE)
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     aurelien@aurel32.net
+Message-ID: <mhng-7ab80707-35c0-4123-8340-cf1feca4cca2@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 12:04:11 -0500 George Kennedy wrote:
-> Avoid double free in tun_free_netdev() by checking if
-> dev->reg_state is NETREG_UNREGISTERING in the tun_set_iff()
-> error paths. If dev->reg_state is NETREG_UNREGISTERING that means
-> the destructor will be called later.
-> 
-> BUG: KASAN: double-free or invalid-free in selinux_tun_dev_free_security+0x1a/0x20 security/selinux/hooks.c:5605
-
-> 
-> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+On Mon, 08 Nov 2021 13:46:29 PST (-0800), aurelien@aurel32.net wrote:
+> The DA9063 PMIC found on the SiFive HiFive Unmatched also provides an
+> RTC, a watchdog and the power button input.
+>
+> Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
 > ---
-> Jakub, decided to go the less code churn route and just
-> check for dev->reg_state is NETREG_UNREGISTERING.
+>  arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+> index 2e4ea84f27e7..c357b48582f7 100644
+> --- a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+> +++ b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+> @@ -70,6 +70,10 @@ pmic@58 {
+>  		interrupts = <1 IRQ_TYPE_LEVEL_LOW>;
+>  		interrupt-controller;
+>
+> +		onkey {
+> +			compatible = "dlg,da9063-onkey";
+> +		};
+> +
+>  		regulators {
+>  			vdd_bcore1: bcore1 {
+>  				regulator-min-microvolt = <900000>;
+> @@ -205,6 +209,14 @@ vdd_ldo11: ldo11 {
+>  				regulator-always-on;
+>  			};
+>  		};
+> +
+> +		rtc {
+> +			compatible = "dlg,da9063-rtc";
+> +		};
+> +
+> +		wdt {
+> +			compatible = "dlg,da9063-watchdog";
+> +		};
+>  	};
+>  };
 
-I don't think this is correct. E.g. if NETDEV_POST_INIT notifier 
-fails the destructor will already have been called and reg_state 
-will be NETREG_UNINITIALIZED which is != NETREG_UNREGISTERING.
-
-What I had in mind is replacing if (!dev->tstats) goto .. with 
-if (reg_state == NETREG_UNREGISTERING) goto ..
-
-But as proven partial destruction on failure of register_netdevice() is
-extra tricky, I believe moving the code into ndo_init would be less
-error-prone even if higher LoC delta. Unless there's some trickery in
-the code move as well, I haven't investigated.
+Thanks, this is on for-next.

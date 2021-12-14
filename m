@@ -2,171 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF7B473CEC
+	by mail.lfdr.de (Postfix) with ESMTP id 50365473CEA
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbhLNGEA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Dec 2021 01:04:00 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.223]:40727 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230238AbhLNGD5 (ORCPT
+        id S230268AbhLNGDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:03:53 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44606
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230238AbhLNGDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 01:03:57 -0500
-HMM_SOURCE_IP: 172.18.0.48:58330.1093354738
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-182.150.57.243 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id 0AE942800F1;
-        Tue, 14 Dec 2021 14:02:57 +0800 (CST)
-X-189-SAVE-TO-SEND: renlei1@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id 7524f4eb91b54d7dbeb0d30380fbbb3a for david@fromorbit.com;
-        Tue, 14 Dec 2021 14:03:38 CST
-X-Transaction-ID: 7524f4eb91b54d7dbeb0d30380fbbb3a
-X-Real-From: renlei1@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: renlei1@chinatelecom.cn
-From:   <renlei1@chinatelecom.cn>
-To:     <david@fromorbit.com>
-Cc:     <djwong@kernel.org>, <linux-xfs@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211214031517.508012-1-renlei1@chinatelecom.cn> <20211214044910.GT449541@dread.disaster.area>
-In-Reply-To: <20211214044910.GT449541@dread.disaster.area>
-Subject: =?gb2312?B?u9i4tDogW1BBVENIXSB4ZnM6IG5vdCBhbGxvdyByZW5hbWUgaWYgcw==?=
-        =?gb2312?B?cmMgaXMgcXVvdGEgZW5hYmxlZCBhbmQgcHJvamVjdCBJRHMgYXJlIGRpZmY=?=
-        =?gb2312?B?ZXJlbnQ=?=
-Date:   Tue, 14 Dec 2021 14:02:57 +0800
-Message-ID: <001301d7f0b0$58cb7c80$0a627580$@chinatelecom.cn>
+        Tue, 14 Dec 2021 01:03:52 -0500
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 78C383F1BA
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 06:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639461831;
+        bh=WL9VjCk8gKCYRWvjUSeuXNo5gRaGFyR5coWlvQxj9dA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=qZnVIlhvkExRsJxNOmi4AalgKQofSs20yrkPleGuW4/gcM0+WSgo9u4OXrnzxFNP+
+         6tDLd71TPJulci6BRXWEbw7lpLTqXn/pXkyqHsgbE7cQLFnRM6bFCjbK1UfpGhW3X0
+         Ijo2bqrq4QiEolNJWuG9FzPxiIN3f5KRHhtzUTEDUp2gFpoARhMqVYhXhJsVLkRIVC
+         755dkTLv91YaFoWjX90w39nKuE2IiVO3NnYfHe5tabvIU+ETKDrs5U31kkDIPGCrxt
+         GA7O1WLC9daYwXAxV49dcfBckEi3qm0Qvzoqk7YSPn3etuzqCwGIwAGOmmz8kXkozS
+         73+auCkkFECow==
+Received: by mail-oi1-f197.google.com with SMTP id k124-20020acaba82000000b002a7401b177cso12312612oif.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 22:03:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WL9VjCk8gKCYRWvjUSeuXNo5gRaGFyR5coWlvQxj9dA=;
+        b=vor0F3IRY4fa2ctRSy6w3aUF8Ks3dRAVGdgnQHpSeyIwyzMdiCqmSrnvxLYwqP5z4v
+         jcc+MxDXb7H/jQbRmaj6W/RUUgYf2dZrnF9en3yCFjeXDHMw1HIW9d74eYbddFnvgYRC
+         2EqCYWYkpLsT1m5HffJUuWPRSYsS4ytzaBNhIMW1hD7R1/nOs+xdqPuMK1Hijh53owEg
+         7FKRM3M7FP/EwimOibGnim5grEPE0nZ1tG5lMh3G1K6moi+3Sioif2LYrdM1CNikIIhk
+         n2YInXbFY40P0R1En36QWPh0gux6suWUF14VcqGfL2kWG82LQIpFhQVn0oU9ZV/7sClu
+         GGfg==
+X-Gm-Message-State: AOAM533v3I0f7tZmeYbtX2xsrDnj0ApkctlAin2bBrUZ3bScZDdC2ZtV
+        C48pQLRzQP3ZuZn0rDqOAM5LNDf43sbEOdbE5F7ipNaiB0beskEDW1MEPct47NZUwGHq1DbVs4G
+        wVhX7JxaXAtTbydGzYiBklI/5B96WslctYPdJmwzQyWz67P6QS8/lKe8yCg==
+X-Received: by 2002:a05:6808:199c:: with SMTP id bj28mr32514053oib.98.1639461830406;
+        Mon, 13 Dec 2021 22:03:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxQiPiixM9RSi+NUpDxh/HasGW+Yuj7rq8GDGN14tmgm1XRQz4dAKdr2QTqTZbeWJcCpX/bCTqbYZQUKb2+2KA=
+X-Received: by 2002:a05:6808:199c:: with SMTP id bj28mr32514034oib.98.1639461830205;
+ Mon, 13 Dec 2021 22:03:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="gb2312"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIhmVxlPsWW/XjW+beLtPQhB5gnxwFkd06Gq5MJexA=
-Content-Language: zh-cn
+References: <20211214053302.242222-1-kai.heng.feng@canonical.com> <874k7bkabi.fsf@codeaurora.org>
+In-Reply-To: <874k7bkabi.fsf@codeaurora.org>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Tue, 14 Dec 2021 14:03:39 +0800
+Message-ID: <CAAd53p5KRufZLSCX6Z5LwiyD87rPy=+34Lnh1VNQfVT_i6tRvg@mail.gmail.com>
+Subject: Re: [PATCH v2] rtw88: Disable PCIe ASPM while doing NAPI poll on 8821CE
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     tony0620emma@gmail.com, pkshih@realtek.com, jhp@endlessos.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Po-Hao Huang <phhuang@realtek.com>,
+        Brian Norris <briannorris@chromium.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-That's make sense, thanks very much for your detailed response!
-
-Regards,
-RenLei
-
------邮件原件-----
-发件人: david@fromorbit.com <david@fromorbit.com> 
-发送时间: 2021年12月14日 12:49
-收件人: renlei1@chinatelecom.cn
-抄送: djwong@kernel.org; linux-xfs@vger.kernel.org;
-linux-kernel@vger.kernel.org
-主题: Re: [PATCH] xfs: not allow rename if src is quota enabled and project
-IDs are different
-
-On Tue, Dec 14, 2021 at 11:15:17AM +0800, renlei1@chinatelecom.cn wrote:
-> From: Ren Lei <renlei1@chinatelecom.cn>
-> 
-> xfs not allow rename if target is using project inheritance and 
-> project IDs are different to avoid tree quota mechanism not work.
-
-Lesson #1: project quotas are *not* directory quotas.
-
-> But if only src with directory quota enabled, rename to other 
-> directory without quota enabled can succeed and skip quota mechanism. 
-> which might result to unexpected quota behavior.
-
-Yes, this is explicitly done this way, because project quotas are not
-directory quotas.
-
-Lesson #2: directory tree semantics use PROJINHERIT to define an entry
-barrier to the directory, not an exit barrier.
-
-That is, we restrict moving inodes with incompatible project IDs into a
-directory that might be used as a directory tree, but we don't prevent
-moving inodes out of PROJINHERIT directories into locations that have no
-PROJINHERIT set.
-
-The reason for this is simple: destinations that don't have PROJINHERIT set
-are unrestricted and can contain inodes with any valid projid. This is the
-traditional use of project quotas, because...
-
-Lesson #3a: PROJINHERIT only defines the default project ID for newly
-created inodes in a directory.
-
-Lesson #3b: Unprivileged users in the init namespace are allowed to change
-PROJINHERIT and projid on any inode they have write permissions on.
-
-That is, PROJINHERIT does not prevent users from changing the project ID of
-files within the directory, or even that of the directory so that it no
-longer matches the projid of the existing directory contents. Hence
-directory tree quotas will only remain valid with the co-operation of
-unprivileged users, as project ID and PROJINHERIT are user modifiable inode
-attributes.
-
-Lesson #4: Using project quotas to provide directory tree quotas does not
-result in an access-based space usage enforcement mechanism without some
-other mechanism for preventing users from accessing and changing project
-quota information. (e.g. containers and user
-namespaces)
-
-> This patch fix this by disable rename if src is using project 
-> inheritance and the project IDs are not the same.
-> 
-> following steps can easy reproduce this issue:
-> 1. first init a directory quota /mnt/test
-> 	mount -o prjquota /dev/sdb  /mnt
-> 	mkdir /mnt/test
-> 	echo 1:/mnt/test >> /etc/projects
-> 	echo test:1 >> /etc/projid
-> 	xfs_quota -x -c 'project -s test' /mnt
-> 	xfs_quota -x -c 'limit -p bhard=10m test' /mnt
+On Tue, Dec 14, 2021 at 1:46 PM Kalle Valo <kvalo@kernel.org> wrote:
 >
-> 2. fill /mnt/test with tesfile util directory full:
-> 	[root@rhost1 test]# dd if=/dev/zero of=/mnt/test/testfile
-> 	dd: writing to '/mnt/test/testfile': No space left on device 3. mv 
-> testfile out to /mnt,  test is empty but cannot create files:
-> 	[root@rhost1 test]# mv testfile ../
-> 	[root@rhost1 test]# ls -a
-> 	.  ..
-> 	[root@rhost1 test]# touch aaa
-> 	touch: cannot touch 'aaa': Disk quota exceeded
+> Kai-Heng Feng <kai.heng.feng@canonical.com> writes:
+>
+> > Many Intel based platforms face system random freeze after commit
+> > 9e2fd29864c5 ("rtw88: add napi support").
+> >
+> > The commit itself shouldn't be the culprit. My guess is that the 8821CE
+> > only leaves ASPM L1 for a short period when IRQ is raised. Since IRQ is
+> > masked during NAPI polling, the PCIe link stays at L1 and makes RX DMA
+> > extremely slow. Eventually the RX ring becomes messed up:
+> > [ 1133.194697] rtw_8821ce 0000:02:00.0: pci bus timeout, check dma status
+> >
+> > Since the 8821CE hardware may fail to leave ASPM L1, manually do it in
+> > the driver to resolve the issue.
+> >
+> > Fixes: 9e2fd29864c5 ("rtw88: add napi support")
+> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215131
+> > BugLink: https://bugs.launchpad.net/bugs/1927808
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>
+> [...]
+>
+> >  static bool rtw_disable_msi;
+> >  static bool rtw_pci_disable_aspm;
+> > +static int rtw_rx_aspm = -1;
+> >  module_param_named(disable_msi, rtw_disable_msi, bool, 0644);
+> >  module_param_named(disable_aspm, rtw_pci_disable_aspm, bool, 0644);
+> > +module_param_named(rx_aspm, rtw_rx_aspm, int, 0444);
+> >  MODULE_PARM_DESC(disable_msi, "Set Y to disable MSI interrupt support");
+> >  MODULE_PARM_DESC(disable_aspm, "Set Y to disable PCI ASPM support");
+> > +MODULE_PARM_DESC(rx_aspm, "Use PCIe ASPM for RX (0=disable, 1=enable, -1=default)")
+>
+> We already have disable_aspm parameter, why do we need yet another one?
+> There's a high bar for new module parameters.
 
-Yup, exfiltration is not prohibited, as per above. What you need to do here
-is prevent infiltration to the "../" directory by use of a default directory
-quota for all the "non-controlled" part of the directory heirarchy. That is:
+It's a good way for (un)affected users to try out different settings.
+But yes the parameter isn't necessary. Let me send another version without it.
 
-> 	mount -o prjquota /dev/sdb  /mnt
-> 	mkdir /mnt/test
-> 	echo 1:/mnt > /etc/projects
-> 	echo 2:/mnt/test >> /etc/projects
-> 	echo default:1 >> /etc/projid
-> 	echo test:2 >> /etc/projid
-> 	xfs_quota -x -c 'project -s default' /mnt
-> 	xfs_quota -x -c 'project -s test' /mnt
-> 	xfs_quota -x -c 'limit -p bhard=10m test' /mnt
+Kai-Heng
 
-So now you have the default "unlimited" directory quota on the entire
-filesytem, with the sub-tree "test" set up with a hard limit.
-Now step #3 in your test will behave as you expect, because ".." has a
-PROJINHERIT w/ projid = 1 set and that will trigger the "destination
-directory has directory quota and different projid"
--EXDEV error case in rename.
-
-i.e. you fix this problem by setting up the directory tree quota
-configuration properly, not by changing the kernel code behaviour...
-
-Note: you can set the default directory tree project ID at mkfs time
-via:
-
-# mkfs.xfs -f -d projinherit=42 /dev/sdb
-
-So you don't actually need to set up a default project in /etc/projects to
-make this work correctly.
-
-Cheers,
-
-Dave.
---
-Dave Chinner
-david@fromorbit.com
-
+>
+> --
+> https://patchwork.kernel.org/project/linux-wireless/list/
+>
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

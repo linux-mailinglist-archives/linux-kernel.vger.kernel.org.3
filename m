@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4646474C87
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98673474C92
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237600AbhLNUPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 15:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbhLNUPi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 15:15:38 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796D9C061574;
-        Tue, 14 Dec 2021 12:15:38 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639512936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=d4wqcXY+MET+Bv0FcRzIRIc5XGvbPUI2bHV9pxD9Ydo=;
-        b=moChZUSho9BA78Zeq1WI5tu/U00oT82AtvfenvZ7wj4+/rbRuMvnEvgp06APrkesXoQIzl
-        7RPpBe3m0oONdQpdS7DAAUNLaW0sDBUgC0jenFPjG7Wr9CEB6Oy4B9l4Iuq/IfEVofBt4t
-        vnaGOWsnREceAU8uxY8NAKpNhml+AgXrJsZ6gKqMSiQL7bA9CFgw8w2TYZeEYT8V3NhbQ8
-        JAqpROxGWfe9cCXptM9xGI/fDzxgqMZx8ZITW8fq90knUugjlJY38p2e8sp+HmqqufWXbS
-        n3mRyaNC3MmjNNomr7JUos4qRao6JylFxbVwVGdREF91hazpGg2c9oB6BzqE4w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639512936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=d4wqcXY+MET+Bv0FcRzIRIc5XGvbPUI2bHV9pxD9Ydo=;
-        b=+ecmdjzCvUtoz/ixJ5pxFaVr7F21Ajeaa5ilYhIAuSfZy+n3tm1NOnNdHltlRFCs+3G/Mc
-        B5RpqeVcmdLBkuDA==
-To:     Nishanth Menon <nm@ti.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>, linux-wireless@vger.kernel.org,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
-In-Reply-To: <87tufbrudl.ffs@tglx>
-References: <20211210221642.869015045@linutronix.de>
- <20211213182958.ytj4m6gsg35u77cv@detonator> <87fsqvttfv.ffs@tglx>
- <20211214162247.ocjm7ihg5oi7uiuv@slider> <87wnk7rvnz.ffs@tglx>
- <87tufbrudl.ffs@tglx>
-Date:   Tue, 14 Dec 2021 21:15:34 +0100
-Message-ID: <87mtl3rli1.ffs@tglx>
+        id S237606AbhLNUVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 15:21:19 -0500
+Received: from mga01.intel.com ([192.55.52.88]:59050 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229795AbhLNUVS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 15:21:18 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263222326"
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="263222326"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 12:21:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="482107666"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 14 Dec 2021 12:20:59 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 4ED2915C; Tue, 14 Dec 2021 22:21:06 +0200 (EET)
+Date:   Tue, 14 Dec 2021 23:21:06 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/26] x86/tdx: Detect running as a TDX guest in early
+ boot
+Message-ID: <20211214202106.uazcwby3365x2ymw@black.fi.intel.com>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-2-kirill.shutemov@linux.intel.com>
+ <Ybjf5g66cFHpUKMH@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ybjf5g66cFHpUKMH@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nishanth,
+On Tue, Dec 14, 2021 at 07:18:14PM +0100, Borislav Petkov wrote:
+> > In preparation of extending cc_platform_has() API to support TDX guest,
+> > use CPUID instruction to detect for TDX guests support in the early
+> 
+> " ... to detect support for TDX guests... "
 
-On Tue, Dec 14 2021 at 18:03, Thomas Gleixner wrote:
->     msi_device_data_release()
->     ...
->     pcim_release()
->        pci_disable_msi[x]()
->
-> Groan....
+Right, thanks.
 
-I think I managed to distangle this. Can you please give:
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index 793e9b42ace0..a61ac6f8821a 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -872,6 +872,19 @@ config ACRN_GUEST
+> >  	  IOT with small footprint and real-time features. More details can be
+> >  	  found in https://projectacrn.org/.
+> >  
+> > +# TDX guest uses X2APIC for interrupt management.
+> 
+> For whom is that comment and who's going to see it? Is that comment
+> supposed to explain the "depends on X86_X2APIC" below?
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v4-part-2
+Yes.
 
-and/or the full pile:
+But I think it should be pretty self-explanatory. I'll drop it.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v4-part-3
+> > +config INTEL_TDX_GUEST
+> > +	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
+> > +	depends on X86_64 && CPU_SUP_INTEL
+> > +	depends on X86_X2APIC
+> > +	help
+> > +	  Support running as a guest under Intel TDX.  Without this support,
+> > +	  the guest kernel can not boot or run under TDX.
+> > +	  TDX includes memory encryption and integrity capabilities
+> > +	  which protect the confidentiality and integrity of guest
+> > +	  memory contents and CPU state. TDX guests are protected from
+> > +	  potential attacks from the VMM.
+> > +
 
-a test ride?
-
-Thanks,
-
-        tglx
+-- 
+ Kirill A. Shutemov

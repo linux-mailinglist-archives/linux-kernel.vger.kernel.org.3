@@ -2,138 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44813474207
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C90474210
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233804AbhLNMG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:06:26 -0500
-Received: from mga05.intel.com ([192.55.52.43]:26111 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229494AbhLNMGW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:06:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639483582; x=1671019582;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=iIWYR91VbYEqQX+iN3rz0mKbS7VG6StqBEl02zH+MNc=;
-  b=kyBjPZ1zNp8EDHvl4fCoNaOAk4juEhJ5eudmAs9fdR1abIZDDX6Gl5Do
-   u3cFbZi4LFH1SBDVqs4jtoJhpmHXL3y8FIMRFh5uovOLqc6Gxrs+LKD+3
-   cmyn4Gp5vN3Va8JegsuT9sZN5hkiyo4yqS4le9Pn70mpJD+GGrzVys09c
-   eXCwEGA3KwDIDr+UJNR/Fa4j3syc8CQ2pdbRxA+iI4JhbH6d/BIs/rPWB
-   8RP2h5lKQMCS4wOkxSV7q1zNdO6lB5wdDLnS6XgZo3RTxZge+mrNACT8q
-   oc4jvt2Ia6wVKqxgiPJtUvDUIlGwUVq5n4GGYn1O8EzlbO326BPuRrA/6
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="325239247"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="325239247"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 04:06:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="465057184"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 04:06:18 -0800
-Subject: Re: [PATCH v4] mmc: sdhci-tegra: Fix switch to HS400ES mode
-To:     Prathamesh Shete <pshete@nvidia.com>, ulf.hansson@linaro.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     anrao@nvidia.com, smangipudi@nvidia.com
-References: <3dd2473a-00ca-4c62-e17f-9392cf74cda4@intel.com>
- <20211214113653.4631-1-pshete@nvidia.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <58312188-d9fd-4bba-2be6-bb208c8b4d63@intel.com>
-Date:   Tue, 14 Dec 2021 14:06:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.13.0
+        id S233832AbhLNMHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233815AbhLNMHm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 07:07:42 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58060C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 04:07:42 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id d10so45791313ybn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 04:07:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iB6ivIESjms0uhDlQqGJKxc8+x2PVejNM8br4Y2QBCQ=;
+        b=GcNMIlG4xluex181zEFsAjlb3PJBSn/USEJqafgNRGh6Vqxv0yTQrVqQrernlTWUE/
+         58LPm44ocdZ3tOkLeJ5TSKBnwYVNnyLJggTMNYito9Uh7vtrdOFEd5Mg4slINyPLr3MT
+         B2y6w0S0ZEzrFAs5Yg0OAkUUVGaFYjZFheOaihH/JsxRNuohdLgJTAkGp2o2I5sYOpoX
+         tXcQ4zxOfAs+nT2/DebXC3ouy90W5bAnr+0zWZqbopjbc/3o7hlv0tLlpQDxpKexJHyb
+         271KlKQjxp8aiTp4BrXKzJrSDYaGSJNgJfmFRTJ2EJti86ZhTL4jKKsWZKmGpyNfFmnc
+         Ouew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iB6ivIESjms0uhDlQqGJKxc8+x2PVejNM8br4Y2QBCQ=;
+        b=JhBlktMWVyZ/NqWqifyii8NK3zjAcxuDtnCNxAahDKBhU1myLOQ4oNbrNw81l0PIZE
+         FdQO0IlJAFOEr8sNbJQ+3YqIvNXNCkESPGseQniQaOpWpAvkxXYLctfYn4tPeUfiv1vl
+         ykha5wGZTIjvB6tX4srtjlIMca3qggCs/BsoOSYbL68RS6apPub1pZtq7Rj7wUV+s3Vb
+         Q9RixYL/Ynl0XUCLSZDRrQHN3wCJu9hHPKSF6J3yaptZ5dFSSYZwIqWscXyp36WUXR1L
+         muOECyfOZRth8CQKqNuR04PqIefI/PmiuIVanslKlHTnlc8zKzDg7+vIvFD1YYcGSxQ0
+         fepQ==
+X-Gm-Message-State: AOAM531h3dtobRY8fSYpgUQcakL/TGOF8ZFnfKkQH1OEzl9Ik+G1Vs8v
+        MLwx0MsHHkXn3m1I7pPgK1DNHO/ZaZaX0OTvfHa31kCbbZE++A==
+X-Google-Smtp-Source: ABdhPJyvHf6LA17wuZ7lECv6wva8I+YNEGrvkKxiOJtI9pZG5e97AyLirlliJEdLIO6am7TGmE2WKw8GNNbbLb69N+Q=
+X-Received: by 2002:a05:6902:52b:: with SMTP id y11mr5225536ybs.199.1639483661606;
+ Tue, 14 Dec 2021 04:07:41 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211214113653.4631-1-pshete@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211214114447.439632-1-deng.changcheng@zte.com.cn>
+In-Reply-To: <20211214114447.439632-1-deng.changcheng@zte.com.cn>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 14 Dec 2021 20:07:05 +0800
+Message-ID: <CAMZfGtVmQWsyNTv=_dykzOpRwNDkZtKrGDOJ13MqypucCGrimw@mail.gmail.com>
+Subject: Re: [PATCH] pktgen: use min() to make code cleaner
+To:     cgel.zte@gmail.com
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, richardsonnick@google.com,
+        Eric Dumazet <edumazet@google.com>, zhudi21@huawei.com,
+        yejune.deng@gmail.com, Networking <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2021 13:36, Prathamesh Shete wrote:
-> When CMD13 is sent after switching to HS400ES mode, the bus
-> is operating at either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
-> To meet Tegra SDHCI requirement at HS400ES mode, force SDHCI
-> interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
-> controller CAR clock and the interface clock are rate matched.
-> 
-> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+On Tue, Dec 14, 2021 at 7:44 PM <cgel.zte@gmail.com> wrote:
+>
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+>
+> Use min() in order to make code cleaner. Issue found by coccinelle.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-> ---
->  drivers/mmc/host/sdhci-tegra.c | 43 ++++++++++++++++++++--------------
->  1 file changed, 26 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
-> index 387ce9cdbd7c..7be6674eebd5 100644
-> --- a/drivers/mmc/host/sdhci-tegra.c
-> +++ b/drivers/mmc/host/sdhci-tegra.c
-> @@ -354,23 +354,6 @@ static void tegra_sdhci_set_tap(struct sdhci_host *host, unsigned int tap)
->  	}
->  }
->  
-> -static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
-> -					      struct mmc_ios *ios)
-> -{
-> -	struct sdhci_host *host = mmc_priv(mmc);
-> -	u32 val;
-> -
-> -	val = sdhci_readl(host, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
-> -
-> -	if (ios->enhanced_strobe)
-> -		val |= SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
-> -	else
-> -		val &= ~SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
-> -
-> -	sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
-> -
-> -}
-> -
->  static void tegra_sdhci_reset(struct sdhci_host *host, u8 mask)
->  {
->  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> @@ -791,6 +774,32 @@ static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
->  	}
->  }
->  
-> +static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
-> +					      struct mmc_ios *ios)
-> +{
-> +	struct sdhci_host *host = mmc_priv(mmc);
-> +	u32 val;
-> +
-> +	val = sdhci_readl(host, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
-> +
-> +	if (ios->enhanced_strobe) {
-> +		val |= SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
-> +		/*
-> +		 * When CMD13 is sent from mmc_select_hs400es() after
-> +		 * switching to HS400ES mode, the bus is operating at
-> +		 * either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
-> +		 * To meet Tegra SDHCI requirement at HS400ES mode, force SDHCI
-> +		 * interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
-> +		 * controller CAR clock and the interface clock are rate matched.
-> +		 */
-> +		tegra_sdhci_set_clock(host, MMC_HS200_MAX_DTR);
-> +	} else {
-> +		val &= ~SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
-> +	}
-> +
-> +	sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
-> +}
-> +
->  static unsigned int tegra_sdhci_get_max_clock(struct sdhci_host *host)
->  {
->  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> -- 2.17.1
-> 
-
+Thanks.

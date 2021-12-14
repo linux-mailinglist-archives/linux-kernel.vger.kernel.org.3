@@ -2,94 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 992EC474C72
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA1B474C7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbhLNUEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 15:04:55 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:37384 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbhLNUEy (ORCPT
+        id S237580AbhLNUIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 15:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229795AbhLNUIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 15:04:54 -0500
-Received: by mail-ot1-f45.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so22149169otg.4;
-        Tue, 14 Dec 2021 12:04:54 -0800 (PST)
+        Tue, 14 Dec 2021 15:08:20 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383B4C061574;
+        Tue, 14 Dec 2021 12:08:20 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id x6so26091811iol.13;
+        Tue, 14 Dec 2021 12:08:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CcClwwT0aibOVAXpgyfdacR5s8e062LtxNDnwr5pduI=;
+        b=jke2JviKVZYjqK3eDLqLuKr7zq2BANQ3c669+t6D3UzrxQFTQCjOTEnpwru8woCWpe
+         ZAetlNiP6qIk6q67QT1hjfTaIOVWY5WZSm9NmukSEdIxW3w4AqQLFFgkbDTExkkLv+Jh
+         1URyOc8ha0g82Xx2XEuwsOziVKlBPCQS+3UFf2wvrBuZmFGySJFrtEx1aXzfQIwlsAab
+         iC1uvL/iJmv7vMzIhSNRHJrnJuI1ckqCG0NX7KtbTGBzbg5uMMZrpDB4Yf7kGjKvwnP1
+         HSEgXkjWdWUwxDy+BAYSKY5YnFJ6PaEj76LsEPOsxC6nHJOijLsyjxkf1AusoKb9xYEX
+         zkqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=ca/8UwhkKrIrm1GYEgOJKPRg9ilbjbbUc4xGIZnlUw0=;
-        b=OLlzFOuTYtQO63bi1btZdmCqs5Gxwnt7iwlgDfqWk0y8m0qvFnMlRbH4o/gcs1icHX
-         V/WmP+KIm5oa/bPHBSMO4fS1y2owMrIbld1tg3ZlJGHNe7+7IX2Nf1NXHdIyy+FWjXPD
-         ONmUb2Qo7UWB+3nGKhvg2OGcS2NVjP7FVkf1qvsqPVmYh75zzwBzsgSGMfduAQGIf74C
-         gO3de3f8DendgDa9BnNkerna3d+09ZkaXrPp7uODEVweHIdMLqURhuf0QWQWfoY9xaEj
-         z6uEUvSs2lz13tB790LpM68QdlCVyF1R/+cU5VisyVo/pdYLMwu2xZqQBz6TsIaJPPz4
-         jW/A==
-X-Gm-Message-State: AOAM53304+EdAx7LNd8RpAwircGtnBoZnSARuLPWbDr2MKHqAIdB3StR
-        PNskkdW45B94JR6pnmpTGc8nU7MYag==
-X-Google-Smtp-Source: ABdhPJxjjNMTn71D4902pz6s8UtNh8ftM5r6dHrAsXV2UWzK6nMfcRwddt9l/qf2loDIKyIicx2YlA==
-X-Received: by 2002:a05:6830:1688:: with SMTP id k8mr5951527otr.238.1639512293684;
-        Tue, 14 Dec 2021 12:04:53 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id r22sm171007oij.36.2021.12.14.12.04.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 12:04:52 -0800 (PST)
-Received: (nullmailer pid 3819897 invoked by uid 1000);
-        Tue, 14 Dec 2021 20:04:50 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     David Mosberger-Tang <davidm@egauge.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>, netdev@vger.kernel.org,
-        Adham Abozaeid <adham.abozaeid@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Ajay Singh <ajay.kathat@microchip.com>,
-        linux-wireless@vger.kernel.org, devicetree@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>
-In-Reply-To: <20211214163315.3769677-3-davidm@egauge.net>
-References: <20211214163315.3769677-1-davidm@egauge.net> <20211214163315.3769677-3-davidm@egauge.net>
-Subject: Re: [PATCH v4 2/2] wilc1000: Document enable-gpios and reset-gpios properties
-Date:   Tue, 14 Dec 2021 14:04:50 -0600
-Message-Id: <1639512290.330041.3819896.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CcClwwT0aibOVAXpgyfdacR5s8e062LtxNDnwr5pduI=;
+        b=jyenBk6Q++w2y/rUYzDf6C9LR6QSgU7zDBruz74SYAYkRJuSGhT2cl9SIRLS+3Tvl+
+         VqA/+H9twn9Qk0PP7GdP/egn4Li3ahBy5PelU6jC7+fY7e5N/uvSpTMcv81s1Y8G0x1H
+         swkYtk2WfElkybrDcsDEpt/JMzCfJTA83jBzm90Q5IMrFWA7i6D6eEvvzgriMqeOBFZx
+         dobQUydQkXDOOW51FxneknziN0OxHr7WFV5tNQ6v9cOE3fWunpMuggV/h2GZt2fsptV+
+         P+b/sl75Gwb1sCYIyAIsGL56FUuZ0KwvfVdgxISxPQYZR9x7eOwUNGYFEKwu0tYHiCId
+         qFsg==
+X-Gm-Message-State: AOAM530naGaMyCfRcct8C5lNrKN+EZkZ11/yEP/9XrZ38M2cIor8BQ7b
+        VWxJIRNtTKKkynI0lV8T6ct+lgmPIDeaDXnvYbFYJIELn/0=
+X-Google-Smtp-Source: ABdhPJzcxR8nevWNaJ1bvUP6+E7XxRI4o7E1CfcZmkHT7HbVsnBz+ZfyN2MFDde5aXpjC9kTrzPOquf6pPHJL+jKJSU=
+X-Received: by 2002:a05:6638:33a6:: with SMTP id h38mr4364530jav.185.1639512498688;
+ Tue, 14 Dec 2021 12:08:18 -0800 (PST)
+MIME-Version: 1.0
+References: <20211214191415.GA19070@kernel.org> <0f74ba31-aba2-0608-b383-9ab46766485b@infradead.org>
+In-Reply-To: <0f74ba31-aba2-0608-b383-9ab46766485b@infradead.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 14 Dec 2021 21:08:06 +0100
+Message-ID: <CANiq72=fHrp=9cbQizyhp1hgiyBYTTunX4odaXpTjxgr+aGqKQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] Remove mentions of the Trivial Patch Monkey
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Joe Perches <joe@perches.com>, Jiri Kosina <jikos@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 16:33:22 +0000, David Mosberger-Tang wrote:
-> Add documentation for the ENABLE and RESET GPIOs that may be needed by
-> wilc1000-spi.
-> 
-> Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
-> ---
->  .../net/wireless/microchip,wilc1000.yaml        | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
+On Tue, Dec 14, 2021 at 8:55 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks Randy -- I didn't add your Ack from a couple months ago since I
+added the Doc/ changes.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.example.dts:30.37-38 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1413: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1567796
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Cheers,
+Miguel

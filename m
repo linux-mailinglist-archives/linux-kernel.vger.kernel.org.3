@@ -2,148 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA254742ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2694742F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 13:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234150AbhLNMut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 07:50:49 -0500
-Received: from mga18.intel.com ([134.134.136.126]:17107 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232332AbhLNMus (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 07:50:48 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="225829147"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="225829147"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 04:50:48 -0800
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="518224917"
-Received: from maboudiw-mobl1.ger.corp.intel.com (HELO [10.252.53.239]) ([10.252.53.239])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 04:50:46 -0800
-Subject: Re: [PATCHv4 2/5] HID: hid-input: Add suffix also for HID_DG_PEN
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>
-References: <20211210111138.1248187-1-tero.kristo@linux.intel.com>
- <20211210111138.1248187-3-tero.kristo@linux.intel.com>
- <c8854f9b-8200-ee10-fe83-77a776ddff95@redhat.com>
- <fb99885c-a9ff-d3e7-ce72-a123cadcd9da@linux.intel.com>
- <CAO-hwJKk55uDCaEr5MVZCUc1p215a3kZqq5zi3oE3fhED7Yavg@mail.gmail.com>
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-Message-ID: <3ff83be0-7732-053e-8d5a-818049070e8a@linux.intel.com>
-Date:   Tue, 14 Dec 2021 14:50:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S234157AbhLNMvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 07:51:36 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:33058 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234151AbhLNMvf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 07:51:35 -0500
+Received: from localhost.localdomain (unknown [124.16.138.122])
+        by APP-05 (Coremail) with SMTP id zQCowAB3WBU_k7hhdkMKAw--.6693S2;
+        Tue, 14 Dec 2021 20:51:13 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     liviu.dudau@arm.com, brian.starkey@arm.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] drm: mali-dp: potential dereference of null pointer
+Date:   Tue, 14 Dec 2021 20:51:10 +0800
+Message-Id: <20211214125110.46979-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAO-hwJKk55uDCaEr5MVZCUc1p215a3kZqq5zi3oE3fhED7Yavg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAB3WBU_k7hhdkMKAw--.6693S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw4xtryruFWUAFWkXr13Arb_yoWkGwc_Ca
+        18XrsFvrZrAFy0q3W2qws3Kry0krZ3ZF4kXrWxtFZ3CrW5Xry7J39FqF18Kr15XF1Utr9r
+        Aa1UCry3ArnIyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5JwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb1rW5UUUUU==
+X-Originating-IP: [124.16.138.122]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The return value of kzalloc() needs to be checked.
+To avoid use of null pointer '&state->base' in case of the
+failure of alloc.
 
-On 14/12/2021 14:35, Benjamin Tissoires wrote:
-> On Fri, Dec 10, 2021 at 6:51 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
->>
->> On 10/12/2021 18:21, Benjamin Tissoires wrote:
->>>
->>> On Fri, Dec 10, 2021 at 12:12 PM Tero Kristo
->>> <tero.kristo@linux.intel.com> wrote:
->>>> From: Mika Westerberg <mika.westerberg@linux.intel.com>
->>>>
->>>> This and HID_DG_STYLUS are pretty much the same thing so add suffix for
->>>> HID_DG_PEN too. This makes the input device name look better.
->>>>
->>>> While doing this, remove the suffix override from hid-multitouch, as it
->>>> is now handled by hid-input. Also, the suffix override done by
->>>> hid-multitouch was wrong, as it mapped HID_DG_PEN => "Stylus" and
->>>> HID_DG_STYLUS => "Pen".
->>> FWIW, I was thinking at the following:
->>> ---
->>> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
->>> index 837585f4e673..fe0da7bf24a9 100644
->>> --- a/drivers/hid/hid-input.c
->>> +++ b/drivers/hid/hid-input.c
->>> @@ -1775,6 +1775,15 @@ static struct hid_input
->>> *hidinput_allocate(struct hid_device *hid,
->>>                          suffix = "Mouse";
->>>                          break;
->>>                  case HID_DG_PEN:
->>> +                       /*
->>> +                        * yes, there is an issue here:
->>> +                        *  DG_PEN -> "Stylus"
->>> +                        *  DG_STYLUS -> "Pen"
->>> +                        * But changing this now means users with
->>> config snippets
->>> +                        * will have to change it and the test suite
->>> will not be happy.
->>> +                        */
->>> +                       suffix = "Stylus";
->>> +                       break;
->>>                  case HID_DG_STYLUS:
->>>                          suffix = "Pen";
->>>                          break;
->>> ---
->>>
->>> Because the current patch breaks the test suite.
->> Ah I see, do you want me to re-post in this form?
-> Nah, no need for a repost. I fixed the patch locally and pushed to
-> for-5.17/core.
+Fixes: 99665d072183 ("drm: mali-dp: add malidp_crtc_state struct")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reported-by: Brian Starkey <brian.starkey@arm.com>
+---
+Changelog:
 
-Thanks a lot!
+v1 -> v2
 
--Tero
+*Change 1. Add r-p.
+---
+ drivers/gpu/drm/arm/malidp_crtc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/gpu/drm/arm/malidp_crtc.c b/drivers/gpu/drm/arm/malidp_crtc.c
+index 494075ddbef6..b5928b52e279 100644
+--- a/drivers/gpu/drm/arm/malidp_crtc.c
++++ b/drivers/gpu/drm/arm/malidp_crtc.c
+@@ -487,7 +487,10 @@ static void malidp_crtc_reset(struct drm_crtc *crtc)
+ 	if (crtc->state)
+ 		malidp_crtc_destroy_state(crtc, crtc->state);
+ 
+-	__drm_atomic_helper_crtc_reset(crtc, &state->base);
++	if (state)
++		__drm_atomic_helper_crtc_reset(crtc, &state->base);
++	else
++		__drm_atomic_helper_crtc_reset(crtc, NULL);
+ }
+ 
+ static int malidp_crtc_enable_vblank(struct drm_crtc *crtc)
+-- 
+2.25.1
 
-> Cheers,
-> Benjamin
->
->> -Tero
->>
->>> Cheers,
->>> Benjamin
->>>
->>>> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
->>>> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
->>>> ---
->>>>   drivers/hid/hid-input.c      | 1 +
->>>>   drivers/hid/hid-multitouch.c | 3 ---
->>>>   2 files changed, 1 insertion(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
->>>> index ad718ceb8af3..78205e445652 100644
->>>> --- a/drivers/hid/hid-input.c
->>>> +++ b/drivers/hid/hid-input.c
->>>> @@ -1741,6 +1741,7 @@ static struct hid_input
->>>> *hidinput_allocate(struct hid_device *hid,
->>>>                  case HID_GD_MOUSE:
->>>>                          suffix = "Mouse";
->>>>                          break;
->>>> +               case HID_DG_PEN:
->>>>                  case HID_DG_STYLUS:
->>>>                          suffix = "Pen";
->>>>                          break;
->>>> diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
->>>> index 082376a6cb3d..99eabfb4145b 100644
->>>> --- a/drivers/hid/hid-multitouch.c
->>>> +++ b/drivers/hid/hid-multitouch.c
->>>> @@ -1606,9 +1606,6 @@ static int mt_input_configured(struct
->>>> hid_device *hdev, struct hid_input *hi)
->>>>          case HID_DG_STYLUS:
->>>>                  /* force BTN_STYLUS to allow tablet matching in udev */
->>>>                  __set_bit(BTN_STYLUS, hi->input->keybit);
->>>> -               fallthrough;
->>>> -       case HID_DG_PEN:
->>>> -               suffix = "Stylus";
->>>>                  break;
->>>>          default:
->>>>                  suffix = "UNKNOWN";
->>>> --
->>>> 2.25.1
->>>>

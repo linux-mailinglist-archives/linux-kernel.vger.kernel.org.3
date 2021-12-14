@@ -2,126 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D187D474EA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216C2474EAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235236AbhLNXfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 18:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238256AbhLNXfE (ORCPT
+        id S238284AbhLNXm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 18:42:56 -0500
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:24012 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235303AbhLNXmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 18:35:04 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C6FC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:35:03 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id p13so19147723pfw.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:35:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gDXHyE+5f179Ixy1hF6TPncRkHGmUBczNontEgHGLBw=;
-        b=dDaN4zSTIHp0O3AZVMYfOMB4N/6+RLi6EzucFkfHQYqjfaOAGlX6FUNKqpWB5LtzVi
-         bJh4DQuX8zDd5XApnN65AT+uN2HQJ0Jh+ei/VEcDgco9n1FfIz5GsWOrpks4DAyEPOm/
-         awYs69O7VsXg8zrS7gcNIAn8i/BYkPFZXyREroDfmrTb5Vu9To2mg5ci/pNxReeQYUvt
-         nRdJ6EcGTNopZTvqW1ppodF9meXBpOF2z3mlJxrg3Fi91zHqlXTSvqEcxXnSdLrp6iWk
-         3iGCHHv5HgRdbzv/qmYXN4eO57xaDy0QCNlbzx2kn5BxFW/CnIfPOo+56aL+obvOstax
-         B0ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gDXHyE+5f179Ixy1hF6TPncRkHGmUBczNontEgHGLBw=;
-        b=WFnT/aVIIGmvnRl/GkwfrOJHHHRG5XfYZ9fsmmfeum582KdzOmoVxw0vpqiE/+YOCc
-         /TAYWZ24taaC6bukG29SJnky7tDvNbrjJ79LlkhUgxGYCbl1mJMNPIzYlFDLb7HgWnMc
-         Zb8bdiXWVnrdaL9BVqRMkT9DeApeON9knXralaytRKpzEjAb1blG93b7GMqWPm9UzR17
-         Yqd0WCBP1elcfxrQvA7pkHUSBvnPAqTe1DoROCGvScqfQsk79VYg6Svaw//zxEL8olxR
-         FLrIdyTq4AC6gJb9ooU39/qdpBlM+jgcffjNOThw/UA7vrQEKa/mNlR6nTdlO0+dt7Uc
-         EmmQ==
-X-Gm-Message-State: AOAM531UHwKHQme5SQrfWIJNLqOFy0sHnCfqjVfvd0/MjjgUu/n9UjwW
-        3Q5yLzfQxNvEhWyebB1buHwD/A==
-X-Google-Smtp-Source: ABdhPJxmH9w+SFOO7sAAlh9QF2Iy0zuPOZtoPKFJhVTBJsR0/xtUUru5N6j85UkjG2tsYRQ9BAHBjQ==
-X-Received: by 2002:a63:8349:: with SMTP id h70mr5684564pge.53.1639524903171;
-        Tue, 14 Dec 2021 15:35:03 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id rm10sm86035pjb.29.2021.12.14.15.35.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 15:35:02 -0800 (PST)
-Date:   Tue, 14 Dec 2021 23:34:59 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hou Wenlong <houwenlong93@linux.alibaba.com>
-Subject: Re: [PATCH 15/28] KVM: x86/mmu: Take TDP MMU roots off list when
- invalidating all roots
-Message-ID: <YbkqIxJjVQkoFo5o@google.com>
-References: <20211120045046.3940942-1-seanjc@google.com>
- <20211120045046.3940942-16-seanjc@google.com>
- <CANgfPd8Kz41FpvooznGW2VLp8GZFei28FCjonr2+YEZoturi0A@mail.gmail.com>
- <YZwi+TzVLQi5YlIX@google.com>
- <CANgfPd8s=8SY2R_Cg+gytU6VU2PhOqkOwtq9fAdXCgp+GRpmQg@mail.gmail.com>
+        Tue, 14 Dec 2021 18:42:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1639525373; x=1671061373;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JqMnR5JDEwVFhzJYd8UbG6LlmRhjhnIL+MAUSeClcjg=;
+  b=ELZbh2v0PEwuSWLB0ms5Wpdx0IDUVR+6q2wA5MOZvYYMCmXsnDEl4ImX
+   iQienxc84cMPqK7mxT/dIKinlF0rAiLLCXBRifK3eXgl3Cj6VWBS6PNA4
+   HZbMJgB0UXF3VJf1sCDkbESortSp9cGJGAuWgCE/lU9IzDI+VNxdCkt3U
+   nhTV4ONgBostt2ZW+Fiy6kI62YUJYFD8c8RCAsN+vtIkyuKF8w+m5WSU/
+   QB2JHKns6X1w4P51nnaQpWL3nvdxuj7xENsM31EV7IHr1DVOqz/PHHGnv
+   6sIa1Ji6EODVQHYNCCgnvvRdYL1H5CPxILOz8BAFWIVsQwEPDpdkyhPH1
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,206,1635177600"; 
+   d="scan'208";a="188252926"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Dec 2021 07:42:52 +0800
+IronPort-SDR: DLVYw+ZuQaAv0hcUmk8WLMh1FRtgjXc6kMXdGo+PVWXfd8XT1xwFTx7EV/9k+ttHSH00+c/OTM
+ ctfjFpsZuyt/9LgtQiQWCGm4sWeAelD30oV4Lakm81mM3Dga+QSJH7yyOh+EI4J0cACnJZ6DVo
+ ZfvMDyDNvXki5C12i/3Ncu4Mgz+iCkY0Wt68mBb7WnaLfW8tO0niZTsDmlxfc4O9kXd9oEbYJx
+ V9/ZUMc86qQlPQeBohzuv5idoS0oHrjg4SdVnuuM5YuHELn9cDA+lXh40Bdqqcp37LrUhu4pB7
+ OGYnCitc+D70pSZn9d1oVtEm
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 15:15:50 -0800
+IronPort-SDR: SVLrRnUfx6EexsjjeBw2VHGwkytmStBBWqz65FA27+a5yA42Hc1G4fAywov6U4iKHRhQsGa0sr
+ RZQJ9yWV23Cet5cCPN84PiE4R0fHkreDm2+3uhh2rAW1CzKEVZNcj4p9W0PNqbi259pxR+Xdj6
+ 9YjmyXMlHCw9/kuI3BZXLjGPYkQSWdEsMm7VjUoCfTS1mT3M38ENrfJGGbp+jb0L0iJgqLs2e2
+ zHT10fpWxV0uGShGNLs5bKr9Z8LnM9y2uGubTXDWVQelUkn8XmX1aPSkHS+madiEDXVke7PyrT
+ VS0=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 15:42:54 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JDFL55LzYz1RvTh
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:42:53 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1639525373; x=1642117374; bh=JqMnR5JDEwVFhzJYd8UbG6LlmRhjhnIL+MA
+        USeClcjg=; b=lqoOl3jpVJmf3sHKq3qwXm/N6K48pIRKj6ClaQW7VAQogC9ona9
+        ir56LuYYLklVqJmyuw0ybqEmmsJwfgX9jS38uhnZnZG17VtuZqpdyQz/QcNNgHDE
+        fVaIuCFN7RBCjPJvfRobBUNn0wupmHryGngNOkWN58+1eDf45L6MOZSNVSqPPjBr
+        +Ya2yd8GI9oQfT5kg1kV+u0NUMBhww1oVJzGT3qQhE+bofm/BAHdfJlaO/XmCUbE
+        Hs83VpVSMYYd4yFCrqSBOZA6HI9bdpj58KK5UBfmbL9Bxdwb7LhHKi/rRU6ZIBqF
+        mSNBLCXeCX9J9NfJrjIrlh/WqTCeGJ3+Niw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id g94Ts3ktwnRi for <linux-kernel@vger.kernel.org>;
+        Tue, 14 Dec 2021 15:42:53 -0800 (PST)
+Received: from [10.225.54.48] (unknown [10.225.54.48])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JDFL43hl9z1RtVG;
+        Tue, 14 Dec 2021 15:42:52 -0800 (PST)
+Message-ID: <87d2345c-f878-1884-e344-25ac2b6862cd@opensource.wdc.com>
+Date:   Wed, 15 Dec 2021 08:42:50 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANgfPd8s=8SY2R_Cg+gytU6VU2PhOqkOwtq9fAdXCgp+GRpmQg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH v2 RESEND] libata: if T_LENGTH is zero, dma direction
+ should be DMA_NONE
+Content-Language: en-US
+To:     George Kennedy <george.kennedy@oracle.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1639493110-15900-1-git-send-email-george.kennedy@oracle.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital
+In-Reply-To: <1639493110-15900-1-git-send-email-george.kennedy@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021, Ben Gardon wrote:
-> On Mon, Nov 22, 2021 at 3:08 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Mon, Nov 22, 2021, Ben Gardon wrote:
-> > > On Fri, Nov 19, 2021 at 8:51 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > >
-> > > > Take TDP MMU roots off the list of roots when they're invalidated instead
-> > > > of walking later on to find the roots that were just invalidated.  In
-> > > > addition to making the flow more straightforward, this allows warning
-> > > > if something attempts to elevate the refcount of an invalid root, which
-> > > > should be unreachable (no longer on the list so can't be reached by MMU
-> > > > notifier, and vCPUs must reload a new root before installing new SPTE).
-> > > >
-> > > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > >
-> > > There are a bunch of awesome little cleanups and unrelated fixes
-> > > included in this commit that could be factored out.
-> > >
-> > > I'm skeptical of immediately moving the invalidated roots into another
-> > > list as that seems like it has a lot of potential for introducing
-> > > weird races.
-> >
-> > I disagree, the entire premise of fast invalidate is that there can't be races,
-> > i.e. mmu_lock must be held for write.  IMO, it's actually the opposite, as the only
-> > reason leaving roots on the per-VM list doesn't have weird races is because slots_lock
-> > is held.  If slots_lock weren't required to do a fast zap, which is feasible for the
-> > TDP MMU since it doesn't rely on the memslots generation, then it would be possible
-> > for multiple calls to kvm_tdp_mmu_zap_invalidated_roots() to run in parallel.  And in
-> > that case, leaving roots on the per-VM list would lead to a single instance of a
-> > "fast zap" zapping roots it didn't invalidate.  That's wouldn't be problematic per se,
-> > but I don't like not having a clear "owner" of the invalidated root.
+On 2021/12/14 23:45, George Kennedy wrote:
+> Avoid data corruption by rejecting pass-through commands where
+> T_LENGTH is zero (No data is transferred) and the dma direction
+> is not DMA_NONE.
 > 
-> That's a good point, the potential interleaving of zap_alls would be gross.
+> Cc: <stable@vger.kernel.org>
+
+George,
+
+FYI, you should not send patches that need backporting to
+stable@vger.kernel.org. The above Cc: tag will do that automatically.
+
+> Reported-by: syzkaller<syzkaller@googlegroups.com>
+> Signed-off-by: George Kennedy<george.kennedy@oracle.com>
+> ---
+> Used the Maintainers suggested fix.
+
+The usual way of writing this is something like:
+
+Changes from v1:
+* Blah
+
+This way, if you need a v3, v4, etc, you can keep the previous changes
+description and add new ones on top.
+
 > 
-> My mental model for the invariant here was "roots that are still in
-> use are on the roots list," but I can see how "the roots list contains
-> all valid, in-use roots" could be a more useful invariant.
+>  drivers/ata/libata-scsi.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+> index 1b84d55..313e947 100644
+> --- a/drivers/ata/libata-scsi.c
+> +++ b/drivers/ata/libata-scsi.c
+> @@ -2859,8 +2859,19 @@ static unsigned int ata_scsi_pass_thru(struct ata_queued_cmd *qc)
+>  		goto invalid_fld;
+>  	}
+>  
+> -	if (ata_is_ncq(tf->protocol) && (cdb[2 + cdb_offset] & 0x3) == 0)
+> -		tf->protocol = ATA_PROT_NCQ_NODATA;
+> +	if ((cdb[2 + cdb_offset] & 0x3) == 0) {
+> +		/*
+> +		 * When T_LENGTH is zero (No data is transferred), dir should
+> +		 * be DMA_NONE.
+> +		 */
+> +		if (scmd->sc_data_direction != DMA_NONE) {
+> +			fp = 2 + cdb_offset;
+> +			goto invalid_fld;
+> +		}
+> +
+> +		if (ata_is_ncq(tf->protocol))
+> +			tf->protocol = ATA_PROT_NCQ_NODATA;
+> +	}
+>  
+>  	/* enable LBA */
+>  	tf->flags |= ATA_TFLAG_LBA;
 
-Sadly, my idea of taking invalid roots off the list ain't gonna happen.
+This look OK to me. Will apply.
 
-The immediate issue is that the TDP MMU doesn't zap invalid roots in mmu_notifier
-callbacks.  This leads to use-after-free and other issues if the mmu_notifier runs
-to completion while an invalid root zapper yields as KVM fails to honor the
-requirement that there must be _no_ references to the page after the mmu_notifier
-returns.
 
-This is most noticeable with set_nx_huge_pages() + kvm_mmu_notifier_release(),
-but the bug exists between kvm_mmu_notifier_invalidate_range_start() and memslot
-updates as well.  The pages aren't accessible by the guest, and KVM won't read or
-write the data itself, but KVM will trigger e.g. kvm_set_pfn_dirty() when zapping
-SPTEs, _after_ the mmu_notifier returns.
+-- 
+Damien Le Moal
+Western Digital Research

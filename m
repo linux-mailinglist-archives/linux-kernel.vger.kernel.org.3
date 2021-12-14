@@ -2,150 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94754473C30
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 05:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEA2473C33
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 05:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbhLNEtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 23:49:15 -0500
-Received: from mail108.syd.optusnet.com.au ([211.29.132.59]:50066 "EHLO
-        mail108.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229652AbhLNEtO (ORCPT
+        id S229652AbhLNExw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 23:53:52 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:30177 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229436AbhLNExv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 23:49:14 -0500
-Received: from dread.disaster.area (pa49-181-243-119.pa.nsw.optusnet.com.au [49.181.243.119])
-        by mail108.syd.optusnet.com.au (Postfix) with ESMTPS id 120533EB690;
-        Tue, 14 Dec 2021 15:49:11 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1mwzkU-002qH7-3l; Tue, 14 Dec 2021 15:49:10 +1100
-Date:   Tue, 14 Dec 2021 15:49:10 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     renlei1@chinatelecom.cn
-Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xfs: not allow rename if src is quota enabled and
- project IDs are different
-Message-ID: <20211214044910.GT449541@dread.disaster.area>
-References: <20211214031517.508012-1-renlei1@chinatelecom.cn>
+        Mon, 13 Dec 2021 23:53:51 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 1BE4SSVb001929;
+        Tue, 14 Dec 2021 12:28:28 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 14 Dec
+ 2021 12:53:47 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] media: aspeed: Fix no complete irq for non-64-aligned width
+Date:   Tue, 14 Dec 2021 12:53:48 +0800
+Message-ID: <20211214045348.13702-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214031517.508012-1-renlei1@chinatelecom.cn>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=61b82248
-        a=BEa52nrBdFykVEm6RU8P4g==:117 a=BEa52nrBdFykVEm6RU8P4g==:17
-        a=kj9zAlcOel0A:10 a=IOMw9HtfNCkA:10 a=7-415B0cAAAA:8
-        a=rG3u2JI8YdbEqDxu-5gA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 1BE4SSVb001929
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 11:15:17AM +0800, renlei1@chinatelecom.cn wrote:
-> From: Ren Lei <renlei1@chinatelecom.cn>
-> 
-> xfs not allow rename if target is using project inheritance and
-> project IDs are different to avoid tree quota mechanism not work.
+In ast2500, engine will stop occasionally for 1360x768.
 
-Lesson #1: project quotas are *not* directory quotas.
+This is a bug which has been addressed, but the workaround is specific
+for 1680 only. Here we make it more complete.
 
-> But if only src with directory quota enabled, rename to other directory
-> without quota enabled can succeed and skip quota mechanism. which might
-> result to unexpected quota behavior.
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+---
+ drivers/media/platform/aspeed-video.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-Yes, this is explicitly done this way, because project quotas are
-not directory quotas.
-
-Lesson #2: directory tree semantics use PROJINHERIT to define an
-entry barrier to the directory, not an exit barrier.
-
-That is, we restrict moving inodes with incompatible project IDs
-into a directory that might be used as a directory tree, but we
-don't prevent moving inodes out of PROJINHERIT directories into
-locations that have no PROJINHERIT set.
-
-The reason for this is simple: destinations that don't have
-PROJINHERIT set are unrestricted and can contain inodes with any
-valid projid. This is the traditional use of project quotas,
-because...
-
-Lesson #3a: PROJINHERIT only defines the default project ID for newly
-created inodes in a directory.
-
-Lesson #3b: Unprivileged users in the init namespace are allowed to
-change PROJINHERIT and projid on any inode they have write
-permissions on.
-
-That is, PROJINHERIT does not prevent users from changing the
-project ID of files within the directory, or even that of the
-directory so that it no longer matches the projid of the existing
-directory contents. Hence directory tree quotas will only remain
-valid with the co-operation of unprivileged users, as project ID and
-PROJINHERIT are user modifiable inode attributes.
-
-Lesson #4: Using project quotas to provide directory tree quotas
-does not result in an access-based space usage enforcement mechanism
-without some other mechanism for preventing users from accessing and
-changing project quota information. (e.g. containers and user
-namespaces)
-
-> This patch fix this by disable rename if src is using project inheritance
-> and the project IDs are not the same.
-> 
-> following steps can easy reproduce this issue:
-> 1. first init a directory quota /mnt/test
-> 	mount -o prjquota /dev/sdb  /mnt
-> 	mkdir /mnt/test
-> 	echo 1:/mnt/test >> /etc/projects
-> 	echo test:1 >> /etc/projid
-> 	xfs_quota -x -c 'project -s test' /mnt
-> 	xfs_quota -x -c 'limit -p bhard=10m test' /mnt
->
-> 2. fill /mnt/test with tesfile util directory full:
-> 	[root@rhost1 test]# dd if=/dev/zero of=/mnt/test/testfile
-> 	dd: writing to '/mnt/test/testfile': No space left on device
-> 3. mv testfile out to /mnt,  test is empty but cannot create files:
-> 	[root@rhost1 test]# mv testfile ../
-> 	[root@rhost1 test]# ls -a
-> 	.  ..
-> 	[root@rhost1 test]# touch aaa
-> 	touch: cannot touch 'aaa': Disk quota exceeded
-
-Yup, exfiltration is not prohibited, as per above. What you need to
-do here is prevent infiltration to the "../" directory by use of
-a default directory quota for all the "non-controlled" part of the
-directory heirarchy. That is:
-
-> 	mount -o prjquota /dev/sdb  /mnt
-> 	mkdir /mnt/test
-> 	echo 1:/mnt > /etc/projects
-> 	echo 2:/mnt/test >> /etc/projects
-> 	echo default:1 >> /etc/projid
-> 	echo test:2 >> /etc/projid
-> 	xfs_quota -x -c 'project -s default' /mnt
-> 	xfs_quota -x -c 'project -s test' /mnt
-> 	xfs_quota -x -c 'limit -p bhard=10m test' /mnt
-
-So now you have the default "unlimited" directory quota on the
-entire filesytem, with the sub-tree "test" set up with a hard limit.
-Now step #3 in your test will behave as you expect, because ".." has
-a PROJINHERIT w/ projid = 1 set and that will trigger the
-"destination directory has directory quota and different projid"
--EXDEV error case in rename.
-
-i.e. you fix this problem by setting up the directory tree quota
-configuration properly, not by changing the kernel code behaviour...
-
-Note: you can set the default directory tree project ID at mkfs time
-via:
-
-# mkfs.xfs -f -d projinherit=42 /dev/sdb
-
-So you don't actually need to set up a default project in
-/etc/projects to make this work correctly.
-
-Cheers,
-
-Dave.
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index 793b2adaa0f5..4d3e6b105d44 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -1055,18 +1055,20 @@ static void aspeed_video_set_resolution(struct aspeed_video *video)
+ 	/* Set capture/compression frame sizes */
+ 	aspeed_video_calc_compressed_size(video, size);
+ 
+-	if (video->active_timings.width == 1680) {
++	if (!IS_ALIGNED(act->width, 64)) {
+ 		/*
+ 		 * This is a workaround to fix a silicon bug on A1 and A2
+ 		 * revisions. Since it doesn't break capturing operation of
+ 		 * other revisions, use it for all revisions without checking
+-		 * the revision ID. It picked 1728 which is a very next
+-		 * 64-pixels aligned value to 1680 to minimize memory bandwidth
++		 * the revision ID. It picked new width which is a very next
++		 * 64-pixels aligned value to minimize memory bandwidth
+ 		 * and to get better access speed from video engine.
+ 		 */
++		u32 width = ALIGN(act->width, 64);
++
+ 		aspeed_video_write(video, VE_CAP_WINDOW,
+-				   1728 << 16 | act->height);
+-		size += (1728 - 1680) * video->active_timings.height;
++				   width << 16 | act->height);
++		size = width * act->height;
+ 	} else {
+ 		aspeed_video_write(video, VE_CAP_WINDOW,
+ 				   act->width << 16 | act->height);
 -- 
-Dave Chinner
-david@fromorbit.com
+2.25.1
+

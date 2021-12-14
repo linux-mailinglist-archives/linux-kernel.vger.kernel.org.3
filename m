@@ -2,86 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A73474163
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE1247416C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 12:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbhLNLVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 06:21:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbhLNLVG (ORCPT
+        id S233498AbhLNLYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 06:24:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52028 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233488AbhLNLYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 06:21:06 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E16C061574;
-        Tue, 14 Dec 2021 03:21:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=re+A+VgqWP+VuzBjah9LZeI0kzGTDdBNysKZxjJuNuQ=; b=N7lITvbQDgqsVxtZNfGzciFiiM
-        b+UX7mxnZh4LF+I5narByKnmJvv+zPLGOffFa1x+SIAA4YPV3Ywkhcc9X+Op4aOMrGMK/uo71r0Rd
-        SRNAjhkRywLfYRajb2D798hIyrC+BsJ0Fgx5mX3HB+L8v0Rkn3pvrCRDlAbyAZkduTYw2qJKS7BFu
-        vSVpJYGv0jGv6mH22JSLHUwf/OGPDFUwTrMIvyOYg1uMWubsCGMG8y8HmQ9j3gZ2B1tq4gCNqn6XZ
-        EJTwPmbiHyAPHfi+wOofHq07AU+cF2u1kkg8jNRTPL+lBCIL9TlbcoAp068AG1dxAHR+mjQkLflge
-        idoqGWcw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56270)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mx5re-0004pu-SQ; Tue, 14 Dec 2021 11:20:58 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mx5ra-0003Sj-4R; Tue, 14 Dec 2021 11:20:54 +0000
-Date:   Tue, 14 Dec 2021 11:20:54 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Joshua Scott <Joshua.Scott@alliedtelesis.co.nz>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Subject: Re: Unhandled prefetch abort when probing USB flash drive
-Message-ID: <Ybh+FhDYN1CSzXi+@shell.armlinux.org.uk>
-References: <d23175b8312e4b4093943b38c2ed59d2@svr-chch-ex1.atlnz.lc>
+        Tue, 14 Dec 2021 06:24:43 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FD1FB81899;
+        Tue, 14 Dec 2021 11:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0BA0C34601;
+        Tue, 14 Dec 2021 11:24:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639481081;
+        bh=5e9V1KFv9vwJ/bLxG0N2DMFYQkTf8Cdc6F0VtrAo7yI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qS965GiqUc4P0Xpb6CY46Il1L+A2vTt1xZprkHD38mUtgoxRKGezouekl37EL/gco
+         Jv+HoqDGtWBF0ROP2Hzskan7ykcPbkiAYHPhKU/NCCJCCm+AnvwaFFhsXSzLfdSwmy
+         avUvO9CarQzXq8ve3PN4OB9bbVR6phaCnomooW1buYznpCk3zSsXRtQ8TEAnX0Q121
+         Zgfkr106BZx1MSDJZAJ5t+KtZEBPNmn4pvQ8SWfzzl+x4FcLCehR4TP4V0h4VUeFuQ
+         dd/pTwJh5USiEiRk4qeL5XVEY7bHi0ltWsNrYoL2icrksigKsC88zt68hMu59A+quS
+         Yomr5uwAqj43Q==
+Message-ID: <0549abbb-9e75-70e9-399b-1b3f84dc5c20@kernel.org>
+Date:   Tue, 14 Dec 2021 13:24:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d23175b8312e4b4093943b38c2ed59d2@svr-chch-ex1.atlnz.lc>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Subject: Re: [PATCH v3 RESEND 0/5] Add QCM2290 interconnect support
+Content-Language: en-US
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211214093011.19775-1-shawn.guo@linaro.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20211214093011.19775-1-shawn.guo@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:13:20AM +0000, Joshua Scott wrote:
-> Hi,
+Hi Shawn,
+
+On 14.12.21 11:30, Shawn Guo wrote:
+> Changes for v3 resend:
+> - Rebase on linux-next
+
+Did you try compiling it? There is one more driver where we need to
+add the QoS type, otherwise I see this error:
+
+drivers/interconnect/qcom/msm8996.c:1884:3: error: ‘const struct 
+qcom_icc_desc’ has no member named ‘is_bimc_node’
+  1884 |  .is_bimc_node = true,
+
+Thanks,
+Georgi
+
+> - Drop NOC_QOS_MODE_INVALID patch which has been applied by Georgi
+> - Pick up Rob's Reviewed-by on the binding patch
 > 
-> I have been running into a kernel panic when probing a USB flash drive, and was after some advice or suggestions on what might be going wrong.
+> Changes for v3:
+> - Update bindings to define child interconnect provider nodes
 > 
-> First up, the details of my setup:
->  * Initially seen on Linux 5.7.19, but I've tested on a vanilla copy of Linux 5.15.0 without any extra modules, and the panic still occurs.
->  * Flash drive (lsusb): Bus 001 Device 002: ID 1005:b113 Apacer Technology, Inc. Handy Steno 2.0/HT203
->  * Our system is based on the Marvell 98DX323x SoC (Arm v7, based on the Armada 370/XP)
+> Changes for v2:
+> - Drop unneeded include of <dt-bindings/clock/qcom,gcc-qcm2290.h> from
+>    bindings.
+> 
+> Shawn Guo (5):
+>    interconnect: icc-rpm: Define ICC device type
+>    interconnect: icc-rpm: Add QNOC type QoS support
+>    interconnect: icc-rpm: Support child NoC device probe
+>    dt-bindings: interconnect: Add Qualcomm QCM2290 NoC support
+>    interconnect: qcom: Add QCM2290 driver support
+> 
+>   .../bindings/interconnect/qcom,qcm2290.yaml   |  137 ++
+>   drivers/interconnect/qcom/Kconfig             |    9 +
+>   drivers/interconnect/qcom/Makefile            |    2 +
+>   drivers/interconnect/qcom/icc-rpm.c           |   52 +-
+>   drivers/interconnect/qcom/icc-rpm.h           |   14 +-
+>   drivers/interconnect/qcom/msm8916.c           |    4 +-
+>   drivers/interconnect/qcom/msm8939.c           |    5 +-
+>   drivers/interconnect/qcom/qcm2290.c           | 1363 +++++++++++++++++
+>   drivers/interconnect/qcom/sdm660.c            |    7 +-
+>   .../dt-bindings/interconnect/qcom,qcm2290.h   |   94 ++
+>   10 files changed, 1676 insertions(+), 11 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+>   create mode 100644 drivers/interconnect/qcom/qcm2290.c
+>   create mode 100644 include/dt-bindings/interconnect/qcom,qcm2290.h
+> 
 
-Does it work with any kernel? If it doesn't, then I would suspect a
-hardware bug, power supply glitch, or a SDRAM timing issue.
-
-Why? These seem somewhat random and spurious. In the example prefetch
-abort, it's weird on two accounts:
-
-1) "external abort on non-linefetch" means that we weren't accessing
-   cached memory, but the kernel is always in cached memory.
-2) prefetch abort means the instruction stream failed to read from
-   this location, but we later see in the Code: line that we have been
-   able to read the instructions into the data cache.
-
-If the system runs fine without the flash drive attached, I would
-suggest it's a power issue. I would suggest trying with an externally
-powered USB hub, so the hub sources the power for the flash drive and
-see whether that makes a difference.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

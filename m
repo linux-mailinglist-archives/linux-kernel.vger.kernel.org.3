@@ -2,149 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAD4474CB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC22474CB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237663AbhLNUhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 15:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234688AbhLNUhk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 15:37:40 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A477C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 12:37:39 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id b40so39083577lfv.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 12:37:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rjQbYZg8144iiip1tDYRKwr2CkrjM2gUKNnhrsXHc3k=;
-        b=pHi5A4/pju7+fEjLEURE3x/9YPiQ8cr+Fn8JARy+UxgdsrspFZFeswhb0HSOXv0pdH
-         rQuU3ofhNHdH3yaBwuwgBclDM2PMX37gMYXyN6Za6rDc/5CncCLnaN5ncYP+CXzgQ+3O
-         6Y1ZUqLqd4KtPnq/XwRudfhwvLDCqFVwE1pB2MxRhMjSHTL4IM/S+KQbh/xpOmygQVeK
-         VtBhwNjHAJgJgvGuewpnW2yBe8vwOI0KjdovQJX1COvMB2rAUXR14kdQpM+3U1lU+80s
-         tDNo+zK7bB3WiPvDoYU75d4fyXPJWZUD/taS4w19QVjzRTh1J/CszTfdqVQEStoRZOdz
-         kviA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rjQbYZg8144iiip1tDYRKwr2CkrjM2gUKNnhrsXHc3k=;
-        b=rV7gxxAhbb+5oUQXb+b8ls/YUU6ngPYu+uh/SruQGFpVnuttu/aowIglJuqRC3mmMP
-         fB8e5s4vOv2CNZxBvnBXxC1GlftQvE3w0SubXdp29Gxa9/XQV0kW3VUbDPiyPHD+IglN
-         UkA3aV+Uki9b9pDhLWk7Xe4g4bS2rIOrkYslL/aLGBeLM7quhZmoqvaWrFjIBgkWbLO0
-         DnRz+c9ZQaUZtvFlxkEdqeoJFi3F4d7AgmHUZ01+gfhCUP5P4lNV7QnmdVegWiVk8dPZ
-         1F15seBLx8kmSjNzE70yPdvt6DaUcrr5fPCBqTFhbRbFU8pbsGl+XwEpevVoBtEc3gEy
-         g6KQ==
-X-Gm-Message-State: AOAM530yTD+JbWpR+l9PkXyoFAbpfW5U/LgHd0THWv0c52W/jKTnokuD
-        qFbounmZc3hwkD5L+wlfgGSEJsFqphkntZftuDbFkQ==
-X-Google-Smtp-Source: ABdhPJyyeNuwTAyrLnEyLCFCzpP8lh05uAdQDCf/Oea93kQ9DAout+5VOBH+u9xReGe8d4Q8RVZT8yy69+6PAvVLFdw=
-X-Received: by 2002:ac2:5607:: with SMTP id v7mr6855211lfd.71.1639514257788;
- Tue, 14 Dec 2021 12:37:37 -0800 (PST)
+        id S237680AbhLNUjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 15:39:32 -0500
+Received: from mga14.intel.com ([192.55.52.115]:1085 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234688AbhLNUjb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 15:39:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639514371; x=1671050371;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PdxDshG3BnxLmtJyl8oB4oJmFU4uoshssKT1Au1peLw=;
+  b=O6xlgO17HPu7WIVDlZh+aNyUv2uwlKN7Vt+4rVD6Ny4MYYvZeOUWz64s
+   mGlegiGGl9DJbQcZKVlXPtFVDFXgRJmlK3rnowHw1G6q58zBvgyHEhB5J
+   hj788F5GX14wa98GDi6Sv/7T1HnzmOMnQ95XfbkAuX6dW72TZXQ9wXyne
+   ueNSw8sRlVdQn7f2g5Scuv5CRO7QVLQVfKCThhdXZam9m4wRyiFy/7cCC
+   uLYtKlpy6IyX4Vzh5xQ/uHap7Qn8bAw8Pe6irDkehK1+5ttuSvcmGZgfZ
+   Ks17GAtcoDQ/O64v9lLUKFjN/kkmUzW7Oyog15fa8hcNC/EUUFlo1scl/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="239302518"
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="239302518"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 12:39:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="463947351"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 14 Dec 2021 12:39:28 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxEa7-0000ky-Pu; Tue, 14 Dec 2021 20:39:27 +0000
+Date:   Wed, 15 Dec 2021 04:39:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: undefined reference to `cpu_sa110_suspend_size'
+Message-ID: <202112150401.4b6Ct9qs-lkp@intel.com>
 MIME-Version: 1.0
-References: <3dd2473a-00ca-4c62-e17f-9392cf74cda4@intel.com> <20211214113653.4631-1-pshete@nvidia.com>
-In-Reply-To: <20211214113653.4631-1-pshete@nvidia.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 14 Dec 2021 21:37:01 +0100
-Message-ID: <CAPDyKFq1NMXrMw0Dn6T7-0J1C4QdNoi4dUfnB5=zMQKeyQoAdQ@mail.gmail.com>
-Subject: Re: [PATCH v4] mmc: sdhci-tegra: Fix switch to HS400ES mode
-To:     Prathamesh Shete <pshete@nvidia.com>
-Cc:     adrian.hunter@intel.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, p.zabel@pengutronix.de,
-        linux-mmc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, anrao@nvidia.com,
-        smangipudi@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 at 12:36, Prathamesh Shete <pshete@nvidia.com> wrote:
->
-> When CMD13 is sent after switching to HS400ES mode, the bus
-> is operating at either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
-> To meet Tegra SDHCI requirement at HS400ES mode, force SDHCI
-> interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
-> controller CAR clock and the interface clock are rate matched.
->
-> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
+commit: a871be6b8eee13a35a3e8e56c62770ef17ee9220 cpuidle: Convert Qualcomm SPM driver to a generic CPUidle driver
+date:   1 year, 7 months ago
+config: arm-randconfig-r022-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150401.4b6Ct9qs-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a871be6b8eee13a35a3e8e56c62770ef17ee9220
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a871be6b8eee13a35a3e8e56c62770ef17ee9220
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
-Applied for fixes and by adding a fixes and a stable tag, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: dfc9700cef77 ("mmc: tegra: Implement HS400 enhanced strobe")
+All errors (new ones prefixed by >>):
 
-Kind regards
-Uffe
+   arm-linux-gnueabi-ld: arch/arm/kernel/sleep.o: in function `__cpu_suspend':
+>> (.text+0x60): undefined reference to `cpu_sa110_suspend_size'
+   arm-linux-gnueabi-ld: arch/arm/kernel/suspend.o: in function `__cpu_suspend_save':
+>> suspend.c:(.text+0x214): undefined reference to `cpu_sa110_do_suspend'
+>> arm-linux-gnueabi-ld: suspend.c:(.text+0x23c): undefined reference to `cpu_sa110_do_resume'
+   arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-smc.o: in function `__scm_smc_do_quirk':
+   qcom_scm-smc.c:(.text+0x58): undefined reference to `__arm_smccc_smc'
+   arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call':
+   qcom_scm-legacy.c:(.text+0x208): undefined reference to `__arm_smccc_smc'
+   arm-linux-gnueabi-ld: drivers/firmware/qcom_scm-legacy.o: in function `scm_legacy_call_atomic':
+   qcom_scm-legacy.c:(.text+0x568): undefined reference to `__arm_smccc_smc'
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+   Depends on ARCH_SUSPEND_POSSIBLE
+   Selected by
+   - ARM_QCOM_SPM_CPUIDLE && CPU_IDLE && (ARM || ARM64) && (ARCH_QCOM || COMPILE_TEST && !ARM64
 
-> ---
->  drivers/mmc/host/sdhci-tegra.c | 43 ++++++++++++++++++++--------------
->  1 file changed, 26 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
-> index 387ce9cdbd7c..7be6674eebd5 100644
-> --- a/drivers/mmc/host/sdhci-tegra.c
-> +++ b/drivers/mmc/host/sdhci-tegra.c
-> @@ -354,23 +354,6 @@ static void tegra_sdhci_set_tap(struct sdhci_host *host, unsigned int tap)
->         }
->  }
->
-> -static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
-> -                                             struct mmc_ios *ios)
-> -{
-> -       struct sdhci_host *host = mmc_priv(mmc);
-> -       u32 val;
-> -
-> -       val = sdhci_readl(host, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
-> -
-> -       if (ios->enhanced_strobe)
-> -               val |= SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
-> -       else
-> -               val &= ~SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
-> -
-> -       sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
-> -
-> -}
-> -
->  static void tegra_sdhci_reset(struct sdhci_host *host, u8 mask)
->  {
->         struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> @@ -791,6 +774,32 @@ static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
->         }
->  }
->
-> +static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
-> +                                             struct mmc_ios *ios)
-> +{
-> +       struct sdhci_host *host = mmc_priv(mmc);
-> +       u32 val;
-> +
-> +       val = sdhci_readl(host, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
-> +
-> +       if (ios->enhanced_strobe) {
-> +               val |= SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
-> +               /*
-> +                * When CMD13 is sent from mmc_select_hs400es() after
-> +                * switching to HS400ES mode, the bus is operating at
-> +                * either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
-> +                * To meet Tegra SDHCI requirement at HS400ES mode, force SDHCI
-> +                * interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
-> +                * controller CAR clock and the interface clock are rate matched.
-> +                */
-> +               tegra_sdhci_set_clock(host, MMC_HS200_MAX_DTR);
-> +       } else {
-> +               val &= ~SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
-> +       }
-> +
-> +       sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
-> +}
-> +
->  static unsigned int tegra_sdhci_get_max_clock(struct sdhci_host *host)
->  {
->         struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> --
-> 2.17.1
->
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

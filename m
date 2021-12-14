@@ -2,109 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFEC47435E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453AB474361
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234359AbhLNNYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S234364AbhLNNZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 08:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbhLNNYy (ORCPT
+        with ESMTP id S229982AbhLNNZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:24:54 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E82C061574;
-        Tue, 14 Dec 2021 05:24:54 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639488291;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ojo5CfB1kqd6Oz7Ue8byTDePBgU77WIcGI14kiPW2MY=;
-        b=FiWW4gr6J2vA6cw2HzsxieR2sV6BeH3/U/R6EURFyJOchc5jCxYyeEMD4AwsLOWHPZ/0yL
-        aXEMO8jEdM5B44wl92TbdB3kvlJOaX0muBcRsTZ4xwxFgV0+RFlNCTqwNb/INH2LJasbhA
-        H7IKpmLqrza3iZeEOcXfiTwvxnTviwdhHwtsFfW6WnJWF+Glh2DUYPgUmOHrpyPbbxlm9q
-        6S/fCR8477PuRcoX0nAEF06uqe4e7XM/K7zwHhGy1FmMLJjNkyovlVMn2HBwArYIDGz/d9
-        EIM7keOxwAHlX151vZPq7QeHmXkRTkmNwrIiE3yFZN4WDSutkBrEqIykS7FJ2g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639488291;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ojo5CfB1kqd6Oz7Ue8byTDePBgU77WIcGI14kiPW2MY=;
-        b=RceVS/6e5lVGJTjqWYYH9Syhhuib5UMpTVTmXSrR+sJvh59TQJFz4A6ibOewOmPReo9rhC
-        qbbH5gOecp7yc+CA==
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Jing Liu <jing2.liu@linux.intel.com>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, Sean Christoperson <seanjc@google.com>,
-        Jin Nakajima <jun.nakajima@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>
-Subject: Re: [patch 0/6] x86/fpu: Preparatory changes for guest AMX support
-In-Reply-To: <09e06d62-33f5-b41f-e913-a8c5e43ba881@redhat.com>
-References: <20211214022825.563892248@linutronix.de>
- <09e06d62-33f5-b41f-e913-a8c5e43ba881@redhat.com>
-Date:   Tue, 14 Dec 2021 14:24:51 +0100
-Message-ID: <877dc7tj30.ffs@tglx>
+        Tue, 14 Dec 2021 08:25:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8A3C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:25:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B428614EC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 13:25:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08494C34606;
+        Tue, 14 Dec 2021 13:25:22 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 13:25:19 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH mm v3 23/38] kasan, arm64: reset pointer tags of vmapped
+ stacks
+Message-ID: <YbibPyHQXjU2A/jg@arm.com>
+References: <cover.1639432170.git.andreyknvl@google.com>
+ <bc9f6cb3df24eb076a6d99f91f97820718f3e29e.1639432170.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc9f6cb3df24eb076a6d99f91f97820718f3e29e.1639432170.git.andreyknvl@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14 2021 at 11:42, Paolo Bonzini wrote:
-> On 12/14/21 03:50, Thomas Gleixner wrote:
->> The only remaining issue is the KVM XSTATE save/restore size checking which
->> probably requires some FPU core assistance. But that requires some more
->> thoughts vs. the IOCTL interface extension and once that is settled it
->> needs to be solved in one go. But that's an orthogonal issue to the above.
->
-> That's not a big deal because KVM uses the uncompacted format.  So 
-> KVM_CHECK_EXTENSION and KVM_GET_XSAVE can just use CPUID to retrieve the 
-> size and uncompacted offset of the largest bit that is set in 
-> kvm_supported_xcr0, while KVM_SET_XSAVE can do the same with the largest 
-> bit that is set in the xstate_bv.
+On Mon, Dec 13, 2021 at 10:54:19PM +0100, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
+> 
+> Once tag-based KASAN modes start tagging vmalloc() allocations,
+> kernel stacks start getting tagged if CONFIG_VMAP_STACK is enabled.
+> 
+> Reset the tag of kernel stack pointers after allocation in
+> arch_alloc_vmap_stack().
+> 
+> For SW_TAGS KASAN, when CONFIG_KASAN_STACK is enabled, the
+> instrumentation can't handle the SP register being tagged.
+> 
+> For HW_TAGS KASAN, there's no instrumentation-related issues. However,
+> the impact of having a tagged SP register needs to be properly evaluated,
+> so keep it non-tagged for now.
+> 
+> Note, that the memory for the stack allocation still gets tagged to
+> catch vmalloc-into-stack out-of-bounds accesses.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-For simplicity you can just get that information from guest_fpu. See
-below.
-
-Thanks,
-
-        tglx
----
---- a/arch/x86/include/asm/fpu/types.h
-+++ b/arch/x86/include/asm/fpu/types.h
-@@ -518,6 +518,11 @@ struct fpu_guest {
- 	u64				perm;
- 
- 	/*
-+	 * @uabi_size:			Size required for save/restore
-+	 */
-+	unsigned int			uabi_size;
-+
-+	/*
- 	 * @fpstate:			Pointer to the allocated guest fpstate
- 	 */
- 	struct fpstate			*fpstate;
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -240,6 +240,7 @@ bool fpu_alloc_guest_fpstate(struct fpu_
- 	gfpu->fpstate		= fpstate;
- 	gfpu->xfeatures		= fpu_user_cfg.default_features;
- 	gfpu->perm		= fpu_user_cfg.default_features;
-+	gfpu->uabi_size		= fpu_user_cfg.default_size;
- 	fpu_init_guest_permissions(gfpu);
- 
- 	return true;
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1545,6 +1545,7 @@ static int fpstate_realloc(u64 xfeatures
- 		newfps->is_confidential = curfps->is_confidential;
- 		newfps->in_use = curfps->in_use;
- 		guest_fpu->xfeatures |= xfeatures;
-+		guest_fpu->uabi_size = usize;
- 	}
- 
- 	fpregs_lock();
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>

@@ -2,230 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 684DA473EDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43387473EDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbhLNI7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:59:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52354 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbhLNI7D (ORCPT
+        id S232033AbhLNI76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:59:58 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:43850 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229782AbhLNI75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:59:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Dec 2021 03:59:57 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1E7FB817F4;
-        Tue, 14 Dec 2021 08:59:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C6BC34604;
-        Tue, 14 Dec 2021 08:59:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639472341;
-        bh=4XA1uqFSGAEDw8kyB0Oc0Z4VEEuxndcmhIaDpt3JEqk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WMKcE6fE0tJBSGble33b6dgoT7H1nam2Z+dJJQFPSqU14zpfjQvX4WDuyzmjb6uKw
-         66YDVW00o9MQaorBqtloEtItPrrOQ0KWMWgA/19aWO8bVuu3lw4lolWv2qCuOjxb2X
-         Uaj3EUDudLp1OqEENaQm3g/YOEf7Br1zTEr/2F78HRuFXy3Pk8dmdTFajxtClrjtQT
-         e323KTimibKLwZ2AxalRo7jjJPBwWqaQwzt5AhbvrRwKXWGC3nuSfIc4GCWNTqI60O
-         cee0eHMMQZxlaqSBAK2OeqETmGW1achsP+F1IvIob0fFYq7imZ/iNUyryICbWhDVE7
-         eoU3TC2/iT0hA==
-Date:   Tue, 14 Dec 2021 14:28:57 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     heiko@sntech.de, robh+dt@kernel.org, kishon@ti.com,
-        p.zabel@pengutronix.de, yifeng.zhao@rock-chips.com,
-        kever.yang@rock-chips.com, cl@rock-chips.com,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v4 2/4] dt-bindings: phy: rockchip: Add Naneng combo
- PHY bindings
-Message-ID: <Ybhc0VW6JeJ4CNY9@matsya>
-References: <20211208185449.16763-1-jbx6244@gmail.com>
- <20211208185449.16763-3-jbx6244@gmail.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C6B9A21108;
+        Tue, 14 Dec 2021 08:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639472396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UFeDHd6qk8JF9LIDK/A9lw7Ura1H2sdGsscX/CasGK8=;
+        b=YusjS/QgdgCMsIQDplVNnCPJHsr7E0ncNQoxqeBXHqemRBfT4fvd764Wc0BMw2VTfrGqIw
+        Js7rIl6ABoNcUTWEHwj8vvSbY12UojrYdcLVVVv71LUyqzWBk9DnmmbiwVTqNsOD+xo40Z
+        IVp/N8KszaPzpUAAXFtSJhrFEU6V1K8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639472396;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UFeDHd6qk8JF9LIDK/A9lw7Ura1H2sdGsscX/CasGK8=;
+        b=oU9shgJ7LgDNLKclzFZi9o6zjsLHcWzpswtMiSJraEgqpqF5eyGdHK16urKLd3ciQUyFSi
+        miHYTHbLKeXgEuAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A42A913C41;
+        Tue, 14 Dec 2021 08:59:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pYsSJwxduGFQIwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 14 Dec 2021 08:59:56 +0000
+Message-ID: <c969cfd4-194f-d347-3ed8-5bcbe1211fd5@suse.de>
+Date:   Tue, 14 Dec 2021 09:59:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208185449.16763-3-jbx6244@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2] drm/ast: potential dereference of null pointer
+Content-Language: en-US
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, airlied@redhat.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20211214014126.2211535-1-jiasheng@iscas.ac.cn>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20211214014126.2211535-1-jiasheng@iscas.ac.cn>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------FSaiij6p1adHCvvQejO1KRSL"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-12-21, 19:54, Johan Jonker wrote:
-> From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-> 
-> Add the compatible strings for the Naneng combo PHY found on rockchip SoC.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------FSaiij6p1adHCvvQejO1KRSL
+Content-Type: multipart/mixed; boundary="------------yXwzGw7zzhjVkoYN4Wgt7aeC";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Jiasheng Jiang <jiasheng@iscas.ac.cn>, airlied@redhat.com,
+ airlied@linux.ie, daniel@ffwll.ch
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Message-ID: <c969cfd4-194f-d347-3ed8-5bcbe1211fd5@suse.de>
+Subject: Re: [PATCH v2] drm/ast: potential dereference of null pointer
+References: <20211214014126.2211535-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20211214014126.2211535-1-jiasheng@iscas.ac.cn>
 
-Why is this series still tagged RFC..?
+--------------yXwzGw7zzhjVkoYN4Wgt7aeC
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> 
-> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
-> 
-> Changed V4:
->   restyle
->   remove some minItems
->   add more properties
->   remove reset-names
->   move #phy-cells
->   add rockchip,rk3568-pipe-grf
->   add rockchip,rk3568-pipe-phy-grf
-> ---
->  .../phy/phy-rockchip-naneng-combphy.yaml      | 127 ++++++++++++++++++
->  1 file changed, 127 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml b/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
-> new file mode 100644
-> index 000000000..d309e2008
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
-> @@ -0,0 +1,127 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/phy-rockchip-naneng-combphy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Rockchip SoC Naneng Combo Phy Device Tree Bindings
-> +
-> +maintainers:
-> +  - Heiko Stuebner <heiko@sntech.de>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - rockchip,rk3568-naneng-combphy
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: reference clock
-> +      - description: apb clock
-> +      - description: pipe clock
+SGkNCg0KQW0gMTQuMTIuMjEgdW0gMDI6NDEgc2NocmllYiBKaWFzaGVuZyBKaWFuZzoNCj4g
+VGhlIHJldHVybiB2YWx1ZSBvZiBremFsbG9jKCkgbmVlZHMgdG8gYmUgY2hlY2tlZC4NCj4g
+VG8gYXZvaWQgdXNlIG9mIG51bGwgcG9pbnRlciAnJmFzdF9zdGF0ZS0+YmFzZScgaW4gY2Fz
+ZSBvZiB0aGUNCj4gZmFpbHVyZSBvZiBhbGxvYy4NCj4gDQo+IEZpeGVzOiBmMGFkYmMzODJi
+OGIgKCJkcm0vYXN0OiBBbGxvY2F0ZSBpbml0aWFsIENSVEMgc3RhdGUgb2YgdGhlIGNvcnJl
+Y3Qgc2l6ZSIpDQo+IFNpZ25lZC1vZmYtYnk6IEppYXNoZW5nIEppYW5nIDxqaWFzaGVuZ0Bp
+c2Nhcy5hYy5jbj4NCg0KVGhhbmtzIGEgbG90LiBJJ3ZlIGFkZGVkIHlvdSBwYXRjaCB0byBk
+cm0tbWlzYy1maXhlcy4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiAtLS0NCj4gQ2hh
+bmdlbG9nOg0KPiANCj4gdjEgLT4gdjINCj4gDQo+ICpDaGFuZ2UgMS4gQWRkIHRoZSBlbHNl
+IHN0YXRlbWVudCB0aGF0IGNhbGxpbmcNCj4gX19kcm1fYXRvbWljX2hlbHBlcl9jcnRjX3Jl
+c2V0KCkgd2l0aCBhIHN0YXRlIG9mIE5VTEwuDQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2Ry
+bS9hc3QvYXN0X21vZGUuYyB8IDUgKysrKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwgNCBpbnNl
+cnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9n
+cHUvZHJtL2FzdC9hc3RfbW9kZS5jIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5j
+DQo+IGluZGV4IDM2ZDk1NzVhYTI3Yi4uNjUwOTlmMDM1OWY5IDEwMDY0NA0KPiAtLS0gYS9k
+cml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJt
+L2FzdC9hc3RfbW9kZS5jDQo+IEBAIC0xMTIwLDcgKzExMjAsMTAgQEAgc3RhdGljIHZvaWQg
+YXN0X2NydGNfcmVzZXQoc3RydWN0IGRybV9jcnRjICpjcnRjKQ0KPiAgIAlpZiAoY3J0Yy0+
+c3RhdGUpDQo+ICAgCQljcnRjLT5mdW5jcy0+YXRvbWljX2Rlc3Ryb3lfc3RhdGUoY3J0Yywg
+Y3J0Yy0+c3RhdGUpOw0KPiAgIA0KPiAtCV9fZHJtX2F0b21pY19oZWxwZXJfY3J0Y19yZXNl
+dChjcnRjLCAmYXN0X3N0YXRlLT5iYXNlKTsNCj4gKwlpZiAoYXN0X3N0YXRlKQ0KPiArCQlf
+X2RybV9hdG9taWNfaGVscGVyX2NydGNfcmVzZXQoY3J0YywgJmFzdF9zdGF0ZS0+YmFzZSk7
+DQo+ICsJZWxzZQ0KPiArCQlfX2RybV9hdG9taWNfaGVscGVyX2NydGNfcmVzZXQoY3J0Yywg
+TlVMTCk7DQo+ICAgfQ0KPiAgIA0KPiAgIHN0YXRpYyBzdHJ1Y3QgZHJtX2NydGNfc3RhdGUg
+Kg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVs
+b3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3Ry
+LiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVy
+ZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-no maxItems or minItems for this?
+--------------yXwzGw7zzhjVkoYN4Wgt7aeC--
 
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ref
-> +      - const: apb
-> +      - const: pipe
-> +
-> +  resets:
-> +    items:
-> +      - description: exclusive apb reset line
-> +      - description: exclusive PHY reset line
+--------------FSaiij6p1adHCvvQejO1KRSL
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Ditto?
+-----BEGIN PGP SIGNATURE-----
 
-> +
-> +  rockchip,dis-u3otg0-port:
-> +    type: boolean
-> +    description:
-> +      Disable the u3otg0 port.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmG4XQwFAwAAAAAACgkQlh/E3EQov+AO
+4g/+LFseO9NJXC7T8puGMkuVxIW1VoUzGwDpN37gIdJWzbWLwFnVAhd7nyw9lCrlCbpco5q6SaLZ
+z6QZMib6HyQ/yvvQLBqjBjd91KY1GKGKX/gne0boSTPbtz2YP+z5m+CPPCL3NPCAn7LwQFiFfw4l
+x4MmOAX0Z7+YlAweiAZQjBOFYtJz2At2JFNpGLtARy/Xwz0lscox67gEh0h9eItO57vWPNd7W6YY
+xVs0wTqIx4szpvvlehvuTHA8kGGg3rD/ywQ2WyZv8vXF0RdpcxlRM/1LiLjhtb2JNqSURcFNxrkx
+hn58mWKB8fLaKdihvSFzl52gs55vknwpmQKT6sKh0sPtZHUc5xMRlDqdeUqo/d2bhYFaIJnY3eeS
+L440zhHeAk4sKXLUlRc9AS0xYw+Wm8bTBrzSNGda594aoxtE5MtNZsV2xDiQgZdyKo3SBDUgYUYG
+bTkh0nkalSvS+EvSB5dIzyAB7w5OpptZ3VO0xncfuaOwOit1HAzuIFJY3xwFVU1AqiVq8tuS/jzd
+3m2v8e5GeTDw1U8Z81H2w7vpVUwpFr5xw8FuJLgAC9FOxr7eB/VlDLOxVdbD05QKaTAbXIU1N3Zv
+W7c+4ipWgEAoA/PaWc6tuazCW5EJyGATKXGhB9+N/dgWKv/UuYnLgKB8PuqKvjo1vaZQsNwgpEHe
++DI=
+=nSHM
+-----END PGP SIGNATURE-----
 
-why not make it explicit and say rockchip,disable-u3otg0-port
-
-Also why should this port be disabled?
-
-> +
-> +  rockchip,dis-u3otg1-port:
-> +    type: boolean
-> +    description:
-> +      Disable the u3otg1 port.
-
-ditto
-
-> +
-> +  rockchip,enable-ssc:
-> +    type: boolean
-> +    description:
-> +      In U3 and SATA mode the SSC option is already disabled by default.
-> +      In PCIE mode the option SSC can be enabled.
-> +      If Spread Spectrum Clocking (SSC) is used it is
-> +      required that a common reference clock is used by the link partners.
-> +      Most commercially available platforms with PCIe backplanes use
-> +      SSC to reduce EMI.
-> +
-> +  rockchip,ext-refclk:
-> +    type: boolean
-> +    description:
-> +      Many PCIe connections, especially backplane connections,
-> +      require a synchronous reference clock between the two link partners.
-> +      To achieve this a common clock source, referred to as REFCLK in
-> +      the PCI Express Card Electromechanical Specification,
-> +      should be used by both ends of the PCIe link.
-> +      The PCIe PHY provides 100MHz differential clock output
-> +      (optional with SSC) in RC mode for system applications.
-> +
-> +  rockchip,pipe-grf:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Some additional phy settings are accessed through GRF regs.
-> +
-> +  rockchip,pipe-phy-grf:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Some additional pipe settings are accessed through GRF regs.
-> +
-> +  rockchip,sgmii-mac-sel:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1]
-> +    default: 0
-> +    description:
-> +      Select gmac0 or gmac1 to be used as SGMII controller.
-> +
-> +  "#phy-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - rockchip,pipe-grf
-> +  - rockchip,pipe-phy-grf
-> +  - "#phy-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/rk3568-cru.h>
-> +
-> +    pipegrf: syscon@fdc50000 {
-> +      compatible = "rockchip,rk3568-pipe-grf", "syscon";
-> +      reg = <0xfdc50000 0x1000>;
-> +    };
-> +
-> +    pipe_phy_grf0: syscon@fdc70000 {
-> +      compatible = "rockchip,rk3568-pipe-phy-grf", "syscon";
-> +      reg = <0xfdc70000 0x1000>;
-> +    };
-> +
-> +    combphy0: phy@fe820000 {
-> +      compatible = "rockchip,rk3568-naneng-combphy";
-> +      reg = <0xfe820000 0x100>;
-> +      clocks = <&pmucru CLK_PCIEPHY0_REF>,
-> +               <&cru PCLK_PIPEPHY0>,
-> +               <&cru PCLK_PIPE>;
-> +      clock-names = "ref", "apb", "pipe";
-> +      assigned-clocks = <&pmucru CLK_PCIEPHY0_REF>;
-> +      assigned-clock-rates = <100000000>;
-> +      resets = <&cru SRST_P_PIPEPHY0>, <&cru SRST_PIPEPHY0>;
-> +      rockchip,pipe-grf = <&pipegrf>;
-> +      rockchip,pipe-phy-grf = <&pipe_phy_grf0>;
-> +      #phy-cells = <1>;
-> +    };
-> -- 
-> 2.20.1
-
--- 
-~Vinod
+--------------FSaiij6p1adHCvvQejO1KRSL--

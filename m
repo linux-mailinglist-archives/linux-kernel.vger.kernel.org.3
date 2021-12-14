@@ -2,175 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FDC474EBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20E1474EBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238335AbhLNXsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 18:48:37 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15733 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbhLNXsf (ORCPT
+        id S238347AbhLNXsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 18:48:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:49913 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238338AbhLNXsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 18:48:35 -0500
-Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JDFP92vPPzZddX;
-        Wed, 15 Dec 2021 07:45:33 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 07:48:32 +0800
-Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 07:48:32 +0800
-Received: from kwepemm600014.china.huawei.com ([7.193.23.54]) by
- kwepemm600014.china.huawei.com ([7.193.23.54]) with mapi id 15.01.2308.020;
- Wed, 15 Dec 2021 07:48:32 +0800
-From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-To:     Jianhua Liu <jianhua.ljh@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-CC:     Will Deacon <will@kernel.org>, "liuqi (BA)" <liuqi115@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v5] arm64: kprobe: Enable OPTPROBE for arm64
-Thread-Topic: [PATCH v5] arm64: kprobe: Enable OPTPROBE for arm64
-Thread-Index: AQHX62g9BT7x93W140S2NL6MB+oX8KwwRG0AgABhQICAAQORAIABCMew
-Date:   Tue, 14 Dec 2021 23:48:32 +0000
-Message-ID: <5c593351b3704c4490b2b122f6cb9112@hisilicon.com>
-References: <20211207124002.59877-1-liuqi115@huawei.com>
- <20211213183851.GD12405@willie-the-truck>
- <20211214092657.5b9c26b4e3852602eced4fda@kernel.org>
- <CAAgTQPUKqFn9_ENKbfJkFjT3v9L2NiFAY2xvULEj_6wguqWYNg@mail.gmail.com>
-In-Reply-To: <CAAgTQPUKqFn9_ENKbfJkFjT3v9L2NiFAY2xvULEj_6wguqWYNg@mail.gmail.com>
-Accept-Language: en-GB, zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.201.239]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 14 Dec 2021 18:48:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639525721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PxegsCUs4iHdn3Ce5+JXTq0Snzm5UCe6ZUE8seqhmhc=;
+        b=bFdQ17AOl3VqQ9ouwxhXCtEifTcaJUnHMC/trIFHYZ5rJCbMUv6DoU5cFnkwjjfK3qJkuK
+        OM2N+1zXX/+/Jbj3GumuS5Fuaqcm1R4sVcvJLlpPpCQ3uMUkoJGaV69+AflK9IV70eUULa
+        O8j+qCBaZE/J3M9QwM1+9BVYeGW+b+g=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-543-_KgT-5OuNAmtnlV1psHmBg-1; Tue, 14 Dec 2021 18:48:40 -0500
+X-MC-Unique: _KgT-5OuNAmtnlV1psHmBg-1
+Received: by mail-qk1-f198.google.com with SMTP id br9-20020a05620a460900b0046ad784c791so18200022qkb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:48:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PxegsCUs4iHdn3Ce5+JXTq0Snzm5UCe6ZUE8seqhmhc=;
+        b=eVJqyHEl4GzSwK/9k1++lffvgT8GNuqPhDt4R1yZltLLiT//eecrsn3MmXGC/kFAfO
+         LdEVRQhww1cOfxwRw7jd48F5ro+fxT9ywbOPyRncGYQ1bVD6OvEcFy7qcibUehxBMqEV
+         tzl7HoGTMxqyQ0yxYXb+EUoswqiILoA1rBPY6aVbnqh/zD+41dHhcAdiMDMUMkykF4WE
+         S+GP0O1H2/gPW+NJ0gDCKozwcscBi1DL9tLwQV7PYgc8j1yRwiAHlM61m0Me7zFbdvm+
+         hJZkqN5RWZqBxK0g3zHHdj9A+dUIVp5YsKGPSejS+ByrCc1QpOjf7CifPPf+q/AvtNgx
+         BqPg==
+X-Gm-Message-State: AOAM532MyKzPS8ok3gA4oz1V9MPrrAwNIwUkpDHAWPVJX1q6T7ZZ8/QJ
+        9mhluJDQuwM1Q0LVyLS7SLm9lerqWPay6USA7dDtcAcPF0D+DBRxFiU0LPI+5zAlkqkIz7SI/o1
+        Jbj0eMuPQbbOmpLnmB1NcQERQ
+X-Received: by 2002:a05:6214:da9:: with SMTP id h9mr8998405qvh.2.1639525719486;
+        Tue, 14 Dec 2021 15:48:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx6wUDPzah/26+HipUsYD/dw9JK8zhpppqGRr1+2gGylE/gSXGSBN1fnRur80e2G8cVi3I+Xw==
+X-Received: by 2002:a05:6214:da9:: with SMTP id h9mr8998389qvh.2.1639525719256;
+        Tue, 14 Dec 2021 15:48:39 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::49])
+        by smtp.gmail.com with ESMTPSA id o4sm143059qkh.107.2021.12.14.15.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 15:48:38 -0800 (PST)
+Date:   Tue, 14 Dec 2021 15:48:36 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Miroslav Benes <mbenes@suse.cz>, jikos@kernel.org,
+        joe.lawrence@redhat.com, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] livepatch: Allow user to specify functions to
+ search for on a stack
+Message-ID: <20211214234836.3x3clp45ut6gtol6@treble>
+References: <20211210124449.21537-1-mbenes@suse.cz>
+ <20211210124449.21537-2-mbenes@suse.cz>
+ <20211213190008.r4rjeytfz5ycbstb@treble>
+ <alpine.LSU.2.21.2112140857570.20187@pobox.suse.cz>
+ <YbiNsVfoCPCJmOKj@alley>
+ <Ybi6252hKwUM4KrP@alley>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Ybi6252hKwUM4KrP@alley>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSmlhbmh1YSBMaXUgW21h
-aWx0bzpqaWFuaHVhLmxqaEBnbWFpbC5jb21dDQo+IFNlbnQ6IFdlZG5lc2RheSwgRGVjZW1iZXIg
-MTUsIDIwMjEgNDo1NiBBTQ0KPiBUbzogTWFzYW1pIEhpcmFtYXRzdSA8bWhpcmFtYXRAa2VybmVs
-Lm9yZz4NCj4gQ2M6IFdpbGwgRGVhY29uIDx3aWxsQGtlcm5lbC5vcmc+OyBsaXVxaSAoQkEpIDxs
-aXVxaTExNUBodWF3ZWkuY29tPjsgQ2F0YWxpbg0KPiBNYXJpbmFzIDxjYXRhbGluLm1hcmluYXNA
-YXJtLmNvbT47IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsNCj4gU29uZyBC
-YW8gSHVhIChCYXJyeSBTb25nKSA8c29uZy5iYW8uaHVhQGhpc2lsaWNvbi5jb20+OyBaZW5ndGFv
-IChCKQ0KPiA8cHJpbWUuemVuZ0BoaXNpbGljb24uY29tPjsgcm9iaW4ubXVycGh5QGFybS5jb207
-IExpbnV4YXJtDQo+IDxsaW51eGFybUBodWF3ZWkuY29tPjsgbGludXgta2VybmVsQHZnZXIua2Vy
-bmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHY1XSBhcm02NDoga3Byb2JlOiBFbmFibGUg
-T1BUUFJPQkUgZm9yIGFybTY0DQo+IA0KPiBPbiBUdWUsIERlYyAxNCwgMjAyMSBhdCA4OjI3IEFN
-IE1hc2FtaSBIaXJhbWF0c3UgPG1oaXJhbWF0QGtlcm5lbC5vcmc+IHdyb3RlOg0KPiA+DQo+ID4g
-T24gTW9uLCAxMyBEZWMgMjAyMSAxODozODo1MiArMDAwMA0KPiA+IFdpbGwgRGVhY29uIDx3aWxs
-QGtlcm5lbC5vcmc+IHdyb3RlOg0KPiA+DQo+ID4gPiBIaSwNCj4gPiA+DQo+ID4gPiBbK0phbmV0
-IExpdV0NCj4gPiA+DQo+ID4gPiBPbiBUdWUsIERlYyAwNywgMjAyMSBhdCAwODo0MDowMlBNICsw
-ODAwLCBRaSBMaXUgd3JvdGU6DQo+ID4gPiA+IFRoaXMgcGF0Y2ggaW50cm9kdWNlIG9wdHByb2Jl
-IGZvciBBUk02NC4gSW4gb3B0cHJvYmUsIHByb2JlZA0KPiA+ID4gPiBpbnN0cnVjdGlvbiBpcyBy
-ZXBsYWNlZCBieSBhIGJyYW5jaCBpbnN0cnVjdGlvbiB0byB0cmFtcG9saW5lLg0KPiA+ID4gPg0K
-PiA+ID4gPiBQZXJmb3JtYW5jZSBvZiBvcHRwcm9iZSBvbiBIaXAwOCBwbGF0Zm9ybSBpcyB0ZXN0
-IHVzaW5nIGtwcm9iZQ0KPiA+ID4gPiBleGFtcGxlIG1vZHVsZVsxXSB0byBhbmFseXplIHRoZSBs
-YXRlbmN5IG9mIGEga2VybmVsIGZ1bmN0aW9uLA0KPiA+ID4gPiBhbmQgaGVyZSBpcyB0aGUgcmVz
-dWx0Og0KPiA+ID4gPg0KPiA+ID4gPiBjb21tb24ga3Byb2JlOg0KPiA+ID4gPiBbMjgwNzA5Ljg0
-NjM4MF0gZG9fZW1wdHkgcmV0dXJuZWQgMCBhbmQgdG9vayAxNTMwIG5zIHRvIGV4ZWN1dGUNCj4g
-PiA+ID4gWzI4MDcwOS44NTIwNTddIGRvX2VtcHR5IHJldHVybmVkIDAgYW5kIHRvb2sgNTUwIG5z
-IHRvIGV4ZWN1dGUNCj4gPiA+ID4gWzI4MDcwOS44NTc2MzFdIGRvX2VtcHR5IHJldHVybmVkIDAg
-YW5kIHRvb2sgNDQwIG5zIHRvIGV4ZWN1dGUNCj4gPiA+ID4gWzI4MDcwOS44NjMyMTVdIGRvX2Vt
-cHR5IHJldHVybmVkIDAgYW5kIHRvb2sgMzgwIG5zIHRvIGV4ZWN1dGUNCj4gPiA+ID4gWzI4MDcw
-OS44Njg3ODddIGRvX2VtcHR5IHJldHVybmVkIDAgYW5kIHRvb2sgMzYwIG5zIHRvIGV4ZWN1dGUN
-Cj4gPiA+ID4gWzI4MDcwOS44NzQzNjJdIGRvX2VtcHR5IHJldHVybmVkIDAgYW5kIHRvb2sgMzQw
-IG5zIHRvIGV4ZWN1dGUNCj4gPiA+ID4gWzI4MDcwOS44Nzk5MzZdIGRvX2VtcHR5IHJldHVybmVk
-IDAgYW5kIHRvb2sgMzIwIG5zIHRvIGV4ZWN1dGUNCj4gPiA+ID4gWzI4MDcwOS44ODU1MDVdIGRv
-X2VtcHR5IHJldHVybmVkIDAgYW5kIHRvb2sgMzAwIG5zIHRvIGV4ZWN1dGUNCj4gPiA+ID4gWzI4
-MDcwOS44OTEwNzVdIGRvX2VtcHR5IHJldHVybmVkIDAgYW5kIHRvb2sgMjgwIG5zIHRvIGV4ZWN1
-dGUNCj4gPiA+ID4gWzI4MDcwOS44OTY2NDZdIGRvX2VtcHR5IHJldHVybmVkIDAgYW5kIHRvb2sg
-MjkwIG5zIHRvIGV4ZWN1dGUNCj4gPiA+ID4NCj4gPiA+ID4gb3B0cHJvYmU6DQo+ID4gPiA+IFsg
-Mjk2NS45NjQ1NzJdIGRvX2VtcHR5IHJldHVybmVkIDAgYW5kIHRvb2sgOTAgbnMgdG8gZXhlY3V0
-ZQ0KPiA+ID4gPiBbIDI5NjUuOTY5OTUyXSBkb19lbXB0eSByZXR1cm5lZCAwIGFuZCB0b29rIDgw
-IG5zIHRvIGV4ZWN1dGUNCj4gPiA+ID4gWyAyOTY1Ljk3NTMzMl0gZG9fZW1wdHkgcmV0dXJuZWQg
-MCBhbmQgdG9vayA3MCBucyB0byBleGVjdXRlDQo+ID4gPiA+IFsgMjk2NS45ODA3MTRdIGRvX2Vt
-cHR5IHJldHVybmVkIDAgYW5kIHRvb2sgNjAgbnMgdG8gZXhlY3V0ZQ0KPiA+ID4gPiBbIDI5NjUu
-OTg2MTI4XSBkb19lbXB0eSByZXR1cm5lZCAwIGFuZCB0b29rIDgwIG5zIHRvIGV4ZWN1dGUNCj4g
-PiA+ID4gWyAyOTY1Ljk5MTUwN10gZG9fZW1wdHkgcmV0dXJuZWQgMCBhbmQgdG9vayA3MCBucyB0
-byBleGVjdXRlDQo+ID4gPiA+IFsgMjk2NS45OTY4ODRdIGRvX2VtcHR5IHJldHVybmVkIDAgYW5k
-IHRvb2sgNzAgbnMgdG8gZXhlY3V0ZQ0KPiA+ID4gPiBbIDI5NjYuMDAyMjYyXSBkb19lbXB0eSBy
-ZXR1cm5lZCAwIGFuZCB0b29rIDgwIG5zIHRvIGV4ZWN1dGUNCj4gPiA+ID4gWyAyOTY2LjAwNzY0
-Ml0gZG9fZW1wdHkgcmV0dXJuZWQgMCBhbmQgdG9vayA3MCBucyB0byBleGVjdXRlDQo+ID4gPiA+
-IFsgMjk2Ni4wMTMwMjBdIGRvX2VtcHR5IHJldHVybmVkIDAgYW5kIHRvb2sgNzAgbnMgdG8gZXhl
-Y3V0ZQ0KPiA+ID4gPiBbIDI5NjYuMDE4NDAwXSBkb19lbXB0eSByZXR1cm5lZCAwIGFuZCB0b29r
-IDcwIG5zIHRvIGV4ZWN1dGUNCj4gPiA+ID4NCj4gPiA+ID4gQXMgdGhlIHJlc3VsdCBzaG93cywg
-b3B0cHJvYmUgY2FuIGdyZWF0bHkgcmVkdWNlIHRoZSBsYXRlbmN5LiBCaWcNCj4gPiA+ID4gbGF0
-ZW5jeSBvZiBjb21tb24ga3Byb2JlIHdpbGwgc2lnbmlmaWNhbnRseSBpbXBhY3QgdGhlIHJlYWwg
-cmVzdWx0DQo+ID4gPiA+IHdoaWxlIGRvaW5nIHBlcmZvcm1hbmNlIGFuYWx5c2lzIG9yIGRlYnVn
-Z2luZyBwZXJmb3JtYW5jZSBpc3N1ZXMNCj4gPiA+ID4gaW4gbGFiLCBzbyBvcHRwcm9iZSBpcyB1
-c2VmdWwgaW4gdGhpcyBzY2VuYXJpby4NCj4gPiA+ID4NCj4gPiA+ID4gQWNrZWQtYnk6IE1hc2Ft
-aSBIaXJhbWF0c3UgPG1oaXJhbWF0QGtlcm5lbC5vcmc+DQo+ID4gPiA+IFNpZ25lZC1vZmYtYnk6
-IFFpIExpdSA8bGl1cWkxMTVAaHVhd2VpLmNvbT4NCj4gPiA+ID4NCj4gPiA+ID4gTm90ZToNCj4g
-PiA+ID4gQXMgYnJhbmNoIGluc3RydWN0aW9uIGluIEFybTY0IGhhcyBhIDEyOE0gcmFuZ2UgbGlt
-aXRhdGlvbiwgb3B0cHJvYmUNCj4gPiA+ID4gY291bGQgb25seSB1c2VkIHdoZW4gb2Zmc2V0IGJl
-dHdlZW4gcHJvYmUgcG9pbnQgYW5kIHRyYW1wb2xpbmUNCj4gPiA+ID4gaXMgbGVzcyB0aGFuIDEy
-OE0sIG90aGVyd2lzZSBrZXJuZWwgd2lsbCBjaG9vc2UgY29tbW9uIGtwcm9iZQ0KPiA+ID4gPiBh
-dXRvbWF0aWNseS4NCj4gPiA+ID4NCj4gPiA+ID4gTGltaXRhdGlvbiBjYXVzZWQgYnkgYnJhbmNo
-IGlzbid0IHVuaXF1ZSB0byBBcm02NCwgYnV0IGFsc28gdG8NCj4gPiA+ID4geDg2L2FybS9wb3dl
-cnBjLg0KPiA+ID4gPg0KPiA+ID4gPiBJbiBmYWN0LCBNb2R1bGUgUExUIGhhcyBiZWVuIHRyaWVk
-IHRvIGdldCByaWQgb2YgbGltaWF0aW9uLCBidXQNCj4gPiA+ID4gZGVzdGluYXRpb24gb2YgUExU
-IG11c3QgYmUgYSBmaXhlZCB2YWx1ZSwgYW5kIHdlIG5lZWQgdG8gbW9kaWZ5DQo+ID4gPiA+IHRo
-ZSBkZXN0aW5hdGlvbiAoYXMgZWFjaCBvcHRwcm9iZSBoYXMgaXRzIG93biB0cmFtcG9saW5lKS4N
-Cj4gPiA+ID4NCj4gPiA+ID4gQXMgZGlzY3Vzc2VkIHdpdGggTWFzYW1pWzJdLCB3ZSBjYW4gc3Rh
-cnQgd2l0aCBjb3JlLWtlcm5lbCBwb2ludA0KPiA+ID4gPiAod2l0aGluIDEyOE0pIGFzIHRoZSBm
-aXJzdCBzdGVwLCBsaWtlIG90aGVyIGFyY2hpdGVjdHVyZXMuDQo+ID4gPiA+DQo+ID4gPiA+IFsx
-XQ0KPiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2
-YWxkcy9saW51eC5naXQvdHJlZS9zYQ0KPiBtcGxlcy9rcHJvYmVzL2tyZXRwcm9iZV9leGFtcGxl
-LmMNCj4gPiA+ID4gWzJdDQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMjAyMTEyMDEx
-MDUwMDEuNTE2NGY5OGJhNzgzZTcyMDdkZjEyMjljQGtlcm5lDQo+IGwub3JnLw0KPiA+ID4gPiAt
-LS0NCj4gPiA+ID4gIGFyY2gvYXJtNjQvS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICB8ICAgMSArDQo+ID4gPiA+ICBhcmNoL2FybTY0L2luY2x1ZGUvYXNtL2twcm9iZXMuaCAgICAg
-ICAgICAgICAgfCAgMjEgKysNCj4gPiA+ID4gIGFyY2gvYXJtNjQva2VybmVsL3Byb2Jlcy9NYWtl
-ZmlsZSAgICAgICAgICAgICB8ICAgMiArDQo+ID4gPiA+ICBhcmNoL2FybTY0L2tlcm5lbC9wcm9i
-ZXMvb3B0X2FybTY0LmMgICAgICAgICAgfCAxOTkgKysrKysrKysrKysrKysrKysrDQo+ID4gPiA+
-ICAuLi4vYXJtNjQva2VybmVsL3Byb2Jlcy9vcHRwcm9iZV90cmFtcG9saW5lLlMgfCAgOTcgKysr
-KysrKysrDQo+ID4gPiA+ICBpbmNsdWRlL2xpbnV4L2twcm9iZXMuaCAgICAgICAgICAgICAgICAg
-ICAgICAgfCAgIDIgKw0KPiA+ID4gPiAga2VybmVsL2twcm9iZXMuYyAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIHwgIDIyICsrDQo+ID4gPiA+ICA3IGZpbGVzIGNoYW5nZWQsIDM0NCBpbnNl
-cnRpb25zKCspDQo+ID4gPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm02NC9rZXJuZWwv
-cHJvYmVzL29wdF9hcm02NC5jDQo+ID4gPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm02
-NC9rZXJuZWwvcHJvYmVzL29wdHByb2JlX3RyYW1wb2xpbmUuUw0KPiA+ID4NCj4gPiA+IEkndmUg
-bm90IGxvb2tlZCBhdCB0aGVzZSBjaGFuZ2VzIGluIGRldGFpbCwgYnV0IGl0IGxvb2tzIGxpa2Ug
-dGhlcmUgaXMgYW4NCj4gPiA+IGluZGVwZW5kZW50IHBhdGNoIGZyb20gSmFuZXQgTGl1IHRyeWlu
-ZyB0byBkbyB0aGUgc2FtZSB0aGluZzoNCj4gPiA+DQo+ID4gPg0KPiBodHRwczovL2xvcmUua2Vy
-bmVsLm9yZy9yLzE2MzU4NTg3MDYtMjczMjAtMS1naXQtc2VuZC1lbWFpbC1qaWFuaHVhLmxqaEBn
-bQ0KPiBhaWwuY29tDQo+ID4gPg0KPiA+DQo+ID4gVGhhbmtzIGZvciBub3RpY2luZy4gSSBtaXNz
-ZWQgaXQuDQo+ID4NCj4gPiA+IFRoZSBwYXRjaCBoZXJlIGZyb20gUWkgTGl1IGxvb2tzIGxpa2Ug
-aXQncyBhIGJpdCBmdXJ0aGVyIGFsb25nLCBidXQgaXQNCj4gPiA+IHdvdWxkIGJlIGdvb2QgZm9y
-IEphbmV0IHRvIGF0IGxlYXN0IHRlc3QgaXQgb3V0IGFuZCBjb25maXJtIHRoYXQgaXQgd29ya3MN
-Cj4gPiA+IGZvciB0aGVtLg0KPiA+DQo+ID4gWWVhaCwgaXQncyBub3cgdjUuDQo+ID4gQnV0IGl0
-IHNlZW1zIEphbmV0J3Mgb25lIGFsc28gaGFzIGdvb2QgcG9pbnRzLiBJIHdvdWxkIGxpa2UgSmFu
-ZXQncyBzaGFyaW5nDQo+ID4gc2F2ZV9hbGxfYmFzZV9yZWdzIG1hY3JvIGFuZCB0aGUgY29tbWVu
-dCBhYm91dCB0aGUgYnJhbmNoIGluc3RydWN0aW9uLg0KPiA+DQo+ID4gPg0KPiA+ID4gQ2hlZXJz
-LA0KPiA+ID4NCj4gPiA+IFdpbGwNCj4gPiA+DQo+ID4gPiBbS2VwdCBkaWZmIGlubGluZSBmb3Ig
-SmFuZXRdDQo+ID4NCj4gPiBKYW5ldCwgcGxlYXNlIGZlZWwgZnJlZSB0byByZXZpZXcgYW5kIHRl
-c3QgaXQuIEl0IGlzIGltcG9ydGFudCB0aGF0IHlvdSBjb25maXJtDQo+ID4gdGhpcyBjYW4gd29y
-ayB3aXRoIHlvdXIgZW52aW9ubWVudCB0b28uDQo+ID4gSSB3aWxsIHJldmlldyB5b3VyIEtQUk9C
-RV9PTl9GVFJBQ0UgcGF0Y2guDQo+ID4NCj4gSSBoYXZlIHRlc3RlZCB0aGVzZSBwYXRjaCBvbiBV
-TklTT0Mgczk4NjNhIHBsYXRmb3JtIGJlZm9yZSBzZW5kaW5nLg0KPiANCj4gVGhlIHRlc3QgY2Fz
-ZSBmcm9tOg0KPiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dp
-dC90b3J2YWxkcy9saW51eC5naXQvdHJlZS9zYQ0KPiBtcGxlcy9rcHJvYmVzLw0KPiANCj4gQW5k
-IEkgZG8gdGhlIGZvbGxvd2luZyBjaGFuZ2UgZm9yIGtwcm9iZV9leGFtcGxlLmMgYmVmb3JlIHRl
-c3Rpbmc6DQo+IDEuIGRlbGV0ZSBmdW5jdGlvbiBoYW5kbGVyX3Bvc3QsDQo+ICAgIGtwcm9iZV9p
-bml0IGRvZXMgImtwLnBvc3RfaGFuZGxlciA9IGhhbmRsZXJfcG9zdDsgLS0tPg0KPiBwLnBvc3Rf
-aGFuZGxlciA9IE5VTEw7Ig0KPiAyLiBoYW5kbGVyX3ByZSBjYWxscyBkdW1wX3N0YWNrLg0KPiAN
-Cj4gVGhhbmtzIGZvciAgdGhlIHJldmlldy4NCg0KSGVsbG8sIEppYW5odWEuIEkgZ3Vlc3MgV2ls
-bCBhbmQgTWFzYW1pIG1lYW50IHlvdSBtYXkNCnRlc3QgbGl1cWkncyBvcHRwcm9iZSBwYXRjaCBv
-biB5b3VyIGhhcmR3YXJlIGFuZCBtYWtlDQpzdXJlIGl0IGNhbiB3b3JrLiBBdCB0aGUgc2FtZSB0
-aW1lLCBNYXNhbWkgd2lsbCBhbHNvDQp0YWtlIGNhcmUgb2YgeW91ciBhcHByb2FjaC4NCg0KVGhh
-bmtzDQpCYXJyeQ0KDQo=
+On Tue, Dec 14, 2021 at 04:40:11PM +0100, Petr Mladek wrote:
+> > > > Hm, what does this mean for the unpatching case?  What if the new
+> > > > function's .cold child is on the stack when we're trying to unpatch?
+> > > 
+> > > Good question. I did not realize it worked both ways. Of course it does.
+> > > 
+> > > > Would it make sense to allow the user specify a 'new_func' for
+> > > > stack_only, which is a func to check on the stack when unpatching?  Then
+> > > > new_func could point to the new .cold child.  And then
+> > > > klp_check_stack_func() wouldn't need a special case.
+> > 
+> > I am confused. My understanding is that .cold child is explicitly
+> > livepatched to the new .cold child like it is done in the selftest:
+> > 
+> > static struct klp_func funcs_stack_only[] = {
+> > 	{
+> > 		.old_name = "child_function",
+> > 		.new_func = livepatch_child_function,
+> > 	}, {
+> > 
+> > We should not need anything special to check it on stack.
+> > We only need to make sure that we check all .stack_only functions of
+> > the to-be-disabled livepatch.
+> 
+> We have discussed this with Miroslav and it seems to be even more
+> complicated. My current understanding is that we actually have
+> three functions involved:
+> 
+>   parent_func()
+>     call child_func()
+>       jmp child_func.cold
+> 
+> We livepatch child_func() that uses jmp and need not be on stack.
+> This is why we want to check parent_func() on stack.
+> For this, we define something like:
+> 
+> static struct klp_func funcs[] = {
+> 	{
+> 		.old_name = "child_func",
+> 		.new_func = livepatch_child_func,   // livepatched func
+> 	},
+> 	{
+> 		.old_name = "parent_func",
+> 		.stack_only = true,		    // stack only
+> 	},
+
+Hm, this is different than how I understand it.
+
+In the past I referred to the "parent" as the function which jumps to
+the cold ("child") function.  So maybe we're getting confused by
+different terminology.  But here I'll go with the naming from your
+example.
+
+If parent_func() is stack_only, that could create some false positive
+scenarios where patching stalls unnecessarily.  Also, wouldn't all of
+child_func()'s callers have to be made stack_only?  How would you
+definitively find all the callers?
+
+Instead I was thinking child_func.cold() should be stack_only.
+
+e.g.:
+
+static struct klp_func funcs[] = {
+	{
+		.old_name = "child_func",
+		.new_func = livepatch_child_func,
+	},
+	{
+		.old_name = "child_func.cold",
+		.new_name = "livepatch_child_func.cold",
+		.stack_only = true,
+	},
+
+Any reason why that wouldn't work?
+
+> This is another argument that we should somehow reuse the nops code
+> also for stack_only checks.
+> 
+> Does it make sense, please? ;-)
+
+Yes, if parent_func() is stack_only.
+
+But if child_func.cold() is stack_only, that doesn't work, because it
+doesn't have a fentry hook.
+
+-- 
+Josh
+

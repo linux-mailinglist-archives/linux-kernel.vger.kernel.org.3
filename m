@@ -2,132 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF66473A39
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EACE473A3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 02:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244665AbhLNBdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 20:33:04 -0500
-Received: from mga06.intel.com ([134.134.136.31]:21975 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237640AbhLNBdD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 20:33:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639445583; x=1670981583;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E8vOL7jWoPtXylL0YcuoLKefuvb/SdvUSnxoD7m8IE0=;
-  b=V4SBH5OTeahRpfGSvEa6QJQbbctb3e0oQx1cX/ohlQm/0OQD44m5d22h
-   o4Gp8oqCcNAdikKs/SllmSOdjp9O2bNy2SvWjzssPf+rLe7eYlYjlDx9M
-   1DVs3THczgtat0pEekdq1mQQwpwDXtbexn7lAK9C+BI+fdHTzyoVn1For
-   s00a8+aR+CyaDqi8F9/77owmj/JX04MRD3fHuwwtih9UVzfHgLXetLS2P
-   uvzxuXKCw/Dhl0cm7Q7S6rcsUoUV3vhdPDsfXdzT0CyeUJbdPIEZULJTR
-   SDvQQofrf3wXPAkoJv5eopcLTTgThH4TryL5rvr1cS19Myc7gZzD/42FJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="299652252"
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="299652252"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 17:33:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
-   d="scan'208";a="464871441"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Dec 2021 17:33:01 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mwwge-0007Gw-Tk; Tue, 14 Dec 2021 01:33:00 +0000
-Date:   Tue, 14 Dec 2021 09:32:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liu Yi L <yi.l.liu@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.16-rc3 31/37] undefined reference to
- `interval_tree_iter_first'
-Message-ID: <202112140915.8XQn8g07-lkp@intel.com>
+        id S243440AbhLNBiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 20:38:15 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:52162 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237640AbhLNBiO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Dec 2021 20:38:14 -0500
+Received: from localhost.localdomain (unknown [124.16.138.122])
+        by APP-05 (Coremail) with SMTP id zQCowADHzgJY9bdhkeHyAg--.59493S2;
+        Tue, 14 Dec 2021 09:37:29 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     airlied@redhat.com, tzimmermann@suse.de, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] drm/ast: potential dereference of null pointer
+Date:   Tue, 14 Dec 2021 09:37:27 +0800
+Message-Id: <20211214013727.2211481-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADHzgJY9bdhkeHyAg--.59493S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw4xtryfuw15Zr1fZr1rXrb_yoWDXFX_GF
+        4UW3Z5Gr9xC34j93W2v3yfKry09rZ3uFs5Xw4UKFZay3s0qry7C39Igr1Fgr4UuF17ZrWD
+        Ja17tFy3Arn7CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWk
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUHpB-UUUUU=
+X-Originating-IP: [124.16.138.122]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.16-rc3
-head:   39eca2be15451cc145f912190c4e5637362f6122
-commit: 74814fdbefe2fb370111a0ce00641c64376447cb [31/37] vfio/pci: Add bind_iommufd() support
-config: parisc-randconfig-r036-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140915.8XQn8g07-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/luxis1999/iommufd/commit/74814fdbefe2fb370111a0ce00641c64376447cb
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.16-rc3
-        git checkout 74814fdbefe2fb370111a0ce00641c64376447cb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
+The return value of kzalloc() needs to be checked.
+To avoid use of null pointer '&ast_state->base' in case of the
+failure of alloc.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_area_iter_first':
->> (.text+0x2e0): undefined reference to `interval_tree_iter_first'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_pages_get_exact_user':
-   (.text+0x4d4): undefined reference to `interval_tree_iter_first'
->> hppa-linux-ld: (.text+0x528): undefined reference to `interval_tree_iter_next'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_area_iter_next':
->> (.text+0x544): undefined reference to `interval_tree_iter_next'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_remove_reserved_iova':
-   (.text+0x5ac): undefined reference to `interval_tree_iter_first'
-   hppa-linux-ld: (.text+0x600): undefined reference to `interval_tree_iter_next'
->> hppa-linux-ld: (.text+0x618): undefined reference to `interval_tree_remove'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_pages_clean_xarray':
->> (.text+0x674): undefined reference to `interval_tree_span_iter_first'
->> hppa-linux-ld: (.text+0x71c): undefined reference to `interval_tree_span_iter_next'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_alloc_area':
-   (.text+0xf88): undefined reference to `interval_tree_iter_first'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `__iopt_area_unpin_domain':
-   (.text+0x1340): undefined reference to `interval_tree_span_iter_first'
-   hppa-linux-ld: (.text+0x13d4): undefined reference to `interval_tree_span_iter_next'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `__iopt_unpopulate_domain':
-   (.text+0x1654): undefined reference to `interval_tree_span_iter_first'
-   hppa-linux-ld: (.text+0x16d0): undefined reference to `interval_tree_span_iter_next'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `__iopt_unmap_iova':
->> (.text+0x189c): undefined reference to `interval_tree_remove'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_pages_unpin_xarray':
-   (.text+0x1a88): undefined reference to `interval_tree_span_iter_first'
-   hppa-linux-ld: (.text+0x1aec): undefined reference to `interval_tree_span_iter_next'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_area_pin_domain':
-   (.text+0x1c1c): undefined reference to `interval_tree_span_iter_first'
-   hppa-linux-ld: (.text+0x1d44): undefined reference to `interval_tree_span_iter_next'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_pages_fill_pinned_pfns':
-   (.text+0x2198): undefined reference to `interval_tree_span_iter_first'
-   hppa-linux-ld: (.text+0x2234): undefined reference to `interval_tree_span_iter_next'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_area_finalize':
->> (.text+0x253c): undefined reference to `interval_tree_insert'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_alloc_iova':
-   (.text+0x28f8): undefined reference to `interval_tree_span_iter_first'
-   hppa-linux-ld: (.text+0x2930): undefined reference to `interval_tree_span_iter_next'
->> hppa-linux-ld: (.text+0x2948): undefined reference to `interval_tree_span_iter_first'
-   hppa-linux-ld: (.text+0x2974): undefined reference to `interval_tree_span_iter_next'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_access_pages':
-   (.text+0x3220): undefined reference to `interval_tree_span_iter_first'
->> hppa-linux-ld: (.text+0x3248): undefined reference to `interval_tree_insert'
-   hppa-linux-ld: (.text+0x3274): undefined reference to `interval_tree_span_iter_next'
-   hppa-linux-ld: drivers/iommu/iommufd/io_pagetable.o: in function `iopt_reserve_iova':
-   (.text+0x3420): undefined reference to `interval_tree_insert'
-   hppa-linux-ld: drivers/iommu/iommufd/ioas_pt.o: in function `iommufd_ioas_pagetable_iova_ranges':
-   (.text+0x388): undefined reference to `interval_tree_span_iter_first'
-   hppa-linux-ld: (.text+0x3c4): undefined reference to `interval_tree_span_iter_next'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for IOMMUFD
-   Depends on IOMMU_SUPPORT
-   Selected by
-   - VFIO_PCI_CORE && VFIO && PCI && MMU
-
+Fixes: f0adbc382b8b ("drm/ast: Allocate initial CRTC state of the correct size")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/ast/ast_mode.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
+index 36d9575aa27b..65099f0359f9 100644
+--- a/drivers/gpu/drm/ast/ast_mode.c
++++ b/drivers/gpu/drm/ast/ast_mode.c
+@@ -1120,7 +1120,10 @@ static void ast_crtc_reset(struct drm_crtc *crtc)
+ 	if (crtc->state)
+ 		crtc->funcs->atomic_destroy_state(crtc, crtc->state);
+ 
+-	__drm_atomic_helper_crtc_reset(crtc, &ast_state->base);
++	if (ast_state)
++		__drm_atomic_helper_crtc_reset(crtc, &ast_state->base);
++	else
++		__drm_atomic_helper_crtc_reset(crtc, NULL);
+ }
+ 
+ static struct drm_crtc_state *
+-- 
+2.25.1
+

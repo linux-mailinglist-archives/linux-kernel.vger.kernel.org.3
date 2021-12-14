@@ -2,369 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD34474C98
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9269A474C9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 21:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237614AbhLNUZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 15:25:22 -0500
-Received: from mail.efficios.com ([167.114.26.124]:60700 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbhLNUZV (ORCPT
+        id S237623AbhLNU06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 15:26:58 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:43887 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237615AbhLNU0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 15:25:21 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id B83CA34EE98;
-        Tue, 14 Dec 2021 15:25:20 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 2cTWMtLKEehL; Tue, 14 Dec 2021 15:25:19 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id A365E34EE97;
-        Tue, 14 Dec 2021 15:25:19 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com A365E34EE97
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1639513519;
-        bh=EN9QJ0nPlbVJaVN6WrjKIkBRkDZmdee9KR1q+jYVPuY=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=qiDlOe5xBon6dDRdsmuQA1afbR8EAY1Ps9u7Woq1MjFYuOyx4cP3IQ1Zz60lmfDqd
-         X+4UbqSCIZBDPuHcl1nbdA9XbvcxiWhwnM2Kb/b3J83x0YTN1BFgEAU7oULR5m3d1G
-         E8TG8U5IUK2TnQxFEr9vu43QJNsfemBVndYoVJM2YMyDFyhOzV0x4yYD1yQmJ2xxV+
-         OWZbX1u9WsuVTkDA52UilKV0VblQ5kA1K7qs/SmLYrHLZpEN8nfcC8YOzqE6zxFeNH
-         UeCv6JNZdA5QbcqoSKZKyEPlbga37srdWCD+85qkvNSqEnY4FGksr5/XdOPJPc7P3q
-         GyIfKAMr8ULpQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id segzmSQm-96I; Tue, 14 Dec 2021 15:25:19 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 88C6D34EDB1;
-        Tue, 14 Dec 2021 15:25:19 -0500 (EST)
-Date:   Tue, 14 Dec 2021 15:25:19 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     linux-api <linux-api@vger.kernel.org>,
-        Jann Horn <jannh@google.com>,
-        libc-alpha <libc-alpha@sourceware.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        paulmck <paulmck@kernel.org>
-Message-ID: <1237737244.31756.1639513519417.JavaMail.zimbra@efficios.com>
-In-Reply-To: <87bl1ktgbn.fsf@oldenburg.str.redhat.com>
-References: <87tufctk82.fsf@oldenburg.str.redhat.com> <697825714.30478.1639423180784.JavaMail.zimbra@efficios.com> <87ilvstia9.fsf@oldenburg.str.redhat.com> <1424606270.30586.1639425414221.JavaMail.zimbra@efficios.com> <87bl1ktgbn.fsf@oldenburg.str.redhat.com>
-Subject: Re: rseq + membarrier programming model
+        Tue, 14 Dec 2021 15:26:54 -0500
+Received: by mail-oi1-f176.google.com with SMTP id o4so28767325oia.10;
+        Tue, 14 Dec 2021 12:26:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zoA5Z8TrkhyO9VpXkw4vVgVTvX1m0JlpyPfyrdFngu4=;
+        b=4Gx4rfyRACGcVR1kIPOOpsvFqM31uJxVfhgtC8dN61FudGPSfKnXrAkOHwq3G2q3bk
+         wz8/6IX1hgzGpTXOdJSbJKmBBIr2cBVWPNxQNMtpxtpMP0gKkOAxW0Pi0cXGOoYkXMwI
+         OWr8pYZTw5+r+MgCFMognHbNaxQTwPx1TIUKl/KKyoAl4E8wsMsIeECEWirehFMbs3Jv
+         fPVrbwuqfYtUUSwMResTtc3gDyGkP7Pzfacp6xnXX9PfnuyCTl4MGCN4F2MwVCqqSRqm
+         4vEU0+rtAfQLj17kTtYSOFQpsnBWuMml/O1eUPJXpaQ71qg2M4QlrQo9c+ZKk/Nc4DB5
+         eA6Q==
+X-Gm-Message-State: AOAM531uORS/TVmYXQGq6GtuCYzowluBoJ/dgvMNyfxeLB2cXBO6amQo
+        It+mfjjR4NSdgbjjAv2s6g==
+X-Google-Smtp-Source: ABdhPJw0zliiKLsHvNnJ7zXg7WFegzRRUZqy33/B0czNpd/RWUhOX058+lN4XGpG8555QCmRZ2KvoA==
+X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr6173359oiw.154.1639513613845;
+        Tue, 14 Dec 2021 12:26:53 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id m12sm177454ots.59.2021.12.14.12.26.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 12:26:53 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Frank Rowand <frank.rowand@sony.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v3] of/fdt: Rework early_init_dt_scan_memory() to call directly
+Date:   Tue, 14 Dec 2021 14:26:51 -0600
+Message-Id: <20211214202652.3894707-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4173 (ZimbraWebClient - FF94 (Linux)/8.8.15_GA_4177)
-Thread-Topic: rseq + membarrier programming model
-Thread-Index: ZkW7VafUwWlLqq9O+7HGhrw/1k6QZg==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use of the of_scan_flat_dt() function predates libfdt and is discouraged
+as libfdt provides a nicer set of APIs. Rework
+early_init_dt_scan_memory() to be called directly and use libfdt.
 
+Cc: John Crispin <john@phrozen.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v3:
+ - Fix powerpc when /ibm,dynamic-reconfiguration-memory is present
+v2:
+ - ralink: Use 'if' instead of 'else if'
+ - early_init_dt_scan_memory: continue instead of return on no reg
+ - Fix indentation
+---
+ arch/mips/ralink/of.c      | 19 +++--------
+ arch/powerpc/kernel/prom.c | 21 ++++++------
+ drivers/of/fdt.c           | 67 +++++++++++++++++++-------------------
+ include/linux/of_fdt.h     |  3 +-
+ 4 files changed, 49 insertions(+), 61 deletions(-)
 
------ On Dec 13, 2021, at 3:12 PM, Florian Weimer fweimer@redhat.com wrote:
+diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
+index 0135376c5de5..35a87a2da10b 100644
+--- a/arch/mips/ralink/of.c
++++ b/arch/mips/ralink/of.c
+@@ -53,17 +53,6 @@ void __init device_tree_init(void)
+ 	unflatten_and_copy_device_tree();
+ }
+ 
+-static int memory_dtb;
+-
+-static int __init early_init_dt_find_memory(unsigned long node,
+-				const char *uname, int depth, void *data)
+-{
+-	if (depth == 1 && !strcmp(uname, "memory@0"))
+-		memory_dtb = 1;
+-
+-	return 0;
+-}
+-
+ void __init plat_mem_setup(void)
+ {
+ 	void *dtb;
+@@ -77,10 +66,10 @@ void __init plat_mem_setup(void)
+ 	dtb = get_fdt();
+ 	__dt_setup_arch(dtb);
+ 
+-	of_scan_flat_dt(early_init_dt_find_memory, NULL);
+-	if (memory_dtb)
+-		of_scan_flat_dt(early_init_dt_scan_memory, NULL);
+-	else if (soc_info.mem_detect)
++	if (!early_init_dt_scan_memory())
++		return;
++
++	if (soc_info.mem_detect)
+ 		soc_info.mem_detect();
+ 	else if (soc_info.mem_size)
+ 		memblock_add(soc_info.mem_base, soc_info.mem_size * SZ_1M);
+diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+index 6e1a106f02eb..ad1230c4f3fe 100644
+--- a/arch/powerpc/kernel/prom.c
++++ b/arch/powerpc/kernel/prom.c
+@@ -532,19 +532,18 @@ static int  __init early_init_drmem_lmb(struct drmem_lmb *lmb,
+ }
+ #endif /* CONFIG_PPC_PSERIES */
+ 
+-static int __init early_init_dt_scan_memory_ppc(unsigned long node,
+-						const char *uname,
+-						int depth, void *data)
++static int __init early_init_dt_scan_memory_ppc(void)
+ {
+ #ifdef CONFIG_PPC_PSERIES
+-	if (depth == 1 &&
+-	    strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
++	const void *fdt = initial_boot_params;
++	int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
++
++	if (node > 0)
+ 		walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
+-		return 0;
+-	}
++
+ #endif
+-	
+-	return early_init_dt_scan_memory(node, uname, depth, data);
++
++	return early_init_dt_scan_memory();
+ }
+ 
+ /*
+@@ -749,7 +748,7 @@ void __init early_init_devtree(void *params)
+ 
+ 	/* Scan memory nodes and rebuild MEMBLOCKs */
+ 	early_init_dt_scan_root();
+-	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
++	early_init_dt_scan_memory_ppc();
+ 
+ 	parse_early_param();
+ 
+@@ -858,7 +857,7 @@ void __init early_get_first_memblock_info(void *params, phys_addr_t *size)
+ 	 */
+ 	add_mem_to_memblock = 0;
+ 	early_init_dt_scan_root();
+-	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
++	early_init_dt_scan_memory_ppc();
+ 	add_mem_to_memblock = 1;
+ 
+ 	if (size)
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index 5e216555fe4f..97d7607625ec 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1078,49 +1078,50 @@ u64 __init dt_mem_next_cell(int s, const __be32 **cellp)
+ /*
+  * early_init_dt_scan_memory - Look for and parse memory nodes
+  */
+-int __init early_init_dt_scan_memory(unsigned long node, const char *uname,
+-				     int depth, void *data)
++int __init early_init_dt_scan_memory(void)
+ {
+-	const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
+-	const __be32 *reg, *endp;
+-	int l;
+-	bool hotpluggable;
+-
+-	/* We are scanning "memory" nodes only */
+-	if (type == NULL || strcmp(type, "memory") != 0)
+-		return 0;
++	int node;
++	const void *fdt = initial_boot_params;
+ 
+-	reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
+-	if (reg == NULL)
+-		reg = of_get_flat_dt_prop(node, "reg", &l);
+-	if (reg == NULL)
+-		return 0;
++	for (node = fdt_node_offset_by_prop_value(fdt, -1, "device_type", "memory", 6);
++	     node != -FDT_ERR_NOTFOUND;
++	     node = fdt_node_offset_by_prop_value(fdt, node, "device_type", "memory", 6)) {
++		const __be32 *reg, *endp;
++		int l;
++		bool hotpluggable;
++
++		reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
++		if (reg == NULL)
++			reg = of_get_flat_dt_prop(node, "reg", &l);
++		if (reg == NULL)
++			continue;
+ 
+-	endp = reg + (l / sizeof(__be32));
+-	hotpluggable = of_get_flat_dt_prop(node, "hotpluggable", NULL);
++		endp = reg + (l / sizeof(__be32));
++		hotpluggable = of_get_flat_dt_prop(node, "hotpluggable", NULL);
+ 
+-	pr_debug("memory scan node %s, reg size %d,\n", uname, l);
++		pr_debug("memory scan node %s, reg size %d,\n",
++			 fdt_get_name(fdt, node, NULL), l);
+ 
+-	while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
+-		u64 base, size;
++		while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
++			u64 base, size;
+ 
+-		base = dt_mem_next_cell(dt_root_addr_cells, &reg);
+-		size = dt_mem_next_cell(dt_root_size_cells, &reg);
++			base = dt_mem_next_cell(dt_root_addr_cells, &reg);
++			size = dt_mem_next_cell(dt_root_size_cells, &reg);
+ 
+-		if (size == 0)
+-			continue;
+-		pr_debug(" - %llx, %llx\n", base, size);
++			if (size == 0)
++				continue;
++			pr_debug(" - %llx, %llx\n", base, size);
+ 
+-		early_init_dt_add_memory_arch(base, size);
++			early_init_dt_add_memory_arch(base, size);
+ 
+-		if (!hotpluggable)
+-			continue;
++			if (!hotpluggable)
++				continue;
+ 
+-		if (memblock_mark_hotplug(base, size))
+-			pr_warn("failed to mark hotplug range 0x%llx - 0x%llx\n",
+-				base, base + size);
++			if (memblock_mark_hotplug(base, size))
++				pr_warn("failed to mark hotplug range 0x%llx - 0x%llx\n",
++					base, base + size);
++		}
+ 	}
+-
+ 	return 0;
+ }
+ 
+@@ -1271,7 +1272,7 @@ void __init early_init_dt_scan_nodes(void)
+ 		pr_warn("No chosen node found, continuing without\n");
+ 
+ 	/* Setup memory, calling early_init_dt_add_memory_arch */
+-	of_scan_flat_dt(early_init_dt_scan_memory, NULL);
++	early_init_dt_scan_memory();
+ 
+ 	/* Handle linux,usable-memory-range property */
+ 	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
+diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
+index df3d31926c3c..914739f3c192 100644
+--- a/include/linux/of_fdt.h
++++ b/include/linux/of_fdt.h
+@@ -59,8 +59,7 @@ extern unsigned long of_get_flat_dt_root(void);
+ extern uint32_t of_get_flat_dt_phandle(unsigned long node);
+ 
+ extern int early_init_dt_scan_chosen(char *cmdline);
+-extern int early_init_dt_scan_memory(unsigned long node, const char *uname,
+-				     int depth, void *data);
++extern int early_init_dt_scan_memory(void);
+ extern int early_init_dt_scan_chosen_stdout(void);
+ extern void early_init_fdt_scan_reserved_mem(void);
+ extern void early_init_fdt_reserve_self(void);
+-- 
+2.32.0
 
-> * Mathieu Desnoyers:
->=20
->> ----- On Dec 13, 2021, at 2:29 PM, Florian Weimer fweimer@redhat.com wro=
-te:
->>
->>> * Mathieu Desnoyers:
->>>=20
->>>>> Could it fall back to
->>>>> MEMBARRIER_CMD_GLOBAL instead?
->>>>
->>>> No. CMD_GLOBAL does not issue the required rseq fence used by the
->>>> algorithm discussed. Also, CMD_GLOBAL has quite a few other shortcomin=
-gs:
->>>> it takes a while to execute, and is incompatible with nohz_full kernel=
-s.
->>>=20
->>> What about using sched_setcpu to move the current thread to the same CP=
-U
->>> (and move it back afterwards)?  Surely that implies the required sort o=
-f
->>> rseq barrier that MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ with
->>> MEMBARRIER_CMD_FLAG_CPU performs?
->>
->> I guess you refer to using sched_setaffinity(2) there ? There are variou=
-s
->> reasons why this may fail. For one, the affinity mask is a shared global
->> resource which can be changed by external applications.
->=20
-> So is process memory =E2=80=A6
-
-Fair point.
-
->=20
->> Also, setting the affinity is really just a hint. In the presence of
->> cpu hotplug and or cgroup cpuset, it is known to lead to situations
->> where the kernel just gives up and provides an affinity mask including
->> all CPUs.
->=20
-> How does CPU hotplug impact this negatively?
-
-It may be OK for the rseq fence use-case specifically, but in general
-relying on cpu affinity to "pin" to a specific CPU is problematic with
-a hotplug scenario like this:
-
-- Userspace thread sets affinity to CPU 3 (only)
-- echo 0 > /sys/devices/system/cpu/cpu3/online  (as root)
-
--> scheduler will hit:
-
-select_fallback_rq():
-                        if (cpuset_cpus_allowed_fallback(p)) { -> false
-                                             do_set_cpus_allowed(p, task_cp=
-u_possible_mask(p));
-
-thus setting the cpus allowed mask to "any of the possible cpus".
-
-This can be confirmed by doing "cat /proc/${pid}/status | grep Cpus_allowed=
-_list:"
-before/after unplugging cpu 3. (side-note: in my test, the target applicati=
-on was
-"sleep 5000", which never gets picked by the scheduler unless we force some=
- activity
-on it by delivering a signal. I used a SIGSTOP/SIGCONT.):
-
-before:
-Cpus_allowed_list:=093
-
-after:
-Cpus_allowed_list:=090-3
-
->=20
-> The cgroup cpuset issue clearly is a bug.
-
-For cgroupv2, there are cpuset.cpus (invariant wrt hotplug),
-cpuset.cpus.effective (affected by hotplug) and cpuset.cpus.partition
-(takes away from parent effective cpuset, invariant after creation).
-cgroup controllers can be either threaded controllers or domain
-controllers. Unfortunately cpuset is a threaded controller, which
-means each thread can have its own cgroup cpuset.
-
-I do not have a full understanding of the interaction between
-sched_setaffinity and concurrent changes to the cgroup cpuset,
-but I am concerned that scenarios where affinity is first "pinned"
-to a specific cpu, and then an external process manager changes the
-cpuset.cpus mask to exclude that cpu may cause issues.
-
-I am also concerned for the rseq fence use-case (done with explicit
-sched_setaffinity) about what would happen if threads belong to
-different cgroup cpusets with threaded controllers. There we may
-have situations where a thread fails to run on a specific CPU just
-because it is not part of its cpuset, but another thread within the
-same process successfully runs there while executing an rseq critical
-section.
-
->=20
->> Therefore, using sched_setaffinity() and expecting to be pinned to
->> a specific CPU for correctness purposes seems brittle.
->=20
-> I'm pretty sure it used to work reliably for some forms of concurrency
-> control.
-
-That being said, it may be OK for the specific case of an rseq-fence, consi=
-dering
-that if we affine to CPU A, and later discover that we run anywhere except =
-on
-CPU A while we explicitly requested to be pinned to that CPU, this means th=
-e
-kernel had to take action and move us away from CPU A's runqueue because we
-are not allowed to run there. So we could consider that this CPU is "quiesc=
-ent"
-in terms of rseq because no other thread belonging to our process runs ther=
-e.
-This appears to work only for cpusets applying to the entire process though=
-,
-not for threaded cpusets.
-
->=20
->> But _if_ we'd have something like a sched_setaffinity which we can
->> trust, yes, temporarily migrating to the target CPU, and observing that
->> we indeed run there, would AFAIU provide the same guarantee as the rseq
->> fence provided by membarrier. It would have a higher overhead than
->> membarrier as well.
->=20
-> Presumably a signal could do it as well.
-
-Fair point, but then you would have to send a signal to every thread, and
-wait for each signal handler to have executed. membarrier improves on this
-kind of scheme by integrating with the scheduler, and leverage its knowledg=
-e
-of which thread is actively running or not. Therefore, if a thread is not
-running, there is no need to awaken it. This makes a huge performance
-difference for heavily multi-threaded applications.
-
->=20
->>> That is possible even without membarrier, so I wonder why registration
->>> of intent is needed for MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ.
->>
->> I would answer that it is not possible to do this _reliably_ today
->> without membarrier (see above discussion of cpu hotplug, cgroups, and
->> modification of cpu affinity by external processes).
->>
->> AFAIR, registration of intent for MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ
->> is mainly there to provide a programming model similar to private expedi=
-ted
->> plain and core-sync cmds.
->>
->> The registration of intent allows the kernel to further tweak what is
->> done internally and make tradeoffs which only impact applications
->> performing the registration.
->=20
-> But if there is no strong performance argument to do so, this introduces
-> additional complexity into userspace.  Surely we could say we just do
-> MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ at process start and document
-> failure (in case of seccomp etc.), but then why do this at all?
-
-There are many performance gains we can get by having membarrier-expedited-=
-rseq
-registered. Some of those use-cases may be doable either by sending signals
-to all threads, or by doing cpu affinity tricks, but using membarrier
-is much more lightweight thanks to its integration with the Linux
-scheduler. When a thread is not running, there is really no need to awaken
-it.
-
-In terms of use-cases, the rseq-fence is a compelling use-case enabling
-various algorithms with rseq.
-
-Other use-cases involve the "plain" memory barrier capabilities of membarri=
-er.
-This generally allow turning algorithms that require pairing memory
-barrier instructions on fast and slow paths into even faster fast-path,
-by pairing compiler barriers (asm memory clobber) on the fast paths
-with membarrier system calls on the slow paths.
-
-Finally, other use-cases involves the SYNC_CORE membarrier. This is mainly
-for JITs, allowing them to issue a process-wide "fence" allowing them to
-re-use memory after reclaim of JITted code.
-
-In terms of overhead added into the process when membarrier-expedited
-is registered, only specific cases are affected:
-
-- SYNC_CORE: processes which have registered membarrier expedited sync-core
-  will issue sync_core_before_usermode() after each scheduling between
-  threads belonging to different processes (see membarrier_mm_sync_core_bef=
-ore_usermode).
-  It is a no-op for all architectures except x86, which implements its
-  return to user-space with sysexit, sysrel and sysretq, which are not core
-  serializing.
-
-  Because of the runtime overhead of the sync-core registration on x86,
-  I would recommend that only JITs register with
-  MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE.
-
-- Plain memory barrier and RSEQ: Registering those adds no overhead except
-  on powerpc (see membarrier_arch_switch_mm). There, when context switching
-  between two user-space processes, an additional memory barrier is needed
-  because it is not implicitly issued by the architecture switch_mm.
-
-  I expect that the impact of this runtime overhead will be much more
-  limited than for the SYNC_CORE. Therefore having glibc auto-register
-  MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ would make sense
-  considering the fast-path improvements this enables.
-
-All of the expedited membarrier commands issue inter-processor interrupts
-(IPIs) to CPUs running threads belonging to the same process. This may be
-unexpected for hard-real-time applications, so this may be something they
-will want to opt-out from with a tunable.
-
-There are also the "global-expedited" membarrier commands, which are
-done to deal with shared memory across processes. There, the processes
-wishing to receive the IPIs need to be registered explicitly. This
-ensures we don't disrupt other hard-real-time processes with unexpected
-IPIs. The processes registered for global-expedited membarrier also have
-the same overhead discussed above for plain/rseq membarrier registration
-on powerpc. I do not expect the global-expedited registration to be done
-automatically, it should really be opt-in by the applications/libraries
-requiring membarrier to interact with other processes across shared memory.
-
->=20
->>>> In order to make sure the programming model is the same for expedited
->>>> private/global plain/sync-core/rseq membarrier commands, we require th=
-at
->>>> each process perform a registration beforehand.
->>>=20
->>> Hmm.  At least it's not possible to unregister again.
->>>=20
->>> But I think it would be really useful to have some of these barriers
->>> available without registration, possibly in a more expensive form.
->>
->> What would be wrong with doing a membarrier private-expedited-rseq
->> registration on libc startup, and exposing a glibc tunable to allow
->> disabling this ?
->=20
-> The configurations that need to be supported go from =E2=80=9Cno rseq=E2=
-=80=9C/=E2=80=9Crseq=E2=80=9D
-> to =E2=80=9Cno rseq=E2=80=9C/=E2=80=9Crseq=E2=80=9D/=E2=80=9Crseq with me=
-mbarrier=E2=80=9D.  Everyone now needs to
-> think about implementing support for all three instead just the obvious
-> two.
-
-One thing to keep in mind is that within the Linux kernel, CONFIG_RSEQ
-always selects CONFIG_MEMBARRIER. I've done this on purpose to simplify
-the user-space programming model. Therefore, if the rseq system call is
-implemented, membarrier is available, unless it's forbidden by seccomp.
-
-However, MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ only appears in kernel v5.10=
-.
-
-This means that starting from kernel v5.10, glibc can rely on having
-both rseq and membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ available,
-or don't bother to do any of the registration.
-
-This would simplify the programming model from a user perspective. If
-glibc registers rseq, this guarantees that
-MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ is available.
-
-You can check for rseq availability with e.g.:
-
-int rseq_available(void)
-{
-        int rc;
-
-        rc =3D sys_rseq(NULL, 0, 0, 0);
-        if (rc !=3D -1)
-                abort();
-        switch (errno) {
-        case ENOSYS:
-                return 0;
-        case EINVAL:
-                return 1;
-        default:
-                abort();
-        }
-}
-
-and check for membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ availability
-by inspecting the mask returned by MEMBARRIER_CMD_QUERY, e.g.:
-
-int status;
-
-status =3D sys_membarrier(MEMBARRIER_CMD_QUERY, 0);
-if (status < 0 || !(status & MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ))
-        return false;
-else
-        return true;
-
-I guess it all depends on how much you care about registering rseq on
-kernels between 4.18 and 5.9 inclusively.
-
-Thanks,
-
-Mathieu
-
-
->=20
-> Thanks,
-> Florian
-
---=20
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com

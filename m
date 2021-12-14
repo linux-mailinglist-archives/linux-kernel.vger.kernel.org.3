@@ -2,124 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D36F473ED3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E88473ED0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbhLNIy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:54:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38868 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231997AbhLNIy5 (ORCPT
+        id S231995AbhLNIyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:54:45 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:53546 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229832AbhLNIyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:54:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639472096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=djy24XBHKtgMaXuU5FrgICK75KROric6ztP2werGRpM=;
-        b=HO+woAuEzgKBI2PqyAthMAR3lfyDBoRjNyGpUXUhj2U/pB++AxImACg3eiQHIoVYXDQoCS
-        TKCvvoqL2NkQTEfPP5c0GJW67S2H8873gApOVLNnMYma3NNqn94/zg4lT37pFO2TrRrWIA
-        TxU9GTv3sz1qc+PtyC7J2d7qgNlSJgQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-z_VrsVuLO4K3u9gVdVOekA-1; Tue, 14 Dec 2021 03:54:53 -0500
-X-MC-Unique: z_VrsVuLO4K3u9gVdVOekA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3BFB392503;
-        Tue, 14 Dec 2021 08:54:50 +0000 (UTC)
-Received: from localhost (ovpn-12-46.pek2.redhat.com [10.72.12.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 645AE196F1;
+        Tue, 14 Dec 2021 03:54:44 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2CCAE1F3C5;
         Tue, 14 Dec 2021 08:54:43 +0000 (UTC)
-Date:   Tue, 14 Dec 2021 16:54:40 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-Subject: Re: [PATCH v17 03/10] x86: kdump: use macro CRASH_ADDR_LOW_MAX in
- functions reserve_crashkernel()
-Message-ID: <20211214085440.GA3023@MiWiFi-R3L-srv>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-4-thunder.leizhen@huawei.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1639472083; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tOuVKsw6WN/ES5cvRcB8gKDwFK03CCX8tV7l0uWiVbQ=;
+        b=fvz1g2sf4pf0M3XlJrzLhMkHwi8+RlV/C6fu/PNqvOruIpQ5z4tUuvYWITV84cXv8B8Bkh
+        AfG6EroqXGuQDEbqLRY2/1j6kFZlMjFOyN3hubMdD81XL9QnR1zn4bo+B85Kfo5NCjcAUN
+        nvNR+vTTHeY/FuiqyPR0pbF8omTIJyM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1639472083;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tOuVKsw6WN/ES5cvRcB8gKDwFK03CCX8tV7l0uWiVbQ=;
+        b=Bn8GOU18ThWycw651O3AaGXTMZxTu6+X09MVBaYzzy227QASbp4hw+//dtmsWaN0+6iAwK
+        EOhZzJH0JtsKQMCA==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0EE16A3B84;
+        Tue, 14 Dec 2021 08:54:43 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 09:54:42 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Petr Mladek <pmladek@suse.com>
+cc:     David Vernet <void@manifault.com>, linux-doc@vger.kernel.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, jikos@kernel.org, joe.lawrence@redhat.com,
+        corbet@lwn.net, yhs@fb.com, songliubraving@fb.com
+Subject: Re: [PATCH] Documentation: livepatch: Add kernel-doc link to
+ klp_enable_patch
+In-Reply-To: <YbdvcXKtxvrVqN+2@alley>
+Message-ID: <alpine.LSU.2.21.2112140952100.20187@pobox.suse.cz>
+References: <20211209165303.3205464-1-void@manifault.com> <YbMc8YGIoyRU5nwJ@alley> <YbObeiWbLxO8MwrD@dev0025.ash9.facebook.com> <YbdvcXKtxvrVqN+2@alley>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210065533.2023-4-thunder.leizhen@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 at 02:55pm, Zhen Lei wrote:
-> From: Chen Zhou <chenzhou10@huawei.com>
+> From this POV, I suggest to create Documentation/livepatch/API.rst
+> and add there the documentation generated from the sources. I mean
+> something like:
 > 
-> To make the functions reserve_crashkernel() as generic,
-> replace some hard-coded numbers with macro CRASH_ADDR_LOW_MAX.
+>     Documentation/core-api/kernel-api.rst
 > 
-> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-
-If you made change to this patch, please remove the old Acked-by. If you
-didn't contribute change, Signed-off-by should be taken off.
-
-Compared this with the version I acked, only see
-memblock_free() -> memblock_phys_free() update which should be done
-from the rebase.
-
-So ack this one again, and please also consider adding Co-developed-by.
-
-> Tested-by: John Donnelly <John.p.donnelly@oracle.com>
-> Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
-> Acked-by: Baoquan He <bhe@redhat.com>
-> ---
->  arch/x86/kernel/setup.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> that results into
 > 
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index 6424ee4f23da2cf..bb2a0973b98059e 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -489,8 +489,9 @@ static void __init reserve_crashkernel(void)
->  	if (!crash_base) {
->  		/*
->  		 * Set CRASH_ADDR_LOW_MAX upper bound for crash memory,
-> -		 * crashkernel=x,high reserves memory over 4G, also allocates
-> -		 * 256M extra low memory for DMA buffers and swiotlb.
-> +		 * crashkernel=x,high reserves memory over CRASH_ADDR_LOW_MAX,
-> +		 * also allocates 256M extra low memory for DMA buffers
-> +		 * and swiotlb.
->  		 * But the extra memory is not required for all machines.
->  		 * So try low memory first and fall back to high memory
->  		 * unless "crashkernel=size[KMG],high" is specified.
-> @@ -518,7 +519,7 @@ static void __init reserve_crashkernel(void)
->  		}
->  	}
->  
-> -	if (crash_base >= (1ULL << 32) && reserve_crashkernel_low()) {
-> +	if (crash_base >= CRASH_ADDR_LOW_MAX && reserve_crashkernel_low()) {
->  		memblock_phys_free(crash_base, crash_size);
->  		return;
->  	}
-> -- 
-> 2.25.1
+> https://www.kernel.org/doc/html/latest/core-api/kernel-api.html
 > 
+> 
+> The livepatch/API.rst might include documentation from
+> 
+>     include/linux/livepatch.h
+>     kernel/livepatch/code.c
+>     kernel/livepatch/shadow.c
+>     kernel/livepatch/state.c
+> 
+> 
+> But let's wait if there are other opinions from another livepatch
+> developers.
 
+Yes, please. Do not include anything generated from the source into our 
+"hand-written" documentation. Or at least not like the proposed patch. It 
+breaks it as Petr pointed out. A separate API file sounds better to me.
+
+Regards
+Miroslav

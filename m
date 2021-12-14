@@ -2,82 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 563CE473B3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4849473B3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235404AbhLNDCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 22:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S243213AbhLNDDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 22:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbhLNDCX (ORCPT
+        with ESMTP id S232118AbhLNDDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 22:02:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4A2C061574;
-        Mon, 13 Dec 2021 19:02:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F88EB815B8;
-        Tue, 14 Dec 2021 03:02:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 315DCC34603;
-        Tue, 14 Dec 2021 03:02:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639450939;
-        bh=HRVA4L6EH/KF8FO0x/gNMH5vDkhOCikRbawIeH2EJRI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o1VSquNf8EbGIBEyckGDLSlncdukveopZ1wyuwoqBcJQiR7quuWHj9+/6WwzkcYEe
-         QXjoB8iEmTcgR5msxONmK1Q3kx26IFKlZ2UHyKy37KRX2R4STkcj9mQXtJDwLlQ9GT
-         DCnc8l6qGy9r4dpgLolGIBkJsKhht5SrpSnEnhjdBLmjunmi1e9cmwMRypeAAa7t0m
-         fyL3+iFrQl3SNFKMDtsSGhQcgTNqQ4ySwKy+PoKqwJkn9SAPw5MsI8jhyl3ISfdFgR
-         D77MhyDTcD5p5TnP+/uyTQMQ0f4Mb03ggu1rSrhRPfQNJLxkDorxDv2yxkVeYiwzyO
-         kJe70czuvnfrw==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Dec 13
-Date:   Tue, 14 Dec 2021 03:02:15 +0000
-Message-Id: <20211214030215.3181149-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 13 Dec 2021 22:03:16 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363A6C061574;
+        Mon, 13 Dec 2021 19:03:16 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id z9so3966858edb.5;
+        Mon, 13 Dec 2021 19:03:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aQH8VcJRpdtHVG0Aky62QzlY2YR8DIAnVjnhwndnNuQ=;
+        b=IrewzDxnwfVRH3+i04KeRgJ+SHoPzpAQZnxuHbX9MhwGhOVZH9HBweheIaHaWtPZw8
+         1lcpMaNXHNAxeq0t83hPye+vZWpbg2F0j46EWWZan+aGaAqtrc4b6KfCe8pgFuCxJBbL
+         8wJplxMmMuY6uJJlmwpCR0QNNs2eivvprjK2+NFhXAzOjMt1ZaYOGT6+LsJDT+5WspEn
+         R/RdFOMqRxIjU4ja0yfHfL7oUWqH41UmEIzAK3xeszQAukNoUXyrvhNTpeO+MR4rOXdX
+         8bqPWpI8+t/YzZoV7oa17ZYBRifwcz/u2rh4wOq8AyMU2g4ivY90NA5Vql9eRuM+RhJq
+         dx2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aQH8VcJRpdtHVG0Aky62QzlY2YR8DIAnVjnhwndnNuQ=;
+        b=iFFIS68bAhoUM4N+gSQ7OhRGy1g+QnKZXL1ZTEqDWgoX3PtOJTxV69gvTH1cEdTyoM
+         ZR5lSYnN3wWcNA5nvVvDrzuJBUu33f7AkaWzuSKkiix//VIiK1X4cF9gWH9v65EoJWv8
+         0bzHZj/0EuU9tlxumgjieM+QV+noRadmPc5FnG8nucSXCXDIfhWBmQ3JMrLMKD9/hYmn
+         a8v68prRIzxuaqXxjVAZCPsCRbU55XStjbsJj3jEXVgdVT7yJKreuzsf8qfBnu974ic/
+         TlMRWzYs64zePmqbePEmbYYCyC5SQt5OSViQwrHEmJycJ3IYf4v8U2zt3g94FUb3/hIV
+         RQsQ==
+X-Gm-Message-State: AOAM5318tl8FBdZ+IdKHXrmjzJfKcJkdwcLMBn0CADwsuM51+Feb5tkx
+        dAmzedcQtVnD1C1i9lphwPOwHQoePWrZ0bLm1Qo=
+X-Google-Smtp-Source: ABdhPJxUvcszqU6qByKOzb7FhjxBOeBPm0AadJQj2uaapEihc0OrFupfXKwgi1ZSr+rYH4XDAR0Tx62RJMptfEiUagc=
+X-Received: by 2002:a17:907:2da5:: with SMTP id gt37mr2675890ejc.316.1639450994178;
+ Mon, 13 Dec 2021 19:03:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211128131853.15125-1-aford173@gmail.com>
+In-Reply-To: <20211128131853.15125-1-aford173@gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 13 Dec 2021 21:03:06 -0600
+Message-ID: <CAHCN7x+yOs3icCV2OsKwAPRcov4Cb9Q+K8b2oy7WZowb3YZnRA@mail.gmail.com>
+Subject: Re: [PATCH V4 0/9] arm64: imx8mn: Enable more imx8m Nano functions
+To:     arm-soc <linux-arm-kernel@lists.infradead.org>
+Cc:     Adam Ford-BE <aford@beaconembedded.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Sun, Nov 28, 2021 at 7:19 AM Adam Ford <aford173@gmail.com> wrote:
+>
+> The i.MX8M Nano is similar to the i.MX8M Mini in some ways, but very
+> different in others.  With the blk-ctrl driver for Mini in place,
+> this series expands the blk-ctrl driver to support the Nano which
+> opens the door for additional functions in the future.  As part of
+> this series, it also addresses some issues in the GPCv2 driver and
+> finally adds support for enabling USB and GPU.
+>
+> V4:  Rebase on top of [1] which fixes hangs caused from CSI and DSI reset
+>      and add the same fixes for CSI and DSI to the Nano
+> V3:  Fixes an the yaml example
+> V2:  Fixes the clock count in the blk-ctrl
+>
+> [1] - https://www.spinics.net/lists/arm-kernel/msg936266.html
+>
 
-Non-merge commits (relative to Linus' tree): 5960
- 6555 files changed, 277265 insertions(+), 120864 deletions(-)
+Shawn,
 
-----------------------------------------------------------------------------
+This series should apply cleanly against your tree now that [1] has
+been applied to your tree.  Should I submit this a resend or are you
+able to test the build now?
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a defconfig for arm64, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf.
-
-Below is a summary of the state of the merge.
-
-I am currently merging 346 trees (counting Linus' and 94 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+adam
+> Adam Ford (9):
+>   soc: imx: gpcv2: keep i.MX8MN gpumix bus clock enabled
+>   soc: imx: gpcv2: Add dispmix and mipi domains to imx8mn
+>   dt-bindings: power: imx8mn: add defines for DISP blk-ctrl domains
+>   dt-bindings: soc: add binding for i.MX8MN DISP blk-ctrl
+>   soc: imx: imx8m-blk-ctrl: add i.MX8MN DISP blk-ctrl
+>   arm64: dts: imx8mn: add GPC node
+>   arm64: dts: imx8mn: put USB controller into power-domains
+>   arm64: dts: imx8mn: add DISP blk-ctrl
+>   arm64: dts: imx8mn: Enable GPU
+>
+>  .../soc/imx/fsl,imx8mn-disp-blk-ctrl.yaml     |  97 +++++++++++++++++
+>  arch/arm64/boot/dts/freescale/imx8mn.dtsi     | 103 ++++++++++++++++++
+>  drivers/soc/imx/gpcv2.c                       |  26 +++++
+>  drivers/soc/imx/imx8m-blk-ctrl.c              |  77 ++++++++++++-
+>  include/dt-bindings/power/imx8mn-power.h      |   5 +
+>  5 files changed, 307 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx8mn-disp-blk-ctrl.yaml
+>
+> --
+> 2.32.0
+>

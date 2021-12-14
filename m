@@ -2,116 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 775ED473FF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF8A473FFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbhLNJ4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 04:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbhLNJ4M (ORCPT
+        id S232802AbhLNJ52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 04:57:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48939 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232788AbhLNJ51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 04:56:12 -0500
-Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCD3C061574;
-        Tue, 14 Dec 2021 01:56:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=hRdm0hDf8+odlarsU7FLIvo3kZ88Mi3L0AUJryy6A1Q=; b=czhIJkiDeNHhJX1y+bWq/xEhUc
-        rcHUfVsS1cP8PkiIS9LlL5OJoz2EiZpoDdXGBNt0yhmRehtYFJ0aRa1U3bBthjnzFDHnSZUWOfEvE
-        7UrWGfp7KQZRLbI0+CPqGtnGViTyrt23DYITz31sUXPIuLcmJFZ5kcFdrst32eISLVRzLf1dw/o5W
-        cvfu1yTKBNk2xDRPhFzGolgMJszaeK40uiaKOOYiOpjZuenMbKffE70InznhkHBbhzuJeSfGar+yB
-        dMBsIwaKIUPx8EFSA0H+AnGfo7nraGNNWKThEWp2R4tXXkKtH8iQN87/NLids84WueF/gpwZC7x8a
-        xFI0As5A==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-        by hall.aurel32.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1mx4XV-0005fV-SG; Tue, 14 Dec 2021 10:56:06 +0100
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.95)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1mx4XV-000uia-Ct;
-        Tue, 14 Dec 2021 10:56:05 +0100
-Date:   Tue, 14 Dec 2021 10:56:05 +0100
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH] riscv: dts: enable more DA9063 functions for the SiFive
- HiFive Unmatched
-Message-ID: <YbhqNY/w36XT5zx0@aurel32.net>
-Mail-Followup-To: Palmer Dabbelt <palmer@dabbelt.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>
-References: <20211108214629.1730870-1-aurelien@aurel32.net>
- <mhng-7ab80707-35c0-4123-8340-cf1feca4cca2@palmer-ri-x1c9>
+        Tue, 14 Dec 2021 04:57:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639475846;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uVqW4kfKzHvqz/9Z5Fnqw0wfFuiGWxkObzMDPGr6nZk=;
+        b=XTigJ51p0TcFpqo2si2vaaDmg8ry6Nl8u1mxuVh2GnHumdu2M0/ABN5k7hHwdxyF490Wuc
+        gQHF6ImxP8gGyLFwD/o8/xf+84JYW7f0OeDe0ZS0YzWyLvzPD0ZU+bGAEgpdaRk5jghu2I
+        Vx7RcBZjwtH6B0jrUy5CCH2Egi6ipG4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-219-cmfldGxPMEeQ5l3UKgrkcA-1; Tue, 14 Dec 2021 04:57:22 -0500
+X-MC-Unique: cmfldGxPMEeQ5l3UKgrkcA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 72A76190A7A1;
+        Tue, 14 Dec 2021 09:57:19 +0000 (UTC)
+Received: from localhost (ovpn-12-46.pek2.redhat.com [10.72.12.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5660D418E;
+        Tue, 14 Dec 2021 09:57:01 +0000 (UTC)
+Date:   Tue, 14 Dec 2021 17:56:57 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>
+Subject: Re: [PATCH v17 03/10] x86: kdump: use macro CRASH_ADDR_LOW_MAX in
+ functions reserve_crashkernel()
+Message-ID: <20211214095657.GB3023@MiWiFi-R3L-srv>
+References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
+ <20211210065533.2023-4-thunder.leizhen@huawei.com>
+ <20211214085440.GA3023@MiWiFi-R3L-srv>
+ <YbhmF3+AzvRtGimD@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mhng-7ab80707-35c0-4123-8340-cf1feca4cca2@palmer-ri-x1c9>
-User-Agent: Mutt/2.1.3 (2021-09-10)
+In-Reply-To: <YbhmF3+AzvRtGimD@zn.tnic>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-13 18:13, Palmer Dabbelt wrote:
-> On Mon, 08 Nov 2021 13:46:29 PST (-0800), aurelien@aurel32.net wrote:
-> > The DA9063 PMIC found on the SiFive HiFive Unmatched also provides an
-> > RTC, a watchdog and the power button input.
-> > 
-> > Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-> > ---
-> >  arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> > 
-> > diff --git a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-> > index 2e4ea84f27e7..c357b48582f7 100644
-> > --- a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-> > +++ b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-> > @@ -70,6 +70,10 @@ pmic@58 {
-> >  		interrupts = <1 IRQ_TYPE_LEVEL_LOW>;
-> >  		interrupt-controller;
-> > 
-> > +		onkey {
-> > +			compatible = "dlg,da9063-onkey";
-> > +		};
-> > +
-> >  		regulators {
-> >  			vdd_bcore1: bcore1 {
-> >  				regulator-min-microvolt = <900000>;
-> > @@ -205,6 +209,14 @@ vdd_ldo11: ldo11 {
-> >  				regulator-always-on;
-> >  			};
-> >  		};
-> > +
-> > +		rtc {
-> > +			compatible = "dlg,da9063-rtc";
-> > +		};
-> > +
-> > +		wdt {
-> > +			compatible = "dlg,da9063-watchdog";
-> > +		};
-> >  	};
-> >  };
+On 12/14/21 at 10:38am, Borislav Petkov wrote:
+> On Tue, Dec 14, 2021 at 04:54:40PM +0800, Baoquan He wrote:
+> > If you didn't contribute change, Signed-off-by should be taken off.
+> 
+> The second SOB is correct here. I'll let you figure it out what it
+> means.
+> 
+> Hint: Documentation/process/submitting-patches.rst
 
-Thanks. However, wouldn't be better to merged this patch and the whole
-series instead:
+Ah, OK, I see the new paragraph from you added in below commit. 
 
-http://lists.infradead.org/pipermail/linux-riscv/2021-November/010234.html
+commit 9bf19b78a203b6ed20ed7b5d7222f5ef7a49aed4
+Author: Borislav Petkov <bp@alien8.de>
+Date:   Thu Dec 17 19:37:56 2020 +0100
 
-Regards,
-Aurelien
+    Documentation/submitting-patches: Document the SoB chain
 
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                 http://www.aurel32.net
+Hi Lei,
+
+I take back the wrong comment on Signed-off-by tag since you post the
+patch, please ignore them.
+

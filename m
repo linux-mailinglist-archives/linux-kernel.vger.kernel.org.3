@@ -2,105 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99898473B50
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57419473B5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235404AbhLNDMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 22:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbhLNDMi (ORCPT
+        id S235639AbhLNDNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 22:13:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:29075 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235472AbhLNDNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 22:12:38 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31711C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:12:38 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id m15so16199948pgu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:12:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DaUpjQsRXzDlNok3onB0tnTkJffX5UHYJGcB3WC+79I=;
-        b=n/GrE6WqmC75O6tMABEgMi0icLtjq1J/sVwOqg0xtjO22NaCgBcN5l4O1X30LDcOWL
-         tgRIRyjgwcjGqMWJ4+fhXiupYbO79FF6zhbtlLLEalFGUFe1SXdKengeNBji3XDUJD+q
-         3K465B4EC5w7R2ro5iynpzXLn6VdQHus524cczmRzZm5UW67WsVQ+HOMLcntdn9f90P7
-         gAJoy+vA2Vp3bZFfPmBO5TOWgYuCU1Fh6fmqSH81uPBw9fLeveOG14khDDCRIHZcRZ+R
-         9Y2DnSnd/PkioGxmHLt/8RJuRZg/tomtoZP0YaW277jW7ZK5DbEKbO+672gEP61Mmd91
-         1xoA==
+        Mon, 13 Dec 2021 22:13:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639451600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=99hHa+R8DxpGc57uFm6oCLjvQUYhFLts8EwSb1a/bxk=;
+        b=i98HusjQARCC5iXS0/CA/19lKvRRlbvvSg347gmDb2uCXUc/A0uhcpX+JdTnelivBLesyp
+        hDg5Gt2bB82trC0SFMjL2RC1E37MD0Gotq0i9BBQ7oc7RO4FxkU/oIvAyFmjT4DT9K7zMb
+        hwVA+Hfo9ahXCuiUkNi2aS3MD/eroZY=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-101-ufLOXVnlOVy-OOZaY_Cb6Q-1; Mon, 13 Dec 2021 22:13:19 -0500
+X-MC-Unique: ufLOXVnlOVy-OOZaY_Cb6Q-1
+Received: by mail-lj1-f199.google.com with SMTP id b3-20020a2ebc03000000b0021ffe75b14cso4895403ljf.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:13:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DaUpjQsRXzDlNok3onB0tnTkJffX5UHYJGcB3WC+79I=;
-        b=RqGzXK7SY+lW0Aar2tWKI730/TdBBgkIsWuFfRp4/YCBVrzaISXJCNN6iNOaAiWQd7
-         ZyeiD6DiyLIf53DfPG4aQw8vZWtxdgxo9WPZV9DGuSw4k8Br3jDvcK8dK0QqWFZ0Rgvs
-         AHSxoM0W9jAGLWQ2uSHeTdLKA7FLnWQHhEPShzgFouXyoRnJdKsR8VPtbWQCLAbbNMbR
-         YWKj/e2wx/DnDyLiTH6uAa1suyMxZqbfqsXzRwzPAcq5PoScan9mQ3gdPn8WN47+/CHl
-         vQtdAYy7jzvDj3UoOm6IT0XF2zMeqJRwalgI8DNGvPR6HYAZ+g8sJcoKXsyMbiysMhfP
-         q6BQ==
-X-Gm-Message-State: AOAM532xM/U5DAGV1MzJCKC6VMLojPCc7ChwLM5OZLKF9wTCPmTfLQk3
-        GFvx5Rou/sfDQyy8v6PEazCa9w==
-X-Google-Smtp-Source: ABdhPJxHgZ7+unda1WxLgv6UMe8FB2suboBfBniZ7oOLB/b+GY1BhQC1gNcfoKtYxYoLRDxeG1OxkQ==
-X-Received: by 2002:a05:6a00:1c56:b0:4a4:f8cb:2604 with SMTP id s22-20020a056a001c5600b004a4f8cb2604mr1910174pfw.34.1639451557474;
-        Mon, 13 Dec 2021 19:12:37 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u22sm14990479pfk.148.2021.12.13.19.12.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 19:12:36 -0800 (PST)
-Date:   Tue, 14 Dec 2021 03:12:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ignat Korchagin <ignat@cloudflare.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        bgardon@google.com, dmatlack@google.com, stevensd@chromium.org,
-        kernel-team <kernel-team@cloudflare.com>
-Subject: Re: [PATCH 0/2] KVM: x86: Fix dangling page reference in TDP MMU
-Message-ID: <YbgLoZjy1zuhIgK7@google.com>
-References: <20211213112514.78552-1-pbonzini@redhat.com>
- <CALrw=nEM6LEAD8LA1Bd15=8BK=TFwwwAMKy_DWRrDkD=r+1Tqg@mail.gmail.com>
- <Ybd5JJ/IZvcW/b2Y@google.com>
- <YbeiiT9b350lYBiR@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=99hHa+R8DxpGc57uFm6oCLjvQUYhFLts8EwSb1a/bxk=;
+        b=CKY3f36lYfCUAmZtgEK2lXc9ifg/4euhGqccE1Tp3tkv6OsOcRN8GCVEnH+HLcOW8t
+         fPdFJ4JSoQCZQ2RASuyOWRwMz8peslLvUzk1LrR3Aka7WRAprBBb02Au4a4bQBOg8ofS
+         GHebyXGmrEzMp4NL0wRfe1yuJwn7JWfRUo9kmBo/L50X5gCJVkcBfsNSvlQSVY0pSew2
+         GgxfIEGskhhNfKHo2qxa255QuZeqk6AKt90C86rwvkBANeoU8W8CwSIgwpUQPtw/r9CX
+         0OAz1a7yiRblkjjcfsXtQnw4zXxqacoWqs542RSbX+FIXA3kdWhTX8UOrf89ZO1vk+lU
+         i1GA==
+X-Gm-Message-State: AOAM533BzGaZ9cozpqPHSzSPXvV0+CtyEvN+9S5ZedZlBj6GGIEKUc2u
+        ym8oyQ7rKqPPqfNJqJm36AH+J7w8+trS9iCue6zUDd0Fky9b9WG+ziZ7QviO5L3ULPwOhPEd5xP
+        87Uoc7zUh1Nz0E17te5uxr3JidbcEgISKM5QOjGYE
+X-Received: by 2002:ac2:518b:: with SMTP id u11mr2321119lfi.498.1639451597760;
+        Mon, 13 Dec 2021 19:13:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwZ1HCIVLCKmLXdf3Yl2yAjouNx1OCPxPcR7jWZs3VxYTOSPUyURuqCGeB00yGBqOXmIWH1kqW4dvobsBNeN9Y=
+X-Received: by 2002:ac2:518b:: with SMTP id u11mr2321107lfi.498.1639451597577;
+ Mon, 13 Dec 2021 19:13:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbeiiT9b350lYBiR@google.com>
+References: <20211213045012.12757-1-mengensun@tencent.com> <CACGkMEtLso8QjvmjTQ=S_bbGxu11O_scRa8GT7z6MXfJbfzfRg@mail.gmail.com>
+In-Reply-To: <CACGkMEtLso8QjvmjTQ=S_bbGxu11O_scRa8GT7z6MXfJbfzfRg@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 14 Dec 2021 11:13:06 +0800
+Message-ID: <CACGkMEukGbDcxJe3nGFkeBNenniJdMkFMRnrN4OOfDsCb7ZPuA@mail.gmail.com>
+Subject: Re: [PATCH] virtio-net: make copy len check in xdp_linearize_page
+To:     mengensun8801@gmail.com
+Cc:     davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        mengensun <mengensun@tencent.com>,
+        MengLong Dong <imagedong@tencent.com>,
+        ZhengXiong Jiang <mungerjiang@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021, Sean Christopherson wrote:
-> On Mon, Dec 13, 2021, Sean Christopherson wrote:
-> > On Mon, Dec 13, 2021, Ignat Korchagin wrote:
-> > > Unfortunately, this patchset does not fix the original issue reported in [1].
-> > 
-> > Can you provide your kernel config?  And any other version/config info that might
-> > be relevant, e.g. anything in gvisor or runsc?
-> 
-> Scratch that, I've reproduced this, with luck I'll have a root cause by end of day.
+On Mon, Dec 13, 2021 at 5:14 PM =E5=AD=99=E8=92=99=E6=81=A9 <mengensun8801@=
+gmail.com> wrote:
+>
+> Jason Wang <jasowang@redhat.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=8813=E6=
+=97=A5=E5=91=A8=E4=B8=80 15:49=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > On Mon, Dec 13, 2021 at 12:50 PM <mengensun8801@gmail.com> wrote:
+> > >
+> > > From: mengensun <mengensun@tencent.com>
+> > >
+> > > xdp_linearize_page asume ring elem size is smaller then page size
+> > > when copy the first ring elem, but, there may be a elem size bigger
+> > > then page size.
+> > >
+> > > add_recvbuf_mergeable may add a hole to ring elem, the hole size is
+> > > not sure, according EWMA.
+> >
+> > The logic is to try to avoid dropping packets in this case, so I
+> > wonder if it's better to "fix" the add_recvbuf_mergeable().
+>
 
-Ok, the root cause is comically simple compared to all the theories we came up with.
-If tdp_mmu_iter_cond_resched() drops mmu_lock and restarts the iterator, the
-"continue" in the caller triggers tdp_iter_next().  tdp_iter_next() does what it's
-told and advances the iterator.  Because all users call tdp_mmu_iter_cond_resched()
-at the very beginning of the loop, this has the effect of skipping the current SPTE.
+Adding lists back.
 
-E.g. in the "zap all" case, where iter->level == iter->min_level == iter->root_level,
-we effectively end up with code like this, which is obviously wrong once the
-complexity of traversing a tree is simplified down to walking an array of SPTEs.
+> turn to XDP generic is so difficulty for me, here can "fix" the
+> add_recvbuf_mergeable link follow:
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 36a4b7c195d5..06ce8bb10b47 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -1315,6 +1315,7 @@ static int add_recvbuf_mergeable(struct virtnet_inf=
+o *vi,
+>                 alloc_frag->offset +=3D hole;
+>         }
+> +       len =3D min(len, PAGE_SIZE - room);
+>         sg_init_one(rq->sg, buf, len);
+>         ctx =3D mergeable_len_to_ctx(len, headroom);
 
-	gfn_t end = tdp_mmu_max_gfn_host();
-        gfn_t start = 0;
-        gfn_t last;
+Then the truesize here is wrong.
 
-        for (i = last = start; i < end; i += 8, last = i) {
-                if (cond_resched()) {
-                        i = last;
-                        continue;
-                }
+>         err =3D virtqueue_add_inbuf_ctx(rq->vq, rq->sg, 1, buf, ctx, gfp)=
+;
+>
+> it seems a rule that, length of elem giving to vring is away smaller
+> or equall then PAGE_SIZE
 
-                sp = &root->spt[i];
-                zap(sp);
-        }
+It aims to be consistent to what EWMA tries to do:
 
-Patch incoming...
+        len =3D hdr_len + clamp_t(unsigned int, ewma_pkt_len_read(avg_pkt_l=
+en),
+                        rq->min_buf_len, PAGE_SIZE - hdr_len);
+
+Thanks
+
+>
+> >
+> > Or another idea is to switch to use XDP generic here where we can use
+> > skb_linearize() which should be more robust and we can drop the
+> > xdp_linearize_page() logic completely.
+> >
+> > Thanks
+> >
+> > >
+> > > so, fix it by check copy len,if checked failed, just dropped the
+> > > whole frame, not make the memory dirty after the page.
+> > >
+> > > Signed-off-by: mengensun <mengensun@tencent.com>
+> > > Reviewed-by: MengLong Dong <imagedong@tencent.com>
+> > > Reviewed-by: ZhengXiong Jiang <mungerjiang@tencent.com>
+> > > ---
+> > >  drivers/net/virtio_net.c | 6 +++++-
+> > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > index 36a4b7c195d5..844bdbd67ff7 100644
+> > > --- a/drivers/net/virtio_net.c
+> > > +++ b/drivers/net/virtio_net.c
+> > > @@ -662,8 +662,12 @@ static struct page *xdp_linearize_page(struct re=
+ceive_queue *rq,
+> > >                                        int page_off,
+> > >                                        unsigned int *len)
+> > >  {
+> > > -       struct page *page =3D alloc_page(GFP_ATOMIC);
+> > > +       struct page *page;
+> > >
+> > > +       if (*len > PAGE_SIZE - page_off)
+> > > +               return NULL;
+> > > +
+> > > +       page =3D alloc_page(GFP_ATOMIC);
+> > >         if (!page)
+> > >                 return NULL;
+> > >
+> > > --
+> > > 2.27.0
+> > >
+> >
+>
+

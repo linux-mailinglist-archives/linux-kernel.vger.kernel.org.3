@@ -2,95 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B41D5473B52
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A158473B5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 04:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235468AbhLNDNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 22:13:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22002 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232689AbhLNDNQ (ORCPT
+        id S235737AbhLNDOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 22:14:07 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54030 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232815AbhLNDOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 22:13:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639451596;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/n9aD3d3fHxDG9Px4q5PGZku+eA71D79JAz4+k/9vSg=;
-        b=I03Ni6bpMFmvufG1voFk2gB1egpLIS0bxw4zvB53lpTqFRdelSS9OJ8klARa+cnwPi7+9b
-        Lm3vqRsd/KRIO90dRf2POldvs4ayhZ5QRD75EFEPvSfj4oqenxVEkB71htmWzluCbcee+x
-        UbkbQGInXzFpiuUYC2ffP+yWymV4Xx0=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-7MAQHQFoPGm7-QU6UUjgdg-1; Mon, 13 Dec 2021 22:13:14 -0500
-X-MC-Unique: 7MAQHQFoPGm7-QU6UUjgdg-1
-Received: by mail-oi1-f199.google.com with SMTP id t132-20020acaaa8a000000b002a819b21cc7so12021403oie.21
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 19:13:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/n9aD3d3fHxDG9Px4q5PGZku+eA71D79JAz4+k/9vSg=;
-        b=s+1O34mUTFXDpUwCb0+ts7DSS6RDca5wfybfGYO82McW7VnRUZ2yK4aZDmq1UCJYYS
-         iPiyI6zipFwAfCWV4emXHgVM1PFha6xEiqPDbZVvnhAPDOvbsDYGdsuJabMSdzMjrFxa
-         Jp2tplr0AQYdPXLnvcHNBB74gom2Da3blN9t2tDB1j2QMRHcuP5AmcX8wbfOaw8s/Vtj
-         FhaR0nlbaqB3cyJ6nhtwWaMXR9IjPOGHDR2yS6hPaTyVT2W6X9ruIDtJhc2WgRGv8xRG
-         inmISNh9DIOvub8JDeCk0/lQam0gobDm2s/GQc+t5oIZD+SdoAHzIhST8HHFGLaVCA6P
-         BxuQ==
-X-Gm-Message-State: AOAM531c1yia9EieMQ7QJ6dUeA+hObPWfeYGuh0jS7dDywqdWbXmYEou
-        /FpwixKmLih8pOnZHhDP03ihbbVi3i6XIRCGIVcNFDbRwW+mreIeSLv/LV+dgVqArwocToCs61T
-        XZ8i0bRYeAgfM35dUvGgWy4ZO
-X-Received: by 2002:a05:6830:195:: with SMTP id q21mr2069562ota.355.1639451594183;
-        Mon, 13 Dec 2021 19:13:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx2iz3hCs6r9lH/lXETVLAPnC49R3ZFNXhsPRQSXrmKaougoXLA3UjZIBo5VrH12Mh87hPjNg==
-X-Received: by 2002:a05:6830:195:: with SMTP id q21mr2069533ota.355.1639451593954;
-        Mon, 13 Dec 2021 19:13:13 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::49])
-        by smtp.gmail.com with ESMTPSA id 186sm2963571oig.28.2021.12.13.19.13.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 19:13:13 -0800 (PST)
-Date:   Mon, 13 Dec 2021 19:13:10 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     David Vernet <void@manifault.com>
-Cc:     pmladek@suse.com, linux-doc@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
-        corbet@lwn.net, yhs@fb.com, songliubraving@fb.com
-Subject: Re: [PATCH] livepatch: Fix leak on klp_init_patch_early failure path
-Message-ID: <20211214031310.p6kmbvd73kn6j7x3@treble>
-References: <20211213191734.3238783-1-void@manifault.com>
- <20211213201022.dhalhtc2bpey55gh@treble>
- <YbfQHjoUO5GTvImR@dev0025.ash9.facebook.com>
+        Mon, 13 Dec 2021 22:14:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5CF99CE16B3;
+        Tue, 14 Dec 2021 03:14:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37568C34605;
+        Tue, 14 Dec 2021 03:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639451643;
+        bh=cIbvf3ZL2PJ3kwzgpLwIdMAmHp6jvH/TiYSFbWgc4PU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Uuud5Ie5RQIAkiTK/yQBzGs4RDLdAMlO4mMr4sUq202zm9dXGOCPiec8f/w1CtCFP
+         uttmN16xowCJ0p97LSwsW4I3CJ9L05Jyf/BlKKjX8Y7Zs0FYWT0yKo0tq98/HbYOKE
+         TyXAQCXIvmc6895b4CMe88IUVTLLbNn/Eagui/P1+cHzwdGCU19O3kYRXVc9MVYOVS
+         47AaXQvV7KlAHK6w5/qTRWtcmJLdCsb+PGCIUgq0Et2KUueQ6D5YFkOKJGh0iHagUt
+         ZaCOUGXszkkXVyI7H4lDLwQCXnENv9isccme1tfRpAF8qiZf8S9dFcC+NxXb6ULNng
+         dnOCWLs0KOsnQ==
+Date:   Tue, 14 Dec 2021 11:13:56 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V4 0/9] arm64: imx8mn: Enable more imx8m Nano functions
+Message-ID: <20211214031356.GA10916@dragon>
+References: <20211128131853.15125-1-aford173@gmail.com>
+ <CAHCN7x+yOs3icCV2OsKwAPRcov4Cb9Q+K8b2oy7WZowb3YZnRA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbfQHjoUO5GTvImR@dev0025.ash9.facebook.com>
+In-Reply-To: <CAHCN7x+yOs3icCV2OsKwAPRcov4Cb9Q+K8b2oy7WZowb3YZnRA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 02:58:38PM -0800, David Vernet wrote:
-> > I don't think the fix will be quite that simple.  For example, if
-> > klp_init_patch_early() fails, that means try_module_get() hasn't been
-> > done, so klp_free_patch_finish() will wrongly do a module_put().
+On Mon, Dec 13, 2021 at 09:03:06PM -0600, Adam Ford wrote:
+> On Sun, Nov 28, 2021 at 7:19 AM Adam Ford <aford173@gmail.com> wrote:
+> >
+> > The i.MX8M Nano is similar to the i.MX8M Mini in some ways, but very
+> > different in others.  With the blk-ctrl driver for Mini in place,
+> > this series expands the blk-ctrl driver to support the Nano which
+> > opens the door for additional functions in the future.  As part of
+> > this series, it also addresses some issues in the GPCv2 driver and
+> > finally adds support for enabling USB and GPU.
+> >
+> > V4:  Rebase on top of [1] which fixes hangs caused from CSI and DSI reset
+> >      and add the same fixes for CSI and DSI to the Nano
+> > V3:  Fixes an the yaml example
+> > V2:  Fixes the clock count in the blk-ctrl
+> >
+> > [1] - https://www.spinics.net/lists/arm-kernel/msg936266.html
+> >
 > 
-> Ugh, good point and thank you for catching that. Another problem with the
-> current patch is that we'll call kobject_put() on the patch even if we
-> never call kobject_init on the patch due to patch->objs being NULL.
+> Shawn,
 > 
-> Perhaps we should pull try_module_get() and the NULL check for patch->objs
-> out of klp_init_patch_early()? It feels a bit more intuitive to me if
-> klp_init_patch_early() were only be responsible for initializing kobjects
-> for the patch and its objects / funcs anyways.
-> 
-> Testing it locally seems to work fine. Let me know if this sounds
-> reasonable to you, and I'll send out a v2 patch with the fixes to both the
-> patch description, and logic.
+> This series should apply cleanly against your tree now that [1] has
+> been applied to your tree.  Should I submit this a resend or are you
+> able to test the build now?
 
-Sounds reasonable to me.  Thanks.
+I haven't seen any comments on this series from Lucas.
 
--- 
-Josh
-
+Shawn

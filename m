@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B01B474E6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9976A474E6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238079AbhLNXEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 18:04:34 -0500
-Received: from mga05.intel.com ([192.55.52.43]:21289 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233875AbhLNXEd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 18:04:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639523073; x=1671059073;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qt/0bX78cB03INx+HUiS9OiVed6/KeEubFO/mlgVDqs=;
-  b=YmJjlTRHSzqLhJFMj+aCjfdWeLB6/0CBu4nThRaXyKibT3+0o3Z9zjsW
-   y6hFIPk422pqZQ+9Mcvd8qZhDJ6CZuCcp0KtMQEy/Kcdw6/rA17Sxu9go
-   tP8a//CWKsLzy8mrJ5mxtN03gFxlxMNqjOrFjdLMee0TC3yXHdsC8LLQ4
-   3HrDMXFMFLvFXRqP8DlXzUAoBZ/Dm4rotgIzTReYKMUj3q5DpY0zYZe3H
-   Y4CWi/d9mQXfWP6d64a5zw7QKuQFvseLg+86d1UpKyDmfGYnw8Tuwp9ei
-   hfkK64dwAI21NJJxPHZzn+8bl2k6LAr5u6rSw/YpWzoQw0HB3Ve6ro6Az
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="325380902"
-X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
-   d="scan'208";a="325380902"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 15:04:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
-   d="scan'208";a="465290643"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 15:04:31 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxGqV-0000ts-2I; Tue, 14 Dec 2021 23:04:31 +0000
-Date:   Wed, 15 Dec 2021 07:04:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     kbuild-all@lists.01.org, Vinod Koul <vkoul@kernel.org>,
-        Kishon <kishon@ti.com>, linux-kernel@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [phy:next 37/37] drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:41:
- error: implicit declaration of function 'FIELD_PREP'
-Message-ID: <202112150757.4yrvwmKK-lkp@intel.com>
+        id S238112AbhLNXFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 18:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238082AbhLNXE7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 18:04:59 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A545C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:04:59 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so18586662pjc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 15:04:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M2BFbMJaVwMNM4RS4xLE2tjwuVQHsGBUmE2Hk9fOAug=;
+        b=TiFP6w2bj9LlQ33+ScgY0eGfLoigi+0Ao+OjORy5YkzW15X59Q6Lytt/c0+S2wCjss
+         mdMbfgIdiGrM0h64qsMvdbKzwz3AD1mGZssJeT7syS+pewMwVDMgchViqwTUe7c/7o9R
+         afgTjXMDqPj1yd/HjGjkwzpmOrAH24ZkaHKzA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M2BFbMJaVwMNM4RS4xLE2tjwuVQHsGBUmE2Hk9fOAug=;
+        b=MUPSuMGWACoKY5mRc72EsWHRr3Yv5Pdyxf2Ea18qwaZbzcWtEFWqfBxbr+VHzLN/SM
+         ewdSXus3cDTzTfYXYv7XsDb5RMvPmV1ZUu3GU5WGeyDD9DvWkAyaZgPYuGG1bgJVALKL
+         Vy00W3TVQ4zAfq5JX8PEzyPbeGORBcol75OvkcHMvVBQlnpqWvVdm4xMVsIiu35bAyha
+         xyD1S/Ei6Z5LIzi1pfN7vSUuCi5q8Ulcjz8RIPczGDr7xQ/EN1Kf5Wrl0XcI0WI/smSf
+         ScItNKvbmkthy443Mq3VjxMhbzL+XUS3LyVTlkAUonyAIQYQ0Dh/ikaIRsg+BoJbCLqW
+         yDpA==
+X-Gm-Message-State: AOAM532NLKpljj1dk+WUCIQ3XxaD2iNWA9fQBrdJFAo7+eKwVfRxxZm2
+        utTFVcxTTm7+POi3HM0BJKq4sQ==
+X-Google-Smtp-Source: ABdhPJwNDRkNv0tjAX5S3YBqoEQjC3y4dtBnPaCbfBBWzUSQcnpEx+d0aV1f9ocu/hymnGerkVgLaQ==
+X-Received: by 2002:a17:902:b197:b0:148:a2e7:fb4d with SMTP id s23-20020a170902b19700b00148a2e7fb4dmr1630928plr.142.1639523099026;
+        Tue, 14 Dec 2021 15:04:59 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:e9a1:b79a:d9a5:5e56])
+        by smtp.gmail.com with ESMTPSA id lp12sm48343pjb.24.2021.12.14.15.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 15:04:58 -0800 (PST)
+Date:   Tue, 14 Dec 2021 15:04:57 -0800
+From:   Prashant Malani <pmalani@chromium.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] acpi: Store _PLD information and convert users
+Message-ID: <YbkjGaDxxzkBKHHX@google.com>
+References: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git next
-head:   1aa97b002258a190d7790a1a5c0c27829f82e569
-commit: 1aa97b002258a190d7790a1a5c0c27829f82e569 [37/37] phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20211215/202112150757.4yrvwmKK-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git/commit/?id=1aa97b002258a190d7790a1a5c0c27829f82e569
-        git remote add phy https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git
-        git fetch --no-tags phy next
-        git checkout 1aa97b002258a190d7790a1a5c0c27829f82e569
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+Hi Heikki,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Mon, Dec 13, 2021 at 01:32:38PM +0300, Heikki Krogerus wrote:
+> Hi,
+> 
+> I'm now using the helpers device_match_acpi_dev() and
+> device_match_fwnode() like Andy suggested. No other changes.
+> 
+> 
+> The original cover letter:
+> 
+> This removes the need for the drivers to always separately evaluate
+> the _PLD. With the USB Type-C connector and USB port mapping this
+> allows us to start using the component framework and remove the custom
+> APIs.
+> 
+> So far the only users of the _PLD information have been the USB
+> drivers, but it seems it will be used also at least in some camera
+> drivers later. These nevertheless touch mostly USB drivers.
+> 
+> Rafael, is it still OK if Greg takes these?
+> 
+> Prashant, can you test these?
 
-All errors (new ones prefixed by >>):
+I'd sent an email earlier, but not sure why it's not showing up in
+lore.kernel.org. So I'll send it again. FWIW, for the series:
 
-   drivers/phy/freescale/phy-fsl-imx8m-pcie.c: In function 'imx8_pcie_phy_init':
->> drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:41: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-      41 | #define IMX8MM_GPR_PCIE_REF_CLK_EXT     FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x2)
-         |                                         ^~~~~~~~~~
-   drivers/phy/freescale/phy-fsl-imx8m-pcie.c:85:28: note: in expansion of macro 'IMX8MM_GPR_PCIE_REF_CLK_EXT'
-      85 |                            IMX8MM_GPR_PCIE_REF_CLK_EXT :
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+Tested-by: Prashant Malani <pmalani@chromium.org>
 
+Thanks,
 
-vim +/FIELD_PREP +41 drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-
-    38	
-    39	#define IMX8MM_GPR_PCIE_REF_CLK_SEL	GENMASK(25, 24)
-    40	#define IMX8MM_GPR_PCIE_REF_CLK_PLL	FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x3)
-  > 41	#define IMX8MM_GPR_PCIE_REF_CLK_EXT	FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x2)
-    42	#define IMX8MM_GPR_PCIE_AUX_EN		BIT(19)
-    43	#define IMX8MM_GPR_PCIE_CMN_RST		BIT(18)
-    44	#define IMX8MM_GPR_PCIE_POWER_OFF	BIT(17)
-    45	#define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
-    46	#define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
-    47	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-Prashant

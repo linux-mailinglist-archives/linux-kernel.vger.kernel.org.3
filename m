@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E30B9474B92
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6132C474B90
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 20:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237339AbhLNTKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 14:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S237333AbhLNTKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 14:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbhLNTKb (ORCPT
+        with ESMTP id S231995AbhLNTKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:10:31 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20FAC061574;
-        Tue, 14 Dec 2021 11:10:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
-        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
-        In-Reply-To:References; bh=XsmCqJao1bqLigheUsyxqJhjt/PPR1l+mc8RxY9x2iQ=; b=H0
-        CFCxlxGEzAFTR6neO9QTDh6LY+bZ1Zc7fFXBjm1KanTVI4Vwn6ktU/hcyHxL9NvgTYrPcKz/sYKSR
-        OazQuw4/rE5cV3f8OYGEDQISIMpCct0yYpP7uS0jKsxtEauLKDEHVaK9BjLTW0M35OjNrVtS9qbvk
-        7u2PZzj+jkj1CmrzlNKb7Y3+YHUc0wvjbDSo5zguKAID9Tlnnp7Sg15DDnOIKLjveFybXPR01q6Ay
-        P0FSgEnI5zyK2trbI9b92QCFjq/kKFsOrV/1JvfrSAnSHJcpudVl2qxLQPc1wcfkZxmwQC6a95L4m
-        AH1ILmzIJ4n6cYcmY21A0pQDiPwyWftQ==;
-Received: from [81.174.171.191] (helo=donbot.metanate.com)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1mxDBt-0000nB-0n; Tue, 14 Dec 2021 19:10:21 +0000
-From:   John Keeping <john@metanate.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-rockchip@lists.infradead.org,
-        John Keeping <john@metanate.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        David Wu <david.wu@rock-chips.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: stmmac: dwmac-rk: fix oob read in rk_gmac_setup
-Date:   Tue, 14 Dec 2021 19:10:09 +0000
-Message-Id: <20211214191009.2454599-1-john@metanate.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 14 Dec 2021 14:10:16 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCFFC061574;
+        Tue, 14 Dec 2021 11:10:16 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C80461EC02AD;
+        Tue, 14 Dec 2021 20:10:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1639509010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=DI2vukmIvxeB24qycMTvikeEQ9/5m2LSUmK7BFY/UXc=;
+        b=iYY1nA/6HMelMQmtlpVuYveRU5HkIKZWb/btW1eVmU8/1GVzhoLzagRE2znZsMCw1LsF4x
+        Sy+YxuDjLUl1PYTFSjvZRBrffZF00IUbhZUYVe8ceJtpeQ2+GFh1DPllxpKzX7R8OySXr6
+        bLYmZvn3Lo8z7CwK9yueRQyYm37ePi0=
+Date:   Tue, 14 Dec 2021 20:10:16 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Venu Busireddy <venu.busireddy@oracle.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 01/40] x86/compressed/64: detect/setup SEV/SME
+ features earlier in boot
+Message-ID: <YbjsGHSUUwomjbpc@zn.tnic>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-2-brijesh.singh@amd.com>
+ <YbeaX+FViak2mgHO@dt>
+ <YbecS4Py2hAPBrTD@zn.tnic>
+ <YbjYZtXlbRdUznUO@dt>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated: YES
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YbjYZtXlbRdUznUO@dt>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN reports an out-of-bounds read in rk_gmac_setup on the line:
+On Tue, Dec 14, 2021 at 11:46:14AM -0600, Venu Busireddy wrote:
+> What I am suggesting should not have anything to do with the boot stage
+> of the kernel.
 
-	while (ops->regs[i]) {
+I know exactly what you're suggesting.
 
-This happens for most platforms since the regs flexible array member is
-empty, so the memory after the ops structure is being read here.  It
-seems that mostly this happens to contain zero anyway, so we get lucky
-and everything still works.
+> For example, both these functions call native_cpuid(), which is declared
+> as an inline function. I am merely suggesting to do something similar
+> to avoid the code duplication.
 
-To avoid adding redundant data to nearly all the ops structures, add a
-new flag to indicate whether the regs field is valid and avoid this loop
-when it is not.
+Try it yourself. If you can come up with something halfway readable and
+it builds, I'm willing to take a look.
 
-Fixes: 3bb3d6b1c195 ("net: stmmac: Add RK3566/RK3568 SoC support")
-Signed-off-by: John Keeping <john@metanate.com>
----
- drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-index 6924a6aacbd5..c469abc91fa1 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-@@ -33,6 +33,7 @@ struct rk_gmac_ops {
- 	void (*set_rgmii_speed)(struct rk_priv_data *bsp_priv, int speed);
- 	void (*set_rmii_speed)(struct rk_priv_data *bsp_priv, int speed);
- 	void (*integrated_phy_powerup)(struct rk_priv_data *bsp_priv);
-+	bool regs_valid;
- 	u32 regs[];
- };
- 
-@@ -1092,6 +1093,7 @@ static const struct rk_gmac_ops rk3568_ops = {
- 	.set_to_rmii = rk3568_set_to_rmii,
- 	.set_rgmii_speed = rk3568_set_gmac_speed,
- 	.set_rmii_speed = rk3568_set_gmac_speed,
-+	.regs_valid = true,
- 	.regs = {
- 		0xfe2a0000, /* gmac0 */
- 		0xfe010000, /* gmac1 */
-@@ -1383,7 +1385,7 @@ static struct rk_priv_data *rk_gmac_setup(struct platform_device *pdev,
- 	 * to be distinguished.
- 	 */
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (res) {
-+	if (res && ops->regs_valid) {
- 		int i = 0;
- 
- 		while (ops->regs[i]) {
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

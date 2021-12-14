@@ -2,200 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E1F473DE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E235A473DEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 09:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbhLNIB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 03:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbhLNIB2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 03:01:28 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0DEC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:01:28 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id r11so59387579edd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 00:01:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=B3ObPEDvbNhMRSidj2AnG8dSMRHJAaonHYD5kHYlWk8=;
-        b=W3W+Khx1r1BTsrQTXQ1n/aZnHbB7LEQfsCmhU9GaLh7y2DS2I5SxR4X1TmCJj/XZcK
-         FrytQj9tJSxREuyBzItGLlTT4GMOQwCuawP8MGhBY8Kbu+fvvDl711m+fFjCjcZ2PQVl
-         lL/xIOpmYLLUUBqjbIvHfO2G3KmRQNiHuwgQo1Gf44DmERkOl3oWYSezf0u7ByfSh7Tv
-         xfXRike+/uuAwvfJrjdRJk+Nmm+fsqr0MJnEWe0uSga/7HdcwDTWh4UMsKQ/TKW7lFnF
-         usYMG5pA/ZIfdyzc8W8+UuUqgYRakEMZI1wsNpOQuxjxRJfBxtsK0kL91uZanatmtjn3
-         EQoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=B3ObPEDvbNhMRSidj2AnG8dSMRHJAaonHYD5kHYlWk8=;
-        b=H+Im+pFpP/Qe9dLa3sFjwml4PQY1KktGNopV0GOQ8Y7dZ9WbZCUiFjo7r6jE1oO1dI
-         3rgldaYLgw+miVxbtTDuj/RTINEMa+qmVG0z0vOSW6FE0sNc/ur9VjW0vkrcT7twEKtJ
-         e2XiDDq6OrQR35pO9bXxJDM7yfAt66vTr0CTI6uddEtqxtPt2mkzRhWEB6XrwSvpl5nh
-         cAT+NAxOmoPoUim3wiNFHFu+/3g+0a7mxAVAVMHuWzhmau73yIJqQCLWZZ2usfRZuPX0
-         hkJtMocDpUj7aLTmIhUCVCUBZ8Sm3sCa4X3wYOjm1bXiViTOH9B3oUu5GFXNZypjqQeW
-         QpmA==
-X-Gm-Message-State: AOAM530wOnnvY+yAq6lVRlxvmIb23X9gAqv391agIMPyXMURAk1MQz2g
-        wUy1Cf4GaJpHCF5jo+BCJsZrmtpbdm/iGI97B+3G9A==
-X-Google-Smtp-Source: ABdhPJzf2F9jts1gqiQ5noRm02vgpLMJNYyXxYNM3xO40IeVF39ghjW37EXQjiRwdLYYoGMqDGNoA43404ffVVe1uus=
-X-Received: by 2002:a17:906:300e:: with SMTP id 14mr4047316ejz.732.1639468886822;
- Tue, 14 Dec 2021 00:01:26 -0800 (PST)
+        id S231680AbhLNIFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 03:05:55 -0500
+Received: from mga07.intel.com ([134.134.136.100]:25185 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229477AbhLNIFy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 03:05:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639469154; x=1671005154;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rjV2vJCIHQHCMOKR5klOAYcSglpVlBbDX5kT5PNhLRY=;
+  b=VpdaMJ0JPOrs4DS08YA8otUYk7lvNOGIGisl2G63spANOGr0IrPsgmAq
+   FybiSxdfRQ6XhzyvGiJSVJf+cMIL+JVXIzJImAj4JR+mmKCDwVkExqszL
+   mpraCmCvUL5WLT0rzPD+3I1zqLINJtnhryZ2VH7sVlTmBgrs3gNEeewJq
+   sRNNgnpinQf0G/UvON4miyGGocqbnhyPhC6BMI+NMUMiDpj9+5XPTQ+cr
+   2xUATSq1NuMRa1kIA58WVCOXsw9MVGWBAaVmsUWcV6gNQDRr2b+LXqoMx
+   WGChgj1Vg63LMXmcNvdEmgvBxLMY9FTBA8EhQd9r0h5/fb8EAriIBSdJM
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="302303380"
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="302303380"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 00:05:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="464977888"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 00:05:52 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mx2op-00004F-C7; Tue, 14 Dec 2021 08:05:51 +0000
+Date:   Tue, 14 Dec 2021 16:05:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [tglx-devel:x86/fpu-kvm 1/6] arch/x86/kernel/fpu/xstate.c:1625:6:
+ warning: variable 'ret' is used uninitialized whenever 'if' condition is
+ false
+Message-ID: <202112141631.KodrezTK-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211213092925.380184671@linuxfoundation.org>
-In-Reply-To: <20211213092925.380184671@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 14 Dec 2021 13:31:15 +0530
-Message-ID: <CA+G9fYsLZwRgxK0S5Xshv6zu9mgvq=naJQRVHPJpDDoARkktrg@mail.gmail.com>
-Subject: Re: [PATCH 4.4 00/37] 4.4.295-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 at 15:03, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.4.295 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.4.295-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/fpu-kvm
+head:   e16d6eec3c9e60abfb29d0d77f08411d326142dd
+commit: 8a4ae8c80ec211646b5824b7c89d64cf7d286625 [1/6] x86/fpu: Extend fpu_xstate_prctl() with guest permissions
+config: x86_64-randconfig-r035-20211213 (https://download.01.org/0day-ci/archive/20211214/202112141631.KodrezTK-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=8a4ae8c80ec211646b5824b7c89d64cf7d286625
+        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
+        git fetch --no-tags tglx-devel x86/fpu-kvm
+        git checkout 8a4ae8c80ec211646b5824b7c89d64cf7d286625
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/fpu/
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+All warnings (new ones prefixed by >>):
 
-## Build
-* kernel: 4.4.295-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.4.y
-* git commit: 597c1677683ab7609f1804211e824a3cab9802e9
-* git describe: v4.4.294-38-g597c1677683a
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.4.y/build/v4.4.2=
-94-38-g597c1677683a
+>> arch/x86/kernel/fpu/xstate.c:1625:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (!guest) {
+               ^~~~~~
+   arch/x86/kernel/fpu/xstate.c:1637:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   arch/x86/kernel/fpu/xstate.c:1625:2: note: remove the 'if' if its condition is always true
+           if (!guest) {
+           ^~~~~~~~~~~~
+   arch/x86/kernel/fpu/xstate.c:1611:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
-## No Test Regressions (compared to v4.4.294)
 
-## No Test Fixes (compared to v4.4.294)
+vim +1625 arch/x86/kernel/fpu/xstate.c
 
-## Test result summary
-total: 44585, pass: 36076, fail: 150, skip: 7382, xfail: 977
+  1597	
+  1598	static int __xstate_request_perm(u64 permitted, u64 requested, bool guest)
+  1599	{
+  1600		/*
+  1601		 * This deliberately does not exclude !XSAVES as we still might
+  1602		 * decide to optionally context switch XCR0 or talk the silicon
+  1603		 * vendors into extending XFD for the pre AMX states, especially
+  1604		 * AVX512.
+  1605		 */
+  1606		bool compacted = cpu_feature_enabled(X86_FEATURE_XSAVES);
+  1607		struct fpu *fpu = &current->group_leader->thread.fpu;
+  1608		struct fpu_state_perm *perm;
+  1609		unsigned int ksize, usize;
+  1610		u64 mask;
+  1611		int ret;
+  1612	
+  1613		/* Check whether fully enabled */
+  1614		if ((permitted & requested) == requested)
+  1615			return 0;
+  1616	
+  1617		/* Calculate the resulting kernel state size */
+  1618		mask = permitted | requested;
+  1619		ksize = xstate_calculate_size(mask, compacted);
+  1620	
+  1621		/* Calculate the resulting user state size */
+  1622		mask &= XFEATURE_MASK_USER_SUPPORTED;
+  1623		usize = xstate_calculate_size(mask, false);
+  1624	
+> 1625		if (!guest) {
+  1626			ret = validate_sigaltstack(usize);
+  1627			if (ret)
+  1628				return ret;
+  1629		}
+  1630	
+  1631		perm = guest ? &fpu->guest_perm : &fpu->perm;
+  1632		/* Pairs with the READ_ONCE() in xstate_get_group_perm() */
+  1633		WRITE_ONCE(perm->__state_perm, requested);
+  1634		/* Protected by sighand lock */
+  1635		perm->__state_size = ksize;
+  1636		perm->__user_state_size = usize;
+  1637		return ret;
+  1638	}
+  1639	
 
-## Build Summary
-* arm: 129 total, 129 passed, 0 failed
-* arm64: 31 total, 31 passed, 0 failed
-* i386: 18 total, 18 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 30 total, 24 passed, 6 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-livepatch
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

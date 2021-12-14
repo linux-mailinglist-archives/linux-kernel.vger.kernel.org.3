@@ -2,113 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DCD473D66
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 08:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4689C473D6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 08:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbhLNHFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 02:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbhLNHFq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 02:05:46 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E16C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 23:05:46 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id 8so17072610pfo.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 23:05:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=u9uJx6Yzs8VAbaAVVWgb3c7raYuZyWdXpq+qPzpYeZM=;
-        b=Y902Ahq4o+Npt/dUrRkpBbcRT1bmljFp51/i3oPcGlXJnJK0PhKJX5yQ3f1r9oaTY3
-         63IgklBVpGUo8EV/WJeEfGD8UDZI17HHrx6WTahkqndWYAD+tl/V+PXNJ+9rZjMopQhw
-         mqSCgdxe/1fFY1aX0trqSTX62HRVMPvQ3qmJaoZevziFRcZj7igLkY/AQ4twp2YUhI5y
-         y2AWFMxffDJZx9Ewy7w9BKfWe+/MZJt6uNuTPE1YQOd0xBtAOd1f6C3bb6z65vyfpfpX
-         hCQdjonogxPVWUY+5WAPOpSqxw3D6BPAgNoTUmmIc2KXwWSlwjykpoEgntMBrQD5QRWC
-         BWUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=u9uJx6Yzs8VAbaAVVWgb3c7raYuZyWdXpq+qPzpYeZM=;
-        b=wTvj6EdtbrFTgqIBQVy6qQCiQ+97Lb61dGtSpQvGal5CUmwpJLTZfxVmJ4Aru4XZZU
-         P5s6U2SOEJqBOPI325Wnh+VqIGbo8ZHeRg2xueaaX+ElKsqHPnTC58emr8iUM5JMR9Wg
-         3eHAaeKnUgIb7zI8v4BWoCmGK88jbkEaZJYfRUQBy03xEfxMJ8z1skIJEJEEikB5zty6
-         OvbrLLBVzzNjuf1sW5VujsEm7zIArL7QiVXAzIc6FbOi+jP4JDWrrKQQNDKvwbJ19ZFG
-         GBYtPMZsiVA9Zv3Mud6+kajPD2yKBZd7P9Yaaxyfg1eyG+41WFTtabV0slbHYEPdlscO
-         ECqA==
-X-Gm-Message-State: AOAM533pcrikMwTeS6f+IbW/fA3lrS6HEjuLt2Rzh/PH3g6DGfyWfL31
-        Qw+eN4juzZzaEeD9xO9aiA/uXg==
-X-Google-Smtp-Source: ABdhPJz65bi9c7M0fZgffgbxVusSpsiNlfIGYC1wjPy5i0UuQiVHxioVmPTqUEQV+R+LXxo5SjqWTw==
-X-Received: by 2002:a05:6a00:22c3:b0:4b6:197:ae5a with SMTP id f3-20020a056a0022c300b004b60197ae5amr1474920pfj.42.1639465545684;
-        Mon, 13 Dec 2021 23:05:45 -0800 (PST)
-Received: from leoy-ThinkPad-X240s ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id fw21sm1238200pjb.25.2021.12.13.23.05.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 23:05:45 -0800 (PST)
-Date:   Tue, 14 Dec 2021 15:05:34 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Balbir Singh <bsingharora@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, codalist@coda.cs.cmu.edu,
-        linux-audit@redhat.com
-Subject: Re: [PATCH v2 4/7] connector/cn_proc: Use task_is_in_init_pid_ns()
-Message-ID: <20211214070534.GA1721898@leoy-ThinkPad-X240s>
-References: <20211208083320.472503-1-leo.yan@linaro.org>
- <20211208083320.472503-5-leo.yan@linaro.org>
- <YbgyiIZDDaOB93Em@balbir-desktop>
+        id S231297AbhLNHGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 02:06:46 -0500
+Received: from mga02.intel.com ([134.134.136.20]:53750 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231283AbhLNHGo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 02:06:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639465604; x=1671001604;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=V2GAFmF54SLCRd9Eu8WIHWGrIVtNKXifLQ6qIOSRQ8U=;
+  b=lUVGKxluBGCj6a3fyi7EoARX+4d5fQumwvNarzJeOCTZEMmpL/vH0KkY
+   91qumrjwKD7yjG2baHBtUepFm0IMkROwAWrpQEXc8O2OBbdaw5jqzXRYl
+   WQjN9DpfuZaGFttz/Jh/OZx7eecXx9jOCoDgUUHv3AzAS8V/XDP020mim
+   X0CPoQOWa2wL1c1cAFf/ckHj2705vHa6gdEFOAnC7e09FfPs9eL9BFCYV
+   oEi/nKoSU5Oe8TZNMQd/Jh+EQhifCS3bYWqQ49Aqfd/ePlUTRAJl70MkW
+   aSn9D4/ZE1U8WeOjQ/luxRQA+Rj8wMoURSRjaTBXnEF9Yo+sRoM95manc
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="226191357"
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="226191357"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 23:06:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="464960713"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga006.jf.intel.com with ESMTP; 13 Dec 2021 23:06:44 -0800
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 23:06:43 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 13 Dec 2021 23:06:43 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 13 Dec 2021 23:06:43 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kxX9oHZ/tNbESmrfqvWDyBwyt0m0jjGYNXyZjEEhv1yLxAIqMNBjKAD1aRHHGdQGc2nSWMSv7RcB9St9CjMqmWv+bjaaXVds1FskWjepxDRXDp1DAUptryi2jHfHv92J7WogIKspsIP0Bk+WjwlwShxDsiTgzYyU/1iztF7DmFvlKuIG6Y+h6UJ3vRXR2Ztx2ngxT4Z2DQczkpBDOarN+wGJIEWCrBjw9+eJk+CJFeIVgPUECWOB1w345crQvAkQjGb1cwqmhGcnJs7f8KB4SqHPWl0yNycrP5/gxgW78yNaRDH8yRLwZrjqmqnab7if62IRDNzkE4s6ssrRALgDpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V2GAFmF54SLCRd9Eu8WIHWGrIVtNKXifLQ6qIOSRQ8U=;
+ b=ZNVlFSmHq2UwfCCjpn00XmgEEbRwo0dV2uzvS9N9L7LT2axEtUInjO8gp8qlkrd4RuW1DKl237bZKnPgo60dIFKxU17ToBOSu+o0EBZh0//9ZTKLjPzq2PNQEJHF7PlEm2GNsNDpYK/b+vTYkatM7VYF/1SgQnlNY1/GucMZL0uPv+JbChEcRqhC5zAN2vMZUjm9QdqfYVGb8WTQUy9ZH4K+Ovjmcg3Qe2liugFSqTzNdS3Mj/JJ62t8RhuAz0BcF99HHnm/2R7oO8AwCtYG5VGfOTq/6rg2fjGVvjhilg7Zf8bmhP8WHMQDEwBi3gxYOXp0cLKFgv31UBpvtOzUOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V2GAFmF54SLCRd9Eu8WIHWGrIVtNKXifLQ6qIOSRQ8U=;
+ b=uEZs2DuhX5TofwCl9O48vNwHXUQ5lKv04HkvfUJ9bZyiJ1v1+7LQXvAUiXD6Dqv12ez2PcA0otypG8XqkFdEjmEsShwqgbNjCqiZEO4kKtW821s5zwnVoycnYu4FclJPsXzgpLGc3WVWPPdLAxtd4IgZ3Izr315YzQcw92I11M4=
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BN6PR1101MB2130.namprd11.prod.outlook.com (2603:10b6:405:4f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Tue, 14 Dec
+ 2021 07:06:40 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04%3]) with mapi id 15.20.4778.018; Tue, 14 Dec 2021
+ 07:06:40 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+CC:     "Christopherson,, Sean" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>
+Subject: RE: [PATCH 09/19] kvm: x86: Prepare reallocation check
+Thread-Topic: [PATCH 09/19] kvm: x86: Prepare reallocation check
+Thread-Index: AQHX63yAqCRfeGSRMUi4D/tAeYgczawwLT2AgAFthgA=
+Date:   Tue, 14 Dec 2021 07:06:40 +0000
+Message-ID: <BN9PR11MB5276416CED5892C20F56EB888C759@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20211208000359.2853257-1-yang.zhong@intel.com>
+ <20211208000359.2853257-10-yang.zhong@intel.com>
+ <fc113a81-b5b8-aaae-5799-c6d49b77b2b4@redhat.com>
+In-Reply-To: <fc113a81-b5b8-aaae-5799-c6d49b77b2b4@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9946cb28-d406-4efd-36fe-08d9bed04703
+x-ms-traffictypediagnostic: BN6PR1101MB2130:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <BN6PR1101MB213081EB22CF4B7D052408968C759@BN6PR1101MB2130.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kz8+WHXLZqoChn350EqpJSK/f/f7Ci60LnzHBhINwLt8yRYH+KmgrrvCP7jlHvtWDxCr7WPV/7d36Td2vCNE413/dC+QnKOtS6OgYAHWzYqobZlO2dMnKBxI2GKRpBsy2EOe+zMX+BhH8DnmMdYksxGWq9Yy4XrW9+eyZ7X7cRa1Zn7zdkl234tw5KAtBhXASvz+6RTvExqq9qecpUlNVlQgiA/vo0RN1tV24m/9OGTh1VesdmC3vPkrhFJselCUYy0rLOMpmqNQvDxfsWwcx1qgOwLImEFgfB9BvIzXU71RTLRmMM4zRVIY3XVpDMDRblg6LDnHyRH3AJqGPzpEX1ApXbYCKFHQtxuUdyL2L5XVUFXH4VnVYKxKu5fw8jiT8OIm2rgv47McgmXq8Tg4MwPbuDZ1CNh4nz9CHbuk5oqDWaW1eyPH+/6S03UErBYl6qm3h0MhNvGZ6UIOYIx6wBxoPH9g3V4BiIWWcabMY/Mm3YEKgFRPWk363gF57Zsls5tSozEdA1OmwcY84wZwREZhztkx8M+wP4yZ9kiGYmv4YwRFS+eHTRMLeP0nA7r41eH/22DJCtpNaxZUmnykWvmPb/JPSkHB5Rt/eej2Pbl/9vz0bAuCcArZEF+e3GE5jJHNFoEg2J0KGnKHI2nKpq5vA/HXG2leOfGYsdIFk0CcDY/CZSz5m4QObj3B4rD6pSPsDm/9ntIayJLVDGyijd5EfQbiskqseNMTpop9+3s=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(122000001)(921005)(8936002)(7696005)(4744005)(5660300002)(186003)(2906002)(52536014)(9686003)(7416002)(38100700002)(4326008)(33656002)(54906003)(26005)(6506007)(110136005)(71200400001)(66946007)(66476007)(64756008)(316002)(8676002)(82960400001)(55016003)(66446008)(86362001)(66556008)(76116006)(508600001)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dlNDWm1HcTJ5dlA4SjFscEJIdnM1ZjdxUE92SzB6ODkwTWNqSWJ1VmFONGZE?=
+ =?utf-8?B?VmhUSllZYURxZzRYVHhsaUxLRFI5Tis5OVpFMG0xMTBsTnFlTG5UTEQ4S0hW?=
+ =?utf-8?B?bG9ucXYyTEUveElDQlpUWUNGd0U4MXJ0d3ZNNVR1eWQ3L1ZKZ3dEcFl1bFBS?=
+ =?utf-8?B?RjJLdWNqZEN6QmVoSWlYWDJtZ29SSVdKM2thY1hmcTFSYSsyYVdzVXVDNTNP?=
+ =?utf-8?B?TEpwa2lOZTk5VzhXWDgzWXd0VEJlVFExN0ZhWVNIaHEwaGJwREdsaFFYM2Na?=
+ =?utf-8?B?QVdTem9VKzJKMllzc1NDNlhLa3BGWTljRms4Z3o1N1hlL29JTWNpOEVaUE5C?=
+ =?utf-8?B?a3JhRlZmRy8wVGtub3dnNm94Sm4zNERBNXlkRWM0Smx0aUhxUEZxU2Z5Q1Zt?=
+ =?utf-8?B?S1lGMFFWS1BiOTRpTVlaWjhPTExHclJZZHVsRFNQM0NXZ3ZVZ2xXQVFsZ3Jj?=
+ =?utf-8?B?SjRoQmJDb2ZMNEIyR0o5THhkRkNWTVV5ZWxaV0x4Y1NXUjNLckdmUnU2ZUww?=
+ =?utf-8?B?VzgzMTVraUFKUGdSSS9XYW9nQ24vU2liTmJzakd6eDZ6YW1hZjQ3djZuV0Na?=
+ =?utf-8?B?NXlJdGZCdzdkZU5yWDZVUktZSE42RjhmcnlJTHNxajZoNFRsY1BsdkhtWTdC?=
+ =?utf-8?B?OU54K0lVUXhUWHhKL2xEOHZrWDA5ZEJicG5ETENzOXcxbE5tdk5TK2VqZFNj?=
+ =?utf-8?B?bk5TSFN4SHNqYnBQZVFrdEQ5QlFQTkF0Q1FjQ2d3cTloTEt3TXdRSDN1M1BM?=
+ =?utf-8?B?TDRrMjVvVWhpQU1aaWZOV1FuR1dFbFFMVWNxS1R2NVF1SzlpWEx6dFg1OVpE?=
+ =?utf-8?B?WmxrVnpWSTNzbFpVbGdjeDJrcDYwMjd2NERNNEYxdDAwSnFBOWhWcTY3Z2la?=
+ =?utf-8?B?T2x0bktNY3pmWVZ3Wkl4ZlJGa3pUSDFVaTZidEc2eGhDUldwa015Uk05bFpi?=
+ =?utf-8?B?VjlxZS9nRDVhcVoyUnlVblV3TDlXMHZUdmpZKzdsSXNud21OQS9LbHcvbGdm?=
+ =?utf-8?B?KzFJZFUrZyt0VjBqSHVZSFFrSGZma1plZ1N6R0lnemZ2NzZ1MHZyQXNaUVdl?=
+ =?utf-8?B?dGkrc3BvbnQ0dFRRNWhhaFU2eTBndHdXL1huTmRqb3VkdWI1czVjTGhlQmth?=
+ =?utf-8?B?aEFxVjBNWXlRUitjM0c4SWxnMGpUanVkSzdyYjJPcHpuYzZXaFpBdys3ZjYv?=
+ =?utf-8?B?bk9LUGplNExBc091SEdBS2lSaWpTVGhteWVGMnJTZ21sTG94Y3hvN3lSMWZE?=
+ =?utf-8?B?S0xyMHRoZ1pUUGpiS0RISFU5UXNjQkM0QkMrTDlOcWRwSTlYcTBjT21MT1Iz?=
+ =?utf-8?B?bzBubU0weGhDR0lndmRLdDUwOS9wZC9VQXN2TCs2QVBubFhqYmRVL0dUK3BV?=
+ =?utf-8?B?ZlRkMXhlSHZ1YmRUWFgxZHhhVGY5N00yeldTdEZmeEZvbmFRRk9iOENGd1Nz?=
+ =?utf-8?B?RUc4d1hCb2E0dS9Rcm0vSTdVKzhsUGEvUE5pRHc2RUk3MmE0WlRuOGJDWjZC?=
+ =?utf-8?B?UDMxRTdJY1J6ZmNlbjhmWmZ0RUdXbmFld2FiVitTeXFqak5EWFJBaWZEckpB?=
+ =?utf-8?B?Q0R2cExRUEFpMWVVVXdmVnh0UnZGRktwTGFQelFUZGgvanhjU3poZjdFV3pn?=
+ =?utf-8?B?ZGdsdzU1MWVkOHZCS1Q5a0E2QllKUVQ5SEVLNmttTWVvMkFWK25RRUNsZkFE?=
+ =?utf-8?B?RThkSFF4eWs4NGoxVlFhd2ZiU2hSMVFQQzRGd2tlQUZzb1c1d2lGalpaQ1Q4?=
+ =?utf-8?B?bk5yVkFydVI3bTUyRHg5d1pvcXRFaHVzL3BWS0FjTEI5TmZ1VGZoQ05talBT?=
+ =?utf-8?B?MktZS010azhEY1ZjamNiejhNV2xSZXpCMVRjQmpWSkNld2dyTHliS1RFWXBD?=
+ =?utf-8?B?bzE0VkFNYVJvQm16VXRIdlNMdHI4NHI3eUJCYlN0VUVUYzFybDE3Zk5LcTJ1?=
+ =?utf-8?B?U0lKM1IvZ3BRbEM0SWtYVGxUMTRmLzNxbFplYW1IQVZLSy9qQW1PR0tHNTFw?=
+ =?utf-8?B?bkNJM2RPNTBtSjB3R2syeDJsYUxIdEtqQ2hUdkEzazgrUGJaSmNDd1drTUtO?=
+ =?utf-8?B?dHRzZzNCaXFGLyt0Um9UQzFxczY4T0dTbEZHYVRHblV5NDcvNmUwdFdSditU?=
+ =?utf-8?B?bXpFbkk0WmdLNVo2ZzYxZFBPOW8vRXJ4WXF0ZjFFaU1DSHRkYnFGTmxOTnZi?=
+ =?utf-8?Q?oD3baSeGh8Y+nu2LcEyGRfc=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbgyiIZDDaOB93Em@balbir-desktop>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9946cb28-d406-4efd-36fe-08d9bed04703
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Dec 2021 07:06:40.2697
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 91969h3E4EBUh0Vm7XZNdu1fb9cDhQrnZpLQiXNMR+QVWWQJwEPd0jpPSaNIsGKrRN4buX+BTdf0NVCKvlDycg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1101MB2130
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 04:58:32PM +1100, Balbir Singh wrote:
-> On Wed, Dec 08, 2021 at 04:33:17PM +0800, Leo Yan wrote:
-> > This patch replaces open code with task_is_in_init_pid_ns() to check if
-> > a task is in root PID namespace.
-> > 
-> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> > ---
-> >  drivers/connector/cn_proc.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/connector/cn_proc.c b/drivers/connector/cn_proc.c
-> > index 646ad385e490..ccac1c453080 100644
-> > --- a/drivers/connector/cn_proc.c
-> > +++ b/drivers/connector/cn_proc.c
-> > @@ -358,7 +358,7 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
-> >  	 * other namespaces.
-> >  	 */
-> >  	if ((current_user_ns() != &init_user_ns) ||
-> > -	    (task_active_pid_ns(current) != &init_pid_ns))
-> > +	    !task_is_in_init_pid_ns(current))
-> >  		return;
-> >
-> 
-> Sounds like there might scope for other wrappers - is_current_in_user_init_ns()
-
-Indeed, for new wrapper is_current_in_user_init_ns(), I searched kernel
-and located there have multiple places use open code.  If no one works
-on this refactoring, I will send a new patchset for it separately.
-
-> Acked-by: Balbir Singh <bsingharora@gmail.com>
-
-Thank you for review, Balbir!  Also thanks review from Leon and
-Suzuki.
-
-Leo
+PiBGcm9tOiBQYW9sbyBCb256aW5pDQo+IFNlbnQ6IE1vbmRheSwgRGVjZW1iZXIgMTMsIDIwMjEg
+NToxNiBQTQ0KPiANCj4gDQo+IC0gaWYgKGR5bmFtaWNfZW5hYmxlZCAmIH5ndWVzdF9mcHUtPnVz
+ZXJfcGVybSkgIT0gMCwgdGhlbiB0aGlzIGlzIGENCj4gdXNlcnNwYWNlIGVycm9yIGFuZCB5b3Ug
+Y2FuICNHUCB0aGUgZ3Vlc3Qgd2l0aG91dCBhbnkgaXNzdWUuICBVc2Vyc3BhY2UNCj4gaXMgYnVn
+Z3kNCj4gDQoNCklzIGl0IGEgZ2VuZXJhbCBndWlkZWxpbmUgdGhhdCBhbiBlcnJvciBjYXVzZWQg
+YnkgZW11bGF0aW9uIGl0c2VsZiAoZS5nLg0KZHVlIHRvIG5vIG1lbW9yeSkgY2FuIGJlIHJlZmxl
+Y3RlZCBpbnRvIHRoZSBndWVzdCBhcyAjR1AsIGV2ZW4NCndoZW4gZnJvbSBndWVzdCBwLm8udiB0
+aGVyZSBpcyBub3RoaW5nIHdyb25nIHdpdGggaXRzIHNldHRpbmc/DQoNClRoYW5rcw0KS2V2aW4N
+Cg==

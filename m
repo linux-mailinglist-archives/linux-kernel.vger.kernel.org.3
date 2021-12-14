@@ -2,112 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE94474D79
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8F0474D7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 23:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234607AbhLNWDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 17:03:34 -0500
-Received: from mga03.intel.com ([134.134.136.65]:25077 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229975AbhLNWDc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 17:03:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639519412; x=1671055412;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5PmAzK2/sfKUZ2BGAwAHafsf+NzQ82CfvTS31m6HQnA=;
-  b=dCQI9NQnT2e3AR3kkxQR1aGvtqDKw4mB7npukWFriEJM9LUmWlHe2J3w
-   mg5muFJs0Z0lCbZVP0xj4M7jFzS3fzwBB8o9VZHo9mEUtFwXSqwDRkoyb
-   oSYYJ/jJuSPkLFblw63sfMacVmmN9Nm1RHltqaz5aeB07sM3BBFrssYM7
-   x0gYDzbTVOPCGdk2in+DjhPSVCwHVm38p3OpMy7eL8E48MoWkeOtgBuhZ
-   88RAsONn73qepOd85D61XXjOyczGtwhk+AuQdN/MTaATxKxqobyoXatZG
-   VEfQK2JWyTVso4IWlKDtTKIbbG0q53kDtoV8h2hGMwf2jv4Q5KyFuBZdz
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="239042501"
-X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
-   d="scan'208";a="239042501"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 14:03:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
-   d="scan'208";a="465273457"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 14:03:30 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxFtR-0000ow-ES; Tue, 14 Dec 2021 22:03:29 +0000
-Date:   Wed, 15 Dec 2021 06:02:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atish Patra <atish.patra@wdc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-        linux-doc@vger.kernel.org
-Subject: [palmer:riscv-pmu 4/10] drivers/perf/riscv_pmu_legacy.c:76: warning:
- This comment starts with '/**', but isn't a kernel-doc comment. Refer
- Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202112150635.JSGg5exu-lkp@intel.com>
+        id S234662AbhLNWD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 17:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229975AbhLNWD6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 17:03:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D08C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 14:03:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 816FF6171A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:03:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1A42C34600;
+        Tue, 14 Dec 2021 22:03:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639519436;
+        bh=vhBV0UB58aLarchcwMhDlOKOEHOzz9YOLWMMuy3eKow=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=qE8zVxADFHlfY70exVyzPUhewE1LR0A4BSs45ehH5SDYstL993kxg9qdR6aq9TJxE
+         gAIBLJQmOx7d0XGXiS2scy5JCUd1sDo2VYEXlf5iCFJOo/4Cz6E463Yrk4zZAcMAau
+         5jM4oW5lhmG247QoJJhNGCGyOcZKZuxXMkDTW1ZuphZPHMiSdB2RfjwL9swmM4gsmu
+         TJi4Y9ZdUq2BQuZINtm4HJSqxsw9h3WiInB/7uGI4LdUcSd8XSdxRuqOAVc7uF4v52
+         wTyNgXEzd5n8DAdZsmUmC6nz+ENz3ij+h2JNgrUaQJ9MNipzRrWMo8N56x5vP0kRyU
+         TelyT7TVMOeYA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 84BFF5C03AE; Tue, 14 Dec 2021 14:03:56 -0800 (PST)
+Date:   Tue, 14 Dec 2021 14:03:56 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        kernel-team@fb.com, mingo@kernel.org
+Cc:     elver@google.com, andreyknvl@google.com, glider@google.com,
+        dvyukov@google.com, cai@lca.pw, boqun.feng@gmail.com
+Subject: [PATCH kcsan 0/29] Kernel Concurrency Sanitizer (KCSAN) updates for
+ v5.17
+Message-ID: <20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git riscv-pmu
-head:   7a94c6fb363cfe62906cb0503d763204b0fe32b8
-commit: e4d5f33e63b1260f378512c0f6e5a117ed6b894a [4/10] RISC-V: Add a simple platform driver for RISC-V legacy perf
-config: riscv-randconfig-r026-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150635.JSGg5exu-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?id=e4d5f33e63b1260f378512c0f6e5a117ed6b894a
-        git remote add palmer https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git
-        git fetch --no-tags palmer riscv-pmu
-        git checkout e4d5f33e63b1260f378512c0f6e5a117ed6b894a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/ drivers/perf/ drivers/power/supply/
+Hello!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This series provides KCSAN updates, courtesy of Marco Elver and Alexander
+Potapenko:
 
-All warnings (new ones prefixed by >>):
+1.	Refactor reading of instrumented memory, courtesy of Marco Elver.
 
->> drivers/perf/riscv_pmu_legacy.c:76: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * This is just a simple implementation to allow legacy implementations
+2.	Remove redundant zero-initialization of globals, courtesy of
+	Marco Elver.
 
+3.	Avoid checking scoped accesses from nested contexts, courtesy
+	of Marco Elver.
 
-vim +76 drivers/perf/riscv_pmu_legacy.c
+4.	Add core support for a subset of weak memory modeling, courtesy
+	of Marco Elver.
 
-    74	
-    75	/**
-  > 76	 * This is just a simple implementation to allow legacy implementations
-    77	 * compatible with new RISC-V PMU driver framework.
-    78	 * This driver only allows reading two counters i.e CYCLE & INSTRET.
-    79	 * However, it can not start or stop the counter. Thus, it is not very useful
-    80	 * will be removed in future.
-    81	 */
-    82	static void pmu_legacy_init(struct riscv_pmu *pmu)
-    83	{
-    84		pr_info("Legacy PMU implementation is available\n");
-    85	
-    86		pmu->num_counters = RISCV_PMU_LEGACY_NUM_CTR;
-    87		pmu->ctr_start = pmu_legacy_ctr_start;
-    88		pmu->ctr_stop = NULL;
-    89		pmu->event_map = pmu_legacy_event_map;
-    90		pmu->ctr_get_idx = pmu_legacy_ctr_get_idx;
-    91		pmu->ctr_get_width = NULL;
-    92		pmu->ctr_clear_idx = NULL;
-    93		pmu->ctr_read = pmu_legacy_read_ctr;
-    94	
-    95		perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
-    96	}
-    97	
+5.	Add core memory barrier instrumentation functions, courtesy of
+	Marco Elver.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+6.	kcsan, kbuild: Add option for barrier instrumentation only,
+	courtesy of Marco Elver.
+
+7.	Call scoped accesses reordered in reports, courtesy of Marco
+	Elver.
+
+8.	Show location access was reordered to, courtesy of Marco Elver.
+
+9.	Document modeling of weak memory, courtesy of Marco Elver.
+
+10.	test: Match reordered or normal accesses, courtesy of Marco Elver.
+
+11.	test: Add test cases for memory barrier instrumentation, courtesy
+	of Marco Elver.
+
+12.	Ignore GCC 11+ warnings about TSan runtime support, courtesy of
+	Marco Elver.
+
+13.	selftest: Add test case to check memory barrier instrumentation,
+	courtesy of Marco Elver.
+
+14.	locking/barriers, kcsan: Add instrumentation for barriers,
+	courtesy of Marco Elver.
+
+15.	locking/barriers, kcsan: Support generic instrumentation,
+	courtesy of Marco Elver.
+
+16.	locking/atomics, kcsan: Add instrumentation for barriers,
+	courtesy of Marco Elver.
+
+17.	asm-generic/bitops, kcsan: Add instrumentation for barriers,
+	courtesy of Marco Elver.
+
+18.	x86/barriers, kcsan: Use generic instrumentation for non-smp
+	barriers, courtesy of Marco Elver.
+
+19.	x86/qspinlock, kcsan: Instrument barrier of
+	pv_queued_spin_unlock(), courtesy of Marco Elver.
+
+20.	mm, kcsan: Enable barrier instrumentation, courtesy of Marco
+	Elver.
+
+21.	sched, kcsan: Enable memory barrier instrumentation, courtesy
+	of Marco Elver.
+
+22.	objtool, kcsan: Add memory barrier instrumentation to whitelist,
+	courtesy of Marco Elver.
+
+23.	objtool, kcsan: Remove memory barrier instrumentation from
+	noinstr, courtesy of Marco Elver.
+
+24.	compiler_attributes.h: Add __disable_sanitizer_instrumentation,
+	courtesy of Alexander Potapenko.
+
+25.	Support WEAK_MEMORY with Clang where no objtool support exists,
+	courtesy of Marco Elver.
+
+26.	Make barrier tests compatible with lockdep, courtesy of Marco
+	Elver.
+
+27.	Turn barrier instrumentation into macros, courtesy of Marco Elver.
+
+28.	Avoid nested contexts reading inconsistent reorder_access,
+	courtesy of Marco Elver.
+
+29.	Only test clear_bit_unlock_is_negative_byte if arch defines it,
+	courtesy of Marco Elver.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ b/Documentation/dev-tools/kcsan.rst                |   76 ++-
+ b/arch/x86/include/asm/barrier.h                   |   10 
+ b/arch/x86/include/asm/qspinlock.h                 |    1 
+ b/include/asm-generic/barrier.h                    |   29 -
+ b/include/asm-generic/bitops/instrumented-atomic.h |    3 
+ b/include/asm-generic/bitops/instrumented-lock.h   |    3 
+ b/include/linux/atomic/atomic-instrumented.h       |  135 ++++++
+ b/include/linux/compiler_attributes.h              |   18 
+ b/include/linux/compiler_types.h                   |   13 
+ b/include/linux/kcsan-checks.h                     |   10 
+ b/include/linux/kcsan.h                            |    1 
+ b/include/linux/sched.h                            |    3 
+ b/include/linux/spinlock.h                         |    2 
+ b/init/init_task.c                                 |    5 
+ b/kernel/kcsan/Makefile                            |    2 
+ b/kernel/kcsan/core.c                              |   51 --
+ b/kernel/kcsan/kcsan_test.c                        |    4 
+ b/kernel/kcsan/report.c                            |   16 
+ b/kernel/kcsan/selftest.c                          |  141 ++++++
+ b/kernel/sched/Makefile                            |    7 
+ b/lib/Kconfig.kcsan                                |   20 
+ b/mm/Makefile                                      |    2 
+ b/scripts/Makefile.kcsan                           |    9 
+ b/scripts/Makefile.lib                             |    5 
+ b/scripts/atomic/gen-atomic-instrumented.sh        |   41 +
+ b/tools/objtool/check.c                            |    4 
+ b/tools/objtool/include/objtool/elf.h              |    2 
+ include/asm-generic/barrier.h                      |   25 +
+ include/linux/kcsan-checks.h                       |   95 +++-
+ include/linux/kcsan.h                              |   10 
+ kernel/kcsan/core.c                                |  302 ++++++++++++-
+ kernel/kcsan/kcsan_test.c                          |  456 ++++++++++++++++++---
+ kernel/kcsan/report.c                              |   35 +
+ kernel/kcsan/selftest.c                            |   22 -
+ lib/Kconfig.kcsan                                  |    2 
+ scripts/Makefile.kcsan                             |    6 
+ tools/objtool/check.c                              |   37 +
+ 37 files changed, 1389 insertions(+), 214 deletions(-)

@@ -2,181 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB3447460F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7CB474618
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbhLNPKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:10:01 -0500
-Received: from mga01.intel.com ([192.55.52.88]:26162 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229883AbhLNPKA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:10:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639494600; x=1671030600;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ynucwZXL4GShMHXFnLAM1Skqd3YPOwEBYgdBTgug/WA=;
-  b=BbHuXA0H1oIv3XnbRpbBx9IP8bQXDuo/0jN/Js1QTbPWfcFmENDVZsIl
-   5QgLj4wbFcRlxFpfYcVyo2LJpswB+nsW4KNv1LmYLEasoeN52r7iAdfi7
-   zHDeyGxKKSl+Q6GfddA/HKTGzsuZ33A06ffn+mI88qX2jY2zQfkFVILRO
-   wg9VlL3w5uAp3nwwV/X9WLNNgpypcRScLLlMNUEuxj8P3P2awx9ZeD+AU
-   R1AuEKvWI8oiASKnTcK8N2deAiQu2waBNi8yMhY15Cq73xbN/3lh2Malc
-   gyCIjliNH1QWScPh/naWWUOz29U9KRDK0cGMEfcwEpbzKkMQZuwB5BvGJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263137177"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="263137177"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 07:09:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="505389032"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga007.jf.intel.com with ESMTP; 14 Dec 2021 07:09:59 -0800
-Received: from shsmsx605.ccr.corp.intel.com (10.109.6.215) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 07:09:58 -0800
-Received: from shsmsx601.ccr.corp.intel.com (10.109.6.141) by
- SHSMSX605.ccr.corp.intel.com (10.109.6.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 23:09:54 +0800
-Received: from shsmsx601.ccr.corp.intel.com ([10.109.6.141]) by
- SHSMSX601.ccr.corp.intel.com ([10.109.6.141]) with mapi id 15.01.2308.020;
- Tue, 14 Dec 2021 23:09:54 +0800
-From:   "Wang, Wei W" <wei.w.wang@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Jing Liu <jing2.liu@linux.intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Sean Christoperson" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Subject: RE: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
-Thread-Topic: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
-Thread-Index: AQHX8JWhvlRQU5T/lU6dpNiL1wIQjqwyEDNg
-Date:   Tue, 14 Dec 2021 15:09:54 +0000
-Message-ID: <854480525e7f4f3baeba09ec6a864b80@intel.com>
-References: <20211214022825.563892248@linutronix.de>
- <20211214024948.048572883@linutronix.de>
-In-Reply-To: <20211214024948.048572883@linutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.239.127.36]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S235154AbhLNPM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:12:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38276 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229883AbhLNPMY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 10:12:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5496B81A58;
+        Tue, 14 Dec 2021 15:12:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6601EC34605;
+        Tue, 14 Dec 2021 15:12:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639494741;
+        bh=Yy4WSR11rEbUUj8oSHYb5/v6Hcw0PnPE3YztZN+362Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NgMScKCA9mwR3E1bfQKuF/vcwttLrXydOhYQcxc1Ou2PrOHikaBZIzt8i5wGKA6sn
+         layap6mjhielEd8nNBZqtHaVAtVc0oz0xvW58G+ppZ9jjA7Mz3bwCUYMy+eKMyGdq8
+         s3RwQwlBtDlkKbZb3wsciWhqQzrRT77eInxJdCpPPe1V6WeFPyNjfAy1h67cZmUTWD
+         j1Ss7xPv1uQ2D4bYwPI6D99sbiYApXa8GJG+yEvSP+y7gVjp2gl13vkbIjBLWMpSnA
+         8WR11kAqZhNcZIdCW567Vy0EkJKy0ONjNNJMMrA4PM0LVVeQFu++x0Q5/byE0Bsci8
+         TnWhqZYPUQOBw==
+Date:   Tue, 14 Dec 2021 16:12:16 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Jammy Huang <jammy_huang@aspeedtech.com>
+Cc:     <eajames@linux.ibm.com>, <joel@jms.id.au>, <andrew@aj.id.au>,
+        <linux-media@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] media: aspeed: Use runtime configuration
+Message-ID: <20211214161216.607df557@coco.lan>
+In-Reply-To: <20211207015544.1755-1-jammy_huang@aspeedtech.com>
+References: <20211207015544.1755-1-jammy_huang@aspeedtech.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlc2RheSwgRGVjZW1iZXIgMTQsIDIwMjEgMTA6NTAgQU0sIFRob21hcyBHbGVpeG5lciB3
-cm90ZToNCj4gS1ZNIGNhbiByZXF1aXJlIGZwc3RhdGUgZXhwYW5zaW9uIGR1ZSB0byB1cGRhdGVz
-IHRvIFhDUjAgYW5kIHRvIHRoZSBYRkQNCj4gTVNSLiBJbiBib3RoIGNhc2VzIGl0IGlzIHJlcXVp
-cmVkIHRvIGNoZWNrIHdoZXRoZXI6DQo+IA0KPiAgIC0gdGhlIHJlcXVlc3RlZCB2YWx1ZXMgYXJl
-IGNvcnJlY3Qgb3IgcGVybWl0dGVkDQo+IA0KPiAgIC0gdGhlIHJlc3VsdGluZyB4ZmVhdHVyZSBt
-YXNrIHdoaWNoIGlzIHJlbGV2YW50IGZvciBYU0FWRVMgaXMgYSBzdWJzZXQgb2YNCj4gICAgIHRo
-ZSBndWVzdHMgZnBzdGF0ZSB4ZmVhdHVyZSBtYXNrIGZvciB3aGljaCB0aGUgcmVnaXN0ZXIgYnVm
-ZmVyIGlzIHNpemVkLg0KPiANCj4gICAgIElmIHRoZSBmZWF0dXJlIG1hc2sgZG9lcyBub3QgZml0
-IGludG8gdGhlIGd1ZXN0cyBmcHN0YXRlIHRoZW4NCj4gICAgIHJlYWxsb2NhdGlvbiBpcyByZXF1
-aXJlZC4NCj4gDQo+IFByb3ZpZGUgYSBjb21tb24gdXBkYXRlIGZ1bmN0aW9uIHdoaWNoIHV0aWxp
-emVzIHRoZSBleGlzdGluZyBYRkQNCj4gZW5hYmxlbWVudCBtZWNoYW5pY3MgYW5kIHR3byB3cmFw
-cGVyIGZ1bmN0aW9ucywgb25lIGZvciBYQ1IwIGFuZCBvbmUNCj4gZm9yIFhGRC4NCj4gDQo+IFRo
-ZXNlIHdyYXBwZXJzIGhhdmUgdG8gYmUgaW52b2tlZCBmcm9tIFhTRVRCViBlbXVsYXRpb24gYW5k
-IHRoZSBYRkQNCj4gTVNSIHdyaXRlIGVtdWxhdGlvbi4NCj4gDQo+IFhDUjAgbW9kaWZpY2F0aW9u
-IGNhbiBvbmx5IHByb2NlZWQgd2hlbiBmcHVfdXBkYXRlX2d1ZXN0X3hjcjAoKSByZXR1cm5zDQo+
-IHN1Y2Nlc3MuDQo+IA0KPiBYRkQgbW9kaWZpY2F0aW9uIGlzIGRvbmUgYnkgdGhlIEZQVSBjb3Jl
-IGNvZGUgYXMgaXQgcmVxdWlyZXMgdG8gdXBkYXRlIHRoZQ0KPiBzb2Z0d2FyZSBzdGF0ZSBhcyB3
-ZWxsLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIEdsZWl4bmVyIDx0Z2x4QGxpbnV0cm9u
-aXguZGU+DQo+IC0tLQ0KPiBOZXcgdmVyc2lvbiB0byBoYW5kbGUgdGhlIHJlc3RvcmUgY2FzZSBh
-bmQgWENSMCB1cGRhdGVzIGNvcnJlY3RseS4NCj4gLS0tDQo+ICBhcmNoL3g4Ni9pbmNsdWRlL2Fz
-bS9mcHUvYXBpLmggfCAgIDU3DQo+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrDQo+ICBhcmNoL3g4Ni9rZXJuZWwvZnB1L2NvcmUuYyAgICAgfCAgIDU3DQo+ICsrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ICAyIGZpbGVzIGNoYW5nZWQs
-IDExNCBpbnNlcnRpb25zKCspDQo+IA0KPiAtLS0gYS9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9mcHUv
-YXBpLmgNCj4gKysrIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vZnB1L2FwaS5oDQo+IEBAIC0xMzYs
-NiArMTM2LDYzIEBAIGV4dGVybiB2b2lkIGZwc3RhdGVfY2xlYXJfeHN0YXRlX2NvbXBvbmUNCj4g
-ZXh0ZXJuIGJvb2wgZnB1X2FsbG9jX2d1ZXN0X2Zwc3RhdGUoc3RydWN0IGZwdV9ndWVzdCAqZ2Zw
-dSk7ICBleHRlcm4gdm9pZA0KPiBmcHVfZnJlZV9ndWVzdF9mcHN0YXRlKHN0cnVjdCBmcHVfZ3Vl
-c3QgKmdmcHUpOyAgZXh0ZXJuIGludA0KPiBmcHVfc3dhcF9rdm1fZnBzdGF0ZShzdHJ1Y3QgZnB1
-X2d1ZXN0ICpnZnB1LCBib29sIGVudGVyX2d1ZXN0KTsNCj4gK2V4dGVybiBpbnQgX19mcHVfdXBk
-YXRlX2d1ZXN0X2ZlYXR1cmVzKHN0cnVjdCBmcHVfZ3Vlc3QgKmd1ZXN0X2ZwdSwgdTY0DQo+ICt4
-Y3IwLCB1NjQgeGZkKTsNCj4gKw0KPiArLyoqDQo+ICsgKiBmcHVfdXBkYXRlX2d1ZXN0X3hjcjAg
-LSBVcGRhdGUgZ3Vlc3QgWENSMCBmcm9tIFhTRVRCViBlbXVsYXRpb24NCj4gKyAqIEBndWVzdF9m
-cHU6CVBvaW50ZXIgdG8gdGhlIGd1ZXN0IEZQVSBjb250YWluZXINCj4gKyAqIEB4Y3IwOglSZXF1
-ZXN0ZWQgZ3Vlc3QgWENSMA0KPiArICoNCj4gKyAqIEhhcyB0byBiZSBpbnZva2VkIGJlZm9yZSBt
-YWtpbmcgdGhlIGd1ZXN0IFhDUjAgdXBkYXRlIGVmZmVjdGl2ZS4gVGhlDQo+ICsgKiBmdW5jdGlv
-biB2YWxpZGF0ZXMgdGhhdCB0aGUgcmVxdWVzdGVkIGZlYXR1cmVzIGFyZSBwZXJtaXR0ZWQgYW5k
-DQo+ICtlbnN1cmVzDQo+ICsgKiB0aGF0IEBndWVzdF9mcHUtPmZwc3RhdGUgaXMgcHJvcGVybHkg
-c2l6ZWQgdGFraW5nDQo+ICtAZ3Vlc3RfZnB1LT5mcHN0YXRlLT54ZmQNCj4gKyAqIGludG8gYWNj
-b3VudC4NCj4gKyAqDQo+ICsgKiBJZiBAZ3Vlc3RfZnB1LT5mcHN0YXRlIGlzIG5vdCB0aGUgY3Vy
-cmVudCB0YXNrcyBhY3RpdmUgZnBzdGF0ZSB0aGVuDQo+ICt0aGUNCj4gKyAqIGNhbGxlciBoYXMg
-dG8gZW5zdXJlIHRoYXQgQGd1ZXN0X2ZwdS0+ZnBzdGF0ZSBjYW5ub3QgYmUgY29uY3VycmVudGx5
-DQo+ICtpbg0KPiArICogdXNlLCBpLmUuIHRoZSBndWVzdCByZXN0b3JlIGNhc2UuDQo+ICsgKg0K
-PiArICogUmV0dXJuOg0KPiArICogMAkJLSBTdWNjZXNzDQo+ICsgKiAtRVBFUk0JLSBGZWF0dXJl
-KHMpIG5vdCBwZXJtaXR0ZWQNCj4gKyAqIC1FRkFVTFQJLSBSZXNpemluZyBvZiBmcHN0YXRlIGZh
-aWxlZA0KPiArICovDQo+ICtzdGF0aWMgaW5saW5lIGludCBmcHVfdXBkYXRlX2d1ZXN0X3hjcjAo
-c3RydWN0IGZwdV9ndWVzdCAqZ3Vlc3RfZnB1LA0KPiArdTY0IHhjcjApIHsNCj4gKwlyZXR1cm4g
-X19mcHVfdXBkYXRlX2d1ZXN0X2ZlYXR1cmVzKGd1ZXN0X2ZwdSwgeGNyMCwNCj4gK2d1ZXN0X2Zw
-dS0+ZnBzdGF0ZS0+eGZkKTsgfQ0KPiArDQo+ICsvKioNCj4gKyAqIGZwdV91cGRhdGVfZ3Vlc3Rf
-eGZkIC0gVXBkYXRlIGd1ZXN0IFhGRCBmcm9tIE1TUiB3cml0ZSBlbXVsYXRpb24NCj4gKyAqIEBn
-dWVzdF9mcHU6CVBvaW50ZXIgdG8gdGhlIGd1ZXN0IEZQVSBjb250YWluZXINCj4gKyAqIEB4Y3Iw
-OglDdXJyZW50IGd1ZXN0IFhDUjANCj4gKyAqIEB4ZmQ6CVJlcXVlc3RlZCBYRkQgdmFsdWUNCj4g
-KyAqDQo+ICsgKiBIYXMgdG8gYmUgaW52b2tlZCB0byBtYWtlIHRoZSBndWVzdCBYRkQgdXBkYXRl
-IGVmZmVjdGl2ZS4gVGhlDQo+ICtmdW5jdGlvbg0KPiArICogdmFsaWRhdGVzIHRoZSBYRkQgdmFs
-dWUgYW5kIGVuc3VyZXMgdGhhdCBAZ3Vlc3RfZnB1LT5mcHN0YXRlIGlzDQo+ICtwcm9wZXJseQ0K
-PiArICogc2l6ZWQgYnkgdGFraW5nIEB4Y3IwIGludG8gYWNjb3VudC4NCj4gKyAqDQo+ICsgKiBU
-aGUgY2FsbGVyIG11c3Qgbm90IG1vZGlmeSBAZ3Vlc3RfZnB1LT5mcHN0YXRlLT54ZmQgb3IgdGhl
-IFhGRCBNU1INCj4gKyAqIGRpcmVjdGx5Lg0KPiArICoNCj4gKyAqIElmIEBndWVzdF9mcHUtPmZw
-c3RhdGUgaXMgbm90IHRoZSBjdXJyZW50IHRhc2tzIGFjdGl2ZSBmcHN0YXRlIHRoZW4NCj4gK3Ro
-ZQ0KPiArICogY2FsbGVyIGhhcyB0byBlbnN1cmUgdGhhdCBAZ3Vlc3RfZnB1LT5mcHN0YXRlIGNh
-bm5vdCBiZSBjb25jdXJyZW50bHkNCj4gK2luDQo+ICsgKiB1c2UsIGkuZS4gdGhlIGd1ZXN0IHJl
-c3RvcmUgY2FzZS4NCj4gKyAqDQo+ICsgKiBPbiBzdWNjZXNzIHRoZSBidWZmZXIgc2l6ZSBpcyB2
-YWxpZCwgQGd1ZXN0X2ZwdS0+ZnBzdGF0ZS54ZmQgPT0gQHhmZA0KPiArYW5kDQo+ICsgKiBpZiB0
-aGUgZ3Vlc3QgZnBzdGF0ZSBpcyBhY3RpdmUgdGhlbiBNU1JfSUEzMl9YRkQgPT0gQHhmZC4NCj4g
-KyAqDQo+ICsgKiBPbiBmYWlsdXJlIHRoZSBwcmV2aW91cyBzdGF0ZSBpcyByZXRhaW5lZC4NCj4g
-KyAqDQo+ICsgKiBSZXR1cm46DQo+ICsgKiAwCQktIFN1Y2Nlc3MNCj4gKyAqIC1FTk9UU1VQUAkt
-IFhGRCB2YWx1ZSBub3Qgc3VwcG9ydGVkDQo+ICsgKiAtRUZBVUxUCS0gUmVzaXppbmcgb2YgZnBz
-dGF0ZSBmYWlsZWQNCj4gKyAqLw0KPiArc3RhdGljIGlubGluZSBpbnQgZnB1X3VwZGF0ZV9ndWVz
-dF94ZmQoc3RydWN0IGZwdV9ndWVzdCAqZ3Vlc3RfZnB1LCB1NjQNCj4gK3hjcjAsIHU2NCB4ZmQp
-IHsNCj4gKwlyZXR1cm4gX19mcHVfdXBkYXRlX2d1ZXN0X2ZlYXR1cmVzKGd1ZXN0X2ZwdSwgeGNy
-MCwgeGZkKTsgfQ0KPiANCj4gIGV4dGVybiB2b2lkIGZwdV9jb3B5X2d1ZXN0X2Zwc3RhdGVfdG9f
-dWFiaShzdHJ1Y3QgZnB1X2d1ZXN0ICpnZnB1LCB2b2lkDQo+ICpidWYsIHVuc2lnbmVkIGludCBz
-aXplLCB1MzIgcGtydSk7ICBleHRlcm4gaW50DQo+IGZwdV9jb3B5X3VhYmlfdG9fZ3Vlc3RfZnBz
-dGF0ZShzdHJ1Y3QgZnB1X2d1ZXN0ICpnZnB1LCBjb25zdCB2b2lkICpidWYsDQo+IHU2NCB4Y3Iw
-LCB1MzIgKnZwa3J1KTsNCj4gLS0tIGEvYXJjaC94ODYva2VybmVsL2ZwdS9jb3JlLmMNCj4gKysr
-IGIvYXJjaC94ODYva2VybmVsL2ZwdS9jb3JlLmMNCj4gQEAgLTI2MSw2ICsyNjEsNjMgQEAgdm9p
-ZCBmcHVfZnJlZV9ndWVzdF9mcHN0YXRlKHN0cnVjdCBmcHVfZyAgfQ0KPiBFWFBPUlRfU1lNQk9M
-X0dQTChmcHVfZnJlZV9ndWVzdF9mcHN0YXRlKTsNCj4gDQo+ICsvKioNCj4gKyAqIF9fZnB1X3Vw
-ZGF0ZV9ndWVzdF9mZWF0dXJlcyAtIFZhbGlkYXRlIGFuZCBlbmFibGUgZ3Vlc3QgWENSMCBhbmQg
-WEZEDQo+IHVwZGF0ZXMNCj4gKyAqIEBndWVzdF9mcHU6CVBvaW50ZXIgdG8gdGhlIGd1ZXN0IEZQ
-VSBjb250YWluZXINCj4gKyAqIEB4Y3IwOglHdWVzdCBYQ1IwDQo+ICsgKiBAeGZkOglHdWVzdCBY
-RkQNCj4gKyAqDQo+ICsgKiBOb3RlOiBAeGNyMCBhbmQgQHhmZCBtdXN0IGVpdGhlciBiZSB0aGUg
-YWxyZWFkeSB2YWxpZGF0ZWQgdmFsdWVzIG9yDQo+ICt0aGUNCj4gKyAqIHJlcXVlc3RlZCB2YWx1
-ZXMgKGd1ZXN0IGVtdWxhdGlvbiBvciBob3N0IHdyaXRlIG9uIHJlc3RvcmUpLg0KPiArICoNCj4g
-KyAqIERvIG5vdCBpbnZva2UgZGlyZWN0bHkuIFVzZSB0aGUgcHJvdmlkZWQgd3JhcHBlcnMNCj4g
-K2ZwdV92YWxpZGF0ZV9ndWVzdF94Y3IwKCkNCj4gKyAqIGFuZCBmcHVfdXBkYXRlX2d1ZXN0X3hm
-ZCgpIGluc3RlYWQuDQo+ICsgKg0KPiArICogUmV0dXJuOiAwIG9uIHN1Y2Nlc3MsIGVycm9yIGNv
-ZGUgb3RoZXJ3aXNlICAqLyBpbnQNCj4gK19fZnB1X3VwZGF0ZV9ndWVzdF9mZWF0dXJlcyhzdHJ1
-Y3QgZnB1X2d1ZXN0ICpndWVzdF9mcHUsIHU2NCB4Y3IwLCB1NjQNCj4gK3hmZCkgew0KDQpJIHRo
-aW5rIHRoZXJlIHdvdWxkIGJlIG9uZSBpc3N1ZSBmb3IgdGhlICJob3N0IHdyaXRlIG9uIHJlc3Rv
-cmUiIGNhc2UuDQpUaGUgY3VycmVudCBRRU1VIGJhc2VkIGhvc3QgcmVzdG9yZSB1c2VzIHRoZSBm
-b2xsb3dpbmcgc2VxdWVuY2U6DQoxKSByZXN0b3JlIHhzYXZlDQoyKSByZXN0b3JlIHhjcjANCjMp
-IHJlc3RvcmUgWEZEIE1TUg0KDQpBdCB0aGUgdGltZSBvZiAiMSkgcmVzdG9yZSB4c2F2ZSIsIEtW
-TSBhbHJlYWR5IG5lZWRzIGZwc3RhdGUgZXhwYW5zaW9uIGJlZm9yZSByZXN0b3JpbmcgdGhlIHhz
-YXZlIGRhdGEuDQpTbyB0aGUgMiBBUElzIGhlcmUgbWlnaHQgbm90IGJlIHVzYWJsZSBmb3IgdGhp
-cyB1c2FnZS4NCk91ciBjdXJyZW50IHNvbHV0aW9uIHRvIGZwc3RhdGUgZXhwYW5zaW9uIGF0IEtW
-TV9TRVRfWFNBVkUgKGkuZS4gc3RlcCAxKSBhYm92ZSkgaXM6DQoNCmt2bV9sb2FkX2d1ZXN0X2Zw
-dSh2Y3B1KTsNCmd1ZXN0X2ZwdS0+cmVhbGxvY19yZXF1ZXN0ID0gcmVhbGxvY19yZXF1ZXN0Ow0K
-a3ZtX3B1dF9ndWVzdF9mcHUodmNwdSk7DQoNCiJyZWFsbG9jX3JlcXVlc3QiIGFib3ZlIGlzIGdl
-bmVyYXRlZCBmcm9tIHRoZSAieHN0YXRlX2hlYWRlciIgcmVjZWl2ZWQgZnJvbSB1c2Vyc3BhY2Uu
-DQoNClRoYW5rcywNCldlaQ0KDQo=
+Hi Jammy,
+
+A different version of this patch was already applied. If it still makes
+change, please rebase this one on the top of the media upstream and
+re-send.
+
+Thanks,
+Mauro
+
+Em Tue, 7 Dec 2021 09:55:44 +0800
+Jammy Huang <jammy_huang@aspeedtech.com> escreveu:
+
+> The aspeed video IP has some differences between SoC families. Currently
+> the driver decides which registers to use at compile time, which means
+> a single kernel can not be used between platforms.
+> 
+> Switch to using runtime configuration of the registers that vary between
+> SoC families.
+> 
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+> ---
+>  drivers/media/platform/aspeed-video.c | 71 ++++++++++++++++++++-------
+>  1 file changed, 52 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+> index d2335d669fb3..ba8ee82b38c3 100644
+> --- a/drivers/media/platform/aspeed-video.c
+> +++ b/drivers/media/platform/aspeed-video.c
+> @@ -75,11 +75,8 @@
+>  #define  VE_SEQ_CTRL_CAP_BUSY		BIT(16)
+>  #define  VE_SEQ_CTRL_COMP_BUSY		BIT(18)
+>  
+> -#ifdef CONFIG_MACH_ASPEED_G4
+> -#define  VE_SEQ_CTRL_JPEG_MODE		BIT(8)	/* AST2400 */
+> -#else
+> -#define  VE_SEQ_CTRL_JPEG_MODE		BIT(13)	/* AST2500/2600 */
+> -#endif
+> +#define AST2500_VE_SEQ_CTRL_JPEG_MODE	BIT(13)
+> +#define AST2400_VE_SEQ_CTRL_JPEG_MODE	BIT(8)
+>  
+>  #define VE_CTRL				0x008
+>  #define  VE_CTRL_HSYNC_POL		BIT(0)
+> @@ -136,9 +133,8 @@
+>  #define  VE_COMP_CTRL_HQ_DCT_CHR	GENMASK(26, 22)
+>  #define  VE_COMP_CTRL_HQ_DCT_LUM	GENMASK(31, 27)
+>  
+> -#define VE_OFFSET_COMP_STREAM		0x078
+> -
+> -#define VE_JPEG_COMP_SIZE_READ_BACK	0x084
+> +#define AST2400_VE_COMP_SIZE_READ_BACK	0x078
+> +#define AST2600_VE_COMP_SIZE_READ_BACK	0x084
+>  
+>  #define VE_SRC_LR_EDGE_DET		0x090
+>  #define  VE_SRC_LR_EDGE_DET_LEFT	GENMASK(11, 0)
+> @@ -233,6 +229,8 @@ struct aspeed_video {
+>  	struct video_device vdev;
+>  	struct mutex video_lock;	/* v4l2 and videobuf2 lock */
+>  
+> +	struct aspeed_video_config config;
+> +
+>  	wait_queue_head_t wait;
+>  	spinlock_t lock;		/* buffer list lock */
+>  	struct delayed_work res_work;
+> @@ -258,6 +256,30 @@ struct aspeed_video {
+>  
+>  #define to_aspeed_video(x) container_of((x), struct aspeed_video, v4l2_dev)
+>  
+> +struct aspeed_video_config {
+> +	u32 version;
+> +	u32 jpeg_mode;
+> +	u32 comp_size_read;
+> +};
+> +
+> +static const struct aspeed_video_config ast2400_config = {
+> +	.version = 4,
+> +	.jpeg_mode = AST2400_VE_SEQ_CTRL_JPEG_MODE,
+> +	.comp_size_read = AST2400_VE_COMP_SIZE_READ_BACK,
+> +};
+> +
+> +static const struct aspeed_video_config ast2500_config = {
+> +	.version = 5,
+> +	.jpeg_mode = AST2500_VE_SEQ_CTRL_JPEG_MODE,
+> +	.comp_size_read = AST2400_VE_COMP_SIZE_READ_BACK,
+> +};
+> +
+> +static const struct aspeed_video_config ast2600_config = {
+> +	.version = 6,
+> +	.jpeg_mode = AST2500_VE_SEQ_CTRL_JPEG_MODE,
+> +	.comp_size_read = AST2600_VE_COMP_SIZE_READ_BACK,
+> +};
+> +
+>  static const u32 aspeed_video_jpeg_header[ASPEED_VIDEO_JPEG_HEADER_SIZE] = {
+>  	0xe0ffd8ff, 0x464a1000, 0x01004649, 0x60000101, 0x00006000, 0x0f00feff,
+>  	0x00002d05, 0x00000000, 0x00000000, 0x00dbff00
+> @@ -640,7 +662,7 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
+>  	if (sts & VE_INTERRUPT_COMP_COMPLETE) {
+>  		struct aspeed_video_buffer *buf;
+>  		u32 frame_size = aspeed_video_read(video,
+> -						   VE_JPEG_COMP_SIZE_READ_BACK);
+> +						   video->config.comp_size_read);
+>  
+>  		update_perf(&video->perf);
+>  
+> @@ -973,7 +995,7 @@ static void aspeed_video_update_regs(struct aspeed_video *video)
+>  		FIELD_PREP(VE_COMP_CTRL_DCT_LUM, video->jpeg_quality) |
+>  		FIELD_PREP(VE_COMP_CTRL_DCT_CHR, video->jpeg_quality | 0x10);
+>  	u32 ctrl = 0;
+> -	u32 seq_ctrl = VE_SEQ_CTRL_JPEG_MODE;
+> +	u32 seq_ctrl = video->config.jpeg_mode;
+>  
+>  	v4l2_dbg(1, debug, &video->v4l2_dev, "framerate(%d)\n",
+>  		 video->frame_rate);
+> @@ -993,7 +1015,7 @@ static void aspeed_video_update_regs(struct aspeed_video *video)
+>  
+>  	/* Set control registers */
+>  	aspeed_video_update(video, VE_SEQ_CTRL,
+> -			    VE_SEQ_CTRL_JPEG_MODE | VE_SEQ_CTRL_YUV420,
+> +			    video->config.jpeg_mode | VE_SEQ_CTRL_YUV420,
+>  			    seq_ctrl);
+>  	aspeed_video_update(video, VE_CTRL, VE_CTRL_FRC, ctrl);
+>  	aspeed_video_update(video, VE_COMP_CTRL,
+> @@ -1790,8 +1812,18 @@ static int aspeed_video_init(struct aspeed_video *video)
+>  	return rc;
+>  }
+>  
+> +static const struct of_device_id aspeed_video_of_match[] = {
+> +	{ .compatible = "aspeed,ast2400-video-engine", .data = &ast2400_config },
+> +	{ .compatible = "aspeed,ast2500-video-engine", .data = &ast2500_config },
+> +	{ .compatible = "aspeed,ast2600-video-engine", .data = &ast2600_config },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, aspeed_video_of_match);
+> +
+>  static int aspeed_video_probe(struct platform_device *pdev)
+>  {
+> +	const struct aspeed_video_config *config;
+> +	const struct of_device_id *match;
+>  	int rc;
+>  	struct resource *res;
+>  	struct aspeed_video *video =
+> @@ -1815,6 +1847,13 @@ static int aspeed_video_probe(struct platform_device *pdev)
+>  	if (IS_ERR(video->base))
+>  		return PTR_ERR(video->base);
+>  
+> +	match = of_match_node(aspeed_video_of_match, pdev->dev.of_node);
+> +	if (!match)
+> +		return -EINVAL;
+> +
+> +	config = match->data;
+> +	video->config = *config;
+> +
+>  	rc = aspeed_video_init(video);
+>  	if (rc)
+>  		return rc;
+> @@ -1828,6 +1867,8 @@ static int aspeed_video_probe(struct platform_device *pdev)
+>  
+>  	aspeed_video_debugfs_create(video);
+>  
+> +	dev_info(video->dev, "compatible for g%d\n", config->version);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -1860,14 +1901,6 @@ static int aspeed_video_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static const struct of_device_id aspeed_video_of_match[] = {
+> -	{ .compatible = "aspeed,ast2400-video-engine" },
+> -	{ .compatible = "aspeed,ast2500-video-engine" },
+> -	{ .compatible = "aspeed,ast2600-video-engine" },
+> -	{}
+> -};
+> -MODULE_DEVICE_TABLE(of, aspeed_video_of_match);
+> -
+>  static struct platform_driver aspeed_video_driver = {
+>  	.driver = {
+>  		.name = DEVICE_NAME,
+
+
+
+Thanks,
+Mauro

@@ -2,129 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6CF474095
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8BF47409D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 11:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbhLNKjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 05:39:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33722 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbhLNKjk (ORCPT
+        id S233130AbhLNKlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 05:41:31 -0500
+Received: from mail-ua1-f50.google.com ([209.85.222.50]:41927 "EHLO
+        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233126AbhLNKl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 05:39:40 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CD63B81876;
-        Tue, 14 Dec 2021 10:39:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A2BC34601;
-        Tue, 14 Dec 2021 10:39:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639478378;
-        bh=CuR0WsrAKe4xFIouUMDiV6pFsJRveX5Kp1MoGEq8lUs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OWjSy5l1n3IUF4eAuzjEUm+inWDUPm+im3k8ruHPxVP88hPZkzvicD/h+2hRVv3Uk
-         e2QC5WaLK8rfBe7NdDpRMkApz1Uuf1xCZRN8z7vMNej9PB441ZcjtpR5e5VWYF1ywZ
-         CRu2cR5YQX6iIHwqkQgfDP5qeHLZmk4P7lH/oe4EUCg9s9Au2IIpkk1DgVyxxCFZ++
-         72oqsmkQyS9vicoJ/W1f1wo09au/+iDDLoeNJbfaoZtsvZdQz8gE1CPIBOW+XCaVJG
-         vKqRsc5nbICQIHjdNFMV0zeY6Xwto/aGDnG1yUu74G9oXrMDekqq1NfEokyhzMEzMQ
-         uOjDfw/abcTfw==
-Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mx5Dc-00C1Ob-96; Tue, 14 Dec 2021 10:39:36 +0000
-Date:   Tue, 14 Dec 2021 10:39:35 +0000
-Message-ID: <87a6h3jwrc.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+        Tue, 14 Dec 2021 05:41:28 -0500
+Received: by mail-ua1-f50.google.com with SMTP id p37so34055135uae.8;
+        Tue, 14 Dec 2021 02:41:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qjahYurnjZXl2YAUO9JQ6AYI06sAOFdZUDV4b2nECo0=;
+        b=WzASmSvyMRZCB3mNIgkpD6rSPYOgZTciAXfw15JIH0OPiocEYl8gn4Ql2BS2p0R7Kk
+         o7xH/LiflwABnGXLmXnzZxbwbpj9BJbQvxJ7yuHz7WUYw+VhK4XmMf5nxPfTgtAv8lgD
+         JW/fSk7VFZBgq/yurM8nK/DB9yBhAWAK7W3tIIr6McgzVDEmnxcmhcB162zdaPuOMOHK
+         S1b7swpruqlHyRpbcMV7PMOu5inm2aerMKEev3MBmw+4yxl3dFgznxqRvGySTgsLtKkL
+         t/jv2zIU6yRtG4PHBjbIAEi/AmTy1mXZPakV4TMC+5o164g6FU+vxhgEVCA/O7gUyyBt
+         /lSQ==
+X-Gm-Message-State: AOAM531hUNX3TnhSPuXxjzWPEMCh9xDjMNgik9HAkJHvWWYWWquS8gLV
+        IYFMdQugYkva09Kxr+XM9dfzAyH+1w76zQ==
+X-Google-Smtp-Source: ABdhPJx0jcVwbIYsV4K+HY6g84d4/ECDG93to9knUpAipKc6SJgYBZq+uTu2CfzYDQuOhyR1XEO43A==
+X-Received: by 2002:a05:6102:3232:: with SMTP id x18mr3977549vsf.38.1639478487883;
+        Tue, 14 Dec 2021 02:41:27 -0800 (PST)
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
+        by smtp.gmail.com with ESMTPSA id o7sm4503584vkl.41.2021.12.14.02.41.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Dec 2021 02:41:27 -0800 (PST)
+Received: by mail-vk1-f178.google.com with SMTP id f7so12189553vkf.10;
+        Tue, 14 Dec 2021 02:41:27 -0800 (PST)
+X-Received: by 2002:a05:6122:2193:: with SMTP id j19mr4107170vkd.7.1639478487115;
+ Tue, 14 Dec 2021 02:41:27 -0800 (PST)
+MIME-Version: 1.0
+References: <20211130164311.2909616-1-kieran.bingham+renesas@ideasonboard.com> <20211130164311.2909616-2-kieran.bingham+renesas@ideasonboard.com>
+In-Reply-To: <20211130164311.2909616-2-kieran.bingham+renesas@ideasonboard.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Dec 2021 11:41:16 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXT-SSqtx=_DT0J0Yus-WSPsYv2GOtehjGq2KbWQHbA5Q@mail.gmail.com>
+Message-ID: <CAMuHMdXT-SSqtx=_DT0J0Yus-WSPsYv2GOtehjGq2KbWQHbA5Q@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] arm64: dts: renesas: r8a779a0: Add DSI encoders
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
-        Biwen Li <biwen.li@nxp.com>, "Z.Q. Hou" <zhiqiang.hou@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [RFC PATCH devicetree 00/10] Do something about ls-extirq interrupt-map breakage
-In-Reply-To: <20211214103025.wnzkfxr5xxeuhpln@skbuf>
-References: <20211214013800.2703568-1-vladimir.oltean@nxp.com>
-        <87ilvrk1r0.wl-maz@kernel.org>
-        <20211214095853.4emzycaxkuqr4tun@skbuf>
-        <87czlzjxmz.wl-maz@kernel.org>
-        <20211214103025.wnzkfxr5xxeuhpln@skbuf>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: vladimir.oltean@nxp.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org, shawnguo@kernel.org, leoyang.li@nxp.com, biwen.li@nxp.com, zhiqiang.hou@nxp.com, kurt@linutronix.de, linux@rasmusvillemoes.dk
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 10:30:26 +0000,
-Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
-> 
-> On Tue, Dec 14, 2021 at 10:20:36AM +0000, Marc Zyngier wrote:
-> > On Tue, 14 Dec 2021 09:58:54 +0000,
-> > Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
-> > > 
-> > > Hi Marc (with a c),
-> > > 
-> > > I wish the firmware for these SoCs was smart enough to be compatible
-> > > with the bindings that are in the kernel and provide a blob that the
-> > > kernel could actually use. Some work has been started there and this is
-> > > work in progress. True, I don't know what other OF-based firmware some
-> > > other customers may use, but I trust it isn't a lot more advanced than
-> > > what U-Boot currently has :)
-> > > 
-> > > Also, the machines may have been in the wild for years, but the
-> > > ls-extirq driver was added in November 2019. So not with the
-> > > introduction of the SoC device trees themselves. That isn't so long ago.
-> > > 
-> > > As for compatibility between old kernel and new DT: I guess you'll hear
-> > > various opinions on this one.
-> > > https://www.spinics.net/lists/linux-mips/msg07778.html
-> > > 
-> > > | > Are we okay with the new device tree blobs breaking the old kernel?
-> > > |
-> > > | From my point of view, newer device trees are not required to work on
-> > > | older kernel, this would impose an unreasonable limitation and the use
-> > > | case is very limited.
-> > 
-> > My views are on the opposite side. DT is an ABI, full stop. If you
-> > change something, you *must* guarantee forward *and* backward
-> > compatibility. That's because:
-> > 
-> > - you don't control how updatable the firmware is
-> > 
-> > - people may need to revert to other versions of the kernel because
-> >   the new one is broken
-> > 
-> > - there are plenty of DT users beyond Linux, and we are not creating
-> >   bindings for Linux only.
-> > 
-> > You may disagree with this, but for the subsystems I maintain, this is
-> > the rule I intent to stick to.
-> 
-> That's an honorable set of guiding principles, but how do you apply them
-> here? Reverting Rob's change won't fix the past, and updating the code
-> to account for one format will break the other. As for trying one
-> format, and if there's an error try the other, there may be situations
-> in which you accept invalid input as valid.
+Hi Kieran,
 
-maz@hot-poop:~/arm-platforms$ git describe --contains 869f0ec048dc --match=v\*
-v5.16-rc1~125^2~19^2~16
+On Tue, Nov 30, 2021 at 5:43 PM Kieran Bingham
+<kieran.bingham+renesas@ideasonboard.com> wrote:
+> Provide the two MIPI DSI encoders on the V3U and connect them to the DU
+> accordingly.
+>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-This patch landed in -rc1, and isn't part of any release. Just revert
-it, and no damage is done.
+> --- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+> @@ -2290,12 +2290,14 @@ ports {
+>                                 port@0 {
+>                                         reg = <0>;
+>                                         du_out_dsi0: endpoint {
+> +                                               remote-endpoint = <&dsi0_in>;
+>                                         };
+>                                 };
+>
+>                                 port@1 {
+>                                         reg = <1>;
+>                                         du_out_dsi1: endpoint {
+> +                                               remote-endpoint = <&dsi1_in>;
+>                                         };
+>                                 };
+>                         };
+> @@ -2633,6 +2635,64 @@ isp3vin31: endpoint {
+>                         };
+>                 };
+>
+> +               dsi0: dsi-encoder@fed80000 {
+> +                       compatible = "renesas,r8a779a0-dsi-csi2-tx";
+> +                       reg = <0 0xfed80000 0 0x10000>;
+> +                       power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
+> +                       clocks = <&cpg CPG_MOD 415>,
+> +                                <&cpg CPG_CORE R8A779A0_CLK_DSI>,
+> +                                <&cpg CPG_CORE R8A779A0_CLK_CL16MCK>;
+> +                       clock-names = "fck", "dsi", "pll";
+> +
+> +                       resets = <&cpg 415>;
+> +                       status = "disabled";
+> +
+> +                       ports {
+> +                               #address-cells = <1>;
+> +                               #size-cells = <0>;
+> +
+> +                               port@0 {
+> +                                       reg = <0>;
+> +                                       dsi0_in: endpoint {
+> +                                               remote-endpoint = <&du_out_dsi0>;
+> +                                       };
+> +                               };
+> +
+> +                               port@1 {
+> +                                       reg = <1>;
+> +                               };
+> +                       };
+> +               };
+> +
+> +               dsi1: dsi-encoder@fed90000 {
+> +                       compatible = "renesas,r8a779a0-dsi-csi2-tx";
+> +                       reg = <0 0xfed90000 0 0x10000>;
+> +                       power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
+> +                       clocks = <&cpg CPG_MOD 415>,
 
-	M.
+416?
 
--- 
-Without deviation from the norm, progress is not possible.
+> +                                <&cpg CPG_CORE R8A779A0_CLK_DSI>,
+> +                                <&cpg CPG_CORE R8A779A0_CLK_CL16MCK>;
+> +                       clock-names = "fck", "dsi", "pll";
+> +
+> +                       resets = <&cpg 416>;
+
+That one is OK.
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.17 with the above fixed.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C3C474A70
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 097BE474A7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:09:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236908AbhLNSHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 13:07:31 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36230 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236894AbhLNSH0 (ORCPT
+        id S234144AbhLNSJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:09:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59504 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230205AbhLNSJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 13:07:26 -0500
+        Tue, 14 Dec 2021 13:09:25 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62B5661680;
-        Tue, 14 Dec 2021 18:07:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FBD6C34600;
-        Tue, 14 Dec 2021 18:07:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16566B81BF7;
+        Tue, 14 Dec 2021 18:09:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB2B5C34604;
+        Tue, 14 Dec 2021 18:09:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639505245;
-        bh=Stm5uOveGVCEyNV3RbZzb/wig7WP56mvtkLDAPKxtoA=;
+        s=k20201202; t=1639505362;
+        bh=/xqmz9lrxbUEJFXEd4jkNP8kMOMxCqRlgDKcoEaYJRI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=grnWu+CC+UXNtt2xIYImlpZizByi6T0+gtk3JgaEVIeeIgsFzsSj7i8fG4S+IBeql
-         IXuo0sqoqxBLEv45fLawcU4Y+tNfEK2XUKNhwRitLkDLFfA0yZqrv+kmylKzDSNSlB
-         9FXOlVc+5HtfxtHLLTLm1lmbUNHPVb37nvrM+QPurLe6HdtSd0sIMUxTVb0W3X9dXg
-         VNq+p5AQ2N8dCmAaWpIjI+9g4iARSly8c3fkWB4DF//Wz2KKpbvHDrGYh/gZ4nWsCa
-         vNikNhUFgBtRzA179V2KH4cUv6oZfFvds6UxQEqF9Hzo1zxBKKwm3gKFXv4RcjXUk8
-         vS+bj84vU8zIQ==
-Date:   Tue, 14 Dec 2021 11:07:21 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        list@opendingux.net, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/3] MIPS: boot/compressed: Build without LTO
-Message-ID: <YbjdWe+i6wQduHEq@archlinux-ax161>
-References: <20211213224914.1501303-1-paul@crapouillou.net>
- <20211213224914.1501303-3-paul@crapouillou.net>
+        b=VxMDAO85DxyMrysBXtPs7Kwg2fSgTWAGbGaytuHSJODT8PEUkCJxjE5gjLHbqe3s6
+         FrDQbLDBChlHlolf8GbH2NZwVHXsD1z8GPjwGL+WN7uIDJ2op60vCXtIRREvf968Xw
+         ggiLP1hUoMuDjL4c72wWQr7XcMQOPuYXYwF5G7YZsV+GFUxk7waUZJwCPLTRBcnoiF
+         vucANR9tDIxfLqpoH+mOWw8m9Za2hUANY88LpMsng0H2zTwQeB7u8wDQC3+L4lmPAf
+         u1+gmvIhTJxHNU7DSh8ftlSzvGRtEkkaCyqCi7kTola39ontbSHHOBiH2Scewm4YaE
+         l2J4Gyzxg9F9w==
+Date:   Tue, 14 Dec 2021 18:09:15 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Atish Patra <atishp@rivosinc.com>, mark.rutland@arm.com,
+        linux-kernel@vger.kernel.org, anup.patel@wdc.com,
+        david.abdurachmanov@sifive.com, devicetree@vger.kernel.org,
+        greentime.hu@sifive.com, guoren@linux.alibaba.com,
+        xypron.glpk@gmx.de, corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        mick@ics.forth.gr, Paul Walmsley <paul.walmsley@sifive.com>,
+        robh+dt@kernel.org, vincent.chen@sifive.com
+Subject: Re: [v4 00/11] Improve RISC-V Perf support using SBI PMU and
+ sscofpmf extension
+Message-ID: <20211214180915.GA15780@willie-the-truck>
+References: <20211025195350.242914-1-atish.patra@wdc.com>
+ <mhng-b8ad045e-2022-4e7d-8e64-ab4cc09c15a7@palmer-ri-x1c9>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213224914.1501303-3-paul@crapouillou.net>
+In-Reply-To: <mhng-b8ad045e-2022-4e7d-8e64-ab4cc09c15a7@palmer-ri-x1c9>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 10:49:13PM +0000, Paul Cercueil wrote:
-> We need a valid ELF object for dummy.o, so that objcopy can insert the
-> vmlinuz payload.
+On Mon, Dec 13, 2021 at 05:51:28PM -0800, Palmer Dabbelt wrote:
+> On Mon, 25 Oct 2021 12:53:39 PDT (-0700), Atish Patra wrote:
+> > This series adds improved perf support for RISC-V based system using
+> > SBI PMU extension[1] and Sscofpmf extension[2]. The SBI PMU extension allows
+> > the kernel to program the counters for different events and start/stop counters
+> > while the sscofpmf extension allows the counter overflow interrupt and privilege
+> > mode filtering. An hardware platform can leverage SBI PMU extension without
+> > the sscofpmf extension if it supports mcountinhibit and mcounteren. However,
+> > the reverse is not true. With both of these extension enabled, a platform can
+> > take advantage of all both event counting and sampling using perf tool.
+> > 
+> > This series introduces a platform perf driver instead of a existing arch
+> > specific implementation. The new perf implementation has adopted a modular
+> > approach where most of the generic event handling is done in the core library
+> > while individual PMUs need to only implement necessary features specific to
+> > the PMU. This is easily extensible and any future RISC-V PMU implementation
+> > can leverage this. Currently, SBI PMU driver & legacy PMU driver are implemented
+> > as a part of this series.
+> > 
+> > The legacy driver tries to reimplement the existing minimal perf under a new
+> > config to maintain backward compatibility. This implementation only allows
+> > monitoring of always running cycle/instruction counters. Moreover, they can
+> > not be started or stopped. In general, this is very limited and not very useful.
+> > That's why, I am not very keen to carry the support into the new driver.
+> > However, I don't want to break perf for any existing hardware platforms.
+> > If everybody agrees that we don't need legacy perf implementation for older
+> > implementation, I will be happy to drop PATCH 4.
 > 
-> Therefore, we must build the decompresser program without LTO, otherwise
-> dummy.o will be LLVM bytecode instead of a ELF object file.
+> IMO we should keep it for a bit, so we have a transition period.  These
+> extensions are pretty new so we won't be able to count on everyone having
+> them yet, this way we'll avoid breaking users.
 > 
-> Building the decompresser with LTO wouldn't make much sense anyway,
-> unlike building the vmlinuz itself with LTO.
+> This generally looks good, but I don't see any Acks from the perf
+> maintainers.  I'm happy to take this through the RISC-V tree, but I'd
+> generally like to have at least an ack as perf isn't really my subsystem.
+> MAINTAINERS seems to indicate that's Will and Mark, they're not To'd so
+> maybe they just missed this?
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> I fixed a few trivial checkpatch warnings, updated Atish's email address,
+> and put this on palmer/riscv-pmu.  Happy to hear any comments, if nobody
+> says anything then I'll just put that on riscv/for-next whenever I get back
+> to my own email.
 
-Seems reasonable.
+Fine by me! Most (all?) of the other drivers under drivers/perf/ are for
+arm64, so I'm more than happy for you to handle the riscv one yourself.
+If I end up with something that touches all of the drivers then we can
+use a shared branch or something.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  arch/mips/boot/compressed/Makefile | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-> index 4c9ecfbb0ef4..2d01c50fb0b1 100644
-> --- a/arch/mips/boot/compressed/Makefile
-> +++ b/arch/mips/boot/compressed/Makefile
-> @@ -27,6 +27,9 @@ ifdef CONFIG_CPU_LOONGSON64
->  KBUILD_CFLAGS := $(filter-out -march=loongson3a, $(KBUILD_CFLAGS)) -march=mips64r2
->  endif
->  
-> +# Disable LTO
-> +KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
-> +
->  KBUILD_CFLAGS := $(KBUILD_CFLAGS) -mno-abicalls -D__KERNEL__ -D__DISABLE_EXPORTS \
->  	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
->  
-> -- 
-> 2.33.0
-> 
-> 
+Will

@@ -2,148 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1CD9474876
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4443247487A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235937AbhLNQqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:46:43 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:49412 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbhLNQqm (ORCPT
+        id S233443AbhLNQsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:48:45 -0500
+Received: from out203-205-221-192.mail.qq.com ([203.205.221.192]:34243 "EHLO
+        out203-205-221-192.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229685AbhLNQso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:46:42 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 375651F37C;
-        Tue, 14 Dec 2021 16:46:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639500401; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Krx9ujt9U+CXGnLAv7z/kYbX8eg3fh5j6WLUs21e2BQ=;
-        b=R0DHQZA1hHW46jQPA5cyJ2mLrcj+9Gy8UcsF1azHs0BUAPxfW6uMFz+C0Xtc7XGzFvblAb
-        voSDvmRXJC+onqYGnxgaycPJZQxbojanWSV8YCEx1dI30MpkBHqhfWMjJajElt+SxElQbk
-        l6Gp6HW4QsZB1fTzRu7JG/7YSNQWBzA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639500401;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Krx9ujt9U+CXGnLAv7z/kYbX8eg3fh5j6WLUs21e2BQ=;
-        b=B8epb+tPC1YiOqb6J3L/qYNvRQTEqjWJcE/pr+z+3mwzE0LYI0AeBCN7Qf785QQRfX0+Kq
-        QOVKr+7o2kvDIQBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CA64F13A1D;
-        Tue, 14 Dec 2021 16:46:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id G39XLXDKuGFDDQAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Tue, 14 Dec 2021 16:46:40 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 8d974c9e;
-        Tue, 14 Dec 2021 16:46:38 +0000 (UTC)
-Date:   Tue, 14 Dec 2021 16:46:38 +0000
-From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-Subject: Re: [PATCH] ext4: set csum seed in tmp inode while migrating to
- extents
-Message-ID: <YbjKbqsVdK3LzKMm@suse.de>
-References: <bug-213357-13602@https.bugzilla.kernel.org>
- <20211206143733.18918-1-lhenriques@suse.de>
- <20211214120317.GA5503@quack2.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211214120317.GA5503@quack2.suse.cz>
+        Tue, 14 Dec 2021 11:48:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1639500522;
+        bh=YCAmTaA0K2S/MJXLjh8iNzCecb4+HnsdZ8jgDLGf12w=;
+        h=In-Reply-To:References:From:To:Cc:Subject:Date;
+        b=w64gYmUUBY5pmj5z47OUzkv04kcE0cRh9rEnXPHf2DpgFsLyu8q6zqvOINsiQ4NpL
+         ZnUouI/FoE0E7XqGqrxXl/N3iYVh0M1Rs6fKHrLaEC1TJ/fBooXkbsRDfVEZrnvN9P
+         uGgDYfBcNh+J7lHPGrpW7gNf4Kw8LXe6jO/UrwBo=
+X-QQ-FEAT: oHWrrGTW1dAsR6hyfs4/PqKPBWkWhQyz
+X-QQ-SSF: 00000000000000F000000000000000Z
+X-QQ-XMAILINFO: OfBuNT7NLq4plpxDJ6jG6+UAV+vjpYDlUS1unHSNPYNysI6Zlg1XKs2AjI0a2p
+         Da0dQHvwD5AF+w2t1Pf3e/OifaylMJEfOgfZRMrwXwjqePo/1YyzxWD4WFbrL7QlTBjbbyjJPFuWl
+         j8yUloVXInAjdDcuAV+Qgp4bf8ESHev/MfHY+8XJ6H83RixGbvgzsb+Fd7ujiLrAAq6xuIH8OFtmT
+         kdiRcFVml2LHBPPSdLiQcn8HXrTdMVzZz2R7sngyPhcSoklxOPRUsO+qUGnL95qBy7/nr5JTwOZkc
+         qvxWuV33RN2D8AOeKLIzu+U3h8K2hr4oESN6ga1wcWPBr3MK4NHoGGeHbSFkdUu7GtJLRJsoB+Hw6
+         eE1fn8CJXBcbEb+s6GIb5aLkT4oxqZ27Jk4OuJYgLOhD+RtiGBBrX5BxigI8bzNjimXGJxb9S/EVV
+         PGrqGL+5ML7LFWjKNuvAj3EePxVE35jM5LDUquzV9fPzT4m2ntpDo8IB8F2nZnGR63uYCNdxC8pAV
+         0EeaO2207++fvbEmoUxytEpez1fySCDs+kOduN9nmPkAol3D3jWVm9up/dEDJmWhJSM0BABD3+49I
+         LNVY+TDAqbH098HV28zbVU5ebaiuD9dCzqBovrDXRKRt9RoAmlldjB27vLJXyp3wdPjh0PYL1rsGQ
+         PZHPSlLnJ8l5Dz8GYqaBB0UCz8BNxs3LM0THd4aQXfHpzpc/4EK3mPJr6aDDwKiFvU/CYfj5/Peqj
+         acDRquUV6nEgfl6JTRu74eGFkdL3JrYLEO2zoXrs91CgOrYFQQBrVhF5reLJPGo9eBtfqrtMouEzQ
+         /gmCaqXcKIwWBALuUEcx07ZODn/P3jGI/GCOkNM6Rv4E0t0i77Fnurwz4FFaKMayDOOTWIg0jALBk
+         EmUcOgdfQ7CfdVehxPyLA==
+X-HAS-ATTACH: no
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 223.75.155.17
+In-Reply-To: <CAEjxPJ4nT3LFqNNh7PRP5DuuJeVfOh_JQiDboskbpBATgoJkOQ@mail.gmail.com>
+References: <tencent_D6BF2948237359EE0A47338567B88512D106@qq.com>
+        <CAEjxPJ4nT3LFqNNh7PRP5DuuJeVfOh_JQiDboskbpBATgoJkOQ@mail.gmail.com>
+X-QQ-STYLE: 
+X-QQ-mid: webmail716t1639500522t3631643
+From:   "=?ISO-8859-1?B?WGlhb2tlIFdhbmc=?=" <xkernel.wang@foxmail.com>
+To:     "=?ISO-8859-1?B?U3RlcGhlbiBTbWFsbGV5?=" 
+        <stephen.smalley.work@gmail.com>
+Cc:     "=?ISO-8859-1?B?UGF1bCBNb29yZQ==?=" <paul@paul-moore.com>,
+        "=?ISO-8859-1?B?RXJpYyBQYXJpcw==?=" <eparis@parisplace.org>,
+        "=?ISO-8859-1?B?U0VsaW51eCBsaXN0?=" <selinux@vger.kernel.org>,
+        "=?ISO-8859-1?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selinux: fix a wrong check condition of strcmp()
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="ISO-8859-1"
+Content-Transfer-Encoding: base64
+Date:   Wed, 15 Dec 2021 00:48:42 +0800
+X-Priority: 3
+Message-ID: <tencent_399699213791238D42225C4269FEFF03C405@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 01:03:17PM +0100, Jan Kara wrote:
-> On Mon 06-12-21 14:37:33, Luís Henriques wrote:
-> > When migrating to extents, the temporary inode will have it's own checksum
-> > seed.  This means that, when swapping the inodes data, the inode checksums
-> > will be incorrect.
-> > 
-> > This can be fixed by recalculating the extents checksums again.  Or simply
-> > by copying the seed into the temporary inode.
-> > 
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=213357
-> > Reported-by: Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> 
-> Thanks for debugging this! Two comments below:
-
-And thanks for the review!
-
-> > diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
-> > index 7e0b4f81c6c0..dd4ece38fc83 100644
-> > --- a/fs/ext4/migrate.c
-> > +++ b/fs/ext4/migrate.c
-> > @@ -413,7 +413,7 @@ int ext4_ext_migrate(struct inode *inode)
-> >  	handle_t *handle;
-> >  	int retval = 0, i;
-> >  	__le32 *i_data;
-> > -	struct ext4_inode_info *ei;
-> > +	struct ext4_inode_info *ei, *tmp_ei;
-> 
-> Probably no need for the new tmp_ei variable when you use it only once...
-
-Sure, I'll drop that new variable in v2.
-
-> > @@ -503,6 +503,10 @@ int ext4_ext_migrate(struct inode *inode)
-> >  	}
-> >  
-> >  	ei = EXT4_I(inode);
-> > +	tmp_ei = EXT4_I(tmp_inode);
-> > +	/* Use the right seed for checksumming */
-> > +	tmp_ei->i_csum_seed = ei->i_csum_seed;
-> > +
-> 
-> I think this is subtly broken in another way: If we crash in the middle of
-> migration, tmp_inode (and possibly attached extent tree blocks) will have
-> wrong checksums (remember that i_csum_seed is computed from inode number)
-> and so orphan cleanup will fail. On the other hand in that case the orphan
-> cleanup will free blocks we have already managed to attach to the tmp_inode
-> although they are still properly attached to the old 'inode'. So the
-> recovery from a crash in the middle of the migration seems to be broken
-> anyway. So I guess what you do is an improvement. But can you perhaps:
-> 
-> 1) Move i_csum_seed initialization to a bit earlier in ext4_ext_migrate()
-> just after we have got the tmp_inode from  ext4_new_inode()? That way all
-> inode writes will at least happen with the same csum.
-> 
-> 2) Add a comment you are updating the csum seed so that metadata blocks get
-> proper checksum for 'inode' and that recovery from a crash in the middle of
-> migration is currently broken.
-
-Obviously, I did not realize the recovery process was broken and I
-appreciate you took the time to explain _how_ it is broken.  I'll add a
-new item to (the bottom of) my to-do list and maybe one of these days I
-get to look into it.
-
-I'll send out v2 shortly, implementing your suggestions.
-
-Cheers,
---
-Luís
-
-> 
-> Thanks!
-> 
-> 								Honza
-> -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+T24gV2VkLCBEZWMgMTUsIDIwMjEgMDA6MTQgQU0sIFN0ZXBoZW4gU21hbGxleSB3cm90ZToK
+PiBOQUsuIExvb2sgbW9yZSBjbG9zZWx5IGF0IHRoZSBjb2RlIHRoYXQgZm9sbG93cywgYW5k
+IHVuZGVyc3RhbmQgdGhhdAo+IHRoZSBsaXN0IGlzIG9yZGVyZWQgdG8gYXZvaWQgbmVlZGlu
+ZyB0byB0cmF2ZXJzZSBhbGwgb2YgaXQuCgpJIGFtIHZlcnkgc29ycnkgdGhhdCBJIGRpZG4n
+dCByZWFsaXplIHRoYXQgaXMgYSBzb3J0ZWQgbGlzdC4gSSByZWFkIHBvbGljeWRiLmMKYW5k
+IHVuZGVyc3RhbmQgd2hhdCB5b3UgY29tbWVudCBub3cuIApBcG9sb2dpemUgYWdhaW4gZm9y
+IGRpc3R1cmJpbmcgeW91LCBhbmQgSSB3aWxsIHJlYWQgdGhlIGNvbnRleHQgYXMgY2FyZWZ1
+bGx5CmFzIHBvc3NpYmxlIGluIHRoZSBmdXR1cmUuLi4uLi4=
+A

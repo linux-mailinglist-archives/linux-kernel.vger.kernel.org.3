@@ -2,207 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A75473FE1
+	by mail.lfdr.de (Postfix) with ESMTP id 6B88E473FE0
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 10:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbhLNJwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 04:52:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43700 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbhLNJwP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 04:52:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12524B8181E;
-        Tue, 14 Dec 2021 09:52:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E13CC34600;
-        Tue, 14 Dec 2021 09:52:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639475532;
-        bh=9EMZu1LiyYALaKoZCn3vmbj8Kq8pZQJtD9DMjmj1qNU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=0KFHldZuxthPQu6ASaLpMR1tYwGEmkrpUJlBCxQlXC+t6oujZsX+LomAkc5wDRpfz
-         2qJHnBAWFx/p+jgm2hOpnAR2mbJp4Rn6o5EFlLYIblq6onOrakFl8Y2msF5qowa2uT
-         j1W9b5NSc6IeotzSfRmcAOtXed+Cvggffp13SRtk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Linux 4.9.293
-Date:   Tue, 14 Dec 2021 10:52:06 +0100
-Message-Id: <163947552697122@kroah.com>
-X-Mailer: git-send-email 2.34.1
+        id S232676AbhLNJwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 04:52:16 -0500
+Received: from foss.arm.com ([217.140.110.172]:50532 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232688AbhLNJwO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 04:52:14 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2677D6E;
+        Tue, 14 Dec 2021 01:52:13 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E75D23F5A1;
+        Tue, 14 Dec 2021 01:52:12 -0800 (PST)
+Date:   Tue, 14 Dec 2021 09:52:07 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Jay Chen <jkchen@linux.alibaba.com>, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, zhangliguang@linux.alibaba.com
+Subject: Re: [RFC PATCH] irqchip/gic-v4.1:fix the kdump GIC ITS RAS error for
+ ITS BASER2
+Message-ID: <20211214095207.GA26339@lpieralisi>
+References: <20211214064716.21407-1-jkchen@linux.alibaba.com>
+ <87h7bbk05r.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h7bbk05r.wl-maz@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm announcing the release of the 4.9.293 kernel.
+On Tue, Dec 14, 2021 at 09:26:08AM +0000, Marc Zyngier wrote:
+> [+ Lorenzo, just in case...]
 
-All users of the 4.9 kernel series must upgrade.
+Thanks. I am away at the moment but definitely on this case. I believe
+this is also an issue with a kexec'ed kernel (where we expect v4.1
+functionality to be up and running in the kexec'ed kernel compared to a
+kdump usecase), need to put something together and test it if someone
+does not beat me to it.
 
-The updated 4.9.y git tree can be found at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.9.y
-and can be browsed at the normal kernel.org git web browser:
-	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+Lorenzo
 
-thanks,
-
-greg k-h
-
-------------
-
- Makefile                                      |    2 
- block/ioprio.c                                |    3 +
- drivers/android/binder.c                      |   21 +++----
- drivers/ata/libata-core.c                     |    2 
- drivers/hid/Kconfig                           |   10 +--
- drivers/hid/hid-chicony.c                     |    8 ++
- drivers/hid/hid-corsair.c                     |    7 ++
- drivers/hid/hid-elo.c                         |    3 +
- drivers/hid/hid-holtek-kbd.c                  |    9 ++-
- drivers/hid/hid-holtek-mouse.c                |    9 +++
- drivers/hid/hid-lg.c                          |   10 ++-
- drivers/hid/hid-prodikeys.c                   |   10 ++-
- drivers/hid/hid-roccat-arvo.c                 |    3 +
- drivers/hid/hid-roccat-isku.c                 |    3 +
- drivers/hid/hid-roccat-kone.c                 |    3 +
- drivers/hid/hid-roccat-koneplus.c             |    3 +
- drivers/hid/hid-roccat-konepure.c             |    3 +
- drivers/hid/hid-roccat-kovaplus.c             |    3 +
- drivers/hid/hid-roccat-lua.c                  |    3 +
- drivers/hid/hid-roccat-pyra.c                 |    3 +
- drivers/hid/hid-roccat-ryos.c                 |    3 +
- drivers/hid/hid-roccat-savu.c                 |    3 +
- drivers/hid/hid-samsung.c                     |    3 +
- drivers/hid/hid-uclogic.c                     |    3 +
- drivers/hid/i2c-hid/i2c-hid-core.c            |    3 -
- drivers/hid/uhid.c                            |    3 -
- drivers/hid/usbhid/hid-core.c                 |    3 -
- drivers/hid/wacom_sys.c                       |   17 ++++-
- drivers/iio/accel/kxcjk-1013.c                |    5 -
- drivers/iio/accel/kxsd9.c                     |    6 +-
- drivers/iio/accel/mma8452.c                   |    2 
- drivers/iio/gyro/itg3200_buffer.c             |    2 
- drivers/iio/light/ltr501.c                    |    2 
- drivers/iio/light/stk3310.c                   |    6 +-
- drivers/infiniband/hw/hfi1/init.c             |    2 
- drivers/irqchip/irq-armada-370-xp.c           |   16 ++---
- drivers/irqchip/irq-gic-v3-its.c              |    2 
- drivers/irqchip/irq-nvic.c                    |    2 
- drivers/net/can/pch_can.c                     |    2 
- drivers/net/can/sja1000/ems_pcmcia.c          |    7 ++
- drivers/net/ethernet/altera/altera_tse_main.c |    9 ++-
- drivers/net/ethernet/freescale/fec.h          |    3 +
- drivers/net/ethernet/freescale/fec_main.c     |    2 
- drivers/net/ethernet/qlogic/qla3xxx.c         |   19 +++---
- drivers/net/usb/cdc_ncm.c                     |    2 
- drivers/usb/core/config.c                     |    6 +-
- drivers/usb/gadget/composite.c                |   14 ++++
- drivers/usb/gadget/legacy/dbgp.c              |   15 ++++-
- drivers/usb/gadget/legacy/inode.c             |   16 +++++
- fs/signalfd.c                                 |   12 ----
- fs/tracefs/inode.c                            |   76 ++++++++++++++++++++++++++
- include/linux/hid.h                           |   16 +++++
- include/linux/wait.h                          |   26 ++++++++
- kernel/sched/wait.c                           |    8 ++
- mm/backing-dev.c                              |    7 ++
- net/bluetooth/hidp/core.c                     |    3 -
- net/core/neighbour.c                          |    2 
- net/nfc/netlink.c                             |    6 +-
- sound/core/control_compat.c                   |    3 +
- sound/core/oss/pcm_oss.c                      |   37 ++++++++----
- 60 files changed, 383 insertions(+), 109 deletions(-)
-
-Alan Young (1):
-      ALSA: ctl: Fix copy of updated id with element read/write
-
-Dan Carpenter (3):
-      can: sja1000: fix use after free in ems_pcmcia_add_card()
-      net: altera: set a couple error code in probe()
-      net/qla3xxx: fix an error code in ql_adapter_up()
-
-Davidlohr Bueso (1):
-      block: fix ioprio_get(IOPRIO_WHO_PGRP) vs setuid(2)
-
-Eric Biggers (3):
-      wait: add wake_up_pollfree()
-      binder: use wake_up_pollfree()
-      signalfd: use wake_up_pollfree()
-
-Eric Dumazet (1):
-      net, neigh: clear whole pneigh_entry at alloc time
-
-Greg Kroah-Hartman (9):
-      HID: add hid_is_usb() function to make it simpler for USB detection
-      HID: add USB_HID dependancy to hid-prodikeys
-      HID: add USB_HID dependancy to hid-chicony
-      HID: add USB_HID dependancy on some USB HID drivers
-      HID: wacom: fix problems when device is not a valid USB device
-      HID: check for valid USB device for many HID drivers
-      USB: gadget: detect too-big endpoint 0 requests
-      USB: gadget: zero allocate endpoint 0 buffers
-      Linux 4.9.293
-
-Hannes Reinecke (1):
-      libata: add horkage for ASMedia 1092
-
-Jason Gerecke (1):
-      HID: introduce hid_is_using_ll_driver
-
-Joakim Zhang (1):
-      net: fec: only clear interrupt of handling queue in fec_enet_rx_queue()
-
-Krzysztof Kozlowski (1):
-      nfc: fix potential NULL pointer deref in nfc_genl_dump_ses_done
-
-Lars-Peter Clausen (5):
-      iio: stk3310: Don't return error code in interrupt handler
-      iio: mma8452: Fix trigger reference couting
-      iio: ltr501: Don't return error code in trigger handler
-      iio: kxsd9: Don't return error code in trigger handler
-      iio: itg3200: Call iio_trigger_notify_done() on error
-
-Lee Jones (1):
-      net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset or zero
-
-Manjong Lee (1):
-      mm: bdi: initialize bdi_min_ratio when bdi is unregistered
-
-Mike Marciniszyn (1):
-      IB/hfi1: Correct guard on eager buffer deallocation
-
-Pali Rohár (2):
-      irqchip/armada-370-xp: Fix return value of armada_370_xp_msi_alloc()
-      irqchip/armada-370-xp: Fix support for Multi-MSI interrupts
-
-Pavel Hofman (2):
-      usb: core: config: fix validation of wMaxPacketValue entries
-      usb: core: config: using bit mask instead of individual bits
-
-Steven Rostedt (VMware) (2):
-      tracefs: Have new files inherit the ownership of their parent
-      tracefs: Set all files to the same group ownership as the mount option
-
-Takashi Iwai (3):
-      ALSA: pcm: oss: Fix negative period/buffer sizes
-      ALSA: pcm: oss: Limit the period size to 16MB
-      ALSA: pcm: oss: Handle missing errors in snd_pcm_oss_change_params*()
-
-Vincent Mailhol (1):
-      can: pch_can: pch_can_rx_normal: fix use after free
-
-Vladimir Murzin (1):
-      irqchip: nvic: Fix offset for Interrupt Priority Offsets
-
-Wudi Wang (1):
-      irqchip/irq-gic-v3-its.c: Force synchronisation when issuing INVALL
-
-Yang Yingliang (1):
-      iio: accel: kxcjk-1013: Fix possible memory leak in probe and remove
-
+> Hi Jay,
+> 
+> Thanks for this.
+> 
+> On Tue, 14 Dec 2021 06:47:16 +0000,
+> Jay Chen <jkchen@linux.alibaba.com> wrote:
+> > 
+> > We encounter a GIC RAS Error in below flow:
+> > (1) Configure ITS related register (including
+> > 	GITS_BASER2, GITS_BASER2.valid = 1'b1)
+> > (2) Configure GICR related register (including
+> > 	GICR_VPROPBASER, GICR_VPROPBASER.valid = 1'b1)
+> > The common settings in above 2 register are the same
+> > and currently everything is OK
+> > (3) Kernel panic and os start the kdump flow.And then os
+> > reconfigure ITS related register (including GITS_BASER2,
+> > GITS_BASER2.valid = 1'b1). But at this time, gicr_vpropbaser
+> > is not initialized, so it is still an old value. At this point,
+> > the new value of its_baser2 and the old value of gicr_vpropbaser is
+> > different, resulting in its RAS error.
+> > 
+> > https://bugzilla.kernel.org/show_bug.cgi?id=215327
+> 
+> I'm sorry, but I don't have any access to this. Please add all the
+> relevant details to the commit message and drop the link.
+> 
+> Could you please detail what HW this is on? The architecture
+> specification for GICv4.1 doesn't make any mention of RAS error
+> conditions, so this must be implementation specific. A reference to
+> the TRM of the IP would certainly help.
+> 
+> Now, I think you have identified something interesting, but I'm not
+> convinced by the implementation, see below.
+> 
+> > 
+> > Signed-off-by: Jay Chen <jkchen@linux.alibaba.com>
+> > ---
+> >  drivers/irqchip/irq-gic-v3-its.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> > index eb0882d15366..c340bbf4427b 100644
+> > --- a/drivers/irqchip/irq-gic-v3-its.c
+> > +++ b/drivers/irqchip/irq-gic-v3-its.c
+> > @@ -2623,6 +2623,12 @@ static int its_alloc_tables(struct its_node *its)
+> >  			return err;
+> >  		}
+> >  
+> > +		if ((i == 2) && is_kdump_kernel() && is_v4_1(its)) {
+> > +			val = its_read_baser(its, baser);
+> > +			val &= ~GITS_BASER_VALID;
+> > +			its_write_baser(its, baser, val);
+> > +		}
+> 
+> This looks like a very odd way to address the issue. You are silently
+> disabling the Base Register containing the VPE table, and carry on as
+> if nothing happened. What happen if someone starts a guest using
+> direct injection at this point? A kdump kernel still is a full fledged
+> kernel, and I don't expect it to behave differently.
+> 
+> If we are to make this work, we need to either disable the v4.1
+> extension altogether or sanitise the offending registers so that we
+> don't leave things in a bad state. My preference is of course the
+> latter.
+> 
+> Could you please give this patch a go and let me know if it helps?
+> 
+> Thanks,
+> 
+> 	M.
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index daec3309b014..cb339ace5046 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -920,6 +920,15 @@ static int __gic_update_rdist_properties(struct redist_region *region,
+>  {
+>  	u64 typer = gic_read_typer(ptr + GICR_TYPER);
+>  
+> +	/* Boot-time cleanup */
+> +	if ((typer & GICR_TYPER_VLPIS) && (typer & GICR_TYPER_RVPEID)) {
+> +		u64 val;
+> +
+> +		val = gicr_read_vpropbaser(ptr + SZ_128K + GICR_VPROPBASER);
+> +		val &= ~GICR_VPROPBASER_4_1_VALID;
+> +		gicr_write_vpropbaser(val, ptr + SZ_128K + GICR_VPROPBASER);
+> +	}
+> +
+>  	gic_data.rdists.has_vlpis &= !!(typer & GICR_TYPER_VLPIS);
+>  
+>  	/* RVPEID implies some form of DirectLPI, no matter what the doc says... :-/ */
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.

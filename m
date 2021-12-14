@@ -2,166 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EEA8473CD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 06:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3E5473CDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbhLNF7c convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Dec 2021 00:59:32 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:57966 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbhLNF7b (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 00:59:31 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1BE5x6gyD004824, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1BE5x6gyD004824
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 14 Dec 2021 13:59:06 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 13:59:06 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 13:59:06 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01]) by
- RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01%5]) with mapi id
- 15.01.2308.020; Tue, 14 Dec 2021 13:59:06 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>
-CC:     "jian-hong@endlessm.com" <jian-hong@endlessm.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Bernie Huang <phhuang@realtek.com>,
-        Brian Norris <briannorris@chromium.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] rtw88: Disable PCIe ASPM while doing NAPI poll on 8821CE
-Thread-Topic: [PATCH v2] rtw88: Disable PCIe ASPM while doing NAPI poll on
- 8821CE
-Thread-Index: AQHX8KxEGsnToIDXSUCJmFSUmWAcOawxeDaA
-Date:   Tue, 14 Dec 2021 05:59:06 +0000
-Message-ID: <4aaf5dd030004285a56bc55cc6b2731b@realtek.com>
-References: <20211214053302.242222-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20211214053302.242222-1-kai.heng.feng@canonical.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/12/14_=3F=3F_02:07:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S230205AbhLNGBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:01:30 -0500
+Received: from mga14.intel.com ([192.55.52.115]:34295 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230114AbhLNGB3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 01:01:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639461689; x=1670997689;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=ci/qhNRNS7RvrPrSsDjgrZYNVw1Al3ceB7ixpdUcULc=;
+  b=gj3CwvxKikDXRyMnth1x4/rOp3fSK7n3nJEA1oY6iOrN6BI25XlH+RU+
+   BB9eIuNWppNEeCmFTTBb3cs3jDd64Sn0UyhwRz2R7UOd3wdjZKGgoMk/A
+   t7wl2D4Pjw12yibYPAJUkYhVjYiOesWJYEX54erChb/psCeYWTgSzKrRi
+   NzEOahGrCIjAw1xovlBX8Qtyiv6EU9h5jApYh5a2H5uKPB/ljLtqyTtQl
+   xg0ljdbabbnAqkFToOu7OPc5cHvf4E/z/rXTdWtwQG84E7lV+HZI8KJZR
+   y+k+pAKCRV7HUXebSUOOfGDSPuv5s32zuukoyUHgX81HSXVPd4XiYUGqH
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="239129194"
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="239129194"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 22:01:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,204,1635231600"; 
+   d="scan'208";a="464942290"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
+  by orsmga006.jf.intel.com with ESMTP; 13 Dec 2021 22:01:25 -0800
+Subject: Re: [PATCH v3] mmc: sdhci-tegra: Fix switch to HS400ES mode
+To:     Prathamesh Shete <pshete@nvidia.com>, ulf.hansson@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     anrao@nvidia.com, smangipudi@nvidia.com
+References: <bf629e1b-c61d-37e7-8802-b6d778f89c21@intel.com>
+ <20211206140541.17148-1-pshete@nvidia.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <3dd2473a-00ca-4c62-e17f-9392cf74cda4@intel.com>
+Date:   Tue, 14 Dec 2021 08:01:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.13.0
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+In-Reply-To: <20211206140541.17148-1-pshete@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06/12/2021 16:05, Prathamesh Shete wrote:
+> When CMD13 is sent after switching to HS400ES mode, the bus
+> is operating at either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
+> To meet Tegra SDHCI requirement at HS400ES mode, force SDHCI
+> interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
+> controller CAR clock and the interface clock are rate matched.
+> 
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
 
-> -----Original Message-----
-> From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Sent: Tuesday, December 14, 2021 1:33 PM
-> To: tony0620emma@gmail.com; Pkshih <pkshih@realtek.com>
-> Cc: jian-hong@endlessm.com; Kai-Heng Feng <kai.heng.feng@canonical.com>; Kalle Valo
-> <kvalo@codeaurora.org>; David S. Miller <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Bernie
-> Huang <phhuang@realtek.com>; Brian Norris <briannorris@chromium.org>; linux-wireless@vger.kernel.org;
-> netdev@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH v2] rtw88: Disable PCIe ASPM while doing NAPI poll on 8821CE
-> 
-> Many Intel based platforms face system random freeze after commit
-> 9e2fd29864c5 ("rtw88: add napi support").
-> 
-> The commit itself shouldn't be the culprit. My guess is that the 8821CE
-> only leaves ASPM L1 for a short period when IRQ is raised. Since IRQ is
-> masked during NAPI polling, the PCIe link stays at L1 and makes RX DMA
-> extremely slow. Eventually the RX ring becomes messed up:
-> [ 1133.194697] rtw_8821ce 0000:02:00.0: pci bus timeout, check dma status
-> 
-> Since the 8821CE hardware may fail to leave ASPM L1, manually do it in
-> the driver to resolve the issue.
-> 
-> Fixes: 9e2fd29864c5 ("rtw88: add napi support")
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215131
-> BugLink: https://bugs.launchpad.net/bugs/1927808
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+One minor comment below otherwise:
+
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+
 > ---
-> v2:
->  - Add default value for module parameter.
+>  drivers/mmc/host/sdhci-tegra.c | 43 ++++++++++++++++++++--------------
+>  1 file changed, 26 insertions(+), 17 deletions(-)
 > 
->  drivers/net/wireless/realtek/rtw88/pci.c | 74 ++++++++----------------
->  drivers/net/wireless/realtek/rtw88/pci.h |  1 +
->  2 files changed, 24 insertions(+), 51 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw88/pci.c b/drivers/net/wireless/realtek/rtw88/pci.c
-> index 3b367c9085eba..4ab75ac2500e9 100644
-> --- a/drivers/net/wireless/realtek/rtw88/pci.c
-> +++ b/drivers/net/wireless/realtek/rtw88/pci.c
-> @@ -2,7 +2,6 @@
->  /* Copyright(c) 2018-2019  Realtek Corporation
->   */
-> 
-> -#include <linux/dmi.h>
->  #include <linux/module.h>
->  #include <linux/pci.h>
->  #include "main.h"
-> @@ -16,10 +15,13 @@
-> 
->  static bool rtw_disable_msi;
->  static bool rtw_pci_disable_aspm;
-> +static int rtw_rx_aspm = -1;
->  module_param_named(disable_msi, rtw_disable_msi, bool, 0644);
->  module_param_named(disable_aspm, rtw_pci_disable_aspm, bool, 0644);
-> +module_param_named(rx_aspm, rtw_rx_aspm, int, 0444);
->  MODULE_PARM_DESC(disable_msi, "Set Y to disable MSI interrupt support");
->  MODULE_PARM_DESC(disable_aspm, "Set Y to disable PCI ASPM support");
-> +MODULE_PARM_DESC(rx_aspm, "Use PCIe ASPM for RX (0=disable, 1=enable, -1=default)");
-> 
->  static u32 rtw_pci_tx_queue_idx_addr[] = {
->  	[RTW_TX_QUEUE_BK]	= RTK_PCI_TXBD_IDX_BKQ,
-> @@ -1409,7 +1411,11 @@ static void rtw_pci_link_ps(struct rtw_dev *rtwdev, bool enter)
->  	 * throughput. This is probably because the ASPM behavior slightly
->  	 * varies from different SOC.
->  	 */
-> -	if (rtwpci->link_ctrl & PCI_EXP_LNKCTL_ASPM_L1)
-> +	if (!(rtwpci->link_ctrl & PCI_EXP_LNKCTL_ASPM_L1))
-> +		return;
-> +
-> +	if ((enter && atomic_dec_return(&rtwpci->link_usage) == 0) ||
-> +	    (!enter && atomic_inc_return(&rtwpci->link_usage) == 1))
->  		rtw_pci_aspm_set(rtwdev, enter);
+> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
+> index 387ce9cdbd7c..ddaa3d9000f6 100644
+> --- a/drivers/mmc/host/sdhci-tegra.c
+> +++ b/drivers/mmc/host/sdhci-tegra.c
+> @@ -354,23 +354,6 @@ static void tegra_sdhci_set_tap(struct sdhci_host *host, unsigned int tap)
+>  	}
 >  }
+>  
+> -static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
+> -					      struct mmc_ios *ios)
+> -{
+> -	struct sdhci_host *host = mmc_priv(mmc);
+> -	u32 val;
+> -
+> -	val = sdhci_readl(host, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> -
+> -	if (ios->enhanced_strobe)
+> -		val |= SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> -	else
+> -		val &= ~SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> -
+> -	sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> -
+> -}
+> -
+>  static void tegra_sdhci_reset(struct sdhci_host *host, u8 mask)
+>  {
+>  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> @@ -791,6 +774,32 @@ static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
+>  	}
+>  }
+>  
+> +static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
+> +					      struct mmc_ios *ios)
+> +{
+> +	struct sdhci_host *host = mmc_priv(mmc);
+> +	u32 val;
+> +
+> +	val = sdhci_readl(host, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> +
+> +	if (ios->enhanced_strobe) {
+> +		val |= SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> +	/*
+> +	 * When CMD13 is sent from mmc_select_hs400es() after
+> +	 * switching to HS400ES mode, the bus is operating at
+> +	 * either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
+> +	 * To meet Tegra SDHCI requirement at HS400ES mode, force SDHCI
+> +	 * interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
+> +	 * controller CAR clock and the interface clock are rate matched.
+> +	 */
+> +	tegra_sdhci_set_clock(host, MMC_HS200_MAX_DTR);
+
+Comment and line above need indenting
+
+> +	} else {
+> +		val &= ~SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> +	}
+> +
+> +	sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> +}
+> +
+>  static unsigned int tegra_sdhci_get_max_clock(struct sdhci_host *host)
+>  {
+>  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
 > 
-
-I found calling pci_link_ps isn't always symmetric, so we need to reset
-ref_cnt at pci_start() like below, or we can't enter rtw_pci_aspm_set()
-anymore. The negative flow I face is 
-ifup -> connect AP -> ifdown -> ifup (ref_cnt isn't expected now).
-
-
-@@ -582,6 +582,8 @@ static int rtw_pci_start(struct rtw_dev *rtwdev)
-        rtw_pci_napi_start(rtwdev);
-
-        spin_lock_bh(&rtwpci->irq_lock);
-+       atomic_set(&rtwpci->link_usage, 1);
-        rtwpci->running = true;
-        rtw_pci_enable_interrupt(rtwdev, rtwpci, false);
-        spin_unlock_bh(&rtwpci->irq_lock);
-
---
-Ping-Ke
-
 

@@ -2,105 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B49474751
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19204474755
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 17:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235608AbhLNQPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 11:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
+        id S235617AbhLNQQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 11:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235606AbhLNQPq (ORCPT
+        with ESMTP id S229513AbhLNQQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:15:46 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A1FC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:15:45 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id t13so35687669uad.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:15:45 -0800 (PST)
+        Tue, 14 Dec 2021 11:16:44 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAD6C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:16:43 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so16608401wmj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 08:16:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u6FJi1chVbjhnnxyU13+cLRUgb7epxkD3A/uWK2BL6E=;
-        b=FCrnA9ABISsTiY1lnbiP9+rfCMgW2g08O6yQF8CfKnrrGmEpexA+SIvqrll1A3dPCq
-         BKPTXc/7IW1Ef4gZrAasmwlRo59LM5YWGm89jTjRndAUgOSlxjDlEuXLpzbmkGdRopsx
-         X2A431io7LiTaagHHLjONVFn7X004XUhAqFBhDUUt8s8ck/oDDC/rhdBs+v5bZvqTfYX
-         Cm2mM3+XNemXd4cDvRBBWMxTHQfZeY8Tm4kNjkPAEfrMRuCb+n8AEUtHq9otxZmqrnkj
-         3ppIu5zf4M9KYj9gb9sVqG+NRN5SougOKXnUuERI5Hgsuv7nvRKIRgudGZ3xeZ0pOz+T
-         9gUg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AmgkymR9haOFT9fuurSvbtWN6rxOeKgu2ZPiSoag26Q=;
+        b=S0HCKpPdv0aGzhdeTCgzdLPyaPU2SxHZ+GU/joalX0OuobxFQydPcVzfEZ/u733I2d
+         fJ7Ekot9HvPUl49H3Kl78ZBnT6M/oTHEyGKWtITtldzhNj546EnytZXvH0YDcupLmXuL
+         9YD+HKPr6hhpg+6mqgX7GtuZ0zzrSomeq4j0rUsiX21XKqaNOCdupYV/zDMd3E0OpCvt
+         2B4gS9dVvhiBCM+PLUR8+pM2DU7W5QI6p/XHWOLNR1EzRCeqbXg8+alvgNu090ikStzQ
+         dqAne2B2Tj0rC4TmQCEL8wYpO6vN3SeflCfICY0hmKZJbrk4cHvJivT1M6cH2W5/pg2p
+         Vb8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u6FJi1chVbjhnnxyU13+cLRUgb7epxkD3A/uWK2BL6E=;
-        b=c0GekpAP+xNhTwBjTg0lAsJsezexJFBEUZ0qzmFsy0UezjLYnOx7Y+f+wqifF7YSFu
-         9DMQu1wX85ORy04SRLMGWoruVunzMPeb3TeFh61ucEbvt1/Bp9feLNK98ll3hYDRxlax
-         ZhwRd9JFD85KJPS18+LJPI0609x+m8anayi9NXBct5ypTZbVcgGPZgTxANiRVE+Y7bHf
-         k7oiW9PQ/UdNmWQTzXg9wx7TT8cJDU6mePycAsGC6UejVPjGrwqz3sDqjDpuuLvwWakg
-         oLW75kb/scPfrKrroFwg3yqyAtTX9C2B/qi2+l5T4lYoC9G/FLnyU/azFsG4noHI0ZOS
-         5U/A==
-X-Gm-Message-State: AOAM530amv9DsCLJKiM4kYjicmbGcoGu2eBSpjrm6SByYDFeQz3Y842K
-        S3vd+d/l9PutaVpzEXUZtssRhITQ0BimUJ94844UFw==
-X-Google-Smtp-Source: ABdhPJzEL887m0Kxg3sI2RmnzaW9Lu/RySFA8VRYAU3p3WJAo5Y3zuyk8/44Zjpq1FkqALrxnuD3wDw/WQyN5lfSdQo=
-X-Received: by 2002:ab0:7859:: with SMTP id y25mr2325675uaq.9.1639498543523;
- Tue, 14 Dec 2021 08:15:43 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AmgkymR9haOFT9fuurSvbtWN6rxOeKgu2ZPiSoag26Q=;
+        b=wJBMWG0KIpXuVg2a7z3ClgICVyrKT08iKh/TeRHYlyiPj7EfHTCAY6OYcKFHVzc54u
+         UXw8ky50smMk0kFetyLY56e89QI+WRiDB9gZGLkkstCNINFyd5lqzy0UCalvTk6/QLs/
+         ZM34exm0Hz2s8+DhLUiT0ZE0/xZ8BK74tPfvnmniVyuhoAZNCewHTJ5Fr+hEtaGpxA74
+         6JJDkLqGtpHEiDoG3foWPFRkSAbsfVNO2rAt4JdFQbjS86Hsp8FkLIy1PhbZb9ka/1/k
+         wJ9f2NsZeyD3ZfmL2NrwL0qzK1CdVc1kDb8gcsb1dIDQk06aX3BrVTO9ueYqAFIu4Bnk
+         whxg==
+X-Gm-Message-State: AOAM5308p2O6TvZSXONDujPxDnsGDvZaY/64s9C3VFU76hnodScUTYGr
+        G08Drj91n8Om2cxOm3YxEdXljA==
+X-Google-Smtp-Source: ABdhPJwD77E4ftv7qBq+s4ZQFO8uD366PZA247DTyhNmc1Ml7+ImDjC8MxX0aXZvGuA1xzNDWwLRXQ==
+X-Received: by 2002:a7b:c257:: with SMTP id b23mr8285418wmj.67.1639498602119;
+        Tue, 14 Dec 2021 08:16:42 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id a9sm295116wrt.66.2021.12.14.08.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 08:16:41 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     mchehab@kernel.org, hverkuil@xs4all.nl, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mjpeg-users@lists.sourceforge.net,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH v4 00/18] staging: media: zoran: merge in one module
+Date:   Tue, 14 Dec 2021 16:16:18 +0000
+Message-Id: <20211214161636.1886900-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211126203641.24005-1-semen.protsenko@linaro.org>
- <YagPWOj0CLxE/+ER@robh.at.kernel.org> <CAPLW+4=LTd8i2Tqr7Wa0NDRTJ5mRJXP=EvRCx84WxnwCDQ1eVg@mail.gmail.com>
-In-Reply-To: <CAPLW+4=LTd8i2Tqr7Wa0NDRTJ5mRJXP=EvRCx84WxnwCDQ1eVg@mail.gmail.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 14 Dec 2021 18:15:31 +0200
-Message-ID: <CAPLW+4nk7Y8Psg9ZVacvzJeAV3VAGWfi+9hTPWgTeAWqh67AKQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: clock: exynos850: Add bindings for
- Exynos850 sysreg clocks
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     linux-samsung-soc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        David Virag <virag.david003@gmail.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Dec 2021 at 22:54, Sam Protsenko <semen.protsenko@linaro.org> wrote:
->
-> On Thu, 2 Dec 2021 at 02:12, Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Fri, 26 Nov 2021 22:36:40 +0200, Sam Protsenko wrote:
-> > > System Register is used to configure system behavior, like USI protocol,
-> > > etc. SYSREG clocks should be provided to corresponding syscon nodes, to
-> > > make it possible to modify SYSREG registers.
-> > >
-> > > While at it, add also missing PMU and GPIO clocks, which looks necessary
-> > > and might be needed for corresponding Exynos850 features soon.
-> > >
-> > > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > > ---
-> > >  include/dt-bindings/clock/exynos850.h | 12 +++++++++---
-> > >  1 file changed, 9 insertions(+), 3 deletions(-)
-> > >
-> >
-> > Acked-by: Rob Herring <robh@kernel.org>
->
-> Hi Sylwester,
->
-> Can you please review and apply this series, if it's ok?
->
+Hello
 
-Hi Krzysztof,
+The main change of this serie is to merge all zoran related modules in
+one.
+This fixes the load order problem when everything is built-in.
+But this serie include several more fixes found while working on this.
 
-Do you think it's possible to take this series in your tree? Once it's
-applied, I can send the board support (dts) series -- this is the only
-remaining blocker for that right now.
+Regards
 
-Thanks!
+Changes since v3:
+- Fixed a lock up when doing a capture
+- added fixes patchs from Hans Verkuil
+- dropped DC30 patch, I will send a new patch later for adding DC30D
 
-> Thanks!
+Changes since v2:
+- added the 4 latest patchs
+- removed DEBUGFS kconfig option
+- fixed Dan Carpenter's reported codec issues
+- fixed kernel test robot's reported issues on vb2_dma_contig_set_max_seg_size()
+
+Changes since v1:
+- add missing debugfs cleaning
+- clean some remaining module_get/put functions which made impossible to
+  remove the zoran module
+- added the two latest patchs
+
+Corentin Labbe (14):
+  staging: media: zoran: move module parameter checks to zoran_probe
+  staging: media: zoran: use module_pci_driver
+  staging: media: zoran: rename debug module parameter
+  staging: media: zoran: add debugfs
+  staging: media: zoran: videocode: remove procfs
+  staging: media: zoran: merge all modules
+  staging: media: zoran: remove vidmem
+  staging: media: zoran: move videodev alloc
+  staging: media: zoran: move config select on primary kconfig
+  staging: media: zoran: introduce zoran_i2c_init
+  staging: media: zoran: fix usage of vb2_dma_contig_set_max_seg_size
+  staging: media: zoran: clean unused code
+  staging: media: zoran: fix counting buffer in reserve
+  staging: media: zoran: calculate the right buffer number for
+    zoran_reap_stat_com
+
+Hans Verkuil (4):
+  staging: media: zoran: fix various V4L2 compliance errors
+  staging: media: zoran: fix TRY_FMT handling
+  staging: media: zoran: drop kernel log spam
+  staging: media: zoran: drop read/write support
+
+ drivers/staging/media/zoran/Kconfig        |  38 +-
+ drivers/staging/media/zoran/Makefile       |   8 +-
+ drivers/staging/media/zoran/videocodec.c   |  68 +---
+ drivers/staging/media/zoran/videocodec.h   |   4 +-
+ drivers/staging/media/zoran/zoran.h        |  18 +-
+ drivers/staging/media/zoran/zoran_card.c   | 398 +++++++++++++--------
+ drivers/staging/media/zoran/zoran_device.c |  15 +-
+ drivers/staging/media/zoran/zoran_device.h |   2 -
+ drivers/staging/media/zoran/zoran_driver.c |  56 ++-
+ drivers/staging/media/zoran/zr36016.c      |  25 +-
+ drivers/staging/media/zoran/zr36016.h      |   2 +
+ drivers/staging/media/zoran/zr36050.c      |  24 +-
+ drivers/staging/media/zoran/zr36050.h      |   2 +
+ drivers/staging/media/zoran/zr36060.c      |  23 +-
+ drivers/staging/media/zoran/zr36060.h      |   2 +
+ 15 files changed, 349 insertions(+), 336 deletions(-)
+
+-- 
+2.32.0
+

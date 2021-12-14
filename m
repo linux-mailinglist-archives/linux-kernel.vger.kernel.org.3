@@ -2,126 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDB5474D1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 22:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5DD474D2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 22:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237818AbhLNVMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 16:12:23 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:44060 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234778AbhLNVMJ (ORCPT
+        id S231174AbhLNVUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 16:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229990AbhLNVUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 16:12:09 -0500
-Date:   Tue, 14 Dec 2021 21:12:06 -0000
+        Tue, 14 Dec 2021 16:20:02 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72FCC061574;
+        Tue, 14 Dec 2021 13:20:01 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639516327;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        s=2020; t=1639516798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=rcii2iHyAkR9Kah3KUc4lSx3hIDJM4dLUBLakzw4z6E=;
-        b=B0rPXjbt1p4rP1GFra4RGExEArWK/VnsV3RQzG+kSZISyI8gUQklTnHVoHza/qViZ4xjSE
-        2rch1qW2B9EEoAkvSclf/c5dnC0leshpUBx8TCva0GYGlY7baBsDeRqjArN6bkAgw0fNko
-        YwQGpJAqlRLcC/TNCAGexGnJXT4BVQgXxjjX6GKtXd+XwU1LVgIwiBuosJznfP5YWh1MUH
-        V90pk7iC3QX+5sN+xLoWRXOmbH/+raJ+caNU5lsavdt8TNh/yYWEePeUhXt1BK7snKTzrY
-        6t/qR/7rPSkjUWLQbF/oCDy8a/sKHXprnJBLjkJhhFtcue0Ghize8MXhK5Ek9w==
+        bh=UY5SIbLiQJhNf3IcwLAaYT3af81CnBCUSA3qSWP4dj0=;
+        b=EzQFCHRvraOq6euqkQn1B+tUeoQ1uw1bo4mwk9Q+vKSF8S8PO4nMGeLKZ/WNHEDZ5eJhpq
+        mjggZFTuoIKEO/OrzzxxfitzasNIFFxeDKcRyrdk7DdmUaNmMFC1unLIMtUfaK38TWwXYn
+        h2orgm5VCZyrGWnjQirGszYr8438eZQal4q/1iuBvD2zWg9nOeapYD6mAyJQRKxCWoQSAd
+        enz2/bCSy9StMuvCnU8bbCEhKsc+iX17V3lbzwiD4WPpGEDgVUswHFbLH8z54QbwfbJl42
+        iPxl/XpXV7+3L/A3q2mlzAY6VVHUHz35mnJZ8s3Ze10jfDmKSXRCDaOkhFkkdQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639516327;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        s=2020e; t=1639516798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=rcii2iHyAkR9Kah3KUc4lSx3hIDJM4dLUBLakzw4z6E=;
-        b=xZEw/zMk3g/IMoezgazY85RpvDxMaCvVQtFZs9lhvsFQB+8uOSZ8EV96YXK2x/k+Fxqmsm
-        GwjKrSqhtTykzJDg==
-From:   "tip-bot2 for Chang S. Bae" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] signal: Skip the altstack update when not needed
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211210225503.12734-1-chang.seok.bae@intel.com>
-References: <20211210225503.12734-1-chang.seok.bae@intel.com>
+        bh=UY5SIbLiQJhNf3IcwLAaYT3af81CnBCUSA3qSWP4dj0=;
+        b=lDR2zL85oMI4BdOLKEJ1Arl/dti0X9kWdevk0BKKPLGWBqf9hwgLOpBluOuP1fE4iBCR8Y
+        5fOFMFfQxW57zEAA==
+To:     Nishanth Menon <nm@ti.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>, linux-wireless@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
+In-Reply-To: <20211214205626.lrnddha6bd6d6es5@possibly>
+References: <20211210221642.869015045@linutronix.de>
+ <20211213182958.ytj4m6gsg35u77cv@detonator> <87fsqvttfv.ffs@tglx>
+ <20211214162247.ocjm7ihg5oi7uiuv@slider> <87wnk7rvnz.ffs@tglx>
+ <87tufbrudl.ffs@tglx> <87mtl3rli1.ffs@tglx>
+ <20211214205626.lrnddha6bd6d6es5@possibly>
+Date:   Tue, 14 Dec 2021 22:19:57 +0100
+Message-ID: <87h7basx36.ffs@tglx>
 MIME-Version: 1.0
-Message-ID: <163951632633.23020.9347613990471336482.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/urgent branch of tip:
+Nishanth,
 
-Commit-ID:     6c3118c32129b4197999a8928ba776bcabd0f5c4
-Gitweb:        https://git.kernel.org/tip/6c3118c32129b4197999a8928ba776bcabd0f5c4
-Author:        Chang S. Bae <chang.seok.bae@intel.com>
-AuthorDate:    Fri, 10 Dec 2021 14:55:03 -08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 14 Dec 2021 13:08:36 -08:00
+On Tue, Dec 14 2021 at 14:56, Nishanth Menon wrote:
+> On 21:15-20211214, Thomas Gleixner wrote:
+>> I think I managed to distangle this. Can you please give:
+>> 
+>>    git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v4-part-2
+>
+>
+> Umm.. I am not entirely sure what is going on.. but all kinds of weird
+> corruption seems to occur with msi-v4-part-2 that does'nt seem to be
+> present in v5.16-rc5. (I use NFS since ethernet in K3 platforms use
+> inta/intr and dma that is impacted by this series).
+>
+> I will try and rebase your patches on v5.16-rc4 to be sure as well and
+> report back later today once i get some time.
+>
+> [1] https://gist.github.com/nmenon/a66e022926c4c15313c45d44313d860c msi-v4-part-2
+> [2] https://gist.github.com/nmenon/43085664d69ad846d596e76a06ed0656  v5.16-rc5
 
-signal: Skip the altstack update when not needed
+thanks for trying. I'll have a look again with brain awake tomorrow
+morning.
 
-== Background ==
+Thanks,
 
-Support for large, "dynamic" fpstates was recently merged.  This
-included code to ensure that sigaltstacks are sufficiently sized for
-these large states.  A new lock was added to remove races between
-enabling large features and setting up sigaltstacks.
-
-== Problem ==
-
-The new lock (sigaltstack_lock()) is acquired in the sigreturn path
-before restoring the old sigaltstack.  Unfortunately, contention on the
-new lock causes a measurable signal handling performance regression [1].
-However, the common case is that no *changes* are made to the
-sigaltstack state at sigreturn.
-
-== Solution ==
-
-do_sigaltstack() acquires sigaltstack_lock() and is used for both
-sys_sigaltstack() and restoring the sigaltstack in sys_sigreturn().
-Check for changes to the sigaltstack before taking the lock.  If no
-changes were made, return before acquiring the lock.
-
-This removes lock contention from the common-case sigreturn path.
-
-[1] https://lore.kernel.org/lkml/20211207012128.GA16074@xsang-OptiPlex-9020/
-
-Fixes: 3aac3ebea08f ("x86/signal: Implement sigaltstack size validation")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20211210225503.12734-1-chang.seok.bae@intel.com
----
- kernel/signal.c |  9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/kernel/signal.c b/kernel/signal.c
-index a629b11..dfcee38 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -4185,6 +4185,15 @@ do_sigaltstack (const stack_t *ss, stack_t *oss, unsigned long sp,
- 				ss_mode != 0))
- 			return -EINVAL;
- 
-+		/*
-+		 * Return before taking any locks if no actual
-+		 * sigaltstack changes were requested.
-+		 */
-+		if (t->sas_ss_sp == (unsigned long)ss_sp &&
-+		    t->sas_ss_size == ss_size &&
-+		    t->sas_ss_flags == ss_flags)
-+			return 0;
-+
- 		sigaltstack_lock();
- 		if (ss_mode == SS_DISABLE) {
- 			ss_size = 0;
+        tglx

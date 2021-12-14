@@ -2,89 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 267F74746C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A8D4746C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 16:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235413AbhLNPqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 10:46:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S235422AbhLNPrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 10:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234610AbhLNPqj (ORCPT
+        with ESMTP id S231273AbhLNPrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 10:46:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216C6C061574;
-        Tue, 14 Dec 2021 07:46:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5EB9615A0;
-        Tue, 14 Dec 2021 15:46:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C84FC34606;
-        Tue, 14 Dec 2021 15:46:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639496798;
-        bh=lpMJyBaryDhU6pdFEk23SJlqLoV1mD69gh70IqL8reE=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=ruvvT96NLYiBGRmzeo6xh7E28uyoreQQvj/Z2GhwLnGcaUERCJuq7NdKw5qo4g/rY
-         MpRaakxm3iRBkfb04Psdeui91kK7BAgLsZd+uUtja6HVHDqv4Aan6I3e1rROmXRLMZ
-         w9g2scAyGEpu2X7NLKHdzfb4b5bwt6tLOGH4P6buaidGL/YSatjfZ5TQMKn5OGLO+X
-         ka53aY+PbWRCFuYikHRVp+CqbsRJbIVzrEzwL+zkl6wMeV0aoRj4p45+2+oPKbeVRo
-         RAPGspKzXPkIelQm5L+a7G1KEzxXxKckTHYw5CVtZ9n3lA1ABKbO6l20p4VO9CBOaj
-         37vHLyPDq5fKw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-hardening@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/17] ath11k: Use memset_startat() for clearing queue descriptors
-References: <20211213223331.135412-1-keescook@chromium.org>
-        <20211213223331.135412-9-keescook@chromium.org>
-        <87v8zriv1c.fsf@codeaurora.org>
-Date:   Tue, 14 Dec 2021 17:46:31 +0200
-In-Reply-To: <87v8zriv1c.fsf@codeaurora.org> (Kalle Valo's message of "Tue, 14
-        Dec 2021 08:02:07 +0200")
-Message-ID: <877dc7i3zc.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Tue, 14 Dec 2021 10:47:22 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7770C061574;
+        Tue, 14 Dec 2021 07:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JdGM5GreK4d7P/yIjP2xXXomBloxaPX0WunYOhiASqQ=; b=1t0q1phicf74iJb3TdVamaNu/E
+        ALQjjbsbHzat42qdfFdXeZ8/krNQ0BKEUCaYu1OJOLwp7OA9GTUdELbLXQSQ/jJtjsl4X2RR8a+y5
+        scFmoWCOdmhR8c68Q8SUn2SBN6bXa6zXbV6I/PGDnHRSsTIbd0KO4A37z0jlaZfULSAgQvfJ7aRRD
+        mpBF/gREdBnS/qwnTfSZ0qxlgIekcml5LTnuQuH78MbLXzbqkCT7D4ptACW5q7e9kTn45M7zeqX0C
+        yJLpJeTMnvoOWHbgvH3SwhQXVgmbwBtLr1jL+LKCmigz6pNmOkkSXLDPD5VbjK+7VhO+sl4RYZPxW
+        VDpScrgA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxA1R-00Ek1e-8E; Tue, 14 Dec 2021 15:47:21 +0000
+Date:   Tue, 14 Dec 2021 07:47:21 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, djwong@kernel.org,
+        dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
+        jane.chu@oracle.com
+Subject: Re: [PATCH v8 6/9] mm: Introduce mf_dax_kill_procs() for fsdax case
+Message-ID: <Ybi8icn3W7vOEQV+@infradead.org>
+References: <20211202084856.1285285-1-ruansy.fnst@fujitsu.com>
+ <20211202084856.1285285-7-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202084856.1285285-7-ruansy.fnst@fujitsu.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kalle Valo <kvalo@kernel.org> writes:
+On Thu, Dec 02, 2021 at 04:48:53PM +0800, Shiyang Ruan wrote:
+> @@ -254,6 +254,15 @@ static inline bool dax_mapping(struct address_space *mapping)
+>  {
+>  	return mapping->host && IS_DAX(mapping->host);
+>  }
+> +static inline unsigned long pgoff_address(pgoff_t pgoff,
+> +		struct vm_area_struct *vma)
 
-> Kees Cook <keescook@chromium.org> writes:
->
->> In preparation for FORTIFY_SOURCE performing compile-time and run-time
->> field bounds checking for memset(), avoid intentionally writing across
->> neighboring fields.
->>
->> Use memset_startat() so memset() doesn't get confused about writing
->> beyond the destination member that is intended to be the starting point
->> of zeroing through the end of the struct. Additionally split up a later
->> field-spanning memset() so that memset() can reason about the size.
->>
->> Cc: Kalle Valo <kvalo@codeaurora.org>
->> Cc: "David S. Miller" <davem@davemloft.net>
->> Cc: Jakub Kicinski <kuba@kernel.org>
->> Cc: ath11k@lists.infradead.org
->> Cc: linux-wireless@vger.kernel.org
->> Cc: netdev@vger.kernel.org
->> Signed-off-by: Kees Cook <keescook@chromium.org>
->
-> What's the plan for this patch? I would like to take this via my ath
-> tree to avoid conflicts.
+Empty lines between functions please.
 
-Actually this has been already applied:
+Also this name is a bit generic for something in dax.h, but then again
+it does not seem to be DAX-specific, so it might want to move into
+a generic MM header with a proper name and kerneldoc comment.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?h=ath-next&id=d5549e9a6b86
+I think a calling conventions that puts the vma before the pgoff would
+seem a little more logical as well.
 
-Why are you submitting the same patch twice?
+Last but not least such a move should be in a separate patch.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+> +extern int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+> +			     unsigned long count, int mf_flags);
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+No need for the extern here.
+
+> -static unsigned long dev_pagemap_mapping_shift(struct page *page,
+> +static unsigned long dev_pagemap_mapping_shift(unsigned long address,
+>  		struct vm_area_struct *vma)
+
+Passing the vma first would seem more logical again.
+
+> +	if (is_zone_device_page(p)) {
+> +		/*
+> +		 * Since page->mapping is no more used for fsdax, we should
+> +		 * calculate the address in a fsdax way.
+> +		 */
+
+		/*
+		 * Since page->mapping is not used for fsdax, we need
+		 * calculate the address based on the vma.
+		 */
+
+> +static void collect_procs_fsdax(struct page *page, struct address_space *mapping,
+> +		pgoff_t pgoff, struct list_head *to_kill)
+
+Overly long line here.

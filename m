@@ -2,243 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B5F474333
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C4C474338
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 14:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234269AbhLNNNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 08:13:12 -0500
-Received: from mga14.intel.com ([192.55.52.115]:22569 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231987AbhLNNNL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 08:13:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639487591; x=1671023591;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cKuC4qjaDrbTudzsGa+8AQuPQgCmf8HxmSCVf6uTmxY=;
-  b=UqNbvh9zW9oVG++WTx+ovGxbLQLp+dgEoxJW+4WJRRFEdX6gNCdDclll
-   Oq6b119p3K3rQTwi+kkFUub5QZDAGeK52QmF+S8vTiEj8FUOPf0kVx9qW
-   6VY5YiHirGpnS3Wfaqx4DigbkZTpaMVhnVkQGi91jAA+h0Nz8c79qIs9g
-   giUWaBeHQ/5x/lArRKnRA0uLXjm5BTbf5BztcuVMQRlSvAByOkRdPppYv
-   9Nl+jVCCwW15o+GQjZIt/9fmW4kbsUtWJcfm1BUJdsOaIJltLf18qxscv
-   FAlmQd5iq1P7ufdBHOQ2FMp090XFuBrhDKHRgfuJ8qIeFyKApABQRGjkm
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="239196587"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="239196587"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 05:13:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="463790490"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 14 Dec 2021 05:13:09 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mx7cC-0000L4-Lu; Tue, 14 Dec 2021 13:13:08 +0000
-Date:   Tue, 14 Dec 2021 21:12:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Peter Rosin <peda@axentia.se>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] i2c-mux-pca954x: Add regulator support
-Message-ID: <202112142101.s4i5cHhd-lkp@intel.com>
-References: <20211214095021.572799-4-patrick.rudolph@9elements.com>
+        id S234280AbhLNNOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 08:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231987AbhLNNOJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 08:14:09 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B39C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:14:08 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id u17so32345870wrt.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 05:14:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=tf7A8M8MW0cJL9m4DIttEClNLOA5QjszPUC9MV5ahVw=;
+        b=iKw0n5Kv7J4rA35x9o6XWDsMVkJlPLBJQaW4YOZVbgQJ+kpIDe7Mi9960e2NL5LfVC
+         va31/J3SGgPJRZDnOo2EQAp61lPekdYxkX2Dl0y92wAUgqeQCKLpEQeZiLur7Trm9lWL
+         q3XdFp7LyLfZbmSGkP+x0HWR4WQmpeh0JUv4cH2tmUJpXmKkwdfcsl41170FXGYrMkB/
+         xIhKjvT0C/CF4FzE3Dv8rQJGKT+bZlFpSThoqMw3ce+7jyn7h7eiyBKM/v8fFVEZsMMo
+         +JE5S/o5wDpcNUPz3pbl1nGY2LGCH10CsXMAIjoOE4jkb9cD9XZPcrVSIqRDdHcML17q
+         esQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=tf7A8M8MW0cJL9m4DIttEClNLOA5QjszPUC9MV5ahVw=;
+        b=gZCeSnsqvl3ugDEgms8CmSkSZ0wheEQfNNDG61MhhdgTFYW4v49Gk5cm6QJ9uJYCCg
+         6VibcmDRbDnJ3qLRuEW/cSvFbgQ84rX59vs1jG/lObtp2OIUw2j8fYzzr+QKrOyyL/CH
+         CV1Ct/xw8P3GdSeg6GJ8o4AJ2F/hmYC3OmbiNpKVIaAB162d7iAWG0r+Lrl9QYifHrk5
+         A7T3aS27QNIGHCjadTAFKZdAiOgJWYCuLNYkwI7FpBI9vE9m5SVzmTbodulrruOMTx59
+         AlHxvFnNh2ERxf9AR0mNTy3IEGO4X5c0UlZ0Fq/KhTCWkE8Cn/UGmzPX+KjnlojA21ED
+         3Mmg==
+X-Gm-Message-State: AOAM531by6IwM+bOTyLSwBeCmxj5kH/nex0uBFO0Tu3UgcdRYStAVlo/
+        3qAtQ5AOHxwOUJXi6Kl0PelnVyXS2kY/5gZpwn0=
+X-Google-Smtp-Source: ABdhPJxbR77bCZKBNNkhiV96xl3wY2ASUvJP9XMPGoXwPHXIj4hj0v+TDKzyecEtVfddYP0deUR00w/n2XBkvmHu1K4=
+X-Received: by 2002:a05:6000:162b:: with SMTP id v11mr5727803wrb.481.1639487647329;
+ Tue, 14 Dec 2021 05:14:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214095021.572799-4-patrick.rudolph@9elements.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Reply-To: mcb_321@aol.com
+Sender: ouedraogoh307@gmail.com
+Received: by 2002:adf:9d81:0:0:0:0:0 with HTTP; Tue, 14 Dec 2021 05:14:06
+ -0800 (PST)
+From:   Patrice Zengu <rm2568590@gmail.com>
+Date:   Tue, 14 Dec 2021 14:14:06 +0100
+X-Google-Sender-Auth: c0T1xuT3GnRwAptjupNww7QmaYw
+Message-ID: <CAJV1yA4xpJiGeLFeuZHfczAXxgYDeN885_T307q-Jip=3H6Y7A@mail.gmail.com>
+Subject: Please Work With Me
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Patrick,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on robh/for-next linux/master linus/master v5.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Patrick-Rudolph/dt-bindings-i2c-Update-PCA954x/20211214-175258
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: riscv-randconfig-r042-20211214 (https://download.01.org/0day-ci/archive/20211214/202112142101.s4i5cHhd-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/3498c52eb6aec09c78a3f07cdcb042897960f8ef
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Patrick-Rudolph/dt-bindings-i2c-Update-PCA954x/20211214-175258
-        git checkout 3498c52eb6aec09c78a3f07cdcb042897960f8ef
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/i2c/muxes/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/i2c/muxes/i2c-mux-pca954x.c:502:58: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                   dev_warn(dev, "Failed to get regulator for vcc: %d\n", ret);
-                                                                          ^~~
-   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
-           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                               ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                       ^~~~~~~~~~~
-   drivers/i2c/muxes/i2c-mux-pca954x.c:483:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+-- 
 
 
-vim +/ret +502 drivers/i2c/muxes/i2c-mux-pca954x.c
+-- 
+Dear Friend,
 
-   470	
-   471	/*
-   472	 * I2C init/probing/exit functions
-   473	 */
-   474	static int pca954x_probe(struct i2c_client *client,
-   475				 const struct i2c_device_id *id)
-   476	{
-   477		struct i2c_adapter *adap = client->adapter;
-   478		struct device *dev = &client->dev;
-   479		struct gpio_desc *gpio;
-   480		struct i2c_mux_core *muxc;
-   481		struct pca954x *data;
-   482		int num;
-   483		int ret;
-   484	
-   485		if (!i2c_check_functionality(adap, I2C_FUNC_SMBUS_BYTE))
-   486			return -ENODEV;
-   487	
-   488		muxc = i2c_mux_alloc(adap, dev, PCA954X_MAX_NCHANS, sizeof(*data), 0,
-   489				     pca954x_select_chan, pca954x_deselect_mux);
-   490		if (!muxc)
-   491			return -ENOMEM;
-   492	
-   493		data = i2c_mux_priv(muxc);
-   494	
-   495		i2c_set_clientdata(client, muxc);
-   496		data->client = client;
-   497	
-   498		data->supply = devm_regulator_get(dev, "vcc");
-   499		if (IS_ERR(data->supply)) {
-   500			if ((PTR_ERR(data->supply) == -EPROBE_DEFER))
-   501				return -EPROBE_DEFER;
- > 502			dev_warn(dev, "Failed to get regulator for vcc: %d\n", ret);
-   503		} else {
-   504			ret = regulator_enable(data->supply);
-   505			if (ret) {
-   506				dev_err(dev, "Failed to enable regulator vcc\n");
-   507				return ret;
-   508			}
-   509		}
-   510	
-   511		/* Reset the mux if a reset GPIO is specified. */
-   512		gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-   513		if (IS_ERR(gpio)) {
-   514			ret = PTR_ERR(gpio);
-   515			goto fail_cleanup;
-   516		}
-   517		if (gpio) {
-   518			udelay(1);
-   519			gpiod_set_value_cansleep(gpio, 0);
-   520			/* Give the chip some time to recover. */
-   521			udelay(1);
-   522		}
-   523	
-   524		data->chip = device_get_match_data(dev);
-   525		if (!data->chip)
-   526			data->chip = &chips[id->driver_data];
-   527	
-   528		if (data->chip->id.manufacturer_id != I2C_DEVICE_ID_NONE) {
-   529			struct i2c_device_identity id;
-   530	
-   531			ret = i2c_get_device_id(client, &id);
-   532			if (ret && ret != -EOPNOTSUPP)
-   533				goto fail_cleanup;
-   534	
-   535			if (!ret &&
-   536			    (id.manufacturer_id != data->chip->id.manufacturer_id ||
-   537			     id.part_id != data->chip->id.part_id)) {
-   538				dev_warn(dev, "unexpected device id %03x-%03x-%x\n",
-   539					 id.manufacturer_id, id.part_id,
-   540					 id.die_revision);
-   541				ret = -ENODEV;
-   542				goto fail_cleanup;
-   543			}
-   544		}
-   545	
-   546		data->idle_state = MUX_IDLE_AS_IS;
-   547		if (device_property_read_u32(dev, "idle-state", &data->idle_state)) {
-   548			if (device_property_read_bool(dev, "i2c-mux-idle-disconnect"))
-   549				data->idle_state = MUX_IDLE_DISCONNECT;
-   550		}
-   551	
-   552		/*
-   553		 * Write the mux register at addr to verify
-   554		 * that the mux is in fact present. This also
-   555		 * initializes the mux to a channel
-   556		 * or disconnected state.
-   557		 */
-   558		ret = pca954x_init(client, data);
-   559		if (ret < 0) {
-   560			dev_warn(dev, "probe failed\n");
-   561			ret = -ENODEV;
-   562			goto fail_cleanup;
-   563		}
-   564	
-   565		ret = pca954x_irq_setup(muxc);
-   566		if (ret)
-   567			goto fail_cleanup;
-   568	
-   569		/* Now create an adapter for each channel */
-   570		for (num = 0; num < data->chip->nchans; num++) {
-   571			ret = i2c_mux_add_adapter(muxc, 0, num, 0);
-   572			if (ret)
-   573				goto fail_cleanup;
-   574		}
-   575	
-   576		if (data->irq) {
-   577			ret = devm_request_threaded_irq(dev, data->client->irq,
-   578							NULL, pca954x_irq_handler,
-   579							IRQF_ONESHOT | IRQF_SHARED,
-   580							"pca954x", data);
-   581			if (ret)
-   582				goto fail_cleanup;
-   583		}
-   584	
-   585		/*
-   586		 * The attr probably isn't going to be needed in most cases,
-   587		 * so don't fail completely on error.
-   588		 */
-   589		device_create_file(dev, &dev_attr_idle_state);
-   590	
-   591		dev_info(dev, "registered %d multiplexed busses for I2C %s %s\n",
-   592			 num, data->chip->muxtype == pca954x_ismux
-   593					? "mux" : "switch", client->name);
-   594	
-   595		return 0;
-   596	
-   597	fail_cleanup:
-   598		pca954x_cleanup(muxc);
-   599		return ret;
-   600	}
-   601	
+I am Mr.Patrice Zengu ,from Burkina Faso and i am the new bank telex
+manager of our bank here in Africa.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I have the opportunity to transfer the sum of US$ 10.5Million to your
+bank account which i personally placed on an Escrow account without a
+name.
+
+I must tell you that after revision of files both old and new as the
+new telex manager ,i discovered that if these funds remains here
+without transferring it offshore,it will be lawfully recovered
+andmoved to the  Government of Burkina Faso treasury as an abandoned
+funds without any name.
+
+I want to let you know that a Burkinabe cannot stand as the depositor
+of these US dollars  since we are not allowed to operate on foreign
+currrency.I do not intend to work  and stay in Africa till the rest of
+my life.
+
+Moreso,i will not want my bank to know about these funds and if they
+happens to know probably,the funds will be moved to the Burkina Faso
+Government public treasury as an abandoned funds.
+
+I will furnish you with more details of this transfer and how it ca
+nbe perfectly and legally executed without any hitch since i am now in
+control.
+
+I am waiting to hear from you urgently to proceed.
+
+
+Yours sincerely,
+Mr.Patrice Zengu.

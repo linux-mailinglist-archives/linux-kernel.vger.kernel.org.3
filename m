@@ -2,105 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 644E2474A5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14759474A68
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 19:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbhLNSEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 13:04:54 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:43266 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236841AbhLNSEw (ORCPT
+        id S236865AbhLNSG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 13:06:59 -0500
+Received: from mail-oo1-f42.google.com ([209.85.161.42]:38754 "EHLO
+        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230037AbhLNSG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 13:04:52 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639505091;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mr4L/VgYICxxzlwNt3+eGl5F3lIZOANlf30RgEVCqXI=;
-        b=B/H4e8O1QMVsEYGo20SJFsTlvuHpkfVFx+nREjxCIFqYx9Cr1tHCUz5dnQjxJW1B0eZAUg
-        WZtJzGonHGgzle/rMf+Nf6djyIA70I1FSxN+S6uwooa3og39/Sjen89p5mhXZXu67Bv+wf
-        68lqT4XIJUQaAg6Vkm0T7R+L5dTRk2tAFHdQPLD3Ssfrpu71W9qQ3ldeQI4AUmDJcrH5Zk
-        Tb/4cFfWDuiXEhjZ849la25YPzcGo0K5FvSOy0DvMQCPeO3Cl7wCe/lS586unbNFVtabmo
-        WcvJxxnVBkfVaDpPCvpkWiySvkl2AngcxfScTGeWPWZP9NwYq3wkI66YXkpkXA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639505091;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mr4L/VgYICxxzlwNt3+eGl5F3lIZOANlf30RgEVCqXI=;
-        b=JnhN6AN2ym4HgrrSIImSsJ3Fh4A9cBsxGITvSWeip/HV+imjPJfZ9sBO4xSgzxytrCpB/f
-        C35558vgrMtWaADg==
-To:     "Wang, Wei W" <wei.w.wang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Juan Quintela <quintela@redhat.com>
-Cc:     Jing Liu <jing2.liu@linux.intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Sean Christoperson <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Subject: RE: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
-In-Reply-To: <b3ac7ba45c984cf39783e33e0c25274d@intel.com>
-References: <20211214022825.563892248@linutronix.de>
- <20211214024948.048572883@linutronix.de>
- <854480525e7f4f3baeba09ec6a864b80@intel.com> <87zgp3ry8i.ffs@tglx>
- <b3ac7ba45c984cf39783e33e0c25274d@intel.com>
-Date:   Tue, 14 Dec 2021 19:04:50 +0100
-Message-ID: <87r1afrrjx.ffs@tglx>
+        Tue, 14 Dec 2021 13:06:58 -0500
+Received: by mail-oo1-f42.google.com with SMTP id w15-20020a4a9d0f000000b002c5cfa80e84so5149742ooj.5;
+        Tue, 14 Dec 2021 10:06:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MiD7xUpDcRNWoT41V1AHd27dlViEpQzGo4jjYpcuCTg=;
+        b=jyBeGkgacTlVNuwDC7pXwPND3FEo4/QbjuSPC5mkJp0+peyBE4RfLtBl74ukcAl9Hn
+         QrkODPtGMujyBQnjvGuo97OPxgJhIv+MBdIEdpoMIZT40K+BYdhhu1fQDYpKh1N0SErg
+         co5Pf9JFfWGBL/j68oskLyG8sxvLH3Wfv4sBLw8ZuOjCobsIvh6gUWL3hLuUPbv4Kb8d
+         PSqduNrOlQT4UKbx2bFkWNd0TBdQkK+Ng3rK+FqHvk5/ih8fp51U270Ku6KR6kEbGnRv
+         CajTNQ97AVc5xwfYWl1xzfdxF6351rrAWyMspcU1arQ1MtCuqvTPeNu+/L80QLB7aTiK
+         /fpA==
+X-Gm-Message-State: AOAM532Sfhvqfut9CYGoLUXp+V5zSFqZ+kAoJeaqGXvXurOXUJKEsN71
+        VZjexkjrkz55B2amUKVdlQ==
+X-Google-Smtp-Source: ABdhPJz7SI7Vj8m407kJe3fzvWkVvhKt/vVWfx8NKW5bPAlBLuytvepeIuN0sSHFQQZQViKILkdQ0Q==
+X-Received: by 2002:a4a:c890:: with SMTP id t16mr4437296ooq.95.1639505217170;
+        Tue, 14 Dec 2021 10:06:57 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id d6sm102008otb.4.2021.12.14.10.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 10:06:56 -0800 (PST)
+Received: (nullmailer pid 3651445 invoked by uid 1000);
+        Tue, 14 Dec 2021 18:06:55 -0000
+Date:   Tue, 14 Dec 2021 12:06:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v3 07/15] dt-bindings: interrupt-controller: Convert
+ BCM7120 L2 to YAML
+Message-ID: <YbjdP8REzyf7oSQw@robh.at.kernel.org>
+References: <20211208003727.3596577-1-f.fainelli@gmail.com>
+ <20211208003727.3596577-8-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208003727.3596577-8-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wei,
+On Tue, Dec 07, 2021 at 04:37:18PM -0800, Florian Fainelli wrote:
+> Convert the Broadcom BCM7120 Level 2 interrupt controller Device Tree
+> binding to YAML to help with validation.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../brcm,bcm7120-l2-intc.txt                  |  88 -------------
+>  .../brcm,bcm7120-l2-intc.yaml                 | 123 ++++++++++++++++++
+>  2 files changed, 123 insertions(+), 88 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.txt
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.txt
+> deleted file mode 100644
+> index addd86b6ca2f..000000000000
+> --- a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.txt
+> +++ /dev/null
+> @@ -1,88 +0,0 @@
+> -Broadcom BCM7120-style Level 2 interrupt controller
+> -
+> -This interrupt controller hardware is a second level interrupt controller that
+> -is hooked to a parent interrupt controller: e.g: ARM GIC for ARM-based
+> -platforms. It can be found on BCM7xxx products starting with BCM7120.
+> -
+> -Such an interrupt controller has the following hardware design:
+> -
+> -- outputs multiple interrupts signals towards its interrupt controller parent
+> -
+> -- controls how some of the interrupts will be flowing, whether they will
+> -  directly output an interrupt signal towards the interrupt controller parent,
+> -  or if they will output an interrupt signal at this 2nd level interrupt
+> -  controller, in particular for UARTs
+> -
+> -- has one 32-bit enable word and one 32-bit status word
+> -
+> -- no atomic set/clear operations
+> -
+> -- not all bits within the interrupt controller actually map to an interrupt
+> -
+> -The typical hardware layout for this controller is represented below:
+> -
+> -2nd level interrupt line		Outputs for the parent controller (e.g: ARM GIC)
+> -
+> -0 -----[ MUX ] ------------|==========> GIC interrupt 75
+> -          \-----------\
+> -                       |
+> -1 -----[ MUX ] --------)---|==========> GIC interrupt 76
+> -          \------------|
+> -                       |
+> -2 -----[ MUX ] --------)---|==========> GIC interrupt 77
+> -          \------------|
+> -                       |
+> -3 ---------------------|
+> -4 ---------------------|
+> -5 ---------------------|
+> -7 ---------------------|---|===========> GIC interrupt 66
+> -9 ---------------------|
+> -10 --------------------|
+> -11 --------------------/
+> -
+> -6 ------------------------\
+> -                           |===========> GIC interrupt 64
+> -8 ------------------------/
+> -
+> -12 ........................ X
+> -13 ........................ X 		(not connected)
+> -..
+> -31 ........................ X
+> -
+> -Required properties:
+> -
+> -- compatible: should be "brcm,bcm7120-l2-intc"
+> -- reg: specifies the base physical address and size of the registers
+> -- interrupt-controller: identifies the node as an interrupt controller
+> -- #interrupt-cells: specifies the number of cells needed to encode an interrupt
+> -  source, should be 1.
+> -- interrupts: specifies the interrupt line(s) in the interrupt-parent controller
+> -  node, valid values depend on the type of parent interrupt controller
+> -- brcm,int-map-mask: 32-bits bit mask describing how many and which interrupts
+> -  are wired to this 2nd level interrupt controller, and how they match their
+> -  respective interrupt parents. Should match exactly the number of interrupts
+> -  specified in the 'interrupts' property.
+> -
+> -Optional properties:
+> -
+> -- brcm,irq-can-wake: if present, this means the L2 controller can be used as a
+> -  wakeup source for system suspend/resume.
+> -
+> -- brcm,int-fwd-mask: if present, a bit mask to configure the interrupts which
+> -  have a mux gate, typically UARTs. Setting these bits will make their
+> -  respective interrupt outputs bypass this 2nd level interrupt controller
+> -  completely; it is completely transparent for the interrupt controller
+> -  parent. This should have one 32-bit word per enable/status pair.
+> -
+> -Example:
+> -
+> -irq0_intc: interrupt-controller@f0406800 {
+> -	compatible = "brcm,bcm7120-l2-intc";
+> -	interrupt-parent = <&intc>;
+> -	#interrupt-cells = <1>;
+> -	reg = <0xf0406800 0x8>;
+> -	interrupt-controller;
+> -	interrupts = <0x0 0x42 0x0>, <0x0 0x40 0x0>;
+> -	brcm,int-map-mask = <0xeb8>, <0x140>;
+> -	brcm,int-fwd-mask = <0x7>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml
+> new file mode 100644
+> index 000000000000..e0c6dce40d13
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml
+> @@ -0,0 +1,123 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/brcm,bcm7120-l2-intc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom BCM7120-style Level 2 interrupt controller
+> +
+> +maintainers:
+> +  - Florian Fainelli <f.fainelli@gmail.com>
+> +
+> +description: >
+> +  This interrupt controller hardware is a second level interrupt controller that
+> +  is hooked to a parent interrupt controller: e.g: ARM GIC for ARM-based
+> +  platforms. It can be found on BCM7xxx products starting with BCM7120.
+> +
+> +  Such an interrupt controller has the following hardware design:
+> +
+> +  - outputs multiple interrupts signals towards its interrupt controller parent
+> +
+> +  - controls how some of the interrupts will be flowing, whether they will
+> +    directly output an interrupt signal towards the interrupt controller parent,
+> +    or if they will output an interrupt signal at this 2nd level interrupt
+> +    controller, in particular for UARTs
+> +
+> +  - has one 32-bit enable word and one 32-bit status word
+> +
+> +  - no atomic set/clear operations
+> +
+> +  - not all bits within the interrupt controller actually map to an interrupt
+> +
+> +  The typical hardware layout for this controller is represented below:
+> +
+> +  2nd level interrupt line		Outputs for the parent controller (e.g: ARM GIC)
+> +
+> +  0 -----[ MUX ] ------------|==========> GIC interrupt 75
+> +            \-----------\
+> +                         |
+> +  1 -----[ MUX ] --------)---|==========> GIC interrupt 76
+> +            \------------|
+> +                         |
+> +  2 -----[ MUX ] --------)---|==========> GIC interrupt 77
+> +            \------------|
+> +                         |
+> +  3 ---------------------|
+> +  4 ---------------------|
+> +  5 ---------------------|
+> +  7 ---------------------|---|===========> GIC interrupt 66
+> +  9 ---------------------|
+> +  10 --------------------|
+> +  11 --------------------/
+> +
+> +  6 ------------------------\
+> +                            |===========> GIC interrupt 64
+> +  8 ------------------------/
+> +
+> +  12 ........................ X
+> +  13 ........................ X 		(not connected)
 
-On Tue, Dec 14 2021 at 16:11, Wei W. Wang wrote:
-> On Tuesday, December 14, 2021 11:40 PM, Thomas Gleixner wrote:
->> On Tue, Dec 14 2021 at 15:09, Wei W. Wang wrote:
->> > On Tuesday, December 14, 2021 10:50 AM, Thomas Gleixner wrote:
->> >> + * Return: 0 on success, error code otherwise  */ int
->> >> +__fpu_update_guest_features(struct fpu_guest *guest_fpu, u64 xcr0,
->> >> +u64
->> >> +xfd) {
->> >
->> > I think there would be one issue for the "host write on restore" case.
->> > The current QEMU based host restore uses the following sequence:
->> > 1) restore xsave
->> > 2) restore xcr0
->> > 3) restore XFD MSR
->> 
->> This needs to be fixed. Ordering clearly needs to be:
->> 
->>   XFD, XCR0, XSTATE
->
-> Sorry, just to clarify that the ordering in QEMU isn't made by us for this specific XFD enabling.
-> It has been there for long time for the general restoring of all the XCRs and MSRs.
-> (if you are interested..FYI: https://github.com/qemu/qemu/blob/master/target/i386/kvm/kvm.c#L4168).
-> - kvm_put_xsave()
-> - kvm_put_xcrs()
-> - kvm_put_msrs()
->
-> We need to check with the QEMU migration maintainer (Dave and Juan CC-ed)
-> if changing that ordering would be OK.
-> (In general, I think there are no hard rules documented for this ordering)
+space followed by tab.
 
-There haven't been ordering requirements so far, but with dynamic
-feature enablement there are.
+> +  ..
+> +  31 ........................ X
+> +
+> +allOf:
+> +  - $ref: /schemas/interrupt-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: brcm,bcm7120-l2-intc
+> +
+> +  reg:
+> +    description: >
+> +      Specifies the base physical address and size of the registers
 
-I really want to avoid going to the point to deduce it from the
-xstate:xfeatures bitmap, which is just backwards and Qemu has all the
-required information already.
+That's every 'reg'. How many?
 
-Thanks,
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 1
+> +
+> +  interrupts: true
 
-        tglx
+No, how many and what are they if more than 1.
 
+> +
+> +  "brcm,int-map-mask":
 
+No need for quotes.
 
-
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description: >
+> +      32-bits bit mask describing how many and which interrupts are wired to
+> +      this 2nd level interrupt controller, and how they match their respective
+> +      interrupt parents. Should match exactly the number of interrupts
+> +      specified in the 'interrupts' property.
+> +
+> +  brcm,irq-can-wake:
+> +    type: boolean
+> +    description: >
+> +      If present, this means the L2 controller can be used as a wakeup source
+> +      for system suspend/resume.
+> +
+> +  brcm,int-fwd-mask:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: >
+> +      if present, a bit mask to configure the interrupts which have a mux gate,
+> +      typically UARTs. Setting these bits will make their respective interrupt
+> +      outputs bypass this 2nd level interrupt controller completely; it is
+> +      completely transparent for the interrupt controller parent. This should
+> +      have one 32-bit word per enable/status pair.
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupt-controller
+> +  - "#interrupt-cells"
+> +  - interrupts
+> +
+> +examples:
+> +  - |
+> +    irq0_intc: interrupt-controller@f0406800 {
+> +      compatible = "brcm,bcm7120-l2-intc";
+> +      interrupt-parent = <&intc>;
+> +      #interrupt-cells = <1>;
+> +      reg = <0xf0406800 0x8>;
+> +      interrupt-controller;
+> +      interrupts = <0x0 0x42 0x0>, <0x0 0x40 0x0>;
+> +      brcm,int-map-mask = <0xeb8>, <0x140>;
+> +      brcm,int-fwd-mask = <0x7>;
+> +    };
+> -- 
+> 2.25.1
+> 
+> 

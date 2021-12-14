@@ -2,233 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55750473D0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCB9473D11
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 07:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbhLNGPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 01:15:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50034 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230334AbhLNGPN (ORCPT
+        id S230399AbhLNGPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 01:15:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229630AbhLNGPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 01:15:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639462513;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YwugZBIsB9O3b1tEKG2yDl1lfnlqxf61JgJVJ0aWmUQ=;
-        b=Vk2++8tnyfBAP4YnUTj+Dm5WH1aP9yxSgCu5lPLv1iQisZFEJ2QU8AzLsldHM9XQfP9/9n
-        XNGMvo2VNxTwqU5KzsEsfCqp2/+vFGpmTrQXyixte8IlX9VFVihFgMwc1AR/Gkb6chkcpz
-        2RprZaKhno5bxeXV2GS95msHLpFksbE=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-VfGCTCZeNdqngVT5OUYY9g-1; Tue, 14 Dec 2021 01:15:11 -0500
-X-MC-Unique: VfGCTCZeNdqngVT5OUYY9g-1
-Received: by mail-lf1-f71.google.com with SMTP id 24-20020ac25f58000000b0041799ebf529so8519305lfz.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Dec 2021 22:15:11 -0800 (PST)
+        Tue, 14 Dec 2021 01:15:49 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3941C061574;
+        Mon, 13 Dec 2021 22:15:48 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id i63so26853723lji.3;
+        Mon, 13 Dec 2021 22:15:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=725ChSobD1VD4Ep/VU60OT9W4QyTtvRCLihRfx/XJFI=;
+        b=GmfHh5wtbAkMz0d5F80QG380DoERfkquzkQHI58BfCR6UCF/ppBX0QcILykcLGLCLR
+         bLSyfzKtL6fIji52++qq+XvXsRJErPWGut7/jVxOntewKVynrWajhoLJNr8KkIKNx/n9
+         UF5Pcg0fpFjUc0XUHuD3val8uMBCIl/jMoXVWkoYqZygHcN6wdc9WhgApBRH4Mn78tdP
+         v3jmzinXx8xdnr/9pHN4yFWYprcewMc4IefBDH5EmKOMRoZ3d2RnAAaPb9234eEeddkG
+         hs5lDo1Yl8e5E/2BD34LHsjsN/Bf0YOSqPWUHr3bFABdKJvvh6IOw5IZ4vpDCOAGa0RL
+         qZcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YwugZBIsB9O3b1tEKG2yDl1lfnlqxf61JgJVJ0aWmUQ=;
-        b=frTMef1gznfLhnNYtWecVr4E6s1W+DaUDhYwJLDC7d/Ku2ARZmvp7jWXoqAZUiyRXL
-         pKJ4BBap4MWIOI/HPs4WjqiI6i2jN2+Q18UzU27xNNoNFOx0hEJ0lTgCB58YEajoZnTJ
-         RAUJzhhaQAmCDFgjuRjHpls5KhV6tRp01RpCax5ZnPBG0mITHBTKafSRRXk+a6akOOqi
-         l6z7hXrStv8s2wbiPJz4GKhK91PrsinWGBCUb3YE5/6qwfSHtjMhZVAIXeb9ZvG5b0l7
-         NglOA9sfX0xI2Uee4Zsyskg35sQlL8JDej25Kxs1VvQz6MKjPUKNHDMA8R6MCAKkFeQk
-         3GhA==
-X-Gm-Message-State: AOAM530Ugm1mgjTPp2llzgWFBwapsaQmMvypBvNN59sI5Lnt40Ni2yHO
-        ZHfTZ6Vo6G/e7EavDgaX4BQrxSN8lLTfFWIPYFX83Jafjz79Ji9Cv0+laNKNmbicK0sEQk76Blf
-        ZrSYnHqKy3WPuu3CjKT4ZOeh2lO6pqOFXfA97o1Fy
-X-Received: by 2002:a2e:3012:: with SMTP id w18mr2978404ljw.217.1639462510183;
-        Mon, 13 Dec 2021 22:15:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwqenw88BrR2D6Qt+sGpTwBW3+xZwJrfzDxCVORbTErFH0MhwcnexNkpqOBvtu367RvJ0qUvX4Rn9Ui+iPKu5s=
-X-Received: by 2002:a2e:3012:: with SMTP id w18mr2978375ljw.217.1639462509908;
- Mon, 13 Dec 2021 22:15:09 -0800 (PST)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=725ChSobD1VD4Ep/VU60OT9W4QyTtvRCLihRfx/XJFI=;
+        b=TWGlEDDH1FIKQIT6+YSz8fm1J+0Saf0x9ZY5IU9bo/zopWv1cdR8zwsITfGd1Dvgph
+         +Knu1QRfYWes5nYUSEKcySHo9nE7PFI0Wjh/HWm2ckLoQ2rfxZbvt3xWTnPX2igLdCtI
+         xZLAZMfPg6C2vx3E3m7MtsVae9N4vHYN03qnklYX6oa72d1Y43Co6Xo5SodxmCglwaSk
+         sZ93j3yXfYnFFYU3t5YbWnLaxfp9qexFCAu6Z6kTS+HdvLLbsk3TU7N0U4UJJ0plUMK3
+         S6vN5cbCKYUSBiWxYF+QEHaL0ayioyzvFutDRa10zyXB043ZZR+tK4IzHgUmujFbi3Nk
+         Xb8g==
+X-Gm-Message-State: AOAM533uFF0kY5NWYNV/+0kI20hqP+3HuIP/vXf/NixjkSeFB7691TC9
+        xKcM1fjgRW9VkDepk6QO7Nzi2wHA+jo=
+X-Google-Smtp-Source: ABdhPJyRbqZooRhCMtT9QRyO1YM7LLBWlPUm2wZXVvfxkW5q+x6LMK0P9+LRK86sL3exSHwBjzHi4w==
+X-Received: by 2002:a05:651c:1791:: with SMTP id bn17mr3075419ljb.525.1639462546955;
+        Mon, 13 Dec 2021 22:15:46 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id v2sm1723169ljv.6.2021.12.13.22.15.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 22:15:46 -0800 (PST)
+Subject: Re: [PATCH 1/3] ALSA: hda/tegra: Skip reset on BPMP devices
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Sameer Pujar <spujar@nvidia.com>, tiwai@suse.com,
+        broonie@kernel.org, lgirdwood@gmail.com, thierry.reding@gmail.com,
+        perex@perex.cz
+Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Mohan Kumar <mkumard@nvidia.com>, robh+dt@kernel.org
+References: <1638858770-22594-1-git-send-email-spujar@nvidia.com>
+ <1638858770-22594-2-git-send-email-spujar@nvidia.com>
+ <7742adae-cdbe-a9ea-2cef-f63363298d73@gmail.com>
+ <8fd704d9-43ce-e34a-a3c0-b48381ef0cd8@nvidia.com>
+ <56bb43b6-8d72-b1de-4402-a2cb31707bd9@gmail.com>
+ <4855e9c4-e4c2-528b-c9ad-2be7209dc62a@nvidia.com>
+ <5d441571-c1c2-5433-729f-86d6396c2853@gmail.com>
+ <f32cde65-63dc-67f8-ded8-b58ea5e89f4e@nvidia.com>
+ <95cc7efa-251c-690b-9afa-53ee9e052c34@gmail.com>
+ <148fba18-5d14-d342-0eb9-4ff224cc58ad@nvidia.com>
+ <3b0de739-7866-3886-be9c-a853c746f8b7@gmail.com>
+ <73d04377-9898-930b-09db-bb6c4b3eb90a@nvidia.com>
+ <ad388f5e-6f60-cf78-8510-87aec8524e33@gmail.com>
+ <50bf5a83-051e-8c12-6502-aabd8edd0a72@nvidia.com>
+ <7230ad0b-2b04-4f1b-b616-b7d98789ded0@gmail.com>
+Message-ID: <93276b40-9ff8-f401-2624-04c0ff02c755@gmail.com>
+Date:   Tue, 14 Dec 2021 09:15:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211213045012.12757-1-mengensun@tencent.com> <CACGkMEtLso8QjvmjTQ=S_bbGxu11O_scRa8GT7z6MXfJbfzfRg@mail.gmail.com>
- <CACGkMEukGbDcxJe3nGFkeBNenniJdMkFMRnrN4OOfDsCb7ZPuA@mail.gmail.com> <CA+K-gpUBSB0_gX2r7Xi7b6SxrbQApNpneQu_bLAR+e1ALOUwYw@mail.gmail.com>
-In-Reply-To: <CA+K-gpUBSB0_gX2r7Xi7b6SxrbQApNpneQu_bLAR+e1ALOUwYw@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 14 Dec 2021 14:14:59 +0800
-Message-ID: <CACGkMEtMcU6f+AD6+_cKuDpLTFgaBJura39j16PnKqGWB2fULA@mail.gmail.com>
-Subject: Re: [PATCH] virtio-net: make copy len check in xdp_linearize_page
-To:     =?UTF-8?B?5a2Z6JKZ5oGp?= <mengensun8801@gmail.com>
-Cc:     davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        mengensun <mengensun@tencent.com>,
-        MengLong Dong <imagedong@tencent.com>,
-        ZhengXiong Jiang <mungerjiang@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <7230ad0b-2b04-4f1b-b616-b7d98789ded0@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 11:48 AM =E5=AD=99=E8=92=99=E6=81=A9 <mengensun8801=
-@gmail.com> wrote:
->
-> Jason Wang <jasowang@redhat.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=8814=E6=
-=97=A5=E5=91=A8=E4=BA=8C 11:13=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > On Mon, Dec 13, 2021 at 5:14 PM =E5=AD=99=E8=92=99=E6=81=A9 <mengensun8=
-801@gmail.com> wrote:
-> > >
-> > > Jason Wang <jasowang@redhat.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=8813=
-=E6=97=A5=E5=91=A8=E4=B8=80 15:49=E5=86=99=E9=81=93=EF=BC=9A
-> > > >
-> > > > On Mon, Dec 13, 2021 at 12:50 PM <mengensun8801@gmail.com> wrote:
-> > > > >
-> > > > > From: mengensun <mengensun@tencent.com>
-> > > > >
-> > > > > xdp_linearize_page asume ring elem size is smaller then page size
-> > > > > when copy the first ring elem, but, there may be a elem size bigg=
-er
-> > > > > then page size.
-> > > > >
-> > > > > add_recvbuf_mergeable may add a hole to ring elem, the hole size =
-is
-> > > > > not sure, according EWMA.
-> > > >
-> > > > The logic is to try to avoid dropping packets in this case, so I
-> > > > wonder if it's better to "fix" the add_recvbuf_mergeable().
-> > >
-> >
-> > Adding lists back.
-> >
-> > > turn to XDP generic is so difficulty for me, here can "fix" the
-> > > add_recvbuf_mergeable link follow:
-> > > --- a/drivers/net/virtio_net.c
-> > > +++ b/drivers/net/virtio_net.c
-> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > index 36a4b7c195d5..06ce8bb10b47 100644
-> > > --- a/drivers/net/virtio_net.c
-> > > +++ b/drivers/net/virtio_net.c
-> > > @@ -1315,6 +1315,7 @@ static int add_recvbuf_mergeable(struct virtnet=
-_info *vi,
-> > >                 alloc_frag->offset +=3D hole;
-> > >         }
-> > > +       len =3D min(len, PAGE_SIZE - room);
-> > >         sg_init_one(rq->sg, buf, len);
-> > >         ctx =3D mergeable_len_to_ctx(len, headroom);
-> >
-> > Then the truesize here is wrong.
-> many thanks!! i have  known i'm wrong immediately after click the
-> "send" botton , now, this problem seem not only about the *hole* but
-> the  EWMA, EWMA will give buff len bewteen min_buf_len and PAGE_SIZE,
-> while swith from no-attach-xdp to attach xdp, there may be some buff
-> already in ring and filled before xdp attach. xdp_linearize_page
-> assume buf size is PAGE_SIZE - VIRTIO_XDP_HEADROOM, and coped "len"
-> from the buff, while the buff may be **PAGE_SIZE**
+14.12.2021 09:09, Dmitry Osipenko пишет:
+> 14.12.2021 09:02, Sameer Pujar пишет:
+>>
+>>
+>> On 12/8/2021 5:35 PM, Dmitry Osipenko wrote:
+>>> 08.12.2021 08:22, Sameer Pujar пишет:
+>>>>
+>>>> On 12/7/2021 11:32 PM, Dmitry Osipenko wrote
+>>>>> If display is already active, then shared power domain is already
+>>>>> ungated.
+>>>> If display is already active, then shared power domain is already
+>>>> ungated. HDA reset is already applied during this ungate. In other
+>>>> words, HDA would be reset as well when display ungates power-domain.
+>>> Now, if you'll reload the HDA driver module while display is active,
+>>> you'll get a different reset behaviour. HDA hardware will be reset on
+>>> pre-T186, on T186+ it won't be reset.
+>>
+>> How the reset behavior is different? At this point when HDA driver is
+>> loaded the HW is already reset during display ungate. What matters,
+>> during HDA driver load, is whether the HW is in predictable state or not
+>> and the answer is yes. So I am not sure what problem you are referring
+>> to. Question is, if BPMP already ensures this, then why driver needs to
+>> take care of it.
+> 
+> 1. Enable display
+> 2. Play audio over HDMI
+> 3. HDA hardware now is in dirty state
+> 4. Reload HDA driver
+> 5. In your case HDA is kept in dirty state, in my no
+> 
 
-So the issue I see is that though add_recvbuf_mergeable() tries to
-make the buffer size is PAGE_SIZE, XDP might requires more on the
-header which makes a single page is not sufficient.
+The power domain is shared by display and HDA, is this correct?
 
->
-> because we have no idear when the user attach xdp prog, so, i have no
-> idear except make all the buff have a "header hole" len of
-> VIRTIO_XDP_HEADROOM(128), but it seem so expensive for no-xdp-attach
-> virtio eth to aways leave 128 byte not used at all.
-
-That's an requirement for XDP header adjustment so far.
-
->
-> this problem is found by review code, in really test, it seemed not so
-> may big frame. so here we can just "fix" the  xdp_linearize_page, make
-> it trying best to not drop frames for now?
-
-I think you can reproduce the issue by keeping sending large frames to
-guest and try to attach XDP in the middle.
-
->
-> btw,  it seem no way to fix this thoroughly, except we drained all the
-> buff in the ring, and flush it all to "xdp buff" when attaching xdp
-> prog.
->
-> is that some mistake i have makeed again? #^_^
-
-I see two ways to solve this:
-
-1) reverse more room (but not headerroom) to make sure PAGE_SIZE can
-work in the case of linearizing
-2) switch to use XDP genreic
-
-2) looks much more easier, you may refer tun_xdp_one() to see how it
-works, it's as simple as call do_xdp_generic()
-
-Thanks
-
->
-> >
-> >
-> > >         err =3D virtqueue_add_inbuf_ctx(rq->vq, rq->sg, 1, buf, ctx, =
-gfp);
-> > >
-> > > it seems a rule that, length of elem giving to vring is away smaller
-> > > or equall then PAGE_SIZE
-> >
-> > It aims to be consistent to what EWMA tries to do:
-> >
-> >         len =3D hdr_len + clamp_t(unsigned int, ewma_pkt_len_read(avg_p=
-kt_len),
-> >                         rq->min_buf_len, PAGE_SIZE - hdr_len);
-> >
-> > Thanks
-> >
-> > >
-> > > >
-> > > > Or another idea is to switch to use XDP generic here where we can u=
-se
-> > > > skb_linearize() which should be more robust and we can drop the
-> > > > xdp_linearize_page() logic completely.
-> > > >
-> > > > Thanks
-> > > >
-> > > > >
-> > > > > so, fix it by check copy len,if checked failed, just dropped the
-> > > > > whole frame, not make the memory dirty after the page.
-> > > > >
-> > > > > Signed-off-by: mengensun <mengensun@tencent.com>
-> > > > > Reviewed-by: MengLong Dong <imagedong@tencent.com>
-> > > > > Reviewed-by: ZhengXiong Jiang <mungerjiang@tencent.com>
-> > > > > ---
-> > > > >  drivers/net/virtio_net.c | 6 +++++-
-> > > > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > index 36a4b7c195d5..844bdbd67ff7 100644
-> > > > > --- a/drivers/net/virtio_net.c
-> > > > > +++ b/drivers/net/virtio_net.c
-> > > > > @@ -662,8 +662,12 @@ static struct page *xdp_linearize_page(struc=
-t receive_queue *rq,
-> > > > >                                        int page_off,
-> > > > >                                        unsigned int *len)
-> > > > >  {
-> > > > > -       struct page *page =3D alloc_page(GFP_ATOMIC);
-> > > > > +       struct page *page;
-> > > > >
-> > > > > +       if (*len > PAGE_SIZE - page_off)
-> > > > > +               return NULL;
-> > > > > +
-> > > > > +       page =3D alloc_page(GFP_ATOMIC);
-> > > > >         if (!page)
-> > > > >                 return NULL;
-> > > > >
-> > > > > --
-> > > > > 2.27.0
-> > > > >
-> > > >
-> > >
-> >
->
-
+If yes, then the shared power domain will be turned off only when all
+its clients are turned off, i.e. both display and HDA simultaneously.

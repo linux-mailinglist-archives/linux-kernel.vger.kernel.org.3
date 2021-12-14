@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D902473AF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E6B473AF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Dec 2021 03:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244867AbhLNCvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Dec 2021 21:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S244879AbhLNCvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Dec 2021 21:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244830AbhLNCub (ORCPT
+        with ESMTP id S244875AbhLNCvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Dec 2021 21:50:31 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66E6C061748;
-        Mon, 13 Dec 2021 18:50:30 -0800 (PST)
-Message-ID: <20211214024948.108057289@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639450229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=SlagvVmM7GKanabo7JJfDiodZn7MWyey8x+4xe/zd+0=;
-        b=MO4eLPYNokixAlehe7eQ6maGtFhDe080A7yLHONsn8oVH1HRKMc4neYD9qqXpoDqTZHvvs
-        bPEWIzzd7GItB7r8PdSbG4KQSJrB11Hh1oX+yKJ9VtlT68HXV+NJwaZPDg4S1g9YcsErlC
-        QE7loTmQ2atocO0iDSQ39d4YspxoH3sI/5nAvVBx27smH/1nckcYayJeJxb9M1jXi76jBY
-        sNTICU8P/EhqU8Xq0YeMbyxTxkoJd4OiJnW6+OwV8MqFzbwiYS3OH3qPtALzcETW7Hm8Hg
-        y+1F/QUYEEFNq18ri/5zM7MGkdinwCMpPJYQPesrJyKeeFPshVnyK40qobrlCQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639450229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=SlagvVmM7GKanabo7JJfDiodZn7MWyey8x+4xe/zd+0=;
-        b=3rU9YOXzfVQzXn+ovm3vW8gHT77DsWjsTeXzdobpi9c/NEEUUSBxGQLUbzbjQUR1cpOZTT
-        J6X+svn+ePj0JTDw==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Jing Liu <jing2.liu@linux.intel.com>,
-        Yang Zhong <yang.zhong@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, x86@kernel.org,
-        kvm@vger.kernel.org, Sean Christoperson <seanjc@google.com>,
-        Jin Nakajima <jun.nakajima@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>
-Subject: [patch 6/6] x86/fpu: Provide kvm_sync_guest_vmexit_xfd_state()
-References: <20211214022825.563892248@linutronix.de>
+        Mon, 13 Dec 2021 21:51:05 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF50C061751;
+        Mon, 13 Dec 2021 18:51:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=JQteDTasuhERiQdoO8h3MwzFI2xTS+/dvlyONH5weSI=; b=kvQPmmwpeorODloDO5Gg4cc0/E
+        aKAj5d1E3f69cYwjZJPzHkDA5CQ/bAUtuRSmnWtmBk0ffwb7xKm5sQ/4dlbUUTXN4XkxyAYRrCHxH
+        RtbxI312qTc2c0S+Pn/Z+NXqQTY3mi0G2XlJNwqG6mbU97ghbdUMhv2z2G5/a25USoaX7Fg4qphEC
+        yXdtqUP1RY6SvFi/9dfKWM11wfKLsNgFiSAL2ysCmI0NaFxhqOeSajUUB6uRT19d9Zjb3wonBTld9
+        iuEgiNwSWe6/yorJtBw+Go0iBKZnwGXamTRKShZX60TMlOgxKw97UVxxrXYsGAYw8wrQjxVMCslyd
+        YEEYGA9Q==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mwxu4-001ElU-ME; Tue, 14 Dec 2021 02:50:57 +0000
+Message-ID: <623bad19-49e5-ee34-910c-f3caf39319f5@infradead.org>
+Date:   Mon, 13 Dec 2021 18:50:51 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 5/3] docs: sphinx/kfigure.py: Delegate inkscape msgs to
+ kernellog
+Content-Language: en-US
+To:     Akira Yokosawa <akiyks@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <de8def13-efbc-1d98-acb5-5cc1f6902e4b@gmail.com>
+ <ea41dd96-124a-9132-7659-1ae04d82188b@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ea41dd96-124a-9132-7659-1ae04d82188b@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 14 Dec 2021 03:50:28 +0100 (CET)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM can disable the write emulation for the XFD MSR when the vCPU's fpstate
-is already correctly sized to reduce the overhead.
 
-When write emulation is disabled the XFD MSR state after a VMEXIT is
-unknown and therefore not in sync with the software states in fpstate and
-the per CPU XFD cache.
 
-Provide kvm_sync_guest_vmexit_xfd_state() which has to be invoked after a
-VMEXIT before enabling interrupts when write emulation is disabled for the
-XFD MSR.
+On 12/13/21 18:34, Akira Yokosawa wrote:
+> Instead of redirecting to /dev/null, capture inkscape messages and
+> output them via kernelloc.verbose or kerneldoc.warn depending on the
 
-It could be invoked unconditionally even when write emulation is enabled
-for the price of a pointless MSR read.
+                  kernellog.verbose or kernellog.warn
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/include/asm/fpu/api.h |    6 ++++++
- arch/x86/kernel/fpu/core.c     |   26 ++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
+> exit code.
+> 
+> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> ---
+> Hi Mauro,
+> 
+> On second thought, I took the path of delegating inkscape warnings
+> to kernellog.
+> 
+> Now you can see those warning messages by "SPHINXOPTS=-v".
+> 
+> Does this approach sound reasonable to you?
+> 
+>         Thanks, Akira
+> --
+>  Documentation/sphinx/kfigure.py | 28 +++++++++++++---------------
+>  1 file changed, 13 insertions(+), 15 deletions(-)
+> 
+> diff --git a/Documentation/sphinx/kfigure.py b/Documentation/sphinx/kfigure.py
+> index dbe75ee8ae61..a275ee0fec02 100644
+> --- a/Documentation/sphinx/kfigure.py
+> +++ b/Documentation/sphinx/kfigure.py
+> @@ -126,9 +126,6 @@ rsvg_convert_cmd = None
+>  inkscape_cmd = None
+>  # Inkscape prior to 1.0 uses different command options
+>  inkscape_ver_one = False
+> -# Show warning from inkscape(1), enabled by setting env var
+> -# SPHINX_SHOW_INKSCAPE_WARN
+> -inkscape_show_warn = False
+>  
+>  
+>  def setup(app):
+> @@ -178,7 +175,7 @@ def setupTools(app):
+>      This function is called once, when the builder is initiated.
+>      """
+>      global dot_cmd, dot_Tpdf, convert_cmd, rsvg_convert_cmd   # pylint: disable=W0603
+> -    global inkscape_cmd, inkscape_ver_one, inkscape_show_warn  # pylint: disable=W0603
+> +    global inkscape_cmd, inkscape_ver_one  # pylint: disable=W0603
+>      kernellog.verbose(app, "kfigure: check installed tools ...")
+>  
+>      dot_cmd = which('dot')
+> @@ -211,12 +208,6 @@ def setupTools(app):
+>          rsvg_convert_cmd = None
+>          dot_Tpdf = False
+>  
+> -        try:
+> -            if os.environ['SPHINX_SHOW_INKSCAPE_WARN']:
+> -                inkscape_show_warn = True
+> -        except KeyError:
+> -            pass
+> -
+>      else:
+>          if convert_cmd:
+>              kernellog.verbose(app, "use convert(1) from: " + convert_cmd)
+> @@ -384,14 +375,21 @@ def svg2pdf(app, svg_fname, pdf_fname):
+>          else:
+>              cmd = [inkscape_cmd, '-z', '--export-pdf=%s' % pdf_fname, svg_fname]
+>  
+> -    # use stdout and stderr from parent
+> -    if inkscape_show_warn:
+> -        exit_code = subprocess.call(cmd)
+> -    else:
+> -        exit_code = subprocess.call(cmd, stderr=subprocess.DEVNULL)
+> +    try:
+> +        warning_msg = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+> +        exit_code = 0
+> +    except subprocess.CalledProcessError as err:
+> +        warning_msg = err.output
+> +        exit_code = 1
+> +        pass
+>  
+>      if exit_code != 0:
+>          kernellog.warn(app, "Error #%d when calling: %s" % (exit_code, " ".join(cmd)))
+> +        kernellog.warn(app, "Warning msg from inkscape: %s" % str(warning_msg, 'utf-8'))
+> +    if warning_msg:
+> +        kernellog.verbose(app, "Warning msg from inkscape (likely harmless):\n%s"
+> +                          % str(warning_msg, 'utf-8'))
+> +
+>      return bool(exit_code == 0)
+>  
+>  def svg2pdf_by_rsvg(app, svg_fname, pdf_fname):
+> 
 
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -194,6 +194,12 @@ static inline int fpu_update_guest_xfd(s
- 	return __fpu_update_guest_features(guest_fpu, xcr0, xfd);
- }
- 
-+#ifdef CONFIG_X86_64
-+extern void fpu_sync_guest_vmexit_xfd_state(void);
-+#else
-+static inline void fpu_sync_guest_vmexit_xfd_state(void) { }
-+#endif
-+
- extern void fpu_copy_guest_fpstate_to_uabi(struct fpu_guest *gfpu, void *buf, unsigned int size, u32 pkru);
- extern int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf, u64 xcr0, u32 *vpkru);
- 
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -318,6 +318,32 @@ int __fpu_update_guest_features(struct f
- }
- EXPORT_SYMBOL_GPL(__fpu_update_guest_features);
- 
-+#ifdef CONFIG_X86_64
-+/**
-+ * fpu_sync_guest_vmexit_xfd_state - Synchronize XFD MSR and software state
-+ *
-+ * Must be invoked from KVM after a VMEXIT before enabling interrupts when
-+ * XFD write emulation is disabled. This is required because the guest can
-+ * freely modify XFD and the state at VMEXIT is not guaranteed to be the
-+ * same as the state on VMENTER. So software state has to be udpated before
-+ * any operation which depends on it can take place.
-+ *
-+ * Note: It can be invoked unconditionally even when write emulation is
-+ * enabled for the price of a then pointless MSR read.
-+ */
-+void fpu_sync_guest_vmexit_xfd_state(void)
-+{
-+	struct fpstate *fps = current->thread.fpu.fpstate;
-+
-+	lockdep_assert_irqs_disabled();
-+	if (fpu_state_size_dynamic()) {
-+		rdmsrl(MSR_IA32_XFD, fps->xfd);
-+		__this_cpu_write(xfd_state, fps->xfd);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(fpu_sync_guest_vmexit_xfd_state);
-+#endif /* CONFIG_X86_64 */
-+
- int fpu_swap_kvm_fpstate(struct fpu_guest *guest_fpu, bool enter_guest)
- {
- 	struct fpstate *guest_fps = guest_fpu->fpstate;
-
+-- 
+~Randy

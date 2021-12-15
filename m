@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C3C4764C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07FCE4764CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbhLOVrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:47:22 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:40886 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229539AbhLOVrU (ORCPT
+        id S229967AbhLOVr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229961AbhLOVrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:47:20 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BFF2cfK011435;
-        Wed, 15 Dec 2021 22:47:04 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : subject
- : date : message-id : mime-version : content-type; s=selector1;
- bh=l/ohPNE652ih2nrYsY5A9VdKCfXMU8dIPHQc3eu6nFE=;
- b=QUEUD5VI/sZ1NUP0NKulv6RwqrrshHqDNpekG48SU2cB9UVl6aJ5v5xtBdGuMAHTqGvF
- sbnzuAb5oNEZDxlSH91V1+PEFUU3q2gmxIn5rPA4rPT2T1ONDnAB6GfMEZpAvVlrZxhv
- PLGzael/rGXOSShzxcPor0SwnaXNjxkyPNo/9VGII+ZxdpKU80MOOkmoZGgw8HeBufh+
- cTueKwmbSHGhpWZ1rqKO7kD+yh+TyR+K+W5PBGGFlYiyxlqcHv/Pvj7IZvsRNTN9Zimh
- 9Rq+8y+oK0bT0mzSDSGBFZ9eHipiQnoKtd8vtqXAr0eBRtEtjwuBQ1USiX74BBUfxnf5 fQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cy79j611w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 22:47:04 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D3C7B10002A;
-        Wed, 15 Dec 2021 22:47:02 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BF2F420A74A;
-        Wed, 15 Dec 2021 22:47:02 +0100 (CET)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 15 Dec 2021 22:47:02
- +0100
-From:   Yannick Fertre <yannick.fertre@foss.st.com>
-To:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 0/5] drm/stm: new features to display controller
-Date:   Wed, 15 Dec 2021 22:46:51 +0100
-Message-ID: <20211215214651.19798-1-yannick.fertre@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 15 Dec 2021 16:47:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C24C061574;
+        Wed, 15 Dec 2021 13:47:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73843B8212C;
+        Wed, 15 Dec 2021 21:47:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB419C36AE3;
+        Wed, 15 Dec 2021 21:47:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639604843;
+        bh=J4oalArU9/UgdlFM6Jz7Zy6gGGeghE6Xy/A4jthyHEI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Ju2IDMuyocvcIjnw/CTO8jPRzLxWltKzEoF3Nhp57gl8K9JFqHfVy6yxNa1vDUfoh
+         bSHdRnHvG0q7jnf50uTKExWjcUSWSH+jnpnvzY3qfD15zCh1FLRkf3HkQL5xrz/YC0
+         bDy7kgjFeL/g/VJ1FU9phqIE6hsOBAFV0E0EBBlFzFJE8SaHNI7UyFLwC+92RjT6cD
+         ujfMpeaD+MQBbYF/HxoPrTJxnKfXL/wupecm7mw+/ILIx/Xye7PMOWAHsALFpPVHLe
+         BDMO0mDb+nRCYXjmaXh2Z757X28q5vOWJs/Rzn88egm5xGB8XzVxFILHE5WsHaqOmy
+         ndjGkF28Ckemw==
+Date:   Wed, 15 Dec 2021 15:47:21 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH] PCI/P2PDMA: Save a few cycles in 'pci_alloc_p2pmem()'
+Message-ID: <20211215214721.GA715509@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-15_13,2021-12-14_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e7676711-52c0-2ca4-f117-bea540d61cb1@deltatee.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-List of new feature:
-* Replace the legacy register access by regmap API.
-* Support of YCbCr 422 output
-* Update layer shadow registers per plane.
-* Support of YCbCr output (planar, semiplanar & coplanar)
+On Wed, Dec 15, 2021 at 02:37:51PM -0700, Logan Gunthorpe wrote:
+> On 2021-12-15 10:35 a.m., Bjorn Helgaas wrote:
+> > Maybe we need a MAINTAINERS entry for P2PDMA?
+> 
+> I'm not opposed to this. Would it be a duplicate of the PCI SUBSYSTEM
+> just with my name added as maintainer? I could send a patch if so.
 
-These featues are available only with last hardware version of ltdc
-(0x401000) link to patch"drm/stm: ltdc: support of new hardware version"
-(https://patchwork.freedesktop.org/patch/465207).
+Maybe something like this?  Are there other relevant files?  I just
+want to make sure that you see updates to p2pdma stuff.
 
-Yannick Fertre (5):
-  drm/stm: ltdc: switch to regmap
-  drm/stm: ltdc: add YCbCr 422 output support
-  drm/stm: ltdc: add per plane update support
-  drm/stm: ltdc: add support of flexible pixel formats
-  drm/stm: ltdc: add support of ycbcr pixel formats
-
- drivers/gpu/drm/stm/ltdc.c | 639 +++++++++++++++++++++++++++++--------
- drivers/gpu/drm/stm/ltdc.h |   9 +-
- 2 files changed, 518 insertions(+), 130 deletions(-)
-
--- 
-2.17.1
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7a2345ce8521..3180160fcc28 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14717,6 +14717,20 @@ L:	linux-pci@vger.kernel.org
+ S:	Supported
+ F:	Documentation/PCI/pci-error-recovery.rst
+ 
++PCI PEER-TO-PEER DMA (P2PDMA)
++M:	Bjorn Helgaas <bhelgaas@google.com>
++M:	Logan Gunthorpe <logang@deltatee.com>
++L:	linux-pci@vger.kernel.org
++S:	Supported
++Q:	https://patchwork.kernel.org/project/linux-pci/list/
++B:	https://bugzilla.kernel.org
++C:	irc://irc.oftc.net/linux-pci
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
++F:	Documentation/PCI/
++F:	Documentation/devicetree/bindings/pci/
++F:	drivers/pci/p2pdma.c
++F:	include/linux/pci-p2pdma.h
++
+ PCI MSI DRIVER FOR ALTERA MSI IP
+ M:	Joyce Ooi <joyce.ooi@intel.com>
+ L:	linux-pci@vger.kernel.org

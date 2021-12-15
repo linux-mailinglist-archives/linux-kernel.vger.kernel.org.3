@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F0A4754B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 155664754A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241027AbhLOIyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 03:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240965AbhLOIyn (ORCPT
+        id S240959AbhLOIym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 03:54:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52514 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240933AbhLOIyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 03:54:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83D9C061574;
-        Wed, 15 Dec 2021 00:54:42 -0800 (PST)
+        Wed, 15 Dec 2021 03:54:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8464BB81EAD;
-        Wed, 15 Dec 2021 08:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27CE5C34600;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C527061859;
+        Wed, 15 Dec 2021 08:54:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FA54C34606;
         Wed, 15 Dec 2021 08:54:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1639558480;
-        bh=29U4XsxrXT+uVI+65SSEjjZcnUbaoe51j9UFxZuYF/w=;
+        bh=bPwyIX0t/F7TcAWDAFt7NPQXqT9UtG8bvIM4c8B3Qh0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V+lksnHOzOCkw6BC5PWXzIJzB0TZAlqB+k0HlXbNYuS9kGCjEhS+lhUh1Zv1cRIUx
-         ymM58DzH34BkCCSD5VMpur35j5bLFlUVynvqdkL97vkbUBEF4PZi6Dc+kN6MtY0IIf
-         OMrdl7dBg1AU0m+4QA6cmxSeomxi75RurRft7R8ZJ3pZAqMkZBU65NON0R5ug2sE70
-         9fDcMwkeQGT1H806oeHPxfnrklsh3Ne6h0fBdOgL6W+Xqz13Y566F6HeopUkrzOftH
-         nHDg61RL7J1lEyA2Ns/+kKk+jpn5x0AKwfALaCLBBcrJdHBh/HDQTuy+hTqmtZgxNG
-         V2uPtbsjzKYAg==
+        b=UBtXEiHxgQwGPUePcPODVvLEWjJxuvHNXDUG24u/iIVUn/WXh5ttWN50rWPXsuHEH
+         mwh55Buyl9rjz5U48W13vVDd5f7q1DnhQWAprQcD9kb9Qx263Fl4cLeSsbz/qCCsZ2
+         uUPtxzLuI9+UJOLPUy1rcycjKZ5564wsCxwiFQf7snu/HswVOIShrt6sTIDZkcvb9R
+         JYU0dmZI/O45Q14s3M4Pkeg22/yIAyVNfvTkaEiovvlDJ9trU1Poz2AqbbvX6yLjo8
+         ReAXiam2dzZaCcjE6PcDlNWQb6eyPYgC282A+3ECkHdmfYQE9RviX2lv1goo668LxJ
+         7RjEzelZ/besg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mxQ3Z-0054IA-P3; Wed, 15 Dec 2021 09:54:37 +0100
+        id 1mxQ3Z-0054IE-Q6; Wed, 15 Dec 2021 09:54:37 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Wei Xu <xuwei5@hisilicon.com>, Rob Herring <robh+dt@kernel.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH RESEND 5/7] arm64: dts: HiSilicon: Add support for HiKey 970 PCIe controller hardware
-Date:   Wed, 15 Dec 2021 09:54:31 +0100
-Message-Id: <0de978662cbcf802d83e86b7977a163735ccb38c.1639558366.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND 6/7] arm64: dts: hisilicon: Add usb mux hub for hikey970
+Date:   Wed, 15 Dec 2021 09:54:32 +0100
+Message-Id: <d0bc2f01be73c89c9768e5d881e6043539ae5b1d.1639558366.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1639558366.git.mchehab+huawei@kernel.org>
 References: <cover.1639558366.git.mchehab+huawei@kernel.org>
@@ -54,146 +50,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Add dt bindings for Kirin 970 USB HUB. Such board comes with an
+integrated USB HUB provided via a TI TUSB8041 4-port USB 3.0 hub.
 
-Add DTS bindings for the HiKey 970 board's PCIe hardware.
-
-Co-developed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH RESEND 0/7] at: https://lore.kernel.org/all/cover.1639558366.git.mchehab+huawei@kernel.org/
 
- arch/arm64/boot/dts/hisilicon/hi3670.dtsi | 107 ++++++++++++++++++++++
- 1 file changed, 107 insertions(+)
+ .../boot/dts/hisilicon/hi3670-hikey970.dts    | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-index 782e1487666d..b47654b50139 100644
---- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-+++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-@@ -177,6 +177,12 @@ sctrl: sctrl@fff0a000 {
- 			#clock-cells = <1>;
- 		};
- 
-+		pmctrl: pmctrl@fff31000 {
-+			compatible = "hisilicon,hi3670-pmctrl", "syscon";
-+			reg = <0x0 0xfff31000 0x0 0x1000>;
-+			#clock-cells = <1>;
-+		};
+diff --git a/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts b/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts
+index 60594db07041..95ca49f1e455 100644
+--- a/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts
++++ b/arch/arm64/boot/dts/hisilicon/hi3670-hikey970.dts
+@@ -53,6 +53,29 @@ wlan_en: wlan-en-1-8v {
+ 		startup-delay-us = <70000>;
+ 		enable-active-high;
+ 	};
 +
- 		iomcu: iomcu@ffd7e000 {
- 			compatible = "hisilicon,hi3670-iomcu", "syscon";
- 			reg = <0x0 0xffd7e000 0x0 0x1000>;
-@@ -660,6 +666,107 @@ gpio28: gpio@fff1d000 {
- 			clock-names = "apb_pclk";
- 		};
- 
-+		pcie_phy: pcie-phy@fc000000 {
-+			compatible = "hisilicon,hi970-pcie-phy";
-+			reg = <0x0 0xfc000000 0x0 0x80000>;
++	usb-hub {
++		compatible = "hisilicon,usbhub";
++		typec-vbus-gpios = <&gpio26 1 0>;
++		otg-switch-gpios = <&gpio4 2 0>;
++		hub-reset-en-gpios = <&gpio0 3 0>;
++		hub-vdd-supply = <&ldo17>;
++		usb-role-switch;
 +
-+			phy-supply = <&ldo33>;
++		port {
++			#address-cells = <1>;
++			#size-cells = <0>;
 +
-+			clocks = <&crg_ctrl HI3670_CLK_GATE_PCIEPHY_REF>,
-+				 <&crg_ctrl HI3670_CLK_GATE_PCIEAUX>,
-+				 <&crg_ctrl HI3670_PCLK_GATE_PCIE_PHY>,
-+				 <&crg_ctrl HI3670_PCLK_GATE_PCIE_SYS>,
-+				 <&crg_ctrl HI3670_ACLK_GATE_PCIE>;
-+			clock-names = "phy_ref", "aux",
-+				      "apb_phy", "apb_sys",
-+				      "aclk";
-+
-+			/* vboost iboost pre post main */
-+			hisilicon,eye-diagram-param = <0xffffffff 0xffffffff
-+						       0xffffffff 0xffffffff
-+						       0xffffffff>;
-+
-+			#phy-cells = <0>;
-+		};
-+
-+		pcie@f4000000 {
-+			compatible = "hisilicon,kirin970-pcie";
-+			reg = <0x0 0xf4000000 0x0 0x1000000>,
-+			      <0x0 0xfc180000 0x0 0x1000>,
-+			      <0x0 0xf5000000 0x0 0x2000>;
-+			reg-names = "dbi", "apb", "config";
-+			#address-cells = <3>;
-+			#size-cells = <2>;
-+			device_type = "pci";
-+			phys = <&pcie_phy>;
-+			ranges = <0x02000000 0x0 0x00000000
-+				  0x0 0xf6000000
-+				  0x0 0x02000000>;
-+			num-lanes = <1>;
-+			#interrupt-cells = <1>;
-+			interrupts = <GIC_SPI 283 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "msi";
-+			interrupt-map-mask = <0 0 0 7>;
-+			interrupt-map = <0x0 0 0 1
-+					 &gic GIC_SPI 282 IRQ_TYPE_LEVEL_HIGH>,
-+					<0x0 0 0 2
-+					 &gic GIC_SPI 283 IRQ_TYPE_LEVEL_HIGH>,
-+					<0x0 0 0 3
-+					 &gic GIC_SPI 284 IRQ_TYPE_LEVEL_HIGH>,
-+					<0x0 0 0 4
-+					 &gic GIC_SPI 285 IRQ_TYPE_LEVEL_HIGH>;
-+			reset-gpios = <&gpio7 0 0>;
-+			hisilicon,clken-gpios = <&gpio27 3 0>, <&gpio17 0 0>,
-+						<&gpio20 6 0>;
-+			pcie@0,0 { // Lane 0: PCIe switch: Bus 1, Device 0
-+				reg = <0 0 0 0 0>;
-+				compatible = "pciclass,0604";
-+				device_type = "pci";
-+				#address-cells = <3>;
-+				#size-cells = <2>;
-+				ranges;
-+
-+				pcie@0,0 { // Lane 0: upstream
-+					reg = <0 0 0 0 0>;
-+					compatible = "pciclass,0604";
-+					device_type = "pci";
-+					#address-cells = <3>;
-+					#size-cells = <2>;
-+					ranges;
-+
-+					pcie@1,0 { // Lane 4: M.2
-+						reg = <0x0800 0 0 0 0>;
-+						compatible = "pciclass,0604";
-+						device_type = "pci";
-+						reset-gpios = <&gpio3 1 0>;
-+						#address-cells = <3>;
-+						#size-cells = <2>;
-+						ranges;
-+					};
-+
-+					pcie@5,0 { // Lane 5: Mini PCIe
-+						reg = <0x2800 0 0 0 0>;
-+						compatible = "pciclass,0604";
-+						device_type = "pci";
-+						reset-gpios = <&gpio27 4 0 >;
-+						#address-cells = <3>;
-+						#size-cells = <2>;
-+						ranges;
-+					};
-+
-+					pcie@7,0 { // Lane 6: Ethernet
-+						reg = <0x3800 0 0 0 0>;
-+						compatible = "pciclass,0604";
-+						device_type = "pci";
-+						reset-gpios = <&gpio25 2 0 >;
-+						#address-cells = <3>;
-+						#size-cells = <2>;
-+						ranges;
-+					};
-+				};
++			hikey_usb_ep0: endpoint@0 {
++				reg = <0>;
++				remote-endpoint = <&dwc3_role_switch>;
++			};
++			hikey_usb_ep1: endpoint@1 {
++				reg = <1>;
++				remote-endpoint = <&rt1711h_ep>;
 +			};
 +		};
-+
- 		/* UFS */
- 		ufs: ufs@ff3c0000 {
- 			compatible = "hisilicon,hi3670-ufs", "jedec,ufs-2.1";
++	};
+ };
+ 
+ /*
 -- 
 2.33.1
 

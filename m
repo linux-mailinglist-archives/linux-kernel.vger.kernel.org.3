@@ -2,85 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 799E54765A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAD84765B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbhLOW1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 17:27:35 -0500
-Received: from mail-oo1-f44.google.com ([209.85.161.44]:46771 "EHLO
-        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbhLOW1d (ORCPT
+        id S231418AbhLOW2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 17:28:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231393AbhLOW15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 17:27:33 -0500
-Received: by mail-oo1-f44.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso6341743ood.13;
-        Wed, 15 Dec 2021 14:27:33 -0800 (PST)
+        Wed, 15 Dec 2021 17:27:57 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D09C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:27:56 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso26712067otr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:27:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=M1jaFOJRzdq3x9WzOCPWbxi4lln7eUG+9jlUAXo/NCI=;
+        b=lo+9tihPQ4PhqEiFwq0qhpbo4eIrKXPODpS30ASYysmOveR9nd43OjgGvg6z/BSYKR
+         c8TSbiBdRcPx7rfW4BTrghAMOW0XF4oOZCzHOIob5+rD6kMT/8kufClTPM3AjRPfjZvd
+         WhqjUuDh0TeoEQlYEk05cdAG2X2k6PetRowBpMk4HQCoIP2rcYcQLzFwpxsh2vp8iWOe
+         0tjFq8fzpJCEleI69IfEXEddKycfjDOIg+Mxlae0zbUJBKbU0rOtWvSmeG16wCXVig0B
+         Oa+U4Z4/IB1lNnCBZdZpA/qil9FDPj7DH+H3lnLkQkuATLn1EFpmoVpNUS/aLit+nRnt
+         UiJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=khz6XuxeDKafAUA9AHe6/aR/dP/aRvnjdJRNkKlCqTo=;
-        b=ju6DcpU17RC2wsp5NVFWduvbpKcZV4MpkWs7Z/8qSmJothRxu24vzFzFs+vKTYSbHY
-         BW528HaU77jwi60LqNY7S+OAWdaNWlvH20z+vcGz/FbJf9IxN22z81e2tfhu/njvUqf/
-         pJlQ3qH9P4cTk1tonMcnmWuyetXVYZM7pJ6IfsX6vyQDPPR0Dh/F7rFkEvh3xseproAt
-         s4/xZFuvCjItcz9/GjlaXDZN96CUrTT2gPBlxXLa6lQL0XYvUdRLcaReRhwduE/6TcHq
-         HIaCOecfGkQtPlAq/f2BBmTWihhBMmWl84CtYoavXLmQmsVc6KYVmnMt84e5FkG4/5ek
-         IwtQ==
-X-Gm-Message-State: AOAM532Hx+Z1YxtVdux6MuR8UWroUzMoPtLWE8jVj4ZLGXd+xJbSzleo
-        Jj2DvYAAikHd/nbHNiu2eg==
-X-Google-Smtp-Source: ABdhPJzNVqqhvP0NPVYe+ULeBlpmR/5grGdaEFpeSYXa09aXA387KoadkmV5AG04I5FgiwIo+QcSUA==
-X-Received: by 2002:a4a:ab05:: with SMTP id i5mr9069023oon.61.1639607252965;
-        Wed, 15 Dec 2021 14:27:32 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bi20sm661315oib.29.2021.12.15.14.27.31
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=M1jaFOJRzdq3x9WzOCPWbxi4lln7eUG+9jlUAXo/NCI=;
+        b=XfqrXcM6uCYnKTSARBFfStJRpp2y1yGhw2QYBpdTxXLIb4+V7x5+OvAfjq8K26qnBv
+         H9buvWt5q8UudaiW9CX6LYYW3vazcIpEcchAOOJ2zJc/UC1hpcUnE6Cb23aY54DyDhYi
+         4L5wX8sPrzmMhCcfZuwZj6LLGTbBFB1nQjvI97DxDvOqO9xVeU3TOCJ8jvFzFzQCCXba
+         LUl2d94iE/Gw86Lq6UAxmLgb1eFKg0T9yPhqx/YdWxzFyFCyukb/sgtAeTfc1IpcNsZ0
+         iF3QMDdJ9H6KG76SNpCnM8+/mBv+FW6/IGvXo9LxSmyFWf7sVP7LLUBElIiR7iXIy/K9
+         NNrQ==
+X-Gm-Message-State: AOAM533/rx6XHHq13sYvuh5Mb8OAV3qn6bOQvtHi7YE3t0JNJhef80sF
+        L9nEtRQ7qGPkXJKV4kgqJrYK/w==
+X-Google-Smtp-Source: ABdhPJzaK0xufB8+lzhrMyUZal/R+F3V5OC6jZ5SDnHg0B2uLuAKczygLZBP3B/g5dZojbNfyCiuFQ==
+X-Received: by 2002:a05:6830:232e:: with SMTP id q14mr10689326otg.133.1639607276106;
+        Wed, 15 Dec 2021 14:27:56 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t14sm700500oth.81.2021.12.15.14.27.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:27:32 -0800 (PST)
-Received: (nullmailer pid 1954728 invoked by uid 1000);
-        Wed, 15 Dec 2021 22:27:28 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        ~okias/devicetree@lists.sr.ht, devicetree@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        David Airlie <airlied@linux.ie>
-In-Reply-To: <20211215152712.72502-1-david@ixit.cz>
-References: <20211215152712.72502-1-david@ixit.cz>
-Subject: Re: [PATCH] dt-bindings: display: bridge: document Toshiba TC358768 cells and panel node
+        Wed, 15 Dec 2021 14:27:55 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     linux-arm-msm@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>
+Subject: Re: (subset) [PATCH] soc: qcom: socinfo: Add SM6350 and SM7225
 Date:   Wed, 15 Dec 2021 16:27:28 -0600
-Message-Id: <1639607248.090344.1954727.nullmailer@robh.at.kernel.org>
+Message-Id: <163960723734.3062250.3076248613827283388.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211213081111.20217-1-luca.weiss@fairphone.com>
+References: <20211213081111.20217-1-luca.weiss@fairphone.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Dec 2021 16:27:12 +0100, David Heidelberg wrote:
-> Properties #address-cells and #size-cells are valid.
-> The bridge node can also contains panel node.
+On Mon, 13 Dec 2021 09:11:11 +0100, Luca Weiss wrote:
+> Both SoCs are known as 'lagoon' downstream. Add their ids to the socinfo
+> driver.
 > 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../bindings/display/bridge/toshiba,tc358768.yaml      | 10 ++++++++++
->  1 file changed, 10 insertions(+)
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Applied, thanks!
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+[1/1] soc: qcom: socinfo: Add SM6350 and SM7225
+      commit: 22e8f8dcb7a88f2167607a52542f2f1bb6f53559
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1568330
-
-
-tc358778@e: compatible: Additional items are not allowed ('toshiba,tc358768' was unexpected)
-	arch/arm/boot/dts/am571x-idk.dt.yaml
-	arch/arm/boot/dts/am572x-idk.dt.yaml
-	arch/arm/boot/dts/am574x-idk.dt.yaml
-
-tc358778@e: compatible: ['toshiba,tc358778', 'toshiba,tc358768'] is too long
-	arch/arm/boot/dts/am571x-idk.dt.yaml
-	arch/arm/boot/dts/am572x-idk.dt.yaml
-	arch/arm/boot/dts/am574x-idk.dt.yaml
-
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>

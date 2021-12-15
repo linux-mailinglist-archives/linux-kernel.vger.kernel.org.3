@@ -2,135 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EA5475D3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F715475D4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244706AbhLOQTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:19:01 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4295 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232976AbhLOQTA (ORCPT
-        <rfc822;Linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:19:00 -0500
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JDgNw5L4Zz6H7Nj;
-        Thu, 16 Dec 2021 00:16:48 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 17:18:57 +0100
-Received: from [10.47.93.135] (10.47.93.135) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 15 Dec
- 2021 16:18:57 +0000
-Subject: Re: [PATCH v2] perf list: Display hybrid pmu events with cpu type
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jin Yao <yao.jin@linux.intel.com>
-CC:     <jolsa@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <alexander.shishkin@linux.intel.com>,
-        <Linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <ak@linux.intel.com>, <kan.liang@intel.com>, <yao.jin@intel.com>
-References: <20210903025239.22754-1-yao.jin@linux.intel.com>
- <YW81L7j06Mf13QmC@kernel.org>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <be6e0b56-ba29-a2ee-c153-d5aec102b587@huawei.com>
-Date:   Wed, 15 Dec 2021 16:18:35 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S244741AbhLOQWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:22:10 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:50716
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239539AbhLOQVz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 11:21:55 -0500
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2A4383F177
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 16:21:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639585314;
+        bh=UQpra13r/imnuYK+P2IbZ5XGTwYfQ/5zZ4iMI2bSBTk=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=GzvKAZkxxlYT7X3R+dnU2AfMFq4aLyoUrAhWiZuPlL8LbER8dJ1ovWIpXAspMWd8o
+         UZJGf3ZiHuC5FIf5gDhPzkHhlHZBjSjWxyQBMzPYSVvwzkgbLiOg8Ap5PlfM3PWyXB
+         k2xgcFSajHtDtD3WVaEX2md89HCTUnYj5jLq1da7jXkLlyYek1VYouq5IOdFPGv2K6
+         Fof3EE9rZ3g2rjAb96R1dyniMoMPmHiphZGoIow8Q2jeXOdPEKxvbNG10yzmy9jLK1
+         jgpkUgtU3xEpTxjhH0QhM0OAZzasyQryEwnWVCDXJorvLQCNTOE/0AL85E5if6AByC
+         Eibke0aUZnPrQ==
+Received: by mail-lf1-f71.google.com with SMTP id m1-20020ac24281000000b004162863a2fcso9766344lfh.14
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:21:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UQpra13r/imnuYK+P2IbZ5XGTwYfQ/5zZ4iMI2bSBTk=;
+        b=CN0XmGAgRYxck43xh/IBJEn4CDLHDhghkENxrHeXy+xPYYhNsJvf/vSKSOb3SwUh8q
+         vo+N8s871yRk32h5UXVUiGkxuK9xizvrTBl2ONLa+VprWaopTZpIPa8nv5TsYdvu+ju/
+         TAxgNh8Iv2Ul61MfE2bt/orQ+Qj+p9QGnzCk3/Y8oWdfFCiCO/o5fSQZQpDVpD9ytgGr
+         5EIlczSru24TA4GJ7mLiKcN8twuOfICg8aDOFTydG9yv5D6k7iF4UeKnTK53VDoMkVP2
+         mgoTjPslxs0Ls2ABjsW2HxTKfwfl14c6dSWIe61h0afvGYU7KM4tZFtLxNqfpB7pBEFH
+         jqpw==
+X-Gm-Message-State: AOAM530p1Hd/RkqeIlGMtls3lckEtn3vQF5nN6adxGKqxoa6YXvCSbll
+        uxxIfEiNgEGza0lruVydCR4ZUzSEG8DaFkYuIMkIoEYVDAzeFKgT921uEqWBmwVVKa9LMfJPu2K
+        w0Y8kRC5FiGa22fV/BCWPtk/CcqjlRHnjcLHkAi0Yqg==
+X-Received: by 2002:a19:d61a:: with SMTP id n26mr10578625lfg.313.1639585313507;
+        Wed, 15 Dec 2021 08:21:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxxRxyxjrUFbKudwdQ61hGbDEEI0JDnv9cU9sfFXGEl6TAeZSdjkJkyUrkdyqRBNhl+99x1pw==
+X-Received: by 2002:a19:d61a:: with SMTP id n26mr10578610lfg.313.1639585313346;
+        Wed, 15 Dec 2021 08:21:53 -0800 (PST)
+Received: from localhost.localdomain (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id l4sm507392ljg.60.2021.12.15.08.21.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 08:21:52 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     David Virag <virag.david003@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-clk@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        linux-samsung-soc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v4 3/7] dt-bindings: arm: samsung: document jackpotlte board binding
+Date:   Wed, 15 Dec 2021 17:21:16 +0100
+Message-Id: <163958527260.183299.17749602272220762675.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211206153124.427102-4-virag.david003@gmail.com>
+References: <20211206153124.427102-1-virag.david003@gmail.com> <20211206153124.427102-4-virag.david003@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <YW81L7j06Mf13QmC@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.93.135]
-X-ClientProxiedBy: lhreml734-chm.china.huawei.com (10.201.108.85) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2021 22:14, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Sep 03, 2021 at 10:52:39AM +0800, Jin Yao escreveu:
->> Add a new option '--cputype' to perf-list to display core-only pmu events
->> or atom-only pmu events.
->>
->> Each hybrid pmu event has been assigned with a pmu name, this patch
->> compares the pmu name before listing the result.
->>
->> For example,
->>
->> perf list --cputype atom
->> ...
->> cache:
->>    core_reject_l2q.any
->>         [Counts the number of request that were not accepted into the L2Q because the L2Q is FULL. Unit: cpu_atom]
->> ...
->>
->> The "Unit: cpu_atom" is displayed in the brief description section
->> to indicate this is an atom event.
-> Thanks, applied.
+On Mon, 6 Dec 2021 16:31:17 +0100, David Virag wrote:
+> Add binding for the jackpotlte board (Samsung Galaxy A8 (2018)).
+> 
+> 
 
-It seems that this buggers "perf list" for uncore events on my arm64 
-platform.
+Applied, thanks!
 
-Before:
+[3/7] dt-bindings: arm: samsung: document jackpotlte board binding
+      commit: c96ebc5fde274edcc02543dcfb6a1ee097f98070
 
-./perf list "uncore ddrc"
-uncore ddrc:
-   act_cmd
-  [DDRC active commands. Unit: hisi_sccl,ddrc]
-   flux_rcmd
-  [DDRC read commands. Unit: hisi_sccl,ddrc]
-   flux_rd
-  [DDRC total read operations. Unit: hisi_sccl,ddrc]
-   flux_wcmd
-  [DDRC write commands. Unit: hisi_sccl,ddrc]
-   flux_wr
-  [DDRC total write operations. Unit: hisi_sccl,ddrc]
-   pre_cmd
-  [DDRC precharge commands. Unit: hisi_sccl,ddrc]
-   rnk_chg
-  [DDRC rank commands. Unit: hisi_sccl,ddrc]
-   rw_chg
-  [DDRC read and write changes. Unit: hisi_sccl,ddrc]
-
-
-After:
-
-./perf list "uncore ddrc"
-
-uncore ddrc:
-   act_cmd
-  [DDRC active commands. Unit: hisi_sccl,ddrc]
-   act_cmd
-  [DDRC active commands. Unit: hisi_sccl,ddrc]
-   act_cmd
-  [DDRC active commands. Unit: hisi_sccl,ddrc]
-   act_cmd
-  [DDRC active commands. Unit: hisi_sccl,ddrc]
-   act_cmd
-  [DDRC active commands. Unit: hisi_sccl,ddrc]
-   act_cmd
-  [DDRC active commands. Unit: hisi_sccl,ddrc]
-   act_cmd
-  [DDRC active commands. Unit: hisi_sccl,ddrc]
-   act_cmd
-  [DDRC active commands. Unit: hisi_sccl,ddrc]
-   act_cmd
-  [DDRC active commands. Unit: hisi_sccl,dd
-
-Notice how the events are repeated.
-
-And then gets broken even worse later some point before v5.16-rc6 such 
-that aliasing gets broken altogether.
-
-./perf list  | grep hisi_sccl | grep act_cmd|  wc -l
-16
-
-Good should be 0.
-
-I'll have a look. Obviously we need a test case to stop such breakages.
-
-Thanks,
-John
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

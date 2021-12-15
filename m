@@ -2,130 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2BCD475752
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A5A475755
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234161AbhLOLEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234048AbhLOLEq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:04:46 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A75C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 03:04:46 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id l22so42368407lfg.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 03:04:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=antmicro.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1Mxq4v2aa07cn7vmDque1vmJSPRI9q1+xfotPBgOEKw=;
-        b=YYVSOtge5Ubs9/QdtAuGxXrCKYFLrjlM3KjC61oHbi35tATBP533nULGmmFdbr/Gvy
-         4tK5sdKWdmzTQZoFtgo2YBjm2MjEONJK0mYJt6hi3UgQ0iMg88k53RtPGndnLhtVi/2N
-         Oge5CcFSb1F6WZhg3zr87NahWwQR586UpuYU4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1Mxq4v2aa07cn7vmDque1vmJSPRI9q1+xfotPBgOEKw=;
-        b=0bjj26XMYLqg2teKdq7GNrRhMDC5kn4MjDZ92PhhF+VHNxdIPDBv7JRS7O2i8Kg8JS
-         0HmCOyIwA1Fjl6FE1xybIANrxxS0erPkToZjN56UmRPJ1knCoQ23ZC1Jhc4/reUbypyK
-         GJj+D6B7k2gVYsR0+aU5Il2+O/BTfETZm8UsHSyloqnX+IFbx6ayfehLKBAWuFH8SgFO
-         GQsa2QKVT6DUGWcyBaIdDB92zgvp/fyb8C98L+Cqg+8wMqaMtITW0oG5bNqMf6de+DNs
-         zN8qtWvkuYP8sT+IqfPhh1rcnD9qWd++howpkzVhUwE56/a8tUdKkj5ljevJ1lNsvVsi
-         T+VQ==
-X-Gm-Message-State: AOAM5307V60XevdxAZRGPv8OzdGtTJDO0uk23yTlWqpFaAcgzgSnAuiS
-        G1jKfiCEq71B6fF6iPyO/TVDI5tJwWMNhrX1N30Cew==
-X-Google-Smtp-Source: ABdhPJxWhA1IhaY2P5SVuTF/Dv2jmTo+wwNa0EsIvD5ISkU2YTob2I9LJQKrHWvVMA8n4dFomFv8yOt53VdRikP8LXc=
-X-Received: by 2002:a05:6512:3f2:: with SMTP id n18mr9409898lfq.646.1639566284404;
- Wed, 15 Dec 2021 03:04:44 -0800 (PST)
+        id S236777AbhLOLHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 06:07:04 -0500
+Received: from mga05.intel.com ([192.55.52.43]:25992 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241895AbhLOLG7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 06:06:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639566419; x=1671102419;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+9v6HklrEHaUKQQTxfWKtZY1fc5zCJpba60VCSVAPdo=;
+  b=F3yfX+VxmXI1XrglswJkNH999Bnd/mGlkK8X6ttNf9TdirVYCFjBmLfn
+   0XIPSE5a+KBo95Z1C5JfPco5ijOPEr6kHFwqihSaeFHrWD41ny8wO5c/2
+   rh8apdch2KaOGcrHiUOITlq/vHmmPXUp2MEYG7RF0FL9l2J24i2J8pZG+
+   JapB6yJF/yR/RFyzOoPxZzJDJ+s2ZR88xnLqBa7L95+eB5CLrBal09YxV
+   0ct3Pj9ySTzdQWZd92lGO7IRaEGgvV7FRc0yjxCfQLQvGN/beaSMJCfkP
+   tWEY2xhDVLCtDEP4tX5Rv12yL/tik5HQ2azXAlmwSFE2IhHe7rLNjq/VA
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="325482734"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="325482734"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 03:06:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="614664929"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 15 Dec 2021 03:06:57 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxS7c-0001eR-Rq; Wed, 15 Dec 2021 11:06:56 +0000
+Date:   Wed, 15 Dec 2021 19:06:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [rmk-arm:zii 147/186]
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1531:49: error:
+ incompatible pointer types passing 'struct phylink_config *' to parameter of
+ type 'struct phylink_pcs *'
+Message-ID: <202112151831.VAQ7h5FH-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211210145430.3707463-1-gsomlo@gmail.com> <20211210145430.3707463-2-gsomlo@gmail.com>
-In-Reply-To: <20211210145430.3707463-2-gsomlo@gmail.com>
-From:   Mateusz Holenko <mholenko@antmicro.com>
-Date:   Wed, 15 Dec 2021 12:04:07 +0100
-Message-ID: <CAPk366RvYSdn8Y2Vy-qDh3wVsBqZgvJk+fZArze8u0s9oob5_A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] MAINTAINERS: co-maintain LiteX platform
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, Karol Gugala <kgugala@antmicro.com>,
-        Kamil Rakoczy <krakoczy@antmicro.com>,
-        mdudek@internships.antmicro.com, paulus@ozlabs.org,
-        Joel Stanley <joel@jms.id.au>,
-        Stafford Horne <shorne@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        david.abdurachmanov@sifive.com,
-        Florent Kermarrec <florent@enjoy-digital.fr>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 3:54 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
->
-> Add the litex_mmc (LiteSDCard) and LiteETH drivers to the list of files
-> maintained under LiteX.
->
-> Add Gabriel Somlo and Joel Stanley as maintainers; Joel authored
-> the LiteETH driver, and Gabriel is currently curating the LiteX
-> out-of-tree device drivers as they are tested and prepared for
-> upstream submission, having also co-authored a number of them.
->
-> Cc: Karol Gugala <kgugala@antmicro.com>
-> Cc: Mateusz Holenko <mholenko@antmicro.com>
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> Acked-by: Joel Stanley <joel@jms.id.au>
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
+head:   d3ebd79d7fb6476e2409c147e4dcc304733f7ae6
+commit: dc659b3d109e3e55a76c0ed143119dad7b369ec8 [147/186] net: axienet: convert to phylink_pcs
+config: x86_64-randconfig-r016-20211214 (https://download.01.org/0day-ci/archive/20211215/202112151831.VAQ7h5FH-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+        git fetch --no-tags rmk-arm zii
+        git checkout dc659b3d109e3e55a76c0ed143119dad7b369ec8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/ drivers/net/ethernet/xilinx/
 
-Acked-by: Mateusz Holenko <mholenko@antmicro.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->
-> New in v4:
->   - n/a
->
-> > New in v3:
-> >   - picked up acked-by Joel
-> >   - added listing for liteeth driver
-> >   - added Joel as additional co-maintainer (thanks!)
->
->  MAINTAINERS | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8691c531e297..7f59779bb5eb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11011,12 +11011,17 @@ F:    lib/list-test.c
->  LITEX PLATFORM
->  M:     Karol Gugala <kgugala@antmicro.com>
->  M:     Mateusz Holenko <mholenko@antmicro.com>
-> +M:     Gabriel Somlo <gsomlo@gmail.com>
-> +M:     Joel Stanley <joel@jms.id.au>
->  S:     Maintained
->  F:     Documentation/devicetree/bindings/*/litex,*.yaml
->  F:     arch/openrisc/boot/dts/or1klitex.dts
-> -F:     drivers/soc/litex/litex_soc_ctrl.c
-> -F:     drivers/tty/serial/liteuart.c
->  F:     include/linux/litex.h
-> +F:     drivers/tty/serial/liteuart.c
-> +F:     drivers/soc/litex/*
-> +F:     drivers/net/ethernet/litex/*
-> +F:     drivers/mmc/host/litex_mmc.c
-> +N:     litex
->
->  LIVE PATCHING
->  M:     Josh Poimboeuf <jpoimboe@redhat.com>
-> --
-> 2.31.1
->
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1531:49: error: incompatible pointer types passing 'struct phylink_config *' to parameter of type 'struct phylink_pcs *' [-Werror,-Wincompatible-pointer-types]
+           struct net_device *ndev = pcs_to_axienet_local(pcs)->ndev;
+                                                          ^~~
+   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1506:71: note: passing argument to parameter 'pcs' here
+   static struct axienet_local *pcs_to_axienet_local(struct phylink_pcs *pcs)
+                                                                         ^
+   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1532:53: error: incompatible pointer types passing 'struct phylink_config *' to parameter of type 'struct phylink_pcs *' [-Werror,-Wincompatible-pointer-types]
+           struct mdio_device *pcs_phy = pcs_to_axienet_local(pcs)->pcs_phy;
+                                                              ^~~
+   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1506:71: note: passing argument to parameter 'pcs' here
+   static struct axienet_local *pcs_to_axienet_local(struct phylink_pcs *pcs)
+                                                                         ^
+>> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1537:8: error: use of undeclared identifier 'iface'
+                               iface == PHY_INTERFACE_MODE_SGMII ?
+                               ^
+>> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:1554:16: error: incompatible function pointer types initializing 'int (*)(struct phylink_pcs *, unsigned int, phy_interface_t, const unsigned long *, bool)' (aka 'int (*)(struct phylink_pcs *, unsigned int, phy_interface_t, const unsigned long *, _Bool)') with an expression of type 'int (struct phylink_config *, unsigned int, phy_interface_t, const unsigned long *, bool)' (aka 'int (struct phylink_config *, unsigned int, phy_interface_t, const unsigned long *, _Bool)') [-Werror,-Wincompatible-function-pointer-types]
+           .pcs_config = axienet_pcs_config,
+                         ^~~~~~~~~~~~~~~~~~
+   4 errors generated.
 
 
--- 
-Mateusz Holenko
-Antmicro Ltd | www.antmicro.com
-Roosevelta 22, 60-829 Poznan, Poland
+vim +1531 drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+
+  1525	
+  1526	static int axienet_pcs_config(struct phylink_config *pcs, unsigned int mode,
+  1527				      phy_interface_t interface,
+  1528				      const unsigned long *advertising,
+  1529				      bool permit_pause_to_mac)
+  1530	{
+> 1531		struct net_device *ndev = pcs_to_axienet_local(pcs)->ndev;
+  1532		struct mdio_device *pcs_phy = pcs_to_axienet_local(pcs)->pcs_phy;
+  1533		int ret;
+  1534	
+  1535		ret = mdiobus_write(pcs_phy->bus, pcs_phy->addr,
+  1536				    XLNX_MII_STD_SELECT_REG,
+> 1537				    iface == PHY_INTERFACE_MODE_SGMII ?
+  1538					XLNX_MII_STD_SELECT_SGMII : 0);
+  1539		if (ret < 0) {
+  1540			netdev_warn(ndev, "Failed to switch PHY interface: %d\n",
+  1541				    ret);
+  1542			return ret;
+  1543		}
+  1544	
+  1545		ret = phylink_mii_c22_pcs_config(pcs_phy, mode, interface, advertising);
+  1546		if (ret < 0)
+  1547			netdev_warn(ndev, "Failed to configure PCS: %d\n", ret);
+  1548	
+  1549		return ret;
+  1550	}
+  1551	
+  1552	static const struct phylink_pcs_ops axienet_pcs_ops = {
+  1553		.pcs_get_state = axienet_pcs_get_state,
+> 1554		.pcs_config = axienet_pcs_config,
+  1555		.pcs_an_restart = axienet_pcs_an_restart,
+  1556	};
+  1557	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

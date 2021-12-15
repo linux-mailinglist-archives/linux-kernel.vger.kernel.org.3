@@ -2,202 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 922B0476646
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A699547664A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbhLOXDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 18:03:08 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38250 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230487AbhLOXDH (ORCPT
+        id S231685AbhLOXEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 18:04:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230487AbhLOXEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 18:03:07 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BFKMiBO006331;
-        Wed, 15 Dec 2021 23:03:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=ZWpg6Z7J14anytBQWWtJdaVc/OLN+NvKmma5FSmlj/Q=;
- b=soh22zpbbuhsjD93qCpT5CkgHqetwIfoiYJWCTVBYO4x+jr+xN9tZnfqOxD+mkOHAM4o
- kNGwJ207WMZyR/VyPvfsOoWlY8mx2bl2zbt8jRJH4D8kFyjejIjBd27lnMJys6943aI5
- hfNHTVtJFfaONIeDJPNj5WArBtVww9rc02JZ2agGv5PNvIdPuQxSfaf3vBmDwGX9KHye
- wJhrDD3DNeRlDaK8rlfrRr5gQmAEGiDAhrzwfFHW50KgNNNkm1s/9tsUAl0THanyFLuM
- 5+FxNIhonqav2tLSba84DzHOmuy/62IRVpW+EDIXv04D5fjiH6KrhZtxrc1KGXOo9G3o Dw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyqbhjngq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 23:03:06 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BFN36gU030158;
-        Wed, 15 Dec 2021 23:03:06 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyqbhjnfs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 23:03:06 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BFN2CDD014774;
-        Wed, 15 Dec 2021 23:03:04 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3cy7k9951m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 23:03:03 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BFMt0nY38076706
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Dec 2021 22:55:00 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F61EAE068;
-        Wed, 15 Dec 2021 23:03:00 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD118AE05A;
-        Wed, 15 Dec 2021 23:02:59 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.20.66])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Wed, 15 Dec 2021 23:02:59 +0000 (GMT)
-Date:   Thu, 16 Dec 2021 00:02:29 +0100
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     Thomas Huth <thuth@redhat.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        linux-s390@vger.kernel.org, Jason Herne <jjherne@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [RFC PATCH] s390: vfio-ap: Register the vfio_ap module for the
- "ap" parent bus
-Message-ID: <20211216000229.7a284661.pasic@linux.ibm.com>
-In-Reply-To: <87tufaqbex.fsf@redhat.com>
-References: <20211201141110.94636-1-thuth@redhat.com>
-        <8512bb0a-a34a-09b0-65f3-781f3d092364@linux.ibm.com>
-        <87k0g8scx1.fsf@redhat.com>
-        <1eb9ca5c-b1bb-b768-64ee-e4a1b31bb171@linux.ibm.com>
-        <6aaf6c60-a258-29e3-fcec-82c77d3945a4@redhat.com>
-        <87tufaqbex.fsf@redhat.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: m7HlbMuXrQxeJIIAHruMt_PIiNOMuKyr
-X-Proofpoint-ORIG-GUID: X3StS-SGM1FJX8ORJ9HFNQeDN29OdjZh
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-15_13,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=999 impostorscore=0
- lowpriorityscore=0 suspectscore=0 phishscore=0 spamscore=0
- priorityscore=1501 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112150127
+        Wed, 15 Dec 2021 18:04:00 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791BDC061574;
+        Wed, 15 Dec 2021 15:04:00 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id v19so17837684plo.7;
+        Wed, 15 Dec 2021 15:04:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=hJ247Tjtv2/SMLJJVrKbZ64lGbQGu3byyWPjCjUkufA=;
+        b=X7FZiUXrQBtJOhpSwc8vgZlabebrQAjdSNY338T02H8YNE3CKJ65APZx+fMj5ECm/t
+         ygM5Adq0yrMP7rwMBEwZquKC/UlVPk9YzLwKv83oFbVAUQLGdg6cEHUWVMdSQyPcCtAe
+         z43OLTIWcoGDPNPRmtHS3/tV8DQnEjyIOqBb46/VvsY/fxPgrL41HbZqhmIiByyblhgB
+         I36sgXp0skTlzGSWiKD4NTqMMZNyqgA/yCt4IFT60Ex0TgbWUCmDCoIELTT3Fit5+S2w
+         2tk3KVn0nXEraQOPaDckU9CB5a79H9UpWRKKjii2cYtk5MqiKtyMNyFP7eTIbkhHAZJl
+         8JyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=hJ247Tjtv2/SMLJJVrKbZ64lGbQGu3byyWPjCjUkufA=;
+        b=rgXTq6zRfp+3GPgfj02uCFxIoUntnQkugpKBr0Yc7fSy/qgXaLKtaScAvgg0Cg6eQh
+         SwjHh2gAyb0AH0DN62KdvzNg3zYmw9lD0IGJG/BzQpmlhmDICbiYthGbfwxzGB+oLvCR
+         M6xP/RGCKsKGlgI27nJp9xUpxwKJXlhMm4miaMknurONSE1wx5jBQ8VuCttTY8/UP0/3
+         /cBibUPT8zme5JMDdqn6+v1IPlfWvfZYPVN7xmG1FE+tNBmqTe67BH/RuqNYIrb+JWda
+         itqXGhhMP7Fd78B3wFHAPwaPpkF6aNw5n8Pe8/ZoVowB/FJc/4Gu3W7JCxoKUrHI0hKd
+         hx4A==
+X-Gm-Message-State: AOAM531cnLO1pagswfUD572zh9q1kZ3nAR2IsM5bh/6SPK3z9PS0XRbC
+        b42Q8HbiIAYjMlgi94t3B78DnC7dWUM9Jjuh9u4=
+X-Google-Smtp-Source: ABdhPJyD03wqzdSWY/kLivk1pCO2f72V0VVdzsclt3SzMtqKCV6RTXeFRt60iohIJRzXNqVUg8/qNg==
+X-Received: by 2002:a17:90b:3511:: with SMTP id ls17mr2401111pjb.81.1639609439529;
+        Wed, 15 Dec 2021 15:03:59 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id x14sm3210065pjl.27.2021.12.15.15.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 15:03:58 -0800 (PST)
+Message-ID: <61ba745e.1c69fb81.4952a.8dfe@mx.google.com>
+Date:   Wed, 15 Dec 2021 15:03:58 -0800 (PST)
+X-Google-Original-Date: Wed, 15 Dec 2021 23:03:57 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 00/42] 5.15.9-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Dec 2021 13:51:02 +0100
-Cornelia Huck <cohuck@redhat.com> wrote:
-
-> On Wed, Dec 15 2021, Thomas Huth <thuth@redhat.com> wrote:
+On Wed, 15 Dec 2021 18:20:41 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.9 release.
+> There are 42 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> > On 14/12/2021 22.55, Tony Krowiak wrote:  
-> >> 
-> >> 
-> >> On 12/13/21 11:11, Cornelia Huck wrote:  
-> >>> One possibility is simply blocking autoload of the module in userspace by
-> >>> default, and only allow it to be loaded automatically when e.g. qemu-kvm
-> >>> is installed on the system. This is obviously something that needs to be
-> >>> decided by the distros.
-> >>>
-> >>> (kvm might actually be autoloaded already, so autoloading vfio-ap would
-> >>> not really make it worse.)  
-> >> 
-> >> Of the vfio_ccw module is automatically loaded, then the kvm
-> >> module will also get loaded. I startup up a RHEL8.3 system and
-> >> sure enough, the vfio_ccw module is loaded along with the
-> >> kvm, vfio and mdev modules. If this is true for all distros, then
-> >> it wouldn't make much difference if the vfio_ap module is
-> >> autoloaded too.  
-> >
-> > I think I don't mind too much if we auto-load vfio-ap or not - but I think 
-> > we should make it consistent with vfio-ccw. So either auto-load both modules 
-> > (if the corresponding devices are available), or remove the 
-> > MODULE_DEVICE_TABLE() entries from both modules?  
+> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
+> Anything received after that time might be too late.
 > 
-> I think we really need to take a step back and think about the purpose
-> of adding a MODULE_DEVICE_TABLE()... basically, it declares which types
-> of devices on a certain bus a driver supports, in a way that can be
-> consumed by userspace (after file2alias.c worked on it).
-
-I did a quick search to locate where this semantic was codified. But
-I didn't find the place neither Documentation/ nor in the header where
-MODULE_DEVICE_TABLE is defined.
-
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 > 
-> Userspace typically uses this to match devices it is notified about to
-> drivers that could possibly drive those devices. In general, the
-> assumption is that you will want to have the drivers for your devices
-> loaded. In some cases (drivers only used in special cases, like here),
-> it might be a better idea to autoload the drivers only under certain
-> circumstances (e.g. if you know you're going to run KVM guests).
-
-Does RHEL do this, or would RHEL do this out of the box? I.e.
-would we end up preserving old behavior when this fix hits the distro,
-or would the end user end up with kvm and vfio_ap loaded (out of the
-box)?
-
-What would be the mechanism of choice to implement if kvm loaded and
-APs present/hotplugged load vfio_ap, otherwise don't in the userspace?
-
-Sorry I'm not very familiar with this whole modules auto-loading
-business, so I may be asking obvious questions. But a quick google
-search did not help me.
-
+> thanks,
 > 
-> My main point, however, is that we're talking about policy here: whether
-> a potentially useful driver should be loaded or not is a decision that
-> should be made by userspace. Not providing a MODULE_DEVICE_TABLE does
-> not look like the right solution, as it deprives userspace of the
-> information to autoload the driver, if it actually wants to do so.
+> greg k-h
 > 
 
-I'm sympathetic to this reading of the situation, but I'm not sure
-it is as black and white as stated.
+5.15.9-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-I think the current state of affairs in the vfio_ap module is clearly a
-bug.
-
-One can argue that not auto-loading vfio_ap and kvm per default out of
-the box is not a bug. I mean the tooling (chzdev) seems to do fine
-without this and just assuming that both kvm and vfio_ap will be needed
-just because we have APs seems wrong.
-
-One of the more important guiding principles of Linux kernel development
-is no userspace regressions. And I think suddenly getting vfio_ap and kvm
-loaded just because we have AP devices can be thought of as a regression.
-
-So I'm sympathetic to Harald's view as well.
-
-Of course there is the solution that the distros should really make sure
-the old behavior is preserved, or some smart behavior is introduced. But
-regarding smart, I believe "if you have devices that are configured for
-vfio_ap pass-through (with chzdev), then the vfio_ap module should get
-loaded" is pretty much as smart as it gets. So blacklisting the module
-by default in the distros looks like a viable option. If that is what
-we want, we should probably ask the distros, because I don't think
-it is just obviously their job to figure out that they have to do so.
-
-Disclaimer: I might be wrong about the current behavior, I didn't verify
-my claims
-
-Also what does vfio-pci do? As far as I can tell vfio-pci does not
-participate in module auto loading just because there are pci devices.
-The have some smart override I don't quite understand:
-https://patchwork.ozlabs.org/project/linux-pci/patch/20210826103912.128972-11-yishaih@nvidia.com/
-Before, I don't think they had a MODULE_DEVICE_TABLE:
-https://elixir.bootlin.com/linux/v5.8.18/source/drivers/vfio/pci/vfio_pci.c
-
-Regards,
-Halil 

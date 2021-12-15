@@ -2,203 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D226E475C43
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D57F4475C49
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238032AbhLOPwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244165AbhLOPwn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:52:43 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346EEC061574;
-        Wed, 15 Dec 2021 07:52:43 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso3374858wme.1;
-        Wed, 15 Dec 2021 07:52:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=fRezAm0KgTU4qbdbTP9jVXgHNoJOhN9tuImbbcO8MrI=;
-        b=mvz9/fN9kFsTA+y3iYV6sIluxzt9hC3jUa2dxhCAirBLkmmGANU1Nn8J/EgSRWF9DC
-         FaIkgvtb4f/2JTz+aPZfsUAHym03C2nIffl0UYjTXYSHIm+jYJ1JTRW4palKeFbLpfke
-         72XdAw2ex1M4e4jayddOme9NJQhWl5JCOsermSFDaAphPsKCEPwojz5sUWQlddEqgoS5
-         SeGCRc0mAYgtbi1/cmD+LwrOEpR2Mr21No05ubc0R4i99DhOhA8oL4boNUVpP+QHlU+6
-         zzAvrm9No3pL3UvWnJaD2FA4QJU5fyVnXYUi+2j+6xByDR+J5a/jzGwl2PN4BPI2KZm4
-         rRJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fRezAm0KgTU4qbdbTP9jVXgHNoJOhN9tuImbbcO8MrI=;
-        b=43ziiiR/eVjOs8xAQUQz7pnUrWKqwWmK+YXdwlgOZ/U3YN9ULOX1hgHKaMp1bFk76c
-         d4pOFF3yGidP4kS9+mTnWyS1X/LIAMT1Tpzlt8EmeDREWFmqnzRzwvCV+8QXagB3au76
-         wRHPvqlk1hylfIclJyWq8vD7LI5omb2t6MhRReIYkD0h8JO5y89tDchV3vvq8khHbVd4
-         2WFKfbq5g/aykYb5ksOgih8BacH9SWAzqZuSbzYl++djDQKXv++W/Zhe7Dvxv8ZDOKIJ
-         mZtnCZHRsnQ1jXI4XCIMWMwU8i8RqcPUGPB3+E9h74RMin/BXKNgtWSWh/nkKQ1QrHA+
-         hQDA==
-X-Gm-Message-State: AOAM533jzkLU88ylU8qyX9gSoT4NjuhaYFVBm0FeaBStIA/F3dBUkHcv
-        gGFa80iDoggItVBQLqCuMiGmFRkfD6vNlg==
-X-Google-Smtp-Source: ABdhPJxICAEDBphdI95vOuIO170N6+cqbuafjEPlOrP5W5d83pqgR+nEFBOdiuJLwuv47WICeHvmWQ==
-X-Received: by 2002:a05:600c:5101:: with SMTP id o1mr409180wms.81.1639583561692;
-        Wed, 15 Dec 2021 07:52:41 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id a198sm2192950wmd.42.2021.12.15.07.52.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 07:52:40 -0800 (PST)
-Date:   Wed, 15 Dec 2021 16:52:36 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        David Heidelberg <david@ixit.cz>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Anton Bambura <jenneron@protonmail.com>,
-        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
-        Nikola Milosavljevic <mnidza@outlook.com>,
-        Ion Agorria <ion@agorria.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Ihor Didenko <tailormoon@rambler.ru>,
-        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
-        Jasper Korten <jja2000@gmail.com>,
-        Thomas Graichen <thomas.graichen@gmail.com>,
-        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 15/28] ARM: tegra: Add usb-role-switch property to USB
- OTG ports
-Message-ID: <YboPROE47E3QBzfl@orome>
-References: <20211211211412.10791-1-digetx@gmail.com>
- <20211211211412.10791-16-digetx@gmail.com>
- <YbnqP0XAcUYc4ePy@orome>
- <9cf23721-db53-830a-f634-d2215232f059@gmail.com>
- <YboGxZSi13OGByUQ@orome>
- <8c0defff-3348-6f97-6bd4-ddfc6117e707@gmail.com>
+        id S244194AbhLOPxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:53:48 -0500
+Received: from mail-mw2nam12on2061.outbound.protection.outlook.com ([40.107.244.61]:43198
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238061AbhLOPxr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 10:53:47 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fIrwdy07I9A17Gx3GZzoqWW1JXtRfs3kE1gpb0KEdIZZgu+LPDGGlFiyL2tMMAEBTfoMcR7ahrVPtur55WBWEkhf17DvZQalDepRo4ELvYoRc+5gvh7aN1IOt/TUrQn7QnGymZRjUA/40+YfuCGW78zRK4O+Cn3M1XBB45i4B5epABaY7YPnN2LxV7eK0kxR3t05FdYkM2lo8Jn/uDZtu6952iNNb1srnE3fME+um7foKoeLQok2vq5KxF949tq7y4hgqD1wq7xlxvgbyYKSHp1MyRCvk1/9w2UH3kF0KH3spCaGVlk3RZkvsM8hELEVad0Z6o8k1S4Vct9gAqaymg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RB9b2zvAH5bih7L9EtObsYfV1gjmysvLWFVZlkRa3GA=;
+ b=M6CMr/BuzxwWkZ5u0z1fb0+TufsUz6Z8FUXoh+P/GxuqBBxdYcdVO/Ick+fGhBOmltzKwo5ZqaQ+ACNgdi1IZFH6EzoX+SxCs4/e1NCVaWSqFN3IgNlacCmCdLJlydCUZp0WgIQKlmE9BIRmvi/PC72BjE2CDBJvjzyHFdnXU6a51ieKnOSv9gOzcu2GGfjvpMIedcmQMT+QxsNAOukJI3ctGWub0wmxqKYzWL8x3a58mjj3XaAs9XZ767tLCcBHEz9smArMLgNidIsu82Pm81zCUBqup4YQCWAb3ilLEO9NlaqRJl7maF1z79iMZ6gjoo+Rg7zqqyd2j4xsZBNbPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RB9b2zvAH5bih7L9EtObsYfV1gjmysvLWFVZlkRa3GA=;
+ b=WtiL1n3ZBmcpUEMc/pvhyeZio9arRwiMEYbnTZmYjw9Exxc4s8euLkFAjlakrkQBzpBWYhLPZgnWYZiszQU6xBDE0HMeo21+voqV7ItnrXhG9mzBd7Iico8DGo0OzkUVuAKCDQtxY6DjqXRN3B5Od/oEAph9pI9h6/zig2KxxEw=
+Received: from BN6PR19CA0090.namprd19.prod.outlook.com (2603:10b6:404:133::28)
+ by DM6PR12MB4827.namprd12.prod.outlook.com (2603:10b6:5:1d6::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Wed, 15 Dec
+ 2021 15:53:44 +0000
+Received: from BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:133:cafe::6e) by BN6PR19CA0090.outlook.office365.com
+ (2603:10b6:404:133::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17 via Frontend
+ Transport; Wed, 15 Dec 2021 15:53:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT053.mail.protection.outlook.com (10.13.177.209) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4801.14 via Frontend Transport; Wed, 15 Dec 2021 15:53:44 +0000
+Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 15 Dec
+ 2021 09:53:43 -0600
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     <linux-edac@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
+        <mchehab@kernel.org>, <tony.luck@intel.com>, <james.morse@arm.com>,
+        <rric@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
+        <william.roche@oracle.com>, "Yazen Ghannam" <yazen.ghannam@amd.com>
+Subject: [PATCH v2 0/2] AMD Family 19h Models 10h-1Fh Updates
+Date:   Wed, 15 Dec 2021 15:53:07 +0000
+Message-ID: <20211215155309.2711917-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="bL/7g93/IKUyyp+l"
-Content-Disposition: inline
-In-Reply-To: <8c0defff-3348-6f97-6bd4-ddfc6117e707@gmail.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7b0e77a1-ebe1-4204-57b4-08d9bfe312e9
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4827:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB48273D4821381AE81185C2BCF8769@DM6PR12MB4827.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2803;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eFgPmwjtSdcPQdoPf7biWeLEEhCdlaazjPXvVn4x5ymOvVolhBy6V2AIjo0x1Klc/WwvTjjpq5tC+u2AZqhkvwBqL3AY6ZQqiSb9K5UmxwJ5DCaYPDLT3rQUby1OHrKGO9HAKd27l+qxZaCpTyysPfo350ao2zCfW/jVYUCq2w6bOlcE+4lku8F0pKgN2kH7YjkfjbX7m/Hzk2ybarHoadjCbriphv4XMkuX88nBKqhynREK4bQ0Mske1Yx+UPY2acoXGQBHe5Dqvhr6rB+2JXrRQsg65ce2Bw+Uf73wQcLweXgVxJzp+sqIeIqbe8qGQCNLZNPRXPWZvz74vjrqAGuZs9b3yUF+PjA/8oMoCOMBPpZO3qX0YYgduKdUBYI3HVe8qxM1Fa9a4kx1bommkOU1vsg1y3iQ6PiYbFNwGfIjN9UAkpMrVdseUnB9s6gcML2uDVEozW62YKJDiN35xXDJa44YE/yLOiSFumWHgPBxmQ6q63Jv31xpGsUtEhQuGxlIXeA6MLUeoZFXfYRzVrrK09YNjon39eu20oys0sYaJY4f3rZwOznZ2r3LRscc8q0KFyIP5qMk870JNOgS23JjethufDNXM0Hn2P4UuhBioLnvK8hTrvRs2wqHnV5u/aNzahbmn5np+wFZxEm1GvB7OAKnYdnXvid2zJFfqMe48ClPF0AHw8c1LR97XqNsblUPg8ysY+WHb1NP8tMv1xj8fvlQQ2Nm5NtkBs6HVlnptInR2lJU7JlFdS66U8H9XJMHFB0quqR2+oGgY7Z0+Fas6gP83V0WLuyR+36Dq30=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(6916009)(83380400001)(86362001)(508600001)(2616005)(44832011)(6666004)(336012)(186003)(16526019)(8676002)(15650500001)(36756003)(81166007)(26005)(426003)(47076005)(8936002)(82310400004)(54906003)(316002)(5660300002)(356005)(40460700001)(36860700001)(1076003)(2906002)(4326008)(70586007)(70206006)(7696005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 15:53:44.4970
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b0e77a1-ebe1-4204-57b4-08d9bfe312e9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4827
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
---bL/7g93/IKUyyp+l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This set adds support for AMD Family 19h Models 10h-1Fh and A0h-AFh.
 
-On Wed, Dec 15, 2021 at 06:45:32PM +0300, Dmitry Osipenko wrote:
-> 15.12.2021 18:16, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Wed, Dec 15, 2021 at 06:04:54PM +0300, Dmitry Osipenko wrote:
-> >> 15.12.2021 16:14, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >>> On Sun, Dec 12, 2021 at 12:13:59AM +0300, Dmitry Osipenko wrote:
-> >>>> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> >>>>
-> >>>> If an USB port is an OTG port, then we should add the usb-role-switch
-> >>>> property. Otherwise XUSB setup fails and therefore padctl is unable =
-to
-> >>>> set up the ports. This leads to broken USB and PCIe ports. Add the
-> >>>> usb-role-switch properties to Tegra124 device-trees to fix the probl=
-em.
-> >>>>
-> >>>> The error message shown without this patch is e.g:
-> >>>> usb2-0: usb-role-switch not found for otg mode
-> >>>>
-> >>>> [digetx@gmail.com: improved commit message]
-> >>>> Tested-by: Thomas Graichen <thomas.graichen@gmail.com> # T124 Nyan B=
-ig
-> >>>> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> >>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >>>> ---
-> >>>>  arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi | 1 +
-> >>>>  arch/arm/boot/dts/tegra124-apalis.dtsi      | 1 +
-> >>>>  arch/arm/boot/dts/tegra124-nyan.dtsi        | 1 +
-> >>>>  arch/arm/boot/dts/tegra124-venice2.dts      | 2 +-
-> >>>>  4 files changed, 4 insertions(+), 1 deletion(-)
-> >>>
-> >>> The device tree bindings for the XUSB pad controller say that when th=
-is
-> >>> property is set, then the "connector" subnode should also exist.
-> >>>
-> >>> Any chance we can add that? I was planning on making that a dependency
-> >>> in the json-schema conversion of the binding, in which case it would =
-be
-> >>> more of a "must" than a "should".
-> >>
-> >> I guess it will be harmless if you'll add the connector subnodes. Will
-> >> you be able to create a separate patch that will add the subnodes on t=
-op
-> >> of this patch?
-> >>
-> >> Thomas Graichen says that one USB port on Nyan Big doesn't work without
-> >> this patch. This is why this patch is needed essentially.
-> >=20
-> > Okay, I can add "dummy" connector nodes for now. I don't see how we can
-> > properly set this up because as far as I can tell there's USB ID GPIO on
-> > Tegra124 (seems like it's a fixed function pin) and the VBUS GPIO is
-> > already used to enable the VBUS supply. The gpio-usb-b-connector binding
-> > required at least one of the ID and VBUS GPIOs to be specified.
->=20
-> The ID and VBUS hardware configurations are very board-specific. There
-> are multiple ways of how it could implemented on Tegra.
->=20
-> > On the other hand, at least Venice2 has a USB type A connector for this,
-> > so I'm not even sure how that would work. I vaguely recall that the
-> > Tegra20 Seaboard also had a USB type A and that it was possible to use
-> > it in device mode, but I don't how that would. Nor would it be correct
-> > to use the gpio-usb-b-connector compatible for that since, well, it's
-> > not USB type B.
->=20
-> I'm not sure whether it makes much sense to use OTG for USB type A
-> connectors, normally they should be fixed to host mode.
+This second revision includes patches 3 and 4 from the first. Patches 1
+and 2 from the first set were applied.
 
-My recollection is that those can be used in device mode as well. For
-example that USB type A port on Venice2 (same as for Seaboard) can be
-used for RCM, IIRC. It's possible that there's no way to detect what is
-connected, though, so this may not be proper OTG.
+This set is based on the following branches:
+  - tip/master
+  - ras/edac-for-next
+  - groeck/linux-staging/hwmon-next
 
->=20
-> > I suspect that Apalis has a micro-B port, much like the Jetson TK1. My
-> > understanding is that OTG doesn't work on Jetson TK1 (which is why it's
-> > configured in "host" mode), so it'd be interesting to see if this can be
-> > made to work on Apalis.
->=20
-> Looks like the default Apalis carrier board has three type A connectors.
->=20
-> https://www.toradex.com/products/carrier-board/ixora-carrier-board
+The following commit in hwmon-next is needed for functional support of
+this set.
 
-I'm wondering if the best thing would be to mark all of these as "host"
-for now and avoid making this look like something that it isn't. I don't
-think we've ever made OTG work on these boards, so perhaps we shouldn't
-assume that it works.
+  49e90c39d0be ("x86/amd_nb: Add AMD Family 19h Models (10h-1Fh) and (A0h-AFh) PCI IDs")
 
-Thierry
+Patch 1 is a small fixup on how some registers are checked. The patch is
+functionally the same as patch 3 in set 1, but the commit message
+updated to give more details.
 
---bL/7g93/IKUyyp+l
-Content-Type: application/pgp-signature; name="signature.asc"
+Patch 2 adds register offset and other minor changes introduced with
+these new models. The patch is updated to use a different name for a new
+flag (thanks Boris for the suggestion).
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Yazen
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG6D0QACgkQ3SOs138+
-s6E6Qw/+NI/apEThH0dvFCCilxaBp5v6FIRnx3T33dnqulelfDZQg4cJzpPwv7Rm
-cDJ2gPpuP3oQZkQ5pisk2KMsb8KbBHCAxopLXjggIX/Nol5uAwKb8fFHq7PkHlzy
-Vw0Foe2sl7wIpCgMxdKhOZltbELOWBma7zB1NYF/Hdu1YQlmPraexCUETqZLMM9v
-QDb7oDBWS3bHJNn3KiaRTv3J/2ahOahtxzSNI4KdiXYd/4QAclKSBIo4MnQa32IV
-4vwTvXb+wBTDyr+rAcyM9p2JxeH17vbYBbJlwygc4Vc7uxvCEuyQr6zfTCUgNbFB
-3dOCOp1LjiDKREJ8N2R4V3DpQoE2x5Aiw0JNKNc2rFwlLBA5I8/HXnyIegYlywHz
-fdXCgiNxHE60tHH9V9F1yUcnnuLN+KcGHwCYNg76aCQOagNPHsFMFrCCHFCEU41i
-JLNrb7NiyjD5O+6KmcMMFPZv8XgoD15EHG3xLRzKivZhbhbCLzw5ywIaPi0FeeX4
-/gGfuPU08pyohF0eZUVQ8FMG2l8RQVBIpiK2gxrRNn/bRY+UYDM86HsH/C6rZfZX
-FLsyRSId1MHst37Q34gp7Nye8ZdDwb0mOhATfRUTwujNEFgLLX6bkVBwT75VzXSY
-GcJS1L3y0Rtw3Gv5Qs4DquGDIuA9oXNUO0Gbf+uVgNM8ORojoN8=
-=1LNN
------END PGP SIGNATURE-----
+Yazen Ghannam (2):
+  EDAC/amd64: Check register values from all UMCs
+  EDAC/amd64: Add new register offset support and related changes
 
---bL/7g93/IKUyyp+l--
+ drivers/edac/amd64_edac.c | 70 ++++++++++++++++++++++++++++++++++-----
+ drivers/edac/amd64_edac.h | 14 ++++++++
+ 2 files changed, 76 insertions(+), 8 deletions(-)
+
+-- 
+2.25.1
+

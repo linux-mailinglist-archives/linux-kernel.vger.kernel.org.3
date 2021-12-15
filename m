@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE77476230
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652D5476236
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233443AbhLOTv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:51:28 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:44733 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbhLOTv1 (ORCPT
+        id S233532AbhLOTxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:53:04 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:40769 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232942AbhLOTxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:51:27 -0500
-Received: by mail-oi1-f170.google.com with SMTP id be32so33120336oib.11;
-        Wed, 15 Dec 2021 11:51:27 -0800 (PST)
+        Wed, 15 Dec 2021 14:53:02 -0500
+Received: by mail-ot1-f52.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so26236753otj.7;
+        Wed, 15 Dec 2021 11:53:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1p1PQrqDAJTBlAEU9eTaqXLhU+FeqafP7VNkw1V6x4M=;
-        b=IdDlIoNDd9y5sxkH89qTH2vxKqIUpoSeP8LG9hEkYHYr/KSxUY4D4c7FYN7vUR4I/j
-         87XrEoPbhQy4lCzqvVD/0HTEXLpnAgokhtEm+QWIMR3awzLjsWHIAGlg1s87ppTlt+X/
-         KPyJ9QsU7jHZEBE7D8bE79MisU+TxH5gyyFTKdCaf5Tvozl/uKk5Yy7wkJImcrmmMvN3
-         I4ePLLC2kBubPJ/Yl3dQRv9kIjeM0n3oeWTCzapFzsre1VAE31guk0o7/V8JGlsVMTvD
-         GOaAbXg4GKpOb0tW/SnjtJlTSODjDH0lcTru9abkaPd5y2wij0GDeHNRRM9fOlzOF1Zz
-         CrqQ==
-X-Gm-Message-State: AOAM533OpkE3b/KBeXkCRn0v4DiHLat5QptgosOyQMvTXG6sx3OpD90k
-        4xGPIYRiLofUtOdnLbOlEQ==
-X-Google-Smtp-Source: ABdhPJw6V5sSTfL+uRxvQ2C07gj9VqUiSInxCB3vdcAEt8qqdj6YEbamz7vxe0Y5oQERaTi6m1SK7A==
-X-Received: by 2002:a05:6808:b08:: with SMTP id s8mr1360010oij.126.1639597886569;
-        Wed, 15 Dec 2021 11:51:26 -0800 (PST)
+        bh=F+7zx1G12gcU32oCO0oDb+7WaFMbkfK3I4pJhCJ/550=;
+        b=RXy/DqLn2rUnsAqFXoE5gULaW7E7oVa0BBXNaenVmCpPWPhTgN4j73ts4LAU4chrMj
+         u1VBFon3JJLcaiJdrycO7AaWncsKz52JNRXNIM9cOkc49Y2gTcefuOzAItO8QUtNjWlc
+         BBb8SjuuXuxQnI/EuHiU0IBahuDTplxy2ujDdXQDOHbg438Hk43UT6m7Dw7eeqnImEdI
+         FSaIRoOHy4xIS6op34KMTY+DvJI/7533LTVCrrdzkuIaOTjATI+SakmghB3UjrNSFAMv
+         Vng5zzndJipTQuK5ylDO9yJ12TgTi6fLZNEXAeXfqb/RRnXD2O+q6Jp0Kr96KP3YW4OG
+         xf/g==
+X-Gm-Message-State: AOAM531dsV88HE8FIJee04pvYjnR9XwWnCIGAJ9Nn57qWINhsZYfviUK
+        edS4K2fG52bH6fve+99yCg==
+X-Google-Smtp-Source: ABdhPJxl3j4PI+RLOXiDgbqAe/8mYKrGVyo06CZJHm+/9QvZ5PkugWgUKfoaX7GvakIHOGaVB9jBmg==
+X-Received: by 2002:a05:6830:8e:: with SMTP id a14mr9509976oto.280.1639597982243;
+        Wed, 15 Dec 2021 11:53:02 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id s17sm616782otp.20.2021.12.15.11.51.25
+        by smtp.gmail.com with ESMTPSA id e20sm538598oiw.32.2021.12.15.11.53.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 11:51:26 -0800 (PST)
-Received: (nullmailer pid 1725656 invoked by uid 1000);
-        Wed, 15 Dec 2021 19:51:25 -0000
-Date:   Wed, 15 Dec 2021 13:51:25 -0600
+        Wed, 15 Dec 2021 11:53:01 -0800 (PST)
+Received: (nullmailer pid 1727871 invoked by uid 1000);
+        Wed, 15 Dec 2021 19:53:00 -0000
+Date:   Wed, 15 Dec 2021 13:53:00 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     David Collins <quic_collinsd@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Subject: Re: [PATCH 1/2] dt-bindings: firmware: arm,scmi: define support for
- name based regulators
-Message-ID: <YbpHPU7PsGO2i+uw@robh.at.kernel.org>
-References: <cover.1639099631.git.quic_collinsd@quicinc.com>
- <2d78b0f19991f8028d9be913be0a5aefd7d1ee17.1639099631.git.quic_collinsd@quicinc.com>
+To:     Yann Gautier <yann.gautier@foss.st.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loic.pallardy@foss.st.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] mmc: mmci: add st,stm32-sdmmc2 compatible
+Message-ID: <YbpHnPwrNpsbH+PB@robh.at.kernel.org>
+References: <20211210091834.28958-1-yann.gautier@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d78b0f19991f8028d9be913be0a5aefd7d1ee17.1639099631.git.quic_collinsd@quicinc.com>
+In-Reply-To: <20211210091834.28958-1-yann.gautier@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Dec 2021 17:54:41 -0800, David Collins wrote:
-> Allow SCMI regulator subnodes to be specified either by ID using
-> the "reg" property or by name using the "regulator-name" property.
+On Fri, 10 Dec 2021 10:18:34 +0100, Yann Gautier wrote:
+> Although this compatible is not used in kernel, as we use the common
+> MMCI driver, it is used by bootloaders. The U-Boot driver was merged
+> before the kernel driver and uses this compatible.
+> To avoid issues when aligning device tree files between kernel and
+> boot loader, the ST dedicated compatible is added to bindings file.
 > 
-> Name based SCMI regulator specification helps ensure that an SCMI
-> agent doesn't need to be aware of the numbering scheme used for
-> Voltage Domains by the SCMI platform.  It also ensures that the
-> correct Voltage Domain is selected for a given physical regulator.
-> This cannot be guaranteed with numeric Voltage Domain IDs alone.
-> 
-> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
 > ---
->  .../devicetree/bindings/firmware/arm,scmi.yaml        | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
+>  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>

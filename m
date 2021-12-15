@@ -2,163 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A49A5475DA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 498BE475DAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244592AbhLOQhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:37:54 -0500
-Received: from foss.arm.com ([217.140.110.172]:57304 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230350AbhLOQhx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:37:53 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A94886D;
-        Wed, 15 Dec 2021 08:37:52 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.67.176])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A283E3F5A1;
-        Wed, 15 Dec 2021 08:37:50 -0800 (PST)
-Date:   Wed, 15 Dec 2021 16:37:47 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     German Gomez <german.gomez@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, Alexandre Truong <alexandre.truong@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 4/6] perf tools: enable dwarf_callchain_users on arm64
-Message-ID: <YboZ24EMD/4lVkyp@FVFF77S0Q05N>
-References: <20211215151139.40854-1-german.gomez@arm.com>
- <20211215151139.40854-5-german.gomez@arm.com>
+        id S244833AbhLOQkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:40:09 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:33584 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230350AbhLOQkH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 11:40:07 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3843A212BD;
+        Wed, 15 Dec 2021 16:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1639586406; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PR/MemBldbTR728L096igmJMG3fo/uDTHlayL6mBYe4=;
+        b=GQBBxdmBohS+o4ZBWp2/gqq4lzHNiZVSy1JPMq7MDWlpGnyALVbQFCf6utnQfj5mKLSQRA
+        v/GHxV0ypGS2TAVlVA+VGjN0iSqtbbhAqWNetEInSPhdzxk6Wg6KAjHs7wCNCx2ILVT7QP
+        sHkFEQZFJUayuDJ9mKcV/vyROUFBYSs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1639586406;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PR/MemBldbTR728L096igmJMG3fo/uDTHlayL6mBYe4=;
+        b=nUwFhiF2wk6jrKHkh37AqVjYosXXTLnHXPQxO8djKhM2ieN2aTJtfUGmu/9CqIa2u0izfo
+        xALB7V3InBlRjQCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DD51913B75;
+        Wed, 15 Dec 2021 16:40:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Vj1KNWUaumGdJgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 15 Dec 2021 16:40:05 +0000
+Message-ID: <92ef4cae-ccfb-d952-6b36-71036329e8da@suse.cz>
+Date:   Wed, 15 Dec 2021 17:40:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215151139.40854-5-german.gomez@arm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 10/66] mm/mmap: Use the maple tree for find_vma_prev()
+ instead of the rbtree
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-11-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211201142918.921493-11-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 03:11:36PM +0000, German Gomez wrote:
-> From: Alexandre Truong <alexandre.truong@arm.com>
+On 12/1/21 15:29, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> On arm64, enable dwarf_callchain_users which will be needed
-> to do a dwarf unwind in order to get the caller of the leaf frame.
+> Use the maple tree's advanced API and a maple state to walk the tree
+> for the entry at the address of the next vma, then use the maple state
+> to walk back one entry to find the previous entry.
 > 
-> Signed-off-by: Alexandre Truong <alexandre.truong@arm.com>
-> Signed-off-by: German Gomez <german.gomez@arm.com>
+> Add kernel documentation comments for this API.
+
+Additional note: the previous patch for find_vma() mentioned "Using the
+maple tree interface mt_find() will handle the RCU locking" while
+find_vma_prev() uses the advanced maple tree API, thus IIUC without RCU
+locking, and doesn't add its own. This can easily result in a bug,
+especially if the documentation comments don't mention it at all?
+
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 > ---
->  tools/perf/builtin-report.c | 4 ++--
->  tools/perf/builtin-script.c | 4 ++--
->  tools/perf/util/callchain.c | 9 ++++++++-
->  tools/perf/util/callchain.h | 2 +-
->  4 files changed, 13 insertions(+), 6 deletions(-)
+>  mm/mmap.c | 24 ++++++++++++++----------
+>  1 file changed, 14 insertions(+), 10 deletions(-)
 > 
-> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-> index 8167ebfe776a..a31ad60ba66e 100644
-> --- a/tools/perf/builtin-report.c
-> +++ b/tools/perf/builtin-report.c
-> @@ -410,7 +410,7 @@ static int report__setup_sample_type(struct report *rep)
->  		}
->  	}
->  
-> -	callchain_param_setup(sample_type);
-> +	callchain_param_setup(sample_type, perf_env__arch(&rep->session->header.env));
->  
->  	if (rep->stitch_lbr && (callchain_param.record_mode != CALLCHAIN_LBR)) {
->  		ui__warning("Can't find LBR callchain. Switch off --stitch-lbr.\n"
-> @@ -1124,7 +1124,7 @@ static int process_attr(struct perf_tool *tool __maybe_unused,
->  	 * on events sample_type.
->  	 */
->  	sample_type = evlist__combined_sample_type(*pevlist);
-> -	callchain_param_setup(sample_type);
-> +	callchain_param_setup(sample_type, perf_env__arch((*pevlist)->env));
->  	return 0;
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 6a7502f74190..8425ab573770 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -2454,23 +2454,27 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
 >  }
+>  EXPORT_SYMBOL(find_vma);
 >  
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index ab7d575f97f2..d308adfd1176 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -2318,7 +2318,7 @@ static int process_attr(struct perf_tool *tool, union perf_event *event,
->  	 * on events sample_type.
->  	 */
->  	sample_type = evlist__combined_sample_type(evlist);
-> -	callchain_param_setup(sample_type);
-> +	callchain_param_setup(sample_type, perf_env__arch((*pevlist)->env));
->  
->  	/* Enable fields for callchain entries */
->  	if (symbol_conf.use_callchain &&
-> @@ -3468,7 +3468,7 @@ static void script__setup_sample_type(struct perf_script *script)
->  	struct perf_session *session = script->session;
->  	u64 sample_type = evlist__combined_sample_type(session->evlist);
->  
-> -	callchain_param_setup(sample_type);
-> +	callchain_param_setup(sample_type, perf_env__arch(session->machines.host.env));
->  
->  	if (script->stitch_lbr && (callchain_param.record_mode != CALLCHAIN_LBR)) {
->  		pr_warning("Can't find LBR callchain. Switch off --stitch-lbr.\n"
-> diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
-> index 8e2777133bd9..aaab9a674807 100644
-> --- a/tools/perf/util/callchain.c
-> +++ b/tools/perf/util/callchain.c
-> @@ -1600,7 +1600,7 @@ void callchain_cursor_reset(struct callchain_cursor *cursor)
->  		map__zput(node->ms.map);
->  }
->  
-> -void callchain_param_setup(u64 sample_type)
-> +void callchain_param_setup(u64 sample_type, const char *arch)
+> -/*
+> - * Same as find_vma, but also return a pointer to the previous VMA in *pprev.
+> +/**
+> + * find_vma_prev() - Find the VMA for a given address, or the next vma and
+> + * set %pprev to the previous VMA, if any.
+> + * @mm: The mm_struct to check
+> + * @addr: The address
+> + * @pprev: The pointer to set to the previous VMA
+> + *
+> + * Returns: The VMA associated with @addr, or the next vma.
+> + * May return %NULL in the case of no vma at addr or above.
+>   */
+>  struct vm_area_struct *
+>  find_vma_prev(struct mm_struct *mm, unsigned long addr,
+>  			struct vm_area_struct **pprev)
 >  {
->  	if (symbol_conf.use_callchain || symbol_conf.cumulate_callchain) {
->  		if ((sample_type & PERF_SAMPLE_REGS_USER) &&
-> @@ -1612,6 +1612,13 @@ void callchain_param_setup(u64 sample_type)
->  		else
->  			callchain_param.record_mode = CALLCHAIN_FP;
->  	}
-> +
-> +	/*
-> +	 * It's possible to determine the caller of leaf frames with omitted
-> +	 * frame pointers on aarch64 using libunwind, so enable it.
-> +	 */
-
-I reckon it's worth mentioning *why* we need to do this; how about:
-
-	/*
-	 * It's necessary to use libunwind to reliably determine the caller of
-	 * a leaf function on aarch64, as otherwise we cannot know whether to
-	 * start from the LR or FP.
-	 *
-	 * Always starting from the LR can result in duplicate or entirely
-	 * erroneous entries. Always skipping the LR and starting from the FP
-	 * can result in missing entries.
-	 */
-
-Other than that, this looks fine to me!
-
-Thanks,
-Mark.
-
-> +	if (callchain_param.record_mode == CALLCHAIN_FP && !strcmp(arch, "arm64"))
-> +		dwarf_callchain_users = true;
+>  	struct vm_area_struct *vma;
+> +	MA_STATE(mas, &mm->mm_mt, addr, addr);
+>  
+> -	vma = find_vma(mm, addr);
+> -	if (vma) {
+> -		*pprev = vma->vm_prev;
+> -	} else {
+> -		struct rb_node *rb_node = rb_last(&mm->mm_rb);
+> -
+> -		*pprev = rb_node ? rb_entry(rb_node, struct vm_area_struct, vm_rb) : NULL;
+> -	}
+> +	vma = mas_walk(&mas);
+> +	*pprev = mas_prev(&mas, 0);
+> +	if (!vma)
+> +		vma = mas_next(&mas, ULONG_MAX);
+>  	return vma;
 >  }
 >  
->  static bool chain_match(struct callchain_list *base_chain,
-> diff --git a/tools/perf/util/callchain.h b/tools/perf/util/callchain.h
-> index 77fba053c677..d95615daed73 100644
-> --- a/tools/perf/util/callchain.h
-> +++ b/tools/perf/util/callchain.h
-> @@ -300,7 +300,7 @@ int callchain_branch_counts(struct callchain_root *root,
->  			    u64 *branch_count, u64 *predicted_count,
->  			    u64 *abort_count, u64 *cycles_count);
->  
-> -void callchain_param_setup(u64 sample_type);
-> +void callchain_param_setup(u64 sample_type, const char *arch);
->  
->  bool callchain_cnode_matched(struct callchain_node *base_cnode,
->  			     struct callchain_node *pair_cnode);
-> -- 
-> 2.25.1
-> 
+

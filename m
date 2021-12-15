@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9C04754F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF924754FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241088AbhLOJQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:16:34 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:35198 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241064AbhLOJQd (ORCPT
+        id S235782AbhLOJRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236009AbhLOJRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:16:33 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 956161C0B98; Wed, 15 Dec 2021 10:16:32 +0100 (CET)
-Date:   Wed, 15 Dec 2021 10:16:24 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH 4.19 29/74] clk: qcom: regmap-mux: fix parent clock lookup
-Message-ID: <20211215091623.GA15796@amd>
-References: <20211213092930.763200615@linuxfoundation.org>
- <20211213092931.784850569@linuxfoundation.org>
+        Wed, 15 Dec 2021 04:17:43 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AED4C061574;
+        Wed, 15 Dec 2021 01:17:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ciNIolSnF0w3P4/6NyIscaHcZqy7GkcNoYmDZxekxE0=; b=fyZ6hxbhOxZ+QdfRh+XzozqNdX
+        LzkhWrjFTvoKMboLzrttB6OAu3GPt8RqWlC8W4wF/wQLAquUQ9r6KIFtqke/8+d6YtamSjUwbOUJt
+        7MUFTiY5qFS45cDBpMSO5QEVFY9fVLN7hwgJi0cQ36D9OPiyBqkqwX6tM0IRCnpnI9p7VLEDXGPq+
+        ukGxcg2E+SQX6YtO/cuZUmIUgOF9PQL7zWndvSauuM42a9hBz0PlaimTTh2Pa7jcAVFO9SPPtlmV6
+        RmKMI6kge2kPQ+Jc2HpTlD959l/5WJNEkNsXNIz7JgdXO7ZbiUZcphFKtBTkDaJZENUL6vMkZH/gq
+        sn9S9Llg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxQPm-00EVNv-Q0; Wed, 15 Dec 2021 09:17:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 25103300252;
+        Wed, 15 Dec 2021 10:17:35 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0DF642B3204AF; Wed, 15 Dec 2021 10:17:35 +0100 (CET)
+Date:   Wed, 15 Dec 2021 10:17:35 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kernel-team@fb.com, x86@kernel.org
+Subject: Re: [PATCH v2 bpf-next 5/7] x86/alternative: introduce text_poke_jit
+Message-ID: <Ybmyr3GB5+nZbso2@hirez.programming.kicks-ass.net>
+References: <20211215060102.3793196-1-song@kernel.org>
+ <20211215060102.3793196-6-song@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="PEIAKu/WMn1b1Hv9"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213092931.784850569@linuxfoundation.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20211215060102.3793196-6-song@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 14, 2021 at 10:01:00PM -0800, Song Liu wrote:
+> This will be used by BPF jit compiler to dump JITed binary to a RWX huge
 
---PEIAKu/WMn1b1Hv9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+OK, I read the actually allocator you use and the relevant code for this
+patch and the above is a typo, you meant: RX. Those pages are most
+definitely not writable.
 
-Hi!
 
-> The function mux_get_parent() uses qcom_find_src_index() to find the
-> parent clock index, which is incorrect: qcom_find_src_index() uses src
-> enum for the lookup, while mux_get_parent() should use cfg field (which
-> corresponds to the register value). Add qcom_find_cfg_index() function
-> doing this kind of lookup and use it for mux parent lookup.
-
-This appears to have problems with error handling.
-
-> +++ b/drivers/clk/qcom/clk-regmap-mux.c
-> @@ -36,7 +36,7 @@ static u8 mux_get_parent(struct clk_hw *
->  	val &=3D mask;
-> =20
->  	if (mux->parent_map)
-> -		return qcom_find_src_index(hw, mux->parent_map, val);
-> +		return qcom_find_cfg_index(hw, mux->parent_map, val);
-> =20
->  	return val;
->  }
-
-So this returns u8.
-
-> +int qcom_find_cfg_index(struct clk_hw *hw, const struct parent_map *map,=
- u8 cfg)
+> +void *text_poke_jit(void *addr, const void *opcode, size_t len)
 > +{
-> +	int i, num_parents =3D clk_hw_get_num_parents(hw);
+> +	unsigned long start = (unsigned long)addr;
+> +	size_t patched = 0;
 > +
-> +	for (i =3D 0; i < num_parents; i++)
-> +		if (cfg =3D=3D map[i].cfg)
-> +			return i;
+> +	if (WARN_ON_ONCE(core_kernel_text(start)))
+> +		return NULL;
 > +
-> +	return -ENOENT;
+> +	while (patched < len) {
+> +		unsigned long ptr = start + patched;
+> +		size_t s;
+> +
+> +		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
+
+Cute, should work.
+
+> +
+> +		__text_poke((void *)ptr, opcode + patched, s);
+> +		patched += s;
+> +	}
+> +	return addr;
 > +}
-
-In case of error, -ENOENT will be cast to u8 in caller. I don't
-believe that is correct.
-
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---PEIAKu/WMn1b1Hv9
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmG5smcACgkQMOfwapXb+vLfGACghGVfl/BVcx3Ba/mAycv5WK2d
-V/sAn2lAERM+A4AczZUjFFhimbMajL6x
-=2YmH
------END PGP SIGNATURE-----
-
---PEIAKu/WMn1b1Hv9--

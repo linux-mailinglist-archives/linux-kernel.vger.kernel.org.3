@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 531F6475F77
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4889E475F7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234614AbhLORiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234176AbhLORiM (ORCPT
+        id S234720AbhLORiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:38:50 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:49390 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234594AbhLORit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:38:12 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE72C061574;
-        Wed, 15 Dec 2021 09:38:11 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id b7so18266568edd.6;
-        Wed, 15 Dec 2021 09:38:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wHSJEvMaIsTc7h8la2YQGbQodwQPApyf7+yKRFnENBc=;
-        b=SvfxzpsSVLXLCVbHRcbcFqim4+B8PHmRbgdhfb3ZkOA6mSuf81cmjdAy20H6QU0VxC
-         HZDWkzGV00rcnyCeTpaQTt4s8y/GWRilVHP0foY/JH+XfdOqIg3aZPprZWVb3tInSpfp
-         tu8lRgcN/vpsCzi6YSwJCdukNAgStQhgGRRyXkwa23Ji+uOkRdUHEqQSITp/VUFxFiuY
-         6MzlvhnyDoeOoFE9oMseORKmecnGojMzr+99on6yVmkikK6YB1M27uKqrIMFJWo1cBlq
-         z0fyT00pedHwXgZhtU1bk1Uyn2MtxdRNicc0PhufPqyfPMsVj6xWKMKoWw6DVh2brELS
-         vQZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wHSJEvMaIsTc7h8la2YQGbQodwQPApyf7+yKRFnENBc=;
-        b=7VaU/xqlSFPpbJgV3hndfAME1jO1w5bwRngwTcYpvhSxx29bmT98idMeq3rjA2JPnu
-         mBlbA6CxZNGmCX6M04TcsLjUMY1da8QPxultcSF3sxasJHl6eecowy1k4WK1zLYME1zL
-         nwJlG9Mb029lsvwMBqjv40FzWtP69N3vPWGjV0sNpLT/COJYsU/bxp3TQ9hrP3GxvudK
-         DwzP0+yPagFOwMJIcraimuP3AhvyhXsFj5qNQWCTY4LCO+eGMBzsTqOBJi1IVbKCynzU
-         E5duKo19Fm7048z5qcObtL9YD9ovaAIRNyrGCO9OoF2HbWLIL4k+c5uZ73ANbpGtgiGT
-         zZ/g==
-X-Gm-Message-State: AOAM531TgQK2Whi36VR5ZMcpU2AqHXHZtF2n+p9Jh7eAXPvxzN+IBMnA
-        aK/EvTnySIxPnR3b2f8/euc=
-X-Google-Smtp-Source: ABdhPJwPUrVkuRn/jLs6O1tnQcz+kCgl1GjfXkTsJh49QFe6B89Oftb8NzEjD/DNLWecFav6qeoOPA==
-X-Received: by 2002:a17:906:7191:: with SMTP id h17mr11600753ejk.643.1639589890530;
-        Wed, 15 Dec 2021 09:38:10 -0800 (PST)
-Received: from [192.168.8.198] ([148.252.129.75])
-        by smtp.gmail.com with ESMTPSA id l16sm1364085edb.59.2021.12.15.09.38.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 09:38:10 -0800 (PST)
-Message-ID: <6406f753-180a-7896-6df2-c187cb0e975f@gmail.com>
-Date:   Wed, 15 Dec 2021 17:38:11 +0000
+        Wed, 15 Dec 2021 12:38:49 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51]:38374)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mxYEq-00Gzy3-Ef; Wed, 15 Dec 2021 10:38:48 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:42328 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mxYEp-00F8hM-Ag; Wed, 15 Dec 2021 10:38:48 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Rong Chen <rong.a.chen@intel.com>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+References: <202112140949.Uq5sFKR1-lkp@intel.com>
+        <87k0g7t7ry.fsf@email.froward.int.ebiederm.org>
+        <2af5f2f0-b2db-35e3-2d7a-7fa512db19af@intel.com>
+        <8735mutqvz.fsf@email.froward.int.ebiederm.org>
+        <db094a6d-48d6-7641-b8c3-fc338bd779b0@intel.com>
+Date:   Wed, 15 Dec 2021 11:38:40 -0600
+In-Reply-To: <db094a6d-48d6-7641-b8c3-fc338bd779b0@intel.com> (Rong Chen's
+        message of "Wed, 15 Dec 2021 13:22:21 +0800")
+Message-ID: <874k79sr8f.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
-References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
- <20211215084044.064e6861@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20211215084044.064e6861@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-XM-SPF: eid=1mxYEp-00F8hM-Ag;;;mid=<874k79sr8f.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX195EHMjx+TaH3P9lovQXdzxvEqxY73Iklg=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMSubLong autolearn=disabled
+        version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4368]
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Rong Chen <rong.a.chen@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 541 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 10 (1.9%), b_tie_ro: 9 (1.6%), parse: 0.79 (0.1%),
+         extract_message_metadata: 14 (2.6%), get_uri_detail_list: 1.26 (0.2%),
+         tests_pri_-1000: 16 (3.0%), tests_pri_-950: 1.22 (0.2%),
+        tests_pri_-900: 0.98 (0.2%), tests_pri_-90: 297 (54.8%), check_bayes:
+        293 (54.0%), b_tokenize: 6 (1.0%), b_tok_get_all: 5 (1.0%),
+        b_comp_prob: 1.90 (0.4%), b_tok_touch_all: 277 (51.1%), b_finish: 0.96
+        (0.2%), tests_pri_0: 170 (31.3%), check_dkim_signature: 0.60 (0.1%),
+        check_dkim_adsp: 3.0 (0.6%), poll_dns_idle: 17 (3.1%), tests_pri_10:
+        2.0 (0.4%), tests_pri_500: 27 (5.0%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH] objtool: Add a missing comma to avoid string concatenation
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 16:40, Jakub Kicinski wrote:
-> On Wed, 15 Dec 2021 14:49:18 +0000 Pavel Begunkov wrote:
->> +static inline bool
->> +__cgroup_bpf_prog_array_is_empty(struct cgroup_bpf *cgrp_bpf,
->> +				 enum cgroup_bpf_attach_type type)
->> +{
->> +	struct bpf_prog_array *array = rcu_access_pointer(cgrp_bpf->effective[type]);
->> +
->> +	return array == &bpf_empty_prog_array.hdr;
->> +}
->> +
->> +#define CGROUP_BPF_TYPE_ENABLED(sk, atype)				       \
->> +({									       \
->> +	struct cgroup *__cgrp = sock_cgroup_ptr(&(sk)->sk_cgrp_data);	       \
->> +									       \
->> +	!__cgroup_bpf_prog_array_is_empty(&__cgrp->bpf, (atype));	       \
->> +})
->> +
-> 
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index e7a163a3146b..0d2195c6fb2a 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -1161,6 +1161,19 @@ struct bpf_prog_array {
->>   	struct bpf_prog_array_item items[];
->>   };
->>   
->> +struct bpf_empty_prog_array {
->> +	struct bpf_prog_array hdr;
->> +	struct bpf_prog *null_prog;
->> +};
->> +
->> +/* to avoid allocating empty bpf_prog_array for cgroups that
->> + * don't have bpf program attached use one global 'bpf_empty_prog_array'
->> + * It will not be modified the caller of bpf_prog_array_alloc()
->> + * (since caller requested prog_cnt == 0)
->> + * that pointer should be 'freed' by bpf_prog_array_free()
->> + */
->> +extern struct bpf_empty_prog_array bpf_empty_prog_array;
-> 
-> mumble mumble, this adds more "fun" dependencies [1] Maybe I'm going
 
-Header dependencies? It's declared right after struct bpf_prog_array,
-and the other member is a pointer, so not sure what can go wrong.
+Recently the kbuild robot reported two new errors:
 
+>> lib/kunit/kunit-example-test.o: warning: objtool: .text.unlikely: unexpected end of section
+>> arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to next function show_opcodes()
 
-> about this all wrong, maybe I should be pulling out struct cgroup_bpf
-> so that cgroup.h does not need bpf-cgroup, not breaking bpf <-> bpf-cgroup.
-> Alexei, WDYT?
-> 
-> [1] https://lore.kernel.org/all/20211215061916.715513-2-kuba@kernel.org/
-> 
+I don't know why they did not occur in my test setup but after digging
+it I realized I had accidentally dropped a comma in
+tools/objtool/check.c when I renamed rewind_stack_do_exit to
+rewind_stack_and_make_dead.
 
+Add that comma back to fix objtool errors.
+
+Link: https://lkml.kernel.org/r/202112140949.Uq5sFKR1-lkp@intel.com
+Fixes: 0e25498f8cd4 ("exit: Add and use make_task_dead.")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+
+For the record this is my trivial objtool fix.
+
+ tools/objtool/check.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 282273a1ffa5..3fc2c57f6124 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -177,7 +177,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
+ 		"fortify_panic",
+ 		"usercopy_abort",
+ 		"machine_real_restart",
+-		"rewind_stack_and_make_dead"
++		"rewind_stack_and_make_dead",
+ 		"kunit_try_catch_throw",
+ 		"xen_start_kernel",
+ 		"cpu_bringup_and_idle",
 -- 
-Pavel Begunkov
+2.29.2
+

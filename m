@@ -2,107 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4DA475A77
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9169475A86
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243286AbhLOORT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:17:19 -0500
-Received: from foss.arm.com ([217.140.110.172]:53282 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243269AbhLOORS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:17:18 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 981E4143B;
-        Wed, 15 Dec 2021 06:17:17 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.67.176])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D52853F774;
-        Wed, 15 Dec 2021 06:17:12 -0800 (PST)
-Date:   Wed, 15 Dec 2021 14:17:09 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 33/43] kmsan: disable physical page merging in biovec
-Message-ID: <Ybn45VpVhjeSqt/S@FVFF77S0Q05N>
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-34-glider@google.com>
+        id S243319AbhLOOS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:18:27 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:33394 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S237554AbhLOOSX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:18:23 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BF9DUax011325;
+        Wed, 15 Dec 2021 15:17:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=YyNwvIlhQ54K6BfHJlIZ/f2Pz7aIwge6Xq8yYR8CYh4=;
+ b=mgi+gfZjF0mC0/1JZyeYJR/dLlXwEqdcnlpcUhONxDxNgMno8kIfts32tdLe9pIvLuCH
+ 0PK5njxbcY1zmBQiL7Gc+UIpIbYKVdymC8xd3N4UFmpc/3Aa18ZdK0SwMzW/rarrwgRc
+ DV6DdF40hDrwUs8n2c+fSYrHHRg1H6KW9wy/u1V9X49eBe5e3qdZ+Fpu2cbF8udCejTa
+ 4yQALaqpcYlR6qEFECxTnbMReCWiHGADZrw1Y8O+Cyby4sBFAcsje3PAY2wM3QHW1tsa
+ JSLauNObpNpL25SkfjjzFuFSnZWdfULQwAD5XXwJdhTILZ9236nyweXpfP5HqfMvU9ap UQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cy79j42k1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Dec 2021 15:17:55 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3F7D510002A;
+        Wed, 15 Dec 2021 15:17:54 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1A8C521EB8F;
+        Wed, 15 Dec 2021 15:17:54 +0100 (CET)
+Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 15 Dec 2021 15:17:53
+ +0100
+From:   Yann Gautier <yann.gautier@foss.st.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        <u.kleine-koenig@pengutronix.de>, Marek Vasut <marex@denx.de>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Yann Gautier <yann.gautier@foss.st.com>
+Subject: [PATCH 0/4] mmc: mmci: updates for STM32MP13
+Date:   Wed, 15 Dec 2021 15:17:23 +0100
+Message-ID: <20211215141727.4901-1-yann.gautier@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214162050.660953-34-glider@google.com>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-15_09,2021-12-14_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:20:40PM +0100, Alexander Potapenko wrote:
-> KMSAN metadata for consequent physical pages may be inconsequent,
+The new STmicroelectronics STM32MP13 SoC embeds a new version
+of the SDMMC peripheral (v2.2).
+It supports SDR104 and HS200 modes.
 
-I think you mean 'adjacent'/ rather than 'consequent' here, i.e.
+Yann Gautier (4):
+  mmc: mmci: Add support for sdmmc variant revision v2.2
+  mmc: mmci: increase stm32 sdmmcv2 clock max freq
+  mmc: mmci: stm32: clear DLYB_CR after sending tuning command
+  mmc: mmci: add hs200 support for stm32 sdmmc
 
-| KMSAN metadata for adjacent physical pages may not be adjacent
+ drivers/mmc/host/mmci.c             | 7 ++++++-
+ drivers/mmc/host/mmci_stm32_sdmmc.c | 7 +++++--
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-> therefore accessing such pages together may lead to metadata
-> corruption.
-> We disable merging pages in biovec to prevent such corruptions.
-> 
-> Signed-off-by: Alexander Potapenko <glider@google.com>
-> ---
-> 
-> Link: https://linux-review.googlesource.com/id/Iece16041be5ee47904fbc98121b105e5be5fea5c
-> ---
->  block/blk.h | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/block/blk.h b/block/blk.h
-> index ccde6e6f17360..e0c62a5d5639e 100644
-> --- a/block/blk.h
-> +++ b/block/blk.h
-> @@ -103,6 +103,13 @@ static inline bool biovec_phys_mergeable(struct request_queue *q,
->  	phys_addr_t addr1 = page_to_phys(vec1->bv_page) + vec1->bv_offset;
->  	phys_addr_t addr2 = page_to_phys(vec2->bv_page) + vec2->bv_offset;
->  
-> +	/*
-> +	 * Merging consequent physical pages may not work correctly under KMSAN
-> +	 * if their metadata pages aren't consequent. Just disable merging.
-> +	 */
+-- 
+2.17.1
 
-Likewise here.
-
-Mark.
-
-> +	if (IS_ENABLED(CONFIG_KMSAN))
-> +		return false;
-> +
->  	if (addr1 + vec1->bv_len != addr2)
->  		return false;
->  	if (xen_domain() && !xen_biovec_phys_mergeable(vec1, vec2->bv_page))
-> -- 
-> 2.34.1.173.g76aa8bc2d0-goog
-> 

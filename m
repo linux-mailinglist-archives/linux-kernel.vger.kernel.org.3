@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D36B74754F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9C04754F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241080AbhLOJQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241064AbhLOJQL (ORCPT
+        id S241088AbhLOJQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:16:34 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:35198 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241064AbhLOJQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:16:11 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4635C061574;
-        Wed, 15 Dec 2021 01:16:10 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id m25so21085895qtq.13;
-        Wed, 15 Dec 2021 01:16:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RYeDCzkTqR8w02XopW3NZUvoT3MLoXV0cjz/EK2A9Iw=;
-        b=LyhgNX0m0w54B7uxFXN0PQEdi83OE74cvQdMu1CpSURgFEfnj3+JXCfyKkhbRrNwHG
-         27PDPWkussW5k1com1s3FgGNXTUYogzJAQJ3RRP27iNlzCOz9HTfZ6MdStsANWBiX33e
-         I01R3z/ZfKOr7E69pKvFGdjbO+q4teTAiBaSXN6GtJdHDtwmDkqZCZKmA2ITdg4/kTgy
-         A8m8H8nq1g5n09jGi24CXSlmK4hpufKPCmu1X9QNAQlxo8z213jGOJ72M36uiV+/NbVj
-         Ekl5c25mvn2uowpfvKncG3nk7vcnm6iGo2Am5EnBblOYkSeB8Ni0uDnFX9iui0hcSoya
-         REvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RYeDCzkTqR8w02XopW3NZUvoT3MLoXV0cjz/EK2A9Iw=;
-        b=Vv52RehVCu3G4C1pZFiZGVW38Vy/D5syYhCjWRIYWySfc9OzwzPeiQlXxpD1xFycF7
-         Xf3UznvO3nKeQL3p4zMdzMX7HemuBcc9hBWXsMWYpBYJpy3Y/Gm9SVyCKkRdxmU+HVSJ
-         tzK9+K54tZnvILu5hwh2fDWXb48CWRExrRky0bFmsHcquAvPJNA17KQjqkPz09PKzJVl
-         rr/kh6X/49K2XwfdN6Bf3CQs/wVaWnte1uuNdGfAMn9GwlPDbUUcTPjMirTOJXk2E/I7
-         UF3g7xnbfFDS63duAPNTYc0UQ6lC3D+VvehDBi6O1HZIektGVgI46QMKszBOoLD4tpwm
-         ZhCw==
-X-Gm-Message-State: AOAM530pmB6XJCDQBy+Sj5go5Cz7EUR+vzMSaTUbKai2T8hjsweZGtdf
-        tR9Dl1LeKmrFDXzr7UOyL75bVbhKFuY=
-X-Google-Smtp-Source: ABdhPJyRpJn1IDfLHPbInYijMkz7jBmtKcQ9FRTV8c2pICByzL6wXTmOLOWQiwhCwLoUNogP06UKOw==
-X-Received: by 2002:ac8:5e07:: with SMTP id h7mr10946388qtx.422.1639559770037;
-        Wed, 15 Dec 2021 01:16:10 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 196sm727407qkd.61.2021.12.15.01.16.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 01:16:09 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] xhci: use max() to make code cleaner
-Date:   Wed, 15 Dec 2021 09:16:02 +0000
-Message-Id: <20211215091602.445009-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Dec 2021 04:16:33 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 956161C0B98; Wed, 15 Dec 2021 10:16:32 +0100 (CET)
+Date:   Wed, 15 Dec 2021 10:16:24 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH 4.19 29/74] clk: qcom: regmap-mux: fix parent clock lookup
+Message-ID: <20211215091623.GA15796@amd>
+References: <20211213092930.763200615@linuxfoundation.org>
+ <20211213092931.784850569@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="PEIAKu/WMn1b1Hv9"
+Content-Disposition: inline
+In-Reply-To: <20211213092931.784850569@linuxfoundation.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Use max() in order to make code cleaner.
+--PEIAKu/WMn1b1Hv9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- drivers/usb/host/xhci.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Hi!
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index f5b1bcc875de..dc357cabb265 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -4998,10 +4998,8 @@ static int calculate_max_exit_latency(struct usb_device *udev,
- 			enabling_u2)
- 		u2_mel_us = DIV_ROUND_UP(udev->u2_params.mel, 1000);
- 
--	if (u1_mel_us > u2_mel_us)
--		mel_us = u1_mel_us;
--	else
--		mel_us = u2_mel_us;
-+	mel_us = max(u1_mel_us, u2_mel_us);
-+
- 	/* xHCI host controller max exit latency field is only 16 bits wide. */
- 	if (mel_us > MAX_EXIT) {
- 		dev_warn(&udev->dev, "Link PM max exit latency of %lluus "
--- 
-2.25.1
+> The function mux_get_parent() uses qcom_find_src_index() to find the
+> parent clock index, which is incorrect: qcom_find_src_index() uses src
+> enum for the lookup, while mux_get_parent() should use cfg field (which
+> corresponds to the register value). Add qcom_find_cfg_index() function
+> doing this kind of lookup and use it for mux parent lookup.
 
+This appears to have problems with error handling.
+
+> +++ b/drivers/clk/qcom/clk-regmap-mux.c
+> @@ -36,7 +36,7 @@ static u8 mux_get_parent(struct clk_hw *
+>  	val &=3D mask;
+> =20
+>  	if (mux->parent_map)
+> -		return qcom_find_src_index(hw, mux->parent_map, val);
+> +		return qcom_find_cfg_index(hw, mux->parent_map, val);
+> =20
+>  	return val;
+>  }
+
+So this returns u8.
+
+> +int qcom_find_cfg_index(struct clk_hw *hw, const struct parent_map *map,=
+ u8 cfg)
+> +{
+> +	int i, num_parents =3D clk_hw_get_num_parents(hw);
+> +
+> +	for (i =3D 0; i < num_parents; i++)
+> +		if (cfg =3D=3D map[i].cfg)
+> +			return i;
+> +
+> +	return -ENOENT;
+> +}
+
+In case of error, -ENOENT will be cast to u8 in caller. I don't
+believe that is correct.
+
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--PEIAKu/WMn1b1Hv9
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAmG5smcACgkQMOfwapXb+vLfGACghGVfl/BVcx3Ba/mAycv5WK2d
+V/sAn2lAERM+A4AczZUjFFhimbMajL6x
+=2YmH
+-----END PGP SIGNATURE-----
+
+--PEIAKu/WMn1b1Hv9--

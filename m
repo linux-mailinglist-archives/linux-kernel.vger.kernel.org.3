@@ -2,72 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3DA475CA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3481475CA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244385AbhLOQDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:03:48 -0500
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:46743 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232066AbhLOQDr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:03:47 -0500
-Received: by mail-oi1-f171.google.com with SMTP id s139so32198149oie.13;
-        Wed, 15 Dec 2021 08:03:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mTcNTFB+NbkHTcAd9qD1dVkWYrQ03s2LijZVy1oBOuU=;
-        b=joWO7PS6lWR0YEQjbF82GhunRWrsd9NAw/NtpCm1wUhcmx9rXCT8x+faROwvAa9Uor
-         XH2zlGMsSCvhJ3ftDCzbw+UF/AYGGJFx0CHUbc4yetTRXcLDZoTF84fyKENV7Rhn3Jjs
-         HFkgc0m4Y7D3gkzpgrr3m3wfcquVLlEZ3+dL8UQmSY5HEzbjZz9jQNqpG4cLOzsmXThG
-         ergNCKzDxTxVocG8x18pxp187JmhUk8sTEgV6v93a5ry1FW5pq0Qw7sUZ6jwEPRvfDAe
-         pG7B7InWF9Z75uJdhtwaCG5/7a1I5SAIRzr2uLbcXt8AlHML0SsreDmcAu5dkKXvak0z
-         kkdw==
-X-Gm-Message-State: AOAM5307IpXW1tXg5Rf+opEipydPWGA55ikYpGfmUs57ZVZBIIRS5LII
-        N72qI67bxDc4BO9zptTzzw==
-X-Google-Smtp-Source: ABdhPJxcEC8GaG5MiQpyLT/0ZeKJG5yMFntxwwj5HQx++f6s884/vXuecGcVNLCcGHcV0hCCY5AVXg==
-X-Received: by 2002:a05:6808:1919:: with SMTP id bf25mr411273oib.33.1639584226858;
-        Wed, 15 Dec 2021 08:03:46 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d6sm499525otb.4.2021.12.15.08.03.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 08:03:45 -0800 (PST)
-Received: (nullmailer pid 1397034 invoked by uid 1000);
-        Wed, 15 Dec 2021 16:03:45 -0000
-Date:   Wed, 15 Dec 2021 10:03:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, kishon@ti.com, nm@ti.com,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        tony@atomide.com, krzysztof.kozlowski@canonical.com,
-        vigneshr@ti.com
-Subject: Re: [PATCH v2 1/4] dt-bindings: memory-controllers: ti,gpmc: Add
- compatible for AM64
-Message-ID: <YboR4WAKRu8ui9HZ@robh.at.kernel.org>
-References: <20211208124611.16843-1-rogerq@kernel.org>
+        id S244395AbhLOQER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:04:17 -0500
+Received: from foss.arm.com ([217.140.110.172]:55948 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234539AbhLOQEQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 11:04:16 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8FC66D;
+        Wed, 15 Dec 2021 08:04:15 -0800 (PST)
+Received: from e126387.extremechicken.org (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C557C3F5A1;
+        Wed, 15 Dec 2021 08:04:14 -0800 (PST)
+From:   carsten.haitzler@foss.arm.com
+To:     linux-kernel@vger.kernel.org
+Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, inux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Subject: [PATCH 01/12] perf test: Shell - Limit to only run executable scripts in tests
+Date:   Wed, 15 Dec 2021 16:03:52 +0000
+Message-Id: <20211215160403.69264-1-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208124611.16843-1-rogerq@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Dec 2021 14:46:08 +0200, Roger Quadros wrote:
-> AM64 SoC contains the GPMC module. Add compatible for it.
-> 
-> Newer SoCs don't necessarily map GPMC data region at the same place
-> as legacy SoCs. Add reg-names "data", to provide this information to
-> the device driver.
-> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> ---
->  .../bindings/memory-controllers/ti,gpmc.yaml  | 23 ++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
-> 
+From: Carsten Haitzler <carsten.haitzler@arm.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Perf test's shell runner will just run everything in the tests
+directory (as long as it's not another directory or does not begin
+with a dot), but sometimes you find files in there that are not shell
+scripts - perf.data output for example if you do some testing and then
+the next time you run perf test it tries to run these. Check the files
+are executable so they are actually intended to be test scripts and
+not just some "random junk" files there.
+
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+---
+ tools/perf/tests/builtin-test.c |  4 +++-
+ tools/perf/util/path.c          | 12 ++++++++++++
+ tools/perf/util/path.h          |  1 +
+ 3 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+index 8cb5a1c3489e..ece272b55587 100644
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -295,7 +295,9 @@ static const char *shell_test__description(char *description, size_t size,
+ 
+ #define for_each_shell_test(entlist, nr, base, ent)	                \
+ 	for (int __i = 0; __i < nr && (ent = entlist[__i]); __i++)	\
+-		if (!is_directory(base, ent) && ent->d_name[0] != '.')
++		if (!is_directory(base, ent) && \
++			is_executable_file(base, ent) && \
++			ent->d_name[0] != '.')
+ 
+ static const char *shell_tests__dir(char *path, size_t size)
+ {
+diff --git a/tools/perf/util/path.c b/tools/perf/util/path.c
+index caed0336429f..7dde8c230ae8 100644
+--- a/tools/perf/util/path.c
++++ b/tools/perf/util/path.c
+@@ -92,3 +92,15 @@ bool is_directory(const char *base_path, const struct dirent *dent)
+ 
+ 	return S_ISDIR(st.st_mode);
+ }
++
++bool is_executable_file(const char *base_path, const struct dirent *dent)
++{
++	char path[PATH_MAX];
++	struct stat st;
++
++	sprintf(path, "%s/%s", base_path, dent->d_name);
++	if (stat(path, &st))
++		return false;
++
++	return !S_ISDIR(st.st_mode) && (st.st_mode & S_IXUSR);
++}
+diff --git a/tools/perf/util/path.h b/tools/perf/util/path.h
+index 083429b7efa3..d94902c22222 100644
+--- a/tools/perf/util/path.h
++++ b/tools/perf/util/path.h
+@@ -12,5 +12,6 @@ int path__join3(char *bf, size_t size, const char *path1, const char *path2, con
+ 
+ bool is_regular_file(const char *file);
+ bool is_directory(const char *base_path, const struct dirent *dent);
++bool is_executable_file(const char *base_path, const struct dirent *dent);
+ 
+ #endif /* _PERF_PATH_H */
+-- 
+2.32.0
+

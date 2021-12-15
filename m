@@ -2,94 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A68C4764B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B57F4764B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbhLOVho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:37:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbhLOVho (ORCPT
+        id S229884AbhLOVh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:37:57 -0500
+Received: from ale.deltatee.com ([204.191.154.188]:34846 "EHLO
+        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229878AbhLOVh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:37:44 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8B9C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 13:37:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=slN8KlAG/wgd1vHM4PNJ12OXam4tmufbrpTaVHTpKTo=; b=prB8s3G23vOELlqzEyhyjNWNll
-        LKWHcCquferLZhfY06Lks/YVUdaLOZNz6g8AdrD7A3fJ9q+EMTF51I14ICP9AYjeG0P6saRF6Baqw
-        lo0M190NFR97czMCNFq8YmvPIs2GcPRViSOQepavjqGByomZRPa6Q8WrEc6mg6JWJDg0C+Rp1Gwn+
-        rkCPcRV5QOmS1BGBr/s/poqY3KmvqBwT4BX3hKr2sp4avswPb91nDobJh47BGAMEZQR1XYfA4UBP4
-        v7lhyU4cNWUffTvRSohqvwDBlLXO/9Bu1mE5FlixwBCcj239t/EykI3KJJuH07Umrj15HbpzkQK0e
-        v0yCMeNw==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:61446 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1mxby0-0008S2-S2; Wed, 15 Dec 2021 22:37:40 +0100
-Message-ID: <5b1d9578-1f74-a808-c4d4-6e8c38dd57fc@tronnes.org>
-Date:   Wed, 15 Dec 2021 22:37:39 +0100
+        Wed, 15 Dec 2021 16:37:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
+        Message-ID:From:References:Cc:To:content-disposition;
+        bh=jWTj3wubn/0E/EwdQLFg156OS16E/EeY/O90DwhWuc8=; b=S/EAnnK6MO/X7SIASHuxJgMs3V
+        FIHpm1uuzGtao4cocaQsn80ed0jvqqUPIuSBExaeMwCl8qZzBWukIN26uAQYHOrR3Zco3njceTh8W
+        yyUWXRYnYbrCvU3/SadN/J+blhTlF3SLUZEE4NwRZyxfTne/oX0YLrXgK2ExCtzObs+jiARkkKsbY
+        QTL4JdcP3Rso5nICLz/C3uqbF1zwcWXf0Ii9MFAaUSEo3kk1A44SzIl7yxUGTjnqIBdLNnEwbfSts
+        4PydtjWXrMgnnCv/e1RHG+iiC9OTVhgXXD/p9q3lX07i4CY5SJosq+xQ1zu/Ml4ZcedBjYF8L38VI
+        orWEql3A==;
+Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1mxbyC-005fWQ-GJ; Wed, 15 Dec 2021 14:37:53 -0700
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>
+References: <20211215173556.GA702194@bhelgaas>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <e7676711-52c0-2ca4-f117-bea540d61cb1@deltatee.com>
+Date:   Wed, 15 Dec 2021 14:37:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 11/60] drm/gud: Add support for the nomodeset kernel
- parameter
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20211215010008.2545520-1-javierm@redhat.com>
- <20211215010008.2545520-12-javierm@redhat.com>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20211215010008.2545520-12-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20211215173556.GA702194@bhelgaas>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.73.163.230
+X-SA-Exim-Rcpt-To: edumazet@google.com, kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, bhelgaas@google.com, christophe.jaillet@wanadoo.fr, helgaas@kernel.org
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-8.5 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] PCI/P2PDMA: Save a few cycles in 'pci_alloc_p2pmem()'
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-Den 15.12.2021 01.59, skrev Javier Martinez Canillas:
-> According to disable Documentation/admin-guide/kernel-parameters.txt, this
-> parameter can be used to disable kernel modesetting.
+On 2021-12-15 10:35 a.m., Bjorn Helgaas wrote:
+> [+cc Logan, Eric]
 > 
-> DRM drivers will not perform display-mode changes or accelerated rendering
-> and only the systewm system framebuffer will be available if it was set-up.
+> On Wed, Nov 03, 2021 at 10:16:53PM +0100, Christophe JAILLET wrote:
+>> Use 'percpu_ref_tryget_live_rcu()' instead of 'percpu_ref_tryget_live()' to
+>> save a few cycles when it is known that the rcu lock is already
+>> taken/released.
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > 
-> But only a few DRM drivers currently check for nomodeset, make this driver
-> to also support the command line parameter.
-> 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
-> 
+> Added Logan and Eric since Logan is the author and de facto maintainer
+> of this file and Eric recently converted this to RCU.
 
-I don't understand why this is applicable to USB drivers, there's no way
-the firmware can setup a framebuffer and continue pushing pixels over
-USB when Linux has been given control over the USB bus?
+Looks fine to me:
 
-The same argument goes for the SPI drivers in drm/tiny/ as well.
+Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
 
-Noralf.
+> Maybe we need a MAINTAINERS entry for P2PDMA?
 
->  drivers/gpu/drm/gud/gud_drv.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/gud/gud_drv.c b/drivers/gpu/drm/gud/gud_drv.c
-> index 3f9d4b9a1e3d..4d253d249512 100644
-> --- a/drivers/gpu/drm/gud/gud_drv.c
-> +++ b/drivers/gpu/drm/gud/gud_drv.c
-> @@ -446,6 +446,9 @@ static int gud_probe(struct usb_interface *intf, const struct usb_device_id *id)
->  	u32 *formats;
->  	int ret, i;
->  
-> +	if (drm_firmware_drivers_only())
-> +		return -ENODEV;
-> +
->  	ret = usb_find_bulk_out_endpoint(intf->cur_altsetting, &bulk_out);
->  	if (ret)
->  		return ret;
-> 
+I'm not opposed to this. Would it be a duplicate of the PCI SUBSYSTEM
+just with my name added as maintainer? I could send a patch if so.
+
+Logan

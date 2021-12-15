@@ -2,121 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDE34764A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A68C4764B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbhLOVfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:35:20 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:37560 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbhLOVfT (ORCPT
+        id S229879AbhLOVho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:37:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229846AbhLOVho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:35:19 -0500
-Received: by mail-ot1-f42.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so26507340otg.4;
-        Wed, 15 Dec 2021 13:35:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Z+q7c1SY7BtuKP5J3/jz8SZvfLkzNTnGUuY7j/mzAHc=;
-        b=nCzwAqGls8MjCQiPAP64M00V1nn5sRy2vla3XlZ4gTFIpcqtL1Bo1/UzkTQ2M8Z6Hk
-         I8lrdsZT9uVbc6wXgX3hyysmy1vtpR9XTNKdnnUR715T8IR6x46gIflHSIUPOnaOCGgv
-         99ILDPkxmDTKNqcshJH+rfZaTFvXsBx0QFhI6J1vGMuLgRe93y8TfE4jRn22CSgYrEqk
-         Zr5PiiFqctVcaIoETqNV6LgX+pgJLSD3Y7h52jEkDnf5RvCNbl68ciyC4vIWWcjqE+Eo
-         AuMtrQmxkwiQo2LLjHN0CvYuTlBuPmPQWs2UQEIi0dxIzdri3cnTlw5Wv23F68ioB1Id
-         Isdw==
-X-Gm-Message-State: AOAM531vjlsfeEpxqm/zZDomVV+LmZUWmLcZxMlJxChkbUo3kZ2CbSRi
-        ibdrZccvp7K8JYeTZBCDng==
-X-Google-Smtp-Source: ABdhPJyxJk251z35S8Jgh8xmkk0PNxS6+ErkCImJCh4gEyMmYR6BAMyQtiw/YYMx64IPyqYDivd+8Q==
-X-Received: by 2002:a05:6830:1b64:: with SMTP id d4mr10561743ote.310.1639604118473;
-        Wed, 15 Dec 2021 13:35:18 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id x4sm545522oiv.35.2021.12.15.13.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 13:35:17 -0800 (PST)
-Received: (nullmailer pid 1880044 invoked by uid 1000);
-        Wed, 15 Dec 2021 21:35:16 -0000
-Date:   Wed, 15 Dec 2021 15:35:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dougall <dougallj@gmail.com>, kernel-team@android.com
-Subject: Re: [PATCH v3 03/10] dt-bindings: apple,aic: Add affinity
- description for per-cpu pseudo-interrupts
-Message-ID: <YbpflHyduDzZb3vx@robh.at.kernel.org>
-References: <20211214182634.727330-1-maz@kernel.org>
- <20211214182634.727330-4-maz@kernel.org>
+        Wed, 15 Dec 2021 16:37:44 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8B9C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 13:37:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=slN8KlAG/wgd1vHM4PNJ12OXam4tmufbrpTaVHTpKTo=; b=prB8s3G23vOELlqzEyhyjNWNll
+        LKWHcCquferLZhfY06Lks/YVUdaLOZNz6g8AdrD7A3fJ9q+EMTF51I14ICP9AYjeG0P6saRF6Baqw
+        lo0M190NFR97czMCNFq8YmvPIs2GcPRViSOQepavjqGByomZRPa6Q8WrEc6mg6JWJDg0C+Rp1Gwn+
+        rkCPcRV5QOmS1BGBr/s/poqY3KmvqBwT4BX3hKr2sp4avswPb91nDobJh47BGAMEZQR1XYfA4UBP4
+        v7lhyU4cNWUffTvRSohqvwDBlLXO/9Bu1mE5FlixwBCcj239t/EykI3KJJuH07Umrj15HbpzkQK0e
+        v0yCMeNw==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:61446 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1mxby0-0008S2-S2; Wed, 15 Dec 2021 22:37:40 +0100
+Message-ID: <5b1d9578-1f74-a808-c4d4-6e8c38dd57fc@tronnes.org>
+Date:   Wed, 15 Dec 2021 22:37:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214182634.727330-4-maz@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 11/60] drm/gud: Add support for the nomodeset kernel
+ parameter
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20211215010008.2545520-1-javierm@redhat.com>
+ <20211215010008.2545520-12-javierm@redhat.com>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20211215010008.2545520-12-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 06:26:27PM +0000, Marc Zyngier wrote:
-> Some of the FIQ per-cpu pseudo-interrupts are better described with
-> a specific affinity, the most obvious candidate being the CPU PMUs.
+
+
+Den 15.12.2021 01.59, skrev Javier Martinez Canillas:
+> According to disable Documentation/admin-guide/kernel-parameters.txt, this
+> parameter can be used to disable kernel modesetting.
 > 
-> Augment the AIC binding to be able to specify that affinity in the
-> interrupt controller node.
+> DRM drivers will not perform display-mode changes or accelerated rendering
+> and only the systewm system framebuffer will be available if it was set-up.
 > 
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> But only a few DRM drivers currently check for nomodeset, make this driver
+> to also support the command line parameter.
+> 
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 > ---
->  .../interrupt-controller/apple,aic.yaml       | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-> index b95e41816953..ac1c82cffa0a 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-> @@ -67,6 +67,32 @@ properties:
->        Specifies base physical address and size of the AIC registers.
->      maxItems: 1
+
+I don't understand why this is applicable to USB drivers, there's no way
+the firmware can setup a framebuffer and continue pushing pixels over
+USB when Linux has been given control over the USB bus?
+
+The same argument goes for the SPI drivers in drm/tiny/ as well.
+
+Noralf.
+
+>  drivers/gpu/drm/gud/gud_drv.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/gud/gud_drv.c b/drivers/gpu/drm/gud/gud_drv.c
+> index 3f9d4b9a1e3d..4d253d249512 100644
+> --- a/drivers/gpu/drm/gud/gud_drv.c
+> +++ b/drivers/gpu/drm/gud/gud_drv.c
+> @@ -446,6 +446,9 @@ static int gud_probe(struct usb_interface *intf, const struct usb_device_id *id)
+>  	u32 *formats;
+>  	int ret, i;
 >  
-> +  affinities:
-> +    type: object
-> +    description:
-> +      FIQ affinity can be expressed as a single "affinities" node,
-> +      containing a set of sub-nodes, one per FIQ with a non-default
-> +      affinity.
-> +    patternProperties:
-> +      "^.+-affinity$":
-> +        type: object
-> +        properties:
-> +          fiq-index:
-> +            description:
-> +              The interrupt number specified as a FIQ, and for which
-> +              the affinity is not the default.
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            maximum: 5
-
-blank line between each prop.
-
-> +          affinity:
-
-'cpus' is already somewhat established for list of phandles to cpu 
-nodes.
-
-> +            $ref: /schemas/types.yaml#/definitions/phandle-array
-> +            description:
-> +              Should be a list of phandles to CPU nodes (as described in
-> +              Documentation/devicetree/bindings/arm/cpus.yaml).
+> +	if (drm_firmware_drivers_only())
+> +		return -ENODEV;
 > +
-> +        required:
-> +          - fiq-index
-> +          - affinity
-> +
->  required:
->    - compatible
->    - '#interrupt-cells'
-> -- 
-> 2.30.2
-> 
+>  	ret = usb_find_bulk_out_endpoint(intf->cur_altsetting, &bulk_out);
+>  	if (ret)
+>  		return ret;
 > 

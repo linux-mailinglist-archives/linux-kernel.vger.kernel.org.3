@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE414757B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B494757BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237004AbhLOLY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:24:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
+        id S237147AbhLOL2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 06:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbhLOLY0 (ORCPT
+        with ESMTP id S229982AbhLOL2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:24:26 -0500
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3E6C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 03:24:25 -0800 (PST)
-Received: by mail-qk1-x743.google.com with SMTP id 132so19597756qkj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 03:24:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RlLgwwH/uXHPTwDkR0KfhsWDxwNLfIM19w1771oT5k0=;
-        b=awk7v/wXCnGqOYB1muEkACMC2zdNvABKzPEWD2c2kXVvoiYiY2gK6WBi91GOSHSY+1
-         55yuIbbDaU5mzqDID32Gd7cctzILA5UtYar4Df7lHqyzLmRBXOpKaoKZ5k36ebvy4xHt
-         CyTmDRg7u34Xk03mMT19TCujjaFdDNFpiytsLdZDWcnEaDPKjzSffBFrOcrehJ+DD38z
-         4KQZBWk7Wh5xjcU0V694ZSbh5pi86iuu5GfLt8QpT/D0UY+A2RpCBKOC/WPh9hF/sJcQ
-         BJxUJSow/RLMXJMIigIkze21f3EyU0YtRnraB3JoVymsxO43B02xhoA8KJ0b0xDtSXvR
-         Lj9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RlLgwwH/uXHPTwDkR0KfhsWDxwNLfIM19w1771oT5k0=;
-        b=a50Vj+R9kRtP6jMvbZXX8Q0UZZ2TFPPvhmLSdb0sg9pJEJ3lZavS/OeuAAkvvCGwEy
-         FBlTlHVqKV8XdUuqZLCj/SUiZWNZsGxpBETjxyajdag0hLZg1MHapqmMtt4c7nM7nYcn
-         f4TkOz+bo2eI9LTn4gZGA1OwZE3vrC9jLscebSUsLge5LTSZWpX+erGUZSYzleeDNmo+
-         KBgtNWTFhCtPDPZVKvY+5ggqkJ5zF/gnfcsja8yB+7nxFj8+P/P3QaAn/tZM/LaP5Hvc
-         +QCun1rNg8CH+P9ruBfJf/70+3t5+KnxkdHgpt2S/v57Qspv7TdKwPAn/mhdbNtGML/k
-         N3BA==
-X-Gm-Message-State: AOAM532OSqaZqgOS7IvZ30lrzAlZi7HedWeABKv5kdY4A9Oxe58evHsm
-        WP2Rgr0IeLotd41CtKOE6yt5o8lUn1e3WVrXSfY=
-X-Google-Smtp-Source: ABdhPJz/SgakNBHsiXF7vBHC9kcrWyCjwF5+Cy4MOYPYESqijrUtbSuJSigAJjcOdwn2TJkvNTEJtgPCxYlAIz8hw7k=
-X-Received: by 2002:a05:620a:191a:: with SMTP id bj26mr8062021qkb.37.1639567464734;
- Wed, 15 Dec 2021 03:24:24 -0800 (PST)
+        Wed, 15 Dec 2021 06:28:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7B3C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 03:28:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 455C5B81ED2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:28:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF9BC34605;
+        Wed, 15 Dec 2021 11:28:07 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Jiri Slaby <jslaby@suse.cz>, Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Will Deacon <will@kernel.org>, tabba@google.com, maz@kernel.org,
+        dave.hansen@linux.intel.com, tglx@linutronix.de, mingo@redhat.com,
+        broonie@kernel.org, linux-arm-kernel@lists.infradead.org,
+        ardb@kernel.org
+Subject: Re: (subset) [RFC PATCH 0/6] linkage: better symbol aliasing
+Date:   Wed, 15 Dec 2021 11:28:05 +0000
+Message-Id: <163956767641.2562019.6628259864727549790.b4-ty@arm.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211206124715.4101571-1-mark.rutland@arm.com>
+References: <20211206124715.4101571-1-mark.rutland@arm.com>
 MIME-Version: 1.0
-Received: by 2002:a05:622a:1aa1:b0:2bd:9337:348b with HTTP; Wed, 15 Dec 2021
- 03:24:24 -0800 (PST)
-Reply-To: howardfahie1@gmail.com
-From:   Howard Fahie <eric0011udenwa@gmail.com>
-Date:   Wed, 15 Dec 2021 12:24:24 +0100
-Message-ID: <CAK8dXb0ELV_wLniTh=RGA0BWeDa97MBafv5G48cnZ3wBr-DO4A@mail.gmail.com>
-Subject: Good day,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day,
-I want to know if you received my previous mail concerning your
-compensation file with the United Nations Compensation Program.
-Confirm as soon as possible.
-Howard Fahie
-United Kingdom (UK)
+On Mon, 6 Dec 2021 12:47:09 +0000, Mark Rutland wrote:
+> This series aims to make symbol aliasing simpler and more consistent.
+> The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
+> SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
+> that e.g.
+> 
+>     SYM_FUNC_START(func)
+>     SYM_FUNC_START_ALIAS(alias1)
+>     SYM_FUNC_START_ALIAS(alias2)
+>         ... asm insns ...
+>     SYM_FUNC_END(func)
+>     SYM_FUNC_END_ALIAS(alias1)
+>     SYM_FUNC_END_ALIAS(alias2)
+>     EXPORT_SYMBOL(alias1)
+>     EXPORT_SYMBOL(alias2)
+> 
+> [...]
+
+Applied to arm64 (for-next/misc), thanks!
+
+[3/6] arm64: remove __dma_*_area() aliases
+      https://git.kernel.org/arm64/c/c2c529b27ceb
+
+-- 
+Catalin
+

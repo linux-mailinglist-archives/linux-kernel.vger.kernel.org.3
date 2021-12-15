@@ -2,171 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECD3475294
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:14:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212BB4752A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240040AbhLOGOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 01:14:51 -0500
-Received: from mga12.intel.com ([192.55.52.136]:26948 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229576AbhLOGOu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 01:14:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639548890; x=1671084890;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=Z6Sfpghe11E6mXkcw1Fbto2Wt66fDkhMMLAIUR0pfjg=;
-  b=RK/sy8Z9pGzLLVL9fVpnV51KWamNgUpcJjzGLaL3Oo0s/XY4ZywDFdLr
-   Afm76WwVGAdZctsYr8FH4RLhH7M1YwyvlmtUMv2ZB8enfI2o05a7/QLmm
-   sYbcFztuH8g99msIno7LHk6UNmUbeCTl60ADPa/IboEF6IQmG1fDP1mCD
-   R5OwLXDEIc/hKRil7asYGFrX26d47UUGADuVPD3EIdIwTPj62yzTHfxka
-   7aTlwioSW7Ao/YV9JsNNlY3ZYIxjmOeC1xkJgTjWmKqw5rkfIaINsbhai
-   5gvt76Z/eIrpiiv2Rh/ZAcaCcBqq0ozR73vMXuebtacirgOMFYSZXNG3F
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="219172645"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="219172645"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 22:14:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="464140375"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga003.jf.intel.com with ESMTP; 14 Dec 2021 22:14:47 -0800
-Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 14 Dec 2021 22:14:47 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Tue, 14 Dec 2021 22:14:47 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Tue, 14 Dec 2021 22:14:47 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YTnkQ7s9ruVsc2Ky/FR5gdsZPqqAUEPQPdCb1B3ojFG4zt88xRPimsHtsV98mNelQefJY44GUBhArdD55a7Kq1AzaJi4eVFW5lv4WXvg1G0W38G7djhj9/jK15yO/KIMRaPnyIHWT2jfbxFxR6RcsDcfBWH8V+4k6tY3wVwA9QLy6CZPJpSYKFfxLP+gWEQi62jBbuZvmTioYh9niFd5lC0m7w9HFuBxa3o7rU99/CEx231JXpd/1KTNFUtHKUFrR7haCB5XFYC94evg7qXrUJ0I9g9uIQWwF0tIO6J5Ge+XC92BRYVkHwLh5mrWNovUnmy83XdPNyNcW3xkB/8PXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z6Sfpghe11E6mXkcw1Fbto2Wt66fDkhMMLAIUR0pfjg=;
- b=HcPy2tgVHgu/izySobpdjM2roJTq07oq510068cRRmuC1GB3fYVe05BZkQIHdHWWxpOzll69IcbiNbC+sXGAtZ+Bhcs3QVyMxSsJ1JHStelRgX6KpPmOvDVs6ncPXglXofA51vBMQCwRrFhFbjedlSNSrF9kicMBaHSfaBadrvRC09DowYfX4w/S0Ej+dWWnY49OSyCU5XoQxz9gOKfM8qYDCM/fXYm2vMpr5kEdcyAZY8v3NfqXE46nPhHd4XYz4yxV6JIM1Rlxtc8n1Xj7DKtXfhp526ECUeuGR1TWGf6utBM+Pe4Z8/ZUxvYh6UgDopjQUXBuc4nQX6zdMAc0lA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z6Sfpghe11E6mXkcw1Fbto2Wt66fDkhMMLAIUR0pfjg=;
- b=lr0vwWnaXebcuQBDq9qL87j7kHJPJQ+6jYNAhO7vTIRIYH5UV78L6ngqhL7UfJWwX9g5wAENFtTm3p4UsuLShl17oieNO03223dbuFihovjBX37VQbvxi4G5FGaIkvV4KKlygr9lFNraBdl08Qm5aCKebUdF1w3qfl130zlDDtY=
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BN7PR11MB2609.namprd11.prod.outlook.com (2603:10b6:406:b1::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Wed, 15 Dec
- 2021 06:14:44 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::5c8a:9266:d416:3e04%3]) with mapi id 15.20.4778.018; Wed, 15 Dec 2021
- 06:14:44 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Jing Liu <jing2.liu@linux.intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>
-Subject: RE: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
-Thread-Topic: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
-Thread-Index: AQHX8JViV3rUbi5iYUCgo3JeBUJUo6wxgJXAgAGTtEA=
-Date:   Wed, 15 Dec 2021 06:14:44 +0000
-Message-ID: <BN9PR11MB5276775D3CFD7F90B6F306F48C769@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20211214022825.563892248@linutronix.de>
- <20211214024948.048572883@linutronix.de> 
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.200.16
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f9dd8542-9ccf-4f2d-d28a-08d9bf923016
-x-ms-traffictypediagnostic: BN7PR11MB2609:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN7PR11MB2609811FED30BBD8DDDDA6978C769@BN7PR11MB2609.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: T96VKsDNvUk1pk80cGFyfAoK5TKl49cc4uD2Lu7cZEoOr2jLFsMxcDbYvnEL1vqFyqFWdzaY7VSGIYE++jOnu5VD011NVCgvT6r3PKZ5kPRS7ktw8sTPq9QI0Aia1b1fQE/UVD+UmpTXbQNB6qUKLFO+M67gfnwalLQaEpOiWB+L/wzB7QYFtNQU085vQxk0/E3lfHdEHz5zT6uzemGXqNAsmM8ZLeCZV2/6tpYb8PyLT7yK3/SQtNEKZyzbJo8kij9zWIvFeV+pEQg12aNCYlwDAPBUg/TrB74QStpCGC0IZOMSBGG1lgR5Jnl6Ch+lWysKaaorOTeHSaRSbBjjn0volSEiU7wEAajT1TUML4v2paDLm5/kXJFSWyjKAkHB1u+XFH/IS3s6IEgx8tv7DojaITPUPar2fGMSszw5kbJYhVHYp0rOUeoS1XM6+1wFRfx6lQJuB99TGw5yBehrWCpWc7e/6zvY6IeTnPejklHskIke+bLPsMFNvDqCMZ3S5hFEfu5S/MIO8UZBRzPnoEFo7wc//cPpudWc32om4oSzZ49pQ2gOxC6sNfyxBoZUMRRARtnYtkr3GsKYTzlfYO8Gf52LDh/v0r/8rRc5kmxlznpaf9PpcxLptjvMCpevYFevidvEqwC3bdPSCAlBPYP1lzNxUHkvXC7Ee/zAGTT7pFxzyI3tFp/aCWALHPmXRr95BSGEzawqfBv4Axv7bw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(55016003)(5660300002)(4744005)(66946007)(33656002)(66446008)(83380400001)(82960400001)(38070700005)(8676002)(186003)(38100700002)(26005)(122000001)(54906003)(66476007)(4326008)(508600001)(8936002)(71200400001)(64756008)(52536014)(76116006)(66556008)(86362001)(316002)(2906002)(7696005)(9686003)(6506007)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RjF5dC9vb0hsS1J4UlQxb0JMR09mMTVSSXBQT0QvK0RwUlhmbGRyV3FIanBv?=
- =?utf-8?B?OWZ2aVBDNEpmQWRKTTh4czFGekpscU03S0JseTE1Rm51ZC9ZN3d1QzhzeGQ0?=
- =?utf-8?B?Nk5sUWk0bXBUZnZ4L2svbC9iakNkMGVvdjNNaDlZOGN0NjdXSWhRdnVnbzhO?=
- =?utf-8?B?ZXhxVEdOS0ZMWTJ5bXZGVGtpVnkxc29qdjJjZE1rTkxxMnVXTXFFM3VQMlVF?=
- =?utf-8?B?dlFTUXNKaVRVQmRvdm5NRU44NjYyRU04V2pGNlBMME4rWHRsSTBwWXJ0U0t6?=
- =?utf-8?B?cU52MlRUa0xSa2xyZHM1QjRKY0wrTjZSRFFXTy9hcHpXWUx1ZXFEdEQwcmJu?=
- =?utf-8?B?Q2x5RzlTeGRKUFJNc0xaNmRkUDQySHdOUWhvL1FGaXZReGVQdjVvVXNnOEtX?=
- =?utf-8?B?c3VaV0pneTR1OENHUDJPZXkyMXpLSHpNTUdIcFVsWlZFbFNyTFJCOXNGdytX?=
- =?utf-8?B?NFNlMnJtUHNSUTA2dmdKYlFvVU90MHVTN3pURkRNZDNSRFh3VjRGTEdJRlh1?=
- =?utf-8?B?UU50M2htVDllVWVmK1h1akNRNldKa0d3MzlDTVdCSnZVNEUvMFhmclJqUGJ4?=
- =?utf-8?B?aTh2Vk1EeDRIY1daMU5QczRrdGJJQmcrQ3VVWWlnR0JjMlp6SDVHVzluNXZl?=
- =?utf-8?B?dVQ1UTFLUktsQUllYXU0cVRsSXViVXFBcWNXOXZYdmxKWXNVek0xOUhpYUpL?=
- =?utf-8?B?VWhrUDRTcDhobld3dnZ6NjkwSHREMDBLbnJPN3BUTkd4ZU9UT29abGIrRmhU?=
- =?utf-8?B?aXhGeGw5MkZPdnV0TGNiOGlaYmtkZjYrZTUwYVh5aEc0am9FallhRDh0SXRu?=
- =?utf-8?B?SFN2eFV5MWlGQVpXbEtNZnZJVGlqTjg4aUNVUHhoZ0dQSmFXUnJrRUkwbEFp?=
- =?utf-8?B?aWluSlBzMVpqb3krS1FKYUhpdWlNeVVFQS9YbVVIbVRrVExLbWEzanNQc2lD?=
- =?utf-8?B?SUpyNktLQW1pYU9VQVUzQ3VJektFOVo5RXFuTzRUaDBCKzNjUmJUMDBJK1BC?=
- =?utf-8?B?dGFyNUZJZnppL1FWV09XRzBDTzB2QXVVczVWQ2F5elMzejFBMUY2bjFMeWY3?=
- =?utf-8?B?dXF6U1J3bVo3WXR4V3ViZmM1eFZwK0llZHNCNFpLTjZNMlZZNERGWjRZYS81?=
- =?utf-8?B?ZDVtbVNQTlhLNzhDYnQweVBlaHRXQjF4eHUwQjRqZ3pQUEh5dlk4NVBUWUFw?=
- =?utf-8?B?Y2dWK0VOQ1ovUFlIVHQyVzJRSTBGOHNJMlMwenRaSDI5VnRrY0pIMVB3Uk1L?=
- =?utf-8?B?ei9hbWw1azI4akZDR1JqYTBIR1pYZFJkeEpPQnYyR2g0bXh2Q3gzYndEek5v?=
- =?utf-8?B?MmpjeVQ3QVl3YkpkdXN6bG0vSmNNbENrWXpEREpsc05QMVFUSUFZdUNiR0dC?=
- =?utf-8?B?ZmtBMlQ3Y3JCdE15Q1hBYlNmOGRaRzZrdGk4WFEyVlpUTzE1QzlxQUlFYUUz?=
- =?utf-8?B?ZkVUZUpsU295WWFEUkp3NWs5ZlBEVlFzL28wSEk4dGtUcTZyS1A1MFdOeXFI?=
- =?utf-8?B?dU9EdFdvUEt6TkFIaUhoNE05Z0FCdjlFNDg5Z0JwSUQvZTZ6ZEJCL1J4K3hh?=
- =?utf-8?B?SWIrKzRJcEF5YjBWODBQYXBldGhaZnlyTXY3cGw5WEJidzdyVllFRGZEL1Np?=
- =?utf-8?B?Vk92T09ZeFErY29FYVErOVp3TEpwYjNwODBFcTF1dlNSQklkMWJoM1V2bnVz?=
- =?utf-8?B?OC9Gekg4R3dJZkl1V1l4ZEM1Wjl5bEdyd3BjbFFmVGxWUlZYZkFCaHhTZlJ3?=
- =?utf-8?B?anJNN1JvUW9wdVNZUnUwRWF4VWpOTXZXMzY2bzc5cDZtb2VPL3dEMGdCS3lx?=
- =?utf-8?B?RWNVeUdpS2UrTGZpZjNFYkZ5SUlSRTNOb2tTUHl0NkZQNlVnRTVHMHFRVDRM?=
- =?utf-8?B?eW5EdU5MZThqTTlodU9WNUFZZUNsblkybTVCZUJ3ZEFMK1lJSHRPVzhUNU9r?=
- =?utf-8?B?WWZsRUF2RzRkZHdXVFd0bEZ1dEpJZ1k5T0NpemFxYU50TlVLdXhsemt3TVls?=
- =?utf-8?B?d2lYSkRiejFMRDErdXhqM252NFplbmhzYmZ1cHRtRkl5eHc0bkdTRmJKdnV0?=
- =?utf-8?B?RmJjRzJUT0kwUHhvT0ZMV2pTZ290bFd3cEhoMVdReUlwUGU5RFVEekRHbnEy?=
- =?utf-8?B?R0RFN3Z5NHZTYSsxK2ppRHBKeXdJeGFmR01sNHdIK0hhSVF3WEpqMlN2V3Zr?=
- =?utf-8?Q?hiWlEQOgGL4x2CY3b2CAFaA=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S240041AbhLOGP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 01:15:59 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41754 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229576AbhLOGP4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 01:15:56 -0500
+X-UUID: 36a810bff7124e9e9c03651d3958aad8-20211215
+X-UUID: 36a810bff7124e9e9c03651d3958aad8-20211215
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1340348728; Wed, 15 Dec 2021 14:15:54 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 15 Dec 2021 14:15:52 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Wed, 15 Dec 2021 14:15:51 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v14, 00/19] Support multi hardware decode using of_platform_populate
+Date:   Wed, 15 Dec 2021 14:15:33 +0800
+Message-ID: <20211215061552.8523-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9dd8542-9ccf-4f2d-d28a-08d9bf923016
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 06:14:44.1582
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2ocT0D8OZGCGm5Buqpel2sLbTuyaoCt6ZyTNHUm4HImxq93iy9VQhwfF8+gKqZHENeoGX9rGKDyf7oHyC/q0lg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR11MB2609
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBUaWFuLCBLZXZpbg0KPiBTZW50OiBUdWVzZGF5LCBEZWNlbWJlciAxNCwgMjAyMSAy
-OjI2IFBNDQo+ID4gK3N0YXRpYyBpbmxpbmUgaW50IGZwdV91cGRhdGVfZ3Vlc3RfeGZkKHN0cnVj
-dCBmcHVfZ3Vlc3QgKmd1ZXN0X2ZwdSwgdTY0DQo+IHhjcjAsDQo+ID4gdTY0IHhmZCkNCj4gPiAr
-ew0KPiA+ICsJcmV0dXJuIF9fZnB1X3VwZGF0ZV9ndWVzdF9mZWF0dXJlcyhndWVzdF9mcHUsIHhj
-cjAsIHhmZCk7DQo+ID4gK30NCj4gDQo+IG5vIG5lZWQgdG8gcGFzcyBpbiB4Y3IwLiBJdCBjYW4g
-YmUgZmV0Y2hlZCBmcm9tIHZjcHUtPmFyY2gueGNyMC4NCj4gDQoNClRoaXMgaXMgYSBzaWxseSBj
-b21tZW50LiBUaGVyZSBpcyBub3QgdmNwdSB0byBiZSByZWZlcmVuY2VkLi4uDQo=
+This series adds support for multi hardware decode into mtk-vcodec, by first adding use
+of_platform_populate to manage each hardware information: interrupt, clock, register
+bases and power. Secondly add core work queue to deal with core hardware message,
+at the same time, add msg queue for different hardware share messages. Lastly, the
+architecture of different specs are not the same, using specs type to separate them.
+
+This series has been tested with both MT8183 and MT8173. Decoding was working for both chips.
+
+Patches 1~3 rewrite get register bases and power on/off interface.
+Patches 4 export decoder pm interfaces.
+Patches 5 add to support 8192.
+Patch 6 support multi hardware.
+Patch 7 separate video encoder and decoder document
+Patch 8-17 add interfaces to support core hardware.
+Patch 18-19 remove mtk_vcodec_release_dec/enc_pm interfaces.
+---
+changes compared with v13:
+- change some function position in case of ko dependency for patch 15.
+- add reviewed-by for patch 06/13/15.
+
+changes compared with v12:
+- fix comments from rob for patch 15.
+- fix comments from steve for 06 and 13.
+
+changes compared with v11:
+- fix comments from AngeloGioacchino for patch 09~11/19.
+- fix comments from steve for patch 03/19.
+
+changes compared with v10:
+- fix comments from tzung-bi for patch 06/19.
+- add more detail information for hardware block diagram 15/19
+
+changes compared with v9:
+- need not to build ko, just export pm interfaces for patch 04/19.
+- fix comments for patch 06/19
+
+changes compared with v8:
+- add new patch 18~19 to remove mtk_vcodec_release_de/enc_pm interfaces.
+- fix spelling mistakes for patch 17/19
+- fix yaml comments for patch 15/19
+
+Changes compared with v7:
+- add new patch 4 to build decoder pm file as module
+- add new patch 5 to support 8192
+- fix comments for patch 6/17
+- change some logic for using work queue instead of create thread for core hardware decode for patch 10/17
+- using work queue for hardware decode instead of create thread for patch 13/17
+- add returen value for patch 14/17
+- fix yaml check fail 15/17
+
+Changes compared with v6:
+- Use of_platform_populate to manage multi hardware, not component framework for patch 4/15
+- Re-write dtsi document for hardware architecture changed for patch 13/15 -The dtsi will write like below in patch 13/15:
+    vcodec_dec: vcodec_dec@16000000 {
+        compatible = "mediatek,mt8192-vcodec-dec";
+        #address-cells = <2>;
+        #size-cells = <2>;
+        ranges;
+        reg = <0 0x16000000 0 0x1000>;		/* VDEC_SYS */
+        mediatek,scp = <&scp>;
+        iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
+        dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
+        vcodec_lat {
+            compatible = "mediatek,mtk-vcodec-lat";
+            reg = <0 0x16010000 0 0x800>;		/* VDEC_MISC */
+            reg-name = "reg-misc";
+            interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
+            iommus = <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
+                 <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
+                 <&iommu0 M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
+                 <&iommu0 M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
+                 <&iommu0 M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
+                 <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
+                 <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
+                 <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
+            clocks = <&topckgen CLK_TOP_VDEC_SEL>,
+                 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
+                 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
+                 <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
+                 <&topckgen CLK_TOP_MAINPLL_D4>;
+            clock-names = "vdec-sel", "vdec-soc-vdec", "vdec-soc-lat",
+                  "vdec-vdec", "vdec-top";
+            assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
+            assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
+            power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
+        };
+
+        vcodec_core {
+            compatible = "mediatek,mtk-vcodec-core";
+            reg = <0 0x16025000 0 0x1000>;		/* VDEC_CORE_MISC */
+            reg-names = "reg-misc";
+            interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
+            iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>,
+                 <&iommu0 M4U_PORT_L4_VDEC_UFO_EXT>,
+                 <&iommu0 M4U_PORT_L4_VDEC_PP_EXT>,
+                 <&iommu0 M4U_PORT_L4_VDEC_PRED_RD_EXT>,
+                 <&iommu0 M4U_PORT_L4_VDEC_PRED_WR_EXT>,
+                 <&iommu0 M4U_PORT_L4_VDEC_PPWRAP_EXT>,
+                 <&iommu0 M4U_PORT_L4_VDEC_TILE_EXT>,
+                 <&iommu0 M4U_PORT_L4_VDEC_VLD_EXT>,
+                 <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
+                 <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
+                 <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
+            clocks = <&topckgen CLK_TOP_VDEC_SEL>,
+                 <&vdecsys CLK_VDEC_VDEC>,
+                 <&vdecsys CLK_VDEC_LAT>,
+                 <&vdecsys CLK_VDEC_LARB1>,
+                 <&topckgen CLK_TOP_MAINPLL_D4>;
+            clock-names = "vdec-sel", "vdec-soc-vdec", "vdec-soc-lat",
+                  "vdec-vdec", "vdec-top";
+            assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
+            assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
+            power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
+        };
+    };
+
+Changes compared with v5:
+- Add decoder hardware block diagram for patch 13/15
+
+Changes compared with v4:
+- Fix comments for patch 4/15
+  >> +     if (dev->is_comp_supported) {
+  >> +             ret = mtk_vcodec_init_master(dev);
+  >> +             if (ret < 0)
+  >> +                     goto err_component_match;
+  >> +     } else {
+  >> +             platform_set_drvdata(pdev, dev);
+  >> +     }
+  Fix platform_set_drvdata.
+- Fix build error for patch 9/15
+- Add depend patch in case of error header file for patch 13/15
+
+Changes compared with v3:
+- Fix return value for patch 1/15
+- Fix comments for patch 4/15
+  > Looking up "mediatek,mtk-vcodec-core" to determine if it uses component framwork sounds like...
+  Add prameter in pdata, for all platform will use compoent after mt8183
+
+  >> +     if (dev->is_comp_supported) {
+  >> +             ret = mtk_vcodec_init_master(dev);
+  >> +             if (ret < 0)
+  >> +                     goto err_component_match;
+  >> +     } else {
+  >> +             platform_set_drvdata(pdev, dev);
+  >> +     }
+  > + Has asked the same question in [1].  Why it removes the
+  > +platform_set_drvdata() above?  mtk_vcodec_init_master() also calls platform_set_drvdata().
+  Must call component_master_add_with_match after platform_set_drvdata for component architecture.
+- Fix yaml files check fail for patch 5/15
+- Fix yaml file check fail for patch 14/15
+
+Changes compared with v1:
+- Fix many comments for patch 3/14
+- Remove unnecessary code for patch 4/14
+- Using enum mtk_vdec_hw_count instead of magic numbers for patch 6/14
+- Reconstructed get/put lat buffer for lat and core hardware for patch 7/14
+- Using yaml format to instead of txt file for patch 12/14
+
+Yunfei Dong (19):
+  media: mtk-vcodec: Get numbers of register bases from DT
+  media: mtk-vcodec: Align vcodec wake up interrupt interface
+  media: mtk-vcodec: Refactor vcodec pm interface
+  media: mtk-vcodec: export decoder pm functions
+  media: mtk-vcodec: Support MT8192
+  media: mtk-vcodec: Add to support multi hardware decode
+  dt-bindings: media: mtk-vcodec: Separate video encoder and decoder
+    dt-bindings
+  media: mtk-vcodec: Use pure single core for MT8183
+  media: mtk-vcodec: Add irq interface for multi hardware
+  media: mtk-vcodec: Add msg queue feature for lat and core architecture
+  media: mtk-vcodec: Generalize power and clock on/off interfaces
+  media: mtk-vcodec: Add new interface to lock different hardware
+  media: mtk-vcodec: Add work queue for core hardware decode
+  media: mtk-vcodec: Support 34bits dma address for vdec
+  dt-bindings: media: mtk-vcodec: Adds decoder dt-bindings for mt8192
+  media: mtk-vcodec: Add core dec and dec end ipi msg
+  media: mtk-vcodec: Use codec type to separate different hardware
+  media: mtk-vcodec: Remove mtk_vcodec_release_dec_pm
+  media: mtk-vcodec: Remove mtk_vcodec_release_enc_pm
+
+ .../media/mediatek,vcodec-decoder.yaml        | 176 +++++++++++
+ .../media/mediatek,vcodec-encoder.yaml        | 187 ++++++++++++
+ .../media/mediatek,vcodec-subdev-decoder.yaml | 265 ++++++++++++++++
+ .../bindings/media/mediatek-vcodec.txt        | 131 --------
+ drivers/media/platform/mtk-vcodec/Makefile    |   6 +-
+ .../platform/mtk-vcodec/mtk_vcodec_dec.c      |   4 +-
+ .../platform/mtk-vcodec/mtk_vcodec_dec.h      |   1 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  | 178 ++++++++---
+ .../platform/mtk-vcodec/mtk_vcodec_dec_hw.c   | 201 ++++++++++++
+ .../platform/mtk-vcodec/mtk_vcodec_dec_hw.h   |  53 ++++
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 104 +++++--
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |  12 +-
+ .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |   2 +
+ .../mtk-vcodec/mtk_vcodec_dec_stateless.c     |  21 ++
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  73 ++++-
+ .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |  21 +-
+ .../platform/mtk-vcodec/mtk_vcodec_enc_pm.c   |  10 +-
+ .../platform/mtk-vcodec/mtk_vcodec_enc_pm.h   |   3 +-
+ .../platform/mtk-vcodec/mtk_vcodec_intr.c     |  27 +-
+ .../platform/mtk-vcodec/mtk_vcodec_intr.h     |   4 +-
+ .../platform/mtk-vcodec/mtk_vcodec_util.c     |  59 +++-
+ .../platform/mtk-vcodec/mtk_vcodec_util.h     |   8 +-
+ .../platform/mtk-vcodec/vdec/vdec_h264_if.c   |   2 +-
+ .../mtk-vcodec/vdec/vdec_h264_req_if.c        |   2 +-
+ .../platform/mtk-vcodec/vdec/vdec_vp8_if.c    |   2 +-
+ .../platform/mtk-vcodec/vdec/vdec_vp9_if.c    |   2 +-
+ .../media/platform/mtk-vcodec/vdec_drv_if.c   |  21 +-
+ .../media/platform/mtk-vcodec/vdec_ipi_msg.h  |  16 +-
+ .../platform/mtk-vcodec/vdec_msg_queue.c      | 289 ++++++++++++++++++
+ .../platform/mtk-vcodec/vdec_msg_queue.h      | 143 +++++++++
+ .../media/platform/mtk-vcodec/vdec_vpu_if.c   |  46 ++-
+ .../media/platform/mtk-vcodec/vdec_vpu_if.h   |  22 ++
+ .../platform/mtk-vcodec/venc/venc_h264_if.c   |   2 +-
+ .../platform/mtk-vcodec/venc/venc_vp8_if.c    |   2 +-
+ 34 files changed, 1800 insertions(+), 295 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+ create mode 100644 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
+ create mode 100644 drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.h
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec_msg_queue.h
+
+-- 
+2.25.1
+

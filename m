@@ -2,94 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9756A475AEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 991F4475AF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243617AbhLOOnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:43:51 -0500
-Received: from foss.arm.com ([217.140.110.172]:53888 "EHLO foss.arm.com"
+        id S237899AbhLOOpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:45:07 -0500
+Received: from mga09.intel.com ([134.134.136.24]:43960 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243531AbhLOOnd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:43:33 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E3D61FB;
-        Wed, 15 Dec 2021 06:43:33 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.67.176])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 648A33F774;
-        Wed, 15 Dec 2021 06:43:28 -0800 (PST)
-Date:   Wed, 15 Dec 2021 14:43:25 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 12/43] kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
-Message-ID: <Ybn/DZb32ujokTnJ@FVFF77S0Q05N>
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-13-glider@google.com>
- <Ybnuup0eMnhrwp8e@FVFF77S0Q05N>
- <CANpmjNNLG0F9WzNnQkJX+QEqdxnhWstuag_9jrid7zdJgivHyw@mail.gmail.com>
+        id S229878AbhLOOpG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:45:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639579506; x=1671115506;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZHmEESDH4aNsqmxsYKHweXgwqdjm2ni2LH+24NGm0iw=;
+  b=dGjgE+sMZjr66yuSoG51SvQlkvX1s0cSvylfv7ARBB3TI9LKQfv328kA
+   kmeHJcCs8rVCOxVXmgBvc9me3aLBEjHfwUXZB3/EZZoNv9vzXNZLK0iCs
+   FQA75NrVXDMe3iT6md6bRjqVguAe6XTi2JkWtxEvkIu+zhhlLgySPpQPY
+   ysC65Uq2fj8RGOkCYgqchoCPKjOTSL3IYCFm3St717NnFIafM6q08JhUd
+   lZ44pSG0pRWzkaFPRjOxr+8xpeo6cL4IextE3ORhhadn49h+15dIMvGkT
+   ypQhKZcqkG7wk0bEDzjzL+vgyBTobPQL0VX31QWT4HykR7FmElG7GAouI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="239051795"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="239051795"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:45:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="505826955"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Dec 2021 06:45:04 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxVWh-0001tu-4F; Wed, 15 Dec 2021 14:45:03 +0000
+Date:   Wed, 15 Dec 2021 22:44:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 8/33] drivers/tty/tty_port.c:228:2: warning:
+ 'xmit_buf' is deprecated
+Message-ID: <202112152217.TA9FNAE3-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANpmjNNLG0F9WzNnQkJX+QEqdxnhWstuag_9jrid7zdJgivHyw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 02:39:43PM +0100, Marco Elver wrote:
-> On Wed, 15 Dec 2021 at 14:33, Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Tue, Dec 14, 2021 at 05:20:19PM +0100, Alexander Potapenko wrote:
-> > > kcov used to be broken prior to Clang 11, but right now that version is
-> > > already the minimum required to build with KCSAN, that is why we don't
-> > > need KCSAN_KCOV_BROKEN anymore.
-> >
-> > Just to check, how is that requirement enforced?
-> 
-> HAVE_KCSAN_COMPILER will only be true with Clang 11 or later, due to
-> no prior compiler having "-tsan-distinguish-volatile=1".
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   d61595c5423534810c1a3c0d4a88dd2fd81d750c
+commit: 8825023d7d2eb9e5dc298ad1996a0c753b2c4580 [8/33] tty: add kfifo to tty_port
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20211215/202112152217.TA9FNAE3-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=8825023d7d2eb9e5dc298ad1996a0c753b2c4580
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout 8825023d7d2eb9e5dc298ad1996a0c753b2c4580
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash drivers/tty/
 
-I see -- could we add wording to that effect into the commit messge?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > I see the core Makefiles enforce 10.0.1+, but I couldn't spot an explicit
-> > version dependency in Kconfig.kcsan.
-> >
-> > Otherwise, this looks good to me!
-> 
-> I think 5.17 will be Clang 11 only, so we could actually revert
-> ea91a1d45d19469001a4955583187b0d75915759:
-> https://lkml.kernel.org/r/Yao86FeC2ybOobLO@archlinux-ax161
-> 
-> I should resend that to be added to the -kbuild tree.
+All warnings (new ones prefixed by >>):
 
-FWIW, that also works for me.
+   drivers/tty/tty_port.c: In function 'tty_port_alloc_xmit_buf':
+>> drivers/tty/tty_port.c:228:2: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
+     228 |  if (port->xmit_buf == NULL)
+         |  ^~
+   In file included from include/linux/tty.h:12,
+                    from drivers/tty/tty_port.c:8:
+   include/linux/tty_port.h:115:18: note: declared here
+     115 |   unsigned char *xmit_buf __attribute__((deprecated));
+         |                  ^~~~~~~~
+   drivers/tty/tty_port.c:229:3: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
+     229 |   port->xmit_buf = (unsigned char *)get_zeroed_page(GFP_KERNEL);
+         |   ^~~~
+   In file included from include/linux/tty.h:12,
+                    from drivers/tty/tty_port.c:8:
+   include/linux/tty_port.h:115:18: note: declared here
+     115 |   unsigned char *xmit_buf __attribute__((deprecated));
+         |                  ^~~~~~~~
+   drivers/tty/tty_port.c:231:2: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
+     231 |  if (port->xmit_buf == NULL)
+         |  ^~
+   In file included from include/linux/tty.h:12,
+                    from drivers/tty/tty_port.c:8:
+   include/linux/tty_port.h:115:18: note: declared here
+     115 |   unsigned char *xmit_buf __attribute__((deprecated));
+         |                  ^~~~~~~~
+   drivers/tty/tty_port.c: In function 'tty_port_free_xmit_buf':
+   drivers/tty/tty_port.c:240:2: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
+     240 |  if (port->xmit_buf != NULL) {
+         |  ^~
+   In file included from include/linux/tty.h:12,
+                    from drivers/tty/tty_port.c:8:
+   include/linux/tty_port.h:115:18: note: declared here
+     115 |   unsigned char *xmit_buf __attribute__((deprecated));
+         |                  ^~~~~~~~
+   drivers/tty/tty_port.c:241:3: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
+     241 |   free_page((unsigned long)port->xmit_buf);
+         |   ^~~~~~~~~
+   In file included from include/linux/tty.h:12,
+                    from drivers/tty/tty_port.c:8:
+   include/linux/tty_port.h:115:18: note: declared here
+     115 |   unsigned char *xmit_buf __attribute__((deprecated));
+         |                  ^~~~~~~~
+   drivers/tty/tty_port.c:242:3: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
+     242 |   port->xmit_buf = NULL;
+         |   ^~~~
+   In file included from include/linux/tty.h:12,
+                    from drivers/tty/tty_port.c:8:
+   include/linux/tty_port.h:115:18: note: declared here
+     115 |   unsigned char *xmit_buf __attribute__((deprecated));
+         |                  ^~~~~~~~
+   drivers/tty/tty_port.c: In function 'tty_port_destructor':
+   drivers/tty/tty_port.c:270:2: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
+     270 |  if (port->xmit_buf)
+         |  ^~
+   In file included from include/linux/tty.h:12,
+                    from drivers/tty/tty_port.c:8:
+   include/linux/tty_port.h:115:18: note: declared here
+     115 |   unsigned char *xmit_buf __attribute__((deprecated));
+         |                  ^~~~~~~~
+   drivers/tty/tty_port.c:271:3: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
+     271 |   free_page((unsigned long)port->xmit_buf);
+         |   ^~~~~~~~~
+   In file included from include/linux/tty.h:12,
+                    from drivers/tty/tty_port.c:8:
+   include/linux/tty_port.h:115:18: note: declared here
+     115 |   unsigned char *xmit_buf __attribute__((deprecated));
+         |                  ^~~~~~~~
 
-Thanks,
-Mark.
+
+vim +/xmit_buf +228 drivers/tty/tty_port.c
+
+8cde11b2baa1d0 drivers/tty/tty_port.c  Johan Hovold 2017-05-18  223  
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  224  int tty_port_alloc_xmit_buf(struct tty_port *port)
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  225  {
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  226  	/* We may sleep in get_zeroed_page() */
+44e4909e453eaa drivers/char/tty_port.c Alan Cox     2009-11-30  227  	mutex_lock(&port->buf_mutex);
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13 @228  	if (port->xmit_buf == NULL)
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  229  		port->xmit_buf = (unsigned char *)get_zeroed_page(GFP_KERNEL);
+44e4909e453eaa drivers/char/tty_port.c Alan Cox     2009-11-30  230  	mutex_unlock(&port->buf_mutex);
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  231  	if (port->xmit_buf == NULL)
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  232  		return -ENOMEM;
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  233  	return 0;
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  234  }
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  235  EXPORT_SYMBOL(tty_port_alloc_xmit_buf);
+9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  236  
+
+:::::: The code at line 228 was first introduced by commit
+:::::: 9e48565d217a8a96cc7577308ad41e9e4b806a62 tty: Split tty_port into its own file
+
+:::::: TO: Alan Cox <alan@redhat.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

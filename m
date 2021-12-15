@@ -2,131 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE31475326
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD77C47532A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240073AbhLOGtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 01:49:07 -0500
-Received: from mail-ed1-f43.google.com ([209.85.208.43]:46917 "EHLO
-        mail-ed1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234590AbhLOGtG (ORCPT
+        id S240148AbhLOGtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 01:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240113AbhLOGtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 01:49:06 -0500
-Received: by mail-ed1-f43.google.com with SMTP id y13so70783637edd.13;
-        Tue, 14 Dec 2021 22:49:06 -0800 (PST)
+        Wed, 15 Dec 2021 01:49:35 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19557C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:49:35 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id c4so36343781wrd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:49:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=d1ToojkIgklMB+4yJ7wavNNpDv07oHI9Uz3VmK4pBHA=;
+        b=pWt085OoLtnHGEYfbyD38ZuZCPBCdpxa3JNzoRKz7r+1W64h5LGIRDL+cY+vL1Xxza
+         mQfdu1EVE8D5nMBc8N56NeWgrSVYzCboFs+QZT95uIqBY7LSda7H61oR2WPJzndr2DYf
+         awU+w3P1JtATCh5lkzNjwqIYpazCNrvXYtAvRVEn+wLaVsCqlKH/3Wg6xJ0a5ymXhlz7
+         uuAGnkrHPSWclqQjiNum9E2rwLxl79bPM1fvuiudSN0OYm6YUBs8jgLLq5nodAGlxhBR
+         Gk8gNxjkM4bmBzsa76J0KcXuLXrcg5Rh3OdWv5OhOTyl4FedkuundOdWVJTLlKLHr6bD
+         J/WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5c4Y2EZIe2jTzIgDwq+5ULEM5PC+1wAhegx/cChmgDA=;
-        b=y+X4oL8dYNWTVOCLi9tAmoH9AV8+QHvskj197Vxi8sDno1UAsN78g6e2j6FAH9SItg
-         QfSZLOklNyvelxwyCQYd8QQ7XDuTz7vXOqwnDMcpZjTK/a/orDl4cX3AjwTMt3er/xgO
-         UCT1PiTrdgsX9EgZF8lecciHymRSD0wHUNo1ku02fJUp2AOqR0vj1an+HmugHaHozmW7
-         S2NG3H5ASPdyHfSF60hdytIeAH72xt3mP0qjqkxyOQqkTbqsv0eCUIl32z8J0gnRmhWl
-         4RorE7TA9jiEycv0CQgi/oJY3/OSFc0V4wuD+2LAOZbbtR03oQNGWkjv2JW66rWqbma/
-         0Wuw==
-X-Gm-Message-State: AOAM531JhrWd2NnuNCBRu6xfYGUXD9NdU0vh1ckNFVeMGEBlII+92SK4
-        2Q1YlSbF6GixFqAiAzt8af8=
-X-Google-Smtp-Source: ABdhPJyriWwORnVntwdo6aVlHnp8hfkLwlO/XGAJQkPjX7l4/X9i08gGHm5/S0C5dC4T6U4jZ1dWww==
-X-Received: by 2002:aa7:d80d:: with SMTP id v13mr12964158edq.7.1639550945669;
-        Tue, 14 Dec 2021 22:49:05 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id 23sm305145ejg.213.2021.12.14.22.49.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 22:49:05 -0800 (PST)
-Message-ID: <3fc784f1-5985-1553-c39f-8472cb63b1af@kernel.org>
-Date:   Wed, 15 Dec 2021 07:49:04 +0100
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=d1ToojkIgklMB+4yJ7wavNNpDv07oHI9Uz3VmK4pBHA=;
+        b=y99VYN4jXKc+ZFVxfodjq2Kll7cjmtl8O7kcsJdsJDGZlmRNkaJTcmj9D2us74VCo7
+         vqgXCY45fUkdwUomXv9qZ+dFBAT2PNB02z1SnhX/6l3okvWnM2l+rJJYNZDS9r3OSd5/
+         V6vFa40TswCmjpge0jnmb8Qu+4HCV8vhWd7zJtFQeFmZMwnBNSlX3MdY6ycIbd1XASuq
+         EDc7okZ0RsesgQxN7Ub1k3hH6iNBeHOH2dd26/C43Jn+3xNJNJAoTjJiZEBWlpkRq/OT
+         SCumv5arIUCk8YpxKywKq8PcEJ6AzkKnq6OhyMqnyfw+hBN3xHoABrnZ18tpWn8a0DNx
+         socA==
+X-Gm-Message-State: AOAM531+XvRnDOSfxbqrXleqVHn/hszn8tGGGa91tWym2iihFIb5UN1g
+        idSshbmAEYGdUW8th4PbrnLGZA==
+X-Google-Smtp-Source: ABdhPJyahB3zCXmo7DIPu0LNNlK0jgC448teBE2QGy3RKNDKLdrrKJoAh7KlN5LPDkMBJ+Eh7J+5GQ==
+X-Received: by 2002:adf:e58e:: with SMTP id l14mr3092324wrm.518.1639550973613;
+        Tue, 14 Dec 2021 22:49:33 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id g198sm1067840wme.23.2021.12.14.22.49.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 22:49:32 -0800 (PST)
+Date:   Wed, 15 Dec 2021 06:49:30 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org
+Subject: Re: [PATCH 2/2] sctp: hold cached endpoints to prevent possible UAF
+Message-ID: <YbmP+gzoCyKiEJBM@google.com>
+References: <20211214192301.1496754-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] tty: rpmsg: Fix race condition releasing tty port
-Content-Language: en-US
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20211214170646.25775-1-arnaud.pouliquen@foss.st.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20211214170646.25775-1-arnaud.pouliquen@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211214192301.1496754-1-lee.jones@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 14 Dec 2021, Lee Jones wrote:
 
-much better IMO.
-
-On 14. 12. 21, 18:06, Arnaud Pouliquen wrote:
-> In current implementation the tty_port struct is part of the
-> rpmsg_tty_port structure.The issue is that the rpmsg_tty_port structure is
-> freed on rpmsg_tty_remove but also referenced in the tty_struct.
-> Its release is not predictable due to workqueues.
+> The cause of the resultant dump_stack() reported below is a
+> dereference of a freed pointer to 'struct sctp_endpoint' in
+> sctp_sock_dump().
 > 
-> For instance following ftrace shows that rpmsg_tty_close is called after
-> rpmsg_tty_release_cport:
-...
-> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
-> index dae2a4e44f38..69272ad92266 100644
-> --- a/drivers/tty/rpmsg_tty.c
-> +++ b/drivers/tty/rpmsg_tty.c
-> @@ -53,9 +53,19 @@ static int rpmsg_tty_install(struct tty_driver *driver, struct tty_struct *tty)
->   
->   	tty->driver_data = cport;
->   
-> +	tty_port_get(&cport->port);
+> This race condition occurs when a transport is cached into its
+> associated hash table followed by an endpoint/sock migration to a new
+> association in sctp_assoc_migrate() prior to their subsequent use in
+> sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
+> table calling into sctp_sock_dump() where the dereference occurs.
+> 
+>   BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
+>   Call trace:
+>    dump_backtrace+0x0/0x2dc
+>    show_stack+0x20/0x2c
+>    dump_stack+0x120/0x144
+>    print_address_description+0x80/0x2f4
+>    __kasan_report+0x174/0x194
+>    kasan_report+0x10/0x18
+>    __asan_load8+0x84/0x8c
+>    sctp_sock_dump+0xa8/0x438 [sctp_diag]
+>    sctp_for_each_transport+0x1e0/0x26c [sctp]
+>    sctp_diag_dump+0x180/0x1f0 [sctp_diag]
+>    inet_diag_dump+0x12c/0x168
+>    netlink_dump+0x24c/0x5b8
+>    __netlink_dump_start+0x274/0x2a8
+>    inet_diag_handler_cmd+0x224/0x274
+>    sock_diag_rcv_msg+0x21c/0x230
+>    netlink_rcv_skb+0xe0/0x1bc
+>    sock_diag_rcv+0x34/0x48
+>    netlink_unicast+0x3b4/0x430
+>    netlink_sendmsg+0x4f0/0x574
+>    sock_write_iter+0x18c/0x1f0
+>    do_iter_readv_writev+0x230/0x2a8
+>    do_iter_write+0xc8/0x2b4
+>    vfs_writev+0xf8/0x184
+>    do_writev+0xb0/0x1a8
+>    __arm64_sys_writev+0x4c/0x5c
+>    el0_svc_common+0x118/0x250
+>    el0_svc_handler+0x3c/0x9c
+>    el0_svc+0x8/0xc
+> 
+> To prevent this from happening we need to take a references to the
+> to-be-used/dereferenced 'struct sock' and 'struct sctp_endpoint's
+> until such a time when we know it can be safely released.
+> 
+> When KASAN is not enabled, a similar, but slightly different NULL
+> pointer derefernce crash occurs later along the thread of execution in
+> inet_sctp_diag_fill() this time.
+> 
+> Cc: Vlad Yasevich <vyasevich@gmail.com>
+> Cc: Neil Horman <nhorman@tuxdriver.com>
+> Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: lksctp developers <linux-sctp@vger.kernel.org>
+> Cc: "H.P. Yarroll" <piggy@acm.org>
+> Cc: Karl Knutson <karl@athena.chicago.il.us>
+> Cc: Jon Grimm <jgrimm@us.ibm.com>
+> Cc: Xingang Guo <xingang.guo@intel.com>
+> Cc: Hui Huang <hui.huang@nokia.com>
+> Cc: Sridhar Samudrala <sri@us.ibm.com>
+> Cc: Daisy Chang <daisyc@us.ibm.com>
+> Cc: Ryan Layer <rmlayer@us.ibm.com>
+> Cc: Kevin Gao <kevin.gao@intel.com>
+> Cc: linux-sctp@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  net/sctp/diag.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Can't this fail? Like when racing with removal?
+Ignore this one.  For some reason 1/2 didn't send.
 
->   	return tty_port_install(&cport->port, driver, tty);
->   }
-...
->   static struct rpmsg_tty_port *rpmsg_tty_alloc_cport(void)
-> @@ -139,6 +156,8 @@ static struct rpmsg_tty_port *rpmsg_tty_alloc_cport(void)
->   
->   static void rpmsg_tty_release_cport(struct rpmsg_tty_port *cport)
->   {
-> +	tty_port_destroy(&cport->port);
-> +
+Submitted a RESEND of the set.
 
-You should not call tty_port_destroy when you use refcounting. The port 
-is already destroyed when ->destruct() is called. (It has currently no 
-bad effect calling it twice on a port though.)
-
-> @@ -146,7 +165,17 @@ static void rpmsg_tty_release_cport(struct rpmsg_tty_port *cport)
->   	kfree(cport);
->   }
->   
-> -static const struct tty_port_operations rpmsg_tty_port_ops = { };
-> +static void rpmsg_tty_destruct_port(struct tty_port *port)
-> +{
-> +	struct rpmsg_tty_port *cport = container_of(port, struct rpmsg_tty_port, port);
-> +
-> +	rpmsg_tty_release_cport(cport);
-> +}
-> +
-> +static const struct tty_port_operations rpmsg_tty_port_ops = {
-> +	.destruct = rpmsg_tty_destruct_port,
-> +};
-> +
->   
->   static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
->   {
-> @@ -179,7 +208,6 @@ static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
->   	return 0;
->   
->   err_destroy:
-> -	tty_port_destroy(&cport->port);
->   	rpmsg_tty_release_cport(cport);
-
-Couldn't you just put the port here? And inline rpmsg_tty_release_cport 
-into the new rpmsg_tty_destruct_port?
-
-thanks,
 -- 
-js
-suse labs
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

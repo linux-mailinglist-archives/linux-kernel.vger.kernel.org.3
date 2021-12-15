@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EBD475986
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22ED047598D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242798AbhLONR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 08:17:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234617AbhLONRx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 08:17:53 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD97C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 05:17:53 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id r18-20020a4a7252000000b002c5f52d1834so5917381ooe.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 05:17:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Au62n4m8uRCaSs4+vVgR5PSbqPQx8MPEQSlKHv3tUvo=;
-        b=aj3Sj5liapebe6SJRITNXLiI4KThaaqInZzt1i7hIMcEYfQBChC3pmnPuyo/QhSqGd
-         w+qBZtYaSwZXwS3iv2DNaZBZXcu/KXH2LkO1SDZs3EPHQpQuyaDT7dMkqVp/ZSGBugLU
-         hQLFsviUCObiQTbgbt00h0krz180Dl/L0DDUQkJz975590I9K3aYpjCnFaCuKB1VD4yP
-         fv+5FM6+bpIo1c+c0X9F7i0ttHfPQCnE5Nsm/oLT37XcCBOVqpfPGg6TtaNe6ugIGVWa
-         XeqpPhcMqc+W76crBy6NMiel0a2RDjhiHty4L8YVDo+/gbcwBfUjrm9iSuNDYHRaMJFm
-         p6oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Au62n4m8uRCaSs4+vVgR5PSbqPQx8MPEQSlKHv3tUvo=;
-        b=Byc3hJg20Ot5KSm7NYfx++LUvkj8UgrOf3f+eD+mNAeUiICf7d/IKwIeZ6hL9FXqxo
-         oXZxGBIxFcLTAezKH436Zzpw3INt65HcDzhnojFQoYrryU/4/Wa9VyqTgELbreNFUKjA
-         MZdEURKfsggk+kcPF0bRTOqAGF42JSUaNiHIVTZ5y5FqA93N271reyasQ74+g/WlY3pv
-         AaC9AGksHu1Cp1bYhvPq0jQBh8y7brdwVI8GKiWyjZ/MqytmO8X5ryzGsbffmherv+od
-         pX+az+5EKQ0sPzPDHRRVtbO94BGSnYQK3Bu0i/svfxHsKgKU9qGwj53U+d4LyWLF/YK8
-         2JBQ==
-X-Gm-Message-State: AOAM5320MT4925RNpciEUR5pnEV1QHeP0yKbVxlW9xoDlPkB7lF7oeY3
-        HTOClQCw6/x395pcLxRqMBaVM0I1u3i03wmOKVSP7A==
-X-Google-Smtp-Source: ABdhPJyKiNrM46sQnQOVNCpuufZLZX8vH6amPXzMUo6ihOAnqKOaK6XOQiIg+OSbQaN3W3LYcklzBmCcOWCR2/ChcDg=
-X-Received: by 2002:a4a:96f1:: with SMTP id t46mr7147958ooi.53.1639574272532;
- Wed, 15 Dec 2021 05:17:52 -0800 (PST)
+        id S242819AbhLONWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 08:22:44 -0500
+Received: from mga04.intel.com ([192.55.52.120]:39860 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234617AbhLONWn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 08:22:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639574563; x=1671110563;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rUjJVZUVIvIFQr4MyBZlVi+Wln2PLmdQR/GPsbeKbcE=;
+  b=O992ke/Gta0r2hb1wIKcHIZGQDEqjOxvrZ71vrgVPm0TsxQ+n1kaChuk
+   LJ2Os+XYjwDBlAzJLck8MrkIRlO2lfaIukC5EzcsA+JYJvkyRflyG3yng
+   gGmNOpJ2xTvKLc67X3MmH5nLTWnoW2DxJLhG5UmGGGyoNMtPSWkDN0rlR
+   ZCh4nh2EMM5mtkN7evDQQyjCxPpfE1VHnoZQAi5vI4QuiFK/zGwEC1nU0
+   LG7MHovkgX7o/jUdRH25+Q7QH2SkOgdaehCP/IaMGpEuLs3erekynppJi
+   4oyUbM5fTj7slskBmCu2DB3U18ECfUtZ7cvSs8Y1vEiS1Ee3DbsIG/q1F
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="237961886"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="237961886"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 05:21:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="464260971"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 15 Dec 2021 05:21:02 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxUDN-0001op-Op; Wed, 15 Dec 2021 13:21:01 +0000
+Date:   Wed, 15 Dec 2021 21:20:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [linux-stable-rc:queue/4.19 9919/9999] ERROR: "usb_hid_driver"
+ [drivers/hid/hid-asus.ko] undefined!
+Message-ID: <202112152114.lpbAj4a1-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211214094526.2442154-1-dvyukov@google.com> <4ad30f21-9955-a72c-d7f0-912de6c205be@i-love.sakura.ne.jp>
- <CACT4Y+Z63jk9cFgkcKeU0HN6ES_CBhrotY0Zabae17R-gqG6SA@mail.gmail.com> <8da31317-9306-70d0-2bf7-382ed157bc5c@i-love.sakura.ne.jp>
-In-Reply-To: <8da31317-9306-70d0-2bf7-382ed157bc5c@i-love.sakura.ne.jp>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 15 Dec 2021 14:17:41 +0100
-Message-ID: <CACT4Y+ZyXhm39R-HBgcsLawQCtDsE5YRppxADjBG7NwkEwgn4A@mail.gmail.com>
-Subject: Re: [PATCH] tomoyo: Check exceeded quota early in tomoyo_domain_quota_is_ok().
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     takedakn@nttdata.co.jp, jmorris@namei.org, serge@hallyn.com,
-        nogikh@google.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Dec 2021 at 12:46, Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
-> On 2021/12/14 20:42, Dmitry Vyukov wrote:
-> >> Therefore, asking administrator to also clear domain->flags[TOMOYO_DIF_QUOTA_WARNED] after
-> >> increasing pref[TOMOYO_PREF_MAX_LEARNING_ENTRY] value (or changing domain->profile) would be
-> >> tolerable...
-> >
-> > Should we reset flags[TOMOYO_DIF_QUOTA_WARNED] on any writes that
-> > change TOMOYO_PREF_MAX_LEARNING_ENTRY?
-> >
-> > If I am increasing TOMOYO_PREF_MAX_LEARNING_ENTRY because I observed
-> > the warning, it's useful for me to receive the warning again.
->
-> I decided not to reset flags[TOMOYO_DIF_QUOTA_WARNED] automatically, and
-> applied your proposal as-is. Thank you.
->
-> https://osdn.net/projects/tomoyo/scm/git/tomoyo-test1/commits/04e57a2d952bbd34bc45744e72be3eecdc344294
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.19
+head:   9f411771d2924dfabe1071cc23e0d13d69ee8fb3
+commit: b1efa723b986a84f84a95b6907cffe3a357338c9 [9919/9999] HID: add hid_is_usb() function to make it simpler for USB detection
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20211215/202112152114.lpbAj4a1-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=b1efa723b986a84f84a95b6907cffe3a357338c9
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/4.19
+        git checkout b1efa723b986a84f84a95b6907cffe3a357338c9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It will appear in v5.17, right?
+All errors (new ones prefixed by >>):
+
+   ERROR: "devm_ioremap_resource" [drivers/scsi/ufs/ufshcd-pltfrm.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/net/ethernet/aurora/nb8800.ko] undefined!
+   ERROR: "devm_ioremap_nocache" [drivers/net/ethernet/altera/altera_tse.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/net/can/grcan.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/media/rc/ir-hix5hd2.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/input/touchscreen/imx6ul_tsc.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/input/serio/apbps2.ko] undefined!
+>> ERROR: "usb_hid_driver" [drivers/hid/hid-asus.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/dma/idma64.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/crypto/ccree/ccree.ko] undefined!
+   ERROR: "debugfs_create_regset32" [drivers/crypto/ccree/ccree.ko] undefined!
+   ERROR: "devm_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

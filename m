@@ -2,290 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7C9475B49
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9D2475B4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234755AbhLOPBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:01:09 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:46845 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbhLOPBG (ORCPT
+        id S234890AbhLOPDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:03:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229623AbhLOPDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:01:06 -0500
-Received: by mail-ot1-f46.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so25144727oto.13;
-        Wed, 15 Dec 2021 07:01:06 -0800 (PST)
+        Wed, 15 Dec 2021 10:03:04 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1EEC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:03:03 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso25274555ota.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:03:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=4LmpLmMQVYKC4yB/BA8hDER3dAOgirX22kQhvIxfc6k=;
+        b=DeOyJJKMU55uXVXAS0+BuCIcPj0j26M6TG4y672SEPwqlgmp1UVx1zRbX2BqBX7JkO
+         rkbKQ0b7GXklGShwNwpvEzY1Y7DXrAmZY/EUtVvQ6Q71NyWTdv77TbqYa9TJ3EATM6t0
+         TlGyVtWPVpkyXDQ9ww2qMnLg5EfOIZHhTZimg2qTkerwlf25wHzEsWl2N5Klr3O/uK8N
+         rxW0RExVHGZExcJd1mcp9tulB7nGgXXXr/03wt84yF/KqLUUxd2FIwWdA6vCQgcotAJg
+         Lpc8yCUlDY2tquOM4md8re6GXHab2SfASS2u16DIkx0Iur+3WiwHyTbDY7f5Xh07gCFO
+         y1XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jq0x8iVALaGMJU7xAVYGCo3xMt/B1pDw6eEI2Wc91JY=;
-        b=jUmpvdTkFpdp3iHTVgIXDwfvwb4W8pdNu7Mdces0shez+0MncmrY16u2DESQaXi8yA
-         eHsbMCZ98nULBXxV1ieRe7KH27AB9VnSE9lhDzMwlTtpVp8Ptm8U8B3QcPRVqhhopdPl
-         zgsbWuzBMYmzvykLTeRQrnJYaMzQeHoHStWK9oKFsxYI9GM2mF8HB9zqvMVIX79dk3oL
-         s5VNZwlNhWNPNTp+Pihh6/w58PtaDBoyA7pYkxPnrGMkGdqNrjQDBldSgGGr7ZI0Gn6G
-         DEBEvRgN20rInTIjRKoAdeYw3mozbwBYUDw1ZS8FIZvJFJS0+k7EWrSLXxyMrTSerhaM
-         xjQw==
-X-Gm-Message-State: AOAM531uHqL3FURdWDgGkZDLUzOw1YHx/xweonPZ1jbgABjFDl20iIjy
-        2eT8XQt2uX5daghAiN5DNg==
-X-Google-Smtp-Source: ABdhPJy9pSAKcn/6iGV5Hbw1t6r2jfryKDONyLlWKGyr+6nX1um5VXoLr8WiphSTjUPLS5R9dSYbpw==
-X-Received: by 2002:a9d:70ce:: with SMTP id w14mr8776986otj.77.1639580464571;
-        Wed, 15 Dec 2021 07:01:04 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id r22sm387007oij.36.2021.12.15.07.01.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 07:01:03 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Frank Rowand <frank.rowand@sony.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v4] of/fdt: Rework early_init_dt_scan_memory() to call directly
-Date:   Wed, 15 Dec 2021 09:01:02 -0600
-Message-Id: <20211215150102.1303588-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=4LmpLmMQVYKC4yB/BA8hDER3dAOgirX22kQhvIxfc6k=;
+        b=Hr/rq9JGXHB2CdETxUKdkedKG0UBjt9CDzLulIQFVQHBqirS1jSK1QZZ6+2+R2MIV/
+         fsXdvst2LDGUc0zF3vED8ZOZc8zx5xsPt8Ouzj68AWXqOqdJdEIdYHSOrLd1jzNWb0eF
+         0TVmwsMYTbuEeKS/ZuLEa9krWCONy34NzPs8pJg59x5fBUFqXgQHOaJ7q1HKCB80X9s5
+         DLl2y35Yi+bkoOdyj8CA/YISzyY07GctI2haB2OStUx9Zn6VcbQmaDbIM1MU617XI8N8
+         3mqJ7KHWs/HcuZ1Juf+nNgPCGIAPEgPZMdfX2Mq2+QEoXRrsiEXe3C3mCV1pmBCNTO2r
+         cqRw==
+X-Gm-Message-State: AOAM533anpCHnx06i9Xiv/jH6mAbJyWLBoRmXNhaIFeYtFECmXA5xw36
+        75JWThXWE7Z1EqvWKfQzk1hrFtcYrbWTzEnRf8L50Q==
+X-Google-Smtp-Source: ABdhPJyPeXxGFCtUrFhryeIE/cEECu0paw5oNL0wX3jX1W1iBxtrTpdCkDYUCr1opeCgLBoVOByK1UUQi8cSw6cCRkg=
+X-Received: by 2002:a9d:2aa3:: with SMTP id e32mr8908943otb.6.1639580582790;
+ Wed, 15 Dec 2021 07:03:02 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 15 Dec 2021 09:03:01 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211213165422.54n3oh72tjcb3a67@houat>
+References: <20211110130623.20553-1-granquet@baylibre.com> <20211110130623.20553-8-granquet@baylibre.com>
+ <20211115101129.lyxxmb6i7paaonwi@gilmour> <CABnWg9tNPGZSi1RLqF5+Qs1GHtynyVoOzAyw+i9mPRYEoByk8g@mail.gmail.com>
+ <20211116145112.xyoxzfll6exysnvt@gilmour> <CABnWg9uhuchdWyBeTacR6Cy0A9OHziUi051BQ5wsZVU0ajYjyA@mail.gmail.com>
+ <20211125143034.tzikvlxxl6fdhsif@gilmour> <CABnWg9tcWdfPQwNtFhqVZxCriT848fy42VHoQZs3X2UmL4LYSA@mail.gmail.com>
+ <20211213165422.54n3oh72tjcb3a67@houat>
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: alot/0.10
+Date:   Wed, 15 Dec 2021 09:03:01 -0600
+Message-ID: <CABnWg9uyoK0TkRZRJXstmtB4u2-UUCi-x_frosKhhQerNmFT=A@mail.gmail.com>
+Subject: Re: [PATCH v6 7/7] drm/mediatek: Add mt8195 DisplayPort driver
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use of the of_scan_flat_dt() function predates libfdt and is discouraged
-as libfdt provides a nicer set of APIs. Rework
-early_init_dt_scan_memory() to be called directly and use libfdt.
+Hi Maxime,
 
-Cc: John Crispin <john@phrozen.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: linux-mips@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Signed-off-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Frank Rowand <frank.rowand@sony.com>
-Link: https://lore.kernel.org/r/20211208155839.4084795-1-robh@kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v4:
- - Revert the changes to search for memory nodes at any level which were
-   accidentally committed.
-v3:
- - Fix powerpc when /ibm,dynamic-reconfiguration-memory is present
-v2:
- - ralink: Use 'if' instead of 'else if'
- - early_init_dt_scan_memory: continue instead of return on no reg
- - Fix indentation
----
- arch/mips/ralink/of.c      | 19 +++--------
- arch/powerpc/kernel/prom.c | 21 ++++++------
- drivers/of/fdt.c           | 68 ++++++++++++++++++++------------------
- include/linux/of_fdt.h     |  3 +-
- 4 files changed, 51 insertions(+), 60 deletions(-)
+Quoting Maxime Ripard (2021-12-13 17:54:22)
+> On Thu, Dec 02, 2021 at 06:48:12AM -0800, Guillaume Ranquet wrote:
+> > Hi,
+> >
+> > Quoting Maxime Ripard (2021-11-25 15:30:34)
+> > > On Wed, Nov 24, 2021 at 01:45:21PM +0000, Guillaume Ranquet wrote:
+> > > > Hi,
+> > > > Thanks for all your input, really appreciated.
+> > > >
+> > > > Quoting Maxime Ripard (2021-11-16 15:51:12)
+> > > > > Hi,
+> > > > >
+> > > > > On Mon, Nov 15, 2021 at 09:33:52AM -0500, Guillaume Ranquet wrote:
+> > > > > > Quoting Maxime Ripard (2021-11-15 11:11:29)
+> > > > > > > > The driver creates a child device for the phy. The child device will
+> > > > > > > > never exist without the parent being active. As they are sharing a
+> > > > > > > > register range, the parent passes a regmap pointer to the child so that
+> > > > > > > > both can work with the same register range. The phy driver sets device
+> > > > > > > > data that is read by the parent to get the phy device that can be used
+> > > > > > > > to control the phy properties.
+> > > > > > >
+> > > > > > > If the PHY is in the same register space than the DP controller, why do
+> > > > > > > you need a separate PHY driver in the first place?
+> > > > > >
+> > > > > > This has been asked by Chun-Kuang Hu in a previous revision of the series:
+> > > > > >
+> > > > > > https://lore.kernel.org/linux-mediatek/CAAOTY_-+T-wRCH2yw2XSm=ZbaBbqBQ4EqpU2P0TF90gAWQeRsg@mail.gmail.com/
+> > > > >
+> > > > > It's a bit of a circular argument though :)
+> > > > >
+> > > > > It's a separate phy driver because it needs to go through another
+> > > > > maintainer's tree, but it needs to go through another maintainer's tree
+> > > > > because it's a separate phy driver.
+> > > > >
+> > > > > It doesn't explain why it needs to be a separate phy driver? Why can't
+> > > > > the phy setup be done directly in the DP driver, if it's essentially a
+> > > > > single device?
+> > > > >
+> > > > > That being said, usually what those kind of questions mean is that
+> > > > > you're missing a comment or something in the commit log to provide that
+> > > > > context in the first place, so it would be great to add that context
+> > > > > here.
+> > > > >
+> > > > > And it will avoid the situation we're now in where multiple reviewers
+> > > > > ask the same questions over and over again :)
+> > > > >
+> > > > At first I didn't understand your reply, then I realized I gave you
+> > > > the wrong link...
+> > > > my bad! I'm struggling a bit with mail reviews, but I'll get there eventually.
+> > > >
+> > > > The driver and phy were a single driver until v2 of this patch series
+> > > > and the phy setup
+> > > > was done directly in the driver (single driver, single C file).
+> > > > Here's the relevant link to the discussion between Chun-Kuang and Markus
+> > > >
+> > > > https://lore.kernel.org/linux-mediatek/CAAOTY__cJMqcAieEraJ2sz4gi0Zs-aiNXz38_x7dPQea6HvYEg@mail.gmail.com/#t
+> > > >
+> > > > I'll try to find a way to make it clearer for v7.
+> > >
+> > > OK, it makes sense then :)
+> > >
+> > > There's something weird though: the devices definitely look like they're
+> > > in a separate register range, yet you mention a regmap to handle the
+> > > shared register range. That range doesn't seem described anywhere in the
+> > > device tree though? What is it for?
+> >
+> > My understanding is that 0x1000 to 0x1fff controls the phy
+> > functionalities and 0x2000 to 0x4fff controls "non-phy"
+> > functionalities. And you are right, there's no description of that in
+> > the device tree whatsoever. The ranges are in the same actual device
+> > and thus it has been decided to not have dt-bindings for the phy
+> > device.
+>
+> Sure, that last part makes sense, but then I'm not sure why you don't
+> have the full register range in the device node you have in the DT?
+>
+> > The phy driver is a child of the DP driver that we register using
+> > platform_device_register_data() and we pass along the same regmap as
+> > the DP driver in its platform data.
+>
+> Especially if it's used by something, it should be described in the DT
+> somewhere.
+>
+> Maxime
 
-diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
-index 0135376c5de5..35a87a2da10b 100644
---- a/arch/mips/ralink/of.c
-+++ b/arch/mips/ralink/of.c
-@@ -53,17 +53,6 @@ void __init device_tree_init(void)
- 	unflatten_and_copy_device_tree();
- }
- 
--static int memory_dtb;
--
--static int __init early_init_dt_find_memory(unsigned long node,
--				const char *uname, int depth, void *data)
--{
--	if (depth == 1 && !strcmp(uname, "memory@0"))
--		memory_dtb = 1;
--
--	return 0;
--}
--
- void __init plat_mem_setup(void)
- {
- 	void *dtb;
-@@ -77,10 +66,10 @@ void __init plat_mem_setup(void)
- 	dtb = get_fdt();
- 	__dt_setup_arch(dtb);
- 
--	of_scan_flat_dt(early_init_dt_find_memory, NULL);
--	if (memory_dtb)
--		of_scan_flat_dt(early_init_dt_scan_memory, NULL);
--	else if (soc_info.mem_detect)
-+	if (!early_init_dt_scan_memory())
-+		return;
-+
-+	if (soc_info.mem_detect)
- 		soc_info.mem_detect();
- 	else if (soc_info.mem_size)
- 		memblock_add(soc_info.mem_base, soc_info.mem_size * SZ_1M);
-diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-index 6e1a106f02eb..ad1230c4f3fe 100644
---- a/arch/powerpc/kernel/prom.c
-+++ b/arch/powerpc/kernel/prom.c
-@@ -532,19 +532,18 @@ static int  __init early_init_drmem_lmb(struct drmem_lmb *lmb,
- }
- #endif /* CONFIG_PPC_PSERIES */
- 
--static int __init early_init_dt_scan_memory_ppc(unsigned long node,
--						const char *uname,
--						int depth, void *data)
-+static int __init early_init_dt_scan_memory_ppc(void)
- {
- #ifdef CONFIG_PPC_PSERIES
--	if (depth == 1 &&
--	    strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
-+	const void *fdt = initial_boot_params;
-+	int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
-+
-+	if (node > 0)
- 		walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
--		return 0;
--	}
-+
- #endif
--	
--	return early_init_dt_scan_memory(node, uname, depth, data);
-+
-+	return early_init_dt_scan_memory();
- }
- 
- /*
-@@ -749,7 +748,7 @@ void __init early_init_devtree(void *params)
- 
- 	/* Scan memory nodes and rebuild MEMBLOCKs */
- 	early_init_dt_scan_root();
--	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
-+	early_init_dt_scan_memory_ppc();
- 
- 	parse_early_param();
- 
-@@ -858,7 +857,7 @@ void __init early_get_first_memblock_info(void *params, phys_addr_t *size)
- 	 */
- 	add_mem_to_memblock = 0;
- 	early_init_dt_scan_root();
--	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
-+	early_init_dt_scan_memory_ppc();
- 	add_mem_to_memblock = 1;
- 
- 	if (size)
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 5e216555fe4f..a835c458f50a 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -1078,49 +1078,53 @@ u64 __init dt_mem_next_cell(int s, const __be32 **cellp)
- /*
-  * early_init_dt_scan_memory - Look for and parse memory nodes
-  */
--int __init early_init_dt_scan_memory(unsigned long node, const char *uname,
--				     int depth, void *data)
-+int __init early_init_dt_scan_memory(void)
- {
--	const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
--	const __be32 *reg, *endp;
--	int l;
--	bool hotpluggable;
-+	int node;
-+	const void *fdt = initial_boot_params;
- 
--	/* We are scanning "memory" nodes only */
--	if (type == NULL || strcmp(type, "memory") != 0)
--		return 0;
-+	fdt_for_each_subnode(node, fdt, 0) {
-+		const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
-+		const __be32 *reg, *endp;
-+		int l;
-+		bool hotpluggable;
- 
--	reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
--	if (reg == NULL)
--		reg = of_get_flat_dt_prop(node, "reg", &l);
--	if (reg == NULL)
--		return 0;
-+		/* We are scanning "memory" nodes only */
-+		if (type == NULL || strcmp(type, "memory") != 0)
-+			continue;
- 
--	endp = reg + (l / sizeof(__be32));
--	hotpluggable = of_get_flat_dt_prop(node, "hotpluggable", NULL);
-+		reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
-+		if (reg == NULL)
-+			reg = of_get_flat_dt_prop(node, "reg", &l);
-+		if (reg == NULL)
-+			continue;
- 
--	pr_debug("memory scan node %s, reg size %d,\n", uname, l);
-+		endp = reg + (l / sizeof(__be32));
-+		hotpluggable = of_get_flat_dt_prop(node, "hotpluggable", NULL);
- 
--	while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
--		u64 base, size;
-+		pr_debug("memory scan node %s, reg size %d,\n",
-+			 fdt_get_name(fdt, node, NULL), l);
- 
--		base = dt_mem_next_cell(dt_root_addr_cells, &reg);
--		size = dt_mem_next_cell(dt_root_size_cells, &reg);
-+		while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
-+			u64 base, size;
- 
--		if (size == 0)
--			continue;
--		pr_debug(" - %llx, %llx\n", base, size);
-+			base = dt_mem_next_cell(dt_root_addr_cells, &reg);
-+			size = dt_mem_next_cell(dt_root_size_cells, &reg);
- 
--		early_init_dt_add_memory_arch(base, size);
-+			if (size == 0)
-+				continue;
-+			pr_debug(" - %llx, %llx\n", base, size);
- 
--		if (!hotpluggable)
--			continue;
-+			early_init_dt_add_memory_arch(base, size);
- 
--		if (memblock_mark_hotplug(base, size))
--			pr_warn("failed to mark hotplug range 0x%llx - 0x%llx\n",
--				base, base + size);
--	}
-+			if (!hotpluggable)
-+				continue;
- 
-+			if (memblock_mark_hotplug(base, size))
-+				pr_warn("failed to mark hotplug range 0x%llx - 0x%llx\n",
-+					base, base + size);
-+		}
-+	}
- 	return 0;
- }
- 
-@@ -1271,7 +1275,7 @@ void __init early_init_dt_scan_nodes(void)
- 		pr_warn("No chosen node found, continuing without\n");
- 
- 	/* Setup memory, calling early_init_dt_add_memory_arch */
--	of_scan_flat_dt(early_init_dt_scan_memory, NULL);
-+	early_init_dt_scan_memory();
- 
- 	/* Handle linux,usable-memory-range property */
- 	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
-diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
-index df3d31926c3c..914739f3c192 100644
---- a/include/linux/of_fdt.h
-+++ b/include/linux/of_fdt.h
-@@ -59,8 +59,7 @@ extern unsigned long of_get_flat_dt_root(void);
- extern uint32_t of_get_flat_dt_phandle(unsigned long node);
- 
- extern int early_init_dt_scan_chosen(char *cmdline);
--extern int early_init_dt_scan_memory(unsigned long node, const char *uname,
--				     int depth, void *data);
-+extern int early_init_dt_scan_memory(void);
- extern int early_init_dt_scan_chosen_stdout(void);
- extern void early_init_fdt_scan_reserved_mem(void);
- extern void early_init_fdt_reserve_self(void);
--- 
-2.32.0
 
+So, to make things crystal clear to a newbie (like me).
+Would you describe it like this:
+compatible = "mediatek,mt8195-dp-tx";
+reg = <0 0x1c501000 0 0x0fff>,
+	<0 0x1c502000 0 0x2fff>;
+
+instead of the current description:
+compatible = "mediatek,mt8195-dp-tx";
+reg = <0 0x1c500000 0 0x8000>;
+
+I haven't checked what the rest of the 0x8000 range is used for though...
+
+Thx,
+Guillaume.

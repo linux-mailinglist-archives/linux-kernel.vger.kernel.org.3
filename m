@@ -2,36 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3A84757FE
+	by mail.lfdr.de (Postfix) with ESMTP id 97D504757FF
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242139AbhLOLip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242154AbhLOLif (ORCPT
+        id S242192AbhLOLiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 06:38:51 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:36160 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242168AbhLOLin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:38:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B60C06173E;
-        Wed, 15 Dec 2021 03:38:35 -0800 (PST)
+        Wed, 15 Dec 2021 06:38:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D87A5618A9;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2F73DCE1CDB;
+        Wed, 15 Dec 2021 11:38:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D52E9C34603;
         Wed, 15 Dec 2021 11:38:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B93DEC34605;
-        Wed, 15 Dec 2021 11:38:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639568314;
-        bh=4uMRQl6jrlsCb+mkulMxgC/glcw+odyDDSuOszbDlHk=;
+        s=k20201202; t=1639568317;
+        bh=QFzqr1T641gUeilQG0Yx+YDcgXpXPUpklimCWNpXOUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TZEkl0BRjq3cQ0R68fMM3e3uIAAixV19tqcLChRNtvBo6FfYeERyj/MABOu9vtpGT
-         jnnYhj6TEmv1Zk3psmnw309hKpBtkPEPeTBIMScWXd4RPEHvZpIbjDre7RR4m5hdTp
-         EISFlus0N9ryfZwt+bRvLk2csNM5ma/R0tTPHuKVXHVwNIaFL2SHMC28aCYnIYZTGT
-         8FCKR9ajN3Qy/Mos4GZvcffhgDEtPUtXNbYqjGQQKEJilWo4jjHRP0+h0gDabcGHqt
-         6JQoDuEMzMkRdnrrABNynRxBUFriEUcf3cfVlLZse5oiQoW05fZOwmQsYhqlHrJI/W
-         Bw872xraUnDag==
+        b=FkvWV5UemwFnt/5MAmSx1AkvF6on1SC6ciJ5T4c0MuBtKhi8oDrXjTV2SfPaRQ5+K
+         /Q/NnG+5y7j4jDXZMHk3b667YLOVHJO+0ZnojdBPHpkVICJpI/HHWZx4M/6v+ogG7W
+         9ptBaqCNHeh2q84C4+5nSpxDPkGgRb2If9ppj9EszMHKfioHKA72vai4ozUBkpVG5N
+         Bhg46H84VTNZewlYv9TcUG7J3S7GKbFXmdLcvSj6o/HcPTDvBbA4VXonzUlTJuothu
+         pyhMFQTTU/UNs51slsQeSgrmPNaRvz0UpSS/uxAK+Bkex87w6xCsGsPt1N85VuEI0/
+         OmrwSndI7Qtvg==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>
@@ -39,9 +36,9 @@ Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/8] clk: qcom: q6sstop-qcs404: explicitly include clk-provider.h
-Date:   Wed, 15 Dec 2021 17:08:02 +0530
-Message-Id: <20211215113803.620032-8-vkoul@kernel.org>
+Subject: [PATCH 8/8] clk: qcom: turingcc-qcs404: explicitly include clk-provider.h
+Date:   Wed, 15 Dec 2021 17:08:03 +0530
+Message-Id: <20211215113803.620032-9-vkoul@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211215113803.620032-1-vkoul@kernel.org>
 References: <20211215113803.620032-1-vkoul@kernel.org>
@@ -56,21 +53,21 @@ this driver as well
 
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- drivers/clk/qcom/q6sstop-qcs404.c | 1 +
+ drivers/clk/qcom/turingcc-qcs404.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/qcom/q6sstop-qcs404.c b/drivers/clk/qcom/q6sstop-qcs404.c
-index 507386bee07d..780074e05841 100644
---- a/drivers/clk/qcom/q6sstop-qcs404.c
-+++ b/drivers/clk/qcom/q6sstop-qcs404.c
+diff --git a/drivers/clk/qcom/turingcc-qcs404.c b/drivers/clk/qcom/turingcc-qcs404.c
+index 4543bda793f4..43184459228f 100644
+--- a/drivers/clk/qcom/turingcc-qcs404.c
++++ b/drivers/clk/qcom/turingcc-qcs404.c
 @@ -4,6 +4,7 @@
   */
  
  #include <linux/bitops.h>
 +#include <linux/clk-provider.h>
  #include <linux/err.h>
- #include <linux/module.h>
  #include <linux/platform_device.h>
+ #include <linux/module.h>
 -- 
 2.31.1
 

@@ -2,124 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C477A474ED3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4B5474ED2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238377AbhLOACM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 19:02:12 -0500
-Received: from mga01.intel.com ([192.55.52.88]:11965 "EHLO mga01.intel.com"
+        id S234435AbhLOAB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 19:01:59 -0500
+Received: from mga04.intel.com ([192.55.52.120]:6580 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234512AbhLOACL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 19:02:11 -0500
+        id S234272AbhLOAB5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 19:01:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639526531; x=1671062531;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VSXgUDdlFqKGlsS399TSciH7lt+O61I9XZ0vqoofX54=;
-  b=XUPp2BicUX38u+AvDOzOmCV8zsbFNMEcaoNTNeKe7wi3AegcQ1KZmbVh
-   HBOtfAW3Q6IQv8bMxICnciQePgBhIsJSkLZwXnrZyo0fm0MIdOWvjhllB
-   LrEmQ3xjh1/FGhfpMoH/v0ITMOGoGTkhvM8Im6e+OY56wVNazktGqw9PY
-   HDUm7rOF5AynZY8QCJbs/a3L1Q3OIjxcgevFNZdGVbO3Ep6j3xBZPa+tP
-   Y3gLVjLJt956Ll3g4zRJ76xEsQeyyf8n4/d2/vypEvehSm9t/tERdxKji
-   jt7C0k4Y/9Ioad+cmuGAmxNKr82rnzl1CeHQSWCev1NT8GRZ367oJuTwg
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263256578"
+  t=1639526517; x=1671062517;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fb2cVcz4LwC7zZEOQweYUdwyszIStBC9RhYXkmAbPrA=;
+  b=n0QJURbn+PGSpiniOaAw/Mq64yxE5PRb7JutMeyrvVFNqhY9SBbT+mwM
+   xGF/eTQwE5AG0iH1YCa7PUDm7nsqnnS7JmLw39R5tj/gKphvCR3XHtT45
+   QDmMMPB2n4IXldKshNXtySTa2G/pNslqHP8oAPeMQk5u1IV08khTDbpGT
+   e1wkxeBBfwC+dF1fFm0/kJ8wo4eV4CKxxDlnHUwJdN+5A6rXQa6ad58Pt
+   BPqPwkxS36PlpxZgAcw0Ep+0aMUtmYEY2cGteeEuIxx7zn/MLueSfQsbF
+   RFMEht2bL5LlT5v8OBrZ7eCtfagLi1//WkyLrbdjGzxQ6ya/I7O0kKbVz
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="237846488"
 X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
-   d="scan'208";a="263256578"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 16:01:37 -0800
+   d="scan'208";a="237846488"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 16:01:37 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
-   d="scan'208";a="753160672"
+   d="scan'208";a="661675155"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Dec 2021 16:01:35 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 14 Dec 2021 16:01:35 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mxHjj-0000x2-3o; Wed, 15 Dec 2021 00:01:35 +0000
-Date:   Wed, 15 Dec 2021 08:00:36 +0800
+        id 1mxHjj-0000x0-3Q; Wed, 15 Dec 2021 00:01:35 +0000
+Date:   Wed, 15 Dec 2021 08:00:38 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Francis Laniel <laniel_francis@privacyrequired.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: include/linux/fortify-string.h:27:33: warning: '__builtin_strncpy'
- output may be truncated copying between 5 and 9 bytes from a string of
- length 9
-Message-ID: <202112150718.rMIimid9-lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linuxtv-commits@linuxtv.org
+Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
+        Bogdan Togorean <bogdan.togorean@analog.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [git:media_stage/master] media: i2c: Add driver for the Analog
+ Devices ADDI9036 ToF front-end
+Message-ID: <202112150733.a6LCjbXP-lkp@intel.com>
+References: <E1mx7hB-002ppP-O7@www.linuxtv.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <E1mx7hB-002ppP-O7@www.linuxtv.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
-commit: a28a6e860c6cf231cf3c5171c75c342adcd00406 string.h: move fortified functions definitions in a dedicated header.
-date:   10 months ago
-config: mips-randconfig-r011-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150718.rMIimid9-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
+Hi Mauro,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linux/master linus/master v5.16-rc5 next-20211213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Mauro-Carvalho-Chehab/media-i2c-Add-driver-for-the-Analog-Devices-ADDI9036-ToF-front-end/20211214-211851
+base:   git://linuxtv.org/media_tree.git master
+config: nios2-allyesconfig (https://download.01.org/0day-ci/archive/20211215/202112150733.a6LCjbXP-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a28a6e860c6cf231cf3c5171c75c342adcd00406
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a28a6e860c6cf231cf3c5171c75c342adcd00406
+        # https://github.com/0day-ci/linux/commit/ec03b2029965b84eff6a7d1e8fe130330c3e69ed
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Mauro-Carvalho-Chehab/media-i2c-Add-driver-for-the-Analog-Devices-ADDI9036-ToF-front-end/20211214-211851
+        git checkout ec03b2029965b84eff6a7d1e8fe130330c3e69ed
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/dec/prom/ fs/xfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from include/linux/string.h:269,
-                    from include/linux/uuid.h:12,
-                    from fs/xfs/xfs_linux.h:10,
-                    from fs/xfs/xfs.h:22,
-                    from fs/xfs/xfs_xattr.c:7:
-   In function 'strncpy',
-       inlined from '__xfs_xattr_put_listent' at fs/xfs/xfs_xattr.c:119:2,
-       inlined from 'xfs_xattr_put_listent' at fs/xfs/xfs_xattr.c:181:2:
->> include/linux/fortify-string.h:27:33: warning: '__builtin_strncpy' output may be truncated copying between 5 and 9 bytes from a string of length 9 [-Wstringop-truncation]
-      27 | #define __underlying_strncpy    __builtin_strncpy
-         |                                 ^
-   include/linux/fortify-string.h:38:16: note: in expansion of macro '__underlying_strncpy'
-      38 |         return __underlying_strncpy(p, q, size);
-         |                ^~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/addi9036.c: In function 'addi9036_get_pad_format':
+>> drivers/media/i2c/addi9036.c:310:66: error: passing argument 2 of 'v4l2_subdev_get_try_format' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     310 |                 return v4l2_subdev_get_try_format(&addi9036->sd, cfg, pad);
+         |                                                                  ^~~
+         |                                                                  |
+         |                                                                  struct v4l2_subdev_pad_config *
+   In file included from drivers/media/i2c/addi9036.c:17:
+   include/media/v4l2-subdev.h:995:54: note: expected 'struct v4l2_subdev_state *' but argument is of type 'struct v4l2_subdev_pad_config *'
+     995 |                            struct v4l2_subdev_state *state,
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+   drivers/media/i2c/addi9036.c: In function 'addi9036_get_pad_crop':
+>> drivers/media/i2c/addi9036.c:342:64: error: passing argument 2 of 'v4l2_subdev_get_try_crop' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     342 |                 return v4l2_subdev_get_try_crop(&addi9036->sd, cfg, pad);
+         |                                                                ^~~
+         |                                                                |
+         |                                                                struct v4l2_subdev_pad_config *
+   In file included from drivers/media/i2c/addi9036.c:17:
+   include/media/v4l2-subdev.h:1013:52: note: expected 'struct v4l2_subdev_state *' but argument is of type 'struct v4l2_subdev_pad_config *'
+    1013 |                          struct v4l2_subdev_state *state,
+         |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+   drivers/media/i2c/addi9036.c: At top level:
+>> drivers/media/i2c/addi9036.c:521:35: error: initialization of 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *)' from incompatible pointer type 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_pad_config *)' [-Werror=incompatible-pointer-types]
+     521 |         .init_cfg               = addi9036_entity_init_cfg,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/addi9036.c:521:35: note: (near initialization for 'addi9036_subdev_pad_ops.init_cfg')
+>> drivers/media/i2c/addi9036.c:522:35: error: initialization of 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_mbus_code_enum *)' from incompatible pointer type 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_mbus_code_enum *)' [-Werror=incompatible-pointer-types]
+     522 |         .enum_mbus_code         = addi9036_enum_mbus_code,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/addi9036.c:522:35: note: (near initialization for 'addi9036_subdev_pad_ops.enum_mbus_code')
+>> drivers/media/i2c/addi9036.c:523:35: error: initialization of 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_frame_size_enum *)' from incompatible pointer type 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_frame_size_enum *)' [-Werror=incompatible-pointer-types]
+     523 |         .enum_frame_size        = addi9036_enum_frame_size,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/addi9036.c:523:35: note: (near initialization for 'addi9036_subdev_pad_ops.enum_frame_size')
+>> drivers/media/i2c/addi9036.c:524:35: error: initialization of 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' from incompatible pointer type 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_format *)' [-Werror=incompatible-pointer-types]
+     524 |         .get_fmt                = addi9036_get_format,
+         |                                   ^~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/addi9036.c:524:35: note: (near initialization for 'addi9036_subdev_pad_ops.get_fmt')
+   drivers/media/i2c/addi9036.c:525:35: error: initialization of 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' from incompatible pointer type 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_format *)' [-Werror=incompatible-pointer-types]
+     525 |         .set_fmt                = addi9036_set_format,
+         |                                   ^~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/addi9036.c:525:35: note: (near initialization for 'addi9036_subdev_pad_ops.set_fmt')
+>> drivers/media/i2c/addi9036.c:526:35: error: initialization of 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_selection *)' from incompatible pointer type 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_selection *)' [-Werror=incompatible-pointer-types]
+     526 |         .get_selection          = addi9036_get_selection,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/addi9036.c:526:35: note: (near initialization for 'addi9036_subdev_pad_ops.get_selection')
+   cc1: some warnings being treated as errors
 
 
-vim +/__builtin_strncpy +27 include/linux/fortify-string.h
+vim +/v4l2_subdev_get_try_format +310 drivers/media/i2c/addi9036.c
 
-     4	
-     5	
-     6	#if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
-     7	extern void *__underlying_memchr(const void *p, int c, __kernel_size_t size) __RENAME(memchr);
-     8	extern int __underlying_memcmp(const void *p, const void *q, __kernel_size_t size) __RENAME(memcmp);
-     9	extern void *__underlying_memcpy(void *p, const void *q, __kernel_size_t size) __RENAME(memcpy);
-    10	extern void *__underlying_memmove(void *p, const void *q, __kernel_size_t size) __RENAME(memmove);
-    11	extern void *__underlying_memset(void *p, int c, __kernel_size_t size) __RENAME(memset);
-    12	extern char *__underlying_strcat(char *p, const char *q) __RENAME(strcat);
-    13	extern char *__underlying_strcpy(char *p, const char *q) __RENAME(strcpy);
-    14	extern __kernel_size_t __underlying_strlen(const char *p) __RENAME(strlen);
-    15	extern char *__underlying_strncat(char *p, const char *q, __kernel_size_t count) __RENAME(strncat);
-    16	extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size) __RENAME(strncpy);
-    17	#else
-    18	#define __underlying_memchr	__builtin_memchr
-    19	#define __underlying_memcmp	__builtin_memcmp
-    20	#define __underlying_memcpy	__builtin_memcpy
-    21	#define __underlying_memmove	__builtin_memmove
-    22	#define __underlying_memset	__builtin_memset
-    23	#define __underlying_strcat	__builtin_strcat
-    24	#define __underlying_strcpy	__builtin_strcpy
-    25	#define __underlying_strlen	__builtin_strlen
-    26	#define __underlying_strncat	__builtin_strncat
-  > 27	#define __underlying_strncpy	__builtin_strncpy
-    28	#endif
-    29	
+   302	
+   303	static struct v4l2_mbus_framefmt *
+   304	addi9036_get_pad_format(struct addi9036 *addi9036,
+   305				struct v4l2_subdev_pad_config *cfg, unsigned int pad,
+   306				enum v4l2_subdev_format_whence which)
+   307	{
+   308		switch (which) {
+   309		case V4L2_SUBDEV_FORMAT_TRY:
+ > 310			return v4l2_subdev_get_try_format(&addi9036->sd, cfg, pad);
+   311		case V4L2_SUBDEV_FORMAT_ACTIVE:
+   312			return &addi9036->fmt;
+   313		default:
+   314			return ERR_PTR(-EINVAL);
+   315		}
+   316	}
+   317	
+   318	static int addi9036_get_format(struct v4l2_subdev *sd,
+   319				       struct v4l2_subdev_pad_config *cfg,
+   320				       struct v4l2_subdev_format *format)
+   321	{
+   322		struct addi9036 *addi9036 = to_addi9036(sd);
+   323		struct v4l2_mbus_framefmt *pad_format;
+   324	
+   325		pad_format = addi9036_get_pad_format(addi9036, cfg, format->pad,
+   326						     format->which);
+   327		if (IS_ERR(pad_format))
+   328			return PTR_ERR(pad_format);
+   329	
+   330		format->format = *pad_format;
+   331	
+   332		return 0;
+   333	}
+   334	
+   335	static struct v4l2_rect *
+   336	addi9036_get_pad_crop(struct addi9036 *addi9036,
+   337			      struct v4l2_subdev_pad_config *cfg,
+   338			      unsigned int pad, enum v4l2_subdev_format_whence which)
+   339	{
+   340		switch (which) {
+   341		case V4L2_SUBDEV_FORMAT_TRY:
+ > 342			return v4l2_subdev_get_try_crop(&addi9036->sd, cfg, pad);
+   343		case V4L2_SUBDEV_FORMAT_ACTIVE:
+   344			return &addi9036->crop;
+   345		default:
+   346			return ERR_PTR(-EINVAL);
+   347		}
+   348	}
+   349	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

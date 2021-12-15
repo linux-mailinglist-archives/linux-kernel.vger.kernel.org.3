@@ -2,122 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F25D4761C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884B44761C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbhLOTbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S230425AbhLOTcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbhLOTbu (ORCPT
+        with ESMTP id S230099AbhLOTc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:31:50 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2515FC061574;
-        Wed, 15 Dec 2021 11:31:50 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id z4-20020a1c7e04000000b0032fb900951eso37207wmc.4;
-        Wed, 15 Dec 2021 11:31:50 -0800 (PST)
+        Wed, 15 Dec 2021 14:32:28 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DABC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:32:27 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso26200573ota.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:32:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=x4k1zI3iK8DOJhhJ2DmMVfZXMtCAnERs0JGKLaP5zks=;
-        b=NJgMzS5JVDp+TUVCMkznQf01HxZ3GyB9IF4TXBY0oWuHJcbxZHXfchrvt9vi4glgEh
-         bg1kyJk7KSht6UVTTLmMWJf2Nb333+aUlD9CsAE3NNehWMqA8FdI/dgM89olrlK5HbTf
-         bjdvKjcLfCZPhTF0MvqqckYJfqnbj1M/7eNeyZ31W5c2Wt4TlNV+44jCc66BCbK2/b/s
-         gqmtHJjMJHSp8AFlMQyTjhmjKFn84n2GsW0u4dnDrwllWYrbAGVID6Ld4m6MNtfEVjQQ
-         A28QyFVm6rZGo/7uSlsa3+ctDkrWpvNgDM43NWY8kblLGRfn49siHORt+xhASsma5vmt
-         Jq8A==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=KCcCNfuto1fwE5eENpKC+nkF/sRCm+bkNjr97zeXP5k=;
+        b=AhonrVu+8ZlLbXNMR2eSNrdEE4oll8p9p2eAk4XvDMUN6TOEl7ESsoWlqAajD2BUlo
+         Q3SP30lGjRDjFsRSbz+fLXShWL6Xw2O0DsLTwzZ/RtslkBzbKd+kRGEOy2Vq/gc+2J6O
+         sMM13+zGYZSPKKUoikyktK9mtBV/VariK2nPM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x4k1zI3iK8DOJhhJ2DmMVfZXMtCAnERs0JGKLaP5zks=;
-        b=GEawsUkU1m9/37PQinJoR6GreLrDVxhGAL/O/AfJIyefMog30d2Ng0HuiU+bs3qr3W
-         5J7SfJ4hRVMxymrXlHzwBp47RWA+YVx+ZNpya5kPMveFboIuHWgK8VOAcWvMbb12Vm8t
-         IVUmoJpJ4Yo2mJRmGoutPh7Tu8bITlydD071++RSCWlUTK5bE+cdfy2zolawqKh92gZr
-         UcGYjnUHW4fYA6Hdkl1UByktPymczd7IwxtCVp+79lDCppngwnGhwqFEU2Q70QAfeaMh
-         dkKaS79Nre2uNfC/Ja815uCbxbQFjPJwCGMw6NecHmYmFA34Ep5TN3CAhcybqg6e1OLx
-         I3Mg==
-X-Gm-Message-State: AOAM5303mrTuNoVj+d3wQfwxat7PF9OY84sHNX5a2wEd51fkwpW7w9G7
-        5BE9QLrEdTdfxwTU17QpZ8Y=
-X-Google-Smtp-Source: ABdhPJztwiKwqGSqUj73cTpvfQYIax4z+WK20VP03cDOKPhcbs9acfRIZLYOMNnC3TC6Sn+0jJvD1g==
-X-Received: by 2002:a7b:ce83:: with SMTP id q3mr1649282wmj.37.1639596708645;
-        Wed, 15 Dec 2021 11:31:48 -0800 (PST)
-Received: from [192.168.0.18] (81.172.62.207.dyn.user.ono.com. [81.172.62.207])
-        by smtp.gmail.com with ESMTPSA id f18sm2729458wre.7.2021.12.15.11.31.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 11:31:48 -0800 (PST)
-Message-ID: <f8abf09f-36ec-b8b6-f3f3-de06f05c4021@gmail.com>
-Date:   Wed, 15 Dec 2021 20:31:47 +0100
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=KCcCNfuto1fwE5eENpKC+nkF/sRCm+bkNjr97zeXP5k=;
+        b=677yJ+1bcoECm6CMTHvsQfhOFntY2OBsba0M38jPHZKQpQzZjgwsAW75D1k7Iku8JR
+         /54aD1R5vL0kA/IWlaL25OEpYxKrN6TW+9I5dWCZ0eNK18ellHlvDdkNSOMJ7Lq7TPGs
+         fnVNNOzsm3gu7lzREFgOwNDPSH/SC9JXuGYsB8cTaMxuIYFjUI/2opypGE8ZKD7byfqy
+         Xh/CVhH1Ph/7i7vD1tBhsN0cAa9Z9EAXpjlu08D0U/rZcUVFVmPIScPVJ51k9vG80t4L
+         GqSsIZpYUC87FxMp8TjEJaQiy+rPJXPW7kjeH+USvEhzAWVEgCzJaW/lhi2FndJcSui2
+         dzLA==
+X-Gm-Message-State: AOAM531nCWnygUdPhI2kEoN1UFTbodwsRTV2x0ej7wcyGrxBUghkHkwD
+        2fXteKuSRCyi33Csfc0cvWOuWNznm1MP7yLKLs2u9w==
+X-Google-Smtp-Source: ABdhPJyexg/795HehcLl8cNNfOqwAGaPZ/BtHR5KlkmgOJqRlq5kPbvEb0Ra/YXyAgX2GsXKtwH2fkUpUy+sB92eL9w=
+X-Received: by 2002:a05:6830:30b7:: with SMTP id g23mr9739312ots.159.1639596747244;
+ Wed, 15 Dec 2021 11:32:27 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 15 Dec 2021 11:32:26 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v8 1/2] dt-bindings: arm64: dts: mediatek: Add mt7986
- series
-Content-Language: en-US
-To:     Sam Shih <sam.shih@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     John Crispin <john@phrozen.org>, Ryder Lee <Ryder.Lee@mediatek.com>
-References: <20211122123222.8016-1-sam.shih@mediatek.com>
- <20211122123222.8016-2-sam.shih@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20211122123222.8016-2-sam.shih@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20211215085554.444351-1-deng.changcheng@zte.com.cn>
+References: <20211215085554.444351-1-deng.changcheng@zte.com.cn>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Wed, 15 Dec 2021 11:32:26 -0800
+Message-ID: <CAE-0n52Uf=rcGVxz1U3p6H+icOz1OoacdOFsQtDHCdcdKYTsJw@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: remove unneeded variable
+To:     cgel.zte@gmail.com, robdclark@gmail.com
+Cc:     sean@poorly.run, quic_abhinavk@quicinc.com, airlied@linux.ie,
+        daniel@ffwll.ch, quic_khsieh@quicinc.com,
+        dmitry.baryshkov@linaro.org, bjorn.andersson@linaro.org,
+        linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22/11/2021 13:32, Sam Shih wrote:
-> MT7986 series is Mediatek's new 4-core SoC, which is mainly
-> for wifi-router application. The difference between mt7986a and mt7986b
-> is that some pins do not exist on mt7986b.
-> 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> 
-
-Applied to v5.16-next/dts64
-
+Quoting cgel.zte@gmail.com (2021-12-15 00:55:54)
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+>
+> Remove unneeded variable used to store return value.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
 > ---
-> v6: separate basic part into a single patch series
-> 
-> Original thread:
-> https://lore.kernel.org/all/315d7823aa108c909a3d36464fe54763b76ab2f4.camel@mediatek.com/
-> 
-> v3: changed 'MT7986' to 'MT7986 series' in the commit message
-> v2: added an Acked-by tag
-> ---
->   Documentation/devicetree/bindings/arm/mediatek.yaml | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> index 80a05f6fee85..a9a778269684 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
-> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> @@ -76,6 +76,14 @@ properties:
->             - enum:
->                 - mediatek,mt7629-rfb
->             - const: mediatek,mt7629
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt7986a-rfb
-> +          - const: mediatek,mt7986a
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt7986b-rfb
-> +          - const: mediatek,mt7986b
->         - items:
->             - enum:
->                 - mediatek,mt8127-moose
-> 
+
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

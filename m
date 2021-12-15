@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDE547617E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3D2476180
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344182AbhLOTSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:18:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
+        id S1344180AbhLOTS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344181AbhLOTSB (ORCPT
+        with ESMTP id S238749AbhLOTSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:18:01 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BC4C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:18:00 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639595878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IWDBdE640bIMVLi/eK8XstbREIWL1tXm5Jvd5nzdPrI=;
-        b=k/EqQ6tP1tn+ErDSzSZ8r95+B2viU6gMYzolsxFfB04rGZZTLnFwlLrxvbhG8twT/kcm3Y
-        Ny0vtmWY28dCANCHCKVXLnnN6V1rpQ0ohvRh7jWqIoA8yC9+P66FZXE1CJiIyrteWwUdCh
-        YP6JgisuWATSILVXeVJDNNicRkq65Cj3uxlKrkzy1qQ6xBPqo0+wDvulRq2SEqvW7k4j6n
-        DsdL/yoA4ejrAmdxsB8VdgXRT5xh6G7gOyKVv8eeerx69yRWlrnfkpzaMLq2Sy2HKfnEqX
-        gkNaoHGvQvlIldA9l7ApIH2sEUuUfroNXeneTZx7JzAjDRD0l5wd0FXTrcwD6w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639595878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IWDBdE640bIMVLi/eK8XstbREIWL1tXm5Jvd5nzdPrI=;
-        b=jRuzfBObOtx7I0aCSEqrqlmFgGYiRa1j7krPZbh6eY2cuXemqD5S9tgod16t9rGnuOD9Qv
-        81mZpv7Fd5Kl7PCA==
-To:     info@engel-internet.de, linux-kernel@vger.kernel.org
-Subject: Re: CLOCK_MONOTONIC after suspend
-In-Reply-To: <91eaa528-9605-134e-8e38-ecc37a0360e1@engel-internet.de>
-References: <91eaa528-9605-134e-8e38-ecc37a0360e1@engel-internet.de>
-Date:   Wed, 15 Dec 2021 20:17:58 +0100
-Message-ID: <87o85hr82h.ffs@tglx>
+        Wed, 15 Dec 2021 14:18:25 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0548C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:18:25 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id de30so21143737qkb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:18:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Lupv2Y8caxWSPo/yUIpJfaEyopRdwsl8zpftq2TZo8c=;
+        b=JeUquh9xs0mAhV646mX1fPpTfEWDBFm4VpV2DzQrI7hCt0URfzBNzPsqmp+Xcqga0n
+         +MLIN75Prpx1MOT0sRYpZ1ckgt2UIU9Uly3dvMbUd+LgfWr+nu6ndecT3/1r9wmeg8p8
+         sVaeU9BJcpoaRYpkyKjQcsfqQfakqh3Le8i/34X9IKrCmTEqU88aNYXxQcQAROakjvV0
+         2pue5P3G7sATp3CiU51ut2qCjCvKB0u2H0um0qcQ26PDbW5o8hr55KWust5VfocLUuLJ
+         x1sSIItAq9vS/jenmboVqsQ64XvKvwW4MvWXZxtLxKI7owqbjC6RuCuDWYNAMHinWcvI
+         HPXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Lupv2Y8caxWSPo/yUIpJfaEyopRdwsl8zpftq2TZo8c=;
+        b=c0Y94d0Dwl6jijHVA8xmu8DREZNq5Zej1GMsK8cieRrFyjXR2fNEltLgN35qbMzuIz
+         BiJTvKFP1KRKxQEwhWnMzxJwN2uaF4OnKJLV9bApTWeqPR0c0fFDm3C4Sml7uwjBXHpC
+         NIpxUenGcIGRjGMVt75HmgIwZeUYjSoCNvyAjxmx9xe3v6Ryk6PJcqU1Pxn7xOCOzVMF
+         NTumazorle3LSzwG2n4UjpU3s7RV1Bf2EaCk9L1565jwiTuptMvbubx3V6u9gGnEJmiK
+         F4dvdzI9DWiVCyc6FNZog9rpDZUadXQc9+FSxsSruRNqKhaBPkAyUc1K8Y5jdSUgApyc
+         ZWWA==
+X-Gm-Message-State: AOAM533yi2tzMce8ovYxUm1KdDqSLjIqa0agaj9VyaJyLeNdeoS0RLTS
+        av+WK+hUKWqhXUTzrLSytamBJKBnjZh3yZTv5yYk9w==
+X-Google-Smtp-Source: ABdhPJzmCzYw51IcVPfPmlbc4eeB5qwnEMYGJDj12g7Z7Wts0i2C3Tw6O2uiNZd87jJ7F7AWfQ2H8EeM1UL3meIYKTU=
+X-Received: by 2002:a05:620a:13ea:: with SMTP id h10mr9971617qkl.30.1639595904803;
+ Wed, 15 Dec 2021 11:18:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20211215174524.1742389-1-robdclark@gmail.com> <20211215174524.1742389-3-robdclark@gmail.com>
+In-Reply-To: <20211215174524.1742389-3-robdclark@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 15 Dec 2021 22:18:14 +0300
+Message-ID: <CAA8EJpruB5kiynfJU93RzrmEiEZLYUyw+qEJoNgfcu4HK+7xFA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] drm/msm/disp: Export helper for capturing snapshot
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dirk,
-
-On Wed, Dec 15 2021 at 18:30, info@engel-internet.de wrote:
-> dT =3D (T_KS_asleep =E2=80=93 T_US_asleep) + (T_US_awake =E2=80=93 T_KS_a=
-wake) // T: point
-> in time, KS: kernel space, US: user space
+On Wed, 15 Dec 2021 at 20:49, Rob Clark <robdclark@gmail.com> wrote:
 >
-> With a simple user space program that prints out the monotonic time each
-> 100ms along with the day time, I did some measurements on my notebook.
-> It reveals the following discrepancies (time gaps) between the last time
-> stamp written before suspend and the first time stamp after resume:
+> From: Rob Clark <robdclark@chromium.org>
 >
-> dT in [s]     #1      #2      #3      #4      #5      #6      #7
+> We'll re-use this for debugfs.
 >
-> Suspend2RAM   6.409   6.423   7.451   3.444   7.815   5.655   7.178
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+> ---
+>  drivers/gpu/drm/msm/disp/msm_disp_snapshot.c | 28 +++++++++++++++-----
+>  drivers/gpu/drm/msm/disp/msm_disp_snapshot.h | 10 +++++++
+>  2 files changed, 31 insertions(+), 7 deletions(-)
 >
-> Suspend2Disk  5.228   2.683   5.072   5.198   4.806   5.763   6.908
->
-> Is this effect known and accepted or is there some way to prevent or
-> mitigate it?
-
-there is not much the kernel can do about that.
-
-Timekeeping can only stop at the very latest moment and has to resume
-immediately when the CPU comes back. That's a matter of internal
-correctness.
-
-Yes, user space has to be frozen first in order to make that work and is
-obviously unfrozen last. So the timeline looks like this:
-
-T0        suspend is initiated
-T1        user space freeze
-T2        kernel shuts down    - timekeeping freeze
-T3        kernel resumes       - timekeeping resume
-T4        user space unfreeze
-
-So the deltas T2 - T1, T4 - T3 are what matter for your user space
-program. Those deltas heavily depend on the amount of drivers,
-outstanding disk operations etc. So your milage will vary.
-
-Thanks,
-
-        tglx
 
 
-
+-- 
+With best wishes
+Dmitry

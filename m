@@ -2,110 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 575B5475E7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4274475EA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245273AbhLORVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:21:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245248AbhLORVx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:21:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D62C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 09:21:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1010BB82026
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 17:21:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70D3C36AE2;
-        Wed, 15 Dec 2021 17:21:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639588909;
-        bh=5kw5d/dJmPzKVkRoB5LKQamLyO243vfdE9NF/V8TtsA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GWrV/EiGznIzhs5lwHJfEXtffgY2NeUaRr7i2F+yyxfvUdi5E5PZH8LhxdNnL0YSH
-         BTn6ii0Rzh8zF2kWe6R/WqtZygnZM7ZyDPgb3w/1e28BxOFEna4BM/bknhhwJygDhT
-         HcarbJQtmlCViCoj9EUHxN19Ot4IQpszrgIMShunJxuTKVQypiyMuzA+aJDGhiIVbG
-         E3xvQGhiurqW59+sdJ1Krk1YEjLThrj/fJDQONn17v+vNuPIjct7ywwrF+zxiludTG
-         UJp1CmtzhFt3c0UNCpd3v2O1aRco/GnsWDVQdsux3pHG/MdKAOYfk3+98HAfR8NOEA
-         zKW2zb7SvdjAA==
-Date:   Wed, 15 Dec 2021 10:21:44 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        id S245553AbhLORXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:23:37 -0500
+Received: from foss.arm.com ([217.140.110.172]:58410 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245334AbhLORXA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 12:23:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D148C6D;
+        Wed, 15 Dec 2021 09:22:59 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.67.176])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DAEF3F5A1;
+        Wed, 15 Dec 2021 09:22:54 -0800 (PST)
+Date:   Wed, 15 Dec 2021 17:22:52 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [linux-stable-rc:queue/5.10 6492/9999] ERROR: modpost:
- "raid6_2data_recov" [fs/btrfs/btrfs.ko] undefined!
-Message-ID: <YbokKLRVkIDCnE8F@archlinux-ax161>
-References: <202112151422.M34sDTRZ-lkp@intel.com>
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 25/43] kmsan: skip shadow checks in files doing context
+ switches
+Message-ID: <YbokbOfHTQXfGq39@FVFF77S0Q05N>
+References: <20211214162050.660953-1-glider@google.com>
+ <20211214162050.660953-26-glider@google.com>
+ <Ybn39Z5dwcbrbs0O@FVFF77S0Q05N>
+ <CAG_fn=XOOoCQhEkN1oeOXUX99P+AQ+ApPiUQXPFxR6yeT-Tf=w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202112151422.M34sDTRZ-lkp@intel.com>
+In-Reply-To: <CAG_fn=XOOoCQhEkN1oeOXUX99P+AQ+ApPiUQXPFxR6yeT-Tf=w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 02:49:44PM +0800, kernel test robot wrote:
-> Hi Nathan,
+On Wed, Dec 15, 2021 at 05:28:21PM +0100, Alexander Potapenko wrote:
+> On Wed, Dec 15, 2021 at 3:13 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > On Tue, Dec 14, 2021 at 05:20:32PM +0100, Alexander Potapenko wrote:
+> > > When instrumenting functions, KMSAN obtains the per-task state (mostly
+> > > pointers to metadata for function arguments and return values) once per
+> > > function at its beginning.
+> >
+> > How does KMSAN instrumentation acquire the per-task state? What's used as the
+> > base for that?
+> >
 > 
-> First bad commit (maybe != root cause):
-
-Indeed, pre-existing issue :)
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
-> head:   a0e5648b46a984339e8c472bfe5da299dd65fc3b
-> commit: f7121692795c654b52b460a11107a87285bb1dcd [6492/9999] hexagon: handle {,SOFT}IRQENTRY_TEXT in linker script
-> config: hexagon-randconfig-r041-20211215 (https://download.01.org/0day-ci/archive/20211215/202112151422.M34sDTRZ-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f7121692795c654b52b460a11107a87285bb1dcd
->         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
->         git fetch --no-tags linux-stable-rc queue/5.10
->         git checkout f7121692795c654b52b460a11107a87285bb1dcd
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+> To preserve kernel ABI (so that instrumented functions can call
+> non-instrumented ones and vice versa) KMSAN uses a per-task struct
+> that keeps shadow values of function call parameters and return
+> values:
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> struct kmsan_context_state {
+>   char param_tls[...];
+>   char retval_tls[...];
+>   char va_arg_tls[...];
+>   char va_arg_origin_tls[...];
+>   u64 va_arg_overflow_size_tls;
+>   depot_stack_handle_t param_origin_tls[...];
+>   depot_stack_handle_t retval_origin_tls;
+> };
 > 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
+> It is mostly dealt with by the compiler, so its layout isn't really important.
+> The compiler inserts a call to __msan_get_context_state() at the
+> beginning of every instrumented function to obtain a pointer to that
+> struct.
+> Then, every time a function pointer is used, a value is returned, or
+> another function is called, the compiler adds code that updates the
+> shadow values in this struct.
 > 
-> ERROR: modpost: "__raw_writesl" [drivers/i3c/master/i3c-master-cdns.ko] undefined!
-> ERROR: modpost: "__raw_readsl" [drivers/i3c/master/i3c-master-cdns.ko] undefined!
-
-This is fixed in linux-5.10.y head, commit 0854c9ff2151 ("hexagon:
-export raw I/O routines for modules").
-
-> >> ERROR: modpost: "raid6_2data_recov" [fs/btrfs/btrfs.ko] undefined!
-> >> ERROR: modpost: "raid6_datap_recov" [fs/btrfs/btrfs.ko] undefined!
-> >> ERROR: modpost: "raid6_call" [fs/btrfs/btrfs.ko] undefined!
-> >> ERROR: modpost: "xor_blocks" [fs/btrfs/btrfs.ko] undefined!
-> >> ERROR: modpost: "__compiletime_assert_963" [fs/btrfs/btrfs.ko] undefined!
+> E.g. the following function:
 > 
-> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for BTRFS_FS
->    Depends on BLOCK && !PPC_256K_PAGES && !PAGE_SIZE_256KB
->    Selected by
->    - TEST_KMOD && RUNTIME_TESTING_MENU && m && MODULES && NETDEVICES && NET_CORE && INET && BLOCK
+> int sum(int a, int b) {
+> ...
+>   result = a + b;
+>   return result;
+> }
+> 
+> will now look as follows:
+> 
+> int sum(int a, int b) {
+>   struct kmsan_context_state *kcs = __msan_get_context_state();
+>   int s_a = ((int)kcs->param_tls)[0];  // shadow of a
+>   int s_b = ((int)kcs->param_tls)[1];  // shadow of b
+> ...
+>   result = a + b;
+>   s_result = s_a | s_b;
+>   ((int)kcs->retval_tls)[0] = s_result;  // returned shadow
+>   return result;
+> }
 
-The rest of the errors should be fixed by my series here, which is
-currently in -mm:
+Ok; thanks for that description, that makes it much easier to understand where
+there could be problems.
 
-https://lore.kernel.org/r/20211129230141.228085-1-nathan@kernel.org/
+> > > To deal with that, we need to apply __no_kmsan_checks to the functions
+> > > performing context switching - this will result in skipping all KMSAN
+> > > shadow checks and marking newly created values as initialized,
+> > > preventing all false positive reports in those functions. False negatives
+> > > are still possible, but we expect them to be rare and impersistent.
+> > >
+> > > To improve maintainability, we choose to apply __no_kmsan_checks not
+> > > just to a handful of functions, but to the whole files that may perform
+> > > context switching - this is done via KMSAN_ENABLE_CHECKS:=n.
+> > > This decision can be reconsidered in the future, when KMSAN won't need
+> > > so much attention.
+> >
+> > I worry this might be the wrong approach (and I've given some rationale below),
+> > but it's not clear to me exactly how this goes wrong. Could you give an example
+> > flow where stale data gets used?
+> 
+> The scheme I described above works well until a context switch occurs.
+> Then, IIUC, at some point `current` changes, so that the previously
+> fetched KMSAN context state becomes stale:
+> 
+> void foo(...) {
+> baz(...);
+> // context switch here changes `current`
+> baz(...);
+> }
+> 
+> In this case we'll have foo() setting up kmsan_context_state for the
+> old task when calling bar(), but bar() taking shadow for its arguments
+> from the new task's kmsan_context_state.
+> 
+> Does this make sense?
 
-I can backport it once it lands in mainline.
+I understand where you're coming from, but I think this affects less code than
+you think it does, due to the way the switch works.
 
-Cheers,
-Nathan
+Importantly, the value of `current` only changes within low-level arch code.
+From the PoV of the core scheduler code, `current` never changes. For example,
+form the PoV of a single thread, thread_a, calling into the scheduler's
+context-switch:
+
+context_switch(rq, thread_a, thread_b, rf)
+{
+	...
+	/* `current` is `thread_a` here */
+	// call blocks for an indefinite period while another thread runs
+	switch_to(thread_a, thread_b, thread_a);
+	/* `current` is `thread_a` here */
+	...
+}
+
+You're correct that on x86 `current` does change within the __switch_to()
+function, since `current` is implemented as a per-cpu variable called
+`current_task`, updated within __switch_to().
+
+So not instrumenting arch/86/kernel/process_64.c might be necessary, but I
+don't see any reason to aovid instrumenting kernel/sched/core.c, since current
+should never change from the PoV of code that lives there.
+
+For contrast, on arm64 we place place `current` within the SP_EL0 register, and
+switch that in our cpu_switch_to() assembly along with the GPRs and stack, so
+it never changes from the PoV of any C code.
+
+It might make sense to have x86 do likewise and update `current_task` in asm,
+or to split the raw context-switch code out into a separate file, since it
+should probably all be noinstr anyway...
+
+> > As above, the actual context-switch occurs in arch code --I assume the
+> > out-of-line call *must* act as a clobber from the instrumentation's PoV or we'd
+> > have many more problems.
+> 
+> Treating a function call as a clobber of kmsan_context_state() is
+> actually an interesting idea.
+> Adding yet another call to __msan_get_context_state() after every
+> function call may sound harsh, but we already instrument every memory
+> access anyway.
+
+As above, I don't think that clobbering is necessary after all; you only need
+to ensure the function which performs the switch and whatever it calls are not
+instrumented.
+
+> What remains unclear is handling the return value of the innermost
+> function that performed the switch: it will be saved to the old task's
+> state, but taken from that of the new task.
+
+As above, I think you just need ot protect x86-64's __switch_to() and callees,
+and perhaps wherever this is first initiailized for a CPU.
+
+> > I also didn't spot any *explciit* state switching
+> > being added there that would seem to affect KMSAN.
+> >
+> > ... so I don't understand why checks need to be inhibited for the core sched code.
+> 
+> In fact for a long time there were only three functions annotated with
+> __no_kmsan_checks right in arch/x86/kernel/process_64.c and
+> kernel/sched/core.c
+> We decided to apply this attribute to every function in both files,
+> just to make sure nothing breaks too early while upstreaming KMSAN.
+
+I appreciate that rationale, but I think it would be better to be precise for
+now; otherwise it'll be much harder to remove the limitation in future as we
+won't know what we're actually protecting, and it means the other code in those
+files will benefit from KMSAN.
+
+Thanks,
+Mark.

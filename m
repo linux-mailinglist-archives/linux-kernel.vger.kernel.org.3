@@ -2,126 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4E8475E74
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF19B475E79
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245257AbhLORTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:19:52 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:49386 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245248AbhLORTv (ORCPT
+        id S245266AbhLORUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245248AbhLORUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:19:51 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639588790;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8dWZtEdF7LamMiNHDQtUJa+ux0BuM6MSUIqH9b+Hvyo=;
-        b=wYhmWV2tAzCQfd9US7tK/sDWCnBbJEkh0toY9VDuwtDZ0a56PMo8BoccPtbLPELWo9I28H
-        HKc2neisW5z7nVF58H33hQ6I3JpDjp7x8Kvp/cCgjUvnYD8QdYGH61A1BeXSEXOYr4fYH5
-        DLBlYKQg7bDxik0O85eEeU6t0YgTJ460cdP5T6mA0DAEz4t2jvbnSoMRyHmCdRIsX+WU5+
-        q/5iZYQod3bSNBGwjqvNjip+w8Kzgei0iFMPfqmZqeU25htKL5R6ykYiRwqQfnG6lFz+mQ
-        r3FvWyI39vnZ4v4UgiVkKOdpkffYfcVyqNIiIF+3PGfZRf0ksOR9s1/A7ZSHGA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639588790;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8dWZtEdF7LamMiNHDQtUJa+ux0BuM6MSUIqH9b+Hvyo=;
-        b=lk+vW3OXeYaf8seyWIaOrmuYBvQZ09fZDnlpC9df3JMNaqJ74ZUxSByXPFwmhYxR0MLbL9
-        iLeRWTRdVJiovHBA==
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: [patch V4 09-02/35] PCI/MSI: Allocate MSI device data on first use
-In-Reply-To: <87tuf9rdoj.ffs@tglx>
-References: <20211210221642.869015045@linutronix.de>
- <20211210221813.740644351@linutronix.de> <87tuf9rdoj.ffs@tglx>
-Date:   Wed, 15 Dec 2021 18:19:49 +0100
-Message-ID: <87r1adrdje.ffs@tglx>
+        Wed, 15 Dec 2021 12:20:37 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B89C06173E;
+        Wed, 15 Dec 2021 09:20:37 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id az34-20020a05600c602200b0033bf8662572so16474548wmb.0;
+        Wed, 15 Dec 2021 09:20:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gBnmKSGLNuMvymhhy5hZJRhuWEJ7BIugf8vR/bIuOqM=;
+        b=KCLZaZDQQvg018ER4RJ25YN2zuBW58lZWc7tx1pn54BQ/20m/VK0Ijoz1tOwebSdBx
+         61/TRUIdYuw7flDNY3/SJCmbW67ZvpJORo3h16tmnm57ZJZCnRVebHhMb98aFx7DRz/P
+         pmbJRHpRfkyz5USGQHyhHRsyoHyFNmfgEv2pVfsUuGSmhPF2vMqwNo31YgulJdBfqMB6
+         qAzMVustltXloIf1FsU/KgxEPNX66be95DgH9/Y3+oPPqOIYsnED574cOm75t0TMvS8F
+         goDrf+aIt8x3oZyChAFBAgD9x2qO6TDvxWzQ2PYMqjWghPSDXFd6mC/wkFddawMfyNaI
+         kEoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gBnmKSGLNuMvymhhy5hZJRhuWEJ7BIugf8vR/bIuOqM=;
+        b=OrwHLjcxpxSlp4XW/v1WmfKZ34dTtSiqGLWv4fy7xMjX3p3oWz/6qAAJDXAL094s1X
+         SkwWoh+Ha9nEhh96jeoOs8w/0ylIlVDg/adEI+rXCLiPeKZurQTmuphTVNPZeLmshyPN
+         gmjkuvvuT8SB7u5Z+YCcMEd/xNe0WCLuaXW7qFvEv0vQ6mYy2kZGLxM+7RzuP2AkuW69
+         BVhOpMclMETR+T/253dVjD4IVEJ6pw9fL/DEf+Sj1VMZDgPIqT+HhmjmIy2fvxxdRWQh
+         WHPlGMQTzO2Hvo997MS7y30U6qZHzLCHMARzSzMpEgcfhW8ijV505cpoCZhat+9UFwn/
+         f05A==
+X-Gm-Message-State: AOAM532S7jP6HwBofhNFIA9+gYAGlbGhKzPktOYxWI60oj41iQnDklEn
+        zuxjrU+Wqn7ljXxpfFvbg8g=
+X-Google-Smtp-Source: ABdhPJwojD9YKCPuESlm+kt+n4P3cUJuGJ1Uccelxcnq8snmgdS+pH9okyrfRk3HN7t/yeFBxs6XXg==
+X-Received: by 2002:a05:600c:1f17:: with SMTP id bd23mr913120wmb.57.1639588835923;
+        Wed, 15 Dec 2021 09:20:35 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id d2sm2535828wra.61.2021.12.15.09.20.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 09:20:35 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <b4295e77-aaf1-f0f5-cfd5-2a4fda923fb4@redhat.com>
+Date:   Wed, 15 Dec 2021 18:20:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 0/4] KVM: x86/mmu: Zap invalid TDP MMU roots when
+ unmapping
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
+References: <20211215011557.399940-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211215011557.399940-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate MSI device data on first use, i.e. when a PCI driver invokes one
-of the PCI/MSI enablement functions.
+On 12/15/21 02:15, Sean Christopherson wrote:
+> Patches 01-03 implement a bug fix by ensuring KVM zaps both valid and
+> invalid roots when unmapping a gfn range (including the magic "all" range).
+> Failure to zap invalid roots means KVM doesn't honor the mmu_notifier's
+> requirement that all references are dropped.
+> 
+> set_nx_huge_pages() is the most blatant offender, as it doesn't elevate
+> mm_users and so a VM's entire mm can be released, but the same underlying
+> bug exists for any "unmap" command from the mmu_notifier in combination
+> with a memslot update.  E.g. if KVM is deleting a memslot, and a
+> mmu_notifier hook acquires mmu_lock while it's dropped by
+> kvm_mmu_zap_all_fast(), the mmu_notifier hook will see the to-be-deleted
+> memslot but won't zap entries from the invalid roots.
+> 
+> Patch 04 is cleanup to reuse the common iterator for walking _only_
+> invalid roots.
+> 
+> Sean Christopherson (4):
+>    KVM: x86/mmu: Use common TDP MMU zap helper for MMU notifier unmap
+>      hook
+>    KVM: x86/mmu: Move "invalid" check out of kvm_tdp_mmu_get_root()
+>    KVM: x86/mmu: Zap _all_ roots when unmapping gfn range in TDP MMU
+>    KVM: x86/mmu: Use common iterator for walking invalid TDP MMU roots
+> 
+>   arch/x86/kvm/mmu/tdp_mmu.c | 116 +++++++++++++++++--------------------
+>   arch/x86/kvm/mmu/tdp_mmu.h |   3 -
+>   2 files changed, 53 insertions(+), 66 deletions(-)
+> 
 
-Add a wrapper function to ensure that the ordering vs. pcim_msi_release()
-is correct.
+Queued 1-3 for 5.16 and 4 for 5.17.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
-V4: Adopted to ensure devres ordering
----
- drivers/pci/msi/msi.c |   17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
---- a/drivers/pci/msi/msi.c
-+++ b/drivers/pci/msi/msi.c
-@@ -366,6 +366,19 @@ static int pcim_setup_msi_release(struct
- 	return ret;
- }
- 
-+/*
-+ * Ordering vs. devres: msi device data has to be installed first so that
-+ * pcim_msi_release() is invoked before it on device release.
-+ */
-+static int pci_setup_msi_context(struct pci_dev *dev)
-+{
-+	int ret = msi_setup_device_data(&dev->dev);
-+
-+	if (!ret)
-+		ret = pcim_setup_msi_release(dev);
-+	return ret;
-+}
-+
- static struct msi_desc *
- msi_setup_entry(struct pci_dev *dev, int nvec, struct irq_affinity *affd)
- {
-@@ -909,7 +922,7 @@ static int __pci_enable_msi_range(struct
- 	if (nvec > maxvec)
- 		nvec = maxvec;
- 
--	rc = pcim_setup_msi_release(dev);
-+	rc = pci_setup_msi_context(dev);
- 	if (rc)
- 		return rc;
- 
-@@ -956,7 +969,7 @@ static int __pci_enable_msix_range(struc
- 	if (WARN_ON_ONCE(dev->msix_enabled))
- 		return -EINVAL;
- 
--	rc = pcim_setup_msi_release(dev);
-+	rc = pci_setup_msi_context(dev);
- 	if (rc)
- 		return rc;
- 
+Paolo

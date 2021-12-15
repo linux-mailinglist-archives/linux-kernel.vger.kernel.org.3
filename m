@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DA64762F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E63F4762FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235415AbhLOUQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:16:22 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:33774 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235337AbhLOUQV (ORCPT
+        id S235452AbhLOURR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235425AbhLOURP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:16:21 -0500
-Received: by mail-oi1-f176.google.com with SMTP id q25so33376674oiw.0;
-        Wed, 15 Dec 2021 12:16:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3jPKLGacEy7jKGMNJeI39f+qAjplz95Y70F3K1TSbv8=;
-        b=tmg4W9OqWWrhJpnzULm+IP14yseKGUi25UQ7peXahsbcEsHrXyhtdPU76wCROwpMCw
-         3ox64twDFh2wBpWHjhgYGZIdlg8t0kJ+I1sAI7WPNkrMdf+TltDFhrfG2pifdycRKe8j
-         eT0bkwSUDn+8tiKzcblrhhWCQgwpRy65fLEkOM7fXRkjYB0XgJtqt9VRo97b62+JvK7V
-         0MS26t9OV0whZARc1WISKk6RLDOAXgxK78zPr/kHFumElDS04ckNDbaU0Um/b7hEtWJr
-         6iLmlx4ZFQgqhaWTRvFm3g+uRBG2ZwDfFlaNrxZYDDpv24z84k5EyjasmCo7+D5KWC42
-         uJAw==
-X-Gm-Message-State: AOAM53363OuG9HHAqEnxLC0acZNn9v46Vx+wElDUlIfSu2aWx906cbk/
-        8v/hiRyDbVAKvCKT6Pj86PFwG2Zp9g==
-X-Google-Smtp-Source: ABdhPJw4B42RMakPPZU34eCLe4JldR2y6R4gqOoaGD90DmZFUhLEm1jp7Je7BL0Z0JInmTqbMEMIEQ==
-X-Received: by 2002:a05:6808:20e:: with SMTP id l14mr1363853oie.119.1639599380344;
-        Wed, 15 Dec 2021 12:16:20 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n26sm608565ooq.36.2021.12.15.12.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 12:16:19 -0800 (PST)
-Received: (nullmailer pid 1764259 invoked by uid 1000);
-        Wed, 15 Dec 2021 20:16:18 -0000
-Date:   Wed, 15 Dec 2021 14:16:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Eugen Hristev <eugen.hristev@microchip.com>
-Cc:     jacopo@jmondi.org, laurent.pinchart@ideasonboard.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sakari.ailus@iki.fi, devicetree@vger.kernel.org,
-        nicolas.ferre@microchip.com, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 02/23] dt-bindings: media: atmel: csi2dc: add bindings
- for microchip csi2dc
-Message-ID: <YbpNEqbOFgwq96SI@robh.at.kernel.org>
-References: <20211213134940.324266-1-eugen.hristev@microchip.com>
- <20211213134940.324266-3-eugen.hristev@microchip.com>
+        Wed, 15 Dec 2021 15:17:15 -0500
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24D8C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 12:17:14 -0800 (PST)
+Received: from [IPv6:2a02:a03f:eafe:c901:b1b8:ded9:465d:f19c] (unknown [IPv6:2a02:a03f:eafe:c901:b1b8:ded9:465d:f19c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id E7B7628198D;
+        Wed, 15 Dec 2021 21:17:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1639599433;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nvnfDiVPncy0UCcN3nNJYwL++VMY6OLiJYafN2vAPhY=;
+        b=dS6+jsOF+ZT4iWI+7TABURR61lP531BZOvVyyTKx5pArdOwFQiSLi5JDU91Aez41qH5Pog
+        ZlGRUfnvYfGo1fKX/AmbVv17kMVlOrKLk/yKi0x6WiDQTgrAH/ADhjJ1Zrx5g3k/tQ75i7
+        VR+5ma0mAfDB/IRPEaPzFdlWcYk6GQlRnrxkmSi8C8R6DI0CW0Jb4OLzMx9b5hLEpilO52
+        GlPpomSzz5pEzQPewbuRxqIXIQJJWPSCFLDLX3IEg65UPeavAo7RL4v7tvUB8yw1yMuUH6
+        7w8lyjPbLYKaaEEbOP5kdZaBZRvfgVvrVx2yv/Z/Cu6rUpsb+dnQStZeRPSsHg==
+Message-ID: <0ba66064ba998f613e209f928ea459ca166a830b.camel@svanheule.net>
+Subject: Re: [PATCH 1/9] mips: drop selecting the non-existing config
+ SYS_HAS_EARLY_PRINTK_8250
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Bert Vermeulen <bert@biot.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Daniel Silsby <dansilsby@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>
+Date:   Wed, 15 Dec 2021 21:17:11 +0100
+In-Reply-To: <CAKXUXMxQ_rCt0CQxKm7ym44vuMTT1cgnzSCdZZQN--DPwayG6Q@mail.gmail.com>
+References: <20211213111642.11317-1-lukas.bulwahn@gmail.com>
+         <20211213111642.11317-2-lukas.bulwahn@gmail.com>
+         <cd01c62484faa9a5b364020c5c8985e3ea7fa643.camel@svanheule.net>
+         <CAKXUXMxQ_rCt0CQxKm7ym44vuMTT1cgnzSCdZZQN--DPwayG6Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213134940.324266-3-eugen.hristev@microchip.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 15:49:19 +0200, Eugen Hristev wrote:
-> Add bindings documentation for Microchip CSI2 Demultiplexer controller.
-> 
-> CSI2DC is a demultiplexer from Synopsys IDI interface specification to
-> parallel interface connection or direct memory access.
-> CSI2DC can also act as a parallel bypass from a parallel sensor to the
-> image sensor controller/interface.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
-> Changes in v3:
-> - Changed to port base as suggested by Rob
-> - Added properties from video-interfaces which are being used by the csi2dc
-> - added mention to the parallel port type as input
-> - did some rephrasing and rewording
-> 
-> Changes in v2:
-> - changed the endpoint/port references as suggested by Rob
-> 
-> Changes in this version :
-> - fixed 'sink' name to be actually source.
-> - added dma properties and example with dma
-> 
-> Previous change log:
-> Changes in v5:
-> - modified bindings as per Rob Herring review
-> 
-> Changes in v4:
-> - Removed property for inter-line-delay and for clock continuous/non-continuous
-> - Removed virtual channel by reg for second endpoint
-> 
-> Changes in v3:
-> - Removed some text from description, as it was explained in the schema
-> - fixed other things as per Rob's review
-> - moved some text inside the schema, like the clock description
-> 
-> Changes in v2:
-> - fixed warnings reported by dt_binding_check
-> 
-> 
->  .../bindings/media/microchip,csi2dc.yaml      | 197 ++++++++++++++++++
->  1 file changed, 197 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-> 
+Hi Lukas,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Tue, 2021-12-14 at 13:25 +0100, Lukas Bulwahn wrote:
+> On Mon, Dec 13, 2021 at 7:52 PM Sander Vanheule <sander@svanheule.net> wrote:
+> > 
+> > Hi Lukas,
+> > 
+> > Thanks for the patch!
+> > 
+> > On Mon, 2021-12-13 at 12:16 +0100, Lukas Bulwahn wrote:
+> > > Commit 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic
+> > > MIPS system") introduces config MACH_REALTEK_RTL, which selects the
+> > > non-existing config SYS_HAS_EARLY_PRINTK_8250.
+> > > 
+> > > As the MACH_REALTEK_RTL config also selects SYS_HAS_EARLY_PRINTK and
+> > > USE_GENERIC_EARLY_PRINTK_8250, an early printk with 8250 should be covered.
+> > > Probably SYS_HAS_EARLY_PRINTK_8250 is just some left-over from an early
+> > > draft version of this commit.
+> > > 
+> > > Drop selecting the non-existing config SYS_HAS_EARLY_PRINTK_8250.
+> > > 
+> > > Fixes: 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS
+> > > system")
+> > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > > ---
+> > >  arch/mips/Kconfig | 1 -
+> > >  1 file changed, 1 deletion(-)
+> > > 
+> > > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> > > index 00951bfdbab0..c89ce68d9580 100644
+> > > --- a/arch/mips/Kconfig
+> > > +++ b/arch/mips/Kconfig
+> > > @@ -640,7 +640,6 @@ config MACH_REALTEK_RTL
+> > >         select SYS_SUPPORTS_MULTITHREADING
+> > >         select SYS_SUPPORTS_VPE_LOADER
+> > >         select SYS_HAS_EARLY_PRINTK
+> > > -       select SYS_HAS_EARLY_PRINTK_8250
+> > >         select USE_GENERIC_EARLY_PRINTK_8250
+> > >         select BOOT_RAW
+> > >         select PINCTRL
+> > 
+> > MACH_REALTEK_RTL doesn't actually call setup_8250_early_printk_port(). That means
+> > USE_GENERIC_EARLY_PRINTK_8250 is also not needed. Being MIPS_GENERIC, that
+> > additionaly
+> > means SYS_HAS_EARLY_PRINTK doesn't need to be selected.
+> > 
+> > I only recently found the MIPS_GENERIC "early" console therefore doesn't actually
+> > work,
+> > but we use the "ns16550a" earlycon console instead. So feel free to also drop the
+> > other
+> > two other EARLY_PRINTK symbols, if you think this is in-scope for this patch.
+> > Otherwise I
+> > can submit a separate patch later.
+> > 
+> > In any case:
+> > Acked-by: Sander Vanheule <sander@svanheule.net>
+> > 
+> 
+> I am fine either way. Thomas, also feel free to just drop this patch
+> in the series and take the full clean-up patch from Sander.
+
+I've submitted my clean-up patch for all three configs, so I guess this patch is now
+superseded.
+
+Best,
+Sander
+

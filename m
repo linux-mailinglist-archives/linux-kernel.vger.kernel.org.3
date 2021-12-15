@@ -2,135 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D81D3475211
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 06:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DE1475216
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 06:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbhLOF1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 00:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
+        id S239881AbhLOFbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 00:31:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbhLOF1B (ORCPT
+        with ESMTP id S231590AbhLOFbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 00:27:01 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A984DC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 21:27:01 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id h24so16351158pjq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 21:27:01 -0800 (PST)
+        Wed, 15 Dec 2021 00:31:00 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB6DC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 21:30:59 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id a24so19375297qvb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 21:30:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EATF0++rhQQhxWqPyfU2MMj4vBgI3dJhEYF3haLw1w4=;
-        b=bTiDndqWZQ7vtoDIvJRvbcIGF2mcynmMfSDxN9wrBBT8TISsHXtThVK23jl+JgQRrp
-         lWnEW4CgcVRJ/3PfopBSA8XCl9WAoEZfEq9nnMDbkNpatBJRwSY5239O3arnteUjkzW2
-         D6CFA4q39MBrxOaXJ7pQirg1auy46uHuACr6t+p/81gJLI2Cnos6HsVwHzXssENFEHlF
-         R6kyaf7bUS1FcSPFY5CxtMBZ/SnTpiqWRyGMTFFE7kIvfKS053DGYkDHsrCGWyHvmWU1
-         MOvyoPsBFuxNefkgcdfHYRy1KiLyqTaaBQu+hoq3jc0jOPFnADd2dIPlmxBZD5vM1g+g
-         5krQ==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Wc+ZvGS9ImSHF7dldCq9sw9VHATWaXJnPCcJpDuiP2c=;
+        b=Lu1GJ24wF1qJKagoWzUQFoKXmtSyBvGMDoVoxHu6bMWnb6yaF1UvIKuaxaet1f7d4h
+         7oAZuLpWVIs99opsRLvbKwp/HEAxgttRgHukG4xMU0yunbnFKfjeZyANABaT+D0d+gZu
+         lGB5GOM51wbL9wiqhGcgMSfe4svvQmDn8lxq4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EATF0++rhQQhxWqPyfU2MMj4vBgI3dJhEYF3haLw1w4=;
-        b=v+ASXOjU7TvQ0BVHXpRjiHCSTBUcbiXrjZr+tOG7SsKE5nVHVxzkCgXY9tDdzKg/UQ
-         gtLQswzVnEitJ4vjmQE2g4Ks68LBfiN9bENcSHfB7ZsNJ7zZ60xuSYDJCsJIiRu1Vore
-         LJbMlciUGoBqM7t3QhEyDee4YodjksEHMP8suFO0On4h7wJCnMey7HRm4jzeZ4f19hVc
-         sViVip0Rj6C9j0JB+qE6WiMkFOXa2zHUWkDgocNYoL8phSSyOw6qTTSoaiuCzyfFkOu5
-         glKZIfA5aLBCaUoqR+kMpkya6eVxpeUEBssOCSu1r0sPdSL3YIXrZvCnq24GW80W6a4U
-         9jyw==
-X-Gm-Message-State: AOAM533rViDalRKYukjKZq/avPjEvgG/yC3dvPoOvccijzSucjqHxzr1
-        cpSuh1Q+321gOIPygj9sAcGkwg==
-X-Google-Smtp-Source: ABdhPJwApHB7bNNx5kaM60v3MqQT5kLfa+h8WBVe0vHIwtGhzbJjlTgBNz0jwrvYru+c6nmuZKYyQA==
-X-Received: by 2002:a17:90b:1810:: with SMTP id lw16mr6687286pjb.129.1639546021207;
-        Tue, 14 Dec 2021 21:27:01 -0800 (PST)
-Received: from C02CPFUZMD6M.bytedance.net ([61.120.150.71])
-        by smtp.gmail.com with ESMTPSA id ns21sm3853367pjb.37.2021.12.14.21.26.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 Dec 2021 21:27:00 -0800 (PST)
-From:   Ting Liu <liuting.0x7c00@bytedance.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, vbabka@suse.cz,
-        shakeelb@google.com, willy@infradead.org, sjpark@amazon.de,
-        liuting.0x7c00@bytedance.com
-Subject: [PATCH] mm: make some vars and functions static or __init
-Date:   Wed, 15 Dec 2021 13:26:51 +0800
-Message-Id: <20211215052651.89544-1-liuting.0x7c00@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wc+ZvGS9ImSHF7dldCq9sw9VHATWaXJnPCcJpDuiP2c=;
+        b=G/lkni1qPQCRV/yxrTyOUPh5Rns4HacHaTmaDT+vOKB0RgX7uTtJhizg2g8OyXLaY2
+         P1jyCeyyvozEYrKYmAf5zbTTL1k1LYLPSl6F70dGnXs50WmQ5/vvJi1wRZYTy2OnrVN+
+         feI9cll7SGE/WXRpWXXXwX5+h1vmSoKZWzjA6SoHYRv5abSS1/fMieFTEZGPsbPFGpJk
+         zdMhH3JFsdu4xhDjFFvHYXF3ntJ/dEo5z6TPffr+W5Cb21o1+ZNDgwcWqU7LbGDYGrFB
+         HIFKSC6goKsKyJegnYC9j21PVGN6JdiRPe2Tezef+qHC6t6+1GyLEOJRZjSWKMfWsFH8
+         DNew==
+X-Gm-Message-State: AOAM531s9M1KDU++n6qkaWYpbwuSbRQMOmnVRm7h0QLCxhRrcv6qvms1
+        fB742+04qK5dFxa6d7v+inWqfWRoNjZYwmmlmntNtguo
+X-Google-Smtp-Source: ABdhPJyz53BcoFzFrLPyNWTF4SxErjumicR5pAk3kQIISNQzv1ROUM6rP4MJc69abbCrIT5F+ZXYvWYf70ZSyx3JY+c=
+X-Received: by 2002:ad4:5beb:: with SMTP id k11mr9946393qvc.107.1639546258940;
+ Tue, 14 Dec 2021 21:30:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211215005833.222841-1-amitay@ozlabs.org> <20211215005833.222841-2-amitay@ozlabs.org>
+In-Reply-To: <20211215005833.222841-2-amitay@ozlabs.org>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 15 Dec 2021 05:30:46 +0000
+Message-ID: <CACPK8Xcmy-UfhWKQRnGD_QuKXenCeho=gcumb2tuo-oa0iA=_A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] fsi: sbefifo: implement FSI_SBEFIFO_READ_TIMEOUT ioctl
+To:     Amitay Isaacs <amitay@ozlabs.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsi@lists.ozlabs.org, Jeremy Kerr <jk@ozlabs.org>,
+        Alistair Popple <alistair@popple.id.au>,
+        Eddie James <eajames@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "liuting.0x7c00" <liuting.0x7c00@bytedance.com>
+On Wed, 15 Dec 2021 at 00:58, Amitay Isaacs <amitay@ozlabs.org> wrote:
+>
+> FSI_SBEFIFO_READ_TIMEOUT ioctl sets the read timeout (in seconds) for
+> the response to *the next* chip-op sent to sbe.  The timeout value is
+> reset to default after the chip-op.  The timeout affects only the read()
+> operation on sbefifo device fd.
 
-"page_idle_ops" as a global var, but its scope of use within this
-document. So it should be static.
-"page_ext_ops" is a var used in the kernel initial phase. And other
-functions are aslo used in the kernel initial phase. So they should be
-__init or __initdata to reclaim memory.
+Makes sense to me.
 
-Signed-off-by: liuting.0x7c00 <liuting.0x7c00@bytedance.com>
----
- include/linux/page_idle.h | 1 -
- mm/page_ext.c             | 4 ++--
- mm/page_owner.c           | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+Lets see if Greg or Andrew will review the icotl interface for us.
 
-diff --git a/include/linux/page_idle.h b/include/linux/page_idle.h
-index 83abf95e9fa7..4663dfed1293 100644
---- a/include/linux/page_idle.h
-+++ b/include/linux/page_idle.h
-@@ -13,7 +13,6 @@
-  * If there is not enough space to store Idle and Young bits in page flags, use
-  * page ext flags instead.
-  */
--extern struct page_ext_operations page_idle_ops;
- 
- static inline bool folio_test_young(struct folio *folio)
- {
-diff --git a/mm/page_ext.c b/mm/page_ext.c
-index 6242afb24d84..2193e3f10e56 100644
---- a/mm/page_ext.c
-+++ b/mm/page_ext.c
-@@ -63,12 +63,12 @@ static bool need_page_idle(void)
- {
- 	return true;
- }
--struct page_ext_operations page_idle_ops = {
-+static struct page_ext_operations page_idle_ops = {
- 	.need = need_page_idle,
- };
- #endif
- 
--static struct page_ext_operations *page_ext_ops[] = {
-+static struct page_ext_operations *page_ext_ops[] __initdata = {
- #ifdef CONFIG_PAGE_OWNER
- 	&page_owner_ops,
- #endif
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 4f924957ce7a..5eea061bb1e5 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -46,7 +46,7 @@ static int __init early_page_owner_param(char *buf)
- }
- early_param("page_owner", early_page_owner_param);
- 
--static bool need_page_owner(void)
-+static __init bool need_page_owner(void)
- {
- 	return page_owner_enabled;
- }
-@@ -75,7 +75,7 @@ static noinline void register_early_stack(void)
- 	early_handle = create_dummy_stack();
- }
- 
--static void init_page_owner(void)
-+static __init void init_page_owner(void)
- {
- 	if (!page_owner_enabled)
- 		return;
--- 
-2.20.1
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
+>
+> Signed-off-by: Amitay Isaacs <amitay@ozlabs.org>
+> ---
+>  drivers/fsi/fsi-sbefifo.c | 42 +++++++++++++++++++++++++++++++++++++++
+>  include/uapi/linux/fsi.h  |  6 ++++++
+>  2 files changed, 48 insertions(+)
+>
+> diff --git a/drivers/fsi/fsi-sbefifo.c b/drivers/fsi/fsi-sbefifo.c
+> index 9188161f440c..b2654b143b85 100644
+> --- a/drivers/fsi/fsi-sbefifo.c
+> +++ b/drivers/fsi/fsi-sbefifo.c
+> @@ -32,6 +32,8 @@
+>  #include <linux/vmalloc.h>
+>  #include <linux/mm.h>
+>
+> +#include <uapi/linux/fsi.h>
+> +
+>  /*
+>   * The SBEFIFO is a pipe-like FSI device for communicating with
+>   * the self boot engine on POWER processors.
+> @@ -134,6 +136,7 @@ struct sbefifo_user {
+>         void                    *cmd_page;
+>         void                    *pending_cmd;
+>         size_t                  pending_len;
+> +       uint32_t                read_timeout_ms;
+>  };
+>
+>  static DEFINE_MUTEX(sbefifo_ffdc_mutex);
+> @@ -796,6 +799,7 @@ static int sbefifo_user_open(struct inode *inode, struct file *file)
+>                 return -ENOMEM;
+>         }
+>         mutex_init(&user->file_lock);
+> +       user->read_timeout_ms = SBEFIFO_TIMEOUT_START_RSP;
+>
+>         return 0;
+>  }
+> @@ -838,7 +842,11 @@ static ssize_t sbefifo_user_read(struct file *file, char __user *buf,
+>         rc = mutex_lock_interruptible(&sbefifo->lock);
+>         if (rc)
+>                 goto bail;
+> +       sbefifo->timeout_start_rsp_ms = user->read_timeout_ms;
+>         rc = __sbefifo_submit(sbefifo, user->pending_cmd, cmd_len, &resp_iter);
+> +       /* Reset the read timeout after a single chip-op */
+> +       sbefifo->timeout_start_rsp_ms = SBEFIFO_TIMEOUT_START_RSP;
+> +       user->read_timeout_ms = SBEFIFO_TIMEOUT_START_RSP;
+>         mutex_unlock(&sbefifo->lock);
+>         if (rc < 0)
+>                 goto bail;
+> @@ -847,6 +855,7 @@ static ssize_t sbefifo_user_read(struct file *file, char __user *buf,
+>         rc = len - iov_iter_count(&resp_iter);
+>   bail:
+>         sbefifo_release_command(user);
+> +       user->read_timeout_ms = 0;
+>         mutex_unlock(&user->file_lock);
+>         return rc;
+>  }
+> @@ -928,12 +937,45 @@ static int sbefifo_user_release(struct inode *inode, struct file *file)
+>         return 0;
+>  }
+>
+> +static int sbefifo_read_timeout(struct sbefifo_user *user, void __user **argp)
+> +{
+> +       uint32_t timeout;
+> +
+> +       if (get_user(timeout, (__u32 __user *)argp))
+> +               return -EFAULT;
+> +       if (timeout < 10 || timeout > 120)
+> +               return -EINVAL;
+> +
+> +       user->read_timeout_ms = timeout * 1000; /* user timeout is in sec */
+> +       return 0;
+> +}
+> +
+> +static long sbefifo_user_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+> +{
+> +       struct sbefifo_user *user = file->private_data;
+> +       void __user **argp = (void __user *)arg;
+> +       int rc = -ENOTTY;
+> +
+> +       if (!user)
+> +               return -EINVAL;
+> +
+> +       mutex_lock(&user->file_lock);
+> +       switch (cmd) {
+> +       case FSI_SBEFIFO_READ_TIMEOUT:
+> +               rc = sbefifo_read_timeout(user, argp);
+> +               break;
+> +       }
+> +       mutex_unlock(&user->file_lock);
+> +       return rc;
+> +}
+> +
+>  static const struct file_operations sbefifo_fops = {
+>         .owner          = THIS_MODULE,
+>         .open           = sbefifo_user_open,
+>         .read           = sbefifo_user_read,
+>         .write          = sbefifo_user_write,
+>         .release        = sbefifo_user_release,
+> +       .unlocked_ioctl = sbefifo_user_ioctl,
+>  };
+>
+>  static void sbefifo_free(struct device *dev)
+> diff --git a/include/uapi/linux/fsi.h b/include/uapi/linux/fsi.h
+> index da577ecd90e7..3e00874ace22 100644
+> --- a/include/uapi/linux/fsi.h
+> +++ b/include/uapi/linux/fsi.h
+> @@ -55,4 +55,10 @@ struct scom_access {
+>  #define FSI_SCOM_WRITE _IOWR('s', 0x02, struct scom_access)
+>  #define FSI_SCOM_RESET _IOW('s', 0x03, __u32)
+>
+> +/*
+> + * /dev/sbefifo* ioctl interface
+> + */
+> +
+> +#define FSI_SBEFIFO_READ_TIMEOUT       _IOW('s', 0x00, __u32)
+> +
+>  #endif /* _UAPI_LINUX_FSI_H */
+> --
+> 2.33.1
+>

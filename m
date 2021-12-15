@@ -2,81 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF174754CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1F447558C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241008AbhLOJBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:01:37 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16814 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236288AbhLOJBg (ORCPT
+        id S241350AbhLOJy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:54:29 -0500
+Received: from mail.osorio.rs.gov.br ([177.73.0.123]:40729 "EHLO
+        mail.osorio.rs.gov.br" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241347AbhLOJyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:01:36 -0500
-Received: from dggeme764-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JDTjt3HFPz91ky;
-        Wed, 15 Dec 2021 17:00:50 +0800 (CST)
-Received: from huawei.com (10.67.174.119) by dggeme764-chm.china.huawei.com
- (10.3.19.110) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.20; Wed, 15
- Dec 2021 17:01:34 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ARM: Add unwinding annotations to __loop.*delay functions
-Date:   Wed, 15 Dec 2021 09:06:07 +0000
-Message-ID: <20211215090607.3737830-1-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 15 Dec 2021 04:54:18 -0500
+Received: by mail.osorio.rs.gov.br (Postfix, from userid 999)
+        id 5E8BA487CEE6; Wed, 15 Dec 2021 10:21:36 -0200 (BRST)
+Received: from localhost (nac.osorio.rs.gov.br [127.0.0.1])
+        by nac (Postfix) with SMTP id 32BC5487A64A;
+        Wed, 15 Dec 2021 10:21:03 -0200 (BRST)
+Received: from User (unknown [84.38.132.16])
+        by mail.osorio.rs.gov.br (Postfix) with ESMTP id D8230488B202;
+        Wed, 15 Dec 2021 08:04:08 -0200 (BRST)
+Reply-To: <andrew.bailey@e-nautia.com>
+From:   "Ads" <projetos@gov.br>
+Subject: Urgent
+Date:   Wed, 15 Dec 2021 06:40:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.119]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggeme764-chm.china.huawei.com (10.3.19.110)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20211215100408.D8230488B202@mail.osorio.rs.gov.br>
+To:     undisclosed-recipients:;
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The unwind directives can't handle nested function entries, so only the
-outermost function __loop_udelay is annotated, and the inner nested
-entries share the same unwind info with __loop_udelay.
+Good Day
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- arch/arm/lib/delay-loop.S | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+I Am Andrew Bailey -  Governor Bank of England  (https://en.wikipedia.org/wiki/Andrew_Bailey_%28banker%29)
 
-diff --git a/arch/arm/lib/delay-loop.S b/arch/arm/lib/delay-loop.S
-index 3ccade0f8130..f0a076f9abc5 100644
---- a/arch/arm/lib/delay-loop.S
-+++ b/arch/arm/lib/delay-loop.S
-@@ -7,6 +7,7 @@
- #include <linux/linkage.h>
- #include <asm/assembler.h>
- #include <asm/delay.h>
-+#include <asm/unwind.h>
- 
- 		.text
- 
-@@ -21,6 +22,7 @@
-  */
- 
- ENTRY(__loop_udelay)
-+UNWIND(.fnstart)
- 		ldr	r2, .LC1
- 		mul	r0, r2, r0		@ r0 = delay_us * UDELAY_MULT
- ENTRY(__loop_const_udelay)			@ 0 <= r0 <= 0xfffffaf0
-@@ -54,6 +56,7 @@ ENTRY(__loop_delay)
- #endif
- 		bhi	__loop_delay
- 		ret	lr
--ENDPROC(__loop_udelay)
--ENDPROC(__loop_const_udelay)
- ENDPROC(__loop_delay)
-+ENDPROC(__loop_const_udelay)
-+UNWIND(.fnend)
-+ENDPROC(__loop_udelay)
--- 
-2.27.0
-
+I have a proposal for you If you know you can Handle this,
+Contact me through my private email:( andrew.bailey@e-nautia.com  
+with you full names and address, phone numbers for more details
+I await your reply,
+Regards,
+Andrew Bailey

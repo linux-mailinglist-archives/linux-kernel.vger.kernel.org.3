@@ -2,66 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB03B475AA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45102475AA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243364AbhLOO2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:28:42 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54272 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243352AbhLOO2l (ORCPT
+        id S243370AbhLOOa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234528AbhLOOa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:28:41 -0500
+        Wed, 15 Dec 2021 09:30:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6F4C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 06:30:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 394F8B81F23;
-        Wed, 15 Dec 2021 14:28:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0C0C34605;
-        Wed, 15 Dec 2021 14:28:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A2D4B81F4D
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:30:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1CFDC34604;
+        Wed, 15 Dec 2021 14:30:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639578518;
-        bh=jS1rXz3m/Z+lDbF3WHhlKToTdimzp7WYV8lBznrDmRM=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=Sf/SiWGw9Y1b2+fGAsZABfXtneeeuOPwQSDeZ1Vh8ZOIaEvr2eCIrdIwjVbRRTezn
-         V57Bl8W7I66YYeYgbfNacxmIeVj3tjvNWMDshHSPtglcr298ldFAju+kJNiX+JspuI
-         ajfCLrzm+z3Ju2M1hEmFumvouNsc9w1f2TERx0ptSFGrBhWG+Hy4EsCGeuEqwloiX/
-         uji6SKZWqUTpq1Hi+sVN5AStChiAZPSk8Fj4BBSx9QoS70jf+VGQCkEDlSTMSwnq8M
-         bJJ7U6bj2TmDBRDQEWSZnOTMLA3gPKUOsxg38oXtnaVCfK4eBXleiZ6LQHdJrfyegn
-         rKw8Jzp6nrf0g==
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1639578624;
+        bh=euW7M7PGgHg0TTWjhkTrtfp9cJF+WeHRjrk4IVhmJM4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ICVKieu4pR1N/KC3YyEyZqs5w4/kbm7qGVVLbF8/rRGj8LE1F6a8XLi0Y3uwR+E+k
+         xYvJ4JVWsr5doXI3OdUQ5XVX94PB7WUl+quh9g01lCXoE7+zZAWOq+nTHiy4Po2n+e
+         z9k2OBiw9fRQU1p9AAGMt2VaEecvF0UCY6SfBiywIkw1va4UBNFpstvK9j3IRHykmX
+         vQXOZ0nwhUyFLtBwDuoXmY4PxE4e/z7bVI/Y24iLLnpLAu6ZBxTnQuc+UHMI0jyCj6
+         ShPTLOzcgynDDOAwEOdXrYk6FQbGHSeSCCNYVsBVWbvUQFaGOIZbiS1+8Xrp6+giKn
+         ZAdTl38B788og==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=hot-poop.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mxVIU-00CIR5-GN; Wed, 15 Dec 2021 14:30:22 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Alexandru Elisei <alexandru.elisei@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH 0/6] KVM: arm64: Miscellaneous pkvm fixes
+Date:   Wed, 15 Dec 2021 14:30:19 +0000
+Message-Id: <163957861285.209889.493127869759455971.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211208152300.2478542-1-qperret@google.com>
+References: <20211208152300.2478542-1-qperret@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] rsi: fix array out of bound
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20211208095341.47777-1-zhangyue1@kylinos.cn>
-References: <20211208095341.47777-1-zhangyue1@kylinos.cn>
-To:     zhangyue <zhangyue1@kylinos.cn>
-Cc:     amitkarwar@gmail.com, siva8118@gmail.com, kvalo@codeaurora.org,
-        davem@davemloft.net, kuba@kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <163957851444.6130.11829040584671370301.kvalo@kernel.org>
-Date:   Wed, 15 Dec 2021 14:28:36 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: alexandru.elisei@arm.com, will@kernel.org, qperret@google.com, james.morse@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, kernel-team@android.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-zhangyue <zhangyue1@kylinos.cn> wrote:
-
-> Limit the max of 'ii'. If 'ii' greater than or
-> equal to 'RSI_MAX_VIFS', the array 'adapter->vifs'
-> may be out of bound
+On Wed, 8 Dec 2021 15:22:53 +0000, Quentin Perret wrote:
+> This series is a collection of various fixes and cleanups for KVM/arm64
+> when running in nVHE protected mode. The first two patches are real
+> fixes/improvements, the following two are minor cleanups, and the last
+> two help satisfy my paranoia so they're certainly optional.
 > 
-> Signed-off-by: zhangyue <zhangyue1@kylinos.cn>
+> Cheers!
+> Quentin
+> 
+> [...]
 
-Patch applied to wireless-drivers-next.git, thanks.
+Applied to next, thanks!
 
-4d375c2e51d5 rsi: fix array out of bound
+[1/6] KVM: arm64: pkvm: Fix hyp_pool max order
+      commit: 34b43a8849229e8363c19236ecdf463b7a89d085
+[2/6] KVM: arm64: pkvm: Disable GICv2 support
+      commit: a770ee80e66270a7df183dda5ad6df4e8c8ab615
+[3/6] KVM: arm64: Make the hyp memory pool static
+      commit: 53a563b01fa2ae2376a0b7d547f26a0ae9c78b5c
+[4/6] KVM: arm64: Make __io_map_base static
+      commit: 473a3efbafaa9ffd06c8b8f653f24c97b5ac3ff0
+[5/6] KVM: arm64: pkvm: Stub io map functions
+      commit: bff01cb6b1bf68052739eb6155132f7d6d974208
+[6/6] KVM: arm64: pkvm: Make kvm_host_owns_hyp_mappings() robust to VHE
+      commit: 64a1fbda59f4b14adde7f21cda687e2b9703b7bb
 
+Cheers,
+
+	M.
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20211208095341.47777-1-zhangyue1@kylinos.cn/
+Without deviation from the norm, progress is not possible.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

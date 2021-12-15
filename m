@@ -2,223 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1E74755DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFB04755E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241524AbhLOKIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:08:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:49189 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236662AbhLOKId (ORCPT
+        id S241531AbhLOKJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:09:43 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:47056 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236662AbhLOKJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:08:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639562912;
+        Wed, 15 Dec 2021 05:09:42 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639562981;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=dUZN8XTWN0DPDicDcJUmdgsmPW1kQZwEv1XiwMhgHv0=;
-        b=AYThS33lQ1FQTSHxGTfm7GOoVwnXhrdYqyZHgQZk2yxbQ8wMDZFBQIzy1nV57YDP8evlgB
-        +vMv2p8XMiMb9z7c58a2b88iPxs6IHft54aLdDikXOUY4xGGQI4OuVQqh6W0gxxMLMDbZ8
-        M/hMSpSBDsOwle+I1Y6CEkPFuQfgzGI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-421-r8Dt5YdrPpm5cQ_EkIjQ0g-1; Wed, 15 Dec 2021 05:08:24 -0500
-X-MC-Unique: r8Dt5YdrPpm5cQ_EkIjQ0g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7CF3F1052BBA;
-        Wed, 15 Dec 2021 10:08:21 +0000 (UTC)
-Received: from localhost (ovpn-12-120.pek2.redhat.com [10.72.12.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B4343838ED;
-        Wed, 15 Dec 2021 10:08:19 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 18:08:16 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
-        cl@linux.com, John.p.donnelly@oracle.com,
-        kexec@lists.infradead.org, stable@vger.kernel.org,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no managed
- pages in DMA zone
-Message-ID: <20211215100816.GD10336@MiWiFi-R3L-srv>
-References: <20211213122712.23805-1-bhe@redhat.com>
- <20211213122712.23805-6-bhe@redhat.com>
- <20211213134319.GA997240@odroid>
- <20211214053253.GB2216@MiWiFi-R3L-srv>
- <f5ff82eb-73b6-55b5-53d7-04ab73ce5035@suse.cz>
+        bh=77Forlu4jTsD7arP2c+F0ARgAvIkkJEpfa/mmyGaEzs=;
+        b=T9rXDFnzFqL0S53u7ODOMdQvDIcX001x8fdxrBWt2SIGgQEayqKviyhT2IWQ5CpTbvMcDX
+        sUWTUA+GmFr0wbcOMI/vMwSkBAVaTHs0R9isSttwVblI4JpHWMUxeivRCJX+srJO9WuYoq
+        s6lJD90Bo4G6bVlNdcP/RLL1hlFRUbXtmb9FUsoO1XcrKTzbKlr4o2qeymXTDlUMShnh9N
+        pcqZbHtOX8a8KB3k9CvEUkjrNYwJ6Jsjmr0GWFofp/VnttFdqXV/yh5zRdVAI5Wp9By9ga
+        +h7SnUNLaS+oY4LmyVVGK9lyxM7rY0CmqiG5v9T58ynzxqwkFHBAhxR0Ikig1w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639562981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=77Forlu4jTsD7arP2c+F0ARgAvIkkJEpfa/mmyGaEzs=;
+        b=0WzFzjUD2eoPPem6JFTvMPAl8kR4/7bYf7qrWsv3OpwhtOccFrR4yGguWhbyZk6OoLC1hO
+        3fsJJdhL7QZWPnCQ==
+To:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        "quintela@redhat.com" <quintela@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Jing Liu <jing2.liu@linux.intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Sean Christoperson <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>
+Subject: RE: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
+In-Reply-To: <afeba57f71f742b88aac3f01800086f9@intel.com>
+References: <20211214022825.563892248@linutronix.de>
+ <20211214024948.048572883@linutronix.de>
+ <854480525e7f4f3baeba09ec6a864b80@intel.com> <87zgp3ry8i.ffs@tglx>
+ <b3ac7ba45c984cf39783e33e0c25274d@intel.com> <87r1afrrjx.ffs@tglx>
+ <87k0g7qa3t.fsf@secure.mitica> <87k0g7rkwj.ffs@tglx>
+ <878rwm7tu8.fsf@secure.mitica>
+ <afeba57f71f742b88aac3f01800086f9@intel.com>
+Date:   Wed, 15 Dec 2021 11:09:40 +0100
+Message-ID: <878rwmrxgb.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5ff82eb-73b6-55b5-53d7-04ab73ce5035@suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/21 at 11:09am, Vlastimil Babka wrote:
-> On 12/14/21 06:32, Baoquan He wrote:
-> > On 12/13/21 at 01:43pm, Hyeonggon Yoo wrote:
-> >> Hello Baoquan. I have a question on your code.
-> >> 
-> >> On Mon, Dec 13, 2021 at 08:27:12PM +0800, Baoquan He wrote:
-> >> > Dma-kmalloc will be created as long as CONFIG_ZONE_DMA is enabled.
-> >> > However, it will fail if DMA zone has no managed pages. The failure
-> >> > can be seen in kdump kernel of x86_64 as below:
-> >> > 
-> 
-> Could have included the warning headline too.
+On Wed, Dec 15 2021 at 02:17, Wei W. Wang wrote:
+> On Wednesday, December 15, 2021 5:36 AM, Juan Quintela wrote:
+>> >> If it needs to be done in any other order, it is completely
+>> >> independent of whatever is inside the migration stream.
+>> >
+>> > From the migration data perspective that's correct, but I have the
+>> > nagging feeling that this in not that simple.
+>> 
+>> Oh, I was not meaning that it was simple at all.
+>
+> It seems to be a consensus that the ordering constraint wouldn't be
+> that easy.
 
-Sure, I will paste the whole warning when repost.
+Right, but what is easy in this context? Not easy does not mean it is
+impossible.
 
-> 
-> >> >  CPU: 0 PID: 65 Comm: kworker/u2:1 Not tainted 5.14.0-rc2+ #9
-> >> >  Hardware name: Intel Corporation SandyBridge Platform/To be filled by O.E.M., BIOS RMLSDP.86I.R2.28.D690.1306271008 06/27/2013
-> >> >  Workqueue: events_unbound async_run_entry_fn
-> >> >  Call Trace:
-> >> >   dump_stack_lvl+0x57/0x72
-> >> >   warn_alloc.cold+0x72/0xd6
-> >> >   __alloc_pages_slowpath.constprop.0+0xf56/0xf70
-> >> >   __alloc_pages+0x23b/0x2b0
-> >> >   allocate_slab+0x406/0x630
-> >> >   ___slab_alloc+0x4b1/0x7e0
-> >> >   ? sr_probe+0x200/0x600
-> >> >   ? lock_acquire+0xc4/0x2e0
-> >> >   ? fs_reclaim_acquire+0x4d/0xe0
-> >> >   ? lock_is_held_type+0xa7/0x120
-> >> >   ? sr_probe+0x200/0x600
-> >> >   ? __slab_alloc+0x67/0x90
-> >> >   __slab_alloc+0x67/0x90
-> >> >   ? sr_probe+0x200/0x600
-> >> >   ? sr_probe+0x200/0x600
-> >> >   kmem_cache_alloc_trace+0x259/0x270
-> >> >   sr_probe+0x200/0x600
-> >> >   ......
-> >> >   bus_probe_device+0x9f/0xb0
-> >> >   device_add+0x3d2/0x970
-> >> >   ......
-> >> >   __scsi_add_device+0xea/0x100
-> >> >   ata_scsi_scan_host+0x97/0x1d0
-> >> >   async_run_entry_fn+0x30/0x130
-> >> >   process_one_work+0x2b0/0x5c0
-> >> >   worker_thread+0x55/0x3c0
-> >> >   ? process_one_work+0x5c0/0x5c0
-> >> >   kthread+0x149/0x170
-> >> >   ? set_kthread_struct+0x40/0x40
-> >> >   ret_from_fork+0x22/0x30
-> >> >  Mem-Info:
-> >> >  ......
-> >> > 
-> >> > The above failure happened when calling kmalloc() to allocate buffer with
-> >> > GFP_DMA. It requests to allocate slab page from DMA zone while no managed
-> >> > pages in there.
-> >> >  sr_probe()
-> >> >  --> get_capabilities()
-> >> >      --> buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
-> >> > 
-> >> > The DMA zone should be checked if it has managed pages, then try to create
-> >> > dma-kmalloc.
-> >> >
-> >> 
-> >> What is problem here?
-> >> 
-> >> The slab allocator requested buddy allocator with GFP_DMA,
-> >> and then buddy allocator failed to allocate page in DMA zone because
-> >> there was no page in DMA zone. and then the buddy allocator called warn_alloc
-> >> because it failed at allocating page.
-> >> 
-> >> Looking at warn, I don't understand what the problem is.
-> > 
-> > The problem is this is a generic issue on x86_64, and will be warned out
-> > always on all x86_64 systems, but not on a certain machine or a certain
-> > type of machine. If not fixed, we can always see it in kdump kernel. The
-> > way things are, it doesn't casue system or device collapse even if
-> > dma-kmalloc can't provide buffer or provide buffer from zone NORMAL.
-> > 
-> > 
-> > I have got bug reports several times from different people, and we have
-> > several bugs tracking this inside Redhat. I think nobody want to see
-> > this appearing in customers' monitor w or w/o a note. If we have to
-> > leave it with that, it's a little embrassing.
-> > 
-> > 
-> >> 
-> >> > ---
-> >> >  mm/slab_common.c | 9 +++++++++
-> >> >  1 file changed, 9 insertions(+)
-> >> > 
-> >> > diff --git a/mm/slab_common.c b/mm/slab_common.c
-> >> > index e5d080a93009..ae4ef0f8903a 100644
-> >> > --- a/mm/slab_common.c
-> >> > +++ b/mm/slab_common.c
-> >> > @@ -878,6 +878,9 @@ void __init create_kmalloc_caches(slab_flags_t flags)
-> >> >  {
-> >> >  	int i;
-> >> >  	enum kmalloc_cache_type type;
-> >> > +#ifdef CONFIG_ZONE_DMA
-> >> > +	bool managed_dma;
-> >> > +#endif
-> >> >  
-> >> >  	/*
-> >> >  	 * Including KMALLOC_CGROUP if CONFIG_MEMCG_KMEM defined
-> >> > @@ -905,10 +908,16 @@ void __init create_kmalloc_caches(slab_flags_t flags)
-> >> >  	slab_state = UP;
-> >> >  
-> >> >  #ifdef CONFIG_ZONE_DMA
-> >> > +	managed_dma = has_managed_dma();
-> >> > +
-> >> >  	for (i = 0; i <= KMALLOC_SHIFT_HIGH; i++) {
-> >> >  		struct kmem_cache *s = kmalloc_caches[KMALLOC_NORMAL][i];
-> >> >  
-> >> >  		if (s) {
-> >> > +			if (!managed_dma) {
-> >> > +				kmalloc_caches[KMALLOC_DMA][i] = kmalloc_caches[KMALLOC_NORMAL][i];
-> 
-> The right side could be just 's'?
+> Would you think that our current solution (the 3 parts shared earlier
+> to do fpstate expansion at KVM_SET_XSAVE) is acceptable as the 1st
+> version?
 
-Right, will see if we will take another way, will change it if keeping
-this way.
+This is really the wrong question in the context of an user space ABI.
 
-> 
-> >> > +				continue;
-> >> > +			}
-> >> 
-> >> This code is copying normal kmalloc caches to DMA kmalloc caches.
-> >> With this code, the kmalloc() with GFP_DMA will succeed even if allocated
-> >> memory is not actually from DMA zone. Is that really what you want?
-> > 
-> > This is a great question. Honestly, no,
-> > 
-> > On the surface, it's obviously not what we want, We should never give
-> > user a zone NORMAL memory when they ask for zone DMA memory. If going to
-> > this specific x86_64 ARCH where this problem is observed, I prefer to give
-> > it zone DMA32 memory if zone DMA allocation failed. Because we rarely
-> > have ISA device deployed which requires low 16M DMA buffer. The zone DMA
-> > is just in case. Thus, for kdump kernel, we have been trying to make sure
-> > zone DMA32 has enough memory to satisfy PCIe device DMA buffer allocation,
-> > I don't remember we made any effort to do that for zone DMA.
-> > 
-> > Now the thing is that the nothing serious happened even if sr_probe()
-> > doesn't get DMA buffer from zone DMA. And it works well when I feed it
-> > with zone NORMAL memory instead with this patch applied.
-> 
-> If doesn't feel right to me to fix (or rather workaround) this on the level
-> of kmalloc caches just because the current reports come from there. If we
-> decide it's acceptable for kdump kernel to return !ZONE_DMA memory for
-> GFP_DMA requests, then it should apply at the page allocator level for all
-> allocations, not just kmalloc().
-> 
-> Also you mention above you'd prefer ZONE_DMA32 memory, while chances are
-> this approach of using KMALLOC_NORMAL caches will end up giving you
-> ZONE_NORMAL. On the page allocator level it would be much easier to
-> implement a fallback from non-populated ZONE_DMA to ZONE_DMA32 specifically.
+The point is that if we go and add that hack, then the hack has to be
+supported forever. So there is no "as the 1st version".
 
-This could be do-able. I count this in when investigate all suggested
-solutions. Thanks.
+I'm not at all a fan of this kind of approach because it puts the burden
+at the wrong end and it carefully avoids to sit down and really think it
+through.
 
+That way we just pile hacks on hacks forever up to the point where the
+hacks end up in a circular dependency which becomes unresolvable.
+
+That's not a KVM/Qemu specific problem. That's a problem in general and
+we've been bitten by that again and again.
+
+The worst about this is that those people who try to sell their quick
+and dirty hack in the first place are not those who end up dealing with
+the consequences some time down the road.
+
+Lets assume the restore order is XSTATE, XCR0, XFD:
+
+     XSTATE has everything in init state, which means the default
+     buffer is good enough
+
+     XCR0 has everything enabled including AMX, so the buffer is
+     expanded
+
+     XFD has AMX disable set, which means the buffer expansion was
+     pointless
+
+If we go there, then we can just use a full expanded buffer for KVM
+unconditionally and be done with it. That spares a lot of code.
+
+Thanks,
+
+        tglx

@@ -2,94 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C8647507A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:21:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8487A475081
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238799AbhLOBUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 20:20:41 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:29131 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233336AbhLOBUl (ORCPT
+        id S238814AbhLOB24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 20:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238806AbhLOB2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 20:20:41 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JDHRR1NWMz1DK4k;
-        Wed, 15 Dec 2021 09:17:39 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 09:20:34 +0800
-Received: from [10.67.109.184] (10.67.109.184) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 09:20:34 +0800
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
- userspace pt_regs
-To:     Daniel Borkmann <daniel@iogearbox.net>, <ast@kernel.org>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <shuah@kernel.org>
-CC:     <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211214135555.125348-1-pulehui@huawei.com>
- <9063be69-fbd9-c0a5-9271-c6d4281c71ef@iogearbox.net>
-From:   Pu Lehui <pulehui@huawei.com>
-Message-ID: <30aa8ea2-3752-d711-50f8-4b3d49cad56f@huawei.com>
-Date:   Wed, 15 Dec 2021 09:20:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 14 Dec 2021 20:28:55 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5B2C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:28:55 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso23071902otf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:28:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to;
+        bh=vsh1MhG90sktMnN9grpR54l4uKx6Z6N5tsDDxbZW6o0=;
+        b=JGU0cApMNO/QObrJvFbIIED25d0QAjNji23cp4HxXLFGTpEnaeb2d947VuokTPrJh4
+         GxqIDaSVHw/ZVrgLLUJ36p6hc4fc2Ao3NBWHZY9233yxuiRmSq0+VA+k2c7w+AK1ethh
+         pIXA/919loix9H/jY9SRtqVmU7bJ5WRstSyhE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to;
+        bh=vsh1MhG90sktMnN9grpR54l4uKx6Z6N5tsDDxbZW6o0=;
+        b=j5h26cr7LaMN8xhz2zPqwq9JXVvdRObSune9rL1eERSwhat+pY3cpqfTGBJ0ZX2IZq
+         TqJtuICBcqDeczdxYn7nYJdaik4daEQvmWkyfKpG/JZPWIL57D3TJYzVt2PwR7KxJf7+
+         GNT/CY83CnCLIlMlaid0PVKW6tu5nhdovuNK+jtcLST+9ZlB25vU4bWsrOIJ4euCUSms
+         U+UEZp/U0bY4zV/UATeguuq777YFzOGYyyrLEMLFwXcoIu//b6R4CNuEB4+SJzFYAbQ/
+         lTxBKnTSYAGiurX23UJIRL17fuYwgaC7ZAaWL7BTzLD9GXD1DtIlBCqB92NBNpEjTGPw
+         oi4w==
+X-Gm-Message-State: AOAM532hTBr+DWCbSzeE9plAZJ4iEPLzStwBQA0Bd09OeGBKT5PuWe1v
+        kkRMjGUkyViwTSNqRg7bSWBlt+9lX0W1NtEFLbu6bw==
+X-Google-Smtp-Source: ABdhPJwVvIEVSzGWkZ6r6tum5sN5c25e8CxEhW4XCE5QW3Fp24XzJo9z3AmfNkACncaxRnmD6mxorka5IqffVKX3Lug=
+X-Received: by 2002:a9d:70ce:: with SMTP id w14mr6875613otj.77.1639531734897;
+ Tue, 14 Dec 2021 17:28:54 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 15 Dec 2021 02:28:54 +0100
 MIME-Version: 1.0
-In-Reply-To: <9063be69-fbd9-c0a5-9271-c6d4281c71ef@iogearbox.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
+In-Reply-To: <1638891339-21806-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1638891339-21806-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Wed, 15 Dec 2021 02:28:54 +0100
+Message-ID: <CAE-0n527T71LPe5R+S+YzEqiid2-QrFdvS2T7MWrakTccyG45w@mail.gmail.com>
+Subject: Re: [PATCH v5 0/5] Add pin control support for lpass sc7280
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, alsa-devel@alsa-project.org,
+        bgoswami@codeaurora.org, bjorn.andersson@linaro.org,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        judyhsiao@chromium.org, lgirdwood@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, perex@perex.cz, plai@codeaurora.org,
+        robh+dt@kernel.org, rohitkr@codeaurora.org,
+        srinivas.kandagatla@linaro.org, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/15 4:01, Daniel Borkmann wrote:
-> On 12/14/21 2:55 PM, Pu Lehui wrote:
->> When building bpf selftests on arm64, the following error will occur:
->>
->> progs/loop2.c:20:7: error: incomplete definition of type 'struct
->> user_pt_regs'
->>
->> Some archs, like arm64 and riscv, use userspace pt_regs in
->> bpf_tracing.h, which causes build failure when bpf prog use
->> macro in bpf_tracing.h. So let's use vmlinux.h directly.
->>
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> 
-> Looks like this lets CI fail, did you run the selftests also with 
-> vmtest.sh to
-> double check?
-> 
-> https://github.com/kernel-patches/bpf/runs/4521708490?check_suite_focus=true 
-> :
-> 
-> [...]
-> #189 verif_scale_loop6:FAIL
-> libbpf: prog 'trace_virtqueue_add_sgs': BPF program load failed: 
-> Argument list too long
-> libbpf: prog 'trace_virtqueue_add_sgs': -- BEGIN PROG LOAD LOG --
-> R1 type=ctx expected=fp
-> BPF program is too large. Processed 1000001 insn
-> verification time 12250995 usec
-> stack depth 88
-> processed 1000001 insns (limit 1000000) max_states_per_insn 107 
-> total_states 21739 peak_states 2271 mark_read 6
-> -- END PROG LOAD LOG --
-> libbpf: failed to load program 'trace_virtqueue_add_sgs'
-> libbpf: failed to load object 'loop6.o'
-> scale_test:FAIL:expect_success unexpected error: -7 (errno 7)
-> Summary: 221/986 PASSED, 8 SKIPPED, 1 FAILED
-> [...]
-> 
-> Please take a look and fix in your patch, thanks!
-> .
-Sorry for my negligence, I'll take a look and fix it.
+Quoting Srinivasa Rao Mandadapu (2021-12-07 07:35:34)
+> This patch series is to split lpass variant common pin control
+> functions and SoC specific functions and to add lpass sc7280 pincontrol support.
+> It also Adds dt-bindings for lpass sc7280 lpass lpi pincontrol.
+
+What ensures that the LPI pins are being muxed out on the pads of the
+SoC? There's the eGPIO support in the tlmm driver, which seems to let us
+override the LPI pins and mux them away from this pinctrl device to the
+tlmm pinctrl device. Should this driver be requesting gpios from tlmm
+and making sure they're not muxed away to tlmm so we don't have
+conflicts?

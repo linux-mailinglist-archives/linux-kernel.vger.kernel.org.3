@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E05475F53
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A502475F0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245660AbhLOR3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344134AbhLOR1Q (ORCPT
+        id S1343752AbhLOR10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:27:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42824 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245693AbhLORZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:27:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F636C061A72;
-        Wed, 15 Dec 2021 09:26:35 -0800 (PST)
+        Wed, 15 Dec 2021 12:25:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E49CF619E8;
-        Wed, 15 Dec 2021 17:26:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D60C36AE2;
-        Wed, 15 Dec 2021 17:26:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A16FB82027;
+        Wed, 15 Dec 2021 17:25:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65A6EC36AE0;
+        Wed, 15 Dec 2021 17:25:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589194;
-        bh=eDprUhMM8vftWzn2Cl89AMWfd58wb49TmTCNevGQdHc=;
+        s=korg; t=1639589144;
+        bh=MbA6CpBOXetaOjPOOd7O1G9xcLFpcFBIwbO7AxokYCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oA7R9uQGl3//oWNC8UTODpqOanGR3yEThiJokD41o7eKG9rm7BsmCOIhJUathAlIq
-         YMp0aKWCqck+2w4Pj7VNHCqSIcR1POP+8iNEQOoZ1qeSJNTx3m1OhTZcmqHxpFUIyJ
-         yUJEd9Vhr5ymxD5v9BPMWHgAMRw7OjfItm2WOnGE=
+        b=WtPjA9FUbMsciCn9P0xFFCvSgSkSXKO2flsB3G5UBo8D+UJdOpY65szJuTLKtxYkh
+         6PuJPEIiPBCB/OrUMJcOOKRe0cca56DYertzf814kqUXKH24TRMbvOfi7i4kvyN0Rs
+         EffuRa7P8BgU15yMeUuVY/AwS9vfVF/34XZUincQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        kernel test robot <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 04/18] parisc/agp: Annotate parisc agp init functions with __init
-Date:   Wed, 15 Dec 2021 18:21:25 +0100
-Message-Id: <20211215172022.959076270@linuxfoundation.org>
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.10 28/33] perf intel-pt: Fix error timestamp setting on the decoder error path
+Date:   Wed, 15 Dec 2021 18:21:26 +0100
+Message-Id: <20211215172025.748329692@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215172022.795825673@linuxfoundation.org>
-References: <20211215172022.795825673@linuxfoundation.org>
+In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
+References: <20211215172024.787958154@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,50 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit 8d88382b7436551a9ebb78475c546b670790cbf6 ]
+commit 6665b8e4836caa8023cbc7e53733acd234969c8c upstream.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+An error timestamp shows the last known timestamp for the queue, but this
+is not updated on the error path. Fix by setting it.
+
+Fixes: f4aa081949e7b6 ("perf tools: Add Intel PT decoder")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: stable@vger.kernel.org # v5.15+
+Link: https://lore.kernel.org/r/20211210162303.2288710-8-adrian.hunter@intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+[Adrian: Backport to v5.10]
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/agp/parisc-agp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/perf/util/intel-pt.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/char/agp/parisc-agp.c b/drivers/char/agp/parisc-agp.c
-index ed3c4c42fc23b..d68d05d5d3838 100644
---- a/drivers/char/agp/parisc-agp.c
-+++ b/drivers/char/agp/parisc-agp.c
-@@ -281,7 +281,7 @@ agp_ioc_init(void __iomem *ioc_regs)
-         return 0;
- }
- 
--static int
-+static int __init
- lba_find_capability(int cap)
- {
- 	struct _parisc_agp_info *info = &parisc_agp_info;
-@@ -366,7 +366,7 @@ parisc_agp_setup(void __iomem *ioc_hpa, void __iomem *lba_hpa)
- 	return error;
- }
- 
--static int
-+static int __init
- find_quicksilver(struct device *dev, void *data)
- {
- 	struct parisc_device **lba = data;
-@@ -378,7 +378,7 @@ find_quicksilver(struct device *dev, void *data)
- 	return 0;
- }
- 
--static int
-+static int __init
- parisc_agp_init(void)
- {
- 	extern struct sba_device *sba_list;
--- 
-2.33.0
-
+--- a/tools/perf/util/intel-pt.c
++++ b/tools/perf/util/intel-pt.c
+@@ -2271,6 +2271,7 @@ static int intel_pt_run_decoder(struct i
+ 				ptq->sync_switch = false;
+ 				intel_pt_next_tid(pt, ptq);
+ 			}
++			ptq->timestamp = state->est_timestamp;
+ 			if (pt->synth_opts.errors) {
+ 				err = intel_ptq_synth_error(ptq, state);
+ 				if (err)
 
 

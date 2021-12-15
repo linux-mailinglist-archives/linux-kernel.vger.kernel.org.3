@@ -2,336 +2,491 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A35814754E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1AB4754ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241061AbhLOJMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:12:19 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:36416 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbhLOJMS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:12:18 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D159921136;
-        Wed, 15 Dec 2021 09:12:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639559536; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UBx2fc8VnzftypTlHlryX/OzLAzKDOM/1Ec/8BwpHvw=;
-        b=v5D+9TCOlUjhICXvGzWJQrHvZZJaWw5P5Yyr8wXs9xOK5uajNMO8fn8fvFG7ZA4RAuaXnH
-        j5T+hxYoK9/KNc6DKuCxzUfxx7h/0tTEQDzcowfPvMuJzLxwfQdPMIRZ0trFwjbJAr8ccw
-        LjhSHg9DJpECgfs1zt7hZG843YYuKKk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639559536;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UBx2fc8VnzftypTlHlryX/OzLAzKDOM/1Ec/8BwpHvw=;
-        b=WyWWzl9sB1mN+kQPnn39stP/4Rw5zqqlKGw6J34vrWWhIBmIh5XewRCFifjb2jT8QgFLfN
-        qrd4kYjhjYKkQsBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B516B13AC7;
-        Wed, 15 Dec 2021 09:12:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uDQoK3CxuWHXSwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 15 Dec 2021 09:12:16 +0000
-Message-ID: <2e76bd93-a65e-094c-15a4-77375906a1b0@suse.de>
-Date:   Wed, 15 Dec 2021 10:12:16 +0100
+        id S241069AbhLOJO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:14:58 -0500
+Received: from mga07.intel.com ([134.134.136.100]:46569 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230104AbhLOJO6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 04:14:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639559698; x=1671095698;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ww8YFhZjlV+lY2z8D7ci3JSnJj2dHRzhsBtQXZ3CiT4=;
+  b=afFqBpTj5uWG+vku44ppNaWvbVW/6kjPXV8ciyjtSxruoe7jf4g+/gYV
+   yS4azULNV7Yi2iKAPClVhOj0PBoDR40+KIwjkEy6EYw/JuI9IEkuuL9pG
+   sBvSvGQqHLeOS62rII2hgUQo9K68TYueLORu/OB6SNawjj4rVlh1+vzNJ
+   qGZoUJoXJ+OJ63oOe3cX25siTCHpOmkwlELCaqExmgryZKswN9lz5ivXV
+   COgoeOLnNS89n2BTQhnDWisiJUMM+4XjERLWjvOlOzHfqocnWeu+X0cIq
+   u6yvuMsGiH/otp22lRKhJxB7euBwat3zfvShdYFumpGQDy4yQq5zjBwYB
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="302561471"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="302561471"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 01:14:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="505718547"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Dec 2021 01:14:55 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxQNC-0001XI-EX; Wed, 15 Dec 2021 09:14:54 +0000
+Date:   Wed, 15 Dec 2021 17:14:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dirk Mueller <dmueller@suse.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Rob Herring <robh@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [linux-stable-rc:queue/4.14 3742/9999]
+ arch/powerpc/kernel/traps.c:1658:6: error: no previous declaration for
+ 'DebugException'
+Message-ID: <202112151740.QoiLaP9D-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 00/60] drm: Make all drivers to honour the nomodeset
- parameter
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20211215010008.2545520-1-javierm@redhat.com>
- <58d00cac-dbf1-9704-3c0b-16fd837a5b6b@suse.de>
-In-Reply-To: <58d00cac-dbf1-9704-3c0b-16fd837a5b6b@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------pImMHL8b0ClGHx43deUpEG0H"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------pImMHL8b0ClGHx43deUpEG0H
-Content-Type: multipart/mixed; boundary="------------7SfPwl0IiYtkz6OMHTDZ10GX";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Message-ID: <2e76bd93-a65e-094c-15a4-77375906a1b0@suse.de>
-Subject: Re: [PATCH 00/60] drm: Make all drivers to honour the nomodeset
- parameter
-References: <20211215010008.2545520-1-javierm@redhat.com>
- <58d00cac-dbf1-9704-3c0b-16fd837a5b6b@suse.de>
-In-Reply-To: <58d00cac-dbf1-9704-3c0b-16fd837a5b6b@suse.de>
+Hi Dirk,
 
---------------7SfPwl0IiYtkz6OMHTDZ10GX
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+First bad commit (maybe != root cause):
 
-SGkNCg0KQW0gMTUuMTIuMjEgdW0gMDk6MzEgc2NocmllYiBUaG9tYXMgWmltbWVybWFubjoN
-Cj4gSGkgSmF2aWVyLA0KPiANCj4gbm90aGluZyB3cm9uZyB3aXRoIHlvdXIgcGF0Y2hlcywg
-YnV0IEknZCBsaWtlIHRvIHByb3Bvc2Ugc2xpZ2h0bHkgDQo+IGRpZmZlcm50IHNvbHV0aW9u
-Lg0KPiANCj4gRm9yIG1hbnkgVVNCIGRyaXZlcnMsIHlvdSBwdXQgdGhlIGRybV9maXJtd2Fy
-ZV9kcml2ZXJzX29ubHkoKSBjYWxsIGludG8gDQo+IHRoZSBwcm9iZSBmdW5jdGlvbi4gRm9y
-IHJlZ2lzdGVyaW5nLCB0aGVzZSBkcml2ZXJzIHVzZSANCj4gbW9kdWxlX3VzYl9kcml2ZXIo
-KSwgd2hpY2ggZXhwYW5kcyB0byBnZW5lcmljIGRldmljZS1yZWdpc3RlciBmdW5jdGlvbnMu
-DQo+IA0KPiBJJ2QgbGlrZSB0byBwcm9wb3NlIGEgc2ltaWxhciBtYWNybyBmb3IgRFJNIGRy
-aXZlcnMgdGhhdCBpbmNsdWRlcyB0aGUgDQo+IHRlc3QgZm9yIGRybV9maXJtd2FyZV9kcml2
-ZXJzX29ubHkoKS4NCj4gDQo+IEluIGRybV9kcnYuaCA6DQo+IA0KPiAgwqAgI2lmIGRlZmlu
-ZWQoVVNCKQ0KPiAgwqAgc3RhdGljIGludCBkcm1fdXNiX3JlZ2lzdGVyKHN0cnVjdCB1c2Jf
-ZHJpdmVyICp1c2IpDQo+ICDCoCB7DQo+ICDCoMKgwqDCoGlmIChkcm1fZmlybXdhcmVfZHJp
-dmVyc19vbmx5KCkpDQo+ICDCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVOT0RFVjsNCj4gIMKg
-wqDCoMKgcmV0dXJuIHVzYl9yZWdpc3Rlcl9kcml2ZXIodXNiKTsNCj4gIMKgIH0NCj4gIMKg
-ICNkZWZpbmUgZHJtX21vZHVsZV91c2JfZHJpdmVyKF9fdXNiKQ0KPiAgwqDCoMKgwqBtb2R1
-bGVfZHJpdmVyKGRybV91c2JfcmVnaXN0ZXIsIHVzYl9kZXJlZ2lzdGVyKQ0KPiAgwqAgI2Vu
-ZGlmDQo+IA0KPiBJbiBlYWNoIG9mIHRoZSBVU0ItYmFzZWQgRFJNIGRyaXZlcnMsIHJlcGxh
-Y2UgbW9kdWxlX3VzYl9kcml2ZXIgd2l0aCANCj4gZHJtX21vZHVsZV91c2JfZHJpdmVyLg0K
-PiANCj4gQW5kIHRoZW4gdGhlcmUncyBQQ0kgWzNdIGFuZCBwbGF0Zm9ybSBkcml2ZXJzLCBb
-NF0gd2hpY2ggY2FuIGJlIGhhbmRsZWQgDQo+IHNpbWlsYXJseS4gTWFueSBQQ0kgZHJpdmVy
-cyBvcGVuLWNvZGUgdGhlIG1vZHVsZSBpbml0IGFuZCBkZXZpY2UgDQo+IHJlZ2lzdGVyaW5n
-IHdpdGggdGhlIGRyaXZlci1zcGVjaWZpYyBlbmFibGUgcGFyYW1ldGVyLiBNYXliZSBhZGRp
-bmcgYSANCj4gZHJpdmVyLXNwZWNpZmljIHJlZ2lzdGVyIGZ1bmN0aW9uIHdvdWxkIG1ha2Ug
-c2Vuc2UuDQoNCkp1c3Qgd2FudCB0byBwb2ludCBvdXQgdGhhdCB0aGUgbmV4dCB0aW1lIHdl
-IGFkZCBhIG5ldyBkcml2ZXIsIGl0IHdpbGwgDQpjYWxsIGRybV9maXJtd2FyZV9kcml2ZXJz
-X29ubHkoKSBhdXRvbWF0aWNhbGx5IGlmIGl0IHVzZXMgc3VjaCBhIG1hY3JvLg0KDQpCZXN0
-IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiBCZXN0IHJlZ2FyZHMNCj4gVGhvbWFzDQo+IA0K
-PiBbMV0gDQo+IGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y1LjE1Ljgvc291
-cmNlL2luY2x1ZGUvbGludXgvdXNiLmgjTDEzMDYNCj4gWzJdIA0KPiBodHRwczovL2VsaXhp
-ci5ib290bGluLmNvbS9saW51eC92NS4xNS44L3NvdXJjZS9pbmNsdWRlL2xpbnV4L2Rldmlj
-ZS9kcml2ZXIuaCNMMjU4IA0KPiANCj4gWzNdIA0KPiBodHRwczovL2VsaXhpci5ib290bGlu
-LmNvbS9saW51eC92NS4xNS44L3NvdXJjZS9pbmNsdWRlL2xpbnV4L3BjaS5oI0wxNDUzDQo+
-IFs0XSANCj4gaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuMTUuOC9zb3Vy
-Y2UvaW5jbHVkZS9saW51eC9wbGF0Zm9ybV9kZXZpY2UuaCNMMjUxIA0KPiANCj4gDQo+IA0K
-PiBBbSAxNS4xMi4yMSB1bSAwMTo1OSBzY2hyaWViIEphdmllciBNYXJ0aW5leiBDYW5pbGxh
-czoNCj4+IFRoZSBub21vZGVzZXQga2VybmVsIGNvbW1hbmQgbGluZSBwYXJhbWV0ZXIgaXMg
-dXNlZCB0byBwcmV2ZW50IHRoZSANCj4+IEtNUy9EUk0NCj4+IGRyaXZlcnMgdG8gYmUgcmVn
-aXN0ZXJlZC9wcm9iZWQuIEJ1dCBvbmx5IGEgZmV3IGRyaXZlcnMgaW1wbGVtZW50IHN1cHBv
-cnQNCj4+IGZvciB0aGlzIHBhcmFtZXRlciBhbmQgbW9zdCBEUk0gZHJpdmVycyB3b3VsZCBq
-dXN0IGlnbm9yZSBpdC4NCj4+DQo+PiBUaGlzIChodWdlKSBwYXRjaCBzZXJpZXMgbWFrZXMg
-YWxsIERSTSBkcml2ZXJzIHRvIGhvbm91ciB0aGlzIA0KPj4gcGFyYW1ldGVyLiBJdA0KPj4g
-aXMgcG9zdGVkIGFzIHNlcGFyYXRlIHBhdGNoZXMgdG8gbWFrZSBlYXNpZXIgZm9yIGRyaXZl
-cnMgbWFpbnRhaW5lcnMgDQo+PiB0byBhY2sNCj4+IG9yIHBpY2sgdGhlbSBpbmRlcGVuZGVu
-dGx5IGF0IHRoZWlyIG93biBwYWNlLg0KPj4NCj4+IFBhdGNoZXMgYXJlIHF1aXRlIHRyaXZp
-YWwgYW5kIGp1c3QgYWRkIGFuIGlmIA0KPj4gKGRybV9maXJtd2FyZV9kcml2ZXJzX29ubHko
-KSkNCj4+IGNoZWNrIGFuZCByZXR1cm4gLUVOT0RFViBpZiB0aGF0J3MgdHJ1ZS4gVGhlIGNv
-bmRpdGlvbiBpcyBjaGVja2VkIGFzIA0KPj4gZWFybHkNCj4+IGFzIHBvc3NpYmxlLCB0aGF0
-IGlzIGluIHRoZSBtb2R1bGVfaW5pdCBoYW5kbGVyIGZvciBkcml2ZXJzIHRoYXQgaGF2ZSBv
-bmUNCj4+IG9yIGluIHRoZSBwcm9iZSBmdW5jdGlvbiBmb3IgZHJpdmVycyB0aGF0IGFyZSB1
-c2luZyB0aGUgbW9kdWxlXypfZHJpdmVyKCkNCj4+IG1hY3JvcyBhbmQgZG9uJ3QgaGF2ZSB0
-aGVpciBvd24gbW9kdWxlIGluaXQgZnVuY3Rpb24uDQo+Pg0KPj4gSSBpbmNsdWRlZCBhbGwg
-dGhlIERSTSBkcml2ZXJzIHRoYXQgdGhpbmsgbWFrZXMgc2Vuc2UuIEkgb25seSBsZWZ0IHRo
-ZSANCj4+IHZjNA0KPj4gYW5kIHYzZCBkcml2ZXJzLCB0aGF0IE1heGltZSBpcyBhbHJlYWR5
-IGhhbmRsaW5nIGluIGFub3RoZXIgcGF0Y2ggc2VyaWVzDQo+PiBhbmQgdGhlIHZnZW0sIHZr
-bXMgYW5kIHNpbXBsZWRybSBkcml2ZXJzIHRoYXQgc2hvdWxkIGlnbm9yZSB0aGUgcGFyYW0g
-DQo+PiBJTU8uDQo+Pg0KPj4gSSd2ZSBidWlsdCB0ZXN0ZWQgd2l0aCAnbWFrZSBhbGxtb2Rj
-b25maWcgJiYgbWFrZSBNPWRyaXZlcnMvZ3B1L2RybS8nLCANCj4+IGJ1dA0KPj4gb25seSBi
-b290ZWQgaW4gYSBmZXcgZGV2aWNlcyB3aXRoIGFuZCB3aXRob3V0IG5vbW9kZXNldCBpbiB0
-aGUgDQo+PiBjbWRsaW5lLiBTbw0KPj4gdGVzdGluZyBhbmQgcmV2aWV3aW5nIGZvciBhbGwg
-dGhlIGRyaXZlcnMgd291bGQgYmUgaGlnaGx5IGFwcHJlY2lhdGVkLg0KPj4NCj4+IEJlc3Qg
-cmVnYXJkcywNCj4+IEphdmllcg0KPj4NCj4+DQo+PiBKYXZpZXIgTWFydGluZXogQ2FuaWxs
-YXMgKDYwKToNCj4+IMKgwqAgZHJtL2tvbWVkYTogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21v
-ZGVzZXQga2VybmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vYXJtL2hkbGNkOiBBZGQgc3Vw
-cG9ydCBmb3IgdGhlIG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9t
-YWxpZHA6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXIN
-Cj4+IMKgwqAgZHJtL2FybWFkYTogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2Vy
-bmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vYXNwZWVkOiBBZGQgc3VwcG9ydCBmb3IgdGhl
-IG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9hdG1lbC1obGNkYzog
-QWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBhcmFtZXRlcg0KPj4gwqDC
-oCBkcm0vZXRuYXZpdjogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBh
-cmFtZXRlcg0KPj4gwqDCoCBkcm0vZXh5bm9zOiBBZGQgc3VwcG9ydCBmb3IgdGhlIG5vbW9k
-ZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9mc2wtZGN1OiBBZGQgc3VwcG9y
-dCBmb3IgdGhlIG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9nbWE1
-MDA6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+
-IMKgwqAgZHJtL2d1ZDogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBh
-cmFtZXRlcg0KPj4gwqDCoCBkcm0vaGlzaWxpY29uL2hpYm1jOiBBZGQgc3VwcG9ydCBmb3Ig
-dGhlIG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9oaXNpbGljb24v
-a2lyaW46IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXIN
-Cj4+IMKgwqAgZHJtL2h5cGVydjogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2Vy
-bmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vaTgxMDogQWRkIHN1cHBvcnQgZm9yIHRoZSBu
-b21vZGVzZXQga2VybmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vaW14L2Rjc3M6IEFkZCBz
-dXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJt
-L2lteDogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBhcmFtZXRlcg0K
-Pj4gwqDCoCBkcm0vaW5nZW5pYzogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2Vy
-bmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0va21iOiBBZGQgc3VwcG9ydCBmb3IgdGhlIG5v
-bW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9saW1hOiBBZGQgc3VwcG9y
-dCBmb3IgdGhlIG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9tY2Rl
-OiBBZGQgc3VwcG9ydCBmb3IgdGhlIG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDC
-oMKgIGRybS9tZWRpYXRlazogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVs
-IHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vbWVzb246IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9t
-b2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJtL21nYTogQWRkIHN1cHBvcnQg
-Zm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vbXNtOiBB
-ZGQgc3VwcG9ydCBmb3IgdGhlIG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKg
-IGRybTogbXhzZmI6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJh
-bWV0ZXINCj4+IMKgwqAgZHJtL29tYXA6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0
-IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJtL3BhbmVsOiBpbGl0ZWstaWxpOTM0MTog
-QWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVsDQo+PiDCoMKgwqDCoCBwYXJh
-bWV0ZXINCj4+IMKgwqAgZHJtL3BhbmZyb3N0OiBBZGQgc3VwcG9ydCBmb3IgdGhlIG5vbW9k
-ZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9wbDExMTogQWRkIHN1cHBvcnQg
-Zm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vcjEyODog
-QWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBhcmFtZXRlcg0KPj4gwqDC
-oCBkcm06IHJjYXItZHU6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBw
-YXJhbWV0ZXINCj4+IMKgwqAgZHJtL3JvY2tjaGlwOiBBZGQgc3VwcG9ydCBmb3IgdGhlIG5v
-bW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9zYXZhZ2U6IEFkZCBzdXBw
-b3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJtL3No
-bW9iaWxlOiBBZGQgc3VwcG9ydCBmb3IgdGhlIG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVy
-DQo+PiDCoMKgIGRybS9zaXM6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5l
-bCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJtL3NwcmQ6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9t
-b2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJtL3N0aTogQWRkIHN1cHBvcnQg
-Zm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vc3RtOiBB
-ZGQgc3VwcG9ydCBmb3IgdGhlIG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKg
-IGRybS9zdW40aTogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBhcmFt
-ZXRlcg0KPj4gwqDCoCBkcm0vdGRmeDogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQg
-a2VybmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vdGVncmE6IEFkZCBzdXBwb3J0IGZvciB0
-aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJtL3RpZHNzOiBBZGQg
-c3VwcG9ydCBmb3IgdGhlIG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRy
-bS90aWxjZGM6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0
-ZXINCj4+IMKgwqAgZHJtL2FyYzogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2Vy
-bmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vZ20xMnUzMjA6IEFkZCBzdXBwb3J0IGZvciB0
-aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJtL2h4ODM1N2Q6IEFk
-ZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAg
-ZHJtL2lsaTkxNjM6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJh
-bWV0ZXINCj4+IMKgwqAgZHJtL2lsaTkyMjU6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rl
-c2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJtL2lsaTkzNDE6IEFkZCBzdXBwb3J0
-IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJtL2lsaTk0
-ODY6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+
-IMKgwqAgZHJtL21pMDI4M3F0OiBBZGQgc3VwcG9ydCBmb3IgdGhlIG5vbW9kZXNldCBrZXJu
-ZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9yZXBhcGVyOiBBZGQgc3VwcG9ydCBmb3IgdGhl
-IG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS9zdDc1ODY6IEFkZCBz
-dXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJt
-L3N0NzczNXI6IEFkZCBzdXBwb3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0
-ZXINCj4+IMKgwqAgZHJtL3R2ZTIwMDogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQg
-a2VybmVsIHBhcmFtZXRlcg0KPj4gwqDCoCBkcm0vdWRsOiBBZGQgc3VwcG9ydCBmb3IgdGhl
-IG5vbW9kZXNldCBrZXJuZWwgcGFyYW1ldGVyDQo+PiDCoMKgIGRybS92aWE6IEFkZCBzdXBw
-b3J0IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXINCj4+IMKgwqAgZHJtL3hl
-bjogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBhcmFtZXRlcg0KPj4g
-wqDCoCBkcm0veGxueDogQWRkIHN1cHBvcnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBh
-cmFtZXRlcg0KPj4NCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9hcm0vZGlzcGxheS9rb21lZGEv
-a29tZWRhX2Rydi5jIHwgNCArKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vYXJtL2hkbGNk
-X2Rydi5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4gwqAg
-ZHJpdmVycy9ncHUvZHJtL2FybS9tYWxpZHBfZHJ2LmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgfCAzICsrKw0KPj4gwqAgZHJpdmVycy9ncHUvZHJtL2FybWFkYS9hcm1hZGFf
-ZHJ2LmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4gwqAgZHJpdmVycy9n
-cHUvZHJtL2FzcGVlZC9hc3BlZWRfZ2Z4X2Rydi5jwqDCoMKgwqDCoMKgwqDCoCB8IDMgKysr
-DQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vYXRtZWwtaGxjZGMvYXRtZWxfaGxjZGNfZGMuY8Kg
-wqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vZXRuYXZpdi9ldG5hdml2X2Ry
-di5jwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4gwqAgZHJpdmVycy9ncHUvZHJt
-L2V4eW5vcy9leHlub3NfZHJtX2Rydi5jwqDCoMKgwqDCoMKgwqDCoCB8IDMgKysrDQo+PiDC
-oCBkcml2ZXJzL2dwdS9kcm0vZnNsLWRjdS9mc2xfZGN1X2RybV9kcnYuY8KgwqDCoMKgwqDC
-oCB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vZ21hNTAwL3BzYl9kcnYuY8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9k
-cm0vZ3VkL2d1ZF9kcnYuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8
-IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vaGlzaWxpY29uL2hpYm1jL2hpYm1jX2Ry
-bV9kcnYuYyB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vaGlzaWxpY29uL2tpcmlu
-L2tpcmluX2RybV9kcnYuYyB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vaHlwZXJ2
-L2h5cGVydl9kcm1fZHJ2LmPCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZl
-cnMvZ3B1L2RybS9pODEwL2k4MTBfZHJ2LmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vaW14L2Rjc3MvZGNzcy1kcnYu
-Y8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9k
-cm0vaW14L2lteC1kcm0tY29yZS5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsr
-Kw0KPj4gwqAgZHJpdmVycy9ncHUvZHJtL2luZ2VuaWMvaW5nZW5pYy1kcm0tZHJ2LmPCoMKg
-wqDCoMKgwqAgfCAzICsrKw0KPj4gwqAgZHJpdmVycy9ncHUvZHJtL2ttYi9rbWJfZHJ2LmPC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4gwqAgZHJp
-dmVycy9ncHUvZHJtL2xpbWEvbGltYV9kcnYuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9tY2RlL21jZGVfZHJ2LmPC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJz
-L2dwdS9kcm0vbWVkaWF0ZWsvbXRrX2RybV9kcnYuY8KgwqDCoMKgwqDCoMKgwqDCoCB8IDMg
-KysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vbWVzb24vbWVzb25fZHJ2LmPCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9tZ2Ev
-bWdhX2Rydi5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysN
-Cj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9tc20vbXNtX2Rydi5jwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9teHNm
-Yi9teHNmYl9kcnYuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4g
-wqAgZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21hcF9kcnYuY8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9wYW5lbC9wYW5lbC1p
-bGl0ZWstaWxpOTM0MS5jwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9w
-YW5mcm9zdC9wYW5mcm9zdF9kcnYuY8KgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4gwqAg
-ZHJpdmVycy9ncHUvZHJtL3BsMTExL3BsMTExX2Rydi5jwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vcjEyOC9yMTI4X2Rydi5j
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4gwqAgZHJpdmVy
-cy9ncHUvZHJtL3JjYXItZHUvcmNhcl9kdV9kcnYuY8KgwqDCoMKgwqDCoMKgwqDCoMKgIHwg
-MyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9yb2NrY2hpcC9yb2NrY2hpcF9kcm1fZHJ2
-LmPCoMKgwqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vc2F2YWdlL3NhdmFn
-ZV9kcnYuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJz
-L2dwdS9kcm0vc2htb2JpbGUvc2htb2JfZHJtX2Rydi5jwqDCoMKgwqDCoMKgwqAgfCAzICsr
-Kw0KPj4gwqAgZHJpdmVycy9ncHUvZHJtL3Npcy9zaXNfZHJ2LmPCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4gwqAgZHJpdmVycy9ncHUvZHJtL3Nw
-cmQvc3ByZF9kcm0uY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysN
-Cj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9zdGkvc3RpX2Rydi5jwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9zdG0v
-ZHJ2LmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDMg
-KysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vc3VuNGkvc3VuNGlfZHJ2LmPCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS90ZGZ4
-L3RkZnhfZHJ2LmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDMgKysrDQo+
-PiDCoCBkcml2ZXJzL2dwdS9kcm0vdGVncmEvZHJtLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS90aWRz
-cy90aWRzc19kcnYuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4g
-wqAgZHJpdmVycy9ncHUvZHJtL3RpbGNkYy90aWxjZGNfZHJ2LmPCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgfCAzICsrKw0KPj4gwqAgZHJpdmVycy9ncHUvZHJtL3RpbnkvYXJjcGd1LmPC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4gwqAgZHJp
-dmVycy9ncHUvZHJtL3RpbnkvZ20xMnUzMjAuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS90aW55L2h4ODM1N2QuY8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsrKw0KPj4gwqAgZHJpdmVy
-cy9ncHUvZHJtL3RpbnkvaWxpOTE2My5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vdGlueS9pbGk5MjI1LmPCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMv
-Z3B1L2RybS90aW55L2lsaTkzNDEuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgfCAzICsrKw0KPj4gwqAgZHJpdmVycy9ncHUvZHJtL3RpbnkvaWxpOTQ4Ni5jwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dw
-dS9kcm0vdGlueS9taTAyODNxdC5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-fCAzICsrKw0KPj4gwqAgZHJpdmVycy9ncHUvZHJtL3RpbnkvcmVwYXBlci5jwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9k
-cm0vdGlueS9zdDc1ODYuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8
-IDMgKysrDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vdGlueS9zdDc3MzVyLmPCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2Ry
-bS90dmUyMDAvdHZlMjAwX2Rydi5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysN
-Cj4+IMKgIGRyaXZlcnMvZ3B1L2RybS91ZGwvdWRsX2Rydi5jwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS92aWEv
-dmlhX2Rydi5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysN
-Cj4+IMKgIGRyaXZlcnMvZ3B1L2RybS94ZW4veGVuX2RybV9mcm9udC5jwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS94bG54L3p5bnFt
-cF9kcHN1Yi5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMyArKysNCj4+IMKgIDYwIGZp
-bGVzIGNoYW5nZWQsIDE4MSBpbnNlcnRpb25zKCspDQo+Pg0KPiANCg0KLS0gDQpUaG9tYXMg
-WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
-b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
-IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
-OiBJdm8gVG90ZXYNCg==
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.14
+head:   93489bfff5495e498b3932e011b0221ff242e0b7
+commit: 88f7a6aa7fb9aa5076b65489146045dac865f1d3 [3742/9999] scripts/dtc: Remove redundant YYLOC global declaration
+config: powerpc-randconfig-r003-20211214 (https://download.01.org/0day-ci/archive/20211215/202112151740.QoiLaP9D-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 7.5.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=88f7a6aa7fb9aa5076b65489146045dac865f1d3
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/4.14
+        git checkout 88f7a6aa7fb9aa5076b65489146045dac865f1d3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
---------------7SfPwl0IiYtkz6OMHTDZ10GX--
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---------------pImMHL8b0ClGHx43deUpEG0H
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+All errors (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+   In file included from include/linux/uaccess.h:14:0,
+                    from arch/powerpc/include/asm/sections.h:7,
+                    from include/linux/interrupt.h:22,
+                    from arch/powerpc/kernel/traps.c:27:
+   arch/powerpc/kernel/traps.c: In function 'emulate_string_inst':
+   arch/powerpc/include/asm/uaccess.h:52:35: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+      (((size) == 0) || (((size) - 1) <= ((segment).seg - (addr)))))
+                                      ^
+   arch/powerpc/include/asm/uaccess.h:58:3: note: in expansion of macro '__access_ok'
+      __access_ok((__force unsigned long)(addr), (size), get_fs()))
+      ^~~~~~~~~~~
+   arch/powerpc/include/asm/uaccess.h:253:6: note: in expansion of macro 'access_ok'
+     if (access_ok(VERIFY_READ, __gu_addr, (size))) {  \
+         ^~~~~~~~~
+   arch/powerpc/include/asm/uaccess.h:80:2: note: in expansion of macro '__get_user_check'
+     __get_user_check((x), (ptr), sizeof(*(ptr)))
+     ^~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/traps.c:889:9: note: in expansion of macro 'get_user'
+        if (get_user(val, (u8 __user *)EA))
+            ^~~~~~~~
+   arch/powerpc/include/asm/uaccess.h:52:35: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+      (((size) == 0) || (((size) - 1) <= ((segment).seg - (addr)))))
+                                      ^
+   arch/powerpc/include/asm/uaccess.h:58:3: note: in expansion of macro '__access_ok'
+      __access_ok((__force unsigned long)(addr), (size), get_fs()))
+      ^~~~~~~~~~~
+   arch/powerpc/include/asm/uaccess.h:160:6: note: in expansion of macro 'access_ok'
+     if (access_ok(VERIFY_WRITE, __pu_addr, size))   \
+         ^~~~~~~~~
+   arch/powerpc/include/asm/uaccess.h:82:2: note: in expansion of macro '__put_user_check'
+     __put_user_check((__typeof__(*(ptr)))(x), (ptr), sizeof(*(ptr)))
+     ^~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/traps.c:900:9: note: in expansion of macro 'put_user'
+        if (put_user(val, (u8 __user *)EA))
+            ^~~~~~~~
+   arch/powerpc/kernel/traps.c: At top level:
+   arch/powerpc/kernel/traps.c:1281:6: error: no previous declaration for 'slb_miss_bad_addr' [-Werror=missing-declarations]
+    void slb_miss_bad_addr(struct pt_regs *regs)
+         ^~~~~~~~~~~~~~~~~
+>> arch/powerpc/kernel/traps.c:1658:6: error: no previous declaration for 'DebugException' [-Werror=missing-declarations]
+    void DebugException(struct pt_regs *regs, unsigned long debug_status)
+         ^~~~~~~~~~~~~~
+>> arch/powerpc/kernel/traps.c:1771:6: error: no previous declaration for 'CacheLockingException' [-Werror=missing-declarations]
+    void CacheLockingException(struct pt_regs *regs, unsigned long address,
+         ^~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/traps.c:1785:6: error: no previous declaration for 'SPEFloatingPointException' [-Werror=missing-declarations]
+    void SPEFloatingPointException(struct pt_regs *regs)
+         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/powerpc/kernel/traps.c:1833:6: error: no previous declaration for 'SPEFloatingPointRoundException' [-Werror=missing-declarations]
+    void SPEFloatingPointRoundException(struct pt_regs *regs)
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/traps.c:1884:29: error: no previous declaration for 'WatchdogHandler' [-Werror=missing-declarations]
+    void __attribute__ ((weak)) WatchdogHandler(struct pt_regs *regs)
+                                ^~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+   In file included from include/linux/uaccess.h:14:0,
+                    from include/asm-generic/termios-base.h:8,
+                    from arch/powerpc/include/asm/termios.h:20,
+                    from include/uapi/linux/termios.h:6,
+                    from include/linux/tty.h:7,
+                    from arch/powerpc/kernel/setup_32.c:13:
+   include/asm-generic/termios-base.h: In function 'user_termio_to_kernel_termios':
+   arch/powerpc/include/asm/uaccess.h:52:35: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+      (((size) == 0) || (((size) - 1) <= ((segment).seg - (addr)))))
+                                      ^
+   arch/powerpc/include/asm/uaccess.h:58:3: note: in expansion of macro '__access_ok'
+      __access_ok((__force unsigned long)(addr), (size), get_fs()))
+      ^~~~~~~~~~~
+   arch/powerpc/include/asm/uaccess.h:253:6: note: in expansion of macro 'access_ok'
+     if (access_ok(VERIFY_READ, __gu_addr, (size))) {  \
+         ^~~~~~~~~
+   arch/powerpc/include/asm/uaccess.h:80:2: note: in expansion of macro '__get_user_check'
+     __get_user_check((x), (ptr), sizeof(*(ptr)))
+     ^~~~~~~~~~~~~~~~
+   include/asm-generic/termios-base.h:36:6: note: in expansion of macro 'get_user'
+     if (get_user(termios->c_line, &termio->c_line) < 0)
+         ^~~~~~~~
+   include/asm-generic/termios-base.h: In function 'kernel_termios_to_user_termio':
+   arch/powerpc/include/asm/uaccess.h:52:35: error: comparison of unsigned expression >= 0 is always true [-Werror=type-limits]
+      (((size) == 0) || (((size) - 1) <= ((segment).seg - (addr)))))
+                                      ^
+   arch/powerpc/include/asm/uaccess.h:58:3: note: in expansion of macro '__access_ok'
+      __access_ok((__force unsigned long)(addr), (size), get_fs()))
+      ^~~~~~~~~~~
+   arch/powerpc/include/asm/uaccess.h:160:6: note: in expansion of macro 'access_ok'
+     if (access_ok(VERIFY_WRITE, __pu_addr, size))   \
+         ^~~~~~~~~
+   arch/powerpc/include/asm/uaccess.h:82:2: note: in expansion of macro '__put_user_check'
+     __put_user_check((__typeof__(*(ptr)))(x), (ptr), sizeof(*(ptr)))
+     ^~~~~~~~~~~~~~~~
+   include/asm-generic/termios-base.h:58:6: note: in expansion of macro 'put_user'
+         put_user(termios->c_line,  &termio->c_line) < 0 ||
+         ^~~~~~~~
+   arch/powerpc/kernel/setup_32.c: At top level:
+   arch/powerpc/kernel/setup_32.c:68:30: error: no previous declaration for 'early_init' [-Werror=missing-declarations]
+    notrace unsigned long __init early_init(unsigned long dt_ptr)
+                                 ^~~~~~~~~~
+   arch/powerpc/kernel/setup_32.c:99:21: error: no previous declaration for 'machine_init' [-Werror=missing-declarations]
+    notrace void __init machine_init(u64 dt_ptr)
+                        ^~~~~~~~~~~~
+   arch/powerpc/kernel/setup_32.c:124:12: error: no previous declaration for 'ppc_setup_l2cr' [-Werror=missing-declarations]
+    int __init ppc_setup_l2cr(char *str)
+               ^~~~~~~~~~~~~~
+   arch/powerpc/kernel/setup_32.c:137:12: error: no previous declaration for 'ppc_setup_l3cr' [-Werror=missing-declarations]
+    int __init ppc_setup_l3cr(char *str)
+               ^~~~~~~~~~~~~~
+   arch/powerpc/kernel/setup_32.c:183:12: error: no previous declaration for 'ppc_init' [-Werror=missing-declarations]
+    int __init ppc_init(void)
+               ^~~~~~~~
+   arch/powerpc/kernel/setup_32.c:198:13: error: no previous declaration for 'irqstack_early_init' [-Werror=missing-declarations]
+    void __init irqstack_early_init(void)
+                ^~~~~~~~~~~~~~~~~~~
+>> arch/powerpc/kernel/setup_32.c:213:13: error: no previous declaration for 'exc_lvl_early_init' [-Werror=missing-declarations]
+    void __init exc_lvl_early_init(void)
+                ^~~~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/setup_32.c:238:13: error: no previous declaration for 'setup_power_save' [-Werror=missing-declarations]
+    void __init setup_power_save(void)
+                ^~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/setup_32.c:253:13: error: no previous declaration for 'initialize_cache_info' [-Werror=missing-declarations]
+    __init void initialize_cache_info(void)
+                ^~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> arch/powerpc/mm/fsl_booke_mmu.c:70:15: error: no previous declaration for 'tlbcam_sz' [-Werror=missing-declarations]
+    unsigned long tlbcam_sz(int idx)
+                  ^~~~~~~~~
+>> arch/powerpc/mm/fsl_booke_mmu.c:269:21: error: no previous declaration for 'relocate_init' [-Werror=missing-declarations]
+    notrace void __init relocate_init(u64 dt_ptr, phys_addr_t start)
+                        ^~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+   In file included from include/linux/hugetlb.h:444:0,
+                    from arch/powerpc/kvm/../../../virt/kvm/kvm_main.c:50:
+   arch/powerpc/include/asm/hugetlb.h: In function 'huge_ptep_clear_flush':
+   arch/powerpc/include/asm/hugetlb.h:167:8: error: variable 'pte' set but not used [-Werror=unused-but-set-variable]
+     pte_t pte;
+           ^~~
+   arch/powerpc/kvm/../../../virt/kvm/kvm_main.c: At top level:
+>> arch/powerpc/kvm/../../../virt/kvm/kvm_main.c:140:13: error: no previous declaration for 'kvm_arch_mmu_notifier_invalidate_range' [-Werror=missing-declarations]
+    __weak void kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/powerpc/kvm/../../../virt/kvm/kvm_main.c:635:12: error: no previous declaration for 'kvm_arch_post_init_vm' [-Werror=missing-declarations]
+    int __weak kvm_arch_post_init_vm(struct kvm *kvm)
+               ^~~~~~~~~~~~~~~~~~~~~
+>> arch/powerpc/kvm/../../../virt/kvm/kvm_main.c:644:13: error: no previous declaration for 'kvm_arch_pre_destroy_vm' [-Werror=missing-declarations]
+    void __weak kvm_arch_pre_destroy_vm(struct kvm *kvm)
+                ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/kvm_host.h:14:0,
+                    from arch/powerpc/kvm/../../../virt/kvm/kvm_main.c:21:
+   include/linux/signal.h: In function 'sigemptyset':
+   include/linux/signal.h:178:22: error: this statement may fall through [-Werror=implicit-fallthrough=]
+     case 2: set->sig[1] = 0;
+             ~~~~~~~~~~~~^~~
+   include/linux/signal.h:179:2: note: here
+     case 1: set->sig[0] = 0;
+     ^~~~
+   cc1: all warnings being treated as errors
+--
+>> arch/powerpc/kvm/booke.c:602:6: error: no previous declaration for 'kvmppc_watchdog_func' [-Werror=missing-declarations]
+    void kvmppc_watchdog_func(unsigned long data)
+         ^~~~~~~~~~~~~~~~~~~~
+>> arch/powerpc/kvm/booke.c:985:5: error: no previous declaration for 'kvmppc_handle_exit' [-Werror=missing-declarations]
+    int kvmppc_handle_exit(struct kvm_run *run, struct kvm_vcpu *vcpu,
+        ^~~~~~~~~~~~~~~~~~
+>> arch/powerpc/kvm/booke.c:1921:6: error: no previous declaration for 'kvm_guest_protect_msr' [-Werror=missing-declarations]
+    void kvm_guest_protect_msr(struct kvm_vcpu *vcpu, ulong prot_bitmap, bool set)
+         ^~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+   In file included from include/linux/hugetlb.h:444:0,
+                    from arch/powerpc/kvm/e500_mmu.c:31:
+   arch/powerpc/include/asm/hugetlb.h: In function 'huge_ptep_clear_flush':
+   arch/powerpc/include/asm/hugetlb.h:167:8: error: variable 'pte' set but not used [-Werror=unused-but-set-variable]
+     pte_t pte;
+           ^~~
+   arch/powerpc/kvm/e500_mmu.c: At top level:
+>> arch/powerpc/kvm/e500_mmu.c:539:6: error: no previous declaration for 'kvmppc_mmu_destroy_e500' [-Werror=missing-declarations]
+    void kvmppc_mmu_destroy_e500(struct kvm_vcpu *vcpu)
+         ^~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+   arch/powerpc/kvm/mpic.c: In function 'kvmppc_mpic_connect_vcpu':
+>> arch/powerpc/kvm/mpic.c:1743:10: error: comparison of unsigned expression < 0 is always false [-Werror=type-limits]
+     if (cpu < 0 || cpu >= MAX_CPU)
+             ^
+   cc1: all warnings being treated as errors
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmG5sXAFAwAAAAAACgkQlh/E3EQov+Aw
-pg/8DaHnP/nnN9onsyKrI/2gh/M2Da3jdnc6/eGRG4pMvoHzzps2Po0mIrjDu+KBEIHj9yqpZCPj
-5c6redE0uBETxDsqzZkEiTHtaGqSg+UBbLanMU4kQx69DYJWXK5/D4sYoYm91Zw6LPoyjdPY4yBm
-98QkH+YcxSHKrugSPNR63DQE6u+zW0Uee9Gd6+L5KD8azMtOIjvnVhYwroMm1yq44HqTNKswzQbT
-/n7c/5h4qrru2fpw17m4YQHH/JyU+h4ZivezTsX5eUXK+WQ+3T3jRR8r5VuTSul82fw6u2/7A0C9
-NLRWxU1VCHq5i9teq+PKjR79V70BJh+MaH+AvbfBcOYa7VeDQKzfbxQ5HpzrvUgCnY9uOzBXzSfX
-Dbp/Gg90Oz+DeE0ITNmPNcGxWVZuBLhc0kiD6zR8Vw7Y0gl4D9va9QruA/sBAmsfyu+BP87GZNTM
-7hG28qWqPDfXyQzQsAwy2PDnZf7hKF5rk88FaRuFey1dQMPiuQ67TR/GB8yfBrw49Y/GHfK+YTDi
-XuLCzLX9RsrSUIP8lNp7jkL0I+9Y5YSlpngmXpnjysgRczNIRmqttw3xY9tQG5ZpxnuGb5gbjFUg
-L/rWg2umoFte06tYJEqdSeMnOqmvK9QmJjAX+A3wE/BfOSBbdOLryRI0+5D+BBn8LPYPvfGaLNwm
-ryk=
-=QCw+
------END PGP SIGNATURE-----
 
---------------pImMHL8b0ClGHx43deUpEG0H--
+vim +/DebugException +1658 arch/powerpc/kernel/traps.c
+
+14cf11af6cf608 Paul Mackerras     2005-09-26  1657  
+03465f899bdac7 Nicholas Piggin    2016-09-16 @1658  void DebugException(struct pt_regs *regs, unsigned long debug_status)
+14cf11af6cf608 Paul Mackerras     2005-09-26  1659  {
+51ae8d4a2b9e4a Bharat Bhushan     2013-07-04  1660  	current->thread.debug.dbsr = debug_status;
+3bffb6529cf10d Dave Kleikamp      2010-02-08  1661  
+ec097c84dff175 Roland McGrath     2009-05-28  1662  	/* Hack alert: On BookE, Branch Taken stops on the branch itself, while
+ec097c84dff175 Roland McGrath     2009-05-28  1663  	 * on server, it stops on the target of the branch. In order to simulate
+ec097c84dff175 Roland McGrath     2009-05-28  1664  	 * the server behaviour, we thus restart right away with a single step
+ec097c84dff175 Roland McGrath     2009-05-28  1665  	 * instead of stopping here when hitting a BT
+ec097c84dff175 Roland McGrath     2009-05-28  1666  	 */
+ec097c84dff175 Roland McGrath     2009-05-28  1667  	if (debug_status & DBSR_BT) {
+ec097c84dff175 Roland McGrath     2009-05-28  1668  		regs->msr &= ~MSR_DE;
+ec097c84dff175 Roland McGrath     2009-05-28  1669  
+ec097c84dff175 Roland McGrath     2009-05-28  1670  		/* Disable BT */
+ec097c84dff175 Roland McGrath     2009-05-28  1671  		mtspr(SPRN_DBCR0, mfspr(SPRN_DBCR0) & ~DBCR0_BT);
+ec097c84dff175 Roland McGrath     2009-05-28  1672  		/* Clear the BT event */
+ec097c84dff175 Roland McGrath     2009-05-28  1673  		mtspr(SPRN_DBSR, DBSR_BT);
+ec097c84dff175 Roland McGrath     2009-05-28  1674  
+ec097c84dff175 Roland McGrath     2009-05-28  1675  		/* Do the single step trick only when coming from userspace */
+ec097c84dff175 Roland McGrath     2009-05-28  1676  		if (user_mode(regs)) {
+51ae8d4a2b9e4a Bharat Bhushan     2013-07-04  1677  			current->thread.debug.dbcr0 &= ~DBCR0_BT;
+51ae8d4a2b9e4a Bharat Bhushan     2013-07-04  1678  			current->thread.debug.dbcr0 |= DBCR0_IDM | DBCR0_IC;
+ec097c84dff175 Roland McGrath     2009-05-28  1679  			regs->msr |= MSR_DE;
+ec097c84dff175 Roland McGrath     2009-05-28  1680  			return;
+ec097c84dff175 Roland McGrath     2009-05-28  1681  		}
+ec097c84dff175 Roland McGrath     2009-05-28  1682  
+6cc89bad60a673 Naveen N. Rao      2016-11-21  1683  		if (kprobe_post_handler(regs))
+6cc89bad60a673 Naveen N. Rao      2016-11-21  1684  			return;
+6cc89bad60a673 Naveen N. Rao      2016-11-21  1685  
+ec097c84dff175 Roland McGrath     2009-05-28  1686  		if (notify_die(DIE_SSTEP, "block_step", regs, 5,
+ec097c84dff175 Roland McGrath     2009-05-28  1687  			       5, SIGTRAP) == NOTIFY_STOP) {
+ec097c84dff175 Roland McGrath     2009-05-28  1688  			return;
+ec097c84dff175 Roland McGrath     2009-05-28  1689  		}
+ec097c84dff175 Roland McGrath     2009-05-28  1690  		if (debugger_sstep(regs))
+ec097c84dff175 Roland McGrath     2009-05-28  1691  			return;
+ec097c84dff175 Roland McGrath     2009-05-28  1692  	} else if (debug_status & DBSR_IC) { 	/* Instruction complete */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1693  		regs->msr &= ~MSR_DE;
+f82796214a95b1 Kumar Gala         2008-06-26  1694  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1695  		/* Disable instruction completion */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1696  		mtspr(SPRN_DBCR0, mfspr(SPRN_DBCR0) & ~DBCR0_IC);
+14cf11af6cf608 Paul Mackerras     2005-09-26  1697  		/* Clear the instruction completion event */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1698  		mtspr(SPRN_DBSR, DBSR_IC);
+f82796214a95b1 Kumar Gala         2008-06-26  1699  
+6cc89bad60a673 Naveen N. Rao      2016-11-21  1700  		if (kprobe_post_handler(regs))
+6cc89bad60a673 Naveen N. Rao      2016-11-21  1701  			return;
+6cc89bad60a673 Naveen N. Rao      2016-11-21  1702  
+f82796214a95b1 Kumar Gala         2008-06-26  1703  		if (notify_die(DIE_SSTEP, "single_step", regs, 5,
+f82796214a95b1 Kumar Gala         2008-06-26  1704  			       5, SIGTRAP) == NOTIFY_STOP) {
+f82796214a95b1 Kumar Gala         2008-06-26  1705  			return;
+f82796214a95b1 Kumar Gala         2008-06-26  1706  		}
+f82796214a95b1 Kumar Gala         2008-06-26  1707  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1708  		if (debugger_sstep(regs))
+14cf11af6cf608 Paul Mackerras     2005-09-26  1709  			return;
+f82796214a95b1 Kumar Gala         2008-06-26  1710  
+d6a61bfc06d6f2 Luis Machado       2008-07-24  1711  		if (user_mode(regs)) {
+51ae8d4a2b9e4a Bharat Bhushan     2013-07-04  1712  			current->thread.debug.dbcr0 &= ~DBCR0_IC;
+51ae8d4a2b9e4a Bharat Bhushan     2013-07-04  1713  			if (DBCR_ACTIVE_EVENTS(current->thread.debug.dbcr0,
+51ae8d4a2b9e4a Bharat Bhushan     2013-07-04  1714  					       current->thread.debug.dbcr1))
+3bffb6529cf10d Dave Kleikamp      2010-02-08  1715  				regs->msr |= MSR_DE;
+3bffb6529cf10d Dave Kleikamp      2010-02-08  1716  			else
+3bffb6529cf10d Dave Kleikamp      2010-02-08  1717  				/* Make sure the IDM bit is off */
+51ae8d4a2b9e4a Bharat Bhushan     2013-07-04  1718  				current->thread.debug.dbcr0 &= ~DBCR0_IDM;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1719  		}
+3bffb6529cf10d Dave Kleikamp      2010-02-08  1720  
+3bffb6529cf10d Dave Kleikamp      2010-02-08  1721  		_exception(SIGTRAP, regs, TRAP_TRACE, regs->nip);
+3bffb6529cf10d Dave Kleikamp      2010-02-08  1722  	} else
+3bffb6529cf10d Dave Kleikamp      2010-02-08  1723  		handle_debug(regs, debug_status);
+14cf11af6cf608 Paul Mackerras     2005-09-26  1724  }
+03465f899bdac7 Nicholas Piggin    2016-09-16  1725  NOKPROBE_SYMBOL(DebugException);
+172ae2e7f8ff90 Dave Kleikamp      2010-02-08  1726  #endif /* CONFIG_PPC_ADV_DEBUG_REGS */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1727  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1728  #if !defined(CONFIG_TAU_INT)
+14cf11af6cf608 Paul Mackerras     2005-09-26  1729  void TAUException(struct pt_regs *regs)
+14cf11af6cf608 Paul Mackerras     2005-09-26  1730  {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1731  	printk("TAU trap at PC: %lx, MSR: %lx, vector=%lx    %s\n",
+14cf11af6cf608 Paul Mackerras     2005-09-26  1732  	       regs->nip, regs->msr, regs->trap, print_tainted());
+14cf11af6cf608 Paul Mackerras     2005-09-26  1733  }
+14cf11af6cf608 Paul Mackerras     2005-09-26  1734  #endif /* CONFIG_INT_TAU */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1735  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1736  #ifdef CONFIG_ALTIVEC
+dc1c1ca3dcd94c Stephen Rothwell   2005-10-01  1737  void altivec_assist_exception(struct pt_regs *regs)
+14cf11af6cf608 Paul Mackerras     2005-09-26  1738  {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1739  	int err;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1740  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1741  	if (!user_mode(regs)) {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1742  		printk(KERN_EMERG "VMX/Altivec assist exception in kernel mode"
+14cf11af6cf608 Paul Mackerras     2005-09-26  1743  		       " at %lx\n", regs->nip);
+8dad3f9257414f Paul Mackerras     2005-10-06  1744  		die("Kernel VMX/Altivec assist exception", regs, SIGILL);
+14cf11af6cf608 Paul Mackerras     2005-09-26  1745  	}
+14cf11af6cf608 Paul Mackerras     2005-09-26  1746  
+dc1c1ca3dcd94c Stephen Rothwell   2005-10-01  1747  	flush_altivec_to_thread(current);
+dc1c1ca3dcd94c Stephen Rothwell   2005-10-01  1748  
+eecff81d1fcda2 Anton Blanchard    2009-10-27  1749  	PPC_WARN_EMULATED(altivec, regs);
+14cf11af6cf608 Paul Mackerras     2005-09-26  1750  	err = emulate_altivec(regs);
+14cf11af6cf608 Paul Mackerras     2005-09-26  1751  	if (err == 0) {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1752  		regs->nip += 4;		/* skip emulated instruction */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1753  		emulate_single_step(regs);
+14cf11af6cf608 Paul Mackerras     2005-09-26  1754  		return;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1755  	}
+14cf11af6cf608 Paul Mackerras     2005-09-26  1756  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1757  	if (err == -EFAULT) {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1758  		/* got an error reading the instruction */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1759  		_exception(SIGSEGV, regs, SEGV_ACCERR, regs->nip);
+14cf11af6cf608 Paul Mackerras     2005-09-26  1760  	} else {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1761  		/* didn't recognize the instruction */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1762  		/* XXX quick hack for now: set the non-Java bit in the VSCR */
+76462232c21dc0 Christian Dietrich 2011-06-04  1763  		printk_ratelimited(KERN_ERR "Unrecognized altivec instruction "
+14cf11af6cf608 Paul Mackerras     2005-09-26  1764  				   "in %s at %lx\n", current->comm, regs->nip);
+de79f7b9f6f92e Paul Mackerras     2013-09-10  1765  		current->thread.vr_state.vscr.u[3] |= 0x10000;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1766  	}
+14cf11af6cf608 Paul Mackerras     2005-09-26  1767  }
+14cf11af6cf608 Paul Mackerras     2005-09-26  1768  #endif /* CONFIG_ALTIVEC */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1769  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1770  #ifdef CONFIG_FSL_BOOKE
+14cf11af6cf608 Paul Mackerras     2005-09-26 @1771  void CacheLockingException(struct pt_regs *regs, unsigned long address,
+14cf11af6cf608 Paul Mackerras     2005-09-26  1772  			   unsigned long error_code)
+14cf11af6cf608 Paul Mackerras     2005-09-26  1773  {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1774  	/* We treat cache locking instructions from the user
+14cf11af6cf608 Paul Mackerras     2005-09-26  1775  	 * as priv ops, in the future we could try to do
+14cf11af6cf608 Paul Mackerras     2005-09-26  1776  	 * something smarter
+14cf11af6cf608 Paul Mackerras     2005-09-26  1777  	 */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1778  	if (error_code & (ESR_DLK|ESR_ILK))
+14cf11af6cf608 Paul Mackerras     2005-09-26  1779  		_exception(SIGILL, regs, ILL_PRVOPC, regs->nip);
+14cf11af6cf608 Paul Mackerras     2005-09-26  1780  	return;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1781  }
+14cf11af6cf608 Paul Mackerras     2005-09-26  1782  #endif /* CONFIG_FSL_BOOKE */
+14cf11af6cf608 Paul Mackerras     2005-09-26  1783  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1784  #ifdef CONFIG_SPE
+14cf11af6cf608 Paul Mackerras     2005-09-26  1785  void SPEFloatingPointException(struct pt_regs *regs)
+14cf11af6cf608 Paul Mackerras     2005-09-26  1786  {
+6a800f36acd5bf Liu Yu             2008-10-28  1787  	extern int do_spe_mathemu(struct pt_regs *regs);
+14cf11af6cf608 Paul Mackerras     2005-09-26  1788  	unsigned long spefscr;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1789  	int fpexc_mode;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1790  	int code = 0;
+6a800f36acd5bf Liu Yu             2008-10-28  1791  	int err;
+6a800f36acd5bf Liu Yu             2008-10-28  1792  
+685659ee70db0b yu liu             2011-06-14  1793  	flush_spe_to_thread(current);
+14cf11af6cf608 Paul Mackerras     2005-09-26  1794  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1795  	spefscr = current->thread.spefscr;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1796  	fpexc_mode = current->thread.fpexc_mode;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1797  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1798  	if ((spefscr & SPEFSCR_FOVF) && (fpexc_mode & PR_FP_EXC_OVF)) {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1799  		code = FPE_FLTOVF;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1800  	}
+14cf11af6cf608 Paul Mackerras     2005-09-26  1801  	else if ((spefscr & SPEFSCR_FUNF) && (fpexc_mode & PR_FP_EXC_UND)) {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1802  		code = FPE_FLTUND;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1803  	}
+14cf11af6cf608 Paul Mackerras     2005-09-26  1804  	else if ((spefscr & SPEFSCR_FDBZ) && (fpexc_mode & PR_FP_EXC_DIV))
+14cf11af6cf608 Paul Mackerras     2005-09-26  1805  		code = FPE_FLTDIV;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1806  	else if ((spefscr & SPEFSCR_FINV) && (fpexc_mode & PR_FP_EXC_INV)) {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1807  		code = FPE_FLTINV;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1808  	}
+14cf11af6cf608 Paul Mackerras     2005-09-26  1809  	else if ((spefscr & (SPEFSCR_FG | SPEFSCR_FX)) && (fpexc_mode & PR_FP_EXC_RES))
+14cf11af6cf608 Paul Mackerras     2005-09-26  1810  		code = FPE_FLTRES;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1811  
+6a800f36acd5bf Liu Yu             2008-10-28  1812  	err = do_spe_mathemu(regs);
+6a800f36acd5bf Liu Yu             2008-10-28  1813  	if (err == 0) {
+6a800f36acd5bf Liu Yu             2008-10-28  1814  		regs->nip += 4;		/* skip emulated instruction */
+6a800f36acd5bf Liu Yu             2008-10-28  1815  		emulate_single_step(regs);
+6a800f36acd5bf Liu Yu             2008-10-28  1816  		return;
+6a800f36acd5bf Liu Yu             2008-10-28  1817  	}
+14cf11af6cf608 Paul Mackerras     2005-09-26  1818  
+6a800f36acd5bf Liu Yu             2008-10-28  1819  	if (err == -EFAULT) {
+6a800f36acd5bf Liu Yu             2008-10-28  1820  		/* got an error reading the instruction */
+6a800f36acd5bf Liu Yu             2008-10-28  1821  		_exception(SIGSEGV, regs, SEGV_ACCERR, regs->nip);
+6a800f36acd5bf Liu Yu             2008-10-28  1822  	} else if (err == -EINVAL) {
+6a800f36acd5bf Liu Yu             2008-10-28  1823  		/* didn't recognize the instruction */
+6a800f36acd5bf Liu Yu             2008-10-28  1824  		printk(KERN_ERR "unrecognized spe instruction "
+6a800f36acd5bf Liu Yu             2008-10-28  1825  		       "in %s at %lx\n", current->comm, regs->nip);
+6a800f36acd5bf Liu Yu             2008-10-28  1826  	} else {
+14cf11af6cf608 Paul Mackerras     2005-09-26  1827  		_exception(SIGFPE, regs, code, regs->nip);
+6a800f36acd5bf Liu Yu             2008-10-28  1828  	}
+6a800f36acd5bf Liu Yu             2008-10-28  1829  
+14cf11af6cf608 Paul Mackerras     2005-09-26  1830  	return;
+14cf11af6cf608 Paul Mackerras     2005-09-26  1831  }
+6a800f36acd5bf Liu Yu             2008-10-28  1832  
+6a800f36acd5bf Liu Yu             2008-10-28 @1833  void SPEFloatingPointRoundException(struct pt_regs *regs)
+6a800f36acd5bf Liu Yu             2008-10-28  1834  {
+6a800f36acd5bf Liu Yu             2008-10-28  1835  	extern int speround_handler(struct pt_regs *regs);
+6a800f36acd5bf Liu Yu             2008-10-28  1836  	int err;
+6a800f36acd5bf Liu Yu             2008-10-28  1837  
+6a800f36acd5bf Liu Yu             2008-10-28  1838  	preempt_disable();
+6a800f36acd5bf Liu Yu             2008-10-28  1839  	if (regs->msr & MSR_SPE)
+6a800f36acd5bf Liu Yu             2008-10-28  1840  		giveup_spe(current);
+6a800f36acd5bf Liu Yu             2008-10-28  1841  	preempt_enable();
+6a800f36acd5bf Liu Yu             2008-10-28  1842  
+6a800f36acd5bf Liu Yu             2008-10-28  1843  	regs->nip -= 4;
+6a800f36acd5bf Liu Yu             2008-10-28  1844  	err = speround_handler(regs);
+6a800f36acd5bf Liu Yu             2008-10-28  1845  	if (err == 0) {
+6a800f36acd5bf Liu Yu             2008-10-28  1846  		regs->nip += 4;		/* skip emulated instruction */
+6a800f36acd5bf Liu Yu             2008-10-28  1847  		emulate_single_step(regs);
+6a800f36acd5bf Liu Yu             2008-10-28  1848  		return;
+6a800f36acd5bf Liu Yu             2008-10-28  1849  	}
+6a800f36acd5bf Liu Yu             2008-10-28  1850  
+6a800f36acd5bf Liu Yu             2008-10-28  1851  	if (err == -EFAULT) {
+6a800f36acd5bf Liu Yu             2008-10-28  1852  		/* got an error reading the instruction */
+6a800f36acd5bf Liu Yu             2008-10-28  1853  		_exception(SIGSEGV, regs, SEGV_ACCERR, regs->nip);
+6a800f36acd5bf Liu Yu             2008-10-28  1854  	} else if (err == -EINVAL) {
+6a800f36acd5bf Liu Yu             2008-10-28  1855  		/* didn't recognize the instruction */
+6a800f36acd5bf Liu Yu             2008-10-28  1856  		printk(KERN_ERR "unrecognized spe instruction "
+6a800f36acd5bf Liu Yu             2008-10-28  1857  		       "in %s at %lx\n", current->comm, regs->nip);
+6a800f36acd5bf Liu Yu             2008-10-28  1858  	} else {
+6a800f36acd5bf Liu Yu             2008-10-28  1859  		_exception(SIGFPE, regs, 0, regs->nip);
+6a800f36acd5bf Liu Yu             2008-10-28  1860  		return;
+6a800f36acd5bf Liu Yu             2008-10-28  1861  	}
+6a800f36acd5bf Liu Yu             2008-10-28  1862  }
+14cf11af6cf608 Paul Mackerras     2005-09-26  1863  #endif
+dc1c1ca3dcd94c Stephen Rothwell   2005-10-01  1864  
+
+:::::: The code at line 1658 was first introduced by commit
+:::::: 03465f899bdac70d34f6ca447a74d8ae9e284ce5 powerpc: Use kprobe blacklist for exception handlers
+
+:::::: TO: Nicholas Piggin <npiggin@gmail.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

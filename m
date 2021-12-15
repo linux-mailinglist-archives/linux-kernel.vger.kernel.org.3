@@ -2,135 +2,534 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4B1475418
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD3A475412
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240770AbhLOIIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 03:08:23 -0500
-Received: from mga07.intel.com ([134.134.136.100]:41315 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240724AbhLOIIS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 03:08:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639555698; x=1671091698;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FkK9L8kDVwHDZsYVRlbM9Nbi4Cr7jGhF6yDZmNRsECk=;
-  b=Rh5j05ugFeuQHrAJDMQcJ1eo2y5jX86Ft7dRZbPURLeTMH7IIPaNQGZW
-   oin47HN/QSdZO4Uq6jU0VdrPfgn+Z5kp8Nt8polISeYMuXbut8VlqplEI
-   1PIQgLftz5s93vkyFOirS57EjdqsoaZm0aWP1QqAI+iR/oD+rVOxTQOHH
-   dSo79Rsntmpl/2muTejKVuTcB1KoWEBQt0DmSgIDMXD8XneqUoElqOxoX
-   TnPPzoVe+EF5RdM47D2EWVs3uuFlrwd6yAkTneVHDbp74QOwZL9t8naRt
-   VRxJWOXjDvlPpthemoLkfhvVY53R2Hk45mdyMrMFUEhSibsa5BBmxKcq1
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="302550188"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="302550188"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 00:06:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="505699450"
-Received: from ahunter-desktop.fi.intel.com ([10.237.72.76])
-  by orsmga007.jf.intel.com with ESMTP; 15 Dec 2021 00:06:45 -0800
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: [PATCH 3/3] perf scripts python: intel-pt-events.py: Fix printing of switch events
-Date:   Wed, 15 Dec 2021 10:06:36 +0200
-Message-Id: <20211215080636.149562-4-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211215080636.149562-1-adrian.hunter@intel.com>
-References: <20211215080636.149562-1-adrian.hunter@intel.com>
+        id S236106AbhLOIHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 03:07:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233510AbhLOIHC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 03:07:02 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354E5C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 00:07:02 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id u17so36702655wrt.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 00:07:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=N22KudqKREDegkjdj4F9f1HFXO0F/sP2MwNwhFRed5g=;
+        b=Z9egFeR4K6qfEDe6DkTb5qVZgkv8pS30i5X34kTSOTSPt5d12Cckv3dQMEyXfn8r1W
+         z87jHMZ9ToQ5rhaFZZ/Vtg5kZfPasv8B5da9GOcqQKM74/wUWgkskDX18GW84EX9Zha8
+         +6/CMW72ALO50Mdzv3sba6pAd4/wF8+R6iGO511ZvPABzL8Dk/BILRNw+rENfu1lXHhu
+         Gwjivx/McMg+jU537NweOzYgpsgWDLIbYF1tfQd4EXQdfQ4jR4z3c8Lgtlv456NyqqTd
+         WGkjtlDklxzxsq9/ojdlcHk3F40Nmd/i1yZzCK/hE/nQEUNQIaZ0avgpQWkxKCldZalS
+         c1hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=N22KudqKREDegkjdj4F9f1HFXO0F/sP2MwNwhFRed5g=;
+        b=ZaWAMzE0+QUJ4iYJi+9ax6T0UUVc6hXqibYZtTVoNttIiCr7SkjoG5ZI/b/csDZ/I6
+         3WcgMwzvZQEtDwN/pTS6taxtThupWGpue132ZMBj52boP9yqvPm2xF7W2or+1YRkQvZu
+         jNxoIAQQKX/dXCE1RKX56S75YjBqgIJz0OF0k4m9Vdh0DbIEjpvsgfioGlQjuF85RCKP
+         RGiTnCsnfCSvQ/pW8qDsiJvFX32NJK/c+6/dpRO6fiygaZvjjR4za4B0QzFkgPdhQ6oz
+         TXQZs+IdSnQYANKF1Z7SSL2rAtQ0Fe2aDZuzArWpABoQhpMjiJGo+96i+/7zE1QS21uT
+         34tg==
+X-Gm-Message-State: AOAM5322VT47gcPMkp1YQcxPKnNJo59yQky++9b5j2j80GFV7tCu8CPP
+        9UiSxXDnj1Zl0QM0eehjZRukhg==
+X-Google-Smtp-Source: ABdhPJyyn7SaBeog/YAbcmR6aLl1IrMpLOIeFqEtnrnTbm8hcGUD1nLSuDJa/9IPrkY7KEG+XkzrCg==
+X-Received: by 2002:a05:6000:381:: with SMTP id u1mr3214221wrf.383.1639555620510;
+        Wed, 15 Dec 2021 00:07:00 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id w25sm1671234wmk.20.2021.12.15.00.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 00:07:00 -0800 (PST)
+Date:   Wed, 15 Dec 2021 08:06:58 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        syzbot <syzbot+9671693590ef5aad8953@syzkaller.appspotmail.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [syzbot] KASAN: stack-out-of-bounds Read in iov_iter_revert
+Message-ID: <YbmiIpQKfrLClsKV@google.com>
+References: <6f7d4c1d-f923-3ab1-c525-45316b973c72@gmail.com>
+ <00000000000047f3b805c962affb@google.com>
+ <YYLAYvFU+9cnu+4H@google.com>
+ <0b4a5ff8-12e5-3cc7-8971-49e576444c9a@gmail.com>
+ <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
+ <YYp4rC4M/oh8fgr7@google.com>
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <YYp4rC4M/oh8fgr7@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The intel-pt-events.py script displays only the last of consecutive switch
-statements but that may not be the last switch event for the CPU. Fix by
-keeping a dictionary of last context switch keyed by CPU, and make it
-possible to see all switch events by adding option --all-switch-events.
+On Tue, 09 Nov 2021, Lee Jones wrote:
 
-Fixes: a92bf335fd82e ("perf scripts python: intel-pt-events.py: Add branches to script")
-Cc: stable@vger.kernel.org
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- tools/perf/scripts/python/intel-pt-events.py | 23 +++++++++++---------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+> On Mon, 08 Nov 2021, Jens Axboe wrote:
+> > On 11/8/21 8:29 AM, Pavel Begunkov wrote:
+> > > On 11/3/21 17:01, Lee Jones wrote:
+> > >> Good afternoon Pavel,
+> > >>
+> > >>> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> > >>>
+> > >>> Reported-and-tested-by: syzbot+9671693590ef5aad8953@syzkaller.appspotmail.com
+> > >>>
+> > >>> Tested on:
+> > >>>
+> > >>> commit:         bff2c168 io_uring: don't retry with truncated iter
+> > >>> git tree:       https://github.com/isilence/linux.git truncate
+> > >>> kernel config:  https://syzkaller.appspot.com/x/.config?x=730106bfb5bf8ace
+> > >>> dashboard link: https://syzkaller.appspot.com/bug?extid=9671693590ef5aad8953
+> > >>> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.1
+> > >>>
+> > >>> Note: testing is done by a robot and is best-effort only.
+> > >>
+> > >> As you can see in the 'dashboard link' above this bug also affects
+> > >> android-5-10 which is currently based on v5.10.75.
+> > >>
+> > >> I see that the back-port of this patch failed in v5.10.y:
+> > >>
+> > >>    https://lore.kernel.org/stable/163152589512611@kroah.com/
+> > >>
+> > >> And after solving the build-error by back-porting both:
+> > >>
+> > >>    2112ff5ce0c11 iov_iter: track truncated size
+> > >>    89c2b3b749182 io_uring: reexpand under-reexpanded iters
+> > >>
+> > >> I now see execution tripping the WARN() in iov_iter_revert():
+> > >>
+> > >>    if (WARN_ON(unroll > MAX_RW_COUNT))
+> > >>        return
+> > >>
+> > >> Am I missing any additional patches required to fix stable/v5.10.y?
+> > > 
+> > > Is it the same syz test? There was a couple more patches for
+> > > IORING_SETUP_IOPOLL, but strange if that's not the case.
+> > > 
+> > > 
+> > > fwiw, Jens decided to replace it with another mechanism shortly
+> > > after, so it may be a better idea to backport those. Jens,
+> > > what do you think?
+> > > 
+> > > 
+> > > commit 8fb0f47a9d7acf620d0fd97831b69da9bc5e22ed
+> > > Author: Jens Axboe <axboe@kernel.dk>
+> > > Date:   Fri Sep 10 11:18:36 2021 -0600
+> > > 
+> > >      iov_iter: add helper to save iov_iter state
+> > > 
+> > > commit cd65869512ab5668a5d16f789bc4da1319c435c4
+> > > Author: Jens Axboe <axboe@kernel.dk>
+> > > Date:   Fri Sep 10 11:19:14 2021 -0600
+> > > 
+> > >      io_uring: use iov_iter state save/restore helpers
+> > 
+> > Yes, I think backporting based on the save/restore setup is the
+> > sanest way by far.
+> 
+> Would you be kind enough to attempt to send these patches to Stable?
+> 
+> When I tried to back-port them, the second one gave me trouble.  And
+> without the in depth knowledge of the driver/subsystem that you guys
+> have, I found it almost impossible to resolve all of the conflicts:
 
-diff --git a/tools/perf/scripts/python/intel-pt-events.py b/tools/perf/scripts/python/intel-pt-events.py
-index 1d3a189a9a54..66452a8ec358 100644
---- a/tools/perf/scripts/python/intel-pt-events.py
-+++ b/tools/perf/scripts/python/intel-pt-events.py
-@@ -32,8 +32,7 @@ try:
- except:
- 	broken_pipe_exception = IOError
- 
--glb_switch_str		= None
--glb_switch_printed	= True
-+glb_switch_str		= {}
- glb_insn		= False
- glb_disassembler	= None
- glb_src			= False
-@@ -70,6 +69,7 @@ def trace_begin():
- 	ap = argparse.ArgumentParser(usage = "", add_help = False)
- 	ap.add_argument("--insn-trace", action='store_true')
- 	ap.add_argument("--src-trace", action='store_true')
-+	ap.add_argument("--all-switch-events", action='store_true')
- 	global glb_args
- 	global glb_insn
- 	global glb_src
-@@ -256,10 +256,6 @@ def print_srccode(comm, param_dict, sample, symbol, dso, with_insn):
- 	print(start_str, src_str)
- 
- def do_process_event(param_dict):
--	global glb_switch_printed
--	if not glb_switch_printed:
--		print(glb_switch_str)
--		glb_switch_printed = True
- 	event_attr = param_dict["attr"]
- 	sample	   = param_dict["sample"]
- 	raw_buf	   = param_dict["raw_buf"]
-@@ -274,6 +270,11 @@ def do_process_event(param_dict):
- 	dso    = get_optional(param_dict, "dso")
- 	symbol = get_optional(param_dict, "symbol")
- 
-+	cpu = sample["cpu"]
-+	if cpu in glb_switch_str:
-+		print(glb_switch_str[cpu])
-+		del glb_switch_str[cpu]
-+
- 	if name[0:12] == "instructions":
- 		if glb_src:
- 			print_srccode(comm, param_dict, sample, symbol, dso, True)
-@@ -336,8 +337,6 @@ def auxtrace_error(typ, code, cpu, pid, tid, ip, ts, msg, cpumode, *x):
- 		sys.exit(1)
- 
- def context_switch(ts, cpu, pid, tid, np_pid, np_tid, machine_pid, out, out_preempt, *x):
--	global glb_switch_printed
--	global glb_switch_str
- 	if out:
- 		out_str = "Switch out "
- 	else:
-@@ -350,6 +349,10 @@ def context_switch(ts, cpu, pid, tid, np_pid, np_tid, machine_pid, out, out_pree
- 		machine_str = ""
- 	else:
- 		machine_str = "machine PID %d" % machine_pid
--	glb_switch_str = "%16s %5d/%-5d [%03u] %9u.%09u %5d/%-5d %s %s" % \
-+	switch_str = "%16s %5d/%-5d [%03u] %9u.%09u %5d/%-5d %s %s" % \
- 		(out_str, pid, tid, cpu, ts / 1000000000, ts %1000000000, np_pid, np_tid, machine_str, preempt_str)
--	glb_switch_printed = False
-+	if glb_args.all_switch_events:
-+		print(switch_str);
-+	else:
-+		global glb_switch_str
-+		glb_switch_str[cpu] = switch_str
+Any movement on this chaps?
+
+Not sure I am able to do this back-port without your help.
+
+> diff --cc fs/io_uring.c
+> index 104dff9c71314,25bda8a5a4e5d..0000000000000
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@@ -2567,57 -2603,20 +2568,64 @@@ static void io_complete_rw_common(struc
+>   }
+>   
+>   #ifdef CONFIG_BLOCK
+>  -static bool io_resubmit_prep(struct io_kiocb *req)
+>  +static bool io_resubmit_prep(struct io_kiocb *req, int error)
+>   {
+>  -	struct io_async_rw *rw = req->async_data;
+>  +	struct iovec inline_vecs[UIO_FASTIOV], *iovec = inline_vecs;
+>  +	ssize_t ret = -ECANCELED;
+>  +	struct iov_iter iter;
+>  +	int rw;
+>  +
+> ++<<<<<<< HEAD
+>  +	if (error) {
+>  +		ret = error;
+>  +		goto end_req;
+>  +	}
+>  +
+>  +	switch (req->opcode) {
+>  +	case IORING_OP_READV:
+>  +	case IORING_OP_READ_FIXED:
+>  +	case IORING_OP_READ:
+>  +		rw = READ;
+>  +		break;
+>  +	case IORING_OP_WRITEV:
+>  +	case IORING_OP_WRITE_FIXED:
+>  +	case IORING_OP_WRITE:
+>  +		rw = WRITE;
+>  +		break;
+>  +	default:
+>  +		printk_once(KERN_WARNING "io_uring: bad opcode in resubmit %d\n",
+>  +				req->opcode);
+>  +		goto end_req;
+>  +	}
+>   
+>  +	if (!req->async_data) {
+>  +		ret = io_import_iovec(rw, req, &iovec, &iter, false);
+>  +		if (ret < 0)
+>  +			goto end_req;
+>  +		ret = io_setup_async_rw(req, iovec, inline_vecs, &iter, false);
+>  +		if (!ret)
+>  +			return true;
+>  +		kfree(iovec);
+>  +	} else {
+>  +		return true;
+>  +	}
+>  +end_req:
+>  +	req_set_fail_links(req);
+>  +	return false;
+> ++=======
+> + 	if (!rw)
+> + 		return !io_req_prep_async(req);
+> + 	iov_iter_restore(&rw->iter, &rw->iter_state);
+> + 	return true;
+> ++>>>>>>> cd65869512ab5 (io_uring: use iov_iter state save/restore helpers)
+>   }
+>  +#endif
+>   
+>  -static bool io_rw_should_reissue(struct io_kiocb *req)
+>  +static bool io_rw_reissue(struct io_kiocb *req, long res)
+>   {
+>  +#ifdef CONFIG_BLOCK
+>   	umode_t mode = file_inode(req->file)->i_mode;
+>  -	struct io_ring_ctx *ctx = req->ctx;
+>  +	int ret;
+>   
+>   	if (!S_ISBLK(mode) && !S_ISREG(mode))
+>   		return false;
+> @@@ -3268,13 -3307,20 +3276,23 @@@ static int io_setup_async_rw(struct io_
+>   			     const struct iovec *fast_iov,
+>   			     struct iov_iter *iter, bool force)
+>   {
+>  -	if (!force && !io_op_defs[req->opcode].needs_async_setup)
+>  +	if (!force && !io_op_defs[req->opcode].needs_async_data)
+>   		return 0;
+>   	if (!req->async_data) {
+> ++<<<<<<< HEAD
+>  +		if (__io_alloc_async_data(req))
+> ++=======
+> + 		struct io_async_rw *iorw;
+> + 
+> + 		if (io_alloc_async_data(req)) {
+> + 			kfree(iovec);
+> ++>>>>>>> cd65869512ab5 (io_uring: use iov_iter state save/restore helpers)
+>   			return -ENOMEM;
+>  -		}
+>   
+>   		io_req_map_rw(req, iovec, fast_iov, iter);
+> + 		iorw = req->async_data;
+> + 		/* we've copied and mapped the iter, ensure state is saved */
+> + 		iov_iter_save_state(&iorw->iter, &iorw->iter_state);
+>   	}
+>   	return 0;
+>   }
+> @@@ -3417,18 -3443,28 +3436,43 @@@ static int io_read(struct io_kiocb *req
+>   	struct kiocb *kiocb = &req->rw.kiocb;
+>   	struct iov_iter __iter, *iter = &__iter;
+>   	struct io_async_rw *rw = req->async_data;
+> ++<<<<<<< HEAD
+>  +	ssize_t io_size, ret, ret2;
+>  +	bool no_async;
+> ++=======
+> + 	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
+> + 	struct iov_iter_state __state, *state;
+> + 	ssize_t ret, ret2;
+> ++>>>>>>> cd65869512ab5 (io_uring: use iov_iter state save/restore helpers)
+>   
+>  -	if (rw) {
+>  +	if (rw)
+>   		iter = &rw->iter;
+> ++<<<<<<< HEAD
+>  +
+>  +	ret = io_import_iovec(READ, req, &iovec, iter, !force_nonblock);
+>  +	if (ret < 0)
+>  +		return ret;
+>  +	io_size = iov_iter_count(iter);
+>  +	req->result = io_size;
+>  +	ret = 0;
+> ++=======
+> + 		state = &rw->iter_state;
+> + 		/*
+> + 		 * We come here from an earlier attempt, restore our state to
+> + 		 * match in case it doesn't. It's cheap enough that we don't
+> + 		 * need to make this conditional.
+> + 		 */
+> + 		iov_iter_restore(iter, state);
+> + 		iovec = NULL;
+> + 	} else {
+> + 		ret = io_import_iovec(READ, req, &iovec, iter, !force_nonblock);
+> + 		if (ret < 0)
+> + 			return ret;
+> + 		state = &__state;
+> + 		iov_iter_save_state(iter, state);
+> + 	}
+> + 	req->result = iov_iter_count(iter);
+> ++>>>>>>> cd65869512ab5 (io_uring: use iov_iter state save/restore helpers)
+>   
+>   	/* Ensure we clear previously set non-block flag */
+>   	if (!force_nonblock)
+> @@@ -3436,15 -3472,17 +3480,23 @@@
+>   	else
+>   		kiocb->ki_flags |= IOCB_NOWAIT;
+>   
+>  +
+>   	/* If the file doesn't support async, just async punt */
+>  -	if (force_nonblock && !io_file_supports_nowait(req, READ)) {
+>  -		ret = io_setup_async_rw(req, iovec, inline_vecs, iter, true);
+>  -		return ret ?: -EAGAIN;
+>  -	}
+>  +	no_async = force_nonblock && !io_file_supports_async(req->file, READ);
+>  +	if (no_async)
+>  +		goto copy_iov;
+>   
+> ++<<<<<<< HEAD
+>  +	ret = rw_verify_area(READ, req->file, io_kiocb_ppos(kiocb), io_size);
+>  +	if (unlikely(ret))
+>  +		goto out_free;
+> ++=======
+> + 	ret = rw_verify_area(READ, req->file, io_kiocb_ppos(kiocb), req->result);
+> + 	if (unlikely(ret)) {
+> + 		kfree(iovec);
+> + 		return ret;
+> + 	}
+> ++>>>>>>> cd65869512ab5 (io_uring: use iov_iter state save/restore helpers)
+>   
+>   	ret = io_iter_do_read(req, iter);
+>   
+> @@@ -3457,68 -3491,78 +3509,133 @@@
+>   		/* IOPOLL retry should happen for io-wq threads */
+>   		if (!force_nonblock && !(req->ctx->flags & IORING_SETUP_IOPOLL))
+>   			goto done;
+>  -		/* no retry on NONBLOCK nor RWF_NOWAIT */
+>  -		if (req->flags & REQ_F_NOWAIT)
+>  +		/* no retry on NONBLOCK marked file */
+>  +		if (req->file->f_flags & O_NONBLOCK)
+>   			goto done;
+> ++<<<<<<< HEAD
+>  +		/* some cases will consume bytes even on error returns */
+>  +		iov_iter_revert(iter, io_size - iov_iter_count(iter));
+>  +		ret = 0;
+>  +		goto copy_iov;
+>  +	} else if (ret < 0) {
+>  +		/* make sure -ERESTARTSYS -> -EINTR is done */
+>  +		goto done;
+>  +	}
+>  +
+>  +	/* read it all, or we did blocking attempt. no retry. */
+>  +	if (!iov_iter_count(iter) || !force_nonblock ||
+>  +	    (req->file->f_flags & O_NONBLOCK) || !(req->flags & REQ_F_ISREG))
+>  +		goto done;
+> ++=======
+> + 		ret = 0;
+> + 	} else if (ret == -EIOCBQUEUED) {
+> + 		goto out_free;
+> + 	} else if (ret <= 0 || ret == req->result || !force_nonblock ||
+> + 		   (req->flags & REQ_F_NOWAIT) || !need_read_all(req)) {
+> + 		/* read all, failed, already did sync or don't want to retry */
+> + 		goto done;
+> + 	}
+> + 
+> + 	/*
+> + 	 * Don't depend on the iter state matching what was consumed, or being
+> + 	 * untouched in case of error. Restore it and we'll advance it
+> + 	 * manually if we need to.
+> + 	 */
+> + 	iov_iter_restore(iter, state);
+> + 
+> + 	ret2 = io_setup_async_rw(req, iovec, inline_vecs, iter, true);
+> + 	if (ret2)
+> + 		return ret2;
+> ++>>>>>>> cd65869512ab5 (io_uring: use iov_iter state save/restore helpers)
+>   
+>  -	iovec = NULL;
+>  +	io_size -= ret;
+>  +copy_iov:
+>  +	ret2 = io_setup_async_rw(req, iovec, inline_vecs, iter, true);
+>  +	if (ret2) {
+>  +		ret = ret2;
+>  +		goto out_free;
+>  +	}
+>  +	if (no_async)
+>  +		return -EAGAIN;
+>   	rw = req->async_data;
+> ++<<<<<<< HEAD
+>  +	/* it's copied and will be cleaned with ->io */
+>  +	iovec = NULL;
+>  +	/* now use our persistent iterator, if we aren't already */
+>  +	iter = &rw->iter;
+>  +retry:
+>  +	rw->bytes_done += ret;
+>  +	/* if we can retry, do so with the callbacks armed */
+>  +	if (!io_rw_should_retry(req)) {
+>  +		kiocb->ki_flags &= ~IOCB_WAITQ;
+>  +		return -EAGAIN;
+>  +	}
+>  +
+>   	/*
+>  -	 * Now use our persistent iterator and state, if we aren't already.
+>  -	 * We've restored and mapped the iter to match.
+>  +	 * Now retry read with the IOCB_WAITQ parts set in the iocb. If we
+>  +	 * get -EIOCBQUEUED, then we'll get a notification when the desired
+>  +	 * page gets unlocked. We can also get a partial read here, and if we
+>  +	 * do, then just retry at the new offset.
+>   	 */
+>  -	if (iter != &rw->iter) {
+>  -		iter = &rw->iter;
+>  +	ret = io_iter_do_read(req, iter);
+>  +	if (ret == -EIOCBQUEUED) {
+>  +		ret = 0;
+>  +		goto out_free;
+>  +	} else if (ret > 0 && ret < io_size) {
+>  +		/* we got some bytes, but not all. retry. */
+>  +		kiocb->ki_flags &= ~IOCB_WAITQ;
+>  +		goto retry;
+>  +	}
+> ++=======
+> ++	/*
+> ++	 * Now use our persistent iterator and state, if we aren't already.
+> ++	 * We've restored and mapped the iter to match.
+> ++	 */
+> ++	if (iter != &rw->iter) {
+> ++		iter = &rw->iter;
+> + 		state = &rw->iter_state;
+> + 	}
+> + 
+> + 	do {
+> + 		/*
+> + 		 * We end up here because of a partial read, either from
+> + 		 * above or inside this loop. Advance the iter by the bytes
+> + 		 * that were consumed.
+> + 		 */
+> + 		iov_iter_advance(iter, ret);
+> + 		if (!iov_iter_count(iter))
+> + 			break;
+> + 		rw->bytes_done += ret;
+> + 		iov_iter_save_state(iter, state);
+> + 
+> + 		/* if we can retry, do so with the callbacks armed */
+> + 		if (!io_rw_should_retry(req)) {
+> + 			kiocb->ki_flags &= ~IOCB_WAITQ;
+> + 			return -EAGAIN;
+> + 		}
+> + 
+> + 		/*
+> + 		 * Now retry read with the IOCB_WAITQ parts set in the iocb. If
+> + 		 * we get -EIOCBQUEUED, then we'll get a notification when the
+> + 		 * desired page gets unlocked. We can also get a partial read
+> + 		 * here, and if we do, then just retry at the new offset.
+> + 		 */
+> + 		ret = io_iter_do_read(req, iter);
+> + 		if (ret == -EIOCBQUEUED)
+> + 			return 0;
+> + 		/* we got some bytes, but not all. retry. */
+> + 		kiocb->ki_flags &= ~IOCB_WAITQ;
+> + 		iov_iter_restore(iter, state);
+> + 	} while (ret > 0);
+> ++>>>>>>> cd65869512ab5 (io_uring: use iov_iter state save/restore helpers)
+>   done:
+>  -	kiocb_done(kiocb, ret, issue_flags);
+>  +	kiocb_done(kiocb, ret, cs);
+>  +	ret = 0;
+>   out_free:
+>  -	/* it's faster to check here then delegate to kfree */
+>  +	/* it's reportedly faster than delegating the null check to kfree() */
+>   	if (iovec)
+>   		kfree(iovec);
+>  -	return 0;
+>  +	return ret;
+>   }
+>   
+>   static int io_write_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+> @@@ -3545,16 -3578,24 +3662,37 @@@ static int io_write(struct io_kiocb *re
+>   	struct kiocb *kiocb = &req->rw.kiocb;
+>   	struct iov_iter __iter, *iter = &__iter;
+>   	struct io_async_rw *rw = req->async_data;
+> ++<<<<<<< HEAD
+>  +	ssize_t ret, ret2, io_size;
+> ++=======
+> + 	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
+> + 	struct iov_iter_state __state, *state;
+> + 	ssize_t ret, ret2;
+> ++>>>>>>> cd65869512ab5 (io_uring: use iov_iter state save/restore helpers)
+>   
+>  -	if (rw) {
+>  +	if (rw)
+>   		iter = &rw->iter;
+> ++<<<<<<< HEAD
+>  +
+>  +	ret = io_import_iovec(WRITE, req, &iovec, iter, !force_nonblock);
+>  +	if (ret < 0)
+>  +		return ret;
+>  +	io_size = iov_iter_count(iter);
+>  +	req->result = io_size;
+> ++=======
+> + 		state = &rw->iter_state;
+> + 		iov_iter_restore(iter, state);
+> + 		iovec = NULL;
+> + 	} else {
+> + 		ret = io_import_iovec(WRITE, req, &iovec, iter, !force_nonblock);
+> + 		if (ret < 0)
+> + 			return ret;
+> + 		state = &__state;
+> + 		iov_iter_save_state(iter, state);
+> + 	}
+> + 	req->result = iov_iter_count(iter);
+> + 	ret2 = 0;
+> ++>>>>>>> cd65869512ab5 (io_uring: use iov_iter state save/restore helpers)
+>   
+>   	/* Ensure we clear previously set non-block flag */
+>   	if (!force_nonblock)
+> @@@ -3610,14 -3656,14 +3748,20 @@@
+>   		if ((req->ctx->flags & IORING_SETUP_IOPOLL) && ret2 == -EAGAIN)
+>   			goto copy_iov;
+>   done:
+>  -		kiocb_done(kiocb, ret2, issue_flags);
+>  +		kiocb_done(kiocb, ret2, cs);
+>   	} else {
+>   copy_iov:
+> ++<<<<<<< HEAD
+>  +		/* some cases will consume bytes even on error returns */
+>  +		iov_iter_revert(iter, io_size - iov_iter_count(iter));
+> ++=======
+> + 		iov_iter_restore(iter, state);
+> + 		if (ret2 > 0)
+> + 			iov_iter_advance(iter, ret2);
+> ++>>>>>>> cd65869512ab5 (io_uring: use iov_iter state save/restore helpers)
+>   		ret = io_setup_async_rw(req, iovec, inline_vecs, iter, false);
+>  -		return ret ?: -EAGAIN;
+>  +		if (!ret)
+>  +			return -EAGAIN;
+>   	}
+>   out_free:
+>   	/* it's reportedly faster than delegating the null check to kfree() */
+> 
+
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

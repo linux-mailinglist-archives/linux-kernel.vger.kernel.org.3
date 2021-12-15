@@ -2,87 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4866A476566
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D931847656A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbhLOWHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 17:07:45 -0500
-Received: from ale.deltatee.com ([204.191.154.188]:35196 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbhLOWHo (ORCPT
+        id S231214AbhLOWH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 17:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229629AbhLOWHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 17:07:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=YPLObzydNABXK47I4VoZKcpNYeXLBeSKX7HWc2tOlYU=; b=fnhQG6MQEZFmVPPa8xA9WKMEur
-        nJCrxkWoyf47BzVGcxG0jKFN7skgrxnhG+NMTdNMBlGAFenHl2RDv1pobXf1RLxWLdllnnkjKLAQF
-        oSyFne0S4sNcKeeA/0l67D0S8mVUAIPa+NeFFu9fnNR7UdafHoRZb91ebL6w5efHvByU1yDrVmkwT
-        qXNgG9H+PsZ1u3JWBY5oYTsrQ0AlXRlMm3nfcwqzUdD+Is9hR7LW14AcUEKt2xBtp7/F05Q9XF3qG
-        yol8KJfcQlq8vv3i2zKx7IJv2w2YIIIXTiFq3i0+U3Ia/29d2toql5M6a2sNdjkuU061lc1A3T20H
-        xmAsLEYg==;
-Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1mxcR4-005g54-Pt; Wed, 15 Dec 2021 15:07:43 -0700
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>
-References: <20211215220433.GA716667@bhelgaas>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <137ba7be-b53f-eb4b-d456-2e53306d4105@deltatee.com>
-Date:   Wed, 15 Dec 2021 15:07:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 15 Dec 2021 17:07:55 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2FEC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:07:55 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id p19so23381055qtw.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:07:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=s9ph+hPb4AnD3MZGi/I9+wvXsLJ+pA2TlSve7ohKzlg=;
+        b=j0dGpBC7vI8/UddeVghIOmCTb18fj23Y0bvJmOL3zIosGtr7VASQEBbfNTvEVr++ye
+         a7Bn+Y4P1P1SbSo1oV+hq1ty7T1PrmEoDFOy/D98nS/eqrw7GcB43hntkJxpij6rsn94
+         uiepjqeX3EQez69h0ecxdSLwKT8ak0GU6T/M5tR5Cn+etr0Gr1711IDdaR/3YGw1fO2l
+         ZNEhdKg2w5xT3/xgwsGxnaq5FG3rzYCMcN0tSM/wVPLrA+CHrALjGjud/S6KCixDW9HR
+         qYGj2axQ4xEpDTNLtakY6uloJLJzelG96lIwGxC/AUhZrmkhv2vPBnNN4LhccEE+3Utu
+         3EvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=s9ph+hPb4AnD3MZGi/I9+wvXsLJ+pA2TlSve7ohKzlg=;
+        b=b7gbxn5Vs1stu7z7MecZhLh8Iwv3EFGE5bi6+A1fybZTNH4PRlxQam8D026Z2S51nk
+         tqoFDCNyP7O0i7Mu3d4eH2y2NDt5bQBdn58+Vgg+t6BuwD86rCpY9bJskYAvQISa4mGl
+         6jU0/YcN4pbOH8FJWl7c855hicZCaludjxEqi1/SGtaCdlj2M25x2sZOBqvoqas7/AHP
+         mpUUbO8++1jzzSoVIwD9vUL87w2X0DRbyynG23qI2/BvHuKoh0VmxUgo7O5MALv9ZXWB
+         VqDSvrhUnHHIbIvFv6bDbnjEy2hVhPiZfgzPGzpU8iDspBrDb+QdLz7ugWhmOrDmi+Un
+         QkLA==
+X-Gm-Message-State: AOAM532UonEmblaCrKVL4tPzL8WrvhW24Kri1hhWgLC2KBLKAIjzjJ48
+        uZUz/0lT8o0dT93C/452Sbn/+Qze+nG8zhAanuKccg==
+X-Google-Smtp-Source: ABdhPJwhv+ujTitjbYs7vUs8AvA5UBtLp0JJyGcrvg86ld4+8fS0QjFgRBxSH9wdD55G7ub/LVzGkcw5bdwwbLbBQTQ=
+X-Received: by 2002:a05:622a:1c6:: with SMTP id t6mr14249037qtw.211.1639606073982;
+ Wed, 15 Dec 2021 14:07:53 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211215220433.GA716667@bhelgaas>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.73.163.230
-X-SA-Exim-Rcpt-To: edumazet@google.com, kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, bhelgaas@google.com, christophe.jaillet@wanadoo.fr, helgaas@kernel.org
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] PCI/P2PDMA: Save a few cycles in 'pci_alloc_p2pmem()'
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
+ <Yboc/G18R1Vi1eQV@google.com> <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
+ <Ybom69OyOjsR7kmZ@google.com> <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
+ <Yboy2WwaREgo95dy@google.com> <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
+ <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com> <92f69969-42dc-204a-4138-16fdaaebb78d@gmail.com>
+In-Reply-To: <92f69969-42dc-204a-4138-16fdaaebb78d@gmail.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Wed, 15 Dec 2021 14:07:43 -0800
+Message-ID: <CAKH8qBuZxBen871AWDK1eDcxJenK7UkSQCZQsHCPhk6nk9e=Ng@mail.gmail.com>
+Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 15, 2021 at 11:55 AM Pavel Begunkov <asml.silence@gmail.com> wr=
+ote:
+>
+> On 12/15/21 19:15, Stanislav Fomichev wrote:
+> > On Wed, Dec 15, 2021 at 10:54 AM Pavel Begunkov <asml.silence@gmail.com=
+> wrote:
+> >>
+> >> On 12/15/21 18:24, sdf@google.com wrote:
+> >>> On 12/15, Pavel Begunkov wrote:
+> >>>> On 12/15/21 17:33, sdf@google.com wrote:
+> >>>>> On 12/15, Pavel Begunkov wrote:
+> >>>>>> On 12/15/21 16:51, sdf@google.com wrote:
+> >>>>>>> On 12/15, Pavel Begunkov wrote:
+> >>>>>>>> =EF=BF=BD /* Wrappers for __cgroup_bpf_run_filter_skb() guarded =
+by cgroup_bpf_enabled. */
+> >>>>>>>> =EF=BF=BD #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+ \
+> >>>>>>>> =EF=BF=BD ({=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+=EF=BF=BD=EF=BF=BD \
+> >>>>>>>> =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD int __ret =3D 0;=
+=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
+> >>>>>>>> -=EF=BF=BD=EF=BF=BD=EF=BF=BD if (cgroup_bpf_enabled(CGROUP_INET_=
+INGRESS))=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
+> >>>>>>>> +=EF=BF=BD=EF=BF=BD=EF=BF=BD if (cgroup_bpf_enabled(CGROUP_INET_=
+INGRESS) && sk &&=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
+> >>>>>>>> +=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+ CGROUP_BPF_TYPE_ENABLED((sk), CGROUP_INET_INGRESS))=EF=BF=BD=EF=BF=BD=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
+> >>>>>>>
+> >>>>>>> Why not add this __cgroup_bpf_run_filter_skb check to
+> >>>>>>> __cgroup_bpf_run_filter_skb? Result of sock_cgroup_ptr() is alrea=
+dy there
+> >>>>>>> and you can use it. Maybe move the things around if you want
+> >>>>>>> it to happen earlier.
+> >>>>>
+> >>>>>> For inlining. Just wanted to get it done right, otherwise I'll lik=
+ely be
+> >>>>>> returning to it back in a few months complaining that I see measur=
+able
+> >>>>>> overhead from the function call :)
+> >>>>>
+> >>>>> Do you expect that direct call to bring any visible overhead?
+> >>>>> Would be nice to compare that inlined case vs
+> >>>>> __cgroup_bpf_prog_array_is_empty inside of __cgroup_bpf_run_filter_=
+skb
+> >>>>> while you're at it (plus move offset initialization down?).
+> >>>
+> >>>> Sorry but that would be waste of time. I naively hope it will be vis=
+ible
+> >>>> with net at some moment (if not already), that's how it was with io_=
+uring,
+> >>>> that's what I see in the block layer. And in anyway, if just one inl=
+ined
+> >>>> won't make a difference, then 10 will.
+> >>>
+> >>> I can probably do more experiments on my side once your patch is
+> >>> accepted. I'm mostly concerned with getsockopt(TCP_ZEROCOPY_RECEIVE).
+> >>> If you claim there is visible overhead for a direct call then there
+> >>> should be visible benefit to using CGROUP_BPF_TYPE_ENABLED there as
+> >>> well.
+> >>
+> >> Interesting, sounds getsockopt might be performance sensitive to
+> >> someone.
+> >>
+> >> FWIW, I forgot to mention that for testing tx I'm using io_uring
+> >> (for both zc and not) with good submission batching.
+> >
+> > Yeah, last time I saw 2-3% as well, but it was due to kmalloc, see
+> > more details in 9cacf81f8161, it was pretty visible under perf.
+> > That's why I'm a bit skeptical of your claims of direct calls being
+> > somehow visible in these 2-3% (even skb pulls/pushes are not 2-3%?).
+>
+> migrate_disable/enable together were taking somewhat in-between
+> 1% and 1.5% in profiling, don't remember the exact number. The rest
+> should be from rcu_read_lock/unlock() in BPF_PROG_RUN_ARRAY_CG_FLAGS()
+> and other extra bits on the way.
 
+You probably have a preemptiple kernel and preemptible rcu which most
+likely explains why you see the overhead and I won't (non-preemptible
+kernel in our env, rcu_read_lock is essentially a nop, just a compiler
+barrier).
 
-On 2021-12-15 3:04 p.m., Bjorn Helgaas wrote:
-> On Wed, Dec 15, 2021 at 02:51:51PM -0700, Logan Gunthorpe wrote:
->> Largely looks good to me.
->>
->> The one missing file is:
->>
->> Documentation/driver-api/pci/p2pdma.rst
->>
->> Do you want me to put that in a patch or will you handle it?
-> 
-> I put the patch below on pci/p2pdma for v5.17, let me know if you want
-> any other tweaks.
-> 
-> I had mistakenly included these, which don't include any P2PDMA
-> content, so I dropped them so you don't get inundated with other
-> random changes:
-> 
->   +F:     Documentation/PCI/
->   +F:     Documentation/devicetree/bindings/pci/
+> I'm skeptical I'll be able to measure inlining one function,
+> variability between boots/runs is usually greater and would hide it.
 
-Yup, ok. Looks good to me. If you want or need my Acked-by or whatever,
-you can add it:
-
-Acked-by: Logan Gunthorpe <logang@deltatee.com>
-
-Thanks,
-
-Logan
+Right, that's why I suggested to mirror what we do in set/getsockopt
+instead of the new extra CGROUP_BPF_TYPE_ENABLED. But I'll leave it up
+to you, Martin and the rest.

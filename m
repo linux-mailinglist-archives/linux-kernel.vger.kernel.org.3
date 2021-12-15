@@ -2,230 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7000C47506A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C3E475073
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238838AbhLOBQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 20:16:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235604AbhLOBQH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 20:16:07 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A862EC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:16:06 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id r4-20020a654984000000b0033ae6493472so5149016pgs.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:16:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=UZ+15oJmdjibeS/LqSfmbc4z9W6A6Fq/YCpfMYzK6Pc=;
-        b=nBITaegwM6XU1MUrXN975MbS92biPy0aczHT4OisoI1XPyo/TdBL/jMDTmg7+WiyrB
-         kR8yXkhMlvXlsxb2okrYmdLSN6IKvYBkZ8DDntbWfIQCme/EeQVm7fmHWTkBTrmWzy2F
-         Idz73SMSrWCEs3jCU9QUxHDsw0kZiL/VqBh0A8ir2E5w487scdJoIes3WcPX6tQtI9+2
-         BBbyAHheT92ORticthLWDyJpsE6TiS0S6QJTy7fke9X87aHPnq2FjM9L0JyjI0oEzrys
-         t5+ca7pe5+wZrTGUj4BiBSeCEcyYJ7U3n8utoBpD6S7wVeohYMa1411rQRzKTye+Z0lH
-         I7Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=UZ+15oJmdjibeS/LqSfmbc4z9W6A6Fq/YCpfMYzK6Pc=;
-        b=ccfPbTjRnTTzRp5i9c7sy/Y8Xhi7ufDPVjN3kX9nGh2NNrxyReICTE5AYa0dXbVtlB
-         vpzhNJ4yOO8Zz6IUg0dAtoku88OJ2Hc19bJ1NixMIYReH5AeVpvHSb+y+AG7AmxZZ8ci
-         kvAnS920YeysQVKGQ90sTV9G+dUsWTp9iNlURnefBkT76RmGLWZP/4iE67QmWEzXB+3c
-         zrFHJbXkR2jMpdkW5qpY59mbgdq+DYdiK1NtOrh/6xPfDjrOQoCC+PwjeupjS7xB9uir
-         RbY4wLk1t35HXnSonpT2zOSqX2UXxNW5vPrpNH506MuulbSb9uPZzTk3KZnZGeun8rZX
-         2cng==
-X-Gm-Message-State: AOAM532hqXqQOGY9JvkIGMttM3aTXuoCrNnpVVcqtK8zqbxhpVCPKqHj
-        rQrxlfQqkc0jw9Lk7EePVVzh2dWsbfc=
-X-Google-Smtp-Source: ABdhPJw+AUfxjbDVFEpdrUOPYphZ3gJ393PRXkNdcigeg+9dXQ43jj1lgXGyzF5HZHsL2pOH7msOJxPUXsY=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90b:1a8b:: with SMTP id
- ng11mr9095066pjb.3.1639530966212; Tue, 14 Dec 2021 17:16:06 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 15 Dec 2021 01:15:57 +0000
-In-Reply-To: <20211215011557.399940-1-seanjc@google.com>
-Message-Id: <20211215011557.399940-5-seanjc@google.com>
-Mime-Version: 1.0
-References: <20211215011557.399940-1-seanjc@google.com>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 4/4] KVM: x86/mmu: Use common iterator for walking invalid TDP
- MMU roots
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S235549AbhLOBTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 20:19:42 -0500
+Received: from mga09.intel.com ([134.134.136.24]:40513 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233336AbhLOBTl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 20:19:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639531181; x=1671067181;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5ciu3togNJYisQkhlXmsWX588nrEA452RSk9rAHStoU=;
+  b=fkHOU9bOnVaDVNPl9dzK747WXzug443pn2D9LG68ZPuYPKN0aJtVLCt4
+   Jl/sTfQtZyKT+1RF6udQzOENCwqO7LwMwvNFbh9te6J9NeD+RaDA5o7PT
+   T3AM6VZfprTK7V6+iIhW0IHHnHCcLCsKVIfzpZ7Xscox7uZH25XT5e/XO
+   z8pt0XNZoP8piSjd5ALSi/BTPKPsth8xSvahUkY+kxqtU/5EK4x+t1Wx8
+   AR9xvf+xHaK19cO0lPy4FYy/sBLJ2CpzRFFrCWRyUzjR6dzIuILa4k4LK
+   Xz0POYU4dca90yBOL8qZCu1DD5Cb381g7WSTQ2YaHHz8AxAzocL0rVvg/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="238931348"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="238931348"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 17:19:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="545392987"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2021 17:19:38 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxIxF-00012V-B2; Wed, 15 Dec 2021 01:19:37 +0000
+Date:   Wed, 15 Dec 2021 09:19:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/urgent] BUILD SUCCESS
+ 94185adbfad56815c2c8401e16d81bdb74a79201
+Message-ID: <61b9429e.ISl3c2kYWU+FSh5O%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that tdp_mmu_next_root() can process both valid and invalid roots,
-extend it to be able to process _only_ invalid roots, add yet another
-iterator macro for walking invalid roots, and use the new macro in
-kvm_tdp_mmu_zap_invalidated_roots().
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
+branch HEAD: 94185adbfad56815c2c8401e16d81bdb74a79201  PCI/MSI: Clear PCI_MSIX_FLAGS_MASKALL on error
 
-No functional change intended.
+elapsed time: 724m
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+configs tested: 189
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211214
+mips                 randconfig-c004-20211214
+i386                 randconfig-c001-20211215
+sh                 kfr2r09-romimage_defconfig
+powerpc                    klondike_defconfig
+xtensa                    xip_kc705_defconfig
+mips                      bmips_stb_defconfig
+arm                            hisi_defconfig
+arm                            mps2_defconfig
+mips                           ip22_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                     loongson1c_defconfig
+arm                        mini2440_defconfig
+xtensa                  audio_kc705_defconfig
+arm                         orion5x_defconfig
+powerpc                   motionpro_defconfig
+powerpc                 mpc834x_itx_defconfig
+sh                               alldefconfig
+arm                             mxs_defconfig
+powerpc                      pasemi_defconfig
+powerpc                    gamecube_defconfig
+powerpc64                        alldefconfig
+mips                  cavium_octeon_defconfig
+arm                     eseries_pxa_defconfig
+arm                      footbridge_defconfig
+arm                          pxa168_defconfig
+riscv                            allmodconfig
+m68k                          sun3x_defconfig
+arm                         s5pv210_defconfig
+mips                         tb0226_defconfig
+mips                         tb0219_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arm64                            alldefconfig
+arc                    vdk_hs38_smp_defconfig
+powerpc                   lite5200b_defconfig
+powerpc                      acadia_defconfig
+arc                     nsimosci_hs_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arm                         hackkit_defconfig
+arm                         s3c2410_defconfig
+m68k                           sun3_defconfig
+sh                          r7780mp_defconfig
+csky                             alldefconfig
+arm                   milbeaut_m10v_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc                      makalu_defconfig
+arm                      jornada720_defconfig
+sh                          urquell_defconfig
+arm                           sama5_defconfig
+mips                            ar7_defconfig
+arm                       aspeed_g5_defconfig
+riscv             nommu_k210_sdcard_defconfig
+arm                       imx_v4_v5_defconfig
+mips                      fuloong2e_defconfig
+arm                         assabet_defconfig
+arm                      integrator_defconfig
+powerpc                 mpc832x_rdb_defconfig
+arm                          lpd270_defconfig
+powerpc                     ppa8548_defconfig
+mips                      maltaaprp_defconfig
+arm                          imote2_defconfig
+sh                      rts7751r2d1_defconfig
+sparc                               defconfig
+sh                         microdev_defconfig
+powerpc                     stx_gp3_defconfig
+parisc                           alldefconfig
+m68k                        m5307c3_defconfig
+xtensa                          iss_defconfig
+sh                            shmin_defconfig
+sh                  sh7785lcr_32bit_defconfig
+m68k                        stmark2_defconfig
+h8300                       h8s-sim_defconfig
+x86_64                           allyesconfig
+arm                         lubbock_defconfig
+arm                         lpc32xx_defconfig
+mips                        vocore2_defconfig
+i386                             alldefconfig
+mips                           rs90_defconfig
+mips                    maltaup_xpa_defconfig
+sparc                       sparc32_defconfig
+h8300                               defconfig
+openrisc                            defconfig
+powerpc                       ppc64_defconfig
+powerpc                      pmac32_defconfig
+mips                         tb0287_defconfig
+arm                         vf610m4_defconfig
+powerpc                   currituck_defconfig
+m68k                             alldefconfig
+arm                            qcom_defconfig
+sh                           se7724_defconfig
+sparc64                             defconfig
+h8300                    h8300h-sim_defconfig
+arm                         socfpga_defconfig
+powerpc                      bamboo_defconfig
+ia64                         bigsur_defconfig
+arm                        multi_v5_defconfig
+arm                        oxnas_v6_defconfig
+sh                                  defconfig
+powerpc                    mvme5100_defconfig
+sh                        apsh4ad0a_defconfig
+parisc                              defconfig
+sh                           se7712_defconfig
+sh                        dreamcast_defconfig
+powerpc                     tqm8540_defconfig
+powerpc                          g5_defconfig
+arm                           sama7_defconfig
+arm                  randconfig-c002-20211214
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20211214
+x86_64               randconfig-a005-20211214
+x86_64               randconfig-a001-20211214
+x86_64               randconfig-a002-20211214
+x86_64               randconfig-a003-20211214
+x86_64               randconfig-a004-20211214
+i386                 randconfig-a001-20211214
+i386                 randconfig-a002-20211214
+i386                 randconfig-a005-20211214
+i386                 randconfig-a003-20211214
+i386                 randconfig-a006-20211214
+i386                 randconfig-a004-20211214
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+arm                  randconfig-c002-20211214
+x86_64               randconfig-c007-20211214
+riscv                randconfig-c006-20211214
+mips                 randconfig-c004-20211214
+i386                 randconfig-c001-20211214
+s390                 randconfig-c005-20211214
+powerpc              randconfig-c003-20211214
+x86_64               randconfig-a011-20211214
+x86_64               randconfig-a014-20211214
+x86_64               randconfig-a012-20211214
+x86_64               randconfig-a013-20211214
+x86_64               randconfig-a016-20211214
+x86_64               randconfig-a015-20211214
+i386                 randconfig-a013-20211214
+i386                 randconfig-a011-20211214
+i386                 randconfig-a016-20211214
+i386                 randconfig-a014-20211214
+i386                 randconfig-a015-20211214
+i386                 randconfig-a012-20211214
+hexagon              randconfig-r045-20211214
+s390                 randconfig-r044-20211214
+riscv                randconfig-r042-20211214
+hexagon              randconfig-r041-20211214
+
 ---
- arch/x86/kvm/mmu/tdp_mmu.c | 76 ++++++++++++++------------------------
- 1 file changed, 27 insertions(+), 49 deletions(-)
-
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 577985fa001d..b6f7ba057f65 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -98,22 +98,34 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
- 	call_rcu(&root->rcu_head, tdp_mmu_free_sp_rcu_callback);
- }
- 
-+enum tdp_mmu_roots_iter_type {
-+	ALL_ROOTS = -1,
-+	VALID_ROOTS = 0,
-+	INVALID_ROOTS = 1,
-+};
-+
- /*
-  * Returns the next root after @prev_root (or the first root if @prev_root is
-  * NULL).  A reference to the returned root is acquired, and the reference to
-  * @prev_root is released (the caller obviously must hold a reference to
-  * @prev_root if it's non-NULL).
-  *
-- * If @only_valid is true, invalid roots are skipped.
-+ * If @type is not ALL_ROOTS, (in)valid roots are skipped accordingly.
-  *
-  * Returns NULL if the end of tdp_mmu_roots was reached.
-  */
- static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
- 					      struct kvm_mmu_page *prev_root,
--					      bool shared, bool only_valid)
-+					      bool shared,
-+					      enum tdp_mmu_roots_iter_type type)
- {
- 	struct kvm_mmu_page *next_root;
- 
-+	kvm_lockdep_assert_mmu_lock_held(kvm, shared);
-+
-+	/* Ensure correctness for the below comparison against role.invalid. */
-+	BUILD_BUG_ON(!!VALID_ROOTS || !INVALID_ROOTS);
-+
- 	rcu_read_lock();
- 
- 	if (prev_root)
-@@ -125,7 +137,7 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
- 						   typeof(*next_root), link);
- 
- 	while (next_root) {
--		if ((!only_valid || !next_root->role.invalid) &&
-+		if ((type == ALL_ROOTS || (type == !!next_root->role.invalid)) &&
- 		    kvm_tdp_mmu_get_root(kvm, next_root))
- 			break;
- 
-@@ -151,18 +163,21 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
-  * mode. In the unlikely event that this thread must free a root, the lock
-  * will be temporarily dropped and reacquired in write mode.
-  */
--#define __for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, _only_valid)\
--	for (_root = tdp_mmu_next_root(_kvm, NULL, _shared, _only_valid);	\
-+#define __for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, _type) \
-+	for (_root = tdp_mmu_next_root(_kvm, NULL, _shared, _type);		\
- 	     _root;								\
--	     _root = tdp_mmu_next_root(_kvm, _root, _shared, _only_valid))	\
--		if (kvm_mmu_page_as_id(_root) != _as_id) {			\
-+	     _root = tdp_mmu_next_root(_kvm, _root, _shared, _type))		\
-+		if (_as_id > 0 && kvm_mmu_page_as_id(_root) != _as_id) {	\
- 		} else
- 
-+#define for_each_invalid_tdp_mmu_root_yield_safe(_kvm, _root)			\
-+	__for_each_tdp_mmu_root_yield_safe(_kvm, _root, -1, true, INVALID_ROOTS)
-+
- #define for_each_valid_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared)	\
--	__for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, true)
-+	__for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, VALID_ROOTS)
- 
- #define for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared)		\
--	__for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, false)
-+	__for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, ALL_ROOTS)
- 
- #define for_each_tdp_mmu_root(_kvm, _root, _as_id)				\
- 	list_for_each_entry_rcu(_root, &_kvm->arch.tdp_mmu_roots, link,		\
-@@ -811,28 +826,6 @@ void kvm_tdp_mmu_zap_all(struct kvm *kvm)
- 		kvm_flush_remote_tlbs(kvm);
- }
- 
--static struct kvm_mmu_page *next_invalidated_root(struct kvm *kvm,
--						  struct kvm_mmu_page *prev_root)
--{
--	struct kvm_mmu_page *next_root;
--
--	if (prev_root)
--		next_root = list_next_or_null_rcu(&kvm->arch.tdp_mmu_roots,
--						  &prev_root->link,
--						  typeof(*prev_root), link);
--	else
--		next_root = list_first_or_null_rcu(&kvm->arch.tdp_mmu_roots,
--						   typeof(*next_root), link);
--
--	while (next_root && !(next_root->role.invalid &&
--			      refcount_read(&next_root->tdp_mmu_root_count)))
--		next_root = list_next_or_null_rcu(&kvm->arch.tdp_mmu_roots,
--						  &next_root->link,
--						  typeof(*next_root), link);
--
--	return next_root;
--}
--
- /*
-  * Since kvm_tdp_mmu_zap_all_fast has acquired a reference to each
-  * invalidated root, they will not be freed until this function drops the
-@@ -843,36 +836,21 @@ static struct kvm_mmu_page *next_invalidated_root(struct kvm *kvm,
-  */
- void kvm_tdp_mmu_zap_invalidated_roots(struct kvm *kvm)
- {
--	struct kvm_mmu_page *next_root;
- 	struct kvm_mmu_page *root;
- 	bool flush = false;
- 
- 	lockdep_assert_held_read(&kvm->mmu_lock);
- 
--	rcu_read_lock();
--
--	root = next_invalidated_root(kvm, NULL);
--
--	while (root) {
--		next_root = next_invalidated_root(kvm, root);
--
--		rcu_read_unlock();
--
-+	for_each_invalid_tdp_mmu_root_yield_safe(kvm, root) {
- 		flush = zap_gfn_range(kvm, root, 0, -1ull, true, flush, true);
- 
- 		/*
--		 * Put the reference acquired in
--		 * kvm_tdp_mmu_invalidate_roots
-+		 * Put the reference acquired in kvm_tdp_mmu_invalidate_roots().
-+		 * Note, the iterator holds its own reference.
- 		 */
- 		kvm_tdp_mmu_put_root(kvm, root, true);
--
--		root = next_root;
--
--		rcu_read_lock();
- 	}
- 
--	rcu_read_unlock();
--
- 	if (flush)
- 		kvm_flush_remote_tlbs(kvm);
- }
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

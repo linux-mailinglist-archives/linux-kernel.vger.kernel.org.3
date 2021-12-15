@@ -2,176 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5238447642E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B48476435
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbhLOVEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbhLOVEr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:04:47 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90EFC06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 13:04:46 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id c4so40374423wrd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 13:04:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+5BKidzd2sc7lu3XwgzfZRbV08/HOJxmZ1PXDsVN3SE=;
-        b=N54GLjP7KFCp6NczDZTlxdYgyJMoT0QXnYDL6opU7Pzargvf2lxn3uhprV98bZ5QCS
-         nAsIQQSZn1XmVaSrQC2viLcF3ZJ4FdwRki2B/oF8NWVXpadrTxFx3IRobz7jtG4hKOay
-         YBwPNXK9/GumcAxwepsGtKMxId4BXJC16AmAiCNPjfyytcyLC1H88C4IsECLO32EjuwA
-         YvCZIcZ6DpxOInigp+4h9XSLcIlyCsjykWlmwdtN5IAsrIF6boV1AP042xyZpInFEGrx
-         QBZ+IPVkK84rStDUHKZMiIKFH0pSDkV5dSf+oe5FVyw2h8JqARTA3Q/Pja4SFReLirxE
-         GzWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+5BKidzd2sc7lu3XwgzfZRbV08/HOJxmZ1PXDsVN3SE=;
-        b=hLm32iWxIwwQ+B++/Z5oeqoBO1Bn0jVDpygGfmx+DpZsSO9+ng2sj6u9VyOp7bhCrc
-         52vKvHUW6KUWehzePqskjPjIgXmWNG69v4NHQ/tBHIdLeODpfM0RkO2ok1wejzE0dKWy
-         iroaIzdTkgThQ51fT1JuK/gmBLsg5AaCDtRn5nc2K3QYtb93zC1o9oMjS9uDk8QlBfzr
-         pbjiRyqhiaeKxN1wNpGUGQ7XvrDzM9B3/0XEd6GbC2Q3wSYlTNDrgRZirVIS/GgEkgf3
-         mXcLUpZvcrS69c9EXvb90sv1Uvu+OQ2dfV+/muCOrFs6YlTl2enpxClHiDffHvt9peNN
-         y70g==
-X-Gm-Message-State: AOAM533hqqQR9i8OkTtsBsk1YlAmhTZV7lUdpDN8Ccs6UVydtx/yQrtk
-        FLCetWaTlJ5BGWPf8WXFqOK5M7eAjCsBXeGfTYo6fg==
-X-Google-Smtp-Source: ABdhPJxS7OpUSsP6dtUpE9KKh2DzPY+ETEPjCpIv4S/1DOFFL39bu97VJ7p8K8i4aiHxGtPvVe8xCEZADAsZtOGfLsA=
-X-Received: by 2002:a5d:5984:: with SMTP id n4mr4002281wri.563.1639602284959;
- Wed, 15 Dec 2021 13:04:44 -0800 (PST)
+        id S232574AbhLOVGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:06:22 -0500
+Received: from mga18.intel.com ([134.134.136.126]:35725 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232391AbhLOVGU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 16:06:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639602380; x=1671138380;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y4quxCLBCGf2zusvpSQA3hzLPeXbPLNNmvqQlyXb6nI=;
+  b=bGfxe2rlF4MK5MUhB6cOmQ2Q31Nziwy18gkX5wSvYwHQVWC1i7nqaC8X
+   hQLmbCmZfjfkgA88mlnL2KWFhAblGZZ3Xym/BJmsw83fREsfnd6YjFdcu
+   LFNvtqtpT7g/aqUW9PvtNnWifNl7oBSVhS9EQ2zvPox1acsFPhFMBPIUg
+   2SYTBvUckB1zSffTJ4AM8st5QLl73Jveal9JqJ0XTabZ+VLyGTCALzPoC
+   oR7YjTjjYvY4pe9oCiZiXpoef4Cc2QDrVn48MbgV5PTX5Bj6Mi/Yb3a/i
+   UlEqRPjsdtrxYsIoxDtD8U4+uU8RiGjvZ73kxJSzOqMjf7q/PrJcSm+zT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226195049"
+X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
+   d="scan'208";a="226195049"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 13:06:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
+   d="scan'208";a="505998429"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Dec 2021 13:06:18 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxbTd-0002L1-Sd; Wed, 15 Dec 2021 21:06:17 +0000
+Date:   Thu, 16 Dec 2021 05:06:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 21/33] drivers/tty/mxser.c:826:22: error: 'port'
+ undeclared; did you mean 'uport'?
+Message-ID: <202112160529.SiB1wC6L-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211214204445.665580974@infradead.org> <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
- <Ybm+HJzkO/0BB4Va@hirez.programming.kicks-ass.net> <CAFTs51Xb6m=htpWsVk577n-h_pRCpqRcBg6-OhBav8OadikHkw@mail.gmail.com>
- <YbozBSLk4PytGp0J@hirez.programming.kicks-ass.net>
-In-Reply-To: <YbozBSLk4PytGp0J@hirez.programming.kicks-ass.net>
-From:   Peter Oskolkov <posk@google.com>
-Date:   Wed, 15 Dec 2021 13:04:33 -0800
-Message-ID: <CAPNVh5fenLG7uvdF1tjyfcOe8Ff3_L0-UqeCu9=tn-NMaJ3ikA@mail.gmail.com>
-Subject: Re: [RFC][PATCH 0/3] sched: User Managed Concurrency Groups
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Peter Oskolkov <posk@posk.io>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, mgorman@suse.de,
-        bristot@redhat.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Paul Turner <pjt@google.com>, Andrei Vagin <avagin@google.com>,
-        Jann Horn <jannh@google.com>,
-        Thierry Delisle <tdelisle@uwaterloo.ca>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 10:25 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Dec 15, 2021 at 09:56:06AM -0800, Peter Oskolkov wrote:
-> > On Wed, Dec 15, 2021 at 2:06 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >  /*
-> > > + * Enqueue tsk to it's server's runnable list and wake the server for pickup if
-> > > + * so desired. Notable LAZY workers will not wake the server and rely on the
-> > > + * server to do pickup whenever it naturally runs next.
-> >
-> > No, I never suggested we needed per-server runnable queues: in all my
-> > patchsets I had a single list of idle (runnable) workers.
->
-> This is not about the idle servers..
->
-> So without the LAZY thing on, a previously blocked task hitting sys_exit
-> will enqueue itself on the runnable list and wake the server for pickup.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   d61595c5423534810c1a3c0d4a88dd2fd81d750c
+commit: 5726d981962bcf45daa931de98923a2aab063487 [21/33] mxser: switch to uart_driver
+config: arc-randconfig-r043-20211214 (https://download.01.org/0day-ci/archive/20211216/202112160529.SiB1wC6L-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=5726d981962bcf45daa931de98923a2aab063487
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout 5726d981962bcf45daa931de98923a2aab063487
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/tty/
 
-How can a blocked task hit sys_exit()? Shouldn't it be RUNNING?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Anyway, servers and workers are supposed to unregister before exiting,
-so if they call sys_exit() they break the agreement; in my patch I
-just clear all umcg-related state and proceed, without waking the
-server: the user broke the protocol, let them figure out what
-happened:
+All errors (new ones prefixed by >>):
 
-+static void umcg_clear_task(struct task_struct *tsk)
-+{
-+ /*
-+ * This is either called for the current task, or for a newly forked
-+ * task that is not yet running, so we don't need strict atomicity
-+ * below.
-+ */
-+ if (tsk->umcg_task) {
-+ WRITE_ONCE(tsk->umcg_task, NULL);
-+
-+ /* These can be simple writes - see the comment above. */
-+ tsk->pinned_umcg_worker_page = NULL;
-+ tsk->pinned_umcg_server_page = NULL;
-+ tsk->flags &= ~PF_UMCG_WORKER;
-+ }
-+}
-+
-+/* Called both by normally (unregister) and abnormally exiting workers. */
-+void umcg_handle_exiting_worker(void)
-+{
-+ umcg_unpin_pages();
-+ umcg_clear_task(current);
-+}
+   In file included from include/linux/tty_port.h:5,
+                    from include/linux/tty.h:12,
+                    from drivers/tty/mxser.c:24:
+   drivers/tty/mxser.c: In function 'mxser_startup':
+>> drivers/tty/mxser.c:826:22: error: 'port' undeclared (first use in this function); did you mean 'uport'?
+     826 |         kfifo_reset(&port->xmit_fifo);
+         |                      ^~~~
+   include/linux/kfifo.h:211:17: note: in definition of macro 'kfifo_reset'
+     211 |         typeof((fifo) + 1) __tmp = (fifo); \
+         |                 ^~~~
+   drivers/tty/mxser.c:826:22: note: each undeclared identifier is reported only once for each function it appears in
+     826 |         kfifo_reset(&port->xmit_fifo);
+         |                      ^~~~
+   include/linux/kfifo.h:211:17: note: in definition of macro 'kfifo_reset'
+     211 |         typeof((fifo) + 1) __tmp = (fifo); \
+         |                 ^~~~
+>> include/linux/kfifo.h:212:14: error: invalid type argument of '->' (have 'int')
+     212 |         __tmp->kfifo.in = __tmp->kfifo.out = 0; \
+         |              ^~
+   drivers/tty/mxser.c:826:9: note: in expansion of macro 'kfifo_reset'
+     826 |         kfifo_reset(&port->xmit_fifo);
+         |         ^~~~~~~~~~~
+   include/linux/kfifo.h:212:32: error: invalid type argument of '->' (have 'int')
+     212 |         __tmp->kfifo.in = __tmp->kfifo.out = 0; \
+         |                                ^~
+   drivers/tty/mxser.c:826:9: note: in expansion of macro 'kfifo_reset'
+     826 |         kfifo_reset(&port->xmit_fifo);
+         |         ^~~~~~~~~~~
+   At top level:
+   drivers/tty/mxser.c:1744:30: warning: 'mxser_ops' defined but not used [-Wunused-const-variable=]
+    1744 | static const struct uart_ops mxser_ops = {
+         |                              ^~~~~~~~~
 
 
->
-> IIRC you didn't like the server waking while it was still running
-> another task, but instead preferred to have it pick up the newly
-> enqueued task when next it ran.
+vim +826 drivers/tty/mxser.c
 
-Yes, this is the model I have, as I outlined in another email. I
-understand that having queues per-CPU/per-server is how it is done in
-the kernel, both for historical reasons (before multiprocessing there
-was a single queue/cpu) and for throughput (per-cpu runqueues are
-individually faster than a global one). However, this model is known
-to lag in presence of load spikes (long per-cpu queues with some CPUs
-idle), and is not really easy to work with given the use cases this
-whole userspace scheduling effort is trying to address: multiple
-priorities and work isolation: these are easy to address directly with
-a scheduler that has a global view rather than multiple
-per-cpu/per-server schedulers/queues that try to coordinate.
+ee7e5e66f2d4fa drivers/tty/mxser.c  Jiri Slaby     2021-09-22  763  
+5726d981962bcf drivers/tty/mxser.c  Jiri Slaby     2021-12-01  764  static int mxser_startup(struct uart_port *uport)
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  765  {
+5726d981962bcf drivers/tty/mxser.c  Jiri Slaby     2021-12-01  766  	struct mxser_port *info = to_mport(uport);
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  767  	unsigned long flags;
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  768  
+22d394f9712b7c drivers/tty/mxser.c  Jiri Slaby     2021-12-10  769  	spin_lock_irqsave(&uport->lock, flags);
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  770  
+e13da5a8a148c0 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  771  	if (!uport->type) {
+22d394f9712b7c drivers/tty/mxser.c  Jiri Slaby     2021-12-10  772  		spin_unlock_irqrestore(&uport->lock, flags);
+5726d981962bcf drivers/tty/mxser.c  Jiri Slaby     2021-12-01  773  		return -EINVAL;
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  774  	}
+94c7e3efe3b70b drivers/tty/mxser.c  Jiri Slaby     2021-12-15  775  
+5726d981962bcf drivers/tty/mxser.c  Jiri Slaby     2021-12-01  776  	BUG_ON("we use kfifo");
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  777  
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  778  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  779  	 * Clear the FIFO buffers and disable them
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  780  	 * (they will be reenabled in mxser_change_speed())
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  781  	 */
+ee7e5e66f2d4fa drivers/tty/mxser.c  Jiri Slaby     2021-09-22  782  	mxser_disable_and_clear_FIFO(info);
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  783  
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  784  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  785  	 * At this point there's no way the LSR could still be 0xFF;
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  786  	 * if it is, then bail out, because there's likely no UART
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  787  	 * here.
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  788  	 */
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  789  	if (inb(uport->iobase + UART_LSR) == 0xff) {
+22d394f9712b7c drivers/tty/mxser.c  Jiri Slaby     2021-12-10  790  		spin_unlock_irqrestore(&uport->lock, flags);
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  791  		return -ENODEV;
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  792  	}
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  793  
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  794  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  795  	 * Clear the interrupt registers.
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  796  	 */
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  797  	(void) inb(uport->iobase + UART_LSR);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  798  	(void) inb(uport->iobase + UART_RX);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  799  	(void) inb(uport->iobase + UART_IIR);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  800  	(void) inb(uport->iobase + UART_MSR);
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  801  
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  802  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  803  	 * Now, initialize the UART
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  804  	 */
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  805  	outb(UART_LCR_WLEN8, uport->iobase + UART_LCR);	/* reset DLAB */
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  806  	info->MCR = UART_MCR_DTR | UART_MCR_RTS;
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  807  	outb(info->MCR, uport->iobase + UART_MCR);
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  808  
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  809  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  810  	 * Finally, enable interrupts
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  811  	 */
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  812  	info->IER = UART_IER_MSI | UART_IER_RLSI | UART_IER_RDI;
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  813  
+292955a7c011e2 drivers/tty/mxser.c  Jiri Slaby     2021-06-18  814  	if (info->board->must_hwid)
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  815  		info->IER |= MOXA_MUST_IER_EGDAI;
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  816  	outb(info->IER, uport->iobase + UART_IER);	/* enable interrupts */
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  817  
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  818  	/*
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  819  	 * And clear the interrupt registers again for luck.
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  820  	 */
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  821  	(void) inb(uport->iobase + UART_LSR);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  822  	(void) inb(uport->iobase + UART_RX);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  823  	(void) inb(uport->iobase + UART_IIR);
+ea78327711f406 drivers/tty/mxser.c  Jiri Slaby     2021-12-10  824  	(void) inb(uport->iobase + UART_MSR);
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  825  
+94c7e3efe3b70b drivers/tty/mxser.c  Jiri Slaby     2021-12-15 @826  	kfifo_reset(&port->xmit_fifo);
+22d394f9712b7c drivers/tty/mxser.c  Jiri Slaby     2021-12-10  827  	spin_unlock_irqrestore(&uport->lock, flags);
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  828  
+1c45607ad3eb73 drivers/char/mxser.c Jiri Slaby     2008-02-07  829  	return 0;
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  830  }
+^1da177e4c3f41 drivers/char/mxser.c Linus Torvalds 2005-04-16  831  
 
-I can even claim (without proof, just a hunch, based on how I would
-code this) that strict scheduling policies around priority and
-isolation (e.g. never run work item A if work item B becomes runnable,
-unless work item A is already running) cannot be enforced without a
-global scheduler, so per-cpu/per-server queues do not really fit the
-use case here...
+:::::: The code at line 826 was first introduced by commit
+:::::: 94c7e3efe3b70b291054ac2344013c35b314ffe6 mxser: switch from xmit_buf to kfifo
 
->
-> LAZY enables that.. *however* it does need to wake the server when it is
-> idle, otherwise they'll all sit there waiting for one another.
+:::::: TO: Jiri Slaby <jslaby@suse.cz>
+:::::: CC: Jiri Slaby <jslaby@suse.cz>
 
-If all servers are busy running workers, then it is not up to the
-kernel to "preempt" them in my model: the userspace can set up another
-thread/task to preempt a misbehaving worker, which will wake the
-server attached to it. But in practice there are always workers
-blocking in the kernel, which wakes their servers, which then reap the
-woken/runnable workers list, so well-behaving code does not need this.
-Yes, sometimes the code does not behave well, e.g. a worker grabs a
-spinlock, blocks in the kernel, its server runs another worker that
-starts spinning on the spinlock; but this is fixable by making the
-spinlock aware of our stuff: either the worker who got the lock is
-marked as LOCKED and so does not release its server (one of the
-reasons I have this flag), or the lock itself becomes sleepable (e.g.
-after spinning a bit it calls into a futex wait).
-
-And so we need to figure out this high-level thing first: do we go
-with the per-server worker queues/lists, or do we go with the approach
-I use in my patchset? It seems to me that the kernel-side code in my
-patchset is not more complicated than your patchset is shaping up to
-be, and some things are actually easier to accomplish, like having a
-single idle_server_ptr vs this LAZY and/or server "preemption"
-behavior that you have.
-
-Again, I'm OK with having it your way if all needed features are
-covered, but I think we should be explicit about why
-per-server/per-cpu model is chosen vs the one I proposed, especially
-as it seems the kernel side code is not really simpler in the end.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

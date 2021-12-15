@@ -2,166 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 991F4475AF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82768475AF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237899AbhLOOpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:45:07 -0500
-Received: from mga09.intel.com ([134.134.136.24]:43960 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229878AbhLOOpG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:45:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639579506; x=1671115506;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZHmEESDH4aNsqmxsYKHweXgwqdjm2ni2LH+24NGm0iw=;
-  b=dGjgE+sMZjr66yuSoG51SvQlkvX1s0cSvylfv7ARBB3TI9LKQfv328kA
-   kmeHJcCs8rVCOxVXmgBvc9me3aLBEjHfwUXZB3/EZZoNv9vzXNZLK0iCs
-   FQA75NrVXDMe3iT6md6bRjqVguAe6XTi2JkWtxEvkIu+zhhlLgySPpQPY
-   ysC65Uq2fj8RGOkCYgqchoCPKjOTSL3IYCFm3St717NnFIafM6q08JhUd
-   lZ44pSG0pRWzkaFPRjOxr+8xpeo6cL4IextE3ORhhadn49h+15dIMvGkT
-   ypQhKZcqkG7wk0bEDzjzL+vgyBTobPQL0VX31QWT4HykR7FmElG7GAouI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="239051795"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="239051795"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:45:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="505826955"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 15 Dec 2021 06:45:04 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxVWh-0001tu-4F; Wed, 15 Dec 2021 14:45:03 +0000
-Date:   Wed, 15 Dec 2021 22:44:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jirislaby:devel 8/33] drivers/tty/tty_port.c:228:2: warning:
- 'xmit_buf' is deprecated
-Message-ID: <202112152217.TA9FNAE3-lkp@intel.com>
+        id S237777AbhLOOoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:44:55 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:41970 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229878AbhLOOox (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:44:53 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 868EF1F3CB;
+        Wed, 15 Dec 2021 14:44:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639579492; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L+FwlFr7sookecjc9+Z4KJH3P8puADKn4avrNKuh3fg=;
+        b=V2YNGn1ryxEnaOg+uqD0czIqum5A+yvyyOQF3/o+zFpawFNR+AbAXZhquxTqZxu3w7E5n2
+        F0ottN2Pw6JXwcZNGP9VFmAgQ2j6z7rsoVTVmkKucdC1IAv+nbmrE/aj9oaCO4INsLri9u
+        /mi/m484fVNsR3E1xOvslXFMEQJcp6I=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4FE231330B;
+        Wed, 15 Dec 2021 14:44:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JkXhEmT/uWHWcAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 15 Dec 2021 14:44:52 +0000
+Date:   Wed, 15 Dec 2021 15:44:51 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <20211215144450.GC25459@blackbody.suse.cz>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-7-longman@redhat.com>
+ <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   d61595c5423534810c1a3c0d4a88dd2fd81d750c
-commit: 8825023d7d2eb9e5dc298ad1996a0c753b2c4580 [8/33] tty: add kfifo to tty_port
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20211215/202112152217.TA9FNAE3-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=8825023d7d2eb9e5dc298ad1996a0c753b2c4580
-        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
-        git fetch --no-tags jirislaby devel
-        git checkout 8825023d7d2eb9e5dc298ad1996a0c753b2c4580
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash drivers/tty/
+On Mon, Dec 13, 2021 at 11:00:17AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> * When a valid partition turns invalid, now we have a reliable way of
+>   discovering what exactly caused the transition. However, when a user now
+>   fails to turn a member into partition, all they get is -EINVAL and there's
+>   no way to discover why it failed and the failure conditions that -EINVAL
+>   represents aren't simple.
+> 
+> * In an automated configuration scenarios, this operation mode may be
+>   difficult to make reliable and lead to sporadic failures which can be
+>   tricky to track down. The core problem is that whether a given operation
+>   succeeds or not may depend on external states (CPU on/offline) which may
+>   change asynchronously in a way that the configuring entity doesn't have
+>   any control over.
+> 
+> It's true that both are existing problems with the current partition
+> interface and given that this is a pretty spcialized feature, this can be
+> okay. Michal, what are your thoughts?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Because of asynchronous changes, the return value should not be that
+important and the user should watch cpuset.partitions for the result
+(end state) anyway.
+Furthermore, the reasons should be IMO just informative (i.e. I like
+they're not explicitly documented) and not API.
 
-All warnings (new ones prefixed by >>):
+But I see there could be a distinction between -EINVAL (the supplied
+input makes no sense) and -EAGAIN(?) denoting that the switch to
+partition root could not happen (due to outer constraints).
 
-   drivers/tty/tty_port.c: In function 'tty_port_alloc_xmit_buf':
->> drivers/tty/tty_port.c:228:2: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     228 |  if (port->xmit_buf == NULL)
-         |  ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:18: note: declared here
-     115 |   unsigned char *xmit_buf __attribute__((deprecated));
-         |                  ^~~~~~~~
-   drivers/tty/tty_port.c:229:3: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     229 |   port->xmit_buf = (unsigned char *)get_zeroed_page(GFP_KERNEL);
-         |   ^~~~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:18: note: declared here
-     115 |   unsigned char *xmit_buf __attribute__((deprecated));
-         |                  ^~~~~~~~
-   drivers/tty/tty_port.c:231:2: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     231 |  if (port->xmit_buf == NULL)
-         |  ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:18: note: declared here
-     115 |   unsigned char *xmit_buf __attribute__((deprecated));
-         |                  ^~~~~~~~
-   drivers/tty/tty_port.c: In function 'tty_port_free_xmit_buf':
-   drivers/tty/tty_port.c:240:2: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     240 |  if (port->xmit_buf != NULL) {
-         |  ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:18: note: declared here
-     115 |   unsigned char *xmit_buf __attribute__((deprecated));
-         |                  ^~~~~~~~
-   drivers/tty/tty_port.c:241:3: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     241 |   free_page((unsigned long)port->xmit_buf);
-         |   ^~~~~~~~~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:18: note: declared here
-     115 |   unsigned char *xmit_buf __attribute__((deprecated));
-         |                  ^~~~~~~~
-   drivers/tty/tty_port.c:242:3: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     242 |   port->xmit_buf = NULL;
-         |   ^~~~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:18: note: declared here
-     115 |   unsigned char *xmit_buf __attribute__((deprecated));
-         |                  ^~~~~~~~
-   drivers/tty/tty_port.c: In function 'tty_port_destructor':
-   drivers/tty/tty_port.c:270:2: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     270 |  if (port->xmit_buf)
-         |  ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:18: note: declared here
-     115 |   unsigned char *xmit_buf __attribute__((deprecated));
-         |                  ^~~~~~~~
-   drivers/tty/tty_port.c:271:3: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     271 |   free_page((unsigned long)port->xmit_buf);
-         |   ^~~~~~~~~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:18: note: declared here
-     115 |   unsigned char *xmit_buf __attribute__((deprecated));
-         |                  ^~~~~~~~
+You seem to propose to replace the -EAGAIN above with a success code and
+allow the switch to an invalid root.
+The action of the configuring entity would be different: retry (when?)
+vs wait till transition happens (notification) (although the immediate
+effect (the change did not happen) is same).
+I considered the two variants equal but the clear information about when
+the change can happen I'd favor the variant allowing the switch to
+invalid root now.
 
 
-vim +/xmit_buf +228 drivers/tty/tty_port.c
-
-8cde11b2baa1d0 drivers/tty/tty_port.c  Johan Hovold 2017-05-18  223  
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  224  int tty_port_alloc_xmit_buf(struct tty_port *port)
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  225  {
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  226  	/* We may sleep in get_zeroed_page() */
-44e4909e453eaa drivers/char/tty_port.c Alan Cox     2009-11-30  227  	mutex_lock(&port->buf_mutex);
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13 @228  	if (port->xmit_buf == NULL)
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  229  		port->xmit_buf = (unsigned char *)get_zeroed_page(GFP_KERNEL);
-44e4909e453eaa drivers/char/tty_port.c Alan Cox     2009-11-30  230  	mutex_unlock(&port->buf_mutex);
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  231  	if (port->xmit_buf == NULL)
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  232  		return -ENOMEM;
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  233  	return 0;
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  234  }
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  235  EXPORT_SYMBOL(tty_port_alloc_xmit_buf);
-9e48565d217a8a drivers/char/tty_port.c Alan Cox     2008-10-13  236  
-
-:::::: The code at line 228 was first introduced by commit
-:::::: 9e48565d217a8a96cc7577308ad41e9e4b806a62 tty: Split tty_port into its own file
-
-:::::: TO: Alan Cox <alan@redhat.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Michal

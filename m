@@ -2,467 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5950847585A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627EB47585D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242272AbhLOMEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236954AbhLOMEn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:04:43 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44679C061574;
-        Wed, 15 Dec 2021 04:04:43 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id e3so74781668edu.4;
-        Wed, 15 Dec 2021 04:04:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fh+b0d/G/RYNJXFF40rUlUpI/+ANIUMDQ5PZvslWC18=;
-        b=VimX2k1OUuTSuFh7b+jz2yVmjY6UAVEjjMGHQ2T+r+QSTBkkUGDpY4t+8+Y/DE+4Zv
-         tSd4YkizUbOZrpSg7AksTfIhhmkR0P4TxgLSxGVZj1iLZghezvQVwdx4BotnfqaiQpbK
-         jmHqlny2Kqlr7hy3xnFK3rIflkl9VKp7NU9+Fi5fAI3z6Aq13/vu2aE1w12OX1aY3jW/
-         nN00YkRiPRTNTBTVW08HgODKM6B69+FBW31+4kdgfyZytQg59iuKeR8lGVRx+WfLwaXZ
-         W0MuRUDQ1gPwSSAHiHSJlQH0z2i/Yv9VY8dAo7f3YVGfENHVsUllDNvl722XJkt/ykeW
-         lRfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fh+b0d/G/RYNJXFF40rUlUpI/+ANIUMDQ5PZvslWC18=;
-        b=PznfActwdFaeGIHlsG8RmEen14T2tISr8W5xQX31fAPhbOFfj6VAzC0W7qcF23l2/M
-         oTml2+uOhlCdxkoi2JiNB69u6493ixYVi5Vd8e2PzySdnzz5A7k2AMW/Kjl/wMXVn72c
-         +e8GgSqJXSGRE6jckfsbbJ4qRmkPScLDdZsS3vBoRpdUGs8p8ayLtaAg1PZ4/N4eig4c
-         NcqeKUoRKhDZKQPGIWvUcZ0XScG+pKMi5RkS0fenIje1dhu53zsI8cmO4k13TZEzilq4
-         i/Wit2b9zEWtoRIj7UVeSNt5sTl/CTCvxwSagt5Sf4n4SzWB81XXfz9A1hYKIIi5JXcZ
-         xs+w==
-X-Gm-Message-State: AOAM532KMfy5DMq8ZnkOxPjpJbGNMN6MAfZMzjJKQN2zgzUjB4tTTOIh
-        CyqfulqPpg7Drz87HyJDsB4x1tCVqcyaXcZEGpw=
-X-Google-Smtp-Source: ABdhPJzuIm3D6+Txl2/eLyUCM4fAPxpVo3qVrlnl2Ad3iOfoss9AXs0RtMEL+O6o+r9V6jdwQPfGQS/aJppbuCtqhmQ=
-X-Received: by 2002:a17:907:75f0:: with SMTP id jz16mr11236403ejc.77.1639569881649;
- Wed, 15 Dec 2021 04:04:41 -0800 (PST)
-MIME-Version: 1.0
-References: <1639479189-6693-1-git-send-email-wellslutw@gmail.com>
- <1639479189-6693-3-git-send-email-wellslutw@gmail.com> <CAHp75VcnkZmzZE5C5z+kyrJoGRx8t60e_vDrw4HXOocY=Mjqsw@mail.gmail.com>
- <83d865b82e574ab49ae0c5fc160774c0@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <83d865b82e574ab49ae0c5fc160774c0@sphcmbx02.sunplus.com.tw>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 15 Dec 2021 14:03:12 +0200
-Message-ID: <CAHp75VcU_2HR2qamGmuYBjXtaG_b55vgAUv20rb7LfPo3q-HYA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] pinctrl: Add driver for Sunplus SP7021
-To:     =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Cc:     Wells Lu <wellslutw@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        id S242277AbhLOMFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:05:39 -0500
+Received: from mail-db8eur05on2077.outbound.protection.outlook.com ([40.107.20.77]:16769
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236954AbhLOMFi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 07:05:38 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=abfduen0Gc3XHFtcWhULAc+0tJ+PTUAJ27vPIdo5ea2YlnaTaP3xqjSq/ygB4XpCPY6SCwAmYTpgznn7Dy5u93B7+B7n89A177EILewZ/hInp+H1fI99v1MmIMTWvQgtd3bCMPZRIUM3O9SGQa4q6lwb2By7KQivelrfM4hSasA6PAhNmPgwiyKzrfkezZvh5TYCfyy/64C87scqRy8h+XjtcD0Xj32QvCNHougaMtfO6x12fkFrZncW4rz3mxoe6a/CyRfea0PCBb8lYzwKix77TyA0V+yQbaklRjT0ZfHWwt814jWqq3Sq9geT4aCsCH1Q6xZqvfzZ4ECBevPjZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=47eWcTZTM514UqAIaWQR7fUL9nJpYUPXrdFlQz5H04k=;
+ b=LXu8q1007SbeSJ2RHCe7+Fgt42YAGgTon/mM/jyZyC+6bx9AtRrv60gSmioFFrIRB/IPtuQslf4QYnAAPcq7oNlXpSJfk7vpofL5JVKJABrNihGOUAmirIMpU1WxfgAQMVOSOAFSP+aarD/N88MWW+921FopaT4zbmCTdjDV+QGXkdCt4wk/DVwKv2z9H4/4fW/Q+oAm1nw4nETG9S9edYhI00W1KlG/Y+TeBlloUyJfRUpe62IYPOgxUabsh3QF8f5aRepfY1o6KuG45ztTqtBs6S51tevE8E4ixKq6DPE56JtGQ2SXMpMkzaREnTCxK8TzAkcKas1JY0UPB3EOlw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=47eWcTZTM514UqAIaWQR7fUL9nJpYUPXrdFlQz5H04k=;
+ b=I2RAmSQ0NqkYMBTq78kg2lvCr6Q+/erEyim07khkEq2F1tyv5Z5ulvbMI84XJsX+THkYg4RPpBouFe4LuhrREhtPdvujjvrol3zzMk1LsBqD0mlVYLtdqzrRWZ9d7qq2XNrx6/YgtS2lxjSADdkz0EOGHyigMd68tj2ECdtVh1Y=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DU0PR04MB9346.eurprd04.prod.outlook.com (2603:10a6:10:356::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Wed, 15 Dec
+ 2021 12:05:36 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43%9]) with mapi id 15.20.4755.021; Wed, 15 Dec 2021
+ 12:05:36 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Mike Rapoport <rppt@kernel.org>
+CC:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "dvorkin@tibbo.com" <dvorkin@tibbo.com>
-Content-Type: text/plain; charset="UTF-8"
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH 2/2] arm64: mm: support bootparam max_addr
+Thread-Topic: [PATCH 2/2] arm64: mm: support bootparam max_addr
+Thread-Index: AQHX8X+RJl0WiuN0bE2TAI+j7pq7b6wzKOQAgAAAXXCAAB69gIAAAFuggAAHxICAACRjYA==
+Date:   Wed, 15 Dec 2021 12:05:36 +0000
+Message-ID: <DU0PR04MB941762839A98B9BB140876E688769@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20211215064559.2843555-1-peng.fan@oss.nxp.com>
+ <20211215064559.2843555-2-peng.fan@oss.nxp.com>
+ <CAMj1kXE8AQaiyHQU9k18P7dK81xhuWRmh3BhpOSP_qPnsX+sRg@mail.gmail.com>
+ <DU0PR04MB94179C41295FF369E5D755D488769@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <Ybm0MWDhzkkwAZoz@kernel.org>
+ <DU0PR04MB9417A1DC98221DF4EF76CA7E88769@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <Ybm7AcGJaanGVwkR@kernel.org>
+In-Reply-To: <Ybm7AcGJaanGVwkR@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 08bac61b-ce04-4c33-bcf6-08d9bfc33456
+x-ms-traffictypediagnostic: DU0PR04MB9346:EE_
+x-microsoft-antispam-prvs: <DU0PR04MB9346A172E292C5DE6AB3721C88769@DU0PR04MB9346.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 36Q0+W8vK/lzVgbJeVpzDToFF+QqIqCUr9jpvB9mvWYBV/piQeZ7BvUgZ+A+ZZLPpdJL3F/NhefbelP/RvfFjj9mFd6tKL1yHjo0jnvFU/hZMHuuXc3qQOh4VEvxjQMoYLniZ4f0eThilWnFNiODnK1o561m9C1hhjWCE4P7AGA7TZrCu5PoPWk0vez3hGyLW0HcRTFRUfQN4Rw0dZ7KR46rIOn3BuFKe9oufqWQravPlFTi66QZKhU71geJbfnmtNb6tzko49owJsXhQEZ0EKufDBOwFUqlrNfmDzXbXPW4/GJayYP30YrgSEiwxGl7wGr2J+7oPzztAcQPqvTlFP+h6YgzY2W7VyvZ0uwx+F5A2Tb2LJTTi3L9fCJtt88TmYTPQHLzJrV2r1NuuY1UZu6cYAIYm9DhPt6HDXtlP2wZmRQo/rWSaZW4JnAerDRVC5Ge79+z2m1fNu5cvMSx+b0PjbY6Bh049sNvKgq+E7Bvaq/A4akLpmrJtOP/yr7xtNKdFU8+Z74z3P8SobdfkGehpSZw4JkeTNyd1Tl6Zypb8aVutpbl78delhOzY2YHJMX3pkJOC753bLiZzjsqIRgubp7xqsnfm6hzFIPHeSQkCqwgPgk4o5XglCgog4LIwgzV/AbKEHOIUV5kc1+iRqsMXyKIKxLlKY5W/+bwJdD6VUXDnKeEicXZID/xL+4ScDcz5sWRC+ezY2Aiv0wYdAjQE6cWKgoQs/axMw2oPdktf3DDbuVmw3IN6f0AG27HtO0Dxjax4GDzRbLku1HWM62rpTpVDYYKiOEuAsm+4TusCA1wfriAGEuwRiKOQwMy7U8SKSvvgg5SLU+Qfou9Bg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(6506007)(44832011)(76116006)(66946007)(38070700005)(9686003)(508600001)(5660300002)(8676002)(7696005)(2906002)(66476007)(8936002)(83380400001)(52536014)(4326008)(55016003)(26005)(66556008)(122000001)(54906003)(966005)(6916009)(64756008)(66446008)(186003)(45080400002)(38100700002)(71200400001)(316002)(7416002)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iujI+KrLfwi05KBf0naMao6mKEX8FZmOOQ5BpQZntiTvDULNe/T4LOazRrbz?=
+ =?us-ascii?Q?9tnwxOe89qmzu2vBy1FP8aJkHpvAgLE8Gle6JGBrseJVJ6GfpyvxGENHGtUI?=
+ =?us-ascii?Q?M16ORTmBMd7+8az75gVoQrRy3pYHxT7cF70GzV3pLR9VCuDRuFQOGZmAufD9?=
+ =?us-ascii?Q?Q5C5r0PkvjZFnlhrLoLr4PRX0N2QibrfjdLN5bM7XqG4Kn2JJ9AgCuvlZcHn?=
+ =?us-ascii?Q?mFlijLSgHvkNRocqR3ZW0BBPgJEN89qAU356NIwZiavWfgf+l2dFafdtAd/B?=
+ =?us-ascii?Q?rPsYwhG0n1KH+MhaDXFtvdlU5MKTA6b4X6uFPP3+vgdCyZw2nLX2DdjVA49o?=
+ =?us-ascii?Q?zHBEv3f4niZgSfQ0wyxbXoETBdn4mLQGwMQ9EnpA6Jc12pb4MNXqzkAacNcB?=
+ =?us-ascii?Q?7zCp66LW5pUp4w4/2F4itUK55gPcbHf0TNfbCMEqxFNnyocSH2hcYat56Nwh?=
+ =?us-ascii?Q?1i3rnYQC7TFNoFNhWSSwxGQ8el3EMsbD/g9cGWflKhFxR7N5M2Xq/CpPzTp+?=
+ =?us-ascii?Q?dx7n3ML5mRO+rB0VmQk1btVXkO6d7ruKHemuabukLcjV7RMqTIokWVAspkHR?=
+ =?us-ascii?Q?HmKZEajKIgQbSAiBO7fa9Q/ZzJGExHUzP2XilFbGEUPkDrXBbF1+Sch+gB8i?=
+ =?us-ascii?Q?JQzCP6N5o1c+D6ZroY8IKqyckAFW7JSdG3yI9nR3tIs4D3aiJ6VDFx+SoE+w?=
+ =?us-ascii?Q?eNuhvfmSpbYvdSSv5Lab3tor775LgeZ8+ENUO8zH1OdV3LVSV2M/z0k6ZLve?=
+ =?us-ascii?Q?qnAB79Dvwh9xOwGnFX3EURbFYf5ReLZ81JrBPD5MeOdxFwf5I8qvNo2IxQAH?=
+ =?us-ascii?Q?HeC3TWnHhjSrl7sABZZlytaO7npinHTME3oOKkqFloi4NcIDdqwKmYwV0ZLD?=
+ =?us-ascii?Q?3+LtG8ELz5obsILHxLMYhkRFF+PnatmckzGXzhFkQeSN7hPjlfqjVvWrA2U5?=
+ =?us-ascii?Q?eK10gy903WgcsLPy+YaJcrDru9q5XgwqZ5v0FiuwjX5YTzwsg04Pg/kLETf3?=
+ =?us-ascii?Q?fayTyjW1Z2ZGldinWk1107uHqQWpOn6BHkB0isM/J/4B1mInRcg99kjs1OVm?=
+ =?us-ascii?Q?4QnD7ulTv6yLz2thYG6V04MAuTPJEgeQ/88Jm6LaCChdoXRgrhhrK7biQbmd?=
+ =?us-ascii?Q?cT5bvW2pI6jJ1MFBRrRUxhfdqNRLcxx/CzPRG6VCCzwA+CHeEIV2s2CKtBZr?=
+ =?us-ascii?Q?5u+VCfFb9yDuH8V2ENwdyjX0vLet83mVXWjpmVJShVE5vkX8SJWTqP2ERAB8?=
+ =?us-ascii?Q?ew2JGmmDSRt18tPgMsqtgn4WHgRdWlcNeQlPJAoT292RdR/ie0r/FzGSRgvg?=
+ =?us-ascii?Q?/s53ijuG+taNs7G4sO4LZ62NikKF843v/CorTKP+Ye1pSW5gYyr1kxgeam1U?=
+ =?us-ascii?Q?gUJmlpHbQeV9YNJMC9iAIUIEVHLBtbhf+xcZAgut9zH8VVSupqC5Cwc68xOQ?=
+ =?us-ascii?Q?n8xvZG20JKq+Tz9UGGXOYXanRnHni4dYJS8xZWSNO2R9f7ZAqslHy/6FJ2g2?=
+ =?us-ascii?Q?ra/eqSEZdUiFkEQKc5nC9K+BhXLd1nXpouKa0YXPnX349lmYl/1cdyVf2c05?=
+ =?us-ascii?Q?Sz6abY+iD8dVMCkHxChOjkVE0eOpFkanbA8hyib6FWDxqSkVuyDZVIHIXKDm?=
+ =?us-ascii?Q?PB8pwz3zW4jQdHROVlI7H58=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08bac61b-ce04-4c33-bcf6-08d9bfc33456
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 12:05:36.6118
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l6vHoQ3T+BydIEg7dPwh6AVmZmXR9u0/XGoUM67UUkzJyjWvsLMTKp02KWa6Zjdmdvdkh+ANzeZXCn9ZyciPlA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9346
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 11:40 AM Wells Lu =E5=91=82=E8=8A=B3=E9=A8=B0 <well=
-s.lu@sunplus.com> wrote:
-
-...
-
-> > > +/* SP7021 Pin Controller Driver.
-> > > + * Copyright (C) Sunplus Tech/Tibbo Tech.
-> > > + */
+> Subject: Re: [PATCH 2/2] arm64: mm: support bootparam max_addr
+>=20
+> On Wed, Dec 15, 2021 at 09:30:36AM +0000, Peng Fan wrote:
+> > > Subject: Re: [PATCH 2/2] arm64: mm: support bootparam max_addr
+> > >
+> > > On Wed, Dec 15, 2021 at 07:59:45AM +0000, Peng Fan wrote:
+> > > > > Subject: Re: [PATCH 2/2] arm64: mm: support bootparam max_addr
+> > > > >
+> > > > > On Wed, 15 Dec 2021 at 07:56, Peng Fan (OSS)
+> > > > > <peng.fan@oss.nxp.com>
+> > > > > wrote:
+> > > > > >
+> > > > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > > >
+> > > > > > There is a "mem=3D[x]" boot parameter, but when there is a whol=
+e
+> > > > > > reserved by secure TEE, the continuous DRAM area is split with
+> > > > > > two
+> > > > > memblocks.
+> > > > > >
+> > > > > > For example, DRAM area [0x40000000, 0xffffffff], when TEE uses
+> > > > > > [0x50000000, 0x51000000), the memblock will be split into
+> > > > > > [0x40000000,
+> > > > > > 0x50000000) and [0x51000000, 0xffffffff].
+> > > > > >
+> > > > > > If pass "mem=3D1024MB", the actually max addr will be 0x8100000=
+0.
+> > > > > > However if need the max addr be 0x80000000, mem=3D1008MB
+> should
+> > > > > > be
+> > > > > used.
+> > > > > >
+> > > > > > There also might be multiple other holes that no visible to
+> > > > > > Linux, when we wanna to limit the max addr usable by Linux,
+> > > > > > using "max_addr=3D[X]" is much easier than "mem=3D[X]"
+> > > > > >
+> > > > > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > > >
+> > > > > mem=3D is a hack already, please don't add another one. Limiting
+> > > > > the memory like this is far too tricky, given that the kernel
+> > > > > itself and the initrd could end up in memory that is excluded,
+> > > > > and we have to go and fix things up if that happens.
+> > > >
+> > > > We wanna to use the reserved memory with request_mem_region, but
+> > > > with commit 86588296acbfb1 ("fdt: Properly handle "no-map" field
+> > > > in the memory region ")
+> > > >
+> > > > request_mem_region will fail, because the reserved memory are now
+> > > > as kernel memory.
+> > >
+> > > request_mem_region() is for MMIO.  Why do you want to use it for
+> RAM?
 > >
-> > This is wrong style for multi-line comments. Fix it everywhere accordin=
-gly.
->
-> I'll modify all multi-line comments, for example, as shown below:
->
-> /*
->  * SP7021 Pin Controller Driver.
->  * Copyright (C) Sunplus Tech/Tibbo Tech.
->  */
->
-> Now, I realized that each subsystem has its own comment style.
-
-Actually there are only two styles:
- - this one (as updated version) for entire kernel with the exception of
- - net / network one (as you used originally)
-
-> > ...
+> > + Jan, the jailhouse hypervisor owner.
 > >
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/pinctrl/pinmux.h>
-> > > +#include <linux/gpio/driver.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/bitfield.h>
+> > There is an out of tree driver
+> > https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit=
+h
 > >
-> > Keep them in order. Besides that it seems missed a few headers, such as=
- of.h.
->
-> I am not sure what order should I keep for inclusions.
-> Reversed x'mas tree order? Alphabetic order?
-
-Alphabetical. When you don't see a direct answer the rule of thumb is
-to go to the recent contributions and check a few new drivers to see
-how they are doing.
-
-> Some reviewers ask to remove unnecessary header files.
-
-So that reviewers are right and maybe wrong (see below for the
-details), I don't see those reviews so I can't judge.
-
-> So I removed all unnecessary header files if compilation
-> completes without any errors or warnings.
-
-Have you checked how deep and sudden the header inclusion went?
-
-> I suppose <linux/of.h> has included by other inclusion.
-
-Of course and it's wrong in your case. No header from above guarantees
-that. See below.
-
-> Need I add <linux/of.h> or other inclusions back?
-
-The rule of thumb is that you have to include all headers you are a
-direct user of.
-There are some that guarantee inclusion of others, like
-bits.h is always included if you use bitmap.h  (via bitops.h) or
-compiler_attributes.h is always provided by types.h.
-
-You have to find a golden ratio here (yes, it's kinda knowledge that
-doesn't come at once, needs to have some experience).
-
-...
-
-> > > +       val =3D (reg & BIT(bit_off)) ? 1 : 0;
+> ub.com%2Fsiemens%2Fjailhouse%2Fblob%2Fmaster%2Fdriver%2Fmain.c%23
+> L466&
 > >
-> > !!(...) may also work, but it's rather style preference.
->
-> The return value is integer 0 or 1, not Boolean.
-
-Yes, and it's exactly what has been suggested. It's a C standard
-allowed trick. With the -O2 compiler gives you the same code for both
-(at least on x86).
-
-...
-
-> > > +       reg =3D readl(spp_gchip->gpioxt_base + SPPCTL_GPIO_OFF_MASTER=
- +
-> > > + reg_off);
+> amp;data=3D04%7C01%7Cpeng.fan%40nxp.com%7C0540c0c55ed24688f9f308d
+> 9bfb0b7
 > >
-> > I noticed a potentially big issue with this driver. Are you sure it's b=
-rave enough to do
-> > I/O without any synchronisation? Did I miss a lock?
->
-> Do I need to add spin_lock() for all gpio operation functions?
-> Please teach me what operation functions I need to add lock or
-> all operation functions need lock?
-
-I don't know. You need to answer this question, it's your code. And
-you know how it's supposed to be used etc, etc.
-
-...
-
-> > > +       reg =3D readl(spp_gchip->gpioxt2_base + SPPCTL_GPIO_OFF_OD +
-> > > + reg_off);
+> 7d%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6377515879788
+> 01324%7CU
 > >
-> > You may create an I/O wrappers to achieve a much better to read code (n=
-o repetition of
-> > this arithmetics, etc).
->
-> I think this is the simplest in-line form:
-
-No, it's harder to read and easy to mistake what the base and / or
-offset is used, what value, etc.
-
-> "spp_gchip->gpioxt2_base" is base address.
-> SPPCTL_GPIO_OFF_OD is register offset to base of OD (open-drain) register=
-s.
-> reg_off is register offset to an OD register (SP7021 has 7 OD registers t=
-otally).
->
-> Need I add macros (wrappers) for accessing registers?
->
-> For example,
->
-> #define SPPCTL_GPIO_OD(off)     (spp_gchip->gpioxt2_base + SPPCTL_GPIO_OF=
-F_OD + off)
->
-> reg =3D readl(SPPCTL_GPIO_OD(reg_off));
->
-> or
->
-> writel(reg, SPPCTL_GPIO_OD(reg_off));
->
->
-> Mr. Linus Walleij told me that he likes in-line (direct) form, instead of=
- macro
-> because in-line form has better readability (No need to jump to other fil=
-e for
-> reading macros).
->
-> Could you please share me with your idea?
-
-It's an idea that is used in zillions of the drivers (and not via macros).
-
-static inline spp_readl(struct ... *spp, u32 offset)
-{
-  return readl(...);
-}
-
-Same for _writel() and so on.
-
-...
-
-> > Perhaps to show only requested ones? In such case you may use
-> > for_each_requested_gpio() macro.
->
-> I'd like to keep showing status of all GPIOs.
-> This helps us know status of all GPIOs when debugging hardware issue.
-
-Since it's a pin control driver, the pin control debug callback can
-show this. For GPIO I would rather not be bothered with not requested
-pins. But it's your decision.
-
-...
-
-> > > +       gchip->parent =3D            &pdev->dev;
+> nknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI
+> 6Ik1ha
 > >
-> > > +       gchip->of_node =3D           pdev->dev.of_node;
+> WwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3DowLVa3T4jnTPvohHwdEnP2%2F
+> uMiUJmYeTc
+> > 1TwM0i9iCE%3D&amp;reserved=3D0
 > >
-> > Drop this dup. GPIO library already does it for you.
->
-> But when I removed the two statements, I found both 'gchip->parent' and
-> 'gchip->of_node' are always 0. No one helps set it.
->
-> Do I miss doing somethings?
-
-Yes, I put blank lines around the dup and left context (as a first
-line) to show why the second one is a dup. When you miss something,
-read the implementation code. It's open source at the end!
-
-...
-
-> > > +       dev_dbg(pctldev->dev, "%s(%d, %ld, %d)\n", __func__, pin,
-> > > + *configs, num_configs);
+> > The hypervisor jailhouse is loaded after linux boot up, and the
+> > hypervisor bin file needs to be loaded into DRAM that reserved in our
+> > device tree with node with no map property.
 > >
-> > Noise. Better to consider to add necessary tracepoints to pin control c=
-ore.
->
-> What should I do?
-> Should I remove it?
-
-I wouldn't expect these to be in the production-ready driver. And
-since you are committing to drivers/pinctrl and not to drivers/staging
-I consider that you are trying to push this code as production-ready.
-
-...
-
-> > > +       dev_dbg(pctldev->dev, "%s(%d)\n", __func__, offset);
+> > And the hypervisor use virtual pci for communication between VMs, The
+> > virtual pci use part of the reserved DRAM area as PCI MMIO space.
 > >
-> > Noise. And so on, so on...
->
-> Should I remove dev_dbg? Or modify it?
-> But it will not print out anything in normal run, only for debugging.
+> > Maybe I should use /memreserve, but not node with no-map property.
+>=20
+> So, my understanding is that you need a chunk of memory that Linux does n=
+ot
+> use and does not map into the kernel page tables.
+> In that case /memreserve + nomap in the device tree could be a better
+> solution than mem=3DX.
 
-See above.
+nomap not work now since commit=20
+86588296acbfb1 ("fdt: Properly handle "no-map" field in the memory region "=
+)
 
-...
+I need try /memreserve
 
-> > > +       dev_dbg(pctldev->dev, "%s(%d), f_idx: %d, g_idx: %d, freg: %d=
-\n",
-> > > +               __func__, selector, g2fpm.f_idx, g2fpm.g_idx,
-> > > + f->freg);
+BTW, do you think max_addr would be an option be added to memblock
+common code mm/memblock.c?
+
+Thanks,
+Peng.
+
+>=20
+> > Thanks,
+> > Peng.
 > >
-> > No need to use __func__, and especially in case of _dbg / _debug. It ca=
-n be enabled at
-> > run-time with help of Dynamic Debug.
->
-> Should I need to remove all __func__ in this driver?
-
-As the first step, the second one is to remove 90%+ of these messages
-as I explained above.
-
-...
-
-> > Looking into this rather quite big function why you can't use what pin =
-control core provides?
->
-> No, we cannot use functions pin-control core provides.
-> Please refer to dt-bindings document, "pinctrl/sunplus,sp7021-pinctrl.yam=
-l".
-> We have more explanation there.
-
-Fine, can you reuse some library functions, etc? Please, consider
-refactoring to make it more readable.
-
-...
-
-> > > +       sppctl->groups_name =3D devm_kzalloc(&pdev->dev, sppctl_list_=
-funcs_sz *
-> > > +                                          SPPCTL_MAX_GROUPS *
-> > > + sizeof(char *), GFP_KERNEL);
-> >
-> > Ditto. And check some interesting macros in overflow.h.
->
-> I'll modify code to use devm_kcalloc().
->
-> I'll modify sizeof() to use type of variable, that is:
->         sizeof(*sppctl->groups_name)
->
-> Please teach me what macros should I check?
-> There are many macros in overflow.h.
-
-Do your homework, it's not me who makes this contribution :-)
-Hint: something about multiplication.
-
-...
-
-> > > +       if (IS_ERR(sppctl->moon2_base)) {
-> > > +               ret =3D PTR_ERR(sppctl->moon2_base);
-> > > +               goto ioremap_failed;
-> >
-> > What is this for? Use return dev_err_probe() directly.
->
-> There are 5 devm_ioremap_resource() in this function.
-> To avoid from duplication, goto an error-handling when ioremap failed.
-
-What error handling? You have the same point which does the same for
-them, I don't see duplication avoidance. See below as well.
-
-> > > +       }
-
-...
-
-> > > +ioremap_failed:
-> > > +       dev_err_probe(&pdev->dev, ret, "ioremap failed!\n");
-> >
-> > This doesn't bring any value,
->> besides the fact that API you have used already prints a
-> > message.
-
-(1)
-
-> I'll modify code to as shown below (error-handling here):
->
-> ioremap_failed:
->         return dev_err_probe(&pdev->dev, ret, "ioremap failed!\n");
-> }
->
-> Is this ok?
-
-No.
-
-> If not, please teach me how to modify.
-
-Read again what I wrote in (1).
-
-> > > +       pdev->dev.platform_data =3D sppctl;
-> >
-> > Don't we have special setter for this field?
->
-> I know platform_set_drvdata() function is used to set "dev->driver_data".
-> I cannot find a function to set "dev->platform_data".
-> Please teach me what function should I use to set "dev->platform_data"?
-
-Ah, now I even may say that the above assignment is simply wrong.
-It's not designed for what you think it's for. Use different ways.
-
-...
-
-> > > +       dev_info(&pdev->dev, "SP7021 PinCtrl by Sunplus/Tibbo Tech.
-> > > + (c)");
-> >
-> > No value.
->
-> This shows that pinctrl driver has probed successfully.
-> Many drivers show this kind of information.
-
-And there is no value in this information.
-
-> Do I need to remove it? Or change to dev_dbg(...).
-
-Neither in this case.
-
-Explain the point "why?". In general you have to explain each line of
-your code "why are you doing this or that?".
-
-...
-
-> > > +#ifndef __SPPCTL_H__
-> > > +#define __SPPCTL_H__
-> >
-> > This header misses the inclusions such as bits.h.
-> > And I believe more than that.
->
-> Some reviewers ask to remove unnecessary header files.
-
-What do you mean by this in this case. This is a clear miss of bits.h
-here as you use macros from it. Imagine if you include this file
-somewhere where bits.h hasn't found its mysterious ways.
-
-> I removed all unnecessary header files if compilation completes
-> without any errors or warnings.
->
-> If compilation has done successfully,
-
-So what? It doesn't mean the code is bad in one way or another, :-)
-
-> does it mean all
-> necessary inclusions has included well?
-
-> Besides, before private header files are included,
-> Linux or system header files will be included.
-> No need extra inclusion here, right?
-
-See above.
-
-...
-
-> > > +/* FIRST register:
-> > > + *   0: MUX
-> > > + *   1: GPIO/IOP
-> > > + *   2: No change
-> > > + */
-> >
-> > For all comments starting from here and for similar cases elsewhere:
-> >  - why it is not in kernel doc?
-> >  - what the value that add?
-> > (Some of them so cryptic or so obvious)
->
-> The comment explains usage of 'enum mux_f_mg'
-> The 'enum' is only used in the driver.
-> It helps programmers to remember or look-up the define of the enum.
-> Need we add this kind of comment to kernel doc?
-
-Why not?
-
-> > > +static const struct sppctl_grp sp7021grps_spif[] =3D {
-> > > +       EGRP("SPI_FLASH1", 1, pins_spif1),
-> > > +       EGRP("SPI_FLASH2", 2, pins_spif2)
-> >
-> > Here and everywhere else, leave a comma if it's not a terminator entry.
->
-> The constant array 'sp7021grps_spif[]' is declared and initialized
-> to have 2 elements. 'EGRP("SPI_FLASH2", 2, pins_spif2)' is the
-> latest element.
-> Why do we need to add 'comma' for the latest element of an array?
-
-To avoid the churn in the future when it will be expanded. Believe I
-saw this kind of "proves" that this or that won't ever be expanded and
-then... you may picture what happens.
-
-> If we add extra comma, the array will have one more element.
-
-Yes, with touching the "last" one here. Please, add commas where it's
-not a crystal clear a termination (which is not in many cases, usually
-arrays with NULL entry or enums with MAX value at the end).
-
---=20
-With Best Regards,
-Andy Shevchenko
+> > >
+> > > > So we use "mem=3DX" to work around the issue, but "mem=3DX" is not
+> > > > user friendly compared with "max_addr=3D" when there are multiple
+> > > > holes used by
+> > > others.
+> > > >
+> > > > Thanks,
+> > > > Peng.
+> > > >
+> > > > >
+> > > > >
+> > > > > > ---
+> > > > > >  arch/arm64/mm/init.c | 21 +++++++++++++++++++++
+> > > > > >  1 file changed, 21 insertions(+)
+> > > > > >
+> > > > > > diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c index
+> > > > > > db63cc885771..3364b5e7a7fe 100644
+> > > > > > --- a/arch/arm64/mm/init.c
+> > > > > > +++ b/arch/arm64/mm/init.c
+> > > > > > @@ -173,6 +173,7 @@ int pfn_is_map_memory(unsigned long pfn)
+> > > > > > EXPORT_SYMBOL(pfn_is_map_memory);
+> > > > > >
+> > > > > >  static phys_addr_t memory_limit __ro_after_init =3D
+> > > > > > PHYS_ADDR_MAX;
+> > > > > > +static phys_addr_t max_addr __ro_after_init =3D PHYS_ADDR_MAX;
+> > > > > >
+> > > > > >  /*
+> > > > > >   * Limit the memory size that was specified via FDT.
+> > > > > > @@ -189,6 +190,18 @@ static int __init early_mem(char *p)  }
+> > > > > > early_param("mem", early_mem);
+> > > > > >
+> > > > > > +static int __init set_max_addr(char *p) {
+> > > > > > +       if (!p)
+> > > > > > +               return 1;
+> > > > > > +
+> > > > > > +       max_addr =3D memparse(p, &p) & PAGE_MASK;
+> > > > > > +       pr_notice("Memory max addr set to 0x%llx\n",
+> > > > > > + max_addr);
+> > > > > > +
+> > > > > > +       return 0;
+> > > > > > +}
+> > > > > > +early_param("max_addr", set_max_addr);
+> > > > > > +
+> > > > > >  void __init arm64_memblock_init(void)  {
+> > > > > >         s64 linear_region_size =3D PAGE_END -
+> > > > > > _PAGE_OFFSET(vabits_actual); @@ -253,6 +266,9 @@ void __init
+> > > > > arm64_memblock_init(void)
+> > > > > >                 memblock_add(__pa_symbol(_text), (u64)(_end
+> -
+> > > > > _text));
+> > > > > >         }
+> > > > > >
+> > > > > > +       if (max_addr !=3D PHYS_ADDR_MAX)
+> > > > > > +               memblock_cap_memory_range(0, max_addr);
+> > > > > > +
+> > > > > >         if (IS_ENABLED(CONFIG_BLK_DEV_INITRD) &&
+> > > phys_initrd_size)
+> > > > > {
+> > > > > >                 /*
+> > > > > >                  * Add back the memory we just removed if it
+> > > > > > results in the @@ -427,4 +443,9 @@ void dump_mem_limit(void)
+> > > > > >         } else {
+> > > > > >                 pr_emerg("Memory Limit: none\n");
+> > > > > >         }
+> > > > > > +
+> > > > > > +       if (max_addr !=3D PHYS_ADDR_MAX)
+> > > > > > +               pr_emerg("Max addr: 0x%llx\n", max_addr);
+> > > > > > +       else
+> > > > > > +               pr_emerg("Max addr: none\n");
+> > > > > >  }
+> > > > > > --
+> > > > > > 2.25.1
+> > > > > >
+> > > > > >
+> > > > > > _______________________________________________
+> > > > > > linux-arm-kernel mailing list
+> > > > > > linux-arm-kernel@lists.infradead.org
+> > > > > > https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2=
+F
+> > > > > > %2Fl
+> > > > > > ists
+> > > > > > .infradead.org%2Fmailman%2Flistinfo%2Flinux-arm-kernel&amp;dat
+> > > > > > a=3D0
+> > > 4
+> > > > > > %
+> > > > > 7C0
+> > > > > >
+> > > > >
+> > >
+> 1%7Cpeng.fan%40nxp.com%7C3ad0ef697ad64542556208d9bf9d1e1f%7C68
+> > > > > 6ea1d3bc
+> > > > > >
+> > > > >
+> > >
+> 2b4c6fa92cd99c5c301635%7C0%7C0%7C637751503805222488%7CUnknow
+> > > > > n%7CTWFpbG
+> > > > > >
+> > > > >
+> > >
+> Zsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6
+> > > > > Mn0%
+> > > > > >
+> > > > >
+> > >
+> 3D%7C3000&amp;sdata=3DiKVO4PUPnaRr%2B5gHcXxaaRxBt%2BK%2Fjytg8eQ
+> > > > > dCqgqh5o%
+> > > > > > 3D&amp;reserved=3D0
+> > >
+> > > --
+> > > Sincerely yours,
+> > > Mike.
+>=20
+> --
+> Sincerely yours,
+> Mike.

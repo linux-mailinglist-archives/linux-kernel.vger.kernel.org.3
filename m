@@ -2,93 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22ED047598D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6718247598B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242819AbhLONWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 08:22:44 -0500
-Received: from mga04.intel.com ([192.55.52.120]:39860 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234617AbhLONWn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 08:22:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639574563; x=1671110563;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rUjJVZUVIvIFQr4MyBZlVi+Wln2PLmdQR/GPsbeKbcE=;
-  b=O992ke/Gta0r2hb1wIKcHIZGQDEqjOxvrZ71vrgVPm0TsxQ+n1kaChuk
-   LJ2Os+XYjwDBlAzJLck8MrkIRlO2lfaIukC5EzcsA+JYJvkyRflyG3yng
-   gGmNOpJ2xTvKLc67X3MmH5nLTWnoW2DxJLhG5UmGGGyoNMtPSWkDN0rlR
-   ZCh4nh2EMM5mtkN7evDQQyjCxPpfE1VHnoZQAi5vI4QuiFK/zGwEC1nU0
-   LG7MHovkgX7o/jUdRH25+Q7QH2SkOgdaehCP/IaMGpEuLs3erekynppJi
-   4oyUbM5fTj7slskBmCu2DB3U18ECfUtZ7cvSs8Y1vEiS1Ee3DbsIG/q1F
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="237961886"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="237961886"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 05:21:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="464260971"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Dec 2021 05:21:02 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxUDN-0001op-Op; Wed, 15 Dec 2021 13:21:01 +0000
-Date:   Wed, 15 Dec 2021 21:20:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [linux-stable-rc:queue/4.19 9919/9999] ERROR: "usb_hid_driver"
- [drivers/hid/hid-asus.ko] undefined!
-Message-ID: <202112152114.lpbAj4a1-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S242810AbhLONVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 08:21:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234617AbhLONVR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 08:21:17 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7143EC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 05:21:17 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id l18so15457167pgj.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 05:21:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=Vi+9tkKMEGtdz8FnRinsSQljBeYWvCw1bcC5u2KAYc4=;
+        b=SEemoU84w0RgZzOfkNVYreTtLSrP07EazxLkoOy/SUea3f4t+beB0FHazSF4XBL1YJ
+         t6DIjGGP0iKNY4wBpu47PliUokbkJv22i/KSKWX5ZE3HKLmhLlhrpZWQ2i3QCbIS1sow
+         8AEvWsAVh7IgeWsGjj69c9pngYl6d/nQIUdmctAqaHZ+jub/8bsmS29YdZc1W8J2dkYN
+         6lKClvTMJ2klr4802Wmc6TMEsnPYslPyHRTkeMgqJoz6VzGOS2o/sunV9u5xWj+EGKR8
+         r/Up5u2yjduZ0fxJFxEC/BMR+niTyuDc/N0IqlPM3Zy4m/26ah2jcoEElrT6cMewRQ1B
+         sihA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Vi+9tkKMEGtdz8FnRinsSQljBeYWvCw1bcC5u2KAYc4=;
+        b=mP9Ss+eIHuqpeGIqMLgFH5tI+74Hq+8sde4dKqAOIu5KIWgHlkrgaaWTkP8OiCDDsX
+         Ha37Aq6KKkSV7wsaXmzuWGEadG3YPaAYN94FQS3jsF1oiTSCL6NaiOs7IoHvzczKbf7o
+         DF1RbVRHn6Guphvf+sM25gAkc5PzCt9OOZvqMoUGb5hDYKf+rpFVst5xiKAjPr2BUxGq
+         KYcH44EBJk6RY1dhi98XVvInFS+tKAOk1RD6e9qdKWtrm//jQPLjSDy99q0TSSocFe6C
+         rRNmmrMYCeXIgGKT6/ZOW81He8G4ZGyzH6lPnQ/wHSzcVO5lp7GwYWURPDvaG04fpKLA
+         +geQ==
+X-Gm-Message-State: AOAM531wkwDno4yQA+G7575LQZA1Mz+7S6XREjbpmNbp99K6ApRloTz3
+        Un/djayqwkg6Vv3zrnjVCC4=
+X-Google-Smtp-Source: ABdhPJyf97EO6xzPbv6JA17GV+bOgjYwhSDz5csdkt1ya66pwl/z/pA9zRqk1fiPRX+Pm12GpQ3QKA==
+X-Received: by 2002:a63:5c0a:: with SMTP id q10mr7683052pgb.213.1639574476985;
+        Wed, 15 Dec 2021 05:21:16 -0800 (PST)
+Received: from localhost.localdomain ([117.254.32.175])
+        by smtp.googlemail.com with ESMTPSA id s8sm2561141pfe.196.2021.12.15.05.21.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 05:21:16 -0800 (PST)
+From:   Ajith P V <ajithpv.linux@gmail.com>
+To:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, christian@brauner.io,
+        hridya@google.com, surenb@google.com
+Cc:     linux-kernel@vger.kernel.org, Ajith P V <ajithpv.linux@gmail.com>
+Subject: [PATCH] binder: use proper cacheflush header file
+Date:   Wed, 15 Dec 2021 18:50:18 +0530
+Message-Id: <20211215132018.31522-1-ajithpv.linux@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.19
-head:   9f411771d2924dfabe1071cc23e0d13d69ee8fb3
-commit: b1efa723b986a84f84a95b6907cffe3a357338c9 [9919/9999] HID: add hid_is_usb() function to make it simpler for USB detection
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20211215/202112152114.lpbAj4a1-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=b1efa723b986a84f84a95b6907cffe3a357338c9
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/4.19
-        git checkout b1efa723b986a84f84a95b6907cffe3a357338c9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+binder.c uses <asm/cacheflush.h> instead of <linux/cacheflush.h>.
+Hence change cacheflush header file to proper one.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This change also avoid warning from checkpatch that shown below:
+WARNING: Use #include <linux/cacheflush.h> instead of <asm/cacheflush.h>
 
-All errors (new ones prefixed by >>):
-
-   ERROR: "devm_ioremap_resource" [drivers/scsi/ufs/ufshcd-pltfrm.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/net/ethernet/aurora/nb8800.ko] undefined!
-   ERROR: "devm_ioremap_nocache" [drivers/net/ethernet/altera/altera_tse.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/net/can/grcan.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/media/rc/ir-hix5hd2.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/input/touchscreen/imx6ul_tsc.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/input/serio/apbps2.ko] undefined!
->> ERROR: "usb_hid_driver" [drivers/hid/hid-asus.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/crypto/ccree/ccree.ko] undefined!
-   ERROR: "debugfs_create_regset32" [drivers/crypto/ccree/ccree.ko] undefined!
-   ERROR: "devm_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
-
+Signed-off-by: Ajith P V <ajithpv.linux@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/android/binder.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index cffbe57a8e08..446ed306d313 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -69,7 +69,7 @@
+ 
+ #include <uapi/linux/android/binder.h>
+ 
+-#include <asm/cacheflush.h>
++#include <linux/cacheflush.h>
+ 
+ #include "binder_internal.h"
+ #include "binder_trace.h"
+-- 
+2.17.1
+

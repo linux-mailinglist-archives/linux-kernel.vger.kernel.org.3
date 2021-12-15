@@ -2,173 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF2E47594D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA13475951
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237363AbhLONFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 08:05:21 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:33944 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbhLONFU (ORCPT
+        id S237382AbhLONFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 08:05:51 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:47838 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232340AbhLONFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 08:05:20 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E48E5210F9;
-        Wed, 15 Dec 2021 13:05:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1639573518; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 15 Dec 2021 08:05:50 -0500
+Date:   Wed, 15 Dec 2021 13:05:46 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639573548;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4WZ7nRsuN4bYhjGYGsm47Qu2gogklXkj+EKNuYHnkws=;
-        b=J6B0+a9DJfkCACkP88ddk6JSJuUUhF4fjAFg/nt20Jpuui4FmUV5I/u/yWoeg6/9p2s4Zr
-        xIRxFB7bMTqhcLh7eQcVfPhXp+9BszglpQ+5XYkz1bNCBmsukPntv9x7caQ7Po3rSVha8j
-        U/PC4611ge1+exTk9d5SSGczCSqfrX8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1639573518;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=cJbh9RBDas7JBSFcpYKrkuMQYwvI0JIn1Tz/C8Xdh1U=;
+        b=mWcwSnrso1YyBJwI7vOf9iHU8jS5tLexWhg3YFwhLCS8rcQkxnmqdfzgF2oPHUOaGGh/V0
+        I7FMLE7iuzL1HFWe5o8hOLSJMrDgvskcIPrN4jnWiQSWQflDbzpaog+PvhsjM/HuZWYbIo
+        wtg4P946VH8U1gOCTlQEm4IA2f4pccEKozNNsz7HEQHq0G4rN9jrZAhIiuR+V6bCnv+Z79
+        8sGuH3AGkTWPWP3jZ0kHulPAYt5LzzJVa9lMDjocD0LuCPg2psJDRaT/4jAUH30EpGa3t1
+        BxON1w3jhm/XsHMyWs++9D0Iy51h4DpFmfxtTE/ZicINoFGRkay+WRniOlxqew==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639573548;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4WZ7nRsuN4bYhjGYGsm47Qu2gogklXkj+EKNuYHnkws=;
-        b=L6SCc7mRFgXJJTauzA/J5DTKgZH14kayFsjdNpeqwqXV1dlXv2wFx3EikV+GLrP2Rgr43O
-        g42EpK2umnd7BpAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A1E4E1330B;
-        Wed, 15 Dec 2021 13:05:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fznBJg7ouWFiQQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 15 Dec 2021 13:05:18 +0000
-Message-ID: <4207b5a3-efac-40f3-6b42-6713c9283cdd@suse.cz>
-Date:   Wed, 15 Dec 2021 14:05:18 +0100
+        bh=cJbh9RBDas7JBSFcpYKrkuMQYwvI0JIn1Tz/C8Xdh1U=;
+        b=MEIJBb2mIdraEc2RxxzG0X5Meb+hkbo9AHPbVtqQT/KCR1lUzEw8FIRQan2g54Me/HpN1N
+        LMmNHUSBQXFAGeCg==
+From:   "tip-bot2 for Mike Rapoport" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/boot: Move EFI range reservation after cmdline parsing
+Cc:     Borislav Petkov <bp@suse.de>, Mike Rapoport <rppt@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <e8dd8993c38702ee6dd73b3c11f158617e665607.camel@intel.com>
+References: <e8dd8993c38702ee6dd73b3c11f158617e665607.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-10-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v4 09/66] mm/mmap: Use the maple tree in find_vma()
- instead of the rbtree.
-In-Reply-To: <20211201142918.921493-10-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <163957354693.23020.8537268805198191781.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:29, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> Using the maple tree interface mt_find() will handle the RCU locking and
-> will start searching at the address up to the limit, ULONG_MAX in this
-> case.
-> 
-> Add kernel documentation to this API.
-> 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+The following commit has been merged into the x86/urgent branch of tip:
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Commit-ID:     83757bbb9fe029b704fb28e80c3f2b92f23a1994
+Gitweb:        https://git.kernel.org/tip/83757bbb9fe029b704fb28e80c3f2b92f23a1994
+Author:        Mike Rapoport <rppt@kernel.org>
+AuthorDate:    Mon, 13 Dec 2021 12:27:57 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 15 Dec 2021 12:36:47 +01:00
 
-Note below:
+x86/boot: Move EFI range reservation after cmdline parsing
 
-> ---
->  mm/mmap.c | 27 +++++++++------------------
->  1 file changed, 9 insertions(+), 18 deletions(-)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index de78fc0ce809..6a7502f74190 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -2429,10 +2429,16 @@ get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
->  
->  EXPORT_SYMBOL(get_unmapped_area);
->  
-> -/* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
-> +/**
-> + * find_vma() - Find the VMA for a given address, or the next vma.
-> + * @mm: The mm_struct to check
-> + * @addr: The address
-> + *
-> + * Returns: The VMA associated with addr, or the next vma.
-> + * May return %NULL in the case of no vma at addr or above.
-> + */
->  struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->  {
-> -	struct rb_node *rb_node;
->  	struct vm_area_struct *vma;
->  
->  	mmap_assert_locked(mm);
-> @@ -2441,22 +2447,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->  	if (likely(vma))
->  		return vma;
->  
-> -	rb_node = mm->mm_rb.rb_node;
-> -
-> -	while (rb_node) {
-> -		struct vm_area_struct *tmp;
-> -
-> -		tmp = rb_entry(rb_node, struct vm_area_struct, vm_rb);
-> -
-> -		if (tmp->vm_end > addr) {
-> -			vma = tmp;
-> -			if (tmp->vm_start <= addr)
-> -				break;
-> -			rb_node = rb_node->rb_left;
-> -		} else
-> -			rb_node = rb_node->rb_right;
-> -	}
-> -
-> +	vma = mt_find(&mm->mm_mt, &addr, ULONG_MAX);
+The memory reservation in arch/x86/platform/efi/efi.c depends on at
+least two command line parameters. Put it back later in the boot process
+and move efi_memblock_x86_reserve_range() out of early_memory_reserve().
 
-This updates addr to the end of vma->vm_end.
+An attempt to fix this was done in
 
->  	if (vma)
->  		vmacache_update(addr, vma);
+  8d48bf8206f7 ("x86/boot: Pull up cmdline preparation and early param parsing")
 
-And here vmacache is updated with the updated addr, which wasn't done
-before. This AFAIU has two consequences:
+but that caused other troubles so it got reverted.
 
-- the original addr will not be cached, so this whole vma lookup will not be
-cached and will always resort to maple tree search. Possibly affecting any
-measurements you made. Especially the vmacache removal later in the series
-might now look like it makes not much of a performance difference - but
-vmcache is effectively dysfunctional.
+The bug this is addressing is:
 
-- the future lookup of address vma->vm_end will return this vma, although
-the address doesn't belong to it. Wouldn't be surprised if this caused
-infrequent mysterious bugs?
+Dan reports that Anjaneya Chagam can no longer use the efi=nosoftreserve
+kernel command line parameter to suppress "soft reservation" behavior.
 
-Both will resolve with vmacache removal later, but better still fix this.
+This is due to the fact that the following call-chain happens at boot:
 
-Vlastimil
+early_reserve_memory
+|-> efi_memblock_x86_reserve_range
+    |-> efi_fake_memmap_early
 
->  	return vma;
+which does
 
+        if (!efi_soft_reserve_enabled())
+                return;
+
+and that would have set EFI_MEM_NO_SOFT_RESERVE after having parsed
+"nosoftreserve".
+
+However, parse_early_param() gets called *after* it, leading to the boot
+cmdline not being taken into account.
+
+ [ bp: Produce into a proper patch. ]
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Mike Rapoport <rppt@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/e8dd8993c38702ee6dd73b3c11f158617e665607.camel@intel.com
+Link: https://lore.kernel.org/r/20211213112757.2612-4-bp@alien8.de
+---
+ arch/x86/kernel/setup.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 49b596d..e04f5e6 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -713,9 +713,6 @@ static void __init early_reserve_memory(void)
+ 
+ 	early_reserve_initrd();
+ 
+-	if (efi_enabled(EFI_BOOT))
+-		efi_memblock_x86_reserve_range();
+-
+ 	memblock_x86_reserve_range_setup_data();
+ 
+ 	reserve_ibft_region();
+@@ -890,6 +887,9 @@ void __init setup_arch(char **cmdline_p)
+ 
+ 	parse_early_param();
+ 
++	if (efi_enabled(EFI_BOOT))
++		efi_memblock_x86_reserve_range();
++
+ #ifdef CONFIG_MEMORY_HOTPLUG
+ 	/*
+ 	 * Memory used by the kernel cannot be hot-removed because Linux

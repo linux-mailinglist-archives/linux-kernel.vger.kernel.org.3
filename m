@@ -2,152 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC043475A5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E8B475A5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243213AbhLOONS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:13:18 -0500
-Received: from foss.arm.com ([217.140.110.172]:53092 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243206AbhLOONR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:13:17 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05DE3142F;
-        Wed, 15 Dec 2021 06:13:17 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.67.176])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 372A03F774;
-        Wed, 15 Dec 2021 06:13:12 -0800 (PST)
-Date:   Wed, 15 Dec 2021 14:13:09 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 25/43] kmsan: skip shadow checks in files doing context
- switches
-Message-ID: <Ybn39Z5dwcbrbs0O@FVFF77S0Q05N>
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-26-glider@google.com>
+        id S243218AbhLOONp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:13:45 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:20998 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237532AbhLOONm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:13:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639577622; x=1671113622;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IOEPlVejksN1DxCvbwyaNA34YV1REce2jmMX5fVsZOA=;
+  b=vpDjst6Xy2Yorpf6VEZu8FCIXCbdXegrYTIpYLtQqsgqiNvIAyAaGAMI
+   KQ5+Snio95osfqXGC60caA65F+0EqbcsY1wAWL7elPHfq5GL4AISoXeSU
+   0c5GdSXGNJG1xNEudduFW4ubtar4RST2F9XkWC3cmAERRCHw98471pDdG
+   A=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 15 Dec 2021 06:13:42 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:13:41 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 15 Dec 2021 06:13:41 -0800
+Received: from fixkernel.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 15 Dec
+ 2021 06:13:39 -0800
+Date:   Wed, 15 Dec 2021 09:13:37 -0500
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Jianyong Wu <jianyong.wu@arm.com>
+CC:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <anshuman.khandual@arm.com>, <akpm@linux-foundation.org>,
+        <ardb@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <david@redhat.com>,
+        <gshan@redhat.com>, <justin.he@arm.com>, <nd@arm.com>
+Subject: Re: [PATCH v2] arm64/mm: avoid fixmap race condition when create pud
+ mapping
+Message-ID: <Ybn4EfweLqKtyW0+@fixkernel.com>
+References: <20211210095432.51798-1-jianyong.wu@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20211214162050.660953-26-glider@google.com>
+In-Reply-To: <20211210095432.51798-1-jianyong.wu@arm.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:20:32PM +0100, Alexander Potapenko wrote:
-> When instrumenting functions, KMSAN obtains the per-task state (mostly
-> pointers to metadata for function arguments and return values) once per
-> function at its beginning.
-
-How does KMSAN instrumentation acquire the per-task state? What's used as the
-base for that?
-
-> If a function performs a context switch, instrumented code won't notice
-> that, and will still refer to the old state, possibly corrupting it or
-> using stale data. This may result in false positive reports.
+On Fri, Dec 10, 2021 at 05:54:32PM +0800, Jianyong Wu wrote:
+> fixmap is a global resource and is used recursively in create pud mapping.
+> It may lead to race condition when alloc_init_pud is called concurrently.
 > 
-> To deal with that, we need to apply __no_kmsan_checks to the functions
-> performing context switching - this will result in skipping all KMSAN
-> shadow checks and marking newly created values as initialized,
-> preventing all false positive reports in those functions. False negatives
-> are still possible, but we expect them to be rare and impersistent.
+> Fox example:
+> alloc_init_pud is called when kernel_init. If memory hotplug
+> thread, which will also call alloc_init_pud, happens during
+> kernel_init, the race for fixmap occurs.
 > 
-> To improve maintainability, we choose to apply __no_kmsan_checks not
-> just to a handful of functions, but to the whole files that may perform
-> context switching - this is done via KMSAN_ENABLE_CHECKS:=n.
-> This decision can be reconsidered in the future, when KMSAN won't need
-> so much attention.
-
-I worry this might be the wrong approach (and I've given some rationale below),
-but it's not clear to me exactly how this goes wrong. Could you give an example
-flow where stale data gets used?
-
+> The race condition flow can be:
 > 
-> Suggested-by: Marco Elver <elver@google.com>
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+> *************** begin **************
+> 
+> kerenl_init thread                          virtio-mem workqueue thread
+> ==================                          ======== ==================
+> alloc_init_pud(...)
+>   pudp = pud_set_fixmap_offset(..)          alloc_init_pud(...)
+> ...                                         ...
+>     READ_ONCE(*pudp) //OK!                    pudp = pud_set_fixmap_offset(
+> ...                                         ...
+>   pud_clear_fixmap() //fixmap break
+>                                               READ_ONCE(*pudp) //CRASH!
+> 
+> **************** end ***************
+> 
+> Hence, a spin lock is introduced to protect the fixmap during create pdg
+> mapping.
+> 
+> Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
+
+I am afraid there is a problem to take a spinlock there.
+
+node 0 deferred pages initialised in 2740ms
+ pgdatinit0 (176) used greatest stack depth: 59184 bytes left
+ devtmpfs: initialized
+ KASLR disabled due to lack of seed
+ BUG: sleeping function called from invalid context at mm/page_alloc.c:5151
+ in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
+ preempt_count: 1, expected: 0
+ 1 lock held by swapper/0/1:
+  #0: ffff800009ea3278 (fixmap_lock){+.+.}-{2:2}, at: __create_pgd_mapping
+  alloc_init_pud at /usr/src/linux-next/arch/arm64/mm/mmu.c:340 (discriminator 4)
+  (inlined by) __create_pgd_mapping at /usr/src/linux-next/arch/arm64/mm/mmu.c:393 (discriminator 4)
+ CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W         5.16.0-rc5-next-20211214
+ Call trace:
+  dump_backtrace
+  show_stack
+  dump_stack_lvl
+  dump_stack
+  __might_resched
+  __might_sleep
+  __alloc_pages
+  alloc_page_interleave
+  alloc_pages
+  __get_free_pages
+  __pgd_pgtable_alloc
+  __create_pgd_mapping
+  __phys_to_pte_val at /usr/src/linux-next/./arch/arm64/include/asm/pgtable.h:77
+  (inlined by) __pud_populate at /usr/src/linux-next/./arch/arm64/include/asm/pgalloc.h:25
+  (inlined by) alloc_init_cont_pmd at /usr/src/linux-next/arch/arm64/mm/mmu.c:277
+  (inlined by) alloc_init_pud at /usr/src/linux-next/arch/arm64/mm/mmu.c:358
+  (inlined by) __create_pgd_mapping at /usr/src/linux-next/arch/arm64/mm/mmu.c:393
+  map_entry_trampoline
+  map_entry_trampoline at /usr/src/linux-next/arch/arm64/mm/mmu.c:639
+  do_one_initcall
+  kernel_init_freeable
+  kernel_init
+  ret_from_fork
+
 > ---
-> Link: https://linux-review.googlesource.com/id/Id40563d36792b4482534c9a0134965d77a5581fa
-> ---
->  arch/x86/kernel/Makefile | 4 ++++
->  kernel/sched/Makefile    | 4 ++++
->  2 files changed, 8 insertions(+)
+>  arch/arm64/mm/mmu.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-> index 0b9fc3ecce2de..308d4d0323263 100644
-> --- a/arch/x86/kernel/Makefile
-> +++ b/arch/x86/kernel/Makefile
-> @@ -38,6 +38,10 @@ KCSAN_SANITIZE := n
->  KMSAN_SANITIZE_head$(BITS).o				:= n
->  KMSAN_SANITIZE_nmi.o					:= n
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index acfae9b41cc8..98ac09ae9588 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -63,6 +63,7 @@ static pmd_t bm_pmd[PTRS_PER_PMD] __page_aligned_bss __maybe_unused;
+>  static pud_t bm_pud[PTRS_PER_PUD] __page_aligned_bss __maybe_unused;
 >  
-> +# Some functions in process_64.c perform context switching.
-> +# Apply __no_kmsan_checks to the whole file to avoid false positives.
-> +KMSAN_ENABLE_CHECKS_process_64.o			:= n
-
-Which state are you worried about here? The __switch_to() funciton is
-tail-called from __switch_to_asm(), so the GPRs and SP should all be consistent
-with the new task.
-
-Are you concerned with the segment registers? Something else?
-
-> +
->  OBJECT_FILES_NON_STANDARD_test_nx.o			:= y
+>  static DEFINE_SPINLOCK(swapper_pgdir_lock);
+> +static DEFINE_SPINLOCK(fixmap_lock);
 >  
->  ifdef CONFIG_FRAME_POINTER
-> diff --git a/kernel/sched/Makefile b/kernel/sched/Makefile
-> index c7421f2d05e15..d9bf8223a064a 100644
-> --- a/kernel/sched/Makefile
-> +++ b/kernel/sched/Makefile
-> @@ -17,6 +17,10 @@ KCOV_INSTRUMENT := n
->  # eventually.
->  KCSAN_SANITIZE := n
+>  void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
+>  {
+> @@ -329,6 +330,11 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+>  	}
+>  	BUG_ON(p4d_bad(p4d));
 >  
-> +# Some functions in core.c perform context switching. Apply __no_kmsan_checks
-> +# to the whole file to avoid false positives.
-> +KMSAN_ENABLE_CHECKS_core.o := n
-
-As above, the actual context-switch occurs in arch code --I assume the
-out-of-line call *must* act as a clobber from the instrumentation's PoV or we'd
-have many more problems. I also didn't spot any *explciit* state switching
-being added there that would seem to affect KMSAN.
-
-... so I don't understand why checks need to be inhibited for the core sched code.
-
-Thanks
-Mark.
-
-> +
->  ifneq ($(CONFIG_SCHED_OMIT_FRAME_POINTER),y)
->  # According to Alan Modra <alan@linuxcare.com.au>, the -fno-omit-frame-pointer is
->  # needed for x86 only.  Why this used to be enabled for all architectures is beyond
+> +	/*
+> +	 * fixmap is global resource, thus it needs to be protected by a lock
+> +	 * in case of race condition.
+> +	 */
+> +	spin_lock(&fixmap_lock);
+>  	pudp = pud_set_fixmap_offset(p4dp, addr);
+>  	do {
+>  		pud_t old_pud = READ_ONCE(*pudp);
+> @@ -359,6 +365,7 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+>  	} while (pudp++, addr = next, addr != end);
+>  
+>  	pud_clear_fixmap();
+> +	spin_unlock(&fixmap_lock);
+>  }
+>  
+>  static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
 > -- 
-> 2.34.1.173.g76aa8bc2d0-goog
+> 2.17.1
 > 

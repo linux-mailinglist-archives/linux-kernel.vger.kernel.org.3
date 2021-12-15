@@ -2,88 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D717476330
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B9A476332
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235838AbhLOUZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:25:31 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44836 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbhLOUZ3 (ORCPT
+        id S235846AbhLOU0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:26:11 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:36463 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231725AbhLOU0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:25:29 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D01F361AA2;
-        Wed, 15 Dec 2021 20:25:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D83D9C36AE3;
-        Wed, 15 Dec 2021 20:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639599928;
-        bh=BVkzCzFwrOwCwYtYhefPQ6DcWed6QHqjelnD/Kl5z40=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RCtu/RoqhecceDeymibV29/lFoWKyAgE74YOq7yR1BiJae8NrnLmXWA9FFLkFPlRf
-         +Q/ouiPMkOUxU6ftt1lVERwV0rCU3/4IibMZBsMLhcGyLgEMcuNF+Onyg65ajMei4Z
-         tecUOC5ZtXmrGgxM8JeRu08TTwok5kpLJNBcl4MRza+tMUI5hYDlZUt0T9szhtAJsp
-         3R3guhftWuUcMpTwpZOKRSVLY18nWCmQQ5+bidm+tvRFYCCew9i7QX8IMlIaRYnFj2
-         Q0R/Aei1HuaveFEPDLLEsVZiFdlT2ePSVr9VYbPdU+abMf94OZ7XQlJZZ8+SQZH3an
-         bKDPtTVUWne2A==
-Date:   Wed, 15 Dec 2021 20:25:22 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        ~okias/devicetree@lists.sr.ht, Dmitry Osipenko <digetx@gmail.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: sound: nvidia,tegra-audio: Convert
- multiple txt bindings to yaml
-Message-ID: <YbpPModNbC1aLWvy@sirena.org.uk>
-References: <20211211224946.79875-1-david@ixit.cz>
+        Wed, 15 Dec 2021 15:26:10 -0500
+Received: by mail-oi1-f179.google.com with SMTP id t23so33310492oiw.3;
+        Wed, 15 Dec 2021 12:26:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iG0u57kunifdWBtvwJx/znGD9pCdWnk87JXPiNNnr3g=;
+        b=GouGxrE23uZJRhx+JkyT6tbRUx8bryuCWz11K7of106E9mGRTDYi8DHbsAJm5sJ3bS
+         n+WJbpRtLgRMogrg8UW//cMQ/JVyEE/OmO2ryBNeshJdvRG5vyWLoFL+ls6Z1X9Cpry3
+         jMXobdnsymDHzH+QAta/CIh+vhcpi7a33WmQ85XFy+e+R5pMYWlrtS19oBL8AKrqi02+
+         AAHtmAD4GRPfz3J+Tpju9CEbmOR8Qlf4OVpGUjVM+dP9pEUgMTNiFNe9inA2/Vih6XEZ
+         Ynh7JhhcgxnZQrfCszsde8GIDaG6B9s7PKXA/9KhQn4RAKbM1T2dA9J5CPk4hTWHNrb2
+         iLCA==
+X-Gm-Message-State: AOAM533l/xy6ONwbTGx/JvuVDjwOTB9O8qpj0wIAfL2KfYMcAj77Or9M
+        C4E/XFZxu1VHLrfUg9+Jrg==
+X-Google-Smtp-Source: ABdhPJxJaNg3Ku//Xg6t7XA/x0vvFJciwrOVFVrPBvOGQ/pHUbHe33Mstx8XZwWj+AIWef4HqmWYRA==
+X-Received: by 2002:a05:6808:2111:: with SMTP id r17mr1492778oiw.118.1639599969681;
+        Wed, 15 Dec 2021 12:26:09 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bl33sm580563oib.47.2021.12.15.12.26.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 12:26:08 -0800 (PST)
+Received: (nullmailer pid 1779557 invoked by uid 1000);
+        Wed, 15 Dec 2021 20:26:08 -0000
+Date:   Wed, 15 Dec 2021 14:26:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     David Brazdil <dbrazdil@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: firmware: Add Open Profile for DICE
+Message-ID: <YbpPYG4rzPmJmwA6@robh.at.kernel.org>
+References: <20211213195833.772892-1-dbrazdil@google.com>
+ <20211213195833.772892-2-dbrazdil@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lvwbvfwXnj48lQFC"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211211224946.79875-1-david@ixit.cz>
-X-Cookie: Void where prohibited by law.
+In-Reply-To: <20211213195833.772892-2-dbrazdil@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 13, 2021 at 07:58:32PM +0000, David Brazdil wrote:
+> Add DeviceTree bindings for Open Profile for DICE, an open protocol for
+> measured boot. Firmware uses DICE to measure the hardware/software
+> combination and generates Compound Device Identifier (CDI) certificates.
+> These are stored in memory and the buffer is described in the DT as
+> a reserved memory region referenced by a compatible device node.
+> 
+> Signed-off-by: David Brazdil <dbrazdil@google.com>
+> ---
+>  .../bindings/firmware/google,open-dice.yaml   | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/firmware/google,open-dice.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/firmware/google,open-dice.yaml b/Documentation/devicetree/bindings/firmware/google,open-dice.yaml
+> new file mode 100644
+> index 000000000000..1aa69f381b8c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/firmware/google,open-dice.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/firmware/google,open-dice.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Open Profile for DICE Device Tree Bindings
+> +
+> +description: |
+> +  This binding represents a reserved memory region containing data
+> +  generated by the Open Profile for DICE protocol.
+> +
+> +  See https://pigweed.googlesource.com/open-dice/
+> +
+> +maintainers:
+> +  - David Brazdil <dbrazdil@google.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - google,open-dice
+> +
+> +  memory-region:
+> +    maxItems: 1
+> +    description: |
+> +      phandle to the reserved memory node to be associated with the device
+> +      The reserved memory node should be defined as per the bindings,
+> +      Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
+> +
+> +required:
+> +  - compatible
+> +  - memory-region
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    reserved-memory {
+> +        #address-cells = <2>;
+> +        #size-cells = <1>;
+> +
+> +        dice_reserved: dice@12340000 {
+> +            reg = <0x00 0x12340000 0x2000>;
+> +            no-map;
+> +        };
+> +    };
+> +
+> +    dice {
+> +        compatible = "google,open-dice";
+> +        memory-region = <&dice_reserved>;
 
---lvwbvfwXnj48lQFC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+There's no need for this indirection. Just add the compatible to the 
+dice@12340000 node. You can bind drivers to /reserved-memory nodes.
 
-On Sat, Dec 11, 2021 at 11:49:44PM +0100, David Heidelberg wrote:
-> Convert Tegra audio complex with the
->   * ALC5632
->   * MAX98090
->   * RT5640
->   * RT5677
-
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
---lvwbvfwXnj48lQFC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG6TzEACgkQJNaLcl1U
-h9AePAgAg6ul9yfOmKkMFgIJAAizLWOO5NqKi49ulaQFjkUkT6t369xEd3ypgnbX
-+fdj6ae4ZqM7LHJFuyht8V+oJ74bdZ02bezUXvh4FrILkiibqFfR6OkIGNpIHemK
-o1BpcH4wXGSy2qIbrUa6kVPwhzK40//o1pfskfzG9EN7FAmcCCnbwuOPZPKbrTt4
-xOyNCP3kd6h4S0yt85jGY4T/czPvvAqM/0FpvqMtWbQNFxk5ULsvbZUESVhCICzl
-8YTgGUpYnrbwJL/bXKTc4Kg3I0WYCoS5AcFNQJFI7tiruY5fDQxIDiafZ7EDk7RB
-EnVAWBDelCmTSLxhwJamgK2+tTMzNg==
-=/kfI
------END PGP SIGNATURE-----
-
---lvwbvfwXnj48lQFC--
+Rob

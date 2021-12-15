@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C070475EDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAADA475F15
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343622AbhLORZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:25:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44982 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245350AbhLORYV (ORCPT
+        id S1343501AbhLOR1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:27:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343551AbhLOR0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:24:21 -0500
+        Wed, 15 Dec 2021 12:26:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6721C0698DE;
+        Wed, 15 Dec 2021 09:25:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 881F2619C9;
-        Wed, 15 Dec 2021 17:24:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D0E1C36AE0;
-        Wed, 15 Dec 2021 17:24:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B069B81F1C;
+        Wed, 15 Dec 2021 17:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE64C36AE3;
+        Wed, 15 Dec 2021 17:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589060;
-        bh=ewmuxsY11nEr8SFgDbQVXcVDgcxMTM324HMwRtemalk=;
+        s=korg; t=1639589127;
+        bh=wqPOorAJNjodfP+jwRE4baCBPYtL/nuulx6d44VMbhg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r89Kcwbv3K6+TrUmzB6hvSgddannppaIuH7GqKGJxef/z9MTfweq5kLyy59Gf/2EY
-         EZC/xjS+4+ShCzWuXzfdta6aCUUw6yHgjA8CFe1Uou+mKSE4zwPukHaDKurJMfcd3o
-         Qe6K+bnD02YS9cpJK7+3p7SIItil1YVBq4nlXZzw=
+        b=MYcj1QxfNerk4OBBrt5mEk82JF5NUhrlZkU8Ol4vvMFa/ddiBzdO6nmhtTvv6V4rR
+         j/qrU2gXsYgSuxr5dwJ0/gZnXTLQ39gppxzZxtlc/x8UnjsUUNSkc1ue0LBX2TK6yk
+         Paa2QmFdvDJD9jbJbUkqomF3k9yR5AqcqF9fS41g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Ilie Halip <ilie.halip@gmail.com>,
-        Ulrich Weigand <Ulrich.Weigand@de.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 24/42] s390/test_unwind: use raw opcode instead of invalid instruction
-Date:   Wed, 15 Dec 2021 18:21:05 +0100
-Message-Id: <20211215172027.500272490@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 08/33] ALSA: hda/hdmi: fix HDA codec entry table order for ADL-P
+Date:   Wed, 15 Dec 2021 18:21:06 +0100
+Message-Id: <20211215172025.061997490@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
-References: <20211215172026.641863587@linuxfoundation.org>
+In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
+References: <20211215172024.787958154@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,53 +49,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilie Halip <ilie.halip@gmail.com>
+From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 
-[ Upstream commit 53ae7230918154d1f4281d7aa3aae9650436eadf ]
+[ Upstream commit 289047db1143c42c81820352f195a393ff639a52 ]
 
-Building with clang & LLVM_IAS=1 leads to an error:
-    arch/s390/lib/test_unwind.c:179:4: error: invalid register pair
-                        "       mvcl    %%r1,%%r1\n"
-                        ^
+Keep the HDA_CODEC_ENTRY entries sorted by the codec VID. ADL-P
+is the only misplaced Intel HDMI codec.
 
-The test creates an invalid instruction that would trap at runtime, but the
-LLVM inline assembler tries to validate it at compile time too.
-
-Use the raw instruction opcode instead.
-
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Ilie Halip <ilie.halip@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Suggested-by: Ulrich Weigand <Ulrich.Weigand@de.ibm.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1421
-Link: https://lore.kernel.org/r/20211117174822.3632412-1-ilie.halip@gmail.com
-Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
-Signed-off-by: Christian Borntraeger <borntraeger@de.ibm.com>
-[hca@linux.ibm.com: use illegal opcode, and update comment]
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Link: https://lore.kernel.org/r/20211130124732.696896-2-kai.vehmanen@linux.intel.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/lib/test_unwind.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_hdmi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
-index ecf327d743a03..c0635cf787e31 100644
---- a/arch/s390/lib/test_unwind.c
-+++ b/arch/s390/lib/test_unwind.c
-@@ -171,10 +171,11 @@ static noinline int unwindme_func4(struct unwindme *u)
- 		}
- 
- 		/*
--		 * trigger specification exception
-+		 * Trigger operation exception; use insn notation to bypass
-+		 * llvm's integrated assembler sanity checks.
- 		 */
- 		asm volatile(
--			"	mvcl	%%r1,%%r1\n"
-+			"	.insn	e,0x0000\n"	/* illegal opcode */
- 			"0:	nopr	%%r7\n"
- 			EX_TABLE(0b, 0b)
- 			:);
+diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
+index 7b91615bcac32..fe725f0f09312 100644
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -4362,11 +4362,11 @@ HDA_CODEC_ENTRY(0x8086280f, "Icelake HDMI",	patch_i915_icl_hdmi),
+ HDA_CODEC_ENTRY(0x80862812, "Tigerlake HDMI",	patch_i915_tgl_hdmi),
+ HDA_CODEC_ENTRY(0x80862814, "DG1 HDMI",	patch_i915_tgl_hdmi),
+ HDA_CODEC_ENTRY(0x80862815, "Alderlake HDMI",	patch_i915_tgl_hdmi),
+-HDA_CODEC_ENTRY(0x8086281c, "Alderlake-P HDMI", patch_i915_tgl_hdmi),
+ HDA_CODEC_ENTRY(0x80862816, "Rocketlake HDMI",	patch_i915_tgl_hdmi),
+ HDA_CODEC_ENTRY(0x80862819, "DG2 HDMI",	patch_i915_tgl_hdmi),
+ HDA_CODEC_ENTRY(0x8086281a, "Jasperlake HDMI",	patch_i915_icl_hdmi),
+ HDA_CODEC_ENTRY(0x8086281b, "Elkhartlake HDMI",	patch_i915_icl_hdmi),
++HDA_CODEC_ENTRY(0x8086281c, "Alderlake-P HDMI", patch_i915_tgl_hdmi),
+ HDA_CODEC_ENTRY(0x80862880, "CedarTrail HDMI",	patch_generic_hdmi),
+ HDA_CODEC_ENTRY(0x80862882, "Valleyview2 HDMI",	patch_i915_byt_hdmi),
+ HDA_CODEC_ENTRY(0x80862883, "Braswell HDMI",	patch_i915_byt_hdmi),
 -- 
 2.33.0
 

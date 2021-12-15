@@ -2,98 +2,452 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D1A475DE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C84A475DE9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245022AbhLOQxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:53:24 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:43862 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232819AbhLOQxV (ORCPT
+        id S245029AbhLOQxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:53:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232819AbhLOQxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:53:21 -0500
-Received: by mail-ot1-f45.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so25654565otu.10;
-        Wed, 15 Dec 2021 08:53:21 -0800 (PST)
+        Wed, 15 Dec 2021 11:53:54 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D06C061574;
+        Wed, 15 Dec 2021 08:53:53 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id x15so78018159edv.1;
+        Wed, 15 Dec 2021 08:53:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7ONVACEf9qaS54CzMeQ4LhCD5DqrmpDkceimVhhKDwM=;
+        b=IalUGH48T7nkRBHEOM3l7qLbjmpep1WORrkuWMQc8zjcnhEMS3aTIV1q9o92ijtIht
+         vA//fDCH1GLbAshHC4IGUoLQSnNXacUHfVx6w1eGXPUmbr05S5vCgGMjYHeUlqGupVd8
+         oKFczXDSBt2xNeJV1vps3kq8btRWLHfviigVI9XFhfUjRacjKurWOERmbEs1I4uxfMKh
+         a8pDlXZiB9T6H3n2tDOn/a2LGr556aunmLB5oSUF9q8NZ9TL7YCsXl1fN6mF+1juQStJ
+         OKX4Y9d7ihsihdrP06vECl8g8I9qCrOZC8Ob6jr+YEw2mRCZWQHNm50DqsKlqE27RHqQ
+         SEHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Xm9gpKkVx8JRZ7dzKc9hCU1OHkufwqdeq6wW80KqSwA=;
-        b=nRNeAHnfXIEYkbzwFzR81kx9AkhXBHask9ZC3kbivFiQ/IO4JPTVCgIsySvb5Sc9AR
-         BuhZQxMjJHL+0MaEHN5I9//dH4m/IVjQjIpdOHRkO6akRKijyZZok7MNX+YHfuHOXsWY
-         T//o5+NASaNkCihW2UreG7yCE5j2B+cCH3eRplKGUbMo7LvQVvLNIW5FaLqNTJyrAtk6
-         PlvZN+7CSIMk2P5Mfk+wjkwu7C4cDhe4EjNgmYtCsZkJzrLLC7SzudZh7uMCWtnvUm0K
-         H0a4u6yxnGx1WZ8UkU5Yu+/PmBHevNIzg8KKwpQzrZ4bgz0fQz695GW5dyP1J078oeS8
-         uwBA==
-X-Gm-Message-State: AOAM533MTOZRQIHyXjMHFwhdgyTHpCEwJd77GlXNLh/8u94UUDKQtKuq
-        ww6IAlBNFmz48Y1SEkJMSQ==
-X-Google-Smtp-Source: ABdhPJyKtoicFALG4i4urGSzoDXuoc7COnK+VLsgjbQi7WLCicmQaJorWgLOrIAOsd0okSfXK3zfnw==
-X-Received: by 2002:a05:6830:4d6:: with SMTP id s22mr9720535otd.270.1639587201035;
-        Wed, 15 Dec 2021 08:53:21 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bc7sm578949oob.35.2021.12.15.08.53.19
+        bh=7ONVACEf9qaS54CzMeQ4LhCD5DqrmpDkceimVhhKDwM=;
+        b=CBGb1gZZ1zEyBbX74eywdJrRECLrwJsipp+NZ/Mou/jQ+jmpfGC6kbw57FhB6LzzSy
+         b5Wrf0gK9ut4bIp/knhR3SFE17i7SiSCnT1uL+jNaleWVdQAoav2zhHxwhZLOyQiPABo
+         98qR8K/Se1ILVhrdo7sdCCsw9wTlxu2vkS/iMGp0tukTTyARQ0Jq/qUegvpiTEISyniw
+         1UGiDgUZ/vhDe6ndQmO9DYUfvOfg6Z0M9HvxD8cXGizoYNUlQShY7sb1HWqCYLUOZq9o
+         sPVjIIITwszI4f1UdLDS4SZErshQv84GWRrzpTOhcmYWtNwhoHFJTSHjEXme87G+MLTb
+         h0vw==
+X-Gm-Message-State: AOAM5331dGfqRoq54hr2bQmqe3IkxtMhuNwumb65Z+xtsCThxkOiBJbR
+        7/74oDFwm8PK7bhecNhxXME=
+X-Google-Smtp-Source: ABdhPJw9lbMWS1A5036GePshxRENV1LOKDtWmuRTZkVd1h4rzcZri773T3YpNggecoetPmvLFP1PhA==
+X-Received: by 2002:a17:907:1626:: with SMTP id hb38mr12261758ejc.481.1639587231827;
+        Wed, 15 Dec 2021 08:53:51 -0800 (PST)
+Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id gb4sm924514ejc.90.2021.12.15.08.53.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 08:53:20 -0800 (PST)
-Received: (nullmailer pid 1462226 invoked by uid 1000);
-        Wed, 15 Dec 2021 16:53:18 -0000
-Date:   Wed, 15 Dec 2021 10:53:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-media@vger.kernel.org, benjamin.gaignard@collabora.com,
-        cphealy@gmail.com, aford@beaconembedded.com, nicolas@ndufresne.ca,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH 08/10] dt-bindings: media: nxp,imx8mq-vpu: Enable support
- for i.MX8M Mini
-Message-ID: <Ybodfln1RtezsARN@robh.at.kernel.org>
-References: <20211208225030.2018923-1-aford173@gmail.com>
- <20211208225030.2018923-9-aford173@gmail.com>
+        Wed, 15 Dec 2021 08:53:51 -0800 (PST)
+Message-ID: <61ba1d9f.1c69fb81.9148a.3673@mx.google.com>
+X-Google-Original-Message-ID: <YbodmzgvEwM07lyn@Ansuel-xps.>
+Date:   Wed, 15 Dec 2021 17:53:47 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH RFC v6 12/16] net: dsa: qca8k: add support for
+ mdio read/write in Ethernet packet
+References: <20211214224409.5770-1-ansuelsmth@gmail.com>
+ <20211214224409.5770-13-ansuelsmth@gmail.com>
+ <20211215094912.gkqq4pfwac7gqeaa@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211208225030.2018923-9-aford173@gmail.com>
+In-Reply-To: <20211215094912.gkqq4pfwac7gqeaa@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 04:50:27PM -0600, Adam Ford wrote:
-> The i.MX8M mini appears to have a similar G1 and G2 decoder but the
-> post-procesing isn't present.  Add compatible flags to support
-> G1 and G2 without post-processing.
+On Wed, Dec 15, 2021 at 11:49:12AM +0200, Vladimir Oltean wrote:
+> On Tue, Dec 14, 2021 at 11:44:05PM +0100, Ansuel Smith wrote:
+> > Add qca8k side support for mdio read/write in Ethernet packet.
+> > qca8k supports some specially crafted Ethernet packet that can be used
+> > for mdio read/write instead of the legacy method uart/internal mdio.
+> > This add support for the qca8k side to craft the packet and enqueue it.
+> > Each port and the qca8k_priv have a special struct to put data in it.
+> > The completion API is used to wait for the packet to be received back
+> > with the requested data.
+> > 
+> > The various steps are:
+> > 1. Craft the special packet with the qca hdr set to mdio read/write
+> >    mode.
+> > 2. Set the lock in the dedicated mdio struct.
+> > 3. Reinit the completion.
+> > 4. Enqueue the packet.
+> > 5. Wait the packet to be received.
+> > 6. Use the data set by the tagger to complete the mdio operation.
+> > 
+> > If the completion timeouts or the ack value is not true, the legacy
+> > mdio way is used.
+> > 
+> > It has to be considered that in the initial setup mdio is still used and
+> > mdio is still used until DSA is ready to accept and tag packet.
+> > 
+> > tag_proto_connect() is used to fill the required handler for the tagger
+> > to correctly parse and elaborate the special Ethernet mdio packet.
+> > 
+> > Locking is added to qca8k_master_change() to make sure no mdio Ethernet
+> > are in progress.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  drivers/net/dsa/qca8k.c | 192 ++++++++++++++++++++++++++++++++++++++++
+> >  drivers/net/dsa/qca8k.h |  13 +++
+> >  2 files changed, 205 insertions(+)
+> > 
+> > diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
+> > index f317f527dd6d..b35ba26a0696 100644
+> > --- a/drivers/net/dsa/qca8k.c
+> > +++ b/drivers/net/dsa/qca8k.c
+> > @@ -20,6 +20,7 @@
+> >  #include <linux/phylink.h>
+> >  #include <linux/gpio/consumer.h>
+> >  #include <linux/etherdevice.h>
+> > +#include <linux/dsa/tag_qca.h>
+> >  
+> >  #include "qca8k.h"
+> >  
+> > @@ -170,6 +171,158 @@ qca8k_rmw(struct qca8k_priv *priv, u32 reg, u32 mask, u32 write_val)
+> >  	return regmap_update_bits(priv->regmap, reg, mask, write_val);
+> >  }
+> >  
+> > +static void qca8k_rw_reg_ack_handler(struct dsa_port *dp, struct sk_buff *skb)
+> > +{
+> > +	struct qca8k_mdio_hdr_data *mdio_hdr_data;
+> > +	struct qca8k_priv *priv = dp->ds->priv;
+> > +	struct mdio_ethhdr *mdio_ethhdr;
+> > +	u8 len, cmd;
+> > +
+> > +	mdio_ethhdr = (struct mdio_ethhdr *)skb_mac_header(skb);
+> > +	mdio_hdr_data = &priv->mdio_hdr_data;
+> > +
+> > +	cmd = FIELD_GET(QCA_HDR_MDIO_CMD, mdio_ethhdr->command);
+> > +	len = FIELD_GET(QCA_HDR_MDIO_LENGTH, mdio_ethhdr->command);
+> > +
+> > +	/* Make sure the seq match the requested packet */
+> > +	if (mdio_ethhdr->seq == mdio_hdr_data->seq)
+> > +		mdio_hdr_data->ack = true;
+> > +
+> > +	if (cmd == MDIO_READ) {
+> > +		mdio_hdr_data->data[0] = mdio_ethhdr->mdio_data;
+> > +
+> > +		/* Get the rest of the 12 byte of data */
+> > +		if (len > QCA_HDR_MDIO_DATA1_LEN)
+> > +			memcpy(mdio_hdr_data->data + 1, skb->data,
+> > +			       QCA_HDR_MDIO_DATA2_LEN);
+> > +	}
+> > +
+> > +	complete(&mdio_hdr_data->rw_done);
+> > +}
+> > +
+> > +static struct sk_buff *qca8k_alloc_mdio_header(enum mdio_cmd cmd, u32 reg, u32 *val,
+> > +					       int seq_num, int priority)
+> > +{
+> > +	struct mdio_ethhdr *mdio_ethhdr;
+> > +	struct sk_buff *skb;
+> > +	u16 hdr;
+> > +
+> > +	skb = dev_alloc_skb(QCA_HDR_MDIO_PKG_LEN);
 > 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> ---
->  Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> Still no if (!skb) checking... Not only here, but also at the call sites
+> of this.
 > 
-> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> index eeb7bd6281f9..fb6c2ab1b2dc 100644
-> --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> @@ -20,6 +20,8 @@ properties:
->          deprecated: true
->        - const: nxp,imx8mq-vpu-g1
->        - const: nxp,imx8mq-vpu-g2
-> +      - const: nxp, imx8mm-vpu-g1
-> +      - const: nxp, imx8mm-vpu-g2
+> > +
+> > +	skb_reset_mac_header(skb);
+> > +	skb_set_network_header(skb, skb->len);
+> > +
+> > +	mdio_ethhdr = skb_push(skb, QCA_HDR_MDIO_HEADER_LEN + QCA_HDR_LEN);
+> > +
+> > +	hdr = FIELD_PREP(QCA_HDR_XMIT_VERSION, QCA_HDR_VERSION);
+> > +	hdr |= FIELD_PREP(QCA_HDR_XMIT_PRIORITY, priority);
+> > +	hdr |= QCA_HDR_XMIT_FROM_CPU;
+> > +	hdr |= FIELD_PREP(QCA_HDR_XMIT_DP_BIT, BIT(0));
+> > +	hdr |= FIELD_PREP(QCA_HDR_XMIT_CONTROL, QCA_HDR_XMIT_TYPE_RW_REG);
+> > +
+> > +	mdio_ethhdr->seq = FIELD_PREP(QCA_HDR_MDIO_SEQ_NUM, seq_num);
+> > +
+> > +	mdio_ethhdr->command = FIELD_PREP(QCA_HDR_MDIO_ADDR, reg);
+> > +	mdio_ethhdr->command |= FIELD_PREP(QCA_HDR_MDIO_LENGTH, 4);
+> > +	mdio_ethhdr->command |= FIELD_PREP(QCA_HDR_MDIO_CMD, cmd);
+> > +	mdio_ethhdr->command |= FIELD_PREP(QCA_HDR_MDIO_CHECK_CODE, MDIO_CHECK_CODE_VAL);
+> > +
+> > +	if (cmd == MDIO_WRITE)
+> > +		mdio_ethhdr->mdio_data = *val;
+> > +
+> > +	mdio_ethhdr->hdr = htons(hdr);
+> > +
+> > +	skb_put_zero(skb, QCA_HDR_MDIO_DATA2_LEN);
+> > +	skb_put_zero(skb, QCA_HDR_MDIO_PADDING_LEN);
+> 
+> Maybe a single call to skb_put_zero, and pass the sum as argument?
+> 
+> > +
+> > +	return skb;
+> > +}
+> > +
+> > +static int qca8k_read_eth(struct qca8k_priv *priv, u32 reg, u32 *val)
+> > +{
+> > +	struct qca8k_mdio_hdr_data *mdio_hdr_data = &priv->mdio_hdr_data;
+> > +	struct sk_buff *skb;
+> > +	bool ack;
+> > +	int ret;
+> > +
+> > +	skb = qca8k_alloc_mdio_header(MDIO_READ, reg, NULL, 200, QCA8K_ETHERNET_MDIO_PRIORITY);
+> 
+> You hardcode "seq" to 200? Aren't you supposed to increment it or
+> something?
+>
 
-space                 ^
+We enforce one operation at time using lock. Seq is currently used to
+check if the packet is correct.
 
->  
->    reg:
->      minItems: 1
-> -- 
-> 2.32.0
+> > +	skb->dev = (struct net_device *)priv->master;
 > 
+> You access priv->master outside of priv->mdio_hdr_data.mutex from
+> qca8k_master_change(), that can't be good.
 > 
+
+Tell me if the logic is correct.
+qca8k_master_change() removes or sets the priv->master under lock (so no
+operation in progress)
+A read/write checks if priv->master is not NULL and try to use this
+alternative way. (not under lock)
+
+Think I should remove the priv->master check from the read/write and
+move it here under lock (and release the lock if it's not defined)
+(The main idea is try to keep the skb alloc and packet setup outside of
+locking to save some locking time)
+
+Can I check priv->master 2 times? One outside the lock and one under
+lock when is actually used by the skb? To skip locking and releasing for
+every read/write if the alternative way is not available. 
+
+> > +
+> > +	mutex_lock(&mdio_hdr_data->mutex);
+> > +
+> > +	reinit_completion(&mdio_hdr_data->rw_done);
+> > +	mdio_hdr_data->seq = 200;
+> 
+> Why do you rewrite the seq here?
+> 
+
+Seq is checked by the handler. Should I set it one time in probe?
+
+> > +	mdio_hdr_data->ack = false;
+> > +
+> > +	dev_queue_xmit(skb);
+> > +
+> > +	ret = wait_for_completion_timeout(&mdio_hdr_data->rw_done,
+> > +					  msecs_to_jiffies(QCA8K_ETHERNET_TIMEOUT));
+> > +
+> > +	*val = mdio_hdr_data->data[0];
+> > +	ack = mdio_hdr_data->ack;
+> > +
+> > +	mutex_unlock(&mdio_hdr_data->mutex);
+> > +
+> > +	if (ret <= 0)
+> > +		return -ETIMEDOUT;
+> > +
+> > +	if (!ack)
+> > +		return -EINVAL;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int qca8k_write_eth(struct qca8k_priv *priv, u32 reg, u32 val)
+> > +{
+> > +	struct qca8k_mdio_hdr_data *mdio_hdr_data = &priv->mdio_hdr_data;
+> > +	struct sk_buff *skb;
+> > +	bool ack;
+> > +	int ret;
+> > +
+> > +	skb = qca8k_alloc_mdio_header(MDIO_WRITE, reg, &val, 200, QCA8K_ETHERNET_MDIO_PRIORITY);
+> > +	skb->dev = (struct net_device *)priv->master;
+> > +
+> > +	mutex_lock(&mdio_hdr_data->mutex);
+> > +
+> > +	reinit_completion(&mdio_hdr_data->rw_done);
+> > +	mdio_hdr_data->ack = false;
+> > +	mdio_hdr_data->seq = 200;
+> > +
+> > +	dev_queue_xmit(skb);
+> > +
+> > +	ret = wait_for_completion_timeout(&mdio_hdr_data->rw_done,
+> > +					  msecs_to_jiffies(QCA8K_ETHERNET_TIMEOUT));
+> > +
+> > +	ack = mdio_hdr_data->ack;
+> > +
+> > +	mutex_unlock(&mdio_hdr_data->mutex);
+> > +
+> > +	if (ret <= 0)
+> > +		return -ETIMEDOUT;
+> > +
+> > +	if (!ack)
+> > +		return -EINVAL;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int
+> > +qca8k_regmap_update_bits_eth(struct qca8k_priv *priv, u32 reg, u32 mask, u32 write_val)
+> > +{
+> > +	u32 val = 0;
+> > +	int ret;
+> > +
+> > +	ret = qca8k_read_eth(priv, reg, &val);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	val &= ~mask;
+> > +	val |= write_val;
+> > +
+> > +	return qca8k_write_eth(priv, reg, val);
+> > +}
+> > +
+> >  static int
+> >  qca8k_regmap_read(void *ctx, uint32_t reg, uint32_t *val)
+> >  {
+> > @@ -178,6 +331,9 @@ qca8k_regmap_read(void *ctx, uint32_t reg, uint32_t *val)
+> >  	u16 r1, r2, page;
+> >  	int ret;
+> >  
+> > +	if (priv->master && !qca8k_read_eth(priv, reg, val))
+> > +		return 0;
+> > +
+> >  	qca8k_split_addr(reg, &r1, &r2, &page);
+> >  
+> >  	mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+> > @@ -201,6 +357,9 @@ qca8k_regmap_write(void *ctx, uint32_t reg, uint32_t val)
+> >  	u16 r1, r2, page;
+> >  	int ret;
+> >  
+> > +	if (priv->master && !qca8k_write_eth(priv, reg, val))
+> > +		return 0;
+> > +
+> >  	qca8k_split_addr(reg, &r1, &r2, &page);
+> >  
+> >  	mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+> > @@ -225,6 +384,10 @@ qca8k_regmap_update_bits(void *ctx, uint32_t reg, uint32_t mask, uint32_t write_
+> >  	u32 val;
+> >  	int ret;
+> >  
+> > +	if (priv->master &&
+> > +	    !qca8k_regmap_update_bits_eth(priv, reg, mask, write_val))
+> > +		return 0;
+> > +
+> >  	qca8k_split_addr(reg, &r1, &r2, &page);
+> >  
+> >  	mutex_lock_nested(&bus->mdio_lock, MDIO_MUTEX_NESTED);
+> > @@ -2394,10 +2557,38 @@ qca8k_master_change(struct dsa_switch *ds, const struct net_device *master,
+> >  	if (dp->index != 0)
+> >  		return;
+> >  
+> > +	mutex_lock(&priv->mdio_hdr_data.mutex);
+> > +
+> >  	if (operational)
+> >  		priv->master = master;
+> >  	else
+> >  		priv->master = NULL;
+> > +
+> > +	mutex_unlock(&priv->mdio_hdr_data.mutex);
+> > +}
+> > +
+> > +static int qca8k_connect_tag_protocol(struct dsa_switch *ds,
+> > +				      enum dsa_tag_protocol proto)
+> > +{
+> > +	struct qca8k_priv *qca8k_priv = ds->priv;
+> > +
+> > +	switch (proto) {
+> > +	case DSA_TAG_PROTO_QCA:
+> > +		struct tag_qca_priv *priv;
+> > +
+> > +		priv = ds->tagger_data;
+> > +
+> > +		mutex_init(&qca8k_priv->mdio_hdr_data.mutex);
+> > +		init_completion(&qca8k_priv->mdio_hdr_data.rw_done);
+> 
+> I think having these initializations here dilutes the purpose of this
+> callback. Could you please move these two lines to qca8k_sw_probe()?
+> 
+> > +
+> > +		priv->rw_reg_ack_handler = qca8k_rw_reg_ack_handler;
+> > +
+> > +		break;
+> > +	default:
+> > +		return -EOPNOTSUPP;
+> > +	}
+> > +
+> > +	return 0;
+> >  }
+> >  
+> >  static const struct dsa_switch_ops qca8k_switch_ops = {
+> > @@ -2436,6 +2627,7 @@ static const struct dsa_switch_ops qca8k_switch_ops = {
+> >  	.port_lag_join		= qca8k_port_lag_join,
+> >  	.port_lag_leave		= qca8k_port_lag_leave,
+> >  	.master_state_change	= qca8k_master_change,
+> > +	.connect_tag_protocol	= qca8k_connect_tag_protocol,
+> >  };
+> >  
+> >  static int qca8k_read_switch_id(struct qca8k_priv *priv)
+> > diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
+> > index 6edd6adc3063..dbe8c74c9793 100644
+> > --- a/drivers/net/dsa/qca8k.h
+> > +++ b/drivers/net/dsa/qca8k.h
+> > @@ -11,6 +11,10 @@
+> >  #include <linux/delay.h>
+> >  #include <linux/regmap.h>
+> >  #include <linux/gpio.h>
+> > +#include <linux/dsa/tag_qca.h>
+> > +
+> > +#define QCA8K_ETHERNET_MDIO_PRIORITY			7
+> > +#define QCA8K_ETHERNET_TIMEOUT				100
+> >  
+> >  #define QCA8K_NUM_PORTS					7
+> >  #define QCA8K_NUM_CPU_PORTS				2
+> > @@ -328,6 +332,14 @@ enum {
+> >  	QCA8K_CPU_PORT6,
+> >  };
+> >  
+> > +struct qca8k_mdio_hdr_data {
+> 
+> What do you think about the "qca8k_eth_mgmt_data" name rather than
+> "mdio_hdr_data"? I don't think this has anything to do with MDIO.
+> 
+> > +	struct completion rw_done;
+> > +	struct mutex mutex; /* Enforce one mdio read/write at time */
+> > +	bool ack;
+> > +	u32 seq;
+> > +	u32 data[4];
+> > +};
+> > +
+> >  struct qca8k_ports_config {
+> >  	bool sgmii_rx_clk_falling_edge;
+> >  	bool sgmii_tx_clk_falling_edge;
+> > @@ -354,6 +366,7 @@ struct qca8k_priv {
+> >  	struct gpio_desc *reset_gpio;
+> >  	unsigned int port_mtu[QCA8K_NUM_PORTS];
+> >  	const struct net_device *master; /* Track if mdio/mib Ethernet is available */
+> > +	struct qca8k_mdio_hdr_data mdio_hdr_data;
+> >  };
+> >  
+> >  struct qca8k_mib_desc {
+> > -- 
+> > 2.33.1
+> > 
+
+-- 
+	Ansuel

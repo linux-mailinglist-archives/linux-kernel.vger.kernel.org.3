@@ -2,99 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B6C4763C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AECFA4763C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234562AbhLOUvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
+        id S234946AbhLOUwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233662AbhLOUvD (ORCPT
+        with ESMTP id S230092AbhLOUwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:51:03 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD17C061574;
-        Wed, 15 Dec 2021 12:51:02 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639601459;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=77DCNiXl9B9x9ao8a3ckFicR+A7/8jsezE822YCoYkI=;
-        b=0MC08SjOyHUSb632XivZnR6xp+J+lhdSt8dO4cVV21Usd+LFkCWMDMI5c2zqdprtPX8VcT
-        Z63tf+3EiGKcUHte1/483d4Z/hf6cKDNCZfSHwK0n7HeyH7/U5ccqzZJxTdJSRVkjhfdtR
-        IiH4xihB3g4E9MBjV2NktVFtgbdOo75IOpoHPIb3/7VdumCnWORcJgrzfHtGplNM5fxLCo
-        lWD8Oek/DpAbTtzS5eZ0f2xj6cql1OA57lGXY/RPOvZpVY8gxierMi9GKVnemFayVy076Y
-        M6+9Lfqa20tO87mNob/FrOG2y8clrn6urg7hwKRz/nQ9j3qTabd4wVqNL/bu2w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639601459;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=77DCNiXl9B9x9ao8a3ckFicR+A7/8jsezE822YCoYkI=;
-        b=SDPAxqej8tM3beNMTA3MRfQgMQzvFbRgGCzPLoilB6fEB/QgGtIDQRto0CY8QP/ghtYPeu
-        cjbHVwPoa9R9VUCQ==
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
-        Nishanth Menon <nm@ti.com>
-Subject: Re: [patch V2 21/31] soc: ti: ti_sci_inta_msi: Rework MSI
- descriptor allocation
-In-Reply-To: <20211206210748.737904583@linutronix.de>
-References: <20211206210600.123171746@linutronix.de>
- <20211206210748.737904583@linutronix.de>
-Date:   Wed, 15 Dec 2021 21:50:58 +0100
-Message-ID: <87a6h1r3rh.ffs@tglx>
+        Wed, 15 Dec 2021 15:52:11 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D95C06173E;
+        Wed, 15 Dec 2021 12:52:11 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id b7so19976057edd.6;
+        Wed, 15 Dec 2021 12:52:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ykWVuEkJPX6pUAAxvof1FIo/afOxa44cYEh33Y562v8=;
+        b=YH6X+CDp4rJCNysACqkEwJgzIYmUM/WTXgENJMxwdH/QpFhl0QpgmoeL3MULutYgqG
+         +ohu3tneuITECHisVjBMK3Aik//5wLq4q9J4/Q/DbPWhyaeqdY8P/zHA7qzmN49sNkWs
+         nR3K+H5NI4Mh8R6nAFu4gwX19CbGtlqz2pEQaprXHYu2eFMWBY4zN27OlWAQHaGtcSI3
+         Dphem7RchLOQrbflAce+cTPGogccqpJEYqlQ0YxZFgQhnaSeMHi5WBa36UFKCnNA8ZPI
+         fojeAfNPl6XauRs3Zr+mVKSrYBt2wC+wxBsIraYlf0L3zABSiOq4zD6gMvE0ZvwMZ4Nr
+         q0ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ykWVuEkJPX6pUAAxvof1FIo/afOxa44cYEh33Y562v8=;
+        b=VBQh91adCxI/g5m4vLzkEDNdauBFTAS6/iqThp4mqU0WWV3Md87/Zd5udo40Jidpg6
+         bOBbjL6+gwzDhqHVhOjBPTo35uVdGOdwLMwe2SsaKc0ZHBDQg+c9dtOcbfdxpRFqxjKk
+         X0L9AWdK+tS7uphg1PJ0XkLXjZ3dQNlc/G2BnD0tv4nAgXq59nOeTMgU9Sx2fRiqgIL0
+         xdOmNzEYrC6mEZyb7e9jORLwZF4s88kjSYjSJP6evohMMIT8FBt8u56o6pMeuiKjKET3
+         2GVe2gJ8eWk2lp7GO4DrBVOcSjjuu1Jn+E8mzEI5ld+msGmYbedu+JHbcPxPfrrlxAjL
+         Tjbw==
+X-Gm-Message-State: AOAM530ZgHNqRpXxBqS0aA8CmSERjino9OaB35sDoqGvBbcsJ/Doqt4+
+        ZVwptwNb5scU52ldRqHRMAKDqWwfohS9erAl3VE=
+X-Google-Smtp-Source: ABdhPJwMIctubBZSGRFLeDH0OE/gyWFLjnj5kRplIzj2r8tet1dkYqI4lhQ3LzMuXiyMtKJwHmUMvGtkhem3RpanpRo=
+X-Received: by 2002:a05:6402:d09:: with SMTP id eb9mr16696784edb.216.1639601529688;
+ Wed, 15 Dec 2021 12:52:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20211215111845.2514-1-urezki@gmail.com> <20211215111845.2514-8-urezki@gmail.com>
+ <YbpGWpskiByQNcJO@pc638.lan> <20211215194952.GY6385@nvidia.com>
+In-Reply-To: <20211215194952.GY6385@nvidia.com>
+From:   Uladzislau Rezki <urezki@gmail.com>
+Date:   Wed, 15 Dec 2021 21:51:58 +0100
+Message-ID: <CA+KHdyVtaf+Upz=ns9evt5osnHb6LL=+dfsMxPeruEnQUqej1A@mail.gmail.com>
+Subject: Re: [PATCH] RDMA/hfi1: Switch to kvfree_rcu() API
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-rdma@vger.kernel.org,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Axtens <dja@axtens.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraju@codeaurora.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06 2021 at 23:51, Thomas Gleixner wrote:
+On Wed, Dec 15, 2021 at 8:49 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
 >
-> No functional change intended.
+> On Wed, Dec 15, 2021 at 08:47:38PM +0100, Uladzislau Rezki wrote:
+> > On Wed, Dec 15, 2021 at 12:18:44PM +0100, Uladzislau Rezki (Sony) wrote:
+> > > Instead of invoking a synchronize_rcu() to free a pointer
+> > > after a grace period we can directly make use of new API
+> > > that does the same but in more efficient way.
+> > >
+> > > TO: linux-rdma@vger.kernel.org
+> > > TO: Jason Gunthorpe <jgg@nvidia.com>
+> > > TO: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+> > > Acked-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+> > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > >  drivers/infiniband/hw/hfi1/sdma.c | 3 +--
+> > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/hfi1/sdma.c
+> > > index f07d328689d3..7264a35e8f4c 100644
+> > > +++ b/drivers/infiniband/hw/hfi1/sdma.c
+> > > @@ -1292,8 +1292,7 @@ void sdma_clean(struct hfi1_devdata *dd, size_t num_engines)
+> > >     sdma_map_free(rcu_access_pointer(dd->sdma_map));
+> > >     RCU_INIT_POINTER(dd->sdma_map, NULL);
+> > >     spin_unlock_irq(&dd->sde_map_lock);
+> > > -   synchronize_rcu();
+> > > -   kfree(dd->per_sdma);
+> > > +   kvfree_rcu(dd->per_sdma);
+> > >     dd->per_sdma = NULL;
+> > >
+> > >     if (dd->sdma_rht) {
+> > + linux-rdma@vger.kernel.org
+> > + Jason Gunthorpe <jgg@nvidia.com>
+> > + Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+>
+> If it is not in the rdma patchworks it won't get applied..
+>
+> https://patchwork.kernel.org/project/linux-rdma/list/
+>
+Do you mean that i should:
 
-Famous last words.
+Cc: <linux-rdma@vger.kernel.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
 
->  static int ti_sci_inta_msi_alloc_descs(struct device *dev,
->  				       struct ti_sci_resource *res)
->  {
-> -	struct msi_desc *msi_desc;
-> +	struct msi_desc msi_desc;
->  	int set, i, count = 0;
->  
-> +	memset(&msi_desc, 0, sizeof(msi_desc));
+instead?
 
-This fails to initialize msi_desc.nvec_used which makes the subsequent
-interrupt allocation fail. Delta fix below.
+Thanks!
 
-Thanks,
-
-        tglx
----
---- a/drivers/soc/ti/ti_sci_inta_msi.c
-+++ b/drivers/soc/ti/ti_sci_inta_msi.c
-@@ -68,6 +68,7 @@ static int ti_sci_inta_msi_alloc_descs(s
- 	int set, i, count = 0;
- 
- 	memset(&msi_desc, 0, sizeof(msi_desc));
-+	msi_desc.nvec_used = 1;
- 
- 	for (set = 0; set < res->sets; set++) {
- 		for (i = 0; i < res->desc[set].num; i++, count++) {
+-- 
+Uladzislau Rezki

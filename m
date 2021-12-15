@@ -2,83 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65706475FBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0DE475FB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237870AbhLORqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:46:55 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53612 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbhLORqu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:46:50 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32466B8204E;
-        Wed, 15 Dec 2021 17:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3895EC36AE0;
-        Wed, 15 Dec 2021 17:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639590408;
-        bh=oVAWRtkVhyLVewrr96Eqb3xtvZVqpmLF7lafQtqO6io=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RDn0d3Wgo9MrkKkAlhFp4clsP7kYBq6OP2oGHpB+ZI+/t6B5qJsnoCzurjsB46fWy
-         AoK6Or0D4ayB4bHwvQH/ebEEdMkczC3evphKuABc44ElX4jTf+p1dRuhuUK9c1usOI
-         gwGgUwjsoCjjzpzu2MRgkv/yDC8qQwbLbyooW/C4=
-Date:   Wed, 15 Dec 2021 18:46:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch V4 09-02/35] PCI/MSI: Allocate MSI device data on first
- use
-Message-ID: <YboqBZuwu5qDwxKS@kroah.com>
-References: <20211210221642.869015045@linutronix.de>
- <20211210221813.740644351@linutronix.de>
- <87tuf9rdoj.ffs@tglx>
- <87r1adrdje.ffs@tglx>
+        id S237938AbhLORrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:47:02 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:57120 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232052AbhLORq7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 12:46:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=wEZ0+lTfI8a0MAszIs0A1GuF36x24QPM+U4kYJZN4eQ=; b=obHBnMzVIzoqMw5H9XKltxWYBa
+        ZpteFhZfeuB9xN70M7J+3+7CEoW5UbbOrN6qAQAg979vJvE3M532N3Z7j4a0sMpIOLZALIwCNsYhf
+        xA4cFxYqlCj+nqszWfFJk5XIhrY44PJZ845hWYXcFbn3ZerAldmygxnXp3niBfjtlgcM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1mxYMf-00GfkU-4j; Wed, 15 Dec 2021 18:46:53 +0100
+Date:   Wed, 15 Dec 2021 18:46:53 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Andrey Eremeev <Axtone4all@yandex.ru>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
+Subject: Re: [PATCH] dsa: mv88e6xxx: fix debug print for SPEED_UNFORCED
+Message-ID: <YboqDeIBwHE8+KcV@lunn.ch>
+References: <20211215173032.53251-1-Axtone4all@yandex.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87r1adrdje.ffs@tglx>
+In-Reply-To: <20211215173032.53251-1-Axtone4all@yandex.ru>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 06:19:49PM +0100, Thomas Gleixner wrote:
-> Allocate MSI device data on first use, i.e. when a PCI driver invokes one
-> of the PCI/MSI enablement functions.
+On Wed, Dec 15, 2021 at 08:30:32PM +0300, Andrey Eremeev wrote:
+> Debug print uses invalid check to detect if speed is unforced:
+> (speed != SPEED_UNFORCED) should be used instead of (!speed).
 > 
-> Add a wrapper function to ensure that the ordering vs. pcim_msi_release()
-> is correct.
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Andrey Eremeev <Axtone4all@yandex.ru>
+> Fixes: 96a2b40c7bd3 ("net: dsa: mv88e6xxx: add port's MAC speed setter")
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+
+    Andrew

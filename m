@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC29475EC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 775C6475EF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245240AbhLORYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
+        id S1343569AbhLOR0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:26:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245610AbhLORXx (ORCPT
+        with ESMTP id S238433AbhLORY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:23:53 -0500
+        Wed, 15 Dec 2021 12:24:56 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EECC06175A;
-        Wed, 15 Dec 2021 09:23:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A46C061378;
+        Wed, 15 Dec 2021 09:24:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71CDAB82049;
-        Wed, 15 Dec 2021 17:23:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55E7C36AE0;
-        Wed, 15 Dec 2021 17:23:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3B7CB8202A;
+        Wed, 15 Dec 2021 17:24:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F86C36AE3;
+        Wed, 15 Dec 2021 17:24:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589018;
-        bh=Zc58ANuGV3Msy+hzdE+4mS7KhdoGskyBSFCTOULUVgA=;
+        s=korg; t=1639589093;
+        bh=Qyu5rfUna9v6YgG1OqOKARS7oRI7jx8getrtOz0G7oY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ubop8DaGJPe1EWCLxGfxw4WxxrC4PUpXEpF7ilXYF0Xo/S4mwxMRMALYIynxTM7t6
-         kby3+PxV/CEihsFdCQcJg628EGXmlUhdddAwWoFcQAVaqJZSWYblGUuXX61HpH8Teo
-         oMSsFzyRIUfBt57KsNDjaK+8KuavoSKtaR05/Y+M=
+        b=kPo0AylqjwtmZVdnnbkzpyHH3haQTIK6XVdBZFseHt4KcD0wMNUldJH5kAuKC20WK
+         rBePZ3JsF8pX400chATebqNDFYVOjRtWc8V1vhSj5ZMWs5nPnaIn0tcbtWxwMEVSaq
+         q/C+o2ZpiAPpfLzTaA+iuY/YPhNTcxaiG8hQaOLc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Flora Cui <flora.cui@amd.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        Alex Deucher <aleander.deucher@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 34/42] drm/amdgpu: check atomic flag to differeniate with legacy path
-Date:   Wed, 15 Dec 2021 18:21:15 +0100
-Message-Id: <20211215172027.824498952@linuxfoundation.org>
+        stable@vger.kernel.org, chenguanyou <chenguanyou@xiaomi.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Ed Tsai <ed.tsai@mediatek.com>
+Subject: [PATCH 5.10 18/33] fuse: make sure reclaim doesnt write the inode
+Date:   Wed, 15 Dec 2021 18:21:16 +0100
+Message-Id: <20211215172025.403287477@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
-References: <20211215172026.641863587@linuxfoundation.org>
+In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
+References: <20211215172024.787958154@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,46 +49,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Flora Cui <flora.cui@amd.com>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-[ Upstream commit 1053b9c948e614473819a1a5bcaff6d44e680dcf ]
+commit 5c791fe1e2a4f401f819065ea4fc0450849f1818 upstream.
 
-since vkms support atomic KMS interface
+In writeback cache mode mtime/ctime updates are cached, and flushed to the
+server using the ->write_inode() callback.
 
-Signed-off-by: Flora Cui <flora.cui@amd.com>
-Reviewed-by: Guchun Chen <guchun.chen@amd.com>
-Acked-by: Alex Deucher <aleander.deucher@amd.com>
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Closing the file will result in a dirty inode being immediately written,
+but in other cases the inode can remain dirty after all references are
+dropped.  This result in the inode being written back from reclaim, which
+can deadlock on a regular allocation while the request is being served.
+
+The usual mechanisms (GFP_NOFS/PF_MEMALLOC*) don't work for FUSE, because
+serving a request involves unrelated userspace process(es).
+
+Instead do the same as for dirty pages: make sure the inode is written
+before the last reference is gone.
+
+ - fallocate(2)/copy_file_range(2): these call file_update_time() or
+   file_modified(), so flush the inode before returning from the call
+
+ - unlink(2), link(2) and rename(2): these call fuse_update_ctime(), so
+   flush the ctime directly from this helper
+
+Reported-by: chenguanyou <chenguanyou@xiaomi.com>
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Cc: Ed Tsai <ed.tsai@mediatek.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/fuse/dir.c    |    8 ++++++++
+ fs/fuse/file.c   |   15 +++++++++++++++
+ fs/fuse/fuse_i.h |    1 +
+ fs/fuse/inode.c  |    3 +++
+ 4 files changed, 27 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index 96ca42bcfdbf9..1545884dc703e 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -3854,7 +3854,7 @@ void amdgpu_device_fini_hw(struct amdgpu_device *adev)
- 	/* disable all interrupts */
- 	amdgpu_irq_disable_all(adev);
- 	if (adev->mode_info.mode_config_initialized){
--		if (!amdgpu_device_has_dc_support(adev))
-+		if (!drm_drv_uses_atomic_modeset(adev_to_drm(adev)))
- 			drm_helper_force_disable_all(adev_to_drm(adev));
- 		else
- 			drm_atomic_helper_shutdown(adev_to_drm(adev));
-@@ -5130,7 +5130,7 @@ int amdgpu_device_gpu_recover(struct amdgpu_device *adev,
- 			drm_sched_start(&ring->sched, !tmp_adev->asic_reset_res);
- 		}
+--- a/fs/fuse/dir.c
++++ b/fs/fuse/dir.c
+@@ -791,11 +791,19 @@ static int fuse_symlink(struct inode *di
+ 	return create_new_entry(fm, &args, dir, entry, S_IFLNK);
+ }
  
--		if (!amdgpu_device_has_dc_support(tmp_adev) && !job_signaled) {
-+		if (!drm_drv_uses_atomic_modeset(adev_to_drm(tmp_adev)) && !job_signaled) {
- 			drm_helper_resume_force_mode(adev_to_drm(tmp_adev));
- 		}
++void fuse_flush_time_update(struct inode *inode)
++{
++	int err = sync_inode_metadata(inode, 1);
++
++	mapping_set_error(inode->i_mapping, err);
++}
++
+ void fuse_update_ctime(struct inode *inode)
+ {
+ 	if (!IS_NOCMTIME(inode)) {
+ 		inode->i_ctime = current_time(inode);
+ 		mark_inode_dirty_sync(inode);
++		fuse_flush_time_update(inode);
+ 	}
+ }
  
--- 
-2.33.0
-
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@ -1849,6 +1849,17 @@ int fuse_write_inode(struct inode *inode
+ 	struct fuse_file *ff;
+ 	int err;
+ 
++	/*
++	 * Inode is always written before the last reference is dropped and
++	 * hence this should not be reached from reclaim.
++	 *
++	 * Writing back the inode from reclaim can deadlock if the request
++	 * processing itself needs an allocation.  Allocations triggering
++	 * reclaim while serving a request can't be prevented, because it can
++	 * involve any number of unrelated userspace processes.
++	 */
++	WARN_ON(wbc->for_reclaim);
++
+ 	ff = __fuse_write_file_get(fc, fi);
+ 	err = fuse_flush_times(inode, ff);
+ 	if (ff)
+@@ -3338,6 +3349,8 @@ out:
+ 	if (lock_inode)
+ 		inode_unlock(inode);
+ 
++	fuse_flush_time_update(inode);
++
+ 	return err;
+ }
+ 
+@@ -3447,6 +3460,8 @@ out:
+ 	inode_unlock(inode_out);
+ 	file_accessed(file_in);
+ 
++	fuse_flush_time_update(inode_out);
++
+ 	return err;
+ }
+ 
+--- a/fs/fuse/fuse_i.h
++++ b/fs/fuse/fuse_i.h
+@@ -1113,6 +1113,7 @@ int fuse_allow_current_process(struct fu
+ 
+ u64 fuse_lock_owner_id(struct fuse_conn *fc, fl_owner_t id);
+ 
++void fuse_flush_time_update(struct inode *inode);
+ void fuse_update_ctime(struct inode *inode);
+ 
+ int fuse_update_attributes(struct inode *inode, struct file *file);
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -119,6 +119,9 @@ static void fuse_evict_inode(struct inod
+ {
+ 	struct fuse_inode *fi = get_fuse_inode(inode);
+ 
++	/* Will write inode on close/munmap and in all other dirtiers */
++	WARN_ON(inode->i_state & I_DIRTY_INODE);
++
+ 	truncate_inode_pages_final(&inode->i_data);
+ 	clear_inode(inode);
+ 	if (inode->i_sb->s_flags & SB_ACTIVE) {
 
 

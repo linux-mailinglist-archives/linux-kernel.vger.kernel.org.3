@@ -2,73 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB44475CB6
+	by mail.lfdr.de (Postfix) with ESMTP id 88451475CB7
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234805AbhLOQGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
+        id S231574AbhLOQGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbhLOQGP (ORCPT
+        with ESMTP id S234342AbhLOQGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:06:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64E0C061574;
-        Wed, 15 Dec 2021 08:06:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47AF261896;
-        Wed, 15 Dec 2021 16:06:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCED1C36AE0;
-        Wed, 15 Dec 2021 16:06:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639584374;
-        bh=AjuTnNgNxVdmHoft5M30nv8knZSADAbtJTguw/b7p4Q=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=OELkQLmgmPrkq7vA21O3IjhRnMHnLFa9HBWVwxj8XzHgqnYFCmbu45yEtKn/rVAU3
-         JtAKap3dgPqytjJtPIahsbsBr178jxsxk8Fh/gXpR3f58oYgWQYde2oGlsYeVafNb7
-         nMAOuQrlatdG3EzQ/HEo3bawDM0O9q9H8n2V3Lxl/nPBZCvY9TVhZErNwnp4O75s/1
-         GirO8kb/PnYSX2scEkgR14NVAohF0kvWKtPf74VKI1xgRMhC7GfcoxMgieeGdwcZTI
-         LPk+B1L/qp0w0e7QWzcC5wg7DTgJ2ZRYzYwh4slFnMwg6P91CcDxPXHxntKEzJk6ky
-         4f/MsZMAUDc2Q==
-Message-ID: <afb20c0909008ae4794a8c2608a7a6c643d11263.camel@kernel.org>
-Subject: Re: [PATCH v3] dt-bindings: soc: bcm: Convert brcm,bcm2835-vchiq to
- json-schema
-From:   nicolas saenz julienne <nsaenz@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     stefan.wahren@i2se.com, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Date:   Wed, 15 Dec 2021 17:06:09 +0100
-In-Reply-To: <YboOPd/xYWkL2JrJ@robh.at.kernel.org>
-References: <20211215094448.280796-1-nsaenz@kernel.org>
-         <YboOPd/xYWkL2JrJ@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        Wed, 15 Dec 2021 11:06:22 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86191C061574;
+        Wed, 15 Dec 2021 08:06:22 -0800 (PST)
+Date:   Wed, 15 Dec 2021 17:06:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639584381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QDSaHB9TQJ2eh9Qx2bgdK5GmheADWSQWVoFj7c7S0O4=;
+        b=MGT9UOAzRjjH6PxGLyPMQdHyPZ4d/qRAsIK7VoWYb/9qg8UtkMu497z0GZrMWvQDZTcSED
+        3ebAIchxdGVxklvxz51EY0qjn342HSQsU2j69J6QdeUx6/xWt0V7XKAVCrJXvNR84zvQYn
+        FP+xbhj+97YpkY8ARleFB3qLTikBHKOY7nNDtAHdDhuOqSn8vRYMoiuVjQ44WguHiQIewq
+        HxRz1v/UUs2C+cc/xYg7XAHiL/jxnWp2NomFzY5tj0HY7Rp6hah+I9+TfoS3ZOyLMJzGUa
+        dQaZxysnb/Ka/6i5QtI0k3BAuMgQv3TNsMuwjko1KqpdZmbwiVjRc/F+yf7neA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639584381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QDSaHB9TQJ2eh9Qx2bgdK5GmheADWSQWVoFj7c7S0O4=;
+        b=2lmjYOXHh9nfnNMFm6NlR1JfTCOxIB4UU8vN+qBLSOlH4JV2c83PWMXX3FC5vcgIPkD+1h
+        aYEa6LcQ+zuz+gBA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Mike Galbraith <efault@gmx.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        RT <linux-rt-users@vger.kernel.org>
+Subject: Re: [rcf/patch] netpoll: Make it RT friendly
+Message-ID: <YboSe4NfbCeoqF1j@linutronix.de>
+References: <20211118163405.adczki7ibk22bw7e@linutronix.de>
+ <773fd8246a1ec4ef79142d9e31b8ba4163a0d496.camel@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <773fd8246a1ec4ef79142d9e31b8ba4163a0d496.camel@gmx.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-On Wed, 2021-12-15 at 09:48 -0600, Rob Herring wrote:
-> On Wed, Dec 15, 2021 at 10:44:49AM +0100, Nicolas Saenz Julienne wrote:
-> > From: Stefan Wahren <stefan.wahren@i2se.com>
-> > 
-> > This converts the VCHIQ bindings to YAML format.
+On 2021-11-19 15:41:25 [+0100], Mike Galbraith wrote:
+> --- a/net/core/netpoll.c
+> +++ b/net/core/netpoll.c
+> @@ -252,6 +252,7 @@ static void zap_completion_queue(void)
+>  		clist = sd->completion_queue;
+>  		sd->completion_queue = NULL;
+>  		local_irq_restore(flags);
+> +		put_cpu_var(softnet_data);
 > 
-> Am I supposed to review this? Some version of it is already in 
-> linux-next...
+>  		while (clist != NULL) {
+>  			struct sk_buff *skb = clist;
+> @@ -263,9 +264,8 @@ static void zap_completion_queue(void)
+>  				__kfree_skb(skb);
+>  			}
+>  		}
+> -	}
+> -
+> -	put_cpu_var(softnet_data);
+> +	} else
+> +		put_cpu_var(softnet_data);
+>  }
 
-It's been removed from linux-next for the time being. There was some issues
-with the previous binding, namely the fact that it removed the fallback to
-'bcrm,bcm2835-vchiq' on BCM2836/BCM2837. All in all, having it is harmless and
-might avoid regressions on some OSs.
+Looking at the callers of zap_completion_queue() it seems that
+get_cpu_var() could be replaced this_cpu_ptr() since the pointer is
+stable at this point.
 
-Regards,
-Nicolas
+>  static struct sk_buff *find_skb(struct netpoll *np, int len, int reserve)
+> @@ -365,16 +366,22 @@ static netdev_tx_t __netpoll_send_skb(st
+> 
+>  netdev_tx_t netpoll_send_skb(struct netpoll *np, struct sk_buff *skb)
+>  {
+> -	unsigned long flags;
+> +	unsigned long __maybe_unused flags;
+>  	netdev_tx_t ret;
+> 
+>  	if (unlikely(!np)) {
+>  		dev_kfree_skb_irq(skb);
+>  		ret = NET_XMIT_DROP;
+>  	} else {
+> -		local_irq_save(flags);
+> +		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> +			local_irq_save(flags);
+> +		else
+> +			rcu_read_lock_bh();
+>  		ret = __netpoll_send_skb(np, skb);
+> -		local_irq_restore(flags);
+> +		if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> +			local_irq_restore(flags);
+> +		else
+> +			rcu_read_unlock_bh();
+>  	}
+>  	return ret;
+>  }
+
+What is the context for netpoll_send_skb()? Why do we need to disable BH
++ RCU on RT?
+If interrupts are never disabled, doesn't this break the assumption made
+in netpoll_tx_running()?
+
+queue_process() is also busted.
+
+Sebastian

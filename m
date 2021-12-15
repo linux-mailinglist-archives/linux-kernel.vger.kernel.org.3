@@ -2,94 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E92D4476598
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03ADA47659B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbhLOWYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 17:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S231276AbhLOW0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 17:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbhLOWYa (ORCPT
+        with ESMTP id S230352AbhLOWZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 17:24:30 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46243C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:24:30 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id n8so17769325plf.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:24:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ycDsmx3PyCZ6frecumpmSuFIqgxs7vNgPaQ/w3kiJEc=;
-        b=DR7M8QbZ1tBnbdUmI6yi7VcT3mNXhvl8LO66qDfb0Jt1VZvST/nR9enfI7qM6YkPCX
-         P3dWIwzZSQDuMU45iFz4vsXeSnxV6xjhP2MFIt9SQicS5/xLLAcA4JU2j2YqeUltjs5/
-         HNEy0BuooiU7ZULR4tJ3QXZ6tRwyInfC3DA+A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ycDsmx3PyCZ6frecumpmSuFIqgxs7vNgPaQ/w3kiJEc=;
-        b=x9SKNFyRa4QUlWSh1uYzoo6oxOrgKj4zzEYAT0Y/iNFZ1/cm3NFGUGg/G+jV153DW0
-         O228euS9Zkb8tTROFD/wVoa45pepZB/obszqCTkuGPi7CQ0NQ4WqwjqlaH4TMk7N5p2X
-         b4VRlCOnNaMZMN3uYxdgNemgad+49Cqh76JrYdBKBAEUYMKVMERevBSdCDo94Zcum5Rm
-         QJNHTt9mx4hJLf5YXRRWbbGIBhRBSHmmm2Kk/9ALjAWue3LMcA3r01g19cZah8pS10UO
-         gqoFfylo8WvVoNUtpJcBC6C00vtExKKIbHdnPGJ5+CD2TwKZ3nnLPk35nOGbLueby8qu
-         ZKSA==
-X-Gm-Message-State: AOAM530WsAyyihx1pHRgHofdbvWB5chVe5P9B4CPOx5WnUP/So+AHhiM
-        /Wfsj0df3ZzVB7D24TzXbtbeuQ==
-X-Google-Smtp-Source: ABdhPJyPaKZPEyh99xkYURqN/PIzlVuqSRGBt2Np9ALE4Ou+FS1gPA5SR9cPXBOtOgKmZVaNLESR0w==
-X-Received: by 2002:a17:903:41ca:b0:142:1dff:1cb7 with SMTP id u10-20020a17090341ca00b001421dff1cb7mr12924238ple.37.1639607069738;
-        Wed, 15 Dec 2021 14:24:29 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o4sm6289739pjq.23.2021.12.15.14.24.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:24:29 -0800 (PST)
-Date:   Wed, 15 Dec 2021 14:24:28 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
-        Uma Shankar <uma.shankar@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] drm/dp: Fix off-by-one in register cache size
-Message-ID: <202112151424.A44D2B7A@keescook>
-References: <20211203084333.3105038-1-keescook@chromium.org>
- <20211214001849.GA62559@embeddedor>
+        Wed, 15 Dec 2021 17:25:59 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF86C061574;
+        Wed, 15 Dec 2021 14:25:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=szJ15KHMKZBsv0DChMYLKxZNIt1BG/HH7JYdwOh3z+o=; b=pSabiEV8wKQIF1bJ0p4jJ32VHd
+        RWNwnjBsA9pfe09CVuo91xR7kCsBbMqyAymGrGa2jwGtmDSemP7eKcDGXJjt6lKyWXCPSVbTzzjr7
+        q/A2/tO+VeOyWjeFI/nvHFh3RWsFu+N4FSw/umuiCIyBuv5UGGd9GG0MsSwXnccUiiPDvJk4mHium
+        hf1rBU9jXwLWOCzzmEje6QqBxrj92Z4iSXe94eeMHh6EMtEb4fZAIZ83WlS4JgAQsHlwqaI07uRkx
+        5myZzsHlWtyzLHELu+Wd1YN95Ga4/tyOQvCqvw3U8SAxSvXlhHBWRT6D33eLCEiiua7AYJfC7WQKI
+        jRB6JwZg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxciE-001a36-86; Wed, 15 Dec 2021 22:25:26 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0C78F9844F1; Wed, 15 Dec 2021 23:25:25 +0100 (CET)
+Date:   Wed, 15 Dec 2021 23:25:24 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Peter Oskolkov <posk@google.com>
+Cc:     Peter Oskolkov <posk@posk.io>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Paul Turner <pjt@google.com>, Andrei Vagin <avagin@google.com>,
+        Jann Horn <jannh@google.com>,
+        Thierry Delisle <tdelisle@uwaterloo.ca>
+Subject: Re: [RFC][PATCH 0/3] sched: User Managed Concurrency Groups
+Message-ID: <20211215222524.GH16608@worktop.programming.kicks-ass.net>
+References: <20211214204445.665580974@infradead.org>
+ <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
+ <Ybm+HJzkO/0BB4Va@hirez.programming.kicks-ass.net>
+ <CAFTs51Xb6m=htpWsVk577n-h_pRCpqRcBg6-OhBav8OadikHkw@mail.gmail.com>
+ <YboxjUM+D9Kg52mO@hirez.programming.kicks-ass.net>
+ <CAPNVh5cJy2y+sTx0cPA1BPSAg=GjXC8XGT7fLzHwzvXH2=xjmw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214001849.GA62559@embeddedor>
+In-Reply-To: <CAPNVh5cJy2y+sTx0cPA1BPSAg=GjXC8XGT7fLzHwzvXH2=xjmw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 06:18:49PM -0600, Gustavo A. R. Silva wrote:
-> On Fri, Dec 03, 2021 at 12:43:33AM -0800, Kees Cook wrote:
-> > The pcon_dsc_dpcd array holds 13 registers (0x92 through 0x9E). Fix the
-> > math to calculate the max size. Found from a -Warray-bounds build:
-> > 
-> > drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_pcon_dsc_bpp_incr':
-> > drivers/gpu/drm/drm_dp_helper.c:3130:28: error: array subscript 12 is outside array bounds of 'const u8[12]' {aka 'const unsigned char[12]'} [-Werror=array-bounds]
-> >  3130 |         buf = pcon_dsc_dpcd[DP_PCON_DSC_BPP_INCR - DP_PCON_DSC_ENCODER];
-> >       |               ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > drivers/gpu/drm/drm_dp_helper.c:3126:39: note: while referencing 'pcon_dsc_dpcd'
-> >  3126 | int drm_dp_pcon_dsc_bpp_incr(const u8 pcon_dsc_dpcd[DP_PCON_DSC_ENCODER_CAP_SIZE])
-> >       |                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > Fixes: e2e16da398d9 ("drm/dp_helper: Add support for Configuring DSC for HDMI2.1 Pcon")
-> 
-> This should be tagged for -stable:
-> 
-> Cc: stable@vger.kernel.org
+On Wed, Dec 15, 2021 at 11:49:51AM -0800, Peter Oskolkov wrote:
 
-Ah yes, thank you! :)
+> TL;DR: our models are different here. In your model a single server
+> can have a bunch of workers interacting with it; in my model only a
+> single RUNNING worker is assigned to a server, which it wakes when it
+> blocks.
 
--- 
-Kees Cook
+So part of the problem is that none of that was evident from the code.
+It is also completely different from the scheduler code it lives in,
+making it double confusing.
+
+After having read the code, I still had no clue what so ever how it was
+supposed to be used. Which is where my reverse engineering started :/
+
+> More details:
+> 
+> "Working servers" cannot get wakeups, because a "working server" has a
+> single RUNNING worker attached to it. When a worker blocks, it wakes
+> its attached server and becomes a detached blocked worker (same is
+> true if the worker is "preempted": it blocks and wakes its assigned
+> server).
+
+But who would do the preemption if the server isn't allowed to run?
+
+> Blocked workers upon wakeup do this, in order:
+> 
+> - always add themselves to the runnable worker list (the list is
+> shared among ALL servers, it is NOT per server);
+
+That seems like a scalability issue. And, as said, it is completely
+alien when compared to the way Linux itself does scheduling.
+
+> - wake a server pointed to by idle_server_ptr, if not NULL;
+> - sleep, waiting for a wakeup from a server;
+> 
+> Server S, upon becoming IDLE (no worker to run, or woken on idle
+> server list) does this, in order, in userspace (simplified, see
+> umcg_get_idle_worker() in
+> https://lore.kernel.org/lkml/20211122211327.5931-5-posk@google.com/):
+> - take a userspace (spin) lock (so the steps below are all within a
+> single critical section):
+
+Don't ever suggest userspace spinlocks, they're horrible crap.
+
+> - compare_xchg(idle_server_ptr, NULL, S);
+>   - if failed, there is another server in idle_server_ptr, so S adds
+> itself to the userspace idle server list, releases the lock, goes to
+> sleep;
+>   - if succeeded:
+>     - check the runnable worker list;
+>         - if empty, release the lock, sleep;
+>         - if not empty:
+>            - get the list
+>            - xchg(idle_server_ptr, NULL) (either S removes itself, or
+> a worker in the kernel does it first, does not matter);
+>            - release the lock;
+>            - wake server S1 on idle server list. S1 goes through all
+> of these steps.
+> 
+> The protocol above serializes the userspace dealing with the idle
+> server ptr/list. Wakeups in the kernel will be caught if there are
+> idle servers. Yes, the protocol in the userspace is complicated (more
+> complicated than outlined above, as the reaped idle/runnable worker
+> list from the kernel is added to the userspace idle/runnable worker
+> list), but the kernel side is very simple. I've tested this
+> interaction extensively, I'm reasonably sure that no worker wakeups
+> are lost.
+
+Sure, but also seems somewhat congestion prone :/

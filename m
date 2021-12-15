@@ -2,128 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D71D1475F5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7528D475F5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235129AbhLORb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245139AbhLORbG (ORCPT
+        id S231320AbhLORbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:31:09 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:52521 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237857AbhLORaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:31:06 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E9DC08E88F;
-        Wed, 15 Dec 2021 09:29:56 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id mj19so3121713pjb.3;
-        Wed, 15 Dec 2021 09:29:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nc7uNBCccws9KsLZMQERR1/3Um+qbOa5VtfS7yT7osg=;
-        b=MsOY7zSjDYQF/40hGnLECCSy/ZqdxR+vvp9+dauV40u2ELY2UDHo+nmijdQ6yVsCvv
-         CpW23Pye3A/yNAI3/snmHyBp7RC+Lu+rJvGkIEoZ9xSBwgwMdxkbD1aWtBSnfqym3502
-         /Db5xR7RSnELXi3gsow6A3A3CAZ+PwazysZlU1AgLRyQGLEuhUKZChXaPv39tbit425O
-         reU6rBBxOLDXxHmCJxKP0wCplllD/midwlfTBD/mxypjcxyPwheSRLiUrJSbZ5ytf0rO
-         Uya0KyYxMUoGhT+5XwjcEtbP5c5ck5t5bPAx+ScXkq2ypbFnUXwl9kmcPLlZZ4SvZNQo
-         TLPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nc7uNBCccws9KsLZMQERR1/3Um+qbOa5VtfS7yT7osg=;
-        b=Aq2YX9K/CH1hX2lFQ4mrcFxiWH9t9ePUS71wjTPcv+Ja1/1bYugLx+wlZJrczL3rG5
-         8CINpcBsZ5PzwymPMd4u2OcZ0GpFm/U2BbNHTwJZAkrWVdX2NftmBcatTpdShCVUcWUu
-         W/dvP6LZOs26pg2tKaGRdcGdfcbCHifAzK3uC9xsK4BRalYRCni9/sqgA+fFcqkBG3Li
-         HZhNsjkhDfyjBgghU8QUbbDV98gzxRBk2DaxJ3r6YrBUB9s8CLEfco1plFpXJ2r7RPzE
-         Q0j9wwr3MvjrMvJonhnezp+lHO7f7fbOJB1vPpRTyxJOsNJ/aetIGwwBm+yGDF+0b/0k
-         ncew==
-X-Gm-Message-State: AOAM531vaGj7m+jdY3HwHPfpcCgGx8qfEpHaqWqX1LZiGfIe6j8rTeRo
-        mw/hWMjuLFkZyWoouLHQ8FgWJs8Q3Ur4eRetOOKgK/PN8ak=
-X-Google-Smtp-Source: ABdhPJzIiyuz1EaX306RNTkzvorH01oFLWmQLAlD9XIeqmTInyrBPe04eIdwDGHLVtl+62pZtgk04Ih6Smk+5oriUTs=
-X-Received: by 2002:a17:902:da8a:b0:148:a2e7:fb33 with SMTP id
- j10-20020a170902da8a00b00148a2e7fb33mr5243907plx.116.1639589395901; Wed, 15
- Dec 2021 09:29:55 -0800 (PST)
+        Wed, 15 Dec 2021 12:30:24 -0500
+Received: from Engel05.fritz.box ([84.145.21.134]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1M8QNs-1mtAOM258S-004PhP; Wed, 15 Dec 2021 18:30:14 +0100
+To:     linux-kernel@vger.kernel.org
+Cc:     tglx@linutronix.de
+From:   info@engel-internet.de
+Subject: CLOCK_MONOTONIC after suspend
+Message-ID: <91eaa528-9605-134e-8e38-ecc37a0360e1@engel-internet.de>
+Date:   Wed, 15 Dec 2021 18:30:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <20211210172034.13614-1-mcroce@linux.microsoft.com>
- <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com> <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
-In-Reply-To: <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 15 Dec 2021 09:29:44 -0800
-Message-ID: <CAADnVQ+OeO=f1rzv_F9HFQmJCcJ7=FojkOuZWvx7cT-XLjVDcQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: limit bpf_core_types_are_compat() recursion
-To:     Matteo Croce <mcroce@linux.microsoft.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:j03kIT4Ogfhps79DPhw2On5cwAjYnaxCJxWL0DfqSySJ0VPeh/T
+ fyDRrFXJwSjr0EtbLIqLQ5BUnp7DCMQjI73PxN9yG2eages1aiWouCE4nhOzrWm6PU+Fdfj
+ GmzhqylMqOaao/1yykUGxtOJ/3sIKrM/LLsOqY2pEEMSFV68vkt4xl60Jc7ShEwqdDqWn15
+ 9WSrG48dqaCq8sNE33lOA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+tntscYG1KM=:RNaAIfszy8bhZGe5LCjZh7
+ LfMgVnkoHuaplaRNaRDVtfdNcMjdKsWMfWLtqt/fVpVrPppZKPI6F6HI13EjsXfZ/O/QEaoVc
+ bEUsnvWxlX1ROi/aH+xO+3MeibheNiguVPlHzbVEDPq5/qAL5Q+bXEZk1B6yVm3OdqR0avCtB
+ 9WgDmpdwF9RFxTtay+PVJPD5XcvuNh5cC17uY2GCzQr8F0lBi+H1PdsyFJZ5hPay/1HwriVLW
+ V5jMG1BvTxbBmHg8LEN3nQnuNNAcdVo5GLz4umO+9ChmW0A2MC4Bkm2Yar9Uc09Zhv3ge0Erp
+ mbsLVlEsGZ0uAA6zKAk+V/Ovrjo1LgodHhlLKzVGnevTElxaVbpqYG/4RZ7iOXphRGCM348gP
+ +rxkCqIl6jQpJXwuyYtlgtmvvbARr105NbmC0vXT+trMK/ZfQ6iMUHDm55GMS7cz2P9PY8NPC
+ GeyLUvT9434VZ1zyudFbmGia7r1TFrPPCCoq/KpfMJMG6E6bd7ahBfsAnhMkfvcdQuxDosDS1
+ DmDeWnwK3rqkdcf3TeB6nOAvyALE+6nxny56xCOV6FUr5kbOZPnkDbXGSr/s5lSovGj5889Lv
+ DQlGdeHA08Uwpb61NBiaB6mqvevvWWgkFNRuQpbUtg+KWa86jzYcZCfHIx/gf6cBXNCYDXS7j
+ VlxHwAlblLQQgSM3ZpIIhyLnKmk0Y7d1P0PXngyOHkoqnFKeN7BsW3C0Mz4bp+YUY+q4QNEgP
+ riveYOILbhpotxm3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 6:54 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
-> >
-> > Maybe do a level check here?
-> > Since calling it and immediately returning doesn't conserve
-> > the stack.
-> > If it gets called it can finish fine, but
-> > calling it again would be too much.
-> > In other words checking the level here gives us
-> > room for one more frame.
-> >
->
-> I thought that the compiler was smart enough to return before
-> allocating most of the frame.
-> I tried and this is true only with gcc, not with clang.
+Hi,
 
-Interesting. That's a surprise.
-Could you share the asm that gcc generates?
 
-> > > +                       err = __bpf_core_types_are_compat(local_btf, local_id,
-> > > +                                                         targ_btf, targ_id,
-> > > +                                                         level - 1);
-> > > +                       if (err <= 0)
-> > > +                               return err;
-> > > +               }
-> > > +
-> > > +               /* tail recurse for return type check */
-> > > +               btf_type_skip_modifiers(local_btf, local_type->type, &local_id);
-> > > +               btf_type_skip_modifiers(targ_btf, targ_type->type, &targ_id);
-> > > +               goto recur;
-> > > +       }
-> > > +       default:
-> > > +               pr_warn("unexpected kind %s relocated, local [%d], target [%d]\n",
-> > > +                       btf_type_str(local_type), local_id, targ_id);
-> >
-> > That should be bpf_log() instead.
-> >
->
-> To do that I need a struct bpf_verifier_log, which is not present
-> there, neither in bpf_core_spec_match() or bpf_core_apply_relo_insn().
 
-It is there. See:
-        err = bpf_core_apply_relo_insn((void *)ctx->log, insn, ...
+I have a comment/question related to this admittedly quite old commit:
 
-> Should we drop the message at all?
+- Revert: Unify CLOCK_MONOTONIC and CLOCK_BOOTTIME,
+https://github.com/torvalds/linux/commit/a3ed0e4393d6885b4af7ce84b437dc696490a530#diff-2278494fe0e3426f0e89d14f1f09e5e24923dc29a0f973250081f70416ade7dc
 
-Passing it into bpf_core_spec_match() and further into
-bpf_core_types_are_compat() is probably unnecessary.
-All callers have an error check with a log right after.
-So I think we won't lose anything if we drop this log.
 
->
-> > > +               return 0;
-> > > +       }
-> > > +}
-> >
-> > Please add tests that exercise this logic by enabling
-> > additional lskels and a new test that hits the recursion limit.
-> > I suspect we don't have such case in selftests.
-> >
-> > Thanks!
->
-> Will do!
 
-Thanks!
+It states "(...) As reported by several folks systemd and other
+applications rely on the documented behaviour of CLOCK_MONOTONIC on
+Linux and break with the above changes. After resume daemons time out
+and other timeout related issues are observed. Rafael compiled this
+list: (...)".
+
+
+
+From user space perspective similar issues can still be observed. I
+guess these ostensible time jumps happen because user space is frozen
+before the kernel fell asleep and vice versa on suspend:
+
+dT = (T_KS_asleep – T_US_asleep) + (T_US_awake – T_KS_awake) // T: point
+in time, KS: kernel space, US: user space
+
+
+
+With a simple user space program that prints out the monotonic time each
+100ms along with the day time, I did some measurements on my notebook.
+It reveals the following discrepancies (time gaps) between the last time
+stamp written before suspend and the first time stamp after resume:
+
+
+
+dT in [s]     #1      #2      #3      #4      #5      #6      #7
+
+Suspend2RAM   6.409   6.423   7.451   3.444   7.815   5.655   7.178
+
+Suspend2Disk  5.228   2.683   5.072   5.198   4.806   5.763   6.908
+
+
+
+Is this effect known and accepted or is there some way to prevent or
+mitigate it?
+
+
+
+Thanks,
+
+Dirk
+

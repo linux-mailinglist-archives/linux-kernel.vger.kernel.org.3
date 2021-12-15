@@ -2,101 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06565474F8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB42474FB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238665AbhLOAu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 19:50:27 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15734 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235240AbhLOAu0 (ORCPT
+        id S238705AbhLOA6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 19:58:54 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:56971 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231138AbhLOA6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 19:50:26 -0500
-Received: from kwepemi500004.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JDGmX6VVczZcgQ;
-        Wed, 15 Dec 2021 08:47:24 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500004.china.huawei.com (7.221.188.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 08:50:24 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 08:50:23 +0800
-Subject: Re: [PATCH 5.4 00/88] 5.4.165-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <stable@vger.kernel.org>
-References: <20211213092933.250314515@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <e7ffaf06-d897-b16d-19ef-9c4168eaffa4@huawei.com>
-Date:   Wed, 15 Dec 2021 08:50:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 14 Dec 2021 19:58:53 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JDH1m0mLVz4xRB;
+        Wed, 15 Dec 2021 11:58:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ozlabs.org;
+        s=201707; t=1639529932;
+        bh=rgm18ZlcGbuDcVzIyyKfPtAJUMVGTI5VokdMjxI1FSc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BPZgdpsAzt9uNtUMUqMCEX8IM/uxBClXdOyq2QNPWlaxxFA0ORVIHxFK2MnnDBOKz
+         IwHj1B0KVKh36iw5pLKIu4vE0mAaUmhf0KdJjkpzqB0sm4OD8guZXrAygrdL1dM56X
+         yNhMTJiBLT/gm4o7xrx1B5BRHb1aQP0WGs6MUal1BNGmqTnW5t1s2jrevQUHQ9O+Gz
+         zHdAs0yF4keelw2pAnr6RlkFXVxxqDnJeKKcaTyc43kJRMxTrIE67+TkezkQMCV09b
+         zw93EiW4clYYpojkf+NHQ+SX+WLqs+OOQghQ2YceoAzo6OBYSNlXwG2PnU5AxMWrpj
+         7sjtOlElUOM3A==
+From:   Amitay Isaacs <amitay@ozlabs.org>
+To:     linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+        jk@ozlabs.org, joel@jms.id.au, alistair@popple.id.au,
+        eajames@linux.ibm.com
+Cc:     Amitay Isaacs <amitay@ozlabs.org>
+Subject: [PATCH 1/2] fsi: sbefifo: Use specified value of start of response timeout
+Date:   Wed, 15 Dec 2021 11:58:32 +1100
+Message-Id: <20211215005833.222841-1-amitay@ozlabs.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+For some of the chip-ops where sbe needs to collect trace information,
+sbe can take a long time (>30s) to respond.  Currently these chip-ops
+will timeout as the start of response timeout defaults to 10s.
 
+Instead of default value, use specified value.  The require timeout
+value will be set using ioctl.
 
-On 2021/12/13 17:29, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.165 release.
-> There are 88 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.165-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Signed-off-by: Amitay Isaacs <amitay@ozlabs.org>
+---
+ drivers/fsi/fsi-sbefifo.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Tested on arm64 and x86 for 5.4.165-rc1,
+diff --git a/drivers/fsi/fsi-sbefifo.c b/drivers/fsi/fsi-sbefifo.c
+index 52328adef643..9188161f440c 100644
+--- a/drivers/fsi/fsi-sbefifo.c
++++ b/drivers/fsi/fsi-sbefifo.c
+@@ -125,6 +125,7 @@ struct sbefifo {
+ 	bool			dead;
+ 	bool			async_ffdc;
+ 	bool			timed_out;
++	uint32_t		timeout_start_rsp_ms;
+ };
+ 
+ struct sbefifo_user {
+@@ -549,7 +550,7 @@ static int sbefifo_read_response(struct sbefifo *sbefifo, struct iov_iter *respo
+ 
+ 	dev_vdbg(dev, "reading response, buflen = %zd\n", iov_iter_count(response));
+ 
+-	timeout = msecs_to_jiffies(SBEFIFO_TIMEOUT_START_RSP);
++	timeout = msecs_to_jiffies(sbefifo->timeout_start_rsp_ms);
+ 	for (;;) {
+ 		/* Grab FIFO status (this will handle parity errors) */
+ 		rc = sbefifo_wait(sbefifo, false, &status, timeout);
+@@ -972,6 +973,7 @@ static int sbefifo_probe(struct device *dev)
+ 	sbefifo->fsi_dev = fsi_dev;
+ 	dev_set_drvdata(dev, sbefifo);
+ 	mutex_init(&sbefifo->lock);
++	sbefifo->timeout_start_rsp_ms = SBEFIFO_TIMEOUT_START_RSP;
+ 
+ 	/*
+ 	 * Try cleaning up the FIFO. If this fails, we still register the
+-- 
+2.33.1
 
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-5.4.y
-Version: 5.4.165-rc1
-Commit: 0896ccf9036401df1f284b0a02b954d71d071d74
-Compiler: gcc version 7.3.0 (GCC)
-
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9013
-passed: 9013
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9013
-passed: 9013
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-Tested-by: Hulk Robot <hulkrobot@huawei.com>

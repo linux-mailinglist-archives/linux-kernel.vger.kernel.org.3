@@ -2,156 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B6B47635E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E66A9476366
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236121AbhLOUdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:33:41 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:44793 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbhLOUdk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:33:40 -0500
-Received: by mail-ot1-f43.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso26325446otj.11;
-        Wed, 15 Dec 2021 12:33:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PNasZti3EJAcUjmghAAyjrnvtl+di8xU5grpOnCBmyg=;
-        b=r/Os1Kd4WaahbBlEUwTmFvMz0jGMaEf5GyRAEsQcwXDHvAEx8OY3O+2FmcKTk5s8F9
-         DUG/r3/ozWdtYWboXX0729eGeT5AbDBr/TzjUitOsNKZVfKT9RfzAef9v+p6zKCuMLR7
-         71uF2hb9HrY8tyaSurfycruRmbn22eWBzarDSG53P9CMaKOnAnApA0GX9NimBoHWfr0j
-         yLvQNpya2WGAe5epcHRkxpc/mqisF8rr8uOCSa3yZllujU6j9sehV7VLwvBOXveWgUMj
-         zJO74zz5ILlgCOzxXs+Kwl/70JpFWjFIeWoAZH2e5NOSLJxC5hnqyevRugxC9JgcbhRl
-         RyOg==
-X-Gm-Message-State: AOAM531a51wj4QoqprZHGHNfczzKVFqVZW6xuoWWrXwGZsf04NOznj9F
-        KvZSs08XXpx+hSkZqhZVeyQsfEm8dg==
-X-Google-Smtp-Source: ABdhPJzYfl8+giEp7MlljEoKVlDCMkHWhKVi6Os4fWSTlT/WQhPPg1r7k7uJ2jVEdD343rJGGqFJOw==
-X-Received: by 2002:a05:6830:3499:: with SMTP id c25mr10508450otu.206.1639600419551;
-        Wed, 15 Dec 2021 12:33:39 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bh12sm534362oib.25.2021.12.15.12.33.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 12:33:39 -0800 (PST)
-Received: (nullmailer pid 1790368 invoked by uid 1000);
-        Wed, 15 Dec 2021 20:33:38 -0000
-Date:   Wed, 15 Dec 2021 14:33:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Peter Rosin <peda@axentia.se>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: i2c Update PCA954x
-Message-ID: <YbpRIjHgfPvHq/zR@robh.at.kernel.org>
-References: <20211214095021.572799-1-patrick.rudolph@9elements.com>
+        id S236175AbhLOUgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:36:21 -0500
+Received: from mga09.intel.com ([134.134.136.24]:14300 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234794AbhLOUgU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 15:36:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639600580; x=1671136580;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hunyGAa0xASiELB1C/3/BZUpwTc7F6peoAwd1eFU9eA=;
+  b=Xz2Pxj5PDzvEVM51nYoNDfPmBsRgeGwX5LL2GXf/IoYY+1TXfoHnb2Qj
+   W4SDMoREPh5XKjekNPEt3y0B7Kl4gmA7GmezI+1ZZxPNWbMw5gAwTOzyp
+   p0BBgdrALp7rL/nbjoil10XhlkSSM9goiypjC6kGdUrOttiMpwZVIUOgT
+   q7x+Pl0vOMnNnZv5j5O5gWuiDQ0nB9rpol+Xsnz1JxlnTpBRjCpIigcOB
+   FnpUPsugyNB7EXEnIfHbeZPM5oc9A+LSZQaCkoA3trRJiTLW6ERhjr+ce
+   TMnfLPtTBdn1hgQEb6ArdC+WOVk1txzTav3AFwjPreh3TzA6Rb7dvvwY/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="239143142"
+X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
+   d="scan'208";a="239143142"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 12:36:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
+   d="scan'208";a="464413491"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 15 Dec 2021 12:36:17 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxb0a-0002Ia-Q5; Wed, 15 Dec 2021 20:36:16 +0000
+Date:   Thu, 16 Dec 2021 04:35:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xiang wangx <wangxiang@cdjrlc.com>, jyri.sarha@iki.fi
+Cc:     kbuild-all@lists.01.org, Xiang wangx <wangxiang@cdjrlc.com>,
+        tomba@kernel.org, airlied@linux.ie, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/tilcdc: add const to of_device_id
+Message-ID: <202112160411.sNrSELAY-lkp@intel.com>
+References: <20211215161803.5900-1-wangxiang@cdjrlc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214095021.572799-1-patrick.rudolph@9elements.com>
+In-Reply-To: <20211215161803.5900-1-wangxiang@cdjrlc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 10:50:18AM +0100, Patrick Rudolph wrote:
-> Add the Maxim MAX735x as supported chip to PCA954x and add an
-> example how to use it.
+Hi Xiang,
 
-The subject needs some work. Every change is an 'update' and you should 
-say something about Maxim. 'Add Maxim MAX735x variants' or something.
+Thank you for the patch! Yet something to improve:
 
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> ---
->  .../bindings/i2c/i2c-mux-pca954x.yaml         | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> index 9f1726d0356b..bd794cb80c11 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> @@ -11,6 +11,7 @@ maintainers:
->  
->  description:
->    The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
-> +  Compatible with Maxim MAX7356 - MAX7358 I2C mux/switch devices.
->  
->  allOf:
->    - $ref: /schemas/i2c/i2c-mux.yaml#
-> @@ -19,6 +20,9 @@ properties:
->    compatible:
->      oneOf:
->        - enum:
-> +          - maxim,max7356
-> +          - maxim,max7357
-> +          - maxim,max7358
->            - nxp,pca9540
->            - nxp,pca9542
->            - nxp,pca9543
-> @@ -40,6 +44,7 @@ properties:
->  
->    interrupts:
->      maxItems: 1
-> +    description: Only supported on NXP devices. Unsupported on Maxim MAX735x.
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on v5.16-rc5 next-20211214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-You can express that as an if/then schema.
+url:    https://github.com/0day-ci/linux/commits/Xiang-wangx/drm-tilcdc-add-const-to-of_device_id/20211216-002326
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: arm-randconfig-c002-20211214 (https://download.01.org/0day-ci/archive/20211216/202112160411.sNrSELAY-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/5698eadb76d94a4fc5298f5bea88b839399ddef0
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Xiang-wangx/drm-tilcdc-add-const-to-of_device_id/20211216-002326
+        git checkout 5698eadb76d94a4fc5298f5bea88b839399ddef0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/tilcdc/
 
-Just 'interrupts: false' for maxim compatibles. There's lots of 
-examples in the tree.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->  
->    "#interrupt-cells":
->      const: 2
-> @@ -100,6 +105,41 @@ examples:
->                  #size-cells = <0>;
->                  reg = <4>;
->  
-> +                rtc@51 {
-> +                    compatible = "nxp,pcf8563";
-> +                    reg = <0x51>;
-> +                };
+All errors (new ones prefixed by >>):
 
-Unrelated change.
+>> drivers/gpu/drm/tilcdc/tilcdc_drv.c:590:34: error: conflicting types for 'tilcdc_of_match'; have 'const struct of_device_id[]'
+     590 | static const struct of_device_id tilcdc_of_match[] = {
+         |                                  ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/tilcdc/tilcdc_drv.c:63:28: note: previous declaration of 'tilcdc_of_match' with type 'struct of_device_id[]'
+      63 | static struct of_device_id tilcdc_of_match[];
+         |                            ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/tilcdc/tilcdc_drv.c:63:28: error: array 'tilcdc_of_match' assumed to have one element [-Werror]
+>> drivers/gpu/drm/tilcdc/tilcdc_drv.c:63:28: error: 'tilcdc_of_match' defined but not used [-Werror=unused-variable]
+   cc1: all warnings being treated as errors
 
-> +            };
-> +        };
-> +    };
-> +
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
 
-Really need another example?
+vim +590 drivers/gpu/drm/tilcdc/tilcdc_drv.c
 
-> +
-> +        i2c-mux@74 {
-> +            compatible = "maxim,max7357";
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            reg = <0x74>;
-> +
-> +            i2c@1 {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                reg = <1>;
-> +
-> +                eeprom@54 {
-> +                    compatible = "atmel,24c08";
-> +                    reg = <0x54>;
-> +                };
-> +            };
-> +
-> +            i2c@7 {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                reg = <7>;
-> +
->                  rtc@51 {
->                      compatible = "nxp,pcf8563";
->                      reg = <0x51>;
-> -- 
-> 2.33.1
-> 
-> 
+   589	
+ > 590	static const struct of_device_id tilcdc_of_match[] = {
+   591			{ .compatible = "ti,am33xx-tilcdc", },
+   592			{ .compatible = "ti,da850-tilcdc", },
+   593			{ },
+   594	};
+   595	MODULE_DEVICE_TABLE(of, tilcdc_of_match);
+   596	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

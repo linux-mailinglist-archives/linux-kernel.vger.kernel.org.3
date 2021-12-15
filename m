@@ -2,99 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7B44765BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799E54765A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbhLOW2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 17:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbhLOW14 (ORCPT
+        id S231287AbhLOW1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 17:27:35 -0500
+Received: from mail-oo1-f44.google.com ([209.85.161.44]:46771 "EHLO
+        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231279AbhLOW1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 17:27:56 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27D1C06175D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:27:55 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso26660859otj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:27:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RSEG16yJ/pZVc9UBuEcTPFQBGiKuZZcjhlf9WtuAprs=;
-        b=cuEcS1f5g35wCAwpC5X2/A93NKMe8/dYHwlIVfoQh6owdqbODcYuIr+4FD4dwpxxuj
-         3c4nTIBn4ol2oBNciDmCfS8LRdUwLkmXWUcBA4Biz/XnVxShgPulMmTLPVhXJrHptetn
-         0w3VX/GxT0cS1glMYSATSJQ/BDMUfm9UDxyEE8gwgkjr69pVxsh9R9EX9nSYkzGco4RW
-         rVJpOG20sDPQX5ov1i+/YBzD3PbUSD0p2Gn5eaIIsehtuPSyjAivNHKfEGTddGHEWhja
-         sy5M0D87BoaBC/cdos2X90QTEHl21CzAzIvE5V3KBeJzZQyTBTvkoZujwIO4JrPsA5Gd
-         i9Ug==
+        Wed, 15 Dec 2021 17:27:33 -0500
+Received: by mail-oo1-f44.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso6341743ood.13;
+        Wed, 15 Dec 2021 14:27:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RSEG16yJ/pZVc9UBuEcTPFQBGiKuZZcjhlf9WtuAprs=;
-        b=RN9sq8jeufkTII0Hq84PUjBx0AVRF/ie1a4Sg7DNt15YuvnY/Xx4G0Z59MqDFUBsBj
-         NnitGkhpooTqSXxLzpWpNlZ9HG1Y25V0WP8DH9UEKs3wlAmkFjBUG5WcjsgORwmRlb77
-         aarz+OAJglYzzP98yAbZcQdAhJzLU8RMZoHCslXbqItisn0uOGjoNhysdDFioYGK5s6s
-         BZg2cP7UXVMI211mz4IbmlG4aIISbbTdV8dnbXT1uCVA27dcPQ4X4P1kvX2ZJWT81/96
-         Iu9/t/kJrdNhbCKDghnwz2h/+yES+FE+YPTP555tN1FjZQXikKO0kDgKPIXqsxPUyaqe
-         PxOw==
-X-Gm-Message-State: AOAM531daZAxvMWDwI6mWpoC+7OMrtTc9FImabMM+y9bar2ZEzXpv716
-        7YTzGin0IEx4yVAw/iZww6jXww==
-X-Google-Smtp-Source: ABdhPJyV9J29rkDfyYTATPFl2Aq7tIcKmAPdfUnsZsTx42Bdm8EG8ZQUy8tFpSqskGCJ62zkRjq/Yg==
-X-Received: by 2002:a9d:77c6:: with SMTP id w6mr10764181otl.155.1639607275216;
-        Wed, 15 Dec 2021 14:27:55 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t14sm700500oth.81.2021.12.15.14.27.54
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=khz6XuxeDKafAUA9AHe6/aR/dP/aRvnjdJRNkKlCqTo=;
+        b=ju6DcpU17RC2wsp5NVFWduvbpKcZV4MpkWs7Z/8qSmJothRxu24vzFzFs+vKTYSbHY
+         BW528HaU77jwi60LqNY7S+OAWdaNWlvH20z+vcGz/FbJf9IxN22z81e2tfhu/njvUqf/
+         pJlQ3qH9P4cTk1tonMcnmWuyetXVYZM7pJ6IfsX6vyQDPPR0Dh/F7rFkEvh3xseproAt
+         s4/xZFuvCjItcz9/GjlaXDZN96CUrTT2gPBlxXLa6lQL0XYvUdRLcaReRhwduE/6TcHq
+         HIaCOecfGkQtPlAq/f2BBmTWihhBMmWl84CtYoavXLmQmsVc6KYVmnMt84e5FkG4/5ek
+         IwtQ==
+X-Gm-Message-State: AOAM532Hx+Z1YxtVdux6MuR8UWroUzMoPtLWE8jVj4ZLGXd+xJbSzleo
+        Jj2DvYAAikHd/nbHNiu2eg==
+X-Google-Smtp-Source: ABdhPJzNVqqhvP0NPVYe+ULeBlpmR/5grGdaEFpeSYXa09aXA387KoadkmV5AG04I5FgiwIo+QcSUA==
+X-Received: by 2002:a4a:ab05:: with SMTP id i5mr9069023oon.61.1639607252965;
+        Wed, 15 Dec 2021 14:27:32 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bi20sm661315oib.29.2021.12.15.14.27.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:27:54 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     linux-arm-msm@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>
-Cc:     linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: (subset) [PATCH 0/8] ADSP/CDSP/MPSS support for sm6350 and Fairphone 4
-Date:   Wed, 15 Dec 2021 16:27:27 -0600
-Message-Id: <163960723734.3062250.7617983608039138619.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211213082208.21492-1-luca.weiss@fairphone.com>
-References: <20211213082208.21492-1-luca.weiss@fairphone.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 15 Dec 2021 14:27:32 -0800 (PST)
+Received: (nullmailer pid 1954728 invoked by uid 1000);
+        Wed, 15 Dec 2021 22:27:28 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        ~okias/devicetree@lists.sr.ht, devicetree@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        David Airlie <airlied@linux.ie>
+In-Reply-To: <20211215152712.72502-1-david@ixit.cz>
+References: <20211215152712.72502-1-david@ixit.cz>
+Subject: Re: [PATCH] dt-bindings: display: bridge: document Toshiba TC358768 cells and panel node
+Date:   Wed, 15 Dec 2021 16:27:28 -0600
+Message-Id: <1639607248.090344.1954727.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 09:22:00 +0100, Luca Weiss wrote:
-> This patch series adds support for the remoteprocs found in
-> sm6350/sm7225 and enables them on the Fairphone 4 smartphone.
+On Wed, 15 Dec 2021 16:27:12 +0100, David Heidelberg wrote:
+> Properties #address-cells and #size-cells are valid.
+> The bridge node can also contains panel node.
 > 
-> Luca Weiss (8):
->   dt-bindings: remoteproc: qcom: pas: Add SM6350 adsp, cdsp & mpss
->   remoteproc: qcom: pas: Add SM6350 MPSS support
->   arm64: dts: qcom: sm6350: Add MPSS nodes
->   remoteproc: qcom: pas: Add SM6350 ADSP support
->   arm64: dts: qcom: sm6350: Add ADSP nodes
->   remoteproc: qcom: pas: Add SM6350 CDSP support
->   arm64: dts: qcom: sm6350: Add CDSP nodes
->   arm64: dts: qcom: sm7225-fairphone-fp4: Enable ADSP, CDSP & MPSS
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  .../bindings/display/bridge/toshiba,tc358768.yaml      | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> [...]
 
-Applied, thanks!
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-[3/8] arm64: dts: qcom: sm6350: Add MPSS nodes
-      commit: 489be59b635ba76ea16d6f820ddf037644b3415a
-[5/8] arm64: dts: qcom: sm6350: Add ADSP nodes
-      commit: efc33c969f23cd6fe983e7e7bdcd8bbb1521f1de
-[7/8] arm64: dts: qcom: sm6350: Add CDSP nodes
-      commit: 8eb5287e8a425aa7b27cfbb92096550046a231f8
-[8/8] arm64: dts: qcom: sm7225-fairphone-fp4: Enable ADSP, CDSP & MPSS
-      commit: bc279dc04e9ee23f6a22f6c7a6924edbd5fe0f6d
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+Full log is available here: https://patchwork.ozlabs.org/patch/1568330
+
+
+tc358778@e: compatible: Additional items are not allowed ('toshiba,tc358768' was unexpected)
+	arch/arm/boot/dts/am571x-idk.dt.yaml
+	arch/arm/boot/dts/am572x-idk.dt.yaml
+	arch/arm/boot/dts/am574x-idk.dt.yaml
+
+tc358778@e: compatible: ['toshiba,tc358778', 'toshiba,tc358768'] is too long
+	arch/arm/boot/dts/am571x-idk.dt.yaml
+	arch/arm/boot/dts/am572x-idk.dt.yaml
+	arch/arm/boot/dts/am574x-idk.dt.yaml
+

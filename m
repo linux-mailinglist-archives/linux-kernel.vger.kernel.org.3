@@ -2,116 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F9B47586E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272BB47586F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242308AbhLOMJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236954AbhLOMJr (ORCPT
+        id S242314AbhLOMJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:09:50 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:43631 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237070AbhLOMJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Dec 2021 07:09:47 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F25C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:09:46 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id 131so54506293ybc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:09:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=medD3Xi3kZKH5q7bagszydyhriMt4qJw4H1Wjw4BIeA=;
-        b=hFy0KgQxd2bJci/Xd+n8sv+Gu5RmYMvEDhUBuj2Yrq8ctOAyB8hlUNmxpM2IiWLKGy
-         GE3vvn8E0z4jskkFd9srdqyZ83G3qGSVOcrD2grWx5AMKa7YPQ48/Vv0KqUhJi54LfOy
-         dD7WRE2C4pHHS/JIsZt35udpFpfLB/bfGhx9yBgUoW8bTi5myNlDaZXqEKI6Kx46FisJ
-         68kZKS3svXvUdYbK5/j6C34dFY+I1Rbbh4hEBrVj5Z8GkSaIoGT6INxX0WmFow5netem
-         tEe/Dm5Fek5uzcugw8IodwEebZjX23z7LIjzHm5KAIPoJ2dg3exHdgGp4uP3a5We1NHj
-         TTAw==
+Received: by mail-ot1-f54.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so24638910otu.10;
+        Wed, 15 Dec 2021 04:09:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=medD3Xi3kZKH5q7bagszydyhriMt4qJw4H1Wjw4BIeA=;
-        b=zuvnBXpN2FBRH4/3lbGRz/fZ+Hxmnr1AsklzlWP7fu6w+p9JUB/mF6NeR8WV8fy9OW
-         9xE2UeItEeCqffOXnA2KnIQLPYtQOExpAxzhjuj0IPgx947aBezhiSF6NLyFZG8aB9Ga
-         bfjlnEjT1d2I4v8/UhQEMuauoSY0ffAFEk8HHSIBqHGTNqrPCBq9RHlMp9UEYG2xBG6w
-         aSuSHQJRPJhhnKCsYUapv4hkKTlJjGGq2m+iQlNov5Cn/aQ/0IQfxYUn3RP0MSe5buwE
-         C1+DzXvE4ExdqI6Aqvzcap4OWuixfExtI3D+ApRkjdJBjSyjeq0LX3Jw6dKcBaO2ZI9x
-         wr0w==
-X-Gm-Message-State: AOAM530cctNwkTZmo7n8Ur+stJ0NlxCIb2ICzsiAG99SJUrD/9ts9Pgz
-        icfkyo/5oV4l4g0NmLQs8AHVGTMN+5EB7UvHJMjDTg==
-X-Google-Smtp-Source: ABdhPJwQ0At3Bjn2QQCan5WHYT82Z/7G6PUgdH5xVAc30+lYih6V821vw+gn8W1jOKI1DU2w2zfhyVDYOnqoiKKOUGU=
-X-Received: by 2002:a05:6902:52b:: with SMTP id y11mr5529088ybs.199.1639570186129;
- Wed, 15 Dec 2021 04:09:46 -0800 (PST)
+        bh=BCA5ded+I5x3sDgisFpvfN1DImt0yc2/pVxbT5RruKU=;
+        b=kYIJKyF8FwLfWN6K9st4fi5N3v8hhIL6k1nHz9jJANVRBJ7sZNOW5wej3kXrliVFtR
+         B57oved4AC0pjzsIMU0KjSn8U0Pn+nuHcS7rGfJry8D+NyD71hDeQVfKJchGiATTR2rD
+         YmAO1G1ATwyf7vJyskpTaVjE93C2tVg+ARCnworjyyqLlsw6U8O3SLZ5umPELYCJy8zq
+         yYIfJY0FVUCJNtWMwB1UksbyfkbrYFG3aOnJZNUX3afVzcI4NEDdJYJnVOODaZYsbZzm
+         dQGxo2WS2vpaospGIUIeFDh0HylU7sInblPTn4Q8Vf7PdP2qKk0mvp4Ye/c9Lr+YxM47
+         DygQ==
+X-Gm-Message-State: AOAM530M21WLAzB76I88z5jR5jiXko6lKcAGV37+VO84zzPvL2VT0eSP
+        iLdoDZZmxhQ07Rajfe/WGwlszjv9qpR6J7ab1nQDw68E3ZE=
+X-Google-Smtp-Source: ABdhPJxHDsY/V2rG/GCrrjnWZd4A3MEHYJ5K+NLt8q0y7Qglh5WylkUyadI/6JbmFqh8ufI6ojPSjmC9qlCUwfzxHuk=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr8453925otf.198.1639570187360;
+ Wed, 15 Dec 2021 04:09:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20211213165342.74704-1-songmuchun@bytedance.com>
- <20211213165342.74704-2-songmuchun@bytedance.com> <YbieX3WCUt7hdZlW@cmpxchg.org>
-In-Reply-To: <YbieX3WCUt7hdZlW@cmpxchg.org>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 15 Dec 2021 20:09:10 +0800
-Message-ID: <CAMZfGtWPt2wk91Js6NRnw-wpMVQHc+ZRZo8OUyrkNAJBB3f8yQ@mail.gmail.com>
-Subject: Re: [PATCH v4 01/17] mm: list_lru: optimize memory consumption of
- arrays of per cgroup lists
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>, Yang Shi <shy828301@gmail.com>,
-        Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Dave Chinner <david@fromorbit.com>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org,
-        Kari Argillander <kari.argillander@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        fam.zheng@bytedance.com, Muchun Song <smuchun@gmail.com>
+References: <20211129061044.1779456-1-ishii.shuuichir@fujitsu.com> <e721c474-1788-5edb-3ce9-26b1ec03b784@huawei.com>
+In-Reply-To: <e721c474-1788-5edb-3ce9-26b1ec03b784@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 15 Dec 2021 13:09:36 +0100
+Message-ID: <CAJZ5v0h4vA5qeys7MrCJLGF-Y5SQPvYoZn4AC+mo-6VZo6PZ_g@mail.gmail.com>
+Subject: Re: [PATCH v3] acpi/tables: Add AEST in ACPI Table Definition
+To:     Hanjun Guo <guohanjun@huawei.com>,
+        Shuuichirou Ishii <ishii.shuuichir@fujitsu.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 9:38 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+On Mon, Nov 29, 2021 at 7:52 AM Hanjun Guo <guohanjun@huawei.com> wrote:
 >
-> On Tue, Dec 14, 2021 at 12:53:26AM +0800, Muchun Song wrote:
-> > The list_lru uses an array (list_lru_memcg->lru) to store pointers
-> > which point to the list_lru_one. And the array is per memcg per node.
-> > Therefore, the size of the arrays will be 10K * number_of_node * 8 (
-> > a pointer size on 64 bits system) when we run 10k containers in the
-> > system. The memory consumption of the arrays becomes significant. The
-> > more numa node, the more memory it consumes.
+> On 2021/11/29 14:10, Shuuichirou Ishii wrote:
+> > When We added AEST using the Upgrading ACPI tables via initrd function,
+> > the kernel could not recognize the AEST, so added the AEST table to
+> > the list to enable the table upgrade function.
+> >
+> > Signed-off-by: Shuuichirou Ishii <ishii.shuuichir@fujitsu.com>
+> > ---
+> > v3 : Changed the location of the change log so that it does not
+> >       disappear when the patch is applied.
+> >
+> > v2 : The reason for committing in the commit log was not clear,
+> >       so it was pointed out and corrected.
+> >
+> >   drivers/acpi/tables.c | 2 +-
 >
-> The complexity for the lists themselves is still nrmemcgs * nrnodes
-> right? But the rcu_head goes from that to nrmemcgs.
+> Acked-by: Hanjun Guo <guohanjun@huawei.com>
 
-Right.
+Applied as 5.17 material under a new subject ("ACPI: tables: Add AEST
+to the list of known table signatures") and with a cleaner changelog.
 
->
-> > I have done a simple test, which creates 10K memcg and mount point
-> > each in a two-node system. The memory consumption of the list_lru
-> > will be 24464MB. After converting the array from per memcg per node
-> > to per memcg, the memory consumption is going to be 21957MB. It is
-> > reduces by 2.5GB. In our AMD servers, there are 8 numa nodes in
-> > those system, the memory consumption could be more significant.
->
-> The code looks good to me, but it would be useful to include a
-> high-level overview of the new scheme, explain that the savings come
-> from the rcu heads, that it simplifies the alloc/dealloc path etc.
-
-Will do in the next version.
-
->
-> With that,
->
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-
-Thanks.
-
->
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Thanks!

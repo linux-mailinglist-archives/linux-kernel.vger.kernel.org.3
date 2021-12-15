@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C52474F73
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1A5474F75
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238603AbhLOAqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 19:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S238609AbhLOAqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 19:46:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233571AbhLOAql (ORCPT
+        with ESMTP id S238605AbhLOAqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 19:46:41 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0D0C061574;
-        Tue, 14 Dec 2021 16:46:41 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id m9so27446875iop.0;
-        Tue, 14 Dec 2021 16:46:41 -0800 (PST)
+        Tue, 14 Dec 2021 19:46:43 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D73C061574;
+        Tue, 14 Dec 2021 16:46:42 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id k21so27324853ioh.4;
+        Tue, 14 Dec 2021 16:46:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TsxVm/nBHbmV/4yA20eRpZCerBTIIqpAtNm+TzyfRMc=;
-        b=CiriOTZ3zJ1nN8OcVg5a1lR0WEgbKwYvIj/uiMxFH88adp3Dq76A7fuT3EjE9lV/eW
-         eb0LcYXSB0PAzxSqB9YvvIn8GwDKlOcQYmvvUCT+ubGaUY0EtA6us+j9IhLhVm89nEwD
-         0DFX4WVwUVMM4jZJUvWTG18EYNQVKFKYIpaHKyeF/6KcAjrE4zaxat/HnMqZY0O5FZiR
-         L358XpwTefW16RcAf1iTma4vuCSJtFtJ47OkZuvr1Gk3GMNBHJM9B4VEJUyLbzO5Hmk1
-         QudoLhR6lWgFe/XB5QWsaahWkBhwQ7v0h7BsteKJZV76+CIb5EnV9UOZDvEDbosse8m/
-         sV1g==
+        bh=hZeqp1FYJmD+knXrPe5OXFXwzSVkktTav5BzuULk6lM=;
+        b=McaMoHZtB0R7eaaRVJjiBK77puPXXCMnkXxzz158P8zT/6hfq9kw0vjctqVga1vP1v
+         zc1MK8vm793LD5a/XQ786JbtSoY0b4MFIAdJZoCrCaHWuUJNMrFRrv+U82ROIB5+9fgS
+         JYUFsY1s2sgxrlLC8TzM4XqQeuPm29s6w/UAO7KJXUnGc2yHqV7iDrNSJ2sIDYB9UXjt
+         CKFiL95ugoRUBx8SRamxYV/hsJEmOcRLoMt6WOFk60XfVl5+i9pKcSRq8aCclUCbNAFU
+         0anU1ilFrD/RFBJqAVtI5S+amlJ7IZ88/bF4DQcPXNd1wzGo7L5GFabLQUnmueHWSBXR
+         y4Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TsxVm/nBHbmV/4yA20eRpZCerBTIIqpAtNm+TzyfRMc=;
-        b=J4HWl5jnCemHs6ULv/pOZbyPZJbr84D2T2l8gvREwZQ8v7Ljazt9a9cfkJO6jOt1xt
-         6NXQjnhN4dWuU8Dhx/oo0kPq21Dj3nc+DYhuw+MxFUmHlu5GcHlONvdNJWQ6lGO4MJag
-         ntkNTeDmlgiyZqNJYS/ztGuk/omBSKlo47ntoqVcaUGBmalyH9l2IEQdQ9zEwDoVC1Vc
-         /TvOoDnwPjmO7Efu+Ojb/cAFKzZ988T3GrXiLkxPKr/mqei0VlcTtY7Tze5/o67EeegO
-         97vWKvo5+mPiwf033qcOLRYNOKUXmeSdkd3wY6qCpqxEP+67piHgDtusTFWwsSlrpVIH
-         2Fwg==
-X-Gm-Message-State: AOAM533DltUsSxY+AJ+P3yAyjdII6rfN4mI8sb+U8hN76yFd3HNYQ++7
-        JOxB5MUxvrPjNlRcdxFpNrw=
-X-Google-Smtp-Source: ABdhPJy12WWwpsykdsDt2quBfCFzIlmVv94rwZBrTeLWWE5IUudQCFp6YRRRx+6tP9S0DhAHpKQw3A==
-X-Received: by 2002:a02:cb0d:: with SMTP id j13mr4568955jap.775.1639529200272;
-        Tue, 14 Dec 2021 16:46:40 -0800 (PST)
+        bh=hZeqp1FYJmD+knXrPe5OXFXwzSVkktTav5BzuULk6lM=;
+        b=rsr46kWcbo/7kGn/WfU4WdBu2FMPLYEWn2eXSaT3vZzHtxiB/Fua//1uTQ+xCkI17k
+         H2C4UhSadUUz+Xhpt3o+in+LEpELO5uJfJG1UkI0wUaABDq1lf9L8QP9uSjqf/nIUcTH
+         zaghdl8CF9GLN/jqDIJ3eAvaLX2zHnY/6fG7uBcMbB+LEhNVOjBFVS5TPb/k3A42erYv
+         olt8O9ahE0EIi2Y3bl8FD2CYuYhe6xk4Me7aqe89HC4j/g1lvMhV9+KfsnFrplfMirED
+         pkEDKR9I1OHdYbPyn0r/edQbczXR9oCqMbLx5AFZB1bhJmxZYoOh4N7moH9ZAVX1nWj+
+         /3OQ==
+X-Gm-Message-State: AOAM532uL8AzmTTHtSALTiJMKtTwidud51x8hPkVE0zDWzNBhD1/tuL/
+        yScdiuFO+e+uoz2FvAqqtZI=
+X-Google-Smtp-Source: ABdhPJxWw+JlvCdOA0QABauvmI+6V5wJiaujT/4F+Zmf0lwfeirbgSjiYolwktTReOWRSYFR+17Sdg==
+X-Received: by 2002:a05:6602:164a:: with SMTP id y10mr5408745iow.123.1639529202186;
+        Tue, 14 Dec 2021 16:46:42 -0800 (PST)
 Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:8256:b93c:84fb:458b])
-        by smtp.gmail.com with ESMTPSA id y8sm218857iox.32.2021.12.14.16.46.39
+        by smtp.gmail.com with ESMTPSA id y8sm218857iox.32.2021.12.14.16.46.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 16:46:39 -0800 (PST)
+        Tue, 14 Dec 2021 16:46:41 -0800 (PST)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     tharvey@gateworks.com, aford@beaconembedded.com,
@@ -61,9 +61,9 @@ Cc:     tharvey@gateworks.com, aford@beaconembedded.com,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V5 1/9] soc: imx: gpcv2: keep i.MX8MN gpumix bus clock enabled
-Date:   Tue, 14 Dec 2021 18:46:18 -0600
-Message-Id: <20211215004626.2241839-2-aford173@gmail.com>
+Subject: [PATCH V5 2/9] soc: imx: gpcv2: Add dispmix and mipi domains to imx8mn
+Date:   Tue, 14 Dec 2021 18:46:19 -0600
+Message-Id: <20211215004626.2241839-3-aford173@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211215004626.2241839-1-aford173@gmail.com>
 References: <20211215004626.2241839-1-aford173@gmail.com>
@@ -73,24 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like the i.MX8MM, keep the gpumix clocks running when the
-domain is active.
+The dispmix will be needed for the blkctl driver, so add it
+to the gpcv2.
 
 Signed-off-by: Adam Ford <aford173@gmail.com>
 Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 
 diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-index 8176380b02e6..a0eab9f41a71 100644
+index a0eab9f41a71..3e59d479d001 100644
 --- a/drivers/soc/imx/gpcv2.c
 +++ b/drivers/soc/imx/gpcv2.c
-@@ -841,6 +841,7 @@ static const struct imx_pgc_domain imx8mn_pgc_domains[] = {
- 			.hskack = IMX8MN_GPUMIX_HSK_PWRDNACKN,
- 		},
+@@ -843,6 +843,31 @@ static const struct imx_pgc_domain imx8mn_pgc_domains[] = {
  		.pgc   = BIT(IMX8MN_PGC_GPUMIX),
-+		.keep_clocks = true,
+ 		.keep_clocks = true,
  	},
++
++	[IMX8MN_POWER_DOMAIN_DISPMIX] = {
++		.genpd = {
++			.name = "dispmix",
++		},
++			.bits  = {
++			.pxx = IMX8MN_DISPMIX_SW_Pxx_REQ,
++			.map = IMX8MN_DISPMIX_A53_DOMAIN,
++			.hskreq = IMX8MN_DISPMIX_HSK_PWRDNREQN,
++			.hskack = IMX8MN_DISPMIX_HSK_PWRDNACKN,
++		},
++		.pgc   = BIT(IMX8MN_PGC_DISPMIX),
++		.keep_clocks = true,
++	},
++
++	[IMX8MN_POWER_DOMAIN_MIPI] = {
++		.genpd = {
++			.name = "mipi",
++		},
++			.bits  = {
++			.pxx = IMX8MN_MIPI_SW_Pxx_REQ,
++			.map = IMX8MN_MIPI_A53_DOMAIN,
++		},
++		.pgc   = BIT(IMX8MN_PGC_MIPI),
++	},
  };
  
+ static const struct regmap_range imx8mn_yes_ranges[] = {
 -- 
 2.32.0
 

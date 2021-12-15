@@ -2,80 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 493CF474F61
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED6B474F63
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238572AbhLOAhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 19:37:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40702 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbhLOAhX (ORCPT
+        id S238585AbhLOAhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 19:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238575AbhLOAht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 19:37:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC94DB81DC7;
-        Wed, 15 Dec 2021 00:37:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99B65C34601;
-        Wed, 15 Dec 2021 00:37:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639528640;
-        bh=tbRoBoVUjzbxEi/QcAg5ir+0LKHMUNVHqZzDT1UUT1M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R1kAz9+2yWKvd3i3G0IegwyWidCH4hzcXhdlxgdsmdKY1kEqwxj6O/pQkLMl9tSq5
-         Naz9fmYMV++H2Cv1dCZXqPhFlEeAEPmtUI61r0LwW3/w+/DWtFz42YL1VfInvIaKPT
-         jYbICeauH1lq89kIMItzR8fcW3MyjJk6Y4Zwo/m5JR+XgeddO/AerMolA+a0d7wluN
-         nRXa3mnCL3L91oK1ujeUI/kuBApN1zZR377JKA211FHDASpI89XaiUbNV017ivPqcb
-         2ueGKvepcq5gHNEnU1RTSxvAWxKPPrWTkixorF1QM99vx1lAfxf6LyGJPFiTGQ34dT
-         JgXsxU2WwJp+w==
-Date:   Tue, 14 Dec 2021 17:37:16 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     broonie@kernel.org
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Subject: Re: linux-next: Tree for Dec 14
-Message-ID: <Ybk4vF68Uhsd/8JH@archlinux-ax161>
-References: <20211214223228.1745315-1-broonie@kernel.org>
+        Tue, 14 Dec 2021 19:37:49 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93917C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 16:37:48 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id m27so39911462lfj.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 16:37:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0KDdNLlO0DLEFTk5ozWlHJ5e1Spt21tciEHONYXuUBQ=;
+        b=ZgMzN4riIJWb0Lc8kETogY6ajpvnX37mMKna+o6OyuRkoa1eu+oYYQgXPIzwo7rpWB
+         WV/izTTb1jEqIZQJZGJLl+o8UAZYNSBgm9vWzgJNf6XlJVTDqg0Tl/7Anezw++elRPzf
+         LtqKKD/3NVY6AgHwq1/2KUAwS21E5MYZ8dFM6M6aVFVOiMkVuycbmWhnHv0JDXOp4DhE
+         kTmS9dgSYd5kboI7e68AIBaeOFezJfvhfY3+VFnd5JpzAU+agrvmK9WJsr0Zn07PmEm/
+         pJkDA9bJ3kX1rbxmXjKzs472w+NrGBp70n+fuhV/DA1EvKFIqDiaY02ejGysAY9WSA/S
+         RzHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0KDdNLlO0DLEFTk5ozWlHJ5e1Spt21tciEHONYXuUBQ=;
+        b=EN5bsMQo1kGlOrFi/lpiSfXglF/eXiF5XfrKdW0KJh6C7XqSxvKKEpuXRvpbpCeS4p
+         4rQJscelLf6ybMAQh1D2EZlmOdR0ZELAkhK8K8M/KPE+mQYf0nECtnKXEqY6ZzPHp/3v
+         1FEAIFfXspn/aTUV70IYTr6gpg+zPRjKnWB6U0ndy7vSkI4fuiKGRhnJ9wE+P28vx/FJ
+         vokA8Bumrt4Pxys9PO7idgZlVNkqkAMlsTk7McGwvS1c++HnzixZVdaWFQfzG+lSkHGF
+         jKLmHmRWOqX8gNWoSnH/ymGChNCpEo9CmPlnB2PPxpEP1gJyCqIEquf7EOGNocc6FZoA
+         xMiA==
+X-Gm-Message-State: AOAM532XG5I1NeJIgg62ffGXReKZfAVYTotwJxd8a6sgDPOLpIU6Z/yk
+        VlxndMZzO9lLLuYVOaXT+NcEEhceFhwXeiD5nogV/w==
+X-Google-Smtp-Source: ABdhPJxuNKJpIi3w7LSROl5qNyBaWmfEqSqfM4jcdWXVmNx99zyNK2fSmfqGQwA9fbrDFVI4pdeeYkw7JwqAv6VJ/Ms=
+X-Received: by 2002:a19:48d7:: with SMTP id v206mr7703497lfa.102.1639528666318;
+ Tue, 14 Dec 2021 16:37:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214223228.1745315-1-broonie@kernel.org>
+References: <20211214033528.123268-1-seanjc@google.com>
+In-Reply-To: <20211214033528.123268-1-seanjc@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 14 Dec 2021 16:37:20 -0800
+Message-ID: <CALzav=f3nAp7iTvtHO3WhE_Jp-jyD5iKAEYEBQ0uc-tae9sYzg@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Don't advance iterator after restart due to yielding
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ignat Korchagin <ignat@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Mon, Dec 13, 2021 at 7:37 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> After dropping mmu_lock in the TDP MMU, restart the iterator during
+> tdp_iter_next() and do not advance the iterator.  Advancing the iterator
+> results in skipping the top-level SPTE and all its children, which is
+> fatal if any of the skipped SPTEs were not visited before yielding.
+>
+> When zapping all SPTEs, i.e. when min_level == root_level, restarting the
+> iter and then invoking tdp_iter_next() is always fatal if the current gfn
+> has as a valid SPTE, as advancing the iterator results in try_step_side()
+> skipping the current gfn, which wasn't visited before yielding.
+>
+> Sprinkle WARNs on iter->yielded being true in various helpers that are
+> often used in conjunction with yielding, and tag the helper with
+> __must_check to reduce the probabily of improper usage.
+>
+> Failing to zap a top-level SPTE manifests in one of two ways.  If a valid
+> SPTE is skipped by both kvm_tdp_mmu_zap_all() and kvm_tdp_mmu_put_root(),
+> the shadow page will be leaked and KVM will WARN accordingly.
+>
+>   WARNING: CPU: 1 PID: 3509 at arch/x86/kvm/mmu/tdp_mmu.c:46 [kvm]
+>   RIP: 0010:kvm_mmu_uninit_tdp_mmu+0x3e/0x50 [kvm]
+>   Call Trace:
+>    <TASK>
+>    kvm_arch_destroy_vm+0x130/0x1b0 [kvm]
+>    kvm_destroy_vm+0x162/0x2a0 [kvm]
+>    kvm_vcpu_release+0x34/0x60 [kvm]
+>    __fput+0x82/0x240
+>    task_work_run+0x5c/0x90
+>    do_exit+0x364/0xa10
+>    ? futex_unqueue+0x38/0x60
+>    do_group_exit+0x33/0xa0
+>    get_signal+0x155/0x850
+>    arch_do_signal_or_restart+0xed/0x750
+>    exit_to_user_mode_prepare+0xc5/0x120
+>    syscall_exit_to_user_mode+0x1d/0x40
+>    do_syscall_64+0x48/0xc0
+>    entry_SYSCALL_64_after_hwframe+0x44/0xae
+>
+> If kvm_tdp_mmu_zap_all() skips a gfn/SPTE but that SPTE is then zapped by
+> kvm_tdp_mmu_put_root(), KVM triggers a use-after-free in the form of
+> marking a struct page as dirty/accessed after it has been put back on the
+> free list.  This directly triggers a WARN due to encountering a page with
+> page_count() == 0, but it can also lead to data corruption and additional
+> errors in the kernel.
+>
+>   WARNING: CPU: 7 PID: 1995658 at arch/x86/kvm/../../../virt/kvm/kvm_main.c:171
+>   RIP: 0010:kvm_is_zone_device_pfn.part.0+0x9e/0xd0 [kvm]
+>   Call Trace:
+>    <TASK>
+>    kvm_set_pfn_dirty+0x120/0x1d0 [kvm]
+>    __handle_changed_spte+0x92e/0xca0 [kvm]
+>    __handle_changed_spte+0x63c/0xca0 [kvm]
+>    __handle_changed_spte+0x63c/0xca0 [kvm]
+>    __handle_changed_spte+0x63c/0xca0 [kvm]
+>    zap_gfn_range+0x549/0x620 [kvm]
+>    kvm_tdp_mmu_put_root+0x1b6/0x270 [kvm]
+>    mmu_free_root_page+0x219/0x2c0 [kvm]
+>    kvm_mmu_free_roots+0x1b4/0x4e0 [kvm]
+>    kvm_mmu_unload+0x1c/0xa0 [kvm]
+>    kvm_arch_destroy_vm+0x1f2/0x5c0 [kvm]
+>    kvm_put_kvm+0x3b1/0x8b0 [kvm]
+>    kvm_vcpu_release+0x4e/0x70 [kvm]
+>    __fput+0x1f7/0x8c0
+>    task_work_run+0xf8/0x1a0
+>    do_exit+0x97b/0x2230
+>    do_group_exit+0xda/0x2a0
+>    get_signal+0x3be/0x1e50
+>    arch_do_signal_or_restart+0x244/0x17f0
+>    exit_to_user_mode_prepare+0xcb/0x120
+>    syscall_exit_to_user_mode+0x1d/0x40
+>    do_syscall_64+0x4d/0x90
+>    entry_SYSCALL_64_after_hwframe+0x44/0xae
+>
+> Note, the underlying bug existed even before commit 1af4a96025b3 ("KVM:
+> x86/mmu: Yield in TDU MMU iter even if no SPTES changed") moved calls to
+> tdp_mmu_iter_cond_resched() to the beginning of loops, as KVM could still
+> incorrectly advance past a top-level entry when yielding on a lower-level
+> entry.  But with respect to leaking shadow pages, the bug was introduced
+> by yielding before processing the current gfn.
+>
+> Alternatively, tdp_mmu_iter_cond_resched() could simply fall through, or
+> callers could jump to their "retry" label.  The downside of that approach
+> is that tdp_mmu_iter_cond_resched() _must_ be called before anything else
+> in the loop, and there's no easy way to enfornce that requirement.
+>
+> Ideally, KVM would handling the cond_resched() fully within the iterator
+> macro (the code is actually quite clean) and avoid this entire class of
+> bugs, but that is extremely difficult do while also supporting yielding
+> after tdp_mmu_set_spte_atomic() fails.  Yielding after failing to set a
+> SPTE is very desirable as the "owner" of the REMOVED_SPTE isn't strictly
+> bounded, e.g. if it's zapping a high-level shadow page, the REMOVED_SPTE
+> may block operations on the SPTE for a significant amount of time.
+>
+> Fixes: faaf05b00aec ("kvm: x86/mmu: Support zapping SPTEs in the TDP MMU")
+> Fixes: 1af4a96025b3 ("KVM: x86/mmu: Yield in TDU MMU iter even if no SPTES changed")
+> Reported-by: Ignat Korchagin <ignat@cloudflare.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-On Tue, Dec 14, 2021 at 10:32:22PM +0000, broonie@kernel.org wrote:
-> Hi all,
-> 
-> News: Releases may or may not happen over the next few days since I'm
-> getting a vacciene dose tomorrow.
-> 
-> Changes since 20211213:
-> 
-> The drm-intel tree gained a conflict with the drm-intel-fixes tree.
-> 
-> The dmaengine tree gained a conflict with the dmaengine-fixes tree.
-> 
-> Non-merge commits (relative to Linus' tree): 6251
->  6873 files changed, 291130 insertions(+), 138903 deletions(-)
+Reviewed-by: David Matlack <dmatlack@google.com>
 
-Was there a conflict in mm/migrate.c with this release? It looks like
-the ptl assignment was dropped in commit fd93c9fe58cc ("Merge branch
-'akpm-current/current'") but I do not see that in any of the individual
-mm/migrate.c commits. I noticed this because Clang warns now:
 
-mm/migrate.c:347:14: error: variable 'ptl' is uninitialized when used here [-Werror,-Wuninitialized]
-        spin_unlock(ptl);
-                    ^~~
-mm/migrate.c:340:17: note: initialize the variable 'ptl' to silence this warning
-        spinlock_t *ptl;
-                       ^
-                        = NULL
-1 error generated.
-
-Cheers,
-Nathan
+> ---
+>  arch/x86/kvm/mmu/tdp_iter.c |  6 ++++++
+>  arch/x86/kvm/mmu/tdp_iter.h |  6 ++++++
+>  arch/x86/kvm/mmu/tdp_mmu.c  | 29 ++++++++++++++++-------------
+>  3 files changed, 28 insertions(+), 13 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/tdp_iter.c b/arch/x86/kvm/mmu/tdp_iter.c
+> index b3ed302c1a35..caa96c270b95 100644
+> --- a/arch/x86/kvm/mmu/tdp_iter.c
+> +++ b/arch/x86/kvm/mmu/tdp_iter.c
+> @@ -26,6 +26,7 @@ static gfn_t round_gfn_for_level(gfn_t gfn, int level)
+>   */
+>  void tdp_iter_restart(struct tdp_iter *iter)
+>  {
+> +       iter->yielded = false;
+>         iter->yielded_gfn = iter->next_last_level_gfn;
+>         iter->level = iter->root_level;
+>
+> @@ -160,6 +161,11 @@ static bool try_step_up(struct tdp_iter *iter)
+>   */
+>  void tdp_iter_next(struct tdp_iter *iter)
+>  {
+> +       if (iter->yielded) {
+> +               tdp_iter_restart(iter);
+> +               return;
+> +       }
+> +
+>         if (try_step_down(iter))
+>                 return;
+>
+> diff --git a/arch/x86/kvm/mmu/tdp_iter.h b/arch/x86/kvm/mmu/tdp_iter.h
+> index b1748b988d3a..e19cabbcb65c 100644
+> --- a/arch/x86/kvm/mmu/tdp_iter.h
+> +++ b/arch/x86/kvm/mmu/tdp_iter.h
+> @@ -45,6 +45,12 @@ struct tdp_iter {
+>          * iterator walks off the end of the paging structure.
+>          */
+>         bool valid;
+> +       /*
+> +        * True if KVM dropped mmu_lock and yielded in the middle of a walk, in
+> +        * which case tdp_iter_next() needs to restart the walk at the root
+> +        * level instead of advancing to the next entry.
+> +        */
+> +       bool yielded;
+>  };
+>
+>  /*
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index b69e47e68307..7b1bc816b7c3 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -502,6 +502,8 @@ static inline bool tdp_mmu_set_spte_atomic(struct kvm *kvm,
+>                                            struct tdp_iter *iter,
+>                                            u64 new_spte)
+>  {
+> +       WARN_ON_ONCE(iter->yielded);
+> +
+>         lockdep_assert_held_read(&kvm->mmu_lock);
+>
+>         /*
+> @@ -575,6 +577,8 @@ static inline void __tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
+>                                       u64 new_spte, bool record_acc_track,
+>                                       bool record_dirty_log)
+>  {
+> +       WARN_ON_ONCE(iter->yielded);
+> +
+>         lockdep_assert_held_write(&kvm->mmu_lock);
+>
+>         /*
+> @@ -640,18 +644,19 @@ static inline void tdp_mmu_set_spte_no_dirty_log(struct kvm *kvm,
+>   * If this function should yield and flush is set, it will perform a remote
+>   * TLB flush before yielding.
+>   *
+> - * If this function yields, it will also reset the tdp_iter's walk over the
+> - * paging structure and the calling function should skip to the next
+> - * iteration to allow the iterator to continue its traversal from the
+> - * paging structure root.
+> + * If this function yields, iter->yielded is set and the caller must skip to
+> + * the next iteration, where tdp_iter_next() will reset the tdp_iter's walk
+> + * over the paging structures to allow the iterator to continue its traversal
+> + * from the paging structure root.
+>   *
+> - * Return true if this function yielded and the iterator's traversal was reset.
+> - * Return false if a yield was not needed.
+> + * Returns true if this function yielded.
+>   */
+> -static inline bool tdp_mmu_iter_cond_resched(struct kvm *kvm,
+> -                                            struct tdp_iter *iter, bool flush,
+> -                                            bool shared)
+> +static inline bool __must_check tdp_mmu_iter_cond_resched(struct kvm *kvm,
+> +                                                         struct tdp_iter *iter,
+> +                                                         bool flush, bool shared)
+>  {
+> +       WARN_ON(iter->yielded);
+> +
+>         /* Ensure forward progress has been made before yielding. */
+>         if (iter->next_last_level_gfn == iter->yielded_gfn)
+>                 return false;
+> @@ -671,12 +676,10 @@ static inline bool tdp_mmu_iter_cond_resched(struct kvm *kvm,
+>
+>                 WARN_ON(iter->gfn > iter->next_last_level_gfn);
+>
+> -               tdp_iter_restart(iter);
+> -
+> -               return true;
+> +               iter->yielded = true;
+>         }
+>
+> -       return false;
+> +       return iter->yielded;
+>  }
+>
+>  /*
+> --
+> 2.34.1.173.g76aa8bc2d0-goog
+>

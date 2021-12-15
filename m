@@ -2,62 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A493F4758E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AE34758EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242535AbhLOMdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:33:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S242542AbhLOMfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:35:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242501AbhLOMdF (ORCPT
+        with ESMTP id S242501AbhLOMfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:33:05 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CE1C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:33:04 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id a1so678229qtx.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:33:04 -0800 (PST)
+        Wed, 15 Dec 2021 07:35:21 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF727C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:35:21 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id f9so54740329ybq.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:35:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=Up+NWP2zXS/W6YKEfOGmNTkWQI2VP9qpgkzgIEJR3fRyz0l9TsYGUw1qWQ/Nkdnetj
-         SfBGM/fZHSUIlynR1CAW0epKL71TsQ/xFhW5+F4xxu8gYu/jpqcELiFBFrIX0aVSbY/d
-         QggGh1b+tWHCS4KeaB6KXVKCJkDSPfrMOam3aI1xiLbURUtak+O6WyBKGhwaiQTb0KuR
-         N87o6xAIAUCRycyBnMS0Q8mnXCQIY4PB02+fHYzF+uZfM/KYI0+3IUU9EpAJoPX9qGvW
-         /xghh1c0XbreShCzPcRtnFd/wzw5HaUstLNvLg5MxSRr2hKs6tUuWsHIMd4H18SSwIGN
-         A3Eg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/PPAsdJy1fvI4IOk7fwhrZPqTZxBHd9OaF3oRGCQhSE=;
+        b=W044lgVz7oRByJHiznLwmwuOhHSsIr9WupRS5mvk2WZ9VbtiG5EK3x8N6zldAG079F
+         SkUvnhF2zswp6UvcJZEDGkw5ZzrBd8tPuevXvcjR8WZGRP0Vek4u6zRY/B78EnA/w9fl
+         vaUDkKJ3IED9TBzE4j+Cm1JI8UHqEUKxfDIc11VzejXBcZlmwf28OLn3zljG5QT29JUq
+         c5l/9c8WEz+Btspj0KgGAln22fEFaBV3WhjcDEHAb98qIlJyFPxSoawx5vWbhvY98CLr
+         tM3/p0ZROCe+YBgg4vEAL5AmEH0kV4Rr94PT63I9CBl/M4IuUeWl+ZrdpNS4QyK/0/6V
+         B0jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=vsD59+4QA6SYGz7Tii8PBH2o8IkHL+iCmMP04k4ch1c1Apcq2TQrkOpeFjLmX9zoHm
-         iD9NJA4WpsFILeNlXq9BoKD7Rp98qn/Cw3aiTrlAiDO9SMI6zMxOifKnp3/t9mv0Wi4q
-         0btc6AG8rT2pYDg6tT6Cr6yU7xgk4LFrUEq8I9Mbs9DKcaoXgfuPt/t+Bw7YFatDn3og
-         fgz8f4Tsjnnkx81ULfJ0jbcX+UelkQAhsHmPZOlMFVoWhGKr2THZZu9IenSJXc6cTaaW
-         zwJzuHid8zDpCa9M5UTK0tfyBsdk2pamqKCtQ+v+w0DoQB07Zz02pQh92gvez0nSS13J
-         3KSA==
-X-Gm-Message-State: AOAM533FKcg6VblakH7mzqf+n62IYNV/aw6CIrt5cqz3ocGMCuoeZqEi
-        5aGdFYgLK3PGXsJ2prvUhKtWqKxF46YIvmwwSbg=
-X-Google-Smtp-Source: ABdhPJzr2dK+4tnPmejLzH/DTnnRP88EPeCUCvzzOZuzRZ1tC4izYn0Q3dOt9RQaE3N57zNz0pKgYzG0t8dGydnhv3M=
-X-Received: by 2002:ac8:5947:: with SMTP id 7mr11557283qtz.16.1639571584056;
- Wed, 15 Dec 2021 04:33:04 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/PPAsdJy1fvI4IOk7fwhrZPqTZxBHd9OaF3oRGCQhSE=;
+        b=ja8Gy61zkmsItPBGTeHhgz5qo9EwJ713tTNZn0ca/grNPo+QHV39+H0g0ipsfUtIXk
+         7oqlBx9hqafwlMxLTKfmMln+6kPFbsPwXwHwqhWyV+P0q53cKQwotDV8ADZ9FThBI93t
+         ZjdrL9+G12GDoFGDuiQCPcLc4Z9YehH4cn7z6B/v27J9zeNrUlUk7X3el8O4CqRJ3l7J
+         eJQdWilLQCEIhyiWbS94BqCdbw73slsRakYi4os04M8eOxNIqYJPPiqJi76RiPNXgn2C
+         ETFToTqIbrubnk7lHo111SpEQfS9m85lzG+ZoU8Uhas+KGBeM7LBmRynbhaZrnj0itfK
+         PIQw==
+X-Gm-Message-State: AOAM532clAvSUbTnrNZryN3Fi8QcKHR0YnEdJ/BqWhfW7sLc8fv0Pq9K
+        oF27z2AKZia6dONDs7wDbniWHD6YtSZy7yuWCPo3RA==
+X-Google-Smtp-Source: ABdhPJyxflIhvpUmrJZ5mUXlnXimvj20RtQWT1adLFErhhGflKCG4cbZFFkiqSaQvpBKD6qVNrEcGYUKSk146eY/mL8=
+X-Received: by 2002:a25:d157:: with SMTP id i84mr5541033ybg.703.1639571720913;
+ Wed, 15 Dec 2021 04:35:20 -0800 (PST)
 MIME-Version: 1.0
-Sender: yaoelommodzinukuse@gmail.com
-Received: by 2002:a05:6214:252a:0:0:0:0 with HTTP; Wed, 15 Dec 2021 04:33:03
- -0800 (PST)
-From:   Daniel kodjo <klawfirm02@gmail.com>
-Date:   Wed, 15 Dec 2021 12:33:03 +0000
-X-Google-Sender-Auth: 0qjc_UZlO8stB2k6SsyXz3DbfvE
-Message-ID: <CAJRYjFRPpiJK8rXLNnUs05nFB1N3OoAvN-BPsD=jAP6MnJQYgA@mail.gmail.com>
-Subject: =?UTF-8?Q?Gr=C3=BC=C3=9Fe=2C_wie_geht_es_dir_heute=2C_hast_du_die_E=2DMail_e?=
-        =?UTF-8?Q?rhalten=2C_die_ich_dir_vor_ein_paar_Tagen_geschickt_habe=3F_Bitt?=
-        =?UTF-8?Q?e_melde_dich_f=C3=BCr_weitere_Informationen_bei_mir_zur=C3=BCck?=
-To:     undisclosed-recipients:;
+References: <20211213165342.74704-1-songmuchun@bytedance.com>
+ <20211213165342.74704-3-songmuchun@bytedance.com> <YbihOFJHqvQ9hsjO@cmpxchg.org>
+In-Reply-To: <YbihOFJHqvQ9hsjO@cmpxchg.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Wed, 15 Dec 2021 20:34:45 +0800
+Message-ID: <CAMZfGtVTztinpOTCAAWW+0Q7SAcGfFW4PVW+bHnFQLN-nDBwSg@mail.gmail.com>
+Subject: Re: [PATCH v4 02/17] mm: introduce kmem_cache_alloc_lru
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <guro@fb.com>, Yang Shi <shy828301@gmail.com>,
+        Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Dave Chinner <david@fromorbit.com>,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        jaegeuk@kernel.org, chao@kernel.org,
+        Kari Argillander <kari.argillander@gmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        fam.zheng@bytedance.com, Muchun Song <smuchun@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 14, 2021 at 9:50 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Tue, Dec 14, 2021 at 12:53:27AM +0800, Muchun Song wrote:
+> > +/*
+> > + * The allocated list lru pointers array is not accounted directly.
+> > + * Moreover, it should not come from DMA buffer and is not readily
+> > + * reclaimable. So those GFP bits should be masked off.
+> > + */
+> > +#define LRUS_CLEAR_MASK      (__GFP_DMA | __GFP_RECLAIMABLE | __GFP_ACCOUNT | __GFP_ZERO)
+>
+> There is already GFP_RECLAIM_MASK for this purpose, you can use that.
 
+Cool. Thanks.
+
+>
+> > +int memcg_list_lru_alloc(struct mem_cgroup *memcg, struct list_lru *lru,
+> > +                      gfp_t gfp)
+> > +{
+> > +     int i;
+> > +     unsigned long flags;
+> > +     struct list_lru_memcg *mlrus;
+> > +     struct list_lru_memcg_table {
+> > +             struct list_lru_per_memcg *mlru;
+> > +             struct mem_cgroup *memcg;
+> > +     } *table;
+> > +
+> > +     if (!list_lru_memcg_aware(lru) || memcg_list_lru_allocated(memcg, lru))
+> > +             return 0;
+> > +
+> > +     gfp &= ~LRUS_CLEAR_MASK;
+>
+>         gfp &= GFP_RECLAIM_MASK;

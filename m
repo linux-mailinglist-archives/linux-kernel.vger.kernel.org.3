@@ -2,334 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8821C476108
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3CF476106
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343979AbhLOSs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:48:59 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36774 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239248AbhLOSs6 (ORCPT
+        id S1343987AbhLOSsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343957AbhLOSrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:48:58 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BFGfel8014460;
-        Wed, 15 Dec 2021 18:48:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : content-type : mime-version; s=pp1;
- bh=XaoY6Yj1xf6THqmZS3tvySRdWBCn8hXHU9UNO45+vG4=;
- b=VrUUH8blOtWr+hKjbLvpQvIvYIkcTFv0/gr+77trOyzrCJVVaxBzWXZ5LnJCAhr1907n
- /4eZs7e+e5ox9yl3wt7rwNcGyikjVR9t2biVAagyivwX6aC1i/4nEpbiNJLPVj2Iq2Hl
- yyb/DwmB1Sc6SrJqEpEDidmPKjDPwRrvxau45Wu5vc3HjSRqHvEKW8cfUtANJG3PUpmQ
- wQzwxewrwgcAgAL+c9DsghetcgLPPlMvfutiXtVwFqiGY/8BbUEAGO1uYIK2cYq1nGk+
- mJgw6O27D0iLoYgDudAk/7gPZ8jSyH3qiAJPAwGlxn+S64CO8hsbu4CXW3CyVAyMR2OP EA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyfdp2d03-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 18:48:57 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BFIhRQB004736;
-        Wed, 15 Dec 2021 18:48:54 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3cy7qw08x8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 18:48:54 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BFImpER42140158
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Dec 2021 18:48:51 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 312E75204F;
-        Wed, 15 Dec 2021 18:48:51 +0000 (GMT)
-Received: from osiris (unknown [9.145.87.178])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id E262752059;
-        Wed, 15 Dec 2021 18:48:50 +0000 (GMT)
-Date:   Wed, 15 Dec 2021 19:48:49 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] s390 updates for 5.16-rc6
-Message-ID: <Ybo4kWEmz2yVEhoE@osiris>
+        Wed, 15 Dec 2021 13:47:48 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F934C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:47:48 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso26011343ots.6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:47:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hfna//jfptCZLjQuovu81eh2+KkCsvsnrTfol/ajmJ8=;
+        b=XUjOpBpixK84kehHLA+0Dy4y2yayB70U62dg4yZVzOKAnNSJj/IIGD1HGDkQm4s/XC
+         osxLO9t8sYNP8VEEgV4nXZWIwhSA8I1ehR8uaEralPHDWS7+0AC1Ex1AbVfURGa9mHgm
+         /M5lMORhlTiTjfJ33x+7kyHF6axQQaG1pVMGYm7qbEZKtzJ10Ge/0gPkLmiqR5uRYk83
+         7YktnpkJ8Jq37uyTMJTmpYqysWIL+ZCj0M3JXzBOaQ+npy47z2tzWUYJC1OKHLW7yXkG
+         3DKti8Rw4O6DG+O5IpGA7VtK6CpnHDLBGZKbStCasKtesyFpmkFCblcrTQgwZZhHi16h
+         09fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hfna//jfptCZLjQuovu81eh2+KkCsvsnrTfol/ajmJ8=;
+        b=a3/iqWgwA3TrvBycj87MGpGmmwX15SzXHR9tJk2RUbn3kV3qHIC75tyD/k14tuWlTL
+         LkVuPYxuuvp9XiOPwSjt15Z7FZgR0nv4f2R71nUimk1TQaKWImC7MkR3AzicRKuLladf
+         ySt0k69nGlKWLIsAfG35ZtMfDVim4R9CfKJTJv2k+59jy2OfTepNrLXPpd9eYgfQwCpm
+         PiubiFoHia5bq4hqd9JOc5ewyzXG7TXtvXdQrjpWjTD5kXQNwwg1HRbsx42wPTy41Rad
+         mptRZ7tT9oZApf6o91t6DvovbZY6YqXINanMXoCVg4Fdc505JAWC93BtXKIB2JCWHh4I
+         bECw==
+X-Gm-Message-State: AOAM533K95nMwmwD3IP9A7gqXG60sSyoEGbpqGi7VjJRhxBEot6X7NF7
+        kKuwO3jbK1tSkL0nxEwBeRoB1w==
+X-Google-Smtp-Source: ABdhPJzUB7g4NaqI3OjMW487/RZ2mxCKnpwgUtciA1wLA7miCnzoWeBZveVX6DRqZi9lCeLKk1EgBQ==
+X-Received: by 2002:a05:6830:22cf:: with SMTP id q15mr9839708otc.255.1639594067330;
+        Wed, 15 Dec 2021 10:47:47 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t12sm550786ood.22.2021.12.15.10.47.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 10:47:46 -0800 (PST)
+Date:   Wed, 15 Dec 2021 10:49:02 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bean Huo <huobean@gmail.com>
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, YongQin Liu <yongqin.liu@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        John Stultz <john.stultz@linaro.org>
+Subject: Re: [PATCH v2] scsi: ufs: Fix deadlock issue in
+ ufshcd_wait_for_doorbell_clr()
+Message-ID: <Ybo4no2n+fS4BOaV@ripper>
+References: <20211214120537.531628-1-huobean@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WSDRtLqJC1ui_BrtHgd8rGn2hEl58e3g
-X-Proofpoint-ORIG-GUID: WSDRtLqJC1ui_BrtHgd8rGn2hEl58e3g
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-15_11,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=324 adultscore=0 priorityscore=1501
- phishscore=0 malwarescore=0 spamscore=0 impostorscore=0 bulkscore=0
- mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112150102
+In-Reply-To: <20211214120537.531628-1-huobean@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue 14 Dec 04:05 PST 2021, Bean Huo wrote:
 
-please pull a couple of s390 fixes for 5.16-rc6.
+> From: Bean Huo <beanhuo@micron.com>
+> 
+> Call shost_for_each_device() with holding host->host_lock will cause
+> a deadlock situation, which will cause the system to stall (the log
+> as follow). Fix this issue by using __shost_for_each_device() in
+> ufshcd_pending_cmds().
+> 
+> stalls on CPUs/tasks:
+> all trace:
+> __switch_to+0x120/0x170
+> 0xffff800011643998
+> ask dump for CPU 5:
+> ask:kworker/u16:2   state:R  running task     stack:    0 pid:   80 ppid:     2 flags:0x0000000a
+> orkqueue: events_unbound async_run_entry_fn
+> all trace:
+> __switch_to+0x120/0x170
+> 0x0
+> ask dump for CPU 6:
+> ask:kworker/u16:6   state:R  running task     stack:    0 pid:  164 ppid:     2 flags:0x0000000a
+> orkqueue: events_unbound async_run_entry_fn
+> all trace:
+> __switch_to+0x120/0x170
+> 0xffff54e7c4429f80
+> ask dump for CPU 7:
+> ask:kworker/u16:4   state:R  running task     stack:    0 pid:  153 ppid:     2 flags:0x0000000a
+> orkqueue: events_unbound async_run_entry_fn
+> all trace:
+> __switch_to+0x120/0x170
+> blk_mq_run_hw_queue+0x34/0x110
+> blk_mq_sched_insert_request+0xb0/0x120
+> blk_execute_rq_nowait+0x68/0x88
+> blk_execute_rq+0x4c/0xd8
+> __scsi_execute+0xec/0x1d0
+> scsi_vpd_inquiry+0x84/0xf0
+> scsi_get_vpd_buf+0x34/0xb8
+> scsi_attach_vpd+0x34/0x140
+> scsi_probe_and_add_lun+0xa6c/0xab8
+> __scsi_scan_target+0x438/0x4f8
+> scsi_scan_channel+0x6c/0xa8
+> scsi_scan_host_selected+0xf0/0x150
+> do_scsi_scan_host+0x88/0x90
+> scsi_scan_host+0x1b4/0x1d0
+> ufshcd_async_scan+0x248/0x310
+> async_run_entry_fn+0x30/0x178
+> process_one_work+0x1e8/0x368
+> worker_thread+0x40/0x478
+> kthread+0x174/0x180
+> ret_from_fork+0x10/0x20
+> 
+> Fixes: 8d077ede48c1 ("scsi: ufs: Optimize the command queueing code")
+> Reported-by: YongQin Liu <yongqin.liu@linaro.org>
+> Reported-by: Amit Pundir <amit.pundir@linaro.org>
+> Tested-by: John Stultz <john.stultz@linaro.org>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> Signed-off-by: Bean Huo <beanhuo@micron.com>
 
-Thanks,
-Heiko
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
+Regards,
+Bjorn
 
-  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-5
-
-for you to fetch changes up to 85bf17b28f97ca2749968d8786dc423db320d9c2:
-
-  recordmcount.pl: look for jgnop instruction as well as bcrl on s390 (2021-12-12 18:52:26 +0100)
-
-----------------------------------------------------------------
-s390 updates for 5.16-rc6
-
-- Add missing handling of R_390_PLT32DBL relocation type in
-  arch_kexec_apply_relocations_add(). Clang and the upcoming gcc 11.3
-  generate such relocation entries, which our relocation code silently
-  ignores, and which finally will result in an endless loop within the
-  purgatory code in case of kexec.
-
-- Add proper handling of errors and print error messages when applying
-  relocations
-
-- Fix duplicate tracking of irq nesting level in entry code
-
-- Let recordmcount.pl also look for jgnop mnemonic. Starting with binutils
-  2.37 objdump emits a jgnop mnemonic instead of brcl, which breaks mcount
-  location detection. This is only a problem if used with compilers older
-  than gcc 9, since with gcc 9 and newer compilers recordmcount.pl is not
-  used anymore.
-
-- Remove preempt_disable()/preempt_enable() pair in kprobe_ftrace_handler()
-  which was done for all architectures except for s390.
-
-- Update defconfig
-
-----------------------------------------------------------------
-Alexander Egorenkov (1):
-      s390/kexec: handle R_390_PLT32DBL rela in arch_kexec_apply_relocations_add()
-
-Jerome Marchand (2):
-      s390/ftrace: remove preempt_disable()/preempt_enable() pair
-      recordmcount.pl: look for jgnop instruction as well as bcrl on s390
-
-Niklas Schnelle (1):
-      s390: enable switchdev support in defconfig
-
-Philipp Rudo (2):
-      s390/kexec_file: print some more error messages
-      s390/kexec_file: fix error handling when applying relocations
-
-Sven Schnelle (1):
-      s390/entry: fix duplicate tracking of irq nesting level
-
- arch/s390/configs/debug_defconfig     |  2 ++
- arch/s390/configs/defconfig           |  2 ++
- arch/s390/kernel/ftrace.c             |  2 --
- arch/s390/kernel/irq.c                |  9 +++++----
- arch/s390/kernel/machine_kexec_file.c | 38 +++++++++++++++++++++++++++++++----
- scripts/recordmcount.pl               |  2 +-
- 6 files changed, 44 insertions(+), 11 deletions(-)
-
-diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
-index b626bc6e0eaf..e45cc27716de 100644
---- a/arch/s390/configs/debug_defconfig
-+++ b/arch/s390/configs/debug_defconfig
-@@ -117,6 +117,7 @@ CONFIG_UNIX=y
- CONFIG_UNIX_DIAG=m
- CONFIG_XFRM_USER=m
- CONFIG_NET_KEY=m
-+CONFIG_NET_SWITCHDEV=y
- CONFIG_SMC=m
- CONFIG_SMC_DIAG=m
- CONFIG_INET=y
-@@ -511,6 +512,7 @@ CONFIG_NLMON=m
- CONFIG_MLX4_EN=m
- CONFIG_MLX5_CORE=m
- CONFIG_MLX5_CORE_EN=y
-+CONFIG_MLX5_ESWITCH=y
- # CONFIG_NET_VENDOR_MICREL is not set
- # CONFIG_NET_VENDOR_MICROCHIP is not set
- # CONFIG_NET_VENDOR_MICROSEMI is not set
-diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
-index 0056cab27372..1c750bfca2d8 100644
---- a/arch/s390/configs/defconfig
-+++ b/arch/s390/configs/defconfig
-@@ -109,6 +109,7 @@ CONFIG_UNIX=y
- CONFIG_UNIX_DIAG=m
- CONFIG_XFRM_USER=m
- CONFIG_NET_KEY=m
-+CONFIG_NET_SWITCHDEV=y
- CONFIG_SMC=m
- CONFIG_SMC_DIAG=m
- CONFIG_INET=y
-@@ -502,6 +503,7 @@ CONFIG_NLMON=m
- CONFIG_MLX4_EN=m
- CONFIG_MLX5_CORE=m
- CONFIG_MLX5_CORE_EN=y
-+CONFIG_MLX5_ESWITCH=y
- # CONFIG_NET_VENDOR_MICREL is not set
- # CONFIG_NET_VENDOR_MICROCHIP is not set
- # CONFIG_NET_VENDOR_MICROSEMI is not set
-diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
-index 5510c7d10ddc..21d62d8b6b9a 100644
---- a/arch/s390/kernel/ftrace.c
-+++ b/arch/s390/kernel/ftrace.c
-@@ -290,7 +290,6 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
- 		return;
- 
- 	regs = ftrace_get_regs(fregs);
--	preempt_disable_notrace();
- 	p = get_kprobe((kprobe_opcode_t *)ip);
- 	if (unlikely(!p) || kprobe_disabled(p))
- 		goto out;
-@@ -318,7 +317,6 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
- 	}
- 	__this_cpu_write(current_kprobe, NULL);
- out:
--	preempt_enable_notrace();
- 	ftrace_test_recursion_unlock(bit);
- }
- NOKPROBE_SYMBOL(kprobe_ftrace_handler);
-diff --git a/arch/s390/kernel/irq.c b/arch/s390/kernel/irq.c
-index 0df83ecaa2e0..cb7099682340 100644
---- a/arch/s390/kernel/irq.c
-+++ b/arch/s390/kernel/irq.c
-@@ -138,7 +138,7 @@ void noinstr do_io_irq(struct pt_regs *regs)
- 	struct pt_regs *old_regs = set_irq_regs(regs);
- 	int from_idle;
- 
--	irq_enter();
-+	irq_enter_rcu();
- 
- 	if (user_mode(regs)) {
- 		update_timer_sys();
-@@ -158,7 +158,8 @@ void noinstr do_io_irq(struct pt_regs *regs)
- 			do_irq_async(regs, IO_INTERRUPT);
- 	} while (MACHINE_IS_LPAR && irq_pending(regs));
- 
--	irq_exit();
-+	irq_exit_rcu();
-+
- 	set_irq_regs(old_regs);
- 	irqentry_exit(regs, state);
- 
-@@ -172,7 +173,7 @@ void noinstr do_ext_irq(struct pt_regs *regs)
- 	struct pt_regs *old_regs = set_irq_regs(regs);
- 	int from_idle;
- 
--	irq_enter();
-+	irq_enter_rcu();
- 
- 	if (user_mode(regs)) {
- 		update_timer_sys();
-@@ -190,7 +191,7 @@ void noinstr do_ext_irq(struct pt_regs *regs)
- 
- 	do_irq_async(regs, EXT_INTERRUPT);
- 
--	irq_exit();
-+	irq_exit_rcu();
- 	set_irq_regs(old_regs);
- 	irqentry_exit(regs, state);
- 
-diff --git a/arch/s390/kernel/machine_kexec_file.c b/arch/s390/kernel/machine_kexec_file.c
-index 9975ad200d74..8f43575a4dd3 100644
---- a/arch/s390/kernel/machine_kexec_file.c
-+++ b/arch/s390/kernel/machine_kexec_file.c
-@@ -7,6 +7,8 @@
-  * Author(s): Philipp Rudo <prudo@linux.vnet.ibm.com>
-  */
- 
-+#define pr_fmt(fmt)	"kexec: " fmt
-+
- #include <linux/elf.h>
- #include <linux/errno.h>
- #include <linux/kexec.h>
-@@ -290,8 +292,16 @@ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
- 				     const Elf_Shdr *relsec,
- 				     const Elf_Shdr *symtab)
- {
-+	const char *strtab, *name, *shstrtab;
-+	const Elf_Shdr *sechdrs;
- 	Elf_Rela *relas;
- 	int i, r_type;
-+	int ret;
-+
-+	/* String & section header string table */
-+	sechdrs = (void *)pi->ehdr + pi->ehdr->e_shoff;
-+	strtab = (char *)pi->ehdr + sechdrs[symtab->sh_link].sh_offset;
-+	shstrtab = (char *)pi->ehdr + sechdrs[pi->ehdr->e_shstrndx].sh_offset;
- 
- 	relas = (void *)pi->ehdr + relsec->sh_offset;
- 
-@@ -304,15 +314,27 @@ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
- 		sym = (void *)pi->ehdr + symtab->sh_offset;
- 		sym += ELF64_R_SYM(relas[i].r_info);
- 
--		if (sym->st_shndx == SHN_UNDEF)
-+		if (sym->st_name)
-+			name = strtab + sym->st_name;
-+		else
-+			name = shstrtab + sechdrs[sym->st_shndx].sh_name;
-+
-+		if (sym->st_shndx == SHN_UNDEF) {
-+			pr_err("Undefined symbol: %s\n", name);
- 			return -ENOEXEC;
-+		}
- 
--		if (sym->st_shndx == SHN_COMMON)
-+		if (sym->st_shndx == SHN_COMMON) {
-+			pr_err("symbol '%s' in common section\n", name);
- 			return -ENOEXEC;
-+		}
- 
- 		if (sym->st_shndx >= pi->ehdr->e_shnum &&
--		    sym->st_shndx != SHN_ABS)
-+		    sym->st_shndx != SHN_ABS) {
-+			pr_err("Invalid section %d for symbol %s\n",
-+			       sym->st_shndx, name);
- 			return -ENOEXEC;
-+		}
- 
- 		loc = pi->purgatory_buf;
- 		loc += section->sh_offset;
-@@ -326,7 +348,15 @@ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
- 		addr = section->sh_addr + relas[i].r_offset;
- 
- 		r_type = ELF64_R_TYPE(relas[i].r_info);
--		arch_kexec_do_relocs(r_type, loc, val, addr);
-+
-+		if (r_type == R_390_PLT32DBL)
-+			r_type = R_390_PC32DBL;
-+
-+		ret = arch_kexec_do_relocs(r_type, loc, val, addr);
-+		if (ret) {
-+			pr_err("Unknown rela relocation: %d\n", r_type);
-+			return -ENOEXEC;
-+		}
- 	}
- 	return 0;
- }
-diff --git a/scripts/recordmcount.pl b/scripts/recordmcount.pl
-index 7d631aaa0ae1..52a000b057a5 100755
---- a/scripts/recordmcount.pl
-+++ b/scripts/recordmcount.pl
-@@ -219,7 +219,7 @@ if ($arch eq "x86_64") {
- 
- } elsif ($arch eq "s390" && $bits == 64) {
-     if ($cc =~ /-DCC_USING_HOTPATCH/) {
--	$mcount_regex = "^\\s*([0-9a-fA-F]+):\\s*c0 04 00 00 00 00\\s*brcl\\s*0,[0-9a-f]+ <([^\+]*)>\$";
-+	$mcount_regex = "^\\s*([0-9a-fA-F]+):\\s*c0 04 00 00 00 00\\s*(bcrl\\s*0,|jgnop\\s*)[0-9a-f]+ <([^\+]*)>\$";
- 	$mcount_adjust = 0;
-     }
-     $alignment = 8;
+> ---
+>  drivers/scsi/ufs/ufshcd.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 6dd517267f1b..fbebb8309ef7 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -1082,7 +1082,8 @@ static u32 ufshcd_pending_cmds(struct ufs_hba *hba)
+>  	struct scsi_device *sdev;
+>  	u32 pending = 0;
+>  
+> -	shost_for_each_device(sdev, hba->host)
+> +	lockdep_assert_held(hba->host->host_lock);
+> +	__shost_for_each_device(sdev, hba->host)
+>  		pending += sbitmap_weight(&sdev->budget_map);
+>  
+>  	return pending;
+> -- 
+> 2.25.1
+> 
+> 

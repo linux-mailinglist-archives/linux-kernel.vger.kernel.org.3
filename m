@@ -2,221 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF234754B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7221B4754B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbhLOIzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 03:55:42 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:34356 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbhLOIzl (ORCPT
+        id S236161AbhLOI4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 03:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235706AbhLOI4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 03:55:41 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4299121107;
-        Wed, 15 Dec 2021 08:55:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639558540; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rA2PPHimPqd2WGEoLE7pNkyE+Am9co0F2w1XVXqv7Zk=;
-        b=S/GwLbmn3qKwx0KN9nxLxeqVEdiGo9YQqSxP/vTa38UIOXKGLMcUk65NXIHaOizghBafKF
-        8YiX1plzZAoUS6fYVtEsC46Hz1kzC/DzSRDSRe7mNkUd1Wd+fA0NVz1sdMe2xmqpB1rD0a
-        jO/lRnADuribuIzpcfJrOQW0sz92gaU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1BEE413A6B;
-        Wed, 15 Dec 2021 08:55:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fr2CBYytuWE6QwAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 15 Dec 2021 08:55:40 +0000
-Subject: Re: [PATCH] xen/pciback: fix typo in a comment
-To:     Jason Wang <wangborong@cdjrlc.com>
-Cc:     boris.ostrovsky@oracle.com, sstabellini@kernel.org,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-References: <20211212032408.52180-1-wangborong@cdjrlc.com>
-From:   Juergen Gross <jgross@suse.com>
-Message-ID: <68aa97ae-dd76-5879-3dba-a08c3581f25b@suse.com>
-Date:   Wed, 15 Dec 2021 09:55:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Wed, 15 Dec 2021 03:56:03 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E19C061574;
+        Wed, 15 Dec 2021 00:56:03 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id j17so21117897qtx.2;
+        Wed, 15 Dec 2021 00:56:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dbfkGjADP1JP/ccn6Y79dw0BB+q77R8upChfhWhpbLY=;
+        b=QXkOpqLoRDDSGEf+AKDxWv1QFdCmuMqUjVA8i/659rKFxt5MDdmYGq1Va3+xt4xFWn
+         IbmRS6G79/ayBNeyvLsUXJa5B25V31ewyeG6mriDRl05OyLYuonJjzZkz5/gzgRBWwSY
+         FujwC5lJEo49cYy1CCLMPqhWg1fIqquQ7F1PsTfqC4edm3O6I6OqqjsYmkCkDIDcqBBv
+         3K+E9Jov4WP9Src1YIj53P5sSLYU2RgOjKiQd6tqUUrMgPwb85qooPV4q/htvnGcJiOz
+         04fzUV19TQL/zQhrxkcxDCBiCQrFo0YchSj5plkEyKKSN4KMhRsV/KI0kBjbP2e75lo7
+         ovsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dbfkGjADP1JP/ccn6Y79dw0BB+q77R8upChfhWhpbLY=;
+        b=Oj9mRjwX5b8V4VElGzpmfkEu/lLUlOxKF/XAq8fMmmJdjZxWKh+P55cHGrFrJJfOvR
+         uhGkJLTFme0Nv2ralsGGcy8fM8Su5LLvB3ea5S2ov98Mn+YalNqNiGU3FzU6LXkD4R1X
+         n83/buU8cv5QvIMsl94gF6ggHg2UuRGsBKdldQJCd1WN67G+HfGMTkTGoeNGsBoDc8Pf
+         XU9oh/K+fvKwUyL+kQq17t/P9od6YtLMMlKMR6qydOpDH6N89V/eChfpGCPCQZcR3I5s
+         omVVzzYFCpCBcl5J6krJarfc4FCAYd0yvgH7Lp9t3sUt928MxNopTuAO9ovSW0gqVaN+
+         IXQw==
+X-Gm-Message-State: AOAM531apPkUC3GszdwFhY0J016LIX7FaZn6GtMSmsKiPHwdoqSR0jAG
+        6qqpErN586Hm2JrCQF3GtcrN3ROwx9o=
+X-Google-Smtp-Source: ABdhPJzLfQfHP7IxlGx7vxk8z92ch8kS1M5ARNToa0yOaFgzRN1nbpR8d1Z4m+rwQRnrr/BsDfzCQw==
+X-Received: by 2002:ac8:5949:: with SMTP id 9mr10885179qtz.522.1639558562394;
+        Wed, 15 Dec 2021 00:56:02 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id q185sm696876qke.64.2021.12.15.00.55.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 00:56:01 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     robdclark@gmail.com
+Cc:     sean@poorly.run, quic_abhinavk@quicinc.com, airlied@linux.ie,
+        daniel@ffwll.ch, swboyd@chromium.org, quic_khsieh@quicinc.com,
+        dmitry.baryshkov@linaro.org, bjorn.andersson@linaro.org,
+        linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drm/msm/dp: remove unneeded variable
+Date:   Wed, 15 Dec 2021 08:55:54 +0000
+Message-Id: <20211215085554.444351-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211212032408.52180-1-wangborong@cdjrlc.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="MtKaboN7PRCVbLi20XvpiHLMkP7wJh3Dt"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---MtKaboN7PRCVbLi20XvpiHLMkP7wJh3Dt
-Content-Type: multipart/mixed; boundary="GorFHiUnBwJkF0gcj3A7cXL8s8u8YTG3J";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Jason Wang <wangborong@cdjrlc.com>
-Cc: boris.ostrovsky@oracle.com, sstabellini@kernel.org,
- xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Message-ID: <68aa97ae-dd76-5879-3dba-a08c3581f25b@suse.com>
-Subject: Re: [PATCH] xen/pciback: fix typo in a comment
-References: <20211212032408.52180-1-wangborong@cdjrlc.com>
-In-Reply-To: <20211212032408.52180-1-wangborong@cdjrlc.com>
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
---GorFHiUnBwJkF0gcj3A7cXL8s8u8YTG3J
-Content-Type: multipart/mixed;
- boundary="------------FB1518124BAB239808CC7C2F"
-Content-Language: en-US
+Remove unneeded variable used to store return value.
 
-This is a multi-part message in MIME format.
---------------FB1518124BAB239808CC7C2F
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-On 12.12.21 04:24, Jason Wang wrote:
-> The double `the' in the comment in line 163 is repeated. Remove it
-> from the comment.
->=20
-> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
-> ---
->   drivers/xen/xen-pciback/pciback_ops.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/xen/xen-pciback/pciback_ops.c b/drivers/xen/xen-pc=
-iback/pciback_ops.c
-> index 3fbc21466a93..e38b43b5065e 100644
-> --- a/drivers/xen/xen-pciback/pciback_ops.c
-> +++ b/drivers/xen/xen-pciback/pciback_ops.c
-> @@ -160,7 +160,7 @@ int xen_pcibk_enable_msi(struct xen_pcibk_device *p=
-dev,
->   	}
->  =20
->   	/* The value the guest needs is actually the IDT vector, not the
-> -	 * the local domain's IRQ number. */
-> +	 * local domain's IRQ number. */
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 8d9c19dbf33e..7cc4d21f2091 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -416,12 +416,11 @@ static int dp_display_usbpd_configure_cb(struct device *dev)
+ 
+ static int dp_display_usbpd_disconnect_cb(struct device *dev)
+ {
+-	int rc = 0;
+ 	struct dp_display_private *dp = dev_get_dp_display_private(dev);
+ 
+ 	dp_add_event(dp, EV_USER_NOTIFICATION, false, 0);
+ 
+-	return rc;
++	return 0;
+ }
+ 
+ static void dp_display_handle_video_request(struct dp_display_private *dp)
+-- 
+2.25.1
 
-When touching this comment, would you mind to correct its style, too?
-It should have a leading "/*" and a trailing "*/" line like e.g. in
-line 72 of the same source file.
-
-
-Juergen
-
---------------FB1518124BAB239808CC7C2F
-Content-Type: application/pgp-keys;
- name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Transfer-Encoding: quoted-printable
-Content-Description: OpenPGP public key
-Content-Disposition: attachment;
- filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOBy=
-cWx
-w3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJvedYm8O=
-f8Z
-d621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y=
-9bf
-IhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xq=
-G7/
-377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR=
-3Jv
-c3MgPGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDA=
-QIe
-AQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4FUGNQH2lvWAUy+dnyT=
-hpw
-dtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3TyevpB0CA3dbBQp0OW0fgCetToGIQrg0=
-MbD
-1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbv=
-oPH
-Z8SlM4KWm8rG+lIkGurqqu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v=
-5QL
-+qHI3EIPtyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVyZ=
-2Vu
-IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJCAcDAgEGFQgCC=
-QoL
-BBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4RF7HoZhPVPogNVbC4YA6lW7Dr=
-Wf0
-teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz78X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC=
-/nu
-AFVGy+67q2DH8As3KPu0344TBDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0Lh=
-ITT
-d9jLzdDad1pQSToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLm=
-XBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkMnQfvUewRz=
-80h
-SnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMBAgAjBQJTjHDXAhsDBwsJC=
-AcD
-AgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJn=
-FOX
-gMLdBQgBlVPO3/D9R8LtF9DBAFPNhlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1=
-jnD
-kfJZr6jrbjgyoZHiw/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0=
-N51
-N5JfVRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwPOoE+l=
-otu
-fe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK/1xMI3/+8jbO0tsn1=
-tqS
-EUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuZGU+wsB5BBMBAgAjBQJTjHDrA=
-hsD
-BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3=
-g3O
-ZUEBmDHVVbqMtzwlmNC4k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5=
-dM7
-wRqzgJpJwK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu5=
-D+j
-LRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzBTNh30FVKK1Evm=
-V2x
-AKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37IoN1EblHI//x/e2AaIHpzK5h88N=
-Eaw
-QsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpW=
-nHI
-s98ndPUDpnoxWQugJ6MpMncr0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZR=
-wgn
-BC5mVM6JjQ5xDk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNV=
-bVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mmwe0icXKLk=
-pEd
-IXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0Iv3OOImwTEe4co3c1mwARA=
-QAB
-wsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMvQ/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEw=
-Tbe
-8YFsw2V/Buv6Z4Mysln3nQK5ZadD534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1=
-vJz
-Q1fOU8lYFpZXTXIHb+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8=
-VGi
-wXvTyJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqcsuylW=
-svi
-uGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5BjR/i1DG86lem3iBDX=
-zXs
-ZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------FB1518124BAB239808CC7C2F--
-
---GorFHiUnBwJkF0gcj3A7cXL8s8u8YTG3J--
-
---MtKaboN7PRCVbLi20XvpiHLMkP7wJh3Dt
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmG5rYsFAwAAAAAACgkQsN6d1ii/Ey8x
-mwf+ISB1pg5TvxP1/6a20M2SKwjPP+lmaGU3qJ9bCJidSAUBQgbvJj+sq/r5LWnrEdD9i7IlAj9K
-JUfRRxnrDwWHUW5OO89hvhDnN1zG1pMJam6dQH76VP4nrtiYOR1pOQMIj3dkAP/iKOvFl+b9wNrJ
-foiq3OYM+Gu/KPX5H3JHU2GM98EdGT0+wMDjrc+vlSwMBvG+zEgRVX5kso1f49EuS2+Oh2yEytdR
-U/NfwdKfPoqLt7EacFdaXP5uWdqEs4YFZXh+MVgNV4X8ZmSXt4JrW70DVZjAfmQnifriVWZOaB2e
-9Z7pXr3Ahy9yox29XewCMgTDXTfT2jzIt/KfZQIj6w==
-=UUpl
------END PGP SIGNATURE-----
-
---MtKaboN7PRCVbLi20XvpiHLMkP7wJh3Dt--

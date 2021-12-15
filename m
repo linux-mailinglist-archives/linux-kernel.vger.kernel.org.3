@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC0A475C67
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A63475C5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244272AbhLOPzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:55:53 -0500
-Received: from mga17.intel.com ([192.55.52.151]:35328 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244245AbhLOPzw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:55:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639583752; x=1671119752;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RRsWa48y/byo17HMgXnE4YpysdyN8WNOzyMTAo/9P/k=;
-  b=Jy0JwEYTOhS1LkUlbN1dVhHEHdwTCUhSyL/ck3BOoa5/lRaJRE6yomNh
-   bjzuwTcLyDkEcFIJMJZv2Oqo3vhkBILMCK6AHocV8sNthS1VEL6SnQOUM
-   007k3Pxb4eJ6m4bCHn+n6axvrNA0GaO8OWr3nr3VGmUs/uc/dvvH1OSgF
-   izOP3JcwSvz23G6HrczRbftNjmj755zAhvuEY7nnTMnVOCJWWOicRdPpt
-   WiioeZ1wnSLCWZPT8nY4cmzY2+tkvgyFLZuHCG59Bgz8xGEAc//1BhL5a
-   uw83dczyRiKnZO847OwMBPtDf8kQLjhh4UlSz/rd83mG49I0SzI4+rU2R
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="219940220"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="219940220"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 07:55:52 -0800
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="465647970"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 07:55:51 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1mxWcJ-006fgn-H6;
-        Wed, 15 Dec 2021 17:54:55 +0200
-Date:   Wed, 15 Dec 2021 17:54:55 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     broonie@kernel.org
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 14
-Message-ID: <YboPz454GCe6ZA7g@smile.fi.intel.com>
-References: <20211214223228.1745315-1-broonie@kernel.org>
+        id S244239AbhLOPzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:55:22 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:46851 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232935AbhLOPzU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 10:55:20 -0500
+Received: by mail-ot1-f47.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so25349191oto.13;
+        Wed, 15 Dec 2021 07:55:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1uN/AqHq/16fmWso+ckRBZMPm8uIk1S05gPTw3SpmPY=;
+        b=5wSByh36Ux6JGZav4koolC2t0qCKOK6ljaTp3ugb1FZ36dTXpykQLIh7zSlo3xDJM3
+         5seQCfFtOdOAFGUNYONb6MHWRvWbJNqhHnFkbCctt5dJNsmQdgfJKbuHkGpBQ64v+7ar
+         9axrimLhQ8X2d7BXOJfo2c+gu2dsmMMp4OgFEN4FF90b1GxecqBeOplB6Sk83DbMx2II
+         CA8lBFeG5tbf9WEDXRNLSezMq5VvJM4UlixnoBvjYYw+PauOLDS/RUQaqoDLNE7NWGCv
+         2+NbCDfOXfimLciifMQHVlcs+17GmSL+c3gn4k7rIuDGQNRy89DWoXm0gBw6QDkUrH4k
+         /xdQ==
+X-Gm-Message-State: AOAM530+FMxp5dm5iVy+h3sjBUkN2WtxntCVqpUCvQdEIel1WKu14Zsk
+        rpf6bVlBX1dWvxUe2lLmICEQJc/yAA==
+X-Google-Smtp-Source: ABdhPJz+BdqqYA7oiWw+kTcTRG+9z9GLCeD0Vi6YlvvtrKR1sMRLQfp3H7e/ZuYhjZ7GDhGlHaYmag==
+X-Received: by 2002:a05:6830:5a:: with SMTP id d26mr9044542otp.316.1639583720233;
+        Wed, 15 Dec 2021 07:55:20 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 69sm496716otf.33.2021.12.15.07.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 07:55:19 -0800 (PST)
+Received: (nullmailer pid 1385017 invoked by uid 1000);
+        Wed, 15 Dec 2021 15:55:18 -0000
+Date:   Wed, 15 Dec 2021 09:55:18 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add SM8450 GCC clock bindings
+Message-ID: <YboP5r3BeImwIsQB@robh.at.kernel.org>
+References: <20211207114003.100693-1-vkoul@kernel.org>
+ <20211207114003.100693-2-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214223228.1745315-1-broonie@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211207114003.100693-2-vkoul@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 10:32:22PM +0000, broonie@kernel.org wrote:
-> Hi all,
+On Tue, 07 Dec 2021 17:10:02 +0530, Vinod Koul wrote:
+> Add device tree bindings for global clock controller on SM8450 SoCs.
 > 
-> News: Releases may or may not happen over the next few days since I'm
-> getting a vacciene dose tomorrow.
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  .../bindings/clock/qcom,gcc-sm8450.yaml       |  85 ++++++
+>  include/dt-bindings/clock/qcom,gcc-sm8450.h   | 244 ++++++++++++++++++
+>  2 files changed, 329 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sm8450.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,gcc-sm8450.h
 > 
-> Changes since 20211213:
 
-> The drm-intel tree gained a conflict with the drm-intel-fixes tree.
-> 
-> The dmaengine tree gained a conflict with the dmaengine-fixes tree.
-> 
-> Non-merge commits (relative to Linus' tree): 6251
->  6873 files changed, 291130 insertions(+), 138903 deletions(-)
-
-Thanks, I see tags now.
-
-The other issue I have noticed is that gpio-intel branches [1] are out of the
-merge. I haven't got any email about any issues with them.
-
-Do you have the latest and greatest list of repositories to merge?
-
-[1]: For example in next-20211203
-
-e24d0a695952 Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-gpio-intel.git
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>

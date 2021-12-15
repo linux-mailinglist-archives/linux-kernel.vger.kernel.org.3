@@ -2,88 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6C547615C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C2947615D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344111AbhLOTKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:10:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238618AbhLOTKf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:10:35 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C61C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:10:35 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id bj13so33046942oib.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:10:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=o4GFUJfnOn1MqDWBxKCcYXZhEN4oa41+4/hNAuhMnEQ=;
-        b=FDnhrOp05KzmGqeixp4fuYb6yNyFnun02Y9PQN9byiYvDKsyxwM1injIQXFUyzVn9V
-         MSvrGkVCX8251BsU+94oW9TYQiiL/ePZhhqB9PpQYiv9AbyREhBGlC7AGo8FCClTx6sb
-         PSJUfLRM+Rq1QNw59ufxqempEPKQijigi3K5I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=o4GFUJfnOn1MqDWBxKCcYXZhEN4oa41+4/hNAuhMnEQ=;
-        b=15XoTKlIBgWkkP7bZWalrMYA+f8lGSTGT+UzWKCgXl4DY+V+fLV6xmnwTLNeSjFwnH
-         HZvQXpklO5Dx1OhShaR1eyQgsP8eO2BJtssUiBji81xHxUV15GRG+BPFCvM9W715+BhF
-         cyi3BzynuTayjve8387FYHBdeetHLswvgQ0SY7CleKkBMee8oRCYFLD6ThEp9YrIwd6N
-         FeXafyXei0TsEHV6/KzcoK2TqW8NSddrxeFMI0pfmilQs0R/DmZSyIQheFa7kAkb/2dC
-         2iXEobO8htYX1IB4wV0srAHUBDMf/QuPGz7838PdC3dimk6Fjn/lTy3QkE3DoTQTk+Ur
-         tgzw==
-X-Gm-Message-State: AOAM530R/8BxpTGGy2WuUL8DWaRdztWhc6cWy6HYta+U6j3EMePEa3dg
-        DWI2KBgaD3ojDnMVRlO5KqAw77OR7qd+ozXrmfqJQg==
-X-Google-Smtp-Source: ABdhPJylPPGqcI6i5Kd0ZwAXgrXkSHaQcXt5Yx/hOTY43OO1Fv2rztkYwFETiHyR1NlHtEbQThfQbHh0h6fpGYQHPfM=
-X-Received: by 2002:a54:4506:: with SMTP id l6mr1230341oil.32.1639595434600;
- Wed, 15 Dec 2021 11:10:34 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 15 Dec 2021 11:10:34 -0800
-MIME-Version: 1.0
-In-Reply-To: <20211215175910.1744151-1-robdclark@gmail.com>
-References: <20211215175910.1744151-1-robdclark@gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 15 Dec 2021 11:10:34 -0800
-Message-ID: <CAE-0n52CHwYAEwAC0Hthgbamjj2x4K3B2w=kTRw_AFLzVgDF-Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm: Don't use autosuspend for display
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        id S239438AbhLOTOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:14:25 -0500
+Received: from mga02.intel.com ([134.134.136.20]:4823 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238618AbhLOTOY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 14:14:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639595664; x=1671131664;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ihXP0hA5/rx+UdqYFRCVxyZ5KEcnx8XHyatPZ37vkTU=;
+  b=TopuRtehp/jybzoUqsVyPB93KSirjI5XpsL5nbh0d2MhLs7cSHTsAa+h
+   HfEL6ILgJkp0kqfsHV3liSYxKJwUkm+PIqjPzt7wj7zAGHiJ23yGHXwFU
+   2CEEqiGH3A9ujk7+vjBSJXse70za98j1PStZ1vqNL/v7sM3jbW7zt8D+W
+   KsTeIjyGttxOEQN9phEzKlQYXbr2KbAxYBVSecPUaorkvCmIbrEFbV4vC
+   ziHC3JtBYfAFJcnszdClHVhKuZriAHjpsYUCHjdGaTZmJ1lCAjvokga3v
+   mcpxiKTpiZhLTNmRpV+I7igdeKZ4C7LqjFNa8Gtw1s0fbhKPpUrj9Hk1N
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226597891"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="226597891"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 11:14:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="755569243"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Dec 2021 11:14:20 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxZjD-0002E9-77; Wed, 15 Dec 2021 19:14:15 +0000
+Date:   Thu, 16 Dec 2021 03:14:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keno Fischer <keno@juliacomputing.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     kbuild-all@lists.01.org, gorcunov@openvz.org,
+        khlebnikov@openvz.org, oleg@redhat.com, akpm@linux-foundation.org,
+        keescook@chromium.org, tj@kernel.org, dbueso@suse.de,
+        matthltc@us.ibm.com, kosaki.motohiro@jp.fujitsu.com
+Subject: Re: [PATCH] c/r: prctl: Remove PR_SET_MM_EXE_FILE old file mapping
+ restriction
+Message-ID: <202112160333.IwCSbqoM-lkp@intel.com>
+References: <20211215062342.GA1548576@juliacomputing.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215062342.GA1548576@juliacomputing.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rob Clark (2021-12-15 09:59:02)
-> From: Rob Clark <robdclark@chromium.org>
->
-> No functional change, as we only actually enable autosuspend for the GPU
-> device.  But lets not encourage thinking that autosuspend is a good idea
-> for anything display related.
+Hi Keno,
 
-I'd prefer to see a small blurb about why it's not a good idea to use
-autosuspend for display things. Then this commit can be dug out of the
-history and someone new can quickly understand the reasoning behind it.
-Just saying it's not a good idea doesn't really help.
+Thank you for the patch! Perhaps something to improve:
 
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
+[auto build test WARNING on linux/master]
+[also build test WARNING on hnaz-mm/master linus/master v5.16-rc5 next-20211214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+url:    https://github.com/0day-ci/linux/commits/Keno-Fischer/c-r-prctl-Remove-PR_SET_MM_EXE_FILE-old-file-mapping-restriction/20211215-142515
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
+config: i386-randconfig-s002-20211214 (https://download.01.org/0day-ci/archive/20211216/202112160333.IwCSbqoM-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/08f30df401c936e27733e3b37765c2b7d35fe0e7
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Keno-Fischer/c-r-prctl-Remove-PR_SET_MM_EXE_FILE-old-file-mapping-restriction/20211215-142515
+        git checkout 08f30df401c936e27733e3b37765c2b7d35fe0e7
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   kernel/fork.c:1215:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct file [noderef] __rcu *__ret @@     got struct file *new_exe_file @@
+   kernel/fork.c:1215:24: sparse:     expected struct file [noderef] __rcu *__ret
+   kernel/fork.c:1215:24: sparse:     got struct file *new_exe_file
+>> kernel/fork.c:1215:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *old_exe_file @@     got struct file [noderef] __rcu *[assigned] __ret @@
+   kernel/fork.c:1215:22: sparse:     expected struct file *old_exe_file
+   kernel/fork.c:1215:22: sparse:     got struct file [noderef] __rcu *[assigned] __ret
+   kernel/fork.c:1572:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct refcount_struct [usertype] *r @@     got struct refcount_struct [noderef] __rcu * @@
+   kernel/fork.c:1572:38: sparse:     expected struct refcount_struct [usertype] *r
+   kernel/fork.c:1572:38: sparse:     got struct refcount_struct [noderef] __rcu *
+   kernel/fork.c:1581:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/fork.c:1581:31: sparse:     expected struct spinlock [usertype] *lock
+   kernel/fork.c:1581:31: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/fork.c:1582:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const *q @@     got struct k_sigaction [noderef] __rcu * @@
+   kernel/fork.c:1582:36: sparse:     expected void const *q
+   kernel/fork.c:1582:36: sparse:     got struct k_sigaction [noderef] __rcu *
+   kernel/fork.c:1583:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/fork.c:1583:33: sparse:     expected struct spinlock [usertype] *lock
+   kernel/fork.c:1583:33: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/fork.c:1995:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/fork.c:1995:31: sparse:     expected struct spinlock [usertype] *lock
+   kernel/fork.c:1995:31: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/fork.c:1999:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/fork.c:1999:33: sparse:     expected struct spinlock [usertype] *lock
+   kernel/fork.c:1999:33: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/fork.c:2304:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct [noderef] __rcu *real_parent @@     got struct task_struct * @@
+   kernel/fork.c:2304:32: sparse:     expected struct task_struct [noderef] __rcu *real_parent
+   kernel/fork.c:2304:32: sparse:     got struct task_struct *
+   kernel/fork.c:2313:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/fork.c:2313:27: sparse:     expected struct spinlock [usertype] *lock
+   kernel/fork.c:2313:27: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/fork.c:2362:54: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct list_head *head @@     got struct list_head [noderef] __rcu * @@
+   kernel/fork.c:2362:54: sparse:     expected struct list_head *head
+   kernel/fork.c:2362:54: sparse:     got struct list_head [noderef] __rcu *
+   kernel/fork.c:2383:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/fork.c:2383:29: sparse:     expected struct spinlock [usertype] *lock
+   kernel/fork.c:2383:29: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/fork.c:2401:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/fork.c:2401:29: sparse:     expected struct spinlock [usertype] *lock
+   kernel/fork.c:2401:29: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/fork.c:2428:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sighand_struct *sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
+   kernel/fork.c:2428:28: sparse:     expected struct sighand_struct *sighand
+   kernel/fork.c:2428:28: sparse:     got struct sighand_struct [noderef] __rcu *sighand
+   kernel/fork.c:2456:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/fork.c:2456:31: sparse:     expected struct spinlock [usertype] *lock
+   kernel/fork.c:2456:31: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/fork.c:2458:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/fork.c:2458:33: sparse:     expected struct spinlock [usertype] *lock
+   kernel/fork.c:2458:33: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/fork.c:2867:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct *[assigned] parent @@     got struct task_struct [noderef] __rcu *real_parent @@
+   kernel/fork.c:2867:24: sparse:     expected struct task_struct *[assigned] parent
+   kernel/fork.c:2867:24: sparse:     got struct task_struct [noderef] __rcu *real_parent
+   kernel/fork.c:2948:43: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct refcount_struct const [usertype] *r @@     got struct refcount_struct [noderef] __rcu * @@
+   kernel/fork.c:2948:43: sparse:     expected struct refcount_struct const [usertype] *r
+   kernel/fork.c:2948:43: sparse:     got struct refcount_struct [noderef] __rcu *
+   kernel/fork.c:2039:22: sparse: sparse: dereference of noderef expression
+   kernel/fork.c: note: in included file (through include/uapi/asm-generic/bpf_perf_event.h, arch/x86/include/generated/uapi/asm/bpf_perf_event.h, ...):
+   include/linux/ptrace.h:218:45: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct task_struct *new_parent @@     got struct task_struct [noderef] __rcu *parent @@
+   include/linux/ptrace.h:218:45: sparse:     expected struct task_struct *new_parent
+   include/linux/ptrace.h:218:45: sparse:     got struct task_struct [noderef] __rcu *parent
+   include/linux/ptrace.h:218:62: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected struct cred const *ptracer_cred @@     got struct cred const [noderef] __rcu *ptracer_cred @@
+   include/linux/ptrace.h:218:62: sparse:     expected struct cred const *ptracer_cred
+   include/linux/ptrace.h:218:62: sparse:     got struct cred const [noderef] __rcu *ptracer_cred
+   kernel/fork.c:2360:59: sparse: sparse: dereference of noderef expression
+   kernel/fork.c:2361:59: sparse: sparse: dereference of noderef expression
+
+vim +1215 kernel/fork.c
+
+3864601387cf41 Jiri Slaby        2011-05-26  1194  
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1195  /**
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1196   * replace_mm_exe_file - replace a reference to the mm's executable file
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1197   *
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1198   * This changes mm's executable file (shown as symlink /proc/[pid]/exe),
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1199   * dealing with concurrent invocation and without grabbing the mmap lock in
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1200   * write mode.
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1201   *
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1202   * Main user is sys_prctl(PR_SET_MM_MAP/EXE_FILE).
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1203   */
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1204  int replace_mm_exe_file(struct mm_struct *mm, struct file *new_exe_file)
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1205  {
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1206  	struct file *old_exe_file;
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1207  	int ret = 0;
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1208  
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1209  	/* set the new file, lockless */
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1210  	ret = deny_write_access(new_exe_file);
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1211  	if (ret)
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1212  		return -EACCES;
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1213  	get_file(new_exe_file);
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1214  
+35d7bdc86031a2 David Hildenbrand 2021-04-23 @1215  	old_exe_file = xchg(&mm->exe_file, new_exe_file);
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1216  	if (old_exe_file) {
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1217  		/*
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1218  		 * Don't race with dup_mmap() getting the file and disallowing
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1219  		 * write access while someone might open the file writable.
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1220  		 */
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1221  		mmap_read_lock(mm);
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1222  		allow_write_access(old_exe_file);
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1223  		fput(old_exe_file);
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1224  		mmap_read_unlock(mm);
+fe69d560b5bd9e David Hildenbrand 2021-04-23  1225  	}
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1226  	return 0;
+35d7bdc86031a2 David Hildenbrand 2021-04-23  1227  }
+3864601387cf41 Jiri Slaby        2011-05-26  1228  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,511 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 714954759AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3EC4759B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242873AbhLONa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 08:30:27 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:55010 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237408AbhLONaZ (ORCPT
+        id S242888AbhLONdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 08:33:18 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.186]:53474 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237423AbhLONdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 08:30:25 -0500
-Received: by mail-il1-f197.google.com with SMTP id g14-20020a92c7ce000000b002b1e78da1f9so2722171ilk.21
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 05:30:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=gVQCM2ntOuDdKZF7tsePymOiEMWw9CHIovfNr6x4O9U=;
-        b=cx2M70aNvpSKDTFIeYMLNcEO2uPNGjyDWxoQNriFg//H/CZmyb7Blyj6ObOq5PE4c/
-         dDJaVRRC9gHwHAqSnwuULf30HEh8TbdAm/ErZxia9DbzsXGsCJ1rIiNCjtHWpPOdwT9m
-         S4z30/n9YS/eLU5i1gi89+F0djjqNvYJ0u5gG2cgIOO0YILmqF8nlR8fVOVdN/n/PAaf
-         N0ZmXAPrITVl/gVsRc0BbgCLfZvTxb/1yq9Wlc64Cr+jxtp155YXi5TM5qYgL6MOBa7F
-         wbIwK5mv+apj3S2Rse/fsPwymmdCs/g/3IK4lFR1umU03ti0ktTk4FpXod3SQqcxZLE2
-         wO/Q==
-X-Gm-Message-State: AOAM532LwLab0Q+zI9UJmCiVdvItsmyh1qKcH6Hv7Dw3uAveOnu7O4Iz
-        3FNb3s5V7zy1KkmO/DZCQ6Vh6/emMHBxKUdhb0OesnimUrgC
-X-Google-Smtp-Source: ABdhPJwA474vx3zs0eRKjWQyfm5xzbNiauuWaSPduNn5M4fSPxkKQ5ma9WxNyZVAapLxsH5NDtLy1fJhIgHPpGqKyn4W5pb9yoZZ
+        Wed, 15 Dec 2021 08:33:17 -0500
+X-KPN-MessageId: 7f588998-5dab-11ec-922e-00505699b430
+Received: from smtp.kpnmail.nl (unknown [10.31.155.5])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 7f588998-5dab-11ec-922e-00505699b430;
+        Wed, 15 Dec 2021 14:32:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=to:from:subject:mime-version:date:message-id:content-type;
+        bh=D8lpnPmXEtCJc007+l/OEpBYaebQm5aF/OrurIdcL0w=;
+        b=gxqkBRJukPyu/y/utRNfM79jtUc+ydn+TWlsqRtxkYwD6s9iVOJmIfkWGbf/zrxziZeIOewYKYPQt
+         nQV6nghE2kcPepk502bBSty4gD1U015ILi71XiQbNEZm1NImb+IUkvj282nBeq7Z8s3bW0wv3/qdDf
+         Cpu34A60vYBk7CzH4vLHagEyapw64WYFObmwEERLKbCivs1vQEtzyjgJgT3D9UseMh/gQT2CXRWQ8G
+         wEcvsGaXD3uQ4Pzgy/MHvRlaC/VSxo9icb/9O5d0tLj+u2UCGrxbAly/RkbaJIgsSa0yrsO9F16Qsx
+         AWFq6YY6o18F/MzHXGUNmIIflNPfx+Q==
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|9MsAs1pOCZjxtesUFKWYptH8WxK99gzDnUc9tE4MWy1t/rp41GYekWUTNPASXD5
+ faWafKVXpeBdL8icvegh+rg==
+X-Originating-IP: 82.161.210.87
+Received: from [192.168.10.70] (pindarots.xs4all.nl [82.161.210.87])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 8ed73d77-5dab-11ec-8d65-00505699b758;
+        Wed, 15 Dec 2021 14:33:16 +0100 (CET)
+Content-Type: multipart/mixed; boundary="------------Gqu6h2tpCxnWrx18RRf09Lbk"
+Message-ID: <3e6017a8-bba4-5189-6ad6-7aab1d22a7a2@xs4all.nl>
+Date:   Wed, 15 Dec 2021 14:33:14 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1304:: with SMTP id r4mr5672523jad.332.1639575024767;
- Wed, 15 Dec 2021 05:30:24 -0800 (PST)
-Date:   Wed, 15 Dec 2021 05:30:24 -0800
-In-Reply-To: <00000000000042e11e05d2b0b39b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ef198805d32f4ec7@google.com>
-Subject: Re: [syzbot] INFO: task hung in r871xu_dev_remove
-From:   syzbot <syzbot+f39c1dad0b7db49ca4a8@syzkaller.appspotmail.com>
-To:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
-        paskripkin@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: crash on 5.15.8
+Content-Language: en-US
+From:   Udo van den Heuvel <udovdh@xs4all.nl>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <8d8d7c27-7a32-a85d-dd9a-38d800d76cab@xs4all.nl>
+ <1a3510cf-a8a9-458e-4d53-4cb81c86dd58@xs4all.nl>
+Organization: hierzo
+In-Reply-To: <1a3510cf-a8a9-458e-4d53-4cb81c86dd58@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+This is a multi-part message in MIME format.
+--------------Gqu6h2tpCxnWrx18RRf09Lbk
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-HEAD commit:    5472f14a3742 Merge tag 'for_linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1767bc25b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa556098924b78f0
-dashboard link: https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=174f3f51b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17568e83b00000
+On 15-12-2021 14:03, Udo van den Heuvel wrote:
+> Hello,
+> 
+> 5.15.8 crashes more:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f39c1dad0b7db49ca4a8@syzkaller.appspotmail.com
+I attached a gzipped dmesg excerpt from the events since last boot.
 
-INFO: task kworker/1:1:25 blocked for more than 143 seconds.
-      Not tainted 5.16.0-rc5-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/1:1     state:D stack:24888 pid:   25 ppid:     2 flags:0x00004000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1857
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common kernel/sched/completion.c:106 [inline]
- wait_for_common kernel/sched/completion.c:117 [inline]
- wait_for_completion+0x174/0x270 kernel/sched/completion.c:138
- r871xu_dev_remove+0x6e/0x2c0 drivers/staging/rtl8712/usb_intf.c:597
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- __device_release_driver+0x5d7/0x700 drivers/base/dd.c:1205
- device_release_driver_internal drivers/base/dd.c:1236 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1259
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
- device_del+0x502/0xd60 drivers/base/core.c:3581
- usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2225
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5643 [inline]
- hub_event+0x1c9c/0x4460 drivers/usb/core/hub.c:5725
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- process_scheduled_works kernel/workqueue.c:2361 [inline]
- worker_thread+0x85c/0x11f0 kernel/workqueue.c:2447
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-INFO: task kworker/1:2:137 blocked for more than 143 seconds.
-      Not tainted 5.16.0-rc5-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/1:2     state:D stack:25016 pid:  137 ppid:     2 flags:0x00004000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385
- __mutex_lock_common kernel/locking/mutex.c:680 [inline]
- __mutex_lock+0xa32/0x12f0 kernel/locking/mutex.c:740
- unregister_netdev+0xe/0x20 net/core/dev.c:11138
- r871xu_dev_remove+0x24f/0x2c0 drivers/staging/rtl8712/usb_intf.c:599
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- __device_release_driver+0x5d7/0x700 drivers/base/dd.c:1205
- device_release_driver_internal drivers/base/dd.c:1236 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1259
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
- device_del+0x502/0xd60 drivers/base/core.c:3581
- usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2225
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5643 [inline]
- hub_event+0x1c9c/0x4460 drivers/usb/core/hub.c:5725
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- process_scheduled_works kernel/workqueue.c:2361 [inline]
- worker_thread+0x85c/0x11f0 kernel/workqueue.c:2447
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-INFO: task kworker/0:3:1136 blocked for more than 143 seconds.
-      Not tainted 5.16.0-rc5-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/0:3     state:D stack:24888 pid: 1136 ppid:     2 flags:0x00004000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1857
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common kernel/sched/completion.c:106 [inline]
- wait_for_common kernel/sched/completion.c:117 [inline]
- wait_for_completion+0x174/0x270 kernel/sched/completion.c:138
- r871xu_dev_remove+0x6e/0x2c0 drivers/staging/rtl8712/usb_intf.c:597
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- __device_release_driver+0x5d7/0x700 drivers/base/dd.c:1205
- device_release_driver_internal drivers/base/dd.c:1236 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1259
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
- device_del+0x502/0xd60 drivers/base/core.c:3581
- usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2225
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5643 [inline]
- hub_event+0x1c9c/0x4460 drivers/usb/core/hub.c:5725
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- process_scheduled_works kernel/workqueue.c:2361 [inline]
- worker_thread+0x85c/0x11f0 kernel/workqueue.c:2447
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-INFO: task kworker/1:0:3714 blocked for more than 144 seconds.
-      Not tainted 5.16.0-rc5-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/1:0     state:D stack:24864 pid: 3714 ppid:     2 flags:0x00004000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1857
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common kernel/sched/completion.c:106 [inline]
- wait_for_common kernel/sched/completion.c:117 [inline]
- wait_for_completion+0x174/0x270 kernel/sched/completion.c:138
- r871xu_dev_remove+0x6e/0x2c0 drivers/staging/rtl8712/usb_intf.c:597
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- __device_release_driver+0x5d7/0x700 drivers/base/dd.c:1205
- device_release_driver_internal drivers/base/dd.c:1236 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1259
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
- device_del+0x502/0xd60 drivers/base/core.c:3581
- usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2225
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5643 [inline]
- hub_event+0x1c9c/0x4460 drivers/usb/core/hub.c:5725
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- process_scheduled_works kernel/workqueue.c:2361 [inline]
- worker_thread+0x85c/0x11f0 kernel/workqueue.c:2447
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-INFO: task kworker/1:3:3717 blocked for more than 144 seconds.
-      Not tainted 5.16.0-rc5-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/1:3     state:D stack:24488 pid: 3717 ppid:     2 flags:0x00004000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1857
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common kernel/sched/completion.c:106 [inline]
- wait_for_common kernel/sched/completion.c:117 [inline]
- wait_for_completion+0x174/0x270 kernel/sched/completion.c:138
- r871xu_dev_remove+0x6e/0x2c0 drivers/staging/rtl8712/usb_intf.c:597
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- __device_release_driver+0x5d7/0x700 drivers/base/dd.c:1205
- device_release_driver_internal drivers/base/dd.c:1236 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1259
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
- device_del+0x502/0xd60 drivers/base/core.c:3581
- usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2225
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5643 [inline]
- hub_event+0x1c9c/0x4460 drivers/usb/core/hub.c:5725
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- process_scheduled_works kernel/workqueue.c:2361 [inline]
- worker_thread+0x85c/0x11f0 kernel/workqueue.c:2447
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-INFO: task kworker/1:5:3722 blocked for more than 144 seconds.
-      Not tainted 5.16.0-rc5-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/1:5     state:D stack:24888 pid: 3722 ppid:     2 flags:0x00004000
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385
- __mutex_lock_common kernel/locking/mutex.c:680 [inline]
- __mutex_lock+0xa32/0x12f0 kernel/locking/mutex.c:740
- netdev_run_todo+0x6fa/0xa80 net/core/dev.c:10635
- r871xu_dev_remove+0x24f/0x2c0 drivers/staging/rtl8712/usb_intf.c:599
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- __device_release_driver+0x5d7/0x700 drivers/base/dd.c:1205
- device_release_driver_internal drivers/base/dd.c:1236 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1259
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:529
- device_del+0x502/0xd60 drivers/base/core.c:3581
- usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x27a/0x78e drivers/usb/core/hub.c:2225
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5643 [inline]
- hub_event+0x1c9c/0x4460 drivers/usb/core/hub.c:5725
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- process_scheduled_works kernel/workqueue.c:2361 [inline]
- worker_thread+0x85c/0x11f0 kernel/workqueue.c:2447
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
 
-Showing all locks held in the system:
-5 locks held by kworker/1:1/25:
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc90000dffdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffff88801cfca220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff88801cfca220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4460 drivers/usb/core/hub.c:5671
- #3: ffff888075ba6220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff888075ba6220 (&dev->mutex){....}-{3:3}, at: usb_disconnect.cold+0x43/0x78e drivers/usb/core/hub.c:2216
- #4: ffff88807b5081a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff88807b5081a8 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1032 [inline]
- #4: ffff88807b5081a8 (&dev->mutex){....}-{3:3}, at: device_release_driver_internal drivers/base/dd.c:1233 [inline]
- #4: ffff88807b5081a8 (&dev->mutex){....}-{3:3}, at: device_release_driver+0x1c/0x40 drivers/base/dd.c:1259
-1 lock held by khungtaskd/27:
- #0: ffffffff8bb83e60 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6458
-6 locks held by kworker/1:2/137:
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc9000209fdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffff888148291220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff888148291220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4460 drivers/usb/core/hub.c:5671
- #3: ffff88807656e220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff88807656e220 (&dev->mutex){....}-{3:3}, at: usb_disconnect.cold+0x43/0x78e drivers/usb/core/hub.c:2216
- #4: ffff88807d3fb1a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff88807d3fb1a8 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1032 [inline]
- #4: ffff88807d3fb1a8 (&dev->mutex){....}-{3:3}, at: device_release_driver_internal drivers/base/dd.c:1233 [inline]
- #4: ffff88807d3fb1a8 (&dev->mutex){....}-{3:3}, at: device_release_driver+0x1c/0x40 drivers/base/dd.c:1259
- #5: ffffffff8d30d3a8 (rtnl_mutex){+.+.}-{3:3}, at: unregister_netdev+0xe/0x20 net/core/dev.c:11138
-5 locks held by kworker/0:3/1136:
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc90004e6fdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffff8881482e9220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff8881482e9220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4460 drivers/usb/core/hub.c:5671
- #3: ffff88807d1fa220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff88807d1fa220 (&dev->mutex){....}-{3:3}, at: usb_disconnect.cold+0x43/0x78e drivers/usb/core/hub.c:2216
- #4: ffff88807d1f91a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff88807d1f91a8 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1032 [inline]
- #4: ffff88807d1f91a8 (&dev->mutex){....}-{3:3}, at: device_release_driver_internal drivers/base/dd.c:1233 [inline]
- #4: ffff88807d1f91a8 (&dev->mutex){....}-{3:3}, at: device_release_driver+0x1c/0x40 drivers/base/dd.c:1259
-2 locks held by dhcpcd/3184:
- #0: ffffffff8d30d3a8 (rtnl_mutex){+.+.}-{3:3}, at: devinet_ioctl+0x1b3/0x1ca0 net/ipv4/devinet.c:1068
- #1: ffff88807f254e60 (&padapter->mutex_start){+.+.}-{3:3}, at: netdev_open+0x2e/0x6c0 drivers/staging/rtl8712/os_intfs.c:375
-2 locks held by getty/3283:
- #0: ffff88802276f098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:252
- #1: ffffc90002b962e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcf0/0x1230 drivers/tty/n_tty.c:2113
-3 locks held by udevd/3682:
- #0: ffff888022339c88 (&of->mutex){+.+.}-{3:3}, at: kernfs_file_read_iter fs/kernfs/file.c:203 [inline]
- #0: ffff888022339c88 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter+0x185/0x5f0 fs/kernfs/file.c:242
- #1: ffff88801af0a748 (kn->active#50){++++}-{0:0}, at: kernfs_file_read_iter fs/kernfs/file.c:204 [inline]
- #1: ffff88801af0a748 (kn->active#50){++++}-{0:0}, at: kernfs_fop_read_iter+0x1a8/0x5f0 fs/kernfs/file.c:242
- #2: ffff888075ba0220 (&dev->mutex){....}-{3:3}, at: device_lock_interruptible include/linux/device.h:765 [inline]
- #2: ffff888075ba0220 (&dev->mutex){....}-{3:3}, at: read_descriptors+0x3c/0x2c0 drivers/usb/core/sysfs.c:873
-5 locks held by kworker/1:0/3714:
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc90001fbfdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffff888148301220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff888148301220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4460 drivers/usb/core/hub.c:5671
- #3: ffff88807f12e220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff88807f12e220 (&dev->mutex){....}-{3:3}, at: usb_disconnect.cold+0x43/0x78e drivers/usb/core/hub.c:2216
- #4: ffff8880155e61a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff8880155e61a8 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1032 [inline]
- #4: ffff8880155e61a8 (&dev->mutex){....}-{3:3}, at: device_release_driver_internal drivers/base/dd.c:1233 [inline]
- #4: ffff8880155e61a8 (&dev->mutex){....}-{3:3}, at: device_release_driver+0x1c/0x40 drivers/base/dd.c:1259
-5 locks held by kworker/1:3/3717:
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc9000291fdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffff888148289220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff888148289220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4460 drivers/usb/core/hub.c:5671
- #3: ffff888075ba0220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff888075ba0220 (&dev->mutex){....}-{3:3}, at: usb_disconnect.cold+0x43/0x78e drivers/usb/core/hub.c:2216
- #4: ffff88807e0fd1a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff88807e0fd1a8 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1032 [inline]
- #4: ffff88807e0fd1a8 (&dev->mutex){....}-{3:3}, at: device_release_driver_internal drivers/base/dd.c:1233 [inline]
- #4: ffff88807e0fd1a8 (&dev->mutex){....}-{3:3}, at: device_release_driver+0x1c/0x40 drivers/base/dd.c:1259
-3 locks held by kworker/1:4/3720:
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc9000294fdb0 ((work_completion)(&fw_work->work)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffffffff8d30d3a8 (rtnl_mutex){+.+.}-{3:3}, at: register_netdev+0x11/0x50 net/core/dev.c:10458
-3 locks held by kworker/0:0/3721:
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc9000295fdb0 ((work_completion)(&fw_work->work)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffffffff8d30d3a8 (rtnl_mutex){+.+.}-{3:3}, at: register_netdev+0x11/0x50 net/core/dev.c:10458
-6 locks held by kworker/1:5/3722:
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff88801578f938 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc9000296fdb0 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffff888148311220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #2: ffff888148311220 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c1/0x4460 drivers/usb/core/hub.c:5671
- #3: ffff88807e543220 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #3: ffff88807e543220 (&dev->mutex){....}-{3:3}, at: usb_disconnect.cold+0x43/0x78e drivers/usb/core/hub.c:2216
- #4: ffff88807d3fe1a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:760 [inline]
- #4: ffff88807d3fe1a8 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1032 [inline]
- #4: ffff88807d3fe1a8 (&dev->mutex){....}-{3:3}, at: device_release_driver_internal drivers/base/dd.c:1233 [inline]
- #4: ffff88807d3fe1a8 (&dev->mutex){....}-{3:3}, at: device_release_driver+0x1c/0x40 drivers/base/dd.c:1259
- #5: ffffffff8d30d3a8 (rtnl_mutex){+.+.}-{3:3}, at: netdev_run_todo+0x6fa/0xa80 net/core/dev.c:10635
-3 locks held by kworker/0:2/3729:
- #0: ffff88814b0d8938 ((wq_completion)ipv6_addrconf){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff88814b0d8938 ((wq_completion)ipv6_addrconf){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff88814b0d8938 ((wq_completion)ipv6_addrconf){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff88814b0d8938 ((wq_completion)ipv6_addrconf){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff88814b0d8938 ((wq_completion)ipv6_addrconf){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff88814b0d8938 ((wq_completion)ipv6_addrconf){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc900029d7db0 ((addr_chk_work).work){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffffffff8d30d3a8 (rtnl_mutex){+.+.}-{3:3}, at: addrconf_verify_work+0xa/0x20 net/ipv6/addrconf.c:4595
-3 locks held by kworker/1:8/3734:
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc900029ffdb0 ((work_completion)(&fw_work->work)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffffffff8d30d3a8 (rtnl_mutex){+.+.}-{3:3}, at: register_netdev+0x11/0x50 net/core/dev.c:10458
-3 locks held by udevd/3737:
- #0: ffff88807d251c88 (&of->mutex){+.+.}-{3:3}, at: kernfs_file_read_iter fs/kernfs/file.c:203 [inline]
- #0: ffff88807d251c88 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter+0x185/0x5f0 fs/kernfs/file.c:242
- #1: ffff88801b95d490 (kn->active#50){++++}-{0:0}, at: kernfs_file_read_iter fs/kernfs/file.c:204 [inline]
- #1: ffff88801b95d490 (kn->active#50){++++}-{0:0}, at: kernfs_fop_read_iter+0x1a8/0x5f0 fs/kernfs/file.c:242
- #2: ffff88807e543220 (&dev->mutex){....}-{3:3}, at: device_lock_interruptible include/linux/device.h:765 [inline]
- #2: ffff88807e543220 (&dev->mutex){....}-{3:3}, at: read_descriptors+0x3c/0x2c0 drivers/usb/core/sysfs.c:873
-3 locks held by kworker/1:10/3926:
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
- #0: ffff888010c64d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
- #1: ffffc90002b2fdb0 ((work_completion)(&fw_work->work)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
- #2: ffffffff8d30d3a8 (rtnl_mutex){+.+.}-{3:3}, at: register_netdev+0x11/0x50 net/core/dev.c:10458
+What is the root cause?
+How to fix?
 
-=============================================
 
-NMI backtrace for cpu 0
-CPU: 0 PID: 27 Comm: khungtaskd Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
- watchdog+0xc1d/0xf50 kernel/hung_task.c:295
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 3709 Comm: syz-executor834 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:util_est_update kernel/sched/fair.c:4001 [inline]
-RIP: 0010:dequeue_task_fair+0x4bf/0xea0 kernel/sched/fair.c:5742
-Code: 42 0f b6 04 30 84 c0 74 08 3c 03 0f 8e 6e 08 00 00 41 8b bf c0 01 00 00 85 ff 0f 84 0c fe ff ff 44 0f b6 74 24 08 41 83 e6 01 <45> 84 f6 0f 84 19 02 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b 54
-RSP: 0018:ffffc900020bfac0 EFLAGS: 00000093
-RAX: ffff8880b9d39a80 RBX: 0000000000000005 RCX: 0000000000000001
-RDX: 0000000000000000 RSI: ffff8880b9d39b5c RDI: ffff88801f9a9df0
-RBP: ffff88801f9a9d00 R08: 0000000000000000 R09: ffff8880b9d39bc8
-R10: 00000000000002ab R11: 0000000000000001 R12: 0000000000000009
-R13: 0000000000000000 R14: 0000000000000001 R15: ffff8880b9d39b40
-FS:  0000555555f6c400(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f6cecc8bd40 CR3: 00000000780a3000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- deactivate_task kernel/sched/core.c:2033 [inline]
- __schedule+0xbe1/0x4940 kernel/sched/core.c:6207
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- freezable_schedule include/linux/freezer.h:172 [inline]
- do_nanosleep+0x24e/0x690 kernel/time/hrtimer.c:2044
- hrtimer_nanosleep+0x1f9/0x4a0 kernel/time/hrtimer.c:2097
- common_nsleep+0xa2/0xc0 kernel/time/posix-timers.c:1227
- __do_sys_clock_nanosleep kernel/time/posix-timers.c:1267 [inline]
- __se_sys_clock_nanosleep kernel/time/posix-timers.c:1245 [inline]
- __x64_sys_clock_nanosleep+0x2f4/0x430 kernel/time/posix-timers.c:1245
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f6cecb20251
-Code: 24 0c 89 3c 24 48 89 4c 24 18 e8 ba dc ff ff 4c 8b 54 24 18 48 8b 54 24 10 41 89 c0 8b 74 24 0c 8b 3c 24 b8 e6 00 00 00 0f 05 <44> 89 c7 48 89 04 24 e8 f3 dc ff ff 48 8b 04 24 eb 97 66 2e 0f 1f
-RSP: 002b:00007f6cecc8cd40 EFLAGS: 00000293 ORIG_RAX: 00000000000000e6
-RAX: ffffffffffffffda RBX: 00000000001b25ad RCX: 00007f6cecb20251
-RDX: 00007f6cecc8cd80 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 000000000000003f R08: 0000000000000000 R09: 00007ffed43bc080
-R10: 0000000000000000 R11: 0000000000000293 R12: 00007f6cecc8cdcc
-R13: 00007f6cecc8ce00 R14: 00007f6cecc8cde0 R15: 000000000000003d
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	42 0f b6 04 30       	movzbl (%rax,%r14,1),%eax
-   5:	84 c0                	test   %al,%al
-   7:	74 08                	je     0x11
-   9:	3c 03                	cmp    $0x3,%al
-   b:	0f 8e 6e 08 00 00    	jle    0x87f
-  11:	41 8b bf c0 01 00 00 	mov    0x1c0(%r15),%edi
-  18:	85 ff                	test   %edi,%edi
-  1a:	0f 84 0c fe ff ff    	je     0xfffffe2c
-  20:	44 0f b6 74 24 08    	movzbl 0x8(%rsp),%r14d
-  26:	41 83 e6 01          	and    $0x1,%r14d
-* 2a:	45 84 f6             	test   %r14b,%r14b <-- trapping instruction
-  2d:	0f 84 19 02 00 00    	je     0x24c
-  33:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  3a:	fc ff df
-  3d:	48                   	rex.W
-  3e:	8b                   	.byte 0x8b
-  3f:	54                   	push   %rsp
+Kind regards,
+Udo
+--------------Gqu6h2tpCxnWrx18RRf09Lbk
+Content-Type: application/gzip; name="dmesg-bugs.txt.gz"
+Content-Disposition: attachment; filename="dmesg-bugs.txt.gz"
+Content-Transfer-Encoding: base64
+
+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
+nzl4dQEA
+--------------Gqu6h2tpCxnWrx18RRf09Lbk--
 

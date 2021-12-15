@@ -2,88 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 117554755F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125794755FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241562AbhLOKNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:13:53 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:36497 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbhLOKNw (ORCPT
+        id S241566AbhLOKOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241569AbhLOKOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:13:52 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JDWL53dllz4xhp;
-        Wed, 15 Dec 2021 21:13:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1639563231;
-        bh=3WntohgGBSsd5zLTEq/JbPVU3YTQL8XrTLe5DXnpfYU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=a8eNNWo605MEiL8ylUOt7YdhmBZnPIijg5uWdKFJI3EqXiu+9jJpFpl0qRgxjzNJr
-         55GgeghdhXOIhoWSsLRVt5H5NVVbMTJzW2/EjE5nILpENBmH45hJ0/QPUHs7Pj2XRc
-         /o9AAUkwztZJ310T95OfI0JVUjoY7WFCJ+z7ykWMAka6NRYrnV1Q9t1M2A3byErDiI
-         cjyrvJtn5OSAe6ONWSFVW8pDPsEZs9qTceN3/135nZOJfw1fK94BI4LRatIT6WHA08
-         KkCkMzLAlITDIIbrhWV0KkJLHITxpaRN4bnqsKy8EHEWN95bNBXOqGub2C2EtCC5Xs
-         lnLM4fX6QarMA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Rob Herring <robh@kernel.org>, John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Frank Rowand <frank.rowand@sony.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3] of/fdt: Rework early_init_dt_scan_memory() to call
- directly
-In-Reply-To: <20211214202652.3894707-1-robh@kernel.org>
-References: <20211214202652.3894707-1-robh@kernel.org>
-Date:   Wed, 15 Dec 2021 21:13:46 +1100
-Message-ID: <871r2emazp.fsf@mpe.ellerman.id.au>
+        Wed, 15 Dec 2021 05:14:46 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB2EC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:14:45 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id y196so16177903wmc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:14:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to
+         :content-language:cc:content-transfer-encoding;
+        bh=4J+Unl3XhdMp8B6pZM0WOABX8WJmG4ysRDdpuSeJCR0=;
+        b=d2cK4j1HT27DODdn/cECHnwt6+YcZTlCRVfSS+xhiO1K29STpAWgyLpVhaUZQ6X4LL
+         kxpviIxCEVFHjWvcithKF7WZ/iSJNelgWoNlwK8MCCph5/RI04U/rWHrU56DpajITnd+
+         WKdU4X2iiqcxtVD9ryQmNtLwVC9gIQguHtVSHnk1/tfVDF7uKzjc0I7tCYRvdHshqs+x
+         W/qJYORQYvK8rj/WuG4ZppSU0Elg4ptI0Kp9nnqKV5oIsHqbgvB/YagnEnXHxTni3dfR
+         LOS4RC4WblDMIrA3i3kBaRMjwYtSvA/G6JasNhAmaBFCbAUXG/BJs0gHixu88eKQTZJt
+         Og2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:content-language:cc:content-transfer-encoding;
+        bh=4J+Unl3XhdMp8B6pZM0WOABX8WJmG4ysRDdpuSeJCR0=;
+        b=jMtSE8PTaUwZz2yjSyfN1siCU0ypJFBa4fPVYh+1pEBGiNqBfXP5F8ZP772SjbTzh7
+         Uw7rg2N9FJGKSJbnDfEeYLDYiwMlruUH8Pn3MBhyyFUfDz+xX9mY3bcIt1BS70iyvsMl
+         ZPyYeDAbDkpcSE5DO0RYqx8HYSY0MviIwbhpb0PuJWIVBkJ6JwJKbQEX9DZkyHzwSiPU
+         JOL301Coa7Cih4z+ineMnaXHxZhmdW87Po8Kw0ZWJEMritbtBoJQZHbk+npxrMqXO5Or
+         LWLySkodlNqAXJ05OQKGU2XaKyg+takDo/TwFx+SsgxzU2Ix8RWfRWa2M2J/tz3C3/tV
+         reyQ==
+X-Gm-Message-State: AOAM531MFOazdoqumLW4jKtB1rn5Vipo7RS32Ru9QwQSkr2Ts7+q6DvE
+        ijYTUS6vJUDY8HqmQzanw+k=
+X-Google-Smtp-Source: ABdhPJw86sym6o+0GNOn4CXPNXcanl17/6jY+y49t7BjLdrpLezjOXjBVNDVM8EBXKrbG5Psjxv2QQ==
+X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr3955229wmk.92.1639563284568;
+        Wed, 15 Dec 2021 02:14:44 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f24:fd00:6862:8ea7:f293:5328? (p200300ea8f24fd0068628ea7f2935328.dip0.t-ipconnect.de. [2003:ea:8f24:fd00:6862:8ea7:f293:5328])
+        by smtp.googlemail.com with ESMTPSA id g16sm1583066wmq.20.2021.12.15.02.14.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 02:14:44 -0800 (PST)
+Message-ID: <ec24e13f-0530-b091-7a08-864577b9b3be@gmail.com>
+Date:   Wed, 15 Dec 2021 11:14:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH resend v3] reset: renesas: Fix Runtime PM usage
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Language: en-US
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rob Herring <robh@kernel.org> writes:
-> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> index 5e216555fe4f..97d7607625ec 100644
-> --- a/drivers/of/fdt.c
-> +++ b/drivers/of/fdt.c
-> @@ -1078,49 +1078,50 @@ u64 __init dt_mem_next_cell(int s, const __be32 **cellp)
->  /*
->   * early_init_dt_scan_memory - Look for and parse memory nodes
->   */
-> -int __init early_init_dt_scan_memory(unsigned long node, const char *uname,
-> -				     int depth, void *data)
-> +int __init early_init_dt_scan_memory(void)
->  {
-> -	const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
-> -	const __be32 *reg, *endp;
-> -	int l;
-> -	bool hotpluggable;
-> -
-> -	/* We are scanning "memory" nodes only */
-> -	if (type == NULL || strcmp(type, "memory") != 0)
-> -		return 0;
-> +	int node;
-> +	const void *fdt = initial_boot_params;
->  
-> -	reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
-> -	if (reg == NULL)
-> -		reg = of_get_flat_dt_prop(node, "reg", &l);
-> -	if (reg == NULL)
-> -		return 0;
-> +	for (node = fdt_node_offset_by_prop_value(fdt, -1, "device_type", "memory", 6);
-> +	     node != -FDT_ERR_NOTFOUND;
-> +	     node = fdt_node_offset_by_prop_value(fdt, node, "device_type", "memory", 6)) {
+If pm_runtime_resume_and_get() fails then it returns w/o the RPM usage
+counter being incremented. In this case call pm_runtime_put() in
+remove() will result in a usage counter imbalance. Therefore check the
+return code of pm_runtime_resume_and_get() and bail out in case of error.
 
-The 6 there doesn't work on my machines.
+Fixes: bee08559701f ("reset: renesas: Add RZ/G2L usbphy control driver")
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+v2:
+- bail out in case of error instead of switching to pm_runtime_get_sync()
+v3:
+- add dev_err_probe() in case of error
+---
+ drivers/reset/reset-rzg2l-usbphy-ctrl.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-It needs to match the trailing NULL, so 7 or sizeof("memory") works.
+diff --git a/drivers/reset/reset-rzg2l-usbphy-ctrl.c b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+index e0704fd2b..46fcd2218 100644
+--- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
++++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
+@@ -137,7 +137,12 @@ static int rzg2l_usbphy_ctrl_probe(struct platform_device *pdev)
+ 	dev_set_drvdata(dev, priv);
+ 
+ 	pm_runtime_enable(&pdev->dev);
+-	pm_runtime_resume_and_get(&pdev->dev);
++	error = pm_runtime_resume_and_get(&pdev->dev);
++	if (error < 0) {
++		pm_runtime_disable(&pdev->dev);
++		reset_control_assert(priv->rstc);
++		return dev_err_probe(&pdev->dev, error, "pm_runtime_resume_and_get failed");
++	}
+ 
+ 	/* put pll and phy into reset state */
+ 	spin_lock_irqsave(&priv->lock, flags);
+-- 
+2.34.1
 
-cheers

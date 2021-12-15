@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83659475283
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76882475286
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235962AbhLOGHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 01:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
+        id S239974AbhLOGIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 01:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235888AbhLOGHQ (ORCPT
+        with ESMTP id S235888AbhLOGIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 01:07:16 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9669C061574;
-        Tue, 14 Dec 2021 22:07:15 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id bu11so19471988qvb.0;
-        Tue, 14 Dec 2021 22:07:15 -0800 (PST)
+        Wed, 15 Dec 2021 01:08:31 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE0CC061574;
+        Tue, 14 Dec 2021 22:08:31 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id l8so20793044qtk.6;
+        Tue, 14 Dec 2021 22:08:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=91eiU/6ESZfyMkPSxlsi+SkNBXeLwtIgx3M1fnSP7qw=;
-        b=ZDkSvqfyjG0XnX/djwv+3ABB8bAs6smdMWzur/XG8xGhnNCg/2trpEXmTiIeHh39or
-         14B7PYlyyekTd7PDFPiOmZDqj5MJEMF/HVWJ5oyr9JbuBDIUaWCck4ior1hRXfJbl6iC
-         0AQJd1MglFkSS5DULcMBvhWDfvqV/tntyVVilI6UqUjC5YLgCYBJiEa/kKOFWXE6zCj+
-         AJ4KBkVLtGWOwWVjNkYz4QD8kE6YaeMw0oHQVVUR6tWOJ9XxM4ohJ1K7Gvo0YRysQD6D
-         BIk9xwLCXb+QkyU0NCFGsBjaE2gOLvi+BZZ6o2RMg2OUsQ7DQX1APAisr9FvFKlOotL5
-         2QyA==
+        bh=+xwkuwluPsTZyAevpz2Dh9lbi48ybD49t0i22pstsUo=;
+        b=MUWShuuikvcrA+0rjapQ+kfaaC8OO4daTxmcj53vpKqRfy0GCJ17rlrZf2IphayDeH
+         hgbJ+ew4jsIb2A76M2+58uTCAjALMcQIHc/dgfOn/Tv2x0RNE+33t0g/s1SuPL11aEln
+         p1RcHUdSgtwMelolcBQepmO8UUJtBw9YPBHELV55jULUylLsPXSmiV3RZYqUyP2Z5NXY
+         m1ltVCQENtx0DOSusHazqKDU2v2rgRr1L8cBGaMGGXnMx2p4puxFlFG9QQPA1QnH08D/
+         HYYMCHUnuOxNjQqu9cmW62ThY0eGyxeYlCmkkHkpXokMKjIztB4HAfxdsyVqRpJJJN5M
+         aXaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=91eiU/6ESZfyMkPSxlsi+SkNBXeLwtIgx3M1fnSP7qw=;
-        b=t51jaRyiM43hwKH+NUnaBjgf1jvrRo/S35QuyDmHPTEojAmPz/DugOUxri41nkGIP2
-         lvihTNbqCUDsynj9KnUVcvCCucnM/Qgq972bRRk61QCWo/q52hTDcDuMB6MPoRG7+ppU
-         LC6xch0iJuVAF2b9QyFs1lFgaIIE7DcdFpTS933TSdojmWfgpcTkDWkZjLQrt9vtV+iY
-         hYwGf/gc0Je+VYi1Z7D2B/zHahcKNwEXs0xaLDbFyS4kMXaNTawosXh8ypDttQfiO8hB
-         gzimprMjawAn7T249vhQn6F2WRVOUQyTTsL3CqhaZvUnRNJmDfO0u6idrWeA5frmBak0
-         Ultw==
-X-Gm-Message-State: AOAM533In+JChpqYhbJXvp2yD7pp52hoXaDeG6I3lrKVMoQa3oVcTNSL
-        WpJMaaconUtyFhp+mR5fiQc=
-X-Google-Smtp-Source: ABdhPJwRYZd6yI6dMVgOJNdi56zXuS/8IylSRaABR5PCyWY+S9Y2t2l2krvRtITPkz21vFHg1ON5xQ==
-X-Received: by 2002:a05:6214:2a81:: with SMTP id jr1mr5244686qvb.39.1639548435095;
-        Tue, 14 Dec 2021 22:07:15 -0800 (PST)
+        bh=+xwkuwluPsTZyAevpz2Dh9lbi48ybD49t0i22pstsUo=;
+        b=tFI0O6+cwajPYTliEh0POdPt/Wnwm9iyRnuHOgs6uyxuPeyIKeAuUGWsGizVjm1vSL
+         5me2tGyckBCQnSvVAQQymKP+A2q0Y8yna1y9Bx1dJeENqZne0LnRxpRdI8HKgis3fNlJ
+         LpVSGVhG+g2Yue2n54Z0PqgUEmENcj1iHRx5kIzAyUSLVHcZMLJB9OrZRw/fMsLr+vz1
+         IPtX2oANaJCpxPhMDeMkc3PRGvCuWIfxh0eiN0nqHp/FIjCvQMe7fpriKZ0XRpybMW3Z
+         cAealLjsUgK/tvqMZhp/PdIvLN9FFYYz54uL0GYEtES/mWif9vhLV6SvAxXZ95chLMxZ
+         1ALA==
+X-Gm-Message-State: AOAM533S1DMvviBGSJWVM5+bYuHYzo+6MUxSg8TkE8bpzrK/a7FfZYqJ
+        gAN4lX057fXzeT185PHsErk=
+X-Google-Smtp-Source: ABdhPJzGRc+Pbqc4GG1xJH1pXIdO7J9/hMlCKKxLkMT3CqDopyzjoYhaPjBb2Bnnkn/Hy2kHBhpEsA==
+X-Received: by 2002:a05:622a:308:: with SMTP id q8mr10281691qtw.463.1639548510447;
+        Tue, 14 Dec 2021 22:08:30 -0800 (PST)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b5sm564920qka.51.2021.12.14.22.07.12
+        by smtp.gmail.com with ESMTPSA id f12sm732059qtj.93.2021.12.14.22.08.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 22:07:14 -0800 (PST)
+        Tue, 14 Dec 2021 22:08:30 -0800 (PST)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     jic23@kernel.org
-Cc:     lars@metafoo.de, chi.minghao@zte.com.cn, nuno.sa@analog.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     richardcochran@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH iio-next] drivers/iio: remove redundant ret variable
-Date:   Wed, 15 Dec 2021 06:07:10 +0000
-Message-Id: <20211215060710.442163-1-chi.minghao@zte.com.cn>
+Subject: [PATCH ptp-next] drivers/ptp: remove redundant variable
+Date:   Wed, 15 Dec 2021 06:08:25 +0000
+Message-Id: <20211215060825.442247-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,33 +66,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Return value from ads8688_prog_write() directly instead
-of taking this in another redundant variable.
+Return value directly instead of taking this
+in another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/iio/adc/ti-ads8688.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/ptp/ptp_pch.c | 20 ++++----------------
+ 1 file changed, 4 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/iio/adc/ti-ads8688.c b/drivers/iio/adc/ti-ads8688.c
-index 79c803537dc4..2e24717d7f55 100644
---- a/drivers/iio/adc/ti-ads8688.c
-+++ b/drivers/iio/adc/ti-ads8688.c
-@@ -281,12 +281,10 @@ static int ads8688_write_reg_range(struct iio_dev *indio_dev,
- 				   enum ads8688_range range)
+diff --git a/drivers/ptp/ptp_pch.c b/drivers/ptp/ptp_pch.c
+index 8070f3fd98f0..9132aaa70a2d 100644
+--- a/drivers/ptp/ptp_pch.c
++++ b/drivers/ptp/ptp_pch.c
+@@ -193,11 +193,8 @@ EXPORT_SYMBOL(pch_ch_control_write);
+ u32 pch_ch_event_read(struct pci_dev *pdev)
  {
- 	unsigned int tmp;
--	int ret;
+ 	struct pch_dev *chip = pci_get_drvdata(pdev);
+-	u32 val;
+-
+-	val = ioread32(&chip->regs->ch_event);
  
- 	tmp = ADS8688_PROG_REG_RANGE_CH(chan->channel);
--	ret = ads8688_prog_write(indio_dev, tmp, range);
+-	return val;
++	return ioread32(&chip->regs->ch_event);
+ }
+ EXPORT_SYMBOL(pch_ch_event_read);
+ 
+@@ -212,22 +209,16 @@ EXPORT_SYMBOL(pch_ch_event_write);
+ u32 pch_src_uuid_lo_read(struct pci_dev *pdev)
+ {
+ 	struct pch_dev *chip = pci_get_drvdata(pdev);
+-	u32 val;
+ 
+-	val = ioread32(&chip->regs->src_uuid_lo);
+-
+-	return val;
++	return ioread32(&chip->regs->src_uuid_lo);
+ }
+ EXPORT_SYMBOL(pch_src_uuid_lo_read);
+ 
+ u32 pch_src_uuid_hi_read(struct pci_dev *pdev)
+ {
+ 	struct pch_dev *chip = pci_get_drvdata(pdev);
+-	u32 val;
+ 
+-	val = ioread32(&chip->regs->src_uuid_hi);
+-
+-	return val;
++	return ioread32(&chip->regs->src_uuid_hi);
+ }
+ EXPORT_SYMBOL(pch_src_uuid_hi_read);
+ 
+@@ -663,12 +654,9 @@ static void __exit ptp_pch_exit(void)
+ 
+ static s32 __init ptp_pch_init(void)
+ {
+-	s32 ret;
+-
+ 	/* register the driver with the pci core */
+-	ret = pci_register_driver(&pch_driver);
  
 -	return ret;
-+	return ads8688_prog_write(indio_dev, tmp, range);
++	return pci_register_driver(&pch_driver);
  }
  
- static int ads8688_write_raw(struct iio_dev *indio_dev,
+ module_init(ptp_pch_init);
 -- 
 2.25.1
 

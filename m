@@ -2,285 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B13F44751C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 05:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1ED4751C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 05:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239761AbhLOEs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 23:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbhLOEs0 (ORCPT
+        id S239773AbhLOEtW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Dec 2021 23:49:22 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:38892 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229554AbhLOEtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 23:48:26 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD8AC061574;
-        Tue, 14 Dec 2021 20:48:26 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id 36-20020a17090a09a700b001b103e48cfaso731080pjo.0;
-        Tue, 14 Dec 2021 20:48:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QSJFdNHmXZjsmVMjqaJMFUvlmr/IGVuF1VTcRtG/qDI=;
-        b=GcMJptJKF9iGYR7c1eI2K+/EVlLYTBekM+m4OlH2NpCAchuSa3sSHzeoShBBxRKmXa
-         fKZDmaR4ySaNfZ4xFhXniRCw2lusT9Jz3ALywIc+hmjqozeufWZ8jXnhW4UU/DLJmTrO
-         Ojl5Evl/xFfeC91MVsWDqiCdaSFSbQY/otcqVJByotSDcazCG4pWQgmtffRPwlq5AJo5
-         L3tTiJk2It9OjCOTVF06J7imCJdfMtbRqVUD5XQZzPynSjSJaR9druF1FBFQYM2E8Pmm
-         DOXUViB/pyLOOM6ycTlVwpuY02zr4W3kB2Gmt3BjYqjUBtpBZRQYYS0ZgHsmdsIJ4R6H
-         Nb5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QSJFdNHmXZjsmVMjqaJMFUvlmr/IGVuF1VTcRtG/qDI=;
-        b=2PgLVik+0KWY36i1uiSK3M0NJ67GEGITwC+CKqOM5f0zLuTY3oiYCfKrMdFdM7yP9k
-         aJCk7ByaZcGFbny5e+kh/RxghPlcME2kmcAoDRfyNOt8Ge8ud3CAQqF7CCXsDet9xDma
-         MtUcElWjGwz1amd6pC6maoS6k3w7Nm3nuhA/zjgJ9bCKl2SxVtffHPLHuEaMwTdDrBMQ
-         BhcrVPmAN5nHnXqBcSivemCVmq5X0E2vdtErKCt9MLhLoX2u+lvLJek1rZCJa2SsnqYj
-         JPT+yXxP1Qfhq9ZS7JSkU2bfptnmqfTw3Rnp0SpB3Sqbhzjmt0eiWrLNGurew3FBOpEx
-         NysQ==
-X-Gm-Message-State: AOAM531irn8KqanAFgL0pleBvuGvRxFbNJcFKEsIUO54g6YQ/e1m2fDg
-        WEZ9gRa3HMaChZSy6exDb+ujC4UKmNWkiPGF
-X-Google-Smtp-Source: ABdhPJyr/jHE/RxZ7IBkI9UTQoUjUj3kMnVy0GJkNOYcipoAxptgoDt+bobYGEB3N1/dB0RyDzmiaA==
-X-Received: by 2002:a17:902:7d8b:b0:144:e29b:4f2b with SMTP id a11-20020a1709027d8b00b00144e29b4f2bmr9813215plm.57.1639543705830;
-        Tue, 14 Dec 2021 20:48:25 -0800 (PST)
-Received: from odroid ([114.29.23.242])
-        by smtp.gmail.com with ESMTPSA id d195sm703154pga.41.2021.12.14.20.48.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 20:48:25 -0800 (PST)
-Date:   Wed, 15 Dec 2021 04:48:18 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
-        cl@linux.com, John.p.donnelly@oracle.com,
-        kexec@lists.infradead.org, stable@vger.kernel.org,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no managed
- pages in DMA zone
-Message-ID: <20211215044818.GB1097530@odroid>
-References: <20211213122712.23805-1-bhe@redhat.com>
- <20211213122712.23805-6-bhe@redhat.com>
- <20211213134319.GA997240@odroid>
- <20211214053253.GB2216@MiWiFi-R3L-srv>
- <f5ff82eb-73b6-55b5-53d7-04ab73ce5035@suse.cz>
+        Tue, 14 Dec 2021 23:49:20 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51]:55648)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mxMEB-00FT0F-NB; Tue, 14 Dec 2021 21:49:19 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:59552 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mxME9-00CZ9e-3J; Tue, 14 Dec 2021 21:49:19 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Rong Chen <rong.a.chen@intel.com>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+References: <202112140949.Uq5sFKR1-lkp@intel.com>
+        <87k0g7t7ry.fsf@email.froward.int.ebiederm.org>
+        <2af5f2f0-b2db-35e3-2d7a-7fa512db19af@intel.com>
+Date:   Tue, 14 Dec 2021 22:48:32 -0600
+In-Reply-To: <2af5f2f0-b2db-35e3-2d7a-7fa512db19af@intel.com> (Rong Chen's
+        message of "Wed, 15 Dec 2021 09:35:43 +0800")
+Message-ID: <8735mutqvz.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5ff82eb-73b6-55b5-53d7-04ab73ce5035@suse.cz>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1mxME9-00CZ9e-3J;;;mid=<8735mutqvz.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/YgnsCOvPnJZVmeWkLiprg0pftoJSZ+qI=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa03.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_05,
+        DCC_CHECK_NEGATIVE,LotsOfNums_01,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
+        T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,T_TooManySym_04,
+        T_TooManySym_05,XMSubLong,XM_B_Unicode autolearn=disabled version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -0.5 BAYES_05 BODY: Bayes spam probability is 1 to 5%
+        *      [score: 0.0115]
+        *  0.7 XMSubLong Long Subject
+        *  1.5 TR_Symld_Words too many words that have symbols inside
+        *  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
+        *  1.2 LotsOfNums_01 BODY: Lots of long strings of numbers
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa03 0; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_02 5+ unique symbols in subject
+        *  0.0 T_TooManySym_04 7+ unique symbols in subject
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+        *  0.0 T_TooManySym_05 8+ unique symbols in subject
+        *  0.0 T_TooManySym_03 6+ unique symbols in subject
+X-Spam-DCC: ; sa03 0; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Rong Chen <rong.a.chen@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1910 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 5 (0.3%), b_tie_ro: 3.7 (0.2%), parse: 1.17
+        (0.1%), extract_message_metadata: 14 (0.7%), get_uri_detail_list: 2.9
+        (0.2%), tests_pri_-1000: 4.8 (0.3%), tests_pri_-950: 1.04 (0.1%),
+        tests_pri_-900: 0.80 (0.0%), tests_pri_-90: 1541 (80.6%), check_bayes:
+        1531 (80.1%), b_tokenize: 7 (0.3%), b_tok_get_all: 8 (0.4%),
+        b_comp_prob: 2.2 (0.1%), b_tok_touch_all: 1510 (79.1%), b_finish: 0.98
+        (0.1%), tests_pri_0: 327 (17.1%), check_dkim_signature: 0.40 (0.0%),
+        check_dkim_adsp: 2.6 (0.1%), poll_dns_idle: 0.27 (0.0%), tests_pri_10:
+        2.6 (0.1%), tests_pri_500: 9 (0.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [kbuild-all] Re: [ebiederm-user-namespace:signal-for-v5.17 4/12] arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to next function show_opcodes()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 11:09:23AM +0100, Vlastimil Babka wrote:
-> On 12/14/21 06:32, Baoquan He wrote:
-> > On 12/13/21 at 01:43pm, Hyeonggon Yoo wrote:
-> >> Hello Baoquan. I have a question on your code.
-> >> 
-> >> On Mon, Dec 13, 2021 at 08:27:12PM +0800, Baoquan He wrote:
-> >> > Dma-kmalloc will be created as long as CONFIG_ZONE_DMA is enabled.
-> >> > However, it will fail if DMA zone has no managed pages. The failure
-> >> > can be seen in kdump kernel of x86_64 as below:
-> >> > 
-> 
-> Could have included the warning headline too.
-> 
-> >> >  CPU: 0 PID: 65 Comm: kworker/u2:1 Not tainted 5.14.0-rc2+ #9
-> >> >  Hardware name: Intel Corporation SandyBridge Platform/To be filled by O.E.M., BIOS RMLSDP.86I.R2.28.D690.1306271008 06/27/2013
-> >> >  Workqueue: events_unbound async_run_entry_fn
-> >> >  Call Trace:
-> >> >   dump_stack_lvl+0x57/0x72
-> >> >   warn_alloc.cold+0x72/0xd6
-> >> >   __alloc_pages_slowpath.constprop.0+0xf56/0xf70
-> >> >   __alloc_pages+0x23b/0x2b0
-> >> >   allocate_slab+0x406/0x630
-> >> >   ___slab_alloc+0x4b1/0x7e0
-> >> >   ? sr_probe+0x200/0x600
-> >> >   ? lock_acquire+0xc4/0x2e0
-> >> >   ? fs_reclaim_acquire+0x4d/0xe0
-> >> >   ? lock_is_held_type+0xa7/0x120
-> >> >   ? sr_probe+0x200/0x600
-> >> >   ? __slab_alloc+0x67/0x90
-> >> >   __slab_alloc+0x67/0x90
-> >> >   ? sr_probe+0x200/0x600
-> >> >   ? sr_probe+0x200/0x600
-> >> >   kmem_cache_alloc_trace+0x259/0x270
-> >> >   sr_probe+0x200/0x600
-> >> >   ......
-> >> >   bus_probe_device+0x9f/0xb0
-> >> >   device_add+0x3d2/0x970
-> >> >   ......
-> >> >   __scsi_add_device+0xea/0x100
-> >> >   ata_scsi_scan_host+0x97/0x1d0
-> >> >   async_run_entry_fn+0x30/0x130
-> >> >   process_one_work+0x2b0/0x5c0
-> >> >   worker_thread+0x55/0x3c0
-> >> >   ? process_one_work+0x5c0/0x5c0
-> >> >   kthread+0x149/0x170
-> >> >   ? set_kthread_struct+0x40/0x40
-> >> >   ret_from_fork+0x22/0x30
-> >> >  Mem-Info:
-> >> >  ......
-> >> > 
-> >> > The above failure happened when calling kmalloc() to allocate buffer with
-> >> > GFP_DMA. It requests to allocate slab page from DMA zone while no managed
-> >> > pages in there.
-> >> >  sr_probe()
-> >> >  --> get_capabilities()
-> >> >      --> buffer = kmalloc(512, GFP_KERNEL | GFP_DMA);
-> >> > 
-> >> > The DMA zone should be checked if it has managed pages, then try to create
-> >> > dma-kmalloc.
-> >> >
-> >> 
-> >> What is problem here?
-> >> 
-> >> The slab allocator requested buddy allocator with GFP_DMA,
-> >> and then buddy allocator failed to allocate page in DMA zone because
-> >> there was no page in DMA zone. and then the buddy allocator called warn_alloc
-> >> because it failed at allocating page.
-> >> 
-> >> Looking at warn, I don't understand what the problem is.
-> > 
-> > The problem is this is a generic issue on x86_64, and will be warned out
-> > always on all x86_64 systems, but not on a certain machine or a certain
-> > type of machine. If not fixed, we can always see it in kdump kernel. The
-> > way things are, it doesn't casue system or device collapse even if
-> > dma-kmalloc can't provide buffer or provide buffer from zone NORMAL.
-> > 
-> > 
-> > I have got bug reports several times from different people, and we have
-> > several bugs tracking this inside Redhat. I think nobody want to see
-> > this appearing in customers' monitor w or w/o a note. If we have to
-> > leave it with that, it's a little embrassing.
-> >
+Rong Chen <rong.a.chen@intel.com> writes:
 
-Okay Then,
-Do you care if it just fails (without warning)
-or is allocated from ZONE_DMA32?
-
-> > 
-> >> 
-> >> > ---
-> >> >  mm/slab_common.c | 9 +++++++++
-> >> >  1 file changed, 9 insertions(+)
-> >> > 
-> >> > diff --git a/mm/slab_common.c b/mm/slab_common.c
-> >> > index e5d080a93009..ae4ef0f8903a 100644
-> >> > --- a/mm/slab_common.c
-> >> > +++ b/mm/slab_common.c
-> >> > @@ -878,6 +878,9 @@ void __init create_kmalloc_caches(slab_flags_t flags)
-> >> >  {
-> >> >  	int i;
-> >> >  	enum kmalloc_cache_type type;
-> >> > +#ifdef CONFIG_ZONE_DMA
-> >> > +	bool managed_dma;
-> >> > +#endif
-> >> >  
-> >> >  	/*
-> >> >  	 * Including KMALLOC_CGROUP if CONFIG_MEMCG_KMEM defined
-> >> > @@ -905,10 +908,16 @@ void __init create_kmalloc_caches(slab_flags_t flags)
-> >> >  	slab_state = UP;
-> >> >  
-> >> >  #ifdef CONFIG_ZONE_DMA
-> >> > +	managed_dma = has_managed_dma();
-> >> > +
-> >> >  	for (i = 0; i <= KMALLOC_SHIFT_HIGH; i++) {
-> >> >  		struct kmem_cache *s = kmalloc_caches[KMALLOC_NORMAL][i];
-> >> >  
-> >> >  		if (s) {
-> >> > +			if (!managed_dma) {
-> >> > +				kmalloc_caches[KMALLOC_DMA][i] = kmalloc_caches[KMALLOC_NORMAL][i];
-> 
-> The right side could be just 's'?
-> 
-> >> > +				continue;
-> >> > +			}
-> >> 
-> >> This code is copying normal kmalloc caches to DMA kmalloc caches.
-> >> With this code, the kmalloc() with GFP_DMA will succeed even if allocated
-> >> memory is not actually from DMA zone. Is that really what you want?
-> > 
-> > This is a great question. Honestly, no,
-> > 
-> > On the surface, it's obviously not what we want, We should never give
-> > user a zone NORMAL memory when they ask for zone DMA memory. If going to
-> > this specific x86_64 ARCH where this problem is observed, I prefer to give
-> > it zone DMA32 memory if zone DMA allocation failed. Because we rarely
-> > have ISA device deployed which requires low 16M DMA buffer. The zone DMA
-> > is just in case. Thus, for kdump kernel, we have been trying to make sure
-> > zone DMA32 has enough memory to satisfy PCIe device DMA buffer allocation,
-> > I don't remember we made any effort to do that for zone DMA.
-> > 
-> > Now the thing is that the nothing serious happened even if sr_probe()
-> > doesn't get DMA buffer from zone DMA. And it works well when I feed it
-> > with zone NORMAL memory instead with this patch applied.
-> 
-> If doesn't feel right to me to fix (or rather workaround) this on the level
-> of kmalloc caches just because the current reports come from there. If we
-> decide it's acceptable for kdump kernel to return !ZONE_DMA memory for
-> GFP_DMA requests, then it should apply at the page allocator level for all
-> allocations, not just kmalloc().
-
-I think that will make it much easier to manage the code.
-
-> Also you mention above you'd prefer ZONE_DMA32 memory, while chances are
-> this approach of using KMALLOC_NORMAL caches will end up giving you
-> ZONE_NORMAL. On the page allocator level it would be much easier to
-> implement a fallback from non-populated ZONE_DMA to ZONE_DMA32 specifically.
+> On 12/15/21 01:29, Eric W. Biederman wrote:
+>> kernel test robot <lkp@intel.com> writes:
+>>
+>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git signal-for-v5.17
+>>> head:   6b1248798eb6f6d5285db214299996ecc5dc1e6b
+>>> commit: 0e25498f8cd43c1b5aa327f373dd094e9a006da7 [4/12] exit: Add and use make_task_dead.
+>>> config: x86_64-randconfig-a011-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140949.Uq5sFKR1-lkp@intel.com/config)
+>>> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+>>> reproduce (this is a W=1 build):
+>>>          # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=0e25498f8cd43c1b5aa327f373dd094e9a006da7
+>>>          git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
+>>>          git fetch --no-tags ebiederm-user-namespace signal-for-v5.17
+>>>          git checkout 0e25498f8cd43c1b5aa327f373dd094e9a006da7
+>>>          # save the config file to linux build tree
+>>>          mkdir build_dir
+>>>          make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ kernel/ lib/kunit/
+>>>
+>>> If you fix the issue, kindly add following tag as appropriate
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>
+>>> All warnings (new ones prefixed by >>):
+>>>
+>>>>> lib/kunit/kunit-example-test.o: warning: objtool: .text.unlikely: unexpected end of section
+>>> --
+>>>>> arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to next function show_opcodes()
+>> I am confused.  This change patches objtool to rename
+>> rewind_stack_and_do_exit to rewind_stack_and_make_dead in the list
+>> global_noreturns in tools/objtool/check.c
+>>
+>> There is no other change to oops_end other than that renaming.
+>>
+>> Did the robot somehow mange to run an old version of objtool while
+>> building and this get this error?
+>>
+>> I tried and I am not currently able to reproduce this error.  Do you
+>> have any additional pointers on how I might reproduce this?
 >
+> Hi Eric,
+>
+> The reproduce step in report based on a full build, I can reproduce
+> the warnings with the below command:
+>
+>   make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Hello Baoquan and Vlastimil.
+Any chance you could do "make arch/x86/kernel/dumpstack.s" and send it
+to me?
 
-I'm not sure allowing ZONE_DMA32 for kdump kernel is nice way to solve
-this problem. Devices that requires ZONE_DMA is rare but we still
-support them.
+I want to see what code is in your oops_end.
 
-If we allow ZONE_DMA32 for ZONE_DMA in kdump kernels,
-the problem will be hard to find.
+It really does not make sense that simply renaming a function would
+trigger this error.
 
-What about one of those?:
+I did a full build (on debian 10 with gcc-8.3.0) and I did not manage to
+reproduce this.  In a bit I will try with a newer debian and see if I
+can get the issue to reproduce.  Still it does not make sense to me
+that a simple rename would trigger this error.
 
-    1) Do not call warn_alloc in page allocator if will always fail
-    to allocate ZONE_DMA pages.
+Eric
 
-
-    2) let's check all callers of kmalloc with GFP_DMA
-    if they really need GFP_DMA flag and replace those by DMA API or
-    just remove GFP_DMA from kmalloc()
-
-    3) Drop support for allocating DMA memory from slab allocator
-    (as Christoph Hellwig said) and convert them to use DMA32
-    and see what happens
-
-Thanks,
-Hyeonggon.
-
-> >> 
-> >> Maybe the function get_capabilities() want to allocate memory
-> >> even if it's not from DMA zone, but other callers will not expect that.
-> > 
-> > Yeah, I have the same guess too for get_capabilities(), not sure about other
-> > callers. Or, as ChristophL and ChristophH said(Sorry, not sure if this is
-> > the right way to call people when the first name is the same. Correct me if
-> > it's wrong), any buffer requested from kmalloc can be used by device driver.
-> > Means device enforces getting memory inside addressing limit for those
-> > DMA transferring buffer which is usually large, Megabytes level with
-> > vmalloc() or alloc_pages(), but doesn't care about this kind of small
-> > piece buffer memory allocated with kmalloc()? Just a guess, please tell
-> > a counter example if anyone happens to know, it could be easy.
-> > 
-> > 
-> >> 
-> >> >  			kmalloc_caches[KMALLOC_DMA][i] = create_kmalloc_cache(
-> >> >  				kmalloc_info[i].name[KMALLOC_DMA],
-> >> >  				kmalloc_info[i].size,
-> >> > -- 
-> >> > 2.17.2
-> >> > 
-> >> > 
-> >> 
-> > 
-> 

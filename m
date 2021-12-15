@@ -2,172 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D0D475FDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D47B3475FDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238669AbhLORwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:52:36 -0500
-Received: from mail-dm6nam11on2061.outbound.protection.outlook.com ([40.107.223.61]:26848
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238305AbhLORwb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:52:31 -0500
+        id S238684AbhLORwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:52:49 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:64168 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238305AbhLORwr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 12:52:47 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BFGAR7L021195;
+        Wed, 15 Dec 2021 17:52:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=dUcWbz9Jy0xh3UKxe1/WGtaHirx4h9ZZzEs1KuHHUYM=;
+ b=qFsjP8o9H9RbVSyj3jQQqum51BjJipa5lk5J5tjXnvpFG+2RwQdW1o63uqlEJ8QTbfA8
+ N7fxOEPT4LL2BNGr1P4px/PbUMLusdaBH5zb7ptdlWOfj5Bt3ScyM7OQiuhG71vyfVhH
+ YYT28bxcn+25GgoxEWY9ZBNlBXhc4qbO/srFZMabR0bueSTzpf8tq3+lBEz1bwupg5mF
+ yNRlMRLOouzgvvZ8lAO7zmBCHb5brxbXRMwSJisiSKKfBxI+vdj+Rf4/n9pHrgWwum3+
+ rmfGgomwGT7e3pKMztr7CkQ0SZXZqBDDPmuGRTwW4q+rr7ZUQDefErHWHG1x7LqxZ1DO 7Q== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cyknc0bp4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Dec 2021 17:52:13 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BFHUW3k057722;
+        Wed, 15 Dec 2021 17:52:12 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2045.outbound.protection.outlook.com [104.47.73.45])
+        by aserp3020.oracle.com with ESMTP id 3cxmrc6ff9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Dec 2021 17:52:12 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ibKRcUOBj/V4qE9wiUX2nVEqn/80DqKeBOU2t1zywZoTefmfzQkHhXnFnNll741iPEMOPEY1p+CDmxpH2+41pyMLVXvPeBVVm0+/gMTkazvShZVY+CTA0FKxuBt0aA4suV1B8Hfd4hyvHia0fVLIKgMy73s63dZSBgGzwgoP8MeTnqc3tYhFiLmE8dHhEIt6bsBTKzr79LVElAVD8BKFUoYPjKxGKGAfO6JhU8PkBaanq+JRLcfHMdO3+nhybtUmJP72dDtsTVMYH3NS7hXNcRrT3qFRD+/jEgM72EwtekfvNLZd25xk8Ns2TosWHoYpGD2BX67zC56lJ3tg+YsPlQ==
+ b=GA2lKjw0ki+qBGx3J+bkAidhosthkCS0yrkagHJ3h491r/x3rCbd4oQ8eLmKS4kHBEJm+QpqpnBDGny1b4d3JSjKNO58RXwq1b8vW2vGJLvhnw7YjlFC1YVYGy7FVBYb7MMJhmTpeP8yjAxCeEuANOlORCk31O2NecGWsstJbYyyDUKnihcQEIcSUgNyQJIOkBOlwdWkfdWMg8j/GAXhIYUI2QiJ+I7DlOEgUvId8skljvLozX4vsvLuKZwLwMCjCKuOUTk38rAm7k9TqNtUe81ffV+O1ZtmkgeDLMn/a6SZqTk8+4BXBMlnJtc4GAnVYtQJtB5D3gk4ZJfVmcswpg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DzJdflHFmHa4TuGszXR9N7gtkHVUjMNdtQ/NS0c4BjA=;
- b=iY/qgUQ/YLDVHFFC6PCJg2YOMdcyXG7akRlBJGqqvgSFVh4Dy+dt84OIRAV1XCuEBU1QBK8VRUQ4TNlVYSipfttSFyYJTUi1VxE2Cf3zwWURvbeXjDE4D8h7UJjojGmqCRsGSKHoQ9K1Imcl+oanY2jnl+bWKy2atZwnyZFr6q53sZlwfoTCYoV5bvyP/UlK/FE01boLOgBhEuAqGjn2FvOICNTWUWS9VWiFD2RxXH0ozOjsa4Kz5FU4Mzf9OEyZYqj4/SRG5T0Him1mkVBTDPiKP49kLfwX9L515uWRibYMxAXj0I0XE93KvCjfIwE9Ju312XpWL0hxsdCCI59/Lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=oracle.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=dUcWbz9Jy0xh3UKxe1/WGtaHirx4h9ZZzEs1KuHHUYM=;
+ b=fQEIm7QVlGASgUGpEEa+D7ks7lf12admPc2RsN8F+Rnsnubz7keAuaEUD1duqoberGjqZy2nJ6dV7DiaMKg2Oa2uqRxffgNtaYl4rPKf/3FGRm19AS9wvgrhvLyhwnlFV8Gh+bhPJehpMjxkstW4X9NVgUPTC424j30np111vIIIssXeCuxbbkvXfbO5S92XC4dyaPplTVaEZGJNMzLzf0AvZ7dwn+gNcoZqU8dmKemiwdmzz/yquaqcRRMX+VitwVLxInp9S5GyEZYk+JFjV5RRVcOs385TqcErsH6Bfc6cwJPRnagEMjvf9sM/QxsiV8DaeOnCMMhoth2aNMBSsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DzJdflHFmHa4TuGszXR9N7gtkHVUjMNdtQ/NS0c4BjA=;
- b=UACLFa4vQO7aQVigPKYmf5+cVvSjZT4aJEny/q62pcOF4myYazwD1zRBG7+xos/jdx32QQlpUCmpcEwe0JyZszgLURZVs5kweRu+9WCLhdaPQ7C9xKisI59CBjICYqq/qoF42IE8QDm5NQNU5JSwcKnMoHgMCxdRBQ/G1cFRIR4=
-Received: from DM6PR07CA0118.namprd07.prod.outlook.com (2603:10b6:5:330::31)
- by BL1PR12MB5096.namprd12.prod.outlook.com (2603:10b6:208:316::7) with
+ bh=dUcWbz9Jy0xh3UKxe1/WGtaHirx4h9ZZzEs1KuHHUYM=;
+ b=sc3OJIAGBMdRjeCZx8CKsFbDnC7ohaIQITEaUXn7zVyD1k6Sm2APXRaIDuVX6lk8NiV8UOoZGXxcnlPhP13ZjlgHqeiF1AMDjMnHugSPGF81qlgSqdXYs/7JtolDeB627gABnWkgtVIhpTXgKsz/5U4ELUcmqSG9gIps0XYfSng=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by SN6PR10MB2623.namprd10.prod.outlook.com (2603:10b6:805:46::32) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Wed, 15 Dec
- 2021 17:52:28 +0000
-Received: from DM6NAM11FT056.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:330:cafe::41) by DM6PR07CA0118.outlook.office365.com
- (2603:10b6:5:330::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.15 via Frontend
- Transport; Wed, 15 Dec 2021 17:52:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT056.mail.protection.outlook.com (10.13.173.99) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4778.13 via Frontend Transport; Wed, 15 Dec 2021 17:52:27 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 15 Dec
- 2021 11:52:25 -0600
-Date:   Wed, 15 Dec 2021 11:51:48 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Venu Busireddy <venu.busireddy@oracle.com>
-CC:     Borislav Petkov <bp@alien8.de>,
-        Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ 2021 17:52:08 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::3857:3a25:3444:fdd3]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::3857:3a25:3444:fdd3%5]) with mapi id 15.20.4778.018; Wed, 15 Dec 2021
+ 17:52:08 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
         David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v8 01/40] x86/compressed/64: detect/setup SEV/SME
- features earlier in boot
-Message-ID: <20211215175148.rtgyyqgymouvs7ft@amd.com>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-2-brijesh.singh@amd.com>
- <YbeaX+FViak2mgHO@dt>
- <YbecS4Py2hAPBrTD@zn.tnic>
- <YbjYZtXlbRdUznUO@dt>
- <YbjsGHSUUwomjbpc@zn.tnic>
- <YbkzaiC31/DzO5Da@dt>
-MIME-Version: 1.0
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+Subject: Re: [PATCH v4 05/66] Maple Tree: Add new data structure
+Thread-Topic: [PATCH v4 05/66] Maple Tree: Add new data structure
+Thread-Index: AQHX5r/msk+dWGpCHEuUYu1SfT0uo6wzmF6AgABTFAA=
+Date:   Wed, 15 Dec 2021 17:52:08 +0000
+Message-ID: <20211215175139.nndgst2mbdudu2dx@revolver>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-6-Liam.Howlett@oracle.com>
+ <f727adcf-5967-0b71-92a8-3269c0256948@suse.cz>
+In-Reply-To: <f727adcf-5967-0b71-92a8-3269c0256948@suse.cz>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2df5741e-7974-46a1-fb8b-08d9bff39d43
+x-ms-traffictypediagnostic: SN6PR10MB2623:EE_
+x-microsoft-antispam-prvs: <SN6PR10MB262346D38F681760D642B85EFD769@SN6PR10MB2623.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RzFwnT0nv2qy/ZqQeraypy3SahNB2W4dNiOW3oTIe4OhZ5HOHTRXxg2VH0n3kV64010koADQIGbNOqtdyUK3Yh/gjA8f/ooAiOyOTKeTOlTUCWWDE6JW7nHqqgb2YUkNO1GspHD35tlwJHGQNHxrpr9hNz1y9DfhNSkUqjNY4m+V4O5uowgVTBSJzqzmDg1BmVF6nZh8WDC5gidjLwzjYKjMgpbE2Dv6s9RXKdCg0UB57TQi1Xw6soK2EUWjWVC/NlTGCS7YlkHFgw8RCAXkTHeujzFUNerKDe2ECLF2uuLLf0uHjXECwYA4yejM/5G38QoPkHWvevUU2gm6ls5wu62aE2cJ78XFsabCYRi8b6FprnZxec9EUxx4XA9qGQdVyGsToQm8T9AmpaKJa7voVAW57IiE+nLC6E5riZ1sra5Jfvj2fK6W+ygvLX5t7NBgbdKa2CEbMS3lUxbuqqjYfj96+rDMHTh1qCcefSPk+8DOKaVHJAzyDPFN28mlAG9q6a0Gn+IR/KyjKyfr/ZXQBrIZABm9nQsJYz7FcktIzhTOz5lqGc6MT/WCWUXFnyaeM+qtLfaFq8cRgR14rw9vKRfN9dToOaTUT6TDbWJp0kKW6Qfn9Hnp3voe3HxVMzMAjWafOiZD2wLEA41oMdXe+FAWg8Ce+u1UWBFWAH0nwTMkhBPjAGCWJhgTi56crMVmGqQtch6q3LjyvSHoX/ILng==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(5660300002)(508600001)(316002)(8936002)(6506007)(53546011)(38100700002)(8676002)(122000001)(2906002)(33716001)(6486002)(1076003)(26005)(44832011)(4326008)(66946007)(9686003)(66476007)(186003)(91956017)(6512007)(66556008)(86362001)(64756008)(66446008)(76116006)(71200400001)(54906003)(38070700005)(83380400001)(6916009)(7416002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?W2kgL/VHPl/MpD618U/rWAPeglK+oG2XxBoTEJb0ClPzMPQ8AWxr11zXZ1YR?=
+ =?us-ascii?Q?9B70GTPYFoN3W/Zi+fpVKVQz0GZUoA5r0GN3mHyivMl8hQL4P3ibjdVBgV/h?=
+ =?us-ascii?Q?Y/0ehCPPtS8gPjYY43ja3oPmgfF2gBkSL+0TdppW1XijDr9kOdDEZeiWw8zs?=
+ =?us-ascii?Q?Oxkfb4CiniUqRS3bbRhyI4hlWfvrDxdwcubD69mFe4N38j88NTlN+VKX6hrb?=
+ =?us-ascii?Q?yKX0YrZz+VDta5+SJXdN1FYfyqHhc3KI142XT/Xd6kkJvkNCfCobghYXZZlr?=
+ =?us-ascii?Q?gtkhC7wiVxMQSqI5qu8xHrW62va52yJw3ITZIGpwFWifSAiZhB4IiB4Orkt+?=
+ =?us-ascii?Q?QCWyl3TEUScozu6jCHKuSqA7exYqSN8QOLy5yjOJVvYB9HjxKkr+QfmxTskp?=
+ =?us-ascii?Q?UfLXQsWdBoKrSPIIBGVYh9zvN7gGT1cbSvtmwfQm9R1iyT7an28HBRr4iqLa?=
+ =?us-ascii?Q?raqob9ZPdKwd9KGggWDISrk/nNbiYqAY+jZQQ4zlGogz2xJ5azAaSpK+sPxh?=
+ =?us-ascii?Q?qIidCFMimddYUmzxdwvQc3l5O1nbMc9lZoGJvpngoRL/XrVE34jANmlot8Ms?=
+ =?us-ascii?Q?Sp2RQx46/jy2+JED/dJx+ILAGY/CXV7lUcgKWv+dExZBsxNMQElvMwXpmVow?=
+ =?us-ascii?Q?AvswrHnlfnGpPBzpyQvRuPbBAT+VuWry7/8/uV/XCtLMuYdCuz+Cd6CHcSIm?=
+ =?us-ascii?Q?ZiTZWxVHU+DOav4XuS620jaYpfoyLlkj9ILojYfY8ZZ5od7QpOqKA5v5Y8aW?=
+ =?us-ascii?Q?b/tmCR20wQ+q2MeX6lPTIS+B89pydoUT1SeIygrl++SU8xt6tkwIdxJZtbfp?=
+ =?us-ascii?Q?i+ZjQhpOYd9AbB7BTdLp4PlWPZKJ3NfgrZIJkYj38wrZ2K+OtOncrxA2474A?=
+ =?us-ascii?Q?BoIcw30dTE6dCBKxQm/IKbzu1IULaGACjsH5YNirTkPiESydjgysch78k2Gp?=
+ =?us-ascii?Q?z6Sv1YGdVoUCQJquSlsmygEUeul02vH1eoEUii6RwUx8Uplk5u8kYwggz1w+?=
+ =?us-ascii?Q?AIPxii7rEE8jx+3mQnuhjQ33gXDAIK0n5nJ7cd1bf3hVlmHDM+i7WbWW+tXc?=
+ =?us-ascii?Q?HfE1kGoJVGJe4vO6W/J7oQjyXNAWExfcQ1RYGTner8uei9mkFzTrDf4dym6u?=
+ =?us-ascii?Q?NU6NuASzZdWa/qOaPtCqPj8b5KztjPgyeNmHhzXN7jBMcgow9iGlniORm4GG?=
+ =?us-ascii?Q?Ugm4mu2Oy5f9yMZFAJAUi3cGeOU3foWuOYLUbHZVjzaNevrW/B/pzlNuvmzn?=
+ =?us-ascii?Q?3eS4Ua0MgmYh+AGzO5mKTjOsb8SZ/BFm31IW/HX91ju+PvCiyrNYbuV0aDLu?=
+ =?us-ascii?Q?dF1VpURU47c7HsqFFO4JQUHYv9GrwtvnIIGg4uewQLmdedavfhLUu0CfQqiQ?=
+ =?us-ascii?Q?mwUECjdRPoLht2NAwGWB79q3yEYnBMAVM65ZGSW3xAFjP3TNUvkDUE84CKHy?=
+ =?us-ascii?Q?plLWz/jQDq7Shzy6ncS3XSbWOeyAYMt1BNq4cvWyzcbBHyutu8qz5O2iP2v2?=
+ =?us-ascii?Q?5dduZURF5aAaikE66y9wgDMNLxyRIIpz3ohCgL67mjie7YgwfwBppRQLxMtk?=
+ =?us-ascii?Q?o9a6h4yhM6//ASBg4cKCeSZVnkJfkf5yJqvDwr45NX8ngNuGbxN9hKD1y462?=
+ =?us-ascii?Q?UQV9Wt6M4uSB0dTRkzlnIxo=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YbkzaiC31/DzO5Da@dt>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a5af497e-5be6-485b-dfeb-08d9bff3a8dc
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5096:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5096A95C2DBBF31A5B91149F95769@BL1PR12MB5096.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6vj+CmqGPoS+IdnKq808awTf2W+Hrxu1M2OkzJ89l8nvHbekLGX2gwjb8lS09T0EpPwDT0MrENCuXBhr1bAuaZx8KVje0OU5uG5qhcw4Dzuw3PuywuyQmp5T/p8xwLoQg5MRWblWv9E4ZR2Wp33xUa6DFE0PWG1pcYrNdfiJItf/+OShuYbneAVDneNmeGi3VUemhLxp2puaNPJYTDXRgAhn7hAzvowzz1+CKWWn3aHiVLaXz8OhO9fht2er3mF1ANIMHLSlucMLI8GI3S2eb41JLBk+6W9wQx/wHeA5n+jbRCxHuTZj6o4i/lkjPE+EPSdqiYni2zlxDpGUd75zUJkRQb/gUfSsyRBgmLVJYLFK5wR+QTm4NbDjyQsJvTDKv6xCiU53zer4qsgnfUYn5i07AyKU+zwfsO3Yfz6ZVGM5vKzvCB5IuqJ2ujULBX7jli7bIlgMessuDtweXFihmFv4IBOODrSulfZppMHDMkMsXjniHDC6Bj5Sn7rs1Huaz2qJ7oETQ4k1rh+MPZX/TATlVAhN5eI/mfW9iOczeHcYZOSqNXVIaR3Vxw3SGJmFSJeIKxUJ+eVFoP39NUl/rtXvBprfZ/b/lmPZqXrtMAa8WRhadQv2NeX1FpnzuGAeqhsBeVM2G66A/Bs0BVISbXpsr5WFCZH1e3eNbz5u5Rkxi6jIXvDVCZSZ4BkqauW1I+RwazX296MvHNgVRzvQeo20HOoHV6ErVtxlE4vWWkTVuwsmtinL7kZUOn0yTUgLhnZzylgT60HfgshZ22yJyb3Ap/szCsdyvw2rKNY49fIgiFbVMOZyANq+utZZJjlK8W+bYHSjo2vxMfZq6JOtBBfpllDNu425/JYoYqKGvofQYjxQv3D3hZQgJhwXMV5d
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(47076005)(82310400004)(8676002)(4326008)(7416002)(5660300002)(7406005)(356005)(8936002)(40460700001)(36860700001)(81166007)(70206006)(2616005)(26005)(6666004)(1076003)(6916009)(36756003)(16526019)(70586007)(45080400002)(508600001)(336012)(186003)(44832011)(53546011)(316002)(2906002)(4001150100001)(86362001)(54906003)(426003)(966005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 17:52:27.9704
+Content-ID: <824047285A820F479AA54782F0C0CCAF@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2df5741e-7974-46a1-fb8b-08d9bff39d43
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 17:52:08.4978
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5af497e-5be6-485b-dfeb-08d9bff3a8dc
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT056.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5096
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0VW6uGnoqrtFD8cN2CUlKFKrMdVepEfIlDj+MsaK78W4sdEgV8j3H7KuU+rmkc4mOtxRTZ6xx+zFbf063bB53Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2623
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10199 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
+ mlxlogscore=999 suspectscore=0 adultscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112150100
+X-Proofpoint-ORIG-GUID: Le_ZKEC_iPM0B8j7WACDvFjIs9bPxQrP
+X-Proofpoint-GUID: Le_ZKEC_iPM0B8j7WACDvFjIs9bPxQrP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 06:14:34PM -0600, Venu Busireddy wrote:
-> On 2021-12-14 20:10:16 +0100, Borislav Petkov wrote:
-> > On Tue, Dec 14, 2021 at 11:46:14AM -0600, Venu Busireddy wrote:
-> > > What I am suggesting should not have anything to do with the boot stage
-> > > of the kernel.
-> > 
-> > I know exactly what you're suggesting.
-> > 
-> > > For example, both these functions call native_cpuid(), which is declared
-> > > as an inline function. I am merely suggesting to do something similar
-> > > to avoid the code duplication.
-> > 
-> > Try it yourself. If you can come up with something halfway readable and
-> > it builds, I'm willing to take a look.
-> 
-> Patch (to be applied on top of sev-snp-v8 branch of
-> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FAMDESE%2Flinux.git&amp;data=04%7C01%7Cmichael.roth%40amd.com%7Cbff83ee03b1147c39ea808d9bf5fe9d8%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637751240979543818%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=DZpgEtthswLhhfWqZlLkHHd5nJW2jb%2FVFuTssAFJ6Uo%3D&amp;reserved=0) is attached at the end.
-> 
-> Here are a few things I did.
-> 
-> 1. Moved all the common code that existed at the begining of
->    sme_enable() and sev_enable() to an inline function named
->    get_pagetable_bit_pos().
-> 2. sme_enable() was using AMD_SME_BIT and AMD_SEV_BIT, whereas
->    sev_enable() was dealing with raw bits. Moved those definitions to
->    sev.h, and changed sev_enable() to use those definitions.
-> 3. Make consistent use of BIT_ULL.
+* Vlastimil Babka <vbabka@suse.cz> [211215 07:54]:
+> On 12/1/21 15:29, Liam Howlett wrote:
+> > +/*
+> > + * mt_find() - Search from the start up until an entry is found.
+> > + * @mt: The maple tree
+> > + * @*index: Pointer which contains the start location of the search
+> > + * @max: The maximum value to check
+> > + *
+> > + * Handles locking.
+> > + *
+> > + * Return: The entry at or after the @*index or %NULL
+>=20
+> Noticed later that the comment doesn't say how *index is updated.
 
-Hi Venu,
+Good point.  I will add to the comment what happens to *index.
 
-I know there's still comments floating around, but once there's consensus feel
-free to respond with a separate precursor patch against tip which moves
-sme_enable() cpuid code into your helper function, along with your S-o-B, and I
-can include it directly in the next version. Otherwise, I can incorporate your
-suggestions into the next spin, just let me know if it's okay to add:
-
-  Co-authored-by: Venu Busireddy <venu.busireddy@oracle.com>
-  Signed-off-by:  Venu Busireddy <venu.busireddy@oracle.com>
-
-to the relevant commits.
-
-Thank you (and Boris/Tom) for the suggestions!
-
--Mike
-
-> 
-> Venu
-> 
+>=20
+> > + */
+> > +void *mt_find(struct maple_tree *mt, unsigned long *index, unsigned lo=
+ng max)
+> > +{
+> > +	MA_STATE(mas, mt, *index, *index);
+> > +	void *entry;
+> > +#ifdef CONFIG_DEBUG_MAPLE_TREE
+> > +	unsigned long copy =3D *index;
+> > +#endif
+> > +
+> > +	trace_ma_read(__func__, &mas);
+> > +
+> > +	if ((*index) > max)
+> > +		return NULL;
+> > +
+> > +	rcu_read_lock();
+> > +retry:
+> > +	entry =3D mas_state_walk(&mas);
+> > +	if (mas_is_start(&mas))
+> > +		goto retry;
+> > +
+> > +	if (unlikely(xa_is_zero(entry)))
+> > +		entry =3D NULL;
+> > +
+> > +	if (entry)
+> > +		goto unlock;
+> > +
+> > +	while (mas_searchable(&mas) && (mas.index < max)) {
+> > +		entry =3D mas_next_entry(&mas, max);
+> > +		if (likely(entry && !xa_is_zero(entry)))
+> > +			break;
+> > +	}
+> > +
+> > +	if (unlikely(xa_is_zero(entry)))
+> > +		entry =3D NULL;
+> > +unlock:
+> > +	rcu_read_unlock();
+> > +	if (likely(entry)) {
+> > +		*index =3D mas.last + 1;
+> > +#ifdef CONFIG_DEBUG_MAPLE_TREE
+> > +		if ((*index) && (*index) <=3D copy)
+> > +			printk("index not increased! %lx <=3D %lx\n",
+> > +			       *index, copy);
+> > +		MT_BUG_ON(mt, (*index) && ((*index) <=3D copy));
+> > +#endif
+> > +	}
+> > +
+> > +	return entry;
+> > +}
+> > +EXPORT_SYMBOL(mt_find);
+> =

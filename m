@@ -2,103 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A13476658
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7B8476665
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:16:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbhLOXKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 18:10:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S231839AbhLOXQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 18:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbhLOXKv (ORCPT
+        with ESMTP id S231739AbhLOXQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 18:10:51 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E5CC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:10:50 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id p8so35685885ljo.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:10:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y7DAUjl0wbjv/4De3uR/B1mDYliz+uJw6v1sVT86P/0=;
-        b=ChEBPDb8pXFVDfq44AJ/HKzPCkqcS2H4CAqjTnUdbGcwdE+8ICS219FWqZqsO1PcrP
-         pFkxIyUKYpFCTxjcs8i5fIhu40y4+ot+YK3lLjE/lSnOqrGFfnWcyzPThJCkBdw7m0gM
-         ZfKqw1uxsnKUbFGpGydoXy+dEzY5ClXsgwjSNV5FSZcEfu2iQuRmrwaH1cCKZv0YTFDH
-         IbfiwU4MntfMg7IIVEUku+IFYeFNVWTgwwZCDiDQeDuJ4Rl/ELLQV/BXUoWZdLNKbClX
-         8NsjywQycnXF/9KN2AFFREOJ+zR0GaqJo0V6v1yD7B5LDwtIFgk4d6PoOzhKXc/uzNLv
-         SbNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y7DAUjl0wbjv/4De3uR/B1mDYliz+uJw6v1sVT86P/0=;
-        b=jloRsC+GynyMlCZi5I6DdH/y/Ja9YyQp36LOHRXPRoK5TrFmWIO8DBCizRH5WPhxRb
-         nV0DcQUZi2FYvd4WC6TVWScrxgO+ZBAhRcInZBGpgs2PkxaDHhAAHBABod4FuiJ9Uree
-         xQcBqLfZEVcmPhATzQLSPrqR0HRIXz8y3rAQSd1lBRUaH+SMCEMLQuCU82T4d/Rxywau
-         2hFL4640Blx5Yp6Rh3UFc82jLFleY5NgU++p9O60LpYfXPWaQO1wsUIsPzP7FjjTZwcH
-         bxzUuo3Zj/ugJ7cGfmiEmVNd7jPZmafb2qLfPqIn1viWe/TFziFYr3D8ECpqfZaZf5AS
-         gEPw==
-X-Gm-Message-State: AOAM5312808KjFqOaMOOYrcx/vVlYsyEj8RV0PTo3oWihTo6ehKqQHcC
-        uO1h07uGiqjR9uKcmeLOpjAJAoG9EiM81h3ne/LHJw==
-X-Google-Smtp-Source: ABdhPJx4cvTTBXFqEZkT1GB0kUVQZrVn1kPQL0HpO20VRBPmvBRZLZsWMjSZw5LuWPt5oJFsHz66EGtUKPCrbnbAwuA=
-X-Received: by 2002:a2e:95d3:: with SMTP id y19mr12740025ljh.175.1639609849022;
- Wed, 15 Dec 2021 15:10:49 -0800 (PST)
+        Wed, 15 Dec 2021 18:16:49 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A91C061574;
+        Wed, 15 Dec 2021 15:16:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7TkUsFIKpnau7pWBf9h7KSNo4ui5MXEQ/bPdkzjokuQ=; b=SLXbGgUjH+DaIrY4ZUo8aCy0/s
+        L+V/vr80d+3sI9qkQTKIkP6lma7r7m6eIzFi3kR4qRIVAuYEtiQY2e3p19RVD9PcYB0QWKdq2Dyta
+        nQG14fmI3XbfV7aidrEMGtkecsx/eqePsGtHH5K2tlCxNDZiaYZzhn3gGjh4B48QAHTZPxE3/cQS1
+        C9MkCcrfdGuG4IaCqUDtXQc/lz1477Oijrjr8AVZf3VjQzfwBp27Gc8mWE3+/uF2DOLq13qQqN7Le
+        GKOVrj1IeeOrbrgSwQ1TE7hEs9zloNKNoPAyyn2wCYntDq8/NOpxv2qEBwuRKka1+utwiKSeo6rrG
+        n3oFyBDA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxdVL-001aXG-7H; Wed, 15 Dec 2021 23:16:11 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 925D29844F1; Thu, 16 Dec 2021 00:16:10 +0100 (CET)
+Date:   Thu, 16 Dec 2021 00:16:10 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Peter Oskolkov <posk@google.com>
+Cc:     Peter Oskolkov <posk@posk.io>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Paul Turner <pjt@google.com>, Andrei Vagin <avagin@google.com>,
+        Jann Horn <jannh@google.com>,
+        Thierry Delisle <tdelisle@uwaterloo.ca>
+Subject: Re: [RFC][PATCH 0/3] sched: User Managed Concurrency Groups
+Message-ID: <20211215231610.GI16608@worktop.programming.kicks-ass.net>
+References: <20211214204445.665580974@infradead.org>
+ <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
+ <Ybm+HJzkO/0BB4Va@hirez.programming.kicks-ass.net>
+ <CAFTs51Xb6m=htpWsVk577n-h_pRCpqRcBg6-OhBav8OadikHkw@mail.gmail.com>
+ <YbozBSLk4PytGp0J@hirez.programming.kicks-ass.net>
+ <CAPNVh5fenLG7uvdF1tjyfcOe8Ff3_L0-UqeCu9=tn-NMaJ3ikA@mail.gmail.com>
 MIME-Version: 1.0
-References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
- <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com> <87wnkbuuuz.ffs@tglx>
- <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com> <8735mvthk6.ffs@tglx>
- <2ab24da8-e37d-426a-9500-b7541d21f8a3@www.fastmail.com> <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
- <Ybpe/ND+MQq6tqoR@piout.net> <CALAqxLWe13ZghdWphzWZZsRGa+MeAH58syfem6ktDFHF0WG4Dg@mail.gmail.com>
- <87pmpxlcrd.ffs@tglx>
-In-Reply-To: <87pmpxlcrd.ffs@tglx>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 15 Dec 2021 15:10:37 -0800
-Message-ID: <CALAqxLUz8c-mOMVUsHj39Vbh35wHA1a8QfbTjLFrnL8qi2Ju6Q@mail.gmail.com>
-Subject: Re: Time keeping while suspended in the presence of persistent clock drift
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Joel Daniels <jdaniels@sent.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPNVh5fenLG7uvdF1tjyfcOe8Ff3_L0-UqeCu9=tn-NMaJ3ikA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 2:33 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Wed, Dec 15 2021 at 14:02, John Stultz wrote:
-> > On Wed, Dec 15, 2021 at 1:32 PM Alexandre Belloni
-> >> I'd rather lean towards the timekeeping code doing that. The RTC
+On Wed, Dec 15, 2021 at 01:04:33PM -0800, Peter Oskolkov wrote:
+> On Wed, Dec 15, 2021 at 10:25 AM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > Heh, touche'!  :)
+> > On Wed, Dec 15, 2021 at 09:56:06AM -0800, Peter Oskolkov wrote:
+> > > On Wed, Dec 15, 2021 at 2:06 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > > >  /*
+> > > > + * Enqueue tsk to it's server's runnable list and wake the server for pickup if
+> > > > + * so desired. Notable LAZY workers will not wake the server and rely on the
+> > > > + * server to do pickup whenever it naturally runs next.
+> > >
+> > > No, I never suggested we needed per-server runnable queues: in all my
+> > > patchsets I had a single list of idle (runnable) workers.
 > >
-> >> subsystem doesn't know which RTC has to be used.
+> > This is not about the idle servers..
 > >
-> > Though the RTC layer *is* the one that tracks which RTC is used, via
-> > the logic in drivers/rtc/class.c, and the timekeeping core already has
-> > adjtimex for timekeeping corrections, so if we're correcting
-> > underlying RTCs it seems such tuning would best be done in the RTC
-> > layer.
-> >
-> > Though how the persistent_clock interface ties into such corrections
-> > would be a separate thing.
->
-> Might be the final trigger to get rid of that leftover from the last
-> millenium?
->
+> > So without the LAZY thing on, a previously blocked task hitting sys_exit
+> > will enqueue itself on the runnable list and wake the server for pickup.
+> 
+> How can a blocked task hit sys_exit()? Shouldn't it be RUNNING?
 
-Yeah. Simplifying probably helps for consistency and maintainability.
-(on top of the rtc and persistent clock, we also have the nonstop
-clocksources that keep running through suspend and can be used. :)
+Task was RUNNING, hits schedule() after passing through sys_enter().
+this marks it BLOCKED. Task wakes again and proceeds to sys_exit(), at
+which point it's marked RUNNABLE and put on the runnable list. After
+which it'll kick the server to process said list.
 
-It's just that window after resume but before the sleep time injection
-where time would be incorrect always made me uncomfortable, so it was
-nice to have some correct way to avoid that, even if all hardware
-couldn't utilize it.  But as I'm less involved here, maybe someone
-else can simplify things and live with that worry. :)
+> Anyway, servers and workers are supposed to unregister before exiting,
+> so if they call sys_exit() they break the agreement; in my patch I
+> just clear all umcg-related state and proceed, without waking the
+> server: the user broke the protocol, let them figure out what
+> happened:
 
-thanks
--john
+No violation of anything there. The time between returning from
+schedule() and sys_exit() is unmanaged.
+
+sys_exit() is the spot where we regain control.
+
+> > IIRC you didn't like the server waking while it was still running
+> > another task, but instead preferred to have it pick up the newly
+> > enqueued task when next it ran.
+> 
+> Yes, this is the model I have, as I outlined in another email. I
+> understand that having queues per-CPU/per-server is how it is done in
+> the kernel, both for historical reasons (before multiprocessing there
+> was a single queue/cpu) and for throughput (per-cpu runqueues are
+> individually faster than a global one). However, this model is known
+> to lag in presence of load spikes (long per-cpu queues with some CPUs
+> idle), and is not really easy to work with given the use cases this
+> whole userspace scheduling effort is trying to address:
+
+Well, that's *your* use-case. I'm fairly sure there's more people that
+want to use this thing.
+
+> multiple
+> priorities and work isolation: these are easy to address directly with
+> a scheduler that has a global view rather than multiple
+> per-cpu/per-server schedulers/queues that try to coordinate.
+
+You can trivially create this, even if the underlying thing is
+per-server. Simply have a lock and shared data structure between the
+servers.
+
+Even in the kernel, it should be mostly trivial to create a global
+policy. The only tricky bit (in the kernel) is the whole affinity muck,
+but userspace doesn't *need* to do even that.
+
+> > LAZY enables that.. *however* it does need to wake the server when it is
+> > idle, otherwise they'll all sit there waiting for one another.
+> 
+> If all servers are busy running workers, then it is not up to the
+> kernel to "preempt" them in my model: the userspace can set up another
+> thread/task to preempt a misbehaving worker, which will wake the
+> server attached to it. 
+
+So the way I'm seeing things is that the server *is* the 'CPU'. A UP
+machine cannot rely on another CPU to make preemption happen.
+
+Also, preemption is very much not about misbehaviour. Wakeup can cause a
+preemption event if the woken task is deemed higher priority than the
+current running one for example.
+
+And time based preemption is definitely also a thing wrt resource
+distribution.
+
+> But in practice there are always workers
+> blocking in the kernel, which wakes their servers, which then reap the
+> woken/runnable workers list, so well-behaving code does not need this.
+
+This seems to discount pure computational workloads.
+
+> And so we need to figure out this high-level thing first: do we go
+> with the per-server worker queues/lists, or do we go with the approach
+> I use in my patchset? It seems to me that the kernel-side code in my
+> patchset is not more complicated than your patchset is shaping up to
+> be, and some things are actually easier to accomplish, like having a
+> single idle_server_ptr vs this LAZY and/or server "preemption"
+> behavior that you have.
+> 
+> Again, I'm OK with having it your way if all needed features are
+> covered, but I think we should be explicit about why
+> per-server/per-cpu model is chosen vs the one I proposed, especially
+> as it seems the kernel side code is not really simpler in the end.
+
+So I went with a UP first approach. I made single server preemption
+driven scheduling work first (both tick and wakeup-preemption are
+supported).
+
+The whole LAZY thing is only meant to supress some of that (notably
+wakeup preemption), but you're right in that it's not really nice. I got
+it working, but I'm not particularly happy with it either.
+
+Having the sys_enter/sys_exit hooks also made the page pins short lived,
+and signals much simpler to handle. You're destroying signals IIUC.
+
+
+So I see no fundamental reason why userspace cannot do something like:
+
+	struct umcg_task *current = NULL;
+
+	for (;;) {
+		self->state = UMCG_TASK_RUNNABLE | UMCG_TF_COND_WAIT;
+
+		runnable_ptr = (void *)__atomic_exchange_n(&self->runnable_workers_ptr,
+                                                           NULL, __ATOMIC_SEQ_CST);
+
+		pthread_mutex_lock(&global_queue.lock);
+		while (runnable_ptr) {
+			next = (void *)runnable_ptr->runnable_workers_ptr;
+			enqueue_task(&global_queue, runnable_ptr);
+			runnable_ptr = next;
+		}
+
+		/* complicated bit about current already running goes here */
+
+		current = pick_task(&global_queue);
+		self->next_tid = current ? current->tid : 0;
+unlock:
+		pthread_mutex_unlock(&global_queue.lock);
+
+		ret = sys_umcg_wait(0, 0);
+
+		pthread_mutex_lock(&global_queue.lock);
+		/* umcg_wait() didn't switch, make sure to return the task */
+		if (self->next_tid) {
+			enqueue_task(&global_queue, current);
+			current = NULL;
+		}
+		pthread_mutex_unlock(&global_queue.lock);
+
+		// do something with @ret
+	}
+
+to get global scheduling and all the contention^Wgoodness related to it.
+Except, of course, it's more complicated, but I think the idea's clear
+enough.
+
+

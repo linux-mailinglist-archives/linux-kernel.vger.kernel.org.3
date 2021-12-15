@@ -2,72 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 841FB47603B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C9B47604B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238723AbhLOSHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:07:17 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:39094 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238519AbhLOSHQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:07:16 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 084E21EC02B9;
-        Wed, 15 Dec 2021 19:07:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639591631;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Ra3WnB05nSWdBwQOHaRFNb+Tj70Io8iaKmQH1Zlg0i4=;
-        b=JEmny9mjtyhNvwXaiZ6pAfXEFdQAO+hlYr9oTcqpOG+/vFGHP9fGqr/ZiZ2vNl2K+USCjz
-        NucjLJUu0uhYKcMZq+aniootNDs/tctosuF6RXh3dtPPPYcOE3UwxqFmgcerUOILdw99/0
-        q2vxsqoevfmU5OpBS6/G0Sapysh/JBI=
-Date:   Wed, 15 Dec 2021 19:07:17 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     William Roche <william.roche@oracle.com>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v2 2/2] EDAC/amd64: Add new register offset support and
- related changes
-Message-ID: <Ybou1VTJ8oced4Ge@zn.tnic>
-References: <20211215155309.2711917-1-yazen.ghannam@amd.com>
- <20211215155309.2711917-3-yazen.ghannam@amd.com>
- <d327bbfe-a3c0-9b26-569d-43e17dba126d@oracle.com>
+        id S245708AbhLOSJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:09:40 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:41896 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245461AbhLOSJi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 13:09:38 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BFI88bl043534;
+        Wed, 15 Dec 2021 12:08:08 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1639591688;
+        bh=BV8tFNoGMdbcKerU49fpsuE5DGB0rVHqEXWJvvEf+r4=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=ZwqpP5UcZ1QWZv7AGAa1OzwwMFuadbbEsAGtDSo4cB6se3FtCbc4klSGqC2fqQUFh
+         7fdnNyE4equbUr+rG0skddv/tns2YRzZhL47ljnzM9aYF4NAG10iKPsf5O271LpT8+
+         rYNDI3ur5+NLeKk/dEPjErvLTfSPXspbsCCTNhzw=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BFI88vw126883
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 15 Dec 2021 12:08:08 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 15
+ Dec 2021 12:08:08 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 15 Dec 2021 12:08:08 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BFI88Qh046197;
+        Wed, 15 Dec 2021 12:08:08 -0600
+Date:   Wed, 15 Dec 2021 12:08:08 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
+        Cedric Le Goater <clg@kaod.org>,
+        Juergen Gross <jgross@suse.com>,
+        <xen-devel@lists.xenproject.org>, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Vinod Koul <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        <iommu@lists.linux-foundation.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>,
+        <linux-wireless@vger.kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
+Message-ID: <20211215180808.dpdlkoheulsnrs65@balcony>
+References: <20211213182958.ytj4m6gsg35u77cv@detonator>
+ <87fsqvttfv.ffs@tglx>
+ <20211214162247.ocjm7ihg5oi7uiuv@slider>
+ <87wnk7rvnz.ffs@tglx>
+ <87tufbrudl.ffs@tglx>
+ <87mtl3rli1.ffs@tglx>
+ <20211214205626.lrnddha6bd6d6es5@possibly>
+ <87h7basx36.ffs@tglx>
+ <87zgp1rge4.ffs@tglx>
+ <87wnk5rfkt.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <d327bbfe-a3c0-9b26-569d-43e17dba126d@oracle.com>
+In-Reply-To: <87wnk5rfkt.ffs@tglx>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 05:32:27PM +0100, William Roche wrote:
-> > @@ -2174,8 +2215,13 @@ static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
-> >   	 * There is one mask per DIMM, and two Chip Selects per DIMM.
-> >   	 *	CS0 and CS1 -> DIMM0
-> >   	 *	CS2 and CS3 -> DIMM1
-> > +	 *
-> > +	 *	Systems with newer register layout have one mask per Chip Select.
-> 
-> Just a question about this comment: Can it be translated into this ?
-> 
-> +	 * Except on systems with newer register layout where we have one Chip Select per DIMM.
+On 17:35-20211215, Thomas Gleixner wrote:
+>    git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v4.1-part-2
+[...]
 
-Sure, but without the "we":
+> That should cure the problem.
 
-	...
-	* On systems with the newer register layout there is one Chip Select per DIMM.
-	*/
+And it sure does. Thanks for looking closer and providing a fix.
 
-Thx.
+https://gist.github.com/nmenon/9862a1c31b17fd6dfe0a30c54d396187
+(msi-v4.1-part-2) looks clean
+
+Also while I had detected pointer corruption in the previous v4
+https://gist.github.com/nmenon/ce4d12f460db5cd511185c047d5d35d0
+
+Running it again on v4.1 does indicate the fix is in place.
+https://gist.github.com/nmenon/3231fbb0faa1b9c827b40d1ae6160626
+
+
+please feel free to add:
+
+Tested-by: Nishanth Menon <nm@ti.com>
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

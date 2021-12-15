@@ -2,159 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CB9475B7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFD2475B7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243734AbhLOPK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        id S243755AbhLOPLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243715AbhLOPK0 (ORCPT
+        with ESMTP id S243748AbhLOPLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:10:26 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD69C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:10:25 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639581023;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=DlAuCxADJdDedhOdaQ3XkarOK9iIv0+wbxsXvUHhZUQ=;
-        b=SoQP/nH11FTR3gJIz9VCS5MbyNwEIACT6FlivUQRXwVMrx0FchPhjYviW9y5b4JnrCfW7G
-        xP2Z81/lhP83oL4ilnIGpFAOUnhnjaUrhCnJPHF5vsYwsT4RejUXUDl8Muci+Xzm38FmPC
-        df8BEpJm3qC760T02Q16qBiYrPDni7xyB07L5nJaW7N0DsqlGOz8RmUYjJUc39xQoN2ZBY
-        6ZEeNip+Y10c0NBCk0LTOg5D2jpDYve//VQ7xjza33+bJ6S3wvbUR3GysbsUMsNMIlpwa/
-        TEt1/j59h3wgivXzJCv9xsApqe6YK0GH2RArkwDVCuE2YrwPT7ysVyRsowXopg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639581023;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=DlAuCxADJdDedhOdaQ3XkarOK9iIv0+wbxsXvUHhZUQ=;
-        b=d3GVDNPOL2OhiwyLPhGHPOdIfW3MW9emdEf9DoQxobGM31EIrvKo+ZIcj7l80VP1spxQip
-        fTNqLnn5nDkNNiCQ==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scripts/gdb: lx-dmesg: read records individually
-Date:   Wed, 15 Dec 2021 16:16:22 +0106
-Message-ID: <874k79c3a9.fsf@jogness.linutronix.de>
+        Wed, 15 Dec 2021 10:11:01 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D78C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:11:00 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id o13so38702583wrs.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:11:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JBNIoCCyN9wSgcuJ37qg24pNF3XF+D3632+cAPkIV/M=;
+        b=VERVctzGgIsLj3+lwneUvXiEV3svF43ASp7TtqW1gpFhbfmQUCr9EyKBBftmf0UJtG
+         LEgLMMv4mfy0FQmPX+M12EfCa91FQXr+tgZfhcAKhw3FVuNnPmStIi3LfvaDvojqRoyv
+         zwoIuDJU/2z8orq/tvRihBQ5ZXn9V1Q87APNWxtw6JS9bnqRAzh6KkxLcR5KfQa6Tvw1
+         vw9NGIwIeDBHrV52QkU1TJOkY4WiwqrP3jkklGS9DXx+r79kQo7OeDTdRNjAPGlxebQg
+         M4mucbcFYuifxFlsAzi8U3GPAGlyowuj5942EjODJ9jsTSI6oSgJ9cGs/WRHkdgQcP5d
+         8mNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JBNIoCCyN9wSgcuJ37qg24pNF3XF+D3632+cAPkIV/M=;
+        b=yO94JOH2peVNeAw+/1kZApUEdPPOrrhbpej+eQhjktfSRQV3g3qoUzVQoO129zRykW
+         buiAV8C8T1mUg1IIXmpkSxwpFRS1nV26rKBioG3kyFkvJOhczf/aL7RB5QTIDUTfNkph
+         tWTHkdE7Q6JYCzyNEOq9lgzqeGJ29m/rvxQjukksDzqmBC9mYRZiARe8C5cZ9IPkts1v
+         2b9SS43UHk3sZpss0ttOZAyZevxq4UrDlg1n3BnnxsnaG00QgtURbZO0apctOqtkf7cc
+         slIwBzY3b6qtgYRZODVLBNeOHD6niwNiOYWebqsaJskwgEbG4tddjczM9r9xIC6eCQnG
+         27qQ==
+X-Gm-Message-State: AOAM530gs3XG0u8EgeKLg08mAhd7E/ciyBe+Af33+OPET63LGYXnTlq8
+        QGLlOIJB9GtoF38Fg+S/rTd1Fqc/P0I=
+X-Google-Smtp-Source: ABdhPJwcjuVgJPq5jg/PUnjQS7Vbsdf97HNtKAUTIXfQsza/9eqTI74AUUyFNjxNC4J0AHQ5gLI5cQ==
+X-Received: by 2002:a5d:4d51:: with SMTP id a17mr4645263wru.384.1639581059094;
+        Wed, 15 Dec 2021 07:10:59 -0800 (PST)
+Received: from localhost.localdomain.at (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
+        by smtp.gmail.com with ESMTPSA id k37sm2262168wms.21.2021.12.15.07.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 07:10:58 -0800 (PST)
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Michael Liebert <liebert@ibv-augsburg.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Keerthy <j-keerthy@ti.com>, u-boot@lists.denx.de
+Subject: [PATCH] arm: mach-k3: am642_init: Unlock MCU PADCFG regs
+Date:   Wed, 15 Dec 2021 16:10:23 +0100
+Message-Id: <20211215151049.101913-1-christian.gmeiner@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the gdb command lx-dmesg, the entire descriptor, info, and text
-data regions are read into memory before printing any records. For
-large kernel log buffers, this not only causes a huge delay before
-seeing any records, but it may also lead to python errors of too
-much memory allocation.
+From: Michael Liebert <liebert@ibv-augsburg.de>
 
-Rather than reading in all these regions in advance, read them as
-needed and only read the regions for the particular record that is
-being printed.
+Currently only the PADCFG registers of the main domain are unlocked.
+Also unlock PADCFG registers of MCU domain, so MCU pin muxing can be configured by u-boot or Linux.
 
-The gdb macro "dmesg" in Documentation/admin-guide/kdump/gdbmacros.txt
-already prints out the kernel log buffer like this.
-
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Signed-off-by: Michael Liebert <liebert@ibv-augsburg.de>
+Tested-by: Christian Gmeiner <christian.gmeiner@gmail.com>
 ---
- scripts/gdb/linux/dmesg.py | 35 ++++++++++++++++++-----------------
- 1 file changed, 18 insertions(+), 17 deletions(-)
+ arch/arm/mach-k3/am642_init.c                 | 3 +++
+ arch/arm/mach-k3/include/mach/am64_hardware.h | 2 ++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/scripts/gdb/linux/dmesg.py b/scripts/gdb/linux/dmesg.py
-index a92c55bd8de5..d5983cf3db7d 100644
---- a/scripts/gdb/linux/dmesg.py
-+++ b/scripts/gdb/linux/dmesg.py
-@@ -44,19 +44,17 @@ class LxDmesg(gdb.Command):
-         sz = prb_desc_ring_type.get_type().sizeof
-         desc_ring = utils.read_memoryview(inf, addr, sz).tobytes()
- 
--        # read in descriptor array
-+        # read in descriptor count, size, and address
-         off = prb_desc_ring_type.get_type()['count_bits'].bitpos // 8
-         desc_ring_count = 1 << utils.read_u32(desc_ring, off)
-         desc_sz = prb_desc_type.get_type().sizeof
-         off = prb_desc_ring_type.get_type()['descs'].bitpos // 8
--        addr = utils.read_ulong(desc_ring, off)
--        descs = utils.read_memoryview(inf, addr, desc_sz * desc_ring_count).tobytes()
-+        desc_addr = utils.read_ulong(desc_ring, off)
- 
--        # read in info array
-+        # read in info size and address
-         info_sz = printk_info_type.get_type().sizeof
-         off = prb_desc_ring_type.get_type()['infos'].bitpos // 8
--        addr = utils.read_ulong(desc_ring, off)
--        infos = utils.read_memoryview(inf, addr, info_sz * desc_ring_count).tobytes()
-+        info_addr = utils.read_ulong(desc_ring, off)
- 
-         # read in text data ring structure
-         off = printk_ringbuffer_type.get_type()['text_data_ring'].bitpos // 8
-@@ -64,12 +62,11 @@ class LxDmesg(gdb.Command):
-         sz = prb_data_ring_type.get_type().sizeof
-         text_data_ring = utils.read_memoryview(inf, addr, sz).tobytes()
- 
--        # read in text data
-+        # read in text data size and address
-         off = prb_data_ring_type.get_type()['size_bits'].bitpos // 8
-         text_data_sz = 1 << utils.read_u32(text_data_ring, off)
-         off = prb_data_ring_type.get_type()['data'].bitpos // 8
--        addr = utils.read_ulong(text_data_ring, off)
--        text_data = utils.read_memoryview(inf, addr, text_data_sz).tobytes()
-+        text_data_addr = utils.read_ulong(text_data_ring, off)
- 
-         counter_off = atomic_long_type.get_type()['counter'].bitpos // 8
- 
-@@ -102,17 +99,20 @@ class LxDmesg(gdb.Command):
-             desc_off = desc_sz * ind
-             info_off = info_sz * ind
- 
-+            desc = utils.read_memoryview(inf, desc_addr + desc_off, desc_sz).tobytes()
+diff --git a/arch/arm/mach-k3/am642_init.c b/arch/arm/mach-k3/am642_init.c
+index 533905daeb..958fa05af4 100644
+--- a/arch/arm/mach-k3/am642_init.c
++++ b/arch/arm/mach-k3/am642_init.c
+@@ -37,6 +37,9 @@ static void ctrl_mmr_unlock(void)
+ 	mmr_unlock(CTRL_MMR0_BASE, 3);
+ 	mmr_unlock(CTRL_MMR0_BASE, 5);
+ 	mmr_unlock(CTRL_MMR0_BASE, 6);
 +
-             # skip non-committed record
--            state = 3 & (utils.read_u64(descs, desc_off + sv_off +
--                                        counter_off) >> desc_flags_shift)
-+            state = 3 & (utils.read_u64(desc, sv_off + counter_off) >> desc_flags_shift)
-             if state != desc_committed and state != desc_finalized:
-                 if did == head_id:
-                     break
-                 did = (did + 1) & desc_id_mask
-                 continue
++	/* Unlock all MCU_PADCFG_MMR1 module registers */
++	mmr_unlock(MCU_PADCFG_MMR1_BASE, 1);
+ }
  
--            begin = utils.read_ulong(descs, desc_off + begin_off) % text_data_sz
--            end = utils.read_ulong(descs, desc_off + next_off) % text_data_sz
-+            begin = utils.read_ulong(desc, begin_off) % text_data_sz
-+            end = utils.read_ulong(desc, next_off) % text_data_sz
+ /*
+diff --git a/arch/arm/mach-k3/include/mach/am64_hardware.h b/arch/arm/mach-k3/include/mach/am64_hardware.h
+index 96383437d5..e06e1f9532 100644
+--- a/arch/arm/mach-k3/include/mach/am64_hardware.h
++++ b/arch/arm/mach-k3/include/mach/am64_hardware.h
+@@ -12,6 +12,8 @@
+ 
+ #define PADCFG_MMR1_BASE				0xf0000
+ 
++#define MCU_PADCFG_MMR1_BASE				0x04080000
 +
-+            info = utils.read_memoryview(inf, info_addr + info_off, info_sz).tobytes()
+ #define MAIN_DEVSTAT_PRIMARY_BOOTMODE_MASK		0x00000078
+ #define MAIN_DEVSTAT_PRIMARY_BOOTMODE_SHIFT		3
  
-             # handle data-less record
-             if begin & 1 == 1:
-@@ -125,16 +125,17 @@ class LxDmesg(gdb.Command):
-                 # skip over descriptor id
-                 text_start = begin + utils.get_long_type().sizeof
- 
--                text_len = utils.read_u16(infos, info_off + len_off)
-+                text_len = utils.read_u16(info, len_off)
- 
-                 # handle truncated message
-                 if end - text_start < text_len:
-                     text_len = end - text_start
- 
--                text = text_data[text_start:text_start + text_len].decode(
--                    encoding='utf8', errors='replace')
-+                text_data = utils.read_memoryview(inf, text_data_addr + text_start,
-+                                                  text_len).tobytes()
-+                text = text_data[0:text_len].decode(encoding='utf8', errors='replace')
- 
--            time_stamp = utils.read_u64(infos, info_off + ts_off)
-+            time_stamp = utils.read_u64(info, ts_off)
- 
-             for line in text.splitlines():
-                 msg = u"[{time:12.6f}] {line}\n".format(
-
-base-commit: 0bafb8f3ebc84525d0ae0fcea22d12151b99312f
 -- 
-2.30.2
+2.33.1
+

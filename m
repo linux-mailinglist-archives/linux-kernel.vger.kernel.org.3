@@ -2,174 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3224B475C0F
+	by mail.lfdr.de (Postfix) with ESMTP id 799F7475C10
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244056AbhLOPoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:44:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
+        id S244066AbhLOPoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244050AbhLOPoL (ORCPT
+        with ESMTP id S244050AbhLOPoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:44:11 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E8DC061574;
-        Wed, 15 Dec 2021 07:44:11 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so19541581pjb.5;
-        Wed, 15 Dec 2021 07:44:11 -0800 (PST)
+        Wed, 15 Dec 2021 10:44:23 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1BFC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:44:23 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id s11so19717154ilv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:44:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=ZQpjHX9dmpcsXje2Uj46IZRB9dElu7f9CmUWai1aoyo=;
-        b=GPNcCQDNTcfpQ8Igy41dk6BT7Vnak7Z1zgVF79fb569KzmPV9iUwAamE+QYIRxStoY
-         lbvw1V3CNspZk1BfRWE9gPiXEZmEC7viVhsgoK8L3Qx2TfkjWpvADx+8csupU4++5N61
-         vBuIdUw47L62gXVMCMxDXIToJH7eH/Bt88O+RkQ04LS0uuzg4sy1VHbTRphGpqFWLciG
-         L6mhurvOc5rIx5jmfBar/IDnT+09ek1N5y0+xX26v/rq0YAhxbHA/YWU4XoDdZavM48D
-         KdlrPNcDyjDeEakWIZ9KNP5xq7gGqMX/3f2E6ERBTTYJC/NcX0mqHiP9PMsCwynm4po+
-         g8yQ==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=ZY9NNgQz1Cb2zFAORN4jsgilpdlgj2d87pcnbidqzeM=;
+        b=Cg0qWt/ceFcBSrFixDf7eQEmcQc+TvIFEyfWzowhbJ2AAwM06qW84wvEpqABbDzNPh
+         BA118I+QYprnfIIqq62tuSOtbFoCbMTUbl4WBFGNH0iJcQD7oWQCT/wlK6FkRTQb6jnn
+         vOE52AU9ZDcLhkSGHjwA8mp+Kmosdr0C/a0GBTJHCLHIDmYbVCzOl4Sw9OVeZeD4iyNT
+         5psMVjmESSS867U/9XAaiCq7UTYTY54FpwgyIUEod/BWDPFYRY/ebwkmz7+CnGhHMYxo
+         0IvbEAvK2zBGYEmfkoYCb0ZqocFlvJ4zRejmwQDT2x7gCt+hk5MRGifGbH5dBC0NrNbm
+         6y2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ZQpjHX9dmpcsXje2Uj46IZRB9dElu7f9CmUWai1aoyo=;
-        b=oz15O/ZUZ9UzLwcojVU8caBYQmqvld8p0J5jShrkrYoeDyjMX+WMYwImIqd6yzw71/
-         q7SjZSi3AB6f5Gfwiodm9Bhp1Ar6sTAfSHzbwqTNOJmdc2tkw4OO+lFPmqO0My9blFgw
-         y+6e2b70f2JKv8XYOTmndjUk5i+RlOkt5Bl40mFV3+kCNVcrg+QtLNCdsOMx57gdh1In
-         V2EkOyG4bKCEAQ5RedxjDWzoefCalNrqz7p2a5X0kc5N9W4R8DMVwlzBg07jpzCGmSn1
-         EGSGm5ashc16L81E5OTjTUa8uQBVl7+sn7gNP8lYw5n+Jw5trEcv1LKoPhc5XfOuXjMr
-         34zA==
-X-Gm-Message-State: AOAM531/pVxtNwQhFDISw+YHJcbU+LaQsp1tFPZPiW6a2ehdwo7kEnXA
-        wWX3hO16C425U+H7y0wFMDo=
-X-Google-Smtp-Source: ABdhPJyTWTg5hRbQgtXnx9xCo10AsgF4ScMRxvo/dpQBveOWmhz0dDkLjkvUNwqZeb87aQr6ljEQ9Q==
-X-Received: by 2002:a17:902:e747:b0:148:a18e:75be with SMTP id p7-20020a170902e74700b00148a18e75bemr5575502plf.73.1639583050796;
-        Wed, 15 Dec 2021 07:44:10 -0800 (PST)
-Received: from localhost.localdomain ([171.221.151.97])
-        by smtp.gmail.com with ESMTPSA id o9sm2907440pgu.12.2021.12.15.07.44.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 Dec 2021 07:44:10 -0800 (PST)
-From:   yongw.pur@gmail.com
-X-Google-Original-From: wang.yong12@zte.com.cn
-To:     bsingharora@gmail.com, akpm@linux-foundation.org,
-        peterz@infradead.org, mingo@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, yang.yang29@zte.com.cn,
-        wang.yong12@zte.com.cn
-Subject: [PATCH] Documentation: accounting: add thrashing page cache and direct compact
-Date:   Wed, 15 Dec 2021 07:43:41 -0800
-Message-Id: <1639583021-92977-1-git-send-email-wang.yong12@zte.com.cn>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=ZY9NNgQz1Cb2zFAORN4jsgilpdlgj2d87pcnbidqzeM=;
+        b=GSqFViQbDl6PwNzcc31Lzrc0JYOcs0F2ssvTb/t1J4iuez0qjsBeAGcndwHt5aN8O6
+         h/PcxgApa13+H9nh5rcjseKSLe9puIh97CQp3HeIXbdvJkSElBti8+2dcwLXJWf5+iIT
+         JWgW5k4R2axdt8fJIYyJeMU3CYRass8C5xARfgtis3anzxwp7/M6yyZle6M8Vi+oSSg+
+         lS/6H+162TpG/U8nlUbGhI0vFhCPRIKMXel7yvQ6YorvadR1cEACdbgoWTwbRy4+bYvW
+         ph0/O0yRgRvmETh22dPcHzSiRcixFkaH0IXQQMZnncnkqcVnolNhy+4WDes+/juW9Ygm
+         JUBg==
+X-Gm-Message-State: AOAM533Aexf4OOhFJYaUUJ2mnexCE28nhGeQjRq4RUMCBxtGJ1Q/PSNu
+        ATCCGfvoHsaOzwDhD+3KWLV09ecw28g4VF/k2QFeQAIwiVFzhQ==
+X-Google-Smtp-Source: ABdhPJwipDo0z7vcK9jh16urW4g2HTN/r6+PK/Ych4ywaK13/+8jgaIA7CyBrAC02cLMjU634y35cv+SFRrt7sqeLVY=
+X-Received: by 2002:a05:6e02:1806:: with SMTP id a6mr6036269ilv.125.1639583062820;
+ Wed, 15 Dec 2021 07:44:22 -0800 (PST)
+MIME-Version: 1.0
+From:   Florent Carli <fcarli@gmail.com>
+Date:   Wed, 15 Dec 2021 16:44:12 +0100
+Message-ID: <CAJuRqcAc19KZYik7T_dYFoqt_wX4QPHKBsh9A8BJwYE7uxs_1A@mail.gmail.com>
+Subject: Bug in vhost-net with RT kernels with SMP
+To:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wangyong <wang.yong12@zte.com.cn>
+Hello all,
 
-Add thrashing page cache and direct compact related descriptions
-and update the usage of getdelays userspace utility.
+We encounter a bug in host-net with RT kernels running on SMP.
 
-The following patches modifications have been updated:
-https://lore.kernel.org/all/20190312102002.31737-4-jinpuwang@gmail.com/
-https://lore.kernel.org/all/1638619795-71451-1-git-send-email-
-wang.yong12@zte.com.cn/
+Our setup is:
+- a multi cpu virtualized hypervisor that runs an RT kernel with SMP
+(tested with 4.19 and 5.10) (originally I encountered the bug with a
+physical host but we virtualized it to facilitate debugging)
+- a guest running a standard kernel with a tap interface on
+virtio/vhost-net (one vcpu)
+- this tap is bridged with the host so that they can ping each other
+- the guest is pinging the host as quickly as possible ("i=0; while [
+$i -lt 100000 ]; do ping -c 1 10.10.10.2; i=$((i+1)); done")
+- it may crash after some time, but to crash "quicker", we have found
+that other network trafics at the same time do help, so we have the
+host ping the guest the same way. Having to manage several network
+flows at the same time seems to be key to triggering this bug.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: wangyong <wang.yong12@zte.com.cn>
-Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
----
- Documentation/accounting/delay-accounting.rst | 55 +++++++++++++--------------
- 1 file changed, 27 insertions(+), 28 deletions(-)
+After a few seconds, we get the following back trace:
 
-diff --git a/Documentation/accounting/delay-accounting.rst b/Documentation/accounting/delay-accounting.rst
-index 1b8b46d..197fe31 100644
---- a/Documentation/accounting/delay-accounting.rst
-+++ b/Documentation/accounting/delay-accounting.rst
-@@ -13,6 +13,8 @@ a) waiting for a CPU (while being runnable)
- b) completion of synchronous block I/O initiated by the task
- c) swapping in pages
- d) memory reclaim
-+e) thrashing page cache
-+f) direct compact
- 
- and makes these statistics available to userspace through
- the taskstats interface.
-@@ -41,11 +43,12 @@ generic data structure to userspace corresponding to per-pid and per-tgid
- statistics. The delay accounting functionality populates specific fields of
- this structure. See
- 
--     include/linux/taskstats.h
-+     include/uapi/linux/taskstats.h
- 
- for a description of the fields pertaining to delay accounting.
- It will generally be in the form of counters returning the cumulative
--delay seen for cpu, sync block I/O, swapin, memory reclaim etc.
-+delay seen for cpu, sync block I/O, swapin, memory reclaim, thrash page
-+cache, direct compact etc.
- 
- Taking the difference of two successive readings of a given
- counter (say cpu_delay_total) for a task will give the delay
-@@ -88,41 +91,37 @@ seen.
- 
- General format of the getdelays command::
- 
--	getdelays [-t tgid] [-p pid] [-c cmd...]
--
-+	getdelays [-dilv] [-t tgid] [-p pid]
- 
- Get delays, since system boot, for pid 10::
- 
--	# ./getdelays -p 10
-+	# ./getdelays -d -p 10
- 	(output similar to next case)
- 
- Get sum of delays, since system boot, for all pids with tgid 5::
- 
--	# ./getdelays -t 5
--
--
--	CPU	count	real total	virtual total	delay total
--		7876	92005750	100000000	24001500
--	IO	count	delay total
--		0	0
--	SWAP	count	delay total
--		0	0
--	RECLAIM	count	delay total
--		0	0
-+	# ./getdelays -d -t 5
-+	print delayacct stats ON
-+	TGID	5
- 
--Get delays seen in executing a given simple command::
- 
--  # ./getdelays -c ls /
-+	CPU             count     real total  virtual total    delay total  delay average
-+	                    8        7000000        6872122        3382277          0.423ms
-+	IO              count    delay total  delay average
-+		            0              0              0ms
-+	SWAP            count    delay total  delay average
-+	                    0              0              0ms
-+	RECLAIM         count    delay total  delay average
-+		            0              0              0ms
-+	THRASHING       count    delay total  delay average
-+	                    0              0              0ms
-+	COMPACT         count    delay total  delay average
-+	                    0              0              0ms
- 
--  bin   data1  data3  data5  dev  home  media  opt   root  srv        sys  usr
--  boot  data2  data4  data6  etc  lib   mnt    proc  sbin  subdomain  tmp  var
-+Get IO accounting for pid 1, it works only with -p::
- 
-+	# ./getdelays -i -p 1
-+	printing IO accounting
-+	linuxrc: read=65536, write=0, cancelled_write=0
- 
--  CPU	count	real total	virtual total	delay total
--	6	4000250		4000000		0
--  IO	count	delay total
--	0	0
--  SWAP	count	delay total
--	0	0
--  RECLAIM	count	delay total
--	0	0
-+The above command can be used with -v to get more debug information.
--- 
-2.7.4
+[  116.435285] WARNING: CPU: 2 PID: 365 at fs/eventfd.c:74
+eventfd_signal+0x79/0x90
+[  116.435303] Modules linked in:
+[  116.435305] CPU: 2 PID: 365 Comm: vhost-361 Not tainted
+5.10.83-rt58-mainline-rt #1
+[  116.435307] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.13.0-1ubuntu1.1 04/01/2014
+[  116.435308] BUG: using smp_processor_id() in preemptible [00000000]
+code: vhost-361/365
+[  116.435310] caller is print_stop_info+0x16/0x30
+[  116.435317] CPU: 2 PID: 365 Comm: vhost-361 Not tainted
+5.10.83-rt58-mainline-rt #1
+[  116.435319] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.13.0-1ubuntu1.1 04/01/2014
+[  116.435320] Call Trace:
+[  116.435330]  dump_stack+0x57/0x6a
+[  116.435362]  check_preemption_disabled+0xc8/0xd0
+[  116.435377]  print_stop_info+0x16/0x30
+[  116.435382]  show_regs+0x10/0x40
+[  116.435399]  __warn+0x6d/0xa0
+[  116.435410]  ? eventfd_signal+0x79/0x90
+[  116.435413]  report_bug+0x95/0xb0
+[  116.435434]  handle_bug+0x41/0x80
+[  116.435437]  exc_invalid_op+0x14/0x60
+[  116.435440]  asm_exc_invalid_op+0x12/0x20
+[  116.435446] RIP: 0010:eventfd_signal+0x79/0x90
+[  116.435449] Code: 01 00 00 00 be 03 00 00 00 4c 89 ef e8 30 ee e6
+ff 65 ff 0d 69 bf 39 43 4c 89 ef e8 51 a7 77 00 4c 89 e0 5b 5d 41 5c
+41 5d c3 <0f> 0b 45 31 e4 5b 5d 4c 89 e0 41 5c 41 5d c3 0f 1f 84 00 00
+00 00
+[  116.435451] RSP: 0018:ffffb0e480793d50 EFLAGS: 00010202
+[  116.435452] RAX: 0000000000000001 RBX: ffff9ff7c5e94b10 RCX: 0000000000000000
+[  116.435454] RDX: 0000000000008ac4 RSI: 0000000000000001 RDI: ffff9ff7c5e144b8
+[  116.435455] RBP: 0000000000000100 R08: 0000000000000000 R09: 0000000000000000
+[  116.435456] R10: 0000000000000000 R11: 0000000000000000 R12: ffff9ff7c53a3c40
+[  116.435457] R13: ffffb0e480793e18 R14: ffff9ff7c5e90000 R15: ffff9ff7c5e94b10
+[  116.435462]  vhost_tx_batch.constprop.0+0xa4/0x170
+[  116.435474]  handle_tx_copy+0x156/0x570
+[  116.435477]  ? __vhost_add_used_n+0x210/0x210
+[  116.435479]  handle_tx+0xa0/0xe0
+[  116.435481]  vhost_worker+0x8e/0xd0
+[  116.435483]  kthread+0x17c/0x1a0
+[  116.435491]  ? __kthread_parkme+0xa0/0xa0
+[  116.435495]  ret_from_fork+0x22/0x30
+[  116.435500] RIP: 0010:eventfd_signal+0x79/0x90
+[  116.435503] Code: 01 00 00 00 be 03 00 00 00 4c 89 ef e8 30 ee e6
+ff 65 ff 0d 69 bf 39 43 4c 89 ef e8 51 a7 77 00 4c 89 e0 5b 5d 41 5c
+41 5d c3 <0f> 0b 45 31 e4 5b 5d 4c 89 e0 41 5c 41 5d c3 0f 1f 84 00 00
+00 00
+[  116.435504] RSP: 0018:ffffb0e480793d50 EFLAGS: 00010202
+[  116.435505] RAX: 0000000000000001 RBX: ffff9ff7c5e94b10 RCX: 0000000000000000
+[  116.435506] RDX: 0000000000008ac4 RSI: 0000000000000001 RDI: ffff9ff7c5e144b8
+[  116.435507] RBP: 0000000000000100 R08: 0000000000000000 R09: 0000000000000000
+[  116.435508] R10: 0000000000000000 R11: 0000000000000000 R12: ffff9ff7c53a3c40
+[  116.435509] R13: ffffb0e480793e18 R14: ffff9ff7c5e90000 R15: ffff9ff7c5e94b10
+[  116.435510] FS:  0000000000000000(0000) GS:ffff9ff7fbd00000(0000)
+knlGS:0000000000000000
+[  116.435513] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  116.435515] CR2: 00007fff835d2080 CR3: 0000000107968002 CR4: 0000000000372ee0
+[  116.435516] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  116.435517] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  116.435518] Call Trace:
+[  116.435519]  vhost_tx_batch.constprop.0+0xa4/0x170
+[  116.435521]  handle_tx_copy+0x156/0x570
+[  116.435523]  ? __vhost_add_used_n+0x210/0x210
+[  116.435525]  handle_tx+0xa0/0xe0
+[  116.435527]  vhost_worker+0x8e/0xd0
+[  116.435529]  kthread+0x17c/0x1a0
+[  116.435531]  ? __kthread_parkme+0xa0/0xa0
+[  116.435532]  ret_from_fork+0x22/0x30
 
+The tap interface will still work but for about as long as it took to
+crash, as if the situation needs to happen a second time for the
+interface to stop working.
+Anyway, the tap interface will fail shortly after: it will still be
+there, but no trafic will flow between the guest and host (with no
+kernel log or error message this time).
+
+We can usually get the interface back up, by issuing "ip link set tap0
+down", "ip link set tap0 up" from within the guest.
+If we try the experiment once again, the tap will fail but we won't
+get a new backtrace.
+We get the backtrace only once, and we need to restart the host if we
+want to see it again.
+It's like the crash sets the kernel in an "unstable mode", in which
+the vhost-net interfaces will easily fail (probably when the situation
+will present itself for the "second" time).
+
+A first analyzis was done on the #linux-rt irc channel:
+"huh, looks like the underlying issue is hitting the WARN_ON_ONCE()
+condition in eventfd_signal(), but in the bug handler (which
+apparently is preemptible), we get into print_stop_info() and try to
+use smp_processor_id() in that context, which is wrong because thigns
+are preemptible.
+I can't see the smp_processor_id() usage in mainlin (I don't have an
+RT tree to hand), but someone with more RT knowledge might want to
+look at that"
+
+We were recommended to post to LKLM for further analysis.
+Thanks.

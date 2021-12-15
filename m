@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12318476114
+	by mail.lfdr.de (Postfix) with ESMTP id 5B732476115
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344002AbhLOSwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        id S1344006AbhLOSwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:52:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239049AbhLOSv7 (ORCPT
+        with ESMTP id S1344000AbhLOSwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:51:59 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076D3C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:51:59 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id u11so17282579plf.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:51:59 -0800 (PST)
+        Wed, 15 Dec 2021 13:52:00 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938EBC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:52:00 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id k6-20020a17090a7f0600b001ad9d73b20bso20129263pjl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:52:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=njr+cYO7xEG0qBkZ/YmHt6HYhJLzs7sEC9t03EpurCA=;
-        b=dCDQ8kWFXlc0N7qfukRib3fou4QHLj/5kM/EJZPYLQp5AuthvNDDS7unLV6CW3E+79
-         mz0tc0Sq+EP1pROs/sAiKjXUoFFsZtBendfDsoJUu3HyDPsFIzq+e66z/0UyiatuDiMX
-         Zy68QbXKztccQv8YmtCEyb2qZ0XFGQ05hENcILJ900TqDEDQMYomJdxzTMpIIzB0Psov
-         Tw9jw180jtLUxc3kP1xgezYjhCutZMx1TLAWkg48qGs81eUyVR5u9EknH3t7rynsueKx
-         PQAOKLYDikAo0ybIYYVxZPASfVHlMWJMumZfCpZY9C6MY0CHvZlHi5aNiDG5LIhvjNBL
-         LBqQ==
+        bh=tow+Nc6EtPapuXOnqTsuFmvcP25mJfOCoP64WLyCgxo=;
+        b=KddrVcFagg6SyW+/ypspkDVjoJ85Z+S2BlfwFGTOcdL+VqsMqYHkpoKc7e96oKwv5/
+         +u1m7YAG4A6tcEhlXqr00SBxXulkiwB+KcUKaAQhECKCkriHLaxrpLCx4uSv64SRPzS6
+         vZwp2948zC9GmENRCuOGdnVjG3d4rGsoALsqLEPhaVmlGiGeKJ5DTCE/rvP46YERLNAY
+         8aQT8Bhph89o1rqViHsHnRNbLZ+tmQ0/xPvXm4q/VCNxKIgZtUnxCy42K2lON02rZM4I
+         7cq2LUMntUYcofGk3T5sPIyYMaIJHjrNlNDl1n5hLhWjlGoSd+EIRB+9BGrb157enBrr
+         aVUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=njr+cYO7xEG0qBkZ/YmHt6HYhJLzs7sEC9t03EpurCA=;
-        b=wZ6UtoiUcyWZSToBxHSiuC0sXgeSum9NCJ+2XUb/RwRlL5SyArpP7d8Bo+ojsH6GMu
-         MgZqywKRtlUs2tiWJuuo1CWNpVOC6SldWWgqz9uurvQt2UbtvYqykD4ofXnngNO+1hrs
-         vdoumwDOtlyyFBQGWWuA5befHZMVXYVO8Ps08E9Vpgo4xQ3Q+dMOxq5jsR6d/T5E7Ts8
-         v7wIM3DecZSH+DC4jh6F1F+Nkq67HSA4Quq7y5QumK1flxWnk+2NuxO2t1UEoU9tUe+a
-         cbT11gO8Fe6gGr55UuoRaiEHOBlTltJKaT1YTrp0u/Q6VN4scs4Ybrhvr2WZL/lR/Aj1
-         sb7w==
-X-Gm-Message-State: AOAM531EqjtWE0GAB96qoGLF5G0TQRgpQYh8IBC0+JgRbYnEvGFLqm6w
-        8zyDmZ1PEoNNaiM/XXaMQ20=
-X-Google-Smtp-Source: ABdhPJxWRHc2kwQCDfdoISuiDHm0Dth+7/x/QOIXQ59icPaUp5Kj1BAx6aoQdJDgh64C3NdJ/yzArA==
-X-Received: by 2002:a17:90b:4f83:: with SMTP id qe3mr1309127pjb.56.1639594318545;
-        Wed, 15 Dec 2021 10:51:58 -0800 (PST)
+        bh=tow+Nc6EtPapuXOnqTsuFmvcP25mJfOCoP64WLyCgxo=;
+        b=x/rYLmFCyz9FvGbJa1X2xdwGn/bw3A+vsIsX8IMK5Y5DTmHnJKVxBzAxf1L1xEELa9
+         PjooGOeR2zSJ29FZpeeX3NM1OFKh1TwFT6nMaK4rhK2Qhcm1tWU//hUdxbHC+jYNXBTj
+         AkpDmrsbwgtUXzO90qpvClmIlMe4UwrVbmiYnX/CyCebm49Agc66v7ldiwhsroJrIpOC
+         KJZHGt1lPItd6f0igcfy4CnXfbYR+wLgZ32/z69mPdzvBUI2KyE8xzq+ZLseSMbK6C6U
+         5+UywGtEPVGCnvQlBGb/VBDZ7WqM29vyhy92ZhJr0P9oL5ZDwJipvw3hbH1G1cIdWGmX
+         YpAw==
+X-Gm-Message-State: AOAM530vfIRrfxDbYYhLAuxhYvLDb0I8OGgtEENAcRS4oJC+1npdRpC1
+        nV+3cUo66tb29tWEFTyvLS4=
+X-Google-Smtp-Source: ABdhPJzDBqLJBNCNXf3sgdQxc6oRSil/aTSZEc0K8oy1X/Yx9zqWp8/W+s5EQO6zkCHM11b9sB4Orw==
+X-Received: by 2002:a17:90a:bc92:: with SMTP id x18mr65544pjr.130.1639594320116;
+        Wed, 15 Dec 2021 10:52:00 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:5800:b969:356c:bdef:8748])
-        by smtp.gmail.com with ESMTPSA id f2sm3646428pfe.132.2021.12.15.10.51.56
+        by smtp.gmail.com with ESMTPSA id f2sm3646428pfe.132.2021.12.15.10.51.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 10:51:57 -0800 (PST)
+        Wed, 15 Dec 2021 10:51:59 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
         Stephane Eranian <eranian@google.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 1/5] perf ftrace: Add 'trace' subcommand
-Date:   Wed, 15 Dec 2021 10:51:50 -0800
-Message-Id: <20211215185154.360314-2-namhyung@kernel.org>
+Subject: [PATCH 2/5] perf ftrace: Move out common code from __cmd_ftrace
+Date:   Wed, 15 Dec 2021 10:51:51 -0800
+Message-Id: <20211215185154.360314-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
 In-Reply-To: <20211215185154.360314-1-namhyung@kernel.org>
 References: <20211215185154.360314-1-namhyung@kernel.org>
@@ -74,43 +74,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a preparation to add more sub-commands for ftrace.  The
-'trace' subcommand does the same thing when no subcommand is given.
+The signal setup code and evlist__prepare_workload() can be used for
+other subcommands.  Let's move them out of the __cmd_ftrace().  Then
+it doesn't need to pass argc and argv.
 
-Committer testing:
-
-The previous mode, i.e. no subcommand and the new 'perf ftrace trace'
-are equivalent:
-
-  # perf ftrace -G check_preempt_curr sleep 0.00001
-  # tracer: function_graph
-  #
-  # CPU  DURATION                  FUNCTION CALLS
-  # |     |   |                     |   |   |   |
-   25)               |  check_preempt_curr() {
-   25)               |    resched_curr() {
-   25)               |      native_smp_send_reschedule() {
-   25)               |        default_send_IPI_single_phys() {
-   25)   0.110 us    |          __default_send_IPI_dest_field();
-   25)   0.490 us    |        }
-   25)   0.640 us    |      }
-   25)   0.850 us    |    }
-   25)   2.060 us    |  }
-  # perf ftrace trace -G check_preempt_curr sleep 0.00001
-  # tracer: function_graph
-  #
-  # CPU  DURATION                  FUNCTION CALLS
-  # |     |   |                     |   |   |   |
-   10)               |  check_preempt_curr() {
-   10)               |    resched_curr() {
-   10)               |      native_smp_send_reschedule() {
-   10)               |        default_send_IPI_single_phys() {
-   10)   0.080 us    |          __default_send_IPI_dest_field();
-   10)   0.460 us    |        }
-   10)   0.610 us    |      }
-   10)   0.830 us    |    }
-   10)   2.020 us    |  }
-  #
+On the other hand, select_tracer() is specific to the 'trace'
+subcommand so it'd better moving it into the __cmd_ftrace().
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
@@ -122,79 +91,128 @@ Cc: Jiri Olsa <jolsa@redhat.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Song Liu <songliubraving@fb.com>
 Cc: Stephane Eranian <eranian@google.com>
-Link: https://lore.kernel.org/r/20211129231830.1117781-2-namhyung@kernel.org
+Link: https://lore.kernel.org/r/20211129231830.1117781-3-namhyung@kernel.org
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- tools/perf/builtin-ftrace.c | 35 +++++++++++++++++++++++------------
- 1 file changed, 23 insertions(+), 12 deletions(-)
+ tools/perf/builtin-ftrace.c | 63 +++++++++++++++++++------------------
+ 1 file changed, 33 insertions(+), 30 deletions(-)
 
 diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
-index 87cb11a7a3ee..b28e762c5d54 100644
+index b28e762c5d54..0f8310bd0e6c 100644
 --- a/tools/perf/builtin-ftrace.c
 +++ b/tools/perf/builtin-ftrace.c
-@@ -879,17 +879,7 @@ int cmd_ftrace(int argc, const char **argv)
- 		.tracer = DEFAULT_TRACER,
- 		.target = { .uid = UINT_MAX, },
- 	};
--	const char * const ftrace_usage[] = {
--		"perf ftrace [<options>] [<command>]",
--		"perf ftrace [<options>] -- <command> [<options>]",
--		NULL
--	};
--	const struct option ftrace_options[] = {
--	OPT_STRING('t', "tracer", &ftrace.tracer, "tracer",
--		   "Tracer to use: function_graph(default) or function"),
--	OPT_CALLBACK_DEFAULT('F', "funcs", NULL, "[FILTER]",
--			     "Show available functions to filter",
--			     opt_list_avail_functions, "*"),
-+	const struct option common_options[] = {
- 	OPT_STRING('p', "pid", &ftrace.target.pid, "pid",
- 		   "Trace on existing process id"),
- 	/* TODO: Add short option -t after -t/--tracer can be removed. */
-@@ -901,6 +891,14 @@ int cmd_ftrace(int argc, const char **argv)
- 		    "System-wide collection from all CPUs"),
- 	OPT_STRING('C', "cpu", &ftrace.target.cpu_list, "cpu",
- 		    "List of cpus to monitor"),
-+	OPT_END()
-+	};
-+	const struct option ftrace_options[] = {
-+	OPT_STRING('t', "tracer", &ftrace.tracer, "tracer",
-+		   "Tracer to use: function_graph(default) or function"),
-+	OPT_CALLBACK_DEFAULT('F', "funcs", NULL, "[FILTER]",
-+			     "Show available functions to filter",
-+			     opt_list_avail_functions, "*"),
- 	OPT_CALLBACK('T', "trace-funcs", &ftrace.filters, "func",
- 		     "Trace given functions using function tracer",
- 		     parse_filter_func),
-@@ -923,7 +921,15 @@ int cmd_ftrace(int argc, const char **argv)
- 		    "Trace children processes"),
- 	OPT_UINTEGER('D', "delay", &ftrace.initial_delay,
- 		     "Number of milliseconds to wait before starting tracing after program start"),
--	OPT_END()
-+	OPT_PARENT(common_options),
-+	};
-+
-+	const char * const ftrace_usage[] = {
-+		"perf ftrace [<options>] [<command>]",
-+		"perf ftrace [<options>] -- [<command>] [<options>]",
-+		"perf ftrace trace [<options>] [<command>]",
-+		"perf ftrace trace [<options>] -- [<command>] [<options>]",
-+		NULL
- 	};
+@@ -565,7 +565,24 @@ static int set_tracing_options(struct perf_ftrace *ftrace)
+ 	return 0;
+ }
  
- 	INIT_LIST_HEAD(&ftrace.filters);
-@@ -935,6 +941,11 @@ int cmd_ftrace(int argc, const char **argv)
+-static int __cmd_ftrace(struct perf_ftrace *ftrace, int argc, const char **argv)
++static void select_tracer(struct perf_ftrace *ftrace)
++{
++	bool graph = !list_empty(&ftrace->graph_funcs) ||
++		     !list_empty(&ftrace->nograph_funcs);
++	bool func = !list_empty(&ftrace->filters) ||
++		    !list_empty(&ftrace->notrace);
++
++	/* The function_graph has priority over function tracer. */
++	if (graph)
++		ftrace->tracer = "function_graph";
++	else if (func)
++		ftrace->tracer = "function";
++	/* Otherwise, the default tracer is used. */
++
++	pr_debug("%s tracer is used\n", ftrace->tracer);
++}
++
++static int __cmd_ftrace(struct perf_ftrace *ftrace)
+ {
+ 	char *trace_file;
+ 	int trace_fd;
+@@ -586,10 +603,7 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace, int argc, const char **argv)
+ 		return -1;
+ 	}
+ 
+-	signal(SIGINT, sig_handler);
+-	signal(SIGUSR1, sig_handler);
+-	signal(SIGCHLD, sig_handler);
+-	signal(SIGPIPE, sig_handler);
++	select_tracer(ftrace);
+ 
+ 	if (reset_tracing_files(ftrace) < 0) {
+ 		pr_err("failed to reset ftrace\n");
+@@ -600,11 +614,6 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace, int argc, const char **argv)
+ 	if (write_tracing_file("trace", "0") < 0)
+ 		goto out;
+ 
+-	if (argc && evlist__prepare_workload(ftrace->evlist, &ftrace->target, argv, false,
+-					     ftrace__workload_exec_failed_signal) < 0) {
+-		goto out;
+-	}
+-
+ 	if (set_tracing_options(ftrace) < 0)
+ 		goto out_reset;
+ 
+@@ -855,23 +864,6 @@ static int parse_graph_tracer_opts(const struct option *opt,
+ 	return 0;
+ }
+ 
+-static void select_tracer(struct perf_ftrace *ftrace)
+-{
+-	bool graph = !list_empty(&ftrace->graph_funcs) ||
+-		     !list_empty(&ftrace->nograph_funcs);
+-	bool func = !list_empty(&ftrace->filters) ||
+-		    !list_empty(&ftrace->notrace);
+-
+-	/* The function_graph has priority over function tracer. */
+-	if (graph)
+-		ftrace->tracer = "function_graph";
+-	else if (func)
+-		ftrace->tracer = "function";
+-	/* Otherwise, the default tracer is used. */
+-
+-	pr_debug("%s tracer is used\n", ftrace->tracer);
+-}
+-
+ int cmd_ftrace(int argc, const char **argv)
+ {
+ 	int ret;
+@@ -937,6 +929,11 @@ int cmd_ftrace(int argc, const char **argv)
+ 	INIT_LIST_HEAD(&ftrace.graph_funcs);
+ 	INIT_LIST_HEAD(&ftrace.nograph_funcs);
+ 
++	signal(SIGINT, sig_handler);
++	signal(SIGUSR1, sig_handler);
++	signal(SIGCHLD, sig_handler);
++	signal(SIGPIPE, sig_handler);
++
+ 	ret = perf_config(perf_ftrace_config, &ftrace);
  	if (ret < 0)
  		return -1;
+@@ -951,8 +948,6 @@ int cmd_ftrace(int argc, const char **argv)
+ 	if (!argc && target__none(&ftrace.target))
+ 		ftrace.target.system_wide = true;
  
-+	if (argc > 1 && !strcmp(argv[1], "trace")) {
-+		argc--;
-+		argv++;
+-	select_tracer(&ftrace);
+-
+ 	ret = target__validate(&ftrace.target);
+ 	if (ret) {
+ 		char errbuf[512];
+@@ -972,7 +967,15 @@ int cmd_ftrace(int argc, const char **argv)
+ 	if (ret < 0)
+ 		goto out_delete_evlist;
+ 
+-	ret = __cmd_ftrace(&ftrace, argc, argv);
++	if (argc) {
++		ret = evlist__prepare_workload(ftrace.evlist, &ftrace.target,
++					       argv, false,
++					       ftrace__workload_exec_failed_signal);
++		if (ret < 0)
++			goto out_delete_evlist;
 +	}
 +
- 	argc = parse_options(argc, argv, ftrace_options, ftrace_usage,
- 			    PARSE_OPT_STOP_AT_NON_OPTION);
- 	if (!argc && target__none(&ftrace.target))
++	ret = __cmd_ftrace(&ftrace);
+ 
+ out_delete_evlist:
+ 	evlist__delete(ftrace.evlist);
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 

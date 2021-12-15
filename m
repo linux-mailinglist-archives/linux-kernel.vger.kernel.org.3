@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B211847530F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D30947530E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236158AbhLOGpi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Dec 2021 01:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S235998AbhLOGpg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Dec 2021 01:45:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235960AbhLOGpe (ORCPT
+        with ESMTP id S235774AbhLOGpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Dec 2021 01:45:34 -0500
 Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on0600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e19::600])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74897C06173F
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B34C06173E
         for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:45:29 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q6XPFFXkn4esYJms9++Ae3K35reubOxu5damKv86UG7G0+hmqns2UBPWkjjDik73I7WH9cIrbcrDd+3LMPMxb0WZLxRlvxqJ1CiY5jl6sbYaUMhfIsFq7pC2HByiJ4vFztykDkBrlPImtmEzrPxYcsOM3RdWU5hwkLE90B0qID1qV4LfeCzvyz1PSu5ozWAmNEfLfns84fvzvLCaHX+P/13V1KRecmJxUXLD6mzX5QNgEmGUkeZiVFT8DSsPXkLOswPO+wZKbLrcxkXqrwGJ+MikSxPQmU0bocayOb+ygPs86vLU/sbFpvH5aWpbchK0n80u8XRsmzjgx6TpKJuNMQ==
+ b=L26RWQ+lQWj4Uf6msk2qFfZ1efxYSq1bJwBJcxe2/9pPL6S4K6kSczaZesZL+mWEPgTMgXHKwfEh7d9XL/deUnIHGVpUXztiFBc3UhEAi9SWp21QUj3RVqlJvABb1jB8b0o7/D3uO+9WSiHv0Vb69BWgKhxI+D8VsvWTi32byMYBzUK2NkbbyDmgnBWGDEBpQj5Rx4/wCFyh3R/YjI+Myes3mnoxu/BmbetbSNSucqw32mfQB+KeDuPiwCaZ96yqtDIkhm3Vnb2vNnGU9DpbdbxfV74wWCaNgzGeLP0rwTIzrhTVUkcc/XXtV38I/ViNSe3zt67aL9YedeoZ+I2OGw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Tfg0sMAM8fxxdC6eQ8XeK/4lMWH8vFXyGKrZdrW9Uug=;
- b=Y+4mfNngXHyo4WSOk8m9ZxUx8RX/+HfYW8mW1mtcOt3js28zfuyKZdQ6uDX4l0lrms51uAFVoopHtb+UDe14lv+DID5qxPG4AiymM2AC/k0VJRYbPpqv2UTV6gEaLiihJJuuVwC1A0B9EculCDsxM2wmCgmpa3DapwoIy2swz66NztEhm256L4g8f1pkR9mQIRNXQS9CuqbUfSEZkXVOec4O6iujFHSwA6Ak2aSsh6+sh6Ia2h0FdVwSydEDqFdsx8YIAnVcIXOuNpT1E+OSHwdL0xzbd+AQ08M3a0tst5eikKI3KQ2h/4zYocPCcCQ/GvRnID6KThDpbwr9jY7ZYw==
+ bh=KuKZ8Pp5OoKCaatHC4wZ7EyUM5TYF66Dvkuh8U4yTxw=;
+ b=KWYJKaLMIi+Tr8qVHZilElbLcrcJdFvThP0bc3kcyTJUno0ndLrkqX3hEgv7Q0RfqIR8VC83PVOtP4zJF07Ertmg/xJVWcO/oStPf39UZ7JFgL68//de/WMht+Q4Dxh70HsizGTyJTCj/DT/QyywgyvAJgQyUH3jQKkpr82xvEbIBeBnCAOj5EY89s8mzMA5vKD19HetsZB295ICSDLlrmqCjIVYqgdJFvytqMb50haAR0Am0H6OFsJiIehnZznhb/cPOAhJbAHeKj+hZJU0sQjfT3FgG9tGtyrN6tfUY2ZGmCOKH0lw46lZFgfQZMzo5OpvR0CT/3jDFs4wwGlPbg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
  dkim=pass header.d=csgroup.eu; arc=none
@@ -29,11 +29,11 @@ Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
  by MR1P264MB2147.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:11::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Wed, 15 Dec
- 2021 06:45:12 +0000
+ 2021 06:45:11 +0000
 Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
  ([fe80::fc67:d895:7965:663f]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
  ([fe80::fc67:d895:7965:663f%2]) with mapi id 15.20.4778.018; Wed, 15 Dec 2021
- 06:45:12 +0000
+ 06:45:11 +0000
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
@@ -47,14 +47,15 @@ CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
         "will@kernel.org" <will@kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v5 03/11] mm: Add len and flags parameters to
- arch_get_mmap_end()
-Thread-Topic: [PATCH v5 03/11] mm: Add len and flags parameters to
- arch_get_mmap_end()
-Thread-Index: AQHX8X9OeEFvyNlKhUOga6+NHQS3mg==
+        <linux-arm-kernel@lists.infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>
+Subject: [PATCH v5 02/11] mm, hugetlbfs: Allow an arch to always use generic
+ versions of get_unmapped_area functions
+Thread-Topic: [PATCH v5 02/11] mm, hugetlbfs: Allow an arch to always use
+ generic versions of get_unmapped_area functions
+Thread-Index: AQHX8X9OFivBvoz9ekm2yhHkjqMGSA==
 Date:   Wed, 15 Dec 2021 06:45:11 +0000
-Message-ID: <38f7d0c0e67c8bed3b2f4326339a8ee18fb7daca.1639550392.git.christophe.leroy@csgroup.eu>
+Message-ID: <50d176dcf3942894a8dcbc42b7b767b065df9af0.1639550392.git.christophe.leroy@csgroup.eu>
 References: <cover.1639550392.git.christophe.leroy@csgroup.eu>
 In-Reply-To: <cover.1639550392.git.christophe.leroy@csgroup.eu>
 Accept-Language: fr-FR, en-US
@@ -64,121 +65,230 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=csgroup.eu;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 98336235-f06f-41fa-6ffa-08d9bf96718c
+x-ms-office365-filtering-correlation-id: 890d07ad-38aa-498e-e067-08d9bf96716f
 x-ms-traffictypediagnostic: MR1P264MB2147:EE_
-x-microsoft-antispam-prvs: <MR1P264MB21470DC5FE0D96C2095A1498ED769@MR1P264MB2147.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:3173;
+x-microsoft-antispam-prvs: <MR1P264MB214792F75AE27BBDC596640EED769@MR1P264MB2147.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jbDjX/8XxNQscKX66rOK7W9/b+8JTjQUP8fJdKK2bgRUu7aj3Gu2WM1O2Z2Nj3EyCCSIw4z2vArFdjYf/ajeAnxEg0IGSRNSraPoxXZxNDC8tnuuwBvrpC4u7wYTrv6K5XuP8relaOQY0Cj7yv3xoSB3iO887Ik8u+adFjj70UDD/MfF7IB3xP7oLBmWZ/lg8jntQYU8/Zrz8tH7AqcPKVs4E7GxVP0BbUDMs4aRN6HoENl1BwHvnwVWvOGV2Y2L9x0hPi2meoU4Obl/4L+cSue13Lf3b1PkzVC0LxQJhOs9kNl2g6x3VzNxYdF1vI/ggiq8lUZwVWavSLL/H3l/o//X2JcQBOSU3O1TuPVWMCVOcIzHCOpP8R7quF+sHC/Fz13sXeTzpe7cPju/4WHzQJb9Ym1HNgJECllbUWB6z7At0p4n1L/8DDtGWbLFWTTshQcb2Xo7dgo56ZfN81YEH/RA8/pA9tifJkjTvTPdZWRx4uREBRQQslR3dwEcZjoIqTG0S5pguqIvSYsTW7ldJQjUFsUOqAtappi70wrdbpo+zDW3Sd7ZPTNL48k10QrMcTp9RRHIYGeLdy4GSJv2vTL4WVeoWSBdTXXXKnME9j5XVkgQkdmEQtrBK4wej0Ijau0+qi/Ct8sTzOMb22CUVjCCKH9DXqP5SwHAhcaPlLCJbxCjJP9JM/G9bm/fbmkgojTNKYbJDAvupdn0o26vZg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(110136005)(36756003)(6486002)(2906002)(86362001)(5660300002)(508600001)(26005)(186003)(38100700002)(8936002)(44832011)(54906003)(316002)(66556008)(66446008)(66476007)(64756008)(6506007)(76116006)(91956017)(8676002)(66946007)(4326008)(2616005)(122000001)(83380400001)(6512007)(71200400001)(38070700005)(7416002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: JuLIPca/In4EmZzAm9LN26YXx0hCc+rrT7QWQfWK5ICRyHg0u8TcuC4iBFZ+Pv/9I/y4s53EFYqYdiEqLyUoJOR6g8u013ThutLoI1v+orSk4Xy0yhG5lSigtAWlOHnrxhPl4a6ekc1iz/98EOFMoxmzhrFDr5MUNXMvwPmH7No+Le9w4UhRzL2WWIXqNMWLA+RgoZ5rJt/8Sj0+Zhcn/Y6iq7HWJKPU/H7Vno2ZEycKPNUPgxV0i9wbrTN2GsWgqTOhTxCLrb5xCbQSMJJ/kaHn2LTNmLLzjj4YUQRTR/rf6WSmb//U1d7VoUHifvQhTYI4UH40AvLl3cpvS6Pagc9xFJ8FCR9pCoj9r42ivDD1AVbaDjXb9vn1EAkTkFrXFjXdT7BV5JatVKgFZ0HCu8TrWWYo86RkJXHCqm7DKycYgHGJ0CjwqclbB2ATcDHodUd+V4nV3mDpgcX6fMfcPnN+Xa5hdfPwh6InrSCRS/ew7Lr50N6VORIyF9uHRmAp09QMwhdxaYq/lY1mKspzNZVydNrNh2NKFyj0y2ob8/jH4e8zTvnDptUrT+QoCv/Cr8mJxrYesv6FYgeqG79JItg50QbR7mSTQsXCPMdLGfo98DMTKzcMRu6T75ke3mz66MDS2Yzrehf6ExYoCWJYKtfFu0o0Ls4bI8DuKwqWVLiohhkmGsdO7uxbSYMLDsgTbHdTlVZTwxs2MQt2lrYS/XzGtqREeW8SIhKYut/5xQY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(110136005)(36756003)(6486002)(2906002)(86362001)(5660300002)(508600001)(26005)(186003)(38100700002)(8936002)(44832011)(54906003)(316002)(66556008)(66446008)(66476007)(64756008)(6506007)(76116006)(91956017)(8676002)(66946007)(4326008)(2616005)(122000001)(83380400001)(6512007)(71200400001)(38070700005)(7416002)(41533002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?GNTY9sBA5lGs4puKtE6ddAPQXN5pTys1pNbuxysICUQ6pxx6zb6QeI8KqC?=
- =?iso-8859-1?Q?G7Y6IVGflsR0MABOq/2JBSbiV/GfA+8xXP5CGarzROZKAz1cvEXYtUuZZi?=
- =?iso-8859-1?Q?OAzM21Etd4rmphnMsziyErl+TDI2qfThN8N8TJ7bWL+ctBSCE/4wIzz06m?=
- =?iso-8859-1?Q?LHAc7Lvko1RLQZDO5DsFb9fw/saICEvjqH7Rf857Mr1YbLt+h+yhQID5ch?=
- =?iso-8859-1?Q?s3sxUsgjqwVeIrUt0YjsK/tlIdZUsoenUJuUAhbH47vmb9FIU/o3PqpYlq?=
- =?iso-8859-1?Q?ggaycYFK+RdJ+tclHXj/L8MUQxsL7F/AXNrvrJd11/No3WZYPbcyZH4m7o?=
- =?iso-8859-1?Q?GFhTedkEYmPL9OtOOmUOnyW26mKE+GI+WYD981ciECzxmhHcMxRnyoJhmf?=
- =?iso-8859-1?Q?KgEwyCki6BNINE5GWrFEfBBomX8ZL5JyU3lksAqda9keCkkscIO2jgxnNG?=
- =?iso-8859-1?Q?1Im95z3lw85BFqA0zyw9kdsAF/5wgTHeAuL6Of0Es4q+YQJB3BHInYZi4I?=
- =?iso-8859-1?Q?ByjPiQsIT0zkv8+Un112aLg8k0MiBObeNrpo24QycYH/Vu44o7ECffa1R4?=
- =?iso-8859-1?Q?rgGihhaPNs8jw6Ov6UR/3YnXKunf/6q6VjlEs04NvfO8zkTDQK9yKZPvef?=
- =?iso-8859-1?Q?lQ1pCRMKnuu/3vuYdKl2hIRkAlAi3goOTjNNK4f+FBndLiTKxGKj/QxDnD?=
- =?iso-8859-1?Q?IlUDz/KJLXkG/H5zlJqx7G9c4uccVo2TxMLyhlZQeyCcf+ppItKDKaUnHP?=
- =?iso-8859-1?Q?Ek8eTVKsPBnyThlpLvuNWVG2uaIC9uHx0K9MMmJRNGKXTORazqo1p0qCiq?=
- =?iso-8859-1?Q?o3vTlJq4ME1zTY67p9j43p9+FQSb3mBO5QS+j6htrH6+Z+FooBL1CwlTR/?=
- =?iso-8859-1?Q?EXqJUWPUoUNLZ9pNOS2Et50JFw/Nsm7WQE1a8eLnuv+2/tPjMQqgZUvuiz?=
- =?iso-8859-1?Q?4cZHLkX8E1KfFXknWTEMnl2yWKfQlgLtRsflRiXaKS49gqk8zUblCXeQB7?=
- =?iso-8859-1?Q?PF2XwbfQGrLY68YFKTlB/EvmZoVbKsgELMIKda74KNhiU5/3Stc29K2im1?=
- =?iso-8859-1?Q?1oDMXr81cYid9L5pjlA+6SW0thXOwDO1R7Wro0+77mNdX7PbNl4ibEZhoj?=
- =?iso-8859-1?Q?207I6vpCO/FRL5k0tBjm6SgZpcc6emFP0W/mhU4bsdU2pO80xlU76eVpzl?=
- =?iso-8859-1?Q?NxufAvCOAzyA3yPAtR/2XfVGQUH9bXaVTeRJZYk31pqAATC5a3YA62EGAS?=
- =?iso-8859-1?Q?IXLVNN6g6ZI4sYkX7H+9NFVtDNJBH4D+PLklLTgL9eLLerXz9N2yi9HNV4?=
- =?iso-8859-1?Q?W4FxBobTAHWgkOM0a+hvUpFKp/pbuMq3rU417mvPevNvyB4ZK79OL7U4gF?=
- =?iso-8859-1?Q?GrClFjXShJwHPSfMAlaXx1NCpMg3waoE26cLyBd1YYCVV/U9T74MgCZtJf?=
- =?iso-8859-1?Q?gV2Z4gDsvl6KtHyW3AU8bH7O+sLJts+VWzMc2yv5+T3/YFcIKBAojEr1ly?=
- =?iso-8859-1?Q?jpoDfaxZ2fMHrXjHibQ931IF1tLJ8774qq4arDPf6ZyBgTHwuUn+k9V0ZY?=
- =?iso-8859-1?Q?sakYs2wNo6wtvHPVHnI0nZ46BW36iclFHIOyaLpVCZYK4WlQXqoSTE37nb?=
- =?iso-8859-1?Q?ANy16QrOcH+trx9G82puGdAFN+lMgLlOtox3uIBD6mu74ZsoOzvQC8f2Q0?=
- =?iso-8859-1?Q?DIs984b6GWrcgUaDFVb2M6VtaFh3+th3qkDzak2L0FkCPr1EsvM/IVqHmy?=
- =?iso-8859-1?Q?5FF9vh09vT1yDZ5qzVQ1hFjIM=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?9WpF00yis3ZLCq3rB3Sd8JsaXgR5VFp5U6svB/ofSrDDJpsHWe+WxoRIm0?=
+ =?iso-8859-1?Q?C/LTeEfsw4sCI+8+r4QezgxJ3a5WxzO7u0LQUgLONX4H6V8/YMSQtpch2V?=
+ =?iso-8859-1?Q?yb+cwVVjBKMQI3ukY5b6dK/XkD2djlUZg/DGYr8j7XTglcUQIws4zDT5kd?=
+ =?iso-8859-1?Q?SqEjdR+KC/fsmsSUIqBMRpmKLbo73ucuUkG6CLyLHLMkiExtv/RL9md8uV?=
+ =?iso-8859-1?Q?mO5XPS5A84LSfCQp8vzP0Rb4TsteIaaLoA/YOXXP8fz8rTxrXrPUFFzWgZ?=
+ =?iso-8859-1?Q?tMrgJpubT+c513z7oAQQahCD3v7An2FxJzNi1oKudNaHsifVCzybhWS2B6?=
+ =?iso-8859-1?Q?aIq+KNn2RkOOYZdAzksg0/IioNyeBkalxvzXROdT0ecTXOn2gbxf85RaAr?=
+ =?iso-8859-1?Q?XIE06k/juDz4mfox2OISTjfSCqiO96a8zP5dLjTElcDd0dNamaA7Gv7cG/?=
+ =?iso-8859-1?Q?hiJ96GfNS5+YFAf66UMbV1BCA56Pwpw/qXB9s30jKVMBlYZUAdPJ8uKtCt?=
+ =?iso-8859-1?Q?ZsJvoAYhK6dlgrvRy5CD0uMGch5kBowST1bfc1nT69WHG3CgSNX7zriAwa?=
+ =?iso-8859-1?Q?KZw8indy+aDtEtFBFI2cYjZtsgkUiryr1Jon9Z/bvKE7rQzPb5O+JCdwwD?=
+ =?iso-8859-1?Q?ry1yxuBgChDeg9hKviDkNEfahkP6bGoZ2wK7KVFY/DKumyFtUmiRVdghjA?=
+ =?iso-8859-1?Q?XEZS8PPX+rhQspVbMxTfq8aXct9KvezTHDx4s24YTV0iC2q0C765CxrPIR?=
+ =?iso-8859-1?Q?9XBkyztlsCmDDpoz+vk3HvGfxJIreFPFRpbHkU9vJ+zQ1U5xh7XUfXc3ih?=
+ =?iso-8859-1?Q?eqU2a/pU3AEKyOSxkoAZU3gj04shQvLd2LWBAu4ODDQel40Vbizr+MlxMU?=
+ =?iso-8859-1?Q?K4ze2z3aJZLIYb0tRU4UfO+xre4LiR/HRDhtJl+4OTzpRb5aJ/SICIsYi7?=
+ =?iso-8859-1?Q?zhVH0ewGFPHbqEcXUDKv5vjvxyfAnJG5OXLfZ+V3Y/Id0z/0vx1Hwhi1VL?=
+ =?iso-8859-1?Q?7VGwFbwFDQFXb6WXojif+98xAkifwsSZAWr74FuOr3D1PrVYBGh65Tybvt?=
+ =?iso-8859-1?Q?ORH41xzY9p/zgpGPeFZuZ9tl4zmIe0VONHiwvIlE68eFq3YPE7bE4waMqC?=
+ =?iso-8859-1?Q?Qr6PN1zJ9shozRP8PcA3TRrdtCT7/hwvO3S6Djy+syWLJKk9nceITRWwqH?=
+ =?iso-8859-1?Q?N4lTzHH9uIsHOSr1EKgdrienNrL6557J2L6W3qu1veF8Oc2Ov6MSN9dbTy?=
+ =?iso-8859-1?Q?brwvGIUxHUMR28YjiiUPRgklJciV5EmP/gZCAPL0dxN95+6plNNx8PFwnA?=
+ =?iso-8859-1?Q?cVRFwzvz41aFpUCUhcuWu/lXX9pazXQ3LYuo7ZHsbZPPCGbvn0apMYI+SG?=
+ =?iso-8859-1?Q?8guR9Tb8EMbSFQk0yNXN39WKZuOsSe9LzkV/Nqzz+w3WDK7htwbFZLBkzp?=
+ =?iso-8859-1?Q?YXHX0Yz1q84v4I7TJUh50P/uLFhLB0Hmh7HqJjTHa4r22a0rleSwupACSw?=
+ =?iso-8859-1?Q?j8k1JUjSLD+UahpvhF2YYHmPZgT3yL2+d1iIVmUHo+O5smGqlwfwR5pBfh?=
+ =?iso-8859-1?Q?kVJMl2fKLSK0PfxiGdSzPMsLWaahxWpJRzsIrqd+Bhqal6nouNPbUXAoG0?=
+ =?iso-8859-1?Q?m5eRYM7L0MwrxjAvLTPirN5J2zAhFttUL+OcPA/3l6uo3FTP6z4rA3do7H?=
+ =?iso-8859-1?Q?AtDUyInvHxkWmLdIKKCNEh+D52fHsh7mnTF9fHzAKunZtigG28ZM9xgBPK?=
+ =?iso-8859-1?Q?Zk5efZXeksoaQJqbLBporSPTU=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
 X-OriginatorOrg: csgroup.eu
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98336235-f06f-41fa-6ffa-08d9bf96718c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 06:45:11.7846
+X-MS-Exchange-CrossTenant-Network-Message-Id: 890d07ad-38aa-498e-e067-08d9bf96716f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 06:45:11.5387
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cy3fnxGmn7nkI312x1S6rHS+dFqzIX8V+PpHPkV4u2cLe5K1NvpIasM4L9cSbg+ao8aa7gzCPZEbgrd0v0NcP406VF/mMVrJOPQ3WgDCDzA=
+X-MS-Exchange-CrossTenant-userprincipalname: 7GtL1reS3uDvvkTRL5y04udJbcv6GijHyRkvexwyJPsR0Jlqe69MnRxHaBIhnIxJvvdedDuD3kH8tEwmdoMeTYnmM6Wg5vOa9fy0J1WWVLI=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2147
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Powerpc needs flags and len to make decision on arch_get_mmap_end().
+Unlike most architectures, powerpc can only define at runtime
+if it is going to use the generic arch_get_unmapped_area() or not.
 
-So add them as parameters to arch_get_mmap_end().
+Today, powerpc has a copy of the generic arch_get_unmapped_area()
+because when selection HAVE_ARCH_UNMAPPED_AREA the generic
+arch_get_unmapped_area() is not available.
+
+Rename it generic_get_unmapped_area() and make it independent of
+HAVE_ARCH_UNMAPPED_AREA.
+
+Do the same for arch_get_unmapped_area_topdown() versus
+HAVE_ARCH_UNMAPPED_AREA_TOPDOWN.
+
+Do the same for hugetlb_get_unmapped_area() versus
+HAVE_ARCH_HUGETLB_UNMAPPED_AREA.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- arch/arm64/include/asm/processor.h | 4 ++--
- mm/mmap.c                          | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ fs/hugetlbfs/inode.c     | 17 +++++++++++++----
+ include/linux/hugetlb.h  |  5 +++++
+ include/linux/sched/mm.h |  9 +++++++++
+ mm/mmap.c                | 31 ++++++++++++++++++++++++-------
+ 4 files changed, 51 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index 6f41b65f9962..88c696350ace 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -91,8 +91,8 @@
- #endif /* CONFIG_COMPAT */
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index 49d2e686be74..c7cde4e5924d 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -195,7 +195,6 @@ static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
+  * Called under mmap_write_lock(mm).
+  */
  
- #ifndef CONFIG_ARM64_FORCE_52BIT
--#define arch_get_mmap_end(addr) ((addr > DEFAULT_MAP_WINDOW) ? TASK_SIZE :\
--				DEFAULT_MAP_WINDOW)
-+#define arch_get_mmap_end(addr, len, flags) ((addr > DEFAULT_MAP_WINDOW) ? TASK_SIZE :\
-+									   DEFAULT_MAP_WINDOW)
- 
- #define arch_get_mmap_base(addr, base) ((addr > DEFAULT_MAP_WINDOW) ? \
- 					base + TASK_SIZE - DEFAULT_MAP_WINDOW :\
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 7ac6a07ff382..ad48f7af7511 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2113,7 +2113,7 @@ unsigned long vm_unmapped_area(struct vm_unmapped_area_info *info)
+-#ifndef HAVE_ARCH_HUGETLB_UNMAPPED_AREA
+ static unsigned long
+ hugetlb_get_unmapped_area_bottomup(struct file *file, unsigned long addr,
+ 		unsigned long len, unsigned long pgoff, unsigned long flags)
+@@ -244,9 +243,10 @@ hugetlb_get_unmapped_area_topdown(struct file *file, unsigned long addr,
+ 	return addr;
  }
  
- #ifndef arch_get_mmap_end
--#define arch_get_mmap_end(addr)	(TASK_SIZE)
-+#define arch_get_mmap_end(addr, len, flags)	(TASK_SIZE)
+-static unsigned long
+-hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+-		unsigned long len, unsigned long pgoff, unsigned long flags)
++unsigned long
++generic_hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
++				  unsigned long len, unsigned long pgoff,
++				  unsigned long flags)
+ {
+ 	struct mm_struct *mm = current->mm;
+ 	struct vm_area_struct *vma;
+@@ -282,6 +282,15 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+ 	return hugetlb_get_unmapped_area_bottomup(file, addr, len,
+ 			pgoff, flags);
+ }
++
++#ifndef HAVE_ARCH_HUGETLB_UNMAPPED_AREA
++static unsigned long
++hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
++			  unsigned long len, unsigned long pgoff,
++			  unsigned long flags)
++{
++	return generic_hugetlb_get_unmapped_area(file, addr, len, pgoff, flags);
++}
  #endif
  
- #ifndef arch_get_mmap_base
-@@ -2139,7 +2139,7 @@ generic_get_unmapped_area(struct file *filp, unsigned long addr,
+ static size_t
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 00351ccb49a3..df899d1937ff 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -513,6 +513,11 @@ unsigned long hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+ 					unsigned long flags);
+ #endif /* HAVE_ARCH_HUGETLB_UNMAPPED_AREA */
+ 
++unsigned long
++generic_hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
++				  unsigned long len, unsigned long pgoff,
++				  unsigned long flags);
++
+ /*
+  * huegtlb page specific state flags.  These flags are located in page.private
+  * of the hugetlb head page.  Functions created via the below macros should be
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index aca874d33fe6..2584f7c13f69 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -144,6 +144,15 @@ extern unsigned long
+ arch_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
+ 			  unsigned long len, unsigned long pgoff,
+ 			  unsigned long flags);
++
++unsigned long
++generic_get_unmapped_area(struct file *filp, unsigned long addr,
++			  unsigned long len, unsigned long pgoff,
++			  unsigned long flags);
++unsigned long
++generic_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
++				  unsigned long len, unsigned long pgoff,
++				  unsigned long flags);
+ #else
+ static inline void arch_pick_mmap_layout(struct mm_struct *mm,
+ 					 struct rlimit *rlim_stack) {}
+diff --git a/mm/mmap.c b/mm/mmap.c
+index bfb0ea164a90..7ac6a07ff382 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2131,10 +2131,10 @@ unsigned long vm_unmapped_area(struct vm_unmapped_area_info *info)
+  *
+  * This function "knows" that -ENOMEM has the bits set.
+  */
+-#ifndef HAVE_ARCH_UNMAPPED_AREA
+ unsigned long
+-arch_get_unmapped_area(struct file *filp, unsigned long addr,
+-		unsigned long len, unsigned long pgoff, unsigned long flags)
++generic_get_unmapped_area(struct file *filp, unsigned long addr,
++			  unsigned long len, unsigned long pgoff,
++			  unsigned long flags)
+ {
  	struct mm_struct *mm = current->mm;
  	struct vm_area_struct *vma, *prev;
- 	struct vm_unmapped_area_info info;
--	const unsigned long mmap_end = arch_get_mmap_end(addr);
-+	const unsigned long mmap_end = arch_get_mmap_end(addr, len, flags);
+@@ -2164,17 +2164,25 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
+ 	info.align_offset = 0;
+ 	return vm_unmapped_area(&info);
+ }
++
++#ifndef HAVE_ARCH_UNMAPPED_AREA
++unsigned long
++arch_get_unmapped_area(struct file *filp, unsigned long addr,
++		       unsigned long len, unsigned long pgoff,
++		       unsigned long flags)
++{
++	return generic_get_unmapped_area(filp, addr, len, pgoff, flags);
++}
+ #endif
  
- 	if (len > mmap_end - mmap_min_addr)
- 		return -ENOMEM;
-@@ -2187,7 +2187,7 @@ generic_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
+ /*
+  * This mmap-allocator allocates new areas top-down from below the
+  * stack's low limit (the base):
+  */
+-#ifndef HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
+ unsigned long
+-arch_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
+-			  unsigned long len, unsigned long pgoff,
+-			  unsigned long flags)
++generic_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
++				  unsigned long len, unsigned long pgoff,
++				  unsigned long flags)
+ {
  	struct vm_area_struct *vma, *prev;
  	struct mm_struct *mm = current->mm;
- 	struct vm_unmapped_area_info info;
--	const unsigned long mmap_end = arch_get_mmap_end(addr);
-+	const unsigned long mmap_end = arch_get_mmap_end(addr, len, flags);
+@@ -2222,6 +2230,15 @@ arch_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
  
- 	/* requested length too big for entire address space */
- 	if (len > mmap_end - mmap_min_addr)
+ 	return addr;
+ }
++
++#ifndef HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
++unsigned long
++arch_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
++			       unsigned long len, unsigned long pgoff,
++			       unsigned long flags)
++{
++	return generic_get_unmapped_area_topdown(filp, addr, len, pgoff, flags);
++}
+ #endif
+ 
+ unsigned long
 -- 
 2.33.1

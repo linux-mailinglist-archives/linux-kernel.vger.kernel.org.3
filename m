@@ -2,119 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B88D5475E2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C45C3475E30
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245147AbhLORFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:05:54 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:41917 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245123AbhLORFx (ORCPT
+        id S245153AbhLORHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:07:37 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:39692 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235069AbhLORHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:05:53 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id A35EC3200E18;
-        Wed, 15 Dec 2021 12:05:51 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 15 Dec 2021 12:05:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=OhgIRedfGWAx9cJ8qYxsz4LKwjC
-        8GH8ThcJrbFThvzY=; b=ELptAK2glnmrEX/tlDCjsMGjva3Wo5hvNBMpqSxyIyK
-        vIZ4Qe1hmZDhBiy/RJ2wrimEkMBC3F7C6cvc9nGrfWR7/yTYwIA5aV8h4rPmBTiU
-        e++82RpaNl1bmqthgZSUcUXY+ZAfFgGktbyHii0NGwg+kWt4V9E1Pcn6kf3sQcgT
-        5CyY0HHReDvVX+m9KA/+nQ85AT+h+2lUA6zd9S1oj/iwn8EZZOCm4Rk2203ZkEkI
-        7SdM1kb/l7zayIuEu5UW8RcxU7twtFXDCnl0+/084FC6sD4CpC3g7boAxSiSHEuL
-        Z2/bvA5Js0SowNRWrzAix82ycIyUwCdBZ5Bh5Kja3Wg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=OhgIRe
-        dfGWAx9cJ8qYxsz4LKwjC8GH8ThcJrbFThvzY=; b=aFV/ERaJbKJz0ym2JVR2XS
-        8VJS+ayBjo9LdZF5Jt6pAl8hMEEdQyrkUOwDJPyxzn24NKJ2MoT++MQtGCRe91Ys
-        /lcjm+YG+BokWHZ2h8eL7iSNjnVNGZcFntmcp1v9x7qkANMoIXKdIxruRoeRO6Tc
-        ZEPZPHMmYnhYB2XSbb+TcFtb38MFIRWkNiX2Y8ErRzBanNW0F3jXD4ajKMpQr1j+
-        BchR04euDyxvvvKJgaF8f74dIZX8K9SJ41/TXLonGbTSsDn+fyXga/fTxGw6Le+w
-        k2eRpdcFiEtjWX/HVUt+57SfC6xv8ChZGvLGJyReDtMne+EoDn7ksGmCbG1mFhHg
-        ==
-X-ME-Sender: <xms:bSC6Yesq8s7EioXwCp0KqwA0tPgFfD3P5crdNtG-Kvi6gHuop0KnFg>
-    <xme:bSC6YTeERVKpjw4vpFmo0bOiORtEln9gY1b_QDw9On2KBsr8p0a_Mhc_JHJCccN0n
-    J52Kq3K4MM8eiHAKxE>
-X-ME-Received: <xmr:bSC6YZwNdwjhPTn9hA5o9sT2JT2-SIsNw0gq09TFVc_lsRyplI3urRAwQyzFJXVVNkCzQuOuoBfT6P8OmBMkqbRomabrpWtn>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrledvgdeljecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculdefhedmnecujfgurhepfffhvffukfhfgggtuggjsehgtderredttddv
-    necuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghksehsth
-    iftgigrdighiiiqeenucggtffrrghtthgvrhhnpeegheehfeffgeekveehtdfhgfduhfeg
-    fefgtdehhfektdelffevkefgueffhedtieenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsthiftgigrdighiii
-X-ME-Proxy: <xmx:bSC6YZNfnqlPaLfE0WJfreOdy721wA_ZhJXA1VYCebz_rNO7K2K4Yw>
-    <xmx:bSC6Ye-HFFRdWLeqxtGKVARSXlKRnp_EArDzQx2vWgWbJ2QACm71Aw>
-    <xmx:bSC6YRU3GVJQI04enPJ1HBtw_PXDcza37gmmr-Cnet_8s8JhEuJ6sQ>
-    <xmx:byC6YVksty5ECBsl70hlQCRTxc5aYVMD_5AkFuU4eBTbJnpOdF4w9g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Dec 2021 12:05:49 -0500 (EST)
-Date:   Wed, 15 Dec 2021 11:05:47 -0600
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Lei YU <yulei.sh@bytedance.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
-        openbmc <openbmc@lists.ozlabs.org>, linux-aspeed@lists.ozlabs.org
-Subject: Re: [PATCH] ARM: dts: Add openbmc-flash-layout-64-alt.dtsi
-Message-ID: <Yboga8RUoYrXoPB1@heinlein>
-References: <20211210093443.2140557-1-yulei.sh@bytedance.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tdFx5lleV3FJ2Qwx"
-Content-Disposition: inline
-In-Reply-To: <20211210093443.2140557-1-yulei.sh@bytedance.com>
+        Wed, 15 Dec 2021 12:07:36 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1639588056; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=klyI/FnBhc37XmbYzTlJCHIPfhTWx4QvxgD/m6XT+ZA=; b=mHnZdU4A8vj7p8QPfz6Bl/bALoTUNm5lEjar4yrNNDwr59BV/DyRjzHy9Yq4oJzoalPp7grl
+ /70yub+oh3p0JqwgqAms00m39BmXdqhlsGVu/DdnF45TO5ijMQI5KWWRvoOCcMgfcXxpVrzi
+ nGt9PIKvCOmNJAZBInK+SWgnWjo=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 61ba2092df12ba53c47dc137 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 15 Dec 2021 17:06:26
+ GMT
+Sender: bgodavar=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 645CDC4338F; Wed, 15 Dec 2021 17:06:25 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from bgodavar-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: bgodavar)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 48447C43616;
+        Wed, 15 Dec 2021 17:06:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 48447C43616
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Balakrishna Godavarthi <bgodavar@codeaurora.org>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com,
+        bjorn.andersson@linaro.org
+Cc:     mka@chromium.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, hemantg@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, bgodavar@codeaurora.org,
+        rjliao@codeaurora.org, hbandi@codeaurora.org,
+        abhishekpandit@chromium.org, mcchou@chromium.org,
+        saluvala@codeaurora.org
+Subject: [PATCH v4] arm64: dts: qcom: sc7280: Add bluetooth node on SC7280 IDP boards
+Date:   Wed, 15 Dec 2021 22:36:03 +0530
+Message-Id: <1639587963-22503-1-git-send-email-bgodavar@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add bluetooth SoC WCN6750 node for SC7280 IDP boards.
 
---tdFx5lleV3FJ2Qwx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Balakrishna Godavarthi <bgodavar@codeaurora.org>
+---
+v4:
+  * updated commit subject
+  * Removed drive strength for bt_en
+  * updated swctrl_gpio name to sw_ctrl
 
-On Fri, Dec 10, 2021 at 05:34:43PM +0800, Lei YU wrote:
-> Add openbmc-flash-layout-64-alt.dtsi to describe the partitions of the
-> secondary flash for OpenBMC's 64M static layout.
-> The layout is the same as openbmc-flash-layout-64.dtsi and the labels
-> are prepended with "alt-" for the partitions.
->=20
-> Signed-off-by: Lei YU <yulei.sh@bytedance.com>
-> ---
->  .../boot/dts/openbmc-flash-layout-64-alt.dtsi | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 arch/arm/boot/dts/openbmc-flash-layout-64-alt.dtsi
->=20
+v3:
+  * Addressed reviewers comments
+  * Added pin config for sw_ctrl line.
+v2:
+  * merged two patches into one
+  * Removed unused comments
+  * Removed pinmux & pin conf.
+  * Addressed reviewers comments
 
-Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
+v1: initial patch
+---
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts  |  4 ++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 36 ++++++++++++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp2.dts |  4 ++++
+ 3 files changed, 44 insertions(+)
 
---=20
-Patrick Williams
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+index 9b991ba..19bd228 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+@@ -56,6 +56,10 @@
+ 	};
+ };
+ 
++&bluetooth {
++	vddio-supply = <&vreg_l19b_1p8>;
++};
++
+ &ipa {
+ 	status = "okay";
+ 	modem-init;
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index d623d71..a146d0d 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -14,6 +14,11 @@
+ #include "pmk8350.dtsi"
+ 
+ / {
++	aliases {
++		bluetooth0 = &bluetooth;
++		serial1 = &uart7;
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		label = "gpio-keys";
+@@ -422,6 +427,23 @@
+ 				<&tlmm 31 IRQ_TYPE_EDGE_FALLING>;
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-1 = <&qup_uart7_sleep_cts>, <&qup_uart7_sleep_rts>, <&qup_uart7_sleep_tx>, <&qup_uart7_sleep_rx>;
++
++	bluetooth: bluetooth {
++		compatible = "qcom,wcn6750-bt";
++		pinctrl-names = "default";
++		pinctrl-0 = <&bt_en>, <&sw_ctrl>;
++		enable-gpios = <&tlmm 85 GPIO_ACTIVE_HIGH>;
++		swctrl-gpios = <&tlmm 86 GPIO_ACTIVE_HIGH>;
++		vddaon-supply = <&vreg_s7b_0p9>;
++		vddbtcxmx-supply = <&vreg_s7b_0p9>;
++		vddrfacmn-supply = <&vreg_s7b_0p9>;
++		vddrfa0p8-supply = <&vreg_s7b_0p9>;
++		vddrfa1p7-supply = <&vreg_s1b_1p8>;
++		vddrfa1p2-supply = <&vreg_s8b_1p2>;
++		vddrfa2p2-supply = <&vreg_s1c_2p2>;
++		vddasd-supply = <&vreg_l11c_2p8>;
++		max-speed = <3200000>;
++	};
+ };
+ 
+ /* PINCTRL - additions to nodes defined in sc7280.dtsi */
+@@ -491,6 +513,13 @@
+ };
+ 
+ &tlmm {
++	bt_en: bt-en {
++		pins = "gpio85";
++		function = "gpio";
++		output-low;
++		bias-disable;
++	};
++
+ 	nvme_pwren: nvme-pwren {
+ 		function = "gpio";
+ 	};
+@@ -554,6 +583,13 @@
+ 		 */
+ 		bias-pull-up;
+ 	};
++
++	sw_ctrl: sw-ctrl {
++		pins = "gpio86";
++		function = "gpio";
++		input-enable;
++		bias-pull-down;
++	};
+ };
+ 
+ &sdc1_on {
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp2.dts b/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
+index 0382c77..73b9911 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
+@@ -23,6 +23,10 @@
+ 	};
+ };
+ 
++&bluetooth {
++	vddio-supply = <&vreg_l18b_1p8>;
++};
++
+ &nvme_pwren {
+ 	pins = "gpio51";
+ };
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
---tdFx5lleV3FJ2Qwx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmG6IGoACgkQqwNHzC0A
-wRmv4w/8C2hlmVW4VqsCt3oOE0NH7hh6aIlVIu7ju7PJosc9kAwljgt2be3ojI+3
-+eUOGw8kkf2xv73lOf4RJWL6vQGE6R+AW6Ar1BLSxpdFkY65PVuUjq0ynnu+ezwk
-W4fWFkJeFcGWEYs7ATqUfpQCSMywJtBESx4QgAyhYuY3G6EA0n7xfE38Kvgn27Sr
-hi73qdg2bKnUi/yITm4c7PNmdYRKgZ1cgHIL8RgiCgDExn+OGaIPVJYxwDkKfMqL
-NkriP6duCP/5LTEo9Esct/5/6LJRwLaQUuA+D+wcf0MP9e2Arja/kLeaWmeEbMFY
-YqjxzQ5bnNb+5g4cTE+D4+RqRNGaeJoEbns9Bs4dUdK/Il1quovhxeRKNeDs8Lnc
-3RT5o6Os+5XZe+4x5GnyxzHw4p6Dbbt0feDI84dv4IQ1Vr9J83yONzxjXXkyH82X
-YKiPWxLHevLByHBzYo5FEEPKC5ePMrp/chgMEPlEOXh5zzaVm6FcG20MEeA9lCHs
-878M5+UROY/+8gfx37D4JzhsjZ6FDjLi3fURJbpBuxMxFFbIQgc+lS8C+SlFlW4L
-H/4puGQ7TvF84JYPnwvvBMHPJHZsrHMLO7+yrsQZuAS9gjFurtsTT21jkIVo/bZf
-jwBVxAPiNWaI2Af4J6xdMHhBsi+aV8871pR5OqlSQdd/6jvKFNY=
-=N7Xs
------END PGP SIGNATURE-----
-
---tdFx5lleV3FJ2Qwx--

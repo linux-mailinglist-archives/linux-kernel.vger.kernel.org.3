@@ -2,195 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C2947615D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34FF476169
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239438AbhLOTOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:14:25 -0500
-Received: from mga02.intel.com ([134.134.136.20]:4823 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238618AbhLOTOY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:14:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639595664; x=1671131664;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ihXP0hA5/rx+UdqYFRCVxyZ5KEcnx8XHyatPZ37vkTU=;
-  b=TopuRtehp/jybzoUqsVyPB93KSirjI5XpsL5nbh0d2MhLs7cSHTsAa+h
-   HfEL6ILgJkp0kqfsHV3liSYxKJwUkm+PIqjPzt7wj7zAGHiJ23yGHXwFU
-   2CEEqiGH3A9ujk7+vjBSJXse70za98j1PStZ1vqNL/v7sM3jbW7zt8D+W
-   KsTeIjyGttxOEQN9phEzKlQYXbr2KbAxYBVSecPUaorkvCmIbrEFbV4vC
-   ziHC3JtBYfAFJcnszdClHVhKuZriAHjpsYUCHjdGaTZmJ1lCAjvokga3v
-   mcpxiKTpiZhLTNmRpV+I7igdeKZ4C7LqjFNa8Gtw1s0fbhKPpUrj9Hk1N
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226597891"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="226597891"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 11:14:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="755569243"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Dec 2021 11:14:20 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxZjD-0002E9-77; Wed, 15 Dec 2021 19:14:15 +0000
-Date:   Thu, 16 Dec 2021 03:14:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Keno Fischer <keno@juliacomputing.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, gorcunov@openvz.org,
-        khlebnikov@openvz.org, oleg@redhat.com, akpm@linux-foundation.org,
-        keescook@chromium.org, tj@kernel.org, dbueso@suse.de,
-        matthltc@us.ibm.com, kosaki.motohiro@jp.fujitsu.com
-Subject: Re: [PATCH] c/r: prctl: Remove PR_SET_MM_EXE_FILE old file mapping
- restriction
-Message-ID: <202112160333.IwCSbqoM-lkp@intel.com>
-References: <20211215062342.GA1548576@juliacomputing.com>
+        id S1344166AbhLOTPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344125AbhLOTPS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 14:15:18 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F524C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:15:17 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id p19so22856057qtw.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:15:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=UpI3HneaoGVJ5KkM2LMcsXRbLjNuK02QifkoMFbXRvo=;
+        b=bnQTMrKXW384szCu/GV6keyGIzOCqPl91frCICxMNaGpzZ4ExMnasu/Mtsdi20VBZu
+         sZYgteWV9QLoRk8fXbwWTAjTa2i/ZmUoII332QM+Y9QFxmsc5/746d9Gh+STvh4R1sUq
+         3ZR+kP3lA4cr2IhqqthdAUBX02fj9O58D2kZ9OSksp0UnPXmgL3UQNr7syF1FQEkx7nU
+         xzEtYkxTtRJ3LxEWwZo9TeP9YVhY3KYk+ZyC7Y9KmRYflL5tl9jzU3sv5PWayToSuQpT
+         wNownxU1t4RSuVZWwtwhHx0ogIEn5HhWM3G4ZrC8xFqtyYOOVXavBVZa20YOnAm7TuFv
+         n+/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=UpI3HneaoGVJ5KkM2LMcsXRbLjNuK02QifkoMFbXRvo=;
+        b=HWBb2sP53N5E5ctFaN19OLNnKpdNzPk/tTiHmyPpGQuMJcPoTXmBkUJMyf2RaUjiz7
+         3695uhZy6xjhoDjeeKJWzkrkRrAFJJ8nRlT5KRoSps3Ta+OV8Etg2EEKVvnhuC8wkc9s
+         rs6SB4zOPZ7moRjcl7PPtq+ftVTAk5jNoJHjOCyo6NVSHO4KFQ6zCeJBqYIMmtxYH3jf
+         txjAvL1K0jbk3Wy8CHTHfC5aZHDADsHOYwP1I7UmVy0+H3VGqca/yWbjhOXK2xKZ1sWW
+         7d17zgxB0DsJ7CPZSeaYrnD0sJvHPNU25AIT2DUTao+zUTOkiiNYskPQYFRbmJVhSN+A
+         gneA==
+X-Gm-Message-State: AOAM532H4Jjcc8w0UkEf1hQs4ZhImWN4ncSgdYWXls30r0PL08/RG0Rr
+        GKzV9cbAvJZY0VnMEKS6xMb1ldEMg1sWBT8hlRfSRg==
+X-Google-Smtp-Source: ABdhPJxSj0kHaySeDZCkpMe2D6Xf7GnXEwDu6v7OTt3DCVmc7SS7f3nBBhy0SgE5CCrfoN0Tr+vwcKDBqrEienrmBFw=
+X-Received: by 2002:a05:622a:609:: with SMTP id z9mr13474939qta.243.1639595716346;
+ Wed, 15 Dec 2021 11:15:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215062342.GA1548576@juliacomputing.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
+ <Yboc/G18R1Vi1eQV@google.com> <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
+ <Ybom69OyOjsR7kmZ@google.com> <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
+ <Yboy2WwaREgo95dy@google.com> <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
+In-Reply-To: <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Wed, 15 Dec 2021 11:15:05 -0800
+Message-ID: <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com>
+Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Keno,
+On Wed, Dec 15, 2021 at 10:54 AM Pavel Begunkov <asml.silence@gmail.com> wr=
+ote:
+>
+> On 12/15/21 18:24, sdf@google.com wrote:
+> > On 12/15, Pavel Begunkov wrote:
+> >> On 12/15/21 17:33, sdf@google.com wrote:
+> >> > On 12/15, Pavel Begunkov wrote:
+> >> > > On 12/15/21 16:51, sdf@google.com wrote:
+> >> > > > On 12/15, Pavel Begunkov wrote:
+> >> > > > > =EF=BF=BD /* Wrappers for __cgroup_bpf_run_filter_skb() guarde=
+d by cgroup_bpf_enabled. */
+> >> > > > > =EF=BF=BD #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+ \
+> >> > > > > =EF=BF=BD ({=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+=BD=EF=BF=BD=EF=BF=BD \
+> >> > > > > =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD int __ret =3D 0;=
+=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
+> >> > > > > -=EF=BF=BD=EF=BF=BD=EF=BF=BD if (cgroup_bpf_enabled(CGROUP_INE=
+T_INGRESS))=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
+> >> > > > > +=EF=BF=BD=EF=BF=BD=EF=BF=BD if (cgroup_bpf_enabled(CGROUP_INE=
+T_INGRESS) && sk &&=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
+=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
+> >> > > > > +=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
+=BD CGROUP_BPF_TYPE_ENABLED((sk), CGROUP_INET_INGRESS))=EF=BF=BD=EF=BF=BD=
+=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
+> >> > > >
+> >> > > > Why not add this __cgroup_bpf_run_filter_skb check to
+> >> > > > __cgroup_bpf_run_filter_skb? Result of sock_cgroup_ptr() is alre=
+ady there
+> >> > > > and you can use it. Maybe move the things around if you want
+> >> > > > it to happen earlier.
+> >> >
+> >> > > For inlining. Just wanted to get it done right, otherwise I'll lik=
+ely be
+> >> > > returning to it back in a few months complaining that I see measur=
+able
+> >> > > overhead from the function call :)
+> >> >
+> >> > Do you expect that direct call to bring any visible overhead?
+> >> > Would be nice to compare that inlined case vs
+> >> > __cgroup_bpf_prog_array_is_empty inside of __cgroup_bpf_run_filter_s=
+kb
+> >> > while you're at it (plus move offset initialization down?).
+> >
+> >> Sorry but that would be waste of time. I naively hope it will be visib=
+le
+> >> with net at some moment (if not already), that's how it was with io_ur=
+ing,
+> >> that's what I see in the block layer. And in anyway, if just one inlin=
+ed
+> >> won't make a difference, then 10 will.
+> >
+> > I can probably do more experiments on my side once your patch is
+> > accepted. I'm mostly concerned with getsockopt(TCP_ZEROCOPY_RECEIVE).
+> > If you claim there is visible overhead for a direct call then there
+> > should be visible benefit to using CGROUP_BPF_TYPE_ENABLED there as
+> > well.
+>
+> Interesting, sounds getsockopt might be performance sensitive to
+> someone.
+>
+> FWIW, I forgot to mention that for testing tx I'm using io_uring
+> (for both zc and not) with good submission batching.
 
-Thank you for the patch! Perhaps something to improve:
+Yeah, last time I saw 2-3% as well, but it was due to kmalloc, see
+more details in 9cacf81f8161, it was pretty visible under perf.
+That's why I'm a bit skeptical of your claims of direct calls being
+somehow visible in these 2-3% (even skb pulls/pushes are not 2-3%?).
+But tbf I don't understand how it all plays out with the io_uring.
 
-[auto build test WARNING on linux/master]
-[also build test WARNING on hnaz-mm/master linus/master v5.16-rc5 next-20211214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Keno-Fischer/c-r-prctl-Remove-PR_SET_MM_EXE_FILE-old-file-mapping-restriction/20211215-142515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
-config: i386-randconfig-s002-20211214 (https://download.01.org/0day-ci/archive/20211216/202112160333.IwCSbqoM-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/08f30df401c936e27733e3b37765c2b7d35fe0e7
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Keno-Fischer/c-r-prctl-Remove-PR_SET_MM_EXE_FILE-old-file-mapping-restriction/20211215-142515
-        git checkout 08f30df401c936e27733e3b37765c2b7d35fe0e7
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-   kernel/fork.c:1215:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct file [noderef] __rcu *__ret @@     got struct file *new_exe_file @@
-   kernel/fork.c:1215:24: sparse:     expected struct file [noderef] __rcu *__ret
-   kernel/fork.c:1215:24: sparse:     got struct file *new_exe_file
->> kernel/fork.c:1215:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *old_exe_file @@     got struct file [noderef] __rcu *[assigned] __ret @@
-   kernel/fork.c:1215:22: sparse:     expected struct file *old_exe_file
-   kernel/fork.c:1215:22: sparse:     got struct file [noderef] __rcu *[assigned] __ret
-   kernel/fork.c:1572:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct refcount_struct [usertype] *r @@     got struct refcount_struct [noderef] __rcu * @@
-   kernel/fork.c:1572:38: sparse:     expected struct refcount_struct [usertype] *r
-   kernel/fork.c:1572:38: sparse:     got struct refcount_struct [noderef] __rcu *
-   kernel/fork.c:1581:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:1581:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:1581:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:1582:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const *q @@     got struct k_sigaction [noderef] __rcu * @@
-   kernel/fork.c:1582:36: sparse:     expected void const *q
-   kernel/fork.c:1582:36: sparse:     got struct k_sigaction [noderef] __rcu *
-   kernel/fork.c:1583:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:1583:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:1583:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:1995:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:1995:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:1995:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:1999:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:1999:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:1999:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2304:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct [noderef] __rcu *real_parent @@     got struct task_struct * @@
-   kernel/fork.c:2304:32: sparse:     expected struct task_struct [noderef] __rcu *real_parent
-   kernel/fork.c:2304:32: sparse:     got struct task_struct *
-   kernel/fork.c:2313:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2313:27: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2313:27: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2362:54: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct list_head *head @@     got struct list_head [noderef] __rcu * @@
-   kernel/fork.c:2362:54: sparse:     expected struct list_head *head
-   kernel/fork.c:2362:54: sparse:     got struct list_head [noderef] __rcu *
-   kernel/fork.c:2383:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2383:29: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2383:29: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2401:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2401:29: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2401:29: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2428:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sighand_struct *sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
-   kernel/fork.c:2428:28: sparse:     expected struct sighand_struct *sighand
-   kernel/fork.c:2428:28: sparse:     got struct sighand_struct [noderef] __rcu *sighand
-   kernel/fork.c:2456:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2456:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2456:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2458:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2458:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2458:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2867:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct *[assigned] parent @@     got struct task_struct [noderef] __rcu *real_parent @@
-   kernel/fork.c:2867:24: sparse:     expected struct task_struct *[assigned] parent
-   kernel/fork.c:2867:24: sparse:     got struct task_struct [noderef] __rcu *real_parent
-   kernel/fork.c:2948:43: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct refcount_struct const [usertype] *r @@     got struct refcount_struct [noderef] __rcu * @@
-   kernel/fork.c:2948:43: sparse:     expected struct refcount_struct const [usertype] *r
-   kernel/fork.c:2948:43: sparse:     got struct refcount_struct [noderef] __rcu *
-   kernel/fork.c:2039:22: sparse: sparse: dereference of noderef expression
-   kernel/fork.c: note: in included file (through include/uapi/asm-generic/bpf_perf_event.h, arch/x86/include/generated/uapi/asm/bpf_perf_event.h, ...):
-   include/linux/ptrace.h:218:45: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct task_struct *new_parent @@     got struct task_struct [noderef] __rcu *parent @@
-   include/linux/ptrace.h:218:45: sparse:     expected struct task_struct *new_parent
-   include/linux/ptrace.h:218:45: sparse:     got struct task_struct [noderef] __rcu *parent
-   include/linux/ptrace.h:218:62: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected struct cred const *ptracer_cred @@     got struct cred const [noderef] __rcu *ptracer_cred @@
-   include/linux/ptrace.h:218:62: sparse:     expected struct cred const *ptracer_cred
-   include/linux/ptrace.h:218:62: sparse:     got struct cred const [noderef] __rcu *ptracer_cred
-   kernel/fork.c:2360:59: sparse: sparse: dereference of noderef expression
-   kernel/fork.c:2361:59: sparse: sparse: dereference of noderef expression
-
-vim +1215 kernel/fork.c
-
-3864601387cf41 Jiri Slaby        2011-05-26  1194  
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1195  /**
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1196   * replace_mm_exe_file - replace a reference to the mm's executable file
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1197   *
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1198   * This changes mm's executable file (shown as symlink /proc/[pid]/exe),
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1199   * dealing with concurrent invocation and without grabbing the mmap lock in
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1200   * write mode.
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1201   *
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1202   * Main user is sys_prctl(PR_SET_MM_MAP/EXE_FILE).
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1203   */
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1204  int replace_mm_exe_file(struct mm_struct *mm, struct file *new_exe_file)
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1205  {
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1206  	struct file *old_exe_file;
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1207  	int ret = 0;
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1208  
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1209  	/* set the new file, lockless */
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1210  	ret = deny_write_access(new_exe_file);
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1211  	if (ret)
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1212  		return -EACCES;
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1213  	get_file(new_exe_file);
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1214  
-35d7bdc86031a2 David Hildenbrand 2021-04-23 @1215  	old_exe_file = xchg(&mm->exe_file, new_exe_file);
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1216  	if (old_exe_file) {
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1217  		/*
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1218  		 * Don't race with dup_mmap() getting the file and disallowing
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1219  		 * write access while someone might open the file writable.
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1220  		 */
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1221  		mmap_read_lock(mm);
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1222  		allow_write_access(old_exe_file);
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1223  		fput(old_exe_file);
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1224  		mmap_read_unlock(mm);
-fe69d560b5bd9e David Hildenbrand 2021-04-23  1225  	}
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1226  	return 0;
-35d7bdc86031a2 David Hildenbrand 2021-04-23  1227  }
-3864601387cf41 Jiri Slaby        2011-05-26  1228  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+(mostly trying to understand where there is some gain left on the
+table for TCP_ZEROCOPY_RECEIVE).

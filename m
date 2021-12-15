@@ -2,81 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E50D04764EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3BB4764EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbhLOVv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:51:56 -0500
-Received: from ale.deltatee.com ([204.191.154.188]:34998 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbhLOVvy (ORCPT
+        id S230170AbhLOVwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230154AbhLOVwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:51:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=GuxFQNSNLJReNjtJIS9Cmh4bZ5NKV9u+LJA0YjgO5lE=; b=B4zTSUHoDTrzGOCncS80uplmng
-        4GBfY8AVbAmCod+d8qhXvmAHZ0k2ksUIo2jaNCdLcfhn1hHjjzPH8VdGAgbyMuR+/3ekCAYNzi8Gg
-        qxJlSumPWFasG8S68jEcLZFmbUpyq6H/ZxnRzkTAw/zFlOG80gIUIUc6sM7jDx/3rHOGUXhywNZdh
-        wmYn4r4eICMdI4XALI5n6AFIItcAveq8UQeSweeZCX5satlidfER3R812zBj4IheFRsUa0Q6z8Dc2
-        KHibwtfepjoQKwYTiYnA4Q0hySrHz9zzpgJdMpEmUGqgQlCbo9/flnc0ZHmIDQfaeiVbVv2t0IWdC
-        U07+/Z5g==;
-Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1mxcBk-005ffJ-Ig; Wed, 15 Dec 2021 14:51:53 -0700
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>
-References: <20211215214721.GA715509@bhelgaas>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <3043c3ab-2b0a-4e97-ac43-21e4398d08e6@deltatee.com>
-Date:   Wed, 15 Dec 2021 14:51:51 -0700
+        Wed, 15 Dec 2021 16:52:04 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7EEC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 13:52:04 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id p65so32437040iof.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 13:52:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=16f82q5b47k1gdpLHEW3eH/SnI2SpnjFCnwxm0Vn8wU=;
+        b=WtiEqTnsceW8JqiTrXgwz26B91YQU6PJtiR65L8BRnrruRMdDBf7+C+2c8GXMrU8jj
+         UJ4H3do01B7FObyVgEfJYzpiUIOpXUUYLVaeJwCv32OaNqjf9iSdmUDBD+C0ZFtfkLF+
+         7mUsBl4MElHQzckJdN4bofOEFpG4Bi33SUPhw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=16f82q5b47k1gdpLHEW3eH/SnI2SpnjFCnwxm0Vn8wU=;
+        b=rb9szCeFWxiSz6GurhqoF8u31IZIeMMw9eWGp5WscyvfnU5bl3j+4HzUGMFu1k3d7u
+         NKbDjrqxH0LA6IQCCpDN43KvPPlRJZB42iR2xKzydGwpWnyS7nuKt+tDhyBX5L5Awk/5
+         RxX+PIlJsqKsDcQrWCiht2/1qtmc6O2tGP1C6m8u3AxtUpKoLVsyY5NDul6je/4Ans/j
+         IcjbXuZr3nSO7pqzlr6uX9IPzp1hdltcmVPEJKWpv2fTcZxypl2gj4V6au3GstILBqZR
+         qKIchYpTEA0dS5cXNcn31Ghp1SYnDNlUzVPn5oaBqPjGVUgDsyAz4RHf2qiTjwYKCGwY
+         fW1w==
+X-Gm-Message-State: AOAM532F+QJQxaKoG5OhaJM9sbd5wHmbXN/OVQ6Wqu0O1FixkAprM83h
+        XbF8Kb9YLYoJ4STILkru6af8Dw==
+X-Google-Smtp-Source: ABdhPJyoQ3Gre/iwqpR5ibF8cIRZwZNJcr6fFVJyr/836gc/3PBZjh28Bc5FXtgFK+9faqRpsdqeMQ==
+X-Received: by 2002:a05:6638:3a4:: with SMTP id z4mr7345226jap.76.1639605119775;
+        Wed, 15 Dec 2021 13:51:59 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id s21sm1576479ioj.11.2021.12.15.13.51.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 13:51:59 -0800 (PST)
+Subject: Re: [PATCH 5.15 00/42] 5.15.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211215172026.641863587@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <c594b2e9-2a5a-f687-7e6f-db9997ac24eb@linuxfoundation.org>
+Date:   Wed, 15 Dec 2021 14:51:58 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20211215214721.GA715509@bhelgaas>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.73.163.230
-X-SA-Exim-Rcpt-To: edumazet@google.com, kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, bhelgaas@google.com, christophe.jaillet@wanadoo.fr, helgaas@kernel.org
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] PCI/P2PDMA: Save a few cycles in 'pci_alloc_p2pmem()'
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2021-12-15 2:47 p.m., Bjorn Helgaas wrote:
-> On Wed, Dec 15, 2021 at 02:37:51PM -0700, Logan Gunthorpe wrote:
->> On 2021-12-15 10:35 a.m., Bjorn Helgaas wrote:
->>> Maybe we need a MAINTAINERS entry for P2PDMA?
->>
->> I'm not opposed to this. Would it be a duplicate of the PCI SUBSYSTEM
->> just with my name added as maintainer? I could send a patch if so.
+On 12/15/21 10:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.9 release.
+> There are 42 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Maybe something like this?  Are there other relevant files?  I just
-> want to make sure that you see updates to p2pdma stuff.
+> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Largely looks good to me.
+Compiled and booted on my test system. No dmesg regressions.
 
-The one missing file is:
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Documentation/driver-api/pci/p2pdma.rst
+thanks,
+-- Shuah
 
-Do you want me to put that in a patch or will you handle it?
-
-Thanks,
-
-Logan

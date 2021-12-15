@@ -2,79 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D67F475173
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E784475177
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239607AbhLODll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 22:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbhLODlk (ORCPT
+        id S239620AbhLODmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 22:42:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60637 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239608AbhLODmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 22:41:40 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6A2C061574;
-        Tue, 14 Dec 2021 19:41:39 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id l25so9518875qkl.5;
-        Tue, 14 Dec 2021 19:41:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VYou/sncx/ZOc90DTta97dk0tFp6wdjxFsde2cv+KuI=;
-        b=l3W1Skv3cttl6xmZPqh5VhNWfrvwvWNuIrISXSp+LbcsxWRIJj230CXHHv3yPUse0U
-         K3NAEntePVy00U5WFkymiOTD9Eju3I93WrQxt5hiT2OYtNzJ8kRuXBDXe53A1wB6/HG6
-         gK8E3ofRMtRVYmgvTdL6xvW6MshVBemcQZtuM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VYou/sncx/ZOc90DTta97dk0tFp6wdjxFsde2cv+KuI=;
-        b=MhjyGLZAcOjS439Y6IrEhTWhJQoGS+FyF9X61JnmAsx3VtkNdDRaPI3ODmpv6icCzN
-         ADrU7Rhlq3Kd5NVkgYSJSdE/hNdtqqCkDuMpAVbrruTwB4vJ5QlU8s7fO8qETGTNMNw7
-         7YXCimfJFBylXCsm0t75lPaAizFYRxBAOp2xkz8lp2F7OtO9wgNcF9hPcx+oHeVInCHY
-         B3hgDYkDQUR4Lcuo2OssjIqY7wP0pd1pc50dHVXloHYoJmVU8EGSWhrlcheroUfU09o1
-         /OzLoiJxQ7I7JbbDqVX/AnM5LHvNCXK9MylGLsw4QPlRQb3CuO3NAbWZyEYSITN9WouY
-         IMOw==
-X-Gm-Message-State: AOAM530FLIStu8pNGHMuYbxTqt84mEIg08iedZY7VYRpMNeDcUw6n6XR
-        KiEsQWoW+r9cmCF0oz9wzraMqdLarduGXW61cKc=
-X-Google-Smtp-Source: ABdhPJz+D6MmqXy3uphrelmMYcf3x4xzGqNjbYJ9LVi3lQsti1ioJGdlxTlTy1QBYZ1VP9UL/KWAIX/qkvoEFc7l98U=
-X-Received: by 2002:a05:620a:4081:: with SMTP id f1mr7120860qko.165.1639539698999;
- Tue, 14 Dec 2021 19:41:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20211210145430.3707463-1-gsomlo@gmail.com> <20211210145430.3707463-3-gsomlo@gmail.com>
-In-Reply-To: <20211210145430.3707463-3-gsomlo@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 15 Dec 2021 03:41:26 +0000
-Message-ID: <CACPK8Xd=Qv_ePGXBTB2gYxSUqqte=MNcuDNgAoqqjecvzNKCPQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] dt-bindings: mmc: Add bindings for LiteSDCard
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tue, 14 Dec 2021 22:42:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639539754;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UKPN2S3SXVfn+2YMA0tbS8ft/AvqrEmCxTbCDiXtIYc=;
+        b=TbmzACF4p0thLbNOAIXXiEEGsjpT/6Xmaec/jLM/ITkuFwnRZFt/WOjUfpn31eC3Aq0PKt
+        k9N56jOy8DByTfCwkiTsQHDWKUAPwTzAOdXMl9kq9JC+HtHamvAIIF/BrRgboVx1CjV+xk
+        aFrhP9oRwv8U0JuxwsfPpW8RWhT4KY0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-191-0POoudTmOk2yvbrwSVZmvw-1; Tue, 14 Dec 2021 22:42:31 -0500
+X-MC-Unique: 0POoudTmOk2yvbrwSVZmvw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AEA6C1006AA0;
+        Wed, 15 Dec 2021 03:42:28 +0000 (UTC)
+Received: from localhost (ovpn-12-120.pek2.redhat.com [10.72.12.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id ED62E752D7;
+        Wed, 15 Dec 2021 03:42:21 +0000 (UTC)
+Date:   Wed, 15 Dec 2021 11:42:19 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
         Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Kamil Rakoczy <krakoczy@antmicro.com>,
-        mdudek@internships.antmicro.com,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        david.abdurachmanov@sifive.com,
-        Florent Kermarrec <florent@enjoy-digital.fr>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>
+Subject: Re: [PATCH v17 02/10] x86: kdump: make the lower bound of crash
+ kernel reservation consistent
+Message-ID: <20211215034219.GB10336@MiWiFi-R3L-srv>
+References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
+ <20211210065533.2023-3-thunder.leizhen@huawei.com>
+ <YbjrjpehprvoRXbV@zn.tnic>
+ <YbjvXl51hc6GZa71@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbjvXl51hc6GZa71@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Dec 2021 at 14:54, Gabriel Somlo <gsomlo@gmail.com> wrote:
->
-> LiteSDCard is a small footprint, configurable SDCard core for FPGA
-> based system on chips.
->
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+On 12/14/21 at 07:24pm, Catalin Marinas wrote:
+> On Tue, Dec 14, 2021 at 08:07:58PM +0100, Borislav Petkov wrote:
+> > On Fri, Dec 10, 2021 at 02:55:25PM +0800, Zhen Lei wrote:
+> > > From: Chen Zhou <chenzhou10@huawei.com>
+> > > 
+> > > The lower bounds of crash kernel reservation and crash kernel low
+> > > reservation are different, use the consistent value CRASH_ALIGN.
+> > 
+> > A big WHY is missing here to explain why the lower bound of the
+> > allocation range needs to be 16M and why was 0 wrong?
+> 
+> I asked the same here:
+> 
+> https://lore.kernel.org/r/20210224143547.GB28965@arm.com
+> 
+> IIRC Baoquan said that there is a 1MB reserved for x86 anyway in the
+> lower part, so that's equivalent in practice to starting from
+> CRASH_ALIGN.
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+Yeah, even for i386, there's area reserved by BIOS inside low 1M.
+Considering the existing alignment CRASH_ALIGN which is 16M, we
+definitely have no chance to get memory starting from 0. So starting
+from 16M can skip the useless memblock searching, and make the
+crashkernel low reservation consisten with crashkernel reservation on
+allocation code.
+
+> 
+> Anyway, I agree the commit log should describe this.
+
+Yes, totally.
+

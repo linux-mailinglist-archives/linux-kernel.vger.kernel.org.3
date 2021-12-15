@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5361F476124
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE6F476132
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344054AbhLOSyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238744AbhLOSya (ORCPT
+        id S1344083AbhLOSzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:55:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60020 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344082AbhLOSzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:54:30 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63330C061574;
-        Wed, 15 Dec 2021 10:54:30 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id r11so77349599edd.9;
-        Wed, 15 Dec 2021 10:54:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=892DI7nBTUbNG0pVInYh7MAvJBd0sM6GoSF/qhjlPEk=;
-        b=FexRi6oFB32LusaeYmHy3eNxdngvc/80shi5i1uhzyZjlRlht1FnXu6mktMoDycha8
-         Zy9y1ieoXiNGjPcGgrL3aUeent/PD6TZOCcz5i+ZoGRUq+GXftpXT8NFdhzP13c8VZ4v
-         jiUIajimnQfcB2hpi/Mi+DXYKksTGOKuMbTcGfw+soYsWLyZVWlEYlOYMeFpVHkF+9f+
-         siYmCCbz4q4nleNH8DSMfkVX2IP95Es/HHjzjN0gs6nbD5GWlRggQHH9+xFlZj/m+RVE
-         NABXCSX8QCTQLAm/rnZMmDoK2IIy/+E2N5fSBpL+oMuaAVue1oLAB//h9ZSHXOzP6yeX
-         5RRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=892DI7nBTUbNG0pVInYh7MAvJBd0sM6GoSF/qhjlPEk=;
-        b=7+cNf/WlwhVhVP7BaQ9KcHKXKa9N4ImadlNnOiJnYu2+FbsRrun/NCon30x9XxViLE
-         P6Qww/Pf9tnLWO2v8TGv7rV8znqFcLShyQ8xPi29kXJNtuBWLAkBUiNxkTGYs5GgWwpm
-         JYKGf3hNQsehmQut6b2psbXSa4JEHqWyWh7Md6yLx+57nbFm1K+D8lPHY45zdsIHUpYX
-         KOm+hLSKvNBD+7wI2gQuK8VUA0EZwFgMQQuuCrdwz1i/cU1YTzi/BEN5Qa2VqNGotxoA
-         5P5VdI6Nv8leGAyDh7eYfyj35xL4Qkiga+HFdi1aBe351cUtKER8viCExx7olVI0DmO+
-         8PFA==
-X-Gm-Message-State: AOAM532uYK5v4VXt6JumMlGT2CQAF+8x/iTpHLZ77v6a5lLrNgjXrQHJ
-        MtE7VlQQ703N5K7bopKKYyU=
-X-Google-Smtp-Source: ABdhPJx7IkAXDp9PoYFp8zW/9qa9BodUFLwG/1hYrYvR9mZfdGScA5aVdX6+VfNlRMI9kj3DsWcMxQ==
-X-Received: by 2002:a17:906:bccc:: with SMTP id lw12mr12684917ejb.128.1639594468913;
-        Wed, 15 Dec 2021 10:54:28 -0800 (PST)
-Received: from [192.168.8.198] ([148.252.129.75])
-        by smtp.gmail.com with ESMTPSA id nd36sm1037595ejc.17.2021.12.15.10.54.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 10:54:28 -0800 (PST)
-Message-ID: <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
-Date:   Wed, 15 Dec 2021 18:54:29 +0000
+        Wed, 15 Dec 2021 13:55:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639594522;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6p2PMg3IHKSv9HJVSyU/jUSPqlHttS0kc0XgSmw+DTI=;
+        b=IlmzxzopeT9hNUaavJY9qyshKFUlmyDcUrkIhXE8C4ZqTagtIbzapb+szqSOnuf8uLi3Xt
+        1Z4AREVU5eQ+P4Rc9BIpWOpkun972m9YAxNE8UK+1G+PCCXSgXNuM2A6DbqXmLWr6aEPzv
+        OfKmTE0506u8TSG67hFT/RGiOVYeUTU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-45-eLARbfoFMtubSfuCb0DIwQ-1; Wed, 15 Dec 2021 13:55:21 -0500
+X-MC-Unique: eLARbfoFMtubSfuCb0DIwQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 65A3C92502;
+        Wed, 15 Dec 2021 18:55:18 +0000 (UTC)
+Received: from [10.22.10.54] (unknown [10.22.10.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1357A19D9B;
+        Wed, 15 Dec 2021 18:55:05 +0000 (UTC)
+Message-ID: <58c06961-ffc4-27d7-01d2-4c91b0c9161d@redhat.com>
+Date:   Wed, 15 Dec 2021 13:55:05 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
 Content-Language: en-US
-To:     sdf@google.com
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
-References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
- <Yboc/G18R1Vi1eQV@google.com>
- <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
- <Ybom69OyOjsR7kmZ@google.com>
- <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
- <Yboy2WwaREgo95dy@google.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <Yboy2WwaREgo95dy@google.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-7-longman@redhat.com>
+ <Ybe0YWEo7Wp7wib9@slm.duckdns.org> <20211215144450.GC25459@blackbody.suse.cz>
+ <96018978-6b7f-1e7f-1012-9df7f7996ec5@redhat.com>
+ <Ybo1jmNvM6sblcJq@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Ybo1jmNvM6sblcJq@slm.duckdns.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 18:24, sdf@google.com wrote:
-> On 12/15, Pavel Begunkov wrote:
->> On 12/15/21 17:33, sdf@google.com wrote:
->> > On 12/15, Pavel Begunkov wrote:
->> > > On 12/15/21 16:51, sdf@google.com wrote:
->> > > > On 12/15, Pavel Begunkov wrote:
->> > > > > � /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
->> > > > > � #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)����������������� \
->> > > > > � ({����������������������������������������� \
->> > > > > ����� int __ret = 0;��������������������������������� \
->> > > > > -��� if (cgroup_bpf_enabled(CGROUP_INET_INGRESS))������������� \
->> > > > > +��� if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) && sk &&������������� \
->> > > > > +������� CGROUP_BPF_TYPE_ENABLED((sk), CGROUP_INET_INGRESS))���������� \
->> > > >
->> > > > Why not add this __cgroup_bpf_run_filter_skb check to
->> > > > __cgroup_bpf_run_filter_skb? Result of sock_cgroup_ptr() is already there
->> > > > and you can use it. Maybe move the things around if you want
->> > > > it to happen earlier.
->> >
->> > > For inlining. Just wanted to get it done right, otherwise I'll likely be
->> > > returning to it back in a few months complaining that I see measurable
->> > > overhead from the function call :)
->> >
->> > Do you expect that direct call to bring any visible overhead?
->> > Would be nice to compare that inlined case vs
->> > __cgroup_bpf_prog_array_is_empty inside of __cgroup_bpf_run_filter_skb
->> > while you're at it (plus move offset initialization down?).
-> 
->> Sorry but that would be waste of time. I naively hope it will be visible
->> with net at some moment (if not already), that's how it was with io_uring,
->> that's what I see in the block layer. And in anyway, if just one inlined
->> won't make a difference, then 10 will.
-> 
-> I can probably do more experiments on my side once your patch is
-> accepted. I'm mostly concerned with getsockopt(TCP_ZEROCOPY_RECEIVE).
-> If you claim there is visible overhead for a direct call then there
-> should be visible benefit to using CGROUP_BPF_TYPE_ENABLED there as
-> well.
+On 12/15/21 13:35, Tejun Heo wrote:
+> Hello, Waiman.
+>
+> On Wed, Dec 15, 2021 at 01:16:43PM -0500, Waiman Long wrote:
+>> Allowing direct transition from member to invalid partition doesn't feel
+>> right for me. A casual user may assume a partition is correctly formed
+>> without double checking the "cpuset.partition" value. Returning an error
+>> will prevent this kind of issue. If returning more information about the
+>> failure is the main reason for allowing the invalid partition transition, we
+>> can extend the "cpuset.partition" read syntax to also show the reason for
+>> the previous failure.
+> I don't think it's a good idea to display error messages without a way to
+> link the error to the one who triggered it. This is the same problem we had
+> with resettable counters. It only works for scenarios where one guy is
+> sitting in front of the computer but gets nastry for more complex scnearios
+> and automation.
+Yes, I agree it is not a good way to handle this issue.
+>
+> I understand that allowing transitions to invalid state can feel jarring.
+> There are pros and cons to both approaches. It's similar dynamics tho.
+> Erroring out may be more intuitive for a casual user but makes it harder for
+> more complex scenarios because whether a given operation errors or not is
+> dependent on external asynchronous states, there's no good way of reporting
+> the exact nature of the error or detecting when the operation would succeed
+> in the future, and the error conditions are rather arbitrary.
 
-Interesting, sounds getsockopt might be performance sensitive to
-someone.
+Thanks for the explanation. Yes, there are always pros and cons for 
+different approach to a problem. I am not totally against allowing 
+member to invalid partition transition. In that case, reading back 
+"cpuset.partition" is a must to verify that it is really a success.
 
-FWIW, I forgot to mention that for testing tx I'm using io_uring
-(for both zc and not) with good submission batching.
+How about we allow transition to an invalid partition state but still 
+return an error?
 
--- 
-Pavel Begunkov
+Regards,
+Longman
+

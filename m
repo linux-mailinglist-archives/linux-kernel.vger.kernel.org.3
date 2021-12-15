@@ -2,84 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BB947591F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF52C475923
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242622AbhLOMxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:53:41 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4284 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbhLOMxk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:53:40 -0500
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JDZnR0k02z6H74V;
-        Wed, 15 Dec 2021 20:49:15 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 13:53:38 +0100
-Received: from [10.47.93.135] (10.47.93.135) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 15 Dec
- 2021 12:53:37 +0000
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
-To:     Andrew Kilroy <andrew.kilroy@arm.com>,
-        Ian Rogers <irogers@google.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <acme@kernel.org>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
- <20211214184240.24215-1-andrew.kilroy@arm.com>
- <20211214184240.24215-2-andrew.kilroy@arm.com>
- <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
- <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
- <d91a1b98-2c2b-a961-543f-d540b3c7a146@arm.com>
-Message-ID: <0a14914c-063d-f9ae-be49-ae9cc6aa7ff1@huawei.com>
-Date:   Wed, 15 Dec 2021 12:53:16 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S242642AbhLOMy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:54:56 -0500
+Received: from foss.arm.com ([217.140.110.172]:51180 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232543AbhLOMy4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 07:54:56 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96687D6E;
+        Wed, 15 Dec 2021 04:54:55 -0800 (PST)
+Received: from e126387.extremechicken.org (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA7EB3F774;
+        Wed, 15 Dec 2021 04:54:54 -0800 (PST)
+From:   carsten.haitzler@foss.arm.com
+To:     linux-kernel@vger.kernel.org
+Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org
+Subject: [PATCH 01/12] perf test: Shell - Limit to only run executable scripts in tests
+Date:   Wed, 15 Dec 2021 12:53:58 +0000
+Message-Id: <20211215125409.61488-1-carsten.haitzler@foss.arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <d91a1b98-2c2b-a961-543f-d540b3c7a146@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.47.93.135]
-X-ClientProxiedBy: lhreml734-chm.china.huawei.com (10.201.108.85) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> In addition we could also add a --topdown arg to force using JSON 
->> metricgroups.
->>
-> 
-> What arg do think would be supplied?
+From: Carsten Haitzler <carsten.haitzler@arm.com>
 
-something like -json or -metricgroup, meaning "Use pmu-events metric 
-events to calculate topdown results rather than kernel CPU PMU events. 
-This is default fallback if the kernel CPU PMU does not support topdown 
-events"
+Perf test's shell runner will just run everything in the tests
+directory (as long as it's not another directory or does not begin
+with a dot), but sometimes you find files in there that are not shell
+scripts - perf.data output for example if you do some testing and then
+the next time you run perf test it tries to run these. Check the files
+are executable so they are actually intended to be test scripts and
+not just some "random junk" files there.
 
-> 
->> Did you actually test this patch? I have something experimental 
->> working from some time ago, and it was more complicated than this. I 
->> need to check the code again...
->>
-> 
-> I got stats back from this implementation, yes.  Let me know if there's 
-> things my patch isn't catering for.
+Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+---
+ tools/perf/tests/builtin-test.c |  2 +-
+ tools/perf/util/path.c          | 12 ++++++++++++
+ tools/perf/util/path.h          |  1 +
+ 3 files changed, 14 insertions(+), 1 deletion(-)
 
-I'll give it a spin...
+diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+index c4b888f18e9c..1a7e21e5acf1 100644
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -512,7 +512,7 @@ static const char *shell_test__description(char *description, size_t size,
+ 
+ #define for_each_shell_test(dir, base, ent)	\
+ 	while ((ent = readdir(dir)) != NULL)	\
+-		if (!is_directory(base, ent) && ent->d_name[0] != '.')
++		if (!is_directory(base, ent) && is_executable_file(base, ent) && ent->d_name[0] != '.')
+ 
+ static const char *shell_tests__dir(char *path, size_t size)
+ {
+diff --git a/tools/perf/util/path.c b/tools/perf/util/path.c
+index caed0336429f..7dde8c230ae8 100644
+--- a/tools/perf/util/path.c
++++ b/tools/perf/util/path.c
+@@ -92,3 +92,15 @@ bool is_directory(const char *base_path, const struct dirent *dent)
+ 
+ 	return S_ISDIR(st.st_mode);
+ }
++
++bool is_executable_file(const char *base_path, const struct dirent *dent)
++{
++	char path[PATH_MAX];
++	struct stat st;
++
++	sprintf(path, "%s/%s", base_path, dent->d_name);
++	if (stat(path, &st))
++		return false;
++
++	return !S_ISDIR(st.st_mode) && (st.st_mode & S_IXUSR);
++}
+diff --git a/tools/perf/util/path.h b/tools/perf/util/path.h
+index 083429b7efa3..d94902c22222 100644
+--- a/tools/perf/util/path.h
++++ b/tools/perf/util/path.h
+@@ -12,5 +12,6 @@ int path__join3(char *bf, size_t size, const char *path1, const char *path2, con
+ 
+ bool is_regular_file(const char *file);
+ bool is_directory(const char *base_path, const struct dirent *dent);
++bool is_executable_file(const char *base_path, const struct dirent *dent);
+ 
+ #endif /* _PERF_PATH_H */
+-- 
+2.32.0
 
-Thanks,
-John

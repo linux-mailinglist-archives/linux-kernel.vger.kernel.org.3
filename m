@@ -2,82 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9D3475D31
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60689475D3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244730AbhLOQQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:16:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40015 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244743AbhLOQQl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:16:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639585000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8NJRR+a9hlTKwcYiYBaZVulZ3Qw4EA1LMUIGcFZHriw=;
-        b=eB1rOPwStCT8ZKRYOIICL2Zil+4ZHJRMcfvyEFdQFVN4WsUshmcAgG+fdvUgXk13+mIOCj
-        kg0wjZC27OsNbkh5GtxeKwkVIP6f45IMHPxOzjDPQHTVJcL7jKZuysRrbkjJQtxKTJ844p
-        Ev5phRKfh9ppwMaKnY0/cJ6wvHf5UAk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-op_bkYODMPCejNi40MvNyg-1; Wed, 15 Dec 2021 11:16:39 -0500
-X-MC-Unique: op_bkYODMPCejNi40MvNyg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AA4CD64141;
-        Wed, 15 Dec 2021 16:16:37 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.195.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E46405E26D;
-        Wed, 15 Dec 2021 16:16:18 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, oliver.sang@intel.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: selftests: Avoid KVM_SET_CPUID2 after KVM_RUN in vmx_pmu_msrs_test
-Date:   Wed, 15 Dec 2021 17:16:17 +0100
-Message-Id: <20211215161617.246563-1-vkuznets@redhat.com>
+        id S244712AbhLOQUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:20:15 -0500
+Received: from smtpbg587.qq.com ([113.96.223.105]:34373 "EHLO smtpbg587.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244446AbhLOQUP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 11:20:15 -0500
+X-QQ-mid: bizesmtp39t1639585092tzk1ch7u
+Received: from wangx.lan (unknown [171.221.148.2])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Thu, 16 Dec 2021 00:18:04 +0800 (CST)
+X-QQ-SSF: 0100000000200090C000B00A0000000
+X-QQ-FEAT: TMbHAYExFrnCiy5Sipe7jG7PBJl0MFknZtWaCapYqBY7aJtaR1CDHRlTgtsxH
+        wO0uRCiatUczPqLnqfOmc5dyPtbc7cCmPt1MN+FTBOaYVA15KCAhkBzb6AqJ0h3eZDNo3n4
+        b2MXKDzxcc3x1txptQtMvKRXrnK9Sain0b+UNapWof5CiekKePwemnd2QvmvgsxwYx7GzoR
+        9oSEbqbxa9YvP9GgNIEc+1oVFQfXKBQs9EWLrrui19UqT+yp/x2Z3pM4h5wLqaTMM7qvjMH
+        Cyosjbsjc3Iwn6q95+B+kve7z8GSUFHZlT3/vQPMFW++EjYa4/qetLOdhG2ubCd0oxxg==
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     jyri.sarha@iki.fi
+Cc:     tomba@kernel.org, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH] drm/tilcdc: add const to of_device_id
+Date:   Thu, 16 Dec 2021 00:18:03 +0800
+Message-Id: <20211215161803.5900-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit feb627e8d6f6 ("KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN")
-forbade chaning vCPU's CPUID data after the first KVM_RUN but
-vmx_pmu_msrs_test does exactly that. Test VM needs to be re-created after
-vcpu_run().
+struct of_device_id should normally be const.
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Fixes: feb627e8d6f6 ("KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN")
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
 ---
- tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/gpu/drm/tilcdc/tilcdc_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
-index 23051d84b907..17882f79deed 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
-@@ -99,6 +99,11 @@ int main(int argc, char *argv[])
- 	vcpu_run(vm, VCPU_ID);
- 	ASSERT_EQ(vcpu_get_msr(vm, VCPU_ID, MSR_IA32_PERF_CAPABILITIES), PMU_CAP_FW_WRITES);
+diff --git a/drivers/gpu/drm/tilcdc/tilcdc_drv.c b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
+index 3ddb7c710a3d..d23ed0e2e87b 100644
+--- a/drivers/gpu/drm/tilcdc/tilcdc_drv.c
++++ b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
+@@ -587,7 +587,7 @@ static int tilcdc_pdev_remove(struct platform_device *pdev)
+ 	return 0;
+ }
  
-+	/* Re-create guest VM after KVM_RUN so CPUID can be changed */
-+	kvm_vm_free(vm);
-+	vm = vm_create_default(VCPU_ID, 0, guest_code);
-+	vcpu_set_cpuid(vm, VCPU_ID, cpuid);
-+
- 	/* testcase 2, check valid LBR formats are accepted */
- 	vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, 0);
- 	ASSERT_EQ(vcpu_get_msr(vm, VCPU_ID, MSR_IA32_PERF_CAPABILITIES), 0);
+-static struct of_device_id tilcdc_of_match[] = {
++static const struct of_device_id tilcdc_of_match[] = {
+ 		{ .compatible = "ti,am33xx-tilcdc", },
+ 		{ .compatible = "ti,da850-tilcdc", },
+ 		{ },
 -- 
-2.33.1
+2.20.1
 

@@ -2,267 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDCD475DDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AE7475DE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245003AbhLOQvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S245019AbhLOQw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244983AbhLOQvM (ORCPT
+        with ESMTP id S245006AbhLOQwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:51:12 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5C3C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:51:11 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s7-20020a5b0447000000b005fb83901511so44194053ybp.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:51:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=tSLoCvV83uVNWzNSIKfpbb32NYaHee7L5yjLmgJjO04=;
-        b=OF3LHg69rEr1/589FxdwoGn7zU+F41Hblpa7aO0QfKR5B2atC/HFFiC92HUtQ0jApv
-         XzgBGCjjBaa8ctauGw4rICaURUg3IIcgu+H04B//s1+o/HIQMg7REEh3CdaJUvIra5oW
-         oZwp23um+QuLz3OmeG1TmTf2EoP2dsqaaHaD9n3pjdlEP7r070ta2fDaXOZbUl4LsvWs
-         Dc48nPWYnx4+QL/P50e7+527QyT3FREMENpb6keEaXUNYEsPWMpj1lvHlpu7dYahoWRG
-         UUsCAB1LMkHGMhElsY1GrZxgji3gD720XBrmWei0nhPEDf8fP6k3pBfjxVtt7u7vEOB9
-         ok4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=tSLoCvV83uVNWzNSIKfpbb32NYaHee7L5yjLmgJjO04=;
-        b=dSn0n+c83JaGR3g39927ZSOGBFrp6UYGS6BNpkfuShvguv+4JBkvYQjj5YwnMOswY6
-         sgJREj5k1hTQjlr5A8ogqlcQRYilScgVWyQpNU7wcFGA40pKL3JNsVQ7n5aElTCxklLM
-         WR5kKfM1TWVjyt3m6AjkDKTOM6kim3LuWZjSAPaXUDMNtkhn+l+SdaWVUOBTi0xIv6zC
-         49E5VVEorRHjPBTSOAV5jpCW41ZTM08CvV/JFt6j9yDFFMXiIndk001N8QzFxozQtK/q
-         43dD9d1NpP+0dhMhRV3//rf1Vu5+fVSlKtwvyiobkuxuUTWU53QQRsNesr66wy79hMji
-         Sw9w==
-X-Gm-Message-State: AOAM532kjLGbA2QsFG3NJR+bdamLUQwH1bRsVR46672T0lr201kPwyAk
-        6Hy+U6F1/30LFoTcZm1DdaePo9c=
-X-Google-Smtp-Source: ABdhPJytWSFWDftlNCzb6hiGAzk4etWEeuivRs5nb1gmQf263LPVBKP9vqCdudWtGZ2KldkOUE5KSBA=
-X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:fc03:a91c:4fe0:3b78])
- (user=sdf job=sendgmr) by 2002:a25:ae51:: with SMTP id g17mr7450259ybe.738.1639587070923;
- Wed, 15 Dec 2021 08:51:10 -0800 (PST)
-Date:   Wed, 15 Dec 2021 08:51:08 -0800
-In-Reply-To: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
-Message-Id: <Yboc/G18R1Vi1eQV@google.com>
-Mime-Version: 1.0
-References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
-Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
-From:   sdf@google.com
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        Wed, 15 Dec 2021 11:52:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0B1C061574;
+        Wed, 15 Dec 2021 08:52:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28815619C2;
+        Wed, 15 Dec 2021 16:52:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 854C2C36AE3;
+        Wed, 15 Dec 2021 16:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639587142;
+        bh=gu0NXiWUgDFrZg3yWV6zoqWRSOaEF70afmPFo6FWlQo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ljs1hvcckUbQFv0LK09hIboci+KQM8lTnjHwDkGdTg/Bi1ErCsAiz9oGY2aKsOlf6
+         BZmX5h0V9CaHsRrJIHDUsRumrttZZt91MFx5Su+xWaU57ct8SJybjJvDrNiR8w/dIv
+         ITwrQ1MTakn/0zokQLYV98Dibn/696m1H1R5cjdvm0jjaVl9pxgj6attGZ7662bOb4
+         L7+mRd4AvgV8b45klMvjrFJ0cTfBhOhN50LPe1Z1CTNLSH0/9OBA8Yie+xgQa8Q7Go
+         M/NgSmKUB+oMV+p9zmA5nAXrHJEAp196laSwWNkavPdSsaf33lmHauNAv3fGXDp5Mt
+         /49rDGnrup59A==
+Received: by mail-yb1-f178.google.com with SMTP id 131so56820928ybc.7;
+        Wed, 15 Dec 2021 08:52:22 -0800 (PST)
+X-Gm-Message-State: AOAM5310pdtVX1TNndFV/DkI8pP0gcfNFUYeK2mrZlHxdgb3HUm7YyFq
+        H8PqFVjxaKUoJ02tIlPAji5lmr/8HQ0zNo6U6RQ=
+X-Google-Smtp-Source: ABdhPJyCKdltBMj18edFZ70YAKPO+yqbXdbg2IBe3ocP+p2sHYq63xHpS9x6KF3kkF3DZIlsllj8zdXHeOpL+yVHo3Q=
+X-Received: by 2002:a25:8284:: with SMTP id r4mr7725979ybk.47.1639587141669;
+ Wed, 15 Dec 2021 08:52:21 -0800 (PST)
+MIME-Version: 1.0
+References: <20211214031553.16435-1-yajun.deng@linux.dev> <CAPhsuW5X+zewpKoJLjMMGOUeSiJ1EYqD+0i1bA8y7SFtJLkMeg@mail.gmail.com>
+ <0d07e13a5454dfb03b22e5223d101a1b@linux.dev>
+In-Reply-To: <0d07e13a5454dfb03b22e5223d101a1b@linux.dev>
+From:   Song Liu <song@kernel.org>
+Date:   Wed, 15 Dec 2021 08:52:10 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW6T_nqqfOtj_dVn9KV+iUbki2X3WU3pxfo25Ewj3i5ZjA@mail.gmail.com>
+Message-ID: <CAPhsuW6T_nqqfOtj_dVn9KV+iUbki2X3WU3pxfo25Ewj3i5ZjA@mail.gmail.com>
+Subject: Re: [PATCH] lib/raid6: fix abnormally high latency
+To:     yajun.deng@linux.dev
+Cc:     stockhausen@collogia.de, open list <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        linux-raid <linux-raid@vger.kernel.org>, masahiroy@kernel.org,
+        williams@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15, Pavel Begunkov wrote:
-> Add per socket fast path for not enabled BPF skb filtering, which sheds
-> a nice chunk of send/recv overhead when affected. Testing udp with 128
-> byte payload and/or zerocopy with any payload size showed 2-3%
-> improvement in requests/s on the tx side using fast NICs across network,
-> and around 4% for dummy device. Same goes for rx, not measured, but
-> numbers should be relatable.
-> In my understanding, this should affect a good share of machines, and at
-> least it includes my laptops and some checked servers.
+On Tue, Dec 14, 2021 at 6:14 PM <yajun.deng@linux.dev> wrote:
+>
+> December 15, 2021 1:27 AM, "Song Liu" <song@kernel.org> wrote:
+>
+> > On Mon, Dec 13, 2021 at 7:17 PM Yajun Deng <yajun.deng@linux.dev> wrote=
+:
+> >
+> >> We found an abnormally high latency when executing modprobe raid6_pq, =
+the
+> >> latency is greater than 1.2s when CONFIG_PREEMPT_VOLUNTARY=3Dy, greate=
+r than
+> >> 67ms when CONFIG_PREEMPT=3Dy, and greater than 16ms when CONFIG_PREEMP=
+T_RT=3Dy.
+> >> This is caused by disable the preemption, this time is too long and
+> >> unreasonable. We just need to disable migration. so used migrate_disab=
+le()/
+> >> migrate_enable() instead of preempt_disable()/preempt_enable(). This i=
+s
+> >> beneficial for CONFIG_PREEMPT=3Dy or CONFIG_PREEMPT_RT=3Dy, but no eff=
+ect for
+> >> CONFIG_PREEMPT_VOLUNTARY=3Dy.
+> >>
+> >> Fixes: fe5cbc6e06c7 ("md/raid6 algorithms: delta syndrome functions")
+> >> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+> >
+> > We measure the speed of different RAID algorithms.If we don't disable
+> > preempt, the result may be inaccurate, right? IIUC, we only disable pre=
+empt
+> > for 16 jiffies. Why do we see 1.2 second delay?
+>
+> Here are the command of my test=EF=BC=9A
+> Execute "sudo cyclictest -S -p 95 -d 0 -i 1000 -D 24h -m" in one terminal=
+ and "sudo modprobe raid6_pq" in the other terminal.
+>
+> Here are the results of my test=EF=BC=9A
+> CONFIG_PREEMPT_VOLUNTARY=3Dy=EF=BC=8CCONFIG_HZ_250=3Dy
+> T: 0 ( 3092) P:95 I:1000 C:   8514 Min:      1 Act:    2 Avg:    1 Max:  =
+     6
+> T: 1 ( 3093) P:95 I:1000 C:   8511 Min:      1 Act:    2 Avg:    1 Max:  =
+    14
 
-> The core of the problem is that even though there is
-> cgroup_bpf_enabled_key guarding from __cgroup_bpf_run_filter_skb()
-> overhead, there are cases where we have several cgroups and loading a
-> BPF program to one also makes all others to go through the slow path
-> even when they don't have any BPF attached. It's even worse, because
-> apparently systemd or some other early init loads some BPF and so
-> triggers exactly this situation for normal networking.
+I am not very familiar with the RT work, so please forgive me for some
+rookie questions.
 
-> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-> ---
+From the result, I think the CONFIG_PREEMPT_VOLUNTARY=3Dy and the
+CONFIG_PREEMPT=3Dy cases failed to preempt during the preempt enabled perio=
+d in
+raid6_choose_gen(). Is this expected?
 
-> v2: replace bitmask appoach with empty_prog_array (suggested by Martin)
-> v3: add "bpf_" prefix to empty_prog_array (Martin)
+OTOH, the 16ms latency with CONFIG_PREEMPT_RT=3Dy is more or less expected.
+Is this acceptable? If not, is 1ms latency acceptable?
 
->   include/linux/bpf-cgroup.h | 24 +++++++++++++++++++++---
->   include/linux/bpf.h        | 13 +++++++++++++
->   kernel/bpf/cgroup.c        | 18 ++----------------
->   kernel/bpf/core.c          | 16 ++++------------
->   4 files changed, 40 insertions(+), 31 deletions(-)
+Thanks,
+Song
 
-> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> index 11820a430d6c..c6dacdbdf565 100644
-> --- a/include/linux/bpf-cgroup.h
-> +++ b/include/linux/bpf-cgroup.h
-> @@ -219,11 +219,28 @@ int bpf_percpu_cgroup_storage_copy(struct bpf_map  
-> *map, void *key, void *value);
->   int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
->   				     void *value, u64 flags);
 
-> +static inline bool
-> +__cgroup_bpf_prog_array_is_empty(struct cgroup_bpf *cgrp_bpf,
-> +				 enum cgroup_bpf_attach_type type)
-> +{
-> +	struct bpf_prog_array *array =  
-> rcu_access_pointer(cgrp_bpf->effective[type]);
-> +
-> +	return array == &bpf_empty_prog_array.hdr;
-> +}
-> +
-> +#define CGROUP_BPF_TYPE_ENABLED(sk, atype)				       \
-> +({									       \
-> +	struct cgroup *__cgrp = sock_cgroup_ptr(&(sk)->sk_cgrp_data);	       \
-> +									       \
-> +	!__cgroup_bpf_prog_array_is_empty(&__cgrp->bpf, (atype));	       \
-> +})
-> +
->   /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by  
-> cgroup_bpf_enabled. */
->   #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
->   ({									      \
->   	int __ret = 0;							      \
-> -	if (cgroup_bpf_enabled(CGROUP_INET_INGRESS))		      \
-> +	if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) && sk &&		      \
-> +	    CGROUP_BPF_TYPE_ENABLED((sk), CGROUP_INET_INGRESS)) 	      \
-
-Why not add this __cgroup_bpf_run_filter_skb check to
-__cgroup_bpf_run_filter_skb? Result of sock_cgroup_ptr() is already there
-and you can use it. Maybe move the things around if you want
-it to happen earlier.
-
->   		__ret = __cgroup_bpf_run_filter_skb(sk, skb,		      \
->   						    CGROUP_INET_INGRESS); \
->   									      \
-> @@ -235,9 +252,10 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map  
-> *map, void *key,
->   	int __ret = 0;							       \
->   	if (cgroup_bpf_enabled(CGROUP_INET_EGRESS) && sk && sk == skb->sk) { \
->   		typeof(sk) __sk = sk_to_full_sk(sk);			       \
-> -		if (sk_fullsock(__sk))					       \
-> +		if (sk_fullsock(__sk) &&				       \
-> +		    CGROUP_BPF_TYPE_ENABLED(__sk, CGROUP_INET_EGRESS))	       \
->   			__ret = __cgroup_bpf_run_filter_skb(__sk, skb,	       \
-> -						      CGROUP_INET_EGRESS); \
-> +						      CGROUP_INET_EGRESS);     \
->   	}								       \
->   	__ret;								       \
->   })
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index e7a163a3146b..0d2195c6fb2a 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1161,6 +1161,19 @@ struct bpf_prog_array {
->   	struct bpf_prog_array_item items[];
->   };
-
-> +struct bpf_empty_prog_array {
-> +	struct bpf_prog_array hdr;
-> +	struct bpf_prog *null_prog;
-> +};
-> +
-> +/* to avoid allocating empty bpf_prog_array for cgroups that
-> + * don't have bpf program attached use one global 'bpf_empty_prog_array'
-> + * It will not be modified the caller of bpf_prog_array_alloc()
-> + * (since caller requested prog_cnt == 0)
-> + * that pointer should be 'freed' by bpf_prog_array_free()
-> + */
-> +extern struct bpf_empty_prog_array bpf_empty_prog_array;
-> +
->   struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags);
->   void bpf_prog_array_free(struct bpf_prog_array *progs);
->   int bpf_prog_array_length(struct bpf_prog_array *progs);
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 43eb3501721b..99e85f44e257 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1354,20 +1354,6 @@ int __cgroup_bpf_run_filter_sysctl(struct  
-> ctl_table_header *head,
->   }
-
->   #ifdef CONFIG_NET
-> -static bool __cgroup_bpf_prog_array_is_empty(struct cgroup *cgrp,
-> -					     enum cgroup_bpf_attach_type attach_type)
-> -{
-> -	struct bpf_prog_array *prog_array;
-> -	bool empty;
-> -
-> -	rcu_read_lock();
-> -	prog_array = rcu_dereference(cgrp->bpf.effective[attach_type]);
-> -	empty = bpf_prog_array_is_empty(prog_array);
-> -	rcu_read_unlock();
-> -
-> -	return empty;
-> -}
-> -
->   static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int  
-> max_optlen,
->   			     struct bpf_sockopt_buf *buf)
->   {
-> @@ -1430,7 +1416,7 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock  
-> *sk, int *level,
->   	 * attached to the hook so we don't waste time allocating
->   	 * memory and locking the socket.
->   	 */
-> -	if (__cgroup_bpf_prog_array_is_empty(cgrp, CGROUP_SETSOCKOPT))
-> +	if (__cgroup_bpf_prog_array_is_empty(&cgrp->bpf, CGROUP_SETSOCKOPT))
->   		return 0;
-
->   	/* Allocate a bit more than the initial user buffer for
-> @@ -1526,7 +1512,7 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock  
-> *sk, int level,
->   	 * attached to the hook so we don't waste time allocating
->   	 * memory and locking the socket.
->   	 */
-> -	if (__cgroup_bpf_prog_array_is_empty(cgrp, CGROUP_GETSOCKOPT))
-> +	if (__cgroup_bpf_prog_array_is_empty(&cgrp->bpf, CGROUP_GETSOCKOPT))
->   		return retval;
-
->   	ctx.optlen = max_optlen;
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 2405e39d800f..fa76d1d839ad 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1967,18 +1967,10 @@ static struct bpf_prog_dummy {
->   	},
->   };
-
-> -/* to avoid allocating empty bpf_prog_array for cgroups that
-> - * don't have bpf program attached use one global 'empty_prog_array'
-> - * It will not be modified the caller of bpf_prog_array_alloc()
-> - * (since caller requested prog_cnt == 0)
-> - * that pointer should be 'freed' by bpf_prog_array_free()
-> - */
-> -static struct {
-> -	struct bpf_prog_array hdr;
-> -	struct bpf_prog *null_prog;
-> -} empty_prog_array = {
-> +struct bpf_empty_prog_array bpf_empty_prog_array = {
->   	.null_prog = NULL,
->   };
-> +EXPORT_SYMBOL(bpf_empty_prog_array);
-
->   struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags)
->   {
-> @@ -1988,12 +1980,12 @@ struct bpf_prog_array *bpf_prog_array_alloc(u32  
-> prog_cnt, gfp_t flags)
->   			       (prog_cnt + 1),
->   			       flags);
-
-> -	return &empty_prog_array.hdr;
-> +	return &bpf_empty_prog_array.hdr;
->   }
-
->   void bpf_prog_array_free(struct bpf_prog_array *progs)
->   {
-> -	if (!progs || progs == &empty_prog_array.hdr)
-> +	if (!progs || progs == &bpf_empty_prog_array.hdr)
->   		return;
->   	kfree_rcu(progs, rcu);
->   }
-> --
-> 2.34.0
-
+[...]

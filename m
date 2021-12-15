@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A560E476673
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A300476674
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbhLOXYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 18:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S231970AbhLOXZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 18:25:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbhLOXYt (ORCPT
+        with ESMTP id S231952AbhLOXZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 18:24:49 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159AEC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:24:49 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id j11so21394127pgs.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:24:49 -0800 (PST)
+        Wed, 15 Dec 2021 18:25:00 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388C7C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:25:00 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id n15-20020a17090a394f00b001b0f6d6468eso657594pjf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:25:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+wKtXeTQxQFOQCh8iyar/PDd0xAj+8Ua39SmoAmPwN0=;
-        b=e93vtoDwd7onN/Fo3H65oql7xosjLseC1YGapBrQmDK8jys1N9X2tePXxtX6QEq0nI
-         iDk6bk2DjcbExvPfmz/6+6BGWestI5jcC4InWhbLSXwwL53ZzItr2OyIyb7zESJ1u4Uq
-         Uria1ieOHKqTNLG4TJ8pf/MQSl/1RONlDvHVw=
+        bh=lOr9C9xGp11EEnMY3mMNWnNiJYgAxYlemMxGk2HFuRg=;
+        b=lytFoHtl0Lj32T5InjYLVfxQZpi2WKgvEyhVMgT1fI8y84D6tHBNzP2H6nWgdcqK3N
+         8Q+vb5MLG21B7TUEc5BQ6PqqSIr73XjfrIE6XGlg3dEZTiDafUr625Fj5zwbf88NLuT8
+         RzFSK+dzcaGBASN30uynT15pcz545Ls0qCol8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+wKtXeTQxQFOQCh8iyar/PDd0xAj+8Ua39SmoAmPwN0=;
-        b=rj+Sj+IL3zMxxLrUunht8+mZHa6LlUdTcmKo95Rbx24Yox+PGr23l7HEchogcaVJi/
-         YgpUqp1XrxxBv4mlFsApiFDRv4SOFOdGx15ilrc066uZbGZD727oUpZQY0KTrvyvqqKB
-         XLHL16IIgvb8SG0KxZvAE8eZk7iJ3G7b3RzVYeOu/KNcsA24g8LCpgs7B89ITEXaXbLD
-         7LgMd84Axxqu/MUMIU3bKoi1J3sUTv3f5FOTkTBFo1asMfqNgy+E6WRA6KEjPQKbEdOQ
-         b/vq7tRUhXwa/JtUHBk8me6RFnf64o+dgq0wugPOVJReNPA5PLFg0z2GZXxZtBf5ywyJ
-         t7Tw==
-X-Gm-Message-State: AOAM53066PT48gHHG7RaDODZrLfh4bUVZWR18SENkSdq0cHM2Sdwb9jX
-        lV5Tl3V2S6PcYaYviOCw5eq18Q==
-X-Google-Smtp-Source: ABdhPJzPaE3TIAcoa2YxlOC2PEjMxZUiaqVdjcPVu4fLhU5i65rsqtA1qnZU6a6ixNYs/HcqJpfTSw==
-X-Received: by 2002:aa7:9990:0:b0:4a1:57ff:3369 with SMTP id k16-20020aa79990000000b004a157ff3369mr11043448pfh.31.1639610688626;
-        Wed, 15 Dec 2021 15:24:48 -0800 (PST)
+        bh=lOr9C9xGp11EEnMY3mMNWnNiJYgAxYlemMxGk2HFuRg=;
+        b=NK4vjCBbrplbCHkJvMnRFW/nLYUyBAhKftTw8SQmxjGLvASDy2RwJ7rQc550vrELJm
+         RTxxcg4roc0S0qWomHAcA7lmHxlXnSjtkmKqVU6n2cm79n/83QKa3+5HRsiqBXlwX8Rc
+         7AyaSed7tS+8LCi5R1UllYcBcodWinGtDzkofrDXVCkfTfD7N5tuq1rjSPTWI1awpwYa
+         TjDCSohZdA8EioXnZiWoOvhHwDmLzJ3OVbPQ15vyP10atKCYhN1doeO2wFHyqxwedkrl
+         ZMjK+sLF4PGsP4W7ov11eWu48pnRPiFk1zNT+Nr7ZdUcbjx79scGicdO1yMC97HP0oy4
+         r85w==
+X-Gm-Message-State: AOAM532Kapfi1eHsM0cNCM9nXQ+EqoiwhJ3j5kgJbGLBaZ1rDsGaM2eZ
+        cjuRl8obmggZ+QS0TrOJn184Og==
+X-Google-Smtp-Source: ABdhPJzWEzTUG8xEzsrfCljx5peyqWkmmblcXXzUthtaiwkcoc9pZyhh5uOifCLoK13xyFngR5KyTg==
+X-Received: by 2002:a17:90a:6fc2:: with SMTP id e60mr2518511pjk.207.1639610699761;
+        Wed, 15 Dec 2021 15:24:59 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c17sm3819536pfc.163.2021.12.15.15.24.48
+        by smtp.gmail.com with ESMTPSA id j8sm3236014pgf.21.2021.12.15.15.24.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 15:24:48 -0800 (PST)
+        Wed, 15 Dec 2021 15:24:59 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Hemant Kumar <hemantk@codeaurora.org>,
-        Bhaumik Bhatt <quic_bbhatt@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Kees Cook <keescook@chromium.org>, Marc Zyngier <maz@kernel.org>,
         Yury Norov <yury.norov@gmail.com>,
-        Carl Huang <cjhuang@codeaurora.org>,
-        Carl Yin <carl.yin@quectel.com>, linux-kernel@vger.kernel.org,
-        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] bus: mhi: core: Use correctly sized arguments for bit field
-Date:   Wed, 15 Dec 2021 15:24:46 -0800
-Message-Id: <20211215232446.2069794-1-keescook@chromium.org>
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] irqchip: Use correctly sized arguments for bit field
+Date:   Wed, 15 Dec 2021 15:24:57 -0800
+Message-Id: <20211215232457.2069969-1-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2373; h=from:subject; bh=5LBWuQcow5y4kUPEfLAt34GEYiaqhrm63wbxhk+W1ig=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhunk+I6cQX+iJm8LamClVJjxV5guF1cKeTHIPdL2O qM1yHtyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbp5PgAKCRCJcvTf3G3AJsjfD/ 9q5kWvVOIY0URvI4tj+mBje1t9tKvfuWMgGjtOXSEkCwt9eJuF6pjzV0I4cbdUmSgim7Nmqpyw8Pg0 2GqtVDK+rttKDmj3c7nA/bBDK89QLy2ddXtThguHJmEyyQyDBEtDXF921DwPMSO3WcIsfDdO3OhPIH Lu1Q6KPnBCnR4x7JE3/S26qSrLxFWuAt/rx2dGkNSF9TwCfeNB/sjxEJgA3cgdHrTtf/nna6jq1iDo r/DFhSPVhPJvVZF090UyNXl9D/cjecCHFnry7rfYNIh4J3jsiLwuEuyhp0vWvTE3BtVErokZyPuNpC 1mLoIfEmURAaIpIgixc+CBWHerMTijTuuC74n03XRWGFweixnFUXHD1Q6+CWubPkImDvRgfz29CwyR yBGzlF6HGzStLuGjoijkx8NBFB6TrRkwDFAWF5B0zw5qp3UrY+tSNO/YblwCNDvTq0462OfdG9cmVO pddc24rF+fnPL2/w9oTILc2Zri0z/gG5INmovaxelLQZXicWKq+xqPzW1tRtxhjEcIGaiLfRI0dZiO DK4/dMZ6bkYZ5RTeVJXNq0Gss3mT0AAXx14TKmm5JxoKuF4ZimvKbUTZ6n6ThtW6ak4tp4lC5EpzI6 FJrzw3xgxM7vAvncRiuDTMExcJ67HX5QgLfa35S+FkRjeRs5PI3Ev81oCCoA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2200; h=from:subject; bh=I5WDSOsav2JhZZJmDTlc6oPqCbgqurX0/oC9QsVqu7I=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhunlJSnbmL3ZFf+n4wr1+7GmFEXHGYrRsE7Q8E7L9 /lzhAIKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbp5SQAKCRCJcvTf3G3AJozvD/ 9GyRwY3NUXGkDc/Q4t0UwRNQico29xfXJltIzBTh6tlvI7Biv8/ruDgWE70+c+a7kC4/1A+NdotwIv lQdb+4QCzYClI5CTvxH0kPJ/b11FIh40lGWCnRKqNHXHOJ0ecy7BbE0X07BQ8xwd3M4IXoYjSx6FeX G4ToOFW0FRfAm11n2yLD+55iykcvj13VU270+zWTvQqguzHp6Oz6Be763MpCTDOjAnCzxGkXYTN57z xun+YfYZp/gLKUeyKDn4WMNusAhyQKWTSCAXgy55PxOH+RP/bgPglm/DtZfE/u0Lw0odUDlgrqhg8G 64C8c3pwHSLKYSIQen2HvyEQMYFA3t+adusVD7uuwSCF1i/nv3mW6F4xUy5Z5SL/VtgV/SbeMejNdF cikyDiACgF6WTERpVdpyKAQ9FTXG2LTI9yf4Euk367u/3oaAejNmjspB5tqwLhqcg4hjkt0NpyD9Kh XCHWAi6+BsUZFr7LaJr3BaCwh+trqI8SoJJySRRSImbVvWz/UzDZcGg/xoRwtVJqr5kfJ2j0wpxAWq lR1pZ8BsOyriLEOT1hYXWfUqCFx538qX1tVSByGdiJngbG2I8bUF0hKtCvUANm00D5C54GlfAt1PWk XFs/ugvJqjEZlrYlGB2V/BHSNl1Qp1JdN/+utLfM/rYPNdh20qRbd9UAXmbA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -76,47 +69,48 @@ which we'd like to enable globally:
 
 In file included from ./include/linux/bitmap.h:9,
                  from ./include/linux/cpumask.h:12,
-                 from ./arch/x86/include/asm/cpumask.h:5,
-                 from ./arch/x86/include/asm/msr.h:11,
-                 from ./arch/x86/include/asm/processor.h:22,
-                 from ./arch/x86/include/asm/cpufeature.h:5,
-                 from ./arch/x86/include/asm/thread_info.h:53,
-                 from ./include/linux/thread_info.h:60,
-                 from ./arch/x86/include/asm/preempt.h:7,
-                 from ./include/linux/preempt.h:78,
-                 from ./include/linux/spinlock.h:55,
-                 from ./include/linux/wait.h:9,
-                 from ./include/linux/wait_bit.h:8,
-                 from ./include/linux/fs.h:6,
-                 from ./include/linux/debugfs.h:15,
-                 from drivers/bus/mhi/core/init.c:7:
-drivers/bus/mhi/core/init.c: In function 'to_mhi_pm_state_str':
-./include/linux/find.h:187:37: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'enum mhi_pm_state[1]' [-Warray-bounds]
-  187 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
-      |                                     ^~~~~
-drivers/bus/mhi/core/init.c:80:51: note: while referencing 'state'
-   80 | const char *to_mhi_pm_state_str(enum mhi_pm_state state)
-      |                                 ~~~~~~~~~~~~~~~~~~^~~~~
+                 from ./include/linux/smp.h:13,
+                 from ./include/linux/lockdep.h:14,
+                 from ./include/linux/mutex.h:17,
+                 from ./include/linux/notifier.h:14,
+                 from ./include/linux/clk.h:14,
+                 from drivers/irqchip/irq-ingenic-tcu.c:7:
+drivers/irqchip/irq-ingenic-tcu.c: In function 'ingenic_tcu_intc_cascade':
+./include/linux/find.h:40:23: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'uint32_t[1]' {aka 'unsigned int[1]'} [-Warray-bounds]
+   40 |                 val = *addr & GENMASK(size - 1, offset);
+      |                       ^~~~~
+drivers/irqchip/irq-ingenic-tcu.c:30:18: note: while referencing 'irq_reg'
+   30 |         uint32_t irq_reg, irq_mask;
+      |                  ^~~~~~~
 
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/bus/mhi/core/init.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-ingenic-tcu.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
-index f1ec34417592..b91f75fff962 100644
---- a/drivers/bus/mhi/core/init.c
-+++ b/drivers/bus/mhi/core/init.c
-@@ -79,7 +79,8 @@ static const char * const mhi_pm_state_str[] = {
+diff --git a/drivers/irqchip/irq-ingenic-tcu.c b/drivers/irqchip/irq-ingenic-tcu.c
+index 34a7d261b710..3363f83bd7e9 100644
+--- a/drivers/irqchip/irq-ingenic-tcu.c
++++ b/drivers/irqchip/irq-ingenic-tcu.c
+@@ -28,6 +28,7 @@ static void ingenic_tcu_intc_cascade(struct irq_desc *desc)
+ 	struct irq_chip_generic *gc = irq_get_domain_generic_chip(domain, 0);
+ 	struct regmap *map = gc->private;
+ 	uint32_t irq_reg, irq_mask;
++	unsigned long bits;
+ 	unsigned int i;
  
- const char *to_mhi_pm_state_str(enum mhi_pm_state state)
- {
--	int index = find_last_bit((unsigned long *)&state, 32);
-+	unsigned long bits = state;
-+	int index = find_last_bit(&bits, 32);
+ 	regmap_read(map, TCU_REG_TFR, &irq_reg);
+@@ -36,8 +37,9 @@ static void ingenic_tcu_intc_cascade(struct irq_desc *desc)
+ 	chained_irq_enter(irq_chip, desc);
  
- 	if (index >= ARRAY_SIZE(mhi_pm_state_str))
- 		return "Invalid State";
+ 	irq_reg &= ~irq_mask;
++	bits = irq_reg;
+ 
+-	for_each_set_bit(i, (unsigned long *)&irq_reg, 32)
++	for_each_set_bit(i, &bits, 32)
+ 		generic_handle_domain_irq(domain, i);
+ 
+ 	chained_irq_exit(irq_chip, desc);
 -- 
 2.30.2
 

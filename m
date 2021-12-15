@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9E647661F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A718F476621
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbhLOWo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 17:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S231444AbhLOWpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 17:45:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbhLOWo4 (ORCPT
+        with ESMTP id S231172AbhLOWo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 17:44:56 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBA7C06173F
+        Wed, 15 Dec 2021 17:44:57 -0500
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B2CC06173E
         for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:44:56 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id v30-20020a4a315e000000b002c52d555875so6365387oog.12
+Received: by mail-oo1-xc31.google.com with SMTP id b1-20020a4a8101000000b002c659ab1342so6361948oog.1
         for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:44:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ugf8VG9mc1i332OpZu+otBgHEDzhuxNnQ5yRaXWRMsA=;
-        b=WbH+CziDlrpgyUBc6N9D57Z+hEwJimqrYlS+UAGZi9DKHru0GppcSu7+sA8VgnWFW+
-         XYwqRLZJPL3bKA5lXhzjCF76XRbftwMiXmLhr3eCoF7fbvt3+AhmY/JEIkho3Hqvzzlj
-         pjUuN8FFE15EuYcRyVyaCEzfUnoUZe+N64nM0YRFkzFSLOw6S7K07F7eKiGihtHfkEgV
-         S4ETwkSEjaTL9I6jsrBxF2m/aeGT2qWGnDgVaIFl7Cy29IQhA7LJ0Z7dpRU4RyYsDlMb
-         45i5gmTzp0uRe3dEJksmXz+0hcsyG6oNXiG4yAQ/P1KaRqVArgmB0ggKPmH9xXsJo2ft
-         uhEA==
+        bh=m7eXdYQSfHOMEV4rFRIDaD0pSvXJQjL3uNKMI5fpepU=;
+        b=KfMsZOgt7Y6Z3amFQl5cblfkWJ9BsLsgs6F59tO+WP9r1E/SX0knZhjqFEqY8rza2P
+         WYaqNWKLj61f+icTxKSItTfiEcGhGL4m+W2Yi09RtgSxrtNX7KtLu01F4z1IntRF7qsm
+         lQjR6AQYSMKlKJfiXDsJo6JrjaeVAd/hoG6tZlashgwMkqt40yKv5Sz9gD2CU0llzPp4
+         kA3QvEcn5npPgXOuYmee1ZppIpt19TtD1J+vMFHj0dy6V5cZgRyemvXSAhVlUD/RwHzi
+         tqKqk/a4FCRTDiGZ9WplIyq7PNEI2SU5ewboAybDUKqS2BZ5LSwA49Epo+zjkgNbOBrY
+         TE2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ugf8VG9mc1i332OpZu+otBgHEDzhuxNnQ5yRaXWRMsA=;
-        b=8J952BE5ipwrj4ioP1m+GXGOrbNspA6qoPHXSWFHNR/uqYm2F/q8R2/IXg7O0yr0rR
-         xbIbue4Fx8U69kwoYixe03Z2e7w1NbHYxDqNgaxQOV36qQIlOR0MRmuf4RRIkU7p0w71
-         tqwGRYrfWGb1Lf45p//ap0s44kEXIHAIoS0zJ8Vko+2OzG2cj+6R/7Nt+H7aRyWimq4F
-         zmsdgkUbHItRiHUUcRHPv9Ckgou5N7xRWfgQfWcNys+nwpQcKelJ/iQsieDHT/ZPhJa7
-         yTSkLfNQbMefvM4OGaOkqpuepU3Z47PpbewvoCrgTAi/icCrZhZhsYY6F3rBtT7GOpIF
-         J6gw==
-X-Gm-Message-State: AOAM5327UW3QEpcj8y+nMK6MYHIrEQh3ab9/g/+ssz3tSHBJwCNs1seH
-        jdZfbtjpS6mU7gyaDL9fEw1/jw==
-X-Google-Smtp-Source: ABdhPJxbEo6DkSroC/wmpKzg8ePiebe2DWXFkjxQ9QA0nlhXnDiE3OA4YLh2zQ63NS8SE0FZcBvZwQ==
-X-Received: by 2002:a4a:7d52:: with SMTP id q18mr9124253ooe.52.1639608295370;
-        Wed, 15 Dec 2021 14:44:55 -0800 (PST)
+        bh=m7eXdYQSfHOMEV4rFRIDaD0pSvXJQjL3uNKMI5fpepU=;
+        b=NwrKdYi7jV8XP2Ts0jO3ckWA3opns7+uF1YaW+Rdllxe3yeOtPx+p0Afy9/+eVlR+C
+         BRZ/EtlahZ4wBxJK6PXDhFqFGqfwOw8o+ACpzXQElEUCeucMJMu9v487bWr8AX3DHpBn
+         xQgaeheuz1ZNN6qGBQt7HrBLvfbkG9qwIxtEBZa05NiTcJN+das/ghUnBiaJ/6teTmyN
+         4gc0sWYyWO73DoZrxmL/Kq23xpajE/xzMLc2x1sK3Dw8so3mPgOPOCqXSWiygOYYCYtU
+         nDXfhqd12ZKfSJnb89KU5V7AIdfh2IllHQT/BVeiGb/xr+muRGBXA3WxudpNJE9XtZe4
+         QQrQ==
+X-Gm-Message-State: AOAM532PL889iapNrKyRcL3blVd+5vNXX4YrfIH+iV3WUJcAYQak0CSg
+        0FudSYWE/3Uei8UYuo2iTVd1Dg==
+X-Google-Smtp-Source: ABdhPJwvuPMPfn2q5FP6SmmHtIMpypDWQyCMWMOoQqkrQwLhZNM4sZYqSqMw/ItoXQoAbeA14nUTcA==
+X-Received: by 2002:a4a:cf12:: with SMTP id l18mr9110518oos.25.1639608296178;
+        Wed, 15 Dec 2021 14:44:56 -0800 (PST)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id bf17sm624189oib.27.2021.12.15.14.44.54
+        by smtp.gmail.com with ESMTPSA id bf17sm624189oib.27.2021.12.15.14.44.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:44:54 -0800 (PST)
+        Wed, 15 Dec 2021 14:44:55 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sibi Sankar <sibis@codeaurora.org>, vkoul@kernel.org
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        mathieu.poirier@linaro.org, ohad@wizery.com, agross@kernel.org
-Subject: Re: (subset) [PATCH] remoteproc: qcom: pas: Add missing power-domain "mxc" for CDSP
-Date:   Wed, 15 Dec 2021 16:44:48 -0600
-Message-Id: <163960827806.3071514.13463889963656785638.b4-ty@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] remoteproc: qcom: Don't memcpy_toio more than is provided
+Date:   Wed, 15 Dec 2021 16:44:49 -0600
+Message-Id: <163960827806.3071514.11059170619331104073.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1624559605-29847-1-git-send-email-sibis@codeaurora.org>
-References: <1624559605-29847-1-git-send-email-sibis@codeaurora.org>
+In-Reply-To: <20211117065454.4142936-1-swboyd@chromium.org>
+References: <20211117065454.4142936-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -66,16 +64,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Jun 2021 00:03:25 +0530, Sibi Sankar wrote:
-> Add missing power-domain "mxc" required by CDSP PAS remoteproc on SM8350
-> SoC.
+On Tue, 16 Nov 2021 22:54:54 -0800, Stephen Boyd wrote:
+> If the string passed into qcom_pil_info_store() isn't as long as
+> PIL_RELOC_NAME_LEN we'll try to copy the string assuming the length is
+> PIL_RELOC_NAME_LEN to the io space and go beyond the bounds of the
+> string. Let's only copy as many byes as the string is long, ignoring the
+> NUL terminator.
 > 
+> This fixes the following KASAN error:
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] remoteproc: qcom: pas: Add missing power-domain "mxc" for CDSP
-      commit: dd585d9bfbf06fd08a6326c82978be1f06e7d1bd
+[1/1] remoteproc: qcom: Don't memcpy_toio more than is provided
+      commit: fdc12231d885119cc2e2b4f3e0fbba3155f37a56
 
 Best regards,
 -- 

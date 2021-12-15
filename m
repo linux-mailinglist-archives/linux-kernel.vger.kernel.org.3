@@ -2,168 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB029475F72
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 531F6475F77
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234141AbhLORhR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Dec 2021 12:37:17 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:49148 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238055AbhLORhD (ORCPT
+        id S234614AbhLORiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234176AbhLORiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:37:03 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:35836)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mxYD7-00Gzk2-5X; Wed, 15 Dec 2021 10:37:01 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:42252 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mxYD6-00F8Dq-19; Wed, 15 Dec 2021 10:37:00 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Rong Chen <rong.a.chen@intel.com>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-References: <202112140949.Uq5sFKR1-lkp@intel.com>
-        <87k0g7t7ry.fsf@email.froward.int.ebiederm.org>
-        <2af5f2f0-b2db-35e3-2d7a-7fa512db19af@intel.com>
-        <8735mutqvz.fsf@email.froward.int.ebiederm.org>
-        <db094a6d-48d6-7641-b8c3-fc338bd779b0@intel.com>
-Date:   Wed, 15 Dec 2021 11:36:23 -0600
-In-Reply-To: <db094a6d-48d6-7641-b8c3-fc338bd779b0@intel.com> (Rong Chen's
-        message of "Wed, 15 Dec 2021 13:22:21 +0800")
-Message-ID: <87czlxsrc8.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 15 Dec 2021 12:38:12 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE72C061574;
+        Wed, 15 Dec 2021 09:38:11 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id b7so18266568edd.6;
+        Wed, 15 Dec 2021 09:38:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wHSJEvMaIsTc7h8la2YQGbQodwQPApyf7+yKRFnENBc=;
+        b=SvfxzpsSVLXLCVbHRcbcFqim4+B8PHmRbgdhfb3ZkOA6mSuf81cmjdAy20H6QU0VxC
+         HZDWkzGV00rcnyCeTpaQTt4s8y/GWRilVHP0foY/JH+XfdOqIg3aZPprZWVb3tInSpfp
+         tu8lRgcN/vpsCzi6YSwJCdukNAgStQhgGRRyXkwa23Ji+uOkRdUHEqQSITp/VUFxFiuY
+         6MzlvhnyDoeOoFE9oMseORKmecnGojMzr+99on6yVmkikK6YB1M27uKqrIMFJWo1cBlq
+         z0fyT00pedHwXgZhtU1bk1Uyn2MtxdRNicc0PhufPqyfPMsVj6xWKMKoWw6DVh2brELS
+         vQZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wHSJEvMaIsTc7h8la2YQGbQodwQPApyf7+yKRFnENBc=;
+        b=7VaU/xqlSFPpbJgV3hndfAME1jO1w5bwRngwTcYpvhSxx29bmT98idMeq3rjA2JPnu
+         mBlbA6CxZNGmCX6M04TcsLjUMY1da8QPxultcSF3sxasJHl6eecowy1k4WK1zLYME1zL
+         nwJlG9Mb029lsvwMBqjv40FzWtP69N3vPWGjV0sNpLT/COJYsU/bxp3TQ9hrP3GxvudK
+         DwzP0+yPagFOwMJIcraimuP3AhvyhXsFj5qNQWCTY4LCO+eGMBzsTqOBJi1IVbKCynzU
+         E5duKo19Fm7048z5qcObtL9YD9ovaAIRNyrGCO9OoF2HbWLIL4k+c5uZ73ANbpGtgiGT
+         zZ/g==
+X-Gm-Message-State: AOAM531TgQK2Whi36VR5ZMcpU2AqHXHZtF2n+p9Jh7eAXPvxzN+IBMnA
+        aK/EvTnySIxPnR3b2f8/euc=
+X-Google-Smtp-Source: ABdhPJwPUrVkuRn/jLs6O1tnQcz+kCgl1GjfXkTsJh49QFe6B89Oftb8NzEjD/DNLWecFav6qeoOPA==
+X-Received: by 2002:a17:906:7191:: with SMTP id h17mr11600753ejk.643.1639589890530;
+        Wed, 15 Dec 2021 09:38:10 -0800 (PST)
+Received: from [192.168.8.198] ([148.252.129.75])
+        by smtp.gmail.com with ESMTPSA id l16sm1364085edb.59.2021.12.15.09.38.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 09:38:10 -0800 (PST)
+Message-ID: <6406f753-180a-7896-6df2-c187cb0e975f@gmail.com>
+Date:   Wed, 15 Dec 2021 17:38:11 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1mxYD6-00F8Dq-19;;;mid=<87czlxsrc8.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/lV0X34FlYM7z/GWcs7Yku8qgHXGn0v0E=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_00,
-        DCC_CHECK_NEGATIVE,LotsOfNums_01,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
-        T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,T_TooManySym_04,
-        T_TooManySym_05,T_XMDrugObfuBody_08,XMSubLong,XM_B_Unicode
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        * -3.0 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0047]
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.7 XMSubLong Long Subject
-        *  1.2 LotsOfNums_01 BODY: Lots of long strings of numbers
-        *  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_04 7+ unique symbols in subject
-        *  0.0 T_TooManySym_02 5+ unique symbols in subject
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.0 T_TooManySym_03 6+ unique symbols in subject
-        *  0.0 T_TooManySym_05 8+ unique symbols in subject
-        *  1.0 T_XMDrugObfuBody_08 obfuscated drug references
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Rong Chen <rong.a.chen@intel.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 559 ms - load_scoreonly_sql: 0.09 (0.0%),
-        signal_user_changed: 11 (2.0%), b_tie_ro: 10 (1.7%), parse: 1.07
-        (0.2%), extract_message_metadata: 24 (4.4%), get_uri_detail_list: 3.5
-        (0.6%), tests_pri_-1000: 33 (5.8%), tests_pri_-950: 1.62 (0.3%),
-        tests_pri_-900: 1.36 (0.2%), tests_pri_-90: 103 (18.5%), check_bayes:
-        101 (18.1%), b_tokenize: 11 (2.0%), b_tok_get_all: 10 (1.7%),
-        b_comp_prob: 5 (0.9%), b_tok_touch_all: 70 (12.5%), b_finish: 1.10
-        (0.2%), tests_pri_0: 368 (65.8%), check_dkim_signature: 0.55 (0.1%),
-        check_dkim_adsp: 2.6 (0.5%), poll_dns_idle: 0.79 (0.1%), tests_pri_10:
-        2.0 (0.4%), tests_pri_500: 9 (1.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [kbuild-all] Re: [ebiederm-user-namespace:signal-for-v5.17 4/12] arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to next function show_opcodes()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
+ <20211215084044.064e6861@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20211215084044.064e6861@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rong Chen <rong.a.chen@intel.com> writes:
+On 12/15/21 16:40, Jakub Kicinski wrote:
+> On Wed, 15 Dec 2021 14:49:18 +0000 Pavel Begunkov wrote:
+>> +static inline bool
+>> +__cgroup_bpf_prog_array_is_empty(struct cgroup_bpf *cgrp_bpf,
+>> +				 enum cgroup_bpf_attach_type type)
+>> +{
+>> +	struct bpf_prog_array *array = rcu_access_pointer(cgrp_bpf->effective[type]);
+>> +
+>> +	return array == &bpf_empty_prog_array.hdr;
+>> +}
+>> +
+>> +#define CGROUP_BPF_TYPE_ENABLED(sk, atype)				       \
+>> +({									       \
+>> +	struct cgroup *__cgrp = sock_cgroup_ptr(&(sk)->sk_cgrp_data);	       \
+>> +									       \
+>> +	!__cgroup_bpf_prog_array_is_empty(&__cgrp->bpf, (atype));	       \
+>> +})
+>> +
+> 
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index e7a163a3146b..0d2195c6fb2a 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -1161,6 +1161,19 @@ struct bpf_prog_array {
+>>   	struct bpf_prog_array_item items[];
+>>   };
+>>   
+>> +struct bpf_empty_prog_array {
+>> +	struct bpf_prog_array hdr;
+>> +	struct bpf_prog *null_prog;
+>> +};
+>> +
+>> +/* to avoid allocating empty bpf_prog_array for cgroups that
+>> + * don't have bpf program attached use one global 'bpf_empty_prog_array'
+>> + * It will not be modified the caller of bpf_prog_array_alloc()
+>> + * (since caller requested prog_cnt == 0)
+>> + * that pointer should be 'freed' by bpf_prog_array_free()
+>> + */
+>> +extern struct bpf_empty_prog_array bpf_empty_prog_array;
+> 
+> mumble mumble, this adds more "fun" dependencies [1] Maybe I'm going
 
-> On 12/15/21 12:48, Eric W. Biederman wrote:
->> Rong Chen <rong.a.chen@intel.com> writes:
->>
->>> On 12/15/21 01:29, Eric W. Biederman wrote:
->>>> kernel test robot <lkp@intel.com> writes:
->>>>
->>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git signal-for-v5.17
->>>>> head:   6b1248798eb6f6d5285db214299996ecc5dc1e6b
->>>>> commit: 0e25498f8cd43c1b5aa327f373dd094e9a006da7 [4/12] exit: Add and use make_task_dead.
->>>>> config: x86_64-randconfig-a011-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140949.Uq5sFKR1-lkp@intel.com/config)
->>>>> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
->>>>> reproduce (this is a W=1 build):
->>>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=0e25498f8cd43c1b5aa327f373dd094e9a006da7
->>>>>           git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
->>>>>           git fetch --no-tags ebiederm-user-namespace signal-for-v5.17
->>>>>           git checkout 0e25498f8cd43c1b5aa327f373dd094e9a006da7
->>>>>           # save the config file to linux build tree
->>>>>           mkdir build_dir
->>>>>           make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ kernel/ lib/kunit/
->>>>>
->>>>> If you fix the issue, kindly add following tag as appropriate
->>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>>
->>>>> All warnings (new ones prefixed by >>):
->>>>>
->>>>>>> lib/kunit/kunit-example-test.o: warning: objtool: .text.unlikely: unexpected end of section
->>>>> --
->>>>>>> arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to next function show_opcodes()
->>>> I am confused.  This change patches objtool to rename
->>>> rewind_stack_and_do_exit to rewind_stack_and_make_dead in the list
->>>> global_noreturns in tools/objtool/check.c
->>>>
->>>> There is no other change to oops_end other than that renaming.
->>>>
->>>> Did the robot somehow mange to run an old version of objtool while
->>>> building and this get this error?
->>>>
->>>> I tried and I am not currently able to reproduce this error.  Do you
->>>> have any additional pointers on how I might reproduce this?
->>> Hi Eric,
->>>
->>> The reproduce step in report based on a full build, I can reproduce
->>> the warnings with the below command:
->>>
->>>    make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
->> Any chance you could do "make arch/x86/kernel/dumpstack.s" and send it
->> to me?
->
-> $ make O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/dumpstack.s
-> make[1]: Entering directory '/mnt/memdrive/linux/build_dir'
->   GEN     Makefile
->   CALL    ../scripts/checksyscalls.sh
->   CALL    ../scripts/atomic/check-atomics.sh
->   DESCEND objtool
->   CC      arch/x86/kernel/dumpstack.s
-> make[1]: Leaving directory '/mnt/memdrive/linux/build_dir'
->
-> $ make O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
-> make[1]: Entering directory '/mnt/memdrive/linux/build_dir'
->   GEN     Makefile
->   CALL    ../scripts/checksyscalls.sh
->   CALL    ../scripts/atomic/check-atomics.sh
->   DESCEND objtool
->   CC      arch/x86/kernel/dumpstack.o
-> arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls
-> through to next function show_opcodes()
->   AR      arch/x86/kernel/built-in.a
-> make[1]: Leaving directory '/mnt/memdrive/linux/build_dir'
+Header dependencies? It's declared right after struct bpf_prog_array,
+and the other member is a pointer, so not sure what can go wrong.
 
-Thanks.  What I was actually hoping for was the assembly code of
-oops_end so I could understand the objtool error.
 
-I have tracked it down now.  I accidentally deleted a comma, which
-caused C string concatenation which merged two symbols together,
-and caused this warning.
+> about this all wrong, maybe I should be pulling out struct cgroup_bpf
+> so that cgroup.h does not need bpf-cgroup, not breaking bpf <-> bpf-cgroup.
+> Alexei, WDYT?
+> 
+> [1] https://lore.kernel.org/all/20211215061916.715513-2-kuba@kernel.org/
+> 
 
-What an annoying typo.
-
-Eric
+-- 
+Pavel Begunkov

@@ -2,134 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 591EC475976
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A5F475980
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237405AbhLONMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 08:12:31 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:47884 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbhLONMa (ORCPT
+        id S242790AbhLONOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 08:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237406AbhLONOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 08:12:30 -0500
-Date:   Wed, 15 Dec 2021 13:12:28 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639573949;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BSmE6urDlzLoZsUUpW4NctKQD0GQ5jnp6Rx5IEXBS9w=;
-        b=AtPT0A6CQeXs5T4aVcKhRJdA/TIltHeQDrtXZ7wx0tjk+M5dyLFRfDw3ki+pU+amn79cum
-        /x5LLp+KqoDR/vcgzQqJf0GeqQWwmcwMvrjIpXl8p1+n0H8fVGFcxk+cdgQG7bCjljNGuz
-        JjAaGyTHY9fHDlFOC+er3R+e5S7RwrO6crKXbQ1H6beJttBw6LJFcOvZimqzai0pf1nmwh
-        C3ERcWW/YvEhVrUK+QxoLuA4Nqoov0IGRWyfSc7CqnliksueC31NCZweKTo2rB0k6xYlG/
-        8YT+5XGkjCru/uzB4MMiEr92BYEjiF0w0k3RDkQkN6dCfkvQJ+G4h8RzjcMcPA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639573949;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BSmE6urDlzLoZsUUpW4NctKQD0GQ5jnp6Rx5IEXBS9w=;
-        b=dDeCCFHkvlCtjKtzdxpmZIlTfKdQ8FzK8U5D9aqSdO9ctZKieoVTBESkFAQsl6brizKNlI
-        wrlRxUHTEr51RcBg==
-From:   "tip-bot2 for Mike Rapoport" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/boot: Move EFI range reservation after cmdline parsing
-Cc:     Mike Rapoport <rppt@kernel.org>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211213112757.2612-4-bp@alien8.de>
-References: <20211213112757.2612-4-bp@alien8.de>
+        Wed, 15 Dec 2021 08:14:46 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09D8C061574;
+        Wed, 15 Dec 2021 05:14:45 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id c4so38118882wrd.9;
+        Wed, 15 Dec 2021 05:14:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DtC00k5MoJtHy7c+VzfuwnEjrtBRQAfi/4tLwKgqaW0=;
+        b=VZ4y91FcJaDU4ZleLAHlSLyXrFp6sNyvA95gVonN0nEw+nJVgibfwDrEQu5OZh17eR
+         q3zZaaMlewkKM3NfWbtdeUTJBuCnmOAD+gcAyk2+7BBy0VH+NhgMCAVe+Qv1CYI0cJZu
+         AaJPJ8FUxRRMT2BYrUeJLFb8TMgk7MEvRj+pEfiUvsMgyA7hNsLBDnTY+oIvLC0sU+xJ
+         B6mAUP3QeI+FjNKgtTMeeVbRZWBArTdf/hAZBbepS/BxFIWub4BurjkmJyWbNiGkckAq
+         cbM2SaoJSdcK7O7sWg+SazJpGyhcPJMe01g4GvaSPpLEssVjDQL49cMgtnE5F4CYxQG1
+         9fsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DtC00k5MoJtHy7c+VzfuwnEjrtBRQAfi/4tLwKgqaW0=;
+        b=E2uSJI4QeRJIY8vPE+ATGuWwfmN50z7eXdPGyGOJ+TJ7euxmlMnNrzMh1reWX/V3E0
+         LKL3fHIlc0fQwUZZ4TBs85Q5BGYAB/amueTPlRD3MKpg5IOgeskK9e1ETb1eIaeTDGTa
+         fe/lm5i5utOvhxlqb5kEnDltZ6TuM2ph7DADvIiY6GC7DsYopI9uDNF5XOG0+mpeKJYV
+         kFcb5ZwZZ+QQHytakumdiMERitlS/GNLhn2cUeYuF6eKmepG6uCGRQg1I1so13vWEr0s
+         z6z9s4Ltgz6E5fGDODuHtCSVJCu7Br8NDEyVIkGInkrtz9GDSOv+KkRV22UKIo5QljxO
+         Hqhw==
+X-Gm-Message-State: AOAM531b3PK96GTnE7oZ/Q9ItZqt8wa3cJ1jt2py+AX1/TIRCqc9txwH
+        i9sWCX8d1sBtgUYn5pr+Sy4=
+X-Google-Smtp-Source: ABdhPJymhOm8azyKTgsfcLqcFUGnGZDkvsCXnEHC8aGHsl3rQH8JIkSAX7BLLq0HVQDmqT/Sz9fKuw==
+X-Received: by 2002:adf:f049:: with SMTP id t9mr2987749wro.40.1639574084359;
+        Wed, 15 Dec 2021 05:14:44 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id c187sm3424177wme.33.2021.12.15.05.14.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 05:14:43 -0800 (PST)
+Date:   Wed, 15 Dec 2021 14:14:39 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        David Heidelberg <david@ixit.cz>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>,
+        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
+        Nikola Milosavljevic <mnidza@outlook.com>,
+        Ion Agorria <ion@agorria.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        Jasper Korten <jja2000@gmail.com>,
+        Thomas Graichen <thomas.graichen@gmail.com>,
+        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 15/28] ARM: tegra: Add usb-role-switch property to USB
+ OTG ports
+Message-ID: <YbnqP0XAcUYc4ePy@orome>
+References: <20211211211412.10791-1-digetx@gmail.com>
+ <20211211211412.10791-16-digetx@gmail.com>
 MIME-Version: 1.0
-Message-ID: <163957394846.23020.4896066797095894706.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jZPZDpo3CQ/tiVnX"
+Content-Disposition: inline
+In-Reply-To: <20211211211412.10791-16-digetx@gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     2f5b3514c33fecad4003ce0f22ca9691492d310b
-Gitweb:        https://git.kernel.org/tip/2f5b3514c33fecad4003ce0f22ca9691492d310b
-Author:        Mike Rapoport <rppt@kernel.org>
-AuthorDate:    Mon, 13 Dec 2021 12:27:57 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 15 Dec 2021 14:07:54 +01:00
+--jZPZDpo3CQ/tiVnX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-x86/boot: Move EFI range reservation after cmdline parsing
+On Sun, Dec 12, 2021 at 12:13:59AM +0300, Dmitry Osipenko wrote:
+> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+>=20
+> If an USB port is an OTG port, then we should add the usb-role-switch
+> property. Otherwise XUSB setup fails and therefore padctl is unable to
+> set up the ports. This leads to broken USB and PCIe ports. Add the
+> usb-role-switch properties to Tegra124 device-trees to fix the problem.
+>=20
+> The error message shown without this patch is e.g:
+> usb2-0: usb-role-switch not found for otg mode
+>=20
+> [digetx@gmail.com: improved commit message]
+> Tested-by: Thomas Graichen <thomas.graichen@gmail.com> # T124 Nyan Big
+> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi | 1 +
+>  arch/arm/boot/dts/tegra124-apalis.dtsi      | 1 +
+>  arch/arm/boot/dts/tegra124-nyan.dtsi        | 1 +
+>  arch/arm/boot/dts/tegra124-venice2.dts      | 2 +-
+>  4 files changed, 4 insertions(+), 1 deletion(-)
 
-The memory reservation in arch/x86/platform/efi/efi.c depends on at
-least two command line parameters. Put it back later in the boot process
-and move efi_memblock_x86_reserve_range() out of early_memory_reserve().
+The device tree bindings for the XUSB pad controller say that when this
+property is set, then the "connector" subnode should also exist.
 
-An attempt to fix this was done in
+Any chance we can add that? I was planning on making that a dependency
+in the json-schema conversion of the binding, in which case it would be
+more of a "must" than a "should".
 
-  8d48bf8206f7 ("x86/boot: Pull up cmdline preparation and early param parsing")
+Thierry
 
-but that caused other troubles so it got reverted.
+--jZPZDpo3CQ/tiVnX
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The bug this is addressing is:
+-----BEGIN PGP SIGNATURE-----
 
-Dan reports that Anjaneya Chagam can no longer use the efi=nosoftreserve
-kernel command line parameter to suppress "soft reservation" behavior.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG56j0ACgkQ3SOs138+
+s6ED/BAAjJzAFGEDZMa0RP9mEQ8ZKPoBhLPoU6TYw8zUJbImsBK004ZjQf/8+RgQ
+cuy7PrKJVdVf3GbpKKyj6B+1POinwPCTOChix1LpM8hVr/Cbyo3u20CEDHHuTnDT
+7ubav66bl3W5XlLLrUMShqv4mvZU75XJweJSWfnJntM01K0ozYVFJP2m9w/m4kwt
+Mo4Gz/tA5Gha9GuupY3M1Nxue3uqRWBgnRoCrns6Ph6m6m/64qxIB0yP4+mnF3bl
+egP7VYEXSwOeEGYX3CBgu9C6bwMh4ikY/4TAIJ5qD79rUg8Gx5zhtP0mZU85kn/S
+opaDvw9cNzc80PsFLRuA3C9JzYOEi4GVca/b94iSPf7vI/2qqWZ6W6t9pmkCu0ub
+Pf0JsTvs7l6+PZil1lbPmFcbQ7B+dOXFLmn2+2htt+VCN0YjRHOeduBVAwVgNTVF
+GdbLQ/kLjD/zSKQ8mTXvoDiqgyEs4qa/zTEnLdiE6Mk7+vRKx3oKJb9ebjTgjDro
+c1xR+/EBKuzpdTdMMfkNu1JMIbKkp4HXt1Zq/jf1q1+MdJ7ijV128T+as0+wUb6k
+FUisvaWf0Winw30eBmbsbzWYstEDf9ofjTDGBuBXrlyuRtZunKe2+MszNa5aoJpg
+G5m0UbGwMrhoPaXuV+F7fY0A2BH+M3+yGLAKY/REavAemMn1JtM=
+=Q6N6
+-----END PGP SIGNATURE-----
 
-This is due to the fact that the following call-chain happens at boot:
-
-  early_reserve_memory
-  |-> efi_memblock_x86_reserve_range
-      |-> efi_fake_memmap_early
-
-which does
-
-        if (!efi_soft_reserve_enabled())
-                return;
-
-and that would have set EFI_MEM_NO_SOFT_RESERVE after having parsed
-"nosoftreserve".
-
-However, parse_early_param() gets called *after* it, leading to the boot
-cmdline not being taken into account.
-
-See also https://lore.kernel.org/r/e8dd8993c38702ee6dd73b3c11f158617e665607.camel@intel.com
-
-  [ bp: Turn into a proper patch. ]
-
-Signed-off-by: Mike Rapoport <rppt@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211213112757.2612-4-bp@alien8.de
----
- arch/x86/kernel/setup.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 49b596d..e04f5e6 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -713,9 +713,6 @@ static void __init early_reserve_memory(void)
- 
- 	early_reserve_initrd();
- 
--	if (efi_enabled(EFI_BOOT))
--		efi_memblock_x86_reserve_range();
--
- 	memblock_x86_reserve_range_setup_data();
- 
- 	reserve_ibft_region();
-@@ -890,6 +887,9 @@ void __init setup_arch(char **cmdline_p)
- 
- 	parse_early_param();
- 
-+	if (efi_enabled(EFI_BOOT))
-+		efi_memblock_x86_reserve_range();
-+
- #ifdef CONFIG_MEMORY_HOTPLUG
- 	/*
- 	 * Memory used by the kernel cannot be hot-removed because Linux
+--jZPZDpo3CQ/tiVnX--

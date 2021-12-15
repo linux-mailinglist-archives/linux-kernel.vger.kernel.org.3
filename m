@@ -2,99 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C904B475C17
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6655B475C19
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244078AbhLOPpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244070AbhLOPps (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:45:48 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF07AC06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:45:47 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so1315490wmd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:45:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Xn1Ll/zwwc6I6T/3u63MToa9pnrJf15QvBtvMTGTwEw=;
-        b=cV+mGs4NRZG4GsjyQJe9jKNMeEcZTmYddiyBPolESjWlUl9INh6zFgOj8lDo4QJpsO
-         bJPicfSNQOGQrwoAqSOYo8+MfoRLQZbutRzXmRyNSTNiN31tAqbJfOYNED8vY2A2N6OV
-         3EZesBnOjcjuUlq+tEI3h4L3E1PhGnVzLpCy97g+bFg55vm7tgNsBLGbgggiQGi/Odl8
-         NW4y3xQvzvKk4q9EYIZrhEKipj2HTuNE+Lk6SGFMysGEXCfMp1faIo4xsiQ+sP8sGHIs
-         WjIHba2yWqbuNsGIdYTiU3VeYonFAQVEVWKZDSOAPG53iORZRdPT8984Gfh5Yab52Os6
-         mAsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Xn1Ll/zwwc6I6T/3u63MToa9pnrJf15QvBtvMTGTwEw=;
-        b=2OqiYXu5oLSNSYcK5WX0TStx1uSuh3x1emsL+rcKc/RQ3IRhB9rcS9ngIxDHHS0mKN
-         LrKlthyjo5nkakvTKDyeEbTGbDSCYGiw2P28dbEfq/b0o2EuuDpC2G29qCoxhsSRlqZn
-         s9qVMssDn3xQF+tA5rfAwbomaJdIg1q/ly2fCMwMSBN4ZFsQs2IwA4wz9eFI3tBsKCp1
-         fmoFZQw78yJ8s+42rtzm3zcPqmT/mPQvIUNeIXMDm8O3bhI7+ieh0kuO5hibMVjtaYSw
-         dEHfXs3tm49yhB+I3uDLu2mQwTKuy6yQn4m4Gv6EqfPQXdNoDcr9DrNKsmhEuJHHZlPa
-         qYaA==
-X-Gm-Message-State: AOAM532Eqz/ahQI2cZUamtE2xpv3ckHIhZffF1wjmIGc7u2qvc5jW7mt
-        d2kiyqmbYsSwalEVGOQMWm1PlQ==
-X-Google-Smtp-Source: ABdhPJyT/9KSiuR3jBg4CCcDkaDCJWmmGa5oRYKyEe/0Ms3ZQJPcsUbg2WLCtUhdd8tgCwOujj6Htg==
-X-Received: by 2002:a05:600c:22d2:: with SMTP id 18mr388735wmg.158.1639583146106;
-        Wed, 15 Dec 2021 07:45:46 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:209:8505:8095:9f82:42b7])
-        by smtp.gmail.com with ESMTPSA id f15sm2681600wmg.30.2021.12.15.07.45.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 07:45:45 -0800 (PST)
-Date:   Wed, 15 Dec 2021 15:45:41 +0000
-From:   David Brazdil <dbrazdil@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Will Deacon <will@kernel.org>,
-        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] misc: open-dice: Add driver to expose DICE data
- to userspace
-Message-ID: <YboNpWFL8v+FuWXC@google.com>
-References: <20211215150410.1707849-1-dbrazdil@google.com>
- <20211215150410.1707849-3-dbrazdil@google.com>
- <YboHh6TJJ0VNHpV2@kroah.com>
+        id S244082AbhLOPqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:46:08 -0500
+Received: from mga05.intel.com ([192.55.52.43]:48704 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237960AbhLOPqH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 10:46:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639583167; x=1671119167;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=C9GDrVZ9XRV1Tyn15XIu1m+c1fHF/qYIGbNdxCRZAlY=;
+  b=UbUKMzdTvt5olp+2vqUh2+NSiaoR2GqkgtucmWzkodagTKugCvnea4Lv
+   7CizdOEM07sDyD5l+uTzgY1N96OSyshwu50MZ5wHPJnEwpnaRqFK7700P
+   f9Rd8alGmHeHWYvC/m6lJRMUfM+W/9rlEz9S5MxxscL+sPCSb4RAK/kN3
+   wVdX37ejhjyu2pFdAlNrR4xjHEzVx4nJ87SLA3u/m66v4zCQ92azzNmV1
+   dz0qC4ncTFXUGYbPvq8sC0ct9MpxK2pC1LukKhRvZMbRFK3uXwwc49jiO
+   SG41u8sY+uZO9Ibzsl95RW7WLmilEFTDacjqFlhtrOSIhhmdVPhCyCxaa
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="325534020"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="325534020"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 07:46:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="614741780"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 15 Dec 2021 07:46:05 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxWTk-0001ym-SJ; Wed, 15 Dec 2021 15:46:04 +0000
+Date:   Wed, 15 Dec 2021 23:46:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Janne Grunau <j@jannau.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:touchpad/wip 80/82] drivers/hid/hid-appleft.c:68:
+ warning: expecting prototype for struct magicmouse_sc. Prototype was for
+ struct appleft_sc instead
+Message-ID: <202112152315.IFJ9Vy6H-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YboHh6TJJ0VNHpV2@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 04:19:35PM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Dec 15, 2021 at 03:04:10PM +0000, David Brazdil wrote:
-> > +	drvdata = devm_kmalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-> > +	if (!drvdata)
-> > +		return -ENOMEM;
-> > +
-> > +	*drvdata = (struct open_dice_drvdata){
-> > +		.lock = __SPIN_LOCK_UNLOCKED(drvdata->lock),
-> > +		.rmem = rmem,
-> > +		.misc = (struct miscdevice){
-> > +			.parent	= dev,
-> > +			.name	= drvdata->name,
-> > +			.minor	= MISC_DYNAMIC_MINOR,
-> > +			.fops	= &open_dice_fops,
-> > +			.mode	= 0600,
-> > +		},
-> > +	};
-> 
-> That is a lovely abuse of an implicit memcpy(), took me a while to
-> realize what it was doing here...
-> 
-> Anyway, this all looks great to me, I'll wait for the DT maintainers to
-> review the dt change before being able to take this through my tree.
-> Thanks for the cleanups based on the review, the driver is now almost
-> 1/3 smaller than your first version with more functionality!
+tree:   https://github.com/AsahiLinux/linux touchpad/wip
+head:   a2281d64fdbcbab0dae68c6ea75bd5b548332e06
+commit: 23cee793a43b082dfa9c9a58a0fb9604c5825d7a [80/82] WIP: HID: Add hid-appleft for Apple Macbook Trackpads
+config: nds32-allyesconfig (https://download.01.org/0day-ci/archive/20211215/202112152315.IFJ9Vy6H-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/23cee793a43b082dfa9c9a58a0fb9604c5825d7a
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux touchpad/wip
+        git checkout 23cee793a43b082dfa9c9a58a0fb9604c5825d7a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash drivers/hid/
 
-Thanks, and thank your for your help!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-David
+All warnings (new ones prefixed by >>):
+
+>> drivers/hid/hid-appleft.c:68: warning: expecting prototype for struct magicmouse_sc. Prototype was for struct appleft_sc instead
+   drivers/hid/hid-appleft.c:105: warning: Function parameter or member 'unknown_or_origin1' not described in 'tp_finger'
+   drivers/hid/hid-appleft.c:105: warning: Function parameter or member 'unknown_or_origin2' not described in 'tp_finger'
+>> drivers/hid/hid-appleft.c:127: warning: expecting prototype for struct trackpad. Prototype was for struct tp_header instead
+
+
+vim +68 drivers/hid/hid-appleft.c
+
+    43	
+    44	/**
+    45	 * struct magicmouse_sc - Tracks Magic Mouse-specific data.
+    46	 * @input: Input device through which we report events.
+    47	 * @quirks: Currently unused.
+    48	 * @ntouches: Number of touches in most recent touch report.
+    49	 * @scroll_accel: Number of consecutive scroll motions.
+    50	 * @scroll_jiffies: Time of last scroll motion.
+    51	 * @touches: Most recent data for a touch, indexed by tracking ID.
+    52	 * @tracking_ids: Mapping of current touch input data to @touches.
+    53	 */
+    54	struct appleft_sc {
+    55		struct input_dev *input;
+    56		unsigned long quirks;
+    57	
+    58		int ntouches;
+    59	
+    60		struct input_mt_pos pos[MAX_CONTACTS];
+    61		int slots[MAX_CONTACTS];
+    62		u8 map_contacs[MAX_CONTACTS];
+    63	
+    64		struct hid_device *hdev;
+    65		struct delayed_work work;
+    66	
+    67		int x_min, y_min, x_max, y_max;
+  > 68	};
+    69	
+    70	/**
+    71	 * struct tp_finger - single trackpad finger structure, le16-aligned
+    72	 *
+    73	 * @origin:		zero when switching track finger
+    74	 * @abs_x:		absolute x coordinate
+    75	 * @abs_y:		absolute y coordinate
+    76	 * @rel_x:		relative x coordinate
+    77	 * @rel_y:		relative y coordinate
+    78	 * @tool_major:		tool area, major axis
+    79	 * @tool_minor:		tool area, minor axis
+    80	 * @orientation:	16384 when point, else 15 bit angle
+    81	 * @touch_major:	touch area, major axis
+    82	 * @touch_minor:	touch area, minor axis
+    83	 * @unused:		zeros
+    84	 * @pressure:		pressure on forcetouch touchpad
+    85	 * @multi:		one finger: varies, more fingers: constant
+    86	 * @crc16:		on last finger: crc over the whole message struct
+    87	 *			(i.e. message header + this struct) minus the last
+    88	 *			@crc16 field; unknown on all other fingers.
+    89	 */
+    90	struct tp_finger {
+    91		__le16 unknown_or_origin1;
+    92		__le16 unknown_or_origin2;
+    93		__le16 abs_x;
+    94		__le16 abs_y;
+    95		__le16 rel_x;
+    96		__le16 rel_y;
+    97		__le16 tool_major;
+    98		__le16 tool_minor;
+    99		__le16 orientation;
+   100		__le16 touch_major;
+   101		__le16 touch_minor;
+   102		__le16 unused[2];
+   103		__le16 pressure;
+   104		__le16 multi;
+   105	} __attribute__((packed, aligned(2)));
+   106	
+   107	/**
+   108	 * struct trackpad report
+   109	 *
+   110	 * @report_id:		reportid
+   111	 * @buttons:		HID Usage Buttons 3 1-bit reports
+   112	 * @num_fingers:	the number of fingers being reported in @fingers
+   113	 * @clicked:		same as @buttons
+   114	 */
+   115	struct tp_header {
+   116		// HID mouse report
+   117		u8 report_id;
+   118		u8 buttons;
+   119		u8 rel_x;
+   120		u8 rel_y;
+   121		u8 padding[4];
+   122		// HID vendor part, up to 1751 bytes
+   123		u8 unknown[22];
+   124		u8 num_fingers;
+   125		u8 clicked;
+   126		u8 unknown3[14];
+ > 127	};
+   128	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

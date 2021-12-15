@@ -2,80 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C45E4751E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 06:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B344751E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 06:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239858AbhLOFWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 00:22:21 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:54180 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229616AbhLOFWU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 00:22:20 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowABnbi53e7lh4DcEAw--.38941S2;
-        Wed, 15 Dec 2021 13:21:59 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
-        mchehab@kernel.org, matthias.bgg@gmail.com
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] media: mtk-vcodec: potential dereference of null pointer
-Date:   Wed, 15 Dec 2021 13:21:57 +0800
-Message-Id: <20211215052157.94172-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S239871AbhLOFW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 00:22:27 -0500
+Received: from mga09.intel.com ([134.134.136.24]:60572 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239861AbhLOFW0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 00:22:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639545746; x=1671081746;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ut1Q/Z+F1qkXD5SI3hngsNT+FiBiMeYWIbrufPg5mKI=;
+  b=VNQ2eromDdWcoioC06wrqVBWDadyzZIJqFjsjHALBhMhyIc76TlDC2oT
+   rNjqhiV6fnX9uHKLBUgZhBTH3KZ5SXED3kcJCYH7jpQh5hJ0CBYbxOXiO
+   Yyw2tG9KaiJ5bxQP/G9HcisL10aaP2hQB2UlTvhd/nQWQk1xg+s++xr6F
+   Rqbjyb3PhWw+bThM6X4cmuG7ic0xU16dflxpLXnX6il03OSyrSGR8g8u8
+   1X1g8q3eKi/BIoJ5myCHDg8Xhi4LVPq/9+CWTPaa6G1+DZFGkVbZhxlcN
+   vcgkH1FXgEE9Uryp9BfNA/bfEIMbSAXxsq6dDc28cLsxsbCE1tlre1HMm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="238964380"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="238964380"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 21:22:25 -0800
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="518608275"
+Received: from rongch2-desk.sh.intel.com (HELO [10.239.159.175]) ([10.239.159.175])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 21:22:24 -0800
+Message-ID: <db094a6d-48d6-7641-b8c3-fc338bd779b0@intel.com>
+Date:   Wed, 15 Dec 2021 13:22:21 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [kbuild-all] Re: [ebiederm-user-namespace:signal-for-v5.17 4/12]
+ arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to
+ next function show_opcodes()
+Content-Language: en-US
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+References: <202112140949.Uq5sFKR1-lkp@intel.com>
+ <87k0g7t7ry.fsf@email.froward.int.ebiederm.org>
+ <2af5f2f0-b2db-35e3-2d7a-7fa512db19af@intel.com>
+ <8735mutqvz.fsf@email.froward.int.ebiederm.org>
+From:   Rong Chen <rong.a.chen@intel.com>
+In-Reply-To: <8735mutqvz.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABnbi53e7lh4DcEAw--.38941S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKFy8Aw4fXFyxCFy7Ww15urg_yoWkurc_Aa
-        yqvF1xZr1UtwnxJF47tF1S9ryI9Fs8Kr40q3sxKFZIqa4UGF4rZr1DXF45Za1UXwnFvF98
-        Jas0vFW7A39xJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GrWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUP5rcUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of devm_kzalloc() needs to be checked.
-To avoid use of null pointer in case of thefailure of alloc.
 
-Fixes: 46233e91fa24 ("media: mtk-vcodec: move firmware implementations into their own files")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
 
-v1 -> v2
+On 12/15/21 12:48, Eric W. Biederman wrote:
+> Rong Chen <rong.a.chen@intel.com> writes:
+>
+>> On 12/15/21 01:29, Eric W. Biederman wrote:
+>>> kernel test robot <lkp@intel.com> writes:
+>>>
+>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git signal-for-v5.17
+>>>> head:   6b1248798eb6f6d5285db214299996ecc5dc1e6b
+>>>> commit: 0e25498f8cd43c1b5aa327f373dd094e9a006da7 [4/12] exit: Add and use make_task_dead.
+>>>> config: x86_64-randconfig-a011-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140949.Uq5sFKR1-lkp@intel.com/config)
+>>>> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+>>>> reproduce (this is a W=1 build):
+>>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=0e25498f8cd43c1b5aa327f373dd094e9a006da7
+>>>>           git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
+>>>>           git fetch --no-tags ebiederm-user-namespace signal-for-v5.17
+>>>>           git checkout 0e25498f8cd43c1b5aa327f373dd094e9a006da7
+>>>>           # save the config file to linux build tree
+>>>>           mkdir build_dir
+>>>>           make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ kernel/ lib/kunit/
+>>>>
+>>>> If you fix the issue, kindly add following tag as appropriate
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>
+>>>> All warnings (new ones prefixed by >>):
+>>>>
+>>>>>> lib/kunit/kunit-example-test.o: warning: objtool: .text.unlikely: unexpected end of section
+>>>> --
+>>>>>> arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to next function show_opcodes()
+>>> I am confused.  This change patches objtool to rename
+>>> rewind_stack_and_do_exit to rewind_stack_and_make_dead in the list
+>>> global_noreturns in tools/objtool/check.c
+>>>
+>>> There is no other change to oops_end other than that renaming.
+>>>
+>>> Did the robot somehow mange to run an old version of objtool while
+>>> building and this get this error?
+>>>
+>>> I tried and I am not currently able to reproduce this error.  Do you
+>>> have any additional pointers on how I might reproduce this?
+>> Hi Eric,
+>>
+>> The reproduce step in report based on a full build, I can reproduce
+>> the warnings with the below command:
+>>
+>>    make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> Any chance you could do "make arch/x86/kernel/dumpstack.s" and send it
+> to me?
 
-*Change 1. Change the return value from "-EINVAL" to "-ENOMEM".
----
- drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c | 2 ++
- 1 file changed, 2 insertions(+)
+$ make O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/dumpstack.s
+make[1]: Entering directory '/mnt/memdrive/linux/build_dir'
+   GEN     Makefile
+   CALL    ../scripts/checksyscalls.sh
+   CALL    ../scripts/atomic/check-atomics.sh
+   DESCEND objtool
+   CC      arch/x86/kernel/dumpstack.s
+make[1]: Leaving directory '/mnt/memdrive/linux/build_dir'
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
-index cd27f637dbe7..769228093e48 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
-@@ -102,6 +102,8 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
- 	vpu_wdt_reg_handler(fw_pdev, mtk_vcodec_vpu_reset_handler, dev, rst_id);
- 
- 	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
-+	if (!fw)
-+		return ERR_PTR(-ENOMEM);
- 	fw->type = VPU;
- 	fw->ops = &mtk_vcodec_vpu_msg;
- 	fw->pdev = fw_pdev;
--- 
-2.25.1
+$ make O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
+make[1]: Entering directory '/mnt/memdrive/linux/build_dir'
+   GEN     Makefile
+   CALL    ../scripts/checksyscalls.sh
+   CALL    ../scripts/atomic/check-atomics.sh
+   DESCEND objtool
+   CC      arch/x86/kernel/dumpstack.o
+arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through 
+to next function show_opcodes()
+   AR      arch/x86/kernel/built-in.a
+make[1]: Leaving directory '/mnt/memdrive/linux/build_dir'
+
+Best Regards,
+Rong Chen
+
+>
+> I want to see what code is in your oops_end.
+>
+> It really does not make sense that simply renaming a function would
+> trigger this error.
+>
+> I did a full build (on debian 10 with gcc-8.3.0) and I did not manage to
+> reproduce this.  In a bit I will try with a newer debian and see if I
+> can get the issue to reproduce.  Still it does not make sense to me
+> that a simple rename would trigger this error.
+>
+> Eric
+>
 

@@ -2,116 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C688F47579B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F36E4757A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234543AbhLOLRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:17:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57640 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237067AbhLOLQ5 (ORCPT
+        id S236993AbhLOLS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 06:18:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231875AbhLOLS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:16:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639567016;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C/kACBPtJZeIuY+3f2e1l9jss5UUWc08/NUCKSY8UVM=;
-        b=XxoSSmuVWTYZl1qMtCj7c54zJUPUbnCGYxMb9OhpJ4O+5ySpSjupX1uaZYER+FPs882MXy
-        Xji7eez1mXQjb3/uez3bYc2GtgyuBxg0HkZxfglFFE1sfdnrzYOsIST2ZOdMgdERHJD8BW
-        SkTFW3vF3sUK0X9rAxVffhNuBqKIczc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-446-8SYL8iBXPgiNrlxaWUUICg-1; Wed, 15 Dec 2021 06:16:53 -0500
-X-MC-Unique: 8SYL8iBXPgiNrlxaWUUICg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2AD0381CCB5;
-        Wed, 15 Dec 2021 11:16:49 +0000 (UTC)
-Received: from localhost (ovpn-12-120.pek2.redhat.com [10.72.12.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id ED0D17E668;
-        Wed, 15 Dec 2021 11:16:46 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 19:16:43 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
+        Wed, 15 Dec 2021 06:18:56 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EACC061574;
+        Wed, 15 Dec 2021 03:18:56 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id i63so32790480lji.3;
+        Wed, 15 Dec 2021 03:18:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JFWfeevTa7CdrnyD5XW53LU9ZJeNJmiufxH04mm98PA=;
+        b=pNEF0X34RlSq8GfUyJ39VPds2Ixzn5FStJmIop/AzKIxKBB4ufecMIiAiai+EBZcm5
+         /J/6LUX61XTG4ouX1WwCgTV0QA8Wq8Dm5ne/NaYiKK7Au1WSbCOYqyldw7yixfOn6+N6
+         8oAVKZ5/O9LNYLCEfLPXwH+sjJY4n8tLdWMaHwD7bSNggyjtUwnkbDwHch+pmqyTv2Eq
+         Ff1OKOqPcP/z6TK04I0vn5VauoI4qdWrgkRX35hWESfG1CZiLMFkixTFb2wd5LQzPrLN
+         6fygCq9Edvr6XZSqoHN3TIQApUJCPQ8DGmLBNfaX8fbpDw+DHimg/zz0gsp6wb+nZxzk
+         dczA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JFWfeevTa7CdrnyD5XW53LU9ZJeNJmiufxH04mm98PA=;
+        b=L0AirUX78USAaD3rGv1ruC1lR99WK/Nv0qHUo6F5oJAfv39dHm8rIsfVmvoxEAErDf
+         Flu0gauvw7/piRRo+Ttc2GqNSwHTswq8SOx/YW7i7CuXx3hUKGBX+7p7hCS3S7i9dYG2
+         JF9R7vyYQm6Nkii4wK4sm/ijP4uJY8Am/66KLSPYrkczeXjKMThyJ8YYAHcwYWKyuS06
+         Us5Xb3D0+kJA1NF9av/ty5gpZiFrBSXqRVkKm6vSAI3sctCVjjqRq5M3VLHy7gFFBf3B
+         ywdFdPUJixoU/sHfnrncVDx1jQhZxA+Di2GYDwBx3hk9SiAS3TGmnm0GZPS+2jUKoftq
+         NOZA==
+X-Gm-Message-State: AOAM533PUtBCISI1go0gOV/x4mP6M0LxPttDIxfYPBJAHSy2JlfT4y2q
+        vkRC41AT5FxRLw8Cj3SO8+Nf2l5u7nJmJuo5
+X-Google-Smtp-Source: ABdhPJxoUTvNToOsgLSqFiP9ArAxNu+GLzgTv2e86d7hOZ9CvBMwZ7st7mNSbyo1dVJSn612xZ6NPg==
+X-Received: by 2002:a2e:3012:: with SMTP id w18mr9453431ljw.344.1639567134417;
+        Wed, 15 Dec 2021 03:18:54 -0800 (PST)
+Received: from pc638.lan (h5ef52e3d.seluork.dyn.perspektivbredband.net. [94.245.46.61])
+        by smtp.gmail.com with ESMTPSA id n17sm383906ljg.128.2021.12.15.03.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 03:18:53 -0800 (PST)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Axtens <dja@axtens.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraju@codeaurora.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-Subject: Re: [PATCH v17 02/10] x86: kdump: make the lower bound of crash
- kernel reservation consistent
-Message-ID: <20211215111643.GF3023@MiWiFi-R3L-srv>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-3-thunder.leizhen@huawei.com>
- <YbjrjpehprvoRXbV@zn.tnic>
- <YbjvXl51hc6GZa71@arm.com>
- <20211215034219.GB10336@MiWiFi-R3L-srv>
- <YbnK79c0YokJ1ahu@arm.com>
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>
+Subject: [PATCH] drdb: Switch to kvfree_rcu() API
+Date:   Wed, 15 Dec 2021 12:18:37 +0100
+Message-Id: <20211215111845.2514-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbnK79c0YokJ1ahu@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 at 11:01am, Catalin Marinas wrote:
-> On Wed, Dec 15, 2021 at 11:42:19AM +0800, Baoquan He wrote:
-> > On 12/14/21 at 07:24pm, Catalin Marinas wrote:
-> > > On Tue, Dec 14, 2021 at 08:07:58PM +0100, Borislav Petkov wrote:
-> > > > On Fri, Dec 10, 2021 at 02:55:25PM +0800, Zhen Lei wrote:
-> > > > > From: Chen Zhou <chenzhou10@huawei.com>
-> > > > > 
-> > > > > The lower bounds of crash kernel reservation and crash kernel low
-> > > > > reservation are different, use the consistent value CRASH_ALIGN.
-> > > > 
-> > > > A big WHY is missing here to explain why the lower bound of the
-> > > > allocation range needs to be 16M and why was 0 wrong?
-> > > 
-> > > I asked the same here:
-> > > 
-> > > https://lore.kernel.org/r/20210224143547.GB28965@arm.com
-> > > 
-> > > IIRC Baoquan said that there is a 1MB reserved for x86 anyway in the
-> > > lower part, so that's equivalent in practice to starting from
-> > > CRASH_ALIGN.
-> > 
-> > Yeah, even for i386, there's area reserved by BIOS inside low 1M.
-> > Considering the existing alignment CRASH_ALIGN which is 16M, we
-> > definitely have no chance to get memory starting from 0. So starting
-> > from 16M can skip the useless memblock searching, and make the
-> > crashkernel low reservation consisten with crashkernel reservation on
-> > allocation code.
-> 
-> That's the x86 assumption. Is it valid for other architectures once the
-> code has been made generic in patch 6? It should be ok for arm64, RAM
-> tends to start from higher up but other architectures may start using
-> this common code.
+Instead of invoking a synchronize_rcu() to free a pointer
+after a grace period we can directly make use of new API
+that does the same but in more efficient way.
 
-Good point. I didn't think of this from generic code side, then let's
-keep it as 0.
+TO: Jens Axboe <axboe@kernel.dk>
+TO: Philipp Reisner <philipp.reisner@linbit.com>
+TO: Jason Gunthorpe <jgg@nvidia.com>
+TO: drbd-dev@lists.linbit.com
+TO: linux-block@vger.kernel.org
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+---
+ drivers/block/drbd/drbd_nl.c       | 9 +++------
+ drivers/block/drbd/drbd_receiver.c | 6 ++----
+ drivers/block/drbd/drbd_state.c    | 3 +--
+ 3 files changed, 6 insertions(+), 12 deletions(-)
 
-> 
-> If you want to keep the same semantics as before, just leave it as 0.
-> It's not that the additional lower bound makes the search slower.
-
-Agree.
+diff --git a/drivers/block/drbd/drbd_nl.c b/drivers/block/drbd/drbd_nl.c
+index 44ccf8b4f4b2..28f4d84945fd 100644
+--- a/drivers/block/drbd/drbd_nl.c
++++ b/drivers/block/drbd/drbd_nl.c
+@@ -1679,8 +1679,7 @@ int drbd_adm_disk_opts(struct sk_buff *skb, struct genl_info *info)
+ 			drbd_send_sync_param(peer_device);
+ 	}
+ 
+-	synchronize_rcu();
+-	kfree(old_disk_conf);
++	kvfree_rcu(old_disk_conf);
+ 	kfree(old_plan);
+ 	mod_timer(&device->request_timer, jiffies + HZ);
+ 	goto success;
+@@ -2511,8 +2510,7 @@ int drbd_adm_net_opts(struct sk_buff *skb, struct genl_info *info)
+ 
+ 	mutex_unlock(&connection->resource->conf_update);
+ 	mutex_unlock(&connection->data.mutex);
+-	synchronize_rcu();
+-	kfree(old_net_conf);
++	kvfree_rcu(old_net_conf);
+ 
+ 	if (connection->cstate >= C_WF_REPORT_PARAMS) {
+ 		struct drbd_peer_device *peer_device;
+@@ -2925,8 +2923,7 @@ int drbd_adm_resize(struct sk_buff *skb, struct genl_info *info)
+ 		new_disk_conf->disk_size = (sector_t)rs.resize_size;
+ 		rcu_assign_pointer(device->ldev->disk_conf, new_disk_conf);
+ 		mutex_unlock(&device->resource->conf_update);
+-		synchronize_rcu();
+-		kfree(old_disk_conf);
++		kvfree_rcu(old_disk_conf);
+ 		new_disk_conf = NULL;
+ 	}
+ 
+diff --git a/drivers/block/drbd/drbd_receiver.c b/drivers/block/drbd/drbd_receiver.c
+index 1f740e42e457..d73a53242a75 100644
+--- a/drivers/block/drbd/drbd_receiver.c
++++ b/drivers/block/drbd/drbd_receiver.c
+@@ -3799,8 +3799,7 @@ static int receive_protocol(struct drbd_connection *connection, struct packet_in
+ 		drbd_info(connection, "peer data-integrity-alg: %s\n",
+ 			  integrity_alg[0] ? integrity_alg : "(none)");
+ 
+-	synchronize_rcu();
+-	kfree(old_net_conf);
++	kvfree_rcu(old_net_conf);
+ 	return 0;
+ 
+ disconnect_rcu_unlock:
+@@ -4168,8 +4167,7 @@ static int receive_sizes(struct drbd_connection *connection, struct packet_info
+ 
+ 			rcu_assign_pointer(device->ldev->disk_conf, new_disk_conf);
+ 			mutex_unlock(&connection->resource->conf_update);
+-			synchronize_rcu();
+-			kfree(old_disk_conf);
++			kvfree_rcu(old_disk_conf);
+ 
+ 			drbd_info(device, "Peer sets u_size to %lu sectors (old: %lu)\n",
+ 				 (unsigned long)p_usize, (unsigned long)my_usize);
+diff --git a/drivers/block/drbd/drbd_state.c b/drivers/block/drbd/drbd_state.c
+index b8a27818ab3f..826e496821c7 100644
+--- a/drivers/block/drbd/drbd_state.c
++++ b/drivers/block/drbd/drbd_state.c
+@@ -2071,8 +2071,7 @@ static int w_after_conn_state_ch(struct drbd_work *w, int unused)
+ 		conn_free_crypto(connection);
+ 		mutex_unlock(&connection->resource->conf_update);
+ 
+-		synchronize_rcu();
+-		kfree(old_conf);
++		kvfree_rcu(old_conf);
+ 	}
+ 
+ 	if (ns_max.susp_fen) {
+-- 
+2.30.2
 

@@ -2,1490 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A2A474F20
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B66474F0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238489AbhLOAYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 19:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        id S238426AbhLOAXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 19:23:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238468AbhLOAYI (ORCPT
+        with ESMTP id S232228AbhLOAXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 19:24:08 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9E6C061401
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 16:24:08 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso17555312pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 16:24:08 -0800 (PST)
+        Tue, 14 Dec 2021 19:23:38 -0500
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17219C061574;
+        Tue, 14 Dec 2021 16:23:38 -0800 (PST)
+Received: by mail-ua1-x931.google.com with SMTP id i6so37894353uae.6;
+        Tue, 14 Dec 2021 16:23:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=AY30Xp9HHwd5baqFS/8IYVCe1FXhUrUb3OLIbsdwsvI=;
-        b=JRn0fzqy60bwlC4saBUzzapNZ/AlLMlGK6mvIk7VK68ur2FHV0H4G/MCSJKFxvPYXJ
-         eVkuiXUKvkzXxzA4SHIu1Hln1OwM0jK02jFh6cH3xUbwzvtTX1EOJE9aIQK/S8/clzeG
-         BghEU8f8qJ9XzS6wpeDFhrfHTOleVzkg0qUtNTGPfilnyYSAXSBdO6MHDR8E7cW4q4cZ
-         +dX0fv9GSBN2lAeZQuRGKJ6ZF+IljXBjomrQrI+LZmCcG0qX+wMGy16PrPH8HYRUJHNG
-         bbbk2asKeULDnYGXG4XKl8kvUNU8AIJ//Pl/1zzcAOjY1wyL78dHaRi/5xk7UjBzFKEM
-         Hhow==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0JKc9PAD26kXoepjJUR+P8qecRLoOY8+4P0m+zClgn4=;
+        b=ayk5kQZm5ugA+VzApd8WhDdXBTuyrtiAvgZuvkMqGdfgS3Yjd0gy/VOB44Q1yhgaSS
+         PjnFcX50Z85F30+YkmtrwG974C5zIGvUUDRf9yPStrSKRR6Fduuw35hfbsNfkwNQxCL0
+         FGlmJ5loYGqdTtL6ZBUw5T6aI1yRdUE4k5VEQ9Q0++F+kzx7uw+h2wIFI9Irat67CRV8
+         YI8OKmg5rqW9C2KB/BOEwSXrNgWYTiLxVazWVAG8kcFn4GpgCEI//+TtPaLZYkfHgnw7
+         Qx+/sMbzMARPsb4lhnetxe9Ms5imHDK8iaRu1E7uZekJizWWsr4OZ/Su5AOEsPhtH7eK
+         m8cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=AY30Xp9HHwd5baqFS/8IYVCe1FXhUrUb3OLIbsdwsvI=;
-        b=VuFNxoFfYynBwoAHeuVZxlyGRQHk5WK/7R5F0OGrzFc+8j/NXPMzU19xLDfJLZL+E9
-         qoMSghFmiGHQ3eTcwVTJjbwOhvW6jtjVXK29xopxtTXRvkDdG6bJCnfvJbW+jPn3bFwO
-         /wg2cSeDBeFASdPjPUPkB3Yit3b1/hjJOSEPSE0rYBPtmYa3VJSiKyEm2RU8yloeysI+
-         nI8PHrCaqV/tRGEKku8kW92QzApiPqL+hSXcJRxK5by4GM62PrWnmVPEVCNdCO4mF8mn
-         1I0Ou9hTMux+qVrMkC7oQvjUp4T30tmX3NrpOdexkAS0x4fkblM9gi791H9UQKyqOixP
-         QOQw==
-X-Gm-Message-State: AOAM533BLU1dKyyLfut6/9FmfyYrCBr6oiALL+ve3uGXcYNtxsqm6fVx
-        9uW1mEHHawGSIt8IudYc59zuXQ==
-X-Google-Smtp-Source: ABdhPJypJIT+Ap+iZH2MTEzqGcrgFZ1dpK1R+Tn4Zfu55dGQ3bpPM13jFcbm2GpSTf1SgsOMahLTJQ==
-X-Received: by 2002:a17:903:32cd:b0:148:a3eb:d902 with SMTP id i13-20020a17090332cd00b00148a3ebd902mr1525083plr.106.1639527847756;
-        Tue, 14 Dec 2021 16:24:07 -0800 (PST)
-Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id a12sm185840pgg.28.2021.12.14.16.24.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 16:24:07 -0800 (PST)
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH v4 5/5] interconnect: qcom: Add QCM2290 driver support
-Date:   Wed, 15 Dec 2021 08:23:24 +0800
-Message-Id: <20211215002324.1727-6-shawn.guo@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211215002324.1727-1-shawn.guo@linaro.org>
-References: <20211215002324.1727-1-shawn.guo@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0JKc9PAD26kXoepjJUR+P8qecRLoOY8+4P0m+zClgn4=;
+        b=AjKcSiYE/3aVtje4uuv0Be2epdHrZ3mnNkhmMMS4undDfXf1emvWF48wIatVI3dafh
+         zlps6bLvzQnF5iqeZsL3bYVVl86UBd1KuSOxf163S5xXjxix/dJwXZ3JlTAzj6BLSRRn
+         sVwUQPoATKYU+lb5NWOyOEBbQwig8s0/Zgnb0atTEqEzt8lGTm4+96ocaPUJln9QffrG
+         NqS7i+20qZxhW8Tm9sPP3qzCLLzYLy9qnjn+GqPE8/9DizEYGrgEuaWZbMkWnc8Zamzb
+         CIUxJg12cjGb0fixpQBV/yI30w1YcL+AyGEUT3Cbl4thuLEM6HP9B9yVEP7YvLT/rzbQ
+         xNVw==
+X-Gm-Message-State: AOAM533K+3xn7XhO4Nq2FPyqcNHwJorysMcB6NMfbjacSC2i6v1i+qoT
+        7Y/84TifC+1atJNo8I5VXz15lyo3enAnZIDBvEg=
+X-Google-Smtp-Source: ABdhPJxtQ6JNBvuRrv1uViR4vf3z4MmjQ9pOIp4wghat9QvMKS2ot1bg2Bzq6ht2NYd2T4l8z68gU7t9mvzk1jzkxwo=
+X-Received: by 2002:a05:6102:c4e:: with SMTP id y14mr1866950vss.61.1639527817027;
+ Tue, 14 Dec 2021 16:23:37 -0800 (PST)
+MIME-Version: 1.0
+References: <20211208040414.151960-1-xiayu.zhang@mediatek.com>
+ <CAHNKnsRZpYsiWORgAejYwQqP5P=PSt-V7_i73G1yfh-UR2zFjw@mail.gmail.com> <6f4ae1d8b1b53cf998eaa14260d93fd3f4c8d5ad.camel@mediatek.com>
+In-Reply-To: <6f4ae1d8b1b53cf998eaa14260d93fd3f4c8d5ad.camel@mediatek.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Date:   Wed, 15 Dec 2021 03:23:28 +0300
+Message-ID: <CAHNKnsQ6qLcUTiTiPEAp+rmoVtrGOjoY98nQFsrwSWUu-v7wYQ@mail.gmail.com>
+Subject: Re: [PATCH] Add Multiple TX/RX Queues Support for WWAN Network Device
+To:     Xiayu Zhang <xiayu.zhang@mediatek.com>
+Cc:     Loic Poulain <loic.poulain@linaro.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        netdev@vger.kernel.org, open list <linux-kernel@vger.kernel.org>,
+        haijun.liu@mediatek.com, zhaoping.shu@mediatek.com,
+        hw.he@mediatek.com, srv_heupstream@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It adds interconnect driver support for QCM2290 platform.  The topology
-consists of 3 NoCs: BIMC, Config NoC (CNOC) and System NoC (SNOC).  SNOC
-is a QCOM_ICC_QNOC type device, as well as its 3 virtual child devices,
-QUP, MMNRT and MMRT.  QUP is owned by RPM and thus has no .regmap_cfg,
-while the other 2 share the same .regmap_cfg with SNOC (parent).
+Hello Xiayu,
 
-Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
----
- drivers/interconnect/qcom/Kconfig   |    9 +
- drivers/interconnect/qcom/Makefile  |    2 +
- drivers/interconnect/qcom/qcm2290.c | 1363 +++++++++++++++++++++++++++
- 3 files changed, 1374 insertions(+)
- create mode 100644 drivers/interconnect/qcom/qcm2290.c
+On Mon, Dec 13, 2021 at 9:06 AM Xiayu Zhang <xiayu.zhang@mediatek.com> wrote:
+> Thanks for your constructive inputs, and sorry for late response.
+>
+> On Fri, 2021-12-10 at 02:11 +0300, Sergey Ryazanov wrote:
+>> On Wed, Dec 8, 2021 at 7:04 AM <xiayu.zhang@mediatek.com> wrote:
+>>> This patch adds 2 callback functions get_num_tx_queues() and
+>>> get_num_rx_queues() to let WWAN network device driver customize its
+>>> own
+>>> TX and RX queue numbers. It gives WWAN driver a chance to implement
+>>> its
+>>> own software strategies, such as TX Qos.
+>>>
+>>> Currently, if WWAN device driver creates default bearer interface
+>>> when
+>>> calling wwan_register_ops(), there will be only 1 TX queue and 1 RX
+>>> queue
+>>> for the WWAN network device. In this case, driver is not able to
+>>> enlarge
+>>> the queue numbers by calling netif_set_real_num_tx_queues() or
+>>> netif_set_real_num_rx_queues() to take advantage of the network
+>>> device's
+>>> capability of supporting multiple TX/RX queues.
+>>>
+>>> As for additional interfaces of secondary bearers, if userspace
+>>> service
+>>> doesn't specify the num_tx_queues or num_rx_queues in netlink
+>>> message or
+>>> iproute2 command, there also will be only 1 TX queue and 1 RX queue
+>>> for
+>>> each additional interface. If userspace service specifies the
+>>> num_tx_queues
+>>> and num_rx_queues, however, these numbers could be not able to
+>>> match the
+>>> capabilities of network device.
+>>>
+>>> Besides, userspace service is hard to learn every WWAN network
+>>> device's
+>>> TX/RX queue numbers.
+>>>
+>>> In order to let WWAN driver determine the queue numbers, this patch
+>>> adds
+>>> below callback functions in wwan_ops:
+>>>     struct wwan_ops {
+>>>         unsigned int priv_size;
+>>>         ...
+>>>         unsigned int (*get_num_tx_queues)(unsigned int hint_num);
+>>>         unsigned int (*get_num_rx_queues)(unsigned int hint_num);
+>>>     };
+>>>
+>>> WWAN subsystem uses the input parameters num_tx_queues and
+>>> num_rx_queues of
+>>> wwan_rtnl_alloc() as hint values, and passes the 2 values to the
+>>> two
+>>> callback functions. WWAN device driver should determine the actual
+>>> numbers
+>>> of network device's TX and RX queues according to the hint value
+>>> and
+>>> device's capabilities.
+>>
+>> As already stated by Jakub, it is hard to understand a new API
+>> suitability without an API user. I will try to describe possible
+>> issues with the proposed API as far as I understand its usage and
+>> possible solutions. Correct me if I am wrong.
+>>
+>> There are actually two tasks related to the queues number selection:
+>> 1) default queues number selection if the userspace provides no
+>> information about a wishful number of queues;
+>> 2) rejecting the new netdev (bearer) creation if a requested number
+>> of queues seems to be invalid.
+>>
+>> Your proposal tries to solve both of these tasks with a single hook
+>> that silently increases or decreases the requested number of queues.
+>> This is creative, but seems contradictory to regular RTNL behavior.
+>> RTNL usually selects a correct default value if no value was
+>> requested, or performs what is requested, or explicitly rejects
+>> requested configuration.
+>>
+>> You could handle an invalid queues configuration in the .newlink
+>> callback. This callback is even able to return a string error
+>> representation via the extack argument.
+>>
+>> As for the default queues number selection it seems better to
+>> implement the RTNL .get_num_rx_queues callback in the WWAN core and
+>> call optional driver specific callback through it. Something like
+>> this:
+>>
+>> static unsigned int wwan_rtnl_get_num_tx_queues(struct nlattr *tb[])
+>> {
+>>     const char *devname = nla_data(tb[IFLA_PARENT_DEV_NAME]);
+>>     struct wwan_device *wwandev = wwan_dev_get_by_name(devname);
+>>
+>>     return wwandev && wwandev->ops && wwandev->ops->get_num_tx_queues
+>> ?
+>>               wwandev->ops->get_num_tx_queues() : 1;
+>> }
+>>
+>> static struct rtnl_link_ops wwan_rtnl_link_ops __read_mostly = {
+>>     ...
+>>     .get_num_tx_queues = wwan_rtnl_get_num_tx_queues,
+>> };
+>>
+>> This way the default queues number selection will be implemented in a
+>> less surprising way.
+>>
+>> But to be able to implement this we need to modify the RTNL ops
+>> .get_num_tx_queues/.get_num_rx_queues callback definitions to make
+>> them able to accept the RTM_NEWLINK message attributes. This is not
+>> difficult since the callbacks are implemented only by a few virtual
+>> devices, but can be assumed too intrusive to implement a one feature
+>> for a single subsystem.
+>
+> Indeed, I had considered this solution provided by you as well:
+>
+>    static unsigned int wwan_rtnl_get_num_tx_queues(struct nlattr *tb[])
+>
+>    static struct rtnl_link_ops wwan_rtnl_link_ops __read_mostly = {
+>       ...
+>       .get_num_tx_queues = wwan_rtnl_get_num_tx_queues,
+>    };
+>
+> I totally agree that it follows the design of RTNL better.
+>
+> There are some reasons that let me not apply the solution above, I want
+> to share them with you. Please correct me if I'm wrong.
+>
+>    1) in rtnl_create_link, RTNL always prefers to use the number
+>    provided by userspace service rather than the number returned by
+>    get_num_tx/rx_queues() of WWAN Core:
+>
+>       if (tb[IFLA_NUM_TX_QUEUES])
+>          num_tx_queues = nla_get_u32(tb[IFLA_NUM_TX_QUEUES]);
+>       else if (ops->get_num_tx_queues)
+>          num_tx_queues = ops->get_num_tx_queues();
+>
+>    Although WWAN driver could reject the number selected by userspace
+>    service in newlink function, this will require userspace service to
+>    learn this error and implement its retry machanisms. Of course, even
+>    so, that's not bad.
 
-diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-index d0ed6f570355..8876ffaf0b53 100644
---- a/drivers/interconnect/qcom/Kconfig
-+++ b/drivers/interconnect/qcom/Kconfig
-@@ -51,6 +51,15 @@ config INTERCONNECT_QCOM_OSM_L3
- 	  Say y here to support the Operating State Manager (OSM) interconnect
- 	  driver which controls the scaling of L3 caches on Qualcomm SoCs.
- 
-+config INTERCONNECT_QCOM_QCM2290
-+	tristate "Qualcomm QCM2290 interconnect driver"
-+	depends on INTERCONNECT_QCOM
-+	depends on QCOM_SMD_RPM
-+	select INTERCONNECT_QCOM_SMD_RPM
-+	help
-+	  This is a driver for the Qualcomm Network-on-Chip on qcm2290-based
-+	  platforms.
-+
- config INTERCONNECT_QCOM_QCS404
- 	tristate "Qualcomm QCS404 interconnect driver"
- 	depends on INTERCONNECT_QCOM
-diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
-index 750e42ab82ac..3b73a5908f1c 100644
---- a/drivers/interconnect/qcom/Makefile
-+++ b/drivers/interconnect/qcom/Makefile
-@@ -6,6 +6,7 @@ qnoc-msm8939-objs			:= msm8939.o
- qnoc-msm8974-objs			:= msm8974.o
- qnoc-msm8996-objs			:= msm8996.o
- icc-osm-l3-objs				:= osm-l3.o
-+qnoc-qcm2290-objs			:= qcm2290.o
- qnoc-qcs404-objs			:= qcs404.o
- icc-rpmh-obj				:= icc-rpmh.o
- qnoc-sc7180-objs			:= sc7180.o
-@@ -25,6 +26,7 @@ obj-$(CONFIG_INTERCONNECT_QCOM_MSM8939) += qnoc-msm8939.o
- obj-$(CONFIG_INTERCONNECT_QCOM_MSM8974) += qnoc-msm8974.o
- obj-$(CONFIG_INTERCONNECT_QCOM_MSM8996) += qnoc-msm8996.o
- obj-$(CONFIG_INTERCONNECT_QCOM_OSM_L3) += icc-osm-l3.o
-+obj-$(CONFIG_INTERCONNECT_QCOM_QCM2290) += qnoc-qcm2290.o
- obj-$(CONFIG_INTERCONNECT_QCOM_QCS404) += qnoc-qcs404.o
- obj-$(CONFIG_INTERCONNECT_QCOM_RPMH) += icc-rpmh.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SC7180) += qnoc-sc7180.o
-diff --git a/drivers/interconnect/qcom/qcm2290.c b/drivers/interconnect/qcom/qcm2290.c
-new file mode 100644
-index 000000000000..74404e0b2080
---- /dev/null
-+++ b/drivers/interconnect/qcom/qcm2290.c
-@@ -0,0 +1,1363 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Qualcomm QCM2290 Network-on-Chip (NoC) QoS driver
-+ *
-+ * Copyright (c) 2021, Linaro Ltd.
-+ *
-+ */
-+
-+#include <dt-bindings/interconnect/qcom,qcm2290.h>
-+#include <linux/clk.h>
-+#include <linux/device.h>
-+#include <linux/interconnect-provider.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+
-+#include "icc-rpm.h"
-+#include "smd-rpm.h"
-+
-+enum {
-+	QCM2290_MASTER_APPSS_PROC = 1,
-+	QCM2290_MASTER_SNOC_BIMC_RT,
-+	QCM2290_MASTER_SNOC_BIMC_NRT,
-+	QCM2290_MASTER_SNOC_BIMC,
-+	QCM2290_MASTER_TCU_0,
-+	QCM2290_MASTER_GFX3D,
-+	QCM2290_MASTER_SNOC_CNOC,
-+	QCM2290_MASTER_QDSS_DAP,
-+	QCM2290_MASTER_CRYPTO_CORE0,
-+	QCM2290_MASTER_SNOC_CFG,
-+	QCM2290_MASTER_TIC,
-+	QCM2290_MASTER_ANOC_SNOC,
-+	QCM2290_MASTER_BIMC_SNOC,
-+	QCM2290_MASTER_PIMEM,
-+	QCM2290_MASTER_QDSS_BAM,
-+	QCM2290_MASTER_QUP_0,
-+	QCM2290_MASTER_IPA,
-+	QCM2290_MASTER_QDSS_ETR,
-+	QCM2290_MASTER_SDCC_1,
-+	QCM2290_MASTER_SDCC_2,
-+	QCM2290_MASTER_QPIC,
-+	QCM2290_MASTER_USB3_0,
-+	QCM2290_MASTER_QUP_CORE_0,
-+	QCM2290_MASTER_CAMNOC_SF,
-+	QCM2290_MASTER_VIDEO_P0,
-+	QCM2290_MASTER_VIDEO_PROC,
-+	QCM2290_MASTER_CAMNOC_HF,
-+	QCM2290_MASTER_MDP0,
-+
-+	QCM2290_SLAVE_EBI1,
-+	QCM2290_SLAVE_BIMC_SNOC,
-+	QCM2290_SLAVE_BIMC_CFG,
-+	QCM2290_SLAVE_CAMERA_NRT_THROTTLE_CFG,
-+	QCM2290_SLAVE_CAMERA_RT_THROTTLE_CFG,
-+	QCM2290_SLAVE_CAMERA_CFG,
-+	QCM2290_SLAVE_CLK_CTL,
-+	QCM2290_SLAVE_CRYPTO_0_CFG,
-+	QCM2290_SLAVE_DISPLAY_CFG,
-+	QCM2290_SLAVE_DISPLAY_THROTTLE_CFG,
-+	QCM2290_SLAVE_GPU_CFG,
-+	QCM2290_SLAVE_HWKM,
-+	QCM2290_SLAVE_IMEM_CFG,
-+	QCM2290_SLAVE_IPA_CFG,
-+	QCM2290_SLAVE_LPASS,
-+	QCM2290_SLAVE_MESSAGE_RAM,
-+	QCM2290_SLAVE_PDM,
-+	QCM2290_SLAVE_PIMEM_CFG,
-+	QCM2290_SLAVE_PKA_WRAPPER,
-+	QCM2290_SLAVE_PMIC_ARB,
-+	QCM2290_SLAVE_PRNG,
-+	QCM2290_SLAVE_QDSS_CFG,
-+	QCM2290_SLAVE_QM_CFG,
-+	QCM2290_SLAVE_QM_MPU_CFG,
-+	QCM2290_SLAVE_QPIC,
-+	QCM2290_SLAVE_QUP_0,
-+	QCM2290_SLAVE_SDCC_1,
-+	QCM2290_SLAVE_SDCC_2,
-+	QCM2290_SLAVE_SNOC_CFG,
-+	QCM2290_SLAVE_TCSR,
-+	QCM2290_SLAVE_USB3,
-+	QCM2290_SLAVE_VENUS_CFG,
-+	QCM2290_SLAVE_VENUS_THROTTLE_CFG,
-+	QCM2290_SLAVE_VSENSE_CTRL_CFG,
-+	QCM2290_SLAVE_SERVICE_CNOC,
-+	QCM2290_SLAVE_APPSS,
-+	QCM2290_SLAVE_SNOC_CNOC,
-+	QCM2290_SLAVE_IMEM,
-+	QCM2290_SLAVE_PIMEM,
-+	QCM2290_SLAVE_SNOC_BIMC,
-+	QCM2290_SLAVE_SERVICE_SNOC,
-+	QCM2290_SLAVE_QDSS_STM,
-+	QCM2290_SLAVE_TCU,
-+	QCM2290_SLAVE_ANOC_SNOC,
-+	QCM2290_SLAVE_QUP_CORE_0,
-+	QCM2290_SLAVE_SNOC_BIMC_NRT,
-+	QCM2290_SLAVE_SNOC_BIMC_RT,
-+};
-+
-+/* Master nodes */
-+static const u16 mas_appss_proc_links[] = {
-+	QCM2290_SLAVE_EBI1,
-+	QCM2290_SLAVE_BIMC_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_appss_proc = {
-+	.id = QCM2290_MASTER_APPSS_PROC,
-+	.name = "mas_apps_proc",
-+	.buswidth = 16,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 0,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.prio_level = 0,
-+	.qos.areq_prio = 0,
-+	.mas_rpm_id = 0,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_appss_proc_links),
-+	.links = mas_appss_proc_links,
-+};
-+
-+static const u16 mas_snoc_bimc_rt_links[] = {
-+	QCM2290_SLAVE_EBI1,
-+};
-+
-+static struct qcom_icc_node mas_snoc_bimc_rt = {
-+	.id = QCM2290_MASTER_SNOC_BIMC_RT,
-+	.name = "mas_snoc_bimc_rt",
-+	.buswidth = 16,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 2,
-+	.qos.qos_mode = NOC_QOS_MODE_BYPASS,
-+	.mas_rpm_id = 163,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_snoc_bimc_rt_links),
-+	.links = mas_snoc_bimc_rt_links,
-+};
-+
-+static const u16 mas_snoc_bimc_nrt_links[] = {
-+	QCM2290_SLAVE_EBI1,
-+};
-+
-+static struct qcom_icc_node mas_snoc_bimc_nrt = {
-+	.id = QCM2290_MASTER_SNOC_BIMC_NRT,
-+	.name = "mas_snoc_bimc_nrt",
-+	.buswidth = 16,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 2,
-+	.qos.qos_mode = NOC_QOS_MODE_BYPASS,
-+	.mas_rpm_id = 163,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_snoc_bimc_nrt_links),
-+	.links = mas_snoc_bimc_nrt_links,
-+};
-+
-+static const u16 mas_snoc_bimc_links[] = {
-+	QCM2290_SLAVE_EBI1,
-+};
-+
-+static struct qcom_icc_node mas_snoc_bimc = {
-+	.id = QCM2290_MASTER_SNOC_BIMC,
-+	.name = "mas_snoc_bimc",
-+	.buswidth = 16,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 2,
-+	.qos.qos_mode = NOC_QOS_MODE_BYPASS,
-+	.mas_rpm_id = 164,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_snoc_bimc_links),
-+	.links = mas_snoc_bimc_links,
-+};
-+
-+static const u16 mas_tcu_0_links[] = {
-+	QCM2290_SLAVE_EBI1,
-+	QCM2290_SLAVE_BIMC_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_tcu_0 = {
-+	.id = QCM2290_MASTER_TCU_0,
-+	.name = "mas_tcu_0",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 4,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.prio_level = 6,
-+	.qos.areq_prio = 6,
-+	.mas_rpm_id = 102,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_tcu_0_links),
-+	.links = mas_tcu_0_links,
-+};
-+
-+static const u16 mas_snoc_cnoc_links[] = {
-+	QCM2290_SLAVE_CAMERA_RT_THROTTLE_CFG,
-+	QCM2290_SLAVE_SDCC_2,
-+	QCM2290_SLAVE_SDCC_1,
-+	QCM2290_SLAVE_QM_CFG,
-+	QCM2290_SLAVE_BIMC_CFG,
-+	QCM2290_SLAVE_USB3,
-+	QCM2290_SLAVE_QM_MPU_CFG,
-+	QCM2290_SLAVE_CAMERA_NRT_THROTTLE_CFG,
-+	QCM2290_SLAVE_QDSS_CFG,
-+	QCM2290_SLAVE_PDM,
-+	QCM2290_SLAVE_IPA_CFG,
-+	QCM2290_SLAVE_DISPLAY_THROTTLE_CFG,
-+	QCM2290_SLAVE_TCSR,
-+	QCM2290_SLAVE_MESSAGE_RAM,
-+	QCM2290_SLAVE_PMIC_ARB,
-+	QCM2290_SLAVE_LPASS,
-+	QCM2290_SLAVE_DISPLAY_CFG,
-+	QCM2290_SLAVE_VENUS_CFG,
-+	QCM2290_SLAVE_GPU_CFG,
-+	QCM2290_SLAVE_IMEM_CFG,
-+	QCM2290_SLAVE_SNOC_CFG,
-+	QCM2290_SLAVE_SERVICE_CNOC,
-+	QCM2290_SLAVE_VENUS_THROTTLE_CFG,
-+	QCM2290_SLAVE_PKA_WRAPPER,
-+	QCM2290_SLAVE_HWKM,
-+	QCM2290_SLAVE_PRNG,
-+	QCM2290_SLAVE_VSENSE_CTRL_CFG,
-+	QCM2290_SLAVE_CRYPTO_0_CFG,
-+	QCM2290_SLAVE_PIMEM_CFG,
-+	QCM2290_SLAVE_QUP_0,
-+	QCM2290_SLAVE_CAMERA_CFG,
-+	QCM2290_SLAVE_CLK_CTL,
-+	QCM2290_SLAVE_QPIC,
-+};
-+
-+static struct qcom_icc_node mas_snoc_cnoc = {
-+	.id = QCM2290_MASTER_SNOC_CNOC,
-+	.name = "mas_snoc_cnoc",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = 52,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_snoc_cnoc_links),
-+	.links = mas_snoc_cnoc_links,
-+};
-+
-+static const u16 mas_qdss_dap_links[] = {
-+	QCM2290_SLAVE_CAMERA_RT_THROTTLE_CFG,
-+	QCM2290_SLAVE_SDCC_2,
-+	QCM2290_SLAVE_SDCC_1,
-+	QCM2290_SLAVE_QM_CFG,
-+	QCM2290_SLAVE_BIMC_CFG,
-+	QCM2290_SLAVE_USB3,
-+	QCM2290_SLAVE_QM_MPU_CFG,
-+	QCM2290_SLAVE_CAMERA_NRT_THROTTLE_CFG,
-+	QCM2290_SLAVE_QDSS_CFG,
-+	QCM2290_SLAVE_PDM,
-+	QCM2290_SLAVE_IPA_CFG,
-+	QCM2290_SLAVE_DISPLAY_THROTTLE_CFG,
-+	QCM2290_SLAVE_TCSR,
-+	QCM2290_SLAVE_MESSAGE_RAM,
-+	QCM2290_SLAVE_PMIC_ARB,
-+	QCM2290_SLAVE_LPASS,
-+	QCM2290_SLAVE_DISPLAY_CFG,
-+	QCM2290_SLAVE_VENUS_CFG,
-+	QCM2290_SLAVE_GPU_CFG,
-+	QCM2290_SLAVE_IMEM_CFG,
-+	QCM2290_SLAVE_SNOC_CFG,
-+	QCM2290_SLAVE_SERVICE_CNOC,
-+	QCM2290_SLAVE_VENUS_THROTTLE_CFG,
-+	QCM2290_SLAVE_PKA_WRAPPER,
-+	QCM2290_SLAVE_HWKM,
-+	QCM2290_SLAVE_PRNG,
-+	QCM2290_SLAVE_VSENSE_CTRL_CFG,
-+	QCM2290_SLAVE_CRYPTO_0_CFG,
-+	QCM2290_SLAVE_PIMEM_CFG,
-+	QCM2290_SLAVE_QUP_0,
-+	QCM2290_SLAVE_CAMERA_CFG,
-+	QCM2290_SLAVE_CLK_CTL,
-+	QCM2290_SLAVE_QPIC,
-+};
-+
-+static struct qcom_icc_node mas_qdss_dap = {
-+	.id = QCM2290_MASTER_QDSS_DAP,
-+	.name = "mas_qdss_dap",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = 49,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_qdss_dap_links),
-+	.links = mas_qdss_dap_links,
-+};
-+
-+static const u16 mas_crypto_core0_links[] = {
-+	QCM2290_SLAVE_ANOC_SNOC
-+};
-+
-+static struct qcom_icc_node mas_crypto_core0 = {
-+	.id = QCM2290_MASTER_CRYPTO_CORE0,
-+	.name = "mas_crypto_core0",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 22,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 23,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_crypto_core0_links),
-+	.links = mas_crypto_core0_links,
-+};
-+
-+static const u16 mas_qup_core_0_links[] = {
-+	QCM2290_SLAVE_QUP_CORE_0,
-+};
-+
-+static struct qcom_icc_node mas_qup_core_0 = {
-+	.id = QCM2290_MASTER_QUP_CORE_0,
-+	.name = "mas_qup_core_0",
-+	.buswidth = 4,
-+	.mas_rpm_id = 170,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_qup_core_0_links),
-+	.links = mas_qup_core_0_links,
-+};
-+
-+static const u16 mas_camnoc_sf_links[] = {
-+	QCM2290_SLAVE_SNOC_BIMC_NRT,
-+};
-+
-+static struct qcom_icc_node mas_camnoc_sf = {
-+	.id = QCM2290_MASTER_CAMNOC_SF,
-+	.name = "mas_camnoc_sf",
-+	.buswidth = 32,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 4,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 3,
-+	.mas_rpm_id = 172,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_camnoc_sf_links),
-+	.links = mas_camnoc_sf_links,
-+};
-+
-+static const u16 mas_camnoc_hf_links[] = {
-+	QCM2290_SLAVE_SNOC_BIMC_RT,
-+};
-+
-+static struct qcom_icc_node mas_camnoc_hf = {
-+	.id = QCM2290_MASTER_CAMNOC_HF,
-+	.name = "mas_camnoc_hf",
-+	.buswidth = 32,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 10,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 3,
-+	.qos.urg_fwd_en = true,
-+	.mas_rpm_id = 173,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_camnoc_hf_links),
-+	.links = mas_camnoc_hf_links,
-+};
-+
-+static const u16 mas_mdp0_links[] = {
-+	QCM2290_SLAVE_SNOC_BIMC_RT,
-+};
-+
-+static struct qcom_icc_node mas_mdp0 = {
-+	.id = QCM2290_MASTER_MDP0,
-+	.name = "mas_mdp0",
-+	.buswidth = 16,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 5,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 3,
-+	.qos.urg_fwd_en = true,
-+	.mas_rpm_id = 8,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_mdp0_links),
-+	.links = mas_mdp0_links,
-+};
-+
-+static const u16 mas_video_p0_links[] = {
-+	QCM2290_SLAVE_SNOC_BIMC_NRT,
-+};
-+
-+static struct qcom_icc_node mas_video_p0 = {
-+	.id = QCM2290_MASTER_VIDEO_P0,
-+	.name = "mas_video_p0",
-+	.buswidth = 16,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 9,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 3,
-+	.qos.urg_fwd_en = true,
-+	.mas_rpm_id = 9,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_video_p0_links),
-+	.links = mas_video_p0_links,
-+};
-+
-+static const u16 mas_video_proc_links[] = {
-+	QCM2290_SLAVE_SNOC_BIMC_NRT,
-+};
-+
-+static struct qcom_icc_node mas_video_proc = {
-+	.id = QCM2290_MASTER_VIDEO_PROC,
-+	.name = "mas_video_proc",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 13,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 4,
-+	.mas_rpm_id = 168,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_video_proc_links),
-+	.links = mas_video_proc_links,
-+};
-+
-+static const u16 mas_snoc_cfg_links[] = {
-+	QCM2290_SLAVE_SERVICE_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_snoc_cfg = {
-+	.id = QCM2290_MASTER_SNOC_CFG,
-+	.name = "mas_snoc_cfg",
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = 20,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_snoc_cfg_links),
-+	.links = mas_snoc_cfg_links,
-+};
-+
-+static const u16 mas_tic_links[] = {
-+	QCM2290_SLAVE_PIMEM,
-+	QCM2290_SLAVE_IMEM,
-+	QCM2290_SLAVE_APPSS,
-+	QCM2290_SLAVE_SNOC_BIMC,
-+	QCM2290_SLAVE_SNOC_CNOC,
-+	QCM2290_SLAVE_TCU,
-+	QCM2290_SLAVE_QDSS_STM,
-+};
-+
-+static struct qcom_icc_node mas_tic = {
-+	.id = QCM2290_MASTER_TIC,
-+	.name = "mas_tic",
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 8,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 51,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_tic_links),
-+	.links = mas_tic_links,
-+};
-+
-+static const u16 mas_anoc_snoc_links[] = {
-+	QCM2290_SLAVE_PIMEM,
-+	QCM2290_SLAVE_IMEM,
-+	QCM2290_SLAVE_APPSS,
-+	QCM2290_SLAVE_SNOC_BIMC,
-+	QCM2290_SLAVE_SNOC_CNOC,
-+	QCM2290_SLAVE_TCU,
-+	QCM2290_SLAVE_QDSS_STM,
-+};
-+
-+static struct qcom_icc_node mas_anoc_snoc = {
-+	.id = QCM2290_MASTER_ANOC_SNOC,
-+	.name = "mas_anoc_snoc",
-+	.buswidth = 16,
-+	.mas_rpm_id = 110,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_anoc_snoc_links),
-+	.links = mas_anoc_snoc_links,
-+};
-+
-+static const u16 mas_bimc_snoc_links[] = {
-+	QCM2290_SLAVE_PIMEM,
-+	QCM2290_SLAVE_IMEM,
-+	QCM2290_SLAVE_APPSS,
-+	QCM2290_SLAVE_SNOC_CNOC,
-+	QCM2290_SLAVE_TCU,
-+	QCM2290_SLAVE_QDSS_STM,
-+};
-+
-+static struct qcom_icc_node mas_bimc_snoc = {
-+	.id = QCM2290_MASTER_BIMC_SNOC,
-+	.name = "mas_bimc_snoc",
-+	.buswidth = 8,
-+	.mas_rpm_id = 21,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_bimc_snoc_links),
-+	.links = mas_bimc_snoc_links,
-+};
-+
-+static const u16 mas_pimem_links[] = {
-+	QCM2290_SLAVE_IMEM,
-+	QCM2290_SLAVE_SNOC_BIMC,
-+};
-+
-+static struct qcom_icc_node mas_pimem = {
-+	.id = QCM2290_MASTER_PIMEM,
-+	.name = "mas_pimem",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 20,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 113,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_pimem_links),
-+	.links = mas_pimem_links,
-+};
-+
-+static const u16 mas_qdss_bam_links[] = {
-+	QCM2290_SLAVE_ANOC_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_qdss_bam = {
-+	.id = QCM2290_MASTER_QDSS_BAM,
-+	.name = "mas_qdss_bam",
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 2,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 19,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_qdss_bam_links),
-+	.links = mas_qdss_bam_links,
-+};
-+
-+static const u16 mas_qup_0_links[] = {
-+	QCM2290_SLAVE_ANOC_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_qup_0 = {
-+	.id = QCM2290_MASTER_QUP_0,
-+	.name = "mas_qup_0",
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 0,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 166,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_qup_0_links),
-+	.links = mas_qup_0_links,
-+};
-+
-+static const u16 mas_ipa_links[] = {
-+	QCM2290_SLAVE_ANOC_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_ipa = {
-+	.id = QCM2290_MASTER_IPA,
-+	.name = "mas_ipa",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 3,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 59,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_ipa_links),
-+	.links = mas_ipa_links,
-+};
-+
-+static const u16 mas_qdss_etr_links[] = {
-+	QCM2290_SLAVE_ANOC_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_qdss_etr = {
-+	.id = QCM2290_MASTER_QDSS_ETR,
-+	.name = "mas_qdss_etr",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 12,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 31,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_qdss_etr_links),
-+	.links = mas_qdss_etr_links,
-+};
-+
-+static const u16 mas_sdcc_1_links[] = {
-+	QCM2290_SLAVE_ANOC_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_sdcc_1 = {
-+	.id = QCM2290_MASTER_SDCC_1,
-+	.name = "mas_sdcc_1",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 17,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 33,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_sdcc_1_links),
-+	.links = mas_sdcc_1_links,
-+};
-+
-+static const u16 mas_sdcc_2_links[] = {
-+	QCM2290_SLAVE_ANOC_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_sdcc_2 = {
-+	.id = QCM2290_MASTER_SDCC_2,
-+	.name = "mas_sdcc_2",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 23,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 35,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_sdcc_2_links),
-+	.links = mas_sdcc_2_links,
-+};
-+
-+static const u16 mas_qpic_links[] = {
-+	QCM2290_SLAVE_ANOC_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_qpic = {
-+	.id = QCM2290_MASTER_QPIC,
-+	.name = "mas_qpic",
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 1,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 58,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_qpic_links),
-+	.links = mas_qpic_links,
-+};
-+
-+static const u16 mas_usb3_0_links[] = {
-+	QCM2290_SLAVE_ANOC_SNOC,
-+};
-+
-+static struct qcom_icc_node mas_usb3_0 = {
-+	.id = QCM2290_MASTER_USB3_0,
-+	.name = "mas_usb3_0",
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 24,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.areq_prio = 2,
-+	.mas_rpm_id = 32,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_usb3_0_links),
-+	.links = mas_usb3_0_links,
-+};
-+
-+static const u16 mas_gfx3d_links[] = {
-+	QCM2290_SLAVE_EBI1,
-+};
-+
-+static struct qcom_icc_node mas_gfx3d = {
-+	.id = QCM2290_MASTER_GFX3D,
-+	.name = "mas_gfx3d",
-+	.buswidth = 32,
-+	.qos.ap_owned = true,
-+	.qos.qos_port = 1,
-+	.qos.qos_mode = NOC_QOS_MODE_FIXED,
-+	.qos.prio_level = 0,
-+	.qos.areq_prio = 0,
-+	.mas_rpm_id = 6,
-+	.slv_rpm_id = -1,
-+	.num_links = ARRAY_SIZE(mas_gfx3d_links),
-+	.links = mas_gfx3d_links,
-+};
-+
-+/* Slave nodes */
-+static struct qcom_icc_node slv_ebi1 = {
-+	.name = "slv_ebi1",
-+	.id = QCM2290_SLAVE_EBI1,
-+	.buswidth = 8,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 0,
-+};
-+
-+static const u16 slv_bimc_snoc_links[] = {
-+	QCM2290_MASTER_BIMC_SNOC,
-+};
-+
-+static struct qcom_icc_node slv_bimc_snoc = {
-+	.name = "slv_bimc_snoc",
-+	.id = QCM2290_SLAVE_BIMC_SNOC,
-+	.buswidth = 8,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 2,
-+	.num_links = ARRAY_SIZE(slv_bimc_snoc_links),
-+	.links = slv_bimc_snoc_links,
-+};
-+
-+static struct qcom_icc_node slv_bimc_cfg = {
-+	.name = "slv_bimc_cfg",
-+	.id = QCM2290_SLAVE_BIMC_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 56,
-+};
-+
-+static struct qcom_icc_node slv_camera_nrt_throttle_cfg = {
-+	.name = "slv_camera_nrt_throttle_cfg",
-+	.id = QCM2290_SLAVE_CAMERA_NRT_THROTTLE_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 271,
-+};
-+
-+static struct qcom_icc_node slv_camera_rt_throttle_cfg = {
-+	.name = "slv_camera_rt_throttle_cfg",
-+	.id = QCM2290_SLAVE_CAMERA_RT_THROTTLE_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 279,
-+};
-+
-+static struct qcom_icc_node slv_camera_cfg = {
-+	.name = "slv_camera_cfg",
-+	.id = QCM2290_SLAVE_CAMERA_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 3,
-+};
-+
-+static struct qcom_icc_node slv_clk_ctl = {
-+	.name = "slv_clk_ctl",
-+	.id = QCM2290_SLAVE_CLK_CTL,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 47,
-+};
-+
-+static struct qcom_icc_node slv_crypto_0_cfg = {
-+	.name = "slv_crypto_0_cfg",
-+	.id = QCM2290_SLAVE_CRYPTO_0_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 52,
-+};
-+
-+static struct qcom_icc_node slv_display_cfg = {
-+	.name = "slv_display_cfg",
-+	.id = QCM2290_SLAVE_DISPLAY_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 4,
-+};
-+
-+static struct qcom_icc_node slv_display_throttle_cfg = {
-+	.name = "slv_display_throttle_cfg",
-+	.id = QCM2290_SLAVE_DISPLAY_THROTTLE_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 156,
-+};
-+
-+static struct qcom_icc_node slv_gpu_cfg = {
-+	.name = "slv_gpu_cfg",
-+	.id = QCM2290_SLAVE_GPU_CFG,
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 275,
-+};
-+
-+static struct qcom_icc_node slv_hwkm = {
-+	.name = "slv_hwkm",
-+	.id = QCM2290_SLAVE_HWKM,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 280,
-+};
-+
-+static struct qcom_icc_node slv_imem_cfg = {
-+	.name = "slv_imem_cfg",
-+	.id = QCM2290_SLAVE_IMEM_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 54,
-+};
-+
-+static struct qcom_icc_node slv_ipa_cfg = {
-+	.name = "slv_ipa_cfg",
-+	.id = QCM2290_SLAVE_IPA_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 183,
-+};
-+
-+static struct qcom_icc_node slv_lpass = {
-+	.name = "slv_lpass",
-+	.id = QCM2290_SLAVE_LPASS,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 21,
-+};
-+
-+static struct qcom_icc_node slv_message_ram = {
-+	.name = "slv_message_ram",
-+	.id = QCM2290_SLAVE_MESSAGE_RAM,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 55,
-+};
-+
-+static struct qcom_icc_node slv_pdm = {
-+	.name = "slv_pdm",
-+	.id = QCM2290_SLAVE_PDM,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 41,
-+};
-+
-+static struct qcom_icc_node slv_pimem_cfg = {
-+	.name = "slv_pimem_cfg",
-+	.id = QCM2290_SLAVE_PIMEM_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 167,
-+};
-+
-+static struct qcom_icc_node slv_pka_wrapper = {
-+	.name = "slv_pka_wrapper",
-+	.id = QCM2290_SLAVE_PKA_WRAPPER,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 281,
-+};
-+
-+static struct qcom_icc_node slv_pmic_arb = {
-+	.name = "slv_pmic_arb",
-+	.id = QCM2290_SLAVE_PMIC_ARB,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 59,
-+};
-+
-+static struct qcom_icc_node slv_prng = {
-+	.name = "slv_prng",
-+	.id = QCM2290_SLAVE_PRNG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 44,
-+};
-+
-+static struct qcom_icc_node slv_qdss_cfg = {
-+	.name = "slv_qdss_cfg",
-+	.id = QCM2290_SLAVE_QDSS_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 63,
-+};
-+
-+static struct qcom_icc_node slv_qm_cfg = {
-+	.name = "slv_qm_cfg",
-+	.id = QCM2290_SLAVE_QM_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 212,
-+};
-+
-+static struct qcom_icc_node slv_qm_mpu_cfg = {
-+	.name = "slv_qm_mpu_cfg",
-+	.id = QCM2290_SLAVE_QM_MPU_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 231,
-+};
-+
-+static struct qcom_icc_node slv_qpic = {
-+	.name = "slv_qpic",
-+	.id = QCM2290_SLAVE_QPIC,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 80,
-+};
-+
-+static struct qcom_icc_node slv_qup_0 = {
-+	.name = "slv_qup_0",
-+	.id = QCM2290_SLAVE_QUP_0,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 261,
-+};
-+
-+static struct qcom_icc_node slv_sdcc_1 = {
-+	.name = "slv_sdcc_1",
-+	.id = QCM2290_SLAVE_SDCC_1,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 31,
-+};
-+
-+static struct qcom_icc_node slv_sdcc_2 = {
-+	.name = "slv_sdcc_2",
-+	.id = QCM2290_SLAVE_SDCC_2,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 33,
-+};
-+
-+static const u16 slv_snoc_cfg_links[] = {
-+	QCM2290_MASTER_SNOC_CFG,
-+};
-+
-+static struct qcom_icc_node slv_snoc_cfg = {
-+	.name = "slv_snoc_cfg",
-+	.id = QCM2290_SLAVE_SNOC_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 70,
-+	.num_links = ARRAY_SIZE(slv_snoc_cfg_links),
-+	.links = slv_snoc_cfg_links,
-+};
-+
-+static struct qcom_icc_node slv_tcsr = {
-+	.name = "slv_tcsr",
-+	.id = QCM2290_SLAVE_TCSR,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 50,
-+};
-+
-+static struct qcom_icc_node slv_usb3 = {
-+	.name = "slv_usb3",
-+	.id = QCM2290_SLAVE_USB3,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 22,
-+};
-+
-+static struct qcom_icc_node slv_venus_cfg = {
-+	.name = "slv_venus_cfg",
-+	.id = QCM2290_SLAVE_VENUS_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 10,
-+};
-+
-+static struct qcom_icc_node slv_venus_throttle_cfg = {
-+	.name = "slv_venus_throttle_cfg",
-+	.id = QCM2290_SLAVE_VENUS_THROTTLE_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 178,
-+};
-+
-+static struct qcom_icc_node slv_vsense_ctrl_cfg = {
-+	.name = "slv_vsense_ctrl_cfg",
-+	.id = QCM2290_SLAVE_VSENSE_CTRL_CFG,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 263,
-+};
-+
-+static struct qcom_icc_node slv_service_cnoc = {
-+	.name = "slv_service_cnoc",
-+	.id = QCM2290_SLAVE_SERVICE_CNOC,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 76,
-+};
-+
-+static struct qcom_icc_node slv_qup_core_0 = {
-+	.name = "slv_qup_core_0",
-+	.id = QCM2290_SLAVE_QUP_CORE_0,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 264,
-+};
-+
-+static const u16 slv_snoc_bimc_nrt_links[] = {
-+	QCM2290_MASTER_SNOC_BIMC_NRT,
-+};
-+
-+static struct qcom_icc_node slv_snoc_bimc_nrt = {
-+	.name = "slv_snoc_bimc_nrt",
-+	.id = QCM2290_SLAVE_SNOC_BIMC_NRT,
-+	.buswidth = 16,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 259,
-+	.num_links = ARRAY_SIZE(slv_snoc_bimc_nrt_links),
-+	.links = slv_snoc_bimc_nrt_links,
-+};
-+
-+static const u16 slv_snoc_bimc_rt_links[] = {
-+	QCM2290_MASTER_SNOC_BIMC_RT,
-+};
-+
-+static struct qcom_icc_node slv_snoc_bimc_rt = {
-+	.name = "slv_snoc_bimc_rt",
-+	.id = QCM2290_SLAVE_SNOC_BIMC_RT,
-+	.buswidth = 16,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 260,
-+	.num_links = ARRAY_SIZE(slv_snoc_bimc_rt_links),
-+	.links = slv_snoc_bimc_rt_links,
-+};
-+
-+static struct qcom_icc_node slv_appss = {
-+	.name = "slv_appss",
-+	.id = QCM2290_SLAVE_APPSS,
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 20,
-+};
-+
-+static const u16 slv_snoc_cnoc_links[] = {
-+	QCM2290_MASTER_SNOC_CNOC,
-+};
-+
-+static struct qcom_icc_node slv_snoc_cnoc = {
-+	.name = "slv_snoc_cnoc",
-+	.id = QCM2290_SLAVE_SNOC_CNOC,
-+	.buswidth = 8,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 25,
-+	.num_links = ARRAY_SIZE(slv_snoc_cnoc_links),
-+	.links = slv_snoc_cnoc_links,
-+};
-+
-+static struct qcom_icc_node slv_imem = {
-+	.name = "slv_imem",
-+	.id = QCM2290_SLAVE_IMEM,
-+	.buswidth = 8,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 26,
-+};
-+
-+static struct qcom_icc_node slv_pimem = {
-+	.name = "slv_pimem",
-+	.id = QCM2290_SLAVE_PIMEM,
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 166,
-+};
-+
-+static const u16 slv_snoc_bimc_links[] = {
-+	QCM2290_MASTER_SNOC_BIMC,
-+};
-+
-+static struct qcom_icc_node slv_snoc_bimc = {
-+	.name = "slv_snoc_bimc",
-+	.id = QCM2290_SLAVE_SNOC_BIMC,
-+	.buswidth = 16,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 24,
-+	.num_links = ARRAY_SIZE(slv_snoc_bimc_links),
-+	.links = slv_snoc_bimc_links,
-+};
-+
-+static struct qcom_icc_node slv_service_snoc = {
-+	.name = "slv_service_snoc",
-+	.id = QCM2290_SLAVE_SERVICE_SNOC,
-+	.buswidth = 4,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 29,
-+};
-+
-+static struct qcom_icc_node slv_qdss_stm = {
-+	.name = "slv_qdss_stm",
-+	.id = QCM2290_SLAVE_QDSS_STM,
-+	.buswidth = 4,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 30,
-+};
-+
-+static struct qcom_icc_node slv_tcu = {
-+	.name = "slv_tcu",
-+	.id = QCM2290_SLAVE_TCU,
-+	.buswidth = 8,
-+	.qos.ap_owned = true,
-+	.qos.qos_mode = NOC_QOS_MODE_INVALID,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 133,
-+};
-+
-+static const u16 slv_anoc_snoc_links[] = {
-+	QCM2290_MASTER_ANOC_SNOC,
-+};
-+
-+static struct qcom_icc_node slv_anoc_snoc = {
-+	.name = "slv_anoc_snoc",
-+	.id = QCM2290_SLAVE_ANOC_SNOC,
-+	.buswidth = 16,
-+	.mas_rpm_id = -1,
-+	.slv_rpm_id = 141,
-+	.num_links = ARRAY_SIZE(slv_anoc_snoc_links),
-+	.links = slv_anoc_snoc_links,
-+};
-+
-+/* NoC descriptors */
-+static struct qcom_icc_node *qcm2290_bimc_nodes[] = {
-+	[MASTER_APPSS_PROC] = &mas_appss_proc,
-+	[MASTER_SNOC_BIMC_RT] = &mas_snoc_bimc_rt,
-+	[MASTER_SNOC_BIMC_NRT] = &mas_snoc_bimc_nrt,
-+	[MASTER_SNOC_BIMC] = &mas_snoc_bimc,
-+	[MASTER_TCU_0] = &mas_tcu_0,
-+	[MASTER_GFX3D] = &mas_gfx3d,
-+	[SLAVE_EBI1] = &slv_ebi1,
-+	[SLAVE_BIMC_SNOC] = &slv_bimc_snoc,
-+};
-+
-+static const struct regmap_config qcm2290_bimc_regmap_config = {
-+	.reg_bits	= 32,
-+	.reg_stride	= 4,
-+	.val_bits	= 32,
-+	.max_register	= 0x80000,
-+	.fast_io	= true,
-+};
-+
-+static struct qcom_icc_desc qcm2290_bimc = {
-+	.type = QCOM_ICC_BIMC,
-+	.nodes = qcm2290_bimc_nodes,
-+	.num_nodes = ARRAY_SIZE(qcm2290_bimc_nodes),
-+	.regmap_cfg = &qcm2290_bimc_regmap_config,
-+	/* M_REG_BASE() in vendor msm_bus_bimc_adhoc driver */
-+	.qos_offset = 0x8000,
-+};
-+
-+static struct qcom_icc_node *qcm2290_cnoc_nodes[] = {
-+	[MASTER_SNOC_CNOC] = &mas_snoc_cnoc,
-+	[MASTER_QDSS_DAP] = &mas_qdss_dap,
-+	[SLAVE_BIMC_CFG] = &slv_bimc_cfg,
-+	[SLAVE_CAMERA_NRT_THROTTLE_CFG] = &slv_camera_nrt_throttle_cfg,
-+	[SLAVE_CAMERA_RT_THROTTLE_CFG] = &slv_camera_rt_throttle_cfg,
-+	[SLAVE_CAMERA_CFG] = &slv_camera_cfg,
-+	[SLAVE_CLK_CTL] = &slv_clk_ctl,
-+	[SLAVE_CRYPTO_0_CFG] = &slv_crypto_0_cfg,
-+	[SLAVE_DISPLAY_CFG] = &slv_display_cfg,
-+	[SLAVE_DISPLAY_THROTTLE_CFG] = &slv_display_throttle_cfg,
-+	[SLAVE_GPU_CFG] = &slv_gpu_cfg,
-+	[SLAVE_HWKM] = &slv_hwkm,
-+	[SLAVE_IMEM_CFG] = &slv_imem_cfg,
-+	[SLAVE_IPA_CFG] = &slv_ipa_cfg,
-+	[SLAVE_LPASS] = &slv_lpass,
-+	[SLAVE_MESSAGE_RAM] = &slv_message_ram,
-+	[SLAVE_PDM] = &slv_pdm,
-+	[SLAVE_PIMEM_CFG] = &slv_pimem_cfg,
-+	[SLAVE_PKA_WRAPPER] = &slv_pka_wrapper,
-+	[SLAVE_PMIC_ARB] = &slv_pmic_arb,
-+	[SLAVE_PRNG] = &slv_prng,
-+	[SLAVE_QDSS_CFG] = &slv_qdss_cfg,
-+	[SLAVE_QM_CFG] = &slv_qm_cfg,
-+	[SLAVE_QM_MPU_CFG] = &slv_qm_mpu_cfg,
-+	[SLAVE_QPIC] = &slv_qpic,
-+	[SLAVE_QUP_0] = &slv_qup_0,
-+	[SLAVE_SDCC_1] = &slv_sdcc_1,
-+	[SLAVE_SDCC_2] = &slv_sdcc_2,
-+	[SLAVE_SNOC_CFG] = &slv_snoc_cfg,
-+	[SLAVE_TCSR] = &slv_tcsr,
-+	[SLAVE_USB3] = &slv_usb3,
-+	[SLAVE_VENUS_CFG] = &slv_venus_cfg,
-+	[SLAVE_VENUS_THROTTLE_CFG] = &slv_venus_throttle_cfg,
-+	[SLAVE_VSENSE_CTRL_CFG] = &slv_vsense_ctrl_cfg,
-+	[SLAVE_SERVICE_CNOC] = &slv_service_cnoc,
-+};
-+
-+static const struct regmap_config qcm2290_cnoc_regmap_config = {
-+	.reg_bits	= 32,
-+	.reg_stride	= 4,
-+	.val_bits	= 32,
-+	.max_register	= 0x8200,
-+	.fast_io	= true,
-+};
-+
-+static struct qcom_icc_desc qcm2290_cnoc = {
-+	.type = QCOM_ICC_NOC,
-+	.nodes = qcm2290_cnoc_nodes,
-+	.num_nodes = ARRAY_SIZE(qcm2290_cnoc_nodes),
-+	.regmap_cfg = &qcm2290_cnoc_regmap_config,
-+};
-+
-+static struct qcom_icc_node *qcm2290_snoc_nodes[] = {
-+	[MASTER_CRYPTO_CORE0] = &mas_crypto_core0,
-+	[MASTER_SNOC_CFG] = &mas_snoc_cfg,
-+	[MASTER_TIC] = &mas_tic,
-+	[MASTER_ANOC_SNOC] = &mas_anoc_snoc,
-+	[MASTER_BIMC_SNOC] = &mas_bimc_snoc,
-+	[MASTER_PIMEM] = &mas_pimem,
-+	[MASTER_QDSS_BAM] = &mas_qdss_bam,
-+	[MASTER_QUP_0] = &mas_qup_0,
-+	[MASTER_IPA] = &mas_ipa,
-+	[MASTER_QDSS_ETR] = &mas_qdss_etr,
-+	[MASTER_SDCC_1] = &mas_sdcc_1,
-+	[MASTER_SDCC_2] = &mas_sdcc_2,
-+	[MASTER_QPIC] = &mas_qpic,
-+	[MASTER_USB3_0] = &mas_usb3_0,
-+	[SLAVE_APPSS] = &slv_appss,
-+	[SLAVE_SNOC_CNOC] = &slv_snoc_cnoc,
-+	[SLAVE_IMEM] = &slv_imem,
-+	[SLAVE_PIMEM] = &slv_pimem,
-+	[SLAVE_SNOC_BIMC] = &slv_snoc_bimc,
-+	[SLAVE_SERVICE_SNOC] = &slv_service_snoc,
-+	[SLAVE_QDSS_STM] = &slv_qdss_stm,
-+	[SLAVE_TCU] = &slv_tcu,
-+	[SLAVE_ANOC_SNOC] = &slv_anoc_snoc,
-+};
-+
-+static const struct regmap_config qcm2290_snoc_regmap_config = {
-+	.reg_bits	= 32,
-+	.reg_stride	= 4,
-+	.val_bits	= 32,
-+	.max_register	= 0x60200,
-+	.fast_io	= true,
-+};
-+
-+static struct qcom_icc_desc qcm2290_snoc = {
-+	.type = QCOM_ICC_QNOC,
-+	.nodes = qcm2290_snoc_nodes,
-+	.num_nodes = ARRAY_SIZE(qcm2290_snoc_nodes),
-+	.regmap_cfg = &qcm2290_snoc_regmap_config,
-+	/* Vendor DT node fab-sys_noc property 'qcom,base-offset' */
-+	.qos_offset = 0x15000,
-+};
-+
-+static struct qcom_icc_node *qcm2290_qup_virt_nodes[] = {
-+	[MASTER_QUP_CORE_0] = &mas_qup_core_0,
-+	[SLAVE_QUP_CORE_0] = &slv_qup_core_0
-+};
-+
-+static struct qcom_icc_desc qcm2290_qup_virt = {
-+	.type = QCOM_ICC_QNOC,
-+	.nodes = qcm2290_qup_virt_nodes,
-+	.num_nodes = ARRAY_SIZE(qcm2290_qup_virt_nodes),
-+};
-+
-+static struct qcom_icc_node *qcm2290_mmnrt_virt_nodes[] = {
-+	[MASTER_CAMNOC_SF] = &mas_camnoc_sf,
-+	[MASTER_VIDEO_P0] = &mas_video_p0,
-+	[MASTER_VIDEO_PROC] = &mas_video_proc,
-+	[SLAVE_SNOC_BIMC_NRT] = &slv_snoc_bimc_nrt,
-+};
-+
-+static struct qcom_icc_desc qcm2290_mmnrt_virt = {
-+	.type = QCOM_ICC_QNOC,
-+	.nodes = qcm2290_mmnrt_virt_nodes,
-+	.num_nodes = ARRAY_SIZE(qcm2290_mmnrt_virt_nodes),
-+	.regmap_cfg = &qcm2290_snoc_regmap_config,
-+	.qos_offset = 0x15000,
-+};
-+
-+static struct qcom_icc_node *qcm2290_mmrt_virt_nodes[] = {
-+	[MASTER_CAMNOC_HF] = &mas_camnoc_hf,
-+	[MASTER_MDP0] = &mas_mdp0,
-+	[SLAVE_SNOC_BIMC_RT] = &slv_snoc_bimc_rt,
-+};
-+
-+static struct qcom_icc_desc qcm2290_mmrt_virt = {
-+	.type = QCOM_ICC_QNOC,
-+	.nodes = qcm2290_mmrt_virt_nodes,
-+	.num_nodes = ARRAY_SIZE(qcm2290_mmrt_virt_nodes),
-+	.regmap_cfg = &qcm2290_snoc_regmap_config,
-+	.qos_offset = 0x15000,
-+};
-+
-+static const struct of_device_id qcm2290_noc_of_match[] = {
-+	{ .compatible = "qcom,qcm2290-bimc", .data = &qcm2290_bimc },
-+	{ .compatible = "qcom,qcm2290-cnoc", .data = &qcm2290_cnoc },
-+	{ .compatible = "qcom,qcm2290-snoc", .data = &qcm2290_snoc },
-+	{ .compatible = "qcom,qcm2290-qup-virt", .data = &qcm2290_qup_virt },
-+	{ .compatible = "qcom,qcm2290-mmrt-virt", .data = &qcm2290_mmrt_virt },
-+	{ .compatible = "qcom,qcm2290-mmnrt-virt", .data = &qcm2290_mmnrt_virt },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, qcm2290_noc_of_match);
-+
-+static struct platform_driver qcm2290_noc_driver = {
-+	.probe = qnoc_probe,
-+	.remove = qnoc_remove,
-+	.driver = {
-+		.name = "qnoc-qcm2290",
-+		.of_match_table = qcm2290_noc_of_match,
-+	},
-+};
-+module_platform_driver(qcm2290_noc_driver);
-+
-+MODULE_DESCRIPTION("Qualcomm QCM2290 NoC driver");
-+MODULE_LICENSE("GPL v2");
+Why do you assume that a userspace service must provide the
+IFLA_NUM_TX_QUEUES attribute?
+
+This attribute is optional, see below.
+
+>    I think it's probably better to let WWAN device driver determine
+>    its default queue number.
+
+Exactly! If we provide RTNL with a .get_num_tx_queues() callback, then
+in case of missed IFLA_NUM_TX_QUEUES attribute, RTNL will select the
+number of queues according to the driver decision. And only if
+userspace forces the driver to use a particular number of queues using
+the IFLA_NUM_TX_QUEUES attribute, then RTNL will try to use a
+non-default queues number. In that case, the driver may reject the
+creation of such a bearer.
+
+So, with the .get_num_tx_queues() callback we will have a simple
+scheme. Either, userspace does not specify the IFLA_NUM_TX_QUEUES
+attribute and allows the driver to select an appropriate number of
+queues. Or, userspace would like to force a specific number of queues
+using the IFLA_NUM_TX_QUEUES attribute, but in that case, the
+userspace application should be ready to receive a rejection.
+
+>    2) As you described, above solution will modify the definition and
+>    usage of get_num_tx_queues() and get_num_rx_queues() in
+>    rtnl_link_ops. Userspace service also needs to add new NETLINK
+>    attributes.
+
+What new attributes did you mean?
+
+IFLA_NUM_TX_QUEUES is optional as shown above. The
+IFLA_PARENT_DEV_NAME attribute must be provided anyway, otherwise the
+WWAN subsystem will not be able to locate a particular driver and the
+interface (bearer) creation request will be rejected. Attributes
+already are passed to the WWAN subsystem via the .rtnl_alloc()
+callback. I suggest to pass the same attributes to the
+.get_num_tx_queues() callback that will be called against the same
+RTM_NEWLINK message, just slightly earlier.
+
+>    3) WWAN subsystem implements the rtnl_link_ops and plays a role of
+>    the bridge between RTNL and WWAN device driver. As a separate
+>    subsystem, I think it could be able to supply its own callback
+>    functions to WWAN device driver in wwan_ops just as shown in this
+>    patch.
+
+Yep, we need a callback to be able to support multi-queue modems. I am
+just not happy with a callback that silently tries to improve a user's
+choice. And I would like to find a more straightforward solution for
+multi-queue support.
+
+>    In addition to these reasons, I also agree with your points:
+>       "can be assumed too intrusive to implement a one feature for
+>       a single subsystem."
+
+But it looks like we have no choice here other than extending the
+.get_num_tx_queues() prototype.
+
+Is there any RTNL guru here who could explain whether it is acceptable
+to extend the internal API for a single subsystem?
+
+> Please review my thoughts and give me some inputs at your convenience.
+>
+>>> Signed-off-by: Xiayu Zhang <Xiayu.Zhang@mediatek.com>
+>>> ---
+>>>  drivers/net/wwan/wwan_core.c | 25 ++++++++++++++++++++++++-
+>>>  include/linux/wwan.h         |  6 ++++++
+>>>  2 files changed, 30 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/net/wwan/wwan_core.c
+>>> b/drivers/net/wwan/wwan_core.c
+>>> index d293ab688044..00095c6987be 100644
+>>> --- a/drivers/net/wwan/wwan_core.c
+>>> +++ b/drivers/net/wwan/wwan_core.c
+>>> @@ -823,6 +823,7 @@ static struct net_device
+>>> *wwan_rtnl_alloc(struct nlattr *tb[],
+>>>         struct wwan_device *wwandev =
+>>> wwan_dev_get_by_name(devname);
+>>>         struct net_device *dev;
+>>>         unsigned int priv_size;
+>>> +       unsigned int num_txqs, num_rxqs;
+>>>
+>>>         if (IS_ERR(wwandev))
+>>>                 return ERR_CAST(wwandev);
+>>> @@ -833,9 +834,31 @@ static struct net_device
+>>> *wwan_rtnl_alloc(struct nlattr *tb[],
+>>>                 goto out;
+>>>         }
+>>>
+>>> +       /* let wwan device driver determine TX queue number if it
+>>> wants */
+>>> +       if (wwandev->ops->get_num_tx_queues) {
+>>> +               num_txqs = wwandev->ops-
+>>> >get_num_tx_queues(num_tx_queues);
+>>> +               if (num_txqs < 1 || num_txqs > 4096) {
+>>> +                       dev = ERR_PTR(-EINVAL);
+>>> +                       goto out;
+>>> +               }
+>>> +       } else {
+>>> +               num_txqs = num_tx_queues;
+>>> +       }
+>>> +
+>>> +       /* let wwan device driver determine RX queue number if it
+>>> wants */
+>>> +       if (wwandev->ops->get_num_rx_queues) {
+>>> +               num_rxqs = wwandev->ops-
+>>> >get_num_rx_queues(num_rx_queues);
+>>> +               if (num_rxqs < 1 || num_rxqs > 4096) {
+>>> +                       dev = ERR_PTR(-EINVAL);
+>>> +                       goto out;
+>>> +               }
+>>> +       } else {
+>>> +               num_rxqs = num_rx_queues;
+>>> +       }
+>>> +
+>>>         priv_size = sizeof(struct wwan_netdev_priv) + wwandev->ops-
+>>> >priv_size;
+>>>         dev = alloc_netdev_mqs(priv_size, ifname, name_assign_type,
+>>> -                              wwandev->ops->setup, num_tx_queues,
+>>> num_rx_queues);
+>>> +                              wwandev->ops->setup, num_txqs,
+>>> num_rxqs);
+>>>
+>>>         if (dev) {
+>>>                 SET_NETDEV_DEV(dev, &wwandev->dev);
+>>> diff --git a/include/linux/wwan.h b/include/linux/wwan.h
+>>> index 9fac819f92e3..69c0af7ab6af 100644
+>>> --- a/include/linux/wwan.h
+>>> +++ b/include/linux/wwan.h
+>>> @@ -156,6 +156,10 @@ static inline void *wwan_netdev_drvpriv(struct
+>>> net_device *dev)
+>>>   * @setup: set up a new netdev
+>>>   * @newlink: register the new netdev
+>>>   * @dellink: remove the given netdev
+>>> + * @get_num_tx_queues: determine number of transmit queues
+>>> + *                     to create when creating a new device.
+>>> + * @get_num_rx_queues: determine number of receive queues
+>>> + *                     to create when creating a new device.
+>>>   */
+>>>  struct wwan_ops {
+>>>         unsigned int priv_size;
+>>> @@ -164,6 +168,8 @@ struct wwan_ops {
+>>>                        u32 if_id, struct netlink_ext_ack *extack);
+>>>         void (*dellink)(void *ctxt, struct net_device *dev,
+>>>                         struct list_head *head);
+>>> +       unsigned int (*get_num_tx_queues)(unsigned int hint_num);
+>>> +       unsigned int (*get_num_rx_queues)(unsigned int hint_num);
+>>>  };
+>>>
+>>>  int wwan_register_ops(struct device *parent, const struct wwan_ops
+>>> *ops,
+
 -- 
-2.17.1
-
+Sergey

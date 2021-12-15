@@ -2,100 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C044758BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA194758C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242398AbhLOMVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:21:14 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:57922 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242384AbhLOMVI (ORCPT
+        id S242423AbhLOMWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:22:38 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:60866 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234236AbhLOMWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:21:08 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 0F3DF212C1;
-        Wed, 15 Dec 2021 12:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639570862; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sCQuKlEuH5PJS4RgJOInUUe+I9iRj43vidhR7aKJ1wk=;
-        b=AuQ7HusEJBwwsUOHdHqobSrnXD2eF0GLsHke7nrjev1p2Sx5f5rIPJd0oKcASUkGLLMeq7
-        QplHpL2iC97GHxeUCk1eyTQ17uiILeI1PxYmQpS49xCWa0w5TrUvqW6Z+NeBySPCYEMMx9
-        hf5/13lOTk5qNcP7EbVAkSBH0SlFFMI=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D1234A3B81;
-        Wed, 15 Dec 2021 12:21:01 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 13:20:58 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        "cl@linux.com" <cl@linux.com>,
-        "mm-commits@vger.kernel.org" <mm-commits@vger.kernel.org>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "tj@kernel.org" <tj@kernel.org>
-Subject: Re: + mm-fix-panic-in-__alloc_pages.patch added to -mm tree
-Message-ID: <Ybndqj/15Mc+GfU2@dhcp22.suse.cz>
-References: <YYpTy9eXZucxuRO/@dhcp22.suse.cz>
- <YY6wZMcx/BeddUnH@fedora>
- <YZI5TEW2BkBjOtC1@dhcp22.suse.cz>
- <B8B7E3FA-6EAB-46B7-95EB-5A31395C8ADE@vmware.com>
- <YZJZes9Gz9fe7bCC@dhcp22.suse.cz>
- <ABEDED57-93A9-4601-8EB6-2FF348A0E0BB@vmware.com>
- <YZMq++inSmJegJmj@fedora>
- <Ybht6kqwI0aPx3Jr@dhcp22.suse.cz>
- <20211214125748.974a400f0b05a633f9b971b7@linux-foundation.org>
- <Ybm91+/z8hKuiHYr@dhcp22.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ybm91+/z8hKuiHYr@dhcp22.suse.cz>
+        Wed, 15 Dec 2021 07:22:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639570956; x=1671106956;
+  h=from:to:cc:subject:date:message-id;
+  bh=WSYjARf9I615x4tAMcmvpMwyOLr6e+mLTd1pXbcRWH4=;
+  b=jwRSDNXeCW7Q/zEzOY+TSo8Kh3vj1EFYJ01PbHLscfaVRu46OjR9lvtb
+   g2Ifq9h1vNUWGzCpBm8sAJXe19Iic7WtNtoseo08Trtq1XOntDlVixwb6
+   0WoJcNHI8z/706YM94gU4L6wA4HBUjOx7nC+MSk9AOjzsqiBkuYHoChX+
+   A=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 15 Dec 2021 04:22:36 -0800
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 15 Dec 2021 04:22:33 -0800
+X-QCInternal: smtphost
+Received: from hyd-lablnx377.qualcomm.com ([10.204.178.226])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 15 Dec 2021 17:52:15 +0530
+Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
+        id 89850213E6; Wed, 15 Dec 2021 17:52:14 +0530 (IST)
+From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com
+Cc:     mka@chromium.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, quic_hemantg@quicinc.com,
+        linux-arm-msm@vger.kernel.org, quic_bgodavar@quicinc.com,
+        rjliao@codeaurora.org, hbandi@codeaurora.org,
+        abhishekpandit@chromium.org, mcchou@chromium.org,
+        quic_pharish@quicinc.com,
+        Sai Teja Aluvala <quic_saluvala@quicinc.com>
+Subject: [PATCH v3] Bluetooth: btqca: sequential validation
+Date:   Wed, 15 Dec 2021 17:51:40 +0530
+Message-Id: <1639570900-24509-1-git-send-email-quic_saluvala@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 15-12-21 11:05:12, Michal Hocko wrote:
-> On Tue 14-12-21 12:57:48, Andrew Morton wrote:
-> > On Tue, 14 Dec 2021 11:11:54 +0100 Michal Hocko <mhocko@suse.com> wrote:
-> > 
-> > > > I need some clarification here. It sounds like memoryless nodes work on
-> > > > x86, but hotplug + memoryless nodes isn't a supported use case or you're
-> > > > introducing it as a new use case?
-> > > > 
-> > > > If this is a new use case, then I'm inclined to say this patch should
-> > > > NOT go in and a proper fix should be implemented on hotplug's side. I
-> > > > don't want to be in the business of having/seeing this conversation
-> > > > reoccur because we just papered over this issue in percpu.
-> > > 
-> > > The patch still seems to be in the mmotm tree. I have sent a different
-> > > fix candidate [1] which should be more robust and cover also other potential
-> > > places.
-> > > 
-> > > [1] http://lkml.kernel.org/r/20211214100732.26335-1-mhocko@kernel.org
-> > 
-> > Is cool, I'm paying attention.
-> > 
-> > We do want something short and simple for backporting to -stable (like
-> > Alexey's patch) so please bear that in mind while preparing an
-> > alternative.
-> 
-> I think we want something that fixes the underlying problem. Please keep
-> in mind that the pcp allocation is not the only place to hit the issue.
-> We have more. I do not want we want to handle each and every one
-> separately.
-> 
-> I am definitly not going to push for my solution but if there is a
-> consensus this is the right approach then I do not think we really want
-> to implement these partial workarounds.
+Added Sequential validation support
+& patch command config
 
-Btw. I forgot to add that if we do not agree on the preallocation
-approach then the approach should be something like 
-http://lkml.kernel.org/r/51c65635-1dae-6ba4-daf9-db9df0ec35d8@redhat.com
-proposed by David.
+Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+
+v3:
+* removed rlen,rtype
+* Replaced kfree with kfree_skb
+
+v2:
+* Added static declaration
+* Addressed wrong indentation
+* Removed EDL_PATCH_CONFIG_CMD_LEN
+*
+
+v1:
+*Initial patch
+---
+ drivers/bluetooth/btqca.c | 48 +++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/bluetooth/btqca.h |  2 ++
+ 2 files changed, 50 insertions(+)
+
+diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
+index be04d74..21830c6 100644
+--- a/drivers/bluetooth/btqca.c
++++ b/drivers/bluetooth/btqca.c
+@@ -141,6 +141,51 @@ static int qca_read_fw_build_info(struct hci_dev *hdev)
+ 	return err;
+ }
+ 
++static int qca_send_patch_config_cmd(struct hci_dev *hdev)
++{
++	struct sk_buff *skb;
++	int err = 0;
++	u8 cmd[] = {EDL_PATCH_CONFIG_CMD, 0x01, 0, 0, 0};
++	struct edl_event_hdr *edl;
++
++	bt_dev_dbg(hdev, "QCA Patch config");
++
++	skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, sizeof(cmd),
++				cmd, HCI_EV_VENDOR, HCI_INIT_TIMEOUT);
++	if (IS_ERR(skb)) {
++		err = PTR_ERR(skb);
++		bt_dev_err(hdev, "Sending QCA Patch config failed (%d)", err);
++		return err;
++	}
++
++	if (skb->len != 2) {
++		bt_dev_err(hdev, "QCA Patch config cmd size mismatch len %d", skb->len);
++		err = -EILSEQ;
++		goto out;
++	}
++
++	edl = (struct edl_event_hdr *)(skb->data);
++	if (!edl) {
++		bt_dev_err(hdev, "QCA Patch config with no header");
++		err = -EILSEQ;
++		goto out;
++	}
++
++	if (edl->cresp != EDL_PATCH_CONFIG_RES_EVT || edl->rtype != EDL_PATCH_CONFIG_CMD) {
++		bt_dev_err(hdev, "QCA Wrong packet received %d %d", edl->cresp,
++			   edl->rtype);
++		err = -EIO;
++		goto out;
++	}
++
++out:
++	kfree_skb(skb);
++	if (err)
++		bt_dev_err(hdev, "QCA Patch config cmd failed (%d)", err);
++
++	return err;
++}
++
+ static int qca_send_reset(struct hci_dev *hdev)
+ {
+ 	struct sk_buff *skb;
+@@ -551,6 +596,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+ 	 */
+ 	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
+ 
++	if (soc_type == QCA_WCN6750)
++		qca_send_patch_config_cmd(hdev);
++
+ 	/* Download rampatch file */
+ 	config.type = TLV_TYPE_PATCH;
+ 	if (qca_is_wcn399x(soc_type)) {
+diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
+index 30afa77..61e9a50 100644
+--- a/drivers/bluetooth/btqca.h
++++ b/drivers/bluetooth/btqca.h
+@@ -13,6 +13,7 @@
+ #define EDL_PATCH_TLV_REQ_CMD		(0x1E)
+ #define EDL_GET_BUILD_INFO_CMD		(0x20)
+ #define EDL_NVM_ACCESS_SET_REQ_CMD	(0x01)
++#define EDL_PATCH_CONFIG_CMD		(0x28)
+ #define MAX_SIZE_PER_TLV_SEGMENT	(243)
+ #define QCA_PRE_SHUTDOWN_CMD		(0xFC08)
+ #define QCA_DISABLE_LOGGING		(0xFC17)
+@@ -24,6 +25,7 @@
+ #define EDL_CMD_EXE_STATUS_EVT		(0x00)
+ #define EDL_SET_BAUDRATE_RSP_EVT	(0x92)
+ #define EDL_NVM_ACCESS_CODE_EVT		(0x0B)
++#define EDL_PATCH_CONFIG_RES_EVT	(0x00)
+ #define QCA_DISABLE_LOGGING_SUB_OP	(0x14)
+ 
+ #define EDL_TAG_ID_HCI			(17)
 -- 
-Michal Hocko
-SUSE Labs
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+

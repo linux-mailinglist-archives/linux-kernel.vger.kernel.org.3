@@ -2,113 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB085476324
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94605476328
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235745AbhLOUX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:23:57 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:34731 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbhLOUX4 (ORCPT
+        id S235749AbhLOUYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:24:11 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:43867 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235748AbhLOUYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:23:56 -0500
-Received: by mail-ot1-f41.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso26361375otj.1;
-        Wed, 15 Dec 2021 12:23:55 -0800 (PST)
+        Wed, 15 Dec 2021 15:24:09 -0500
+Received: by mail-ot1-f51.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so26326414otu.10;
+        Wed, 15 Dec 2021 12:24:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=rDc/m0z81usLrHmVxQTbPcJpFGLlwccuEGUofI1rnCY=;
-        b=bauiFRNf87k9FXx7JUwt1/rv/jjFMHZnGHcRUpDgSeQA4ovjkk0dimXbBDYKhJQXtW
-         K7KlCB9tdpCv/7lshj7tlogGAIJ7bsYAhsroIYhDBmr6WiHDEbJxRNr0uqV8DvuCmi3w
-         r9XJidB9hA7k8NJW8MmHbFof4oTTcxqQRUNeBAmah9jJ9sRme4MJqQ6eXtWmSAZBZEIf
-         cpY4LC45iCfZ1Jb2OMaoiIvJFY9i1psIXMuhajqMhS+2CReiecrwxFkaymReDKorL4IU
-         ipDVWVJUdtI1RQCal6ym3UuiaDwj85EaNx9F0s9pjcw+UE6XGtk+33N5SsP6rr1ceFO7
-         lJSw==
-X-Gm-Message-State: AOAM530vmvA1Y0K++boRArU4SIx7pvaS0QiNBWoGoN/+kl7/8Qscj0hM
-        yYkZ4NBQqCO3iUbcZRxO4g==
-X-Google-Smtp-Source: ABdhPJx2REterkzgVl+l3L2vynJmWoml8AEBu3SIbeJvyBZUECUO9F4YSXSi72K4S6J35Z5cPCOHaA==
-X-Received: by 2002:a9d:6058:: with SMTP id v24mr10028046otj.296.1639599835370;
-        Wed, 15 Dec 2021 12:23:55 -0800 (PST)
+        bh=cHfNSs54Slrx4wtANzUpexy4Yem5PpNyZASXoL+St08=;
+        b=dSvjpJOVsaCnxxzF2adnGPwhib318grV0S53VCRdy/qSF9R/s4zpkwbO+4OxMQ2lFb
+         nLU1eJrMlaO2s20D7ztNRlGT+G1M7uNeoER70rR/Cat5pmbQmESKDmubvPysXyjaPIYA
+         2qBCK2NVrSprtqkz53RPnRHn8cHWz4VDcScUt6Nla724HWQFKOVWnSEuevdQBn/ocM/h
+         wrrQfuwHbCXnEZLKyechFJ3QWC4GfUOnlqAIEssXS7KfGyv+fOwZ+GYll00B/8tIXdSh
+         sWo2T2lOXN11cwdEAIyyZWszjW3Cb44/ndnXSk/iCkT/0PF2Ad2OxxJOxjkQ3sAIP3jg
+         GoKA==
+X-Gm-Message-State: AOAM530er+FRNmcMTt8t0s72VfVhVddtEz4z4yixyPuwingkeyvCol1x
+        n9WS6yCoFNwc0O/t7TGKhw==
+X-Google-Smtp-Source: ABdhPJzR65AsskXOxu12cvr8FeJjC048WZ1Ev6UZcGjufrn57yxDWUHLYrTWxWd3GOD7x5OcOdfq3w==
+X-Received: by 2002:a9d:61d4:: with SMTP id h20mr10154106otk.202.1639599848971;
+        Wed, 15 Dec 2021 12:24:08 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d6sm620937otb.4.2021.12.15.12.23.54
+        by smtp.gmail.com with ESMTPSA id e16sm645882ook.38.2021.12.15.12.24.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 12:23:54 -0800 (PST)
-Received: (nullmailer pid 1776034 invoked by uid 1000);
-        Wed, 15 Dec 2021 20:23:53 -0000
-Date:   Wed, 15 Dec 2021 14:23:53 -0600
+        Wed, 15 Dec 2021 12:24:08 -0800 (PST)
+Received: (nullmailer pid 1776423 invoked by uid 1000);
+        Wed, 15 Dec 2021 20:24:07 -0000
+Date:   Wed, 15 Dec 2021 14:24:07 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     David Heidelberg <david@ixit.cz>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Caleb Connolly <caleb@connolly.tech>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Satya Priya <skakit@codeaurora.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: rtc: qcom-pm8xxx-rtc: update register
  numbers
-Message-ID: <YbpO2ckB14wZ7p0l@robh.at.kernel.org>
+Message-ID: <YbpO53ySu7yr01NR@robh.at.kernel.org>
 References: <20211213192946.111320-1-david@ixit.cz>
- <1639437829.348405.1773613.nullmailer@robh.at.kernel.org>
- <7I544R.923UO8WZHK48@ixit.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7I544R.923UO8WZHK48@ixit.cz>
+In-Reply-To: <20211213192946.111320-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:22:55PM +0100, David Heidelberg wrote:
+On Mon, 13 Dec 2021 20:29:45 +0100, David Heidelberg wrote:
+> Extend registers up to 2, also document their names.
 > 
+> Also fixes warnings generated by `make qcom/sdm845-oneplus-fajita.dtb`:
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: reg: [[24576], [24832]] is too long
+>         From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: 'reg-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+>         From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
 > 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml         | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> On Mon, Dec 13 2021 at 17:23:49 -0600, Rob Herring <robh@kernel.org> wrote:
-> > On Mon, 13 Dec 2021 20:29:45 +0100, David Heidelberg wrote:
-> > >  Extend registers up to 2, also document their names.
-> > > 
-> > >  Also fixes warnings generated by `make
-> > > qcom/sdm845-oneplus-fajita.dtb`:
-> > >  arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000:
-> > > reg: [[24576], [24832]] is too long
-> > >          From schema:
-> > > Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-> > >  arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000:
-> > > 'reg-names' does not match any of the regexes: 'pinctrl-[0-9]+'
-> > >          From schema:
-> > > Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-> > > 
-> > >  Signed-off-by: David Heidelberg <david@ixit.cz>
-> > >  ---
-> > >   .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml         | 9
-> > > ++++++++-
-> > >   1 file changed, 8 insertions(+), 1 deletion(-)
-> > > 
-> > 
-> > Running 'make dtbs_check' with the schema in this patch gives the
-> > following warnings. Consider if they are expected or the schema is
-> > incorrect. These may not be new warnings.
-> > 
-> > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> > This will change in the future.
-> > 
-> > Full log is available here: https://patchwork.ozlabs.org/patch/1567467
-> > 
-> > 
-> > rtc@11d: compatible: Additional items are not allowed ('qcom,pm8921-rtc'
-> > was unexpected)
-> > 	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dt.yaml
-> > 
-> > rtc@11d: compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too long
-> > 	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dt.yaml
-> 
-> 
-> Would you consider safe, if I sent patch to remove redundant
-> `qcom,pm8921-rtc` from arch/arm/boot/dts/qcom-mdm9615.dtsi?
 
-I don't know. Depends if anything uses that and doesn't know about 
-'qcom,pm8018-rtc'.
-
-Rob
+Reviewed-by: Rob Herring <robh@kernel.org>

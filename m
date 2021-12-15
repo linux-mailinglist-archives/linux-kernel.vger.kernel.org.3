@@ -2,289 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8A147535C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969FC47533E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240439AbhLOG7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 01:59:49 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:52216 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240346AbhLOG7i (ORCPT
+        id S240302AbhLOG7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 01:59:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22254 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240111AbhLOG7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 01:59:38 -0500
-X-UUID: d18215e442a3414cb37c7f5a110d3dc9-20211215
-X-UUID: d18215e442a3414cb37c7f5a110d3dc9-20211215
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1352448132; Wed, 15 Dec 2021 14:59:33 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 15 Dec 2021 14:59:31 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Wed, 15 Dec 2021 14:59:30 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v1, 03/12] media: mtk-vcodec: get frame buffer size from scp
-Date:   Wed, 15 Dec 2021 14:59:17 +0800
-Message-ID: <20211215065926.8761-4-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211215065926.8761-1-yunfei.dong@mediatek.com>
-References: <20211215065926.8761-1-yunfei.dong@mediatek.com>
+        Wed, 15 Dec 2021 01:59:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639551571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UcpwwD43R1or7NeD2dP64m1yxGz/641w1QnQXTdSpf0=;
+        b=gmnNLTdFLAlbsBEP+pjxBak73Ka/59ydnshNog1ZiHt7C2gWJfrSZNOU1zmTwHOjnz3RcB
+        NE32hrzgGBJ9bbPY0dJ/kn3p8kLNrgqjw/v3SHt1LTetdoU4rdWEb1hlEKoDw29SifPiQM
+        p+V38Xr2CNxGGOgaTcP+y2ky68LU3dc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-636-e5LHqd80McS0TxX46rG1eA-1; Wed, 15 Dec 2021 01:59:30 -0500
+X-MC-Unique: e5LHqd80McS0TxX46rG1eA-1
+Received: by mail-ed1-f70.google.com with SMTP id t9-20020aa7d709000000b003e83403a5cbso19223105edq.19
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:59:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UcpwwD43R1or7NeD2dP64m1yxGz/641w1QnQXTdSpf0=;
+        b=pn4BW74KSQ9uJIeAkp5JWFcl3Ix6tHOcuZBOviC8grjP1jx8UT1GX+UhsC7BlKOIDa
+         zWakg2htKrNtVCS0GLYZBagu54OYYlu6DPvGgmilJxfAt8SaTiFauzlHpeuEajGvHjJW
+         QeNi9mEFEORrHjskRYYjOwYZLe4EEfHfxAjeEGD05qtCrvDfY1h14NffOqfZwQcBH5AD
+         hhj037InIicVIS7/RoP8ODDrhbG/ptJvpACni+nmSUah38y9OG06rqkmS4nXRsv6h1tt
+         fdN59BQktgN9XzWipHYINNhnTrFKcSYjyLQ2lXkSKNFwSX0Eyb2Er8g+OfoqKDEOXv8a
+         Jd9Q==
+X-Gm-Message-State: AOAM531ecUVCZASYpL4nLntLCtvj9ai6j4tZd8xIkXzQsPY+/eXmeQwu
+        jMVCxmRtgWRBrhv/LfuSaKUXA4e5jDnyHte29z+hWO8BMhy2728/0XiyNBy1xTtio+WpF1z3OS4
+        xCK0eIr32nqlhMgJ0NTYMz5ZQQvCGJ1RYXBD4o8Fy
+X-Received: by 2002:a05:6402:2706:: with SMTP id y6mr13266519edd.29.1639551569465;
+        Tue, 14 Dec 2021 22:59:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzLEtdH6OwY04TWX96qvtzBjBz+n0WHWrGbPbU0g+bbxsrxtTZ9ZwBnpDrgJQH46xOpIL5izQRkdmgEqsIc9Dw=
+X-Received: by 2002:a05:6402:2706:: with SMTP id y6mr13266510edd.29.1639551569282;
+ Tue, 14 Dec 2021 22:59:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+References: <20211215030831.24058-1-trbecker@gmail.com>
+In-Reply-To: <20211215030831.24058-1-trbecker@gmail.com>
+From:   Leif Sahlberg <lsahlber@redhat.com>
+Date:   Wed, 15 Dec 2021 16:59:18 +1000
+Message-ID: <CAGvGhF4y4ydeuQg9CmTF5OrrVmXG6D05PtBCWHb-EFmY8Y4zOA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] cifs: sanitize multiple delimiters in prepath
+To:     Thiago Rafael Becker <trbecker@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Steve French <sfrench@samba.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
+Steve,
 
-Different capture buffer format has different buffer size, need to get
-real buffer size according to buffer type from scp.
+Acked-by: me
+Steve, we should have this in stable
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- .../platform/mtk-vcodec/mtk_vcodec_dec.c      |  2 +
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  2 +
- .../media/platform/mtk-vcodec/vdec_ipi_msg.h  | 36 +++++++++++++
- .../media/platform/mtk-vcodec/vdec_vpu_if.c   | 51 +++++++++++++++++++
- .../media/platform/mtk-vcodec/vdec_vpu_if.h   | 15 ++++++
- 5 files changed, 106 insertions(+)
+    Fixes: 24e0a1eff9e2 ("cifs: switch to new mount api")
+    Cc: stable@vger.kernel.org # 5.11+
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-index 130ecef2e766..87891ebd7246 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-@@ -466,6 +466,8 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 			}
- 			ctx->state = MTK_STATE_INIT;
- 		}
-+	} else {
-+		ctx->capture_fourcc = fmt->fourcc;
- 	}
- 
- 	/*
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index e9a31306b956..fc2c23deb825 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -277,6 +277,7 @@ struct vdec_pic_info {
-  *		     to be used with encoder and stateful decoder.
-  * @is_flushing: set to true if flushing is in progress.
-  * @current_codec: current set input codec, in V4L2 pixel format
-+ * @capture_fourcc: capture queue type, in V4L2 pixel format
-  *
-  * @colorspace: enum v4l2_colorspace; supplemental to pixelformat
-  * @ycbcr_enc: enum v4l2_ycbcr_encoding, Y'CbCr encoding
-@@ -322,6 +323,7 @@ struct mtk_vcodec_ctx {
- 	bool is_flushing;
- 
- 	u32 current_codec;
-+	u32 capture_fourcc;
- 
- 	enum v4l2_colorspace colorspace;
- 	enum v4l2_ycbcr_encoding ycbcr_enc;
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-index 5daca8d52ebb..d00e555cf27a 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-+++ b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-@@ -20,6 +20,7 @@ enum vdec_ipi_msgid {
- 	AP_IPIMSG_DEC_RESET = 0xA004,
- 	AP_IPIMSG_DEC_CORE = 0xA005,
- 	AP_IPIMSG_DEC_CORE_END = 0xA006,
-+	AP_IPIMSG_DEC_GET_PARAM = 0xA007,
- 
- 	VPU_IPIMSG_DEC_INIT_ACK = 0xB000,
- 	VPU_IPIMSG_DEC_START_ACK = 0xB001,
-@@ -28,6 +29,7 @@ enum vdec_ipi_msgid {
- 	VPU_IPIMSG_DEC_RESET_ACK = 0xB004,
- 	VPU_IPIMSG_DEC_CORE_ACK = 0xB005,
- 	VPU_IPIMSG_DEC_CORE_END_ACK = 0xB006,
-+	VPU_IPIMSG_DEC_GET_PARAM_ACK = 0xB007,
- };
- 
- /**
-@@ -114,4 +116,38 @@ struct vdec_vpu_ipi_init_ack {
- 	uint32_t inst_id;
- };
- 
-+/**
-+ * struct vdec_ap_ipi_get_param - for AP_IPIMSG_SET_PARAM
-+ * @msg_id	: AP_IPIMSG_DEC_START
-+ * @inst_id     : instance ID. Used if the ABI version >= 2.
-+ * @data	: picture information
-+ * @param_type	: get param type
-+ * @codec_type	: Codec fourcc
-+ */
-+struct vdec_ap_ipi_get_param {
-+	uint32_t msg_id;
-+	uint32_t inst_id;
-+	uint32_t data[4];
-+	uint32_t param_type;
-+	uint32_t codec_type;
-+};
-+
-+
-+/**
-+ * struct vdec_vpu_ipi_init_ack - for VPU_IPIMSG_DEC_INIT_ACK
-+ * @msg_id	: VPU_IPIMSG_DEC_INIT_ACK
-+ * @status	: VPU exeuction result
-+ * @ap_inst_addr	: AP vcodec_vpu_inst instance address
-+ * @data     : picture information from SCP.
-+ * @param_type	: get param type
-+ */
-+struct vdec_vpu_ipi_get_param_ack {
-+	uint32_t msg_id;
-+	int32_t status;
-+	uint64_t ap_inst_addr;
-+	uint32_t data[4];
-+	uint32_t param_type;
-+	uint32_t reserved;
-+};
-+
- #endif
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-index 21f6d9c5a371..6f9bcc2b0bb9 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-@@ -54,6 +54,27 @@ static void handle_init_ack_msg(const struct vdec_vpu_ipi_init_ack *msg)
- 	}
- }
- 
-+static void handle_get_param_msg_ack(
-+	const struct vdec_vpu_ipi_get_param_ack *msg)
-+{
-+	struct vdec_vpu_inst *vpu = (struct vdec_vpu_inst *)
-+					(unsigned long)msg->ap_inst_addr;
-+
-+	mtk_vcodec_debug(vpu, "+ ap_inst_addr = 0x%llx", msg->ap_inst_addr);
-+
-+	/* param_type is enum vdec_get_param_type */
-+	switch(msg->param_type) {
-+	case 2:
-+		vpu->fb_sz[0] = msg->data[0];
-+		vpu->fb_sz[1] = msg->data[1];
-+		break;
-+	default:
-+		mtk_vcodec_err(vpu, "invalid get param type=%d", msg->param_type);
-+		vpu->failure = 1;
-+		break;
-+	}
-+}
-+
- /*
-  * vpu_dec_ipi_handler - Handler for VPU ipi message.
-  *
-@@ -89,6 +110,9 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
- 		case VPU_IPIMSG_DEC_CORE_END_ACK:
- 			break;
- 
-+		case VPU_IPIMSG_DEC_GET_PARAM_ACK:
-+			handle_get_param_msg_ack(data);
-+			break;
- 		default:
- 			mtk_vcodec_err(vpu, "invalid msg=%X", msg->msg_id);
- 			break;
-@@ -217,6 +241,33 @@ int vpu_dec_start(struct vdec_vpu_inst *vpu, uint32_t *data, unsigned int len)
- 	return err;
- }
- 
-+int vpu_dec_get_param(struct vdec_vpu_inst *vpu, uint32_t *data,
-+	unsigned int len, unsigned int param_type)
-+{
-+	struct vdec_ap_ipi_get_param msg;
-+	int i;
-+	int err;
-+
-+	mtk_vcodec_debug_enter(vpu);
-+
-+	if (len > ARRAY_SIZE(msg.data)) {
-+		mtk_vcodec_err(vpu, "invalid len = %d\n", len);
-+		return -EINVAL;
-+	}
-+
-+	memset(&msg, 0, sizeof(msg));
-+	msg.msg_id = AP_IPIMSG_DEC_GET_PARAM;
-+	msg.inst_id = vpu->inst_id;
-+	for (i = 0; i < len; i++)
-+		msg.data[i] = data[i];
-+	msg.param_type = param_type;
-+	msg.codec_type = vpu->codec_type;
-+
-+	err = vcodec_vpu_send_msg(vpu, (void *)&msg, sizeof(msg));
-+	mtk_vcodec_debug(vpu, "- ret=%d", err);
-+	return err;
-+}
-+
- int vpu_dec_core(struct vdec_vpu_inst *vpu)
- {
- 	return vcodec_send_ap_ipi(vpu, AP_IPIMSG_DEC_CORE);
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-index 4cb3c7f5a3ad..963f8d4877b7 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-+++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-@@ -28,6 +28,8 @@ struct mtk_vcodec_ctx;
-  * @wq          : wait queue to wait VPU message ack
-  * @handler     : ipi handler for each decoder
-  * @codec_type     : use codec type to separate different codecs
-+ * @capture_type    : used capture type to separate different capture format
-+ * @fb_sz  : frame buffer size of each plane
-  */
- struct vdec_vpu_inst {
- 	int id;
-@@ -42,6 +44,8 @@ struct vdec_vpu_inst {
- 	wait_queue_head_t wq;
- 	mtk_vcodec_ipi_handler handler;
- 	unsigned int codec_type;
-+	unsigned int capture_type;
-+	unsigned int fb_sz[2];
- };
- 
- /**
-@@ -104,4 +108,15 @@ int vpu_dec_core(struct vdec_vpu_inst *vpu);
-  */
- int vpu_dec_core_end(struct vdec_vpu_inst *vpu);
- 
-+/**
-+ * vpu_dec_get_param - get param from scp
-+ *
-+ * @vpu : instance for vdec_vpu_inst
-+ * @data: meta data to pass bitstream info to VPU decoder
-+ * @len : meta data length
-+ * @param_type : get param type
-+ */
-+int vpu_dec_get_param(struct vdec_vpu_inst *vpu, uint32_t *data,
-+	unsigned int len, unsigned int param_type);
-+
- #endif
--- 
-2.25.1
+
+On Wed, Dec 15, 2021 at 1:09 PM Thiago Rafael Becker <trbecker@gmail.com> wrote:
+>
+> mount.cifs can pass a device with multiple delimiters in it. This will
+> cause rename(2) to fail with ENOENT.
+>
+> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=2031200
+> Signed-off-by: Thiago Rafael Becker <trbecker@gmail.com>
+> ---
+>  fs/cifs/fs_context.c | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>
+> diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
+> index 6a179ae753c1..4ce8a7df3a02 100644
+> --- a/fs/cifs/fs_context.c
+> +++ b/fs/cifs/fs_context.c
+> @@ -434,6 +434,34 @@ int smb3_parse_opt(const char *options, const char *key, char **val)
+>         return rc;
+>  }
+>
+> +/*
+> + * remove duplicate path delimiters. Windows is supposed to do that
+> + * but there are some bugs that prevent rename from working if there are
+> + * multiple delimiters.
+> + */
+> +void sanitize_path(char *path) {
+> +        char *pos = path, last = *path;
+> +        unsigned int offset = 0;
+> +
+> +        while(*(++pos)) {
+> +                if ((*pos == '/' || *pos == '\\') && (last == '/' || last == '\\')) {
+> +                        offset++;
+> +                        continue;
+> +                }
+> +
+> +                last = *pos;
+> +                *(pos - offset) = *pos;
+> +        }
+> +
+> +        pos = pos - offset - 1;
+> +
+> +        /* At this point, there should be only zero or one delimiter at the end of the string */
+> +        if (*pos != '/' && *pos != '\\')
+> +                pos++;
+> +
+> +        *pos = '\0';
+> +}
+> +
+>  /*
+>   * Parse a devname into substrings and populate the ctx->UNC and ctx->prepath
+>   * fields with the result. Returns 0 on success and an error otherwise
+> @@ -497,6 +525,8 @@ smb3_parse_devname(const char *devname, struct smb3_fs_context *ctx)
+>         if (!ctx->prepath)
+>                 return -ENOMEM;
+>
+> +       sanitize_path(ctx->prepath);
+> +
+>         return 0;
+>  }
+>
+> --
+> 2.31.1
+>
 

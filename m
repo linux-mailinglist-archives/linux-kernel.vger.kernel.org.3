@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 046D5475962
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25FA475965
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242754AbhLONIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 08:08:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S242774AbhLONI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 08:08:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242704AbhLONIg (ORCPT
+        with ESMTP id S242772AbhLONI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 08:08:36 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEC8C06173F;
-        Wed, 15 Dec 2021 05:08:36 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id m192so19883722qke.2;
-        Wed, 15 Dec 2021 05:08:36 -0800 (PST)
+        Wed, 15 Dec 2021 08:08:57 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EC8C06173E;
+        Wed, 15 Dec 2021 05:08:56 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id i13so20200943qvm.1;
+        Wed, 15 Dec 2021 05:08:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VzWryQMQXu1HYg1ynBv0/PjpqcrADY+cqKGeEKL596E=;
-        b=d0UFWa/snxiPgSHptjSjB0h0SeCov85NNnZ9RHVa+KjMpxgP7LxfPIW8W7yHePIYJP
-         zVrR3kILicR9kMsD2enE+ieuymqKTfY0Me6FycLb9/d5EJ4N3BJknlUDQd9m7Q9bVVNt
-         LwOtvIsk5LdyBGN1PU9u3tpVZkO33DCFohZuPKzTYwU736yptM4YxgLzGZcXVvhkfV+A
-         L9Qomx9QR7ePl4zRxLnupfGWJ/tGjdp7TT7ycFwUhEulgR3N/p75yfb8JfMzlZy5qTDh
-         6Lj2YSFtndK4P9hsEMF6nX7fIjSd30dggfqwfob+5szDOkpkcAWFiWlyxymgLE7cBMrY
-         X6nw==
+        bh=+Ox43oa+Czh+mlWTXv9jvCVoTil02NguQK6rBzom3hc=;
+        b=I0KFfgIZFb1T7eTuywu5QbAamTrX+2ytSV7bWKy1n3ilDoGD/JT2dbXHlbwsn6D0EC
+         1P9/688AKbmHM/rCQJwusHK7j68Cp9+LD2Sl/iZpB0JMFc359tQBwtFQvzvf67lI3EDu
+         4exq0vshwqABczmbmBBkaGJA0Wh3QqOuyEOzFxkVxIwDsejjw8X0Ik06BBPDF4BCpZ9K
+         nTRnSaMEQFZ3OP+UkOIwnL8+vE2sNtakrOygZACE7/oJ3CCf4Eg8dvRx9r3Doy/oUBSG
+         upPmAO3J6QB4gYn8iRO487Dw+w4PhgtkOBCTAVybzhZud953vmnBRALo76GJVUAKqYY7
+         2sCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VzWryQMQXu1HYg1ynBv0/PjpqcrADY+cqKGeEKL596E=;
-        b=xeUUufBoBOBKxdLZfJwl3xDU4GaSZ3dvaOkX6Ae3l+QqUqpcC8Kz9O7MfIx54QVbeP
-         tvERr5VB2KTwPUBvW3WT8OwwftWBlDPcq0IrrYiQj1bAsTLte4jD3oWbXRc+Imlc3JMd
-         /3CpIXSJiFFdfSRVnqnZpwCHQ0omzn7Z7elhyq+lKGlY9cAXSY8GCApPKoObanUz9ZUf
-         z9Z2OlZTObv21MghRXMqqrZgA/0AR8RR5lP97doJn4jh1vv+PjtXHoDo9ti4x/X/BFJn
-         kS2Gj053R6TI+HYW5SmTz8muNO4pFLALYyfMgMT2SN5Bf9h1bqqXX5S8PgI7cBl4aq6g
-         PhrA==
-X-Gm-Message-State: AOAM533+6a/LLqFjjSVOOzB3/LnArWo7wCgZAQFZs8bvW54bTxGK4Psl
-        I6PXoqCY54aV9ctPGV1NAl+gQkNxITj3QQ==
-X-Google-Smtp-Source: ABdhPJwiIxFq5irBpgv02HJUL8hqMQpIAImtq/9UmMb5zRN6z8/eCzVxuLWaG36TqdbZ9GM9BYk/pw==
-X-Received: by 2002:ae9:f710:: with SMTP id s16mr8284277qkg.740.1639573714882;
-        Wed, 15 Dec 2021 05:08:34 -0800 (PST)
+        bh=+Ox43oa+Czh+mlWTXv9jvCVoTil02NguQK6rBzom3hc=;
+        b=xpJrzkDX2RTvAu67X59OCxz16c5T8ntCJw7uHKr3MjvJ/Lfrmh9tq4sMD/+Cdb9KjZ
+         Z353/gAtQOHewQs/gC3Q2DxUGf08Utw3oAYH6Ud1ozxgFrptlwAuG8jO+rJ+1ZI9nQEd
+         AkUAXhLKLTl1vwyZCDquGzQaPH+mWP2SN0NMQp0JeAbz7sx5bImqXMcXWzL8cfL0if23
+         2yGR2CwQW9UHxyyUVD8m5dTGz5PWl7KBxK3xlYbvDx9hszlv/scJhGSnA1sulCwisdjg
+         5htfgDpTVGB63j+p4NkYeO2KDyPY2y0EYy297Jl2eXvjqYqd32Lqx4e28AKhAT0OX6Fa
+         GmCA==
+X-Gm-Message-State: AOAM530nGCaMTJJolAht6MCxpR7MgeoxS2Rr2ipeSGy7isF4SrVRBuy0
+        VC5qiCz4CXKzX2BX4VbLi4tN5dBLRBnY2w==
+X-Google-Smtp-Source: ABdhPJz0DDQyYhZVT+X3Lgm2ZsSxatdTzUtOT8BizsJ4OLjdmc2x74jMk8KsUfWCF8Xr2T7b9ywjFQ==
+X-Received: by 2002:a05:6214:1cc7:: with SMTP id g7mr10915864qvd.79.1639573735642;
+        Wed, 15 Dec 2021 05:08:55 -0800 (PST)
 Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
-        by smtp.gmail.com with ESMTPSA id j12sm1594897qta.54.2021.12.15.05.08.19
+        by smtp.gmail.com with ESMTPSA id j12sm1594897qta.54.2021.12.15.05.08.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 05:08:25 -0800 (PST)
+        Wed, 15 Dec 2021 05:08:40 -0800 (PST)
 From:   Gabriel Somlo <gsomlo@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
@@ -57,9 +57,9 @@ Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
         shorne@gmail.com, geert@linux-m68k.org,
         david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
         rdunlap@infradead.org
-Subject: [PATCH v5 1/3] MAINTAINERS: co-maintain LiteX platform
-Date:   Wed, 15 Dec 2021 08:07:09 -0500
-Message-Id: <20211215130711.111186-2-gsomlo@gmail.com>
+Subject: [PATCH v5 2/3] dt-bindings: mmc: Add bindings for LiteSDCard
+Date:   Wed, 15 Dec 2021 08:07:10 -0500
+Message-Id: <20211215130711.111186-3-gsomlo@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211215130711.111186-1-gsomlo@gmail.com>
 References: <20211215130711.111186-1-gsomlo@gmail.com>
@@ -69,59 +69,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the litex_mmc (LiteSDCard) and LiteETH drivers to the list
-of files maintained under LiteX.
+LiteSDCard is a small footprint, configurable SDCard core forFPGA
+based system on chips.
 
-Add Gabriel Somlo and Joel Stanley as maintainers; Joel authored
-the LiteETH driver, and Gabriel is currently curating the LiteX
-out-of-tree device drivers as they are tested and prepared for
-upstream submission, having also co-authored a number of them.
-
-Cc: Karol Gugala <kgugala@antmicro.com>
-Cc: Mateusz Holenko <mholenko@antmicro.com>
 Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-Acked-by: Joel Stanley <joel@jms.id.au>
-Acked-by: Mateusz Holenko <mholenko@antmicro.com>
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 ---
 
 New in v5:
-  - picked up acked-by Mateusz
+  - picked up reviewd-by Rob, Joel
 
 >New in v4:
->  - n/a
+>  - fixed `dt_binding_check` errors uncovered by Rob's script
 >
 >> New in v3:
->>   - picked up acked-by Joel
->>   - added listing for liteeth driver
->>   - added Joel as additional co-maintainer (thanks!)
+>>   - picked up r/b Geert Uytterhoeven <geert@linux-m68k.org> in DT
+>>     bindings document (please let me know if that was premature, and
+>>     happy to take further review if needed :)
+>>   - add dedicated DT property for source clock frequency
 
- MAINTAINERS | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/mmc/litex,mmc.yaml    | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mmc/litex,mmc.yaml
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 13f9a84a617e..fbbeb6281da5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11011,12 +11011,17 @@ F:	lib/list-test.c
- LITEX PLATFORM
- M:	Karol Gugala <kgugala@antmicro.com>
- M:	Mateusz Holenko <mholenko@antmicro.com>
-+M:	Gabriel Somlo <gsomlo@gmail.com>
-+M:	Joel Stanley <joel@jms.id.au>
- S:	Maintained
- F:	Documentation/devicetree/bindings/*/litex,*.yaml
- F:	arch/openrisc/boot/dts/or1klitex.dts
--F:	drivers/soc/litex/litex_soc_ctrl.c
--F:	drivers/tty/serial/liteuart.c
- F:	include/linux/litex.h
-+F:	drivers/tty/serial/liteuart.c
-+F:	drivers/soc/litex/*
-+F:	drivers/net/ethernet/litex/*
-+F:	drivers/mmc/host/litex_mmc.c
-+N:	litex
- 
- LIVE PATCHING
- M:	Josh Poimboeuf <jpoimboe@redhat.com>
+diff --git a/Documentation/devicetree/bindings/mmc/litex,mmc.yaml b/Documentation/devicetree/bindings/mmc/litex,mmc.yaml
+new file mode 100644
+index 000000000000..f57cf42b8db7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mmc/litex,mmc.yaml
+@@ -0,0 +1,72 @@
++# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mmc/litex,mmc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: LiteX LiteSDCard device
++
++maintainers:
++  - Gabriel Somlo <gsomlo@gmail.com>
++
++description: |
++  LiteSDCard is a small footprint, configurable SDCard core for FPGA based
++  system on chips.
++
++  The hardware source is Open Source and can be found on at
++  https://github.com/enjoy-digital/litesdcard/.
++
++allOf:
++  - $ref: mmc-controller.yaml#
++
++properties:
++  compatible:
++    const: litex,mmc
++
++  reg:
++    items:
++      - description: PHY registers
++      - description: CORE registers
++      - description: DMA Reader buffer
++      - description: DMA Writer buffer
++      - description: IRQ registers
++    minItems: 4
++
++  reg-names:
++    items:
++      - const: phy
++      - const: core
++      - const: reader
++      - const: writer
++      - const: irq
++    minItems: 4
++
++  clocks:
++    maxItems: 1
++    description:
++      Handle to reference clock.
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    mmc: mmc@12005000 {
++        compatible = "litex,mmc";
++        reg = <0x12005000 0x100>,
++              <0x12003800 0x100>,
++              <0x12003000 0x100>,
++              <0x12004800 0x100>,
++              <0x12004000 0x100>;
++        reg-names = "phy", "core", "reader", "writer", "irq";
++        clocks = <&reference_clk>;
++        interrupts = <4>;
++    };
 -- 
 2.31.1
 

@@ -2,112 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFD94753A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2104753A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240523AbhLOH0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 02:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233441AbhLOH03 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 02:26:29 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0410DC061574;
-        Tue, 14 Dec 2021 23:26:29 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so15357445wms.3;
-        Tue, 14 Dec 2021 23:26:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D0S+D/FQRGuVQki4kVkJvs2fOsfa72Dpr2oChnts0Ws=;
-        b=WdvxT3AHJGP0FowpHfoyKjf86KJRfCJAo/ZMy1uiUGYvBdjJz1KMfHcZpwGLL02iDY
-         LGQBRYY0VSUkJEoQzSxVYxpVBRtd1e/sBUegdImeVx0q4CJpoU6k6rUcdrq3SUcmQisw
-         vw7hP0NS8pijMK5dor9haSYxpq9sbmZ0wlhtL9+Y0BxxX7UOV1wiFdHQyQIuFkBmc8pC
-         b1mJ4svz1jKQ8KIsmrxneYddmK5bcBxfJfrt4GF/2TA/e76pwK7wi/kvk8/xHnSJGcVc
-         eBc5+0SSDcblNb6RLcuZlVyqil5g0chWhrvys2q35nitr5GWVolEFRIk1qiNtOyz8AXk
-         mczg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D0S+D/FQRGuVQki4kVkJvs2fOsfa72Dpr2oChnts0Ws=;
-        b=oX1fXPm+s+VBjyX2aThWs1rEvsSoAn5uck1+FScpTPhJtu5+CbXNuwFVDqBw2y2jl6
-         UP4wxYcFBqLO7KKnMJOsALMZpsLawFjRb3LYjHVGDy4FQM7Sl3CTHw1BcWSO3No9AuqS
-         /zJk6svrQUeP/E0fdiXUBmJdaDd5gIqvj1RqtYEHTegEEwhaJ02T5ik+02jiVHsDzMpo
-         kueqoK3NEN8JfBmMEzgQAc4agLvYJjAu8nhKDVWQz7agtdbUeiytop3vfI0A6RXoO0PB
-         ddNyYt28QA0IB2jST7odzVOId1ZXfgpdqzAQwxOOTyHDiIcuJBYZ80rS4ZY+NDWk6RWw
-         /brw==
-X-Gm-Message-State: AOAM533jaOgv3YB3ul2nUFnVvz4rQ06bxAUtt/h+ZkP+5/hd0aWIZwVH
-        lQ5d8vgQyeXPHVjETlCsTj0=
-X-Google-Smtp-Source: ABdhPJy/GrSOOMdxeif45fSIo768/oWC9Ngyny3KxPbnBtG8e2Huth5hWJoCBpOteRbxOktqQt0SOA==
-X-Received: by 2002:a1c:1fc2:: with SMTP id f185mr3189608wmf.149.1639553187498;
-        Tue, 14 Dec 2021 23:26:27 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id f7sm1283383wri.74.2021.12.14.23.26.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 23:26:26 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ribalda@chromium.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH v2] media: uvcvideo: Fix memory leak in uvc_gpio_parse
-Date:   Wed, 15 Dec 2021 08:26:18 +0100
-Message-Id: <20211215072618.7646-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S240531AbhLOH1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 02:27:15 -0500
+Received: from verein.lst.de ([213.95.11.211]:55363 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240524AbhLOH1O (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 02:27:14 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 600A268AFE; Wed, 15 Dec 2021 08:27:10 +0100 (CET)
+Date:   Wed, 15 Dec 2021 08:27:10 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Baoquan He <bhe@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hch@lst.de, cl@linux.com,
+        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
+        stable@vger.kernel.org, Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no
+ managed pages in DMA zone
+Message-ID: <20211215072710.GA3010@lst.de>
+References: <20211213122712.23805-1-bhe@redhat.com> <20211213122712.23805-6-bhe@redhat.com> <20211213134319.GA997240@odroid> <20211214053253.GB2216@MiWiFi-R3L-srv> <f5ff82eb-73b6-55b5-53d7-04ab73ce5035@suse.cz> <20211215044818.GB1097530@odroid> <20211215070335.GA1165926@odroid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215070335.GA1165926@odroid>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously the unit buffer was allocated before checking the IRQ for
-privacy GPIO.
-In case of error, the unit buffer was leaked.
+On Wed, Dec 15, 2021 at 07:03:35AM +0000, Hyeonggon Yoo wrote:
+> I'm not sure that allocating from ZONE_DMA32 instead of ZONE_DMA
+> for kdump kernel is nice way to solve this problem.
 
-Allocate the unit buffer after the IRQ to avoid it.
+What is the problem with zones in kdump kernels?
 
-Addresses-Coverity-ID: 1474639 ("Resource leak")
-Fixes: 2886477ff987 ("media: uvcvideo: Implement UVC_EXT_GPIO_UNIT")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+> Devices that requires ZONE_DMA memory is rare but we still support them.
 
----
+Indeed.
 
-v2: Add Fixes and Reviewed-by tags
----
- drivers/media/usb/uvc/uvc_driver.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> >     1) Do not call warn_alloc in page allocator if will always fail
+> >     to allocate ZONE_DMA pages.
+> > 
+> > 
+> >     2) let's check all callers of kmalloc with GFP_DMA
+> >     if they really need GFP_DMA flag and replace those by DMA API or
+> >     just remove GFP_DMA from kmalloc()
+> > 
+> >     3) Drop support for allocating DMA memory from slab allocator
+> >     (as Christoph Hellwig said) and convert them to use DMA32
+> 
+> 	(as Christoph Hellwig said) and convert them to use *DMA API*
+> 
+> >     and see what happens
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 7c007426e082..9e83e2002710 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1533,10 +1533,6 @@ static int uvc_gpio_parse(struct uvc_device *dev)
- 	if (IS_ERR_OR_NULL(gpio_privacy))
- 		return PTR_ERR_OR_ZERO(gpio_privacy);
- 
--	unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
--	if (!unit)
--		return -ENOMEM;
--
- 	irq = gpiod_to_irq(gpio_privacy);
- 	if (irq < 0) {
- 		if (irq != EPROBE_DEFER)
-@@ -1545,6 +1541,10 @@ static int uvc_gpio_parse(struct uvc_device *dev)
- 		return irq;
- 	}
- 
-+	unit = uvc_alloc_entity(UVC_EXT_GPIO_UNIT, UVC_EXT_GPIO_UNIT_ID, 0, 1);
-+	if (!unit)
-+		return -ENOMEM;
-+
- 	unit->gpio.gpio_privacy = gpio_privacy;
- 	unit->gpio.irq = irq;
- 	unit->gpio.bControlSize = 1;
--- 
-2.25.1
+This is the right thing to do, but it will take a while.  In fact
+I dont think we really need the warning in step 1, a simple grep
+already allows to go over them.  I just looked at the uses of GFP_DMA
+in drivers/scsi for example, and all but one look bogus.
 
+> > > > Yeah, I have the same guess too for get_capabilities(), not sure about other
+> > > > callers. Or, as ChristophL and ChristophH said(Sorry, not sure if this is
+> > > > the right way to call people when the first name is the same. Correct me if
+> > > > it's wrong), any buffer requested from kmalloc can be used by device driver.
+> > > > Means device enforces getting memory inside addressing limit for those
+> > > > DMA transferring buffer which is usually large, Megabytes level with
+> > > > vmalloc() or alloc_pages(), but doesn't care about this kind of small
+> > > > piece buffer memory allocated with kmalloc()? Just a guess, please tell
+> > > > a counter example if anyone happens to know, it could be easy.
+
+The way this works is that the dma_map* calls will bounce buffer memory
+that does to fall into the addressing limitations.  This is a performance
+overhead, but allows drivers to address all memory in a system.  If the
+driver controls memory allocation it should use one of the dma_alloc_*
+APIs that allocate addressable memory from the start.  The allocator
+will dip into ZONE_DMA and ZONE_DMA32 when needed.

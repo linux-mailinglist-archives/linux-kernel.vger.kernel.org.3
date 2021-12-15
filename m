@@ -2,104 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7422E4753D0
+	by mail.lfdr.de (Postfix) with ESMTP id BD38D4753D1
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240653AbhLOHgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 02:36:46 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:60524
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236011AbhLOHgl (ORCPT
+        id S240657AbhLOHgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 02:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240639AbhLOHgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Dec 2021 02:36:41 -0500
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE381C061574;
+        Tue, 14 Dec 2021 23:36:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 203953F1B0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:36:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639553800;
-        bh=F6A76TBrmUtFWX3VCIsN07CYhL6FGO84vIVFcKsHMuk=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=HBhtqH1ftR+JE8s30I5DsAG0EuWjU+L6cYe5RU3DMx6TTR2l1POXl4JAJfUEU21W6
-         j3BSoVnYkjcx9YjGGZccgnSmS5RQFEW1Fr/DdC61vvWnQjehz75pOIghLlyARcWSMB
-         33HTuXB4CsxWmFzT+YvsOsVPkQAO8WOdBkU987uEpVShT8eRsXSY05ibMYgKsC6sA5
-         lNcKKMBJaHRxD+iQZ8PafGHPCd333khRvEV3x3iGjUDidWJ5013WUPl9fkyuIVL5pI
-         jb/yS+DraClm4KTIzSp0DzQal5w27BTJoMtVZOCb+Uu5FUUBq2Iwpekqv8Y64Ko/+N
-         oh3GQkpRyU39g==
-Received: by mail-lj1-f199.google.com with SMTP id q64-20020a2e2a43000000b00218c94eab9bso6653473ljq.18
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 23:36:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=F6A76TBrmUtFWX3VCIsN07CYhL6FGO84vIVFcKsHMuk=;
-        b=T6obXA3sZFwygQXpmvJ8UAms5iLy9tVDBKs/uP3bQjlYHVkzxOu2Eq9yAkqzrz0wqf
-         HCTWCUr4mWQgFDCMxDq9VhteF4zMzRoGXBorwpaqTwXuer4Ueyq58srCh9SadY3KVivk
-         fLYrUB6FQMLnc/TlsQjVWNFwBd+hxZwwmgVRW68/x4orpue4dYhpByab8tarFrunb+0X
-         g9Py96nu8Qv7SNLP80HbCIq8ar7w5hmXNDNOPatT57b74E3JGXgFvyFKtRMxVdGlPThj
-         GDTIQ8NhINVcHo20brKm8Sqfo8Gx32nSYRGjNjxWtJ79tz2Xn+CUTljwgUytwDdiqTZs
-         +RGQ==
-X-Gm-Message-State: AOAM532gDTG76NC40ky0ETYocqdzYQkVpe2xkeuCJN6kCXzfQhD39S/k
-        DTG+6zao+WdArePtFUqlCAU7R15Nz+tF3O0BeM4RhkbYc4CWEozZ6aLeyDL0fAv8sFMvlus5JmC
-        lBz2NMtG0poEBCdMSLTALr454BezTREZX4FfcvC0nVA==
-X-Received: by 2002:a05:6512:4022:: with SMTP id br34mr8848168lfb.530.1639553799646;
-        Tue, 14 Dec 2021 23:36:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyzPtDMOJasNzOvdacYEtvNk/bKv5BWr0rmdGjWr2pcPixNzBSY/JytR3tWeRLhzvX45bRflw==
-X-Received: by 2002:a05:6512:4022:: with SMTP id br34mr8848159lfb.530.1639553799518;
-        Tue, 14 Dec 2021 23:36:39 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id bp15sm188546lfb.176.2021.12.14.23.36.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 23:36:39 -0800 (PST)
-Message-ID: <27e76745-090c-36c5-78b8-aeda58c91034@canonical.com>
-Date:   Wed, 15 Dec 2021 08:36:38 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B133617DE;
+        Wed, 15 Dec 2021 07:36:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B015BC34605;
+        Wed, 15 Dec 2021 07:36:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639553800;
+        bh=2eI6exSN0FUaIEOk/+PWQb13t4mMcNpEbG4tBXpXW20=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=GJtAajHT++olYZTMCJyu0CSCpjQk5zQ6r+b6ZlJUYZzhoJmER5BgU9qx0Te16loCd
+         yBoJST5sR/FQiVmCv5vym8DKgallGkphuE4CUs+FlDG3kwNXyWok9fnI+xxUs5Egdd
+         DpyeFTBYXv2uuYipjOuhtwFoAVC14vJoUl1av7f73xXQTkGG2HwDB/W5eaWLyT544F
+         zi5awz4rDGvTVvQVja7kbMIcaFnkNtt9gGmFwo8uuJulw63bLTwr2Yac/KME64+gJN
+         DDFigMZAAcUKHkVbN2+u/KXvpdr+TzkPhr463srApXq+7GoHndTsnPYzh4/CJmnNc5
+         RJmn8VNc7ffYQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH] dt-bindings: soc: samsung: Fix I2C clocks order in USI
- binding example
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211214170924.27998-1-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211214170924.27998-1-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Ybgs+zet4EVGMa2a@matsya>
+References: <20211207114003.100693-1-vkoul@kernel.org> <20211207114003.100693-3-vkoul@kernel.org> <20211209082607.06929C004DD@smtp.kernel.org> <Ybgs+zet4EVGMa2a@matsya>
+Subject: Re: [PATCH v2 2/2] clk: qcom: Add clock driver for SM8450
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Vinod Koul <vkoul@kernel.org>
+Date:   Tue, 14 Dec 2021 23:36:39 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211215073640.B015BC34605@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2021 18:09, Sam Protsenko wrote:
-> Now that HSI2C binding [1] is converted to dt-schema format, it reveals
-> incorrect HSI2C clocks order in USI binding example:
-> 
->     .../exynos-usi.example.dt.yaml:
->     i2c@13820000: clock-names:0: 'hsi2c' was expected
->     From schema: .../i2c-exynos5.yaml
-> 
->     .../exynos-usi.example.dt.yaml:
->     i2c@13820000: clock-names:1: 'hsi2c_pclk' was expected
->     From schema: .../i2c-exynos5.yaml
-> 
-> Change HSI2C clock order in USI binding example to satisfy HSI2C binding
-> requirements and fix above warnings.
-> 
-> [1] Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
-> NOTE: If possible, it can be squashed into "dt-bindings: soc: samsung:
->       Add Exynos USI bindings" patch (already applied in Krzysztof tree)
-> 
+Quoting Vinod Koul (2021-12-13 21:34:51)
+> On 09-12-21, 00:26, Stephen Boyd wrote:
+> > Quoting Vinod Koul (2021-12-07 03:40:03)
+> > > diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8=
+450.c
+> > > new file mode 100644
+> > > index 000000000000..82ac419718d7
+> > > --- /dev/null
+> > > +++ b/drivers/clk/qcom/gcc-sm8450.c
+> > > @@ -0,0 +1,3303 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/*
+> > > + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserve=
+d.
+> > > + * Copyright (c) 2021, Linaro Limited
+> > > + */
+> > > +
+> > > +#include <linux/module.h>
+> > > +#include <linux/of_device.h>
+> > > +#include <linux/regmap.h>
+> >=20
+> > BTW, clk providers need to include clk-provider.h
+>=20
+> It is included but indirectly thru clk-alpha-pll.h.. I think this should
+> be fine.
 
-I already merged it between branches, so no squashing.
-
-Best regards,
-Krzysztof
+No

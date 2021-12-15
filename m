@@ -2,150 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB1A475EC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC24475F2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245629AbhLORYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245403AbhLORX6 (ORCPT
+        id S1343595AbhLOR2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:28:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43512 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343953AbhLOR0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:23:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EB0C06175E;
-        Wed, 15 Dec 2021 09:23:57 -0800 (PST)
+        Wed, 15 Dec 2021 12:26:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11F03B81F1C;
-        Wed, 15 Dec 2021 17:23:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1C3C36AF8;
-        Wed, 15 Dec 2021 17:23:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45211B82032;
+        Wed, 15 Dec 2021 17:26:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5291AC36AE2;
+        Wed, 15 Dec 2021 17:26:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589034;
-        bh=ggDjupL8YiE3e+LHks8GD/2HNtxOpGyAlI5o4sPWzMc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xXd6O6POd/x36+WB6Ftjo8tGhwhy8+35gKRRCEVeGPve653qZ4T6yD2RQ4EX94G9N
-         2Nw+wzPYxAWA2k/DXlMriZY9M1Bg35RrAhst01I/520lHTVb+n+8v0PkSeNI4CYJSc
-         4D055HJ5XJR5byG5i+FVv35jTjuU0BFGCOb5pzmY=
+        s=korg; t=1639589211;
+        bh=iq96+Oisq3hLwALZjatJrHKyYhwPIn4BaXsCypheb3s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Sp3jQKYvAwNUyrs3HaaYnsTmyNIIf7xwzDp2r5nDGEnr32ML4dHJXKsbqeGJ6BZMJ
+         trEsT+MW/ucaoAtRssYEtFihYoVoX3ZmfomC84p8B0mO55Jd9L3doMPNCwZN5x2s47
+         0rVCICnM4Zk80Prbt7Jy1Me1pPggqA4hmP6q9cr4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen Jun <chenjun102@huawei.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 39/42] tracing: Fix a kmemleak false positive in tracing_map
-Date:   Wed, 15 Dec 2021 18:21:20 +0100
-Message-Id: <20211215172027.983910010@linuxfoundation.org>
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: [PATCH 5.4 00/18] 5.4.166-rc1 review
+Date:   Wed, 15 Dec 2021 18:21:21 +0100
+Message-Id: <20211215172022.795825673@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
-References: <20211215172026.641863587@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.166-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.4.166-rc1
+X-KernelTest-Deadline: 2021-12-17T17:20+00:00
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Jun <chenjun102@huawei.com>
+This is the start of the stable review cycle for the 5.4.166 release.
+There are 18 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-[ Upstream commit f25667e5980a4333729cac3101e5de1bb851f71a ]
+Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
+Anything received after that time might be too late.
 
-Doing the command:
-  echo 'hist:key=common_pid.execname,common_timestamp' > /sys/kernel/debug/tracing/events/xxx/trigger
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.166-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+and the diffstat can be found below.
 
-Triggers many kmemleak reports:
+thanks,
 
-unreferenced object 0xffff0000c7ea4980 (size 128):
-  comm "bash", pid 338, jiffies 4294912626 (age 9339.324s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000f3469921>] kmem_cache_alloc_trace+0x4c0/0x6f0
-    [<0000000054ca40c3>] hist_trigger_elt_data_alloc+0x140/0x178
-    [<00000000633bd154>] tracing_map_init+0x1f8/0x268
-    [<000000007e814ab9>] event_hist_trigger_func+0xca0/0x1ad0
-    [<00000000bf8520ed>] trigger_process_regex+0xd4/0x128
-    [<00000000f549355a>] event_trigger_write+0x7c/0x120
-    [<00000000b80f898d>] vfs_write+0xc4/0x380
-    [<00000000823e1055>] ksys_write+0x74/0xf8
-    [<000000008a9374aa>] __arm64_sys_write+0x24/0x30
-    [<0000000087124017>] do_el0_svc+0x88/0x1c0
-    [<00000000efd0dcd1>] el0_svc+0x1c/0x28
-    [<00000000dbfba9b3>] el0_sync_handler+0x88/0xc0
-    [<00000000e7399680>] el0_sync+0x148/0x180
-unreferenced object 0xffff0000c7ea4980 (size 128):
-  comm "bash", pid 338, jiffies 4294912626 (age 9339.324s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000f3469921>] kmem_cache_alloc_trace+0x4c0/0x6f0
-    [<0000000054ca40c3>] hist_trigger_elt_data_alloc+0x140/0x178
-    [<00000000633bd154>] tracing_map_init+0x1f8/0x268
-    [<000000007e814ab9>] event_hist_trigger_func+0xca0/0x1ad0
-    [<00000000bf8520ed>] trigger_process_regex+0xd4/0x128
-    [<00000000f549355a>] event_trigger_write+0x7c/0x120
-    [<00000000b80f898d>] vfs_write+0xc4/0x380
-    [<00000000823e1055>] ksys_write+0x74/0xf8
-    [<000000008a9374aa>] __arm64_sys_write+0x24/0x30
-    [<0000000087124017>] do_el0_svc+0x88/0x1c0
-    [<00000000efd0dcd1>] el0_svc+0x1c/0x28
-    [<00000000dbfba9b3>] el0_sync_handler+0x88/0xc0
-    [<00000000e7399680>] el0_sync+0x148/0x180
+greg k-h
 
-The reason is elts->pages[i] is alloced by get_zeroed_page.
-and kmemleak will not scan the area alloced by get_zeroed_page.
-The address stored in elts->pages will be regarded as leaked.
+-------------
+Pseudo-Shortlog of commits:
 
-That is, the elts->pages[i] will have pointers loaded onto it as well, and
-without telling kmemleak about it, those pointers will look like memory
-without a reference.
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.4.166-rc1
 
-To fix this, call kmemleak_alloc to tell kmemleak to scan elts->pages[i]
+Mike Rapoport <rppt@linux.ibm.com>
+    arm: ioremap: don't abuse pfn_valid() to check if pfn is in RAM
 
-Link: https://lkml.kernel.org/r/20211124140801.87121-1-chenjun102@huawei.com
+Mike Rapoport <rppt@linux.ibm.com>
+    arm: extend pfn_valid to take into account freed memory map alignment
 
-Signed-off-by: Chen Jun <chenjun102@huawei.com>
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/trace/tracing_map.c | 3 +++
- 1 file changed, 3 insertions(+)
+Mike Rapoport <rppt@linux.ibm.com>
+    memblock: ensure there is no overflow in memblock_overlaps_region()
 
-diff --git a/kernel/trace/tracing_map.c b/kernel/trace/tracing_map.c
-index 39bb56d2dcbef..9628b55718468 100644
---- a/kernel/trace/tracing_map.c
-+++ b/kernel/trace/tracing_map.c
-@@ -15,6 +15,7 @@
- #include <linux/jhash.h>
- #include <linux/slab.h>
- #include <linux/sort.h>
-+#include <linux/kmemleak.h>
- 
- #include "tracing_map.h"
- #include "trace.h"
-@@ -307,6 +308,7 @@ static void tracing_map_array_free(struct tracing_map_array *a)
- 	for (i = 0; i < a->n_pages; i++) {
- 		if (!a->pages[i])
- 			break;
-+		kmemleak_free(a->pages[i]);
- 		free_page((unsigned long)a->pages[i]);
- 	}
- 
-@@ -342,6 +344,7 @@ static struct tracing_map_array *tracing_map_array_alloc(unsigned int n_elts,
- 		a->pages[i] = (void *)get_zeroed_page(GFP_KERNEL);
- 		if (!a->pages[i])
- 			goto free;
-+		kmemleak_alloc(a->pages[i], PAGE_SIZE, 1, GFP_KERNEL);
- 	}
-  out:
- 	return a;
--- 
-2.33.0
+Mike Rapoport <rppt@linux.ibm.com>
+    memblock: align freed memory map on pageblock boundaries with SPARSEMEM
 
+Mike Rapoport <rppt@linux.ibm.com>
+    memblock: free_unused_memmap: use pageblock units instead of MAX_ORDER
+
+Armin Wolf <W_Armin@gmx.de>
+    hwmon: (dell-smm) Fix warning on /proc/i8k creation error
+
+Bui Quang Minh <minhquangbui99@gmail.com>
+    bpf: Fix integer overflow in argument calculation for bpf_map_area_alloc
+
+Ondrej Mosnacek <omosnace@redhat.com>
+    selinux: fix race condition when computing ocontext SIDs
+
+Sean Christopherson <seanjc@google.com>
+    KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI req
+
+Chen Jun <chenjun102@huawei.com>
+    tracing: Fix a kmemleak false positive in tracing_map
+
+Perry Yuan <Perry.Yuan@amd.com>
+    drm/amd/display: add connector type check for CRC source set
+
+Mustapha Ghaddar <mghaddar@amd.com>
+    drm/amd/display: Fix for the no Audio bug with Tiled Displays
+
+Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+    net: netlink: af_netlink: Prevent empty skb by adding a check on len.
+
+Ondrej Jirman <megous@megous.com>
+    i2c: rk3x: Handle a spurious start completion interrupt flag
+
+Helge Deller <deller@gmx.de>
+    parisc/agp: Annotate parisc agp init functions with __init
+
+Erik Ekman <erik@kryo.se>
+    net/mlx4_en: Update reported link modes for 1/10G
+
+Philip Chen <philipchen@chromium.org>
+    drm/msm/dsi: set default num_data_lanes
+
+Tadeusz Struk <tadeusz.struk@linaro.org>
+    nfc: fix segfault in nfc_genl_dump_devices_done
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |   4 +-
+ arch/arm/mm/init.c                                 |  37 +++--
+ arch/arm/mm/ioremap.c                              |   4 +-
+ arch/x86/kvm/hyperv.c                              |   7 +-
+ drivers/char/agp/parisc-agp.c                      |   6 +-
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crc.c  |   8 ++
+ drivers/gpu/drm/amd/display/dc/core/dc_resource.c  |   4 +
+ drivers/gpu/drm/msm/dsi/dsi_host.c                 |   2 +
+ drivers/hwmon/dell-smm-hwmon.c                     |   7 +-
+ drivers/i2c/busses/i2c-rk3x.c                      |   4 +-
+ drivers/net/ethernet/mellanox/mlx4/en_ethtool.c    |   6 +-
+ kernel/bpf/devmap.c                                |   4 +-
+ kernel/trace/tracing_map.c                         |   3 +
+ mm/memblock.c                                      |   3 +-
+ net/core/sock_map.c                                |   2 +-
+ net/netlink/af_netlink.c                           |   5 +
+ net/nfc/netlink.c                                  |   6 +-
+ security/selinux/ss/services.c                     | 159 +++++++++++----------
+ 18 files changed, 166 insertions(+), 105 deletions(-)
 
 

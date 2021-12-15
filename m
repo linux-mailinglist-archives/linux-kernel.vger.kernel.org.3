@@ -2,30 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53910475318
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A20A5475317
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240419AbhLOGqT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Dec 2021 01:46:19 -0500
-Received: from mail-eopbgr120058.outbound.protection.outlook.com ([40.107.12.58]:48045
-        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240289AbhLOGpw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 01:45:52 -0500
+        id S240237AbhLOGqC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Dec 2021 01:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236266AbhLOGpj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 01:45:39 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on0600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e19::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799CDC061756
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:45:31 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qdh1OFQ/hFEVvIs7Pbz3bsXCk4DHECsZ9puS+lymWDgCMjhvem3rKHy9MAhbWsccM8HeONg9DXmbt7x0grYxYPBQkUGb2bZ9nhfAyJPCqChlukAmO8sPiB0J+7G0kd15nxiPu39oeZ2VCxdDTJs8Roh50009ukH8oNModDhcZzpLqWeQ6LGxOtc3mSXTBx3PGU+mGsiK+hRg6hJeAA/BcrQw3iDivG6Z9zHwzZiTjHOsRVRM1n5j2vBdiCDoX7wMLG7eGPVRIhcz6PPXp4CFWWIEr+woibBFr8N8D1zuYf3B2x1+rASa9USyvcI6Szl75WeSzGkmnVnoELeKPeIGkw==
+ b=dxhXpEo0KVuhbn/gco8LAuRDr6AxRT/b0RzP/dYMSi45GppTv6izyOctZCcPH4WKSFMzjp8jyHgQpyhFmwUJzdc7f1tVb7MCBIjZ0tI0FiTx6SWwVY0lbN/e0s0ECZv3N32C+ihOOtc9v9YQer1tSLh/1bGRhWbRxr5SEJNvPjWtRn0QaEtO4mphoSQO7pf6Q9660/o/JjV2XYikjp2tsR8XZNRRxPJ37QYEWCEKf5X12VUMzTGIFn2vLB4r7MqgQFue9hoO1dpj8UtADzlK8y5hhP9UDJ9IY7k114x9hdMcTwj+Fe2WW4eJWXcOQIdLbMSNvEfjJnwXk9Mi9G1Qdg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FdCjHKP9l9OBJ5gDlZQo8deltmcwCmBmFWj0cSPtgCE=;
- b=cJDKGo+c42Z348GOCVWVuQ4zCHV33E04EN2Sm94CbyOiG6Oz83FHyj+0+5kkLYnytZwCx9OQU/kKEOSMB/slJ7I82Q1wNe2qoztDR2hqA78aJ+HX/sDSD5TM02a7bqYQporOfgtr4LP5GmQZKdcTtj+P8X7trzCl991Am0yID1WCyDRZnth9TObiLTPqiED+nH0TJmXsEgWrvywd1N269QEOT80JRAPzxlY3htZ8FPOffRjDNffnxZKdyY7Y+Tsppf+E/0AMaYAsTcOY3gOwwZvBkJ+ZPbYLiVbxyf7SiKjNEhhXdWZwZ2yjHTCkxsJhXumHvTOXxwWW3048jnNopw==
+ bh=Ao0J4RtTmJCD5YE4NNN5icIYyoHVg3j5QWKaKWYo9c4=;
+ b=Yfgrin3/elY+QYD9BZJWO5398zlmvBk2smLqz93p2ShmdqUuYXajPn9X7UcZxn89ujQs07VIjZ0+CINGzcXffQsh6nVh7QGe12ozqxaeW+GdfKFLO0VNeZbd+U9G3+yo639JrjQv3bOlq+N/Q/w0w0j4BvU1uioGIsxCDRoJyNFVBFg7kHNZFoiQ0kEn7p7gLN8edtbB1cJS84pXRfhNtPKqDEldDQ2rxqD/2gDnMfHo/Kj02Gn8jONgpArJOyq+58v2aJu+xCYXErEgUZeHlQUGVB4qJq8fdu0ASRknF5MO6oFR1IHcHSScaAwUiiGrowa1dMS4Sr54HRizEAZD/A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
  dkim=pass header.d=csgroup.eu; arc=none
 Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRXP264MB0311.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:22::16) with
+ by MR1P264MB2147.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:11::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Wed, 15 Dec
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Wed, 15 Dec
  2021 06:45:13 +0000
 Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
  ([fe80::fc67:d895:7965:663f]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
@@ -45,13 +48,12 @@ CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         "will@kernel.org" <will@kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v5 09/11] powerpc/mm: Move get_unmapped_area functions to
- slice.c
-Thread-Topic: [PATCH v5 09/11] powerpc/mm: Move get_unmapped_area functions to
- slice.c
-Thread-Index: AQHX8X9PfJMd8arIBE+k0k9TTXOCMg==
+Subject: [PATCH v5 08/11] powerpc/mm: Use generic_hugetlb_get_unmapped_area()
+Thread-Topic: [PATCH v5 08/11] powerpc/mm: Use
+ generic_hugetlb_get_unmapped_area()
+Thread-Index: AQHX8X9PFl6iCMIDuUSKEdqOR1hcJw==
 Date:   Wed, 15 Dec 2021 06:45:13 +0000
-Message-ID: <510046d11cc0d5da800d9bdbd9d4ac3bc0a605a8.1639550392.git.christophe.leroy@csgroup.eu>
+Message-ID: <7e151023284051a14ab088b9ed284efbac0048ef.1639550392.git.christophe.leroy@csgroup.eu>
 References: <cover.1639550392.git.christophe.leroy@csgroup.eu>
 In-Reply-To: <cover.1639550392.git.christophe.leroy@csgroup.eu>
 Accept-Language: fr-FR, en-US
@@ -61,251 +63,171 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=csgroup.eu;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7723a19b-edec-41ab-2773-08d9bf967277
-x-ms-traffictypediagnostic: MRXP264MB0311:EE_
-x-microsoft-antispam-prvs: <MRXP264MB031187752448F773838DF92BED769@MRXP264MB0311.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-office365-filtering-correlation-id: ff287c5d-3e08-4498-ae14-08d9bf96724d
+x-ms-traffictypediagnostic: MR1P264MB2147:EE_
+x-microsoft-antispam-prvs: <MR1P264MB214779138458E54251E8808DED769@MR1P264MB2147.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:246;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FE7A4ulTpvjfTq9lmcnyjtJzaGw76Yx6pZkfIav7678rRCyJlnmylhRwtHekoSak9JcnRhYwTNWE5+ElWnPnTOTcK73/qVAwMe4r2rOWkT9PecsO+Rty+azuzJy62U1x924yfojqzJ85y/XzvE+szGYLa0S4lTK7vNBxFeSI0y6vlLM7LgkusdifR7A1PRBpZZizri2kAV8wfgFy7qCZPj04e2RgaXDWBGJpqx03Xouz1jnxPXawuu1OuN/wpQqjR9zCh50kwmoeqhkjCtkJpzpOm/oMHYCcc7PqCf4TlfQzxdLcJWgBSXXR5OJtICag5Z5zsAZpripCyZE956tDr+KH0SF8ssi5YQtt2NLG6nKrZyeGMCAqBtAs4vulgX3XUxNpSoNzmR23dEK7ACmcS05PLj7uJtl+kF9amRWUB8lWtiChhNnh0OfMQUqlN9E0PyFZYaP6jqEeZfw48YMAvK4R2P9tV5rr0PZkZzHm4HNrDBL6+uBPr0bU8vhKh9KIGRQGrtFQNg9uL06qf2Q3MVSefL1URqG6XBBAwIiZxeTWO/vfkIBlSXhPLpaZaKtha2h43lHheQGg6xDHDx1wIE+9RERpuwy6ZlVyiOMXKiHSE800sudWEKhVTiMuy98m+TdSR5p+0CMyf9o9TwvyiMi/keE5saPHC90Sx0fR8uC3mdmHzssg/euwqFwXZ3F9WW5JqSyyxHNNF44hzdZpjw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(36756003)(86362001)(6512007)(83380400001)(2616005)(26005)(76116006)(8936002)(71200400001)(66556008)(66476007)(66946007)(64756008)(66446008)(38070700005)(186003)(110136005)(122000001)(38100700002)(316002)(8676002)(6506007)(7416002)(5660300002)(91956017)(508600001)(2906002)(6486002)(4326008)(44832011);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: ycXG95SEtS/UWrhfk0SOHzD/JukAaQ+jaP8zblcg8MtnLyMl6Mm9UIEP5egiuroSDsT0u4FNCDGkt61Kd3nul2wQ/QgwgDjlMZEYixhsVVB3NGru0cPBZxjNsGgb8MxqhM40NTiNHEmPbJq07bdScCh0/xVvl/YGluTxb2DaqpJdibZ0CNUQd+M7oOySKAzBgutIjs2ecBRVH/p+RxNMlAl4thaam4nsCJfUVu1fzf93fABUtXfmBFs4KVpa3C8hX8Bw2RVAD6lXKuysp2pv6UfieE3TItchpRTf3oriyK55H5dY1Yp9oS65idZp61cJk5lW5wHwnqIpBiQNvpxUsxfksJ+3AnabyG/meaeqIBihAJ+w2LCKgjuzw/cUECL8qVJcr6RaEoSt3RCxUD7QnjRw0qzlumajQvHy2uoovF7rEqRWSStzSlbKJ8izoED3f4w9Io49Zl5iaL04Lt4+NKmAhGIATCoE/Hg8Xy+kxatRTFG065qFxWHZTAGeZhIJ/vr8u1IcD9w4TYg5zScGm7zsv3gWuxRIZQBuq8sLnJWpbhJ0dwHfa6sdmEXPl8STOr4El2lIOsAHptYTaqnrqC19mWgAI+zEUGFh6szJs3gVrN/omZDRnqFvd8dCcqGTAD/ljKedCZdJRqV+J1Pw2SqSRQjssPjj70T1G9h7LCDwJIuXlkQk5OsSe1WZfT7Fm5EdaAr62Q33gBSQ7udb5bBmkgEwxkp/I3Ch1cYZarA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(110136005)(36756003)(6486002)(2906002)(86362001)(5660300002)(508600001)(26005)(186003)(38100700002)(8936002)(44832011)(54906003)(316002)(66556008)(66446008)(66476007)(64756008)(6506007)(76116006)(91956017)(8676002)(66946007)(4326008)(2616005)(122000001)(83380400001)(6512007)(71200400001)(38070700005)(7416002)(41533002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?yqTnmyqVRZbbRekppizezaN1e96udt7mWRpmR+bNpl8ZpG3lN/x17lJdpF?=
- =?iso-8859-1?Q?DK4N6bKgV7pugiuHQ/P+/KbBmUhbA/wPPvvcgQiOwrAjAIvqlwPdrhCfe0?=
- =?iso-8859-1?Q?WBsThBnrR8bViAPC/1vN/NBojI8fBmdFZrLKDHkyrm8i98kBtaGRgeVj7q?=
- =?iso-8859-1?Q?QPLdbtoBPFbhXwihbeFHU9JQwLKc+iGwJNiav6DUOtjIGnNfj0XE98aceU?=
- =?iso-8859-1?Q?d4r9QlTw1P5pvzE0CVo6uGwRaNuwY39v8492xh4gWE62cEtY1aRa5Uhg/E?=
- =?iso-8859-1?Q?lp0HsQc1ba7alzeNvnde+9kL8bW8ITM+LkPp/AHwpfcM1inG/5Ae6nywBX?=
- =?iso-8859-1?Q?mc56Saf/TmC9lyd/dJHP7AsKJJ8d9loMk15gYDBLegbbHlmiTEQ8kwDvCZ?=
- =?iso-8859-1?Q?UNlMmjm7g3+9vsZ794t5mVFWz99ULOggqWwWg12E6Y9F0LpQ/oWQ77sZCK?=
- =?iso-8859-1?Q?WlikltiUVDtkWH5fPI9ex0MtqPy7iTvLFiAa9yEdscBzhdWpx8eLZZeYzc?=
- =?iso-8859-1?Q?u7Cy3jp0HXz5+peSgZXem7H1Spls3LzfFNwMklRNauwJioWWzFHkMWd56w?=
- =?iso-8859-1?Q?GkboZq22EtTO420QJWu8CDFAV1B3E0APMqvLBzG5GHkmCxGeFOYKhyO5+h?=
- =?iso-8859-1?Q?HCzs6bYghtIdkIUe1zd1l266iRV7uhwxiARbs2G/v2FN0P5JInI9rLTqRX?=
- =?iso-8859-1?Q?FwqN0dMj5t6XL8GamvOvCJdW5s0tHbAPURhPEzF4OQoHflDiYI4LW4UhME?=
- =?iso-8859-1?Q?CaczXrOcS+wqLKZZHv6UNbktwdvotCCl64aCPJa4IAmM3HD+PKHiwz3lxJ?=
- =?iso-8859-1?Q?WQH58X6FGRB7vtbZsdADkclynSHWRf5lu55gwTC8a6RNny07mgc11GUdEB?=
- =?iso-8859-1?Q?++p8qKJN9iJq7hrfPS1syzOPOsPiwd0BbzCmshBLn/5I+ynuQ89IwW8ltE?=
- =?iso-8859-1?Q?chQS2iHKSkP8TLeTXc6jzzAcrkz9jCA4rJxHxHm0Z7MO7T/p2+igoH2uiK?=
- =?iso-8859-1?Q?HvBRwnU6Gp9Q1mDVSCDHv6bSw/TPLBlbgqZ9aIXnUtUxC74Tnrw50WEKLg?=
- =?iso-8859-1?Q?1qh+MhiEesVmicRr/iq4WYQaaZJhmjjKnlzbGo6wJUVLzc8F18pFIeaTrl?=
- =?iso-8859-1?Q?HMg8d1VYdRgrIYeh6he2aRUrYlu2oOoJFyG9sOOfGc5Us0SNQWxUGB4Zy1?=
- =?iso-8859-1?Q?OpPDwZi/yb6UZ2AgTdwBYoXY5YdWfBetGOHo5OSHI7K+pqP7aTXCpxRbE7?=
- =?iso-8859-1?Q?bXGY+hp6P2cGf2xL1tow535+9Kmw3wceAUkC7qGdnAJnuqvNlUYb0h5kxS?=
- =?iso-8859-1?Q?nZtnVPn/MyfaOYjK3Q4JHZncYUM/xK/gs4iQ/MGeEqBWBlvRDyYmDDxVmf?=
- =?iso-8859-1?Q?fNS5f+VNCN8q9enwmeJg/iSQ4agPb+2AVVFBP2bKW4nzrkh19yva+F/Zjs?=
- =?iso-8859-1?Q?KuMD6GTq8qfbxJRqoQO5SF9hn9opHjoaA8lBg5JKLmMMqAZkK0AN6+iimE?=
- =?iso-8859-1?Q?SKUixYBLHfASQwgEWJBANvA6uAQQbPV9/LXFyZSVFvWbwojAkL6frczpgF?=
- =?iso-8859-1?Q?6G6X4mpOxhLDY3IyhPAHwsj0sjnC1HG/9q/zzAEt4U9xTcix6LZ/TG9LYE?=
- =?iso-8859-1?Q?VvfXLJFmQOWLglEX7UPCzgxxsgw88lYT8/83hrKGD0jrJ9CBJMM3aAlJCj?=
- =?iso-8859-1?Q?3zOc52fL7QtmkBzVwqReGQZpCdO9BZ/CqKPAPullTdLtINSTiKOzjLFaiN?=
- =?iso-8859-1?Q?ocUmScRsT2fzScpv5/YsDUg70=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?ywyzsHPr5oUQA3yBp06ga4vqgsRkulorVfLzvHs29P8R/RTglk/cPJIycP?=
+ =?iso-8859-1?Q?2dJCJd6m21GuR81qQy7gUc6I+E0DcwOExHDDSwcKGfEMao1azAIFhj5cuJ?=
+ =?iso-8859-1?Q?v+n6LsSKlWlQ0FMfF0LPx30XYBP1t9EhJMiWIrWKLc3EucHuwBeL67Nj7F?=
+ =?iso-8859-1?Q?syTWq635gXFhCVZsBERnCSUmZxW8H773VzlvZOHdjKE0XNkbOmqZLl/7CS?=
+ =?iso-8859-1?Q?fJ4diaovDI710ptGxvRV4+utJbKxoJ7gg4mZ2X8lzgIRhOtpN44ZPtEf1G?=
+ =?iso-8859-1?Q?KUf0t56qqrlKvgBu2jdnE55H1GfjGt3thre5cDShg2RhQdcibdoOCTUgIz?=
+ =?iso-8859-1?Q?dyXuuPpVcO19sJ1F1MAN/vN7pu4walb0XGsLh0nUQJAxqh6y+BuGLBkUET?=
+ =?iso-8859-1?Q?BAIsPyIK4p+s2rD3YtxhGuJoKJTwsvS7CBBKNW0pvDJOxMqMHcGwKvXCoo?=
+ =?iso-8859-1?Q?hIRvv7G5ZrfM+PxcSmGJIT13EbOS4gfIRiBNAV+hlLcg/NLrpTvKAyK5Uc?=
+ =?iso-8859-1?Q?pGcjfEKnJgYCoiqahrB6F7+V7iQrT4rEnxDN6G3LnzTk5wkyxXEfNrYgJC?=
+ =?iso-8859-1?Q?Fla/RN1moJAha0oroA1duyR+BBeU6dTREgAR/+L8PxaSI/1b0o4oy2pp1m?=
+ =?iso-8859-1?Q?i1nRlXBfGl+rHiNMXJ1h+IvNoqI2yR67rL3dsuR3HfGGGHwVpiLanmENpO?=
+ =?iso-8859-1?Q?IDgvzm3SKGglM3RgWYuVfT2Ow+AZrViLMZXAz9vIdg1aFCKo2LwbBhWmVA?=
+ =?iso-8859-1?Q?Fsm+laLTDKX02kNIrAfs5g5+xozIv38ffa9bEunei1KPJt8wcVQCxu/kpS?=
+ =?iso-8859-1?Q?v1VzqDCwuduwA4pCo3PVFYtGNGDXQ3bNwqNOQMJamdZ7n+t7sx19482LAF?=
+ =?iso-8859-1?Q?VnGJjh+GHjzrWg0s0Uj4aj6xbTuwaUbAk7hQ+5uUbEky4/7ec7hCR+qXXJ?=
+ =?iso-8859-1?Q?yMx9mWMjij3QcXZIoWvxOPjnslZRO0LJOE2Myx3EppL6eFXRrt/z6RFqof?=
+ =?iso-8859-1?Q?ZmfR5Vp2kHAjxUQbL2lIv+bZZLfIW5xXjX6pMfpiA/TK/puvS6fsDaocx2?=
+ =?iso-8859-1?Q?vyy8aaiOpcHe8GwxY4UYfcL+ispuoJmBWwiS1IZ/Pgv83CR+N2qlCRjj+k?=
+ =?iso-8859-1?Q?IT7N1fQVIwQMcMAedR0L7Up2ISgXM9H0w572Fwct13j/upCVFMWn90R++T?=
+ =?iso-8859-1?Q?q3AKFcxcRsFnK6MKUzWzhjX3eULE9okosfQ12TdcjcvXin9V+VCpP5Mz82?=
+ =?iso-8859-1?Q?Q7imeRukrVTaQ9BJuRPyeY10Aqxc7ahD14tn/lA27i3m+a1WkHCciPeex8?=
+ =?iso-8859-1?Q?9ZOdKMp+KV2vfcG0ReHJZ83ynsbVFOWw6Iga0ag3MjSwTKKvnJVy2lEiix?=
+ =?iso-8859-1?Q?/lCZlzgLyk39j5ZANNN85TPZ0EVwAGkLiVmZ0+2jzpIMAzUV6a+Vv0XAbg?=
+ =?iso-8859-1?Q?3MU+K92rdxa3tXZ5Hkb7eAsD4cZXOlE5BWALf7CmX6vJ1cJmbqnDT/4Lro?=
+ =?iso-8859-1?Q?YQImxjNm0T1mRyqDwGD4FzMEEJ1dysgWztusbmAgQMzgKGO9GeZ2h0JEi0?=
+ =?iso-8859-1?Q?tx5Ay91rhVc/LPZlOOQpEyxRMLidqUGx/IPp7arH7XotNKN+EIbH202q1k?=
+ =?iso-8859-1?Q?xWn3/J625U8OiJa6TzV5bmNO/H3LinFOm/aGvGNsWu+NmgtH5HIwFR9S99?=
+ =?iso-8859-1?Q?cYQ1mo8+8t0aenwDJNgs7OdaGDksT3n5C24FPPAbZK9B5z1V441vahaWAG?=
+ =?iso-8859-1?Q?s2tFEFrNRubxVTVVDQ8XFGWFU=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
 X-OriginatorOrg: csgroup.eu
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7723a19b-edec-41ab-2773-08d9bf967277
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 06:45:13.5350
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff287c5d-3e08-4498-ae14-08d9bf96724d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 06:45:13.2164
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IVbILLp60vu25x7ojZvUNTt4Qmq6401YdRxKOxtZs2gKieBVtZovoM8siJX5oq111HPP+JMFMnEbkB+OdVni2F0dn+euYGppxpRTqzl2siM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0311
+X-MS-Exchange-CrossTenant-userprincipalname: tIZuM52tXLRnTk/v8R/6VENKgzPJvbO89NcG6xD8PqcuY1lEcR7egXq6PWmjh1or0vd+7O34kCq6yUY0aFrgfC5nG8g7idwLtz73lJn6Q2g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2147
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hugetlb_get_unmapped_area() is now identical to the
-generic version if only RADIX is enabled, so move it
-to slice.c and let it fallback on the generic one
-when HASH MMU is not compiled in.
-
-Do the same with arch_get_unmapped_area() and
-arch_get_unmapped_area_topdown().
+Use the generic version of arch_hugetlb_get_unmapped_area()
+which is now available at all time.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/powerpc/include/asm/book3s/64/mmu.h   |  6 ----
- arch/powerpc/include/asm/book3s/64/slice.h |  6 ++++
- arch/powerpc/mm/book3s64/slice.c           | 42 ++++++++++++++++++++++
- arch/powerpc/mm/hugetlbpage.c              | 21 -----------
- arch/powerpc/mm/mmap.c                     | 36 -------------------
- 5 files changed, 48 insertions(+), 63 deletions(-)
+ arch/powerpc/include/asm/book3s/64/hugetlb.h |  4 --
+ arch/powerpc/mm/book3s64/radix_hugetlbpage.c | 55 --------------------
+ arch/powerpc/mm/hugetlbpage.c                |  4 +-
+ 3 files changed, 1 insertion(+), 62 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/book3s/64/mmu.h b/arch/powerpc/include/asm/book3s/64/mmu.h
-index 7fee46e50377..310ca3597d58 100644
---- a/arch/powerpc/include/asm/book3s/64/mmu.h
-+++ b/arch/powerpc/include/asm/book3s/64/mmu.h
-@@ -4,12 +4,6 @@
+diff --git a/arch/powerpc/include/asm/book3s/64/hugetlb.h b/arch/powerpc/include/asm/book3s/64/hugetlb.h
+index 12e150e615b7..b37a28f62cf6 100644
+--- a/arch/powerpc/include/asm/book3s/64/hugetlb.h
++++ b/arch/powerpc/include/asm/book3s/64/hugetlb.h
+@@ -8,10 +8,6 @@
+  */
+ void radix__flush_hugetlb_page(struct vm_area_struct *vma, unsigned long vmaddr);
+ void radix__local_flush_hugetlb_page(struct vm_area_struct *vma, unsigned long vmaddr);
+-extern unsigned long
+-radix__hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+-				unsigned long len, unsigned long pgoff,
+-				unsigned long flags);
  
- #include <asm/page.h>
+ extern void radix__huge_ptep_modify_prot_commit(struct vm_area_struct *vma,
+ 						unsigned long addr, pte_t *ptep,
+diff --git a/arch/powerpc/mm/book3s64/radix_hugetlbpage.c b/arch/powerpc/mm/book3s64/radix_hugetlbpage.c
+index 23d3e08911d3..d2fb776febb4 100644
+--- a/arch/powerpc/mm/book3s64/radix_hugetlbpage.c
++++ b/arch/powerpc/mm/book3s64/radix_hugetlbpage.c
+@@ -41,61 +41,6 @@ void radix__flush_hugetlb_tlb_range(struct vm_area_struct *vma, unsigned long st
+ 		radix__flush_tlb_range_psize(vma->vm_mm, start, end, psize);
+ }
  
--#ifdef CONFIG_HUGETLB_PAGE
--#define HAVE_ARCH_HUGETLB_UNMAPPED_AREA
--#endif
--#define HAVE_ARCH_UNMAPPED_AREA
--#define HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
+-/*
+- * A vairant of hugetlb_get_unmapped_area doing topdown search
+- * FIXME!! should we do as x86 does or non hugetlb area does ?
+- * ie, use topdown or not based on mmap_is_legacy check ?
+- */
+-unsigned long
+-radix__hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+-				unsigned long len, unsigned long pgoff,
+-				unsigned long flags)
+-{
+-	struct mm_struct *mm = current->mm;
+-	struct vm_area_struct *vma;
+-	struct hstate *h = hstate_file(file);
+-	int fixed = (flags & MAP_FIXED);
+-	unsigned long high_limit;
+-	struct vm_unmapped_area_info info;
 -
- #ifndef __ASSEMBLY__
- /*
-  * Page size definition
-diff --git a/arch/powerpc/include/asm/book3s/64/slice.h b/arch/powerpc/include/asm/book3s/64/slice.h
-index 5b0f7105bc8b..b8eb4ad271b9 100644
---- a/arch/powerpc/include/asm/book3s/64/slice.h
-+++ b/arch/powerpc/include/asm/book3s/64/slice.h
-@@ -4,6 +4,12 @@
- 
- #ifndef __ASSEMBLY__
- 
-+#ifdef CONFIG_HUGETLB_PAGE
-+#define HAVE_ARCH_HUGETLB_UNMAPPED_AREA
-+#endif
-+#define HAVE_ARCH_UNMAPPED_AREA
-+#define HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
-+
- #define SLICE_LOW_SHIFT		28
- #define SLICE_LOW_TOP		(0x100000000ul)
- #define SLICE_NUM_LOW		(SLICE_LOW_TOP >> SLICE_LOW_SHIFT)
-diff --git a/arch/powerpc/mm/book3s64/slice.c b/arch/powerpc/mm/book3s64/slice.c
-index e4382713746d..03681042b807 100644
---- a/arch/powerpc/mm/book3s64/slice.c
-+++ b/arch/powerpc/mm/book3s64/slice.c
-@@ -639,6 +639,32 @@ unsigned long slice_get_unmapped_area(unsigned long addr, unsigned long len,
- }
- EXPORT_SYMBOL_GPL(slice_get_unmapped_area);
- 
-+unsigned long arch_get_unmapped_area(struct file *filp,
-+				     unsigned long addr,
-+				     unsigned long len,
-+				     unsigned long pgoff,
-+				     unsigned long flags)
-+{
-+	if (radix_enabled())
-+		return generic_get_unmapped_area(filp, addr, len, pgoff, flags);
-+
-+	return slice_get_unmapped_area(addr, len, flags,
-+				       mm_ctx_user_psize(&current->mm->context), 0);
-+}
-+
-+unsigned long arch_get_unmapped_area_topdown(struct file *filp,
-+					     const unsigned long addr0,
-+					     const unsigned long len,
-+					     const unsigned long pgoff,
-+					     const unsigned long flags)
-+{
-+	if (radix_enabled())
-+		return generic_get_unmapped_area_topdown(filp, addr0, len, pgoff, flags);
-+
-+	return slice_get_unmapped_area(addr0, len, flags,
-+				       mm_ctx_user_psize(&current->mm->context), 1);
-+}
-+
- unsigned int notrace get_slice_psize(struct mm_struct *mm, unsigned long addr)
- {
- 	unsigned char *psizes;
-@@ -766,4 +792,20 @@ unsigned long vma_mmu_pagesize(struct vm_area_struct *vma)
- 
- 	return 1UL << mmu_psize_to_shift(get_slice_psize(vma->vm_mm, vma->vm_start));
- }
-+
-+static int file_to_psize(struct file *file)
-+{
-+	struct hstate *hstate = hstate_file(file);
-+	return shift_to_mmu_psize(huge_page_shift(hstate));
-+}
-+
-+unsigned long hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
-+					unsigned long len, unsigned long pgoff,
-+					unsigned long flags)
-+{
-+	if (radix_enabled())
-+		return generic_hugetlb_get_unmapped_area(file, addr, len, pgoff, flags);
-+
-+	return slice_get_unmapped_area(addr, len, flags, file_to_psize(file), 1);
-+}
- #endif
+-	high_limit = DEFAULT_MAP_WINDOW;
+-	if (addr >= high_limit || (fixed && (addr + len > high_limit)))
+-		high_limit = TASK_SIZE;
+-
+-	if (len & ~huge_page_mask(h))
+-		return -EINVAL;
+-	if (len > high_limit)
+-		return -ENOMEM;
+-
+-	if (fixed) {
+-		if (addr > high_limit - len)
+-			return -ENOMEM;
+-		if (prepare_hugepage_range(file, addr, len))
+-			return -EINVAL;
+-		return addr;
+-	}
+-
+-	if (addr) {
+-		addr = ALIGN(addr, huge_page_size(h));
+-		vma = find_vma(mm, addr);
+-		if (high_limit - len >= addr && addr >= mmap_min_addr &&
+-		    (!vma || addr + len <= vm_start_gap(vma)))
+-			return addr;
+-	}
+-	/*
+-	 * We are always doing an topdown search here. Slice code
+-	 * does that too.
+-	 */
+-	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
+-	info.length = len;
+-	info.low_limit = max(PAGE_SIZE, mmap_min_addr);
+-	info.high_limit = mm->mmap_base + (high_limit - DEFAULT_MAP_WINDOW);
+-	info.align_mask = PAGE_MASK & ~huge_page_mask(h);
+-	info.align_offset = 0;
+-
+-	return vm_unmapped_area(&info);
+-}
+-
+ void radix__huge_ptep_modify_prot_commit(struct vm_area_struct *vma,
+ 					 unsigned long addr, pte_t *ptep,
+ 					 pte_t old_pte, pte_t pte)
 diff --git a/arch/powerpc/mm/hugetlbpage.c b/arch/powerpc/mm/hugetlbpage.c
-index bfd7f4af1e58..eb9de09e49a3 100644
+index f18b3a1d18f0..bfd7f4af1e58 100644
 --- a/arch/powerpc/mm/hugetlbpage.c
 +++ b/arch/powerpc/mm/hugetlbpage.c
-@@ -542,27 +542,6 @@ struct page *follow_huge_pd(struct vm_area_struct *vma,
- 	return page;
- }
- 
--#ifdef HAVE_ARCH_HUGETLB_UNMAPPED_AREA
--static inline int file_to_psize(struct file *file)
--{
--	struct hstate *hstate = hstate_file(file);
--	return shift_to_mmu_psize(huge_page_shift(hstate));
--}
--
--unsigned long hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
--					unsigned long len, unsigned long pgoff,
--					unsigned long flags)
--{
--	if (radix_enabled())
--		return generic_hugetlb_get_unmapped_area(file, addr, len,
--						       pgoff, flags);
--#ifdef CONFIG_PPC_64S_HASH_MMU
--	return slice_get_unmapped_area(addr, len, flags, file_to_psize(file), 1);
--#endif
--	BUG();
--}
--#endif
--
- bool __init arch_hugetlb_valid_size(unsigned long size)
+@@ -553,11 +553,9 @@ unsigned long hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+ 					unsigned long len, unsigned long pgoff,
+ 					unsigned long flags)
  {
- 	int shift = __ffs(size);
-diff --git a/arch/powerpc/mm/mmap.c b/arch/powerpc/mm/mmap.c
-index 46781d0103d1..5972d619d274 100644
---- a/arch/powerpc/mm/mmap.c
-+++ b/arch/powerpc/mm/mmap.c
-@@ -80,42 +80,6 @@ static inline unsigned long mmap_base(unsigned long rnd,
- 	return PAGE_ALIGN(DEFAULT_MAP_WINDOW - gap - rnd);
- }
- 
--#ifdef HAVE_ARCH_UNMAPPED_AREA
--unsigned long arch_get_unmapped_area(struct file *filp,
--				     unsigned long addr,
--				     unsigned long len,
--				     unsigned long pgoff,
--				     unsigned long flags)
--{
--	if (radix_enabled())
--		return generic_get_unmapped_area(filp, addr, len, pgoff, flags);
--
--#ifdef CONFIG_PPC_64S_HASH_MMU
--	return slice_get_unmapped_area(addr, len, flags,
--				       mm_ctx_user_psize(&current->mm->context), 0);
--#else
--	BUG();
+-#ifdef CONFIG_PPC_RADIX_MMU
+ 	if (radix_enabled())
+-		return radix__hugetlb_get_unmapped_area(file, addr, len,
++		return generic_hugetlb_get_unmapped_area(file, addr, len,
+ 						       pgoff, flags);
 -#endif
--}
--
--unsigned long arch_get_unmapped_area_topdown(struct file *filp,
--					     const unsigned long addr0,
--					     const unsigned long len,
--					     const unsigned long pgoff,
--					     const unsigned long flags)
--{
--	if (radix_enabled())
--		return generic_get_unmapped_area_topdown(filp, addr0, len, pgoff, flags);
--
--#ifdef CONFIG_PPC_64S_HASH_MMU
--	return slice_get_unmapped_area(addr0, len, flags,
--				       mm_ctx_user_psize(&current->mm->context), 1);
--#else
--	BUG();
--#endif
--}
--#endif /* HAVE_ARCH_UNMAPPED_AREA */
--
- /*
-  * This function, called very early during the creation of a new
-  * process VM image, sets up which VM layout function to use:
+ #ifdef CONFIG_PPC_64S_HASH_MMU
+ 	return slice_get_unmapped_area(addr, len, flags, file_to_psize(file), 1);
+ #endif
 -- 
 2.33.1

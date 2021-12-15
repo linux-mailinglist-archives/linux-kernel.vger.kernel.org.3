@@ -2,83 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C58D475180
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1157475188
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239640AbhLODwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 22:52:20 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32921 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235424AbhLODwT (ORCPT
+        id S239660AbhLOD7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 22:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235424AbhLOD7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 22:52:19 -0500
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JDLsW6MXfzcbyr;
-        Wed, 15 Dec 2021 11:51:59 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 11:51:50 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 15 Dec
- 2021 11:51:50 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-CC:     <jgross@suse.com>, <gregkh@linuxfoundation.org>
-Subject: [PATCH -next] usb: host: xen-hcd: add missing unlock in error path
-Date:   Wed, 15 Dec 2021 11:58:05 +0800
-Message-ID: <20211215035805.375244-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 14 Dec 2021 22:59:17 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30749C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 19:59:17 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id 207so31303718ljf.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 19:59:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0tjE/40QVq1O5nmoJ1f6NdfWomQGy4kZlQAecDcJBAY=;
+        b=lMukVHCCCrsBCkWUUA9h8abns1sXvGs2ZJHKiinYOvQYdFNeGuUp8oHFjQN+HNWJat
+         MDG2wX/8wbhMg3aEKTaOWAer2dTwIdKaVnvDxTN8eH6yZ/SMTLT6t/kwD/E7yZIYZ4iF
+         WBNLWMd/yvSTlanK4sCl2Dbk888/pFJnJbiLdAQYcrbEvLPSiz/f6xoj9jeN/+WHtxHD
+         9fh2cBimdj63hJdEfLc2JdCD6p+XQhN4QF2mnhMs74pu9hxHxW84jxy8ww99NDN2oW0u
+         dQpAAEnEeeUR0nb+ElfaACPB6LbOXwOLyQzQI6tSq+A2oORrD0u+8O/BuvacvLoHp1Dm
+         sA6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0tjE/40QVq1O5nmoJ1f6NdfWomQGy4kZlQAecDcJBAY=;
+        b=4C7uUJ88kKEA4oxQRBFrYTk1oYJa6JcpJ20ka/z8YFLieV2MLRTUIggLJ0jn5zxutI
+         GH3jDvEvdHqCEhQVEQWehf88a8N26eGo/AoLkqeKCBC2xoV2nsUJJomOfAJZxSYl2fMN
+         ducFs1Jp/sTwplU7oeynEq7Puyp3lM1HNeppufUTjJYnN0UVkCLuldokqtnEHpEVBDxU
+         UBVSUwa1hPQuh+42LTGxxsP1N1hN8Z6eGoJNjAp4sZpKGLs/qGnBO9IECqhprkfsEWS8
+         Yecd+pFOKXZ17h7zt6DQQ0pVgsO8kvdA9TxivotgOHefAEVWnm4COUQfBLIOgRYqxN0c
+         Zl8A==
+X-Gm-Message-State: AOAM532R/uRlbeBt7UGZWjMeCy95Xonl4k5MA48Efg/KW+SyZ3PFGOKc
+        RzMMn5RK67YEvrIHCNUOx/u9+96DFu8GQt/8tat4bw==
+X-Google-Smtp-Source: ABdhPJwQADB+Z5LoN6xoV02kzdHV72/9d8qqf3kqL6tB/YVGP/Y2TPgGWz4/q6/qmdLqzz/Rgx0Suo/MD99/j8Z1goQ=
+X-Received: by 2002:a2e:83cc:: with SMTP id s12mr8308376ljh.508.1639540755235;
+ Tue, 14 Dec 2021 19:59:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+References: <20211214050708.4040200-1-vipinsh@google.com> <YbjRb0XR7neyX/Gy@google.com>
+In-Reply-To: <YbjRb0XR7neyX/Gy@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 14 Dec 2021 19:58:39 -0800
+Message-ID: <CAHVum0ec420f4dMseNRCJqzfLV+5V6NpmaBibPZDzsc15S_3oA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: Move VM's worker kthreads back to the original
+ cgroups before exiting.
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, dmatlack@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing unlock before return from function xenhcd_urb_request_done()
-and xenhcd_conn_notify() in the error handling case.
+On Tue, Dec 14, 2021 at 9:16 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Tue, Dec 14, 2021, Vipin Sharma wrote:
+> > +     WARN_ON(cgroup_attach_task_all(kthreadd_task, current));
+>
+> As the build bot noted, kthreadd_task isn't exported, and I doubt you'll convince
+> folks to let you export it.
+>
+> Why is it problematic for the kthread to linger in the cgroup?  Conceptually, it's
+> not really wrong.
 
-Fixes: 494ed3997d75 ("usb: Introduce Xen pvUSB frontend (xen hcd)")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/usb/host/xen-hcd.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/host/xen-hcd.c b/drivers/usb/host/xen-hcd.c
-index 7801dde6f5ee..be09fd9bac58 100644
---- a/drivers/usb/host/xen-hcd.c
-+++ b/drivers/usb/host/xen-hcd.c
-@@ -942,6 +942,7 @@ static int xenhcd_urb_request_done(struct xenhcd_info *info)
- 	rp = info->urb_ring.sring->rsp_prod;
- 	if (RING_RESPONSE_PROD_OVERFLOW(&info->urb_ring, rp)) {
- 		xenhcd_set_error(info, "Illegal index on urb-ring");
-+		spin_unlock_irqrestore(&info->lock, flags);
- 		return 0;
- 	}
- 	rmb(); /* ensure we see queued responses up to "rp" */
-@@ -997,6 +998,7 @@ static int xenhcd_conn_notify(struct xenhcd_info *info)
- 	rp = info->conn_ring.sring->rsp_prod;
- 	if (RING_RESPONSE_PROD_OVERFLOW(&info->conn_ring, rp)) {
- 		xenhcd_set_error(info, "Illegal index on conn-ring");
-+		spin_unlock_irqrestore(&info->lock, flags);
- 		return 0;
- 	}
- 	rmb(); /* ensure we see queued responses up to "rp" */
-@@ -1010,6 +1012,7 @@ static int xenhcd_conn_notify(struct xenhcd_info *info)
- 
- 		if (xenhcd_rhport_connect(info, portnum, speed)) {
- 			xenhcd_set_error(info, "Illegal data on conn-ring");
-+			spin_unlock_irqrestore(&info->lock, flags);
- 			return 0;
- 		}
- 
--- 
-2.25.1
-
+Issue comes when a process tries to clear up the resources when a VM
+shutdown/dies. The process sometimes get an EBUSY error when it tries
+to delete the cgroup directories which were created for that VM. It is
+also difficult to know how many times to retry or how much time to
+wait before the cgroup is empty. This issue is not always happening.

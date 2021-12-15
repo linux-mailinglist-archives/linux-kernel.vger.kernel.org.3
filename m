@@ -2,86 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DDA475B13
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FECF475B16
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243499AbhLOOw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:52:28 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:36412 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237842AbhLOOwY (ORCPT
+        id S243527AbhLOOwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243504AbhLOOw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:52:24 -0500
-Received: by mail-oi1-f169.google.com with SMTP id t23so32002894oiw.3;
-        Wed, 15 Dec 2021 06:52:24 -0800 (PST)
+        Wed, 15 Dec 2021 09:52:28 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA69C061574;
+        Wed, 15 Dec 2021 06:52:27 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id e24so17898574lfc.0;
+        Wed, 15 Dec 2021 06:52:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LO1x8iedEbzMXD8iaeIwOohPXHwNbM9LQL7gCPHHVok=;
+        b=QjCUIXRCRUhvXqnKy2b8cNhuz/nNrXo5BUbNtoRem0OJ9o0sDFziIeI0nM9+uK+hcK
+         Lk6cnre1LKuPsyuTqfLgm2xJqWBma9a50yGZ3La2W7UCq+8QKlX1WYbQ9h/DF7410ywZ
+         Z2mOBO4RKMt0UOXbAAa+bNvv6+qh73eVixLAMrSjQ7x9+bt96Sa6MgrWCTREama5SCXt
+         XIGiYjsarVgwWQNRNOp4LuXJ9p3NscZ8NjLxn5q8HwpNz1BiP2vn4XSsJl+UtU/6MNjl
+         //4DzHEBpiJbbJk6IRbYZ5se4wsOhnG4cAFLaDjGlyuymRWgciF1Yg93Tzdk1eEjnfoa
+         fftg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z1up0j7hF/rulik3lRaD24Z6MuUYNaFHV9krTlOBx4A=;
-        b=d33rXfN4sbzoaLJVHO0iIoBrGbM2y8M5Ff5MA3t2tBdmV/WwGAYE+j4KiwA1JiOKTk
-         avfCizb8sLVwvxgXqOl6Oe76JieZvqZBURhrJV5VrmxSi/hU4nqWdkQrFqD611dO0Ub4
-         vo15SRMhbk4sLQAeGWaM77thahDV8QysXZi2EiTIaDIwAzgjsCAA8LLvCijMf9QyOZyv
-         8wWlSBF7+FL/geGGluOPJ6rjgdRkreOOkAPM66aF1MuX0I0jLPPlpZEe27tPTgEwKOtD
-         SpFTK5vI6gnnkajbeymM1/egTOnG6iGecdlKW2H58ljVzxTfp5LAz2wYcHtc/YhhY4Iu
-         fyZg==
-X-Gm-Message-State: AOAM530sE+4h1mbinuIA8OsusTzXQdQsfWgs6MNeCNIrZwEyjFowikAj
-        A7olQ3Q6u9liHK+Le64Gulz1xstwxRnWmZ6/WDE=
-X-Google-Smtp-Source: ABdhPJw8i33FspLIffQinoU6FdTktEhVP9lRVkbZmJZwncQv3RzUzvVSnU9wWIeXS4cV/UHKAONNMnhIOBhnU2RqwI4=
-X-Received: by 2002:a05:6808:1454:: with SMTP id x20mr110728oiv.166.1639579944358;
- Wed, 15 Dec 2021 06:52:24 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LO1x8iedEbzMXD8iaeIwOohPXHwNbM9LQL7gCPHHVok=;
+        b=KxRUSHnaxQV6KVyEMegSs3uA7K1nIM/QLxB9BK1+KKOyyPDW2x5YJ47TbONEy6XBz8
+         CwI5WpjZDz7nPbBGzH4TAdADW2Sda6KqCUMNlV1WNU/puYZmv2wCbHOgZnSbwQ/XdQE7
+         xaM0uROhgJUT4QtD7evD9Hbs5tN0W6m+kdxlqWSMj3w1wsFLGRrbWXkcbbZvrMIbFqZn
+         u0XzVMySuiNQfGvrxIyZ1/WyeFJhEn/RLgBOOpDrGnOS5fGg9VTC5O9gmSePn2k+UD75
+         7bqTLvCl78kRV3uDjoPM0SRh0omNnrBBjYqA/mk4+dWq+FNN/uxN5gGD+AGAs7gOBMpS
+         Dk5g==
+X-Gm-Message-State: AOAM533Bghsz9IVirp70iZq+WaagIYxtmDVRKTRnLBh6PqbBY0f8uJcL
+        PPVV9k+y1E/6XLNGbnoiB8GCxzagdcI=
+X-Google-Smtp-Source: ABdhPJz7DCXQh8+Cu8E5eqzQJ7mTCbxRpntVNjHf/gwJg9yeA17TYw04B0ceWbFDaA2+uDWbbc7l4Q==
+X-Received: by 2002:a19:761a:: with SMTP id c26mr10205200lff.584.1639579945929;
+        Wed, 15 Dec 2021 06:52:25 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id b7sm353091lfb.224.2021.12.15.06.52.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 06:52:25 -0800 (PST)
+Subject: Re: [PATCH v6 11/28] ARM: tegra: Add device-tree for ASUS Transformer
+ Infinity TF700T
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        David Heidelberg <david@ixit.cz>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>,
+        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
+        Nikola Milosavljevic <mnidza@outlook.com>,
+        Ion Agorria <ion@agorria.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        Jasper Korten <jja2000@gmail.com>,
+        Thomas Graichen <thomas.graichen@gmail.com>,
+        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211211211412.10791-1-digetx@gmail.com>
+ <20211211211412.10791-12-digetx@gmail.com> <Ybn1Ne2aGfsablwQ@orome>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <02d7e9a9-6999-cccd-aea2-d069c759cd56@gmail.com>
+Date:   Wed, 15 Dec 2021 17:52:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
- <20211213103243.33657-2-heikki.krogerus@linux.intel.com> <CAJZ5v0jq5ve9+V3k5Vi=vJAheSyQbAsNmi6An9=oKxkyVed5bw@mail.gmail.com>
- <Ybnoy9e6VvFsJ4b1@kuha.fi.intel.com>
-In-Reply-To: <Ybnoy9e6VvFsJ4b1@kuha.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 15 Dec 2021 15:52:12 +0100
-Message-ID: <CAJZ5v0hiv18Ri5Vi4Y07bXRO9+Qf5bZ+TwmqwRG3spr9nzV0MA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] acpi: Store the Physical Location of Device (_PLD) information
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <Ybn1Ne2aGfsablwQ@orome>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 2:08 PM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Rafael,
->
-> On Wed, Dec 15, 2021 at 12:43:48PM +0100, Rafael J. Wysocki wrote:
-> > One overall problem I see here is that it potentially stores a bunch
-> > of _PLD buffers that will never be used, which is a waste of memory.
-> >
-> > It may be better to make acpi_device_get_location() evaluate _PLD for
-> > the target device if it cannot be found in the list and either update
-> > one of the existing entries if the crc matches and return the pld data
-> > from there, or add a new item to the list and return its pld data.
->
-> The primary goal of this series is actually to see the other devices
-> that share a fixed location with our device.
+15.12.2021 17:01, Thierry Reding пишет:
+> On Sun, Dec 12, 2021 at 12:13:55AM +0300, Dmitry Osipenko wrote:
+> [...]
+>> +		i2c@1 {
+>> +			reg = <1>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +
+>> +			dsi-bridge@7 {
+>> +				compatible = "toshiba,tc358768";
+>> +				reg = <0x7>;
+>> +
+>> +				#address-cells = <1>;
+>> +				#size-cells = <0>;
+>> +
+>> +				clocks = <&tc358768_osc>;
+>> +				clock-names = "refclk";
+>> +
+>> +				reset-gpios = <&gpio TEGRA_GPIO(N, 6) GPIO_ACTIVE_LOW>;
+>> +
+>> +				vddc-supply = <&vdd_1v2_mipi>;
+>> +				vddio-supply = <&vdd_1v8_vio>;
+>> +				vddmipi-supply = <&vdd_1v2_mipi>;
+>> +
+>> +				ports {
+>> +					#address-cells = <1>;
+>> +					#size-cells = <0>;
+>> +
+>> +					port@0 {
+>> +						reg = <0>;
+>> +
+>> +						bridge_input: endpoint {
+>> +							remote-endpoint = <&dpi_output>;
+>> +							data-lines = <24>;
+>> +						};
+>> +					};
+>> +
+>> +					port@1 {
+>> +						reg = <1>;
+>> +
+>> +						bridge_output: endpoint {
+>> +							remote-endpoint = <&panel_input>;
+>> +						};
+>> +					};
+>> +				};
+>> +
+>> +				/*
+>> +				 * Panasonic VVX10F004B00 or HYDIS HV101WU1-1E1
+>> +				 * LCD SuperIPS+ Full HD panel.
+>> +				 */
+>> +				panel@1 {
+>> +					compatible = "panasonic,vvx10f004b00";
+>> +					reg = <1>;
+>> +
+>> +					power-supply = <&vdd_pnl>;
+>> +					backlight = <&backlight>;
+>> +
+>> +					port {
+>> +						panel_input: endpoint {
+>> +							remote-endpoint = <&bridge_output>;
+>> +						};
+>> +					};
+>> +				};
+> 
+> make dtbs_check complains about this and says that panel@1 (as well as
+> #address-cells and #size-cells) are not allowed here. And indeed the
+> binding for the Toshiba bridge doesn't mention them here.
+> 
+> Do we need this here or should this be moved to the top level to fix
+> those warnings? I guess what you're doing above is describe a DSI bus
+> created by the DSI bridge, which also makes sense, so another
+> alternative would be to fix up the binding and let it accept those
+> properties.
 
-It would be good to mention that in the changelog then.
+Toshiba bridge binding is incomplete. David has patch for that [1], I
+don't think that it was sent out yet.
 
-> The _PLD buffer cache
-> would be nice, but not necessary. We don't have to store the _PLD
-> buffer itself as part of the location structure at all if that's a
-> problem.
+[1]
+https://github.com/okias/linux/commit/0875230062294b6db17f395ced0a8384a4c1cfc7
 
-It may be cached on the first invocation of acpi_device_get_location()
-too, but I'm not sure how much overhead would be avoided by doing
-that.  I guess it would make most sense in the shared _PLD case.
-
-> I'll make the change.
-
-OK

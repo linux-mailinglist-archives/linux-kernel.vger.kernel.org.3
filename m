@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94488475EDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7929B475F4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343632AbhLORZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        id S1343515AbhLOR3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245371AbhLORYX (ORCPT
+        with ESMTP id S1343806AbhLOR0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:24:23 -0500
+        Wed, 15 Dec 2021 12:26:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50E3C061574;
-        Wed, 15 Dec 2021 09:24:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5DEC0698E2;
+        Wed, 15 Dec 2021 09:25:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53322619EB;
-        Wed, 15 Dec 2021 17:24:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 382F2C36AE0;
-        Wed, 15 Dec 2021 17:24:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CB4B619EE;
+        Wed, 15 Dec 2021 17:25:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF99C36AE0;
+        Wed, 15 Dec 2021 17:25:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589062;
-        bh=1kNzIlA7OK/d4j0WjBCGRmP3H3raho0VDYTDXBHSWCw=;
+        s=korg; t=1639589130;
+        bh=eDprUhMM8vftWzn2Cl89AMWfd58wb49TmTCNevGQdHc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P5q5LG7a1QLYbXgcrBLUoys3ylWZFIvFSknmwJtuFB4ZDAVNhwmlZ8stK8Wq9SAu9
-         +XSUe2kGPCPcChqmnAl0EXUbcQCvtN0gJO26sM+D8IECacc7sfw4iE21XXS6I2adQv
-         KUhMo6ivrINqFRWcNKfGkqWMHRMD0/uSG+NM9yTY=
+        b=q53Xg1cv3SJs91jNKHR7m73rvDAl/DMB8rm1CERVQAAoNdJOMZNqKKxedxwI5GSkI
+         C5kLGCVFHrSOQ7ssuP8tfLiN01c5qyH7xOGPZcRfnQJCrI6F4b12zhygrfc2GOC7c+
+         Es0c8Wtn+vLHUPRMiyYPFNw6CEDuI2oO1fIDhhI4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        kernel test robot <lkp@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 25/42] Revert "tty: serial: fsl_lpuart: drop earlycon entry for i.MX8QXP"
-Date:   Wed, 15 Dec 2021 18:21:06 +0100
-Message-Id: <20211215172027.533691416@linuxfoundation.org>
+Subject: [PATCH 5.10 09/33] parisc/agp: Annotate parisc agp init functions with __init
+Date:   Wed, 15 Dec 2021 18:21:07 +0100
+Message-Id: <20211215172025.091618039@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
-References: <20211215172026.641863587@linuxfoundation.org>
+In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
+References: <20211215172024.787958154@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,39 +49,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 4e9679738a918d8a482ac6a2cb2bb871f094bb84 ]
+[ Upstream commit 8d88382b7436551a9ebb78475c546b670790cbf6 ]
 
-Revert commit b4b844930f27 ("tty: serial: fsl_lpuart: drop earlycon entry
-for i.MX8QXP"), because this breaks earlycon support on imx8qm/imx8qxp.
-While it is true that for earlycon there is no difference between
-i.MX8QXP and i.MX7ULP (for now at least), there are differences
-regarding clocks and fixups for wakeup support. For that reason it was
-deemed unacceptable to add the imx7ulp compatible to device tree in
-order to get earlycon working again.
-
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Link: https://lore.kernel.org/r/20211124073109.805088-1-alexander.stein@ew.tq-group.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/fsl_lpuart.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/char/agp/parisc-agp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index b1e7190ae4836..ac5112def40d1 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -2625,6 +2625,7 @@ OF_EARLYCON_DECLARE(lpuart, "fsl,vf610-lpuart", lpuart_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1021a-lpuart", lpuart32_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,ls1028a-lpuart", ls1028a_early_console_setup);
- OF_EARLYCON_DECLARE(lpuart32, "fsl,imx7ulp-lpuart", lpuart32_imx_early_console_setup);
-+OF_EARLYCON_DECLARE(lpuart32, "fsl,imx8qxp-lpuart", lpuart32_imx_early_console_setup);
- EARLYCON_DECLARE(lpuart, lpuart_early_console_setup);
- EARLYCON_DECLARE(lpuart32, lpuart32_early_console_setup);
+diff --git a/drivers/char/agp/parisc-agp.c b/drivers/char/agp/parisc-agp.c
+index ed3c4c42fc23b..d68d05d5d3838 100644
+--- a/drivers/char/agp/parisc-agp.c
++++ b/drivers/char/agp/parisc-agp.c
+@@ -281,7 +281,7 @@ agp_ioc_init(void __iomem *ioc_regs)
+         return 0;
+ }
  
+-static int
++static int __init
+ lba_find_capability(int cap)
+ {
+ 	struct _parisc_agp_info *info = &parisc_agp_info;
+@@ -366,7 +366,7 @@ parisc_agp_setup(void __iomem *ioc_hpa, void __iomem *lba_hpa)
+ 	return error;
+ }
+ 
+-static int
++static int __init
+ find_quicksilver(struct device *dev, void *data)
+ {
+ 	struct parisc_device **lba = data;
+@@ -378,7 +378,7 @@ find_quicksilver(struct device *dev, void *data)
+ 	return 0;
+ }
+ 
+-static int
++static int __init
+ parisc_agp_init(void)
+ {
+ 	extern struct sba_device *sba_list;
 -- 
 2.33.0
 

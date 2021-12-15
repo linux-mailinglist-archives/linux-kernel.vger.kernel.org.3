@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E3847622D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE77476230
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbhLOTuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:50:32 -0500
-Received: from mail-oo1-f49.google.com ([209.85.161.49]:34417 "EHLO
-        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbhLOTub (ORCPT
+        id S233443AbhLOTv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:51:28 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:44733 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233409AbhLOTv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:50:31 -0500
-Received: by mail-oo1-f49.google.com with SMTP id b1-20020a4a8101000000b002c659ab1342so6233479oog.1;
-        Wed, 15 Dec 2021 11:50:31 -0800 (PST)
+        Wed, 15 Dec 2021 14:51:27 -0500
+Received: by mail-oi1-f170.google.com with SMTP id be32so33120336oib.11;
+        Wed, 15 Dec 2021 11:51:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=vOnL6FtlkEPq4JwJbq4ZntR2PTCXZJH8UTvwELdoNOI=;
-        b=PdHc5bn37ERxno8DvjE2ID71906Sq+Pggl6mpuuO3bZ0XWEQAUqdmzXqY2JHNGhfuF
-         Vp1lQy+aUenTnuutKIDkKlyb9F8ffJuenbnDHGJ8Ybek4z8wS4iNydNL6gt80x5O1E4+
-         0dZkgE37MExkos3c5RkxoZP/WzpaC7UXkS4u18oWUVUcPOyOuQmIJ2lMsOV+aRkJiKFC
-         XDpxOv7oo7J+9uIljenKpvtPNsm0AUkQlNID/pBJdxUxrR87YwQki5nlvgX8UcQLi525
-         WDijWSNSyq7hj9A1J8lLIiVMSy2jJmXQ1K3WGVqKYqprcNggI+j5/GIt+Hj3DOEFl1+A
-         sABQ==
-X-Gm-Message-State: AOAM530syD1T0+Bmo9CJ2Fu3iKnB6cj079Q6LUv/NO90Gi7300rIiAp0
-        sFfUV4RNR+v6uWZLHVi6ow==
-X-Google-Smtp-Source: ABdhPJymhdbBzWTF6GqA7YjnSBH3BeiC4soK970pMrTFbTWw6FjPOrFhAxHrJr10lC2NEeX3H8uwYQ==
-X-Received: by 2002:a05:6820:30b:: with SMTP id l11mr8624417ooe.32.1639597830554;
-        Wed, 15 Dec 2021 11:50:30 -0800 (PST)
+        bh=1p1PQrqDAJTBlAEU9eTaqXLhU+FeqafP7VNkw1V6x4M=;
+        b=IdDlIoNDd9y5sxkH89qTH2vxKqIUpoSeP8LG9hEkYHYr/KSxUY4D4c7FYN7vUR4I/j
+         87XrEoPbhQy4lCzqvVD/0HTEXLpnAgokhtEm+QWIMR3awzLjsWHIAGlg1s87ppTlt+X/
+         KPyJ9QsU7jHZEBE7D8bE79MisU+TxH5gyyFTKdCaf5Tvozl/uKk5Yy7wkJImcrmmMvN3
+         I4ePLLC2kBubPJ/Yl3dQRv9kIjeM0n3oeWTCzapFzsre1VAE31guk0o7/V8JGlsVMTvD
+         GOaAbXg4GKpOb0tW/SnjtJlTSODjDH0lcTru9abkaPd5y2wij0GDeHNRRM9fOlzOF1Zz
+         CrqQ==
+X-Gm-Message-State: AOAM533OpkE3b/KBeXkCRn0v4DiHLat5QptgosOyQMvTXG6sx3OpD90k
+        4xGPIYRiLofUtOdnLbOlEQ==
+X-Google-Smtp-Source: ABdhPJw6V5sSTfL+uRxvQ2C07gj9VqUiSInxCB3vdcAEt8qqdj6YEbamz7vxe0Y5oQERaTi6m1SK7A==
+X-Received: by 2002:a05:6808:b08:: with SMTP id s8mr1360010oij.126.1639597886569;
+        Wed, 15 Dec 2021 11:51:26 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t3sm609157otk.44.2021.12.15.11.50.29
+        by smtp.gmail.com with ESMTPSA id s17sm616782otp.20.2021.12.15.11.51.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 11:50:29 -0800 (PST)
-Received: (nullmailer pid 1724400 invoked by uid 1000);
-        Wed, 15 Dec 2021 19:50:28 -0000
-Date:   Wed, 15 Dec 2021 13:50:28 -0600
+        Wed, 15 Dec 2021 11:51:26 -0800 (PST)
+Received: (nullmailer pid 1725656 invoked by uid 1000);
+        Wed, 15 Dec 2021 19:51:25 -0000
+Date:   Wed, 15 Dec 2021 13:51:25 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, Kevin Cernekee <cernekee@gmail.com>,
-        linux-mips@vger.kernel.org,
-        Saenz Julienne <nsaenzjulienne@suse.de>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+To:     David Collins <quic_collinsd@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, james.quinlan@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v1 1/4] dt-bindings: PCI: Add compatible string for
- Brcmstb 74[23]5 MIPs SOCs
-Message-ID: <YbpHBJurUaoT4pZD@robh.at.kernel.org>
-References: <20211209204726.6676-1-jim2101024@gmail.com>
- <20211209204726.6676-2-jim2101024@gmail.com>
+        linux-arm-msm@vger.kernel.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Subject: Re: [PATCH 1/2] dt-bindings: firmware: arm,scmi: define support for
+ name based regulators
+Message-ID: <YbpHPU7PsGO2i+uw@robh.at.kernel.org>
+References: <cover.1639099631.git.quic_collinsd@quicinc.com>
+ <2d78b0f19991f8028d9be913be0a5aefd7d1ee17.1639099631.git.quic_collinsd@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209204726.6676-2-jim2101024@gmail.com>
+In-Reply-To: <2d78b0f19991f8028d9be913be0a5aefd7d1ee17.1639099631.git.quic_collinsd@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Dec 2021 15:47:22 -0500, Jim Quinlan wrote:
-> The Broadcom STB Arm and MIPs SOCs use the same PCIe controller
-> HW, although the MIPs version is older.
+On Thu, 09 Dec 2021 17:54:41 -0800, David Collins wrote:
+> Allow SCMI regulator subnodes to be specified either by ID using
+> the "reg" property or by name using the "regulator-name" property.
 > 
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> Name based SCMI regulator specification helps ensure that an SCMI
+> agent doesn't need to be aware of the numbering scheme used for
+> Voltage Domains by the SCMI platform.  It also ensures that the
+> correct Voltage Domain is selected for a given physical regulator.
+> This cannot be guaranteed with numeric Voltage Domain IDs alone.
+> 
+> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../devicetree/bindings/firmware/arm,scmi.yaml        | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>

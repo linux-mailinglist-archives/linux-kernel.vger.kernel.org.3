@@ -2,113 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD441475A74
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE74475A65
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243285AbhLOORN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:17:13 -0500
-Received: from mga04.intel.com ([192.55.52.120]:44608 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243291AbhLOORI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:17:08 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="237973151"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="237973151"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:17:08 -0800
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="567937520"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:16:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mxV4Z-006d5b-Tn;
-        Wed, 15 Dec 2021 16:15:59 +0200
-Date:   Wed, 15 Dec 2021 16:15:59 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Radim Pavlik <radim.pavlik@tbs-biometrics.com>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Herve Codina <herve.codina@bootlin.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-actions@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        - <patches@opensource.cirrus.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        linux-mediatek@lists.infradead.org, linux-oxnas@groups.io,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andy Gross <agross@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        arm-soc <soc@kernel.org>
-Subject: Re: [PATCH v1 1/2] pinctrl: Get rid of duplicate of_node assignment
- in the drivers
-Message-ID: <Ybn4ny0YY/Sbld+Q@smile.fi.intel.com>
-References: <20211213163929.7509-1-andriy.shevchenko@linux.intel.com>
- <CAMuHMdW_CKcXwOSUAbCreHVM62E35yjiCfpXC_wM0zK-V43CnA@mail.gmail.com>
+        id S243236AbhLOOQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229451AbhLOOQN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:16:13 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851E8C061574;
+        Wed, 15 Dec 2021 06:16:13 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id i6so41174586uae.6;
+        Wed, 15 Dec 2021 06:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CzbcpPsGeUu7cJzf3YmL97esTyegl1WilzwunHBlsJ0=;
+        b=jQ3z1cfZEizwMVs6X9FHIKAYSCLQEZfG9jBGu6U5eoX9t3cxn2eK22elO0OTZJN69h
+         Hn+F8vkLmwBfB578y8gVSXOPSRPG+UHZf9bm2KmLLJDjbOh5AIV7parjNUiHpJxrM0iW
+         p5T5FK4MMFw+ERF7e0E4+igdewZbUJ9F3hzyLUfPPEOFYLFzA3ug1JiDR9PL7ZcNIvK6
+         p4PtXl1+yP3AgMaBp+WhABR5xmamvD7qNuBwUz3mqPxrY17i33Jk7SkKYqf1pe004f1X
+         rnTY65EfiluoKF3GNdURKFgUXlXNaiv9lK09YfKDKw1pS1Pls+r2sR2A+jVbdTByOurc
+         971g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CzbcpPsGeUu7cJzf3YmL97esTyegl1WilzwunHBlsJ0=;
+        b=egm9gEHBNDrvRs0/x3QVfv8J4zq9z9nP6AG1hkVUMInasgjBb8iJ54eez2/NBr9HTQ
+         J5DPZGOMx6nBguIF/w+Wt7iMqRN8z7F8bM0m2utegOYOxgaivJg/iRX52xAcUg844xqi
+         Va7+fOJpXzbm+osFGkaDXLRvX+78bbbn6ajZK1OZmXY2rBManrJunrdvsIQseE9j+vxl
+         2lU2siEFp/DAaFpX3kscOTn8CPdTtUPraxhSaYiLmSzSuiy/K6PBUcuBs3OeH3tAmYGQ
+         2SzTb56U2cEpdPvMiLmSha3HjIw0wE/dsr1nG8NX6kRb3zIhpMTwJBw5hqtoDTEIA9pX
+         +Y6A==
+X-Gm-Message-State: AOAM531t0nmigMmVdT4ehlx6HzlhxtcJkfDwB7FwewfIYa06oUzDK8GT
+        d4xbqpEkIIVU/Qu/5GB8Ao3FYpejhIkZGeCB3NI=
+X-Google-Smtp-Source: ABdhPJxdL2tTTGHJqdrnbuJO9P7hgjMkVQp/qQTD2TuSHHUNy6I1A/PqvwNkyLn7WxuKlm+/IoK/o+YjeolRNyYzGJM=
+X-Received: by 2002:a67:d893:: with SMTP id f19mr2833967vsj.39.1639577772711;
+ Wed, 15 Dec 2021 06:16:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdW_CKcXwOSUAbCreHVM62E35yjiCfpXC_wM0zK-V43CnA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211208040414.151960-1-xiayu.zhang@mediatek.com>
+ <CAHNKnsRZpYsiWORgAejYwQqP5P=PSt-V7_i73G1yfh-UR2zFjw@mail.gmail.com>
+ <6f4ae1d8b1b53cf998eaa14260d93fd3f4c8d5ad.camel@mediatek.com>
+ <CAHNKnsQ6qLcUTiTiPEAp+rmoVtrGOjoY98nQFsrwSWUu-v7wYQ@mail.gmail.com> <76bc0c0174edc3a0c89bb880a237c844d44ac46b.camel@mediatek.com>
+In-Reply-To: <76bc0c0174edc3a0c89bb880a237c844d44ac46b.camel@mediatek.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Date:   Wed, 15 Dec 2021 17:16:01 +0300
+Message-ID: <CAHNKnsTWkiaKPmOghn_ztLDOcTbci8w4wkWhQ_EZPMNu0dRy3Q@mail.gmail.com>
+Subject: Re: [PATCH] Add Multiple TX/RX Queues Support for WWAN Network Device
+To:     Xiayu Zhang <xiayu.zhang@mediatek.com>
+Cc:     Loic Poulain <loic.poulain@linaro.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?SGFpanVuIExpdSAo5YiY5rW35YabKQ==?= 
+        <haijun.liu@mediatek.com>,
+        =?UTF-8?B?Wmhhb3BpbmcgU2h1ICjoiJLlj6zlubMp?= 
+        <Zhaoping.Shu@mediatek.com>,
+        =?UTF-8?B?SFcgSGUgKOS9leS8nyk=?= <HW.He@mediatek.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 11:28:34AM +0100, Geert Uytterhoeven wrote:
-> On Mon, Dec 13, 2021 at 5:40 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > GPIO library does copy the of_node from the parent device of
-> > the GPIO chip, there is no need to repeat this in the individual
-> > drivers. Remove these assignment all at once.
-> >
-> > For the details one may look into the of_gpio_dev_init() implementation.
+On Wed, Dec 15, 2021 at 11:44 AM Xiayu Zhang <xiayu.zhang@mediatek.com> wrote:
+> I want to know whether it is acceptable to add new callback functions
+> into WWAN subsystem only as well. Hope anyone could help confirm.
 
-> >  drivers/pinctrl/renesas/pinctrl-rza2.c     | 1 -
-> 
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Yes. Feel free to add any callbacks to the WWAN subsystem for proper
+hardware support.
 
-Thanks, there is v2 with this patch w/o changes. I take a liberty to
-extrapolate the tags to it. I need to send a v3 in case Linus hasn't
-taken the first patch before it happens.
+There are two things that trigger the discussion:
+1) absence of users of the new API;
+2) an attempt to silently correct a user choice instead of explicit
+rejection of a wrong value.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Sergey

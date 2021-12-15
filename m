@@ -2,101 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE46475849
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27AF47584F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242257AbhLOL7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
+        id S242253AbhLOMAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242253AbhLOL7O (ORCPT
+        with ESMTP id S234188AbhLOMAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:59:14 -0500
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD57C06173E;
-        Wed, 15 Dec 2021 03:59:13 -0800 (PST)
-Received: by mail-oo1-xc35.google.com with SMTP id b1-20020a4a8101000000b002c659ab1342so5837797oog.1;
-        Wed, 15 Dec 2021 03:59:13 -0800 (PST)
+        Wed, 15 Dec 2021 07:00:36 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43CEC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:00:36 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id w23so40472830uao.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:00:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lQwcpNrbli9VLdeHuoAEQZcD0V8NfN8ZrlDwyL/3SPg=;
-        b=NXUg701i7/xygKjrqrCnOF3wUzVQW/TT/JHhNblf9fYF2jPatQRkV0gz680FHw9f3f
-         B5xkzXspfmD6dEWbRcP6S/G9fRNZPORFRqlG5h20DMNcD0rGbxIr8OqBNfYLzyELwTx0
-         aIJnnpnwvQVALQcXb08NhZbfFozyc/zl5Zs07VOl5gGShFmDfAGjt0FtS2W89CJQGWjr
-         GUDipgN/QDnzP5GB/B3ludRHG/OAjHcIKrQ8eipvXDhd7GxxHwOSQ+JlZv8uPPb18MsP
-         qTIAJuulgP1GfsNwLMn/ewNZeABFgJ9Ml2TL3GNQyfF1E5KgErPp5QIXFiZJDv9lttlv
-         LLGQ==
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VOAaOrdWd5lD+mK78KAHRm3OPwW02mUiPealsVCa/TE=;
+        b=nXffj4HlEJDZRxH9ClBp3ESjXsc80vQ6Bx4/t2/jtVy/sYzWZa3L3AzHtvC2ETkDAt
+         F1WFJakkk49x6SHa8eFdvm0OThZv18X0r6ocfvBAsQW6J2/80+m29HbOIBHcHnMN8O3z
+         Id8sO7VF5PvgCTP9vOGCK63cMWpcmICFdJGIk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lQwcpNrbli9VLdeHuoAEQZcD0V8NfN8ZrlDwyL/3SPg=;
-        b=2WmkcrgVOGWpOtTGnyWD6tjseDGV5WiRbTckwOdJAA3vyLOgoWRyck1qFYZB9mpyjF
-         KelKsBDgAOCwwzfCwUXOXLHI8jlq/ZEyhXRX6RP0rqZ0RG+PF6/BXe71PGgEdnTNgIx+
-         Cx9FPc4MdJm9bSS2JMpnkz6ja8fjQBRgXGc3mJjADmRsbpEIsQeYRMeyBQP9uoTk1N9A
-         RvfQy4kQ8+wdMX/YZZ1yUt/yCUYQRqFsgnB1OWiqeCRYVuWUiACf7rBjgDynLwdl3KF9
-         MeZwVtSTnWD0vknnN4VerV1GY1R3vzSNuB5I2oxrsNQZYW0vcFu0jlMAnOYb+PByMxFy
-         tsqg==
-X-Gm-Message-State: AOAM532Q+cwxjEyWLrKxsEImN0fczILuJKv/PKB5scI89mVZFm3wkl8x
-        6ajZ5eeguXGm/sBLU7yN4w/nsoSslcE=
-X-Google-Smtp-Source: ABdhPJz3kh6UqCvLRy64cZ4L8HIFYMkmsAOVitikMB/e8C4SDG+xnmEnY2tAfD5CidpR/9tkcNTgUw==
-X-Received: by 2002:a4a:d8c7:: with SMTP id c7mr7034347oov.58.1639569552916;
-        Wed, 15 Dec 2021 03:59:12 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t11sm396991otj.24.2021.12.15.03.59.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 03:59:12 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Arseny Demidov <arsdemal@gmail.com>
-Cc:     Arseny Demidov <a.demidov@yadro.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211215113023.2945-1-a.demidov@yadro.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon : (mr75203) fix macro typo
-Message-ID: <0baa6133-5903-ffd8-69a0-99fb9f69665d@roeck-us.net>
-Date:   Wed, 15 Dec 2021 03:59:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VOAaOrdWd5lD+mK78KAHRm3OPwW02mUiPealsVCa/TE=;
+        b=Zfd8/mSQeco+gdlrJwaFAo9t9wtUSmTW4p7dPYGkMr2xTHsiWZksSfB3oIoR6eC+kz
+         yNxh0hhFjRN+LTJ3dmuyCY6KiBCgURQr0JrZ873cqVlUwdNVIGYctu3p9m/5OAdIaJhe
+         0xfSjginFecaX532HlhRhJMFXO/Hjdlqpm9/b6lBUqKigLyphvBIfs1wTJk/zLwJvF90
+         6Q7ZSnEEtaCRlHJUWjTL2UWEYXVK0jgQoTemU0p0v9R0O/zx+Sw3r6zTkvEw3dJz8QtL
+         B3erw9ENY3mY0lnF0WfaLjOsEhQ6cM0OpMwMTy4ALr2q2Yd9Acs35W/8oIdF0JsTeeX2
+         b/Ng==
+X-Gm-Message-State: AOAM530aBBHBtx4hgDhX9xAVs+36+QTgTMJFwJPea8+g2Rd81BCE7zqR
+        d69GLDB2F+SU7PDyc10/svJsYdvLYeop99SdEpx+0w==
+X-Google-Smtp-Source: ABdhPJzfnv9OWeG/6yWiNozReELreuK/r3yjp7+RBk370dK3SPwGVwGSqoE4lKW0XwFEoF8Kv706pzRsgb3p8eswoQM=
+X-Received: by 2002:ab0:6c44:: with SMTP id q4mr9732674uas.127.1639569635807;
+ Wed, 15 Dec 2021 04:00:35 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211215113023.2945-1-a.demidov@yadro.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211212181906.94062-1-romain.perier@gmail.com> <20211212181906.94062-3-romain.perier@gmail.com>
+In-Reply-To: <20211212181906.94062-3-romain.perier@gmail.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Wed, 15 Dec 2021 21:00:25 +0900
+Message-ID: <CAFr9PXki8LVdjQC_4eDSuB1dmEmv2K00bWOy92cOXENEoEyeqw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] clocksource: msc313e: Add support for
+ ssd20xd-based platforms
+To:     Romain Perier <romain.perier@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 3:30 AM, Arseny Demidov wrote:
-> In the file mr75203.c we have a macro named
-> POWER_DELAY_CYCLE_256, the correct value should be 0x100
-> 
+Hi Romain,
 
-How do you know that ? Do you have access to the datasheet, or
-is it just an assumption based on the name of the define ?
+On Mon, 13 Dec 2021 at 03:19, Romain Perier <romain.perier@gmail.com> wrote:
+>
+> SSD20X family SoCs have an oscillator running at ~432Mhz for timer1 and
+> timer2, while timer0 is running at 12Mhz.
 
-Guenter
+I don't think this is technically true. I think the boot rom sets the
+divider for timer0 so that it runs at ~12MHz.
+I think the current change to only configure timer1 and timer2 is ok
+but maybe the commit message should say that timer0 is configured to
+be backwards compatible at boot.
 
-> Signed-off-by: Arseny Demidov <a.demidov@yadro.com>
-> ---
->   drivers/hwmon/mr75203.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index 868243dba1ee..1ba1e3145969 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -93,7 +93,7 @@
->   #define VM_CH_REQ	BIT(21)
->   
->   #define IP_TMR			0x05
-> -#define POWER_DELAY_CYCLE_256	0x80
-> +#define POWER_DELAY_CYCLE_256	0x100
->   #define POWER_DELAY_CYCLE_64	0x40
->   
->   #define PVT_POLL_DELAY_US	20
-> 
+Cheers,
 
+Daniel

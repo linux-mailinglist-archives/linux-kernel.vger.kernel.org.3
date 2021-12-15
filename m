@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A68464756FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3D9475706
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241827AbhLOK4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:56:38 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:33699 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241810AbhLOK4h (ORCPT
+        id S241835AbhLOK5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241828AbhLOK5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:56:37 -0500
-Received: by mail-ot1-f43.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso24496980otf.0;
-        Wed, 15 Dec 2021 02:56:37 -0800 (PST)
+        Wed, 15 Dec 2021 05:57:35 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C54C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:57:35 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id e136so54007022ybc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:57:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AIrkD/IobhHZYxHxGbgH3jxyfBz6NWo4YroRSenLJUE=;
+        b=bTTv63Ge/6FRH89M7D86qhkk/pyCDjZIoIBeoUV3DKzSqkzsVNS7z9mXK4/h6OUDQI
+         lLVz6Gw0j4byVy4KyQNKzfrPyc72WrQjruSL7AYfw6JfmYo6IRZUatCPx43Arilfo4HM
+         DiatrggvhKt1R9HK2ZaAtJnN1dAxzndkkq5x2qMxsZ+ssbw3tIOI1itbFf+zg1ie37CE
+         a39rcdDsdQm0un6PMmz1f9zOcDMmCXuWnv2gjEoIsmz5ouIqYLF7B3siGOhLZbc0u7ee
+         blnG2P0pM6cGKBKlOeRwEM9nxderFfs3RYTeTJ4qf4q1CJs2eWHRkE01irm3GQYzF2o0
+         tqrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=c+b6o2kT50XjdF2Qu7E5BjAnXipgwhkkAIzs/MBlias=;
-        b=m6voVRwI4246ZqQvAW45aAYJ/+fnritHQxtddZUHDfukKPrbs+uO1ITguZ4ahTkMw2
-         MMXNpSTfbG1igXgz2Qt6IAoJojQw7wJwH2nDBH3a+tqcGz8jOnJVfLZmoynVEYjrzCLk
-         VotlkKEijDNHx+Pfdb4iSp2/CzJAP0VK9SZgUtmknIVHkEp3KaJE64jV6u9dS3bxMhvH
-         L1ZxqCaybVBZTQCpbIdCZ8KKan3P0Of5jhC8ydYEZQzaXWSslLnD788VFXDxmpyWi6mA
-         W+rB1zQCTUEZkSs2kfcTgogcAKVwkxUCN8kDaidGMyUeVpiwgsUFX+ZpnL8qbPWpqWWT
-         76gQ==
-X-Gm-Message-State: AOAM532lz7etEtYMqUV75SdhqiDN9u03UfrISTK8y1h8BJ3ms/1pwvuS
-        t3Yl5u40Clm4FotkUxzVVB+/E2PUxe40LDA33KI5Ffj5
-X-Google-Smtp-Source: ABdhPJzOKBewyc1EJTNidGydsTDLgPpVQPsCNiOckKPdNK5qGAgB5i204gc3Tmoz8yMpWLqqgsXlSdIoPkJ9mhpu2QU=
-X-Received: by 2002:a9d:4c10:: with SMTP id l16mr8244269otf.198.1639565796648;
- Wed, 15 Dec 2021 02:56:36 -0800 (PST)
+        bh=AIrkD/IobhHZYxHxGbgH3jxyfBz6NWo4YroRSenLJUE=;
+        b=V1NA6oayZo/qWVUwoZI0nuZWC+SRQcFjonTY34lo9HZBKmemuJh1AUWZAfnwfesva0
+         CU6sI199wPJBPgHyx6BTcmHVkfdKS3O1hxzH+dt1pJKpiEy9Q+1ng9HUhfMjhuQRWfD4
+         CLrP4bWkAbdet/XrMvbMepjrAj1XraeA+Gs239I1beZhUkKqW2W+m4h4XOvVg0txRwCa
+         nTUwkDrg2TT21qC3qcQcoFGjH/CDEMKf797aVcZgATa9CugQ3GZiS5/0gI0AQiFgl+DB
+         POAe127/cFv513jzBg8aNe2AqFM6+uGm+VTaxw6PCEAt4GTa15tTPdDgXR2G0PTAa0zE
+         JY4Q==
+X-Gm-Message-State: AOAM5304HIlVxYbtdMr7CXe78Q0gQQCJCL13Zsd6vgV60iC0yy0zzj+3
+        ObXyrIZQwkObOMv492nDpwJVKSaOmlXuy3HmwY5wwA==
+X-Google-Smtp-Source: ABdhPJxJOMUSo4Ey+qvovIH8KQHFepe9ugEWNg072zmjsMSsURjykDxmENoqPcZCtk9GINwhiqy3l2oE+uvi6uwqsdk=
+X-Received: by 2002:a25:760d:: with SMTP id r13mr5552778ybc.296.1639565854209;
+ Wed, 15 Dec 2021 02:57:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 15 Dec 2021 11:56:25 +0100
-Message-ID: <CAJZ5v0gFVQanDYwLFe6GFo2uYOHurrXka2c64n_4rvzPPts-MQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] acpi: Store _PLD information and convert users
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
+References: <0b6c06487234b0fb52b7a2fbd2237af42f9d11a6.1639560869.git.geert+renesas@glider.be>
+ <CANn89iKdorp0Ki0KFf6LAdjtKOm2np=vYY_YtkmJCoGfet1q-g@mail.gmail.com>
+ <CAMuHMdWQZA_fS-pr+4wVYtZ6h9Bx4PJ_92qpDNZ2kdjpzj+DHQ@mail.gmail.com>
+ <CANn89iJ-uGzpbAhNjT=fGfDYTjpxo335yhKbqUKwSUPOwPZqWw@mail.gmail.com>
+ <CAMuHMdUepDEgf9xD6+6qLqKtQH-ptvUf-fP1M=gt5nemitQBsw@mail.gmail.com> <CANn89iJ2HjNqOM=yF0yCi5K8id7XY=nG-yoo-sJsv=ykaSNDnw@mail.gmail.com>
+In-Reply-To: <CANn89iJ2HjNqOM=yF0yCi5K8id7XY=nG-yoo-sJsv=ykaSNDnw@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 15 Dec 2021 02:57:23 -0800
+Message-ID: <CANn89i+rBQr0dCKp6KrO83cFmB-abNSSbxJiDmOVf-gFfiKnwg@mail.gmail.com>
+Subject: Re: [PATCH -next] lib: TEST_REF_TRACKER should depend on REF_TRACKER
+ instead of selecting it
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:32 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+On Wed, Dec 15, 2021 at 2:55 AM Eric Dumazet <edumazet@google.com> wrote:
 >
-> Hi,
->
-> I'm now using the helpers device_match_acpi_dev() and
-> device_match_fwnode() like Andy suggested. No other changes.
->
->
-> The original cover letter:
->
-> This removes the need for the drivers to always separately evaluate
-> the _PLD. With the USB Type-C connector and USB port mapping this
-> allows us to start using the component framework and remove the custom
-> APIs.
->
-> So far the only users of the _PLD information have been the USB
-> drivers, but it seems it will be used also at least in some camera
-> drivers later. These nevertheless touch mostly USB drivers.
->
-> Rafael, is it still OK if Greg takes these?
 
-It is in general, but let me look at the changes in scan.c in particular.
+> So you say that STACKDEPOT should be user selectable,
+> even if no layer is using it ?
+>
+> I based my work on STACKDEPOT, not on EXT4
+
+In any case, the patch you sent prevents me from testing the module alone.
+
+So whatever you had in mind, you will have to send another patch.

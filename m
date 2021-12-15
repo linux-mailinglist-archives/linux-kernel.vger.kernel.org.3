@@ -2,141 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 072054764F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1904764FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbhLOVw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:52:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21655 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230188AbhLOVw1 (ORCPT
+        id S230212AbhLOVwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230188AbhLOVwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:52:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639605147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=d8Xx3zTekrihbvJfhZhhSli7JDX8raqst1ZSqjxf0vI=;
-        b=VyAnZa5Ea2e6Tvem5EeUyB/Ln5eecw4ryau+VGyce+TL+Rf8ocMmrDs4/GEJRGRKoM88gg
-        FML1z97KpCOSLyTSYLsd06CTDjAFDvK3qJZh0Ja/lgphy9b+5oJiPkl8RkzrL61X61hgTK
-        0rY5w3VYozSlJh4aDpzzG3WmH+V86UI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-604-PMyltjrkMS6PmpVo4bzuhQ-1; Wed, 15 Dec 2021 16:52:23 -0500
-X-MC-Unique: PMyltjrkMS6PmpVo4bzuhQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D18E7190B2A3;
-        Wed, 15 Dec 2021 21:52:20 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.192.60])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D67DF78DE6;
-        Wed, 15 Dec 2021 21:52:13 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [GIT PULL] Immutable branch with INT3472 ACPI/i2c + pdx86 patches
-Date:   Wed, 15 Dec 2021 22:52:12 +0100
-Message-Id: <20211215215212.321235-1-hdegoede@redhat.com>
+        Wed, 15 Dec 2021 16:52:35 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F56C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 13:52:35 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id m9so32472494iop.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 13:52:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=e/EAxrRt3kxe+Lol8a7ZY4P5skpYZL/GMsfAsy/rtH4=;
+        b=ODw8qSXwouQGngcKNgmsfhbc/7+btLsv52/kSIpIcprxssRRBTlH3dlvIqTyOGvciI
+         cCH07JL6cCaINhYwZSGPw4T1UcQOrSC0Pys0qgTUTpG5mdH3mhlrLMb00hVSKlsMqEpw
+         emPBBejt5e67QNRgFImKHKf9aigDPNskqGpy0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=e/EAxrRt3kxe+Lol8a7ZY4P5skpYZL/GMsfAsy/rtH4=;
+        b=5514+K+82JD0zt+fQab2nUPS79FChnMz/pyrnMYkCeobhFMrQIaSa2p5g0OeHnWVtC
+         FtBzUMcSiIjcEwPAB3TEiAAOBmYz2TMoWNz6I5sGPTxYGIcCXmZy9/sw7bBRFDUPm+EP
+         X57AIt4mZ1hullL+L9X0lfFNostA7hHGD7SeVDiUB12s8c0+jdMFz5xJQyHwJ1BhD09m
+         rcLlpfPIGHmSuTKjGJWMinW98iF4M5xtONA4NRMnoj98GOeNTokZN8yiTgDepuViaXRf
+         tZzB1RyfhWDIOAOUn7LlQsEeFW/T81agnzWL4BPPW3N8Umsgrh7Rv+oZccZ3aHeK1xHX
+         0O9A==
+X-Gm-Message-State: AOAM531reHMXKnFj5Mm80UtP5IjSkX/qB9hzoq/wh/4SA1VzWt7qlAxD
+        uwwOzSuF9eIofPQV8ysqfwg4Sg==
+X-Google-Smtp-Source: ABdhPJxw1X44InqtOw7ZLYmoXaZkucjOSkBs0oW4q0zDfYzc16xGvMSp6M4xqbkTQpHnoizyUhPm6A==
+X-Received: by 2002:a05:6602:1588:: with SMTP id e8mr7692933iow.181.1639605154763;
+        Wed, 15 Dec 2021 13:52:34 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id k13sm1972393iow.45.2021.12.15.13.52.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 13:52:34 -0800 (PST)
+Subject: Re: [PATCH 5.10 00/33] 5.10.86-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211215172024.787958154@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <6417d843-042d-607b-fef8-b58921748339@linuxfoundation.org>
+Date:   Wed, 15 Dec 2021 14:52:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello clk, regulator and media maintainers,
+On 12/15/21 10:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.86 release.
+> There are 33 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.86-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-As discussed here is a pull-req from an immutable branch based on 5.16-rc1
-with the ACPI/i2c, tps68470 and pdx86/INT3472 changes necessary as a base
-to merge the remaining clk / regulator / media changes from my
-[PATCH v7 00/14] Add support for X86/ACPI camera sensor/PMIC setup with clk and regulator platform data
-series. The remaining changes are:
+Compiled and booted on my test system. No dmesg regressions.
 
-[PATCH v7 05/14] regulator: Introduce tps68470-regulator driver
-[PATCH v7 06/14] clk: Introduce clk-tps68470 driver
-[PATCH v7 12/14] media: ipu3-cio2: Defer probing until the PMIC is fully setup
-[PATCH v7 13/14] media: ipu3-cio2: Call cio2_bridge_init() before anything else
-[PATCH v7 14/14] media: ipu3-cio2: Add support for instantiating i2c-clients for VCMs
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Please pull this immutable branch into your tree and then merge the
-remaining patches relevant for your tree on top.
-
-Regards,
-
-Hans
-
-
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-int3472-1
-
-for you to fetch changes up to 97c2259ec7757ec24a90f0ef8fc5ea7fa1c6acca:
-
-  platform/x86: int3472: Deal with probe ordering issues (2021-12-13 11:44:51 +0100)
-
-----------------------------------------------------------------
-Signed tag for the immutable platform-drivers-x86-int3472 branch
-
-This branch contains 5.16-rc1 + the pending ACPI/i2c, tps68570 platform_data
-and INT3472 driver patches.
-
-----------------------------------------------------------------
-Hans de Goede (9):
-      ACPI: delay enumeration of devices with a _DEP pointing to an INT3472 device
-      i2c: acpi: Use acpi_dev_ready_for_enumeration() helper
-      i2c: acpi: Add i2c_acpi_new_device_by_fwnode() function
-      platform_data: Add linux/platform_data/tps68470.h file
-      platform/x86: int3472: Split into 2 drivers
-      platform/x86: int3472: Add get_sensor_adev_and_name() helper
-      platform/x86: int3472: Pass tps68470_clk_platform_data to the tps68470-regulator MFD-cell
-      platform/x86: int3472: Pass tps68470_regulator_platform_data to the tps68470-regulator MFD-cell
-      platform/x86: int3472: Deal with probe ordering issues
-
- drivers/acpi/scan.c                                |  37 +++++-
- drivers/i2c/i2c-core-acpi.c                        |  22 +++-
- drivers/platform/x86/intel/int3472/Makefile        |   9 +-
- ...472_clk_and_regulator.c => clk_and_regulator.c} |   2 +-
- drivers/platform/x86/intel/int3472/common.c        |  82 ++++++++++++
- .../{intel_skl_int3472_common.h => common.h}       |   6 +-
- .../{intel_skl_int3472_discrete.c => discrete.c}   |  51 +++++---
- .../x86/intel/int3472/intel_skl_int3472_common.c   | 106 ---------------
- .../{intel_skl_int3472_tps68470.c => tps68470.c}   |  92 +++++++++++--
- drivers/platform/x86/intel/int3472/tps68470.h      |  25 ++++
- .../x86/intel/int3472/tps68470_board_data.c        | 145 +++++++++++++++++++++
- include/acpi/acpi_bus.h                            |   5 +-
- include/linux/i2c.h                                |  17 ++-
- include/linux/platform_data/tps68470.h             |  35 +++++
- 14 files changed, 473 insertions(+), 161 deletions(-)
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_clk_and_regulator.c => clk_and_regulator.c} (99%)
- create mode 100644 drivers/platform/x86/intel/int3472/common.c
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_common.h => common.h} (94%)
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_discrete.c => discrete.c} (91%)
- delete mode 100644 drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_tps68470.c => tps68470.c} (56%)
- create mode 100644 drivers/platform/x86/intel/int3472/tps68470.h
- create mode 100644 drivers/platform/x86/intel/int3472/tps68470_board_data.c
- create mode 100644 include/linux/platform_data/tps68470.h
-
+thanks,
+-- Shuah

@@ -2,137 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC38475D26
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1176475D24
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244691AbhLOQO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244657AbhLOQO4 (ORCPT
+        id S244685AbhLOQOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:14:48 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:49884
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244657AbhLOQOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:14:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD46C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:14:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 15 Dec 2021 11:14:46 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AC84B81D40
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 16:14:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46411C36AE2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 16:14:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639584893;
-        bh=wo0crMKVlb7bmqaDIAvITIC848wu5jLZZ67Z80HKcRM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eNNwMRyTV221oRdj5G7UQ3XcsDP0G7RuGoRrkRZ8/lXE5fYOW59uAEH7VihbRwWxO
-         rtb2Sx3uHnp5mBD933YemSHpayKk8aVSbhbS2kbp59RPunQhsSVllBTcTVxRaC+7vW
-         LK2qW0jamydu8RrkXx6l9G5NH3CljOkpCbzelsgkQ+DbsD7UJZgwQN/fASuh112NmM
-         U6qgHhfjUCfNgNxkWFW5Q4dO6fd1XNjIk25q+yElqtapX5MLBZakT3X8qjwoViNhkQ
-         RY4ZSE4xqJravCkR194jmGdWpJY8xB6yXowVQwBYv9aqOFXzVRB/jv3/etMHkNSYGO
-         1bwfUz3h+JsWA==
-Received: by mail-ed1-f54.google.com with SMTP id g14so75758364edb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:14:53 -0800 (PST)
-X-Gm-Message-State: AOAM532HX6/hV5PwzDycKLI9wgobzULc3kvmKOlc6vbclWTJBuohR+zs
-        B/hMQ0WbLieJundFTxb0zi0wYctUiLmIDb/ePQ==
-X-Google-Smtp-Source: ABdhPJwb1dCWZnfzIsxAO7jQHE1+1kUJseuzbpP+YWd9CINPK/i/ENG5c75C9WxsfttHUDoyFH5Gb/7t73WX+PxlWKg=
-X-Received: by 2002:a50:ef02:: with SMTP id m2mr15331810eds.172.1639584888656;
- Wed, 15 Dec 2021 08:14:48 -0800 (PST)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5CECA40265
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 16:14:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639584885;
+        bh=BgY63FchJkPJ4eMrqqHCh/pTnUvExCwHzjMOF853cBI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=kQvjuLgjuSuJon90wlPPUsHIXOlGkKAB8BR83+nT059COoph95huY859tFyNFcYwK
+         RYltee/2FhbwdesHMgfqR5VucaaXqoVmrBaHUg3gNPK9pNGbTZ9rZoLxExWgt7EZo3
+         1uPeump0c+bxHrd6GwxABC7A9kBDQFIcCF99I/rPV8SRakh2gLtj1MlrVOKIwi6Xab
+         GdyBwHHCPQjSq3YyZMcACVP/Aui4KR5FT1FVNLaINuWcHoKQzA9rbvqZhBi9Nr/5Jz
+         YKuZ8yEiZQglmNlp2BTU2H6KevqnhwZrRa9eSi73WOBmiNKxhopDR4A238yxzvvaX5
+         jFobhcc65AB8w==
+Received: by mail-lj1-f197.google.com with SMTP id b3-20020a2ebc03000000b0021ffe75b14cso7193163ljf.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:14:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BgY63FchJkPJ4eMrqqHCh/pTnUvExCwHzjMOF853cBI=;
+        b=CUpJ+f5jcVQdRNKsaKBcyh/MuRKNs9zA707SMly7N0/c1nmAaitXqYkykhlMg3obn9
+         9+GSGCHbYIwRYpGx6VdxrVUcqbJ3P45SUbiYQVvq3OfgXkYf8sYHSOazJusHh2REfXh3
+         y5iylK8e4UzGz3lyOZnGUJ1+fLjyrCBMO0hfASIuqPdWNeLWQ5a/l9WHJxwH2DV6vb0I
+         rv1+PaxLoULWzIQkT0KXMGTI1DGznWMLzJKI+SxRE4TZGJohCw3WfwJ7EZLfciqTg2/S
+         lzKMf0TzowtDgAz8bGWVXL7rxatwQ6376b465c7AaT8NDtSoG6gj03oF+1rs5M8oFUwK
+         Xpnw==
+X-Gm-Message-State: AOAM533v7YlnCXxYVQBL4BTfiZnAg/JCyrUgP0arp2t+1NADe4Lb2vxM
+        kGwfUAX0vnOpqEJyp+4o/reKE3D/2yBngnoEnwaZGGQ8bVXGztVnrIVXuUslp6O5IIHq0XHzq6j
+        1HiTeeLEnuf8cUNtiWszmWgsUt0u5vSjnYP1P19Dctw==
+X-Received: by 2002:a2e:9a8c:: with SMTP id p12mr10675500lji.526.1639584884732;
+        Wed, 15 Dec 2021 08:14:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyoFe2zOV0XCkDN3GJvTojPbSxqWGhI9oo5Cf2acMBIzbtAkJY5xqgX9FvmY/8rG8I8ROe7SQ==
+X-Received: by 2002:a2e:9a8c:: with SMTP id p12mr10675478lji.526.1639584884570;
+        Wed, 15 Dec 2021 08:14:44 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id l18sm385334lfc.97.2021.12.15.08.14.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 08:14:44 -0800 (PST)
+Message-ID: <55294fa1-9988-5c10-1fc1-c33f3ec9b231@canonical.com>
+Date:   Wed, 15 Dec 2021 17:14:43 +0100
 MIME-Version: 1.0
-References: <20211022172413.195559-1-markyacoub@chromium.org>
- <20211026011318.GF2515@art_vandelay> <CAJUqKUopyQEyLh7w32UnHfUJv0nNUoE_PHAdkEj8JOnkhVqbbQ@mail.gmail.com>
-In-Reply-To: <CAJUqKUopyQEyLh7w32UnHfUJv0nNUoE_PHAdkEj8JOnkhVqbbQ@mail.gmail.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Thu, 16 Dec 2021 00:14:36 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_84K_xCQE-H8zxWfBhn4kQF_kPsmaqDuRr8w2E4rti3QA@mail.gmail.com>
-Message-ID: <CAAOTY_84K_xCQE-H8zxWfBhn4kQF_kPsmaqDuRr8w2E4rti3QA@mail.gmail.com>
-Subject: Re: [PATCH] mediatek: Set default value for Panel Orientation
- connector prop.
-To:     Mark Yacoub <markyacoub@chromium.org>
-Cc:     Sean Paul <sean@poorly.run>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Mark Yacoub <markyacoub@google.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 4/7] dt-bindings: arm: samsung: Document E850-96 board
+ binding
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20211215160906.17451-1-semen.protsenko@linaro.org>
+ <20211215160906.17451-5-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211215160906.17451-5-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Mark:
+On 15/12/2021 17:09, Sam Protsenko wrote:
+> Add binding for the WinLink E850-96 board, which is based on Samsung
+> Exynos850 SoC.
+> 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+>  .../devicetree/bindings/arm/samsung/samsung-boards.yaml     | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+> index ef6dc14be4b5..00f122197476 100644
+> --- a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+> +++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+> @@ -205,6 +205,12 @@ properties:
+>                - samsung,exynosautov9-sadk   # Samsung Exynos Auto v9 SADK
+>            - const: samsung,exynosautov9
+>  
+> +      - description: Exynos850 based boards
+> +        items:
+> +          - enum:
+> +              - winlink,e850-96                 # WinLink E850-96
+> +          - const: samsung,exynos850
+> +
 
-Mark Yacoub <markyacoub@chromium.org> =E6=96=BC 2021=E5=B9=B412=E6=9C=8814=
-=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8811:13=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Hey CK, can we have this merged?
-> Thank you!
->
-> On Mon, Oct 25, 2021 at 9:13 PM Sean Paul <sean@poorly.run> wrote:
-> >
-> > On Fri, Oct 22, 2021 at 01:24:03PM -0400, Mark Yacoub wrote:
-> > > From: Mark Yacoub <markyacoub@chromium.org>
-> > >
-> > > [Why]
-> > > Creating the prop uses UNKNOWN as the initial value, which is not a
-> > > supported value if the props is to be supported.
-> > >
-> > > [How]
-> > > Set the panel orientation default value to NORMAL right after creatin=
-g
-> > > the prop.
-> >
-> > Reviewed-by: Sean Paul <seanpaul@chromium.org>
-> >
-> > >
-> > > Tested on Jacuzzi(MTK)
-> > > Fixes IGT@kms_properties@get_properties-sanity-{atomic,non-atomic}
-> > >
-> > > Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
-> > > ---
-> > >  drivers/gpu/drm/mediatek/mtk_dsi.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/med=
-iatek/mtk_dsi.c
-> > > index 0ad7157660afa..b7c2528a8f41c 100644
-> > > --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > > +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> > > @@ -1039,6 +1039,8 @@ static int mtk_dsi_encoder_init(struct drm_devi=
-ce *drm, struct mtk_dsi *dsi)
-> > >               DRM_ERROR("Unable to init panel orientation\n");
-> > >               goto err_cleanup_encoder;
-> > >       }
-> > > +     drm_connector_set_panel_orientation(dsi->connector,
-> > > +                                         DRM_MODE_PANEL_ORIENTATION_=
-NORMAL);
+Add it before Exynos Auto v9 entry, please.
 
-In drm_connector_set_panel_orientation() [1], I find that the
-orientation could be set only once. Once you set it to normal, it
-could not be set to other orientation. Right?
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/gpu/drm/drm_connector.c?h=3Dv5.16-rc5#n2302
-
-Regards,
-Chun-Kuang.
-
-> > >
-> > >       drm_connector_attach_encoder(dsi->connector, &dsi->encoder);
-> > >
-> > > --
-> > > 2.33.0.1079.g6e70778dc9-goog
-> > >
-> >
-> > --
-> > Sean Paul, Software Engineer, Google / Chromium OS
+Best regards,
+Krzysztof

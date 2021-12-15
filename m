@@ -2,180 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E861347514B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A95475155
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239549AbhLODUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 22:20:13 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:56440 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235453AbhLODUK (ORCPT
+        id S239555AbhLODYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 22:24:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57031 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230073AbhLODYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 22:20:10 -0500
-X-UUID: 6bf2cf4628284c88992b4cd6e01176af-20211215
-X-UUID: 6bf2cf4628284c88992b4cd6e01176af-20211215
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <yc.hung@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 82201096; Wed, 15 Dec 2021 11:20:06 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 15 Dec 2021 11:20:05 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 15 Dec 2021 11:20:05 +0800
-From:   YC Hung <yc.hung@mediatek.com>
-To:     <broonie@kernel.org>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <yc.hung@mediatek.com>, <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <daniel.baluta@nxp.com>, <trevor.wu@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>
-Subject: [PATCH] dt-bindings: dsp: mediatek: add mt8195 dsp document
-Date:   Wed, 15 Dec 2021 11:19:55 +0800
-Message-ID: <20211215031955.28244-1-yc.hung@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Tue, 14 Dec 2021 22:24:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639538682;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wHvqWA9pCAW9hO772UCEPBtSbiKtXLn9xS2Zet02foU=;
+        b=D7XpqjJxZk1k/LrdSMz/4bLf2yxhg23ndlYStXLLubyHq36HkRjzH3ePi6cmypQHrBKjwm
+        VHKrsTeH9XiILdS8JDJfYy9BIjchp2OymSpx8k6cYGoQDDX0gx4bB8f4JcXQCu1KzLtpCd
+        uIWGkDBtlnxYbqFjPADZJW5SieXGrbM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-529-9OCunupRPaCWWCdihpXOZA-1; Tue, 14 Dec 2021 22:24:38 -0500
+X-MC-Unique: 9OCunupRPaCWWCdihpXOZA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E277581CCB7;
+        Wed, 15 Dec 2021 03:24:35 +0000 (UTC)
+Received: from [10.22.16.35] (unknown [10.22.16.35])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B73C18276C;
+        Wed, 15 Dec 2021 03:24:22 +0000 (UTC)
+Message-ID: <810204ce-7967-e470-1267-7c3cfb521c89@redhat.com>
+Date:   Tue, 14 Dec 2021 22:24:22 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 2/7] cgroup/cpuset: Allow no-task partition to have
+ empty cpuset.cpus.effective
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-3-longman@redhat.com>
+ <Ybew7d2oE2gLcLNO@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Ybew7d2oE2gLcLNO@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "yc.hung" <yc.hung@mediatek.com>
+On 12/13/21 15:45, Tejun Heo wrote:
+> On Sun, Dec 05, 2021 at 01:32:15PM -0500, Waiman Long wrote:
+>>   	adding = deleting = false;
+>>   	old_prs = new_prs = cpuset->partition_root_state;
+>>   	if (cmd == partcmd_enable) {
+>> +		/*
+>> +		 * Enabling partition root is not allowed if not all the CPUs
+>> +		 * can be granted from parent's effective_cpus.
+>> +		 */
+>> +		if (!cpumask_subset(cpuset->cpus_allowed, parent->effective_cpus))
+>> +			return -EINVAL;
+>> +
+>> +		/*
+>> +		 * A parent can be left with no CPU as long as there is no
+>> +		 * task directly associated with the parent partition. For
+>> +		 * such a parent, no new task can be moved into it.
+>> +		 */
+>> +		if (partition_is_populated(parent, cpuset) &&
+>> +		    cpumask_equal(cpuset->cpus_allowed, parent->effective_cpus))
+>> +			return -EINVAL;
+> So, given that this only happens with threaded domains, can we just not
+> allow partitions within threaded domains? The combination doesn't make whole
+> lot of sense to me anyway.
+AFAICS, there are code in cpuset.c that disallows the an non-child node 
+to hold tasks, but the check doesn't cover all the possible cases. I 
+remembered that I was able to create such a scenario without using 
+threaded domains. That is why I put in this conditional check. It has 
+nothing to do with the use of threaded domains.
+>> +	/*
+>> +	 * On default hierarchy, task cannot be moved to a cpuset with empty
+>> +	 * effective cpus.
+>> +	 */
+>> +	if (is_in_v2_mode() && cpumask_empty(cs->effective_cpus))
+>> +		goto out_unlock;
+> And then we can avoid this extra restriction too, right?
 
-This patch adds mt8195 dsp document.
+This check is supposed to prevent a task to be moved to a leaf cpuset 
+partition with just offlined cpus and hence no effective cpu. A possible 
+alternative is to force the partition to become invalid, but I think not 
+allowing the move is easier until one or more offlined cpus are onlined.
 
-Signed-off-by: yc.hung <yc.hung@mediatek.com>
----
- .../bindings/dsp/mtk,mt8195-dsp.yaml          | 116 ++++++++++++++++++
- 1 file changed, 116 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/dsp/mtk,mt8195-dsp.yaml
-
-diff --git a/Documentation/devicetree/bindings/dsp/mtk,mt8195-dsp.yaml b/Documentation/devicetree/bindings/dsp/mtk,mt8195-dsp.yaml
-new file mode 100644
-index 000000000000..33db11ee2336
---- /dev/null
-+++ b/Documentation/devicetree/bindings/dsp/mtk,mt8195-dsp.yaml
-@@ -0,0 +1,116 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/dsp/mtk,mt8195-dsp.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek mt8195 DSP core
-+
-+maintainers:
-+  - YC Hung <yc.hung@mediatek.com>
-+
-+description: |
-+  Some boards from mt8195 contain a DSP core used for
-+  advanced pre- and post- audio processing.
-+properties:
-+  compatible:
-+    const: mediatek,mt8195-dsp
-+
-+  reg:
-+    items:
-+      - description: Address and size of the DSP Cfg registers
-+      - description: Address and size of the DSP SRAM
-+
-+  reg-names:
-+    items:
-+      - const: cfg
-+      - const: sram
-+
-+  interrupts:
-+    items:
-+      - description: watchdog interrupt
-+
-+  interrupt-names:
-+    items:
-+      - const: wdt
-+
-+  clocks:
-+    items:
-+      - description: mux for audio dsp clock
-+      - description: 26M clock
-+      - description: mux for audio dsp local bus
-+      - description: default audio dsp local bus clock source
-+      - description: clock gate for audio dsp clock
-+      - description: mux for audio dsp access external bus
-+
-+  clock-names:
-+    items:
-+      - const: adsp_sel
-+      - const: clk26m_ck
-+      - const: audio_local_bus
-+      - const: mainpll_d7_d2
-+      - const: scp_adsp_audiodsp
-+      - const: audio_h
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  mboxes:
-+    items:
-+      - description: a mailbox is ised for ipc reply between host and audio DSP.
-+      - description: a mailbox is ised for ipc reuqest between host and audio DSP.
-+
-+  mbox-names:
-+    items:
-+      - const: mbox0
-+      - const: mbox1
-+
-+  memory-region:      
-+    items:
-+      - description: A phandle to a reserved memory region is used for dma buffer between host and DSP.   
-+      - description: A phandle to a reserved memory region is used for DSP system memory.
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clock-names
-+  - memory-region
-+  - power-domains
-+  - mbox-names
-+  - mboxes
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    adsp: dsp@10803000 {
-+       compatible =  "mediatek,mt8195-dsp";
-+       reg = <0x10803000  0x1000>,
-+             <0x10840000  0x40000>;
-+       reg-names = "cfg", "sram";
-+       interrupts = <GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH 0>;
-+       interrupt-names = "wdt";
-+       clocks = <&topckgen 10>, //CLK_TOP_ADSP
-+                <&clk26m>,
-+                <&topckgen 107>, //CLK_TOP_AUDIO_LOCAL_BUS
-+                <&topckgen 136>, //CLK_TOP_MAINPLL_D7_D2
-+                <&scp_adsp 0>, //CLK_SCP_ADSP_AUDIODSP
-+                <&topckgen 34>; //CLK_TOP_AUDIO_H
-+       clock-names = "adsp_sel",
-+                     "clk26m_ck",
-+                     "audio_local_bus",
-+                     "mainpll_d7_d2",
-+                     "scp_adsp_audiodsp",
-+                     "audio_h";
-+       memory-region = <&adsp_dma_mem_reserved>,
-+                       <&adsp_mem_reserved>;
-+       power-domains = <&spm 6>; //MT8195_POWER_DOMAIN_ADSP
-+       mbox-names = "mbox0", "mbox1";
-+       mboxes = <&adsp_mailbox0>, <&adsp_mailbox1>;
-+       };
--- 
-2.18.0
+Cheers,
+Longman
 

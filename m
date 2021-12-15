@@ -2,103 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4969A4764BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C3C4764C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbhLOVmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:42:53 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:40487 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbhLOVmw (ORCPT
+        id S229957AbhLOVrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:47:22 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:40886 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229539AbhLOVrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:42:52 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id D3C6340002;
-        Wed, 15 Dec 2021 21:42:50 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 22:42:50 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Joel Daniels <jdaniels@sent.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, x86@kernel.org
-Subject: Re: Time keeping while suspended in the presence of persistent clock
- drift
-Message-ID: <YbphWpMl7W0Qzs+d@piout.net>
-References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
- <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com>
- <87wnkbuuuz.ffs@tglx>
- <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
- <8735mvthk6.ffs@tglx>
+        Wed, 15 Dec 2021 16:47:20 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BFF2cfK011435;
+        Wed, 15 Dec 2021 22:47:04 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : subject
+ : date : message-id : mime-version : content-type; s=selector1;
+ bh=l/ohPNE652ih2nrYsY5A9VdKCfXMU8dIPHQc3eu6nFE=;
+ b=QUEUD5VI/sZ1NUP0NKulv6RwqrrshHqDNpekG48SU2cB9UVl6aJ5v5xtBdGuMAHTqGvF
+ sbnzuAb5oNEZDxlSH91V1+PEFUU3q2gmxIn5rPA4rPT2T1ONDnAB6GfMEZpAvVlrZxhv
+ PLGzael/rGXOSShzxcPor0SwnaXNjxkyPNo/9VGII+ZxdpKU80MOOkmoZGgw8HeBufh+
+ cTueKwmbSHGhpWZ1rqKO7kD+yh+TyR+K+W5PBGGFlYiyxlqcHv/Pvj7IZvsRNTN9Zimh
+ 9Rq+8y+oK0bT0mzSDSGBFZ9eHipiQnoKtd8vtqXAr0eBRtEtjwuBQ1USiX74BBUfxnf5 fQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cy79j611w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Dec 2021 22:47:04 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D3C7B10002A;
+        Wed, 15 Dec 2021 22:47:02 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BF2F420A74A;
+        Wed, 15 Dec 2021 22:47:02 +0100 (CET)
+Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 15 Dec 2021 22:47:02
+ +0100
+From:   Yannick Fertre <yannick.fertre@foss.st.com>
+To:     Yannick Fertre <yannick.fertre@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/5] drm/stm: new features to display controller
+Date:   Wed, 15 Dec 2021 22:46:51 +0100
+Message-ID: <20211215214651.19798-1-yannick.fertre@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8735mvthk6.ffs@tglx>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-15_13,2021-12-14_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2021 14:57:45+0100, Thomas Gleixner wrote:
-> Joel,
-> 
-> On Mon, Dec 13 2021 at 06:39, Joel Daniels wrote:
-> > On Sat, 11 Dec 2021 14:36 +0100, Thomas Gleixner wrote:
-> >> Can you please verify that the problem persists with NTP enabled and
-> >> synchronized?
-> >
-> > Yes, I just verified that the problem still exists while
-> > synchronized to NTP.
-> ...
-> >     $ chronyc tracking && echo && chronyc sources
-> >     [...]
-> >     Ref time (UTC)  : Mon Dec 13 13:30:52 2021
-> >     System time     : 5.597892284 seconds fast of NTP time
-> 
-> thanks for making sure that this is really a RTC issue on that machine.
-> 
-> > The "if" branch does not apply as I have no clock sources flagged as
-> > CLOCK_SOURCE_SUSPEND_NONSTOP but the "else if" branch does apply.
-> 
-> Which CPU is in that box?
-> 
-> > The kernel seems to believe that the time spent sleeping is exactly
-> > the difference of two calls to read_persistent_clock64 with no option
-> > to adjust for persistent clock drift.
-> 
-> The kernel does not believe. It relies on the accuracy of the CMOS clock
-> which is usually pretty good.
-> 
-> > I would like to provide a way for user space to inform the kernel
-> > that the persistent clock drifts so it can make a corresponding
-> > adjustment when resuming from a long suspend period.
-> >
-> > In my use case it would be enough for me to set this parameter on
-> > boot. In use cases with continuous network access, NTP daemons
-> > could be enhanced to periodically update this parameter with the
-> > daemon's best estimate of the persistent clock drift.
-> 
-> That needs some thought. The RTC people (cc'ed now) might have opionions
-> on that.
-> 
+Hello,
+List of new feature:
+* Replace the legacy register access by regmap API.
+* Support of YCbCr 422 output
+* Update layer shadow registers per plane.
+* Support of YCbCr output (planar, semiplanar & coplanar)
 
-The RTC subsystem already has two interfaces to correct the drift of an
-RTC. However, this is currently limited to RTC that have hardware
-support for this feature. I guess we could had software emulation of the
-feature to be able to correct for any RTCs  but this will raise many
-design questions, like how often the correction has to happen, what to
-do with RTC that have a counter that doesn't reset when setting their
-time, etc...
+These featues are available only with last hardware version of ltdc
+(0x401000) link to patch"drm/stm: ltdc: support of new hardware version"
+(https://patchwork.freedesktop.org/patch/465207).
 
-I guess this would be able to solve your particular issue has you will
-need a mechanism to handle when you overshoot the regular correction
-timer.
+Yannick Fertre (5):
+  drm/stm: ltdc: switch to regmap
+  drm/stm: ltdc: add YCbCr 422 output support
+  drm/stm: ltdc: add per plane update support
+  drm/stm: ltdc: add support of flexible pixel formats
+  drm/stm: ltdc: add support of ycbcr pixel formats
 
-However, everything falls down once the machine is turned off, making
-the whole effort moot...
-
+ drivers/gpu/drm/stm/ltdc.c | 639 +++++++++++++++++++++++++++++--------
+ drivers/gpu/drm/stm/ltdc.h |   9 +-
+ 2 files changed, 518 insertions(+), 130 deletions(-)
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
+

@@ -2,134 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0B5475A57
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC043475A5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243204AbhLOOMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:12:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31988 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237488AbhLOOMu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:12:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639577569;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8F8rhWm3cAZvDLz8+C4c0NNLwqP6rp57iJ8wx1AiHaU=;
-        b=hlsxBCiDbB4qeHqaD6m9nwtmfQtSJ4AzEWFxCXr6VVW5zV4v/lqSBhgeuqv8JbcaHMqXRw
-        GqJy3oqUNar5o640Z64CmTTUt5DJb7i6OuBQfX+P/qOrLkdg4YhDxL9QbhGpRl0+TePH4w
-        Gh00rmU7+amPLC5ir5+vOn3mc7rLDbY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-311-lCtA5eQ3MQ6Qv3LL93mSWQ-1; Wed, 15 Dec 2021 09:12:45 -0500
-X-MC-Unique: lCtA5eQ3MQ6Qv3LL93mSWQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A5E3801AC5;
-        Wed, 15 Dec 2021 14:12:44 +0000 (UTC)
-Received: from work (unknown [10.40.195.60])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E35BA5FC22;
-        Wed, 15 Dec 2021 14:12:41 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 15:12:37 +0100
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        =?utf-8?B?THXDrXM=?= Henriques <lhenriques@suse.de>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-Subject: Re: [PATCH v2] ext4: set csum seed in tmp inode while migrating to
- extents
-Message-ID: <20211215141237.lrymhbebgjunh4n2@work>
-References: <20211214175058.19511-1-lhenriques@suse.de>
- <20211215004945.GD69182@magnolia>
- <20211215112852.GM14044@quack2.suse.cz>
+        id S243213AbhLOONS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:13:18 -0500
+Received: from foss.arm.com ([217.140.110.172]:53092 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243206AbhLOONR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:13:17 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05DE3142F;
+        Wed, 15 Dec 2021 06:13:17 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.67.176])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 372A03F774;
+        Wed, 15 Dec 2021 06:13:12 -0800 (PST)
+Date:   Wed, 15 Dec 2021 14:13:09 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 25/43] kmsan: skip shadow checks in files doing context
+ switches
+Message-ID: <Ybn39Z5dwcbrbs0O@FVFF77S0Q05N>
+References: <20211214162050.660953-1-glider@google.com>
+ <20211214162050.660953-26-glider@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211215112852.GM14044@quack2.suse.cz>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+In-Reply-To: <20211214162050.660953-26-glider@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 12:28:52PM +0100, Jan Kara wrote:
-> On Tue 14-12-21 16:49:45, Darrick J. Wong wrote:
-> > On Tue, Dec 14, 2021 at 05:50:58PM +0000, Luís Henriques wrote:
-> > > When migrating to extents, the temporary inode will have it's own checksum
-> > > seed.  This means that, when swapping the inodes data, the inode checksums
-> > > will be incorrect.
-> > > 
-> > > This can be fixed by recalculating the extents checksums again.  Or simply
-> > > by copying the seed into the temporary inode.
-> > > 
-> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=213357
-> > > Reported-by: Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-> > > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> > > ---
-> > >  fs/ext4/migrate.c | 12 +++++++++++-
-> > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > > 
-> > > changes since v1:
-> > > 
-> > > * Dropped tmp_ei variable
-> > > * ->i_csum_seed is now initialised immediately after tmp_inode is created
-> > > * New comment about the seed initialization and stating that recovery
-> > >   needs to be fixed.
-> > > 
-> > > Cheers,
-> > > --
-> > > Luís
-> > > 
-> > > diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
-> > > index 7e0b4f81c6c0..36dfc88ce05b 100644
-> > > --- a/fs/ext4/migrate.c
-> > > +++ b/fs/ext4/migrate.c
-> > > @@ -459,6 +459,17 @@ int ext4_ext_migrate(struct inode *inode)
-> > >  		ext4_journal_stop(handle);
-> > >  		goto out_unlock;
-> > >  	}
-> > > +	/*
-> > > +	 * Use the correct seed for checksum (i.e. the seed from 'inode').  This
-> > > +	 * is so that the metadata blocks will have the correct checksum after
-> > > +	 * the migration.
-> > > +	 *
-> > > +	 * Note however that, if a crash occurs during the migration process,
-> > > +	 * the recovery process is broken because the tmp_inode checksums will
-> > > +	 * be wrong and the orphans cleanup will fail.
-> > 
-> > ...and then what does the user do?
-> 
-> Run fsck of course! And then recover from backups :) I know this is sad but
-> the situation is that our migration code just is not crash-safe (if we
-> crash we are going to free blocks that are still used by the migrated
-> inode) and Luis makes it work in case we do not crash (which should be
-> hopefully more common) and documents it does not work in case we crash.
-> So overall I'd call it a win.
-> 
-> But maybe we should just remove this online-migration functionality
-> completely from the kernel? That would be also a fine solution for me. I
-> was thinking whether we could somehow make the inode migration crash-safe
-> but I didn't think of anything which would not require on-disk format
-> change...
+On Tue, Dec 14, 2021 at 05:20:32PM +0100, Alexander Potapenko wrote:
+> When instrumenting functions, KMSAN obtains the per-task state (mostly
+> pointers to metadata for function arguments and return values) once per
+> function at its beginning.
 
-Since this is not something that anyone can honestly recommend doing
-without a prior backup and a word of warning I personaly would be in favor
-of removing it.
+How does KMSAN instrumentation acquire the per-task state? What's used as the
+base for that?
 
--Lukas
+> If a function performs a context switch, instrumented code won't notice
+> that, and will still refer to the old state, possibly corrupting it or
+> using stale data. This may result in false positive reports.
+> 
+> To deal with that, we need to apply __no_kmsan_checks to the functions
+> performing context switching - this will result in skipping all KMSAN
+> shadow checks and marking newly created values as initialized,
+> preventing all false positive reports in those functions. False negatives
+> are still possible, but we expect them to be rare and impersistent.
+> 
+> To improve maintainability, we choose to apply __no_kmsan_checks not
+> just to a handful of functions, but to the whole files that may perform
+> context switching - this is done via KMSAN_ENABLE_CHECKS:=n.
+> This decision can be reconsidered in the future, when KMSAN won't need
+> so much attention.
+
+I worry this might be the wrong approach (and I've given some rationale below),
+but it's not clear to me exactly how this goes wrong. Could you give an example
+flow where stale data gets used?
 
 > 
-> 								Honza
+> Suggested-by: Marco Elver <elver@google.com>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> ---
+> Link: https://linux-review.googlesource.com/id/Id40563d36792b4482534c9a0134965d77a5581fa
+> ---
+>  arch/x86/kernel/Makefile | 4 ++++
+>  kernel/sched/Makefile    | 4 ++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+> index 0b9fc3ecce2de..308d4d0323263 100644
+> --- a/arch/x86/kernel/Makefile
+> +++ b/arch/x86/kernel/Makefile
+> @@ -38,6 +38,10 @@ KCSAN_SANITIZE := n
+>  KMSAN_SANITIZE_head$(BITS).o				:= n
+>  KMSAN_SANITIZE_nmi.o					:= n
+>  
+> +# Some functions in process_64.c perform context switching.
+> +# Apply __no_kmsan_checks to the whole file to avoid false positives.
+> +KMSAN_ENABLE_CHECKS_process_64.o			:= n
+
+Which state are you worried about here? The __switch_to() funciton is
+tail-called from __switch_to_asm(), so the GPRs and SP should all be consistent
+with the new task.
+
+Are you concerned with the segment registers? Something else?
+
+> +
+>  OBJECT_FILES_NON_STANDARD_test_nx.o			:= y
+>  
+>  ifdef CONFIG_FRAME_POINTER
+> diff --git a/kernel/sched/Makefile b/kernel/sched/Makefile
+> index c7421f2d05e15..d9bf8223a064a 100644
+> --- a/kernel/sched/Makefile
+> +++ b/kernel/sched/Makefile
+> @@ -17,6 +17,10 @@ KCOV_INSTRUMENT := n
+>  # eventually.
+>  KCSAN_SANITIZE := n
+>  
+> +# Some functions in core.c perform context switching. Apply __no_kmsan_checks
+> +# to the whole file to avoid false positives.
+> +KMSAN_ENABLE_CHECKS_core.o := n
+
+As above, the actual context-switch occurs in arch code --I assume the
+out-of-line call *must* act as a clobber from the instrumentation's PoV or we'd
+have many more problems. I also didn't spot any *explciit* state switching
+being added there that would seem to affect KMSAN.
+
+... so I don't understand why checks need to be inhibited for the core sched code.
+
+Thanks
+Mark.
+
+> +
+>  ifneq ($(CONFIG_SCHED_OMIT_FRAME_POINTER),y)
+>  # According to Alan Modra <alan@linuxcare.com.au>, the -fno-omit-frame-pointer is
+>  # needed for x86 only.  Why this used to be enabled for all architectures is beyond
 > -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+> 2.34.1.173.g76aa8bc2d0-goog
 > 
-

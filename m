@@ -2,462 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C31564764DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8894764DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbhLOVsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:48:55 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:45640 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230030AbhLOVsz (ORCPT
+        id S230056AbhLOVtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:49:42 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:57705 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229957AbhLOVtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:48:55 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BFIjXQb026335;
-        Wed, 15 Dec 2021 22:48:46 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : subject
- : date : message-id : mime-version : content-type; s=selector1;
- bh=KDBBSC2Jp0beHPBPjDebpa/g/sde3MElNeSyHWIo9O0=;
- b=V/I0QUjJ8VMHjgu+zXByyzXAGVjy2XC3KRgxhx7eq9mVqn6wDcuDVD/X/rROEUftMi4J
- qItSVK3n01tEvvOjHG1eU0gca2UuxrQJYC4sikz+ZRyI583TIwKmZerya3+/i7SKYPAq
- 7j+31+2hF37trNvk2Yji12efP9IVir+685pCHA392+SRMOpt9LsVtfLO9x3+O7Ur8vAI
- uSB+lljYU9oeqUE6O+SWZA3HLmNgu/5nV1G5S67KaMuhDv8KX1tzrVarTooSV4JD4dAL
- IObkSHURg/yOdiRxCA+izdXnlqo1vPp4atevcl6RoVUI5M8KxEdbPC67tV/dg4u0jbN/ 6A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cyfpxjj3k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 22:48:46 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A546610002A;
-        Wed, 15 Dec 2021 22:48:45 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9BB2620A74F;
-        Wed, 15 Dec 2021 22:48:45 +0100 (CET)
-Received: from localhost (10.75.127.47) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 15 Dec 2021 22:48:45
- +0100
-From:   Yannick Fertre <yannick.fertre@foss.st.com>
-To:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 5/5] drm/stm: ltdc: add support of ycbcr pixel formats
-Date:   Wed, 15 Dec 2021 22:48:43 +0100
-Message-ID: <20211215214843.20703-1-yannick.fertre@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 15 Dec 2021 16:49:41 -0500
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MdeKd-1mOpV42v2n-00ZhgC; Wed, 15 Dec 2021 22:49:39 +0100
+Received: by mail-wr1-f51.google.com with SMTP id t9so40561711wrx.7;
+        Wed, 15 Dec 2021 13:49:39 -0800 (PST)
+X-Gm-Message-State: AOAM5303tLyEPqp+DZ1578ZBUv0l3AaCo/05okCaN1m84A3lHkG1tIqw
+        gK/D+e5EuNSxXoCwBGrO8BAOqfdEiWyFcr8Yzm4=
+X-Google-Smtp-Source: ABdhPJyI4sFfqi3WV9r3gOmk1U//npIrS4nf8wBAkc7GviXMWmaD3dsHGyhZUXFZ+uysDsSwkLsuIqVlj3CoEC95hIQ=
+X-Received: by 2002:a5d:530e:: with SMTP id e14mr6188596wrv.12.1639604979240;
+ Wed, 15 Dec 2021 13:49:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-15_13,2021-12-14_01,2021-12-02_01
+References: <20211105154334.1841927-1-alexandre.ghiti@canonical.com>
+ <CAK8P3a2AnLJgGNBFvjUQqXd-Az9vjgE7yJQXGDwCav5E0btSsg@mail.gmail.com> <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com>
+In-Reply-To: <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 15 Dec 2021 22:49:23 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
+Message-ID: <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
+Subject: Re: [PATCH 0/7] Cleanup after removal of configs
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Steve French <sfrench@samba.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-cachefs@redhat.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-power@fi.rohmeurope.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Io+rAnOukRGsESnCj52tUXFsPjVCtRLppZBZmKntlAeVeXpSrHi
+ qcxK9k04dshwgrWQYiw878XedRH47AsrLy4n/gdfxwlX7u2EYvjqUjIKEXIjY0tuCEb4D4b
+ LwE4dKpbjXgggXVUh7oHMARa5sG2Nx8fzgjtBBQhJLpcxn/XzSdD2djB3j6dwZlyKw7hv1G
+ drYUyPNFv42Qoql8UBrlg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:c07D+hGrL+w=:9x8C/icw8ntMTFqTZrSJrn
+ 6fyDDf4A/Q11iHr55nqwsGbPmkNrTebx43qkhrG1kKn+QweoG2MdgmEAMiSPsM0a18L18+Aur
+ rWclUKaX1DLwnkMvBTMNEBclBZYir8NYTvXSxZkzrJqynEv8CDsIwVEO73ysx3dkU79TaUJqq
+ ZGIEJjiEnuGE16rReyAdFECgxf6LmiGPDDLM/iBKdx9uO4BQGoXW18Cr/4+W/93SFzg8KuPCl
+ 4cO5C618BYZCT/TM34l2u/+7s0zYwWnnG5DneRm5zATDIaOpzQmASCntR1+q10bQ5shpFWfQ9
+ 349jAEyhYcUS51FiqkwWtW9U8nugU7PtrsLIOoJvF9O6RLHenDq4UhSZ+4wLl69agk/IGFwdY
+ e1pmV61H6prVazhtH0IJav8Tq+SlZA9eEL9ciwmNKDoqBq2UMGDU6NsiVlBC5IBfmFFwwW6vp
+ KnJgdSRkvw5StV8PRak8JngW4z38sMAssrPaLhMZnB58ohEI8vyai/WrofA3ZMAhqSXdUVHVW
+ MA94AVgnaRrqkS4aBiCwQXpehyyIGYzmaYvHQ5t5Rmcze8cs9pcwXtBm5NMjHJ7zQZh/sjcvD
+ 3VDHt9JKKeJ+17u9vpzBc/CqU/JYO47NgWL88LV8n1MafnwPo9YqI9ttnCx66ln9cZui2m3f0
+ bGWS9lZmArQRHp8q2TygJ//o8TTWVCEP5dbnuH3rBp3ln7RSib74/2lkOGLR1fuMQcLY=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the following YCbCr input pixel formats on the latest
-LTDC hardware version:
+On Fri, Dec 10, 2021 at 9:38 PM Alexandre Ghiti
+<alexandre.ghiti@canonical.com> wrote:
+>
+> On Fri, Nov 5, 2021 at 4:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Fri, Nov 5, 2021 at 4:43 PM Alexandre Ghiti
+> > <alexandre.ghiti@canonical.com> wrote:
+> > >
+> > > While bumping from 5.13 to 5.15, I found that a few deleted configs had
+> > > left some pieces here and there: this patchset cleans that.
+> > >
+> > > Alexandre Ghiti (7):
+> > >   Documentation, arch: Remove leftovers from fscache/cachefiles
+> > >     histograms
+> > >   Documentation, arch: Remove leftovers from raw device
+> > >   Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
+> > >   arch: Remove leftovers from mandatory file locking
+> > >   Documentation, arch, fs: Remove leftovers from fscache object list
+> > >   include: mfd: Remove leftovers from bd70528 watchdog
+> > >   arch: Remove leftovers from prism54 wireless driver
+> >
+> > Looks all good to me, thanks a lot for the cleanup!
+> >
+> > For arch/arm/configs:
+> >
+> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> >
+> > assuming this goes through someone else's tree. Let me know if you need me
+> > to pick up the patches in the asm-generic tree for cross-architecture work.
+>
+> Arnd, do you mind taking the whole series except patch 6 ("include:
+> mfd: Remove leftovers from bd70528 watchdog") as this will be handled
+> separately. I can ask Jonathan for the doc patches if needed.
 
-1 plane  (co-planar)  : YUYV, YVYU, UYVY, VYUY
-2 planes (semi-planar): NV12, NV21
-3 planes (full-planar): YU12=I420=DRM YUV420, YV12=DRM YVU420
+I tried to apply them, but only three of the patches applied cleanly. Can you
+resend them based on v5.16-rc1?
 
-Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
----
- drivers/gpu/drm/stm/ltdc.c | 251 +++++++++++++++++++++++++++++++++++--
- drivers/gpu/drm/stm/ltdc.h |   1 +
- 2 files changed, 245 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 4d249bc99894..7fd173390b9f 100644
---- a/drivers/gpu/drm/stm/ltdc.c
-+++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -198,6 +198,21 @@
- 
- #define LXCFBLNR_CFBLN	GENMASK(10, 0)	/* Color Frame Buffer Line Number */
- 
-+#define LXCR_C1R_YIA	BIT(0)		/* Ycbcr 422 Interleaved Ability */
-+#define LXCR_C1R_YSPA	BIT(1)		/* Ycbcr 420 Semi-Planar Ability */
-+#define LXCR_C1R_YFPA	BIT(2)		/* Ycbcr 420 Full-Planar Ability */
-+#define LXCR_C1R_SCA	BIT(31)		/* SCaling Ability*/
-+
-+#define LxPCR_YREN	BIT(9)		/* Y Rescale Enable for the color dynamic range */
-+#define LxPCR_OF	BIT(8)		/* Odd pixel First */
-+#define LxPCR_CBF	BIT(7)		/* CB component First */
-+#define LxPCR_YF	BIT(6)		/* Y component First */
-+#define LxPCR_YCM	GENMASK(5, 4)	/* Ycbcr Conversion Mode */
-+#define YCM_I		0x0		/* Interleaved 422 */
-+#define YCM_SP		0x1		/* Semi-Planar 420 */
-+#define YCM_FP		0x2		/* Full-Planar 420 */
-+#define LxPCR_YCEN	BIT(3)		/* YCbCr-to-RGB Conversion Enable */
-+
- #define LXRCR_IMR	BIT(0)		/* IMmediate Reload */
- #define LXRCR_VBR	BIT(1)		/* Vertical Blanking Reload */
- #define LXRCR_GRMSK	BIT(2)		/* Global (centralized) Reload MaSKed */
-@@ -311,6 +326,23 @@ static const u32 ltdc_drm_fmt_a2[] = {
- 	DRM_FORMAT_C8
- };
- 
-+static const u32 ltdc_drm_fmt_ycbcr_cp[] = {
-+	DRM_FORMAT_YUYV,
-+	DRM_FORMAT_YVYU,
-+	DRM_FORMAT_UYVY,
-+	DRM_FORMAT_VYUY
-+};
-+
-+static const u32 ltdc_drm_fmt_ycbcr_sp[] = {
-+	DRM_FORMAT_NV12,
-+	DRM_FORMAT_NV21
-+};
-+
-+static const u32 ltdc_drm_fmt_ycbcr_fp[] = {
-+	DRM_FORMAT_YUV420,
-+	DRM_FORMAT_YVU420
-+};
-+
- /* Layer register offsets */
- static const u32 ltdc_layer_regs_a0[] = {
- 	0x80,	/* L1 configuration 0 */
-@@ -410,6 +442,26 @@ static const struct regmap_config stm32_ltdc_regmap_cfg = {
- 	.cache_type = REGCACHE_NONE,
- };
- 
-+static const u32 ltdc_ycbcr2rgb_coeffs[DRM_COLOR_ENCODING_MAX][DRM_COLOR_RANGE_MAX][2] = {
-+	[DRM_COLOR_YCBCR_BT601][DRM_COLOR_YCBCR_LIMITED_RANGE] = {
-+		0x02040199,	/* (b_cb = 516 / r_cr = 409) */
-+		0x006400D0	/* (g_cb = 100 / g_cr = 208) */
-+	},
-+	[DRM_COLOR_YCBCR_BT601][DRM_COLOR_YCBCR_FULL_RANGE] = {
-+		0x01C60167,	/* (b_cb = 454 / r_cr = 359) */
-+		0x005800B7	/* (g_cb = 88 / g_cr = 183) */
-+	},
-+	[DRM_COLOR_YCBCR_BT709][DRM_COLOR_YCBCR_LIMITED_RANGE] = {
-+		0x021D01CB,	/* (b_cb = 541 / r_cr = 459) */
-+		0x00370089	/* (g_cb = 55 / g_cr = 137) */
-+	},
-+	[DRM_COLOR_YCBCR_BT709][DRM_COLOR_YCBCR_FULL_RANGE] = {
-+		0x01DB0193,	/* (b_cb = 475 / r_cr = 403) */
-+		0x00300078	/* (g_cb = 48 / g_cr = 120) */
-+	}
-+	/* BT2020 not supported */
-+};
-+
- static inline struct ltdc_device *crtc_to_ltdc(struct drm_crtc *crtc)
- {
- 	return (struct ltdc_device *)crtc->dev->dev_private;
-@@ -540,6 +592,78 @@ static inline u32 is_xrgb(u32 drm)
- 	return ((drm & 0xFF) == 'X' || ((drm >> 8) & 0xFF) == 'X');
- }
- 
-+static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fmt)
-+{
-+	struct ltdc_device *ldev = plane_to_ltdc(plane);
-+	struct drm_plane_state *state = plane->state;
-+	u32 lofs = plane->index * LAY_OFS;
-+	u32 val;
-+
-+	switch (drm_pix_fmt) {
-+	case DRM_FORMAT_YUYV:
-+		val = (YCM_I << 4) | LxPCR_YF | LxPCR_CBF;
-+		break;
-+	case DRM_FORMAT_YVYU:
-+		val = (YCM_I << 4) | LxPCR_YF;
-+		break;
-+	case DRM_FORMAT_UYVY:
-+		val = (YCM_I << 4) | LxPCR_CBF;
-+		break;
-+	case DRM_FORMAT_VYUY:
-+		val = (YCM_I << 4);
-+		break;
-+	case DRM_FORMAT_NV12:
-+		val = (YCM_SP << 4) | LxPCR_CBF;
-+		break;
-+	case DRM_FORMAT_NV21:
-+		val = (YCM_SP << 4);
-+		break;
-+	case DRM_FORMAT_YUV420:
-+	case DRM_FORMAT_YVU420:
-+		val = (YCM_FP << 4);
-+		break;
-+	default:
-+		/* RGB or not a YCbCr supported format */
-+		break;
-+	}
-+
-+	/* Enable limited range */
-+	if (state->color_range == DRM_COLOR_YCBCR_LIMITED_RANGE)
-+		val |= LxPCR_YREN;
-+
-+	/* enable ycbcr conversion */
-+	val |= LxPCR_YCEN;
-+
-+	regmap_write(ldev->regmap, LTDC_L1PCR + lofs, val);
-+}
-+
-+static inline void ltdc_set_ycbcr_coeffs(struct drm_plane *plane)
-+{
-+	struct ltdc_device *ldev = plane_to_ltdc(plane);
-+	struct drm_plane_state *state = plane->state;
-+	enum drm_color_encoding enc = state->color_encoding;
-+	enum drm_color_range ran = state->color_range;
-+	u32 lofs = plane->index * LAY_OFS;
-+
-+	if (enc != DRM_COLOR_YCBCR_BT601 && enc != DRM_COLOR_YCBCR_BT709) {
-+		DRM_ERROR("color encoding %d not supported, use bt601 by default\n", enc);
-+		/* set by default color encoding to DRM_COLOR_YCBCR_BT601 */
-+		enc = DRM_COLOR_YCBCR_BT601;
-+	}
-+
-+	if (ran != DRM_COLOR_YCBCR_LIMITED_RANGE && ran != DRM_COLOR_YCBCR_FULL_RANGE) {
-+		DRM_ERROR("color range %d not supported, use limited range by default\n", ran);
-+		/* set by default color range to DRM_COLOR_YCBCR_LIMITED_RANGE */
-+		ran = DRM_COLOR_YCBCR_LIMITED_RANGE;
-+	}
-+
-+	DRM_DEBUG_DRIVER("Color encoding=%d, range=%d\n", enc, ran);
-+	regmap_write(ldev->regmap, LTDC_L1CYR0R + lofs,
-+		     ltdc_ycbcr2rgb_coeffs[enc][ran][0]);
-+	regmap_write(ldev->regmap, LTDC_L1CYR1R + lofs,
-+		     ltdc_ycbcr2rgb_coeffs[enc][ran][1]);
-+}
-+
- static irqreturn_t ltdc_irq_thread(int irq, void *arg)
- {
- 	struct drm_device *ddev = arg;
-@@ -1010,7 +1134,7 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
- 	u32 y0 = newstate->crtc_y;
- 	u32 y1 = newstate->crtc_y + newstate->crtc_h - 1;
- 	u32 src_x, src_y, src_w, src_h;
--	u32 val, pitch_in_bytes, line_length, paddr, ahbp, avbp, bpcr;
-+	u32 val, pitch_in_bytes, line_length, line_number, paddr, ahbp, avbp, bpcr;
- 	enum ltdc_pix_fmt pf;
- 
- 	if (!newstate->crtc || !fb) {
-@@ -1086,8 +1210,8 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
- 	regmap_write_bits(ldev->regmap, LTDC_L1BFCR + lofs, LXBFCR_BF2 | LXBFCR_BF1, val);
- 
- 	/* Configures the frame buffer line number */
--	val = y1 - y0 + 1;
--	regmap_write_bits(ldev->regmap, LTDC_L1CFBLNR + lofs, LXCFBLNR_CFBLN, val);
-+	line_number = y1 - y0 + 1;
-+	regmap_write_bits(ldev->regmap, LTDC_L1CFBLNR + lofs, LXCFBLNR_CFBLN, line_number);
- 
- 	/* Sets the FB address */
- 	paddr = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 0);
-@@ -1095,6 +1219,77 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
- 	DRM_DEBUG_DRIVER("fb: phys 0x%08x", paddr);
- 	regmap_write(ldev->regmap, LTDC_L1CFBAR + lofs, paddr);
- 
-+	if (ldev->caps.ycbcr_input) {
-+		if (fb->format->is_yuv) {
-+			switch (fb->format->format) {
-+			case DRM_FORMAT_NV12:
-+			case DRM_FORMAT_NV21:
-+			/* Configure the auxiliary frame buffer address 0 & 1 */
-+			paddr = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 1);
-+			regmap_write(ldev->regmap, LTDC_L1AFBA0R + lofs, paddr);
-+			regmap_write(ldev->regmap, LTDC_L1AFBA1R + lofs, paddr + 1);
-+
-+			/* Configure the buffer length */
-+			val = ((pitch_in_bytes << 16) | line_length);
-+			regmap_write(ldev->regmap, LTDC_L1AFBLR + lofs, val);
-+
-+			/* Configure the frame buffer line number */
-+			val = (line_number >> 1);
-+			regmap_write(ldev->regmap, LTDC_L1AFBLNR + lofs, val);
-+			break;
-+			case DRM_FORMAT_YUV420:
-+			/* Configure the auxiliary frame buffer address 0 */
-+			paddr = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 1);
-+			regmap_write(ldev->regmap, LTDC_L1AFBA0R + lofs, paddr);
-+
-+			/* Configure the auxiliary frame buffer address 1 */
-+			paddr = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 2);
-+			regmap_write(ldev->regmap, LTDC_L1AFBA1R + lofs, paddr);
-+
-+			line_length = ((fb->format->cpp[0] * (x1 - x0 + 1)) >> 1) +
-+				      (ldev->caps.bus_width >> 3) - 1;
-+
-+			/* Configure the buffer length */
-+			val = (((pitch_in_bytes >> 1) << 16) | line_length);
-+			regmap_write(ldev->regmap, LTDC_L1AFBLR + lofs, val);
-+
-+			/* Configure the frame buffer line number */
-+			val = (line_number >> 1);
-+			regmap_write(ldev->regmap, LTDC_L1AFBLNR + lofs, val);
-+			break;
-+			case DRM_FORMAT_YVU420:
-+			/* Configure the auxiliary frame buffer address 0 */
-+			paddr = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 2);
-+			regmap_write(ldev->regmap, LTDC_L1AFBA0R + lofs, paddr);
-+
-+			/* Configure the auxiliary frame buffer address 1 */
-+			paddr = (u32)drm_fb_cma_get_gem_addr(fb, newstate, 1);
-+			regmap_write(ldev->regmap, LTDC_L1AFBA1R + lofs, paddr);
-+
-+			line_length = ((fb->format->cpp[0] * (x1 - x0 + 1)) >> 1) +
-+				      (ldev->caps.bus_width >> 3) - 1;
-+
-+			/* Configure the buffer length */
-+			val = (((pitch_in_bytes >> 1) << 16) | line_length);
-+			regmap_write(ldev->regmap, LTDC_L1AFBLR + lofs, val);
-+
-+			/* Configure the frame buffer line number */
-+			val = (line_number >> 1);
-+			regmap_write(ldev->regmap, LTDC_L1AFBLNR + lofs, val);
-+			break;
-+			}
-+
-+			/* Configure YCbC conversion coefficient */
-+			ltdc_set_ycbcr_coeffs(plane);
-+
-+			/* Configure YCbCr format and enable/disable conversion */
-+			ltdc_set_ycbcr_config(plane, fb->format->format);
-+		} else {
-+			/* disable ycbcr conversion */
-+			regmap_write(ldev->regmap, LTDC_L1PCR + lofs, 0);
-+		}
-+	}
-+
- 	/* Enable layer and CLUT if needed */
- 	val = fb->format->format == DRM_FORMAT_C8 ? LXCR_CLUTEN : 0;
- 	val |= LXCR_LEN;
-@@ -1186,7 +1381,8 @@ static const struct drm_plane_helper_funcs ltdc_plane_helper_funcs = {
- };
- 
- static struct drm_plane *ltdc_plane_create(struct drm_device *ddev,
--					   enum drm_plane_type type)
-+					   enum drm_plane_type type,
-+					   int index)
- {
- 	unsigned long possible_crtcs = CRTC_MASK;
- 	struct ltdc_device *ldev = ddev->dev_private;
-@@ -1196,9 +1392,16 @@ static struct drm_plane *ltdc_plane_create(struct drm_device *ddev,
- 	u32 *formats;
- 	u32 drm_fmt;
- 	const u64 *modifiers = ltdc_format_modifiers;
-+	u32 lofs = index * LAY_OFS;
-+	u32 val;
- 	int ret;
- 
--	formats = devm_kzalloc(dev, ldev->caps.pix_fmt_nb * sizeof(*formats), GFP_KERNEL);
-+	/* Allocate the biggest size according to supported color formats */
-+	formats = devm_kzalloc(dev, (ldev->caps.pix_fmt_nb +
-+			       ARRAY_SIZE(ltdc_drm_fmt_ycbcr_cp) +
-+			       ARRAY_SIZE(ltdc_drm_fmt_ycbcr_sp) +
-+			       ARRAY_SIZE(ltdc_drm_fmt_ycbcr_fp)) *
-+			       sizeof(*formats), GFP_KERNEL);
- 
- 	for (i = 0; i < ldev->caps.pix_fmt_nb; i++) {
- 		drm_fmt = ldev->caps.pix_fmt_drm[i];
-@@ -1212,6 +1415,26 @@ static struct drm_plane *ltdc_plane_create(struct drm_device *ddev,
- 		formats[nb_fmt++] = drm_fmt;
- 	}
- 
-+	/* Add YCbCr supported pixel formats */
-+	if (ldev->caps.ycbcr_input) {
-+		regmap_read(ldev->regmap, LTDC_L1C1R + lofs, &val);
-+		if (val & LXCR_C1R_YIA) {
-+			memcpy(&formats[nb_fmt], ltdc_drm_fmt_ycbcr_cp,
-+			       ARRAY_SIZE(ltdc_drm_fmt_ycbcr_cp) * sizeof(*formats));
-+			nb_fmt += ARRAY_SIZE(ltdc_drm_fmt_ycbcr_cp);
-+		}
-+		if (val & LXCR_C1R_YSPA) {
-+			memcpy(&formats[nb_fmt], ltdc_drm_fmt_ycbcr_sp,
-+			       ARRAY_SIZE(ltdc_drm_fmt_ycbcr_sp) * sizeof(*formats));
-+			nb_fmt += ARRAY_SIZE(ltdc_drm_fmt_ycbcr_sp);
-+		}
-+		if (val & LXCR_C1R_YFPA) {
-+			memcpy(&formats[nb_fmt], ltdc_drm_fmt_ycbcr_fp,
-+			       ARRAY_SIZE(ltdc_drm_fmt_ycbcr_fp) * sizeof(*formats));
-+			nb_fmt += ARRAY_SIZE(ltdc_drm_fmt_ycbcr_fp);
-+		}
-+	}
-+
- 	plane = devm_kzalloc(dev, sizeof(*plane), GFP_KERNEL);
- 	if (!plane)
- 		return NULL;
-@@ -1222,6 +1445,17 @@ static struct drm_plane *ltdc_plane_create(struct drm_device *ddev,
- 	if (ret < 0)
- 		return NULL;
- 
-+	if (ldev->caps.ycbcr_input) {
-+		if (val & (LXCR_C1R_YIA | LXCR_C1R_YSPA | LXCR_C1R_YFPA))
-+			drm_plane_create_color_properties(plane,
-+							  BIT(DRM_COLOR_YCBCR_BT601) |
-+							  BIT(DRM_COLOR_YCBCR_BT709),
-+							  BIT(DRM_COLOR_YCBCR_LIMITED_RANGE) |
-+							  BIT(DRM_COLOR_YCBCR_FULL_RANGE),
-+							  DRM_COLOR_YCBCR_BT601,
-+							  DRM_COLOR_YCBCR_LIMITED_RANGE);
-+	}
-+
- 	drm_plane_helper_add(plane, &ltdc_plane_helper_funcs);
- 
- 	drm_plane_create_alpha_property(plane);
-@@ -1247,7 +1481,7 @@ static int ltdc_crtc_init(struct drm_device *ddev, struct drm_crtc *crtc)
- 	unsigned int i;
- 	int ret;
- 
--	primary = ltdc_plane_create(ddev, DRM_PLANE_TYPE_PRIMARY);
-+	primary = ltdc_plane_create(ddev, DRM_PLANE_TYPE_PRIMARY, 0);
- 	if (!primary) {
- 		DRM_ERROR("Can not create primary plane\n");
- 		return -EINVAL;
-@@ -1271,7 +1505,7 @@ static int ltdc_crtc_init(struct drm_device *ddev, struct drm_crtc *crtc)
- 
- 	/* Add planes. Note : the first layer is used by primary plane */
- 	for (i = 1; i < ldev->caps.nb_layers; i++) {
--		overlay = ltdc_plane_create(ddev, DRM_PLANE_TYPE_OVERLAY);
-+		overlay = ltdc_plane_create(ddev, DRM_PLANE_TYPE_OVERLAY, i);
- 		if (!overlay) {
- 			ret = -ENOMEM;
- 			DRM_ERROR("Can not create overlay plane %d\n", i);
-@@ -1403,6 +1637,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
- 		if (ldev->caps.hw_version == HWVER_10200)
- 			ldev->caps.pad_max_freq_hz = 65000000;
- 		ldev->caps.nb_irq = 2;
-+		ldev->caps.ycbcr_input = false;
- 		ldev->caps.ycbcr_output = false;
- 		ldev->caps.plane_reg_shadow = false;
- 		break;
-@@ -1416,6 +1651,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
- 		ldev->caps.non_alpha_only_l1 = false;
- 		ldev->caps.pad_max_freq_hz = 150000000;
- 		ldev->caps.nb_irq = 4;
-+		ldev->caps.ycbcr_input = false;
- 		ldev->caps.ycbcr_output = false;
- 		ldev->caps.plane_reg_shadow = false;
- 		break;
-@@ -1429,6 +1665,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
- 		ldev->caps.non_alpha_only_l1 = false;
- 		ldev->caps.pad_max_freq_hz = 90000000;
- 		ldev->caps.nb_irq = 2;
-+		ldev->caps.ycbcr_input = true;
- 		ldev->caps.ycbcr_output = true;
- 		ldev->caps.plane_reg_shadow = true;
- 		break;
-diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
-index adc4f9cf7f95..6968d1ca5149 100644
---- a/drivers/gpu/drm/stm/ltdc.h
-+++ b/drivers/gpu/drm/stm/ltdc.h
-@@ -24,6 +24,7 @@ struct ltdc_caps {
- 	bool non_alpha_only_l1; /* non-native no-alpha formats on layer 1 */
- 	int pad_max_freq_hz;	/* max frequency supported by pad */
- 	int nb_irq;		/* number of hardware interrupts */
-+	bool ycbcr_input;	/* ycbcr input converter supported */
- 	bool ycbcr_output;	/* ycbcr output converter supported */
- 	bool plane_reg_shadow;	/* plane shadow registers ability */
- };
--- 
-2.17.1
-
+        Arnd

@@ -2,82 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B76D2476232
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4A0476155
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233409AbhLOTwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:52:16 -0500
-Received: from mail.blitar.go.id ([103.148.208.194]:55840 "EHLO
-        mail.blitarkota.go.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232942AbhLOTwP (ORCPT
+        id S1344100AbhLOTJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:09:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25085 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238618AbhLOTJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:52:15 -0500
-X-Greylist: delayed 4386 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Dec 2021 14:52:14 EST
-Received: from localhost (localhost [127.0.0.1])
-        by mail.blitarkota.go.id (Postfix) with ESMTP id 4D8DA97FF40;
-        Thu, 16 Dec 2021 00:16:14 +0700 (WIB)
-Received: from mail.blitarkota.go.id ([127.0.0.1])
-        by localhost (mail.blitarkota.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ezWr9PcriFJx; Thu, 16 Dec 2021 00:16:14 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.blitarkota.go.id (Postfix) with ESMTP id B8F2B97FF67;
-        Thu, 16 Dec 2021 00:16:13 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.blitarkota.go.id B8F2B97FF67
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=blitarkota.go.id;
-        s=9A007E36-2400-11EA-BC1D-4C7ACDE6EBEB; t=1639588574;
-        bh=qOniPYo60Rm+nn+EMGaRwakTHiwhSd7xUjyuKs7tmsk=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=v/tgWTcMxSBTb13MUcSSvTEePzoB17DgiA55lidmsDa1r9bHaKTVgaXMIpfEIEawY
-         PTeXBSTlI45RQ3APXK004a054Yc8ZxExQV5QkDROb5g5u86qwhWnvXxXJdCpQsG70e
-         GqIFvSRnrgx413yYmylWO26fdfwl1V+bR551on3BCszy5CvX87j1I8Mj0VF8oR5ixd
-         O3LcWxHeuBvG1wN68P/n9LC20qq9TuSRBBDC4reRJUBty5JKjkFUCCoCQmfqhnODCA
-         3GztyXQk70MdVc/ltYlVCKw/LOtrw3JLSgamdCNz+O2dB986lzQHSM4JWlGCp+H/jZ
-         UWHnkf26C9/Mw==
-X-Virus-Scanned: amavisd-new at mail.blitarkota.go.id
-Received: from mail.blitarkota.go.id ([127.0.0.1])
-        by localhost (mail.blitarkota.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Ie1XcT4f0wxH; Thu, 16 Dec 2021 00:16:13 +0700 (WIB)
-Received: from mail.blitarkota.go.id (mail.blitarkota.go.id [192.168.99.194])
-        by mail.blitarkota.go.id (Postfix) with ESMTP id AFFDE97FF40;
-        Thu, 16 Dec 2021 00:16:11 +0700 (WIB)
-Date:   Thu, 16 Dec 2021 00:16:11 +0700 (WIB)
-From:   Administrador de Sistemas <sdn-tanggung2@blitarkota.go.id>
-Reply-To: sistemassadmins@mail2engineer.com
-Message-ID: <849692780.1965246.1639588571701.JavaMail.zimbra@blitarkota.go.id>
-Subject: 
+        Wed, 15 Dec 2021 14:09:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639595387;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/QiYL8Zdx7tWy1t7wncXYCdbSScry/EwDPkj5f12pLM=;
+        b=TRn4Wk4Y/Hm4CCM5Kj0DB0Om8YgpdYQZ/GhOBogcIg2Z9fcV/jguUOx6/p/CEopevbS9rs
+        MJifc+XQEuu49yNil+P5K1ZbrwuTx4GujU4Wbj+u33jmQiZ96NN218cPUuH/Nyn4rNYKxE
+        8xd7Ub67UaE07Gx1RjZEp65cQsFvRpk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-56-GJvRsitqMQWJbqPg04c7LQ-1; Wed, 15 Dec 2021 14:09:44 -0500
+X-MC-Unique: GJvRsitqMQWJbqPg04c7LQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5B89A801AAB;
+        Wed, 15 Dec 2021 19:09:41 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.2.14.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6CDE0196E6;
+        Wed, 15 Dec 2021 19:09:14 +0000 (UTC)
+Date:   Wed, 15 Dec 2021 14:09:12 -0500
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Leo Yan <leo.yan@linaro.org>, codalist@telemann.coda.cs.cmu.edu,
+        Jan Harkes <jaharkes@cs.cmu.edu>,
+        Leon Romanovsky <leon@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        netdev@vger.kernel.org, Balbir Singh <bsingharora@gmail.com>,
+        linux-kernel@vger.kernel.org, Eric Paris <eparis@redhat.com>,
+        coda@cs.cmu.edu, linux-audit@redhat.com,
+        coresight@lists.linaro.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-arm-kernel@lists.infradead.org,
+        Mike Leach <mike.leach@linaro.org>
+Subject: Re: [PATCH v2 6/7] audit: Use task_is_in_init_pid_ns()
+Message-ID: <20211215190912.GU1550715@madcap2.tricolour.ca>
+References: <20211208083320.472503-1-leo.yan@linaro.org>
+ <20211208083320.472503-7-leo.yan@linaro.org>
+ <CAHC9VhThB=kDsXr8Uc_65+gePucSstAbrab2TpLxcBSd0k39pQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.168.99.194]
-X-Mailer: Zimbra 8.8.12_GA_3866 (zclient/8.8.12_GA_3866)
-Thread-Index: sESN16NYlC1tXKBk3ni7JBWv6h/gOg==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhThB=kDsXr8Uc_65+gePucSstAbrab2TpLxcBSd0k39pQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ATEN=C3=87=C3=83O;
+On 2021-12-14 17:35, Paul Moore wrote:
+> On Wed, Dec 8, 2021 at 3:33 AM Leo Yan <leo.yan@linaro.org> wrote:
+> >
+> > Replace open code with task_is_in_init_pid_ns() for checking root PID
+> > namespace.
+> >
+> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> > ---
+> >  kernel/audit.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> I'm not sure how necessary this is, but it looks correct to me.
 
-Sua caixa de correio excedeu o limite de armazenamento, que =C3=A9 de 5 GB =
-como definido pelo administrador, que est=C3=A1 atualmente em execu=C3=A7=
-=C3=A3o no 10.9GB, voc=C3=AA pode n=C3=A3o ser capaz de enviar ou receber n=
-ovas mensagens at=C3=A9 que voc=C3=AA re-validar a sua caixa de correio. Pa=
-ra revalidar sua caixa de correio, envie os seguintes dados abaixo:
+I had the same thought.  I looks correct to me.  I could see the value
+if it permitted init_pid_ns to not be global.
 
-nome:
-Nome de usu=C3=A1rio:
-senha:
-Confirme a Senha :
-Endere=C3=A7o de e-mail:
-Telefone:
+> Acked-by: Paul Moore <paul@paul-moore.com>
 
-Se voc=C3=AA n=C3=A3o conseguir revalidar sua caixa de correio, sua caixa p=
-ostal vai ser desativado!
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
 
-Lamentamos o inconveniente.
-C=C3=B3digo de verifica=C3=A7=C3=A3o: pt:p9uyba98139>2021
-Correio T=C3=A9cnico Suporte =C2=A92021
+> > diff --git a/kernel/audit.c b/kernel/audit.c
+> > index 121d37e700a6..56ea91014180 100644
+> > --- a/kernel/audit.c
+> > +++ b/kernel/audit.c
+> > @@ -1034,7 +1034,7 @@ static int audit_netlink_ok(struct sk_buff *skb, u16 msg_type)
+> >         case AUDIT_MAKE_EQUIV:
+> >                 /* Only support auditd and auditctl in initial pid namespace
+> >                  * for now. */
+> > -               if (task_active_pid_ns(current) != &init_pid_ns)
+> > +               if (!task_is_in_init_pid_ns(current))
+> >                         return -EPERM;
+> >
+> >                 if (!netlink_capable(skb, CAP_AUDIT_CONTROL))
+> > --
+> > 2.25.1
+> 
+> paul moore
 
-obrigado
-Administrador de Sistemas
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
+

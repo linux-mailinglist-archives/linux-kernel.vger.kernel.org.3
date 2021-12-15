@@ -2,97 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45102475AA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E740475AB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243370AbhLOOa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234528AbhLOOa1 (ORCPT
+        id S243386AbhLOOd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:33:29 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:45510 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234528AbhLOOd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:30:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6F4C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 06:30:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 15 Dec 2021 09:33:28 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A2D4B81F4D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:30:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1CFDC34604;
-        Wed, 15 Dec 2021 14:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639578624;
-        bh=euW7M7PGgHg0TTWjhkTrtfp9cJF+WeHRjrk4IVhmJM4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ICVKieu4pR1N/KC3YyEyZqs5w4/kbm7qGVVLbF8/rRGj8LE1F6a8XLi0Y3uwR+E+k
-         xYvJ4JVWsr5doXI3OdUQ5XVX94PB7WUl+quh9g01lCXoE7+zZAWOq+nTHiy4Po2n+e
-         z9k2OBiw9fRQU1p9AAGMt2VaEecvF0UCY6SfBiywIkw1va4UBNFpstvK9j3IRHykmX
-         vQXOZ0nwhUyFLtBwDuoXmY4PxE4e/z7bVI/Y24iLLnpLAu6ZBxTnQuc+UHMI0jyCj6
-         ShPTLOzcgynDDOAwEOdXrYk6FQbGHSeSCCNYVsBVWbvUQFaGOIZbiS1+8Xrp6+giKn
-         ZAdTl38B788og==
-Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=hot-poop.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mxVIU-00CIR5-GN; Wed, 15 Dec 2021 14:30:22 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Alexandru Elisei <alexandru.elisei@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH 0/6] KVM: arm64: Miscellaneous pkvm fixes
-Date:   Wed, 15 Dec 2021 14:30:19 +0000
-Message-Id: <163957861285.209889.493127869759455971.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211208152300.2478542-1-qperret@google.com>
-References: <20211208152300.2478542-1-qperret@google.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 44E20212C3;
+        Wed, 15 Dec 2021 14:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1639578807; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uG2WTliKuw9y1GnF0GCM8aAWnidbbXnIJQvJ9/qxELo=;
+        b=Qma6cDfN1dfSqN2ZxfnwEkn2R8ogcM+6j1FU4Btz3vK9AtVJiQ9T3GEKVwjj/8DaJqppD2
+        lVzomDkjvGUnaYGcUtbm1DT+ozfRPD5n7KvxZyhndeG71iS0jrFEGSVWN0pQHUOZ3Ga6KH
+        mqvRL3fpHsEagRutjxI7LKMtgJ3NQj0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1639578807;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uG2WTliKuw9y1GnF0GCM8aAWnidbbXnIJQvJ9/qxELo=;
+        b=QPVoQMIk5+rTOuHYFmu29+EiHWXEs4I5rAi6BvW0lefYDXGy+hjbbJCuPgrfaIU/udPuLe
+        K1LhewAZ4qXoZLAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F23D313B45;
+        Wed, 15 Dec 2021 14:33:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Lpp9Orb8uWGSawAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 15 Dec 2021 14:33:26 +0000
+Message-ID: <91440de1-b3c2-1f24-a46d-53d7d264db60@suse.cz>
+Date:   Wed, 15 Dec 2021 15:33:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: alexandru.elisei@arm.com, will@kernel.org, qperret@google.com, james.morse@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, kernel-team@android.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 10/66] mm/mmap: Use the maple tree for find_vma_prev()
+ instead of the rbtree
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-11-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211201142918.921493-11-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Dec 2021 15:22:53 +0000, Quentin Perret wrote:
-> This series is a collection of various fixes and cleanups for KVM/arm64
-> when running in nVHE protected mode. The first two patches are real
-> fixes/improvements, the following two are minor cleanups, and the last
-> two help satisfy my paranoia so they're certainly optional.
+On 12/1/21 15:29, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> Cheers!
-> Quentin
+> Use the maple tree's advanced API and a maple state to walk the tree
+> for the entry at the address of the next vma, then use the maple state
+> to walk back one entry to find the previous entry.
 > 
-> [...]
+> Add kernel documentation comments for this API.
+> 
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-Applied to next, thanks!
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-[1/6] KVM: arm64: pkvm: Fix hyp_pool max order
-      commit: 34b43a8849229e8363c19236ecdf463b7a89d085
-[2/6] KVM: arm64: pkvm: Disable GICv2 support
-      commit: a770ee80e66270a7df183dda5ad6df4e8c8ab615
-[3/6] KVM: arm64: Make the hyp memory pool static
-      commit: 53a563b01fa2ae2376a0b7d547f26a0ae9c78b5c
-[4/6] KVM: arm64: Make __io_map_base static
-      commit: 473a3efbafaa9ffd06c8b8f653f24c97b5ac3ff0
-[5/6] KVM: arm64: pkvm: Stub io map functions
-      commit: bff01cb6b1bf68052739eb6155132f7d6d974208
-[6/6] KVM: arm64: pkvm: Make kvm_host_owns_hyp_mappings() robust to VHE
-      commit: 64a1fbda59f4b14adde7f21cda687e2b9703b7bb
-
-Cheers,
-
-	M.
--- 
-Without deviation from the norm, progress is not possible.
-
+> ---
+>  mm/mmap.c | 24 ++++++++++++++----------
+>  1 file changed, 14 insertions(+), 10 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 6a7502f74190..8425ab573770 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -2454,23 +2454,27 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
+>  }
+>  EXPORT_SYMBOL(find_vma);
+>  
+> -/*
+> - * Same as find_vma, but also return a pointer to the previous VMA in *pprev.
+> +/**
+> + * find_vma_prev() - Find the VMA for a given address, or the next vma and
+> + * set %pprev to the previous VMA, if any.
+> + * @mm: The mm_struct to check
+> + * @addr: The address
+> + * @pprev: The pointer to set to the previous VMA
+> + *
+> + * Returns: The VMA associated with @addr, or the next vma.
+> + * May return %NULL in the case of no vma at addr or above.
+>   */
+>  struct vm_area_struct *
+>  find_vma_prev(struct mm_struct *mm, unsigned long addr,
+>  			struct vm_area_struct **pprev)
+>  {
+>  	struct vm_area_struct *vma;
+> +	MA_STATE(mas, &mm->mm_mt, addr, addr);
+>  
+> -	vma = find_vma(mm, addr);
+> -	if (vma) {
+> -		*pprev = vma->vm_prev;
+> -	} else {
+> -		struct rb_node *rb_node = rb_last(&mm->mm_rb);
+> -
+> -		*pprev = rb_node ? rb_entry(rb_node, struct vm_area_struct, vm_rb) : NULL;
+> -	}
+> +	vma = mas_walk(&mas);
+> +	*pprev = mas_prev(&mas, 0);
+> +	if (!vma)
+> +		vma = mas_next(&mas, ULONG_MAX);
+>  	return vma;
+>  }
+>  
 

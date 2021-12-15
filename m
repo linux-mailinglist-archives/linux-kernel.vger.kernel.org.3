@@ -2,57 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBAE4756EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C89114756F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241807AbhLOKve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:51:34 -0500
-Received: from mga09.intel.com ([134.134.136.24]:4958 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241795AbhLOKvc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:51:32 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="239012028"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="239012028"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 02:51:31 -0800
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="604941785"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 02:51:28 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 15 Dec 2021 12:51:26 +0200
-Date:   Wed, 15 Dec 2021 12:51:26 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Xiaoke Wang <xkernel.wang@foxmail.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
-Message-ID: <YbnIrsQGsjRnksq4@lahna>
-References: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
+        id S241794AbhLOKww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:52:52 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4283 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236099AbhLOKwu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 05:52:50 -0500
+Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JDX8b49Lxz683Ds;
+        Wed, 15 Dec 2021 18:50:39 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 11:52:47 +0100
+Received: from [10.47.93.135] (10.47.93.135) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 15 Dec
+ 2021 10:52:47 +0000
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
+To:     Ian Rogers <irogers@google.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <acme@kernel.org>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
+ <20211214184240.24215-1-andrew.kilroy@arm.com>
+ <20211214184240.24215-2-andrew.kilroy@arm.com>
+ <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
+Message-ID: <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
+Date:   Wed, 15 Dec 2021 10:52:25 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.93.135]
+X-ClientProxiedBy: lhreml734-chm.china.huawei.com (10.201.108.85) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Andrew,
 
-On Mon, Dec 13, 2021 at 04:27:15PM +0800, Xiaoke Wang wrote:
-> Note: Compare with the last email, this one is using my full name.
+>>   const struct pmu_event *metricgroup__find_metric(const char *metric,
+>>                                                   const struct pmu_events_map *map);
+>>   int metricgroup__parse_groups_test(struct evlist *evlist,
+>> diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
+>> index 1081b20f9891..57c0c5f2c6bd 100644
+>> --- a/tools/perf/util/topdown.c
+>> +++ b/tools/perf/util/topdown.c
+>> @@ -56,3 +56,9 @@ __weak bool arch_topdown_sample_read(struct evsel *leader __maybe_unused)
+>>   {
+>>          return false;
+>>   }
+>> +
+>> +__weak bool arch_topdown_use_json_metrics(void)
+>> +{
 
-This should go below the '---' line. Remember this next time, no need to
-resend this one.
+AFAICS, only x86 supports topdown today and that is because they have 
+special kernel topdown events exposed for the kernel CPU PMU driver. So 
+other architectures - not only arm - would need rely on metricgroups for 
+topdown support. So let's make this generic for all archs.
 
-> kmemdup() return NULL when some internal memory errors happen, it is
-> better to check the return value of it. Otherwise, some memory errors
-> will not be catched in time and may further result in wrong memory
-> access.
-> 
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+> I like this extension! I've ranted in the past about weak symbols
+> breaking with archives due to lazy loading [1]. In this case
+> tools/perf/arch/arm64/util/topdown.c has no other symbols within it
+> and so the weak symbol has an extra chance of being linked
+> incorrectly. We could add a new command line of --topdown-json to
+> avoid this, but there seems little difference in doing this over just
+> doing '-M TopDownL1'.
 
-I sligthly modified the commit message and applied to
-thunderbolt.git/next, thanks!
+
+> Is it possible to use the json metric approach
+> for when the CPU version fails?
+
+I think that's a good idea.
+
+In addition we could also add a --topdown arg to force using JSON 
+metricgroups.
+
+Did you actually test this patch? I have something experimental working 
+from some time ago, and it was more complicated than this. I need to 
+check the code again...
+
+Thanks,
+John

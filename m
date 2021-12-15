@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEA1475CA9
+	by mail.lfdr.de (Postfix) with ESMTP id E21EA475CAA
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244413AbhLOQEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:04:21 -0500
-Received: from foss.arm.com ([217.140.110.172]:55970 "EHLO foss.arm.com"
+        id S244398AbhLOQEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:04:23 -0500
+Received: from foss.arm.com ([217.140.110.172]:55980 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244407AbhLOQET (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:04:19 -0500
+        id S244412AbhLOQEU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 11:04:20 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A23ED1477;
-        Wed, 15 Dec 2021 08:04:18 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0623E150C;
+        Wed, 15 Dec 2021 08:04:20 -0800 (PST)
 Received: from e126387.extremechicken.org (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E4503F5A1;
-        Wed, 15 Dec 2021 08:04:17 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D815E3F5A1;
+        Wed, 15 Dec 2021 08:04:18 -0800 (PST)
 From:   carsten.haitzler@foss.arm.com
 To:     linux-kernel@vger.kernel.org
 Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
         mathieu.poirier@linaro.org, mike.leach@linaro.org,
         leo.yan@linaro.org, inux-perf-users@vger.kernel.org,
         acme@kernel.org
-Subject: [PATCH 03/12] perf test: Use 3 digits for test numbering now we can have more tests
-Date:   Wed, 15 Dec 2021 16:03:54 +0000
-Message-Id: <20211215160403.69264-3-carsten.haitzler@foss.arm.com>
+Subject: [PATCH 04/12] perf test: Add beginning of test infra + test to exercise coresight
+Date:   Wed, 15 Dec 2021 16:03:55 +0000
+Message-Id: <20211215160403.69264-4-carsten.haitzler@foss.arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211215160403.69264-1-carsten.haitzler@foss.arm.com>
 References: <20211215160403.69264-1-carsten.haitzler@foss.arm.com>
@@ -37,71 +37,413 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Carsten Haitzler <carsten.haitzler@arm.com>
 
-This is in preparation for adding more tests that will need the test
-number to be 3 digts so they align nicely in the output.
+This adds the initial test harness to run perf record and examine the
+resuling output when coresight is enabled on arm64 and check the
+resulting quality of the output as part of perf test.
 
 Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 ---
- tools/perf/tests/builtin-test.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ MAINTAINERS                                   |   3 +
+ tools/perf/Makefile.perf                      |  14 +-
+ .../tests/shell/coresight_asm_pure_loop.sh    |  18 +++
+ tools/perf/tests/shell/lib/coresight.sh       | 130 ++++++++++++++++++
+ tools/perf/tests/shell/tools/Makefile         |  26 ++++
+ .../perf/tests/shell/tools/coresight/Makefile |  27 ++++
+ .../shell/tools/coresight/Makefile.miniconfig |  23 ++++
+ .../tools/coresight/asm_pure_loop/Makefile    |  30 ++++
+ .../coresight/asm_pure_loop/asm_pure_loop.S   |  28 ++++
+ 9 files changed, 297 insertions(+), 2 deletions(-)
+ create mode 100755 tools/perf/tests/shell/coresight_asm_pure_loop.sh
+ create mode 100644 tools/perf/tests/shell/lib/coresight.sh
+ create mode 100644 tools/perf/tests/shell/tools/Makefile
+ create mode 100644 tools/perf/tests/shell/tools/coresight/Makefile
+ create mode 100644 tools/perf/tests/shell/tools/coresight/Makefile.miniconfig
+ create mode 100644 tools/perf/tests/shell/tools/coresight/asm_pure_loop/Makefile
+ create mode 100644 tools/perf/tests/shell/tools/coresight/asm_pure_loop/asm_pure_loop.S
 
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index 849737ead9fd..8652dcc4912c 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -435,7 +435,7 @@ static int run_shell_tests(int argc, const char *argv[], int i, int width,
- 			continue;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 13f9a84a617e..d46e8469c467 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1894,6 +1894,9 @@ F:	tools/perf/arch/arm/util/auxtrace.c
+ F:	tools/perf/arch/arm/util/cs-etm.c
+ F:	tools/perf/arch/arm/util/cs-etm.h
+ F:	tools/perf/arch/arm/util/pmu.c
++F:	tools/perf/tests/shell/coresight_*
++F:	tools/perf/tests/shell/tools/Makefile
++F:	tools/perf/tests/shell/tools/coresight/*
+ F:	tools/perf/util/cs-etm-decoder/*
+ F:	tools/perf/util/cs-etm.*
  
- 		st.file = ent->d_name;
--		pr_info("%2d: %-*s:", i, width, test_suite.desc);
-+		pr_info("%3d: %-*s:", i, width, test_suite.desc);
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 80522bcfafe0..26467a2c71f4 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -630,7 +630,15 @@ sync_file_range_tbls := $(srctree)/tools/perf/trace/beauty/sync_file_range.sh
+ $(sync_file_range_arrays): $(linux_uapi_dir)/fs.h $(sync_file_range_tbls)
+ 	$(Q)$(SHELL) '$(sync_file_range_tbls)' $(linux_uapi_dir) > $@
  
- 		if (intlist__find(skiplist, i)) {
- 			color_fprintf(stderr, PERF_COLOR_YELLOW, " Skip (user override)\n");
-@@ -485,7 +485,7 @@ static int __cmd_test(int argc, const char *argv[], struct intlist *skiplist)
- 				continue;
- 		}
+-all: shell_compatibility_test $(ALL_PROGRAMS) $(LANG_BINDINGS) $(OTHER_PROGRAMS)
++TESTS_TOOLS_DIR := $(srctree)/tools/perf/tests/shell/tools
++
++tests-tools-targets: FORCE
++	$(Q)$(MAKE) -C $(TESTS_TOOLS_DIR)
++
++tests-tools-targets-clean:
++	$(Q)$(MAKE) -C $(TESTS_TOOLS_DIR) clean
++
++all: shell_compatibility_test $(ALL_PROGRAMS) $(LANG_BINDINGS) $(OTHER_PROGRAMS) tests-tools-targets
  
--		pr_info("%2d: %-*s:", i, width, test_description(t, -1));
-+		pr_info("%3d: %-*s:", i, width, test_description(t, -1));
+ # Create python binding output directory if not already present
+ _dummy := $(shell [ -d '$(OUTPUT)python' ] || mkdir -p '$(OUTPUT)python')
+@@ -1020,6 +1028,7 @@ install-tests: all install-gtk
+ 		$(INSTALL) tests/shell/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
+ 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+ 		$(INSTALL) tests/shell/lib/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
++	$(Q)$(MAKE) -C tests/shell/tools install-tests
  
- 		if (intlist__find(skiplist, i)) {
- 			color_fprintf(stderr, PERF_COLOR_YELLOW, " Skip (user override)\n");
-@@ -525,7 +525,7 @@ static int __cmd_test(int argc, const char *argv[], struct intlist *skiplist)
- 							curr, argc, argv))
- 					continue;
+ install-bin: install-tools install-tests install-traceevent-plugins
  
--				pr_info("%2d.%1d: %-*s:", i, subi + 1, subw,
-+				pr_info("%3d.%1d: %-*s:", i, subi + 1, subw,
- 					test_description(t, subi));
- 				test_and_print(t, subi);
- 			}
-@@ -560,7 +560,7 @@ static int perf_test__list_shell(int argc, const char **argv, int i)
- 		if (!perf_test__matches(t.desc, curr, argc, argv))
- 			continue;
+@@ -1088,7 +1097,7 @@ endif # BUILD_BPF_SKEL
+ bpf-skel-clean:
+ 	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS)
  
--		pr_info("%2d: %s\n", i, t.desc);
-+		pr_info("%3d: %s\n", i, t.desc);
+-clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean
++clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean tests-tools-targets-clean
+ 	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive $(OUTPUT)perf-with-kcore $(OUTPUT)perf-iostat $(LANG_BINDINGS)
+ 	$(Q)find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
+ 	$(Q)$(RM) $(OUTPUT).config-detected
+@@ -1155,5 +1164,6 @@ FORCE:
+ .PHONY: shell_compatibility_test please_set_SHELL_PATH_to_a_more_modern_shell
+ .PHONY: $(GIT-HEAD-PHONY) TAGS tags cscope FORCE prepare
+ .PHONY: libtraceevent_plugins archheaders
++.PHONY: $(TESTS_TOOLS_TARGETS)
  
- 	}
- 
-@@ -582,14 +582,14 @@ static int perf_test__list(int argc, const char **argv)
- 		if (!perf_test__matches(test_description(t, -1), curr, argc, argv))
- 			continue;
- 
--		pr_info("%2d: %s\n", i, test_description(t, -1));
-+		pr_info("%3d: %s\n", i, test_description(t, -1));
- 
- 		if (has_subtests(t)) {
- 			int subn = num_subtests(t);
- 			int subi;
- 
- 			for (subi = 0; subi < subn; subi++)
--				pr_info("%2d:%1d: %s\n", i, subi + 1,
-+				pr_info("%3d:%1d: %s\n", i, subi + 1,
- 					test_description(t, subi));
- 		}
- 	}
+ endif # force_fixdep
+diff --git a/tools/perf/tests/shell/coresight_asm_pure_loop.sh b/tools/perf/tests/shell/coresight_asm_pure_loop.sh
+new file mode 100755
+index 000000000000..542d4a37e349
+--- /dev/null
++++ b/tools/perf/tests/shell/coresight_asm_pure_loop.sh
+@@ -0,0 +1,18 @@
++#!/bin/sh -e
++# Coresight / ASM Pure Loop
++
++# SPDX-License-Identifier: GPL-2.0
++# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++
++TEST="asm_pure_loop"
++. $(dirname $0)/lib/coresight.sh
++ARGS=""
++DATV="out"
++DATA="$DATD/perf-$TEST-$DATV.data"
++
++perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
++
++perf_dump_aux_verify "$DATA" 2601 334 334
++
++err=$?
++exit $err
+diff --git a/tools/perf/tests/shell/lib/coresight.sh b/tools/perf/tests/shell/lib/coresight.sh
+new file mode 100644
+index 000000000000..cd6c1283e6f5
+--- /dev/null
++++ b/tools/perf/tests/shell/lib/coresight.sh
+@@ -0,0 +1,130 @@
++# SPDX-License-Identifier: GPL-2.0
++# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++
++# This is sourced from a driver script so no need for #!/bin... etc. at the
++# top - the assumption below is that it runs as part of sourcing after the
++# test sets up some basic env vars to say what it is.
++
++# perf record options for the perf tests to use
++PERFRECMEM="-m ,128M"
++PERFRECOPT="$PERFRECMEM -e cs_etm//u"
++
++# These tests need to be run as root or coresight won't allow large buffers
++# and will not collect proper data
++UID=`id -u`
++if test "$UID" -ne 0; then
++	echo "Not running as root... skip"
++	exit 2
++fi
++
++TOOLS=$(dirname $0)/tools
++DIR="$TOOLS/coresight/$TEST"
++BIN="$DIR/$TEST"
++# If the test tool/binary does not exist and is executable then skip the test
++if ! test -x "$BIN"; then exit 2; fi
++DATD="."
++# If the data dir env is set then make the data dir use that instead of ./
++if test -n "$PERF_TEST_CORESIGHT_DATADIR"; then
++	DATD="$PERF_TEST_CORESIGHT_DATADIR";
++fi
++# If the stat dir env is set then make the data dir use that instead of ./
++STATD="."
++if test -n "$PERF_TEST_CORESIGHT_STATDIR"; then
++	STATD="$PERF_TEST_CORESIGHT_STATDIR";
++fi
++
++# Called if the test fails - error code 2
++err() {
++	echo "$1"
++	exit 1
++}
++
++# Check that some statistics from our perf
++check_val_min() {
++	STATF="$4"
++	if test "$2" -lt "$3"; then
++		echo ", FAILED" >> "$STATF"
++		err "Sanity check number of $1 is too low ($2 < $3)"
++	fi
++}
++
++perf_dump_aux_verify() {
++	# Some basic checking that the AUX chunk contains some sensible data
++	# to see that we are recording something and at least a minimum
++	# amount of it. We should almost always see F3 atoms in just about
++	# anything but certainly we will see some trace info and async atom
++	# chunks.
++	DUMP="$DATD/perf-tmp-aux-dump.txt"
++	perf report --stdio --dump -i "$1" | \
++		grep -o -e I_ATOM_F3 -e I_ASYNC -e I_TRACE_INFO > "$DUMP"
++	# Simply count how many of these atoms we find to see that we are
++	# producing a reasonable amount of data - exact checks are not sane
++	# as this is a lossy  process where we may lose some blocks and the
++	# compiler may produce different code depending on the compiler and
++	# optimization options, so this is rough  just to see if we're
++	# either missing almost all the data or all of it
++	ATOM_F3_NUM=`grep I_ATOM_F3 "$DUMP" | wc -l`
++	ATOM_ASYNC_NUM=`grep I_ASYNC "$DUMP" | wc -l`
++	ATOM_TRACE_INFO_NUM=`grep I_TRACE_INFO "$DUMP" | wc -l`
++	rm -f "$DUMP"
++
++	# Arguments provide minimums for a pass
++	CHECK_F3_MIN="$2"
++	CHECK_ASYNC_MIN="$3"
++	CHECK_TRACE_INFO_MIN="$4"
++
++	# Write out statistics, so over time you can track results to see if
++	# there is a pattern - for example we have less "noisy" results that
++	# produce more consistent amounts of data each run, to see if over
++	# time any techinques to  minimize data loss are having an effect or
++	# not
++	STATF="$STATD/stats-$TEST-$DATV.csv"
++	if ! test -f "$STATF"; then
++		echo "ATOM F3 Count, Minimum, ATOM ASYNC Count, Minimum, TRACE INFO Count, Minimum" > "$STATF"
++	fi
++	echo -n "$ATOM_F3_NUM, $CHECK_F3_MIN, $ATOM_ASYNC_NUM, $CHECK_ASYNC_MIN, $ATOM_TRACE_INFO_NUM, $CHECK_TRACE_INFO_MIN" >> "$STATF"
++
++	# Actually check to see if we passed or failed.
++	check_val_min "ATOM_F3" "$ATOM_F3_NUM" "$CHECK_F3_MIN" "$STATF"
++	check_val_min "ASYNC" "$ATOM_ASYNC_NUM" "$CHECK_ASYNC_MIN" "$STATF"
++	check_val_min "TRACE_INFO" "$ATOM_TRACE_INFO_NUM" "$CHECK_TRACE_INFO_MIN" "$STATF"
++	echo ", Ok" >> "$STATF"
++}
++
++perf_dump_aux_tid_verify() {
++	# Specifically crafted test will produce a list of Tread ID's to
++	# stdout that need to be checked to  see that they have had trace
++	# info collected in AUX blocks in the perf data. This will go
++	# through all the TID's that are listed as CID=0xabcdef and see
++	# that all the Thread IDs the test tool reports are  in the perf
++	# data AUX chunks
++
++	# The TID test tools will print a TID per stdout line that are being
++	# tested
++	TIDS=`cat "$2"`
++	# Scan the perf report to find the TIDs that are actually CID in hex
++	# and build a list of the ones found
++	FOUND_TIDS=`perf report --stdio --dump -i "$1" | \
++			grep -o "CID=0x[0-9a-z]\+" | sed 's/CID=//g' | \
++			uniq | sort | uniq`
++
++	# Iterate over the list of TIDs that the test says it has and find
++	# them in the TIDs found in the perf report
++	MISSING=""
++	for TID2 in $TIDS; do
++		FOUND=""
++		for TIDHEX in $FOUND_TIDS; do
++			TID=`printf "%i" $TIDHEX`
++			if test "$TID" -eq "$TID2"; then
++				FOUND="y"
++				break
++			fi
++		done
++		if test -z "$FOUND"; then
++			MISSING="$MISSING $TID"
++		fi
++	done
++	if test -n "$MISSING"; then
++		err "Thread IDs $MISSING not found in perf AUX data"
++	fi
++}
+diff --git a/tools/perf/tests/shell/tools/Makefile b/tools/perf/tests/shell/tools/Makefile
+new file mode 100644
+index 000000000000..c7ada20922fd
+--- /dev/null
++++ b/tools/perf/tests/shell/tools/Makefile
+@@ -0,0 +1,26 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++include ../../../../../tools/scripts/Makefile.include
++include ../../../../../tools/scripts/Makefile.arch
++include ../../../../../tools/scripts/utilities.mak
++
++SUBDIRS = \
++	coresight
++
++all: $(SUBDIRS)
++$(SUBDIRS):
++	$(Q)$(MAKE) -C $@
++
++INSTALLDIRS = $(SUBDIRS:%=install-%)
++
++install-tests: all $(INSTALLDIRS)
++$(INSTALLDIRS):
++	$(Q)$(MAKE) -C $(@:install-%=%) install-tests
++
++CLEANDIRS = $(SUBDIRS:%=clean-%)
++
++clean: $(CLEANDIRS)
++$(CLEANDIRS):
++	$(Q)$(MAKE) -C $(@:clean-%=%) O=$(OUTPUT) clean >/dev/null
++
++.PHONY: all clean install-tests $(SUBDIRS) $(CLEANDIRS) $(INSTALLDIRS)
+diff --git a/tools/perf/tests/shell/tools/coresight/Makefile b/tools/perf/tests/shell/tools/coresight/Makefile
+new file mode 100644
+index 000000000000..723006ea827c
+--- /dev/null
++++ b/tools/perf/tests/shell/tools/coresight/Makefile
+@@ -0,0 +1,27 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++include ../../../../../../tools/scripts/Makefile.include
++include ../../../../../../tools/scripts/Makefile.arch
++include ../../../../../../tools/scripts/utilities.mak
++
++SUBDIRS = \
++	asm_pure_loop
++
++all: $(SUBDIRS)
++$(SUBDIRS):
++	$(Q)$(MAKE) -C $@
++
++INSTALLDIRS = $(SUBDIRS:%=install-%)
++
++install-tests: $(INSTALLDIRS)
++$(INSTALLDIRS):
++	$(Q)$(MAKE) -C $(@:install-%=%) install-tests
++
++CLEANDIRS = $(SUBDIRS:%=clean-%)
++
++clean: $(CLEANDIRS)
++$(CLEANDIRS):
++	$(Q)$(MAKE) -C $(@:clean-%=%) clean >/dev/null
++
++.PHONY: all clean $(SUBDIRS) $(CLEANDIRS) $(INSTALLDIRS)
++
+diff --git a/tools/perf/tests/shell/tools/coresight/Makefile.miniconfig b/tools/perf/tests/shell/tools/coresight/Makefile.miniconfig
+new file mode 100644
+index 000000000000..cedd26c6a0eb
+--- /dev/null
++++ b/tools/perf/tests/shell/tools/coresight/Makefile.miniconfig
+@@ -0,0 +1,23 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++
++ifndef DESTDIR
++prefix ?= $(HOME)
++endif
++
++DESTDIR_SQ = $(subst ','\'',$(DESTDIR))
++perfexecdir = libexec/perf-core
++perfexec_instdir = $(perfexecdir)
++
++ifneq ($(filter /%,$(firstword $(perfexecdir))),)
++perfexec_instdir = $(perfexecdir)
++else
++perfexec_instdir = $(prefix)/$(perfexecdir)
++endif
++
++perfexec_instdir_SQ = $(subst ','\'',$(perfexec_instdir))
++INSTALL = install
++
++include ../../../../../../scripts/Makefile.include
++include ../../../../../../scripts/Makefile.arch
++include ../../../../../../scripts/utilities.mak
+diff --git a/tools/perf/tests/shell/tools/coresight/asm_pure_loop/Makefile b/tools/perf/tests/shell/tools/coresight/asm_pure_loop/Makefile
+new file mode 100644
+index 000000000000..10c5a60cb71c
+--- /dev/null
++++ b/tools/perf/tests/shell/tools/coresight/asm_pure_loop/Makefile
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: GPL-2.0
++# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
++
++include ../Makefile.miniconfig
++
++BIN=asm_pure_loop
++LIB=
++
++all: $(BIN)
++
++$(BIN): $(BIN).S
++ifdef CORESIGHT
++ifeq ($(ARCH),arm64)
++	$(Q)$(CC) $(BIN).S -nostdlib -static -o $(BIN) $(LIB)
++endif
++endif
++
++install-tests: all
++ifdef CORESIGHT
++ifeq ($(ARCH),arm64)
++	$(call QUIET_INSTALL, tests) \
++		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/tools/$(BIN)'; \
++		$(INSTALL) $(BIN) '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/tools/$(BIN)/$(BIN)'
++endif
++endif
++
++clean:
++	$(Q)$(RM) -f $(BIN)
++
++.PHONY: all clean install-tests
+diff --git a/tools/perf/tests/shell/tools/coresight/asm_pure_loop/asm_pure_loop.S b/tools/perf/tests/shell/tools/coresight/asm_pure_loop/asm_pure_loop.S
+new file mode 100644
+index 000000000000..262876451021
+--- /dev/null
++++ b/tools/perf/tests/shell/tools/coresight/asm_pure_loop/asm_pure_loop.S
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Tamas Zsoldos <tamas.zsoldos@arm.com>, 2021 */
++
++.globl _start
++_start:
++	mov	x0, 0x000fffff
++	mov	x1, xzr
++loop:
++	nop
++	nop
++	cbnz	x1, noskip
++	nop
++	nop
++	adrp	x2, skip
++	add 	x2, x2, :lo12:skip
++	br	x2
++	nop
++	nop
++noskip:
++	nop
++	nop
++skip:
++	sub	x0, x0, 1
++	cbnz	x0, loop
++
++	mov	x0, #0
++	mov	x8, #93 // __NR_exit syscall
++	svc	#0
 -- 
 2.32.0
 

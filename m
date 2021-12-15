@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE874758E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7444758E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242520AbhLOMa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:30:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20330 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242512AbhLOMa5 (ORCPT
+        id S242527AbhLOMbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:31:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237629AbhLOMbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:30:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639571456;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zH8D1SLNAp4PXkcwxNLQitwyr9VTmaG7uyXu9T1aOg0=;
-        b=PHmC4ld08CIywijvfk1MMoV7RB965i2Qocjfp3rw5w5XuKDFT9UQ4/QlQUmA0fRYoBd/Gz
-        hXCkIkKZbYysbjMUti9lTOyTLUJPwh1wJmaa26f9SvsCaQJR6fZ8xW2w1cQ07FA/peC4rB
-        oSNbMasaODMAgULfCacR5OlQJcPyV80=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-i0AhiATPO_SIrdrUObpvVg-1; Wed, 15 Dec 2021 07:30:55 -0500
-X-MC-Unique: i0AhiATPO_SIrdrUObpvVg-1
-Received: by mail-wm1-f72.google.com with SMTP id g9-20020a1c2009000000b0034569dd335aso637025wmg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:30:55 -0800 (PST)
+        Wed, 15 Dec 2021 07:31:33 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD74C061574;
+        Wed, 15 Dec 2021 04:31:33 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so24676738otv.9;
+        Wed, 15 Dec 2021 04:31:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0TSpLPQPFLItXTo3lZzCz10vs9V+Bflifn6PD2+rUjs=;
+        b=e6pTCNptZTpRA0nZOl6upXu5TF1Mzu+p4NR1V7Ci1Oaar2kwCBdZ5C1Isc0/Z0WiFv
+         b5V/37QeGdSfuPbJx8Y5HFnyig8kFObv0YP6hCktB23tTnbrnic8WmYn4pQXGKDNrzhz
+         L+orZIsgDLd8ccFgWIH/AffKR9/oz6fg3xmAfyAUA9ibrJdKnynobfgyMXb/tw+8YlQQ
+         mDub8RfAJzz7brZ7jEI7rqGaD9ZZ3P50iFS/hTvT4cm1I0tk3Gp5dHx8tHKVRMOUEvHq
+         rCAk8A8sDW0QaLLMer5OkxkPI883qdQxWV+Mpam1lcMG0X1+5jp+gTHGzNhxTCuFLs3K
+         kGPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+        h=x-gm-message-state:sender:subject:from:to:cc:references:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zH8D1SLNAp4PXkcwxNLQitwyr9VTmaG7uyXu9T1aOg0=;
-        b=dkCevUsT/PditW1fdZMF5mI+La0ISky4Cs+D4RgnEbIhF9HaWpF3aFAXuV+JUFNgaP
-         YBmbCwL3k5dsMfX7hQa0Nmhkd3QKi/ShXRfALE0zMmdyFtcfz5D39TLhJTPEhjo/MExc
-         J1DXwLtLrsSaH6R3bibb7H8f9J512xa8DL/MlH+wYRjSnni4huWrAPkAFwrT6pTaBHQC
-         W5orcfPdOTmDjKCFp9XdrP0ja8ga6/s2NFfV7ERZ0uudRQEBMbSMjZ1rfgOeoaWm8mtJ
-         E2E+mt55DiQ+3M5VP2M6eXlMF8ixGAzdFXosS7FCtBEG6jTqlDdveF91+NJonim/ounk
-         b2Kg==
-X-Gm-Message-State: AOAM532uvGnAXRAAz6gK6qWIYwgKNHZlvokm57T6AJ3BdZQKwwComNBT
-        AQLHqz+byTLZUQGtdpMjWjVWxG28xTbvkDwc2bKVjSI8eJEMIZVWmUf3U8xkJKg0+orA2aMqxdG
-        AcXnI6ny31/pHlvjvP1bwPnmX
-X-Received: by 2002:adf:d1a6:: with SMTP id w6mr1020592wrc.274.1639571454270;
-        Wed, 15 Dec 2021 04:30:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwfpgjKYuZNDv0OniYKd7UUVLPlR4v7vEBeJK21+fOTrEhUjq0mHLYuLaFlnRTX/3YAYADjoQ==
-X-Received: by 2002:adf:d1a6:: with SMTP id w6mr1020572wrc.274.1639571454002;
-        Wed, 15 Dec 2021 04:30:54 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c609b.dip0.t-ipconnect.de. [91.12.96.155])
-        by smtp.gmail.com with ESMTPSA id j35sm822030wms.13.2021.12.15.04.30.53
+        bh=0TSpLPQPFLItXTo3lZzCz10vs9V+Bflifn6PD2+rUjs=;
+        b=iBkBmr19H3JNExpou6cW1VMYdYey3OpuIPMaXab20iN8p2Cp7P3tM1VIsLRI16WG7r
+         NUsZW5L5U1nZUwJDIR1bHfkeWU293n4/Spx915JNyWY30tXbbjwRrGdO4VkSOCgRC7oC
+         JiC32/RaOIgA6v1HwsYpXuZ9Fa61ief73XSf3LO659BbIthEUk0+I3Vgg0gzQtMOpYvx
+         vbmV/rRCMVqPCr+LmsEAiSwvEX4gVOxKtKjM1aE7rQAj8U3F7/cxCjIXfF4/tye/ah9G
+         96at2YVw68wV2iK2DG61exipzsnxmHOa8S/FgqdU9fPseAqohmwWgOrpbg/OPQJJvBbv
+         91JA==
+X-Gm-Message-State: AOAM530+IxV+T1ABXOaETe+aeClBQn/781QOHSivye4ZLQlBSWnl+o8j
+        H1rR+p3FfDvyEjvP+0YQnwmmh2aZM9M=
+X-Google-Smtp-Source: ABdhPJyEF+97/XhrZAC0KV+lMOz4inQ2VncVYhhcmHk3f/XtFenVt3rCmmwJVKR5axwfwZcAClRL/w==
+X-Received: by 2002:a05:6830:4391:: with SMTP id s17mr8400677otv.118.1639571492329;
+        Wed, 15 Dec 2021 04:31:32 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bl33sm342599oib.47.2021.12.15.04.31.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 04:30:53 -0800 (PST)
-Message-ID: <783f64f5-3a55-6c42-a740-19a12c2c7321@redhat.com>
-Date:   Wed, 15 Dec 2021 13:30:52 +0100
+        Wed, 15 Dec 2021 04:31:31 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] hwmon : (mr75203) fix macro typo
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Arseny Demidov <arsdemal@gmail.com>
+Cc:     Arseny Demidov <a.demidov@yadro.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211215113023.2945-1-a.demidov@yadro.com>
+ <0baa6133-5903-ffd8-69a0-99fb9f69665d@roeck-us.net>
+Message-ID: <06d7c6ee-2db5-f250-50f7-9a47e33a35b5@roeck-us.net>
+Date:   Wed, 15 Dec 2021 04:31:29 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 1/2] mm: cma: fix allocation may fail sometimes
+In-Reply-To: <0baa6133-5903-ffd8-69a0-99fb9f69665d@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Dong Aisheng <aisheng.dong@nxp.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, dongas86@gmail.com,
-        linux-arm-kernel@lists.infradead.org, jason.hui.liu@nxp.com,
-        leoyang.li@nxp.com, abel.vesa@nxp.com, shawnguo@kernel.org,
-        linux-imx@nxp.com, akpm@linux-foundation.org,
-        m.szyprowski@samsung.com, lecopzer.chen@mediatek.com,
-        vbabka@suse.cz, stable@vger.kernel.org, shijie.qin@nxp.com
-References: <20211215080242.3034856-1-aisheng.dong@nxp.com>
- <20211215080242.3034856-2-aisheng.dong@nxp.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20211215080242.3034856-2-aisheng.dong@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.12.21 09:02, Dong Aisheng wrote:
-> We met dma_alloc_coherent() fail sometimes when doing 8 VPU decoder
-> test in parallel on a MX6Q SDB board.
+On 12/15/21 3:59 AM, Guenter Roeck wrote:
+> On 12/15/21 3:30 AM, Arseny Demidov wrote:
+>> In the file mr75203.c we have a macro named
+>> POWER_DELAY_CYCLE_256, the correct value should be 0x100
+>>
 > 
-> Error log:
-> cma: cma_alloc: linux,cma: alloc failed, req-size: 148 pages, ret: -16
-> cma: number of available pages:
-> 3@125+20@172+12@236+4@380+32@736+17@2287+23@2473+20@36076+99@40477+108@40852+44@41108+20@41196+108@41364+108@41620+
-> 108@42900+108@43156+483@44061+1763@45341+1440@47712+20@49324+20@49388+5076@49452+2304@55040+35@58141+20@58220+20@58284+
-> 7188@58348+84@66220+7276@66452+227@74525+6371@75549=> 33161 free of 81920 total pages
+> How do you know that ? Do you have access to the datasheet, or
+> is it just an assumption based on the name of the define ?
 > 
-> When issue happened, we saw there were still 33161 pages (129M) free CMA
-> memory and a lot available free slots for 148 pages in CMA bitmap that we
-> want to allocate.
-> 
-> If dumping memory info, we found that there was also ~342M normal memory,
-> but only 1352K CMA memory left in buddy system while a lot of pageblocks
-> were isolated.
-> 
-> Memory info log:
-> Normal free:351096kB min:30000kB low:37500kB high:45000kB reserved_highatomic:0KB
-> 	    active_anon:98060kB inactive_anon:98948kB active_file:60864kB inactive_file:31776kB
-> 	    unevictable:0kB writepending:0kB present:1048576kB managed:1018328kB mlocked:0kB
-> 	    bounce:0kB free_pcp:220kB local_pcp:192kB free_cma:1352kB lowmem_reserve[]: 0 0 0
-> Normal: 78*4kB (UECI) 1772*8kB (UMECI) 1335*16kB (UMECI) 360*32kB (UMECI) 65*64kB (UMCI)
-> 	36*128kB (UMECI) 16*256kB (UMCI) 6*512kB (EI) 8*1024kB (UEI) 4*2048kB (MI) 8*4096kB (EI)
-> 	8*8192kB (UI) 3*16384kB (EI) 8*32768kB (M) = 489288kB
-> 
-> The root cause of this issue is that since commit a4efc174b382
-> ("mm/cma.c: remove redundant cma_mutex lock"), CMA supports concurrent
-> memory allocation. It's possible that the pageblock process A try to alloc
-> has already been isolated by the allocation of process B during memory
-> migration.
-> 
-> When there're multi process allocating CMA memory in parallel, it's
-> likely that other the remain pageblocks may have also been isolated,
-> then CMA alloc fail finally during the first round of scanning of the
-> whole available CMA bitmap.
 
-I already raised in different context that we should most probably
-convert that -EBUSY to -EAGAIN --  to differentiate an actual migration
-problem from a simple "concurrent allocations that target the same
-MAX_ORDER -1 range".
+Also, how do you know that the value is wrong, not the name
+of the define ?
 
+Guenter
 
--- 
-Thanks,
-
-David / dhildenb
+> Guenter
+> 
+>> Signed-off-by: Arseny Demidov <a.demidov@yadro.com>
+>> ---
+>>   drivers/hwmon/mr75203.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+>> index 868243dba1ee..1ba1e3145969 100644
+>> --- a/drivers/hwmon/mr75203.c
+>> +++ b/drivers/hwmon/mr75203.c
+>> @@ -93,7 +93,7 @@
+>>   #define VM_CH_REQ    BIT(21)
+>>   #define IP_TMR            0x05
+>> -#define POWER_DELAY_CYCLE_256    0x80
+>> +#define POWER_DELAY_CYCLE_256    0x100
+>>   #define POWER_DELAY_CYCLE_64    0x40
+>>   #define PVT_POLL_DELAY_US    20
+>>
+> 
 

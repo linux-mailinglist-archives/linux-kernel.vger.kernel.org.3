@@ -2,49 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1F447558C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBC14754D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241350AbhLOJy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:54:29 -0500
-Received: from mail.osorio.rs.gov.br ([177.73.0.123]:40729 "EHLO
-        mail.osorio.rs.gov.br" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241347AbhLOJyS (ORCPT
+        id S241020AbhLOJGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230104AbhLOJGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:54:18 -0500
-Received: by mail.osorio.rs.gov.br (Postfix, from userid 999)
-        id 5E8BA487CEE6; Wed, 15 Dec 2021 10:21:36 -0200 (BRST)
-Received: from localhost (nac.osorio.rs.gov.br [127.0.0.1])
-        by nac (Postfix) with SMTP id 32BC5487A64A;
-        Wed, 15 Dec 2021 10:21:03 -0200 (BRST)
-Received: from User (unknown [84.38.132.16])
-        by mail.osorio.rs.gov.br (Postfix) with ESMTP id D8230488B202;
-        Wed, 15 Dec 2021 08:04:08 -0200 (BRST)
-Reply-To: <andrew.bailey@e-nautia.com>
-From:   "Ads" <projetos@gov.br>
-Subject: Urgent
-Date:   Wed, 15 Dec 2021 06:40:54 +0200
+        Wed, 15 Dec 2021 04:06:35 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED7FC061574;
+        Wed, 15 Dec 2021 01:06:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/gnLOx5MckqsqXcaJGTFGvaCSrtiaNjF1HqSIA4z/lw=; b=V9yE5LKY35qxfGLLbo36mQaETj
+        dlECIASz0KjEEKwuEJ4xZnEOLfEhwtmedhIhCanS6gGNkjHmGi1ocK0T7wNqLGharrNG9fUyDhT56
+        SjMffbv5XExgOgYJdjKTaVHmDx4Oebdk2HLkNmIddeJVxey5oMgEU1XfFjOoNGKsuS5+PmOpIBNTr
+        95UT9gudfUmxWuUbMEH5AnFYl3CRAoo379rcpnCCJij8CuxGPDfU4Ick2i7F5Ib6il2ISEVXrrYHl
+        NaatNDDzVWRMkDiZRFoArU+hcqh2ArAGyzKSmidVNViy+abpWzIgSktQHfT6tsH5BF5v25hnHSXPJ
+        Np2HT4pA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxQEz-00EUvr-Aa; Wed, 15 Dec 2021 09:06:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4E3F5300252;
+        Wed, 15 Dec 2021 10:06:25 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 362532B3206D2; Wed, 15 Dec 2021 10:06:25 +0100 (CET)
+Date:   Wed, 15 Dec 2021 10:06:25 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kernel-team@fb.com, x86@kernel.org
+Subject: Re: [PATCH v2 bpf-next 5/7] x86/alternative: introduce text_poke_jit
+Message-ID: <YbmwEZub47vxlFT/@hirez.programming.kicks-ass.net>
+References: <20211215060102.3793196-1-song@kernel.org>
+ <20211215060102.3793196-6-song@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20211215100408.D8230488B202@mail.osorio.rs.gov.br>
-To:     undisclosed-recipients:;
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215060102.3793196-6-song@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Day
+On Tue, Dec 14, 2021 at 10:01:00PM -0800, Song Liu wrote:
+> This will be used by BPF jit compiler to dump JITed binary to a RWX huge
 
-I Am Andrew Bailey -  Governor Bank of England  (https://en.wikipedia.org/wiki/Andrew_Bailey_%28banker%29)
-
-I have a proposal for you If you know you can Handle this,
-Contact me through my private email:( andrew.bailey@e-nautia.com  
-with you full names and address, phone numbers for more details
-I await your reply,
-Regards,
-Andrew Bailey
+RWX *must* not happen, ever. If you still rely on that full NAK.

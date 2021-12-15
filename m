@@ -2,148 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B44C4751CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 06:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50D44751D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 06:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239786AbhLOE5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 23:57:48 -0500
-Received: from mga17.intel.com ([192.55.52.151]:26546 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229554AbhLOE5r (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 23:57:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639544267; x=1671080267;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VkaRvQLoXE620TW1XUKONqpVdjUb10SIg4knOwbVOGo=;
-  b=U0w8MpLmyq3L6wfeNoj+Co3UKihZCxWLeJwnbxSzISj4t/6SY8qnhtbt
-   qKbucyItyAuiTgB0xEztb+vCtRqzOefQOnBNilbpGY+QqU/hI7rO3Fu5r
-   mpk/We1HnLYHn8NC3SloeJ7CEjzwiOuDMtiOyPeIIv4TB/nLKdWoSDgSy
-   P4JiiJhPvxEcby7z+heWSKs7yzLs1LYdnPeXqq120sYgNSQou/+xaoPE6
-   OyspDhhDB07BhXFGctuZdxYtX6oisD/Zfwv5KEIuDbHGoo00y+4v6WWi5
-   /kdfPjSN/Mb1tSWr59y00FoSmhSaFbE6+7/Bq8EurbGRl1qBsjzu6hNDX
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="219831945"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="219831945"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 20:57:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="465389209"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Dec 2021 20:57:45 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxMMK-0001Hc-G5; Wed, 15 Dec 2021 04:57:44 +0000
-Date:   Wed, 15 Dec 2021 12:57:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [norov:bm-new1 2/15] drivers/infiniband/sw/siw/siw_main.c:196:6:
- warning: variable 'num_cpus' is used uninitialized whenever 'if' condition
- is false
-Message-ID: <202112151203.qazbGUpx-lkp@intel.com>
+        id S239802AbhLOFAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 00:00:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229554AbhLOFAv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 00:00:51 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC03C061574;
+        Tue, 14 Dec 2021 21:00:51 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id n15-20020a17090a394f00b001b0f6d6468eso2792718pjf.3;
+        Tue, 14 Dec 2021 21:00:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8sb3K87sdhKiYvwx5bE3jeNXRLJJS0kXGICNRdYkExM=;
+        b=GVxjwKmV+XdfIx3OX8dNy0HsVz+rAhcBP4TxG/bSjazWU1VGQl3lo1m/ntwbSt/fE8
+         +fLt661wiY2Ob3UprzkHURpD8SPtv4vHfUM/qgarRm+yGZxuZRKRzNHfy6+6gVbu+Hm6
+         irdS04nAlXP7ipPNqkW5x5zmKimsFBWvHX9F3Bwrt5Nta8SM6aSBKlZmMehQQRnZQrLS
+         jMbPbmJP843pXc50Ss37z22jgJfrijxc5qboOdvVWhHjb7sXSeK2tJftp8Ha2seC/yVQ
+         /A9vgVwODdZfImj6DIVkjVQAXWlrbNDT0tUyuL5dQtYdvCvOnt9h1qdW/5d2mw0Oo6mr
+         FJSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8sb3K87sdhKiYvwx5bE3jeNXRLJJS0kXGICNRdYkExM=;
+        b=UxWrph/Mo3HKEgUq5pKUuO3WGiARgEvPIy6fzYuN4dlPGcp9BVciKxLKWVTIvjSXRc
+         sE9uXupOhed5MeGEPVz//d7xKlFOib/uflbHeI7cd1tLK3AOQwdcgd/XvzNV8/FgtSwk
+         iz27k8Qjm9ilUGP6r1tb+9AKY1ATrQ17ZfPz2YdS7Z5ghuKfhgL9y1z5xhBuYZjqEE3o
+         cl17G7o0631+CZyg7lxbbcpXWi/ut6b1lm+U5e/6aFiaOtDVZ7ZOQj6LUFHvvbx7ao1r
+         PlYJFtEVFXxVEraBAk7o/RLxLZhbC105wUXKjLYq7oEaUS1D0b+wuBiDSzV+7fRcVoEv
+         4Kfw==
+X-Gm-Message-State: AOAM532tnPdQ0ZFkq+Vz4+EsNO7Ic27KdVnktLb4eIZEjstf2J484ozQ
+        Mv5cQR06kd5Nznmxhar2AKQ=
+X-Google-Smtp-Source: ABdhPJwcOKly8tCIGgpC7MXZRzN03nfzM7/pY6teJOhQSIlHmDoW624D++0O7lZvpqu65iezQV0wQw==
+X-Received: by 2002:a17:902:728e:b0:143:a388:868b with SMTP id d14-20020a170902728e00b00143a388868bmr9724300pll.33.1639544450122;
+        Tue, 14 Dec 2021 21:00:50 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:1a:efea::50b])
+        by smtp.gmail.com with ESMTPSA id m6sm723040pfh.87.2021.12.14.21.00.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Dec 2021 21:00:49 -0800 (PST)
+Message-ID: <fb2ff8b7-ab8c-7c4b-0850-222cd2cf7c4a@gmail.com>
+Date:   Wed, 15 Dec 2021 13:00:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH V7 1/5] swiotlb: Add swiotlb bounce buffer remap function
+ for HV IVM
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        Tianyu.Lan@microsoft.com, michael.h.kelley@microsoft.com
+Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        hch@lst.de, joro@8bytes.org, parri.andrea@gmail.com
+References: <20211213071407.314309-1-ltykernel@gmail.com>
+ <20211213071407.314309-2-ltykernel@gmail.com>
+ <198e9243-abca-b23e-0e8e-8581a7329ede@intel.com>
+ <3243ff22-f6c8-b7cd-26b7-6e917e274a7c@gmail.com>
+ <c25ff1e8-4d1e-cf1c-a9f6-c189307f92fd@intel.com>
+ <a1c8f26f-fbf2-29b6-e734-e6d6151c39f8@amd.com>
+ <7afc23c3-22e7-9bbf-7770-c683bf84a7cc@intel.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <7afc23c3-22e7-9bbf-7770-c683bf84a7cc@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/norov/linux bm-new1
-head:   4c8fba87b160a8063bdd06928dbfc058e26a85db
-commit: 80216b2d5ee90bb6dea0aaa7224948f6deb3ae83 [2/15] lib/cpumask: replace cpumask_weight with cpumask_empty where appropriate
-config: x86_64-randconfig-a012-20211214 (https://download.01.org/0day-ci/archive/20211215/202112151203.qazbGUpx-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/norov/linux/commit/80216b2d5ee90bb6dea0aaa7224948f6deb3ae83
-        git remote add norov https://github.com/norov/linux
-        git fetch --no-tags norov bm-new1
-        git checkout 80216b2d5ee90bb6dea0aaa7224948f6deb3ae83
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/infiniband/sw/siw/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/infiniband/sw/siw/siw_main.c:196:6: warning: variable 'num_cpus' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (cpumask_empty(tx_cpumask)) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/sw/siw/siw_main.c:201:7: note: uninitialized use occurs here
-           if (!num_cpus)
-                ^~~~~~~~
-   drivers/infiniband/sw/siw/siw_main.c:196:2: note: remove the 'if' if its condition is always true
-           if (cpumask_empty(tx_cpumask)) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/sw/siw/siw_main.c:189:17: note: initialize the variable 'num_cpus' to silence this warning
-           int i, num_cpus, cpu, min_use, node = sdev->numa_node, tx_cpu = -1;
-                          ^
-                           = 0
-   1 warning generated.
 
 
-vim +196 drivers/infiniband/sw/siw/siw_main.c
+On 12/15/2021 6:40 AM, Dave Hansen wrote:
+> On 12/14/21 2:23 PM, Tom Lendacky wrote:
+>>> I don't really understand how this can be more general any *not* get
+>>> utilized by the existing SEV support.
+>>
+>> The Virtual Top-of-Memory (VTOM) support is an SEV-SNP feature that is
+>> meant to be used with a (relatively) un-enlightened guest. The idea is
+>> that the C-bit in the guest page tables must be 0 for all accesses. It
+>> is only the physical address relative to VTOM that determines if the
+>> access is encrypted or not. So setting sme_me_mask will actually cause
+>> issues when running with this feature. Since all DMA for an SEV-SNP
+>> guest must still be to shared (unencrypted) memory, some enlightenment
+>> is needed. In this case, memory mapped above VTOM will provide that via
+>> the SWIOTLB update. For SEV-SNP guests running with VTOM, they are
+>> likely to also be running with the Reflect #VC feature, allowing a
+>> "paravisor" to handle any #VCs generated by the guest.
+>>
+>> See sections 15.36.8 "Virtual Top-of-Memory" and 15.36.9 "Reflect #VC"
+>> in volume 2 of the AMD APM [1].
+> 
+> Thanks, Tom, that's pretty much what I was looking for.
+> 
+> The C-bit normally comes from the page tables.  But, the hardware also
+> provides an alternative way to effectively get C-bit behavior without
+> actually setting the bit in the page tables: Virtual Top-of-Memory
+> (VTOM).  Right?
+> 
+> It sounds like Hyper-V has chosen to use VTOM instead of requiring the
+> guest to do the C-bit in its page tables.
+> 
+> But, the thing that confuses me is when you said: "it (VTOM) is meant to
+> be used with a (relatively) un-enlightened guest".  We don't have an
+> unenlightened guest here.  We have Linux, which is quite enlightened.
+>
+>> Is VTOM being used because there's something that completely rules out
+>> using the C-bit in the page tables?  What's that "something"?
 
-   181	
-   182	/*
-   183	 * Choose CPU with least number of active QP's from NUMA node of
-   184	 * TX interface.
-   185	 */
-   186	int siw_get_tx_cpu(struct siw_device *sdev)
-   187	{
-   188		const struct cpumask *tx_cpumask;
-   189		int i, num_cpus, cpu, min_use, node = sdev->numa_node, tx_cpu = -1;
-   190	
-   191		if (node < 0)
-   192			tx_cpumask = cpu_online_mask;
-   193		else
-   194			tx_cpumask = siw_cpu_info.tx_valid_cpus[node];
-   195	
- > 196		if (cpumask_empty(tx_cpumask)) {
-   197			/* no CPU on this NUMA node */
-   198			tx_cpumask = cpu_online_mask;
-   199			num_cpus = cpumask_weight(tx_cpumask);
-   200		}
-   201		if (!num_cpus)
-   202			goto out;
-   203	
-   204		cpu = cpumask_first(tx_cpumask);
-   205	
-   206		for (i = 0, min_use = SIW_MAX_QP; i < num_cpus;
-   207		     i++, cpu = cpumask_next(cpu, tx_cpumask)) {
-   208			int usage;
-   209	
-   210			/* Skip any cores which have no TX thread */
-   211			if (!siw_tx_thread[cpu])
-   212				continue;
-   213	
-   214			usage = atomic_read(&per_cpu(siw_use_cnt, cpu));
-   215			if (usage <= min_use) {
-   216				tx_cpu = cpu;
-   217				min_use = usage;
-   218			}
-   219		}
-   220		siw_dbg(&sdev->base_dev,
-   221			"tx cpu %d, node %d, %d qp's\n", tx_cpu, node, min_use);
-   222	
-   223	out:
-   224		if (tx_cpu >= 0)
-   225			atomic_inc(&per_cpu(siw_use_cnt, tx_cpu));
-   226		else
-   227			pr_warn("siw: no tx cpu found\n");
-   228	
-   229		return tx_cpu;
-   230	}
-   231	
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+For "un-enlightened" guest, there is an another system running insider
+the VM to emulate some functions(tsc, timer, interrupt and so on) and
+this helps not to modify OS(Linux/Windows) a lot. In Hyper-V Isolation
+VM, we called the new system as HCL/paravisor. HCL runs in the VMPL0 and 
+Linux runs in VMPL2. This is similar with nested virtualization. HCL
+plays similar role as L1 hypervisor to emulate some general functions
+(e.g, rdmsr/wrmsr accessing and interrupt injection) which needs to be
+enlightened in the enlightened guest. Linux kernel needs to handle
+#vc/#ve exception directly in the enlightened guest. HCL handles such
+exception in un-enlightened guest and emulate interrupt injection which
+helps not to modify OS core part code. Using vTOM also is same purpose.
+Hyper-V uses vTOM avoid changing page table related code in OS(include
+Windows and Linux)and just needs to map memory into decrypted address
+space above vTOM in the driver code.
+
+Linux has generic swiotlb bounce buffer implementation and so introduce
+swiotlb_unencrypted_base here to set shared memory boundary or vTOM.
+Hyper-V Isolation VM is un-enlightened guest. Hyper-V doesn't expose 
+sev/sme capability to guest and so SEV code actually doesn't work.
+So we also can't interact current existing SEV code and these code is
+for enlightened guest support without HCL/paravisor. If other platforms
+or SEV want to use similar vTOM feature, swiotlb_unencrypted_base can
+be reused. So swiotlb_unencrypted_base is a general solution for all
+platforms besides SEV and Hyper-V.
+
+
+
+
+
+
+
+
+
+

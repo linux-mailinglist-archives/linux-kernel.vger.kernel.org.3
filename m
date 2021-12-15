@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60448475018
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F1247501C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239303AbhLOBC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 20:02:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44663 "EHLO
+        id S239030AbhLOBCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 20:02:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42345 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238926AbhLOBBW (ORCPT
+        by vger.kernel.org with ESMTP id S238939AbhLOBBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 20:01:22 -0500
+        Tue, 14 Dec 2021 20:01:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639530081;
+        s=mimecast20190719; t=1639530082;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rlYV5jujXPmrTef8VMng0tahS4lUJ8NEfoE2L3lNMRc=;
-        b=SE76yGpHRy+/L5u2l9/1aQsdmfkYRWn7lK9RyA6WhmQUnHOLiEsu7yMIOLYoBhcqyabgaq
-        darQDCf20zYA159gtvH6dtvdeodCSD3A5GTgaw5gE6DXsA2xMT9RxQO+Zy1Q/m2hFMSr7O
-        schzl69qYhpKM0thMBKihyFJ6hJGveI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=/Vk2qnrhEf+Kai7YeRcT32BEinF6P94Q+jPpKbZkEq0=;
+        b=fuGVBp123MMiOjKT8yf+TTR7JfrOMeXsAIYNxtxjcxvy3wFB5htLDOjAob14UKzK9CIwgp
+        TUc0a3y4Bnvjt/OJ4G3xJeJnGWccuDKbWXY/SzDHGOnwtcNaJfVmpHKL2wwAgQ5A4Z5RS8
+        L7fpfQn1CdX9wSIR4n1DjVF1dzbwZP4=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-189-c8PxlPNwMGOWLh1_AbBoSw-1; Tue, 14 Dec 2021 20:01:20 -0500
-X-MC-Unique: c8PxlPNwMGOWLh1_AbBoSw-1
-Received: by mail-wr1-f72.google.com with SMTP id d3-20020adfa343000000b0018ed6dd4629so5378945wrb.2
+ us-mta-39-Gzcy_5OBN6quZeYsPzBmuA-1; Tue, 14 Dec 2021 20:01:21 -0500
+X-MC-Unique: Gzcy_5OBN6quZeYsPzBmuA-1
+Received: by mail-wm1-f72.google.com with SMTP id j20-20020a05600c1c1400b00343ad0c4c40so1928956wms.0
         for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:01:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rlYV5jujXPmrTef8VMng0tahS4lUJ8NEfoE2L3lNMRc=;
-        b=58LI/6lROXsMQt+18ybzT45sdApoEPOgXQUD8Bb80lhye735yk9ZgnmVMGtAWdkjr+
-         eh269Rycw/CPFH0HQMnZKMELO6Wix/JBc9+3PMMPMsv8NHYMm1XkIRwya8W8mYsqc2FJ
-         svD/wpRoXTWJs47irXC42dR34Gz7rXktTVIE9eby0nKBYecV/mTPfC8jhdI/VLrD3F44
-         oemJfi619VBWznCNKpK4LwJGr3GVoEMbpcVgja4gpDDXWnFEq3TA/RWMXOmHQ9jfT75L
-         6XXmd5zUhaZMYHwHJ7dWMS6WQzledv3QQl6422x6vwRIItppH8pjGsz8OX61GsEV+GJa
-         5ScQ==
-X-Gm-Message-State: AOAM532rm8Lwf6w1nEprrKxpY2meUb4QKKpUiSEYPKuPfzv/LUT7FL43
-        AJTxb6cKC/9HKX9iFcSJDOO4o06V7ktxh1Rl9y7KnkxROaoaRwt1Wi32lIyBocdmKAwrs9DN41i
-        mvGN02fI8R9XVQ/QcboYvJLOG6qciT+L71RFS2kFsh5sn7tVrzSYN8XwSe82QcLOnHJUHHZsan2
-        A=
-X-Received: by 2002:a05:600c:4ca3:: with SMTP id g35mr4290wmp.54.1639530079249;
+        bh=/Vk2qnrhEf+Kai7YeRcT32BEinF6P94Q+jPpKbZkEq0=;
+        b=AEUNruAEp/T7vnDV6JHSXIeXdwgDcZK1g29/V+jXJnsiIiFXjlrd94npMb8JBFBiQI
+         oPMl3uA2ZnbM9ZA6nFuqHH671TotL68g96qIXiQl2kGpiVZt2fLnp7wniGvU72aepY6L
+         DyRZ4k/2XjqnPaUj/gbfkfzl8T5fXGLSKxC/tU0vUgJC5Z0r9CdvjIA8RtvLCobaOA55
+         Ox8IpnQ1xCy+XAgpdjErr4kimzCz8HDbCzunqIM95PkVwtu5ziA0bgJqQj2BLMRm1PsI
+         vb3qwy5IckH6FnvwuRgP8kPDIlObL5TNbDMVnFv9ar0e0KfY7ImUvO3M9YFHRc7ZZ1sp
+         A47Q==
+X-Gm-Message-State: AOAM530mbupx4OKcmSRRZcgHlKNTQxC06Nwl0/Y5htO/gxC0P6PpLSYL
+        Lkp/0y0lS9yf+IY7q2NlfmOJzgKme7UjRFAQ6upv4/Y4RnZF008OIVq20wWM2w7xcWt+ij8jaV+
+        ecY2El2bRysemDbjEGSfJQdspWXH9OP/SB5Wp6akfjqhSO306bOSspTWsr1ZK7XAeUDg7pfWM+N
+        k=
+X-Received: by 2002:a5d:64c4:: with SMTP id f4mr2274522wri.6.1639530079951;
         Tue, 14 Dec 2021 17:01:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxwbrE2P7uLd5gohyPv60Cvh2x5AK1c5Fb/dSoeBTKa1erFm5CYUANmoo1pNd8dydJLjKaDOg==
-X-Received: by 2002:a05:600c:4ca3:: with SMTP id g35mr4272wmp.54.1639530078984;
-        Tue, 14 Dec 2021 17:01:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxpgf/synfrDivMDCeU4Ykh/9ngl8VnGKCZ76Fqha4/HBFuKYtD61t4V9M6O1vIOzMH4S9syg==
+X-Received: by 2002:a5d:64c4:: with SMTP id f4mr2274509wri.6.1639530079778;
+        Tue, 14 Dec 2021 17:01:19 -0800 (PST)
 Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id o64sm334543wme.28.2021.12.14.17.01.18
+        by smtp.gmail.com with ESMTPSA id o64sm334543wme.28.2021.12.14.17.01.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 17:01:18 -0800 (PST)
+        Tue, 14 Dec 2021 17:01:19 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-        Sandy Huang <hjc@rock-chips.com>
-Subject: [PATCH 33/60] drm/rockchip: Add support for the nomodeset kernel parameter
-Date:   Wed, 15 Dec 2021 01:59:41 +0100
-Message-Id: <20211215010008.2545520-34-javierm@redhat.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>
+Subject: [PATCH 34/60] drm/savage: Add support for the nomodeset kernel parameter
+Date:   Wed, 15 Dec 2021 01:59:42 +0100
+Message-Id: <20211215010008.2545520-35-javierm@redhat.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211215010008.2545520-1-javierm@redhat.com>
 References: <20211215010008.2545520-1-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -83,23 +80,23 @@ to also support the command line parameter.
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
 
- drivers/gpu/drm/rockchip/rockchip_drm_drv.c | 3 +++
+ drivers/gpu/drm/savage/savage_drv.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-index bec207de4544..ac190e2b1f7a 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-@@ -457,6 +457,9 @@ static int __init rockchip_drm_init(void)
- {
- 	int ret;
+diff --git a/drivers/gpu/drm/savage/savage_drv.c b/drivers/gpu/drm/savage/savage_drv.c
+index 799bd11adb9c..bb3f12874178 100644
+--- a/drivers/gpu/drm/savage/savage_drv.c
++++ b/drivers/gpu/drm/savage/savage_drv.c
+@@ -74,6 +74,9 @@ static struct pci_driver savage_pci_driver = {
  
+ static int __init savage_init(void)
+ {
 +	if (drm_firmware_drivers_only())
 +		return -ENODEV;
 +
- 	num_rockchip_sub_drivers = 0;
- 	ADD_ROCKCHIP_SUB_DRIVER(vop_platform_driver, CONFIG_DRM_ROCKCHIP);
- 	ADD_ROCKCHIP_SUB_DRIVER(rockchip_lvds_driver,
+ 	driver.num_ioctls = savage_max_ioctl;
+ 	return drm_legacy_pci_init(&driver, &savage_pci_driver);
+ }
 -- 
 2.33.1
 

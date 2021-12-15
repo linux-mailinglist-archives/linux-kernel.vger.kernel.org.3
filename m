@@ -2,283 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 488D4475C50
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5236475C47
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244218AbhLOPyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:54:00 -0500
-Received: from mail-bn8nam11on2073.outbound.protection.outlook.com ([40.107.236.73]:57466
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244199AbhLOPx6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:53:58 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lG224ivbGPVjdn2thirLvh2b8cG7nYS3YPmPvCvh0GKDa1dM5eSpxuHvHaq4IYScd+TOQNqpf+WZ4lhB/ruVlyjD/C4tM5vC5seaNjirbvX2l5Zr1+awc+qqMjIoIMmHBgoovfE4AMhlkM97vf429Gbjyq+iBc69JRNIzPS+w64ADd6urSO5g1O1qSMF6i/VYhj4gS5X2sA8y/eCJ1DBYThiFIlzlLmt8vX4JCk3cEdjjMzg0G504xDLicZN+OeFKdhv5M4xLVgLAxxZRB6pg6kVOP+Tttic/H1aO8bSuSOJY7TB8rxsQCpwDnFOuz1Z2a982R66IOZqO5YNqMsUWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XcgOg1QhN9XlsVLPyfsom0Nl0AfmQOuSf9mEtgPjK/A=;
- b=NPljaO0PQy7t+xFz6Nxic2dHjsXr5iUy6wAvN2pYq/TOeWNCuB9+v2Prpk7jwOiYRrUb3m7Q6V3VCAFwGIKTpI6DEIOWV3i3yskv34TVlDHY+Nm5N0FYVD/Ng5FoWUGXLHbrTAr5cmZbrH96g0ahwbiKJNpbmjuNmuYONWTiXBo7oiCHQHmq2rEnhU9WJUnsnSnI5P6TheaBJsbwjNPx6WJtmhCowNqN3wI2esqQ32Oac8aGivPThxMsENhDsMOVuADVbEsmcl2m5bsop0WsrZz4Q0AQVUdZ+ytD03MXtNGgAzZ9gLSnBG5reUbE5TXkw34+ZVMXqL5sTkAwwVMYXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XcgOg1QhN9XlsVLPyfsom0Nl0AfmQOuSf9mEtgPjK/A=;
- b=ZLPeDTOYm0qWYn9GAcEld4nLqR2VB93bemVD78tC/PcGPXkk81lDp+69oF3EK4SoI4esn4XwNI9hAitEVrzfkoDN0zLiwBTda1xVcAwv2zfqpUpKWTr0hdLcAx0cxe8Bokbzt7jo6xDTJxneP0sS/k61UovRuiHu0V+Kr6Up95I=
-Received: from BN9PR03CA0863.namprd03.prod.outlook.com (2603:10b6:408:13d::28)
- by DM6PR12MB3723.namprd12.prod.outlook.com (2603:10b6:5:1c8::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Wed, 15 Dec
- 2021 15:53:56 +0000
-Received: from BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13d:cafe::13) by BN9PR03CA0863.outlook.office365.com
- (2603:10b6:408:13d::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14 via Frontend
- Transport; Wed, 15 Dec 2021 15:53:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT025.mail.protection.outlook.com (10.13.177.136) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4778.13 via Frontend Transport; Wed, 15 Dec 2021 15:53:55 +0000
-Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 15 Dec
- 2021 09:53:55 -0600
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
-        <mchehab@kernel.org>, <tony.luck@intel.com>, <james.morse@arm.com>,
-        <rric@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
-        <william.roche@oracle.com>, "Yazen Ghannam" <yazen.ghannam@amd.com>
-Subject: [PATCH v2 2/2] EDAC/amd64: Add new register offset support and related changes
-Date:   Wed, 15 Dec 2021 15:53:09 +0000
-Message-ID: <20211215155309.2711917-3-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211215155309.2711917-1-yazen.ghannam@amd.com>
-References: <20211215155309.2711917-1-yazen.ghannam@amd.com>
+        id S244187AbhLOPxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:53:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34264 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238061AbhLOPxd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 10:53:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639583612;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Abx6XVTZxeI1Y9sqCGZVk3LIO7eRn0VFyYMe2HXMnBc=;
+        b=ATbc0FhCw5O2AAwaiKHTWe4CtE3VgSUDjgEhflq8S5Jj9gfQaZ8gT+y5RJsyjhqX8cWhdU
+        JhF3byd9+i3EpI+ca9GERcN0uxjBUU1HgRuE5nLBE55V0VMVv7hA6NhnlxgBT7nchTl1hy
+        OhShFtSjZ2d0IXn38Uc38UazO4bhatM=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-628-x4gc3YEKNXyfZPP1q87_7w-1; Wed, 15 Dec 2021 10:53:31 -0500
+X-MC-Unique: x4gc3YEKNXyfZPP1q87_7w-1
+Received: by mail-yb1-f199.google.com with SMTP id p133-20020a255b8b000000b006086e19f89fso25045914ybb.19
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:53:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Abx6XVTZxeI1Y9sqCGZVk3LIO7eRn0VFyYMe2HXMnBc=;
+        b=KrtZKj8WVMv8a+Y/PbXbhzqcq2jiE/EqT8r7qh0kswR95tLxiuKpEeV+/ALVgNdKSL
+         ApGFHM5Hg4XTqcO+mXZSrxWYnt0Xa4JU5QlL1x+q/sWszT9kcOScOdoe+dtDWMy6duEX
+         yDbmAxf0OhcRKf0SmieDQQQHgstm5wowxBUjNc3DTEf8wx7xW2eD5LmC2CEGlBKcSHLJ
+         f8rJyluoQC3okVyZrMId47YWDb9DRWvMNpxuI07GqSlmztqZhUCL4G9ckJuG1CIXXhyh
+         CNFKfoWe3uO9jspaztDRkKW7eDUxhnnbVKmMrikuT1jrC6zUcPAbsyPeIypwQNkqOf5U
+         8ewQ==
+X-Gm-Message-State: AOAM531M0bAuWL4oY/A/kAbfbCPxO8kt9OiA+2OBGjlO3lNM74gZTgfk
+        7Ff0SNqkN67l8eYkkQy5sIOjUFm+7PLXzn7FLUHOLfj1SSrcUEpKP0YMtO7UrMKveqmyg+AyrHE
+        1qfWtvWq6ZZmD6Kc3unwJdzarOj4HIcw7OWFeHwLt
+X-Received: by 2002:a25:d16:: with SMTP id 22mr7262210ybn.51.1639583611034;
+        Wed, 15 Dec 2021 07:53:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxgo9cFMLm8mx2Ky3hk+GNpyqtsSqduxH8gzk/VkQSFZWfkZLjMF1CAQ43GEotn4on8nVyw7ekmdDrUu0xOLiI=
+X-Received: by 2002:a25:d16:: with SMTP id 22mr7262175ybn.51.1639583610794;
+ Wed, 15 Dec 2021 07:53:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c2ecf879-7793-4f54-8d8f-08d9bfe319c1
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3723:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3723DBAAD2710DBF7CBCD382F8769@DM6PR12MB3723.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5yOMQqIPZuEIxgBug++Ne9grJn4ji7qFQPWdOSz2eJpr5/u+aTBQaiafhmg2iAGDXKc7IRsNDRxsEvrib2vzBd7hasWBUw7I5LPshARZq/qSLAtxxaDGt/7m58Ev3Kc9TB4KHov2Iy88wONwa4r8SYOh8vKWDbA3fH1JQdOxCLfa4sWykWt2USCdkT0QRjc/JwlMiG0iLxF95drU5pVciQieHMd5nGCmyKqEsBaQdNRhxwFSGNqQkrQ7ZvnXFTH2PMgy5bz4OPUcWjxcZ1Ij8hIq8H5eP8y+87d8bEZOawpzh8Lu2PTgMgJVq3oL1lC8KsEVcF8Kl5GxfK+B5u7NTfRnxsrfbMEXzCOxFkTjIzCo1XlZGYFWVNKrxv66e30eDbzWvxMgPT2cam57cxFYwE5w+bJU79i4D1yVrYUFJframupJ+v8TZkIZw9asRHe5t6vh1QFbCgeWygeLzOVFhzsDKZjZiua6PdVHD37fNQnxPw8LICCWNk6vxPrpbmVNUIIumHEIJuqaNQDtsh2qCEe0NCrybilFqMyrMrMi8bxxY6F6Q9ZTgVUjyfnyJBZXVS/288znH4xos3fuQIsEW9lnt1AqEzvuyQ1tEniodaNhOniHWPbxu5APeiybpy3MpeLE2Ls/mYq11YLbU1gSBd+K18Hkh+v5a9YSKT8YNur0sJV3D4iGp4n5uFhqhFkxlJbFpT6QFehCPCC0lkgoFSU///UFHeAk3A5hZq8zEyM1sUVARyPeDVjNV1dLhulL+a8oV/fiLAAgPkpQEx0zjI03QyEmzuqax8QnIkSDDTJzWD7YL4VbB0pZun2gtOLp315F5ZmlLumUxFIJ5ugUfsvWFsK3H43YndhCQmUyh+yeow18PvB0i/bzMq/12W43
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(7696005)(36756003)(508600001)(47076005)(26005)(4326008)(966005)(81166007)(36860700001)(6666004)(54906003)(426003)(83380400001)(356005)(86362001)(5660300002)(8676002)(44832011)(316002)(2616005)(40460700001)(2906002)(8936002)(186003)(16526019)(1076003)(6916009)(70586007)(70206006)(336012)(82310400004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 15:53:55.9763
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2ecf879-7793-4f54-8d8f-08d9bfe319c1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3723
+References: <20211208181714.880312-1-jsavitz@redhat.com> <YboN+O3QuJw1Px+7@fixkernel.com>
+In-Reply-To: <YboN+O3QuJw1Px+7@fixkernel.com>
+From:   Joel Savitz <jsavitz@redhat.com>
+Date:   Wed, 15 Dec 2021 10:53:15 -0500
+Message-ID: <CAL1p7m5K1c6SELRD=CpMNmEXyDBQc8XvcjraH8xi7xcMS=oBHA@mail.gmail.com>
+Subject: Re: [PATCH v2] mm/oom_kill: wake futex waiters before annihilating
+ victim shared mutex
+To:     Qian Cai <quic_qiancai@quicinc.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Waiman Long <longman@redhat.com>, linux-mm@kvack.org,
+        Nico Pache <npache@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a "family flags" bitmask that can be used to indicate any
-special behavior needed on a per-family basis.
+> I am afraid we can't call futex_exit_release() under rcu_read_lock()
+> because it might sleep.
 
-Add a flag to indicate a system uses the new register offsets introduced
-with Family 19h Model 10h.
+Ah that's too bad. Is there an equivalent atomic call suitable for this purpose?
 
-Use this flag to account for register offset changes, a new bitfield
-indicating DDR5 use on a memory controller, and to set the proper number
-of chip select masks.
+>
+>  BUG: sleeping function called from invalid context at kernel/locking/mutex.c:577
+>  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1509, name: lsbug
+>  preempt_count: 1, expected: 0
+>  3 locks held by lsbug/1509:
+>   #0: ffff00004de99c98 (&mm->mmap_lock){++++}-{3:3}, at: do_page_fault
+>   #1: ffff800010fd8308 (oom_lock){+.+.}-{3:3}, at: __alloc_pages_slowpath.constprop.0
+>   __alloc_pages_may_oom at /usr/src/linux-next/mm/page_alloc.c:4278
+>   (inlined by) __alloc_pages_slowpath at /usr/src/linux-next/mm/page_alloc.c:5058
+>   #2: ffff000867b3b0c0 (&p->alloc_lock){+.+.}-{2:2}, at: find_lock_task_mm
+>   find_lock_task_mm at /usr/src/linux-next/mm/oom_kill.c:145
+>  CPU: 5 PID: 1509 Comm: lsbug Not tainted 5.16.0-rc5-next-20211214+ #172
+>  Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 1.6 06/28/2020
+>  Call trace:
+>   dump_backtrace
+>   show_stack
+>   dump_stack_lvl
+>   dump_stack
+>   __might_resched
+>   __might_sleep
+>   __mutex_lock
+>   mutex_lock_nested
+>   futex_cleanup_begin
+>   futex_cleanup_begin at /usr/src/linux-next/kernel/futex/core.c:1071
+>   futex_exit_release
+>   __oom_kill_process
+>   oom_kill_process
+>   out_of_memory
+>   __alloc_pages_slowpath.constprop.0
+>   __alloc_pages
+>   alloc_pages_vma
+>   alloc_zeroed_user_highpage_movable
+>   do_anonymous_page
+>   __handle_mm_fault
+>   handle_mm_fault
+>   do_page_fault
+>   do_translation_fault
+>   do_mem_abort
+>   el0_da
+>   el0t_64_sync_handler
+>   el0t_64_sync
+>  =============================
+>  [ BUG: Invalid wait context ]
+>  5.16.0-rc5-next-20211214+ #172 Tainted: G        W
+>  -----------------------------
+>  lsbug/1509 is trying to lock:
+>  ffff000867b3ba98 (&tsk->futex_exit_mutex){+.+.}-{3:3}, at: futex_cleanup_begin
+>  other info that might help us debug this:
+>  context-{4:4}
+>  3 locks held by lsbug/1509:
+>   #0: ffff00004de99c98 (&mm->mmap_lock){++++}-{3:3}, at: do_page_fault
+>   #1: ffff800010fd8308 (oom_lock){+.+.}-{3:3}, at: __alloc_pages_slowpath.constprop.0
+>   #2: ffff000867b3b0c0 (&p->alloc_lock){+.+.}-{2:2}, at: find_lock_task_mm
+>  stack backtrace:
+>  CPU: 5 PID: 1509 Comm: lsbug Tainted: G        W         5.16.0-rc5-next-20211214+ #172
+>  Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 1.6 06/28/2020
+>  Call trace:
+>   dump_backtrace
+>   show_stack
+>   dump_stack_lvl
+>   dump_stack
+>   __lock_acquire
+>   lock_acquire
+>   __mutex_lock
+>   mutex_lock_nested
+>   futex_cleanup_begin
+>   futex_exit_release
+>   __oom_kill_process
+>   oom_kill_process
+>   out_of_memory
+>   __alloc_pages_slowpath.constprop.0
+>   __alloc_pages
+>   alloc_pages_vma
+>   alloc_zeroed_user_highpage_movable
+>   do_anonymous_page
+>   __handle_mm_fault
+>   handle_mm_fault
+>   do_page_fault
+>   do_translation_fault
+>   do_mem_abort
+>   el0_da
+>   el0t_64_sync_handler
+>   el0t_64_sync
+>
+> > ---
+> >  mm/oom_kill.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> > index 1ddabefcfb5a..884a5f15fd06 100644
+> > --- a/mm/oom_kill.c
+> > +++ b/mm/oom_kill.c
+> > @@ -44,6 +44,7 @@
+> >  #include <linux/kthread.h>
+> >  #include <linux/init.h>
+> >  #include <linux/mmu_notifier.h>
+> > +#include <linux/futex.h>
+> >
+> >  #include <asm/tlb.h>
+> >  #include "internal.h"
+> > @@ -885,6 +886,11 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
+> >       count_vm_event(OOM_KILL);
+> >       memcg_memory_event_mm(mm, MEMCG_OOM_KILL);
+> >
+> > +     /*
+> > +      * We call futex_exit_release() on the victim task to ensure any waiters on any
+> > +      * process-shared futexes held by the victim task are woken up.
+> > +      */
+> > +     futex_exit_release(victim);
+> >       /*
+> >        * We should send SIGKILL before granting access to memory reserves
+> >        * in order to prevent the OOM victim from depleting the memory
+> > @@ -930,6 +936,12 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
+> >                */
+> >               if (unlikely(p->flags & PF_KTHREAD))
+> >                       continue;
+> > +             /*
+> > +              * We call futex_exit_release() on any task p sharing the
+> > +              * victim->mm to ensure any waiters on any
+> > +              * process-shared futexes held by task p are woken up.
+> > +              */
+> > +             futex_exit_release(p);
+> >               do_send_sig_info(SIGKILL, SEND_SIG_PRIV, p, PIDTYPE_TGID);
+> >       }
+> >       rcu_read_unlock();
+> > --
+> > 2.27.0
+> >
+>
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
-Link:
-https://lkml.kernel.org/r/20211208174356.1997855-5-yazen.ghannam@amd.com
-
-v1->v2:
-* Was patch 4 in v1.
-* Change "has_ddr5" flag to "zn_regs_v2".
-* Drop flag check helper function.
-* Update determine_memory_type() to check bitfield for DDR5.
-* Update code comments.
-
- drivers/edac/amd64_edac.c | 59 +++++++++++++++++++++++++++++++++++----
- drivers/edac/amd64_edac.h | 14 ++++++++++
- 2 files changed, 67 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 1df763128483..b7dd87636155 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -15,6 +15,31 @@ static struct msr __percpu *msrs;
- 
- static struct amd64_family_type *fam_type;
- 
-+/* Family flag helpers */
-+static inline u64 get_addr_cfg(void)
-+{
-+	if (fam_type->flags.zn_regs_v2)
-+		return UMCCH_ADDR_CFG_DDR5;
-+
-+	return UMCCH_ADDR_CFG;
-+}
-+
-+static inline u64 get_addr_mask_sec(void)
-+{
-+	if (fam_type->flags.zn_regs_v2)
-+		return UMCCH_ADDR_MASK_SEC_DDR5;
-+
-+	return UMCCH_ADDR_MASK_SEC;
-+}
-+
-+static inline u64 get_dimm_cfg(void)
-+{
-+	if (fam_type->flags.zn_regs_v2)
-+		return UMCCH_DIMM_CFG_DDR5;
-+
-+	return UMCCH_DIMM_CFG;
-+}
-+
- /* Per-node stuff */
- static struct ecc_settings **ecc_stngs;
- 
-@@ -1429,8 +1454,10 @@ static void __dump_misc_regs_df(struct amd64_pvt *pvt)
- 		edac_dbg(1, "UMC%d x16 DIMMs present: %s\n",
- 				i, (umc->dimm_cfg & BIT(7)) ? "yes" : "no");
- 
--		if (pvt->dram_type == MEM_LRDDR4) {
--			amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_ADDR_CFG, &tmp);
-+		if (pvt->dram_type == MEM_LRDDR4 || pvt->dram_type == MEM_LRDDR5) {
-+			amd_smn_read(pvt->mc_node_id,
-+				     umc_base + get_addr_cfg(),
-+				     &tmp);
- 			edac_dbg(1, "UMC%d LRDIMM %dx rank multiply\n",
- 					i, 1 << ((tmp >> 4) & 0x3));
- 		}
-@@ -1505,7 +1532,7 @@ static void prep_chip_selects(struct amd64_pvt *pvt)
- 
- 		for_each_umc(umc) {
- 			pvt->csels[umc].b_cnt = 4;
--			pvt->csels[umc].m_cnt = 2;
-+			pvt->csels[umc].m_cnt = fam_type->flags.zn_regs_v2 ? 4 : 2;
- 		}
- 
- 	} else {
-@@ -1545,7 +1572,7 @@ static void read_umc_base_mask(struct amd64_pvt *pvt)
- 		}
- 
- 		umc_mask_reg = get_umc_base(umc) + UMCCH_ADDR_MASK;
--		umc_mask_reg_sec = get_umc_base(umc) + UMCCH_ADDR_MASK_SEC;
-+		umc_mask_reg_sec = get_umc_base(umc) + get_addr_mask_sec();
- 
- 		for_each_chip_select_mask(cs, umc, pvt) {
- 			mask = &pvt->csels[umc].csmasks[cs];
-@@ -1628,6 +1655,20 @@ static void determine_memory_type(struct amd64_pvt *pvt)
- 			dimm_cfg |= pvt->umc[i].dimm_cfg;
- 		}
- 
-+		/*
-+		 * Check if the system supports the "DDR Type" field in UMC Config
-+		 * and has DDR5 DIMMs in use.
-+		 */
-+		if (fam_type->flags.zn_regs_v2 && ((umc_cfg & GENMASK(2, 0)) == 0x1)) {
-+			if (dimm_cfg & BIT(5))
-+				pvt->dram_type = MEM_LRDDR5;
-+			else if (dimm_cfg & BIT(4))
-+				pvt->dram_type = MEM_RDDR5;
-+			else
-+				pvt->dram_type = MEM_DDR5;
-+			return;
-+		}
-+
- 		if (dimm_cfg & BIT(5))
- 			pvt->dram_type = MEM_LRDDR4;
- 		else if (dimm_cfg & BIT(4))
-@@ -2174,8 +2215,13 @@ static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
- 	 * There is one mask per DIMM, and two Chip Selects per DIMM.
- 	 *	CS0 and CS1 -> DIMM0
- 	 *	CS2 and CS3 -> DIMM1
-+	 *
-+	 *	Systems with newer register layout have one mask per Chip Select.
- 	 */
--	dimm = csrow_nr >> 1;
-+	if (fam_type->flags.zn_regs_v2)
-+		dimm = csrow_nr;
-+	else
-+		dimm = csrow_nr >> 1;
- 
- 	/* Asymmetric dual-rank DIMM support. */
- 	if ((csrow_nr & 1) && (cs_mode & CS_ODD_SECONDARY))
-@@ -2937,6 +2983,7 @@ static struct amd64_family_type family_types[] = {
- 		.f0_id = PCI_DEVICE_ID_AMD_19H_M10H_DF_F0,
- 		.f6_id = PCI_DEVICE_ID_AMD_19H_M10H_DF_F6,
- 		.max_mcs = 12,
-+		.flags.zn_regs_v2 = 1,
- 		.ops = {
- 			.early_channel_count	= f17_early_channel_count,
- 			.dbam_to_cs		= f17_addr_mask_to_cs_size,
-@@ -3365,7 +3412,7 @@ static void __read_mc_regs_df(struct amd64_pvt *pvt)
- 		umc_base = get_umc_base(i);
- 		umc = &pvt->umc[i];
- 
--		amd_smn_read(nid, umc_base + UMCCH_DIMM_CFG, &umc->dimm_cfg);
-+		amd_smn_read(nid, umc_base + get_dimm_cfg(), &umc->dimm_cfg);
- 		amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &umc->umc_cfg);
- 		amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &umc->sdp_ctrl);
- 		amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &umc->ecc_ctrl);
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 650cab401e21..39ecb77873db 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -271,8 +271,11 @@
- #define UMCCH_BASE_ADDR_SEC		0x10
- #define UMCCH_ADDR_MASK			0x20
- #define UMCCH_ADDR_MASK_SEC		0x28
-+#define UMCCH_ADDR_MASK_SEC_DDR5	0x30
- #define UMCCH_ADDR_CFG			0x30
-+#define UMCCH_ADDR_CFG_DDR5		0x40
- #define UMCCH_DIMM_CFG			0x80
-+#define UMCCH_DIMM_CFG_DDR5		0x90
- #define UMCCH_UMC_CFG			0x100
- #define UMCCH_SDP_CTRL			0x104
- #define UMCCH_ECC_CTRL			0x14C
-@@ -477,11 +480,22 @@ struct low_ops {
- 					 unsigned cs_mode, int cs_mask_nr);
- };
- 
-+struct amd64_family_flags {
-+	/*
-+	 * Indicates that the system supports the new register offsets, etc.
-+	 * first introduced with Family 19h Model 10h.
-+	 */
-+	__u64 zn_regs_v2	: 1,
-+
-+	      __reserved	: 63;
-+};
-+
- struct amd64_family_type {
- 	const char *ctl_name;
- 	u16 f0_id, f1_id, f2_id, f6_id;
- 	/* Maximum number of memory controllers per die/node. */
- 	u8 max_mcs;
-+	struct amd64_family_flags flags;
- 	struct low_ops ops;
- };
- 
--- 
-2.25.1
+Best,
+Joel Savitz
 

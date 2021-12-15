@@ -2,109 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AE34758EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D86A94758F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242542AbhLOMfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:35:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
+        id S242559AbhLOMgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242501AbhLOMfV (ORCPT
+        with ESMTP id S242501AbhLOMg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:35:21 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF727C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:35:21 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id f9so54740329ybq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:35:21 -0800 (PST)
+        Wed, 15 Dec 2021 07:36:29 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A20C061574;
+        Wed, 15 Dec 2021 04:36:29 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id m6so31074575lfu.1;
+        Wed, 15 Dec 2021 04:36:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/PPAsdJy1fvI4IOk7fwhrZPqTZxBHd9OaF3oRGCQhSE=;
-        b=W044lgVz7oRByJHiznLwmwuOhHSsIr9WupRS5mvk2WZ9VbtiG5EK3x8N6zldAG079F
-         SkUvnhF2zswp6UvcJZEDGkw5ZzrBd8tPuevXvcjR8WZGRP0Vek4u6zRY/B78EnA/w9fl
-         vaUDkKJ3IED9TBzE4j+Cm1JI8UHqEUKxfDIc11VzejXBcZlmwf28OLn3zljG5QT29JUq
-         c5l/9c8WEz+Btspj0KgGAln22fEFaBV3WhjcDEHAb98qIlJyFPxSoawx5vWbhvY98CLr
-         tM3/p0ZROCe+YBgg4vEAL5AmEH0kV4Rr94PT63I9CBl/M4IuUeWl+ZrdpNS4QyK/0/6V
-         B0jA==
+        bh=/B4+jWAqwXykz4vWfcUdoaBnklx9nhuB0x+qyPZT6e4=;
+        b=UAdo901qc25WuNpQZDyIvsjT7MHJscQaAW/or9naMisIevsgNzMgpGPPPhQcrTt8rQ
+         lOXQYK3oYdH/yIuy/R0hdNs7CJKgaRryqjzllOivmcoXWDjxKCIVM0VT1abWCm6jtz6o
+         sja4416/aVwuRbjCos2+Kp2YJpMzn1JP/buhSkfFp6BzEm2adSR73Nl1u/ESjfY3wmkk
+         DBMTOnxh0qsphAB3YZDRFd7sfFOn9gWZSJwV7uxV2JoGmfUx1+gEwQGf9iFnMxBXg+ba
+         Dl7yj1jUbp0u8cO/ydZb60I+9N7fAh/FukHPlVpGM12e7MXOdea7d9GlMmNMiYnhVnrR
+         aHFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/PPAsdJy1fvI4IOk7fwhrZPqTZxBHd9OaF3oRGCQhSE=;
-        b=ja8Gy61zkmsItPBGTeHhgz5qo9EwJ713tTNZn0ca/grNPo+QHV39+H0g0ipsfUtIXk
-         7oqlBx9hqafwlMxLTKfmMln+6kPFbsPwXwHwqhWyV+P0q53cKQwotDV8ADZ9FThBI93t
-         ZjdrL9+G12GDoFGDuiQCPcLc4Z9YehH4cn7z6B/v27J9zeNrUlUk7X3el8O4CqRJ3l7J
-         eJQdWilLQCEIhyiWbS94BqCdbw73slsRakYi4os04M8eOxNIqYJPPiqJi76RiPNXgn2C
-         ETFToTqIbrubnk7lHo111SpEQfS9m85lzG+ZoU8Uhas+KGBeM7LBmRynbhaZrnj0itfK
-         PIQw==
-X-Gm-Message-State: AOAM532clAvSUbTnrNZryN3Fi8QcKHR0YnEdJ/BqWhfW7sLc8fv0Pq9K
-        oF27z2AKZia6dONDs7wDbniWHD6YtSZy7yuWCPo3RA==
-X-Google-Smtp-Source: ABdhPJyxflIhvpUmrJZ5mUXlnXimvj20RtQWT1adLFErhhGflKCG4cbZFFkiqSaQvpBKD6qVNrEcGYUKSk146eY/mL8=
-X-Received: by 2002:a25:d157:: with SMTP id i84mr5541033ybg.703.1639571720913;
- Wed, 15 Dec 2021 04:35:20 -0800 (PST)
+        bh=/B4+jWAqwXykz4vWfcUdoaBnklx9nhuB0x+qyPZT6e4=;
+        b=s2N2dJtSPrJ363RoQCnN7YD++4ZgwWglCCZVZxEINyAikPKcwY2BDKNrx99aOU80cQ
+         T140KzFA6eKsfWHfIgbcBZdqZwTiCnBRQ6KCRsWkHBebyUOIr8d+FKghM7PWftpHGpjT
+         CaIn/UcDI9rkUNBXuHEbKrDXrgaDgfnOZEv6zMbTGqFkCxQxEswCZUtbVd2xUqHy9dpU
+         BZLfhGBpeiiGAEKZo4OiAaz1ozc2XfKJQhpxThew+G7Z4NADR6zFhv6BfdUZLUUvY4Cc
+         2vW/xSGgUJZJzEUUNQTmpjXk8H2VAJ6fO5l/+rIpBd9/ceyUnrr3x4CrHBmOVj7bRVm0
+         4IgQ==
+X-Gm-Message-State: AOAM533Db56TW5dpDIiR13EjbJrwFy4QCB48mEJZebVXA3EmfIKsIPWx
+        kYHb2HxC5JpHJL1AF5FaJKNXkiJQNVUGyGOe75A=
+X-Google-Smtp-Source: ABdhPJzhZ9IPJsVU6iKeCj8iz3RjSkbPmPIM1Wcx5S8yxI/CfGDPKV61YqYV/sGNXBOjyUlbfnmYURqjJu5mbt1QnHQ=
+X-Received: by 2002:ac2:5049:: with SMTP id a9mr9595535lfm.666.1639571787323;
+ Wed, 15 Dec 2021 04:36:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20211213165342.74704-1-songmuchun@bytedance.com>
- <20211213165342.74704-3-songmuchun@bytedance.com> <YbihOFJHqvQ9hsjO@cmpxchg.org>
-In-Reply-To: <YbihOFJHqvQ9hsjO@cmpxchg.org>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 15 Dec 2021 20:34:45 +0800
-Message-ID: <CAMZfGtVTztinpOTCAAWW+0Q7SAcGfFW4PVW+bHnFQLN-nDBwSg@mail.gmail.com>
-Subject: Re: [PATCH v4 02/17] mm: introduce kmem_cache_alloc_lru
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>, Yang Shi <shy828301@gmail.com>,
-        Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Dave Chinner <david@fromorbit.com>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org,
-        Kari Argillander <kari.argillander@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+References: <CO6PR10MB56353FD77836D5605CDDB8DEDD769@CO6PR10MB5635.namprd10.prod.outlook.com>
+ <20211215075258.442930-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20211215075258.442930-1-chi.minghao@zte.com.cn>
+From:   Zhu Yanjun <zyjzyj2000@gmail.com>
+Date:   Wed, 15 Dec 2021 20:36:15 +0800
+Message-ID: <CAD=hENdjPT7PeMe8AoeQXQr-Ksj8S08N4xeL_=__VEsoPDeOmw@mail.gmail.com>
+Subject: Re: [PATCH for-next v2] RDMA/rxe: remove redundant err variable
+To:     cgel.zte@gmail.com
+Cc:     devesh.s.sharma@oracle.com, chi.minghao@zte.com.cn,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
         LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        fam.zheng@bytedance.com, Muchun Song <smuchun@gmail.com>
+        RDMA mailing list <linux-rdma@vger.kernel.org>,
+        zealci@zte.com.cn
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 9:50 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+On Wed, Dec 15, 2021 at 3:53 PM <cgel.zte@gmail.com> wrote:
 >
-> On Tue, Dec 14, 2021 at 12:53:27AM +0800, Muchun Song wrote:
-> > +/*
-> > + * The allocated list lru pointers array is not accounted directly.
-> > + * Moreover, it should not come from DMA buffer and is not readily
-> > + * reclaimable. So those GFP bits should be masked off.
-> > + */
-> > +#define LRUS_CLEAR_MASK      (__GFP_DMA | __GFP_RECLAIMABLE | __GFP_ACCOUNT | __GFP_ZERO)
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 >
-> There is already GFP_RECLAIM_MASK for this purpose, you can use that.
+> Return value directly instead of taking this
+> in another redundant variable.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
-Cool. Thanks.
+Thanks.
+Acked-by: Zhu Yanjun <zyjzyj2000@gmail.com>
 
+Zhu Yanjun
+
+> ---
+>  drivers/infiniband/sw/rxe/rxe_net.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 >
-> > +int memcg_list_lru_alloc(struct mem_cgroup *memcg, struct list_lru *lru,
-> > +                      gfp_t gfp)
-> > +{
-> > +     int i;
-> > +     unsigned long flags;
-> > +     struct list_lru_memcg *mlrus;
-> > +     struct list_lru_memcg_table {
-> > +             struct list_lru_per_memcg *mlru;
-> > +             struct mem_cgroup *memcg;
-> > +     } *table;
-> > +
-> > +     if (!list_lru_memcg_aware(lru) || memcg_list_lru_allocated(memcg, lru))
-> > +             return 0;
-> > +
-> > +     gfp &= ~LRUS_CLEAR_MASK;
+> diff --git a/drivers/infiniband/sw/rxe/rxe_net.c
+> b/drivers/infiniband/sw/rxe/rxe_net.c
+> index 2cb810cb890a..f557150bd59a 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_net.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_net.c
+> @@ -22,24 +22,20 @@ static struct rxe_recv_sockets recv_sockets;
 >
->         gfp &= GFP_RECLAIM_MASK;
+>  int rxe_mcast_add(struct rxe_dev *rxe, union ib_gid *mgid)
+>  {
+> -       int err;
+>         unsigned char ll_addr[ETH_ALEN];
+>
+>         ipv6_eth_mc_map((struct in6_addr *)mgid->raw, ll_addr);
+> -       err = dev_mc_add(rxe->ndev, ll_addr);
+>
+> -       return err;
+> +       return dev_mc_add(rxe->ndev, ll_addr);
+>  }
+>
+>  int rxe_mcast_delete(struct rxe_dev *rxe, union ib_gid *mgid)
+>  {
+> -       int err;
+>         unsigned char ll_addr[ETH_ALEN];
+>
+>         ipv6_eth_mc_map((struct in6_addr *)mgid->raw, ll_addr);
+> -       err = dev_mc_del(rxe->ndev, ll_addr);
+>
+> -       return err;
+> +       return dev_mc_del(rxe->ndev, ll_addr);
+>  }
+>
+>  static struct dst_entry *rxe_find_route4(struct net_device *ndev,
+> --
+> 2.25.1
+>

@@ -2,154 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDEA2475C15
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C904B475C17
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244065AbhLOPph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S244078AbhLOPpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234878AbhLOPpg (ORCPT
+        with ESMTP id S244070AbhLOPps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:45:36 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D5AC06173E;
-        Wed, 15 Dec 2021 07:45:36 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id m27so43871929lfj.12;
-        Wed, 15 Dec 2021 07:45:35 -0800 (PST)
+        Wed, 15 Dec 2021 10:45:48 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF07AC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:45:47 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so1315490wmd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:45:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7QFG/KOWEFOwNZzyUYyvdsxhN49Z5B+4BTkc8nzo7cY=;
-        b=fd0gB6Frk76cNohLpnNCVZtFbegOUIt/yxoMih73T220owEYYccwVmB8j+Rpw6I9EV
-         CLtMM6GjlBulIe1iZm4tsIWcDxfLjEoENhEIOrRiDfus6ASqeNIs5Rw6cHeyb+kgGB/P
-         ReksY3a8PbH0dWPKlJ3qiRJjeBpfkaa6bAQhfcmt5Zwi/3/i4ctoNt9lBJ7hVfTIzj3i
-         cPWwqNf2hOJvRLjHs+bdGrVrPo0SGfmNXIYSjuKAODRz9SHB/0JFgj2YjIdxx+gRuMb3
-         QCwA/9OwWfa/NJIFuDl/81w565mx3g2/GETS95pc41TfAQgJKFR9uvlu2EqLZxPbXaW/
-         GVRg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Xn1Ll/zwwc6I6T/3u63MToa9pnrJf15QvBtvMTGTwEw=;
+        b=cV+mGs4NRZG4GsjyQJe9jKNMeEcZTmYddiyBPolESjWlUl9INh6zFgOj8lDo4QJpsO
+         bJPicfSNQOGQrwoAqSOYo8+MfoRLQZbutRzXmRyNSTNiN31tAqbJfOYNED8vY2A2N6OV
+         3EZesBnOjcjuUlq+tEI3h4L3E1PhGnVzLpCy97g+bFg55vm7tgNsBLGbgggiQGi/Odl8
+         NW4y3xQvzvKk4q9EYIZrhEKipj2HTuNE+Lk6SGFMysGEXCfMp1faIo4xsiQ+sP8sGHIs
+         WjIHba2yWqbuNsGIdYTiU3VeYonFAQVEVWKZDSOAPG53iORZRdPT8984Gfh5Yab52Os6
+         mAsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7QFG/KOWEFOwNZzyUYyvdsxhN49Z5B+4BTkc8nzo7cY=;
-        b=3fYQx9j+g4Ol0+4AfQ30C9wKN13QaRiSkOG//MnmJXxIh2dXs1ME5p/FnCdnCRN3UI
-         lMYcqlyNXNP5nlv9nokX8SFtBTAUMlT7pfhFXU9lFX898HnWW9f00rj5NJeeF4wGdt5R
-         WM0C5zzpFFsNmfiHq3Ngo2jC4sRNaw/GywY2JtfQ3VOtYidGSCjgbPgoKrcfoWv+T/mf
-         jc5gM7XiJeRzDoIIrrGg5cAXZczO4r3DOsP2Xx7zjRPb9qPH2pRpkg/08oXkVWn6tDs1
-         PCcNe02D1MtfTRPfC74jf5c9nOfGit3qZVBpTXzlLS5QZBlpAKT8MmuTWYSlcRIt3hpl
-         8Slw==
-X-Gm-Message-State: AOAM533RnWa66ZBPsSFJrkRWRisbx3Y7eukO28h74eTbCpDObaedAytK
-        XoaYegD28DS1Krr5/Yl8/bQdw6gEdXY=
-X-Google-Smtp-Source: ABdhPJxHk+nWjcGuwrJ4RgA+qOLt0595mJAMj3fWGxXVqm99WvoDSjWH8gQK2DvhjMGXpbovPDQ5sA==
-X-Received: by 2002:ac2:5f73:: with SMTP id c19mr10536004lfc.158.1639583134145;
-        Wed, 15 Dec 2021 07:45:34 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id bn30sm506051ljb.29.2021.12.15.07.45.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 07:45:33 -0800 (PST)
-Subject: Re: [PATCH v6 15/28] ARM: tegra: Add usb-role-switch property to USB
- OTG ports
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        David Heidelberg <david@ixit.cz>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Anton Bambura <jenneron@protonmail.com>,
-        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
-        Nikola Milosavljevic <mnidza@outlook.com>,
-        Ion Agorria <ion@agorria.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Ihor Didenko <tailormoon@rambler.ru>,
-        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
-        Jasper Korten <jja2000@gmail.com>,
-        Thomas Graichen <thomas.graichen@gmail.com>,
-        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211211211412.10791-1-digetx@gmail.com>
- <20211211211412.10791-16-digetx@gmail.com> <YbnqP0XAcUYc4ePy@orome>
- <9cf23721-db53-830a-f634-d2215232f059@gmail.com> <YboGxZSi13OGByUQ@orome>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <8c0defff-3348-6f97-6bd4-ddfc6117e707@gmail.com>
-Date:   Wed, 15 Dec 2021 18:45:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Xn1Ll/zwwc6I6T/3u63MToa9pnrJf15QvBtvMTGTwEw=;
+        b=2OqiYXu5oLSNSYcK5WX0TStx1uSuh3x1emsL+rcKc/RQ3IRhB9rcS9ngIxDHHS0mKN
+         LrKlthyjo5nkakvTKDyeEbTGbDSCYGiw2P28dbEfq/b0o2EuuDpC2G29qCoxhsSRlqZn
+         s9qVMssDn3xQF+tA5rfAwbomaJdIg1q/ly2fCMwMSBN4ZFsQs2IwA4wz9eFI3tBsKCp1
+         fmoFZQw78yJ8s+42rtzm3zcPqmT/mPQvIUNeIXMDm8O3bhI7+ieh0kuO5hibMVjtaYSw
+         dEHfXs3tm49yhB+I3uDLu2mQwTKuy6yQn4m4Gv6EqfPQXdNoDcr9DrNKsmhEuJHHZlPa
+         qYaA==
+X-Gm-Message-State: AOAM532Eqz/ahQI2cZUamtE2xpv3ckHIhZffF1wjmIGc7u2qvc5jW7mt
+        d2kiyqmbYsSwalEVGOQMWm1PlQ==
+X-Google-Smtp-Source: ABdhPJyT/9KSiuR3jBg4CCcDkaDCJWmmGa5oRYKyEe/0Ms3ZQJPcsUbg2WLCtUhdd8tgCwOujj6Htg==
+X-Received: by 2002:a05:600c:22d2:: with SMTP id 18mr388735wmg.158.1639583146106;
+        Wed, 15 Dec 2021 07:45:46 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:209:8505:8095:9f82:42b7])
+        by smtp.gmail.com with ESMTPSA id f15sm2681600wmg.30.2021.12.15.07.45.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 07:45:45 -0800 (PST)
+Date:   Wed, 15 Dec 2021 15:45:41 +0000
+From:   David Brazdil <dbrazdil@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Will Deacon <will@kernel.org>,
+        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] misc: open-dice: Add driver to expose DICE data
+ to userspace
+Message-ID: <YboNpWFL8v+FuWXC@google.com>
+References: <20211215150410.1707849-1-dbrazdil@google.com>
+ <20211215150410.1707849-3-dbrazdil@google.com>
+ <YboHh6TJJ0VNHpV2@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <YboGxZSi13OGByUQ@orome>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YboHh6TJJ0VNHpV2@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-15.12.2021 18:16, Thierry Reding пишет:
-> On Wed, Dec 15, 2021 at 06:04:54PM +0300, Dmitry Osipenko wrote:
->> 15.12.2021 16:14, Thierry Reding пишет:
->>> On Sun, Dec 12, 2021 at 12:13:59AM +0300, Dmitry Osipenko wrote:
->>>> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
->>>>
->>>> If an USB port is an OTG port, then we should add the usb-role-switch
->>>> property. Otherwise XUSB setup fails and therefore padctl is unable to
->>>> set up the ports. This leads to broken USB and PCIe ports. Add the
->>>> usb-role-switch properties to Tegra124 device-trees to fix the problem.
->>>>
->>>> The error message shown without this patch is e.g:
->>>> usb2-0: usb-role-switch not found for otg mode
->>>>
->>>> [digetx@gmail.com: improved commit message]
->>>> Tested-by: Thomas Graichen <thomas.graichen@gmail.com> # T124 Nyan Big
->>>> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
->>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>>> ---
->>>>  arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi | 1 +
->>>>  arch/arm/boot/dts/tegra124-apalis.dtsi      | 1 +
->>>>  arch/arm/boot/dts/tegra124-nyan.dtsi        | 1 +
->>>>  arch/arm/boot/dts/tegra124-venice2.dts      | 2 +-
->>>>  4 files changed, 4 insertions(+), 1 deletion(-)
->>>
->>> The device tree bindings for the XUSB pad controller say that when this
->>> property is set, then the "connector" subnode should also exist.
->>>
->>> Any chance we can add that? I was planning on making that a dependency
->>> in the json-schema conversion of the binding, in which case it would be
->>> more of a "must" than a "should".
->>
->> I guess it will be harmless if you'll add the connector subnodes. Will
->> you be able to create a separate patch that will add the subnodes on top
->> of this patch?
->>
->> Thomas Graichen says that one USB port on Nyan Big doesn't work without
->> this patch. This is why this patch is needed essentially.
+On Wed, Dec 15, 2021 at 04:19:35PM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Dec 15, 2021 at 03:04:10PM +0000, David Brazdil wrote:
+> > +	drvdata = devm_kmalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+> > +	if (!drvdata)
+> > +		return -ENOMEM;
+> > +
+> > +	*drvdata = (struct open_dice_drvdata){
+> > +		.lock = __SPIN_LOCK_UNLOCKED(drvdata->lock),
+> > +		.rmem = rmem,
+> > +		.misc = (struct miscdevice){
+> > +			.parent	= dev,
+> > +			.name	= drvdata->name,
+> > +			.minor	= MISC_DYNAMIC_MINOR,
+> > +			.fops	= &open_dice_fops,
+> > +			.mode	= 0600,
+> > +		},
+> > +	};
 > 
-> Okay, I can add "dummy" connector nodes for now. I don't see how we can
-> properly set this up because as far as I can tell there's USB ID GPIO on
-> Tegra124 (seems like it's a fixed function pin) and the VBUS GPIO is
-> already used to enable the VBUS supply. The gpio-usb-b-connector binding
-> required at least one of the ID and VBUS GPIOs to be specified.
+> That is a lovely abuse of an implicit memcpy(), took me a while to
+> realize what it was doing here...
+> 
+> Anyway, this all looks great to me, I'll wait for the DT maintainers to
+> review the dt change before being able to take this through my tree.
+> Thanks for the cleanups based on the review, the driver is now almost
+> 1/3 smaller than your first version with more functionality!
 
-The ID and VBUS hardware configurations are very board-specific. There
-are multiple ways of how it could implemented on Tegra.
+Thanks, and thank your for your help!
 
-> On the other hand, at least Venice2 has a USB type A connector for this,
-> so I'm not even sure how that would work. I vaguely recall that the
-> Tegra20 Seaboard also had a USB type A and that it was possible to use
-> it in device mode, but I don't how that would. Nor would it be correct
-> to use the gpio-usb-b-connector compatible for that since, well, it's
-> not USB type B.
-
-I'm not sure whether it makes much sense to use OTG for USB type A
-connectors, normally they should be fixed to host mode.
-
-> I suspect that Apalis has a micro-B port, much like the Jetson TK1. My
-> understanding is that OTG doesn't work on Jetson TK1 (which is why it's
-> configured in "host" mode), so it'd be interesting to see if this can be
-> made to work on Apalis.
-
-Looks like the default Apalis carrier board has three type A connectors.
-
-https://www.toradex.com/products/carrier-board/ixora-carrier-board
+David

@@ -2,94 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B99C475B22
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5CD475B26
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243577AbhLOO4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
+        id S243597AbhLOO41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237581AbhLOO4Y (ORCPT
+        with ESMTP id S243575AbhLOO4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:56:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B46C061574;
+        Wed, 15 Dec 2021 09:56:25 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA356C06173E;
         Wed, 15 Dec 2021 06:56:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A0E261926;
-        Wed, 15 Dec 2021 14:56:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D04C34606;
-        Wed, 15 Dec 2021 14:56:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639580183;
-        bh=q+PAwVA3hA+XAhkskemgn4L0uXS+xZdMC81JEaAee+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B/iDNpR6h+hL0e1YRBM881u2j27FMncSdty5BhYRunWFI0uML8+Yr4JjUH75DFFOI
-         1r2G1MDosuXV/qyo8ZYJSvMuSEdF0yZHubAYSbXqCeVvgCQuBDUv/6VjiIno3rDdtY
-         ODWiEa2O/1N5YOcTGAeldswmqvC5/GKtbhXGn25QKXgHP41Ew27vi12CRW6Xygs+Un
-         FCk+n2E0vkPhD1E6WyNGI7PmUlXRd+IJW0qyvSuH4kjIX1N+EnTQFYNtjXfCmlvIFt
-         wpV2s+K9uIsg0OtN+hbwl8IghINcrlLJ/+wtmZGh665ibD6eZ5X3YsSqQ27ui/uE0L
-         1h19IxIbsZtZw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C81C6405D8; Wed, 15 Dec 2021 11:56:19 -0300 (-03)
-Date:   Wed, 15 Dec 2021 11:56:19 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Yonghong Song <yhs@fb.com>,
-        Douglas RAILLARD <douglas.raillard@arm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Matteo Croce <mcroce@microsoft.com>
-Subject: Re: ANNOUNCE: pahole v1.23 (BTF tags and alignment inference)
-Message-ID: <YboCE3zig9papNQW@kernel.org>
-References: <YSQSZQnnlIWAQ06v@kernel.org>
- <YbC5MC+h+PkDZten@kernel.org>
- <YbkTAPn3EEu6BUYR@archlinux-ax161>
+Received: by mail-lj1-x22f.google.com with SMTP id u22so33686892lju.7;
+        Wed, 15 Dec 2021 06:56:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=VlpUM4pVnFF7b/v49q5hG/QwrE0qXlxltwh39I/Lb3U=;
+        b=aa6oe37gkeikvLqkgQh4Y837T645JoVUUPcc6Rkd9TBbGuzq8J7gfQnQJxKEfazilm
+         xjVa0jXe5Rizo7oGsjIlD+H4jIPSNziX6oKVz1TfSZKcy/UyUwX7Y3Uxcqnla9a+N0+7
+         PGaF+FerxDS3CvJKQxLCUk/m478BUgaON1nKCFZjUCzTVUCsAIqHnBNtZW5iuchZkwgT
+         yWKQqC4UGy8UZ0i36y0hM73bTREHeJzrl9AGWHAkjz9sUBSRVAmQXd956vjX+GTSI3hw
+         OK7zVF+Lr4VZu9yE9dt/aGk6xRHkfRz/GVlTbCVf11Nl9HNlXmJ0RQ4s01FEdcUSl+gy
+         VeqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=VlpUM4pVnFF7b/v49q5hG/QwrE0qXlxltwh39I/Lb3U=;
+        b=Z2qHA55au2qwu6s21olx0D4NVmqk/HaxsgDYmGw10K2Dosvk9Y5dSEo2Kb6mR6Tvai
+         25TYuckmD8vrvNuqPcn334rv/aonX1gt6zHHmuIPgjljAKTIfwb8Qguj2g29Hrr0AHPs
+         NzleO6L/u5OPrCd//caB6EL7rqsHSbHyGdwWLadzw6JNu9C2HQ2IIGfOwj9Se2JZ7aTy
+         xGOaTzW6WFdc3Fk96Nx8FRI8qYQiC5OmyUShiJ3uhcsnzgkjf7eBNqT4Y6kXLLtXIrq3
+         ZXq3qVirb76zGbZd9M1QkPExKMyGa+DQKHAZWA6/9IQGO+bQuwrzx5mhlsbua6Qvf+ix
+         Nsig==
+X-Gm-Message-State: AOAM532n/i/TcpAK8cQ7NmEhfjYSBeSx08X9DlJQb8gUjVCLSXoZIVRq
+        1WnbKuTSNzg/5U/G4x2jL+STSy2Goqg=
+X-Google-Smtp-Source: ABdhPJxtZzId3hlV/qfDQ7GjmHdzLoX/TCsop5PDpRClHgQYUT0FtHwvACVezQ3yUAbTdn7cYaU8bw==
+X-Received: by 2002:a2e:9903:: with SMTP id v3mr10380295lji.143.1639580182548;
+        Wed, 15 Dec 2021 06:56:22 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id c34sm357937lfv.83.2021.12.15.06.56.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 06:56:22 -0800 (PST)
+Subject: Re: [PATCH v14 2/4] dmaengine: tegra: Add tegra gpcdma driver
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
+References: <1638795639-3681-1-git-send-email-akhilrajeev@nvidia.com>
+ <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
+ <3f7b072d-f108-ebce-e862-eff9869d1d92@gmail.com>
+ <BN9PR12MB52738F4B5B7494466A9CB5A1C0769@BN9PR12MB5273.namprd12.prod.outlook.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <70cce574-4022-16a9-ae10-4b84696d21d5@gmail.com>
+Date:   Wed, 15 Dec 2021 17:56:21 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbkTAPn3EEu6BUYR@archlinux-ax161>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <BN9PR12MB52738F4B5B7494466A9CB5A1C0769@BN9PR12MB5273.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 14, 2021 at 02:56:16PM -0700, Nathan Chancellor escreveu:
-> Hi Arnaldo,
-> 
-> On Wed, Dec 08, 2021 at 10:54:56AM -0300, Arnaldo Carvalho de Melo wrote:
-> > - Initial support for DW_TAG_skeleton_unit, so far just suggest looking up a
-> >   matching .dwo file to be used instead. Automagically doing this is in the
-> >   plans for a future release.
-> 
-> This change [1] appears to break building on older distributions for me,
-> which I use in containers for access to older versions of GCC. I see the
-> error with Debian Stretch and Ubuntu Xenial, which have an older
-> libelf-dev.  Is this expected? I don't mind sticking with 1.22 for
-> those, I just want to be sure!
+15.12.2021 16:50, Akhil R пишет:
+>> 06.12.2021 16:00, Akhil R пишет:
+>>> +static const struct __maybe_unused dev_pm_ops tegra_dma_dev_pm_ops =
+>> {
+>>> +     SET_LATE_SYSTEM_SLEEP_PM_OPS(tegra_dma_pm_suspend,
+>>> +tegra_dma_pm_resume) };
+>>
+>> Why late?
+> To wait for the drivers using the dma to be suspended so that they
+> don't keep the dma busy.
+> Agree with the other comments.
 
-Nope, not expected, I'll reproduce here, fix and push, thanks for the
-report.
-
-- Arnaldo
- 
-> /tmp/dwarves-1.23/dwarf_loader.c: In function 'die__process':
-> /tmp/dwarves-1.23/dwarf_loader.c:2529:13: error: 'DW_TAG_skeleton_unit' undeclared (first use in this function)
->   if (tag == DW_TAG_skeleton_unit) {
->              ^
-> 
-> [1]: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=0135ccd632796ab3aff65b7c99b374c4682c2bcf
-> 
-> Cheers,
-> Nathan
-
--- 
-
-- Arnaldo
+Drivers are suspended in the opposite order to the probe order. DMA
+controller driver is always probed first. The "late" is unneeded, please
+see tegra20-apb-dma driver for the example.

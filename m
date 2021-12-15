@@ -2,50 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 658634756EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBAE4756EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241796AbhLOKvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:51:31 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47174 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241790AbhLOKv3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:51:29 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8689F6187F;
-        Wed, 15 Dec 2021 10:51:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71583C34605;
-        Wed, 15 Dec 2021 10:51:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639565489;
-        bh=QmWJDFoNTU+yMq2ahW3avilQ/lkEV4Lp+jaFKGdMnww=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ecQXa5MuQ0ug8XWyQhPk2zFLSynYNTb4U6teBzWSW/u9m3BhsXEdDDpWXJSppMDpH
-         79r6hcxahRzn+QQ6P47u0Gr7k0iTy+Ld2REpigAiEZtTT+jPifEfSdIKxLGFTLsqnf
-         E72tawt4feUIGCKaPLWAWdj1rFV4uInnhBg2had4=
-Date:   Wed, 15 Dec 2021 11:51:26 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dejia Shang <dejia.shang@armchina.com>
-Cc:     robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        toby.shang@armchina.com
-Subject: Re: [PATCH 4/4] MAINTAINERS: add maintainer info. for Zhouyi NPU
-Message-ID: <YbnIrvCi0uoJAfpB@kroah.com>
-References: <20211215103609.9268-1-dejia.shang@armchina.com>
- <20211215103609.9268-5-dejia.shang@armchina.com>
+        id S241807AbhLOKve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:51:34 -0500
+Received: from mga09.intel.com ([134.134.136.24]:4958 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241795AbhLOKvc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 05:51:32 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="239012028"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="239012028"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 02:51:31 -0800
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="604941785"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 02:51:28 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 15 Dec 2021 12:51:26 +0200
+Date:   Wed, 15 Dec 2021 12:51:26 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Xiaoke Wang <xkernel.wang@foxmail.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: check the return value of kmemdup()
+Message-ID: <YbnIrsQGsjRnksq4@lahna>
+References: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211215103609.9268-5-dejia.shang@armchina.com>
+In-Reply-To: <tencent_8268B88CD2F7BF04083AF35D6E2C87158506@qq.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 06:36:09PM +0800, Dejia Shang wrote:
-> IMPORTANT NOTICE: The contents of this email and any attachments may be privileged and confidential. If you are not the intended recipient, please delete the email immediately. It is strictly prohibited to disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you. ©Arm Technology (China) Co., Ltd copyright and reserve all rights. 重要提示：本邮件（包括任何附件）可能含有专供明确的个人或目的使用的机密信息，并受法律保护。如果您并非该收件人，请立即删除此邮件。严禁通过任何渠道，以任何目的，向任何人披露、储存或复制邮件信息或者据此采取任何行动。感谢您的配合。 ©安谋科技（中国）有限公司 版权所有并保留一切权利。
+Hi,
 
-Now deleted.
+On Mon, Dec 13, 2021 at 04:27:15PM +0800, Xiaoke Wang wrote:
+> Note: Compare with the last email, this one is using my full name.
+
+This should go below the '---' line. Remember this next time, no need to
+resend this one.
+
+> kmemdup() return NULL when some internal memory errors happen, it is
+> better to check the return value of it. Otherwise, some memory errors
+> will not be catched in time and may further result in wrong memory
+> access.
+> 
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+
+I sligthly modified the commit message and applied to
+thunderbolt.git/next, thanks!

@@ -2,116 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06746475111
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 03:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B20475119
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 03:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235515AbhLOCtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 21:49:45 -0500
-Received: from mga07.intel.com ([134.134.136.100]:27544 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231494AbhLOCto (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 21:49:44 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="302510114"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="302510114"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 18:49:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="682312340"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.232.188]) ([10.238.232.188])
-  by orsmga005.jf.intel.com with ESMTP; 14 Dec 2021 18:49:41 -0800
-Subject: Re: [PATCH 6/6] media: hi556: Support device probe in non-zero ACPI D
- state
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>
-Cc:     linux-media@vger.kernel.org, rafael@kernel.org,
-        shawnx.tu@intel.com, tian.shu.qiu@intel.com,
-        chiranjeevi.rapolu@intel.com, hyungwoo.yang@intel.com,
-        tfiga@chromium.org, senozhatsky@chromium.org,
-        linux-kernel@vger.kernel.org
-References: <1636447715-15526-1-git-send-email-bingbu.cao@intel.com>
- <1636447715-15526-7-git-send-email-bingbu.cao@intel.com>
- <YbjAHhDFJOSxFI+v@paasikivi.fi.intel.com>
-From:   Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <7a1db2f4-f132-c700-9406-387977308f97@linux.intel.com>
-Date:   Wed, 15 Dec 2021 10:46:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S239394AbhLOCxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 21:53:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235556AbhLOCxw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 21:53:52 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2A5C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 18:53:52 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id d14so16377860ila.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 18:53:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=egauge.net; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :organization:user-agent:mime-version:content-transfer-encoding;
+        bh=JNO9HQcOsTQ+/F9tSokn+P//npmreQ8s7nXWJHfyG24=;
+        b=CuQG5eSOTY/tUfMP0an7paoYzjHJVEIbnHZwcTjDFrJZ0TJ12mOP9DxIfYEGjAY+UB
+         F7B0mYZ8jabh435YjXvzj6LZna23yjj3ktCG7S4RsDFQ//EuInPcwzBtky6+4NdAkZ/U
+         vEC5IpxdrLlr0B+eqvAZx/IHJOh3MA7tFin51XwWARWieWTDjKflAhAHyPtYh0mIATQ0
+         3WnOpopnrwqHcEjY75YWIM4XnwU0EDDp8+4D2Io0ZmZLOHLQYZhdkdGOF5Er05ZV3HQa
+         8ZPQG75yQx0PhGWbLwY7XBi2BPJU2/PiAXDepQauzIwtvJxKJrydN5LqYVy2dz0f72Aj
+         3MDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=JNO9HQcOsTQ+/F9tSokn+P//npmreQ8s7nXWJHfyG24=;
+        b=f9/MFnMsrOXj/DURY6v9wpgU/kGDPcisYwrgHImzq0quOv9YdnyE2EjFX6hkY88pr3
+         sL8/obgGpXgAp7hjcXeKMfQsx0CmAUb03xVXg3MEQoPuGm/tVcE4XsqJONZRK6JMEN4E
+         9Ftnlg/zm8uAqmsb6XR8iPVqIl1CsQSub4yelu/wIQ+Yf8qgxgyDEf7nPVJPSdqHjfpS
+         xdGQqr86eEu8pAn2x5iqCG1XG3y3ZT9MerGiDMZZ1DiBIePAc8nbhn8sr40UAlVxWZcF
+         eC2KBir8BkdolJF0hn/mP8OQwq7H08v72qZaXbJ1jc9eO7mYxzMdUbXXhPP/z+p8WwQF
+         K3ew==
+X-Gm-Message-State: AOAM531XojDXyWxcUZolPzNPKLkKyTPiAiNY22aIBkgYGnmz3YUv0a3o
+        UjpM/Ua9eTdlpnxNaKQkDrL2
+X-Google-Smtp-Source: ABdhPJxLGSeS/jppKnX2n6TOk9j0USm9m1EGq0mFiKyRnVAqy2C4LTg9ZxO23/COdOBgXqD0ktwj+A==
+X-Received: by 2002:a92:b708:: with SMTP id k8mr5613023ili.181.1639536831145;
+        Tue, 14 Dec 2021 18:53:51 -0800 (PST)
+Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
+        by smtp.gmail.com with ESMTPSA id g20sm456762iov.35.2021.12.14.18.53.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 18:53:50 -0800 (PST)
+Message-ID: <4a571870f8d95432e53fcce7bcb34e2b41632aef.camel@egauge.net>
+Subject: Re: [PATCH v4 2/2] wilc1000: Document enable-gpios and reset-gpios
+ properties
+From:   David Mosberger-Tang <davidm@egauge.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Kalle Valo <kvalo@codeaurora.org>, netdev <netdev@vger.kernel.org>,
+        Adham Abozaeid <adham.abozaeid@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ajay Singh <ajay.kathat@microchip.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        devicetree@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Date:   Tue, 14 Dec 2021 19:53:42 -0700
+In-Reply-To: <CAL_JsqLFyaAvTGQJc0GjYbXwyhpmfpRm3_rkGopD8cz6-ZX5zw@mail.gmail.com>
+References: <20211214163315.3769677-1-davidm@egauge.net>
+         <20211214163315.3769677-3-davidm@egauge.net>
+         <1639512290.330041.3819896.nullmailer@robh.at.kernel.org>
+         <e88e908e720172d8571d48bd1ebdab3617534f73.camel@egauge.net>
+         <CAL_JsqLFyaAvTGQJc0GjYbXwyhpmfpRm3_rkGopD8cz6-ZX5zw@mail.gmail.com>
+Organization: eGauge Systems LLC
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <YbjAHhDFJOSxFI+v@paasikivi.fi.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/15/21 12:02 AM, Sakari Ailus wrote:
-> Hi Bingbu,
+On Tue, 2021-12-14 at 17:54 -0600, Rob Herring wrote:
+> On Tue, Dec 14, 2021 at 5:30 PM David Mosberger-Tang <davidm@egauge.net> wrote:
+> > On Tue, 2021-12-14 at 14:04 -0600, Rob Herring wrote:
+> > > 
+> > > dtschema/dtc warnings/errors:
+> > > Error: Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.example.dts:30.37-38 syntax error
+> > > FATAL ERROR: Unable to parse input tree
+> > > make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.example.dt.yaml] Error 1
+> > > make[1]: *** Waiting for unfinished jobs....
+> > > make: *** [Makefile:1413: dt_binding_check] Error 2
+> > 
+> > So this error appears due to GPIO_ACTIVE_HIGH and GPIO_ACTIVE_LOW in these
+> > lines:
+> > 
+> >         enable-gpios = <&pioA 5 GPIO_ACTIVE_HIGH>;
+> >         reset-gpios = <&pioA 6 GPIO_ACTIVE_LOW>;
+> > 
+> > I can replace those with 0 and 1 respectively, but I doubt a lot of people would
+> > recognize what those integers standard for.  Is there a better way to get this
+> > to pass?
 > 
-> On Tue, Nov 09, 2021 at 04:48:35PM +0800, Bingbu Cao wrote:
->> Tell ACPI device PM code that the driver supports the device being in
->> non-zero ACPI D state when the driver's probe function is entered.
->>
->> Also do identification on the first access of the device, whether in probe
->> or when starting streaming.
->>
->> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
->> Signed-off-by: Kao, Arec <arec.kao@intel.com>
->> ---
->>  drivers/media/i2c/hi556.c | 67 +++++++++++++++++++++++++++++------------------
->>  1 file changed, 42 insertions(+), 25 deletions(-)
->>
->> diff --git a/drivers/media/i2c/hi556.c b/drivers/media/i2c/hi556.c
->> index 8db1cbedc1fd..c8011467d1a4 100644
->> --- a/drivers/media/i2c/hi556.c
->> +++ b/drivers/media/i2c/hi556.c
->> @@ -495,6 +495,9 @@ struct hi556 {
->>  
->>  	/* Streaming on/off */
->>  	bool streaming;
->> +
->> +	/* True if the device has been identified */
->> +	bool identified;
->>  };
->>  
->>  static u64 to_pixel_rate(u32 f_index)
->> @@ -757,12 +760,38 @@ static void hi556_assign_pad_format(const struct hi556_mode *mode,
->>  	fmt->field = V4L2_FIELD_NONE;
->>  }
->>  
->> +static int hi556_identify_module(struct hi556 *hi556)
->> +{
->> +	struct i2c_client *client = v4l2_get_subdevdata(&hi556->sd);
->> +	int ret;
->> +	u32 val;
-> 
-> If the sensor's already identified, you can return 0 here.
+> Include the header(s) you use in the example.
 
-Yes, I will add in v2. Thanks!
+Huh, that works, thanks!
 
-> 
->> +
->> +	ret = hi556_read_reg(hi556, HI556_REG_CHIP_ID,
->> +			     HI556_REG_VALUE_16BIT, &val);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if (val != HI556_CHIP_ID) {
->> +		dev_err(&client->dev, "chip id mismatch: %x!=%x",
->> +			HI556_CHIP_ID, val);
->> +		return -ENXIO;
->> +	}
->> +
->> +	hi556->identified = true;
->> +
->> +	return 0;
->> +}
-> 
+  --david
 
--- 
-Best regards,
-Bingbu Cao

@@ -2,86 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50456474F47
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C777C474F52
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238518AbhLOAbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 19:31:40 -0500
-Received: from mga18.intel.com ([134.134.136.126]:14830 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230072AbhLOAbj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 19:31:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639528299; x=1671064299;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Vw5g02XxGnh/wWb+FVeeAh5fTIFo1dqda7KD+NsOnxA=;
-  b=n3xEZK7kjIyknetuKb7z0o9zo4wHfZ7n/SWYKpdy/d07X5UMlXrH73Mx
-   8H8hwicdbW9cSrMT3/qV6rLr7LErBdb+LV0gCE1bZYXxDAmJzZAqgvxWg
-   ZOxcnCjnBUksuwtg2f9zB6hcmlM4s45mdRIPockjWgauL/2kVWKMuZczt
-   KdkurtrqhdcdWcHQmZZ1KrMjD+bRRe1AhtY72lO0Hah4JbMlDAr0j7Ogw
-   8n8ycEhl5f73n181XCKRABkGJDccuDkY66H6qjayR3nPOV/1z2utM99XH
-   uAGo8VxT3u5aTbYwZ+mP+XF+H6lMTE4ZbrVgcZAQVOqI9P2AzWvSpMh4H
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="225971503"
-X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
-   d="scan'208";a="225971503"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 16:31:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
-   d="scan'208";a="661682623"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Dec 2021 16:31:36 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxICm-0000zN-6h; Wed, 15 Dec 2021 00:31:36 +0000
-Date:   Wed, 15 Dec 2021 08:31:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [ardb:arm-entry-literals 24/38] ld.lld: error: undefined symbol:
- generic_handle_arch_irq
-Message-ID: <202112150836.cvaUk2Wq-lkp@intel.com>
+        id S238543AbhLOAc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 19:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233010AbhLOAcz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 19:32:55 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A171C061574;
+        Tue, 14 Dec 2021 16:32:55 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id w24so2247080ply.12;
+        Tue, 14 Dec 2021 16:32:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5tpDiYJfLBvJT4YRg5lUUTi4/uP6MuPk6WbTxQVNJZ4=;
+        b=TqZdQDpcmCi8aKm9NRkSIsh326J5kVxxAUK0uGGA++ju7/uC1tvaz3ScWQOE9Gpz5E
+         7goeXcTvBjWkpejTP4xHNTRyYbvg5wPqgVZI3UrvJWH+AMY87yToZfiRQy2xEfgL0Uf1
+         6hSY+ar++jNJcKzuHlHZ3yNfATatrF3BT614CWBjNuYUYfJ1Zet/jjhWvBr1vxuEY3DH
+         0lJUqmnLvyP6zhyJw4OLbJ65QOAz/BNqcv/upZWMwXls855gOBP06MVU57oqzH9FM91w
+         3w7zyvzqc7PfgEWKNCj1aDPybrlQg9uM0J5uQS3HCP92eyHMH6D4aV3abTprwoH0D0ea
+         Swjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5tpDiYJfLBvJT4YRg5lUUTi4/uP6MuPk6WbTxQVNJZ4=;
+        b=snP4ruwOOJEqNscZMgMn5ObRWK37JSK+QGsPeTxhkzQdavNdg1rwjQFpBnYxmLltU8
+         p9bpP5+BeRvRoOcjDuatlNVb5Gk/Tsfrkbh6bUktCtD3f89OYwxKO1Um01cCtQ6HuHgw
+         al6/siL/zQlsd/yWZUfkwsQCG691/iHWWjWakF55VdRC66LsmBMoNGm30tYLsmNfmVgm
+         MhfRjvPzM7dpdaHSsUnLnKSy9ntJLO/CpGG66PK+ntD53SXfSXpQyepYlhlKt8Nu+sej
+         pg+jFx0ppw6QMzQErRY+nOouAPkvkUGW0ai6RR1cLEyoAxIvBLa905G3wSxWSecGRXro
+         4qhg==
+X-Gm-Message-State: AOAM531VgoHTl7hM6BBSff/8+lcpSdPdG7HolJ5hHrH2cK1Kz071OVm8
+        y6PZjGTVf870xtCX1BErAwtX7qAsLvB4pw==
+X-Google-Smtp-Source: ABdhPJxbMrdkbi9fMo8aCcEo7hmqXzeod+KI/3uL6BCgplxsGb6K43N7wyvC/RmZ5gvhaFFoX93/5g==
+X-Received: by 2002:a17:902:d4ce:b0:148:a2f7:9d52 with SMTP id o14-20020a170902d4ce00b00148a2f79d52mr1946235plg.113.1639528374776;
+        Tue, 14 Dec 2021 16:32:54 -0800 (PST)
+Received: from localhost.lan (p4857108-ipngn27301marunouchi.tokyo.ocn.ne.jp. [114.164.215.108])
+        by smtp.gmail.com with ESMTPSA id x18sm242939pfh.210.2021.12.14.16.32.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 16:32:54 -0800 (PST)
+Received: from x2.lan (localhost [127.0.0.1])
+        by localhost.lan (Postfix) with ESMTPSA id 8523C90090A;
+        Wed, 15 Dec 2021 00:32:51 +0000 (GMT)
+From:   Vincent Pelletier <plr.vincent@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Salah Triki <salah.triki@gmail.com>,
+        Dean Anderson <dean@sensoray.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_reset.
+Date:   Wed, 15 Dec 2021 00:32:49 +0000
+Message-Id: <96948a63d1a33da63b4f226e89ea90d21e9b0f82.1639528369.git.plr.vincent@gmail.com>
+X-Mailer: git-send-email 2.34.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm-entry-literals
-head:   bed1490d5af6f3411b5b8ca816c8b6ddb9206528
-commit: 54f481a2308efab49d2b14c3f8263b34fdb1c65e [24/38] ARM: remove old-style irq entry
-config: arm-randconfig-r003-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150836.cvaUk2Wq-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=54f481a2308efab49d2b14c3f8263b34fdb1c65e
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb arm-entry-literals
-        git checkout 54f481a2308efab49d2b14c3f8263b34fdb1c65e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+ffs_data_reset is called from both ffs_fs_kill_sb and ffs_ep0_release, so
+it ends up being called twice when userland closes ep0 and then unmounts
+f_fs. If userland provided an eventfd along with function's USB
+descriptors, ffs_data_clear (via ffs_data_reset) ends up calling
+eventfd_ctx_put as many times, causing a refcount underflow warning
+(as of 5.15 at least). NULL-ify ffs_eventfd to prevent these extraneous
+eventfd_ctx_put calls.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+For completeness, ffs_data_clear actually ends up being called thrice, the
+last call being before the whole ffs structure gets freed, so when this
+specific sequence happens there is a second underflow happening (but not
+being reported):
 
-All errors (new ones prefixed by >>):
+/sys/kernel/debug/tracing# modprobe usb_f_fs
+/sys/kernel/debug/tracing# echo ffs_data_clear > set_ftrace_filter
+/sys/kernel/debug/tracing# echo function > current_tracer
+/sys/kernel/debug/tracing# echo 1 > tracing_on
+(setup gadget, run and kill function userland process, teardown gadget)
+/sys/kernel/debug/tracing# echo 0 > tracing_on
+/sys/kernel/debug/tracing# cat trace
+# tracer: function
+#
+# entries-in-buffer/entries-written: 3/3   #P:1
+#
+#                                _-----=> irqs-off
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+ smartcard-openp-436     [000] .....  1946.208786: ffs_data_clear <-ffs_data_closed
+ smartcard-openp-431     [000] .....  1946.279147: ffs_data_clear <-ffs_data_closed
+ smartcard-openp-431     [000] .n...  1946.905512: ffs_data_clear <-ffs_data_put
 
-   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
-   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
->> ld.lld: error: undefined symbol: generic_handle_arch_irq
-   >>> referenced by kernel/entry-armv.o:(__irq_svc) in archive arch/arm/built-in.a
-   >>> referenced by kernel/entry-armv.o:(__irq_usr) in archive arch/arm/built-in.a
+Warning output corresponding to above trace:
+[ 1946.284139] WARNING: CPU: 0 PID: 431 at lib/refcount.c:28 refcount_warn_saturate+0x110/0x15c
+[ 1946.293094] refcount_t: underflow; use-after-free.
+[ 1946.298164] Modules linked in: usb_f_ncm(E) u_ether(E) usb_f_fs(E) hci_uart(E) btqca(E) btrtl(E) btbcm(E) btintel(E) bluetooth(E) nls_ascii(E) nls_cp437(E) vfat(E) fat(E) bcm2835_v4l2(CE) bcm2835_mmal_vchiq(CE) videobuf2_vmalloc(E) videobuf2_memops(E) sha512_generic(E) videobuf2_v4l2(E) sha512_arm(E) videobuf2_common(E) videodev(E) cpufreq_dt(E) snd_bcm2835(CE) brcmfmac(E) mc(E) vc4(E) ctr(E) brcmutil(E) snd_soc_core(E) snd_pcm_dmaengine(E) drbg(E) snd_pcm(E) snd_timer(E) snd(E) soundcore(E) drm_kms_helper(E) cec(E) ansi_cprng(E) rc_core(E) syscopyarea(E) raspberrypi_cpufreq(E) sysfillrect(E) sysimgblt(E) cfg80211(E) max17040_battery(OE) raspberrypi_hwmon(E) fb_sys_fops(E) regmap_i2c(E) ecdh_generic(E) rfkill(E) ecc(E) bcm2835_rng(E) rng_core(E) vchiq(CE) leds_gpio(E) libcomposite(E) fuse(E) configfs(E) ip_tables(E) x_tables(E) autofs4(E) ext4(E) crc16(E) mbcache(E) jbd2(E) crc32c_generic(E) sdhci_iproc(E) sdhci_pltfm(E) sdhci(E)
+[ 1946.399633] CPU: 0 PID: 431 Comm: smartcard-openp Tainted: G         C OE     5.15.0-1-rpi #1  Debian 5.15.3-1
+[ 1946.417950] Hardware name: BCM2835
+[ 1946.425442] Backtrace:
+[ 1946.432048] [<c08d60a0>] (dump_backtrace) from [<c08d62ec>] (show_stack+0x20/0x24)
+[ 1946.448226]  r7:00000009 r6:0000001c r5:c04a948c r4:c0a64e2c
+[ 1946.458412] [<c08d62cc>] (show_stack) from [<c08d9ae0>] (dump_stack+0x28/0x30)
+[ 1946.470380] [<c08d9ab8>] (dump_stack) from [<c0123500>] (__warn+0xe8/0x154)
+[ 1946.482067]  r5:c04a948c r4:c0a71dc8
+[ 1946.490184] [<c0123418>] (__warn) from [<c08d6948>] (warn_slowpath_fmt+0xa0/0xe4)
+[ 1946.506758]  r7:00000009 r6:0000001c r5:c0a71dc8 r4:c0a71e04
+[ 1946.517070] [<c08d68ac>] (warn_slowpath_fmt) from [<c04a948c>] (refcount_warn_saturate+0x110/0x15c)
+[ 1946.535309]  r8:c0100224 r7:c0dfcb84 r6:ffffffff r5:c3b84c00 r4:c24a17c0
+[ 1946.546708] [<c04a937c>] (refcount_warn_saturate) from [<c0380134>] (eventfd_ctx_put+0x48/0x74)
+[ 1946.564476] [<c03800ec>] (eventfd_ctx_put) from [<bf5464e8>] (ffs_data_clear+0xd0/0x118 [usb_f_fs])
+[ 1946.582664]  r5:c3b84c00 r4:c2695b00
+[ 1946.590668] [<bf546418>] (ffs_data_clear [usb_f_fs]) from [<bf547cc0>] (ffs_data_closed+0x9c/0x150 [usb_f_fs])
+[ 1946.609608]  r5:bf54d014 r4:c2695b00
+[ 1946.617522] [<bf547c24>] (ffs_data_closed [usb_f_fs]) from [<bf547da0>] (ffs_fs_kill_sb+0x2c/0x30 [usb_f_fs])
+[ 1946.636217]  r7:c0dfcb84 r6:c3a12260 r5:bf54d014 r4:c229f000
+[ 1946.646273] [<bf547d74>] (ffs_fs_kill_sb [usb_f_fs]) from [<c0326d50>] (deactivate_locked_super+0x54/0x9c)
+[ 1946.664893]  r5:bf54d014 r4:c229f000
+[ 1946.672921] [<c0326cfc>] (deactivate_locked_super) from [<c0326df8>] (deactivate_super+0x60/0x64)
+[ 1946.690722]  r5:c2a09000 r4:c229f000
+[ 1946.698706] [<c0326d98>] (deactivate_super) from [<c0349a28>] (cleanup_mnt+0xe4/0x14c)
+[ 1946.715553]  r5:c2a09000 r4:00000000
+[ 1946.723528] [<c0349944>] (cleanup_mnt) from [<c0349b08>] (__cleanup_mnt+0x1c/0x20)
+[ 1946.739922]  r7:c0dfcb84 r6:c3a12260 r5:c3a126fc r4:00000000
+[ 1946.750088] [<c0349aec>] (__cleanup_mnt) from [<c0143d10>] (task_work_run+0x84/0xb8)
+[ 1946.766602] [<c0143c8c>] (task_work_run) from [<c010bdc8>] (do_work_pending+0x470/0x56c)
+[ 1946.783540]  r7:5ac3c35a r6:c0d0424c r5:c200bfb0 r4:c200a000
+[ 1946.793614] [<c010b958>] (do_work_pending) from [<c01000c0>] (slow_work_pending+0xc/0x20)
+[ 1946.810553] Exception stack(0xc200bfb0 to 0xc200bff8)
+[ 1946.820129] bfa0:                                     00000000 00000000 000000aa b5e21430
+[ 1946.837104] bfc0: bef867a0 00000001 bef86840 00000034 bef86838 bef86790 bef86794 bef867a0
+[ 1946.854125] bfe0: 00000000 bef86798 b67b7a1c b6d626a4 60000010 b5a23760
+[ 1946.865335]  r10:00000000 r9:c200a000 r8:c0100224 r7:00000034 r6:bef86840 r5:00000001
+[ 1946.881914]  r4:bef867a0
+[ 1946.888793] ---[ end trace 7387f2a9725b28d0 ]---
 
+Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/gadget/function/f_fs.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index e20c19a0f106..437141a11ec6 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1791,6 +1791,7 @@ static void ffs_data_reset(struct ffs_data *ffs)
+ 	ffs_data_clear(ffs);
+ 
+ 	ffs->epfiles = NULL;
++	ffs->ffs_eventfd = NULL;
+ 	ffs->raw_descs_data = NULL;
+ 	ffs->raw_descs = NULL;
+ 	ffs->raw_strings = NULL;
+-- 
+2.34.0
+

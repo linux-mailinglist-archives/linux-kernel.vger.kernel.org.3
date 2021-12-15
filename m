@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BE9475040
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1B1475052
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238788AbhLOBEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 20:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239247AbhLOBDr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 20:03:47 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AD5C0698D3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:02:34 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso23015177otf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:02:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=tAS1Dz9hbso+xED173BAGau2yBWGVtEsqq1M5udA5B4=;
-        b=GhcyDIIM2jm8UKC8uDNBGGtP77QCBxbllbAGtu+WpoWBH3wSVUhxwivFOrME8ST8tl
-         Zca8cebk0sf1py77IcG8U7XyTmZl2CrY3HgsduuvXY4KLAknZShqH4ci1NZFEdEVjVtS
-         qyAfyjgIDXllV3LnagwFoaCUz33TU3k844SXU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=tAS1Dz9hbso+xED173BAGau2yBWGVtEsqq1M5udA5B4=;
-        b=Eiyg9epzuRy7hwQXhk2tmq6LThf81afNFnOA9cj/XPmHk2sDf+46S+NyQlYC/XxFOq
-         jJUzIf1reeziYAxzr5AMvKgy+W+DUOPi5iHOiGWrBLBEC+zTGmOfm9T5nneMkyb5CIzz
-         5gRG25l+DyKncPU3kNBsg0xepqqlrKl4z+Z5HJ90ffkOkPOdixGwa1muJyq9QWh4EQY0
-         mk9ggUurt5pIB6rUsKYtxJJcVa4m/ycbGw+PZ1nWYU0NDTsCy4pPTlWdAfn1QaFXawnb
-         ykLnmqVDMGh5wNFuMacQ5lXkqoEMAIoxo9VsJzKKxh2sPxYbED9aU6mQXR4hNQt0qiY9
-         qgtg==
-X-Gm-Message-State: AOAM530xcQ4mmNMcwYT09D362jtoaPRHo0j9eRg0023DIvXtTW/UKm0h
-        DFNc4A46dsAMwXQIJbPk1ZoxYkblArwb8Ggkkmq2uECUVHg=
-X-Google-Smtp-Source: ABdhPJzk2YYgzmM+8WnPv9/YqjRAIl9m1g3mvsykEz3iVPSAuGfqP9Mv76ORVCT7utH3L4rsdcBxx1fWaqPrYYaIpNM=
-X-Received: by 2002:a05:6830:30b7:: with SMTP id g23mr6732732ots.159.1639530153506;
- Tue, 14 Dec 2021 17:02:33 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 15 Dec 2021 02:02:33 +0100
+        id S233073AbhLOBKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 20:10:10 -0500
+Received: from mga04.intel.com ([192.55.52.120]:11409 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231258AbhLOBKJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 20:10:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639530609; x=1671066609;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p419YJnl6N9/x/smUi4dkMhI5rqPpm6B6apiobEu2QI=;
+  b=dNiin+iL+ZD8e7EGAP/UqYv3VcG0wCR3OLbXa5A4ji0tXq84gZGVf7bZ
+   b5QT255gEZwr9n+BO2W/Fsz51kXFM1ltY140Zt1oStdHf+1GtKYFOHPYL
+   ePDfYBx78hIVsPctHvu6JROQOPYuA3yrRWb3poGtZlnKfJE4k0IlLe7X7
+   k68Ve7eI6do1eUPs2In0lOr6Qb9jYsd89tgN+fWqoK52sHuaIdNdKBtFb
+   gg925Hiye5zhi2opoMwOxdaivyiL6UDln1pmBUHU9gBdAS/3CYVallgSj
+   rV9nE6J2+Cec7LoLnumtK0E+D55ZFdnBWhhh9RIqwkogMsW9pb+/N8+8C
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="237855572"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="237855572"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 17:10:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="545390647"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
+  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2021 17:10:07 -0800
+Date:   Wed, 15 Dec 2021 09:02:39 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     trix@redhat.com, mdf@kernel.org, hao.wu@intel.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: stratix10-soc: cleanup double word in comment
+Message-ID: <20211215010239.GA787567@yilunxu-OptiPlex-7050>
+References: <20211214154749.2463147-1-trix@redhat.com>
+ <6d5f9555-47c5-c84e-a62d-73fbee78a483@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <eeeedcb4-d444-5402-2822-0fe942bcb83a@quicinc.com>
-References: <1638339338-6731-1-git-send-email-quic_c_sanm@quicinc.com>
- <1638339338-6731-2-git-send-email-quic_c_sanm@quicinc.com>
- <CAE-0n50YLsHhqoNQDNnGUYhHQSbMc7qnS5nGB-Nk2Z2J13xBVQ@mail.gmail.com> <eeeedcb4-d444-5402-2822-0fe942bcb83a@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 15 Dec 2021 02:02:33 +0100
-Message-ID: <CAE-0n50sO_HcMiou7nhWTkGRiyG1-yHJmgXexMhS=j+AH2NyfA@mail.gmail.com>
-Subject: Re: [PATCH v3] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for
- DWC3 controller
-To:     Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6d5f9555-47c5-c84e-a62d-73fbee78a483@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sandeep Maheswaram (2021-12-13 20:47:48)
->
-> On 12/2/2021 8:47 AM, Stephen Boyd wrote:
-> > Quoting Sandeep Maheswaram (2021-11-30 22:15:38)
-> >> Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
-> >> Runtime suspend of phy drivers was failing from DWC3 driver as
-> >> runtime usage value is 2 because the phy is initialized from
-> >> DWC3 core and HCD core.
-> >> DWC3 manages phy in their core drivers.
-> > This looks wrapped weirdly.
+On Tue, Dec 14, 2021 at 08:59:45AM -0800, Russ Weight wrote:
+> 
+> 
+> On 12/14/21 7:47 AM, trix@redhat.com wrote:
+> > From: Tom Rix <trix@redhat.com>
 > >
-> >> Set this quirk to avoid phy initialization in HCD core.
-> >>
-> >> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > Any Fixes tag?
-> Not sure about the commit id to be used here.
-
-Maybe whenever the phy started being initialized twice?
-
+> > There are two that's in the comment, remove one.
 > >
-> >> ---
-> >>   drivers/usb/host/xhci-plat.c | 3 +++
-> >>   1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat=
-.c
-> >> index c1edcc9..9bbd939 100644
-> >> --- a/drivers/usb/host/xhci-plat.c
-> >> +++ b/drivers/usb/host/xhci-plat.c
-> >> @@ -327,6 +327,9 @@ static int xhci_plat_probe(struct platform_device =
-*pdev)
-> >>                                           &xhci->imod_interval);
-> >>          }
-> >>
-> >> +       if (of_device_is_compatible(pdev->dev.parent->of_node, "snps,d=
-wc3"))
-> > Are we sure that pdev->dev.parent isn't NULL here?
->
-> +=C2=A0=C2=A0=C2=A0 if (of_device_is_compatible(to_of_node(sysdev->fwnode=
-), "snps,dwc3"))
->
-> Will this be ok ?
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
 
-Probably? But I see this function already uses 'sysdev->of_node' so
-that's probably all that's necessary assuming sysdev =3D=3D pdev->dev.paren=
-t
-in this case.
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-	if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
+Thanks,
+Yilun
 
->
+> 
+> > ---
+> >  drivers/fpga/stratix10-soc.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> >> +               xhci->quirks |=3D XHCI_SKIP_PHY_INIT;
-> >> +
-> >>          hcd->usb_phy =3D devm_usb_get_phy_by_phandle(sysdev, "usb-phy=
-", 0);
-> >>          if (IS_ERR(hcd->usb_phy)) {
+> > diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+> > index 357cea58ec98e..862069c95aa3c 100644
+> > --- a/drivers/fpga/stratix10-soc.c
+> > +++ b/drivers/fpga/stratix10-soc.c
+> > @@ -245,7 +245,7 @@ static int s10_send_buf(struct fpga_manager *mgr, const char *buf, size_t count)
+> >  	int ret;
+> >  	uint i;
+> >  
+> > -	/* get/lock a buffer that that's not being used */
+> > +	/* get/lock a buffer that is not being used */
+> >  	for (i = 0; i < NUM_SVC_BUFS; i++)
+> >  		if (!test_and_set_bit_lock(SVC_BUF_LOCK,
+> >  					   &priv->svc_bufs[i].lock))

@@ -2,127 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B42E476677
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6393B47667B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbhLOXZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 18:25:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S231998AbhLOX0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 18:26:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbhLOXZP (ORCPT
+        with ESMTP id S229643AbhLOX0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 18:25:15 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC14C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:25:15 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id p18so2995714pld.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:25:15 -0800 (PST)
+        Wed, 15 Dec 2021 18:26:33 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8449C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:26:31 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id j9so8749290wrc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:26:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vDUcxi+1vGmZblRbJ1Sm9A93/BTFWuWvpCJG8LRDqkk=;
-        b=DXYPMTYBbhpvhrxDXuuENJokIN1C4FOkTY68o9ZdjY2X0pGgYoeO8rgMJaLTIsJsrs
-         hmhV7bxWtULdRgZPqxLDrtgFNOXSv0KV8oWxGpMGFNLqSmTy7fmcHkQ1kpl4yEeKFaCQ
-         UoJ3WJjaqxJiystBa+XimfZjMEBdQR3ZC1UQg=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aWEO4+lOEaRD/eaLAldY1rujZBp501QLD0CtTf2OGKA=;
+        b=Wwg0Zje4gwnyDqzh6zBIkVcOEeg1o9Yay/pTmAgzONLQN+nlRUYC1VRinffQ9rwEvZ
+         FIy8AVONbOxsS6nJh30y7I9KC2LLiFw/QncF9XjD5vpRyzwCwr7iTUDc9hA1U/Nsph4g
+         Jn9hR5KE/kgsIbkRKVgflH0LwhnERJFi0FTSXdkkXKYnfN7nwrV6lYD2vFrNiK8clZIw
+         QvGpfmYKPsA44l6MZ8zQZg9O9aLtq4u3AVprrjiUw+rbmHHmnvGNaG5DgZ733L+mBl6q
+         I2TKNE66D1maqk92/Ot9v6UO6fzNyG452yZFHwzXovtaKnMahpvNAB3YKpqCRqdCc42I
+         ojzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vDUcxi+1vGmZblRbJ1Sm9A93/BTFWuWvpCJG8LRDqkk=;
-        b=5JH5lm3hVVMeeIpOTZzYCtdbr3vFnmv/rFJsH+xHGq/dA63xD3rfwX+LkdE/g1wF/d
-         UsYr2ySoCcTKu/SZs0AbbGfASaHM5EaK240NjwQPkYgeN5tCqPFABC2mjNY4yityLnNd
-         FJDMp6ym8GoqpUVPWGnm3d3Gyz8lKztnOzHfdRv6FTsv2IOI61axBbXP8Ks3+8grkfXH
-         cqOs7xbhIIdu3njD6EIEW/SHp/G0m7jHZBkTJ3WvKZJ3hGLnEcDRS2V5y20FZnSOZEV/
-         nuMaFNBNxtnOyWy5OA1ttXi0YRrowVkSUJlOHsZ6bD0Asf6vZV4HXtjZ4YvWC2ATi95p
-         4axw==
-X-Gm-Message-State: AOAM530oZrbSrPGYFFM/0YolrfQhEk7xkcPg0qBLhOT0skXJn4kKbrNO
-        FGiHSGx4BvX+UDBRD27xnnTJHA==
-X-Google-Smtp-Source: ABdhPJy5py/792S478eMSZrNlgV3972pgHifUoF5SICCwYNK+P2sBeyjHIvi7Ls6eSNJ7zV9Rq3Hlg==
-X-Received: by 2002:a17:902:b712:b0:143:72b7:4096 with SMTP id d18-20020a170902b71200b0014372b74096mr13995974pls.25.1639610714881;
-        Wed, 15 Dec 2021 15:25:14 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b18sm3120925pjo.31.2021.12.15.15.25.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 15:25:14 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] iio: stmpe-adc: Use correctly sized arguments for bit field
-Date:   Wed, 15 Dec 2021 15:25:13 -0800
-Message-Id: <20211215232513.2070158-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aWEO4+lOEaRD/eaLAldY1rujZBp501QLD0CtTf2OGKA=;
+        b=Hd719nOGKqc8t+X5xzaZb+q/Udke8QLvo28shzzLrccf3HAm3VAhZ/vXsoTzaiFvy/
+         0QVpTSmFF57Oc/lZC7yQSfXXpcW1amxNa6WdmFx6fuIOEBbzsyMpfolSBJVGm0amQC+U
+         QkV5y4XvtGk+7yQ2vtFT9XbO/2MVGVa3tvDYMW76G4OZIukKMH2oOXD3kgRlxDkBnJIm
+         w7Tx8RQIf1RaUxY8ISXuKYOOjZeXcFQ3ZUkRrAGGzOBXFQywe2dGrj1MRFKCOlBvcTIR
+         1DXkebBwtgLlIUj6q4oKx9UT8cimPNP2o4x9W2VxO1QY79abLn9ypqXO38sr0P46KewA
+         eMeg==
+X-Gm-Message-State: AOAM532uKN+lAL2ZSn06cFO+PHAWRkqeVoR7w63rdr8lhjiuWcyjBuHt
+        bKmnJBOEuuphPVa7GjiscHOED7j0hx8HMZmYnGXSpQ==
+X-Google-Smtp-Source: ABdhPJwEeohnXfddqmmLfWY+PzER4jE5agUTbIOZPR/cQUXqFmsd9PLsQpxGAjQnucUxh/dXB006eBPsmx3o86OTQeo=
+X-Received: by 2002:adf:ee0c:: with SMTP id y12mr6698308wrn.82.1639610790378;
+ Wed, 15 Dec 2021 15:26:30 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2545; h=from:subject; bh=S+yja+ZH2OmWXK3ijI5wGcAm/sNwDDcR7CmSYgsRQzo=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhunlYeGsDYpcqYmqKGq1gspbWZM1i9uJh+lhO3VSQ FHREJxSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbp5WAAKCRCJcvTf3G3AJlBiD/ 9NL3ZLujTHevof7dlDGHJPmKwu+YtML22gc59bhFYHNlrW1bYIyk8TVkzq+kmWec+iWtOk61RpCSXS Z0k7OnyjFshW0V/lqBxlh9J5enIY+QUpyTtjZItLHc+peGRRmKU3uDXa8yjTgmYevNLvTHfOipZRzz YX5h1sDytZpE3iLSCyn/6iQF51ttub/xD2LyDYPWCVRhJxhfyqNNLqMT9ieTj7XSNP7ho0xpLojXtG tYWFm1l7YezgqMr59jAE6fQpMkolVM6/jLRvwm94HRifQWDQlVIJz2D/fE/HI8uMpMN9h/dj3lWqCz b4ueQOnKzDV9J1CjKjjZzWHmB+YITuSkqr1zsPTHvccwOfdpBMTwPqh9G2MRm0jUXjYh5wbbdX0RnY JVZy4dPkxUArpoQx+Xv4Tfh8F/WXlRyqbV/+GBScF9djq6yabzoTpogdl8ms5SWTD/qQZalMX7vnQS b71qchU1Q+2z06VaTVhRZQ/+9b0CpOQNr0Dwnp7anmFBJ+HiWBzxsh5MK6pgbk4EDXUwePl6dA/RyO nVDXPwtQGKzNPzhRAFRnnBCAqowSzkQzNAUNtmHVyPfmg5yUjLgG9QlaoTPq/J+G5/qAgZv8HMan4Q g/nbEXYvBPu9ipCueVOY3evU+0zo1CFssLloRyC7DBje0O6J/hslJrPUKIfw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20211214204445.665580974@infradead.org> <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
+ <Ybm+HJzkO/0BB4Va@hirez.programming.kicks-ass.net> <CAFTs51Xb6m=htpWsVk577n-h_pRCpqRcBg6-OhBav8OadikHkw@mail.gmail.com>
+ <YboxjUM+D9Kg52mO@hirez.programming.kicks-ass.net> <CAPNVh5cJy2y+sTx0cPA1BPSAg=GjXC8XGT7fLzHwzvXH2=xjmw@mail.gmail.com>
+ <20211215222524.GH16608@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211215222524.GH16608@worktop.programming.kicks-ass.net>
+From:   Peter Oskolkov <posk@google.com>
+Date:   Wed, 15 Dec 2021 15:26:19 -0800
+Message-ID: <CAPNVh5cfoehYpOu2PE59L3_yxmZaXgJ6oC1eg923rmaiK4f87A@mail.gmail.com>
+Subject: Re: [RFC][PATCH 0/3] sched: User Managed Concurrency Groups
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Peter Oskolkov <posk@posk.io>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Paul Turner <pjt@google.com>, Andrei Vagin <avagin@google.com>,
+        Jann Horn <jannh@google.com>,
+        Thierry Delisle <tdelisle@uwaterloo.ca>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The find.h APIs are designed to be used only on unsigned long arguments.
-This can technically result in a over-read, but it is harmless in this
-case. Regardless, fix it to avoid the warning seen under -Warray-bounds,
-which we'd like to enable globally:
+On Wed, Dec 15, 2021 at 2:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, Dec 15, 2021 at 11:49:51AM -0800, Peter Oskolkov wrote:
+>
+> > TL;DR: our models are different here. In your model a single server
+> > can have a bunch of workers interacting with it; in my model only a
+> > single RUNNING worker is assigned to a server, which it wakes when it
+> > blocks.
+>
+> So part of the problem is that none of that was evident from the code.
+> It is also completely different from the scheduler code it lives in,
+> making it double confusing.
+>
+> After having read the code, I still had no clue what so ever how it was
+> supposed to be used. Which is where my reverse engineering started :/
 
-In file included from ./include/linux/bitmap.h:9,
-                 from ./include/linux/cpumask.h:12,
-                 from ./arch/x86/include/asm/cpumask.h:5,
-                 from ./arch/x86/include/asm/msr.h:11,
-                 from ./arch/x86/include/asm/processor.h:22,
-                 from ./arch/x86/include/asm/cpufeature.h:5,
-                 from ./arch/x86/include/asm/thread_info.h:53,
-                 from ./include/linux/thread_info.h:60,
-                 from ./arch/x86/include/asm/preempt.h:7,
-                 from ./include/linux/preempt.h:78,
-                 from ./include/linux/spinlock.h:55,
-                 from ./include/linux/swait.h:7,
-                 from ./include/linux/completion.h:12,
-                 from drivers/iio/adc/stmpe-adc.c:10:
-drivers/iio/adc/stmpe-adc.c: In function 'stmpe_adc_probe':
-./include/linux/find.h:98:23: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'u32[1]' {aka 'unsigned int[1]'} [-Warray-bounds]
-   98 |                 val = *addr | ~GENMASK(size - 1, offset);
-      |                       ^~~~~
-drivers/iio/adc/stmpe-adc.c:258:13: note: while referencing 'norequest_mask'
-  258 |         u32 norequest_mask = 0;
-      |             ^~~~~~~~~~~~~~
+I posted a doc patch:
+https://lore.kernel.org/lkml/20211122211327.5931-6-posk@google.com/
+a lib patch with userspace code:
+https://lore.kernel.org/lkml/20211122211327.5931-5-posk@google.com/
+and a doc patch for the lib/userspace code:
+https://lore.kernel.org/lkml/20211122211327.5931-7-posk@google.com/
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/iio/adc/stmpe-adc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I spent at least two weeks polishing the lib patch and the docs, much
+more if previous patchsets are to be taken into account. Yes, they are
+confusing, and most likely answer all of the wrong questions, but I
+did try to make my approach as clear as possible... I apologize if
+that was not very successful...
 
-diff --git a/drivers/iio/adc/stmpe-adc.c b/drivers/iio/adc/stmpe-adc.c
-index fba659bfdb40..d2d405388499 100644
---- a/drivers/iio/adc/stmpe-adc.c
-+++ b/drivers/iio/adc/stmpe-adc.c
-@@ -256,6 +256,7 @@ static int stmpe_adc_probe(struct platform_device *pdev)
- 	struct stmpe_adc *info;
- 	struct device_node *np;
- 	u32 norequest_mask = 0;
-+	unsigned long bits;
- 	int irq_temp, irq_adc;
- 	int num_chan = 0;
- 	int i = 0;
-@@ -309,8 +310,8 @@ static int stmpe_adc_probe(struct platform_device *pdev)
- 
- 	of_property_read_u32(np, "st,norequest-mask", &norequest_mask);
- 
--	for_each_clear_bit(i, (unsigned long *) &norequest_mask,
--			   (STMPE_ADC_LAST_NR + 1)) {
-+	bits = norequest_mask;
-+	for_each_clear_bit(i, &bits, (STMPE_ADC_LAST_NR + 1)) {
- 		stmpe_adc_voltage_chan(&info->stmpe_adc_iio_channels[num_chan], i);
- 		num_chan++;
- 	}
--- 
-2.30.2
+>
+> > More details:
+> >
+> > "Working servers" cannot get wakeups, because a "working server" has a
+> > single RUNNING worker attached to it. When a worker blocks, it wakes
+> > its attached server and becomes a detached blocked worker (same is
+> > true if the worker is "preempted": it blocks and wakes its assigned
+> > server).
+>
+> But who would do the preemption if the server isn't allowed to run?
+>
+> > Blocked workers upon wakeup do this, in order:
+> >
+> > - always add themselves to the runnable worker list (the list is
+> > shared among ALL servers, it is NOT per server);
+>
+> That seems like a scalability issue. And, as said, it is completely
+> alien when compared to the way Linux itself does scheduling.
+>
+> > - wake a server pointed to by idle_server_ptr, if not NULL;
+> > - sleep, waiting for a wakeup from a server;
+> >
+> > Server S, upon becoming IDLE (no worker to run, or woken on idle
+> > server list) does this, in order, in userspace (simplified, see
+> > umcg_get_idle_worker() in
+> > https://lore.kernel.org/lkml/20211122211327.5931-5-posk@google.com/):
+> > - take a userspace (spin) lock (so the steps below are all within a
+> > single critical section):
+>
+> Don't ever suggest userspace spinlocks, they're horrible crap.
 
+This can easily be a mutex, not really important (although for very
+short critical sections with only memory reads/writes, like here, spin
+locks often perform better, in our experience).
+
+>
+> > - compare_xchg(idle_server_ptr, NULL, S);
+> >   - if failed, there is another server in idle_server_ptr, so S adds
+> > itself to the userspace idle server list, releases the lock, goes to
+> > sleep;
+> >   - if succeeded:
+> >     - check the runnable worker list;
+> >         - if empty, release the lock, sleep;
+> >         - if not empty:
+> >            - get the list
+> >            - xchg(idle_server_ptr, NULL) (either S removes itself, or
+> > a worker in the kernel does it first, does not matter);
+> >            - release the lock;
+> >            - wake server S1 on idle server list. S1 goes through all
+> > of these steps.
+> >
+> > The protocol above serializes the userspace dealing with the idle
+> > server ptr/list. Wakeups in the kernel will be caught if there are
+> > idle servers. Yes, the protocol in the userspace is complicated (more
+> > complicated than outlined above, as the reaped idle/runnable worker
+> > list from the kernel is added to the userspace idle/runnable worker
+> > list), but the kernel side is very simple. I've tested this
+> > interaction extensively, I'm reasonably sure that no worker wakeups
+> > are lost.
+>
+> Sure, but also seems somewhat congestion prone :/
+
+The whole critical section under the loc is just several memory
+read/write operations, so very short. And workers are removed from the
+kernel's list of runnable/woken workers all at once; and the server
+processing the runnable worker list knows how many of them are now
+available to run, so the appropriate number of idle servers can be
+woken (not yet implemented in my lib patch). So yes, this can be a
+bottleneck, but there are ways to make it less and less likely (by
+making the userspace more complicated; but this is not a concern).

@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60358475BC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3249C475BBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243919AbhLOPVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:21:55 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46794 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243856AbhLOPVy (ORCPT
+        id S243912AbhLOPUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:20:13 -0500
+Received: from mail-qv1-f51.google.com ([209.85.219.51]:43627 "EHLO
+        mail-qv1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243891AbhLOPUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:21:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 357FDB81FBE;
-        Wed, 15 Dec 2021 15:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2423AC33CF2;
-        Wed, 15 Dec 2021 15:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639581615;
-        bh=iV9y8WX18pADcC4QTmY9Es2S3Ox/ct9sA+YFJ4++suE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I5zy0R1xSIP7q6y3HNK8lmGyXjkmA88xqFMM8bEynhZp1VapNobnTQM7R90JsBDqL
-         yQ4oXr20idIdtI+4vz7oW/32vhuQoj8f9lN7dTOmG8lVTyC1bk6gKYqzvxh0Wu/jqs
-         LBba4gf+X0fpVFeWihIYFYK1NrAxrjKoJrYT+FqYhESUMcKHHhCVayrnVi/vvX1O5F
-         wFpS86A23mRlDcOV8wHhjf8S7VS4/Gt3ncfVA4r7iJ8yor3OVnV6PVFozoqRIW2VMr
-         yG7oabIHTWDiJLcPeQ3i52UYG0qalcHex/0H6KYbfoUqhrCH9ANL/ebaZkVe7VmlB5
-         0SPm5bsla1BDg==
-Date:   Wed, 15 Dec 2021 20:50:04 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Cc:     "kishon@ti.com" <kishon@ti.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hongxing.zhu@nxp.com" <hongxing.zhu@nxp.com>
-Subject: Re: linux-next: build failure after merge of the phy-next tree
-Message-ID: <YboHpPfynVmOP+ac@matsya>
-References: <20211215134915.3622957-1-broonie@kernel.org>
- <82dcdd84d9111dcde3fb43504ffec5592e2c8356.camel@toradex.com>
+        Wed, 15 Dec 2021 10:20:07 -0500
+Received: by mail-qv1-f51.google.com with SMTP id m6so3409280qvh.10;
+        Wed, 15 Dec 2021 07:20:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qmub5xNOOJMDe8hIhM9h8/alEATciJeF8DyioMLtUB8=;
+        b=arHfkLE/oMXuj9Vhp/EzfzhoQuipuI2DFL1hrz49sbPBSAQvq5iY95Ag74kc51IBCU
+         ay/5B150LwAT9hJkaLQVLAgBCw+MfvZ2+rWgLGCtLwHxH0V8TUCfo5cybFkZ7xLkg5eH
+         7+Z5b6nDVhAqZ7H3hb9qL/hV2p5D3omhFn5CpAlqaO46pFqhB/VcPSxBdjx8+0GjUT1z
+         Zz1JajOvZX8uVJ2p8bERhzDoMebYFzEd7dGuSyhUetBNPM/CVS+Vg9ThImZe09pdBy/y
+         eC/8wiZVEZhIO9poPOjhbamVxuBqnRAtyvQevjSuBvfTe8gPrq74DOqHeU3WeAWBT4Uy
+         FAgA==
+X-Gm-Message-State: AOAM532oLwhVKr517VpLaW7VLESrin/+fhFL4ghG00qk0jktXWE+Tx6D
+        wHKc0fhW+/53icCPMOakXog=
+X-Google-Smtp-Source: ABdhPJwpKCZQHgXCQtJRVjQxiaairOVcdTec8dAbnr0GZQTF2BkohLdy9oVEhVmjwIjxFEe3RMlV0w==
+X-Received: by 2002:a0c:f6ca:: with SMTP id d10mr6572282qvo.48.1639581606603;
+        Wed, 15 Dec 2021 07:20:06 -0800 (PST)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-004.fbsv.net. [2a03:2880:20ff:4::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a16sm1640986qta.94.2021.12.15.07.20.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 07:20:06 -0800 (PST)
+Date:   Wed, 15 Dec 2021 07:20:04 -0800
+From:   David Vernet <void@manifault.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
+        corbet@lwn.net, songliubraving@fb.com, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2] livepatch: Fix leak on klp_init_patch_early failure
+ path
+Message-ID: <YboHpHmu3D+0hxKp@dev0025.ash9.facebook.com>
+References: <20211214220124.2911264-1-void@manifault.com>
+ <20211214235128.ckaozqsvcr6iqcnu@treble>
+ <Ybm+FyhLnuH4JThq@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <82dcdd84d9111dcde3fb43504ffec5592e2c8356.camel@toradex.com>
+In-Reply-To: <Ybm+FyhLnuH4JThq@alley>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15-12-21, 14:14, Marcel Ziswiler wrote:
-> On Wed, 2021-12-15 at 13:49 +0000, broonie@kernel.org wrote:
-> > Hi all,
-> > 
-> > After merging the phy-next tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> 
-> I admit I never tried building any of this as a module. I assume neither did Richard (now on CC) or anybody
-> else.
-> 
-> > /tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c: In function 'imx8_pcie_phy_init':
-> > /tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:37: error: implicit declaration of function
-> > 'FIELD_PREP' [-Werror=implicit-function-declaration]
-> 
-> Hm, that should come from include/linux/bitfield.h. However, that seems not explicitly included. Likely, in the
-> module case it no longer finds it. That's a problem.
-> 
-> >    41 | #define IMX8MM_GPR_PCIE_REF_CLK_EXT FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x2)
-> >       |                                     ^~~~~~~~~~
-> > /tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:85:7: note: in expansion of macro
-> > 'IMX8MM_GPR_PCIE_REF_CLK_EXT'
-> >    85 |       IMX8MM_GPR_PCIE_REF_CLK_EXT :
-> >       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > cc1: all warnings being treated as errors
-> > 
-> > Caused by commit
-> > 
-> >   1aa97b002258a190d77 ("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
-> > 
-> > I have used the phy-next tree from yesterday.
-> 
-> Yes, I also noticed it having been applied there now.
-> 
-> Anyway, let me cook up a fix for this. Thanks for reporting.
+Petr Mladek <pmladek@suse.com> wrote on Wed [2021-Dec-15 11:06:15 +0100]:
+> Well, I still believe that this is just a cargo cult. And I would prefer
+> to finish the discussion about it, first, see
+> https://lore.kernel.org/all/YbmlL0ZyfSuek9OB@alley/
 
-I have fixed it up: https://lore.kernel.org/all/20211215060834.921617-1-vkoul@kernel.org/
+No problem, I won't send out v3 until we've finished the discussion and
+have consensus. I'll assume that the discussion on whether or not there is
+a leak will continue on the thread you linked to above, so I won't comment
+on it here.
 
-will push now
+> Note that klp_init_*_early() functions iterate through the arrays
+> using klp_for_each_*_static. While klp_free_*() functions iterate
+> via the lists using klp_for_each_*_safe().
 
--- 
-~Vinod
+Correct, as I've understood it, klp_for_each_*_safe() should only iterate
+over the objects that have been added to the patch and klp_object's lists,
+and thus for which kobject_init() has been invoked. So if we fail a check
+on 'struct klp_object' N, then we'll only iterate over the first N - 1
+objects in klp_for_each_*_safe().
+
+> We should not need the pre-early-init check when the lists include only
+> structures with initialized kobjects.
+
+Not sure I quite follow. We have to do NULL checks for obj->funcs at some
+point, and per Josh's suggestion it seems cleaner to do it outside the
+critical section, and before we actually invoke kobject_init(). Apologies
+if I've misunderstood your point.
+
+> Otherwise, I like the idea to do module_get() before
+> klp_init_patch_early(). I was never happy with the "hidden"
+> side effect.
+
+Ack!
+
+> I am also fine with calling klp_free() when the early init fails
+> if we agreed that it is a good practice. I just do want to pretend
+> that it fixes a leak what nobody sees any leak.
+> 
+> Please, wait few days until the discussion finishes before sending v3.
+
+Ack, no problem, I'll wait until we're all in alignment. Thanks, Petr and
+Josh for taking a look at the patch.
+
+Regards,
+David

@@ -2,181 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA67B476577
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD4847657E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbhLOWND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 17:13:03 -0500
-Received: from mail-ot1-f52.google.com ([209.85.210.52]:33708 "EHLO
-        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbhLOWND (ORCPT
+        id S231209AbhLOWQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 17:16:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36996 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229472AbhLOWQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 17:13:03 -0500
-Received: by mail-ot1-f52.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso26733801otf.0;
-        Wed, 15 Dec 2021 14:13:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ITxrC42cpEdFPF3axFsIeZiANWHi83eE7MbTcA8W+gg=;
-        b=woP6wUFLq3RI2nWA5aH4VFVgxJv49yzJ3px/8nSzthwX/EATef4YsVKSkRmFmXtV87
-         WXQcG11Qz0QViQ1jf8VTG4oAt6azgOTQbDc/CVgIBrKcKH8k3x11Ls/2fHj9wVa6cnco
-         5ueFGHQLMEXRpItxp+lnhujjvM623Q85Eqimn5IwaWheZGJnDageBabvPbxPqO8M/MDa
-         vvMNzXPFeITNEKu2typt6ISyzjNbYODe0YeLlfZCVOwJLfvaGplUFljS1ktAktrBPNFM
-         S+xLrg46RpEWzo1ymoMeg6PVWvkblhGfGiYollDdC6xdrkUaqCFzNjvRKWN9o8eDrsh9
-         8SKA==
-X-Gm-Message-State: AOAM531LXTSlNIfHwMbFNE6r1iRR9mbzg9emk89Ym/+H9G+J/lt7DE4w
-        h07IBUzjBMigx7182uJkWg==
-X-Google-Smtp-Source: ABdhPJwaDEcWGo2pJ8CHSx9viVOHay+ZBu3YGBOyUvT6TDJu7jRsraMtVM63nT7+QEIcvGrQCS8ePw==
-X-Received: by 2002:a05:6830:1092:: with SMTP id y18mr10206759oto.119.1639606382307;
-        Wed, 15 Dec 2021 14:13:02 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t18sm698156ott.2.2021.12.15.14.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:13:01 -0800 (PST)
-Received: (nullmailer pid 1932976 invoked by uid 1000);
-        Wed, 15 Dec 2021 22:13:00 -0000
-Date:   Wed, 15 Dec 2021 16:13:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Biao Huang <biao.huang@mediatek.com>
-Cc:     davem@davemloft.net, Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        srv_heupstream@mediatek.com, macpaul.lin@mediatek.com,
-        angelogioacchino.delregno@collabora.com, dkirjanov@suse.de
-Subject: Re: [PATCH net-next v9 6/6] net: dt-bindings: dwmac: add support for
- mt8195
-Message-ID: <YbpobIscSDPKuxxY@robh.at.kernel.org>
-References: <20211215021652.7270-1-biao.huang@mediatek.com>
- <20211215021652.7270-7-biao.huang@mediatek.com>
+        Wed, 15 Dec 2021 17:16:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DE6261B16;
+        Wed, 15 Dec 2021 22:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55837C36AE3;
+        Wed, 15 Dec 2021 22:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639606583;
+        bh=1hSjeBr9VK09A920ZiCqpUGXz/tcRcEu0B3NSFSN9Sg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VzvfjufzjFK5OQlfhq7RCUUT8gtWoFrpXlWOciHQRyIxO3kO27skF7qJ1kp+Alzvb
+         Doj1QNkm96LgEmNwVcgEqojrhR9s/qNj0NawAjtkU4WX3Re1nykPtiKV7m5Ds1hwDh
+         dHfu1sgdbCn3pXeCr2aftkjBeY3wtatDf5mAhj6Jjup6D8lf6CEs/5bOjvVHocdmvB
+         K0Gf3DiUc8VeZHTCxEyenTKzCO9P2W0lBsReLGnbWisl4tgkoRbQFTfoFBZDGQcutN
+         103eA4jQiRtfoBEG6JoxAEYxq6t2Fop3ZsEOqDs8TKWDYGq7NqchQNQ52bx1WTHhnS
+         fujEzQaNL6KsQ==
+From:   broonie@kernel.org
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Dec 15
+Date:   Wed, 15 Dec 2021 22:16:19 +0000
+Message-Id: <20211215221619.822904-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215021652.7270-7-biao.huang@mediatek.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 10:16:52AM +0800, Biao Huang wrote:
-> Add binding document for the ethernet on mt8195.
-> 
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> ---
->  .../bindings/net/mediatek-dwmac.yaml          | 42 ++++++++++++++-----
->  1 file changed, 32 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> index 8ad6e19661b8..44d55146def4 100644
-> --- a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> @@ -19,6 +19,7 @@ select:
->        contains:
->          enum:
->            - mediatek,mt2712-gmac
-> +          - mediatek,mt8195-gmac
->    required:
->      - compatible
->  
-> @@ -27,26 +28,37 @@ allOf:
->  
->  properties:
->    compatible:
-> -    items:
-> -      - enum:
-> -          - mediatek,mt2712-gmac
-> -      - const: snps,dwmac-4.20a
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt2712-gmac
-> +          - const: snps,dwmac-4.20a
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8195-gmac
-> +          - const: snps,dwmac-5.10a
->  
->    clocks:
-> +    minItems: 5
+Hi all,
 
-As before, you need 'minItems: 4' in the previous patch.
+News: I had a vaccine dose today so no guarantees about releases at
+least tomorrow depending on side effects.
 
-If you aren't clear what's needed, run 'make dtbs_checks' yourself 
-before submitting again.
+Changes since 20211214:
 
->      items:
->        - description: AXI clock
->        - description: APB clock
->        - description: MAC Main clock
->        - description: PTP clock
->        - description: RMII reference clock provided by MAC
-> +      - description: MAC clock gate
->  
->    clock-names:
-> -    items:
-> -      - const: axi
-> -      - const: apb
-> -      - const: mac_main
-> -      - const: ptp_ref
-> -      - const: rmii_internal
-> +    minItems: 5
-> +    maxItems: 6
-> +    contains:
+The kvm tree gained a conflict.
 
-No, you just threw out the order requirements. And this schema will be 
-true with just 1 of the strings below plus any other strings. For 
-example, this will pass:
+The phy-next tree gained a build failure and I used the version from
+yesterday.
 
-clock-names = "foo", "bar", "axi", "baz", "rob";
+Non-merge commits (relative to Linus' tree): 6683
+ 7239 files changed, 321081 insertions(+), 155400 deletions(-)
 
-> +      enum:
-> +        - axi
-> +        - apb
-> +        - mac_main
-> +        - ptp_ref
-> +        - rmii_internal
-> +        - mac_cg
->  
->    mediatek,pericfg:
->      $ref: /schemas/types.yaml#/definitions/phandle
-> @@ -61,6 +73,8 @@ properties:
->        or will round down. Range 0~31*170.
->        For MT2712 RMII/MII interface, Allowed value need to be a multiple of 550,
->        or will round down. Range 0~31*550.
-> +      For MT8195 RGMII/RMII/MII interface, Allowed value need to be a multiple of 290,
-> +      or will round down. Range 0~31*290.
->  
->    mediatek,rx-delay-ps:
->      description:
-> @@ -69,6 +83,8 @@ properties:
->        or will round down. Range 0~31*170.
->        For MT2712 RMII/MII interface, Allowed value need to be a multiple of 550,
->        or will round down. Range 0~31*550.
-> +      For MT8195 RGMII/RMII/MII interface, Allowed value need to be a multiple
-> +      of 290, or will round down. Range 0~31*290.
->  
->    mediatek,rmii-rxc:
->      type: boolean
-> @@ -102,6 +118,12 @@ properties:
->        3. the inside clock, which be sent to MAC, will be inversed in RMII case when
->           the reference clock is from MAC.
->  
-> +  mediatek,mac-wol:
-> +    type: boolean
-> +    description:
-> +      If present, indicates that MAC supports WOL(Wake-On-LAN), and MAC WOL will be enabled.
-> +      Otherwise, PHY WOL is perferred.
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.25.1
-> 
-> 
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a defconfig for arm64, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After the
+final fixups (if any), I do an x86_64 modules_install followed by builds
+for x86_64 allnoconfig, arm64 allnoconfig, arm64 allyesconfig and i386,
+and arm64 and htmldocs.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 347 trees (counting Linus' and 94 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

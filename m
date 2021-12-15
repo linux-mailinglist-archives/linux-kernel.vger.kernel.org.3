@@ -2,114 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A95475155
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2456A47515B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239555AbhLODYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 22:24:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57031 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230073AbhLODYm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 22:24:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639538682;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wHvqWA9pCAW9hO772UCEPBtSbiKtXLn9xS2Zet02foU=;
-        b=D7XpqjJxZk1k/LrdSMz/4bLf2yxhg23ndlYStXLLubyHq36HkRjzH3ePi6cmypQHrBKjwm
-        VHKrsTeH9XiILdS8JDJfYy9BIjchp2OymSpx8k6cYGoQDDX0gx4bB8f4JcXQCu1KzLtpCd
-        uIWGkDBtlnxYbqFjPADZJW5SieXGrbM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-529-9OCunupRPaCWWCdihpXOZA-1; Tue, 14 Dec 2021 22:24:38 -0500
-X-MC-Unique: 9OCunupRPaCWWCdihpXOZA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E277581CCB7;
-        Wed, 15 Dec 2021 03:24:35 +0000 (UTC)
-Received: from [10.22.16.35] (unknown [10.22.16.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B73C18276C;
-        Wed, 15 Dec 2021 03:24:22 +0000 (UTC)
-Message-ID: <810204ce-7967-e470-1267-7c3cfb521c89@redhat.com>
-Date:   Tue, 14 Dec 2021 22:24:22 -0500
+        id S239565AbhLOD26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 22:28:58 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:49198 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230073AbhLOD26 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 22:28:58 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAD3_wPkYLlht7ctAw--.30807S2;
+        Wed, 15 Dec 2021 11:28:36 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
+        mchehab@kernel.org, matthias.bgg@gmail.com
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] media: mtk-vcodec: potential dereference of null pointer
+Date:   Wed, 15 Dec 2021 11:28:34 +0800
+Message-Id: <20211215032834.94111-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 2/7] cgroup/cpuset: Allow no-task partition to have
- empty cpuset.cpus.effective
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-3-longman@redhat.com>
- <Ybew7d2oE2gLcLNO@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Ybew7d2oE2gLcLNO@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAD3_wPkYLlht7ctAw--.30807S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKFy8Aw4fXFyxCFyrtw4ruFg_yoWDKwb_Za
+        yqvF1xZr1UKwnxJF47tF1S9ryIgFZ0kr40q3sxKFZIga4UGF4rur4DAF45Za1UZw40vF98
+        JasYvFWxA39xJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gr4l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUYnYwUUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 15:45, Tejun Heo wrote:
-> On Sun, Dec 05, 2021 at 01:32:15PM -0500, Waiman Long wrote:
->>   	adding = deleting = false;
->>   	old_prs = new_prs = cpuset->partition_root_state;
->>   	if (cmd == partcmd_enable) {
->> +		/*
->> +		 * Enabling partition root is not allowed if not all the CPUs
->> +		 * can be granted from parent's effective_cpus.
->> +		 */
->> +		if (!cpumask_subset(cpuset->cpus_allowed, parent->effective_cpus))
->> +			return -EINVAL;
->> +
->> +		/*
->> +		 * A parent can be left with no CPU as long as there is no
->> +		 * task directly associated with the parent partition. For
->> +		 * such a parent, no new task can be moved into it.
->> +		 */
->> +		if (partition_is_populated(parent, cpuset) &&
->> +		    cpumask_equal(cpuset->cpus_allowed, parent->effective_cpus))
->> +			return -EINVAL;
-> So, given that this only happens with threaded domains, can we just not
-> allow partitions within threaded domains? The combination doesn't make whole
-> lot of sense to me anyway.
-AFAICS, there are code in cpuset.c that disallows the an non-child node 
-to hold tasks, but the check doesn't cover all the possible cases. I 
-remembered that I was able to create such a scenario without using 
-threaded domains. That is why I put in this conditional check. It has 
-nothing to do with the use of threaded domains.
->> +	/*
->> +	 * On default hierarchy, task cannot be moved to a cpuset with empty
->> +	 * effective cpus.
->> +	 */
->> +	if (is_in_v2_mode() && cpumask_empty(cs->effective_cpus))
->> +		goto out_unlock;
-> And then we can avoid this extra restriction too, right?
+The return value of devm_kzalloc() needs to be checked.
+To avoid use of null pointer in case of thefailure of alloc.
 
-This check is supposed to prevent a task to be moved to a leaf cpuset 
-partition with just offlined cpus and hence no effective cpu. A possible 
-alternative is to force the partition to become invalid, but I think not 
-allowing the move is easier until one or more offlined cpus are onlined.
+Fixes: 46233e91fa24 ("media: mtk-vcodec: move firmware implementations into their own files")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Cheers,
-Longman
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
+index cd27f637dbe7..769228093e48 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
+@@ -102,6 +102,8 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
+ 	vpu_wdt_reg_handler(fw_pdev, mtk_vcodec_vpu_reset_handler, dev, rst_id);
+ 
+ 	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
++	if (!fw)
++		return ERR_PTR(-EINVAL);
+ 	fw->type = VPU;
+ 	fw->ops = &mtk_vcodec_vpu_msg;
+ 	fw->pdev = fw_pdev;
+-- 
+2.25.1
 

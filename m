@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5CD475B26
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7508D475B3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243597AbhLOO41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56426 "EHLO
+        id S243728AbhLOO5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243575AbhLOO4Z (ORCPT
+        with ESMTP id S243648AbhLOO5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:56:25 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA356C06173E;
-        Wed, 15 Dec 2021 06:56:24 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id u22so33686892lju.7;
-        Wed, 15 Dec 2021 06:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VlpUM4pVnFF7b/v49q5hG/QwrE0qXlxltwh39I/Lb3U=;
-        b=aa6oe37gkeikvLqkgQh4Y837T645JoVUUPcc6Rkd9TBbGuzq8J7gfQnQJxKEfazilm
-         xjVa0jXe5Rizo7oGsjIlD+H4jIPSNziX6oKVz1TfSZKcy/UyUwX7Y3Uxcqnla9a+N0+7
-         PGaF+FerxDS3CvJKQxLCUk/m478BUgaON1nKCFZjUCzTVUCsAIqHnBNtZW5iuchZkwgT
-         yWKQqC4UGy8UZ0i36y0hM73bTREHeJzrl9AGWHAkjz9sUBSRVAmQXd956vjX+GTSI3hw
-         OK7zVF+Lr4VZu9yE9dt/aGk6xRHkfRz/GVlTbCVf11Nl9HNlXmJ0RQ4s01FEdcUSl+gy
-         VeqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VlpUM4pVnFF7b/v49q5hG/QwrE0qXlxltwh39I/Lb3U=;
-        b=Z2qHA55au2qwu6s21olx0D4NVmqk/HaxsgDYmGw10K2Dosvk9Y5dSEo2Kb6mR6Tvai
-         25TYuckmD8vrvNuqPcn334rv/aonX1gt6zHHmuIPgjljAKTIfwb8Qguj2g29Hrr0AHPs
-         NzleO6L/u5OPrCd//caB6EL7rqsHSbHyGdwWLadzw6JNu9C2HQ2IIGfOwj9Se2JZ7aTy
-         xGOaTzW6WFdc3Fk96Nx8FRI8qYQiC5OmyUShiJ3uhcsnzgkjf7eBNqT4Y6kXLLtXIrq3
-         ZXq3qVirb76zGbZd9M1QkPExKMyGa+DQKHAZWA6/9IQGO+bQuwrzx5mhlsbua6Qvf+ix
-         Nsig==
-X-Gm-Message-State: AOAM532n/i/TcpAK8cQ7NmEhfjYSBeSx08X9DlJQb8gUjVCLSXoZIVRq
-        1WnbKuTSNzg/5U/G4x2jL+STSy2Goqg=
-X-Google-Smtp-Source: ABdhPJxtZzId3hlV/qfDQ7GjmHdzLoX/TCsop5PDpRClHgQYUT0FtHwvACVezQ3yUAbTdn7cYaU8bw==
-X-Received: by 2002:a2e:9903:: with SMTP id v3mr10380295lji.143.1639580182548;
-        Wed, 15 Dec 2021 06:56:22 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id c34sm357937lfv.83.2021.12.15.06.56.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 06:56:22 -0800 (PST)
-Subject: Re: [PATCH v14 2/4] dmaengine: tegra: Add tegra gpcdma driver
-To:     Akhil R <akhilrajeev@nvidia.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Rajesh Gumasta <rgumasta@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>
-Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
-References: <1638795639-3681-1-git-send-email-akhilrajeev@nvidia.com>
- <1638795639-3681-3-git-send-email-akhilrajeev@nvidia.com>
- <3f7b072d-f108-ebce-e862-eff9869d1d92@gmail.com>
- <BN9PR12MB52738F4B5B7494466A9CB5A1C0769@BN9PR12MB5273.namprd12.prod.outlook.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <70cce574-4022-16a9-ae10-4b84696d21d5@gmail.com>
-Date:   Wed, 15 Dec 2021 17:56:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 15 Dec 2021 09:57:12 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480C9C061757;
+        Wed, 15 Dec 2021 06:57:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=P340VFo+4PrrAUQaheCNZWVztH0i3+oCk4D7HckAZkY=; b=U9RTLiGsf5f36zTBHdhGQRZzfA
+        vLKPTDrqLnJ8zr4wpgXX6EweGnRqycbMic4oSiN35734GJ0vPyBv/OjxtFBpAeYFgj/Zkq2PT1PaW
+        qyCh9xffpTqYIibTewVLaLWfkeW6UKRYuco+SL7DuXIDqB3/q+X8p+FJewTRAe3uOR8U0WMMWqcDE
+        z+NQ7hmg1tMeVmikjhOwW0/rRNW3WUSs85+mxSu5oDRjmGdMcfCN0HmtmEf60GZ23afvisKsbbU1p
+        AhyWeD/PvAWs9Aqy8REVLPLE4GmSqs4lkRGlU7TDUO62nPIXU0oHQCJU2qAs4hmCEhAoqZ5BLkDGj
+        iZl4+Vaw==;
+Received: from i7.infradead.org ([2001:8b0:10b:1:21e:67ff:fecb:7a92])
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxVhr-001WOs-3j; Wed, 15 Dec 2021 14:56:35 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxVhq-0001Nd-Mi; Wed, 15 Dec 2021 14:56:34 +0000
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
+Subject: [PATCH v3 0/9] Parallel CPU bringup for x86_64
+Date:   Wed, 15 Dec 2021 14:56:24 +0000
+Message-Id: <20211215145633.5238-1-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <BN9PR12MB52738F4B5B7494466A9CB5A1C0769@BN9PR12MB5273.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-15.12.2021 16:50, Akhil R пишет:
->> 06.12.2021 16:00, Akhil R пишет:
->>> +static const struct __maybe_unused dev_pm_ops tegra_dma_dev_pm_ops =
->> {
->>> +     SET_LATE_SYSTEM_SLEEP_PM_OPS(tegra_dma_pm_suspend,
->>> +tegra_dma_pm_resume) };
->>
->> Why late?
-> To wait for the drivers using the dma to be suspended so that they
-> don't keep the dma busy.
-> Agree with the other comments.
+Doing the INIT/SIPI/SIPI in parallel for all APs and *then* waiting for
+them shaves about 80% off the AP bringup time on a 96-thread socket
+Skylake box (EC2 c5.metal) — from about 500ms to 100ms.
 
-Drivers are suspended in the opposite order to the probe order. DMA
-controller driver is always probed first. The "late" is unneeded, please
-see tegra20-apb-dma driver for the example.
+There are more wins to be had with further parallelisation, but this is
+the simple part.
+
+v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
+v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
+    in preparation for more parallelisation.
+
+
+David Woodhouse (8):
+      x86/apic/x2apic: Fix parallel handling of cluster_mask
+      cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
+      cpu/hotplug: Add dynamic parallel bringup states before CPUHP_BRINGUP_CPU
+      x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
+      x86/smpboot: Split up native_cpu_up into separate phases and document them
+      x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
+      x86/mtrr: Avoid repeated save of MTRRs on boot-time CPU bringup
+      x86/smpboot: Serialize topology updates for secondary bringup
+
+Thomas Gleixner (1):
+      x86/smpboot: Support parallel startup of secondary CPUs
+
+ arch/x86/include/asm/realmode.h       |   3 +
+ arch/x86/include/asm/smp.h            |  13 +-
+ arch/x86/include/asm/topology.h       |   2 -
+ arch/x86/kernel/acpi/sleep.c          |   1 +
+ arch/x86/kernel/apic/apic.c           |   2 +-
+ arch/x86/kernel/apic/x2apic_cluster.c | 108 +++++++-----
+ arch/x86/kernel/cpu/common.c          |   6 +-
+ arch/x86/kernel/cpu/mtrr/mtrr.c       |   9 +
+ arch/x86/kernel/head_64.S             |  71 ++++++++
+ arch/x86/kernel/smpboot.c             | 324 ++++++++++++++++++++++++----------
+ arch/x86/realmode/init.c              |   3 +
+ arch/x86/realmode/rm/trampoline_64.S  |  14 ++
+ arch/x86/xen/smp_pv.c                 |   4 +-
+ include/linux/cpuhotplug.h            |   2 +
+ include/linux/smpboot.h               |   7 +
+ kernel/cpu.c                          |  27 ++-
+ kernel/smpboot.c                      |   2 +-
+ kernel/smpboot.h                      |   2 -
+ 18 files changed, 441 insertions(+), 159 deletions(-)
+
+

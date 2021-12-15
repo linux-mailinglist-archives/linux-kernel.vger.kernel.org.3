@@ -2,76 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAEB475570
+	by mail.lfdr.de (Postfix) with ESMTP id D165D475572
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241291AbhLOJtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:49:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241287AbhLOJtV (ORCPT
+        id S241302AbhLOJtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:49:40 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54498 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241286AbhLOJtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:49:21 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AB2C06173F;
-        Wed, 15 Dec 2021 01:49:20 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639561758;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1lCJ3NbjTqIwHu6whJDvCeBv8J9e+geodL4/RUvckeU=;
-        b=KbUEIBYMpT20qDzlouknlVuJRNIVD7Rx7y3C2/eRqLGl6za7spUkeOe239BHH+OZuILXpp
-        DfzsWUbdE5QIPVNCTfaLSTogDYVQKDHOv2rvZjC8d6sfTb5mFq36UlhtQLcAs9W0g+rVuo
-        vE2ruHl0Y5oaWAMQXNeNp9eHnheaq03e+oVKRa7XCcTRqDQOrDjS7fmVjojx9gI7NVWoOj
-        TH5xyTnUZbw6iEzoQqBYVkOy4PgfesX0Me7GoH2VQhEpmE2G1QvjnctY3QsssQtbEgrLd9
-        tS66oMXylHzFCMyMaRWMIVs+Alijn0w7fsbalSA5DZiqbPn4Km28gN+wq6lZ+Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639561758;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1lCJ3NbjTqIwHu6whJDvCeBv8J9e+geodL4/RUvckeU=;
-        b=g3rT5ofNlaqDZp1E32XFw+fcsJfmDupQEbTtEwjHrlZ7ok3Ulp8PYWlyn/BM1gW9PPblqC
-        svQm90/tvCOu1SDw==
-To:     "Liu, Jing2" <jing2.liu@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Yang Zhong <yang.zhong@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, x86@kernel.org,
-        kvm@vger.kernel.org, Sean Christoperson <seanjc@google.com>,
-        Jin Nakajima <jun.nakajima@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>
-Subject: Re: [patch 6/6] x86/fpu: Provide kvm_sync_guest_vmexit_xfd_state()
-In-Reply-To: <62cc7ba5-8a46-2396-e728-cf5902c22306@linux.intel.com>
-References: <20211214022825.563892248@linutronix.de>
- <20211214024948.108057289@linutronix.de>
- <62cc7ba5-8a46-2396-e728-cf5902c22306@linux.intel.com>
-Date:   Wed, 15 Dec 2021 10:49:18 +0100
-Message-ID: <87ee6erye9.ffs@tglx>
+        Wed, 15 Dec 2021 04:49:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7284EB817DB;
+        Wed, 15 Dec 2021 09:49:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36947C34605;
+        Wed, 15 Dec 2021 09:49:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639561777;
+        bh=iyz1IavZbdA7EvQGlAK3NVUq4sQ3YeO8OiWehA9NRu4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=We9EgW3nbhl3PPysO5L97scwaaPLW/+ADafzE2Z6K5KbxIB6PP1MPXa38x2lT7y30
+         lLIyHWB85i7T71dQzMg91DSaq+cS6b0qHDP4fO+6oC+reCower+G2Hj3VJovjeeOlM
+         gCBfeKZiQLr31pjHUbo4WZXE5EmbfnuMbTA/vPCdcsXYFwLqPiHb517yYN5G6vRDu4
+         8cvHxvlfsSuEZXnAr348MNHCsaK7BD81GkDkNk/7+kFHAHIB4nIYqG2nbZYIzAHcoG
+         msK9w5bOeiRwKjozf3/JAetAt1BAhcnQcE9oMFWY5cfOXmDpHgEs2S6d0tbganF1dJ
+         P/sD+yVm+rlEA==
+Date:   Wed, 15 Dec 2021 11:49:29 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Quentin Perret <qperret@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>
+Subject: Re: [PATCH v2] of/fdt: Don't worry about non-memory region overlap
+ for no-map
+Message-ID: <Ybm6KQiS7B28QOSW@kernel.org>
+References: <20211215072011.496998-1-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215072011.496998-1-swboyd@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jing,
+Hi,
 
-On Wed, Dec 15 2021 at 14:35, Jing2 Liu wrote:
-> On 12/14/2021 10:50 AM, Thomas Gleixner wrote:
->> KVM can disable the write emulation for the XFD MSR when the vCPU's fpstate
->> is already correctly sized to reduce the overhead.
->>
->> When write emulation is disabled the XFD MSR state after a VMEXIT is
->> unknown and therefore not in sync with the software states in fpstate and
->> the per CPU XFD cache.
->>
->> Provide kvm_sync_guest_vmexit_xfd_state() which has to be invoked after a
->> VMEXIT before enabling interrupts when write emulation is disabled for the
->> XFD MSR.
-> Thanks for this function.
->
-> s/kvm_sync_guest_vmexit_xfd_state/fpu_sync_guest_vmexit_xfd_state
-> in subject and changelog.
+On Tue, Dec 14, 2021 at 11:20:11PM -0800, Stephen Boyd wrote:
+> In commit 8a5a75e5e9e5 ("of/fdt: Make sure no-map does not remove
+> already reserved regions") we returned -EBUSY when trying to mark
+> regions as no-map when they're in the reserved memory node. This if
+> condition will still trigger though if the DT has a /memreserve/ that
+> completely subsumes the no-map memory carveouts in the reserved memory
+> node. Let's only consider this to be a problem if we're trying to mark a
+> region as no-map and it is actually memory. If it isn't memory,
+> presumably it was removed from the memory map via /memreserve/ and thus
+> can't be mapped anyway.
 
-I clearly need more sleep.
+I have no objections for this patch, but I afraid that this is a never
+ending story of reservation vs nomap ordering and this won't be the last
+fix in the area.
+
+I was toying with the idea to use flags in memblock.reserved to have
+clearer view of how the reserved memory was used and then we won't need
+to guess firmware intentions.
+Thoughts?
+ 
+> This silences a warning seen at boot on sc7180-trogdor.dtsi boards that
+> have /memreserve/ populated by the bootloader where those reserved
+> regions overlap with the reserved-memory carveouts that we have in DT
+> for other purposes like communicating with remote processors.
+
+Do you mind adding the relevant pats of the device tree to the changelog?
+
+> For example
+> 
+>  OF: fdt: Reserved memory: failed to reserve memory for node 'memory@80900000': base 0x0000000080900000, size 2 MiB
+> 
+> Cc: Mike Rapoport <rppt@kernel.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Nicolas Boichat <drinkcat@chromium.org>
+> Cc: Quentin Perret <qperret@google.com>
+> Cc: Jan Kiszka <jan.kiszka@siemens.com>
+> Fixes: 8a5a75e5e9e5 ("of/fdt: Make sure no-map does not remove already reserved regions")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+> 
+> Changes from v1 (https://lore.kernel.org/r/20210520012731.3731314-1-swboyd@chromium.org):
+>  * Use memblock_overlaps_region instead of memblock_is_region_memory()
+>  * Add more details to commit text 
+> 
+>  drivers/of/fdt.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index bdca35284ceb..c736e5bcc2f6 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -482,9 +482,11 @@ static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
+>  	if (nomap) {
+>  		/*
+>  		 * If the memory is already reserved (by another region), we
+> -		 * should not allow it to be marked nomap.
+> +		 * should not allow it to be marked nomap, but don't worry
+> +		 * if the region isn't memory as it won't be mapped.
+>  		 */
+> -		if (memblock_is_region_reserved(base, size))
+> +		if (memblock_overlaps_region(&memblock.memory, base, size) &&
+> +		    memblock_is_region_reserved(base, size))
+>  			return -EBUSY;
+>  
+>  		return memblock_mark_nomap(base, size);
+> 
+> base-commit: 136057256686de39cc3a07c2e39ef6bc43003ff6
+> -- 
+> https://chromeos.dev
+> 
+
+-- 
+Sincerely yours,
+Mike.

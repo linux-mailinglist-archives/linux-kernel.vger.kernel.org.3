@@ -2,258 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A54447513F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38F7475145
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239497AbhLODJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 22:09:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbhLODJt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 22:09:49 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EF5C06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 19:09:49 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id mj19so1160159pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 19:09:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zV7Byx9t+KDsgsJ+lRahaZM7qh41MhISAIcarU0rIrs=;
-        b=602lIADH8P0VxX3t15azUhnF4g8PeHZMtloaMQG4uOL1R82WuF0JrBx6pFOtz993GF
-         NTUL3zyB44Tvo4UI07UeIj8wXBUatoMBpM3AFutfdSkjBKlgdOm8S14c4vNhwBl+8rGu
-         ST63etO43gdF+JemQDiRWRxOlyD3CT8vQ0XDYPd9ayEkVpc6BSOTsAWSNIMX3YrAjLVI
-         W7ncayOkW2TfhNpDzNDWbEeOM9FzNG+ESP9A48mEbyRHD4R6ZaVb7mOWEs5/2qh6NhaE
-         hxBCthC8kRhqY3deTGWEcsg1qUck0ddwwKsrnGre1xi1zfYyWzxzmQmOSj9BLKUsmAf/
-         sKzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zV7Byx9t+KDsgsJ+lRahaZM7qh41MhISAIcarU0rIrs=;
-        b=gx5C+CibG+ghIDHfr9LEkcPZinBKpMvw41sWzB0aEat6Oub/kRNqRSI7Ii7S4nkTup
-         8GyJPvlKIIqpM2pSSn8kjmQZ4LuUVjZJ9qJZNN7hZ42hMei3A/72OwI0zuytx18cDn4Z
-         qv6sea8Q3pbfDlxDKL9t+yW39aM36cV5YlTj0pqwvxVZndVZXfQ3ZBCZ7k1maRWJq1+y
-         hj/IqvGWW2zE5CYodZWmxUzEJZZ0xnGE4gdZOTbBVMUPIq9UfWbREHZk4UKDSa6aa70M
-         rZmgRUiRR4rHB/MTZOCCkvCvXwsokI8PVCXumP/5jfEU1W6tS36RKg9vlH4cMizg9GW3
-         TviA==
-X-Gm-Message-State: AOAM531bzc6t7kpgLOQZCQoilFoQacL70qL8dtDgEbEQoTVXxsWnxfuU
-        47ruoq6DhP3uPhp/u7mXI5SxTnrccPdb3G87qU6bCQ==
-X-Google-Smtp-Source: ABdhPJyjMfaGYmiposIisiZRidNY8TOPZq1tLdw8NQ7Z5XZbq18nnyTwV4R/TrMM9ymfKh/aJSUi3bLLzquD7YpcUjU=
-X-Received: by 2002:a17:903:41c1:b0:141:f28f:729e with SMTP id
- u1-20020a17090341c100b00141f28f729emr9342998ple.34.1639537789085; Tue, 14 Dec
- 2021 19:09:49 -0800 (PST)
+        id S239533AbhLODQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 22:16:13 -0500
+Received: from mga01.intel.com ([192.55.52.88]:25937 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231215AbhLODQM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 22:16:12 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="263283420"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="263283420"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 19:16:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="682318698"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.188]) ([10.238.232.188])
+  by orsmga005.jf.intel.com with ESMTP; 14 Dec 2021 19:16:08 -0800
+Subject: Re: [PATCH 4/6] media: imx208: Support device probe in non-zero ACPI
+ D state
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>
+Cc:     linux-media@vger.kernel.org, rafael@kernel.org,
+        shawnx.tu@intel.com, tian.shu.qiu@intel.com,
+        chiranjeevi.rapolu@intel.com, hyungwoo.yang@intel.com,
+        tfiga@chromium.org, senozhatsky@chromium.org,
+        linux-kernel@vger.kernel.org
+References: <1636447715-15526-1-git-send-email-bingbu.cao@intel.com>
+ <1636447715-15526-5-git-send-email-bingbu.cao@intel.com>
+ <Ybi/b0QYV2BwSbQk@paasikivi.fi.intel.com>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <374d87f4-a3e5-fbaa-b4eb-c1ac1bd983dd@linux.intel.com>
+Date:   Wed, 15 Dec 2021 11:13:03 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20211202084856.1285285-1-ruansy.fnst@fujitsu.com> <20211202084856.1285285-3-ruansy.fnst@fujitsu.com>
-In-Reply-To: <20211202084856.1285285-3-ruansy.fnst@fujitsu.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 14 Dec 2021 19:09:38 -0800
-Message-ID: <CAPcyv4gkjhrzNoRqwiWxps_ymAhmm3DJSWL7Lr+bLpSxSPvd0w@mail.gmail.com>
-Subject: Re: [PATCH v8 2/9] dax: Introduce holder for dax_device
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <Ybi/b0QYV2BwSbQk@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 12:49 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
->
-> To easily track filesystem from a pmem device, we introduce a holder for
-> dax_device structure, and also its operation.  This holder is used to
-> remember who is using this dax_device:
->  - When it is the backend of a filesystem, the holder will be the
->    superblock of this filesystem.
->  - When this pmem device is one of the targets in a mapped device, the
->    holder will be this mapped device.  In this case, the mapped device
->    has its own dax_device and it will follow the first rule.  So that we
->    can finally track to the filesystem we needed.
->
-> The holder and holder_ops will be set when filesystem is being mounted,
-> or an target device is being activated.
->
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> ---
->  drivers/dax/super.c | 61 +++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/dax.h | 25 +++++++++++++++++++
->  2 files changed, 86 insertions(+)
->
-> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> index 719e77b2c2d4..a19fcc0a54f3 100644
-> --- a/drivers/dax/super.c
-> +++ b/drivers/dax/super.c
-> @@ -20,15 +20,20 @@
->   * @inode: core vfs
->   * @cdev: optional character interface for "device dax"
->   * @private: dax driver private data
-> + * @holder_data: holder of a dax_device: could be filesystem or mapped device
->   * @flags: state and boolean properties
-> + * @ops: operations for dax_device
-> + * @holder_ops: operations for the inner holder
->   */
->  struct dax_device {
->         struct inode inode;
->         struct cdev cdev;
->         void *private;
->         struct percpu_rw_semaphore rwsem;
-> +       void *holder_data;
->         unsigned long flags;
->         const struct dax_operations *ops;
-> +       const struct dax_holder_operations *holder_ops;
->  };
->
->  static dev_t dax_devt;
-> @@ -190,6 +195,29 @@ int dax_zero_page_range(struct dax_device *dax_dev, pgoff_t pgoff,
->  }
->  EXPORT_SYMBOL_GPL(dax_zero_page_range);
->
-> +int dax_holder_notify_failure(struct dax_device *dax_dev, u64 off,
-> +                             u64 len, int mf_flags)
-> +{
-> +       int rc;
-> +
-> +       dax_read_lock(dax_dev);
-> +       if (!dax_alive(dax_dev)) {
-> +               rc = -ENXIO;
-> +               goto out;
-> +       }
-> +
-> +       if (!dax_dev->holder_ops) {
-> +               rc = -EOPNOTSUPP;
-> +               goto out;
-> +       }
-> +
-> +       rc = dax_dev->holder_ops->notify_failure(dax_dev, off, len, mf_flags);
-> +out:
-> +       dax_read_unlock(dax_dev);
-> +       return rc;
-> +}
-> +EXPORT_SYMBOL_GPL(dax_holder_notify_failure);
-> +
->  #ifdef CONFIG_ARCH_HAS_PMEM_API
->  void arch_wb_cache_pmem(void *addr, size_t size);
->  void dax_flush(struct dax_device *dax_dev, void *addr, size_t size)
-> @@ -252,6 +280,10 @@ void kill_dax(struct dax_device *dax_dev)
->                 return;
->         dax_write_lock(dax_dev);
->         clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
-> +
-> +       /* clear holder data */
-> +       dax_dev->holder_ops = NULL;
-> +       dax_dev->holder_data = NULL;
->         dax_write_unlock(dax_dev);
->  }
->  EXPORT_SYMBOL_GPL(kill_dax);
-> @@ -399,6 +431,35 @@ void put_dax(struct dax_device *dax_dev)
->  }
->  EXPORT_SYMBOL_GPL(put_dax);
->
-> +void dax_set_holder(struct dax_device *dax_dev, void *holder,
-> +               const struct dax_holder_operations *ops)
-> +{
-> +       dax_write_lock(dax_dev);
-> +       if (!dax_alive(dax_dev))
-> +               goto out;
-> +
-> +       dax_dev->holder_data = holder;
-> +       dax_dev->holder_ops = ops;
-> +out:
-> +       dax_write_unlock(dax_dev);
 
-Why does this need to be a write_lock()? This is just like any other
-dax_operation that can only operate while the dax device is alive.
 
-> +}
-> +EXPORT_SYMBOL_GPL(dax_set_holder);
-> +
-> +void *dax_get_holder(struct dax_device *dax_dev)
-> +{
-> +       void *holder = NULL;
-> +
-> +       dax_read_lock(dax_dev);
-> +       if (!dax_alive(dax_dev))
-> +               goto out;
-> +
-> +       holder = dax_dev->holder_data;
-> +out:
-> +       dax_read_unlock(dax_dev);
-> +       return holder;
+On 12/14/21 11:59 PM, Sakari Ailus wrote:
+> Hi Bingbu,
+> 
+> On Tue, Nov 09, 2021 at 04:48:33PM +0800, Bingbu Cao wrote:
+>> Tell ACPI device PM code that the driver supports the device being in
+>> non-zero ACPI D state when the driver's probe function is entered.
+>>
+>> Also do identification on the first access of the device, whether in probe
+>> or when starting streaming.
+>>
+>> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+>> ---
+>>  drivers/media/i2c/imx208.c | 77 +++++++++++++++++++++++++++++-----------------
+>>  1 file changed, 48 insertions(+), 29 deletions(-)
+>>
+>> diff --git a/drivers/media/i2c/imx208.c b/drivers/media/i2c/imx208.c
+>> index 6f3d9c1b5879..b9f6d5f33b58 100644
+>> --- a/drivers/media/i2c/imx208.c
+>> +++ b/drivers/media/i2c/imx208.c
+>> @@ -296,6 +296,9 @@ struct imx208 {
+>>  	/* OTP data */
+>>  	bool otp_read;
+>>  	char otp_data[IMX208_OTP_SIZE];
+>> +
+>> +	/* True if the device has been identified */
+>> +	bool identified;
+>>  };
+>>  
+>>  static inline struct imx208 *to_imx208(struct v4l2_subdev *_sd)
+>> @@ -619,6 +622,34 @@ static int imx208_set_pad_format(struct v4l2_subdev *sd,
+>>  	return 0;
+>>  }
+>>  
+>> +static int imx208_identify_module(struct imx208 *imx208)
+>> +{
+>> +	struct i2c_client *client = v4l2_get_subdevdata(&imx208->sd);
+>> +	int ret;
+>> +	u32 val;
+>> +
+>> +	if (imx208->identified)
+>> +		return 0;
+> 
+> Otp access requires this as well.
 
-The read_lock should be held outside of this helper. I.e. the caller
-of this will already want to do:
+Sakari, thanks for your review.
 
-dax_read_lock()
-dax_get_holder()
-*do holder operation*
-dax_read_unlock() <-- now device can finalize kill_dax().
+Yes, OTP read will trigger the LED blink, but I am not sure it makes sense that camera
+framework try to read the OTP data without streaming, and it would complain once fail to
+access the OTP data.
+> 
+> How about adding a runtime PM resume callback for this?
 
-> +}
-> +EXPORT_SYMBOL_GPL(dax_get_holder);
-> +
->  /**
->   * inode_dax: convert a public inode into its dax_dev
->   * @inode: An inode with i_cdev pointing to a dax_dev
-> diff --git a/include/linux/dax.h b/include/linux/dax.h
-> index 8414a08dcbea..f01684a63447 100644
-> --- a/include/linux/dax.h
-> +++ b/include/linux/dax.h
-> @@ -44,6 +44,21 @@ struct dax_operations {
->  #if IS_ENABLED(CONFIG_DAX)
->  struct dax_device *alloc_dax(void *private, const struct dax_operations *ops,
->                 unsigned long flags);
-> +struct dax_holder_operations {
-> +       /*
-> +        * notify_failure - notify memory failure into inner holder device
-> +        * @dax_dev: the dax device which contains the holder
-> +        * @offset: offset on this dax device where memory failure occurs
-> +        * @len: length of this memory failure event
-> +        * @flags: action flags for memory failure handler
-> +        */
-> +       int (*notify_failure)(struct dax_device *dax_dev, u64 offset,
-> +                       u64 len, int mf_flags);
-> +};
-> +
-> +void dax_set_holder(struct dax_device *dax_dev, void *holder,
-> +               const struct dax_holder_operations *ops);
-> +void *dax_get_holder(struct dax_device *dax_dev);
->  void put_dax(struct dax_device *dax_dev);
->  void kill_dax(struct dax_device *dax_dev);
->  void dax_write_cache(struct dax_device *dax_dev, bool wc);
-> @@ -71,6 +86,14 @@ static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
->         return dax_synchronous(dax_dev);
->  }
->  #else
-> +static inline void dax_set_holder(struct dax_device *dax_dev, void *holder,
-> +               const struct dax_holder_operations *ops)
-> +{
-> +}
-> +static inline void *dax_get_holder(struct dax_device *dax_dev)
-> +{
-> +       return NULL;
-> +}
->  static inline struct dax_device *alloc_dax(void *private,
->                 const struct dax_operations *ops, unsigned long flags)
->  {
-> @@ -199,6 +222,8 @@ size_t dax_copy_to_iter(struct dax_device *dax_dev, pgoff_t pgoff, void *addr,
->                 size_t bytes, struct iov_iter *i);
->  int dax_zero_page_range(struct dax_device *dax_dev, pgoff_t pgoff,
->                         size_t nr_pages);
-> +int dax_holder_notify_failure(struct dax_device *dax_dev, u64 off, u64 len,
-> +               int mf_flags);
->  void dax_flush(struct dax_device *dax_dev, void *addr, size_t size);
->
->  ssize_t dax_iomap_rw(struct kiocb *iocb, struct iov_iter *iter,
-> --
-> 2.34.0
->
->
->
+For the runtime PM callback, what is the benefit adding a callback here as will call try
+pm_runtime_get_sync() each stream on?
+
+> 
+> I guess it'd be better for the rest, too. Up to you.
+> 
+>> +
+>> +	ret = imx208_read_reg(imx208, IMX208_REG_CHIP_ID,
+>> +			      2, &val);
+>> +	if (ret) {
+>> +		dev_err(&client->dev, "failed to read chip id %x\n",
+>> +			IMX208_CHIP_ID);
+>> +		return ret;
+>> +	}
+>> +
+>> +	if (val != IMX208_CHIP_ID) {
+>> +		dev_err(&client->dev, "chip id mismatch: %x!=%x\n",
+>> +			IMX208_CHIP_ID, val);
+>> +		return -EIO;
+>> +	}
+>> +
+>> +	imx208->identified = true;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>  /* Start streaming */
+>>  static int imx208_start_streaming(struct imx208 *imx208)
+>>  {
+>> @@ -626,6 +657,10 @@ static int imx208_start_streaming(struct imx208 *imx208)
+>>  	const struct imx208_reg_list *reg_list;
+>>  	int ret, link_freq_index;
+>>  
+>> +	ret = imx208_identify_module(imx208);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>>  	/* Setup PLL */
+>>  	link_freq_index = imx208->cur_mode->link_freq_index;
+>>  	reg_list = &link_freq_configs[link_freq_index].reg_list;
+>> @@ -752,29 +787,6 @@ static int __maybe_unused imx208_resume(struct device *dev)
+>>  }
+>>  
+>>  /* Verify chip ID */
+>> -static int imx208_identify_module(struct imx208 *imx208)
+>> -{
+>> -	struct i2c_client *client = v4l2_get_subdevdata(&imx208->sd);
+>> -	int ret;
+>> -	u32 val;
+>> -
+>> -	ret = imx208_read_reg(imx208, IMX208_REG_CHIP_ID,
+>> -			      2, &val);
+>> -	if (ret) {
+>> -		dev_err(&client->dev, "failed to read chip id %x\n",
+>> -			IMX208_CHIP_ID);
+>> -		return ret;
+>> -	}
+>> -
+>> -	if (val != IMX208_CHIP_ID) {
+>> -		dev_err(&client->dev, "chip id mismatch: %x!=%x\n",
+>> -			IMX208_CHIP_ID, val);
+>> -		return -EIO;
+>> -	}
+>> -
+>> -	return 0;
+>> -}
+>> -
+>>  static const struct v4l2_subdev_video_ops imx208_video_ops = {
+>>  	.s_stream = imx208_set_stream,
+>>  };
+>> @@ -961,6 +973,7 @@ static int imx208_probe(struct i2c_client *client)
+>>  {
+>>  	struct imx208 *imx208;
+>>  	int ret;
+>> +	bool full_power;
+>>  	u32 val = 0;
+>>  
+>>  	device_property_read_u32(&client->dev, "clock-frequency", &val);
+>> @@ -978,11 +991,14 @@ static int imx208_probe(struct i2c_client *client)
+>>  	/* Initialize subdev */
+>>  	v4l2_i2c_subdev_init(&imx208->sd, client, &imx208_subdev_ops);
+>>  
+>> -	/* Check module identity */
+>> -	ret = imx208_identify_module(imx208);
+>> -	if (ret) {
+>> -		dev_err(&client->dev, "failed to find sensor: %d", ret);
+>> -		goto error_probe;
+>> +	full_power = acpi_dev_state_d0(&client->dev);
+>> +	if (full_power) {
+>> +		/* Check module identity */
+>> +		ret = imx208_identify_module(imx208);
+>> +		if (ret) {
+>> +			dev_err(&client->dev, "failed to find sensor: %d", ret);
+>> +			goto error_probe;
+>> +		}
+>>  	}
+>>  
+>>  	/* Set default mode to max resolution */
+>> @@ -1017,7 +1033,9 @@ static int imx208_probe(struct i2c_client *client)
+>>  		goto error_async_subdev;
+>>  	}
+>>  
+>> -	pm_runtime_set_active(&client->dev);
+>> +	/* Set the device's state to active if it's in D0 state. */
+>> +	if (full_power)
+>> +		pm_runtime_set_active(&client->dev);
+>>  	pm_runtime_enable(&client->dev);
+>>  	pm_runtime_idle(&client->dev);
+>>  
+>> @@ -1077,6 +1095,7 @@ static struct i2c_driver imx208_i2c_driver = {
+>>  	},
+>>  	.probe_new = imx208_probe,
+>>  	.remove = imx208_remove,
+>> +	.flags = I2C_DRV_ACPI_WAIVE_D0_PROBE,
+>>  };
+>>  
+>>  module_i2c_driver(imx208_i2c_driver);
+> 
+
+-- 
+Best regards,
+Bingbu Cao

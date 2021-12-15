@@ -2,127 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D165D475572
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61790475578
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241302AbhLOJtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:49:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54498 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241286AbhLOJtj (ORCPT
+        id S241305AbhLOJvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236419AbhLOJvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:49:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7284EB817DB;
-        Wed, 15 Dec 2021 09:49:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36947C34605;
-        Wed, 15 Dec 2021 09:49:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639561777;
-        bh=iyz1IavZbdA7EvQGlAK3NVUq4sQ3YeO8OiWehA9NRu4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=We9EgW3nbhl3PPysO5L97scwaaPLW/+ADafzE2Z6K5KbxIB6PP1MPXa38x2lT7y30
-         lLIyHWB85i7T71dQzMg91DSaq+cS6b0qHDP4fO+6oC+reCower+G2Hj3VJovjeeOlM
-         gCBfeKZiQLr31pjHUbo4WZXE5EmbfnuMbTA/vPCdcsXYFwLqPiHb517yYN5G6vRDu4
-         8cvHxvlfsSuEZXnAr348MNHCsaK7BD81GkDkNk/7+kFHAHIB4nIYqG2nbZYIzAHcoG
-         msK9w5bOeiRwKjozf3/JAetAt1BAhcnQcE9oMFWY5cfOXmDpHgEs2S6d0tbganF1dJ
-         P/sD+yVm+rlEA==
-Date:   Wed, 15 Dec 2021 11:49:29 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Quentin Perret <qperret@google.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>
-Subject: Re: [PATCH v2] of/fdt: Don't worry about non-memory region overlap
- for no-map
-Message-ID: <Ybm6KQiS7B28QOSW@kernel.org>
-References: <20211215072011.496998-1-swboyd@chromium.org>
+        Wed, 15 Dec 2021 04:51:22 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C7BC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 01:51:21 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id g17so53501388ybe.13
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 01:51:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tFT9slFzR2Yf0j3yzAPs2dGyzL0oVYEo3K/VfvSACI8=;
+        b=PzOIJV4Yjhq/PSV/T+fa0v+1hgjWHgeE6yJBgYxRqr+ZseW+QBtxyuFZXfZtcWhsOY
+         7h5kOfpz2lh2bRXJHQw4XjbD2aW5AozdVTqMj2U8dMpxBDaEUo1Kq9ERzOctW0QyV3Ky
+         CBxsbrJu0S7QLbVf+57RQPRZXr4EGpjJFqk0GR59q33rO4TVDsdDcht3F9mSWJEqSTUF
+         ZEqwUnyChANbfawGpcIQfCmQ2JkCX2+WSfyzDpr/TqcYtzmwJ8koSdmcqSvzV1Mi2ALK
+         qovQux4WZIS2IidFpLXCxy8/gN3ahMqWeEkzQVSddcmwvPD3n2dp68Ik43kyxjPRhrVk
+         G+5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tFT9slFzR2Yf0j3yzAPs2dGyzL0oVYEo3K/VfvSACI8=;
+        b=XxwmRB4f+0QZDNjtkbQHYPmFek04aDh/AHIATB0YcaE/P5Dd0ZWTQYVS4WfZNTpOBX
+         a3gHHoDF7O5zx2vcpnR7cSakhAruEZdfadUAHEwZ3UOZoCYF14M/KXoKCwy8ZZ0wj7eX
+         AWcHaPptVM4qhmyx7y/BiWjciE89mjmyNaBoVJ2R+tI5iyLNYWdvcTIVTrGwV+8LzLJN
+         fZXVCVjsKM6V+XF8M9yeCQViYKKbnmKHLjZE/aTVSPtJMaVD1S85N2z6tuL275PjiaKy
+         bMP9HOATeNuFfM88O5pZBK1mM/FXBZ7qJKCMhayCAm3b3g8GSMVdzzjyRKmCtNM/6kVj
+         XB4g==
+X-Gm-Message-State: AOAM53294mOuUMRWoD5DVJyjCsuSqbdf4fOHYuhvibwhWJ6gD0njCldF
+        Zs7mOzGYRjGQcolqJAkpX0ly9QslH7fAvGg+9cTniw==
+X-Google-Smtp-Source: ABdhPJxEcUv+QwNjP0pSGrF5WpKqx1mIIo85nwLnFmdOfBLktNHZo6YNCXbpOXqvbqVqj+IUJSZy9qZqfJ3eyTBVT9Q=
+X-Received: by 2002:a25:df4f:: with SMTP id w76mr5399025ybg.711.1639561880366;
+ Wed, 15 Dec 2021 01:51:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215072011.496998-1-swboyd@chromium.org>
+References: <0b6c06487234b0fb52b7a2fbd2237af42f9d11a6.1639560869.git.geert+renesas@glider.be>
+In-Reply-To: <0b6c06487234b0fb52b7a2fbd2237af42f9d11a6.1639560869.git.geert+renesas@glider.be>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 15 Dec 2021 01:51:08 -0800
+Message-ID: <CANn89iKdorp0Ki0KFf6LAdjtKOm2np=vYY_YtkmJCoGfet1q-g@mail.gmail.com>
+Subject: Re: [PATCH -next] lib: TEST_REF_TRACKER should depend on REF_TRACKER
+ instead of selecting it
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Dec 15, 2021 at 1:36 AM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> TEST_REF_TRACKER selects REF_TRACKER, thus enabling an optional feature
+> the user may not want to have enabled.  Fix this by making the test
+> depend on REF_TRACKER instead.
 
-On Tue, Dec 14, 2021 at 11:20:11PM -0800, Stephen Boyd wrote:
-> In commit 8a5a75e5e9e5 ("of/fdt: Make sure no-map does not remove
-> already reserved regions") we returned -EBUSY when trying to mark
-> regions as no-map when they're in the reserved memory node. This if
-> condition will still trigger though if the DT has a /memreserve/ that
-> completely subsumes the no-map memory carveouts in the reserved memory
-> node. Let's only consider this to be a problem if we're trying to mark a
-> region as no-map and it is actually memory. If it isn't memory,
-> presumably it was removed from the memory map via /memreserve/ and thus
-> can't be mapped anyway.
+I do not understand this.
 
-I have no objections for this patch, but I afraid that this is a never
-ending story of reservation vs nomap ordering and this won't be the last
-fix in the area.
+How can I test this infra alone, without any ref_tracker being selected ?
 
-I was toying with the idea to use flags in memblock.reserved to have
-clearer view of how the reserved memory was used and then we won't need
-to guess firmware intentions.
-Thoughts?
- 
-> This silences a warning seen at boot on sc7180-trogdor.dtsi boards that
-> have /memreserve/ populated by the bootloader where those reserved
-> regions overlap with the reserved-memory carveouts that we have in DT
-> for other purposes like communicating with remote processors.
+I have in my configs
 
-Do you mind adding the relevant pats of the device tree to the changelog?
+CONFIG_TEST_REF_TRACKER=m
+# CONFIG_NET_DEV_REFCNT_TRACKER is not set
+# CONFIG_NET_NS_REFCNT_TRACKER is not set
 
-> For example
-> 
->  OF: fdt: Reserved memory: failed to reserve memory for node 'memory@80900000': base 0x0000000080900000, size 2 MiB
-> 
-> Cc: Mike Rapoport <rppt@kernel.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Nicolas Boichat <drinkcat@chromium.org>
-> Cc: Quentin Perret <qperret@google.com>
-> Cc: Jan Kiszka <jan.kiszka@siemens.com>
-> Fixes: 8a5a75e5e9e5 ("of/fdt: Make sure no-map does not remove already reserved regions")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+This should work.
+
+I would not have sent patches built around ref_tracker if I had no
+ways of testing the base infrastructure.
+
+
+
+>
+> Fixes: 914a7b5000d08f14 ("lib: add tests for reference tracker")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
-> 
-> Changes from v1 (https://lore.kernel.org/r/20210520012731.3731314-1-swboyd@chromium.org):
->  * Use memblock_overlaps_region instead of memblock_is_region_memory()
->  * Add more details to commit text 
-> 
->  drivers/of/fdt.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> index bdca35284ceb..c736e5bcc2f6 100644
-> --- a/drivers/of/fdt.c
-> +++ b/drivers/of/fdt.c
-> @@ -482,9 +482,11 @@ static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
->  	if (nomap) {
->  		/*
->  		 * If the memory is already reserved (by another region), we
-> -		 * should not allow it to be marked nomap.
-> +		 * should not allow it to be marked nomap, but don't worry
-> +		 * if the region isn't memory as it won't be mapped.
->  		 */
-> -		if (memblock_is_region_reserved(base, size))
-> +		if (memblock_overlaps_region(&memblock.memory, base, size) &&
-> +		    memblock_is_region_reserved(base, size))
->  			return -EBUSY;
->  
->  		return memblock_mark_nomap(base, size);
-> 
-> base-commit: 136057256686de39cc3a07c2e39ef6bc43003ff6
-> -- 
-> https://chromeos.dev
-> 
-
--- 
-Sincerely yours,
-Mike.
+>  lib/Kconfig.debug | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index c77fe36bb3d89685..d5e4afee09d78a1e 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2114,8 +2114,7 @@ config BACKTRACE_SELF_TEST
+>
+>  config TEST_REF_TRACKER
+>         tristate "Self test for reference tracker"
+> -       depends on DEBUG_KERNEL && STACKTRACE_SUPPORT
+> -       select REF_TRACKER
+> +       depends on DEBUG_KERNEL && STACKTRACE_SUPPORT && REF_TRACKER
+>         help
+>           This option provides a kernel module performing tests
+>           using reference tracker infrastructure.
+> --
+> 2.25.1
+>

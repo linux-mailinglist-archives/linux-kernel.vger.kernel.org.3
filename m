@@ -2,146 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B344751E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 06:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D81D3475211
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 06:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239871AbhLOFW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 00:22:27 -0500
-Received: from mga09.intel.com ([134.134.136.24]:60572 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239861AbhLOFW0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 00:22:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639545746; x=1671081746;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ut1Q/Z+F1qkXD5SI3hngsNT+FiBiMeYWIbrufPg5mKI=;
-  b=VNQ2eromDdWcoioC06wrqVBWDadyzZIJqFjsjHALBhMhyIc76TlDC2oT
-   rNjqhiV6fnX9uHKLBUgZhBTH3KZ5SXED3kcJCYH7jpQh5hJ0CBYbxOXiO
-   Yyw2tG9KaiJ5bxQP/G9HcisL10aaP2hQB2UlTvhd/nQWQk1xg+s++xr6F
-   Rqbjyb3PhWw+bThM6X4cmuG7ic0xU16dflxpLXnX6il03OSyrSGR8g8u8
-   1X1g8q3eKi/BIoJ5myCHDg8Xhi4LVPq/9+CWTPaa6G1+DZFGkVbZhxlcN
-   vcgkH1FXgEE9Uryp9BfNA/bfEIMbSAXxsq6dDc28cLsxsbCE1tlre1HMm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="238964380"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="238964380"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 21:22:25 -0800
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="518608275"
-Received: from rongch2-desk.sh.intel.com (HELO [10.239.159.175]) ([10.239.159.175])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 21:22:24 -0800
-Message-ID: <db094a6d-48d6-7641-b8c3-fc338bd779b0@intel.com>
-Date:   Wed, 15 Dec 2021 13:22:21 +0800
+        id S233606AbhLOF1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 00:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231590AbhLOF1B (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 00:27:01 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A984DC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 21:27:01 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id h24so16351158pjq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 21:27:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EATF0++rhQQhxWqPyfU2MMj4vBgI3dJhEYF3haLw1w4=;
+        b=bTiDndqWZQ7vtoDIvJRvbcIGF2mcynmMfSDxN9wrBBT8TISsHXtThVK23jl+JgQRrp
+         lWnEW4CgcVRJ/3PfopBSA8XCl9WAoEZfEq9nnMDbkNpatBJRwSY5239O3arnteUjkzW2
+         D6CFA4q39MBrxOaXJ7pQirg1auy46uHuACr6t+p/81gJLI2Cnos6HsVwHzXssENFEHlF
+         R6kyaf7bUS1FcSPFY5CxtMBZ/SnTpiqWRyGMTFFE7kIvfKS053DGYkDHsrCGWyHvmWU1
+         MOvyoPsBFuxNefkgcdfHYRy1KiLyqTaaBQu+hoq3jc0jOPFnADd2dIPlmxBZD5vM1g+g
+         5krQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EATF0++rhQQhxWqPyfU2MMj4vBgI3dJhEYF3haLw1w4=;
+        b=v+ASXOjU7TvQ0BVHXpRjiHCSTBUcbiXrjZr+tOG7SsKE5nVHVxzkCgXY9tDdzKg/UQ
+         gtLQswzVnEitJ4vjmQE2g4Ks68LBfiN9bENcSHfB7ZsNJ7zZ60xuSYDJCsJIiRu1Vore
+         LJbMlciUGoBqM7t3QhEyDee4YodjksEHMP8suFO0On4h7wJCnMey7HRm4jzeZ4f19hVc
+         sViVip0Rj6C9j0JB+qE6WiMkFOXa2zHUWkDgocNYoL8phSSyOw6qTTSoaiuCzyfFkOu5
+         glKZIfA5aLBCaUoqR+kMpkya6eVxpeUEBssOCSu1r0sPdSL3YIXrZvCnq24GW80W6a4U
+         9jyw==
+X-Gm-Message-State: AOAM533rViDalRKYukjKZq/avPjEvgG/yC3dvPoOvccijzSucjqHxzr1
+        cpSuh1Q+321gOIPygj9sAcGkwg==
+X-Google-Smtp-Source: ABdhPJwApHB7bNNx5kaM60v3MqQT5kLfa+h8WBVe0vHIwtGhzbJjlTgBNz0jwrvYru+c6nmuZKYyQA==
+X-Received: by 2002:a17:90b:1810:: with SMTP id lw16mr6687286pjb.129.1639546021207;
+        Tue, 14 Dec 2021 21:27:01 -0800 (PST)
+Received: from C02CPFUZMD6M.bytedance.net ([61.120.150.71])
+        by smtp.gmail.com with ESMTPSA id ns21sm3853367pjb.37.2021.12.14.21.26.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 Dec 2021 21:27:00 -0800 (PST)
+From:   Ting Liu <liuting.0x7c00@bytedance.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, vbabka@suse.cz,
+        shakeelb@google.com, willy@infradead.org, sjpark@amazon.de,
+        liuting.0x7c00@bytedance.com
+Subject: [PATCH] mm: make some vars and functions static or __init
+Date:   Wed, 15 Dec 2021 13:26:51 +0800
+Message-Id: <20211215052651.89544-1-liuting.0x7c00@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [kbuild-all] Re: [ebiederm-user-namespace:signal-for-v5.17 4/12]
- arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to
- next function show_opcodes()
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-References: <202112140949.Uq5sFKR1-lkp@intel.com>
- <87k0g7t7ry.fsf@email.froward.int.ebiederm.org>
- <2af5f2f0-b2db-35e3-2d7a-7fa512db19af@intel.com>
- <8735mutqvz.fsf@email.froward.int.ebiederm.org>
-From:   Rong Chen <rong.a.chen@intel.com>
-In-Reply-To: <8735mutqvz.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "liuting.0x7c00" <liuting.0x7c00@bytedance.com>
 
+"page_idle_ops" as a global var, but its scope of use within this
+document. So it should be static.
+"page_ext_ops" is a var used in the kernel initial phase. And other
+functions are aslo used in the kernel initial phase. So they should be
+__init or __initdata to reclaim memory.
 
-On 12/15/21 12:48, Eric W. Biederman wrote:
-> Rong Chen <rong.a.chen@intel.com> writes:
->
->> On 12/15/21 01:29, Eric W. Biederman wrote:
->>> kernel test robot <lkp@intel.com> writes:
->>>
->>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git signal-for-v5.17
->>>> head:   6b1248798eb6f6d5285db214299996ecc5dc1e6b
->>>> commit: 0e25498f8cd43c1b5aa327f373dd094e9a006da7 [4/12] exit: Add and use make_task_dead.
->>>> config: x86_64-randconfig-a011-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140949.Uq5sFKR1-lkp@intel.com/config)
->>>> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
->>>> reproduce (this is a W=1 build):
->>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git/commit/?id=0e25498f8cd43c1b5aa327f373dd094e9a006da7
->>>>           git remote add ebiederm-user-namespace https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git
->>>>           git fetch --no-tags ebiederm-user-namespace signal-for-v5.17
->>>>           git checkout 0e25498f8cd43c1b5aa327f373dd094e9a006da7
->>>>           # save the config file to linux build tree
->>>>           mkdir build_dir
->>>>           make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ kernel/ lib/kunit/
->>>>
->>>> If you fix the issue, kindly add following tag as appropriate
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>
->>>> All warnings (new ones prefixed by >>):
->>>>
->>>>>> lib/kunit/kunit-example-test.o: warning: objtool: .text.unlikely: unexpected end of section
->>>> --
->>>>>> arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through to next function show_opcodes()
->>> I am confused.  This change patches objtool to rename
->>> rewind_stack_and_do_exit to rewind_stack_and_make_dead in the list
->>> global_noreturns in tools/objtool/check.c
->>>
->>> There is no other change to oops_end other than that renaming.
->>>
->>> Did the robot somehow mange to run an old version of objtool while
->>> building and this get this error?
->>>
->>> I tried and I am not currently able to reproduce this error.  Do you
->>> have any additional pointers on how I might reproduce this?
->> Hi Eric,
->>
->> The reproduce step in report based on a full build, I can reproduce
->> the warnings with the below command:
->>
->>    make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-> Any chance you could do "make arch/x86/kernel/dumpstack.s" and send it
-> to me?
+Signed-off-by: liuting.0x7c00 <liuting.0x7c00@bytedance.com>
+---
+ include/linux/page_idle.h | 1 -
+ mm/page_ext.c             | 4 ++--
+ mm/page_owner.c           | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-$ make O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/dumpstack.s
-make[1]: Entering directory '/mnt/memdrive/linux/build_dir'
-   GEN     Makefile
-   CALL    ../scripts/checksyscalls.sh
-   CALL    ../scripts/atomic/check-atomics.sh
-   DESCEND objtool
-   CC      arch/x86/kernel/dumpstack.s
-make[1]: Leaving directory '/mnt/memdrive/linux/build_dir'
-
-$ make O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
-make[1]: Entering directory '/mnt/memdrive/linux/build_dir'
-   GEN     Makefile
-   CALL    ../scripts/checksyscalls.sh
-   CALL    ../scripts/atomic/check-atomics.sh
-   DESCEND objtool
-   CC      arch/x86/kernel/dumpstack.o
-arch/x86/kernel/dumpstack.o: warning: objtool: oops_end() falls through 
-to next function show_opcodes()
-   AR      arch/x86/kernel/built-in.a
-make[1]: Leaving directory '/mnt/memdrive/linux/build_dir'
-
-Best Regards,
-Rong Chen
-
->
-> I want to see what code is in your oops_end.
->
-> It really does not make sense that simply renaming a function would
-> trigger this error.
->
-> I did a full build (on debian 10 with gcc-8.3.0) and I did not manage to
-> reproduce this.  In a bit I will try with a newer debian and see if I
-> can get the issue to reproduce.  Still it does not make sense to me
-> that a simple rename would trigger this error.
->
-> Eric
->
+diff --git a/include/linux/page_idle.h b/include/linux/page_idle.h
+index 83abf95e9fa7..4663dfed1293 100644
+--- a/include/linux/page_idle.h
++++ b/include/linux/page_idle.h
+@@ -13,7 +13,6 @@
+  * If there is not enough space to store Idle and Young bits in page flags, use
+  * page ext flags instead.
+  */
+-extern struct page_ext_operations page_idle_ops;
+ 
+ static inline bool folio_test_young(struct folio *folio)
+ {
+diff --git a/mm/page_ext.c b/mm/page_ext.c
+index 6242afb24d84..2193e3f10e56 100644
+--- a/mm/page_ext.c
++++ b/mm/page_ext.c
+@@ -63,12 +63,12 @@ static bool need_page_idle(void)
+ {
+ 	return true;
+ }
+-struct page_ext_operations page_idle_ops = {
++static struct page_ext_operations page_idle_ops = {
+ 	.need = need_page_idle,
+ };
+ #endif
+ 
+-static struct page_ext_operations *page_ext_ops[] = {
++static struct page_ext_operations *page_ext_ops[] __initdata = {
+ #ifdef CONFIG_PAGE_OWNER
+ 	&page_owner_ops,
+ #endif
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index 4f924957ce7a..5eea061bb1e5 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -46,7 +46,7 @@ static int __init early_page_owner_param(char *buf)
+ }
+ early_param("page_owner", early_page_owner_param);
+ 
+-static bool need_page_owner(void)
++static __init bool need_page_owner(void)
+ {
+ 	return page_owner_enabled;
+ }
+@@ -75,7 +75,7 @@ static noinline void register_early_stack(void)
+ 	early_handle = create_dummy_stack();
+ }
+ 
+-static void init_page_owner(void)
++static __init void init_page_owner(void)
+ {
+ 	if (!page_owner_enabled)
+ 		return;
+-- 
+2.20.1
 

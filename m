@@ -2,119 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1176475D24
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9D3475D31
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244685AbhLOQOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:14:48 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:49884
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244657AbhLOQOq (ORCPT
+        id S244730AbhLOQQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:16:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40015 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244743AbhLOQQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:14:46 -0500
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 15 Dec 2021 11:16:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639585000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8NJRR+a9hlTKwcYiYBaZVulZ3Qw4EA1LMUIGcFZHriw=;
+        b=eB1rOPwStCT8ZKRYOIICL2Zil+4ZHJRMcfvyEFdQFVN4WsUshmcAgG+fdvUgXk13+mIOCj
+        kg0wjZC27OsNbkh5GtxeKwkVIP6f45IMHPxOzjDPQHTVJcL7jKZuysRrbkjJQtxKTJ844p
+        Ev5phRKfh9ppwMaKnY0/cJ6wvHf5UAk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-op_bkYODMPCejNi40MvNyg-1; Wed, 15 Dec 2021 11:16:39 -0500
+X-MC-Unique: op_bkYODMPCejNi40MvNyg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5CECA40265
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 16:14:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639584885;
-        bh=BgY63FchJkPJ4eMrqqHCh/pTnUvExCwHzjMOF853cBI=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=kQvjuLgjuSuJon90wlPPUsHIXOlGkKAB8BR83+nT059COoph95huY859tFyNFcYwK
-         RYltee/2FhbwdesHMgfqR5VucaaXqoVmrBaHUg3gNPK9pNGbTZ9rZoLxExWgt7EZo3
-         1uPeump0c+bxHrd6GwxABC7A9kBDQFIcCF99I/rPV8SRakh2gLtj1MlrVOKIwi6Xab
-         GdyBwHHCPQjSq3YyZMcACVP/Aui4KR5FT1FVNLaINuWcHoKQzA9rbvqZhBi9Nr/5Jz
-         YKuZ8yEiZQglmNlp2BTU2H6KevqnhwZrRa9eSi73WOBmiNKxhopDR4A238yxzvvaX5
-         jFobhcc65AB8w==
-Received: by mail-lj1-f197.google.com with SMTP id b3-20020a2ebc03000000b0021ffe75b14cso7193163ljf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:14:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BgY63FchJkPJ4eMrqqHCh/pTnUvExCwHzjMOF853cBI=;
-        b=CUpJ+f5jcVQdRNKsaKBcyh/MuRKNs9zA707SMly7N0/c1nmAaitXqYkykhlMg3obn9
-         9+GSGCHbYIwRYpGx6VdxrVUcqbJ3P45SUbiYQVvq3OfgXkYf8sYHSOazJusHh2REfXh3
-         y5iylK8e4UzGz3lyOZnGUJ1+fLjyrCBMO0hfASIuqPdWNeLWQ5a/l9WHJxwH2DV6vb0I
-         rv1+PaxLoULWzIQkT0KXMGTI1DGznWMLzJKI+SxRE4TZGJohCw3WfwJ7EZLfciqTg2/S
-         lzKMf0TzowtDgAz8bGWVXL7rxatwQ6376b465c7AaT8NDtSoG6gj03oF+1rs5M8oFUwK
-         Xpnw==
-X-Gm-Message-State: AOAM533v7YlnCXxYVQBL4BTfiZnAg/JCyrUgP0arp2t+1NADe4Lb2vxM
-        kGwfUAX0vnOpqEJyp+4o/reKE3D/2yBngnoEnwaZGGQ8bVXGztVnrIVXuUslp6O5IIHq0XHzq6j
-        1HiTeeLEnuf8cUNtiWszmWgsUt0u5vSjnYP1P19Dctw==
-X-Received: by 2002:a2e:9a8c:: with SMTP id p12mr10675500lji.526.1639584884732;
-        Wed, 15 Dec 2021 08:14:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyoFe2zOV0XCkDN3GJvTojPbSxqWGhI9oo5Cf2acMBIzbtAkJY5xqgX9FvmY/8rG8I8ROe7SQ==
-X-Received: by 2002:a2e:9a8c:: with SMTP id p12mr10675478lji.526.1639584884570;
-        Wed, 15 Dec 2021 08:14:44 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id l18sm385334lfc.97.2021.12.15.08.14.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 08:14:44 -0800 (PST)
-Message-ID: <55294fa1-9988-5c10-1fc1-c33f3ec9b231@canonical.com>
-Date:   Wed, 15 Dec 2021 17:14:43 +0100
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AA4CD64141;
+        Wed, 15 Dec 2021 16:16:37 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.195.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E46405E26D;
+        Wed, 15 Dec 2021 16:16:18 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, oliver.sang@intel.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: selftests: Avoid KVM_SET_CPUID2 after KVM_RUN in vmx_pmu_msrs_test
+Date:   Wed, 15 Dec 2021 17:16:17 +0100
+Message-Id: <20211215161617.246563-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 4/7] dt-bindings: arm: samsung: Document E850-96 board
- binding
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Hao Fang <fanghao11@huawei.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20211215160906.17451-1-semen.protsenko@linaro.org>
- <20211215160906.17451-5-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211215160906.17451-5-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/2021 17:09, Sam Protsenko wrote:
-> Add binding for the WinLink E850-96 board, which is based on Samsung
-> Exynos850 SoC.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  .../devicetree/bindings/arm/samsung/samsung-boards.yaml     | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
-> index ef6dc14be4b5..00f122197476 100644
-> --- a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
-> +++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
-> @@ -205,6 +205,12 @@ properties:
->                - samsung,exynosautov9-sadk   # Samsung Exynos Auto v9 SADK
->            - const: samsung,exynosautov9
->  
-> +      - description: Exynos850 based boards
-> +        items:
-> +          - enum:
-> +              - winlink,e850-96                 # WinLink E850-96
-> +          - const: samsung,exynos850
-> +
+Commit feb627e8d6f6 ("KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN")
+forbade chaning vCPU's CPUID data after the first KVM_RUN but
+vmx_pmu_msrs_test does exactly that. Test VM needs to be re-created after
+vcpu_run().
 
-Add it before Exynos Auto v9 entry, please.
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Fixes: feb627e8d6f6 ("KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN")
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
+index 23051d84b907..17882f79deed 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_msrs_test.c
+@@ -99,6 +99,11 @@ int main(int argc, char *argv[])
+ 	vcpu_run(vm, VCPU_ID);
+ 	ASSERT_EQ(vcpu_get_msr(vm, VCPU_ID, MSR_IA32_PERF_CAPABILITIES), PMU_CAP_FW_WRITES);
+ 
++	/* Re-create guest VM after KVM_RUN so CPUID can be changed */
++	kvm_vm_free(vm);
++	vm = vm_create_default(VCPU_ID, 0, guest_code);
++	vcpu_set_cpuid(vm, VCPU_ID, cpuid);
++
+ 	/* testcase 2, check valid LBR formats are accepted */
+ 	vcpu_set_msr(vm, 0, MSR_IA32_PERF_CAPABILITIES, 0);
+ 	ASSERT_EQ(vcpu_get_msr(vm, VCPU_ID, MSR_IA32_PERF_CAPABILITIES), 0);
+-- 
+2.33.1
+

@@ -2,148 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5825475816
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2AC9475819
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242140AbhLOLps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:45:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbhLOLpr (ORCPT
+        id S242179AbhLOLqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 06:46:03 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16816 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236943AbhLOLqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:45:47 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11A0C061574;
-        Wed, 15 Dec 2021 03:45:46 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id i22so7890787wrb.13;
-        Wed, 15 Dec 2021 03:45:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5y9YMe/eWv7WDQGk94/07WbC1a0DggODyRLYD1P022w=;
-        b=n4gfdQGtJRqAzx00gI6mLDt2NbdkIyc+NxbfPJrTlqNX60e56q9DthJI2mw9r0uEnY
-         eEln0HhO674GE3KKvOVbhaGlj44wII6r49y7Qk/HD/FmwOhdLxoyiawZXotQZBogKNLc
-         kgIRDiiYL1Fwo48Is4wnDByoePXvgMg4I/zd4Qmb4vXVnw+FHbXhDlyLwfRrE3TMzmDT
-         OykPVnxr3B2U6o22QB3IWvxl6RTaJ7CqLjbYXuBgGT8YH0jJYH5Cab5f0OgYPjYLc/Qa
-         4jm5lfmRfOOp56FpKY19WEbTQNXr3WruVF+WoxlYUlsAH1ud7pcznOVUGuQsNYz8ZqzI
-         Swdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5y9YMe/eWv7WDQGk94/07WbC1a0DggODyRLYD1P022w=;
-        b=Xxq6A2n+VwmSaT8PYHnvPRVYn+SzLRhgCmTrnNW9P9J/j60r/m9EoJVhzF55rY8BV4
-         WNO7WacyzugyITtEXCU+VxXlMjg3JypgPcNyfYllXh6Dr0xBsSKc0E0VZKp/A/Yvl4V3
-         tIg2y0T+RTOR8jgIxmXNUD+B4rxpDkt+ipZUKa76ha85uHfJ4yb+v+/Z2Orn5RveI/HK
-         VZqMo5pvcY5PXXXrv3LViTClrYPKMyFWapGRbvJbbdLlEclIcKLydqCaeqzFhPB+N8g3
-         W2AtP54Skk58KyrZd3VjFSy4Lxiv2gvFLxd2/NnGG3rAt3rZxZUeiowOvhYbRTd+5/Gi
-         Di2g==
-X-Gm-Message-State: AOAM530kwXgsWJ4FYX+yu5yzvgwO3d4X4xdXwOWogtl9ioO0hpneMv2B
-        FO72HD8pX752257BjzOCbQM=
-X-Google-Smtp-Source: ABdhPJzfEo9sd2GIgoURytIw3qwhBdStk/HfcyqWv5JqSA7tEFDWFDXxOBg+w4URjUIO+m8wgC9iVA==
-X-Received: by 2002:a5d:6a8f:: with SMTP id s15mr4110956wru.544.1639568745415;
-        Wed, 15 Dec 2021 03:45:45 -0800 (PST)
-Received: from [192.168.43.77] (82-132-229-108.dab.02.net. [82.132.229.108])
-        by smtp.gmail.com with ESMTPSA id y15sm2449440wry.72.2021.12.15.03.45.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 03:45:45 -0800 (PST)
-Message-ID: <e18915fe-8c2e-2622-3225-b8d94d396fe9@gmail.com>
-Date:   Wed, 15 Dec 2021 11:45:44 +0000
+        Wed, 15 Dec 2021 06:46:01 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JDYMZ23lHz91N9;
+        Wed, 15 Dec 2021 19:45:14 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 19:45:58 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 19:45:57 +0800
+Subject: Re: [PATCH v17 02/10] x86: kdump: make the lower bound of crash
+ kernel reservation consistent
+To:     Baoquan He <bhe@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+CC:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
+        Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Chen Zhou" <dingguo.cz@antgroup.com>
+References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
+ <20211210065533.2023-3-thunder.leizhen@huawei.com> <YbjrjpehprvoRXbV@zn.tnic>
+ <YbjvXl51hc6GZa71@arm.com> <20211215034219.GB10336@MiWiFi-R3L-srv>
+ <YbnK79c0YokJ1ahu@arm.com> <20211215111643.GF3023@MiWiFi-R3L-srv>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <b947e66b-1a23-9095-08c1-439e6c70d191@huawei.com>
+Date:   Wed, 15 Dec 2021 19:45:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2] cgroup/bpf: fast path for not loaded skb BPF filtering
+In-Reply-To: <20211215111643.GF3023@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
-References: <d1b6d4756287c28faf9ad9ce824e1a62be9a5e84.1639200253.git.asml.silence@gmail.com>
- <20211214072716.jdemxmsavd6venci@kafai-mbp.dhcp.thefacebook.com>
- <3f89041e-685a-efa5-6405-8ea6a6cf83f3@gmail.com>
- <20211214191430.h36grlvnxeicuqea@kafai-mbp.dhcp.thefacebook.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20211214191430.h36grlvnxeicuqea@kafai-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/21 19:14, Martin KaFai Lau wrote:
-> On Tue, Dec 14, 2021 at 11:40:26AM +0000, Pavel Begunkov wrote:
->> On 12/14/21 07:27, Martin KaFai Lau wrote:
->>> On Sat, Dec 11, 2021 at 07:17:49PM +0000, Pavel Begunkov wrote:
->>>> cgroup_bpf_enabled_key static key guards from overhead in cases where
->>>> no cgroup bpf program of a specific type is loaded in any cgroup. Turn
->>>> out that's not always good enough, e.g. when there are many cgroups but
->>>> ones that we're interesting in are without bpf. It's seen in server
->>>> environments, but the problem seems to be even wider as apparently
->>>> systemd loads some BPF affecting my laptop.
+
+
+On 2021/12/15 19:16, Baoquan He wrote:
+> On 12/15/21 at 11:01am, Catalin Marinas wrote:
+>> On Wed, Dec 15, 2021 at 11:42:19AM +0800, Baoquan He wrote:
+>>> On 12/14/21 at 07:24pm, Catalin Marinas wrote:
+>>>> On Tue, Dec 14, 2021 at 08:07:58PM +0100, Borislav Petkov wrote:
+>>>>> On Fri, Dec 10, 2021 at 02:55:25PM +0800, Zhen Lei wrote:
+>>>>>> From: Chen Zhou <chenzhou10@huawei.com>
+>>>>>>
+>>>>>> The lower bounds of crash kernel reservation and crash kernel low
+>>>>>> reservation are different, use the consistent value CRASH_ALIGN.
+>>>>>
+>>>>> A big WHY is missing here to explain why the lower bound of the
+>>>>> allocation range needs to be 16M and why was 0 wrong?
 >>>>
->>>> Profiles for small packet or zerocopy transmissions over fast network
->>>> show __cgroup_bpf_run_filter_skb() taking 2-3%, 1% of which is from
->>>> migrate_disable/enable(), and similarly on the receiving side. Also
->>>> got +4-5% of t-put for local testing.
->>> What is t-put?  throughput?
+>>>> I asked the same here:
+>>>>
+>>>> https://lore.kernel.org/r/20210224143547.GB28965@arm.com
+>>>>
+>>>> IIRC Baoquan said that there is a 1MB reserved for x86 anyway in the
+>>>> lower part, so that's equivalent in practice to starting from
+>>>> CRASH_ALIGN.
+>>>
+>>> Yeah, even for i386, there's area reserved by BIOS inside low 1M.
+>>> Considering the existing alignment CRASH_ALIGN which is 16M, we
+>>> definitely have no chance to get memory starting from 0. So starting
+>>> from 16M can skip the useless memblock searching, and make the
+>>> crashkernel low reservation consisten with crashkernel reservation on
+>>> allocation code.
 >>
->> yes
->>
->>> Local testing means sending to lo/dummy?
->>
->> yes, it was dummy specifically
-> Thanks for confirming.
+>> That's the x86 assumption. Is it valid for other architectures once the
+>> code has been made generic in patch 6? It should be ok for arm64, RAM
+>> tends to start from higher up but other architectures may start using
+>> this common code.
 > 
-> Please also put these details in the commit log.
-> I was slow.  With only '%' as a unit, it took me a min to guess
-> what t-put may mean ;)
-
-I guess requests/s is a more natural metric for net. I anyway going
-to resend, will reword it a bit.
-
->>>> +#define CGROUP_BPF_TYPE_ENABLED(sk, atype)				       \
->>> and change cgroup.c to directly use this instead, so
->>> everywhere holding a fullsock sk will use this instead
->>> of having two helpers for empty check.
->>
->> Why?
-> As mentioned earlier, prefer to have one way to do the same thing
-> for checking with a fullsock.
+> Good point. I didn't think of this from generic code side, then let's
+> keep it as 0.
 > 
->> CGROUP_BPF_TYPE_ENABLED can't be a function atm because of header
->> dependency hell, and so it'd kill some of typization, which doesn't add
->> clarity.
-> I didn't mean to change it to a function.  I actually think,
-> for the sk context, it should eventually be folded with the existing
-> cgroup_bpf_enabled() macro because those are the tests to ensure
-> there is bpf prog to run before proceeding.
-> Need to audit about the non fullsock case. not sure yet.
+>>
+>> If you want to keep the same semantics as before, just leave it as 0.
+>> It's not that the additional lower bound makes the search slower.
+> 
+> Agree.
 
-btw, would be nice to rewrite helpers as inline functions, but
-sock, cgroup, etc. are not defined in bpf-cgroup.h are can't be
-included. May make sense e.g. not include bpf-cgroup.h in bpf.h
-but to move some definitions like struct cgroup_bpf into
-include/linux/cgroup-defs.h.
-Though I'd rather leave it to someone with a better grasp on
-BPF code base.
+OK, I will drop this patch.
 
-
->> And also it imposes some extra overhead to *sockopt using
->> the first helper directly.
-> I think it is unimportant unless it is measurable in normal
-> use case.
-
-I hope so
-
-
->> I think it's better with two of them.
-> Ok. I won't insist.  There are atype that may not have sk, so
-> a separate inline function for checking emptiness may eventually
-> be useful there.
-
--- 
-Pavel Begunkov
+> 
+> .
+> 

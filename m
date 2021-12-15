@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 985FA476168
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3BB476164
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344154AbhLOTPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:15:22 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59454 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344116AbhLOTPQ (ORCPT
+        id S1344129AbhLOTPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238618AbhLOTPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:15:16 -0500
+        Wed, 15 Dec 2021 14:15:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4226AC061574;
+        Wed, 15 Dec 2021 11:15:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3484EB820E7;
-        Wed, 15 Dec 2021 19:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EC5C2C36AE2;
-        Wed, 15 Dec 2021 19:15:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D46BB61A5E;
+        Wed, 15 Dec 2021 19:15:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 40244C36AE4;
+        Wed, 15 Dec 2021 19:15:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1639595714;
-        bh=TnB5QGesTygDmnU823pUl5hlL7VPzYvpHiA32BRyVy0=;
+        bh=jnNKzN3/LyivQSwG6a/PILUFPs0weRTJqZ0kYiAOAiM=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HsoqROnm3QN7B/GDrshtT1tNbeMj3BGUMjhJmRFTMTGIe0tSmoSWH/rbZ/tzWjftn
-         8tsWTN/y4tEeakKU1D6iaPBPG6P36EQaGE4XuNkjbCosYjPxngpVBsD4SjMBcm0Ntw
-         HGSvT+LW3Ps2oDlNUetiyOTKALL+AbtHBvOyDYAcsXIxPlQq2Cnh7mR6jtsLJGLZKC
-         oLMn80YwtjsAG9BFAs6n6YYe/WAjCwJ3e3FBdG/6QCEq55uKBGkT3F0654Pp0oxwdV
-         5yI6aUKPhIhKqJTBQiclasHeUJkOrvrAxr1W1BVCyEvCZqdRIp5tQNJc1NfrlhWX/9
-         /xf8p+zIAN8nQ==
+        b=pBRjSQT0odW5Fpp09mev62ZQ8g1E1wdaPJM0UcTMV4opNisNFap3lDFvbIjgpHFz2
+         QQThb0wLoqzlfDCkLubuJQdrl5HHcrJ3GeBheYIr5HRiSNWcrWfyxsLgHGGA0NlomS
+         61avZDHf1Ids5CqTefiUqvblc6uaRveIst4l06bWtkiIxEmtEhT6/V2jvAIT4KiE24
+         ML0RfhEZGPygPdjWiEc1fXCZspB3I3DXflkJrDwFrxubTs5COk84gtZo+UQXrrVCH7
+         sPXfFnR0FgD9O/6tznKWa6yStIhp+VmPoRxv5RXHpvIH0kxQFMOwbGfmIyJ9VfWgvW
+         gdAaJRSmiGucA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D3E7D60A12;
-        Wed, 15 Dec 2021 19:15:13 +0000 (UTC)
-Subject: Re: [GIT PULL] s390 updates for 5.16-rc6
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2B78660984;
+        Wed, 15 Dec 2021 19:15:14 +0000 (UTC)
+Subject: Re: [GIT PULL] Hyper-V fixes for 5.16-rc6
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Ybo4kWEmz2yVEhoE@osiris>
-References: <Ybo4kWEmz2yVEhoE@osiris>
-X-PR-Tracked-List-Id: <linux-s390.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Ybo4kWEmz2yVEhoE@osiris>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-5
-X-PR-Tracked-Commit-Id: 85bf17b28f97ca2749968d8786dc423db320d9c2
+In-Reply-To: <20211214190833.a4cnzbygiph3ydl2@liuwe-devbox-debian-v2>
+References: <20211214190833.a4cnzbygiph3ydl2@liuwe-devbox-debian-v2>
+X-PR-Tracked-List-Id: <linux-hyperv.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211214190833.a4cnzbygiph3ydl2@liuwe-devbox-debian-v2>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-fixes-signed-20211214
+X-PR-Tracked-Commit-Id: 1dc2f2b81a6a9895da59f3915760f6c0c3074492
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d9c1e6409cf47585a1f9abdd9b37d62ca7910966
-Message-Id: <163959571386.3685.5157764727883349464.pr-tracker-bot@kernel.org>
-Date:   Wed, 15 Dec 2021 19:15:13 +0000
-To:     Heiko Carstens <hca@linux.ibm.com>
+X-PR-Merge-Commit-Id: 213d9d4c25c380d4ce86d6ca3682e185f7924d05
+Message-Id: <163959571417.3685.4533140541250038128.pr-tracker-bot@kernel.org>
+Date:   Wed, 15 Dec 2021 19:15:14 +0000
+To:     Wei Liu <wei.liu@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+        Wei Liu <wei.liu@kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        kys@microsoft.com, sthemmin@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com, Michael Kelley <mikelley@microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 15 Dec 2021 19:48:49 +0100:
+The pull request you sent on Tue, 14 Dec 2021 19:08:33 +0000:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-5
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-fixes-signed-20211214
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d9c1e6409cf47585a1f9abdd9b37d62ca7910966
+https://git.kernel.org/torvalds/c/213d9d4c25c380d4ce86d6ca3682e185f7924d05
 
 Thank you!
 

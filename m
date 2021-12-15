@@ -2,78 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F217475BFD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515B5475BBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244015AbhLOPkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244007AbhLOPks (ORCPT
+        id S243904AbhLOPTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:19:45 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:48598 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243891AbhLOPTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:40:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63835C061574;
-        Wed, 15 Dec 2021 07:40:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7FDB618C5;
-        Wed, 15 Dec 2021 15:40:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 412B3C350A0;
-        Wed, 15 Dec 2021 15:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639582810;
-        bh=lnaJeZrmcfRPUXrS5zYz/AbX8ZL7Dk9Dej0q5x35Vas=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G7YfzR+RqR3AOZBSUB7Po5wUzm3IqFw9tPYlCgZDkoaVzkQ1OzKXQY7qKrJcP7Iit
-         waFiYflUVOl9s9vBmW0LVzqys8a0xSfzMamrXwv8DxGSoTIDMAwJNNaWn9D1f+dPG0
-         d5PuzPiv97CT0gb0JC8GgkjNWPsv51CfTv+gWMx0=
-Date:   Wed, 15 Dec 2021 16:19:35 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     David Brazdil <dbrazdil@google.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Will Deacon <will@kernel.org>,
-        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
+        Wed, 15 Dec 2021 10:19:43 -0500
+Date:   Wed, 15 Dec 2021 15:19:40 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639581581;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8aw+dzbZV9sL0G2zG8PyRV9RCl/3aZAvEXoPr3WcNaY=;
+        b=eCyciDGq1LQvcNVKGxzMJBjz7Cc/Dz3RWBBAcGkDStswnspYLD7pbiU238KOrKJEJ0W35y
+        eQOkSOj/3p0uIjeYwQmhx3N4eSM5XpzYpay9Sb7U+e/ZyuYvpK4E92c/zKHyVSOdH2RrFy
+        5X3WekzMm2pyaAcGGjCkTpzQZAuI0pLLaHxDgTMxA+IJEDPxH6mbLRTiHzBV8qIPofVrJA
+        1tfXQXxIwJQq8Hj6q+YsR0voWEC416jufPAXlYxv6uYroyo7nnAk44cgzGesmOZxIkfmsJ
+        g7d5RuwVNQuEYH5v46h5FoN5+/Nl3gkfPg9uBnn2hDvFpAXs4Zy2ZZChXXTLPQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639581581;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8aw+dzbZV9sL0G2zG8PyRV9RCl/3aZAvEXoPr3WcNaY=;
+        b=8EKStKLIwjKDgP1fv4eibthHR17eq7YtEOtlRMmEV8WWHXymYO6HH7aghPBCkJvXtit+8k
+        kQgvnCCx7L3ZAhCA==
+From:   "tip-bot2 for Arnd Bergmann" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/msi] x86/xen: Use correct #ifdef guard for
+ xen_initdom_restore_msi()
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] misc: open-dice: Add driver to expose DICE data
- to userspace
-Message-ID: <YboHh6TJJ0VNHpV2@kroah.com>
-References: <20211215150410.1707849-1-dbrazdil@google.com>
- <20211215150410.1707849-3-dbrazdil@google.com>
+In-Reply-To: <20211215140209.451379-1-arnd@kernel.org>
+References: <20211215140209.451379-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215150410.1707849-3-dbrazdil@google.com>
+Message-ID: <163958158059.23020.1721008355650214462.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 03:04:10PM +0000, David Brazdil wrote:
-> +	drvdata = devm_kmalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-> +	if (!drvdata)
-> +		return -ENOMEM;
-> +
-> +	*drvdata = (struct open_dice_drvdata){
-> +		.lock = __SPIN_LOCK_UNLOCKED(drvdata->lock),
-> +		.rmem = rmem,
-> +		.misc = (struct miscdevice){
-> +			.parent	= dev,
-> +			.name	= drvdata->name,
-> +			.minor	= MISC_DYNAMIC_MINOR,
-> +			.fops	= &open_dice_fops,
-> +			.mode	= 0600,
-> +		},
-> +	};
+The following commit has been merged into the irq/msi branch of tip:
 
-That is a lovely abuse of an implicit memcpy(), took me a while to
-realize what it was doing here...
+Commit-ID:     91f7d2dbf952f54442fa81bb62f78ee023179bf9
+Gitweb:        https://git.kernel.org/tip/91f7d2dbf952f54442fa81bb62f78ee023179bf9
+Author:        Arnd Bergmann <arnd@arndb.de>
+AuthorDate:    Wed, 15 Dec 2021 15:01:59 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Wed, 15 Dec 2021 16:13:23 +01:00
 
-Anyway, this all looks great to me, I'll wait for the DT maintainers to
-review the dt change before being able to take this through my tree.
-Thanks for the cleanups based on the review, the driver is now almost
-1/3 smaller than your first version with more functionality!
+x86/xen: Use correct #ifdef guard for xen_initdom_restore_msi()
 
-thanks,
+The #ifdef check around the definition doesn't match the one around the
+declaration, leading to a link failure when CONFIG_XEN_DOM0 is enabled
+but CONFIG_XEN_PV_DOM0 is not:
 
-greg k-h
+x86_64-linux-ld: arch/x86/kernel/apic/msi.o: in function `arch_restore_msi_irqs':
+msi.c:(.text+0x29a): undefined reference to `xen_initdom_restore_msi'
+
+Change the declaration to use the same check that was already present
+around the function definition.
+
+Fixes: ae72f3156729 ("PCI/MSI: Make arch_restore_msi_irqs() less horrible.")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20211215140209.451379-1-arnd@kernel.org
+
+---
+ arch/x86/include/asm/xen/hypervisor.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/xen/hypervisor.h b/arch/x86/include/asm/xen/hypervisor.h
+index 677f84d..1bf2ad3 100644
+--- a/arch/x86/include/asm/xen/hypervisor.h
++++ b/arch/x86/include/asm/xen/hypervisor.h
+@@ -59,7 +59,7 @@ static inline bool __init xen_x2apic_para_available(void)
+ 
+ struct pci_dev;
+ 
+-#ifdef CONFIG_XEN_DOM0
++#ifdef CONFIG_XEN_PV_DOM0
+ bool xen_initdom_restore_msi(struct pci_dev *dev);
+ #else
+ static inline bool xen_initdom_restore_msi(struct pci_dev *dev) { return true; }

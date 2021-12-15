@@ -2,81 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3907476194
+	by mail.lfdr.de (Postfix) with ESMTP id 44C15476193
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344202AbhLOTVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S1344212AbhLOTVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbhLOTVl (ORCPT
+        with ESMTP id S233676AbhLOTVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:21:41 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1AAC061574;
+        Wed, 15 Dec 2021 14:21:42 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFDBC061574;
         Wed, 15 Dec 2021 11:21:41 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id g14so77562110edb.8;
+Received: by mail-ed1-x534.google.com with SMTP id z5so79193127edd.3;
         Wed, 15 Dec 2021 11:21:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8tM3tA7VofLMOjAxzFGeXbuG7wz0BjJnUf7afMSSks4=;
-        b=eBqfM0NCsSA1tg5Jzmy8hOZxa0YA5ECF/3/29sj3nlY0xxsUq+fhe2TzPeqrzG1k9l
-         1wHyJz3Rv+A1mpXgkwiC78379to+7OIfulALUjH7W3lO0S6tICZ/yEchv5DUYiSorF2B
-         VdXmlUJUKbBh3WCTh99QJViY2PC5azby0Yo0PD125DrT1FzGgc/mCBjoqL0okIx7wLTn
-         XQfivq3UeA7FJznKWkz1yuZg4gPypBX3seZx3wrIe/KfmvzW++zRADkqMhO/tsSTBehC
-         hfa2OXK82KwnKri3PEN9yLs4J4yLNFdPY904c0wkWZYEGN/CndqFTbxBpGt6BrwR2VWG
-         iPTg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=a52zq15vpbe/q6jA/7CfhJp1eVSjrKX60Heccwe2TQs=;
+        b=B98v3wgxFCiJcdr1Ly+YLJFrh7y+vq5EWE1XRKEORWyQzgQC+cVZGY/oVhbxMmP4qa
+         IrQNiDBhJB7uvgh3nKuRhiMTdGTgwrLQ8G2Z9Snb48jPQ+th8W0HlFjpxcS6Uoup22A1
+         KJ5utGaM2rW/2SFpLZFnEtt4anqLsF2i5zPH1YUa+dCQdlIGdXtRl7U4aqOw0Nk9Ux2f
+         boPSI4cLZ5E95mwSIp2ZYqpp3Z/Q1IX55JGT9a4lBcjw+SAh+LVfaF9M2qSIlRd8fzb1
+         tJWEMaV+cuh6lOetER2OD85Zu5iZlmzySA3U7ydnKrdk59U03Roau2WzglK4FesxKWeQ
+         49Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8tM3tA7VofLMOjAxzFGeXbuG7wz0BjJnUf7afMSSks4=;
-        b=pq6jaCaKdtqL6ZkoudPJlK891g9AEMcaH2YEfmMHfc/7TM//CGY37H9xojz1fMdpn1
-         I1VR0M4i3IFR/2v16i9PWjIW8MsQf6mN0e8Kxnv4tKL9wHDaCR0oEKlJjd2jjirIfg00
-         fyrPMvLBxYjpk5Tt9aJmjJYSfttpAVkU+WcZH7WGd2+wm3hcJREI5+8tj1e5ofrdJJPp
-         SznGgpbIKgyeF7M0Q4idlBFRgeRsAgr+MAC/3X0f+A+wZKhd7GoVQR+wAL9r1dLbEkOG
-         WprSbiscxYHzMuM6h3jOZ2TWmLQWN4kUx/mJoRmyHt9M+KH7ZWz1ANM6P10QcDJqS7tZ
-         DHVw==
-X-Gm-Message-State: AOAM530Fnu1Fo5lJ7EHO4J7iNQimCz8bHUzyIHtzKBENzmJHeoovcuRl
-        SMuZTSLuGQSH8TiODCxzuss=
-X-Google-Smtp-Source: ABdhPJxThLjFD0xPeQ2x0ipUIu9K6K8vg8Ud4zitzUMW/vWRUCNixJv3a5h8jTc6bk8EZAYod3pC0A==
-X-Received: by 2002:a05:6402:5cb:: with SMTP id n11mr16749831edx.279.1639596099992;
-        Wed, 15 Dec 2021 11:21:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=a52zq15vpbe/q6jA/7CfhJp1eVSjrKX60Heccwe2TQs=;
+        b=UNvYbFNmRskGJm5Iz9Yy5CQebGsSQcVDPJ1VN77D+/hWWN2nvBa5BEZ69eqCEmADuA
+         MPPRTo2vRlSD1+4lD5IuVs9wribzbep9LxPp+3CkccxmHWN5qQcq+u6zQPXfnj1eWzFY
+         yzJM+gzD+2zxYP9yt+fSlEIpDk3VNY42F0kWrDTOHeCTNlqkh8lDJtjCQp8upjuuywN9
+         rnl47A9nmIDBILtuQrkqBWdtTMdLaxnLvlzKjXrSiaX+6Cr2dtuAhv3VHyar7yrqgrlR
+         hYzUCg4ANovKOGnvHnITQKev7Rpdnwtx1rQCn/6Bp/yTo3/6hrVu7xVT1kL4/FtsObKS
+         yJcw==
+X-Gm-Message-State: AOAM532I59mlCAaWfMfIcoThPAwNognhm6HFzzj/NFA509RqmIcrqbZL
+        wITb4+kfQ4LaiM+kLyCxIks=
+X-Google-Smtp-Source: ABdhPJwqcSIXnkSQXY6ynvdgZuHHX6yGAZq0rD8knDCqqtR64It6E5IZbjDyyjAPgeb3am+lgiJhkQ==
+X-Received: by 2002:a17:907:d0b:: with SMTP id gn11mr12337690ejc.355.1639596100502;
+        Wed, 15 Dec 2021 11:21:40 -0800 (PST)
 Received: from zenorus.myxoz.lan (81-232-177-112-no2390.tbcn.telia.com. [81.232.177.112])
-        by smtp.gmail.com with ESMTPSA id n10sm1461049edx.3.2021.12.15.11.21.39
+        by smtp.gmail.com with ESMTPSA id n10sm1461049edx.3.2021.12.15.11.21.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 11:21:39 -0800 (PST)
+        Wed, 15 Dec 2021 11:21:40 -0800 (PST)
 From:   Miko Larsson <mikoxyzzz@gmail.com>
 To:     minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
         axboe@kernel.dk, linux-kernel@vger.kernel.org,
         linux-block@vger.kernel.org
 Cc:     Miko Larsson <mikoxyzzz@gmail.com>
-Subject: [PATCH 0/2] zram: zram_drv: Fix some formatting problems
-Date:   Wed, 15 Dec 2021 20:21:26 +0100
-Message-Id: <20211215192128.108967-1-mikoxyzzz@gmail.com>
+Subject: [PATCH 1/2] zram: zram_drv: add SPDX license identifiers
+Date:   Wed, 15 Dec 2021 20:21:27 +0100
+Message-Id: <20211215192128.108967-2-mikoxyzzz@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211215192128.108967-1-mikoxyzzz@gmail.com>
+References: <20211215192128.108967-1-mikoxyzzz@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+zram_drv lacks an SPDX license identifier in both its source and in its
+header, so we should add a license identifiers based on the copyright
+info provided by the initial comment block.
 
-This small patch set fixes some superficial formatting problems in
-zram_drv that were reported by checkpatch, namely that it missed SPDX
-license identifiers and that it used strlcopy instead of strscpy.
-
-Miko Larsson (2):
-  zram: zram_drv: add SPDX license identifiers
-  zram: zram_drv: replace strlcpy with strscpy
-
- drivers/block/zram/zram_drv.c | 8 +++++---
+Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
+---
+ drivers/block/zram/zram_drv.c | 2 ++
  drivers/block/zram/zram_drv.h | 2 ++
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ 2 files changed, 4 insertions(+)
 
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index 25071126995b..464ef53adcbc 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -1,3 +1,5 @@
++// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
++
+ /*
+  * Compressed RAM block device
+  *
+diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
+index 80c3b43b4828..fa00bbe434fb 100644
+--- a/drivers/block/zram/zram_drv.h
++++ b/drivers/block/zram/zram_drv.h
+@@ -1,3 +1,5 @@
++/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
++
+ /*
+  * Compressed RAM block device
+  *
 -- 
 2.34.1
 

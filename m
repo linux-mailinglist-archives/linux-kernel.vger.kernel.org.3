@@ -2,138 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D20B647569A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EE947569D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241729AbhLOKlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:41:49 -0500
-Received: from mail-ua1-f50.google.com ([209.85.222.50]:39871 "EHLO
-        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbhLOKls (ORCPT
+        id S241726AbhLOKmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:42:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236690AbhLOKmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:41:48 -0500
-Received: by mail-ua1-f50.google.com with SMTP id i6so40112234uae.6;
-        Wed, 15 Dec 2021 02:41:48 -0800 (PST)
+        Wed, 15 Dec 2021 05:42:53 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1AFC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:42:53 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id k9so19589657wrd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:42:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u39bS1Cb1q0ZvFivSQ0bPVUI1WzG2lEMqJpYNQJ7sMI=;
+        b=E1qBKLCc9Y8v6XbRVioDhnmFJ97IRzewurZphcXXEqw5wsswfYoLqbeRvJUaoKL+Kf
+         83KEeiKEq4nFnpY/0oLwbmDOj90h/9S9a5/THImR1X8j7UoTiwjGSzSn0PWLowGlcjTS
+         uL3M1l7cmScfSmSBXTdxXilFHCXLlCX/ZwBww9q8CculQwHzPeGDnNP72sEcwouMrvFT
+         wBoPcvhqXD7A8K03SLA/VCzcf8p917SCQoI9OF0D/+F1OeWm8X2U+sUZjrfh+hWV92ih
+         j8gBrvemBVvO1Z9lGTPBbv+0V07Zyg0nD2BylG6hZbrOloHtw+4EODtI1JkU4iQ9qFQu
+         ht2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ejx12Q0UWVESQFhDXrvPbzr6S3J1EWL+wdidH97Pj3w=;
-        b=x70Z4d3Pakz1wu5mdTDbRIYdJmAYGn2HGOJyLCO/e9ZLMdVtCWYpvpE5f2IQm6Bowr
-         yz5hM347rnfm8tcXcKOLVRmDw91AjD5IJunzT0iHmzrjA2OZF7wkNu+mKJpy9oFQ/CiS
-         lKfXCvbbQG4Ce3tfbeUGQUjz9MxGRITfur5x1zZ4K+fHtULvtlCTboOj6D1OsfgfZDQl
-         goeUCInvOgD6X1U9gIX46b2XlX51jYxptn3qmFrYOkCtTWL6v10WrVrMzvm6NAQEoWkh
-         xnAmIFQmMwdP1+FfPmyPytKQUFwBSWmKDSrMMcFB2QMbY4JBJCYiS8tOtgA8loDwQmVV
-         F9hw==
-X-Gm-Message-State: AOAM5317w+B2S7V1vHSHJs1SM7nJBkIjvN9O6KCV7vrWx7P1AXfBezVc
-        W/wi+526VD+kuqqNW8+2IN1B3TZ6YuU1wA==
-X-Google-Smtp-Source: ABdhPJy+Z4zUVmJR4I2FFz5h0qxwTLKcptoVxWBnHUk7Ia44r/NpcxGlV5mhrAhTRlhtaTugvY9fyg==
-X-Received: by 2002:a67:e114:: with SMTP id d20mr2477478vsl.5.1639564907724;
-        Wed, 15 Dec 2021 02:41:47 -0800 (PST)
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com. [209.85.221.181])
-        by smtp.gmail.com with ESMTPSA id s2sm386622uap.7.2021.12.15.02.41.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 02:41:47 -0800 (PST)
-Received: by mail-vk1-f181.google.com with SMTP id 84so14326836vkc.6;
-        Wed, 15 Dec 2021 02:41:47 -0800 (PST)
-X-Received: by 2002:a05:6122:104f:: with SMTP id z15mr2686675vkn.39.1639564907271;
- Wed, 15 Dec 2021 02:41:47 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u39bS1Cb1q0ZvFivSQ0bPVUI1WzG2lEMqJpYNQJ7sMI=;
+        b=GEXU7nWwJGHzJ61qBuVKXAqdQhX34xgx2d3a5LDjwAVguN9uzSmr5qhNzCMsZ0e/s1
+         1cZk1be8rwbiAMIer4w7ekCVuWlmtEsMikyHxmasSkCp/R+JoaTGHzdqLDFc+DXDi4qB
+         RqcpwsfjT879rhETFiEQtRtA0Jp832X6QaQSbhylLnPF0bz476YQfVFqk2OQUMEoM34/
+         aleRhFsQPAHihY5GRO6rsdw2x/D9krhqet8M4aa+dZCAYpejnmFAPFXTcA+aM4UbgZ9Q
+         wDL8eupCbaQZ+TWjg7gyGmTP/uzY5Q08g3mwFEaVNZq9XQq4lIS1lm5tnvf6bnEZtAyK
+         vMFA==
+X-Gm-Message-State: AOAM5303HYhUba4T4wahihVxnjbhD5cAv/D1T8myapqvIuL36RxNbfqB
+        koLG0BNu+PQhbAVxqyqDJOJ5lg==
+X-Google-Smtp-Source: ABdhPJz4cUohwpfTnswYYZh8vQE9RXm72Qv04LqhD754Vz22/rCynZ1rpfgFnNjQk03c7MKW0POHtQ==
+X-Received: by 2002:a5d:4ece:: with SMTP id s14mr3939045wrv.371.1639564971518;
+        Wed, 15 Dec 2021 02:42:51 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id k7sm1643494wrg.105.2021.12.15.02.42.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 02:42:51 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     davem@davemloft.net, herbert@gondor.apana.org.au
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH] crypto: omap: increase priority of DES/3DES
+Date:   Wed, 15 Dec 2021 10:42:39 +0000
+Message-Id: <20211215104239.800193-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <0b6c06487234b0fb52b7a2fbd2237af42f9d11a6.1639560869.git.geert+renesas@glider.be>
- <CANn89iKdorp0Ki0KFf6LAdjtKOm2np=vYY_YtkmJCoGfet1q-g@mail.gmail.com>
- <CAMuHMdWQZA_fS-pr+4wVYtZ6h9Bx4PJ_92qpDNZ2kdjpzj+DHQ@mail.gmail.com> <CANn89iJ-uGzpbAhNjT=fGfDYTjpxo335yhKbqUKwSUPOwPZqWw@mail.gmail.com>
-In-Reply-To: <CANn89iJ-uGzpbAhNjT=fGfDYTjpxo335yhKbqUKwSUPOwPZqWw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 15 Dec 2021 11:41:36 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUepDEgf9xD6+6qLqKtQH-ptvUf-fP1M=gt5nemitQBsw@mail.gmail.com>
-Message-ID: <CAMuHMdUepDEgf9xD6+6qLqKtQH-ptvUf-fP1M=gt5nemitQBsw@mail.gmail.com>
-Subject: Re: [PATCH -next] lib: TEST_REF_TRACKER should depend on REF_TRACKER
- instead of selecting it
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+Give the same priority of OMAP DES/3DES than OMAP AES for being sure it
+is picked before software implementation.
 
-On Wed, Dec 15, 2021 at 11:24 AM Eric Dumazet <edumazet@google.com> wrote:
-> On Wed, Dec 15, 2021 at 2:10 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Wed, Dec 15, 2021 at 10:51 AM Eric Dumazet <edumazet@google.com> wrote:
-> > > On Wed, Dec 15, 2021 at 1:36 AM Geert Uytterhoeven
-> > > <geert+renesas@glider.be> wrote:
-> > > > TEST_REF_TRACKER selects REF_TRACKER, thus enabling an optional feature
-> > > > the user may not want to have enabled.  Fix this by making the test
-> > > > depend on REF_TRACKER instead.
-> > >
-> > > I do not understand this.
-> >
-> > The issue is that merely enabling tests should not enable optional
-> > features, to prevent unwanted features sneaking into a product.
->
-> if you do not want the feature, just say no ?
->
-> # CONFIG_TEST_REF_TRACKER is not set
-> # CONFIG_NET_DEV_REFCNT_TRACKER is not set
-> # CONFIG_NET_NS_REFCNT_TRACKER is not set
->
-> > If tests depend on features, all tests for features that are enabled can
-> > still be enabled (e.g. made modular, so they can be loaded when needed).
-> >
-> > > How can I test this infra alone, without any ref_tracker being selected ?
-> > >
-> > > I have in my configs
-> > >
-> > > CONFIG_TEST_REF_TRACKER=m
-> > > # CONFIG_NET_DEV_REFCNT_TRACKER is not set
-> > > # CONFIG_NET_NS_REFCNT_TRACKER is not set
-> > >
-> > > This should work.
-> >
-> > So you want to test the reference tracker, without having any actual
-> > users of the reference tracker enabled?
->
-> Yes, I fail to see the problem you have with this.
->
-> lib/ref_tracker.c is not adding intrusive features like KASAN.
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/crypto/omap-des.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-How can I be sure of that? ;-)
+diff --git a/drivers/crypto/omap-des.c b/drivers/crypto/omap-des.c
+index be77656864e3..538aff80869f 100644
+--- a/drivers/crypto/omap-des.c
++++ b/drivers/crypto/omap-des.c
+@@ -735,7 +735,7 @@ static struct skcipher_alg algs_ecb_cbc[] = {
+ {
+ 	.base.cra_name		= "ecb(des)",
+ 	.base.cra_driver_name	= "ecb-des-omap",
+-	.base.cra_priority	= 100,
++	.base.cra_priority	= 300,
+ 	.base.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
+ 				  CRYPTO_ALG_ASYNC,
+ 	.base.cra_blocksize	= DES_BLOCK_SIZE,
+@@ -752,7 +752,7 @@ static struct skcipher_alg algs_ecb_cbc[] = {
+ {
+ 	.base.cra_name		= "cbc(des)",
+ 	.base.cra_driver_name	= "cbc-des-omap",
+-	.base.cra_priority	= 100,
++	.base.cra_priority	= 300,
+ 	.base.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
+ 				  CRYPTO_ALG_ASYNC,
+ 	.base.cra_blocksize	= DES_BLOCK_SIZE,
+@@ -770,7 +770,7 @@ static struct skcipher_alg algs_ecb_cbc[] = {
+ {
+ 	.base.cra_name		= "ecb(des3_ede)",
+ 	.base.cra_driver_name	= "ecb-des3-omap",
+-	.base.cra_priority	= 100,
++	.base.cra_priority	= 300,
+ 	.base.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
+ 				  CRYPTO_ALG_ASYNC,
+ 	.base.cra_blocksize	= DES3_EDE_BLOCK_SIZE,
+@@ -787,7 +787,7 @@ static struct skcipher_alg algs_ecb_cbc[] = {
+ {
+ 	.base.cra_name		= "cbc(des3_ede)",
+ 	.base.cra_driver_name	= "cbc-des3-omap",
+-	.base.cra_priority	= 100,
++	.base.cra_priority	= 300,
+ 	.base.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
+ 				  CRYPTO_ALG_ASYNC,
+ 	.base.cra_blocksize	= DES3_EDE_BLOCK_SIZE,
+-- 
+2.32.0
 
-> > Perhaps REF_TRACKER should become visible, cfr. CRC32 and
-> > the related CRC32_SELFTEST?
->
-> I can not speak for CRC32.
->
-> My point is that I sent a series, I wanted this series to be bisectable.
->
-> When the test was added, I wanted to be able to use it right away.
-> (like compile it, and run it)
-
-Then you indeed need a way to force-enable the feature. For other
-library-like features, that is done by making the feature visible,
-cfr. CRC32.
-
-My point is that a user should be able to easily enable all available
-tests for all features he has wilfully enabled in his kernel config,
-without running into the risk of accidentally enabling more features.
-Hence a test should depend on the feature under test, not blindly
-enable the feature.
-
-An example of this is commit 302fdadeafe4be53 ("ext: EXT4_KUNIT_TESTS
-should depend on EXT4_FS instead of selecting it"). Before that commit,
-enabling KUNIT_ALL_TESTS=m enabled EXT4_FS, even on diskless system.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

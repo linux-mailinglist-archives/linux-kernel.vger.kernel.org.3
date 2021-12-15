@@ -2,385 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A49B475618
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E50CF47561E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241606AbhLOKTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:19:23 -0500
-Received: from mx1.cqplus1.com ([113.204.237.245]:51196 "EHLO test.cqplus1.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S241590AbhLOKTW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:19:22 -0500
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by cqmailgates with MailGates ESMTP Server V5.0(17176:0:AUTH_RELAY)
-        (envelope-from <xt.hu@cqplus1.com>); Wed, 15 Dec 2021 18:18:41 +0800 (CST)
-From:   Xiantao Hu <xt.hu@cqplus1.com>
-To:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux@roeck-us.net, robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     wells.lu@sunplus.com, qinjian@cqplus1.com,
-        Xiantao Hu <xt.hu@cqplus1.com>
-Subject: [PATCH v3 2/2] watchdog: Add driver for Sunplus SP7021
-Date:   Wed, 15 Dec 2021 18:18:31 +0800
-Message-Id: <20211215101831.256667-3-xt.hu@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211215101831.256667-1-xt.hu@cqplus1.com>
-References: <20211215101831.256667-1-xt.hu@cqplus1.com>
+        id S241613AbhLOKUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:20:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241594AbhLOKT7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 05:19:59 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05752C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:19:59 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id i12so16218714wmq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:19:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ktoEeE7WMeOlsYWyT3cXq3Vx1tDnLZCpaB9rbw82iY0=;
+        b=gMQsy6tLUT0AbJks62K5KfXKoExcgdx4Gmg2A/06V4eLrnKcUjRPWs0zB9EDLkhnrb
+         W1ajK98Uv4BVFUy47JwoyGWk0vd8LsEYB2XUFEjok5z9mR2rlZL53ByRNtZarXK1lw5n
+         Rck+TSP7BZ1rIZNC4ENzCUruHGfvX81E8SYT/9UuE41ryk5W7UXMbN0vhKc/Er/+9NYm
+         dqhebMeGBznmtGODOFWdcNirgRP3BHWdTXQWNsq7aR1p/Buxonl7nYaYTpnq0yuvKmZ0
+         nzEQDmxFwCfAlp7g0/LeKvcQ8tIohVtKbLQ68LfvJxrBv1sdZSK3poNfD52HiwKNX+oR
+         rX2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ktoEeE7WMeOlsYWyT3cXq3Vx1tDnLZCpaB9rbw82iY0=;
+        b=XWwqbwp5fIIrP/Lk09t3miwEZ3JzBMl0HLaSe8iewDfgCiQ/p6XeGAX8oCVfKCkoTI
+         rrpgnVc1LXQdap47PlV+6Plshxogt31pyjvmwN3LyZ+OdyjHkEM1wNNExXJJ+uISPczt
+         /U48WBGDHWsZxlSbxaFkH1tLv+UnuZqUYtV9a01f4I7eKwSr5tyXHn8DbwgIN+BqGwZr
+         kRQUDcDHYMh/ZLg9AG/N1AhhHQtiINN3y7/mthKhcupL81LGi4oyOiwrc9XxOT1J8eDb
+         s7gEZNKB5LPX7xFGWdgtOSjEdXyELACR0/pPLAE34oBmGYK29USRACa4KrF35OTlxwii
+         F/Wg==
+X-Gm-Message-State: AOAM5320Xl6+Y4F1mTDk6uWmwIzQV2fX1F0xI1oAQIX4wI8qoPO9fzA1
+        8twYvcRnVELfPWx/cSZSnnuOyjoaPB1W0Aog
+X-Google-Smtp-Source: ABdhPJwSUwN6GeHOPJmewGizuB+uiKqdaUyPDoaq5+zgTVRmxBeu7ZTyTtnqNHIGgQubkf9eyz687g==
+X-Received: by 2002:a05:600c:3ac8:: with SMTP id d8mr399487wms.72.1639563597529;
+        Wed, 15 Dec 2021 02:19:57 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id z11sm1356836wmf.9.2021.12.15.02.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 02:19:56 -0800 (PST)
+Date:   Wed, 15 Dec 2021 10:19:54 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Jerome Forissier <jerome@forissier.org>,
+        "Wang, Xiaolei" <xiaolei.wang@windriver.com>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Etienne Carriere <etienne.carriere@linaro.org>
+Subject: Re: [PATCH] optee: Suppress false positive kmemleak report in
+ optee_handle_rpc()
+Message-ID: <20211215101954.oggnubww6ywz6fu7@maple.lan>
+References: <20211206120533.602062-1-xiaolei.wang@windriver.com>
+ <CAFA6WYN+0751=feb-O9Drmm5V_Gz-1qsgiHmLsA88=49MoK_dg@mail.gmail.com>
+ <PH0PR11MB507734019F54C2BB24D1456F95719@PH0PR11MB5077.namprd11.prod.outlook.com>
+ <CAFA6WYMOHUEve8cbZdwzsijer3fRsy=50q67ndsC6U2JD6gK5Q@mail.gmail.com>
+ <ede44051-41db-60b4-d5a3-97a789dd52bc@forissier.org>
+ <CAFA6WYM1oCs9gE4b5DaRez+jhCXPb_c25ausj0yWdS5tawX0MA@mail.gmail.com>
+ <20211210154915.hjbgrnvtitmwluhz@maple.lan>
+ <CAFA6WYPd+SLT+XZgLPVjLph27P1D5RpYuLwNu4KC+2nOQH07_Q@mail.gmail.com>
+ <20211213130400.npccyt36r5sysca3@maple.lan>
+ <CAFA6WYPEjQDyt4g-dftMyzd8RKkagDs3hj5ThQfvdpmmV5dF7A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFA6WYPEjQDyt4g-dftMyzd8RKkagDs3hj5ThQfvdpmmV5dF7A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for Sunplus SP7021 SoC.
+On Tue, Dec 14, 2021 at 12:33:08PM +0530, Sumit Garg wrote:
+> On Mon, 13 Dec 2021 at 18:34, Daniel Thompson
+> <daniel.thompson@linaro.org> wrote:
+> > On Mon, Dec 13, 2021 at 02:28:01PM +0530, Sumit Garg wrote:
+> > > On Fri, 10 Dec 2021 at 21:19, Daniel Thompson
+> > > <daniel.thompson@linaro.org> wrote:
+> > > > On Fri, Dec 10, 2021 at 03:08:21PM +0530, Sumit Garg wrote:
+> > > > > On Fri, 10 Dec 2021 at 13:40, Jerome Forissier <jerome@forissier.org> wrote:
+> > > > > > On 12/10/21 06:00, Sumit Garg wrote:
+> > > > > > > On Fri, 10 Dec 2021 at 09:42, Wang, Xiaolei <Xiaolei.Wang@windriver.com> wrote:
+> > > > IIUC this patch adds kmemleak_not_leak() at (pretty much) the last
+> > > > possible point before *ownership* of the SHM block is passed from kernel
+> > > > to OP-TEE.
+> > >
+> > > I wouldn't say it's a transfer of ownership from kernel to OP-TEE but
+> > > rather a way for OP-TEE to access kernel's memory in order to pass
+> > > info or execute further RPC commands.
+> >
+> > The RPC handler allocates a pointer (e.g. now the RPC handler owns the
+> > allocated memory). The RPC handler then passes that pointer to OP-TEE and
+> > forgets what it's value was.
+> >
+> > That is a transfer of ownership: the RPC handler does not hold any pointer
+> > to the memory and is incapable of freeing it. Moreover this situation is
+> > what kmemleak_no_leak() is for! Its job it to inform kmemleak that the
+> > pointer is owned/stored somewhere that is does not scan.
+> 
+> Let me put this another way. If the memory allocator belongs to the
+> kernel then how does OP-TEE get to know which memory is currently
+> allocated and it is to be scanned?
 
-Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
----
-Changes in v3:
- - Addressed all comments from Guenter Roeck.
- - Drop the operations related to address 0x9c000274.
-   Put it in bootloader before entry kernel boot.
+OP-TEE explicitly requested that the be allocated and responsible for
+figuring out where to store the pointer. How could it *not* know this
+information? More specifically OP-TEE is perfectly capable of recording
+what memory it has allocated and where to scan to find out if it has
+been lost.
 
- MAINTAINERS                    |   1 +
- drivers/watchdog/Kconfig       |  11 ++
- drivers/watchdog/Makefile      |   1 +
- drivers/watchdog/sunplus_wdt.c | 279 +++++++++++++++++++++++++++++++++
- 4 files changed, 292 insertions(+)
- create mode 100644 drivers/watchdog/sunplus_wdt.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c2ba65155..d51f0cb1a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17938,6 +17938,7 @@ M:	Xiantao Hu <xt.hu@cqplus1.com>
- L:	linux-watchdog@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
-+F:	drivers/watchdog/sunplus_wdt.c
- 
- SUPERH
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index bf59faeb3..1a95df8ed 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -990,6 +990,17 @@ config MSC313E_WATCHDOG
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called msc313e_wdt.
- 
-+config SUNPLUS_WATCHDOG
-+	tristate "Sunplus watchdog support"
-+	depends on ARCH_SUNPLUS || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	help
-+	  Say Y here to include support for the watchdog timer
-+	  in Sunplus SoCs.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called sunplus_wdt.
-+
- # X86 (i386 + ia64 + x86_64) Architecture
- 
- config ACQUIRE_WDT
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 1bd2d6f37..d6a9e4d0e 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -94,6 +94,7 @@ obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
- obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
- obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
- obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
-+obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
- 
- # X86 (i386 + ia64 + x86_64) Architecture
- obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-diff --git a/drivers/watchdog/sunplus_wdt.c b/drivers/watchdog/sunplus_wdt.c
-new file mode 100644
-index 000000000..7dadd0758
---- /dev/null
-+++ b/drivers/watchdog/sunplus_wdt.c
-@@ -0,0 +1,279 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * sunplus Watchdog Driver
-+ *
-+ * Copyright (C) 2021 Sunplus Technology Co., Ltd.
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+#include <linux/watchdog.h>
-+
-+#define WDT_CTRL                0x00
-+#define WDT_CNT                 0x04
-+
-+#define WDT_STOP				0x3877
-+#define WDT_RESUME				0x4A4B
-+#define WDT_CLRIRQ				0x7482
-+#define WDT_UNLOCK				0xAB00
-+#define WDT_LOCK				0xAB01
-+#define WDT_CONMAX				0xDEAF
-+
-+#define SP_WDT_MAX_TIMEOUT		11U
-+#define SP_WDT_DEFAULT_TIMEOUT	10
-+
-+#define STC_CLK				90000
-+
-+#define DEVICE_NAME		"sunplus-wdt"
-+
-+static unsigned int timeout;
-+module_param(timeout, int, 0);
-+MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+struct sp_wdt_priv {
-+	struct watchdog_device wdev;
-+	void __iomem *base;
-+	struct clk *clk;
-+	struct reset_control *rstc;
-+};
-+
-+static int sp_wdt_restart(struct watchdog_device *wdev,
-+			  unsigned long action, void *data)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_STOP, base + WDT_CTRL);
-+	writel(WDT_UNLOCK, base + WDT_CTRL);
-+	writel(0x0001, base + WDT_CNT);
-+	writel(WDT_LOCK, base + WDT_CTRL);
-+	writel(WDT_RESUME, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+/* TIMEOUT_MAX = ffff0/90kHz =11.65,so longer than 11 seconds will time out */
-+static int sp_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+	u32 count;
-+	u32 actual;
-+
-+	actual = min(wdev->timeout, SP_WDT_MAX_TIMEOUT);
-+
-+	if (actual > SP_WDT_MAX_TIMEOUT) {
-+		writel(WDT_CONMAX, base + WDT_CTRL);
-+	} else {
-+		writel(WDT_UNLOCK, base + WDT_CTRL);
-+		/* tiemrw_cnt[3:0]can't be write,only [19:4] can be write. */
-+		count = (actual * STC_CLK) >> 4;
-+		writel(count, base + WDT_CNT);
-+		writel(WDT_LOCK, base + WDT_CTRL);
-+	}
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_set_timeout(struct watchdog_device *wdev,
-+			      unsigned int timeout)
-+{
-+	wdev->timeout = timeout;
-+	sp_wdt_ping(wdev);
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_STOP, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static int sp_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+
-+	writel(WDT_RESUME, base + WDT_CTRL);
-+
-+	return 0;
-+}
-+
-+static unsigned int sp_wdt_get_timeleft(struct watchdog_device *wdev)
-+{
-+	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	void __iomem *base = priv->base;
-+	u32 val;
-+
-+	val = readl(base + WDT_CNT);
-+	val &= 0xffff;
-+	val = val << 4;
-+
-+	return val;
-+}
-+
-+static const struct watchdog_info sp_wdt_info = {
-+	.identity	= DEVICE_NAME,
-+	.options	= WDIOF_SETTIMEOUT |
-+			  WDIOF_MAGICCLOSE |
-+			  WDIOF_KEEPALIVEPING,
-+};
-+
-+static const struct watchdog_ops sp_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= sp_wdt_start,
-+	.stop		= sp_wdt_stop,
-+	.ping		= sp_wdt_ping,
-+	.set_timeout	= sp_wdt_set_timeout,
-+	.get_timeleft	= sp_wdt_get_timeleft,
-+	.restart	= sp_wdt_restart,
-+};
-+
-+static void sp_clk_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
-+static void sp_reset_control_assert(void *data)
-+{
-+	reset_control_assert(data);
-+}
-+
-+static int sp_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct sp_wdt_priv *priv;
-+	struct resource *wdt_res;
-+	int err;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(priv->clk)) {
-+		dev_err(dev, "Can't find clock source\n");
-+		return PTR_ERR(priv->clk);
-+	}
-+
-+	err = clk_prepare_enable(priv->clk);
-+	if (err) {
-+		dev_err(dev, "Clock can't be enabled correctly\n");
-+		return err;
-+	}
-+
-+	/* The timer and watchdog shared the STC reset */
-+	priv->rstc = devm_reset_control_get_shared(dev, NULL);
-+	if (!IS_ERR(priv->rstc))
-+		reset_control_deassert(priv->rstc);
-+
-+	err = devm_add_action_or_reset(dev, sp_reset_control_assert,
-+				       priv->rstc);
-+	if (err)
-+		return err;
-+
-+	err = devm_add_action_or_reset(dev, sp_clk_disable_unprepare,
-+				       priv->clk);
-+	if (err)
-+		return err;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	priv->wdev.info = &sp_wdt_info;
-+	priv->wdev.ops = &sp_wdt_ops;
-+	priv->wdev.timeout = SP_WDT_DEFAULT_TIMEOUT;
-+	priv->wdev.max_hw_heartbeat_ms = SP_WDT_MAX_TIMEOUT * 1000;
-+	priv->wdev.min_timeout = 1;
-+	priv->wdev.parent = dev;
-+
-+	watchdog_init_timeout(&priv->wdev, timeout, dev);
-+	watchdog_set_nowayout(&priv->wdev, nowayout);
-+	watchdog_set_restart_priority(&priv->wdev, 128);
-+
-+	watchdog_set_drvdata(&priv->wdev, priv);
-+
-+	watchdog_stop_on_reboot(&priv->wdev);
-+	err = devm_watchdog_register_device(dev, &priv->wdev);
-+	if (err)
-+		return err;
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	dev_info(dev, "Watchdog enabled (timeout=%d sec%s.)\n",
-+		 priv->wdev.timeout, nowayout ? ", nowayout" : "");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id sp_wdt_of_match[] = {
-+	{.compatible = "sunplus,sp7021-wdt", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, sp_wdt_of_match);
-+
-+static int __maybe_unused sp_wdt_suspend(struct device *dev)
-+{
-+	struct sp_wdt_priv *priv = dev_get_drvdata(dev);
-+
-+	if (watchdog_active(&priv->wdev))
-+		sp_wdt_stop(&priv->wdev);
-+
-+	reset_control_assert(priv->rstc);
-+	clk_disable_unprepare(priv->clk);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused sp_wdt_resume(struct device *dev)
-+{
-+	int err;
-+
-+	struct sp_wdt_priv *priv = dev_get_drvdata(dev);
-+
-+	err = clk_prepare_enable(priv->clk);
-+	if (err) {
-+		dev_err(dev, "Clock can't be enabled correctly\n");
-+		return err;
-+	}
-+
-+	reset_control_deassert(priv->rstc);
-+
-+	if (watchdog_active(&priv->wdev))
-+		sp_wdt_start(&priv->wdev);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(sp_wdt_pm_ops, sp_wdt_suspend, sp_wdt_resume);
-+
-+static struct platform_driver sp_wdt_driver = {
-+	.probe = sp_wdt_probe,
-+	.driver = {
-+		   .name = DEVICE_NAME,
-+		   .of_match_table = sp_wdt_of_match,
-+		   .pm = &sp_wdt_pm_ops,
-+	},
-+};
-+
-+module_platform_driver(sp_wdt_driver);
-+
-+MODULE_AUTHOR("Xiantao Hu <xt.hu@cqplus1.com>");
-+MODULE_DESCRIPTION("Sunplus Watchdog Timer Driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.33.1
+> I think the complete solution would be to extend kmemleak to support
+> OP-TEE memory scanning via OP-TEE invocation to check if it's holding
+> any kernel memory references.
 
+This is the part I get stuck on... and the reason I'm still posting on
+the thread.
+
+I struggle to see any value in using kmemleak to identify this type of
+leak. That is the fundamental issue. False positives from kmemleak are
+damaging to user confidence in the tool and are especially harmful when
+it is complex and time consuming to verify that is actually is a false
+positive (which would certainly be the case for OP-TEE false positives).
+In short it is *not* always the case failure-to-detect is worse than
+false-positive.
+
+As discussed already the firmware/kernel contract prevents kmemleak from
+working as it is designed to and I am unconvinced that relying on
+fragile timeouts is sufficient.
+
+Extending kmemleak to support OP-TEE memory scanning is also, IMHO,
+pointless. The reason for this is that OP-TEE cannot perform any scan on
+behalf of kmemleak without first validating the information provided to
+it by the kernel (to avoid information leaks). However if OP-TEE tracks
+enough state to validate the kernel input than it already has enough
+state to do a scan for leaks independently anyway (apart from being
+donated an execution context). Therefore it follows that any OP-TEE
+extension to handle leaks should be independent of kmemleak because it
+would still be useful to be able to ask OP-TEE to run a self-consistency
+check even if kmemleak is disabled.
+
+Or, in short, even if you implement improved leak detection for OP-TEE
+(whether that is based on timers or scanning) then kmemleak_not_leak()
+is still the right thing to do with pointers whose ownership we have
+transferred to OP-TEE.
+
+
+> > > > Sure, after we change ownership it could still be leaked... but it can
+> > > > no longer be leaked by the kernel because the kernel no longer owns it!
+> > > > More importantly, it makes no sense to run the kernel memory detector on the
+> > > > buffer because it simply can't work.
+> > > >
+> > > > After the RPC completes, doesn't it become impossible for kmemleak to
+> > > > scan to see if the pointer is lost[1]?
+> > >
+> > > Apart from the special OP-TEE prealloc SHM cache stuff, I can't think
+> > > of any scenario where an OP-TEE thread should hold off kernel's memory
+> > > pointers for more than 5 seconds before being passed onto kernel for
+> > > further RPC commands or RPC free action. So the kmemleak should be
+> > > able to detect if a pointer is lost.
+> >
+> > Or putting this a different way: there is known to be firmware in the
+> > field that allocates pointers for more then five seconds!
+> 
+> If it's known that upstream OP-TEE doesn't hold any kernel memory
+> references for more than 5 seconds then IMO we should be fine to not
+> disable kmemleak until we have a future kmemleak extension. Otherwise
+> it would be very hard to keep track of kernel memory lost in this way.
+
+In essence I am arguing for using the right tool for the right job (and
+against turning down a correct patch because the right tool isn't yet
+implemented). A memory scanning leak detector is the wrong tool to
+search for leaks in memory that cannot be scanned.
+
+For me having to rely on fragile implied contracts and undocumented
+assumptions about timing further reinforces my view that kmemleak is not
+the wrong tool. Especially so when we know that those assumptions are
+not met by existing firmware.
+
+
+Daniel.

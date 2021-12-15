@@ -2,157 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 468E2476228
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B60476226
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbhLOTuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233243AbhLOTuF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:50:05 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA52C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:50:04 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id i22so10285048wrb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:50:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3JBKbYwsshu8iSqfD9517s+vo2UdPMxMRdjnHJCVbj4=;
-        b=sRpMqDyx/cpoXSV6aAdR8pC8t21f+shsV3RNJFBReQFIZpIbxX8XFW5H67QMW0z346
-         Lekq/JbkSFs51zuPMhiN0N0FmNxeywvGIGPfhxJDZZofM4xWFPq0IS3+6Rvo7fDqNzxc
-         PGw+mxtOId3D+aoqyi66teuR1yQOjpHnqg93ocrcCQXlft1OJnBtrV45BXQ+6+ubz+D+
-         sj7ViNnzisl3y2LXbEwh46ph0/9DAQCR2Z+rt2KrrtuhvQi0eAP55ThtvQ4MHEw0TiNG
-         jV/giEUSPIvvfBTzfQQZsGYR5mRR/SmMOiBHkn59tZJB5m/FOku52D7kWqUAl9ZuMy30
-         bNWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3JBKbYwsshu8iSqfD9517s+vo2UdPMxMRdjnHJCVbj4=;
-        b=WLvClnqPsfqZ2viHkcC0TbkrOs0bCZl3R+rMqdLnkpL8ddM0eBTjFU3NE9GTPp1VPm
-         U5gXYe9D24jkbORp4OghkyW/EiKonMqxhxT4M/Q4oOCTLj4IyO5yfxnUm+GVNZDo9Gqt
-         MlIK3dXUkbWwpYU689Extey9jTDSmC6JCU4vAyRUy04d2mJdwGoKG7j/u9XO/dJV+SOS
-         WV7nsB+HKOWiZcnTx+ouckmoYXzw8e+T8X60g+C6FB7/iBplLU3g1xSWlmBolRNrXDGr
-         pIF0Umg6qfBR/MTjVHcvfTCk57H6VvFUesXSZ+I6Kq5uMBGb8UOsDYlG/Smte61ZxZof
-         03GA==
-X-Gm-Message-State: AOAM532FdbKoI0MCkxOq3vKZ5qiewYl6lX/M9Ijexi49scNggs83Npc3
-        EY4bXdbh/VjismrkNZCH4ocN53yApE+3Ibij8ryD+Q==
-X-Google-Smtp-Source: ABdhPJzZJskrySYWuhv/jOhIkWrdH0hLSZsgVg63d25D6HdWDBjBSiU7oA1n3Gu5cZ6AIZETV2PYLONoFpL3NUpS76c=
-X-Received: by 2002:a5d:47ab:: with SMTP id 11mr5996811wrb.148.1639597802997;
- Wed, 15 Dec 2021 11:50:02 -0800 (PST)
+        id S233231AbhLOTt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:49:56 -0500
+Received: from mail-bn8nam11on2088.outbound.protection.outlook.com ([40.107.236.88]:62182
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230341AbhLOTtz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 14:49:55 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lE0Vnln6QZOvboP4cOgvXK7WW9JyX7dcDyQueCLN/DXcfza1tpbDL5ddsrRPvR69CEnIe4Hv8vdcQ8bAmlZXLCKvDSyZaaBkHtEQx044u6K1RE5AyroifnlgcJuqfy+d9buBtP6td5EEk7j/S+qWaCmLVM/R1OgcdGrcpOYj1yXZ7cKm3MHS/b52/U4p7Lf19fzgjcfxe7VLYtckTpGvTQtOhpgjC7d6xNf8SjYNAtfAROJQULwGcYIyZ97kf9NUzVtYXAVTZYEm6iJVfVUe+pGi+B2NdTnaQpSnvjLW6W6lG+jIRqgwGeVwyXL/4zguC/a4RSCeRwrSM1nHk/avsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qcykf9g/f/RHgqgz/3J9NYVhQsAS18KABVave/+fUAw=;
+ b=Tan7O2XDMWb/EIsp421O2Eai6XphVsErWz96OXwNjnoQdMsVAWgu342dqp9nRS1GxG9Ry3fKK7a/c6RBA6abDGG7reuH6LUPAZROy2xfNpSa+qzbRVJLGE/ZKY21wQDsRfAeNPVwIW48BBjcijo9Arz4du42TyeyQW9BoaIeDRbLL4X1tQ6HoJQmmVXbU+HT//c0GsWoUmd29yh+ppyQdHESvPZ4blxc3C56tHcurN5jgSITrhx2da/Whg/zpFRqUNIlOuvybF79lPJQiNVSq0uj1qERpnK+bH4sEJ7SM5wdfmtp0MAxfZha6iDV74JV8ObOJ10Z75cPjFJJPo7Ruw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qcykf9g/f/RHgqgz/3J9NYVhQsAS18KABVave/+fUAw=;
+ b=newAVbH9w/k//9Y6jZvPEMJnwtPQAbaYbK9Qfe7Gwnf8ndqpOCbPT7BjFK7qDROThS10xhX1nJ94KQxMQwOXbbx3qLrvwZWeEa03ff3b3eiSvVIMSiQ2ldUCjfST/iHzD6g2fGHjINCFAInOC57vRrPoePQfPfb6wzefJDrOL4RuhaxQx8i/EESU0D+Tm5+EQOBV4xuFqIIS6WCE4JrWuMS1UU2AToR8BeI4LOEl+yqDt8yFmai/y5NMgtxYFWYGK+X7WK+mID7GGQLfuF/tVArVa15ZY4e96+7dJGLv3xyV400pMg1qJpDLS0Oy1BEeH3DYOhIPA26bzoGp6kdFJg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5272.namprd12.prod.outlook.com (2603:10b6:208:319::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Wed, 15 Dec
+ 2021 19:49:53 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%8]) with mapi id 15.20.4801.014; Wed, 15 Dec 2021
+ 19:49:53 +0000
+Date:   Wed, 15 Dec 2021 15:49:52 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     linux-rdma@vger.kernel.org,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Axtens <dja@axtens.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraju@codeaurora.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>
+Subject: Re: [PATCH] RDMA/hfi1: Switch to kvfree_rcu() API
+Message-ID: <20211215194952.GY6385@nvidia.com>
+References: <20211215111845.2514-1-urezki@gmail.com>
+ <20211215111845.2514-8-urezki@gmail.com>
+ <YbpGWpskiByQNcJO@pc638.lan>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbpGWpskiByQNcJO@pc638.lan>
+X-ClientProxiedBy: BLAPR03CA0038.namprd03.prod.outlook.com
+ (2603:10b6:208:32d::13) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
 MIME-Version: 1.0
-References: <20211214204445.665580974@infradead.org> <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
- <Ybm+HJzkO/0BB4Va@hirez.programming.kicks-ass.net> <CAFTs51Xb6m=htpWsVk577n-h_pRCpqRcBg6-OhBav8OadikHkw@mail.gmail.com>
- <YboxjUM+D9Kg52mO@hirez.programming.kicks-ass.net>
-In-Reply-To: <YboxjUM+D9Kg52mO@hirez.programming.kicks-ass.net>
-From:   Peter Oskolkov <posk@google.com>
-Date:   Wed, 15 Dec 2021 11:49:51 -0800
-Message-ID: <CAPNVh5cJy2y+sTx0cPA1BPSAg=GjXC8XGT7fLzHwzvXH2=xjmw@mail.gmail.com>
-Subject: Re: [RFC][PATCH 0/3] sched: User Managed Concurrency Groups
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Peter Oskolkov <posk@posk.io>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, mgorman@suse.de,
-        bristot@redhat.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Paul Turner <pjt@google.com>, Andrei Vagin <avagin@google.com>,
-        Jann Horn <jannh@google.com>,
-        Thierry Delisle <tdelisle@uwaterloo.ca>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2c120de9-8273-40e8-42b0-08d9c0041007
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5272:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB527283ADCC6231B4F32EBD96C2769@BL1PR12MB5272.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0utu+rUSCY9RpFOjiyJnZvna5OwchO2zD3BAc41d/GxWIhKiCYUWfHsGrhXWhq9Z5qWuacWo3GYBJiGRb72KNtD8m5+Dxp9yDe+qKGgABZ+ZGKgSa9vc5/r2YVw4dn2Rgz0YOe/h0pQbaqiGNBZwhT5EyAoQLCJEO/LhWXH1wjI85jZniiQvBOeJ24iftzW6fshtY52s1ZOpdLlT0oSFrIn1S/NenAJY1C8XHd5ob3ZbdGVYTChC1/vHbcEf9hEAH9Vl+2igDLHEw+vusEd1pHGqfpHK1YRPA66ke2k/uYaUFWgf2Zkvu0tg4zQWtk98a/EIVBDq2pv1XU1O4scev5i2e99mqFor1R+7K9EAG/qGBgF34MR+CtCZDYJogZ+YDisiH4+iqjgIVWYUyMpXCAFQXfZ7ZolnGZ961O9qF34sJl9HBgMjGmZ0wfG60kv6p2tw4jhEdode1YAfyjx/HsV0yEu34jwX/IJ90zhmeA421rIkH+BxiIN8coGTAwLM06hbOw0NNpAjr/vMqWzvmGUGsW7NjArCxJsy4LqxSNxRiWsqav4GFemPfexXWzssbfIv5upa/kxJxP7eWtk5h4SeuQ/iwanayn53hCX+c4U+9d9QVnQx4k3jLALvldMycELS9eYl7+xvAO1dZ243qddNP4I8SQdnLRAVnfuz6LYJaTPIqpj8YhtI5aleDkjIXDVHJfds2cvD7sXMqbabMMFAHf5udHxLbhmIwjR3BOo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(66946007)(26005)(7416002)(316002)(1076003)(6506007)(54906003)(8936002)(33656002)(83380400001)(5660300002)(36756003)(38100700002)(2906002)(66476007)(4326008)(508600001)(6512007)(6916009)(66556008)(6486002)(86362001)(966005)(186003)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L/Pf85pQ1W8KrzZu0+Xk1b+p9/PJBV4sYiIQA5lsxK/hLWD5nis/3rMlY85Q?=
+ =?us-ascii?Q?5nTdxAjj4xax5KDB/oobfR54IFiA5qc/ZN5Q6fLoFp3nLf8kGhJEczb5MGWS?=
+ =?us-ascii?Q?ome+bd18PzvqIJN/F9G67Ca8lUNZrn5FfNaDq1AnliGyV+amRzdiRr0icLSf?=
+ =?us-ascii?Q?XsyDtgyv6AL8dC57SyvaQ2QetAjcnF+qjNR39Mk7BSH+TGEKnqkWV5vaFgZY?=
+ =?us-ascii?Q?ngawGF5iToIK6Jf/6LA94mCFuq4J1jeVp5yZgWUWTNa0iWjj5QFBhsGcdkv/?=
+ =?us-ascii?Q?dmTjHY3KT/tDDrvBPFTDoQ81kMCparaZunP/FZONg2T9Y950AQGTUkGkVOyG?=
+ =?us-ascii?Q?FZ7AeXIwR7gBPgx/GI0cvP1oNDi3+wOlLpPOtg1PL2cvKX0JM4EsXAbXBFz7?=
+ =?us-ascii?Q?T0+mVoqQMMkzXIbsxUbhXfuILGkyenljpJABa2jnDiayTNaumI6xN/pnEuTL?=
+ =?us-ascii?Q?cDbtPc2pzkP5Zfb5dx7VnZTo1XdoL+hJsgjzwaJ5Dn/ahdg3FnjpSjRFdE51?=
+ =?us-ascii?Q?2L4wTlZTqzPxm/jAfzCtv/03Cxo3CiZSQN8g4IwzdjwBbIrzrNYYJbjKLI/q?=
+ =?us-ascii?Q?q3+NZFLEQPu0sga6d4Z2Dy6yhvIrFc8Bdnzlua1VdwYIj4Hmi3b9DuvNwGjC?=
+ =?us-ascii?Q?iLQQbSQoxD2VSrckicc49uLUpn3gejLn3FVo9RTViQhoTMXJg3ilQovf9DR8?=
+ =?us-ascii?Q?YWfH+ZGXUJ/xBZ+5vVUHfXcIDOdmx52PFKFsrE5J0jt7EfUhLTIqfvTkqQh5?=
+ =?us-ascii?Q?5e6oFisLx/w0385vHbtd0StuHhkdBB0H+F18AHr/8O/SkAi0gQs3NATvv39r?=
+ =?us-ascii?Q?W5Y6DJkMT3TKCJTr/CMlv5CJLnkSwg0YkL3BOxwnIRZZwjyeYvKWUDWv2A9g?=
+ =?us-ascii?Q?OqfyHfyrmED21WllxPGRaiNlAzIioLrSodzZtvplr2fhcj2TOGmolZpM75cl?=
+ =?us-ascii?Q?rY4gL7cTdhyxL/DifStu+71JIyHp7BbYDKn/p4J7s+FXdc94ISbPxiLVT0mI?=
+ =?us-ascii?Q?GpW8XRd094gMV5MzqLuHWji4oUMGGUNtTB/O944kTppwpcQv3/dTyQJJx1Lm?=
+ =?us-ascii?Q?WA4HRAXceXyFF80L/2aQhF5pNUg9Wys4qFY8eOzajZ3ZvQwaRXVrFvK2lou+?=
+ =?us-ascii?Q?uVaBoxJTR2VbJBHyqhT8j+H9sndCZUyyWrchTAdLIE0GoQL7z3UBm98AMs1O?=
+ =?us-ascii?Q?ODGpk7zhkzur++Pe9vSSSi+XZ7fuQIeOnUn5IQB0e4GmN14iq2UTsItLzLIZ?=
+ =?us-ascii?Q?HH019A0M1RkHEhKD5bMfmP7D7JuL1Q3ccSmqo1fH6sgnFG2v8AJeSFCPJ25A?=
+ =?us-ascii?Q?hj36iJ77zwJVZweK7++IJfKHuBHaRCHhpEocgiBJXYaVm84nlb8RaGCIl80l?=
+ =?us-ascii?Q?IhpFCtalbeoERgGitXjOA4BvG9NMqJUYPwDuDJgc2DIa0lAllTjr1HYzDLMi?=
+ =?us-ascii?Q?dA0GmEpWPLM0Pz4Xo2NSrsEW7V7b5dFcTAqTtL2b4SX2K54v68Y7Fa+Cc6dE?=
+ =?us-ascii?Q?1WSgHQWAR96IZ2QjuaE1mCplNbALBeXHrKeTvhj+5MnU+/7ZM6qhkToz9l0i?=
+ =?us-ascii?Q?NUZd6kVMbSLYtUxVV2c=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c120de9-8273-40e8-42b0-08d9c0041007
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 19:49:53.2210
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xm1ErUbA/XOZVkHTmid4X6MwQXIy5hh0b8SNbFl7HfHEaiXyXFK7+IL5MRtYQ6tI
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5272
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 10:19 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Dec 15, 2021 at 09:56:06AM -0800, Peter Oskolkov wrote:
->
-> > > Right, so the problem I'm having is that a single idle server ptr like
-> > > before can trivially miss waking annother idle server.
-> >
-> > I believe the approach I used in my patchset, suggested by Thierry
-> > Delisle, works.
-> >
-> > In short, there is a single idle server ptr for the kernel to work
-> > with. The userspace maintains a list of idle servers. If the ptr is
-> > NULL, the list is empty. When the kernel wakes the idle server it
-> > sees, the server reaps the runnable worker list and wakes another idle
-> > server from the userspace list, if available. This newly woken idle
-> > server repoints the ptr to itself, checks the runnable worker list, to
-> > avoid missing a woken worker, then goes to sleep.
-> >
-> > Why do you think this approach is not OK?
->
-> Suppose at least 4 servers, 2 idle, 2 working.
->
-> Now, the first of the working servers (lets call it S0) gets a wakeup
-> (say Ta), it finds the idle server (say S3) and consumes it, sticking Ta
-> on S3 and kicking it alive.
+On Wed, Dec 15, 2021 at 08:47:38PM +0100, Uladzislau Rezki wrote:
+> On Wed, Dec 15, 2021 at 12:18:44PM +0100, Uladzislau Rezki (Sony) wrote:
+> > Instead of invoking a synchronize_rcu() to free a pointer
+> > after a grace period we can directly make use of new API
+> > that does the same but in more efficient way.
+> > 
+> > TO: linux-rdma@vger.kernel.org
+> > TO: Jason Gunthorpe <jgg@nvidia.com>
+> > TO: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+> > Acked-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> >  drivers/infiniband/hw/hfi1/sdma.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/hfi1/sdma.c
+> > index f07d328689d3..7264a35e8f4c 100644
+> > +++ b/drivers/infiniband/hw/hfi1/sdma.c
+> > @@ -1292,8 +1292,7 @@ void sdma_clean(struct hfi1_devdata *dd, size_t num_engines)
+> >  	sdma_map_free(rcu_access_pointer(dd->sdma_map));
+> >  	RCU_INIT_POINTER(dd->sdma_map, NULL);
+> >  	spin_unlock_irq(&dd->sde_map_lock);
+> > -	synchronize_rcu();
+> > -	kfree(dd->per_sdma);
+> > +	kvfree_rcu(dd->per_sdma);
+> >  	dd->per_sdma = NULL;
+> >  
+> >  	if (dd->sdma_rht) {
+> + linux-rdma@vger.kernel.org
+> + Jason Gunthorpe <jgg@nvidia.com>
+> + Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
 
-TL;DR: our models are different here. In your model a single server
-can have a bunch of workers interacting with it; in my model only a
-single RUNNING worker is assigned to a server, which it wakes when it
-blocks.
+If it is not in the rdma patchworks it won't get applied..
 
-More details:
+https://patchwork.kernel.org/project/linux-rdma/list/
 
-"Working servers" cannot get wakeups, because a "working server" has a
-single RUNNING worker attached to it. When a worker blocks, it wakes
-its attached server and becomes a detached blocked worker (same is
-true if the worker is "preempted": it blocks and wakes its assigned
-server).
-
-Blocked workers upon wakeup do this, in order:
-
-- always add themselves to the runnable worker list (the list is
-shared among ALL servers, it is NOT per server);
-- wake a server pointed to by idle_server_ptr, if not NULL;
-- sleep, waiting for a wakeup from a server;
-
-Server S, upon becoming IDLE (no worker to run, or woken on idle
-server list) does this, in order, in userspace (simplified, see
-umcg_get_idle_worker() in
-https://lore.kernel.org/lkml/20211122211327.5931-5-posk@google.com/):
-- take a userspace (spin) lock (so the steps below are all within a
-single critical section):
-- compare_xchg(idle_server_ptr, NULL, S);
-  - if failed, there is another server in idle_server_ptr, so S adds
-itself to the userspace idle server list, releases the lock, goes to
-sleep;
-  - if succeeded:
-    - check the runnable worker list;
-        - if empty, release the lock, sleep;
-        - if not empty:
-           - get the list
-           - xchg(idle_server_ptr, NULL) (either S removes itself, or
-a worker in the kernel does it first, does not matter);
-           - release the lock;
-           - wake server S1 on idle server list. S1 goes through all
-of these steps.
-
-The protocol above serializes the userspace dealing with the idle
-server ptr/list. Wakeups in the kernel will be caught if there are
-idle servers. Yes, the protocol in the userspace is complicated (more
-complicated than outlined above, as the reaped idle/runnable worker
-list from the kernel is added to the userspace idle/runnable worker
-list), but the kernel side is very simple. I've tested this
-interaction extensively, I'm reasonably sure that no worker wakeups
-are lost.
-
->
-> Concurrently and loosing the race the other working server (S1) gets a
-> wake-up from Tb, like said, it lost, no idle server, so Tb goes on the
-> queue of S1.
->
-> So then S3 wakes, finds Ta and they live happily ever after.
->
-> While S2 and Tb fail to meet one another and both linger in sadness.
->
+Jason
+ 

@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12121476255
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAE547625A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbhLOT4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:56:40 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:39873 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbhLOT4j (ORCPT
+        id S233988AbhLOT5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:57:13 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:38555 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229791AbhLOT5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:56:39 -0500
-Received: by mail-ot1-f49.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso26220695ots.6;
-        Wed, 15 Dec 2021 11:56:38 -0800 (PST)
+        Wed, 15 Dec 2021 14:57:11 -0500
+Received: by mail-ot1-f42.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso26274342ota.5;
+        Wed, 15 Dec 2021 11:57:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=rc75QnNGJmNS7Cbebb+pY8RDy1d28+BSSxCtW4SecuI=;
-        b=gEizBTR33a1S3bh2Zt7v2sHpuCPXzc86v5+CZm0YUxHqRyW8z5GPIbvHpz0Ki3zNXM
-         2Uw/3pTaM5+XccsawKq33kNfF4vZKI+gzDbwV9qOmPZKt89Hq6PwS8oq4k+6gzKsVhNP
-         sXMmTGAtw8/FLOBFHj104YxCTGVxbRqhH6AnBaOShjuJk6RESE9JCCMnat9uqKCiJENi
-         dNo/FuZrpF6TjWSxAYvBFbnhebdoeg6JnNQYft25K9T/u5+BmeszcF+KySZw5e3bbWuB
-         UziQJTu0iGpJmScRJ6vPWXiaYsFJWEh0jsCV9AUhhu4vBw4j7JMDEokbxcvjMrWlfUgi
-         iceQ==
-X-Gm-Message-State: AOAM530feeJ6KAuqy+H+XGb7FPsIzI+m3Gl2DR8IYpS4kUueQTbUU0cB
-        YNXmSmfsS2jCdWiKboexwrAq2jCcWA==
-X-Google-Smtp-Source: ABdhPJzrQNwX1PWtVKEQVvXrLOMZ8C9c+duQoIn7Gf9bM82Fcc1FZELEJd5svYbn2v5KVWFulAvMXQ==
-X-Received: by 2002:a05:6830:2431:: with SMTP id k17mr10212639ots.220.1639598198475;
-        Wed, 15 Dec 2021 11:56:38 -0800 (PST)
+        bh=OQHnIq3MbqKOkBWaqzhYEGokXZQ4cO9gcO52HXRgUjM=;
+        b=mKpepPtDc+WJGm0k2kIv0T7EV5cAHkezG3mbv0SPUfFnlNd0waNWA5JnIAlbMgmsBD
+         0Dy6Vw93RdqOei6OG5jQXNuRKxw9/IfAjQXSa5K9OEC09RLsJ0J+2fldrtLQatNdIWXY
+         nIJuPjdZ3fn9cGQ/9Nn8SR+KbM6B8Bf2gXrCJxo7WLL92MXFFJB6KMYjtHnRLuvb5XYw
+         KFhHm/wRia+yTOrQJjMV22yKESNSrmGQG+uJy+vyveWStZl9Lk0CLCsOokAlNeh/Kgw0
+         +f/kiJPgClbVM3KwGwVmqQFoNWnj3c9AK8MG3xo0yONs650Yjdc94BRYzL7edEHcENGF
+         tdlw==
+X-Gm-Message-State: AOAM531LcM/1SIpZyHSnTezCtHl0qzmqt90so1LGdUXWKe4LHL0xDtMD
+        jj+JgMcEeM+U8rPeWkP68w==
+X-Google-Smtp-Source: ABdhPJzxwIsn/cIQGYHuBgMFx+Tg1FD9tkT3hX/+n0dDk8WvLbNnz56ZucAnHQZY6SSnHfzgg0OuTQ==
+X-Received: by 2002:a05:6830:1e8f:: with SMTP id n15mr9846388otr.259.1639598231225;
+        Wed, 15 Dec 2021 11:57:11 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o2sm602213oik.11.2021.12.15.11.56.37
+        by smtp.gmail.com with ESMTPSA id ay40sm508165oib.1.2021.12.15.11.57.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 11:56:37 -0800 (PST)
-Received: (nullmailer pid 1733483 invoked by uid 1000);
-        Wed, 15 Dec 2021 19:56:36 -0000
-Date:   Wed, 15 Dec 2021 13:56:36 -0600
+        Wed, 15 Dec 2021 11:57:10 -0800 (PST)
+Received: (nullmailer pid 1734417 invoked by uid 1000);
+        Wed, 15 Dec 2021 19:57:09 -0000
+Date:   Wed, 15 Dec 2021 13:57:09 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     linux-iio@vger.kernel.org, amit.pundir@linaro.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, john.stultz@linaro.org,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>, sumit.semwal@linaro.org
-Subject: Re: [PATCH 2/7] dt-bindings: iio: adc: document qcom-spmi-rradc
-Message-ID: <YbpIdF/z3w6DAKH3@robh.at.kernel.org>
-References: <20211211022224.3488860-1-caleb@connolly.tech>
- <20211211022224.3488860-3-caleb@connolly.tech>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH v2 1/3] dt-bindings: sharp,lq101r1sx01: Add compatible
+ for LQ101R1SX03
+Message-ID: <YbpIldrQUQHh37C9@robh.at.kernel.org>
+References: <20211211213653.17700-1-digetx@gmail.com>
+ <20211211213653.17700-2-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211211022224.3488860-3-caleb@connolly.tech>
+In-Reply-To: <20211211213653.17700-2-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Dec 2021 02:22:19 +0000, Caleb Connolly wrote:
-> From: Caleb Connolly <caleb.connolly@linaro.org>
+On Sun, 12 Dec 2021 00:36:51 +0300, Dmitry Osipenko wrote:
+> From: Anton Bambura <jenneron@protonmail.com>
 > 
-> Add dt-binding docs for the Qualcomm SPMI RRADC found in PMICs like
-> PMI8998 and PMI8994
+> LQ101R1SX03 is compatible with LQ101R1SX01 from software perspective,
+> document it. The LQ101R1SX03 is a newer revision of LQ101R1SX01, it has
+> minor differences in hardware pins in comparison to the older version.
+> The newer version of the panel can be found on Android tablets, like
+> ASUS TF701T.
 > 
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> Signed-off-by: Anton Bambura <jenneron@protonmail.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  .../bindings/iio/adc/qcom,spmi-rradc.yaml     | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/qcom,spmi-rradc.yaml
+>  .../bindings/display/panel/sharp,lq101r1sx01.yaml          | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,133 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC174758FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 614044758FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237295AbhLOMlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:41:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234378AbhLOMlI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:41:08 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C63C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:41:08 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id e3so75148460edu.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:41:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pa5P7TJTPoCcI6iCLMQS9O9zVLDm47/fvRV9xdvs9Gk=;
-        b=kZwDtXK8NdFCbdiSQ62IKZJiYJUsIKUYlCJlBbmgkykwXRjfGnZU86rUx7f/8n4tyY
-         N1Y6VQgyd5N70AHYTFH0CuKbITY0nHwJ1V4DXx30+HnXy7JgddzSWrksWaxzbAcAt5ss
-         MyzVwCBnyv6gLHbo6WPFSnyZ8aBYQwBN+s80XJ2c2PkFFdgx23bTgSt4281ms4toLqrp
-         2udw7QoXKg/lyon1/bHBSLDa/rESK62RSClfJkHeWGHl32mbhfM4ibHPP2qPP2vi2duP
-         ytnAXCG9fypdJbH88CUXiSQ6I3CJyBtNEi2eGN4rKkuk+u7BHQ5Ktwv7RY1VpzxvBpZu
-         IO4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pa5P7TJTPoCcI6iCLMQS9O9zVLDm47/fvRV9xdvs9Gk=;
-        b=iMnSuXOMJpXF/OPASKAYFHb7xdvLp8cJJbyjhLELoiWoJT29cAI+1JRUAgUzMamH7a
-         L3dj6Iy+UNcUWNdFCvjIBNidfuRs83MymU7y19l3MZIlJWtfCDtX3BZYhbewrQSky0qc
-         EIHrEufCqoiWBkIiswakdR7whCHZVyeBhM/YllB6vqQy5QmyWvqTbVErOx8XHTP4jlle
-         x2NX3oWagM68v591wb0FkC+VJRwIlBUsovwRUDhQKlIz3Ick4Po0kBWLcq7m7WsSYP0e
-         rZ3tp++tdilBUDXhV4KhVC419UnI0CGRQjGlsoWej/+xjkxh0hTChX4oUPWGUtS8wuUM
-         4+Dg==
-X-Gm-Message-State: AOAM530V3wYklwlcmihMtSxwvAyG609TUnrL0c82jg3p+eqi//+gzBar
-        oijYJP79JY+YwAmrLYErm/vT8fzPaze5tAx0yV/xeHO6Lz52j+XH
-X-Google-Smtp-Source: ABdhPJyqx50oqjtiQUFh6Za0gonG95YEHb7EWF3cYk2Vcnzwxdbz3gtLfbbRkCZaiY/HO3n7MW1Im7CTK5HmtEwCmpE=
-X-Received: by 2002:a05:6402:14f:: with SMTP id s15mr14355960edu.118.1639572066575;
- Wed, 15 Dec 2021 04:41:06 -0800 (PST)
+        id S242583AbhLOMmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:42:21 -0500
+Received: from mail-vi1eur05on2138.outbound.protection.outlook.com ([40.107.21.138]:33408
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234378AbhLOMmU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 07:42:20 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lQ28IuJNCdmsdc7tAt3co7aAlDVbKYPZLZk6OFdROCQnzAXHoXPMxUdXUhpq5Z1xF2rp56noYvk6QJVEGZGZBqhiYcYKL43164lc86ZOYj/MbKEWUHJ2xjubWaLp/UHfUQaXGie3YDsfrtJlt1+9r3bA0Yt+Re/4G0OJtYsJr4XxAMjCZ/pPSNBouEScX3MzzkPdfMq5BRWpRIHtusxY0S5grrYh+Jw4v2pFh6sysobdUM7k9JZsAhOhGDLSrl9SqdgFW0qD2WWp2ldSpr1wgd3T3oKioeaEThHZzEh25n5PgYHxs1acFhifpakI7Q3WLqlxLiqfneCKvH2QFKUI2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qBeNucITdkOIdY1Q4iWTWzcDI+exXvjxKu8q1pHnkIc=;
+ b=ZKCrYAvRwFoatDHXJcovpOchSgzU+udqR9wYBqY4O4PRTkxEgHaFeBwF9Tx8O23a9fVBlB+BwNp7Kl/RxyzWoJltGyw2BhWZCJpF7rEXQaFBEy5WRYWePoEhogOhBaP+l5mMsthENLc2KA5R4Gb79bt+xnKNw+jA0fmmm545HbheT1gQAGEhpYLZr7KUvkyogMz0i29z71qwFwp2LAAtxYcKUGd3rV5fLxXXz1XEcjD/BKWPpSNP+rEXaSBu2EJsywkYhu+MhkCSZEpG6UZwS4o8epRrDJYdSlvx6E01N1lPaV2HSJL+RxL7vYV2SpYwzXbpCSWcHxcBzr+YfobxJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qBeNucITdkOIdY1Q4iWTWzcDI+exXvjxKu8q1pHnkIc=;
+ b=CUMPEdIj+pMGtgVt3sTUu/94gOlcmVLom7xS4ISHVcwhHCu7+iNfDbXUPpANcb7OuNkGLP0RnwBqQ0Opoi82X2jZiJ9wehnkS3P0YZ7SR/rW+/v9h7GlxSMKeEImwRZ8Of5T5mU+MECOpqxA6CZTpgyIi2BYD81YNqYLYBRixsY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
+ by DB7PR02MB4220.eurprd02.prod.outlook.com (2603:10a6:10:4d::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.18; Wed, 15 Dec
+ 2021 12:42:17 +0000
+Received: from DB8PR02MB5482.eurprd02.prod.outlook.com
+ ([fe80::7519:c72c:98b1:a39]) by DB8PR02MB5482.eurprd02.prod.outlook.com
+ ([fe80::7519:c72c:98b1:a39%4]) with mapi id 15.20.4778.018; Wed, 15 Dec 2021
+ 12:42:17 +0000
+Message-ID: <a78b52ec-81bf-9ee1-9e12-135079d19b7a@axentia.se>
+Date:   Wed, 15 Dec 2021 13:42:14 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 1/4] dt-bindings: i2c Update PCA954x
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211214095021.572799-1-patrick.rudolph@9elements.com>
+ <Ybh8cCU/zbfXkXYO@pendragon.ideasonboard.com>
+From:   Peter Rosin <peda@axentia.se>
+Organization: Axentia Technologies AB
+In-Reply-To: <Ybh8cCU/zbfXkXYO@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GV3P280CA0011.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:b::7)
+ To DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
 MIME-Version: 1.0
-References: <1638619795-71451-1-git-send-email-wang.yong12@zte.com.cn>
- <Yax01zjuzmNyyJK/@balbir-desktop> <CAOH5QeDhjyjAkS1bUju2cv67KFukUr0ov8uG+z3bM6Oa=iFrMA@mail.gmail.com>
- <Ya7uQingLC3fMJlt@balbir-desktop> <CAOH5QeC+0xDrgO+t3zwN4o48F9Q2CiTnzQDO78kuJLfyNJwoLA@mail.gmail.com>
- <CAOH5QeCO_EZzkU=B3L1=1OPiZa7XxnWZK87GbwXNOQXxZqYcoQ@mail.gmail.com> <YbgwWir/Ymt/2gxE@balbir-desktop>
-In-Reply-To: <YbgwWir/Ymt/2gxE@balbir-desktop>
-From:   yong w <yongw.pur@gmail.com>
-Date:   Wed, 15 Dec 2021 20:40:48 +0800
-Message-ID: <CAOH5QeDqsiMgX4BB=yWOC02CMv2zHu472O45_8FUXvA3TBYfSw@mail.gmail.com>
-Subject: Re: [PATCH v2 linux-next] delayacct: track delays from memory compact
-To:     Balbir Singh <bsingharora@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, mingo@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, yang.yang29@zte.com.cn,
-        wang.yong12@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 79eddb59-80ec-4605-1073-08d9bfc853c1
+X-MS-TrafficTypeDiagnostic: DB7PR02MB4220:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR02MB4220EEBCEB46FEDD5584E0A1BC769@DB7PR02MB4220.eurprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qyWzTABJbab2telkg3ykrvtiqsnZP/FEMMtDdVbk6ZfnvPjlPpkye5o8F+yx2YYNrmkZafPwEFAGuCPZvpKUtfcSpGpYWmS8SwFIG0/0XNOB9uRJtDOcPCQbl/xEPQu/rW4ruRgTqd9svnQ4tCXSxAsSAay/LepxT5TnL5T1g0wo+0E4+Mqm3/8C1LZlq2SpDCLQnXTWljLRrt7BSeTMNA5Bvg/4Ptv43GHEIYcuR78KKpOIBtrXIFegGqYXP8dFjuBV+cBGSx60qwUcphtuKQiF8tabV7WdToh4fzt2EaKBrWZQcOner5uOHZaJQtTvpsu9Ww6shtHark+XyOfpYu1cb9RbcpqTzjUEExKPfBdY9oL84aMvUyCV0Y49pnc+18TixxVohg3yT5TAWjH8/Lc8vTW1zpzhnhp3aukstfEDuczNl2fCMR7m90tq8yGNWqDWsgWnSPQeKISf5tP1J1jPZt+gDRqA3wCATg2IUQ1LoXlgknYPOjJ+RSvh6LpWTpk3k6MoVwCHokjhmllM/qSRooIpBkfkpnd+botL3peQUUcGdOOGtjmHYeUeA6JIUgXqcQVe+BVtOES+hb2ZR9mp7yj1C0hz9hFuKKevrmflTBpNi+W4cYsbNL+oNwXvIklRldeIykqsT19qFNHgVQB5VIt6/G4ztmUyTY4SU//nGktGhXJYLaKvBbqAKmO8ZgtPxNnIa9LnCRBIsIXVagFe1SpJ/hOOyPS0fWrpwSk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR02MB5482.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(39830400003)(366004)(136003)(396003)(376002)(346002)(5660300002)(2616005)(36916002)(6512007)(86362001)(2906002)(6486002)(31696002)(4326008)(26005)(36756003)(66476007)(186003)(53546011)(4001150100001)(6666004)(66556008)(38100700002)(8676002)(66946007)(110136005)(316002)(508600001)(6506007)(31686004)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZnBNN1pzMnRMN0xaUTlhWjRTV1dweGFhZytoMTkzTWNseGQ1ampPMFZkeVBj?=
+ =?utf-8?B?SjBaMmMrOFhDNmVHRjdicnVLVzcvUU9tS3pNYTB0NTJtK1llaGVlbXhsT3Bq?=
+ =?utf-8?B?WXFGT0VCSVBIZFFYT0tETHoyb3hURFpTNm9NL3dFV29FaExwa0I0R2VjcE9k?=
+ =?utf-8?B?Y0lILzVXRFRjdS9oSTgyQlNvRFdJWWZpVEV1TU1QMHZVV041dSt5Mi9QK3dw?=
+ =?utf-8?B?blBMaTY2V2t3MTlGaGM3TStnRGx6Z08zWllGblkzRUZXMk9ZYWxCTVp4MDJh?=
+ =?utf-8?B?WVlUblU2UTNNV0UzQklOelNRNU9rU1dtenhDcTFmZDM5NlFtYkFVQU52T3p2?=
+ =?utf-8?B?UEd0MHhqYTRrVkZNZVRkRWVDMng2WnE2TXBSc2tYR25adG5JOXVKVVFYU2Vh?=
+ =?utf-8?B?VlJYWEJIeWhqSU9xVHdEdXNqMlRpa3lqTWl1V3BTK2x6U2hBNmhtQTZaUFYx?=
+ =?utf-8?B?bHpYNElCMTUzOG80UUVQZDJlMTJGR01hMTczRHhHTmRsQlVwNGdzeWRZM29H?=
+ =?utf-8?B?empocUFvWThzZ0FacWgxaFhIdEtxYW16YUZEdWErSHJHZ1V0eVFFY3h4TVBW?=
+ =?utf-8?B?Rk4wVU5GQlU5RmJWWjZMTWpFK2UybVVmVVZVa0dZRVJ6ZzJWTGM3SGhicnlW?=
+ =?utf-8?B?U2pUWHg4Z09UYzFIWlRUUHhYWGIvZFdOVldDVGdqREdabWlNdndRVW5udWo3?=
+ =?utf-8?B?UHZjNDBNQzU5S3F3R2NtMTJFV29CNGpPdXFLVS85Szl1c3JPYXVORmxEV2li?=
+ =?utf-8?B?WGdTU2FMOXRhSVdPaGFwWEZ1b0djRUNpV0tTVExMYWJiN2FmVDRlTTR5alc5?=
+ =?utf-8?B?TjlxNlkxcUFtbktkNlJIQnlPb0lGT21NRmV2OXRXcldZNW9sbzdsV1B6OExE?=
+ =?utf-8?B?WmdHS2xRMVpINTNFd3VSa2FvOTNKNzdZMXBpNFIxeWZ0cCtrZXcxM096OGR1?=
+ =?utf-8?B?Y2dxYk5GTzZhV3VjREtZUUpWM0d4SnBCNnRndHNHU2lyN0xDS2l2cFAzZ0VI?=
+ =?utf-8?B?QVErQWUybUR1ZFdwKzZHVXllcG9GZzh6ZXhCTUk4TDhoT09CQjZIVlljcmpx?=
+ =?utf-8?B?a3gwazNLRDlVaW5wVFZya0xvWDJWZjNaT2dVWXh6Nm9zMG9tWDgwUk9kQ2dw?=
+ =?utf-8?B?NFJ4MkJvWXhNL1pYaCs5enYySVk5Q0NDODhiTnMyS3JHY1FjZkkrMFo0ZG9C?=
+ =?utf-8?B?NEtTV0VyZ1NuS1VyQnAyeHZneG5RSkJOZDhmWWRFSjhWSHpadUcyVzk2dDBi?=
+ =?utf-8?B?bHdtRFpxVkF1bTVMelJUUTdreXBHVzFNMXNYMzVPdnA4NUZLUGRpaFBDbVUr?=
+ =?utf-8?B?czZ2aGZBellqUXRqbFdWdGRRa3hsU3ZDSU9IZjlpTExmZytVT1dmZjdSanVL?=
+ =?utf-8?B?UHB1UXV3UFBCUlUvUnNlYjJST0ZxMkNOMVJtcytJa3hqSW16OE8ySmtyV2xG?=
+ =?utf-8?B?MC9aSDZvUlo0UmRIS0IyOFFoRzU2OXpCUjFPZEFjMWFnbDVLazBCcytNY2N1?=
+ =?utf-8?B?VFlvZFlrYkxaaU9lUytXZU4zMElzWTVaaTNNdXVLQVJqTlAzLzhjTTZ2eDVy?=
+ =?utf-8?B?ZHNma1UvT2Z6by9RWkxSQWRySlg2amtILzhTWlRNUk5kbDYvVjRBalFOcjky?=
+ =?utf-8?B?Mk90S3Zkem5ZbEV1aUxzdkk4Zm9uWkFmRS9uQXdvN0ovRnpOU2xEZ1lkKzkz?=
+ =?utf-8?B?cjBGTkxGZVE0c3N3TUFZMGZwcFphZzd5YitjcW5BT2UyWDMyenpraGlMd0NN?=
+ =?utf-8?B?U3B2K0IzSjBpUnhuTU8rR0pGeW5JS09uQjVWaVNDcTlJQTJMMWluY3FKcGtT?=
+ =?utf-8?B?cFVRenZCZ2UyZ3JIT0hZd0lGcHdiR24yNEhFKzZRRFBpK25ncDlIcEgxbVhs?=
+ =?utf-8?B?V2NWRko3TnlYWk4wSGo2QXRab3BmcTlhdFBEM3NJblA0SklCYUNzWVE3eThC?=
+ =?utf-8?B?bERpbzNEN0pLd24ybmhSejYyU3RUWEd3RzhOWVFCV0EvU3ZMSkJsR1YvNUZP?=
+ =?utf-8?B?bmlGOHFST2Z5YTNaNXdySzlnTFo3c3VaaW16T1c2a3VZY2NCRkFHRGpJQWd5?=
+ =?utf-8?B?UkRybkJQVWcyQlN5Qll6a0RPaXR5K3EwQWR5WWl1MEVvVmxYSHo3QWZpS05I?=
+ =?utf-8?Q?Baeo=3D?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79eddb59-80ec-4605-1073-08d9bfc853c1
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR02MB5482.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 12:42:17.0780
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gyBWqjpWHve2nEreAPnih7FsW++pDibt6T6En/OtBgqK8Fd9auWpedZqjI1raXKE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR02MB4220
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Balbir Singh <bsingharora@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=8814=E6=
-=97=A5=E5=91=A8=E4=BA=8C 13:49=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Mon, Dec 13, 2021 at 09:56:08PM +0800, yong w wrote:
-> > Hello,  is this patch OK?
-> >
-> > Thanks.
-> >
-> > yong w <yongw.pur@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=888=E6=97=
-=A5=E5=91=A8=E4=B8=89 00:50=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > Balbir Singh <bsingharora@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=
-=887=E6=97=A5=E5=91=A8=E4=BA=8C 13:16=E5=86=99=E9=81=93=EF=BC=9A
-> > > >
-> > > > On Sun, Dec 05, 2021 at 07:08:02PM +0800, yong w wrote:
-> > > > > Balbir Singh <bsingharora@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=
-=9C=885=E6=97=A5=E5=91=A8=E6=97=A5 16:17=E5=86=99=E9=81=93=EF=BC=9A
-> > > > > >
-> > > > > > On Sat, Dec 04, 2021 at 04:09:55AM -0800, yongw.pur@gmail.com w=
-rote:
-> > > > > > > From: wangyong <wang.yong12@zte.com.cn>
-> > > > > > >
-> > > > > > > Delay accounting does not track the delay of memory compact.
-> > > > > > > When there is not enough free memory, tasks can spend
-> > > > > > > a amount of their time waiting for compact.
-> > > > > > >
-> > > > > > > To get the impact of tasks in direct memory compact, measure
-> > > > > > > the delay when allocating memory through memory compact.
-> > > > > > >
-> > > > > >
-> > > > > > Should we call this DIRECT_COMPACT and through documentation
-> > > > > > or name change imply that this won't work for kcompactd the
-> > > > > > kernel thread - based on my reading of the patches.
-> > > > > >
-> > > > > Using DIRECT_COMPACT is a little redundant=EF=BC=8Cbecause the
-> > > > > delayacct stats of delay accounting is specific to tasks, it has
-> > > > > nothing to do with kcompactd, which is similar to the RECLAIM fie=
-ld.
-> > > > >
-> > > >
-> > > > What would we expect when we call delayacct -p <pidof kcompactd>
-> > > > to be output?
-> > > If the slow path of memory allocation is invoked in the kcompacd proc=
-ess,
-> > > there may be delays being recorded.
-> > >
-> > > > Don't feel to strongly, but it can be confusing that kcompactd
-> > > > has spent no time in compact'ing? Not that delayacct is used for
-> > > > kernel threads, but I am not sure if that use case exists today.
-> > > Yes, delayacct does not restrict the process of obtaining information=
-=EF=BC=8C
-> > > but kcompactd is used for  compaction,  the compact delay of
-> > > kcompatd is not actually a delay.Maybe it can be added to the
-> > > document later to make it clearer.
-> > >
-> > > Thanks for your reply!
->
-> Please avoid top posting, when you say added later, I presume more
-> patches for documentation are coming. I am OK with the patch in that
-> case.
->
-> Reviewed-by: Balbir Singh <bsingharora@gmail.com>
->
-> Balbir Singh
+Hi!
 
-OK=EF=BC=8CThank you!
+On 2021-12-14 12:13, Laurent Pinchart wrote:
+> Hi Patrick,
+> 
+> Thank you for the patch.
+> 
+> On Tue, Dec 14, 2021 at 10:50:18AM +0100, Patrick Rudolph wrote:
+>> Add the Maxim MAX735x as supported chip to PCA954x and add an
+>> example how to use it.
+>>
+>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> ---
+>>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 40 +++++++++++++++++++
+>>  1 file changed, 40 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+>> index 9f1726d0356b..bd794cb80c11 100644
+>> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+>> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+>> @@ -11,6 +11,7 @@ maintainers:
+>>  
+>>  description:
+>>    The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
+>> +  Compatible with Maxim MAX7356 - MAX7358 I2C mux/switch devices.
+>>  
+>>  allOf:
+>>    - $ref: /schemas/i2c/i2c-mux.yaml#
+>> @@ -19,6 +20,9 @@ properties:
+>>    compatible:
+>>      oneOf:
+>>        - enum:
+>> +          - maxim,max7356
+>> +          - maxim,max7357
+>> +          - maxim,max7358
+>>            - nxp,pca9540
+>>            - nxp,pca9542
+>>            - nxp,pca9543
+>> @@ -40,6 +44,7 @@ properties:
+>>  
+>>    interrupts:
+>>      maxItems: 1
+>> +    description: Only supported on NXP devices. Unsupported on Maxim MAX735x.
+> 
+> Could this be modelled by a YAML schema instead ? Something like
+> 
+> allOf:
+>   - if:
+>       properties:
+>         compatible:
+> 	  contains:
+> 	    enum:
+>               - maxim,max7356
+>               - maxim,max7357
+>               - maxim,max7358
+>     then:
+>       properties:
+>         interrupts: false
+> 
+> (untested, it would be nice to use a pattern check for the compatible
+> property if possible)
+
+Some of the existing NXP chips do not support interrupts; we should
+probably treat these new chips the same as the older ones. Either by
+disallowing interrupts on both kinds or by continuing to ignore the
+situation.
+
+That said, I'm slightly in favor of the latter, since these new chips
+do have interrupts, just not the same flavor as the NXP chips. What
+the Maxim chips do not have is support for being an
+	interrupt-controller;
+At least that's how I read it...
+
+I don't know how this situation is supposed to be described? Maybe this
+new kind of interrupt should be indicated with a bus-error-interrupts
+property (or bikeshed along those lines)? Maybe there should be two
+entries in the existing interrupts property? Maybe these new chips
+should be described in a new binding specific to maxim,max7356-7358
+(could still be handled by the pca954x driver of course) to keep the
+yaml simpler to read?
+
+However, there is also maxim,max7367-7369 to consider. They seem to
+have interrupts of the style described by the NXP binding (haven't
+checked if the registers work the same, but since they reuse the
+0x70 address-range the are in all likelihood also compatible).
+
+Cheers,
+Peter
+
+>>  
+>>    "#interrupt-cells":
+>>      const: 2
+>> @@ -100,6 +105,41 @@ examples:
+>>                  #size-cells = <0>;
+>>                  reg = <4>;
+>>  
+>> +                rtc@51 {
+>> +                    compatible = "nxp,pcf8563";
+>> +                    reg = <0x51>;
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +
+>> +  - |
+>> +    i2c {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        i2c-mux@74 {
+>> +            compatible = "maxim,max7357";
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +            reg = <0x74>;
+>> +
+>> +            i2c@1 {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +                reg = <1>;
+>> +
+>> +                eeprom@54 {
+>> +                    compatible = "atmel,24c08";
+>> +                    reg = <0x54>;
+>> +                };
+>> +            };
+>> +
+>> +            i2c@7 {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +                reg = <7>;
+>> +
+>>                  rtc@51 {
+>>                      compatible = "nxp,pcf8563";
+>>                      reg = <0x51>;
+> 

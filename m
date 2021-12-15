@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66A9476366
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3607A47636A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236175AbhLOUgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:36:21 -0500
-Received: from mga09.intel.com ([134.134.136.24]:14300 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234794AbhLOUgU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:36:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639600580; x=1671136580;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hunyGAa0xASiELB1C/3/BZUpwTc7F6peoAwd1eFU9eA=;
-  b=Xz2Pxj5PDzvEVM51nYoNDfPmBsRgeGwX5LL2GXf/IoYY+1TXfoHnb2Qj
-   W4SDMoREPh5XKjekNPEt3y0B7Kl4gmA7GmezI+1ZZxPNWbMw5gAwTOzyp
-   p0BBgdrALp7rL/nbjoil10XhlkSSM9goiypjC6kGdUrOttiMpwZVIUOgT
-   q7x+Pl0vOMnNnZv5j5O5gWuiDQ0nB9rpol+Xsnz1JxlnTpBRjCpIigcOB
-   FnpUPsugyNB7EXEnIfHbeZPM5oc9A+LSZQaCkoA3trRJiTLW6ERhjr+ce
-   TMnfLPtTBdn1hgQEb6ArdC+WOVk1txzTav3AFwjPreh3TzA6Rb7dvvwY/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="239143142"
-X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
-   d="scan'208";a="239143142"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 12:36:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
-   d="scan'208";a="464413491"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Dec 2021 12:36:17 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxb0a-0002Ia-Q5; Wed, 15 Dec 2021 20:36:16 +0000
-Date:   Thu, 16 Dec 2021 04:35:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xiang wangx <wangxiang@cdjrlc.com>, jyri.sarha@iki.fi
-Cc:     kbuild-all@lists.01.org, Xiang wangx <wangxiang@cdjrlc.com>,
-        tomba@kernel.org, airlied@linux.ie, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/tilcdc: add const to of_device_id
-Message-ID: <202112160411.sNrSELAY-lkp@intel.com>
-References: <20211215161803.5900-1-wangxiang@cdjrlc.com>
+        id S236197AbhLOUgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234794AbhLOUge (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 15:36:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27220C061574;
+        Wed, 15 Dec 2021 12:36:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8055461A94;
+        Wed, 15 Dec 2021 20:36:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBCBC36AE2;
+        Wed, 15 Dec 2021 20:36:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639600592;
+        bh=w2ji66cDZOpUYJpMi0FUwoBY9Q0VZyx0B3jj/5yMIbs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=BIfeti0DoVI0rsV0OMLLXebcFMjGL3E829uWJ8pSaGnmjDRhMhaDd53aozQ4x+k2j
+         /WR5QFnST7gvwRZX11AiAwKcGaNmo0HZEFTpaYVy/8KiynTKghpF8VOY3bYwWZsvE5
+         9YRvTj8/dBE+qEOxccw8Bd6Hoe+cbiXeebr8Wg2toJEPgKxXgn6o19WQg5WXdAEuYX
+         IpRE4M2A7ibg91c/Kv5F2kIdLdztinALfjiTHMpqx8uDRzrf9wlGKSbQBkQ5h33dPa
+         a/EWhLeHV4dMkY+Byas3EZK5nsZ7IBW7HlzNd7h+BR1KUr0KZGR5LrTUJkHr5jsqV0
+         auS/I8fZ4JQ9A==
+Date:   Wed, 15 Dec 2021 14:36:31 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Yifeng Li <tomli@tomli.me>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Sam Bingner <sam@bingner.com>, linux-pci@vger.kernel.org,
+        trivial@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 RESEND] PCI: Add func1 DMA quirk for Marvell 88SE9125
+ SATA controller
+Message-ID: <20211215203631.GA710012@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211215161803.5900-1-wangxiang@cdjrlc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YahpKVR+McJVDdkD@work>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiang,
+On Thu, Dec 02, 2021 at 06:35:21AM +0000, Yifeng Li wrote:
+> Like other SATA controller chips in the Marvell 88SE91xx series, the
+> Marvell 88SE9125 has the same DMA requester ID hardware bug that prevents
+> it from working under IOMMU. This patch adds its device ID 0x9125 to the
+> Function 1 DMA alias quirk list.
+> 
+> This patch should not be confused with an earlier patch, commit 059983790a4c
+> ("PCI: Add function 1 DMA alias quirk for Marvell 9215 SATA controller"),
+> which applies to a different chip with a similar model number, 88SE9215.
+> 
+> Without this patch, device initialization fails with DMA errors.
+> 
+>     ata8: softreset failed (1st FIS failed)
+>     DMAR: DRHD: handling fault status reg 2
+>     DMAR: [DMA Write NO_PASID] Request device [03:00.1] fault addr 0xfffc0000 [fault reason 0x02] Present bit in context entry is clear
+>     DMAR: DRHD: handling fault status reg 2
+>     DMAR: [DMA Read NO_PASID] Request device [03:00.1] fault addr 0xfffc0000 [fault reason 0x02] Present bit in context entry is clear
+> 
+> After applying the patch, the controller can be successfully initialized.
+> 
+>     ata8: SATA link up 1.5 Gbps (SStatus 113 SControl 330)
+>     ata8.00: ATAPI: PIONEER BD-RW   BDR-207M, 1.21, max UDMA/100
+>     ata8.00: configured for UDMA/100
+>     scsi 7:0:0:0: CD-ROM            PIONEER  BD-RW   BDR-207M 1.21 PQ: 0 ANSI: 5
+> 
+> Cc: stable@vger.kernel.org
+> Reported-by: Sam Bingner <sam@bingner.com>
+> Tested-by: Sam Bingner <sam@bingner.com>
+> Tested-by: Yifeng Li <tomli@tomli.me>
+> Signed-off-by: Yifeng Li <tomli@tomli.me>
+> Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
 
-Thank you for the patch! Yet something to improve:
+I tweaked the subject line to match similar previous commits and
+applied to pci/virtualization for v5.17, thanks!
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on v5.16-rc5 next-20211214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+  e44537588288 ("PCI: Add function 1 DMA alias quirk for Marvell 88SE9125 SATA controller")
+  059983790a4c ("PCI: Add function 1 DMA alias quirk for Marvell 9215 SATA controller")
+  9cde402a5977 ("PCI: Add function 1 DMA alias quirk for Marvell 9170 SATA controller")
+  7695e73f3db4 ("PCI: Add function 1 DMA alias quirk for Marvell 88SS9183")
+  1903be8222b7 ("PCI: Add function 1 DMA alias quirk for Highpoint RocketRAID 644L")
+  832e4e1f76b8 ("PCI: Add function 1 DMA alias quirk for Marvell 88SE9220")
+  aa0082066343 ("PCI: Add function 1 DMA alias quirk for Marvell 9128")
+  00456b35a527 ("PCI: Add function 1 DMA alias quirk for Marvell 88SE9182")
 
-url:    https://github.com/0day-ci/linux/commits/Xiang-wangx/drm-tilcdc-add-const-to-of_device_id/20211216-002326
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: arm-randconfig-c002-20211214 (https://download.01.org/0day-ci/archive/20211216/202112160411.sNrSELAY-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/5698eadb76d94a4fc5298f5bea88b839399ddef0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Xiang-wangx/drm-tilcdc-add-const-to-of_device_id/20211216-002326
-        git checkout 5698eadb76d94a4fc5298f5bea88b839399ddef0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/tilcdc/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/tilcdc/tilcdc_drv.c:590:34: error: conflicting types for 'tilcdc_of_match'; have 'const struct of_device_id[]'
-     590 | static const struct of_device_id tilcdc_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/tilcdc/tilcdc_drv.c:63:28: note: previous declaration of 'tilcdc_of_match' with type 'struct of_device_id[]'
-      63 | static struct of_device_id tilcdc_of_match[];
-         |                            ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/tilcdc/tilcdc_drv.c:63:28: error: array 'tilcdc_of_match' assumed to have one element [-Werror]
->> drivers/gpu/drm/tilcdc/tilcdc_drv.c:63:28: error: 'tilcdc_of_match' defined but not used [-Werror=unused-variable]
-   cc1: all warnings being treated as errors
-
-
-vim +590 drivers/gpu/drm/tilcdc/tilcdc_drv.c
-
-   589	
- > 590	static const struct of_device_id tilcdc_of_match[] = {
-   591			{ .compatible = "ti,am33xx-tilcdc", },
-   592			{ .compatible = "ti,da850-tilcdc", },
-   593			{ },
-   594	};
-   595	MODULE_DEVICE_TABLE(of, tilcdc_of_match);
-   596	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+> 
+> Notes:
+>     v3: Use full names in Reported-by and Tested-by tags.
+>     
+>     v2: I accidentally sent an earlier version of the commit without
+>     CCing stable@vger.kernel.org. The mail itself was also rejected by
+>     many servers due to a DKIM issue. Thus [PATCH v2], sorry for the
+>     noise.
+> 
+>  drivers/pci/quirks.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 003950c73..20a932690 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -4103,6 +4103,9 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9120,
+>  			 quirk_dma_func1_alias);
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9123,
+>  			 quirk_dma_func1_alias);
+> +/* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c136 */
+> +DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9125,
+> +			 quirk_dma_func1_alias);
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9128,
+>  			 quirk_dma_func1_alias);
+>  /* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c14 */
+> -- 
+> 2.31.1

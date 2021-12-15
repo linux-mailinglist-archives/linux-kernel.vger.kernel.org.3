@@ -2,260 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB324754D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A794754DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241028AbhLOJI4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Dec 2021 04:08:56 -0500
-Received: from protonic.xs4all.nl ([83.163.252.89]:53872 "EHLO
-        protonic.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbhLOJIz (ORCPT
+        id S241034AbhLOJKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:10:24 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:36176 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230104AbhLOJKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:08:55 -0500
-Received: from erd992 (erd988.prtnl [192.168.224.30])
-        by sparta.prtnl (Postfix) with ESMTP id 2AB8E44A0250;
-        Wed, 15 Dec 2021 10:08:53 +0100 (CET)
-Date:   Wed, 15 Dec 2021 10:08:53 +0100
-From:   David Jander <david@protonic.nl>
-To:     William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        David Lechner <david@lechnology.com>,
-        linux-iio@vger.kernel.org,
-        Robin van der Gracht <robin@protonic.nl>,
-        linux-kernel@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v1] counter: interrupt-cnt: add counter_push_event()
-Message-ID: <20211215100853.11f9262d@erd992>
-In-Reply-To: <Ybmr2kCLScuGZ41h@shinobu>
-References: <20211123134540.416695-1-o.rempel@pengutronix.de>
-        <YZ3XAeYyfGblfaOi@shinobu>
-        <20211124072720.GA30281@pengutronix.de>
-        <YZ7tv79LQwLL7h3T@shinobu>
-        <f73650b6-5a08-9ea9-9ecb-c47665ef07b0@lechnology.com>
-        <20211207081602.45b1423c@erd992>
-        <20211208135902.7j3aawytt3jlqgwr@pengutronix.de>
-        <20211208171035.6ad117af@erd992>
-        <Ybmr2kCLScuGZ41h@shinobu>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 15 Dec 2021 04:10:23 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 763BE212C2;
+        Wed, 15 Dec 2021 09:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639559421; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yaOtXoXAxLmS3EoYLymWISdTN/mex+bCq/Gcj1u/AAc=;
+        b=vaSwDzF0Xv2ln3MhOmTYXF5PCcpBpYuNGd6krKZ4BXD2ZVkKrOmQb/PmFfwIzI8J56tuky
+        rlQhrcjleonZ6FSh7N5niHbyH3BLuuqEbIEzHtJnXRMVEV6eMnDp1gj8ZG3Ukf7N7pdM0B
+        PfzcUD9VaY9tZvoaoDHJJ3lnrWyTml8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639559421;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yaOtXoXAxLmS3EoYLymWISdTN/mex+bCq/Gcj1u/AAc=;
+        b=4i8Tkp+RcyOc2eht3bBhFsB2zcqp4ofSzhQ+HQCcWyD/UfyPfwYibHoXzGWozLz7jeI0Wx
+        SSmGUbz0mqJbiGCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 99A9613AC7;
+        Wed, 15 Dec 2021 09:10:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cmaCJPywuWHJSgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 15 Dec 2021 09:10:20 +0000
+Message-ID: <be79a619-491b-da9f-9db4-de3919e08fff@suse.de>
+Date:   Wed, 15 Dec 2021 10:10:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 00/60] drm: Make all drivers to honour the nomodeset
+ parameter
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     Emma Anholt <emma@anholt.net>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Edmund Dea <edmund.j.dea@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Marek Vasut <marex@denx.de>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        "James (Qian) Wang" <james.qian.wang@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Qiang Yu <yuq825@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        David Lechner <david@lechnology.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Alison Wang <alison.wang@nxp.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Sean Paul <sean@poorly.run>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Erico Nunes <nunes.erico@gmail.com>
+References: <20211215010008.2545520-1-javierm@redhat.com>
+ <58d00cac-dbf1-9704-3c0b-16fd837a5b6b@suse.de>
+ <1c1aeb13-6e90-ed2b-08db-11ceaa8d0de0@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <1c1aeb13-6e90-ed2b-08db-11ceaa8d0de0@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------FUBRZuT557ZUV0zq60QTkWTk"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------FUBRZuT557ZUV0zq60QTkWTk
+Content-Type: multipart/mixed; boundary="------------KSFt5G0iXD2T5MGhgvb3pt74";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: Emma Anholt <emma@anholt.net>, Neil Armstrong <narmstrong@baylibre.com>,
+ Xinliang Liu <xinliang.liu@linaro.org>, Edmund Dea <edmund.j.dea@intel.com>,
+ Paul Cercueil <paul@crapouillou.net>, Tomi Valkeinen <tomba@kernel.org>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+ Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+ Sam Ravnborg <sam@ravnborg.org>, Marek Vasut <marex@denx.de>,
+ Joonyoung Shim <jy0922.shim@samsung.com>,
+ Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
+ Alexey Brodkin <abrodkin@synopsys.com>, Russell King
+ <linux@armlinux.org.uk>, Deepak Rawat <drawat.floss@gmail.com>,
+ Chen-Yu Tsai <wens@csie.org>,
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+ "James (Qian) Wang" <james.qian.wang@arm.com>, Joel Stanley
+ <joel@jms.id.au>, Russell King <linux+etnaviv@armlinux.org.uk>,
+ Qiang Yu <yuq825@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ David Lechner <david@lechnology.com>, Liviu Dudau <liviu.dudau@arm.com>,
+ Alison Wang <alison.wang@nxp.com>, Hans de Goede <hdegoede@redhat.com>,
+ Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+ Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+ Sean Paul <sean@poorly.run>, Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+ Hyun Kwon <hyun.kwon@xilinx.com>, Boris Brezillon <bbrezillon@kernel.org>,
+ Yannick Fertre <yannick.fertre@foss.st.com>, Sandy Huang
+ <hjc@rock-chips.com>, =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+ Philippe Cornu <philippe.cornu@foss.st.com>,
+ Tian Tao <tiantao6@hisilicon.com>, Jyri Sarha <jyri.sarha@iki.fi>,
+ Erico Nunes <nunes.erico@gmail.com>
+Message-ID: <be79a619-491b-da9f-9db4-de3919e08fff@suse.de>
+Subject: Re: [PATCH 00/60] drm: Make all drivers to honour the nomodeset
+ parameter
+References: <20211215010008.2545520-1-javierm@redhat.com>
+ <58d00cac-dbf1-9704-3c0b-16fd837a5b6b@suse.de>
+ <1c1aeb13-6e90-ed2b-08db-11ceaa8d0de0@redhat.com>
+In-Reply-To: <1c1aeb13-6e90-ed2b-08db-11ceaa8d0de0@redhat.com>
 
-Dear William,
+--------------KSFt5G0iXD2T5MGhgvb3pt74
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On Wed, 15 Dec 2021 17:48:26 +0900
-William Breathitt Gray <vilhelm.gray@gmail.com> wrote:
+SGkNCg0KQW0gMTUuMTIuMjEgdW0gMDk6NTAgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IEhlbGxvIFRob21hcywNCj4gDQo+IE9uIDEyLzE1LzIxIDA5OjMxLCBUaG9t
+YXMgWmltbWVybWFubiB3cm90ZToNCj4+IEhpIEphdmllciwNCj4+DQo+PiBub3RoaW5nIHdy
+b25nIHdpdGggeW91ciBwYXRjaGVzLCBidXQgSSdkIGxpa2UgdG8gcHJvcG9zZSBzbGlnaHRs
+eQ0KPj4gZGlmZmVybnQgc29sdXRpb24uDQo+Pg0KPj4gRm9yIG1hbnkgVVNCIGRyaXZlcnMs
+IHlvdSBwdXQgdGhlIGRybV9maXJtd2FyZV9kcml2ZXJzX29ubHkoKSBjYWxsIGludG8NCj4+
+IHRoZSBwcm9iZSBmdW5jdGlvbi4gRm9yIHJlZ2lzdGVyaW5nLCB0aGVzZSBkcml2ZXJzIHVz
+ZQ0KPj4gbW9kdWxlX3VzYl9kcml2ZXIoKSwgd2hpY2ggZXhwYW5kcyB0byBnZW5lcmljIGRl
+dmljZS1yZWdpc3RlciBmdW5jdGlvbnMuDQo+Pg0KPj4gSSdkIGxpa2UgdG8gcHJvcG9zZSBh
+IHNpbWlsYXIgbWFjcm8gZm9yIERSTSBkcml2ZXJzIHRoYXQgaW5jbHVkZXMgdGhlDQo+PiB0
+ZXN0IGZvciBkcm1fZmlybXdhcmVfZHJpdmVyc19vbmx5KCkuDQo+Pg0KPj4gSW4gZHJtX2Ry
+di5oIDoNCj4+DQo+PiAgICAgI2lmIGRlZmluZWQoVVNCKQ0KPj4gICAgIHN0YXRpYyBpbnQg
+ZHJtX3VzYl9yZWdpc3RlcihzdHJ1Y3QgdXNiX2RyaXZlciAqdXNiKQ0KPj4gICAgIHsNCj4+
+IAlpZiAoZHJtX2Zpcm13YXJlX2RyaXZlcnNfb25seSgpKQ0KPj4gCQlyZXR1cm4gLUVOT0RF
+VjsNCj4+IAlyZXR1cm4gdXNiX3JlZ2lzdGVyX2RyaXZlcih1c2IpOw0KPj4gICAgIH0NCj4+
+ICAgICAjZGVmaW5lIGRybV9tb2R1bGVfdXNiX2RyaXZlcihfX3VzYikNCj4+IAltb2R1bGVf
+ZHJpdmVyKGRybV91c2JfcmVnaXN0ZXIsIHVzYl9kZXJlZ2lzdGVyKQ0KPj4gICAgICNlbmRp
+Zg0KPj4NCj4+IEluIGVhY2ggb2YgdGhlIFVTQi1iYXNlZCBEUk0gZHJpdmVycywgcmVwbGFj
+ZSBtb2R1bGVfdXNiX2RyaXZlciB3aXRoDQo+PiBkcm1fbW9kdWxlX3VzYl9kcml2ZXIuDQo+
+Pg0KPj4gQW5kIHRoZW4gdGhlcmUncyBQQ0kgWzNdIGFuZCBwbGF0Zm9ybSBkcml2ZXJzLCBb
+NF0gd2hpY2ggY2FuIGJlIGhhbmRsZWQNCj4+IHNpbWlsYXJseS4gTWFueSBQQ0kgZHJpdmVy
+cyBvcGVuLWNvZGUgdGhlIG1vZHVsZSBpbml0IGFuZCBkZXZpY2UNCj4gDQo+IFRoYW5rcyBm
+b3IgdGhlIHN1Z2dlc3Rpb24uIEkgYWN0dWFsbHkgdGhvdWdodCBhYm91dCB0aGlzIGFwcHJv
+YWNoIGFzIHdlbGwsDQo+IHNpbmNlIHNlZW1zIHVubmVjZXNzYXJ5IHRvIGhhdmUgYWxsIHRo
+YXQgZHVwbGljYXRlZCBsb2dpYyBpbiBldmVyeSBkcml2ZXIuDQo+IA0KPiBCdXQgYXQgdGhl
+IGVuZCBkZWNpZGVkIHRvIGp1c3QgZG8gdGhlIGxlc3MgaW50cnVzaXZlIGNoYW5nZSwgYmVj
+YXVzZSBjYW4ndA0KPiBkbyBhbnkgdGVzdGluZyBmb3IgbW9zdCBvZiB0aGUgZHJpdmVycy4N
+Cj4gDQo+PiByZWdpc3RlcmluZyB3aXRoIHRoZSBkcml2ZXItc3BlY2lmaWMgZW5hYmxlIHBh
+cmFtZXRlci4gTWF5YmUgYWRkaW5nIGENCj4+IGRyaXZlci1zcGVjaWZpYyByZWdpc3RlciBm
+dW5jdGlvbiB3b3VsZCBtYWtlIHNlbnNlLg0KPj4NCj4gDQo+IElmIEkgdW5kZXJzdG9vZCB5
+b3UgY29ycmVjdGx5LCBzdWdnZXN0ZWQgc29tZXRoaW5nIHNpbWlsYXIgaW4gI2RyaS1kZXZl
+bCBidXQNCj4gZGFudmV0J3Mgc3VnZ2VzdGlvbiBbMF0gd2FzIHRvIGtlZXAgaXQgc2ltcGxl
+Og0KPiANCj4gMTY6MzIgamF2aWVybTogZGFudmV0OiB5ZXMsIEkgZG9uJ3QgdGhpbmsgd2Ug
+d291bGQgYmUgYWJsZSB0byBkbyBpdCBhdCB0aGlzIHBvaW50LiBJJ2xsIGFkZCBhIGZ1bmN0
+aW9uIHBvaW50ZXINCj4gICAgICAgICAgICAgICAgICAgICAgICAgcGFyYW0gdG8gdGhlIGNo
+ZWNrIGZ1bmN0aW9uIHNvIGRyaXZlcnMgY2FuIGFsc28gZGVmaW5lIHRoZWlyIG93biBjaGVj
+ayBiZXNpZGVzIG5vbW9kZXNldA0KPiAxNjozMyBkYW52ZXQ6IGphdmllcm0sIHVoIHRoYXQg
+c291bmRzIGEgYml0IGxpa2Ugb3ZlcmtpbGw/IGp1c3Qga2VlcCB0aGF0IHBhcnQgb2YgdGhl
+IGNoZWNrIGluIGRyaXZlcnM/DQo+IDE2OjMzIGphdmllcm06IGRhbnZldDogT2suIFdhbnRl
+ZCB0byBnZXQgcmlkIG9mIHRoZSBkdXBsaWNhdGVkIGNvZGUgYnV0IEknbSBpbmRlZWQgb3Zl
+ciBlbmdpbmVlcmluZyB0aGlzIDopDQoNCkFuIGV4dHJhIHBvaW50ZXIgc291bmRzIGluZGVl
+ZCBsaWtlIG92ZXItZW5naW5lZXJpbmcuIElmIHdlIHRha2UgYXN0IGZvciANCmV4YW1wbGUs
+IEknZCBqdXN0IGRvIHNvbWV0aGluZyBsaWtlIHRoaXM6DQoNCiAgIHN0YXRpYyBhc3RfcGNp
+X3JlZ2lzdGVyX2RyaXZlcihzdHJ1Y3QgcGNpX2RyaXZlciAqcGNpKQ0KICAgew0KCWlmIChk
+cm1fZmlybXdhcmVfZHJpdmVyc19vbmx5KCkgJiYgYXN0X21vZGVzZXQgPT0gLTEpDQoJCXJl
+dHVybiAtRU5PREVWOw0KCWlmIChhc3RfbW9kZXNldCA9PSAwKQ0KCQlyZXR1cm4gLUVOT0RF
+VjsNCg0KCXJldHVybiBwY2lfcmVnaXN0ZXJfZHJpdmVyKHBjaSk7DQogICB9DQoNCiAgIG1v
+ZHVsZV9kcml2ZXIoJmFzdF9wY2lfZHJpdmVyLCBhc3RfcGNpX3JlZ2lzdGVyX2RyaXZlciwN
+CgkJcGNpX3VucmVnaXN0ZXJfZHJpdmVyKQ0KDQpUaGF0IHJlbW92ZXMgc29tZSBvZiB0aGUg
+Ym9pbGVyLXBsYXRlIG1vZHVsZSBjb2RlIHdpdGhvdXQgY2hhbmdpbmcgdGhlIA0KZHJpdmVy
+J3MgYmVoYXZpb3IuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IFswXTogaHR0
+cHM6Ly9wZW9wbGUuZnJlZWRlc2t0b3Aub3JnL35jYnJpbGwvZHJpLWxvZy8/Y2hhbm5lbD1k
+cmktZGV2ZWwmZGF0ZT0yMDIxLTExLTAyDQo+IA0KPj4gQmVzdCByZWdhcmRzDQo+PiBUaG9t
+YXMNCj4+DQo+IEJlc3QgcmVnYXJkcywNCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4N
+CkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdl
+cm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQoo
+SFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2
+DQo=
 
-> On Wed, Dec 08, 2021 at 05:10:35PM +0100, David Jander wrote:
-> > 
-> > Dear Uwe,
-> > 
-> > On Wed, 8 Dec 2021 14:59:02 +0100
-> > Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
-> >   
-> > > Hello David,
-> > > 
-> > > On Tue, Dec 07, 2021 at 08:16:02AM +0100, David Jander wrote:  
-> > > > On Mon, 6 Dec 2021 13:24:18 -0600
-> > > > David Lechner <david@lechnology.com> wrote:
-> > > >     
-> > > > > On 11/24/21 7:58 PM, William Breathitt Gray wrote:    
-> > > > > > On Wed, Nov 24, 2021 at 08:27:20AM +0100, Oleksij Rempel wrote:      
-> > > > > >> Hi William,
-> > > > > >>
-> > > > > >> On Wed, Nov 24, 2021 at 03:09:05PM +0900, William Breathitt Gray wrote:      
-> > > > > >>> On Tue, Nov 23, 2021 at 02:45:40PM +0100, Oleksij Rempel wrote:      
-> > > > > >>>> Add counter_push_event() to notify user space about new pulses
-> > > > > >>>>
-> > > > > >>>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > > > > >>>> ---
-> > > > > >>>>   drivers/counter/interrupt-cnt.c | 2 ++
-> > > > > >>>>   1 file changed, 2 insertions(+)
-> > > > > >>>>
-> > > > > >>>> diff --git a/drivers/counter/interrupt-cnt.c b/drivers/counter/interrupt-cnt.c
-> > > > > >>>> index 8514a87fcbee..b237137b552b 100644
-> > > > > >>>> --- a/drivers/counter/interrupt-cnt.c
-> > > > > >>>> +++ b/drivers/counter/interrupt-cnt.c
-> > > > > >>>> @@ -31,6 +31,8 @@ static irqreturn_t interrupt_cnt_isr(int irq, void *dev_id)
-> > > > > >>>>   
-> > > > > >>>>   	atomic_inc(&priv->count);
-> > > > > >>>>   
-> > > > > >>>> +	counter_push_event(&priv->counter, COUNTER_EVENT_OVERFLOW, 0);
-> > > > > >>>> +
-> > > > > >>>>   	return IRQ_HANDLED;
-> > > > > >>>>   }
-> > > > > >>>>   
-> > > > > >>>> -- 
-> > > > > >>>> 2.30.2      
-> > > > > >>>
-> > > > > >>> Hi Oleksij,
-> > > > > >>>
-> > > > > >>> It looks like this is pushing a COUNTER_EVENT_OVERFLOW event every time
-> > > > > >>> an interrupt is handled, which I suspect is not what you want to happen.
-> > > > > >>> The COUNTER_EVENT_OVERFLOW event indicates a count value overflow event,
-> > > > > >>> so you'll need to check for a count value overflow before pushing the
-> > > > > >>> event.
-> > > > > >>>
-> > > > > >>> It would be good idea to implement a ceiling extension as well (you can
-> > > > > >>> use the COUNTER_COMP_CEILING() macro) so that users can configure the
-> > > > > >>> particular point where the value overflows.      
-> > > > > >>
-> > > > > >> Thank you!
-> > > > > >>
-> > > > > >> What would be the best and resource effective strategy for periodically
-> > > > > >> getting frequency of interrupts/pulses? This is actual information which is
-> > > > > >> needed for my use case.
-> > > > > >>
-> > > > > >> So far, I was pushing every event to the user space, which is working
-> > > > > >> but probably not the most resource effective method of doing it.
-> > > > > >>
-> > > > > >> Regards,
-> > > > > >> Oleskij
-> > > > > >> -- 
-> > > > > >> Pengutronix e.K.                           |                             |
-> > > > > >> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-> > > > > >> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> > > > > >> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |      
-> > > > > > 
-> > > > > > We could introduce a new Counter change-of-state event type which would
-> > > > > > trigger whenever the count value changes, but I agree with you that this
-> > > > > > is likely not the best way for us to derive the frequency of the
-> > > > > > interrupts due to the indirection of handling and parsing the event
-> > > > > > data.
-> > > > > > 
-> > > > > > Instead, perhaps introducing a "frequency" or "period" Count extension
-> > > > > > would make more sense here. This extension could report the value delta
-> > > > > > between counts, or alternatively the time delta from which you can
-> > > > > > derive frequency. Regarding implementation, you can store the previous
-> > > > > > value in a variable, updating it whenever an interrupt occurs, and
-> > > > > > compute the particular delta every time a read is requested by the user.
-> > > > > > 
-> > > > > > David Lechner is implementing something similar for the TI eQEP driver
-> > > > > > to expose speed, so I'm CCing them here in case this is of interest to
-> > > > > > them.
-> > > > > >       
-> > > > > 
-> > > > > Based on my experience, I would recommend that counter drivers be as
-> > > > > "thin" as possible. They shouldn't try to provide any information that
-> > > > > the hardware itself doesn't provide. In other words, the kernel should
-> > > > > provide userspace the information needed to calculate the speed/rate
-> > > > > but not try to do the actual calculation in the kernel. Inevitably
-> > > > > there are nuances for specific use cases that can't all possibly be
-> > > > > handled by such an implementation.    
-> > > > 
-> > > > I completely agree with this. While interrupts aren't really meant for
-> > > > measuring frequency, and this being somewhat of a mis-use of something, it is
-> > > > still possible to do and very useful in many cases. That said, while the
-> > > > counter framework is AFAIK the best fit for this, the main use-case for this
-> > > > driver is measuring wheel speed (and similar "speeds"). For this, the minimum
-> > > > amount of information the driver needs to provide user-space with to do
-> > > > reliable calculations, is high-resolution time-stamps of GPIO events. A simple
-> > > > counter is not suited, because there can be glitches that need to be detected.
-> > > > If user-space gets a buffer full of consecutive time-stamps (don't need to be
-> > > > all of them, just a sample of n consecutive timestamps), as well as total
-> > > > count, all needed calculations, glitch filtering, low-pass filtering, etc...
-> > > > can be done in user-space just fine.
-> > > >     
-> > > > > I've tried using gpio interrupts to try to calculate speed/rate in
-> > > > > the kernel before and it simply doesn't work reliably. Interrupts
-> > > > > get missed and the calculation will be off.    
-> > > > 
-> > > > Exactly. Been there, done that.
-> > > > For reliable speed calculations of a mechanical system, the properties of the
-> > > > mechanical system need to be known, like physical limits of accelerations,
-> > > > maximum (or minimum) speed, etc. The minimum set of input data needed by a
-> > > > user-space application to do these calculations is total pulse count in
-> > > > addition to a buffer of timestamps of n consecutive input events (raising or
-> > > > falling edges on GPIO). So IMHO this is what the driver should provide, and
-> > > > in the most resource-efficient way possible. This particular driver will be
-> > > > used 3 times on the same SoC, with each up to 10-15k pulses per second. That
-> > > > is a lot of interrupts for an embedded system, so they better consume as
-> > > > little resources as possible. Filling a ring buffer with timestamps should be
-> > > > possible, as long as no locking is involved. Locks in IRQ context must be
-> > > > avoided at all costs, specially in this case.
-> > > >     
-> > > > > For really slow counts (i.e. 1 count/second), I can see a use for
-> > > > > generating an event on each count though. For high rates, I would
-> > > > > just read the count every 100ms in usespace and divide the change in
-> > > > > the number of counts by the time period to get the rate.    
-> > > > 
-> > > > For slow counts, I agree, but for high rates, I don't (see above). There can
-> > > > be glitches and false events that can (and must) be effectively filtered out.
-> > > > For that user-space needs to know the time of each event during the
-> > > > measurement period.    
-> > > 
-> > > No sure I understood the problem here. If you keep the driver as is and
-> > > in userspace just read out the counter value twice and measure the time
-> > > between the reads[1], you can calculate the average frequency of the
-> > > event in userspace.
-> > > 
-> > > Isn't that good enough?  
-> > 
-> > No, I'm afraid it isn't, for two reasons:
-> > 
-> > 1. These counters are often used in environments, where glitches can and do
-> > happen. So sometimes there are fake events. The only way to tell fake from
-> > real pulses, is to filter them. Unfortunately you need the timestamps of each
-> > event for that.
-> > 
-> > 2. Another reason for having time-stamps is the case when the frequency is low
-> > and one still requires fast accurate measurements. In that case timestamps
-> > provide a way of accurately measuring period time.
-> > 
-> > Best regards,
-> > 
-> > -- 
-> > David Jander
-> > Protonic Holland.  
-> 
-> Keeping drivers focused on just exposing the hardware data and
-> functionality is likely the best path to choose, so my earlier
-> suggestion of a "frequency" extension would better be left for userspace
-> to handle.
+--------------KSFt5G0iXD2T5MGhgvb3pt74--
 
-I agree.
+--------------FUBRZuT557ZUV0zq60QTkWTk
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> So in order to enable userspace to derive frequency, you need reliable
-> timestamps for enough consecutive events to provide an adequate size
-> sample of data on which to perform filtering and other such operations.
+-----BEGIN PGP SIGNATURE-----
 
-Ack.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmG5sPwFAwAAAAAACgkQlh/E3EQov+A6
+4w//RTaGdTp2JblvCPaxRFp2XN7pZ3by30jZPRpL/KURJ68Tctb7qmYq9YpC5VBz4oOh0DgaSXzR
+ZemGHH9nawpMlWqEA9I5j6M50SFtTmCeZQuMzoibt6XdL2RW+xk8e7p6BlOGTVfrQ5H7rT2/il8x
+eyl9q8M+P9L/+Fv5KYEnFw1b/9lHTqQQ6H4LwBEPqe3B1d6I8FhysoByBbusan2rBOUi4q450liX
+4mrVbzWPYRtmDKIuHaEY2PhCUzP7kBk5uy0KbbLXqoo06R4fHZ8A54RrorSCQZo4YRPFVqDhMpGM
+AZtzAKeYDeJ86rb5MZmYcW7Q4EqyR1tBngLW8ZGIc2DweVuqLsAYsUmJVQ4E4MZbW8SHY/2xChp1
+JpariUEtSMa83UKVkBiLRKY7JIP1MWdZVmJ2P/GWuhzjHERCm5/X+DnUHIRDqTVI8weksY9pgBo/
+rC3XMS1FQ4Jyb0XMU+l46lL3t1hwFpQRxIgksPv1XclSmAxGZetNtYCXFJgp3uOdCr2+8ezClEDJ
+uhJZE5IML13DQmQ/cP7ScH/kUaa4Gqki2Ix+3zxbI/+P3LK9TD6Y1ft07iYfUrjQHX8nfaDbrVrn
+4zNX377kl/Wxr/oPddkzFDrFNu2BSnzJ9awrjNjJrIttziI2fhLuguQ9iFd15LF41R4GH37VVu5w
+kg8=
+=/Tmz
+-----END PGP SIGNATURE-----
 
-> If we add a COUNTER_EVENT_CHANGE_OF_STATE or similar, every count change
-> will generate an event with a logged timestamp. Is the problem with this
-> solution primarily that the Counter event queue is currently utilizing
-> spinlocks for synchronization?
-
-Yes. Basically, since one can expect a very high amount of IRQs, it seems
-paramount to eliminate any source of latency (spinlocks, etc...) from
-interrupt context as well as to keep CPU load as low as technically possible.
-
-If a spinlock is used, and at 10kHz pulses, on a moderately fast embedded SoC,
-it is IMHO quite possible to have user-space cause the spinlock to be held for
-more than 100 microseconds, thus causing a pulse to be missed. Not to mention
-slight jitter introduced to the timestamps that can cause user-space to falsely
-filter out events (a software PLL that doesn't correctly lock).
-
-The ideal ISR in this case would only take a timestamp from a hardware TSC (or
-similarly latency-free direct source) and put it into a circular buffer
-without using locks, and maybe increase an unsigned long counter value (atomic
-operation if MB's are correctly used) and nothing else.
-If, for example, such a solution would require user-space access CPU
-load (complexity) to increase by a factor of 10 or even more (in order to
-avoid locks), this is likely still preferable, since the ISR is executed maybe
-1000+ times more often than user-space accessing the driver.
-
-Best regards,
-
--- 
-David Jander
-Protonic Holland.
-
+--------------FUBRZuT557ZUV0zq60QTkWTk--

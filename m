@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCB7475929
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B760347592E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242700AbhLOMzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:55:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:51256 "EHLO foss.arm.com"
+        id S242710AbhLOMzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:55:23 -0500
+Received: from foss.arm.com ([217.140.110.172]:51268 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242711AbhLOMzH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:55:07 -0500
+        id S242726AbhLOMzI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 07:55:08 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C5C811D4;
-        Wed, 15 Dec 2021 04:55:06 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0E3A13A1;
+        Wed, 15 Dec 2021 04:55:07 -0800 (PST)
 Received: from e126387.extremechicken.org (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E7EE3F774;
-        Wed, 15 Dec 2021 04:55:05 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B42763F774;
+        Wed, 15 Dec 2021 04:55:06 -0800 (PST)
 From:   carsten.haitzler@foss.arm.com
 To:     linux-kernel@vger.kernel.org
 Cc:     coresight@lists.linaro.org, suzuki.poulose@arm.com,
         mathieu.poirier@linaro.org, mike.leach@linaro.org,
         leo.yan@linaro.org
-Subject: [PATCH 10/12] perf test: Add threaded memcpy tests to check coresight aux data
-Date:   Wed, 15 Dec 2021 12:54:07 +0000
-Message-Id: <20211215125409.61488-10-carsten.haitzler@foss.arm.com>
+Subject: [PATCH 11/12] perf test: Add unrolled loop tests for coresight aux data
+Date:   Wed, 15 Dec 2021 12:54:08 +0000
+Message-Id: <20211215125409.61488-11-carsten.haitzler@foss.arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211215125409.61488-1-carsten.haitzler@foss.arm.com>
 References: <20211215125409.61488-1-carsten.haitzler@foss.arm.com>
@@ -36,224 +36,174 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Carsten Haitzler <carsten.haitzler@arm.com>
 
-This adds threaded memcpy test looking at coresight aux data quality.
+These tests have large batches of code manually unrolled with macros
+to ensure that the processor has to walk through a lot of instructions
+and memory for those instructions to generate the coresight aux data.
 
 Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 ---
- .../shell/coresight_memcpy_thread_1m_2.sh     | 18 +++++
- .../shell/coresight_memcpy_thread_1m_25.sh    | 18 +++++
- .../shell/coresight_memcpy_thread_32m_10.sh   | 18 +++++
- .../shell/coresight_memcpy_thread_32m_2.sh    | 18 +++++
- .../shell/coresight_memcpy_thread_64k_2.sh    | 18 +++++
- .../shell/coresight_memcpy_thread_64k_25.sh   | 18 +++++
- .../shell/coresight_memcpy_thread_64k_250.sh  | 18 +++++
+ .../shell/coresight_unroll_loop_thread_1.sh   | 18 +++++
+ .../shell/coresight_unroll_loop_thread_10.sh  | 18 +++++
+ .../shell/coresight_unroll_loop_thread_2.sh   | 18 +++++
+ .../shell/coresight_unroll_loop_thread_25.sh  | 18 +++++
+ .../shell/coresight_unroll_loop_thread_250.sh | 18 +++++
  .../perf/tests/shell/tools/coresight/Makefile |  3 +-
- .../tools/coresight/memcpy_thread/Makefile    | 29 +++++++
- .../coresight/memcpy_thread/memcpy_thread.c   | 79 +++++++++++++++++++
- 10 files changed, 236 insertions(+), 1 deletion(-)
- create mode 100755 tools/perf/tests/shell/coresight_memcpy_thread_1m_2.sh
- create mode 100755 tools/perf/tests/shell/coresight_memcpy_thread_1m_25.sh
- create mode 100755 tools/perf/tests/shell/coresight_memcpy_thread_32m_10.sh
- create mode 100755 tools/perf/tests/shell/coresight_memcpy_thread_32m_2.sh
- create mode 100755 tools/perf/tests/shell/coresight_memcpy_thread_64k_2.sh
- create mode 100755 tools/perf/tests/shell/coresight_memcpy_thread_64k_25.sh
- create mode 100755 tools/perf/tests/shell/coresight_memcpy_thread_64k_250.sh
- create mode 100644 tools/perf/tests/shell/tools/coresight/memcpy_thread/Makefile
- create mode 100644 tools/perf/tests/shell/tools/coresight/memcpy_thread/memcpy_thread.c
+ .../coresight/unroll_loop_thread/Makefile     | 29 ++++++++
+ .../unroll_loop_thread/unroll_loop_thread.c   | 74 +++++++++++++++++++
+ 8 files changed, 195 insertions(+), 1 deletion(-)
+ create mode 100755 tools/perf/tests/shell/coresight_unroll_loop_thread_1.sh
+ create mode 100755 tools/perf/tests/shell/coresight_unroll_loop_thread_10.sh
+ create mode 100755 tools/perf/tests/shell/coresight_unroll_loop_thread_2.sh
+ create mode 100755 tools/perf/tests/shell/coresight_unroll_loop_thread_25.sh
+ create mode 100755 tools/perf/tests/shell/coresight_unroll_loop_thread_250.sh
+ create mode 100644 tools/perf/tests/shell/tools/coresight/unroll_loop_thread/Makefile
+ create mode 100644 tools/perf/tests/shell/tools/coresight/unroll_loop_thread/unroll_loop_thread.c
 
-diff --git a/tools/perf/tests/shell/coresight_memcpy_thread_1m_2.sh b/tools/perf/tests/shell/coresight_memcpy_thread_1m_2.sh
+diff --git a/tools/perf/tests/shell/coresight_unroll_loop_thread_1.sh b/tools/perf/tests/shell/coresight_unroll_loop_thread_1.sh
 new file mode 100755
-index 000000000000..32d5ee94343a
+index 000000000000..9175ec532bd8
 --- /dev/null
-+++ b/tools/perf/tests/shell/coresight_memcpy_thread_1m_2.sh
++++ b/tools/perf/tests/shell/coresight_unroll_loop_thread_1.sh
 @@ -0,0 +1,18 @@
 +#!/bin/sh -e
-+# Coresight / Memcpy 1M 2 Threads
++# Coresight / Unroll Loop Thread 1
 +
 +# SPDX-License-Identifier: GPL-2.0
 +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
 +
-+TEST="memcpy_thread"
++TEST="unroll_loop_thread"
 +. $(dirname $0)/lib/coresight.sh
-+ARGS="1024 2 400"
-+DATV="1m_2"
++ARGS="1"
++DATV="1"
 +DATA="$DATD/perf-$TEST-$DATV.data"
 +
 +perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
 +
-+perf_dump_aux_verify "$DATA" 125 26 26
++perf_dump_aux_verify "$DATA" 118 14 14
 +
 +err=$?
 +exit $err
-diff --git a/tools/perf/tests/shell/coresight_memcpy_thread_1m_25.sh b/tools/perf/tests/shell/coresight_memcpy_thread_1m_25.sh
+diff --git a/tools/perf/tests/shell/coresight_unroll_loop_thread_10.sh b/tools/perf/tests/shell/coresight_unroll_loop_thread_10.sh
 new file mode 100755
-index 000000000000..6510f8c7df99
+index 000000000000..66cf0245294e
 --- /dev/null
-+++ b/tools/perf/tests/shell/coresight_memcpy_thread_1m_25.sh
++++ b/tools/perf/tests/shell/coresight_unroll_loop_thread_10.sh
 @@ -0,0 +1,18 @@
 +#!/bin/sh -e
-+# Coresight / Memcpy 1M 25 Threads
++# Coresight / Unroll Loop Thread 10
 +
 +# SPDX-License-Identifier: GPL-2.0
 +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
 +
-+TEST="memcpy_thread"
++TEST="unroll_loop_thread"
 +. $(dirname $0)/lib/coresight.sh
-+ARGS="1024 25 1"
-+DATV="1m_25"
++ARGS="10"
++DATV="10"
 +DATA="$DATD/perf-$TEST-$DATV.data"
 +
 +perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
 +
-+perf_dump_aux_verify "$DATA" 1 44 43
++perf_dump_aux_verify "$DATA" 127 17 17
 +
 +err=$?
 +exit $err
-diff --git a/tools/perf/tests/shell/coresight_memcpy_thread_32m_10.sh b/tools/perf/tests/shell/coresight_memcpy_thread_32m_10.sh
+diff --git a/tools/perf/tests/shell/coresight_unroll_loop_thread_2.sh b/tools/perf/tests/shell/coresight_unroll_loop_thread_2.sh
 new file mode 100755
-index 000000000000..3715ed4b612e
+index 000000000000..ff2e293699b0
 --- /dev/null
-+++ b/tools/perf/tests/shell/coresight_memcpy_thread_32m_10.sh
++++ b/tools/perf/tests/shell/coresight_unroll_loop_thread_2.sh
 @@ -0,0 +1,18 @@
 +#!/bin/sh -e
-+# Coresight / Memcpy 32M 10 Threads
++# Coresight / Unroll Loop Thread 2
 +
 +# SPDX-License-Identifier: GPL-2.0
 +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
 +
-+TEST="memcpy_thread"
++TEST="unroll_loop_thread"
 +. $(dirname $0)/lib/coresight.sh
-+ARGS="32768 10 1"
-+DATV="32m_10"
++ARGS="2"
++DATV="2"
 +DATA="$DATD/perf-$TEST-$DATV.data"
 +
 +perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
 +
-+perf_dump_aux_verify "$DATA" 6 36 36
++perf_dump_aux_verify "$DATA" 65 6 6
 +
 +err=$?
 +exit $err
-diff --git a/tools/perf/tests/shell/coresight_memcpy_thread_32m_2.sh b/tools/perf/tests/shell/coresight_memcpy_thread_32m_2.sh
+diff --git a/tools/perf/tests/shell/coresight_unroll_loop_thread_25.sh b/tools/perf/tests/shell/coresight_unroll_loop_thread_25.sh
 new file mode 100755
-index 000000000000..ad57bf4d9c0c
+index 000000000000..7d7669a797ab
 --- /dev/null
-+++ b/tools/perf/tests/shell/coresight_memcpy_thread_32m_2.sh
++++ b/tools/perf/tests/shell/coresight_unroll_loop_thread_25.sh
 @@ -0,0 +1,18 @@
 +#!/bin/sh -e
-+# Coresight / Memcpy 32M 2 Threads
++# Coresight / Unroll Loop Thread 25
 +
 +# SPDX-License-Identifier: GPL-2.0
 +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
 +
-+TEST="memcpy_thread"
++TEST="unroll_loop_thread"
 +. $(dirname $0)/lib/coresight.sh
-+ARGS="32768 2 1"
-+DATV="32m_2"
++ARGS="25"
++DATV="25"
 +DATA="$DATD/perf-$TEST-$DATV.data"
 +
 +perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
 +
-+perf_dump_aux_verify "$DATA" 3 12 12
++perf_dump_aux_verify "$DATA" 72 26 25
 +
 +err=$?
 +exit $err
-diff --git a/tools/perf/tests/shell/coresight_memcpy_thread_64k_2.sh b/tools/perf/tests/shell/coresight_memcpy_thread_64k_2.sh
+diff --git a/tools/perf/tests/shell/coresight_unroll_loop_thread_250.sh b/tools/perf/tests/shell/coresight_unroll_loop_thread_250.sh
 new file mode 100755
-index 000000000000..282cc8922641
+index 000000000000..7a0e23aff0dc
 --- /dev/null
-+++ b/tools/perf/tests/shell/coresight_memcpy_thread_64k_2.sh
++++ b/tools/perf/tests/shell/coresight_unroll_loop_thread_250.sh
 @@ -0,0 +1,18 @@
 +#!/bin/sh -e
-+# Coresight / Memcpy 64k 2 Threads
++# Coresight / Unroll Loop Thread 250
 +
 +# SPDX-License-Identifier: GPL-2.0
 +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
 +
-+TEST="memcpy_thread"
++TEST="unroll_loop_thread"
 +. $(dirname $0)/lib/coresight.sh
-+ARGS="64 2 100"
-+DATV="64k_2"
++ARGS="250"
++DATV="250"
 +DATA="$DATD/perf-$TEST-$DATV.data"
 +
 +perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
 +
-+perf_dump_aux_verify "$DATA" 66 11 11
-+
-+err=$?
-+exit $err
-diff --git a/tools/perf/tests/shell/coresight_memcpy_thread_64k_25.sh b/tools/perf/tests/shell/coresight_memcpy_thread_64k_25.sh
-new file mode 100755
-index 000000000000..05bc6c23f4a1
---- /dev/null
-+++ b/tools/perf/tests/shell/coresight_memcpy_thread_64k_25.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh -e
-+# Coresight / Memcpy 64k 25 Threads
-+
-+# SPDX-License-Identifier: GPL-2.0
-+# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-+
-+TEST="memcpy_thread"
-+. $(dirname $0)/lib/coresight.sh
-+ARGS="64 25 2"
-+DATV="64k_25"
-+DATA="$DATD/perf-$TEST-$DATV.data"
-+
-+perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
-+
-+perf_dump_aux_verify "$DATA" 118 31 31
-+
-+err=$?
-+exit $err
-diff --git a/tools/perf/tests/shell/coresight_memcpy_thread_64k_250.sh b/tools/perf/tests/shell/coresight_memcpy_thread_64k_250.sh
-new file mode 100755
-index 000000000000..aaf35e32f610
---- /dev/null
-+++ b/tools/perf/tests/shell/coresight_memcpy_thread_64k_250.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh -e
-+# Coresight / Memcpy 64k 250 Threads
-+
-+# SPDX-License-Identifier: GPL-2.0
-+# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
-+
-+TEST="memcpy_thread"
-+. $(dirname $0)/lib/coresight.sh
-+ARGS="64 250 1"
-+DATV="64k_250"
-+DATA="$DATD/perf-$TEST-$DATV.data"
-+
-+perf record $PERFRECOPT -o "$DATA" "$BIN" $ARGS
-+
-+perf_dump_aux_verify "$DATA" 340 1878 1878
++perf_dump_aux_verify "$DATA" 544 2417 2417
 +
 +err=$?
 +exit $err
 diff --git a/tools/perf/tests/shell/tools/coresight/Makefile b/tools/perf/tests/shell/tools/coresight/Makefile
-index 99030c889b04..be671aac06b8 100644
+index be671aac06b8..b9cdeff1149b 100644
 --- a/tools/perf/tests/shell/tools/coresight/Makefile
 +++ b/tools/perf/tests/shell/tools/coresight/Makefile
-@@ -9,7 +9,8 @@ SUBDIRS = \
- 	thread_loop \
+@@ -10,7 +10,8 @@ SUBDIRS = \
  	bubble_sort \
  	bubble_sort_thread \
--        memcpy
-+        memcpy \
-+        memcpy_thread
+         memcpy \
+-        memcpy_thread
++        memcpy_thread \
++        unroll_loop_thread
  
  all: $(SUBDIRS)
  $(SUBDIRS):
-diff --git a/tools/perf/tests/shell/tools/coresight/memcpy_thread/Makefile b/tools/perf/tests/shell/tools/coresight/memcpy_thread/Makefile
+diff --git a/tools/perf/tests/shell/tools/coresight/unroll_loop_thread/Makefile b/tools/perf/tests/shell/tools/coresight/unroll_loop_thread/Makefile
 new file mode 100644
-index 000000000000..e2604cfae74b
+index 000000000000..45ab2be8be92
 --- /dev/null
-+++ b/tools/perf/tests/shell/tools/coresight/memcpy_thread/Makefile
++++ b/tools/perf/tests/shell/tools/coresight/unroll_loop_thread/Makefile
 @@ -0,0 +1,29 @@
 +# SPDX-License-Identifier: GPL-2.0
 +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
 +include ../Makefile.miniconfig
 +
-+BIN=memcpy_thread
++BIN=unroll_loop_thread
 +LIB=-pthread
 +
 +all: $(BIN)
@@ -278,12 +228,12 @@ index 000000000000..e2604cfae74b
 +	$(Q)$(RM) -f $(BIN)
 +
 +.PHONY: all clean install-tests
-diff --git a/tools/perf/tests/shell/tools/coresight/memcpy_thread/memcpy_thread.c b/tools/perf/tests/shell/tools/coresight/memcpy_thread/memcpy_thread.c
+diff --git a/tools/perf/tests/shell/tools/coresight/unroll_loop_thread/unroll_loop_thread.c b/tools/perf/tests/shell/tools/coresight/unroll_loop_thread/unroll_loop_thread.c
 new file mode 100644
-index 000000000000..a7e169d1bf64
+index 000000000000..cb9d22c7dfb9
 --- /dev/null
-+++ b/tools/perf/tests/shell/tools/coresight/memcpy_thread/memcpy_thread.c
-@@ -0,0 +1,79 @@
++++ b/tools/perf/tests/shell/tools/coresight/unroll_loop_thread/unroll_loop_thread.c
+@@ -0,0 +1,74 @@
 +// SPDX-License-Identifier: GPL-2.0
 +// Carsten Haitzler <carsten.haitzler@arm.com>, 2021
 +#include <stdio.h>
@@ -293,26 +243,35 @@ index 000000000000..a7e169d1bf64
 +#include <pthread.h>
 +
 +struct args {
-+	unsigned long loops;
-+	unsigned long size;
 +	pthread_t th;
++	unsigned int in, out;
 +	void *ret;
 +};
 +
 +static void *thrfn(void *arg)
 +{
 +	struct args *a = arg;
-+	unsigned long i, len = a->loops;
-+	unsigned char *src, *dst;
++	unsigned int i, in = a->in;
 +
-+	src = malloc(a->size * 1024);
-+	dst = malloc(a->size * 1024);
-+	if ((!src) || (!dst)) {
-+		printf("ERR: Can't allocate memory\n");
-+		exit(1);
++	for (i = 0; i < 10000; i++) {
++		asm volatile (
++// force an unroll of thia add instruction so we can test long runs of code
++#define SNIP1 "add %[in], %[in], #1\n"
++// 10
++#define SNIP2 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1 SNIP1
++// 100
++#define SNIP3 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2 SNIP2
++// 1000
++#define SNIP4 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3 SNIP3
++// 10000
++#define SNIP5 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4 SNIP4
++// 100000
++			SNIP5 SNIP5 SNIP5 SNIP5 SNIP5 SNIP5 SNIP5 SNIP5 SNIP5 SNIP5
++			: /* out */
++			: /* in */ [in] "r" (in)
++			: /* clobber */
++		);
 +	}
-+	for (i = 0; i < len; i++)
-+		memcpy(dst, src, a->size * 1024);
 +}
 +
 +static pthread_t new_thr(void *(*fn) (void *arg), void *arg)
@@ -327,36 +286,22 @@ index 000000000000..a7e169d1bf64
 +
 +int main(int argc, char **argv)
 +{
-+	unsigned long i, len, size, thr;
++	unsigned int i, thr;
 +	pthread_t threads[256];
 +	struct args args[256];
-+	long long v;
 +
-+	if (argc < 4) {
-+		printf("ERR: %s [copysize Kb] [numthreads] [numloops (hundreds)]\n", argv[0]);
++	if (argc < 2) {
++		printf("ERR: %s [numthreads]\n", argv[0]);
 +		exit(1);
 +	}
 +
-+	v = atoll(argv[1]);
-+	if ((v < 1) || (v > (1024 * 1024))) {
-+		printf("ERR: max memory 1GB (1048576 KB)\n");
-+		exit(1);
-+	}
-+	size = v;
-+	thr = atol(argv[2]);
-+	if ((thr < 1) || (thr > 256)) {
++	thr = atoi(argv[1]);
++	if ((thr > 256) || (thr < 1)) {
 +		printf("ERR: threads 1-256\n");
 +		exit(1);
 +	}
-+	v = atoll(argv[3]);
-+	if ((v < 1) || (v > 40000000000ll)) {
-+		printf("ERR: loops 1-40000000000 (hundreds)\n");
-+		exit(1);
-+	}
-+	len = v * 100;
 +	for (i = 0; i < thr; i++) {
-+		args[i].loops = len;
-+		args[i].size = size;
++		args[i].in = rand();
 +		args[i].th = new_thr(thrfn, &(args[i]));
 +	}
 +	for (i = 0; i < thr; i++)

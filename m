@@ -2,92 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2F04753C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32F24753C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240630AbhLOHgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 02:36:19 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:54700
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240652AbhLOHgN (ORCPT
+        id S240626AbhLOHg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 02:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232083AbhLOHg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 02:36:13 -0500
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 15 Dec 2021 02:36:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34A7C061574;
+        Tue, 14 Dec 2021 23:36:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 249743F1AA
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:36:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639553771;
-        bh=lH1LVhxxdi1joAcG9QMeOEZioVS7QsVUiTN3+0B9yPI=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=snF0R5BUMjyMIE5BS40kakeVNlPU0yB1IldIY41RIkYHZGkjkjSjAJjyJiGG1Qd2V
-         8mUHJpLga/kInhFZMgS5pU7cKQeM/r7/Iwb8TNr1KvK5rc/UYbHDlz4d1wkoD+T4hP
-         ks13iIbM/2iLflruno70km/ftRQLqymE3zh5BLZ7E8dwc3aysH+Cbmpm0kIDy41ErN
-         Aaf3f3d7f9N3JXNuiBRSrd7juYIHlw5OnJSCk86S/CMzg+J/O4Fv1cwh/vhxSdp7uU
-         etTAUo880N9RRO5EWMP8rmMt62AAPTaVmSd6KRc23ewvIGmuxmCwQuH+TiSwmh1b7r
-         WCe2XlOsJQVKQ==
-Received: by mail-lj1-f197.google.com with SMTP id y23-20020a2e3217000000b00218c6ede162so6643678ljy.23
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 23:36:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lH1LVhxxdi1joAcG9QMeOEZioVS7QsVUiTN3+0B9yPI=;
-        b=cInpaMz+nQVUgwm+3UzH7rduruQVVAI//oSp2j2TgFznZT3dQpKLXV4IPpnau42S6f
-         fchb06X0+lQ9rKEp5wLfMAfr2JkKOXIF8B/p6LIRTAeM1Ebw/pAeXERjZQLPiptOm+Fn
-         /RJW0mZ+D1jsUbpha7p65XidZGNHb/SViH8apf++Wb2E8S+RzgU/lJ3lRiIRhbc+qGPL
-         tOFhtuRn//VEFpotobqM6LuQ+5tzhWlt7bDtEAhCmSQr3n1wvZVe9okRb/dRzDihQ4pW
-         ZdabpdqWzLH7Ypi+gjNx68WcPvIWBy6GuKUTKYPXuzwBJ2wI3UakNMyvEjSA8zgnlT/H
-         BCaQ==
-X-Gm-Message-State: AOAM531MclWmvB7C4uc6lk7BDQwAdbkufOG/BMnenbSfusEd3NLaHFJW
-        TWXs+c84rNzhGc43A3BhRNTSgxP4CGXf4k05GMuZxdD/QSJ/JiXB7ax9os5JYQUoCCkCKrY5y5V
-        En3UEntSm8naGjSNtnFxQHLmWKUEV1Ww2UJBj3pmWwQ==
-X-Received: by 2002:a05:6512:3a5:: with SMTP id v5mr8692441lfp.250.1639553770499;
-        Tue, 14 Dec 2021 23:36:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwOwaghIPjqudOHsOrTqyn0+O2yP9jGP5v1G1NM3rIvGm2dppX7KnT+sQYSYzVH6Kn1f8081Q==
-X-Received: by 2002:a05:6512:3a5:: with SMTP id v5mr8692421lfp.250.1639553770272;
-        Tue, 14 Dec 2021 23:36:10 -0800 (PST)
-Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id v14sm189836lfe.59.2021.12.14.23.36.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 23:36:09 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: soc: samsung: Fix I2C clocks order in USI binding example
-Date:   Wed, 15 Dec 2021 08:36:07 +0100
-Message-Id: <163955376463.24562.1462295970065480353.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211214170924.27998-1-semen.protsenko@linaro.org>
-References: <20211214170924.27998-1-semen.protsenko@linaro.org>
-MIME-Version: 1.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 340F76182A;
+        Wed, 15 Dec 2021 07:36:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 800E9C34600;
+        Wed, 15 Dec 2021 07:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639553787;
+        bh=DJ2GHnN3+A6IaBsHIRn0E837VrFieLJ7mGwRff2GO5U=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=K42zGEXQtbBUT2bBp6+lbHjYkNzFd6JkJbMuJ91E+Nz7cRsIzzkvNgi6kSRaeoVXA
+         kb6lglDpOdMVGikSLoyotjYyH3ieyB3VUCeABR/exa+uMUJ1+8q43SLUwrQkByNEab
+         +HJziIRWI19gF3NTBajou068WHrZujke73cH96PHZlyRksrZvXmC3gT4HCHNTenVFe
+         q68NCbL0sWxBa5+fxMnYVjam9VBfI8oRv+HA7k3vgpYsHilxdEL4breAyJIypCHtfJ
+         7ZNf1jeAKp84iCIAnCtHx/o9+L3E55fuQ77GWx1vVgeYaJJ2YJInBKfb+O3L6wSOtY
+         lFz9CBLy42htg==
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YbTqPfs7026l6LFE@builder.lan>
+References: <20211207114003.100693-1-vkoul@kernel.org> <20211207114003.100693-3-vkoul@kernel.org> <20211209082537.1AF6CC341C8@smtp.kernel.org> <YbTqPfs7026l6LFE@builder.lan>
+Subject: Re: [PATCH v2 2/2] clk: qcom: Add clock driver for SM8450
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Date:   Tue, 14 Dec 2021 23:36:26 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211215073627.800E9C34600@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 19:09:24 +0200, Sam Protsenko wrote:
-> Now that HSI2C binding [1] is converted to dt-schema format, it reveals
-> incorrect HSI2C clocks order in USI binding example:
-> 
->     .../exynos-usi.example.dt.yaml:
->     i2c@13820000: clock-names:0: 'hsi2c' was expected
->     From schema: .../i2c-exynos5.yaml
-> 
-> [...]
+Quoting Bjorn Andersson (2021-12-11 10:13:17)
+> On Thu 09 Dec 02:25 CST 2021, Stephen Boyd wrote:
+>=20
+> > Maybe you want to drop these strings and use the dt index directly? That
+> > may actually be faster because we don't do as many string comparisons
+> > and the code may be smaller if we don't have to store bi_tcxo. I suppose
+> > to make it more readable we could have #defines for each DT index like
+> >=20
+> >  #define DT_BI_TCXO   0
+> >  #define DT_SLEEP_CLK 1
+> >=20
+> > Blaze a new trail!
+> >=20
+>=20
+> I like the idea, and iiuc it's just a matter of replacing .fw_name with
+> .index?
 
-Applied, thanks!
+Yes.
 
-[1/1] dt-bindings: soc: samsung: Fix I2C clocks order in USI binding example
-      commit: d56a8e9c7af835a4f3f88b2ae34f4ba6f7085b7c
+>=20
+> I am however worried that people will get the order wrong as they are
+> hacking on their dts/drivers, because (at least in my view) the order of
+> clocks & clock-names has been seen as "a dt binding requirement" up
+> until such change. But if we replace the names with indices such enum
+> would have to be kept in sync with the DT binding and there's no way to
+> validate it.
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+That's lame, but I see your point. The order is definitely part of the
+binding but I'm not sure what we can do about folks deciding to reorder
+the clocks property. The checker has a blind spot here.
+
+>=20
+> If we do this we should force the driver and dts-writers to rely on the
+> binding document by omitting clock-names from the binding (and hence
+> dts). Otherwise people will (I will) assume that the clock-names are
+> still what matters...
+>=20
+
+I guess so. It still leaves everything exposed to the clocks property
+getting jumbled and then everything falling apart. Sigh.
+
+I'm not sure how much worse this is than today where the clock-names
+property could be wrong and doesn't match the order of the clocks
+property. We don't catch that either with the checker, so it's about the
+same risk from my perspective. Why not take the risk and save on image
+size?

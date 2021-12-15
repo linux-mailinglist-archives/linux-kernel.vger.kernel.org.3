@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 392CC475EB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB85F475EEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245532AbhLORYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:24:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S1343514AbhLORZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:25:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245564AbhLORXk (ORCPT
+        with ESMTP id S1343506AbhLORYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:23:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F23C061759;
-        Wed, 15 Dec 2021 09:23:28 -0800 (PST)
+        Wed, 15 Dec 2021 12:24:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32F1C061785;
+        Wed, 15 Dec 2021 09:24:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A35C461A0A;
-        Wed, 15 Dec 2021 17:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B12C36AE2;
-        Wed, 15 Dec 2021 17:23:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CB59B82046;
+        Wed, 15 Dec 2021 17:24:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D2FC36AE0;
+        Wed, 15 Dec 2021 17:24:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589007;
-        bh=eDprUhMM8vftWzn2Cl89AMWfd58wb49TmTCNevGQdHc=;
+        s=korg; t=1639589082;
+        bh=v8AV/1ipcON2h/timmSIvFSLJ+/FELGlcoBlMPMwTJo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JWshmmDFU4LaLGa2ksjSBc3Gn+FEbL5wrnEKGvkhAucet3opkucniipc+uo6A+YMG
-         gs/XVP/kZfAn43TMzk1tfGL6qsq0k7XWNZ4F94F9TAieIdMKZ8sd3C+RoaMJebtjjW
-         1JFUs/b8SkOamx1wJWO/7bJP0zku8QGEaYXm6qQE=
+        b=Jb0z9Cjm+sI0OOu47oWXS3KAXb8tJpNIZVMipdnEMgFX+J+iC7EIQ57eTUgVWxB3/
+         HZarq4W88lhttFdez49/ufQPfkqqUL5DICAdn8QloCq1Yrq7zUo9mqLeFLxpgq5pn6
+         hgv3/SYRZi5M2f95HTbbIDbYTD6CA1mmm/o8hFdQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        kernel test robot <lkp@intel.com>,
+        stable@vger.kernel.org, Chen Jun <chenjun102@huawei.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 30/42] parisc/agp: Annotate parisc agp init functions with __init
-Date:   Wed, 15 Dec 2021 18:21:11 +0100
-Message-Id: <20211215172027.692415082@linuxfoundation.org>
+Subject: [PATCH 5.10 14/33] tracing: Fix a kmemleak false positive in tracing_map
+Date:   Wed, 15 Dec 2021 18:21:12 +0100
+Message-Id: <20211215172025.260599776@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
-References: <20211215172026.641863587@linuxfoundation.org>
+In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
+References: <20211215172024.787958154@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,48 +49,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Chen Jun <chenjun102@huawei.com>
 
-[ Upstream commit 8d88382b7436551a9ebb78475c546b670790cbf6 ]
+[ Upstream commit f25667e5980a4333729cac3101e5de1bb851f71a ]
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Reported-by: kernel test robot <lkp@intel.com>
+Doing the command:
+  echo 'hist:key=common_pid.execname,common_timestamp' > /sys/kernel/debug/tracing/events/xxx/trigger
+
+Triggers many kmemleak reports:
+
+unreferenced object 0xffff0000c7ea4980 (size 128):
+  comm "bash", pid 338, jiffies 4294912626 (age 9339.324s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000f3469921>] kmem_cache_alloc_trace+0x4c0/0x6f0
+    [<0000000054ca40c3>] hist_trigger_elt_data_alloc+0x140/0x178
+    [<00000000633bd154>] tracing_map_init+0x1f8/0x268
+    [<000000007e814ab9>] event_hist_trigger_func+0xca0/0x1ad0
+    [<00000000bf8520ed>] trigger_process_regex+0xd4/0x128
+    [<00000000f549355a>] event_trigger_write+0x7c/0x120
+    [<00000000b80f898d>] vfs_write+0xc4/0x380
+    [<00000000823e1055>] ksys_write+0x74/0xf8
+    [<000000008a9374aa>] __arm64_sys_write+0x24/0x30
+    [<0000000087124017>] do_el0_svc+0x88/0x1c0
+    [<00000000efd0dcd1>] el0_svc+0x1c/0x28
+    [<00000000dbfba9b3>] el0_sync_handler+0x88/0xc0
+    [<00000000e7399680>] el0_sync+0x148/0x180
+unreferenced object 0xffff0000c7ea4980 (size 128):
+  comm "bash", pid 338, jiffies 4294912626 (age 9339.324s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000f3469921>] kmem_cache_alloc_trace+0x4c0/0x6f0
+    [<0000000054ca40c3>] hist_trigger_elt_data_alloc+0x140/0x178
+    [<00000000633bd154>] tracing_map_init+0x1f8/0x268
+    [<000000007e814ab9>] event_hist_trigger_func+0xca0/0x1ad0
+    [<00000000bf8520ed>] trigger_process_regex+0xd4/0x128
+    [<00000000f549355a>] event_trigger_write+0x7c/0x120
+    [<00000000b80f898d>] vfs_write+0xc4/0x380
+    [<00000000823e1055>] ksys_write+0x74/0xf8
+    [<000000008a9374aa>] __arm64_sys_write+0x24/0x30
+    [<0000000087124017>] do_el0_svc+0x88/0x1c0
+    [<00000000efd0dcd1>] el0_svc+0x1c/0x28
+    [<00000000dbfba9b3>] el0_sync_handler+0x88/0xc0
+    [<00000000e7399680>] el0_sync+0x148/0x180
+
+The reason is elts->pages[i] is alloced by get_zeroed_page.
+and kmemleak will not scan the area alloced by get_zeroed_page.
+The address stored in elts->pages will be regarded as leaked.
+
+That is, the elts->pages[i] will have pointers loaded onto it as well, and
+without telling kmemleak about it, those pointers will look like memory
+without a reference.
+
+To fix this, call kmemleak_alloc to tell kmemleak to scan elts->pages[i]
+
+Link: https://lkml.kernel.org/r/20211124140801.87121-1-chenjun102@huawei.com
+
+Signed-off-by: Chen Jun <chenjun102@huawei.com>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/agp/parisc-agp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/trace/tracing_map.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/char/agp/parisc-agp.c b/drivers/char/agp/parisc-agp.c
-index ed3c4c42fc23b..d68d05d5d3838 100644
---- a/drivers/char/agp/parisc-agp.c
-+++ b/drivers/char/agp/parisc-agp.c
-@@ -281,7 +281,7 @@ agp_ioc_init(void __iomem *ioc_regs)
-         return 0;
- }
+diff --git a/kernel/trace/tracing_map.c b/kernel/trace/tracing_map.c
+index d63e51dde0d24..51a9d1185033b 100644
+--- a/kernel/trace/tracing_map.c
++++ b/kernel/trace/tracing_map.c
+@@ -15,6 +15,7 @@
+ #include <linux/jhash.h>
+ #include <linux/slab.h>
+ #include <linux/sort.h>
++#include <linux/kmemleak.h>
  
--static int
-+static int __init
- lba_find_capability(int cap)
- {
- 	struct _parisc_agp_info *info = &parisc_agp_info;
-@@ -366,7 +366,7 @@ parisc_agp_setup(void __iomem *ioc_hpa, void __iomem *lba_hpa)
- 	return error;
- }
+ #include "tracing_map.h"
+ #include "trace.h"
+@@ -307,6 +308,7 @@ static void tracing_map_array_free(struct tracing_map_array *a)
+ 	for (i = 0; i < a->n_pages; i++) {
+ 		if (!a->pages[i])
+ 			break;
++		kmemleak_free(a->pages[i]);
+ 		free_page((unsigned long)a->pages[i]);
+ 	}
  
--static int
-+static int __init
- find_quicksilver(struct device *dev, void *data)
- {
- 	struct parisc_device **lba = data;
-@@ -378,7 +378,7 @@ find_quicksilver(struct device *dev, void *data)
- 	return 0;
- }
- 
--static int
-+static int __init
- parisc_agp_init(void)
- {
- 	extern struct sba_device *sba_list;
+@@ -342,6 +344,7 @@ static struct tracing_map_array *tracing_map_array_alloc(unsigned int n_elts,
+ 		a->pages[i] = (void *)get_zeroed_page(GFP_KERNEL);
+ 		if (!a->pages[i])
+ 			goto free;
++		kmemleak_alloc(a->pages[i], PAGE_SIZE, 1, GFP_KERNEL);
+ 	}
+  out:
+ 	return a;
 -- 
 2.33.0
 

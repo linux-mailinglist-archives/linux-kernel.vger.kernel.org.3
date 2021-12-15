@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B552475813
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0457D47581C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236934AbhLOLpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:45:39 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:40158 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbhLOLpi (ORCPT
+        id S242194AbhLOLqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 06:46:05 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:36590
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242168AbhLOLqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:45:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639568738; x=1671104738;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KU+hRdVySm5s0uHVi3dKg9v9GD2HE+bneHskT1rs1Pk=;
-  b=fZm1r9AZ5VM3dpjIMNm4a/pwmho/9ah5dyzBIJHxziYd6cBqQTP4Wu9A
-   35XVuvsnHq+oFHh9aNgpRBKIOiBi4r2ddGfR9MFdYCelwmYJUMzUIj1Um
-   PCmg5+K3hQRmOjkRZg2uzUs18ZBfIW5O+i/V3BYarg6T7gxnyWK9LW/zV
-   rXppVrfpt/l4FaUq1FYJGOonnCzlsGWpdgz84WlVru/EY48B+ktoepjka
-   qWkfIggsF8CkMhsXXmp4mzL3JYpfDQeWygun3aQ1mk8LO8/t9V5DTL/rd
-   oba1hrUaNWk3/FamgHKirvZZF2qoJnhu1w1BoODkcONmbRML0P2nbOfv5
-   A==;
-IronPort-SDR: f6NaQDcCr90bIDs6cMJCyWtOH26DX5ULUXOpWzgCVTr+9qDxaZUTdeM6fG5YUQ0HD0zVcLgMUR
- sSt0bZ+jbsyduETBCnw1frDJHTUlBzcMB4iFrPqAukFwbS5ryO5R71498lhf0Hp3QfTVQHcqfV
- FQXbgO22i9LffRyqK2xneMznousYpiaZYF5MSbRO3tyuPP810iltLoOJfjFNd49ZoY8MnOzF+6
- 1ki/LzW3pkpUiq7GajhVgVmFr/65q3TyICZwx6M+rltDi+GlQOfhars5qjudxfXb/p01mCTZc6
- hQh+MTkfhXq/J2M9Hm0xld1O
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="142488026"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Dec 2021 04:45:38 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 15 Dec 2021 04:45:37 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 15 Dec 2021 04:45:34 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <nicolas.ferre@microchip.com>
-CC:     <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
-        <claudiu.beznea@microchip.com>, <dianders@chromium.org>,
-        <emil.velikov@collabora.com>, <sam@ravnborg.org>,
-        <codrin.ciubotariu@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v2] ARM: configs: at91: Enable crypto software implementations
-Date:   Wed, 15 Dec 2021 13:45:32 +0200
-Message-ID: <20211215114532.300118-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Dec 2021 06:46:03 -0500
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D555540265
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:45:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639568755;
+        bh=5tMBnwEs/vWNX4NTSLds+QqZD5aWu/S+gNf17CfK8JM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=vfe3+zipvDe/4vjs8VqT9Cx6fBLLo0bppnFoWIogi8n98jlcsiY2uV8ekW3LkIkoj
+         moPxNRUsVv3SZAZwTGzrFNaJGIgZB9ROderuV/iFK3c1J3A/yGBv1wWA79IYD1JV2V
+         MGfUQFP9LZymBcMQfj3epM9IkcqNXdLQpls7ZcMTfNDIzINMHrFHOZ4q3nemfNrQmV
+         ForqNcXBIz9a60PZB+mCdbzdQCoEyo/w6MwLDcz4VTMQdk/8HQepI1i5lwU/kYZXDw
+         WwNe45W067pAA8hW1oH6FtsOpa4pHWvcJXTxVjZKwN4sAxgwseM1OrV70tQNhury9P
+         VYI9X4ztFMXoA==
+Received: by mail-ot1-f69.google.com with SMTP id z33-20020a9d24a4000000b00579320f89ecso9668308ota.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 03:45:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5tMBnwEs/vWNX4NTSLds+QqZD5aWu/S+gNf17CfK8JM=;
+        b=SBBpnPp5IL5aqjNTBYiZS3L+Kfp1O4UndRASgRrk1dqKJSOVcEEokI5NBUzti6ZcbT
+         /rUV/R5cJnifF6g63wkZ07DbivOW+AXvYChAwP8SB5/XcM1EyVq44E7QVtHDrjeC39k0
+         N42gD6DCvT/vNZ42UJd/pKWB+6oUYPEfh1VXAA9P04/pgN0polHJv9ynvmOG7KroUINb
+         GkUKXGPbbq+aabAgHYSX04E5vv/0Th0kuSHFaz0VMGFjPOMbANjxcygP5WB7CCi7xJJY
+         A4cLUBUhKj//H/9bCFEpz0AsEWH9Oj0sOtrfVAzxrA3nJn8L6pSd1jN6u2YMeuvWMlGK
+         JlHg==
+X-Gm-Message-State: AOAM530QwGe67lnPQG5/YFZPpSMFV8cIlmNbb0aX27sl+ico0BgL8t/a
+        s4Fe7XmevPparGqH5vbsghntcZXiTnEgtGk37XQ/5Ejdqbp5oOqjWJQtVvgVLsBfb1acDyKj9y0
+        jU0D47VCN7W13wPl2p9h+iB3sfpYV3r/93OSi3yuzmK46xTEUMpzlucIM+Q==
+X-Received: by 2002:a05:6830:1d87:: with SMTP id y7mr8276894oti.269.1639568753843;
+        Wed, 15 Dec 2021 03:45:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyUZs3tekHx4L7AzmeZS7ZHKZrzmVXmBqWxSo92TBMGIxeMG8WyBZlVeLYPA06s3SesslmBxwaGtWlDT9HtkMs=
+X-Received: by 2002:a05:6830:1d87:: with SMTP id y7mr8276881oti.269.1639568753625;
+ Wed, 15 Dec 2021 03:45:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20211215065508.313330-1-kai.heng.feng@canonical.com>
+ <CAPpJ_eff_NC3w7QjGtYtLjOBtSFBuRkFHojnuPC7neOmd54wcg@mail.gmail.com>
+ <1bf16614c29e47d8a57cfd6ee4ee50ae@realtek.com> <CAPpJ_efxbsd=DuP6gq-YB4q195oa+wtZ9qaPdT=o20b6Ojy9Gw@mail.gmail.com>
+In-Reply-To: <CAPpJ_efxbsd=DuP6gq-YB4q195oa+wtZ9qaPdT=o20b6Ojy9Gw@mail.gmail.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 15 Dec 2021 19:45:42 +0800
+Message-ID: <CAAd53p76S7kgHerKosj3P+u2h6TBAS9H0kK_cHDQqGg1SC=83A@mail.gmail.com>
+Subject: Re: [PATCH v3] rtw88: Disable PCIe ASPM while doing NAPI poll on 8821CE
+To:     Jian-Hong Pan <jhp@endlessos.org>
+Cc:     Pkshih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bernie Huang <phhuang@realtek.com>,
+        Brian Norris <briannorris@chromium.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Netdev List <netdev@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable at least the same amount of algs as the hardware IPs are
-supporting so that they are able to fallback to the software
-implementations in case they need it.
+On Wed, Dec 15, 2021 at 6:07 PM Jian-Hong Pan <jhp@endlessos.org> wrote:
+>
+> Pkshih <pkshih@realtek.com> =E6=96=BC 2021=E5=B9=B412=E6=9C=8815=E6=97=A5=
+ =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=884:03=E5=AF=AB=E9=81=93=EF=BC=9A
+> >
+> >
+> > > -----Original Message-----
+> > > From: Jian-Hong Pan <jhp@endlessos.org>
+> > > Sent: Wednesday, December 15, 2021 3:16 PM
+> > >
+> > > Tried to apply this patch for testing.  But it seems conflicting to
+> > > commit c81edb8dddaa "rtw88: add quirk to disable pci caps on HP 250 G=
+7
+> > > Notebook PC" in wireless-drivers-next repo.
+> > >
+> >
+> > I fix the conflict manually, and the ASPM setting is expected.
+>
+> Yes!  Same from my side.
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
-v2:
-- add CONFIG_CRYPTO_HMAC
-- update commit message
-- ignore other non-crypto changes that are revealed with
-  "make savedefconfig".
+Sorry for that, I used the wrong tree.
+Will send a new one.
 
- arch/arm/configs/at91_dt_defconfig | 10 +++++++++-
- arch/arm/configs/sama5_defconfig   |  9 +++++++++
- 2 files changed, 18 insertions(+), 1 deletion(-)
+Kai-Heng
 
-diff --git a/arch/arm/configs/at91_dt_defconfig b/arch/arm/configs/at91_dt_defconfig
-index a6310c8abcc3..fe4838ea0bd1 100644
---- a/arch/arm/configs/at91_dt_defconfig
-+++ b/arch/arm/configs/at91_dt_defconfig
-@@ -216,7 +216,15 @@ CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_CODEPAGE_850=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_NLS_UTF8=y
--CONFIG_CRYPTO_ECB=y
-+CONFIG_CRYPTO_CBC=y
-+CONFIG_CRYPTO_CFB=y
-+CONFIG_CRYPTO_OFB=y
-+CONFIG_CRYPTO_XTS=y
-+CONFIG_CRYPTO_HMAC=y
-+CONFIG_CRYPTO_MD5=y
-+CONFIG_CRYPTO_SHA1=y
-+CONFIG_CRYPTO_SHA512=y
-+CONFIG_CRYPTO_DES=y
- CONFIG_CRYPTO_USER_API_HASH=m
- CONFIG_CRYPTO_USER_API_SKCIPHER=m
- CONFIG_CRYPTO_DEV_ATMEL_AES=y
-diff --git a/arch/arm/configs/sama5_defconfig b/arch/arm/configs/sama5_defconfig
-index fe0d7ccc8fb2..eee67628e231 100644
---- a/arch/arm/configs/sama5_defconfig
-+++ b/arch/arm/configs/sama5_defconfig
-@@ -232,6 +232,15 @@ CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_CODEPAGE_850=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_NLS_UTF8=y
-+CONFIG_CRYPTO_CBC=y
-+CONFIG_CRYPTO_CFB=y
-+CONFIG_CRYPTO_OFB=y
-+CONFIG_CRYPTO_XTS=y
-+CONFIG_CRYPTO_HMAC=y
-+CONFIG_CRYPTO_MD5=y
-+CONFIG_CRYPTO_SHA1=y
-+CONFIG_CRYPTO_SHA512=y
-+CONFIG_CRYPTO_DES=y
- CONFIG_CRYPTO_USER_API_HASH=m
- CONFIG_CRYPTO_USER_API_SKCIPHER=m
- CONFIG_CRYPTO_DEV_ATMEL_AES=y
--- 
-2.25.1
-
+>
+> Jian-Hong Pan

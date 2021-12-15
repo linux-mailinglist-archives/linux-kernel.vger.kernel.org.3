@@ -2,91 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB284753E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9986D4753E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235856AbhLOHvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 02:51:14 -0500
-Received: from mga18.intel.com ([134.134.136.126]:27224 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230260AbhLOHvM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 02:51:12 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="226029945"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="226029945"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 23:51:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="545492292"
-Received: from mylly.fi.intel.com (HELO [10.237.72.88]) ([10.237.72.88])
-  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2021 23:51:11 -0800
-Message-ID: <3d67442c-87a7-e05b-7f69-de501fc0ad29@linux.intel.com>
-Date:   Wed, 15 Dec 2021 09:51:10 +0200
+        id S236086AbhLOHxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 02:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230260AbhLOHxK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 02:53:10 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0BCC061574;
+        Tue, 14 Dec 2021 23:53:09 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id d2so19209901qki.12;
+        Tue, 14 Dec 2021 23:53:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=e4GoGhGMbxrdA++ZWH+ek8XaYXmmb722DkOkuUVJm+g=;
+        b=YzI62Cg+qqzhSz3+o2jiwg9bzdOYgFPKnF2Up/A2SqcmVY7DWtk9o/fh0l5ViDWEQD
+         Q4Yo92eS66cm1x/K982FFBT06nSoeDFVdrc8gVan6VuafM93nDnNLyHjgpuyHcgLuOCk
+         Np25/PW3VCRcMviR97tkvIpgWAOSntlvtNRoZaABKNJ+vgpXWRJTp3y7Wv+d5rh9uaw2
+         DUiRBF6SKcYtq2w5eOXZ8m60WcTeZBl6zOdq2pqyVJSHPDO+76XAd//oODK07a++Pr/S
+         IokSCXLnvSF6PuVNnufPu0VjO8Dt1VkTb/rdW5k4o8tj1J0FCQ1KSQDuxm4G9LSdN1me
+         tujw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=e4GoGhGMbxrdA++ZWH+ek8XaYXmmb722DkOkuUVJm+g=;
+        b=JRTZ5/pvRoyHB6tbW0nK9PIgRnXFTfKP4pBQj34HVkcK2ddmbPOA55yDCPpVgYNOJM
+         i3WoaIrX9RnrhOf4hdCb0uphFklr36YX+mNXxKU1ssS945EV/ptWZDcCR8lFv+K0BDBf
+         bvT76gnR8KaYmWy4mut/f6dRIqTZnJmHxRov33aPF8LznvlNnZ89+VSYWVhft6lxGKHV
+         2WOhLnIb+ounxCt6gpIO3vzwQJ6hQ2qUvvg5R24sd7lmbGDyaXJmM6gsfICFsONvFDXa
+         rivG4hSYuQnYR/gX+EIWBYRAtZ6TmxPkOBHV95W0NdrighE50G9burVWKoYB9IugT1z2
+         sIOQ==
+X-Gm-Message-State: AOAM5301shJQTW/tAxQ+BPHsAktK+79BfRYs9qMOz6Rp17yFTK9gpJgX
+        KMw1nhdaGEfTAz8FapDT7dBhqTn10u4=
+X-Google-Smtp-Source: ABdhPJwJ8PwXedRowaLQRsE848JaULPvyTsNAaDLeKFGUZK0PzrLYDlRmjK/llz0cRrBfsNBFky4+g==
+X-Received: by 2002:ae9:eb45:: with SMTP id b66mr7402397qkg.695.1639554788607;
+        Tue, 14 Dec 2021 23:53:08 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id t35sm1011675qtc.83.2021.12.14.23.53.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 23:53:08 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     devesh.s.sharma@oracle.com
+Cc:     cgel.zte@gmail.com, chi.minghao@zte.com.cn, dledford@redhat.com,
+        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, zealci@zte.com.cn, zyjzyj2000@gmail.com
+Subject: [PATCH for-next v2] RDMA/rxe: remove redundant err variable
+Date:   Wed, 15 Dec 2021 07:52:58 +0000
+Message-Id: <20211215075258.442930-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CO6PR10MB56353FD77836D5605CDDB8DEDD769@CO6PR10MB5635.namprd10.prod.outlook.com>
+References: <CO6PR10MB56353FD77836D5605CDDB8DEDD769@CO6PR10MB5635.namprd10.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.4.0
-Subject: Re: [PATCH v2 1/6] i2c: designware-pci: Use temporary variable for
- struct device
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20211213180034.30929-1-andriy.shevchenko@linux.intel.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20211213180034.30929-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 20:00, Andy Shevchenko wrote:
-> Use temporary variable for struct device to make code neater.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: dropped dev --> i_dev renaming (Jarkko)
->   drivers/i2c/busses/i2c-designware-pcidrv.c | 52 +++++++++++-----------
->   1 file changed, 26 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-> index 0f409a4c2da0..5f76010f7dfd 100644
-> --- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-> +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-> @@ -207,23 +207,23 @@ static struct dw_pci_controller dw_pci_controllers[] = {
->   };
->   
->   #ifdef CONFIG_PM
-> -static int i2c_dw_pci_suspend(struct device *dev)
-> +static int i2c_dw_pci_suspend(struct device *d)
->   {
-> -	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
-> +	struct dw_i2c_dev *dev = dev_get_drvdata(d);
->   >   
-> -	dev = devm_kzalloc(&pdev->dev, sizeof(struct dw_i2c_dev), GFP_KERNEL);
-> +	dev = devm_kzalloc(d, sizeof(*dev), GFP_KERNEL);
-Ditto.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-> -	i_dev->suspended = true;
-> -	i_dev->disable(i_dev);
-> +	dev->suspended = true;
-> +	dev->disable(dev);
->   
-In my opinion this brings more mess than removes. If I see 
-dev->something I'll immediatelly think "struct device" and get confused. 
-x_dev->something or dev_y->something not so much. And this change adds 
-in my opinion more confusion than removes.
+Return value directly instead of taking this
+in another redundant variable.
 
->   	if (id->driver_data >= ARRAY_SIZE(dw_pci_controllers)) {
-> -		dev_err(&pdev->dev, "%s: invalid driver data %ld\n", __func__,
-> -			id->driver_data);
-> +		dev_err(d, "%s: invalid driver data %ld\n", __func__, id->driver_data);
->   		return -EINVAL;
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/infiniband/sw/rxe/rxe_net.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Honestly, what's is the value of this change? Yet another differently 
-named "device" pointer more to the mess (Inconsistent naming use of 
-struct dw_i2c_dev *dev, struct dw_i2c_dev *i_dev and struct device *dev 
-in the i2c-designware-*).
+diff --git a/drivers/infiniband/sw/rxe/rxe_net.c
+b/drivers/infiniband/sw/rxe/rxe_net.c
+index 2cb810cb890a..f557150bd59a 100644
+--- a/drivers/infiniband/sw/rxe/rxe_net.c
++++ b/drivers/infiniband/sw/rxe/rxe_net.c
+@@ -22,24 +22,20 @@ static struct rxe_recv_sockets recv_sockets;
+ 
+ int rxe_mcast_add(struct rxe_dev *rxe, union ib_gid *mgid)
+ {
+-	int err;
+ 	unsigned char ll_addr[ETH_ALEN];
+ 
+ 	ipv6_eth_mc_map((struct in6_addr *)mgid->raw, ll_addr);
+-	err = dev_mc_add(rxe->ndev, ll_addr);
+ 
+-	return err;
++	return dev_mc_add(rxe->ndev, ll_addr);
+ }
+ 
+ int rxe_mcast_delete(struct rxe_dev *rxe, union ib_gid *mgid)
+ {
+-	int err;
+ 	unsigned char ll_addr[ETH_ALEN];
+ 
+ 	ipv6_eth_mc_map((struct in6_addr *)mgid->raw, ll_addr);
+-	err = dev_mc_del(rxe->ndev, ll_addr);
+ 
+-	return err;
++	return dev_mc_del(rxe->ndev, ll_addr);
+ }
+ 
+ static struct dst_entry *rxe_find_route4(struct net_device *ndev,
+-- 
+2.25.1
 
-Jarkko

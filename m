@@ -2,279 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 384CA474F00
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E412474F03
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238415AbhLOAS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 19:18:26 -0500
-Received: from finn.gateworks.com ([108.161.129.64]:35628 "EHLO
-        finn.localdomain" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235245AbhLOASZ (ORCPT
+        id S235360AbhLOATe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 19:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232930AbhLOATd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 19:18:25 -0500
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1mxHzr-0090fo-4m; Wed, 15 Dec 2021 00:18:15 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH] arm64: dts: imx8m{m,n}_venice*: add gpio-line-names
-Date:   Tue, 14 Dec 2021 16:18:12 -0800
-Message-Id: <20211215001812.9006-1-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 14 Dec 2021 19:19:33 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E475C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 16:19:33 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id c3so27285571iob.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 16:19:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tMAMO0djljzKE3TENnIaAeCLl2cv92t1lTW3pqGBMI0=;
+        b=VolncuD+ecLvUJYaYCLJYLHnoSda1ds53ng7/XHsT6rIWQNgZKX7N5dginAgH92FO2
+         BoLitBFswKWP4wzRENpMLpf1rMRH7MXB/Kgqlnm2EcGeO2YedQhzsKt3OXP39DX0W2HO
+         Lp9HXliGQtlsVv27n8YZl7bI85kk5vXWRwz68=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tMAMO0djljzKE3TENnIaAeCLl2cv92t1lTW3pqGBMI0=;
+        b=LTkiK8y6mvTdE+xwepKnAOqoedsLAPbbRJ3Npdh8jHxPYsKY34R/YXv6mSM0BRyvLX
+         fy4izMMcD/oM9UM0jIe8kGTbpALbNKTbJ09LqdU6aUcLMHgz8FWJTF71nBP647Xb9Q4f
+         eJ6N6xn9wStoyEJflM0V9JL04V0VNJ8cINC5bmFvV3biiSiJuTzKjYlJp/unnEIFOXvS
+         kZvbOHUKj7rd+q30yOA08EQp0oOga5IHFi2Y6vgogAzi0G2npsFOeQ+zX2F6zcqmMR+7
+         6jBfg1WOCgxTm38ln1+yBaJRIZTU0vsqEeHql/JgqsbN49uqfs3jXoUw3vCUEEHHrtUa
+         xJdQ==
+X-Gm-Message-State: AOAM531nvNeiysCThSA2f3SvAOjfHRLR4fxuXs+LZsQMM8KT2EEXUdZW
+        IdpEggJvtEKvR0GeYG8QQmCi/o2he55LFw==
+X-Google-Smtp-Source: ABdhPJwhscLR8urvPYNYICV9n50i02n9ItYu6S9knOO/0EpDjHr2GIwgeFzqaHpnegAQXSBVR0bqeg==
+X-Received: by 2002:a05:6602:24ce:: with SMTP id h14mr5443876ioe.87.1639527572066;
+        Tue, 14 Dec 2021 16:19:32 -0800 (PST)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id b8sm258975iow.2.2021.12.14.16.19.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 16:19:31 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     corbet@lwn.net, akpm@linux-foundation.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] docs/vm: fix Unexpected indentation warns in page_owner
+Date:   Tue, 14 Dec 2021 17:19:29 -0700
+Message-Id: <20211215001929.47866-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add gpio-line-names for the various GPIO's used on Gateworks Venice
-boards. Note that these GPIO's are typically 'configured' in Boot
-Firmware via gpio-hog therefore we only configure line names to keep the
-boot firmware configuration from changing on kernel init.
+Fix Unexpected indentation warns in page_owner:
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+Documentation/vm/page_owner.rst:92: WARNING: Unexpected indentation.
+Documentation/vm/page_owner.rst:96: WARNING: Unexpected indentation.
+Documentation/vm/page_owner.rst:107: WARNING: Unexpected indentation.
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- .../dts/freescale/imx8mm-venice-gw71xx.dtsi   | 14 +++++++
- .../dts/freescale/imx8mm-venice-gw72xx.dtsi   | 16 ++++++++
- .../dts/freescale/imx8mm-venice-gw73xx.dtsi   | 16 ++++++++
- .../dts/freescale/imx8mm-venice-gw7901.dts    | 23 +++++++++++
- .../dts/freescale/imx8mm-venice-gw7902.dts    | 39 ++++++++++++++++++-
- .../dts/freescale/imx8mn-venice-gw7902.dts    | 39 ++++++++++++++++++-
- 6 files changed, 145 insertions(+), 2 deletions(-)
+ Documentation/vm/page_owner.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
-index 506335efc391..73addc0b8e57 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
-@@ -68,6 +68,20 @@
- 	status = "okay";
- };
+diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
+index 9837fc8147dd..9a3af6aafa09 100644
+--- a/Documentation/vm/page_owner.rst
++++ b/Documentation/vm/page_owner.rst
+@@ -89,11 +89,11 @@ Usage
  
-+&gpio1 {
-+	gpio-line-names = "", "", "", "", "", "", "pci_usb_sel", "dio0",
-+		"", "dio1", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
-+&gpio4 {
-+	gpio-line-names = "", "", "", "dio2", "dio3", "", "", "pci_wdis#",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
- &i2c2 {
- 	clock-frequency = <400000>;
- 	pinctrl-names = "default";
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
-index 72a3a3aa8fcd..1e7badb2a82e 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
-@@ -88,6 +88,22 @@
- 	status = "okay";
- };
+ 	Page allocated via order XXX, ...
+ 	PFN XXX ...
+-	 // Detailed stack
++	// Detailed stack
  
-+&gpio1 {
-+	gpio-line-names = "rs485_term", "mipi_gpio4", "", "",
-+		"", "", "pci_usb_sel", "dio0",
-+		"", "dio1", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
-+&gpio4 {
-+	gpio-line-names = "rs485_en", "mipi_gpio3", "rs485_hd", "mipi_gpio2",
-+		"mipi_gpio1", "", "", "pci_wdis#",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
- &i2c2 {
- 	clock-frequency = <400000>;
- 	pinctrl-names = "default";
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
-index 7b00b6b5bb38..426483ec1f88 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
-@@ -108,6 +108,22 @@
- 	status = "okay";
- };
+ 	Page allocated via order XXX, ...
+ 	PFN XXX ...
+-	 // Detailed stack
++	// Detailed stack
  
-+&gpio1 {
-+	gpio-line-names = "rs485_term", "mipi_gpio4", "", "",
-+		"", "", "pci_usb_sel", "dio0",
-+		"", "dio1", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
-+&gpio4 {
-+	gpio-line-names = "rs485_en", "mipi_gpio3", "rs485_hd", "mipi_gpio2",
-+		"mipi_gpio1", "", "", "pci_wdis#",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
- &i2c2 {
- 	clock-frequency = <400000>;
- 	pinctrl-names = "default";
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-index 4bf2b97b3ef5..8710586a1d8f 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-@@ -293,6 +293,29 @@
- 	};
- };
+    The ``page_owner_sort`` tool ignores ``PFN`` rows, puts the remaining rows
+    in buf, uses regexp to extract the page order value, counts the times
+@@ -104,7 +104,7 @@ Usage
  
-+&gpio1 {
-+	gpio-line-names = "uart1_rs422#", "", "", "uart1_rs485#",
-+		"", "uart1_rs232#", "dig1_in", "dig1_out",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
-+&gpio4 {
-+	gpio-line-names = "", "", "", "",
-+		"", "", "uart3_rs232#", "uart3_rs422#",
-+		"uart3_rs485#", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "uart4_rs485#", "", "sim1det#", "sim2det#", "";
-+};
-+
-+&gpio5 {
-+	gpio-line-names = "", "", "", "dig2_out", "dig2_in", "sim2sel", "", "",
-+		"", "", "uart4_rs232#", "", "", "uart4_rs422#", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
- &gpu_2d {
- 	status = "disabled";
- };
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-index 1b2aaf299b24..edf0c7aaaef0 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-@@ -260,6 +260,43 @@
- 	};
- };
+ 	XXX times, XXX pages:
+ 	Page allocated via order XXX, ...
+-	 // Detailed stack
++	// Detailed stack
  
-+&gpio1 {
-+	gpio-line-names = "", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "m2_reset", "", "m2_wdis#",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
-+&gpio2 {
-+	gpio-line-names = "", "", "", "", "", "", "", "",
-+		"uart2_en#", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
-+&gpio3 {
-+	gpio-line-names = "", "m2_gdis#", "", "", "", "", "", "m2_off#",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
-+&gpio4 {
-+	gpio-line-names = "", "", "", "", "", "", "", "",
-+		"", "", "", "amp_gpio3", "amp_gpio2", "", "amp_gpio1", "",
-+		"", "", "", "", "amp_gpio4", "app_gpio1", "", "uart1_rs485",
-+		"", "uart1_term", "uart1_half", "app_gpio2",
-+		"mipi_gpio1", "", "", "";
-+};
-+
-+&gpio5 {
-+	gpio-line-names = "", "", "", "mipi_gpio4",
-+		"mipi_gpio3", "mipi_gpio2", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
- &i2c1 {
- 	clock-frequency = <100000>;
- 	pinctrl-names = "default";
-@@ -691,7 +728,7 @@
- 	pinctrl_hog: hoggrp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_NAND_CE0_B_GPIO3_IO1	0x40000159 /* M2_GDIS# */
--			MX8MM_IOMUXC_GPIO1_IO13_GPIO1_IO13	0x40000041 /* M2_RST# */
-+			MX8MM_IOMUXC_GPIO1_IO13_GPIO1_IO13	0x40000041 /* M2_RESET */
- 			MX8MM_IOMUXC_NAND_DATA01_GPIO3_IO7	0x40000119 /* M2_OFF# */
- 			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x40000159 /* M2_WDIS# */
- 			MX8MM_IOMUXC_SAI1_TXD2_GPIO4_IO14	0x40000041 /* AMP GPIO1 */
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-index 2d58005d20e4..3c0e63d2e82d 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-@@ -255,6 +255,43 @@
- 	};
- };
- 
-+&gpio1 {
-+	gpio-line-names = "", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "m2_reset", "", "m2_wdis#",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
-+&gpio2 {
-+	gpio-line-names = "", "", "", "", "", "", "", "",
-+		"uart2_en#", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
-+&gpio3 {
-+	gpio-line-names = "", "m2_gdis#", "", "", "", "", "", "m2_off#",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
-+&gpio4 {
-+	gpio-line-names = "", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "app_gpio1", "", "uart1_rs485",
-+		"", "uart1_term", "uart1_half", "app_gpio2",
-+		"mipi_gpio1", "", "", "";
-+};
-+
-+&gpio5 {
-+	gpio-line-names = "", "", "", "mipi_gpio4",
-+		"mipi_gpio3", "mipi_gpio2", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "";
-+};
-+
- &gpu {
- 	status = "disabled";
- };
-@@ -645,7 +682,7 @@
- 	pinctrl_hog: hoggrp {
- 		fsl,pins = <
- 			MX8MN_IOMUXC_NAND_CE0_B_GPIO3_IO1	0x40000159 /* M2_GDIS# */
--			MX8MN_IOMUXC_GPIO1_IO13_GPIO1_IO13	0x40000041 /* M2_RST# */
-+			MX8MN_IOMUXC_GPIO1_IO13_GPIO1_IO13	0x40000041 /* M2_RESET */
- 			MX8MN_IOMUXC_NAND_DATA01_GPIO3_IO7	0x40000119 /* M2_OFF# */
- 			MX8MN_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x40000159 /* M2_WDIS# */
- 			MX8MN_IOMUXC_SAI2_RXFS_GPIO4_IO21	0x40000041 /* APP GPIO1 */
+    By default, ``page_owner_sort`` is sorted according to the times of buf.
+    If you want to sort by the pages nums of buf, use the ``-m`` parameter.
 -- 
-2.17.1
+2.32.0
 

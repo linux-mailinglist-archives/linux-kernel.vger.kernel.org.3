@@ -2,65 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92659475861
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F9B47586E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242299AbhLOMGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:06:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        id S242308AbhLOMJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:09:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242288AbhLOMGH (ORCPT
+        with ESMTP id S236954AbhLOMJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:06:07 -0500
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35807C061747
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:06:07 -0800 (PST)
-Received: by mail-oo1-xc42.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso5831833ood.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:06:07 -0800 (PST)
+        Wed, 15 Dec 2021 07:09:47 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F25C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:09:46 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id 131so54506293ybc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:09:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=urbOGxUEIV32+MkH0cwNAEvEHR7ycdGQDqYdOGjjysw=;
-        b=ThTtklH+LJDoaqeG43ed2nEwVgUMKY/bVoyM7JthsuG3hlD3zvuTBRSYEqRA/+AR1w
-         +SEZ5X+lcZxMxp6bm7X3okc/0aV/MKAPIKroUnMIP9yrv5AuLrDG/l0iOEk7vhNJT00d
-         ZSh6e1OPFIxvFjI1jIDy9KEiK0kGKnZNphuMQO+rPzUsouebyK+QnUbHjw7ezvCQm6ya
-         JAiLiuBlMhDzo+6bOPCJDc3lvPjAUjtFUE4+YvWSox6zPQLF9pEmu8EJzFPCIIp3ywD+
-         csL7FXMjkIMIl3vW9Fo4K3a7syWbLPd0uWrNWh7+ODCXel/IApC3lbVPiWNLHfoyBayu
-         Jo1w==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=medD3Xi3kZKH5q7bagszydyhriMt4qJw4H1Wjw4BIeA=;
+        b=hFy0KgQxd2bJci/Xd+n8sv+Gu5RmYMvEDhUBuj2Yrq8ctOAyB8hlUNmxpM2IiWLKGy
+         GE3vvn8E0z4jskkFd9srdqyZ83G3qGSVOcrD2grWx5AMKa7YPQ48/Vv0KqUhJi54LfOy
+         dD7WRE2C4pHHS/JIsZt35udpFpfLB/bfGhx9yBgUoW8bTi5myNlDaZXqEKI6Kx46FisJ
+         68kZKS3svXvUdYbK5/j6C34dFY+I1Rbbh4hEBrVj5Z8GkSaIoGT6INxX0WmFow5netem
+         tEe/Dm5Fek5uzcugw8IodwEebZjX23z7LIjzHm5KAIPoJ2dg3exHdgGp4uP3a5We1NHj
+         TTAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=urbOGxUEIV32+MkH0cwNAEvEHR7ycdGQDqYdOGjjysw=;
-        b=K/YaTEv7YyiraWSDTPUeAahWTKe7gmnC+RhMvNsS7XQ/+15wEsNnfraIFfTYvtNoWp
-         x3vcm/TO7vIyt7fiZgb5LCgDYtfjiQu4pgtyVYsf9VRE/rJqNpagr/clbVUBIEh2kBST
-         c1X6/OboVB8ZOLs19nzYOlQ0u7CoxXbqT6ij6JjAijtLRjMV/V99s8zcTCJRMJ4rnjD/
-         6H9wnysbODuOLaj+x0/1hBWAqSC6CAz6dGVHgNeEUKMnGtf4jzUE0OAqlZlgzw1n9/Nq
-         YBcWq9IeQ9Fqdg7zIESGD/MfJh6DdIMJ+D9XnpSf34atbKVRmIDiB9jAXh7DKsmPSUwE
-         NkSQ==
-X-Gm-Message-State: AOAM533wVWoXgnfi30sr0Ypjq1xnX9wG1bJssIkGCTCfZrIGe08VOfmT
-        uY5tvuY6tsW1eg2vQZ8rmZAaebcK4i20zWLALgA=
-X-Google-Smtp-Source: ABdhPJzEmnOdokFuTDU/o4KPkFDzkFu0T4SDRiPiWDvhw9ASYPpQAQnxBAiDGOwBC6yDaUnu5xX32f0vziuFpTOlntw=
-X-Received: by 2002:a4a:a44b:: with SMTP id w11mr7068587ool.66.1639569966448;
- Wed, 15 Dec 2021 04:06:06 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=medD3Xi3kZKH5q7bagszydyhriMt4qJw4H1Wjw4BIeA=;
+        b=zuvnBXpN2FBRH4/3lbGRz/fZ+Hxmnr1AsklzlWP7fu6w+p9JUB/mF6NeR8WV8fy9OW
+         9xE2UeItEeCqffOXnA2KnIQLPYtQOExpAxzhjuj0IPgx947aBezhiSF6NLyFZG8aB9Ga
+         bfjlnEjT1d2I4v8/UhQEMuauoSY0ffAFEk8HHSIBqHGTNqrPCBq9RHlMp9UEYG2xBG6w
+         aSuSHQJRPJhhnKCsYUapv4hkKTlJjGGq2m+iQlNov5Cn/aQ/0IQfxYUn3RP0MSe5buwE
+         C1+DzXvE4ExdqI6Aqvzcap4OWuixfExtI3D+ApRkjdJBjSyjeq0LX3Jw6dKcBaO2ZI9x
+         wr0w==
+X-Gm-Message-State: AOAM530cctNwkTZmo7n8Ur+stJ0NlxCIb2ICzsiAG99SJUrD/9ts9Pgz
+        icfkyo/5oV4l4g0NmLQs8AHVGTMN+5EB7UvHJMjDTg==
+X-Google-Smtp-Source: ABdhPJwQ0At3Bjn2QQCan5WHYT82Z/7G6PUgdH5xVAc30+lYih6V821vw+gn8W1jOKI1DU2w2zfhyVDYOnqoiKKOUGU=
+X-Received: by 2002:a05:6902:52b:: with SMTP id y11mr5529088ybs.199.1639570186129;
+ Wed, 15 Dec 2021 04:09:46 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6830:4408:0:0:0:0 with HTTP; Wed, 15 Dec 2021 04:06:06
- -0800 (PST)
-Reply-To: drtracywilliam503@gmail.com
-From:   Dr Tracy William <jenniferkatharineg@gmail.com>
-Date:   Wed, 15 Dec 2021 04:06:06 -0800
-Message-ID: <CACUYesE=chnPk0gSOf_H-zCDgNZQ6O6jZ8RxsKhCVx1X_QzdOg@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
+References: <20211213165342.74704-1-songmuchun@bytedance.com>
+ <20211213165342.74704-2-songmuchun@bytedance.com> <YbieX3WCUt7hdZlW@cmpxchg.org>
+In-Reply-To: <YbieX3WCUt7hdZlW@cmpxchg.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Wed, 15 Dec 2021 20:09:10 +0800
+Message-ID: <CAMZfGtWPt2wk91Js6NRnw-wpMVQHc+ZRZo8OUyrkNAJBB3f8yQ@mail.gmail.com>
+Subject: Re: [PATCH v4 01/17] mm: list_lru: optimize memory consumption of
+ arrays of per cgroup lists
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <guro@fb.com>, Yang Shi <shy828301@gmail.com>,
+        Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Dave Chinner <david@fromorbit.com>,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        jaegeuk@kernel.org, chao@kernel.org,
+        Kari Argillander <kari.argillander@gmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        fam.zheng@bytedance.com, Muchun Song <smuchun@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Tracy William ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Tracy
+On Tue, Dec 14, 2021 at 9:38 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Tue, Dec 14, 2021 at 12:53:26AM +0800, Muchun Song wrote:
+> > The list_lru uses an array (list_lru_memcg->lru) to store pointers
+> > which point to the list_lru_one. And the array is per memcg per node.
+> > Therefore, the size of the arrays will be 10K * number_of_node * 8 (
+> > a pointer size on 64 bits system) when we run 10k containers in the
+> > system. The memory consumption of the arrays becomes significant. The
+> > more numa node, the more memory it consumes.
+>
+> The complexity for the lists themselves is still nrmemcgs * nrnodes
+> right? But the rcu_head goes from that to nrmemcgs.
+
+Right.
+
+>
+> > I have done a simple test, which creates 10K memcg and mount point
+> > each in a two-node system. The memory consumption of the list_lru
+> > will be 24464MB. After converting the array from per memcg per node
+> > to per memcg, the memory consumption is going to be 21957MB. It is
+> > reduces by 2.5GB. In our AMD servers, there are 8 numa nodes in
+> > those system, the memory consumption could be more significant.
+>
+> The code looks good to me, but it would be useful to include a
+> high-level overview of the new scheme, explain that the savings come
+> from the rcu heads, that it simplifies the alloc/dealloc path etc.
+
+Will do in the next version.
+
+>
+> With that,
+>
+> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+
+Thanks.
+
+>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>

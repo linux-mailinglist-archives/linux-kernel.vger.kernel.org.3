@@ -2,82 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B57F4764B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 512FF4764B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbhLOVh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:37:57 -0500
-Received: from ale.deltatee.com ([204.191.154.188]:34846 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbhLOVh4 (ORCPT
+        id S229913AbhLOVk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229813AbhLOVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:37:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=jWTj3wubn/0E/EwdQLFg156OS16E/EeY/O90DwhWuc8=; b=S/EAnnK6MO/X7SIASHuxJgMs3V
-        FIHpm1uuzGtao4cocaQsn80ed0jvqqUPIuSBExaeMwCl8qZzBWukIN26uAQYHOrR3Zco3njceTh8W
-        yyUWXRYnYbrCvU3/SadN/J+blhTlF3SLUZEE4NwRZyxfTne/oX0YLrXgK2ExCtzObs+jiARkkKsbY
-        QTL4JdcP3Rso5nICLz/C3uqbF1zwcWXf0Ii9MFAaUSEo3kk1A44SzIl7yxUGTjnqIBdLNnEwbfSts
-        4PydtjWXrMgnnCv/e1RHG+iiC9OTVhgXXD/p9q3lX07i4CY5SJosq+xQ1zu/Ml4ZcedBjYF8L38VI
-        orWEql3A==;
-Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1mxbyC-005fWQ-GJ; Wed, 15 Dec 2021 14:37:53 -0700
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>
-References: <20211215173556.GA702194@bhelgaas>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <e7676711-52c0-2ca4-f117-bea540d61cb1@deltatee.com>
-Date:   Wed, 15 Dec 2021 14:37:51 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 15 Dec 2021 16:40:26 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B2CC061574;
+        Wed, 15 Dec 2021 13:40:26 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id q14so23347729qtx.10;
+        Wed, 15 Dec 2021 13:40:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dBmNfUUXlFFGQ+sdmOWfMRZ5XVtampSpkmAvqHCdWjo=;
+        b=hTSmm96IXkdb15Y51GO3v1Kob+u1eJn+H2WSF/uv9cN9AAp7lxoEwvWxKJl/HNmip2
+         vn6BBbzMzC9Rrr8dUMY0fLzCzjv9t32Ak1gDCpGWLLRFeZAMTmkF0LENtDX7ElUMjLhe
+         bfq4ByjYo5CGxnPbvIWHlWqsH63qwX04VGtwMXyX4gzWGFdeVBmxAoUA5rAVogxriqZG
+         5HQrAP98VIz3dodS17Ufw4mx77+js4u2znfcDut4KjmhO0v8yF/kzJpPUVxgwGW/ZYZK
+         MVezXOCdnAnRhLwktkrK6cbpEh+aLjrHuyOXKTFHivRhSjDRUf2iV46nWAFOZ7c3gZbi
+         eVoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=dBmNfUUXlFFGQ+sdmOWfMRZ5XVtampSpkmAvqHCdWjo=;
+        b=RslfWNu17TjVkWX5nUXtZ/TJrKGVSmQc8gkNPWWyejLodrdJxspvOAfZqb9430riHX
+         DDfnjH3B7V2QfushrQoF9mURywq2ah6SDUsrhaJtwSXc9VzM5+bwKI4i13Exo+nJaU/9
+         NdZyw3FY3ucqhUuFbvDCYVGupARiAStqpxVOhg1L+zhagxSkAQYTU1TPVdFF0hSPK/nc
+         pqZOmRSyFPRj+Y/2Rzvq9NHOVkm+20cs6e9B7w8a538vLFxznxP/fluXw2SCNd2KnquQ
+         BfjS45UqbL9z+H2EujUdBlxXC/81td3qW+cUULMRCksR7jQIMVPc7deN169hYcOGoYVU
+         ORVw==
+X-Gm-Message-State: AOAM533Jq2S2OImCIPCg5APydnZhI77P8VSji/a23LFc6zIifhHrXHjD
+        Lg8WNs1hT7BLTrKHx0h6D04=
+X-Google-Smtp-Source: ABdhPJxsVzTqiyuhQ/gkZagHF2QD7t9F+lNGXyubtGk4s0cYRy+SqHH6fBc42phCSuvI4Kb5t3WFlw==
+X-Received: by 2002:a05:622a:647:: with SMTP id a7mr13825515qtb.593.1639604425522;
+        Wed, 15 Dec 2021 13:40:25 -0800 (PST)
+Received: from kubuntu-laptop.. ([67.8.38.84])
+        by smtp.gmail.com with ESMTPSA id h9sm1755988qkp.106.2021.12.15.13.40.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 13:40:25 -0800 (PST)
+Sender: Julian Braha <julian.braha@gmail.com>
+From:   Julian Braha <julianbraha@gmail.com>
+To:     andrew@aj.id.au, linus.walleij@linaro.org, joel@jms.id.au
+Cc:     linux-aspeed@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, fazilyildiran@gmail.com
+Subject: [PATCH v1] pinctrl: aspeed: fix unmet dependencies on MFD_SYSCON for PINCTRL_ASPEED
+Date:   Wed, 15 Dec 2021 16:40:22 -0500
+Message-Id: <20211215214022.146391-1-julianbraha@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20211215173556.GA702194@bhelgaas>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.73.163.230
-X-SA-Exim-Rcpt-To: edumazet@google.com, kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, bhelgaas@google.com, christophe.jaillet@wanadoo.fr, helgaas@kernel.org
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] PCI/P2PDMA: Save a few cycles in 'pci_alloc_p2pmem()'
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When PINCTRL_ASPEED_G* is selected,
+and MFD_SYSCON is not selected,
+Kbuild gives the following warnings:
 
+WARNING: unmet direct dependencies detected for PINCTRL_ASPEED
+  Depends on [n]: PINCTRL [=y] && (ARCH_ASPEED [=n] || COMPILE_TEST [=y]) && OF [=y] && MFD_SYSCON [=n]
+  Selected by [y]:
+  - PINCTRL_ASPEED_G4 [=y] && PINCTRL [=y] && (MACH_ASPEED_G4 [=n] || COMPILE_TEST [=y]) && OF [=y]
 
-On 2021-12-15 10:35 a.m., Bjorn Helgaas wrote:
-> [+cc Logan, Eric]
-> 
-> On Wed, Nov 03, 2021 at 10:16:53PM +0100, Christophe JAILLET wrote:
->> Use 'percpu_ref_tryget_live_rcu()' instead of 'percpu_ref_tryget_live()' to
->> save a few cycles when it is known that the rcu lock is already
->> taken/released.
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> 
-> Added Logan and Eric since Logan is the author and de facto maintainer
-> of this file and Eric recently converted this to RCU.
+WARNING: unmet direct dependencies detected for PINCTRL_ASPEED
+  Depends on [n]: PINCTRL [=y] && (ARCH_ASPEED [=n] || COMPILE_TEST [=y]) && OF [=y] && MFD_S>
+  Selected by [y]:
+  - PINCTRL_ASPEED_G5 [=y] && PINCTRL [=y] && (MACH_ASPEED_G5 [=n] || COMPILE_TEST [=y]) && O>
 
-Looks fine to me:
+WARNING: unmet direct dependencies detected for PINCTRL_ASPEED
+  Depends on [n]: PINCTRL [=y] && (ARCH_ASPEED [=n] || COMPILE_TEST [=y]) && OF [=y] && MFD_S>
+  Selected by [y]:
+  - PINCTRL_ASPEED_G6 [=y] && PINCTRL [=y] && (MACH_ASPEED_G6 [=n] || COMPILE_TEST [=y]) && O>
 
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+This is because MACH_ASPEED_G* depend on (ARCH_ASPEED || COMPILE_TEST).
+ARCH_ASPEED enables the MFD_SYSCON dependency, but COMPILE_TEST doesn't.
 
-> Maybe we need a MAINTAINERS entry for P2PDMA?
+These unmet dependency bugs were detected by Kismet,
+a static analysis tool for Kconfig. Please advise
+if this is not the appropriate solution.
 
-I'm not opposed to this. Would it be a duplicate of the PCI SUBSYSTEM
-just with my name added as maintainer? I could send a patch if so.
+Signed-off-by: Julian Braha <julianbraha@gmail.com>
+---
+ drivers/pinctrl/aspeed/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Logan
+diff --git a/drivers/pinctrl/aspeed/Kconfig b/drivers/pinctrl/aspeed/Kconfig
+index de8b185c4fee..1a4e5b9ed471 100644
+--- a/drivers/pinctrl/aspeed/Kconfig
++++ b/drivers/pinctrl/aspeed/Kconfig
+@@ -2,7 +2,7 @@
+ config PINCTRL_ASPEED
+ 	bool
+ 	depends on (ARCH_ASPEED || COMPILE_TEST) && OF
+-	depends on MFD_SYSCON
++	select MFD_SYSCON
+ 	select PINMUX
+ 	select PINCONF
+ 	select GENERIC_PINCONF
+-- 
+2.32.0
+

@@ -2,77 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE884760E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CC44760E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343890AbhLOSlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:41:10 -0500
-Received: from mga18.intel.com ([134.134.136.126]:22549 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234977AbhLOSlJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:41:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639593669; x=1671129669;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ApidIX6nwQUZTYZQJExSqeAHWvjA68F4rXo5Gp4mB4Q=;
-  b=d/21i3cWr1wgBuzo7Yl40hRFyehyM8NXNCzkK53gRnkQg9g1XtQ7oKTI
-   mHJjwY/IikHDk7UZsRUYNEDjkrpPPL+7Ou2XTxVVGO6EQMy3vT+Cjb/Va
-   djqVnxbJtyQowZbfHTAWPLgE8MH2+HLQaBcH0Y2AshcZOnwepyYCf0ZRu
-   OlF1LPHOmSexnvaMVGva8hEGC4O/zmsIQd0aq9cZnad7PWhXytW1blshN
-   HyHCJ7bsWne3HyYOdPNgK308zPkTJM/217diMRg3AGEr6iOV1B3goVclH
-   UbpWYCJOc+TIewqumqwwk0oxZkXTZW5ndtXgcAfrb8kNxIaYkSGdykYA/
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226165287"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="226165287"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 10:41:09 -0800
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="505936654"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 10:41:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1mxZCG-006jkN-1H;
-        Wed, 15 Dec 2021 20:40:12 +0200
-Date:   Wed, 15 Dec 2021 20:40:11 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 14
-Message-ID: <Ybo2i0lmD2kx/cg6@smile.fi.intel.com>
-References: <20211214223228.1745315-1-broonie@kernel.org>
- <YboPz454GCe6ZA7g@smile.fi.intel.com>
- <Yboui5aym4eB6oP8@sirena.org.uk>
+        id S1343881AbhLOSk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234977AbhLOSk2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 13:40:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1477C061574;
+        Wed, 15 Dec 2021 10:40:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21B5DB8207B;
+        Wed, 15 Dec 2021 18:40:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC84C36AE3;
+        Wed, 15 Dec 2021 18:40:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639593624;
+        bh=VgZti/Y1MwzTJlMCoNXKf6jL3JZ03GEy/PdqNgRSkmU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mjOYArg39ZiVAkwpRDtBKDUA2VIZimzD5YSsDHeY4rI+CJH8OO8zIVgEjtiSvnXuC
+         mCC8ZbKhFjhnhBo970fi60rFsb8+f+myJtdGcIpPMiDZ2lREJ0jO1hvnyp6xkk4u/Q
+         6V2toStCYoRToUwxBNp/30bWYjEjrADlvYT9uLn4=
+Date:   Wed, 15 Dec 2021 19:40:21 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     chris.paterson2@renesas.com, alice.ferrazzi@miraclelinux.com,
+        nobuhiro1.iwamatsu@toshiba.co.jp, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: 5.10.85 breaks CIP testing Re: [PATCH 5.10 00/33] 5.10.86-rc1
+ review
+Message-ID: <Ybo2lbHVaASDyAcC@kroah.com>
+References: <20211215172024.787958154@linuxfoundation.org>
+ <20211215183223.GB10909@duo.ucw.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yboui5aym4eB6oP8@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211215183223.GB10909@duo.ucw.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 06:06:03PM +0000, Mark Brown wrote:
-> On Wed, Dec 15, 2021 at 05:54:55PM +0200, Andy Shevchenko wrote:
-
-> > The other issue I have noticed is that gpio-intel branches [1] are out of the
-> > merge. I haven't got any email about any issues with them.
+On Wed, Dec 15, 2021 at 07:32:23PM +0100, Pavel Machek wrote:
+> Hi!
 > 
-> > Do you have the latest and greatest list of repositories to merge?
+> > This is the start of the stable review cycle for the 5.10.86 release.
+> > There are 33 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
 > 
-> You can see in the merge log that it's getting skipped due to an issue
-> with the previous tree (which also has a build failure causing me to
-> need to revert it) upsetting the script.
+> I'm getting the gmp.h failures :-(.
+> 
+> https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/430434332
+> 
+> I believe we should not change build requirements in the middle of
+> stable series.
+> 
+> To our testing team: 5.10.85 introduced new requirements for the
+> build. gmp.h is now required in our configs, and maybe something else.
+> 
+> Easiest fix might be to add
+> 
+> # CONFIG_GCC_PLUGINS is not set
+> 
+> to our configs. Alternatively I know which patch to revert.
+> 
+> But I believe -stable should be the one doing the revert, as the patch
+> does not fix serious bug and introduces problem. Faster compile is
+> nice but let mainline have those kind of changes.
 
-Yes, I see now. But as far as I know my repo doesn't have issues (neither
-compilation nor merge), or at least nobody so far informed me about.
+But that commit is needed to get gcc11 plugins to work with the 5.10.y
+kernel tree.  So either we "break" it for old and obsolete gcc versions
+(i.e. gcc7), or newer supported versions break.
 
--- 
-With Best Regards,
-Andy Shevchenko
+We are not in the business of keeping older versions of gcc always
+working, right?
 
+thanks,
 
+greg k-h

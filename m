@@ -2,153 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 868A34759A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DD04759A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242875AbhLON3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 08:29:18 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57598 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242840AbhLON3M (ORCPT
+        id S242876AbhLON3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 08:29:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237408AbhLON33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 08:29:12 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 780D51F387;
-        Wed, 15 Dec 2021 13:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639574951; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 15 Dec 2021 08:29:29 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B1DC061574;
+        Wed, 15 Dec 2021 05:29:29 -0800 (PST)
+Date:   Wed, 15 Dec 2021 14:29:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639574965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=gJ2jyR7VN20r+seaSe1QDbMXvh1OvYB4PCD+TDYUlvA=;
-        b=QpLHpTaJVVFSh6aewDo5f/rH0GBqqfLMbQJxfUptpMzyy3+LKlVUOmPd2Z/whIl6DNW6rx
-        f7I1LJ62ZJzLID1rRHbO0ENivgATp3hc0bZVNY7FRK3UTIkjYA9ofzNgxg7e7sZxbQBtS3
-        oTRZAVRZTrpycFPwHe5Kaio2Bfm8yes=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639574951;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=GBgySfTiWHq4d5/4mgjxgny2xuIxe31kHkq2SocLAI0=;
+        b=RBSpqn4EUCnAkOCjtXFRe6o2T1mTuTfvwFs1sgJJGtr1leItrP5urS4GTfIt3eTyFKEZAt
+        jz0JO4Tfy3XNsFQIZpJceXyOfP/3Hi+0ENZoxPjsRuCHxqoIN6k+ThDyx/L8YRtJ9hK0bA
+        ew6/nMwaZG23RyZmrZnA67QnaRHGxTCz42aHQuhlmhvjsc0tCvlYe0yaZ3Atq5kfUDyBP6
+        7UqaTh+b9PheADx2co9x0YaoMQ2Byi9muvjhhOLcjMu1DV6y3Zxd7SReBthPOfT0DEcVJ6
+        si40tpbJ/wLJehe4yrnGiUPHDw46LWZEwoRCbbQTA3WO4J9tuIuVGlVrHSRK+w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639574965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=gJ2jyR7VN20r+seaSe1QDbMXvh1OvYB4PCD+TDYUlvA=;
-        b=eWa/RbMxgh+BjSWJYP2QdUvpkhTHBQbMGPzqHelj/Ag60L1PGcoDbYtFx+E0PlpgZvv640
-        SH8WKfeZD9vaXkAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2EDEC1330B;
-        Wed, 15 Dec 2021 13:29:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3sZSCqftuWGhTAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 15 Dec 2021 13:29:11 +0000
-Message-ID: <4d16ff4b-4060-49df-805f-66d293ffa186@suse.de>
-Date:   Wed, 15 Dec 2021 14:29:10 +0100
+        bh=GBgySfTiWHq4d5/4mgjxgny2xuIxe31kHkq2SocLAI0=;
+        b=/zyERqOB+X76XCxdndLxeOhF/sZdGe0hJMiGVBv8Ri46uPDVzna09ikHsUZDkWdCgOBZHM
+        sqEWSs5CWZGILTAQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] Fix warnings in blktrace
+Message-ID: <YbnttOqgAuD0gygR@linutronix.de>
+References: <20211213123737.9147-1-wander@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3 0/3] drm/simpledrm: Apple M1 / DT platform support
- fixes
-Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20211212062407.138309-1-marcan@marcan.st>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20211212062407.138309-1-marcan@marcan.st>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------YKMJGICHJYklTHrMiV9Y0wVh"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211213123737.9147-1-wander@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------YKMJGICHJYklTHrMiV9Y0wVh
-Content-Type: multipart/mixed; boundary="------------aaASzzqf6IN1TtNz411BVreu";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Hector Martin <marcan@marcan.st>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>,
- Hans de Goede <hdegoede@redhat.com>
-Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Javier Martinez Canillas <javier@dowhile0.org>,
- Pekka Paalanen <ppaalanen@gmail.com>, devicetree@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Message-ID: <4d16ff4b-4060-49df-805f-66d293ffa186@suse.de>
-Subject: Re: [PATCH v3 0/3] drm/simpledrm: Apple M1 / DT platform support
- fixes
-References: <20211212062407.138309-1-marcan@marcan.st>
-In-Reply-To: <20211212062407.138309-1-marcan@marcan.st>
+On 2021-12-13 09:37:35 [-0300], Wander Lairson Costa wrote:
+> These two patches fix wrong usage of lock primitives with
+> CONFIG_PREEMPT_RT in the blktrace code.
+> 
+> This version fixes a missing piece in the blktrace patch.
+> 
+> The patches apply to the PREEMPT_RT tree.
 
---------------aaASzzqf6IN1TtNz411BVreu
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I've seen it, need to think about it.
 
-SGkNCg0KQW0gMTIuMTIuMjEgdW0gMDc6MjQgc2NocmllYiBIZWN0b3IgTWFydGluOg0KPiBI
-aSBEUk0gZm9sa3MsDQo+IA0KPiBUaGlzIHNob3J0IHNlcmllcyBtYWtlcyBzaW1wbGVkcm0g
-d29yayBvbiBBcHBsZSBNMSAoaW5jbHVkaW5nIFByby9NYXgpDQo+IHBsYXRmb3JtcyB0aGUg
-d2F5IHNpbXBsZWZiIGFscmVhZHkgZG9lcywgYnkgYWRkaW5nIFhSR0IyMTAxMDEwIHN1cHBv
-cnQNCj4gYW5kIG1ha2luZyBpdCBiaW5kIHRvIGZyYW1lYnVmZmVycyBpbiAvY2hvc2VuIHRo
-ZSBzYW1lIHdheSBzaW1wbGVmYg0KPiBkb2VzLg0KPiANCj4gVGhpcyBhdm9pZHMgYnJlYWtp
-bmcgdGhlIGJvb3Rsb2FkZXItcHJvdmlkZWQgZnJhbWVidWZmZXIgY29uc29sZSB3aGVuDQo+
-IHNpbXBsZWRybSBpcyBzZWxlY3RlZCB0byByZXBsYWNlIHNpbXBsZWZiLCBhcyB0aGVzZSBG
-QnMgYWx3YXlzIHNlZW0gdG8NCj4gYmUgMTAtYml0IChhdCBsZWFzdCB3aGVuIGEgcmVhbCBz
-Y3JlZW4gaXMgYXR0YWNoZWQpLg0KDQpJZiB0aGVyZSBhcmUgbm8gZnVydGhlciBjb21tZW50
-cywgSSdtIGdvaW5nIHRvIGFwcGx5IHRoZSBzZXJpZXMgdG8gDQpkcm0tbWlzYy1uZXh0Lg0K
-DQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiBDaGFuZ2VzIHNpbmNlIHYyOg0KPiAt
-IE1hZGUgMTAtYml0IGNvbnZlcnNpb24gY29kZSBmaWxsIHRoZSBMU0JzDQo+IC0gQWRkZWQg
-QVJHQjIxMDEwMTAgdG8gc3VwcG9ydGVkIGZvcm1hdHMgbGlzdA0KPiAtIFNpbXBsaWZpZWQg
-T0YgY29yZSBjb2RlIHBlciByZXZpZXcgZmVlZGJhY2sNCj4gSGVjdG9yIE1hcnRpbiAoMyk6
-DQo+ICAgIG9mOiBNb3ZlIHNpbXBsZS1mcmFtZWJ1ZmZlciBkZXZpY2UgaGFuZGxpbmcgZnJv
-bSBzaW1wbGVmYiB0byBvZg0KPiAgICBkcm0vZm9ybWF0LWhlbHBlcjogQWRkIGRybV9mYl94
-cmdiODg4OF90b194cmdiMjEwMTAxMF90b2lvKCkNCj4gICAgZHJtL3NpbXBsZWRybTogQWRk
-IFtBWF1SR0IyMTAxMDEwIGZvcm1hdHMNCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9m
-b3JtYXRfaGVscGVyLmMgfCA2NCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAg
-IGRyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRybS5jICAgIHwgIDQgKy0NCj4gICBkcml2
-ZXJzL29mL3BsYXRmb3JtLmMgICAgICAgICAgICAgICB8ICA0ICsrDQo+ICAgZHJpdmVycy92
-aWRlby9mYmRldi9zaW1wbGVmYi5jICAgICAgfCAyMSArLS0tLS0tLS0tDQo+ICAgaW5jbHVk
-ZS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuaCAgICAgfCAgMyArKw0KPiAgIDUgZmlsZXMgY2hh
-bmdlZCwgNzQgaW5zZXJ0aW9ucygrKSwgMjIgZGVsZXRpb25zKC0pDQo+IA0KDQotLSANClRo
-b21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3
-YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJu
-YmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bD
-vGhyZXI6IEl2byBUb3Rldg0K
-
---------------aaASzzqf6IN1TtNz411BVreu--
-
---------------YKMJGICHJYklTHrMiV9Y0wVh
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmG57aYFAwAAAAAACgkQlh/E3EQov+Dk
-AxAAs8xKAuo10t0j9jgIcJcbdfBgzKEDF1wtooz9GVCjTAsoqTiz0Eq83SG2bGjv1riybTKshNYq
-CriNW3gLP7LTg14Q8EXtnykoDaA4CfxuyEpAapBrM+BgAH8inkd908+cXJx776c59A7hr4YWdKTo
-1qtwfToXjYNnBbURPz6Ke89GO9ca288CifBn49JgGv9WOh35W2vakTV5UAtdVbKwiBh0q6qk+66P
-YvEhAl/h+p22PiRXzLN5BJMWQEWqlb19VdfBNXxGpzQ0UymLhDHeGjk0/2DKqDBG9zXRkDj8OpbD
-c+dxhhjKTNDngcUjpVsO7LMG/9tYuvuXGMMBWukPGLh4u+77WKLXYm5irT+ml57gUEaUqbJ7pmNN
-1AnH7rean0hmkjHteAYNO8tJW3w/LBPKNgMzrm1BLNkxX2TyocvxH6qTcS7YxHeQqX7i+VMTPu6B
-9hw6ZXML0P52JzzLHvX2SLvGt2O5z0iG+SNGPBIetF+dmtlhBgKbFe/dThvHZuQSVFOX5fIy3cJL
-uMLTQnWz3Gm3FscZGThDNnUGucHw7WurHZFKFsDazSjD3b24Jlw8ifD5NX05/SqpK8pv91nXtxSe
-zJox/IYEwNOuO45/moc7+AZIUsmGtXY+oEQJ/l+ZKBLV9LZKEeTLOEGVHSEUuCN+FSVaRnuHOLHx
-WSI=
-=7Djj
------END PGP SIGNATURE-----
-
---------------YKMJGICHJYklTHrMiV9Y0wVh--
+Sebastian

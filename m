@@ -2,120 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A7C4759DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31AAF4759DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242946AbhLONm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 08:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242974AbhLONmy (ORCPT
+        id S237447AbhLONnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 08:43:22 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:10213 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234458AbhLONnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 08:42:54 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24D8C06173E;
-        Wed, 15 Dec 2021 05:42:53 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id a18so38297105wrn.6;
-        Wed, 15 Dec 2021 05:42:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PQjMxn6qJTOCu4WLYBTC7H6yDOVC/lj7pDQpiSi6VaI=;
-        b=Y+sCX/uXXoSnqNOsQpRuA4Qer6cbTzPqlZvKri6W1VXh+wM9sN8nJmQKGeGuEMMTCh
-         OzNUE7rX6ZJ+V38UFtFN+UNTvZpW+JTXIswzAjawhJCOgnGltRNtAPJiaTsBJUw1UE9n
-         Fb6lELQtB52N1WyUSfeidytqaXSktzzhp9DIhSfAe37fbTH/VviFYODVL+1UaX223xVI
-         7O9AQxYrpcNN+LUg7I8oUL4YntN85A/BbbwwuP4s6UD1ZBJ+blh/7Z97FaO4QzEADztO
-         i7MBDagLm2PVOYkQcbDyc+leNoSKPt5yIEqtwbxgjeSknMiSTgirDW57xTpf/zi+jUt9
-         du4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PQjMxn6qJTOCu4WLYBTC7H6yDOVC/lj7pDQpiSi6VaI=;
-        b=Xx/oQchNgwLwII9xU0tO+KFHltFwXp9tAb0CUPVPV1r/CkBadeTHkZP6z1MjF7t55v
-         Dzk+SqL8dCaXq4GuVPFIExzDleAu+A9IELmq2nX6F0PRE9srRWrv7Kw9x7LzqgpBk4lH
-         r1oqNviLUIOGhn1DIw4pKg/10cwg4CvxkbHdVdiczv7Po9H6+5kciHVoRWuTSrShFRl6
-         MipHxd2ynKNkRlvFw2BwcN5EWd4LaCOQ8PNH5t2UmhU2br3fa9aXI2ZxCC2G2bXrDFpN
-         /XZeQGkfiVAL2xQEj0qY+75aG6iruRvn6QAkTchnvKiFHmVNEXNud0JGrwRnyjTAllx1
-         qvXw==
-X-Gm-Message-State: AOAM533ivcXQan1bSIq8faMEQpw0zYfjhX9MiFi6aa6sjuU9pDT2C7Iy
-        /mJCrOtbOVldbLtz6dRYpeDIvXa6yhc=
-X-Google-Smtp-Source: ABdhPJxcvMJ4OEvpcjc32m30jB/7icgUUTlB7pMFor2DIIcYMwjGGBvNxumXQVaznXM5L5xVld+02A==
-X-Received: by 2002:a05:6000:10c4:: with SMTP id b4mr4047469wrx.514.1639575772365;
-        Wed, 15 Dec 2021 05:42:52 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id v6sm5146887wmh.8.2021.12.15.05.42.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 05:42:51 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <cf329949-b81c-3e8c-0f38-4a28de22c456@redhat.com>
-Date:   Wed, 15 Dec 2021 14:42:50 +0100
+        Wed, 15 Dec 2021 08:43:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639575799; x=1671111799;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DB+4UXSNLFL5U+KUUKZY5o4OUcNG+kIDNiOJlDVl2XM=;
+  b=VIx6xZDwHfvayuIt0BcItOimRCd1fW+olwclfRPWnC3fQV30skXBYLkW
+   QXnDDFKWWLSjFK8e9S7ml0RyhMBtKKLhWKPwH5evGXdEc3F5sCMy/msC0
+   rQJ/8hAB4C7kvMDPaXJ2guHKs3Yyr5LPP33LpzflI+frqKoi5etmXsJEc
+   rqEJ4ejAQLgyC6hZS1kRzSDo2W5udAE2jZmDIk/g7FYpY3rXdGHqFWo2y
+   oa69FVPp/R50OFeUOm/YpKXuwtvbqRneYi75hXezgZ+FBgYzlSf/9a+AO
+   BudViuyv0I+CbDg7iB8Mhy4hBzI5js3uSSy31/d7jGeVrkfk1jPMvxp4Z
+   g==;
+IronPort-SDR: NhkGtw3sajwHnQXzvOVKjNiiQZo33uK8FoOMZnyZbz5VA3MpdpMhGLPPGTNCN7vES/OjFxiEEF
+ sSg/WUYgVzS6EDbl1I7qGKtJE2y/GhEJPi4gUR57OGbx/kQgsK5rmdBbxjIy6OIOcddfUcE7u1
+ sAlKI+nO5Ew6RDR8JmSTMp393FYatNmuWOEOiA09vzg7ezrs5IjrkwMsxhqQAOTTqHsaywy1sA
+ VSrcbOgY1qRaEE1cFAIvEiLPjQ7RhQq4VdVxu0PFBu2vDOgDVQP9wcGKCBMx39O9fQDZ+nXQ/e
+ 9eY7QBvnNVxix+VGWxAAEoKp
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="79647478"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Dec 2021 06:43:16 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 15 Dec 2021 06:43:16 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 15 Dec 2021 06:43:13 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <nicolas.ferre@microchip.com>
+CC:     <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
+        <claudiu.beznea@microchip.com>, <dianders@chromium.org>,
+        <emil.velikov@collabora.com>, <sam@ravnborg.org>,
+        <codrin.ciubotariu@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Subject: [PATCH v3] ARM: configs: at91: Enable crypto software implementations
+Date:   Wed, 15 Dec 2021 15:43:11 +0200
+Message-ID: <20211215134311.304427-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 16/19] kvm: x86: Introduce KVM_{G|S}ET_XSAVE2 ioctl
-Content-Language: en-US
-To:     "Wang, Wei W" <wei.w.wang@intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Cc:     "seanjc@google.com" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>
-References: <20211208000359.2853257-1-yang.zhong@intel.com>
- <20211208000359.2853257-17-yang.zhong@intel.com>
- <d16aab21-0f81-f758-a61e-5919f223be78@redhat.com>
- <26ea7039-3186-c23f-daba-d039bb8d6f48@redhat.com>
- <86d3c3a5d61649079800a2038370365b@intel.com>
- <bdda79b5-79e4-22fd-9af8-ec6e87a412ab@redhat.com>
- <3ec6019a551249d6994063e56a448625@intel.com>
- <ba78d142-6a97-99dd-9d00-465f7d6aa712@redhat.com>
- <0c2dae4264ae4d3b87d023879c51833c@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <0c2dae4264ae4d3b87d023879c51833c@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 03:39, Wang, Wei W wrote:
->>> Why would KVM_GET_XSAVE2 still be needed in this case?
->>>
->>> I'm thinking it would also be possible to reuse KVM_GET_XSAVE:
->>>
->>> - If userspace calls to KVM_CHECK_EXTENSION(KVM_CAP_XSAVE2),
->>>    then KVM knows that the userspace is a new version and it works with
->> larger xsave buffer using the "size" that it returns via KVM_CAP_XSAVE2.
->>>    So we can add a flag "kvm->xsave2_enabled", which gets set upon
->> userspace checks KVM_CAP_XSAVE2.
->>
->> You can use KVM_ENABLE_CAP(KVM_CAP_XSAVE2) for that, yes.  In that case
->> you don't need KVM_GET_XSAVE2.
->
-> On more thing here, what size should KVM_CHECK_EXTENSION(KVM_CAP_XSAVE2) return?
-> If the size still comes from the guest CPUID(0xd, 0)::RCX, would it be better to just return 1?
-> This requires that the QEMU CPUID info has been set to KVM before checking the cap.
-> QEMU already has this CPUID info to get the size (seems no need to inquire KVM for it).
+Enable at least the same amount of algs as the hardware IPs are
+supporting so that they are able to fallback to the software
+implementations in case they need it.
 
-It's still easier to return the full size of the buffer from 
-KVM_CHECK_EXTENSION(KVM_CAP_XSAVE2).  It makes the userspace code a bit 
-easier.
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+---
+v3: drop CONFIG_CRYPTO_MD5, as MD5 is not hw accelerated.
 
-I'm also thinking that I prefer KVM_GET_XSAVE2 to 
-KVM_ENABLE_CAP(KVM_CAP_XSAVE2), after all.  Since it would be a 
-backwards-incompatible change to an _old_ ioctl (KVM_GET_XSAVE), I 
-prefer to limit the ways that userspace can shoot itself in the foot.
+v2:
+- add CONFIG_CRYPTO_HMAC
+- update commit message
+- ignore other non-crypto changes that are revealed with
+  "make savedefconfig"
 
-Paolo
+ arch/arm/configs/at91_dt_defconfig | 9 ++++++++-
+ arch/arm/configs/sama5_defconfig   | 8 ++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/configs/at91_dt_defconfig b/arch/arm/configs/at91_dt_defconfig
+index a6310c8abcc3..549d01be0b47 100644
+--- a/arch/arm/configs/at91_dt_defconfig
++++ b/arch/arm/configs/at91_dt_defconfig
+@@ -216,7 +216,14 @@ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_CODEPAGE_850=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_NLS_UTF8=y
+-CONFIG_CRYPTO_ECB=y
++CONFIG_CRYPTO_CBC=y
++CONFIG_CRYPTO_CFB=y
++CONFIG_CRYPTO_OFB=y
++CONFIG_CRYPTO_XTS=y
++CONFIG_CRYPTO_HMAC=y
++CONFIG_CRYPTO_SHA1=y
++CONFIG_CRYPTO_SHA512=y
++CONFIG_CRYPTO_DES=y
+ CONFIG_CRYPTO_USER_API_HASH=m
+ CONFIG_CRYPTO_USER_API_SKCIPHER=m
+ CONFIG_CRYPTO_DEV_ATMEL_AES=y
+diff --git a/arch/arm/configs/sama5_defconfig b/arch/arm/configs/sama5_defconfig
+index fe0d7ccc8fb2..03dd80c2a19e 100644
+--- a/arch/arm/configs/sama5_defconfig
++++ b/arch/arm/configs/sama5_defconfig
+@@ -232,6 +232,14 @@ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_CODEPAGE_850=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_NLS_UTF8=y
++CONFIG_CRYPTO_CBC=y
++CONFIG_CRYPTO_CFB=y
++CONFIG_CRYPTO_OFB=y
++CONFIG_CRYPTO_XTS=y
++CONFIG_CRYPTO_HMAC=y
++CONFIG_CRYPTO_SHA1=y
++CONFIG_CRYPTO_SHA512=y
++CONFIG_CRYPTO_DES=y
+ CONFIG_CRYPTO_USER_API_HASH=m
+ CONFIG_CRYPTO_USER_API_SKCIPHER=m
+ CONFIG_CRYPTO_DEV_ATMEL_AES=y
+-- 
+2.25.1
+

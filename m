@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE511475EB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4A2475EBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245547AbhLORYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:24:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44400 "EHLO
+        id S245484AbhLORYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:24:19 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44490 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245445AbhLORXm (ORCPT
+        with ESMTP id S245350AbhLORXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:23:42 -0500
+        Wed, 15 Dec 2021 12:23:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CFEE61A14;
-        Wed, 15 Dec 2021 17:23:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 822CDC36AE0;
-        Wed, 15 Dec 2021 17:23:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DB45619C9;
+        Wed, 15 Dec 2021 17:23:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15531C36AE2;
+        Wed, 15 Dec 2021 17:23:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589021;
-        bh=pQE60b+PjcLVTwWbBbEUh82jS+EsMmj4rNuXKiHL/qY=;
+        s=korg; t=1639589026;
+        bh=43vaTSWzCeqdaVI0fvsU4SSsHbOGCmzqdI+/gtOBR5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ofLRA5X2eo4k9gMrq9M8Z4XY2HoR8OftKb7+PiFRMDFsezxe3ZM/WxC1LF15MONtL
-         XLlPON9fzbur6Vyp1gQhklKy8nI6su6w+an5+Tm4NFp+NrI5NgJnFocBuTl7jqEXeu
-         MScz6mIuxtTA7ryP8+vMdd87k5w02nARP5+qZKPY=
+        b=M1o6PSh6m25IM2urr5s3efVGb7So/bhEHYt3WjpqKtQF2w6hX8fOVlpaZhn8wyrlO
+         TB5hs4OwNpzrNaKV7PD68Au4YWmeODaBrBh1a2QDZOJ0SDgBgXj7B1bloS+dbnTY35
+         w7tk1SQNfujMoasJP4nX7TKAlOYhi1goDmUE9RnU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jun Lei <Jun.Lei@amd.com>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        Mustapha Ghaddar <mustapha.ghaddar@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
+        stable@vger.kernel.org, Philip Yang <Philip.Yang@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 35/42] drm/amd/display: Fix for the no Audio bug with Tiled Displays
-Date:   Wed, 15 Dec 2021 18:21:16 +0100
-Message-Id: <20211215172027.855542858@linuxfoundation.org>
+Subject: [PATCH 5.15 36/42] drm/amdkfd: fix double free mem structure
+Date:   Wed, 15 Dec 2021 18:21:17 +0100
+Message-Id: <20211215172027.886545805@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
 References: <20211215172026.641863587@linuxfoundation.org>
@@ -49,44 +47,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mustapha Ghaddar <mghaddar@amd.com>
+From: Philip Yang <Philip.Yang@amd.com>
 
-[ Upstream commit 5ceaebcda9061c04f439c93961f0819878365c0f ]
+[ Upstream commit 494f2e42ce4a9ddffb5d8c5b2db816425ef90397 ]
 
-[WHY]
-It seems like after a series of plug/unplugs we end up in a situation
-where tiled display doesnt support Audio.
+drm_gem_object_put calls release_notify callback to free the mem
+structure and unreserve_mem_limit, move it down after the last access
+of mem and make it conditional call.
 
-[HOW]
-The issue seems to be related to when we check streams changed after an
-HPD, we should be checking the audio_struct as well to see if any of its
-values changed.
-
-Reviewed-by: Jun Lei <Jun.Lei@amd.com>
-Acked-by: Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>
-Signed-off-by: Mustapha Ghaddar <mustapha.ghaddar@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Philip Yang <Philip.Yang@amd.com>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc_resource.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-index a60396d5be445..e94546187cf15 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-@@ -1623,6 +1623,10 @@ bool dc_is_stream_unchanged(
- 	if (old_stream->ignore_msa_timing_param != stream->ignore_msa_timing_param)
- 		return false;
- 
-+	// Only Have Audio left to check whether it is same or not. This is a corner case for Tiled sinks
-+	if (old_stream->audio_info.mode_count != stream->audio_info.mode_count)
-+		return false;
-+
- 	return true;
- }
- 
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+index cdf46bd0d8d5b..ab36cce59d2e4 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
+@@ -1393,7 +1393,7 @@ int amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu(
+ 	struct sg_table *sg = NULL;
+ 	uint64_t user_addr = 0;
+ 	struct amdgpu_bo *bo;
+-	struct drm_gem_object *gobj;
++	struct drm_gem_object *gobj = NULL;
+ 	u32 domain, alloc_domain;
+ 	u64 alloc_flags;
+ 	int ret;
+@@ -1503,14 +1503,16 @@ int amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu(
+ 	remove_kgd_mem_from_kfd_bo_list(*mem, avm->process_info);
+ 	drm_vma_node_revoke(&gobj->vma_node, drm_priv);
+ err_node_allow:
+-	drm_gem_object_put(gobj);
+ 	/* Don't unreserve system mem limit twice */
+ 	goto err_reserve_limit;
+ err_bo_create:
+ 	unreserve_mem_limit(adev, size, alloc_domain, !!sg);
+ err_reserve_limit:
+ 	mutex_destroy(&(*mem)->lock);
+-	kfree(*mem);
++	if (gobj)
++		drm_gem_object_put(gobj);
++	else
++		kfree(*mem);
+ err:
+ 	if (sg) {
+ 		sg_free_table(sg);
 -- 
 2.33.0
 

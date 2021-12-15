@@ -2,191 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66007475ABF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B5F475AC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243394AbhLOOhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:37:31 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:39990 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbhLOOhb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:37:31 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A83BE1F3A3;
-        Wed, 15 Dec 2021 14:37:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639579049; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AqBRO/NIE3ZileUsayjziVQapZwhk+Tq0b/E/cvn/ng=;
-        b=PY8PJ53frcTOAtDVC1yD5gzsDepo7ctC0J5IDL/nsb08PurypnC2bMah8Rkl6q5KeAI0mL
-        utuh2KouFWhVWypn7Rb+N9ADIlw2jpdloFRrJi4LkqItzi5SDQn5y0PzdLntZEqPX8tDX3
-        nWqsErkr57JurBNRKpx0xN+AnHDWEGc=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 84C6BA3B81;
-        Wed, 15 Dec 2021 14:37:29 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 15:37:26 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Miroslav Benes <mbenes@suse.cz>, jikos@kernel.org,
-        joe.lawrence@redhat.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] livepatch: Allow user to specify functions to
- search for on a stack
-Message-ID: <Ybn9piT9Z83SKaCK@alley>
-References: <20211210124449.21537-1-mbenes@suse.cz>
- <20211210124449.21537-2-mbenes@suse.cz>
- <20211213190008.r4rjeytfz5ycbstb@treble>
- <alpine.LSU.2.21.2112140857570.20187@pobox.suse.cz>
- <YbiNsVfoCPCJmOKj@alley>
- <Ybi6252hKwUM4KrP@alley>
- <20211214234836.3x3clp45ut6gtol6@treble>
+        id S243404AbhLOOiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:38:01 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:58104 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243396AbhLOOh5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:37:57 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowABnSBWs_blh5tBEAw--.62553S2;
+        Wed, 15 Dec 2021 22:37:32 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] sfc_ef100: potential dereference of null pointer
+Date:   Wed, 15 Dec 2021 22:37:31 +0800
+Message-Id: <20211215143731.188026-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214234836.3x3clp45ut6gtol6@treble>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowABnSBWs_blh5tBEAw--.62553S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw4xtry3CFyUJrWUWFW7Arb_yoWDCwb_Kr
+        12qwn5CF43Ar4Sk3WUZr42g34jk34kXwn5XryvgrZ5ZryDGry7Jw1q9rn8Cr15WryDCF9r
+        tFy7Ga4a9347tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xryl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUmzuXUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2021-12-14 15:48:36, Josh Poimboeuf wrote:
-> On Tue, Dec 14, 2021 at 04:40:11PM +0100, Petr Mladek wrote:
-> > > > > Hm, what does this mean for the unpatching case?  What if the new
-> > > > > function's .cold child is on the stack when we're trying to unpatch?
-> > > > 
-> > > > Good question. I did not realize it worked both ways. Of course it does.
-> > > > 
-> > > > > Would it make sense to allow the user specify a 'new_func' for
-> > > > > stack_only, which is a func to check on the stack when unpatching?  Then
-> > > > > new_func could point to the new .cold child.  And then
-> > > > > klp_check_stack_func() wouldn't need a special case.
-> > > 
-> > > I am confused. My understanding is that .cold child is explicitly
-> > > livepatched to the new .cold child like it is done in the selftest:
-> > > 
-> > > static struct klp_func funcs_stack_only[] = {
-> > > 	{
-> > > 		.old_name = "child_function",
-> > > 		.new_func = livepatch_child_function,
-> > > 	}, {
-> > > 
-> > > We should not need anything special to check it on stack.
-> > > We only need to make sure that we check all .stack_only functions of
-> > > the to-be-disabled livepatch.
-> > 
-> > We have discussed this with Miroslav and it seems to be even more
-> > complicated. My current understanding is that we actually have
-> > three functions involved:
-> > 
-> >   parent_func()
-> >     call child_func()
-> >       jmp child_func.cold
-> > 
-> > We livepatch child_func() that uses jmp and need not be on stack.
-> > This is why we want to check parent_func() on stack.
-> > For this, we define something like:
-> > 
-> > static struct klp_func funcs[] = {
-> > 	{
-> > 		.old_name = "child_func",
-> > 		.new_func = livepatch_child_func,   // livepatched func
-> > 	},
-> > 	{
-> > 		.old_name = "parent_func",
-> > 		.stack_only = true,		    // stack only
-> > 	},
-> 
-> Hm, this is different than how I understand it.
-> 
-> In the past I referred to the "parent" as the function which jumps to
-> the cold ("child") function.  So maybe we're getting confused by
-> different terminology.  But here I'll go with the naming from your
-> example.
+The return value of kmalloc() needs to be checked.
+To avoid use in efx_nic_update_stats() in case of the failure of alloc.
 
-I think that I was primary confused by the selftest where "child"
-function is livepatched and "parent" is defined as stack_only.
+Fixes: b593b6f1b492 ("sfc_ef100: statistics gathering")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reported-by: kernel test robot <lkp@intel.com>
+---
+Changelog:
 
-Miroslav told me yesterday that the function that jumps into
-the .cold child needs to get livepatched. It makes sense
-because .cold child does not have well defined functionality.
-It depends on the compiler what code is put there.
-Hence I added one more level...
+v1 -> v2
 
-> If parent_func() is stack_only, that could create some false positive
-> scenarios where patching stalls unnecessarily.
+*Change 1. Change the place to check, avoiding the warning.
+---
+ drivers/net/ethernet/sfc/ef100_nic.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Yes, it won't be optimal.
+diff --git a/drivers/net/ethernet/sfc/ef100_nic.c b/drivers/net/ethernet/sfc/ef100_nic.c
+index 518268ce2064..d35cafd422b1 100644
+--- a/drivers/net/ethernet/sfc/ef100_nic.c
++++ b/drivers/net/ethernet/sfc/ef100_nic.c
+@@ -609,6 +609,9 @@ static size_t ef100_update_stats(struct efx_nic *efx,
+ 	ef100_common_stat_mask(mask);
+ 	ef100_ethtool_stat_mask(mask);
+ 
++	if (!mc_stats)
++		return 0;
++
+ 	efx_nic_copy_stats(efx, mc_stats);
+ 	efx_nic_update_stats(ef100_stat_desc, EF100_STAT_COUNT, mask,
+ 			     stats, mc_stats, false);
+-- 
+2.25.1
 
-
-> Also, wouldn't all of child_func()'s callers have to be made
-> stack_only?
-
-Well, we already do this when handling compiler optimizations,
-for example, inlining.
-
-
-> How would you definitively find all the callers?
-
-Good question. The best solution would be to get support from
-the compiler like we already get for another optimizations.
-
-We always have these problems how to find functions that need
-special handling for livepatching.
-
-
-> Instead I was thinking child_func.cold() should be stack_only.
-> 
-> e.g.:
-> 
-> static struct klp_func funcs[] = {
-> 	{
-> 		.old_name = "child_func",
-> 		.new_func = livepatch_child_func,
-> 	},
-> 	{
-> 		.old_name = "child_func.cold",
-> 		.new_name = "livepatch_child_func.cold",
-> 		.stack_only = true,
-> 	},
-> 
-> Any reason why that wouldn't work?
-
-Yes, it should work in the given example. I am just curious how this
-would work in practice:
-
-
-  1. The compiler might optimize the new code another way and there
-     need not be 1:1 relation.
-
-     We might need another set of stack_only functions checked when
-     the livepatch is enabled. And another set of functions checked
-     when the livepatch gets disabled.
-
-
-  2. The names of "child_func.cold" functions are generated by
-     the compiler. I mean that the names are "strange" ;-)
-
-     It is likely easier with the kPatch approach that creates glue
-     around already compiled symbols. It is more tricky when preparing
-     the livepatch from sources. Well, it is doable.
-
-
-BTW: livepatch_child_func.cold function must be checked on the stack
-     also when the livepatch is replaced by another livepatch.
-
-     I mean that we need to check two sets of stack only functions
-     when replacing one livepatch with another one:
-
-	+ "new_name" functions from to-be-replaced livepatch (like when disabling)
-	+ "old_name" functions from new livepatch (like when enabling)
-
-
-Note that I do not have any strong opinion about any approach at the
-moment. I primary want to be sure that I understand the problem correctly :-)
-
-Best Regards,
-Petr

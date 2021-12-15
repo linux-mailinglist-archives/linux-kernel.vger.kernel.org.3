@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 735D74755ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117554755F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236677AbhLOKMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:12:43 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:44670 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbhLOKMm (ORCPT
+        id S241562AbhLOKNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:13:53 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:36497 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231890AbhLOKNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:12:42 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 276E521106;
-        Wed, 15 Dec 2021 10:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639563161; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+m11QBU81Zd70kDcW78Gw2InB8DF1Mzu3b5xIo+K/Ng=;
-        b=f9tOBGKkty1CLcmfOjNG5XntBeTQo5veDIzZ3HAqlEzrWpPAa0TelIuIDkrYz5LO4wP0iV
-        3c1J+IJyO9cCnmP+58lihp7T2qkCgf/ewMq2sqDOzYJI+dVHDIV30yImgPcMlWAZNZw/L8
-        7pgKG+3pR5KXzv/7pLkrlezdNA8zNSw=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 15 Dec 2021 05:13:52 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D0EF2A3B83;
-        Wed, 15 Dec 2021 10:12:40 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 11:12:40 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux-foundation.org>
-Subject: Re: [PATCH v2 2/4] mm: handle uninitialized numa nodes gracefully
-Message-ID: <Ybm/mMY1XaM0VebV@dhcp22.suse.cz>
-References: <20211214100732.26335-3-mhocko@kernel.org>
- <202112151219.xAI8NaQR-lkp@intel.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JDWL53dllz4xhp;
+        Wed, 15 Dec 2021 21:13:49 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1639563231;
+        bh=3WntohgGBSsd5zLTEq/JbPVU3YTQL8XrTLe5DXnpfYU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=a8eNNWo605MEiL8ylUOt7YdhmBZnPIijg5uWdKFJI3EqXiu+9jJpFpl0qRgxjzNJr
+         55GgeghdhXOIhoWSsLRVt5H5NVVbMTJzW2/EjE5nILpENBmH45hJ0/QPUHs7Pj2XRc
+         /o9AAUkwztZJ310T95OfI0JVUjoY7WFCJ+z7ykWMAka6NRYrnV1Q9t1M2A3byErDiI
+         cjyrvJtn5OSAe6ONWSFVW8pDPsEZs9qTceN3/135nZOJfw1fK94BI4LRatIT6WHA08
+         KkCkMzLAlITDIIbrhWV0KkJLHITxpaRN4bnqsKy8EHEWN95bNBXOqGub2C2EtCC5Xs
+         lnLM4fX6QarMA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Rob Herring <robh@kernel.org>, John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Frank Rowand <frank.rowand@sony.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3] of/fdt: Rework early_init_dt_scan_memory() to call
+ directly
+In-Reply-To: <20211214202652.3894707-1-robh@kernel.org>
+References: <20211214202652.3894707-1-robh@kernel.org>
+Date:   Wed, 15 Dec 2021 21:13:46 +1100
+Message-ID: <871r2emazp.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202112151219.xAI8NaQR-lkp@intel.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 15-12-21 12:47:16, kernel test robot wrote:
-> Hi Michal,
-> 
-> I love your patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on hnaz-mm/master]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Michal-Hocko/mm-memory_hotplug-make-arch_alloc_nodedata-independent-on-CONFIG_MEMORY_HOTPLUG/20211214-190817
-> base:   https://github.com/hnaz/linux-mm master
-> config: ia64-defconfig (https://download.01.org/0day-ci/archive/20211215/202112151219.xAI8NaQR-lkp@intel.com/config)
-> compiler: ia64-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/65c560a3ac2561750c1dc71213f042e660b9bbc0
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Michal-Hocko/mm-memory_hotplug-make-arch_alloc_nodedata-independent-on-CONFIG_MEMORY_HOTPLUG/20211214-190817
->         git checkout 65c560a3ac2561750c1dc71213f042e660b9bbc0
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> >> WARNING: modpost: vmlinux.o(.text+0x566a2): Section mismatch in reference from the function arch_alloc_nodedata() to the function .init.text:memblock_alloc_try_nid()
-> The function arch_alloc_nodedata() references
-> the function __init memblock_alloc_try_nid().
-> This is often because arch_alloc_nodedata lacks a __init
-> annotation or the annotation of memblock_alloc_try_nid is wrong.
+Rob Herring <robh@kernel.org> writes:
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index 5e216555fe4f..97d7607625ec 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -1078,49 +1078,50 @@ u64 __init dt_mem_next_cell(int s, const __be32 **cellp)
+>  /*
+>   * early_init_dt_scan_memory - Look for and parse memory nodes
+>   */
+> -int __init early_init_dt_scan_memory(unsigned long node, const char *uname,
+> -				     int depth, void *data)
+> +int __init early_init_dt_scan_memory(void)
+>  {
+> -	const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
+> -	const __be32 *reg, *endp;
+> -	int l;
+> -	bool hotpluggable;
+> -
+> -	/* We are scanning "memory" nodes only */
+> -	if (type == NULL || strcmp(type, "memory") != 0)
+> -		return 0;
+> +	int node;
+> +	const void *fdt = initial_boot_params;
+>  
+> -	reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
+> -	if (reg == NULL)
+> -		reg = of_get_flat_dt_prop(node, "reg", &l);
+> -	if (reg == NULL)
+> -		return 0;
+> +	for (node = fdt_node_offset_by_prop_value(fdt, -1, "device_type", "memory", 6);
+> +	     node != -FDT_ERR_NOTFOUND;
+> +	     node = fdt_node_offset_by_prop_value(fdt, node, "device_type", "memory", 6)) {
 
-Thanks for the report. This should do the trick. I will fold it into the
-patch.
+The 6 there doesn't work on my machines.
 
-diff --git a/arch/ia64/mm/discontig.c b/arch/ia64/mm/discontig.c
-index b4c46925792f..dd0cf4834eaa 100644
---- a/arch/ia64/mm/discontig.c
-+++ b/arch/ia64/mm/discontig.c
-@@ -608,7 +608,7 @@ void __init paging_init(void)
- 	zero_page_memmap_ptr = virt_to_page(ia64_imva(empty_zero_page));
- }
- 
--pg_data_t *arch_alloc_nodedata(int nid)
-+pg_data_t * __init arch_alloc_nodedata(int nid)
- {
- 	unsigned long size = compute_pernodesize(nid);
- 
--- 
-Michal Hocko
-SUSE Labs
+It needs to match the trailing NULL, so 7 or sizeof("memory") works.
+
+cheers

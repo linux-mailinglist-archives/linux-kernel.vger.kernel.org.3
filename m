@@ -2,121 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C9B47604B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C30476047
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245708AbhLOSJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:09:40 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:41896 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245461AbhLOSJi (ORCPT
+        id S245413AbhLOSJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:09:07 -0500
+Received: from mail-lj1-f182.google.com ([209.85.208.182]:37780 "EHLO
+        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238804AbhLOSJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:09:38 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BFI88bl043534;
-        Wed, 15 Dec 2021 12:08:08 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639591688;
-        bh=BV8tFNoGMdbcKerU49fpsuE5DGB0rVHqEXWJvvEf+r4=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ZwqpP5UcZ1QWZv7AGAa1OzwwMFuadbbEsAGtDSo4cB6se3FtCbc4klSGqC2fqQUFh
-         7fdnNyE4equbUr+rG0skddv/tns2YRzZhL47ljnzM9aYF4NAG10iKPsf5O271LpT8+
-         rYNDI3ur5+NLeKk/dEPjErvLTfSPXspbsCCTNhzw=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BFI88vw126883
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Dec 2021 12:08:08 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 15
- Dec 2021 12:08:08 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 15 Dec 2021 12:08:08 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BFI88Qh046197;
-        Wed, 15 Dec 2021 12:08:08 -0600
-Date:   Wed, 15 Dec 2021 12:08:08 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        <xen-devel@lists.xenproject.org>, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Vinod Koul <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        <iommu@lists.linux-foundation.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>,
-        <linux-wireless@vger.kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
-Message-ID: <20211215180808.dpdlkoheulsnrs65@balcony>
-References: <20211213182958.ytj4m6gsg35u77cv@detonator>
- <87fsqvttfv.ffs@tglx>
- <20211214162247.ocjm7ihg5oi7uiuv@slider>
- <87wnk7rvnz.ffs@tglx>
- <87tufbrudl.ffs@tglx>
- <87mtl3rli1.ffs@tglx>
- <20211214205626.lrnddha6bd6d6es5@possibly>
- <87h7basx36.ffs@tglx>
- <87zgp1rge4.ffs@tglx>
- <87wnk5rfkt.ffs@tglx>
+        Wed, 15 Dec 2021 13:09:05 -0500
+Received: by mail-lj1-f182.google.com with SMTP id k2so34549200lji.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:09:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wg92UbpxiHJQo9VenySQi0trc/483Lrpzxj0TRwK9+c=;
+        b=TYRtasvq1ryZCnX7YNBewFweuRelvWaqraLUD5EJqKppd2Dc3hhYgoFyBu+U30brjM
+         pfSFJgkjVyLsXApPvNRq9/+j9VGOGSkQtHw8ZtUvaX0WGjXzCnjAM5rV4EaYukweIVaI
+         AFfxurENkm/J72wSl3HknMwAdmEaEFlmZH5V4K7g3o3kewyT1/Y3Y0E6sRLTJvJINABj
+         FbHKzfRAClO30n9WtwAENoO97FYWflIFSwQtebOSzYb7KQ+ePmq4maVU0VvUP5PUwvAE
+         W1w5x4vSEWGQRpkNituOtyKNDkmh2agziviHir6fjnUS47ixMzLNQs16F5ZHCdvH3TAm
+         eFcw==
+X-Gm-Message-State: AOAM530BBIHAOWz6JgaXPDfmRsMRB193vgYbyPaKA46oXMq0zXq7nBgW
+        0kX56NIBMu8q10LrnyJZkLnKW5/AQEfKa/jRZRVZlDMW
+X-Google-Smtp-Source: ABdhPJy5GYIsPJBjMWRE6xXhYYlfVYwgo4XUerOCy1snrADwmHlxNu52dgOCaFAxGsqw9PqLM1J9SJCiE/tNcKBKMzQ=
+X-Received: by 2002:a2e:5450:: with SMTP id y16mr11493572ljd.241.1639591744371;
+ Wed, 15 Dec 2021 10:09:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <87wnk5rfkt.ffs@tglx>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20211129231830.1117781-1-namhyung@kernel.org> <YbePytGwg9Kb7hT1@kernel.org>
+ <CAM9d7ciqzb4CArnzMf20x7XccwvmPSzCdk3w7Hhu=qg9TuD4vw@mail.gmail.com>
+ <YboKAvgX7SIiUcoN@kernel.org> <YboNUk+ThCpEf8mQ@kernel.org>
+In-Reply-To: <YboNUk+ThCpEf8mQ@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 15 Dec 2021 10:08:53 -0800
+Message-ID: <CAM9d7cgKUHiJJXG5+OnzGv=5abS==ugxcnfrwgGxf35vyRb+Bw@mail.gmail.com>
+Subject: Re: [RFC/PATCHSET 0/5] perf ftrace: Implement function latency
+ histogram (v1)
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Song Liu <songliubraving@fb.com>,
+        Changbin Du <changbin.du@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17:35-20211215, Thomas Gleixner wrote:
->    git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v4.1-part-2
-[...]
+Hi Arnaldo,
 
-> That should cure the problem.
+On Wed, Dec 15, 2021 at 8:08 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Wed, Dec 15, 2021 at 12:30:10PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Mon, Dec 13, 2021 at 11:40:16AM -0800, Namhyung Kim escreveu:
+> > > On Mon, Dec 13, 2021 at 10:24 AM Arnaldo Carvalho de Melo
+> > > <acme@kernel.org> wrote:
+> > > >
+> > > > Em Mon, Nov 29, 2021 at 03:18:25PM -0800, Namhyung Kim escreveu:
+> > > > > Hello,
+> > > > >
+> > > > > I've implemented 'latency' subcommand in the perf ftrace command to
+> > > > > show a histogram of function latency.
+> > > >
+> > > > This still applies cleanly, I'll test it later.
+> > >
+> > > Thank you Arnaldo!  While I have some small modifications
+> > > but the functionality should be the same.  Please let me know
+> > > if you have any suggestions.
+> >
+> > So, it is failing here with:
+>
+> So that 'fd' variable and the cpumap.h problems goes away when the last
+> patch is applied, but for bisection its better to apply the patch below
+> to 4/5.
 
-And it sure does. Thanks for looking closer and providing a fix.
+Sure, I will move them.  Thanks for pointing that out.
 
-https://gist.github.com/nmenon/9862a1c31b17fd6dfe0a30c54d396187
-(msi-v4.1-part-2) looks clean
+>
+> I tested it all, cool stuff, will you resubmit soon?
 
-Also while I had detected pointer corruption in the previous v4
-https://gist.github.com/nmenon/ce4d12f460db5cd511185c047d5d35d0
+Yep!
 
-Running it again on v4.1 does indicate the fix is in place.
-https://gist.github.com/nmenon/3231fbb0faa1b9c827b40d1ae6160626
+>
+> I pushed it to the tmp.perf/ftrace_bpf branch on my repo at:
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/log/?h=tmp.perf/ftrace_bpf
+>
+> With committer testing notes.
+
+Thanks for the test!
+Namhyung
 
 
-please feel free to add:
-
-Tested-by: Nishanth Menon <nm@ti.com>
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+>
+> > Fixed with:
+> >
+> >
+> > diff --git a/tools/perf/util/bpf_ftrace.c b/tools/perf/util/bpf_ftrace.c
+> > index 1975a6fe73c9fa8b..f5b49fc056ab8b95 100644
+> > --- a/tools/perf/util/bpf_ftrace.c
+> > +++ b/tools/perf/util/bpf_ftrace.c
+> > @@ -5,6 +5,7 @@
+> >
+> >  #include <linux/err.h>
+> >
+> > +#include "util/cpumap.h"
+> >  #include "util/ftrace.h"
+> >  #include "util/debug.h"
+> >  #include "util/bpf_counter.h"
+> > @@ -15,7 +16,7 @@ static struct func_latency_bpf *skel;
+> >
+> >  int perf_ftrace__latency_prepare_bpf(struct perf_ftrace *ftrace)
+> >  {
+> > -     int fd, err;
+> > +     int err;
+> >       struct filter_entry *func;
+> >       struct bpf_link *begin_link, *end_link;
+> >
+>
+> --
+>
+> - Arnaldo

@@ -2,80 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F5D475ACD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B19475ACF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243425AbhLOOm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242239AbhLOOm1 (ORCPT
+        id S243432AbhLOOmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:42:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60263 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243427AbhLOOmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:42:27 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02635C061574;
-        Wed, 15 Dec 2021 06:42:27 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso19391038pjb.2;
-        Wed, 15 Dec 2021 06:42:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=THFGjkGAOSNztSupFqn6DyyfL2bBvbOSLqsrZfKpQ1w=;
-        b=XSzXED0pwDiKXU9s3kD5hYwqxy1Fj4lXYy1boz1BM70yDgKadH5xDq7l498KJFy0J3
-         EZC5CmJmoSb9TnqDBueT+6dXDKCUFl5ivrgi9uMfQNdBMeTqi4PuWmlppsuOcZy4rMdN
-         oqxoKEa+5tQ9IUfYVuKl08TB8kZ0h843Zx2RjABPmqRWJh5C9CkKmHaydahgDSNG2dZ4
-         08FG19C9pAdqXmZmX6bqzirCaajybjqVmYVLydwQPRNxYh2hnuyDYWnwR+AMPx23qTHM
-         giEI6fYd0O+uwCaf/p8nQlkvXiXxqGFZrKDEf8oQ8DJhplA3HMQ4pKgOsRJxoLrt9Lqu
-         /AFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=THFGjkGAOSNztSupFqn6DyyfL2bBvbOSLqsrZfKpQ1w=;
-        b=3hCz1TS5jNF0rfQ20yeDFFXqhZLYlIXkxTosQ5In1F5cyjoYZ/cSAD67MAD1WmFxXJ
-         FCpF9oxXsGvjJgLrNdJ1eG+eHzdByZSa/flnZX+WwXpQdby3EpW7R87feSzumQadjmnu
-         0fzzDEyOWvQkXryElW+w19AZb5wEVOto8peZRqIENmPItQKSQLxjgU1L85Z1mweJdgUX
-         DOH4gGhzduwBB13KCa38z/i2DLTJ3UpUre7ncdu2zPffTeSgxSxcI3fJGMJx4efjtd0S
-         /bGEP611x6UXU1tPIpRTcNT6lN194BYQgKlTw0pE/5M2p9qRw5aAWKdz2eegAD1boBmW
-         oJ5A==
-X-Gm-Message-State: AOAM532AiNurBtt5kNJBC7sPh97n6Z9iy1WGP4auvtAWF5AhhK4rdc3O
-        OyyhvP70b6UKvrtJhaizzv0MBq2Hyik=
-X-Google-Smtp-Source: ABdhPJwFX+ULXts6rLpkGNtQE66DON8ZMhhxTHJzo74t+Ui94dhnCV0NDGvM+jEbeqcUyqN36GE12Q==
-X-Received: by 2002:a17:90b:1bcf:: with SMTP id oa15mr75536pjb.161.1639579346538;
-        Wed, 15 Dec 2021 06:42:26 -0800 (PST)
-Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id c2sm3127205pfl.200.2021.12.15.06.42.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 06:42:25 -0800 (PST)
-Date:   Wed, 15 Dec 2021 06:42:23 -0800
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     cgel.zte@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH ptp-next] drivers/ptp: remove redundant variable
-Message-ID: <20211215144223.GC7866@hoboy.vegasvil.org>
-References: <20211215060825.442247-1-chi.minghao@zte.com.cn>
+        Wed, 15 Dec 2021 09:42:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639579359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DRVbhue+YBe2AzpJnQbC+hJztV++FER/EJMMHEHF/mE=;
+        b=Bk2jtDlJaxpBjOXOWwqxi/F1iN+IWe6G2ewVs9ib5L3A8A6sd2RQu2WN6eVMxIHDa0FY1D
+        UhDz2YSdDByNzZxtKfPFYeHxv3OJ/ko9QUfUFuVmxXRoS87kQ3PyfJ1K3BQUac8mdSlq55
+        ANBmnPtxacY2+eEx2ECMwylZmmtFcAw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-396-A5H6TXp3OLCkFI-8D18BaA-1; Wed, 15 Dec 2021 09:42:35 -0500
+X-MC-Unique: A5H6TXp3OLCkFI-8D18BaA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A5DA31927830;
+        Wed, 15 Dec 2021 14:42:33 +0000 (UTC)
+Received: from localhost (ovpn-12-120.pek2.redhat.com [10.72.12.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 759A370D58;
+        Wed, 15 Dec 2021 14:42:31 +0000 (UTC)
+Date:   Wed, 15 Dec 2021 22:42:28 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
+        cl@linux.com, John.p.donnelly@oracle.com,
+        kexec@lists.infradead.org, stable@vger.kernel.org,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no managed
+ pages in DMA zone
+Message-ID: <20211215144228.GF10336@MiWiFi-R3L-srv>
+References: <20211213122712.23805-1-bhe@redhat.com>
+ <20211213122712.23805-6-bhe@redhat.com>
+ <20211213134319.GA997240@odroid>
+ <20211214053253.GB2216@MiWiFi-R3L-srv>
+ <f5ff82eb-73b6-55b5-53d7-04ab73ce5035@suse.cz>
+ <20211215044818.GB1097530@odroid>
+ <20211215070335.GA1165926@odroid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215060825.442247-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20211215070335.GA1165926@odroid>
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 06:08:25AM +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On 12/15/21 at 07:03am, Hyeonggon Yoo wrote:
+> On Wed, Dec 15, 2021 at 04:48:26AM +0000, Hyeonggon Yoo wrote:
+> > 
+> > Hello Baoquan and Vlastimil.
+> > 
+> > I'm not sure allowing ZONE_DMA32 for kdump kernel is nice way to solve
+> > this problem. Devices that requires ZONE_DMA is rare but we still
+> > support them.
+> > 
+> > If we allow ZONE_DMA32 for ZONE_DMA in kdump kernels,
+> > the problem will be hard to find.
+> > 
 > 
-> Return value directly instead of taking this
-> in another redundant variable.
+> Sorry, I sometimes forget validating my english writing :(
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> What I meant:
+> 
+> I'm not sure that allocating from ZONE_DMA32 instead of ZONE_DMA
+> for kdump kernel is nice way to solve this problem.
 
-NAK.  The original version is fine as it.  Please teach your robot not
-to generate churn.
+Yeah, if it's really <32bit addressing limit on device, it doesn't solve
+problem. Not sure if devices really has the limitation when
+kmalloc(GFP_DMA) is invoked kernel driver.
 
-Thanks,
-Richard
+> 
+> Devices that requires ZONE_DMA memory is rare but we still support them.
+> 
+> If we use ZONE_DMA32 memory instead of ZONE_DMA in kdump kernels,
+> It will be hard to the problem when we use devices that can use only
+> ZONE_DMA memory.
+> 
+> > What about one of those?:
+> > 
+> >     1) Do not call warn_alloc in page allocator if will always fail
+> >     to allocate ZONE_DMA pages.
+> > 
+
+Seems we can do like below.
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 7c7a0b5de2ff..843bc8e5550a 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -4204,7 +4204,8 @@ void warn_alloc(gfp_t gfp_mask, nodemask_t *nodemask, const char *fmt, ...)
+ 	va_list args;
+ 	static DEFINE_RATELIMIT_STATE(nopage_rs, 10*HZ, 1);
+ 
+-	if ((gfp_mask & __GFP_NOWARN) || !__ratelimit(&nopage_rs))
++	if ((gfp_mask & __GFP_NOWARN) || !__ratelimit(&nopage_rs) ||
++		(gfp_mask & __GFP_DMA) && !has_managed_dma())
+ 		return;
+ 
+> > 
+> >     2) let's check all callers of kmalloc with GFP_DMA
+> >     if they really need GFP_DMA flag and replace those by DMA API or
+> >     just remove GFP_DMA from kmalloc()
+
+I grepped and got a list, I will try to start with several easy place,
+see if we can do something to improve.
+start with.
+
+
+> > 
+> >     3) Drop support for allocating DMA memory from slab allocator
+> >     (as Christoph Hellwig said) and convert them to use DMA32
+> 
+> 	(as Christoph Hellwig said) and convert them to use *DMA API*
+
+Yes, that will be ideal result. This is equivalent to 2), or depends
+on 2).
+
+> 
+> >     and see what happens
+> > 
+> > Thanks,
+> > Hyeonggon.
+> > 
+> > > >> 
+> > > >> Maybe the function get_capabilities() want to allocate memory
+> > > >> even if it's not from DMA zone, but other callers will not expect that.
+> > > > 
+> > > > Yeah, I have the same guess too for get_capabilities(), not sure about other
+> > > > callers. Or, as ChristophL and ChristophH said(Sorry, not sure if this is
+> > > > the right way to call people when the first name is the same. Correct me if
+> > > > it's wrong), any buffer requested from kmalloc can be used by device driver.
+> > > > Means device enforces getting memory inside addressing limit for those
+> > > > DMA transferring buffer which is usually large, Megabytes level with
+> > > > vmalloc() or alloc_pages(), but doesn't care about this kind of small
+> > > > piece buffer memory allocated with kmalloc()? Just a guess, please tell
+> > > > a counter example if anyone happens to know, it could be easy.
+> > > > 
+> > > > 
+> > > >> 
+> > > >> >  			kmalloc_caches[KMALLOC_DMA][i] = create_kmalloc_cache(
+> > > >> >  				kmalloc_info[i].name[KMALLOC_DMA],
+> > > >> >  				kmalloc_info[i].size,
+> > > >> > -- 
+> > > >> > 2.17.2
+> > > >> > 
+> > > >> > 
+> > > >> 
+> > > > 
+> > > 
+> 
+

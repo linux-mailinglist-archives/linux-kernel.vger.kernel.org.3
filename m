@@ -2,121 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8894764DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1904764E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbhLOVtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:49:42 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:57705 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbhLOVtl (ORCPT
+        id S230127AbhLOVuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:50:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:29225 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229967AbhLOVup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:49:41 -0500
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MdeKd-1mOpV42v2n-00ZhgC; Wed, 15 Dec 2021 22:49:39 +0100
-Received: by mail-wr1-f51.google.com with SMTP id t9so40561711wrx.7;
-        Wed, 15 Dec 2021 13:49:39 -0800 (PST)
-X-Gm-Message-State: AOAM5303tLyEPqp+DZ1578ZBUv0l3AaCo/05okCaN1m84A3lHkG1tIqw
-        gK/D+e5EuNSxXoCwBGrO8BAOqfdEiWyFcr8Yzm4=
-X-Google-Smtp-Source: ABdhPJyI4sFfqi3WV9r3gOmk1U//npIrS4nf8wBAkc7GviXMWmaD3dsHGyhZUXFZ+uysDsSwkLsuIqVlj3CoEC95hIQ=
-X-Received: by 2002:a5d:530e:: with SMTP id e14mr6188596wrv.12.1639604979240;
- Wed, 15 Dec 2021 13:49:39 -0800 (PST)
+        Wed, 15 Dec 2021 16:50:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639605044;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wGR9lVOCYBcFzYHb4uDLfPBm6adD4t2ujSbcqbcS7Vg=;
+        b=fWuH3PNhTBrJ+McEHha1jHZ7xgaD49NWlk6XmRHc7xp9BnVzdKUVauqfn0gVwnWuv0QUHY
+        ol4bk9sXI+Y3WnpU0h1dPEcA/oBLiGtR1pchrXCGm0hr9hptSJP0x78cHtEUZIwiyt214A
+        jmNPpmSRxDJTDBQRytG8m5v5L2Q8nYY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-119-Tl3q560IN-iAyOdghPTbsQ-1; Wed, 15 Dec 2021 16:50:43 -0500
+X-MC-Unique: Tl3q560IN-iAyOdghPTbsQ-1
+Received: by mail-wm1-f70.google.com with SMTP id v23-20020a05600c215700b0034566adb612so1490407wml.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 13:50:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wGR9lVOCYBcFzYHb4uDLfPBm6adD4t2ujSbcqbcS7Vg=;
+        b=Ge9U99//hbLXyX462hnGUqryti2K626wSy6eHcdS+IHI306BU26KRLjn306668lnv2
+         S2ewjg3mLjaGeJqWsesFhCasd7bhlw6jUFIU2WJ+gGkGihLylhYsULDw8p2u4dAVkV/Y
+         uM2kIpq5Be+IpAEwVP3RO76XT/21/acE9r2cmmO2h3sJNWMVLRhhRTT8Jgj6+kDc14fI
+         vb/D/d0t2Qx2yT/4gXvTUdFO+nJo3qStaf6jBYJNtgJYVSJbQQWLYmAMgOQlpMfxyxKJ
+         JBaxUFSBcQCb0Gwz3/skpJMiyAzJkRi2OaheHQZh+oHXh8rjt5sFvSXmPDCRxOdANDhp
+         ClgA==
+X-Gm-Message-State: AOAM533WTeF8kk+ciMAzugERINnZ0axSvVZUm65UVl4jK/CSjRtiONno
+        qO3qbXAVNCgno4xQaPy+jPNhan5ZFwIn6rqtMjR/e1+umZQz+Upt7YEHV/k8Pd6VpGBTYF9SZND
+        xJOxlPHzF+SWPXMIQ+EJzQeku
+X-Received: by 2002:adf:ee0c:: with SMTP id y12mr6450769wrn.82.1639605041880;
+        Wed, 15 Dec 2021 13:50:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJztn757VovvfR4KWm4Z3CccDgWA1jc8DERSH/B4nyn/TmIpahQdg4Sb1c3A9FuWw9em2KDNzA==
+X-Received: by 2002:adf:ee0c:: with SMTP id y12mr6450754wrn.82.1639605041636;
+        Wed, 15 Dec 2021 13:50:41 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id c12sm3557301wrr.108.2021.12.15.13.50.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 13:50:41 -0800 (PST)
+Message-ID: <55881b86-6130-7737-b6f8-44e1853e419a@redhat.com>
+Date:   Wed, 15 Dec 2021 22:50:40 +0100
 MIME-Version: 1.0
-References: <20211105154334.1841927-1-alexandre.ghiti@canonical.com>
- <CAK8P3a2AnLJgGNBFvjUQqXd-Az9vjgE7yJQXGDwCav5E0btSsg@mail.gmail.com> <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com>
-In-Reply-To: <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 15 Dec 2021 22:49:23 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
-Message-ID: <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
-Subject: Re: [PATCH 0/7] Cleanup after removal of configs
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Steve French <sfrench@samba.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-cachefs@redhat.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-power@fi.rohmeurope.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Io+rAnOukRGsESnCj52tUXFsPjVCtRLppZBZmKntlAeVeXpSrHi
- qcxK9k04dshwgrWQYiw878XedRH47AsrLy4n/gdfxwlX7u2EYvjqUjIKEXIjY0tuCEb4D4b
- LwE4dKpbjXgggXVUh7oHMARa5sG2Nx8fzgjtBBQhJLpcxn/XzSdD2djB3j6dwZlyKw7hv1G
- drYUyPNFv42Qoql8UBrlg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:c07D+hGrL+w=:9x8C/icw8ntMTFqTZrSJrn
- 6fyDDf4A/Q11iHr55nqwsGbPmkNrTebx43qkhrG1kKn+QweoG2MdgmEAMiSPsM0a18L18+Aur
- rWclUKaX1DLwnkMvBTMNEBclBZYir8NYTvXSxZkzrJqynEv8CDsIwVEO73ysx3dkU79TaUJqq
- ZGIEJjiEnuGE16rReyAdFECgxf6LmiGPDDLM/iBKdx9uO4BQGoXW18Cr/4+W/93SFzg8KuPCl
- 4cO5C618BYZCT/TM34l2u/+7s0zYwWnnG5DneRm5zATDIaOpzQmASCntR1+q10bQ5shpFWfQ9
- 349jAEyhYcUS51FiqkwWtW9U8nugU7PtrsLIOoJvF9O6RLHenDq4UhSZ+4wLl69agk/IGFwdY
- e1pmV61H6prVazhtH0IJav8Tq+SlZA9eEL9ciwmNKDoqBq2UMGDU6NsiVlBC5IBfmFFwwW6vp
- KnJgdSRkvw5StV8PRak8JngW4z38sMAssrPaLhMZnB58ohEI8vyai/WrofA3ZMAhqSXdUVHVW
- MA94AVgnaRrqkS4aBiCwQXpehyyIGYzmaYvHQ5t5Rmcze8cs9pcwXtBm5NMjHJ7zQZh/sjcvD
- 3VDHt9JKKeJ+17u9vpzBc/CqU/JYO47NgWL88LV8n1MafnwPo9YqI9ttnCx66ln9cZui2m3f0
- bGWS9lZmArQRHp8q2TygJ//o8TTWVCEP5dbnuH3rBp3ln7RSib74/2lkOGLR1fuMQcLY=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 11/60] drm/gud: Add support for the nomodeset kernel
+ parameter
+Content-Language: en-US
+To:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20211215010008.2545520-1-javierm@redhat.com>
+ <20211215010008.2545520-12-javierm@redhat.com>
+ <5b1d9578-1f74-a808-c4d4-6e8c38dd57fc@tronnes.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <5b1d9578-1f74-a808-c4d4-6e8c38dd57fc@tronnes.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 9:38 PM Alexandre Ghiti
-<alexandre.ghiti@canonical.com> wrote:
->
-> On Fri, Nov 5, 2021 at 4:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Fri, Nov 5, 2021 at 4:43 PM Alexandre Ghiti
-> > <alexandre.ghiti@canonical.com> wrote:
-> > >
-> > > While bumping from 5.13 to 5.15, I found that a few deleted configs had
-> > > left some pieces here and there: this patchset cleans that.
-> > >
-> > > Alexandre Ghiti (7):
-> > >   Documentation, arch: Remove leftovers from fscache/cachefiles
-> > >     histograms
-> > >   Documentation, arch: Remove leftovers from raw device
-> > >   Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
-> > >   arch: Remove leftovers from mandatory file locking
-> > >   Documentation, arch, fs: Remove leftovers from fscache object list
-> > >   include: mfd: Remove leftovers from bd70528 watchdog
-> > >   arch: Remove leftovers from prism54 wireless driver
-> >
-> > Looks all good to me, thanks a lot for the cleanup!
-> >
-> > For arch/arm/configs:
-> >
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> >
-> > assuming this goes through someone else's tree. Let me know if you need me
-> > to pick up the patches in the asm-generic tree for cross-architecture work.
->
-> Arnd, do you mind taking the whole series except patch 6 ("include:
-> mfd: Remove leftovers from bd70528 watchdog") as this will be handled
-> separately. I can ask Jonathan for the doc patches if needed.
+Hello Noralf,
 
-I tried to apply them, but only three of the patches applied cleanly. Can you
-resend them based on v5.16-rc1?
+On 12/15/21 22:37, Noralf Trønnes wrote:
+> 
+> 
+> Den 15.12.2021 01.59, skrev Javier Martinez Canillas:
+>> According to disable Documentation/admin-guide/kernel-parameters.txt, this
+>> parameter can be used to disable kernel modesetting.
+>>
+>> DRM drivers will not perform display-mode changes or accelerated rendering
+>> and only the systewm system framebuffer will be available if it was set-up.
+>>
+>> But only a few DRM drivers currently check for nomodeset, make this driver
+>> to also support the command line parameter.
+>>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+>> ---
+>>
+> 
+> I don't understand why this is applicable to USB drivers, there's no way
+> the firmware can setup a framebuffer and continue pushing pixels over
+> USB when Linux has been given control over the USB bus?
+> 
+> The same argument goes for the SPI drivers in drm/tiny/ as well.
+> 
 
-        Arnd
+That's a very good point. I included these mostly for consistency but if it's
+OK for the KMS drivers to just ignore the "nomodeset" parameter, I could drop
+all that are not for devices in the PCI or platform buses.
+
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8F3475F09
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B14C475F27
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:31:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343669AbhLOR0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:26:46 -0500
+        id S245648AbhLOR2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:28:10 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343672AbhLORZV (ORCPT
+        with ESMTP id S1343659AbhLOR0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:25:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CEEC0698C5;
-        Wed, 15 Dec 2021 09:25:15 -0800 (PST)
+        Wed, 15 Dec 2021 12:26:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6A7C07E5E3;
+        Wed, 15 Dec 2021 09:26:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44795B8202B;
-        Wed, 15 Dec 2021 17:25:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E170C36AE2;
-        Wed, 15 Dec 2021 17:25:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F12361A08;
+        Wed, 15 Dec 2021 17:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C84C36AE2;
+        Wed, 15 Dec 2021 17:26:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589113;
-        bh=lY58zCJaNfQ3ES7Jy6v+wdk9jJ5VOZ+EsXN8Z4hsOnI=;
+        s=korg; t=1639589160;
+        bh=PqqQmART0691xGxwedt0tQGrGlD6Xok4ZPFflHKlJJk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1TxnIxxnx8M7iNxsSlOjTEw9CgoZ6qEG8VUS4VUJZwTQ/4sIFm3no9AdN3utN3I9I
-         P+gCozabEokRBd3FEt/8Qjx9T5zVyE06INyC92mIUxkFLArOhaMwKDFNP2+Y0/inC2
-         OR2sDVv1yJXsztA/83BsPjgaIzGQ47Ia4VD/uC5c=
+        b=j0EyjO2CHo5T1O0M/nE82+DDeAO/l2E/5Mjps0X7L0ZdseDxR9OGNREFfNoQJ+ee2
+         lunwYEgknAqDUA9S4WcJBh0nOh5LaVL72CGRJoW0RI3fO7ckNvJWDYh62KenPX6UCr
+         t7UnmGzzqZfNWD6xSgfZQ5ixnLFR28pA96NjDDs8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Jiri Olsa <jolsa@redhat.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.10 24/33] perf intel-pt: Fix intel_pt_fup_event() assumptions about setting state type
-Date:   Wed, 15 Dec 2021 18:21:22 +0100
-Message-Id: <20211215172025.599224706@linuxfoundation.org>
+Subject: [PATCH 5.10 25/33] perf intel-pt: Fix state setting when receiving overflow (OVF) packet
+Date:   Wed, 15 Dec 2021 18:21:23 +0100
+Message-Id: <20211215172025.641797704@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
 References: <20211215172024.787958154@linuxfoundation.org>
@@ -51,104 +51,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Adrian Hunter <adrian.hunter@intel.com>
 
-commit 4c761d805bb2d2ead1b9baaba75496152b394c80 upstream.
+commit c79ee2b2160909889df67c8801352d3e69d43a1a upstream.
 
-intel_pt_fup_event() assumes it can overwrite the state type if there has
-been an FUP event, but this is an unnecessary and unexpected constraint on
-callers.
+An overflow (OVF packet) is treated as an error because it represents a
+loss of trace data, but there is no loss of synchronization, so the packet
+state should be INTEL_PT_STATE_IN_SYNC not INTEL_PT_STATE_ERR_RESYNC.
 
-Fix by touching only the state type flags that are affected by an FUP
-event.
+To support that, some additional variables must be reset, and the FUP
+packet that may follow OVF is treated as an FUP event.
 
-Fixes: a472e65fc490a ("perf intel-pt: Add decoder support for ptwrite and power event packets")
+Fixes: f4aa081949e7b6 ("perf tools: Add Intel PT decoder")
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 Cc: Jiri Olsa <jolsa@redhat.com>
 Cc: stable@vger.kernel.org # v5.15+
-Link: https://lore.kernel.org/r/20211210162303.2288710-4-adrian.hunter@intel.com
+Link: https://lore.kernel.org/r/20211210162303.2288710-5-adrian.hunter@intel.com
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 [Adrian: Backport to v5.10]
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/util/intel-pt-decoder/intel-pt-decoder.c |   32 ++++++++------------
- 1 file changed, 13 insertions(+), 19 deletions(-)
+ tools/perf/util/intel-pt-decoder/intel-pt-decoder.c |   32 +++++++++++++++++---
+ 1 file changed, 28 insertions(+), 4 deletions(-)
 
 --- a/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
 +++ b/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
-@@ -1114,61 +1114,55 @@ out_no_progress:
- 
- static bool intel_pt_fup_event(struct intel_pt_decoder *decoder)
- {
-+	enum intel_pt_sample_type type = decoder->state.type;
- 	bool ret = false;
- 
-+	decoder->state.type &= ~INTEL_PT_BRANCH;
-+
- 	if (decoder->set_fup_tx_flags) {
- 		decoder->set_fup_tx_flags = false;
- 		decoder->tx_flags = decoder->fup_tx_flags;
--		decoder->state.type = INTEL_PT_TRANSACTION;
-+		decoder->state.type |= INTEL_PT_TRANSACTION;
- 		if (decoder->fup_tx_flags & INTEL_PT_ABORT_TX)
- 			decoder->state.type |= INTEL_PT_BRANCH;
--		decoder->state.from_ip = decoder->ip;
--		decoder->state.to_ip = 0;
- 		decoder->state.flags = decoder->fup_tx_flags;
--		return true;
-+		ret = true;
- 	}
- 	if (decoder->set_fup_ptw) {
- 		decoder->set_fup_ptw = false;
--		decoder->state.type = INTEL_PT_PTW;
-+		decoder->state.type |= INTEL_PT_PTW;
- 		decoder->state.flags |= INTEL_PT_FUP_IP;
--		decoder->state.from_ip = decoder->ip;
--		decoder->state.to_ip = 0;
- 		decoder->state.ptw_payload = decoder->fup_ptw_payload;
--		return true;
-+		ret = true;
- 	}
- 	if (decoder->set_fup_mwait) {
- 		decoder->set_fup_mwait = false;
--		decoder->state.type = INTEL_PT_MWAIT_OP;
--		decoder->state.from_ip = decoder->ip;
--		decoder->state.to_ip = 0;
-+		decoder->state.type |= INTEL_PT_MWAIT_OP;
- 		decoder->state.mwait_payload = decoder->fup_mwait_payload;
- 		ret = true;
- 	}
- 	if (decoder->set_fup_pwre) {
- 		decoder->set_fup_pwre = false;
- 		decoder->state.type |= INTEL_PT_PWR_ENTRY;
--		decoder->state.type &= ~INTEL_PT_BRANCH;
--		decoder->state.from_ip = decoder->ip;
--		decoder->state.to_ip = 0;
- 		decoder->state.pwre_payload = decoder->fup_pwre_payload;
- 		ret = true;
- 	}
- 	if (decoder->set_fup_exstop) {
- 		decoder->set_fup_exstop = false;
- 		decoder->state.type |= INTEL_PT_EX_STOP;
--		decoder->state.type &= ~INTEL_PT_BRANCH;
- 		decoder->state.flags |= INTEL_PT_FUP_IP;
--		decoder->state.from_ip = decoder->ip;
--		decoder->state.to_ip = 0;
- 		ret = true;
- 	}
- 	if (decoder->set_fup_bep) {
- 		decoder->set_fup_bep = false;
+@@ -1158,6 +1158,20 @@ static bool intel_pt_fup_event(struct in
  		decoder->state.type |= INTEL_PT_BLK_ITEMS;
--		decoder->state.type &= ~INTEL_PT_BRANCH;
-+		ret = true;
+ 		ret = true;
+ 	}
++	if (decoder->overflow) {
++		decoder->overflow = false;
++		if (!ret && !decoder->pge) {
++			if (decoder->hop) {
++				decoder->state.type = 0;
++				decoder->pkt_state = INTEL_PT_STATE_RESAMPLE;
++			}
++			decoder->pge = true;
++			decoder->state.type |= INTEL_PT_BRANCH | INTEL_PT_TRACE_BEGIN;
++			decoder->state.from_ip = 0;
++			decoder->state.to_ip = decoder->ip;
++			return true;
++		}
 +	}
-+	if (ret) {
+ 	if (ret) {
  		decoder->state.from_ip = decoder->ip;
  		decoder->state.to_ip = 0;
--		ret = true;
-+	} else {
-+		decoder->state.type = type;
- 	}
- 	return ret;
+@@ -1480,7 +1494,16 @@ static int intel_pt_overflow(struct inte
+ 	intel_pt_log("ERROR: Buffer overflow\n");
+ 	intel_pt_clear_tx_flags(decoder);
+ 	decoder->timestamp_insn_cnt = 0;
+-	decoder->pkt_state = INTEL_PT_STATE_ERR_RESYNC;
++	decoder->pkt_state = INTEL_PT_STATE_IN_SYNC;
++	decoder->state.from_ip = decoder->ip;
++	decoder->ip = 0;
++	decoder->pge = false;
++	decoder->set_fup_tx_flags = false;
++	decoder->set_fup_ptw = false;
++	decoder->set_fup_mwait = false;
++	decoder->set_fup_pwre = false;
++	decoder->set_fup_exstop = false;
++	decoder->set_fup_bep = false;
+ 	decoder->overflow = true;
+ 	return -EOVERFLOW;
  }
+@@ -2083,6 +2106,7 @@ next:
+ 
+ 		case INTEL_PT_TIP_PGE: {
+ 			decoder->pge = true;
++			decoder->overflow = false;
+ 			intel_pt_mtc_cyc_cnt_pge(decoder);
+ 			if (decoder->packet.count == 0) {
+ 				intel_pt_log_at("Skipping zero TIP.PGE",
+@@ -2596,10 +2620,10 @@ static int intel_pt_sync_ip(struct intel
+ 	decoder->set_fup_pwre = false;
+ 	decoder->set_fup_exstop = false;
+ 	decoder->set_fup_bep = false;
++	decoder->overflow = false;
+ 
+ 	if (!decoder->branch_enable) {
+ 		decoder->pkt_state = INTEL_PT_STATE_IN_SYNC;
+-		decoder->overflow = false;
+ 		decoder->state.type = 0; /* Do not have a sample */
+ 		return 0;
+ 	}
+@@ -2614,7 +2638,6 @@ static int intel_pt_sync_ip(struct intel
+ 		decoder->pkt_state = INTEL_PT_STATE_RESAMPLE;
+ 	else
+ 		decoder->pkt_state = INTEL_PT_STATE_IN_SYNC;
+-	decoder->overflow = false;
+ 
+ 	decoder->state.from_ip = 0;
+ 	decoder->state.to_ip = decoder->ip;
+@@ -2823,7 +2846,8 @@ const struct intel_pt_state *intel_pt_de
+ 
+ 	if (err) {
+ 		decoder->state.err = intel_pt_ext_err(err);
+-		decoder->state.from_ip = decoder->ip;
++		if (err != -EOVERFLOW)
++			decoder->state.from_ip = decoder->ip;
+ 		intel_pt_update_sample_time(decoder);
+ 		decoder->sample_tot_cyc_cnt = decoder->tot_cyc_cnt;
+ 	} else {
 
 

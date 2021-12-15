@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6697B4757A2
+	by mail.lfdr.de (Postfix) with ESMTP id E7D644757A3
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242005AbhLOLTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
+        id S242054AbhLOLTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 06:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237026AbhLOLS6 (ORCPT
+        with ESMTP id S237092AbhLOLTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:18:58 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4D4C06173E;
-        Wed, 15 Dec 2021 03:18:58 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id m12so32790649ljj.6;
-        Wed, 15 Dec 2021 03:18:58 -0800 (PST)
+        Wed, 15 Dec 2021 06:19:00 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44380C061574;
+        Wed, 15 Dec 2021 03:18:59 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id m12so32790697ljj.6;
+        Wed, 15 Dec 2021 03:18:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Do+igy+24OpCO8ayQtrvopM+UKDBXHu8XcWDcF2aT8A=;
-        b=gtea3RiShrHzm8K2NJN9kLT0Tk3BzL4XLXaiyJ8GsRdnG96DSfC/fD+bR6ixZFSUkN
-         feEZjnAR22tXPQSjRK/vYhizXd0p/GbIn3n8ixnaBw2fdatq5yqIxnRwcj8PPKWUHRro
-         afFIL1zBsSx1PJSL5Lt3+TSfkLfnDPZt/JuWeUuUFSLOsok499cR2e5yYD77hhcXihmF
-         /qBJGE/xBl2C8rn9OndUgSaUW50zg+Zhv7kr/aJv8TsMkFCemKxSMcNR42jOilLuhPTt
-         0G73W/rS3Jux/oxGd2GBxC9uzlPYIelwV/N6I7jzy+hFq+0FDG8AOeHhvvDALngFDuKF
-         Y25g==
+        bh=IXBBA6tooNUJe0qcFXJZUGQ+vzEcA/gvh+yxjKcwpWY=;
+        b=pFAJRY08zh4uBk2yxFcOF5CRP5Xaooyqwvpkmq2oEvGAQ29n7VwOVwMZ5YcYsRtnjE
+         TMWBfGOrijArZzJlMRZvq59nWMFouDYH2FJf6e8QPgc20vUl57S/RRbBOVRc9YectayT
+         F2eCI8I/9mnHUmreR8KoSMZq3aVMOOvYOLqDkwfKPUib3W1BRd09Q4NlPJYTDXWhOMbn
+         G3b/ALm9DCYnoIb+KaP3vIwidiQQviOunF7lPv7roa/cOYoydJdnOqD6pTL14WXmV2SO
+         eyGz/EIHJeNKSIUIVwATPPo560Dw6J4xxFMkkPmFsjZx9utlFKT8M0AQTmJhngBqii9S
+         g9ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Do+igy+24OpCO8ayQtrvopM+UKDBXHu8XcWDcF2aT8A=;
-        b=Cc+HaaPcxm3m3JHM+lW2cGRCEAaQHEUxEGOIJIUmmhU6pEG/q1TDgMvJOIM8N6aP3O
-         makWdaBawkdDNJn3PyhmpTI7QqBds1vQPoBbOKT09C2KGMqyH54S0tCcXqbafz6G2ku1
-         BiPBjaO9AGS2Xf5TEhLVPZ7bfVJInbqjmCaKdRndYiBfUJHkuyCZSXa9IHFeoXogkwzl
-         YUvhiM4a2MYEh3TozyrkheGZuRUcDb2DX7YLBa61F7ikuPIDXx7x7/DuoslItpANit4D
-         5WrXAZz04Uod6b4oGDKlLIH09s/IySurqwVYeNNImBE/s5/F3V/DWTTAXJRayNvOhlze
-         ynHA==
-X-Gm-Message-State: AOAM530keDXnp5/gIVsdonFOwu1lZsm9/W5jzTEANcF/43LFBa9y0qrb
-        5iiJ/eaoboOu0aY+Fxek4Yia8X3E5tpIlgux
-X-Google-Smtp-Source: ABdhPJwFOszL8X0098U2pAArbk7tuSgkGkfS74rjH//U2QP8U89diYehibh4lSdLUziYcOh7tlp7Fg==
-X-Received: by 2002:a2e:2a46:: with SMTP id q67mr9683196ljq.398.1639567136643;
-        Wed, 15 Dec 2021 03:18:56 -0800 (PST)
+        bh=IXBBA6tooNUJe0qcFXJZUGQ+vzEcA/gvh+yxjKcwpWY=;
+        b=Tf/8Z6B5azX79OKO+2xPA2rlT9/qj7miKW7fR7x0ST6PS8Dxa9gN8SQ8JR6UqShy3t
+         34DU6XhYz+QQNyLk79w9WOFHyJFkxOU9Rc1aClQ/yRYmnlzgcOygzzg2fn6DFR9VotC8
+         8kJxeijN54U96ZXuMjhX786hesD/gqGqha0288I/MO0CQvRbBS+VWG9mzkyoYnQh9bGE
+         DWDdnNw85nutGTJZD9fgGUjHf3iZqWJCwN8qPXdZb69tXE4ePeRNpNry0ZKZVdk53ZcN
+         yM8vVT/8LqtjIZ7dGJzgyQOYdVM3QIdb+PUF42PAqiVGO7J0mBSkKKRrcSBGMNMBUTA0
+         wX5Q==
+X-Gm-Message-State: AOAM533AYl6lhSLDQlJ4nfPqJqGrNE+cQ/5wf1CLFjmhea9go58iE8D3
+        HD7HUI/XUHtbwHyqtb/yTQzOrQpLPPd0y+ck
+X-Google-Smtp-Source: ABdhPJyjG0DF4H4NoX1YAecwDQnw1hcE7326b6kvl7XCGvbMqGBBUdTOiGM1KVJ4k4cFtCxeDGNOcQ==
+X-Received: by 2002:a05:651c:1689:: with SMTP id bd9mr9870481ljb.192.1639567137573;
+        Wed, 15 Dec 2021 03:18:57 -0800 (PST)
 Received: from pc638.lan (h5ef52e3d.seluork.dyn.perspektivbredband.net. [94.245.46.61])
-        by smtp.gmail.com with ESMTPSA id n17sm383906ljg.128.2021.12.15.03.18.55
+        by smtp.gmail.com with ESMTPSA id n17sm383906ljg.128.2021.12.15.03.18.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 03:18:56 -0800 (PST)
+        Wed, 15 Dec 2021 03:18:57 -0800 (PST)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
@@ -64,9 +64,9 @@ Cc:     Michal Hocko <mhocko@suse.com>,
         Uladzislau Rezki <urezki@gmail.com>,
         Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>,
         Uladzislau Rezki <uladzislau.rezki@sony.com>
-Subject: [PATCH RESEND] ext4: Switch to kvfree_rcu() API
-Date:   Wed, 15 Dec 2021 12:18:39 +0100
-Message-Id: <20211215111845.2514-3-urezki@gmail.com>
+Subject: [PATCH] fs: nfs: sysfs: Switch to kvfree_rcu() API
+Date:   Wed, 15 Dec 2021 12:18:40 +0100
+Message-Id: <20211215111845.2514-4-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211215111845.2514-1-urezki@gmail.com>
 References: <20211215111845.2514-1-urezki@gmail.com>
@@ -82,27 +82,31 @@ Instead of invoking a synchronize_rcu() to free a pointer
 after a grace period we can directly make use of new API
 that does the same but in more efficient way.
 
-TO: "Theodore Ts'o" <tytso@mit.edu>
-TO: linux-ext4@vger.kernel.org
+TO: Trond Myklebust <trond.myklebust@hammerspace.com>
+TO: linux-nfs@vger.kernel.org
 Signed-off-by: Uladzislau Rezki <uladzislau.rezki@sony.com>
 ---
- fs/ext4/super.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ fs/nfs/sysfs.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 4e33b5eca694..111b0498a232 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1886,8 +1886,7 @@ static int clear_qf_name(struct super_block *sb, int qtype)
- 		return -1;
- 	}
- 	rcu_assign_pointer(sbi->s_qf_names[qtype], NULL);
--	synchronize_rcu();
--	kfree(old_qname);
-+	kvfree_rcu(old_qname);
- 	return 1;
+diff --git a/fs/nfs/sysfs.c b/fs/nfs/sysfs.c
+index 8cb70755e3c9..ff88d5d58e1e 100644
+--- a/fs/nfs/sysfs.c
++++ b/fs/nfs/sysfs.c
+@@ -113,10 +113,9 @@ static ssize_t nfs_netns_identifier_store(struct kobject *kobj,
+ 	if (!p)
+ 		return -ENOMEM;
+ 	old = rcu_dereference_protected(xchg(&c->identifier, (char __rcu *)p), 1);
+-	if (old) {
+-		synchronize_rcu();
+-		kfree(old);
+-	}
++	if (old)
++		kvfree_rcu(old);
++
+ 	return count;
  }
- #endif
+ 
 -- 
 2.30.2
 

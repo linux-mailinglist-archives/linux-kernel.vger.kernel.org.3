@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8484758F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63CA4758FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242566AbhLOMgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:36:38 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:48934 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242572AbhLOMgg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:36:36 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 523514382B;
-        Wed, 15 Dec 2021 12:36:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        mime-version:content-transfer-encoding:content-type:content-type
-        :content-language:accept-language:in-reply-to:references
-        :message-id:date:date:subject:subject:from:from:received
-        :received:received:received:received; s=mta-01; t=1639571794; x=
-        1641386195; bh=vYjW8XrgnwJ5djB3iYo4jM09bOlWQU/PIRsmeJ0i0vg=; b=n
-        46q9AEkWrYlHbHDzxf5EMfQtQsqI+xHhjvxeBVRyWjtBXxwvFfsFXni+BGk1eb/q
-        74Cr1DJDB4U1HSAhAVmv/Wok86/SH6xzXD0ni/9O+FCAdRdSdT6aKvN/b8wKAU3y
-        1X+XG/8Lg3u5bjOw+qN/EbRp+HRSq3YTURhEvIRdRA=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Gk4kjZDlEaU3; Wed, 15 Dec 2021 15:36:34 +0300 (MSK)
-Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id A57D443828;
-        Wed, 15 Dec 2021 15:36:33 +0300 (MSK)
-Received: from T-EXCH-06.corp.yadro.com (172.17.10.110) by
- T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Wed, 15 Dec 2021 15:36:33 +0300
-Received: from T-Exch-05.corp.yadro.com (172.17.10.109) by
- T-EXCH-06.corp.yadro.com (172.17.10.110) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 15 Dec 2021 15:36:33 +0300
-Received: from T-Exch-05.corp.yadro.com ([fe80::a43b:5159:cc52:9ad8]) by
- T-Exch-05.corp.yadro.com ([fe80::a43b:5159:cc52:9ad8%14]) with mapi id
- 15.02.0792.003; Wed, 15 Dec 2021 15:36:33 +0300
-From:   Arseny Demidov <a.demidov@yadro.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Arseny Demidov <arsdemal@gmail.com>
-CC:     Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] hwmon : (mr75203) fix macro typo
-Thread-Topic: [PATCH] hwmon : (mr75203) fix macro typo
-Thread-Index: AQHX8adVWLaP7HAg3kCtAegOS1jXr6wzQLyAgAAJCICAADLCIA==
-Date:   Wed, 15 Dec 2021 12:36:32 +0000
-Message-ID: <c1d036c0cfa14fbb9c289f792780f003@yadro.com>
-References: <20211215113023.2945-1-a.demidov@yadro.com>
- <0baa6133-5903-ffd8-69a0-99fb9f69665d@roeck-us.net>
- <06d7c6ee-2db5-f250-50f7-9a47e33a35b5@roeck-us.net>
-In-Reply-To: <06d7c6ee-2db5-f250-50f7-9a47e33a35b5@roeck-us.net>
-Accept-Language: en-US
-Content-Language: ru-RU
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.17.4.118]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S242573AbhLOMjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:39:07 -0500
+Received: from foss.arm.com ([217.140.110.172]:50848 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234378AbhLOMjG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 07:39:06 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 854CAD6E;
+        Wed, 15 Dec 2021 04:39:05 -0800 (PST)
+Received: from [10.57.33.203] (unknown [10.57.33.203])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E90B53F774;
+        Wed, 15 Dec 2021 04:39:02 -0800 (PST)
+Message-ID: <d91a1b98-2c2b-a961-543f-d540b3c7a146@arm.com>
+Date:   Wed, 15 Dec 2021 12:38:47 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, Ian Rogers <irogers@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
+ <20211214184240.24215-1-andrew.kilroy@arm.com>
+ <20211214184240.24215-2-andrew.kilroy@arm.com>
+ <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
+ <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
+From:   Andrew Kilroy <andrew.kilroy@arm.com>
+In-Reply-To: <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WWVzLCBJIGhhdmUgYWNjZXNzIHRvIHRoZSBkYXRhc2hlZXQgYW5kIGNhdWdodCBhbiBlcnJvciBv
-biBzaW11bGF0aW9uIElQLWJsb2NrLg0KVGhlIGRhdGFzaGVldCBzYXlzIHRoYXQgcmVnaXN0ZXIg
-IkV4cHJlc3NlZCBpbiB1bml0cyBvZiBJUCBjbGsgY3ljbGVzLiINClR5cGljYWwgcG93ZXItdXAg
-ZGVsYXlzIGZvciBUZW1wZXJhdHVyZSBTZW5zb3IgYXJlIDI1NiBjeWNsZXMgaS4gZS4gMHgxMDAN
-Cg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEd1ZW50ZXIgUm9lY2sgPGdyb2Vj
-azdAZ21haWwuY29tPiBPbiBCZWhhbGYgT2YgR3VlbnRlciBSb2Vjaw0KU2VudDogV2VkbmVzZGF5
-LCBEZWNlbWJlciAxNSwgMjAyMSAzOjMxIFBNDQpUbzogQXJzZW55IERlbWlkb3YgPGFyc2RlbWFs
-QGdtYWlsLmNvbT4NCkNjOiBBcnNlbnkgRGVtaWRvdiA8YS5kZW1pZG92QHlhZHJvLmNvbT47IEpl
-YW4gRGVsdmFyZSA8amRlbHZhcmVAc3VzZS5jb20+OyBsaW51eC1od21vbkB2Z2VyLmtlcm5lbC5v
-cmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNClN1YmplY3Q6IFJlOiBbUEFUQ0hdIGh3
-bW9uIDogKG1yNzUyMDMpIGZpeCBtYWNybyB0eXBvDQoNCk9uIDEyLzE1LzIxIDM6NTkgQU0sIEd1
-ZW50ZXIgUm9lY2sgd3JvdGU6DQo+IE9uIDEyLzE1LzIxIDM6MzAgQU0sIEFyc2VueSBEZW1pZG92
-IHdyb3RlOg0KPj4gSW4gdGhlIGZpbGUgbXI3NTIwMy5jIHdlIGhhdmUgYSBtYWNybyBuYW1lZCBQ
-T1dFUl9ERUxBWV9DWUNMRV8yNTYsIA0KPj4gdGhlIGNvcnJlY3QgdmFsdWUgc2hvdWxkIGJlIDB4
-MTAwDQo+Pg0KPiANCj4gSG93IGRvIHlvdSBrbm93IHRoYXQgPyBEbyB5b3UgaGF2ZSBhY2Nlc3Mg
-dG8gdGhlIGRhdGFzaGVldCwgb3IgaXMgaXQgDQo+IGp1c3QgYW4gYXNzdW1wdGlvbiBiYXNlZCBv
-biB0aGUgbmFtZSBvZiB0aGUgZGVmaW5lID8NCj4gDQoNCkFsc28sIGhvdyBkbyB5b3Uga25vdyB0
-aGF0IHRoZSB2YWx1ZSBpcyB3cm9uZywgbm90IHRoZSBuYW1lIG9mIHRoZSBkZWZpbmUgPw0KDQpH
-dWVudGVyDQoNCj4gR3VlbnRlcg0KPiANCj4+IFNpZ25lZC1vZmYtYnk6IEFyc2VueSBEZW1pZG92
-IDxhLmRlbWlkb3ZAeWFkcm8uY29tPg0KPj4gLS0tDQo+PiDCoCBkcml2ZXJzL2h3bW9uL21yNzUy
-MDMuYyB8IDIgKy0NCj4+IMKgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxl
-dGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL21yNzUyMDMuYyBiL2Ry
-aXZlcnMvaHdtb24vbXI3NTIwMy5jIGluZGV4IA0KPj4gODY4MjQzZGJhMWVlLi4xYmExZTMxNDU5
-NjkgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2h3bW9uL21yNzUyMDMuYw0KPj4gKysrIGIvZHJp
-dmVycy9od21vbi9tcjc1MjAzLmMNCj4+IEBAIC05Myw3ICs5Myw3IEBADQo+PiDCoCAjZGVmaW5l
-IFZNX0NIX1JFUcKgwqDCoCBCSVQoMjEpDQo+PiDCoCAjZGVmaW5lIElQX1RNUsKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgMHgwNQ0KPj4gLSNkZWZpbmUgUE9XRVJfREVMQVlfQ1lDTEVfMjU2wqDCoMKg
-IDB4ODANCj4+ICsjZGVmaW5lIFBPV0VSX0RFTEFZX0NZQ0xFXzI1NsKgwqDCoCAweDEwMA0KPj4g
-wqAgI2RlZmluZSBQT1dFUl9ERUxBWV9DWUNMRV82NMKgwqDCoCAweDQwDQo+PiDCoCAjZGVmaW5l
-IFBWVF9QT0xMX0RFTEFZX1VTwqDCoMKgIDIwDQo+Pg0KPiANCg0K
+Ian, John, thanks for the feedback.
+
+On 15/12/2021 10:52, John Garry wrote:
+> Hi Andrew,
+> 
+>>>   const struct pmu_event *metricgroup__find_metric(const char *metric,
+>>>                                                   const struct 
+>>> pmu_events_map *map);
+>>>   int metricgroup__parse_groups_test(struct evlist *evlist,
+>>> diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
+>>> index 1081b20f9891..57c0c5f2c6bd 100644
+>>> --- a/tools/perf/util/topdown.c
+>>> +++ b/tools/perf/util/topdown.c
+>>> @@ -56,3 +56,9 @@ __weak bool arch_topdown_sample_read(struct evsel 
+>>> *leader __maybe_unused)
+>>>   {
+>>>          return false;
+>>>   }
+>>> +
+>>> +__weak bool arch_topdown_use_json_metrics(void)
+>>> +{
+> 
+> AFAICS, only x86 supports topdown today and that is because they have 
+> special kernel topdown events exposed for the kernel CPU PMU driver. So 
+> other architectures - not only arm - would need rely on metricgroups for 
+> topdown support. So let's make this generic for all archs.
+> 
+>> I like this extension! I've ranted in the past about weak symbols
+>> breaking with archives due to lazy loading [1]. In this case
+>> tools/perf/arch/arm64/util/topdown.c has no other symbols within it
+>> and so the weak symbol has an extra chance of being linked
+>> incorrectly. We could add a new command line of --topdown-json to
+>> avoid this, but there seems little difference in doing this over just
+>> doing '-M TopDownL1'.
+> 
+> 
+>> Is it possible to use the json metric approach
+>> for when the CPU version fails?
+> 
+> I think that's a good idea.
+> 
+
+Taking a look.
+
+> In addition we could also add a --topdown arg to force using JSON 
+> metricgroups.
+> 
+
+What arg do think would be supplied?
+
+> Did you actually test this patch? I have something experimental working 
+> from some time ago, and it was more complicated than this. I need to 
+> check the code again...
+> 
+
+I got stats back from this implementation, yes.  Let me know if there's 
+things my patch isn't catering for.
+
+> Thanks,
+> John

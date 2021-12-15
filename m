@@ -2,187 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C909247551A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF7F47551C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241148AbhLOJYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:24:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44926 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236355AbhLOJYP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:24:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3573B81EA7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 09:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D608C34605;
-        Wed, 15 Dec 2021 09:24:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639560252;
-        bh=rYjnaWSzpqIp48Q0lLbOr6CKp/MW2rZdnrmbiakJPyw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=krmuTg3Z1Is3v3jSurAWWkX8DuzYpjmbabZwDv2Rd0nWO3fA0bp/W781FYxMoXsNM
-         W66QcfH/qRXURS8m0++Q3XtTZjZPjKmElYM7evxJ4/DbC7yR9Liu3K49RZvcfQKdlu
-         D+9auBsgu5zhK9KucJw+Q6Vn9IIdiDSAqEHLWyabkukrlh8itxyLTMY7hb1jDgvwaH
-         nqUmFPkbbO47AJaGGzBJRNC4o8gE4+v7b7DcNG2qF9xnX8YFed0jHfoRYnTwmJdQuS
-         uc5ddIYfiHVzEWqtMNIRayIhGKsP5MdsuRV1seUZELLcvdI0NVPvvplOWHF0eOWWoa
-         5QEi15ZtI+mVQ==
-Date:   Wed, 15 Dec 2021 11:24:01 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH 2/2] arm64: mm: support bootparam max_addr
-Message-ID: <Ybm0MWDhzkkwAZoz@kernel.org>
-References: <20211215064559.2843555-1-peng.fan@oss.nxp.com>
- <20211215064559.2843555-2-peng.fan@oss.nxp.com>
- <CAMj1kXE8AQaiyHQU9k18P7dK81xhuWRmh3BhpOSP_qPnsX+sRg@mail.gmail.com>
- <DU0PR04MB94179C41295FF369E5D755D488769@DU0PR04MB9417.eurprd04.prod.outlook.com>
+        id S241171AbhLOJYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:24:33 -0500
+Received: from foss.arm.com ([217.140.110.172]:46272 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241165AbhLOJYb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 04:24:31 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 977C86D;
+        Wed, 15 Dec 2021 01:24:30 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.66.121])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4D69C3F5A1;
+        Wed, 15 Dec 2021 01:24:28 -0800 (PST)
+Date:   Wed, 15 Dec 2021 09:24:22 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, ardb@kernel.org,
+        broonie@kernel.org, dave.hansen@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, maz@kernel.org,
+        mingo@redhat.com, tabba@google.com, tglx@linutronix.de,
+        will@kernel.org
+Subject: Re: [RFC PATCH 0/6] linkage: better symbol aliasing
+Message-ID: <Ybm0Rl6TxdgA0tsB@FVFF77S0Q05N>
+References: <20211206124715.4101571-1-mark.rutland@arm.com>
+ <YbNsjU2n2uXlg3fc@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DU0PR04MB94179C41295FF369E5D755D488769@DU0PR04MB9417.eurprd04.prod.outlook.com>
+In-Reply-To: <YbNsjU2n2uXlg3fc@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 07:59:45AM +0000, Peng Fan wrote:
-> > Subject: Re: [PATCH 2/2] arm64: mm: support bootparam max_addr
+On Fri, Dec 10, 2021 at 03:04:45PM +0000, Catalin Marinas wrote:
+> On Mon, Dec 06, 2021 at 12:47:09PM +0000, Mark Rutland wrote:
+> > This series aims to make symbol aliasing simpler and more consistent.
+> > The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
+> > SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
+> > that e.g.
 > > 
-> > On Wed, 15 Dec 2021 at 07:56, Peng Fan (OSS) <peng.fan@oss.nxp.com>
-> > wrote:
-> > >
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > There is a "mem=[x]" boot parameter, but when there is a whole
-> > > reserved by secure TEE, the continuous DRAM area is split with two
-> > memblocks.
-> > >
-> > > For example, DRAM area [0x40000000, 0xffffffff], when TEE uses
-> > > [0x50000000, 0x51000000), the memblock will be split into [0x40000000,
-> > > 0x50000000) and [0x51000000, 0xffffffff].
-> > >
-> > > If pass "mem=1024MB", the actually max addr will be 0x81000000.
-> > > However if need the max addr be 0x80000000, mem=1008MB should be
-> > used.
-> > >
-> > > There also might be multiple other holes that no visible to Linux,
-> > > when we wanna to limit the max addr usable by Linux, using
-> > > "max_addr=[X]" is much easier than "mem=[X]"
-> > >
-> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> >     SYM_FUNC_START(func)
+> >     SYM_FUNC_START_ALIAS(alias1)
+> >     SYM_FUNC_START_ALIAS(alias2)
+> >         ... asm insns ...
+> >     SYM_FUNC_END(func)
+> >     SYM_FUNC_END_ALIAS(alias1)
+> >     SYM_FUNC_END_ALIAS(alias2)
+> >     EXPORT_SYMBOL(alias1)
+> >     EXPORT_SYMBOL(alias2)
 > > 
-> > mem= is a hack already, please don't add another one. Limiting the memory
-> > like this is far too tricky, given that the kernel itself and the initrd could end up
-> > in memory that is excluded, and we have to go and fix things up if that
-> > happens.
+> > ... can become:
+> > 
+> >     SYM_FUNC_START(name)
+> >         ... asm insns ...
+> >     SYM_FUNC_END(name)
+> > 
+> >     SYM_FUNC_ALIAS(alias1, func)
+> >     EXPORT_SYMBOL(alias1)
+> > 
+> >     SYM_FUNC_ALIAS(alias2, func)
+> >     EXPORT_SYMBOL(alias2)
+> > 
+> > This avoids repetition and hopefully make it easier to ensure
+> > consistency (e.g. so each function has a single canonical name and
+> > associated metadata).
+> > 
+> > I'm sending this as an RFC since I want to check:
+> > 
+> > a) People are happy with the idea in principle.
+> > 
+> > b) People are happy with the implementation within <linux/linkage.h>.
+> > 
+> > ... and I haven't yet converted the headers under tools/, which is
+> > largely a copy+paste job.
 > 
-> We wanna to use the reserved memory with request_mem_region, but with
-> commit 86588296acbfb1 ("fdt: Properly handle "no-map" field in the memory region ")
-> 
-> request_mem_region will fail, because the reserved memory are now as
-> kernel memory.
- 
-request_mem_region() is for MMIO.  Why do you want to use it for RAM?
+> I'm happy with the approach and acked the arm64 patches for the record.
+> Not sure how/when this series will get into mainline.
 
-> So we use "mem=X" to work around the issue, but "mem=X" is not user friendly
-> compared with "max_addr=" when there are multiple holes used by others.
-> 
-> Thanks,
-> Peng.
-> 
-> > 
-> > 
-> > > ---
-> > >  arch/arm64/mm/init.c | 21 +++++++++++++++++++++
-> > >  1 file changed, 21 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c index
-> > > db63cc885771..3364b5e7a7fe 100644
-> > > --- a/arch/arm64/mm/init.c
-> > > +++ b/arch/arm64/mm/init.c
-> > > @@ -173,6 +173,7 @@ int pfn_is_map_memory(unsigned long pfn)
-> > > EXPORT_SYMBOL(pfn_is_map_memory);
-> > >
-> > >  static phys_addr_t memory_limit __ro_after_init = PHYS_ADDR_MAX;
-> > > +static phys_addr_t max_addr __ro_after_init = PHYS_ADDR_MAX;
-> > >
-> > >  /*
-> > >   * Limit the memory size that was specified via FDT.
-> > > @@ -189,6 +190,18 @@ static int __init early_mem(char *p)  }
-> > > early_param("mem", early_mem);
-> > >
-> > > +static int __init set_max_addr(char *p) {
-> > > +       if (!p)
-> > > +               return 1;
-> > > +
-> > > +       max_addr = memparse(p, &p) & PAGE_MASK;
-> > > +       pr_notice("Memory max addr set to 0x%llx\n", max_addr);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +early_param("max_addr", set_max_addr);
-> > > +
-> > >  void __init arm64_memblock_init(void)  {
-> > >         s64 linear_region_size = PAGE_END -
-> > > _PAGE_OFFSET(vabits_actual); @@ -253,6 +266,9 @@ void __init
-> > arm64_memblock_init(void)
-> > >                 memblock_add(__pa_symbol(_text), (u64)(_end -
-> > _text));
-> > >         }
-> > >
-> > > +       if (max_addr != PHYS_ADDR_MAX)
-> > > +               memblock_cap_memory_range(0, max_addr);
-> > > +
-> > >         if (IS_ENABLED(CONFIG_BLK_DEV_INITRD) && phys_initrd_size)
-> > {
-> > >                 /*
-> > >                  * Add back the memory we just removed if it results
-> > > in the @@ -427,4 +443,9 @@ void dump_mem_limit(void)
-> > >         } else {
-> > >                 pr_emerg("Memory Limit: none\n");
-> > >         }
-> > > +
-> > > +       if (max_addr != PHYS_ADDR_MAX)
-> > > +               pr_emerg("Max addr: 0x%llx\n", max_addr);
-> > > +       else
-> > > +               pr_emerg("Max addr: none\n");
-> > >  }
-> > > --
-> > > 2.25.1
-> > >
-> > >
-> > > _______________________________________________
-> > > linux-arm-kernel mailing list
-> > > linux-arm-kernel@lists.infradead.org
-> > > https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Flists
-> > > .infradead.org%2Fmailman%2Flistinfo%2Flinux-arm-kernel&amp;data=04%
-> > 7C0
-> > >
-> > 1%7Cpeng.fan%40nxp.com%7C3ad0ef697ad64542556208d9bf9d1e1f%7C68
-> > 6ea1d3bc
-> > >
-> > 2b4c6fa92cd99c5c301635%7C0%7C0%7C637751503805222488%7CUnknow
-> > n%7CTWFpbG
-> > >
-> > Zsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6
-> > Mn0%
-> > >
-> > 3D%7C3000&amp;sdata=iKVO4PUPnaRr%2B5gHcXxaaRxBt%2BK%2Fjytg8eQ
-> > dCqgqh5o%
-> > > 3D&amp;reserved=0
+Thanks!
 
--- 
-Sincerely yours,
-Mike.
+As to "when", I think I'm going to rework the series atop v5.17-rc1, so for now
+would you be happy to pick patch 3 ("arm64: remove __dma_*_area() aliases"):
+
+  https://lore.kernel.org/linux-arm-kernel/20211206124715.4101571-4-mark.rutland@arm.com/
+
+... into the arm64 tree? That'a a pure cleanup with no dependency on the rest
+of the series.
+
+For the rest of the series I still need to to the mechanical work for tools/,
+there's a token-pasting issue on 32-bit arm, and I'd like to give this a long
+soak in -next, so earlier in the next window seems like a better bet.
+
+As for "how", I assume the core linkage bits will go via the tip tree, so I
+think it'd make sense for the (remaining) arch bits to go that way too.
+
+Thanks,
+Mark.

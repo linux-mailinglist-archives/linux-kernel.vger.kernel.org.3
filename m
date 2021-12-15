@@ -2,108 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A63CA4758FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC174758FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242573AbhLOMjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:39:07 -0500
-Received: from foss.arm.com ([217.140.110.172]:50848 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234378AbhLOMjG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:39:06 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 854CAD6E;
-        Wed, 15 Dec 2021 04:39:05 -0800 (PST)
-Received: from [10.57.33.203] (unknown [10.57.33.203])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E90B53F774;
-        Wed, 15 Dec 2021 04:39:02 -0800 (PST)
-Message-ID: <d91a1b98-2c2b-a961-543f-d540b3c7a146@arm.com>
-Date:   Wed, 15 Dec 2021 12:38:47 +0000
+        id S237295AbhLOMlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234378AbhLOMlI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 07:41:08 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C63C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:41:08 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id e3so75148460edu.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pa5P7TJTPoCcI6iCLMQS9O9zVLDm47/fvRV9xdvs9Gk=;
+        b=kZwDtXK8NdFCbdiSQ62IKZJiYJUsIKUYlCJlBbmgkykwXRjfGnZU86rUx7f/8n4tyY
+         N1Y6VQgyd5N70AHYTFH0CuKbITY0nHwJ1V4DXx30+HnXy7JgddzSWrksWaxzbAcAt5ss
+         MyzVwCBnyv6gLHbo6WPFSnyZ8aBYQwBN+s80XJ2c2PkFFdgx23bTgSt4281ms4toLqrp
+         2udw7QoXKg/lyon1/bHBSLDa/rESK62RSClfJkHeWGHl32mbhfM4ibHPP2qPP2vi2duP
+         ytnAXCG9fypdJbH88CUXiSQ6I3CJyBtNEi2eGN4rKkuk+u7BHQ5Ktwv7RY1VpzxvBpZu
+         IO4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pa5P7TJTPoCcI6iCLMQS9O9zVLDm47/fvRV9xdvs9Gk=;
+        b=iMnSuXOMJpXF/OPASKAYFHb7xdvLp8cJJbyjhLELoiWoJT29cAI+1JRUAgUzMamH7a
+         L3dj6Iy+UNcUWNdFCvjIBNidfuRs83MymU7y19l3MZIlJWtfCDtX3BZYhbewrQSky0qc
+         EIHrEufCqoiWBkIiswakdR7whCHZVyeBhM/YllB6vqQy5QmyWvqTbVErOx8XHTP4jlle
+         x2NX3oWagM68v591wb0FkC+VJRwIlBUsovwRUDhQKlIz3Ick4Po0kBWLcq7m7WsSYP0e
+         rZ3tp++tdilBUDXhV4KhVC419UnI0CGRQjGlsoWej/+xjkxh0hTChX4oUPWGUtS8wuUM
+         4+Dg==
+X-Gm-Message-State: AOAM530V3wYklwlcmihMtSxwvAyG609TUnrL0c82jg3p+eqi//+gzBar
+        oijYJP79JY+YwAmrLYErm/vT8fzPaze5tAx0yV/xeHO6Lz52j+XH
+X-Google-Smtp-Source: ABdhPJyqx50oqjtiQUFh6Za0gonG95YEHb7EWF3cYk2Vcnzwxdbz3gtLfbbRkCZaiY/HO3n7MW1Im7CTK5HmtEwCmpE=
+X-Received: by 2002:a05:6402:14f:: with SMTP id s15mr14355960edu.118.1639572066575;
+ Wed, 15 Dec 2021 04:41:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, Ian Rogers <irogers@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
- <20211214184240.24215-1-andrew.kilroy@arm.com>
- <20211214184240.24215-2-andrew.kilroy@arm.com>
- <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
- <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
-From:   Andrew Kilroy <andrew.kilroy@arm.com>
-In-Reply-To: <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <1638619795-71451-1-git-send-email-wang.yong12@zte.com.cn>
+ <Yax01zjuzmNyyJK/@balbir-desktop> <CAOH5QeDhjyjAkS1bUju2cv67KFukUr0ov8uG+z3bM6Oa=iFrMA@mail.gmail.com>
+ <Ya7uQingLC3fMJlt@balbir-desktop> <CAOH5QeC+0xDrgO+t3zwN4o48F9Q2CiTnzQDO78kuJLfyNJwoLA@mail.gmail.com>
+ <CAOH5QeCO_EZzkU=B3L1=1OPiZa7XxnWZK87GbwXNOQXxZqYcoQ@mail.gmail.com> <YbgwWir/Ymt/2gxE@balbir-desktop>
+In-Reply-To: <YbgwWir/Ymt/2gxE@balbir-desktop>
+From:   yong w <yongw.pur@gmail.com>
+Date:   Wed, 15 Dec 2021 20:40:48 +0800
+Message-ID: <CAOH5QeDqsiMgX4BB=yWOC02CMv2zHu472O45_8FUXvA3TBYfSw@mail.gmail.com>
+Subject: Re: [PATCH v2 linux-next] delayacct: track delays from memory compact
+To:     Balbir Singh <bsingharora@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, mingo@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, yang.yang29@zte.com.cn,
+        wang.yong12@zte.com.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ian, John, thanks for the feedback.
+Balbir Singh <bsingharora@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=8814=E6=
+=97=A5=E5=91=A8=E4=BA=8C 13:49=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, Dec 13, 2021 at 09:56:08PM +0800, yong w wrote:
+> > Hello,  is this patch OK?
+> >
+> > Thanks.
+> >
+> > yong w <yongw.pur@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=888=E6=97=
+=A5=E5=91=A8=E4=B8=89 00:50=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > Balbir Singh <bsingharora@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=9C=
+=887=E6=97=A5=E5=91=A8=E4=BA=8C 13:16=E5=86=99=E9=81=93=EF=BC=9A
+> > > >
+> > > > On Sun, Dec 05, 2021 at 07:08:02PM +0800, yong w wrote:
+> > > > > Balbir Singh <bsingharora@gmail.com> =E4=BA=8E2021=E5=B9=B412=E6=
+=9C=885=E6=97=A5=E5=91=A8=E6=97=A5 16:17=E5=86=99=E9=81=93=EF=BC=9A
+> > > > > >
+> > > > > > On Sat, Dec 04, 2021 at 04:09:55AM -0800, yongw.pur@gmail.com w=
+rote:
+> > > > > > > From: wangyong <wang.yong12@zte.com.cn>
+> > > > > > >
+> > > > > > > Delay accounting does not track the delay of memory compact.
+> > > > > > > When there is not enough free memory, tasks can spend
+> > > > > > > a amount of their time waiting for compact.
+> > > > > > >
+> > > > > > > To get the impact of tasks in direct memory compact, measure
+> > > > > > > the delay when allocating memory through memory compact.
+> > > > > > >
+> > > > > >
+> > > > > > Should we call this DIRECT_COMPACT and through documentation
+> > > > > > or name change imply that this won't work for kcompactd the
+> > > > > > kernel thread - based on my reading of the patches.
+> > > > > >
+> > > > > Using DIRECT_COMPACT is a little redundant=EF=BC=8Cbecause the
+> > > > > delayacct stats of delay accounting is specific to tasks, it has
+> > > > > nothing to do with kcompactd, which is similar to the RECLAIM fie=
+ld.
+> > > > >
+> > > >
+> > > > What would we expect when we call delayacct -p <pidof kcompactd>
+> > > > to be output?
+> > > If the slow path of memory allocation is invoked in the kcompacd proc=
+ess,
+> > > there may be delays being recorded.
+> > >
+> > > > Don't feel to strongly, but it can be confusing that kcompactd
+> > > > has spent no time in compact'ing? Not that delayacct is used for
+> > > > kernel threads, but I am not sure if that use case exists today.
+> > > Yes, delayacct does not restrict the process of obtaining information=
+=EF=BC=8C
+> > > but kcompactd is used for  compaction,  the compact delay of
+> > > kcompatd is not actually a delay.Maybe it can be added to the
+> > > document later to make it clearer.
+> > >
+> > > Thanks for your reply!
+>
+> Please avoid top posting, when you say added later, I presume more
+> patches for documentation are coming. I am OK with the patch in that
+> case.
+>
+> Reviewed-by: Balbir Singh <bsingharora@gmail.com>
+>
+> Balbir Singh
 
-On 15/12/2021 10:52, John Garry wrote:
-> Hi Andrew,
-> 
->>>   const struct pmu_event *metricgroup__find_metric(const char *metric,
->>>                                                   const struct 
->>> pmu_events_map *map);
->>>   int metricgroup__parse_groups_test(struct evlist *evlist,
->>> diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
->>> index 1081b20f9891..57c0c5f2c6bd 100644
->>> --- a/tools/perf/util/topdown.c
->>> +++ b/tools/perf/util/topdown.c
->>> @@ -56,3 +56,9 @@ __weak bool arch_topdown_sample_read(struct evsel 
->>> *leader __maybe_unused)
->>>   {
->>>          return false;
->>>   }
->>> +
->>> +__weak bool arch_topdown_use_json_metrics(void)
->>> +{
-> 
-> AFAICS, only x86 supports topdown today and that is because they have 
-> special kernel topdown events exposed for the kernel CPU PMU driver. So 
-> other architectures - not only arm - would need rely on metricgroups for 
-> topdown support. So let's make this generic for all archs.
-> 
->> I like this extension! I've ranted in the past about weak symbols
->> breaking with archives due to lazy loading [1]. In this case
->> tools/perf/arch/arm64/util/topdown.c has no other symbols within it
->> and so the weak symbol has an extra chance of being linked
->> incorrectly. We could add a new command line of --topdown-json to
->> avoid this, but there seems little difference in doing this over just
->> doing '-M TopDownL1'.
-> 
-> 
->> Is it possible to use the json metric approach
->> for when the CPU version fails?
-> 
-> I think that's a good idea.
-> 
-
-Taking a look.
-
-> In addition we could also add a --topdown arg to force using JSON 
-> metricgroups.
-> 
-
-What arg do think would be supplied?
-
-> Did you actually test this patch? I have something experimental working 
-> from some time ago, and it was more complicated than this. I need to 
-> check the code again...
-> 
-
-I got stats back from this implementation, yes.  Let me know if there's 
-things my patch isn't catering for.
-
-> Thanks,
-> John
+OK=EF=BC=8CThank you!

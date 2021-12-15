@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EE0475EC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC1D475ECE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245719AbhLORYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:24:37 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44652 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbhLORX6 (ORCPT
+        id S238461AbhLORYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:24:50 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41496 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238418AbhLORYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:23:58 -0500
+        Wed, 15 Dec 2021 12:24:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 438AE619DD;
-        Wed, 15 Dec 2021 17:23:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A8B5C36AE3;
-        Wed, 15 Dec 2021 17:23:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA9AFB8202A;
+        Wed, 15 Dec 2021 17:24:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01ED7C36AED;
+        Wed, 15 Dec 2021 17:23:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589037;
-        bh=7nfrDWaJfCPiO3lAwswAj5ZbLTewMnU2tdwfUmRCoCQ=;
+        s=korg; t=1639589040;
+        bh=nyHaPjp81nirVcxsIllb+UjN3GP3nHwAyPMWiCeiA0g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ogLerrs/v8J+rwpzT4p5CAX3NtefjE4N0J7iJ2KAIul8blaN0hysIeu7/hNOOrDRm
-         75+HKECO2VGkXFsU0wmvUHQCL+I/MGFQ+KKLhj5RfgExzGKVvVJl+zmyOYJ7Drv9we
-         LMIxpjd2Z97Mm/2GqUeT2XN0PbR+uSlRRouR5QV8=
+        b=IDOSqWtaGtn39CjfJAKjkYe7Vx1PY0kflXp0F66Xw/YBCJL5YhltEBoUM9dk6Klok
+         JqOPwuM2AB7X+BGAJn4+fioCqB8ZupKdgxqzoqXAMhf397S8AQfctXjWa6E6Trq4wJ
+         0CluykQz/72SG0dQ4flkTvbKK+IYUaO52OirOfFc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Subject: [PATCH 5.15 40/42] staging: most: dim2: use device release method
-Date:   Wed, 15 Dec 2021 18:21:21 +0100
-Message-Id: <20211215172028.015339773@linuxfoundation.org>
+        stable@vger.kernel.org, chenguanyou <chenguanyou@xiaomi.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Ed Tsai <ed.tsai@mediatek.com>
+Subject: [PATCH 5.15 41/42] fuse: make sure reclaim doesnt write the inode
+Date:   Wed, 15 Dec 2021 18:21:22 +0100
+Message-Id: <20211215172028.046903387@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
 References: <20211215172026.641863587@linuxfoundation.org>
@@ -45,144 +46,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-commit d445aa402d60014a37a199fae2bba379696b007d upstream.
+commit 5c791fe1e2a4f401f819065ea4fc0450849f1818 upstream.
 
-Commit 723de0f9171e ("staging: most: remove device from interface
-structure") moved registration of driver-provided struct device to
-the most subsystem. This updated dim2 driver as well.
+In writeback cache mode mtime/ctime updates are cached, and flushed to the
+server using the ->write_inode() callback.
 
-However, struct device passed to register_device() becomes refcounted,
-and must not be explicitly deallocated, but must provide release method
-instead. Which is incompatible with managing it via devres.
+Closing the file will result in a dirty inode being immediately written,
+but in other cases the inode can remain dirty after all references are
+dropped.  This result in the inode being written back from reclaim, which
+can deadlock on a regular allocation while the request is being served.
 
-This patch makes the device structure allocated without devres, adds
-device release method, and moves device destruction there.
+The usual mechanisms (GFP_NOFS/PF_MEMALLOC*) don't work for FUSE, because
+serving a request involves unrelated userspace process(es).
 
-Fixes: 723de0f9171e ("staging: most: remove device from interface structure")
-Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Link: https://lore.kernel.org/r/20211005143448.8660-2-nikita.yoush@cogentembedded.com
+Instead do the same as for dirty pages: make sure the inode is written
+before the last reference is gone.
+
+ - fallocate(2)/copy_file_range(2): these call file_update_time() or
+   file_modified(), so flush the inode before returning from the call
+
+ - unlink(2), link(2) and rename(2): these call fuse_update_ctime(), so
+   flush the ctime directly from this helper
+
+Reported-by: chenguanyou <chenguanyou@xiaomi.com>
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Cc: Ed Tsai <ed.tsai@mediatek.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/most/dim2/dim2.c |   55 +++++++++++++++++++++------------------
- 1 file changed, 30 insertions(+), 25 deletions(-)
+ fs/fuse/dir.c    |    8 ++++++++
+ fs/fuse/file.c   |   15 +++++++++++++++
+ fs/fuse/fuse_i.h |    1 +
+ fs/fuse/inode.c  |    3 +++
+ 4 files changed, 27 insertions(+)
 
---- a/drivers/staging/most/dim2/dim2.c
-+++ b/drivers/staging/most/dim2/dim2.c
-@@ -726,6 +726,23 @@ static int get_dim2_clk_speed(const char
- 	return -EINVAL;
+--- a/fs/fuse/dir.c
++++ b/fs/fuse/dir.c
+@@ -738,11 +738,19 @@ static int fuse_symlink(struct user_name
+ 	return create_new_entry(fm, &args, dir, entry, S_IFLNK);
  }
  
-+static void dim2_release(struct device *d)
++void fuse_flush_time_update(struct inode *inode)
 +{
-+	struct dim2_hdm *dev = container_of(d, struct dim2_hdm, dev);
-+	unsigned long flags;
++	int err = sync_inode_metadata(inode, 1);
 +
-+	kthread_stop(dev->netinfo_task);
-+
-+	spin_lock_irqsave(&dim_lock, flags);
-+	dim_shutdown();
-+	spin_unlock_irqrestore(&dim_lock, flags);
-+
-+	if (dev->disable_platform)
-+		dev->disable_platform(to_platform_device(d->parent));
-+
-+	kfree(dev);
++	mapping_set_error(inode->i_mapping, err);
 +}
 +
- /*
-  * dim2_probe - dim2 probe handler
-  * @pdev: platform device structure
-@@ -746,7 +763,7 @@ static int dim2_probe(struct platform_de
- 
- 	enum { MLB_INT_IDX, AHB0_INT_IDX };
- 
--	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
-+	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
- 	if (!dev)
- 		return -ENOMEM;
- 
-@@ -758,25 +775,27 @@ static int dim2_probe(struct platform_de
- 				      "microchip,clock-speed", &clock_speed);
- 	if (ret) {
- 		dev_err(&pdev->dev, "missing dt property clock-speed\n");
--		return ret;
-+		goto err_free_dev;
- 	}
- 
- 	ret = get_dim2_clk_speed(clock_speed, &dev->clk_speed);
- 	if (ret) {
- 		dev_err(&pdev->dev, "bad dt property clock-speed\n");
--		return ret;
-+		goto err_free_dev;
- 	}
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	dev->io_base = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(dev->io_base))
--		return PTR_ERR(dev->io_base);
-+	if (IS_ERR(dev->io_base)) {
-+		ret = PTR_ERR(dev->io_base);
-+		goto err_free_dev;
-+	}
- 
- 	of_id = of_match_node(dim2_of_match, pdev->dev.of_node);
- 	pdata = of_id->data;
- 	ret = pdata && pdata->enable ? pdata->enable(pdev) : 0;
- 	if (ret)
--		return ret;
-+		goto err_free_dev;
- 
- 	dev->disable_platform = pdata ? pdata->disable : NULL;
- 
-@@ -867,24 +886,19 @@ static int dim2_probe(struct platform_de
- 	dev->most_iface.request_netinfo = request_netinfo;
- 	dev->most_iface.driver_dev = &pdev->dev;
- 	dev->most_iface.dev = &dev->dev;
--	dev->dev.init_name = "dim2_state";
-+	dev->dev.init_name = dev->name;
- 	dev->dev.parent = &pdev->dev;
-+	dev->dev.release = dim2_release;
- 
--	ret = most_register_interface(&dev->most_iface);
--	if (ret) {
--		dev_err(&pdev->dev, "failed to register MOST interface\n");
--		goto err_stop_thread;
--	}
--
--	return 0;
-+	return most_register_interface(&dev->most_iface);
- 
--err_stop_thread:
--	kthread_stop(dev->netinfo_task);
- err_shutdown_dim:
- 	dim_shutdown();
- err_disable_platform:
- 	if (dev->disable_platform)
- 		dev->disable_platform(pdev);
-+err_free_dev:
-+	kfree(dev);
- 
- 	return ret;
- }
-@@ -898,17 +912,8 @@ err_disable_platform:
- static int dim2_remove(struct platform_device *pdev)
+ void fuse_update_ctime(struct inode *inode)
  {
- 	struct dim2_hdm *dev = platform_get_drvdata(pdev);
--	unsigned long flags;
- 
- 	most_deregister_interface(&dev->most_iface);
--	kthread_stop(dev->netinfo_task);
--
--	spin_lock_irqsave(&dim_lock, flags);
--	dim_shutdown();
--	spin_unlock_irqrestore(&dim_lock, flags);
--
--	if (dev->disable_platform)
--		dev->disable_platform(pdev);
- 
- 	return 0;
+ 	if (!IS_NOCMTIME(inode)) {
+ 		inode->i_ctime = current_time(inode);
+ 		mark_inode_dirty_sync(inode);
++		fuse_flush_time_update(inode);
+ 	}
  }
+ 
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@ -1848,6 +1848,17 @@ int fuse_write_inode(struct inode *inode
+ 	struct fuse_file *ff;
+ 	int err;
+ 
++	/*
++	 * Inode is always written before the last reference is dropped and
++	 * hence this should not be reached from reclaim.
++	 *
++	 * Writing back the inode from reclaim can deadlock if the request
++	 * processing itself needs an allocation.  Allocations triggering
++	 * reclaim while serving a request can't be prevented, because it can
++	 * involve any number of unrelated userspace processes.
++	 */
++	WARN_ON(wbc->for_reclaim);
++
+ 	ff = __fuse_write_file_get(fi);
+ 	err = fuse_flush_times(inode, ff);
+ 	if (ff)
+@@ -3002,6 +3013,8 @@ out:
+ 	if (lock_inode)
+ 		inode_unlock(inode);
+ 
++	fuse_flush_time_update(inode);
++
+ 	return err;
+ }
+ 
+@@ -3111,6 +3124,8 @@ out:
+ 	inode_unlock(inode_out);
+ 	file_accessed(file_in);
+ 
++	fuse_flush_time_update(inode_out);
++
+ 	return err;
+ }
+ 
+--- a/fs/fuse/fuse_i.h
++++ b/fs/fuse/fuse_i.h
+@@ -1148,6 +1148,7 @@ int fuse_allow_current_process(struct fu
+ 
+ u64 fuse_lock_owner_id(struct fuse_conn *fc, fl_owner_t id);
+ 
++void fuse_flush_time_update(struct inode *inode);
+ void fuse_update_ctime(struct inode *inode);
+ 
+ int fuse_update_attributes(struct inode *inode, struct file *file);
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -118,6 +118,9 @@ static void fuse_evict_inode(struct inod
+ {
+ 	struct fuse_inode *fi = get_fuse_inode(inode);
+ 
++	/* Will write inode on close/munmap and in all other dirtiers */
++	WARN_ON(inode->i_state & I_DIRTY_INODE);
++
+ 	truncate_inode_pages_final(&inode->i_data);
+ 	clear_inode(inode);
+ 	if (inode->i_sb->s_flags & SB_ACTIVE) {
 
 

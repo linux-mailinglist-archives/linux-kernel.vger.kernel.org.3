@@ -2,101 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6713E475146
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E861347514B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239542AbhLODQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 22:16:40 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:44566 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230073AbhLODQd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 22:16:33 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowACXcUDxXblhXTEtAw--.46852S2;
-        Wed, 15 Dec 2021 11:16:03 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     oder_chiou@realtek.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] ASoC: rt5663: Handle device_property_read_u32_array error codes
-Date:   Wed, 15 Dec 2021 11:15:50 +0800
-Message-Id: <20211215031550.70702-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S239549AbhLODUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 22:20:13 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:56440 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235453AbhLODUK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 22:20:10 -0500
+X-UUID: 6bf2cf4628284c88992b4cd6e01176af-20211215
+X-UUID: 6bf2cf4628284c88992b4cd6e01176af-20211215
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <yc.hung@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 82201096; Wed, 15 Dec 2021 11:20:06 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 15 Dec 2021 11:20:05 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 15 Dec 2021 11:20:05 +0800
+From:   YC Hung <yc.hung@mediatek.com>
+To:     <broonie@kernel.org>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <yc.hung@mediatek.com>, <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <daniel.baluta@nxp.com>, <trevor.wu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>
+Subject: [PATCH] dt-bindings: dsp: mediatek: add mt8195 dsp document
+Date:   Wed, 15 Dec 2021 11:19:55 +0800
+Message-ID: <20211215031955.28244-1-yc.hung@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACXcUDxXblhXTEtAw--.46852S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF1rXry5ur1xAF43CrykKrg_yoW8Cryxpr
-        s8CFZYya4Yqr45Ca13Jw4DW3WxKw4UJFWxJrW8G3sY9rn8Jr15uFWqkFyayayrKrykuF17
-        XFWIgF4xGF45Gw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
-        xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of device_property_read_u32_array() is not always 0.
-To catch the exception in case that devm_kzalloc failed and the
-rt5663->imp_table was NULL, which caused the failure of
-device_property_read_u32_array.
+From: "yc.hung" <yc.hung@mediatek.com>
 
-Fixes: 450f0f6a8fb4 ("ASoC: rt5663: Add the manual offset field to compensate the DC offset")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+This patch adds mt8195 dsp document.
+
+Signed-off-by: yc.hung <yc.hung@mediatek.com>
 ---
- sound/soc/codecs/rt5663.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ .../bindings/dsp/mtk,mt8195-dsp.yaml          | 116 ++++++++++++++++++
+ 1 file changed, 116 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/dsp/mtk,mt8195-dsp.yaml
 
-diff --git a/sound/soc/codecs/rt5663.c b/sound/soc/codecs/rt5663.c
-index be9fc58ff681..ee09ccd448dc 100644
---- a/sound/soc/codecs/rt5663.c
-+++ b/sound/soc/codecs/rt5663.c
-@@ -3461,6 +3461,7 @@ static void rt5663_calibrate(struct rt5663_priv *rt5663)
- static int rt5663_parse_dp(struct rt5663_priv *rt5663, struct device *dev)
- {
- 	int table_size;
-+	int ret;
- 
- 	device_property_read_u32(dev, "realtek,dc_offset_l_manual",
- 		&rt5663->pdata.dc_offset_l_manual);
-@@ -3477,9 +3478,11 @@ static int rt5663_parse_dp(struct rt5663_priv *rt5663, struct device *dev)
- 		table_size = sizeof(struct impedance_mapping_table) *
- 			rt5663->pdata.impedance_sensing_num;
- 		rt5663->imp_table = devm_kzalloc(dev, table_size, GFP_KERNEL);
--		device_property_read_u32_array(dev,
-+		ret = device_property_read_u32_array(dev,
- 			"realtek,impedance_sensing_table",
- 			(u32 *)rt5663->imp_table, table_size);
-+		if (ret)
-+			return ret;
- 	}
- 
- 	return 0;
-@@ -3504,8 +3507,11 @@ static int rt5663_i2c_probe(struct i2c_client *i2c,
- 
- 	if (pdata)
- 		rt5663->pdata = *pdata;
--	else
--		rt5663_parse_dp(rt5663, &i2c->dev);
-+	else {
-+		ret = rt5663_parse_dp(rt5663, &i2c->dev);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	for (i = 0; i < ARRAY_SIZE(rt5663->supplies); i++)
- 		rt5663->supplies[i].supply = rt5663_supply_names[i];
+diff --git a/Documentation/devicetree/bindings/dsp/mtk,mt8195-dsp.yaml b/Documentation/devicetree/bindings/dsp/mtk,mt8195-dsp.yaml
+new file mode 100644
+index 000000000000..33db11ee2336
+--- /dev/null
++++ b/Documentation/devicetree/bindings/dsp/mtk,mt8195-dsp.yaml
+@@ -0,0 +1,116 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/dsp/mtk,mt8195-dsp.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek mt8195 DSP core
++
++maintainers:
++  - YC Hung <yc.hung@mediatek.com>
++
++description: |
++  Some boards from mt8195 contain a DSP core used for
++  advanced pre- and post- audio processing.
++properties:
++  compatible:
++    const: mediatek,mt8195-dsp
++
++  reg:
++    items:
++      - description: Address and size of the DSP Cfg registers
++      - description: Address and size of the DSP SRAM
++
++  reg-names:
++    items:
++      - const: cfg
++      - const: sram
++
++  interrupts:
++    items:
++      - description: watchdog interrupt
++
++  interrupt-names:
++    items:
++      - const: wdt
++
++  clocks:
++    items:
++      - description: mux for audio dsp clock
++      - description: 26M clock
++      - description: mux for audio dsp local bus
++      - description: default audio dsp local bus clock source
++      - description: clock gate for audio dsp clock
++      - description: mux for audio dsp access external bus
++
++  clock-names:
++    items:
++      - const: adsp_sel
++      - const: clk26m_ck
++      - const: audio_local_bus
++      - const: mainpll_d7_d2
++      - const: scp_adsp_audiodsp
++      - const: audio_h
++
++  power-domains:
++    maxItems: 1
++
++  mboxes:
++    items:
++      - description: a mailbox is ised for ipc reply between host and audio DSP.
++      - description: a mailbox is ised for ipc reuqest between host and audio DSP.
++
++  mbox-names:
++    items:
++      - const: mbox0
++      - const: mbox1
++
++  memory-region:      
++    items:
++      - description: A phandle to a reserved memory region is used for dma buffer between host and DSP.   
++      - description: A phandle to a reserved memory region is used for DSP system memory.
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++  - memory-region
++  - power-domains
++  - mbox-names
++  - mboxes
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    adsp: dsp@10803000 {
++       compatible =  "mediatek,mt8195-dsp";
++       reg = <0x10803000  0x1000>,
++             <0x10840000  0x40000>;
++       reg-names = "cfg", "sram";
++       interrupts = <GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH 0>;
++       interrupt-names = "wdt";
++       clocks = <&topckgen 10>, //CLK_TOP_ADSP
++                <&clk26m>,
++                <&topckgen 107>, //CLK_TOP_AUDIO_LOCAL_BUS
++                <&topckgen 136>, //CLK_TOP_MAINPLL_D7_D2
++                <&scp_adsp 0>, //CLK_SCP_ADSP_AUDIODSP
++                <&topckgen 34>; //CLK_TOP_AUDIO_H
++       clock-names = "adsp_sel",
++                     "clk26m_ck",
++                     "audio_local_bus",
++                     "mainpll_d7_d2",
++                     "scp_adsp_audiodsp",
++                     "audio_h";
++       memory-region = <&adsp_dma_mem_reserved>,
++                       <&adsp_mem_reserved>;
++       power-domains = <&spm 6>; //MT8195_POWER_DOMAIN_ADSP
++       mbox-names = "mbox0", "mbox1";
++       mboxes = <&adsp_mailbox0>, <&adsp_mailbox1>;
++       };
 -- 
-2.25.1
+2.18.0
 

@@ -2,107 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 513C747545E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2AA475465
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240857AbhLOIi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 03:38:26 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:53776 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbhLOIiZ (ORCPT
+        id S240884AbhLOIlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 03:41:08 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:58352 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231575AbhLOIlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 03:38:25 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BF8cI9R027337;
-        Wed, 15 Dec 2021 02:38:18 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639557498;
-        bh=77J8uhE8DpJv8ppHfDAq421hJxuLaHcdCaWhrTzQBGY=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=VTTwix71dpK4zFkkuE8YpvzTp8Yn8yOiTC71OA8dkNRjdYJr9vb1svyJIIxs5/WX4
-         Fy2nlRBekMC68zhZ6v0/B3XLkRg6CiavXgGOxce5ddNbEvUhr5qSA2QuE8HpyJ+e+O
-         VDJv5YrsJBUD9hbUAPQ3TeyjGjck33bLzvCC27Ek=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BF8cIbM004245
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Dec 2021 02:38:18 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 15
- Dec 2021 02:38:18 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 15 Dec 2021 02:38:18 -0600
-Received: from uda0132425.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BF8cFKp057995;
-        Wed, 15 Dec 2021 02:38:15 -0600
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Wed, 15 Dec 2021 03:41:02 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-23-f8sISgTNNZG0D9h8G8bq7w-1; Wed, 15 Dec 2021 08:40:15 +0000
+X-MC-Unique: f8sISgTNNZG0D9h8G8bq7w-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Wed, 15 Dec 2021 08:40:11 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Wed, 15 Dec 2021 08:40:11 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Yury Norov' <yury.norov@gmail.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Andy Shevchenko" <andy@infradead.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Christoph Lameter" <cl@linux.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Dennis Zhou <dennis@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        "Jens Axboe" <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
+        Mark Gross <markgross@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Rasmus Villemoes" <linux@rasmusvillemoes.dk>,
+        Roy Pledge <Roy.Pledge@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v3 0/5] J721S2: Add initial support
-Date:   Wed, 15 Dec 2021 14:08:04 +0530
-Message-ID: <163955230562.15251.10921015972649910083.b4-ty@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211207080904.14324-1-a-govindraju@ti.com>
-References: <20211207080904.14324-1-a-govindraju@ti.com>
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: RE: [PATCH 2/9] lib/bitmap: implement bitmap_{empty,full} with
+ bitmap_weight_eq()
+Thread-Topic: [PATCH 2/9] lib/bitmap: implement bitmap_{empty,full} with
+ bitmap_weight_eq()
+Thread-Index: AQHX8SLbxx6fx2pSKEyBSY04FwbBf6wzO5+g
+Date:   Wed, 15 Dec 2021 08:40:10 +0000
+Message-ID: <0ccb827de1164b2989d652bfb6f1bbab@AcuMS.aculab.com>
+References: <20211128035704.270739-1-yury.norov@gmail.com>
+ <20211128035704.270739-3-yury.norov@gmail.com>
+ <YaPGDOvBzhiRFcOP@qmqm.qmqm.pl>
+ <CAAH8bW9-dbENFUrwPUQ-uJVVX_s=PWb2zpAJ8BqkV3vJE696mA@mail.gmail.com>
+In-Reply-To: <CAAH8bW9-dbENFUrwPUQ-uJVVX_s=PWb2zpAJ8BqkV3vJE696mA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aswath Govindraju,
- 
-On Tue, 7 Dec 2021 13:38:59 +0530, Aswath Govindraju wrote:
-> The J721S2 SoC belongs to the K3 Multicore SoC architecture platform,
-> providing advanced system integration in automotive ADAS applications and
-> industrial applications requiring AI at the network edge. This SoC extends
-> the Jacinto 7 family of SoCs with focus on lowering system costs and power
-> while providing interfaces, memory architecture and compute performance for
-> single and multi-sensor applications.
-> 
-> [...]
- 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
- 
-[1/5] dt-bindings: arm: ti: Add bindings for J721s2 SoC
-      commit: 6b1caf4dea3e0a961b7a11cff6757ff74c1c34ea
-[2/5] dt-bindings: pinctrl: k3: Introduce pinmux definitions for J721S2
-      commit: beba81faad86fc2bad567b1c029d6a000a43ca78
-[3/5] arm64: dts: ti: Add initial support for J721S2 SoC
-      commit: b8545f9d3a5426a5f76814c8aaebc5cb46a3213a
-[4/5] arm64: dts: ti: Add initial support for J721S2 System on Module
-      commit: d502f852d22af1ca33e7a2fedd7426831f6dbaef
-[5/5] arch: arm64: ti: Add support J721S2 Common Processor Board
-      commit: effb32e931dd4feb8aa3cee7b5b4ddda43c8b701
- 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
- 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
- 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
- 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
- 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
+RnJvbTogWXVyeSBOb3Jvdg0KPiBTZW50OiAxNCBEZWNlbWJlciAyMDIxIDE5OjQzDQouLi4NCj4g
+DQo+IEkgdGhpbmsgdGhhdCBmb3IgbG9uZyBiaXRtYXBzIHRoZSBtb3N0IHRpbWUgY29uc3VtaW5n
+IG9wZXJhdGlvbiBpcyBtb3ZpbmcNCj4gZGF0YSB0byBMMSwgYW5kIGZvciBzaG9ydCBiaXRtYXBz
+IHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gYXBwcm9hY2hlcyBpcw0KPiBiYXJlbHkgbWVhc3VyYWJs
+ZS4NCj4gDQo+IEJ1dCBod2VnaHRfbG9uZyBvbiBlYWNoIGl0ZXJhdGlvbiBjYW4ndCBiZSBtb3Jl
+IGVmZmVjdGl2ZSB0aGFuIHRoZSBjdXJyZW50DQo+IHZlcnNpb24uIFNvLCBJJ2xsIGRyb3AgdGhp
+cyBwYXRjaCBmb3IgdjIgYW5kIGtlZXAgdGhpbmdzIHVuY2hhbmdlZC4NCg0KQWN0dWFsbHkgZG8g
+Yml0bWFwX2Z1bGwvZW1wdHkoKSBjYWxscyBtYWtlIGFueSBzZW5zZSBhdCBhbGw/DQpUaGUgcmVz
+dWx0IGlzIHN0YWxlIHNpbmNlIGJpdG1hcHMgYXJlIGRlc2lnbmVkIHRvIGRvIGxvY2tlZCBvcGVy
+YXRpb25zLg0KSWYgeW91IGhhdmUgYSBsb2NrIGNvdmVyaW5nIHRoZSBiaXRtYXAgdGhlbiB5b3Ug
+c2hvdWxkIGJlIHVzaW5nDQpzb21ldGhpbmcgdGhhdCB1c2VzIG5vbi1sb2NrZWQgYWNjZXNzZXMu
+DQpSaWdodGx5IG9yIHdyb25nbHkgdGhhdCBpc24ndCB0aGUgYml0bWFwIGFwaS4NCg0KCURhdmlk
+DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
+YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
+IChXYWxlcykNCg==
 

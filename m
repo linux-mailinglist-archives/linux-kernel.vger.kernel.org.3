@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B14C475F27
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86619475ED1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245648AbhLOR2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:28:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343659AbhLOR0o (ORCPT
+        id S245507AbhLORY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:24:56 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44724 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245365AbhLORYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:26:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6A7C07E5E3;
-        Wed, 15 Dec 2021 09:26:01 -0800 (PST)
+        Wed, 15 Dec 2021 12:24:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F12361A08;
-        Wed, 15 Dec 2021 17:26:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C84C36AE2;
-        Wed, 15 Dec 2021 17:26:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3D1F619E8;
+        Wed, 15 Dec 2021 17:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C83DAC36AE2;
+        Wed, 15 Dec 2021 17:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589160;
-        bh=PqqQmART0691xGxwedt0tQGrGlD6Xok4ZPFflHKlJJk=;
+        s=korg; t=1639589043;
+        bh=+q9LINZAMnju/J1RN8FmBJT3/5KdKmOLPEEphQu5i1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j0EyjO2CHo5T1O0M/nE82+DDeAO/l2E/5Mjps0X7L0ZdseDxR9OGNREFfNoQJ+ee2
-         lunwYEgknAqDUA9S4WcJBh0nOh5LaVL72CGRJoW0RI3fO7ckNvJWDYh62KenPX6UCr
-         t7UnmGzzqZfNWD6xSgfZQ5ixnLFR28pA96NjDDs8=
+        b=hHiRgUXHpMBWLaSGrLgManr3fVUcT03NlA5Sxq9DY+CDsWEGBhYCv4MxKLx/76b+Q
+         rxseY0fb/O9qtzSex7cGYyj0RG9d+4QxJuj/UezWH2LINrA+SzsunJQlCXNHD2Eyee
+         GgpcDh8lqGAER8+0DNlDsQEVsIHPKmpnJ9rttFxA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
         Jiri Olsa <jolsa@redhat.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.10 25/33] perf intel-pt: Fix state setting when receiving overflow (OVF) packet
+Subject: [PATCH 5.15 42/42] perf inject: Fix itrace space allowed for new attributes
 Date:   Wed, 15 Dec 2021 18:21:23 +0100
-Message-Id: <20211215172025.641797704@linuxfoundation.org>
+Message-Id: <20211215172028.076413106@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
-References: <20211215172024.787958154@linuxfoundation.org>
+In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
+References: <20211215172026.641863587@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,106 +48,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Adrian Hunter <adrian.hunter@intel.com>
 
-commit c79ee2b2160909889df67c8801352d3e69d43a1a upstream.
+commit c29d9792607e67ed8a3f6e9db0d96836d885a8c5 upstream.
 
-An overflow (OVF packet) is treated as an error because it represents a
-loss of trace data, but there is no loss of synchronization, so the packet
-state should be INTEL_PT_STATE_IN_SYNC not INTEL_PT_STATE_ERR_RESYNC.
+The space allowed for new attributes can be too small if existing header
+information is large. That can happen, for example, if there are very
+many CPUs, due to having an event ID per CPU per event being stored in the
+header information.
 
-To support that, some additional variables must be reset, and the FUP
-packet that may follow OVF is treated as an FUP event.
+Fix by adding the existing header.data_offset. Also increase the extra
+space allowed to 8KiB and align to a 4KiB boundary for neatness.
 
-Fixes: f4aa081949e7b6 ("perf tools: Add Intel PT decoder")
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: stable@vger.kernel.org # v5.15+
-Link: https://lore.kernel.org/r/20211210162303.2288710-5-adrian.hunter@intel.com
+Link: http://lore.kernel.org/lkml/20211125071457.2066863-1-adrian.hunter@intel.com
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-[Adrian: Backport to v5.10]
+[Adrian: Backport to v5.15]
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/util/intel-pt-decoder/intel-pt-decoder.c |   32 +++++++++++++++++---
- 1 file changed, 28 insertions(+), 4 deletions(-)
+ tools/perf/builtin-inject.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
-+++ b/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
-@@ -1158,6 +1158,20 @@ static bool intel_pt_fup_event(struct in
- 		decoder->state.type |= INTEL_PT_BLK_ITEMS;
- 		ret = true;
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -819,7 +819,7 @@ static int __cmd_inject(struct perf_inje
+ 		inject->tool.ordered_events = true;
+ 		inject->tool.ordering_requires_timestamps = true;
+ 		/* Allow space in the header for new attributes */
+-		output_data_offset = 4096;
++		output_data_offset = roundup(8192 + session->header.data_offset, 4096);
+ 		if (inject->strip)
+ 			strip_init(inject);
  	}
-+	if (decoder->overflow) {
-+		decoder->overflow = false;
-+		if (!ret && !decoder->pge) {
-+			if (decoder->hop) {
-+				decoder->state.type = 0;
-+				decoder->pkt_state = INTEL_PT_STATE_RESAMPLE;
-+			}
-+			decoder->pge = true;
-+			decoder->state.type |= INTEL_PT_BRANCH | INTEL_PT_TRACE_BEGIN;
-+			decoder->state.from_ip = 0;
-+			decoder->state.to_ip = decoder->ip;
-+			return true;
-+		}
-+	}
- 	if (ret) {
- 		decoder->state.from_ip = decoder->ip;
- 		decoder->state.to_ip = 0;
-@@ -1480,7 +1494,16 @@ static int intel_pt_overflow(struct inte
- 	intel_pt_log("ERROR: Buffer overflow\n");
- 	intel_pt_clear_tx_flags(decoder);
- 	decoder->timestamp_insn_cnt = 0;
--	decoder->pkt_state = INTEL_PT_STATE_ERR_RESYNC;
-+	decoder->pkt_state = INTEL_PT_STATE_IN_SYNC;
-+	decoder->state.from_ip = decoder->ip;
-+	decoder->ip = 0;
-+	decoder->pge = false;
-+	decoder->set_fup_tx_flags = false;
-+	decoder->set_fup_ptw = false;
-+	decoder->set_fup_mwait = false;
-+	decoder->set_fup_pwre = false;
-+	decoder->set_fup_exstop = false;
-+	decoder->set_fup_bep = false;
- 	decoder->overflow = true;
- 	return -EOVERFLOW;
- }
-@@ -2083,6 +2106,7 @@ next:
- 
- 		case INTEL_PT_TIP_PGE: {
- 			decoder->pge = true;
-+			decoder->overflow = false;
- 			intel_pt_mtc_cyc_cnt_pge(decoder);
- 			if (decoder->packet.count == 0) {
- 				intel_pt_log_at("Skipping zero TIP.PGE",
-@@ -2596,10 +2620,10 @@ static int intel_pt_sync_ip(struct intel
- 	decoder->set_fup_pwre = false;
- 	decoder->set_fup_exstop = false;
- 	decoder->set_fup_bep = false;
-+	decoder->overflow = false;
- 
- 	if (!decoder->branch_enable) {
- 		decoder->pkt_state = INTEL_PT_STATE_IN_SYNC;
--		decoder->overflow = false;
- 		decoder->state.type = 0; /* Do not have a sample */
- 		return 0;
- 	}
-@@ -2614,7 +2638,6 @@ static int intel_pt_sync_ip(struct intel
- 		decoder->pkt_state = INTEL_PT_STATE_RESAMPLE;
- 	else
- 		decoder->pkt_state = INTEL_PT_STATE_IN_SYNC;
--	decoder->overflow = false;
- 
- 	decoder->state.from_ip = 0;
- 	decoder->state.to_ip = decoder->ip;
-@@ -2823,7 +2846,8 @@ const struct intel_pt_state *intel_pt_de
- 
- 	if (err) {
- 		decoder->state.err = intel_pt_ext_err(err);
--		decoder->state.from_ip = decoder->ip;
-+		if (err != -EOVERFLOW)
-+			decoder->state.from_ip = decoder->ip;
- 		intel_pt_update_sample_time(decoder);
- 		decoder->sample_tot_cyc_cnt = decoder->tot_cyc_cnt;
- 	} else {
 
 

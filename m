@@ -2,104 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DA1476083
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F28476087
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343642AbhLOSQD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Dec 2021 13:16:03 -0500
-Received: from mail-lf1-f44.google.com ([209.85.167.44]:37731 "EHLO
-        mail-lf1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343605AbhLOSQA (ORCPT
+        id S1343655AbhLOSRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:17:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59966 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343689AbhLOSRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:16:00 -0500
-Received: by mail-lf1-f44.google.com with SMTP id c32so44845842lfv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:15:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tQG36V6DTbwoVLAJqXerjwCdN1jzRWsIwTOQpwr2EbI=;
-        b=1g02p6xtaCklBKVKrNUjEmDI3/U2jEjvgorWAOOQuNXR9/mnlYI4eViAqAg0/rXIwZ
-         /hVOvb+e1BpffaCLuPedlTETuaweLVb9JkrAcGd82plDmuPpBBLvyurW8C8QWcnNaCXT
-         LjKy1Jsm5qcHTaNN4qNjtsupzGK0t3b9PJkpTQdd3zSS5BNdpBfaXlp3/jGKlidrl6bf
-         +oXWMgKgJSwL9TQDL03eNKFeC+4KMIR2QSNooKpoMhoYwGQ8xCEOQKymcIZdGGPil2wE
-         VuLBhpkoFm2CkGilRVWVSRNoezzVeuSr227F19eGkHP19JfDQp2JI0NXzQ9Ylp9Yp9Pc
-         ZeEQ==
-X-Gm-Message-State: AOAM533t9wgPRoZR03suJUOqTpRiSisj+PvXUWZdbHN+sb0vwyVJyUib
-        4WVCwvWAhVsr9I5XR5v7y4kDdqtr+rI6vL7lhpk=
-X-Google-Smtp-Source: ABdhPJwxlhnMXpB3jWFJahyoTZylx8Jq77EGyWpCwNiJM908b19e6mVEYQ5yqo7ua40B8t2wUkbnN/8C6ENMy9vyLtk=
-X-Received: by 2002:a05:6512:22c3:: with SMTP id g3mr11221707lfu.528.1639592159160;
- Wed, 15 Dec 2021 10:15:59 -0800 (PST)
+        Wed, 15 Dec 2021 13:17:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639592222;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vDOmbSgSfH5oVZVfeOYCn0yzGNbmiacT1UQDjK4tWws=;
+        b=X5jnsmXLWx/GAm82O5kIOV28RnAtjMPcOR5uGHO7vFYDq1SrlgD0srWvVH0uiil7slx/le
+        D/8MIAqakPMWLUpyHulRGAAFAwh2g4+YRSfHPcLRRWY6K0b7gcNZ5H6Liz2H6YPAqqYjiy
+        mYZzBC/VKggW69/HTYnu2iD+RjN3EZU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-654-O0RuXf4FP2WllEUrZTzsIw-1; Wed, 15 Dec 2021 13:16:56 -0500
+X-MC-Unique: O0RuXf4FP2WllEUrZTzsIw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A1E32593AE;
+        Wed, 15 Dec 2021 18:16:54 +0000 (UTC)
+Received: from [10.22.10.54] (unknown [10.22.10.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 342EC60BD8;
+        Wed, 15 Dec 2021 18:16:44 +0000 (UTC)
+Message-ID: <96018978-6b7f-1e7f-1012-9df7f7996ec5@redhat.com>
+Date:   Wed, 15 Dec 2021 13:16:43 -0500
 MIME-Version: 1.0
-References: <20211129231830.1117781-1-namhyung@kernel.org> <20211129231830.1117781-5-namhyung@kernel.org>
- <011B6FDF-15F0-411F-98F2-155E95BE7047@linux.vnet.ibm.com> <CAM9d7cgaYC9BxeA3dRtb8CP+9BnFQ7pXgG9X+ku_CZ43i=ZqGg@mail.gmail.com>
-In-Reply-To: <CAM9d7cgaYC9BxeA3dRtb8CP+9BnFQ7pXgG9X+ku_CZ43i=ZqGg@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 15 Dec 2021 10:15:48 -0800
-Message-ID: <CAM9d7cgnQOZVaCs7Yj=siBLkhK7Z5TmmXLBA+VkGs1S3PUOSTw@mail.gmail.com>
-Subject: Re: [PATCH 4/5] perf ftrace: Add -b/--use-bpf option for latency subcommand
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Song Liu <songliubraving@fb.com>,
-        Changbin Du <changbin.du@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-7-longman@redhat.com>
+ <Ybe0YWEo7Wp7wib9@slm.duckdns.org> <20211215144450.GC25459@blackbody.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20211215144450.GC25459@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 9:16 AM Namhyung Kim <namhyung@kernel.org> wrote:
+On 12/15/21 09:44, Michal Koutný wrote:
+> On Mon, Dec 13, 2021 at 11:00:17AM -1000, Tejun Heo <tj@kernel.org> wrote:
+>> * When a valid partition turns invalid, now we have a reliable way of
+>>    discovering what exactly caused the transition. However, when a user now
+>>    fails to turn a member into partition, all they get is -EINVAL and there's
+>>    no way to discover why it failed and the failure conditions that -EINVAL
+>>    represents aren't simple.
+>>
+>> * In an automated configuration scenarios, this operation mode may be
+>>    difficult to make reliable and lead to sporadic failures which can be
+>>    tricky to track down. The core problem is that whether a given operation
+>>    succeeds or not may depend on external states (CPU on/offline) which may
+>>    change asynchronously in a way that the configuring entity doesn't have
+>>    any control over.
+>>
+>> It's true that both are existing problems with the current partition
+>> interface and given that this is a pretty spcialized feature, this can be
+>> okay. Michal, what are your thoughts?
+> Because of asynchronous changes, the return value should not be that
+> important and the user should watch cpuset.partitions for the result
+> (end state) anyway.
+> Furthermore, the reasons should be IMO just informative (i.e. I like
+> they're not explicitly documented) and not API.
 >
-> Hello Athira,
+> But I see there could be a distinction between -EINVAL (the supplied
+> input makes no sense) and -EAGAIN(?) denoting that the switch to
+> partition root could not happen (due to outer constraints).
 >
-> On Sun, Dec 5, 2021 at 6:24 PM Athira Rajeev
-> <atrajeev@linux.vnet.ibm.com> wrote:
-> >
-> >
-> >
-> > > On 30-Nov-2021, at 4:48 AM, Namhyung Kim <namhyung@kernel.org> wrote:
-> > >
-> > > The -b/--use-bpf option is to use BPF to get latency info of kernel
-> > > functions.  It'd have better performance impact and I observed that
-> > > latency of same function is smaller than before when using BPF.
-> > >
-> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > > ---
-> [SNIP]
-> > > @@ -1144,6 +1166,8 @@ int cmd_ftrace(int argc, const char **argv)
-> > >       const struct option latency_options[] = {
-> > >       OPT_CALLBACK('T', "trace-funcs", &ftrace.filters, "func",
-> > >                    "Show latency of given function", parse_filter_func),
-> > > +     OPT_BOOLEAN('b', "use-bpf", &ftrace.target.use_bpf,
-> > > +                 "Use BPF to measure function latency"),
-> >
-> >
-> > Hi Namhyung,
-> >
-> > Can this be inside BPF_SKEL check, similar to how we have “bpf-prog” and other options in builtin-stat.c ?
-> >
-> > #ifdef HAVE_BPF_SKEL
-> > <<OPT_BOOLEAN for use-bpf>>
-> > #endif
-> >
-> > Otherwise when using “-b” and if perf is not built with BPF_SKEL, we will just return in perf_ftrace__latency_prepare_bpf without any error messages.
->
-> Thanks for reporting this.  Yeah, it should report
-> error messages in such conditions.
->
-> I think it'd be better to add an error message
-> rather than hiding the option.
+> You seem to propose to replace the -EAGAIN above with a success code and
+> allow the switch to an invalid root.
+> The action of the configuring entity would be different: retry (when?)
+> vs wait till transition happens (notification) (although the immediate
+> effect (the change did not happen) is same).
+> I considered the two variants equal but the clear information about when
+> the change can happen I'd favor the variant allowing the switch to
+> invalid root now.
 
-Well, now we build perf with BPF by default.
-So I think it's ok to follow your suggestion.
-it'd show the usage and options when the -b option is used
-and BPF support is not enabled.
+Allowing direct transition from member to invalid partition doesn't feel 
+right for me. A casual user may assume a partition is correctly formed 
+without double checking the "cpuset.partition" value. Returning an error 
+will prevent this kind of issue. If returning more information about the 
+failure is the main reason for allowing the invalid partition 
+transition, we can extend the "cpuset.partition" read syntax to also 
+show the reason for the previous failure.
 
-Thanks,
-Namhyung
+Cheers,
+Longman
+

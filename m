@@ -2,219 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E230475762
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 370F5475774
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236818AbhLOLJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:09:06 -0500
-Received: from mail-shaop0210.outbound.protection.partner.outlook.cn ([42.159.161.210]:6342
+        id S241967AbhLOLKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 06:10:46 -0500
+Received: from mail-shaop0212.outbound.protection.partner.outlook.cn ([42.159.161.212]:32267
         "EHLO CN01-SHA-obe.outbound.protection.partner.outlook.cn"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232306AbhLOLJF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:09:05 -0500
-X-Greylist: delayed 1961 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Dec 2021 06:09:04 EST
+        id S236845AbhLOLKo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 06:10:44 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RaJ7FUpU+8eNsXohMBVf3Leyi6QYolHxzH84L2/AIw6scU2laxtGh0pllDtZrB1Pm80ag9ufBoe9jK6ju6sp2zd43qSPztUUvGxL1oMTAcKP0TmxbaRcRge4VSr9fAxKaXNii0tvvJpRdLZFVKaNgdng+TId0seYKtQ3qlf0Dzm+MsRunVKpk1xD9kyrCwRpnYpDC2HyUMK3QiM/kBkIRlpwjwj5LqvBbyUKCt7RYo5PNrQhmnRvS24pmdbHIIMvc5RdCfpz2Y6UotTb6PuG4UyKNA72DjRPntGc1doQeELUZGfgs84qUAV5VgZ2Rp+dPmJazTF0dc86/WZDuivOYA==
+ b=ImS8LIRjE/kBznTxnRs+G0xYOGdVzN3kOOM6OZLuFCBhSaBiZvXPK9gworz69xWbSnVNSMSdY5V/xTaNPEpnQdjychWFHckROx8EhXTq2VL0+hUGMzZAJb2CmlI0MLCxvAZEunOHV61hTuU0SddTkcCj0WTYNfOpx8uWb4yamH1pkNpzSPZ+DdvC9KqIW4apCe7zzJbOJNRUmK+dhtJ4Ap0bObKgjhKZpDZ95zQXc73Q3DuXmSMpsUjpAzAnel5Kbk6OCdpvQsJP4MkI3SiKdlDVafytiXfaVzPpWBsdQt1c6LwwqoxKZVJ9oGPsg1Fkiie2fvBLrZIX9vqQ3iCSHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XPjfI1AeIP3LRgemHdeGpu08c/yirG5c5cL3ZdTXLe8=;
- b=HfnQUhYzTReO2n+8ksTGF6pQv4XWBJzF1Lz6rovodqD9J/JddbSYDYQjNP7ILa/Rp4rTrbbPaJhMUYNKsTs4j02YIUIuzzbk601UWFG5GIQfCSjhmoz8gaCSoDzKCljBdL3CQgoKDSuyJBc7g0S/rqv+WC45KH/cOQ2hir8cTbJzrWDDz/CHyX2JjJn+LIv+eA9ERHqtq9hdqUQth3lnVKGm4VjpkT7z9Sy2XEoNLFtxQ1v+n/d/Sy6a7EfhH2ELA39nlaErrYkarQ8iVypAr/Nbdue2xuoHmyMH5UOEXiYFpTYOdhGm+vYp0ZKQiy86MqWMOAKwEGGrEkL67CX1RQ==
+ bh=0gcdPGiBlPJALmyChvu4q5cRixPI0346mJD0kGtVRaM=;
+ b=CFw7hrfOw+Gnve6wjbAyGrZQDNyIsJ4ExDq5zDr61eyBeelffQC83cKReVCtFRtPan7/oSSJRsHRq8cUgMAtUmoW3Rjd1w+TpTRE9neOSrRIW7Ev4xMA9kBBDYKYwTsNgdF762dbtFcTXej7jL7PynEhbqncha3npGWNHE6pdKa3kvxT8X1MUgc+UptKRFsA14IqNc//f51F4KMTHLvFAhm1vT7Wew8Qefhqtn/NktNd6pth96FMsXn6czC9G1W0y1iGDA1+Kg0mHIBgnuRnmT2eApBlXttS7+r7+ymJJuhmgE9JT+XRH+LIeGKJJ0GutUecCvLhl5QmJhiQ1en70g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=armchina.com; dmarc=pass action=none header.from=armchina.com;
  dkim=pass header.d=armchina.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=armchina.partner.onmschina.cn; s=selector1-armchina-partner-onmschina-cn;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XPjfI1AeIP3LRgemHdeGpu08c/yirG5c5cL3ZdTXLe8=;
- b=oBFf43a0fWivygnz+0CyFeCBaKxmUrEvHcZUpNwPr51DjoUMzI0fiOhI+Q4bhLR+j53JpWSWA9SvjF1ZD9ZLfp44ZTI/aK1D1/dE5QDaMBnwqSjOR3NE0J/ci00veB3NBWQX3NuPelu8LO70sABbCMI9ceWDBBapCp1VU5sKzSY=
+ bh=0gcdPGiBlPJALmyChvu4q5cRixPI0346mJD0kGtVRaM=;
+ b=tkeBaWG+R1LkRj43njIO2qNEu4//6vpvGH7Setrxx4ubK/umyaVIbV/Yz3I0nF3yOiUHdcTEWzt71SSw/Kqy3cYFpIVhaKkUB1u9oLtWom6b2U3mNvWIqrPNfEc52ShHaDiaFsCKqPI35guz4G1L/yxtqVExUrH1vSBGXKC8Btg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=armchina.com;
 Received: from SH0PR01MB0634.CHNPR01.prod.partner.outlook.cn (10.43.108.74) by
  SH0PR01MB0827.CHNPR01.prod.partner.outlook.cn (10.43.106.150) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4778.13; Wed, 15 Dec 2021 10:36:20 +0000
+ 15.20.4778.13; Wed, 15 Dec 2021 10:36:21 +0000
 Received: from SH0PR01MB0634.CHNPR01.prod.partner.outlook.cn ([10.43.108.74])
  by SH0PR01MB0634.CHNPR01.prod.partner.outlook.cn ([10.43.108.74]) with mapi
- id 15.20.4778.018; Wed, 15 Dec 2021 10:36:19 +0000
+ id 15.20.4778.018; Wed, 15 Dec 2021 10:36:20 +0000
 From:   Dejia Shang <dejia.shang@armchina.com>
 To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org
 Cc:     dejia.shang@armchina.com, toby.shang@armchina.com
-Subject: [PATCH 0/4] misc: add ArmChina Zhouyi NPU driver
-Date:   Wed, 15 Dec 2021 18:36:05 +0800
-Message-Id: <20211215103609.9268-1-dejia.shang@armchina.com>
+Subject: [PATCH 2/4] Documentation: add sysfs entries for Zhouyi NPU
+Date:   Wed, 15 Dec 2021 18:36:07 +0800
+Message-Id: <20211215103609.9268-3-dejia.shang@armchina.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211215103609.9268-1-dejia.shang@armchina.com>
+References: <20211215103609.9268-1-dejia.shang@armchina.com>
 Content-Type: text/plain; charset="utf-8"
 X-ClientProxiedBy: SHXPR01CA0021.CHNPR01.prod.partner.outlook.cn
  (10.43.110.222) To SH0PR01MB0634.CHNPR01.prod.partner.outlook.cn
  (10.43.108.74)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0150d1de-9c18-4d27-2281-08d9bfb6bb19
+X-MS-Office365-Filtering-Correlation-Id: 3dfa70e7-f1c6-4a0b-db75-08d9bfb6bbe9
 X-MS-TrafficTypeDiagnostic: SH0PR01MB0827:
-X-Microsoft-Antispam-PRVS: <SH0PR01MB082739DCEB41DD5E81C0FFF598769@SH0PR01MB0827.CHNPR01.prod.partner.outlook.cn>
+X-Microsoft-Antispam-PRVS: <SH0PR01MB082716F79168577191F211A798769@SH0PR01MB0827.CHNPR01.prod.partner.outlook.cn>
 Content-Transfer-Encoding: quoted-printable
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Hrwnm3LiRDeGFlef2H8xIrdmN0Is0XvhKVYJGxh6WcgT4kJ+fy9k2tyeMSgdgYwZGp89Sdb/MHxgWmMWSplXpL2m3zup2XEKlDzRc+nkQw/1O/MmTRQBb/R+PuvFub4HNo1gysRrWH2ryWsioLkn4oT4lNwQidqDEkElq/J5E8z6sUJQLOxJsRtyDuoR8T1b0MXjL6EshS9I2pJ6R8kRAB6lEYC29aJsmhO/TruosZEhbG6BoTewxPj+tBWiwTgl9yl2xNdgZYbvifUM30yJxk6zQUJO+UbnbyBLe5l+v2rxBOMwUjRaxLYJeBXoYjumxX2+Z/X2BCQBYltwqEnNksVtmu0l4MWcgvX3oO7tyW5AyDask7MnXnvugwy+ofyp5ewt+RUKT1NwnoSFalpXgVb0pjpkKTsekmVqViDXlacR6Hp+EUg73gSWgsNiHni/5Sbf41sUnaDrdFcfo+z+JYG/5eMPU23F0yzKo+tWVHA7x5NdPoBxhVG2CweTAQYSHlqITr7rEqt7i7xudC/tHIXDu9EMnV00xxz6xao9ScAvSFjVj2q65cVeZEbITM7wsJ7WAcgWr+P73LnXYu3IyEda7htPzpUHS5HwJ2W98rqBfhqd5Q6+JYUbanfiA0V0YIgzj6fuU1JP7G9qiGa+kZnMxMKMJtDpkHCcjLUjBYEbTFZtjGc95buvH1vo55nZvTAdclr9GVTmDk6wjpqTjw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SH0PR01MB0634.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230001)(366004)(1076003)(6666004)(508600001)(66476007)(186003)(86362001)(52116002)(2616005)(966005)(26005)(8676002)(40180700001)(107886003)(4326008)(38350700002)(38100700002)(8936002)(44832011)(40160700002)(36756003)(66556008)(5660300002)(2906002)(66946007)(83380400001)(20210929001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: EQqUFuWgAk1hey1xVhcYHV2UXaQiGyRmQsHdQdtcORiz68zooDGSaXnDkf53I2mtwSHLyJL8AYl9u5fNANx+SNx6E4KocELckhBWKFMxempX5sTk7+w2S8p1yFEzKwO23pJ12ta4/YGDn8CWTiMOpygF/3gAEXTJGaqOqJORzcB9EakUlOAecv52wFrbE7T8pwb1Zf4bbTn4scUH2YTZVQd7EF7SfZJ2SqJc0hTcmrVS9ixTZJucf1Z+bzGh+bbsZe8xPFwZT0GhJ7e0AOCitfQYX9XbI9orwtcL1rWEzOXSpBL1M28UNxmVi4Yw4s4cNv0DwFcnDCXWz7qAxOGJVyQOVsH5S3kzwLQwV2bK4RFkweLsZnkTmTVDzvzBQtClMdzUNtI8qR+r4SS/q7/89T5cHY3VrL6XsgyZSvMXnJA/sJIIJs7TeQLDPOunpf8hll/uwv0DgEUsdvKRbXGDc4f3PzAZBQEjl61hjPuLrITFL7lGsdvnyIWYoNUgBJv59g+Ckz3+iDldwJw7rI3YZLjwfSFwn6REpm2kbahZ3o9kzX9Of4VXlfLqnh0twqB+DtgY5e2GYIoXutWPX6vPrgQ9+HtgR26MqmnJsO1HPZK524kL+hcq2YsfpJqEd9ITx3BnG2LjBJ3mAypTb0GzmdGKnQoXpVjNGxEoWOne0PA5DQE++fpSd3QJU0Dvm7++
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SH0PR01MB0634.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230001)(366004)(1076003)(6666004)(508600001)(66476007)(186003)(86362001)(52116002)(2616005)(26005)(8676002)(40180700001)(107886003)(4326008)(38350700002)(38100700002)(8936002)(44832011)(40160700002)(36756003)(66556008)(5660300002)(2906002)(66946007)(83380400001)(20210929001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VdeD/AU6Ccr7HBZnMrN4hf5sWxyrDhn9tuHLmtG8cO8u8Pod47e96207EKVl?=
- =?us-ascii?Q?HHSRDYZv6mmz/ebzr7iDu1XNKBWpGpl94qXgYAe6g8wsaJrIppt6456K3Drs?=
- =?us-ascii?Q?7DC5UGYMdybMIjAB484SSSDdWTHbv9adKNzps5P3glCsN/h8Xg0fP6K++IDh?=
- =?us-ascii?Q?D58yKdRAlorEKv0RIei5CSrmKtp6LUcGMB+ezAPJpVRO84ZzrGQrXBNr0nXl?=
- =?us-ascii?Q?tHLLHBiZr/LjC2nqGd38/8kth8T6mCbolKGWlK5UEo2Nt2Hi7LAE57E8mTFz?=
- =?us-ascii?Q?r+3lMPQvj6ycQhcZmp+L8cSO1tdb6Bf5ZBcO0O9SmicnI43VeDq4DR85P9JD?=
- =?us-ascii?Q?dkAC8v+4Ujh4sytPNtdiEEugwOBPNES8QmUf2MU9ElYSnPJJeYJo1Jhd2x5k?=
- =?us-ascii?Q?E6it7BRjHCSc0t4VWyGxxJAhgAXw0sLTv9unAUiEBIV1IuNKc3IH8R2ITB5D?=
- =?us-ascii?Q?28h9AFOofTujtH20LSrl5e2HjtU23wR97QK+ai5uOvLNpGstHlodS9JPWHq3?=
- =?us-ascii?Q?cyel4M5eEDS2u1FPK1263KG+27SdmeaRKqzE80YzfGqMsO5bwLhsEjySGS5Z?=
- =?us-ascii?Q?ehBrW6ekROJKyVSxF6thaDYj51WOhMOPRhYRwNbK+nloYbA+nSkv0rNBo4te?=
- =?us-ascii?Q?CxgfJIl1G3PoUwRN26muh0dbWyUAPGAVzKN5kQrGrC+4Jr6Y5y8wZTMJz6Qo?=
- =?us-ascii?Q?cl+VB+FC28+dBAqMK15QPc1p9VwWuKVw0JF1p+/9wdXSdrESgXE1UDglRxRA?=
- =?us-ascii?Q?2IV2uyachSspVj8ki/uIXgGbYmst1AJzeHUGGd31pohRL9LBgmocd88B06im?=
- =?us-ascii?Q?qy8wktugOPbuT3f7kkmZCKspLFeOZdaZyZd/dp4ZTCNzwk55HJS9/IqsnDq5?=
- =?us-ascii?Q?VItoQX2Fx7VsN6ifOyT5nGjG/Rmi/WY135M7J5KaRUh9HrD9gq9KIJ/gjid0?=
- =?us-ascii?Q?JzQWb4yzRi7Naeg0ETaHjwYdG6djq611teQ52pVG7em/SwUqSeU7B33IkUFc?=
- =?us-ascii?Q?/O4dJzp9mlWLNHyA4RRQfYF9KSJpSJ9maxq8RJUMJr0CxIxmEj6nQsKnxPoy?=
- =?us-ascii?Q?YXxxR9rnuq7RoEwXvzU0r2KxDXJDWpLRC4pc0appDHo5g1C/UZdLqFiHJ5M9?=
- =?us-ascii?Q?40pZSaO/EJLrSNhvRjR7CZ9LXg6pXglnmZdQfk5hGqqJC0Da41zAEXMqIFbE?=
- =?us-ascii?Q?WsuXkiCu68Gwj/2hzSMywDI+5XRaZVaNLtvgOJzXrFwRoPY/haDMnP61qUid?=
- =?us-ascii?Q?NNS3SFQHY8MM68/Vq2yTWOBPyZNsNf4RJfQgkD8YMytQDFdAtSNtsxpE0BRP?=
- =?us-ascii?Q?4pT0Le7PITniUnNr1SKz4EJPU6u9KY9OBoMS3gr0mthYr0BbqMIRJPJpa/Iw?=
- =?us-ascii?Q?XtFq0M9I6YLVDZHA2wGaMPAO/wqB3cORrxpE84g+f9Rc0izcedTBzMsClU/o?=
- =?us-ascii?Q?MJBvRRGpxHArPf6fNiut1flweF6CAtJEmRpzsJZjemWxwBu+kPiuqs+Eozn6?=
- =?us-ascii?Q?/KZfF7CVdT54C8eTr3LeFumsIjZWhoisEGRYgQUbcbxxAz+G4l/rmM8+e0VT?=
- =?us-ascii?Q?mBrDKou0ts5SpgTOeJ+TKsEuHG2DuwaLTbT5uc9Zv8jvNeNJF2uD3tFN/HXs?=
- =?us-ascii?Q?oQ=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uY/jdLmywe7LEVYqK92fI1t7NaRQYG+PP71xzb115jSGW/gKyUzil7DjUsDK?=
+ =?us-ascii?Q?9PLirIQyFBoXIfOf5ZQYEpBKrXHW6zpFYXosypv414cV85JPr1rp+TsIDdRo?=
+ =?us-ascii?Q?Ht7hpJz5xZokWIlV7rgn9/01F2Q8uATm0q20ryMLzPZFyhQYuq+Hgnaf3Dq2?=
+ =?us-ascii?Q?jwvFRkji0dyTMmzInxSKKyzKJ76iSFeuQOM+1ns5zLBFBNRyU9DjfR2yle6e?=
+ =?us-ascii?Q?p5YVfZWqA9hchkT3WmRG0f8kgwSsIH7nbLuoFwvv9mcsZrIRymDEomfmgq0N?=
+ =?us-ascii?Q?lz5WIaxLOoUtDNpazdbkfMt42bGJRXSQzko1I8grm3GCi4NMworRof9BDW7v?=
+ =?us-ascii?Q?/PwkjVvtGamGlBgh/HYLXIB1j0cbACNaoZDB41tyuG/biKvN3HNUAA36hMcF?=
+ =?us-ascii?Q?lbKW7JZQ8q9I7op0rnutIlwqEQedL+C1C0xVcFjIbr2FjYwcLuiWNA5wvaL5?=
+ =?us-ascii?Q?ozmljswW7djlhjh7nZOdBwMB0C0qv5kvJFwESEV+wrHh/qh2wh7hYkaOk0PH?=
+ =?us-ascii?Q?oG0FAPkOTm2GORowwnSguteiSdr2IqzMm/Ks1a1uKk/ef3ESHGQlZnkSOAnL?=
+ =?us-ascii?Q?h+w8MZFy1LCoyIWkz5qem0/eygEup5v4twOPBIx/xIsie2b0S5Tpi4BQBlQ3?=
+ =?us-ascii?Q?WMJh5uOoV2HC0k3UDKt17Jw1AY+U4T7mMwYmOHn/zlupbBNOAkgLuZPiiOYD?=
+ =?us-ascii?Q?s6goBV2C5IumdxWmFOwfaqGOXBziHJIp5VYnW6ERWKUJRWV/XnXoz+DNTtsZ?=
+ =?us-ascii?Q?xto01gMTNMbEd+uI11QvbB8rx2YnFLApEwl4CALR/E4sJ754wsz1KO5fSrVG?=
+ =?us-ascii?Q?0O3qFHRdUVDKJT8jyJMQy9BfOVylIsbkGYkFiAjAsc6EThyV69HL5A0yZ3eS?=
+ =?us-ascii?Q?ssfdp8rXX2S0qJhXSi5MYHLYvI2ITSpHv7MS2Nyz7lci+AavwoGzHiygcOCk?=
+ =?us-ascii?Q?fsqF9lMBMZhrj2rmwhipIZZQLe1vhuSvuio4TWvjZaqYiNTpf5R4wFPm6lra?=
+ =?us-ascii?Q?2mHPxACRUfTghnS6YKzJbnXcBLWGtKxRMWB1rAQe9evkxQGLL7wjGZvu8xiw?=
+ =?us-ascii?Q?WQALCRd27jgFl85TL/qvMC9nJA8zOExKLDC59MaewarncfA2C0QkwB8Dm92M?=
+ =?us-ascii?Q?c98goSHGO0MGYmp9jDgwjYURJSW/4KJjLSRFSCJK56ujziwKQhFrThuR5IV3?=
+ =?us-ascii?Q?6+f/106Fgqw98qQMmTliuJ83S9BrJdIPlfYfgKMITw1Q/sqPRbkImrp/OH/0?=
+ =?us-ascii?Q?YsTRKLpv8NOXe/0XMSvkJYbMFYt6CMzG/RFtr7fT4X68FlQU4qGj0VfapHgY?=
+ =?us-ascii?Q?hsFuXsavf4xO9llu+SigyLU8VB95v6CYAssv3mtUrB4Kia7P9dQgGcDpfE1G?=
+ =?us-ascii?Q?+nmSlQ0IrBu99HhtNjQ4DEQLFcBxi80IImx3F4E1vkUhNExf9oVX9+OWYl3x?=
+ =?us-ascii?Q?s/gFruONiqYwyWf0ly8OrGGdDdERgBgODIPlqOGdQ3NF1t4+hOuayEtlhAUX?=
+ =?us-ascii?Q?SUyXfEMZRNbLq3r/F8jr2EacfAq0k+z26cfrRLbMMjaxUrsNUa6EwDG0Xr7L?=
+ =?us-ascii?Q?LgjiHLM2MzOmD89ESnzvIU63aKmHg0amieKRdi7BpcwuuWZltMCVh/JykB2N?=
+ =?us-ascii?Q?6Q=3D=3D?=
 X-OriginatorOrg: armchina.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0150d1de-9c18-4d27-2281-08d9bfb6bb19
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3dfa70e7-f1c6-4a0b-db75-08d9bfb6bbe9
 X-MS-Exchange-CrossTenant-AuthSource: SH0PR01MB0634.CHNPR01.prod.partner.outlook.cn
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 10:36:19.4978
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 10:36:20.8286
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 58b271af-432f-4dad-9dee-571f404bc6a0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1+awXN00kXRH4j0q/bVHb1VyQvtw3P8/n1/GzD9+SAoEZPeVy1IEZhb+s706/Y1F6ckWMj6B433qH+gkU8rXeyEWnm/S6E178EqLrUFnmNE=
+X-MS-Exchange-CrossTenant-UserPrincipalName: e0CAHek2iewuHd8Ffvraq4oEnRBKxpJnjgfpwUGxpw80sNy8/rWF1W0W/jdt+rKJFpGTQtgaa1VoahjcHYJP4pUlncrfprqaY2GuFCsP0Dc=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SH0PR01MB0827
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Zhouyi NPU driver provides sysfs interfaces for userspace to
+check the status of NPU cores.
 
-These 4 patches add supports to the ArmChina Zhouyi NPU IPs.
-
-The Zhouyi NPUs (and software for it) are designed by Arm Technology (China=
-) Co. Ltd.,
-i.e. short for ArmChina, for edge AI computing devices in markets like smar=
-t home, auto,
-IoT, mobile, etc. The brand name "Zhouyi" comes from a Chinese traditional =
-classic about
-changes and predictions. Currently two versions of Zhouyi IP (Z1 and Z2) ar=
-e released,
-and they are integrated into SoC chips Allwinner R329 and Siengine SE1000, =
-respectively.
-
-This driver supports the control of Zhouyi Z1 and Z2 NPUs. By using the use=
-r mode driver
-APIs, application program can schedule AI inference tasks on Zhouyi NPUs ef=
-ficiently. The
-user mode part of this driver is opensourced now and anyone can fetch it fr=
-om github:
-https://github.com/dejsha01/armchina-zhouyi.
-
-We found that a few days ago someone submitted a legacy version of Zhouyi N=
-PU driver:
-https://lore.kernel.org/lkml/20211126021904.32325-1-caihuoqing@baidu.com/#t=
-.
-We think that the current version in these 4 patches is better for upstream=
-ing because
-it contains bug-fixes and code optimizations compared with the legacy versi=
-on,
-and the corresponding user mode driver for this kernel driver is opensource=
-d.
-
-I would appricate any feedback, question or review :)
-
-Thanks,
-Dejia
-
-Dejia Shang (4):
-  misc: add ArmChina Zhouyi NPU driver
-  Documentation: add sysfs entries for Zhouyi NPU
-  dt-bindings: add vendor-prefix and documentation for Zhouyi NPU
-  MAINTAINERS: add maintainer info. for Zhouyi NPU
-
- .../sysfs-devices-platform-armchina-npu       |  13 +
- .../bindings/misc/armchina,zhouyi-npu.yaml    |  57 ++
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- MAINTAINERS                                   |  10 +
- drivers/misc/Kconfig                          |   1 +
- drivers/misc/Makefile                         |   1 +
- drivers/misc/armchina-npu/Kconfig             |  15 +
- drivers/misc/armchina-npu/Makefile            |  11 +
- drivers/misc/armchina-npu/aipu.c              | 312 ++++++++
- drivers/misc/armchina-npu/aipu_core.c         | 418 ++++++++++
- drivers/misc/armchina-npu/aipu_core.h         | 100 +++
- drivers/misc/armchina-npu/aipu_io.c           |  74 ++
- drivers/misc/armchina-npu/aipu_io.h           |  27 +
- drivers/misc/armchina-npu/aipu_irq.c          | 113 +++
- drivers/misc/armchina-npu/aipu_irq.h          |  36 +
- drivers/misc/armchina-npu/aipu_job_manager.c  | 689 ++++++++++++++++
- drivers/misc/armchina-npu/aipu_job_manager.h  | 110 +++
- drivers/misc/armchina-npu/aipu_mm.c           | 740 ++++++++++++++++++
- drivers/misc/armchina-npu/aipu_mm.h           | 127 +++
- drivers/misc/armchina-npu/aipu_priv.c         | 280 +++++++
- drivers/misc/armchina-npu/aipu_priv.h         |  58 ++
- drivers/misc/armchina-npu/aipu_soc_default.c  |  82 ++
- drivers/misc/armchina-npu/config.h            |  12 +
- .../armchina-npu/include/armchina_aipu_soc.h  |  52 ++
- drivers/misc/armchina-npu/zhouyi/Makefile     |   4 +
- drivers/misc/armchina-npu/zhouyi/z1.c         | 244 ++++++
- drivers/misc/armchina-npu/zhouyi/z1.h         |  33 +
- drivers/misc/armchina-npu/zhouyi/z2.c         | 311 ++++++++
- drivers/misc/armchina-npu/zhouyi/z2.h         |  47 ++
- drivers/misc/armchina-npu/zhouyi/zhouyi.c     | 142 ++++
- drivers/misc/armchina-npu/zhouyi/zhouyi.h     |  73 ++
- include/uapi/misc/armchina_aipu.h             | 335 ++++++++
- 32 files changed, 4529 insertions(+)
+Signed-off-by: Dejia Shang <dejia.shang@armchina.com>
+---
+ .../ABI/testing/sysfs-devices-platform-armchina-npu | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
  create mode 100644 Documentation/ABI/testing/sysfs-devices-platform-armchi=
 na-npu
- create mode 100644 Documentation/devicetree/bindings/misc/armchina,zhouyi-=
-npu.yaml
- create mode 100644 drivers/misc/armchina-npu/Kconfig
- create mode 100644 drivers/misc/armchina-npu/Makefile
- create mode 100644 drivers/misc/armchina-npu/aipu.c
- create mode 100644 drivers/misc/armchina-npu/aipu_core.c
- create mode 100644 drivers/misc/armchina-npu/aipu_core.h
- create mode 100644 drivers/misc/armchina-npu/aipu_io.c
- create mode 100644 drivers/misc/armchina-npu/aipu_io.h
- create mode 100644 drivers/misc/armchina-npu/aipu_irq.c
- create mode 100644 drivers/misc/armchina-npu/aipu_irq.h
- create mode 100644 drivers/misc/armchina-npu/aipu_job_manager.c
- create mode 100644 drivers/misc/armchina-npu/aipu_job_manager.h
- create mode 100644 drivers/misc/armchina-npu/aipu_mm.c
- create mode 100644 drivers/misc/armchina-npu/aipu_mm.h
- create mode 100644 drivers/misc/armchina-npu/aipu_priv.c
- create mode 100644 drivers/misc/armchina-npu/aipu_priv.h
- create mode 100644 drivers/misc/armchina-npu/aipu_soc_default.c
- create mode 100644 drivers/misc/armchina-npu/config.h
- create mode 100644 drivers/misc/armchina-npu/include/armchina_aipu_soc.h
- create mode 100644 drivers/misc/armchina-npu/zhouyi/Makefile
- create mode 100644 drivers/misc/armchina-npu/zhouyi/z1.c
- create mode 100644 drivers/misc/armchina-npu/zhouyi/z1.h
- create mode 100644 drivers/misc/armchina-npu/zhouyi/z2.c
- create mode 100644 drivers/misc/armchina-npu/zhouyi/z2.h
- create mode 100644 drivers/misc/armchina-npu/zhouyi/zhouyi.c
- create mode 100644 drivers/misc/armchina-npu/zhouyi/zhouyi.h
- create mode 100644 include/uapi/misc/armchina_aipu.h
 
+diff --git a/Documentation/ABI/testing/sysfs-devices-platform-armchina-npu =
+b/Documentation/ABI/testing/sysfs-devices-platform-armchina-npu
+new file mode 100644
+index 000000000000..185819e0010c
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-devices-platform-armchina-npu
+@@ -0,0 +1,13 @@
++What:           /sys/devices/platform/aipu<n>/disable
++Date:           December 2021
++KernelVersion:  5.16
++Contact:        Dejia Shang <dejia.shang@armchina.com>
++Description:
++                (RW) Read/Set the enable/disable status of the current Zho=
+uyi NPU core
++
++What:           /sys/devices/platform/aipu<n>/ext_registers
++Date:           December 2021
++KernelVersion:  5.16
++Contact:        Dejia Shang <dejia.shang@armchina.com>
++Description:
++                (RO) List of Zhouyi NPU external registers and current val=
+ues inside
 --
 2.17.1
 

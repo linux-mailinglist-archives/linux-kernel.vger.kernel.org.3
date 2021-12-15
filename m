@@ -2,116 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6D4475DB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB49475DB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244927AbhLOQmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:42:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S244939AbhLOQm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:42:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244974AbhLOQmF (ORCPT
+        with ESMTP id S233700AbhLOQm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:42:05 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3224C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:42:04 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id f74so3820351pfa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:42:04 -0800 (PST)
+        Wed, 15 Dec 2021 11:42:26 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DF7C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:42:26 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id o29so17065818wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:42:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=twHkGtbZ/4TAT9UJF4rb85KYB1yDtANe5IeqA4O27RQ=;
-        b=VSSHlZ4Cm1kE0LlkjpF79TezRsOcCbqa+waw7+xIKfNskBGTGbJVEhBUwBu/Dd0qWq
-         8pB5hOOdqLI/tP88lfQgzSBh4HKxKvfotIwI0ZUOxIqQDibLPdmzpDYW3U5XTj4WDeWg
-         CvLSNkKXSCurFF01LAsFvUW8O4okUR3uNuf0VF52uELM/6qE7AIoMJzl/yWjWz+SsLKX
-         QcqwSs3dAL5pw1PFR5BH3mUyqgG04DzxEcXkMlGSIOj8YEDvUzl5LCpkmDuTh3B6zlxj
-         2QoF7MHznUPUE99iKI1d1xhWKz8TNNHQYYSk9AuWD4BcDtQusj/1x+9lUt/qD2C4BS7w
-         CfGQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NvzzcJBBRe/pXCF+v6jb3YyzpE8towMbOfGTpdBZYQ4=;
+        b=Y/he0J6Lou1b7MK8UrLT4EAKChQ6wRnFzIemVHZMZCeMW/WAFa9sWB1PMvV5yKbNLy
+         TSGt/WsYV01cW8EELmqGtGPajcsHjRw7qiPH73v5O2s1GHTj89wlriw0XsA7C7eofPmX
+         5Gbbn9GRxCxBJ8GsxphD1mzARHA3tTvVDsj7qO6LFzFybTCD0ZftQx87a3BN1eIiW+pm
+         b0m+CWGEnjiujkOALyZJD/GMHT1rFs2P9sUb1AN6cvk+4SBbTSIVI0aann4A+xD2rCDw
+         QIyB9gDzW2mbRF0RHZHQ15MaIX5ba597mYAQcUo2a6xeR91FOPo+4+wya1/LOtivqiA8
+         5ubg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=twHkGtbZ/4TAT9UJF4rb85KYB1yDtANe5IeqA4O27RQ=;
-        b=qLJqyTp6yoxF9lQUYuXjNnVweZYyvIPWUX6MRSIfF+G6M63/476eg2SNOOXocbT962
-         BGwWgegjgEC2qUegNGGz2qUmAwZRpk0lgrTyfkJctyNbMvqX6c7eAnKSgGf3X5lWTxG6
-         UdRaRrw6uwY+cTCXUy6lNz3iOoJOilmaOKABHLSqE24Snz8DpbKQlHJ9ADDfvCDsvjF0
-         uAg50ZBmH2GlbwQ+w4rllLhKePwDLApiTCIGu1UpuVKtrJp2rA6zINQZ+Y7hLWHUaO53
-         2g3vuW/0GQAw8GtE/JlTpoCpyhc/23X7nFVXMIcD+770zoyj1CcK1VPKWew+odWJNBzN
-         MqzA==
-X-Gm-Message-State: AOAM532uzkSCdGpOCrpZ522cMMjOPbC9XApTzEo5rONY7cjSxGz0fthL
-        0yHjYosYbj7Cg/VMp1J6xa6gRpGqLis=
-X-Google-Smtp-Source: ABdhPJxZ3UqgJ8pfN51sBTuQJFzDf4hI4q1vnyZa3JBsW10ZCEg1+z1CMzXhc2M9Sv6XARCwVPlW5g==
-X-Received: by 2002:a63:e43:: with SMTP id 3mr8611068pgo.73.1639586524479;
-        Wed, 15 Dec 2021 08:42:04 -0800 (PST)
-Received: from pc ([223.197.3.99])
-        by smtp.gmail.com with ESMTPSA id ot7sm6797174pjb.21.2021.12.15.08.42.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 15 Dec 2021 08:42:03 -0800 (PST)
-Date:   Thu, 16 Dec 2021 00:41:57 +0800
-From:   Zhaoyu Liu <zackary.liu.pro@gmail.com>
-To:     ddstreet@ieee.org, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] zpool: remove the list of pools_head
-Message-ID: <20211215163727.GA17196@pc>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NvzzcJBBRe/pXCF+v6jb3YyzpE8towMbOfGTpdBZYQ4=;
+        b=DCaz/iAEn3nc5d6bV4A1B1SspcMZ13vcX9eKebizjdKTXPXxkLsClCEyDfcVQggpeM
+         t8IRiCDfEYR7ZYvmBSbHO0kw7yERRZhUkc5syC+S0jvB2ed835K1opkVNLptM6enru3x
+         AMrf+UX8M4VkYOm+7zSCUF6lHrLn42gV7MfeGZejKviFqozFg25tJ0S9e+Mjhi07wmMx
+         n6fjWCGkwUkNvZvkzlAQ0sbH38MnY2Amu7eKktAXDX3/iyXKUPw5DU50g2nKaRgGwZKf
+         wRB+1bM4qMXUbDEDVYpqdCXruzCzzjSYMBgmTWVWLouEIdf5arRhFouWhC6A7RV8OaXU
+         EoxQ==
+X-Gm-Message-State: AOAM5304CbWpMsL28vzBm0Boe8WUh22YJPuhnU/tfDDGC0RYfss099K0
+        305Ha/EZXg9EoANbW618Jxk7d0Yn9hkwgw==
+X-Google-Smtp-Source: ABdhPJw4JBTMPtxa5ZwHTVMTxDQkDfoTJZtcvubScnA/WXNuCiBIpsjv1lyrwpTMJDGIIfafuHW4kw==
+X-Received: by 2002:a05:600c:2295:: with SMTP id 21mr685312wmf.187.1639586544711;
+        Wed, 15 Dec 2021 08:42:24 -0800 (PST)
+Received: from localhost.localdomain ([217.113.240.86])
+        by smtp.gmail.com with ESMTPSA id p10sm2670828wrr.24.2021.12.15.08.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 08:42:24 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     rodrigosiqueiramelo@gmail.com
+Cc:     melissa.srw@gmail.com, hamohammed.sa@gmail.com, daniel@ffwll.ch,
+        airlied@linux.ie, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, cphealy@gmail.com,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH] drm/vkms: set plane modifiers
+Date:   Wed, 15 Dec 2021 17:42:13 +0100
+Message-Id: <20211215164213.9760-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list of pools_head is no longer needed because the caller has been
-deleted in commit 479305fd7172 ("zpool: remove zpool_evict()").
+Where no modifiers are exposed, usually linear modifier is assumed.
+However, userspace code is starting to expect IN_FORMATS even when the
+only supported modifiers are linear [1].
 
-Signed-off-by: Zhaoyu Liu <zackary.liu.pro@gmail.com>
+To avoid possible issues, explicitly set the DRM_FORMAT_MOD_LINEAR
+modifier.
+
+[1] https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/599/diffs?commit_id=5aea1bc522f0874e6cc07f5120fbcf1736706536
+
+Suggested-by: Chris Healy <cphealy@gmail.com>
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- mm/zpool.c | 12 ------------
- 1 file changed, 12 deletions(-)
+ drivers/gpu/drm/vkms/vkms_plane.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/mm/zpool.c b/mm/zpool.c
-index 6d9ed48141e5..68facc193496 100644
---- a/mm/zpool.c
-+++ b/mm/zpool.c
-@@ -24,16 +24,11 @@ struct zpool {
- 	const struct zpool_ops *ops;
- 	bool evictable;
- 	bool can_sleep_mapped;
--
--	struct list_head list;
+diff --git a/drivers/gpu/drm/vkms/vkms_plane.c b/drivers/gpu/drm/vkms/vkms_plane.c
+index 32409e15244b..1666fa59189b 100644
+--- a/drivers/gpu/drm/vkms/vkms_plane.c
++++ b/drivers/gpu/drm/vkms/vkms_plane.c
+@@ -20,6 +20,11 @@ static const u32 vkms_plane_formats[] = {
+ 	DRM_FORMAT_XRGB8888
  };
  
- static LIST_HEAD(drivers_head);
- static DEFINE_SPINLOCK(drivers_lock);
- 
--static LIST_HEAD(pools_head);
--static DEFINE_SPINLOCK(pools_lock);
--
- /**
-  * zpool_register_driver() - register a zpool implementation.
-  * @driver:	driver to register
-@@ -195,10 +190,6 @@ struct zpool *zpool_create_pool(const char *type, const char *name, gfp_t gfp,
- 
- 	pr_debug("created pool type %s\n", type);
- 
--	spin_lock(&pools_lock);
--	list_add(&zpool->list, &pools_head);
--	spin_unlock(&pools_lock);
--
- 	return zpool;
- }
- 
-@@ -217,9 +208,6 @@ void zpool_destroy_pool(struct zpool *zpool)
++static const u64 vkms_plane_modifiers[] = {
++	DRM_FORMAT_MOD_LINEAR,
++	DRM_FORMAT_MOD_INVALID
++};
++
+ static struct drm_plane_state *
+ vkms_plane_duplicate_state(struct drm_plane *plane)
  {
- 	pr_debug("destroying pool type %s\n", zpool->driver->type);
+@@ -189,7 +194,7 @@ struct vkms_plane *vkms_plane_init(struct vkms_device *vkmsdev,
+ 	plane = drmm_universal_plane_alloc(dev, struct vkms_plane, base, 1 << index,
+ 					   &vkms_plane_funcs,
+ 					   formats, nformats,
+-					   NULL, type, NULL);
++					   vkms_plane_modifiers, type, NULL);
+ 	if (IS_ERR(plane))
+ 		return plane;
  
--	spin_lock(&pools_lock);
--	list_del(&zpool->list);
--	spin_unlock(&pools_lock);
- 	zpool->driver->destroy(zpool->pool);
- 	zpool_put_driver(zpool->driver);
- 	kfree(zpool);
 -- 
-2.17.1
+2.25.1
 

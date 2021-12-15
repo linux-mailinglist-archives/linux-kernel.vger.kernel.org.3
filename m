@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B19475278
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53FCC47527B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235845AbhLOGDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 01:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S230519AbhLOGEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 01:04:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbhLOGDp (ORCPT
+        with ESMTP id S230048AbhLOGEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 01:03:45 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77FBC061574;
-        Tue, 14 Dec 2021 22:03:44 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id i12so19387255qvh.11;
-        Tue, 14 Dec 2021 22:03:44 -0800 (PST)
+        Wed, 15 Dec 2021 01:04:44 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC5EC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:04:44 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id gu12so19406059qvb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:04:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=00gvlCVZoUfNgXMNllOlq06WfYH2Dl5nJAnc2H0V/zY=;
-        b=aLSBeezUnCNnj/bCBkX1EsTgVKD2EOSq1GAje6VHOxZFdXqZScTUkvriUssoGFQyfO
-         zjZ8Im6yeZ7ijfyUFK7PJQSQPtgsS2DqhcdHtTaRkoiO4jFQAAckIHjcwYC1VBD2XzDo
-         qBgYRuIKIjugjtvNcOqRg7Q0PLo74VmRWf20DRDeFJhGczGs2OSCuVTn3fin70nttBMm
-         9166IUNxR8eaFTNIDRS4l4mFuAn9I5vTyqx1/MoSAz+y/l0W3CbCXi4SBBh4EDMZls3A
-         QRlYfXE7k+BDTpJc5JTe8qIwTe4y0m90NA6ijBAONQEviMU2ZbYT+VcQ+8tPc2RkQe5x
-         GM/Q==
+        bh=2R5OeRRbE3oFvfnQ6EkZyxFAy5mgz3HVPN8knpgRZ+4=;
+        b=j66aG4va2AEf5a1Tg6TnnySxzXSk/TojXjsiXYw/cLsBi9ppRIfHI8dkr4sfgZq0gP
+         FnYFLdYXXaICFTm+/BRikIVOPfie847o0a895FY71HhfKMfMt3nxCh6DgjPMw5hDhZCO
+         8j7bfg9SYEfSIPzm1HtzGHrrSJtRMNvXNJB49hUOnUJf6pHyh60aR+BNW3w/Iw/81fua
+         qmJg04DcI5IjnUNcRRDfBWbOFUAQJ8ePKTpDaQYzaOz3fDO06mrn7u7AM0Ym5I+Wwrpn
+         na7f7CQDeuERZpkW6BQu4GU1hN/RyLLcS4DG95SeK4lMQS5Z6BrvQiHa4SDltuytfyaG
+         qyrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=00gvlCVZoUfNgXMNllOlq06WfYH2Dl5nJAnc2H0V/zY=;
-        b=B/5PxAFNI9wPftBZYFJCFdLJgRpCm/9CKXEAjbTtdyDU2fIzN/PSLWeOiBRmv/QFwH
-         iTeJO2iRsrKVLC4vu4lgmDL+RxWnfJukVqTO3anxIyFOiM9c6tVAkrzITWs8R+AWDvgq
-         XVEEBWuO7gEdmL5QQKQJ/D6zBm1gOiA5YYsMjqmR00zvKQiDhPtQPDLuvXYNqw0BrPdZ
-         y1lX9gHGZA0WsMHYZu7Iwumqh1JWViPj6W+gDgdnRqoGl2dh6zCgEp3qigudjMLusEyN
-         5xtokqdLPESBaL7jrZpWE1KIUk68i3poXYqO6fzP2dtA9cmkd4dWCGOQhiV/sbqplLYu
-         UtYw==
-X-Gm-Message-State: AOAM533qIbylXzk4lKVsFGwyUEtCWshHQtd4HkXdxqln2CwdIPMNpp5y
-        ccd0pho7klkEFy9kV5XUj88=
-X-Google-Smtp-Source: ABdhPJxky32i2ceyaBkcawpbUORnlOolabOZmtCf4ffSu5T0Y4eZkjDb1LJMY3itCtAnyEKlAiotwg==
-X-Received: by 2002:a05:6214:4005:: with SMTP id kd5mr982227qvb.80.1639548223748;
-        Tue, 14 Dec 2021 22:03:43 -0800 (PST)
+        bh=2R5OeRRbE3oFvfnQ6EkZyxFAy5mgz3HVPN8knpgRZ+4=;
+        b=vepwkB8WwpRNmQPocBnzQ1rtP/iZ0IGTX4sV/NqBLM0TvgVdhe4ZodliT7X+xSWRiG
+         AVjMR/2BgzPAU7BwtSRnImJcF/mWD1LKkzwUyzHohjaPBmwFG/+Qa7agouSHITBnMK+V
+         Bk+qSIG+tl73OQgrldi89+uosC2aC0PYKdB0syGn3cOZftCHV3vfxbhiKBaXbgC4mKQO
+         kVMC8FIe5Ld4u+7pjL/S+Izc52SyOhuDoY77NVQ5N2SO8By9VBKPGxnaX8oSHTm3uUZn
+         haj5Ey68QcKsa1wlAvERokSxyM/KvcbZlTqXAlrGBydukQ4EYBcqOmiH0vXv8G6Q8/Mb
+         IIpw==
+X-Gm-Message-State: AOAM533hvkNlmUNriKzuq/NPu2SlHsA1xlraTM4vamJE1y6oRJFRTR7J
+        peqs0I+R8W/f+edIW8wpAQ33OxMTSYU=
+X-Google-Smtp-Source: ABdhPJysi/QemswnOvlwmBX+VdVLw9Xg1SigpRarxG7fxAwRCV2cUswrZ/m+trtWu/kkApevLcjCgA==
+X-Received: by 2002:a0c:c710:: with SMTP id w16mr9508506qvi.114.1639548283626;
+        Tue, 14 Dec 2021 22:04:43 -0800 (PST)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id y6sm723746qtn.23.2021.12.14.22.03.41
+        by smtp.gmail.com with ESMTPSA id y16sm17017qkj.69.2021.12.14.22.04.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 22:03:43 -0800 (PST)
+        Tue, 14 Dec 2021 22:04:43 -0800 (PST)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     prabhakar.csengg@gmail.com
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+To:     fbarrat@linux.ibm.com
+Cc:     ajd@linux.ibm.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH platform-next] media/platform: remove redundant bpp variable
-Date:   Wed, 15 Dec 2021 06:03:39 +0000
-Message-Id: <20211215060339.441820-1-chi.minghao@zte.com.cn>
+Subject: [PATCH misc-next] drivers/misc: remove redundant rc variable
+Date:   Wed, 15 Dec 2021 06:04:38 +0000
+Message-Id: <20211215060438.441918-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,35 +67,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Return value directly instead of taking this in another
-redundant variable.
+Return value from ocxl_context_attach() directly instead
+of taking this in another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/misc/ocxl/file.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 2dfae9bc0bba..dc3ef0708f14 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -143,13 +143,12 @@ static unsigned int __get_bytesperpixel(struct vpfe_device *vpfe,
+diff --git a/drivers/misc/ocxl/file.c b/drivers/misc/ocxl/file.c
+index e70525eedaae..d881f5e40ad9 100644
+--- a/drivers/misc/ocxl/file.c
++++ b/drivers/misc/ocxl/file.c
+@@ -74,7 +74,6 @@ static long afu_ioctl_attach(struct ocxl_context *ctx,
  {
- 	struct vpfe_subdev_info *sdinfo = vpfe->current_subdev;
- 	unsigned int bus_width = sdinfo->vpfe_param.bus_width;
--	u32 bpp, bus_width_bytes, clocksperpixel;
-+	u32 bus_width_bytes, clocksperpixel;
+ 	struct ocxl_ioctl_attach arg;
+ 	u64 amr = 0;
+-	int rc;
  
- 	bus_width_bytes = ALIGN(bus_width, 8) >> 3;
- 	clocksperpixel = DIV_ROUND_UP(fmt->bitsperpixel, bus_width);
--	bpp = clocksperpixel * bus_width_bytes;
+ 	pr_debug("%s for context %d\n", __func__, ctx->pasid);
  
--	return bpp;
-+	return clocksperpixel * bus_width_bytes;
+@@ -86,8 +85,7 @@ static long afu_ioctl_attach(struct ocxl_context *ctx,
+ 		return -EINVAL;
+ 
+ 	amr = arg.amr & mfspr(SPRN_UAMOR);
+-	rc = ocxl_context_attach(ctx, amr, current->mm);
+-	return rc;
++	return ocxl_context_attach(ctx, amr, current->mm);
  }
  
- /*  Print Four-character-code (FOURCC) */
+ static long afu_ioctl_get_metadata(struct ocxl_context *ctx,
 -- 
 2.25.1
 

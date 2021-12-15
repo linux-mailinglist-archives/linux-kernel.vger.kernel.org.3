@@ -2,119 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25117475250
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 06:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADE4475252
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 06:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbhLOFyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 00:54:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
+        id S237908AbhLOFzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 00:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbhLOFyl (ORCPT
+        with ESMTP id S233038AbhLOFzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 00:54:41 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03F0C061574;
-        Tue, 14 Dec 2021 21:54:40 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id d2so19003451qki.12;
-        Tue, 14 Dec 2021 21:54:40 -0800 (PST)
+        Wed, 15 Dec 2021 00:55:51 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7A7C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 21:55:51 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id 8so19765972pfo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 21:55:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ns5GZijDDkvEqzTEF/tM6NXihTz99Me+1gVWWGykbaU=;
-        b=ANzdSoS3CEw7Z4a4SrAL+osqZ6CT/bB4wis+Fm7htyRQY2jg28eddDnaEhLpSEbJLg
-         dZyff25pXN8u3hRDoKgndlJetOpPqsR+n/CUkpieNzbUBLf9dzIrEG7ORXmOQr/PVU2a
-         0pjyLZRqGTK/+6WMUuq7MHZ+CMqcQrbRV+hqhl7beshgp+t7xjaEPRuPKFuCfNQkiJli
-         B0x9Sl+MV2T6UWX2JS5jp2A+seM44wUW10jbADAahYwiaAYdz0nNRyZotO2hYL/sGx9y
-         Om6VVayXtGuvUH0dXUtgkOhaCNZX1EiNpYcMG60dhEJ06dEV6OxZBv6b0hKZUP64OStV
-         T91Q==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=or349biYLFpL+w0ZA3FfJe1BgIFAwbYkc2y2ZXxAeHw=;
+        b=kDowek4cSSKDkV4UGyJuXyqi5JIWAReO4OxHgYeFCA2HgFjEt1CmeiAM/M29ggFdWg
+         zDA/vFKSK9uddEPsw6wgIXwmAHpCHwIGsC3J/1ibKr0pCY02/gmpC/7BEgpLr/c4ATlC
+         L3nLg9A3lMltpboAcgF5Vbiohm/XRqfAc6EERoIOQoo/W0TrNgmv4Sgo3e6xJjP+J/19
+         4hBUComVDTtx8ThzXRwuIHX16u61zSn3cVAorIsKN+qBdjiiNhlbPIqoOlNh/vYW33HJ
+         9LaKqv8Cfwn8Hk4NM7gRBQU/s3wspmVc7BIW1GQm67V9cop79vBDzKcQPPSZmi3etjlo
+         An/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ns5GZijDDkvEqzTEF/tM6NXihTz99Me+1gVWWGykbaU=;
-        b=6dRKypZyEY4k0TGeBIMqlxLY7tjsuMjI4v/SHZS0i75FqmTdaF4zqqS/RPHEaQd6AM
-         TkhVftG5a8X9WY7fur1fidsAUyuuUo27DEEFWsLjolmTlzV+t4PLbkzUVaUp0LFzt5Mo
-         vuvxjyTM5YjgmPA7qw170GaMSuf7ZW7vAUwqvqIu8EhBTU5sTylWvGVuHY6NJITsRKFz
-         bzPTPDpaD+0a7MrefoA+VckzxWbZDvz1RB5tg5qxZZxdsmabP6EDnGfNKRnmL4tpUWSt
-         IzKOLhzVOojmrJjqK1ttRNmLGbCXbIkaiRTByc3/lE7FyNEitNsO14jCj9vBPSv+t2D1
-         c8eA==
-X-Gm-Message-State: AOAM532ZrZY8uA5oG0q6yRhwi0tYRYY24bgwCGrTxgNyiqj5uHSM46Nk
-        T4QBmi+02ZWpSEQr9iiCeTAHajd+IPE=
-X-Google-Smtp-Source: ABdhPJzKzQP7Gb0UbghtWKjuK+K+TzKt4ir7r9Z8x2fWyjfNnJX8XtnYeT4dKZxttSWFdt2FyLwbIg==
-X-Received: by 2002:a05:620a:13ea:: with SMTP id h10mr7513026qkl.30.1639547679945;
-        Tue, 14 Dec 2021 21:54:39 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id d5sm790246qte.27.2021.12.14.21.54.35
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=or349biYLFpL+w0ZA3FfJe1BgIFAwbYkc2y2ZXxAeHw=;
+        b=mPmD9nGS+2y9z7u0kmuVkSCabee6y6Pmn0LQCoBulTLJUd3QhccOb2zJYOsKb2VOnw
+         SASPIoDRb6+Lm0ofhTCMtHpoURri5GK6rqh+PBghQ/myowyj7w4AF63Ef0unsGt51CT5
+         tc4Dse8FBFimu3U2z7x/zq1OvAICy7KY9JFAmfCG0eppxg0MRb2yUsIGnJ1Mx4f71Car
+         cg1CmexIr+/2Zg8+kTspFScVVTL03qD507SPcoKFrYTB7snrEj15eyk2ZMNTetgewNia
+         eG9MFjubF9uQrknB9N6RNFcl72sJ003yzljuDRrNKgIp2X2BDaJIZ358unWMtIhMmtIK
+         Ochw==
+X-Gm-Message-State: AOAM533+yK2CFh32PrFBkonvj/f9R/gKnkFFzrj/PgKZ9TaEFQ22tj4C
+        lr6o+wSSW4eULrBmf/3OsWsrfg==
+X-Google-Smtp-Source: ABdhPJxJk9jvjtHfRNmilmy4wTT3wZeaD4iKsJSZSfKzYHurbYvLQ7MyZFm9b5pPFVNOYSjjm5goIA==
+X-Received: by 2002:a63:102:: with SMTP id 2mr6802124pgb.311.1639547750606;
+        Tue, 14 Dec 2021 21:55:50 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:754d:1c44:62a9:6d30])
+        by smtp.gmail.com with ESMTPSA id k22sm1015260pfu.72.2021.12.14.21.55.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 21:54:39 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     jgg@nvidia.com
-Cc:     cgel.zte@gmail.com, chi.minghao@zte.com.cn,
-        dennis.dalessandro@cornelisnetworks.com,
-        devesh.s.sharma@oracle.com, dledford@redhat.com, leon@kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        mbloch@nvidia.com, selvin.xavier@broadcom.com, trix@redhat.com,
-        zealci@zte.com.cn
-Subject: [PATCH for-next v5] RDMA/ocrdma: remove unneeded variable
-Date:   Wed, 15 Dec 2021 05:54:21 +0000
-Message-Id: <20211215055421.441375-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211214235015.GA969883@nvidia.com>
-References: <20211214235015.GA969883@nvidia.com>
+        Tue, 14 Dec 2021 21:55:50 -0800 (PST)
+Date:   Wed, 15 Dec 2021 13:55:47 +0800
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
+        mchehab@kernel.org, matthias.bgg@gmail.com,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: mtk-vcodec: potential dereference of null
+ pointer
+Message-ID: <YbmDY9PbQUlHgyPF@google.com>
+References: <20211215052157.94172-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215052157.94172-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Wed, Dec 15, 2021 at 01:21:57PM +0800, Jiasheng Jiang wrote:
+> The return value of devm_kzalloc() needs to be checked.
+> To avoid use of null pointer in case of thefailure of alloc.
+> 
+> Fixes: 46233e91fa24 ("media: mtk-vcodec: move firmware implementations into their own files")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-Return status directly from function called.
+With a nit:
+s/thefailure/the failure/
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/infiniband/hw/ocrdma/ocrdma_verbs.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
-index 735123d0e9ec..3bfbf4ec040d 100644
---- a/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
-+++ b/drivers/infiniband/hw/ocrdma/ocrdma_verbs.c
-@@ -1844,12 +1844,10 @@ int ocrdma_modify_srq(struct ib_srq *ibsrq,
- 
- int ocrdma_query_srq(struct ib_srq *ibsrq, struct ib_srq_attr *srq_attr)
- {
--	int status;
- 	struct ocrdma_srq *srq;
- 
- 	srq = get_ocrdma_srq(ibsrq);
--	status = ocrdma_mbx_query_srq(srq, srq_attr);
--	return status;
-+	return ocrdma_mbx_query_srq(srq, srq_attr);
- }
- 
- int ocrdma_destroy_srq(struct ib_srq *ibsrq, struct ib_udata *udata)
-@@ -1960,7 +1958,6 @@ static int ocrdma_build_inline_sges(struct ocrdma_qp *qp,
- static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
- 			     const struct ib_send_wr *wr)
- {
--	int status;
- 	struct ocrdma_sge *sge;
- 	u32 wqe_size = sizeof(*hdr);
- 
-@@ -1972,8 +1969,7 @@ static int ocrdma_build_send(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
- 		sge = (struct ocrdma_sge *)(hdr + 1);
- 	}
- 
--	status = ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
--	return status;
-+	return ocrdma_build_inline_sges(qp, hdr, sge, wr, wqe_size);
- }
- 
- static int ocrdma_build_write(struct ocrdma_qp *qp, struct ocrdma_hdr_wqe *hdr,
--- 
-2.25.1
-
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>

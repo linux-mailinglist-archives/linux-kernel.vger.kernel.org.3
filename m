@@ -2,169 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC5E4752D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521104752EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 07:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240263AbhLOGQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 01:16:36 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:42904 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240208AbhLOGQ1 (ORCPT
+        id S230324AbhLOGXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 01:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbhLOGXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 01:16:27 -0500
-X-UUID: 5f3dd0e4a209425da322492efe1cc581-20211215
-X-UUID: 5f3dd0e4a209425da322492efe1cc581-20211215
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 22562171; Wed, 15 Dec 2021 14:16:24 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 15 Dec 2021 14:16:23 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 15 Dec
- 2021 14:16:22 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Wed, 15 Dec 2021 14:16:21 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Tzung-Bi Shih" <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v14, 19/19] media: mtk-vcodec: Remove mtk_vcodec_release_enc_pm
-Date:   Wed, 15 Dec 2021 14:15:52 +0800
-Message-ID: <20211215061552.8523-20-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211215061552.8523-1-yunfei.dong@mediatek.com>
-References: <20211215061552.8523-1-yunfei.dong@mediatek.com>
+        Wed, 15 Dec 2021 01:23:46 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75078C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:23:46 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id kl7so2581349qvb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 22:23:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=juliacomputing.com; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=Rc5xtFp4u75d66LLYKtxhf7lmOqThaEzRIkdwyUgUEc=;
+        b=H7f/qfVfKBmo+iFdBKfYICARTkjIneUXudsZaaPgNIY1nXeISYJ9ZgzT8vROoaR/j6
+         TbeX1N45CrKCQpSJnW4myRzFVD1laJa1Cs1eVEQlhd9ilSHUn8/KXrW7O00qV1fDXJhR
+         fsUQtqffQZ5TJ7OWAwaKVGaOFPk6HIxAZwPNBZn4cDd+7jOggIa5hcYiONsolLEUT93b
+         UT1IXhB/gN+VWDsHCD91PHc+op6SChCDrGehX4QoTf+hpwaVAz5tOJlLTxkApvzkoOYW
+         ht8HAvDVw0/0q1jwqNjOqJec7H1KHId3Lj/WSt4kpBXBSpG4oMyipfvSyLdgaIbW3vhq
+         HQZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Rc5xtFp4u75d66LLYKtxhf7lmOqThaEzRIkdwyUgUEc=;
+        b=7Hjn+al6sQ0N80n//jsx/Nm96ldn11Su0AhD/1mRTWkGfMiTRUeIdIZQvBoCMTAHD5
+         hzgJi8ADl/HMDUvYQkkBCkq4OqCxWuYB0d8bNMX5YLRh8pbiTrofGMyzVisnyH6QvK47
+         CaPpUij3YtZWsNIOehvF6OEuBr5NkdZyX5ORByoDayKAqxk6bmhlM2gf5tO5m6liiMNh
+         BCILEQw1423ZrylV5GADR9rky0+rU+v09bQFIc2nRabE0p3V9jWTn24/7bHj7Ih1C5ZX
+         Prrs7Rd8WrhblXpXOyYq8atDWU5SUSu3GQUMaEpR/xZxeqMXNRgB3nBNsSARb1fSb8l+
+         njhg==
+X-Gm-Message-State: AOAM53335yH9n5fE0TRZZ16LxwczDXqCEopirhqzzytmaY+4YDXy1NAL
+        0wQTyp35LAXxTuu3nffLBtd/xAebYhYbQA==
+X-Google-Smtp-Source: ABdhPJwrqhJXWl1YMtTct0xm5CppzumvwPiBGXjS6u4bkCZS76kogu7ZJdfk89rUy2GooCf6KVwrqQ==
+X-Received: by 2002:a05:6214:246d:: with SMTP id im13mr2449436qvb.44.1639549425089;
+        Tue, 14 Dec 2021 22:23:45 -0800 (PST)
+Received: from juliacomputing.com ([2601:184:4780:3aef:8c6:cc82:9394:77a7])
+        by smtp.gmail.com with ESMTPSA id r8sm857396qtw.35.2021.12.14.22.23.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 22:23:44 -0800 (PST)
+Date:   Wed, 15 Dec 2021 01:23:42 -0500
+From:   Keno Fischer <keno@juliacomputing.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gorcunov@openvz.org, khlebnikov@openvz.org, oleg@redhat.com,
+        akpm@linux-foundation.org, keescook@chromium.org, tj@kernel.org,
+        dbueso@suse.de, matthltc@us.ibm.com,
+        kosaki.motohiro@jp.fujitsu.com, xemul@parallels.com,
+        linux-mm@kvack.org
+Subject: [PATCH] c/r: prctl: Remove PR_SET_MM_EXE_FILE old file mapping
+ restriction
+Message-ID: <20211215062342.GA1548576@juliacomputing.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are only two lines in mtk_vcodec_release_enc_pm, using
-pm_runtime_disable and put_device instead directly.
+* What this patch does
 
-Move pm_runtime_enable outside mtk_vcodec_release_enc_pm to symmetry with
-pm_runtime_disable, after that, rename mtk_vcodec_init_enc_pm to *_clk since
-it only has clock operations now.
+This patch changes the behavior of replace_mm_exe_file to remove the
+restriction that the current mm may not have any mappings of the
+previous exe_file. This restriction has a bit of a complicated history,
+which I will summarize below, but the upshot is that whatever value it
+may have had when originally introduced (and it is worth pointing out
+that the history does not suggest it was ever seen as a security
+feature) - in its current state, the restriction is essentially useless
+and merely forces userspace into awkward contusions (and extra system
+calls) to be able to use it.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Co-developed-by: Yong Wu <yong.wu@mediatek.com>
+* Context/History
+
+The /proc/<pid>/exe symlink provides access to the file that was used
+to execve <pid>. It is used for example by gdb to find the on-disk location
+of the executed binary and read its debug information.
+
+Originally, the /proc/<pid>/exe symlink was immutable, set by the
+kernel upon execve and never changed again. However, in b32dfe377
+("c/r: prctl: add ability to set new mm_struct::exe_file"), `prctl`
+gained the ability to modify this symlink for use by c/r, under a couple
+of restrictions:
+
+1. The process contains no mappings marked as VM_EXECUTABLE (i.e. mappings
+   created in execve or by splitting mappings thereof).
+2. The new file has appropriate access permissions
+3. The call may only be made once
+4. The calling process has CAP_SYS_RESOURCE
+
+The restriction we're considering here is point 1. For completeness, I
+will note that restriction 3 was subsequently dropped, and restriction 4
+was expanded to also allow the local user namespace's root to perform
+the operation (as long as this was done using `PR_SET_MM_MAP`).
+
+On restriction 1, the original commit notes that:
+
+    Note it allows to change /proc/$pid/exe if there are no VM_EXECUTABLE
+    vmas present for current process, simply because this feature is a special
+    to C/R and mm::num_exe_file_vmas become meaningless after that.
+
+The `num_exe_file_vmas` counter was a refcount for the number of mapped VMAs
+with the VM_EXECUTABLE flag set. It was used to drop the reference of
+/proc/<pid>/exe to the execve'd file if all mappings to it created in
+sys_execve were subsequently removed. Thus, as best I can tell, this restriction
+was simply a convenience to avoid the additional complexity of correctly handling
+non-zero `num_exe_file_vmas` while updating the exe_file.
+
+However, `num_exe_file_vmas` was removed a few months later in e9714acf8c
+("mm: kill vma flag VM_EXECUTABLE and mm->num_exe_file_vmas") with the
+justification that nobody depended on it and the functionality could
+be replaced by an appropriate use of PR_SET_MM_EXE_FILE.
+
+Because of this change, the restriction was updated in bafb282d ("c/r: prctl:
+update prctl_set_mm_exe_file() after mm->num_exe_file_vmas removal") to
+not allow any mappings present in the memory map of the process other
+than the *new* exe_file (a more strict restriction than the original
+restriction) and then again in 4229fb1dc ("c/r: prctl: less paranoid
+prctl_set_mm_exe_file()") to disallow any mappings of the old exe_file
+(still a more strict restriction than the original restriction on
+VM_EXECUTABLE mappings, as now any mapping with the same path would
+be forbidden not just those created in execve).
+
+It is worth noting that at this point the check for mappings of the
+original file and the modification to mm->exe_file were still protected
+by the mm's mmap_sem and thus atomic with respect to other modifications
+of the mm. However, this too was changed in 6e399cd14 ("prctl: avoid using mmap_sem
+for exe_file serialization") and the prctl now separately acquires the
+mm's read sema just for the purpose of enforcing the restriction (but
+does not enforce any sort of atomicity with respect to the update of
+the exe_file).
+
+Except for minor refactorings, this is essentially the state of the
+restriction in today's kernel. It appears to me that this was originally
+a technical restriction to avoid additional complexity from the interaction
+with VM_EXECTUABLE, but when this was removed the question of whether the
+restriction was still sensible was not revisited. I searched around for
+any additional justifications for this restriction, but could not
+find any, and given the lack of enforced atomicity, it does not seem
+that any guarantees are actually provided in practice.
+
+* The use case for dropping the restriction
+
+Apart from a general dislike for executing unnecessary code, there are
+some practical reasons to want to drop the restriction. In particular,
+it is currently awkward to call PR_SET_MM_MAP from an executable itself.
+In the original c/r usecase, the restorer was a ptracer and the original
+exe_file merely a stub that essentially did nothing, so it was no trouble
+to unmap it completely, However, there are a few usecases where
+PR_SET_MM_MAP would be useful that are not ptracers.
+
+One such use case are preloaders that run before ld.so and the main
+executable in order to control the memory layout. Wine has such a
+preloader, but they are also useful to control memory layout for
+debugging purposes. Another use case are non-ptrace checkpoint/restore
+systems (ptrace is powerful, but not particularly performant, so
+c/r systems that are ok with some state changing can gain
+performance by not using it).
+
+It is of course possible to use PR_SET_MM_MAP in these contexts
+by relocating the executable to private memory and unmapping the
+original, but this introduces additional unnecessary complexity for
+what appears to be no good reason.
+
+* Summary
+
+As far as I can tell, the restriction against mappings of the old
+exe_file in PR_SET_MM_EXE_FILE/PR_SET_MM_MAP exists for no good
+reason, but is simply an artifact of its development process.
+Because it makes it hard to use this APIs in legitimate contexts
+I propose that the restriction be dropped.
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c | 9 ++++++---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c  | 9 +--------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h  | 3 +--
- 3 files changed, 8 insertions(+), 13 deletions(-)
+ kernel/fork.c | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index 0f326d82dea0..7816efb90cbe 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -11,6 +11,7 @@
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/of.h>
-+#include <linux/pm_runtime.h>
- #include <media/v4l2-event.h>
- #include <media/v4l2-mem2mem.h>
- #include <media/videobuf2-dma-contig.h>
-@@ -260,7 +261,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		return PTR_ERR(dev->fw_handler);
- 
- 	dev->venc_pdata = of_device_get_match_data(&pdev->dev);
--	ret = mtk_vcodec_init_enc_pm(dev);
-+	ret = mtk_vcodec_init_enc_clk(dev);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Failed to get mtk vcodec clock source!");
- 		goto err_enc_pm;
-@@ -372,7 +373,8 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- err_enc_alloc:
- 	v4l2_device_unregister(&dev->v4l2_dev);
- err_res:
--	mtk_vcodec_release_enc_pm(dev);
-+	pm_runtime_disable(dev->pm.dev);
-+	put_device(dev->pm.larbvenc);
- err_enc_pm:
- 	mtk_vcodec_fw_release(dev->fw_handler);
- 	return ret;
-@@ -462,7 +464,8 @@ static int mtk_vcodec_enc_remove(struct platform_device *pdev)
- 		video_unregister_device(dev->vfd_enc);
- 
- 	v4l2_device_unregister(&dev->v4l2_dev);
--	mtk_vcodec_release_enc_pm(dev);
-+	pm_runtime_disable(dev->pm.dev);
-+	put_device(dev->pm.larbvenc);
- 	mtk_vcodec_fw_release(dev->fw_handler);
- 	return 0;
- }
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-index 0c8c8f86788c..0825c6ec4eb7 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
-@@ -13,7 +13,7 @@
- #include "mtk_vcodec_enc_pm.h"
- #include "mtk_vcodec_util.h"
- 
--int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
-+int mtk_vcodec_init_enc_clk(struct mtk_vcodec_dev *mtkdev)
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 3244cc56b697..11e01dae8bbc 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1203,27 +1203,9 @@ int set_mm_exe_file(struct mm_struct *mm, struct file *new_exe_file)
+  */
+ int replace_mm_exe_file(struct mm_struct *mm, struct file *new_exe_file)
  {
- 	struct device_node *node;
- 	struct platform_device *pdev;
-@@ -86,13 +86,6 @@ int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
- 	return ret;
- }
+-	struct vm_area_struct *vma;
+ 	struct file *old_exe_file;
+ 	int ret = 0;
  
--void mtk_vcodec_release_enc_pm(struct mtk_vcodec_dev *mtkdev)
--{
--	pm_runtime_disable(mtkdev->pm.dev);
--	put_device(mtkdev->pm.larbvenc);
--}
+-	/* Forbid mm->exe_file change if old file still mapped. */
+-	old_exe_file = get_mm_exe_file(mm);
+-	if (old_exe_file) {
+-		mmap_read_lock(mm);
+-		for (vma = mm->mmap; vma && !ret; vma = vma->vm_next) {
+-			if (!vma->vm_file)
+-				continue;
+-			if (path_equal(&vma->vm_file->f_path,
+-				       &old_exe_file->f_path))
+-				ret = -EBUSY;
+-		}
+-		mmap_read_unlock(mm);
+-		fput(old_exe_file);
+-		if (ret)
+-			return ret;
+-	}
 -
--
- void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm)
- {
- 	struct mtk_vcodec_clk *enc_clk = &pm->venc_clk;
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
-index b7ecdfd74823..bc455cefc0cd 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
-@@ -9,8 +9,7 @@
- 
- #include "mtk_vcodec_drv.h"
- 
--int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *dev);
--void mtk_vcodec_release_enc_pm(struct mtk_vcodec_dev *dev);
-+int mtk_vcodec_init_enc_clk(struct mtk_vcodec_dev *dev);
- 
- void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm);
- void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm);
+ 	/* set the new file, lockless */
+ 	ret = deny_write_access(new_exe_file);
+ 	if (ret)
 -- 
 2.25.1
 

@@ -2,103 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E784475177
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B8C47517A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:46:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239620AbhLODmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 22:42:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60637 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239608AbhLODmh (ORCPT
+        id S239628AbhLODqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 22:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235616AbhLODqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 22:42:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639539754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UKPN2S3SXVfn+2YMA0tbS8ft/AvqrEmCxTbCDiXtIYc=;
-        b=TbmzACF4p0thLbNOAIXXiEEGsjpT/6Xmaec/jLM/ITkuFwnRZFt/WOjUfpn31eC3Aq0PKt
-        k9N56jOy8DByTfCwkiTsQHDWKUAPwTzAOdXMl9kq9JC+HtHamvAIIF/BrRgboVx1CjV+xk
-        aFrhP9oRwv8U0JuxwsfPpW8RWhT4KY0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-191-0POoudTmOk2yvbrwSVZmvw-1; Tue, 14 Dec 2021 22:42:31 -0500
-X-MC-Unique: 0POoudTmOk2yvbrwSVZmvw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AEA6C1006AA0;
-        Wed, 15 Dec 2021 03:42:28 +0000 (UTC)
-Received: from localhost (ovpn-12-120.pek2.redhat.com [10.72.12.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id ED62E752D7;
-        Wed, 15 Dec 2021 03:42:21 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 11:42:19 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-Subject: Re: [PATCH v17 02/10] x86: kdump: make the lower bound of crash
- kernel reservation consistent
-Message-ID: <20211215034219.GB10336@MiWiFi-R3L-srv>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-3-thunder.leizhen@huawei.com>
- <YbjrjpehprvoRXbV@zn.tnic>
- <YbjvXl51hc6GZa71@arm.com>
+        Tue, 14 Dec 2021 22:46:37 -0500
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A663C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 19:46:37 -0800 (PST)
+Received: by mail-vk1-xa35.google.com with SMTP id m19so13790866vko.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 19:46:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=posk.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6TekgYXvLI9+PhAB10t1a5FqyPcohZFo1S/h5MUzllc=;
+        b=BFsYMu+UZJj1SArv/r1ASXkdEhkDV6ze8dTrFKXh3BqRPxE59I75lLftewi2N6Gdp/
+         hVHKuBSEEOKvlfo92eHsingxtFZVif9P2kEl6cecf9Wk9hgAZt3SwH61VWQ5b7m3J709
+         IoSEdRybiuRcZB9Tc8r+YKx7thHVGC2NJjigGfuhZ8jYYnD9Hpweg6EIeb/5PtEUWuvu
+         kyEP1L9s9nZcncRMdGj7SPlQOUtLRYUv61wDX+vOEyJAa1M6B4sbg9XU/AZqbfSyq23I
+         d6/QxcitDHYWCTs0pWw+Zuc6i5WaCwCgQSyJJ8IwrdQmpo/1vzgd4eMJBefEbUP2/lW2
+         GgNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6TekgYXvLI9+PhAB10t1a5FqyPcohZFo1S/h5MUzllc=;
+        b=HxLKor7iSNBsED6ptCGaFtScKRUw9y9+BfnCbiDEoUjutsPtp5nBUF8iWWMYE8TOQj
+         hakRaocumG1hr8qGlD1fC7uWR94KdXEflR4YQ1PVSLdBfxnCWJ80PHRV0EeUByzLutfB
+         M+vudW5s0rU5WV/ISgUBIdRgNjgz68NpQJ/OLvE8Sj4P6xvh0sDivLn6dTuM3pFdGGBK
+         bWN3SA3dN/FAbpsE72yBrmxgGnlvSLvXSKJCtN9gjLaBLdEZkPCQ5vg8MaPr01byhTku
+         W2PGfcfefuUaf0Co6eB0lq1mX3H2pMpqYwnZ61fwMWZNEmw1ttEm0tNQLIWPQ61/mmll
+         9YfQ==
+X-Gm-Message-State: AOAM532Yvkv8M+ryzHQ35SUt2RyCIEtujJKnWPcuUVIddHIvzJ7j8mkN
+        7yXHirSTyaEU7kYz3VmgumI3+2V1E6fJ/d/mu/CPZw==
+X-Google-Smtp-Source: ABdhPJwT1P/z+guQQbhBVQaBckIuopJw6LK6HpQeJEPxLY8JvjeQl8Z+vJL49XKvD80YtUUcd36/oxeIFPPgqM4AECg=
+X-Received: by 2002:a05:6122:221c:: with SMTP id bb28mr2417373vkb.27.1639539996199;
+ Tue, 14 Dec 2021 19:46:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbjvXl51hc6GZa71@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+References: <20211214204445.665580974@infradead.org>
+In-Reply-To: <20211214204445.665580974@infradead.org>
+From:   Peter Oskolkov <posk@posk.io>
+Date:   Tue, 14 Dec 2021 19:46:25 -0800
+Message-ID: <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
+Subject: Re: [RFC][PATCH 0/3] sched: User Managed Concurrency Groups
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-api@vger.kernel.org, x86@kernel.org,
+        Paul Turner <pjt@google.com>, Peter Oskolkov <posk@google.com>,
+        Andrei Vagin <avagin@google.com>, Jann Horn <jannh@google.com>,
+        Thierry Delisle <tdelisle@uwaterloo.ca>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/21 at 07:24pm, Catalin Marinas wrote:
-> On Tue, Dec 14, 2021 at 08:07:58PM +0100, Borislav Petkov wrote:
-> > On Fri, Dec 10, 2021 at 02:55:25PM +0800, Zhen Lei wrote:
-> > > From: Chen Zhou <chenzhou10@huawei.com>
-> > > 
-> > > The lower bounds of crash kernel reservation and crash kernel low
-> > > reservation are different, use the consistent value CRASH_ALIGN.
-> > 
-> > A big WHY is missing here to explain why the lower bound of the
-> > allocation range needs to be 16M and why was 0 wrong?
-> 
-> I asked the same here:
-> 
-> https://lore.kernel.org/r/20210224143547.GB28965@arm.com
-> 
-> IIRC Baoquan said that there is a 1MB reserved for x86 anyway in the
-> lower part, so that's equivalent in practice to starting from
-> CRASH_ALIGN.
+On Tue, Dec 14, 2021 at 12:55 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Hi,
+>
+> This is actually tested code; but still missing the SMP wake-to-idle machinery.
+> I still need to think about that.
 
-Yeah, even for i386, there's area reserved by BIOS inside low 1M.
-Considering the existing alignment CRASH_ALIGN which is 16M, we
-definitely have no chance to get memory starting from 0. So starting
-from 16M can skip the useless memblock searching, and make the
-crashkernel low reservation consisten with crashkernel reservation on
-allocation code.
+Thanks, Peter!
 
-> 
-> Anyway, I agree the commit log should describe this.
+At a first glance, your main patch does not look much smaller than
+mine, and I thought the whole point of re-doing it was to throw away
+extra features and make things smaller/simpler...
 
-Yes, totally.
+Anyway, I'll test your patchset over the next week or so and let you
+know if anything really needed is missing (other than waking an idle
+server if there is one on a worker wakeup; this piece is definitely
+needed).
 
+>
+> I'll post my test-hack as a reply, but basically it does co-operative and
+> preemptive UP-like user scheduling.
+>
+> Patches go on top of tip/master as they rely on the .fixup removal
+> recently merged in tip/x86/core.
+>
+> Also, I still need to audit a bunch of mm code, because I'm not sure things are
+> actually as well behaved as this code supposes they are.
+>

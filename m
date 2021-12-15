@@ -2,51 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6383B475513
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD2B47551B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241136AbhLOJXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:23:22 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:56034 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241129AbhLOJXU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:23:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=+zVtvNYbXivg34WLxycg7O1rtuc4e8poX+c0u7FpMkY=; b=irXRlSt+hiag+XSrNj+AzxWMmB
-        MPa8lb4Wknhjdh3DOKMVwpwywL5O1rA+CsfCIQr4KUPp2+PuUzjyQJKnBbZcr1L0I5dTjGOYF6mp2
-        pzjeP4014czJ0E3dyZZwv+gnnjPY+X+HuhL4hj+K2M4wXqn7wHmfX0BKRX8i9Jqha4+Q=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mxQVK-00GcsB-G8; Wed, 15 Dec 2021 10:23:18 +0100
-Date:   Wed, 15 Dec 2021 10:23:18 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Ismail, Mohammad Athari" <mohammad.athari.ismail@intel.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Voon, Weifeng" <weifeng.voon@intel.com>,
-        "Wong, Vee Khee" <vee.khee.wong@intel.com>
-Subject: Re: [BUG] net: phy: genphy_loopback: add link speed configuration
-Message-ID: <Ybm0Bgclc0FP/Q3f@lunn.ch>
-References: <CO1PR11MB4771251E6D2E59B1B413211FD5759@CO1PR11MB4771.namprd11.prod.outlook.com>
- <YbhmTcFITSD1dOts@lunn.ch>
- <CO1PR11MB477111F4B2AF4EFA61D9B7F4D5769@CO1PR11MB4771.namprd11.prod.outlook.com>
+        id S241156AbhLOJY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:24:26 -0500
+Received: from mailgw.kylinos.cn ([123.150.8.42]:57517 "EHLO nksmu.kylinos.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236355AbhLOJYZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 04:24:25 -0500
+X-UUID: f7c97c1c2b8a479baf36adbbbce09b56-20211215
+X-UUID: f7c97c1c2b8a479baf36adbbbce09b56-20211215
+X-User: zhouzongmin@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by nksmu.kylinos.cn
+        (envelope-from <zhouzongmin@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1907932870; Wed, 15 Dec 2021 17:32:29 +0800
+From:   Zongmin Zhou <zhouzongmin@kylinos.cn>
+To:     airlied@linux.ie, daniel@ffwll.ch
+Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Zongmin Zhou <zhouzongmin@kylinos.cn>
+Subject: [PATCH] drm/amdgpu: fixup bad vram size on gmc v8
+Date:   Wed, 15 Dec 2021 17:23:37 +0800
+Message-Id: <20211215092337.340266-1-zhouzongmin@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CO1PR11MB477111F4B2AF4EFA61D9B7F4D5769@CO1PR11MB4771.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Thanks for the suggestion. The proposed solution also doesn't work. Still get -110 error.
+Some boards(like RX550) seem to have garbage in the upper
+16 bits of the vram size register.  Check for
+this and clamp the size properly.  Fixes
+boards reporting bogus amounts of vram.
 
-Please can you trace where this -110 comes from. Am i looking at the
-wrong poll call?
+after add this patch,the maximum GPU VRAM size is 64GB,
+otherwise only 64GB vram size will be used.
 
-Thanks
-	Andrew
+Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
+---
+ drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
+index 492ebed2915b..63b890f1e8af 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
+@@ -515,10 +515,10 @@ static void gmc_v8_0_mc_program(struct amdgpu_device *adev)
+ static int gmc_v8_0_mc_init(struct amdgpu_device *adev)
+ {
+ 	int r;
++	u32 tmp;
+ 
+ 	adev->gmc.vram_width = amdgpu_atombios_get_vram_width(adev);
+ 	if (!adev->gmc.vram_width) {
+-		u32 tmp;
+ 		int chansize, numchan;
+ 
+ 		/* Get VRAM informations */
+@@ -562,8 +562,15 @@ static int gmc_v8_0_mc_init(struct amdgpu_device *adev)
+ 		adev->gmc.vram_width = numchan * chansize;
+ 	}
+ 	/* size in MB on si */
+-	adev->gmc.mc_vram_size = RREG32(mmCONFIG_MEMSIZE) * 1024ULL * 1024ULL;
+-	adev->gmc.real_vram_size = RREG32(mmCONFIG_MEMSIZE) * 1024ULL * 1024ULL;
++	tmp = RREG32(mmCONFIG_MEMSIZE);
++	/* some boards may have garbage in the upper 16 bits */
++	if (tmp & 0xffff0000) {
++		DRM_INFO("Probable bad vram size: 0x%08x\n", tmp);
++		if (tmp & 0xffff)
++			tmp &= 0xffff;
++	}
++	adev->gmc.mc_vram_size = tmp * 1024ULL * 1024ULL;
++	adev->gmc.real_vram_size = adev->gmc.mc_vram_size;
+ 
+ 	if (!(adev->flags & AMD_IS_APU)) {
+ 		r = amdgpu_device_resize_fb_bar(adev);
+-- 
+2.25.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus

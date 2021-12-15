@@ -2,168 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2740847585F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417F2475865
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242285AbhLOMGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:06:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34233 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236954AbhLOMF6 (ORCPT
+        id S242302AbhLOMGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:06:40 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:40129 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236954AbhLOMGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:05:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639569958;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5nFpQ6cduCeSMbccEFc0gIMqs2KB4TheEAXhDJB6cHg=;
-        b=dSBu4Mi/k2obBGbT591gKcfEs/gtyo/8/uKjb8QMrLuPNAomyFE5oGTkjgWuxU+z1mwvqs
-        8yyCjvNhz0URKwAv+AUSId2jrvVvJTXmIghwB1D3Ab+N5T2Mwj65WyIKfOqBmIDoFDG7Ep
-        bdgwvWB7WgUrJXYF3QmOh2FaURJKQfs=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-125-IKJ1UGfZNWGVUFm_w_WOeA-1; Wed, 15 Dec 2021 07:05:56 -0500
-X-MC-Unique: IKJ1UGfZNWGVUFm_w_WOeA-1
-Received: by mail-wr1-f70.google.com with SMTP id h7-20020adfaa87000000b001885269a937so5884993wrc.17
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:05:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=5nFpQ6cduCeSMbccEFc0gIMqs2KB4TheEAXhDJB6cHg=;
-        b=JPhZOmRENgaEsYGI7yI1EfMs4q9PSyREEyRpwG2ITs9+1PGe1CNL8DIXPqiWlFRFhZ
-         vNi/C70CyR6aZ4ynva8Bk+7IpIRm+rxkG20To4yE57vAwv9C2ARO4lT78J3PM9PVT1h1
-         kGJlZ8zkoObvzN0wJ0LFH08IZXoliMH9inPLocc+1cA4wjh8yvEimzAtKniVWalyZDLc
-         RgIcDOU7GxC1t61mEemLyZzJnXtZK0L7cIeCeNB8aMJDqylxwashFnY+FcXTwKF29CVg
-         cbDuF9rDZwEShOhj13RFhf00YOMPqTm29nNeavKsakeflWDYL34vbWGifDW14H/y0ajY
-         gLKw==
-X-Gm-Message-State: AOAM530nXI7r3qp5X8TivO6oSGVwY7tTl3YuMRyGRwK7YN0f91KRqR/L
-        te9aDcxo/1/+zrYQak4uxoNN/S85WBdVt3lKON/BelkeAYeqNFkI/XhnVb3P8rJh6/96Ygl77D7
-        bWVWpGLpwPQH3Ns4fT3EybCih
-X-Received: by 2002:a5d:5912:: with SMTP id v18mr4046379wrd.144.1639569955593;
-        Wed, 15 Dec 2021 04:05:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyxnVBjLRjVoyS6pA2ah+8a/ieDtsvKK9/J9/tJ54F2erl5Katslc3OMv9ZF9ctr1FZVwPxVg==
-X-Received: by 2002:a5d:5912:: with SMTP id v18mr4046365wrd.144.1639569955366;
-        Wed, 15 Dec 2021 04:05:55 -0800 (PST)
-Received: from [10.33.192.183] (nat-pool-str-t.redhat.com. [149.14.88.106])
-        by smtp.gmail.com with ESMTPSA id m20sm5369211wmq.11.2021.12.15.04.05.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 04:05:54 -0800 (PST)
-Message-ID: <6aaf6c60-a258-29e3-fcec-82c77d3945a4@redhat.com>
-Date:   Wed, 15 Dec 2021 13:05:53 +0100
+        Wed, 15 Dec 2021 07:06:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639569999; x=1671105999;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fMixDV+hpNbYQgek63SXWJhHVAjFsf+hOokboNZBz2g=;
+  b=eosEveaLkkQruSdc9rBUVdiOKPH/9ggzEoE+wAL9g7+12yPbhHWBfRHx
+   uHskI7Xh3dvjlgHDQIE7LDWudK7n0QZWBrzo5JxjzVJLBqH9PQmpvXOYW
+   Tu/wjonaXvaaPalVQcA/b2KQGpLjrzwbfoUt4h/A3jaHfgfopQUxPxGoF
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Dec 2021 04:06:38 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 04:06:37 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 15 Dec 2021 04:06:37 -0800
+Received: from [10.50.9.33] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 15 Dec
+ 2021 04:06:31 -0800
+Message-ID: <5ebbc96a-941f-8f64-e6e9-d70d38260b9d@quicinc.com>
+Date:   Wed, 15 Dec 2021 17:36:00 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-US
-To:     Tony Krowiak <akrowiak@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        linux-s390@vger.kernel.org, Halil Pasic <pasic@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-References: <20211201141110.94636-1-thuth@redhat.com>
- <8512bb0a-a34a-09b0-65f3-781f3d092364@linux.ibm.com>
- <87k0g8scx1.fsf@redhat.com>
- <1eb9ca5c-b1bb-b768-64ee-e4a1b31bb171@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-Subject: Re: [RFC PATCH] s390: vfio-ap: Register the vfio_ap module for the
- "ap" parent bus
-In-Reply-To: <1eb9ca5c-b1bb-b768-64ee-e4a1b31bb171@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V2 4/8] usb: dwc3: drd: Register the eud connector child
+ node for dwc3
+Content-Language: en-CA
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>,
+        <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
+        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
+        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>
+References: <cover.1638430506.git.quic_schowdhu@quicinc.com>
+ <bcb48839a520b8bfc9b09e7a26ba8a8459ab602d.1638430506.git.quic_schowdhu@quicinc.com>
+ <YbenLLPUYVX50CJc@robh.at.kernel.org>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <YbenLLPUYVX50CJc@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2021 22.55, Tony Krowiak wrote:
-> 
-> 
-> On 12/13/21 11:11, Cornelia Huck wrote:
->> On Mon, Dec 13 2021, Harald Freudenberger <freude@linux.ibm.com> wrote:
->>
->>> On 01.12.21 15:11, Thomas Huth wrote:
->>>> The crypto devices that we can use with the vfio_ap module are sitting
->>>> on the "ap" bus, not on the "vfio_ap" bus that the module defines
->>>> itself. With this change, the vfio_ap module now gets automatically
->>>> loaded if a supported crypto adapter is available in the host.
->>>>
->>>> Signed-off-by: Thomas Huth <thuth@redhat.com>
->>>> ---
->>>>   Note: Marked as "RFC" since I'm not 100% sure about it ...
->>>>         please review carefully!
->>>>
->>>>   drivers/s390/crypto/vfio_ap_drv.c | 2 +-
->>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/s390/crypto/vfio_ap_drv.c 
->>>> b/drivers/s390/crypto/vfio_ap_drv.c
->>>> index 4d2556bc7fe5..5580e40608a4 100644
->>>> --- a/drivers/s390/crypto/vfio_ap_drv.c
->>>> +++ b/drivers/s390/crypto/vfio_ap_drv.c
->>>> @@ -39,7 +39,7 @@ static struct ap_device_id ap_queue_ids[] = {
->>>>       { /* end of sibling */ },
->>>>   };
->>>> -MODULE_DEVICE_TABLE(vfio_ap, ap_queue_ids);
->>>> +MODULE_DEVICE_TABLE(ap, ap_queue_ids);
->>>>   /**
->>>>    * vfio_ap_queue_dev_probe:
->>> I had a chance to check this now.
->>> First I have to apologize about the dispute with vfio devices appearing 
->>> on the ap bus.
->>> That's not the case with this patch. As Connie states the 
->>> MODULE_DEVICE_TABLE() does not
->>> change the parent of a device and vfio_ap_drv is a driver for ap devices 
->>> and thus
->>> belongs to the ap bus anyway.
->>> So what's left is that with this change the vfio_ap kernel module is 
->>> automatically loaded
->>> when an ap device type 10-13 is recognized by the ap bus. So the 
->>> intention of the patch
->>> is fulfilled.
->>> Yet another kernel module which may occupy memory but will never get used 
->>> by most customers.
->>> This may not be a problem but I had a glance at the list of kernel 
->>> modules loaded on my
->>> LPAR with and without the patch and the difference is:
->>> ...
->>> kvm                   512000  1 vfio_ap
->>> vfio_ap                28672  0
->>> ...
->>> So the vfio_ap module has a dependency to the biggest kernel module ever 
->>> - kvm.
->>> Do I need to say something more?
->>>
->>> If this dependency is removed then I would not hesitate to accept this 
->>> patch. However
->>> this is up to Tony as he is the maintainer of the vfio ap device driver.
->> I don't think you can drop the kvm reference, as the code in vfio-ap
->> obviously depends on it...
->>
->> One possibility is simply blocking autoload of the module in userspace by
->> default, and only allow it to be loaded automatically when e.g. qemu-kvm
->> is installed on the system. This is obviously something that needs to be
->> decided by the distros.
->>
->> (kvm might actually be autoloaded already, so autoloading vfio-ap would
->> not really make it worse.)
-> 
-> Of the vfio_ccw module is automatically loaded, then the kvm
-> module will also get loaded. I startup up a RHEL8.3 system and
-> sure enough, the vfio_ccw module is loaded along with the
-> kvm, vfio and mdev modules. If this is true for all distros, then
-> it wouldn't make much difference if the vfio_ap module is
-> autoloaded too.
 
-I think I don't mind too much if we auto-load vfio-ap or not - but I think 
-we should make it consistent with vfio-ccw. So either auto-load both modules 
-(if the corresponding devices are available), or remove the 
-MODULE_DEVICE_TABLE() entries from both modules?
+On 12/14/2021 1:33 AM, Rob Herring wrote:
+> On Thu, Dec 02, 2021 at 03:21:23PM +0530, Souradeep Chowdhury wrote:
+>> Register the child node for dwc3 which is the "eud_usb_connector".
+>> The eud driver will be able to switch the usb role from device to
+>> host and vice versa using the role switch property of dwc3 node.
+>>
+>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/drd.c | 26 ++++++++++++++++++++++++++
+>>   1 file changed, 26 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+>> index d7f7683..b4ea55c 100644
+>> --- a/drivers/usb/dwc3/drd.c
+>> +++ b/drivers/usb/dwc3/drd.c
+>> @@ -8,6 +8,7 @@
+>>    */
+>>   
+>>   #include <linux/extcon.h>
+>> +#include <linux/of_platform.h>
+>>   #include <linux/of_graph.h>
+>>   #include <linux/platform_device.h>
+>>   #include <linux/property.h>
+>> @@ -164,6 +165,27 @@ static int dwc3_otg_get_irq(struct dwc3 *dwc)
+>>   	return irq;
+>>   }
+>>   
+>> +static int dwc3_register_eud(struct dwc3 *dwc)
+>> +{
+>> +	struct device		*dev = dwc->dev;
+>> +	struct device_node	*np = dev->of_node;
+>> +	int                     ret;
+>> +
+>> +	of_get_child_by_name(np, "eud_usb_connector");
+> Connector nodes are named 'connector' or possibly 'usb-connector'. If
+> you are creating an ABI with the node name, it should be documented.
+> However, it's preferred to use 'compatible' for identifying nodes rather
+> than a node name.
+Ack.
+>> +	if (!np) {
+>> +		dev_dbg(dev, "no usb_connector child node specified\n");
+>> +		return 0;
+>> +	}
+>> +
+>> +	ret = of_platform_populate(np, NULL, NULL, dev);
+> But why is any of this needed. The connector doesn't have a driver (I
+> expect eventually we will) and the EUD device is not a child.
 
-  Thomas
+Ack. This can be removed as we are no longer mapping EUD as a type C 
+connector.
 
+
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to register usb_connector - %d\n", ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   void dwc3_otg_init(struct dwc3 *dwc)
+>>   {
+>>   	u32 reg;
+>> @@ -580,6 +602,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
+>>   		ret = dwc3_setup_role_switch(dwc);
+>>   		if (ret < 0)
+>>   			return ret;
+>> +
+>> +		ret = dwc3_register_eud(dwc);
+>> +		if (ret < 0)
+>> +			return ret;
+>>   	} else if (dwc->edev) {
+>>   		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+>>   		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+>> -- 
+>> 2.7.4
+>>
+>>

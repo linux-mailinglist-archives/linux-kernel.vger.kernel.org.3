@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90367475AE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC89475AE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243545AbhLOOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:43:25 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4292 "EHLO
+        id S243513AbhLOOnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:43:22 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4290 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243499AbhLOOnS (ORCPT
+        with ESMTP id S243495AbhLOOnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Dec 2021 09:43:18 -0500
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JDdCw5gjsz67wfM;
-        Wed, 15 Dec 2021 22:38:52 +0800 (CST)
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JDdGW1zWsz67Q1M;
+        Wed, 15 Dec 2021 22:41:07 +0800 (CST)
 Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 15:43:13 +0100
+ 15.1.2308.20; Wed, 15 Dec 2021 15:43:15 +0100
 Received: from localhost.localdomain (10.69.192.58) by
  lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 14:43:10 +0000
+ 15.1.2308.20; Wed, 15 Dec 2021 14:43:13 +0000
 From:   John Garry <john.garry@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@huawei.com>, Qi Liu <liuqi115@huawei.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH 6/8] scsi: hisi_sas: Prevent parallel FLR and controller reset
-Date:   Wed, 15 Dec 2021 22:37:39 +0800
-Message-ID: <1639579061-179473-7-git-send-email-john.garry@huawei.com>
+Subject: [PATCH 7/8] scsi: hisi_sas: Fix phyup timeout on FPGA
+Date:   Wed, 15 Dec 2021 22:37:40 +0800
+Message-ID: <1639579061-179473-8-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1639579061-179473-1-git-send-email-john.garry@huawei.com>
 References: <1639579061-179473-1-git-send-email-john.garry@huawei.com>
@@ -46,88 +46,93 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Qi Liu <liuqi115@huawei.com>
 
-If we issue a controller reset command during executing a FLR a hung task
-may be found:
+The OOB interrupt and phyup interrupt handlers may run out-of-order in
+high CPU usage scenarios. Since the hisi_sas_phy.timer is added in
+hisi_sas_phy_oob_ready() and disarmed in phy_up_v3_hw(), this
+out-of-order execution will cause hisi_sas_phy.timer timeout to trigger.
 
- Call trace:
-  __switch_to+0x158/0x1cc
-  __schedule+0x2e8/0x85c
-  schedule+0x7c/0x110
-  schedule_timeout+0x190/0x1cc
-  __down+0x7c/0xd4
-  down+0x5c/0x7c
-  hisi_sas_task_exec+0x510/0x680 [hisi_sas_main]
-  hisi_sas_queue_command+0x24/0x30 [hisi_sas_main]
-  smp_execute_task_sg+0xf4/0x23c [libsas]
-  sas_smp_phy_control+0x110/0x1e0 [libsas]
-  transport_sas_phy_reset+0xc8/0x190 [libsas]
-  phy_reset_work+0x2c/0x40 [libsas]
-  process_one_work+0x1dc/0x48c
-  worker_thread+0x15c/0x464
-  kthread+0x160/0x170
-  ret_from_fork+0x10/0x18
-
-This is a race condition which occurs when the FLR completes first.
-
-Here the host HISI_SAS_RESETTING_BIT flag out gets of sync as
-HISI_SAS_RESETTING_BIT is not always cleared with the hisi_hba.sem held,
-so now only set/unset HISI_SAS_RESETTING_BIT under hisi_hba.sem .
+To solve, protect hisi_sas_phy.timer and .attached with a lock, and ensure
+that the timer won't be added after phyup handler completes.
 
 Signed-off-by: Qi Liu <liuqi115@huawei.com>
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 8 +++++---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 1 +
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 18 +++++++++++++-----
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 10 ++++++++--
+ 2 files changed, 21 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 977911580d8f..0e14f90dbb1e 100644
+index 0e14f90dbb1e..66e63a336770 100644
 --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
 +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1574,7 +1574,6 @@ void hisi_sas_controller_reset_prepare(struct hisi_hba *hisi_hba)
+@@ -909,10 +909,14 @@ void hisi_sas_phy_oob_ready(struct hisi_hba *hisi_hba, int phy_no)
  {
- 	struct Scsi_Host *shost = hisi_hba->shost;
+ 	struct hisi_sas_phy *phy = &hisi_hba->phy[phy_no];
+ 	struct device *dev = hisi_hba->dev;
++	unsigned long flags;
  
--	down(&hisi_hba->sem);
- 	hisi_hba->phy_state = hisi_hba->hw->get_phys_state(hisi_hba);
- 
- 	scsi_block_requests(shost);
-@@ -1599,9 +1598,9 @@ void hisi_sas_controller_reset_done(struct hisi_hba *hisi_hba)
- 	if (hisi_hba->reject_stp_links_msk)
- 		hisi_sas_terminate_stp_reject(hisi_hba);
- 	hisi_sas_reset_init_all_devices(hisi_hba);
--	up(&hisi_hba->sem);
- 	scsi_unblock_requests(shost);
- 	clear_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags);
-+	up(&hisi_hba->sem);
- 
- 	hisi_sas_rescan_topology(hisi_hba, hisi_hba->phy_state);
- }
-@@ -1612,8 +1611,11 @@ static int hisi_sas_controller_prereset(struct hisi_hba *hisi_hba)
- 	if (!hisi_hba->hw->soft_reset)
- 		return -1;
- 
--	if (test_and_set_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags))
-+	down(&hisi_hba->sem);
-+	if (test_and_set_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags)) {
-+		up(&hisi_hba->sem);
- 		return -1;
+ 	dev_dbg(dev, "phy%d OOB ready\n", phy_no);
+-	if (phy->phy_attached)
++	spin_lock_irqsave(&phy->lock, flags);
++	if (phy->phy_attached) {
++		spin_unlock_irqrestore(&phy->lock, flags);
+ 		return;
 +	}
  
- 	if (hisi_sas_debugfs_enable && hisi_hba->debugfs_itct[0].itct)
- 		hisi_hba->hw->debugfs_snapshot_regs(hisi_hba);
+ 	if (!timer_pending(&phy->timer)) {
+ 		if (phy->wait_phyup_cnt < HISI_SAS_WAIT_PHYUP_RETRIES) {
+@@ -920,13 +924,17 @@ void hisi_sas_phy_oob_ready(struct hisi_hba *hisi_hba, int phy_no)
+ 			phy->timer.expires = jiffies +
+ 					     HISI_SAS_WAIT_PHYUP_TIMEOUT;
+ 			add_timer(&phy->timer);
+-		} else {
+-			dev_warn(dev, "phy%d failed to come up %d times, giving up\n",
+-				 phy_no, phy->wait_phyup_cnt);
+-			phy->wait_phyup_cnt = 0;
++			spin_unlock_irqrestore(&phy->lock, flags);
++			return;
+ 		}
++
++		dev_warn(dev, "phy%d failed to come up %d times, giving up\n",
++			 phy_no, phy->wait_phyup_cnt);
++		phy->wait_phyup_cnt = 0;
+ 	}
++	spin_unlock_irqrestore(&phy->lock, flags);
+ }
++
+ EXPORT_SYMBOL_GPL(hisi_sas_phy_oob_ready);
+ 
+ static void hisi_sas_phy_init(struct hisi_hba *hisi_hba, int phy_no)
 diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 0ef6c21bf081..11a44d9dd9b2 100644
+index 11a44d9dd9b2..0239e2b4b84f 100644
 --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
 +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -4848,6 +4848,7 @@ static void hisi_sas_reset_prepare_v3_hw(struct pci_dev *pdev)
- 	int rc;
+@@ -1484,7 +1484,6 @@ static irqreturn_t phy_up_v3_hw(int phy_no, struct hisi_hba *hisi_hba)
+ 	struct asd_sas_phy *sas_phy = &phy->sas_phy;
+ 	struct device *dev = hisi_hba->dev;
  
- 	dev_info(dev, "FLR prepare\n");
-+	down(&hisi_hba->sem);
- 	set_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags);
- 	hisi_sas_controller_reset_prepare(hisi_hba);
+-	del_timer(&phy->timer);
+ 	hisi_sas_phy_write32(hisi_hba, phy_no, PHYCTRL_PHY_ENA_MSK, 1);
  
+ 	port_id = hisi_sas_read32(hisi_hba, PHY_PORT_NUM_MA);
+@@ -1561,9 +1560,16 @@ static irqreturn_t phy_up_v3_hw(int phy_no, struct hisi_hba *hisi_hba)
+ 	}
+ 
+ 	phy->port_id = port_id;
+-	phy->phy_attached = 1;
++
+ 	hisi_sas_notify_phy_event(phy, HISI_PHYE_PHY_UP);
++
+ 	res = IRQ_HANDLED;
++
++	spin_lock(&phy->lock);
++	/* Delete timer and set phy_attached atomically */
++	del_timer(&phy->timer);
++	phy->phy_attached = 1;
++	spin_unlock(&phy->lock);
+ end:
+ 	if (phy->reset_completion)
+ 		complete(phy->reset_completion);
 -- 
 2.26.2
 

@@ -2,172 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6393B47667B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 780CF47667F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbhLOX0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 18:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
+        id S232023AbhLOX0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 18:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbhLOX0d (ORCPT
+        with ESMTP id S232014AbhLOX0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 18:26:33 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8449C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:26:31 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id j9so8749290wrc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:26:31 -0800 (PST)
+        Wed, 15 Dec 2021 18:26:42 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DF8C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:26:42 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id m6so34317610lfu.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:26:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aWEO4+lOEaRD/eaLAldY1rujZBp501QLD0CtTf2OGKA=;
-        b=Wwg0Zje4gwnyDqzh6zBIkVcOEeg1o9Yay/pTmAgzONLQN+nlRUYC1VRinffQ9rwEvZ
-         FIy8AVONbOxsS6nJh30y7I9KC2LLiFw/QncF9XjD5vpRyzwCwr7iTUDc9hA1U/Nsph4g
-         Jn9hR5KE/kgsIbkRKVgflH0LwhnERJFi0FTSXdkkXKYnfN7nwrV6lYD2vFrNiK8clZIw
-         QvGpfmYKPsA44l6MZ8zQZg9O9aLtq4u3AVprrjiUw+rbmHHmnvGNaG5DgZ733L+mBl6q
-         I2TKNE66D1maqk92/Ot9v6UO6fzNyG452yZFHwzXovtaKnMahpvNAB3YKpqCRqdCc42I
-         ojzQ==
+        bh=bcHo33xzIOtmp7c3bKuGJhHB6p8wPg6+OBcYmDbcbH4=;
+        b=QDVg3hllEkz0TXTcOs6+PKXolvCwOMSwdIwUFsp5PnbihOUyEVG+nhcBq4jiOimcNy
+         YbIX8Mft+DUIco6EyrzeGfR8HsQM+ilG8lNKHda8j4UGfHr2aXSaPI3SlrnxAN+Hr55U
+         BD5aDZYU6+giXiGQdBFD6gt9Qo6SSc37QjwRC8CwuMxUDKK+ow0YQQVl58dfK+dUh82s
+         t13RtS43Jq32VPxwZEz0dHDWW5PcpTY60gkVl535gR8uB33jDCzRHtgF3psCoNFFGAgp
+         NJMIPRImBNoNE+hjXC6BCNsf6/Jc8jp2AR/gSRHAu9mJE9A6YuLnFqZo30gQ6w+jMzdw
+         dpSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aWEO4+lOEaRD/eaLAldY1rujZBp501QLD0CtTf2OGKA=;
-        b=Hd719nOGKqc8t+X5xzaZb+q/Udke8QLvo28shzzLrccf3HAm3VAhZ/vXsoTzaiFvy/
-         0QVpTSmFF57Oc/lZC7yQSfXXpcW1amxNa6WdmFx6fuIOEBbzsyMpfolSBJVGm0amQC+U
-         QkV5y4XvtGk+7yQ2vtFT9XbO/2MVGVa3tvDYMW76G4OZIukKMH2oOXD3kgRlxDkBnJIm
-         w7Tx8RQIf1RaUxY8ISXuKYOOjZeXcFQ3ZUkRrAGGzOBXFQywe2dGrj1MRFKCOlBvcTIR
-         1DXkebBwtgLlIUj6q4oKx9UT8cimPNP2o4x9W2VxO1QY79abLn9ypqXO38sr0P46KewA
-         eMeg==
-X-Gm-Message-State: AOAM532uKN+lAL2ZSn06cFO+PHAWRkqeVoR7w63rdr8lhjiuWcyjBuHt
-        bKmnJBOEuuphPVa7GjiscHOED7j0hx8HMZmYnGXSpQ==
-X-Google-Smtp-Source: ABdhPJwEeohnXfddqmmLfWY+PzER4jE5agUTbIOZPR/cQUXqFmsd9PLsQpxGAjQnucUxh/dXB006eBPsmx3o86OTQeo=
-X-Received: by 2002:adf:ee0c:: with SMTP id y12mr6698308wrn.82.1639610790378;
- Wed, 15 Dec 2021 15:26:30 -0800 (PST)
+        bh=bcHo33xzIOtmp7c3bKuGJhHB6p8wPg6+OBcYmDbcbH4=;
+        b=w+NN8TXY8hpo+7n6hCRX40w/CYwuCYaci/Jp9bCpZIyjexxLNqu/IpRikYqIEtBHxW
+         He8m0Eu/BRCUule8cCMrC/0gep21oDF0TfPnFhC0yHy7U0LleYf0k7Byv7D1aPUcCXtx
+         zH7Vvrpt+IPsQLXiu7W+VOEZTn1ST7X2Bbm6GjexKUSujKRWmTqacwoju0WO1aIoed12
+         6tDAfZr1oH/7k4kcAwz+JTUiImTH6d5/smoIQGX6q6+TVzKLQ7iSgZNgg1WNd/L/rn7J
+         AkTSHxdJ8ezCL220O0bTw3/iJi44in4XofqyIAXKZWPR7PX4jZw9ze0cvzFLa5ZCXVj7
+         Sa1Q==
+X-Gm-Message-State: AOAM532GO2YgLGiNv27F6UH6e5KnW083oK5Fnkv9RGLg5wptdPyC72q9
+        qXTAv7OqEyqIg7rFZRvMgbTEuPk6YtVbrtWaces+Mg==
+X-Google-Smtp-Source: ABdhPJzWbnHRB2ZFvLPt8OwCZ4t1rvOqOSO1x4ZnIXyVlMP8WRF3RQfhXXxbRkl78n67uWm+rMO2zc6dxCM0Yj4GEBI=
+X-Received: by 2002:a05:6512:32ae:: with SMTP id q14mr2044133lfe.533.1639610800328;
+ Wed, 15 Dec 2021 15:26:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20211214204445.665580974@infradead.org> <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
- <Ybm+HJzkO/0BB4Va@hirez.programming.kicks-ass.net> <CAFTs51Xb6m=htpWsVk577n-h_pRCpqRcBg6-OhBav8OadikHkw@mail.gmail.com>
- <YboxjUM+D9Kg52mO@hirez.programming.kicks-ass.net> <CAPNVh5cJy2y+sTx0cPA1BPSAg=GjXC8XGT7fLzHwzvXH2=xjmw@mail.gmail.com>
- <20211215222524.GH16608@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211215222524.GH16608@worktop.programming.kicks-ass.net>
-From:   Peter Oskolkov <posk@google.com>
-Date:   Wed, 15 Dec 2021 15:26:19 -0800
-Message-ID: <CAPNVh5cfoehYpOu2PE59L3_yxmZaXgJ6oC1eg923rmaiK4f87A@mail.gmail.com>
-Subject: Re: [RFC][PATCH 0/3] sched: User Managed Concurrency Groups
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Peter Oskolkov <posk@posk.io>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, mgorman@suse.de,
-        bristot@redhat.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Paul Turner <pjt@google.com>, Andrei Vagin <avagin@google.com>,
-        Jann Horn <jannh@google.com>,
-        Thierry Delisle <tdelisle@uwaterloo.ca>
+References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
+ <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com> <87wnkbuuuz.ffs@tglx>
+ <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com> <8735mvthk6.ffs@tglx>
+ <2ab24da8-e37d-426a-9500-b7541d21f8a3@www.fastmail.com> <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
+ <83deaa79-39eb-4fd7-ad80-9d233fd6fdbb@www.fastmail.com>
+In-Reply-To: <83deaa79-39eb-4fd7-ad80-9d233fd6fdbb@www.fastmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 15 Dec 2021 15:26:28 -0800
+Message-ID: <CALAqxLX795pURb_aJTEAdq80LGiY=br88A+R3TN3HQh+HtS85Q@mail.gmail.com>
+Subject: Re: Time keeping while suspended in the presence of persistent clock drift
+To:     Joel Daniels <jdaniels@sent.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 2:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Dec 15, 2021 at 11:49:51AM -0800, Peter Oskolkov wrote:
->
-> > TL;DR: our models are different here. In your model a single server
-> > can have a bunch of workers interacting with it; in my model only a
-> > single RUNNING worker is assigned to a server, which it wakes when it
-> > blocks.
->
-> So part of the problem is that none of that was evident from the code.
-> It is also completely different from the scheduler code it lives in,
-> making it double confusing.
->
-> After having read the code, I still had no clue what so ever how it was
-> supposed to be used. Which is where my reverse engineering started :/
-
-I posted a doc patch:
-https://lore.kernel.org/lkml/20211122211327.5931-6-posk@google.com/
-a lib patch with userspace code:
-https://lore.kernel.org/lkml/20211122211327.5931-5-posk@google.com/
-and a doc patch for the lib/userspace code:
-https://lore.kernel.org/lkml/20211122211327.5931-7-posk@google.com/
-
-I spent at least two weeks polishing the lib patch and the docs, much
-more if previous patchsets are to be taken into account. Yes, they are
-confusing, and most likely answer all of the wrong questions, but I
-did try to make my approach as clear as possible... I apologize if
-that was not very successful...
-
->
-> > More details:
+On Wed, Dec 15, 2021 at 2:44 PM Joel Daniels <jdaniels@sent.com> wrote:
+> >>    [A] On machines with a persistent clock how is userspace supposed
+> >>        to be sure what drift to measure? Can it assume that the drift
+> >>        of the persistent clock used for sleep time injection is the
+> >>        same as the drift of /dev/rtc? This seems dangerous.
 > >
-> > "Working servers" cannot get wakeups, because a "working server" has a
-> > single RUNNING worker attached to it. When a worker blocks, it wakes
-> > its attached server and becomes a detached blocked worker (same is
-> > true if the worker is "preempted": it blocks and wakes its assigned
-> > server).
->
-> But who would do the preemption if the server isn't allowed to run?
->
-> > Blocked workers upon wakeup do this, in order:
+> > Yea, there can be multiple RTCs as well.
 > >
-> > - always add themselves to the runnable worker list (the list is
-> > shared among ALL servers, it is NOT per server);
->
-> That seems like a scalability issue. And, as said, it is completely
-> alien when compared to the way Linux itself does scheduling.
->
-> > - wake a server pointed to by idle_server_ptr, if not NULL;
-> > - sleep, waiting for a wakeup from a server;
+> >>    [B] Sleep time injection can come from the "persistent clock" or,
+> >>        if there is no persistent clock, from an RTC driver. I'd like
+> >>        to correct for drift from the perisistant clock but not touch
+> >>        the RTC driver sleep time injection mechanism. Is this
+> >>        acceptable or do people feel that any drift correction should
+> >>        work with both mechanisms in order to ensure a polished
+> >>        interface?
 > >
-> > Server S, upon becoming IDLE (no worker to run, or woken on idle
-> > server list) does this, in order, in userspace (simplified, see
-> > umcg_get_idle_worker() in
-> > https://lore.kernel.org/lkml/20211122211327.5931-5-posk@google.com/):
-> > - take a userspace (spin) lock (so the steps below are all within a
-> > single critical section):
->
-> Don't ever suggest userspace spinlocks, they're horrible crap.
-
-This can easily be a mutex, not really important (although for very
-short critical sections with only memory reads/writes, like here, spin
-locks often perform better, in our experience).
-
->
-> > - compare_xchg(idle_server_ptr, NULL, S);
-> >   - if failed, there is another server in idle_server_ptr, so S adds
-> > itself to the userspace idle server list, releases the lock, goes to
-> > sleep;
-> >   - if succeeded:
-> >     - check the runnable worker list;
-> >         - if empty, release the lock, sleep;
-> >         - if not empty:
-> >            - get the list
-> >            - xchg(idle_server_ptr, NULL) (either S removes itself, or
-> > a worker in the kernel does it first, does not matter);
-> >            - release the lock;
-> >            - wake server S1 on idle server list. S1 goes through all
-> > of these steps.
+> > This dual interface comes from the desire to support both the more
+> > atomic/earlier correction we can do w/ the persistent_clock interface
+> > while holding the timekeeping lock, while also supporting RTC devices
+> > that may sleep when being read, or may have dependencies that aren't
+> > ready that early in resume.
 > >
-> > The protocol above serializes the userspace dealing with the idle
-> > server ptr/list. Wakeups in the kernel will be caught if there are
-> > idle servers. Yes, the protocol in the userspace is complicated (more
-> > complicated than outlined above, as the reaped idle/runnable worker
-> > list from the kernel is added to the userspace idle/runnable worker
-> > list), but the kernel side is very simple. I've tested this
-> > interaction extensively, I'm reasonably sure that no worker wakeups
-> > are lost.
+> > Admittedly having two separate abstractions here is a bit of a pain,
+> > and fixing just one side doesn't make it better.
 >
-> Sure, but also seems somewhat congestion prone :/
+> Thanks; that makes sense to me. I suppose I ought to have a separate
+> sleep-time-injection drift correction parameter per RTC? That way the
+> kernel wouldn't do something silly if somebody hotplugs one RTC while
+> removing another. The persistent clock is almost always exposed as an
+> RTC as well, so either I could try to be very clever and make the
+> persistent clock share the drift correction parameter of its
+> corresponding RTC or I could just maintain a separate correction for
+> the persistent clock.
+>
+> >>    [C] Some users may want to correct for drift during suspend-to-RAM
+> >>        but during suspend-to-disk they might boot into some other
+> >>        operating system which itself sets the CMOS RTC. Hopefully,
+> >>        this could be solved from userspace by changing the drift
+> >>        correction parameter to 0 just before a suspend-to-disk
+> >>        operation.
+> >
+> > Oof. This feels particularly complex and fragile to try to address.
+>
+> Yes, I think we should ignore this issue and treat all suspend/resume
+> cycles identically. People who regularly dual-boot can just not use
+> the new feature.
+>
+> > Personally, I'm not sure this warrants adding new userland interfaces
+> > for. I'd probably lean towards having the RTC framework internally
+> > measure and correct for drift, rather than adding an extra knob in
+> > userland.
+>
+> Measuring RTC drift is hard. The standard PC RTC has only one second
+> resolution so you have to wait for the "edge" of a tick and measure
+> drift over an extended period of time. If you have some NTP daemon
+> slewing your system clock while you try to measure RTC drift then
+> you will get garbage. If your motherboard gets hot enough then your
+> RTC will run at a different rate while the machine is on than while
+> it is off.
+>
+> I know of three programs that measure RTC drift today:
+>
+>   # hwclock: you must use it to set the RTC twice, the second time
+>     with the "--update-drift" argument. The manual suggests waiting
+>     one day between calls. The drift and offset information is
+>     stored in /etc/adjtime. On boot "hwclock --hctosys" will use this
+>     to set the system clock correctly.
+>
+>   # adjtimex (program not syscall) when run with the "--compare"
+>     option. It uses a least squares estimate from multiple samples
+>     which by default are each 10 seconds apart.
+>
+>   # chrony with the "rtcfile" directive. It tracks the RTC over time
+>     to measure its offset and drift similarly to how it tracks the
+>     system clock drift. Tracking information is saved into
+>       /var/lib/chrony/rtc
+>     and can be used (via "chronyd -s") to set the system clock
+>     correctly on next boot.
+>
+> Any method of measuring the drift is going to need to persist the
+> drift coefficient to disk so that it can set the system clock
+> correctly on boot. I think it would be best for the kernel to use this
+> same coefficient.
 
-The whole critical section under the loc is just several memory
-read/write operations, so very short. And workers are removed from the
-kernel's list of runnable/woken workers all at once; and the server
-processing the runnable worker list knows how many of them are now
-available to run, so the appropriate number of idle servers can be
-woken (not yet implemented in my lib patch). So yes, this can be a
-bottleneck, but there are ways to make it less and less likely (by
-making the userspace more complicated; but this is not a concern).
+My initial thought was for the rtc class layer to do the estimation
+internally against the system time (assuming it was NTP corrected) to
+try establish a close enough correction factor as the system was up
+and running, but you're right that would be reset on every reboot, and
+with second granular RTCs accurate error calculations will take awhile
+(though polling for the second-edge might work well enough, but would
+be cpu heavy for a background task).
+
+Maybe that's a good enough argument for having an ADJ ioctl added to
+the rtc chardev?
+
+But it also seems to suggest that if chronyd already has all this
+logic in userland, maybe having it calculate and call settimeofday()
+on resume from userland instead of pushing half of that logic into the
+kernel?
+
+> > Alternatively I'd go very simple and just put the correction factor in
+> > a boot argument.
+>
+> This works for my use case though it won't be useful to a general
+> distro. Would you have one argument being used regardless of where the
+> sleep injection was coming from or would you try to tie it to the
+> persistent clock and/or a specific RTC?
+
+I agree it is an important thing to consider how to generalize this
+for common use (which is why I prefer the approach that works
+*without* any distro integration).
+
+But it's also important to consider if the added complexity is
+*really* needed in the general case.
+
+thanks
+-john

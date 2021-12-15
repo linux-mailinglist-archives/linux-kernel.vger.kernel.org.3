@@ -2,103 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 541A94755FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80481475600
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241553AbhLOKOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S230308AbhLOKPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:15:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbhLOKOk (ORCPT
+        with ESMTP id S236717AbhLOKPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:14:40 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0D7C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:14:40 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id z4-20020a1c7e04000000b0032fb900951eso1080980wmc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:14:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to
-         :content-language:cc:content-transfer-encoding;
-        bh=4J+Unl3XhdMp8B6pZM0WOABX8WJmG4ysRDdpuSeJCR0=;
-        b=d2cK4j1HT27DODdn/cECHnwt6+YcZTlCRVfSS+xhiO1K29STpAWgyLpVhaUZQ6X4LL
-         kxpviIxCEVFHjWvcithKF7WZ/iSJNelgWoNlwK8MCCph5/RI04U/rWHrU56DpajITnd+
-         WKdU4X2iiqcxtVD9ryQmNtLwVC9gIQguHtVSHnk1/tfVDF7uKzjc0I7tCYRvdHshqs+x
-         W/qJYORQYvK8rj/WuG4ZppSU0Elg4ptI0Kp9nnqKV5oIsHqbgvB/YagnEnXHxTni3dfR
-         LOS4RC4WblDMIrA3i3kBaRMjwYtSvA/G6JasNhAmaBFCbAUXG/BJs0gHixu88eKQTZJt
-         Og2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:content-language:cc:content-transfer-encoding;
-        bh=4J+Unl3XhdMp8B6pZM0WOABX8WJmG4ysRDdpuSeJCR0=;
-        b=38bSKbUtWa2olEDh4Z5IIK6ZvRhWeQAZhgUtaEJqqoVbPFgdFRsmJ2chRkl/s0stVa
-         BNUOpVwTKc30JCPHMOsM4XVYNJvkroRQ3pIf7TmJDfRCFv/4127IOtDzWiES0+umrttm
-         ng145itrIq+3o92o3uwOrsolFDYWHDWgUlPNcRU+kCADPVR9j5+bnhA35bpda7ex2BBS
-         Jv5/lO7pOK8PnZOzSguT2e9kKxLVZa2j9CMTgyftwMmyovNehxnSbbioxymI+teSJK4F
-         RGZ5FCSADzcSlYOwNPK5NoNYpe0VgHqOEhsePPn72vpxvYS8tTE6cfQNbfYFS525zqAz
-         ZIHA==
-X-Gm-Message-State: AOAM531DlTRy4BUYKfwb36Y0Ie2t1bQhMHf286wvDh3tIkDxWYzzaS7p
-        uBuymtrurQnkRejPU9QQ9QpBEa4DiSU=
-X-Google-Smtp-Source: ABdhPJzFw6jAIk+gHKFf2fczb6PB33zS0j95EBu/wMQseCh3YQVyBDKN6Xtco7B3P64DCR5xx4fvMw==
-X-Received: by 2002:a05:600c:29a:: with SMTP id 26mr3843480wmk.86.1639563278900;
-        Wed, 15 Dec 2021 02:14:38 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f24:fd00:6862:8ea7:f293:5328? (p200300ea8f24fd0068628ea7f2935328.dip0.t-ipconnect.de. [2003:ea:8f24:fd00:6862:8ea7:f293:5328])
-        by smtp.googlemail.com with ESMTPSA id t8sm1538060wrv.30.2021.12.15.02.14.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 02:14:38 -0800 (PST)
-Message-ID: <ec24e13f-0530-b091-7a08-864577b9b3be@gmail.com>
-Date:   Wed, 15 Dec 2021 11:14:23 +0100
+        Wed, 15 Dec 2021 05:15:08 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A6FC061574;
+        Wed, 15 Dec 2021 02:15:08 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 5F4481F45580
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1639563305; bh=3gcQGNr2454bcL5Y6Emf4IAgqrpvitQtv6gVZdbNOPE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=mp3IwHoye7upYbMjvc4/Qd7V0ucnZ7JsEyUyjLdKSdib6JHtWeMhnHroStMZEd7EC
+         J2ImrfB79FYWHm65KwJpyfdt1JVO96L3cfBja4bUQfvCgN4lybE2/7Q7YTDeF1lmJW
+         u3Usyt5m23uX8d8eJvNc3GRO1BNyfIjskDKB1r7v3KXDoihmW45q+CszlFS+8P3Vtq
+         bvOO/ua+e0dadPSIcgJdaV7aVdVlrm0SpABiwrM+RJlKLxb1bEwtK6SeYIpD5AFqgv
+         97PY9P3Dh8eOaIjL0Tkp8WLUDlspbKz9/c4khMXtvBXeK5x6DSaYV2dwVGFK+kWCKJ
+         rK7xsqaAKzjNA==
+Subject: Re: [PATCH v10 2/3] dts: arm64: mt8183: add Mediatek MDP3 nodes
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        menghui.lin@mediatek.com, sj.huang@mediatek.com,
+        allen-kh.cheng@mediatek.com, randy.wu@mediatek.com,
+        jason-jh.lin@mediatek.com, roy-cw.yeh@mediatek.com,
+        river.cheng@mediatek.com, srv_heupstream@mediatek.com
+References: <20211202062733.20338-1-moudy.ho@mediatek.com>
+ <20211202062733.20338-3-moudy.ho@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <0b893a2b-cec6-a88a-7218-52d1629d9469@collabora.com>
+Date:   Wed, 15 Dec 2021 11:15:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH resend v3] reset: renesas: Fix Runtime PM usage
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+In-Reply-To: <20211202062733.20338-3-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If pm_runtime_resume_and_get() fails then it returns w/o the RPM usage
-counter being incremented. In this case call pm_runtime_put() in
-remove() will result in a usage counter imbalance. Therefore check the
-return code of pm_runtime_resume_and_get() and bail out in case of error.
+Il 02/12/21 07:27, Moudy Ho ha scritto:
+> Add device nodes for Media Data Path 3 (MDP3) modules.
+> 
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 115 ++++++++++++++++++++++-
+>   1 file changed, 114 insertions(+), 1 deletion(-)
+> 
 
-Fixes: bee08559701f ("reset: renesas: Add RZ/G2L usbphy control driver")
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
-v2:
-- bail out in case of error instead of switching to pm_runtime_get_sync()
-v3:
-- add dev_err_probe() in case of error
----
- drivers/reset/reset-rzg2l-usbphy-ctrl.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Hello Moudy,
+we have just detected an issue with this commit.
 
-diff --git a/drivers/reset/reset-rzg2l-usbphy-ctrl.c b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
-index e0704fd2b..46fcd2218 100644
---- a/drivers/reset/reset-rzg2l-usbphy-ctrl.c
-+++ b/drivers/reset/reset-rzg2l-usbphy-ctrl.c
-@@ -137,7 +137,12 @@ static int rzg2l_usbphy_ctrl_probe(struct platform_device *pdev)
- 	dev_set_drvdata(dev, priv);
- 
- 	pm_runtime_enable(&pdev->dev);
--	pm_runtime_resume_and_get(&pdev->dev);
-+	error = pm_runtime_resume_and_get(&pdev->dev);
-+	if (error < 0) {
-+		pm_runtime_disable(&pdev->dev);
-+		reset_control_assert(priv->rstc);
-+		return dev_err_probe(&pdev->dev, error, "pm_runtime_resume_and_get failed");
-+	}
- 
- 	/* put pll and phy into reset state */
- 	spin_lock_irqsave(&priv->lock, flags);
--- 
-2.34.1
 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index ba4584faca5a..e4dc76b04438 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -1325,6 +1325,85 @@
+>   			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+>   		};
+>   
+> +		mdp3_rdma0: mdp3_rdma0@14001000 {
+> +			compatible = "mediatek,mt8183-mdp3",
+> +				     "mediatek,mt8183-mdp3-rdma";
+> +			mediatek,scp = <&scp>;
+> +			mediatek,mdp3-id = <0>;
+> +			mediatek,mdp3-comps = "mediatek,mt8183-mdp3-dl1",
+> +					      "mediatek,mt8183-mdp3-dl2",
+> +					      "mediatek,mt8183-mdp3-path1",
+> +					      "mediatek,mt8183-mdp3-path2",
+> +					      "mediatek,mt8183-mdp3-imgi",
+> +					      "mediatek,mt8183-mdp3-exto";
+> +			mediatek,mdp3-comp-ids = <0 1 0 1 0 1>;
+> +			reg = <0 0x14001000 0 0x1000>,
+> +			      <0 0x14000000 0 0x1000>,
+> +			      <0 0x14005000 0 0x1000>,
+> +			      <0 0x14006000 0 0x1000>,
+> +			      <0 0x15020000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>,
+> +						  <&gce SUBSYS_1400XXXX 0 0x1000>,
+> +						  <&gce SUBSYS_1400XXXX 0x5000 0x1000>,
+> +						  <&gce SUBSYS_1400XXXX 0x6000 0x1000>,
+> +						  <&gce SUBSYS_1502XXXX 0 0x1000>;
+> +			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+> +			clocks = <&mmsys CLK_MM_MDP_RDMA0>,
+> +				 <&mmsys CLK_MM_MDP_RSZ1>,
+> +				 <&mmsys CLK_MM_MDP_DL_TXCK>,
+> +				 <&mmsys CLK_MM_MDP_DL_RX>,
+> +				 <&mmsys CLK_MM_IPU_DL_TXCK>,
+> +				 <&mmsys CLK_MM_IPU_DL_RX>;
+> +			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
+> +			mediatek,mmsys = <&mmsys>;
+> +			mediatek,mm-mutex = <&mutex>;
+> +			mediatek,mailbox-gce = <&gce>;
+> +			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
+> +				 <&gce 21 CMDQ_THR_PRIO_LOWEST 0>,
+> +				 <&gce 22 CMDQ_THR_PRIO_LOWEST 0>,
+> +				 <&gce 23 CMDQ_THR_PRIO_LOWEST 0>;
+
+The gce mailbox node declares #mbox-cells = <2> and you're trying to use three
+cells instead. Like that, the driver won't even probe.
+
+Please fix this by removing the last cell here (remove the 0).
+
+Thanks,
+- Angelo

@@ -2,42 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48826475EF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A8A475EF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245575AbhLOR0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245408AbhLORY6 (ORCPT
+        id S238772AbhLOR00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:26:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42340 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245648AbhLORZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:24:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BB3C06137E;
-        Wed, 15 Dec 2021 09:24:58 -0800 (PST)
+        Wed, 15 Dec 2021 12:25:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E579B82027;
-        Wed, 15 Dec 2021 17:24:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCDEEC36AE2;
-        Wed, 15 Dec 2021 17:24:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A58CB82029;
+        Wed, 15 Dec 2021 17:25:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D0F9C36AE2;
+        Wed, 15 Dec 2021 17:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589096;
-        bh=V2Bc+BIyktiVIK+CEB6NMZWPDWV6KxalB0gmH8FlNAI=;
+        s=korg; t=1639589099;
+        bh=14PYgjOPcuznMxdJlqia4LIKiz+cpLfgtJRpyJVX5TE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HOuOh659/e7BL8FwfogA3QtQYOb/6jHHuA6aUbEnwNEKYmqG+f6/AOqMTc/S2qHKc
-         OhKCEhA2ttusFlGTZ+kq3Gb2hVbCV7wHzHTexF6uy8hQePTvPd4lyFWj3//5B8B5ll
-         udpbruyjThOlhKo1XPzxkDs3zu8VYbzH/1UH2lIw=
+        b=cM0jaSbL4xa5nVdGEK5IVMLcGW94KPHYFS7SP3JpFUU4Ovtd2q2uoOppfP1iDjG+p
+         ur8shT2ffiNKWzd36ukckKcx/D4wor3W12N8/pWjpViqRhx/DdGQFBOBfDYizQs3iQ
+         mRsQUJRgVRxRR/zjLX4PTQNujU75Qi+LGTom00JA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 5.10 19/33] hwmon: (dell-smm) Fix warning on /proc/i8k creation error
-Date:   Wed, 15 Dec 2021 18:21:17 +0100
-Message-Id: <20211215172025.437030420@linuxfoundation.org>
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Antoine Tenart <atenart@kernel.org>
+Subject: [PATCH 5.10 20/33] ethtool: do not perform operations on net devices being unregistered
+Date:   Wed, 15 Dec 2021 18:21:18 +0100
+Message-Id: <20211215172025.469159159@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
 References: <20211215172024.787958154@linuxfoundation.org>
@@ -49,50 +45,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+From: Antoine Tenart <atenart@kernel.org>
 
-commit dbd3e6eaf3d813939b28e8a66e29d81cdc836445 upstream.
+commit dde91ccfa25fd58f64c397d91b81a4b393100ffa upstream.
 
-The removal function is called regardless of whether
-/proc/i8k was created successfully or not, the later
-causing a WARN() on module removal.
-Fix that by only registering the removal function
-if /proc/i8k was created successfully.
+There is a short period between a net device starts to be unregistered
+and when it is actually gone. In that time frame ethtool operations
+could still be performed, which might end up in unwanted or undefined
+behaviours[1].
 
-Tested on a Inspiron 3505.
+Do not allow ethtool operations after a net device starts its
+unregistration. This patch targets the netlink part as the ioctl one
+isn't affected: the reference to the net device is taken and the
+operation is executed within an rtnl lock section and the net device
+won't be found after unregister.
 
-Fixes: 039ae58503f3 ("hwmon: Allow to compile dell-smm-hwmon driver without /proc/i8k")
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Acked-by: Pali Rohár <pali@kernel.org>
-Link: https://lore.kernel.org/r/20211112171440.59006-1-W_Armin@gmx.de
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+[1] For example adding Tx queues after unregister ends up in NULL
+    pointer exceptions and UaFs, such as:
+
+      BUG: KASAN: use-after-free in kobject_get+0x14/0x90
+      Read of size 1 at addr ffff88801961248c by task ethtool/755
+
+      CPU: 0 PID: 755 Comm: ethtool Not tainted 5.15.0-rc6+ #778
+      Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/014
+      Call Trace:
+       dump_stack_lvl+0x57/0x72
+       print_address_description.constprop.0+0x1f/0x140
+       kasan_report.cold+0x7f/0x11b
+       kobject_get+0x14/0x90
+       kobject_add_internal+0x3d1/0x450
+       kobject_init_and_add+0xba/0xf0
+       netdev_queue_update_kobjects+0xcf/0x200
+       netif_set_real_num_tx_queues+0xb4/0x310
+       veth_set_channels+0x1c3/0x550
+       ethnl_set_channels+0x524/0x610
+
+Fixes: 041b1c5d4a53 ("ethtool: helper functions for netlink interface")
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Link: https://lore.kernel.org/r/20211203101318.435618-1-atenart@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/dell-smm-hwmon.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ net/ethtool/netlink.h |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -603,15 +603,18 @@ static const struct proc_ops i8k_proc_op
- 	.proc_ioctl	= i8k_ioctl,
- };
+--- a/net/ethtool/netlink.h
++++ b/net/ethtool/netlink.h
+@@ -249,6 +249,9 @@ struct ethnl_reply_data {
  
-+static struct proc_dir_entry *entry;
+ static inline int ethnl_ops_begin(struct net_device *dev)
+ {
++	if (dev && dev->reg_state == NETREG_UNREGISTERING)
++		return -ENODEV;
 +
- static void __init i8k_init_procfs(void)
- {
- 	/* Register the proc entry */
--	proc_create("i8k", 0, NULL, &i8k_proc_ops);
-+	entry = proc_create("i8k", 0, NULL, &i8k_proc_ops);
- }
- 
- static void __exit i8k_exit_procfs(void)
- {
--	remove_proc_entry("i8k", NULL);
-+	if (entry)
-+		remove_proc_entry("i8k", NULL);
- }
- 
- #else
+ 	if (dev && dev->ethtool_ops->begin)
+ 		return dev->ethtool_ops->begin(dev);
+ 	else
 
 

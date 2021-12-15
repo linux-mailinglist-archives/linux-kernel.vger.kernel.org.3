@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0D94766A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DEF4766AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232168AbhLOXpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 18:45:01 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:32337 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232096AbhLOXpA (ORCPT
+        id S232184AbhLOXqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 18:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232174AbhLOXqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 18:45:00 -0500
-X-IronPort-AV: E=Sophos;i="5.88,209,1635174000"; 
-   d="scan'208";a="103632380"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 16 Dec 2021 08:44:59 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 8ACC24007F5C;
-        Thu, 16 Dec 2021 08:44:57 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] irqchip/renesas-intc-irqpin: Use platform_get_irq_optional() to get the interrupt
-Date:   Wed, 15 Dec 2021 23:44:48 +0000
-Message-Id: <20211215234448.5631-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 15 Dec 2021 18:46:19 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E215C061574;
+        Wed, 15 Dec 2021 15:46:19 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id z6so17925267plk.6;
+        Wed, 15 Dec 2021 15:46:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=q3SOY0GnBdcWKH+D/4Nkrs1rt/Pr20FSK0Xntas2zR8=;
+        b=GVEILhipuAU/C/YtMLxJ/42VCjY70Jzn4Bbyh1AaslN9IIt+vU8vE8iD7Mc6SvWFiW
+         p6ifjG9z8hUNeV5Q0vccTNwUFYGbxebzjNZlN/gBOjxWdyAHeokdTB6dr6b7fGy2sdAu
+         lGFZKweSHG5P2uPPBTFTxNFuy8TrHwPz/hLUtWKQJOxh5s4paBP3530Me+naJX2tTALK
+         z9x135GgcsT2AH5ZPwev8W0FBN/KDtwDSOB5YxDSa2BSHAYAeRHPcCt+mY8HC4bp9pEW
+         tBw3ETYx+QBnKQdyyyx2sJH+r21JC0o8jOG21qJOOVHxIIM3mYBk3yXuSxoR5w4DJ944
+         8jKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=q3SOY0GnBdcWKH+D/4Nkrs1rt/Pr20FSK0Xntas2zR8=;
+        b=yJE9zedWtbFU8N2CXmwzJmuRNBWv/BZDOJDbcfbfNrxyjdL5a7f66LWboc9wYifdH3
+         WBquQSlwoi4OjnW4o7M8TrxVZg5jHE5XhROvC0nJlFEq1dxPp0vP+9zKNQHxbpNhpwlG
+         uoH/Q7CK8VtEUISVsWvU/mViscS5XQzNA6U5PgeKz/AnzhVlzcczBJSMooEwOQOdn/a1
+         ruE8yN7vbsRzw+LUxuBbHTVtNYHiEQzAgh0zUSmC6hiM5yI/QgcyYGe/1dnTmWt9hxQh
+         ztZkVhazJ65mYmUze088ous6QPz+Acqo2CkiTNwF/QPF63yTGJyim2/qCin95Km/aKlM
+         iR4A==
+X-Gm-Message-State: AOAM530UhwGjEizFrGHlXAdU6hwLifSrCr52+iu66TFVp7VIXc1DPCle
+        ZgdbDWqbVZmXAbkhyq6fDRn1U/AUkeo=
+X-Google-Smtp-Source: ABdhPJxnOyufCg1aMp2Jca3GpvEv/C/3UCDPVDBXMYIq55Cd7eebo47xDXBGtJnIm/1UEIScaRNkUw==
+X-Received: by 2002:a17:902:8544:b0:142:66e7:afbb with SMTP id d4-20020a170902854400b0014266e7afbbmr13422234plo.62.1639611978711;
+        Wed, 15 Dec 2021 15:46:18 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id x11sm3168725pjq.52.2021.12.15.15.46.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 15:46:17 -0800 (PST)
+Subject: Re: [PATCH 5.15 00/42] 5.15.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20211215172026.641863587@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <0fcbd44b-93d3-aee6-f483-49b4653289ae@gmail.com>
+Date:   Wed, 15 Dec 2021 15:46:16 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypassed the hierarchical setup and messed up the
-irq chaining.
+On 12/15/21 9:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.9 release.
+> There are 42 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-Hi,
-
-Usage of platform_get_irq/_optional was agreed based on
-the discussion [0].
-
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/
-patch/20211209001056.29774-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-
-Cheers,
-Prabhakar
----
- drivers/irqchip/irq-renesas-intc-irqpin.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/irqchip/irq-renesas-intc-irqpin.c b/drivers/irqchip/irq-renesas-intc-irqpin.c
-index cb7f60b3b4a9..c35d9fbcda5c 100644
---- a/drivers/irqchip/irq-renesas-intc-irqpin.c
-+++ b/drivers/irqchip/irq-renesas-intc-irqpin.c
-@@ -375,7 +375,6 @@ static int intc_irqpin_probe(struct platform_device *pdev)
- 	struct intc_irqpin_priv *p;
- 	struct intc_irqpin_iomem *i;
- 	struct resource *io[INTC_IRQPIN_REG_NR];
--	struct resource *irq;
- 	struct irq_chip *irq_chip;
- 	void (*enable_fn)(struct irq_data *d);
- 	void (*disable_fn)(struct irq_data *d);
-@@ -418,12 +417,14 @@ static int intc_irqpin_probe(struct platform_device *pdev)
- 
- 	/* allow any number of IRQs between 1 and INTC_IRQPIN_MAX */
- 	for (k = 0; k < INTC_IRQPIN_MAX; k++) {
--		irq = platform_get_resource(pdev, IORESOURCE_IRQ, k);
--		if (!irq)
-+		ret = platform_get_irq_optional(pdev, k);
-+		if (ret == -EPROBE_DEFER)
-+			goto err0;
-+		if (ret < 0)
- 			break;
- 
- 		p->irq[k].p = p;
--		p->irq[k].requested_irq = irq->start;
-+		p->irq[k].requested_irq = ret;
- 	}
- 
- 	nirqs = k;
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.17.1
-
+Florian

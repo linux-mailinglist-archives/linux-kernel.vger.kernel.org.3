@@ -2,183 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DD1475543
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979B9475546
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241210AbhLOJfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:35:33 -0500
-Received: from mga12.intel.com ([192.55.52.136]:42840 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241191AbhLOJf3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:35:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639560929; x=1671096929;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=9+28yWy+U3CfpAFKhwL5jeZgmxsrrPtqmcm6DyFjsY0=;
-  b=CwTTJX16FQ3ax5u9/OXx381I+yRC5wRFszltf6ZEgNqgt74c/tSINulT
-   4dqwwF39y39Tn+r1L7ti1yR91UB9E2LVyzwZSaoJp5USrmc66HJSc+cKS
-   KZnIqo8q51PrOokzEElrjDywv+KvRNsoYXROBl+ihhC5qPY+pJ0m3SkNg
-   vBBnC2+eGMYSQXt98Qy/efEmDFQO0hFC9lG2+SFBXRZOLFA0o7P4ee2OO
-   HMjE+uvkslcKsEyQz16/kryyYh359RahH5LzV/tDyaJhTgFJttBeH/f3V
-   S90BXrjw+KR1NVutUwWfPvCw7ejjjPBsCsgIGRJ83wiPDSMGbezVwJTrJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="219204499"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="219204499"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 01:35:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="604869229"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Dec 2021 01:35:27 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 01:35:27 -0800
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 01:35:27 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Wed, 15 Dec 2021 01:35:27 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Wed, 15 Dec 2021 01:35:26 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nU3QYp9A72+z/UlrTCkcphV9rVJYOheMH4WphwlLOWGhyFpoN0bTOgX9euX0QJ82oqAB11Khm36XUBjMfUzRMYNgJoceMF8RntaqxKC3dARr7BEWqiU+koWq3jE5kry78IdfrlYPuX0104a58bYZ9MuLI5ysg8vyzEqa+e65w51yxnAXef5UcDZK6eQAkrdjWDWMKzbZLO0kkeZB/xU23Y8RKcujcb0IItd8xGyc2GGxC2syZUcwoFsF2vHrTY/1WL1jbsv8ZamrXuZRMtGzEQMicztdTU9EMpcdiMPUVFLCQR3S//NOkQqYi2iesb12dRMlk8hRFXmwUv+QsAUw5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0s43FS5KDUn1hE7qhq1yQ0noBwbzSZJr/qNVRugEof4=;
- b=Acl4XszjG46xSbuQTwffitGvqJSB2bIPnsiu/Mwa0/pE9iPqBpytvbSXGGkUr1itaSD3ggdOuvYLVjXCPMXgaYsoWbN+fzo/YZuNkGhCFPmuKbHDZJgnrxhBT1JRJPcIxvhGqFHwqlqRFFBaD+TMibbb4NeurcNfu184nEwXeHiKVBT5KvPXDjyl4rliIx5jUPwh8AlKk4Fbn3hNjbaArjBqW4G+GZGMqPrqLTIYHpW0D3HL+gz3zT37h4qUh+3D8hWj/Yk+cB7Z9WjJUsrtNZp16XANqNUs95m8kez6hQe2LR9OTdf627Kge9r7XwPLgdnmlupI6JCVwrfssJXBDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CO1PR11MB4771.namprd11.prod.outlook.com (2603:10b6:303:9f::9)
- by MWHPR11MB1904.namprd11.prod.outlook.com (2603:10b6:300:111::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Wed, 15 Dec
- 2021 09:35:20 +0000
-Received: from CO1PR11MB4771.namprd11.prod.outlook.com
- ([fe80::116:4172:f06e:e2b]) by CO1PR11MB4771.namprd11.prod.outlook.com
- ([fe80::116:4172:f06e:e2b%8]) with mapi id 15.20.4778.018; Wed, 15 Dec 2021
- 09:35:20 +0000
-From:   "Ismail, Mohammad Athari" <mohammad.athari.ismail@intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Voon, Weifeng" <weifeng.voon@intel.com>,
-        "Wong, Vee Khee" <vee.khee.wong@intel.com>
-Subject: RE: [BUG] net: phy: genphy_loopback: add link speed configuration
-Thread-Topic: [BUG] net: phy: genphy_loopback: add link speed configuration
-Thread-Index: AdfwtmkvCyrAW5M4S3mERBKDxICdHAAGBHqAADANSQAAAa06AAAAYHXg
-Date:   Wed, 15 Dec 2021 09:35:20 +0000
-Message-ID: <CO1PR11MB47715A9B7ADB8AF36066DCE6D5769@CO1PR11MB4771.namprd11.prod.outlook.com>
-References: <CO1PR11MB4771251E6D2E59B1B413211FD5759@CO1PR11MB4771.namprd11.prod.outlook.com>
- <YbhmTcFITSD1dOts@lunn.ch>
- <CO1PR11MB477111F4B2AF4EFA61D9B7F4D5769@CO1PR11MB4771.namprd11.prod.outlook.com>
- <Ybm0Bgclc0FP/Q3f@lunn.ch>
-In-Reply-To: <Ybm0Bgclc0FP/Q3f@lunn.ch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.200.16
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d25e84aa-545c-43c7-fc98-08d9bfae3653
-x-ms-traffictypediagnostic: MWHPR11MB1904:EE_
-x-microsoft-antispam-prvs: <MWHPR11MB1904D521DF119655EF7D449CD5769@MWHPR11MB1904.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9SI4R5WysPRb0wUbEIuTezqQJyeXEU4fC5nl8jBN0/rcYGeq5AYnyqud+r5GxPeI+wfG6Et69UvnbT0xNkS9Btjmu7e48zz6kNBeBVEHJDqbYI2hZOWPgat1tu1EpCBNvNRorrEmDUI54NtXC8XD19RzZhgUImU7qs3ICbUnRTGz/26tWGcTyk1aoGjcwY3c2AgMH3UCk8UkdsGdgaFqBWOZrV4EFiYSVTzwy1zkMgJNDU3OOLd/RHt/Fe3wVLSiMISlVTVTuYvWphIz5osE5+OJj3233zUZdDOHte+ROXsS6iBCDSeSHNiqlv+MYJ8u1DTUV7tHG2zziSU1+fG6Jtb+bj++a0NEiIZxBYjGwY8NwFh4M2ESMT8PpoF3yb9ub/XTAFIl03iXYTWT3vP5/k/ilMsVq52jvO+TLlsso5tMLkZsNe76p05pLxqUBUY0OgY6jVjvHX76p6MJKEve1W5LBfralbzbQuHN2HEBMvPvIvvvDVRjORGozazjQT2t83YA9DTJATSLTJ121Y6hRWuysbmr31usGUWa4eJxVhWn+wGgL3B/fWwcOYiLUKB2Wv52fTkyXrpF/d0gXBF41694Cua45CQMy4GyyfM7GQFcs55MKn7aQD3ENI+L4V0dnd1U9TH2gHqhWIC+n2Y8QtKLDfGmJzRYA6D2LzJlsnXO0CNMBjxdXhCJbSjMg1ELeo5ehNSCNPO87ofDUWD06Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4771.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8936002)(54906003)(5660300002)(8676002)(64756008)(76116006)(55016003)(86362001)(6916009)(66446008)(122000001)(6506007)(4326008)(66476007)(66556008)(4744005)(66946007)(316002)(7696005)(38100700002)(33656002)(53546011)(9686003)(2906002)(38070700005)(82960400001)(26005)(71200400001)(52536014)(186003)(83380400001)(107886003)(508600001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?GN/xRawQzJ2OjPImkYQthpkdry1D62GBDaJUFRrAXl1ulObwO8TXmNN6Q1cH?=
- =?us-ascii?Q?iHvQ93TFo2TZUTQfEyiOHvplOGDabPw+QVVJDbn4Tb/pO/GjENqlHCwA4bq6?=
- =?us-ascii?Q?nab+lnw4md7lsb4PT3E28jkn9MZjb5clNRiaK4vgk1QWyYWq8Ljt/rh+DX+q?=
- =?us-ascii?Q?KZidvSxaRdRnGkVaDK6tWhOjZxrXX0hHiew4euBGTsToYepcg6iO/0gDjE9C?=
- =?us-ascii?Q?0YXNzd9Lp57vs0woS99e8sQu9mD0DXJw8ZiMcvRojgY3qL5oNzFqThow5FGr?=
- =?us-ascii?Q?alNv4DJ/X5J7Jen9euVIBU8eh8FOdUWNzMk94ZoAEb0Z91jn4OTMkUVLLhP3?=
- =?us-ascii?Q?//nMnRRALG4JjmUXcVOwLzPyD64ThX2V887/ECHs29ZAL2SNv+H2cuJ+3iEg?=
- =?us-ascii?Q?CYIIGk9nGxabqzBmonqPnmC7VJr+S7uFWfAxnzvNr3q/6y4lwuXN1xxlusQs?=
- =?us-ascii?Q?b5JvL7XDe+nwVmRR5/RUYzhVhddNE0NenEQ2nTSPo0G+mhjHUtZfK3ynnKyo?=
- =?us-ascii?Q?Ojdvr2CUfjBDeBzub4UeEteKGTktr9Wa+flcjhEFxC6tVKx+5ymtdA8chhTY?=
- =?us-ascii?Q?PEEPE3k2m7ljdD+50Grngk+Tn2hrLLZYaT/OxlDEFoHeS0PFYl5wUyWwAa0n?=
- =?us-ascii?Q?iLYeQyNfis8/qU0LEt2kDahx2ame9Y3/+h/jwWPNTR6CYeDCUx35HUGybUaf?=
- =?us-ascii?Q?8N/zkiEt7OPWAxj1oJFdFwW5g9sA5YtrILxev7IUq0LXQSApDWn3oi2+YON3?=
- =?us-ascii?Q?pfySKGH69UVMJgATTeB1rzhTl/MTezzEbM1GUP/mAeaI8vi9K71RPIlG61wb?=
- =?us-ascii?Q?cs1OHrHT9LCQAt0Lf+ClkyviNnNt6TyJJ2QxDhFpsr/tI2aHCreVYXvmpn7D?=
- =?us-ascii?Q?qBxhd86Yk5Z1qASLULLdFNuXMAm/g7Bwx8rrYe/WY32Q5uGHhVZ98ziwsp1f?=
- =?us-ascii?Q?Pjdj+dWxrj+KQrDJ3J6bdJ9bOM2tRCwDIswrTVO0gvLSLWXvMzu2h/mV3zKX?=
- =?us-ascii?Q?QT71zSk393G+ggG645GyR6lnv4Q6bMHz7ELw9EWWwXJbbBeh7VNa6e1Z/Pc0?=
- =?us-ascii?Q?HBSO+5K8N3LyOBzGMYSbzt70sBpUzebyCXWVQXv/mSnfWr9qVVS3RBkJ8cRS?=
- =?us-ascii?Q?D8tg3KDTP32lo94jAqd9KwUnIr61PcSU+B6KrhDygrXlZOyQ2M4QkzRt4lQz?=
- =?us-ascii?Q?DnsJhfAKnk0ZNTfWUq5HhmE7EjYdqTWvsAAOkXTk4ZSE19mZpHTqb5AKsvRD?=
- =?us-ascii?Q?fEengT1LqRI4MlhSLaL9HrEGky3qJGupDs9P1Y4o6NVEGH90ZwXkVJVnhH/2?=
- =?us-ascii?Q?wQNdvciHTtY08f5LUHQSbWCupu1W8lvQYsNvjBBdQunjd2eQOap0aJkcaYiw?=
- =?us-ascii?Q?gX16JmJSVm3/8j34KC+pjxIqLkptFFPHWyvweK3lQWpncSmohtccnX+yxiYe?=
- =?us-ascii?Q?u/VLR7q1+tnX0YFL1Xj+pHIyK8kZm1RNlpZxbgHBJ0+aR9MBVIN8Uvtbi6io?=
- =?us-ascii?Q?7jfnZhZwl5TfVFg1wyVQ7W0iR3jBBfuXIguNCmcBPIHIQHJmFJEdae8ml9JR?=
- =?us-ascii?Q?YrqsLyjonSh/Fm6sO0hnqFx0KFlonJN+AxVVs3FtL/fFhqWqpn9kUmMQHlLQ?=
- =?us-ascii?Q?WT6a5lp/l3NifkQZ6DH29XgTKPUaY7n6/HJ1TslpLYYRH3KzGvEf3mrENLsy?=
- =?us-ascii?Q?CGjCeEKCcbZIj6FhwEw3knuktFaRwUFvdtb3V7FR9x+RWQrE?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S241217AbhLOJgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:36:21 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:34918
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236594AbhLOJgU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 04:36:20 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3AaHKrP6OEBSWAU37vrR1GlcFynXyQoLVcMsFnjC/?=
+ =?us-ascii?q?WdVTrhjsk3zJVymIbUW6PM/6OYWL0co9wPo7g8EkBsJfWm99gGjLY11k9FiMQ8?=
+ =?us-ascii?q?ZKt6fexdxqrYXvKdqUvdK/WhiknQoGowPscEzmM9n9BDpC79SMljPvRG+KmYAL?=
+ =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5W31GyNh1aYBlkpB5er83uDi?=
+ =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFCtq?=
+ =?us-ascii?q?piLf2dCXmQJaCYE7Q2jwPAfHk20cZzsAx+v9T2P40a1pTijzPm9luwdFJnZ22U?=
+ =?us-ascii?q?wYgeKPW8AgYe0AHQnohYMWq/5eCexBTq/e70ETAfGLtxfpGEkAoOssT/eMfKWd?=
+ =?us-ascii?q?P/vscIStLdhmHhvKewbeyRa9inKwLJ87gN4I3oWB70TzcALAiQIidBavQjfdc3?=
+ =?us-ascii?q?TEtloVNEOzYas4xdzVidlLDbgdJN1NRD4gx9NpELFGXnyZw8Q3O4/Ntui6NnEo?=
+ =?us-ascii?q?hjf73PcSTYdKQA8NYgi6lSqv91zyRKnkn2Ba3kGftHqqQu9Ly?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AQe2Va6i+v+relkW2W6fLE2b/mHBQXuMji2hC?=
+ =?us-ascii?q?6mlwRA09TyVXrbHJoB17726MtN9/YgBDpTntAtjifZqYz/5ICOoqU4tKPjOW3V?=
+ =?us-ascii?q?dARbsKheDfKn/behEWndQtsZuIHZIOb+EYzmIWsS852mOF+hobrOVvOZrGudvj?=
+X-IronPort-AV: E=Sophos;i="5.88,207,1635199200"; 
+   d="scan'208";a="179375"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 10:36:18 +0100
+Date:   Wed, 15 Dec 2021 10:36:17 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     =?GB2312?B?zfXH5g==?= <wangqing@vivo.com>
+cc:     Nicolas Palix <nicolas.palix@imag.fr>,
+        "cocci@systeme.lip6.fr" <cocci@systeme.lip6.fr>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?GB2312?Q?Re=3A_=BB=D8=B8=B4=3A_=5BPATCH=5D_coccinelle=3A_adjust?=
+ =?GB2312?Q?_the_confidence_of_fen=2Ecocci?=
+In-Reply-To: <SL2PR06MB308278FAD9A0DC79F92CB580BD769@SL2PR06MB3082.apcprd06.prod.outlook.com>
+Message-ID: <alpine.DEB.2.22.394.2112151026590.2946@hadrien>
+References: <1639484373-76061-1-git-send-email-wangqing@vivo.com> <AMYAywCFE0lG630WMxnU84qe.9.1639487006485.Hmail.wangqing@vivo.com.@PGFscGluZS5ERUIuMi4yMi4zOTQuMjExMjE0MTQwMjI0MC4yNjIzQGhhZHJpZW4+>
+ <SL2PR06MB308278FAD9A0DC79F92CB580BD769@SL2PR06MB3082.apcprd06.prod.outlook.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4771.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d25e84aa-545c-43c7-fc98-08d9bfae3653
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 09:35:20.5468
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cnPmkyCFPLR4zQmd92FQaU28uspjpX6r2MrDqRWHbVoRr2+a4SGW4qiTlav3oWWeGSp5xv6XALjltVTLWA4us856HqFo0sJY0mjI/ilbw4csqxF2osQMhrHSwMDVHih8
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1904
-X-OriginatorOrg: intel.com
+Content-Type: multipart/mixed; boundary="8323329-1685345872-1639560977=:2946"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1685345872-1639560977=:2946
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
 
-> -----Original Message-----
-> From: Andrew Lunn <andrew@lunn.ch>
-> Sent: Wednesday, December 15, 2021 5:23 PM
-> To: Ismail, Mohammad Athari <mohammad.athari.ismail@intel.com>
-> Cc: Oleksij Rempel <o.rempel@pengutronix.de>; netdev@vger.kernel.org;
-> linux-kernel@vger.kernel.org; Voon, Weifeng <weifeng.voon@intel.com>;
-> Wong, Vee Khee <vee.khee.wong@intel.com>
-> Subject: Re: [BUG] net: phy: genphy_loopback: add link speed configuratio=
-n
->=20
-> > Thanks for the suggestion. The proposed solution also doesn't work. Sti=
-ll
-> get -110 error.
->=20
-> Please can you trace where this -110 comes from. Am i looking at the wron=
-g
-> poll call?
 
-I did read the ret value from genphy_soft_reset() and phy_read_poll_timeout=
-().
-The -110 came from phy_read_poll_timeout().
+On Wed, 15 Dec 2021, 王擎 wrote:
 
--Athari-
+>
+> >> From: Wang Qing <wangqing@vivo.com>
+> >>
+> >> We scan by coccinelle according to the confidence value, then check for
+> >> potential problems. But the accuracy of this cocci is very low,
+> >> the scan results are all wrong.
+> >
+> >Can you give some examples of cases where the results are wrong?
+> >
+> For example:
+> for_each_node_by_name(np, "global-utilities") {
+> 	if ((of_get_property(np, "fsl,has-rstcr", NULL))) {
+> 		rstcr = of_iomap(np, 0) + 0xb0;
+> 		if (!rstcr) {
+> 			printk (KERN_ERR "Error: reset control "
+> 					"register not mapped!\n");
+> 		} else {
+> 			register_restart_handler(&restart_handler);
+> 		}
+> 		break; // break here
+> 	}
+> }
+>
+> of_node_put(np);  // Is there any problem here?
 
->=20
-> Thanks
-> 	Andrew
+This looks quite strange.  If the loop exits normally, then there is a put
+on something on which there was no get.  Is the value NULL in tihs case,
+and so the of_node_put does nothing?  I guess that then there is no
+problem, but it's not clear that the code is very nice either.
+
+But I think that the real of_node_put problems are covered by another
+rule, so we can drop this one, as you suggested.
+
+julia
+
+>
+> And there are many others:
+> >>>>>>>>>>>>>>>>>  iterators/fen.cocci <<<<<<<<<<<<<<<<<<<<
+> drivers/edac/cell_edac.c:165:1-12: ERROR: of_node_put not needed after iterator on line 137
+> arch/powerpc/platforms/powermac/udbg_adb.c:204:1-12: ERROR: of_node_put not needed after iterator on line 195
+> arch/powerpc/platforms/cell/iommu.c:744:1-12: ERROR: of_node_put not needed after iterator on line 737
+> arch/powerpc/kexec/file_load_64.c:1037:1-12: ERROR: of_node_put not needed after iterator on line 1023
+> drivers/cpufreq/pmac64-cpufreq.c:640:1-12: ERROR: of_node_put not needed after iterator on line 501
+> arch/powerpc/kexec/ranges.c:271:1-12: ERROR: of_node_put not needed after iterator on line 248
+> arch/powerpc/platforms/chrp/setup.c:479:1-12: ERROR: of_node_put not needed after iterator on line 470
+> arch/powerpc/platforms/chrp/setup.c:524:1-12: ERROR: of_node_put not needed after iterator on line 521
+> arch/powerpc/platforms/4xx/uic.c:293:1-12: ERROR: of_node_put not needed after iterator on line 280
+> arch/powerpc/mm/numa.c:1317:1-12: ERROR: of_node_put not needed after iterator on line 1289
+> sound/ppc/pmac.c:970:2-13: ERROR: of_node_put not needed after iterator on line 951
+> drivers/tty/serial/cpm_uart/cpm_uart_core.c:1336:1-12: ERROR: of_node_put not needed after iterator on line 1316
+> arch/powerpc/sysdev/fsl_soc.c:190:1-12: ERROR: of_node_put not needed after iterator on line 177
+>
+> Thanks,
+> Qing
+>
+> >thanks,
+> >julia
+> >
+> >>
+> >> So, lower its confidence to low.
+> >>
+> >> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> >> ---
+> >>  scripts/coccinelle/iterators/fen.cocci | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/scripts/coccinelle/iterators/fen.cocci b/scripts/coccinelle/iterators/fen.cocci
+> >> index b69f966..7b71207
+> >> --- a/scripts/coccinelle/iterators/fen.cocci
+> >> +++ b/scripts/coccinelle/iterators/fen.cocci
+> >> @@ -2,7 +2,7 @@
+> >>  /// These iterators only exit normally when the loop cursor is NULL, so there
+> >>  /// is no point to call of_node_put on the final value.
+> >>  ///
+> >> -// Confidence: High
+> >> +// Confidence: Low
+> >>  // Copyright: (C) 2010-2012 Nicolas Palix.
+> >>  // Copyright: (C) 2010-2012 Julia Lawall, INRIA/LIP6.
+> >>  // Copyright: (C) 2010-2012 Gilles Muller, INRIA/LiP6.
+> >> --
+> >> 2.7.4
+> >>
+> >>
+--8323329-1685345872-1639560977=:2946--

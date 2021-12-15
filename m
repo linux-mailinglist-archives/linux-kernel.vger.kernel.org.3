@@ -2,167 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FECF475B16
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE84A475B19
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243527AbhLOOwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243504AbhLOOw2 (ORCPT
+        id S243535AbhLOOyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:54:16 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:55686 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237581AbhLOOyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:52:28 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA69C061574;
-        Wed, 15 Dec 2021 06:52:27 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id e24so17898574lfc.0;
-        Wed, 15 Dec 2021 06:52:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LO1x8iedEbzMXD8iaeIwOohPXHwNbM9LQL7gCPHHVok=;
-        b=QjCUIXRCRUhvXqnKy2b8cNhuz/nNrXo5BUbNtoRem0OJ9o0sDFziIeI0nM9+uK+hcK
-         Lk6cnre1LKuPsyuTqfLgm2xJqWBma9a50yGZ3La2W7UCq+8QKlX1WYbQ9h/DF7410ywZ
-         Z2mOBO4RKMt0UOXbAAa+bNvv6+qh73eVixLAMrSjQ7x9+bt96Sa6MgrWCTREama5SCXt
-         XIGiYjsarVgwWQNRNOp4LuXJ9p3NscZ8NjLxn5q8HwpNz1BiP2vn4XSsJl+UtU/6MNjl
-         //4DzHEBpiJbbJk6IRbYZ5se4wsOhnG4cAFLaDjGlyuymRWgciF1Yg93Tzdk1eEjnfoa
-         fftg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LO1x8iedEbzMXD8iaeIwOohPXHwNbM9LQL7gCPHHVok=;
-        b=KxRUSHnaxQV6KVyEMegSs3uA7K1nIM/QLxB9BK1+KKOyyPDW2x5YJ47TbONEy6XBz8
-         CwI5WpjZDz7nPbBGzH4TAdADW2Sda6KqCUMNlV1WNU/puYZmv2wCbHOgZnSbwQ/XdQE7
-         xaM0uROhgJUT4QtD7evD9Hbs5tN0W6m+kdxlqWSMj3w1wsFLGRrbWXkcbbZvrMIbFqZn
-         u0XzVMySuiNQfGvrxIyZ1/WyeFJhEn/RLgBOOpDrGnOS5fGg9VTC5O9gmSePn2k+UD75
-         7bqTLvCl78kRV3uDjoPM0SRh0omNnrBBjYqA/mk4+dWq+FNN/uxN5gGD+AGAs7gOBMpS
-         Dk5g==
-X-Gm-Message-State: AOAM533Bghsz9IVirp70iZq+WaagIYxtmDVRKTRnLBh6PqbBY0f8uJcL
-        PPVV9k+y1E/6XLNGbnoiB8GCxzagdcI=
-X-Google-Smtp-Source: ABdhPJz7DCXQh8+Cu8E5eqzQJ7mTCbxRpntVNjHf/gwJg9yeA17TYw04B0ceWbFDaA2+uDWbbc7l4Q==
-X-Received: by 2002:a19:761a:: with SMTP id c26mr10205200lff.584.1639579945929;
-        Wed, 15 Dec 2021 06:52:25 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id b7sm353091lfb.224.2021.12.15.06.52.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 06:52:25 -0800 (PST)
-Subject: Re: [PATCH v6 11/28] ARM: tegra: Add device-tree for ASUS Transformer
- Infinity TF700T
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        David Heidelberg <david@ixit.cz>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Anton Bambura <jenneron@protonmail.com>,
-        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
-        Nikola Milosavljevic <mnidza@outlook.com>,
-        Ion Agorria <ion@agorria.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Ihor Didenko <tailormoon@rambler.ru>,
-        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
-        Jasper Korten <jja2000@gmail.com>,
-        Thomas Graichen <thomas.graichen@gmail.com>,
-        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211211211412.10791-1-digetx@gmail.com>
- <20211211211412.10791-12-digetx@gmail.com> <Ybn1Ne2aGfsablwQ@orome>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <02d7e9a9-6999-cccd-aea2-d069c759cd56@gmail.com>
-Date:   Wed, 15 Dec 2021 17:52:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 15 Dec 2021 09:54:15 -0500
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 697B720B7179;
+        Wed, 15 Dec 2021 06:54:15 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 697B720B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1639580055;
+        bh=kpvtFImBdsm0KS6/7ksR5rDp39OEowT/MiX537AcTKA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MmWbvmBoJOrpllac7Vzm7DlHz/8QuqZV4quR/T0DZyzWGW74auXKoo7+Wq2rI7x0z
+         PD76FHEIuLAR0WBvXxQbKyKul+dDX+kIXyOqAerSCrKnlgWf6RfVG75Vzdbg7eZyjO
+         QK7e3+cU3UAXqzQmSbGddXVub09+SvJSnMfidqW8=
+Received: by mail-pj1-f53.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso20633066pji.0;
+        Wed, 15 Dec 2021 06:54:15 -0800 (PST)
+X-Gm-Message-State: AOAM531YkIBO0XsJ8d4o3e4VmnNYXyywAIALmBwIuZ15pnsmy72bUB/0
+        mBFQTDtkBW36m+55u5zPcyijwk5lq4+twYdTkSU=
+X-Google-Smtp-Source: ABdhPJyYlvtC8PbTkloBE3GK0NsNRRrs3BSa88a0IjzkqUrs32iyUjkW8mEl78Zy/F0o5l0K7Ce+nybVGCYh0qP0CrI=
+X-Received: by 2002:a17:90b:3b8d:: with SMTP id pc13mr167135pjb.112.1639580054956;
+ Wed, 15 Dec 2021 06:54:14 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Ybn1Ne2aGfsablwQ@orome>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211210172034.13614-1-mcroce@linux.microsoft.com> <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com>
+In-Reply-To: <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Wed, 15 Dec 2021 15:53:38 +0100
+X-Gmail-Original-Message-ID: <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
+Message-ID: <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: limit bpf_core_types_are_compat() recursion
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-15.12.2021 17:01, Thierry Reding пишет:
-> On Sun, Dec 12, 2021 at 12:13:55AM +0300, Dmitry Osipenko wrote:
-> [...]
->> +		i2c@1 {
->> +			reg = <1>;
->> +			#address-cells = <1>;
->> +			#size-cells = <0>;
->> +
->> +			dsi-bridge@7 {
->> +				compatible = "toshiba,tc358768";
->> +				reg = <0x7>;
->> +
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +
->> +				clocks = <&tc358768_osc>;
->> +				clock-names = "refclk";
->> +
->> +				reset-gpios = <&gpio TEGRA_GPIO(N, 6) GPIO_ACTIVE_LOW>;
->> +
->> +				vddc-supply = <&vdd_1v2_mipi>;
->> +				vddio-supply = <&vdd_1v8_vio>;
->> +				vddmipi-supply = <&vdd_1v2_mipi>;
->> +
->> +				ports {
->> +					#address-cells = <1>;
->> +					#size-cells = <0>;
->> +
->> +					port@0 {
->> +						reg = <0>;
->> +
->> +						bridge_input: endpoint {
->> +							remote-endpoint = <&dpi_output>;
->> +							data-lines = <24>;
->> +						};
->> +					};
->> +
->> +					port@1 {
->> +						reg = <1>;
->> +
->> +						bridge_output: endpoint {
->> +							remote-endpoint = <&panel_input>;
->> +						};
->> +					};
->> +				};
->> +
->> +				/*
->> +				 * Panasonic VVX10F004B00 or HYDIS HV101WU1-1E1
->> +				 * LCD SuperIPS+ Full HD panel.
->> +				 */
->> +				panel@1 {
->> +					compatible = "panasonic,vvx10f004b00";
->> +					reg = <1>;
->> +
->> +					power-supply = <&vdd_pnl>;
->> +					backlight = <&backlight>;
->> +
->> +					port {
->> +						panel_input: endpoint {
->> +							remote-endpoint = <&bridge_output>;
->> +						};
->> +					};
->> +				};
-> 
-> make dtbs_check complains about this and says that panel@1 (as well as
-> #address-cells and #size-cells) are not allowed here. And indeed the
-> binding for the Toshiba bridge doesn't mention them here.
-> 
-> Do we need this here or should this be moved to the top level to fix
-> those warnings? I guess what you're doing above is describe a DSI bus
-> created by the DSI bridge, which also makes sense, so another
-> alternative would be to fix up the binding and let it accept those
-> properties.
+On Wed, Dec 15, 2021 at 6:57 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Dec 10, 2021 at 9:20 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
+> >
+> > From: Matteo Croce <mcroce@microsoft.com>
+> >
+> > In userspace, bpf_core_types_are_compat() is a recursive function which
+> > can't be put in the kernel as is.
+> > Limit the recursion depth to 2, to avoid potential stack overflows
+> > in kernel.
+> >
+> > Signed-off-by: Matteo Croce <mcroce@microsoft.com>
+>
+> Thank you for taking a stab at it!
+>
+> > +#define MAX_TYPES_ARE_COMPAT_DEPTH 2
+> > +
+> > +static
+> > +int __bpf_core_types_are_compat(const struct btf *local_btf, __u32 local_id,
+> > +                               const struct btf *targ_btf, __u32 targ_id,
+> > +                               int level)
+> > +{
+> > +       const struct btf_type *local_type, *targ_type;
+> > +       int depth = 32; /* max recursion depth */
+> > +
+> > +       if (level <= 0)
+> > +               return -EINVAL;
+> > +
+> > +       /* caller made sure that names match (ignoring flavor suffix) */
+> > +       local_type = btf_type_by_id(local_btf, local_id);
+> > +       targ_type = btf_type_by_id(targ_btf, targ_id);
+> > +       if (btf_kind(local_type) != btf_kind(targ_type))
+> > +               return 0;
+> > +
+> > +recur:
+> > +       depth--;
+> > +       if (depth < 0)
+> > +               return -EINVAL;
+> > +
+> > +       local_type = btf_type_skip_modifiers(local_btf, local_id, &local_id);
+> > +       targ_type = btf_type_skip_modifiers(targ_btf, targ_id, &targ_id);
+> > +       if (!local_type || !targ_type)
+> > +               return -EINVAL;
+> > +
+> > +       if (btf_kind(local_type) != btf_kind(targ_type))
+> > +               return 0;
+> > +
+> > +       switch (btf_kind(local_type)) {
+> > +       case BTF_KIND_UNKN:
+> > +       case BTF_KIND_STRUCT:
+> > +       case BTF_KIND_UNION:
+> > +       case BTF_KIND_ENUM:
+> > +       case BTF_KIND_FWD:
+> > +               return 1;
+> > +       case BTF_KIND_INT:
+> > +               /* just reject deprecated bitfield-like integers; all other
+> > +                * integers are by default compatible between each other
+> > +                */
+> > +               return btf_int_offset(local_type) == 0 && btf_int_offset(targ_type) == 0;
+> > +       case BTF_KIND_PTR:
+> > +               local_id = local_type->type;
+> > +               targ_id = targ_type->type;
+> > +               goto recur;
+> > +       case BTF_KIND_ARRAY:
+> > +               local_id = btf_array(local_type)->type;
+> > +               targ_id = btf_array(targ_type)->type;
+> > +               goto recur;
+> > +       case BTF_KIND_FUNC_PROTO: {
+> > +               struct btf_param *local_p = btf_params(local_type);
+> > +               struct btf_param *targ_p = btf_params(targ_type);
+> > +               __u16 local_vlen = btf_vlen(local_type);
+> > +               __u16 targ_vlen = btf_vlen(targ_type);
+> > +               int i, err;
+> > +
+> > +               if (local_vlen != targ_vlen)
+> > +                       return 0;
+> > +
+> > +               for (i = 0; i < local_vlen; i++, local_p++, targ_p++) {
+> > +                       btf_type_skip_modifiers(local_btf, local_p->type, &local_id);
+> > +                       btf_type_skip_modifiers(targ_btf, targ_p->type, &targ_id);
+>
+>
+> Maybe do a level check here?
+> Since calling it and immediately returning doesn't conserve
+> the stack.
+> If it gets called it can finish fine, but
+> calling it again would be too much.
+> In other words checking the level here gives us
+> room for one more frame.
+>
 
-Toshiba bridge binding is incomplete. David has patch for that [1], I
-don't think that it was sent out yet.
+I thought that the compiler was smart enough to return before
+allocating most of the frame.
+I tried and this is true only with gcc, not with clang.
 
-[1]
-https://github.com/okias/linux/commit/0875230062294b6db17f395ced0a8384a4c1cfc7
+> > +                       err = __bpf_core_types_are_compat(local_btf, local_id,
+> > +                                                         targ_btf, targ_id,
+> > +                                                         level - 1);
+> > +                       if (err <= 0)
+> > +                               return err;
+> > +               }
+> > +
+> > +               /* tail recurse for return type check */
+> > +               btf_type_skip_modifiers(local_btf, local_type->type, &local_id);
+> > +               btf_type_skip_modifiers(targ_btf, targ_type->type, &targ_id);
+> > +               goto recur;
+> > +       }
+> > +       default:
+> > +               pr_warn("unexpected kind %s relocated, local [%d], target [%d]\n",
+> > +                       btf_type_str(local_type), local_id, targ_id);
+>
+> That should be bpf_log() instead.
+>
 
+To do that I need a struct bpf_verifier_log, which is not present
+there, neither in bpf_core_spec_match() or bpf_core_apply_relo_insn().
+Should we drop the message at all?
+
+> > +               return 0;
+> > +       }
+> > +}
+>
+> Please add tests that exercise this logic by enabling
+> additional lskels and a new test that hits the recursion limit.
+> I suspect we don't have such case in selftests.
+>
+> Thanks!
+
+Will do!
+
+Regards,
+-- 
+per aspera ad upstream

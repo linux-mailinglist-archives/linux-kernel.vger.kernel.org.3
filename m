@@ -2,103 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF5C475C29
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C79475C2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244132AbhLOPr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:47:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:49583 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244110AbhLOPr5 (ORCPT
+        id S244141AbhLOPsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:48:16 -0500
+Received: from mail-oo1-f48.google.com ([209.85.161.48]:33749 "EHLO
+        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244136AbhLOPsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:47:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639583277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=prBQp9dTKIRBw4z7Uj86elfBkm/Guna1cZpwNeo2Vh8=;
-        b=OATNBiyfFzxah7x3/pzTJzRoE8V5bTcHJNtg/WN9dCoeMtR29oIUkxc7y+xlHk4yDCZice
-        gdIidP+0K76I+/5EXsgmkNhLB759ZtfSNxB2zVZa6ocSu2RcehM1T+M/xvwfNHX1XJTFkq
-        wComxK7NuAfzubs/1NUoUXN/HW5rem0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-341-eG32FGKZOtqkWObp6a-9NQ-1; Wed, 15 Dec 2021 10:47:54 -0500
-X-MC-Unique: eG32FGKZOtqkWObp6a-9NQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 89F1381EE62;
-        Wed, 15 Dec 2021 15:47:51 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 24F7579590;
-        Wed, 15 Dec 2021 15:47:46 +0000 (UTC)
-Message-ID: <0271da9d3a7494d9e7439d4b8d6d9c857c83a45e.camel@redhat.com>
-Subject: Re: [PATCH 11/15] KVM: VMX: Update vmcs.GUEST_CR3 only when the
- guest CR3 is dirty
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Lai Jiangshan <laijs@linux.alibaba.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Date:   Wed, 15 Dec 2021 17:47:45 +0200
-In-Reply-To: <20211108124407.12187-12-jiangshanlai@gmail.com>
-References: <20211108124407.12187-1-jiangshanlai@gmail.com>
-         <20211108124407.12187-12-jiangshanlai@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 15 Dec 2021 10:48:15 -0500
+Received: by mail-oo1-f48.google.com with SMTP id r18-20020a4a7252000000b002c5f52d1834so6055350ooe.0;
+        Wed, 15 Dec 2021 07:48:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YWe46+RAeAhv8NF0hCOXC2BzwnA8Qf4Za9W9pdCQ3i4=;
+        b=dfXOrGp0DhVFyAkstQIYvxwH2uK0DXAR75Y+MX12KVnN4Fok9/WEPYnu3iY1Lg64Jq
+         qhD65M6h1395krNMLgoijh8SVK8azNlgdLvMoozTOw5FO7kjfemoCv++vmdR47d/tZ9x
+         dtX6tPVjVOVbiaT9VTyNJrnIy3hFc2zTCSme7/O99cgiL4PoGPVWAN2uS/MhreneiT8/
+         pMNTe5UpIAoQPu0RijoGNTGalBvDX8GMPdCQ2fjB+NiecmafiTVpTwvVHkMzZjuUDvSW
+         /J8EwJ9GQd5zZQV2Vyyoe3R0l3rFlY9x9aIwZcoyPogej/KTKkHhBO2XuB4LjCyYx5vS
+         wOUQ==
+X-Gm-Message-State: AOAM5308qF8u3wK8LIX9NXVTyLbqDIOPgCON2yblDzwG8fbMo4Cwv8id
+        aSkU/29H6Gd7qr/24SZjKg==
+X-Google-Smtp-Source: ABdhPJzdctEjOEJ409DYQ3J/LdTeJQRWm7fGan8BXsK3rIpkYQPsb9T0JqpOHXUWRS4QqK/Wk46VBw==
+X-Received: by 2002:a4a:d8c7:: with SMTP id c7mr7789817oov.58.1639583295075;
+        Wed, 15 Dec 2021 07:48:15 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id o19sm426468oiw.22.2021.12.15.07.48.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 07:48:14 -0800 (PST)
+Received: (nullmailer pid 1371708 invoked by uid 1000);
+        Wed, 15 Dec 2021 15:48:13 -0000
+Date:   Wed, 15 Dec 2021 09:48:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nicolas Saenz Julienne <nsaenz@kernel.org>
+Cc:     stefan.wahren@i2se.com, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: soc: bcm: Convert brcm,bcm2835-vchiq to
+ json-schema
+Message-ID: <YboOPd/xYWkL2JrJ@robh.at.kernel.org>
+References: <20211215094448.280796-1-nsaenz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215094448.280796-1-nsaenz@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-11-08 at 20:44 +0800, Lai Jiangshan wrote:
-> From: Lai Jiangshan <laijs@linux.alibaba.com>
+On Wed, Dec 15, 2021 at 10:44:49AM +0100, Nicolas Saenz Julienne wrote:
+> From: Stefan Wahren <stefan.wahren@i2se.com>
 > 
-> When vcpu->arch.cr3 is changed, it is marked dirty, so vmcs.GUEST_CR3
-> can be updated only when kvm_register_is_dirty(vcpu, VCPU_EXREG_CR3).
+> This converts the VCHIQ bindings to YAML format.
+
+Am I supposed to review this? Some version of it is already in 
+linux-next...
+
 > 
-> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> Co-developed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
+> Signed-off-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
+> 
 > ---
->  arch/x86/kvm/vmx/vmx.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Changes since v2:
+>  - Reinstate fallback compatible
 > 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index d94e51e9c08f..38b65b97fb7b 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -3126,9 +3126,9 @@ static void vmx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
->  
->  		if (!enable_unrestricted_guest && !is_paging(vcpu))
->  			guest_cr3 = to_kvm_vmx(kvm)->ept_identity_map_addr;
-> -		else if (test_bit(VCPU_EXREG_CR3, (ulong *)&vcpu->arch.regs_avail))
-> +		else if (kvm_register_is_dirty(vcpu, VCPU_EXREG_CR3))
->  			guest_cr3 = vcpu->arch.cr3;
-> -		else /* vmcs01.GUEST_CR3 is already up-to-date. */
-> +		else /* vmcs.GUEST_CR3 is already up-to-date. */
->  			update_guest_cr3 = false;
->  		vmx_ept_load_pdptrs(vcpu);
->  	} else {
-
-
-I just bisected this patch to break booting a VM with ept=1 but unrestricted_guest=0
-(I needed to re-test unrestricted_guest=0 bug related to SMM, but didn't want
-to boot without EPT. With ept=0,the VM boots with this patch applied).
-
-Reverting this patch on top of kvm/queue also works.
-
-Best regards,
-	Maxim levitsky
-
+>  .../bindings/soc/bcm/brcm,bcm2835-vchiq.txt   | 17 ------
+>  .../bindings/soc/bcm/brcm,bcm2835-vchiq.yaml  | 53 +++++++++++++++++++
+>  2 files changed, 53 insertions(+), 17 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-vchiq.txt
+>  create mode 100644 Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-vchiq.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-vchiq.txt b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-vchiq.txt
+> deleted file mode 100644
+> index f331316183f6..000000000000
+> --- a/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-vchiq.txt
+> +++ /dev/null
+> @@ -1,17 +0,0 @@
+> -Broadcom VCHIQ firmware services
+> -
+> -Required properties:
+> -
+> -- compatible:	Should be "brcm,bcm2835-vchiq" on BCM2835, otherwise
+> -		"brcm,bcm2836-vchiq".
+> -- reg:		Physical base address and length of the doorbell register pair
+> -- interrupts:	The interrupt number
+> -		  See bindings/interrupt-controller/brcm,bcm2835-armctrl-ic.txt
+> -
+> -Example:
+> -
+> -mailbox@7e00b840 {
+> -	compatible = "brcm,bcm2835-vchiq";
+> -	reg = <0x7e00b840 0xf>;
+> -	interrupts = <0 2>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-vchiq.yaml b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-vchiq.yaml
+> new file mode 100644
+> index 000000000000..e04439b3355b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/bcm/brcm,bcm2835-vchiq.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/bcm/brcm,bcm2835-vchiq.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom VCHIQ firmware services
+> +
+> +maintainers:
+> +  - Nicolas Saenz Julienne <nsaenz@kernel.org>
+> +
+> +description:
+> +  The VCHIQ communication channel can be provided by BCM283x and Capri SoCs,
+> +  to communicate with the VPU-side OS services.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - description: BCM2835 based boards
+> +        items:
+> +          - enum:
+> +              - brcm,bcm2835-vchiq
+> +
+> +      - description: BCM2836/BCM2837 based boards
+> +        items:
+> +          - enum:
+> +              - brcm,bcm2836-vchiq
+> +          - const: brcm,bcm2835-vchiq
+> +
+> +  reg:
+> +    description: Physical base address and length of the doorbell register pair
+> +    minItems: 1
+> +
+> +  interrupts:
+> +    description: Interrupt number of the doorbell interrupt
+> +    minItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    mailbox@7e00b840 {
+> +      compatible = "brcm,bcm2835-vchiq";
+> +      reg = <0x7e00b840 0xf>;
+> +      interrupts = <0 2>;
+> +    };
+> +
+> +...
+> -- 
+> 2.33.1
+> 
+> 

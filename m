@@ -2,301 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D396476055
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDDD47606F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343509AbhLOSKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:10:32 -0500
-Received: from mga11.intel.com ([192.55.52.93]:51206 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245728AbhLOSK3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:10:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639591829; x=1671127829;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nkz4uq/rH0zcevft5h5f8WuuneRvuuT3ZQPtIxPLJ8s=;
-  b=ihpoGh/zIQadzLCSquwoMso12QBIJ8NWhQkM/9IzuE5DtTCyWFCWxcnP
-   waVvGNYAYXi40tjU74O0MJURKeUFtN6utAl9HtF7u75qzYG6nTvz2wiMH
-   A/8ec++vi7jPGnEe2JBKX2V9D4MgTDLlgE4H3Fy9P5KFoycFFqC1tGCcb
-   8JffK6pAZTn6QnJKTJwk882v1ra49D4pKRAJm9bSdt6jQgQ6SUU7LyJwf
-   a6RvHxLvFek/k4M8Z3pTi0dn691yMK8yGeFHOGPcXpct1LXsdQBuYRmC4
-   Fvt2qAzbQPofkwVoGUjPZQjbh32mjiNnyWE3HBc/uVN0Qo8zsuLpVmo4v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="236836589"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="236836589"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 10:10:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="518880855"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 15 Dec 2021 10:10:14 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxYjF-00029q-Qr; Wed, 15 Dec 2021 18:10:13 +0000
-Date:   Thu, 16 Dec 2021 02:09:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jirislaby:devel 8/33] include/linux/compiler.h:61:23: warning:
- 'xmit_buf' is deprecated
-Message-ID: <202112160239.cdlehqr0-lkp@intel.com>
+        id S1343558AbhLOSOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:14:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343537AbhLOSOR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 13:14:17 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5969CC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:14:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
+        In-Reply-To:References; bh=wsq8cUBFjzgYgnMDS2RJHFOuvoD7tYl9ctoDcV6S2XU=; b=ma
+        VHM7jnW3jr4hNhZHkDvbhYleitth2sQiAk9MQr4S21BANoKCUezlSV2fxfYr3Bxz+Lb3ETG6oFk76
+        HRmLtccR3HooekJURkDGWIw6c+GSNADF8zBWZra7N9Mdxx9SgruBVu4nTIsaFBwdzm8gLPAdnqiLm
+        PQeIyY69c7Zvex5/fSBnxfk02Zppy+OUgrQcIvmQyYJwFXCdlaOeO7G6mmaeOxsznh1Mp8tI+K8QV
+        mh7e4n5xbv0n3NVvzkc7IyxmESBXtYyv14G8vcQVtqkN77EsAt2QP3Zg331QvenUtq8w+53T5+D/H
+        1RueANeVYxJFgafLegyqTDY2wkvs41UQ==;
+Received: from [81.174.171.191] (helo=donbot.metanate.com)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mxYmz-0001lA-Au; Wed, 15 Dec 2021 18:14:05 +0000
+From:   John Keeping <john@metanate.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     John Keeping <john@metanate.com>, Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/rockchip: vop: duplicate subclassed state variables
+Date:   Wed, 15 Dec 2021 18:13:58 +0000
+Message-Id: <20211215181358.2950649-1-john@metanate.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   d61595c5423534810c1a3c0d4a88dd2fd81d750c
-commit: 8825023d7d2eb9e5dc298ad1996a0c753b2c4580 [8/33] tty: add kfifo to tty_port
-config: s390-randconfig-r044-20211215 (https://download.01.org/0day-ci/archive/20211216/202112160239.cdlehqr0-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=8825023d7d2eb9e5dc298ad1996a0c753b2c4580
-        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
-        git fetch --no-tags jirislaby devel
-        git checkout 8825023d7d2eb9e5dc298ad1996a0c753b2c4580
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+Duplicating the CRTC state should copy all of the fields in the
+subclassed state as well as the base state.  Switch to kmemdup to cover
+all of these (which are all simple variables).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Most of the state variables are only used for .atomic_enable where they
+will have been set in the initial check, and enable_afbc is always set
+in the preceding .atomic_check, so the only issue here is inspecting the
+state later when these field end up no longer reflecting what has been
+programmed in the hardware.
 
-All warnings (new ones prefixed by >>):
-
-   drivers/tty/tty_port.c: In function 'tty_port_alloc_xmit_buf':
-   drivers/tty/tty_port.c:228:9: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     228 |         if (port->xmit_buf == NULL)
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c:228:9: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     228 |         if (port->xmit_buf == NULL)
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   In file included from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/wait.h:7,
-                    from include/linux/wait_bit.h:8,
-                    from include/linux/fs.h:6,
-                    from include/linux/tty.h:5,
-                    from drivers/tty/tty_port.c:8:
->> include/linux/compiler.h:61:23: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-      61 |         static struct ftrace_branch_data                \
-         |                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:69: note: in expansion of macro '__trace_if_value'
-      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: in expansion of macro '__trace_if_var'
-      56 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~
-   drivers/tty/tty_port.c:228:9: note: in expansion of macro 'if'
-     228 |         if (port->xmit_buf == NULL)
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c:229:17: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     229 |                 port->xmit_buf = (unsigned char *)get_zeroed_page(GFP_KERNEL);
-         |                 ^~~~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c:231:9: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     231 |         if (port->xmit_buf == NULL)
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c:231:9: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     231 |         if (port->xmit_buf == NULL)
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   In file included from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/wait.h:7,
-                    from include/linux/wait_bit.h:8,
-                    from include/linux/fs.h:6,
-                    from include/linux/tty.h:5,
-                    from drivers/tty/tty_port.c:8:
->> include/linux/compiler.h:61:23: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-      61 |         static struct ftrace_branch_data                \
-         |                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:69: note: in expansion of macro '__trace_if_value'
-      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: in expansion of macro '__trace_if_var'
-      56 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~
-   drivers/tty/tty_port.c:231:9: note: in expansion of macro 'if'
-     231 |         if (port->xmit_buf == NULL)
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c: In function 'tty_port_free_xmit_buf':
-   drivers/tty/tty_port.c:240:9: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     240 |         if (port->xmit_buf != NULL) {
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c:240:9: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     240 |         if (port->xmit_buf != NULL) {
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   In file included from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/wait.h:7,
-                    from include/linux/wait_bit.h:8,
-                    from include/linux/fs.h:6,
-                    from include/linux/tty.h:5,
-                    from drivers/tty/tty_port.c:8:
->> include/linux/compiler.h:61:23: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-      61 |         static struct ftrace_branch_data                \
-         |                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:69: note: in expansion of macro '__trace_if_value'
-      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: in expansion of macro '__trace_if_var'
-      56 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~
-   drivers/tty/tty_port.c:240:9: note: in expansion of macro 'if'
-     240 |         if (port->xmit_buf != NULL) {
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c:241:17: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     241 |                 free_page((unsigned long)port->xmit_buf);
-         |                 ^~~~~~~~~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c:242:17: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     242 |                 port->xmit_buf = NULL;
-         |                 ^~~~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c: In function 'tty_port_destructor':
-   drivers/tty/tty_port.c:270:9: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     270 |         if (port->xmit_buf)
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c:270:9: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     270 |         if (port->xmit_buf)
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   In file included from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/wait.h:7,
-                    from include/linux/wait_bit.h:8,
-                    from include/linux/fs.h:6,
-                    from include/linux/tty.h:5,
-                    from drivers/tty/tty_port.c:8:
->> include/linux/compiler.h:61:23: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-      61 |         static struct ftrace_branch_data                \
-         |                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:69: note: in expansion of macro '__trace_if_value'
-      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: in expansion of macro '__trace_if_var'
-      56 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~
-   drivers/tty/tty_port.c:270:9: note: in expansion of macro 'if'
-     270 |         if (port->xmit_buf)
-         |         ^~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-   drivers/tty/tty_port.c:271:17: warning: 'xmit_buf' is deprecated [-Wdeprecated-declarations]
-     271 |                 free_page((unsigned long)port->xmit_buf);
-         |                 ^~~~~~~~~
-   In file included from include/linux/tty.h:12,
-                    from drivers/tty/tty_port.c:8:
-   include/linux/tty_port.h:115:34: note: declared here
-     115 |                 unsigned char   *xmit_buf __attribute__((deprecated));
-         |                                  ^~~~~~~~
-
-
-vim +/xmit_buf +61 include/linux/compiler.h
-
-a15fd609ad53a6 Linus Torvalds 2019-03-20  59  
-a15fd609ad53a6 Linus Torvalds 2019-03-20  60  #define __trace_if_value(cond) ({			\
-2bcd521a684cc9 Steven Rostedt 2008-11-21 @61  	static struct ftrace_branch_data		\
-e04462fb82f8dd Miguel Ojeda   2018-09-03  62  		__aligned(4)				\
-33def8498fdde1 Joe Perches    2020-10-21  63  		__section("_ftrace_branch")		\
-a15fd609ad53a6 Linus Torvalds 2019-03-20  64  		__if_trace = {				\
-2bcd521a684cc9 Steven Rostedt 2008-11-21  65  			.func = __func__,		\
-2bcd521a684cc9 Steven Rostedt 2008-11-21  66  			.file = __FILE__,		\
-2bcd521a684cc9 Steven Rostedt 2008-11-21  67  			.line = __LINE__,		\
-2bcd521a684cc9 Steven Rostedt 2008-11-21  68  		};					\
-a15fd609ad53a6 Linus Torvalds 2019-03-20  69  	(cond) ?					\
-a15fd609ad53a6 Linus Torvalds 2019-03-20  70  		(__if_trace.miss_hit[1]++,1) :		\
-a15fd609ad53a6 Linus Torvalds 2019-03-20  71  		(__if_trace.miss_hit[0]++,0);		\
-a15fd609ad53a6 Linus Torvalds 2019-03-20  72  })
-a15fd609ad53a6 Linus Torvalds 2019-03-20  73  
-
-:::::: The code at line 61 was first introduced by commit
-:::::: 2bcd521a684cc94befbe2ce7d5b613c841b0d304 trace: profile all if conditionals
-
-:::::: TO: Steven Rostedt <srostedt@redhat.com>
-:::::: CC: Ingo Molnar <mingo@elte.hu>
-
+Signed-off-by: John Keeping <john@metanate.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+index f3975905599b..0efd79be8f3b 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+@@ -1552,7 +1552,7 @@ static struct drm_crtc_state *vop_crtc_duplicate_state(struct drm_crtc *crtc)
+ {
+ 	struct rockchip_crtc_state *rockchip_state;
+ 
+-	rockchip_state = kzalloc(sizeof(*rockchip_state), GFP_KERNEL);
++	rockchip_state = kmemdup(crtc->state, sizeof(*rockchip_state), GFP_KERNEL);
+ 	if (!rockchip_state)
+ 		return NULL;
+ 
+-- 
+2.34.1
+

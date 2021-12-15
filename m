@@ -2,145 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 417F2475865
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92659475861
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242302AbhLOMGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:06:40 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:40129 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236954AbhLOMGj (ORCPT
+        id S242299AbhLOMGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242288AbhLOMGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:06:39 -0500
+        Wed, 15 Dec 2021 07:06:07 -0500
+Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35807C061747
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:06:07 -0800 (PST)
+Received: by mail-oo1-xc42.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso5831833ood.13
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:06:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639569999; x=1671105999;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fMixDV+hpNbYQgek63SXWJhHVAjFsf+hOokboNZBz2g=;
-  b=eosEveaLkkQruSdc9rBUVdiOKPH/9ggzEoE+wAL9g7+12yPbhHWBfRHx
-   uHskI7Xh3dvjlgHDQIE7LDWudK7n0QZWBrzo5JxjzVJLBqH9PQmpvXOYW
-   Tu/wjonaXvaaPalVQcA/b2KQGpLjrzwbfoUt4h/A3jaHfgfopQUxPxGoF
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Dec 2021 04:06:38 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 04:06:37 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 15 Dec 2021 04:06:37 -0800
-Received: from [10.50.9.33] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 15 Dec
- 2021 04:06:31 -0800
-Message-ID: <5ebbc96a-941f-8f64-e6e9-d70d38260b9d@quicinc.com>
-Date:   Wed, 15 Dec 2021 17:36:00 +0530
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=urbOGxUEIV32+MkH0cwNAEvEHR7ycdGQDqYdOGjjysw=;
+        b=ThTtklH+LJDoaqeG43ed2nEwVgUMKY/bVoyM7JthsuG3hlD3zvuTBRSYEqRA/+AR1w
+         +SEZ5X+lcZxMxp6bm7X3okc/0aV/MKAPIKroUnMIP9yrv5AuLrDG/l0iOEk7vhNJT00d
+         ZSh6e1OPFIxvFjI1jIDy9KEiK0kGKnZNphuMQO+rPzUsouebyK+QnUbHjw7ezvCQm6ya
+         JAiLiuBlMhDzo+6bOPCJDc3lvPjAUjtFUE4+YvWSox6zPQLF9pEmu8EJzFPCIIp3ywD+
+         csL7FXMjkIMIl3vW9Fo4K3a7syWbLPd0uWrNWh7+ODCXel/IApC3lbVPiWNLHfoyBayu
+         Jo1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=urbOGxUEIV32+MkH0cwNAEvEHR7ycdGQDqYdOGjjysw=;
+        b=K/YaTEv7YyiraWSDTPUeAahWTKe7gmnC+RhMvNsS7XQ/+15wEsNnfraIFfTYvtNoWp
+         x3vcm/TO7vIyt7fiZgb5LCgDYtfjiQu4pgtyVYsf9VRE/rJqNpagr/clbVUBIEh2kBST
+         c1X6/OboVB8ZOLs19nzYOlQ0u7CoxXbqT6ij6JjAijtLRjMV/V99s8zcTCJRMJ4rnjD/
+         6H9wnysbODuOLaj+x0/1hBWAqSC6CAz6dGVHgNeEUKMnGtf4jzUE0OAqlZlgzw1n9/Nq
+         YBcWq9IeQ9Fqdg7zIESGD/MfJh6DdIMJ+D9XnpSf34atbKVRmIDiB9jAXh7DKsmPSUwE
+         NkSQ==
+X-Gm-Message-State: AOAM533wVWoXgnfi30sr0Ypjq1xnX9wG1bJssIkGCTCfZrIGe08VOfmT
+        uY5tvuY6tsW1eg2vQZ8rmZAaebcK4i20zWLALgA=
+X-Google-Smtp-Source: ABdhPJzEmnOdokFuTDU/o4KPkFDzkFu0T4SDRiPiWDvhw9ASYPpQAQnxBAiDGOwBC6yDaUnu5xX32f0vziuFpTOlntw=
+X-Received: by 2002:a4a:a44b:: with SMTP id w11mr7068587ool.66.1639569966448;
+ Wed, 15 Dec 2021 04:06:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V2 4/8] usb: dwc3: drd: Register the eud connector child
- node for dwc3
-Content-Language: en-CA
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <greg@kroah.com>,
-        <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
-        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
-        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>
-References: <cover.1638430506.git.quic_schowdhu@quicinc.com>
- <bcb48839a520b8bfc9b09e7a26ba8a8459ab602d.1638430506.git.quic_schowdhu@quicinc.com>
- <YbenLLPUYVX50CJc@robh.at.kernel.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <YbenLLPUYVX50CJc@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Received: by 2002:a05:6830:4408:0:0:0:0 with HTTP; Wed, 15 Dec 2021 04:06:06
+ -0800 (PST)
+Reply-To: drtracywilliam503@gmail.com
+From:   Dr Tracy William <jenniferkatharineg@gmail.com>
+Date:   Wed, 15 Dec 2021 04:06:06 -0800
+Message-ID: <CACUYesE=chnPk0gSOf_H-zCDgNZQ6O6jZ8RxsKhCVx1X_QzdOg@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 12/14/2021 1:33 AM, Rob Herring wrote:
-> On Thu, Dec 02, 2021 at 03:21:23PM +0530, Souradeep Chowdhury wrote:
->> Register the child node for dwc3 which is the "eud_usb_connector".
->> The eud driver will be able to switch the usb role from device to
->> host and vice versa using the role switch property of dwc3 node.
->>
->> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> ---
->>   drivers/usb/dwc3/drd.c | 26 ++++++++++++++++++++++++++
->>   1 file changed, 26 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
->> index d7f7683..b4ea55c 100644
->> --- a/drivers/usb/dwc3/drd.c
->> +++ b/drivers/usb/dwc3/drd.c
->> @@ -8,6 +8,7 @@
->>    */
->>   
->>   #include <linux/extcon.h>
->> +#include <linux/of_platform.h>
->>   #include <linux/of_graph.h>
->>   #include <linux/platform_device.h>
->>   #include <linux/property.h>
->> @@ -164,6 +165,27 @@ static int dwc3_otg_get_irq(struct dwc3 *dwc)
->>   	return irq;
->>   }
->>   
->> +static int dwc3_register_eud(struct dwc3 *dwc)
->> +{
->> +	struct device		*dev = dwc->dev;
->> +	struct device_node	*np = dev->of_node;
->> +	int                     ret;
->> +
->> +	of_get_child_by_name(np, "eud_usb_connector");
-> Connector nodes are named 'connector' or possibly 'usb-connector'. If
-> you are creating an ABI with the node name, it should be documented.
-> However, it's preferred to use 'compatible' for identifying nodes rather
-> than a node name.
-Ack.
->> +	if (!np) {
->> +		dev_dbg(dev, "no usb_connector child node specified\n");
->> +		return 0;
->> +	}
->> +
->> +	ret = of_platform_populate(np, NULL, NULL, dev);
-> But why is any of this needed. The connector doesn't have a driver (I
-> expect eventually we will) and the EUD device is not a child.
-
-Ack. This can be removed as we are no longer mapping EUD as a type C 
-connector.
-
-
->> +	if (ret) {
->> +		dev_err(dev, "failed to register usb_connector - %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->>   void dwc3_otg_init(struct dwc3 *dwc)
->>   {
->>   	u32 reg;
->> @@ -580,6 +602,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
->>   		ret = dwc3_setup_role_switch(dwc);
->>   		if (ret < 0)
->>   			return ret;
->> +
->> +		ret = dwc3_register_eud(dwc);
->> +		if (ret < 0)
->> +			return ret;
->>   	} else if (dwc->edev) {
->>   		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
->>   		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
->> -- 
->> 2.7.4
->>
->>
+-- 
+Hello Dear,
+how are you today?hope you are fine
+My name is Tracy William ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Tracy

@@ -2,149 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 498BE475DAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 000EF475DAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244833AbhLOQkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:40:09 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:33584 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbhLOQkH (ORCPT
+        id S244915AbhLOQkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:40:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230350AbhLOQks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:40:07 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 15 Dec 2021 11:40:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92ABAC061574;
+        Wed, 15 Dec 2021 08:40:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3843A212BD;
-        Wed, 15 Dec 2021 16:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1639586406; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PR/MemBldbTR728L096igmJMG3fo/uDTHlayL6mBYe4=;
-        b=GQBBxdmBohS+o4ZBWp2/gqq4lzHNiZVSy1JPMq7MDWlpGnyALVbQFCf6utnQfj5mKLSQRA
-        v/GHxV0ypGS2TAVlVA+VGjN0iSqtbbhAqWNetEInSPhdzxk6Wg6KAjHs7wCNCx2ILVT7QP
-        sHkFEQZFJUayuDJ9mKcV/vyROUFBYSs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1639586406;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PR/MemBldbTR728L096igmJMG3fo/uDTHlayL6mBYe4=;
-        b=nUwFhiF2wk6jrKHkh37AqVjYosXXTLnHXPQxO8djKhM2ieN2aTJtfUGmu/9CqIa2u0izfo
-        xALB7V3InBlRjQCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DD51913B75;
-        Wed, 15 Dec 2021 16:40:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Vj1KNWUaumGdJgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 15 Dec 2021 16:40:05 +0000
-Message-ID: <92ef4cae-ccfb-d952-6b36-71036329e8da@suse.cz>
-Date:   Wed, 15 Dec 2021 17:40:05 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C6B7B8201E;
+        Wed, 15 Dec 2021 16:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E064AC36AE3;
+        Wed, 15 Dec 2021 16:40:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639586446;
+        bh=SX0OrCxVumA1tCRQnY9OBElu2TNIeelB2MX6iLzch1c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EJqZAbpsBWw5B8ZRKYd5Y5EZA4vn6LZCwRchReyc3VzOpjMtMt7FzaODVwCJ8hBWP
+         Xr8HYP2J7qLD7mei2bZxiXAs+xmC6CSLB7jSCwN90cwauFNLnA7NydTcoMpdkiE88M
+         nSF+z9cjTQAge+yV54jgZO1XtqImgpqS4QiUVo4mZMA7BhWmKNj5Jtae75CdO9EOvL
+         UobCss4x8ODAfmfk/CC+lJSh56MiRdcm1efWWZsTf1y9nCRdB9VBJw71XazXwz+enk
+         CjFv5/AMMe+EM9d31ApiqLF/4TT3YrQmwFrsnFJQo5N0PsV5igNIGRim7KOR1saUor
+         XG+YQNKzKqtjA==
+Date:   Wed, 15 Dec 2021 08:40:44 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+Message-ID: <20211215084044.064e6861@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
+References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 10/66] mm/mmap: Use the maple tree for find_vma_prev()
- instead of the rbtree
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-11-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-11-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:29, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> Use the maple tree's advanced API and a maple state to walk the tree
-> for the entry at the address of the next vma, then use the maple state
-> to walk back one entry to find the previous entry.
-> 
-> Add kernel documentation comments for this API.
+On Wed, 15 Dec 2021 14:49:18 +0000 Pavel Begunkov wrote:
+> +static inline bool
+> +__cgroup_bpf_prog_array_is_empty(struct cgroup_bpf *cgrp_bpf,
+> +				 enum cgroup_bpf_attach_type type)
+> +{
+> +	struct bpf_prog_array *array = rcu_access_pointer(cgrp_bpf->effective[type]);
+> +
+> +	return array == &bpf_empty_prog_array.hdr;
+> +}
+> +
+> +#define CGROUP_BPF_TYPE_ENABLED(sk, atype)				       \
+> +({									       \
+> +	struct cgroup *__cgrp = sock_cgroup_ptr(&(sk)->sk_cgrp_data);	       \
+> +									       \
+> +	!__cgroup_bpf_prog_array_is_empty(&__cgrp->bpf, (atype));	       \
+> +})
+> +
 
-Additional note: the previous patch for find_vma() mentioned "Using the
-maple tree interface mt_find() will handle the RCU locking" while
-find_vma_prev() uses the advanced maple tree API, thus IIUC without RCU
-locking, and doesn't add its own. This can easily result in a bug,
-especially if the documentation comments don't mention it at all?
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index e7a163a3146b..0d2195c6fb2a 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1161,6 +1161,19 @@ struct bpf_prog_array {
+>  	struct bpf_prog_array_item items[];
+>  };
+>  
+> +struct bpf_empty_prog_array {
+> +	struct bpf_prog_array hdr;
+> +	struct bpf_prog *null_prog;
+> +};
+> +
+> +/* to avoid allocating empty bpf_prog_array for cgroups that
+> + * don't have bpf program attached use one global 'bpf_empty_prog_array'
+> + * It will not be modified the caller of bpf_prog_array_alloc()
+> + * (since caller requested prog_cnt == 0)
+> + * that pointer should be 'freed' by bpf_prog_array_free()
+> + */
+> +extern struct bpf_empty_prog_array bpf_empty_prog_array;
 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  mm/mmap.c | 24 ++++++++++++++----------
->  1 file changed, 14 insertions(+), 10 deletions(-)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 6a7502f74190..8425ab573770 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -2454,23 +2454,27 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->  }
->  EXPORT_SYMBOL(find_vma);
->  
-> -/*
-> - * Same as find_vma, but also return a pointer to the previous VMA in *pprev.
-> +/**
-> + * find_vma_prev() - Find the VMA for a given address, or the next vma and
-> + * set %pprev to the previous VMA, if any.
-> + * @mm: The mm_struct to check
-> + * @addr: The address
-> + * @pprev: The pointer to set to the previous VMA
-> + *
-> + * Returns: The VMA associated with @addr, or the next vma.
-> + * May return %NULL in the case of no vma at addr or above.
->   */
->  struct vm_area_struct *
->  find_vma_prev(struct mm_struct *mm, unsigned long addr,
->  			struct vm_area_struct **pprev)
->  {
->  	struct vm_area_struct *vma;
-> +	MA_STATE(mas, &mm->mm_mt, addr, addr);
->  
-> -	vma = find_vma(mm, addr);
-> -	if (vma) {
-> -		*pprev = vma->vm_prev;
-> -	} else {
-> -		struct rb_node *rb_node = rb_last(&mm->mm_rb);
-> -
-> -		*pprev = rb_node ? rb_entry(rb_node, struct vm_area_struct, vm_rb) : NULL;
-> -	}
-> +	vma = mas_walk(&mas);
-> +	*pprev = mas_prev(&mas, 0);
-> +	if (!vma)
-> +		vma = mas_next(&mas, ULONG_MAX);
->  	return vma;
->  }
->  
+mumble mumble, this adds more "fun" dependencies [1] Maybe I'm going
+about this all wrong, maybe I should be pulling out struct cgroup_bpf
+so that cgroup.h does not need bpf-cgroup, not breaking bpf <-> bpf-cgroup.
+Alexei, WDYT?
 
+[1] https://lore.kernel.org/all/20211215061916.715513-2-kuba@kernel.org/

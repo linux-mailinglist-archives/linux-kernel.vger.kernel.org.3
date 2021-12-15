@@ -2,102 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 477B1475B08
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DDA475B13
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243344AbhLOOtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:49:49 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:42592 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243326AbhLOOtr (ORCPT
+        id S243499AbhLOOw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:52:28 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:36412 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237842AbhLOOwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:49:47 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D1E6D1F3D1;
-        Wed, 15 Dec 2021 14:49:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639579785; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=euooVMEZrx6lIqaC7AMmnzXnheQmRgVNrxBqLKPSDeo=;
-        b=aeZp5/6ZBT1NQPyhZwdCBE9p7ifowhSb5Hl3nbSP98JM2lL79llq1iWlF6SyW8eDoL1JAE
-        ENZAWU9w2b1dAX4LN6zUnritfxHJIXjDC9LjsCUO2sl/hJRZdOntrqINvCU530pRSSnWxE
-        gtvstSGrCMdd159A9k7YD3+lqDybexg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9D8931330B;
-        Wed, 15 Dec 2021 14:49:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id M5LuJYkAumGbcwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 15 Dec 2021 14:49:45 +0000
-Date:   Wed, 15 Dec 2021 15:49:44 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v9 3/7] cgroup/cpuset: Refining features and constraints
- of a partition
-Message-ID: <20211215144944.GE16798@blackbody.suse.cz>
-References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-4-longman@redhat.com>
+        Wed, 15 Dec 2021 09:52:24 -0500
+Received: by mail-oi1-f169.google.com with SMTP id t23so32002894oiw.3;
+        Wed, 15 Dec 2021 06:52:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z1up0j7hF/rulik3lRaD24Z6MuUYNaFHV9krTlOBx4A=;
+        b=d33rXfN4sbzoaLJVHO0iIoBrGbM2y8M5Ff5MA3t2tBdmV/WwGAYE+j4KiwA1JiOKTk
+         avfCizb8sLVwvxgXqOl6Oe76JieZvqZBURhrJV5VrmxSi/hU4nqWdkQrFqD611dO0Ub4
+         vo15SRMhbk4sLQAeGWaM77thahDV8QysXZi2EiTIaDIwAzgjsCAA8LLvCijMf9QyOZyv
+         8wWlSBF7+FL/geGGluOPJ6rjgdRkreOOkAPM66aF1MuX0I0jLPPlpZEe27tPTgEwKOtD
+         SpFTK5vI6gnnkajbeymM1/egTOnG6iGecdlKW2H58ljVzxTfp5LAz2wYcHtc/YhhY4Iu
+         fyZg==
+X-Gm-Message-State: AOAM530sE+4h1mbinuIA8OsusTzXQdQsfWgs6MNeCNIrZwEyjFowikAj
+        A7olQ3Q6u9liHK+Le64Gulz1xstwxRnWmZ6/WDE=
+X-Google-Smtp-Source: ABdhPJw8i33FspLIffQinoU6FdTktEhVP9lRVkbZmJZwncQv3RzUzvVSnU9wWIeXS4cV/UHKAONNMnhIOBhnU2RqwI4=
+X-Received: by 2002:a05:6808:1454:: with SMTP id x20mr110728oiv.166.1639579944358;
+ Wed, 15 Dec 2021 06:52:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211205183220.818872-4-longman@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211213103243.33657-1-heikki.krogerus@linux.intel.com>
+ <20211213103243.33657-2-heikki.krogerus@linux.intel.com> <CAJZ5v0jq5ve9+V3k5Vi=vJAheSyQbAsNmi6An9=oKxkyVed5bw@mail.gmail.com>
+ <Ybnoy9e6VvFsJ4b1@kuha.fi.intel.com>
+In-Reply-To: <Ybnoy9e6VvFsJ4b1@kuha.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 15 Dec 2021 15:52:12 +0100
+Message-ID: <CAJZ5v0hiv18Ri5Vi4Y07bXRO9+Qf5bZ+TwmqwRG3spr9nzV0MA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] acpi: Store the Physical Location of Device (_PLD) information
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 01:32:16PM -0500, Waiman Long <longman@redhat.com> wrote:
-> @@ -1455,34 +1450,16 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
->  			switch (parent->partition_root_state) {
-> [...]
-> -
->  			case PRS_ENABLED:
-> -				if (update_parent_subparts_cpumask(cp, partcmd_update, NULL, tmp))
-> -					update_tasks_cpumask(parent);
-> +				update_parent = true;
-> [...]
-> +		if (update_parent) {
-> +			if (update_parent_subparts_cpumask(cp, partcmd_update, NULL, tmp))
-> +				update_tasks_cpumask(parent);
-> +			/*
-> +			 * The cpuset partition_root_state may be changed
-> +			 * to PRS_ERROR. Capture it.
-> +			 */
-> +			new_prs = cp->partition_root_state;
-> +		}
+On Wed, Dec 15, 2021 at 2:08 PM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi Rafael,
+>
+> On Wed, Dec 15, 2021 at 12:43:48PM +0100, Rafael J. Wysocki wrote:
+> > One overall problem I see here is that it potentially stores a bunch
+> > of _PLD buffers that will never be used, which is a waste of memory.
+> >
+> > It may be better to make acpi_device_get_location() evaluate _PLD for
+> > the target device if it cannot be found in the list and either update
+> > one of the existing entries if the crc matches and return the pld data
+> > from there, or add a new item to the list and return its pld data.
+>
+> The primary goal of this series is actually to see the other devices
+> that share a fixed location with our device.
 
-IIUC, this ensures that when a parent becomes partition root again, this
-would propagate downwards to invalidated children. 
+It would be good to mention that in the changelog then.
 
-However, the documentation says:
+> The _PLD buffer cache
+> would be nice, but not necessary. We don't have to store the _PLD
+> buffer itself as part of the location structure at all if that's a
+> problem.
 
-> +       Changing a partition root (valid or invalid) to "member" is
-> +       always allowed.  If there are child partition roots underneath
-> +       it, they will become invalid and unrecoverable.  So care must
-> +       be taken to double check for this condition before disabling
-> +       a partition root.
+It may be cached on the first invocation of acpi_device_get_location()
+too, but I'm not sure how much overhead would be avoided by doing
+that.  I guess it would make most sense in the shared _PLD case.
 
-I.e. it suggests a child can be trapped in the unrecoverable state (i.e.
-not fixable by writing into cpuset.cpus.partition).
-But this does not happen, right?
+> I'll make the change.
 
-Michal
+OK

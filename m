@@ -2,101 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1E8474ECC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 00:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C477A474ED3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238372AbhLNXyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 18:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbhLNXyb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 18:54:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424DCC061574;
-        Tue, 14 Dec 2021 15:54:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EB32B81D7B;
-        Tue, 14 Dec 2021 23:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3A22C34600;
-        Tue, 14 Dec 2021 23:54:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639526067;
-        bh=NbVNYrferHfK7Et1tLU+6jHiQp8Yu5js3Qgqf8gRZ6w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=So5j1gY28yYedmfARaWH3xdXnuzVqawAwtFbovlmfZAbQPdwiJ8Kzrc0DUAqccodD
-         +vCvksQ4y8UdS9RqJcCjHRh4oBlKbr8AyblSWHKevSlUrdAxt5Fpv4kXiSlV47oAx6
-         l3jOvluU9M0flvnDnkaNuyS6F90UY8Av9KmTj6fqDMFv2WsnCdY5U95Ft7CSL2YLFp
-         NmD0oVW1YP+kHTwR//XR2HbNI90O9Y0+yEti+Jr9sAfLiqsHdlpTQH15mES76oL70l
-         4CyWlh10r1RkLjTeyxU/bFqqQ7/P97IVhirls5gDgVRnhDfR5wcFCBcXVHyAT3mEaK
-         SkwNzXKCTgmkg==
-Received: by mail-ed1-f45.google.com with SMTP id v1so69013257edx.2;
-        Tue, 14 Dec 2021 15:54:27 -0800 (PST)
-X-Gm-Message-State: AOAM5330r8jCF+OhuRfoDEnHk55JBSX6cIOlEwsPckn2W5oSZI/Aa/6k
-        fcTBTKYtId2AWEA/rDnoAvsrrcj5P7GD9+SRXQ==
-X-Google-Smtp-Source: ABdhPJzp/5VvUlwABGdKDrORoiAKsOFL9lfiyfvDlKLdyjmNKuH0Av0WZQ9j/LmjnxdTEMVKsH0dKrI/HjqdDOtI/UE=
-X-Received: by 2002:a17:907:7b98:: with SMTP id ne24mr8557534ejc.14.1639526066241;
- Tue, 14 Dec 2021 15:54:26 -0800 (PST)
+        id S238377AbhLOACM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 19:02:12 -0500
+Received: from mga01.intel.com ([192.55.52.88]:11965 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234512AbhLOACL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 19:02:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639526531; x=1671062531;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VSXgUDdlFqKGlsS399TSciH7lt+O61I9XZ0vqoofX54=;
+  b=XUPp2BicUX38u+AvDOzOmCV8zsbFNMEcaoNTNeKe7wi3AegcQ1KZmbVh
+   HBOtfAW3Q6IQv8bMxICnciQePgBhIsJSkLZwXnrZyo0fm0MIdOWvjhllB
+   LrEmQ3xjh1/FGhfpMoH/v0ITMOGoGTkhvM8Im6e+OY56wVNazktGqw9PY
+   HDUm7rOF5AynZY8QCJbs/a3L1Q3OIjxcgevFNZdGVbO3Ep6j3xBZPa+tP
+   Y3gLVjLJt956Ll3g4zRJ76xEsQeyyf8n4/d2/vypEvehSm9t/tERdxKji
+   jt7C0k4Y/9Ioad+cmuGAmxNKr82rnzl1CeHQSWCev1NT8GRZ367oJuTwg
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263256578"
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="263256578"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 16:01:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="753160672"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Dec 2021 16:01:35 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxHjj-0000x2-3o; Wed, 15 Dec 2021 00:01:35 +0000
+Date:   Wed, 15 Dec 2021 08:00:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Francis Laniel <laniel_francis@privacyrequired.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: include/linux/fortify-string.h:27:33: warning: '__builtin_strncpy'
+ output may be truncated copying between 5 and 9 bytes from a string of
+ length 9
+Message-ID: <202112150718.rMIimid9-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211214163315.3769677-1-davidm@egauge.net> <20211214163315.3769677-3-davidm@egauge.net>
- <1639512290.330041.3819896.nullmailer@robh.at.kernel.org> <e88e908e720172d8571d48bd1ebdab3617534f73.camel@egauge.net>
-In-Reply-To: <e88e908e720172d8571d48bd1ebdab3617534f73.camel@egauge.net>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 14 Dec 2021 17:54:14 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLFyaAvTGQJc0GjYbXwyhpmfpRm3_rkGopD8cz6-ZX5zw@mail.gmail.com>
-Message-ID: <CAL_JsqLFyaAvTGQJc0GjYbXwyhpmfpRm3_rkGopD8cz6-ZX5zw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] wilc1000: Document enable-gpios and reset-gpios properties
-To:     David Mosberger-Tang <davidm@egauge.net>
-Cc:     Kalle Valo <kvalo@codeaurora.org>, netdev <netdev@vger.kernel.org>,
-        Adham Abozaeid <adham.abozaeid@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ajay Singh <ajay.kathat@microchip.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        devicetree@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 5:30 PM David Mosberger-Tang <davidm@egauge.net> wrote:
->
-> On Tue, 2021-12-14 at 14:04 -0600, Rob Herring wrote:
-> > On Tue, 14 Dec 2021 16:33:22 +0000, David Mosberger-Tang wrote:
-> > > Add documentation for the ENABLE and RESET GPIOs that may be needed by
-> > > wilc1000-spi.
-> > >
-> > > Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
-> > > ---
-> > >  .../net/wireless/microchip,wilc1000.yaml        | 17 +++++++++++++++++
-> > >  1 file changed, 17 insertions(+)
-> > >
-> >
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> >
-> > yamllint warnings/errors:
-> >
-> > dtschema/dtc warnings/errors:
-> > Error: Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.example.dts:30.37-38 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> > make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/net/wireless/microchip,wilc1000.example.dt.yaml] Error 1
-> > make[1]: *** Waiting for unfinished jobs....
-> > make: *** [Makefile:1413: dt_binding_check] Error 2
->
-> So this error appears due to GPIO_ACTIVE_HIGH and GPIO_ACTIVE_LOW in these
-> lines:
->
->         enable-gpios = <&pioA 5 GPIO_ACTIVE_HIGH>;
->         reset-gpios = <&pioA 6 GPIO_ACTIVE_LOW>;
->
-> I can replace those with 0 and 1 respectively, but I doubt a lot of people would
-> recognize what those integers standard for.  Is there a better way to get this
-> to pass?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5472f14a37421d1bca3dddf33cabd3bd6dbefbbc
+commit: a28a6e860c6cf231cf3c5171c75c342adcd00406 string.h: move fortified functions definitions in a dedicated header.
+date:   10 months ago
+config: mips-randconfig-r011-20211214 (https://download.01.org/0day-ci/archive/20211215/202112150718.rMIimid9-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a28a6e860c6cf231cf3c5171c75c342adcd00406
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a28a6e860c6cf231cf3c5171c75c342adcd00406
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/dec/prom/ fs/xfs/
 
-Include the header(s) you use in the example.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Rob
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/string.h:269,
+                    from include/linux/uuid.h:12,
+                    from fs/xfs/xfs_linux.h:10,
+                    from fs/xfs/xfs.h:22,
+                    from fs/xfs/xfs_xattr.c:7:
+   In function 'strncpy',
+       inlined from '__xfs_xattr_put_listent' at fs/xfs/xfs_xattr.c:119:2,
+       inlined from 'xfs_xattr_put_listent' at fs/xfs/xfs_xattr.c:181:2:
+>> include/linux/fortify-string.h:27:33: warning: '__builtin_strncpy' output may be truncated copying between 5 and 9 bytes from a string of length 9 [-Wstringop-truncation]
+      27 | #define __underlying_strncpy    __builtin_strncpy
+         |                                 ^
+   include/linux/fortify-string.h:38:16: note: in expansion of macro '__underlying_strncpy'
+      38 |         return __underlying_strncpy(p, q, size);
+         |                ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +/__builtin_strncpy +27 include/linux/fortify-string.h
+
+     4	
+     5	
+     6	#if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+     7	extern void *__underlying_memchr(const void *p, int c, __kernel_size_t size) __RENAME(memchr);
+     8	extern int __underlying_memcmp(const void *p, const void *q, __kernel_size_t size) __RENAME(memcmp);
+     9	extern void *__underlying_memcpy(void *p, const void *q, __kernel_size_t size) __RENAME(memcpy);
+    10	extern void *__underlying_memmove(void *p, const void *q, __kernel_size_t size) __RENAME(memmove);
+    11	extern void *__underlying_memset(void *p, int c, __kernel_size_t size) __RENAME(memset);
+    12	extern char *__underlying_strcat(char *p, const char *q) __RENAME(strcat);
+    13	extern char *__underlying_strcpy(char *p, const char *q) __RENAME(strcpy);
+    14	extern __kernel_size_t __underlying_strlen(const char *p) __RENAME(strlen);
+    15	extern char *__underlying_strncat(char *p, const char *q, __kernel_size_t count) __RENAME(strncat);
+    16	extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size) __RENAME(strncpy);
+    17	#else
+    18	#define __underlying_memchr	__builtin_memchr
+    19	#define __underlying_memcmp	__builtin_memcmp
+    20	#define __underlying_memcpy	__builtin_memcpy
+    21	#define __underlying_memmove	__builtin_memmove
+    22	#define __underlying_memset	__builtin_memset
+    23	#define __underlying_strcat	__builtin_strcat
+    24	#define __underlying_strcpy	__builtin_strcpy
+    25	#define __underlying_strlen	__builtin_strlen
+    26	#define __underlying_strncat	__builtin_strncat
+  > 27	#define __underlying_strncpy	__builtin_strncpy
+    28	#endif
+    29	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

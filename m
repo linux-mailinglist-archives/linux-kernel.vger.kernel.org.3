@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AE7475DE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D1A475DE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245019AbhLOQw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:52:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245006AbhLOQwY (ORCPT
+        id S245022AbhLOQxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:53:24 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:43862 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232819AbhLOQxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:52:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0B1C061574;
-        Wed, 15 Dec 2021 08:52:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28815619C2;
-        Wed, 15 Dec 2021 16:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 854C2C36AE3;
-        Wed, 15 Dec 2021 16:52:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639587142;
-        bh=gu0NXiWUgDFrZg3yWV6zoqWRSOaEF70afmPFo6FWlQo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ljs1hvcckUbQFv0LK09hIboci+KQM8lTnjHwDkGdTg/Bi1ErCsAiz9oGY2aKsOlf6
-         BZmX5h0V9CaHsRrJIHDUsRumrttZZt91MFx5Su+xWaU57ct8SJybjJvDrNiR8w/dIv
-         ITwrQ1MTakn/0zokQLYV98Dibn/696m1H1R5cjdvm0jjaVl9pxgj6attGZ7662bOb4
-         L7+mRd4AvgV8b45klMvjrFJ0cTfBhOhN50LPe1Z1CTNLSH0/9OBA8Yie+xgQa8Q7Go
-         M/NgSmKUB+oMV+p9zmA5nAXrHJEAp196laSwWNkavPdSsaf33lmHauNAv3fGXDp5Mt
-         /49rDGnrup59A==
-Received: by mail-yb1-f178.google.com with SMTP id 131so56820928ybc.7;
-        Wed, 15 Dec 2021 08:52:22 -0800 (PST)
-X-Gm-Message-State: AOAM5310pdtVX1TNndFV/DkI8pP0gcfNFUYeK2mrZlHxdgb3HUm7YyFq
-        H8PqFVjxaKUoJ02tIlPAji5lmr/8HQ0zNo6U6RQ=
-X-Google-Smtp-Source: ABdhPJyCKdltBMj18edFZ70YAKPO+yqbXdbg2IBe3ocP+p2sHYq63xHpS9x6KF3kkF3DZIlsllj8zdXHeOpL+yVHo3Q=
-X-Received: by 2002:a25:8284:: with SMTP id r4mr7725979ybk.47.1639587141669;
- Wed, 15 Dec 2021 08:52:21 -0800 (PST)
+        Wed, 15 Dec 2021 11:53:21 -0500
+Received: by mail-ot1-f45.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so25654565otu.10;
+        Wed, 15 Dec 2021 08:53:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Xm9gpKkVx8JRZ7dzKc9hCU1OHkufwqdeq6wW80KqSwA=;
+        b=nRNeAHnfXIEYkbzwFzR81kx9AkhXBHask9ZC3kbivFiQ/IO4JPTVCgIsySvb5Sc9AR
+         BuhZQxMjJHL+0MaEHN5I9//dH4m/IVjQjIpdOHRkO6akRKijyZZok7MNX+YHfuHOXsWY
+         T//o5+NASaNkCihW2UreG7yCE5j2B+cCH3eRplKGUbMo7LvQVvLNIW5FaLqNTJyrAtk6
+         PlvZN+7CSIMk2P5Mfk+wjkwu7C4cDhe4EjNgmYtCsZkJzrLLC7SzudZh7uMCWtnvUm0K
+         H0a4u6yxnGx1WZ8UkU5Yu+/PmBHevNIzg8KKwpQzrZ4bgz0fQz695GW5dyP1J078oeS8
+         uwBA==
+X-Gm-Message-State: AOAM533MTOZRQIHyXjMHFwhdgyTHpCEwJd77GlXNLh/8u94UUDKQtKuq
+        ww6IAlBNFmz48Y1SEkJMSQ==
+X-Google-Smtp-Source: ABdhPJyKtoicFALG4i4urGSzoDXuoc7COnK+VLsgjbQi7WLCicmQaJorWgLOrIAOsd0okSfXK3zfnw==
+X-Received: by 2002:a05:6830:4d6:: with SMTP id s22mr9720535otd.270.1639587201035;
+        Wed, 15 Dec 2021 08:53:21 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bc7sm578949oob.35.2021.12.15.08.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 08:53:20 -0800 (PST)
+Received: (nullmailer pid 1462226 invoked by uid 1000);
+        Wed, 15 Dec 2021 16:53:18 -0000
+Date:   Wed, 15 Dec 2021 10:53:18 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-media@vger.kernel.org, benjamin.gaignard@collabora.com,
+        cphealy@gmail.com, aford@beaconembedded.com, nicolas@ndufresne.ca,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH 08/10] dt-bindings: media: nxp,imx8mq-vpu: Enable support
+ for i.MX8M Mini
+Message-ID: <Ybodfln1RtezsARN@robh.at.kernel.org>
+References: <20211208225030.2018923-1-aford173@gmail.com>
+ <20211208225030.2018923-9-aford173@gmail.com>
 MIME-Version: 1.0
-References: <20211214031553.16435-1-yajun.deng@linux.dev> <CAPhsuW5X+zewpKoJLjMMGOUeSiJ1EYqD+0i1bA8y7SFtJLkMeg@mail.gmail.com>
- <0d07e13a5454dfb03b22e5223d101a1b@linux.dev>
-In-Reply-To: <0d07e13a5454dfb03b22e5223d101a1b@linux.dev>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 15 Dec 2021 08:52:10 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6T_nqqfOtj_dVn9KV+iUbki2X3WU3pxfo25Ewj3i5ZjA@mail.gmail.com>
-Message-ID: <CAPhsuW6T_nqqfOtj_dVn9KV+iUbki2X3WU3pxfo25Ewj3i5ZjA@mail.gmail.com>
-Subject: Re: [PATCH] lib/raid6: fix abnormally high latency
-To:     yajun.deng@linux.dev
-Cc:     stockhausen@collogia.de, open list <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org,
-        linux-raid <linux-raid@vger.kernel.org>, masahiroy@kernel.org,
-        williams@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208225030.2018923-9-aford173@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 6:14 PM <yajun.deng@linux.dev> wrote:
->
-> December 15, 2021 1:27 AM, "Song Liu" <song@kernel.org> wrote:
->
-> > On Mon, Dec 13, 2021 at 7:17 PM Yajun Deng <yajun.deng@linux.dev> wrote=
-:
-> >
-> >> We found an abnormally high latency when executing modprobe raid6_pq, =
-the
-> >> latency is greater than 1.2s when CONFIG_PREEMPT_VOLUNTARY=3Dy, greate=
-r than
-> >> 67ms when CONFIG_PREEMPT=3Dy, and greater than 16ms when CONFIG_PREEMP=
-T_RT=3Dy.
-> >> This is caused by disable the preemption, this time is too long and
-> >> unreasonable. We just need to disable migration. so used migrate_disab=
-le()/
-> >> migrate_enable() instead of preempt_disable()/preempt_enable(). This i=
-s
-> >> beneficial for CONFIG_PREEMPT=3Dy or CONFIG_PREEMPT_RT=3Dy, but no eff=
-ect for
-> >> CONFIG_PREEMPT_VOLUNTARY=3Dy.
-> >>
-> >> Fixes: fe5cbc6e06c7 ("md/raid6 algorithms: delta syndrome functions")
-> >> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-> >
-> > We measure the speed of different RAID algorithms.If we don't disable
-> > preempt, the result may be inaccurate, right? IIUC, we only disable pre=
-empt
-> > for 16 jiffies. Why do we see 1.2 second delay?
->
-> Here are the command of my test=EF=BC=9A
-> Execute "sudo cyclictest -S -p 95 -d 0 -i 1000 -D 24h -m" in one terminal=
- and "sudo modprobe raid6_pq" in the other terminal.
->
-> Here are the results of my test=EF=BC=9A
-> CONFIG_PREEMPT_VOLUNTARY=3Dy=EF=BC=8CCONFIG_HZ_250=3Dy
-> T: 0 ( 3092) P:95 I:1000 C:   8514 Min:      1 Act:    2 Avg:    1 Max:  =
-     6
-> T: 1 ( 3093) P:95 I:1000 C:   8511 Min:      1 Act:    2 Avg:    1 Max:  =
-    14
+On Wed, Dec 08, 2021 at 04:50:27PM -0600, Adam Ford wrote:
+> The i.MX8M mini appears to have a similar G1 and G2 decoder but the
+> post-procesing isn't present.  Add compatible flags to support
+> G1 and G2 without post-processing.
+> 
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> index eeb7bd6281f9..fb6c2ab1b2dc 100644
+> --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> @@ -20,6 +20,8 @@ properties:
+>          deprecated: true
+>        - const: nxp,imx8mq-vpu-g1
+>        - const: nxp,imx8mq-vpu-g2
+> +      - const: nxp, imx8mm-vpu-g1
+> +      - const: nxp, imx8mm-vpu-g2
 
-I am not very familiar with the RT work, so please forgive me for some
-rookie questions.
+space                 ^
 
-From the result, I think the CONFIG_PREEMPT_VOLUNTARY=3Dy and the
-CONFIG_PREEMPT=3Dy cases failed to preempt during the preempt enabled perio=
-d in
-raid6_choose_gen(). Is this expected?
-
-OTOH, the 16ms latency with CONFIG_PREEMPT_RT=3Dy is more or less expected.
-Is this acceptable? If not, is 1ms latency acceptable?
-
-Thanks,
-Song
-
-
-[...]
+>  
+>    reg:
+>      minItems: 1
+> -- 
+> 2.32.0
+> 
+> 

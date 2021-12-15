@@ -2,150 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E34FF476169
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFD6476167
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344166AbhLOTPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:15:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344125AbhLOTPS (ORCPT
+        id S1344139AbhLOTPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:15:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59452 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344115AbhLOTPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:15:18 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F524C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:15:17 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id p19so22856057qtw.12
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:15:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=UpI3HneaoGVJ5KkM2LMcsXRbLjNuK02QifkoMFbXRvo=;
-        b=bnQTMrKXW384szCu/GV6keyGIzOCqPl91frCICxMNaGpzZ4ExMnasu/Mtsdi20VBZu
-         sZYgteWV9QLoRk8fXbwWTAjTa2i/ZmUoII332QM+Y9QFxmsc5/746d9Gh+STvh4R1sUq
-         3ZR+kP3lA4cr2IhqqthdAUBX02fj9O58D2kZ9OSksp0UnPXmgL3UQNr7syF1FQEkx7nU
-         xzEtYkxTtRJ3LxEWwZo9TeP9YVhY3KYk+ZyC7Y9KmRYflL5tl9jzU3sv5PWayToSuQpT
-         wNownxU1t4RSuVZWwtwhHx0ogIEn5HhWM3G4ZrC8xFqtyYOOVXavBVZa20YOnAm7TuFv
-         n+/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=UpI3HneaoGVJ5KkM2LMcsXRbLjNuK02QifkoMFbXRvo=;
-        b=HWBb2sP53N5E5ctFaN19OLNnKpdNzPk/tTiHmyPpGQuMJcPoTXmBkUJMyf2RaUjiz7
-         3695uhZy6xjhoDjeeKJWzkrkRrAFJJ8nRlT5KRoSps3Ta+OV8Etg2EEKVvnhuC8wkc9s
-         rs6SB4zOPZ7moRjcl7PPtq+ftVTAk5jNoJHjOCyo6NVSHO4KFQ6zCeJBqYIMmtxYH3jf
-         txjAvL1K0jbk3Wy8CHTHfC5aZHDADsHOYwP1I7UmVy0+H3VGqca/yWbjhOXK2xKZ1sWW
-         7d17zgxB0DsJ7CPZSeaYrnD0sJvHPNU25AIT2DUTao+zUTOkiiNYskPQYFRbmJVhSN+A
-         gneA==
-X-Gm-Message-State: AOAM532H4Jjcc8w0UkEf1hQs4ZhImWN4ncSgdYWXls30r0PL08/RG0Rr
-        GKzV9cbAvJZY0VnMEKS6xMb1ldEMg1sWBT8hlRfSRg==
-X-Google-Smtp-Source: ABdhPJxSj0kHaySeDZCkpMe2D6Xf7GnXEwDu6v7OTt3DCVmc7SS7f3nBBhy0SgE5CCrfoN0Tr+vwcKDBqrEienrmBFw=
-X-Received: by 2002:a05:622a:609:: with SMTP id z9mr13474939qta.243.1639595716346;
- Wed, 15 Dec 2021 11:15:16 -0800 (PST)
-MIME-Version: 1.0
-References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
- <Yboc/G18R1Vi1eQV@google.com> <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
- <Ybom69OyOjsR7kmZ@google.com> <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
- <Yboy2WwaREgo95dy@google.com> <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
-In-Reply-To: <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 15 Dec 2021 11:15:05 -0800
-Message-ID: <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com>
-Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 15 Dec 2021 14:15:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13229B8205D;
+        Wed, 15 Dec 2021 19:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D4EBFC36AE3;
+        Wed, 15 Dec 2021 19:15:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639595713;
+        bh=R/wEC/fi0K+cxq7MlkXIaJr0RFPuM4dAhPJlP7I7/R8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=pKFBElKsZtyHpK+qWy4ekRivHGnXz6kaaRzKQezmZwqgtKL8bYKpdSmWATXqB51Zx
+         oU46Zw1hSd5AjjTbG+HtXYaw7T+eZ3Z+0AKSE+z9UoVj7Qifyjzz/H1pJTH8Uf7vAq
+         Zjvz18luE9FHC3PiydYPOTtNLQi2t90hy6LRDK123MV1kUBlzQaSij65L97PmxKhZ5
+         5z4mIyrSMsKtMQjvNXth2WNvKbeJqgSHjG9oYLN9s3aOI1DWFqQOJs24i83gJIKQ2l
+         kw8cbELSPkxolV8M62vStftBN92Hdp4pSPfmfSuaQB/u47VY5DfYtvrlfKmpmBAkmh
+         DqvzjKSaDVixg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id AA4D960984;
+        Wed, 15 Dec 2021 19:15:13 +0000 (UTC)
+Subject: Re: [GIT PULL] Ceph fixes for 5.16-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211215124625.32575-1-idryomov@gmail.com>
+References: <20211215124625.32575-1-idryomov@gmail.com>
+X-PR-Tracked-List-Id: <ceph-devel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211215124625.32575-1-idryomov@gmail.com>
+X-PR-Tracked-Remote: https://github.com/ceph/ceph-client.git tags/ceph-for-5.16-rc6
+X-PR-Tracked-Commit-Id: fd84bfdddd169c219c3a637889a8b87f70a072c2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2b14864acbaaf03d9c01982e243a84632524c3ac
+Message-Id: <163959571363.3685.2546987175943161417.pr-tracker-bot@kernel.org>
+Date:   Wed, 15 Dec 2021 19:15:13 +0000
+To:     Ilya Dryomov <idryomov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 10:54 AM Pavel Begunkov <asml.silence@gmail.com> wr=
-ote:
->
-> On 12/15/21 18:24, sdf@google.com wrote:
-> > On 12/15, Pavel Begunkov wrote:
-> >> On 12/15/21 17:33, sdf@google.com wrote:
-> >> > On 12/15, Pavel Begunkov wrote:
-> >> > > On 12/15/21 16:51, sdf@google.com wrote:
-> >> > > > On 12/15, Pavel Begunkov wrote:
-> >> > > > > =EF=BF=BD /* Wrappers for __cgroup_bpf_run_filter_skb() guarde=
-d by cgroup_bpf_enabled. */
-> >> > > > > =EF=BF=BD #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)=EF=
-=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
-=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
- \
-> >> > > > > =EF=BF=BD ({=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=
-=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
-=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
-=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=
-=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
-=BD=EF=BF=BD=EF=BF=BD \
-> >> > > > > =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD int __ret =3D 0;=
-=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=
-=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
-=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
-=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
-> >> > > > > -=EF=BF=BD=EF=BF=BD=EF=BF=BD if (cgroup_bpf_enabled(CGROUP_INE=
-T_INGRESS))=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
-=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
-> >> > > > > +=EF=BF=BD=EF=BF=BD=EF=BF=BD if (cgroup_bpf_enabled(CGROUP_INE=
-T_INGRESS) && sk &&=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=
-=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
-> >> > > > > +=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=
-=BD CGROUP_BPF_TYPE_ENABLED((sk), CGROUP_INET_INGRESS))=EF=BF=BD=EF=BF=BD=
-=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BD \
-> >> > > >
-> >> > > > Why not add this __cgroup_bpf_run_filter_skb check to
-> >> > > > __cgroup_bpf_run_filter_skb? Result of sock_cgroup_ptr() is alre=
-ady there
-> >> > > > and you can use it. Maybe move the things around if you want
-> >> > > > it to happen earlier.
-> >> >
-> >> > > For inlining. Just wanted to get it done right, otherwise I'll lik=
-ely be
-> >> > > returning to it back in a few months complaining that I see measur=
-able
-> >> > > overhead from the function call :)
-> >> >
-> >> > Do you expect that direct call to bring any visible overhead?
-> >> > Would be nice to compare that inlined case vs
-> >> > __cgroup_bpf_prog_array_is_empty inside of __cgroup_bpf_run_filter_s=
-kb
-> >> > while you're at it (plus move offset initialization down?).
-> >
-> >> Sorry but that would be waste of time. I naively hope it will be visib=
-le
-> >> with net at some moment (if not already), that's how it was with io_ur=
-ing,
-> >> that's what I see in the block layer. And in anyway, if just one inlin=
-ed
-> >> won't make a difference, then 10 will.
-> >
-> > I can probably do more experiments on my side once your patch is
-> > accepted. I'm mostly concerned with getsockopt(TCP_ZEROCOPY_RECEIVE).
-> > If you claim there is visible overhead for a direct call then there
-> > should be visible benefit to using CGROUP_BPF_TYPE_ENABLED there as
-> > well.
->
-> Interesting, sounds getsockopt might be performance sensitive to
-> someone.
->
-> FWIW, I forgot to mention that for testing tx I'm using io_uring
-> (for both zc and not) with good submission batching.
+The pull request you sent on Wed, 15 Dec 2021 13:46:25 +0100:
 
-Yeah, last time I saw 2-3% as well, but it was due to kmalloc, see
-more details in 9cacf81f8161, it was pretty visible under perf.
-That's why I'm a bit skeptical of your claims of direct calls being
-somehow visible in these 2-3% (even skb pulls/pushes are not 2-3%?).
-But tbf I don't understand how it all plays out with the io_uring.
+> https://github.com/ceph/ceph-client.git tags/ceph-for-5.16-rc6
 
-(mostly trying to understand where there is some gain left on the
-table for TCP_ZEROCOPY_RECEIVE).
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2b14864acbaaf03d9c01982e243a84632524c3ac
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

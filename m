@@ -2,148 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E213475E6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4E8475E74
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245245AbhLORSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235266AbhLORSH (ORCPT
+        id S245257AbhLORTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:19:52 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:49386 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245248AbhLORTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:18:07 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE784C061574;
-        Wed, 15 Dec 2021 09:18:06 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id g14so76429155edb.8;
-        Wed, 15 Dec 2021 09:18:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=R6JXxO0z/aU0JUYWCi/S32PK2Eed5dPgoRU+PPyekKQ=;
-        b=MfCEEiy5VLUR51ho/kqi8XwRfkj/qds68rR2pLPtKRnBkh5r1De7bUWtXmWJcnrCuc
-         BKu5VvFE4vW3Uskh+24hyV5emoW4L+z6XFjcFTunXythtzMrkqHmQxPRhdljaQjaOZx8
-         5hKHisfaMm09I3BlyPmvG/ropaUF4MXixMLIKYdNfAIg36rjrtyt4ZIxmEgC4ZTE4BAm
-         Qakj7VJc3ugOzFuUJwTVki8yj5NxL0ShcsePA9kmV0m9E30xTflE/oRcw/My4taZ3eIa
-         ASuW5IT4hwNgfqVIMnOjBd7dd6h2FprSdV2OSR0jmXMRHxOyMlxUy0hoSbn5U/HP9bMq
-         iB8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=R6JXxO0z/aU0JUYWCi/S32PK2Eed5dPgoRU+PPyekKQ=;
-        b=wCystA4upgOHYmkvTixByJrHSj9uMUAvxwAi31UOuauHe8WOyo06D7crJIH2hW41GI
-         eKImC0ookoPiY3NBRBTvZuwzX8Ck4qPFnrqEHR66SGJXQvNkusXAYzbEBU4OeY7e/QQM
-         uND/imVC1j/7oxZjQlS5ndnSNPLZg9lPpOztOeDrStRhpWrXxyVPw8J+2Iij9/VqPOi4
-         0GDgXMdRBPJggtJMHiookUelPEOmHy5vr+EFWSswndQSLINQqmA8cQ95VGDKtTy7p7GV
-         ssX9EkEFEV9UndrLKVqKOSnbM+JB0N3lCB5Nh/6unfBlqETeNM6sJIBsD3/UWAxzdLYY
-         2XhQ==
-X-Gm-Message-State: AOAM533OdilL5+d4SIFCU1qRdb2mQz/opzlqLeKg6yCYQMiM01BYHJdH
-        OMQELjY03NpwYB8T5Q5Q9NI=
-X-Google-Smtp-Source: ABdhPJxzH0drEvLcsDg93dMbOvVRIifpZ4Vl/jQcYozqfy3/IJWKsdNxjTw32CwOdxMFDPf/6N1rmQ==
-X-Received: by 2002:a50:d594:: with SMTP id v20mr15537511edi.401.1639588683201;
-        Wed, 15 Dec 2021 09:18:03 -0800 (PST)
-Received: from [192.168.8.198] ([148.252.129.75])
-        by smtp.gmail.com with ESMTPSA id t5sm1306591edd.68.2021.12.15.09.18.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 09:18:02 -0800 (PST)
-Message-ID: <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
-Date:   Wed, 15 Dec 2021 17:18:03 +0000
+        Wed, 15 Dec 2021 12:19:51 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639588790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8dWZtEdF7LamMiNHDQtUJa+ux0BuM6MSUIqH9b+Hvyo=;
+        b=wYhmWV2tAzCQfd9US7tK/sDWCnBbJEkh0toY9VDuwtDZ0a56PMo8BoccPtbLPELWo9I28H
+        HKc2neisW5z7nVF58H33hQ6I3JpDjp7x8Kvp/cCgjUvnYD8QdYGH61A1BeXSEXOYr4fYH5
+        DLBlYKQg7bDxik0O85eEeU6t0YgTJ460cdP5T6mA0DAEz4t2jvbnSoMRyHmCdRIsX+WU5+
+        q/5iZYQod3bSNBGwjqvNjip+w8Kzgei0iFMPfqmZqeU25htKL5R6ykYiRwqQfnG6lFz+mQ
+        r3FvWyI39vnZ4v4UgiVkKOdpkffYfcVyqNIiIF+3PGfZRf0ksOR9s1/A7ZSHGA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639588790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8dWZtEdF7LamMiNHDQtUJa+ux0BuM6MSUIqH9b+Hvyo=;
+        b=lk+vW3OXeYaf8seyWIaOrmuYBvQZ09fZDnlpC9df3JMNaqJ74ZUxSByXPFwmhYxR0MLbL9
+        iLeRWTRdVJiovHBA==
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Sinan Kaya <okaya@kernel.org>
+Subject: [patch V4 09-02/35] PCI/MSI: Allocate MSI device data on first use
+In-Reply-To: <87tuf9rdoj.ffs@tglx>
+References: <20211210221642.869015045@linutronix.de>
+ <20211210221813.740644351@linutronix.de> <87tuf9rdoj.ffs@tglx>
+Date:   Wed, 15 Dec 2021 18:19:49 +0100
+Message-ID: <87r1adrdje.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
-Content-Language: en-US
-To:     sdf@google.com
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
-References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
- <Yboc/G18R1Vi1eQV@google.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <Yboc/G18R1Vi1eQV@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 16:51, sdf@google.com wrote:
-> On 12/15, Pavel Begunkov wrote:
->> Add per socket fast path for not enabled BPF skb filtering, which sheds
->> a nice chunk of send/recv overhead when affected. Testing udp with 128
->> byte payload and/or zerocopy with any payload size showed 2-3%
->> improvement in requests/s on the tx side using fast NICs across network,
->> and around 4% for dummy device. Same goes for rx, not measured, but
->> numbers should be relatable.
->> In my understanding, this should affect a good share of machines, and at
->> least it includes my laptops and some checked servers.
-> 
->> The core of the problem is that even though there is
->> cgroup_bpf_enabled_key guarding from __cgroup_bpf_run_filter_skb()
->> overhead, there are cases where we have several cgroups and loading a
->> BPF program to one also makes all others to go through the slow path
->> even when they don't have any BPF attached. It's even worse, because
->> apparently systemd or some other early init loads some BPF and so
->> triggers exactly this situation for normal networking.
-> 
->> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->> ---
-> 
->> v2: replace bitmask appoach with empty_prog_array (suggested by Martin)
->> v3: add "bpf_" prefix to empty_prog_array (Martin)
-> 
->>   include/linux/bpf-cgroup.h | 24 +++++++++++++++++++++---
->>   include/linux/bpf.h        | 13 +++++++++++++
->>   kernel/bpf/cgroup.c        | 18 ++----------------
->>   kernel/bpf/core.c          | 16 ++++------------
->>   4 files changed, 40 insertions(+), 31 deletions(-)
-> 
->> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
->> index 11820a430d6c..c6dacdbdf565 100644
->> --- a/include/linux/bpf-cgroup.h
->> +++ b/include/linux/bpf-cgroup.h
->> @@ -219,11 +219,28 @@ int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
->>   int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
->>                        void *value, u64 flags);
-> 
->> +static inline bool
->> +__cgroup_bpf_prog_array_is_empty(struct cgroup_bpf *cgrp_bpf,
->> +                 enum cgroup_bpf_attach_type type)
->> +{
->> +    struct bpf_prog_array *array = rcu_access_pointer(cgrp_bpf->effective[type]);
->> +
->> +    return array == &bpf_empty_prog_array.hdr;
->> +}
->> +
->> +#define CGROUP_BPF_TYPE_ENABLED(sk, atype)                       \
->> +({                                           \
->> +    struct cgroup *__cgrp = sock_cgroup_ptr(&(sk)->sk_cgrp_data);           \
->> +                                           \
->> +    !__cgroup_bpf_prog_array_is_empty(&__cgrp->bpf, (atype));           \
->> +})
->> +
->>   /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
->>   #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)                  \
->>   ({                                          \
->>       int __ret = 0;                                  \
->> -    if (cgroup_bpf_enabled(CGROUP_INET_INGRESS))              \
->> +    if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) && sk &&              \
->> +        CGROUP_BPF_TYPE_ENABLED((sk), CGROUP_INET_INGRESS))           \
-> 
-> Why not add this __cgroup_bpf_run_filter_skb check to
-> __cgroup_bpf_run_filter_skb? Result of sock_cgroup_ptr() is already there
-> and you can use it. Maybe move the things around if you want
-> it to happen earlier.
+Allocate MSI device data on first use, i.e. when a PCI driver invokes one
+of the PCI/MSI enablement functions.
 
-For inlining. Just wanted to get it done right, otherwise I'll likely be
-returning to it back in a few months complaining that I see measurable
-overhead from the function call :)
+Add a wrapper function to ensure that the ordering vs. pcim_msi_release()
+is correct.
 
--- 
-Pavel Begunkov
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+V4: Adopted to ensure devres ordering
+---
+ drivers/pci/msi/msi.c |   17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+--- a/drivers/pci/msi/msi.c
++++ b/drivers/pci/msi/msi.c
+@@ -366,6 +366,19 @@ static int pcim_setup_msi_release(struct
+ 	return ret;
+ }
+ 
++/*
++ * Ordering vs. devres: msi device data has to be installed first so that
++ * pcim_msi_release() is invoked before it on device release.
++ */
++static int pci_setup_msi_context(struct pci_dev *dev)
++{
++	int ret = msi_setup_device_data(&dev->dev);
++
++	if (!ret)
++		ret = pcim_setup_msi_release(dev);
++	return ret;
++}
++
+ static struct msi_desc *
+ msi_setup_entry(struct pci_dev *dev, int nvec, struct irq_affinity *affd)
+ {
+@@ -909,7 +922,7 @@ static int __pci_enable_msi_range(struct
+ 	if (nvec > maxvec)
+ 		nvec = maxvec;
+ 
+-	rc = pcim_setup_msi_release(dev);
++	rc = pci_setup_msi_context(dev);
+ 	if (rc)
+ 		return rc;
+ 
+@@ -956,7 +969,7 @@ static int __pci_enable_msix_range(struc
+ 	if (WARN_ON_ONCE(dev->msix_enabled))
+ 		return -EINVAL;
+ 
+-	rc = pcim_setup_msi_release(dev);
++	rc = pci_setup_msi_context(dev);
+ 	if (rc)
+ 		return rc;
+ 

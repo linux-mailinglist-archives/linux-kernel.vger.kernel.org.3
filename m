@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E73C475036
+	by mail.lfdr.de (Postfix) with ESMTP id 16417475035
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239195AbhLOBDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 20:03:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43493 "EHLO
+        id S239651AbhLOBDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 20:03:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21406 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238881AbhLOBBm (ORCPT
+        by vger.kernel.org with ESMTP id S239132AbhLOBBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 20:01:42 -0500
+        Tue, 14 Dec 2021 20:01:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639530101;
+        s=mimecast20190719; t=1639530102;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=01UyAOvBbQsdYZuo/97O6H7o+O610gyZBThBA0LMVHg=;
-        b=eUWYVunikzj+cHtLCd5EOEd+zbiQydjnagyR/9IyiBV1FZAZ9l+FlC/w64ekNV5rpsK0mA
-        CyQAP2GEcfGZLsRQ5vMDR9VF3+RkoDH90h57V5NTVrmvpaoxdukZW5WOoq9osPoDGQXLN1
-        avrQU0mYgpm5ul+y5QMHdtik9K3oAiU=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=If0/Rf9Wm5tTSQlPAKpGzbiBM/4txD6ayzOYSnTn4nc=;
+        b=gFxD8mOMKeB4ZPAZaqHjzjncR2KNkO3e4M5M5Z5KmTKClIKLQ19VY+iPH4zdl5l2s8GvTv
+        g06fl7in8n8h5/uBBKN1CeaDuMbZwYUd57BdX2Lyxx+05ye9ik4kXVS0RR5uzUCo56TTMU
+        oQW66APy2izvPi0YiBPjtPkeWmH+DBA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-216-iI-ls6V8OqeVYRTryHwJUw-1; Tue, 14 Dec 2021 20:01:40 -0500
-X-MC-Unique: iI-ls6V8OqeVYRTryHwJUw-1
-Received: by mail-wr1-f72.google.com with SMTP id a11-20020adffb8b000000b001a0b0f4afe9so2589620wrr.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:01:40 -0800 (PST)
+ us-mta-548-nq58DTyMMIuG0Vx4reE2wQ-1; Tue, 14 Dec 2021 20:01:41 -0500
+X-MC-Unique: nq58DTyMMIuG0Vx4reE2wQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 205-20020a1c00d6000000b003335d1384f1so13898404wma.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:01:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=01UyAOvBbQsdYZuo/97O6H7o+O610gyZBThBA0LMVHg=;
-        b=Zr2F3VKYLBz7lN42T6omBNwzLXxQSAF3hbvIkOiGyFsKiWoXklGBs6rVCtkTKbUEBm
-         oPXCBXv34DT2CpufaImGZGkOuz9V+ghzzhUL7cWWcdyhnavHaIPXG94Ou5uC+7DvrUAY
-         pB/UXe62VZl3pLE3SJh9B0OkHdZLqHiIkbXq1UJQBLwZ3DLTP5C1SBCM1bN5kYDHf4IG
-         QoTAHoHUeJTJXb7mjFxSEQSXvuRu1aYAxzdCwjUBgtkOKXelYCwxbvcjK5SmtO9KWW1T
-         pxJL0k+dxzcxKiM88ahBJeMqvKC+uZJ9sJ+zKdpnJpsUULrs+eYYzOBxCWukxF8kaEwh
-         XYOA==
-X-Gm-Message-State: AOAM532PA2ffpVnC2Kx0On2XFicmuLKaQEb3hm3xCmqnxoXW58AaEKoM
-        I/7g0PPXPNQAOn0Qnjle9Ecd9SMLm4sDFSGi2wi0mSZOlyvc1vxkNrlVMa84IGw0N/9+4uS/4Gn
-        ja/UT2e5P9ToSCEB8SEp1UjaL4m7NCalXepf8uLdC/D7KVpdZxggIAfsfbpAuJO1OUKrFaTd5Ds
-        0=
-X-Received: by 2002:a1c:6a0e:: with SMTP id f14mr2393883wmc.58.1639530099273;
-        Tue, 14 Dec 2021 17:01:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxqoSLRJJ02so1Qq0JhojYRNJZ9AVkb2q/OhzN866shbb5MPKeNaZ6+meUDDnZw5935EtqRvQ==
-X-Received: by 2002:a1c:6a0e:: with SMTP id f14mr2393869wmc.58.1639530099075;
+        bh=If0/Rf9Wm5tTSQlPAKpGzbiBM/4txD6ayzOYSnTn4nc=;
+        b=u8MDLh6gXzSteXl28O5Nd0Nzqf0+dD8g1qJxLqCaZA8dzkTkccMZKBiFqYdYlXzTzr
+         MDyg8GReuHUxfTQ6kl/Aoh9079stDUmZnig/zgLElJL1pjTVwuHWpq1FrfcSJRdRZMF7
+         S2QTjA8c55fLlidd/x0SZPzF5I2EoytwvSG1QWDfd07SwvXfSYgKUhofpaJNxNEXqxhG
+         TvLGdoW5a3wWd3SHtTwh7kkObilpJFkl+7gdKIublq3wehRngSIUwZHWhBFBIy/6albi
+         gVTeZ/9XrW6crnGqFub4ATk9Pu05RYaoTFlDvIzzNVHLVdk1qsiCQY6jW054E3KQUDtG
+         bCew==
+X-Gm-Message-State: AOAM531bNx9iMg+y3fZe199wqGt3d8FxXH8vD8vrz5v8waBgyRkfBPv9
+        2KXbK5KUpEgBR++wIC0MsV9bMG6dH5PkMHED6PFkWkJJktLaIZ8eRE2A9oFvqbYSp6jbD237q9s
+        K8c1knMO7coK5ie5cdKPlgriVkMAnmMMucLFmGdXOtwcwy85I0839jdXD/rsHyMt7al1xieOcnn
+        4=
+X-Received: by 2002:a5d:4883:: with SMTP id g3mr2182493wrq.590.1639530100003;
+        Tue, 14 Dec 2021 17:01:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxDseigahROS0KmkmjXTnhvtROBpPvhKmvaS4LRmNphhZDojYZ2ZPoPBDEcYQbylIv7aDz6CQ==
+X-Received: by 2002:a5d:4883:: with SMTP id g3mr2182473wrq.590.1639530099756;
         Tue, 14 Dec 2021 17:01:39 -0800 (PST)
 Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id o64sm334543wme.28.2021.12.14.17.01.38
+        by smtp.gmail.com with ESMTPSA id o64sm334543wme.28.2021.12.14.17.01.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 17:01:38 -0800 (PST)
+        Tue, 14 Dec 2021 17:01:39 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH 57/60] drm/udl: Add support for the nomodeset kernel parameter
-Date:   Wed, 15 Dec 2021 02:00:05 +0100
-Message-Id: <20211215010008.2545520-58-javierm@redhat.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>
+Subject: [PATCH 58/60] drm/via: Add support for the nomodeset kernel parameter
+Date:   Wed, 15 Dec 2021 02:00:06 +0100
+Message-Id: <20211215010008.2545520-59-javierm@redhat.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211215010008.2545520-1-javierm@redhat.com>
 References: <20211215010008.2545520-1-javierm@redhat.com>
@@ -82,23 +80,23 @@ to also support the command line parameter.
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
 
- drivers/gpu/drm/udl/udl_drv.c | 3 +++
+ drivers/gpu/drm/via/via_drv.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/udl/udl_drv.c b/drivers/gpu/drm/udl/udl_drv.c
-index 5703277c6f52..d5a0aa762ec8 100644
---- a/drivers/gpu/drm/udl/udl_drv.c
-+++ b/drivers/gpu/drm/udl/udl_drv.c
-@@ -91,6 +91,9 @@ static int udl_usb_probe(struct usb_interface *interface,
- 	int r;
- 	struct udl_device *udl;
+diff --git a/drivers/gpu/drm/via/via_drv.c b/drivers/gpu/drm/via/via_drv.c
+index 5da38082821f..57d63514f812 100644
+--- a/drivers/gpu/drm/via/via_drv.c
++++ b/drivers/gpu/drm/via/via_drv.c
+@@ -106,6 +106,9 @@ static struct pci_driver via_pci_driver = {
  
+ static int __init via_init(void)
+ {
 +	if (drm_firmware_drivers_only())
 +		return -ENODEV;
 +
- 	udl = udl_driver_create(interface);
- 	if (IS_ERR(udl))
- 		return PTR_ERR(udl);
+ 	driver.num_ioctls = via_max_ioctl;
+ 	via_init_command_verifier();
+ 	return drm_legacy_pci_init(&driver, &via_pci_driver);
 -- 
 2.33.1
 

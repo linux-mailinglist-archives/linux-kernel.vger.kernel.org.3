@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 216D64758BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A394758C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242410AbhLOMWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:22:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234411AbhLOMWU (ORCPT
+        id S242436AbhLOMXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:23:34 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:36813 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237111AbhLOMXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:22:20 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5DAC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:22:19 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id y13so73727448edd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:22:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=oSus18PkSQk7gaytbRQXd7Pr8Yd4R6m1hBQBrNUfHLE=;
-        b=y+eQK2rhs+UjIgjo9x69K8aIQYOroKmJuPG1jDDKFceYUMCfHo6EmOe3EMcbHiyttE
-         tqz2hYNwc/xY/rDNVE3WQUF11ihYsWNBzyEVHWwxszBhUWkH7msjY+ZCSibR8SQqnG+/
-         e++mBzxIudYCY1s4bQ4oynQOnVMYbOYO9Vu/dbqZ/t3zRkMryKnE1uwbLe9pryRW0rtn
-         cswMA13TK0ufoF/ziCW8GSKl4ecNRNE8F2kVlk4/DHYcqG+teXY0IBSS9NyNhInjkycg
-         kcqXh0Gjl2lSdRrOT2pqAUaCju16VBsJhLNaYm2nnN/ohGpvTnuY0jloFd6N/j8dz1AY
-         UOeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=oSus18PkSQk7gaytbRQXd7Pr8Yd4R6m1hBQBrNUfHLE=;
-        b=5F4H5GkpBdYSu85V4Jr8rPgAU37uRZpnyFju1UOfCyTrz2QyeG2Ruz3DeBIxvNN2Qq
-         566GwfmMTvMI6tPPGH4FPJtPzXNPF1QdWYq4Set+8MSQOEBtQnqboDpN0ddHKBx5GeBF
-         NhraAz7moW01T6zzw6HGEIYPbkDUsABgEVGk2U03bJaNc1gRJsdQavj3Pni/NKq32SM8
-         qUeZBAe86JQiANsbb9lUFvhGIsh9fGK/TNl3KgVYALrfWRkdT5A1q2VWy73a3A4FTwBX
-         +0022fQ0z/aUpbfhOeFCdqcQwa4856JdjuE9Ky1MF8tvfE6PwaAZqMF/Qss0bT/E0gFZ
-         c6nQ==
-X-Gm-Message-State: AOAM531Y0XOHMooiPXwZLpUrnlpT94MuRQECjrvbldrlELY0YCX6DwkE
-        03HO9YYz3sspTmp1eExHXhZsdnCtGpk5dqheLBVViEIrhiwtRw==
-X-Google-Smtp-Source: ABdhPJy38NvrpRrwmbljzVqKw93QXJ7vvsNCwOQ8Hn0fVKX84lb8CHKTNhIy4Af2FXOEV/Puop9I4HxysphjKkl6Blk=
-X-Received: by 2002:a05:6402:4312:: with SMTP id m18mr14249776edc.273.1639570937702;
- Wed, 15 Dec 2021 04:22:17 -0800 (PST)
+        Wed, 15 Dec 2021 07:23:32 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1BFCN88r8021830, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1BFCN88r8021830
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 15 Dec 2021 20:23:08 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 15 Dec 2021 20:23:08 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 20:23:07 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01]) by
+ RTEXMBS04.realtek.com.tw ([fe80::65a3:1e23:d911:4b01%5]) with mapi id
+ 15.01.2308.020; Wed, 15 Dec 2021 20:23:07 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "jian-hong@endlessm.com" <jian-hong@endlessm.com>,
+        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
+        Bernie Huang <phhuang@realtek.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "briannorris@chromium.org" <briannorris@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] rtw88: Disable PCIe ASPM while doing NAPI poll on 8821CE
+Thread-Topic: [PATCH v4] rtw88: Disable PCIe ASPM while doing NAPI poll on
+ 8821CE
+Thread-Index: AQHX8amLQ1c7M9LrfUaQkh1Nis88KKwy82wA
+Date:   Wed, 15 Dec 2021 12:23:07 +0000
+Message-ID: <d2ddfaa035315ca91a2a05a8188810ff50db83c8.camel@realtek.com>
+References: <20211215114635.333767-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20211215114635.333767-1-kai.heng.feng@canonical.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [114.26.206.138]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzEyLzE1IOS4iuWNiCAxMDo0NjowMA==?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BE14E3E86E3CFF46A962ED5D3DBCEDA6@realtek.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 15 Dec 2021 17:52:06 +0530
-Message-ID: <CA+G9fYua-LEU7u3OA0=c8HnBjoU6WENh9Avc18GGLg8Dbf9ZAw@mail.gmail.com>
-Subject: [next] powerpc: book3s_hv.c:4591:27: error: 'struct kvm_vcpu' has no
- member named 'wait'
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Please ignore this email if it is already reported ]
-
-While building Linux next 20211214 powerpc defconfig with gcc-8/9/10/11
-following warnings / errors noticed.
-
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=powerpc
-CROSS_COMPILE=powerpc64le-linux-gnu- 'CC=sccache
-powerpc64le-linux-gnu-gcc' 'HOSTCC=sccache gcc'
-arch/powerpc/kvm/book3s_hv.c: In function 'kvmhv_run_single_vcpu':
-arch/powerpc/kvm/book3s_hv.c:4591:27: error: 'struct kvm_vcpu' has no
-member named 'wait'
-   prepare_to_rcuwait(&vcpu->wait);
-                           ^~
-arch/powerpc/kvm/book3s_hv.c:4608:23: error: 'struct kvm_vcpu' has no
-member named 'wait'
-   finish_rcuwait(&vcpu->wait);
-                       ^~
-make[3]: *** [scripts/Makefile.build:289: arch/powerpc/kvm/book3s_hv.o] Error 1
-
-meta data:
------------
-    git describe: next-20211214
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-    git_sha: 0bafb8f3ebc84525d0ae0fcea22d12151b99312f
-    git_short_log: 0bafb8f3ebc8 (\"Add linux-next specific files for 20211214\")
-    target_arch: powerpc
-    toolchain: gcc-8
-
-steps to reproduce:
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-tuxmake --runtime podman --target-arch powerpc --toolchain gcc-8
---kconfig defconfig
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-build log:
-https://builds.tuxbuild.com/22IPCvkz8z9pqpgCMPoNw7OstPD/
-
---
-Linaro LKFT
-https://lkft.linaro.org
+T24gV2VkLCAyMDIxLTEyLTE1IGF0IDE5OjQ2ICswODAwLCBLYWktSGVuZyBGZW5nIHdyb3RlOg0K
+PiBNYW55IEludGVsIGJhc2VkIHBsYXRmb3JtcyBmYWNlIHN5c3RlbSByYW5kb20gZnJlZXplIGFm
+dGVyIGNvbW1pdA0KPiA5ZTJmZDI5ODY0YzUgKCJydHc4ODogYWRkIG5hcGkgc3VwcG9ydCIpLg0K
+PiANCj4gVGhlIGNvbW1pdCBpdHNlbGYgc2hvdWxkbid0IGJlIHRoZSBjdWxwcml0LiBNeSBndWVz
+cyBpcyB0aGF0IHRoZSA4ODIxQ0UNCj4gb25seSBsZWF2ZXMgQVNQTSBMMSBmb3IgYSBzaG9ydCBw
+ZXJpb2Qgd2hlbiBJUlEgaXMgcmFpc2VkLiBTaW5jZSBJUlEgaXMNCj4gbWFza2VkIGR1cmluZyBO
+QVBJIHBvbGxpbmcsIHRoZSBQQ0llIGxpbmsgc3RheXMgYXQgTDEgYW5kIG1ha2VzIFJYIERNQQ0K
+PiBleHRyZW1lbHkgc2xvdy4gRXZlbnR1YWxseSB0aGUgUlggcmluZyBiZWNvbWVzIG1lc3NlZCB1
+cDoNCj4gWyAxMTMzLjE5NDY5N10gcnR3Xzg4MjFjZSAwMDAwOjAyOjAwLjA6IHBjaSBidXMgdGlt
+ZW91dCwgY2hlY2sgZG1hIHN0YXR1cw0KPiANCj4gU2luY2UgdGhlIDg4MjFDRSBoYXJkd2FyZSBt
+YXkgZmFpbCB0byBsZWF2ZSBBU1BNIEwxLCBtYW51YWxseSBkbyBpdCBpbg0KPiB0aGUgZHJpdmVy
+IHRvIHJlc29sdmUgdGhlIGlzc3VlLg0KPiANCj4gRml4ZXM6IDllMmZkMjk4NjRjNSAoInJ0dzg4
+OiBhZGQgbmFwaSBzdXBwb3J0IikNCj4gQnVnemlsbGE6IGh0dHBzOi8vYnVnemlsbGEua2VybmVs
+Lm9yZy9zaG93X2J1Zy5jZ2k/aWQ9MjE1MTMxDQo+IEJ1Z0xpbms6IGh0dHBzOi8vYnVncy5sYXVu
+Y2hwYWQubmV0L2J1Z3MvMTkyNzgwOA0KPiBTaWduZWQtb2ZmLWJ5OiBLYWktSGVuZyBGZW5nIDxr
+YWkuaGVuZy5mZW5nQGNhbm9uaWNhbC5jb20+DQoNClJldmlld2VkLWFuZC1UZXN0ZWQtYnk6IFBp
+bmctS2UgU2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPg0KDQo+IC0tLQ0KPiB2NDoNCj4gIC0gUmVi
+YXNlIHRvIHRoZSByaWdodCB0cmVlLg0KPiANCj4gdjM6DQo+ICAtIE1vdmUgdGhlIG1vZHVsZSBw
+YXJhbWV0ZXIgdG8gYmUgcGFydCBvZiBwcml2YXRlIHN0cnVjdC4NCj4gIC0gRW5zdXJlIGxpbmtf
+dXNhZ2UgbmV2ZXIgZ29lcyBiZWxvdyB6ZXJvLg0KPiANCj4gdjI6DQo+ICAtIEFkZCBkZWZhdWx0
+IHZhbHVlIGZvciBtb2R1bGUgcGFyYW1ldGVyLg0KPiANCj4gIGRyaXZlcnMvbmV0L3dpcmVsZXNz
+L3JlYWx0ZWsvcnR3ODgvcGNpLmMgfCA3MCArKysrKysrLS0tLS0tLS0tLS0tLS0tLS0NCj4gIGRy
+aXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODgvcGNpLmggfCAgMiArDQo+ICAyIGZpbGVz
+IGNoYW5nZWQsIDIxIGluc2VydGlvbnMoKyksIDUxIGRlbGV0aW9ucygtKQ0KPiANCj4gDQoNClsu
+Li5dDQoNCg0K

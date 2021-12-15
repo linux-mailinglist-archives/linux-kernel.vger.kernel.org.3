@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9C14761F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B194761FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbhLOTix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:38:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
+        id S232614AbhLOTkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbhLOTiv (ORCPT
+        with ESMTP id S229786AbhLOTka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:38:51 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F97DC061574;
-        Wed, 15 Dec 2021 11:38:51 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id b22so592836lfb.9;
-        Wed, 15 Dec 2021 11:38:51 -0800 (PST)
+        Wed, 15 Dec 2021 14:40:30 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10BBC061574;
+        Wed, 15 Dec 2021 11:40:29 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id 13so34818662ljj.11;
+        Wed, 15 Dec 2021 11:40:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=fOcjE2pXavuKbJCrwB9ewcw0SQq3JyvpjoJ4QyUms+k=;
-        b=o5dMU0DcaUlE+/2CiW05vzfTnr1Z77oVBKfCUQNAWnB/OsBNdI4o54ecYJjM75u9vg
-         rumPl1ANlnY1sGQ5A8QVq5e3qtaAm8tQdpLkLl6uwWVNO1qOYYy6subpsVjKQTyVYwaF
-         03H1MXlzz7LF7VHLRfMSOkuPwwpEwN2pV2cy+59gHDAcZluJ4dV2vm3VfCKKzjP4D1CO
-         dVef13FjgFkkTF+9AKC/EoeP86pYpw3adJVaB3Tb4Oh/qNDgjSA3rT63sUTaCPG2OuPy
-         BKEnXMGA8P0cCLGpbAjuV2s0vSeIsxQblkAns4Dko7VUXD3bBpkBCVsAGh0oAizWbzcL
-         2j/A==
+        bh=8HtAgUhr/NsiGqKq9VgMDhC8R9rDE1DfVxbnNun+dH8=;
+        b=S/mLeu1UJTdOu5UTWcv2jQOYG/Z5fRndaHXfBTr2MjSRTsJEYJQzqTCeNyQIDyzMYb
+         3RHvEK2EySGmD0ovvTKAV+004wUR1sWZUW4+GhHpusD8yfgbLQYB9m4rwPdz5/Rvr9mE
+         3XCF7U9UyioGkn4i0fEwZkClnBWwZ8Gf9gMUbLK6+hMC8ySk075wPD+d2VeccDp6a/ke
+         x/EGRVRgwZI/z+FohTFJGdm0C5fQgWa1Bd2wdQWGE1eOyTJvtVTeiVmfZ8hdkTJMaaN/
+         As6vLEkL3J9+x1nzbMY63pLV7JZ9EbsIkhHY30rZiZ4dxiWmoOCUc3XfzUhPILirE5zb
+         BiPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=fOcjE2pXavuKbJCrwB9ewcw0SQq3JyvpjoJ4QyUms+k=;
-        b=q0aPhhld57jN5bfvvCD5mnnI2AiUm+fEw9JU8wMvH42kQ8gLKTSi/NBwhwaNHCFzHn
-         qEpWJpPDnOVbqfUumSGgemsinVmWGUJkcofigR6pgTHuWCGf+Wimj2m7Z+PHuDbT1AUB
-         3u+R5vXuEqI/f321iHWx+qy+X9fvBDe6q/gcjpKmKN1mJ4WsFdNJnJx66hOlJwOBk4dT
-         2zahbCCdVWrgDZiu+mK9Uw6dmjrEaJMcYG9BglIYu6HWFJFBxD3BrA2sNKflM498KA+e
-         S8/iAFzE1kiC+APkbc8QLMnaUNiYqVZosP6XFU3g+F/oR1bfZiAKRnMKtt8Iz+VOOr6j
-         5LIQ==
-X-Gm-Message-State: AOAM530M6wNt+10VZ7Z5DeUPjut91e8i4DTyzjSa6lFFrhenz/1xELli
-        jjoz6Gc3ImNbq7iwaGtRjw4=
-X-Google-Smtp-Source: ABdhPJxHpQcpecZHC7OldNt5DYzoOYI16J+5esNrAprCo/D3ilVrZV5uhXycQ2Cd340qZ/0p+0tZhA==
-X-Received: by 2002:a05:6512:2347:: with SMTP id p7mr11387141lfu.304.1639597129414;
-        Wed, 15 Dec 2021 11:38:49 -0800 (PST)
+        bh=8HtAgUhr/NsiGqKq9VgMDhC8R9rDE1DfVxbnNun+dH8=;
+        b=wmHJOeQIqq1U9ixfGXRyjlYTMOOAhExC7olJSKrCw6NMVmRYRwLsVwBm403Di0iIDt
+         JBLQnJcYoRn7PFzyC9CYZTpk08g09OslNPPBt37h2weOcCu/+Pr9Ylrj2p5i8cXtkOti
+         aZcOi4uaI+ustk8TXBGA4qfWGIJN53D7UQDuqS/RYQI2OzWefQfhPWBLAQMZWrOvvzzM
+         i/NAhJKUD3AjdpnhzP5TrWTe5OL0VDIajyKVfIXwjirp8KsDyTzYc1ulHHXHfZtqmdqo
+         vrA9uPvWh3yqsvYgb4tJw+8ukNupQzCkCHUnPyekYOVG4xNkiPxVLxk/CacaCNsfmcxA
+         U0kA==
+X-Gm-Message-State: AOAM530/1UQthqkQ7JlhJEaKvUMRtFp38qYx0TIWC6YtfDYGefo0eyWr
+        dnO2aLNj/P9Cq56fj0sm4Qc=
+X-Google-Smtp-Source: ABdhPJyRHySmqWpVFF6JU+B67GThGTAe/tyYhvgk9PzNlEOLyQHiSplDlcCt3qEGZ7jC0n6elYy7Yg==
+X-Received: by 2002:a2e:a279:: with SMTP id k25mr11876627ljm.37.1639597228072;
+        Wed, 15 Dec 2021 11:40:28 -0800 (PST)
 Received: from pc638.lan (h5ef52e3d.seluork.dyn.perspektivbredband.net. [94.245.46.61])
-        by smtp.gmail.com with ESMTPSA id u22sm463719lff.118.2021.12.15.11.38.48
+        by smtp.gmail.com with ESMTPSA id v8sm464263lfq.177.2021.12.15.11.40.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 11:38:48 -0800 (PST)
+        Wed, 15 Dec 2021 11:40:27 -0800 (PST)
 From:   Uladzislau Rezki <urezki@gmail.com>
 X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Wed, 15 Dec 2021 20:38:46 +0100
-To:     Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, drbd-dev@lists.linbit.com,
-        linux-block@vger.kernel.org
+Date:   Wed, 15 Dec 2021 20:40:25 +0100
+To:     Theodore Ts'o <tytso@mit.edu>, linux-ext4@vger.kernel.org
 Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Michal Hocko <mhocko@suse.com>,
@@ -68,114 +65,142 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
         "Theodore Y . Ts'o" <tytso@mit.edu>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>
-Subject: Re: [PATCH] drdb: Switch to kvfree_rcu() API
-Message-ID: <YbpERiPKO4ufe1hf@pc638.lan>
+Subject: Re: [PATCH RESEND] ext4: Replace ext4_kvfree_array_rcu() by
+ kvfree_rcu() API
+Message-ID: <YbpEqWAH6r1Dz8HC@pc638.lan>
 References: <20211215111845.2514-1-urezki@gmail.com>
+ <20211215111845.2514-2-urezki@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215111845.2514-1-urezki@gmail.com>
+In-Reply-To: <20211215111845.2514-2-urezki@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 12:18:37PM +0100, Uladzislau Rezki (Sony) wrote:
-> Instead of invoking a synchronize_rcu() to free a pointer
-> after a grace period we can directly make use of new API
-> that does the same but in more efficient way.
+On Wed, Dec 15, 2021 at 12:18:38PM +0100, Uladzislau Rezki (Sony) wrote:
+> The ext4_kvfree_array_rcu() function was introduced in order to
+> release some memory after a grace period during resizing of a
+> partition. An object that is freed does not contain any rcu_head
+> filed.
 > 
-> TO: Jens Axboe <axboe@kernel.dk>
-> TO: Philipp Reisner <philipp.reisner@linbit.com>
-> TO: Jason Gunthorpe <jgg@nvidia.com>
-> TO: drbd-dev@lists.linbit.com
-> TO: linux-block@vger.kernel.org
+> To do so, it requires to allocate some extra memory for a special
+> structure that has an rcu_head filed and pointer one where a freed
+> memory is attached. Finally call_rcu() API is invoked.
+> 
+> Since we have a single argument of kvfree_rcu() API, we can easily
+> replace all that tricky code by one single call that does the same
+> but in more efficient way.
+> 
+> TO: "Theodore Ts'o" <tytso@mit.edu>
+> TO: linux-ext4@vger.kernel.org
 > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 > ---
->  drivers/block/drbd/drbd_nl.c       | 9 +++------
->  drivers/block/drbd/drbd_receiver.c | 6 ++----
->  drivers/block/drbd/drbd_state.c    | 3 +--
->  3 files changed, 6 insertions(+), 12 deletions(-)
+>  fs/ext4/ext4.h    |  1 -
+>  fs/ext4/mballoc.c |  2 +-
+>  fs/ext4/resize.c  | 31 ++-----------------------------
+>  fs/ext4/super.c   |  2 +-
+>  4 files changed, 4 insertions(+), 32 deletions(-)
 > 
-> diff --git a/drivers/block/drbd/drbd_nl.c b/drivers/block/drbd/drbd_nl.c
-> index 44ccf8b4f4b2..28f4d84945fd 100644
-> --- a/drivers/block/drbd/drbd_nl.c
-> +++ b/drivers/block/drbd/drbd_nl.c
-> @@ -1679,8 +1679,7 @@ int drbd_adm_disk_opts(struct sk_buff *skb, struct genl_info *info)
->  			drbd_send_sync_param(peer_device);
->  	}
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 404dd50856e5..7e8ff3ac2beb 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -3089,7 +3089,6 @@ extern int ext4_generic_delete_entry(struct inode *dir,
+>  extern bool ext4_empty_dir(struct inode *inode);
 >  
-> -	synchronize_rcu();
-> -	kfree(old_disk_conf);
-> +	kvfree_rcu(old_disk_conf);
->  	kfree(old_plan);
->  	mod_timer(&device->request_timer, jiffies + HZ);
->  	goto success;
-> @@ -2511,8 +2510,7 @@ int drbd_adm_net_opts(struct sk_buff *skb, struct genl_info *info)
->  
->  	mutex_unlock(&connection->resource->conf_update);
->  	mutex_unlock(&connection->data.mutex);
-> -	synchronize_rcu();
-> -	kfree(old_net_conf);
-> +	kvfree_rcu(old_net_conf);
->  
->  	if (connection->cstate >= C_WF_REPORT_PARAMS) {
->  		struct drbd_peer_device *peer_device;
-> @@ -2925,8 +2923,7 @@ int drbd_adm_resize(struct sk_buff *skb, struct genl_info *info)
->  		new_disk_conf->disk_size = (sector_t)rs.resize_size;
->  		rcu_assign_pointer(device->ldev->disk_conf, new_disk_conf);
->  		mutex_unlock(&device->resource->conf_update);
-> -		synchronize_rcu();
-> -		kfree(old_disk_conf);
-> +		kvfree_rcu(old_disk_conf);
->  		new_disk_conf = NULL;
->  	}
->  
-> diff --git a/drivers/block/drbd/drbd_receiver.c b/drivers/block/drbd/drbd_receiver.c
-> index 1f740e42e457..d73a53242a75 100644
-> --- a/drivers/block/drbd/drbd_receiver.c
-> +++ b/drivers/block/drbd/drbd_receiver.c
-> @@ -3799,8 +3799,7 @@ static int receive_protocol(struct drbd_connection *connection, struct packet_in
->  		drbd_info(connection, "peer data-integrity-alg: %s\n",
->  			  integrity_alg[0] ? integrity_alg : "(none)");
->  
-> -	synchronize_rcu();
-> -	kfree(old_net_conf);
-> +	kvfree_rcu(old_net_conf);
+>  /* resize.c */
+> -extern void ext4_kvfree_array_rcu(void *to_free);
+>  extern int ext4_group_add(struct super_block *sb,
+>  				struct ext4_new_group_data *input);
+>  extern int ext4_group_extend(struct super_block *sb,
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 215b7068f548..b0469f7a5c55 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -3109,7 +3109,7 @@ int ext4_mb_alloc_groupinfo(struct super_block *sb, ext4_group_t ngroups)
+>  	rcu_assign_pointer(sbi->s_group_info, new_groupinfo);
+>  	sbi->s_group_info_size = size / sizeof(*sbi->s_group_info);
+>  	if (old_groupinfo)
+> -		ext4_kvfree_array_rcu(old_groupinfo);
+> +		kvfree_rcu(old_groupinfo);
+>  	ext4_debug("allocated s_groupinfo array for %d meta_bg's\n",
+>  		   sbi->s_group_info_size);
 >  	return 0;
+> diff --git a/fs/ext4/resize.c b/fs/ext4/resize.c
+> index b63cb88ccdae..ac6aa037aaab 100644
+> --- a/fs/ext4/resize.c
+> +++ b/fs/ext4/resize.c
+> @@ -17,33 +17,6 @@
 >  
->  disconnect_rcu_unlock:
-> @@ -4168,8 +4167,7 @@ static int receive_sizes(struct drbd_connection *connection, struct packet_info
+>  #include "ext4_jbd2.h"
 >  
->  			rcu_assign_pointer(device->ldev->disk_conf, new_disk_conf);
->  			mutex_unlock(&connection->resource->conf_update);
-> -			synchronize_rcu();
-> -			kfree(old_disk_conf);
-> +			kvfree_rcu(old_disk_conf);
+> -struct ext4_rcu_ptr {
+> -	struct rcu_head rcu;
+> -	void *ptr;
+> -};
+> -
+> -static void ext4_rcu_ptr_callback(struct rcu_head *head)
+> -{
+> -	struct ext4_rcu_ptr *ptr;
+> -
+> -	ptr = container_of(head, struct ext4_rcu_ptr, rcu);
+> -	kvfree(ptr->ptr);
+> -	kfree(ptr);
+> -}
+> -
+> -void ext4_kvfree_array_rcu(void *to_free)
+> -{
+> -	struct ext4_rcu_ptr *ptr = kzalloc(sizeof(*ptr), GFP_KERNEL);
+> -
+> -	if (ptr) {
+> -		ptr->ptr = to_free;
+> -		call_rcu(&ptr->rcu, ext4_rcu_ptr_callback);
+> -		return;
+> -	}
+> -	synchronize_rcu();
+> -	kvfree(to_free);
+> -}
+> -
+>  int ext4_resize_begin(struct super_block *sb)
+>  {
+>  	struct ext4_sb_info *sbi = EXT4_SB(sb);
+> @@ -906,7 +879,7 @@ static int add_new_gdb(handle_t *handle, struct inode *inode,
+>  	n_group_desc[gdb_num] = gdb_bh;
+>  	rcu_assign_pointer(EXT4_SB(sb)->s_group_desc, n_group_desc);
+>  	EXT4_SB(sb)->s_gdb_count++;
+> -	ext4_kvfree_array_rcu(o_group_desc);
+> +	kvfree_rcu(o_group_desc);
 >  
->  			drbd_info(device, "Peer sets u_size to %lu sectors (old: %lu)\n",
->  				 (unsigned long)p_usize, (unsigned long)my_usize);
-> diff --git a/drivers/block/drbd/drbd_state.c b/drivers/block/drbd/drbd_state.c
-> index b8a27818ab3f..826e496821c7 100644
-> --- a/drivers/block/drbd/drbd_state.c
-> +++ b/drivers/block/drbd/drbd_state.c
-> @@ -2071,8 +2071,7 @@ static int w_after_conn_state_ch(struct drbd_work *w, int unused)
->  		conn_free_crypto(connection);
->  		mutex_unlock(&connection->resource->conf_update);
+>  	lock_buffer(EXT4_SB(sb)->s_sbh);
+>  	le16_add_cpu(&es->s_reserved_gdt_blocks, -1);
+> @@ -969,7 +942,7 @@ static int add_new_gdb_meta_bg(struct super_block *sb,
 >  
-> -		synchronize_rcu();
-> -		kfree(old_conf);
-> +		kvfree_rcu(old_conf);
->  	}
+>  	rcu_assign_pointer(EXT4_SB(sb)->s_group_desc, n_group_desc);
+>  	EXT4_SB(sb)->s_gdb_count++;
+> -	ext4_kvfree_array_rcu(o_group_desc);
+> +	kvfree_rcu(o_group_desc);
+>  	return err;
+>  }
 >  
->  	if (ns_max.susp_fen) {
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 111b0498a232..3942cd271a00 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -2759,7 +2759,7 @@ int ext4_alloc_flex_bg_array(struct super_block *sb, ext4_group_t ngroup)
+>  	rcu_assign_pointer(sbi->s_flex_groups, new_groups);
+>  	sbi->s_flex_groups_allocated = size;
+>  	if (old_groups)
+> -		ext4_kvfree_array_rcu(old_groups);
+> +		kvfree_rcu(old_groups);
+>  	return 0;
+>  }
+>  
 > -- 
 > 2.30.2
 > 
-+ Jens Axboe <axboe@kernel.dk>
-+ Philipp Reisner <philipp.reisner@linbit.com>
-+ Jason Gunthorpe <jgg@nvidia.com>
-+ drbd-dev@lists.linbit.com
-+ linux-block@vger.kernel.org
++ "Theodore Ts'o" <tytso@mit.edu>
++ linux-ext4@vger.kernel.org
 
 --
 Vlad Rezki

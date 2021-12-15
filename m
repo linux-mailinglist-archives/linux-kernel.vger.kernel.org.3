@@ -2,128 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15172476120
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5361F476124
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344037AbhLOSxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        id S1344054AbhLOSyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:54:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239065AbhLOSxU (ORCPT
+        with ESMTP id S238744AbhLOSya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:53:20 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769DAC06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:53:20 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id p18so2401573pld.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 10:53:20 -0800 (PST)
+        Wed, 15 Dec 2021 13:54:30 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63330C061574;
+        Wed, 15 Dec 2021 10:54:30 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id r11so77349599edd.9;
+        Wed, 15 Dec 2021 10:54:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ofLlu4vI5oc9F8yAJdCo2OL049xmEG3qVfEzoCZNq3s=;
-        b=MMJevBACLSGNrI/y7YuIZH+V5RiQOSjeHU/mv8xomCH7Ptt3x6NoWOf12uOpSaepTL
-         oz43yH4EfiYWtioiIgG9ttyi0MQaKOdZVf8oGHQxW6xZCLKdWdagO+MSKK0bF7u0XjdR
-         CiMVoL4aAsV4+CB8dGJGAIsXrivRu5wTzLdMmJqBJj8W3wbOPc74y/2+0tygeu9jMSmg
-         TspE2ykXZam7FhK4ugTgnmh91SvE2qS9tMUSuMGEn3jAzNP2Xwmwu4ebE6jfBz9vO9eX
-         tBNwPhqJxXByXbKYNymRMoNwo1LHIm2ARkG7iCQIHeqEbdp50AkCFUIt/nrBNp/hdbYQ
-         0tXg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=892DI7nBTUbNG0pVInYh7MAvJBd0sM6GoSF/qhjlPEk=;
+        b=FexRi6oFB32LusaeYmHy3eNxdngvc/80shi5i1uhzyZjlRlht1FnXu6mktMoDycha8
+         Zy9y1ieoXiNGjPcGgrL3aUeent/PD6TZOCcz5i+ZoGRUq+GXftpXT8NFdhzP13c8VZ4v
+         jiUIajimnQfcB2hpi/Mi+DXYKksTGOKuMbTcGfw+soYsWLyZVWlEYlOYMeFpVHkF+9f+
+         siYmCCbz4q4nleNH8DSMfkVX2IP95Es/HHjzjN0gs6nbD5GWlRggQHH9+xFlZj/m+RVE
+         NABXCSX8QCTQLAm/rnZMmDoK2IIy/+E2N5fSBpL+oMuaAVue1oLAB//h9ZSHXOzP6yeX
+         5RRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ofLlu4vI5oc9F8yAJdCo2OL049xmEG3qVfEzoCZNq3s=;
-        b=MHbrE00bbBiPOKH7X0ulIYgXf8CD/QJ9Vs/+1wtI5uDDsidNnrOq5c1LqyzsemzDvp
-         plx6d/JK6bYiqvPLizUxzQ8CcZO0v4GzuhCZyfWbxiLIagLXIzjQwoMa5mVn8hBiIu2Z
-         5ErvOS/1WYGRY4LxU9jiZlwSiDCvTCK3ttoR2yRExYbiaiFHLtju+f0/zpmNMoyK9G0L
-         BY5wYVZN06Ebh4c5wpyxt4XONjOT4Vf/1Igjq8f5gvwMXC8tNzpFa8IzEAJI7vS/2AOV
-         Rogi6cfI8GAxOo2Y1+79ITEn7TeUspKc1x1QpbWgZuFKsm80tbL/dglSdDlsuD/tQPOn
-         /W9g==
-X-Gm-Message-State: AOAM531PASeMmn4xaXcN//6ApaJmJnDK/k0Ygg2xjo3M7+VRB/abn3hu
-        zPtGe1ksFo/a1L4h8AFSJN41zw==
-X-Google-Smtp-Source: ABdhPJzjhnHaeY3OeD8Fy2oSut8c+bZMl2MgbvLYlH0uRFnNZ4HEAlsbNgGVabQMuhkGW18U/fNsAg==
-X-Received: by 2002:a17:902:b615:b0:143:bbf0:aad0 with SMTP id b21-20020a170902b61500b00143bbf0aad0mr12280273pls.12.1639594399798;
-        Wed, 15 Dec 2021 10:53:19 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g18sm3672838pfj.142.2021.12.15.10.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 10:53:19 -0800 (PST)
-Date:   Wed, 15 Dec 2021 18:53:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH 1/7] KVM: x86: Retry page fault if MMU reload is pending
- and root has no sp
-Message-ID: <Ybo5nOu7/bVPhzCK@google.com>
-References: <20211209060552.2956723-1-seanjc@google.com>
- <20211209060552.2956723-2-seanjc@google.com>
- <c94b3aec-981e-8557-ba29-0094b075b8e4@redhat.com>
- <YbN58FS67bEBOZZu@google.com>
- <8ab8833f-2a89-71ff-98da-2cfbb251736f@redhat.com>
- <YbOLRLEdfpl51QLS@google.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=892DI7nBTUbNG0pVInYh7MAvJBd0sM6GoSF/qhjlPEk=;
+        b=7+cNf/WlwhVhVP7BaQ9KcHKXKa9N4ImadlNnOiJnYu2+FbsRrun/NCon30x9XxViLE
+         P6Qww/Pf9tnLWO2v8TGv7rV8znqFcLShyQ8xPi29kXJNtuBWLAkBUiNxkTGYs5GgWwpm
+         JYKGf3hNQsehmQut6b2psbXSa4JEHqWyWh7Md6yLx+57nbFm1K+D8lPHY45zdsIHUpYX
+         KOm+hLSKvNBD+7wI2gQuK8VUA0EZwFgMQQuuCrdwz1i/cU1YTzi/BEN5Qa2VqNGotxoA
+         5P5VdI6Nv8leGAyDh7eYfyj35xL4Qkiga+HFdi1aBe351cUtKER8viCExx7olVI0DmO+
+         8PFA==
+X-Gm-Message-State: AOAM532uYK5v4VXt6JumMlGT2CQAF+8x/iTpHLZ77v6a5lLrNgjXrQHJ
+        MtE7VlQQ703N5K7bopKKYyU=
+X-Google-Smtp-Source: ABdhPJx7IkAXDp9PoYFp8zW/9qa9BodUFLwG/1hYrYvR9mZfdGScA5aVdX6+VfNlRMI9kj3DsWcMxQ==
+X-Received: by 2002:a17:906:bccc:: with SMTP id lw12mr12684917ejb.128.1639594468913;
+        Wed, 15 Dec 2021 10:54:28 -0800 (PST)
+Received: from [192.168.8.198] ([148.252.129.75])
+        by smtp.gmail.com with ESMTPSA id nd36sm1037595ejc.17.2021.12.15.10.54.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 10:54:28 -0800 (PST)
+Message-ID: <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
+Date:   Wed, 15 Dec 2021 18:54:29 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbOLRLEdfpl51QLS@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+Content-Language: en-US
+To:     sdf@google.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
+ <Yboc/G18R1Vi1eQV@google.com>
+ <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
+ <Ybom69OyOjsR7kmZ@google.com>
+ <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
+ <Yboy2WwaREgo95dy@google.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <Yboy2WwaREgo95dy@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021, Sean Christopherson wrote:
-> On Fri, Dec 10, 2021, Paolo Bonzini wrote:
-> > On 12/10/21 17:01, Sean Christopherson wrote:
-> > > > KVM_REQ_MMU_RELOAD is raised after kvm->arch.mmu_valid_gen is fixed (of
-> > > > course, otherwise the other CPU might just not see any obsoleted page
-> > > > from the legacy MMU), therefore any check on KVM_REQ_MMU_RELOAD is just
-> > > > advisory.
-> > > 
-> > > I disagree.  IMO, KVM should not be installing SPTEs into obsolete shadow pages,
-> > > which is what continuing on allows.  I don't _think_ it's problematic, but I do
-> > > think it's wrong.
-> > > 
-> > > [...] Eh, for all intents and purposes, KVM_REQ_MMU_RELOAD very much says
-> > > special roots are obsolete.  The root will be unloaded, i.e. will no
-> > > longer be used, i.e. is obsolete.
-> > 
-> > I understand that---but it takes some unspoken details to understand that.
+On 12/15/21 18:24, sdf@google.com wrote:
+> On 12/15, Pavel Begunkov wrote:
+>> On 12/15/21 17:33, sdf@google.com wrote:
+>> > On 12/15, Pavel Begunkov wrote:
+>> > > On 12/15/21 16:51, sdf@google.com wrote:
+>> > > > On 12/15, Pavel Begunkov wrote:
+>> > > > > � /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
+>> > > > > � #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)����������������� \
+>> > > > > � ({����������������������������������������� \
+>> > > > > ����� int __ret = 0;��������������������������������� \
+>> > > > > -��� if (cgroup_bpf_enabled(CGROUP_INET_INGRESS))������������� \
+>> > > > > +��� if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) && sk &&������������� \
+>> > > > > +������� CGROUP_BPF_TYPE_ENABLED((sk), CGROUP_INET_INGRESS))���������� \
+>> > > >
+>> > > > Why not add this __cgroup_bpf_run_filter_skb check to
+>> > > > __cgroup_bpf_run_filter_skb? Result of sock_cgroup_ptr() is already there
+>> > > > and you can use it. Maybe move the things around if you want
+>> > > > it to happen earlier.
+>> >
+>> > > For inlining. Just wanted to get it done right, otherwise I'll likely be
+>> > > returning to it back in a few months complaining that I see measurable
+>> > > overhead from the function call :)
+>> >
+>> > Do you expect that direct call to bring any visible overhead?
+>> > Would be nice to compare that inlined case vs
+>> > __cgroup_bpf_prog_array_is_empty inside of __cgroup_bpf_run_filter_skb
+>> > while you're at it (plus move offset initialization down?).
 > 
-> Eh, it takes just as many unspoken details to understand why it's safe-ish to
-> install SPTEs into an obsolete shadow page.
+>> Sorry but that would be waste of time. I naively hope it will be visible
+>> with net at some moment (if not already), that's how it was with io_uring,
+>> that's what I see in the block layer. And in anyway, if just one inlined
+>> won't make a difference, then 10 will.
 > 
-> > In particular that both kvm_reload_remote_mmus and is_page_fault_stale are
-> > called under mmu_lock write-lock, and that there's no unlock between
-> > updating mmu_valid_gen and calling kvm_reload_remote_mmus.
-> > 
-> > (This also suggests, for the other six patches, keeping
-> > kvm_reload_remote_mmus and just moving it to arch/x86/kvm/mmu/mmu.c, with an
-> > assertion that the MMU lock is held for write).
-> > 
-> > But since we have a way forward for having no special roots to worry about,
-> > it seems an unnecessary overload for 1) a patch that will last one or two
-> > releasees at most 
-> 
-> Yeah, I don't disagree, which is why I'm not totally opposed to punting this and
-> naturally fixing it by allocating shadow pages for the special roots.  But this
-> code needs to be modified by Jiangshan's series either way, so it's not like we're
-> saving anything meaningful.
-> 
-> > 2) a case that has been handled in the inefficient way forever.
-> 
-> I don't care about inefficiency, I'm worried about correctness.  It's extremely
-> unlikely this fixes a true bug in the legacy MMU, but there's also no real
-> downside to adding the check.
-> 
-> Anyways, either way is fine.
+> I can probably do more experiments on my side once your patch is
+> accepted. I'm mostly concerned with getsockopt(TCP_ZEROCOPY_RECEIVE).
+> If you claim there is visible overhead for a direct call then there
+> should be visible benefit to using CGROUP_BPF_TYPE_ENABLED there as
+> well.
 
-Ping, in case this dropped off your radar.  Regardless of how we fix this goof,
-it needs to get fixed in 5.16.
+Interesting, sounds getsockopt might be performance sensitive to
+someone.
+
+FWIW, I forgot to mention that for testing tx I'm using io_uring
+(for both zc and not) with good submission batching.
+
+-- 
+Pavel Begunkov

@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 746614754C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF174754CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240970AbhLOI6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 03:58:33 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:34396
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240966AbhLOI6c (ORCPT
+        id S241008AbhLOJBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:01:37 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16814 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236288AbhLOJBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 03:58:32 -0500
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 585793F1D7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:58:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639558707;
-        bh=3BfLpW6QaE5r1o/oxEhvTtY5Tkz0EqDoGB1r3qMbQpc=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=bHPo9XUCkUguaJYepEhAngL/bJSgTo757tLMndVO5XCS8tDBd5xtVSlrZj4S7cJT4
-         yJRjARB9P2FZEceLvIfnbBqlc5KEpZaryNEuQD+3C4WaUwjn1Ug4a2+sHFc/W0r9Yp
-         xdo/evotRYLZMnaNU1V4n2z2EgO6RhybmASARjB5obHaGIZFnysL+h+eQUF8ap1wey
-         5cAOoXe1sNiCjWANodc+B+UkxhbmebMm4iSbcrxTc4wpCUryLdxcYft+th8vnP0F+F
-         bMd+XKZ5seDJ3azUS/izk4RJTnz7CH3MTvORhsucbn56yAOsZAji93FUANZLiBEvEG
-         IC90r9mhFctbw==
-Received: by mail-pj1-f71.google.com with SMTP id t22-20020a17090a0d1600b001b0e394b0b6so2351170pja.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 00:58:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3BfLpW6QaE5r1o/oxEhvTtY5Tkz0EqDoGB1r3qMbQpc=;
-        b=eiyCeT3KNx+TIlXYWhUgD7O6jgzQ6i/PF4xYv1dJgk2czmhXlf5UzPmouv2JLWUQi3
-         sNXcLuJStWbPkopFDRAEKaA8cblBgadb9uWFHSiwdTJW9udAFWFUISh04KfdvZyTh+Ny
-         SKa2cKFKeal6/nV6MfJJvmEEdcUmkZixrAoOa4dYk09+15Icjaa4jsn7dBHYCEJcGm36
-         rC1rYCV+fsz3+lt+1/EtGR/bjjcc8UUIP2h3mykQEKIkNdoZNDzmp/kwVj6FHuxcWQlj
-         Jy15rCr11wJ/vii7N2dGCPjLCYZkc2xtZ0pePChUWITcjh3Sl5JbCwtlptN6WIPgwc+P
-         cv8w==
-X-Gm-Message-State: AOAM5321kMNNY4C5TEx4IPv7ArhSYfu8J+bsomcRvMTjfJhkrwLtqWIg
-        nRCJzu1adg7QnJsV1mkb8IxcEg/2FNa5oC6jMWQEYEsrWSb4tvu7ezrXNN3ZylbJC0qiIGaDo45
-        oYfRCcQYcOEikJLzzpqrpj1pVJ+vUuFvkuKlZl/N7rA==
-X-Received: by 2002:a17:90b:1d91:: with SMTP id pf17mr10697936pjb.230.1639558705739;
-        Wed, 15 Dec 2021 00:58:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz5u/I/zPqWj2M27e7kAtp+TKxevV0E9EA8Zo4i+iC+27VJ83/+Rr/1w6QvRSDqHo7Q7JlNJg==
-X-Received: by 2002:a17:90b:1d91:: with SMTP id pf17mr10697915pjb.230.1639558705415;
-        Wed, 15 Dec 2021 00:58:25 -0800 (PST)
-Received: from localhost.localdomain (122-116-80-115.hinet-ip.hinet.net. [122.116.80.115])
-        by smtp.gmail.com with ESMTPSA id bt2sm1567260pjb.57.2021.12.15.00.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 00:58:25 -0800 (PST)
-From:   Chris Chiu <chris.chiu@canonical.com>
-To:     Jes.Sorensen@gmail.com, kvalo@codeaurora.org, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     code@reto-schneider.ch, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Chiu <chris.chiu@canonical.com>
-Subject: [PATCH v2] rtl8xxxu: Improve the A-MPDU retransmission rate with RTS/CTS protection
-Date:   Wed, 15 Dec 2021 16:58:19 +0800
-Message-Id: <20211215085819.729345-1-chris.chiu@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Dec 2021 04:01:36 -0500
+Received: from dggeme764-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JDTjt3HFPz91ky;
+        Wed, 15 Dec 2021 17:00:50 +0800 (CST)
+Received: from huawei.com (10.67.174.119) by dggeme764-chm.china.huawei.com
+ (10.3.19.110) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.20; Wed, 15
+ Dec 2021 17:01:34 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ARM: Add unwinding annotations to __loop.*delay functions
+Date:   Wed, 15 Dec 2021 09:06:07 +0000
+Message-ID: <20211215090607.3737830-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.119]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggeme764-chm.china.huawei.com (10.3.19.110)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The A-MPDU TX retransmission rate is always high (> 20%) even in a very
-clean environment. However, the vendor driver retransimission rate is
-< 10% in the same test bed. The difference is the vendor driver starts
-the A-MPDU TXOP with initial RTS/CTS handshake which is observed in the
-air capture and the TX descriptor. Since the driver does not know how
-many frames will be aggregated and the estimated duration, forcing the
-RTS/CTS protection for A-MPDU helps to lower the retransmission rate
-from > 20% to ~12% in the same test setup with the vendor driver.
+The unwind directives can't handle nested function entries, so only the
+outermost function __loop_udelay is annotated, and the inner nested
+entries share the same unwind info with __loop_udelay.
 
-Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
+ arch/arm/lib/delay-loop.S | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-v2: revise the commit message to be more explicit.
-
- drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index a42e2081b75f..06d59ffb7444 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -4859,7 +4859,7 @@ rtl8xxxu_fill_txdesc_v1(struct ieee80211_hw *hw, struct ieee80211_hdr *hdr,
- 	 * rts_rate is zero if RTS/CTS or CTS to SELF are not enabled
- 	 */
- 	tx_desc->txdw4 |= cpu_to_le32(rts_rate << TXDESC32_RTS_RATE_SHIFT);
--	if (rate_flags & IEEE80211_TX_RC_USE_RTS_CTS) {
-+	if (ampdu_enable || (rate_flags & IEEE80211_TX_RC_USE_RTS_CTS)) {
- 		tx_desc->txdw4 |= cpu_to_le32(TXDESC32_RTS_CTS_ENABLE);
- 		tx_desc->txdw4 |= cpu_to_le32(TXDESC32_HW_RTS_ENABLE);
- 	} else if (rate_flags & IEEE80211_TX_RC_USE_CTS_PROTECT) {
-@@ -4930,7 +4930,7 @@ rtl8xxxu_fill_txdesc_v2(struct ieee80211_hw *hw, struct ieee80211_hdr *hdr,
- 	/*
- 	 * rts_rate is zero if RTS/CTS or CTS to SELF are not enabled
- 	 */
--	if (rate_flags & IEEE80211_TX_RC_USE_RTS_CTS) {
-+	if (ampdu_enable || (rate_flags & IEEE80211_TX_RC_USE_RTS_CTS)) {
- 		tx_desc40->txdw3 |= cpu_to_le32(TXDESC40_RTS_CTS_ENABLE);
- 		tx_desc40->txdw3 |= cpu_to_le32(TXDESC40_HW_RTS_ENABLE);
- 	} else if (rate_flags & IEEE80211_TX_RC_USE_CTS_PROTECT) {
+diff --git a/arch/arm/lib/delay-loop.S b/arch/arm/lib/delay-loop.S
+index 3ccade0f8130..f0a076f9abc5 100644
+--- a/arch/arm/lib/delay-loop.S
++++ b/arch/arm/lib/delay-loop.S
+@@ -7,6 +7,7 @@
+ #include <linux/linkage.h>
+ #include <asm/assembler.h>
+ #include <asm/delay.h>
++#include <asm/unwind.h>
+ 
+ 		.text
+ 
+@@ -21,6 +22,7 @@
+  */
+ 
+ ENTRY(__loop_udelay)
++UNWIND(.fnstart)
+ 		ldr	r2, .LC1
+ 		mul	r0, r2, r0		@ r0 = delay_us * UDELAY_MULT
+ ENTRY(__loop_const_udelay)			@ 0 <= r0 <= 0xfffffaf0
+@@ -54,6 +56,7 @@ ENTRY(__loop_delay)
+ #endif
+ 		bhi	__loop_delay
+ 		ret	lr
+-ENDPROC(__loop_udelay)
+-ENDPROC(__loop_const_udelay)
+ ENDPROC(__loop_delay)
++ENDPROC(__loop_const_udelay)
++UNWIND(.fnend)
++ENDPROC(__loop_udelay)
 -- 
-2.25.1
+2.27.0
 

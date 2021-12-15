@@ -2,138 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10788475FFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8986C476004
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245214AbhLOR4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S245352AbhLOR5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239020AbhLOR4S (ORCPT
+        with ESMTP id S239020AbhLOR5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:56:18 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB9BC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 09:56:18 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id y23so713446uay.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 09:56:18 -0800 (PST)
+        Wed, 15 Dec 2021 12:57:33 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85D0C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 09:57:30 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so19948581pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 09:57:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=posk.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ys3rZNuX7+z7pA4D/KdILKC/mW3vMwpvwDb3wE/01Rk=;
-        b=WW/hDoEwCR1rjxM+F7Yqu7cbwjS2D1bqvjEDmHgeoNa4PpqzkK/Wtz52xdZLCWaYoc
-         6Pn5GlBJr1vQSqOPG7HIqznF6eHy8RNiaB8KcPFORAnkybihRPqcWot4wmmdx/Sn7giF
-         6ksUoQLeqZS/6NQfhsRKADgceL1NH3EXpvitsHQ11ncUc0WYkenrnitfsLgT+xhwx0EQ
-         QIifb4vEkoZCZJk1L8dL5YNogD1RSRGVUVAizVq+NA4A9xM0nkT9E2qmYtgGtDazpxWK
-         2K0Fb65gE2iQADFX90bH5+pnqPBE9urVbakB+se5A8QEswecS3Mhbr29o5Nd67CNKEqq
-         wbXQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0UQwrR8nztzBdJpsrXKSkivXvI2bisLviWSkYI1RuFg=;
+        b=h5WpgU54efXlAJPt2ZOWqh39VhVF4Mj8ZdNpmFs6ohI1LO1pGXiEKyNDDDGLz1P4mO
+         DWQOHKkzMdAosYip2+m2ylFEMYAeBlzKogFNXCUDcBmvAd5RZidSVPZzn2EtUPci+Gk9
+         iqHTI86k2N2fL3bvSQSMXM9avR0LE83ASJCTw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ys3rZNuX7+z7pA4D/KdILKC/mW3vMwpvwDb3wE/01Rk=;
-        b=sdt6YG+ExanUVe+X6t/ypzuyPwuWKPTEX7N2GEf6htaUAQN5yI2LLGkd70FTGJX3B+
-         rEXGZXXiPEhyP/6Kor0nBEwfTUR9TQw9MxPs0N8FyudSZlNTk9psVmGicSotD2NH14xu
-         JDNf91mrr95w0hSkhL5Tgo8Qt7wiBPD8Auc6J3QeCY7n2+xHWbmbtM8RdS+nQQYqM6UZ
-         B7T0v6qF9M22kHK2HN660KNK9nYGIZTKa1zSSVS86Kit/cmYQVLqddukwwqSQ20k4rkc
-         mewg+yZxd2YhWFfoa3jBq99xyM102xeDEpt9E8NgH0EOk3qH1L/gcKlkHD4tWc31+z0z
-         d0ag==
-X-Gm-Message-State: AOAM532N38esoCZ7yXEvWl9OyNvtxhNxwXfa7CvZc6npCDBho3pT4ez5
-        7gQHK4LEv4ZQ7vNu1EZT3doGo4go01qDUZueRCgu7w==
-X-Google-Smtp-Source: ABdhPJy+0ibS31bqjUgXJDh5pEyKbSWrcOOg1QLNTZcvBmNYNGL0ZuDRxO8hqcH3gGNI1DLlIUcWmmw2XfEKcGTSo/Q=
-X-Received: by 2002:a9f:218c:: with SMTP id 12mr10203394uac.71.1639590977230;
- Wed, 15 Dec 2021 09:56:17 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0UQwrR8nztzBdJpsrXKSkivXvI2bisLviWSkYI1RuFg=;
+        b=ljsPTTzb2pNhVCwxdLT6CBr402V3PeO0LGRRfQtsFi7IogX/5fyplUDOuHdSV1/SKG
+         Co2WZ+MV1lzYq7awCdg9PN20JdqwfcaNygyH/S3+q6w8tCjdVPFjjSYDNmoTo+cT6Ihr
+         Gg1r6WeispIkAf8Bh7YYHAbeyVmaihOai7CwPJPi/RxSMe6r9U1KNtB6e9iY6/h21gY6
+         uMAGBjmVIxhpBP189urN/Kgb+D4ptTGV+QqG+K7VzxREU3sRHmr1BCv+0hm5zN0i+rjK
+         2Tn6giLuxM2XW0MFyc0GghVx6J5VPyDjogL741PZh2Sh+8bNrW6I6On0Wiut/vRyQFDN
+         s0Iw==
+X-Gm-Message-State: AOAM531M0lDeEGrhPpOicH5rUTDUCT55QzUsT+FkbtdkS5QkDssFZeFv
+        X0lji119ZgWA84OIxDZJTyUDJA==
+X-Google-Smtp-Source: ABdhPJy/WFxlvXktRBoFkIxaqTD1Pgc2S0N0D3YDLYBKkEC/1cFQNSjmztuXkGwnzEEDmx1OzjC+yg==
+X-Received: by 2002:a17:902:bd44:b0:148:a2e8:2c51 with SMTP id b4-20020a170902bd4400b00148a2e82c51mr5382642plx.160.1639591050392;
+        Wed, 15 Dec 2021 09:57:30 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:4570:3a38:a59b:d420])
+        by smtp.gmail.com with UTF8SMTPSA id bt2sm2892224pjb.57.2021.12.15.09.57.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 09:57:30 -0800 (PST)
+Date:   Wed, 15 Dec 2021 09:57:28 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Balakrishna Godavarthi <bgodavar@codeaurora.org>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
+        bjorn.andersson@linaro.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, hemantg@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, rjliao@codeaurora.org,
+        hbandi@codeaurora.org, abhishekpandit@chromium.org,
+        mcchou@chromium.org, saluvala@codeaurora.org
+Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Add bluetooth node on
+ SC7280 IDP boards
+Message-ID: <YbosiM3ZZl5zrZcV@google.com>
+References: <1639587963-22503-1-git-send-email-bgodavar@codeaurora.org>
 MIME-Version: 1.0
-References: <20211214204445.665580974@infradead.org> <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
- <Ybm+HJzkO/0BB4Va@hirez.programming.kicks-ass.net>
-In-Reply-To: <Ybm+HJzkO/0BB4Va@hirez.programming.kicks-ass.net>
-From:   Peter Oskolkov <posk@posk.io>
-Date:   Wed, 15 Dec 2021 09:56:06 -0800
-Message-ID: <CAFTs51Xb6m=htpWsVk577n-h_pRCpqRcBg6-OhBav8OadikHkw@mail.gmail.com>
-Subject: Re: [RFC][PATCH 0/3] sched: User Managed Concurrency Groups
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, mgorman@suse.de,
-        bristot@redhat.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Paul Turner <pjt@google.com>, Peter Oskolkov <posk@google.com>,
-        Andrei Vagin <avagin@google.com>, Jann Horn <jannh@google.com>,
-        Thierry Delisle <tdelisle@uwaterloo.ca>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1639587963-22503-1-git-send-email-bgodavar@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 2:06 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Dec 14, 2021 at 07:46:25PM -0800, Peter Oskolkov wrote:
-> > On Tue, Dec 14, 2021 at 12:55 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > Hi,
-> > >
-> > > This is actually tested code; but still missing the SMP wake-to-idle machinery.
-> > > I still need to think about that.
-> >
-> > Thanks, Peter!
-> >
-> > At a first glance, your main patch does not look much smaller than
-> > mine, and I thought the whole point of re-doing it was to throw away
-> > extra features and make things smaller/simpler...
->
-> Well, simpler was the goal. I didn't really focus on size much. It isn't
-> really big to begin with.
->
-> But yes, it has 5 hooks now, 3 syscalls and lots of comments and all
-> that under 900 lines, not bad I'd say.
+On Wed, Dec 15, 2021 at 10:36:03PM +0530, Balakrishna Godavarthi wrote:
+> Add bluetooth SoC WCN6750 node for SC7280 IDP boards.
+> 
+> Signed-off-by: Balakrishna Godavarthi <bgodavar@codeaurora.org>
 
-My patchset had three hooks and two syscalls, and fewer new fields
-added to task_struct... And similarly around 900 lines on the kernel
-side in the main patch. So I am not sure why you believe that your
-approach is simpler, unless there was something fundamentally wrong
-with my approach. But tglx@ looked into it, and his remarks were more
-about comments and the commit message and smaller things at a function
-level, like an unneeded goto, than about the overall design...
-
->
-> Also I think you wanted something like this? I'm not sure of the LAZY
-> name, but I can't seem to come up with anything saner atm.
->
-[...]
->  /*
-> + * Enqueue tsk to it's server's runnable list and wake the server for pickup if
-> + * so desired. Notable LAZY workers will not wake the server and rely on the
-> + * server to do pickup whenever it naturally runs next.
-
-No, I never suggested we needed per-server runnable queues: in all my
-patchsets I had a single list of idle (runnable) workers.
-
-[...]
-
-From another message:
-
->> Anyway, I'll test your patchset over the next week or so and let you
->> know if anything really needed is missing (other than waking an idle
->> server if there is one on a worker wakeup; this piece is definitely
-> needed).
-
-> Right, so the problem I'm having is that a single idle server ptr like
-> before can trivially miss waking annother idle server.
-
-I believe the approach I used in my patchset, suggested by Thierry
-Delisle, works.
-
-In short, there is a single idle server ptr for the kernel to work
-with. The userspace maintains a list of idle servers. If the ptr is
-NULL, the list is empty. When the kernel wakes the idle server it
-sees, the server reaps the runnable worker list and wakes another idle
-server from the userspace list, if available. This newly woken idle
-server repoints the ptr to itself, checks the runnable worker list, to
-avoid missing a woken worker, then goes to sleep.
-
-Why do you think this approach is not OK?
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

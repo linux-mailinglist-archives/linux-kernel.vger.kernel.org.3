@@ -2,122 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 752B147646C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448B347647C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhLOVQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:16:20 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38172 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229555AbhLOVQQ (ORCPT
+        id S229682AbhLOVWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:22:53 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:58120 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229555AbhLOVWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:16:16 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BFKMigB006331;
-        Wed, 15 Dec 2021 21:16:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=r1/Oo1kyddJ7iuoNqUgzDeZ8tr/sCHoqm/0C/JjKL60=;
- b=i3l1suvG3440rFJziRMQ0/rjYlShQINEqt+ecEEJZEoi1pTHT589rMVGsJv8rFg0TYiN
- D0x1awLYKZ+DtwrV5JB/d0jZoDUmlfcDreyOVrhdvDUeR0m8wXkl1kExmqDmMAeD7M1t
- b7cbtXcB3wnrdKif022I6QjsqpRCh5gqbzYf2ncOfFJvWcxoPdgBk2OVuDY8Ke4pPOoC
- WW75vUozZq9BFGp01nKUe5koRvzaPNBrIQpzIu3+A/dWE7ML1pOcQoiusWUUb/meStoN
- Uc2xNDIq3CH4AlQFjYQ+Q27pKJfwn5Aa2dYRZ8jCkigNtO34UjxCnBTtp1/XAkQA0Do8 lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyqbhgx96-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 21:16:05 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BFLG4T1032076;
-        Wed, 15 Dec 2021 21:16:04 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyqbhgx88-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 21:16:04 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BFLCn1m024453;
-        Wed, 15 Dec 2021 21:16:02 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3cy7jr1217-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 21:16:01 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BFLFwGw47710678
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Dec 2021 21:15:58 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A6420A405C;
-        Wed, 15 Dec 2021 21:15:58 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1617AA4060;
-        Wed, 15 Dec 2021 21:15:56 +0000 (GMT)
-Received: from sig-9-65-74-182.ibm.com (unknown [9.65.74.182])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Dec 2021 21:15:55 +0000 (GMT)
-Message-ID: <925ed27a6375dffcb92e9812e36b1c461ae63aa2.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 03/17] ima: Namespace audit status flags
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Mehmet Kayaalp <mkayaalp@linux.vnet.ibm.com>
-Date:   Wed, 15 Dec 2021 16:15:55 -0500
-In-Reply-To: <20211210194736.1538863-4-stefanb@linux.ibm.com>
-References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
-         <20211210194736.1538863-4-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OhkSsN2HvKSugWB1AyCNBJwn0KH2n4EX
-X-Proofpoint-ORIG-GUID: 9nmbmPhHwTxWg_ZTZ2w47i4rbBE4fqES
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-15_12,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=944 impostorscore=0
- lowpriorityscore=0 suspectscore=0 phishscore=0 spamscore=0
- priorityscore=1501 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112150116
+        Wed, 15 Dec 2021 16:22:52 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C62AE3F0;
+        Wed, 15 Dec 2021 22:22:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1639603371;
+        bh=euTVl1Cnl1bPhsXphZ5i09i+m16ZyOMXSNCbblpciZY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=udBHdrdyrmk9OsGoO3RVcyB1drz5mfBWuWR7Tlo2kJFxHXadFlkVYXiSeB6j5VtKD
+         VMkNETd5AHpRWVqfRVHWvUqgD2tYpvxsuZ3TjeC/fZbBLqrp3HDGup0sl/G7igcup/
+         MTRtNibxgH3xujSc7HZwmPXeJh4S90zGf13qDNBk=
+Date:   Wed, 15 Dec 2021 23:22:48 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: i2c Update PCA954x
+Message-ID: <YbpcqK5BOrsFWhok@pendragon.ideasonboard.com>
+References: <20211214095021.572799-1-patrick.rudolph@9elements.com>
+ <Ybh8cCU/zbfXkXYO@pendragon.ideasonboard.com>
+ <a78b52ec-81bf-9ee1-9e12-135079d19b7a@axentia.se>
+ <CALNFmy3vwkvU2ctBE6otCBnhMb2GAOXvRW6NGpOwwAD2qVt7ag@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CALNFmy3vwkvU2ctBE6otCBnhMb2GAOXvRW6NGpOwwAD2qVt7ag@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-10 at 14:47 -0500, Stefan Berger wrote:
-> From: Mehmet Kayaalp <mkayaalp@linux.vnet.ibm.com>
+Hi Patrick,
+
+On Wed, Dec 15, 2021 at 03:19:37PM +0100, Patrick Rudolph wrote:
+> Hi Peter,
+> thanks for your feedback.
+> You are right, the added Maxim chips should not have set the interrupt-controller; flag.
 > 
-> The iint cache stores whether the file is measured, appraised, audited
-> etc. This patch moves the IMA_AUDITED flag into the per-namespace
-> ns_status, enabling IMA audit mechanism to audit the same file each time
-> it is accessed in a new namespace.
-> 
-> The ns_status is not looked up if the CONFIG_IMA_NS is disabled or if
-> any of the IMA_NS_STATUS_ACTIONS (currently only IMA_AUDIT) is not
-> enabled.
+> The reason I decided to not handle that interrupt is that I don't know where to pass that bus error to.
+> It looks like only the I2C master can signal bus errors by returning -EIO, however there's no API for I2C clients
+> to pass such errors to the master. However any attempt to access the stuck and isolated bus will fail and
+> the address will be NACKed, so I don't think that this a big issue as in the end the bus stall will be detected.
 
-^none of the ... are enabled.
+You don't have to handle interrupts in the driver in order to declare
+the interrupts property in the bindings. If the device has an interrupt
+output that is meant to be connected to an interrupt input of the SoC,
+then an interrupt property should describe how that signal is connected.
+You can upstream support for those devices in the driver without
+handlign the interrupt, it can be added later.
 
-thanks,
+> Is there a mapping between devicetree bindings and driver file names? If not I'll use
+> maxim,max7356 as devicetree binding to make it easier to read and mention that interrupts
+> are not supported for those maxim devices.
 
-Mimi
+The bindings and drivers file names are usually related, as they support
+the same device, but there's no specific rule that requires that.
 
-> 
-> Read and write operations on the iint flags is replaced with function
-> calls. For reading, iint_flags() returns the bitwise AND of iint->flags
-> and ns_status->flags. The ns_status flags are masked with
-> IMA_NS_STATUS_FLAGS (currently only IMA_AUDITED). Similarly
-> set_iint_flags() only writes the masked portion to the ns_status flags,
-> while the iint flags is set as before. The ns_status parameter added to
-> ima_audit_measurement() is used with the above functions to query and
-> set the ns_status flags.
-> 
+> On Wed, Dec 15, 2021 at 1:42 PM Peter Rosin <peda@axentia.se> wrote:
+> > On 2021-12-14 12:13, Laurent Pinchart wrote:
+> > > Hi Patrick,
+> > >
+> > > Thank you for the patch.
+> > >
+> > > On Tue, Dec 14, 2021 at 10:50:18AM +0100, Patrick Rudolph wrote:
+> > >> Add the Maxim MAX735x as supported chip to PCA954x and add an
+> > >> example how to use it.
+> > >>
+> > >> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > >> ---
+> > >>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 40 +++++++++++++++++++
+> > >>  1 file changed, 40 insertions(+)
+> > >>
+> > >> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> > >> index 9f1726d0356b..bd794cb80c11 100644
+> > >> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> > >> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> > >> @@ -11,6 +11,7 @@ maintainers:
+> > >>
+> > >>  description:
+> > >>    The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
+> > >> +  Compatible with Maxim MAX7356 - MAX7358 I2C mux/switch devices.
+> > >>
+> > >>  allOf:
+> > >>    - $ref: /schemas/i2c/i2c-mux.yaml#
+> > >> @@ -19,6 +20,9 @@ properties:
+> > >>    compatible:
+> > >>      oneOf:
+> > >>        - enum:
+> > >> +          - maxim,max7356
+> > >> +          - maxim,max7357
+> > >> +          - maxim,max7358
+> > >>            - nxp,pca9540
+> > >>            - nxp,pca9542
+> > >>            - nxp,pca9543
+> > >> @@ -40,6 +44,7 @@ properties:
+> > >>
+> > >>    interrupts:
+> > >>      maxItems: 1
+> > >> +    description: Only supported on NXP devices. Unsupported on Maxim MAX735x.
+> > >
+> > > Could this be modelled by a YAML schema instead ? Something like
+> > >
+> > > allOf:
+> > >   - if:
+> > >       properties:
+> > >         compatible:
+> > >         contains:
+> > >           enum:
+> > >               - maxim,max7356
+> > >               - maxim,max7357
+> > >               - maxim,max7358
+> > >     then:
+> > >       properties:
+> > >         interrupts: false
+> > >
+> > > (untested, it would be nice to use a pattern check for the compatible
+> > > property if possible)
+> >
+> > Some of the existing NXP chips do not support interrupts; we should
+> > probably treat these new chips the same as the older ones. Either by
+> > disallowing interrupts on both kinds or by continuing to ignore the
+> > situation.
+> >
+> > That said, I'm slightly in favor of the latter, since these new chips
+> > do have interrupts, just not the same flavor as the NXP chips. What
+> > the Maxim chips do not have is support for being an
+> >         interrupt-controller;
+> > At least that's how I read it...
+> >
+> > I don't know how this situation is supposed to be described? Maybe this
+> > new kind of interrupt should be indicated with a bus-error-interrupts
+> > property (or bikeshed along those lines)? Maybe there should be two
+> > entries in the existing interrupts property? Maybe these new chips
+> > should be described in a new binding specific to maxim,max7356-7358
+> > (could still be handled by the pca954x driver of course) to keep the
+> > yaml simpler to read?
+> >
+> > However, there is also maxim,max7367-7369 to consider. They seem to
+> > have interrupts of the style described by the NXP binding (haven't
+> > checked if the registers work the same, but since they reuse the
+> > 0x70 address-range the are in all likelihood also compatible).
+> >
+> > >>    "#interrupt-cells":
+> > >>      const: 2
+> > >> @@ -100,6 +105,41 @@ examples:
+> > >>                  #size-cells = <0>;
+> > >>                  reg = <4>;
+> > >>
+> > >> +                rtc@51 {
+> > >> +                    compatible = "nxp,pcf8563";
+> > >> +                    reg = <0x51>;
+> > >> +                };
+> > >> +            };
+> > >> +        };
+> > >> +    };
+> > >> +
+> > >> +  - |
+> > >> +    i2c {
+> > >> +        #address-cells = <1>;
+> > >> +        #size-cells = <0>;
+> > >> +
+> > >> +        i2c-mux@74 {
+> > >> +            compatible = "maxim,max7357";
+> > >> +            #address-cells = <1>;
+> > >> +            #size-cells = <0>;
+> > >> +            reg = <0x74>;
+> > >> +
+> > >> +            i2c@1 {
+> > >> +                #address-cells = <1>;
+> > >> +                #size-cells = <0>;
+> > >> +                reg = <1>;
+> > >> +
+> > >> +                eeprom@54 {
+> > >> +                    compatible = "atmel,24c08";
+> > >> +                    reg = <0x54>;
+> > >> +                };
+> > >> +            };
+> > >> +
+> > >> +            i2c@7 {
+> > >> +                #address-cells = <1>;
+> > >> +                #size-cells = <0>;
+> > >> +                reg = <7>;
+> > >> +
+> > >>                  rtc@51 {
+> > >>                      compatible = "nxp,pcf8563";
+> > >>                      reg = <0x51>;
 
+-- 
+Regards,
+
+Laurent Pinchart

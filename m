@@ -2,91 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 874BD476691
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECBC476695
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbhLOXfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 18:35:18 -0500
-Received: from mga18.intel.com ([134.134.136.126]:49741 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232073AbhLOXfR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 18:35:17 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226219203"
-X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
-   d="scan'208";a="226219203"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 15:35:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
-   d="scan'208";a="464466077"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 15 Dec 2021 15:35:10 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 5B26FD4; Thu, 16 Dec 2021 01:35:17 +0200 (EET)
-Date:   Thu, 16 Dec 2021 02:35:17 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, knsathya@kernel.org, pbonzini@redhat.com,
-        sdeep@vmware.com, seanjc@google.com, tony.luck@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/26] x86/tdx: Extend the cc_platform_has() API to
- support TDX guests
-Message-ID: <20211215233517.4cpiqqvlvxgd3qek@black.fi.intel.com>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-3-kirill.shutemov@linux.intel.com>
- <20211215231904.rpakxlrp64zmxhhg@treble>
+        id S232093AbhLOXgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 18:36:11 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:39869 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232073AbhLOXgK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 18:36:10 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 25EA11BF206;
+        Wed, 15 Dec 2021 23:36:09 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 00:36:08 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Joel Daniels <jdaniels@sent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, x86@kernel.org
+Subject: Re: Time keeping while suspended in the presence of persistent clock
+ drift
+Message-ID: <Ybp76D62Le2aEc5R@piout.net>
+References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
+ <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com>
+ <87wnkbuuuz.ffs@tglx>
+ <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
+ <8735mvthk6.ffs@tglx>
+ <2ab24da8-e37d-426a-9500-b7541d21f8a3@www.fastmail.com>
+ <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
+ <83deaa79-39eb-4fd7-ad80-9d233fd6fdbb@www.fastmail.com>
+ <CALAqxLX795pURb_aJTEAdq80LGiY=br88A+R3TN3HQh+HtS85Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215231904.rpakxlrp64zmxhhg@treble>
+In-Reply-To: <CALAqxLX795pURb_aJTEAdq80LGiY=br88A+R3TN3HQh+HtS85Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 03:19:04PM -0800, Josh Poimboeuf wrote:
-> On Tue, Dec 14, 2021 at 06:02:40PM +0300, Kirill A. Shutemov wrote:
-> > --- a/arch/x86/kernel/Makefile
-> > +++ b/arch/x86/kernel/Makefile
-> > @@ -22,6 +22,7 @@ CFLAGS_REMOVE_early_printk.o = -pg
-> >  CFLAGS_REMOVE_head64.o = -pg
-> >  CFLAGS_REMOVE_sev.o = -pg
-> >  CFLAGS_REMOVE_cc_platform.o = -pg
-> > +CFLAGS_REMOVE_tdx.o = -pg
-> >  endif
-> >  
-> >  KASAN_SANITIZE_head$(BITS).o				:= n
-> > @@ -31,6 +32,7 @@ KASAN_SANITIZE_stacktrace.o				:= n
-> >  KASAN_SANITIZE_paravirt.o				:= n
-> >  KASAN_SANITIZE_sev.o					:= n
-> >  KASAN_SANITIZE_cc_platform.o				:= n
-> > +KASAN_SANITIZE_tdx.o					:= n
-> >  
-> >  # With some compiler versions the generated code results in boot hangs, caused
-> >  # by several compilation units. To be safe, disable all instrumentation.
-> > @@ -50,6 +52,7 @@ KCOV_INSTRUMENT		:= n
-> >  
-> >  CFLAGS_head$(BITS).o	+= -fno-stack-protector
-> >  CFLAGS_cc_platform.o	+= -fno-stack-protector
-> > +CFLAGS_tdx.o		+= -fno-stack-protector
-> >  
-> >  CFLAGS_irq.o := -I $(srctree)/$(src)/../include/asm/trace
+On 15/12/2021 15:26:28-0800, John Stultz wrote:
+> > Any method of measuring the drift is going to need to persist the
+> > drift coefficient to disk so that it can set the system clock
+> > correctly on boot. I think it would be best for the kernel to use this
+> > same coefficient.
 > 
-> Don't these Makefile changes belong in patch 1, which adds tdx.c?
+> My initial thought was for the rtc class layer to do the estimation
+> internally against the system time (assuming it was NTP corrected) to
+> try establish a close enough correction factor as the system was up
+> and running, but you're right that would be reset on every reboot, and
+> with second granular RTCs accurate error calculations will take awhile
+> (though polling for the second-edge might work well enough, but would
+> be cpu heavy for a background task).
+> 
+> Maybe that's a good enough argument for having an ADJ ioctl added to
+> the rtc chardev?
+> 
 
-Removing of the instrumentation is required because is_tdx_guest() is
-called from cc_platform_has().
+Then why not got for the correction software emulation? that would avoid
+duplicating interfaces and we'd avoid to use it on RTCs with hardware
+support.
 
-Commit message tries to communicate this:
+> But it also seems to suggest that if chronyd already has all this
+> logic in userland, maybe having it calculate and call settimeofday()
+> on resume from userland instead of pushing half of that logic into the
+> kernel?
 
-	Since is_tdx_guest() function (through cc_platform_has() API) is used in
-	the early boot code, disable the instrumentation flags and function
-	tracer. This is similar to AMD SEV and cc_platform.c.
+My suggestion would leave the correction calculation to userspace which
+is definitively where it should stay.
+
+> 
+> > > Alternatively I'd go very simple and just put the correction factor in
+> > > a boot argument.
+> >
+> > This works for my use case though it won't be useful to a general
+> > distro. Would you have one argument being used regardless of where the
+> > sleep injection was coming from or would you try to tie it to the
+> > persistent clock and/or a specific RTC?
+> 
+> I agree it is an important thing to consider how to generalize this
+> for common use (which is why I prefer the approach that works
+> *without* any distro integration).
+> 
+> But it's also important to consider if the added complexity is
+> *really* needed in the general case.
+> 
+> thanks
+> -john
 
 -- 
- Kirill A. Shutemov
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

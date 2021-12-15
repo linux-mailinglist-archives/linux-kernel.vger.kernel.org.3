@@ -2,245 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9584475BA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BAD4475BA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243785AbhLOPPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:15:14 -0500
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:33523 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231331AbhLOPPO (ORCPT
+        id S243858AbhLOPP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:15:27 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:46620
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243717AbhLOPPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:15:14 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id B2BFB2B00280;
-        Wed, 15 Dec 2021 10:15:11 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 15 Dec 2021 10:15:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=BgQfZ5cmTLEg6cfAdiBnNstLR/w
-        6Eaqsba+2qCrgE3U=; b=UxyQrvNP5H9z8DjeJCSVCJSF4F7qx+Im+whlJrvye/O
-        NQD/BQCjWSZVyhpynD4txgI8c8CUUs5kUjzCNoWQFaMzhRVQ2Z7ZviHJD3Keuj2f
-        S+vGf5J8Gh/CpHjNTubKAqTEbWni2jHC9TSuj51YI6q8oryTHM3InILFRcXyfVPo
-        Nnoyei3MheVDEFgELkWrQpXRz/FJMvrrWXG9LfDPydbRiNajuvW33BAmcE61FlEw
-        qL9TAfhgoBLnHlEr5COe4r+TEnf0sJa+R69zGVsICnFMWbGpQ4khqfImIgTMKs1a
-        RV8SkIh+QFZfO0da/ZZBtIDEZ6nvKWdWnMmWMgwzbGg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=BgQfZ5
-        cmTLEg6cfAdiBnNstLR/w6Eaqsba+2qCrgE3U=; b=aCe1LeTQ/muxoLZFqzGKYz
-        y8UqxB/btSaJBsnA0/tnqWAkoap5TWK8Kjc1GczJL02Q/jMqwX/ZtngFs0BCZkmH
-        9+AlwfSg5VLtZnkiHqgLTf9YhB25yF9tAJ1LVOFhEQF9m3tjQJdxjblVUWd4FCzN
-        enhoWp9N+0M7jUxCSVir0QPatrdhkQ3toUDx704NJYsE+ScH0WjI2k1nIxj/qF/2
-        wOPg9f3HDXqv5G7SZVeFZBpaX7Fx0L2aSUrQ3FfZ7iEwr2F10KjdVu8jSPs4f9Mf
-        H4pvkoD5yeUbxUgjWbJE5Y+7g7FqgflZF0PMhbHfop3w4QajzCi+CMfxu5ffZE4Q
-        ==
-X-ME-Sender: <xms:fga6YewyMBRnbO9eOIO2AOEHn8IiCI4sjSF2D1ElgLjlUG6lJvGHsA>
-    <xme:fga6YaTSy8et713HqV5php6RlZEp759Ss0zpSEf0BXXNpeiTbE74bIUG6mW_8Y8rK
-    QFnA3Gc7dGZ2O93JTU>
-X-ME-Received: <xmr:fga6YQVgmI8jtj16Jf-V2UuBNuhkegRPqHgcXNMI3Ztu-zGnPyX2qfqY6ce6_YG1FW0ielLeeyqC8VNczEGfTi5UO2Br-qI-QJu15BY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrledvgdejhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeevveefffduveeitdegtefhhfetueffteefffdvheevvdehteethedvleffgfej
-    vdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:fga6YUjMpClCRS2EOz-At3snRCjqdv6WdjzGOy2d6X1iYSqyyFTKAA>
-    <xmx:fga6YQBvV8lkD0PCcF2rtee3UX6r8oGUzWEGDky5cZGaUHJ0ljz1pg>
-    <xmx:fga6YVLf2hwARidBL946sLKtm73nqU4Yb50s_2En8I6IYdKGUSogmw>
-    <xmx:fwa6Yc4PsujncKjBgPHfwsK96d0TdXCjruxJiNtCtWL2Ij_duAZeQa1Gkzw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Dec 2021 10:15:10 -0500 (EST)
-Date:   Wed, 15 Dec 2021 16:15:08 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Guillaume Ranquet <granquet@baylibre.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 7/7] drm/mediatek: Add mt8195 DisplayPort driver
-Message-ID: <20211215151508.hc7blhh7p3wrjili@houat>
-References: <20211110130623.20553-1-granquet@baylibre.com>
- <20211110130623.20553-8-granquet@baylibre.com>
- <20211115101129.lyxxmb6i7paaonwi@gilmour>
- <CABnWg9tNPGZSi1RLqF5+Qs1GHtynyVoOzAyw+i9mPRYEoByk8g@mail.gmail.com>
- <20211116145112.xyoxzfll6exysnvt@gilmour>
- <CABnWg9uhuchdWyBeTacR6Cy0A9OHziUi051BQ5wsZVU0ajYjyA@mail.gmail.com>
- <20211125143034.tzikvlxxl6fdhsif@gilmour>
- <CABnWg9tcWdfPQwNtFhqVZxCriT848fy42VHoQZs3X2UmL4LYSA@mail.gmail.com>
- <20211213165422.54n3oh72tjcb3a67@houat>
- <CABnWg9uyoK0TkRZRJXstmtB4u2-UUCi-x_frosKhhQerNmFT=A@mail.gmail.com>
+        Wed, 15 Dec 2021 10:15:25 -0500
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5D3073F177
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:15:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639581324;
+        bh=NJlwDd5bAMJRuNFENJ45/ccB1wsP6KiGSWfHC0fnYW0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=l0OHpa9cmZHYaccz0KjPdBc0/gVx49QDBbDqToE/mwwAmtmavrdip4aEwYFs46aCw
+         eJ8m419WVSbhhMyzCaUPjLAJN7WrKmgSlcERMDf7YyM2T++YsEsOOOkkZZpSWRNoV+
+         TnAlW5dS44A/fu9xf/bNwm5gnPEur6RnbouW0/Iyjja+SsA3iEsO41mm9p0yXbUPTM
+         8u1xyBCppk20+lmcVv5b3UD0eN/mNK0QqUA0i613FV+wNX4p6WMjUnXEMcqjpSKQnc
+         NzaktrJGDZsVUTpz9cO6CQVaNPLd8SS/wxuJpVf5D/bWHo+XDhg7He16xwo10vwxx4
+         9OFvbaE0crAqw==
+Received: by mail-lj1-f199.google.com with SMTP id b3-20020a2ebc03000000b0021ffe75b14cso7132261ljf.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:15:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NJlwDd5bAMJRuNFENJ45/ccB1wsP6KiGSWfHC0fnYW0=;
+        b=y7MM81g2DWhoPvs85VoDCDRbxK9Do9SFrgatbdl72ZXVG3RmSMCi1Bbt4PYDHaWSzM
+         vT14e5zTh4To9mAxHnI8tUGwBUEYZq4deBH/Ez0GnkapAm+WJJ3CTljcvsBsC4gIPwbr
+         1+Nvaw8MVy5tWVTC7DfNoVP3xS7HsSBUodMYviETpam9BX3ayT+2kY8BcNQ2X/gn4q8Y
+         GGPlvo4CHg5OY3nwEF7+EGo8gSN3u11V9QtDqszif/nviRM+ZSZRO+yO6qp8IS50sHXj
+         hCXrUNC+J9a7ink9vgFwGcCxV4DtimlqTzzDIxTq3A5kb13ZPMPvhdoEAUv39tfpwwlZ
+         h6xQ==
+X-Gm-Message-State: AOAM530m7tQNWvYHpJxErsE++OBh0O4Me0GKXHEyGK2J7MTlgwVqdO8d
+        VqssfYOrKF+w6H7llx0SzWxFP8R45KrSE/J0hILBxCU3MOZ9iyf5+zPs/c60BY/qjrMxDdeNMCS
+        KCx6FiCqVXr5DsQQ8yhJczPGXve+0A9ETHxLPp5saow==
+X-Received: by 2002:a05:6512:1395:: with SMTP id p21mr10063208lfa.98.1639581323845;
+        Wed, 15 Dec 2021 07:15:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzSqjwtfFgEsXQmVVMjGxzT6u23CbpHjbBKaHBmzxKigW2rHXI/vvH2ToOQ3mNIqgQ+BBJjMw==
+X-Received: by 2002:a05:6512:1395:: with SMTP id p21mr10063195lfa.98.1639581323675;
+        Wed, 15 Dec 2021 07:15:23 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id h12sm362245lfc.239.2021.12.15.07.15.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 07:15:23 -0800 (PST)
+Message-ID: <90ce73cb-0dec-d7a7-9bb5-f10a8cd7c250@canonical.com>
+Date:   Wed, 15 Dec 2021 16:15:22 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ndkzk456decuxgne"
-Content-Disposition: inline
-In-Reply-To: <CABnWg9uyoK0TkRZRJXstmtB4u2-UUCi-x_frosKhhQerNmFT=A@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3 2/6] dt-bindings: memory: tegra: Add Tegra234 support
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+References: <20211213162151.916523-1-thierry.reding@gmail.com>
+ <20211213162151.916523-3-thierry.reding@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211213162151.916523-3-thierry.reding@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 13/12/2021 17:21, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> Document the variant of the memory controller and external memory
+> controllers found on Tegra234 and add some memory client and SMMU
+> stream ID definitions for use in device tree files.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+> Changes in v2:
+> - conditionally set minItems for reg properties
+> 
+>  .../nvidia,tegra186-mc.yaml                   | 20 ++++++++++++
+>  include/dt-bindings/clock/tegra234-clock.h    |  9 ++++++
+>  include/dt-bindings/memory/tegra234-mc.h      | 32 +++++++++++++++++++
+>  3 files changed, 61 insertions(+)
+>  create mode 100644 include/dt-bindings/memory/tegra234-mc.h
+> 
 
---ndkzk456decuxgne
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-On Wed, Dec 15, 2021 at 09:03:01AM -0600, Guillaume Ranquet wrote:
-> Quoting Maxime Ripard (2021-12-13 17:54:22)
-> > On Thu, Dec 02, 2021 at 06:48:12AM -0800, Guillaume Ranquet wrote:
-> > > Hi,
-> > >
-> > > Quoting Maxime Ripard (2021-11-25 15:30:34)
-> > > > On Wed, Nov 24, 2021 at 01:45:21PM +0000, Guillaume Ranquet wrote:
-> > > > > Hi,
-> > > > > Thanks for all your input, really appreciated.
-> > > > >
-> > > > > Quoting Maxime Ripard (2021-11-16 15:51:12)
-> > > > > > Hi,
-> > > > > >
-> > > > > > On Mon, Nov 15, 2021 at 09:33:52AM -0500, Guillaume Ranquet wro=
-te:
-> > > > > > > Quoting Maxime Ripard (2021-11-15 11:11:29)
-> > > > > > > > > The driver creates a child device for the phy. The child =
-device will
-> > > > > > > > > never exist without the parent being active. As they are =
-sharing a
-> > > > > > > > > register range, the parent passes a regmap pointer to the=
- child so that
-> > > > > > > > > both can work with the same register range. The phy drive=
-r sets device
-> > > > > > > > > data that is read by the parent to get the phy device tha=
-t can be used
-> > > > > > > > > to control the phy properties.
-> > > > > > > >
-> > > > > > > > If the PHY is in the same register space than the DP contro=
-ller, why do
-> > > > > > > > you need a separate PHY driver in the first place?
-> > > > > > >
-> > > > > > > This has been asked by Chun-Kuang Hu in a previous revision o=
-f the series:
-> > > > > > >
-> > > > > > > https://lore.kernel.org/linux-mediatek/CAAOTY_-+T-wRCH2yw2XSm=
-=3DZbaBbqBQ4EqpU2P0TF90gAWQeRsg@mail.gmail.com/
-> > > > > >
-> > > > > > It's a bit of a circular argument though :)
-> > > > > >
-> > > > > > It's a separate phy driver because it needs to go through anoth=
-er
-> > > > > > maintainer's tree, but it needs to go through another maintaine=
-r's tree
-> > > > > > because it's a separate phy driver.
-> > > > > >
-> > > > > > It doesn't explain why it needs to be a separate phy driver? Wh=
-y can't
-> > > > > > the phy setup be done directly in the DP driver, if it's essent=
-ially a
-> > > > > > single device?
-> > > > > >
-> > > > > > That being said, usually what those kind of questions mean is t=
-hat
-> > > > > > you're missing a comment or something in the commit log to prov=
-ide that
-> > > > > > context in the first place, so it would be great to add that co=
-ntext
-> > > > > > here.
-> > > > > >
-> > > > > > And it will avoid the situation we're now in where multiple rev=
-iewers
-> > > > > > ask the same questions over and over again :)
-> > > > > >
-> > > > > At first I didn't understand your reply, then I realized I gave y=
-ou
-> > > > > the wrong link...
-> > > > > my bad! I'm struggling a bit with mail reviews, but I'll get ther=
-e eventually.
-> > > > >
-> > > > > The driver and phy were a single driver until v2 of this patch se=
-ries
-> > > > > and the phy setup
-> > > > > was done directly in the driver (single driver, single C file).
-> > > > > Here's the relevant link to the discussion between Chun-Kuang and=
- Markus
-> > > > >
-> > > > > https://lore.kernel.org/linux-mediatek/CAAOTY__cJMqcAieEraJ2sz4gi=
-0Zs-aiNXz38_x7dPQea6HvYEg@mail.gmail.com/#t
-> > > > >
-> > > > > I'll try to find a way to make it clearer for v7.
-> > > >
-> > > > OK, it makes sense then :)
-> > > >
-> > > > There's something weird though: the devices definitely look like th=
-ey're
-> > > > in a separate register range, yet you mention a regmap to handle the
-> > > > shared register range. That range doesn't seem described anywhere i=
-n the
-> > > > device tree though? What is it for?
-> > >
-> > > My understanding is that 0x1000 to 0x1fff controls the phy
-> > > functionalities and 0x2000 to 0x4fff controls "non-phy"
-> > > functionalities. And you are right, there's no description of that in
-> > > the device tree whatsoever. The ranges are in the same actual device
-> > > and thus it has been decided to not have dt-bindings for the phy
-> > > device.
-> >
-> > Sure, that last part makes sense, but then I'm not sure why you don't
-> > have the full register range in the device node you have in the DT?
-> >
-> > > The phy driver is a child of the DP driver that we register using
-> > > platform_device_register_data() and we pass along the same regmap as
-> > > the DP driver in its platform data.
-> >
-> > Especially if it's used by something, it should be described in the DT
-> > somewhere.
-> >
-> > Maxime
->=20
->=20
-> So, to make things crystal clear to a newbie (like me).
-> Would you describe it like this:
-> compatible =3D "mediatek,mt8195-dp-tx";
-> reg =3D <0 0x1c501000 0 0x0fff>,
-> 	<0 0x1c502000 0 0x2fff>;
->=20
-> instead of the current description:
-> compatible =3D "mediatek,mt8195-dp-tx";
-> reg =3D <0 0x1c500000 0 0x8000>;
->=20
-> I haven't checked what the rest of the 0x8000 range is used for though...
 
-I'm confused, is that what you had before?
+Provide me a stable tag with the headers, please.
 
-I recall you had a DTSI somewhere where you have two devices, and the
-dp-tx device not having the phy range?
-
-If the latter is what you have, and there's no overlapping ranges over
-multiple nodes, then it's fine already.
-
-Maxime
-
---ndkzk456decuxgne
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYboGfAAKCRDj7w1vZxhR
-xd+NAQCzDSb3a8jsktzRpRmed41tbQPbdLx8RoZV1Z4ZIerXRQD5ASNI9HPxl3CG
-VgiUX/PsaEGNJr3KNbNwBWiUDdLLbAc=
-=GHKM
------END PGP SIGNATURE-----
-
---ndkzk456decuxgne--
+Best regards,
+Krzysztof

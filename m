@@ -2,107 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF3B476377
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E286E47637A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236223AbhLOUjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:39:01 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:60292 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236138AbhLOUi7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:38:59 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ECE161EC0521;
-        Wed, 15 Dec 2021 21:38:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639600734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=38LOASUbOxitabwqSnlHmtZ4CPFEE2iObHtY//Knd18=;
-        b=mA+UjtaxSHPgzi76OhlpEPn2l9W7pmBEEhSJhJPcBMs+30+5XZKiSotujmWQlxjQw/Agry
-        VbfCf0I6JSgAFL3mrz1F7Z1bjgaoUCdVETfXmR29d/yHvSzF4QSJZSTsyoiEKoNUj5SnmX
-        HxyqHwCnm3uX6+RUzcIy+cKr16Vfdys=
-Date:   Wed, 15 Dec 2021 21:38:55 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Venu Busireddy <venu.busireddy@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 01/40] x86/compressed/64: detect/setup SEV/SME
- features earlier in boot
-Message-ID: <YbpSX4/WGsXpX6n0@zn.tnic>
-References: <YbeaX+FViak2mgHO@dt>
- <YbecS4Py2hAPBrTD@zn.tnic>
- <YbjYZtXlbRdUznUO@dt>
- <YbjsGHSUUwomjbpc@zn.tnic>
- <YbkzaiC31/DzO5Da@dt>
- <b18655e3-3922-2b5d-0c35-1dcfef568e4d@amd.com>
- <20211215174934.tgn3c7c4s3toelbq@amd.com>
- <YboxSPFGF0Cqo5Fh@dt>
- <Ybo1C6kpcPJBzMGq@zn.tnic>
- <20211215201734.glq5gsle6crj25sf@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211215201734.glq5gsle6crj25sf@amd.com>
+        id S236251AbhLOUjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236138AbhLOUj1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 15:39:27 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3879C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 12:39:27 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id e131-20020a25d389000000b005fb5e6eb757so45349271ybf.22
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 12:39:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=sfllunMFpDuZT34Po6N/Y75gCsaWiTA2hy3SEI5N8aU=;
+        b=qk+p3k7Lpw2nRf9F2QCp2ERW/hT5HhXf8vtNNmX+DZLYw55Z//nvdsjj2XxBs4Mt4Y
+         AHlCUeRruUUifsaB06a04U6HmpGE2laD4f8/VWhj7Vfwc3x3FmuJI2F4X5gdBLcAzfeU
+         QjQtSRVm3x6k2qSM2KezijUSLpgTWzDPzdAF9hyvm2w16jn8ZpvD5DI7fEDTqpHFCPdA
+         vfSRMD3/K7+BG7SXRVj7uEeS6wa1TGTvwCMa8X7DUayUniQtLGzmluoiwhCgqWU07JmV
+         u3e/zJ8fIBlUPr0JrVfdh+mpaBQuc0sVc3ayT1DDy83RlqQ0DpzWKUkeM0jH7zz2memI
+         F+1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=sfllunMFpDuZT34Po6N/Y75gCsaWiTA2hy3SEI5N8aU=;
+        b=uXX7gVy1uQrOUdD87DbhCkgCvYFii8ypXY7eGXRvcN3AXNAJQ7j4WOwRMgimQLTY/h
+         iCeZ8ZLq+gXrxTBa4x+FnWy4ovFSVhdQLk0IeAqcKRDdzXC89AIx36DrHIISVWjYAwuq
+         0+7btLI0eJio+cn/tvoiYSnvL5vM8/wxQIkPBa5C4ToEvKlw+VmJNkgFyMpU0Aku1qx6
+         BdIalJ7qn9CSkvQ6Ks2M04BFOqZ4IMNCXnBpWI6x+S33LjBeC52tyrVbbt7bxVQxBsTo
+         e2fxDo+Yy/sw1HiZ2dSDnBGCa43gdXAjrxDczFWIt1uUwehKQB4umq0YwU7RLoijIkxJ
+         VIpw==
+X-Gm-Message-State: AOAM533qFjHYpupsIFECYBqQxBxrts4hNVNzOFFJJhRJCgDjZ3/5v21b
+        WzEuBfU49+RQnGLpiaQ0RGBFnXGhoV1Zqg==
+X-Google-Smtp-Source: ABdhPJwmSfd229bx3CvEKZL0Rnq5k1dzQeOCkX50InTNnISDRej1puPzT8POL8bzmS3A/sjiVGNjXBr4/+vT9g==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1bef:2d92:9c3e:f258])
+ (user=dlatypov job=sendgmr) by 2002:a25:bb49:: with SMTP id
+ b9mr8724144ybk.0.1639600766944; Wed, 15 Dec 2021 12:39:26 -0800 (PST)
+Date:   Wed, 15 Dec 2021 12:39:23 -0800
+Message-Id: <20211215203923.390608-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH v2] kunit: tool: fix newly introduced typechecker errors
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 02:17:34PM -0600, Michael Roth wrote:
-> and if fields are added in the future:
-> 
->   sev_parse_cpuid(AMD_SEV_BIT, &me_bit_pos, &vte_enabled, &new_feature_enabled, etc..)
+After upgrading mypy and pytype from pip, we see 2 new errors when
+running ./tools/testing/kunit/run_checks.py.
 
-And that will end up being a vararg function because of who knows what
-other feature bits will have to get passed in? You have even added the
-ellipsis in there.
+Error #1: mypy and pytype
+They now deduce that importlib.util.spec_from_file_location() can return
+None and note that we're not checking for this.
 
-Nope. Definitely not.
+We validate that the arch is valid (i.e. the file exists) beforehand.
+Add in an `asssert spec is not None` to appease the checkers.
 
-> or if that eventually becomes unwieldly 
+Error #2: pytype bug https://github.com/google/pytype/issues/1057
+It doesn't like `from datetime import datetime`, specifically that a
+type shares a name with a module.
 
-The above example is already unwieldy.
+We can workaround this by either
+* renaming the import or just using `import datetime`
+* passing the new `--fix-module-collisions` flag to pytype.
 
-> it could later be changed to return a feature mask.
+We pick the first option for now because
+* the flag is quite new, only in the 2021.11.29 release.
+* I'd prefer if people can just run `pytype <file>`
 
-Yes, that. Clean and simple.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
+v1 -> v2: rebase on top of linx-kselftest kunit branch.
+Only conflict was a deleted import in kunit_parser.py
+---
+ tools/testing/kunit/kunit_kernel.py | 1 +
+ tools/testing/kunit/kunit_parser.py | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-But it is hard to discuss anything without patches so we can continue
-the topic with concrete patches. But this unification is not
-super-pressing so it can go ontop of the SNP pile.
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 12085e04a80c..44bbe54f25f1 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -209,6 +209,7 @@ def get_source_tree_ops_from_qemu_config(config_path: str,
+ 	# exists as a file.
+ 	module_path = '.' + os.path.join(os.path.basename(QEMU_CONFIGS_DIR), os.path.basename(config_path))
+ 	spec = importlib.util.spec_from_file_location(module_path, config_path)
++	assert spec is not None
+ 	config = importlib.util.module_from_spec(spec)
+ 	# See https://github.com/python/typeshed/pull/2626 for context.
+ 	assert isinstance(spec.loader, importlib.abc.Loader)
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 66a7f2fb314a..05ff334761dd 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -12,7 +12,7 @@
+ from __future__ import annotations
+ import re
+ 
+-from datetime import datetime
++import datetime
+ from enum import Enum, auto
+ from functools import reduce
+ from typing import Iterable, Iterator, List, Optional, Tuple
+@@ -517,7 +517,7 @@ ANSI_LEN = len(red(''))
+ 
+ def print_with_timestamp(message: str) -> None:
+ 	"""Prints message with timestamp at beginning."""
+-	print('[%s] %s' % (datetime.now().strftime('%H:%M:%S'), message))
++	print('[%s] %s' % (datetime.datetime.now().strftime('%H:%M:%S'), message))
+ 
+ def format_test_divider(message: str, len_message: int) -> str:
+ 	"""
 
-Thx.
-
+base-commit: 1ee2ba89bea86d6389509e426583b49ac19b86f2
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1.173.g76aa8bc2d0-goog
 
-https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,139 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82057475A53
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0B5475A57
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243179AbhLOOIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:08:45 -0500
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:58805 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243156AbhLOOIn (ORCPT
+        id S243204AbhLOOMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:12:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31988 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237488AbhLOOMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:08:43 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id E9CB62B0024D;
-        Wed, 15 Dec 2021 09:08:40 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 15 Dec 2021 09:08:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=m6yMRlUpraLi1xtxRrCa3cMeEFx
-        gKk31Q2bUedXIMts=; b=B37uD+8zlRC+bFTMc47tywug9eQZUJ4wHpviRhr6hiv
-        Yz+BGwPwnMqRZaRP5D1H6SgDoWeBwenUXqiG70lsiGGAEqwY8mMXCJ4KuWL/CzDt
-        0brDNMzZkBnCeKXF8MHi5Jjx1Cex9C4X/GwvYZRQhun4FGta6TZEBJbdLMjwxXFE
-        cxof6lnHhgvCmt0OnY68u0nIEcGGADjVTvpZXIrlssx1RRSJWj1J3SoArRSvAEb5
-        idFQhXxQbjtO/bxUvo5QecNbHD8SKcikiKw1gQtGxS+TH8nlwJsyLaRGrhfhrT/U
-        Z+lO1nbWGhbk+z7J54K0xQPXkU93fdqSRMIJqf/VEDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=m6yMRl
-        UpraLi1xtxRrCa3cMeEFxgKk31Q2bUedXIMts=; b=NDzjqOhyUQ3yep0d6mzjgg
-        s15xsYgk7ahAemCRQAwPuR2uBHoN5Z6gBsUiU3IPiH1rAsFoMZnsD7BIgQAZXGKn
-        D7/QGW8CNhxP38WTjK/jIPYbW/8suW6jf5AK3rVD7KLTLEtHLQuMq+357sfnm5mZ
-        NF0Ie2hMER4/0s4aGkLYcT29n/kcAufZLvMz+npzPUzvj1iBgYvaklGHKOKB3F4Z
-        1ZB8E6NLUhqP5LAS2CSHBD/GObqaFJNq4B8oPSUW76Dg1OjMl7hCPGtrlrfkjIi9
-        WtCA0R1eQEQdne4wE895otZKIeeHPgZQjK2/kdy534W75tOuTYUwfFFnvqa+yRjQ
-        ==
-X-ME-Sender: <xms:5_a5YfFlBM_ETlcRr45TthbytsE392r5Yu8PxCHM96q_5v0Shzh67w>
-    <xme:5_a5YcUJmFiGNN559BnqmJi08P6VS0wz8Cbq7gXI0dMcZYqrHbHdufoTQA7gUECBD
-    ePA1IZ5NCykDsz1ULw>
-X-ME-Received: <xmr:5_a5YRJ_fyDfCJ7vPj_AANJ55GVyrlwByA16kvBbgT6MuE2fc0Abde-4fxxmwyDLQ746pCaJuey4CJ4gItyG9zlfPKvotl_c3_VttII>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrledvgdeiudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeevveefffduveeitdegtefhhfetueffteefffdvheevvdehteethedvleffgfej
-    vdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:5_a5YdGy7mdmcQS0_NBjnLjEFbunQ0NdG0riJ2eqs4AKcE0L7pxe5Q>
-    <xmx:5_a5YVWtOQjfqj57BCKYIu05wAGZCn_KsZ7nnpFNH-OXk36wP7CbJA>
-    <xmx:5_a5YYPHi1MW2GywVVvK_TSgijbFKzZXEdHpPwEhlVkDk5qju9JvSg>
-    <xmx:6Pa5YaUoOLLRRSR3lHAZA1ehQl0qWsuRjFF119zkBT0Nac2DgqtdZfti5i0>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Dec 2021 09:08:38 -0500 (EST)
-Date:   Wed, 15 Dec 2021 15:08:36 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     linux-clk@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Emma Anholt <emma@anholt.net>, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v2 0/3] clk: Implement a clock request API
-Message-ID: <20211215140836.bpxyau4atm74sfkk@houat>
-References: <20210914093515.260031-1-maxime@cerno.tech>
+        Wed, 15 Dec 2021 09:12:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639577569;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8F8rhWm3cAZvDLz8+C4c0NNLwqP6rp57iJ8wx1AiHaU=;
+        b=hlsxBCiDbB4qeHqaD6m9nwtmfQtSJ4AzEWFxCXr6VVW5zV4v/lqSBhgeuqv8JbcaHMqXRw
+        GqJy3oqUNar5o640Z64CmTTUt5DJb7i6OuBQfX+P/qOrLkdg4YhDxL9QbhGpRl0+TePH4w
+        Gh00rmU7+amPLC5ir5+vOn3mc7rLDbY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-311-lCtA5eQ3MQ6Qv3LL93mSWQ-1; Wed, 15 Dec 2021 09:12:45 -0500
+X-MC-Unique: lCtA5eQ3MQ6Qv3LL93mSWQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A5E3801AC5;
+        Wed, 15 Dec 2021 14:12:44 +0000 (UTC)
+Received: from work (unknown [10.40.195.60])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E35BA5FC22;
+        Wed, 15 Dec 2021 14:12:41 +0000 (UTC)
+Date:   Wed, 15 Dec 2021 15:12:37 +0100
+From:   Lukas Czerner <lczerner@redhat.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        =?utf-8?B?THXDrXM=?= Henriques <lhenriques@suse.de>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+Subject: Re: [PATCH v2] ext4: set csum seed in tmp inode while migrating to
+ extents
+Message-ID: <20211215141237.lrymhbebgjunh4n2@work>
+References: <20211214175058.19511-1-lhenriques@suse.de>
+ <20211215004945.GD69182@magnolia>
+ <20211215112852.GM14044@quack2.suse.cz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lg2pqwgvtun7kcl5"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210914093515.260031-1-maxime@cerno.tech>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211215112852.GM14044@quack2.suse.cz>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 15, 2021 at 12:28:52PM +0100, Jan Kara wrote:
+> On Tue 14-12-21 16:49:45, Darrick J. Wong wrote:
+> > On Tue, Dec 14, 2021 at 05:50:58PM +0000, Luís Henriques wrote:
+> > > When migrating to extents, the temporary inode will have it's own checksum
+> > > seed.  This means that, when swapping the inodes data, the inode checksums
+> > > will be incorrect.
+> > > 
+> > > This can be fixed by recalculating the extents checksums again.  Or simply
+> > > by copying the seed into the temporary inode.
+> > > 
+> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=213357
+> > > Reported-by: Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+> > > Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> > > ---
+> > >  fs/ext4/migrate.c | 12 +++++++++++-
+> > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > > 
+> > > changes since v1:
+> > > 
+> > > * Dropped tmp_ei variable
+> > > * ->i_csum_seed is now initialised immediately after tmp_inode is created
+> > > * New comment about the seed initialization and stating that recovery
+> > >   needs to be fixed.
+> > > 
+> > > Cheers,
+> > > --
+> > > Luís
+> > > 
+> > > diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
+> > > index 7e0b4f81c6c0..36dfc88ce05b 100644
+> > > --- a/fs/ext4/migrate.c
+> > > +++ b/fs/ext4/migrate.c
+> > > @@ -459,6 +459,17 @@ int ext4_ext_migrate(struct inode *inode)
+> > >  		ext4_journal_stop(handle);
+> > >  		goto out_unlock;
+> > >  	}
+> > > +	/*
+> > > +	 * Use the correct seed for checksum (i.e. the seed from 'inode').  This
+> > > +	 * is so that the metadata blocks will have the correct checksum after
+> > > +	 * the migration.
+> > > +	 *
+> > > +	 * Note however that, if a crash occurs during the migration process,
+> > > +	 * the recovery process is broken because the tmp_inode checksums will
+> > > +	 * be wrong and the orphans cleanup will fail.
+> > 
+> > ...and then what does the user do?
+> 
+> Run fsck of course! And then recover from backups :) I know this is sad but
+> the situation is that our migration code just is not crash-safe (if we
+> crash we are going to free blocks that are still used by the migrated
+> inode) and Luis makes it work in case we do not crash (which should be
+> hopefully more common) and documents it does not work in case we crash.
+> So overall I'd call it a win.
+> 
+> But maybe we should just remove this online-migration functionality
+> completely from the kernel? That would be also a fine solution for me. I
+> was thinking whether we could somehow make the inode migration crash-safe
+> but I didn't think of anything which would not require on-disk format
+> change...
 
---lg2pqwgvtun7kcl5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Since this is not something that anyone can honestly recommend doing
+without a prior backup and a word of warning I personaly would be in favor
+of removing it.
 
-Hi Stephen, Mike,
+-Lukas
 
-On Tue, Sep 14, 2021 at 11:35:12AM +0200, Maxime Ripard wrote:
-> Hi,
->=20
-> This is a follow-up of the discussion here:
-> https://lore.kernel.org/linux-clk/20210319150355.xzw7ikwdaga2dwhv@gilmour/
->=20
-> This implements a mechanism to raise and lower clock rates based on consu=
-mer
-> workloads, with an example of such an implementation for the RaspberryPi4=
- HDMI
-> controller.
->=20
-> There's a couple of things worth discussing:
->=20
->   - The name is in conflict with clk_request_rate, and even though it fee=
-ls
->     like the right name to me, we should probably avoid any confusion
->=20
->   - The code so far implements a policy of always going for the lowest ra=
-te
->     possible. While we don't have an use-case for something else, this sh=
-ould
->     maybe be made more flexible?
+> 
+> 								Honza
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
+> 
 
-This has been posted around 8 monthes ago now:
-https://lore.kernel.org/all/20210413101320.321584-1-maxime@cerno.tech/
-
-I haven't had any review on this, and I'm struggling to see how we can
-move forward. Given your initial reaction, I'm guessing you were a bit
-reluctant at first with the approach, if so, can you share *any*
-direction in which I should amend that series to support similar
-features?
-
-Maxime
-
---lg2pqwgvtun7kcl5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYbn25AAKCRDj7w1vZxhR
-xXPHAQDOqQ4yaKrzcO5kvJncig3EqvvGSCVhhwqr3YlVw4JwogD7B2wtLggYl6h3
-hip/UU8FeqCCPB/OZzacWJicCo8cFQo=
-=PF1A
------END PGP SIGNATURE-----
-
---lg2pqwgvtun7kcl5--

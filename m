@@ -2,160 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33346475C40
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F32B475C87
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244180AbhLOPv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244165AbhLOPvx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:51:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06DEC06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:51:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9408661866
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:51:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E42A8C340F3;
-        Wed, 15 Dec 2021 15:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639582215;
-        bh=1Xfg/+XPyCv0/mU3wm87ixMAPiT8GzAvakRuzAp09iY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aa/AW8q+gzdHT/wWCoXCG7UyjWjCgVU2pZBQoAHCm1HliIkDDfgztFgyOGYqnhqlk
-         8BOslERkTQH+YcKnK/en4GdeOEQ81yzd1W3RMR/0GshZawHS5v6ksboFXOutDhS6i3
-         /u06jJ7kvnXxVcLnHztcR3Cr+IWZT8kbLlclJlm08XBvviHoTvg+PVdue82po4Ivm3
-         0N6nAzdHj4ivbR+FQ3S8dGrYtomN4MWDZxD1Gv/gkpQ5joKCGRy1ohSBjV5P7B82MO
-         Fdn4pcEXIYQMEOZhJHGY7PhER0RYWoc/rP1FVwTZ1W6GLnl4mZ+vJOQQO83xtzZkjq
-         gQj2AAsWG2SXg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6D3DE405D8; Wed, 15 Dec 2021 12:30:10 -0300 (-03)
-Date:   Wed, 15 Dec 2021 12:30:10 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Song Liu <songliubraving@fb.com>,
-        Changbin Du <changbin.du@gmail.com>
-Subject: Re: [RFC/PATCHSET 0/5] perf ftrace: Implement function latency
- histogram (v1)
-Message-ID: <YboKAvgX7SIiUcoN@kernel.org>
-References: <20211129231830.1117781-1-namhyung@kernel.org>
- <YbePytGwg9Kb7hT1@kernel.org>
- <CAM9d7ciqzb4CArnzMf20x7XccwvmPSzCdk3w7Hhu=qg9TuD4vw@mail.gmail.com>
+        id S244347AbhLOP7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:59:52 -0500
+Received: from mout.perfora.net ([74.208.4.196]:44183 "EHLO mout.perfora.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232587AbhLOP7v (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 10:59:51 -0500
+X-Greylist: delayed 783 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Dec 2021 10:59:51 EST
+Received: from localhost.localdomain ([194.191.235.54]) by mrelay.perfora.net
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MLePl-1mxF7p3NJb-000tVI;
+ Wed, 15 Dec 2021 16:30:51 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-phy@lists.infradead.org
+Cc:     linux-imx@nxp.com, linux-next@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mark Brown <broonie@kernel.org>, linux-pci@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH] phy: freescale: pcie: fix building for x86_64 as a module
+Date:   Wed, 15 Dec 2021 16:30:36 +0100
+Message-Id: <20211215153037.688885-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM9d7ciqzb4CArnzMf20x7XccwvmPSzCdk3w7Hhu=qg9TuD4vw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+X-Provags-ID: V03:K1:/cHhHSs4N+2DNJ5wTLoubYD0rUh2l5oYb3aX9HXa0UVqu9pMzMH
+ x28Ezyml0wRYEPJv55bAaYjT+GdEyE0EyrLF5WXgnYvHdA46RWoxI5rFwvao8GE/Z0Ko8Wn
+ zHYpeRMGj4Oez1fAUsPK6WdyDVU06FLWr/izt4+nhuLOghlYZmREkXYt9P3HEp+IMegRn+/
+ 7cpvofDSXIf8K/oJxQ23Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:j9pVH4IC4Ko=:L/0+fEZ1sh5vEjL38EdZNa
+ ZdUk5+nc3/JZMH9e65FYO4YxeSpeV8Q9/wFTvh+KJ26lcOzDG2P736wCK8BXCOIrkrcS/Lk00
+ UwlXBpZvpsu0qxxleOV7c4NRNGbVu/OG3/x6QSh85ZizqUqRXnQ34qv9lOxScCA78UkhcC09N
+ SlKWoj67Ade6nkH81iD2m5M0WkQyC69VFDlMVPCphfhlyN9XMvsp1wRGZUGP2Ob/8MNlTny9p
+ Z0soAHNOZQi8NJg33mqTjVuluF8BNf7gkrD+b+w/mRO5whvIhOLx7ACap6gpMn4yKNrLcUxag
+ 6qHkoAei7cAd4AAsBneQp4kqny5u++sBSXAXUNsNbu7vXspVVx7I8tajJDUmFJqIdlFL73AWi
+ SvVrRWYsplHIXM3wXkrFd3fH0b+ungUzj8NBRegOsECr/ZH8CCdLT8nW/5fvPoIFJc78U5O9/
+ Qiaena3e6vwsK3kWZD9NpXgt4f8ppecDciHoWWVIeWSmCL14z7L7UPDZuXTcGGXYOOTzWZCyy
+ ixQoIazO2B5Pq1iML6BxUtFKLRwZdLO/n184pUWrBqnnWg9Mkg36wEDP3P9YTXuG/YYD+oAdo
+ cAioKSkOYXG5T5Nd4EjSCDh1rx7Zvj84wU5iUExWycoEj5tgC5pKft0RCNFNUTr3J4TKpk5CU
+ UEL5q03GWPRgkv/N5MJQkO6lFrnc/8IJHAy32E/6a3N5kRoWi0cwbBHVQbZXkoJ5eB1A=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Dec 13, 2021 at 11:40:16AM -0800, Namhyung Kim escreveu:
-> On Mon, Dec 13, 2021 at 10:24 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Mon, Nov 29, 2021 at 03:18:25PM -0800, Namhyung Kim escreveu:
-> > > Hello,
-> > >
-> > > I've implemented 'latency' subcommand in the perf ftrace command to
-> > > show a histogram of function latency.
-> >
-> > This still applies cleanly, I'll test it later.
-> 
-> Thank you Arnaldo!  While I have some small modifications
-> but the functionality should be the same.  Please let me know
-> if you have any suggestions.
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-So, it is failing here with:
+x86_64 allmodconfig build failed like this:
 
-⬢[acme@toolbox perf]$ m
-make: Entering directory '/var/home/acme/git/perf/tools/perf'
-  BUILD:   Doing 'make -j32' parallel build
-  CC      /tmp/build/perf/perf-read-vdso32
-  LINK    /tmp/build/perf/libperf-jvmti.so
-make[3]: Nothing to be done for 'install_headers'.
-  CLANG   /tmp/build/perf/util/bpf_skel/.tmp/func_latency.bpf.o
-  DESCEND plugins
-  PERF_VERSION = 5.16.rc5.g6924c0713d69
-  GEN     perf-archive
-  GEN     perf-with-kcore
-  GEN     perf-iostat
-  GEN     /tmp/build/perf/python/perf.so
-  INSTALL trace_plugins
-  GENSKEL /tmp/build/perf/util/bpf_skel/func_latency.skel.h
-  CC      /tmp/build/perf/builtin-ftrace.o
-  CC      /tmp/build/perf/util/header.o
-  CC      /tmp/build/perf/util/bpf_ftrace.o
-util/bpf_ftrace.c: In function ‘perf_ftrace__latency_prepare_bpf’:
-util/bpf_ftrace.c:18:13: error: unused variable ‘fd’ [-Werror=unused-variable]
-   18 |         int fd, err;
-      |             ^~
-util/bpf_ftrace.c: In function ‘perf_ftrace__latency_read_bpf’:
-util/bpf_ftrace.c:86:21: error: implicit declaration of function ‘cpu__max_cpu’ [-Werror=implicit-function-declaration]
-   86 |         int ncpus = cpu__max_cpu();
-      |                     ^~~~~~~~~~~~
+/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c: In function
+ 'imx8_pcie_phy_init':
+/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:37:
+ error: implicit declaration of function 'FIELD_PREP'
+ [-Werror=implicit-function-declaration]
+   41 | #define IMX8MM_GPR_PCIE_REF_CLK_EXT FIELD_PREP(IMX8MM_GPR_PCIE_
+REF_CLK_SEL, 0x2)
+      |                                     ^~~~~~~~~~
+/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:85:7: note:
+ in expansion of macro 'IMX8MM_GPR_PCIE_REF_CLK_EXT'
+   85 |       IMX8MM_GPR_PCIE_REF_CLK_EXT :
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 cc1: all warnings being treated as errors
-make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/util/bpf_ftrace.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
-make[3]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:139: util] Error 2
-make[2]: *** [Makefile.perf:665: /tmp/build/perf/perf-in.o] Error 2
-make[1]: *** [Makefile.perf:240: sub-make] Error 2
-make: *** [Makefile:113: install-bin] Error 2
-make: Leaving directory '/var/home/acme/git/perf/tools/perf'
 
- Performance counter stats for 'make -k BUILD_BPF_SKEL=1 CORESIGHT=1 PYTHON=python3 O=/tmp/build/perf -C tools/perf install-bin':
+Fix this by explicitly including linux/bitfield.h.
 
-     8,018,756,380      cycles:u
-    14,452,278,281      instructions:u            #    1.80  insn per cycle
+While at it sort includes alphabethically and add a new line before the
+dt-bindings one as usually done.
 
-       2.250520538 seconds time elapsed
+Fixes: 1aa97b002258a190d77
+("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
+Reported-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-       1.834706000 seconds user
-       0.876410000 seconds sys
+---
 
+ drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-⬢[acme@toolbox perf]$
-
-⬢[acme@toolbox perf]$ git log --oneline -5
-6924c0713d691a6f (HEAD) perf ftrace: Add -b/--use-bpf option for latency subcommand
-c96f789bf6313259 perf ftrace: Add 'latency' subcommand
-0c5041e1141b53d3 perf ftrace: Move out common code from __cmd_ftrace
-8b4a91a9a0b4fbf6 perf ftrace: Add 'trace' subcommand
-6bf2efd9d99f3a14 perf arch: Support register names from all archs
-⬢[acme@toolbox perf]$
-
-Fixed with:
-
-
-diff --git a/tools/perf/util/bpf_ftrace.c b/tools/perf/util/bpf_ftrace.c
-index 1975a6fe73c9fa8b..f5b49fc056ab8b95 100644
---- a/tools/perf/util/bpf_ftrace.c
-+++ b/tools/perf/util/bpf_ftrace.c
-@@ -5,6 +5,7 @@
+diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+index f6502463d49a..f1eb03ba25d6 100644
+--- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
++++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+@@ -3,10 +3,11 @@
+  * Copyright 2021 NXP
+  */
  
- #include <linux/err.h>
++#include <linux/bitfield.h>
+ #include <linux/clk.h>
++#include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+-#include <linux/delay.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
+ #include <linux/module.h>
+@@ -14,6 +15,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
++
+ #include <dt-bindings/phy/phy-imx8-pcie.h>
  
-+#include "util/cpumap.h"
- #include "util/ftrace.h"
- #include "util/debug.h"
- #include "util/bpf_counter.h"
-@@ -15,7 +16,7 @@ static struct func_latency_bpf *skel;
- 
- int perf_ftrace__latency_prepare_bpf(struct perf_ftrace *ftrace)
- {
--	int fd, err;
-+	int err;
- 	struct filter_entry *func;
- 	struct bpf_link *begin_link, *end_link;
- 
+ #define IMX8MM_PCIE_PHY_CMN_REG061	0x184
+-- 
+2.33.1
+

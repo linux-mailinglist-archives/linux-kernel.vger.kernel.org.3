@@ -2,78 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3D9475706
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9381E475715
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241835AbhLOK5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:57:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241828AbhLOK5f (ORCPT
+        id S241853AbhLOK7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:59:14 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:50974 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241814AbhLOK7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:57:35 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C54C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:57:35 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id e136so54007022ybc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 02:57:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AIrkD/IobhHZYxHxGbgH3jxyfBz6NWo4YroRSenLJUE=;
-        b=bTTv63Ge/6FRH89M7D86qhkk/pyCDjZIoIBeoUV3DKzSqkzsVNS7z9mXK4/h6OUDQI
-         lLVz6Gw0j4byVy4KyQNKzfrPyc72WrQjruSL7AYfw6JfmYo6IRZUatCPx43Arilfo4HM
-         DiatrggvhKt1R9HK2ZaAtJnN1dAxzndkkq5x2qMxsZ+ssbw3tIOI1itbFf+zg1ie37CE
-         a39rcdDsdQm0un6PMmz1f9zOcDMmCXuWnv2gjEoIsmz5ouIqYLF7B3siGOhLZbc0u7ee
-         blnG2P0pM6cGKBKlOeRwEM9nxderFfs3RYTeTJ4qf4q1CJs2eWHRkE01irm3GQYzF2o0
-         tqrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AIrkD/IobhHZYxHxGbgH3jxyfBz6NWo4YroRSenLJUE=;
-        b=V1NA6oayZo/qWVUwoZI0nuZWC+SRQcFjonTY34lo9HZBKmemuJh1AUWZAfnwfesva0
-         CU6sI199wPJBPgHyx6BTcmHVkfdKS3O1hxzH+dt1pJKpiEy9Q+1ng9HUhfMjhuQRWfD4
-         CLrP4bWkAbdet/XrMvbMepjrAj1XraeA+Gs239I1beZhUkKqW2W+m4h4XOvVg0txRwCa
-         nTUwkDrg2TT21qC3qcQcoFGjH/CDEMKf797aVcZgATa9CugQ3GZiS5/0gI0AQiFgl+DB
-         POAe127/cFv513jzBg8aNe2AqFM6+uGm+VTaxw6PCEAt4GTa15tTPdDgXR2G0PTAa0zE
-         JY4Q==
-X-Gm-Message-State: AOAM5304HIlVxYbtdMr7CXe78Q0gQQCJCL13Zsd6vgV60iC0yy0zzj+3
-        ObXyrIZQwkObOMv492nDpwJVKSaOmlXuy3HmwY5wwA==
-X-Google-Smtp-Source: ABdhPJxJOMUSo4Ey+qvovIH8KQHFepe9ugEWNg072zmjsMSsURjykDxmENoqPcZCtk9GINwhiqy3l2oE+uvi6uwqsdk=
-X-Received: by 2002:a25:760d:: with SMTP id r13mr5552778ybc.296.1639565854209;
- Wed, 15 Dec 2021 02:57:34 -0800 (PST)
+        Wed, 15 Dec 2021 05:59:13 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BF9DkDl015351;
+        Wed, 15 Dec 2021 11:58:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=iAvi2v3+PvPRmJ+PWGHzFsnMGLc/ZedxkP2Ebwxd13Y=;
+ b=Bu4guHmxENB3eZAFoEle8uceQDU8Q74UYolxK9CDwIa8cw7g3X5xG6a9KJ9dzgjSeOpw
+ oGjkwyruvcYO6lb/cEAcM8m9lgft//wtyXP1cUWc8eMhrEYXHJTbZtChYkFSwD0MlL5c
+ 9TNz0iG4HcBviQk0JF97AEUhPhhGABRB4pmp7B3AdWkCxiG3n2J0bFctkKrznxl4Uth0
+ 2flSs3WrPMttapiktrcirwi41hzBLCtrjXjzZzmNt1CXDQcIr3otAF5v8wZTPv/G9At2
+ NjOQe6sZk7Smo4RaOq2C1fn6HGm0a8CpVG04loH/6XIFT5yfleEiXGCHKBkCN1v1Fru0 CA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cxrthy012-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Dec 2021 11:58:53 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5862110002A;
+        Wed, 15 Dec 2021 11:58:52 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4EA56235F6C;
+        Wed, 15 Dec 2021 11:58:52 +0100 (CET)
+Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 15 Dec 2021 11:58:51
+ +0100
+From:   Alexandre Torgue <alexandre.torgue@foss.st.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>, <alexandre.torgue@foss.st.com>
+Subject: [PATCH v2 0/5] Add STM32MP13 EXTI support
+Date:   Wed, 15 Dec 2021 11:58:42 +0100
+Message-ID: <20211215105847.2328-1-alexandre.torgue@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <0b6c06487234b0fb52b7a2fbd2237af42f9d11a6.1639560869.git.geert+renesas@glider.be>
- <CANn89iKdorp0Ki0KFf6LAdjtKOm2np=vYY_YtkmJCoGfet1q-g@mail.gmail.com>
- <CAMuHMdWQZA_fS-pr+4wVYtZ6h9Bx4PJ_92qpDNZ2kdjpzj+DHQ@mail.gmail.com>
- <CANn89iJ-uGzpbAhNjT=fGfDYTjpxo335yhKbqUKwSUPOwPZqWw@mail.gmail.com>
- <CAMuHMdUepDEgf9xD6+6qLqKtQH-ptvUf-fP1M=gt5nemitQBsw@mail.gmail.com> <CANn89iJ2HjNqOM=yF0yCi5K8id7XY=nG-yoo-sJsv=ykaSNDnw@mail.gmail.com>
-In-Reply-To: <CANn89iJ2HjNqOM=yF0yCi5K8id7XY=nG-yoo-sJsv=ykaSNDnw@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 15 Dec 2021 02:57:23 -0800
-Message-ID: <CANn89i+rBQr0dCKp6KrO83cFmB-abNSSbxJiDmOVf-gFfiKnwg@mail.gmail.com>
-Subject: Re: [PATCH -next] lib: TEST_REF_TRACKER should depend on REF_TRACKER
- instead of selecting it
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-15_08,2021-12-14_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 2:55 AM Eric Dumazet <edumazet@google.com> wrote:
->
+Enhance stm32-exti driver to support STM32MP13 SoC. This SoC uses the same
+hardware version than STM32MP15. Only EXTI line mapping is changed and
+following EXTI lines are supported: GPIO, RTC, I2C[1-5], UxART[1-8],
+USBH_EHCI, USBH_OHCI, USB_OTG, LPTIM[1-5], ETH[1-2].
 
-> So you say that STACKDEPOT should be user selectable,
-> even if no layer is using it ?
->
-> I based my work on STACKDEPOT, not on EXT4
+This series adds also the possibility to define EXTI GIC mapping through
+devicetree.
 
-In any case, the patch you sent prevents me from testing the module alone.
+Changes since v1:
+- add possibility to define EXTI/GIC mapping in devicetree
+- define STM32MP13 EXTI/GIC mapping in devicetree.
 
-So whatever you had in mind, you will have to send another patch.
+
+regards
+Alex
+
+Alexandre Torgue (5):
+  dt-bindings: interrupt-controller: Update STM32 EXTI interrupt
+    controller
+  irqchip/stm32: use device tree to define EXTI-GIC mapping
+  dt-bindings: interrupt-controller: stm32-exti: document
+    st,stm32mp13-exti
+  irqchip/stm32-exti: add STM32MP13 support
+  ARM: dts: stm32: Enable EXTI on stm32mp13
+
+ .../interrupt-controller/st,stm32-exti.yaml   | 12 +++
+ arch/arm/boot/dts/stm32mp131.dtsi             | 47 ++++++++++
+ drivers/irqchip/irq-stm32-exti.c              | 87 ++++++++++++++++---
+ .../interrupt-controller/stm32-exti.h         | 10 +++
+ 4 files changed, 145 insertions(+), 11 deletions(-)
+ create mode 100644 include/dt-bindings/interrupt-controller/stm32-exti.h
+
+-- 
+2.17.1
+

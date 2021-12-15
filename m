@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B59474F88
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06565474F8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238661AbhLOAtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 19:49:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238641AbhLOAtt (ORCPT
+        id S238665AbhLOAu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 19:50:27 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15734 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235240AbhLOAu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 19:49:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56E4C06173E;
-        Tue, 14 Dec 2021 16:49:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95C14B81DFD;
-        Wed, 15 Dec 2021 00:49:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E64C34601;
-        Wed, 15 Dec 2021 00:49:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639529386;
-        bh=FZKl3tGfrowl5Ti7tX7JSdDJMVveBK63MZ1TCe4VWaA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jj3b3SgFhHnCFW1lJXQRXxR67BMC9ieccEdiaFUqH2GO8+TEokXFiBAmqk6+D561L
-         y/pyo4mFtnWvKRkcNH9EVuwyF5oUSLSDJDmfAt+YgFZqWw4GVljKicJlpA6q8x/Nd1
-         qIkSgECnpTv06qHJ+qa2OTyBhjeYYg5FnaiHpWMewF9s/WMaShUkuubZttE6n/Qxpc
-         vgjglmKasHoaAf22Js0hTbb1vI2eKdfR3PeIwjMgOeRv8H2jH8b3NykbJEa5OJk4P1
-         vkdi5xKzYqmb2E/jOtibYoiEOd2S8ZST9EK7kzb2E58yVslGABW+1Xo9/3D4DNqgaY
-         GGtxSjADmAqew==
-Date:   Tue, 14 Dec 2021 16:49:45 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-Subject: Re: [PATCH v2] ext4: set csum seed in tmp inode while migrating to
- extents
-Message-ID: <20211215004945.GD69182@magnolia>
-References: <20211214175058.19511-1-lhenriques@suse.de>
+        Tue, 14 Dec 2021 19:50:26 -0500
+Received: from kwepemi500004.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JDGmX6VVczZcgQ;
+        Wed, 15 Dec 2021 08:47:24 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500004.china.huawei.com (7.221.188.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 08:50:24 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 08:50:23 +0800
+Subject: Re: [PATCH 5.4 00/88] 5.4.165-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <stable@vger.kernel.org>
+References: <20211213092933.250314515@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <e7ffaf06-d897-b16d-19ef-9c4168eaffa4@huawei.com>
+Date:   Wed, 15 Dec 2021 08:50:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211214175058.19511-1-lhenriques@suse.de>
+In-Reply-To: <20211213092933.250314515@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:50:58PM +0000, Luís Henriques wrote:
-> When migrating to extents, the temporary inode will have it's own checksum
-> seed.  This means that, when swapping the inodes data, the inode checksums
-> will be incorrect.
-> 
-> This can be fixed by recalculating the extents checksums again.  Or simply
-> by copying the seed into the temporary inode.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=213357
-> Reported-by: Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-> Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> ---
->  fs/ext4/migrate.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> changes since v1:
-> 
-> * Dropped tmp_ei variable
-> * ->i_csum_seed is now initialised immediately after tmp_inode is created
-> * New comment about the seed initialization and stating that recovery
->   needs to be fixed.
-> 
-> Cheers,
-> --
-> Luís
-> 
-> diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
-> index 7e0b4f81c6c0..36dfc88ce05b 100644
-> --- a/fs/ext4/migrate.c
-> +++ b/fs/ext4/migrate.c
-> @@ -459,6 +459,17 @@ int ext4_ext_migrate(struct inode *inode)
->  		ext4_journal_stop(handle);
->  		goto out_unlock;
->  	}
-> +	/*
-> +	 * Use the correct seed for checksum (i.e. the seed from 'inode').  This
-> +	 * is so that the metadata blocks will have the correct checksum after
-> +	 * the migration.
-> +	 *
-> +	 * Note however that, if a crash occurs during the migration process,
-> +	 * the recovery process is broken because the tmp_inode checksums will
-> +	 * be wrong and the orphans cleanup will fail.
 
-...and then what does the user do?
 
---D
+On 2021/12/13 17:29, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.165 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 15 Dec 2021 09:29:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.165-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-> +	 */
-> +	ei = EXT4_I(inode);
-> +	EXT4_I(tmp_inode)->i_csum_seed = ei->i_csum_seed;
->  	i_size_write(tmp_inode, i_size_read(inode));
->  	/*
->  	 * Set the i_nlink to zero so it will be deleted later
-> @@ -502,7 +513,6 @@ int ext4_ext_migrate(struct inode *inode)
->  		goto out_tmp_inode;
->  	}
->  
-> -	ei = EXT4_I(inode);
->  	i_data = ei->i_data;
->  	memset(&lb, 0, sizeof(lb));
->  
+Tested on arm64 and x86 for 5.4.165-rc1,
+
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.4.y
+Version: 5.4.165-rc1
+Commit: 0896ccf9036401df1f284b0a02b954d71d071d74
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9013
+passed: 9013
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9013
+passed: 9013
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

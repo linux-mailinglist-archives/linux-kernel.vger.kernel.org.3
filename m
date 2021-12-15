@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BED86475A98
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB03B475AA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243347AbhLOOVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:21:19 -0500
-Received: from mga06.intel.com ([134.134.136.31]:35831 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230188AbhLOOVT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:21:19 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="300012787"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="300012787"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:21:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="545591351"
-Received: from mylly.fi.intel.com (HELO [10.237.72.88]) ([10.237.72.88])
-  by orsmga001.jf.intel.com with ESMTP; 15 Dec 2021 06:21:16 -0800
-Message-ID: <9949baad-fc59-475c-cb7d-a4da935b8271@linux.intel.com>
-Date:   Wed, 15 Dec 2021 16:21:15 +0200
+        id S243364AbhLOO2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:28:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54272 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243352AbhLOO2l (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:28:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 394F8B81F23;
+        Wed, 15 Dec 2021 14:28:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0C0C34605;
+        Wed, 15 Dec 2021 14:28:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639578518;
+        bh=jS1rXz3m/Z+lDbF3WHhlKToTdimzp7WYV8lBznrDmRM=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=Sf/SiWGw9Y1b2+fGAsZABfXtneeeuOPwQSDeZ1Vh8ZOIaEvr2eCIrdIwjVbRRTezn
+         V57Bl8W7I66YYeYgbfNacxmIeVj3tjvNWMDshHSPtglcr298ldFAju+kJNiX+JspuI
+         ajfCLrzm+z3Ju2M1hEmFumvouNsc9w1f2TERx0ptSFGrBhWG+Hy4EsCGeuEqwloiX/
+         uji6SKZWqUTpq1Hi+sVN5AStChiAZPSk8Fj4BBSx9QoS70jf+VGQCkEDlSTMSwnq8M
+         bJJ7U6bj2TmDBRDQEWSZnOTMLA3gPKUOsxg38oXtnaVCfK4eBXleiZ6LQHdJrfyegn
+         rKw8Jzp6nrf0g==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.4.0
-Subject: Re: [PATCH v2 4/6] i2c: designware-pci: Fix to change data types of
- hcnt and lcnt parameters
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
-References: <20211213180034.30929-1-andriy.shevchenko@linux.intel.com>
- <20211213180034.30929-4-andriy.shevchenko@linux.intel.com>
- <05baeea4-08ef-4fcd-5004-58b19e3e63f3@linux.intel.com>
- <Ybny5Cxh60e7d63q@smile.fi.intel.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <Ybny5Cxh60e7d63q@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] rsi: fix array out of bound
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20211208095341.47777-1-zhangyue1@kylinos.cn>
+References: <20211208095341.47777-1-zhangyue1@kylinos.cn>
+To:     zhangyue <zhangyue1@kylinos.cn>
+Cc:     amitkarwar@gmail.com, siva8118@gmail.com, kvalo@codeaurora.org,
+        davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <163957851444.6130.11829040584671370301.kvalo@kernel.org>
+Date:   Wed, 15 Dec 2021 14:28:36 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 15:51, Andy Shevchenko wrote:
-> On Wed, Dec 15, 2021 at 09:55:47AM +0200, Jarkko Nikula wrote:
->> On 12/13/21 20:00, Andy Shevchenko wrote:
->>> From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
->>>
->>> The data type of hcnt and lcnt in the struct dw_i2c_dev is of type u16.
->>> It's better to have same data type in struct dw_scl_sda_cfg as well.
-> 
-> ...
-> 
->> I proposed this to be first before questionable cleanups since this fixes
->> existing confusion (noted by Wolfram not any of us). Same to 5-6/6.
-> 
-> Okay, I postpone this series. It seems altogether it will require more time
-> than I currently have. Consider picking patches on the basis you have in mind
-> if you consider them useful. Thanks!
-> 
-Will do. I really like to get those patches before any cosmetic changes 
-that fix existing issues that were confusing all of us (patches 4/6 and 
-6/6) and do obvious cleanup (3/6 and 5/6).
+zhangyue <zhangyue1@kylinos.cn> wrote:
 
-Jarkko
+> Limit the max of 'ii'. If 'ii' greater than or
+> equal to 'RSI_MAX_VIFS', the array 'adapter->vifs'
+> may be out of bound
+> 
+> Signed-off-by: zhangyue <zhangyue1@kylinos.cn>
+
+Patch applied to wireless-drivers-next.git, thanks.
+
+4d375c2e51d5 rsi: fix array out of bound
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20211208095341.47777-1-zhangyue1@kylinos.cn/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

@@ -2,88 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B334757D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9D44757D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237272AbhLOLey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:34:54 -0500
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:46843 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234047AbhLOLew (ORCPT
+        id S237273AbhLOLfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 06:35:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232085AbhLOLfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:34:52 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id E333F5C0346;
-        Wed, 15 Dec 2021 06:34:51 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute3.internal (MEProxy); Wed, 15 Dec 2021 06:34:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm3; bh=m3LAop276JGnuIzrbo3h0hI4rst+
-        9X0A+rv7sty1g70=; b=QHUfO1ZT7H+y/sweUvnZTrMZKGCc/fLq1ft4S2MVkOHQ
-        dgIW3qrcxFtsMP52lrFj5anX2btycq2kWEwhupbNDexEdlztHucsnPxaZE2QWh2I
-        OGZYAUByiAsZ9lktB4BYSyPUE25kA4HthSKSgjX3LsiqH6ptjXDP6nGbG+6ZwsPI
-        FaSk31h3rFXzODeE9iW2dfLav0Vtww83olmlKOcOeqMiMS5VU/bFD8k8USIhF14Z
-        PcyZMVK3nglsCWvSiBh7uI9svgvR93pPkOm7HrnzTMiwC2tNLqYRIt1xahQsWiSs
-        LwyuDuWH+I2ILRsRkKg3pdePkmE7ukrG1t1yXtmCVQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=m3LAop
-        276JGnuIzrbo3h0hI4rst+9X0A+rv7sty1g70=; b=T3SH6Rt6Wsvjl84z1jl9/i
-        ZBwskCVOaC+MtI0/kVEkSt04bh6AvlqrBnVMVPjbTHUxlKh9p76XAy5hDnhu+wfp
-        D+es3GX+4LnjJ1z2MfUfX5/jLnkxgidHX+YXPZP0WEvdISSqVlrmHWu0ug51tGAG
-        Df1tN/XuaCUVlwYsNU9aZ2gzaAme9DN6tkh6WJW4ROUC6Jhx4OONl9f5ftM7yDLW
-        NGJf7MyOjED5NP+lBX6UIT+/FDIdfbY37sI6KQoCBB4lZaaU76XzrYmpisc47aJ2
-        pTypD5ObVr2QfN6gPeQJ1bPeQw2dDU50NeBT5N3IS7aVnBrZoyK/gjeadqZJ+w+g
-        ==
-X-ME-Sender: <xms:29K5YdayOcaB9M3P6Q9TJJx7Yuh0Ybf374DxaOQOQQ1qPyeogkDrRw>
-    <xme:29K5YUaFe_ZXnV-2XCQJfSnY6veGm7sg3PckNhJsFz8yYSEl849RpS8ml3SPPst8e
-    turKvlcXBNieaeUO4E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrledvgdefudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhvvghn
-    ucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrth
-    htvghrnhepgfeigeeiffeuhfettdejgfetjeetfeelfefgfefgvddvtdfghfffudehvdef
-    keffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
-    hvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:29K5Yf_6PHTIco8GoPH1VhAO9UV34oHXDzSjJhJdTL6pBfjMVFPigA>
-    <xmx:29K5YbpkbxE6BW4_kAdHtx_IV0dIPcrdX_vs_x8suf0a_-pLv5LceA>
-    <xmx:29K5YYrDqOTnB7S6Gpk6qIAgkJ7XwljRVqS1C_jJjpQS3uM0o2x-mQ>
-    <xmx:29K5YVCNJJ-G6ZvVmgc4lUDNvHfXHK8DmoFkJA6mRTHsBYQ_t6Uueg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 88F56274042E; Wed, 15 Dec 2021 06:34:51 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4524-g5e5d2efdba-fm-20211214.001-g5e5d2efd
-Mime-Version: 1.0
-Message-Id: <b082f563-833c-4813-948c-eb498fe84817@www.fastmail.com>
-In-Reply-To: <20211215112935.238561-1-marcan@marcan.st>
-References: <20211215112935.238561-1-marcan@marcan.st>
-Date:   Wed, 15 Dec 2021 12:34:31 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Hector Martin" <marcan@marcan.st>
-Cc:     "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] soc: apple: apple-pmgr-pwrstate: Do not build as a module
-Content-Type: text/plain
+        Wed, 15 Dec 2021 06:35:45 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B92C061574;
+        Wed, 15 Dec 2021 03:35:45 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id 36-20020a17090a09a700b001b103e48cfaso1406959pjo.0;
+        Wed, 15 Dec 2021 03:35:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=TaGHD7z1uPWVoqBO0eW99qVXK7I8JIm4IUxWWiL69jk=;
+        b=ZRB7buEAdPUMdg4qRNJl0QZFOg/ttuxXUZ72SnQGIA9EmDkcx/sPi5n8EiHe8Zfkuz
+         deDwSXmBHJe2GHyb69LW0TjsY4iD19cdAETzSf20F2LBprIZYKmtG4HQEf3378up69XI
+         R99TmkRgV7wJwT6mrD3ob5GQICyoVKGBtsMxarUuqR6F5m5z0lqhzYOmt5DBR1ZmSZ6/
+         quvghAnPZ9CacNWKe+DeFz/AILM2DbrKNk64e1BnQrD3+p3l7ywQX7rDpP0Nb7I9L+v4
+         ou+g15089fnr2ETbF0I0unm+B6NonpZ8gO8MdBBSkd7xTEb+p0itDRa+B6YusD30nX52
+         b0qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=TaGHD7z1uPWVoqBO0eW99qVXK7I8JIm4IUxWWiL69jk=;
+        b=7F+Pf3K0dTo99tfT/o1KSm+Ny1M5B/pvv2HvqPervrXUV9gCBIDjs32uhr1rOnPx3H
+         ii1QS4thL5RAxetgSO326JWGkJjKxCMq0AaH9esMR3iP2UwOOYTnmUhochV+2snEbIIM
+         cbqbAL4POvjQYDzudB7USnSjCSM3GPNEsQEd5HWMocMZQTGtCUPLA6g5z1CV/dBXHBNp
+         krd9MjYPa0KPLbzCTaMv6KEKX4eM6ha0enQUQzG2zD2DTHmK92b9gqZS/xq/a5W8Nzio
+         KUxK3CR9pS9Ui63adNLmSZ7asBl1f9RRH2szPnlRAaNMxwSsv4HsZPLtZeG6RzqCd8/x
+         N7Kg==
+X-Gm-Message-State: AOAM531tuEJNfEPDMRiWa6pxDO9//ggyp86BTxd5yAMLv7Af22DbKMzz
+        0bLSizMv7nFeOLoe7zy/6tY=
+X-Google-Smtp-Source: ABdhPJwrVSLtJSqE4KeEdAyFEhmMWKLl28Zif20FZtpcrRW2UjVLBkZsOw0OCPvtHm8ztqGsBfG2CQ==
+X-Received: by 2002:a17:90a:af94:: with SMTP id w20mr10976474pjq.223.1639568144654;
+        Wed, 15 Dec 2021 03:35:44 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id s19sm2558727pfu.104.2021.12.15.03.35.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Dec 2021 03:35:44 -0800 (PST)
+From:   Vincent Shih <vincent.sunplus@gmail.com>
+To:     srinivas.kandagatla@linaro.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com, vincent.shih@sunplus.com
+Cc:     Vincent Shih <vincent.sunplus@gmail.com>
+Subject: [PATCH v3 0/2] Add driver for OCOTP in Sunplus SP7021
+Date:   Wed, 15 Dec 2021 19:35:46 +0800
+Message-Id: <1639568148-22872-1-git-send-email-vincent.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021, at 12:29, Hector Martin wrote:
-> This doesn't make any sense as a module since it is a critical device,
-> and it turns out of_phandle_iterator_args was not exported so the module
-> version doesn't build anyway.
->
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+This is a patch series for OCOTP driver for Sunplus SP7021 SoC.
 
-I think it'd be nice to add Reported-by: kernel test robot <lkp@intel.com>
-here since their service found it and maybe also a Fixes: tag.
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+etc.) into a single chip. It is designed for industrial control.
 
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
+Vincent Shih (2):
+  nvmem: Add driver for OCOTP in Sunplus SP7021
+  dt-bindings: nvmem: Add bindings doc for Sunplus OCOTP driver
 
+ .../bindings/nvmem/sunplus,sp7021-ocotp.yaml       |  86 ++++++++
+ MAINTAINERS                                        |   6 +
+ drivers/nvmem/Kconfig                              |  12 +
+ drivers/nvmem/Makefile                             |   2 +
+ drivers/nvmem/sunplus-ocotp.c                      | 244 +++++++++++++++++++++
+ 5 files changed, 350 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
+ create mode 100644 drivers/nvmem/sunplus-ocotp.c
 
+-- 
+2.7.4
 
-Sven

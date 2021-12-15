@@ -2,96 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7889B476628
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B964547662A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbhLOWrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 17:47:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        id S231480AbhLOWsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 17:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbhLOWry (ORCPT
+        with ESMTP id S229820AbhLOWsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 17:47:54 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A00C061574;
-        Wed, 15 Dec 2021 14:47:54 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 200so12488110pgg.3;
-        Wed, 15 Dec 2021 14:47:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RHqGM5KaVx4aanEHt68tqYagkFbd+faffRCxKAJuME8=;
-        b=n3QOGfVjVSngBc98aSouNBFqW1iJMZ8U28WYvbKDYo4PdpLx8mszyjPnh3Tru5O0rj
-         cKCAtH7Rx76En0zhaZ73BKcbkVYyyi0gRY4BukOKNAkhIMqSucajp83hbO09/2KECt5w
-         EvFEYjYb8gUPYwmuukqCoWpEbmykYvlBQT0BlyOE+D4sXSmZfTskkjMo8CyN2HEbO60w
-         grMFSX5b5fTJRwWNHFD9+FN1kjr40GgSCZ74tCTFJ3u99FgoXv3guj4TY/8qtO2CFUrW
-         p8br+kVSvvWqGxpv8q/9Vd9cJdrTTXMgcDl0dCbTPNzFuiNvBeoKD41uuIlkP19djdVl
-         qkGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RHqGM5KaVx4aanEHt68tqYagkFbd+faffRCxKAJuME8=;
-        b=Y9jgGV9VeAyVGo/juebjZxGB38ebija+iDA7tmWootGzm+ShLni3dCiYXuKICcrmwi
-         WxQgD6zasglYfKjWBynjmvFjnwjW2Ued7Cn79K77vXdiSBWjZzJKKVMKJi2BudC88NgM
-         ooLnFSd5XpN02vd6StOUVw81RPwSH2MUb7mqo98AoEw8WEVYpnvLYu3XxoFLBGY98dBu
-         Yk4IHf58Z2tILWzRYpSR+ngo1tb86+DtA4VJN0r/dqiQoIq/cynJ8qKM1kJDlpNOv8T1
-         WVIkXLIqo2c87V4GE3Nvb9g/9jIBSL1o99Pm2NIjkJfHBsA7QsBKYvlI1kvuSufhbkrU
-         dhjg==
-X-Gm-Message-State: AOAM532ypZnUYN5FpqfAEfo/lyn7HQVPmvidmt8MaJpxm328UNm5H58Q
-        jiKD6PDCdlK117IgtWyIvMgFA63nN8E=
-X-Google-Smtp-Source: ABdhPJx9DILb5VAXYPQ41GIthiTDQk83woDWHRy0x2yhvskIBd+TfVsHJxC2QelWQcKJL6V3pe8Ycg==
-X-Received: by 2002:a63:190b:: with SMTP id z11mr9519442pgl.414.1639608473370;
-        Wed, 15 Dec 2021 14:47:53 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h191sm3190700pge.55.2021.12.15.14.47.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 14:47:52 -0800 (PST)
-Subject: Re: [PATCH 5.4 00/18] 5.4.166-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20211215172022.795825673@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <324adb61-1ab5-4b66-80f8-d942f6421dcb@gmail.com>
-Date:   Wed, 15 Dec 2021 14:47:49 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 15 Dec 2021 17:48:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB05C061574;
+        Wed, 15 Dec 2021 14:48:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA56BB8221E;
+        Wed, 15 Dec 2021 22:47:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C265C36AE2;
+        Wed, 15 Dec 2021 22:47:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639608478;
+        bh=GgPsE6TbS7V5v4Amc3+um4dg/OZkdFC4aT5pVXd/aQY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QM+DAYgneA0mf2OUOgEUscPaxesLtKahh8GWAa8xcxmLS/VxeusunC3EI4SJ3HMAU
+         q7IfqHJtvilFgOI7Vhe0VrDvgMpd2QXuglqh8s+6b7Czp+UDZHLzmBBK4hlE9mbBuG
+         eXNhmN6Gn97eqtJb9/b4Od3uIGdm8+w0w1pj540k=
+Date:   Wed, 15 Dec 2021 23:47:56 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     cgel.zte@gmail.com
+Cc:     balbi@kernel.org, maze@google.com, deng.changcheng@zte.com.cn,
+        lorenzo@google.com, kuba@kernel.org, manish.narani@xilinx.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] usb: gadget: remove duplicate include
+Message-ID: <YbpwnHJWpwurP0pl@kroah.com>
+References: <20211215014754.441065-1-deng.changcheng@zte.com.cn>
 MIME-Version: 1.0
-In-Reply-To: <20211215172022.795825673@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215014754.441065-1-deng.changcheng@zte.com.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 9:21 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.166 release.
-> There are 18 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Dec 15, 2021 at 01:47:54AM +0000, cgel.zte@gmail.com wrote:
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
 > 
-> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
-> Anything received after that time might be too late.
+> ./drivers/usb/gadget/function/u_ether.c: linux/etherdevice.h is included
+> more than once.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.166-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> ---
+>  drivers/usb/gadget/function/u_ether.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> thanks,
+> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+> index 6f5d45ef2e39..3b674f99320b 100644
+> --- a/drivers/usb/gadget/function/u_ether.c
+> +++ b/drivers/usb/gadget/function/u_ether.c
+> @@ -17,7 +17,6 @@
+>  #include <linux/etherdevice.h>
+>  #include <linux/ethtool.h>
+>  #include <linux/if_vlan.h>
+> -#include <linux/etherdevice.h>
+>  
+>  #include "u_ether.h"
+>  
+> -- 
+> 2.25.1
 > 
-> greg k-h
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+This does not apply to my tree at all.  What did you make it against?

@@ -2,119 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6350B47538E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 378B8475392
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240470AbhLOHOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 02:14:48 -0500
-Received: from mga03.intel.com ([134.134.136.65]:62426 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240324AbhLOHOr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 02:14:47 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="239116968"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="239116968"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 23:14:47 -0800
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="753265360"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 23:14:44 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 2B42920657;
-        Wed, 15 Dec 2021 09:14:42 +0200 (EET)
-Date:   Wed, 15 Dec 2021 09:14:42 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Bingbu Cao <bingbu.cao@linux.intel.com>
-Cc:     Bingbu Cao <bingbu.cao@intel.com>, linux-media@vger.kernel.org,
-        rafael@kernel.org, shawnx.tu@intel.com, tian.shu.qiu@intel.com,
-        chiranjeevi.rapolu@intel.com, hyungwoo.yang@intel.com,
-        tfiga@chromium.org, senozhatsky@chromium.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] media: imx208: Support device probe in non-zero ACPI
- D state
-Message-ID: <YbmV4hHrixPAeQYD@paasikivi.fi.intel.com>
-References: <1636447715-15526-1-git-send-email-bingbu.cao@intel.com>
- <1636447715-15526-5-git-send-email-bingbu.cao@intel.com>
- <Ybi/b0QYV2BwSbQk@paasikivi.fi.intel.com>
- <374d87f4-a3e5-fbaa-b4eb-c1ac1bd983dd@linux.intel.com>
+        id S240490AbhLOHQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 02:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240324AbhLOHQN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 02:16:13 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E564DC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 23:16:12 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id be32so30453882oib.11
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 23:16:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessos.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iTgtnQdRZOQC70dHZST7rANbpEQlupbSgOvB6m22IcU=;
+        b=ZeitVrEzqWWAAbC4xIfGE+rrb/NjRImvUDDe1hBt/6xwKhnoRcR9X//uFZ6tLrfMZG
+         SzfANUwo7rihe7dtXYZ5G7pEIb05iv+iWw7NOpdkE/6GjXq/7Mfhs/xyPyVRDi/64jnh
+         EhZ2WlrNOK34Bx02+/s0M0c2hL3LA0XnWE1i0QuQwfuXTRdiBlSlSR5PTEUeE4fBgVhN
+         YQHFM4uTmyN8tiZmN900uBRMgKAIMFG9cF++KxTC6DaifqTKy8Ll0+5Qf3B2IDwtyTst
+         B6nyUxIghf9jfmyiawfcjzkVlrLzoN7VBpPU+fnYIQM7wdR1KZmIT254L8wSQEtkzH+N
+         qpWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iTgtnQdRZOQC70dHZST7rANbpEQlupbSgOvB6m22IcU=;
+        b=FuJae65KMB4z15yBgkOzKCZuip7uzw/5QNkiYltQdf93xIqCziaARhmMwgC86M7GcW
+         QV2PriiGbfEv97YjsvNdqaZtBdaXLljw0gGge8uAVqYDbhTX09Dw6c32xlbB7Tg3mc+s
+         jmQjXOs9IwjVlB3zHbmXNFxdnh4zjTZYYsBsSXWu7EHuMEyrp1pfLPgI/YRPYxnb8ZRw
+         0NPwrQnYTaGdBxvREH1Bb/ZO4QtUNRKHhc+XKRxvaStf+BvCkmG3c7hQccleSHi2+HMv
+         yZxvICnrO7e9oLh9r63RiA7L2cHZ8+uAxb2+kjYudM0vr0CK2Ggk7mHRCZMADc4YBYxF
+         XyuA==
+X-Gm-Message-State: AOAM531Evjff3rWiQugazwpZAmd8AE9zH4xxge3ef59OisLspW4Y/PTd
+        lgYmCDBs/RYe6DhTWWMpbpXlh8Hm8PKTZh3qhS6RyNnjW+kkag==
+X-Google-Smtp-Source: ABdhPJyTzPgwdXIvoWRJgwE4Y0FO2roYSNMdAqCy4CzWkPpPWny0BmiTkJx3i6vrMTIxqrjUg+OKjA+YsVjfQAJvWPs=
+X-Received: by 2002:a05:6808:d1:: with SMTP id t17mr7550480oic.161.1639552572191;
+ Tue, 14 Dec 2021 23:16:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <374d87f4-a3e5-fbaa-b4eb-c1ac1bd983dd@linux.intel.com>
+References: <20211215065508.313330-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20211215065508.313330-1-kai.heng.feng@canonical.com>
+From:   Jian-Hong Pan <jhp@endlessos.org>
+Date:   Wed, 15 Dec 2021 15:15:35 +0800
+Message-ID: <CAPpJ_eff_NC3w7QjGtYtLjOBtSFBuRkFHojnuPC7neOmd54wcg@mail.gmail.com>
+Subject: Re: [PATCH v3] rtw88: Disable PCIe ASPM while doing NAPI poll on 8821CE
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Jian-Hong Pan <jian-hong@endlessm.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Po-Hao Huang <phhuang@realtek.com>,
+        Brian Norris <briannorris@chromium.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Netdev List <netdev@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bingbu,
+Tried to apply this patch for testing.  But it seems conflicting to
+commit c81edb8dddaa "rtw88: add quirk to disable pci caps on HP 250 G7
+Notebook PC" in wireless-drivers-next repo.
 
-On Wed, Dec 15, 2021 at 11:13:03AM +0800, Bingbu Cao wrote:
-> 
-> 
-> On 12/14/21 11:59 PM, Sakari Ailus wrote:
-> > Hi Bingbu,
-> > 
-> > On Tue, Nov 09, 2021 at 04:48:33PM +0800, Bingbu Cao wrote:
-> >> Tell ACPI device PM code that the driver supports the device being in
-> >> non-zero ACPI D state when the driver's probe function is entered.
-> >>
-> >> Also do identification on the first access of the device, whether in probe
-> >> or when starting streaming.
-> >>
-> >> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-> >> ---
-> >>  drivers/media/i2c/imx208.c | 77 +++++++++++++++++++++++++++++-----------------
-> >>  1 file changed, 48 insertions(+), 29 deletions(-)
-> >>
-> >> diff --git a/drivers/media/i2c/imx208.c b/drivers/media/i2c/imx208.c
-> >> index 6f3d9c1b5879..b9f6d5f33b58 100644
-> >> --- a/drivers/media/i2c/imx208.c
-> >> +++ b/drivers/media/i2c/imx208.c
-> >> @@ -296,6 +296,9 @@ struct imx208 {
-> >>  	/* OTP data */
-> >>  	bool otp_read;
-> >>  	char otp_data[IMX208_OTP_SIZE];
-> >> +
-> >> +	/* True if the device has been identified */
-> >> +	bool identified;
-> >>  };
-> >>  
-> >>  static inline struct imx208 *to_imx208(struct v4l2_subdev *_sd)
-> >> @@ -619,6 +622,34 @@ static int imx208_set_pad_format(struct v4l2_subdev *sd,
-> >>  	return 0;
-> >>  }
-> >>  
-> >> +static int imx208_identify_module(struct imx208 *imx208)
-> >> +{
-> >> +	struct i2c_client *client = v4l2_get_subdevdata(&imx208->sd);
-> >> +	int ret;
-> >> +	u32 val;
-> >> +
-> >> +	if (imx208->identified)
-> >> +		return 0;
-> > 
-> > Otp access requires this as well.
-> 
-> Sakari, thanks for your review.
-> 
-> Yes, OTP read will trigger the LED blink, but I am not sure it makes sense that camera
-> framework try to read the OTP data without streaming, and it would complain once fail to
-> access the OTP data.
+Jian-Hong Pan
 
-That might be the case, but the interface this driver provides is
-accessible in the user space before streaming is enabled. Accessing
-sensor's other registers shouldn't be done before the sensor is identified.
-
-> > 
-> > How about adding a runtime PM resume callback for this?
-> 
-> For the runtime PM callback, what is the benefit adding a callback here as will call try
-> pm_runtime_get_sync() each stream on?
-
-My suggestion is to identify the sensor from the runtime PM resume callback
-(which this driver doesn't have yet), i.e. not here.
-
--- 
-Kind regards,
-
-Sakari Ailus
+Kai-Heng Feng <kai.heng.feng@canonical.com> =E6=96=BC 2021=E5=B9=B412=E6=9C=
+=8815=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=882:55=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> Many Intel based platforms face system random freeze after commit
+> 9e2fd29864c5 ("rtw88: add napi support").
+>
+> The commit itself shouldn't be the culprit. My guess is that the 8821CE
+> only leaves ASPM L1 for a short period when IRQ is raised. Since IRQ is
+> masked during NAPI polling, the PCIe link stays at L1 and makes RX DMA
+> extremely slow. Eventually the RX ring becomes messed up:
+> [ 1133.194697] rtw_8821ce 0000:02:00.0: pci bus timeout, check dma status
+>
+> Since the 8821CE hardware may fail to leave ASPM L1, manually do it in
+> the driver to resolve the issue.
+>
+> Fixes: 9e2fd29864c5 ("rtw88: add napi support")
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=3D215131
+> BugLink: https://bugs.launchpad.net/bugs/1927808
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+> v3:
+>  - Move the module parameter to be part of private struct.
+>  - Ensure link_usage never goes below zero.
+>
+> v2:
+>  - Add default value for module parameter.
+>
+>  drivers/net/wireless/realtek/rtw88/pci.c | 61 ++++++++----------------
+>  drivers/net/wireless/realtek/rtw88/pci.h |  2 +
+>  2 files changed, 21 insertions(+), 42 deletions(-)
+>
+> diff --git a/drivers/net/wireless/realtek/rtw88/pci.c b/drivers/net/wirel=
+ess/realtek/rtw88/pci.c
+> index a7a6ebfaa203c..08cf66141889b 100644
+> --- a/drivers/net/wireless/realtek/rtw88/pci.c
+> +++ b/drivers/net/wireless/realtek/rtw88/pci.c
+> @@ -2,7 +2,6 @@
+>  /* Copyright(c) 2018-2019  Realtek Corporation
+>   */
+>
+> -#include <linux/dmi.h>
+>  #include <linux/module.h>
+>  #include <linux/pci.h>
+>  #include "main.h"
+> @@ -1409,7 +1408,11 @@ static void rtw_pci_link_ps(struct rtw_dev *rtwdev=
+, bool enter)
+>          * throughput. This is probably because the ASPM behavior slightl=
+y
+>          * varies from different SOC.
+>          */
+> -       if (rtwpci->link_ctrl & PCI_EXP_LNKCTL_ASPM_L1)
+> +       if (!(rtwpci->link_ctrl & PCI_EXP_LNKCTL_ASPM_L1))
+> +               return;
+> +
+> +       if ((enter && atomic_dec_if_positive(&rtwpci->link_usage) =3D=3D =
+0) ||
+> +           (!enter && atomic_inc_return(&rtwpci->link_usage) =3D=3D 1))
+>                 rtw_pci_aspm_set(rtwdev, enter);
+>  }
+>
+> @@ -1658,6 +1661,9 @@ static int rtw_pci_napi_poll(struct napi_struct *na=
+pi, int budget)
+>                                               priv);
+>         int work_done =3D 0;
+>
+> +       if (rtwpci->rx_no_aspm)
+> +               rtw_pci_link_ps(rtwdev, false);
+> +
+>         while (work_done < budget) {
+>                 u32 work_done_once;
+>
+> @@ -1681,6 +1687,8 @@ static int rtw_pci_napi_poll(struct napi_struct *na=
+pi, int budget)
+>                 if (rtw_pci_get_hw_rx_ring_nr(rtwdev, rtwpci))
+>                         napi_schedule(napi);
+>         }
+> +       if (rtwpci->rx_no_aspm)
+> +               rtw_pci_link_ps(rtwdev, true);
+>
+>         return work_done;
+>  }
+> @@ -1702,50 +1710,13 @@ static void rtw_pci_napi_deinit(struct rtw_dev *r=
+twdev)
+>         netif_napi_del(&rtwpci->napi);
+>  }
+>
+> -enum rtw88_quirk_dis_pci_caps {
+> -       QUIRK_DIS_PCI_CAP_MSI,
+> -       QUIRK_DIS_PCI_CAP_ASPM,
+> -};
+> -
+> -static int disable_pci_caps(const struct dmi_system_id *dmi)
+> -{
+> -       uintptr_t dis_caps =3D (uintptr_t)dmi->driver_data;
+> -
+> -       if (dis_caps & BIT(QUIRK_DIS_PCI_CAP_MSI))
+> -               rtw_disable_msi =3D true;
+> -       if (dis_caps & BIT(QUIRK_DIS_PCI_CAP_ASPM))
+> -               rtw_pci_disable_aspm =3D true;
+> -
+> -       return 1;
+> -}
+> -
+> -static const struct dmi_system_id rtw88_pci_quirks[] =3D {
+> -       {
+> -               .callback =3D disable_pci_caps,
+> -               .ident =3D "Protempo Ltd L116HTN6SPW",
+> -               .matches =3D {
+> -                       DMI_MATCH(DMI_SYS_VENDOR, "Protempo Ltd"),
+> -                       DMI_MATCH(DMI_PRODUCT_NAME, "L116HTN6SPW"),
+> -               },
+> -               .driver_data =3D (void *)BIT(QUIRK_DIS_PCI_CAP_ASPM),
+> -       },
+> -       {
+> -               .callback =3D disable_pci_caps,
+> -               .ident =3D "HP HP Pavilion Laptop 14-ce0xxx",
+> -               .matches =3D {
+> -                       DMI_MATCH(DMI_SYS_VENDOR, "HP"),
+> -                       DMI_MATCH(DMI_PRODUCT_NAME, "HP Pavilion Laptop 1=
+4-ce0xxx"),
+> -               },
+> -               .driver_data =3D (void *)BIT(QUIRK_DIS_PCI_CAP_ASPM),
+> -       },
+> -       {}
+> -};
+> -
+>  int rtw_pci_probe(struct pci_dev *pdev,
+>                   const struct pci_device_id *id)
+>  {
+> +       struct pci_dev *bridge =3D pci_upstream_bridge(pdev);
+>         struct ieee80211_hw *hw;
+>         struct rtw_dev *rtwdev;
+> +       struct rtw_pci *rtwpci;
+>         int drv_data_size;
+>         int ret;
+>
+> @@ -1763,6 +1734,9 @@ int rtw_pci_probe(struct pci_dev *pdev,
+>         rtwdev->hci.ops =3D &rtw_pci_ops;
+>         rtwdev->hci.type =3D RTW_HCI_TYPE_PCIE;
+>
+> +       rtwpci =3D (struct rtw_pci *)rtwdev->priv;
+> +       atomic_set(&rtwpci->link_usage, 1);
+> +
+>         ret =3D rtw_core_init(rtwdev);
+>         if (ret)
+>                 goto err_release_hw;
+> @@ -1791,7 +1765,10 @@ int rtw_pci_probe(struct pci_dev *pdev,
+>                 goto err_destroy_pci;
+>         }
+>
+> -       dmi_check_system(rtw88_pci_quirks);
+> +       /* Disable PCIe ASPM L1 while doing NAPI poll for 8821CE */
+> +       if (pdev->device =3D=3D 0xc821 && bridge->vendor =3D=3D PCI_VENDO=
+R_ID_INTEL)
+> +               rtwpci->rx_no_aspm =3D true;
+> +
+>         rtw_pci_phy_cfg(rtwdev);
+>
+>         ret =3D rtw_register_hw(rtwdev, hw);
+> diff --git a/drivers/net/wireless/realtek/rtw88/pci.h b/drivers/net/wirel=
+ess/realtek/rtw88/pci.h
+> index 66f78eb7757c5..0c37efd8c66fa 100644
+> --- a/drivers/net/wireless/realtek/rtw88/pci.h
+> +++ b/drivers/net/wireless/realtek/rtw88/pci.h
+> @@ -223,6 +223,8 @@ struct rtw_pci {
+>         struct rtw_pci_tx_ring tx_rings[RTK_MAX_TX_QUEUE_NUM];
+>         struct rtw_pci_rx_ring rx_rings[RTK_MAX_RX_QUEUE_NUM];
+>         u16 link_ctrl;
+> +       atomic_t link_usage;
+> +       bool rx_no_aspm;
+>         DECLARE_BITMAP(flags, NUM_OF_RTW_PCI_FLAGS);
+>
+>         void __iomem *mmap;
+> --
+> 2.33.1
+>

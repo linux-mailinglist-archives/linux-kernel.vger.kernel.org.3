@@ -2,87 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6718247598B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F24B47598F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242810AbhLONVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 08:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234617AbhLONVR (ORCPT
+        id S242817AbhLONXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 08:23:09 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:38825 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242813AbhLONXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 08:21:17 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7143EC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 05:21:17 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id l18so15457167pgj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 05:21:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Vi+9tkKMEGtdz8FnRinsSQljBeYWvCw1bcC5u2KAYc4=;
-        b=SEemoU84w0RgZzOfkNVYreTtLSrP07EazxLkoOy/SUea3f4t+beB0FHazSF4XBL1YJ
-         t6DIjGGP0iKNY4wBpu47PliUokbkJv22i/KSKWX5ZE3HKLmhLlhrpZWQ2i3QCbIS1sow
-         8AEvWsAVh7IgeWsGjj69c9pngYl6d/nQIUdmctAqaHZ+jub/8bsmS29YdZc1W8J2dkYN
-         6lKClvTMJ2klr4802Wmc6TMEsnPYslPyHRTkeMgqJoz6VzGOS2o/sunV9u5xWj+EGKR8
-         r/Up5u2yjduZ0fxJFxEC/BMR+niTyuDc/N0IqlPM3Zy4m/26ah2jcoEElrT6cMewRQ1B
-         sihA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Vi+9tkKMEGtdz8FnRinsSQljBeYWvCw1bcC5u2KAYc4=;
-        b=mP9Ss+eIHuqpeGIqMLgFH5tI+74Hq+8sde4dKqAOIu5KIWgHlkrgaaWTkP8OiCDDsX
-         Ha37Aq6KKkSV7wsaXmzuWGEadG3YPaAYN94FQS3jsF1oiTSCL6NaiOs7IoHvzczKbf7o
-         DF1RbVRHn6Guphvf+sM25gAkc5PzCt9OOZvqMoUGb5hDYKf+rpFVst5xiKAjPr2BUxGq
-         KYcH44EBJk6RY1dhi98XVvInFS+tKAOk1RD6e9qdKWtrm//jQPLjSDy99q0TSSocFe6C
-         rRNmmrMYCeXIgGKT6/ZOW81He8G4ZGyzH6lPnQ/wHSzcVO5lp7GwYWURPDvaG04fpKLA
-         +geQ==
-X-Gm-Message-State: AOAM531wkwDno4yQA+G7575LQZA1Mz+7S6XREjbpmNbp99K6ApRloTz3
-        Un/djayqwkg6Vv3zrnjVCC4=
-X-Google-Smtp-Source: ABdhPJyf97EO6xzPbv6JA17GV+bOgjYwhSDz5csdkt1ya66pwl/z/pA9zRqk1fiPRX+Pm12GpQ3QKA==
-X-Received: by 2002:a63:5c0a:: with SMTP id q10mr7683052pgb.213.1639574476985;
-        Wed, 15 Dec 2021 05:21:16 -0800 (PST)
-Received: from localhost.localdomain ([117.254.32.175])
-        by smtp.googlemail.com with ESMTPSA id s8sm2561141pfe.196.2021.12.15.05.21.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 05:21:16 -0800 (PST)
-From:   Ajith P V <ajithpv.linux@gmail.com>
-To:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
-        maco@android.com, joel@joelfernandes.org, christian@brauner.io,
-        hridya@google.com, surenb@google.com
-Cc:     linux-kernel@vger.kernel.org, Ajith P V <ajithpv.linux@gmail.com>
-Subject: [PATCH] binder: use proper cacheflush header file
-Date:   Wed, 15 Dec 2021 18:50:18 +0530
-Message-Id: <20211215132018.31522-1-ajithpv.linux@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 15 Dec 2021 08:23:08 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20211215132306epoutp02dca7c07cbd1ad9516856095bd4f17d28~A8GZF4oRm2940729407epoutp02B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 13:23:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20211215132306epoutp02dca7c07cbd1ad9516856095bd4f17d28~A8GZF4oRm2940729407epoutp02B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1639574586;
+        bh=pKmeqjyTNT934u0IZtusrpZ6dFyEyLYgWowpW5Xi76Y=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=D96aSDykwNy+TvDq9Md7dvSKWILda1CnV/CGJVyh9HcL1G9cwkml0ByX3uK5pxe+O
+         pqKu9bwrN693WeserFrpLFKFxJYm0EJlniEotN7Nj28KHRRQmRmvrVzf9bLws8WXGx
+         devtFgHQyk1Fbt356ImM8YUn1oRc6VBus6O7wwfM=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20211215132305epcas1p3d2e2d503104b409a1931ac3cbc0d5d84~A8GYm7Fs82163321633epcas1p3i;
+        Wed, 15 Dec 2021 13:23:05 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.38.247]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4JDbXS1nlkz4x9Pr; Wed, 15 Dec
+        2021 13:23:04 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FD.F9.21932.80CE9B16; Wed, 15 Dec 2021 22:22:16 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20211215132303epcas1p39d451d7db07a8d76f86bf6adb0c162f6~A8GWdFSTC2299222992epcas1p3c;
+        Wed, 15 Dec 2021 13:23:03 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20211215132303epsmtrp19ca7dd578cd33ba1101b961aa91ad901~A8GWce3yu1874518745epsmtrp1Q;
+        Wed, 15 Dec 2021 13:23:03 +0000 (GMT)
+X-AuditID: b6c32a38-929ff700000255ac-69-61b9ec085fc0
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        94.D7.08738.83CE9B16; Wed, 15 Dec 2021 22:23:04 +0900 (KST)
+Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20211215132303epsmtip16f52d4482c76164a7c79e94d2ddf55a7~A8GWSrkB01481714817epsmtip1F;
+        Wed, 15 Dec 2021 13:23:03 +0000 (GMT)
+From:   "Sungjong Seo" <sj1557.seo@samsung.com>
+To:     <linkinjeon@kernel.org>
+Cc:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sj1557.seo@samsung.com>
+In-Reply-To: <HK2PR04MB38919EB7F957C4BBB0B94C3781769@HK2PR04MB3891.apcprd04.prod.outlook.com>
+Subject: RE: [PATCH] exfat: remove argument 'sector' from exfat_get_dentry()
+Date:   Wed, 15 Dec 2021 22:23:03 +0900
+Message-ID: <054301d7f1b6$e3d380f0$ab7a82d0$@samsung.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQKBraH801cCLk1f6v1nGU93CDkKTAMc91kuqscqS9A=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPKsWRmVeSWpSXmKPExsWy7bCmri7Hm52JBh0zOS0mTlvKbLFn70kW
+        i8u75rBZbPl3hNWBxWPTqk42j74tqxg9Pm+SC2COyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneO
+        NzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAdqmpFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFV
+        Si1IySkwK9ArTswtLs1L18tLLbEyNDAwMgUqTMjO2L1sD0vBfpaKAy97WBsYLzF3MXJwSAiY
+        SCy4wtvFyMUhJLCDUWLXk62MEM4nRomubY/ZIZzPjBLLt88D6uAE61jX8oANIrGLUeL+y8es
+        EM5LRon9UzexglSxCehKPLnxE6xDREBaYt7FKUwgNrNAvMTiHcfZQGxOgViJ9ovr2UFsYQEf
+        icMNH8DiLAKqEqd/bAaL8wpYSpzubGSGsAUlTs58wgIxR15i+9s5UBcpSOz+dJQVYpeVxNyd
+        X9kgakQkZne2MYMcJyHwlV3izfqnLBANLhLvWu9ANQtLvDq+hR3ClpJ42d/GDtGwilFiw/rL
+        bBDOakaJm7eus0CCzF7i/SULEJNZQFNi/S59iF5FiZ2/5zJCLOaTePe1hxWimleio00IokRF
+        4vuHnSwwq678uMo0gVFpFpLXZiF5bRaSF2YhLFvAyLKKUSy1oDg3PbXYsMAEHtvJ+bmbGMEp
+        UctiB+Pctx/0DjEycTAeYpTgYFYS4V1qsDNRiDclsbIqtSg/vqg0J7X4EKMpMLAnMkuJJucD
+        k3JeSbyhiaWBiZmRiYWxpbGZkjjvc//piUIC6YklqdmpqQWpRTB9TBycUg1MSdeWzzywLb98
+        2tfU9uC1GiFNX5b5brCLeFi5/l/Zl13+arKW39it/dde0tiotqe/Yv4E9iPF0e7LPSasSma4
+        pb9JkTXqvMJ/b/MCnds28zRyeSeeZBR8VpSlUL1N29HomfxftWOs+w+3a/W1MXLtSrcVqO/l
+        TW/j6Hzaz9f9gEP9S6+5urTMrn1qd0rM4q6lfTxgJnHvofiCBQKtOdbCbc3Mq59/330n9Pse
+        G/EWXsaUSxNDJ65f8MaQ3zwhM9/o2YmF29weKjDo+ge8zD5SFPpR5EFh991VNSt/K981stO4
+        6XH+gk+A+CaJ+3/L3i1gnik0/c7UzmclX+I7s7er3RRkfyulYJXz7+7977FKLMUZiYZazEXF
+        iQCLE01+EgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOLMWRmVeSWpSXmKPExsWy7bCSnK7Fm52JBs9eM1tMnLaU2WLP3pMs
+        Fpd3zWGz2PLvCKsDi8emVZ1sHn1bVjF6fN4kF8AcxWWTkpqTWZZapG+XwJWxe9keloL9LBUH
+        XvawNjBeYu5i5OSQEDCRWNfygK2LkYtDSGAHo0Rf+w2WLkYOoISUxMF9mhCmsMThw8UQJc8Z
+        JXp+PWEF6WUT0JV4cuMn2BwRAWmJeRenMIHYzAKJEmeWtLFCNKxjlLj04gcLSIJTIFai/eJ6
+        dhBbWMBH4nDDBzYQm0VAVeL0j81gcV4BS4nTnY3MELagxMmZT8DuYRbQk2jbyAgxX15i+9s5
+        UPcrSOz+dJQV4gYribk7v7JB1IhIzO5sY57AKDwLyaRZCJNmIZk0C0nHAkaWVYySqQXFuem5
+        xYYFRnmp5XrFibnFpXnpesn5uZsYwXGhpbWDcc+qD3qHGJk4GA8xSnAwK4nwLjXYmSjEm5JY
+        WZValB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QD04oUQ7N8lfz7M8Ty
+        379kyOo8HGbHdPORqsPBO9yrOXxymbr3mzMeZvnAFu6tvUec7wL7YSPBTJutfq9OTWfNl1eQ
+        XxpqXL3886/DVgpu3Pl2u95Xmazwy1uTv/Gye2+ZJ9OBmOg9U10/dlg8+7j7iMz242vO3Q4r
+        WjtpyzGRJ/Mbu7buPOrJpMFxxMB//ne7e6lrD5nP9rjTNu2s4rdrG5i9BWrP7lp4bu7y3d5P
+        Fn5yUHY6oHf2Tt2qPS/+T9zWqf2of8vV3DNSM1wELml4tIrN0xfwVOCR+cYlcvOBwbPp7brc
+        WyU2LJweIn6um19T865Bn1nfnatbzhR92Vs2vWbHpeV/AqUd7Tgc3iqu/q3EUpyRaKjFXFSc
+        CADreoH1+gIAAA==
+X-CMS-MailID: 20211215132303epcas1p39d451d7db07a8d76f86bf6adb0c162f6
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211215051307epcas1p30f013371a7f2e346ce5851b0157abedc
+References: <CGME20211215051307epcas1p30f013371a7f2e346ce5851b0157abedc@epcas1p3.samsung.com>
+        <HK2PR04MB38919EB7F957C4BBB0B94C3781769@HK2PR04MB3891.apcprd04.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-binder.c uses <asm/cacheflush.h> instead of <linux/cacheflush.h>.
-Hence change cacheflush header file to proper one.
+> No any function uses argument 'sector', remove it.
+> 
+> Signed-off-by: Yuezhang.Mo <Yuezhang.Mo@sony.com>
+> Reviewed-by: Andy.Wu <Andy.Wu@sony.com>
+> Reviewed-by: Aoyama, Wataru <wataru.aoyama@sony.com>
 
-This change also avoid warning from checkpatch that shown below:
-WARNING: Use #include <linux/cacheflush.h> instead of <asm/cacheflush.h>
+Looks good!
+Acked-by: Sungjong Seo <sj1557.seo@samsung.com>
 
-Signed-off-by: Ajith P V <ajithpv.linux@gmail.com>
----
- drivers/android/binder.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index cffbe57a8e08..446ed306d313 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -69,7 +69,7 @@
- 
- #include <uapi/linux/android/binder.h>
- 
--#include <asm/cacheflush.h>
-+#include <linux/cacheflush.h>
- 
- #include "binder_internal.h"
- #include "binder_trace.h"
--- 
-2.17.1
+> ---
+>  fs/exfat/balloc.c   |  2 +-
+>  fs/exfat/dir.c      | 36 ++++++++++++++----------------------
+>  fs/exfat/exfat_fs.h |  3 +--
+>  fs/exfat/namei.c    | 42 ++++++++++++++++--------------------------
+>  fs/exfat/nls.c      |  2 +-
+>  5 files changed, 33 insertions(+), 52 deletions(-)
 

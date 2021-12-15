@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C894755AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4FF4755AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241433AbhLOJ7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:59:24 -0500
-Received: from foss.arm.com ([217.140.110.172]:47112 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236424AbhLOJ7W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:59:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9660A6D;
-        Wed, 15 Dec 2021 01:59:21 -0800 (PST)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7E573F5A1;
-        Wed, 15 Dec 2021 01:59:19 -0800 (PST)
-Date:   Wed, 15 Dec 2021 09:59:11 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        lkp@lists.01.org, linux-kselftest@vger.kernel.org,
-        sjpark@amazon.de, keescook@chromium.org, shuah@kernel.org
-Subject: Re: [selftests/kselftest/runner.sh]  3226b4a464:
- kernel-selftests.cpu-hotplug.cpu-on-off-test.sh.fail
-Message-ID: <20211215095911.GK6207@e120937-lin>
-References: <20211202142056.17386-1-cristian.marussi@arm.com>
- <20211213052044.GA1334@xsang-OptiPlex-9020>
+        id S236180AbhLOKCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:02:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53722 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241453AbhLOKCH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 05:02:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2795361871;
+        Wed, 15 Dec 2021 10:02:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D8AC34605;
+        Wed, 15 Dec 2021 10:02:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639562526;
+        bh=wPPt3YTgM3V3tQ8DUiilyDYIEOG7frejMbA+g84XeoY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pSW/EOewQq8NtDeouDd7kv07T9fgxYMFWUhdfv6fm7dngWYi/rr8jbyxly9RxgKsj
+         itWM0dTjMymYT4SF+rHspon+RSB7pmFHCuMdk42DiCJXttz6IFUDMoHw51MTg5Xsin
+         uwZ0w7lpW1rGQsDpYNsvobb2b4J9YYeRddwooHuKJ6bfsz2dCzNteq3aYARA38au1v
+         7Q3BOAlE/xHo/DPr1g3ks7ODi3MRf06Ki8R2XvqaP0NDNseFMxsSRzKYUo4/atANgX
+         Ya0WIeuDUkD52RkwZKRbd9im67e+HeutG5aT6qDuV4nn5Xeldtw2YiIbtacgWJb3a0
+         s/255UjdrVHJw==
+Date:   Wed, 15 Dec 2021 12:01:59 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Quentin Perret <qperret@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>
+Subject: Re: [PATCH v2] of/fdt: Don't worry about non-memory region overlap
+ for no-map
+Message-ID: <Ybm9F5AdCSGz6IwN@kernel.org>
+References: <20211215072011.496998-1-swboyd@chromium.org>
+ <Ybm6KQiS7B28QOSW@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213052044.GA1334@xsang-OptiPlex-9020>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <Ybm6KQiS7B28QOSW@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 01:20:44PM +0800, kernel test robot wrote:
+On Wed, Dec 15, 2021 at 11:49:37AM +0200, Mike Rapoport wrote:
 > 
-> 
-> Greeting,
-> 
-> FYI, we noticed the following commit (built with gcc-9):
-> 
+> On Tue, Dec 14, 2021 at 11:20:11PM -0800, Stephen Boyd wrote:
+> > @@ -482,9 +482,11 @@ static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
+> >  	if (nomap) {
+> >  		/*
+> >  		 * If the memory is already reserved (by another region), we
+> > -		 * should not allow it to be marked nomap.
+> > +		 * should not allow it to be marked nomap, but don't worry
+> > +		 * if the region isn't memory as it won't be mapped.
+> >  		 */
+> > -		if (memblock_is_region_reserved(base, size))
+> > +		if (memblock_overlaps_region(&memblock.memory, base, size) &&
+> > +		    memblock_is_region_reserved(base, size))
 
-Hi,
+One more small thing. Maybe add pr_warn() here?
 
-> commit: 3226b4a4648c6562c642947cee8b90335df911f5 ("[PATCH] selftests/kselftest/runner.sh: Add optional command parameters in settings")
-> url: https://github.com/0day-ci/linux/commits/Cristian-Marussi/selftests-kselftest-runner-sh-Add-optional-command-parameters-in-settings/20211202-222205
-> base: https://git.kernel.org/cgit/linux/kernel/git/shuah/linux-kselftest.git next
-> patch link: https://lore.kernel.org/linux-kselftest/20211202142056.17386-1-cristian.marussi@arm.com
-> 
-> in testcase: kernel-selftests
-> version: kernel-selftests-x86_64-99d09ee9-1_20211206
-> with following parameters:
-> 
-> 	group: group-01
-> 	ucode: 0xde
-> 
-> test-description: The kernel contains a set of "self tests" under the tools/testing/selftests/ directory. These are intended to be small unit tests to exercise individual code paths in the kernel.
-> test-url: https://www.kernel.org/doc/Documentation/kselftest.txt
-> 
-> 
+> >  			return -EBUSY;
+> >  
+> >  		return memblock_mark_nomap(base, size);
 
-This commit was under discussion/not acked nor fully reviewed, not ready
-for upstream queuing really.
-
-Indeed I posted today a V2 that take a different approach:
-
-https://lore.kernel.org/linux-kselftest/20211215095340.50717-1-cristian.marussi@arm.com/T/#u
-
-and should solve also the issue mentioned in this report.
-
-Thanks,
-Cristian
-
+-- 
+Sincerely yours,
+Mike.

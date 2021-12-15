@@ -2,227 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E54647542C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FB0475434
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240782AbhLOIUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 03:20:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240775AbhLOIUg (ORCPT
+        id S240797AbhLOIWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 03:22:19 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:50418 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S240783AbhLOIWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 03:20:36 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE336C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 00:20:35 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id k4so19574100pgb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 00:20:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dVW69TmCJnTv5pUkbvRYzOl3hIL8o0Ev8E5MCNMu3v4=;
-        b=G/3L4rDd1Goqt0d0b2dj/cMhsDvkaMD7Z1+8qFaNab+J/SE+VpMr8z5qIjIgg31BP3
-         6Rgv6T1J2UpaqpYj4Ko/HrsvNIinACGkY9Lq5IoHJmoAfHdOCZaVIS8KCXKSYD+RXgZa
-         /tkVzDLzR++mtz40WJdnBEWAHCVJHeYyEp/qf6PSLI0VfhlzOWEmckna48+po0it3yNf
-         LAXJXzd9ucGOc72u1drmRWGY/oxGZGNbXHlqHYO3Q1Mbr9iGZI5uUeGNv079dUH+i/uQ
-         cRClz28G6WpGzT/Iu1lkboFSdf/KTwa+NTw7eq9XCNDI29f50wCdZFXoICXU1S0PMGXY
-         mLOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dVW69TmCJnTv5pUkbvRYzOl3hIL8o0Ev8E5MCNMu3v4=;
-        b=OFSvyHyGemKENIHsEZe4J5Ow/p8ClWqfczTnZyML0XRhNjuIPswQSU5ZNGZJCIIzpT
-         VzVNAcu5NrUZNgxOYhZwHTTJsAo9DAWVdnYJbtv5B1Zv7vpgqtg1madaJna3NQdkwTFA
-         bNak2cQQh2Bl4B3CqF4C7tD93fA+XZMgI9WuDA62P7NwRmZ/tCh1N6ljQkrvQfhiQ7J9
-         QZ0LMHpwmsYi/ZOqI5ZZ1hFQl1fO+/G4V/n/+OPR2fTbQHIBfHJSLCAdO0hmYRqGQJ1j
-         qLn/iOCqHjx4g+Bmph2ETgxi+FEUJib7vrG35Otaws+9LSliiG5ZmkOB8cguMR5rIVyT
-         XKxA==
-X-Gm-Message-State: AOAM533gbR+eOXcmlNr4x8/eUEv74957otmwOKOLsrbopC9s82owd3Oh
-        GH8s97mXFi6GB9sFLyj9CAwd8w==
-X-Google-Smtp-Source: ABdhPJzqmCCROdTAh4mINIHDWtKReeWzZihdPEwTeamzuw2CuCOAX2lKwuAQZGGVSBG5s+y4UQgjig==
-X-Received: by 2002:a63:5350:: with SMTP id t16mr6987808pgl.321.1639556435096;
-        Wed, 15 Dec 2021 00:20:35 -0800 (PST)
-Received: from google.com ([2401:fa00:1:10:754d:1c44:62a9:6d30])
-        by smtp.gmail.com with ESMTPSA id j127sm1679143pfg.14.2021.12.15.00.20.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 00:20:34 -0800 (PST)
-Date:   Wed, 15 Dec 2021 16:20:31 +0800
-From:   Tzung-Bi Shih <tzungbi@google.com>
-To:     Trevor Wu <trevor.wu@mediatek.com>
-Cc:     broonie@kernel.org, tiwai@suse.com, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, alsa-devel@alsa-project.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, jiaxin.yu@mediatek.com,
-        shumingf@realtek.com
-Subject: Re: [PATCH 1/2] ASoC: mediatek: mt8195: update control for RT5682
- series
-Message-ID: <YbmlT+OSwpGuylsx@google.com>
-References: <20211215065835.3074-1-trevor.wu@mediatek.com>
+        Wed, 15 Dec 2021 03:22:19 -0500
+X-UUID: d792b6e1cce0461682edc83858752f51-20211215
+X-UUID: d792b6e1cce0461682edc83858752f51-20211215
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ed.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1029014839; Wed, 15 Dec 2021 16:22:13 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 15 Dec 2021 16:22:12 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 15 Dec 2021 16:22:12 +0800
+Message-ID: <75833704ac3ffff38a781c582f144c34dcef0e16.camel@mediatek.com>
+Subject: Re: [PATCH] [fuse] alloc_page nofs avoid deadlock
+From:   Ed Tsai <ed.tsai@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Miklos Szeredi <miklos@szeredi.hu>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        chenguanyou <chenguanyou9338@gmail.com>,
+        Stanley Chu =?UTF-8?Q?=28=E6=9C=B1=E5=8E=9F=E9=99=9E=29?= 
+        <stanley.chu@mediatek.com>,
+        "Yong-xuan Wang =?UTF-8?Q?=28=E7=8E=8B=E8=A9=A0=E8=90=B1=29?=" 
+        <Yong-xuan.Wang@mediatek.com>
+Date:   Wed, 15 Dec 2021 16:22:12 +0800
+In-Reply-To: <YbhmF2mVUqNw16x9@kroah.com>
+References: <20210603125242.31699-1-chenguanyou@xiaomi.com>
+         <CAJfpegsEkRnU26Vvo4BTQUmx89Hahp6=RTuyEcPm=rqz8icwUQ@mail.gmail.com>
+         <1fabb91167a86990f4723e9036a0e006293518f4.camel@mediatek.com>
+         <CAJfpegsOSWZpKHqDNE_B489dGCzLr-RVAhimVOsFkxJwMYmj9A@mail.gmail.com>
+         <07c5f2f1e10671bc462f88717f84aae9ee1e4d2b.camel@mediatek.com>
+         <CAJfpegvAJS=An+hyAshkNcTS8A2TM28V2UP4SYycXUw3awOR+g@mail.gmail.com>
+         <YVMz8E1Lg/GZQcjw@miu.piliscsaba.redhat.com>
+         <0cd20f8c582dd0288472408800a02f6093000f1e.camel@mediatek.com>
+         <YbhmF2mVUqNw16x9@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215065835.3074-1-trevor.wu@mediatek.com>
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 02:58:34PM +0800, Trevor Wu wrote:
-> --- a/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1011-rt5682.c
-> +++ b/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1011-rt5682.c
-[...]
-> +static int mt8195_set_bias_level_post(struct snd_soc_card *card,
-> +	struct snd_soc_dapm_context *dapm, enum snd_soc_bias_level level)
-> +{
-> +	struct snd_soc_component *component = dapm->component;
-> +	struct mt8195_mt6359_rt1011_rt5682_priv *priv =
-> +		snd_soc_card_get_drvdata(card);
-> +	int ret = 0;
+On Tue, 2021-12-14 at 17:38 +0800, Greg Kroah-Hartman wrote:
+> On Tue, Dec 14, 2021 at 05:25:01PM +0800, Ed Tsai wrote:
+> > On Tue, 2021-09-28 at 23:25 +0800, Miklos Szeredi wrote:
+> > > On Fri, Sep 24, 2021 at 09:52:35AM +0200, Miklos Szeredi wrote:
+> > > > On Fri, 24 Sept 2021 at 05:52, Ed Tsai <ed.tsai@mediatek.com>
+> > > > wrote:
+> > > > > 
+> > > > > On Wed, 2021-08-18 at 17:24 +0800, Miklos Szeredi wrote:
+> > > > > > On Tue, 13 Jul 2021 at 04:42, Ed Tsai <ed.tsai@mediatek.com
+> > > > > > >
+> > > > > > wrote:
+> > > > > > > 
+> > > > > > > On Tue, 2021-06-08 at 17:30 +0200, Miklos Szeredi wrote:
+> > > > > > > > On Thu, 3 Jun 2021 at 14:52, chenguanyou <
+> > > > > > > > chenguanyou9338@gmail.com>
+> > > > > > > > wrote:
+> > > > > > > > > 
+> > > > > > > > > ABA deadlock
+> > > > > > > > > 
+> > > > > > > > > PID: 17172 TASK: ffffffc0c162c000 CPU: 6 COMMAND:
+> > > > > > > > > "Thread-21"
+> > > > > > > > > 0 [ffffff802d16b400] __switch_to at ffffff8008086a4c
+> > > > > > > > > 1 [ffffff802d16b470] __schedule at ffffff80091ffe58
+> > > > > > > > > 2 [ffffff802d16b4d0] schedule at ffffff8009200348
+> > > > > > > > > 3 [ffffff802d16b4f0] bit_wait at ffffff8009201098
+> > > > > > > > > 4 [ffffff802d16b510] __wait_on_bit at
+> > > > > > > > > ffffff8009200a34
+> > > > > > > > > 5 [ffffff802d16b5b0] inode_wait_for_writeback at
+> > > > > > > > > ffffff800830e1e8
+> > > > > > > > > 6 [ffffff802d16b5e0] evict at ffffff80082fb15c
+> > > > > > > > > 7 [ffffff802d16b620] iput at ffffff80082f9270
+> > > > > > > > > 8 [ffffff802d16b680] dentry_unlink_inode at
+> > > > > > > > > ffffff80082f4c90
+> > > > > > > > > 9 [ffffff802d16b6a0] __dentry_kill at
+> > > > > > > > > ffffff80082f1710
+> > > > > > > > > 10 [ffffff802d16b6d0] shrink_dentry_list at
+> > > > > > > > > ffffff80082f1c34
+> > > > > > > > > 11 [ffffff802d16b750] prune_dcache_sb at
+> > > > > > > > > ffffff80082f18a8
+> > > > > > > > > 12 [ffffff802d16b770] super_cache_scan at
+> > > > > > > > > ffffff80082d55ac
+> > > > > > > > > 13 [ffffff802d16b860] shrink_slab at ffffff8008266170
+> > > > > > > > > 14 [ffffff802d16b900] shrink_node at ffffff800826b420
+> > > > > > > > > 15 [ffffff802d16b980] do_try_to_free_pages at
+> > > > > > > > > ffffff8008268460
+> > > > > > > > > 16 [ffffff802d16ba60] try_to_free_pages at
+> > > > > > > > > ffffff80082680d0
+> > > > > > > > > 17 [ffffff802d16bbe0] __alloc_pages_nodemask at
+> > > > > > > > > ffffff8008256514
+> > > > > > > > > 18 [ffffff802d16bc60] fuse_copy_fill at
+> > > > > > > > > ffffff8008438268
+> > > > > > > > > 19 [ffffff802d16bd00] fuse_dev_do_read at
+> > > > > > > > > ffffff8008437654
+> > > > > > > > > 20 [ffffff802d16bdc0] fuse_dev_splice_read at
+> > > > > > > > > ffffff8008436f40
+> > > > > > > > > 21 [ffffff802d16be60] sys_splice at ffffff8008315d18
+> > > > > > > > > 22 [ffffff802d16bff0] __sys_trace at ffffff8008084014
+> > > > > > > > > 
+> > > > > > > > > PID: 9652 TASK: ffffffc0c9ce0000 CPU: 4 COMMAND:
+> > > > > > > > > "kworker/u16:8"
+> > > > > > > > > 0 [ffffff802e793650] __switch_to at ffffff8008086a4c
+> > > > > > > > > 1 [ffffff802e7936c0] __schedule at ffffff80091ffe58
+> > > > > > > > > 2 [ffffff802e793720] schedule at ffffff8009200348
+> > > > > > > > > 3 [ffffff802e793770] __fuse_request_send at
+> > > > > > > > > ffffff8008435760
+> > > > > > > > > 4 [ffffff802e7937b0] fuse_simple_request at
+> > > > > > > > > ffffff8008435b14
+> > > > > > > > > 5 [ffffff802e793930] fuse_flush_times at
+> > > > > > > > > ffffff800843a7a0
+> > > > > > > > > 6 [ffffff802e793950] fuse_write_inode at
+> > > > > > > > > ffffff800843e4dc
+> > > > > > > > > 7 [ffffff802e793980] __writeback_single_inode at
+> > > > > > > > > ffffff8008312740
+> > > > > > > > > 8 [ffffff802e793aa0] writeback_sb_inodes at
+> > > > > > > > > ffffff80083117e4
+> > > > > > > > > 9 [ffffff802e793b00] __writeback_inodes_wb at
+> > > > > > > > > ffffff8008311d98
+> > > > > > > > > 10 [ffffff802e793c00] wb_writeback at
+> > > > > > > > > ffffff8008310cfc
+> > > > > > > > > 11 [ffffff802e793d00] wb_workfn at ffffff800830e4a8
+> > > > > > > > > 12 [ffffff802e793d90] process_one_work at
+> > > > > > > > > ffffff80080e4fac
+> > > > > > > > > 13 [ffffff802e793e00] worker_thread at
+> > > > > > > > > ffffff80080e5670
+> > > > > > > > > 14 [ffffff802e793e60] kthread at ffffff80080eb650
+> > > > > > > > 
+> > > > > > > > The issue is real.
+> > > > > > > > 
+> > > > > > > > The fix, however, is not the right one.  The
+> > > > > > > > fundamental
+> > > > > > > > problem
+> > > > > > > > is
+> > > > > > > > that fuse_write_inode() blocks on a request to
+> > > > > > > > userspace.
+> > > > > > > > 
+> > > > > > > > This is the same issue that
+> > > > > > > > fuse_writepage/fuse_writepages
+> > > > > > > > face.  In
+> > > > > > > > that case the solution was to copy the page contents to
+> > > > > > > > a
+> > > > > > > > temporary
+> > > > > > > > buffer and return immediately as if the writeback
+> > > > > > > > already
+> > > > > > > > completed.
+> > > > > > > > 
+> > > > > > > > Something similar needs to be done here: send the
+> > > > > > > > FUSE_SETATTR
+> > > > > > > > request
+> > > > > > > > asynchronously and return immediately from
+> > > > > > > > fuse_write_inode().  The
+> > > > > > > > tricky part is to make sure that multiple time updates
+> > > > > > > > for
+> > > > > > > > the
+> > > > > > > > same
+> > > > > > > > inode aren't mixed up...
+> > > > > > > > 
+> > > > > > > > Thanks,
+> > > > > > > > Miklos
+> > > > > > > 
+> > > > > > > Dear Szeredi,
+> > > > > > > 
+> > > > > > > Writeback thread calls fuse_write_inode() and wait for
+> > > > > > > user
+> > > > > > > Daemon
+> > > > > > > to
+> > > > > > > complete this write inode request. The user daemon will
+> > > > > > > alloc_page()
+> > > > > > > after taking this request, and a deadlock could happen
+> > > > > > > when
+> > > > > > > we try
+> > > > > > > to
+> > > > > > > shrink dentry list under memory pressure.
+> > > > > > > 
+> > > > > > > We (Mediatek) glad to work on this issue for mainline and
+> > > > > > > also LTS.
+> > > > > > > So
+> > > > > > > another problem is that we should not change the protocol
+> > > > > > > or
+> > > > > > > feature
+> > > > > > > for stable kernel.
+> > > > > > > 
+> > > > > > > Use GFP_NOFS | __GFP_HIGHMEM can really avoid this by
+> > > > > > > skip
+> > > > > > > the
+> > > > > > > dentry
+> > > > > > > shirnker. It works but degrade the alloc_page success
+> > > > > > > rate.
+> > > > > > > In a
+> > > > > > > more
+> > > > > > > fundamental way, we could cache the contents and return
+> > > > > > > immediately.
+> > > > > > > But how to ensure the request will be done successfully,
+> > > > > > > e.g.,
+> > > > > > > always
+> > > > > > > retry if it fails from daemon.
+> > > > > > 
+> > > > > > Key is where the the dirty metadata is flushed.  To prevent
+> > > > > > deadlock
+> > > > > > it must not be flushed from memory reclaim, so must make
+> > > > > > sure
+> > > > > > that it
+> > > > > > is flushed on close(2) and munmap(2) and not dirtied after
+> > > > > > that.
+> > > > > > 
+> > > > > > I'm working on this currently and hope to get it ready for
+> > > > > > the
+> > > > > > next
+> > > > > > merge window.
+> > > > > > 
+> > > > > > Thanks,
+> > > > > > Miklos
+> > > > > 
+> > > > > Hi Miklos,
+> > > > > 
+> > > > > I'm not sure whether it has already been resolved in
+> > > > > mainline.
+> > > > > If it still WIP, please cc me on future emails.
+> > > > 
+> > > > Hi,
+> > > > 
+> > > > This is taking a bit longer, unfortunately, but I already have
+> > > > something in testing and currently cleaning it up for
+> > > > review.  Hope
+> > > > to
+> > > > post a series today or early next week.
+> > > 
+> > > 
+> > > Here's a minimal patch.  It's been through some iterations and
+> > > some
+> > > testing, but
+> > > more review and testing is definitely welcome.
+> > > 
+> > > Chenguanyou, can you please verify that it fixes the deadlock?
+> > > 
+> > > Thanks,
+> > > Miklos
+> > > 
+> > > ---
+> > > From: Miklos Szeredi <mszeredi@redhat.com>
+> > > Subject: fuse: make sure reclaim doesn't write the inode
+> > > 
+> > > In writeback cache mode mtime/ctime updates are cached, and
+> > > flushed
+> > > to the
+> > > server using the ->write_inode() callback.
+> > > 
+> > > Closing the file will result in a dirty inode being immediately
+> > > written,
+> > > but in other cases the inode can remain dirty after all
+> > > references
+> > > are
+> > > dropped.  This result in the inode being written back from
+> > > reclaim,
+> > > which
+> > > can deadlock on a regular allocation while the request is being
+> > > served.
+> > > 
+> > > The usual mechanisms (GFP_NOFS/PF_MEMALLOC*) don't work for FUSE,
+> > > because
+> > > serving a request involves unrelated userspace process(es).
+> > > 
+> > > Instead do the same as for dirty pages: make sure the inode is
+> > > written
+> > > before the last reference is gone.
+> > > 
+> > >  - fuse_vma_close(): flush times in addition to the dirty pages
+> > > 
+> > >  - fallocate(2)/copy_file_range(2): these call file_update_time()
+> > > or
+> > >    file_modified(), so flush the inode before returning from the
+> > > call
+> > > 
+> > >  - unlink(2), link(2) and rename(2): these call
+> > > fuse_update_ctime(),
+> > > so
+> > >    flush the ctime directly from this helper
+> > > 
+> > > Reported-by: chenguanyou <chenguanyou@xiaomi.com>
+> > > Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+> > > ---
+> > >  fs/fuse/dir.c    |    8 ++++++++
+> > >  fs/fuse/file.c   |   24 +++++++++++++++++++++---
+> > >  fs/fuse/fuse_i.h |    1 +
+> > >  3 files changed, 30 insertions(+), 3 deletions(-)
+> > > 
+> > > --- a/fs/fuse/dir.c
+> > > +++ b/fs/fuse/dir.c
+> > > @@ -738,12 +738,20 @@ static int fuse_symlink(struct user_name
+> > >  	return create_new_entry(fm, &args, dir, entry, S_IFLNK);
+> > >  }
+> > >  
+> > > +void fuse_flush_time_update(struct inode *inode)
+> > > +{
+> > > +	int err = sync_inode_metadata(inode, 1);
+> > > +
+> > > +	mapping_set_error(inode->i_mapping, err);
+> > > +}
+> > > +
+> > >  void fuse_update_ctime(struct inode *inode)
+> > >  {
+> > >  	fuse_invalidate_attr(inode);
+> > >  	if (!IS_NOCMTIME(inode)) {
+> > >  		inode->i_ctime = current_time(inode);
+> > >  		mark_inode_dirty_sync(inode);
+> > > +		fuse_flush_time_update(inode);
+> > >  	}
+> > >  }
+> > >  
+> > > --- a/fs/fuse/file.c
+> > > +++ b/fs/fuse/file.c
+> > > @@ -1847,6 +1847,17 @@ int fuse_write_inode(struct inode *inode
+> > >  	struct fuse_file *ff;
+> > >  	int err;
+> > >  
+> > > +	/*
+> > > +	 * Inode is always written before the last reference is dropped
+> > > and
+> > > +	 * hence this should not be reached from reclaim.
+> > > +	 *
+> > > +	 * Writing back the inode from reclaim can deadlock if the
+> > > request
+> > > +	 * processing itself needs an allocation.  Allocations
+> > > triggering
+> > > +	 * reclaim while serving a request can't be prevented, because
+> > > it can
+> > > +	 * involve any number of unrelated userspace processes.
+> > > +	 */
+> > > +	WARN_ON(wbc->for_reclaim);
+> > > +
+> > >  	ff = __fuse_write_file_get(fi);
+> > >  	err = fuse_flush_times(inode, ff);
+> > >  	if (ff)
+> > > @@ -2339,12 +2350,15 @@ static int fuse_launder_page(struct page
+> > >  }
+> > >  
+> > >  /*
+> > > - * Write back dirty pages now, because there may not be any
+> > > suitable
+> > > - * open files later
+> > > + * Write back dirty data/metadata now (there may not be any
+> > > suitable
+> > > + * open files later for data)
+> > >   */
+> > >  static void fuse_vma_close(struct vm_area_struct *vma)
+> > >  {
+> > > -	filemap_write_and_wait(vma->vm_file->f_mapping);
+> > > +	int err;
+> > > +
+> > > +	err = write_inode_now(vma->vm_file->f_mapping->host, 1);
+> > > +	mapping_set_error(vma->vm_file->f_mapping, err);
+> > >  }
+> > >  
+> > >  /*
+> > > @@ -3001,6 +3015,8 @@ static long fuse_file_fallocate(struct f
+> > >  	if (lock_inode)
+> > >  		inode_unlock(inode);
+> > >  
+> > > +	fuse_flush_time_update(inode);
+> > > +
+> > >  	return err;
+> > >  }
+> > >  
+> > > @@ -3110,6 +3126,8 @@ static ssize_t __fuse_copy_file_range(st
+> > >  	inode_unlock(inode_out);
+> > >  	file_accessed(file_in);
+> > >  
+> > > +	fuse_flush_time_update(inode_out);
+> > > +
+> > >  	return err;
+> > >  }
+> > >  
+> > > --- a/fs/fuse/fuse_i.h
+> > > +++ b/fs/fuse/fuse_i.h
+> > > @@ -1145,6 +1145,7 @@ int fuse_allow_current_process(struct fu
+> > >  
+> > >  u64 fuse_lock_owner_id(struct fuse_conn *fc, fl_owner_t id);
+> > >  
+> > > +void fuse_flush_time_update(struct inode *inode);
+> > >  void fuse_update_ctime(struct inode *inode);
+> > >  
+> > >  int fuse_update_attributes(struct inode *inode, struct file
+> > > *file);
+> > 
+> > Hi Mikloz, Greg,
+> > 
+> > This deadlock issue could be raised in high memory pressure and the
+> > patch has been merged in commit 5c791fe ("fuse: make sure reclaim
+> > doesn't write the inode").
+> > 
+> > Can we take it to the LTS version?
+> 
+> What kernel tree(s) do you want this backported to?  Have you tested
+> it
+> that it will apply cleanly and work?
+> 
+> thanks,
+> 
+> greg k-h
 
-ret doesn't need to be initialized.
+Hi Greg, I want to take this commit to 5.10 LTS. This can be work to
+resolve the deadlock issue. Also, I have done some monkey tests on our
+ACK 5.10 phone to confirm the stability.
 
-> +	/*
-> +	 * It's required to control mclk directly in the set_bias_level_post
-> +	 * function for rt5682 and rt5682s codec, or the unexpected pop happens
-> +	 * at the end of playback.
-> +	 */
-> +	if (!component ||
-> +	    (strcmp(component->name, RT5682_DEV0_NAME) &&
-> +	    strcmp(component->name, RT5682S_DEV0_NAME)))
-> +		return 0;
-> +
-> +	if (IS_ERR(priv->i2so1_mclk))
-> +		return 0;
+Best,
 
-I doubt if it needs to check priv->i2so1_mclk.  In other words, if IS_ERR(priv->i2so1_mclk) is true in _probe, does mt8195_set_bias_level_post() get called?
+Ed Tsai
 
-> +	switch (level) {
-> +	case SND_SOC_BIAS_OFF:
-> +		if (!__clk_is_enabled(priv->i2so1_mclk))
-> +			return 0;
-> +
-> +		dev_dbg(card->dev, "Disable i2so1");
-> +		clk_disable_unprepare(priv->i2so1_mclk);
-
-I would suggest move dev_dbg() later than clk_disable_unprepare() which means "Disable i2so1" is done.
-
-> +		break;
-> +	case SND_SOC_BIAS_ON:
-> +		dev_dbg(card->dev, "Enable i2so1");
-> +		ret = clk_prepare_enable(priv->i2so1_mclk);
-> +		if (ret) {
-> +			dev_err(card->dev, "Can't enable mclk, err: %d\n", ret);
-
-The error message can be more specific.  "Cannot enable i2so1" for example.
-
-> +			return ret;
-> +		}
-
-Also, I would suggest move dev_dbg() later than clk_prepare_enable().  Otherwise, it could fail to prepare or enable but still can see "Enable i2so1" message.
-
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return ret;
-
-The function doesn't use any gotos.  To be concise, "return 0;".
-
-> @@ -1072,6 +1119,19 @@ static int mt8195_mt6359_rt1011_rt5682_dev_probe(struct platform_device *pdev)
->  		return -EINVAL;
->  	}
->  
-> +	priv->i2so1_mclk = devm_clk_get(&pdev->dev, "i2so1_mclk");
-> +	if (IS_ERR(priv->i2so1_mclk)) {
-> +		ret = PTR_ERR(priv->i2so1_mclk);
-> +		if (ret == -ENOENT) {
-> +			dev_dbg(&pdev->dev,
-> +				"Failed to get i2so1_mclk, defer probe\n");
-> +			return -EPROBE_DEFER;
-> +		}
-
-Does devm_clk_get_optional() could make the block more concise?
-
-> +
-> +		dev_err(&pdev->dev, "Failed to get i2so1_mclk, err:%d\n", ret);
-
-If devm_clk_get() is possible to return -EPROBE_DEFER too, use dev_err_probe().
-
-> --- a/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c
-> +++ b/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c
-[...]
-> +static int mt8195_set_bias_level_post(struct snd_soc_card *card,
-> +	struct snd_soc_dapm_context *dapm, enum snd_soc_bias_level level)
-> +{
-> +	struct snd_soc_component *component = dapm->component;
-> +	struct mt8195_mt6359_rt1019_rt5682_priv *priv =
-> +		snd_soc_card_get_drvdata(card);
-> +	int ret = 0;
-
-Ditto, see comments above.
-
-> +
-> +	/*
-> +	 * It's required to control mclk directly in the set_bias_level_post
-> +	 * function for rt5682 and rt5682s codec, or the unexpected pop happens
-> +	 * at the end of playback.
-> +	 */
-> +	if (!component ||
-> +	    (strcmp(component->name, RT5682_DEV0_NAME) &&
-> +	    strcmp(component->name, RT5682S_DEV0_NAME)))
-> +		return 0;
-> +
-> +	if (IS_ERR(priv->i2so1_mclk))
-> +		return 0;
-
-Ditto, see comments above.
-
-> +
-> +	switch (level) {
-> +	case SND_SOC_BIAS_OFF:
-> +		if (!__clk_is_enabled(priv->i2so1_mclk))
-> +			return 0;
-> +
-> +		dev_dbg(card->dev, "Disable i2so1");
-> +		clk_disable_unprepare(priv->i2so1_mclk);
-> +		break;
-> +	case SND_SOC_BIAS_ON:
-> +		dev_dbg(card->dev, "Enable i2so1");
-> +		ret = clk_prepare_enable(priv->i2so1_mclk);
-> +		if (ret) {
-> +			dev_err(card->dev, "Can't enable mclk, err: %d\n", ret);
-> +			return ret;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-
-Ditto, see comments above for the block.
-
-> +
-> +	return ret;
-
-Ditto, see comments above.
-
-> @@ -1285,6 +1326,19 @@ static int mt8195_mt6359_rt1019_rt5682_dev_probe(struct platform_device *pdev)
->  		return -EINVAL;
->  	}
->  
-> +	priv->i2so1_mclk = devm_clk_get(&pdev->dev, "i2so1_mclk");
-> +	if (IS_ERR(priv->i2so1_mclk)) {
-> +		ret = PTR_ERR(priv->i2so1_mclk);
-> +		if (ret == -ENOENT) {
-> +			dev_dbg(&pdev->dev,
-> +				"Failed to get i2so1_mclk, defer probe\n");
-> +			return -EPROBE_DEFER;
-> +		}
-> +
-> +		dev_err(&pdev->dev, "Failed to get i2so1_mclk, err:%d\n", ret);
-> +		return ret;
-> +	}
-
-Ditto, see comments above for the block.

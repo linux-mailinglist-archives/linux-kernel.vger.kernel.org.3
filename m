@@ -2,93 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D564756CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E01DA4756CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236729AbhLOKpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
+        id S241744AbhLOKqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbhLOKpP (ORCPT
+        with ESMTP id S231962AbhLOKqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:45:15 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5494CC061574;
-        Wed, 15 Dec 2021 02:45:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ri+zdawudXgxAzscU1cRqkMc+UJ/ZceDl69E/eAootg=; b=bF1U3XaTIPTP8OzTZo/py3pL1n
-        HeIi5p+wrTocF4lUzT4+WF7Uq5b49yYOANErk8pFisKWn0r1Y0PzUVZP1UWlzn5CKIlUfPNRyy/A5
-        dFQG8x3mpfmuh8FCl2fO0mlZQwzLHD5nPoweoGFYryCLvxhf+hDUkz0CCiz4DoPEdxkwHeZbbjyOb
-        PNu/hP9gyONi03R84gugzTBWGA5DpC6rY/n86zDWnjHhUrG/mrEarrCnj+S2jh3jccKmuW0kF0EuL
-        pa75hefUOMCP/on2MW9l3iEjSbiyXfU57TwSITSmJH1ZWAVa9FXXuoe6FF/k+rYgOYRWbx0H3o9md
-        5sYHl95g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mxRmE-001URT-C3; Wed, 15 Dec 2021 10:44:50 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6497330003C;
-        Wed, 15 Dec 2021 11:44:49 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0B9EC2B3206F8; Wed, 15 Dec 2021 11:44:49 +0100 (CET)
-Date:   Wed, 15 Dec 2021 11:44:49 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Peter Oskolkov <posk@posk.io>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, mgorman@suse.de,
-        bristot@redhat.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Paul Turner <pjt@google.com>, Peter Oskolkov <posk@google.com>,
-        Andrei Vagin <avagin@google.com>, Jann Horn <jannh@google.com>,
-        Thierry Delisle <tdelisle@uwaterloo.ca>
-Subject: Re: [RFC][PATCH 0/3] sched: User Managed Concurrency Groups
-Message-ID: <YbnHIRdv/8bjZxX/@hirez.programming.kicks-ass.net>
-References: <20211214204445.665580974@infradead.org>
- <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
+        Wed, 15 Dec 2021 05:46:09 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE4CC061574;
+        Wed, 15 Dec 2021 02:46:09 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id z6so20347301pfe.7;
+        Wed, 15 Dec 2021 02:46:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=visCgipwq+8Dh1e1D30M7xrsBqNGiZx6/prFL9FwtgE=;
+        b=XmyphHpWmaYjkQUXlDDa9wygZdpKwEQXOWQ2VRhWPdqBxFhGt2DiwfaCTvsuE+PqXn
+         arxWRp8LsnWoumx6u1iT2jni7JPVVgwTXlWwBGduSyvq9vIZZY1mlexCzDhN6mogTxyl
+         m6g6iCuNpQqryMVwK3uxMWVcmECVFOrswcgWeO+kzofgEAJ/+bxzI+mt/eDA7dW0I0nS
+         wfVVwPEetKLf/mu0GWP0fPwp/f+fo83051Xp+vkujYyVNquF9ZvzKChwZWa4SNWwlf/s
+         cuxjRr0XNNJHFaJIZkVFInUnaTb793qx4C06xjrI+77CU/izOrvNR5EkdrvHiIva3Yyw
+         umPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=visCgipwq+8Dh1e1D30M7xrsBqNGiZx6/prFL9FwtgE=;
+        b=SVMmiMyYLZW3J7lFqZpi9bPLFh0Dc+lgx42fzeHqk/V3f/UAOAxp4Uu9SHBDzfyoj0
+         vd37eQ4xavmmMXNyt3xgATOuU5HG2XIKUKkZnhp3IzGXgPbxSf29p/Uce8v8QlmPgk83
+         WwXLweCzQvjRb5OnDC1BUI/5/R9nZnmOuVMYo0LdB5XrGrN82RCGJke5/CyTbXslQM2K
+         EtZB0BUs4VmadKjwVRemo8+yB9wATokt659TxCPwJwT0PA3tS3P47/0Ivs2IUVBbE6rS
+         tovPQyiSg2bDgaObTXPQkf5ojURKIKwGMPvRKr1dAdaysRRkP+tmkkfQgP7UL9IslRua
+         abmA==
+X-Gm-Message-State: AOAM533elvS2YLkxNjW6w74WOKO95gzSMMwNGGPEwbA6Ql6O5+RzpBPR
+        PxHbQUMRVodkNdU+9LZLts0=
+X-Google-Smtp-Source: ABdhPJzcKg4Xu/3DOSqkJv15X4/w+QuYtputehhKUpZwZScxRmotY3js/hGUIXTq3umFz/Zo/rSmfg==
+X-Received: by 2002:a05:6a00:a14:b0:4a0:945:16fa with SMTP id p20-20020a056a000a1400b004a0094516famr8433515pfh.9.1639565168973;
+        Wed, 15 Dec 2021 02:46:08 -0800 (PST)
+Received: from localhost.lan ([2400:4070:175b:7500::7a7])
+        by smtp.gmail.com with ESMTPSA id v70sm1566298pgd.91.2021.12.15.02.46.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 02:46:08 -0800 (PST)
+Received: from localhost (localhost [IPv6:::1])
+        by localhost.lan (Postfix) with ESMTPSA id 96CFA90090A;
+        Wed, 15 Dec 2021 10:46:06 +0000 (GMT)
+Date:   Wed, 15 Dec 2021 10:46:05 +0000
+From:   Vincent Pelletier <plr.vincent@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Salah Triki <salah.triki@gmail.com>,
+        Dean Anderson <dean@sensoray.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robert Baldyga <r.baldyga@samsung.com>
+Subject: Re: [PATCH] usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_reset.
+Message-ID: <20211215104605.3e3a4d82@gmail.com>
+In-Reply-To: <96948a63d1a33da63b4f226e89ea90d21e9b0f82.1639528369.git.plr.vincent@gmail.com>
+References: <96948a63d1a33da63b4f226e89ea90d21e9b0f82.1639528369.git.plr.vincent@gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 07:46:25PM -0800, Peter Oskolkov wrote:
++Robert Baldyga
 
-> Anyway, I'll test your patchset over the next week or so and let you
-> know if anything really needed is missing (other than waking an idle
-> server if there is one on a worker wakeup; this piece is definitely
-> needed).
+On Wed, 15 Dec 2021 00:32:49 +0000, Vincent Pelletier <plr.vincent@gmail.com> wrote:
+> ffs_data_reset is called from both ffs_fs_kill_sb and ffs_ep0_release, so
+> it ends up being called twice when userland closes ep0 and then unmounts
+> f_fs. If userland provided an eventfd along with function's USB
+> descriptors, ffs_data_clear (via ffs_data_reset) ends up calling
+> eventfd_ctx_put as many times, causing a refcount underflow warning
+> (as of 5.15 at least). NULL-ify ffs_eventfd to prevent these extraneous
+> eventfd_ctx_put calls.
+> 
+> For completeness, ffs_data_clear actually ends up being called thrice, the
+> last call being before the whole ffs structure gets freed, so when this
+> specific sequence happens there is a second underflow happening (but not
+> being reported):
+> 
+> /sys/kernel/debug/tracing# modprobe usb_f_fs
+> /sys/kernel/debug/tracing# echo ffs_data_clear > set_ftrace_filter
+> /sys/kernel/debug/tracing# echo function > current_tracer
+> /sys/kernel/debug/tracing# echo 1 > tracing_on
+> (setup gadget, run and kill function userland process, teardown gadget)
+> /sys/kernel/debug/tracing# echo 0 > tracing_on
+> /sys/kernel/debug/tracing# cat trace
+> # tracer: function
+> #
+> # entries-in-buffer/entries-written: 3/3   #P:1
+> #
+> #                                _-----=> irqs-off
+> #                               / _----=> need-resched
+> #                              | / _---=> hardirq/softirq
+> #                              || / _--=> preempt-depth
+> #                              ||| / _-=> migrate-disable
+> #                              |||| /     delay
+> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> #              | |         |   |||||     |         |
+>  smartcard-openp-436     [000] .....  1946.208786: ffs_data_clear <-ffs_data_closed
+>  smartcard-openp-431     [000] .....  1946.279147: ffs_data_clear <-ffs_data_closed
+>  smartcard-openp-431     [000] .n...  1946.905512: ffs_data_clear <-ffs_data_put
+> 
+> Warning output corresponding to above trace:
+> [ 1946.284139] WARNING: CPU: 0 PID: 431 at lib/refcount.c:28 refcount_warn_saturate+0x110/0x15c
+> [ 1946.293094] refcount_t: underflow; use-after-free.
+> [ 1946.298164] Modules linked in: usb_f_ncm(E) u_ether(E) usb_f_fs(E) hci_uart(E) btqca(E) btrtl(E) btbcm(E) btintel(E) bluetooth(E) nls_ascii(E) nls_cp437(E) vfat(E) fat(E) bcm2835_v4l2(CE) bcm2835_mmal_vchiq(CE) videobuf2_vmalloc(E) videobuf2_memops(E) sha512_generic(E) videobuf2_v4l2(E) sha512_arm(E) videobuf2_common(E) videodev(E) cpufreq_dt(E) snd_bcm2835(CE) brcmfmac(E) mc(E) vc4(E) ctr(E) brcmutil(E) snd_soc_core(E) snd_pcm_dmaengine(E) drbg(E) snd_pcm(E) snd_timer(E) snd(E) soundcore(E) drm_kms_helper(E) cec(E) ansi_cprng(E) rc_core(E) syscopyarea(E) raspberrypi_cpufreq(E) sysfillrect(E) sysimgblt(E) cfg80211(E) max17040_battery(OE) raspberrypi_hwmon(E) fb_sys_fops(E) regmap_i2c(E) ecdh_generic(E) rfkill(E) ecc(E) bcm2835_rng(E) rng_core(E) vchiq(CE) leds_gpio(E) libcomposite(E) fuse(E) configfs(E) ip_tables(E) x_tables(E) autofs4(E) ext4(E) crc16(E) mbcache(E) jbd2(E) crc32c_generic(E) sdhci_iproc(E) sdhci_pltfm(E) sdhci(E)
+> [ 1946.399633] CPU: 0 PID: 431 Comm: smartcard-openp Tainted: G         C OE     5.15.0-1-rpi #1  Debian 5.15.3-1
+> [ 1946.417950] Hardware name: BCM2835
+> [ 1946.425442] Backtrace:
+> [ 1946.432048] [<c08d60a0>] (dump_backtrace) from [<c08d62ec>] (show_stack+0x20/0x24)
+> [ 1946.448226]  r7:00000009 r6:0000001c r5:c04a948c r4:c0a64e2c
+> [ 1946.458412] [<c08d62cc>] (show_stack) from [<c08d9ae0>] (dump_stack+0x28/0x30)
+> [ 1946.470380] [<c08d9ab8>] (dump_stack) from [<c0123500>] (__warn+0xe8/0x154)
+> [ 1946.482067]  r5:c04a948c r4:c0a71dc8
+> [ 1946.490184] [<c0123418>] (__warn) from [<c08d6948>] (warn_slowpath_fmt+0xa0/0xe4)
+> [ 1946.506758]  r7:00000009 r6:0000001c r5:c0a71dc8 r4:c0a71e04
+> [ 1946.517070] [<c08d68ac>] (warn_slowpath_fmt) from [<c04a948c>] (refcount_warn_saturate+0x110/0x15c)
+> [ 1946.535309]  r8:c0100224 r7:c0dfcb84 r6:ffffffff r5:c3b84c00 r4:c24a17c0
+> [ 1946.546708] [<c04a937c>] (refcount_warn_saturate) from [<c0380134>] (eventfd_ctx_put+0x48/0x74)
+> [ 1946.564476] [<c03800ec>] (eventfd_ctx_put) from [<bf5464e8>] (ffs_data_clear+0xd0/0x118 [usb_f_fs])
+> [ 1946.582664]  r5:c3b84c00 r4:c2695b00
+> [ 1946.590668] [<bf546418>] (ffs_data_clear [usb_f_fs]) from [<bf547cc0>] (ffs_data_closed+0x9c/0x150 [usb_f_fs])
+> [ 1946.609608]  r5:bf54d014 r4:c2695b00
+> [ 1946.617522] [<bf547c24>] (ffs_data_closed [usb_f_fs]) from [<bf547da0>] (ffs_fs_kill_sb+0x2c/0x30 [usb_f_fs])
+> [ 1946.636217]  r7:c0dfcb84 r6:c3a12260 r5:bf54d014 r4:c229f000
+> [ 1946.646273] [<bf547d74>] (ffs_fs_kill_sb [usb_f_fs]) from [<c0326d50>] (deactivate_locked_super+0x54/0x9c)
+> [ 1946.664893]  r5:bf54d014 r4:c229f000
+> [ 1946.672921] [<c0326cfc>] (deactivate_locked_super) from [<c0326df8>] (deactivate_super+0x60/0x64)
+> [ 1946.690722]  r5:c2a09000 r4:c229f000
+> [ 1946.698706] [<c0326d98>] (deactivate_super) from [<c0349a28>] (cleanup_mnt+0xe4/0x14c)
+> [ 1946.715553]  r5:c2a09000 r4:00000000
+> [ 1946.723528] [<c0349944>] (cleanup_mnt) from [<c0349b08>] (__cleanup_mnt+0x1c/0x20)
+> [ 1946.739922]  r7:c0dfcb84 r6:c3a12260 r5:c3a126fc r4:00000000
+> [ 1946.750088] [<c0349aec>] (__cleanup_mnt) from [<c0143d10>] (task_work_run+0x84/0xb8)
+> [ 1946.766602] [<c0143c8c>] (task_work_run) from [<c010bdc8>] (do_work_pending+0x470/0x56c)
+> [ 1946.783540]  r7:5ac3c35a r6:c0d0424c r5:c200bfb0 r4:c200a000
+> [ 1946.793614] [<c010b958>] (do_work_pending) from [<c01000c0>] (slow_work_pending+0xc/0x20)
+> [ 1946.810553] Exception stack(0xc200bfb0 to 0xc200bff8)
+> [ 1946.820129] bfa0:                                     00000000 00000000 000000aa b5e21430
+> [ 1946.837104] bfc0: bef867a0 00000001 bef86840 00000034 bef86838 bef86790 bef86794 bef867a0
+> [ 1946.854125] bfe0: 00000000 bef86798 b67b7a1c b6d626a4 60000010 b5a23760
+> [ 1946.865335]  r10:00000000 r9:c200a000 r8:c0100224 r7:00000034 r6:bef86840 r5:00000001
+> [ 1946.881914]  r4:bef867a0
+> [ 1946.888793] ---[ end trace 7387f2a9725b28d0 ]---
+> 
+> Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
 
-Right, so the problem I'm having is that a single idle server ptr like
-before can trivially miss waking annother idle server.
+I checked the chqnge history, and I believe this issue is present since
+eventfd support has been introduced. I'm mainly sending this email to get
+Robert's feedback, but while I'm here I believe this change could also
+have:
 
-Suppose:
+Fixes: 5e33f6fdf735 ("usb: gadget: ffs: add eventfd notification about ffs events")
 
-	umcg::idle_server_tid_ptr
-
-Then the enqueue_and_wake() thing from the last patch would:
-
-	idle_server_tid = xchg((pid_t __user *)self->idle_server_tid_ptr, 0);
-
-to consume the tid, and then use that to enqueue and wake. But what if a
-second wakeup happens right after that? There might be a second idle
-server, but we'll never find it, because userspace hasn't had time to
-update the field again.
-
-Alternatively, we do a linked list of servers, but then every such
-wakeup needs to iterate the whole list, looking for one that has
-UMCG_TF_IDLE set, or something like that, but that lookup is bad for
-performance.
-
-So I'm really not sure what way to go yet.
+> ---
+>  drivers/usb/gadget/function/f_fs.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index e20c19a0f106..437141a11ec6 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1791,6 +1791,7 @@ static void ffs_data_reset(struct ffs_data *ffs)
+>  	ffs_data_clear(ffs);
+>  
+>  	ffs->epfiles = NULL;
+> +	ffs->ffs_eventfd = NULL;
+>  	ffs->raw_descs_data = NULL;
+>  	ffs->raw_descs = NULL;
+>  	ffs->raw_strings = NULL;
+-- 
+Vincent Pelletier
+GPG fingerprint 983A E8B7 3B91 1598 7A92 3845 CAC9 3691 4257 B0C1

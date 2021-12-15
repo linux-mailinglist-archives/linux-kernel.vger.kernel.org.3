@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 641494765D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4574765F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbhLOW2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 17:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbhLOW2L (ORCPT
+        id S231351AbhLOWdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 17:33:13 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:50844 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230453AbhLOWdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 17:28:11 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06E5C061223
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:28:08 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso26727550otj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:28:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jT4a+xEhIK+SVAkBmdeCICawKg4FNoRvYcNXbWrlWNc=;
-        b=Hc5/fDs4WRE4QmhZqB4/bFEqCnNTQkbEj2u9x4T6p2xlyWopfm8NqP8EsHEYuNF+JV
-         LUD4HQMVRL3Oi95SdU0xn1sfxzzEPEdAkXlcU3gek/wUkaO46Wicdsk0l8iaebwda0UL
-         h/UTw+jDFkc7wWsigbTqoAEow1qx8KBmmJ9L6Aobo2AiW2UV1bSHvylAE6becG/JwO9C
-         M5n6kccexw0Z+33zxZV3B3KD81Bq1w1RlEi0V7BYtFDM8e5skJWbrtT31WVKYUGKi3Q8
-         2ySLmTvQ3AnprjhfpHEryTf78giV6tySR06FDgAvNtGreNnhxnbY3KfbXrz5AvTcISuU
-         MztA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jT4a+xEhIK+SVAkBmdeCICawKg4FNoRvYcNXbWrlWNc=;
-        b=d6bParirJ4YiFHIPj+iOKtAHH7pHdyPfNYfZXHmlE7iLdFKa4ebeOBcn+Vxk36B8UN
-         9BRb70owp5GwoPOlDWE/o/pVJv8M2F3DBk6XcsWZ8U7svvQLONHinYuj4aqMffIBJyFL
-         kQBFWZW8zQQLzpqtkb/sQZpjsnuMS010yvuICNcFffLQi3xQUUa82aVdsr5HQLAHx4zd
-         01T75QyAPcjq1W7SYpg6MMwEIcZVwxrEFK7dF3sCxG8HKtm3oddwWeg8JfwXiMKH5P48
-         Vrh+hdzQ+8ClkLxIO2xECf7XcNZ6VwoUiveCOJBdfsxwR37m4BYR4lg307CAIbH5etLt
-         De9A==
-X-Gm-Message-State: AOAM531co0Jjm+CYMJb+4/49hbdPTUSVa9NoWitCTFiA0FL1WpAIAS+l
-        SHVf6U2QxC8L1/okgHB4+o/82g==
-X-Google-Smtp-Source: ABdhPJyj7hr2nIOKDGVEPflX6oa9DhTDQBWoBdlSnXRKjmat/ygobjRbdzcjKqxvDI9f19+p2efppw==
-X-Received: by 2002:a05:6830:1358:: with SMTP id r24mr10762267otq.8.1639607288210;
-        Wed, 15 Dec 2021 14:28:08 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t14sm700500oth.81.2021.12.15.14.28.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:28:07 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Jason Wang <wangborong@cdjrlc.com>
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH] soc: qcom: rpmh-rsc: Fix typo in a comment
-Date:   Wed, 15 Dec 2021 16:27:41 -0600
-Message-Id: <163960723734.3062250.6877130242356070905.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211211090626.248801-1-wangborong@cdjrlc.com>
-References: <20211211090626.248801-1-wangborong@cdjrlc.com>
+        Wed, 15 Dec 2021 17:33:12 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639607590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0wLjOR/truiw3spglNpgdzWcIOuNDZ50DiBaTN0NPKk=;
+        b=g4lNVMEiBdsmsS70bHrFSbfGrJkpcZVhgKzg3oerl6zDK584XIigYe2hIUIFYGMc3vQ01F
+        6ntpsZNerL5J8tnkXVqR0lyxOvxuA5D3g8mQw10s+eRb85IkuMS8u0vIS5rUMYsOkPmi48
+        6P4IK629TgrDdnMrN8aCYGxphf8dTo7jAKu9z3j7fX05CVpP+U+1zeMz2x8WguqMVBFRnt
+        aBBYxRbHMnhhX6TNhxJheqLdvGnlvG3jn5jQYjHumF5rJkQDiT6TR3i/vXn8BZwX4NQqQ2
+        dmecYBpxEcmuasSPzX+fvj8MHfU9QUYeGUZiywYrpXp4LAB5f7sc3uDM6paUfQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639607590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0wLjOR/truiw3spglNpgdzWcIOuNDZ50DiBaTN0NPKk=;
+        b=bU2SbwGd4BkXXwrvUdscO2en1CKdqahC4I10BIaDCJOLiL1HN85Tefc7JsdMm0oplfn+z3
+        GrRG+qBrAZlKlXAw==
+To:     John Stultz <john.stultz@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Joel Daniels <jdaniels@sent.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, x86@kernel.org
+Subject: Re: Time keeping while suspended in the presence of persistent
+ clock drift
+In-Reply-To: <CALAqxLWe13ZghdWphzWZZsRGa+MeAH58syfem6ktDFHF0WG4Dg@mail.gmail.com>
+References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
+ <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com>
+ <87wnkbuuuz.ffs@tglx>
+ <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
+ <8735mvthk6.ffs@tglx>
+ <2ab24da8-e37d-426a-9500-b7541d21f8a3@www.fastmail.com>
+ <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
+ <Ybpe/ND+MQq6tqoR@piout.net>
+ <CALAqxLWe13ZghdWphzWZZsRGa+MeAH58syfem6ktDFHF0WG4Dg@mail.gmail.com>
+Date:   Wed, 15 Dec 2021 23:33:10 +0100
+Message-ID: <87pmpxlcrd.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Dec 2021 17:06:26 +0800, Jason Wang wrote:
-> The double `for' in the comment in line 694 is repeated. Remove one
-> of them from the comment.
-> 
-> 
+On Wed, Dec 15 2021 at 14:02, John Stultz wrote:
+> On Wed, Dec 15, 2021 at 1:32 PM Alexandre Belloni
+>> I'd rather lean towards the timekeeping code doing that. The RTC
+>
+> Heh, touche'!  :)
+>
+>> subsystem doesn't know which RTC has to be used.
+>
+> Though the RTC layer *is* the one that tracks which RTC is used, via
+> the logic in drivers/rtc/class.c, and the timekeeping core already has
+> adjtimex for timekeeping corrections, so if we're correcting
+> underlying RTCs it seems such tuning would best be done in the RTC
+> layer.
+>
+> Though how the persistent_clock interface ties into such corrections
+> would be a separate thing.
 
-Applied, thanks!
+Might be the final trigger to get rid of that leftover from the last
+millenium?
 
-[1/1] soc: qcom: rpmh-rsc: Fix typo in a comment
-      commit: 73efacc6bd1d58e9b318f4861072501d97ebf7c4
+Thanks,
 
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+        tglx

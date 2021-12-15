@@ -2,867 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AA8475A5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FF0475A60
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243224AbhLOONt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243217AbhLOONs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:13:48 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD60C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 06:13:48 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id s139so31730456oie.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 06:13:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=Y4zhr1qBpQouWAjQmvQmYm8AO9iMhLv9gsqOBViL2VY=;
-        b=fCTSIupul7HV3t0Pc2YRbF5joKjanOEBO8j7BSRvcj4Nwvczd/l0R8QpqDInjzUDgI
-         ISXaKJWrUhb/qLJLFD6OJwp/5oVLPs/YSJwZ9T8wG7UZJq8xu4qH5WS9LcmicHzwaiR2
-         1Mjg+45dc86B478Ip/vQIoCDq0CHPG5tgoGOP9kcJUlbH9+kX+8ccMhmdQSbGzf21P7S
-         S3fMEgUM8zzp6Iitp5jJFbg2fAHeWYfAkskGEbanskX84I6Uxzm/flbmlgEsJ/6yoWYw
-         3Lf5FNYHeocrymRGeeeCsyO9iK40rNmhMiZzsolpitHW6gQdRKfwOQb8VPpChhyjaUuz
-         lxxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=Y4zhr1qBpQouWAjQmvQmYm8AO9iMhLv9gsqOBViL2VY=;
-        b=SMblPV/z2RcW9pjT/l1z0hGSdastkcZHl5g76iFU/mGKRk3a6oOBHJmc+acuySK2VG
-         uWqfsdBcA2UfcTClsgfNy4590d1u7PUyC8p2dRUEaHlXZT4j9QiMiNWc8/wyDUrkWLGn
-         Wljvzld+bg6FDcxscEaAHsjU05RviE4+9uaZ6eOyJxFQQ7SYH2AZCGg0fnXRZe6eNzQ6
-         5uqM1OfdmLtxVHn6rrqCK8kXXejUFOHQEdVDr+7DovOXorX9f5Aon5/Rv0VGQ5t825mr
-         cFdmNvmmIAtmzHz0x08LLHRn7oVv+IzLGAnEm27tYQVUQzabE6P2p0VeUt48n+v69KLo
-         apbg==
-X-Gm-Message-State: AOAM532pqI3MHJ+cI74Az9VTwQaoZDH+VkDHGI/YcIuhOk1fiW6MfSxy
-        NQw76dB2ijgGvSp1519eJyk/bTEEkNquZCQQQRXacA==
-X-Google-Smtp-Source: ABdhPJwRFY1fq8yZUUhdUBtDKqKygr3wmrQBm1uJ0DWwFLApjZXm+12sLNNfYTFx2KiRxrS+xsNX+Kq+lo9ijUZWzl8=
-X-Received: by 2002:aca:2b02:: with SMTP id i2mr8696186oik.140.1639577627856;
- Wed, 15 Dec 2021 06:13:47 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 15 Dec 2021 08:13:46 -0600
+        id S243227AbhLOOOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:14:34 -0500
+Received: from mail-gv0che01on2131.outbound.protection.outlook.com ([40.107.23.131]:22426
+        "EHLO CHE01-GV0-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229563AbhLOOOd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:14:33 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q2NqoBU/qKfKwe6I7CLwLtiI/HCso1mfIfDvFMFFY34iDy5KISbeM7pJ0u4DpEmkeZQGIjR1DBk7baIGm0sSuzy59Mo8vk6enFlw/TzCQrgGGkYJRzCcNAR863ZCbuxPEQtT9F4bzghV8zATWDkFhQkPiMhm3RB8o4YbDW82xWH0M9JXWoITtUDNBHa90Zm1LVjIkZJLs8vwZZPALgAIdLeNwKIXqWR/RTmTzuk9TcUdhgNp9Qmtwtq+7LdA+PquledtumcSRVtoxCK7vp5MrcPgRF+YsR7itRYfdZ+HYMGVcp2KFW2Vs4fNbWDZTkDNiKQ6hxO+7Xt/qzolz3oB9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WQKUgJscRCfG4CG1uDLCJYDiDlgpUBgP/sDfGeCBeb0=;
+ b=Ys8vfr0csh+4wYtvYxnvnCil/pdHR/7zMGaEIL3zRdrEjdoA/zmLtRL2qo7PZVUjSF31+4dCZeO1wZwrD46Vroqv+naqlQDULj/DjKWQhUxtYD6HUM4zfXlrTj7PA8LVxdtiK2iuvZQ7U+PkbBH2B6vsAkn83Q9YG61JQYi6vLXAh4kLW7ef+rij7+eX6/sKHhhnPX0Y0VfgeqDR5TpPumgS6ykShaq7SXRRefRjwZm2+j0m51PEWpH46yi0Nd3ITvolNfAWA3UbyWNomHW3zYrIpIWYapBCCSE+HtVLCzY9/KRnkRuc/4GI+XU49UAmz1lSf9euq3deNyTswa3l8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
+ dkim=pass header.d=toradex.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WQKUgJscRCfG4CG1uDLCJYDiDlgpUBgP/sDfGeCBeb0=;
+ b=SyR8sF3ka33nucK0sgn8VKAogjKZIXh6LmPP4Tn+9E0//4KAsOiwDc/lPXZZkKus8FwP0ET2M8afRCgxs0KAk0u9rXmLdNZloQEEs/iYaU2Th/GVZJjqDhWPEmfUia28T8ZpqyZiifYM4In+LGbJbBdg1q+GYebZfXCnEoM9N+s=
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
+ ZRAP278MB0301.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:1f::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4778.16; Wed, 15 Dec 2021 14:14:30 +0000
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::2de2:ea03:cafb:56c1]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::2de2:ea03:cafb:56c1%6]) with mapi id 15.20.4778.018; Wed, 15 Dec 2021
+ 14:14:30 +0000
+From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To:     "kishon@ti.com" <kishon@ti.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+CC:     "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hongxing.zhu@nxp.com" <hongxing.zhu@nxp.com>
+Subject: Re: linux-next: build failure after merge of the phy-next tree
+Thread-Topic: linux-next: build failure after merge of the phy-next tree
+Thread-Index: AQHX8bqV5MNcOiqp+kyIvR5Ddt4fHqwzmLEA
+Date:   Wed, 15 Dec 2021 14:14:30 +0000
+Message-ID: <82dcdd84d9111dcde3fb43504ffec5592e2c8356.camel@toradex.com>
+References: <20211215134915.3622957-1-broonie@kernel.org>
+In-Reply-To: <20211215134915.3622957-1-broonie@kernel.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=toradex.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 04c2b58e-3e40-45f0-e852-08d9bfd53613
+x-ms-traffictypediagnostic: ZRAP278MB0301:EE_
+x-microsoft-antispam-prvs: <ZRAP278MB0301AD747B9C089A1A422183FB769@ZRAP278MB0301.CHEP278.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:3513;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: h44/UvUjMST/rChuk6uag9VB97MXeE/Rd9RCdfYa80CWjkSK+zP3zy4znyDu0Z5fg4LyBBEw0lS63gsphh581m0i7ITp5aTDmxzFVM3XDSa3eWEKYKP3/f8WRNQ8AZ36HJ/Q5mKghCiK6nNYiYsso31BrPX41o05VSwXbZJQKyIjnEjrR/v5eBLH1TzNtQ5HRXtRooSn0kMZX82O7Uf7yehS7UjtSi9LUawYLaZ86n55PRb4g1SggJcFHVugVCcSXFQgD73TJ4d7agWM4heVMlQ4I7JnpqUm7jgUw/lw9x5uznSo9MOanNygl+aAmSSQwkcJPIynV1fo4lWQICcwGIUMmZeh/deWzta8UP3y1drBAyB4+2cnPIYMwjZAiONqPDlszoeJoLfGZjswRBd2APU6OyB2OCNRV4EUqkEd1r9A88qW+gPc1uPsyO1rTpxA+U5QrCOPUdYO2CXVQK/p706YnMMZhVoqzmQYJ/31wg85FqCTzZqkf6QuNnblOCFM1Hp85Zs08i2XMZ7mWJ7yZxd2kCjw+U/Qp5KATg5/S9VjxFkrkVMA1e4HfYfwIfJtTHYvoDCMGazqdHBvxbt47wowIR0QC3hGAQZCWJNxJTPbihcS8ANuaN9YCsyBG+TX8ccaBAMylRTeKQThIxLW/BJsIIxkDJmNBnBoXC8uDdcrf+v6msddgeRwuRuQCiGVq166XouwR9Y0NoDDKvaEIg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(346002)(39840400004)(376002)(136003)(38070700005)(508600001)(122000001)(54906003)(36756003)(5660300002)(6512007)(110136005)(316002)(86362001)(26005)(6506007)(71200400001)(44832011)(8936002)(4001150100001)(8676002)(2906002)(186003)(2616005)(83380400001)(6486002)(91956017)(38100700002)(76116006)(66476007)(66556008)(64756008)(66446008)(66946007)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bG5zWUhtWjE1Mjg3UG8xb0JSZ2pMa0p2NnNBL2p5ci9LR2NRUVAvOUxvVU1S?=
+ =?utf-8?B?bjJHSGcyaVI4eUlraFJPZW9kRXN0a1lMNmQ3VGEzamdjb2NQNnd3VGlhaXJM?=
+ =?utf-8?B?MmM1TG03TnFhVWxoQW95eFcrN0prdHFsQURKM2JJZmV4TFU1anBDT1RCMDdN?=
+ =?utf-8?B?anRvNVJTU2hXWVdYMytmdzR6Qis0aWpXTlZxV0FhWTFTejIrMjRrVTQyMW5G?=
+ =?utf-8?B?TndoZ1d3ekZiMjhMaFBBK2tkdm5DYytiWjYvMlZGZmU4RkZlLy9VNXpkK2xY?=
+ =?utf-8?B?bUZiSmUwa0Fwd01OVUFBUjN2dktlVDNVZUJIcVdHSnBmUEg3dDkvTHlTY25B?=
+ =?utf-8?B?RDQrL1lPVzl3ZE9QNnNpNDJzSVZpeHFYYWw2a01vMy9HUVdkdFBaVi9QSk11?=
+ =?utf-8?B?TDZnd0R4WGtFcVNnV01BbXpKbm9VUGhzNjZydHdwdUp4cEhCVW5sRExEOVpE?=
+ =?utf-8?B?ZTF3NHdncnl3cFZhVmllNEQrR3hVTDNqOEhEbmdQNmc1Y0lVMGdQdGs1WHh4?=
+ =?utf-8?B?YldQbjJBQWVqVnZKSWZzckhydmZqRmVqY3pyOE5Xa1UzTzdLRzY4YVJIc2lp?=
+ =?utf-8?B?SFlab3VHSFdmczRBUHdxZUU2R20zdzlya3VOUHVOczFRUzQ4NThuRHh0djlO?=
+ =?utf-8?B?cXJTZXJvaWpoQzRRZW0vSXJWNUFlOG9aR21Tc1JhVzJmYXc0SGROaVRQUTl0?=
+ =?utf-8?B?OWQ0cloyaXp2a1VvNDBjT256ZFpKcGcvZTFYd0svbkpOWWZYczlvSGxPNzgv?=
+ =?utf-8?B?LzJyOEszSzhBMkt6QnlzSXlKV3lwekJLZkFRZmxvQUpqZkZFVFpPT1FrN2Vk?=
+ =?utf-8?B?bXZseHJxdDNmY0pJSXkrUHVYMFJ1YnlDTEs5eEFvSFptTVJsQ0ZwTnZSVnBt?=
+ =?utf-8?B?S1NtTkRpQjRUQnZJakNSS0xHbVBpS2FhV2FtZlNrQXQ1dTh3bFJJKzV3TG05?=
+ =?utf-8?B?eXZTaHJkMmZVejlQSDBxaURDQTdLMU8xRSsweWcraXFnVVc5bzY2cHZGRE51?=
+ =?utf-8?B?ZHJ6U0lmMWt4STlRb0JHcUFvMjZzYWZSWHNLRzdYOE9RWXVPcEVqL0xTQUo3?=
+ =?utf-8?B?YnkvZm4xb3pxMmE4cW1mS1BPOGV5OVBvVlFEYndwTklpKzluNHdRdjE5bE55?=
+ =?utf-8?B?aGhCbXorRXZ5c2JYc1M0bXkwazNuZ1FpN09RV0RPdmNwYXRYRmI2VlVvT1pt?=
+ =?utf-8?B?RUNKK2NHTjFCUzN4QUZoa1IzUlM1ajBpWVJrQktPeDlEOVB2ZXJRdWpjMHJU?=
+ =?utf-8?B?UUlSNWZmYzFrcjNtTHYxQjFWeEdkQ0JRaVc2c0lIc2tyVmlwWUNQbHB1N1I1?=
+ =?utf-8?B?ZnlweS9EcURieTBwTGlWOFZUdFJhRnJsYXo5Yy9oaDl6Z2ZWSzRJcjhpWkVS?=
+ =?utf-8?B?YjF1cnE1cHRQTWt1b2tOeURTTWZXS2lGQlN2MHRkZmdjcUkyMk54cjFUQlZU?=
+ =?utf-8?B?TVpNeitJcEZQRnRvcmZHRWVlb1VSM2JicVNyMU8wVHN3OTI5eHZLWmpobWdy?=
+ =?utf-8?B?SFVxUi8vUG93aVhsMVBpWmVpdzBqeEd6SjMzTHhlVDZYb2p0NlhJc2VERldu?=
+ =?utf-8?B?eklxZ1lnNkxXTDFSUWZ0STVpVTNqZDdHR0Q2WFlPck9qZlF3dlVVY2M5N0FL?=
+ =?utf-8?B?TlVxNEIwTHhFU0xqUzdnZHZJUzkvaDVZYnRYSDROUTU5WkR2MnpWMHlpZDFk?=
+ =?utf-8?B?SzFqVkNMcFhTdkxpTGtNcE8rUWJ6aGFsRlJLU0xwZGREbUxlVy9XcENPNE52?=
+ =?utf-8?B?ZTdlUkNoanlHWG9vSWRpYitnVlJxMWJoQUFpWE04V2d6Q3RLZ1NxWUZWYmoz?=
+ =?utf-8?B?MW15Ym9HNEY0QlVnNnYxSzgwNi80QXVWNGpGRklKa0crTDJvbkpySmNBY1Uv?=
+ =?utf-8?B?d0pYTDVLamJOVXM5RjdlK0RwNTRkMUVTZ0ZtWEtHR1lrakkvTDg2TXprUTQ0?=
+ =?utf-8?B?enF0MjVDbm90UE5JQzFTQWM5MDhBRHRiSFZzS1lYZ1JvUU13UTVyd21rRWZ1?=
+ =?utf-8?B?QkdaaG5FMkdVZnJkUXFqeU1nYjBNSlpNSHZvU2ExaU1sRlVqeSt5SE9qTi9o?=
+ =?utf-8?B?MWFHTHBaKzBnL1ZUc2Uxa05QcHNQeHhwZTZNU1pWTm1Wd016cHl2ZXdTZ1F3?=
+ =?utf-8?B?R2trNnkyRlNxMkU1eGZQWVBpSEVJZmd3NFVGT1ZvZE5mWUNMTkVxODZrNXgy?=
+ =?utf-8?B?L3JtUzJwdmFuVnhZNXNOenpQNjloYkgwMXQ2aXVWRkI2WUNXczNjNFYrUnU0?=
+ =?utf-8?Q?DDK1CIF4/Zc8lslSDe3nt/opU2kT2CnwjP5JYLxcEg=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <973B2AE12486F84EABC0D07F62CFE75F@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <CABnWg9vBQrJy=5TAnECN5TOFiyUcaff5VvsTgAVbX7DcacCXyQ@mail.gmail.com>
-References: <20211110130623.20553-1-granquet@baylibre.com> <20211110130623.20553-8-granquet@baylibre.com>
- <CAAOTY__+UCtV5pbJoZjp_T0yRPNaNEJUzPUZ=9k8-wt3x3wKQg@mail.gmail.com> <CABnWg9vBQrJy=5TAnECN5TOFiyUcaff5VvsTgAVbX7DcacCXyQ@mail.gmail.com>
-From:   Guillaume Ranquet <granquet@baylibre.com>
-User-Agent: alot/0.10
-Date:   Wed, 15 Dec 2021 08:13:46 -0600
-Message-ID: <CABnWg9v-QBAaJ0MffNNSKCNyd8eb1zhETxoZjxQ5c7FNeUkBAg@mail.gmail.com>
-Subject: Re: [PATCH v6 7/7] drm/mediatek: Add mt8195 DisplayPort driver
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04c2b58e-3e40-45f0-e852-08d9bfd53613
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 14:14:30.4614
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z+hYZO/HHMqJhHUfYkrHO9zrOSOEum7vSWU11+ss2rnlCKJjyH6jdhKK4S/7ms3Ic8tcNcuMAA+mawd+dmMgEcidHisC7iIfODisIm+gcqk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0301
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chun-Kuang.
-
-Quoting Guillaume Ranquet (2021-12-02 16:31:03)
-> Hi Chun-Kuang.
->
-> Quoting Chun-Kuang Hu (2021-11-25 16:27:45)
-> > Hi, Guillaume:
-> >
-> > This is a big patch, so I give some comment first.
-> >
-> > Guillaume Ranquet <granquet@baylibre.com> =E6=96=BC 2021=E5=B9=B411=E6=
-=9C=8810=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=889:06=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> > >
-> > > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > >
-> > > This patch adds a DisplayPort driver for the Mediatek mt8195 SoC and =
-a
-> > > according phy driver mediatek-dp-phy.
-> > >
-> > > It supports both functional units on the mt8195, the embedded
-> > > DisplayPort as well as the external DisplayPort units. It offers
-> > > hot-plug-detection, audio up to 8 channels, and DisplayPort 1.4 with =
-up
-> > > to 4 lanes.
-> > >
-> > > The driver creates a child device for the phy. The child device will
-> > > never exist without the parent being active. As they are sharing a
-> > > register range, the parent passes a regmap pointer to the child so th=
-at
-> > > both can work with the same register range. The phy driver sets devic=
-e
-> > > data that is read by the parent to get the phy device that can be use=
-d
-> > > to control the phy properties.
-> > >
-> > > This driver is based on an initial version by
-> > > Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> > >
-> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > ---
-> > >  drivers/gpu/drm/drm_edid.c              |    2 +-
-> >
-> > Separate this to another patch.
-> >
-> > >  drivers/gpu/drm/mediatek/Kconfig        |    7 +
-> > >  drivers/gpu/drm/mediatek/Makefile       |    2 +
-> > >  drivers/gpu/drm/mediatek/mtk_dp.c       | 3094 +++++++++++++++++++++=
-++
-> > >  drivers/gpu/drm/mediatek/mtk_dp_reg.h   |  568 +++++
-> > >  drivers/gpu/drm/mediatek/mtk_dpi.c      |  111 +-
-> >
-> > Ditto.
-> >
-> > >  drivers/gpu/drm/mediatek/mtk_dpi_regs.h |   26 +
-> >
-> > Ditto.
-> >
-> > >  drivers/gpu/drm/mediatek/mtk_drm_drv.c  |    1 +
-> >
-> > Ditto
-> >
-> > >  drivers/gpu/drm/mediatek/mtk_drm_drv.h  |    1 +
-> >
-> > Ditto
-> >
-> yes my bad, I've made a bunch of fixup which ended up in the wrong place.
-> It will be fixed for the next version.
->
-> > >  9 files changed, 3799 insertions(+), 13 deletions(-)
-> > >  create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
-> > >  create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> > >
-> > > diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-> > > index 500279a82167a..bfd98b50ceb5b 100644
-> > > --- a/drivers/gpu/drm/drm_edid.c
-> > > +++ b/drivers/gpu/drm/drm_edid.c
-> > > @@ -5183,7 +5183,7 @@ static void drm_parse_hdmi_deep_color_info(stru=
-ct drm_connector *connector,
-> > >          * modes and forbids YCRCB422 support for all video modes per
-> > >          * HDMI 1.3 spec.
-> > >          */
-> > > -       info->color_formats =3D DRM_COLOR_FORMAT_RGB444;
-> > > +       info->color_formats |=3D DRM_COLOR_FORMAT_RGB444;
-> > >
-> > >         /* YCRCB444 is optional according to spec. */
-> > >         if (hdmi[6] & DRM_EDID_HDMI_DC_Y444) {
-> > > diff --git a/drivers/gpu/drm/mediatek/Kconfig b/drivers/gpu/drm/media=
-tek/Kconfig
-> > > index 2976d21e9a34a..029b94c716131 100644
-> > > --- a/drivers/gpu/drm/mediatek/Kconfig
-> > > +++ b/drivers/gpu/drm/mediatek/Kconfig
-> > > @@ -28,3 +28,10 @@ config DRM_MEDIATEK_HDMI
-> > >         select PHY_MTK_HDMI
-> > >         help
-> > >           DRM/KMS HDMI driver for Mediatek SoCs
-> > > +
-> > > +config MTK_DPTX_SUPPORT
-> > > +       tristate "DRM DPTX Support for Mediatek SoCs"
-> > > +       depends on DRM_MEDIATEK
-> > > +       select PHY_MTK_DP
-> > > +       help
-> > > +         DRM/KMS Display Port driver for Mediatek SoCs.
-> > > diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/medi=
-atek/Makefile
-> > > index 29098d7c8307c..d86a6406055e6 100644
-> > > --- a/drivers/gpu/drm/mediatek/Makefile
-> > > +++ b/drivers/gpu/drm/mediatek/Makefile
-> > > @@ -21,3 +21,5 @@ mediatek-drm-hdmi-objs :=3D mtk_cec.o \
-> > >                           mtk_hdmi_ddc.o
-> > >
-> > >  obj-$(CONFIG_DRM_MEDIATEK_HDMI) +=3D mediatek-drm-hdmi.o
-> > > +
-> > > +obj-$(CONFIG_MTK_DPTX_SUPPORT) +=3D mtk_dp.o
-> > > diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/medi=
-atek/mtk_dp.c
-> > > new file mode 100644
-> > > index 0000000000000..83087219d5a5e
-> > > --- /dev/null
-> > > +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-> > > @@ -0,0 +1,3094 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Copyright (c) 2019 MediaTek Inc.
-> > > + * Copyright (c) 2021 BayLibre
-> > > + */
-> > > +
-> > > +#include <drm/drm_atomic_helper.h>
-> > > +#include <drm/drm_bridge.h>
-> > > +#include <drm/drm_crtc.h>
-> > > +#include <drm/drm_dp_helper.h>
-> > > +#include <drm/drm_edid.h>
-> > > +#include <drm/drm_of.h>
-> > > +#include <drm/drm_panel.h>
-> > > +#include <drm/drm_print.h>
-> > > +#include <drm/drm_probe_helper.h>
-> > > +#include <linux/arm-smccc.h>
-> > > +#include <linux/clk.h>
-> > > +#include <linux/delay.h>
-> > > +#include <linux/errno.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/nvmem-consumer.h>
-> > > +#include <linux/of.h>
-> > > +#include <linux/of_irq.h>
-> > > +#include <linux/of_platform.h>
-> > > +#include <linux/phy/phy.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/pm_runtime.h>
-> > > +#include <linux/regmap.h>
-> > > +#include <sound/hdmi-codec.h>
-> > > +#include <video/videomode.h>
-> > > +
-> > > +#include "mtk_dp_reg.h"
-> > > +
-> > > +#define MTK_DP_AUX_WAIT_REPLY_COUNT 20
-> > > +#define MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT 3
-> > > +
-> > > +#define MTK_DP_MAX_LANES 4
-> > > +#define MTK_DP_MAX_LINK_RATE MTK_DP_LINKRATE_HBR3
-> > > +
-> > > +#define MTK_DP_TBC_BUF_READ_START_ADDR 0x08
-> > > +
-> > > +#define MTK_DP_TRAIN_RETRY_LIMIT 8
-> > > +#define MTK_DP_TRAIN_MAX_ITERATIONS 5
-> > > +
-> > > +#define MTK_DP_AUX_WRITE_READ_WAIT_TIME_US 20
-> > > +
-> > > +#define MTK_DP_DP_VERSION_11 0x11
-> > > +
-> > > +enum mtk_dp_state {
-> > > +       MTK_DP_STATE_INITIAL,
-> > > +       MTK_DP_STATE_IDLE,
-> > > +       MTK_DP_STATE_PREPARE,
-> > > +       MTK_DP_STATE_NORMAL,
-> > > +};
-> > > +
-> > > +enum mtk_dp_train_state {
-> > > +       MTK_DP_TRAIN_STATE_STARTUP =3D 0,
-> > > +       MTK_DP_TRAIN_STATE_CHECKCAP,
-> > > +       MTK_DP_TRAIN_STATE_CHECKEDID,
-> > > +       MTK_DP_TRAIN_STATE_TRAINING_PRE,
-> > > +       MTK_DP_TRAIN_STATE_TRAINING,
-> > > +       MTK_DP_TRAIN_STATE_CHECKTIMING,
-> > > +       MTK_DP_TRAIN_STATE_NORMAL,
-> > > +       MTK_DP_TRAIN_STATE_POWERSAVE,
-> > > +       MTK_DP_TRAIN_STATE_DPIDLE,
-> > > +};
-> > > +
-> > > +struct mtk_dp_timings {
-> > > +       struct videomode vm;
-> > > +
-> > > +       u16 htotal;
-> > > +       u16 vtotal;
-> > > +       u8 frame_rate;
-> > > +       u32 pix_rate_khz;
-> > > +};
-> > > +
-> > > +struct mtk_dp_train_info {
-> > > +       bool tps3;
-> > > +       bool tps4;
-> > > +       bool sink_ssc;
-> > > +       bool cable_plugged_in;
-> > > +       bool cable_state_change;
-> > > +       bool cr_done;
-> > > +       bool eq_done;
-> > > +
-> > > +       // link_rate is in multiple of 0.27Gbps
-> > > +       int link_rate;
-> > > +       int lane_count;
-> > > +
-> > > +       int irq_status;
-> > > +       int check_cap_count;
-> > > +};
-> > > +
-> > > +// Same values as used by the DP Spec for MISC0 bits 1 and 2
-> > > +enum mtk_dp_color_format {
-> > > +       MTK_DP_COLOR_FORMAT_RGB_444 =3D 0,
-> > > +       MTK_DP_COLOR_FORMAT_YUV_422 =3D 1,
-> > > +       MTK_DP_COLOR_FORMAT_YUV_444 =3D 2,
-> > > +       MTK_DP_COLOR_FORMAT_YUV_420 =3D 3,
-> > > +       MTK_DP_COLOR_FORMAT_YONLY =3D 4,
-> > > +       MTK_DP_COLOR_FORMAT_RAW =3D 5,
-> > > +       MTK_DP_COLOR_FORMAT_RESERVED =3D 6,
-> > > +       MTK_DP_COLOR_FORMAT_DEFAULT =3D MTK_DP_COLOR_FORMAT_RGB_444,
-> > > +       MTK_DP_COLOR_FORMAT_UNKNOWN =3D 15,
-> > > +};
-> > > +
-> > > +// Multiple of 0.27Gbps
-> > > +enum mtk_dp_linkrate {
-> > > +       MTK_DP_LINKRATE_RBR =3D 0x6,
-> > > +       MTK_DP_LINKRATE_HBR =3D 0xA,
-> > > +       MTK_DP_LINKRATE_HBR2 =3D 0x14,
-> > > +       MTK_DP_LINKRATE_HBR25 =3D 0x19,
-> > > +       MTK_DP_LINKRATE_HBR3 =3D 0x1E,
-> > > +};
-> > > +
-> > > +// Same values as used for DP Spec MISC0 bits 5,6,7
-> > > +enum mtk_dp_color_depth {
-> > > +       MTK_DP_COLOR_DEPTH_6BIT =3D 0,
-> > > +       MTK_DP_COLOR_DEPTH_8BIT =3D 1,
-> > > +       MTK_DP_COLOR_DEPTH_10BIT =3D 2,
-> > > +       MTK_DP_COLOR_DEPTH_12BIT =3D 3,
-> > > +       MTK_DP_COLOR_DEPTH_16BIT =3D 4,
-> > > +       MTK_DP_COLOR_DEPTH_UNKNOWN =3D 5,
-> > > +};
-> > > +
-> > > +struct mtk_dp_audio_cfg {
-> > > +       int sample_rate;
-> > > +       int word_length_bits;
-> > > +       int channels;
-> > > +};
-> > > +
-> > > +struct mtk_dp_info {
-> > > +       enum mtk_dp_color_depth depth;
-> > > +       enum mtk_dp_color_format format;
-> > > +       struct mtk_dp_audio_cfg audio_caps;
-> > > +       struct mtk_dp_timings timings;
-> > > +};
-> > > +
-> > > +struct dp_cal_data {
-> > > +       unsigned int glb_bias_trim;
-> > > +       unsigned int clktx_impse;
-> > > +
-> > > +       unsigned int ln0_tx_impsel_pmos;
-> > > +       unsigned int ln0_tx_impsel_nmos;
-> > > +       unsigned int ln1_tx_impsel_pmos;
-> > > +       unsigned int ln1_tx_impsel_nmos;
-> > > +       unsigned int ln2_tx_impsel_pmos;
-> > > +       unsigned int ln2_tx_impsel_nmos;
-> > > +       unsigned int ln3_tx_impsel_pmos;
-> > > +       unsigned int ln3_tx_impsel_nmos;
-> > > +};
-> > > +
-> > > +struct mtk_dp {
-> > > +       struct device *dev;
-> > > +       struct platform_device *phy_dev;
-> > > +       struct phy *phy;
-> > > +       struct dp_cal_data cal_data;
-> > > +
-> > > +       struct drm_device *drm_dev;
-> > > +       struct drm_bridge bridge;
-> > > +       struct drm_bridge *next_bridge;
-> > > +       struct drm_dp_aux aux;
-> > > +
-> > > +       struct mutex edid_lock;
-> > > +       struct edid *edid;
-> > > +
-> > > +       u8 rx_cap[DP_RECEIVER_CAP_SIZE];
-> > > +
-> > > +       struct mtk_dp_info info;
-> > > +       enum mtk_dp_state state;
-> > > +
-> > > +       struct mtk_dp_train_info train_info;
-> > > +       enum mtk_dp_train_state train_state;
-> > > +       unsigned int input_fmt;
-> > > +
-> > > +       struct regmap *regs;
-> > > +       struct clk *dp_tx_clk;
-> > > +
-> > > +       bool enabled;
-> > > +       bool audio_enable;
-> > > +
-> > > +       bool has_fec;
-> > > +       struct mutex dp_lock;
-> > > +
-> > > +       struct mutex update_plugged_status_lock;
-> > > +
-> > > +       hdmi_codec_plugged_cb plugged_cb;
-> > > +       struct device *codec_dev;
-> > > +       u8 connector_eld[MAX_ELD_BYTES];
-> > > +};
-> > > +
-> > > +enum mtk_dp_sdp_type {
-> > > +       MTK_DP_SDP_NONE =3D 0x00,
-> > > +       MTK_DP_SDP_ACM =3D 0x01,
-> > > +       MTK_DP_SDP_ISRC =3D 0x02,
-> > > +       MTK_DP_SDP_AVI =3D 0x03,
-> > > +       MTK_DP_SDP_AUI =3D 0x04,
-> > > +       MTK_DP_SDP_SPD =3D 0x05,
-> > > +       MTK_DP_SDP_MPEG =3D 0x06,
-> > > +       MTK_DP_SDP_NTSC =3D 0x07,
-> > > +       MTK_DP_SDP_VSP =3D 0x08,
-> > > +       MTK_DP_SDP_VSC =3D 0x09,
-> > > +       MTK_DP_SDP_EXT =3D 0x0A,
-> > > +       MTK_DP_SDP_PPS0 =3D 0x0B,
-> > > +       MTK_DP_SDP_PPS1 =3D 0x0C,
-> > > +       MTK_DP_SDP_PPS2 =3D 0x0D,
-> > > +       MTK_DP_SDP_PPS3 =3D 0x0E,
-> > > +       MTK_DP_SDP_DRM =3D 0x10,
-> > > +       MTK_DP_SDP_MAX_NUM
-> > > +};
-> > > +
-> > > +struct mtk_dp_sdp_packet {
-> > > +       enum mtk_dp_sdp_type type;
-> > > +       struct dp_sdp sdp;
-> > > +};
-> > > +
-> > > +#define MTK_DP_IEC_CHANNEL_STATUS_LEN 5
-> > > +union mtk_dp_audio_channel_status {
-> > > +       struct {
-> > > +               u8 rev : 1;
-> > > +               u8 is_lpcm : 1;
-> > > +               u8 copy_right : 1;
-> > > +               u8 additional_format_info : 3;
-> > > +               u8 channel_status_mode : 2;
-> > > +               u8 category_code;
-> > > +               u8 src_num : 4;
-> > > +               u8 channel_num : 4;
-> > > +               u8 sampling_freq : 4;
-> > > +               u8 clk_accuracy : 2;
-> > > +               u8 rev2 : 2;
-> > > +               u8 word_len : 4;
-> > > +               u8 original_sampling_freq : 4;
-> > > +       } iec;
-> > > +
-> > > +       u8 buf[MTK_DP_IEC_CHANNEL_STATUS_LEN];
-> > > +};
-> > > +
-> > > +static struct regmap_config mtk_dp_regmap_config =3D {
-> > > +       .reg_bits =3D 32,
-> > > +       .val_bits =3D 32,
-> > > +       .reg_stride =3D 4,
-> > > +       .max_register =3D SEC_OFFSET + 0x90,
-> > > +       .name =3D "mtk-dp-registers",
-> > > +};
-> > > +
-> > > +static bool mtk_dp_is_edp(struct mtk_dp *mtk_dp)
-> >
-> > Separate edp and displayport into two patches. For example, the first
-> > patch support edp only, and the second patch add displayport function.
-> >
-> I have made the opposite as it seemed a bit more logical from how it's co=
-ded
-> now.
-> I've made a single patch with DP and a new one adding eDP support on top =
-of it.
-> The change is quite small, adding the eDP on top of DP:
->  drivers/gpu/drm/mediatek/mtk_dp.c | 103 ++++++++++++++++++++++++++++++++=
-++++++++++++++++++++++++++++++++++++++++++-----------------------------
->  1 file changed, 74 insertions(+), 29 deletions(-)
-> > > +{
-> > > +       return mtk_dp->next_bridge !=3D NULL;
-> > > +}
-> > > +
-> >
-> > [snip]
-> >
-> > > +
-> > > +static struct edid *mtk_dp_get_edid(struct drm_bridge *bridge,
-> > > +                                   struct drm_connector *connector)
-> > > +{
-> > > +       struct mtk_dp *mtk_dp =3D mtk_dp_from_bridge(bridge);
-> > > +       bool enabled =3D mtk_dp->enabled;
-> > > +       struct edid *new_edid =3D NULL;
-> > > +
-> > > +       if (!enabled)
-> > > +               drm_bridge_chain_pre_enable(bridge);
-> >
-> > In mtk_hdmi_bridge_get_edid(), there does not check the power. Why in
-> > this function need this?
-> > Does mtk hdmi driver has a bug?
-> >
-> I don't know, but I will be asking around.
-In short, no, the hdmi driver does not have a bug.
-We have to check power here as this driver handles both a DP and an eDP pan=
-el.
-
-As the power is controlled by the panel driver in the case of eDP, we have
-to make sure the bridge is enabled before trying to read the edid.
-
-Hope this answers the question.
-
-> > > +
-> > > +       drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POWER_D=
-0);
-> > > +       usleep_range(2000, 5000);
-> > > +
-> > > +       if (mtk_dp_plug_state(mtk_dp))
-> > > +               new_edid =3D drm_get_edid(connector, &mtk_dp->aux.ddc=
-);
-> > > +
-> > > +       if (!enabled)
-> > > +               drm_bridge_chain_post_disable(bridge);
-> > > +
-> > > +       mutex_lock(&mtk_dp->edid_lock);
-> > > +       kfree(mtk_dp->edid);
-> > > +       mtk_dp->edid =3D NULL;
-> > > +
-> > > +       if (!new_edid) {
-> > > +               mutex_unlock(&mtk_dp->edid_lock);
-> > > +               return NULL;
-> > > +       }
-> > > +
-> > > +       mtk_dp->edid =3D drm_edid_duplicate(new_edid);
-> > > +       mutex_unlock(&mtk_dp->edid_lock);
-> > > +
-> > > +       return new_edid;
-> > > +}
-> > > +
-> > > +static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
-> > > +                                  struct drm_dp_aux_msg *msg)
-> > > +{
-> > > +       ssize_t err =3D -EAGAIN;
-> > > +       struct mtk_dp *mtk_dp;
-> > > +       bool is_read;
-> > > +       u8 request;
-> > > +       size_t accessed_bytes =3D 0;
-> > > +       int retry =3D 3, ret =3D 0;
-> > > +
-> > > +       mtk_dp =3D container_of(mtk_aux, struct mtk_dp, aux);
-> > > +
-> > > +       if (!mtk_dp->train_info.cable_plugged_in ||
-> > > +           mtk_dp->train_info.irq_status & MTK_DP_HPD_DISCONNECT) {
-> > > +               mtk_dp->train_state =3D MTK_DP_TRAIN_STATE_CHECKCAP;
-> > > +               err =3D -EAGAIN;
-> > > +               goto err;
-> > > +       }
-> > > +
-> > > +       switch (msg->request) {
-> > > +       case DP_AUX_I2C_MOT:
-> > > +       case DP_AUX_I2C_WRITE:
-> > > +       case DP_AUX_NATIVE_WRITE:
-> > > +       case DP_AUX_I2C_WRITE_STATUS_UPDATE:
-> > > +       case DP_AUX_I2C_WRITE_STATUS_UPDATE | DP_AUX_I2C_MOT:
-> > > +               request =3D msg->request & ~DP_AUX_I2C_WRITE_STATUS_U=
-PDATE;
-> > > +               is_read =3D false;
-> > > +               break;
-> > > +       case DP_AUX_I2C_READ:
-> > > +       case DP_AUX_NATIVE_READ:
-> > > +       case DP_AUX_I2C_READ | DP_AUX_I2C_MOT:
-> > > +               request =3D msg->request;
-> > > +               is_read =3D true;
-> > > +               break;
-> > > +       default:
-> > > +               drm_err(mtk_aux->drm_dev, "invalid aux cmd =3D %d\n",
-> > > +                       msg->request);
-> > > +               err =3D -EINVAL;
-> > > +               goto err;
-> >
-> > Directly return here.
-> >
-> Hmm, not sure yet, it seems I still need to prime msg->reply anyway.
-> Though the error handling can be simplified a bit.
->
-> > > +       }
-> > > +
-> > > +       if (msg->size =3D=3D 0) {
-> > > +               mtk_dp_aux_do_transfer(mtk_dp, is_read, request,
-> > > +                                      msg->address + accessed_bytes,
-> > > +                                      msg->buffer + accessed_bytes, =
-0);
-> > > +       } else {
-> > > +               while (accessed_bytes < msg->size) {
-> > > +                       size_t to_access =3D
-> > > +                               min_t(size_t, DP_AUX_MAX_PAYLOAD_BYTE=
-S,
-> > > +                                     msg->size - accessed_bytes);
-> > > +                       retry =3D 3;
-> > > +                       while (retry--) {
-> > > +                               ret =3D mtk_dp_aux_do_transfer(
-> > > +                                       mtk_dp, is_read, request,
-> > > +                                       msg->address + accessed_bytes=
-,
-> > > +                                       msg->buffer + accessed_bytes,
-> > > +                                       to_access);
-> > > +                               if (ret =3D=3D 0)
-> > > +                                       break;
-> > > +                               udelay(50);
-> > > +                       }
-> > > +                       if (!retry && ret) {
-> > > +                               drm_info(mtk_dp->drm_dev,
-> > > +                                        "Failed to do AUX transfer: =
-%d\n",
-> > > +                                        ret);
-> > > +                               break;
-> > > +                       }
-> > > +                       accessed_bytes +=3D to_access;
-> > > +               }
-> > > +       }
-> > > +err:
-> > > +       if (!ret) {
-> > > +               msg->reply =3D DP_AUX_NATIVE_REPLY_ACK | DP_AUX_I2C_R=
-EPLY_ACK;
-> > > +               ret =3D msg->size;
-> > > +       } else {
-> > > +               msg->reply =3D DP_AUX_NATIVE_REPLY_NACK | DP_AUX_I2C_=
-REPLY_NACK;
-> > > +               return err;
-> > > +       }
-> > > +
-> > > +       msg->reply =3D DP_AUX_NATIVE_REPLY_ACK | DP_AUX_I2C_REPLY_ACK=
-;
-> > > +       return msg->size;
-> > > +}
-> > > +
-> > > +static void mtk_dp_aux_init(struct mtk_dp *mtk_dp)
-> > > +{
-> > > +       drm_dp_aux_init(&mtk_dp->aux);
-> > > +       mtk_dp->aux.name =3D "aux_mtk_dp";
-> > > +       mtk_dp->aux.transfer =3D mtk_dp_aux_transfer;
-> > > +}
-> > > +
-> > > +static void mtk_dp_poweroff(struct mtk_dp *mtk_dp)
-> > > +{
-> > > +       mutex_lock(&mtk_dp->dp_lock);
-> > > +
-> > > +       mtk_dp_hwirq_enable(mtk_dp, false);
-> > > +       mtk_dp_power_disable(mtk_dp);
-> > > +       phy_exit(mtk_dp->phy);
-> > > +       clk_disable_unprepare(mtk_dp->dp_tx_clk);
-> > > +
-> > > +       mutex_unlock(&mtk_dp->dp_lock);
-> > > +}
-> > > +
-> > > +static int mtk_dp_poweron(struct mtk_dp *mtk_dp)
-> > > +{
-> > > +       int ret =3D 0;
-> > > +
-> > > +       mutex_lock(&mtk_dp->dp_lock);
-> > > +
-> > > +       ret =3D clk_prepare_enable(mtk_dp->dp_tx_clk);
-> > > +       if (ret < 0) {
-> > > +               dev_err(mtk_dp->dev, "Fail to enable clock: %d\n", re=
-t);
-> > > +               goto err;
-> > > +       }
-> > > +       ret =3D phy_init(mtk_dp->phy);
-> > > +       if (ret) {
-> > > +               dev_err(mtk_dp->dev, "Failed to initialize phy: %d\n"=
-, ret);
-> > > +               goto err_phy_init;
-> > > +       }
-> > > +       ret =3D mtk_dp_phy_configure(mtk_dp, MTK_DP_LINKRATE_RBR, 1);
-> > > +       if (ret) {
-> > > +               dev_err(mtk_dp->dev, "Failed to configure phy: %d\n",=
- ret);
-> > > +               goto err_phy_config;
-> > > +       }
-> > > +
-> > > +       mtk_dp_init_port(mtk_dp);
-> > > +       mtk_dp_power_enable(mtk_dp);
-> > > +       mtk_dp_hwirq_enable(mtk_dp, true);
-> > > +
-> > > +err_phy_config:
-> > > +       phy_exit(mtk_dp->phy);
-> > > +err_phy_init:
-> > > +       clk_disable_unprepare(mtk_dp->dp_tx_clk);
-> > > +err:
-> > > +       mutex_unlock(&mtk_dp->dp_lock);
-> > > +       return ret;
-> > > +}
-> > > +
-> > > +static int mtk_dp_bridge_attach(struct drm_bridge *bridge,
-> > > +                               enum drm_bridge_attach_flags flags)
-> > > +{
-> > > +       struct mtk_dp *mtk_dp =3D mtk_dp_from_bridge(bridge);
-> > > +       int ret;
-> > > +
-> > > +       if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR)) {
-> > > +               dev_err(mtk_dp->dev, "Driver does not provide a conne=
-ctor!");
-> > > +               return -EINVAL;
-> > > +       }
-> > > +
-> > > +       ret =3D mtk_dp_poweron(mtk_dp);
-> >
-> > Move the power on to mtk_dp_bridge_atomic_enable().
-> >
-Moving the power-on sequence to the mtk_dp_bridge_atoimc_enable()
-breaks the eDP functionality.
-For the time being (ie: v7), the power on will stay in the
-bridge_attach() callback, sorry.
-
-> > > +       if (ret)
-> > > +               return ret;
-> > > +
-> > > +       if (mtk_dp->next_bridge) {
-> > > +               ret =3D drm_bridge_attach(bridge->encoder, mtk_dp->ne=
-xt_bridge,
-> > > +                                       &mtk_dp->bridge, flags);
-> > > +               if (ret) {
-> > > +                       drm_warn(mtk_dp->drm_dev,
-> > > +                                "Failed to attach external bridge: %=
-d\n", ret);
-> > > +                       goto err_bridge_attach;
-> > > +               }
-> > > +       }
-> > > +
-> > > +       mtk_dp->drm_dev =3D bridge->dev;
-> > > +
-> > > +       return 0;
-> > > +
-> > > +err_bridge_attach:
-> > > +       mtk_dp_poweroff(mtk_dp);
-> > > +       return ret;
-> > > +}
-> > > +
-> > > +static void mtk_dp_bridge_detach(struct drm_bridge *bridge)
-> > > +{
-> > > +       struct mtk_dp *mtk_dp =3D mtk_dp_from_bridge(bridge);
-> > > +
-> > > +       mtk_dp->drm_dev =3D NULL;
-> > > +
-> > > +       mtk_dp_poweroff(mtk_dp);
-> > > +}
-> > > +
-> > > +static void mtk_dp_bridge_atomic_disable(struct drm_bridge *bridge,
-> > > +                                        struct drm_bridge_state *old=
-_state)
-> > > +{
-> > > +       struct mtk_dp *mtk_dp =3D mtk_dp_from_bridge(bridge);
-> > > +
-> > > +       mtk_dp_video_mute(mtk_dp, true);
-> > > +       mtk_dp_audio_mute(mtk_dp, true);
-> > > +       mtk_dp->state =3D MTK_DP_STATE_IDLE;
-> > > +       mtk_dp->train_state =3D MTK_DP_TRAIN_STATE_STARTUP;
-> > > +
-> > > +       mtk_dp->enabled =3D false;
-> > > +       msleep(100);
-> > > +}
-> > > +
-> > > +static void mtk_dp_parse_drm_mode_timings(struct mtk_dp *mtk_dp,
-> > > +                                         struct drm_display_mode *mo=
-de)
-> > > +{
-> > > +       struct mtk_dp_timings *timings =3D &mtk_dp->info.timings;
-> > > +
-> > > +       drm_display_mode_to_videomode(mode, &timings->vm);
-> > > +       timings->frame_rate =3D mode->clock * 1000 / mode->htotal / m=
-ode->vtotal;
-> > > +       timings->htotal =3D mode->htotal;
-> > > +       timings->vtotal =3D mode->vtotal;
-> > > +}
-> > > +
-> > > +static void mtk_dp_bridge_atomic_enable(struct drm_bridge *bridge,
-> > > +                                       struct drm_bridge_state *old_=
-state)
-> > > +{
-> > > +       struct mtk_dp *mtk_dp =3D mtk_dp_from_bridge(bridge);
-> > > +       struct drm_connector *conn;
-> > > +       struct drm_connector_state *conn_state;
-> > > +       struct drm_crtc *crtc;
-> > > +       struct drm_crtc_state *crtc_state;
-> > > +       int ret =3D 0;
-> > > +       int i;
-> > > +
-> > > +       conn =3D drm_atomic_get_new_connector_for_encoder(old_state->=
-base.state,
-> > > +                                                       bridge->encod=
-er);
-> >
-> > mtk_dp->conn =3D drm_atomic_get_new_connector_for_encoder(old_state->ba=
-se.state,
-> >                                                        bridge->encoder)=
-;
-> >
-> The connector doesn't seem to be used anywhere else in the driver.
-> Though I can add a drm_connector in the mtk_dp struct.
->
-> > > +       if (!conn) {
-> > > +               drm_err(mtk_dp->drm_dev,
-> > > +                       "Can't enable bridge as connector is missing\=
-n");
-> > > +               return;
-> > > +       }
-> > > +
-> > > +       memcpy(mtk_dp->connector_eld, conn->eld, MAX_ELD_BYTES);
-> > > +
-> > > +       conn_state =3D
-> > > +               drm_atomic_get_new_connector_state(old_state->base.st=
-ate, conn);
-> > > +       if (!conn_state) {
-> > > +               drm_err(mtk_dp->drm_dev,
-> > > +                       "Can't enable bridge as connector state is mi=
-ssing\n");
-> > > +               return;
-> > > +       }
-> > > +
-> > > +       crtc =3D conn_state->crtc;
-> > > +       if (!crtc) {
-> > > +               drm_err(mtk_dp->drm_dev,
-> > > +                       "Can't enable bridge as connector state doesn=
-'t have a crtc\n");
-> > > +               return;
-> > > +       }
-> > > +
-> > > +       crtc_state =3D drm_atomic_get_new_crtc_state(old_state->base.=
-state, crtc);
-> > > +       if (!crtc_state) {
-> > > +               drm_err(mtk_dp->drm_dev,
-> > > +                       "Can't enable bridge as crtc state is missing=
-\n");
-> > > +               return;
-> > > +       }
-> > > +
-> > > +       mtk_dp_parse_drm_mode_timings(mtk_dp, &crtc_state->adjusted_m=
-ode);
-> >
-> > Refer to mtk_hdmi_bridge_atomic_enable() for getting the mode.
-> >
-> I'm sorry, I don't understand what I'm supposed to do here.
-> Could you elaborate?
->
-> > > +       if (!mtk_dp_parse_capabilities(mtk_dp)) {
-> > > +               drm_err(mtk_dp->drm_dev,
-> > > +                       "Can't enable bridge as nothing is plugged in=
-\n");
-> > > +               return;
-> > > +       }
-> > > +
-> > > +       //training
-> >
-> > Run checkpatch first.
-> >
-> > Regards,
-> > Chun-Kuang.
-> >
-> > > +       for (i =3D 0; i < 50; i++) {
-> > > +               ret =3D mtk_dp_train_handler(mtk_dp);
-> > > +               if (ret) {
-> > > +                       drm_err(mtk_dp->drm_dev, "Train handler faile=
-d %d\n",
-> > > +                               ret);
-> > > +                       return;
-> > > +               }
-> > > +
-> > > +               ret =3D mtk_dp_state_handler(mtk_dp);
-> > > +               if (ret) {
-> > > +                       drm_err(mtk_dp->drm_dev, "State handler faile=
-d %d\n",
-> > > +                               ret);
-> > > +                       return;
-> > > +               }
-> > > +       }
-> > > +
-> > > +       mtk_dp->enabled =3D true;
-> > > +       mtk_dp_update_plugged_status(mtk_dp);
-> > > +}
-> > > +
-> >
-> >
-> >
-> > > --
-> > > 2.32.0
-> > >
-
-Thx,
-Guillaume.
+T24gV2VkLCAyMDIxLTEyLTE1IGF0IDEzOjQ5ICswMDAwLCBicm9vbmllQGtlcm5lbC5vcmcgd3Jv
+dGU6DQo+IEhpIGFsbCwNCj4gDQo+IEFmdGVyIG1lcmdpbmcgdGhlIHBoeS1uZXh0IHRyZWUsIHRv
+ZGF5J3MgbGludXgtbmV4dCBidWlsZCAoeDg2XzY0DQo+IGFsbG1vZGNvbmZpZykgZmFpbGVkIGxp
+a2UgdGhpczoNCg0KSSBhZG1pdCBJIG5ldmVyIHRyaWVkIGJ1aWxkaW5nIGFueSBvZiB0aGlzIGFz
+IGEgbW9kdWxlLiBJIGFzc3VtZSBuZWl0aGVyIGRpZCBSaWNoYXJkIChub3cgb24gQ0MpIG9yIGFu
+eWJvZHkNCmVsc2UuDQoNCj4gL3RtcC9uZXh0L2J1aWxkL2RyaXZlcnMvcGh5L2ZyZWVzY2FsZS9w
+aHktZnNsLWlteDhtLXBjaWUuYzogSW4gZnVuY3Rpb24gJ2lteDhfcGNpZV9waHlfaW5pdCc6DQo+
+IC90bXAvbmV4dC9idWlsZC9kcml2ZXJzL3BoeS9mcmVlc2NhbGUvcGh5LWZzbC1pbXg4bS1wY2ll
+LmM6NDE6Mzc6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbg0KPiAnRklF
+TERfUFJFUCcgWy1XZXJyb3I9aW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dDQoNCkhtLCB0
+aGF0IHNob3VsZCBjb21lIGZyb20gaW5jbHVkZS9saW51eC9iaXRmaWVsZC5oLiBIb3dldmVyLCB0
+aGF0IHNlZW1zIG5vdCBleHBsaWNpdGx5IGluY2x1ZGVkLiBMaWtlbHksIGluIHRoZQ0KbW9kdWxl
+IGNhc2UgaXQgbm8gbG9uZ2VyIGZpbmRzIGl0LiBUaGF0J3MgYSBwcm9ibGVtLg0KDQo+IMKgwqAg
+NDEgfCAjZGVmaW5lIElNWDhNTV9HUFJfUENJRV9SRUZfQ0xLX0VYVCBGSUVMRF9QUkVQKElNWDhN
+TV9HUFJfUENJRV9SRUZfQ0xLX1NFTCwgMHgyKQ0KPiDCoMKgwqDCoMKgIHzCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgXn5+fn5+fn5+fg0KPiAvdG1wL25leHQvYnVpbGQvZHJpdmVycy9waHkvZnJlZXNjYWxlL3Bo
+eS1mc2wtaW14OG0tcGNpZS5jOjg1Ojc6IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybw0KPiAn
+SU1YOE1NX0dQUl9QQ0lFX1JFRl9DTEtfRVhUJw0KPiDCoMKgIDg1IHzCoMKgwqDCoMKgwqAgSU1Y
+OE1NX0dQUl9QQ0lFX1JFRl9DTEtfRVhUIDoNCj4gwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgIF5+
+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fg0KPiBjYzE6IGFsbCB3YXJuaW5ncyBiZWluZyB0cmVh
+dGVkIGFzIGVycm9ycw0KPiANCj4gQ2F1c2VkIGJ5IGNvbW1pdA0KPiANCj4gwqAgMWFhOTdiMDAy
+MjU4YTE5MGQ3NyAoInBoeTogZnJlZXNjYWxlOiBwY2llOiBJbml0aWFsaXplIHRoZSBpbXg4IHBj
+aWUgc3RhbmRhbG9uZSBwaHkgZHJpdmVyIikNCj4gDQo+IEkgaGF2ZSB1c2VkIHRoZSBwaHktbmV4
+dCB0cmVlIGZyb20geWVzdGVyZGF5Lg0KDQpZZXMsIEkgYWxzbyBub3RpY2VkIGl0IGhhdmluZyBi
+ZWVuIGFwcGxpZWQgdGhlcmUgbm93Lg0KDQpBbnl3YXksIGxldCBtZSBjb29rIHVwIGEgZml4IGZv
+ciB0aGlzLiBUaGFua3MgZm9yIHJlcG9ydGluZy4NCg==

@@ -2,237 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B31F7476248
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F39847624B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233800AbhLOTzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:55:44 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:56774 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231906AbhLOTzi (ORCPT
+        id S233890AbhLOTzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229755AbhLOTzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:55:38 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BFJkP7x016328;
-        Wed, 15 Dec 2021 19:55:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=xnvALnzuykUtUWsTbESF0a7fLCarrfbygXfJoV4B4s8=;
- b=azKX6PGpEpCo9QxRZgrFd6J3f3CJxXrGv8Ftx+/BSWmy9gfRpqjQkerRlmQsVxn4wrRm
- 3iHlAGD1zZmVLbL5vEdi/pK64iA6RqBLn85Gjy+4rkIcqapeUaYPdhQbUY2jjY/kO7qu
- wasQ/s1T9mAg0gDZWZtv0xfJwH7TtJhcfRwWfx8Key8XDQFd9j7K+BUXWKneLrV/S76V
- lt5qpXloSXE3n9p7Ag40uRFaXdqRtoHnFhDvNfm4g8xFk1eFJIsaL0/GA5vSZLzlIk0W
- NWW4Sl8uGUQNjK9AMntGk1ZvAsyG6ZLHnL64T6tGOZNYAAWh34t6lrtlpyOEnJfj0shi jg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cypt784df-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 19:55:03 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BFJqrxZ028567;
-        Wed, 15 Dec 2021 19:55:03 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cypt784bk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 19:55:02 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BFJqpHX002120;
-        Wed, 15 Dec 2021 19:55:00 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3cy78e8tap-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 19:55:00 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BFJkwOQ49021430
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Dec 2021 19:46:58 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D65F34C040;
-        Wed, 15 Dec 2021 19:54:57 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 08D674C044;
-        Wed, 15 Dec 2021 19:54:55 +0000 (GMT)
-Received: from sig-9-65-74-182.ibm.com (unknown [9.65.74.182])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Dec 2021 19:54:54 +0000 (GMT)
-Message-ID: <55d8186018eaf979592349dc7fefd886e10d4c19.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 09/17] KEYS: Rename
- get_builtin_and_secondary_restriction
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "ebiggers@google.com" <ebiggers@google.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "nramas@linux.microsoft.com" <nramas@linux.microsoft.com>,
-        "lszubowi@redhat.com" <lszubowi@redhat.com>,
-        "jason@zx2c4.com" <jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Date:   Wed, 15 Dec 2021 14:54:54 -0500
-In-Reply-To: <31FE813A-91D5-46B8-9658-21F3F1418643@oracle.com>
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
-         <20211124044124.998170-10-eric.snowberg@oracle.com>
-         <fb1d583f588e3f46fdadbe3cf6288bb098ff45f8.camel@kernel.org>
-         <8906F8A4-313F-45E5-8ABD-A1A2D07BFD93@oracle.com> <YadOLrHb14MEfphi@iki.fi>
-         <61f5d74f861ce1015831649d3bca9272a2e3b7bf.camel@linux.ibm.com>
-         <31FE813A-91D5-46B8-9658-21F3F1418643@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: vbRrD6GbhpAi0WTQ9sI-A4Is6MJKymqp
-X-Proofpoint-GUID: u9yowdspx9vXKqSEf6uZvdbN8FscDNiB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-15_12,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
- mlxscore=0 impostorscore=0 clxscore=1011 phishscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112150108
+        Wed, 15 Dec 2021 14:55:53 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEBAC061574;
+        Wed, 15 Dec 2021 11:55:52 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z5so79488892edd.3;
+        Wed, 15 Dec 2021 11:55:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+FwOsMPFWuHD3Srr5u6p6BaVxiN7tOGCdTYxX9oGL+o=;
+        b=iZZfv93BK2mUBBYQ9HStlRrkIUid0JR5mqBhFAVzgoSdsdGevV1qM4FxfpJmXtzMys
+         jUixU/rthfXWIBwtD8daClZfqLVGLLPt9pC89XbWSqYvZFQAZUBuNq4M08ewPGSJvS0/
+         w1y17xDhsg/oNWC5FO5GYLClVYqb01fO+pwGG7xm83gGQ3Hx8ED92M5CtsDLdWZbvWEt
+         hIULSNMAIe0AtzxGs4u7qdPPJn6bmWbXB5YHGxWnEkRYwknuoP+k5XJVSiG6OGNN0lYz
+         y2XmWakWd3Sv7+h5+nBQXXfuIZeRR/cfJ7xXCLE/i2KFB3FTalOvvKlulkda1LzbI1JC
+         A5DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+FwOsMPFWuHD3Srr5u6p6BaVxiN7tOGCdTYxX9oGL+o=;
+        b=ghaJad1BYVbPcyEcRuRjBUY3ah9vsUXlJcFHxVOpZFx22lSJu7fYoV2eV95jBSWv50
+         C2G6jEQki8wwVUHh0ti1WCmyauOhuTdiptH96OGZu9v+tzaGqRK4zTRiHai//Vlua//w
+         ytf9RFtQG5fjOIzcx+jueDb5x/ZbAf/AL1Flimh5TFH2u/N7b+2CB0wbuVmt8WdMQ++0
+         H240eyDv93hRC6DqEVzavphrnv0gFQgjm4q3nZZuwbLW4ACTDpthUXHqgGzpFwPU0j1/
+         +BORBEGI50FQG8FZiz33gbChtRYvPixyLsYldmGmJfJ5ad9MtVJRHezuy1AB/b7pijKc
+         vOlA==
+X-Gm-Message-State: AOAM533rQ2/giFGAkgBg06Dki75Vef2HQp1/5nq0AV2FLGHaQAJRGQZi
+        JgDgrtyX2BqWYq5wKaH0BgA=
+X-Google-Smtp-Source: ABdhPJxgPSPCKdd+bs0T3S6jJAWO+RFNkXUXFnQDekQ03XwGYWVsUzFiNfApY9cxnxCs8Rz/fk+jgg==
+X-Received: by 2002:a17:907:3d01:: with SMTP id gm1mr14554ejc.749.1639598150996;
+        Wed, 15 Dec 2021 11:55:50 -0800 (PST)
+Received: from [192.168.8.198] ([148.252.129.75])
+        by smtp.gmail.com with ESMTPSA id f27sm1032192ejj.193.2021.12.15.11.55.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 11:55:50 -0800 (PST)
+Message-ID: <92f69969-42dc-204a-4138-16fdaaebb78d@gmail.com>
+Date:   Wed, 15 Dec 2021 19:55:51 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
+ <Yboc/G18R1Vi1eQV@google.com>
+ <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
+ <Ybom69OyOjsR7kmZ@google.com>
+ <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
+ <Yboy2WwaREgo95dy@google.com>
+ <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
+ <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-15 at 18:14 +0000, Eric Snowberg wrote:
+On 12/15/21 19:15, Stanislav Fomichev wrote:
+> On Wed, Dec 15, 2021 at 10:54 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> On 12/15/21 18:24, sdf@google.com wrote:
+>>> On 12/15, Pavel Begunkov wrote:
+>>>> On 12/15/21 17:33, sdf@google.com wrote:
+>>>>> On 12/15, Pavel Begunkov wrote:
+>>>>>> On 12/15/21 16:51, sdf@google.com wrote:
+>>>>>>> On 12/15, Pavel Begunkov wrote:
+>>>>>>>> � /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
+>>>>>>>> � #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)����������������� \
+>>>>>>>> � ({����������������������������������������� \
+>>>>>>>> ����� int __ret = 0;��������������������������������� \
+>>>>>>>> -��� if (cgroup_bpf_enabled(CGROUP_INET_INGRESS))������������� \
+>>>>>>>> +��� if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) && sk &&������������� \
+>>>>>>>> +������� CGROUP_BPF_TYPE_ENABLED((sk), CGROUP_INET_INGRESS))���������� \
+>>>>>>>
+>>>>>>> Why not add this __cgroup_bpf_run_filter_skb check to
+>>>>>>> __cgroup_bpf_run_filter_skb? Result of sock_cgroup_ptr() is already there
+>>>>>>> and you can use it. Maybe move the things around if you want
+>>>>>>> it to happen earlier.
+>>>>>
+>>>>>> For inlining. Just wanted to get it done right, otherwise I'll likely be
+>>>>>> returning to it back in a few months complaining that I see measurable
+>>>>>> overhead from the function call :)
+>>>>>
+>>>>> Do you expect that direct call to bring any visible overhead?
+>>>>> Would be nice to compare that inlined case vs
+>>>>> __cgroup_bpf_prog_array_is_empty inside of __cgroup_bpf_run_filter_skb
+>>>>> while you're at it (plus move offset initialization down?).
+>>>
+>>>> Sorry but that would be waste of time. I naively hope it will be visible
+>>>> with net at some moment (if not already), that's how it was with io_uring,
+>>>> that's what I see in the block layer. And in anyway, if just one inlined
+>>>> won't make a difference, then 10 will.
+>>>
+>>> I can probably do more experiments on my side once your patch is
+>>> accepted. I'm mostly concerned with getsockopt(TCP_ZEROCOPY_RECEIVE).
+>>> If you claim there is visible overhead for a direct call then there
+>>> should be visible benefit to using CGROUP_BPF_TYPE_ENABLED there as
+>>> well.
+>>
+>> Interesting, sounds getsockopt might be performance sensitive to
+>> someone.
+>>
+>> FWIW, I forgot to mention that for testing tx I'm using io_uring
+>> (for both zc and not) with good submission batching.
 > 
-> > On Dec 1, 2021, at 6:46 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > 
-> > On Wed, 2021-12-01 at 12:27 +0200, Jarkko Sakkinen wrote:
-> >> On Tue, Nov 30, 2021 at 05:21:45PM +0000, Eric Snowberg wrote:
-> >>> 
-> >>> 
-> >>>> On Nov 26, 2021, at 5:49 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >>>> 
-> >>>> On Tue, 2021-11-23 at 23:41 -0500, Eric Snowberg wrote:
-> >>>>> In preparation for returning either the existing
-> >>>>> restrict_link_by_builtin_and_secondary_trusted or the upcoming
-> >>>>> restriction that includes the trusted builtin, secondary and
-> >>>>> machine keys, to improve clarity, rename
-> >>>>> get_builtin_and_secondary_restriction to get_secondary_restriction.
-> >>>>> 
-> >>>>> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> >>>>> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> >>>>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> >>>>> ---
-> >>>>> v6: Initial version
-> >>>>> v7: Unmodified from v7
-> >>>>> v8: Code unmodified from v7, added Mimi's Reviewed-by
-> >>>>> ---
-> >>>>> certs/system_keyring.c | 4 ++--
-> >>>>> 1 file changed, 2 insertions(+), 2 deletions(-)
-> >>>>> 
-> >>>>> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> >>>>> index 692365dee2bd..8f1f87579819 100644
-> >>>>> --- a/certs/system_keyring.c
-> >>>>> +++ b/certs/system_keyring.c
-> >>>>> @@ -77,7 +77,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
-> >>>>>  * Allocate a struct key_restriction for the "builtin and secondary trust"
-> >>>>>  * keyring. Only for use in system_trusted_keyring_init().
-> >>>>>  */
-> >>>>> -static __init struct key_restriction *get_builtin_and_secondary_restriction(void)
-> >>>>> +static __init struct key_restriction *get_secondary_restriction(void)
-> >>>>> {
-> >>>>>        struct key_restriction *restriction;
-> >>>>> 
-> >>>>> @@ -117,7 +117,7 @@ static __init int system_trusted_keyring_init(void)
-> >>>>>                               KEY_USR_VIEW | KEY_USR_READ | KEY_USR_SEARCH |
-> >>>>>                               KEY_USR_WRITE),
-> >>>>>                              KEY_ALLOC_NOT_IN_QUOTA,
-> >>>>> -                             get_builtin_and_secondary_restriction(),
-> >>>>> +                             get_secondary_restriction(),
-> >>>>>                              NULL);
-> >>>>>        if (IS_ERR(secondary_trusted_keys))
-> >>>>>                panic("Can't allocate secondary trusted keyring\n");
-> >>>> 
-> >>>> This is wrong order.
-> >>>> 
-> >>>> You should first do the changes that make the old name
-> >>>> obsolete and only after that have a patch that does the
-> >>>> rename. Unfortunately, this patch cannot possibly acked
-> >>>> with the current order.
-> >>> 
-> >>> I can change the order, but I'm confused how this would work for a git bisect. 
-> >>> If the rename happens afterwards, now two patches will always need to be 
-> >>> reverted instead of the possibility of one.  Is this your expectation?
-> > 
-> > If the keyring name change is independent of any other changes, as
-> > Jarkko suggested, nothing would break.
-> > 
-> >> I'd drop this patch altogether. Old name is a bit ugly but does it matter
-> >> all that much?
-> > 
-> > The name "get_builtin_and_secondary_restriction" implies trust based on
-> > keys in the ".builtin_trusted_keys" and ".secondary_trusted_keys"
-> > keyrings.  This patch set is extending that to include keys on the new
-> > ".machine" keyring, by linking it to the secondary keyring.  Is leaving
-> > the name unchanged really an option?
-> > 
-> >> 
-> >> You already 16 patches without this.
-> > 
-> > Agreed, it's a lot.  In the past, I've asked Eric to see if some of
-> > them could be squashed.
-> 
-> The series grew based on requests added in each round.  How about
-> I drop IMA support from the next round?  This would eliminate nine patches
-> from the series (5, 6, 7, 9-14), leaving six patches to introduce and enable 
-> the new machine keyring (3, 4, 8, 15-17).  The first two patches could 
-> be taken today.  The only reason the first two are included is to get this series 
-> through the kernel test robot.
-> 
-> This would allow the machine keyring to be used for module signing.  Afterwards 
-> I could introduce the CA restriction behind another Kconfig in a different series to 
-> add back IMA support. Let me know if this would be a better approach.
+> Yeah, last time I saw 2-3% as well, but it was due to kmalloc, see
+> more details in 9cacf81f8161, it was pretty visible under perf.
+> That's why I'm a bit skeptical of your claims of direct calls being
+> somehow visible in these 2-3% (even skb pulls/pushes are not 2-3%?).
 
-Once you allow ALL the MOK keys to be loaded onto the .machine keyring,
-limiting which keys should be loaded will change the existing expected
-behavior.  So you indeed would need to define a new config option.
+migrate_disable/enable together were taking somewhat in-between
+1% and 1.5% in profiling, don't remember the exact number. The rest
+should be from rcu_read_lock/unlock() in BPF_PROG_RUN_ARRAY_CG_FLAGS()
+and other extra bits on the way.
 
-Your patch set links the ".machine" keyring to the
-".secondary_trusted_keys" kerying. Based on
-IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY config being
-enabled, determines whether IMA trusts the secondary keyring.
+I'm skeptical I'll be able to measure inlining one function,
+variability between boots/runs is usually greater and would hide it.
 
-From IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY:
-        help
-          Keys may be added to the IMA or IMA blacklist keyrings, if
-the
-          key is validly signed by a CA cert in the system built-in or
-          secondary trusted keyrings.
+> But tbf I don't understand how it all plays out with the io_uring.
 
-          Intermediate keys between those the kernel has compiled in
-and the
-          IMA keys to be added may be added to the system secondary
-keyring,
-          provided they are validly signed by a key already resident in
-the
-          built-in or secondary trusted keyrings.
+1 syscall per N requests (N=32 IIRC), 1 fdget() per N, no payload
+page referencing (for zc), and so on
 
-A dependency to prevent enabling this configuration, if the ".machine"
-keyring is enabled, would need to be defined.
 
-thanks,
+> (mostly trying to understand where there is some gain left on the
+> table for TCP_ZEROCOPY_RECEIVE).
 
-Mimi
-
+-- 
+Pavel Begunkov

@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE46476350
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC47476353
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236057AbhLOU3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:29:31 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:39658 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbhLOU3a (ORCPT
+        id S236073AbhLOUbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:31:20 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:46296 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234794AbhLOUbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:29:30 -0500
-Received: by mail-ot1-f51.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso26321099ots.6;
-        Wed, 15 Dec 2021 12:29:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=agAmJrAHp4WJOo55DBZF6jiUaB3K9dubsfqlOWvl1sI=;
-        b=luPk83VxHJiOenjyPEYi6CoZN+GwIoSH+7ubUgmQ0K2m/LcTMHPTGqu0vDXJBtyGtI
-         msWxwKM1LR6N9c20BZ5BBdP/TpoyqkKjDt7QCOEL7JE+kPEZQfz+MtTY19VBqFgZjxuk
-         +2TEUU8WkiC7Lzca+O3+MftwOePpLfJvHmAtGTka8or5n7LxmrRJp/oOaU6rcEWwlKQY
-         jrzknZtH7HCBL4/O7gjXn8i13w+AntoYLM8UyjwCBY2JBwsxZmhKbT7t1nd3yKr2VJQX
-         H+qK5655kcoLaJeimATGDr0du4exKfGA97dg2WQPekMlcS4j466PV43oojuHH/9aFSw+
-         8DSQ==
-X-Gm-Message-State: AOAM533q51pLSHMhxeD2wiXRyRJeqmzIkfen74CwQWvELNeJ0cqpjYnS
-        DooYeODFIebN/90vtg+JPw==
-X-Google-Smtp-Source: ABdhPJz9yUol/9bNBhhW7cpZ2jGbw20gyt4RO4u1F4JQBcIkMG+mhJOkyFi0L7NloVWIsLaailAEMw==
-X-Received: by 2002:a9d:77c6:: with SMTP id w6mr10382149otl.155.1639600169412;
-        Wed, 15 Dec 2021 12:29:29 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t11sm638861otj.24.2021.12.15.12.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 12:29:28 -0800 (PST)
-Received: (nullmailer pid 1784906 invoked by uid 1000);
-        Wed, 15 Dec 2021 20:29:27 -0000
-Date:   Wed, 15 Dec 2021 14:29:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Qianggui Song <qianggui.song@amlogic.com>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Wed, 15 Dec 2021 15:31:19 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 590531C0B98; Wed, 15 Dec 2021 21:31:18 +0100 (CET)
+Date:   Wed, 15 Dec 2021 21:31:13 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Merlijn Wajer <merlijn@wizzup.org>
+Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        Dev Null <devnull@uvos.xyz>, Tony Lindgren <tony@atomide.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        "Sicelo A. Mhlongo" <absicsz@gmail.com>,
+        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-gpio@vger.kernel.org,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Dan Murphy <dmurphy@ti.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Subject: Re: [PATCH 2/3] dt-bindings: gpio: Add a header file for Amlogic
- Meson S4
-Message-ID: <YbpQJ3D6UrMckg02@robh.at.kernel.org>
-References: <20211214022100.14841-1-qianggui.song@amlogic.com>
- <20211214022100.14841-3-qianggui.song@amlogic.com>
+        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ARM: dts: omap3-n900: Fix lp5523 for multi color
+Message-ID: <20211215203113.GE28336@duo.ucw.cz>
+References: <20211212224007.10293-1-merlijn@wizzup.org>
+ <20211212224007.10293-2-merlijn@wizzup.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="a1QUDc0q7S3U7/Jg"
 Content-Disposition: inline
-In-Reply-To: <20211214022100.14841-3-qianggui.song@amlogic.com>
+In-Reply-To: <20211212224007.10293-2-merlijn@wizzup.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 10:20:59 +0800, Qianggui Song wrote:
-> Add a new dt-binding header file which documents the detail pin names.
-> 
-> Signed-off-by: Qianggui Song <qianggui.song@amlogic.com>
-> ---
->  include/dt-bindings/gpio/meson-s4-gpio.h | 99 ++++++++++++++++++++++++
->  1 file changed, 99 insertions(+)
->  create mode 100644 include/dt-bindings/gpio/meson-s4-gpio.h
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+--a1QUDc0q7S3U7/Jg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> From: "Sicelo A. Mhlongo" <absicsz@gmail.com>
+>=20
+> Since the LED multicolor framework support was added in commit
+> 92a81562e695 ("leds: lp55xx: Add multicolor framework support to lp55xx")
+> LEDs on this platform stopped working.
+
+Does this change names is /sys/class/leds?
+
+Best regards,
+								Pavel
+--=20
+http://www.livejournal.com/~pavelmachek
+
+--a1QUDc0q7S3U7/Jg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYbpQkQAKCRAw5/Bqldv6
+8vpmAKCmg+y81WeSFmyrK2qvObpFyZI28gCeKQovv1MP1lI3LSdsWLab55DwqFE=
+=mEH/
+-----END PGP SIGNATURE-----
+
+--a1QUDc0q7S3U7/Jg--

@@ -2,105 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1108B475A90
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2991D475A95
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243331AbhLOOTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:19:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S243336AbhLOOTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243292AbhLOOTO (ORCPT
+        with ESMTP id S237641AbhLOOTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:19:14 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19317C06173E;
-        Wed, 15 Dec 2021 06:19:14 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id k37so43533219lfv.3;
-        Wed, 15 Dec 2021 06:19:14 -0800 (PST)
+        Wed, 15 Dec 2021 09:19:49 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2767CC06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 06:19:49 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id d11so11628469pgl.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 06:19:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wgEoOe80ydYoYhOrnQFTmgFp/fiiDyl6aBseAyf2+vA=;
-        b=lG/cn4qdGgxDXdA6SBGobZm7+BTvpVBZmhUM94+PsJ/S0qWUNi7wGzUOTVZvf/GcsC
-         GhvYEPV+89gkNkF7dWorWTchvKOKwr2B6KS9DwxWAnekaaG2Q3wM3OH6Jut4Gewz0i5I
-         KL4byysJzIoH42kOEazdZBZr4svNeMsWWUkwYFdOj3HQHbw+ESwfcveKs339cHlHNlB4
-         IZCDRod5PvJswr83iiXGaXuN2HNqnu0rKYdw0eRWg4wu6pwQ036z4bW1imn1To02DEy3
-         lGIg5dJ8jf6SvKCJV+8kUwhS7xKffkqEgwHAg/N+AEH9OizB3n0vNf99OYgRml7zGzHm
-         vOTA==
+        d=9elements.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bYO72Xiz+IzX17yEGA37Zawk+fJB2f9J+6VJQ3xUS98=;
+        b=BWp1cHOc9CE/pRtoQNg2hI2YavfSzPgvejTKmFzRYOumv7tR/K643vWh4TmtqjSZw/
+         xUqOGFcQpMfXKK6sLtJ32mRhM9Tt//hq2rH7HuZlYqMtb0bpba4Olrsd6syTzybzpPFk
+         LCAvrJpj/GwSrJ5XWLKBrpaHCY0y4lqKnLBaGFP/UOCfhACOhlDN3XHpYMpQjVbLrAw7
+         VIMuQtFhUh0pp4qP39i/mvhdtAaRMmUkGYavkvSfwKTIPBt55sdDdQkLqhuN+KQlxaP7
+         5JwjH8VQMue6Yoh4gXN1fdC0b4plh0t+SVYgqU+H7Yn3qVUVh542klijzos2yUcWE4P2
+         kgCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wgEoOe80ydYoYhOrnQFTmgFp/fiiDyl6aBseAyf2+vA=;
-        b=1hy6ETpwQb//t1t8V7SsbSk7CM2RJK+vPxvKSVkm4AvCOmE7UTeQUk0fS22J3EAG6p
-         xFsZ2KYd71na3Ka+Vj/hUjubYoE2dkOP3amtkPXd3SGpg3jgQW5/2ErFowQLBXF+W/LP
-         YIY6fxt4CLSPpUli8aqc6BvsSJL32iKC6DgkzbLE9XAzw5jD75P95MNYA4sLz1htmZTi
-         jnnDSGA185o//Pt2ZFLwDN5z1NI2S9AccQAPxixWNWSKfNpHE+MsNHBdToHNVIi14xm6
-         HBQGXysabH5CmpfneR0B2/szIJx3+5uYS1uY/SpwVkMYqac8az5hljVtr2Uxjr9U5hYV
-         v8ZQ==
-X-Gm-Message-State: AOAM531JL+49ATRIjeV5JcREjiWJv7XF5OEzp7zvSbrue4xJiox2DvcR
-        0CL/CdcEm0BrWHPiDnF6VjmR039BkBE=
-X-Google-Smtp-Source: ABdhPJzWqv4rzu/nRAZ3WfSzaLPuAvty+2g7LYK/Ea0zstxzmdgT3qe6/jbOatdKz+jIqN5XdJ1LNQ==
-X-Received: by 2002:a05:6512:1289:: with SMTP id u9mr9892434lfs.273.1639577952153;
-        Wed, 15 Dec 2021 06:19:12 -0800 (PST)
-Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
-        by smtp.googlemail.com with ESMTPSA id o26sm340685lfb.242.2021.12.15.06.19.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 06:19:11 -0800 (PST)
-Subject: Re: [PATCH v6 08/28] ARM: tegra: Add device-tree for ASUS Transformer
- Prime TF201
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        David Heidelberg <david@ixit.cz>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Anton Bambura <jenneron@protonmail.com>,
-        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
-        Nikola Milosavljevic <mnidza@outlook.com>,
-        Ion Agorria <ion@agorria.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Ihor Didenko <tailormoon@rambler.ru>,
-        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
-        Jasper Korten <jja2000@gmail.com>,
-        Thomas Graichen <thomas.graichen@gmail.com>,
-        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211211211412.10791-1-digetx@gmail.com>
- <20211211211412.10791-9-digetx@gmail.com> <Ybntiedyo353hMxm@orome>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <373613c6-2c3b-522c-ac63-371304b79bb9@gmail.com>
-Date:   Wed, 15 Dec 2021 17:19:09 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bYO72Xiz+IzX17yEGA37Zawk+fJB2f9J+6VJQ3xUS98=;
+        b=tO9IxCLdx9/WxHf8psVzUaA6ODwHHrOfHPErErNxGHE4DLg693gtOMwHtCJ4SqqCYW
+         /cRokSB/aBqPri3MWiNJ2IKuK8d8O1WY9cEJrE9jPZU8+ChTMBzM73rSiNfw49mzsnlu
+         /bhLGBchMguJZ7002qFNh87QcyURaNpuBHU5f8WK2782b72hyG0HRfRO3TxsZqyfVpBD
+         SZMONep3JH4qzqMXk7D6snQJnNemktpc76Wj3ZIQ7MNH/gzmrwKV8iFa35WzfenJHzf3
+         DyhCOgiZtSCap49m2IhTOgChaUTYO+shW646XVx7Eaq7QwRZZyZvgbpByWfOx5QWbltG
+         riAA==
+X-Gm-Message-State: AOAM533q13fE7y2SNABUGjNi5osBXCmBpJhub5mRS2Z1wwE/lVAZFURe
+        lLDj2/lXVdZQAwhGfYCN+GPjntg7oNl0yc5peOfruw==
+X-Google-Smtp-Source: ABdhPJx8GVAYnl9B182MKt8R6HBm86O0PhVJCK98BFGGAB/cxX0g6LKlCE9LCr8tlExy5HRq8PA94KkSeIoQ5nnOomQ=
+X-Received: by 2002:a05:6a00:1389:b0:4ad:528b:bf86 with SMTP id
+ t9-20020a056a00138900b004ad528bbf86mr9300370pfg.80.1639577988433; Wed, 15 Dec
+ 2021 06:19:48 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Ybntiedyo353hMxm@orome>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211214095021.572799-1-patrick.rudolph@9elements.com>
+ <Ybh8cCU/zbfXkXYO@pendragon.ideasonboard.com> <a78b52ec-81bf-9ee1-9e12-135079d19b7a@axentia.se>
+In-Reply-To: <a78b52ec-81bf-9ee1-9e12-135079d19b7a@axentia.se>
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+Date:   Wed, 15 Dec 2021 15:19:37 +0100
+Message-ID: <CALNFmy3vwkvU2ctBE6otCBnhMb2GAOXvRW6NGpOwwAD2qVt7ag@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dt-bindings: i2c Update PCA954x
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-15.12.2021 16:28, Thierry Reding пишет:
-> On Sun, Dec 12, 2021 at 12:13:52AM +0300, Dmitry Osipenko wrote:
-> [...]
->> +	display-panel {
->> +		compatible = "hannstar,hsd101pww2";
-> 
-> There doesn't seem to be a DT binding for this and I can't find any
-> patches where this would be added. Is there a patch somewhere to do
-> this?
+Hi Peter,
+thanks for your feedback.
+You are right, the added Maxim chips should not have set the
+interrupt-controller; flag.
 
-Are you trolling me? :/ Please search the "Tegra kernel patches for
-5.17" email in your inbox, it must be there. Please read and answer to it.
+The reason I decided to not handle that interrupt is that I don't know
+where to pass that bus error to.
+It looks like only the I2C master can signal bus errors by returning
+-EIO, however there's no API for I2C clients
+to pass such errors to the master. However any attempt to access the
+stuck and isolated bus will fail and
+the address will be NACKed, so I don't think that this a big issue as
+in the end the bus stall will be detected.
 
-All patches are in the Tegra patchwork. Who marked them "Not Applicable"?
+Is there a mapping between devicetree bindings and driver file names?
+If not I'll use
+maxim,max7356 as devicetree binding to make it easier to read and
+mention that interrupts
+are not supported for those maxim devices.
 
-https://patchwork.ozlabs.org/project/linux-tegra/patch/20211211213653.17700-3-digetx@gmail.com/
+Regards,
+Patrick
 
-https://patchwork.ozlabs.org/project/linux-tegra/list/?series=276358
+On Wed, Dec 15, 2021 at 1:42 PM Peter Rosin <peda@axentia.se> wrote:
+>
+> Hi!
+>
+> On 2021-12-14 12:13, Laurent Pinchart wrote:
+> > Hi Patrick,
+> >
+> > Thank you for the patch.
+> >
+> > On Tue, Dec 14, 2021 at 10:50:18AM +0100, Patrick Rudolph wrote:
+> >> Add the Maxim MAX735x as supported chip to PCA954x and add an
+> >> example how to use it.
+> >>
+> >> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> >> ---
+> >>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 40 +++++++++++++++++++
+> >>  1 file changed, 40 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> >> index 9f1726d0356b..bd794cb80c11 100644
+> >> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> >> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> >> @@ -11,6 +11,7 @@ maintainers:
+> >>
+> >>  description:
+> >>    The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
+> >> +  Compatible with Maxim MAX7356 - MAX7358 I2C mux/switch devices.
+> >>
+> >>  allOf:
+> >>    - $ref: /schemas/i2c/i2c-mux.yaml#
+> >> @@ -19,6 +20,9 @@ properties:
+> >>    compatible:
+> >>      oneOf:
+> >>        - enum:
+> >> +          - maxim,max7356
+> >> +          - maxim,max7357
+> >> +          - maxim,max7358
+> >>            - nxp,pca9540
+> >>            - nxp,pca9542
+> >>            - nxp,pca9543
+> >> @@ -40,6 +44,7 @@ properties:
+> >>
+> >>    interrupts:
+> >>      maxItems: 1
+> >> +    description: Only supported on NXP devices. Unsupported on Maxim MAX735x.
+> >
+> > Could this be modelled by a YAML schema instead ? Something like
+> >
+> > allOf:
+> >   - if:
+> >       properties:
+> >         compatible:
+> >         contains:
+> >           enum:
+> >               - maxim,max7356
+> >               - maxim,max7357
+> >               - maxim,max7358
+> >     then:
+> >       properties:
+> >         interrupts: false
+> >
+> > (untested, it would be nice to use a pattern check for the compatible
+> > property if possible)
+>
+> Some of the existing NXP chips do not support interrupts; we should
+> probably treat these new chips the same as the older ones. Either by
+> disallowing interrupts on both kinds or by continuing to ignore the
+> situation.
+>
+> That said, I'm slightly in favor of the latter, since these new chips
+> do have interrupts, just not the same flavor as the NXP chips. What
+> the Maxim chips do not have is support for being an
+>         interrupt-controller;
+> At least that's how I read it...
+>
+> I don't know how this situation is supposed to be described? Maybe this
+> new kind of interrupt should be indicated with a bus-error-interrupts
+> property (or bikeshed along those lines)? Maybe there should be two
+> entries in the existing interrupts property? Maybe these new chips
+> should be described in a new binding specific to maxim,max7356-7358
+> (could still be handled by the pca954x driver of course) to keep the
+> yaml simpler to read?
+>
+> However, there is also maxim,max7367-7369 to consider. They seem to
+> have interrupts of the style described by the NXP binding (haven't
+> checked if the registers work the same, but since they reuse the
+> 0x70 address-range the are in all likelihood also compatible).
+>
+> Cheers,
+> Peter
+>
+> >>
+> >>    "#interrupt-cells":
+> >>      const: 2
+> >> @@ -100,6 +105,41 @@ examples:
+> >>                  #size-cells = <0>;
+> >>                  reg = <4>;
+> >>
+> >> +                rtc@51 {
+> >> +                    compatible = "nxp,pcf8563";
+> >> +                    reg = <0x51>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +  - |
+> >> +    i2c {
+> >> +        #address-cells = <1>;
+> >> +        #size-cells = <0>;
+> >> +
+> >> +        i2c-mux@74 {
+> >> +            compatible = "maxim,max7357";
+> >> +            #address-cells = <1>;
+> >> +            #size-cells = <0>;
+> >> +            reg = <0x74>;
+> >> +
+> >> +            i2c@1 {
+> >> +                #address-cells = <1>;
+> >> +                #size-cells = <0>;
+> >> +                reg = <1>;
+> >> +
+> >> +                eeprom@54 {
+> >> +                    compatible = "atmel,24c08";
+> >> +                    reg = <0x54>;
+> >> +                };
+> >> +            };
+> >> +
+> >> +            i2c@7 {
+> >> +                #address-cells = <1>;
+> >> +                #size-cells = <0>;
+> >> +                reg = <7>;
+> >> +
+> >>                  rtc@51 {
+> >>                      compatible = "nxp,pcf8563";
+> >>                      reg = <0x51>;
+> >

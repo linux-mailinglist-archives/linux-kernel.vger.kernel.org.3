@@ -2,185 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC9D475FCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACDA475FA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238334AbhLORtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:49:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S237782AbhLORpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238305AbhLORtf (ORCPT
+        with ESMTP id S235513AbhLORpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:49:35 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46070C061401;
-        Wed, 15 Dec 2021 09:49:35 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id co15so1617800pjb.2;
-        Wed, 15 Dec 2021 09:49:35 -0800 (PST)
+        Wed, 15 Dec 2021 12:45:43 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA136C061574;
+        Wed, 15 Dec 2021 09:45:42 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so21092777pja.1;
+        Wed, 15 Dec 2021 09:45:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EcfVA2uBNe/X9h6wuhZ5EuU1xWQlNWZCg+pNTH+2meY=;
-        b=kIp4kYBkdDDru9e4HJrZZx1Mqq/lPJBOIQxaWAsqiDdm5RVCVoj8s/WNVOAt2apkEx
-         ehoLvfo0+fBHvEsFhC0tCoKyHUtmWXT/Ecsn1nSwftN1qUFJmUuEAQZ1jKtM3Xd3WTwa
-         cnM8BMDTbbYcRQt61uaFQrp/TA68fpZv5INyMdhWf5322Jf/2TfxfXaTvCdmk4gU0Jpv
-         ljXrNLt8ooqMdRZS95G+BM7KKfsmaGofA29Yl+FKKidVMQNBD7a7NtwUD1ePxcgFqOm2
-         0EHLFM7xvi/1la+RR5HsxUEyIY+XvK32s/BtNI7ijOH5ufs2fpUvG8OntcmSw9UURLuy
-         V9iQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RLdWdHoT6O3wLXgWsRx2m2m62hSjV0BcJXlTjn5JUFY=;
+        b=fVGVY8wqrxR8Y9FDXFtr4SE6iyR8BVVbZ5vgJ4y8dkqTnryOyAM1f7oIOnezuj4A6J
+         xZUPr4yWMlNLYsHQ1fallxSJg8aU00+SwAnq0ijeJb6rpCasKd3VYye0HMu7Rz4Fmzli
+         VTY7ooY+g0kHA+TAUoyyLgzX0mSn9ha1KmFllLdg51BzQBC+Mgmo9+XdPBjphX6Y4e34
+         aHA3UHFWRC7Btex9u1tZiEFoYFee/G/WGm4rYd3nNUPqV0MpixQGc6Vx0PruHv6wejmQ
+         Ow0n2j4fyu9ba9vCZKTh9cTJvx1bERx0Yn7rh5DuRA2QxMZuAeUzJXU06wIQ9Mevfcss
+         WI7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EcfVA2uBNe/X9h6wuhZ5EuU1xWQlNWZCg+pNTH+2meY=;
-        b=61sE/vDM7tLLIN7OgCdzin72QdH6NR+gcQSy3T9pXUF5Ka8A1lBWAYhXBeAUbse5R6
-         wHo/UO9v0az2Ni3NY+Zn+o3YIzyYdE5iE4vtQPbug+xXOCKsgOIVq7JUCAiZ/TtW0iA5
-         gJyXyJvx2TX76JEHgRqIPEiJm2b6c+ssRCMo4DvPYB+voKnf4JLkc0gdJaIVOuRnUF/N
-         BNXN+KpfDtMO62EnI2JNarYHPYJnW7gemKpx9UMummiRpGFaq6LLmeOPC27gp/tkbC9S
-         xgvPwzc76JKpo28s/GrzuzKZ63SuzK758cgoDbytoB/h4JKu9pN64u14kegwpGWWxZtI
-         W8dg==
-X-Gm-Message-State: AOAM530izj2Xng7VgGa3a5OASxBGPgi8YjIiY8l26iiwNM2hgPM47Ovd
-        EkxlSDSMB1PAfL4SjzNlU5E=
-X-Google-Smtp-Source: ABdhPJx1Bx8yaUPuKlzM1Tz2ZDpWlyHvRiqC3BiqYmeoSCToMSDaurYg6b8JjJUEdJA2daCWrJD6wQ==
-X-Received: by 2002:a17:902:e54d:b0:148:a2e8:278a with SMTP id n13-20020a170902e54d00b00148a2e8278amr5386218plf.145.1639590574740;
-        Wed, 15 Dec 2021 09:49:34 -0800 (PST)
-Received: from localhost (c-73-25-156-94.hsd1.or.comcast.net. [73.25.156.94])
-        by smtp.gmail.com with ESMTPSA id n3sm2976279pgc.76.2021.12.15.09.49.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 09:49:33 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 3/3] drm/msm/debugfs: Add display/kms state snapshot
-Date:   Wed, 15 Dec 2021 09:45:08 -0800
-Message-Id: <20211215174524.1742389-4-robdclark@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211215174524.1742389-1-robdclark@gmail.com>
-References: <20211215174524.1742389-1-robdclark@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RLdWdHoT6O3wLXgWsRx2m2m62hSjV0BcJXlTjn5JUFY=;
+        b=sXa4PcQUXBKlR2VROcfOlrvxsOIi4XVb+mljr5YNYnVds/2Me+M5DI44i8rGe9Rcnk
+         UY8yugizTuUUUgzZfMVuh3URcNtM660AB1Gkd67ZcxQTgY24kDF9abv/x9fBJqAeEReX
+         7Zhgo7ET0YVC0GzDKs17CDVjYYvF160fhZSSG+SILcsHJRVm1vPoqWcO6rSfwCUaY+lV
+         PlbbsWM06gUdehVGBC4896CjSbgZKstoR0VClDQoo6UyaLnWd9E9cshdwORHG/jN/RdJ
+         xaV+ctip9qT+NOtVFAFVnv0azE6qDGv3C/xyePJvckwSI/ZKrDcygb4xLSWyNvJ6P6b4
+         7aPQ==
+X-Gm-Message-State: AOAM531bZh5ia5V0qOR9CYeeK4bH6cqyS2+9ClJCKIRMj41tZ4/JaYmR
+        GzI4SXUAq703SpgzI+2TkhJHRYocxravu9zYHsQ=
+X-Google-Smtp-Source: ABdhPJxIcVzS1V95pBlMUcYP2k7Lrcyzl/rBNhnf3pbvrkTovj6aQvXpyQPCUffP2FcbLTl6T7AIgJQIhLFRrE2qAuQ=
+X-Received: by 2002:a17:90a:4a06:: with SMTP id e6mr968675pjh.228.1639590342342;
+ Wed, 15 Dec 2021 09:45:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211128035704.270739-1-yury.norov@gmail.com> <20211128035704.270739-3-yury.norov@gmail.com>
+ <YaPGDOvBzhiRFcOP@qmqm.qmqm.pl> <CAAH8bW9-dbENFUrwPUQ-uJVVX_s=PWb2zpAJ8BqkV3vJE696mA@mail.gmail.com>
+ <0ccb827de1164b2989d652bfb6f1bbab@AcuMS.aculab.com>
+In-Reply-To: <0ccb827de1164b2989d652bfb6f1bbab@AcuMS.aculab.com>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Wed, 15 Dec 2021 09:45:30 -0800
+Message-ID: <CAAH8bW-u5AsFTXUOJPRkF-6dk1LcL7PE0Tm+dUc9Ctb6JMy=tg@mail.gmail.com>
+Subject: Re: [PATCH 2/9] lib/bitmap: implement bitmap_{empty,full} with bitmap_weight_eq()
+To:     David Laight <David.Laight@aculab.com>
+Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Dennis Zhou <dennis@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
+        Mark Gross <markgross@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Roy Pledge <Roy.Pledge@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Wed, Dec 15, 2021 at 12:41 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Yury Norov
+> > Sent: 14 December 2021 19:43
+> ...
+> >
+> > I think that for long bitmaps the most time consuming operation is moving
+> > data to L1, and for short bitmaps the difference between approaches is
+> > barely measurable.
+> >
+> > But hweght_long on each iteration can't be more effective than the current
+> > version. So, I'll drop this patch for v2 and keep things unchanged.
+>
+> Actually do bitmap_full/empty() calls make any sense at all?
+> The result is stale since bitmaps are designed to do locked operations.
+> If you have a lock covering the bitmap then you should be using
+> something that uses non-locked accesses.
+> Rightly or wrongly that isn't the bitmap api.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
-v2: Drop unneeded msm_kms_show_priv [Dmitry B]
-
- drivers/gpu/drm/msm/msm_debugfs.c | 75 +++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
-
-diff --git a/drivers/gpu/drm/msm/msm_debugfs.c b/drivers/gpu/drm/msm/msm_debugfs.c
-index 956b1efc3721..0804c31e8962 100644
---- a/drivers/gpu/drm/msm/msm_debugfs.c
-+++ b/drivers/gpu/drm/msm/msm_debugfs.c
-@@ -15,6 +15,11 @@
- #include "msm_gpu.h"
- #include "msm_kms.h"
- #include "msm_debugfs.h"
-+#include "disp/msm_disp_snapshot.h"
-+
-+/*
-+ * GPU Snapshot:
-+ */
- 
- struct msm_gpu_show_priv {
- 	struct msm_gpu_state *state;
-@@ -109,6 +114,73 @@ static const struct file_operations msm_gpu_fops = {
- 	.release = msm_gpu_release,
- };
- 
-+/*
-+ * Display Snapshot:
-+ */
-+
-+static int msm_kms_show(struct seq_file *m, void *arg)
-+{
-+	struct drm_printer p = drm_seq_file_printer(m);
-+	struct msm_disp_state *state = m->private;
-+
-+	msm_disp_state_print(state, &p);
-+
-+	return 0;
-+}
-+
-+static int msm_kms_release(struct inode *inode, struct file *file)
-+{
-+	struct seq_file *m = file->private_data;
-+	struct msm_disp_state *state = m->private;
-+
-+	msm_disp_state_free(state);
-+
-+	return single_release(inode, file);
-+}
-+
-+static int msm_kms_open(struct inode *inode, struct file *file)
-+{
-+	struct drm_device *dev = inode->i_private;
-+	struct msm_drm_private *priv = dev->dev_private;
-+	struct msm_disp_state *state;
-+	int ret;
-+
-+	if (!priv->kms)
-+		return -ENODEV;
-+
-+	ret = mutex_lock_interruptible(&priv->kms->dump_mutex);
-+	if (ret)
-+		return ret;
-+
-+	state = msm_disp_snapshot_state_sync(priv->kms);
-+
-+	mutex_unlock(&priv->kms->dump_mutex);
-+
-+	if (IS_ERR(state)) {
-+		return PTR_ERR(state);
-+	}
-+
-+	ret = single_open(file, msm_kms_show, state);
-+	if (ret) {
-+		msm_disp_state_free(state);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct file_operations msm_kms_fops = {
-+	.owner = THIS_MODULE,
-+	.open = msm_kms_open,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = msm_kms_release,
-+};
-+
-+/*
-+ * Other debugfs:
-+ */
-+
- static unsigned long last_shrink_freed;
- 
- static int
-@@ -239,6 +311,9 @@ void msm_debugfs_init(struct drm_minor *minor)
- 	debugfs_create_file("gpu", S_IRUSR, minor->debugfs_root,
- 		dev, &msm_gpu_fops);
- 
-+	debugfs_create_file("kms", S_IRUSR, minor->debugfs_root,
-+		dev, &msm_kms_fops);
-+
- 	debugfs_create_u32("hangcheck_period_ms", 0600, minor->debugfs_root,
- 		&priv->hangcheck_period);
- 
--- 
-2.33.1
-
+Are you talking about __{set,clear}_bit()?
+include/asm-generic/bitops/non-atomic.h

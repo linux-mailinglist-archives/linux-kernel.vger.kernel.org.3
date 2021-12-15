@@ -2,106 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EB44763AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042D74763BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234150AbhLOUqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:46:15 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:47788 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbhLOUqO (ORCPT
+        id S233625AbhLOUu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229941AbhLOUu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:46:14 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 1458D1C0B9C; Wed, 15 Dec 2021 21:46:13 +0100 (CET)
-Date:   Wed, 15 Dec 2021 21:46:06 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Florian Eckert <fe@dev.tdt.de>
-Cc:     robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] leds: ktd20xx: Add the KTD20xx family of the RGB
- LEDs driver from Kinetic
-Message-ID: <20211215204606.GH28336@duo.ucw.cz>
-References: <20211123101826.9069-1-fe@dev.tdt.de>
- <20211123101826.9069-2-fe@dev.tdt.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="AzNpbZlgThVzWita"
-Content-Disposition: inline
-In-Reply-To: <20211123101826.9069-2-fe@dev.tdt.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Wed, 15 Dec 2021 15:50:28 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D9DC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 12:50:27 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id j18-20020a258152000000b006000d292a42so45616147ybm.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 12:50:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=NAo1ycJu3XyEPZpDshhuC6pxi2PdRLOf6LhiLqg4ifA=;
+        b=j6bkHpGQGZ5RU9UhhE+tOXjOCW8gXXPdd4zJfDHPqrHlkJYdNftVyqvh8yy5Mfn7/y
+         TwsY6JIXwSvILwWwqQSvyTC9E14rmI4ZwcxqXEMFHjCtljAb7ETqh5QKWb1UV3HtmyQx
+         fqCXLSduU6VSG/8PsVuFQLZcAdInI7mWbhijA6ANKu1RN9N7S+jAfodTySis75aQT9pR
+         s3AjensJkNnrk7ZCZ4PV44hqRHRgss9XRMb0GeBqLJIiumX1jtnPzwFpM41qvM6qBm88
+         FogRE2cv8e9dX4WKwP5FTGLvJRkDREZDiWMPJSCGy2g0i4gJ+3hDUZOeFmLxZ/c2pKJx
+         4UvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=NAo1ycJu3XyEPZpDshhuC6pxi2PdRLOf6LhiLqg4ifA=;
+        b=RG/cvIEwf1C6Kz60HCwuN7EMouBBAts4hWhjyf46XnTu8zWMo2rrK495H9e5Eu694r
+         XB5cApGEoeurzCCxqI80rHSReov5uDKPEBaQs2aScMHo/tPqVLXcuN/5wznWivTwcly4
+         s6eprRdgsSDFA9skMZaBAZKlx9uR5AbmPsQbyIhgPGo4DsP4nU9EwhoceG4bYiCt3C41
+         BVPi2J+9V+woiB2YmKZadzkZmyXTlEQBCkFt8WlL3QbUBWBAI8GlKbdQ+xquMHBl7an1
+         2YAPEsCXCwhS133g2qfIuNlkGaS21OuDZPR3N3WHlEdkbvaTeJ0yXuJAI7N82vTC0jzR
+         9brw==
+X-Gm-Message-State: AOAM530qysWQh/HufgF/VjpCw10V8otyEllCP/6ybLWy13QPQyGt15kZ
+        dqu9So0mTb++RmYTQGFaj3PVyVUIs98aOw==
+X-Google-Smtp-Source: ABdhPJwMD6YsHXO4Rfc7WCDeo9/IZDWQB0EKqpKkQZkujkDq/NBsT+yi4a/+zjw+o066HwyXbiZ3NFwMrRgeXw==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1bef:2d92:9c3e:f258])
+ (user=dlatypov job=sendgmr) by 2002:a25:d4ce:: with SMTP id
+ m197mr9126045ybf.194.1639601427048; Wed, 15 Dec 2021 12:50:27 -0800 (PST)
+Date:   Wed, 15 Dec 2021 12:50:14 -0800
+Message-Id: <20211215205014.398984-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH v3] kunit: tool: Default --jobs to number of CPUs
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: David Gow <davidgow@google.com>
 
---AzNpbZlgThVzWita
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The --jobs parameter for kunit_tool currently defaults to 8 CPUs,
+regardless of the number available. For systems with significantly more
+(or less), this is not as efficient. Instead, default --jobs to the
+number of CPUs available to the process: while there are as many
+superstitions as to exactly what the ideal jobs:CPU ratio is, this seems
+sufficiently sensible to me.
 
-Hi!
+A new helper function to get the default number of jobs is added:
+get_default_jobs() -- this is used in kunit_tool_test instead of a
+hardcoded value, or an explicit call to len(os.sched_getaffinity()), so
+should be more flexible if this needs to change in the future.
 
-> Introduce the KTD2061/58/59/60 RGB LEDs driver. The difference in these
-> parts are the address number on the I2C bus the device is listen on.
->=20
-> All KT20xx device could control up to 12 LEDs. The chip can be operated
-> in two variants.
->=20
-> Variant 1:
-> The device has the ability to group LED outputs into two banks so that
-> the two LED banks can be controlled with the same color. This could not
-> be done via the LEDs 'sysfs' entry because of the limitation on the color
-> register count. The color of the two banks can be configured via device
-> 'sysfs' entry for all LEDs at once [current_color0|current_color1].
-> Which color the LED is to be used can be set via the 'sysfs' of the
-> individual LEDs via the 'multi_intensity' file. Valid values for the
-> colors (RGB) are 0 | 1. The value 0 selects the color register 0 and the
-> value 1 selects the color register 1.
->=20
-> Variant 2:
-> The device can also set the LED color independently. Since the chip only
-> has two color registers, but we want to control the 12 LEDs
-> independently via the 'led-class-multicolour' sysfs entry,
-> the full RGB color depth cannot be used. Due to this limitation, only 7
-> colors and the color black (off) can be set. To use this mode the color
-> registers must be preset via the device tree or the device 'sysfs'. The
-> color registers 0 must be preset with 0x00 (Red=3D0x00 Green=3D0x00 Blue=
-=3D0x00).
-> The color register1 should be preset all with the same value. This value
-> depends on which light intensity is to be used in the setup.
+Signed-off-by: David Gow <davidgow@google.com>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
+Changes since v2:
+- Rebased by Daniel Latypov onto linxu-kselftest kunit branch.
+  There was a trivial conflict in kunit_tool_test.py.
 
-Summary: some crazy hardware.
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20211211084928.410669-1-davidgow@google.com/
+- Use len(os.sched_getaffinity()) instead of os.cpu_count(), which gives
+  the number of available processors (to this process), rather than the
+  total.
+- Fix kunit_tool_test.py, which had 8 jobs hardcoded in a couple of
+  places.
+- Thanks to Daniel Latypov for these suggestions.
+---
+ tools/testing/kunit/kunit.py           | 5 ++++-
+ tools/testing/kunit/kunit_tool_test.py | 5 +++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-> +static ssize_t current_color0_store(struct device *dev,
-> +		struct device_attribute *a,
-> +		const char *buf, size_t size)
-> +{
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index f1be71811369..7a706f96f68d 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -282,6 +282,9 @@ def massage_argv(argv: Sequence[str]) -> Sequence[str]:
+ 		return  f'{arg}={pseudo_bool_flag_defaults[arg]}'
+ 	return list(map(massage_arg, argv))
+ 
++def get_default_jobs() -> int:
++	return len(os.sched_getaffinity(0))
++
+ def add_common_opts(parser) -> None:
+ 	parser.add_argument('--build_dir',
+ 			    help='As in the make command, it specifies the build '
+@@ -332,7 +335,7 @@ def add_build_opts(parser) -> None:
+ 	parser.add_argument('--jobs',
+ 			    help='As in the make command, "Specifies  the number of '
+ 			    'jobs (commands) to run simultaneously."',
+-			    type=int, default=8, metavar='jobs')
++			    type=int, default=get_default_jobs(), metavar='jobs')
+ 
+ def add_exec_opts(parser) -> None:
+ 	parser.add_argument('--timeout',
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index b80e333a20cb..352369dffbd9 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -527,7 +527,7 @@ class KUnitMainTest(unittest.TestCase):
+ 	def test_build_passes_args_pass(self):
+ 		kunit.main(['build'], self.linux_source_mock)
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+-		self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, '.kunit', None)
++		self.linux_source_mock.build_kernel.assert_called_once_with(False, kunit.get_default_jobs(), '.kunit', None)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
+ 
+ 	def test_exec_passes_args_pass(self):
+@@ -633,8 +633,9 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 	def test_build_builddir(self):
+ 		build_dir = '.kunit'
++		jobs = kunit.get_default_jobs()
+ 		kunit.main(['build', '--build_dir', build_dir], self.linux_source_mock)
+-		self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, build_dir, None)
++		self.linux_source_mock.build_kernel.assert_called_once_with(False, jobs, build_dir, None)
+ 
+ 	def test_exec_builddir(self):
+ 		build_dir = '.kunit'
 
-And now we have custom interface. Undocumented.
+base-commit: 1ee2ba89bea86d6389509e426583b49ac19b86f2
+-- 
+2.34.1.173.g76aa8bc2d0-goog
 
-That is not acceptable, sorry.
-
-Find a way to squeeze it into current RGB framework, perhaps with
-reduced feature set.
-
-AFAICT you could either pretend it is 2-LED driver with full 8bit RGB
-on each, or you could pretend it is 12-LED driver with 1bit
-RGB. Select one and implement that.
-
-Best regards,
-									Pavel
---=20
-http://www.livejournal.com/~pavelmachek
-
---AzNpbZlgThVzWita
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYbpUDgAKCRAw5/Bqldv6
-8jAIAJwLayuGsDv/gbU954WbGOG7AW6VYACeMjuav6P+tpCZAO1qh4oKNblyJck=
-=DU/B
------END PGP SIGNATURE-----
-
---AzNpbZlgThVzWita--

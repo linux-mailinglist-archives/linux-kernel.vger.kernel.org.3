@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F184758F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8484758F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237022AbhLOMhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:37:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242567AbhLOMhF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:37:05 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E957BC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:37:04 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id d10so54903681ybn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 04:37:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K8r8XSvSuYu3ZxgnX8Iq0jqKYxog5KOUtPtLKnhEkEw=;
-        b=4AghxD+KT7s9yyElNwN0c1w4aNYag2FvFgEPc3cpIfezoxE3NZoiARw3vAa2yfY3hS
-         mw4n3mu7LS8hUEQJdwZdCZrpAhDjhD85Tj79vszagcjseK8hZnI2rN28Gqc1wGXyTzRM
-         71tD+sziOM3stmstau3gQY+2HNKAUpGP2vlVtzaGEP+V2HHCS4Aqc4j2dmP/AV6QFx/2
-         jI1B3buJphwPACrGU5LRR5B2i2jKjCRGf3koV/uPKRBOZQhGbcsiyFf4Y6v2l5yW+ejD
-         DL9TjdFNqQg9FyhizICVZK1xqnOkJGODiQmuC/1oesPvmXMbI4vBBAyuO4GGaukq+0LM
-         EuzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K8r8XSvSuYu3ZxgnX8Iq0jqKYxog5KOUtPtLKnhEkEw=;
-        b=vWIxtQFEjTTYb4Omx4rmIc08Fk6JIK1jFSKEQ7In4cWf/IYmT2zeheahLu24bnxWzX
-         Qk2oVfuIK5H+CPy5+kP+BJV0pRWr9gGjtWWvv3VtHziJqZrHW02daqQR3y6ZNUyuveu/
-         uh5FurJXnVzncNU5yfiV97uetpoi+wriARjyi7BogobXM3Fi8cnrzGgQLZdxTbysVZ7p
-         mVDahKMMi7XoFx3epNWoL9Ob65Zt7ihj+w1t5nON+Ox2bWD0tmz5gmlr5yXY82DMQ6kI
-         ZQldCP8PMHG1xtKsKmuR35wzfGPQSdMWVmK/8QWKXxGYsLGscMOCaTrWPpjZqvtxXV+D
-         K3LA==
-X-Gm-Message-State: AOAM531T47368Ej3Uh94SO5OigUtT3YG5TYajgpd1tIR6iR0tw6qCsLw
-        ShoheLsaYNrhBukkZCdP6JjrGNFMUnoUgVjmOrZ/gQ==
-X-Google-Smtp-Source: ABdhPJy7XuDUBZjUXayR4SOS35Xzmwel1sEN2LoYxG/u2Rr6YggD031pTlQUTqN+7t/G1Dw+lmYcEL/VApAhalHOoWY=
-X-Received: by 2002:a25:b285:: with SMTP id k5mr6012330ybj.132.1639571824184;
- Wed, 15 Dec 2021 04:37:04 -0800 (PST)
+        id S242566AbhLOMgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:36:38 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:48934 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242572AbhLOMgg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 07:36:36 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 523514382B;
+        Wed, 15 Dec 2021 12:36:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        mime-version:content-transfer-encoding:content-type:content-type
+        :content-language:accept-language:in-reply-to:references
+        :message-id:date:date:subject:subject:from:from:received
+        :received:received:received:received; s=mta-01; t=1639571794; x=
+        1641386195; bh=vYjW8XrgnwJ5djB3iYo4jM09bOlWQU/PIRsmeJ0i0vg=; b=n
+        46q9AEkWrYlHbHDzxf5EMfQtQsqI+xHhjvxeBVRyWjtBXxwvFfsFXni+BGk1eb/q
+        74Cr1DJDB4U1HSAhAVmv/Wok86/SH6xzXD0ni/9O+FCAdRdSdT6aKvN/b8wKAU3y
+        1X+XG/8Lg3u5bjOw+qN/EbRp+HRSq3YTURhEvIRdRA=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Gk4kjZDlEaU3; Wed, 15 Dec 2021 15:36:34 +0300 (MSK)
+Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id A57D443828;
+        Wed, 15 Dec 2021 15:36:33 +0300 (MSK)
+Received: from T-EXCH-06.corp.yadro.com (172.17.10.110) by
+ T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Wed, 15 Dec 2021 15:36:33 +0300
+Received: from T-Exch-05.corp.yadro.com (172.17.10.109) by
+ T-EXCH-06.corp.yadro.com (172.17.10.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 15 Dec 2021 15:36:33 +0300
+Received: from T-Exch-05.corp.yadro.com ([fe80::a43b:5159:cc52:9ad8]) by
+ T-Exch-05.corp.yadro.com ([fe80::a43b:5159:cc52:9ad8%14]) with mapi id
+ 15.02.0792.003; Wed, 15 Dec 2021 15:36:33 +0300
+From:   Arseny Demidov <a.demidov@yadro.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Arseny Demidov <arsdemal@gmail.com>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] hwmon : (mr75203) fix macro typo
+Thread-Topic: [PATCH] hwmon : (mr75203) fix macro typo
+Thread-Index: AQHX8adVWLaP7HAg3kCtAegOS1jXr6wzQLyAgAAJCICAADLCIA==
+Date:   Wed, 15 Dec 2021 12:36:32 +0000
+Message-ID: <c1d036c0cfa14fbb9c289f792780f003@yadro.com>
+References: <20211215113023.2945-1-a.demidov@yadro.com>
+ <0baa6133-5903-ffd8-69a0-99fb9f69665d@roeck-us.net>
+ <06d7c6ee-2db5-f250-50f7-9a47e33a35b5@roeck-us.net>
+In-Reply-To: <06d7c6ee-2db5-f250-50f7-9a47e33a35b5@roeck-us.net>
+Accept-Language: en-US
+Content-Language: ru-RU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.17.4.118]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211213165342.74704-1-songmuchun@bytedance.com>
- <20211213165342.74704-10-songmuchun@bytedance.com> <YbilqnwnuTiQ2FEB@cmpxchg.org>
-In-Reply-To: <YbilqnwnuTiQ2FEB@cmpxchg.org>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 15 Dec 2021 20:36:28 +0800
-Message-ID: <CAMZfGtXng-X2LPZ3CHwNuyT6LtnkWcHsd_3FZiQpchwtKhR5JQ@mail.gmail.com>
-Subject: Re: [PATCH v4 09/17] mm: workingset: use xas_set_lru() to pass shadow_nodes
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>, Yang Shi <shy828301@gmail.com>,
-        Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Dave Chinner <david@fromorbit.com>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org,
-        Kari Argillander <kari.argillander@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        fam.zheng@bytedance.com, Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 10:09 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> On Tue, Dec 14, 2021 at 12:53:34AM +0800, Muchun Song wrote:
-> > The workingset will add the xa_node to shadow_nodes, so we should use
-> > xas_set_lru() to pass the list_lru which we want to insert xa_node
-> > into to set up the xa_node reclaim context correctly.
-> >
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
->
-> Ah, you can't instantiate the list on-demand in list_lru_add() because
-> that's happening in an atomic context. So you need the lru available
-> in the broader xa update context and group the lru setup in with the
-> other pre-atomic node allocation bits. Fair enough. I think it would
-> be a bit easier to read if this patch and the previous one were
-> squashed (workingset is the only user of xa_lru anyway) and you added
-> that explanation. But other than that, the changes make sense to me;
-> to a combined patch, please add:
->
-
-Great. I'll do it. Thanks for your review.
-
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+WWVzLCBJIGhhdmUgYWNjZXNzIHRvIHRoZSBkYXRhc2hlZXQgYW5kIGNhdWdodCBhbiBlcnJvciBv
+biBzaW11bGF0aW9uIElQLWJsb2NrLg0KVGhlIGRhdGFzaGVldCBzYXlzIHRoYXQgcmVnaXN0ZXIg
+IkV4cHJlc3NlZCBpbiB1bml0cyBvZiBJUCBjbGsgY3ljbGVzLiINClR5cGljYWwgcG93ZXItdXAg
+ZGVsYXlzIGZvciBUZW1wZXJhdHVyZSBTZW5zb3IgYXJlIDI1NiBjeWNsZXMgaS4gZS4gMHgxMDAN
+Cg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEd1ZW50ZXIgUm9lY2sgPGdyb2Vj
+azdAZ21haWwuY29tPiBPbiBCZWhhbGYgT2YgR3VlbnRlciBSb2Vjaw0KU2VudDogV2VkbmVzZGF5
+LCBEZWNlbWJlciAxNSwgMjAyMSAzOjMxIFBNDQpUbzogQXJzZW55IERlbWlkb3YgPGFyc2RlbWFs
+QGdtYWlsLmNvbT4NCkNjOiBBcnNlbnkgRGVtaWRvdiA8YS5kZW1pZG92QHlhZHJvLmNvbT47IEpl
+YW4gRGVsdmFyZSA8amRlbHZhcmVAc3VzZS5jb20+OyBsaW51eC1od21vbkB2Z2VyLmtlcm5lbC5v
+cmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNClN1YmplY3Q6IFJlOiBbUEFUQ0hdIGh3
+bW9uIDogKG1yNzUyMDMpIGZpeCBtYWNybyB0eXBvDQoNCk9uIDEyLzE1LzIxIDM6NTkgQU0sIEd1
+ZW50ZXIgUm9lY2sgd3JvdGU6DQo+IE9uIDEyLzE1LzIxIDM6MzAgQU0sIEFyc2VueSBEZW1pZG92
+IHdyb3RlOg0KPj4gSW4gdGhlIGZpbGUgbXI3NTIwMy5jIHdlIGhhdmUgYSBtYWNybyBuYW1lZCBQ
+T1dFUl9ERUxBWV9DWUNMRV8yNTYsIA0KPj4gdGhlIGNvcnJlY3QgdmFsdWUgc2hvdWxkIGJlIDB4
+MTAwDQo+Pg0KPiANCj4gSG93IGRvIHlvdSBrbm93IHRoYXQgPyBEbyB5b3UgaGF2ZSBhY2Nlc3Mg
+dG8gdGhlIGRhdGFzaGVldCwgb3IgaXMgaXQgDQo+IGp1c3QgYW4gYXNzdW1wdGlvbiBiYXNlZCBv
+biB0aGUgbmFtZSBvZiB0aGUgZGVmaW5lID8NCj4gDQoNCkFsc28sIGhvdyBkbyB5b3Uga25vdyB0
+aGF0IHRoZSB2YWx1ZSBpcyB3cm9uZywgbm90IHRoZSBuYW1lIG9mIHRoZSBkZWZpbmUgPw0KDQpH
+dWVudGVyDQoNCj4gR3VlbnRlcg0KPiANCj4+IFNpZ25lZC1vZmYtYnk6IEFyc2VueSBEZW1pZG92
+IDxhLmRlbWlkb3ZAeWFkcm8uY29tPg0KPj4gLS0tDQo+PiDCoCBkcml2ZXJzL2h3bW9uL21yNzUy
+MDMuYyB8IDIgKy0NCj4+IMKgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxl
+dGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL21yNzUyMDMuYyBiL2Ry
+aXZlcnMvaHdtb24vbXI3NTIwMy5jIGluZGV4IA0KPj4gODY4MjQzZGJhMWVlLi4xYmExZTMxNDU5
+NjkgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2h3bW9uL21yNzUyMDMuYw0KPj4gKysrIGIvZHJp
+dmVycy9od21vbi9tcjc1MjAzLmMNCj4+IEBAIC05Myw3ICs5Myw3IEBADQo+PiDCoCAjZGVmaW5l
+IFZNX0NIX1JFUcKgwqDCoCBCSVQoMjEpDQo+PiDCoCAjZGVmaW5lIElQX1RNUsKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgMHgwNQ0KPj4gLSNkZWZpbmUgUE9XRVJfREVMQVlfQ1lDTEVfMjU2wqDCoMKg
+IDB4ODANCj4+ICsjZGVmaW5lIFBPV0VSX0RFTEFZX0NZQ0xFXzI1NsKgwqDCoCAweDEwMA0KPj4g
+wqAgI2RlZmluZSBQT1dFUl9ERUxBWV9DWUNMRV82NMKgwqDCoCAweDQwDQo+PiDCoCAjZGVmaW5l
+IFBWVF9QT0xMX0RFTEFZX1VTwqDCoMKgIDIwDQo+Pg0KPiANCg0K

@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 512FF4764B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4969A4764BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbhLOVk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbhLOVk0 (ORCPT
+        id S229940AbhLOVmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:42:53 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:40487 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229526AbhLOVmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:40:26 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B2CC061574;
-        Wed, 15 Dec 2021 13:40:26 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id q14so23347729qtx.10;
-        Wed, 15 Dec 2021 13:40:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dBmNfUUXlFFGQ+sdmOWfMRZ5XVtampSpkmAvqHCdWjo=;
-        b=hTSmm96IXkdb15Y51GO3v1Kob+u1eJn+H2WSF/uv9cN9AAp7lxoEwvWxKJl/HNmip2
-         vn6BBbzMzC9Rrr8dUMY0fLzCzjv9t32Ak1gDCpGWLLRFeZAMTmkF0LENtDX7ElUMjLhe
-         bfq4ByjYo5CGxnPbvIWHlWqsH63qwX04VGtwMXyX4gzWGFdeVBmxAoUA5rAVogxriqZG
-         5HQrAP98VIz3dodS17Ufw4mx77+js4u2znfcDut4KjmhO0v8yF/kzJpPUVxgwGW/ZYZK
-         MVezXOCdnAnRhLwktkrK6cbpEh+aLjrHuyOXKTFHivRhSjDRUf2iV46nWAFOZ7c3gZbi
-         eVoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=dBmNfUUXlFFGQ+sdmOWfMRZ5XVtampSpkmAvqHCdWjo=;
-        b=RslfWNu17TjVkWX5nUXtZ/TJrKGVSmQc8gkNPWWyejLodrdJxspvOAfZqb9430riHX
-         DDfnjH3B7V2QfushrQoF9mURywq2ah6SDUsrhaJtwSXc9VzM5+bwKI4i13Exo+nJaU/9
-         NdZyw3FY3ucqhUuFbvDCYVGupARiAStqpxVOhg1L+zhagxSkAQYTU1TPVdFF0hSPK/nc
-         pqZOmRSyFPRj+Y/2Rzvq9NHOVkm+20cs6e9B7w8a538vLFxznxP/fluXw2SCNd2KnquQ
-         BfjS45UqbL9z+H2EujUdBlxXC/81td3qW+cUULMRCksR7jQIMVPc7deN169hYcOGoYVU
-         ORVw==
-X-Gm-Message-State: AOAM533Jq2S2OImCIPCg5APydnZhI77P8VSji/a23LFc6zIifhHrXHjD
-        Lg8WNs1hT7BLTrKHx0h6D04=
-X-Google-Smtp-Source: ABdhPJxsVzTqiyuhQ/gkZagHF2QD7t9F+lNGXyubtGk4s0cYRy+SqHH6fBc42phCSuvI4Kb5t3WFlw==
-X-Received: by 2002:a05:622a:647:: with SMTP id a7mr13825515qtb.593.1639604425522;
-        Wed, 15 Dec 2021 13:40:25 -0800 (PST)
-Received: from kubuntu-laptop.. ([67.8.38.84])
-        by smtp.gmail.com with ESMTPSA id h9sm1755988qkp.106.2021.12.15.13.40.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 13:40:25 -0800 (PST)
-Sender: Julian Braha <julian.braha@gmail.com>
-From:   Julian Braha <julianbraha@gmail.com>
-To:     andrew@aj.id.au, linus.walleij@linaro.org, joel@jms.id.au
-Cc:     linux-aspeed@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, fazilyildiran@gmail.com
-Subject: [PATCH v1] pinctrl: aspeed: fix unmet dependencies on MFD_SYSCON for PINCTRL_ASPEED
-Date:   Wed, 15 Dec 2021 16:40:22 -0500
-Message-Id: <20211215214022.146391-1-julianbraha@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 15 Dec 2021 16:42:52 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id D3C6340002;
+        Wed, 15 Dec 2021 21:42:50 +0000 (UTC)
+Date:   Wed, 15 Dec 2021 22:42:50 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Joel Daniels <jdaniels@sent.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, x86@kernel.org
+Subject: Re: Time keeping while suspended in the presence of persistent clock
+ drift
+Message-ID: <YbphWpMl7W0Qzs+d@piout.net>
+References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
+ <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com>
+ <87wnkbuuuz.ffs@tglx>
+ <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
+ <8735mvthk6.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8735mvthk6.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When PINCTRL_ASPEED_G* is selected,
-and MFD_SYSCON is not selected,
-Kbuild gives the following warnings:
+On 14/12/2021 14:57:45+0100, Thomas Gleixner wrote:
+> Joel,
+> 
+> On Mon, Dec 13 2021 at 06:39, Joel Daniels wrote:
+> > On Sat, 11 Dec 2021 14:36 +0100, Thomas Gleixner wrote:
+> >> Can you please verify that the problem persists with NTP enabled and
+> >> synchronized?
+> >
+> > Yes, I just verified that the problem still exists while
+> > synchronized to NTP.
+> ...
+> >     $ chronyc tracking && echo && chronyc sources
+> >     [...]
+> >     Ref time (UTC)  : Mon Dec 13 13:30:52 2021
+> >     System time     : 5.597892284 seconds fast of NTP time
+> 
+> thanks for making sure that this is really a RTC issue on that machine.
+> 
+> > The "if" branch does not apply as I have no clock sources flagged as
+> > CLOCK_SOURCE_SUSPEND_NONSTOP but the "else if" branch does apply.
+> 
+> Which CPU is in that box?
+> 
+> > The kernel seems to believe that the time spent sleeping is exactly
+> > the difference of two calls to read_persistent_clock64 with no option
+> > to adjust for persistent clock drift.
+> 
+> The kernel does not believe. It relies on the accuracy of the CMOS clock
+> which is usually pretty good.
+> 
+> > I would like to provide a way for user space to inform the kernel
+> > that the persistent clock drifts so it can make a corresponding
+> > adjustment when resuming from a long suspend period.
+> >
+> > In my use case it would be enough for me to set this parameter on
+> > boot. In use cases with continuous network access, NTP daemons
+> > could be enhanced to periodically update this parameter with the
+> > daemon's best estimate of the persistent clock drift.
+> 
+> That needs some thought. The RTC people (cc'ed now) might have opionions
+> on that.
+> 
 
-WARNING: unmet direct dependencies detected for PINCTRL_ASPEED
-  Depends on [n]: PINCTRL [=y] && (ARCH_ASPEED [=n] || COMPILE_TEST [=y]) && OF [=y] && MFD_SYSCON [=n]
-  Selected by [y]:
-  - PINCTRL_ASPEED_G4 [=y] && PINCTRL [=y] && (MACH_ASPEED_G4 [=n] || COMPILE_TEST [=y]) && OF [=y]
+The RTC subsystem already has two interfaces to correct the drift of an
+RTC. However, this is currently limited to RTC that have hardware
+support for this feature. I guess we could had software emulation of the
+feature to be able to correct for any RTCs  but this will raise many
+design questions, like how often the correction has to happen, what to
+do with RTC that have a counter that doesn't reset when setting their
+time, etc...
 
-WARNING: unmet direct dependencies detected for PINCTRL_ASPEED
-  Depends on [n]: PINCTRL [=y] && (ARCH_ASPEED [=n] || COMPILE_TEST [=y]) && OF [=y] && MFD_S>
-  Selected by [y]:
-  - PINCTRL_ASPEED_G5 [=y] && PINCTRL [=y] && (MACH_ASPEED_G5 [=n] || COMPILE_TEST [=y]) && O>
+I guess this would be able to solve your particular issue has you will
+need a mechanism to handle when you overshoot the regular correction
+timer.
 
-WARNING: unmet direct dependencies detected for PINCTRL_ASPEED
-  Depends on [n]: PINCTRL [=y] && (ARCH_ASPEED [=n] || COMPILE_TEST [=y]) && OF [=y] && MFD_S>
-  Selected by [y]:
-  - PINCTRL_ASPEED_G6 [=y] && PINCTRL [=y] && (MACH_ASPEED_G6 [=n] || COMPILE_TEST [=y]) && O>
+However, everything falls down once the machine is turned off, making
+the whole effort moot...
 
-This is because MACH_ASPEED_G* depend on (ARCH_ASPEED || COMPILE_TEST).
-ARCH_ASPEED enables the MFD_SYSCON dependency, but COMPILE_TEST doesn't.
 
-These unmet dependency bugs were detected by Kismet,
-a static analysis tool for Kconfig. Please advise
-if this is not the appropriate solution.
-
-Signed-off-by: Julian Braha <julianbraha@gmail.com>
----
- drivers/pinctrl/aspeed/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/pinctrl/aspeed/Kconfig b/drivers/pinctrl/aspeed/Kconfig
-index de8b185c4fee..1a4e5b9ed471 100644
---- a/drivers/pinctrl/aspeed/Kconfig
-+++ b/drivers/pinctrl/aspeed/Kconfig
-@@ -2,7 +2,7 @@
- config PINCTRL_ASPEED
- 	bool
- 	depends on (ARCH_ASPEED || COMPILE_TEST) && OF
--	depends on MFD_SYSCON
-+	select MFD_SYSCON
- 	select PINMUX
- 	select PINCONF
- 	select GENERIC_PINCONF
 -- 
-2.32.0
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

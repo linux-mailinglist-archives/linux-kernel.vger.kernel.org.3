@@ -2,137 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E82A475674
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C95D647567C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241698AbhLOKeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:34:07 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:39146 "EHLO
+        id S241706AbhLOKge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:36:34 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:39474 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241691AbhLOKeF (ORCPT
+        with ESMTP id S236385AbhLOKgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:34:05 -0500
+        Wed, 15 Dec 2021 05:36:33 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 02D3F1F386;
-        Wed, 15 Dec 2021 10:34:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1639564444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B842C1F39F;
+        Wed, 15 Dec 2021 10:36:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639564591; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4B/t1E772kncxf7q+3szKnolpRRxz03FLz9K8j69YlU=;
-        b=mtiETWpGphTKrWOG62e1vOFPHatQJf/iEqNVBfCpjkix25dH4uCRc6NEQ5QGT2rWvyGYmZ
-        oVL43PUrJXuHttPs9d/995nedzm90YIhMU4XnPTmiq1yWHCpMeIn4OYlmvIV89ctqH6zCa
-        5G8pY/Z7Kc8dKzyHn9sxp+g31Uz/EBE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1639564444;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4B/t1E772kncxf7q+3szKnolpRRxz03FLz9K8j69YlU=;
-        b=IjUeu0n+nj1T1BrCZFQYHRTwBcXulcOdaAH3RBD+zzGWgpJHj/YQZ4rcwUaLa/UBwYmy8M
-        NN+g+5BhhRdhgPDQ==
+        bh=/aPaR9Uw4ulAkIgHecWl2en5QXeWEK3aOB4cy3NVwDI=;
+        b=N0Oi6iG4jR1Ii/2w8VZGdDCkCls7BxgRGgpITtz5WTEMqIEVtEn64XU5QoylIR/K2x/31p
+        dRUkaE8ntIn9pTwzN1kEQ9S+rdhVnK7upRk8kdKOg/KeAaBeb/daspbclQWbET4VvGyatI
+        iuTmVTTFyDVEZ/YCPSS9aAkJG5W4m/0=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C095013B1C;
-        Wed, 15 Dec 2021 10:34:03 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 85BE613B1C;
+        Wed, 15 Dec 2021 10:36:31 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id RYgzLpvEuWHNcwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 15 Dec 2021 10:34:03 +0000
-Message-ID: <f7c1f169-f9b3-6930-f933-d69ab0287069@suse.cz>
-Date:   Wed, 15 Dec 2021 11:34:03 +0100
+        id /RwjIC/FuWHZdAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 15 Dec 2021 10:36:31 +0000
+Date:   Wed, 15 Dec 2021 11:36:29 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v9 2/7] cgroup/cpuset: Allow no-task partition to have
+ empty cpuset.cpus.effective
+Message-ID: <20211215103629.GA25459@blackbody.suse.cz>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-3-longman@redhat.com>
+ <Ybew7d2oE2gLcLNO@slm.duckdns.org>
+ <810204ce-7967-e470-1267-7c3cfb521c89@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>, Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, cl@linux.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
-        stable@vger.kernel.org, Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>
-References: <20211213122712.23805-1-bhe@redhat.com>
- <20211213122712.23805-6-bhe@redhat.com> <20211213134319.GA997240@odroid>
- <20211214053253.GB2216@MiWiFi-R3L-srv>
- <f5ff82eb-73b6-55b5-53d7-04ab73ce5035@suse.cz>
- <20211215044818.GB1097530@odroid> <20211215070335.GA1165926@odroid>
- <20211215072710.GA3010@lst.de>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v3 5/5] mm/slub: do not create dma-kmalloc if no managed
- pages in DMA zone
-In-Reply-To: <20211215072710.GA3010@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <810204ce-7967-e470-1267-7c3cfb521c89@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 08:27, Christoph Hellwig wrote:
-> On Wed, Dec 15, 2021 at 07:03:35AM +0000, Hyeonggon Yoo wrote:
->> I'm not sure that allocating from ZONE_DMA32 instead of ZONE_DMA
->> for kdump kernel is nice way to solve this problem.
-> 
-> What is the problem with zones in kdump kernels?
+On Tue, Dec 14, 2021 at 10:24:22PM -0500, Waiman Long <longman@redhat.com> wrote:
+> AFAICS, there are code in cpuset.c that disallows the an non-child node to
+> hold tasks, but the check doesn't cover all the possible cases.
+> I remembered that I was able to create such a scenario without using
+> threaded domains.
 
-My understanding is that kdump kernel can only use physical memory that it
-got reserved by the main kernel, and the main kernel will reserve some block
-of memory that doesn't include any pages from ZONE_DMA (first 16MB of
-physical memory or whatnot). By looking at the "crashkernel" parameter
-documentation in kernel-parameters.txt it seems we only care about
-below-4GB/above-4GB split.
-So it can easily happen that ZONE_DMA in the kdump kernel will be completely
-empty because the main kernel was using all of it.
+On the default hierarchy (with controller(s) enabled)? That sounds like a bug.
 
->> Devices that requires ZONE_DMA memory is rare but we still support them.
-> 
-> Indeed.
-> 
->> >     1) Do not call warn_alloc in page allocator if will always fail
->> >     to allocate ZONE_DMA pages.
->> > 
->> > 
->> >     2) let's check all callers of kmalloc with GFP_DMA
->> >     if they really need GFP_DMA flag and replace those by DMA API or
->> >     just remove GFP_DMA from kmalloc()
->> > 
->> >     3) Drop support for allocating DMA memory from slab allocator
->> >     (as Christoph Hellwig said) and convert them to use DMA32
->> 
->> 	(as Christoph Hellwig said) and convert them to use *DMA API*
->> 
->> >     and see what happens
-> 
-> This is the right thing to do, but it will take a while.  In fact
-> I dont think we really need the warning in step 1, a simple grep
-> already allows to go over them.  I just looked at the uses of GFP_DMA
-> in drivers/scsi for example, and all but one look bogus.
-> 
->> > > > Yeah, I have the same guess too for get_capabilities(), not sure about other
->> > > > callers. Or, as ChristophL and ChristophH said(Sorry, not sure if this is
->> > > > the right way to call people when the first name is the same. Correct me if
->> > > > it's wrong), any buffer requested from kmalloc can be used by device driver.
->> > > > Means device enforces getting memory inside addressing limit for those
->> > > > DMA transferring buffer which is usually large, Megabytes level with
->> > > > vmalloc() or alloc_pages(), but doesn't care about this kind of small
->> > > > piece buffer memory allocated with kmalloc()? Just a guess, please tell
->> > > > a counter example if anyone happens to know, it could be easy.
-> 
-> The way this works is that the dma_map* calls will bounce buffer memory
+> That is why I put in this conditional check. It has nothing to do with the
+> use of threaded domains.
 
-But if ZONE_DMA is not populated, where will it get the bounce buffer from?
-I guess nowhere and the problem still exists?
+But threaded domains are important nevertheless.
+I think that a structure like
 
-> that does to fall into the addressing limitations.  This is a performance
-> overhead, but allows drivers to address all memory in a system.  If the
-> driver controls memory allocation it should use one of the dma_alloc_*
-> APIs that allocate addressable memory from the start.  The allocator
-> will dip into ZONE_DMA and ZONE_DMA32 when needed.
+	app-cgroup	cgroup.type=threaded domain	cpuset.partition=root
+	`- rt		cgroup.type=threaded		cpuset.partition=isolated
+	`- normal	cgroup.type=threaded
 
+is a valid use case. Therefore I would not disallow partitioning inside
+threaded subtrees (as suggested).
+
+
+Michal

@@ -2,134 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2C44753F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4332A4753FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 08:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240632AbhLOH6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 02:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235592AbhLOH6k (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 02:58:40 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1102C061574;
-        Tue, 14 Dec 2021 23:58:39 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id o4so19958438pfp.13;
-        Tue, 14 Dec 2021 23:58:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=t5evHBPBS2G9SDCjwG+itx/1b630mANVexHP2C5AUCQ=;
-        b=b2qVwXOZEQSL+rnJrA2ylV/bzDUKbSX8bGookqJg0BNLKPb8ueySgHRoz8KhdsO96H
-         urWMEx7TLNcbln0b5RdcUPG0ecn44CO7vl+6KwG5OFf9GDDS3QylhMt1f+6Z9DsHUwEq
-         YiSq0hzpQJaoMUutf4LsnyHTmln9uOu8O9qhW8+5ZGxofIfLKvTwbEyU+7Db2l+0XkQ0
-         fz0LdKF0Lso7IgaHoFzYEnb59wlVh9Rosx9D4TrVN+0Anv3D6Vjh71gW/sfmm+T7Hayo
-         KquHCKJjlNWKE4bFt6rGSO7BgHArPwF0j3YE9zUuQFcRzTJkp86kIy9d/ndoRVA2FJqr
-         m5Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=t5evHBPBS2G9SDCjwG+itx/1b630mANVexHP2C5AUCQ=;
-        b=cHwdn+sPXfrgEYOlvhYF/5x3zNeop/OW9EdCVp9cSZfiBhCTuEooZfUlovBaJl0MrL
-         KUd7V1TBdNTJumon7MwybFtAKydWpFnVuBg3yF7tLnCv3pxDt/QikpZahE/McdGdX8xf
-         pwSsEiRq/kyaCY7PcCRFHEauxZXPHm9t7SGHiI5yTWW566xIhAgL4PgR7J9z4DDSlxoY
-         0hkvClg0lWl6C+uVEW+7JEnzBHHTWYAaie7Uop6ce+ncgZ37dFWPNsulDqj28WBQX1GB
-         9a73RwEQrBum8S40TXw5q8wE4S0RFreLG6zcK4V1dFQgVBy2Sx/XarV8SuFzYPaugFqR
-         tmDQ==
-X-Gm-Message-State: AOAM531ZhE6HhxMHg2/gXTcX9bxH62L/dEeznr3+moW5LiCr8UEDBE2T
-        e+r5HxhXP/bpUhXsGixdDR0=
-X-Google-Smtp-Source: ABdhPJwzT8g/dTl6M8Jf/DL+idNTs5kKFkBZClo6StaKK/pyVU/yin8yPI5D3ghiQKQih9zi6V2ioQ==
-X-Received: by 2002:a65:5bce:: with SMTP id o14mr6950781pgr.347.1639555119329;
-        Tue, 14 Dec 2021 23:58:39 -0800 (PST)
-Received: from localhost (59-120-186-245.hinet-ip.hinet.net. [59.120.186.245])
-        by smtp.gmail.com with ESMTPSA id hk18sm4935266pjb.20.2021.12.14.23.58.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 Dec 2021 23:58:38 -0800 (PST)
-From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-X-Google-Original-From: "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        peter_hong@fintek.com.tw
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rel+kernel@agilox.net,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: [PATCH V1 1/1] serial: 8250_fintek: Fix garbled text for console
-Date:   Wed, 15 Dec 2021 15:58:35 +0800
-Message-Id: <20211215075835.2072-1-hpeter+linux_kernel@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S240666AbhLOH7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 02:59:50 -0500
+Received: from mail-eopbgr140045.outbound.protection.outlook.com ([40.107.14.45]:38385
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235592AbhLOH7t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 02:59:49 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OLJOBJgacT0abdI5tKI6YyQijsivxizw/+Hg7XuuP1uZPGL57hU2srsokeLeiqjT0vM3WN5yoyaPxrGKbUmH/LalMssdr1yRDhN0U54qKKXkKOCehCEomaSgapMlQxV8bTRjJFRz+f8Jfh/euvsch8vdn3R/dCvBTX9o6YKTrAUYCg2+6WHRoqn4PrXYvT1QHUysfEBwb6DFP0qyL6mxBZMwjvhbqdtHOpCaA4ON9NchPdvPuucrHgJNwMDVNeMebdkMq84Qo4wXUjDMrTuQ8KitT/30nSeGrYhrgJe2yjYjYnbKqvqLmfps2jbLdVCY6GaKyQ1h6zNEsUUtbdd6nQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xlokQtyulz9MWnz1tHNu5apYgWHePZ3obofGhtG6RXM=;
+ b=HEfDB8L/CLpLEwjwnrQtI0Ceyd3pCgqTAlAKKDg4bMiYFo0xMwT3CyFgwyqbCKyEPwMpEvVmi3ugWBvU04lVAUkrE8cvBVkLcwyIht1tTgJavNs3XII+zDmmORyiQLGao11ur4M4cfaVR1niUKiF/dj/qJ6toSJYCCZY90t4460rMoT8YaCZqY+gw63pR+pjsSaqXOsCOIaBUomnoBrcN9r0DDancQX4iUNBvFiCFc8sz3Vi5icIWxGku9TQCoI6sdX0AUiKimiffOx2YHZ+YLQgz6GXQJ+k+KJ4BtdCtlWvUBYkdsRJYaDBlfKu+GLKMuXHgj3QEdlvemI+p9ehIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xlokQtyulz9MWnz1tHNu5apYgWHePZ3obofGhtG6RXM=;
+ b=G5gYk2uR4yXY5RZ/N6EOtK/SLHxHKZq7Zm3ki8XVGdmj48Xu7HmKtbO3kJKLFihmjiICGS2hW6tpJsyQ+Bf3rej8K9RAxtH0zraTVhIkXaVe/WYPnRyTDBRDQpUhocAe+sZLmYlLmcW+o7JnGoNt+acpMcxLVvuN97C5ZVvyvkk=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DU2PR04MB8936.eurprd04.prod.outlook.com (2603:10a6:10:2e3::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Wed, 15 Dec
+ 2021 07:59:45 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43%9]) with mapi id 15.20.4755.021; Wed, 15 Dec 2021
+ 07:59:45 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH 2/2] arm64: mm: support bootparam max_addr
+Thread-Topic: [PATCH 2/2] arm64: mm: support bootparam max_addr
+Thread-Index: AQHX8X+RJl0WiuN0bE2TAI+j7pq7b6wzKOQAgAAAXXA=
+Date:   Wed, 15 Dec 2021 07:59:45 +0000
+Message-ID: <DU0PR04MB94179C41295FF369E5D755D488769@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20211215064559.2843555-1-peng.fan@oss.nxp.com>
+ <20211215064559.2843555-2-peng.fan@oss.nxp.com>
+ <CAMj1kXE8AQaiyHQU9k18P7dK81xhuWRmh3BhpOSP_qPnsX+sRg@mail.gmail.com>
+In-Reply-To: <CAMj1kXE8AQaiyHQU9k18P7dK81xhuWRmh3BhpOSP_qPnsX+sRg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 35754672-8587-40ef-e0b0-08d9bfa0dc05
+x-ms-traffictypediagnostic: DU2PR04MB8936:EE_
+x-microsoft-antispam-prvs: <DU2PR04MB8936B259076F876A9255B50B88769@DU2PR04MB8936.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DJrAnRVK3o0jKKtnB/3dw3WRB2djbzCWKUKjgH1GyruDlZh47ZqmcyR0M+A++4LJyIaTCcEnrGHSutbgZFgLawxQRitgE7jVKQiMU/MzMOFxQ7ZWi6+I5drw/2uA40Nhjc2o2awWISrVnCpO2/eNEj9uA3rBWCXS9af+SOBIyhLAeIj4ZlC7JopOcQHGncfKRkoRoRAC9+f8F/ZgnEn7Hsoh+9hwLDcjXOavUg8hYoBvyRGnd53IHfCWsQTgppFs8q/p5z+dQ/Qs3mMO2FzWaB1EurPawU6Y18ysZ8yk+iOjLGneb7FQhglAh+tQA2/TDMMfdWsIAtaAWON1bMtu2K182Ku9SjmqRzo9LREgFythKWcfehCyZZT3g1fjIg5PfU77RMB+hpOzFO9N9WxWcFXuURLLP4EbYzXCGceE6QdxF7xsQmwHbS/r1CQznZdBrvtcysGuI1JHSQKcaSaY+S8Vc7kcash9gIdsQ+kBUiEGuog/yFbEBg5aJJtQt4IdEGWkYwN3Zfw1Tnfq1vZJvKwI6X8EVY7nPLNYmUPAt5Pj4HYGZ1IwGyA5XgcfxYBuvaTktHETx6vupJP1DzQDLbrg2r3vKdyWepAwnGl5GKXbfl6JpLUvIgRrjGcUsnbk1qDmyDF/HhRd3xBY9MaZvoocYyzMBbFtFhp6MPzKPNk8CUSYdg2+40knAV0AKw1QRsMCBm/8ZNejwoch1cQKMwBvjj4IoEA6+WiZejGXr5qX1tzE7oxzm3zELcAQIDeStbqMcxux9aNk035ofujWtcoPF9uwatyCb+8HgDltJSk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(45080400002)(8676002)(86362001)(83380400001)(55016003)(316002)(7696005)(9686003)(5660300002)(8936002)(7416002)(4326008)(966005)(44832011)(110136005)(508600001)(52536014)(54906003)(2906002)(71200400001)(33656002)(38070700005)(26005)(64756008)(6506007)(122000001)(66446008)(66476007)(66556008)(76116006)(186003)(66946007)(38100700002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VMjcZLJ1hMNt6VGWwUVzvQ5g4MLvIrmbwqetQxyI1HeZwMlptUjTSMkKJCCH?=
+ =?us-ascii?Q?DmKbCe24X+96jFgXiva0aTL0V3xuipCeGaEdBMMMMZr0V2qrr9mObH0BWWTG?=
+ =?us-ascii?Q?iKsM72iBMX7yYcyMc1EWnyTl5VQk17tPn811PNHcFA2G76tXDAgqFfUGTZUF?=
+ =?us-ascii?Q?8NupyHz/a+D6ctiX9s6qp3zcmlr1Z6zHp1Sxvj1OmCP3ZWS849XghPMN+dJL?=
+ =?us-ascii?Q?ri0V5GF9qSdLajs/laAhBt7FeaWhFYgeomtorRmlK1fm1KVYAcVh+oalNSBb?=
+ =?us-ascii?Q?XN7jkGFhdTy8QFyeIcW2wznG6v+qp0xPnOywwG6FhbBZHUT4+dGDNc9eDwxe?=
+ =?us-ascii?Q?4SZ17WbcAe9JsmpgEUGpu8mTNuwaf2hIngpP7/rk7PdwC9qR6/LdXDHfHcXz?=
+ =?us-ascii?Q?8cO3oRD/HxECLRxy7jQEq7HnmH3URHjGv2MEj2pYZdRtRHo/GpEtY91SD8Ue?=
+ =?us-ascii?Q?b1NcKgitL89nJGxu10GBdUHrNk6NFUdZHiWVRaPyKnfkNCGY0IubOROyc0Q/?=
+ =?us-ascii?Q?wKCYKiVX/GPXQpkq8Q7+KntGNlAS2tv0TtD4Wmr0cXUcY8jb1kHBL/9Z8fRT?=
+ =?us-ascii?Q?Og6FFe05HNQqHpcaMmpHFxJga/QkamjwWkCkFZ460mzv7oAFAifDDrF3TDFR?=
+ =?us-ascii?Q?qMmpU9qiMBFd/yRl8LodHiYRBYLy/PZKTS24Ek3CzjDR9EV6jk7tp9BXXSYD?=
+ =?us-ascii?Q?DDzzRwI7vxNOBTTdBZwYwR56QHQuzj49BNmUxU8ff2+tyw3NCsoiJfIPNmQ5?=
+ =?us-ascii?Q?WokqJilJU3jb4fyKhDdGrYDywSdRgPjJ9Ykcex0najzVAvHIs82Ia+htKZ2z?=
+ =?us-ascii?Q?kJLVLJDbo5GTEEU6Mi/45xYnrmObqr1Ed5cokEDGJTrkik5VrxY5gqalKr1E?=
+ =?us-ascii?Q?fuGVxOhlWagqZjmNPcd3Xdlni6BkCJZCAJ2Pnkw+6Kws+Ck69kIiiCbNbGx9?=
+ =?us-ascii?Q?F7PuPxpDMoeQE1K1usgCf7Lf4fer7GKDMdbVgSS4TM3e/DPKFsHPzEiBuWTM?=
+ =?us-ascii?Q?952sCbBrCkb/MHnm15zdoBy0K8I9Rma0UNi4K1bVm8+8P55sRFXMAfWkMLoG?=
+ =?us-ascii?Q?Rc4413AAYhHc4u6rMIs7AnP4Pr7vhPzNED/bFa0vgYk7QD3Ul12liN7YLC/A?=
+ =?us-ascii?Q?iAGB37fCW1Xh66ZFAMTbSXmwuyGrAIIOkCd3ZPSdV+cuJgc4QTqN0pnq95xj?=
+ =?us-ascii?Q?F80OuzjPB+8XqNhSukt7Qv8F68e+zR+ex1QTwmNK6PGkLrX25S4icHlbntbi?=
+ =?us-ascii?Q?m1B//ppd6yIGe3Oo/QCCQvzBIDqE6C0HyXNqgCMEW1l1gGKe+2NncOmT2Ezn?=
+ =?us-ascii?Q?BEwJNXqTN1bXVgAta/W2pzGX6aE4gj0mv+prTFAzzKV1S4aHLf/LPRrLiEaW?=
+ =?us-ascii?Q?yoRdgV3EOSc1TAOdrFPqflY2e6C+qYuBT5qCWsW7xTyTtURLeURtOgcgC2A2?=
+ =?us-ascii?Q?bOUxGNRz8U2tNiIjae1p3eig04feW0vyrAKmUiverNcCLC0fm223mf5rhcOq?=
+ =?us-ascii?Q?npHlU9M3lG7V4jHjRH3fBJBHCCE3MMPKBBNehTNCK2TfD+c4LtPbxS/llRr3?=
+ =?us-ascii?Q?R9m0WynI6EeUNAx56/9Vs/+1ZjcpVLr5yIF9OxsJ/4r7Lv6SzDRqvwSTCNVi?=
+ =?us-ascii?Q?GYuPQv98KLTpo1AC8B2ae2Y=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35754672-8587-40ef-e0b0-08d9bfa0dc05
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 07:59:45.5745
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: g7UBZDZ4TTrX4JY+8pkQEKazSGyPYtfgRkpNpTQ6axYBdwUXcGPRSugxG735ulLLiRKD4ockxvUvJ/TAq3C5GQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8936
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit fab8a02b73eb ("serial: 8250_fintek: Enable high speed mode on Fintek F81866")
-introduced support to use high baudrate with Fintek SuperIO UARTs. It'll
-change clocksources when the UART probed.
+> Subject: Re: [PATCH 2/2] arm64: mm: support bootparam max_addr
+>=20
+> On Wed, 15 Dec 2021 at 07:56, Peng Fan (OSS) <peng.fan@oss.nxp.com>
+> wrote:
+> >
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > There is a "mem=3D[x]" boot parameter, but when there is a whole
+> > reserved by secure TEE, the continuous DRAM area is split with two
+> memblocks.
+> >
+> > For example, DRAM area [0x40000000, 0xffffffff], when TEE uses
+> > [0x50000000, 0x51000000), the memblock will be split into [0x40000000,
+> > 0x50000000) and [0x51000000, 0xffffffff].
+> >
+> > If pass "mem=3D1024MB", the actually max addr will be 0x81000000.
+> > However if need the max addr be 0x80000000, mem=3D1008MB should be
+> used.
+> >
+> > There also might be multiple other holes that no visible to Linux,
+> > when we wanna to limit the max addr usable by Linux, using
+> > "max_addr=3D[X]" is much easier than "mem=3D[X]"
+> >
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>=20
+> mem=3D is a hack already, please don't add another one. Limiting the memo=
+ry
+> like this is far too tricky, given that the kernel itself and the initrd =
+could end up
+> in memory that is excluded, and we have to go and fix things up if that
+> happens.
 
-But when user add kernel parameter "console=ttyS0,115200 console=tty0" to make
-the UART as console output, the console will output garbled text after the
-following kernel message.
+We wanna to use the reserved memory with request_mem_region, but with
+commit 86588296acbfb1 ("fdt: Properly handle "no-map" field in the memory r=
+egion ")
 
-[    3.681188] Serial: 8250/16550 driver, 32 ports, IRQ sharing enabled
+request_mem_region will fail, because the reserved memory are now as
+kernel memory.
 
-The issue is occurs in following step:
-	probe_setup_port() -> fintek_8250_goto_highspeed()
+So we use "mem=3DX" to work around the issue, but "mem=3DX" is not user fri=
+endly
+compared with "max_addr=3D" when there are multiple holes used by others.
 
-It change clocksource from 115200 to 921600 with wrong time, it should change
-clocksource in set_termios() not in probed. The following 3 patches are
-implemented change clocksource in fintek_8250_set_termios().
+Thanks,
+Peng.
 
-Commit 58178914ae5b ("serial: 8250_fintek: UART dynamic clocksource on Fintek F81216H")
-Commit 195638b6d44f ("serial: 8250_fintek: UART dynamic clocksource on Fintek F81866")
-Commit 423d9118c624 ("serial: 8250_fintek: Add F81966 Support")
-
-Due to the high baud rate had implemented above 3 patches and the patch
-Commit fab8a02b73eb ("serial: 8250_fintek: Enable high speed mode on Fintek F81866")
-is bugged, So this patch will remove it.
-
-Fixes: fab8a02b73eb ("serial: 8250_fintek: Enable high speed mode on Fintek F81866")
-Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
----
- drivers/tty/serial/8250/8250_fintek.c | 20 --------------------
- 1 file changed, 20 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
-index 31c9e83ea3cb..251f0018ae8c 100644
---- a/drivers/tty/serial/8250/8250_fintek.c
-+++ b/drivers/tty/serial/8250/8250_fintek.c
-@@ -290,25 +290,6 @@ static void fintek_8250_set_max_fifo(struct fintek_8250 *pdata)
- 	}
- }
- 
--static void fintek_8250_goto_highspeed(struct uart_8250_port *uart,
--			      struct fintek_8250 *pdata)
--{
--	sio_write_reg(pdata, LDN, pdata->index);
--
--	switch (pdata->pid) {
--	case CHIP_ID_F81966:
--	case CHIP_ID_F81866: /* set uart clock for high speed serial mode */
--		sio_write_mask_reg(pdata, F81866_UART_CLK,
--			F81866_UART_CLK_MASK,
--			F81866_UART_CLK_14_769MHZ);
--
--		uart->port.uartclk = 921600 * 16;
--		break;
--	default: /* leave clock speed untouched */
--		break;
--	}
--}
--
- static void fintek_8250_set_termios(struct uart_port *port,
- 				    struct ktermios *termios,
- 				    struct ktermios *old)
-@@ -430,7 +411,6 @@ static int probe_setup_port(struct fintek_8250 *pdata,
- 
- 				fintek_8250_set_irq_mode(pdata, level_mode);
- 				fintek_8250_set_max_fifo(pdata);
--				fintek_8250_goto_highspeed(uart, pdata);
- 
- 				fintek_8250_exit_key(addr[i]);
- 
--- 
-2.17.1
-
+>=20
+>=20
+> > ---
+> >  arch/arm64/mm/init.c | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> >
+> > diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c index
+> > db63cc885771..3364b5e7a7fe 100644
+> > --- a/arch/arm64/mm/init.c
+> > +++ b/arch/arm64/mm/init.c
+> > @@ -173,6 +173,7 @@ int pfn_is_map_memory(unsigned long pfn)
+> > EXPORT_SYMBOL(pfn_is_map_memory);
+> >
+> >  static phys_addr_t memory_limit __ro_after_init =3D PHYS_ADDR_MAX;
+> > +static phys_addr_t max_addr __ro_after_init =3D PHYS_ADDR_MAX;
+> >
+> >  /*
+> >   * Limit the memory size that was specified via FDT.
+> > @@ -189,6 +190,18 @@ static int __init early_mem(char *p)  }
+> > early_param("mem", early_mem);
+> >
+> > +static int __init set_max_addr(char *p) {
+> > +       if (!p)
+> > +               return 1;
+> > +
+> > +       max_addr =3D memparse(p, &p) & PAGE_MASK;
+> > +       pr_notice("Memory max addr set to 0x%llx\n", max_addr);
+> > +
+> > +       return 0;
+> > +}
+> > +early_param("max_addr", set_max_addr);
+> > +
+> >  void __init arm64_memblock_init(void)  {
+> >         s64 linear_region_size =3D PAGE_END -
+> > _PAGE_OFFSET(vabits_actual); @@ -253,6 +266,9 @@ void __init
+> arm64_memblock_init(void)
+> >                 memblock_add(__pa_symbol(_text), (u64)(_end -
+> _text));
+> >         }
+> >
+> > +       if (max_addr !=3D PHYS_ADDR_MAX)
+> > +               memblock_cap_memory_range(0, max_addr);
+> > +
+> >         if (IS_ENABLED(CONFIG_BLK_DEV_INITRD) && phys_initrd_size)
+> {
+> >                 /*
+> >                  * Add back the memory we just removed if it results
+> > in the @@ -427,4 +443,9 @@ void dump_mem_limit(void)
+> >         } else {
+> >                 pr_emerg("Memory Limit: none\n");
+> >         }
+> > +
+> > +       if (max_addr !=3D PHYS_ADDR_MAX)
+> > +               pr_emerg("Max addr: 0x%llx\n", max_addr);
+> > +       else
+> > +               pr_emerg("Max addr: none\n");
+> >  }
+> > --
+> > 2.25.1
+> >
+> >
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Flist=
+s
+> > .infradead.org%2Fmailman%2Flistinfo%2Flinux-arm-kernel&amp;data=3D04%
+> 7C0
+> >
+> 1%7Cpeng.fan%40nxp.com%7C3ad0ef697ad64542556208d9bf9d1e1f%7C68
+> 6ea1d3bc
+> >
+> 2b4c6fa92cd99c5c301635%7C0%7C0%7C637751503805222488%7CUnknow
+> n%7CTWFpbG
+> >
+> Zsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6
+> Mn0%
+> >
+> 3D%7C3000&amp;sdata=3DiKVO4PUPnaRr%2B5gHcXxaaRxBt%2BK%2Fjytg8eQ
+> dCqgqh5o%
+> > 3D&amp;reserved=3D0

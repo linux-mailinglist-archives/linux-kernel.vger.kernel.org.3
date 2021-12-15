@@ -2,210 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3513475495
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359DB47549C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240921AbhLOIuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 03:50:40 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:33934 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbhLOIuk (ORCPT
+        id S240939AbhLOIwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 03:52:43 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48398 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240934AbhLOIwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 03:50:40 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 15 Dec 2021 03:52:39 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BF7gjRf030002;
+        Wed, 15 Dec 2021 08:52:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2J1ribNNKGa2+n1R4Zv8pbfAcOMU0iSIpnvv3Q+3k1E=;
+ b=kQyFx+JfaGqIiWI08d5JBjNQIyTPEo2MhTKOrN2GsG2VyeHKDYC/p1bq9lx3/mXNb56f
+ AViuwtay1rGazCQCvdwThkzyJIiMIYaEANtBNEOKLXaFUwfhI/GN7mRSLtEJhaXjp/hC
+ 0aMTzer3TinJcX5LH0jTnZYkBCqY9UakIUraOt1vHABfi/TLOYhlwmKsr9VKMTdUdzVX
+ cSzdXTWN0hk8Hs5uOdOM5PsA1zlaYxDiV9/GKUYlV5DFzbETEJvW917zjnypS1j93qeO
+ Z6mQAQ4XmrP4rUsQ1bmGeREBbu7wUQSuZblGiI6XhdyIshPd8P47aHLzJLQNEDl7mip6 Bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r8412a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Dec 2021 08:52:28 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BF8kPZ4032101;
+        Wed, 15 Dec 2021 08:52:28 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r8411y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Dec 2021 08:52:28 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BF8X9G7003310;
+        Wed, 15 Dec 2021 08:52:26 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3cy7qvtqsr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Dec 2021 08:52:26 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BF8iO8C41025822
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Dec 2021 08:44:24 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5264AAE053;
+        Wed, 15 Dec 2021 08:52:23 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 07875AE075;
+        Wed, 15 Dec 2021 08:52:23 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 15 Dec 2021 08:52:22 +0000 (GMT)
+Received: from [9.43.169.195] (unknown [9.43.169.195])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A7016210FE;
-        Wed, 15 Dec 2021 08:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639558238; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tINJ0VM4iSWX/reYXHRjmRh2zYSZjQub/YlSmSxPV5w=;
-        b=dkLsNh9oqG5nZV3X/B0vtMhJ1ngxssJxdhuyztXw1+HSTV2y4SKo3zsOxTFIhT+eua705r
-        pzSxRJyrWcZvAVhl+nDM2p2+8fat+GV6A/e0lUC4e8eW2ex6toDIMSwqzCyf/5Ik1/8QjH
-        3+GvWHVMk/mkO9lqhmhlltLaBXl/jqU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7F48913A6B;
-        Wed, 15 Dec 2021 08:50:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RQxqHV6suWGSQAAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 15 Dec 2021 08:50:38 +0000
-Subject: Re: [PATCH -next] usb: host: xen-hcd: add missing unlock in error
- path
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org
-References: <20211215035805.375244-1-yangyingliang@huawei.com>
-From:   Juergen Gross <jgross@suse.com>
-Message-ID: <43d3ab3f-fc21-e617-9777-6a779bcc92d6@suse.com>
-Date:   Wed, 15 Dec 2021 09:50:37 +0100
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id B487A6015D;
+        Wed, 15 Dec 2021 19:52:12 +1100 (AEDT)
+Subject: Re: [PATCH misc-next] drivers/misc: remove redundant rc variable
+To:     cgel.zte@gmail.com, fbarrat@linux.ibm.com
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20211215060438.441918-1-chi.minghao@zte.com.cn>
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+Message-ID: <789ac279-ce90-5845-e3c0-e5c4b3ff1753@linux.ibm.com>
+Date:   Wed, 15 Dec 2021 19:52:02 +1100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211215035805.375244-1-yangyingliang@huawei.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="VwwqiP8tCcaKtnEDFy8iFMWNyZOAUYoT0"
+In-Reply-To: <20211215060438.441918-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: nYYBK1Jr8T5-wduQnzr09b3X2UkN5WT0
+X-Proofpoint-ORIG-GUID: yWY2CMR6rTcknYAKvEefpmzLC7-EwMkU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-15_06,2021-12-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 suspectscore=0 mlxlogscore=768 malwarescore=0
+ mlxscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0 adultscore=0
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112150048
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---VwwqiP8tCcaKtnEDFy8iFMWNyZOAUYoT0
-Content-Type: multipart/mixed; boundary="zYgzSW5RwQryQZR6ciwefy7ir8u4qbDRl";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Yang Yingliang <yangyingliang@huawei.com>, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-Cc: gregkh@linuxfoundation.org
-Message-ID: <43d3ab3f-fc21-e617-9777-6a779bcc92d6@suse.com>
-Subject: Re: [PATCH -next] usb: host: xen-hcd: add missing unlock in error
- path
-References: <20211215035805.375244-1-yangyingliang@huawei.com>
-In-Reply-To: <20211215035805.375244-1-yangyingliang@huawei.com>
+On 15/12/21 5:04 pm, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Return value from ocxl_context_attach() directly instead
+> of taking this in another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
---zYgzSW5RwQryQZR6ciwefy7ir8u4qbDRl
-Content-Type: multipart/mixed;
- boundary="------------58027B3A2F323DE6D9154526"
-Content-Language: en-US
+Acked-by: Andrew Donnellan <ajd@linux.ibm.com>
 
-This is a multi-part message in MIME format.
---------------58027B3A2F323DE6D9154526
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-
-On 15.12.21 04:58, Yang Yingliang wrote:
-> Add the missing unlock before return from function xenhcd_urb_request_d=
-one()
-> and xenhcd_conn_notify() in the error handling case.
->=20
-> Fixes: 494ed3997d75 ("usb: Introduce Xen pvUSB frontend (xen hcd)")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-
-Reviewed-by: Juergen Gross <jgross@suse.com>
-
-
-Thanks,
-
-Juergen
-
---------------58027B3A2F323DE6D9154526
-Content-Type: application/pgp-keys;
- name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Transfer-Encoding: quoted-printable
-Content-Description: OpenPGP public key
-Content-Disposition: attachment;
- filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOBy=
-cWx
-w3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJvedYm8O=
-f8Z
-d621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y=
-9bf
-IhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xq=
-G7/
-377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR=
-3Jv
-c3MgPGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDA=
-QIe
-AQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4FUGNQH2lvWAUy+dnyT=
-hpw
-dtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3TyevpB0CA3dbBQp0OW0fgCetToGIQrg0=
-MbD
-1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbv=
-oPH
-Z8SlM4KWm8rG+lIkGurqqu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v=
-5QL
-+qHI3EIPtyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVyZ=
-2Vu
-IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJCAcDAgEGFQgCC=
-QoL
-BBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4RF7HoZhPVPogNVbC4YA6lW7Dr=
-Wf0
-teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz78X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC=
-/nu
-AFVGy+67q2DH8As3KPu0344TBDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0Lh=
-ITT
-d9jLzdDad1pQSToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLm=
-XBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkMnQfvUewRz=
-80h
-SnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMBAgAjBQJTjHDXAhsDBwsJC=
-AcD
-AgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJn=
-FOX
-gMLdBQgBlVPO3/D9R8LtF9DBAFPNhlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1=
-jnD
-kfJZr6jrbjgyoZHiw/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0=
-N51
-N5JfVRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwPOoE+l=
-otu
-fe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK/1xMI3/+8jbO0tsn1=
-tqS
-EUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuZGU+wsB5BBMBAgAjBQJTjHDrA=
-hsD
-BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3=
-g3O
-ZUEBmDHVVbqMtzwlmNC4k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5=
-dM7
-wRqzgJpJwK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu5=
-D+j
-LRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzBTNh30FVKK1Evm=
-V2x
-AKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37IoN1EblHI//x/e2AaIHpzK5h88N=
-Eaw
-QsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpW=
-nHI
-s98ndPUDpnoxWQugJ6MpMncr0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZR=
-wgn
-BC5mVM6JjQ5xDk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNV=
-bVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mmwe0icXKLk=
-pEd
-IXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0Iv3OOImwTEe4co3c1mwARA=
-QAB
-wsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMvQ/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEw=
-Tbe
-8YFsw2V/Buv6Z4Mysln3nQK5ZadD534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1=
-vJz
-Q1fOU8lYFpZXTXIHb+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8=
-VGi
-wXvTyJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqcsuylW=
-svi
-uGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5BjR/i1DG86lem3iBDX=
-zXs
-ZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------58027B3A2F323DE6D9154526--
-
---zYgzSW5RwQryQZR6ciwefy7ir8u4qbDRl--
-
---VwwqiP8tCcaKtnEDFy8iFMWNyZOAUYoT0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmG5rF0FAwAAAAAACgkQsN6d1ii/Ey83
-0wf/T64nHeAvE6A2ZkHHb3Qy9k/sC3ya2LQYgErYZQw+vDN/Gb8w81JboAbI6RDm997ujsIsaOfF
-c8XMqubMVBv/9U6m9sLTpGuz+2th73gLKZem1XgQtVZvCo7tzWHBHOumqxcdbU6rUNWx1Rma6cKk
-lfmnUkMHZ5WZ3R8SUO9SN5US8NFthgebaaY0jF7/C37VAuAWDhkwXag4gjMJYi20tX6J7VXm1pqe
-kHts2lbneJn8vb0yJpl0wrCTdGWqQgkvDoJvBQxvTPCtiItPn0Tmqq6bTPepvt79JjF60GzLYkG7
-87x9ToHi549ItHRUVStojb0psmXa+OKEnq41SStFZA==
-=1Qz9
------END PGP SIGNATURE-----
-
---VwwqiP8tCcaKtnEDFy8iFMWNyZOAUYoT0--
+-- 
+Andrew Donnellan              OzLabs, ADL Canberra
+ajd@linux.ibm.com             IBM Australia Limited

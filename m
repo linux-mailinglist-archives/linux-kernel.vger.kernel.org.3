@@ -2,179 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9D2475B4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C821B475B52
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbhLOPDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbhLOPDE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:03:04 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1EEC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:03:03 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso25274555ota.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:03:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=4LmpLmMQVYKC4yB/BA8hDER3dAOgirX22kQhvIxfc6k=;
-        b=DeOyJJKMU55uXVXAS0+BuCIcPj0j26M6TG4y672SEPwqlgmp1UVx1zRbX2BqBX7JkO
-         rkbKQ0b7GXklGShwNwpvEzY1Y7DXrAmZY/EUtVvQ6Q71NyWTdv77TbqYa9TJ3EATM6t0
-         TlGyVtWPVpkyXDQ9ww2qMnLg5EfOIZHhTZimg2qTkerwlf25wHzEsWl2N5Klr3O/uK8N
-         rxW0RExVHGZExcJd1mcp9tulB7nGgXXXr/03wt84yF/KqLUUxd2FIwWdA6vCQgcotAJg
-         Lpc8yCUlDY2tquOM4md8re6GXHab2SfASS2u16DIkx0Iur+3WiwHyTbDY7f5Xh07gCFO
-         y1XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=4LmpLmMQVYKC4yB/BA8hDER3dAOgirX22kQhvIxfc6k=;
-        b=Hr/rq9JGXHB2CdETxUKdkedKG0UBjt9CDzLulIQFVQHBqirS1jSK1QZZ6+2+R2MIV/
-         fsXdvst2LDGUc0zF3vED8ZOZc8zx5xsPt8Ouzj68AWXqOqdJdEIdYHSOrLd1jzNWb0eF
-         0TVmwsMYTbuEeKS/ZuLEa9krWCONy34NzPs8pJg59x5fBUFqXgQHOaJ7q1HKCB80X9s5
-         DLl2y35Yi+bkoOdyj8CA/YISzyY07GctI2haB2OStUx9Zn6VcbQmaDbIM1MU617XI8N8
-         3mqJ7KHWs/HcuZ1Juf+nNgPCGIAPEgPZMdfX2Mq2+QEoXRrsiEXe3C3mCV1pmBCNTO2r
-         cqRw==
-X-Gm-Message-State: AOAM533anpCHnx06i9Xiv/jH6mAbJyWLBoRmXNhaIFeYtFECmXA5xw36
-        75JWThXWE7Z1EqvWKfQzk1hrFtcYrbWTzEnRf8L50Q==
-X-Google-Smtp-Source: ABdhPJyPeXxGFCtUrFhryeIE/cEECu0paw5oNL0wX3jX1W1iBxtrTpdCkDYUCr1opeCgLBoVOByK1UUQi8cSw6cCRkg=
-X-Received: by 2002:a9d:2aa3:: with SMTP id e32mr8908943otb.6.1639580582790;
- Wed, 15 Dec 2021 07:03:02 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 15 Dec 2021 09:03:01 -0600
+        id S243457AbhLOPD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:03:56 -0500
+Received: from mga07.intel.com ([134.134.136.100]:29065 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229623AbhLOPDz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 10:03:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639580635; x=1671116635;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=RT7wwlzfQgCt7UrqjWS02XgK8kU4dDVX1Qy7mX2o0dU=;
+  b=YW6eveOOYnmkeQJbK+dLzWKBS9PqONgUV0qY0FhfSF2XzuXrrb0YOvWp
+   OpacihpZIPVmQDtZ52PX6J5UJ+ASaWiqZh/RAFtpHAuehyi15gMyWbp+S
+   v2m/t1A6cyK3xXICJTCp88w3WADjybbvWcjix4QTkn1jIx45GUnUxXp10
+   2KC9r18TgqkQpaJXKE2lj9rdpwhCSeFKbSwvVTVzXHP/wRJLu5PkpguLg
+   DdHiSdmgRJ8dT3/0xlt0WGPuHFDik5+FEadPuEFALouVNhlkGE9GcwCQT
+   5XGO7IIT++XrkaLeduSoFruFtLwn/kKOaDEjIAP1WNDC2PpBp/PA9Z9Q2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="302618151"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="302618151"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 07:03:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="682527033"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 15 Dec 2021 07:03:54 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 07:03:54 -0800
+Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 07:03:54 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Wed, 15 Dec 2021 07:03:53 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.49) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Wed, 15 Dec 2021 07:03:53 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kjVXPTtDAa3IUCJlYe04cl4oxmGENBoffWqQscAcm2kcgvkT61MoV5QXXiMt5WwosZ26BvAuv0HFrTYUNH0K3zKAW1pBhCAK9mEqg4VFiYFGk95LnFSno2MlCqCnokRfa5xwD9Tz8Ze/lNcXs9pOAsCQI/7SeXReHMrtodgqOOtG4idkotz3KeDToBOedwmMZxZ4DPNzAjAIEeDmES3hG3B0HSb+dXG2dhNRLCn5TQUara4JCCesFcmzHwowCwxI8/VJVXpoa1yUQJjpaTAJRi4mbfNd35MMtLOrRm+9U+NPa2ylzOiKwMu3dlqugQzYYQTh4mdpPAPOjGp0L6NSfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kXf6lKOI6pjSGm0BbDzXKlrfLtf8+CY8ubtzAvN3blo=;
+ b=hg/SFxpbLMhY0AYutdh68ww3X6NleSm8MMusaMGY/Pg+vRWgwSZWDVOahbkgnMaOshbOfQe0E1ZgrNcb9JUy+QTS0QdBG7RxzeKNLhSJUzjwW6MzCsv+NfzpTMNpo7hMcd5Cb0kcDV3Rxp7mDSOFMwL5kUftAgqahM2q1orgFxhNOoCQv7Z2/m75kHki3b11i280YI6t/uNmZ2xO7vszFjwzj3TUdBIqJW5Fttm1QuMzDLE/siBM8tURs2EHNrMMG7M03fIggHkS/RSIPpK7K+OQYvZLC7gomiXO4ZnQVya+m2Q7NvYF/WIP/AWva+8HLF4gWNqBTmP08AeGZoIM1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CO1PR11MB4771.namprd11.prod.outlook.com (2603:10b6:303:9f::9)
+ by MWHPR11MB1792.namprd11.prod.outlook.com (2603:10b6:300:10b::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.18; Wed, 15 Dec
+ 2021 15:03:52 +0000
+Received: from CO1PR11MB4771.namprd11.prod.outlook.com
+ ([fe80::116:4172:f06e:e2b]) by CO1PR11MB4771.namprd11.prod.outlook.com
+ ([fe80::116:4172:f06e:e2b%8]) with mapi id 15.20.4778.018; Wed, 15 Dec 2021
+ 15:03:52 +0000
+From:   "Ismail, Mohammad Athari" <mohammad.athari.ismail@intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Voon, Weifeng" <weifeng.voon@intel.com>,
+        "Wong, Vee Khee" <vee.khee.wong@intel.com>
+Subject: RE: [BUG] net: phy: genphy_loopback: add link speed configuration
+Thread-Topic: [BUG] net: phy: genphy_loopback: add link speed configuration
+Thread-Index: AdfwtmkvCyrAW5M4S3mERBKDxICdHAAGBHqAADANSQAAAa06AAAAYHXgAAC+sIAACnbKwA==
+Date:   Wed, 15 Dec 2021 15:03:52 +0000
+Message-ID: <CO1PR11MB47710EE8587C6F4A4D40851ED5769@CO1PR11MB4771.namprd11.prod.outlook.com>
+References: <CO1PR11MB4771251E6D2E59B1B413211FD5759@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <YbhmTcFITSD1dOts@lunn.ch>
+ <CO1PR11MB477111F4B2AF4EFA61D9B7F4D5769@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <Ybm0Bgclc0FP/Q3f@lunn.ch>
+ <CO1PR11MB47715A9B7ADB8AF36066DCE6D5769@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <Ybm7jVwNfj01b7S4@lunn.ch>
+In-Reply-To: <Ybm7jVwNfj01b7S4@lunn.ch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8c9bc89a-9e4c-4970-f1b2-08d9bfdc1ba0
+x-ms-traffictypediagnostic: MWHPR11MB1792:EE_
+x-microsoft-antispam-prvs: <MWHPR11MB1792F6F9A4B07BCC1D54BDFED5769@MWHPR11MB1792.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: X/gjfs+Je2NA8b52ZoWa3p9/ZcTV7O1TE25CX7WHKFLkrHOkm4ncZlqjTj68mj2TfxNfxpV0I6vXq8jMDfvfJj+LSLDafOMN0D3iXCKRe72KobArczCFVYFBVPuUDtmtOJWlW/fU0EyVwl650UZotoBybriUsduwuWsS6C98aONTNcx5EczL4A54h6CgT/AE6zY3JIMqBt/eKZ/+4F/9ZRSKv0hDlhMTYbVvBPU/KMkRra9NmqcAOv91KuuFds5y5yDWye/WqSDxinwYLM97T3GdrVKM6e4qGE+Ny67/O2uLNkc0kfc0+TYSbfP67+5lw5xadj3B+R7e1c58YQLDH5+U79drXz6ZNzfTkXNZAr+J6goM/RIPakzzL5RFeV/XD1mYwgOgmQKh2SfjHbyabwwgc0xSrM3WckYuiMxgEvlYhnxkgaFwPXgQQOwTlACkfNr1qXH5k61UFnQvB8nC7l85jKW6LNBEarQdh4QUNjOIuWneMCN6JYUv3aWL8aVnodoFeVAOZofoLZ+WY1FYCV8OKg2b9lT8sqvVfvvr6LoguJ6BvLLSvWoDdX2D9EgKsbwOsJsKdK4LtJLSqnssdBBAn2telEW94baYpU93IKypv1b2l1i9dohg4GTtvt3O27U8DmhDZu0NegwG1iRGIewty1vdbjRlAkIOC0jPPcJhCPxMBNIYpo3Mxe2QbH5gFBuNsuEX8R31l5iMRsBTrQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4771.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(83380400001)(26005)(52536014)(107886003)(2906002)(8676002)(186003)(5660300002)(8936002)(53546011)(6916009)(64756008)(316002)(82960400001)(54906003)(7696005)(6506007)(38070700005)(66476007)(66446008)(66946007)(66556008)(71200400001)(55016003)(508600001)(9686003)(76116006)(122000001)(38100700002)(86362001)(33656002)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?oip6Ew1cF9A15rUjadBb3Cd60Vn0KCRAlKFI3nEjyFnf50ga+LX6SsgqctSW?=
+ =?us-ascii?Q?F/kc7O/obCONIXNdEUkGdpS76GpdasiL4dEGEfPc3Tgn657iNeyclz7MNZo4?=
+ =?us-ascii?Q?OYo8xJEPAbsokss3yeGSjtwHvcXe4zWBWPeKjJios6IH5gaG2+0VXK+VU6xs?=
+ =?us-ascii?Q?i1HNA2+59rou7VyyR208scxKCWMqVa9DtPj3rilMZD57lujsntR6GEGSSdTf?=
+ =?us-ascii?Q?v645BbqdXgD+wl9AoqBVI1LJt2mPWjrj3e1bitikcrCQodcHhMiGT39esFFQ?=
+ =?us-ascii?Q?DhReXYGg055kFfBXqHfV0/1UQItBOwzkeE1gAALejjYUMH29RQvkMsYVANTC?=
+ =?us-ascii?Q?wlYA7zDGPuZXMm7Qwzsm//pyoTDtI2yN/sEoQiK3DL81csLIzpmAKeiZDaiB?=
+ =?us-ascii?Q?loTRMqwRZFgGRrXigNZUyv/JAf0rJUfDkj0xYhsn/WkJd6+uIOCAAX9weeMp?=
+ =?us-ascii?Q?nZ8stmzYXt1g+Bp/NBF5hSYaxHV6Mtn1kprZu7I0hFOy4mtjtin82uHFK4x2?=
+ =?us-ascii?Q?h3ThyFKHFa3WkmMrw5dvnGs+rBuaOuXbe0ibEY1WIddpK6729cE/gPqMiR/P?=
+ =?us-ascii?Q?PErxJq65EfL49jm9Qh1ZkK6S4xnTfkdSizUh4dvw+bTZHA+NmVWLT5AoRsQT?=
+ =?us-ascii?Q?OCcXtV3xo7TSwq1xEEVFB1lHdt72vCtbZ9OBcFKhbvZVqlRFce9DUWR2N7W3?=
+ =?us-ascii?Q?W9uZXCTLgl80B8e9dGVggSjFnsxWwbPEA7Uelev85X6RAh0FwB10O90TcxRl?=
+ =?us-ascii?Q?CV+3BqStK25IIMkMPIKRTOWTcEQA0nMsS8WAtQ8Q+AZhGYXSKYi14pkw3pDq?=
+ =?us-ascii?Q?D21dCl1hrRH0coiVnvOX3ybNQUcKxTHao//1WApzdvMhKVHAZSai+yCNnX+u?=
+ =?us-ascii?Q?OrTSM9o7Uvwx6SjAa96c8NamK4UujDr1RSLok4jwMD81+RZ9zH9+tDqp1fsh?=
+ =?us-ascii?Q?c2KLkZErJx2Nbt8liyQoQ07AyUa9rK2YETwktpoeS7r0LXqYii9ZhpRzDUcR?=
+ =?us-ascii?Q?WJPa7jIw1tKEU43jZv6I4aFAn3Vq6GXtMHe5YkYfUuzSyUIDyq4WAEdNviT4?=
+ =?us-ascii?Q?fLWPvkwIh7cICRwkLZktj10nzXGVZRLEoLiUu+S3wbrdj1nglM2ZrJEoDpP1?=
+ =?us-ascii?Q?dAdeLcL2Xyn4aU5CdywJg5+oXD6CWkS11NLWaazOcwYmzvJaTKq/nTjkhvBa?=
+ =?us-ascii?Q?iA0NJ6aN8D5N/OWmz/chO6MywNXNQibsut3vPdI0yzsv6Q3mb6ZsToaeNnKA?=
+ =?us-ascii?Q?M0TgIwhMXAYf54m933TLDDasl9HnZL5gobJvVvEbpe9dG1z/7KH3KpqVmry0?=
+ =?us-ascii?Q?ankhY4x+LdGeLmanTO4iL+8EtW1TAznUNBXeVgL+wnMmU1G3t4POwW1SOp7A?=
+ =?us-ascii?Q?mjkZ1EFrpqeo8bodd7+//j2LWheW7RBTFiLlInfIt1VETuF32RD9LnR/2ZEF?=
+ =?us-ascii?Q?Wt2k877VJA5Pnjj+kpUM0AYXDO5hQIwmi0EqxAsSpluiI+QhNn3QRrVW+hqN?=
+ =?us-ascii?Q?+kYOIlaXUd6KaBA1M+Zrzt5fRMCesKmT4svxHYNry986J77rSIL4HP7yPibx?=
+ =?us-ascii?Q?HqNmNQOYaJwWtVK/FJ6prYcIZZY5Yc/iYrbNZRVRY2cUOUjrj/DyDzFeOejC?=
+ =?us-ascii?Q?Y9f0iyk+8MiKV0DUYjzLc3NFA5b7+U64CM+LTfo2Igx5upvKmtH0Eyk5YjbM?=
+ =?us-ascii?Q?w3WiFOqkZSPMHnCnocdHIZK6zwKMxYJySaAP6fSx/i4Reh/G?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20211213165422.54n3oh72tjcb3a67@houat>
-References: <20211110130623.20553-1-granquet@baylibre.com> <20211110130623.20553-8-granquet@baylibre.com>
- <20211115101129.lyxxmb6i7paaonwi@gilmour> <CABnWg9tNPGZSi1RLqF5+Qs1GHtynyVoOzAyw+i9mPRYEoByk8g@mail.gmail.com>
- <20211116145112.xyoxzfll6exysnvt@gilmour> <CABnWg9uhuchdWyBeTacR6Cy0A9OHziUi051BQ5wsZVU0ajYjyA@mail.gmail.com>
- <20211125143034.tzikvlxxl6fdhsif@gilmour> <CABnWg9tcWdfPQwNtFhqVZxCriT848fy42VHoQZs3X2UmL4LYSA@mail.gmail.com>
- <20211213165422.54n3oh72tjcb3a67@houat>
-From:   Guillaume Ranquet <granquet@baylibre.com>
-User-Agent: alot/0.10
-Date:   Wed, 15 Dec 2021 09:03:01 -0600
-Message-ID: <CABnWg9uyoK0TkRZRJXstmtB4u2-UUCi-x_frosKhhQerNmFT=A@mail.gmail.com>
-Subject: Re: [PATCH v6 7/7] drm/mediatek: Add mt8195 DisplayPort driver
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4771.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c9bc89a-9e4c-4970-f1b2-08d9bfdc1ba0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 15:03:52.5036
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1wh90lolYo5wwAWRFdBbglsxWA2C0FlPkHFC4rLy5yrBBWrwa3ohq4QjTjNm0lMlMR8d5y4kPO0af41bbNaPqX9XRB2w/qi3munJI46ZOhWyiUP5i6mRcdbsCXq2u/D9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1792
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
 
-Quoting Maxime Ripard (2021-12-13 17:54:22)
-> On Thu, Dec 02, 2021 at 06:48:12AM -0800, Guillaume Ranquet wrote:
-> > Hi,
-> >
-> > Quoting Maxime Ripard (2021-11-25 15:30:34)
-> > > On Wed, Nov 24, 2021 at 01:45:21PM +0000, Guillaume Ranquet wrote:
-> > > > Hi,
-> > > > Thanks for all your input, really appreciated.
-> > > >
-> > > > Quoting Maxime Ripard (2021-11-16 15:51:12)
-> > > > > Hi,
-> > > > >
-> > > > > On Mon, Nov 15, 2021 at 09:33:52AM -0500, Guillaume Ranquet wrote:
-> > > > > > Quoting Maxime Ripard (2021-11-15 11:11:29)
-> > > > > > > > The driver creates a child device for the phy. The child device will
-> > > > > > > > never exist without the parent being active. As they are sharing a
-> > > > > > > > register range, the parent passes a regmap pointer to the child so that
-> > > > > > > > both can work with the same register range. The phy driver sets device
-> > > > > > > > data that is read by the parent to get the phy device that can be used
-> > > > > > > > to control the phy properties.
-> > > > > > >
-> > > > > > > If the PHY is in the same register space than the DP controller, why do
-> > > > > > > you need a separate PHY driver in the first place?
-> > > > > >
-> > > > > > This has been asked by Chun-Kuang Hu in a previous revision of the series:
-> > > > > >
-> > > > > > https://lore.kernel.org/linux-mediatek/CAAOTY_-+T-wRCH2yw2XSm=ZbaBbqBQ4EqpU2P0TF90gAWQeRsg@mail.gmail.com/
-> > > > >
-> > > > > It's a bit of a circular argument though :)
-> > > > >
-> > > > > It's a separate phy driver because it needs to go through another
-> > > > > maintainer's tree, but it needs to go through another maintainer's tree
-> > > > > because it's a separate phy driver.
-> > > > >
-> > > > > It doesn't explain why it needs to be a separate phy driver? Why can't
-> > > > > the phy setup be done directly in the DP driver, if it's essentially a
-> > > > > single device?
-> > > > >
-> > > > > That being said, usually what those kind of questions mean is that
-> > > > > you're missing a comment or something in the commit log to provide that
-> > > > > context in the first place, so it would be great to add that context
-> > > > > here.
-> > > > >
-> > > > > And it will avoid the situation we're now in where multiple reviewers
-> > > > > ask the same questions over and over again :)
-> > > > >
-> > > > At first I didn't understand your reply, then I realized I gave you
-> > > > the wrong link...
-> > > > my bad! I'm struggling a bit with mail reviews, but I'll get there eventually.
-> > > >
-> > > > The driver and phy were a single driver until v2 of this patch series
-> > > > and the phy setup
-> > > > was done directly in the driver (single driver, single C file).
-> > > > Here's the relevant link to the discussion between Chun-Kuang and Markus
-> > > >
-> > > > https://lore.kernel.org/linux-mediatek/CAAOTY__cJMqcAieEraJ2sz4gi0Zs-aiNXz38_x7dPQea6HvYEg@mail.gmail.com/#t
-> > > >
-> > > > I'll try to find a way to make it clearer for v7.
+
+> -----Original Message-----
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: Wednesday, December 15, 2021 5:55 PM
+> To: Ismail, Mohammad Athari <mohammad.athari.ismail@intel.com>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>; netdev@vger.kernel.org;
+> linux-kernel@vger.kernel.org; Voon, Weifeng <weifeng.voon@intel.com>;
+> Wong, Vee Khee <vee.khee.wong@intel.com>
+> Subject: Re: [BUG] net: phy: genphy_loopback: add link speed configuratio=
+n
+>=20
+> > > -----Original Message-----
+> > > From: Andrew Lunn <andrew@lunn.ch>
+> > > Sent: Wednesday, December 15, 2021 5:23 PM
+> > > To: Ismail, Mohammad Athari <mohammad.athari.ismail@intel.com>
+> > > Cc: Oleksij Rempel <o.rempel@pengutronix.de>;
+> > > netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Voon, Weifeng
+> > > <weifeng.voon@intel.com>; Wong, Vee Khee
+> <vee.khee.wong@intel.com>
+> > > Subject: Re: [BUG] net: phy: genphy_loopback: add link speed
+> > > configuration
 > > >
-> > > OK, it makes sense then :)
+> > > > Thanks for the suggestion. The proposed solution also doesn't
+> > > > work. Still
+> > > get -110 error.
 > > >
-> > > There's something weird though: the devices definitely look like they're
-> > > in a separate register range, yet you mention a regmap to handle the
-> > > shared register range. That range doesn't seem described anywhere in the
-> > > device tree though? What is it for?
+> > > Please can you trace where this -110 comes from. Am i looking at the
+> > > wrong poll call?
 > >
-> > My understanding is that 0x1000 to 0x1fff controls the phy
-> > functionalities and 0x2000 to 0x4fff controls "non-phy"
-> > functionalities. And you are right, there's no description of that in
-> > the device tree whatsoever. The ranges are in the same actual device
-> > and thus it has been decided to not have dt-bindings for the phy
-> > device.
->
-> Sure, that last part makes sense, but then I'm not sure why you don't
-> have the full register range in the device node you have in the DT?
->
-> > The phy driver is a child of the DP driver that we register using
-> > platform_device_register_data() and we pass along the same regmap as
-> > the DP driver in its platform data.
->
-> Especially if it's used by something, it should be described in the DT
-> somewhere.
->
-> Maxime
+> > I did read the ret value from genphy_soft_reset() and
+> phy_read_poll_timeout().
+> > The -110 came from phy_read_poll_timeout().
+>=20
+> O.K.
+>=20
+> Does the PHY actually do loopback, despite the -110?
 
+As Intel Elkhart Lake is using stmmac driver, in stmmac_selftest, return va=
+lue of phy_loopback() is checked as well. If it return -110, the selftest t=
+hat using PHY loopback will be recorded as -110 (fail).
 
-So, to make things crystal clear to a newbie (like me).
-Would you describe it like this:
-compatible = "mediatek,mt8195-dp-tx";
-reg = <0 0x1c501000 0 0x0fff>,
-	<0 0x1c502000 0 0x2fff>;
+>=20
+> I'm wondering if we should ignore the return value from
+> phy_read_poll_timeout().
 
-instead of the current description:
-compatible = "mediatek,mt8195-dp-tx";
-reg = <0 0x1c500000 0 0x8000>;
+Removing/ignoring the return value from phy_read_poll_timeout() can work. B=
+ut, the -110 error message will be displayed in dmesg. It is because there =
+is phydev_err() as part of phy_read_poll_timeout() definition.
 
-I haven't checked what the rest of the 0x8000 range is used for though...
+-Athari-
 
-Thx,
-Guillaume.
+>=20
+> 	Andrew

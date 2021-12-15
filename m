@@ -2,109 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE6F476132
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86544476141
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344083AbhLOSzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:55:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60020 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344082AbhLOSzX (ORCPT
+        id S1344042AbhLOS6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:58:07 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34316 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235473AbhLOS6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:55:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639594522;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6p2PMg3IHKSv9HJVSyU/jUSPqlHttS0kc0XgSmw+DTI=;
-        b=IlmzxzopeT9hNUaavJY9qyshKFUlmyDcUrkIhXE8C4ZqTagtIbzapb+szqSOnuf8uLi3Xt
-        1Z4AREVU5eQ+P4Rc9BIpWOpkun972m9YAxNE8UK+1G+PCCXSgXNuM2A6DbqXmLWr6aEPzv
-        OfKmTE0506u8TSG67hFT/RGiOVYeUTU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-eLARbfoFMtubSfuCb0DIwQ-1; Wed, 15 Dec 2021 13:55:21 -0500
-X-MC-Unique: eLARbfoFMtubSfuCb0DIwQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 15 Dec 2021 13:58:05 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 65A3C92502;
-        Wed, 15 Dec 2021 18:55:18 +0000 (UTC)
-Received: from [10.22.10.54] (unknown [10.22.10.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1357A19D9B;
-        Wed, 15 Dec 2021 18:55:05 +0000 (UTC)
-Message-ID: <58c06961-ffc4-27d7-01d2-4c91b0c9161d@redhat.com>
-Date:   Wed, 15 Dec 2021 13:55:05 -0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F06161899;
+        Wed, 15 Dec 2021 18:58:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ADB1C36AE3;
+        Wed, 15 Dec 2021 18:58:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639594684;
+        bh=76eb7VDWfPRd7pvYjeAKY4dcwiM5H0xLKfZAlmiztxc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z0iSKh3vKhdbFk1neCcrSe+Pzz9B7uk/gXVZqa7cqsyP5e3NuDNJ6g3TlIYzqioxP
+         AsT6VSjdWNFxVYu2mzZyIhobGGJ3HWcSKXOmNHTIGdWY1eFuySt7/uVz3zlrPtmzMz
+         KiCDM+GnCReT/Hi62TTcJXfML0VhsVLvJQYRPe93KdkP5Yxb13RLRf1GB1vO+mIxyE
+         656/TTsEcb+IGbWvQ4YUj8y1RRZfJVcHlxwZ4hEOIo+7Kk7I16v/5gkbL8QyQSjniv
+         S/YgMUg4h1cCmeud1uX5gJECCwHGHVlXCwHrq9aDuc55ANZuTgmJtNC3OyH9pgfMiJ
+         ayYMGgNNP1Eaw==
+Date:   Wed, 15 Dec 2021 18:57:58 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Agneli <poczt@protonmail.ch>, linux-tegra@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v4 00/22] Support HDMI audio on NVIDIA Tegra20
+Message-ID: <Ybo6tsnQM6OacoZs@sirena.org.uk>
+References: <20211204143725.31646-1-digetx@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-7-longman@redhat.com>
- <Ybe0YWEo7Wp7wib9@slm.duckdns.org> <20211215144450.GC25459@blackbody.suse.cz>
- <96018978-6b7f-1e7f-1012-9df7f7996ec5@redhat.com>
- <Ybo1jmNvM6sblcJq@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Ybo1jmNvM6sblcJq@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r8pMqbbDVxb335U5"
+Content-Disposition: inline
+In-Reply-To: <20211204143725.31646-1-digetx@gmail.com>
+X-Cookie: No solicitors.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 13:35, Tejun Heo wrote:
-> Hello, Waiman.
->
-> On Wed, Dec 15, 2021 at 01:16:43PM -0500, Waiman Long wrote:
->> Allowing direct transition from member to invalid partition doesn't feel
->> right for me. A casual user may assume a partition is correctly formed
->> without double checking the "cpuset.partition" value. Returning an error
->> will prevent this kind of issue. If returning more information about the
->> failure is the main reason for allowing the invalid partition transition, we
->> can extend the "cpuset.partition" read syntax to also show the reason for
->> the previous failure.
-> I don't think it's a good idea to display error messages without a way to
-> link the error to the one who triggered it. This is the same problem we had
-> with resettable counters. It only works for scenarios where one guy is
-> sitting in front of the computer but gets nastry for more complex scnearios
-> and automation.
-Yes, I agree it is not a good way to handle this issue.
->
-> I understand that allowing transitions to invalid state can feel jarring.
-> There are pros and cons to both approaches. It's similar dynamics tho.
-> Erroring out may be more intuitive for a casual user but makes it harder for
-> more complex scenarios because whether a given operation errors or not is
-> dependent on external asynchronous states, there's no good way of reporting
-> the exact nature of the error or detecting when the operation would succeed
-> in the future, and the error conditions are rather arbitrary.
 
-Thanks for the explanation. Yes, there are always pros and cons for 
-different approach to a problem. I am not totally against allowing 
-member to invalid partition transition. In that case, reading back 
-"cpuset.partition" is a must to verify that it is really a success.
+--r8pMqbbDVxb335U5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-How about we allow transition to an invalid partition state but still 
-return an error?
+On Sat, Dec 04, 2021 at 05:37:03PM +0300, Dmitry Osipenko wrote:
 
-Regards,
-Longman
+> I based S/PDIF patches on Arnd's Bergmann patch from a separate series [1]
+> that removes obsolete slave_id. This eases merging of the patches by
+> removing the merge conflict. This is a note for Mark Brown.
 
+That's not in my tree so I'll need either a pull request with the series
+or a resend after the merge window.  It's also not clear what to do
+about the DRM bits, I guess it's probably easiest to just apply them
+along with the ASoC patches.
+
+Please include human readable descriptions of things like commits and
+issues being discussed in e-mail in your mails, this makes them much
+easier for humans to read especially when they have no internet access.
+I do frequently catch up on my mail on flights or while otherwise
+travelling so this is even more pressing for me than just being about
+making things a bit easier to read.
+
+--r8pMqbbDVxb335U5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG6OrUACgkQJNaLcl1U
+h9CG4wf/R0NhMevfJzcrxbAImYtw8MIQXIBeRXJNM+viHozogArxj5HSQNArbEYW
+VBlrS/tCW9uXaIoqZgIAAkU5UoH8r01iharsCnm/GLer4aFfvFJqYfc6KPZAVhgu
+zu1AwsHPBiv59YBPE5eMNxwluv5AORqy98wy0i5eiyEBCpEeKgt3lLoFDr/GFIKt
+tXWuheE/2fqKASDvQvTHfbQ75Nb7oiCqdc/0xRkjmUgJX6JDrUPPASiQ38YfHgHw
+0X6L1Y2tWlLlGsQpdoXOceu0pnc0WdWWAxnLvJHjv6o+nMGECYBCZB/AmHYkqzrj
+vAkNiHZXRi+f3RikU7TRzEHgXszS2Q==
+=rihE
+-----END PGP SIGNATURE-----
+
+--r8pMqbbDVxb335U5--

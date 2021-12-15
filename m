@@ -2,147 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 042D74763BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B6C4763C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbhLOUu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
+        id S234562AbhLOUvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:51:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbhLOUu2 (ORCPT
+        with ESMTP id S233662AbhLOUvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:50:28 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D9DC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 12:50:27 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id j18-20020a258152000000b006000d292a42so45616147ybm.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 12:50:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=NAo1ycJu3XyEPZpDshhuC6pxi2PdRLOf6LhiLqg4ifA=;
-        b=j6bkHpGQGZ5RU9UhhE+tOXjOCW8gXXPdd4zJfDHPqrHlkJYdNftVyqvh8yy5Mfn7/y
-         TwsY6JIXwSvILwWwqQSvyTC9E14rmI4ZwcxqXEMFHjCtljAb7ETqh5QKWb1UV3HtmyQx
-         fqCXLSduU6VSG/8PsVuFQLZcAdInI7mWbhijA6ANKu1RN9N7S+jAfodTySis75aQT9pR
-         s3AjensJkNnrk7ZCZ4PV44hqRHRgss9XRMb0GeBqLJIiumX1jtnPzwFpM41qvM6qBm88
-         FogRE2cv8e9dX4WKwP5FTGLvJRkDREZDiWMPJSCGy2g0i4gJ+3hDUZOeFmLxZ/c2pKJx
-         4UvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=NAo1ycJu3XyEPZpDshhuC6pxi2PdRLOf6LhiLqg4ifA=;
-        b=RG/cvIEwf1C6Kz60HCwuN7EMouBBAts4hWhjyf46XnTu8zWMo2rrK495H9e5Eu694r
-         XB5cApGEoeurzCCxqI80rHSReov5uDKPEBaQs2aScMHo/tPqVLXcuN/5wznWivTwcly4
-         s6eprRdgsSDFA9skMZaBAZKlx9uR5AbmPsQbyIhgPGo4DsP4nU9EwhoceG4bYiCt3C41
-         BVPi2J+9V+woiB2YmKZadzkZmyXTlEQBCkFt8WlL3QbUBWBAI8GlKbdQ+xquMHBl7an1
-         2YAPEsCXCwhS133g2qfIuNlkGaS21OuDZPR3N3WHlEdkbvaTeJ0yXuJAI7N82vTC0jzR
-         9brw==
-X-Gm-Message-State: AOAM530qysWQh/HufgF/VjpCw10V8otyEllCP/6ybLWy13QPQyGt15kZ
-        dqu9So0mTb++RmYTQGFaj3PVyVUIs98aOw==
-X-Google-Smtp-Source: ABdhPJwMD6YsHXO4Rfc7WCDeo9/IZDWQB0EKqpKkQZkujkDq/NBsT+yi4a/+zjw+o066HwyXbiZ3NFwMrRgeXw==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1bef:2d92:9c3e:f258])
- (user=dlatypov job=sendgmr) by 2002:a25:d4ce:: with SMTP id
- m197mr9126045ybf.194.1639601427048; Wed, 15 Dec 2021 12:50:27 -0800 (PST)
-Date:   Wed, 15 Dec 2021 12:50:14 -0800
-Message-Id: <20211215205014.398984-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v3] kunit: tool: Default --jobs to number of CPUs
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 15 Dec 2021 15:51:03 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD17C061574;
+        Wed, 15 Dec 2021 12:51:02 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639601459;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=77DCNiXl9B9x9ao8a3ckFicR+A7/8jsezE822YCoYkI=;
+        b=0MC08SjOyHUSb632XivZnR6xp+J+lhdSt8dO4cVV21Usd+LFkCWMDMI5c2zqdprtPX8VcT
+        Z63tf+3EiGKcUHte1/483d4Z/hf6cKDNCZfSHwK0n7HeyH7/U5ccqzZJxTdJSRVkjhfdtR
+        IiH4xihB3g4E9MBjV2NktVFtgbdOo75IOpoHPIb3/7VdumCnWORcJgrzfHtGplNM5fxLCo
+        lWD8Oek/DpAbTtzS5eZ0f2xj6cql1OA57lGXY/RPOvZpVY8gxierMi9GKVnemFayVy076Y
+        M6+9Lfqa20tO87mNob/FrOG2y8clrn6urg7hwKRz/nQ9j3qTabd4wVqNL/bu2w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639601459;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=77DCNiXl9B9x9ao8a3ckFicR+A7/8jsezE822YCoYkI=;
+        b=SDPAxqej8tM3beNMTA3MRfQgMQzvFbRgGCzPLoilB6fEB/QgGtIDQRto0CY8QP/ghtYPeu
+        cjbHVwPoa9R9VUCQ==
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
+        Nishanth Menon <nm@ti.com>
+Subject: Re: [patch V2 21/31] soc: ti: ti_sci_inta_msi: Rework MSI
+ descriptor allocation
+In-Reply-To: <20211206210748.737904583@linutronix.de>
+References: <20211206210600.123171746@linutronix.de>
+ <20211206210748.737904583@linutronix.de>
+Date:   Wed, 15 Dec 2021 21:50:58 +0100
+Message-ID: <87a6h1r3rh.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+On Mon, Dec 06 2021 at 23:51, Thomas Gleixner wrote:
+>
+> No functional change intended.
 
-The --jobs parameter for kunit_tool currently defaults to 8 CPUs,
-regardless of the number available. For systems with significantly more
-(or less), this is not as efficient. Instead, default --jobs to the
-number of CPUs available to the process: while there are as many
-superstitions as to exactly what the ideal jobs:CPU ratio is, this seems
-sufficiently sensible to me.
+Famous last words.
 
-A new helper function to get the default number of jobs is added:
-get_default_jobs() -- this is used in kunit_tool_test instead of a
-hardcoded value, or an explicit call to len(os.sched_getaffinity()), so
-should be more flexible if this needs to change in the future.
+>  static int ti_sci_inta_msi_alloc_descs(struct device *dev,
+>  				       struct ti_sci_resource *res)
+>  {
+> -	struct msi_desc *msi_desc;
+> +	struct msi_desc msi_desc;
+>  	int set, i, count = 0;
+>  
+> +	memset(&msi_desc, 0, sizeof(msi_desc));
 
-Signed-off-by: David Gow <davidgow@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+This fails to initialize msi_desc.nvec_used which makes the subsequent
+interrupt allocation fail. Delta fix below.
+
+Thanks,
+
+        tglx
 ---
-Changes since v2:
-- Rebased by Daniel Latypov onto linxu-kselftest kunit branch.
-  There was a trivial conflict in kunit_tool_test.py.
-
-Changes since v1:
-https://lore.kernel.org/linux-kselftest/20211211084928.410669-1-davidgow@google.com/
-- Use len(os.sched_getaffinity()) instead of os.cpu_count(), which gives
-  the number of available processors (to this process), rather than the
-  total.
-- Fix kunit_tool_test.py, which had 8 jobs hardcoded in a couple of
-  places.
-- Thanks to Daniel Latypov for these suggestions.
----
- tools/testing/kunit/kunit.py           | 5 ++++-
- tools/testing/kunit/kunit_tool_test.py | 5 +++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index f1be71811369..7a706f96f68d 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -282,6 +282,9 @@ def massage_argv(argv: Sequence[str]) -> Sequence[str]:
- 		return  f'{arg}={pseudo_bool_flag_defaults[arg]}'
- 	return list(map(massage_arg, argv))
+--- a/drivers/soc/ti/ti_sci_inta_msi.c
++++ b/drivers/soc/ti/ti_sci_inta_msi.c
+@@ -68,6 +68,7 @@ static int ti_sci_inta_msi_alloc_descs(s
+ 	int set, i, count = 0;
  
-+def get_default_jobs() -> int:
-+	return len(os.sched_getaffinity(0))
-+
- def add_common_opts(parser) -> None:
- 	parser.add_argument('--build_dir',
- 			    help='As in the make command, it specifies the build '
-@@ -332,7 +335,7 @@ def add_build_opts(parser) -> None:
- 	parser.add_argument('--jobs',
- 			    help='As in the make command, "Specifies  the number of '
- 			    'jobs (commands) to run simultaneously."',
--			    type=int, default=8, metavar='jobs')
-+			    type=int, default=get_default_jobs(), metavar='jobs')
+ 	memset(&msi_desc, 0, sizeof(msi_desc));
++	msi_desc.nvec_used = 1;
  
- def add_exec_opts(parser) -> None:
- 	parser.add_argument('--timeout',
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index b80e333a20cb..352369dffbd9 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -527,7 +527,7 @@ class KUnitMainTest(unittest.TestCase):
- 	def test_build_passes_args_pass(self):
- 		kunit.main(['build'], self.linux_source_mock)
- 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
--		self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, '.kunit', None)
-+		self.linux_source_mock.build_kernel.assert_called_once_with(False, kunit.get_default_jobs(), '.kunit', None)
- 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
- 
- 	def test_exec_passes_args_pass(self):
-@@ -633,8 +633,9 @@ class KUnitMainTest(unittest.TestCase):
- 
- 	def test_build_builddir(self):
- 		build_dir = '.kunit'
-+		jobs = kunit.get_default_jobs()
- 		kunit.main(['build', '--build_dir', build_dir], self.linux_source_mock)
--		self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, build_dir, None)
-+		self.linux_source_mock.build_kernel.assert_called_once_with(False, jobs, build_dir, None)
- 
- 	def test_exec_builddir(self):
- 		build_dir = '.kunit'
-
-base-commit: 1ee2ba89bea86d6389509e426583b49ac19b86f2
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+ 	for (set = 0; set < res->sets; set++) {
+ 		for (i = 0; i < res->desc[set].num; i++, count++) {

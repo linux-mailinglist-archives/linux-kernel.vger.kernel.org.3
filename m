@@ -2,134 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60DC0475058
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABDC475062
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbhLOBMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 20:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S235223AbhLOBQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 20:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbhLOBMG (ORCPT
+        with ESMTP id S233867AbhLOBQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 20:12:06 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B94DC061574;
-        Tue, 14 Dec 2021 17:12:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=I9E4+ZKe69WmCybnXNkkbnAbPC5UKQx+gK5B9WYgX94=; b=UsLn/WYA2UFvlVuXcC+erSOcOK
-        DwVaQYkU0dISQYsJIqI0wy2b+nZzWmsOI1e0CZ2lVA7IjdjNG+UD7Kwv6ryH41/w0a/rmtaBaDek+
-        Qi8BCsOKOKjJSAAe5AtnC2EZ4Q3HkERYwSyIvKiRld95UuYHMjb4lcGKKCRQugR6i7MIW1eEuui50
-        59ZxZNKoDZCKUhDVt2jLuf8JXU/AKGfSxiOaj4BOGiyXuMpK7w04EO+OAIQ2BKoJ6wzq+oAhQSm7a
-        rjx6LYTMvU55EAZ/iXF1otpuLMwRWUa2/gMRJ1S/cpIIrvUE5WS57wA7cwTMF+6Hh80cv5e+5KGxW
-        c6Qi1rpQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56296)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mxIpu-0005ed-Hz; Wed, 15 Dec 2021 01:12:02 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mxIps-00040X-Ig; Wed, 15 Dec 2021 01:12:00 +0000
-Date:   Wed, 15 Dec 2021 01:12:00 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Jose Abreu <Jose.Abreu@synopsys.com>, Andrew Lunn <andrew@lunn.ch>,
-        linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH] net: phylink: Pass state to pcs_config
-Message-ID: <YblA4E/InIAa0U1U@shell.armlinux.org.uk>
-References: <20211214233450.1488736-1-sean.anderson@seco.com>
- <YbkshnqgXP7Gd188@shell.armlinux.org.uk>
- <de1f7214-58c8-cdc6-1d29-08c979ce68f1@seco.com>
- <Ybk7iuxdin69MjTo@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ybk7iuxdin69MjTo@shell.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+        Tue, 14 Dec 2021 20:16:01 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D87C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:16:01 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id p8-20020a17090a748800b001a6cceee8afso11210741pjk.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:16:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=Dum5uuzQc6+fBFUfChCShPcDaDaNlCCyh9HPYMxf5Zg=;
+        b=QZkYv1zHcaSU4WgRP3rO/8co9P6jsA5heGxdb6RYei05MrXmBjtsPhuSU4VF04HZdR
+         Dl3U5u4Y+/Nt4igCegP5WmBTYDR9uwQACBeyeWpubcz0/LK8fCYIRRhG7YnXcKyQmiO6
+         UH/u218aSBtoksjxqUDBJ5CX6xSC6UoK9qPJuCsQtpfiAfv9w4p7KEj5ENUvFnO9fHs9
+         dKK7NI0zHObr085VSP81MtlGUp24KKdH4St5Wy2LUyQtYbZ8AYXNYAsGBaNnO/CtmgdL
+         EkO5l1V0D4mWGQl5cML/QipSwSfj7/yQRGzIYMhyY7mIZsK2DrfuTM6296rV9nKk1pmd
+         26OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=Dum5uuzQc6+fBFUfChCShPcDaDaNlCCyh9HPYMxf5Zg=;
+        b=irxhb0UDitRTCAPSBa2QRxahQ89zrztJl56QiBiN4w31zoPxs2oTjaeD8De9L+SdIw
+         3LUpJ/ASTGhykv5FYpOuwNrf6f60WivVks6UONzuaTlMHcfLR65PfVot4MuIRIYEq6c9
+         aw9zj3yVRzTBO2c2o8IRzl+iLzCPv3Fk3Pb8bATrctZuQqPVT+X4mELFDy3YXHQsZVkO
+         VZOphLebkpCO/raRiFV7Ii+K5iv9EE3wUiWlMuqkNrqE5Lny92UNEzkNf428S1cFFfwG
+         +/d3V6wpWlZBLDt3VvSq58BMn6DzP8A61IxQ0s2DmKJit9XbmrFdkBgv2hdcpQFJrfxK
+         5QHQ==
+X-Gm-Message-State: AOAM530PsX5a4+rvHLbNLI6z5adK6xogbGhZ4gXipzkEFmeIyABIBdwm
+        2WbFUxHxxQ79xDswpC0sPv8u2u1rIOg=
+X-Google-Smtp-Source: ABdhPJz1PCplQTuJimb/SA1V1PBxiqkExCSXsWQhQ7jSf7YEDuSD2V3/9bVvP0OBS/7OQm9HpR15aBeFRSM=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:30e:: with SMTP id
+ ay14mr9007932pjb.60.1639530960510; Tue, 14 Dec 2021 17:16:00 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed, 15 Dec 2021 01:15:53 +0000
+Message-Id: <20211215011557.399940-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH 0/4] KVM: x86/mmu: Zap invalid TDP MMU roots when unmapping
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 12:49:14AM +0000, Russell King (Oracle) wrote:
-> On Tue, Dec 14, 2021 at 07:16:53PM -0500, Sean Anderson wrote:
-> > Ok, so let me clarify my understanding. Perhaps this can be eliminated
-> > through a different approach.
-> > 
-> > When I read the datasheet for mvneta (which hopefully has the same
-> > logic here, since I could not find a datasheet for an mvpp2 device), I
-> > noticed that the Pause_Adv bit said
-> > 
-> > > It is valid only if flow control mode is defined by Auto-Negotiation
-> > > (as defined by the <AnFcEn> bit).
-> > 
-> > Which I interpreted to mean that if AnFcEn was clear, then no flow
-> > control was advertised. But perhaps it instead means that the logic is
-> > something like
-> > 
-> > if (AnFcEn)
-> > 	Config_Reg.PAUSE = Pause_Adv;
-> > else
-> > 	Config_Reg.PAUSE = SetFcEn;
-> > 
-> > which would mean that we can just clear AnFcEn in link_up if the
-> > autonegotiated pause settings are different from the configured pause
-> > settings.
-> 
-> Having actually played with this hardware quite a bit and observed what
-> it sends, what it implements for advertising is:
-> 
-> 	Config_Reg.PAUSE = Pause_Adv;
-> 
-> Config_Reg gets sent over the 1000BASE-X link to the link partner, and
-> we receive Remote_Reg from the link partner.
-> 
-> Then, the hardware implements:
-> 
-> 	if (AnFcEn)
-> 		MAC_PAUSE = Config_Reg.PAUSE & Remote_Reg.PAUSE;
-> 	else
-> 		MAC_PAUSE = SetFcEn;
-> 
-> In otherwords, AnFcEn controls whether the result of autonegotiation
-> or the value of SetFcEn controls whether the MAC enables symmetric
-> pause mode.
+Patches 01-03 implement a bug fix by ensuring KVM zaps both valid and
+invalid roots when unmapping a gfn range (including the magic "all" range).
+Failure to zap invalid roots means KVM doesn't honor the mmu_notifier's
+requirement that all references are dropped.
 
-I should also note that in the Port Status register,
+set_nx_huge_pages() is the most blatant offender, as it doesn't elevate
+mm_users and so a VM's entire mm can be released, but the same underlying
+bug exists for any "unmap" command from the mmu_notifier in combination
+with a memslot update.  E.g. if KVM is deleting a memslot, and a
+mmu_notifier hook acquires mmu_lock while it's dropped by
+kvm_mmu_zap_all_fast(), the mmu_notifier hook will see the to-be-deleted
+memslot but won't zap entries from the invalid roots.
 
-	TxFcEn = RxFcEn = MAC_PAUSE;
+Patch 04 is cleanup to reuse the common iterator for walking _only_
+invalid roots.
 
-So, the status register bits follow SetFcEn when AnFcEn is disabled.
+Sean Christopherson (4):
+  KVM: x86/mmu: Use common TDP MMU zap helper for MMU notifier unmap
+    hook
+  KVM: x86/mmu: Move "invalid" check out of kvm_tdp_mmu_get_root()
+  KVM: x86/mmu: Zap _all_ roots when unmapping gfn range in TDP MMU
+  KVM: x86/mmu: Use common iterator for walking invalid TDP MMU roots
 
-However, these bits are the only way to report the result of the
-negotiation, which is why we use them to report back whether flow
-control was enabled in mvneta_pcs_get_state(). These bits will be
-ignored by phylink when ethtool -A has disabled pause negotiation,
-and in that situation there is no way as I said to be able to read
-the negotiation result.
-
-permit_pause_to_mac exists precisely because of the limitions of this
-hardware, and having it costs virtually nothing to other network
-drivers... except a parameter that others ignore.
-
-If we don't have permit_pause_to_mac in pcs_config() then we need to
-have it passed to the link_up() methods instead. There is no other
-option (other than breaking mvneta and mvpp2) here than to make the
-state of ethtool -A ... autoneg on|off known to the hardware.
+ arch/x86/kvm/mmu/tdp_mmu.c | 116 +++++++++++++++++--------------------
+ arch/x86/kvm/mmu/tdp_mmu.h |   3 -
+ 2 files changed, 53 insertions(+), 66 deletions(-)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.34.1.173.g76aa8bc2d0-goog
+

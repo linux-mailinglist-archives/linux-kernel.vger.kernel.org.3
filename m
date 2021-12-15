@@ -2,127 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D049B47565C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECEA47565F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241663AbhLOK2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:28:48 -0500
-Received: from mail-ua1-f49.google.com ([209.85.222.49]:34502 "EHLO
-        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbhLOK2r (ORCPT
+        id S241675AbhLOK3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:29:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241668AbhLOK3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:28:47 -0500
-Received: by mail-ua1-f49.google.com with SMTP id u40so6890059uad.1;
-        Wed, 15 Dec 2021 02:28:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6KatagByVh+i+7U2cQTugmti3xcd82C2QfCSX1Fy8Jo=;
-        b=ZdSXZmf2lY0qFDYqOx3eNuTs5WT7NOc6ukNoEOMkaxZ3NNhCpjouW0yF1pkoFljy1w
-         HUSS2IR71ynLU9QlZ+vceOeosIVH98QKlmfMF5TFoWdN+FaaBnjoHI3XHLineo26rzcE
-         L0vF8a6M1a/3QqyO1XXl4iReb6AAPWS7DIgPCyJaoblQI5jz5UDBrQcdx04SU9xZb2QR
-         MFBHNN2oSD17oX/fLz0rbzVT3EJja1mF7+0PDVUu/W9NwV/tSFs+9tY2jW9oOO5uvmGl
-         SkYAn5jV4i8X6jz7yD5oFr9YdifBUPl5Z5D5KHafq9jVlQD+ixm6j2IKe/edzR3LtK/z
-         yIsg==
-X-Gm-Message-State: AOAM532tZOoro+pWrwNdT0Nz9aGG95R0gzUD1kyUzFYnMOXK0zAR4e7z
-        ZMLwwxQuMeH3sReVJfwW4BBtp5ETUY9i9w==
-X-Google-Smtp-Source: ABdhPJwJk+bggskRQZYTIK19Vj5/gOsc8Xt4U6CwTBeOCMMcwolTZ42DFwnIN3oQ/01lOMVIoFXaHg==
-X-Received: by 2002:a9f:2d8c:: with SMTP id v12mr9159217uaj.25.1639564126939;
-        Wed, 15 Dec 2021 02:28:46 -0800 (PST)
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com. [209.85.221.181])
-        by smtp.gmail.com with ESMTPSA id j192sm325337vkc.39.2021.12.15.02.28.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 02:28:46 -0800 (PST)
-Received: by mail-vk1-f181.google.com with SMTP id q21so14325294vkn.2;
-        Wed, 15 Dec 2021 02:28:45 -0800 (PST)
-X-Received: by 2002:a05:6122:920:: with SMTP id j32mr2889520vka.20.1639564125403;
- Wed, 15 Dec 2021 02:28:45 -0800 (PST)
+        Wed, 15 Dec 2021 05:29:12 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B5AC061574;
+        Wed, 15 Dec 2021 02:29:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=TVQg7rmLG9/kEQLBFPzjR2EeSy+xiEzrH+q1P3DvhXg=; b=lFfJegrnC0xJgESF0BGSNXdjs3
+        Jl+aaLDljTZGLkE38I3rA2Y10F41p3fkamSkYZnM4BynI0hm/dM+rAn6GVoRC/PzozH9mY8XpW2RN
+        PyJ+x2QEy7b6Sl/yF/fHGqnW0+5LrdRWMehfegPTuEmOlPRaGymvoVVuqebP0ahOKOsWUBzQt8/TL
+        zR8Sp19tiDiHS/QS8YLa+WybqwpHWiARqsgwMfCRIneq1k84NpOOrtUfear/yaGBXx3ckLeEJ/0gz
+        9EBX9FV7kL6UWI9+IBAu7TaaOcpjJVhj65ePCQv4Qg3bdvRLiTeIZDiln6B8GBib1B+IYbVTI4j5Z
+        ACeNLh9A==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56300)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mxRX2-0006C9-Rj; Wed, 15 Dec 2021 10:29:08 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mxRX1-0004P3-4h; Wed, 15 Dec 2021 10:29:07 +0000
+Date:   Wed, 15 Dec 2021 10:29:07 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        netdev@vger.kernel.org, Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Fugang Duan <fugang.duan@nxp.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 3/3] net: fec: reset phy on resume after power-up
+Message-ID: <YbnDc/snmb1WYVCt@shell.armlinux.org.uk>
+References: <20211214121638.138784-1-philippe.schenker@toradex.com>
+ <20211214121638.138784-4-philippe.schenker@toradex.com>
+ <YbjofqEBIjonjIgg@lunn.ch>
+ <20211214223548.GA47132@francesco-nb.int.toradex.com>
+ <Ybm3NDeq96TSjh+k@lunn.ch>
 MIME-Version: 1.0
-References: <20211213163929.7509-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211213163929.7509-1-andriy.shevchenko@linux.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 15 Dec 2021 11:28:34 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW_CKcXwOSUAbCreHVM62E35yjiCfpXC_wM0zK-V43CnA@mail.gmail.com>
-Message-ID: <CAMuHMdW_CKcXwOSUAbCreHVM62E35yjiCfpXC_wM0zK-V43CnA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] pinctrl: Get rid of duplicate of_node assignment
- in the drivers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Radim Pavlik <radim.pavlik@tbs-biometrics.com>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Herve Codina <herve.codina@bootlin.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-actions@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        - <patches@opensource.cirrus.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        linux-mediatek@lists.infradead.org, linux-oxnas@groups.io,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andy Gross <agross@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        arm-soc <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ybm3NDeq96TSjh+k@lunn.ch>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 5:40 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> GPIO library does copy the of_node from the parent device of
-> the GPIO chip, there is no need to repeat this in the individual
-> drivers. Remove these assignment all at once.
->
-> For the details one may look into the of_gpio_dev_init() implementation.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Wed, Dec 15, 2021 at 10:36:52AM +0100, Andrew Lunn wrote:
+> On Tue, Dec 14, 2021 at 11:35:48PM +0100, Francesco Dolcini wrote:
+> > Hello Andrew,
+> > 
+> > On Tue, Dec 14, 2021 at 07:54:54PM +0100, Andrew Lunn wrote:
+> > > What i don't particularly like about this is that the MAC driver is
+> > > doing it. Meaning if this PHY is used with any other MAC, the same
+> > > code needs adding there.
+> > This is exactly the same case as phy_reset_after_clk_enable() [1][2], to
+> > me it does not look that bad.
+> > 
+> > > So maybe in the phy driver, add a suspend handler, which asserts the
+> > > reset. This call here will take it out of reset, so applying the reset
+> > > you need?
+> > Asserting the reset in the phylib in suspend path is a bad idea, in the
+> > general case in which the PHY is powered in suspend the
+> > power-consumption is likely to be higher if the device is in reset
+> > compared to software power-down using the BMCR register (at least for
+> > the PHY datasheet I checked).
+> 
+> Maybe i don't understand your hardware.
+> 
+> You have a regulator providing power of the PHY.
+> 
+> You have a reset, i guess a GPIO, connected to the reset pin of the
+> PHY.
+> 
+> What you could do is:
+> 
+> PHY driver suspend handler does a phy_device_reset(ndev->phydev, 1)
+> to put the PHY into reset.
+> 
+> MAC driver disables the regulator.
+> 
+> Power consumption should now be 0, since it does not have any power.
+> 
+> On resume, the MAC enables the regulator. At this point, the PHY gets
+> power, but is still held in reset. It is now consuming power, but not
+> doing anything. The MAC calls phy_hw_init(), which calls
+> phy_device_reset(ndev->phydev, 0), taking the PHY out of reset.
+> 
+> Hopefully, this release from reset is enough to make the PHY work.
+> 
+> Doing it like this also addresses Russell point. phy_hw_init() is not
+> putting the device into reset, it is only taking it out of reset, if
+> it happens to be already in reset. So we are not slowing down link up
+> for everybody.
 
->  drivers/pinctrl/renesas/pinctrl-rza2.c     | 1 -
+Here's another question which no one seems to have considered. If the
+PHY power source can be controlled, why doesn't the firmware describe
+the power supply for the PHY, and why doesn't the PHY driver control
+the PHY power source? Why is that in the SoC network driver?
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

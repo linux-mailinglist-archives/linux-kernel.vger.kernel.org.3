@@ -2,101 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7221B4754B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 398144754BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236161AbhLOI4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 03:56:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235706AbhLOI4D (ORCPT
+        id S236244AbhLOI41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 03:56:27 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32923 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233803AbhLOI40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 03:56:03 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E19C061574;
-        Wed, 15 Dec 2021 00:56:03 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id j17so21117897qtx.2;
-        Wed, 15 Dec 2021 00:56:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dbfkGjADP1JP/ccn6Y79dw0BB+q77R8upChfhWhpbLY=;
-        b=QXkOpqLoRDDSGEf+AKDxWv1QFdCmuMqUjVA8i/659rKFxt5MDdmYGq1Va3+xt4xFWn
-         IbmRS6G79/ayBNeyvLsUXJa5B25V31ewyeG6mriDRl05OyLYuonJjzZkz5/gzgRBWwSY
-         FujwC5lJEo49cYy1CCLMPqhWg1fIqquQ7F1PsTfqC4edm3O6I6OqqjsYmkCkDIDcqBBv
-         3K+E9Jov4WP9Src1YIj53P5sSLYU2RgOjKiQd6tqUUrMgPwb85qooPV4q/htvnGcJiOz
-         04fzUV19TQL/zQhrxkcxDCBiCQrFo0YchSj5plkEyKKSN4KMhRsV/KI0kBjbP2e75lo7
-         ovsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dbfkGjADP1JP/ccn6Y79dw0BB+q77R8upChfhWhpbLY=;
-        b=Oj9mRjwX5b8V4VElGzpmfkEu/lLUlOxKF/XAq8fMmmJdjZxWKh+P55cHGrFrJJfOvR
-         uhGkJLTFme0Nv2ralsGGcy8fM8Su5LLvB3ea5S2ov98Mn+YalNqNiGU3FzU6LXkD4R1X
-         n83/buU8cv5QvIMsl94gF6ggHg2UuRGsBKdldQJCd1WN67G+HfGMTkTGoeNGsBoDc8Pf
-         XU9oh/K+fvKwUyL+kQq17t/P9od6YtLMMlKMR6qydOpDH6N89V/eChfpGCPCQZcR3I5s
-         omVVzzYFCpCBcl5J6krJarfc4FCAYd0yvgH7Lp9t3sUt928MxNopTuAO9ovSW0gqVaN+
-         IXQw==
-X-Gm-Message-State: AOAM531apPkUC3GszdwFhY0J016LIX7FaZn6GtMSmsKiPHwdoqSR0jAG
-        6qqpErN586Hm2JrCQF3GtcrN3ROwx9o=
-X-Google-Smtp-Source: ABdhPJzLfQfHP7IxlGx7vxk8z92ch8kS1M5ARNToa0yOaFgzRN1nbpR8d1Z4m+rwQRnrr/BsDfzCQw==
-X-Received: by 2002:ac8:5949:: with SMTP id 9mr10885179qtz.522.1639558562394;
-        Wed, 15 Dec 2021 00:56:02 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id q185sm696876qke.64.2021.12.15.00.55.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 00:56:01 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     robdclark@gmail.com
-Cc:     sean@poorly.run, quic_abhinavk@quicinc.com, airlied@linux.ie,
-        daniel@ffwll.ch, swboyd@chromium.org, quic_khsieh@quicinc.com,
-        dmitry.baryshkov@linaro.org, bjorn.andersson@linaro.org,
-        linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] drm/msm/dp: remove unneeded variable
-Date:   Wed, 15 Dec 2021 08:55:54 +0000
-Message-Id: <20211215085554.444351-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Dec 2021 03:56:26 -0500
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JDTcQ1xhbzXdTj;
+        Wed, 15 Dec 2021 16:56:06 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 16:56:23 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 16:56:22 +0800
+Subject: Re: [PATCH v17 04/10] x86: kdump: move xen_pv_domain() check and
+ insert_resource() to setup_arch()
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+CC:     Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Chen Zhou" <dingguo.cz@antgroup.com>
+References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
+ <20211210065533.2023-5-thunder.leizhen@huawei.com>
+ <d328aede-1282-b4d5-f17a-aa9c3e9f6563@huawei.com>
+Message-ID: <03bd43f3-14a1-dbd1-9fff-118c0885653c@huawei.com>
+Date:   Wed, 15 Dec 2021 16:56:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <d328aede-1282-b4d5-f17a-aa9c3e9f6563@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Remove unneeded variable used to store return value.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On 2021/12/14 19:40, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2021/12/10 14:55, Zhen Lei wrote:
+>> From: Chen Zhou <chenzhou10@huawei.com>
+>>
+>> We will make the functions reserve_crashkernel() as generic, the
+>> xen_pv_domain() check in reserve_crashkernel() is relevant only to
+>> x86, the same as insert_resource() in reserve_crashkernel[_low]().
+>> So move xen_pv_domain() check and insert_resource() to setup_arch()
+>> to keep them in x86.
+>>
+>> Suggested-by: Mike Rapoport <rppt@kernel.org>
+>> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> Tested-by: John Donnelly <John.p.donnelly@oracle.com>
+>> Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+>> Acked-by: Baoquan He <bhe@redhat.com>
+>> ---
+>>  arch/x86/kernel/setup.c | 19 +++++++++++--------
+>>  1 file changed, 11 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+>> index bb2a0973b98059e..7ae00716a208f82 100644
+>> --- a/arch/x86/kernel/setup.c
+>> +++ b/arch/x86/kernel/setup.c
+>> @@ -456,7 +456,6 @@ static int __init reserve_crashkernel_low(void)
+>>  
+>>  	crashk_low_res.start = low_base;
+>>  	crashk_low_res.end   = low_base + low_size - 1;
+>> -	insert_resource(&iomem_resource, &crashk_low_res);
+>>  #endif
+>>  	return 0;
+>>  }
+>> @@ -480,11 +479,6 @@ static void __init reserve_crashkernel(void)
+>>  		high = true;
+>>  	}
+>>  
+>> -	if (xen_pv_domain()) {
+>> -		pr_info("Ignoring crashkernel for a Xen PV domain\n");
+>> -		return;
+>> -	}
+>> -
+>>  	/* 0 means: find the address automatically */
+>>  	if (!crash_base) {
+>>  		/*
+>> @@ -531,7 +525,6 @@ static void __init reserve_crashkernel(void)
+>>  
+>>  	crashk_res.start = crash_base;
+>>  	crashk_res.end   = crash_base + crash_size - 1;
+>> -	insert_resource(&iomem_resource, &crashk_res);
+>>  }
+>>  #else
+>>  static void __init reserve_crashkernel(void)
+>> @@ -1143,7 +1136,17 @@ void __init setup_arch(char **cmdline_p)
+>>  	 * Reserve memory for crash kernel after SRAT is parsed so that it
+>>  	 * won't consume hotpluggable memory.
+>>  	 */
+>> -	reserve_crashkernel();
+> 
+> Hi Baoquan:
+>   How about move "#ifdef CONFIG_KEXEC_CORE" here, so that we can remove the
+> empty reserve_crashkernel(). In fact, xen_pv_domain() is invoked only
+> when CONFIG_KEXEC_CORE is enabled before.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 8d9c19dbf33e..7cc4d21f2091 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -416,12 +416,11 @@ static int dp_display_usbpd_configure_cb(struct device *dev)
- 
- static int dp_display_usbpd_disconnect_cb(struct device *dev)
- {
--	int rc = 0;
- 	struct dp_display_private *dp = dev_get_dp_display_private(dev);
- 
- 	dp_add_event(dp, EV_USER_NOTIFICATION, false, 0);
- 
--	return rc;
-+	return 0;
- }
- 
- static void dp_display_handle_video_request(struct dp_display_private *dp)
--- 
-2.25.1
+Hi Baoquan:
+  Did you miss this email? If no reply, I will keep it no change.
 
+> 
+>> +	if (xen_pv_domain())
+>> +		pr_info("Ignoring crashkernel for a Xen PV domain\n");
+>> +	else {
+>> +		reserve_crashkernel();
+>> +#ifdef CONFIG_KEXEC_CORE
+>> +		if (crashk_res.end > crashk_res.start)
+>> +			insert_resource(&iomem_resource, &crashk_res);
+>> +		if (crashk_low_res.end > crashk_low_res.start)
+>> +			insert_resource(&iomem_resource, &crashk_low_res);
+>> +#endif
+>> +	}
+>>  
+>>  	memblock_find_dma_reserve();
+>>  
+>>
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> .
+> 

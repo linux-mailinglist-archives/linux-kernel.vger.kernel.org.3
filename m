@@ -2,289 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98DC5475CBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E018475CCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235019AbhLOQGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:06:43 -0500
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:34331 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235029AbhLOQGl (ORCPT
+        id S238007AbhLOQJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235088AbhLOQJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:06:41 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 49C312B000FA;
-        Wed, 15 Dec 2021 11:06:39 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 15 Dec 2021 11:06:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=WP37NbalGKJAL0/fH72V8DXVgIh
-        gPELRYdKLvojT4Z4=; b=I1JKQ0Qp16O7m6Dl068qAPHTtTaJyxzgfdmhUEJrpzC
-        fGYU4RePOKwe772Q/f3PmsyVoeQwUs/nWJcRQT3raFmU+qxg/7qI0ZU/Z+1jR5lK
-        fliiRC02mn+06E7X+KPg9W/inxpoMF59NgcrFZT+f8VcvDerQqprowWdY/t2EXdF
-        XdIYQHP5cirPnC+JGuUeyextTlnQ0L/dwhwdpWDUDxh/+TEpKBIu/cNfKyQl0Bjl
-        fN8u0TDiYc5Q2QyQswJ7cnF0mHvOzwpsCn6gCNgwdQkjwDlChRpCf/Qm6/1P9EMV
-        uu+flLvzEKRr/9RdC4rQ2+WOrgvovH0q90IIDRDDo6Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=WP37Nb
-        alGKJAL0/fH72V8DXVgIhgPELRYdKLvojT4Z4=; b=CBgX3DNsBsFLHllQuYJ9wE
-        5gWJBdGMQIWS7gSS+9pcb6K9CSbJzZkfUCciedTGW9uXTM5WVMa823GBcd5mrU1H
-        3mP6LIYQAueQsBEGDs4iF8IIEbqBp63pB4nZ+dFomC2JJyLuyK/LbuHuYpe+Jhtr
-        9liAbtOFu44vSnAFXCJh49bdIDJH4KhTgv2EPnWXq3sK6UjTK6syNO35sHUxfKpt
-        JpkiziPlMeobP04xYRoB/y/0395r0YgHxcrcX5umFZFwIjNb8UjuEe00H3e/3WFc
-        ijC71LdWR+4sk95pF9c6bje7at85VRbuPL0waFnr6PrLj0hhMrmASkRQKAxuUhow
-        ==
-X-ME-Sender: <xms:hhK6Yb9YkGQJtXyiG1GsceZsQcr49_FBvz3ilc2W2-0cOYJ02y5ufQ>
-    <xme:hhK6YXt_OztEopYb1EYylOxatH0_T-094yOHiD7ul2_VbFXjxvvdthXOi3TYWGE3T
-    APv7sSTPCrycQmlkIc>
-X-ME-Received: <xmr:hhK6YZAhotNLrRDa1oaRA6rD8JKceGoHjDnCgqpXVxZ1Vz5CTbsr--LAhljQNLDKT6GaHQqcBjSK_WKXA7wHWwy4KM2dRN25zJ6PXbw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrledvgdekhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeevveefffduveeitdegtefhhfetueffteefffdvheevvdehteethedvleffgfej
-    vdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:hhK6YXcW09v2iehWXB1CBKSCOin-wlkF-IhG68puzVssD_d7ofvDAA>
-    <xmx:hhK6YQM_B2Pu7Qznm5mzkNxudkUhp3eTojkWoHt4o_tyiyn68vSTog>
-    <xmx:hhK6YZkiXd46lkfbQCzoNDZLNHNUebG2K4hs-UQO-9mDJ9ud2LKpyQ>
-    <xmx:jhK6YcnDxEMUCeWhkR5AV7XVOguTJCrktgxelAumEenVhndfbwY0XjAOsvo>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Dec 2021 11:06:29 -0500 (EST)
-Date:   Wed, 15 Dec 2021 17:06:28 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Guillaume Ranquet <granquet@baylibre.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 7/7] drm/mediatek: Add mt8195 DisplayPort driver
-Message-ID: <20211215160628.ogfprazobtm5nylf@houat>
-References: <20211115101129.lyxxmb6i7paaonwi@gilmour>
- <CABnWg9tNPGZSi1RLqF5+Qs1GHtynyVoOzAyw+i9mPRYEoByk8g@mail.gmail.com>
- <20211116145112.xyoxzfll6exysnvt@gilmour>
- <CABnWg9uhuchdWyBeTacR6Cy0A9OHziUi051BQ5wsZVU0ajYjyA@mail.gmail.com>
- <20211125143034.tzikvlxxl6fdhsif@gilmour>
- <CABnWg9tcWdfPQwNtFhqVZxCriT848fy42VHoQZs3X2UmL4LYSA@mail.gmail.com>
- <20211213165422.54n3oh72tjcb3a67@houat>
- <CABnWg9uyoK0TkRZRJXstmtB4u2-UUCi-x_frosKhhQerNmFT=A@mail.gmail.com>
- <20211215151508.hc7blhh7p3wrjili@houat>
- <CABnWg9s0GpTPWH=2HcD5j6F23=0rvkG9KrFpen-qKO4RpQoH1g@mail.gmail.com>
+        Wed, 15 Dec 2021 11:09:09 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C25C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:09:09 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id k9so21271740wrd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 08:09:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=miak/i2hpYLrUnHAJtCSqYH++KiQVAx0lzOfX3VFDhs=;
+        b=YLi+Map8CrZDUMzwjQftVbIvXrD/TGP48S7VMuAlfV4OA9QBsCobU0lZvNTKgmO4Bd
+         VMiaDUtne7LqIdkK4A1i7n5NOio6+cRyMfqvu+gXr4R4HjDpPe0327RaIaYUMKLRZlhI
+         o2OzS2sZLp9WdYnoVswGfp0ECWlMrrilKGoIrpa8nWY8dGafejh9sTAaUW2dK5nBhy81
+         lIdvX6E11MUFCyfZOXP7ppSiwuK7lCE/8QCC+bYxrUk+mBQnemzNiPWrmpWeAiHdgcCH
+         5+SLT9bgqXasuDO12QP/FFuh9kzHPw6+B7mDzvfyRliLar2Cl3mwfOnI6JEztIORZW43
+         iCNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=miak/i2hpYLrUnHAJtCSqYH++KiQVAx0lzOfX3VFDhs=;
+        b=XREvdLmA5mLAfi2/DG1ErtGWGT6L3/Cv5oewecwBENUJuW0CYwJZP4TAclex8Ccv56
+         qvAGSwukqyAm4Xjbpys+2q6d78NLLfARMageLifQcFJ2wWbINVHNz19fnINdjxHm2OI2
+         kVu80XT7dIwjA9t97Rb+g4g4hXai0LIM/+ilrz7mXexBS0zwpp6VzlAUIPmvWsDVVacH
+         LnIS1M7mwGaNlIuY6PhA+DoBviSaEkLFL6467ZqaMK4qRuQUizGNDF/Uw/J07+jkfmGS
+         1uMfWKLMaxTb8iFx6Jx7gtKHZc6+GFpeSJn+JaF9wgAA090+SKptTOypFEQWD1+NogKn
+         YWRw==
+X-Gm-Message-State: AOAM533FvOQOuBGauiKyXXghbOhxJsovQhdO8N2QkbQ9WKxzsfp3YGN3
+        saemCyQhzb2NnE4Wktrb+Lf4XQ==
+X-Google-Smtp-Source: ABdhPJzsGRd487Qtry582CfMd10zTS8QWxJIAZQOiMVPhG3S8uwc8QKnH4OH3ZsHO9NGfYMgiYPcwQ==
+X-Received: by 2002:adf:d1c1:: with SMTP id b1mr4932000wrd.296.1639584547840;
+        Wed, 15 Dec 2021 08:09:07 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id bg34sm5861786wmb.47.2021.12.15.08.09.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 08:09:07 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH 0/7] arm64: dts: exynos: Add E850-96 board support
+Date:   Wed, 15 Dec 2021 18:08:59 +0200
+Message-Id: <20211215160906.17451-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ku4qditxo4q3mink"
-Content-Disposition: inline
-In-Reply-To: <CABnWg9s0GpTPWH=2HcD5j6F23=0rvkG9KrFpen-qKO4RpQoH1g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+WinLink's E850-96 is a dev board based on Exynos850 SoC [1]. The board's
+design follows 96boards specifications, hence it's compatible with
+96boards mezzanines [2].
 
---ku4qditxo4q3mink
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch series adds the initial support for E850-96 board and
+Exynos850 SoC, along with corresponding bindings. Only basic platform
+components are enabled at the moment (like serial, I2C, eMMC, RTC, WDT,
+clock driver, etc). Right now with this patch series it's possible to
+run the kernel with BusyBox rootfs as a RAM disk. More features are
+coming soon.
 
-On Wed, Dec 15, 2021 at 10:02:22AM -0600, Guillaume Ranquet wrote:
-> Quoting Maxime Ripard (2021-12-15 16:15:08)
-> > Hi,
-> >
-> > On Wed, Dec 15, 2021 at 09:03:01AM -0600, Guillaume Ranquet wrote:
-> > > Quoting Maxime Ripard (2021-12-13 17:54:22)
-> > > > On Thu, Dec 02, 2021 at 06:48:12AM -0800, Guillaume Ranquet wrote:
-> > > > > Hi,
-> > > > >
-> > > > > Quoting Maxime Ripard (2021-11-25 15:30:34)
-> > > > > > On Wed, Nov 24, 2021 at 01:45:21PM +0000, Guillaume Ranquet wro=
-te:
-> > > > > > > Hi,
-> > > > > > > Thanks for all your input, really appreciated.
-> > > > > > >
-> > > > > > > Quoting Maxime Ripard (2021-11-16 15:51:12)
-> > > > > > > > Hi,
-> > > > > > > >
-> > > > > > > > On Mon, Nov 15, 2021 at 09:33:52AM -0500, Guillaume Ranquet=
- wrote:
-> > > > > > > > > Quoting Maxime Ripard (2021-11-15 11:11:29)
-> > > > > > > > > > > The driver creates a child device for the phy. The ch=
-ild device will
-> > > > > > > > > > > never exist without the parent being active. As they =
-are sharing a
-> > > > > > > > > > > register range, the parent passes a regmap pointer to=
- the child so that
-> > > > > > > > > > > both can work with the same register range. The phy d=
-river sets device
-> > > > > > > > > > > data that is read by the parent to get the phy device=
- that can be used
-> > > > > > > > > > > to control the phy properties.
-> > > > > > > > > >
-> > > > > > > > > > If the PHY is in the same register space than the DP co=
-ntroller, why do
-> > > > > > > > > > you need a separate PHY driver in the first place?
-> > > > > > > > >
-> > > > > > > > > This has been asked by Chun-Kuang Hu in a previous revisi=
-on of the series:
-> > > > > > > > >
-> > > > > > > > > https://lore.kernel.org/linux-mediatek/CAAOTY_-+T-wRCH2yw=
-2XSm=3DZbaBbqBQ4EqpU2P0TF90gAWQeRsg@mail.gmail.com/
-> > > > > > > >
-> > > > > > > > It's a bit of a circular argument though :)
-> > > > > > > >
-> > > > > > > > It's a separate phy driver because it needs to go through a=
-nother
-> > > > > > > > maintainer's tree, but it needs to go through another maint=
-ainer's tree
-> > > > > > > > because it's a separate phy driver.
-> > > > > > > >
-> > > > > > > > It doesn't explain why it needs to be a separate phy driver=
-? Why can't
-> > > > > > > > the phy setup be done directly in the DP driver, if it's es=
-sentially a
-> > > > > > > > single device?
-> > > > > > > >
-> > > > > > > > That being said, usually what those kind of questions mean =
-is that
-> > > > > > > > you're missing a comment or something in the commit log to =
-provide that
-> > > > > > > > context in the first place, so it would be great to add tha=
-t context
-> > > > > > > > here.
-> > > > > > > >
-> > > > > > > > And it will avoid the situation we're now in where multiple=
- reviewers
-> > > > > > > > ask the same questions over and over again :)
-> > > > > > > >
-> > > > > > > At first I didn't understand your reply, then I realized I ga=
-ve you
-> > > > > > > the wrong link...
-> > > > > > > my bad! I'm struggling a bit with mail reviews, but I'll get =
-there eventually.
-> > > > > > >
-> > > > > > > The driver and phy were a single driver until v2 of this patc=
-h series
-> > > > > > > and the phy setup
-> > > > > > > was done directly in the driver (single driver, single C file=
-).
-> > > > > > > Here's the relevant link to the discussion between Chun-Kuang=
- and Markus
-> > > > > > >
-> > > > > > > https://lore.kernel.org/linux-mediatek/CAAOTY__cJMqcAieEraJ2s=
-z4gi0Zs-aiNXz38_x7dPQea6HvYEg@mail.gmail.com/#t
-> > > > > > >
-> > > > > > > I'll try to find a way to make it clearer for v7.
-> > > > > >
-> > > > > > OK, it makes sense then :)
-> > > > > >
-> > > > > > There's something weird though: the devices definitely look lik=
-e they're
-> > > > > > in a separate register range, yet you mention a regmap to handl=
-e the
-> > > > > > shared register range. That range doesn't seem described anywhe=
-re in the
-> > > > > > device tree though? What is it for?
-> > > > >
-> > > > > My understanding is that 0x1000 to 0x1fff controls the phy
-> > > > > functionalities and 0x2000 to 0x4fff controls "non-phy"
-> > > > > functionalities. And you are right, there's no description of tha=
-t in
-> > > > > the device tree whatsoever. The ranges are in the same actual dev=
-ice
-> > > > > and thus it has been decided to not have dt-bindings for the phy
-> > > > > device.
-> > > >
-> > > > Sure, that last part makes sense, but then I'm not sure why you don=
-'t
-> > > > have the full register range in the device node you have in the DT?
-> > > >
-> > > > > The phy driver is a child of the DP driver that we register using
-> > > > > platform_device_register_data() and we pass along the same regmap=
- as
-> > > > > the DP driver in its platform data.
-> > > >
-> > > > Especially if it's used by something, it should be described in the=
- DT
-> > > > somewhere.
-> > > >
-> > > > Maxime
-> > >
-> > >
-> > > So, to make things crystal clear to a newbie (like me).
-> > > Would you describe it like this:
-> > > compatible =3D "mediatek,mt8195-dp-tx";
-> > > reg =3D <0 0x1c501000 0 0x0fff>,
-> > >       <0 0x1c502000 0 0x2fff>;
-> > >
-> > > instead of the current description:
-> > > compatible =3D "mediatek,mt8195-dp-tx";
-> > > reg =3D <0 0x1c500000 0 0x8000>;
-> > >
-> > > I haven't checked what the rest of the 0x8000 range is used for thoug=
-h...
-> >
-> > I'm confused, is that what you had before?
-> >
-> > I recall you had a DTSI somewhere where you have two devices, and the
-> > dp-tx device not having the phy range?
-> >
-> > If the latter is what you have, and there's no overlapping ranges over
-> > multiple nodes, then it's fine already.
-> >
-> > Maxime
->=20
-> This is what I have today in the mt8195.dtsi I'm using for testing purpos=
-e.
-> Provided by mediatek on their vendor branch, not sure if it has been subm=
-itted
-> to the list yet:
->=20
->         edp_tx: edp_tx@1c500000 {
->             status =3D "disabled";
->             compatible =3D "mediatek,mt8195-dp-tx";
->             reg =3D <0 0x1c500000 0 0x8000>;
->             nvmem-cells =3D <&dp_calibration>;
->             nvmem-cell-names =3D "dp_calibration_data";
->             power-domains =3D <&spm MT8195_POWER_DOMAIN_EPD_TX>;
->             interrupts =3D <GIC_SPI 676 IRQ_TYPE_LEVEL_HIGH 0>;
->         };
->=20
->         dp_tx: dp_tx@1c600000 {
->             compatible =3D "mediatek,mt8195-dp-tx";
->             reg =3D <0 0x1c600000 0 0x8000>;
->             nvmem-cells =3D <&dp_calibration>;
->             nvmem-cell-names =3D "dp_calibration_data";
->             power-domains =3D <&spm MT8195_POWER_DOMAIN_DP_TX>;
->             interrupts =3D <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH 0>;
->             status =3D "disabled";
->         };
->=20
-> With no device tree node for the dp-phy.
-> The phy range is included in the reg range of the dp-tx device.
+[1] https://www.samsung.com/semiconductor/minisite/exynos/products/mobileprocessor/exynos-850/
+[2] https://www.96boards.org/products/mezzanine/
 
-It's all good then, sorry for the noise
+Sam Protsenko (7):
+  dt-bindings: clock: exynos850: Add bindings for Exynos850 sysreg
+    clocks
+  clk: samsung: exynos850: Add missing sysreg clocks
+  dt-bindings: Add vendor prefix for WinLink
+  dt-bindings: arm: samsung: Document E850-96 board binding
+  dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850
+  arm64: dts: exynos: Add initial Exynos850 SoC support
+  arm64: dts: exynos: Add initial E850-96 board support
 
-Maxime
+ .../bindings/arm/samsung/samsung-boards.yaml  |   6 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ arch/arm64/boot/dts/exynos/Makefile           |   3 +-
+ .../boot/dts/exynos/exynos850-e850-96.dts     | 157 ++++
+ .../boot/dts/exynos/exynos850-pinctrl.dtsi    | 755 ++++++++++++++++++
+ arch/arm64/boot/dts/exynos/exynos850.dtsi     | 755 ++++++++++++++++++
+ drivers/clk/samsung/clk-exynos850.c           |  29 +
+ include/dt-bindings/clock/exynos850.h         |  12 +-
+ include/dt-bindings/pinctrl/samsung.h         |  13 +-
+ 9 files changed, 1727 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos850.dtsi
 
---ku4qditxo4q3mink
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.30.2
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYboShAAKCRDj7w1vZxhR
-xUYVAQCGjzUfWr2v3Z62sZDrWOasRwMjVwIuCKR48vIkup8T+AEAvm/G2Hc7KhWe
-iKk+sVWc6DV2ixUroSxPb1PtnTOQPQ4=
-=UG8J
------END PGP SIGNATURE-----
-
---ku4qditxo4q3mink--

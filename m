@@ -2,97 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CD2475D3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32EA5475D3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238528AbhLOQSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:18:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237946AbhLOQSP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:18:15 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C030C061574;
-        Wed, 15 Dec 2021 08:18:15 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639585092;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rJVDTOuDDTSDYTKGknJ4P2/i6V8wI5GXY78I0tAdccE=;
-        b=Duk9xXYJRbMmemMIOmEyunjHOHUpSQ52ka5BJz2QJs2S0qPRIK58y+S3Lko1ZlEjQE4BX8
-        ZU028VnNCSYc9l0XY8uhQma7yD4UrOymDjltXVY4rv8h7zgNlwduFdqwAcAFDON1RX3zi2
-        mmVT0W/J+Dnpx9gU69YThbgcMVdIGDwktBYeU8w6xHDNNQ1cfVXfi7UJUdu8cZFpZ4djvW
-        sNfj11z/AlBcs/iBjLIkOdp3fZ5Jn2Frw6ku5unRVchcjEBwGq+5TST3aSGvBDLz4W/cCs
-        +a6ygbS16QffcOcKDJAfM3Xj6o1sZeY6YbYJAVGM9q/cH3hPizriXmurSZqczA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639585092;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rJVDTOuDDTSDYTKGknJ4P2/i6V8wI5GXY78I0tAdccE=;
-        b=VaI3p2v0+/sjSWEzfZRRZs5oPT3dZJd36h/55liytya3KHC+MGusZdBUZeky4AheCysSDm
-        D0SIY5tvwLxpauBg==
-To:     Nishanth Menon <nm@ti.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>, linux-wireless@vger.kernel.org,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
-In-Reply-To: <87h7basx36.ffs@tglx>
-References: <20211210221642.869015045@linutronix.de>
- <20211213182958.ytj4m6gsg35u77cv@detonator> <87fsqvttfv.ffs@tglx>
- <20211214162247.ocjm7ihg5oi7uiuv@slider> <87wnk7rvnz.ffs@tglx>
- <87tufbrudl.ffs@tglx> <87mtl3rli1.ffs@tglx>
- <20211214205626.lrnddha6bd6d6es5@possibly> <87h7basx36.ffs@tglx>
-Date:   Wed, 15 Dec 2021 17:18:11 +0100
-Message-ID: <87zgp1rge4.ffs@tglx>
+        id S244706AbhLOQTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:19:01 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4295 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232976AbhLOQTA (ORCPT
+        <rfc822;Linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 11:19:00 -0500
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JDgNw5L4Zz6H7Nj;
+        Thu, 16 Dec 2021 00:16:48 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 17:18:57 +0100
+Received: from [10.47.93.135] (10.47.93.135) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 15 Dec
+ 2021 16:18:57 +0000
+Subject: Re: [PATCH v2] perf list: Display hybrid pmu events with cpu type
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jin Yao <yao.jin@linux.intel.com>
+CC:     <jolsa@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <alexander.shishkin@linux.intel.com>,
+        <Linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <ak@linux.intel.com>, <kan.liang@intel.com>, <yao.jin@intel.com>
+References: <20210903025239.22754-1-yao.jin@linux.intel.com>
+ <YW81L7j06Mf13QmC@kernel.org>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <be6e0b56-ba29-a2ee-c153-d5aec102b587@huawei.com>
+Date:   Wed, 15 Dec 2021 16:18:35 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <YW81L7j06Mf13QmC@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.93.135]
+X-ClientProxiedBy: lhreml734-chm.china.huawei.com (10.201.108.85) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14 2021 at 22:19, Thomas Gleixner wrote:
-> On Tue, Dec 14 2021 at 14:56, Nishanth Menon wrote:
->
-> thanks for trying. I'll have a look again with brain awake tomorrow
-> morning.
+On 19/10/2021 22:14, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Sep 03, 2021 at 10:52:39AM +0800, Jin Yao escreveu:
+>> Add a new option '--cputype' to perf-list to display core-only pmu events
+>> or atom-only pmu events.
+>>
+>> Each hybrid pmu event has been assigned with a pmu name, this patch
+>> compares the pmu name before listing the result.
+>>
+>> For example,
+>>
+>> perf list --cputype atom
+>> ...
+>> cache:
+>>    core_reject_l2q.any
+>>         [Counts the number of request that were not accepted into the L2Q because the L2Q is FULL. Unit: cpu_atom]
+>> ...
+>>
+>> The "Unit: cpu_atom" is displayed in the brief description section
+>> to indicate this is an atom event.
+> Thanks, applied.
 
-Morning was busy with other things, but I found what my sleepy brain
-managed to do wrong yesterday evening.
+It seems that this buggers "perf list" for uncore events on my arm64 
+platform.
 
-Let me reintegrate the pile and I'll send you an update.
+Before:
+
+./perf list "uncore ddrc"
+uncore ddrc:
+   act_cmd
+  [DDRC active commands. Unit: hisi_sccl,ddrc]
+   flux_rcmd
+  [DDRC read commands. Unit: hisi_sccl,ddrc]
+   flux_rd
+  [DDRC total read operations. Unit: hisi_sccl,ddrc]
+   flux_wcmd
+  [DDRC write commands. Unit: hisi_sccl,ddrc]
+   flux_wr
+  [DDRC total write operations. Unit: hisi_sccl,ddrc]
+   pre_cmd
+  [DDRC precharge commands. Unit: hisi_sccl,ddrc]
+   rnk_chg
+  [DDRC rank commands. Unit: hisi_sccl,ddrc]
+   rw_chg
+  [DDRC read and write changes. Unit: hisi_sccl,ddrc]
+
+
+After:
+
+./perf list "uncore ddrc"
+
+uncore ddrc:
+   act_cmd
+  [DDRC active commands. Unit: hisi_sccl,ddrc]
+   act_cmd
+  [DDRC active commands. Unit: hisi_sccl,ddrc]
+   act_cmd
+  [DDRC active commands. Unit: hisi_sccl,ddrc]
+   act_cmd
+  [DDRC active commands. Unit: hisi_sccl,ddrc]
+   act_cmd
+  [DDRC active commands. Unit: hisi_sccl,ddrc]
+   act_cmd
+  [DDRC active commands. Unit: hisi_sccl,ddrc]
+   act_cmd
+  [DDRC active commands. Unit: hisi_sccl,ddrc]
+   act_cmd
+  [DDRC active commands. Unit: hisi_sccl,ddrc]
+   act_cmd
+  [DDRC active commands. Unit: hisi_sccl,dd
+
+Notice how the events are repeated.
+
+And then gets broken even worse later some point before v5.16-rc6 such 
+that aliasing gets broken altogether.
+
+./perf list  | grep hisi_sccl | grep act_cmd|  wc -l
+16
+
+Good should be 0.
+
+I'll have a look. Obviously we need a test case to stop such breakages.
 
 Thanks,
-
-        tglx
+John

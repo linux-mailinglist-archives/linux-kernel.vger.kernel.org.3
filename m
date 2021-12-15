@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B25B47601F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7916D476028
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245584AbhLOSCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:02:18 -0500
-Received: from 82-65-109-163.subs.proxad.net ([82.65.109.163]:58940 "EHLO
+        id S238551AbhLOSCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:02:40 -0500
+Received: from 82-65-109-163.subs.proxad.net ([82.65.109.163]:58974 "EHLO
         luna.linkmauve.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245258AbhLOSCP (ORCPT
+        with ESMTP id S245515AbhLOSCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:02:15 -0500
+        Wed, 15 Dec 2021 13:02:17 -0500
 Received: by luna.linkmauve.fr (Postfix, from userid 1000)
-        id 957D3F40EAF; Wed, 15 Dec 2021 18:55:07 +0100 (CET)
+        id 6C1F8F40EBE; Wed, 15 Dec 2021 18:55:08 +0100 (CET)
 From:   Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Alessandro Zummo <a.zummo@towertech.it>
@@ -27,9 +27,9 @@ Cc:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
         Paul Mackerras <paulus@samba.org>,
         linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org
-Subject: [PATCH v3 4/5] powerpc: gamecube_defconfig: Enable the RTC driver
-Date:   Wed, 15 Dec 2021 18:55:00 +0100
-Message-Id: <20211215175501.6761-5-linkmauve@linkmauve.fr>
+Subject: [PATCH v3 5/5] powerpc: wii_defconfig: Enable the RTC driver
+Date:   Wed, 15 Dec 2021 18:55:01 +0100
+Message-Id: <20211215175501.6761-6-linkmauve@linkmauve.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211215175501.6761-1-linkmauve@linkmauve.fr>
 References: <20211027223516.2031-1-linkmauve@linkmauve.fr>
@@ -45,22 +45,22 @@ on this platform.
 
 Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
 ---
- arch/powerpc/configs/gamecube_defconfig | 2 +-
+ arch/powerpc/configs/wii_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/configs/gamecube_defconfig b/arch/powerpc/configs/gamecube_defconfig
-index 24c0e0ea5aeb..91a1b99f4e8f 100644
---- a/arch/powerpc/configs/gamecube_defconfig
-+++ b/arch/powerpc/configs/gamecube_defconfig
-@@ -68,7 +68,7 @@ CONFIG_SND_SEQUENCER=y
- CONFIG_SND_SEQUENCER_OSS=y
- # CONFIG_USB_SUPPORT is not set
+diff --git a/arch/powerpc/configs/wii_defconfig b/arch/powerpc/configs/wii_defconfig
+index 752e081d28d0..ad4302a12fd7 100644
+--- a/arch/powerpc/configs/wii_defconfig
++++ b/arch/powerpc/configs/wii_defconfig
+@@ -98,7 +98,7 @@ CONFIG_LEDS_TRIGGERS=y
+ CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+ CONFIG_LEDS_TRIGGER_PANIC=y
  CONFIG_RTC_CLASS=y
 -CONFIG_RTC_DRV_GENERIC=y
 +CONFIG_RTC_DRV_GAMECUBE=y
  CONFIG_EXT2_FS=y
  CONFIG_EXT4_FS=y
- CONFIG_ISO9660_FS=y
+ CONFIG_FUSE_FS=m
 -- 
 2.34.1
 

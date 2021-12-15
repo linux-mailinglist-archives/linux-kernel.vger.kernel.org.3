@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C3E475073
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2152747507B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235549AbhLOBTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 20:19:42 -0500
-Received: from mga09.intel.com ([134.134.136.24]:40513 "EHLO mga09.intel.com"
+        id S238851AbhLOBUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 20:20:45 -0500
+Received: from mga01.intel.com ([192.55.52.88]:17688 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233336AbhLOBTl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 20:19:41 -0500
+        id S235593AbhLOBUl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Dec 2021 20:20:41 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639531181; x=1671067181;
+  t=1639531241; x=1671067241;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=5ciu3togNJYisQkhlXmsWX588nrEA452RSk9rAHStoU=;
-  b=fkHOU9bOnVaDVNPl9dzK747WXzug443pn2D9LG68ZPuYPKN0aJtVLCt4
-   Jl/sTfQtZyKT+1RF6udQzOENCwqO7LwMwvNFbh9te6J9NeD+RaDA5o7PT
-   T3AM6VZfprTK7V6+iIhW0IHHnHCcLCsKVIfzpZ7Xscox7uZH25XT5e/XO
-   z8pt0XNZoP8piSjd5ALSi/BTPKPsth8xSvahUkY+kxqtU/5EK4x+t1Wx8
-   AR9xvf+xHaK19cO0lPy4FYy/sBLJ2CpzRFFrCWRyUzjR6dzIuILa4k4LK
-   Xz0POYU4dca90yBOL8qZCu1DD5Cb381g7WSTQ2YaHHz8AxAzocL0rVvg/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="238931348"
+  bh=2ScolSGqKo7c+DPgkMuUW0sd9nq3H7SBO861xh0/Ifo=;
+  b=ehFRSP0lP5ijC3kg3ZuGlYzC24JnzAkt3BpsSsqUkvQgzb6poLxBktVX
+   iSzkynY4uerFuZBtQd2Fj1bYb1SCv4RlxqpeRrl0xxObSwfm2qihIFM/x
+   9r7WrENPo3UaY0sWc++1TokvzYQY22NsNFkNGv1cCTtYjFyv4qjENL7DT
+   fYA5U8N2uxAByQpw3YMKATYTQ5qtpG/+YPWsR39IvQDa27Y0YkKzjHiKF
+   x6e8na3W4XSkKU42NXVD113GJ4wYKvHDyVzqasI1vV+luXWnvji5TBVuW
+   LUR7YdXr2FgSNyxm+MlylPO05E7yTq2HsdK+mq/IrC7yycYhzU8djSEek
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263267025"
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="238931348"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 17:19:39 -0800
+   d="scan'208";a="263267025"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 17:20:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="545392987"
+   d="scan'208";a="482199754"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2021 17:19:38 -0800
+  by orsmga002.jf.intel.com with ESMTP; 14 Dec 2021 17:20:38 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mxIxF-00012V-B2; Wed, 15 Dec 2021 01:19:37 +0000
-Date:   Wed, 15 Dec 2021 09:19:26 +0800
+        id 1mxIyD-00012m-Km; Wed, 15 Dec 2021 01:20:37 +0000
+Date:   Wed, 15 Dec 2021 09:19:45 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/urgent] BUILD SUCCESS
- 94185adbfad56815c2c8401e16d81bdb74a79201
-Message-ID: <61b9429e.ISl3c2kYWU+FSh5O%lkp@intel.com>
+Subject: [tip:irq/msi] BUILD SUCCESS
+ 09eb3ad55fef8d62edb74d5fe3a6720b6b467463
+Message-ID: <61b942b1.RTY6vOF29eZR3+Be%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -52,10 +52,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
-branch HEAD: 94185adbfad56815c2c8401e16d81bdb74a79201  PCI/MSI: Clear PCI_MSIX_FLAGS_MASKALL on error
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/msi
+branch HEAD: 09eb3ad55fef8d62edb74d5fe3a6720b6b467463  Merge branch 'irq/urgent' into irq/msi
 
-elapsed time: 724m
+elapsed time: 725m
 
 configs tested: 189
 configs skipped: 3

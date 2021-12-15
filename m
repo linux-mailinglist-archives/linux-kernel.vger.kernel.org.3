@@ -2,95 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 049714755C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEA44755C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 11:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236478AbhLOKFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 05:05:14 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:35514 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbhLOKFN (ORCPT
+        id S241479AbhLOKFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 05:05:42 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:41936 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236515AbhLOKFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 05:05:13 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 5955F1F382;
-        Wed, 15 Dec 2021 10:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639562712; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OAAzviErppZGCS8tC7thMjgNf1ikMh2wNe6PPnH5tIU=;
-        b=SW29Usn8ahZEdr7Pb16D31fYyr1zZk8aBIHkD0IBgfvQzyaBgkRoevLfMJtjnzX7iPndpT
-        8nz8VGl+BHZ7DnHWAevRMiWvK1KzHeQ3nHVQ0znoGVvQe37MyP7VSKKXkpWpIW7yNnMADz
-        cmSOJsFpE0E6dvbI2lf9sIDFv2UtZWo=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 21AF9A3B83;
-        Wed, 15 Dec 2021 10:05:12 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 11:05:11 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        "cl@linux.com" <cl@linux.com>,
-        "mm-commits@vger.kernel.org" <mm-commits@vger.kernel.org>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "tj@kernel.org" <tj@kernel.org>
-Subject: Re: + mm-fix-panic-in-__alloc_pages.patch added to -mm tree
-Message-ID: <Ybm91+/z8hKuiHYr@dhcp22.suse.cz>
-References: <af7ab3ce-fed2-1ffc-13a8-f9acbd201841@redhat.com>
- <YYpTy9eXZucxuRO/@dhcp22.suse.cz>
- <YY6wZMcx/BeddUnH@fedora>
- <YZI5TEW2BkBjOtC1@dhcp22.suse.cz>
- <B8B7E3FA-6EAB-46B7-95EB-5A31395C8ADE@vmware.com>
- <YZJZes9Gz9fe7bCC@dhcp22.suse.cz>
- <ABEDED57-93A9-4601-8EB6-2FF348A0E0BB@vmware.com>
- <YZMq++inSmJegJmj@fedora>
- <Ybht6kqwI0aPx3Jr@dhcp22.suse.cz>
- <20211214125748.974a400f0b05a633f9b971b7@linux-foundation.org>
+        Wed, 15 Dec 2021 05:05:39 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BF8xctf015267;
+        Wed, 15 Dec 2021 11:05:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=3BmR+IunfXlXTt4gyyNN854tdQIgeq49/tg0NzOw1sQ=;
+ b=l2jYnSVWXey8pRiDuQw4YH4DuQVxXo3jqJkwJcbVK37Le0q8hwUdzuj+kUf96Jk/3LK1
+ FvrSsXTIWQkMEneDrNoPNbFsj3hibP6w38qdfACestZ6GG37qqD4oL6D+MoBLbqzVvKH
+ utgoDUvyMx6jeB2KOsjmxv7xsHcIwNk8UW2V7gPJngmAOEJevFFEMBkNdIuib4EJZxmA
+ ZqnTKuMR5RnK0pcymYxpRuUKGMCLmQa42Jp+2bNRbWywQsRGw3wwal1vaK2DpMHmQfmm
+ X6K+JWxk9845ZMqJ9HDWbQA8nKWM0QffWdZqUfNT+4peTTiS1e74aLaNnpKC9dlo3njN BA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cxrthxptn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Dec 2021 11:05:33 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5B75B10002A;
+        Wed, 15 Dec 2021 11:05:32 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BE06222682C;
+        Wed, 15 Dec 2021 11:05:27 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.49) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 15 Dec
+ 2021 11:05:27 +0100
+Subject: Re: [PATCH v2] tty: rpmsg: Fix race condition releasing tty port
+To:     Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20211214170646.25775-1-arnaud.pouliquen@foss.st.com>
+ <3fc784f1-5985-1553-c39f-8472cb63b1af@kernel.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <250fd384-1dde-e800-2bac-ca37e53d50a2@foss.st.com>
+Date:   Wed, 15 Dec 2021 11:05:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214125748.974a400f0b05a633f9b971b7@linux-foundation.org>
+In-Reply-To: <3fc784f1-5985-1553-c39f-8472cb63b1af@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-15_07,2021-12-14_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 14-12-21 12:57:48, Andrew Morton wrote:
-> On Tue, 14 Dec 2021 11:11:54 +0100 Michal Hocko <mhocko@suse.com> wrote:
-> 
-> > > I need some clarification here. It sounds like memoryless nodes work on
-> > > x86, but hotplug + memoryless nodes isn't a supported use case or you're
-> > > introducing it as a new use case?
-> > > 
-> > > If this is a new use case, then I'm inclined to say this patch should
-> > > NOT go in and a proper fix should be implemented on hotplug's side. I
-> > > don't want to be in the business of having/seeing this conversation
-> > > reoccur because we just papered over this issue in percpu.
-> > 
-> > The patch still seems to be in the mmotm tree. I have sent a different
-> > fix candidate [1] which should be more robust and cover also other potential
-> > places.
-> > 
-> > [1] http://lkml.kernel.org/r/20211214100732.26335-1-mhocko@kernel.org
-> 
-> Is cool, I'm paying attention.
-> 
-> We do want something short and simple for backporting to -stable (like
-> Alexey's patch) so please bear that in mind while preparing an
-> alternative.
 
-I think we want something that fixes the underlying problem. Please keep
-in mind that the pcp allocation is not the only place to hit the issue.
-We have more. I do not want we want to handle each and every one
-separately.
 
-I am definitly not going to push for my solution but if there is a
-consensus this is the right approach then I do not think we really want
-to implement these partial workarounds.
+On 12/15/21 7:49 AM, Jiri Slaby wrote:
+> Hi,
+> 
+> much better IMO.
+> 
+> On 14. 12. 21, 18:06, Arnaud Pouliquen wrote:
+>> In current implementation the tty_port struct is part of the
+>> rpmsg_tty_port structure.The issue is that the rpmsg_tty_port structure is
+>> freed on rpmsg_tty_remove but also referenced in the tty_struct.
+>> Its release is not predictable due to workqueues.
+>>
+>> For instance following ftrace shows that rpmsg_tty_close is called after
+>> rpmsg_tty_release_cport:
+> ...
+>> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
+>> index dae2a4e44f38..69272ad92266 100644
+>> --- a/drivers/tty/rpmsg_tty.c
+>> +++ b/drivers/tty/rpmsg_tty.c
+>> @@ -53,9 +53,19 @@ static int rpmsg_tty_install(struct tty_driver *driver,
+>> struct tty_struct *tty)
+>>         tty->driver_data = cport;
+>>   +    tty_port_get(&cport->port);
+> 
+> Can't this fail? Like when racing with removal?
+> 
+>>       return tty_port_install(&cport->port, driver, tty);
+>>   }
+> ...
+>>   static struct rpmsg_tty_port *rpmsg_tty_alloc_cport(void)
+>> @@ -139,6 +156,8 @@ static struct rpmsg_tty_port *rpmsg_tty_alloc_cport(void)
+>>     static void rpmsg_tty_release_cport(struct rpmsg_tty_port *cport)
+>>   {
+>> +    tty_port_destroy(&cport->port);
+>> +
+> 
+> You should not call tty_port_destroy when you use refcounting. The port is
+> already destroyed when ->destruct() is called. (It has currently no bad effect
+> calling it twice on a port though.)
+> 
+>> @@ -146,7 +165,17 @@ static void rpmsg_tty_release_cport(struct rpmsg_tty_port
+>> *cport)
+>>       kfree(cport);
+>>   }
+>>   -static const struct tty_port_operations rpmsg_tty_port_ops = { };
+>> +static void rpmsg_tty_destruct_port(struct tty_port *port)
+>> +{
+>> +    struct rpmsg_tty_port *cport = container_of(port, struct rpmsg_tty_port,
+>> port);
+>> +
+>> +    rpmsg_tty_release_cport(cport);
+>> +}
+>> +
+>> +static const struct tty_port_operations rpmsg_tty_port_ops = {
+>> +    .destruct = rpmsg_tty_destruct_port,
+>> +};
+>> +
+>>     static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
+>>   {
+>> @@ -179,7 +208,6 @@ static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
+>>       return 0;
+>>     err_destroy:
+>> -    tty_port_destroy(&cport->port);
+>>       rpmsg_tty_release_cport(cport);
+> 
+> Couldn't you just put the port here? And inline rpmsg_tty_release_cport into the
+> new rpmsg_tty_destruct_port?
+> 
 
--- 
-Michal Hocko
-SUSE Labs
+Thanks for all the insightful comments, V3 is coming.
+
+> thanks,

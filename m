@@ -2,130 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4552647644A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DBE476453
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbhLOVJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:09:51 -0500
-Received: from mga06.intel.com ([134.134.136.31]:13063 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229468AbhLOVJu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:09:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639602590; x=1671138590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=k0cpiTf2b3sof3q8ZCR+A4XSzZbGc/TK16t1qQbQikc=;
-  b=l/dKxoRdGDAO0B4bLvkpwcZO6DlNnR12h1tNbhV1Au52zT058A7lqIIY
-   Tjc4nJhOlJcQ7C0ohDGZHMPpZLtFCY/befIydKPIk4fgc9tGkMJVfT9Ix
-   1zsGZnGTlwV+tIFrQ3Ar9pAp9yQR2bymgPY2r0IXofgPhWdxXEpmzo0pN
-   2E/Rs7++VrgUIEJU8GDsKeXEDfaXXe2lQSFH/kydEiq1n06m4bxLDTxm6
-   7FnKK4RL04YnC0GWOPPRQZuDM1sc+NUxrfLfmvCKRWovVoyW7gDDRkTqH
-   XVlRdxomtUUQnIRCSZULAmhCdmbWYmYapgO1TabC7aXIS35CJffe9QKGf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="300112941"
-X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
-   d="scan'208";a="300112941"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 13:09:49 -0800
-X-IronPort-AV: E=Sophos;i="5.88,209,1635231600"; 
-   d="scan'208";a="610885273"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 13:09:49 -0800
-Date:   Wed, 15 Dec 2021 13:09:49 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        linux-arm-msm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org
-Subject: Re: [PATCH 6/7] drm/amdgpu: Ensure kunmap is called on error
-Message-ID: <20211215210949.GW3538886@iweiny-DESK2.sc.intel.com>
-References: <20211210232404.4098157-1-ira.weiny@intel.com>
- <20211210232404.4098157-7-ira.weiny@intel.com>
- <5bbd3c48-1388-9469-8b6f-deed64406d7d@amd.com>
- <20211214033725.GR3538886@iweiny-DESK2.sc.intel.com>
- <c3b173ea-6509-ebbe-b5f9-eeb29f1ce57e@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c3b173ea-6509-ebbe-b5f9-eeb29f1ce57e@amd.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+        id S229583AbhLOVLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 16:11:01 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39980 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229555AbhLOVK7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 16:10:59 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BFIFOwT006516;
+        Wed, 15 Dec 2021 21:10:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=0H21dSWks6lfyzIA33adcnIvPkdeT84cDPY1BPRGV2k=;
+ b=n/W/vOSJtXI2Uk9JudUWHoIN6QrLwRfi2sOR80VUdotUNJPA24xqsl24W0/STrtFvEQT
+ WW3WTHcoyfBBvLp/W2uFtftkhgraTrGMICHicGig83kpE1MZN7ZOpIucWTppQEwR8F4g
+ wIxsxnAh6AiBCRLnnsvaKXw1x6KckAwYeTiSfwSOvnuNdFnbsRwlYuezRqZ49Q6LmKrw
+ AOJHDktX3aU4IGu4VOkV6FL+RVoAsu7nj2GN3dBXclvpXd9aebOCRyUH1flTGwuQxJ/I
+ fxFWn3ZuV+VG/QMnF+4Cvi6t67uu5BeZUf2MihqB2PtjBzM71knj4lTEZHBHKSBbPPbk tQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cynfvufrs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Dec 2021 21:10:32 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BFLAW12012765;
+        Wed, 15 Dec 2021 21:10:32 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cynfvufqd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Dec 2021 21:10:31 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BFL3IEF001970;
+        Wed, 15 Dec 2021 21:10:29 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3cy77p8rmj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Dec 2021 21:10:29 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BFLAQOD37552580
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Dec 2021 21:10:26 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0FEF55204E;
+        Wed, 15 Dec 2021 21:10:26 +0000 (GMT)
+Received: from sig-9-65-74-182.ibm.com (unknown [9.65.74.182])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 2CC7C52057;
+        Wed, 15 Dec 2021 21:10:23 +0000 (GMT)
+Message-ID: <004908152121f617497a71ce3602a70cb25d5a38.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 01/17] ima: Add IMA namespace support
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Date:   Wed, 15 Dec 2021 16:10:22 -0500
+In-Reply-To: <20211210194736.1538863-2-stefanb@linux.ibm.com>
+References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
+         <20211210194736.1538863-2-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wdhGOcRm93yZVojXRKgJt-RC8mg6YyA2
+X-Proofpoint-ORIG-GUID: tPua4oCeCeXDqJqB0JqY-lXZonMETbrk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-15_12,2021-12-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 mlxlogscore=992 malwarescore=0
+ suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112150116
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 08:09:29AM +0100, Christian König wrote:
-> Am 14.12.21 um 04:37 schrieb Ira Weiny:
-> > On Mon, Dec 13, 2021 at 09:37:32PM +0100, Christian König wrote:
-> > > Am 11.12.21 um 00:24 schrieb ira.weiny@intel.com:
-> > > > From: Ira Weiny <ira.weiny@intel.com>
-> > > > 
-> > > > The default case leaves the buffer object mapped in error.
-> > > > 
-> > > > Add amdgpu_bo_kunmap() to that case to ensure the mapping is cleaned up.
-> > > Mhm, good catch. But why do you want to do this in the first place?
-> > I'm not sure I understand the question.
-> > 
-> > Any mapping of memory should be paired with an unmapping when no longer needed.
-> > And this is supported by the call to amdgpu_bo_kunmap() in the other
-> > non-default cases.
-> > 
-> > Do you believe the mapping is not needed?
-> 
-> No, the unmapping is not needed here. See the function amdgpu_bo_kmap(), it
-> either creates the mapping or return the cached pointer.
+Hi Stefan,
 
-Ah I missed that.  Thanks.
-
+On Fri, 2021-12-10 at 14:47 -0500, Stefan Berger wrote:
+> Implement an IMA namespace data structure that gets created alongside a
+> user namespace with CLONE_NEWUSER. This lays down the foundation for
+> namespacing the different aspects of IMA (eg. IMA-audit, IMA-measurement,
+> IMA-appraisal).
 > 
-> A call to amdgpu_bo_kunmap() is only done in a few places where we know that
-> the created mapping most likely won't be needed any more. If that's not done
-> the mapping is automatically destroyed when the BO is moved or freed up.
-> 
-> I mean good bug fix, but you seem to see this as some kind of prerequisite
-> to some follow up work converting TTM to use kmap_local() which most likely
-> won't work in the first place.
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Suggested-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-Sure.  I see now that it is more complicated than I thought but I never thought
-of this as a strict prerequisite.  Just something I found while trying to
-figure out how this works.
+Thanks, this patch set is looking a lot better.  Hopefully it isn't
+premature for generic comments:
 
-How much of a speed up is it to maintain the ttm_bo_map_kmap map type?  Could
-this all be done with vmap and just remove the kmap stuff?
+- With the SPDX line, the license info should be removed.
 
-Ira
+thanks,
 
-> 
-> Regards,
-> Christian.
-> 
-> > 
-> > Ira
-> > 
-> > > Christian.
-> > > 
-> > > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > > > 
-> > > > ---
-> > > > NOTE: It seems like this function could use a fair bit of refactoring
-> > > > but this is the easiest way to fix the actual bug.
-> > > > ---
-> > > >    drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c | 1 +
-> > > >    1 file changed, 1 insertion(+)
-> > > > nice
-> > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
-> > > > index 6f8de11a17f1..b3ffd0f6b35f 100644
-> > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
-> > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_uvd.c
-> > > > @@ -889,6 +889,7 @@ static int amdgpu_uvd_cs_msg(struct amdgpu_uvd_cs_ctx *ctx,
-> > > >    		return 0;
-> > > >    	default:
-> > > > +		amdgpu_bo_kunmap(bo);
-> > > >    		DRM_ERROR("Illegal UVD message type (%d)!\n", msg_type);
-> > > >    	}
-> 
+Mimi
+

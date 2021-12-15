@@ -2,463 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5E6475A42
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF598475A3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243143AbhLOODs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:03:48 -0500
-Received: from mga01.intel.com ([192.55.52.88]:60128 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243142AbhLOODq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:03:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639577026; x=1671113026;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=OcvUDZQbivMWdEZ4M6V0ScHcefdpWUJCdw6J1WlAbqw=;
-  b=i0tZk95x65/bVdN0bYrnPoVhQMoRzh4y/y8ixHo2urQGz09Z63YP+TKW
-   6Ec6gONGWpHN/fV7VRc0Jn8/y6Ke4BTL6zFlznDPJym8Ml55e39Yx5aVv
-   zvw6EsYHIi5D2yPaT9bOwOOOowci62q1xdh5PflFHcgkpzUjIl+M6ZkfB
-   ed+MKS9EFz88bUEcKnT6P9bazW/9Zn37lq7kkWoPPInKMydD4ae9Rm3Uz
-   qdICxE+phELxUvsoPwWfkRPcXHwr76tNBp3GXhvFv7cMUUIhidorpZnWm
-   VLje9ih0MLSnyThQ451RrqMtf++m/djleTvjwV9flTYOPFb1ec/ALmAfk
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="263382599"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="263382599"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 06:03:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="682505241"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
-  by orsmga005.jf.intel.com with ESMTP; 15 Dec 2021 06:03:16 -0800
-Subject: Re: [PATCH V2] mmc: debugfs: add error statistics
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        riteshh@codeaurora.org, asutoshd@quicinc.com,
-        ulf.hansson@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-mmc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     stummala@codeaurora.org, vbadigan@codeaurora.org,
-        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
-        sartgarg@codeaurora.org, nitirawa@codeaurora.org,
-        sayalil@codeaurora.org
-References: <1639492863-7053-1-git-send-email-quic_c_sbhanu@quicinc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <9fbec373-e667-b4a5-4b92-741f9dd2b7ee@intel.com>
-Date:   Wed, 15 Dec 2021 16:03:15 +0200
+        id S243137AbhLOOD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:03:27 -0500
+Received: from de-smtp-delivery-102.mimecast.com ([194.104.111.102]:57852 "EHLO
+        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237716AbhLOOD0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:03:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1639577005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=63EsgojecgMz4kCx/nfJJCQTwXpcHVXKBVt5bMBg7EU=;
+        b=lhClwpiwy92D0MBcB40jgz/h3N5ONF3OKwqhNbmBErJK/AIfSQUGeHDDUyaoMXl+yHwGLR
+        MS4E8lwJR3DxQ/xUJx+WjHesZuoDBAoci7zijbrID1/mwd0vyKidKVfMJibmH2Glweyzlo
+        JKhCTJMhlkqKcr3uyk94Ah3TNrkmY4U=
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com
+ (mail-vi1eur04lp2051.outbound.protection.outlook.com [104.47.14.51]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-10-uSd9ZGP2NOKj4vkDdgcZLg-1; Wed, 15 Dec 2021 15:03:24 +0100
+X-MC-Unique: uSd9ZGP2NOKj4vkDdgcZLg-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EUJ+Q5B86ZbAoT5tPTH2RYzv/vTWwmo+N94YsttEYvPzfyTDClBU1eS2yaOYSinoHUdC4USjMCAq62SBOwvHtdZIhfxh7P4qngQxduN6udPpBrx2FY57yQLmHbAxJQVSFen4tmKwmNX1XWFJ3b7H5QiBgkE+wmlR+c2AcqkRwXtIVxtEDT00nD43PxqvtVVG77H+LvVxr9FfR8ruuXFqWqAgzwJihLn7J3b4MD6WGE6kTevDhOWg+I0Ak+P1jSkrxfWuXhXlzdRjlU4TInIpSAxLCMAwZK2qMrE9zAi2n3RPftU23qJnJ2Dg7P9w6iRQN8yuCOMj7LpcNuaDOhJNEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V8CFDhUHuJMHoiLezJWSp7jKkplg0kBNIzLTgQsYY5Q=;
+ b=AQIk/yczMftGHHecoGy2pOZtwpmTio2aQafKjVi+mpXKubAe41uG+B2xQ5ZkctPQjnRRChZR+ex+bcnx3hJ1H3CGdWgKG4KLUwLdsmDZ/UDLbw3L+rW4Rzjj/DAc0TvfhPECdrpah/T8Zz7Mc38umtGW30E5gM0DmTkgI0TpGfmBQmcSB/04nd2Zx2qWEINvam0WWTCsZwnXa0rPdHhwqAHfB3n8M74tr6njBT8M8Opbm3qHdBx1GUgH7RM6pnWpKUa1N8+SFThPjubH/ScTcGbANdC3kUZ7J6+zOzBz/5O/Da2OWJfDc9/HHOvbf+Fc5hCkf5+tYCSntsxhBXtvaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
+ by DB8PR04MB7148.eurprd04.prod.outlook.com (2603:10a6:10:12d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Wed, 15 Dec
+ 2021 14:03:22 +0000
+Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
+ ([fe80::e9d6:1be9:d046:af1]) by DB7PR04MB5050.eurprd04.prod.outlook.com
+ ([fe80::e9d6:1be9:d046:af1%7]) with mapi id 15.20.4778.018; Wed, 15 Dec 2021
+ 14:03:22 +0000
+Subject: Re: [usb-storage] Re: [PATCH] usb: storage: do not use UAS with
+ Logitec LGB-4BNHUC
+To:     Alexandre Courbot <gnurou@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>
+CC:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211212115506.180629-1-gnurou@gmail.com>
+ <9b20ae5d-be8f-59dd-3136-2a9f7ce216e9@suse.com>
+ <CAAVeFu+sLzNUztnW4Vyr6ukCyjxTwCT-L4Y2xEWsRx=CPuarPw@mail.gmail.com>
+From:   Oliver Neukum <oneukum@suse.com>
+Message-ID: <c4b4aa34-12d9-7000-6398-d94a7ebffdfc@suse.com>
+Date:   Wed, 15 Dec 2021 15:03:20 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <1639492863-7053-1-git-send-email-quic_c_sbhanu@quicinc.com>
+ Thunderbird/78.12.0
+In-Reply-To: <CAAVeFu+sLzNUztnW4Vyr6ukCyjxTwCT-L4Y2xEWsRx=CPuarPw@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR06CA0078.eurprd06.prod.outlook.com
+ (2603:10a6:20b:464::28) To DB7PR04MB5050.eurprd04.prod.outlook.com
+ (2603:10a6:10:22::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: faf4e589-0d65-4e9f-3646-08d9bfd3a784
+X-MS-TrafficTypeDiagnostic: DB8PR04MB7148:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-Microsoft-Antispam-PRVS: <DB8PR04MB7148603436EA2AA4EB832C54C7769@DB8PR04MB7148.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IyRkH/zTr3qi9zTp8Y+b5axYzxnTuv/R2xGHPpX0MRXUETOKhraW2I9jqeA3XHb4EUa+B2seMiR6fOQXhs9AnbPKwEug1Tu2CmGZNsGl8hOnuR0HEC5rvlKrwj1aWdTTfSPLLvisoLpmvvOzwIno5HBQ/7J4cpy1OnCXHlBrac/4u3xprrsZroe/zWO8szC9scEqo67gvetauJW7nhM5xhQKqbih7FnHgZf1FS+4VRhIre9X4OqKmuCj9KUj7EXzIeZhpPr0dJ3IEARG7uhTR3tkxtwocP09c281KD/V5GscWLFb2Efyq6f3W0W+PQV/28NDaT6VSqk5hiXR4rVfJS7VUabO3BD0ZLuTfwqph7OVJ05mUz7zcZMje8v/E7GIGKF4qHtW06p2ea35XQnQc1Ysi1Tr7pc0LHR/yD3SKP5aQw4pn9PfaIlSzHF24oX9h2LAm5iux6BsJgVoIOYk2SiQ8+jfTdTWNoNxofHzf7dJQvnK5Nf+3ppYyApHT4Js1posDIpWt+lSRL8S+HMfsF+wBTAu18rLtIv5rJTQsIQRp97T30ojF6OyXtjyO3V+XJfAZHFGWOexHRYhkRUJMcj+MR48YO9+9oqWorEE+/Gij1dx2zLwluYxVXXwaO2LeQK+HHZ3eIGUyfA0jwguEcj+dl78jtDnHHzipHVem+JlwsrBwwz7WB/9NpXLNIciMWtO2VE5e5ZZnyPmVERklC6Mi2OZwREiCc/DB8kTR5o=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(5660300002)(508600001)(53546011)(4744005)(6486002)(31686004)(316002)(6506007)(2906002)(4326008)(8676002)(66946007)(66476007)(2616005)(66556008)(6512007)(86362001)(36756003)(54906003)(31696002)(83380400001)(110136005)(38100700002)(186003)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PmUTCFgqL+3/mmeIamFtC7LnVplLGwQjgjenO2sLiqEyjSPY3gqfEghUBKcT?=
+ =?us-ascii?Q?9eDMRLZUl9NUw7Cq8xDRnb27JdwIPscKuUEuwqbgXRGOXOu5MgyBQgvOK/vU?=
+ =?us-ascii?Q?V43LcE+0kmA95a7V6qpnSgHj71RaEWyeCHrwqIxHNqSwAKk7TQ3Nf4eqqH1y?=
+ =?us-ascii?Q?kRfvudNpu/LX1XVUQ+pcBUFzXz9Dr8506SE4Z0sT4u9N31h17Rc8HF3dVv5r?=
+ =?us-ascii?Q?IfITgcdZXF0laXp1kgxCogZ3YnVz1XDZ/6RHRWRGSxNHccGVBLZRH+6Jm+zY?=
+ =?us-ascii?Q?FAGlmIyREMwmYFz2L8Xr63rwiHonWKPEDHo1IUeDemMmUAZQH7Db9lU0A5XV?=
+ =?us-ascii?Q?rfJI2xmCTAUFP0ByMZO4M7xbu6q2MLgZtk7T4brkvS52PAB56h8fvQjw8FhB?=
+ =?us-ascii?Q?5+pNGG09cjc5KQWYnDKOk7eYkoOoF0+7WMdHROm7p7+xaiUuAWwftxN78WyM?=
+ =?us-ascii?Q?5A1KawLj+teZ+jUAp7gSBOX251uI3UjvBycnm3TjxQCC37tRDjkEsvwDviha?=
+ =?us-ascii?Q?alfsTKMqSzAeW4xBNmVBFULtJmcMo5UuwYIxTrFjWh3imdPk9qTyEM61EZ8X?=
+ =?us-ascii?Q?D0NVR3PBe3Cn5KHhcFbPjzkMAyKIOctzWC0wxm9480frCSvyodda7pqQ5XjY?=
+ =?us-ascii?Q?+lna54++KzFOZxV6d72cBpm9xKnNXt4qUc5FDoxACG6XOulDD//+9T6PGdQi?=
+ =?us-ascii?Q?LvaUW9yGo5BSgBWYdUQrvp7UNmM8KR6BvuhUkG7+Tfa+zfKwas0isrAYrNRX?=
+ =?us-ascii?Q?S0tdNPH8O8DvCmJoE7fLOrLlnVMdZ3E9IoQ5EtB3G7ZFwd0a9CDLKsRvQM+W?=
+ =?us-ascii?Q?XbBdQATlJqLnsqgIoiunqNe1K6rjgiygyGcrTld6avtP8w1mW+StDBmcjWln?=
+ =?us-ascii?Q?LgvG3Tww6Dq36KjnpGUKRRvN8Oey/gZDkPTfKszUZtQRUmOFpglc/OqsWyWk?=
+ =?us-ascii?Q?E52kY9NG5yvrQ0edEiaizA8qwuKvApGgAL/RJ+2VH3EaWqpJXWg+OE563Iop?=
+ =?us-ascii?Q?2I6LlwUZnEY/9yDtFpQUeoLV4mD/Lozoo0A3XzGblqzk/NlasMtdl0EC4f25?=
+ =?us-ascii?Q?9pigoXcC7xz9Od3LMoITO1jafLwqEJ49/rI9U1c0K1rLh2BXV70FRHJgr5BA?=
+ =?us-ascii?Q?J9WxzJLZXhEOi9H6xDpU7lSCW7I8DNdEEH64Z0lCKFmUaNJt3HugfRrqSDK/?=
+ =?us-ascii?Q?Zn43Zi0rX4E833JA7uv75Id26zHQVf5bDLLFzER58qvN2Ut0m+O0qLmJRGP3?=
+ =?us-ascii?Q?dl6ysM2yt1T2rs50qcH2OuvgC1xjeoKjaeaW2iLvQDVXRFiaYpzYopgHqu0r?=
+ =?us-ascii?Q?qwJSSjT/rHWc4biLJX++EXbEYi+OpdUkDl+bYaF4eX+A2Qrd2IyyYFcPcayu?=
+ =?us-ascii?Q?Go5geTt9AAO9JHzjjs69YwH9x95WreOji8Ti89GJMt5yuA4sYLybQ0lFYT2N?=
+ =?us-ascii?Q?NvD++sf6fk8nzcJ095H9m+zGdAD5rCCPhtn8DPTM8EIEjsrci2lI8fz+N3Sq?=
+ =?us-ascii?Q?BFFMFr75k0a7I0poGpQsxVR/6aZaXKVBlyzO+R4lW0GQkc9M6IMcSN0i7rOy?=
+ =?us-ascii?Q?kPNuZGdVQ1Uchk/FZ/CXjs7PotcTkSrqtekolp9XSzrGTWHODHZyuu8rfPCB?=
+ =?us-ascii?Q?l7spHe5bKDfi7yjJTkqLOR2dZIIKcT8OlOnIeypnDcZYs1Ok/61wlyi5mHv4?=
+ =?us-ascii?Q?4w7BSjaLVqwjmZgVLXxQ95YsMkw=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: faf4e589-0d65-4e9f-3646-08d9bfd3a784
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 14:03:22.3277
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c3aPwY4+1+wbColrEIpAyhnC21oz+L6tTdhUdbT0bVG3ZfgGKb/Q5pSXb8OQDuOeWW/xP0+Sb0jDel9xNOv2YA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7148
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2021 16:41, Shaik Sajida Bhanu wrote:
-> Add debugfs entry to query eMMC and SD card errors statistics.
-> This feature is useful for debug and testing
-> 
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-> ---
-> 
-> Changes since V1:
-> 	-Removed sysfs entry for eMMC and SD card error statistics and added
-> 	 debugfs entry as suggested by Adrian Hunter and Ulf Hansson.
 
-Thanks for doing this.
+On 15.12.21 12:41, Alexandre Courbot wrote:
+> Unfortunately I am not familiar with the storage subsystem so I'm not
+> sure which quirks would be good candidates to try, would you have
+> suggestions? As for the command, reproduction is rather random and I
+> did not keep traces of all instances.
 
-> ---
->  drivers/mmc/core/debugfs.c | 106 +++++++++++++++++++++++++++++++++++++++++++++
->  drivers/mmc/core/queue.c   |   2 +
->  drivers/mmc/host/sdhci.c   |  53 ++++++++++++++++++-----
->  include/linux/mmc/host.h   |  37 ++++++++++++++++
->  4 files changed, 186 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/mmc/core/debugfs.c b/drivers/mmc/core/debugfs.c
-> index 3fdbc80..40210c34 100644
-> --- a/drivers/mmc/core/debugfs.c
-> +++ b/drivers/mmc/core/debugfs.c
-> @@ -223,6 +223,107 @@ static int mmc_clock_opt_set(void *data, u64 val)
->  DEFINE_DEBUGFS_ATTRIBUTE(mmc_clock_fops, mmc_clock_opt_get, mmc_clock_opt_set,
->  	"%llu\n");
->  
-> +static int mmc_err_state_get(void *data, u64 *val)
-> +{
-> +	struct mmc_host *host = data;
-> +
-> +	if (!host)
-> +		return -EINVAL;
-> +
-> +	*val = host->err_state ? 1 : 0;
-> +
-> +	return 0;
-> +}
-> +
-> +static int mmc_err_state_clear(void *data, u64 val)
-> +{
-> +	struct mmc_host *host = data;
-> +
-> +	if (!host)
-> +		return -EINVAL;
-> +
-> +	host->err_state = false;
+Hi,
 
-Is there much reason to disable err stats from userspace?
 
-> +
-> +	return 0;
-> +}
-> +
-> +DEFINE_SIMPLE_ATTRIBUTE(mmc_err_state, mmc_err_state_get,
-> +		mmc_err_state_clear, "%llu\n");
-> +
-> +static int mmc_err_stats_show(struct seq_file *file, void *data)
-> +{
-> +	struct mmc_host *host = (struct mmc_host *)file->private;
-> +
-> +	if (!host)
-> +		return -EINVAL;
+could you try "fgkm" ?
 
-I was thinking we needed a way to determine whether stats were being
-collected because not all drivers would support it at least initially
-e.g.
-
-	if (!host->err_stats_enabled) {
-		seq_printf(file, "Not supported by driver\n");
-		return 0;
-	}
-
-> +
-> +	seq_printf(file, "# Command Timeout Occurred:\t %d\n",
-> +		   host->err_stats[MMC_ERR_CMD_TIMEOUT]);
-
-Maybe put the descriptions in an array and iterate e.g.
-
-	const char *desc[MMC_ERR_MAX] = {
-		[MMC_ERR_CMD_TIMEOUT] = "Command Timeout Occurred",
-		etc
-	};
-	int i;
-
-	if (!host)
-		return -EINVAL;
-
-	for (i = 0; i < MMC_ERR_MAX; i++) {
-		if (desc[i])
-			seq_printf(file, "# %s:\t %d\n",
-				   desc[1], host->err_stats[i]);
-	}
-
-> +
-> +	seq_printf(file, "# Command CRC Errors Occurred:\t %d\n",
-> +		   host->err_stats[MMC_ERR_CMD_CRC]);
-> +
-> +	seq_printf(file, "# Data Timeout Occurred:\t %d\n",
-> +		   host->err_stats[MMC_ERR_DAT_TIMEOUT]);
-> +
-> +	seq_printf(file, "# Data CRC Errors Occurred:\t %d\n",
-> +		   host->err_stats[MMC_ERR_DAT_CRC]);
-> +
-> +	seq_printf(file, "# Auto-Cmd Error Occurred:\t %d\n",
-> +		   host->err_stats[MMC_ERR_ADMA]);
-> +
-> +	seq_printf(file, "# ADMA Error Occurred:\t %d\n",
-> +		   host->err_stats[MMC_ERR_ADMA]);
-> +
-> +	seq_printf(file, "# Tuning Error Occurred:\t %d\n",
-> +		   host->err_stats[MMC_ERR_TUNING]);
-> +
-> +	seq_printf(file, "# CMDQ RED Errors:\t\t %d\n",
-> +		   host->err_stats[MMC_ERR_CMDQ_RED]);
-> +
-> +	seq_printf(file, "# CMDQ GCE Errors:\t\t %d\n",
-> +		   host->err_stats[MMC_ERR_CMDQ_GCE]);
-> +
-> +	seq_printf(file, "# CMDQ ICCE Errors:\t\t %d\n",
-> +		   host->err_stats[MMC_ERR_CMDQ_ICCE]);
-> +
-> +	seq_printf(file, "# Request Timedout:\t %d\n",
-> +		   host->err_stats[MMC_ERR_REQ_TIMEOUT]);
-> +
-> +	seq_printf(file, "# CMDQ Request Timedout:\t %d\n",
-> +		   host->err_stats[MMC_ERR_CMDQ_REQ_TIMEOUT]);
-> +
-> +	seq_printf(file, "# ICE Config Errors:\t\t %d\n",
-> +		   host->err_stats[MMC_ERR_ICE_CFG]);
-> +
-> +	return 0;
-> +}
-> +
-> +static int mmc_err_stats_open(struct inode *inode, struct file *file)
-> +{
-> +	return single_open(file, mmc_err_stats_show, inode->i_private);
-> +}
-> +
-> +static ssize_t mmc_err_stats_write(struct file *filp, const char __user *ubuf,
-> +				   size_t cnt, loff_t *ppos)
-> +{
-> +	struct mmc_host *host = filp->f_mapping->host->i_private;
-> +
-> +	if (!host)
-> +		return -EINVAL;
-> +
-> +	pr_debug("%s: Resetting MMC error statistics\n", __func__);
-> +	memset(host->err_stats, 0, sizeof(host->err_stats));
-> +
-> +	return cnt;
-> +}
-> +
-> +static const struct file_operations mmc_err_stats_fops = {
-> +	.open	= mmc_err_stats_open,
-> +	.read	= seq_read,
-> +	.write	= mmc_err_stats_write,
-> +};
-> +
->  void mmc_add_host_debugfs(struct mmc_host *host)
->  {
->  	struct dentry *root;
-> @@ -236,6 +337,11 @@ void mmc_add_host_debugfs(struct mmc_host *host)
->  	debugfs_create_file_unsafe("clock", S_IRUSR | S_IWUSR, root, host,
->  				   &mmc_clock_fops);
->  
-> +	debugfs_create_file("err_state", 0600, root, host,
-> +		&mmc_err_state);
-> +	debugfs_create_file("err_stats", 0600, root, host,
-> +		&mmc_err_stats_fops);
-> +
->  #ifdef CONFIG_FAIL_MMC_REQUEST
->  	if (fail_request)
->  		setup_fault_attr(&fail_default_attr, fail_request);
-> diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
-> index b15c034..5243929 100644
-> --- a/drivers/mmc/core/queue.c
-> +++ b/drivers/mmc/core/queue.c
-> @@ -100,6 +100,8 @@ static enum blk_eh_timer_return mmc_cqe_timed_out(struct request *req)
->  	enum mmc_issue_type issue_type = mmc_issue_type(mq, req);
->  	bool recovery_needed = false;
->  
-> +	mmc_debugfs_err_stats_inc(host, MMC_ERR_CMDQ_REQ_TIMEOUT);
-> +
->  	switch (issue_type) {
->  	case MMC_ISSUE_ASYNC:
->  	case MMC_ISSUE_DCMD:
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-
-I think the core changes should be a separate patch from sdhci.
-I would probably split into 4:
-	mmc core
-	mmc block driver
-	cqhci driver
-	sdhci driver
-
-> index 07c6da1..d742051 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -113,6 +113,7 @@ void sdhci_dumpregs(struct sdhci_host *host)
->  	if (host->ops->dump_vendor_regs)
->  		host->ops->dump_vendor_regs(host);
->  
-> +	mmc_debugfs_err_stats_enable(host->mmc);
-
-Why here and not in e.g. __sdhci_add_host() ?
-
->  	SDHCI_DUMP("============================================\n");
->  }
->  EXPORT_SYMBOL_GPL(sdhci_dumpregs);
-> @@ -3159,6 +3160,7 @@ static void sdhci_timeout_timer(struct timer_list *t)
->  	spin_lock_irqsave(&host->lock, flags);
->  
->  	if (host->cmd && !sdhci_data_line_cmd(host->cmd)) {
-> +		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_REQ_TIMEOUT);
->  		pr_err("%s: Timeout waiting for hardware cmd interrupt.\n",
->  		       mmc_hostname(host->mmc));
->  		sdhci_dumpregs(host);
-> @@ -3181,6 +3183,7 @@ static void sdhci_timeout_data_timer(struct timer_list *t)
->  
->  	if (host->data || host->data_cmd ||
->  	    (host->cmd && sdhci_data_line_cmd(host->cmd))) {
-> +		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_REQ_TIMEOUT);
->  		pr_err("%s: Timeout waiting for hardware interrupt.\n",
->  		       mmc_hostname(host->mmc));
->  		sdhci_dumpregs(host);
-> @@ -3240,11 +3243,15 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
->  
->  	if (intmask & (SDHCI_INT_TIMEOUT | SDHCI_INT_CRC |
->  		       SDHCI_INT_END_BIT | SDHCI_INT_INDEX)) {
-> -		if (intmask & SDHCI_INT_TIMEOUT)
-> +		if (intmask & SDHCI_INT_TIMEOUT) {
->  			host->cmd->error = -ETIMEDOUT;
-> -		else
-> +			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_TIMEOUT);
-> +		} else {
->  			host->cmd->error = -EILSEQ;
-> -
-> +			if (host->cmd->opcode != MMC_SEND_TUNING_BLOCK ||
-> +					host->cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200)
-> +				mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_CRC);
-> +		}
->  		/* Treat data command CRC error the same as data CRC error */
->  		if (host->cmd->data &&
->  		    (intmask & (SDHCI_INT_CRC | SDHCI_INT_TIMEOUT)) ==
-> @@ -3266,6 +3273,7 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
->  			  -ETIMEDOUT :
->  			  -EILSEQ;
->  
-> +		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_AUTO_CMD);
->  		if (sdhci_auto_cmd23(host, mrq)) {
->  			mrq->sbc->error = err;
->  			__sdhci_finish_mrq(host, mrq);
-> @@ -3342,6 +3350,7 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
->  			if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->  				host->data_cmd = NULL;
->  				data_cmd->error = -ETIMEDOUT;
-> +				mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_TIMEOUT);
->  				__sdhci_finish_mrq(host, data_cmd->mrq);
->  				return;
->  			}
-> @@ -3375,18 +3384,25 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
->  		return;
->  	}
->  
-> -	if (intmask & SDHCI_INT_DATA_TIMEOUT)
-> +	if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->  		host->data->error = -ETIMEDOUT;
-> +		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_TIMEOUT);
-> +	}
->  	else if (intmask & SDHCI_INT_DATA_END_BIT)
->  		host->data->error = -EILSEQ;
->  	else if ((intmask & SDHCI_INT_DATA_CRC) &&
->  		SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))
-> -			!= MMC_BUS_TEST_R)
-> +			!= MMC_BUS_TEST_R) {
->  		host->data->error = -EILSEQ;
-> +		if (host->cmd->opcode != MMC_SEND_TUNING_BLOCK ||
-> +				host->cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200)
-> +			mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_CRC);
-> +	}
->  	else if (intmask & SDHCI_INT_ADMA_ERROR) {
->  		pr_err("%s: ADMA error: 0x%08x\n", mmc_hostname(host->mmc),
->  		       intmask);
->  		sdhci_adma_show_error(host);
-> +		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_ADMA);
->  		host->data->error = -EIO;
->  		if (host->ops->adma_workaround)
->  			host->ops->adma_workaround(host, intmask);
-> @@ -3905,20 +3921,33 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
->  	if (!host->cqe_on)
->  		return false;
->  
-> -	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC))
-> +	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC)) {
->  		*cmd_error = -EILSEQ;
-> -	else if (intmask & SDHCI_INT_TIMEOUT)
-> +		if (intmask & SDHCI_INT_CRC) {
-> +			if (host->cmd->opcode != MMC_SEND_TUNING_BLOCK ||
-> +					host->cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200)
-> +				mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_CRC);
-> +		}
-> +	} else if (intmask & SDHCI_INT_TIMEOUT) {
->  		*cmd_error = -ETIMEDOUT;
-> -	else
-> +		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_CMD_TIMEOUT);
-> +	} else
->  		*cmd_error = 0;
->  
-> -	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC))
-> +	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
->  		*data_error = -EILSEQ;
-> -	else if (intmask & SDHCI_INT_DATA_TIMEOUT)
-> +		if (intmask & SDHCI_INT_DATA_CRC) {
-> +			if (host->cmd->opcode != MMC_SEND_TUNING_BLOCK ||
-> +					host->cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200)
-> +				mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_CRC);
-> +		}
-> +	} else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->  		*data_error = -ETIMEDOUT;
-> -	else if (intmask & SDHCI_INT_ADMA_ERROR)
-> +		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_DAT_TIMEOUT);
-> +	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
->  		*data_error = -EIO;
-> -	else
-> +		mmc_debugfs_err_stats_inc(host->mmc, MMC_ERR_ADMA);
-> +	} else
->  		*data_error = 0;
->  
->  	/* Clear selected interrupts. */
-> diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-> index 7afb57c..c263f8f 100644
-> --- a/include/linux/mmc/host.h
-> +++ b/include/linux/mmc/host.h
-> @@ -93,6 +93,23 @@ struct mmc_clk_phase_map {
->  
->  struct mmc_host;
->  
-> +enum mmc_err_stat {
-> +	MMC_ERR_CMD_TIMEOUT,
-> +	MMC_ERR_CMD_CRC,
-> +	MMC_ERR_DAT_TIMEOUT,
-> +	MMC_ERR_DAT_CRC,
-> +	MMC_ERR_AUTO_CMD,
-> +	MMC_ERR_ADMA,
-> +	MMC_ERR_TUNING,
-> +	MMC_ERR_CMDQ_RED,
-> +	MMC_ERR_CMDQ_GCE,
-> +	MMC_ERR_CMDQ_ICCE,
-> +	MMC_ERR_REQ_TIMEOUT,
-> +	MMC_ERR_CMDQ_REQ_TIMEOUT,
-> +	MMC_ERR_ICE_CFG,
-> +	MMC_ERR_MAX,
-> +};
-> +
->  struct mmc_host_ops {
->  	/*
->  	 * It is optional for the host to implement pre_req and post_req in
-> @@ -500,6 +517,8 @@ struct mmc_host {
->  
->  	/* Host Software Queue support */
->  	bool			hsq_enabled;
-> +	u32                     err_stats[MMC_ERR_MAX];
-
-If you make it u64 then we don't have to think about the value overflowing.
-
-> +	bool			err_state;
->  
->  	unsigned long		private[] ____cacheline_aligned;
->  };
-> @@ -635,6 +654,24 @@ static inline enum dma_data_direction mmc_get_dma_dir(struct mmc_data *data)
->  	return data->flags & MMC_DATA_WRITE ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
->  }
->  
-> +static inline void mmc_debugfs_err_stats_enable(struct mmc_host *mmc)
-> +{
-> +	mmc->err_state = true;
-> +}
-> +
-> +static inline void mmc_debugfs_err_stats_inc(struct mmc_host *mmc,
-> +		enum mmc_err_stat stat) {
-> +
-> +	/*
-> +	 * Ignore the command timeout errors observed during
-> +	 * the card init as those are excepted.
-> +	 */
-> +	if (!mmc->err_state)
-> +		mmc->err_stats[MMC_ERR_CMD_TIMEOUT] = 0;
-
-This would be better handled in the card init code somewhere, not here.
-
-> +
-> +	mmc->err_stats[stat] += 1;
-> +}
-> +
->  int mmc_send_tuning(struct mmc_host *host, u32 opcode, int *cmd_error);
->  int mmc_send_abort_tuning(struct mmc_host *host, u32 opcode);
->  int mmc_get_ext_csd(struct mmc_card *card, u8 **new_ext_csd);
-> 
+=C2=A0=C2=A0=C2=A0 Regards
+=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
 

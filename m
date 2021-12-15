@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C29CF475F01
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2DE475EDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245591AbhLOR02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:26:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45698 "EHLO
+        id S245713AbhLORZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:25:20 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44842 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245584AbhLORZD (ORCPT
+        with ESMTP id S245562AbhLORYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:25:03 -0500
+        Wed, 15 Dec 2021 12:24:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81B71619F2;
-        Wed, 15 Dec 2021 17:25:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B28C36AE6;
-        Wed, 15 Dec 2021 17:25:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45FE261A14;
+        Wed, 15 Dec 2021 17:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D5D1C36AE0;
+        Wed, 15 Dec 2021 17:24:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589101;
-        bh=vi5UnlwFaAsMltw2f/EZrq89g/w9jyCTRXA2jFOVkD0=;
+        s=korg; t=1639589051;
+        bh=fbZcHfztkVh/9iYEi+/Xqk3tFGUtpBIMDyj4UDvNSDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VsermUOLzL2Yg8AZEssfa79VteQQdXnrNlyEZFrLSToL5A521oiuVUrcbo6G/Z1Sc
-         Yr3nPMlWhzPEQBuVUBnlm+mwglizJOBfU0vyOLZunSYAoP/AMw9ewe6AazLap6m0A7
-         jgdJT0QCME5ZswONyRyzU/+V8FG00/uhfuOGM2xI=
+        b=TwqtQZvkasR0JhtIbA1tk/RmSYrrGwnwvCzH8BEVM6F+CGNM/KU8LtTNonkN+7o+q
+         VNeBdZtkKBTRhS8UTQ0u9E0+W/Ozucq96Ud1a+g2z9866kE5bZibSiBi7leUKM0JBk
+         +t7dfIcIgQ5dkwZk2+dHn3Ha97/0vHsp7KIYdkT8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fuad Tabba <tabba@google.com>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 03/33] KVM: arm64: Save PSTATE early on exit
-Date:   Wed, 15 Dec 2021 18:21:01 +0100
-Message-Id: <20211215172024.900099232@linuxfoundation.org>
+        stable@vger.kernel.org, Philip Chen <philipchen@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 21/42] drm/msm/dsi: set default num_data_lanes
+Date:   Wed, 15 Dec 2021 18:21:02 +0100
+Message-Id: <20211215172027.398099966@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
-References: <20211215172024.787958154@linuxfoundation.org>
+In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
+References: <20211215172026.641863587@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,63 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Philip Chen <philipchen@chromium.org>
 
-[ Upstream commit 83bb2c1a01d7127d5adc7d69d7aaa3f7072de2b4 ]
+[ Upstream commit cd92cc187c053ab010a1570e2d61d68394a5c725 ]
 
-In order to be able to use primitives such as vcpu_mode_is_32bit(),
-we need to synchronize the guest PSTATE. However, this is currently
-done deep into the bowels of the world-switch code, and we do have
-helpers evaluating this much earlier (__vgic_v3_perform_cpuif_access
-and handle_aarch32_guest, for example).
+If "data_lanes" property of the dsi output endpoint is missing in
+the DT, num_data_lanes would be 0 by default, which could cause
+dsi_host_attach() to fail if dsi->lanes is set to a non-zero value
+by the bridge driver.
 
-Move the saving of the guest pstate into the early fixups, which
-cures the first issue. The second one will be addressed separately.
+According to the binding document of msm dsi controller, the
+input/output endpoint of the controller is expected to have 4 lanes.
+So let's set num_data_lanes to 4 by default.
 
-Tested-by: Fuad Tabba <tabba@google.com>
-Reviewed-by: Fuad Tabba <tabba@google.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Philip Chen <philipchen@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Link: https://lore.kernel.org/r/20211030100812.1.I6cd9af36b723fed277d34539d3b2ba4ca233ad2d@changeid
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/kvm/hyp/include/hyp/switch.h    | 6 ++++++
- arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 7 ++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/dsi/dsi_host.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/kvm/hyp/include/hyp/switch.h b/arch/arm64/kvm/hyp/include/hyp/switch.h
-index 1f875a8f20c47..8116ae1e636a2 100644
---- a/arch/arm64/kvm/hyp/include/hyp/switch.h
-+++ b/arch/arm64/kvm/hyp/include/hyp/switch.h
-@@ -406,6 +406,12 @@ static inline bool __hyp_handle_ptrauth(struct kvm_vcpu *vcpu)
-  */
- static inline bool fixup_guest_exit(struct kvm_vcpu *vcpu, u64 *exit_code)
- {
-+	/*
-+	 * Save PSTATE early so that we can evaluate the vcpu mode
-+	 * early on.
-+	 */
-+	vcpu->arch.ctxt.regs.pstate = read_sysreg_el2(SYS_SPSR);
-+
- 	if (ARM_EXCEPTION_CODE(*exit_code) != ARM_EXCEPTION_IRQ)
- 		vcpu->arch.fault.esr_el2 = read_sysreg_el2(SYS_ESR);
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+index ea641151e77e7..dc85974c78975 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_host.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+@@ -1696,6 +1696,8 @@ static int dsi_host_parse_lane_data(struct msm_dsi_host *msm_host,
+ 	if (!prop) {
+ 		DRM_DEV_DEBUG(dev,
+ 			"failed to find data lane mapping, using default\n");
++		/* Set the number of date lanes to 4 by default. */
++		msm_host->num_data_lanes = 4;
+ 		return 0;
+ 	}
  
-diff --git a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-index cce43bfe158fa..0eacfb9d17b02 100644
---- a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-+++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-@@ -54,7 +54,12 @@ static inline void __sysreg_save_el1_state(struct kvm_cpu_context *ctxt)
- static inline void __sysreg_save_el2_return_state(struct kvm_cpu_context *ctxt)
- {
- 	ctxt->regs.pc			= read_sysreg_el2(SYS_ELR);
--	ctxt->regs.pstate		= read_sysreg_el2(SYS_SPSR);
-+	/*
-+	 * Guest PSTATE gets saved at guest fixup time in all
-+	 * cases. We still need to handle the nVHE host side here.
-+	 */
-+	if (!has_vhe() && ctxt->__hyp_running_vcpu)
-+		ctxt->regs.pstate	= read_sysreg_el2(SYS_SPSR);
- 
- 	if (cpus_have_final_cap(ARM64_HAS_RAS_EXTN))
- 		ctxt_sys_reg(ctxt, DISR_EL1) = read_sysreg_s(SYS_VDISR_EL2);
 -- 
 2.33.0
 

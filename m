@@ -2,278 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD0D476081
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEA347607C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 19:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343597AbhLOSP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 13:15:29 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:15606 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343605AbhLOSP0 (ORCPT
+        id S1343584AbhLOSPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 13:15:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238605AbhLOSPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:15:26 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BFHw5dP030510;
-        Wed, 15 Dec 2021 18:14:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=xT8Fh9kMzvIu+YvAIU7axDKgidNDef/THtLXIOP8jYE=;
- b=y8bFCtm6DgAvjwQ0zLoXg2H42hNbWcROkSoQW8kAn7hcgekbx2hkpYyLWf76LpyW4sQa
- Zg8h0DAuiVDoAvc+M4X4w5QL/rNlFPFWQyW7R6QXe34UDLd08Nv+uec0rNoYzhxCSBKz
- Y0FSoc3Dn19vTN1vwNpSs+w2eX89VdYbpbZMsvI+uSOoNOjUB/UuneQIWfibnYonbUm5
- o5j/wtyOPadL2KEgCEXlkhxpJoV/is+PdS1D+g+uR4j0KiBwk9uP0zj6vYwJYtFPbAl7
- yecreQPOWeXGyRSAC2S1GqenEocbMVHEgWjh5PM2ovxg1TKnZZ/8pq0nvhyeFWhUEAKy 9g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cykm58eek-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Dec 2021 18:14:47 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BFHuXRa163199;
-        Wed, 15 Dec 2021 18:14:46 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
-        by aserp3020.oracle.com with ESMTP id 3cxmrc7ab8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Dec 2021 18:14:46 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IQ656U5zRBwAZ8TlagaVuALx8e3Ow0di+ud+CPFoJyGDis5dTmZvs7E0rekCLMcaam7jX6vs3t1D7Vb0jvaVMs2fyg/hJYlPY0ia+QOFyDmd9+TqWrWai6ObckHPUbf2y09UbW3/JchPIZtBdwjqQHM1vrRTosnwuuTRm67VHZgxh8BGA4IZikZHdNS2pYnhMzu6SwcH6HM+p0iOCp59j1S11okeUZP6jF84BaZgDiJNH2rbnLh5J5MkWoqNhY6La+c1pXr+lhSDs6/BmsDH29MlCGCYj1r7Ocag1Xgd4M+LHGBqiVIq5S7gVrmY3DJPfMgs5xOq19qMjPK5lJI+HA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xT8Fh9kMzvIu+YvAIU7axDKgidNDef/THtLXIOP8jYE=;
- b=WSU3vKfalPfgzq7GuJ79Ek255qEPr1s2gE8InNzY3UI/riom5oj+1D1WioS00Bx9WhAF1y4Pi/wjK+N7hDEpXTb4P5uWbYIHwE8kVp9oKYnTNl5uhcfVlzOFgSM+8QviRMBEG0I7rtDgRPasRBDnwL8xgamTABg6u4iRCtT5pPnT68Vs+MsJHMgTeWv3F1ZW6MpO8Se5bHiG+yKuywNxbIGa5KIY0nsTGoD3aGn8Tt9PCAJvFJ34ve94xoklUOqEAyAdEgvRBlfLYvblW/fbuUKFUnEmMmFDyyZceAdcL4FiX9m1/5Vhc5zGs6rHRioN8q8Tjc4JRi4Ze4G11wFADA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 15 Dec 2021 13:15:22 -0500
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CBBC06173F;
+        Wed, 15 Dec 2021 10:15:22 -0800 (PST)
+Received: by mail-vk1-xa2c.google.com with SMTP id u68so15144033vke.11;
+        Wed, 15 Dec 2021 10:15:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xT8Fh9kMzvIu+YvAIU7axDKgidNDef/THtLXIOP8jYE=;
- b=ugU41m1D88n///onx3gKlo3KJtWhymex7NqEFNgt7iQTwI6O2FGltPrTmd8+/Tw/0pNnREVpQdJsyGS96wMO7tnTivDfCFyDBn5+OpIRCsS5DTzemGQOJzexNHQzUMRs2bBRrTQwbCMZeUQDfoSVvNomPJvA8kz/AqwqOihGGc4=
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by CH0PR10MB4827.namprd10.prod.outlook.com (2603:10b6:610:df::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Wed, 15 Dec
- 2021 18:14:44 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::65b8:d8e7:e373:4896]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::65b8:d8e7:e373:4896%9]) with mapi id 15.20.4778.018; Wed, 15 Dec 2021
- 18:14:44 +0000
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-CC:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "ebiggers@google.com" <ebiggers@google.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "nramas@linux.microsoft.com" <nramas@linux.microsoft.com>,
-        "lszubowi@redhat.com" <lszubowi@redhat.com>,
-        "jason@zx2c4.com" <jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Subject: Re: [PATCH v8 09/17] KEYS: Rename
- get_builtin_and_secondary_restriction
-Thread-Topic: [PATCH v8 09/17] KEYS: Rename
- get_builtin_and_secondary_restriction
-Thread-Index: AQHX4O2pDdgPDu39Wk2pZOJ3EdBmzqwWj2cAgAXMOQCAAR68AIAAN5SAgBZLdwA=
-Date:   Wed, 15 Dec 2021 18:14:44 +0000
-Message-ID: <31FE813A-91D5-46B8-9658-21F3F1418643@oracle.com>
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
- <20211124044124.998170-10-eric.snowberg@oracle.com>
- <fb1d583f588e3f46fdadbe3cf6288bb098ff45f8.camel@kernel.org>
- <8906F8A4-313F-45E5-8ABD-A1A2D07BFD93@oracle.com> <YadOLrHb14MEfphi@iki.fi>
- <61f5d74f861ce1015831649d3bca9272a2e3b7bf.camel@linux.ibm.com>
-In-Reply-To: <61f5d74f861ce1015831649d3bca9272a2e3b7bf.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3608.120.23.2.7)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 99e81cd5-7d6b-413e-c459-08d9bff6c54e
-x-ms-traffictypediagnostic: CH0PR10MB4827:EE_
-x-microsoft-antispam-prvs: <CH0PR10MB48276B70DB6C787DA8EE98D987769@CH0PR10MB4827.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Ofbt8VLsz+252ZNoPqSLmCkQzElx3Ha9s5sNXO7/HYwShDKfgknlcSrX6VGXzw7XoAGQqCR8RqoRmi1zMGfs9dgixYKVT/iu1OkoJs3HYyyp5ZGv9DdtjJ0jOVEsgQ2QNoKZsprGj1HPctInFp4YEEMUrsumFOjpSTzoCqGa1b2T8k0OrLxo+uhR8ftk+5StW8SY1EmZ2QhSBudDuPNSY5NudQm3J6BAKT1zrchK8X012CAxrXg+eJqkk18jnyP+vSALAHyWL9KJv+2n0eVenQjVljwnIblDKGdbRAi4zRBSu14R1yS6MPIeUjYIRp5954WsRTB0GwBJ8rdOd1pUapx4iVWGXvj27VgLx55auugo8wOUQUdZ9NljjzpQ9WYleG3TCfGK1uuVxWhZ5t7XKj+xUDQd4SI1QERRvwaLOiIS1C0F/A4rRnKGHXeLeyzsjV7yAWsig236urliABVTSP+swB+b3RnK2h0rTJp4QHOvfNhp9JHHX/NfCv1Hy5fgmMDm/ZMGg5pmHQXxt98Ogy8+g83Wp7luqcLM2d6fpfCq+D68GvYCTkPXqA8SDxlxsn/h8YyYKoOLJFd9Q9IwqhBWIS0m7vgbTT9ASIQyTEu8/mx04jJ8i+mI6BXJDX/765jwT4zI4gmzHV3Q/O14XncmksL3sQ51shqMS4jMqisgzYp2E9EaUzaYkG1GEJj+cd/tRt73xU9Uxy0Mu7UMs8RGKNONuzRFT9tOrxn60SM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(7416002)(316002)(66476007)(66556008)(76116006)(508600001)(4326008)(2616005)(44832011)(86362001)(6512007)(66446008)(5660300002)(6486002)(83380400001)(66946007)(91956017)(71200400001)(64756008)(122000001)(36756003)(54906003)(8676002)(107886003)(38100700002)(8936002)(33656002)(2906002)(186003)(6506007)(38070700005)(110136005)(53546011)(4001150100001)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?cgWnJK64xH0TWy9AkJFCcXOLCP8sek7F/1JddlYP82gQUF0jfQi2IGkScuBQ?=
- =?us-ascii?Q?xabto89yvy88D9ZfGmEkYf1E/tuw/nvD43XLNuNx/YQaVez73XD4KCJV/yPz?=
- =?us-ascii?Q?9IgUuhyOowhDKczZgPCOPoqsnGTG2/LBdVH4qff0CQpUCn6zOrWqOrrecbOh?=
- =?us-ascii?Q?OpWJDgnC6TPKtTfqKyuckvPoaXFUi4qTuKVQ+VXJUoJninI8lT3EyasR5YKU?=
- =?us-ascii?Q?5szAONSDv3RyJc5Mzj/xwZNQPcwIkEMfgVyr8/ziiqRbGOEGiueBpSBwBgrr?=
- =?us-ascii?Q?ZMhdWXK/5y7aPWILO419a6C66RXqf3Mx2IpZl98w3chNrDfKdjaKa8tAvaO3?=
- =?us-ascii?Q?WeOWZmdgvUUfbd1864Wmi5CnVoDE1xgVxPrcYCVhNOF/v30qVBVA7DIMsG0b?=
- =?us-ascii?Q?xCecfTLUSvbgHyAhM3ZnNNlxGgE2fPfTFFRSCEA6fH4+DgPJ8f7otnoZNxXE?=
- =?us-ascii?Q?HsBGGu5iiv8yRPE24h1Lvw8rXiiiCHZCEXBExl++TDn/5WLIyjdlBd5sZAA+?=
- =?us-ascii?Q?iqOG2ShqCMMJS8kuhBoArD5U7Rm0/8u6Kz4QX6GajTexl34Bo0YzZOZ0jtG1?=
- =?us-ascii?Q?jupOte/gMfNM53+s8acU6agR0asgndKhf7de0A//JwunVknbg2wY2xIla9sq?=
- =?us-ascii?Q?UVHAMcppz38Kv0ZhlrLCGY7vXP5C42agJnTBcnbPTxj1iUUA4eVMHgPST0kR?=
- =?us-ascii?Q?AQ9qVWw3gAB5Hw3SS7eJGzASo8RI6nSDMlSoXW0UunJgHP9hAYUp7Y/HHzfa?=
- =?us-ascii?Q?r7mJdsM+gToPr8XT7mSboTTvgIvDmb4jpREIuIcHWF25vnWs4UCJ8IgTJT/u?=
- =?us-ascii?Q?uhtqhuGgw7xX2YKYGtfLCaCYoTiqti/TjBJ3GXtE3Qx0d397uIb06c8y7PWl?=
- =?us-ascii?Q?arcSidUqrKVizjRbhdZ0h7bzBirUgBPYuY4seUkHQkJew4lUPOK94MCz7PKa?=
- =?us-ascii?Q?dnu43sggDUku6dj59Ha6UYh5JKtq2d6ACR101NfUpUbqmMH0EaMrI2CDwhpI?=
- =?us-ascii?Q?tco04lKH69NyDQfZIUiPRzsIgHHxic0RAgmFQxMgAALZJVV3DDB5YaB14Kj+?=
- =?us-ascii?Q?1S04va/1kHZGsmfk9pYc0iPSHiacKm4wZYrCbxa+4XpDu+rK5omNZ+2X9kGz?=
- =?us-ascii?Q?Pv8utcj6Vyko5j2ggQnwEidcwqJs1JTJQG0MoO6gUmsoEcNs8IZMMS5Pec0D?=
- =?us-ascii?Q?xlo62nS35+Yh9vNJOikyTwwvk3rjuCkfAKvrtSEDqmYLpihUXYSfYuflDik6?=
- =?us-ascii?Q?WN6KyPE178UBoowz8QD9RAeuhaTNhaapJ0rLGJlu2px+hMwAegkOJ8jlJH3l?=
- =?us-ascii?Q?vxnO3UULinM2Dsb+AOnFq+5+abgk9lSI3CH6sSsbVD04QrJevSK090WHAvYG?=
- =?us-ascii?Q?miytPESeFvUnU44ZyZyKaDNY1+JKniBEPlWGu/btv3GPcppHfq4ClFeHtmBM?=
- =?us-ascii?Q?G+7gQPNISgtYrixM89A9jctWzEawW3C95P0eRO1jySJe61KllxQu5dQ3Xltu?=
- =?us-ascii?Q?6W69GsjNHr37y47ZdicyowqaYD1wvU6Ewj12rSVeH8VRTvwWr0mDgdPEj0O5?=
- =?us-ascii?Q?Va/TkWbMpOPnCn7CxPBZob/1Bl607LpDf1nxkKz1uMN72rxFL6ddqsCjjKdQ?=
- =?us-ascii?Q?i8mwWHX00OQ/dVGdIOphrmpNhXsGl2OvCR33Zr7j75KGQgZU75ofSnsRQDgz?=
- =?us-ascii?Q?fjzEZhrZBdEnoowyHF/B8rraX1rBU3zpRbtfVZVi/e5fSH3C?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <BBD756BBB259AD418485FD83577B4CB6@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=8W2UHSgyaQqFRjauGt8EERxuZx77NqQIXtATvxyGB4s=;
+        b=lFA6ZU/J2TJzbPI0cBflc4JqEypHvUC7d6KcSQM3BCTbgfSeHTYMSyS14AsFFCbFo9
+         WB2WEUtK5cjsjqgLrJTnwO7PN0WEfzsVomQC3hLo40I2qjQiCCuT0yD2QmAMgTrhnoEJ
+         mwNcB8ngqta/mB2HLDhqakp4Dq3zLtF3obCaiW56xbUNxHbjdk9cHrAxxwprATRHOMCF
+         OeAZWH2ct/rNOK5PL9+B+j5GTKaj8daQtM4EuVbiWclf3bnXeDFCmcFgg/P/RjAxJEs3
+         1HUl/LJeo9+KBSyq/LUdVCOqadSHlU5LkFcXp6WT/YuK8gnCrtdTDo+shLcdHf8572hA
+         83mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=8W2UHSgyaQqFRjauGt8EERxuZx77NqQIXtATvxyGB4s=;
+        b=bJbmTnpxsQAXhboeevpKqQLUl/8WyGa9GSiju7hT1xkQubr7JE6B1E0zyErtVPAiGr
+         iTUiCkVtoAcvEPX1k1RcYDGAjP1wrR6j04Siw8gzXQfwp7ZC37pTQG7RmU4SZ1qiCjw6
+         b/VMmhU80YtyDp0IYuG/Opn7R793mAxXKKBKHK/MHfwv0mqal19DNbS1LQ4QC5tckOEk
+         FiAFVbXlPusryo0NMnzRbl0w4JdpcMwJEHL/VHdKvJmS9XRURh2Qg1yxf/vzbIqzOPS8
+         0jue+MzMWzhbTz9xhLZx8ZDcUcwdo1FpcO/jCoLG0k1Q+9j2ej9Q/GkdVqsae0QNcJfB
+         TGWQ==
+X-Gm-Message-State: AOAM533e3YC3G5G39Ag5BIiC645gKhEe/Hqg+gCi8DSFUvWiZiwG3JVP
+        b/0JtrmluYszpbZRK/kHYwNxUgOSFXHPxPbgELs=
+X-Google-Smtp-Source: ABdhPJy6+ZYj/czS+N6xQJJVPwbFkSClmjGyoVDwrPO8FgNgKs5g9wvBbt4I+QxOrjRIXtKEMJ/Xl/j05IdFnbkFMdM=
+X-Received: by 2002:a05:6122:732:: with SMTP id 50mr4516866vki.28.1639592121248;
+ Wed, 15 Dec 2021 10:15:21 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99e81cd5-7d6b-413e-c459-08d9bff6c54e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2021 18:14:44.1276
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bXla887beIeLxpwcqj0LhDhTz6YIzXfKcqOFgrvR/xT+9PG1G+chlE9fbCJ1ECcfboWjHxr8StU35tcxQcD7vCNoy/70mmWtOFn+UOvOEJ8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB4827
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10199 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
- mlxlogscore=999 suspectscore=0 adultscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112150101
-X-Proofpoint-GUID: Ui4k1O4r0BhR4ly9aPHpzXQDYU4cPFJg
-X-Proofpoint-ORIG-GUID: Ui4k1O4r0BhR4ly9aPHpzXQDYU4cPFJg
+References: <20211208000948.487820-1-rajatja@google.com> <20211215180426.GA702736@bhelgaas>
+In-Reply-To: <20211215180426.GA702736@bhelgaas>
+Reply-To: rajatxjain@gmail.com
+From:   Rajat Jain <rajatxjain@gmail.com>
+Date:   Wed, 15 Dec 2021 10:15:02 -0800
+Message-ID: <CAA93t1rQgfUP7jDKK+Gu80EyxQJpUDGz+=4LgjSfJUi77s_AeQ@mail.gmail.com>
+Subject: Re: [PATCH] pci/quirks: Add quirk for Bayhub O2 SD controller
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Rajat Jain <rajatja@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-mmc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Jesse Barnes <jsbarnes@google.com>, gwendal@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bjorn,
 
+Thanks for taking a look.
 
-> On Dec 1, 2021, at 6:46 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
->=20
-> On Wed, 2021-12-01 at 12:27 +0200, Jarkko Sakkinen wrote:
->> On Tue, Nov 30, 2021 at 05:21:45PM +0000, Eric Snowberg wrote:
->>>=20
->>>=20
->>>> On Nov 26, 2021, at 5:49 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote=
-:
->>>>=20
->>>> On Tue, 2021-11-23 at 23:41 -0500, Eric Snowberg wrote:
->>>>> In preparation for returning either the existing
->>>>> restrict_link_by_builtin_and_secondary_trusted or the upcoming
->>>>> restriction that includes the trusted builtin, secondary and
->>>>> machine keys, to improve clarity, rename
->>>>> get_builtin_and_secondary_restriction to get_secondary_restriction.
->>>>>=20
->>>>> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
->>>>> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
->>>>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->>>>> ---
->>>>> v6: Initial version
->>>>> v7: Unmodified from v7
->>>>> v8: Code unmodified from v7, added Mimi's Reviewed-by
->>>>> ---
->>>>> certs/system_keyring.c | 4 ++--
->>>>> 1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>=20
->>>>> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
->>>>> index 692365dee2bd..8f1f87579819 100644
->>>>> --- a/certs/system_keyring.c
->>>>> +++ b/certs/system_keyring.c
->>>>> @@ -77,7 +77,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
->>>>>  * Allocate a struct key_restriction for the "builtin and secondary t=
-rust"
->>>>>  * keyring. Only for use in system_trusted_keyring_init().
->>>>>  */
->>>>> -static __init struct key_restriction *get_builtin_and_secondary_rest=
-riction(void)
->>>>> +static __init struct key_restriction *get_secondary_restriction(void=
-)
->>>>> {
->>>>>        struct key_restriction *restriction;
->>>>>=20
->>>>> @@ -117,7 +117,7 @@ static __init int system_trusted_keyring_init(voi=
-d)
->>>>>                               KEY_USR_VIEW | KEY_USR_READ | KEY_USR_S=
-EARCH |
->>>>>                               KEY_USR_WRITE),
->>>>>                              KEY_ALLOC_NOT_IN_QUOTA,
->>>>> -                             get_builtin_and_secondary_restriction()=
-,
->>>>> +                             get_secondary_restriction(),
->>>>>                              NULL);
->>>>>        if (IS_ERR(secondary_trusted_keys))
->>>>>                panic("Can't allocate secondary trusted keyring\n");
->>>>=20
->>>> This is wrong order.
->>>>=20
->>>> You should first do the changes that make the old name
->>>> obsolete and only after that have a patch that does the
->>>> rename. Unfortunately, this patch cannot possibly acked
->>>> with the current order.
->>>=20
->>> I can change the order, but I'm confused how this would work for a git =
-bisect.=20
->>> If the rename happens afterwards, now two patches will always need to b=
-e=20
->>> reverted instead of the possibility of one.  Is this your expectation?
->=20
-> If the keyring name change is independent of any other changes, as
-> Jarkko suggested, nothing would break.
->=20
->> I'd drop this patch altogether. Old name is a bit ugly but does it matte=
-r
->> all that much?
->=20
-> The name "get_builtin_and_secondary_restriction" implies trust based on
-> keys in the ".builtin_trusted_keys" and ".secondary_trusted_keys"
-> keyrings.  This patch set is extending that to include keys on the new
-> ".machine" keyring, by linking it to the secondary keyring.  Is leaving
-> the name unchanged really an option?
->=20
->>=20
->> You already 16 patches without this.
->=20
-> Agreed, it's a lot.  In the past, I've asked Eric to see if some of
-> them could be squashed.
+On Wed, Dec 15, 2021 at 10:04 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Tue, Dec 07, 2021 at 04:09:48PM -0800, Rajat Jain wrote:
+> > This particular SD controller from O2 / Bayhub only allows dword
+> > accesses to its LTR max latency registers:
+> > https://github.com/rajatxjain/public_shared/blob/main/OZ711LV2_appnote.pdf
+>
+> What happens if we use a non-dword access?  Unsupported Request?
+> Invalid data returned?  Writes ignored?
 
-The series grew based on requests added in each round.  How about
-I drop IMA support from the next round?  This would eliminate nine patches
-from the series (5, 6, 7, 9-14), leaving six patches to introduce and enabl=
-e=20
-the new machine keyring (3, 4, 8, 15-17).  The first two patches could=20
-be taken today.  The only reason the first two are included is to get this =
-series=20
-through the kernel test robot.
+Invalid data values are read / written.
 
-This would allow the machine keyring to be used for module signing.  Afterw=
-ards=20
-I could introduce the CA restriction behind another Kconfig in a different =
-series to=20
-add back IMA support. Let me know if this would be a better approach.
+>
+> I guess word accesses must not cause PCIe errors, since we still do
+> them in pci_save_ltr_state() and pci_restore_ltr_state() even with
+> this patch.
 
+Yes, that is correct.
+
+>
+> The app note says 0x234 (Max Latency registers), 0x248 (L1 PM
+> Substates Control 1), and 0x24c (L1 PM Substates Control 2) are all
+> broken, but the patch only mentions 0x234.
+>
+> I guess for 0x248 and 0x24c (the L1 PM Substates Control registers),
+> we're just lucky because those are dword registers, and all current
+> users already do dword accesses.
+
+Yes, that is right.
+
+>
+> What if we instead changed pci_save_ltr_state() and
+> pci_restore_ltr_state() to do a single dword access instead of two
+> word accesses?  That kind of sweeps it under the rug, but we're
+> already doing that for 0x248 and 0x24c.
+
+Yes, that is what I had in mind originally, and actually I'd prefer
+that too. I was afraid you might disagree :-). It sounds like we're on
+the same page though, so should I send a patch with that approach?
+
+>
+> If we did that, we shouldn't need a quirk at all, but the hardware bug
+> is still lurking, and we should add a comment about it somewhere.
+
+I can add a comment in pci_save_ltr_state() / pci_restore_ltr_state().
+
+>
+> I guess setpci (and maybe lspci) could still do smaller accesses and
+> see whatever the bad behavior is.  Hmmm.  Maybe we just have to live
+> with that.
+>
+> The app note doesn't actually say how to identify the part -- no
+> "affected Device ID", for instance.  Are we confident that the other
+> O2_* devices are unaffected?
+
+Yes, I noticed that. I confirmed with them that no other parts are
+affected (in an internal bug unfortunately). I can ask them to update
+their appnote also.
+
+Thanks & Best Regards,
+
+Rajat
+
+>
+> > Thus add a quirk that saves and restores these registers
+> > manually using dword acesses:
+> > LTR Max Snoop Latency Register
+> > LTR Max No-Snoop Latency Register
+> >
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > ---
+> >  drivers/mmc/host/sdhci-pci.h |  1 -
+> >  drivers/pci/quirks.c         | 39 ++++++++++++++++++++++++++++++++++++
+> >  include/linux/pci_ids.h      |  1 +
+> >  3 files changed, 40 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/mmc/host/sdhci-pci.h b/drivers/mmc/host/sdhci-pci.h
+> > index 5e3193278ff9..d47cc0ba7ca4 100644
+> > --- a/drivers/mmc/host/sdhci-pci.h
+> > +++ b/drivers/mmc/host/sdhci-pci.h
+> > @@ -10,7 +10,6 @@
+> >  #define PCI_DEVICE_ID_O2_SDS1                0x8421
+> >  #define PCI_DEVICE_ID_O2_FUJIN2              0x8520
+> >  #define PCI_DEVICE_ID_O2_SEABIRD0    0x8620
+> > -#define PCI_DEVICE_ID_O2_SEABIRD1    0x8621
+> >
+> >  #define PCI_DEVICE_ID_INTEL_PCH_SDIO0        0x8809
+> >  #define PCI_DEVICE_ID_INTEL_PCH_SDIO1        0x880a
+> > diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> > index 003950c738d2..b7bd19802744 100644
+> > --- a/drivers/pci/quirks.c
+> > +++ b/drivers/pci/quirks.c
+> > @@ -5857,3 +5857,42 @@ static void nvidia_ion_ahci_fixup(struct pci_dev *pdev)
+> >       pdev->dev_flags |= PCI_DEV_FLAGS_HAS_MSI_MASKING;
+> >  }
+> >  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NVIDIA, 0x0ab8, nvidia_ion_ahci_fixup);
+> > +
+> > +/*
+> > + * Bayhub OZ711LV2 SD controller has an errata that only allows DWORD accesses
+> > + * to the LTR max latency registers. Thus need to save and restore these
+> > + * registers manually.
+> > + */
+> > +static void o2_seabird1_save_ltr(struct pci_dev *dev)
+> > +{
+> > +     struct pci_cap_saved_state *save_state;
+> > +     u32 *reg32;
+> > +
+> > +     save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_LTR);
+> > +     if (save_state) {
+> > +             reg32 = &save_state->cap.data[0];
+> > +             /* Preserve PCI_LTR_MAX_SNOOP_LAT & PCI_LTR_MAX_NOSNOOP_LAT */
+> > +             pci_read_config_dword(dev, 0x234, reg32);
+> > +     } else {
+> > +             pci_err(dev, "quirk can't save LTR snoop latency\n");
+> > +     }
+> > +}
+> > +
+> > +static void o2_seabird1_restore_ltr(struct pci_dev *dev)
+> > +{
+> > +     struct pci_cap_saved_state *save_state;
+> > +     u32 *reg32;
+> > +
+> > +     save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_LTR);
+> > +     if (save_state) {
+> > +             reg32 = &save_state->cap.data[0];
+> > +             /* Restore PCI_LTR_MAX_SNOOP_LAT & PCI_LTR_MAX_NOSNOOP_LAT */
+> > +             pci_write_config_dword(dev, 0x234, *reg32);
+> > +     } else {
+> > +             pci_err(dev, "quirk can't restore LTR snoop latency\n");
+> > +     }
+> > +}
+> > +DECLARE_PCI_FIXUP_SUSPEND_LATE(PCI_VENDOR_ID_O2, PCI_DEVICE_ID_O2_SEABIRD1,
+> > +                            o2_seabird1_save_ltr);
+> > +DECLARE_PCI_FIXUP_RESUME_EARLY(PCI_VENDOR_ID_O2, PCI_DEVICE_ID_O2_SEABIRD1,
+> > +                            o2_seabird1_restore_ltr);
+> > diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> > index 011f2f1ea5bb..6ed16aa38196 100644
+> > --- a/include/linux/pci_ids.h
+> > +++ b/include/linux/pci_ids.h
+> > @@ -1717,6 +1717,7 @@
+> >  #define PCI_DEVICE_ID_O2_8221                0x8221
+> >  #define PCI_DEVICE_ID_O2_8320                0x8320
+> >  #define PCI_DEVICE_ID_O2_8321                0x8321
+> > +#define PCI_DEVICE_ID_O2_SEABIRD1    0x8621
+> >
+> >  #define PCI_VENDOR_ID_3DFX           0x121a
+> >  #define PCI_DEVICE_ID_3DFX_VOODOO    0x0001
+> > --
+> > 2.34.1.400.ga245620fadb-goog
+> >

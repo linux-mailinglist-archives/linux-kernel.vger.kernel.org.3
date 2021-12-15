@@ -2,106 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAD4475BA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6C7475BAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243858AbhLOPP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:15:27 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:46620
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243717AbhLOPPZ (ORCPT
+        id S243863AbhLOPQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:16:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234671AbhLOPQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:15:25 -0500
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5D3073F177
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:15:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639581324;
-        bh=NJlwDd5bAMJRuNFENJ45/ccB1wsP6KiGSWfHC0fnYW0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=l0OHpa9cmZHYaccz0KjPdBc0/gVx49QDBbDqToE/mwwAmtmavrdip4aEwYFs46aCw
-         eJ8m419WVSbhhMyzCaUPjLAJN7WrKmgSlcERMDf7YyM2T++YsEsOOOkkZZpSWRNoV+
-         TnAlW5dS44A/fu9xf/bNwm5gnPEur6RnbouW0/Iyjja+SsA3iEsO41mm9p0yXbUPTM
-         8u1xyBCppk20+lmcVv5b3UD0eN/mNK0QqUA0i613FV+wNX4p6WMjUnXEMcqjpSKQnc
-         NzaktrJGDZsVUTpz9cO6CQVaNPLd8SS/wxuJpVf5D/bWHo+XDhg7He16xwo10vwxx4
-         9OFvbaE0crAqw==
-Received: by mail-lj1-f199.google.com with SMTP id b3-20020a2ebc03000000b0021ffe75b14cso7132261ljf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 07:15:24 -0800 (PST)
+        Wed, 15 Dec 2021 10:16:28 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBBAC061574;
+        Wed, 15 Dec 2021 07:16:28 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso3299684wme.1;
+        Wed, 15 Dec 2021 07:16:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9Q9Qi8wQrEoZWm5nsu6G4IHs86FT9L423fH5Q6OLkcA=;
+        b=TW0UDNbyWAL4qgqq0kFrVu7bE+lTDYxQSAwBC3cRCaJFFH1/P4MGQ0hQYHQ4BN4lRY
+         jF7mY9owHeXUSwMEaLWBueGxhSi5E7Ry2FWkpAC4Yy99H1DbBzXJVWkhI9ly0FLUOAac
+         HvBAxmOQClgmCA/Tpn2dW69r9OM+VqeUI8tjKehRElFOR/nzQLOfzFkApGSFw/y4VfI3
+         H2jBDinKiMjTPU5dxmCtNS+HNF6fzqmzpKWdsalQp3425T+zUCxFYlJE8sMxxyDthcjg
+         dWFcq/btrhjgS4axZMuHzI5WK5Z7wo4f3RuOJs8pcSpKcQqRAGDnC31JYhQO2rNE5ihR
+         n2Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NJlwDd5bAMJRuNFENJ45/ccB1wsP6KiGSWfHC0fnYW0=;
-        b=y7MM81g2DWhoPvs85VoDCDRbxK9Do9SFrgatbdl72ZXVG3RmSMCi1Bbt4PYDHaWSzM
-         vT14e5zTh4To9mAxHnI8tUGwBUEYZq4deBH/Ez0GnkapAm+WJJ3CTljcvsBsC4gIPwbr
-         1+Nvaw8MVy5tWVTC7DfNoVP3xS7HsSBUodMYviETpam9BX3ayT+2kY8BcNQ2X/gn4q8Y
-         GGPlvo4CHg5OY3nwEF7+EGo8gSN3u11V9QtDqszif/nviRM+ZSZRO+yO6qp8IS50sHXj
-         hCXrUNC+J9a7ink9vgFwGcCxV4DtimlqTzzDIxTq3A5kb13ZPMPvhdoEAUv39tfpwwlZ
-         h6xQ==
-X-Gm-Message-State: AOAM530m7tQNWvYHpJxErsE++OBh0O4Me0GKXHEyGK2J7MTlgwVqdO8d
-        VqssfYOrKF+w6H7llx0SzWxFP8R45KrSE/J0hILBxCU3MOZ9iyf5+zPs/c60BY/qjrMxDdeNMCS
-        KCx6FiCqVXr5DsQQ8yhJczPGXve+0A9ETHxLPp5saow==
-X-Received: by 2002:a05:6512:1395:: with SMTP id p21mr10063208lfa.98.1639581323845;
-        Wed, 15 Dec 2021 07:15:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzSqjwtfFgEsXQmVVMjGxzT6u23CbpHjbBKaHBmzxKigW2rHXI/vvH2ToOQ3mNIqgQ+BBJjMw==
-X-Received: by 2002:a05:6512:1395:: with SMTP id p21mr10063195lfa.98.1639581323675;
-        Wed, 15 Dec 2021 07:15:23 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id h12sm362245lfc.239.2021.12.15.07.15.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 07:15:23 -0800 (PST)
-Message-ID: <90ce73cb-0dec-d7a7-9bb5-f10a8cd7c250@canonical.com>
-Date:   Wed, 15 Dec 2021 16:15:22 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9Q9Qi8wQrEoZWm5nsu6G4IHs86FT9L423fH5Q6OLkcA=;
+        b=qG1NojqR0tTWNn3GGlWZnvYoREX8GUC7ZypZUg1ESktYCOuv5j2U0yNu/r2nh31bNR
+         g+X/3A/qhOyqIeoYH3+7gcK+5l8hqYGwl4Kbs9Wb6fZjSNZZ8Zi5fYMNa8sk5ZJtBqra
+         WSZ2sm7LTufC7OVUqj8zcFMqoLxFvw0Bk9L2PyEQIDzuZrcM94VBps1bd4C9f9kqQm5E
+         IREy060oP+H7bjvQcy2bH+If0GJRQtkFQM6tWJz85rAX4mQFgPxs1SXeDM3hXCPp4Mvd
+         7GyHlugnUoqD7DnYdVFf90E3vOzA9TFasLKptJy1wS1ZlaOygSvUolGBF1R/QwtrMwyr
+         pxtg==
+X-Gm-Message-State: AOAM531hN7cY7uXjURIe96zcMQPVjbfX7sESALC+uGaht8ND3Ti/PXUW
+        7qwm6qSU4FghmipvrocGDDE=
+X-Google-Smtp-Source: ABdhPJwcQAhgd6tMvOqhOGQfwhmuxfi4/RnpfrTqDUixzz+Dbbo/ne0yrMPZtjGbR6B1DiRKXMbBAw==
+X-Received: by 2002:a05:600c:22cb:: with SMTP id 11mr212948wmg.181.1639581386791;
+        Wed, 15 Dec 2021 07:16:26 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id d1sm2211910wrz.92.2021.12.15.07.16.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 07:16:25 -0800 (PST)
+Date:   Wed, 15 Dec 2021 16:16:21 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        David Heidelberg <david@ixit.cz>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Anton Bambura <jenneron@protonmail.com>,
+        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
+        Nikola Milosavljevic <mnidza@outlook.com>,
+        Ion Agorria <ion@agorria.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Ihor Didenko <tailormoon@rambler.ru>,
+        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        Jasper Korten <jja2000@gmail.com>,
+        Thomas Graichen <thomas.graichen@gmail.com>,
+        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 15/28] ARM: tegra: Add usb-role-switch property to USB
+ OTG ports
+Message-ID: <YboGxZSi13OGByUQ@orome>
+References: <20211211211412.10791-1-digetx@gmail.com>
+ <20211211211412.10791-16-digetx@gmail.com>
+ <YbnqP0XAcUYc4ePy@orome>
+ <9cf23721-db53-830a-f634-d2215232f059@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v3 2/6] dt-bindings: memory: tegra: Add Tegra234 support
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-References: <20211213162151.916523-1-thierry.reding@gmail.com>
- <20211213162151.916523-3-thierry.reding@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211213162151.916523-3-thierry.reding@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="WYAJB0Pchkifo8CI"
+Content-Disposition: inline
+In-Reply-To: <9cf23721-db53-830a-f634-d2215232f059@gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2021 17:21, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> Document the variant of the memory controller and external memory
-> controllers found on Tegra234 and add some memory client and SMMU
-> stream ID definitions for use in device tree files.
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
-> Changes in v2:
-> - conditionally set minItems for reg properties
-> 
->  .../nvidia,tegra186-mc.yaml                   | 20 ++++++++++++
->  include/dt-bindings/clock/tegra234-clock.h    |  9 ++++++
->  include/dt-bindings/memory/tegra234-mc.h      | 32 +++++++++++++++++++
->  3 files changed, 61 insertions(+)
->  create mode 100644 include/dt-bindings/memory/tegra234-mc.h
-> 
 
+--WYAJB0Pchkifo8CI
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+On Wed, Dec 15, 2021 at 06:04:54PM +0300, Dmitry Osipenko wrote:
+> 15.12.2021 16:14, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Sun, Dec 12, 2021 at 12:13:59AM +0300, Dmitry Osipenko wrote:
+> >> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> >>
+> >> If an USB port is an OTG port, then we should add the usb-role-switch
+> >> property. Otherwise XUSB setup fails and therefore padctl is unable to
+> >> set up the ports. This leads to broken USB and PCIe ports. Add the
+> >> usb-role-switch properties to Tegra124 device-trees to fix the problem.
+> >>
+> >> The error message shown without this patch is e.g:
+> >> usb2-0: usb-role-switch not found for otg mode
+> >>
+> >> [digetx@gmail.com: improved commit message]
+> >> Tested-by: Thomas Graichen <thomas.graichen@gmail.com> # T124 Nyan Big
+> >> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> >> ---
+> >>  arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi | 1 +
+> >>  arch/arm/boot/dts/tegra124-apalis.dtsi      | 1 +
+> >>  arch/arm/boot/dts/tegra124-nyan.dtsi        | 1 +
+> >>  arch/arm/boot/dts/tegra124-venice2.dts      | 2 +-
+> >>  4 files changed, 4 insertions(+), 1 deletion(-)
+> >=20
+> > The device tree bindings for the XUSB pad controller say that when this
+> > property is set, then the "connector" subnode should also exist.
+> >=20
+> > Any chance we can add that? I was planning on making that a dependency
+> > in the json-schema conversion of the binding, in which case it would be
+> > more of a "must" than a "should".
+>=20
+> I guess it will be harmless if you'll add the connector subnodes. Will
+> you be able to create a separate patch that will add the subnodes on top
+> of this patch?
+>=20
+> Thomas Graichen says that one USB port on Nyan Big doesn't work without
+> this patch. This is why this patch is needed essentially.
 
+Okay, I can add "dummy" connector nodes for now. I don't see how we can
+properly set this up because as far as I can tell there's USB ID GPIO on
+Tegra124 (seems like it's a fixed function pin) and the VBUS GPIO is
+already used to enable the VBUS supply. The gpio-usb-b-connector binding
+required at least one of the ID and VBUS GPIOs to be specified.
 
-Provide me a stable tag with the headers, please.
+On the other hand, at least Venice2 has a USB type A connector for this,
+so I'm not even sure how that would work. I vaguely recall that the
+Tegra20 Seaboard also had a USB type A and that it was possible to use
+it in device mode, but I don't how that would. Nor would it be correct
+to use the gpio-usb-b-connector compatible for that since, well, it's
+not USB type B.
 
-Best regards,
-Krzysztof
+I suspect that Apalis has a micro-B port, much like the Jetson TK1. My
+understanding is that OTG doesn't work on Jetson TK1 (which is why it's
+configured in "host" mode), so it'd be interesting to see if this can be
+made to work on Apalis.
+
+Thierry
+
+--WYAJB0Pchkifo8CI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG6BsUACgkQ3SOs138+
+s6EdVA/9HoSwai41QHSPGL6ezVQADy/iGs9tHGDNypOX4IMF/UOYV3SNVHJDI5wG
+sJS1OFIlEHLj0+IaKsSjg3wLQvtPduWoO2Gdi/aTScPdiABe86xIOLPu9jv0I+/E
+MzhrVLnN+t0YYPkU/0uornbwd2UzgZTeyhn8Ey5E4NrtqdLXyVj+5q3UFrYpEn+Q
+ReMRZJ1RTXNzFqpOGTTW5pa4+sWx3ECaUV7Hwd2qY6Ezlun41U7EjoBvhNLPUowB
+A/k5CtdzwWHu5plpwquUwP8eDk9v53tYIgA2gPDtbf7xBMop2D4X/YFywIQTTos2
+wU5GcnFVpK1Yg+GAMJGieI/61UxMcYyJqinhY4qRtj4PR5Eo3pn4H7FVA+sG5CKb
+vPZWmv3n/UDAWlW0mQZZsgqtWwpgMLz2PN8AGZmfru/1pmCZrTStLORSDqMkv2Aq
+4SzSd6BBRfpiaJySaXr1aj+c7fPRN8niqOi1TFjnv8F5LNaqFvqOhfX9gylByvJc
+v8TOxMqu27+CtDdK3WlcmGEE2A5DdW4IPTXVSvR0f8KeoxDUOOW+nQc8300jA/iv
+EfHZfe+JsvP1pTNPE+9AdIg1C/us5ZSM1FcnMBvUB4mWX5sZjZ8GLLxJ2fPKJ7VP
+9dGQMD1y73vrMBLHLDNFNchAMKuUay+STSoLkpxvndJ3rcOtm1c=
+=Ut27
+-----END PGP SIGNATURE-----
+
+--WYAJB0Pchkifo8CI--

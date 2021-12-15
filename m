@@ -2,228 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B887A47630B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A267476303
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 21:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235542AbhLOUTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 15:19:30 -0500
-Received: from mail-dm6nam08on2051.outbound.protection.outlook.com ([40.107.102.51]:39221
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235425AbhLOUT3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 15:19:29 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kKvcneuB1MHSlzqzHCqFJbZVC9f3zYuJvDcgwEN9hGvy2dg+9Ko1xkqXmv9otOGPw9SvIUn9gC3ryuX0LxS08lTo1Pp+dFZ51eqKj3yZdV47YJsxg3W7zV+NO8p1ySwf2mOO28UKip4Onxm1Bt30xZTSp5Yd/Ya7klq20NztSpVxqek8BKigqDbfJ0CVogoqRrqQ9d3JmLfi1Tsy7krGsvX0r7R0IjSO+ukzNy7rvil4AnYyPSpW2ZHOknxObzoi9V2gXmIrXQxuiXpWYJUwOY7a4tLRc3HRT7C4g9JTHBrxRfDTyoiSrX6IrFCDPvqjnSsaZilN0V7Xx0zO/Z+syg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jluifcnSuGncFW4f+lZK43WK4tu4gdrY95lopL4LdQ0=;
- b=ee8IE+NTwovEAMmUEKvewAfBGN/2L31+d3Pj5nbre4GspgvnkSOIg+Q5fbi/Cl3dJegBon0ylshxzbVvaaiLZQp+mY8WPO8Wd3UrXPZf34MStX6sqabg5eP+4V/M4J8UKP/1MNtWBA4kPo/9YLeoiIstMNf3HOymfN2hWvkIhDu565E6QJ5/cVc6LNCvTf8iROVP8Q8Cda3UlAP3kOxjSeUABV2uRhV5GSzwY886D5M+zeohNnrRRxxmFNAatUjiIfrgY08foH7u+8Rdo831TDEAZzfvtOx9D2jX0q+fRLpA06xpDnkmU+VLhapw0il7X+oRjjkCdfkwgcyJaUWXdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jluifcnSuGncFW4f+lZK43WK4tu4gdrY95lopL4LdQ0=;
- b=tmEAncar0EAUXkBtCQU8mtNPjTJ/JzjveriQdSAZczYuXfxlg7CeG6WCYqLlz7638x2/lkzbsCvJ3XQK8OCUA93QcBQZ431cZ7TWupuAFtJWFMKbXskY+cV1+RMY9sXx5wvrlsudFEgWeQumFcvzOO+MZD3xRi9FapWSuZ+1zfQ=
-Received: from MWHPR14CA0064.namprd14.prod.outlook.com (2603:10b6:300:81::26)
- by CY4PR1201MB0070.namprd12.prod.outlook.com (2603:10b6:910:18::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16; Wed, 15 Dec
- 2021 20:19:25 +0000
-Received: from CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:81:cafe::77) by MWHPR14CA0064.outlook.office365.com
- (2603:10b6:300:81::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.13 via Frontend
- Transport; Wed, 15 Dec 2021 20:19:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT066.mail.protection.outlook.com (10.13.175.18) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4778.13 via Frontend Transport; Wed, 15 Dec 2021 20:19:24 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 15 Dec
- 2021 14:19:23 -0600
-Date:   Wed, 15 Dec 2021 14:17:34 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Venu Busireddy <venu.busireddy@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Srinivas Pandruvada" <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        "Tobin Feldman-Fitzthum" <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v8 01/40] x86/compressed/64: detect/setup SEV/SME
- features earlier in boot
-Message-ID: <20211215201734.glq5gsle6crj25sf@amd.com>
-References: <20211210154332.11526-2-brijesh.singh@amd.com>
- <YbeaX+FViak2mgHO@dt>
- <YbecS4Py2hAPBrTD@zn.tnic>
- <YbjYZtXlbRdUznUO@dt>
- <YbjsGHSUUwomjbpc@zn.tnic>
- <YbkzaiC31/DzO5Da@dt>
- <b18655e3-3922-2b5d-0c35-1dcfef568e4d@amd.com>
- <20211215174934.tgn3c7c4s3toelbq@amd.com>
- <YboxSPFGF0Cqo5Fh@dt>
- <Ybo1C6kpcPJBzMGq@zn.tnic>
+        id S235467AbhLOUSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 15:18:04 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:44876 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235425AbhLOUSE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 15:18:04 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 1873F1C0B98; Wed, 15 Dec 2021 21:18:02 +0100 (CET)
+Date:   Wed, 15 Dec 2021 21:18:00 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Enrico Weigelt <lkml@metux.net>
+Subject: Re: [PATCH v5 2/4] leds: simatic-ipc-leds: add new driver for
+ Siemens Industial PCs
+Message-ID: <20211215201800.GA28336@duo.ucw.cz>
+References: <20211213120502.20661-1-henning.schild@siemens.com>
+ <20211213120502.20661-3-henning.schild@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="+HP7ph2BbKc20aGI"
 Content-Disposition: inline
-In-Reply-To: <Ybo1C6kpcPJBzMGq@zn.tnic>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB03.amd.com
- (10.181.40.144)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 75f638b2-b570-4e75-6441-08d9c0082fee
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB0070:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR1201MB007060973F83A14EF3EEA2FC95769@CY4PR1201MB0070.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IOeh7EaE+fs9Xwoobxs3qCYvHIwtg0XUUU9AWbNcrCjKCB3vcplAIhNvCgYxIgFyInqbBRwfnPGR3CAy/9JXOWBguzMsLS9ffBTlwoMBS4jVe5CUWk6L96r8mIX4VI9JhBlIIWp0dNuU1xhWPfzMO9knb4/8fh2Dux8SmW1eAmP9BQavdNbHXRCh3VOgg0uAYeIh/OtOvA9WXIZzxyey95ZDv2psK1lVIfPOOaPYLPd9w+ehoqvpPTcTr4ixaoHwJ0+sJngFCvRMl+JhGiUOduPxPo1xj0iPtKQgokvLCYNRb+i4rLBQ78w5GBUMWlFLztQcQDje8PLb0puDgv8HrHAkeImvoCslzmkaPHR5QBRhCFNp7eiTL713kNOle/UwrofuWjF+2xgoIe0sG3j6ge16cyYX29NRlHnxIaA3xoZh0iXSVXpoO4hT7k+ae7/Uo8xJCI3s+InJXGMsKFbnJX/JJa0VFrQHx9oYqxbrGPDkioG4+2Cuh32xVoaFivNyNV+wLkXq7paMJ1B8hQp9eIZWQ3kWvTjjqC+XiD6hBY1E1Yi56TuXglh/+mYtXdgdT/UHasDWJl9f5OSGAZURRvRBtpmD1WPlxGPCs6+gxHrbaMrqaZsc/UupqNzia2cPF78JHfZQu21bEfVWwExqfhuP5XhiegneXJE0XcJMa4TLGKhLuVku8N954A0LNU7yKOn2Se6JtnPrxVqPMqskFSVj3keIcPLvXg0wfy438jtKfDmhSxrpXR0hg5/UKf/NBkKUiqLSdiE0Q73Q8UIRli0Np33Bag72uMzZCi02t9lG7bmbCZhSdgF+sQXaDcCNt99+0CZ92zm0sutYRFmNReQvTYBqmVBbZIzCz9IHhpTgMWtcapkWC3n3j4SCHG7Z
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(426003)(186003)(40460700001)(86362001)(47076005)(26005)(8936002)(1076003)(7406005)(81166007)(336012)(82310400004)(16526019)(83380400001)(36756003)(2616005)(44832011)(8676002)(356005)(36860700001)(70586007)(2906002)(7416002)(5660300002)(316002)(70206006)(54906003)(45080400002)(6916009)(4326008)(6666004)(508600001)(966005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 20:19:24.4497
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75f638b2-b570-4e75-6441-08d9c0082fee
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0070
+In-Reply-To: <20211213120502.20661-3-henning.schild@siemens.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 07:33:47PM +0100, Borislav Petkov wrote:
-> On Wed, Dec 15, 2021 at 12:17:44PM -0600, Venu Busireddy wrote:
-> > Boris & Tom, which implementation would you prefer?
-> 
-> I'd like to see how that sme_sev_parse_cpuid() would look like. And that
-> function should be called sev_parse_cpuid(), btw.
-> 
-> Because if that function turns out to be a subset of your suggestion,
-> functionality-wise, then we should save us the churn and simply do one
-> generic helper.
 
-I was actually thinking this proposed sev_parse_cpuid() helper would be
-a superset of what Venu currently has implemented. E.g. Venu's most recent
-patch does:
+--+HP7ph2BbKc20aGI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-sev_enable():
-  unsigned int me_bit_pos;
+On Mon 2021-12-13 13:05:00, Henning Schild wrote:
+> This driver adds initial support for several devices from Siemens. It is
+> based on a platform driver introduced in an earlier commit.
+>=20
+> One of the supported machines has GPIO connected LEDs, here we poke GPIO
+> memory directly because pinctrl does not come up.
+>=20
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
 
-  me_bit_pos = get_me_bit(AMD_SEV_BIT)
-  if (!me_bit_pos)
-    return;
+Acked-by: Pavel Machek <pavel@ucw.cz>
 
-  ...
+> index c636ec069612..1a719caf14c0 100644
+> --- a/drivers/leds/Makefile
+> +++ b/drivers/leds/Makefile
+> @@ -105,3 +105,6 @@ obj-$(CONFIG_LEDS_TRIGGERS)		+=3D trigger/
+> =20
+>  # LED Blink
+>  obj-y					+=3D blink/
+> +
+> +# Simple LED drivers
+> +obj-y					+=3D simple/
+> diff --git a/drivers/leds/simple/Kconfig b/drivers/leds/simple/Kconfig
+> new file mode 100644
+> index 000000000000..9f6a68336659
+> --- /dev/null
+> +++ b/drivers/leds/simple/Kconfig
+> @@ -0,0 +1,11 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +config LEDS_SIEMENS_SIMATIC_IPC
+> +	tristate "LED driver for Siemens Simatic IPCs"
+> +	depends on LEDS_CLASS
+> +	depends on SIEMENS_SIMATIC_IPC
+> +	help
+> +	  This option enables support for the LEDs of several Industrial PCs
+> +	  from Siemens.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called simatic-ipc-leds.
+> diff --git a/drivers/leds/simple/Makefile b/drivers/leds/simple/Makefile
+> new file mode 100644
+> index 000000000000..8481f1e9e360
+> --- /dev/null
+> +++ b/drivers/leds/simple/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+=3D simatic-ipc-leds.o
+> diff --git a/drivers/leds/simple/simatic-ipc-leds.c b/drivers/leds/simple=
+/simatic-ipc-leds.c
+> new file mode 100644
+> index 000000000000..ff2c96e73241
+> --- /dev/null
+> +++ b/drivers/leds/simple/simatic-ipc-leds.c
+> @@ -0,0 +1,202 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Siemens SIMATIC IPC driver for LEDs
+> + *
+> + * Copyright (c) Siemens AG, 2018-2021
+> + *
+> + * Authors:
+> + *  Henning Schild <henning.schild@siemens.com>
+> + *  Jan Kiszka <jan.kiszka@siemens.com>
+> + *  Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+> + */
+> +
+> +#include <linux/ioport.h>
+> +#include <linux/kernel.h>
+> +#include <linux/leds.h>
+> +#include <linux/module.h>
+> +#include <linux/pci.h>
+> +#include <linux/platform_data/x86/simatic-ipc-base.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/sizes.h>
+> +#include <linux/spinlock.h>
+> +
+> +#define SIMATIC_IPC_LED_PORT_BASE	0x404E
+> +
+> +struct simatic_ipc_led {
+> +	unsigned int value; /* mask for io and offset for mem */
+> +	char *name;
+> +	struct led_classdev cdev;
+> +};
+> +
+> +static struct simatic_ipc_led simatic_ipc_leds_io[] =3D {
+> +	{1 << 15, "green:" LED_FUNCTION_STATUS "-1" },
+> +	{1 << 7,  "yellow:" LED_FUNCTION_STATUS "-1" },
+> +	{1 << 14, "red:" LED_FUNCTION_STATUS "-2" },
+> +	{1 << 6,  "yellow:" LED_FUNCTION_STATUS "-2" },
+> +	{1 << 13, "red:" LED_FUNCTION_STATUS "-3" },
+> +	{1 << 5,  "yellow:" LED_FUNCTION_STATUS "-3" },
+> +	{ }
+> +};
+> +
+> +/* the actual start will be discovered with PCI, 0 is a placeholder */
+> +struct resource simatic_ipc_led_mem_res =3D DEFINE_RES_MEM_NAMED(0, SZ_4=
+K, KBUILD_MODNAME);
+> +
+> +static void *simatic_ipc_led_memory;
+> +
+> +static struct simatic_ipc_led simatic_ipc_leds_mem[] =3D {
+> +	{0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS "-1"},
+> +	{0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS "-1"},
+> +	{0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS "-2"},
+> +	{0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS "-2"},
+> +	{0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS "-3"},
+> +	{0x500 + 0x198, "green:" LED_FUNCTION_STATUS "-3"},
+> +	{ }
+> +};
 
-Let's say in the future there's need to also grab say, the VTE bit. We
-could introduce a new helper, get_vte_bit() that re-does all the
-0x80000000-0x8000001F range checks, some sanity checks that SEV is set if
-VTE bit is set, and then now have a nice single-purpose helper that
-duplicates similar checks in get_me_bit(), or we could avoid the
-duplication by expanding get_me_bit() so it could be used something like:
+Would it be possible to get some better naming for leds? status-1 to
+status-3 is not quite useful.
 
-  me_bit_pos = get_me_bit(AMD_SEV_BIT, &vte_enabled)
+Best regards,
+								Pavel
+--=20
+http://www.livejournal.com/~pavelmachek
 
-at which point it makes more sense to just have it be a more generic
-helper, called via:
+--+HP7ph2BbKc20aGI
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  ret = sev_parse_cpuid(AMD_SEV_BIT, &me_bit_pos, &vte_enabled)
+-----BEGIN PGP SIGNATURE-----
 
-i.e. Venu's original patch basically, but with the helper function
-renamed.
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYbpNeAAKCRAw5/Bqldv6
+8uoeAJ4sl3uW+00Q8GOt0tXn49BH4Z1o1wCgvOZQDi8nnAbyEUDsGST+vgva3F4=
+=0S8D
+-----END PGP SIGNATURE-----
 
-and if fields are added in the future:
-
-  sev_parse_cpuid(AMD_SEV_BIT, &me_bit_pos, &vte_enabled, &new_feature_enabled, etc..)
-
-or if that eventually becomes unwieldly it could later be changed to return
-a feature mask.
-
-> 
-> Btw 2, that helper should be in arch/x86/kernel/sev-shared.c so that it
-> gets shared by both kernel stages instead having an inline function in
-> some random header.
-> 
-> Btw 3, I'm not crazy about the feature testing with the @features param
-> either. Maybe that function should return the eYx register directly,
-> like the cpuid_eYx() variants in the kernel do, where Y in { a, b, c, d
-> }.
-> 
-> The caller can than do its own testing:
-> 
-> 	eax = sev_parse_cpuid(RET_EAX, ...)
-> 	if (eax > 0) {
-> 		if (eax & BIT(1))
-> 			...
-> 
-> Something along those lines, for example.
-
-I think having sev_parse_cpuid() using a more "human-readable" format
-for reporting features/fields will make it easier to abstract away the
-nitty-gritty details and reduce that chances for more duplication
-between boot/compressed and kernel proper in the future. That
-"human-readable" format could be in the form of a boolean/int
-parameter list that gets expanded over time as needed (like the above
-examples), or a higher-level construct like a struct/bitmask/etc. But
-either way it would be nice to only have to think about specific CPUID
-bits when looking at sev_parse_cpuid(), and have callers instead rely
-purely on the sev_parse_cpuid() function prototype/documentation to
-know what's going on.
-
-> 
-> But I'd have to see a concrete diff from Michael to get a better idea
-> how that CPUID parsing from the CPUID page is going to look like.
-
-It should look the same with/without CPUID page, since the CPUID page
-will have already been set up early in sev_enable()/sme_enable() based
-on the presence of the CC blob via snp_init(), introduced in:
-
- [PATCH v8 31/40] x86/compressed: add SEV-SNP feature detection/setup
-
-Thanks,
-
-Mike
-
-> 
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpeople.kernel.org%2Ftglx%2Fnotes-about-netiquette&amp;data=04%7C01%7Cmichael.roth%40amd.com%7C6a28b961ef1441ed08f908d9bff970ea%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637751900351173552%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=nnCrpsw9%2FYlmhK1Xbx5y5vUScVsEOQeU%2F%2FTCmBMQ3v4%3D&amp;reserved=0
+--+HP7ph2BbKc20aGI--

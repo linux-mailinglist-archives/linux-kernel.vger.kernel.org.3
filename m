@@ -2,69 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C73A475DB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 775B5475DBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 17:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244948AbhLOQnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 11:43:10 -0500
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:44189 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231801AbhLOQnJ (ORCPT
+        id S244957AbhLOQna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 11:43:30 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:33992 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231883AbhLOQn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:43:09 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R281e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=laijs@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V-jf2Ei_1639586585;
-Received: from 30.32.64.86(mailfrom:laijs@linux.alibaba.com fp:SMTPD_---0V-jf2Ei_1639586585)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 16 Dec 2021 00:43:07 +0800
-Message-ID: <73990f49-bb72-5f73-06e4-667d92a94408@linux.alibaba.com>
-Date:   Thu, 16 Dec 2021 00:43:05 +0800
+        Wed, 15 Dec 2021 11:43:28 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D8BCB21112;
+        Wed, 15 Dec 2021 16:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1639586606; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mc+NOCo8gFAcIat9O5ZbYkdJnvydq3UrnGWVFeBnwXA=;
+        b=Q56ITFqIWCHrKTC7YasLp1lMw54M3KUsiRTZ4gfVQWE6WA7gsbGbmZDIS83d1UyQp7BvFb
+        inU5dlvW7aiw8oavyg35HXewcF1kieK2HvzZyfwSA6FlCEsk4xaQievz7AuYFDOPU5/EPC
+        1kXdJZ9gMbBxP5fddEV+fUBqNNacyUQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1639586606;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mc+NOCo8gFAcIat9O5ZbYkdJnvydq3UrnGWVFeBnwXA=;
+        b=VIiUza+iTA5qjLV6YQpqFmNZF67sEdrklSc2+Gth5pfWfwWTRaL9/3noJK1lSSyGnwvvTM
+        ruFoHWaCX7PAG5Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8C37813B75;
+        Wed, 15 Dec 2021 16:43:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pCmoIS4bumEIKAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 15 Dec 2021 16:43:26 +0000
+Message-ID: <97b96d36-434e-fb4e-3e0f-7c96faa9cef9@suse.cz>
+Date:   Wed, 15 Dec 2021 17:43:26 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [PATCH 11/15] KVM: VMX: Update vmcs.GUEST_CR3 only when the guest
- CR3 is dirty
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 11/66] mm/mmap: Use maple tree for
+ unmapped_area{_topdown}
 Content-Language: en-US
-From:   Lai Jiangshan <laijs@linux.alibaba.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-References: <20211108124407.12187-1-jiangshanlai@gmail.com>
- <20211108124407.12187-12-jiangshanlai@gmail.com>
- <0271da9d3a7494d9e7439d4b8d6d9c857c83a45e.camel@redhat.com>
- <604709fa-e8bd-4eb6-6b79-8bf031a785ce@linux.alibaba.com>
-In-Reply-To: <604709fa-e8bd-4eb6-6b79-8bf031a785ce@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-12-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211201142918.921493-12-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2021/12/16 00:31, Lai Jiangshan wrote:
-
+On 12/1/21 15:29, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 > 
-> What I missed is the case of "if (!enable_unrestricted_guest && !is_paging(vcpu))"
-> in vmx_load_mmu_pgd() which doesn't load GUEST_CR3 but clears dirty of VCPU_EXREG_CR3
-> (when after next run).
+> The maple tree code was added to find the unmapped area in a previous
+> commit and was checked against what the rbtree returned, but the actual
+> result was never used.  Start using the maple tree implementation and
+> remove the rbtree code.
 
-Oops.
+Nice cleanup. But...
 
-What I missed is the case of "if (!enable_unrestricted_guest && !is_paging(vcpu))"
-in vmx_load_mmu_pgd() which doesn't load GUEST_CR3 with the guest cr3 and
-VCPU_EXREG_CR3 dirty bit is cleared after VMEXIT.  When !PG -> PG, GUEST_CR3 is
-still the ept_identity_map_addr, and VCPU_EXREG_CR3 dirty bit is not set, so
-vmx_load_mmu_pgd() doesn't update GUEST_CR3.
-
-
-> So when CR0 !PG -> PG, VCPU_EXREG_CR3 dirty bit should be set.
+> Add kernel documentation comment for these functions.
 > 
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+
+>  
+>  	/* Adjust search length to account for worst case alignment overhead */
+>  	length = info->length + info->align_mask;
+>  	if (length < info->length)
+>  		return -ENOMEM;
+>  
+> -	rcu_read_lock();
+> -	mas_empty_area_rev(&mas, info->low_limit, info->high_limit - 1,
+> -			   length);
+> -	rcu_read_unlock();
+
+Why is RCU locking being removed as part of this? Ditton in
+unmapped_area_topdown()

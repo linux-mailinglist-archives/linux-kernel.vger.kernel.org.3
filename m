@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88872474F86
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B59474F88
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 01:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238639AbhLOAti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 19:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
+        id S238661AbhLOAtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 19:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbhLOAti (ORCPT
+        with ESMTP id S238641AbhLOAtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 19:49:38 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92194C061574;
-        Tue, 14 Dec 2021 16:49:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=FzXY7sl5S8h2qdDHdwMRvfifQOha1K6MVJQWY3VouUE=; b=FmetdnOjOQ4EZC5waJ/JR2z1Mu
-        e9Ed69AFfl7jAP2LroGmGeKKenHO4w2NxjKwLsqEGoc2LcEunt5N9w4sPPXiNxG5IKSaHqoeFrA1N
-        +bvp0EIkam8bSHWcTs2VXHHQbN7zTGK4wcRfr7zfneQlaHZ2blMPC2Gf9Nk+XeAlEG32jESXoIEZR
-        arGActGv64VhWB9d2SsUWOoUrVN1lZKcW54Dq57NVx4Eon5mBuOUqbN9h7gYk9YunZjAx9Et9tRZP
-        ymx8bWns8p2DlCKf2BEze4G7eUPsodhdItAm6QP24mPabLNLXq0gKAmfZ0hEagINSGOabErIfdFx3
-        GDhgKUlw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56292)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mxITw-0005cX-Bi; Wed, 15 Dec 2021 00:49:20 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mxITq-0003zB-Kq; Wed, 15 Dec 2021 00:49:14 +0000
-Date:   Wed, 15 Dec 2021 00:49:14 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Marcin Wojtas <mw@semihalf.com>, UNGLinuxDriver@microchip.com,
-        "David S . Miller" <davem@davemloft.net>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] net: phylink: Pass state to pcs_config
-Message-ID: <Ybk7iuxdin69MjTo@shell.armlinux.org.uk>
-References: <20211214233450.1488736-1-sean.anderson@seco.com>
- <YbkshnqgXP7Gd188@shell.armlinux.org.uk>
- <de1f7214-58c8-cdc6-1d29-08c979ce68f1@seco.com>
+        Tue, 14 Dec 2021 19:49:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56E4C06173E;
+        Tue, 14 Dec 2021 16:49:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95C14B81DFD;
+        Wed, 15 Dec 2021 00:49:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E64C34601;
+        Wed, 15 Dec 2021 00:49:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639529386;
+        bh=FZKl3tGfrowl5Ti7tX7JSdDJMVveBK63MZ1TCe4VWaA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jj3b3SgFhHnCFW1lJXQRXxR67BMC9ieccEdiaFUqH2GO8+TEokXFiBAmqk6+D561L
+         y/pyo4mFtnWvKRkcNH9EVuwyF5oUSLSDJDmfAt+YgFZqWw4GVljKicJlpA6q8x/Nd1
+         qIkSgECnpTv06qHJ+qa2OTyBhjeYYg5FnaiHpWMewF9s/WMaShUkuubZttE6n/Qxpc
+         vgjglmKasHoaAf22Js0hTbb1vI2eKdfR3PeIwjMgOeRv8H2jH8b3NykbJEa5OJk4P1
+         vkdi5xKzYqmb2E/jOtibYoiEOd2S8ZST9EK7kzb2E58yVslGABW+1Xo9/3D4DNqgaY
+         GGtxSjADmAqew==
+Date:   Tue, 14 Dec 2021 16:49:45 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+Subject: Re: [PATCH v2] ext4: set csum seed in tmp inode while migrating to
+ extents
+Message-ID: <20211215004945.GD69182@magnolia>
+References: <20211214175058.19511-1-lhenriques@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <de1f7214-58c8-cdc6-1d29-08c979ce68f1@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211214175058.19511-1-lhenriques@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 07:16:53PM -0500, Sean Anderson wrote:
-> Ok, so let me clarify my understanding. Perhaps this can be eliminated
-> through a different approach.
+On Tue, Dec 14, 2021 at 05:50:58PM +0000, Luís Henriques wrote:
+> When migrating to extents, the temporary inode will have it's own checksum
+> seed.  This means that, when swapping the inodes data, the inode checksums
+> will be incorrect.
 > 
-> When I read the datasheet for mvneta (which hopefully has the same
-> logic here, since I could not find a datasheet for an mvpp2 device), I
-> noticed that the Pause_Adv bit said
+> This can be fixed by recalculating the extents checksums again.  Or simply
+> by copying the seed into the temporary inode.
 > 
-> > It is valid only if flow control mode is defined by Auto-Negotiation
-> > (as defined by the <AnFcEn> bit).
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=213357
+> Reported-by: Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>  fs/ext4/migrate.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 > 
-> Which I interpreted to mean that if AnFcEn was clear, then no flow
-> control was advertised. But perhaps it instead means that the logic is
-> something like
+> changes since v1:
 > 
-> if (AnFcEn)
-> 	Config_Reg.PAUSE = Pause_Adv;
-> else
-> 	Config_Reg.PAUSE = SetFcEn;
+> * Dropped tmp_ei variable
+> * ->i_csum_seed is now initialised immediately after tmp_inode is created
+> * New comment about the seed initialization and stating that recovery
+>   needs to be fixed.
 > 
-> which would mean that we can just clear AnFcEn in link_up if the
-> autonegotiated pause settings are different from the configured pause
-> settings.
+> Cheers,
+> --
+> Luís
+> 
+> diff --git a/fs/ext4/migrate.c b/fs/ext4/migrate.c
+> index 7e0b4f81c6c0..36dfc88ce05b 100644
+> --- a/fs/ext4/migrate.c
+> +++ b/fs/ext4/migrate.c
+> @@ -459,6 +459,17 @@ int ext4_ext_migrate(struct inode *inode)
+>  		ext4_journal_stop(handle);
+>  		goto out_unlock;
+>  	}
+> +	/*
+> +	 * Use the correct seed for checksum (i.e. the seed from 'inode').  This
+> +	 * is so that the metadata blocks will have the correct checksum after
+> +	 * the migration.
+> +	 *
+> +	 * Note however that, if a crash occurs during the migration process,
+> +	 * the recovery process is broken because the tmp_inode checksums will
+> +	 * be wrong and the orphans cleanup will fail.
 
-Having actually played with this hardware quite a bit and observed what
-it sends, what it implements for advertising is:
+...and then what does the user do?
 
-	Config_Reg.PAUSE = Pause_Adv;
+--D
 
-Config_Reg gets sent over the 1000BASE-X link to the link partner, and
-we receive Remote_Reg from the link partner.
-
-Then, the hardware implements:
-
-	if (AnFcEn)
-		MAC_PAUSE = Config_Reg.PAUSE & Remote_Reg.PAUSE;
-	else
-		MAC_PAUSE = SetFcEn;
-
-In otherwords, AnFcEn controls whether the result of autonegotiation
-or the value of SetFcEn controls whether the MAC enables symmetric
-pause mode.
-
-Pause_Adv comes from the advertisement, and this is controlled from
-ethtool -s and somewhat by ethtool -A.
-
-AnFcEn is controlled purely and only by ethtool -A ... autoneg on|off.
-You can't derive this from "state".
-
-SetFcEn comes from ethtool -A ... tx and rx parameters (which must
-both be on or both be off.)
-
-Since we have no knowledge what Remote_Reg contains (it's not made
-accessible by the hardware), it's impossible to derive whether the
-autonegotiated pause settings are different from the configured pause
-settings.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> +	 */
+> +	ei = EXT4_I(inode);
+> +	EXT4_I(tmp_inode)->i_csum_seed = ei->i_csum_seed;
+>  	i_size_write(tmp_inode, i_size_read(inode));
+>  	/*
+>  	 * Set the i_nlink to zero so it will be deleted later
+> @@ -502,7 +513,6 @@ int ext4_ext_migrate(struct inode *inode)
+>  		goto out_tmp_inode;
+>  	}
+>  
+> -	ei = EXT4_I(inode);
+>  	i_data = ei->i_data;
+>  	memset(&lb, 0, sizeof(lb));
+>  

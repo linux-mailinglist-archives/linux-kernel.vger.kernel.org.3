@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8854475005
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A16475004
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 02:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238899AbhLOBBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 20:01:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37895 "EHLO
+        id S238856AbhLOBBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 20:01:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43738 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238751AbhLOBA7 (ORCPT
+        by vger.kernel.org with ESMTP id S238749AbhLOBBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 20:00:59 -0500
+        Tue, 14 Dec 2021 20:01:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1639530059;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jBTKxPeGB31tYrcCVudga0Xd94MnfSm4hqMjeexwQ7g=;
-        b=P5WFcZ5JOF+OKOcWSB0ksjYvYeQQtGJKlL8kdfaa+2Aipb7NhcuCLmjHhGHYIgZb08642Y
-        CgVJzC/KYx4SIv6fbA5UmB7G6OQo+YxOIe7zNc6ZqBPBeyz6T8PwE1DN5NwfYno1VKP4hM
-        8B8nhZLNWguODDfg2hftZUktJTs8cEg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=hlwmMpDs7rI0oeMFDz50CNwBVV8B4o70fliBdr6Ssvs=;
+        b=iy+nrBSv4iChvShmevO+nTzGj7sRdsYZgoIEBicK612UVntNfZEJQ/n3F+pZnKVHVFol7V
+        PHD3yphwbT35pBhWH3ex7b4zeBxGehkszixTb+Dy2NBYH/zlFF5RrGx6dgRqwnhvCiclw2
+        eI29dTMIcQ4v00M0wY1ddYoJl9V+tys=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-loB_khSMMXyWoQsee0nO4g-1; Tue, 14 Dec 2021 20:00:58 -0500
-X-MC-Unique: loB_khSMMXyWoQsee0nO4g-1
-Received: by mail-wr1-f71.google.com with SMTP id v17-20020adfedd1000000b0017c5e737b02so5368084wro.18
+ us-mta-653-kfhPCWFvMnG0attEna81-Q-1; Tue, 14 Dec 2021 20:00:58 -0500
+X-MC-Unique: kfhPCWFvMnG0attEna81-Q-1
+Received: by mail-wm1-f72.google.com with SMTP id a85-20020a1c7f58000000b0033ddc0eacc8so13865832wmd.9
         for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 17:00:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jBTKxPeGB31tYrcCVudga0Xd94MnfSm4hqMjeexwQ7g=;
-        b=UUNhMp7vpwxFCfWDbXVry8h00OpRBfR6kpR88R8oY1KWYvxvHpUIs4XJjEbnLbymvR
-         8sf1Y3SKcAN92t3RuXCXxvb0yJbPoT/vtQPWJLjvAglPCuBzGzAMzvHGtUiqAqTVB7Fk
-         ZZjJxlNRBLr1t5RIp67TdZxC7xduBt7YY+OfU14Ct41XLt4PqGIBpzlU4FcvLJU55rxc
-         S8P3Zq3fSHofxOJFu8fhdz0csnXNgH1Jr4ZOY+0Eew4khQGdg5jIoNi7DhOcfQTJ2QlQ
-         Q83hbZSyc8Te3TfhvHxZ35rw/Dt2k4H6b7Zy3W7HxjEmruA7PIT2KXSJPNhBmu4y9r/s
-         ZYIA==
-X-Gm-Message-State: AOAM53380O7yfrYhdR54GDvKFgttRq/n12SzS2Os0PKnefmPtxJ2d/Ow
-        VZCLg45djphMSb8k93kRN35093UAVoMR50hq5ntJ4OjHzfy3acsFBrpMPDfks7rOY/ML7q/cLv/
-        Jta+YaqhDV1IaakoVyEAfMM5XRQl/Ey6AEqrF2QI1HDT6GQzJ4EI7Hm42HOUuqkFlFOvGiVASae
-        8=
-X-Received: by 2002:a5d:4a84:: with SMTP id o4mr1419949wrq.295.1639530056917;
-        Tue, 14 Dec 2021 17:00:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyItXA3rJrb3rM7E1UOBx0yrgeihNb1i2VAfL998yRE15d9H9HahBJ3qU8bKTePTqUW7O/9TA==
-X-Received: by 2002:a5d:4a84:: with SMTP id o4mr1419939wrq.295.1639530056729;
-        Tue, 14 Dec 2021 17:00:56 -0800 (PST)
+        bh=hlwmMpDs7rI0oeMFDz50CNwBVV8B4o70fliBdr6Ssvs=;
+        b=lQdGApnCy/6XOtfDHLTAp2wZEV/Ff2xXWyrFiSMVhZqw5qMfdmRVDfd316txBfvxFi
+         FNC7j1UBS6Fc6LM5COYu4j5vJUVnSNM8yt0rXoW+YJ+wxl8x8hbh6LezwS7wHD8manSN
+         tEk2loGFiVL7ZkoeTWqTzfSThJ0+V5ALxroY4/EsVu+PJL7amhwRhGXmXTjaE+uJlGkh
+         dAIqrG6wteXVPZsn7TiwUtxLPUMwLOPS7DZ1Vaa27RXnaZ3ZUnOPXqS98c6Nm1ULQN+d
+         eFkfgfg/SzTiqONbye5R/UwLTDH1DxeKLwpmWrf2UeQv2bE3HUGpj0Q9n8JwWMfxZTB+
+         gnuQ==
+X-Gm-Message-State: AOAM532ZmKFF9Dzzc1fTfTibm6FdOgdVVGS5VMtxX+nRYYR9oq4ZpA5R
+        Bni8n0g336v1g1UCKI8ye/WqF2pUJni2AzAAKedoFcCy0o1enh/c1swx7gT341wtARaqENF8w3j
+        2GggQr95cyN0zV6xG/O9PEUvNf00WqWj2caNFl1HTa3HRjnTcQ1cbSiOVj4fGXMVNymFBEEw4Tb
+        o=
+X-Received: by 2002:a1c:2:: with SMTP id 2mr2292573wma.41.1639530057613;
+        Tue, 14 Dec 2021 17:00:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwNXHTo+e2PB/eHuFET+/zbQRmAraTRzbs4BC9O1M1wtzs+H5k80hNY0ix6RAXDNXF/Bpcp6Q==
+X-Received: by 2002:a1c:2:: with SMTP id 2mr2292557wma.41.1639530057411;
+        Tue, 14 Dec 2021 17:00:57 -0800 (PST)
 Received: from minerva.home ([92.176.231.205])
         by smtp.gmail.com with ESMTPSA id o64sm334543wme.28.2021.12.14.17.00.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 17:00:56 -0800 (PST)
+        Tue, 14 Dec 2021 17:00:57 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>
-Subject: [PATCH 08/60] drm/exynos: Add support for the nomodeset kernel parameter
-Date:   Wed, 15 Dec 2021 01:59:16 +0100
-Message-Id: <20211215010008.2545520-9-javierm@redhat.com>
+        Alison Wang <alison.wang@nxp.com>,
+        Stefan Agner <stefan@agner.ch>
+Subject: [PATCH 09/60] drm/fsl-dcu: Add support for the nomodeset kernel parameter
+Date:   Wed, 15 Dec 2021 01:59:17 +0100
+Message-Id: <20211215010008.2545520-10-javierm@redhat.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211215010008.2545520-1-javierm@redhat.com>
 References: <20211215010008.2545520-1-javierm@redhat.com>
@@ -82,23 +82,23 @@ to also support the command line parameter.
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
 
- drivers/gpu/drm/exynos/exynos_drm_drv.c | 3 +++
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/exynos/exynos_drm_drv.c b/drivers/gpu/drm/exynos/exynos_drm_drv.c
-index d8f1cf4d6b69..f9f10413a4f2 100644
---- a/drivers/gpu/drm/exynos/exynos_drm_drv.c
-+++ b/drivers/gpu/drm/exynos/exynos_drm_drv.c
-@@ -464,6 +464,9 @@ static int exynos_drm_init(void)
- {
+diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+index 660fe573db96..9b9e1b200005 100644
+--- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
++++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+@@ -255,6 +255,9 @@ static int fsl_dcu_drm_probe(struct platform_device *pdev)
  	int ret;
+ 	u8 div_ratio_shift = 0;
  
 +	if (drm_firmware_drivers_only())
 +		return -ENODEV;
 +
- 	ret = exynos_drm_register_devices();
- 	if (ret)
- 		return ret;
+ 	fsl_dev = devm_kzalloc(dev, sizeof(*fsl_dev), GFP_KERNEL);
+ 	if (!fsl_dev)
+ 		return -ENOMEM;
 -- 
 2.33.1
 

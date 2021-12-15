@@ -2,116 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A49476181
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EB2476186
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 20:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344186AbhLOTSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 14:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
+        id S1344194AbhLOTTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 14:19:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238749AbhLOTSo (ORCPT
+        with ESMTP id S238169AbhLOTTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 14:18:44 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D34C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:18:44 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id k64so21527000pfd.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 11:18:44 -0800 (PST)
+        Wed, 15 Dec 2021 14:19:11 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F398C061574;
+        Wed, 15 Dec 2021 11:19:11 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id l7so34873452lja.2;
+        Wed, 15 Dec 2021 11:19:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VieVwmJcTaouBAsZhAsLWT8FWFzWmhNzhs/0LCf2Xx8=;
-        b=KQaP77Z+T21lpkRzYHOY7GZ/71aDT9EktseQSiMaEH9b+P4R0mI2rGqJnngOMkV4LE
-         reYdKLoKmY+elWRlEYuAsKwhmqlAWSpG8F//YwDK3SotHgql2TdIMryDryexH1gu6W8H
-         mVRX2dwj9+pMUUFwXt2FB4euWVVJ7oupjoZ/4=
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mcoM9Ax1uVbLecr06Jv1GjfyazYcAb1+Wc5JbxKbgLk=;
+        b=SVHqay68VUOAOHu9uBZo4mdJWTihaz5p+A6gLbEoE3abtu4VilIEkQaAoxGgkqIxCJ
+         ebBrahy80p+gKC5PUp8cy/iok91hF8uU90zVfcYCEQZ3SHyk2iV/M7yBuM5xXx1q+dbU
+         5HYPfT/e1p1lkh8wzWatch4fvJdJLNPZ+kGX2LpuRhZxZYaKjhQyHOeZu6pgOAkfqBrl
+         j46GWZWa2ldkdxunzLARSSBw53v5jsHy5vDrAHM0XddeaZK+IBjhIpCsmR/2RIeprNMa
+         B0e0JU6YbzcQ+5TIWgVjqtru1nqdqQcnUt+H+vsOBjU6fZXijMwHlxAtIxg66N9nh3O/
+         8+eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=VieVwmJcTaouBAsZhAsLWT8FWFzWmhNzhs/0LCf2Xx8=;
-        b=Sl2sK36lSHdqfKdG2hwg9So6yBf5u26IxhWy+WO7ulu0N8BiNiGuwOhLpjHzJlmE3s
-         nzD68PQNJWu0Xiv0S3SdwB7s14evNCvRWgwJiauLqGX75CHBgjCiu17xgWKEHRUwH/02
-         +WzFwrBGpn8jeqTA02hoMLW6NCGEdxtU0MlG7IJqaSqgBdBeGms1RS6hqaNVEakjTpt6
-         SKwK+DAaYGWS4fI9ChwGwAZmvlVzE9ecIt0jgXBg1I6/5uHcsn2m/wdiO0ClDoHmqXMW
-         WHAfC1plEpuSHywNbzGjmbDyj/ImjjG/Aoxb75RTwqBYEpu+kFG3hnqWHhS4YhkS4r15
-         HgkQ==
-X-Gm-Message-State: AOAM531f8H7wVZpjS0Xbk5kdYoi0kVW4yasXQ5Hgj6WM60m7vvfb+3s7
-        Y08q95ptSL8ImnNV6st8w1QlHQ==
-X-Google-Smtp-Source: ABdhPJyIK/MXWr+ArcoWEok+Ed+yI2nihs7NoVe0mWxmf0ySNM0hCdkshrKHX/ewdub/9B6BOpExkQ==
-X-Received: by 2002:a63:c155:: with SMTP id p21mr8792730pgi.156.1639595924042;
-        Wed, 15 Dec 2021 11:18:44 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g1sm2953110pgm.23.2021.12.15.11.18.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 11:18:43 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Joe Perches <joe@perches.com>, Will Deacon <will@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        James Morse <james.morse@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Fuad Tabba <tabba@google.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] arm64: Drop outdated links in comments
-Date:   Wed, 15 Dec 2021 11:18:35 -0800
-Message-Id: <20211215191835.1420010-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        bh=mcoM9Ax1uVbLecr06Jv1GjfyazYcAb1+Wc5JbxKbgLk=;
+        b=6ckwBa6ut1JC+uLyMbIYUE2APx/UnYjfcGeqsPjtVxHv1Isnr+aFfU08OZ4WXFY3Jp
+         qkN4bayUVGY0vTVd1ORGGMeVfieYWXG4DSfr5KfePg1dOT0AAWv2kc4xeKRpzR2IWtoH
+         H5mcuFpAcKzduwkEiJ7Ios2mcRhf5EpbIgbFpl3J5DauKAc1uY8gFAEaGmnYiksB3Jm2
+         forUn7tgwR0oFxp2xZBdYvEtal8bDDHCT7ZzGpFkRp215XiXR4UegkNeNyPFAJ6N6V5e
+         MCiNLqgwWwvWt9fPJf84dam3DStOKfnoaiqfU3f1eEBEC+Ta5GP4t7XKFLZzx5A/rnXm
+         CzQA==
+X-Gm-Message-State: AOAM5321YujbnqPX0/SDCpJJ1V1Hn2Kzz/8Z3peMQxnlFDo/ieepRn9F
+        ScmXBdVZwN+csFT/c5IE9yU=
+X-Google-Smtp-Source: ABdhPJwfQiIXPLFnM45Qsq1mKLc+gw5v4w90DdqR/S/COVYdQgiDcGeqkBnZ70V6mO6ZWA17wweAIA==
+X-Received: by 2002:a2e:a7c4:: with SMTP id x4mr11737287ljp.43.1639595949539;
+        Wed, 15 Dec 2021 11:19:09 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id j22sm455282lfu.155.2021.12.15.11.19.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 11:19:08 -0800 (PST)
+Subject: Re: [PATCH v4 00/22] Support HDMI audio on NVIDIA Tegra20
+To:     Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Agneli <poczt@protonmail.ch>, linux-tegra@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20211204143725.31646-1-digetx@gmail.com>
+ <Ybo6tsnQM6OacoZs@sirena.org.uk>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <26af30a6-9606-72d0-9258-cf9627ddfe77@gmail.com>
+Date:   Wed, 15 Dec 2021 22:19:07 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1946; h=from:subject; bh=DfZ3UnHsFmsw/4N8X7tFFfoiorSVEgqutHFHjXlqRJY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhuj+KVHSRvnQNmxzGq7Cmwjvi8uBXKualoCmCG7Ac MP2cEAmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYbo/igAKCRCJcvTf3G3AJv2CD/ 44aCLWGwalwPUI9Jx/X4oqTA953MfMh2ACDgiXMyTKaavdqYutq4t3u9evp4kTyes2fWCViJNr1Ryk jkWtykGccTM6X7LYuoNrd0jpHmr3k1xS1x/WCbvSMLOgjOwaYnalVNxYeYiIMak8zWPliYc9fbMKcA 098B3X9xpr9m6tAVxWwrCabG5z59wgz5oVI38eSEBZOrfWqPbaU1q+4X2KUrQ7XOCi+YKomxzW2rIA eHLyBsAfTcHx+svY35yGVLKpseFzzXf38R4dKSm6Xfej6K2qEhM5jU3NQKKOS77PU89f7r0bWV3QRz iFitrhpqNVxdWGaH8WWRlBk+1iyZ0zZ+P4KUDIBBVObM9+ZS/GaNdUND/GA6xc/AG2e6RYBfbpbWVY Z9I+rmSsnZe2ND8BzibY5tDhxh6uh0Gnn2lcdwWBiSa+G95Oqz71Nsw64gRWYmZUXLqc1i3iZra6kP egFxvIrs9aKxO6SU6onpy/IMt037DRFJac+8Smct8Big7KM5gxta+aILrxjW898E7BP5bNRK3na/4p RBtXnajjSt2RoaT/WY0Judgkvqj0rYd54Jq9csl6R7zxhWPSf2yAH7elswm2XIxVp+yBoqG0P27eHS oCL2XwFdlH8WDxkY9hUXTzgupa+WdZ3BPBRIly8+OhGh9WRi3o8z1dcV3izw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+In-Reply-To: <Ybo6tsnQM6OacoZs@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As started by commit 05a5f51ca566 ("Documentation: Replace lkml.org links
-with lore"), an effort was made to replace lkml.org links with lore to
-better use a single source that's more likely to stay available long-term.
-However, it seems these links don't offer much value here, so just
-remove them entirely.
+15.12.2021 21:57, Mark Brown пишет:
+> On Sat, Dec 04, 2021 at 05:37:03PM +0300, Dmitry Osipenko wrote:
+> 
+>> I based S/PDIF patches on Arnd's Bergmann patch from a separate series [1]
+>> that removes obsolete slave_id. This eases merging of the patches by
+>> removing the merge conflict. This is a note for Mark Brown.
+> 
+> That's not in my tree so I'll need either a pull request with the series
+> or a resend after the merge window.
 
-Cc: Joe Perches <joe@perches.com>
-Suggested-by: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/lkml/20210211100213.GA29813@willie-the-truck/
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/arm/kernel/hibernate.c   | 4 ----
- arch/arm64/kernel/hibernate.c | 4 ----
- 2 files changed, 8 deletions(-)
+This patch is included as a part of this series, please see the patch #6.
 
-diff --git a/arch/arm/kernel/hibernate.c b/arch/arm/kernel/hibernate.c
-index 2373020af965..2c1f290342e4 100644
---- a/arch/arm/kernel/hibernate.c
-+++ b/arch/arm/kernel/hibernate.c
-@@ -7,10 +7,6 @@
-  * Ubuntu project, hibernation support for mach-dove
-  * Copyright (C) 2010 Nokia Corporation (Hiroshi Doyu)
-  * Copyright (C) 2010 Texas Instruments, Inc. (Teerth Reddy et al.)
-- *  https://lkml.org/lkml/2010/6/18/4
-- *  https://lists.linux-foundation.org/pipermail/linux-pm/2010-June/027422.html
-- *  https://patchwork.kernel.org/patch/96442/
-- *
-  * Copyright (C) 2006 Rafael J. Wysocki <rjw@sisk.pl>
-  */
- 
-diff --git a/arch/arm64/kernel/hibernate.c b/arch/arm64/kernel/hibernate.c
-index 2758f75d6809..6328308be272 100644
---- a/arch/arm64/kernel/hibernate.c
-+++ b/arch/arm64/kernel/hibernate.c
-@@ -7,10 +7,6 @@
-  * Ubuntu project, hibernation support for mach-dove
-  * Copyright (C) 2010 Nokia Corporation (Hiroshi Doyu)
-  * Copyright (C) 2010 Texas Instruments, Inc. (Teerth Reddy et al.)
-- *  https://lkml.org/lkml/2010/6/18/4
-- *  https://lists.linux-foundation.org/pipermail/linux-pm/2010-June/027422.html
-- *  https://patchwork.kernel.org/patch/96442/
-- *
-  * Copyright (C) 2006 Rafael J. Wysocki <rjw@sisk.pl>
-  */
- #define pr_fmt(x) "hibernate: " x
--- 
-2.30.2
+I saw that Vinod Koul already merged it into his DMA tree [1] a day ago,
+but there is no stable branch there.
 
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git/log/?h=next
+
+>  It's also not clear what to do
+> about the DRM bits, I guess it's probably easiest to just apply them
+> along with the ASoC patches.
+
+I already asked Thierry Reding to take a look at this patchset. He will
+let to you know how the DRM bits should be handled. Hopefully this
+should happen tomorrow.
+
+We will know how to move forward if Vinod and Thierry will reply ASAP.
+Otherwise this series will have to wait for the next cycle.
+
+> Please include human readable descriptions of things like commits and
+> issues being discussed in e-mail in your mails, this makes them much
+> easier for humans to read especially when they have no internet access.
+> I do frequently catch up on my mail on flights or while otherwise
+> travelling so this is even more pressing for me than just being about
+> making things a bit easier to read.
+> 
+
+Noted; I see now that it's indeed not clear from the cover letter that I
+included Arnd's patch into this patchset, sorry about that. I assumed
+that you will notice this after looking through the patches.

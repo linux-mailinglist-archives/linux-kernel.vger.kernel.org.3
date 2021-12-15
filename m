@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 110E747576E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47ED47575D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 12:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236951AbhLOLKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 06:10:22 -0500
-Received: from mail-bjbop0216.outbound.protection.partner.outlook.cn ([42.159.33.216]:6016
+        id S236796AbhLOLI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 06:08:28 -0500
+Received: from mail-bjbop0212.outbound.protection.partner.outlook.cn ([42.159.33.212]:26895
         "EHLO CN01-BJB-obe.outbound.protection.partner.outlook.cn"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236857AbhLOLKS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 06:10:18 -0500
+        id S232306AbhLOLI0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 06:08:26 -0500
+X-Greylist: delayed 1079 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Dec 2021 06:08:26 EST
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cac5XpHKTXXGfYca0epomiOULddVFH1p2mNlQu2DM1VNGGKgsMi5JxiMcfH4L/ZccW2o6Z8OHEffpv9twsmUKFepcq6dNOg5bH4AloHVDQ7o5FJyNydI2EkLNGj8c2AdI0ETeIf7W+VZs0BwfwvXr4PX/aZUf2Z9Kp7ZbCVNmtF44lNmKn1XlZo96qm465FZX2+S3CuziGfDeukKuU7DuZM72aMTf+uvy2FOEdM0sfc8ozehWfXple81e4WwYg+q1keAFNEogCiRS3RmjzHyBFRQc68Q8CjvQHgywNLObr0bHAs1oFI8ziUlO5i/a2OBi7FwwRgMRZe9lRA+x6Vs3w==
+ b=Uj9LufUh8P8Zk1P2eWxdq6V9e9gSqoq2rcyKvlPI+MwvX/FkZNqCNDWC0Zg86Z+2aJlkMCJeewzzzPOnVdNnfX28T3xryKQg1g1YbKm5Z4uitwnKLBFJGCJKikXuzHfPSWIiAHlpV5UIinbcDyZk3Rpp5B3fJZrmWT/4CxGc2kQl9xH2rC6sgHOszssTI7Ssl5cHRMwaRfOU+5sko1U15Yg5u02Gc0GkMlNB5mXoyaiYM8n552RzxVyl+ZvxzyW8ZTb/8qQ3vz4wjeLZ/h0rxQ789VjLM7yCl3TEQfWRcricKBPAGP3tQ73z5NqW4tWACrUiHMHlGqX547s39/luSA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KUQwwe3Y75Qwd4kBXUakdujcL+XTwCBlfilhm0owzW4=;
- b=EwKPIpxGy4DIgWY82LCaXVn8CJA5p1A2J6RELUILXft5Rbneg5rnajqdfgaP4d4bOQpzWX+osz1XXYi8mNtabGsDQF7mEWyZAHfwPFLZPamqrgUo3k9K1TSv64ajFWwX/JB4pu1e1W1RSLzk0o79tAJep4CNlm6ZWCXQG4lZvLWPHXkdt9THZ3ifG2ls4+EE1h3jgTJJ0Xd1HyK2tEg2LQ5mto0zdPCu6ybQX2UTRJTVTYDQrvPgLsBpZhUph8JxjkFY8wuzXly+gYkuB0zixL2efUvwx3Yjy9lvAVV+W0ijYXBxBkFzxIF0Jsvx4SSHoq5R+rzQE+ULjit9LsFo1Q==
+ bh=4jGQdzYhoRaffqlNk1eS1gngsaeSXsKsiqbasRqQuZ4=;
+ b=CRnqZatki3JuQ7rDi5HT8jjbqIoPUOlB+mXrH1PoPkKYBc3Q4X+bQ7LrRUD8h/9oAeSIs1A7aWNyyBREBxTpRL7sPrRwuNgHLBGr46bMWOuyJdY7Rp/pdxnIZyvd0+IZAWR+FjHATkCxAzOtdRkPJMX5RFjDE8v5fZibeMttOznnw4F/7JjINDD+dNQNvpuP8KP8J7ucN8IYT5mAVBq7pQLMdKqBvXhhYmd13HaSwkVSzyr5rXzZH7aPd5f3K46V4PxkpiSuqhX6Ugo6szIL7wGLoBj8wpWvrdfoSJydPy+E7hr/tWV4SnC9U7oo84MSfb77wpp3JhKU+vnYmDf3JA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=armchina.com; dmarc=pass action=none header.from=armchina.com;
  dkim=pass header.d=armchina.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=armchina.partner.onmschina.cn; s=selector1-armchina-partner-onmschina-cn;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KUQwwe3Y75Qwd4kBXUakdujcL+XTwCBlfilhm0owzW4=;
- b=cm1fG9ViorfvJJ26FwJLbN4qvFyqnEuQSNscwAmMogc2AudBkTSfPpjokehU4yocxhXkhbeBM7UA1DWZ6VaRigM+0AXOHzsJngBMv9GPaZ27QgfxmWGSF/fQIMuKIwyuIWmOl2ghENLnBR3KURyH76tKo5y/JLNUxs02/lArUKg=
+ bh=4jGQdzYhoRaffqlNk1eS1gngsaeSXsKsiqbasRqQuZ4=;
+ b=oSQHGHTKnD9Tz3mO3mXAIgwqFOfzgF1gI5A3Lxpz67yb4K9xmA+W4ARStXb8DLOfw/TUPtwdPVm/gcliydHLLlQVfmJ/NXFgxanrjOMrdCY2xwXJpPS4Rx/bo8GTOH4jGNOwmvLSc/AqqMPg0DaTvYwZzlwm9xp+Th+KQguIgAQ=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=armchina.com;
 Received: from SH0PR01MB0634.CHNPR01.prod.partner.outlook.cn (10.43.108.74) by
@@ -41,9 +42,9 @@ To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org
 Cc:     dejia.shang@armchina.com, toby.shang@armchina.com
-Subject: [PATCH 3/4] dt-bindings: add vendor-prefix and documentation for Zhouyi NPU
-Date:   Wed, 15 Dec 2021 18:36:08 +0800
-Message-Id: <20211215103609.9268-4-dejia.shang@armchina.com>
+Subject: [PATCH 4/4] MAINTAINERS: add maintainer info. for Zhouyi NPU
+Date:   Wed, 15 Dec 2021 18:36:09 +0800
+Message-Id: <20211215103609.9268-5-dejia.shang@armchina.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211215103609.9268-1-dejia.shang@armchina.com>
 References: <20211215103609.9268-1-dejia.shang@armchina.com>
@@ -53,149 +54,92 @@ X-ClientProxiedBy: SHXPR01CA0021.CHNPR01.prod.partner.outlook.cn
  (10.43.108.74)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 764104a5-50f0-4d03-680d-08d9bfb6bc33
+X-MS-Office365-Filtering-Correlation-Id: ebaa9d77-1d60-41cd-1543-08d9bfb6bc81
 X-MS-TrafficTypeDiagnostic: SH0PR01MB0827:
-X-Microsoft-Antispam-PRVS: <SH0PR01MB08273AB971AC9F2C733CABAE98769@SH0PR01MB0827.CHNPR01.prod.partner.outlook.cn>
+X-Microsoft-Antispam-PRVS: <SH0PR01MB0827F4E66BD9AEF1EFBB884B98769@SH0PR01MB0827.CHNPR01.prod.partner.outlook.cn>
 Content-Transfer-Encoding: quoted-printable
-X-MS-Oob-TLC-OOBClassifiers: OLM:1201;
+X-MS-Oob-TLC-OOBClassifiers: OLM:612;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6K1Hw/e2t8kFBCpst3OsQ1iht8iR512rwwshtv8UO0hcGzymfV5cGz+oqqyzkwkX/2gnvT2avDvmPSDzzRIWjYEIbltfeCqRBKy/NwdZYQEnnCINT6GZRfnHR2otS2A1eA1WcTxg4ma9dgHP2IrM8Fjwh/CmQ7BJAfJF0IahoVBdvErwIKPljhq4xGbyEaP5VW9uNnK0uyCgESQQIPSzQvgpBTgXdLTOjHk0fLM5+dxkkj56nm1kUdbuZ6eY9aQaPZs6WaENKaozLq6mqAQeryggixkrFDcfiITRgYdJJbCDvyo/Rt6fSDkjbweN5sUBp4IoSB7Q/gytO6fk90agEmVgmm0X1oAt6Y77FmVZkFVGpTFz9WNJJukP4YqQBtj5W8R/1P7rS75BYKrC7Ifuae9wilxZcIxcyVkSbL0HnL6a5W6Nt7nFypUS4E2k+ZezjierTNlsnDiXhDU+x5IakiyGvbX18iD6EoYoJUNuf8GGBS3oBrqKoAQO7EVw5M51fpjsl9wJyHGcte5eOClC6STb0Ni7+fPwYG3wyPMEJE2n3ErVs7GcqVTZmr0xm7aeQ7JiUpZXvXV5OnYuZvYNWOdiuq7GO0rdvNJ6yNguJUwijtMzL1nvv91QTVHXrIL3s08xJBTHAVY4AoGuL7IR061GQ1yEQeaYoY5yDJ/Mt6UjI6ZEDyZ2JWkDZuoyk8WD1Qeyes5aAFIeZoYqhjEf4g==
+X-Microsoft-Antispam-Message-Info: xjBw4Vohl/VgzrF/kh22ccrv0zIkky/gffr628D59PdW60KCneYSFt1boV+cpmYAHKYE0Z3SAGWSf8lnq0/CM+CLGzil+OGZA6ztdMsgk2kF9HLh4n+cehUUIzsi/07qHaLz50YopRVn5lQBRJlTEWAxgRVRi/1Ifkaa5bKTXzkJnXhFZuP8SGHSDbSSzq7I82ypzj9XYOSCs8Jl998jlHJW0VOyen9YT9Q7HWB+ROGHEY4xUM2B96t0xfskqR+YwsjYHi+99O1FCRns25ySHTOEhScyCazErzF8BDQgaMv9wx/hyJkbfEdttKl0BVEUDU5pTeh8zZ1xHx2rvfT6US/CtgU5yn4fuqChJAHJiDbRWblglt8kNC90xUyGeLzFOAqHs/wVFvrrGQNLVSsEROKe9auas9po7qgetWT5kHw+mf2PuuTrXSpFZeFw6lenxc2qBJ2cUehQGugpedJ517VRN9AWdeesBl0x6xabxIHc92er3/+SMLuQuWqjzy4qO2bzoyk+wbyeb2yJkE0PtmfqIRGo4xtSdylxILR99hAUCrRJxat8e6Mw1YkUAz0E7YrD/Yd+mA1mXIzMuhnIJYmcWuRSOq0OFV9OGkuurpH1+9WAxFFmZHHWsVDVtMf0nK4uAEPCSiFojXQQRxcVQPXSKC0Kg8kWbtbdgaGsSmJowATUIK6eJs9O2LBDMcFVOs6T/F9ErdW2r85SeBZwJw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SH0PR01MB0634.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230001)(366004)(1076003)(6666004)(508600001)(66476007)(186003)(86362001)(52116002)(2616005)(26005)(8676002)(40180700001)(107886003)(4326008)(38350700002)(38100700002)(8936002)(44832011)(40160700002)(36756003)(66556008)(5660300002)(2906002)(66946007)(83380400001)(20210929001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v1lfoSs3//LT8vxRVfcNgnTYIFjDBzX18BEwBc4YpTKwG8XoVvmx4KxHzL4b?=
- =?us-ascii?Q?ueNN3UabYrP3tUPq9fKJ81JzcUZoe+dsYva1IXpCkF0Hjql4OVlWbkjUFf3z?=
- =?us-ascii?Q?ZXkIdBsyv8eYNs6VST4KSShdOuR2Fr3E6lMSaG3r+0heFZsLhS6Iy72S6PGn?=
- =?us-ascii?Q?Exs7wWbipa7x87TMS2Fx98D/MuWwkoDh87058ulm+xqwwIvHwhWq72LkHLRo?=
- =?us-ascii?Q?MshyS+hmaf1HyVtoH/WfU42HMM/PbYsvfCPW0FF2ue/2wrhitmqyORXPAabU?=
- =?us-ascii?Q?KQoX0CfY8dYSQgDlPjIX1bImWuD9yEGcg8gbs9ze8P3kjNo71wXnbxj38tZm?=
- =?us-ascii?Q?rrcFKkmV6qiyiaJzuczGbKO2C90mUUzH0JCdYfD5Vef3pc9715TWdxoThDz9?=
- =?us-ascii?Q?JwEHmABCNdTMnWPPjkj+1YVU5+1h36T9P4cLGJCt1lqOkEZcITTRkh9+Va+r?=
- =?us-ascii?Q?QiWx/jm4k3j/ipQi6mwTVrvGKBONtPryD/p9K38MPwo2byk5yXAgnVbsACTK?=
- =?us-ascii?Q?cotKM6632uHHNlHxiA8GkkvhR2F4jZ182ZIVO3aA/G1IteW7uVBMSdkYUwSo?=
- =?us-ascii?Q?huXQeAwiDwBycTVqRu0a0DSi91rfK6VyLgwLwMu+Gi5uCNJWQaDjS0srloU9?=
- =?us-ascii?Q?yMz/GZjnO5MzjTCYXONW+jgbthKm/FZmqtbsZJaUb2eOkJLYkDZTbd8MRngr?=
- =?us-ascii?Q?w1prF2vsmJWnzio0nks2A8K0ULdOuSTj3rzJR8VfsxDnfsSakq4NCSyQMvBA?=
- =?us-ascii?Q?4B+YEJz5XeGRTQeG0vUFMxJZYVNs+k9BzxMiLN46Bb8D8WmVUrS4gD0LmTLp?=
- =?us-ascii?Q?FezjdMcQg/Bwfho7uSXBNcPbsM9pN5BAPSKdcjfxM+vPst+01yUGabLxbg2O?=
- =?us-ascii?Q?CQ/4ZE9KWAgerxoHf6og8Z5VcksCPRZCCbhlUcKGBKMTDNknelp9YMVb7+WR?=
- =?us-ascii?Q?cXigXCD+m5qaILeI+FzVgjmcfZEp80NjmojsE9ZoAt4Wc5kPvfzqDpw2PVQr?=
- =?us-ascii?Q?FIkWuosC0kvJ/FOseOtt9yX8WjIEzJ7yBiYuxEOkFzO3uPiVXAxvetIw48qY?=
- =?us-ascii?Q?gYflXRoywxoKjFToMI0quaPqzEb6oi+pZvC4RyzC6ArfXuBk6ONes+pl5lCb?=
- =?us-ascii?Q?fgH7M9rzfaQ0mDRewbccApEBWfAA63YE+wiml44Q3wRfEHzENVYO6BUU9Dvo?=
- =?us-ascii?Q?ks9PhDzLicP+4fn164dFtNzvxOhoEftofeFn6yT9ssoWDIx694/WM9QIY9uk?=
- =?us-ascii?Q?hkHZ7u1NAhlGvfWCXAgDhf5xtqTGhtaBWNFUXNv24UQlMB75SrydzZY0+5Ky?=
- =?us-ascii?Q?hmCosr7Ii4oK3yBHKoMUHJF65nAQ3we6YJbZHILuLyyHJg8JLYCgf89MaqbY?=
- =?us-ascii?Q?OaCs3DYZmIl15tcNBg/LVrFCxJDeAc2RG0gSpaYq1NWOJasTjsg/Ho0btHIX?=
- =?us-ascii?Q?AqvZsIXTYwDxnxk2eGlMzc2qYpZoOrgTaQMuRbGGczsR5OQ9biMuWRyXaOIN?=
- =?us-ascii?Q?mQEjnn7anT6SocMMK251lu7F+gbrtRqQIKCQ1Aj2OvRbG7B28fjhe8NQZih5?=
- =?us-ascii?Q?YcoBuMshtjXUNu10Ds062Qzu07sgcrTTxPRsfd2EERX9N2ffYuGihNSTjWnz?=
- =?us-ascii?Q?YQ=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?V3wTjk7Q6bFQLh8wjXi+dp6hhA3RwPe6FScW2/04SWdooOh+LfHH6Yh5GNMU?=
+ =?us-ascii?Q?b0hOR7FR2eKmDW6dooc1OCkHuAGB6WLipkfD1J5uwxT5DwNvbimV/QYBe990?=
+ =?us-ascii?Q?79qxBJbiGQcfhxRlTGN2ZqYoMv5UzH2ebDe1OIBjlJ1tcL3UePm9oEExsf6V?=
+ =?us-ascii?Q?lYgbDwl/54MKzGjpSHyzj+rjebLsKsu/cgfH3eyVBUPHjncgVnOfCw+V7afB?=
+ =?us-ascii?Q?B7yE28aduW4+Bvri1irl8WZjtdkURxaZsz3CO3/Mkq3uoicpf9Xj5l0+twz0?=
+ =?us-ascii?Q?3o3B8rVR6uIiX2iUYTpjsNifabDkmKyvlL2E5Z2UCAKFkTZXpGexfGG9vEUM?=
+ =?us-ascii?Q?lvRT4eA/Ta/kOMOmXxeg4ucDjumtaYFW8d1+Nsz2Kw5OfSd4yWsNYL9xOE7K?=
+ =?us-ascii?Q?se6oXQo6xZqNVf2CNKnRbF17T4xrn8F/kJwOMv3AUuBCJnnpGz3xq3onRJvX?=
+ =?us-ascii?Q?nnFEsKq2ci0FJ5OGbfD2Jl3HYQcXzOd1ZyKlTwZnDqiZBdnZ5fnOsGppj+tY?=
+ =?us-ascii?Q?X3H0DFXSZeKzGpOd62211ucSyn3QhwpyyNpUa/Gh9ntyyYt/lPMM3N+9z8Me?=
+ =?us-ascii?Q?gFbgJH8mauU8qVcZwIRcciDerue5qSL7WS2aM/VeKCDqlspH6a+WZ3V8ERyc?=
+ =?us-ascii?Q?c2dRKYaHLFnf5DLO0Ghpl7ez4O80SDdg+yBo0TB/xPI3/dPAb1aRoRRi4Y6o?=
+ =?us-ascii?Q?JC5otR58Yletjnd79iRZ9y/rBZT1ToLzymireflQ9P4upVg/jaEwCcOhVc5L?=
+ =?us-ascii?Q?MSGyXq64fCHE6Jh+6m7Es1C4JRnE5nzUwZGIStJnKTZ0R3AvuSryA6am5QmG?=
+ =?us-ascii?Q?lpBQaz38fMHopGHt3we1TDquoLQveq7oXHZ9Rvrh4VzsMaLacFH2D6hIWMNP?=
+ =?us-ascii?Q?t0d99m8AXZcgVbaIpm4E2NT2jAkJOLEmntHsclMWGxBr9CjD0k7peLlawXcQ?=
+ =?us-ascii?Q?Lwto+jVKEvVFiMM7sxxbr+6If7wxEODSzAy8sJ4h9AogKQijNHOljIzaKmHw?=
+ =?us-ascii?Q?Hm9tUFMiiDvjQlxyEMnoRd/p1sfpCvkLSg3izwj5f9LF+nEG3Xz+kEO+q4Mj?=
+ =?us-ascii?Q?pD3BxI5w3LJNLL1G1ioiEdGVT+ARteUg7x+jIs/JB4wE2S4LQuDPGy+J64mb?=
+ =?us-ascii?Q?GAbToePhX9cFYQ8BVWgyItvUPE80vQftLMb59M6nWaHKnt/c+MwZxX0LTK5P?=
+ =?us-ascii?Q?66yMKZ1JQzaUuSwoOMTJDbZTKGIopG4EVUk3PjYdzOQFOTMa+5OtRUMOJv/w?=
+ =?us-ascii?Q?p5XB1VPDcF93sZe6nkigjClArNFyuUvKD1hcMUZbHngvr+IOTVdiCoWjDd5H?=
+ =?us-ascii?Q?2o+LRXLDY4bxRxYbCchkl0d/4SvXs3Yu/5RBikW42I6J8YK13ie1+1TuCgwg?=
+ =?us-ascii?Q?7/wR8ThECZPkS6oEAC8eNCdkhwwTta5fzhPFwZPsrW39yC6tiGlct+6OC9gD?=
+ =?us-ascii?Q?zuIoWcN05yzfwDA32ANPWfUglWbQ1RKr2yy/rSap2+tiTHKkpv8McJHb6Rm+?=
+ =?us-ascii?Q?Wfqa5kI0CGQybomxC00hv4kZS04UCS5CSUQUEB57kU7hKAj2dCwOx2zcIXYX?=
+ =?us-ascii?Q?Q2YC/15AKG7sfui9ny1z5UMkn0n/lxplXMm+7LNyBOkOr8mue5luBgklsKhl?=
+ =?us-ascii?Q?CA=3D=3D?=
 X-OriginatorOrg: armchina.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 764104a5-50f0-4d03-680d-08d9bfb6bc33
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebaa9d77-1d60-41cd-1543-08d9bfb6bc81
 X-MS-Exchange-CrossTenant-AuthSource: SH0PR01MB0634.CHNPR01.prod.partner.outlook.cn
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 10:36:21.3597
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 10:36:21.8708
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 58b271af-432f-4dad-9dee-571f404bc6a0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: al9+/2zyKod/ZXHMHLcFZ6rlaSckc0rhN1qXyizmOjUh/B5v6B2CEs8XF/TDvARh5fmbvUbEt3TSDv4clFopy6gzRpsVYclF0rOLkvVPqog=
+X-MS-Exchange-CrossTenant-UserPrincipalName: mXKJ5JirzmqOAro5vPRTNGJG/qC1DBEmJoFJMUKc40zvyta1dnFetKF87p9qK7Cz9HNItDICYrgCS8mxS/SP4mhk4KkhOuZUzaRauc3LG14=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SH0PR01MB0827
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To enable this NPU IP in Arm-Linux system, SoC vendors should
-write devicetree files as documented.
+Zhouyi NPU IP and its SDK/driver are designed and maintained by
+Arm Technology (China), i.e. ArmChina.
 
 Signed-off-by: Dejia Shang <dejia.shang@armchina.com>
 ---
- .../bindings/misc/armchina,zhouyi-npu.yaml    | 57 +++++++++++++++++++
- .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
- 2 files changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/misc/armchina,zhouyi-=
-npu.yaml
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yam=
-l b/Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml
-new file mode 100644
-index 000000000000..d3fdea101114
---- /dev/null
-+++ b/Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml
-@@ -0,0 +1,57 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/misc/armchina,zhouyi-npu.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5f040a502859..7bb01176e169 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1827,6 +1827,16 @@ L:       linux-arm-kernel@lists.infradead.org (moder=
+ated for non-subscribers)
+ S:     Supported
+ F:     drivers/net/ethernet/cavium/thunder/
+
++ARMCHINA NPU DRIVER
++M:     Dejia Shang <dejia.shang@armchina.com>
++M:     Toby Huang <toby.huang@armchina.com>
++L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribers=
+)
++S:     Maintained
++F:     Documentation/ABI/testing/sysfs-devices-platform-armchina-npu
++F:     Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml
++F:     drivers/misc/armchina-npu/
++F:     include/uapi/misc/armchina-aipu.h
 +
-+title: ArmChina Zhouyi NPU bindings
-+
-+maintainers:
-+  - Dejia Shang <dejia.shang@armchina.com>
-+
-+description: |
-+  Armchina AI accelerator IP - Zhouyi NPU
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: armchina,zhouyi-v1
-+      - const: armchina,zhouyi-v2
-+      - const: armchina,zhouyi
-+
-+  reg:
-+    maxItems: 1
-+
-+  memory-region:
-+    maxItems: 2
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    reserved-memory {
-+                #address-cells =3D <2>;
-+                #size-cells =3D <2>;
-+                ranges;
-+
-+                aipu_ddr_reserved: aipu-shmem@0xA0000000 {
-+                        compatible =3D "shared-dma-pool";
-+                        no-map;
-+                        reg =3D <0x0 0xA0000000 0x0 0x4000000>;
-+                };
-+    };
-+
-+    aipu0@0x64000000 {
-+                compatible =3D "armchina,zhouyi";
-+                reg =3D <0x0 0x64000000 0x0 0x1000>;
-+                memory-region=3D<&aipu_ddr_reserved>;
-+                interrupts =3D <0 168 1>;
-+    };
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Docum=
-entation/devicetree/bindings/vendor-prefixes.yaml
-index 66d6432fd781..4b1865d92455 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -123,6 +123,8 @@ patternProperties:
-     description: ARM Ltd.
-   "^armadeus,.*":
-     description: ARMadeus Systems SARL
-+  "^armchina,.*":
-+    description: Arm Technology (China) Co., Ltd.
-   "^arrow,.*":
-     description: Arrow Electronics
-   "^artesyn,.*":
+ ARM/CIRRUS LOGIC BK3 MACHINE SUPPORT
+ M:     Lukasz Majewski <lukma@denx.de>
+ L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribers=
+)
 --
 2.17.1
 

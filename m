@@ -2,77 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E954A475921
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D734475922
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 13:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242629AbhLOMyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 07:54:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43968 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbhLOMyh (ORCPT
+        id S242636AbhLOMys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 07:54:48 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:54436 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232543AbhLOMyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 07:54:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 15 Dec 2021 07:54:47 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B03DEB817E2;
-        Wed, 15 Dec 2021 12:54:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1CCC34605;
-        Wed, 15 Dec 2021 12:54:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639572875;
-        bh=sDAdKAEWoKymaU21bL9bOk0WN3gSE+kY6EqkVtUA720=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ShgL11Oa0oixb+6a4yve3OYKiVghK7lFd7Gz/4APwtylGpB7fFj6ByFlk4fe5z7Ac
-         j0JB5fHBA9pQP7VewcqE1SvJ8fySidL5kgrLiDSbkubnxkzzRzaZYrQXYEDe1JFp+c
-         x4h/VTEwMcPEG/oopKYDHN2uiFYGjtss4ow8KvAw=
-Date:   Wed, 15 Dec 2021 13:54:33 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Carel Si <beibei.si@intel.com>, Jann Horn <jannh@google.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        kernel test robot <lkp@intel.com>, fengwei.yin@intel.com,
-        stable <stable@vger.kernel.org>
-Subject: Re: [LKP] Re: [fget] 054aa8d439: will-it-scale.per_thread_ops -5.7%
- regression
-Message-ID: <Ybnlic4KUznysQvl@kroah.com>
-References: <20211210053743.GA36420@xsang-OptiPlex-9020>
- <CAHk-=wgxd2DqzM3PAsFmzJDHFggxg7ODTQxfJoGCRDbjgMm8nA@mail.gmail.com>
- <CAG48ez1pnatAB095dnbrn9LbuQe4+ENwh-WEW36pM40ozhpruw@mail.gmail.com>
- <CAHk-=wg1uxUTmdEYgTcxWGQ-s6vb_V_Jux+Z+qwoAcVGkCTDYA@mail.gmail.com>
- <CAHk-=wh5iFv1MOx6r8zyGYkYGfgfxqcPSrUDwfuOCdis+VR+BQ@mail.gmail.com>
- <20211213083154.GA20853@linux.intel.com>
- <CAHk-=wjsTk2jym66RYkK9kuq8zOXTd2bWPiOq43-iCF6Qy-xQQ@mail.gmail.com>
- <CAHk-=whoMGTAAyah0jH+rHyAXCLnxAHu8KffrR8PrAXGhTxRdA@mail.gmail.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3FC3A1F387;
+        Wed, 15 Dec 2021 12:54:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1639572886; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6G74eF57Xv4t6JFouHLmcNr7BnEUyjP+vnWHmDH4sfw=;
+        b=2OAjKgi47I5WkECU1uNTESMohBN/N11JSx10cZaxNoPcGTSRSbHqK3bU1tpCWOIRlUlOQq
+        Xei98jx2Wu/qiE7HfOi20M2vy3iJOShyeSVJvqOgrojFEnwAyXdQMUyL5cWaz7frs1ZrrW
+        KxFP/nMknhgz5KSnxZRW7oUNqj1sYms=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1639572886;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6G74eF57Xv4t6JFouHLmcNr7BnEUyjP+vnWHmDH4sfw=;
+        b=Ntnor+dcDUkTZGBpk3v1l7rUs5mswEgKrn/oP25/U5fCPOOZJXPtpzhFJbM2WnSK7IDjYT
+        EyfgRxFvH7dMQpBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EB0451330B;
+        Wed, 15 Dec 2021 12:54:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JUG+OJXluWFMPAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 15 Dec 2021 12:54:45 +0000
+Message-ID: <f727adcf-5967-0b71-92a8-3269c0256948@suse.cz>
+Date:   Wed, 15 Dec 2021 13:54:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whoMGTAAyah0jH+rHyAXCLnxAHu8KffrR8PrAXGhTxRdA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 05/66] Maple Tree: Add new data structure
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-6-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211201142918.921493-6-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:44:31AM -0800, Linus Torvalds wrote:
-> On Mon, Dec 13, 2021 at 10:37 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > So I'll just apply the patch. Thanks for the report and the testing
-> 
-> Done, it's commit e386dfc56f83 ("fget: clarify and improve
-> __fget_files() implementation") in my tree now.
-> 
-> I didn't mark it as "Fixes:" or for stable, because I can't imagine
-> that it matters in real life.
-> 
-> But then it  struck me that Greg has mentioned that he ends up getting
-> a lot of performance regression reports for people testing stable and
-> they can be distracting.
-> 
-> So I'm adding a stable cc here just so people are aware of this as a
-> "yeah, will-it-scale.poll2 performance regression has been reported,
-> has a fix available if somebody cares".
+On 12/1/21 15:29, Liam Howlett wrote:
+> +/*
+> + * mt_find() - Search from the start up until an entry is found.
+> + * @mt: The maple tree
+> + * @*index: Pointer which contains the start location of the search
+> + * @max: The maximum value to check
+> + *
+> + * Handles locking.
+> + *
+> + * Return: The entry at or after the @*index or %NULL
 
-Thanks, I'll keep an eye on this.
+Noticed later that the comment doesn't say how *index is updated.
 
-greg k-h
+> + */
+> +void *mt_find(struct maple_tree *mt, unsigned long *index, unsigned long max)
+> +{
+> +	MA_STATE(mas, mt, *index, *index);
+> +	void *entry;
+> +#ifdef CONFIG_DEBUG_MAPLE_TREE
+> +	unsigned long copy = *index;
+> +#endif
+> +
+> +	trace_ma_read(__func__, &mas);
+> +
+> +	if ((*index) > max)
+> +		return NULL;
+> +
+> +	rcu_read_lock();
+> +retry:
+> +	entry = mas_state_walk(&mas);
+> +	if (mas_is_start(&mas))
+> +		goto retry;
+> +
+> +	if (unlikely(xa_is_zero(entry)))
+> +		entry = NULL;
+> +
+> +	if (entry)
+> +		goto unlock;
+> +
+> +	while (mas_searchable(&mas) && (mas.index < max)) {
+> +		entry = mas_next_entry(&mas, max);
+> +		if (likely(entry && !xa_is_zero(entry)))
+> +			break;
+> +	}
+> +
+> +	if (unlikely(xa_is_zero(entry)))
+> +		entry = NULL;
+> +unlock:
+> +	rcu_read_unlock();
+> +	if (likely(entry)) {
+> +		*index = mas.last + 1;
+> +#ifdef CONFIG_DEBUG_MAPLE_TREE
+> +		if ((*index) && (*index) <= copy)
+> +			printk("index not increased! %lx <= %lx\n",
+> +			       *index, copy);
+> +		MT_BUG_ON(mt, (*index) && ((*index) <= copy));
+> +#endif
+> +	}
+> +
+> +	return entry;
+> +}
+> +EXPORT_SYMBOL(mt_find);
+

@@ -2,221 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF043475C26
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF5C475C29
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244109AbhLOPrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:47:13 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:15578 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244103AbhLOPrJ (ORCPT
+        id S244132AbhLOPr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:47:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:49583 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244110AbhLOPr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:47:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639583230; x=1671119230;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5qdNyYy/u82NrJL4zXN50Jkwe+xtr/LrwhlU2vpvAtM=;
-  b=YAhjFDAgnNEKJWNVgaTvswTTc8V2HKlX7d8JNSHwKqm8BztipY8ajL2a
-   tndDFU3ivjAj9tWqhBQLz0zAitdFoBknPY86ffjjMjytf9J40sigO5WBJ
-   HvQrBTqPb6rpPKqaBh6li7rT2ibqVQ2dQvR+x+2AypdHWJ/XZbNd5sGBn
-   g=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 15 Dec 2021 07:47:09 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 07:47:08 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 15 Dec 2021 07:47:07 -0800
-Received: from fixkernel.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 15 Dec
- 2021 07:47:06 -0800
-Date:   Wed, 15 Dec 2021 10:47:04 -0500
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Joel Savitz <jsavitz@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, Waiman Long <longman@redhat.com>,
-        <linux-mm@kvack.org>, Nico Pache <npache@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Wed, 15 Dec 2021 10:47:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639583277;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=prBQp9dTKIRBw4z7Uj86elfBkm/Guna1cZpwNeo2Vh8=;
+        b=OATNBiyfFzxah7x3/pzTJzRoE8V5bTcHJNtg/WN9dCoeMtR29oIUkxc7y+xlHk4yDCZice
+        gdIidP+0K76I+/5EXsgmkNhLB759ZtfSNxB2zVZa6ocSu2RcehM1T+M/xvwfNHX1XJTFkq
+        wComxK7NuAfzubs/1NUoUXN/HW5rem0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-341-eG32FGKZOtqkWObp6a-9NQ-1; Wed, 15 Dec 2021 10:47:54 -0500
+X-MC-Unique: eG32FGKZOtqkWObp6a-9NQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 89F1381EE62;
+        Wed, 15 Dec 2021 15:47:51 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 24F7579590;
+        Wed, 15 Dec 2021 15:47:46 +0000 (UTC)
+Message-ID: <0271da9d3a7494d9e7439d4b8d6d9c857c83a45e.camel@redhat.com>
+Subject: Re: [PATCH 11/15] KVM: VMX: Update vmcs.GUEST_CR3 only when the
+ guest CR3 is dirty
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Lai Jiangshan <laijs@linux.alibaba.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH v2] mm/oom_kill: wake futex waiters before annihilating
- victim shared mutex
-Message-ID: <YboN+O3QuJw1Px+7@fixkernel.com>
-References: <20211208181714.880312-1-jsavitz@redhat.com>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Date:   Wed, 15 Dec 2021 17:47:45 +0200
+In-Reply-To: <20211108124407.12187-12-jiangshanlai@gmail.com>
+References: <20211108124407.12187-1-jiangshanlai@gmail.com>
+         <20211108124407.12187-12-jiangshanlai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211208181714.880312-1-jsavitz@redhat.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 01:17:14PM -0500, Joel Savitz wrote:
-> In the case that two or more processes share a futex located within
-> a shared mmaped region, such as a process that shares a lock between
-> itself and a number of child processes, we have observed that when
-> a process holding the lock is oom killed, at least one waiter is never
-> alerted to this new development and simply continues to wait.
+On Mon, 2021-11-08 at 20:44 +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <laijs@linux.alibaba.com>
 > 
-> This is visible via pthreads by checking the __owner field of the
-> pthread_mutex_t structure within a waiting process, perhaps with gdb.
+> When vcpu->arch.cr3 is changed, it is marked dirty, so vmcs.GUEST_CR3
+> can be updated only when kvm_register_is_dirty(vcpu, VCPU_EXREG_CR3).
 > 
-> We identify reproduction of this issue by checking a waiting process of
-> a test program and viewing the contents of the pthread_mutex_t, taking note
-> of the value in the owner field, and then checking dmesg to see if the
-> owner has already been killed.
-> 
-> This issue can be tricky to reproduce, but with the modifications of
-> this small patch, I have found it to be impossible to reproduce. There
-> may be additional considerations that I have not taken into account in
-> this patch and I welcome any comments and criticism.
-> 
-> Changes from v1:
-> - add comments before calls to futex_exit_release()
-> 
-> Co-developed-by: Nico Pache <npache@redhat.com>
-> Signed-off-by: Nico Pache <npache@redhat.com>
-> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-
-I am afraid we can't call futex_exit_release() under rcu_read_lock()
-because it might sleep.
-
- BUG: sleeping function called from invalid context at kernel/locking/mutex.c:577
- in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1509, name: lsbug
- preempt_count: 1, expected: 0
- 3 locks held by lsbug/1509:
-  #0: ffff00004de99c98 (&mm->mmap_lock){++++}-{3:3}, at: do_page_fault
-  #1: ffff800010fd8308 (oom_lock){+.+.}-{3:3}, at: __alloc_pages_slowpath.constprop.0
-  __alloc_pages_may_oom at /usr/src/linux-next/mm/page_alloc.c:4278
-  (inlined by) __alloc_pages_slowpath at /usr/src/linux-next/mm/page_alloc.c:5058
-  #2: ffff000867b3b0c0 (&p->alloc_lock){+.+.}-{2:2}, at: find_lock_task_mm
-  find_lock_task_mm at /usr/src/linux-next/mm/oom_kill.c:145
- CPU: 5 PID: 1509 Comm: lsbug Not tainted 5.16.0-rc5-next-20211214+ #172
- Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 1.6 06/28/2020
- Call trace:
-  dump_backtrace
-  show_stack
-  dump_stack_lvl
-  dump_stack
-  __might_resched
-  __might_sleep
-  __mutex_lock
-  mutex_lock_nested
-  futex_cleanup_begin
-  futex_cleanup_begin at /usr/src/linux-next/kernel/futex/core.c:1071
-  futex_exit_release
-  __oom_kill_process
-  oom_kill_process
-  out_of_memory
-  __alloc_pages_slowpath.constprop.0
-  __alloc_pages
-  alloc_pages_vma
-  alloc_zeroed_user_highpage_movable
-  do_anonymous_page
-  __handle_mm_fault
-  handle_mm_fault
-  do_page_fault
-  do_translation_fault
-  do_mem_abort
-  el0_da
-  el0t_64_sync_handler
-  el0t_64_sync
- =============================
- [ BUG: Invalid wait context ]
- 5.16.0-rc5-next-20211214+ #172 Tainted: G        W
- -----------------------------
- lsbug/1509 is trying to lock:
- ffff000867b3ba98 (&tsk->futex_exit_mutex){+.+.}-{3:3}, at: futex_cleanup_begin
- other info that might help us debug this:
- context-{4:4}
- 3 locks held by lsbug/1509:
-  #0: ffff00004de99c98 (&mm->mmap_lock){++++}-{3:3}, at: do_page_fault
-  #1: ffff800010fd8308 (oom_lock){+.+.}-{3:3}, at: __alloc_pages_slowpath.constprop.0
-  #2: ffff000867b3b0c0 (&p->alloc_lock){+.+.}-{2:2}, at: find_lock_task_mm
- stack backtrace:
- CPU: 5 PID: 1509 Comm: lsbug Tainted: G        W         5.16.0-rc5-next-20211214+ #172
- Hardware name: MiTAC RAPTOR EV-883832-X3-0001/RAPTOR, BIOS 1.6 06/28/2020
- Call trace:
-  dump_backtrace
-  show_stack
-  dump_stack_lvl
-  dump_stack
-  __lock_acquire
-  lock_acquire
-  __mutex_lock
-  mutex_lock_nested
-  futex_cleanup_begin
-  futex_exit_release
-  __oom_kill_process
-  oom_kill_process
-  out_of_memory
-  __alloc_pages_slowpath.constprop.0
-  __alloc_pages
-  alloc_pages_vma
-  alloc_zeroed_user_highpage_movable
-  do_anonymous_page
-  __handle_mm_fault
-  handle_mm_fault
-  do_page_fault
-  do_translation_fault
-  do_mem_abort
-  el0_da
-  el0t_64_sync_handler
-  el0t_64_sync
-
+> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
 > ---
->  mm/oom_kill.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  arch/x86/kvm/vmx/vmx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> index 1ddabefcfb5a..884a5f15fd06 100644
-> --- a/mm/oom_kill.c
-> +++ b/mm/oom_kill.c
-> @@ -44,6 +44,7 @@
->  #include <linux/kthread.h>
->  #include <linux/init.h>
->  #include <linux/mmu_notifier.h>
-> +#include <linux/futex.h>
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index d94e51e9c08f..38b65b97fb7b 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -3126,9 +3126,9 @@ static void vmx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
 >  
->  #include <asm/tlb.h>
->  #include "internal.h"
-> @@ -885,6 +886,11 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
->  	count_vm_event(OOM_KILL);
->  	memcg_memory_event_mm(mm, MEMCG_OOM_KILL);
->  
-> +	/*
-> +	 * We call futex_exit_release() on the victim task to ensure any waiters on any
-> +	 * process-shared futexes held by the victim task are woken up.
-> +	 */
-> +	futex_exit_release(victim);
->  	/*
->  	 * We should send SIGKILL before granting access to memory reserves
->  	 * in order to prevent the OOM victim from depleting the memory
-> @@ -930,6 +936,12 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
->  		 */
->  		if (unlikely(p->flags & PF_KTHREAD))
->  			continue;
-> +		/*
-> +		 * We call futex_exit_release() on any task p sharing the
-> +		 * victim->mm to ensure any waiters on any
-> +		 * process-shared futexes held by task p are woken up.
-> +		 */
-> +		futex_exit_release(p);
->  		do_send_sig_info(SIGKILL, SEND_SIG_PRIV, p, PIDTYPE_TGID);
->  	}
->  	rcu_read_unlock();
-> -- 
-> 2.27.0
-> 
+>  		if (!enable_unrestricted_guest && !is_paging(vcpu))
+>  			guest_cr3 = to_kvm_vmx(kvm)->ept_identity_map_addr;
+> -		else if (test_bit(VCPU_EXREG_CR3, (ulong *)&vcpu->arch.regs_avail))
+> +		else if (kvm_register_is_dirty(vcpu, VCPU_EXREG_CR3))
+>  			guest_cr3 = vcpu->arch.cr3;
+> -		else /* vmcs01.GUEST_CR3 is already up-to-date. */
+> +		else /* vmcs.GUEST_CR3 is already up-to-date. */
+>  			update_guest_cr3 = false;
+>  		vmx_ept_load_pdptrs(vcpu);
+>  	} else {
+
+
+I just bisected this patch to break booting a VM with ept=1 but unrestricted_guest=0
+(I needed to re-test unrestricted_guest=0 bug related to SMM, but didn't want
+to boot without EPT. With ept=0,the VM boots with this patch applied).
+
+Reverting this patch on top of kvm/queue also works.
+
+Best regards,
+	Maxim levitsky
+

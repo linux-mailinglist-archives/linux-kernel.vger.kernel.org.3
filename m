@@ -2,150 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8368476662
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A13476658
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 00:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbhLOXQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 18:16:29 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:46832 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbhLOXQ1 (ORCPT
+        id S231752AbhLOXKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 18:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231607AbhLOXKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 18:16:27 -0500
-Received: by mail-ot1-f46.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so26723473oto.13;
-        Wed, 15 Dec 2021 15:16:27 -0800 (PST)
+        Wed, 15 Dec 2021 18:10:51 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E5CC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:10:50 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id p8so35685885ljo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:10:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y7DAUjl0wbjv/4De3uR/B1mDYliz+uJw6v1sVT86P/0=;
+        b=ChEBPDb8pXFVDfq44AJ/HKzPCkqcS2H4CAqjTnUdbGcwdE+8ICS219FWqZqsO1PcrP
+         pFkxIyUKYpFCTxjcs8i5fIhu40y4+ot+YK3lLjE/lSnOqrGFfnWcyzPThJCkBdw7m0gM
+         ZfKqw1uxsnKUbFGpGydoXy+dEzY5ClXsgwjSNV5FSZcEfu2iQuRmrwaH1cCKZv0YTFDH
+         IbfiwU4MntfMg7IIVEUku+IFYeFNVWTgwwZCDiDQeDuJ4Rl/ELLQV/BXUoWZdLNKbClX
+         8NsjywQycnXF/9KN2AFFREOJ+zR0GaqJo0V6v1yD7B5LDwtIFgk4d6PoOzhKXc/uzNLv
+         SbNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+NJojSfoVwMgJb/Ja90KiUetfn1vdOAgMVEPVsedxn4=;
-        b=q97GoWmyAzRaPDgA42DeTcGXaAbrgaabtUfcupEFIQl8do7mvhJeuxGC1Tqii9GT1S
-         RFCX5LLjhjV1hkT5PcBiwvQqnWjaQ6GD1hjwY8jRkAntpUxcdIniCmqUR7ZRCyJX05pt
-         CTo8kvXmqDRKq11R+/v26483Zj1GcuNbkG7MWCIZHOwxhygOULtxkvdh70aCjq6W3lZE
-         HFT4hhQuNE68qLbkFpMmVr0UaH3OfQ/ZHHLSyK6j1rk4/PoNnyw0ZSQqvygsR2sQtxAe
-         l/QATmuwEI49hRfmGWqZQFJzS5V605lERUsywrCG95JAu+54Q0arDNpKRSSP+wBsP+8L
-         pTlQ==
-X-Gm-Message-State: AOAM533GMAneZtImqgVWpuND4V6/563k7qi2AM+j7XmT6HSwCzciUvv2
-        xRe/Pm36pbdZfZ/I+UwMtw==
-X-Google-Smtp-Source: ABdhPJxe1D9MH0CKZ4DycjsHFTIJBOoLIjt6AIVTztF3s4fwJK0Y3vM/K0Wz5DMCsalknmREVSwMng==
-X-Received: by 2002:a05:6830:2707:: with SMTP id j7mr10302445otu.354.1639610186803;
-        Wed, 15 Dec 2021 15:16:26 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id g7sm740166oon.27.2021.12.15.15.16.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 15:16:26 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Matthias Brugger <matthias.bgg@gmail.com>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH 2/2] usb: musb: Set the DT node on the child device
-Date:   Wed, 15 Dec 2021 17:07:57 -0600
-Message-Id: <20211215230756.2009115-3-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211215230756.2009115-1-robh@kernel.org>
-References: <20211215230756.2009115-1-robh@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y7DAUjl0wbjv/4De3uR/B1mDYliz+uJw6v1sVT86P/0=;
+        b=jloRsC+GynyMlCZi5I6DdH/y/Ja9YyQp36LOHRXPRoK5TrFmWIO8DBCizRH5WPhxRb
+         nV0DcQUZi2FYvd4WC6TVWScrxgO+ZBAhRcInZBGpgs2PkxaDHhAAHBABod4FuiJ9Uree
+         xQcBqLfZEVcmPhATzQLSPrqR0HRIXz8y3rAQSd1lBRUaH+SMCEMLQuCU82T4d/Rxywau
+         2hFL4640Blx5Yp6Rh3UFc82jLFleY5NgU++p9O60LpYfXPWaQO1wsUIsPzP7FjjTZwcH
+         bxzUuo3Zj/ugJ7cGfmiEmVNd7jPZmafb2qLfPqIn1viWe/TFziFYr3D8ECpqfZaZf5AS
+         gEPw==
+X-Gm-Message-State: AOAM5312808KjFqOaMOOYrcx/vVlYsyEj8RV0PTo3oWihTo6ehKqQHcC
+        uO1h07uGiqjR9uKcmeLOpjAJAoG9EiM81h3ne/LHJw==
+X-Google-Smtp-Source: ABdhPJx4cvTTBXFqEZkT1GB0kUVQZrVn1kPQL0HpO20VRBPmvBRZLZsWMjSZw5LuWPt5oJFsHz66EGtUKPCrbnbAwuA=
+X-Received: by 2002:a2e:95d3:: with SMTP id y19mr12740025ljh.175.1639609849022;
+ Wed, 15 Dec 2021 15:10:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
+ <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com> <87wnkbuuuz.ffs@tglx>
+ <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com> <8735mvthk6.ffs@tglx>
+ <2ab24da8-e37d-426a-9500-b7541d21f8a3@www.fastmail.com> <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
+ <Ybpe/ND+MQq6tqoR@piout.net> <CALAqxLWe13ZghdWphzWZZsRGa+MeAH58syfem6ktDFHF0WG4Dg@mail.gmail.com>
+ <87pmpxlcrd.ffs@tglx>
+In-Reply-To: <87pmpxlcrd.ffs@tglx>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 15 Dec 2021 15:10:37 -0800
+Message-ID: <CALAqxLUz8c-mOMVUsHj39Vbh35wHA1a8QfbTjLFrnL8qi2Ju6Q@mail.gmail.com>
+Subject: Re: Time keeping while suspended in the presence of persistent clock drift
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Joel Daniels <jdaniels@sent.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The musb glue drivers just copy the glue resources to the musb child device.
-Instead, set the musb child device's DT node pointer to the parent device's
-node so that platform_get_irq_byname() can find the resources in the DT.
-This removes the need for statically populating the IRQ resources from the
-DT which has been deprecated for some time.
+On Wed, Dec 15, 2021 at 2:33 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Wed, Dec 15 2021 at 14:02, John Stultz wrote:
+> > On Wed, Dec 15, 2021 at 1:32 PM Alexandre Belloni
+> >> I'd rather lean towards the timekeeping code doing that. The RTC
+> >
+> > Heh, touche'!  :)
+> >
+> >> subsystem doesn't know which RTC has to be used.
+> >
+> > Though the RTC layer *is* the one that tracks which RTC is used, via
+> > the logic in drivers/rtc/class.c, and the timekeeping core already has
+> > adjtimex for timekeeping corrections, so if we're correcting
+> > underlying RTCs it seems such tuning would best be done in the RTC
+> > layer.
+> >
+> > Though how the persistent_clock interface ties into such corrections
+> > would be a separate thing.
+>
+> Might be the final trigger to get rid of that leftover from the last
+> millenium?
+>
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/usb/musb/am35x.c    | 2 ++
- drivers/usb/musb/da8xx.c    | 2 ++
- drivers/usb/musb/jz4740.c   | 1 +
- drivers/usb/musb/mediatek.c | 2 ++
- drivers/usb/musb/omap2430.c | 1 +
- drivers/usb/musb/ux500.c    | 1 +
- 6 files changed, 9 insertions(+)
+Yeah. Simplifying probably helps for consistency and maintainability.
+(on top of the rtc and persistent clock, we also have the nonstop
+clocksources that keep running through suspend and can be used. :)
 
-diff --git a/drivers/usb/musb/am35x.c b/drivers/usb/musb/am35x.c
-index 660641ab1545..bf2c0fa6cb32 100644
---- a/drivers/usb/musb/am35x.c
-+++ b/drivers/usb/musb/am35x.c
-@@ -500,6 +500,8 @@ static int am35x_probe(struct platform_device *pdev)
- 	pinfo.num_res = pdev->num_resources;
- 	pinfo.data = pdata;
- 	pinfo.size_data = sizeof(*pdata);
-+	pinfo.fwnode = of_fwnode_handle(pdev->dev.of_node);
-+	pinfo.of_node_reused = true;
- 
- 	glue->musb = musb = platform_device_register_full(&pinfo);
- 	if (IS_ERR(musb)) {
-diff --git a/drivers/usb/musb/da8xx.c b/drivers/usb/musb/da8xx.c
-index e4e0195131da..fd4ae2dd24e5 100644
---- a/drivers/usb/musb/da8xx.c
-+++ b/drivers/usb/musb/da8xx.c
-@@ -563,6 +563,8 @@ static int da8xx_probe(struct platform_device *pdev)
- 	pinfo.num_res = pdev->num_resources;
- 	pinfo.data = pdata;
- 	pinfo.size_data = sizeof(*pdata);
-+	pinfo.fwnode = of_fwnode_handle(np);
-+	pinfo.of_node_reused = true;
- 
- 	glue->musb = platform_device_register_full(&pinfo);
- 	ret = PTR_ERR_OR_ZERO(glue->musb);
-diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-index 5b7d576bf6ee..417c30bff9ca 100644
---- a/drivers/usb/musb/jz4740.c
-+++ b/drivers/usb/musb/jz4740.c
-@@ -231,6 +231,7 @@ static int jz4740_probe(struct platform_device *pdev)
- 	musb->dev.parent		= dev;
- 	musb->dev.dma_mask		= &musb->dev.coherent_dma_mask;
- 	musb->dev.coherent_dma_mask	= DMA_BIT_MASK(32);
-+	device_set_of_node_from_dev(&musb->dev, dev);
- 
- 	glue->pdev			= musb;
- 	glue->clk			= clk;
-diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
-index f5d97eb84cb5..1aeb34dbe24f 100644
---- a/drivers/usb/musb/mediatek.c
-+++ b/drivers/usb/musb/mediatek.c
-@@ -538,6 +538,8 @@ static int mtk_musb_probe(struct platform_device *pdev)
- 	pinfo.num_res = pdev->num_resources;
- 	pinfo.data = pdata;
- 	pinfo.size_data = sizeof(*pdata);
-+	pinfo.fwnode = of_fwnode_handle(np);
-+	pinfo.of_node_reused = true;
- 
- 	glue->musb_pdev = platform_device_register_full(&pinfo);
- 	if (IS_ERR(glue->musb_pdev)) {
-diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
-index d2b7e613eb34..7d4d0713f4f0 100644
---- a/drivers/usb/musb/omap2430.c
-+++ b/drivers/usb/musb/omap2430.c
-@@ -327,6 +327,7 @@ static int omap2430_probe(struct platform_device *pdev)
- 	musb->dev.parent		= &pdev->dev;
- 	musb->dev.dma_mask		= &omap2430_dmamask;
- 	musb->dev.coherent_dma_mask	= omap2430_dmamask;
-+	device_set_of_node_from_dev(&musb->dev, &pdev->dev);
- 
- 	glue->dev			= &pdev->dev;
- 	glue->musb			= musb;
-diff --git a/drivers/usb/musb/ux500.c b/drivers/usb/musb/ux500.c
-index 9bce19b5ffd7..8ea62c344328 100644
---- a/drivers/usb/musb/ux500.c
-+++ b/drivers/usb/musb/ux500.c
-@@ -262,6 +262,7 @@ static int ux500_probe(struct platform_device *pdev)
- 	musb->dev.parent		= &pdev->dev;
- 	musb->dev.dma_mask		= &pdev->dev.coherent_dma_mask;
- 	musb->dev.coherent_dma_mask	= pdev->dev.coherent_dma_mask;
-+	device_set_of_node_from_dev(&musb->dev, &pdev->dev);
- 
- 	glue->dev			= &pdev->dev;
- 	glue->musb			= musb;
--- 
-2.32.0
+It's just that window after resume but before the sleep time injection
+where time would be incorrect always made me uncomfortable, so it was
+nice to have some correct way to avoid that, even if all hardware
+couldn't utilize it.  But as I'm less involved here, maybe someone
+else can simplify things and live with that worry. :)
 
+thanks
+-john

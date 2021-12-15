@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 359DB47549C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4D747549B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 09:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240939AbhLOIwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 03:52:43 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48398 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240934AbhLOIwj (ORCPT
+        id S240927AbhLOIwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 03:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231282AbhLOIwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 03:52:39 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BF7gjRf030002;
-        Wed, 15 Dec 2021 08:52:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=2J1ribNNKGa2+n1R4Zv8pbfAcOMU0iSIpnvv3Q+3k1E=;
- b=kQyFx+JfaGqIiWI08d5JBjNQIyTPEo2MhTKOrN2GsG2VyeHKDYC/p1bq9lx3/mXNb56f
- AViuwtay1rGazCQCvdwThkzyJIiMIYaEANtBNEOKLXaFUwfhI/GN7mRSLtEJhaXjp/hC
- 0aMTzer3TinJcX5LH0jTnZYkBCqY9UakIUraOt1vHABfi/TLOYhlwmKsr9VKMTdUdzVX
- cSzdXTWN0hk8Hs5uOdOM5PsA1zlaYxDiV9/GKUYlV5DFzbETEJvW917zjnypS1j93qeO
- Z6mQAQ4XmrP4rUsQ1bmGeREBbu7wUQSuZblGiI6XhdyIshPd8P47aHLzJLQNEDl7mip6 Bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r8412a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 08:52:28 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BF8kPZ4032101;
-        Wed, 15 Dec 2021 08:52:28 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cx9r8411y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 08:52:28 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BF8X9G7003310;
-        Wed, 15 Dec 2021 08:52:26 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3cy7qvtqsr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Dec 2021 08:52:26 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BF8iO8C41025822
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Dec 2021 08:44:24 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5264AAE053;
-        Wed, 15 Dec 2021 08:52:23 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07875AE075;
-        Wed, 15 Dec 2021 08:52:23 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Dec 2021 08:52:22 +0000 (GMT)
-Received: from [9.43.169.195] (unknown [9.43.169.195])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id B487A6015D;
-        Wed, 15 Dec 2021 19:52:12 +1100 (AEDT)
-Subject: Re: [PATCH misc-next] drivers/misc: remove redundant rc variable
-To:     cgel.zte@gmail.com, fbarrat@linux.ibm.com
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
+        Wed, 15 Dec 2021 03:52:35 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D30BC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 00:52:35 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id g28so19343547qkk.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 00:52:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d3xqEFCnUeJ8vvB6oqGl3RWteLibojQLIPJLALa9AL4=;
+        b=LWvCWYu5dd7SpqDfLhzfKe/gM68KLGz+a8UD4ROmRR+SiNgJaYC0CO+GKngxadcs+B
+         jw7au6+Czw16h/I5TzQ59+Nhjegs38s7HrW6EGV2ePYGKmPPj/dVe2CpsVbGEI2JLc+d
+         KbZG+3Lo+NdSqaOFyZXv59ka5U6J6QpALFB7fHX4OR2pn0mzNe8S8Y6EHZ7Mko9eDC7O
+         YYgD+iPDbUfxJaKgozd6Osl2u+gsPGwNmtov25jPzMffqa6qQzv+h+qJtdIlPe10WNwV
+         SRt3rKe6NB+OMgcd/b0vLs78iVPf63mrDLHlwM5YGE9mGEjEqerTd32oYqH/sr84Z/Da
+         Q8Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d3xqEFCnUeJ8vvB6oqGl3RWteLibojQLIPJLALa9AL4=;
+        b=nHkeNy8BD4b6HbtsVHj7j9sZ0Il4zpLiNrLisSq6Qf5yaWjJipmX9PhCu/iB4qLnYc
+         S54f+bOencaN3ctZq120rxsGXSdIrs69zSXN4noWHA3QUpNyE2zy0zxhla3PgjdETzPy
+         Kk3haApJTmnwhFqHO2Uxo6Ce2CE7D4U2Nh6car1D+xTUvmraABEMiQF6aCIJZtwQ6ILr
+         DPHLJFVhGHsGb7YvzFUfag41jRV5muueZDIw7rvYjlcuGB/0CcNMl4/cJs8cM4K6YNTr
+         x7xwYeLX3sEnF00kA9IO9JtZDSY9U/LSvgN7mFEktx9JFf1WJe4A+k6cursvo0Zg+Lcj
+         HQjQ==
+X-Gm-Message-State: AOAM5310RaPCRsXuupjCCE6VjSQ+2GqRrLWdDylHBLMMfFw0GkTiC3gL
+        YQ468D4QZlo9WTrmsoyajc8=
+X-Google-Smtp-Source: ABdhPJxbuYNNH89Hh5DonCAoPvklNGqdaYuC30FlbEHaKHj3JDfq8kkAx1hTE8+V67UMKVqj2+s/9w==
+X-Received: by 2002:a05:620a:66e:: with SMTP id a14mr7842353qkh.496.1639558354245;
+        Wed, 15 Dec 2021 00:52:34 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id t15sm1039864qta.45.2021.12.15.00.52.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 00:52:33 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     Felix.Kuehling@amd.com
+Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-References: <20211215060438.441918-1-chi.minghao@zte.com.cn>
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-Message-ID: <789ac279-ce90-5845-e3c0-e5c4b3ff1753@linux.ibm.com>
-Date:   Wed, 15 Dec 2021 19:52:02 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Subject: [PATCH] drm/amdkfd: use max() and min() to make code cleaner
+Date:   Wed, 15 Dec 2021 08:52:26 +0000
+Message-Id: <20211215085226.444116-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211215060438.441918-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nYYBK1Jr8T5-wduQnzr09b3X2UkN5WT0
-X-Proofpoint-ORIG-GUID: yWY2CMR6rTcknYAKvEefpmzLC7-EwMkU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-15_06,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 suspectscore=0 mlxlogscore=768 malwarescore=0
- mlxscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0 adultscore=0
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112150048
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/21 5:04 pm, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Return value from ocxl_context_attach() directly instead
-> of taking this in another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Acked-by: Andrew Donnellan <ajd@linux.ibm.com>
+Use max() and min() in order to make code cleaner.
 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+index 7e92dcea4ce8..c6d3555b5be6 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+@@ -2254,8 +2254,8 @@ svm_range_cpu_invalidate_pagetables(struct mmu_interval_notifier *mni,
+ 
+ 	start = mni->interval_tree.start;
+ 	last = mni->interval_tree.last;
+-	start = (start > range->start ? start : range->start) >> PAGE_SHIFT;
+-	last = (last < (range->end - 1) ? last : range->end - 1) >> PAGE_SHIFT;
++	start = max(start, range->start) >> PAGE_SHIFT;
++	last = min(last, range->end - 1) >> PAGE_SHIFT;
+ 	pr_debug("[0x%lx 0x%lx] range[0x%lx 0x%lx] notifier[0x%lx 0x%lx] %d\n",
+ 		 start, last, range->start >> PAGE_SHIFT,
+ 		 (range->end - 1) >> PAGE_SHIFT,
 -- 
-Andrew Donnellan              OzLabs, ADL Canberra
-ajd@linux.ibm.com             IBM Australia Limited
+2.25.1
+

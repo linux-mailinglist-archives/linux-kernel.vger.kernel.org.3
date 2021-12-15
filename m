@@ -2,160 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79228475B41
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7C9475B49
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbhLOO72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbhLOO71 (ORCPT
+        id S234755AbhLOPBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:01:09 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:46845 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229623AbhLOPBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:59:27 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021F2C061401
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 06:59:27 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id a11so19636966ilj.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 06:59:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=egauge.net; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :organization:user-agent:mime-version:content-transfer-encoding;
-        bh=FGUzSktIeEIDsFM8vyYCPEieWo/StazW6rU1WrCQ4Sc=;
-        b=X0s1Sl8WfdAvOXQqlGhOh24HfvJJ3OSaVj96SkWh09YHVwiKfY/yPCVVOJF26OBdFg
-         QtIR98y2KTv+W/cC6cxX0RZKWgxSJ88ScuWnb4+HzFeR8uBrOtHCeVeX/w6iXQGgUf8f
-         IaI8NhsxEBLFCtYJWzwpuqh/sDDRk1fVkHEs04l8I7vacetXVtot/8GsPPgZdC+PALhx
-         0vFG09L+UJ2zXlsUiXNcen53SYy16qg9FC21A+4oMS6ouR0TQZggUHIlD27A8BqbQNwZ
-         euA+tLdnegY5HO5BcaLCYRpqVTS8PYDr9XqG9YI+oMFbmCoiXQ2Xb0m1vXGnXOkcrfnT
-         Tf2A==
+        Wed, 15 Dec 2021 10:01:06 -0500
+Received: by mail-ot1-f46.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so25144727oto.13;
+        Wed, 15 Dec 2021 07:01:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=FGUzSktIeEIDsFM8vyYCPEieWo/StazW6rU1WrCQ4Sc=;
-        b=AX+umBlvHMUwia1bM8fg0CZ0uM9/iT7boPE6in0BJVEU4EOQ/NoX5p8ePg7IRyUhpK
-         tO1S+TA30lDABlQxfokQk58bI7+ac6wXEnNatH2MT+BuhY0tJqoYDQOOfXrzw5k8xv9T
-         2SPNJ+sc7XcSrLZFDXW7pc5dsQ66MVJzL1dXHqmb3O+kkkddJH2cULvJFr49t9EIhmqy
-         ONwfg+1sY3Qdfju5w6X7Oq/KkMGBBNKK9aOGy436us1mVxR7LDl+0GVr5dky8sHV+QdJ
-         jjlnqyY7DrMOQpy4LsZgXFT9hs4qVDBtibLKY2Un0GhpwIuW62RZBs3AaL0D7FOvGWtw
-         W7MA==
-X-Gm-Message-State: AOAM530656OQ+nO6lHLvucF4Y0cF8zEXyLjTZprUlVXsqaenTd8bGc6Z
-        6FYCjJ0deLby8CI/yi/dPL2a
-X-Google-Smtp-Source: ABdhPJyr96cALkbCjBKoe8urBSmD4Rj9c9Bsxrk9TkZIYGeCPzjxC8N2fJsHIUld2UFGjLX3IVrBUQ==
-X-Received: by 2002:a05:6e02:1c85:: with SMTP id w5mr6640419ill.211.1639580366235;
-        Wed, 15 Dec 2021 06:59:26 -0800 (PST)
-Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
-        by smtp.gmail.com with ESMTPSA id i1sm1086042ilv.54.2021.12.15.06.59.19
+        bh=Jq0x8iVALaGMJU7xAVYGCo3xMt/B1pDw6eEI2Wc91JY=;
+        b=jUmpvdTkFpdp3iHTVgIXDwfvwb4W8pdNu7Mdces0shez+0MncmrY16u2DESQaXi8yA
+         eHsbMCZ98nULBXxV1ieRe7KH27AB9VnSE9lhDzMwlTtpVp8Ptm8U8B3QcPRVqhhopdPl
+         zgsbWuzBMYmzvykLTeRQrnJYaMzQeHoHStWK9oKFsxYI9GM2mF8HB9zqvMVIX79dk3oL
+         s5VNZwlNhWNPNTp+Pihh6/w58PtaDBoyA7pYkxPnrGMkGdqNrjQDBldSgGGr7ZI0Gn6G
+         DEBEvRgN20rInTIjRKoAdeYw3mozbwBYUDw1ZS8FIZvJFJS0+k7EWrSLXxyMrTSerhaM
+         xjQw==
+X-Gm-Message-State: AOAM531uHqL3FURdWDgGkZDLUzOw1YHx/xweonPZ1jbgABjFDl20iIjy
+        2eT8XQt2uX5daghAiN5DNg==
+X-Google-Smtp-Source: ABdhPJy9pSAKcn/6iGV5Hbw1t6r2jfryKDONyLlWKGyr+6nX1um5VXoLr8WiphSTjUPLS5R9dSYbpw==
+X-Received: by 2002:a9d:70ce:: with SMTP id w14mr8776986otj.77.1639580464571;
+        Wed, 15 Dec 2021 07:01:04 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id r22sm387007oij.36.2021.12.15.07.01.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 06:59:25 -0800 (PST)
-Message-ID: <9cfbcc99f8a70ba2c03a9ad99f273f12e237e09f.camel@egauge.net>
-Subject: Re: [PATCH v5 1/2] wilc1000: Add reset/enable GPIO support to SPI
- driver
-From:   David Mosberger-Tang <davidm@egauge.net>
-To:     Claudiu.Beznea@microchip.com, Ajay.Kathat@microchip.com
-Cc:     adham.abozaeid@microchip.com, davem@davemloft.net,
-        devicetree@vger.kernel.org, kuba@kernel.org, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, robh+dt@kernel.org
-Date:   Wed, 15 Dec 2021 07:59:05 -0700
-In-Reply-To: <d55a2558-b05d-5995-b0f0-f234cb3b50aa@microchip.com>
-References: <20211215030501.3779911-1-davidm@egauge.net>
-         <20211215030501.3779911-2-davidm@egauge.net>
-         <d55a2558-b05d-5995-b0f0-f234cb3b50aa@microchip.com>
-Organization: eGauge Systems LLC
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 15 Dec 2021 07:01:03 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Frank Rowand <frank.rowand@sony.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v4] of/fdt: Rework early_init_dt_scan_memory() to call directly
+Date:   Wed, 15 Dec 2021 09:01:02 -0600
+Message-Id: <20211215150102.1303588-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-15 at 06:41 +0000, Claudiu.Beznea@microchip.com wrote:
-> On 15.12.2021 05:05, David Mosberger-Tang wrote:
-> > 
-> +static int wilc_parse_gpios(struct wilc *wilc)
-> > +{
-> > +       struct spi_device *spi = to_spi_device(wilc->dev);
-> > +       struct wilc_spi *spi_priv = wilc->bus_data;
-> > +       struct wilc_gpios *gpios = &spi_priv->gpios;
-> > +
-> > +       /* get ENABLE pin and deassert it (if it is defined): */
-> > +       gpios->enable = devm_gpiod_get_optional(&spi->dev,
-> > +                                               "enable", GPIOD_OUT_LOW);
-> > +       /* get RESET pin and assert it (if it is defined): */
-> > +       if (gpios->enable) {
-> > +               /* if enable pin exists, reset must exist as well */
-> > +               gpios->reset = devm_gpiod_get(&spi->dev,
-> > +                                             "reset", GPIOD_OUT_HIGH);
-> 
-> As far as I can tell form gpiolib code the difference b/w GPIOD_OUT_HIGH
-> and GPIOD_OUT_LOW in gpiolib is related to the initial value for the GPIO.
+Use of the of_scan_flat_dt() function predates libfdt and is discouraged
+as libfdt provides a nicer set of APIs. Rework
+early_init_dt_scan_memory() to be called directly and use libfdt.
 
-Yes.
+Cc: John Crispin <john@phrozen.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+Link: https://lore.kernel.org/r/20211208155839.4084795-1-robh@kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v4:
+ - Revert the changes to search for memory nodes at any level which were
+   accidentally committed.
+v3:
+ - Fix powerpc when /ibm,dynamic-reconfiguration-memory is present
+v2:
+ - ralink: Use 'if' instead of 'else if'
+ - early_init_dt_scan_memory: continue instead of return on no reg
+ - Fix indentation
+---
+ arch/mips/ralink/of.c      | 19 +++--------
+ arch/powerpc/kernel/prom.c | 21 ++++++------
+ drivers/of/fdt.c           | 68 ++++++++++++++++++++------------------
+ include/linux/of_fdt.h     |  3 +-
+ 4 files changed, 51 insertions(+), 60 deletions(-)
 
-> Did you used GPIOD_OUT_HIGH for reset to have the chip out of reset at this
-> point?
-
-No, ~RESET is an active-low signal.  GPIOD_OUT_LOW should really be
-called GPIOD_OUT_DEASSERTED or something like that.  The code ensures
-that the chip is in RESET and ~ENABLEd after parsing the GPIOs.
-
-> > +               if (IS_ERR(gpios->reset)) {
-> > +                       dev_err(&spi->dev, "missing reset gpio.\n");
-> > +                       return PTR_ERR(gpios->reset);
-> > +               }
-> > +       } else {
-> > +               gpios->reset = devm_gpiod_get_optional(&spi->dev,
-> > +                                                      "reset", GPIOD_OUT_HIGH);
-> > +       }
-> > +       return 0;
-> > +}
-> > +
-> > +static void wilc_wlan_power(struct wilc *wilc, bool on)
-> > +{
-> > +       struct wilc_spi *spi_priv = wilc->bus_data;
-> > +       struct wilc_gpios *gpios = &spi_priv->gpios;
-> > +
-> > +       if (on) {
-> > +               gpiod_set_value(gpios->enable, 1);      /* assert ENABLE */
-> > +               mdelay(5);
-> > +               gpiod_set_value(gpios->reset, 0);       /* deassert RESET */
-> 
-> From what I can tell from gpiolib code, requesting the pin from device tree
-> with:
-> 
-> +        reset-gpios = <&pioA 6 GPIO_ACTIVE_LOW>;
-> 
-> makes the value written with gpiod_set_value() to be negated, thus the 0
-> written here is translated to a 1 on the pin. Is there a reason you did it
-> like this?
-
-Yes, of course.  RESET is an active-low signal, as defined in the
-datasheet.
-
-> Would it have been simpler to have both pins requested with
-> GPIO_ACTIVE_HIGH and here to do gpiod_set_value(gpio, 1) for both of the
-> pin. In this way, at the first read of the code one one would have been
-> telling that it does what datasheet specifies: for power on toggle enable
-> and reset gpios from 0 to 1 with a delay in between.
-
-I think you're confusing 0 and 1 with low-voltage and high-voltage.  0
-means de-assert the signal, 1 means assert the signal.  Whether that
-translates to a low voltage or a high voltage depends on whether the
-signal a active-low or active-high.
-
-> 
-> 
-> > +       } else {
-> > +               gpiod_set_value(gpios->reset, 1);       /* assert RESET */
-> > +               gpiod_set_value(gpios->enable, 0);      /* deassert ENABLE */
-> 
-> I don't usually see comments near the code line in kernel. Maybe move them
-> before the actual code line or remove them at all as the code is impler enough?
-
-You're kidding, right?
-
-  --david
+diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
+index 0135376c5de5..35a87a2da10b 100644
+--- a/arch/mips/ralink/of.c
++++ b/arch/mips/ralink/of.c
+@@ -53,17 +53,6 @@ void __init device_tree_init(void)
+ 	unflatten_and_copy_device_tree();
+ }
+ 
+-static int memory_dtb;
+-
+-static int __init early_init_dt_find_memory(unsigned long node,
+-				const char *uname, int depth, void *data)
+-{
+-	if (depth == 1 && !strcmp(uname, "memory@0"))
+-		memory_dtb = 1;
+-
+-	return 0;
+-}
+-
+ void __init plat_mem_setup(void)
+ {
+ 	void *dtb;
+@@ -77,10 +66,10 @@ void __init plat_mem_setup(void)
+ 	dtb = get_fdt();
+ 	__dt_setup_arch(dtb);
+ 
+-	of_scan_flat_dt(early_init_dt_find_memory, NULL);
+-	if (memory_dtb)
+-		of_scan_flat_dt(early_init_dt_scan_memory, NULL);
+-	else if (soc_info.mem_detect)
++	if (!early_init_dt_scan_memory())
++		return;
++
++	if (soc_info.mem_detect)
+ 		soc_info.mem_detect();
+ 	else if (soc_info.mem_size)
+ 		memblock_add(soc_info.mem_base, soc_info.mem_size * SZ_1M);
+diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+index 6e1a106f02eb..ad1230c4f3fe 100644
+--- a/arch/powerpc/kernel/prom.c
++++ b/arch/powerpc/kernel/prom.c
+@@ -532,19 +532,18 @@ static int  __init early_init_drmem_lmb(struct drmem_lmb *lmb,
+ }
+ #endif /* CONFIG_PPC_PSERIES */
+ 
+-static int __init early_init_dt_scan_memory_ppc(unsigned long node,
+-						const char *uname,
+-						int depth, void *data)
++static int __init early_init_dt_scan_memory_ppc(void)
+ {
+ #ifdef CONFIG_PPC_PSERIES
+-	if (depth == 1 &&
+-	    strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
++	const void *fdt = initial_boot_params;
++	int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
++
++	if (node > 0)
+ 		walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
+-		return 0;
+-	}
++
+ #endif
+-	
+-	return early_init_dt_scan_memory(node, uname, depth, data);
++
++	return early_init_dt_scan_memory();
+ }
+ 
+ /*
+@@ -749,7 +748,7 @@ void __init early_init_devtree(void *params)
+ 
+ 	/* Scan memory nodes and rebuild MEMBLOCKs */
+ 	early_init_dt_scan_root();
+-	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
++	early_init_dt_scan_memory_ppc();
+ 
+ 	parse_early_param();
+ 
+@@ -858,7 +857,7 @@ void __init early_get_first_memblock_info(void *params, phys_addr_t *size)
+ 	 */
+ 	add_mem_to_memblock = 0;
+ 	early_init_dt_scan_root();
+-	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
++	early_init_dt_scan_memory_ppc();
+ 	add_mem_to_memblock = 1;
+ 
+ 	if (size)
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index 5e216555fe4f..a835c458f50a 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1078,49 +1078,53 @@ u64 __init dt_mem_next_cell(int s, const __be32 **cellp)
+ /*
+  * early_init_dt_scan_memory - Look for and parse memory nodes
+  */
+-int __init early_init_dt_scan_memory(unsigned long node, const char *uname,
+-				     int depth, void *data)
++int __init early_init_dt_scan_memory(void)
+ {
+-	const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
+-	const __be32 *reg, *endp;
+-	int l;
+-	bool hotpluggable;
++	int node;
++	const void *fdt = initial_boot_params;
+ 
+-	/* We are scanning "memory" nodes only */
+-	if (type == NULL || strcmp(type, "memory") != 0)
+-		return 0;
++	fdt_for_each_subnode(node, fdt, 0) {
++		const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
++		const __be32 *reg, *endp;
++		int l;
++		bool hotpluggable;
+ 
+-	reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
+-	if (reg == NULL)
+-		reg = of_get_flat_dt_prop(node, "reg", &l);
+-	if (reg == NULL)
+-		return 0;
++		/* We are scanning "memory" nodes only */
++		if (type == NULL || strcmp(type, "memory") != 0)
++			continue;
+ 
+-	endp = reg + (l / sizeof(__be32));
+-	hotpluggable = of_get_flat_dt_prop(node, "hotpluggable", NULL);
++		reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
++		if (reg == NULL)
++			reg = of_get_flat_dt_prop(node, "reg", &l);
++		if (reg == NULL)
++			continue;
+ 
+-	pr_debug("memory scan node %s, reg size %d,\n", uname, l);
++		endp = reg + (l / sizeof(__be32));
++		hotpluggable = of_get_flat_dt_prop(node, "hotpluggable", NULL);
+ 
+-	while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
+-		u64 base, size;
++		pr_debug("memory scan node %s, reg size %d,\n",
++			 fdt_get_name(fdt, node, NULL), l);
+ 
+-		base = dt_mem_next_cell(dt_root_addr_cells, &reg);
+-		size = dt_mem_next_cell(dt_root_size_cells, &reg);
++		while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
++			u64 base, size;
+ 
+-		if (size == 0)
+-			continue;
+-		pr_debug(" - %llx, %llx\n", base, size);
++			base = dt_mem_next_cell(dt_root_addr_cells, &reg);
++			size = dt_mem_next_cell(dt_root_size_cells, &reg);
+ 
+-		early_init_dt_add_memory_arch(base, size);
++			if (size == 0)
++				continue;
++			pr_debug(" - %llx, %llx\n", base, size);
+ 
+-		if (!hotpluggable)
+-			continue;
++			early_init_dt_add_memory_arch(base, size);
+ 
+-		if (memblock_mark_hotplug(base, size))
+-			pr_warn("failed to mark hotplug range 0x%llx - 0x%llx\n",
+-				base, base + size);
+-	}
++			if (!hotpluggable)
++				continue;
+ 
++			if (memblock_mark_hotplug(base, size))
++				pr_warn("failed to mark hotplug range 0x%llx - 0x%llx\n",
++					base, base + size);
++		}
++	}
+ 	return 0;
+ }
+ 
+@@ -1271,7 +1275,7 @@ void __init early_init_dt_scan_nodes(void)
+ 		pr_warn("No chosen node found, continuing without\n");
+ 
+ 	/* Setup memory, calling early_init_dt_add_memory_arch */
+-	of_scan_flat_dt(early_init_dt_scan_memory, NULL);
++	early_init_dt_scan_memory();
+ 
+ 	/* Handle linux,usable-memory-range property */
+ 	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
+diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
+index df3d31926c3c..914739f3c192 100644
+--- a/include/linux/of_fdt.h
++++ b/include/linux/of_fdt.h
+@@ -59,8 +59,7 @@ extern unsigned long of_get_flat_dt_root(void);
+ extern uint32_t of_get_flat_dt_phandle(unsigned long node);
+ 
+ extern int early_init_dt_scan_chosen(char *cmdline);
+-extern int early_init_dt_scan_memory(unsigned long node, const char *uname,
+-				     int depth, void *data);
++extern int early_init_dt_scan_memory(void);
+ extern int early_init_dt_scan_chosen_stdout(void);
+ extern void early_init_fdt_scan_reserved_mem(void);
+ extern void early_init_fdt_reserve_self(void);
+-- 
+2.32.0
 

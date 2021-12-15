@@ -2,122 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B83E14759A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 868A34759A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 14:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242861AbhLON2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 08:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242840AbhLON2q (ORCPT
+        id S242875AbhLON3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 08:29:18 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57598 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242840AbhLON3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 08:28:46 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DC5C061574;
-        Wed, 15 Dec 2021 05:28:46 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id 207so33286225ljf.10;
-        Wed, 15 Dec 2021 05:28:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Dz0GA19ryeg+oeJV9N8K8wsEZZL8M53J/JQlMxcDflo=;
-        b=ltwlAtWfj+cSg72jYSvGVLJxrzjiq7RGKiUufJa01KvLLc9morCymEJLqAuuilI5FI
-         uXHoLXafxt10iwduMOTRiljVzW6UsR/Mg6dizt3qBeCAOZpPWs3Q9yI7ZN0Z3EE4h1XG
-         ed9T8+8CZBGg3OA/kYi7dz8d0yvQYcc/dN5o/6yZrl5Wg8rpD2U39D1zHZDH8bxe1Qb9
-         zeYbeCd4VySPYplr1Xn5CdWSK2pkIb9C64pLiCONu8DCu2+oqig11H87gzACn42N8wFz
-         eTLCiVLgmRrBqpfcPfi3itp4zB4/4PsRGdlOzeUTURstGLrtslUhR5zxeGodfUju8YDt
-         OC3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Dz0GA19ryeg+oeJV9N8K8wsEZZL8M53J/JQlMxcDflo=;
-        b=MAlCAD4FaIJ7c5Q7b8Iko0KNr89xifier+2EIz3F2P9uB/tim7yH8BwUmsIcnK5sg4
-         9HQUZAgkx/W7wl0oWt7tM37ygLnlJXhUisEWxaVuO6OQmo0qyjwbZKjdcb08y9j1iqRl
-         IQakDZEGd80uG1X6npD2RIJ2C73MjMFQAnSOIKtRyWSKrlhUFuy6staplFyiaeNj+rpu
-         EkLC3f+wGFW/gNTopEzDuxReAqKgPtUGZfX0vBMGCLwP4D6zexE1M+BH8mESU9VtcQ2j
-         9hxPu8NC2OJQ+ZLKUSL/kKNfuGmUinggblgHNeVJdJgQZTyNnVKZQilIezSp1T6nONyx
-         K/hg==
-X-Gm-Message-State: AOAM532/c02aIK+CKwXGfZA7NUUJjF8i+tM1DNhu9O6jsvt31p9Ewwvq
-        i5wK6L198Bd+899CWDCw7iA=
-X-Google-Smtp-Source: ABdhPJzM1f61gCZlatJ/6FWjfJNJuhOQFug6vE35pjrfRjHRz/L3IKNkWuVR6KnAUEsjnmKNhcCYmw==
-X-Received: by 2002:a2e:8e38:: with SMTP id r24mr9915935ljk.450.1639574924630;
-        Wed, 15 Dec 2021 05:28:44 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id p11sm322554lfc.101.2021.12.15.05.28.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 05:28:43 -0800 (PST)
-Date:   Wed, 15 Dec 2021 14:28:41 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        David Heidelberg <david@ixit.cz>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Anton Bambura <jenneron@protonmail.com>,
-        Antoni Aloy Torrens <aaloytorrens@gmail.com>,
-        Nikola Milosavljevic <mnidza@outlook.com>,
-        Ion Agorria <ion@agorria.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Ihor Didenko <tailormoon@rambler.ru>,
-        Andreas Westman Dorcsak <hedmoo@yahoo.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
-        Jasper Korten <jja2000@gmail.com>,
-        Thomas Graichen <thomas.graichen@gmail.com>,
-        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 08/28] ARM: tegra: Add device-tree for ASUS
- Transformer Prime TF201
-Message-ID: <Ybntiedyo353hMxm@orome>
-References: <20211211211412.10791-1-digetx@gmail.com>
- <20211211211412.10791-9-digetx@gmail.com>
+        Wed, 15 Dec 2021 08:29:12 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 780D51F387;
+        Wed, 15 Dec 2021 13:29:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639574951; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gJ2jyR7VN20r+seaSe1QDbMXvh1OvYB4PCD+TDYUlvA=;
+        b=QpLHpTaJVVFSh6aewDo5f/rH0GBqqfLMbQJxfUptpMzyy3+LKlVUOmPd2Z/whIl6DNW6rx
+        f7I1LJ62ZJzLID1rRHbO0ENivgATp3hc0bZVNY7FRK3UTIkjYA9ofzNgxg7e7sZxbQBtS3
+        oTRZAVRZTrpycFPwHe5Kaio2Bfm8yes=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639574951;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gJ2jyR7VN20r+seaSe1QDbMXvh1OvYB4PCD+TDYUlvA=;
+        b=eWa/RbMxgh+BjSWJYP2QdUvpkhTHBQbMGPzqHelj/Ag60L1PGcoDbYtFx+E0PlpgZvv640
+        SH8WKfeZD9vaXkAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2EDEC1330B;
+        Wed, 15 Dec 2021 13:29:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3sZSCqftuWGhTAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 15 Dec 2021 13:29:11 +0000
+Message-ID: <4d16ff4b-4060-49df-805f-66d293ffa186@suse.de>
+Date:   Wed, 15 Dec 2021 14:29:10 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3 0/3] drm/simpledrm: Apple M1 / DT platform support
+ fixes
+Content-Language: en-US
+To:     Hector Martin <marcan@marcan.st>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20211212062407.138309-1-marcan@marcan.st>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20211212062407.138309-1-marcan@marcan.st>
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="8CCpjWlobjOg053Y"
-Content-Disposition: inline
-In-Reply-To: <20211211211412.10791-9-digetx@gmail.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+ protocol="application/pgp-signature";
+ boundary="------------YKMJGICHJYklTHrMiV9Y0wVh"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------YKMJGICHJYklTHrMiV9Y0wVh
+Content-Type: multipart/mixed; boundary="------------aaASzzqf6IN1TtNz411BVreu";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Hector Martin <marcan@marcan.st>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>
+Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Javier Martinez Canillas <javier@dowhile0.org>,
+ Pekka Paalanen <ppaalanen@gmail.com>, devicetree@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Message-ID: <4d16ff4b-4060-49df-805f-66d293ffa186@suse.de>
+Subject: Re: [PATCH v3 0/3] drm/simpledrm: Apple M1 / DT platform support
+ fixes
+References: <20211212062407.138309-1-marcan@marcan.st>
+In-Reply-To: <20211212062407.138309-1-marcan@marcan.st>
 
---8CCpjWlobjOg053Y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--------------aaASzzqf6IN1TtNz411BVreu
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On Sun, Dec 12, 2021 at 12:13:52AM +0300, Dmitry Osipenko wrote:
-[...]
-> +	display-panel {
-> +		compatible = "hannstar,hsd101pww2";
+SGkNCg0KQW0gMTIuMTIuMjEgdW0gMDc6MjQgc2NocmllYiBIZWN0b3IgTWFydGluOg0KPiBI
+aSBEUk0gZm9sa3MsDQo+IA0KPiBUaGlzIHNob3J0IHNlcmllcyBtYWtlcyBzaW1wbGVkcm0g
+d29yayBvbiBBcHBsZSBNMSAoaW5jbHVkaW5nIFByby9NYXgpDQo+IHBsYXRmb3JtcyB0aGUg
+d2F5IHNpbXBsZWZiIGFscmVhZHkgZG9lcywgYnkgYWRkaW5nIFhSR0IyMTAxMDEwIHN1cHBv
+cnQNCj4gYW5kIG1ha2luZyBpdCBiaW5kIHRvIGZyYW1lYnVmZmVycyBpbiAvY2hvc2VuIHRo
+ZSBzYW1lIHdheSBzaW1wbGVmYg0KPiBkb2VzLg0KPiANCj4gVGhpcyBhdm9pZHMgYnJlYWtp
+bmcgdGhlIGJvb3Rsb2FkZXItcHJvdmlkZWQgZnJhbWVidWZmZXIgY29uc29sZSB3aGVuDQo+
+IHNpbXBsZWRybSBpcyBzZWxlY3RlZCB0byByZXBsYWNlIHNpbXBsZWZiLCBhcyB0aGVzZSBG
+QnMgYWx3YXlzIHNlZW0gdG8NCj4gYmUgMTAtYml0IChhdCBsZWFzdCB3aGVuIGEgcmVhbCBz
+Y3JlZW4gaXMgYXR0YWNoZWQpLg0KDQpJZiB0aGVyZSBhcmUgbm8gZnVydGhlciBjb21tZW50
+cywgSSdtIGdvaW5nIHRvIGFwcGx5IHRoZSBzZXJpZXMgdG8gDQpkcm0tbWlzYy1uZXh0Lg0K
+DQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiBDaGFuZ2VzIHNpbmNlIHYyOg0KPiAt
+IE1hZGUgMTAtYml0IGNvbnZlcnNpb24gY29kZSBmaWxsIHRoZSBMU0JzDQo+IC0gQWRkZWQg
+QVJHQjIxMDEwMTAgdG8gc3VwcG9ydGVkIGZvcm1hdHMgbGlzdA0KPiAtIFNpbXBsaWZpZWQg
+T0YgY29yZSBjb2RlIHBlciByZXZpZXcgZmVlZGJhY2sNCj4gSGVjdG9yIE1hcnRpbiAoMyk6
+DQo+ICAgIG9mOiBNb3ZlIHNpbXBsZS1mcmFtZWJ1ZmZlciBkZXZpY2UgaGFuZGxpbmcgZnJv
+bSBzaW1wbGVmYiB0byBvZg0KPiAgICBkcm0vZm9ybWF0LWhlbHBlcjogQWRkIGRybV9mYl94
+cmdiODg4OF90b194cmdiMjEwMTAxMF90b2lvKCkNCj4gICAgZHJtL3NpbXBsZWRybTogQWRk
+IFtBWF1SR0IyMTAxMDEwIGZvcm1hdHMNCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9m
+b3JtYXRfaGVscGVyLmMgfCA2NCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAg
+IGRyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRybS5jICAgIHwgIDQgKy0NCj4gICBkcml2
+ZXJzL29mL3BsYXRmb3JtLmMgICAgICAgICAgICAgICB8ICA0ICsrDQo+ICAgZHJpdmVycy92
+aWRlby9mYmRldi9zaW1wbGVmYi5jICAgICAgfCAyMSArLS0tLS0tLS0tDQo+ICAgaW5jbHVk
+ZS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuaCAgICAgfCAgMyArKw0KPiAgIDUgZmlsZXMgY2hh
+bmdlZCwgNzQgaW5zZXJ0aW9ucygrKSwgMjIgZGVsZXRpb25zKC0pDQo+IA0KDQotLSANClRo
+b21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3
+YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJu
+YmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bD
+vGhyZXI6IEl2byBUb3Rldg0K
 
-There doesn't seem to be a DT binding for this and I can't find any
-patches where this would be added. Is there a patch somewhere to do
-this?
+--------------aaASzzqf6IN1TtNz411BVreu--
 
-Thierry
-
---8CCpjWlobjOg053Y
-Content-Type: application/pgp-signature; name="signature.asc"
+--------------YKMJGICHJYklTHrMiV9Y0wVh
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG57YYACgkQ3SOs138+
-s6HgQg/+MJCWmuNMm4flx4FCM3sClwDAw0f2I+xGELeWHxyPG2TKg8TS8h0L8cM1
-ZaVzJ994Pypxlecr9nnWNchJuYSx+FOjMgs/OtyE74Tno9hnRDPib9L++dRGI6SH
-KfAlLcSIXRZn4TQOBQ8CSVh4IttrAc//BGOgmMY0wWGzaZFKg3ALnaDwbQ1DplSL
-asiXg05FqbVci8SCO11FPMZ0UNrFaDYQjg5mln81WAgIDc0kwH+7jvMD5cNWalu2
-d6X3zMwy4aBITWH4qBGPPNG/ulKgdnAjrqoSF2VleblH0RXF0nuY5OyUSrDvmIlp
-0Qc0BN5TO/Eb5rKNBEifQVfrWOmdRShulD6St//+f8Cc+JLwNxtUKOzjZPQL6fnX
-4MIvY+Pnlp9zJSipzec/dN0A0o23W6u0Md6VU9bl2T/BBmMyplXDOnS3IMkUjreW
-D4KQoIUnGgOEee5Hq0vD0rRqgugB/z5tXka1dhxaLdIFbGQTWF9Nrg/U5dtYiFG0
-3WB50nGo8nZUfSk+Vs9imd7xWEE8bDtw/gBMiydm+gGraPW9UQ2He3xRB0ONtoez
-30mUviHYauvIEFEerKxtJ4tZb+Qq6nk9dTxOhqf/xn68uKH3K6x5MvlKFpY6KUWB
-lDFgceUherzSNLfpfxMtFMSoZaGry3geQMlmCza+zuIP9O/S45U=
-=6jhd
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmG57aYFAwAAAAAACgkQlh/E3EQov+Dk
+AxAAs8xKAuo10t0j9jgIcJcbdfBgzKEDF1wtooz9GVCjTAsoqTiz0Eq83SG2bGjv1riybTKshNYq
+CriNW3gLP7LTg14Q8EXtnykoDaA4CfxuyEpAapBrM+BgAH8inkd908+cXJx776c59A7hr4YWdKTo
+1qtwfToXjYNnBbURPz6Ke89GO9ca288CifBn49JgGv9WOh35W2vakTV5UAtdVbKwiBh0q6qk+66P
+YvEhAl/h+p22PiRXzLN5BJMWQEWqlb19VdfBNXxGpzQ0UymLhDHeGjk0/2DKqDBG9zXRkDj8OpbD
+c+dxhhjKTNDngcUjpVsO7LMG/9tYuvuXGMMBWukPGLh4u+77WKLXYm5irT+ml57gUEaUqbJ7pmNN
+1AnH7rean0hmkjHteAYNO8tJW3w/LBPKNgMzrm1BLNkxX2TyocvxH6qTcS7YxHeQqX7i+VMTPu6B
+9hw6ZXML0P52JzzLHvX2SLvGt2O5z0iG+SNGPBIetF+dmtlhBgKbFe/dThvHZuQSVFOX5fIy3cJL
+uMLTQnWz3Gm3FscZGThDNnUGucHw7WurHZFKFsDazSjD3b24Jlw8ifD5NX05/SqpK8pv91nXtxSe
+zJox/IYEwNOuO45/moc7+AZIUsmGtXY+oEQJ/l+ZKBLV9LZKEeTLOEGVHSEUuCN+FSVaRnuHOLHx
+WSI=
+=7Djj
 -----END PGP SIGNATURE-----
 
---8CCpjWlobjOg053Y--
+--------------YKMJGICHJYklTHrMiV9Y0wVh--

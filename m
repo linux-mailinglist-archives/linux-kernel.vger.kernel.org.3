@@ -2,142 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 438664764FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 22:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7D347651E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 23:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbhLOVy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 16:54:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S230345AbhLOWC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 17:02:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbhLOVyZ (ORCPT
+        with ESMTP id S230306AbhLOWC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 16:54:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2D2C061574;
-        Wed, 15 Dec 2021 13:54:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48AE161B05;
-        Wed, 15 Dec 2021 21:54:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67352C36AE4;
-        Wed, 15 Dec 2021 21:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639605263;
-        bh=1oN5MbiWr8ncJJISL0YeC2irLttfEL4nIXiN8arS9kg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fpb7hXGwN2dX+Kwe//hSaynEpB9Ur4A6oXW4ZZJcZ6ZN3NK2AZTuvCgQC4OR2bp/i
-         4hhNG+BXhPpL3WScjLW4+gUUatMwp3+B86/BnL2afS6Nt+YSTsf+0fseMwkMuoP2w0
-         O7kEQjMc7HU9o0CoojLop73+Mfo3zWeDSriOhjip3RaYE85SZKGQV3xA97WAG9hY9f
-         7+4ugxvE7Ro4ymnwGVUpQUztJMNCGXSIhktEoaCP+2BoSz0PEsVXy01tGYhpBJ62mh
-         d11dmRFKnY2vmIaxkB/MRNqwvivAN5GdO2MOHphh0XeWCHEib1UFatwGT31oBjLMKu
-         Qy+pkK56XxNEQ==
-Date:   Wed, 15 Dec 2021 16:00:04 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     paul@paul-moore.com, eparis@redhat.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH -next, v2] audit: use struct_size() helper in kmalloc()
-Message-ID: <20211215220004.GA21862@embeddedor>
-References: <20211215030420.72324-1-xiujianfeng@huawei.com>
+        Wed, 15 Dec 2021 17:02:26 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468E5C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:02:26 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id l22so45768038lfg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 14:02:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D37sSrKXvPjTBTZeLgaiDtC505FZLtGgW+LNt7fG/kc=;
+        b=j6Im5dU+2Plha+sn4zkYp7vxP7KbKIUWhCbacEbxeVmC20OoFcXjx+KEciYbYX7mxd
+         LBu+MwHgSVDwRamwjX7Y26mNmyoPYltRT+RvLbNAhaJZD8NBklmh/9/NAIKCIJqG+fLz
+         amve9cIZnY75BKG8klZVKUwHHKEewacaN9TNvN0tALR7GrO9lCpumjdoBodyAozYBr6E
+         RarsaPC3K8IbmeJIurRxclSMIRvvil4sg04+Tt3p6hvBC3GEK6viYNR4TW90uLBoZfD+
+         UJ3AUg9OIwGWy4Ey5iJxfjslEnYLmwRtPUyq3SDmaHX9ZrjlVDvJGyNmygGa5xs7CoUz
+         XclA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D37sSrKXvPjTBTZeLgaiDtC505FZLtGgW+LNt7fG/kc=;
+        b=dOeRAbiO+hhEFKC0nEqZvL4JySvNL+AcsqYMDxoDYm5s7FcsYTie91D9tdl6KR8C/w
+         /jXyHhhZEX7QpvEs4TrowLqhmNB82fLGUCNTmp11DTCvVpzwh4cyx0wrxz1zg3nmF8bl
+         C1y7g+6vm4SS611/7Vfygi2JVRaVK6zxgKB9TCvwQpZBbG+52b0K9lxdA3Iml85NTOu9
+         xIO1PRv7Ow+KRG+kFH2A0PRPBguxRNXFRYR6yhgQkbs2178ukGAkcAIPQTOfZsVR8O9Q
+         q9Sn2SzUBOzdfzIHuMsqZOuQ5VtZsWaST4AQiihwt/0/AeBPpfZyJo+zsVzlr204VGDq
+         B6ag==
+X-Gm-Message-State: AOAM533Jn36dlviPxAmsiZX9SNzfvMsTRDszfIWHITWZsSHoQzzHXzgv
+        esNjwqya+EixZo7zW4l2IsNFPlm21cbkUUP/eck99w==
+X-Google-Smtp-Source: ABdhPJwVHqr0NdUemN6rxMcZ1uq5pf33jpn4oyhNEifOJhIm0nCqTbxxJ0Kh8yTfOUiMl4DH8u53UAvV1W4x/dL08Uo=
+X-Received: by 2002:a05:6512:12c3:: with SMTP id p3mr11997107lfg.298.1639605744442;
+ Wed, 15 Dec 2021 14:02:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215030420.72324-1-xiujianfeng@huawei.com>
+References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
+ <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com> <87wnkbuuuz.ffs@tglx>
+ <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com> <8735mvthk6.ffs@tglx>
+ <2ab24da8-e37d-426a-9500-b7541d21f8a3@www.fastmail.com> <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
+ <Ybpe/ND+MQq6tqoR@piout.net>
+In-Reply-To: <Ybpe/ND+MQq6tqoR@piout.net>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 15 Dec 2021 14:02:12 -0800
+Message-ID: <CALAqxLWe13ZghdWphzWZZsRGa+MeAH58syfem6ktDFHF0WG4Dg@mail.gmail.com>
+Subject: Re: Time keeping while suspended in the presence of persistent clock drift
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Joel Daniels <jdaniels@sent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 11:04:20AM +0800, Xiu Jianfeng wrote:
-> Make use of struct_size() helper instead of an open-coded calculation.
+On Wed, Dec 15, 2021 at 1:32 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On 15/12/2021 13:06:30-0800, John Stultz wrote:
+> > I'm not really active in this space much anymore, but a few of my
+> > (possibly wrongheaded) thoughts:
+> >
+> > >    [A] On machines with a persistent clock how is userspace supposed
+> > >        to be sure what drift to measure? Can it assume that the drift
+> > >        of the persistent clock used for sleep time injection is the
+> > >        same as the drift of /dev/rtc? This seems dangerous.
+> >
+> > Yea, there can be multiple RTCs as well.
+> >
+> > >    [B] Sleep time injection can come from the "persistent clock" or,
+> > >        if there is no persistent clock, from an RTC driver. I'd like
+> > >        to correct for drift from the perisistant clock but not touch
+> > >        the RTC driver sleep time injection mechanism. Is this
+> > >        acceptable or do people feel that any drift correction should
+> > >        work with both mechanisms in order to ensure a polished
+> > >        interface?
+> >
+> > This dual interface comes from the desire to support both the more
+> > atomic/earlier correction we can do w/ the persistent_clock interface
+> > while holding the timekeeping lock, while also supporting RTC devices
+> > that may sleep when being read, or may have dependencies that aren't
+> > ready that early in resume.
+> >
+> > Admittedly having two separate abstractions here is a bit of a pain,
+> > and fixing just one side doesn't make it better.
+> >
+> > >    [C] Some users may want to correct for drift during suspend-to-RAM
+> > >        but during suspend-to-disk they might boot into some other
+> > >        operating system which itself sets the CMOS RTC. Hopefully,
+> > >        this could be solved from userspace by changing the drift
+> > >        correction parameter to 0 just before a suspend-to-disk
+> > >        operation.
+> >
+> > Oof. This feels particularly complex and fragile to try to address.
+> >
+> > > I suspect that there are other things about which I should also be
+> > > worried if only I were less ignorant. That is why I am asking here.
+> >
+> > Personally, I'm not sure this warrants adding new userland interfaces
+> > for. I'd probably lean towards having the RTC framework internally
+> > measure and correct for drift, rather than adding an extra knob in
+> > userland.
+> >
+>
+> I'd rather lean towards the timekeeping code doing that. The RTC
 
-I think you should also mention the flexible array transformation in
-struct audit_rule_data.
+Heh, touche'!  :)
 
-Thanks
---
-Gustavo
+> subsystem doesn't know which RTC has to be used.
 
-> 
-> Link: https://github.com/KSPP/linux/issues/160
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->  include/uapi/linux/audit.h | 2 +-
->  kernel/audit.c             | 4 ++--
->  kernel/audit_tree.c        | 2 +-
->  kernel/auditfilter.c       | 4 ++--
->  4 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-> index 9176a095fefc..8eda133ca4c1 100644
-> --- a/include/uapi/linux/audit.h
-> +++ b/include/uapi/linux/audit.h
-> @@ -514,7 +514,7 @@ struct audit_rule_data {
->  	__u32		values[AUDIT_MAX_FIELDS];
->  	__u32		fieldflags[AUDIT_MAX_FIELDS];
->  	__u32		buflen;	/* total length of string fields */
-> -	char		buf[0];	/* string fields buffer */
-> +	char		buf[];	/* string fields buffer */
->  };
->  
->  #endif /* _UAPI_LINUX_AUDIT_H_ */
-> diff --git a/kernel/audit.c b/kernel/audit.c
-> index d4084751cfe6..7778eca34837 100644
-> --- a/kernel/audit.c
-> +++ b/kernel/audit.c
-> @@ -1446,7 +1446,7 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
->  			if (err)
->  				return err;
->  		}
-> -		sig_data = kmalloc(sizeof(*sig_data) + len, GFP_KERNEL);
-> +		sig_data = kmalloc(struct_size(sig_data, ctx, len), GFP_KERNEL);
->  		if (!sig_data) {
->  			if (audit_sig_sid)
->  				security_release_secctx(ctx, len);
-> @@ -1459,7 +1459,7 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
->  			security_release_secctx(ctx, len);
->  		}
->  		audit_send_reply(skb, seq, AUDIT_SIGNAL_INFO, 0, 0,
-> -				 sig_data, sizeof(*sig_data) + len);
-> +				 sig_data, struct_size(sig_data, ctx, len));
->  		kfree(sig_data);
->  		break;
->  	case AUDIT_TTY_GET: {
-> diff --git a/kernel/audit_tree.c b/kernel/audit_tree.c
-> index 72324afcffef..e7315d487163 100644
-> --- a/kernel/audit_tree.c
-> +++ b/kernel/audit_tree.c
-> @@ -94,7 +94,7 @@ static struct audit_tree *alloc_tree(const char *s)
->  {
->  	struct audit_tree *tree;
->  
-> -	tree = kmalloc(sizeof(struct audit_tree) + strlen(s) + 1, GFP_KERNEL);
-> +	tree = kmalloc(struct_size(tree, pathname, strlen(s) + 1), GFP_KERNEL);
->  	if (tree) {
->  		refcount_set(&tree->count, 1);
->  		tree->goner = 0;
-> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
-> index 4173e771650c..42d99896e7a6 100644
-> --- a/kernel/auditfilter.c
-> +++ b/kernel/auditfilter.c
-> @@ -637,7 +637,7 @@ static struct audit_rule_data *audit_krule_to_data(struct audit_krule *krule)
->  	void *bufp;
->  	int i;
->  
-> -	data = kmalloc(sizeof(*data) + krule->buflen, GFP_KERNEL);
-> +	data = kmalloc(struct_size(data, buf, krule->buflen), GFP_KERNEL);
->  	if (unlikely(!data))
->  		return NULL;
->  	memset(data, 0, sizeof(*data));
-> @@ -1092,7 +1092,7 @@ static void audit_list_rules(int seq, struct sk_buff_head *q)
->  				break;
->  			skb = audit_make_reply(seq, AUDIT_LIST_RULES, 0, 1,
->  					       data,
-> -					       sizeof(*data) + data->buflen);
-> +					       struct_size(data, buf, data->buflen));
->  			if (skb)
->  				skb_queue_tail(q, skb);
->  			kfree(data);
-> -- 
-> 2.17.1
-> 
+Though the RTC layer *is* the one that tracks which RTC is used, via
+the logic in drivers/rtc/class.c, and the timekeeping core already has
+adjtimex for timekeeping corrections, so if we're correcting
+underlying RTCs it seems such tuning would best be done in the RTC
+layer.
+
+Though how the persistent_clock interface ties into such corrections
+would be a separate thing.
+
+thanks
+-john

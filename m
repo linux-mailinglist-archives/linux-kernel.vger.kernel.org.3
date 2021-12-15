@@ -2,77 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1157475188
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 04:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEE447518A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 05:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239660AbhLOD7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Dec 2021 22:59:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S239671AbhLOEB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Dec 2021 23:01:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235424AbhLOD7R (ORCPT
+        with ESMTP id S235718AbhLOEB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Dec 2021 22:59:17 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30749C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 19:59:17 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id 207so31303718ljf.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 19:59:17 -0800 (PST)
+        Tue, 14 Dec 2021 23:01:28 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7CDC06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 20:01:28 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id w15-20020a4a9d0f000000b002c5cfa80e84so5524038ooj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Dec 2021 20:01:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0tjE/40QVq1O5nmoJ1f6NdfWomQGy4kZlQAecDcJBAY=;
-        b=lMukVHCCCrsBCkWUUA9h8abns1sXvGs2ZJHKiinYOvQYdFNeGuUp8oHFjQN+HNWJat
-         MDG2wX/8wbhMg3aEKTaOWAer2dTwIdKaVnvDxTN8eH6yZ/SMTLT6t/kwD/E7yZIYZ4iF
-         WBNLWMd/yvSTlanK4sCl2Dbk888/pFJnJbiLdAQYcrbEvLPSiz/f6xoj9jeN/+WHtxHD
-         9fh2cBimdj63hJdEfLc2JdCD6p+XQhN4QF2mnhMs74pu9hxHxW84jxy8ww99NDN2oW0u
-         dQpAAEnEeeUR0nb+ElfaACPB6LbOXwOLyQzQI6tSq+A2oORrD0u+8O/BuvacvLoHp1Dm
-         sA6A==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3p21cZX6VTVJfDbT+xtRQs4392W+Wmz3Ks+mLBHxP7M=;
+        b=BZq61RILd+nULFwvm2GxQkU9S8LWIa1H1hgca+PB0mf2Kjj0r9PNv1LUepCNPM8jUj
+         E2aTNbha2RqV+ObUt5CMqXgcv/g2s4rGeAPRsIptcmJPndDWCBC73VZXl1c2EvfAdcAC
+         dn1zJ5P83Gr1PNFHtSjU0MfvNCNUUbTIAXUxsrmzPpzsmVYz+ch6b/xMQyS7xYkLYTQN
+         bNNoa9VWPcyTQA2CioVbpG4bIFFWQvGGMRKKXItdwVD0XX9KhOrWsAjLHdMOLJNq0YKP
+         MYp6flmUJnmy+gGxCXwB9eowL/p86IzLO+LQBDq7RTXMfOexqccg//UvfDhiV1RwSUk6
+         l+3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0tjE/40QVq1O5nmoJ1f6NdfWomQGy4kZlQAecDcJBAY=;
-        b=4C7uUJ88kKEA4oxQRBFrYTk1oYJa6JcpJ20ka/z8YFLieV2MLRTUIggLJ0jn5zxutI
-         GH3jDvEvdHqCEhQVEQWehf88a8N26eGo/AoLkqeKCBC2xoV2nsUJJomOfAJZxSYl2fMN
-         ducFs1Jp/sTwplU7oeynEq7Puyp3lM1HNeppufUTjJYnN0UVkCLuldokqtnEHpEVBDxU
-         UBVSUwa1hPQuh+42LTGxxsP1N1hN8Z6eGoJNjAp4sZpKGLs/qGnBO9IECqhprkfsEWS8
-         Yecd+pFOKXZ17h7zt6DQQ0pVgsO8kvdA9TxivotgOHefAEVWnm4COUQfBLIOgRYqxN0c
-         Zl8A==
-X-Gm-Message-State: AOAM532R/uRlbeBt7UGZWjMeCy95Xonl4k5MA48Efg/KW+SyZ3PFGOKc
-        RzMMn5RK67YEvrIHCNUOx/u9+96DFu8GQt/8tat4bw==
-X-Google-Smtp-Source: ABdhPJwQADB+Z5LoN6xoV02kzdHV72/9d8qqf3kqL6tB/YVGP/Y2TPgGWz4/q6/qmdLqzz/Rgx0Suo/MD99/j8Z1goQ=
-X-Received: by 2002:a2e:83cc:: with SMTP id s12mr8308376ljh.508.1639540755235;
- Tue, 14 Dec 2021 19:59:15 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3p21cZX6VTVJfDbT+xtRQs4392W+Wmz3Ks+mLBHxP7M=;
+        b=cpzmBHX0y/k6fwAnKJZs5erxB/QhPBfHNRandp1nTN5FYxvW7taubQSFdMtJK3cuH8
+         X3vvHXm4l24qYcq0PWMqPbpbtsMS75+9IxtjtOq5AaBNIq8QRBybxFS2yqLq8EVCf6ND
+         XgGZNs02szipOLge1KVG6wxsndQ0owFhYZa5DhNgywU8mCMj6c+tnTPCJjHqAEqwFYvz
+         f79IKdx1zuGPohxEDtwXzbjZRjmYk+ELG//zg4iRJM5EU7c6WbcOOYdZ+sCVHPXy4XIU
+         bpIWsvCBTG840tz4bBWHyUluDPj2FgpgxqkhRG0eyxOXS8EmgVeTiH78IRb8wyKkic6D
+         Edpg==
+X-Gm-Message-State: AOAM533WH2TwMs2nRFBO6Er/qoSOQDfRNVwaLmjsM1mqFDhlZ9tnhNvE
+        ptPtfmoe2d1QR/qmFaJ/jxtDzA==
+X-Google-Smtp-Source: ABdhPJylGahtXNpt8ZT81qnmWmURXAJa8/4nDbCQ3NP/HgyFvMAjCgzGr2/TKK0vAKV08Kyhp6HyTw==
+X-Received: by 2002:a4a:3110:: with SMTP id k16mr6030549ooa.64.1639540887319;
+        Tue, 14 Dec 2021 20:01:27 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id p6sm221765oof.0.2021.12.14.20.01.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 20:01:26 -0800 (PST)
+Date:   Tue, 14 Dec 2021 22:01:23 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Deepak Kumar Singh <deesin@codeaurora.org>
+Cc:     clew@codeaurora.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH V3 0/2] smem partition remap and bound check changes
+Message-ID: <Yblok/6vHI0Zv9he@builder.lan>
+References: <1633426371-4827-1-git-send-email-deesin@codeaurora.org>
 MIME-Version: 1.0
-References: <20211214050708.4040200-1-vipinsh@google.com> <YbjRb0XR7neyX/Gy@google.com>
-In-Reply-To: <YbjRb0XR7neyX/Gy@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 14 Dec 2021 19:58:39 -0800
-Message-ID: <CAHVum0ec420f4dMseNRCJqzfLV+5V6NpmaBibPZDzsc15S_3oA@mail.gmail.com>
-Subject: Re: [PATCH] KVM: Move VM's worker kthreads back to the original
- cgroups before exiting.
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1633426371-4827-1-git-send-email-deesin@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 9:16 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Tue, Dec 14, 2021, Vipin Sharma wrote:
-> > +     WARN_ON(cgroup_attach_task_all(kthreadd_task, current));
->
-> As the build bot noted, kthreadd_task isn't exported, and I doubt you'll convince
-> folks to let you export it.
->
-> Why is it problematic for the kthread to linger in the cgroup?  Conceptually, it's
-> not really wrong.
+On Tue 05 Oct 04:32 CDT 2021, Deepak Kumar Singh wrote:
 
-Issue comes when a process tries to clear up the resources when a VM
-shutdown/dies. The process sometimes get an EBUSY error when it tries
-to delete the cgroup directories which were created for that VM. It is
-also difficult to know how many times to retry or how much time to
-wait before the cgroup is empty. This issue is not always happening.
+> Addressed pointer conversion error in previous set and devm_iounmap
+> code reordering. Corrected code for calculating global partition size,
+> added code inside hardware mutex p_size = avilable + free.
+> 
+
+Hi Deepak,
+
+Sorry for taking my time reviewing and testing this series. I think it
+looks good and was hoping to just merge it, but it no longer applies.
+
+Could you please help me rebase it ontop of linux-next?
+
+Thanks,
+Bjorn
+
+> Deepak Kumar Singh (2):
+>   soc: qcom: smem: map only partitions used by local HOST
+>   soc: qcom: smem: validate fields of shared structures
+> 
+>  drivers/soc/qcom/smem.c | 317 +++++++++++++++++++++++++++++++++++++-----------
+>  1 file changed, 245 insertions(+), 72 deletions(-)
+> 
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 

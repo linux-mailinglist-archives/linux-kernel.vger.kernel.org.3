@@ -2,96 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C993747554A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6A247554F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 10:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241233AbhLOJhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 04:37:03 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:56078 "EHLO vps0.lunn.ch"
+        id S236594AbhLOJi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 04:38:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:46588 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236594AbhLOJhA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 04:37:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=bWabqgzy31ROygG4sHuqWrrrRhdegIiJSCjnLPiSdfU=; b=kukt+hJokNzP8MUmjYG18ln/N4
-        xjUgKOvA9C3x+68bB7tsOqpiTlwzEABmSgmcB6d3+2683Qqxq8UvegwpCpz/atYNcPrjeUkcxv95A
-        5dbbtppfnnRAmRvP1JPMlk38QP27FAszoDy1DzUk1Y63dNTUlYSbglJ7S7M4IR6GD9wo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mxQiS-00Gcwt-1v; Wed, 15 Dec 2021 10:36:52 +0100
-Date:   Wed, 15 Dec 2021 10:36:52 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        netdev@vger.kernel.org, Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Fugang Duan <fugang.duan@nxp.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 3/3] net: fec: reset phy on resume after power-up
-Message-ID: <Ybm3NDeq96TSjh+k@lunn.ch>
-References: <20211214121638.138784-1-philippe.schenker@toradex.com>
- <20211214121638.138784-4-philippe.schenker@toradex.com>
- <YbjofqEBIjonjIgg@lunn.ch>
- <20211214223548.GA47132@francesco-nb.int.toradex.com>
+        id S229494AbhLOJi6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 04:38:58 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD7976D;
+        Wed, 15 Dec 2021 01:38:57 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.66.121])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F6903F5A1;
+        Wed, 15 Dec 2021 01:38:56 -0800 (PST)
+Date:   Wed, 15 Dec 2021 09:38:53 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>
+Subject: Re: [PATCH v4] arm64: Enable KCSAN
+Message-ID: <Ybm3rfq+9bNEX1Rt@FVFF77S0Q05N>
+References: <20211211131734.126874-1-wangkefeng.wang@huawei.com>
+ <YbjhUaEP4Sqk7qRP@FVFF77S0Q05N>
+ <CANpmjNP_M2R9XD8GnCJVTmN17GPOR_5Y3jX8r5AAKcaDRUWJ4A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214223548.GA47132@francesco-nb.int.toradex.com>
+In-Reply-To: <CANpmjNP_M2R9XD8GnCJVTmN17GPOR_5Y3jX8r5AAKcaDRUWJ4A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 11:35:48PM +0100, Francesco Dolcini wrote:
-> Hello Andrew,
+On Tue, Dec 14, 2021 at 08:11:24PM +0100, Marco Elver wrote:
+> On Tue, 14 Dec 2021 at 19:24, Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> >   Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+> >   Tested-by: Mark Rutland <mark.rutland@arm.com>
 > 
-> On Tue, Dec 14, 2021 at 07:54:54PM +0100, Andrew Lunn wrote:
-> > What i don't particularly like about this is that the MAC driver is
-> > doing it. Meaning if this PHY is used with any other MAC, the same
-> > code needs adding there.
-> This is exactly the same case as phy_reset_after_clk_enable() [1][2], to
-> me it does not look that bad.
+> Thanks for taking a look and testing! Thought I'd update you re status
+> of some of the reports below. :-)
+
+Thanks for the pointers below! I'll fold those into a test branch, so that I
+can soak this under Syzkaller over the holiday break.
+
+I've given precise refernces below in case I've misunderstood or missed
+something.
+
+> > * BUG: KCSAN: data-race in mutex_spin_on_owner+0xcc/0x150
+> > * BUG: KCSAN: data-race in rwsem_spin_on_owner+0xa8/0x13c
 > 
-> > So maybe in the phy driver, add a suspend handler, which asserts the
-> > reset. This call here will take it out of reset, so applying the reset
-> > you need?
-> Asserting the reset in the phylib in suspend path is a bad idea, in the
-> general case in which the PHY is powered in suspend the
-> power-consumption is likely to be higher if the device is in reset
-> compared to software power-down using the BMCR register (at least for
-> the PHY datasheet I checked).
+> These are going away, fixes are already in -tip/-next.
 
-Maybe i don't understand your hardware.
+Cool! I assume that means commits:
 
-You have a regulator providing power of the PHY.
+* c0bed69daf4b6780 ("locking: Make owner_on_cpu() into <linux/sched.h>")
+  from https://lore.kernel.org/r/20211203075935.136808-2-wangkefeng.wang@huawei.com
 
-You have a reset, i guess a GPIO, connected to the reset pin of the
-PHY.
+* 4cf75fd4a2545ca4 ("locking: Mark racy reads of owner->on_cpu")
+  from https://lore.kernel.org/r/20211203075935.136808-3-wangkefeng.wang@huawei.com
 
-What you could do is:
+... in the tip locking/core branch (the head commit of which is currently
+5fb6e8cf53b005d2 ("locking/atomic: atomic64: Remove unusable atomic ops")).
 
-PHY driver suspend handler does a phy_device_reset(ndev->phydev, 1)
-to put the PHY into reset.
+> > * UBSAN: object-size-mismatch in net/unix/af_unix.c:977:14
+> 
+> The UBSAN object-size-mismatch warnings are going away, as
+> fsanitize=object-size is broken/incomplete as it turns out --
+> UBSAN_OBJECT_SIZE will be removed from 5.17:
+> https://bugzilla.kernel.org/show_bug.cgi?id=214861#c4
 
-MAC driver disables the regulator.
+I see the relevant patch is:
 
-Power consumption should now be 0, since it does not have any power.
+* "[PATCH] ubsan: Remove CONFIG_UBSAN_OBJECT_SIZE"
+  from https://lore.kernel.org/all/20211203235346.110809-1-keescook@chromium.org/
 
-On resume, the MAC enables the regulator. At this point, the PHY gets
-power, but is still held in reset. It is now consuming power, but not
-doing anything. The MAC calls phy_hw_init(), which calls
-phy_device_reset(ndev->phydev, 0), taking the PHY out of reset.
+... and from looking at next-20211214 that's been picked up by Andrew Morton.
 
-Hopefully, this release from reset is enough to make the PHY work.
-
-Doing it like this also addresses Russell point. phy_hw_init() is not
-putting the device into reset, it is only taking it out of reset, if
-it happens to be already in reset. So we are not slowing down link up
-for everybody.
-
-    Andrew
+Thanks,
+Mark.

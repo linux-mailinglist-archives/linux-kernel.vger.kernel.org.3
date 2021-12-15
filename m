@@ -2,107 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82768475AF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DD2475AF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 15:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237777AbhLOOoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 09:44:55 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:41970 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbhLOOox (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:44:53 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        id S243472AbhLOOpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 09:45:13 -0500
+Received: from ixit.cz ([94.230.151.217]:57530 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229878AbhLOOpM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:45:12 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 868EF1F3CB;
-        Wed, 15 Dec 2021 14:44:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639579492; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L+FwlFr7sookecjc9+Z4KJH3P8puADKn4avrNKuh3fg=;
-        b=V2YNGn1ryxEnaOg+uqD0czIqum5A+yvyyOQF3/o+zFpawFNR+AbAXZhquxTqZxu3w7E5n2
-        F0ottN2Pw6JXwcZNGP9VFmAgQ2j6z7rsoVTVmkKucdC1IAv+nbmrE/aj9oaCO4INsLri9u
-        /mi/m484fVNsR3E1xOvslXFMEQJcp6I=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4FE231330B;
-        Wed, 15 Dec 2021 14:44:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id JkXhEmT/uWHWcAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 15 Dec 2021 14:44:52 +0000
-Date:   Wed, 15 Dec 2021 15:44:51 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <20211215144450.GC25459@blackbody.suse.cz>
-References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-7-longman@redhat.com>
- <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
+        by ixit.cz (Postfix) with ESMTPSA id D28812243C;
+        Wed, 15 Dec 2021 15:45:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1639579510;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KgrfzqPcwcbEdQTP/IsIyd9Cb/Q6naiYwHO1cYZtjmI=;
+        b=que4/kenTmNg9ZD/pHL0733A4WZjscxE5vJP7j9zTm703QSbjoe+y1mWc8e7Pm2PgXoT2E
+        IR4LLFCnmkbDYdwuHqBGmHmLhGKKnK54+PoEZIpZ38tiA53GHv56gOeQe3+J/EEV+QDoim
+        zWKYSxYO2VRSoeImkpaKIxjxVHCgQPg=
+From:   David Heidelberg <david@ixit.cz>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Caleb Connolly <caleb@connolly.tech>,
+        David Heidelberg <david@ixit.cz>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH] dt-bindings: timer: add #size-cells 2 for ARM
+Date:   Wed, 15 Dec 2021 15:45:00 +0100
+Message-Id: <20211215144500.64284-1-david@ixit.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 11:00:17AM -1000, Tejun Heo <tj@kernel.org> wrote:
-> * When a valid partition turns invalid, now we have a reliable way of
->   discovering what exactly caused the transition. However, when a user now
->   fails to turn a member into partition, all they get is -EINVAL and there's
->   no way to discover why it failed and the failure conditions that -EINVAL
->   represents aren't simple.
-> 
-> * In an automated configuration scenarios, this operation mode may be
->   difficult to make reliable and lead to sporadic failures which can be
->   tricky to track down. The core problem is that whether a given operation
->   succeeds or not may depend on external states (CPU on/offline) which may
->   change asynchronously in a way that the configuring entity doesn't have
->   any control over.
-> 
-> It's true that both are existing problems with the current partition
-> interface and given that this is a pretty spcialized feature, this can be
-> okay. Michal, what are your thoughts?
+It's already widely used by dt-schemas, so I blindly assume it's correct.
 
-Because of asynchronous changes, the return value should not be that
-important and the user should watch cpuset.partitions for the result
-(end state) anyway.
-Furthermore, the reasons should be IMO just informative (i.e. I like
-they're not explicitly documented) and not API.
+Fixes warnings as:
+arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: timer@17c90000: #size-cells:0:0: 1 was expected
+        From schema: Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
 
-But I see there could be a distinction between -EINVAL (the supplied
-input makes no sense) and -EAGAIN(?) denoting that the switch to
-partition root could not happen (due to outer constraints).
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml          | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You seem to propose to replace the -EAGAIN above with a success code and
-allow the switch to an invalid root.
-The action of the configuring entity would be different: retry (when?)
-vs wait till transition happens (notification) (although the immediate
-effect (the change did not happen) is same).
-I considered the two variants equal but the clear information about when
-the change can happen I'd favor the variant allowing the switch to
-invalid root now.
+diff --git a/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml b/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
+index cd2176cad53a..c061bb90b8e7 100644
+--- a/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
++++ b/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
+@@ -30,7 +30,7 @@ properties:
+     enum: [1, 2]
+ 
+   '#size-cells':
+-    const: 1
++    enum: [1, 2]
+ 
+   ranges: true
+ 
+-- 
+2.34.1
 
-
-Michal

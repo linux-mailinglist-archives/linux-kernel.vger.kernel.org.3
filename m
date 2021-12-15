@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9303F475EC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB22475F04
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 18:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbhLORYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 12:24:32 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44568 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245603AbhLORXx (ORCPT
+        id S238954AbhLOR0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 12:26:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42410 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245596AbhLORZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 12:23:53 -0500
+        Wed, 15 Dec 2021 12:25:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2BCB619E5;
-        Wed, 15 Dec 2021 17:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 992EAC36AE3;
-        Wed, 15 Dec 2021 17:23:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC1BFB8202A;
+        Wed, 15 Dec 2021 17:25:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3FEFC36AE0;
+        Wed, 15 Dec 2021 17:25:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639589032;
-        bh=p4q2jJiqmTvTg/BQqSl9uEEFfH48wa23OnPgltutTCs=;
+        s=korg; t=1639589107;
+        bh=CHSSIJqlJ9HAafhsYLM5PD7RElinICbrYQk+VkpXLX4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LbAZ3ixlUWKrL87Fg4zQcviRHcBk6g/95RuuWH8ZHrih8pP46DkKtP+3AGHVxYOK8
-         0wfbFi0gExqkbLdOHNZYF+gNitwCc5HnN5y8v80bHb5xWoyFTFr9M/j2a8Dffj2bpT
-         /bMGs6iUqh1qNzv77NQmVjWuceLgG/YOEOHZPyko=
+        b=LQSKr8PCEAUP/ulqFVCF6bzukEC5fDN5u0i8Xz6UN6okEMkEPGdxR/TqCarrjhE57
+         LIeDZavdT3/IKmPcZ5X+gvy9WwgY9lpA0QWcMlbkS72MmV6paUQ+xw55BAGrec+QRh
+         j3ZpA8fGAA9r7VnSZ/DbzD572JGCGaD4lOZo9oic=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philip Yang <Philip.Yang@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 38/42] drm/amdkfd: process_info lock not needed for svm
-Date:   Wed, 15 Dec 2021 18:21:19 +0100
-Message-Id: <20211215172027.951056559@linuxfoundation.org>
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.10 22/33] perf intel-pt: Fix some PGE (packet generation enable/control flow packets) usage
+Date:   Wed, 15 Dec 2021 18:21:20 +0100
+Message-Id: <20211215172025.532614710@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
-References: <20211215172026.641863587@linuxfoundation.org>
+In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
+References: <20211215172024.787958154@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,84 +46,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philip Yang <Philip.Yang@amd.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit 3abfe30d803e62cc75dec254eefab3b04d69219b ]
+commit 057ae59f5a1d924511beb1b09f395bdb316cfd03 upstream.
 
-process_info->lock is used to protect kfd_bo_list, vm_list_head, n_vms
-and userptr valid/inval list, svm_range_restore_work and
-svm_range_set_attr don't access those, so do not need to take
-process_info lock. This will avoid potential circular locking issue.
+Packet generation enable (PGE) refers to whether control flow (COFI)
+packets are being produced.
 
-Signed-off-by: Philip Yang <Philip.Yang@amd.com>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+PGE may be false even when branch-tracing is enabled, due to being
+out-of-context, or outside a filter address range.  Fix some missing PGE
+usage.
+
+Fixes: 7c1b16ba0e26e6 ("perf intel-pt: Add support for decoding FUP/TIP only")
+Fixes: 839598176b0554 ("perf intel-pt: Allow decoding with branch tracing disabled")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: stable@vger.kernel.org # v5.15+
+Link: https://lore.kernel.org/r/20211210162303.2288710-2-adrian.hunter@intel.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+[Adrian: Backport to v5.10]
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 9 ---------
- 1 file changed, 9 deletions(-)
+ tools/perf/util/intel-pt-decoder/intel-pt-decoder.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-index 179080329af89..5a674235ae41a 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-@@ -1565,7 +1565,6 @@ svm_range_list_lock_and_flush_work(struct svm_range_list *svms,
- static void svm_range_restore_work(struct work_struct *work)
- {
- 	struct delayed_work *dwork = to_delayed_work(work);
--	struct amdkfd_process_info *process_info;
- 	struct svm_range_list *svms;
- 	struct svm_range *prange;
- 	struct kfd_process *p;
-@@ -1585,12 +1584,10 @@ static void svm_range_restore_work(struct work_struct *work)
- 	 * the lifetime of this thread, kfd_process and mm will be valid.
- 	 */
- 	p = container_of(svms, struct kfd_process, svms);
--	process_info = p->kgd_process_info;
- 	mm = p->mm;
- 	if (!mm)
- 		return;
+--- a/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
++++ b/tools/perf/util/intel-pt-decoder/intel-pt-decoder.c
+@@ -1949,6 +1949,7 @@ static int intel_pt_hop_trace(struct int
+ 		return HOP_IGNORE;
  
--	mutex_lock(&process_info->lock);
- 	svm_range_list_lock_and_flush_work(svms, mm);
- 	mutex_lock(&svms->lock);
- 
-@@ -1643,7 +1640,6 @@ static void svm_range_restore_work(struct work_struct *work)
- out_reschedule:
- 	mutex_unlock(&svms->lock);
- 	mmap_write_unlock(mm);
--	mutex_unlock(&process_info->lock);
- 
- 	/* If validation failed, reschedule another attempt */
- 	if (evicted_ranges) {
-@@ -2974,7 +2970,6 @@ static int
- svm_range_set_attr(struct kfd_process *p, uint64_t start, uint64_t size,
- 		   uint32_t nattr, struct kfd_ioctl_svm_attribute *attrs)
- {
--	struct amdkfd_process_info *process_info = p->kgd_process_info;
- 	struct mm_struct *mm = current->mm;
- 	struct list_head update_list;
- 	struct list_head insert_list;
-@@ -2993,8 +2988,6 @@ svm_range_set_attr(struct kfd_process *p, uint64_t start, uint64_t size,
- 
- 	svms = &p->svms;
- 
--	mutex_lock(&process_info->lock);
--
- 	svm_range_list_lock_and_flush_work(svms, mm);
- 
- 	if (!svm_range_is_valid(mm, start, size)) {
-@@ -3070,8 +3063,6 @@ svm_range_set_attr(struct kfd_process *p, uint64_t start, uint64_t size,
- 	mutex_unlock(&svms->lock);
- 	mmap_read_unlock(mm);
- out:
--	mutex_unlock(&process_info->lock);
--
- 	pr_debug("pasid 0x%x svms 0x%p [0x%llx 0x%llx] done, r=%d\n", p->pasid,
- 		 &p->svms, start, start + size - 1, r);
- 
--- 
-2.33.0
-
+ 	case INTEL_PT_TIP_PGD:
++		decoder->pge = false;
+ 		if (!decoder->packet.count)
+ 			return HOP_IGNORE;
+ 		intel_pt_set_ip(decoder);
+@@ -1972,7 +1973,7 @@ static int intel_pt_hop_trace(struct int
+ 		intel_pt_set_ip(decoder);
+ 		if (intel_pt_fup_event(decoder))
+ 			return HOP_RETURN;
+-		if (!decoder->branch_enable)
++		if (!decoder->branch_enable || !decoder->pge)
+ 			*no_tip = true;
+ 		if (*no_tip) {
+ 			decoder->state.type = INTEL_PT_INSTRUCTION;
+@@ -2124,7 +2125,7 @@ next:
+ 				break;
+ 			}
+ 			intel_pt_set_last_ip(decoder);
+-			if (!decoder->branch_enable) {
++			if (!decoder->branch_enable || !decoder->pge) {
+ 				decoder->ip = decoder->last_ip;
+ 				if (intel_pt_fup_event(decoder))
+ 					return 0;
 
 

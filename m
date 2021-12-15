@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3249C475BBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BE1475C73
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Dec 2021 16:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243912AbhLOPUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 10:20:13 -0500
-Received: from mail-qv1-f51.google.com ([209.85.219.51]:43627 "EHLO
-        mail-qv1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243891AbhLOPUH (ORCPT
+        id S244298AbhLOP5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 10:57:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59964 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244312AbhLOP5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:20:07 -0500
-Received: by mail-qv1-f51.google.com with SMTP id m6so3409280qvh.10;
-        Wed, 15 Dec 2021 07:20:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Qmub5xNOOJMDe8hIhM9h8/alEATciJeF8DyioMLtUB8=;
-        b=arHfkLE/oMXuj9Vhp/EzfzhoQuipuI2DFL1hrz49sbPBSAQvq5iY95Ag74kc51IBCU
-         ay/5B150LwAT9hJkaLQVLAgBCw+MfvZ2+rWgLGCtLwHxH0V8TUCfo5cybFkZ7xLkg5eH
-         7+Z5b6nDVhAqZ7H3hb9qL/hV2p5D3omhFn5CpAlqaO46pFqhB/VcPSxBdjx8+0GjUT1z
-         Zz1JajOvZX8uVJ2p8bERhzDoMebYFzEd7dGuSyhUetBNPM/CVS+Vg9ThImZe09pdBy/y
-         eC/8wiZVEZhIO9poPOjhbamVxuBqnRAtyvQevjSuBvfTe8gPrq74DOqHeU3WeAWBT4Uy
-         FAgA==
-X-Gm-Message-State: AOAM532oLwhVKr517VpLaW7VLESrin/+fhFL4ghG00qk0jktXWE+Tx6D
-        wHKc0fhW+/53icCPMOakXog=
-X-Google-Smtp-Source: ABdhPJwpKCZQHgXCQtJRVjQxiaairOVcdTec8dAbnr0GZQTF2BkohLdy9oVEhVmjwIjxFEe3RMlV0w==
-X-Received: by 2002:a0c:f6ca:: with SMTP id d10mr6572282qvo.48.1639581606603;
-        Wed, 15 Dec 2021 07:20:06 -0800 (PST)
-Received: from dev0025.ash9.facebook.com (fwdproxy-ash-004.fbsv.net. [2a03:2880:20ff:4::face:b00c])
-        by smtp.gmail.com with ESMTPSA id a16sm1640986qta.94.2021.12.15.07.20.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 07:20:06 -0800 (PST)
-Date:   Wed, 15 Dec 2021 07:20:04 -0800
-From:   David Vernet <void@manifault.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
-        corbet@lwn.net, songliubraving@fb.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v2] livepatch: Fix leak on klp_init_patch_early failure
- path
-Message-ID: <YboHpHmu3D+0hxKp@dev0025.ash9.facebook.com>
-References: <20211214220124.2911264-1-void@manifault.com>
- <20211214235128.ckaozqsvcr6iqcnu@treble>
- <Ybm+FyhLnuH4JThq@alley>
+        Wed, 15 Dec 2021 10:57:00 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBD316195C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 15:56:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D13C33D08;
+        Wed, 15 Dec 2021 15:21:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639581707;
+        bh=RrbKXeLGT86mKHHzXfbS7Zvc1u/9yveHLJ8kMXAW9mA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dlFscuUbBGrpssU83yuU6eR1TmKWtsE772UwqMzDUp/KLgvzk4lHabwjfqfA7LBEy
+         Em4yzgryz/iSk/bzKwRF1DuO2TAnqUFs0u3Lkv02vcexCktXDHQxM2no4+lNcc6Kfb
+         C06nh42FoRWsFR70/u1Ayg0VmQmFf+czQ8yW/qAXcrK30CzeYkTf8uNEUJz1NJKiYQ
+         cAqp4O9ALYk3cCwrraEwt+NgSCoSE+ysV6+r9R+31fEhm2DIm3ANgNs+OdXgyR1wtd
+         M3PFDQ9d1tTLP6HMNx4eJOc/QXizjcyyUMpSl3GMnNngPUbd0A1AXt42miJB+SuxqX
+         L8m7OfKB5wlqg==
+Date:   Wed, 15 Dec 2021 20:51:39 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] phy: freescale: pcie: explictly add bitfield.h
+Message-ID: <YboIAzhMrUYS09As@matsya>
+References: <20211215060834.921617-1-vkoul@kernel.org>
+ <AS8PR04MB86765D95A0E42CED2C5D9B4D8C769@AS8PR04MB8676.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ybm+FyhLnuH4JThq@alley>
+In-Reply-To: <AS8PR04MB86765D95A0E42CED2C5D9B4D8C769@AS8PR04MB8676.eurprd04.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Petr Mladek <pmladek@suse.com> wrote on Wed [2021-Dec-15 11:06:15 +0100]:
-> Well, I still believe that this is just a cargo cult. And I would prefer
-> to finish the discussion about it, first, see
-> https://lore.kernel.org/all/YbmlL0ZyfSuek9OB@alley/
+On 15-12-21, 06:29, Hongxing Zhu wrote:
+> > -----Original Message-----
+> > From: Vinod Koul <vkoul@kernel.org>
+> > Sent: Wednesday, December 15, 2021 2:09 PM
+> > To: Kishon Vijay Abraham I <kishon@ti.com>; Hongxing Zhu
+> > <hongxing.zhu@nxp.com>
+> > Cc: linux-phy@lists.infradead.org; Vinod Koul <vkoul@kernel.org>;
+> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+> > kernel test robot <lkp@intel.com>
+> > Subject: [PATCH] phy: freescale: pcie: explictly add bitfield.h
+> > 
+> > kernel test robot complains about missing FIELD_PREP, so include
+> > bitfield.h for that
+> > 
+> > drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:37: error: implicit
+> > declaration of function 'FIELD_PREP'
+> > [-Werror=implicit-function-declaration]
+> > drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:41: error: implicit
+> > declaration of function 'FIELD_PREP'
+> > [-Werror=implicit-function-declaration]
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Fixes: 1aa97b002258 ("phy: freescale: pcie: Initialize the imx8 pcie
+> > standalone phy driver")
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> Reviewed-by: Richard Zhu <hongxing.zhu@nxp.com>
 
-No problem, I won't send out v3 until we've finished the discussion and
-have consensus. I'll assume that the discussion on whether or not there is
-a leak will continue on the thread you linked to above, so I won't comment
-on it here.
+Thanks for quick review, I have pushed this
 
-> Note that klp_init_*_early() functions iterate through the arrays
-> using klp_for_each_*_static. While klp_free_*() functions iterate
-> via the lists using klp_for_each_*_safe().
+> Thanks a lot for your help to fix it.
+> And I'm sorry about that I didn't capture this error in my local build and tests.
 
-Correct, as I've understood it, klp_for_each_*_safe() should only iterate
-over the objects that have been added to the patch and klp_object's lists,
-and thus for which kobject_init() has been invoked. So if we fail a check
-on 'struct klp_object' N, then we'll only iterate over the first N - 1
-objects in klp_for_each_*_safe().
+No worries, Do test on different arch's other than yours
 
-> We should not need the pre-early-init check when the lists include only
-> structures with initialized kobjects.
-
-Not sure I quite follow. We have to do NULL checks for obj->funcs at some
-point, and per Josh's suggestion it seems cleaner to do it outside the
-critical section, and before we actually invoke kobject_init(). Apologies
-if I've misunderstood your point.
-
-> Otherwise, I like the idea to do module_get() before
-> klp_init_patch_early(). I was never happy with the "hidden"
-> side effect.
-
-Ack!
-
-> I am also fine with calling klp_free() when the early init fails
-> if we agreed that it is a good practice. I just do want to pretend
-> that it fixes a leak what nobody sees any leak.
-> 
-> Please, wait few days until the discussion finishes before sending v3.
-
-Ack, no problem, I'll wait until we're all in alignment. Thanks, Petr and
-Josh for taking a look at the patch.
-
-Regards,
-David
+-- 
+~Vinod

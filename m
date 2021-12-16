@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3503F477F14
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5209477F1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242099AbhLPVlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:41:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241769AbhLPVkc (ORCPT
+        id S241740AbhLPVlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:41:16 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:57042 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241726AbhLPVkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:40:32 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAB5C061401;
-        Thu, 16 Dec 2021 13:40:32 -0800 (PST)
-Date:   Thu, 16 Dec 2021 21:40:30 -0000
+        Thu, 16 Dec 2021 16:40:33 -0500
+Date:   Thu, 16 Dec 2021 21:40:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690831;
+        s=2020; t=1639690832;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GjlbTERZhvfcw6i35tIMr6aTG9Itn1xp4AgKMTrqGrM=;
-        b=fCMnkZsbFhLQDGwfwRXD0Te8Ml95OE9fwqmarAkXMJWPR0UGLULGa2marpPCTE0wSmrPsj
-        rWs91bu4ZHhjPgM58yH2ogVu6NxikUNhLzA6kAIUp9S78iLSe3CeuXK6quwyepmWe+L6Q4
-        Sf07bOwrPVLC8iHp/Bif/Wf0rlKwboyVvAajN+bak+7CfXOjtSTgjylrLDYD5pP14xm6jN
-        0wj4SGljHRAFR/wTGDGTJlce466le1vL2goaU1dChmWUeVwxMNMivLDzcYFJPPGvpY3nUI
-        EFS1t6YbIXB+JvGAk0aO3v0yN3s5KeqNDwNod4Xy5PQgLlHIX8KHbshsG8Y+pQ==
+        bh=oiV5Am9Gtgo6ubA/1E1L8M6rup4KNwD60I7rIr5kJ3c=;
+        b=Gt3M4BWEvnlKJCHfg0PMvujEYJkTcfZwN4eHdV/tZLy+9cJx0g/AqFnhnZ2QQndF8CGzNZ
+        rEXTzw/HzLEnW5ZSLHn9b9L8wPju5sSI9wCtc2kg9vNPsP2U0qy09rKW333hDK1ki4a78e
+        D38Ffn31A5NL1+OMtLf2zI65IlcvFKh2jD36/zNozU84W9bYNXaPac90ols/yG6fDemC35
+        hzLJaIlPvrlz7uxN7hO10S+6/EN19XO658jrXhf8cx1Vf1Egvej257gqT6YIONi17aAVeH
+        pzAOvpqpHxD3TpBTlZAjd3O39/Mjj/pWcHAoCciFuTOFFFc+N7FzTAa/ztDLnw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690831;
+        s=2020e; t=1639690832;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GjlbTERZhvfcw6i35tIMr6aTG9Itn1xp4AgKMTrqGrM=;
-        b=Shk3ZhFJmWPuRwIdYzH9om4os7/h80wQneSgX6Vij1zkNwTYXp7K/SMexk4g+kGt5b7NV3
-        yoKD7SyS5XnhegDA==
+        bh=oiV5Am9Gtgo6ubA/1E1L8M6rup4KNwD60I7rIr5kJ3c=;
+        b=wX8gJq5xv82QfXq2YNzv6wTODN0kuyBBBkNX47XEKanVRyJqCkAYEdqE7rqZ/VBZd/0mkG
+        l1fVeDEem4N9qRAw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] powerpc/mpic_u3msi: Use msi_for_each-desc()
+Subject: [tip: irq/msi] powerpc/pasemi/msi: Convert to msi_on_each_dec()
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211206210748.576162169@linutronix.de>
-References: <20211206210748.576162169@linutronix.de>
+In-Reply-To: <20211206210748.468512783@linutronix.de>
+References: <20211206210748.468512783@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969083006.23020.12966734312702593646.tip-bot2@tip-bot2>
+Message-ID: <163969083183.23020.13468707208989147673.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,32 +58,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     706b585a1b9554cb1ede5108c733593b94a7e1c4
-Gitweb:        https://git.kernel.org/tip/706b585a1b9554cb1ede5108c733593b94a7e1c4
+Commit-ID:     e22b0d1bbf5bd71ed2b2fb54a257b5cc38c351c3
+Gitweb:        https://git.kernel.org/tip/e22b0d1bbf5bd71ed2b2fb54a257b5cc38c351c3
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 06 Dec 2021 23:51:31 +01:00
+AuthorDate:    Mon, 06 Dec 2021 23:51:28 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 16 Dec 2021 22:22:19 +01:00
+CommitterDate: Thu, 16 Dec 2021 22:22:18 +01:00
 
-powerpc/mpic_u3msi: Use msi_for_each-desc()
+powerpc/pasemi/msi: Convert to msi_on_each_dec()
 
 Replace the about to vanish iterators and make use of the filtering.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211206210748.576162169@linutronix.de
+Link: https://lore.kernel.org/r/20211206210748.468512783@linutronix.de
 
 ---
- arch/powerpc/sysdev/mpic_u3msi.c |  9 ++-------
+ arch/powerpc/platforms/pasemi/msi.c |  9 ++-------
  1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/arch/powerpc/sysdev/mpic_u3msi.c b/arch/powerpc/sysdev/mpic_u3msi.c
-index 3861023..fa53b6d 100644
---- a/arch/powerpc/sysdev/mpic_u3msi.c
-+++ b/arch/powerpc/sysdev/mpic_u3msi.c
-@@ -104,17 +104,12 @@ static void u3msi_teardown_msi_irqs(struct pci_dev *pdev)
- 	struct msi_desc *entry;
- 	irq_hw_number_t hwirq;
+diff --git a/arch/powerpc/platforms/pasemi/msi.c b/arch/powerpc/platforms/pasemi/msi.c
+index d38944a..e8af722 100644
+--- a/arch/powerpc/platforms/pasemi/msi.c
++++ b/arch/powerpc/platforms/pasemi/msi.c
+@@ -62,17 +62,12 @@ static void pasemi_msi_teardown_msi_irqs(struct pci_dev *pdev)
+ 
+ 	pr_debug("pasemi_msi_teardown_msi_irqs, pdev %p\n", pdev);
  
 -	for_each_pci_msi_entry(entry, pdev) {
 -		if (!entry->irq)
@@ -96,19 +93,19 @@ index 3861023..fa53b6d 100644
  		hwirq = virq_to_hw(entry->irq);
  		irq_set_msi_desc(entry->irq, NULL);
  		irq_dispose_mapping(entry->irq);
- 		msi_bitmap_free_hwirqs(&msi_mpic->msi_bitmap, hwirq, 1);
+ 		msi_bitmap_free_hwirqs(&msi_mpic->msi_bitmap, hwirq, ALLOC_CHUNK);
  	}
 -
 -	return;
  }
  
- static int u3msi_setup_msi_irqs(struct pci_dev *pdev, int nvec, int type)
-@@ -136,7 +131,7 @@ static int u3msi_setup_msi_irqs(struct pci_dev *pdev, int nvec, int type)
- 		return -ENXIO;
- 	}
+ static int pasemi_msi_setup_msi_irqs(struct pci_dev *pdev, int nvec, int type)
+@@ -90,7 +85,7 @@ static int pasemi_msi_setup_msi_irqs(struct pci_dev *pdev, int nvec, int type)
+ 	msg.address_hi = 0;
+ 	msg.address_lo = PASEMI_MSI_ADDR;
  
 -	for_each_pci_msi_entry(entry, pdev) {
 +	msi_for_each_desc(entry, &pdev->dev, MSI_DESC_NOTASSOCIATED) {
- 		hwirq = msi_bitmap_alloc_hwirqs(&msi_mpic->msi_bitmap, 1);
- 		if (hwirq < 0) {
- 			pr_debug("u3msi: failed allocating hwirq\n");
+ 		/* Allocate 16 interrupts for now, since that's the grouping for
+ 		 * affinity. This can be changed later if it turns out 32 is too
+ 		 * few MSIs for someone, but restrictions will apply to how the

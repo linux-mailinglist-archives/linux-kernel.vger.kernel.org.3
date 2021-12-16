@@ -2,122 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E5E4766E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 01:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E9A4766EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 01:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232315AbhLPAWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 19:22:03 -0500
-Received: from mail-wr1-f44.google.com ([209.85.221.44]:46895 "EHLO
-        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbhLPAWB (ORCPT
+        id S232323AbhLPAXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 19:23:48 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:37796
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229517AbhLPAXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 19:22:01 -0500
-Received: by mail-wr1-f44.google.com with SMTP id i22so11227262wrb.13;
-        Wed, 15 Dec 2021 16:22:00 -0800 (PST)
+        Wed, 15 Dec 2021 19:23:47 -0500
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 06496402FC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639614223;
+        bh=NXEpqs11wJhxLhr2hGFsp1gTWREU+GIpmQhxyJLCwqQ=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=wDxYX7ksFU7BovcMcNLoLPdzrp8jSTdPdYzZAA8nB3Ah28RkIBQUfsEDEK9GAT0ha
+         5+nW1GqtIfYoGCCcSa1W+5VgGbt5PVtul32UlQFeXqLHHPkZJ0inUskT1EYdzv7l/Z
+         yshDyB/V0eqlN2akcXcP7YyJX5V9fVcK9z8dpDNqIxlNN5LGtA1yBu4EsQ/2WudEFi
+         CW/I6UAPbBwChHcEQpJ9wpl+O06l+8MUXYU3E+ssHP2bpUEftF/FAk7+EC6GFFdw8d
+         c/otahGEruB/RqtDbep7rsQH8ncEPMKG6McN8rKqHnxchiXXLGTg0vthqfpoMfRnKn
+         wSXb0dB5UB+jg==
+Received: by mail-oi1-f199.google.com with SMTP id bi9-20020a056808188900b002bc4f64083aso14841707oib.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 16:23:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=5WVeXX6wF7Rq2S+DCKKRBlsrDqOKaYzTtLcyOXsKktU=;
-        b=71Fyb9Y2z5XfTVJQkLUZsQI6fw/2m6QPaR9OedB+1Hr3Ab/CKeqRfoPXJLd7r/D1mr
-         ble9h5LzXogAB0LexPnfwPf9BEW+h/jwIj+hDiJrC6eT1gs5JQzV6uRAo3t9YlT7Hl1I
-         KpYbV/gxVMaZWuH31q/8Uk+cEfLyCnjOVEWJ1NS6D9EtOrh6om2YlS9r2vmcZ8p33s5H
-         M04hA7Nv0dDHDmbgWPeG91xxeRiT99iw5IXpuWB1v2zuvmYQxojZyJlkduN/B1+xrjf2
-         dxH6OfeHUJ/N/wcXUpE4HM2WxFItnlF01wEVgAbOU8DsAFdCNyVkwbrKxO3NqnNoTyey
-         mjqA==
-X-Gm-Message-State: AOAM532WDvGT0LBymqSmZ6h2EDxjfKKPaiWMlUj8bgBsxHszqrE1qk8k
-        pfXIVuo980YZqDOb2+BzSOQ=
-X-Google-Smtp-Source: ABdhPJxLZqT3HVtWQiBLR32v2gzej5zHFQfgYEBY+Q1JCFyIlLTVOST7lpHyp2N5Yf05rj757fhaTw==
-X-Received: by 2002:a5d:59af:: with SMTP id p15mr6457665wrr.561.1639614120352;
-        Wed, 15 Dec 2021 16:22:00 -0800 (PST)
-Received: from rocinante ([95.155.85.46])
-        by smtp.gmail.com with ESMTPSA id g13sm3932678wri.102.2021.12.15.16.21.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 16:21:59 -0800 (PST)
-Date:   Thu, 16 Dec 2021 01:21:58 +0100
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Michael J . Ruhl" <michael.j.ruhl@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: Re: [PATCH 1/2] PCI: Add support for VF Resizable Bar extended cap
-Message-ID: <YbqGplTKl5i/1/kY@rocinante>
-References: <20211215141626.3090807-1-michal.winiarski@intel.com>
- <20211215141626.3090807-2-michal.winiarski@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NXEpqs11wJhxLhr2hGFsp1gTWREU+GIpmQhxyJLCwqQ=;
+        b=WvCtFkqhIFlc8qxqzF5j08QVRFn9DXKl5RnRVpfEsLIqTcakQ2yX8MzxZIdhfk0GwD
+         0YYHxUJw7m+hZXpef091muZd9e/QBgR3PByaZhRzIvuHFz2hO9P/FWmoCy5xEKzpTsqW
+         s/1pm5zmZ0590BurCRh77aJ3FZa4B+Uu3ieWLXCyV1hTe6B9PybIYevr1IkOetmwizHj
+         10HuT5rSMtmm/nOe5hwN6MJEF4uQr6MiZStjMyGk/QaZ/4+0ZGbN92pMBT0ZULGWkk5N
+         92ymDkJ5ehkyfzCfWbE19akGep8iCQsvFTUIJhQULmeVH1gL5VLfg8jty3BLhY7rSde0
+         d69w==
+X-Gm-Message-State: AOAM530P0vubv7Kzxk1LN1iGHI90rg7ysNdrGKOr+s00hOE88qaKozfb
+        2bLMXQPh4GhIvcp28CyUEFlbx4sfbG5BdNgpdRbvr11xf6VvrNEGwKPwooA+QqP0UNCDniYR2Z3
+        a8hatH8/603X9B2g7EinHIkRJmrU/exIyGWOR25/BuVb3WZFnOyuOvIwf+Q==
+X-Received: by 2002:a9d:292a:: with SMTP id d39mr10790972otb.11.1639614221819;
+        Wed, 15 Dec 2021 16:23:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzv/g29ju733vLu9DeNRCfIyC6Jv43aGjLqrwu/CBmKeZ3xs9KlDPgDwcOM9akcjDvZAtedKp4MD0nEvspnCGo=
+X-Received: by 2002:a9d:292a:: with SMTP id d39mr10790957otb.11.1639614221546;
+ Wed, 15 Dec 2021 16:23:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211215141626.3090807-2-michal.winiarski@intel.com>
+References: <20211215120108.336597-1-kai.heng.feng@canonical.com> <YboN+GmeyeoypV1D@rowland.harvard.edu>
+In-Reply-To: <YboN+GmeyeoypV1D@rowland.harvard.edu>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 16 Dec 2021 08:23:29 +0800
+Message-ID: <CAAd53p5thAHXdmmEn9VV7nrWGu7W6UaEsB7hx7k9WYTBMG2GqQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: hub: Add delay for SuperSpeed hub resume to let
+ links transit to U0
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Chris Chiu <chris.chiu@canonical.com>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Rajat Jain <rajatja@google.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michał,
+On Wed, Dec 15, 2021 at 11:47 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Wed, Dec 15, 2021 at 08:01:06PM +0800, Kai-Heng Feng wrote:
+> > When a new USB device gets plugged to nested hubs, the affected hub,
+> > which connects to usb 2-1.4-port2, doesn't report there's any change,
+> > hence the nested hubs go back to runtime suspend like nothing happened:
+> > [  281.032951] usb usb2: usb wakeup-resume
+> > [  281.032959] usb usb2: usb auto-resume
+> > [  281.032974] hub 2-0:1.0: hub_resume
+> > [  281.033011] usb usb2-port1: status 0263 change 0000
+> > [  281.033077] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.049797] usb 2-1: usb wakeup-resume
+> > [  281.069800] usb 2-1: Waited 0ms for CONNECT
+> > [  281.069810] usb 2-1: finish resume
+> > [  281.070026] hub 2-1:1.0: hub_resume
+> > [  281.070250] usb 2-1-port4: status 0203 change 0000
+> > [  281.070272] usb usb2-port1: resume, status 0
+> > [  281.070282] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+> > [  281.089813] usb 2-1.4: usb wakeup-resume
+> > [  281.109792] usb 2-1.4: Waited 0ms for CONNECT
+> > [  281.109801] usb 2-1.4: finish resume
+> > [  281.109991] hub 2-1.4:1.0: hub_resume
+> > [  281.110147] usb 2-1.4-port2: status 0263 change 0000
+> > [  281.110234] usb 2-1-port4: resume, status 0
+> > [  281.110239] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+> > [  281.110266] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.110426] hub 2-1.4:1.0: hub_suspend
+> > [  281.110565] usb 2-1.4: usb auto-suspend, wakeup 1
+> > [  281.130998] hub 2-1:1.0: hub_suspend
+> > [  281.137788] usb 2-1: usb auto-suspend, wakeup 1
+> > [  281.142935] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.177828] usb 2-1: usb wakeup-resume
+> > [  281.197839] usb 2-1: Waited 0ms for CONNECT
+> > [  281.197850] usb 2-1: finish resume
+> > [  281.197984] hub 2-1:1.0: hub_resume
+> > [  281.198203] usb 2-1-port4: status 0203 change 0000
+> > [  281.198228] usb usb2-port1: resume, status 0
+> > [  281.198237] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+> > [  281.217835] usb 2-1.4: usb wakeup-resume
+> > [  281.237834] usb 2-1.4: Waited 0ms for CONNECT
+> > [  281.237845] usb 2-1.4: finish resume
+> > [  281.237990] hub 2-1.4:1.0: hub_resume
+> > [  281.238067] usb 2-1.4-port2: status 0263 change 0000
+> > [  281.238148] usb 2-1-port4: resume, status 0
+> > [  281.238152] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+> > [  281.238166] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+> > [  281.238385] hub 2-1.4:1.0: hub_suspend
+> > [  281.238523] usb 2-1.4: usb auto-suspend, wakeup 1
+> > [  281.258076] hub 2-1:1.0: hub_suspend
+> > [  281.265744] usb 2-1: usb auto-suspend, wakeup 1
+> > [  281.285976] hub 2-0:1.0: hub_suspend
+> > [  281.285988] usb usb2: bus auto-suspend, wakeup 1
+> >
+> > USB 3.2 spec, 9.2.5.4 "Changing Function Suspend State" says that "If
+> > the link is in a non-U0 state, then the device must transition the link
+> > to U0 prior to sending the remote wake message", but the hub only
+> > transits the link to U0 after signaling remote wakeup.
+> >
+> > So be more forgiving and use a 20ms delay to let the link transit to U0
+> > for remote wakeup.
+> >
+> > Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> > v2:
+> >  - Add a small delay instead of waking up all hubs.
+> >
+> >  drivers/usb/core/hub.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > index 00070a8a65079..576fdf2c9f3c8 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -1110,7 +1110,10 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+> >               } else {
+> >                       hub_power_on(hub, true);
+> >               }
+> > -     }
+> > +     /* Give some time on remote wakeup to let links to transit to U0 */
+> > +     } else if (hub_is_superspeed(hub->hdev))
+> > +             msleep(20);
+>
+> Where did the 20-ms number come from?  Is it mentioned in the spec as
+> the time required for a port to switch from U3 to U0?
 
-[...]
-> +static int pci_memory_decoding(struct pci_dev *dev)
-> +{
-> +	u16 cmd;
-> +
-> +	pci_read_config_word(dev, PCI_COMMAND, &cmd);
-> +	if (cmd & PCI_COMMAND_MEMORY)
-> +		return -EBUSY;
-> +
-> +	return 0;
-> +}
-> +
-> +#ifdef CONFIG_PCI_IOV
-> +static int pci_vf_memory_decoding(struct pci_dev *dev)
-> +{
-> +	u16 cmd;
-> +
-> +	pci_read_config_word(dev, dev->sriov->pos + PCI_SRIOV_CTRL, &cmd);
-> +	if (cmd & PCI_SRIOV_CTRL_MSE)
-> +		return -EBUSY;
-> +
-> +	return 0;
-> +}
-> +#endif
-> +
->  int pci_resize_resource(struct pci_dev *dev, int resno, int size)
->  {
->  	struct resource *res = dev->resource + resno;
->  	struct pci_host_bridge *host;
->  	int old, ret;
->  	u32 sizes;
-> -	u16 cmd;
->  
->  	/* Check if we must preserve the firmware's resource assignment */
->  	host = pci_find_host_bridge(dev->bus);
-> @@ -424,9 +447,14 @@ int pci_resize_resource(struct pci_dev *dev, int resno, int size)
->  	if (!(res->flags & IORESOURCE_UNSET))
->  		return -EBUSY;
->  
-> -	pci_read_config_word(dev, PCI_COMMAND, &cmd);
-> -	if (cmd & PCI_COMMAND_MEMORY)
-> -		return -EBUSY;
-> +#ifdef CONFIG_PCI_IOV
-> +	if (resno >= PCI_IOV_RESOURCES)
-> +		ret = pci_vf_memory_decoding(dev);
-> +	else
-> +#endif
-> +	ret = pci_memory_decoding(dev);
-> +	if (ret)
-> +		return ret;
+The 20ms is the minimal time the device take to bring link back to U0 reliably.
+The spec mentioned device has to transit the link to U0 before
+signaling remote wakeup.
+So do you think this requires a new quirk?
 
-The above else works, however, it does trip our static analysis tools, and
-lack of the indentation makes it slightly confusing to read, at least at
-the first glance.  Thus, I wonder whether it would be possible to combine
-the pci_vf_memory_decoding() and pci_memory_decoding() somehow neatly into
-a private helper that takes a boolean to indicate whether it's a VF or not.
-Then, we could drop the if-statement, since some of the logic could live
-within the helper.
+Kai-Heng
 
-What do you think?
-
-	Krzysztof
+>
+> Alan Stern

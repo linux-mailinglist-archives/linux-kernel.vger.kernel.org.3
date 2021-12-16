@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3524774DF
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE0E4774E0
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237661AbhLPOmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:42:40 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15748 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234897AbhLPOmi (ORCPT
+        id S238137AbhLPOmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:42:42 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:28325 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238128AbhLPOmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Dec 2021 09:42:38 -0500
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JFFBG6Dk6zZcvy;
-        Thu, 16 Dec 2021 22:39:34 +0800 (CST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JFFFP5JlQzbjQR;
+        Thu, 16 Dec 2021 22:42:17 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2308.20; Thu, 16 Dec 2021 22:42:36 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 16 Dec 2021 22:42:35 +0800
+ 15.1.2308.20; Thu, 16 Dec 2021 22:42:36 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Ingo Molnar <mingo@kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>,
@@ -31,10 +31,12 @@ To:     Ingo Molnar <mingo@kernel.org>,
 CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Nadav Amit <namit@vmware.com>,
         "Dave Hansen" <dave.hansen@linux.intel.com>
-Subject: [PATCH v4 0/2] smp: Fix the comments in smp.c
-Date:   Thu, 16 Dec 2021 22:40:51 +0800
-Message-ID: <20211216144053.229-1-thunder.leizhen@huawei.com>
+Subject: [PATCH v4 1/2] smp: Fix the comments of smp_call_function_many()
+Date:   Thu, 16 Dec 2021 22:40:52 +0800
+Message-ID: <20211216144053.229-2-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
+In-Reply-To: <20211216144053.229-1-thunder.leizhen@huawei.com>
+References: <20211216144053.229-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -46,23 +48,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v3 --> v4:
-1. Change "function-name:" to "function-name -".
-2. Fix other kernel-doc related mistakes.
+As commit a32a4d8a815c ("smp: Run functions concurrently in
+smp_call_function_many_cond()") itself says:
+                  "Keep other smp_call_function_many() semantic as it is
+today for backward compatibility: the called function is not executed in
+this case locally."
 
-v2 --> v3:
-Add the descrition of other parameters of smp_call_function_many_cond().
+It's clear that, the function header comments of smp_call_function_many()
+does not need to be changed.
 
-v1 --> v2:
-Delete some duplicate comments.
+So move the comment about 'scf_flags' to smp_call_function_many_cond(),
+and restore the original comments of smp_call_function_many(). The
+comments have been simplified slightly to avoid duplication. And the
+description of other parameters of smp_call_function_many_cond() is added.
 
-Zhen Lei (2):
-  smp: Fix the comments of smp_call_function_many()
-  smp: Fix kernel-doc related mistakes
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ kernel/smp.c | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
 
- kernel/smp.c | 36 ++++++++++++++++++++++++------------
- 1 file changed, 24 insertions(+), 12 deletions(-)
-
+diff --git a/kernel/smp.c b/kernel/smp.c
+index 01a7c1706a58b1d..1e5221fe200296a 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -853,14 +853,26 @@ int smp_call_function_any(const struct cpumask *mask,
+ EXPORT_SYMBOL_GPL(smp_call_function_any);
+ 
+ /*
+- * Flags to be used as scf_flags argument of smp_call_function_many_cond().
+- *
+  * %SCF_WAIT:		Wait until function execution is completed
+  * %SCF_RUN_LOCAL:	Run also locally if local cpu is set in cpumask
+  */
+ #define SCF_WAIT	(1U << 0)
+ #define SCF_RUN_LOCAL	(1U << 1)
+ 
++/**
++ * smp_call_function_many_cond() - Run a function on a set of CPUs.
++ * @mask:	The set of cpus to run on (only runs on online subset).
++ *		Whether to allow execution on the local CPU is also controlled
++ *		by @scf_flags.
++ * @func:	The function to run on all applicable CPUs.
++ * @info:	An arbitrary pointer to pass to @func.
++ * @scf_flags:	Bitmask that controls the operation. Such as SCF_WAIT,
++ *		SCF_RUN_LOCAL.
++ * @cond_func:	A callback function that is passed a cpu id and the info
++ *		parameter. The function should return a blooean value
++ *		indicating whether @func will be executed on the specified CPU.
++ *		If @cond_func is NULL, that means unconditional, always true.
++ */
+ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 					smp_call_func_t func, void *info,
+ 					unsigned int scf_flags,
+@@ -972,14 +984,12 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ }
+ 
+ /**
+- * smp_call_function_many(): Run a function on a set of CPUs.
++ * smp_call_function_many() - Run a function on a set of other CPUs.
+  * @mask: The set of cpus to run on (only runs on online subset).
+  * @func: The function to run. This must be fast and non-blocking.
+  * @info: An arbitrary pointer to pass to the function.
+- * @wait: Bitmask that controls the operation. If %SCF_WAIT is set, wait
+- *        (atomically) until function has completed on other CPUs. If
+- *        %SCF_RUN_LOCAL is set, the function will also be run locally
+- *        if the local CPU is set in the @cpumask.
++ * @wait: If true, wait (atomically) until function has completed
++ *        on other CPUs.
+  *
+  * If @wait is true, then returns once @func has returned.
+  *
 -- 
 2.25.1
 

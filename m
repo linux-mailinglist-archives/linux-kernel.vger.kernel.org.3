@@ -2,131 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B269B4779E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1AA74779EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239888AbhLPRC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S239913AbhLPRDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239781AbhLPRCZ (ORCPT
+        with ESMTP id S239907AbhLPRDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:02:25 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A39C061574;
-        Thu, 16 Dec 2021 09:02:25 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id g14so88317925edb.8;
-        Thu, 16 Dec 2021 09:02:25 -0800 (PST)
+        Thu, 16 Dec 2021 12:03:00 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BA3C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:02:59 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id s1so11252137wrg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:02:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tAX1DillDzDe1cq2Y4cS5Hx7YpRdt+8cd+A34oUxstg=;
-        b=f26UaeIhrwptau+bBYmXy3CAzsPf0oUsp2HfFF11aRbP5g/3IVVkOJaavI2OtD4rj+
-         RqX2kCY0usTcPCDseXlzq2g+lS5/8TnTjZE00zluIQPKDosGh7pNwO6EB/AUlbqf07m4
-         IPUGGiIk1vFufYjFN5uqYgNQRbVlkK7WS7caup+vp0eZ77gFyHiDpJE2VqNgJ04MvqzQ
-         o95CdeyamIWhISKp2BKVHpSGiRl7I2SSrvIALqm09n1dv9ZLx+MmlrikB8xPb2qU8E4Y
-         BiXxCGJCf9PAY0NKvyNsKoxGAsBq5BFLLsM49bAO8Qnxj+xnLMxIB4LBeVMJgo3IX0yR
-         g5hA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=SrVCHaSSUww1aUIlo9VUKiSwk7a826/Fk8HSVed0lbU=;
+        b=oE2mc1WjeSGmDZolVhS6lIXVpReQkkc+OMnmHwpvVE+Kvdh6a0uAT6wX6xkEB+qlaf
+         xJnr1aWLF+FRJq6U4bWJFCHuXjdXastRSIk8mDm2OPTaMHLZ3jSkKFor+O4nR83ySpE5
+         wWKem3sERbIoS0fv67sp+3Ez+TSrfXEUGGZ9KmG9J1ronTD0cmZA1XQTaGdrjIWynN8t
+         wgWH602ixhBSTGwSDWzHynt/pk7jugRbMvdEDViG+PSZshKz2E/9c6LDjSSFMIc9HMdy
+         SLCqWcPwrekOMEYlQQsYeTmOFhqNr7Vh7qinfLw1/AD5lj3vyfHHQeIcViNcum5xvCDt
+         EdRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tAX1DillDzDe1cq2Y4cS5Hx7YpRdt+8cd+A34oUxstg=;
-        b=MqhHwaqJemx+764K03rYXtO/jPBL5hA2iCkTYE+UskV0tRLcXRTA1Pkdgd+89Cj3LC
-         FQtjKK8/828uJd8rz/IQ1dBZXrIAMyDkn92dyRNkm4clBEYjMpjq98AcI7o1IAlPzQxe
-         N/imFGaNq7C8UlGxeKeoqUnnUpDer/oSJ6PAwThbiEEIipeZ7j7q3bQ1oQ9iV/ll/FmO
-         Y3I95I6vePAWd+c1LdaWbhwhJ9iXVTHg8TZn1WKlKGgilE8VW2bCxMo6wSy3yYiYd+Cz
-         GuAULDH9hoVewmOmD8eXK3NbRXtoVPOGoYA2lZ5PZcpSSWs8zM4xZNtV5gItkoSSYkvn
-         ef1w==
-X-Gm-Message-State: AOAM533/GDs3EGXgkdOHEYgpegEGR1TWE8VZvTLv9/stBxa6bdr6YXGw
-        j0QuoLSJ/pe6Pa5mBYVt2e53OZVHqqfbIoSm+A8=
-X-Google-Smtp-Source: ABdhPJwusy1Z0natNCWY8k0AsGqbnUQN3iXeEdAbqKhD6r1xMeBarSuf3pT/Xg1NQ6wAs0oNMRSyZyveqhusvrqxHdE=
-X-Received: by 2002:a17:907:2d12:: with SMTP id gs18mr4099000ejc.198.1639674142539;
- Thu, 16 Dec 2021 09:02:22 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=SrVCHaSSUww1aUIlo9VUKiSwk7a826/Fk8HSVed0lbU=;
+        b=tmyckI/+eXuRGqWTgybVw+MYbDK84CtBdXd8cvaEmafB+mwl7kOyHlHU/bRkWOmws1
+         bl7B3jtTZxzrS6tS/pN+LKcSIAbpbsMBM3ODO+pi9ua78i9ajaaXGp88reMeGl+GVNgj
+         JaG/fT/m+KCbbmaNCOIHkeRH7EoaH695y+tHWe5urNyVNaQuJllbYWVs+AiPDpQHGJfV
+         YrfWwzw1DqpPWGOIIU163f2mE0q/utTfl8NKlnWPrpUlI6W9opRKTPAcBPBHW+2Ucw+6
+         9b6B9HhytnqdfBp84nQFaOCvpRCBZHyhKw9MNyTCfHliIeFN7GsIXul+2buJIJC3tyT6
+         Rw8A==
+X-Gm-Message-State: AOAM533CFN0pDf8Bt6fc5z9fsTkvyse8IzzGEEqagc/ExNTfqYR7e7qF
+        RKYmolLv2oLjX6bmwUZkURIG5g==
+X-Google-Smtp-Source: ABdhPJzBJgn6GwDUGy7kLbPH98ubX4OIJvp7lqM5S68uYwB/Fyf9/8xted9dA5x6AfEAlxVFV98qQw==
+X-Received: by 2002:adf:cd06:: with SMTP id w6mr9835298wrm.431.1639674178280;
+        Thu, 16 Dec 2021 09:02:58 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id b132sm5251570wmd.38.2021.12.16.09.02.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 09:02:57 -0800 (PST)
+Date:   Thu, 16 Dec 2021 17:02:52 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        syzbot <syzbot+9671693590ef5aad8953@syzkaller.appspotmail.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [syzbot] KASAN: stack-out-of-bounds Read in iov_iter_revert
+Message-ID: <YbtxPB/ceMUVK7t7@google.com>
+References: <6f7d4c1d-f923-3ab1-c525-45316b973c72@gmail.com>
+ <00000000000047f3b805c962affb@google.com>
+ <YYLAYvFU+9cnu+4H@google.com>
+ <0b4a5ff8-12e5-3cc7-8971-49e576444c9a@gmail.com>
+ <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
+ <YYp4rC4M/oh8fgr7@google.com>
+ <YbmiIpQKfrLClsKV@google.com>
+ <c7131961-23de-8bf4-7773-efffe9b8d294@gmail.com>
 MIME-Version: 1.0
-References: <20211216161227.31960-1-tharvey@gateworks.com>
-In-Reply-To: <20211216161227.31960-1-tharvey@gateworks.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Thu, 16 Dec 2021 11:02:11 -0600
-Message-ID: <CAHCN7x+sSixbY0oSsQ0bcEsZ6CVbc+Big1Tx=WDzt1WX0ycOWA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: imx8mn-venice-gw7902: disable gpu
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Lucas Stach <l.stach@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c7131961-23de-8bf4-7773-efffe9b8d294@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 10:12 AM Tim Harvey <tharvey@gateworks.com> wrote:
->
-> Since commit 99aa29932271 ("arm64: dts: imx8mn: Enable GPU")
-> imx8mn-venice-gw7902 will hang during kernel init because it uses
-> a MIMX8MN5CVTI which does not have a GPU.
->
-> Disable pgc_gpumix to work around this. We also disable the GPU devices
-> that depend on the gpumix power domain and pgc_gpu to avoid them staying
-> in a probe deferred state forever.
->
-> Cc: Adam Ford <aford173@gmail.com>
-> Cc: Lucas Stach <l.stach@pengutronix.de>
+On Wed, 15 Dec 2021, Pavel Begunkov wrote:
 
-Fixes: 99aa29932271 ("arm64: dts: imx8mn: Enable GPU")
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-Reviewed-by: Adam Ford <aford173@gmail.com>
-> ---
->  .../boot/dts/freescale/imx8mn-venice-gw7902.dts      | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-> index 236f425e1570..2d58005d20e4 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-> @@ -220,6 +220,10 @@
->         };
->  };
->
-> +&disp_blk_ctrl {
-> +       status = "disabled";
-> +};
-> +
+> On 12/15/21 08:06, Lee Jones wrote:
+> > On Tue, 09 Nov 2021, Lee Jones wrote:
+> > 
+> > > On Mon, 08 Nov 2021, Jens Axboe wrote:
+> > > > On 11/8/21 8:29 AM, Pavel Begunkov wrote:
+> > > > > On 11/3/21 17:01, Lee Jones wrote:
+> > > > > > Good afternoon Pavel,
+> > > > > > 
+> > > > > > > syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> > > > > > > 
+> > > > > > > Reported-and-tested-by: syzbot+9671693590ef5aad8953@syzkaller.appspotmail.com
+> > > > > > > 
+> > > > > > > Tested on:
+> > > > > > > 
+> > > > > > > commit:         bff2c168 io_uring: don't retry with truncated iter
+> > > > > > > git tree:       https://github.com/isilence/linux.git truncate
+> > > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=730106bfb5bf8ace
+> > > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=9671693590ef5aad8953
+> > > > > > > compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.1
+> > > > > > > 
+> > > > > > > Note: testing is done by a robot and is best-effort only.
+> > > > > > 
+> > > > > > As you can see in the 'dashboard link' above this bug also affects
+> > > > > > android-5-10 which is currently based on v5.10.75.
+> > > > > > 
+> > > > > > I see that the back-port of this patch failed in v5.10.y:
+> > > > > > 
+> > > > > >     https://lore.kernel.org/stable/163152589512611@kroah.com/
+> > > > > > 
+> > > > > > And after solving the build-error by back-porting both:
+> > > > > > 
+> > > > > >     2112ff5ce0c11 iov_iter: track truncated size
+> > > > > >     89c2b3b749182 io_uring: reexpand under-reexpanded iters
+> > > > > > 
+> > > > > > I now see execution tripping the WARN() in iov_iter_revert():
+> > > > > > 
+> > > > > >     if (WARN_ON(unroll > MAX_RW_COUNT))
+> > > > > >         return
+> > > > > > 
+> > > > > > Am I missing any additional patches required to fix stable/v5.10.y?
+> > > > > 
+> > > > > Is it the same syz test? There was a couple more patches for
+> > > > > IORING_SETUP_IOPOLL, but strange if that's not the case.
+> > > > > 
+> > > > > 
+> > > > > fwiw, Jens decided to replace it with another mechanism shortly
+> > > > > after, so it may be a better idea to backport those. Jens,
+> > > > > what do you think?
+> > > > > 
+> > > > > 
+> > > > > commit 8fb0f47a9d7acf620d0fd97831b69da9bc5e22ed
+> > > > > Author: Jens Axboe <axboe@kernel.dk>
+> > > > > Date:   Fri Sep 10 11:18:36 2021 -0600
+> > > > > 
+> > > > >       iov_iter: add helper to save iov_iter state
+> > > > > 
+> > > > > commit cd65869512ab5668a5d16f789bc4da1319c435c4
+> > > > > Author: Jens Axboe <axboe@kernel.dk>
+> > > > > Date:   Fri Sep 10 11:19:14 2021 -0600
+> > > > > 
+> > > > >       io_uring: use iov_iter state save/restore helpers
+> > > > 
+> > > > Yes, I think backporting based on the save/restore setup is the
+> > > > sanest way by far.
+> > > 
+> > > Would you be kind enough to attempt to send these patches to Stable?
+> > > 
+> > > When I tried to back-port them, the second one gave me trouble.  And
+> > > without the in depth knowledge of the driver/subsystem that you guys
+> > > have, I found it almost impossible to resolve all of the conflicts:
+> > 
+> > Any movement on this chaps?
+> > 
+> > Not sure I am able to do this back-port without your help.
+> 
+> Apologies, slipped from my attention, we'll backport it,
+> and thanks for the reminder
 
-Disabling the blk-ctrl also makes it so you cannot use a display
-and/or CSI camera.   I don't know the application, so it's likely OK.
+Excellent.  Thanks Pavel.
 
->  /* off-board header */
->  &ecspi2 {
->         pinctrl-names = "default";
-> @@ -251,6 +255,10 @@
->         };
->  };
->
-> +&gpu {
-> +       status = "disabled";
-> +};
-> +
->  &i2c1 {
->         clock-frequency = <100000>;
->         pinctrl-names = "default";
-> @@ -546,6 +554,10 @@
->         status = "okay";
->  };
->
-> +&pgc_gpumix {
-> +       status = "disabled";
-> +};
-> +
->  /* off-board header */
->  &sai3 {
->         pinctrl-names = "default";
-> --
-> 2.17.1
->
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,100 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC6E47730E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26C0477310
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237492AbhLPNXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:23:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbhLPNXi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:23:38 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12246C061574;
-        Thu, 16 Dec 2021 05:23:38 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639661016;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uHDlt/HgQV9SB/CETbsCPHdj+DyjQBUg5mN4biUJiq0=;
-        b=uS8VK2zstKjBJALe5V5SLqq17N7d8WeWhQ31xBbSrV6xW9TiccgvBu0RtOepEIhr8VYNoj
-        TO35K1pXGBFr8rwTNvCZKzJRvWC2FIvOaLeTlkltwMe5PKrUiGbwGRc9G8Uoa3zrGTiKFz
-        pdLDXRvC8Vo5xii75fR5IsqbjlD5WgBGSMS7MRmS7MB+7QXlROkfV0BVl5PA4BHARARdp+
-        C6ewhfJNGGkkb06EGhxNPFxJQ3Xi1EmOdpCOuKiy67nak5d131yHh9lrmmi8il95Qpyr1o
-        WCsWZ96VfNK/ozy+2Np2cYyQBRqytABHImgOjuvuOSyXLFsIfXpjkIr+kUAUYQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639661016;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uHDlt/HgQV9SB/CETbsCPHdj+DyjQBUg5mN4biUJiq0=;
-        b=lTbaVuGdSjicH5fAaadv8EWyCHPRMVu8kQRTNDafztc59q4IXBgfpI4G4ChcA6TolZv42L
-        KF8M5eVZp7cGuzAQ==
-To:     Peter Oskolkov <posk@google.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Peter Oskolkov <posk@posk.io>, Ingo Molnar <mingo@redhat.com>,
-        juri.lelli@redhat.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, mgorman@suse.de,
-        bristot@redhat.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Paul Turner <pjt@google.com>, Andrei Vagin <avagin@google.com>,
-        Jann Horn <jannh@google.com>,
-        Thierry Delisle <tdelisle@uwaterloo.ca>
-Subject: Re: [RFC][PATCH 0/3] sched: User Managed Concurrency Groups
-In-Reply-To: <CAPNVh5cfoehYpOu2PE59L3_yxmZaXgJ6oC1eg923rmaiK4f87A@mail.gmail.com>
-References: <20211214204445.665580974@infradead.org>
- <CAFTs51XRJj1pwF6q5hwdGP0jtXmY81QQmTzyuA26fHMH0zCymw@mail.gmail.com>
- <Ybm+HJzkO/0BB4Va@hirez.programming.kicks-ass.net>
- <CAFTs51Xb6m=htpWsVk577n-h_pRCpqRcBg6-OhBav8OadikHkw@mail.gmail.com>
- <YboxjUM+D9Kg52mO@hirez.programming.kicks-ass.net>
- <CAPNVh5cJy2y+sTx0cPA1BPSAg=GjXC8XGT7fLzHwzvXH2=xjmw@mail.gmail.com>
- <20211215222524.GH16608@worktop.programming.kicks-ass.net>
- <CAPNVh5cfoehYpOu2PE59L3_yxmZaXgJ6oC1eg923rmaiK4f87A@mail.gmail.com>
-Date:   Thu, 16 Dec 2021 14:23:36 +0100
-Message-ID: <875yrolm3r.ffs@tglx>
+        id S237495AbhLPNYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:24:05 -0500
+Received: from mga04.intel.com ([192.55.52.120]:27070 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231752AbhLPNYE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 08:24:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639661044; x=1671197044;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zboWqb90S4wzxS9Bv6e7DstXNtZxbkOG+qiSh7V3U3w=;
+  b=a1yRVt1rlZU09WjdoZWC4Wxs0HGSpmq3Y7nYjw7n4xX0v1W/yEJc4ZS2
+   TBYGnlymj9z1Hqp5yIBFrlfVCI80e3KeuXWR5aT0EGr+NwegS0ozn9gsW
+   sjB2tCkfAaJ3hDInoiBHfye5aXNl7C4CZxWqAEInwup7jABlRVyzhbrnf
+   Vzq0n8GcAEM0pfNIdph5hZlTKkKe5uqEa5+wYiPMooxYkRSzVI3/9Yh/r
+   R/Ehg4v5wgTsqzFIFxbRp93i/C3dhsA06W8hrajYZ0T+x6M76zIf7Bkaw
+   uH1G8G+rO+5BX7qQKI/11pGB2z0Gnb4tV6mDtM5H6utDDz1GwftEVXYIK
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="238226335"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="238226335"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 05:24:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="615148914"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 05:24:02 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxqjq-0003CX-3P; Thu, 16 Dec 2021 13:24:02 +0000
+Date:   Thu, 16 Dec 2021 21:23:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin Botka <martin.botka@somainline.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [qcom:arm64-for-5.17 60/89] Error:
+ arch/arm64/boot/dts/qcom/sm6125.dtsi:452.28-29 syntax error
+Message-ID: <202112162157.I3SOidyR-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux arm64-for-5.17
+head:   bf0a257a9418ebcbe6ab2a73728f76969942e52a
+commit: 556a9f3ae17ef19deecac130fea38f258d5abeb2 [60/89] arm64: dts: qcom: sm6125: Add power domains to sdhc
+config: arm64-buildonly-randconfig-r001-20211216 (https://download.01.org/0day-ci/archive/20211216/202112162157.I3SOidyR-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?id=556a9f3ae17ef19deecac130fea38f258d5abeb2
+        git remote add qcom https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux
+        git fetch --no-tags qcom arm64-for-5.17
+        git checkout 556a9f3ae17ef19deecac130fea38f258d5abeb2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-On Wed, Dec 15 2021 at 15:26, Peter Oskolkov wrote:
-> On Wed, Dec 15, 2021 at 2:25 PM Peter Zijlstra <peterz@infradead.org> wrote:
->> > - take a userspace (spin) lock (so the steps below are all within a
->> > single critical section):
->>
->> Don't ever suggest userspace spinlocks, they're horrible crap.
->
-> This can easily be a mutex, not really important (although for very
-> short critical sections with only memory reads/writes, like here, spin
-> locks often perform better, in our experience).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Performance may be better, but user space spinlocks have a fundamental
-problem: They are prone to live locks.
+All errors (new ones prefixed by >>):
 
-That's completely independent of the length of the critical section, it
-even can be empty.
+>> Error: arch/arm64/boot/dts/qcom/sm6125.dtsi:452.28-29 syntax error
+   FATAL ERROR: Unable to parse input tree
 
-There are ways to avoid that, but that needs a very careful design on
-the application/library level and at the system configuration level
-(priorities, affinities ...). And even then, there are trival ways to
-break that, e.g. via CPU hotplug.
-
-So no, for something of general use, they are a complete NONO. People
-who think they know what they are doing have the source and can replace
-them if they feel the need to do so.
-
-Thanks,
-
-        tglx
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

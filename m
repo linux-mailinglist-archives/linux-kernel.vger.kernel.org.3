@@ -2,226 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E51477FF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3483D477FFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233009AbhLPWR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 17:17:28 -0500
-Received: from mga11.intel.com ([192.55.52.93]:62726 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230340AbhLPWR1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 17:17:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639693047; x=1671229047;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BYUu5ZKrH1J8ckToMDzhagj3swX7tjhJ3VHu0z+m1RA=;
-  b=KCcnuFwfcCYz6xB11aYjs30zBoN7tfpwQcNMazy+tTNgg2QREwhIy04p
-   2XcfRI08wou64iVZcZDj8Vx8u/LJ4INodAIysZ1Z2n2HuFCYJ6XbRYBBC
-   S02jFArN7tPwSVbeUAeY4MJKBmW2VOQiSGhPXIbF5jiZWkl2tpXv9cAH4
-   n3nmAqxUt6fmJS4y3PL6xyz8Y12aa1szTS21pF2T+El9RtxoZlmA0wjP0
-   7oLplXyn99DkAL6CIMrv7dGqnW1U2hlIonhWha8b9AlU9/u1PHIfR5A8g
-   GETbNygtyHvTRGzFhsXq58KjKUJGU+d/aHedqMaFJc42dZZxs7PGDsYXW
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="237157669"
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="237157669"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 14:17:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="615334846"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 14:17:25 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxz40-0003so-RB; Thu, 16 Dec 2021 22:17:24 +0000
-Date:   Fri, 17 Dec 2021 06:16:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vladimir Stempen <vladimir.stempen@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2005
- dcn10_align_pixel_clocks() warn: inconsistent indenting
-Message-ID: <202112170643.aEpVHFk9-lkp@intel.com>
+        id S233327AbhLPWWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 17:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230462AbhLPWW3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 17:22:29 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4155EC061574;
+        Thu, 16 Dec 2021 14:22:29 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id d38so906431lfv.0;
+        Thu, 16 Dec 2021 14:22:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:cc:subject:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=+HEWTxN0MDr0ZGvDvF7WwVJpOBhBbuSX1UZJkIu2GZk=;
+        b=VAazcsq7AbbriTGSYUvqxmPY8IF42ILQ5xzOvxTfUtJLkeUclB2j2lsNmdWc8lcj5W
+         vgEMq0X4KGbwUyG3nI1oj6WjJXIAx8c9/c/syX7/Q2KXeFeQIROmY4K6UvbbE0zO3glB
+         TwzqRZ3RFf95JLuEMFnXxkd/Kj+U/E5btiHSEG05TKaYT2oifgTXsItSOPW1N8D60cQu
+         1Mw90fwYazu0WaabIWEAncmncv2qhd0rZ49uyjC8hRD7NP2q/vk/d/ibGHWQfPUDWMKM
+         sWWXfNRoCqn3ouRKkUT/Mp5uLYveMhQ7GhkGHmhqchgKdwCv9cpW8iWmxbtT6AnGj8I6
+         otkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+HEWTxN0MDr0ZGvDvF7WwVJpOBhBbuSX1UZJkIu2GZk=;
+        b=329RQ7v7nMiIw3wI6zdhUQXjhIBCy5bh3v1/S0+SqqJ7fJMQNRjFAFYGMNW8UFtAdF
+         x4kNJlWzZvh/KrptBAMmH9SnfKqc0fR5fzqPNO6hb23ek4DFTbduizXpjsvK0wbdQK11
+         pSEZigAEsQzkOmluvkQAh2oSr7fZtgmjpB86CfdunbaESmJeemyPcQAmL/0FSqcHKyDG
+         cJaoepxdyBlvZ3Q2laIUwQbdoj8ekFk4Q83oYQwUH3Pi02hP39PUfpQNWyXXr0deCERH
+         SMq+tbzZnogokoNrRhLmChbBrb1Xkn72xTlML1zl4rWWtkoAppTSybvY5LwSAX/ZeI1e
+         fNTQ==
+X-Gm-Message-State: AOAM5336/VqK32r0sEHxucQP+cNuFO1ROq/h+e5AzWNHbTX2uFuiUV8L
+        ZAchAbvE0T4q8IrdRcEOtyDEI8eLlUxH6w==
+X-Google-Smtp-Source: ABdhPJy8dQJNPIazDdKfOzklHrBIo12MdaldzTWmrzxWAslICqqohGJxWtH9VJ4TfWIRmdKRG/lu7A==
+X-Received: by 2002:ac2:4c0b:: with SMTP id t11mr231727lfq.520.1639693347464;
+        Thu, 16 Dec 2021 14:22:27 -0800 (PST)
+Received: from netbook-debian (55-2-94-178.pool.ukrtel.net. [178.94.2.55])
+        by smtp.gmail.com with ESMTPSA id t23sm1074373lfg.63.2021.12.16.14.22.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 14:22:27 -0800 (PST)
+Date:   Fri, 17 Dec 2021 00:22:23 +0200
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     eugene.shalygin@gmail.com, andy.shevchenko@gmail.com,
+        platform-driver-x86@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] hwmon: (nct6775) Support lock by ACPI mutex
+Message-ID: <20211217002223.63b1e0a7@netbook-debian>
+In-Reply-To: <20211128184549.9161-1-pauk.denis@gmail.com>
+References: <20211128184549.9161-1-pauk.denis@gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fa36bbe6d43f3bbce1f10a187e153587c7584d83
-commit: 77a2b7265f20ee827e527eaa6f82b87e88388947 drm/amd/display: Synchronize displays with different timings
-date:   10 months ago
-config: x86_64-randconfig-m001-20211207 (https://download.01.org/0day-ci/archive/20211217/202112170643.aEpVHFk9-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Could you please provide a some feedback about such idea?
 
-New smatch warnings:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2005 dcn10_align_pixel_clocks() warn: inconsistent indenting
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2050 dcn10_enable_vblanks_synchronization() warn: if statement not indented
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2058 dcn10_enable_vblanks_synchronization() warn: inconsistent indenting
+I have bigger list of supported boards that requires ACPI mutex lock,
+but I prefer to have some feedback before send next version of patch.
 
-Old smatch warnings:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1449 dcn10_init_hw() error: we previously assumed 'dc->clk_mgr' could be null (see line 1276)
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:1691 dcn10_set_output_transfer_func() warn: variable dereferenced before check 'stream' (see line 1674)
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:3433 dcn10_update_pending_status() warn: variable dereferenced before check 'plane_state' (see line 3431)
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:3923 dcn10_set_clock() error: we previously assumed 'dc->clk_mgr' could be null (see line 3919)
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:3943 dcn10_set_clock() warn: variable dereferenced before check 'dc->clk_mgr' (see line 3923)
+I have created separate patch[1] with only boards where WMI methods is
+enough. And if work on patch takes some time/additional patch
+versions(for sure it will), I prefer to have that patch merged and
+rebase current patch over resulted list of boards. 
 
-vim +2005 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c
+Thank you.  
+1. https://patchwork.kernel.org/project/linux-hwmon/list/?series=594167
 
-  1928	
-  1929	int dcn10_align_pixel_clocks(
-  1930		struct dc *dc,
-  1931		int group_size,
-  1932		struct pipe_ctx *grouped_pipes[])
-  1933	{
-  1934		struct dc_context *dc_ctx = dc->ctx;
-  1935		int i, master = -1, embedded = -1;
-  1936		struct dc_crtc_timing hw_crtc_timing[MAX_PIPES] = {0};
-  1937		uint64_t phase[MAX_PIPES];
-  1938		uint64_t modulo[MAX_PIPES];
-  1939		unsigned int pclk;
-  1940	
-  1941		uint32_t embedded_pix_clk_100hz;
-  1942		uint16_t embedded_h_total;
-  1943		uint16_t embedded_v_total;
-  1944		bool clamshell_closed = false;
-  1945		uint32_t dp_ref_clk_100hz =
-  1946			dc->res_pool->dp_clock_source->ctx->dc->clk_mgr->dprefclk_khz*10;
-  1947	
-  1948		if (dc->config.vblank_alignment_dto_params &&
-  1949			dc->res_pool->dp_clock_source->funcs->override_dp_pix_clk) {
-  1950			clamshell_closed =
-  1951				(dc->config.vblank_alignment_dto_params >> 63);
-  1952			embedded_h_total =
-  1953				(dc->config.vblank_alignment_dto_params >> 32) & 0x7FFF;
-  1954			embedded_v_total =
-  1955				(dc->config.vblank_alignment_dto_params >> 48) & 0x7FFF;
-  1956			embedded_pix_clk_100hz =
-  1957				dc->config.vblank_alignment_dto_params & 0xFFFFFFFF;
-  1958	
-  1959			for (i = 0; i < group_size; i++) {
-  1960				grouped_pipes[i]->stream_res.tg->funcs->get_hw_timing(
-  1961						grouped_pipes[i]->stream_res.tg,
-  1962						&hw_crtc_timing[i]);
-  1963				dc->res_pool->dp_clock_source->funcs->get_pixel_clk_frequency_100hz(
-  1964					dc->res_pool->dp_clock_source,
-  1965					grouped_pipes[i]->stream_res.tg->inst,
-  1966					&pclk);
-  1967				hw_crtc_timing[i].pix_clk_100hz = pclk;
-  1968				if (dc_is_embedded_signal(
-  1969						grouped_pipes[i]->stream->signal)) {
-  1970					embedded = i;
-  1971					master = i;
-  1972					phase[i] = embedded_pix_clk_100hz*100;
-  1973					modulo[i] = dp_ref_clk_100hz*100;
-  1974				} else {
-  1975	
-  1976					phase[i] = (uint64_t)embedded_pix_clk_100hz*
-  1977						hw_crtc_timing[i].h_total*
-  1978						hw_crtc_timing[i].v_total/
-  1979						get_clock_divider(grouped_pipes[i], true);
-  1980					modulo[i] = (uint64_t)dp_ref_clk_100hz*
-  1981						embedded_h_total*
-  1982						embedded_v_total;
-  1983	
-  1984					if (reduceSizeAndFraction(&phase[i],
-  1985							&modulo[i], true) == false) {
-  1986						/*
-  1987						 * this will help to stop reporting
-  1988						 * this timing synchronizable
-  1989						 */
-  1990						DC_SYNC_INFO("Failed to reduce DTO parameters\n");
-  1991						grouped_pipes[i]->stream->has_non_synchronizable_pclk = true;
-  1992					}
-  1993				}
-  1994			}
-  1995	
-  1996			for (i = 0; i < group_size; i++) {
-  1997				if (i != embedded && !grouped_pipes[i]->stream->has_non_synchronizable_pclk) {
-  1998					dc->res_pool->dp_clock_source->funcs->override_dp_pix_clk(
-  1999						dc->res_pool->dp_clock_source,
-  2000						grouped_pipes[i]->stream_res.tg->inst,
-  2001						phase[i], modulo[i]);
-  2002					dc->res_pool->dp_clock_source->funcs->get_pixel_clk_frequency_100hz(
-  2003						dc->res_pool->dp_clock_source,
-  2004						grouped_pipes[i]->stream_res.tg->inst, &pclk);
-> 2005						grouped_pipes[i]->stream->timing.pix_clk_100hz =
-  2006							pclk*get_clock_divider(grouped_pipes[i], false);
-  2007					if (master == -1)
-  2008						master = i;
-  2009				}
-  2010			}
-  2011	
-  2012		}
-  2013		return master;
-  2014	}
-  2015	
-  2016	void dcn10_enable_vblanks_synchronization(
-  2017		struct dc *dc,
-  2018		int group_index,
-  2019		int group_size,
-  2020		struct pipe_ctx *grouped_pipes[])
-  2021	{
-  2022		struct dc_context *dc_ctx = dc->ctx;
-  2023		struct output_pixel_processor *opp;
-  2024		struct timing_generator *tg;
-  2025		int i, width, height, master;
-  2026	
-  2027		for (i = 1; i < group_size; i++) {
-  2028			opp = grouped_pipes[i]->stream_res.opp;
-  2029			tg = grouped_pipes[i]->stream_res.tg;
-  2030			tg->funcs->get_otg_active_size(tg, &width, &height);
-  2031			if (opp->funcs->opp_program_dpg_dimensions)
-  2032				opp->funcs->opp_program_dpg_dimensions(opp, width, 2*(height) + 1);
-  2033		}
-  2034	
-  2035		for (i = 0; i < group_size; i++) {
-  2036			if (grouped_pipes[i]->stream == NULL)
-  2037				continue;
-  2038			grouped_pipes[i]->stream->vblank_synchronized = false;
-  2039			grouped_pipes[i]->stream->has_non_synchronizable_pclk = false;
-  2040		}
-  2041	
-  2042		DC_SYNC_INFO("Aligning DP DTOs\n");
-  2043	
-  2044		master = dcn10_align_pixel_clocks(dc, group_size, grouped_pipes);
-  2045	
-  2046		DC_SYNC_INFO("Synchronizing VBlanks\n");
-  2047	
-  2048		if (master >= 0) {
-  2049			for (i = 0; i < group_size; i++) {
-> 2050				if (i != master && !grouped_pipes[i]->stream->has_non_synchronizable_pclk)
-  2051				grouped_pipes[i]->stream_res.tg->funcs->align_vblanks(
-  2052					grouped_pipes[master]->stream_res.tg,
-  2053					grouped_pipes[i]->stream_res.tg,
-  2054					grouped_pipes[master]->stream->timing.pix_clk_100hz,
-  2055					grouped_pipes[i]->stream->timing.pix_clk_100hz,
-  2056					get_clock_divider(grouped_pipes[master], false),
-  2057					get_clock_divider(grouped_pipes[i], false));
-> 2058					grouped_pipes[i]->stream->vblank_synchronized = true;
-  2059			}
-  2060			grouped_pipes[master]->stream->vblank_synchronized = true;
-  2061			DC_SYNC_INFO("Sync complete\n");
-  2062		}
-  2063	
-  2064		for (i = 1; i < group_size; i++) {
-  2065			opp = grouped_pipes[i]->stream_res.opp;
-  2066			tg = grouped_pipes[i]->stream_res.tg;
-  2067			tg->funcs->get_otg_active_size(tg, &width, &height);
-  2068			if (opp->funcs->opp_program_dpg_dimensions)
-  2069				opp->funcs->opp_program_dpg_dimensions(opp, width, height);
-  2070		}
-  2071	}
-  2072	
+On Sun, 28 Nov 2021 20:45:45 +0200
+Denis Pauk <pauk.denis@gmail.com> wrote:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Lock by a ACPI mutex that is required for support ASUS MAXIMUS VII
+> HERO motherboard. In other case, all methods are returned zero
+> instead of real values. Code uses acpi mutex before any IO operations
+> in case when such acpi mutex is known.
+> 
+> Patch series adds additional check for chip ID, and if method
+> returned zero, all calls by acpi_wmi are disabled. 
+> 
+> @Andy Shevchenko: 
+> >> Do you need string_helpers.h after this change?  
+> It was not required in the original patch, as it was included as part
+> of some other header and I have left includes without changes.
+> 
+> I have a little bit changed conditionals in "add MAXIMUS VII HERO",
+> code can change access variable several times: 
+> * By the default, access is set to direct, 
+> * after code has checked that wmi methods can return something useful,
+> * and as the last step code has checked that mutext is existed and
+> set access back to direct.
+> 
+> But as for me, it should be less confusing.
+> 
+> What do you think?
+> 
+> ---
+> 
+> Changes in v2:
+> - Fix commit message.
+> - Remove default acpi_board_ANY and use NULL instead.
+> - Use chip ID everywhere.
+> - Use an anonymous union for mutexes.
+> - Use temporary status varibale in acpi calls.
+> ---
+> 
+> Denis Pauk (3):
+>   hwmon: (nct6775) Use lock function pointers in nct6775_data
+>   hwmon: (nct6775) Implement custom lock by ACPI mutex
+>   hwmon: (nct6775) add MAXIMUS VII HERO
+> 
+>  drivers/hwmon/nct6775.c | 364
+> +++++++++++++++++++++++++++++----------- 1 file changed, 263
+> insertions(+), 101 deletions(-)
+> 
+> 
+> base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
+
+
+
+Best regards,
+             Denis.

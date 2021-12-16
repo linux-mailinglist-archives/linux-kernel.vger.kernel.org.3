@@ -2,115 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9FA9476F07
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB30476F08
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236169AbhLPKlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:41:19 -0500
-Received: from elvis.franken.de ([193.175.24.41]:50245 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230467AbhLPKlS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:41:18 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mxoC2-00089d-00; Thu, 16 Dec 2021 11:40:58 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 5AA86C075D; Thu, 16 Dec 2021 11:40:49 +0100 (CET)
-Date:   Thu, 16 Dec 2021 11:40:49 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Steve French <sfrench@samba.org>, Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-cachefs@redhat.com,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        linux-power@fi.rohmeurope.com
-Subject: Re: [PATCH v2 0/6] Cleanup after removal of configs
-Message-ID: <20211216104049.GA10578@alpha.franken.de>
-References: <20211216094426.2083802-1-alexandre.ghiti@canonical.com>
+        id S236176AbhLPKle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:41:34 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:38057 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230467AbhLPKlc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 05:41:32 -0500
+Received: (Authenticated sender: alex@ghiti.fr)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 4B27D20003;
+        Thu, 16 Dec 2021 10:41:26 +0000 (UTC)
+Message-ID: <74995c52-dfd4-d07e-cc0f-1a934be9cc16@ghiti.fr>
+Date:   Thu, 16 Dec 2021 11:41:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216094426.2083802-1-alexandre.ghiti@canonical.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2 2/5] riscv: mm: init: try best to use
+ IS_ENABLED(CONFIG_64BIT) instead of #ifdef
+Content-Language: en-US
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211206150353.731-1-jszhang@kernel.org>
+ <20211206150353.731-3-jszhang@kernel.org>
+From:   Alexandre ghiti <alex@ghiti.fr>
+In-Reply-To: <20211206150353.731-3-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 10:44:20AM +0100, Alexandre Ghiti wrote:
-> While bumping from 5.13 to 5.15, I found that a few deleted configs had
-> left some pieces here and there: this patchset cleans that.
-> 
-> Changes in v2:
-> - Rebase on top of v5.16-rc1
-> - Removed patch 6 since Matti said he would take care of that
-> - Added AB, RB
-> 
-> Alexandre Ghiti (6):
->   Documentation, arch: Remove leftovers from fscache/cachefiles
->     histograms
->   Documentation, arch: Remove leftovers from raw device
->   Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
->   arch: Remove leftovers from mandatory file locking
->   Documentation, arch, fs: Remove leftovers from fscache object list
->   arch: Remove leftovers from prism54 wireless driver
-> 
->  Documentation/admin-guide/cifs/usage.rst      |   7 +-
->  Documentation/admin-guide/devices.txt         |   8 +-
->  .../filesystems/caching/cachefiles.rst        |  34 -----
->  Documentation/filesystems/caching/fscache.rst | 123 +-----------------
->  arch/arm/configs/axm55xx_defconfig            |   3 -
->  arch/arm/configs/cm_x300_defconfig            |   1 -
->  arch/arm/configs/ezx_defconfig                |   1 -
->  arch/arm/configs/imote2_defconfig             |   1 -
->  arch/arm/configs/nhk8815_defconfig            |   1 -
->  arch/arm/configs/pxa_defconfig                |   1 -
->  arch/arm/configs/spear13xx_defconfig          |   1 -
->  arch/arm/configs/spear3xx_defconfig           |   1 -
->  arch/arm/configs/spear6xx_defconfig           |   1 -
->  arch/mips/configs/decstation_64_defconfig     |   1 -
->  arch/mips/configs/decstation_defconfig        |   1 -
->  arch/mips/configs/decstation_r4k_defconfig    |   1 -
->  arch/mips/configs/fuloong2e_defconfig         |   1 -
->  arch/mips/configs/ip27_defconfig              |   1 -
->  arch/mips/configs/malta_defconfig             |   1 -
->  arch/mips/configs/malta_kvm_defconfig         |   1 -
->  arch/mips/configs/malta_qemu_32r6_defconfig   |   1 -
->  arch/mips/configs/maltaaprp_defconfig         |   1 -
->  arch/mips/configs/maltasmvp_defconfig         |   1 -
->  arch/mips/configs/maltasmvp_eva_defconfig     |   1 -
->  arch/mips/configs/maltaup_defconfig           |   1 -
->  arch/mips/configs/maltaup_xpa_defconfig       |   1 -
->  arch/powerpc/configs/pmac32_defconfig         |   1 -
->  arch/powerpc/configs/ppc6xx_defconfig         |   1 -
->  arch/powerpc/configs/pseries_defconfig        |   1 -
->  arch/sh/configs/titan_defconfig               |   1 -
->  fs/fscache/object.c                           |   3 -
->  fs/fscache/proc.c                             |  12 --
->  32 files changed, 6 insertions(+), 209 deletions(-)
+hi Jisheng,
 
-for the MIPS parts:
+On 12/6/21 16:03, Jisheng Zhang wrote:
+> Try our best to replace the conditional compilation using
+> "#ifdef CONFIG_64BIT" by a check for "IS_ENABLED(CONFIG_64BIT)", to
+> simplify the code and to increase compile coverage.
+>
+> Now we can also remove the __maybe_unused used in max_mapped_addr
+> declaration.
+>
+> We also remove the BUG_ON check of mapping the last 4K bytes of the
+> addressable memory since this is always true for every kernel actually.
 
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+That could have been a different patch as this does not fit the patch 
+subject, but anyway:
+
+Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
+
+Thanks,
+
+Alex
+
+
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>   arch/riscv/mm/init.c | 43 ++++++++++++++++---------------------------
+>   1 file changed, 16 insertions(+), 27 deletions(-)
+>
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 745f26a3b02e..4edf5600bea9 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -102,10 +102,9 @@ static void __init print_vm_layout(void)
+>   		  (unsigned long)VMALLOC_END);
+>   	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
+>   		  (unsigned long)high_memory);
+> -#ifdef CONFIG_64BIT
+> -	print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
+> -		  (unsigned long)ADDRESS_SPACE_END);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
+> +			  (unsigned long)ADDRESS_SPACE_END);
+>   }
+>   #else
+>   static void print_vm_layout(void) { }
+> @@ -163,7 +162,7 @@ static void __init setup_bootmem(void)
+>   {
+>   	phys_addr_t vmlinux_end = __pa_symbol(&_end);
+>   	phys_addr_t vmlinux_start = __pa_symbol(&_start);
+> -	phys_addr_t __maybe_unused max_mapped_addr;
+> +	phys_addr_t max_mapped_addr;
+>   	phys_addr_t phys_ram_end;
+>   
+>   #ifdef CONFIG_XIP_KERNEL
+> @@ -172,17 +171,16 @@ static void __init setup_bootmem(void)
+>   
+>   	memblock_enforce_memory_limit(memory_limit);
+>   
+> -	/*
+> -	 * Reserve from the start of the kernel to the end of the kernel
+> -	 */
+> -#if defined(CONFIG_64BIT) && defined(CONFIG_STRICT_KERNEL_RWX)
+>   	/*
+>   	 * Make sure we align the reservation on PMD_SIZE since we will
+>   	 * map the kernel in the linear mapping as read-only: we do not want
+>   	 * any allocation to happen between _end and the next pmd aligned page.
+>   	 */
+> -	vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT) && IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
+> +		vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
+> +	/*
+> +	 * Reserve from the start of the kernel to the end of the kernel
+> +	 */
+>   	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
+>   
+>   
+> @@ -190,7 +188,6 @@ static void __init setup_bootmem(void)
+>   #ifndef CONFIG_XIP_KERNEL
+>   	phys_ram_base = memblock_start_of_DRAM();
+>   #endif
+> -#ifndef CONFIG_64BIT
+>   	/*
+>   	 * memblock allocator is not aware of the fact that last 4K bytes of
+>   	 * the addressable memory can not be mapped because of IS_ERR_VALUE
+> @@ -200,10 +197,11 @@ static void __init setup_bootmem(void)
+>   	 * address space is occupied by the kernel mapping then this check must
+>   	 * be done as soon as the kernel mapping base address is determined.
+>   	 */
+> -	max_mapped_addr = __pa(~(ulong)0);
+> -	if (max_mapped_addr == (phys_ram_end - 1))
+> -		memblock_set_current_limit(max_mapped_addr - 4096);
+> -#endif
+> +	if (!IS_ENABLED(CONFIG_64BIT)) {
+> +		max_mapped_addr = __pa(~(ulong)0);
+> +		if (max_mapped_addr == (phys_ram_end - 1))
+> +			memblock_set_current_limit(max_mapped_addr - 4096);
+> +	}
+>   
+>   	min_low_pfn = PFN_UP(phys_ram_base);
+>   	max_low_pfn = max_pfn = PFN_DOWN(phys_ram_end);
+> @@ -616,14 +614,6 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>   	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
+>   	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
+>   
+> -#ifdef CONFIG_64BIT
+> -	/*
+> -	 * The last 4K bytes of the addressable memory can not be mapped because
+> -	 * of IS_ERR_VALUE macro.
+> -	 */
+> -	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
+> -#endif
+> -
+>   	pt_ops.alloc_pte = alloc_pte_early;
+>   	pt_ops.get_pte_virt = get_pte_virt_early;
+>   #ifndef __PAGETABLE_PMD_FOLDED
+> @@ -735,10 +725,9 @@ static void __init setup_vm_final(void)
+>   		}
+>   	}
+>   
+> -#ifdef CONFIG_64BIT
+>   	/* Map the kernel */
+> -	create_kernel_page_table(swapper_pg_dir, false);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		create_kernel_page_table(swapper_pg_dir, false);
+>   
+>   	/* Clear fixmap PTE and PMD mappings */
+>   	clear_fixmap(FIX_PTE);

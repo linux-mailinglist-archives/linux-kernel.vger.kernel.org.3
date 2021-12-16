@@ -2,106 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A586477EAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15875477EB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236880AbhLPVWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235310AbhLPVWu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:22:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0437FC061574;
-        Thu, 16 Dec 2021 13:22:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8ACFB82641;
-        Thu, 16 Dec 2021 21:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F16DC36AEE;
-        Thu, 16 Dec 2021 21:22:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639689767;
-        bh=Rby8wL1R+RjVFuXBREBzbt9S6XLeBNTp+vc8b4HLPZo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OMQH3hlrCyXS7AW2yFCYCI6gAMn6YU9jHcBYW75R6j7qIag52Lfkv6XdFE/Qe3F1c
-         +Fu8iIakEuAR0HFqo8GzKOu8zwz6zehyxzxEzi6nfSXCPqXtk+0WPg64W2FlILMyyV
-         vnMdeVnuK/usJad6qIbm5yYdzzS5wmgZ7DMgMXBwILVvOVoaifKPafcBsfRDBhZtJv
-         Ls0R0QM1C/vfTD2JNoxo3/BnTMdejA7gkS2K25rqC/3PK4towqfxbyhxR0l6lj9QeL
-         bLyf83gwnUhN+eKjGdkOh6B4KzIipP4L58Tp/vTAGi/xF1hYbiyiYTBSL7eUFvS6oC
-         J+jyY6oBigxNg==
-Received: by mail-qv1-f44.google.com with SMTP id ke6so561267qvb.1;
-        Thu, 16 Dec 2021 13:22:47 -0800 (PST)
-X-Gm-Message-State: AOAM532KeVJ6ndrtc3LeTI09rvUnNRXR8EBuSNMk0Yvh4vkokcXb7qk/
-        HxcOE8y8WQR7t/F75OAys+YWlCj3V56ZdJZKGg==
-X-Google-Smtp-Source: ABdhPJwCk6EQOFeg0DPodBptUy75vtieDV400ot205d73s7buJc0fLIKkr8OqR4T6zfPLrh/d90m8q4caiFdkY4YT3k=
-X-Received: by 2002:a0c:e54d:: with SMTP id n13mr86544qvm.16.1639689766539;
- Thu, 16 Dec 2021 13:22:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20211215224832.1985402-1-robh@kernel.org> <Ybp8QMyoW+MxTgmJ@piout.net>
-In-Reply-To: <Ybp8QMyoW+MxTgmJ@piout.net>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 16 Dec 2021 15:22:35 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+QbqH3tsZPjJb-WUObpXos9TQ2b_aB5ih_KSPVQcYLLA@mail.gmail.com>
-Message-ID: <CAL_Jsq+QbqH3tsZPjJb-WUObpXos9TQ2b_aB5ih_KSPVQcYLLA@mail.gmail.com>
-Subject: Re: [PATCH] serial: atmel: Use platform_get_irq() to get the interrupt
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Richard Genoud <richard.genoud@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        id S236943AbhLPVYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:24:03 -0500
+Received: from mga02.intel.com ([134.134.136.20]:58272 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235310AbhLPVYB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 16:24:01 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="226890986"
+X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
+   d="scan'208";a="226890986"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 13:24:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
+   d="scan'208";a="615318088"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 13:24:00 -0800
+Received: from debox1-desk1.jf.intel.com (debox1-desk1.jf.intel.com [10.54.75.53])
+        by linux.intel.com (Postfix) with ESMTP id 620AF580978;
+        Thu, 16 Dec 2021 13:24:00 -0800 (PST)
+Message-ID: <5432c30fd597a68feaa935054205da90519a769f.camel@linux.intel.com>
+Subject: Re: [PATCH V4 2/2] PCI: vmd: Override ASPM on TGL/ADL VMD devices
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com,
+        michael.a.bottini@linux.intel.com, rafael@kernel.org,
+        me@adhityamohan.in, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rajat Jain <rajatja@google.com>
+Date:   Thu, 16 Dec 2021 13:24:00 -0800
+In-Reply-To: <20211216172658.GA770781@bhelgaas>
+References: <20211216172658.GA770781@bhelgaas>
+Organization: David E. Box
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 5:37 PM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> Hello Rob,
->
-> On 15/12/2021 16:48:31-0600, Rob Herring wrote:
-> > Accessing platform device resources directly has long been deprecated for
-> > DT as IRQ resources may not be available at device creation time. Drivers
-> > continuing to use static IRQ resources is blocking removing the static setup
-> > from the DT core code.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
+On Thu, 2021-12-16 at 11:26 -0600, Bjorn Helgaas wrote:
+> [+cc Rajat for LTR max latency write]
+> 
+> On Wed, Dec 15, 2021 at 09:56:00PM -0800, David E. Box wrote:
+> > From: Michael Bottini <michael.a.bottini@linux.intel.com>
+> > 
+> > On Tiger Lake and Alder Lake platforms, VMD controllers do not have ASPM
+> > enabled nor LTR values set by BIOS. This leads high power consumption on
+> > these platforms when VMD is enabled as reported in bugzilla [1].  Enable
+> > these features in the VMD driver using pcie_aspm_policy_override() to set
+> > the ASPM policy for the root ports.
+> 
+> s/leads high/leads to high/
+> 
+> Does this depend on "Tiger Lake and Alder Lake platforms"
+> specifically, or does it depend on a BIOS design choice, i.e., "don't
+> configure ASPM or LTR for devices below a VMD"?
+
+It was a BIOS design choice to have this done by the OS driver for both Tiger Lake and Alder Lake.
+
+> 
+> The subject says "override ASPM on VMD devices," but it looks like
+> this affects the ASPM configuration of devices *below* the VMD, not of
+> the VMD itself.
+
+Yes.
+
+> 
+> It looks like this only affects *NVMe* devices, since
+> vmd_enable_aspm() checks for PCI_CLASS_STORAGE_EXPRESS.  Why is that?
+> Is there something special about NVMe?  I'd think you would want to do
+> this for *all* devices below a VMD.
+
+We need this for all devices under the PCIe root ports below VMD. Those will only be NVMe device
+AFAICS.
+
+> 
+> Since it only affects PCI_CLASS_STORAGE_EXPRESS devices, I don't think
+> it actually "sets ASPM policy for the root ports".  vmd_enable_aspm()
+> calls pcie_aspm_policy_override() on endpoints.  It's true that the
+> link ASPM state happens to be attached to the upstream end of the
+> link, but that's an ASPM implementation detail.
+> 
+> This all needs to be clear in the subject and commit log.
+
+Ack
+
+> 
+> > To do this, add an additional flag in VMD features to specify devices that
+> > must have their respective policies overridden.
+> 
+> I'm not clear on why you want this to apply to only certain VMDs and
+> not others.  Do some BIOSes configure ASPM for devices below some
+> VMDs?
+
+Not currently. But the plan is for future devices to move back to having BIOS do the programming.
+
+> 
+> > [1] https://bugzilla.kernel.org/show_bug.cgi?id=213717
+> > 
+> > Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
+> > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > Tested-by: Adhitya Mohan <me@adhityamohan.in>
 > > ---
-> >  drivers/tty/serial/atmel_serial.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-> > index 2c99a47a2535..9e57bfe523cf 100644
-> > --- a/drivers/tty/serial/atmel_serial.c
-> > +++ b/drivers/tty/serial/atmel_serial.c
-> > @@ -2479,7 +2479,7 @@ static int atmel_init_port(struct atmel_uart_port *atmel_port,
-> >       port->fifosize          = 1;
-> >       port->dev               = &pdev->dev;
-> >       port->mapbase           = mpdev->resource[0].start;
->
-> Shouldn't you fix that one at the same time?
+> > V4
+> >  - Refactor vmd_enable_apsm() to exit early, making the lines shorter
+> >    and more readable. Suggested by Christoph.
+> > V3
+> >  - No changes
+> > V2
+> >  - Use return status to print pci_info message if ASPM cannot be enabled.
+> >  - Add missing static declaration, caught by lkp@intel.com
+> > 
+> >  drivers/pci/controller/vmd.c | 43 +++++++++++++++++++++++++++++++++---
+> >  1 file changed, 40 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> > index a45e8e59d3d4..880afd450a14 100644
+> > --- a/drivers/pci/controller/vmd.c
+> > +++ b/drivers/pci/controller/vmd.c
+> > @@ -20,6 +20,8 @@
+> >  
+> >  #include <asm/irqdomain.h>
+> >  
+> > +#include "../pci.h"
+> > +
+> >  #define VMD_CFGBAR     0
+> >  #define VMD_MEMBAR1    2
+> >  #define VMD_MEMBAR2    4
+> > @@ -67,6 +69,12 @@ enum vmd_features {
+> >          * interrupt handling.
+> >          */
+> >         VMD_FEAT_CAN_BYPASS_MSI_REMAP           = (1 << 4),
+> > +
+> > +       /*
+> > +        * Device must have ASPM policy overridden, as its default policy is
+> > +        * incorrect.
+> > +        */
+> > +       VMD_FEAT_QUIRK_OVERRIDE_ASPM            = (1 << 5),
+> 
+> I think you specifically want to *enable* some ASPM link states, not
+> just "override the default policy."  "Override" tells us nothing about
+> whether you are enabling or disabling ASPM.  Applies to subject line
+> as well.
 
-Sure, I'll make a 2nd patch as it has little to do with $subject.
+Ack
 
->
-> > -     port->irq               = mpdev->resource[1].start;
-> > +     port->irq               = platform_get_irq(mpdev, 0);
-> >       port->rs485_config      = atmel_config_rs485;
-> >       port->iso7816_config    = atmel_config_iso7816;
-> >       port->membase           = NULL;
-> > --
-> > 2.32.0
-> >
->
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> 
+> >  };
+> >  
+> >  static DEFINE_IDA(vmd_instance_ida);
+> > @@ -661,6 +669,30 @@ static int vmd_alloc_irqs(struct vmd_dev *vmd)
+> >         return 0;
+> >  }
+> >  
+> > +/*
+> > + * Override the BIOS ASPM policy and set the LTR value for PCI storage
+> > + * devices on the VMD bride.
+> 
+> I don't think there's any BIOS "policy" here.  At this point BIOS is
+> no longer involved at all, so all that's left is whatever ASPM config
+> the BIOS did or did not do.
+> 
+> Why only storage?
+
+Only storage devices will be on these root ports.
+
+> 
+> s/bride/bridge/
+> 
+> > + */
+> > +static int vmd_enable_aspm(struct pci_dev *pdev, void *userdata)
+> > +{
+> > +       int features = *(int *)userdata, pos;
+> > +
+> > +       if (!(features & VMD_FEAT_QUIRK_OVERRIDE_ASPM) ||
+> > +           pdev->class != PCI_CLASS_STORAGE_EXPRESS)
+> > +               return 0;
+> > +
+> > +       pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
+> > +       if (!pos)
+> > +               return 0;
+> > +
+> > +       pci_write_config_word(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, 0x1003);
+> > +       pci_write_config_word(pdev, pos + PCI_LTR_MAX_NOSNOOP_LAT, 0x1003);
+> 
+> 1) Where did this magic 0x1003 value come from?  Does that depend on
+> the VMD device?  The endpoint?  The circuit design?  The path between
+> endpoint and VMD?  What if there are switches in the path?
+
+The number comes from the BIOS team. They are tied to the SoC. I don't believe there can be switches
+in the path but Nirmal and Jonathan should know for sure. From what I've seen these root ports are
+wired directly to M.2 slots on boards that are intended for storage devices.
+
+> 
+> 2) There exist broken devices where WORD config accesses don't work:
+> https://lore.kernel.org/all/20211208000948.487820-1-rajatja@google.com/
+> 
+> We might need a way to quirk config accesses to those devices, but we
+> don't have one yet.  So for now this needs to be a single DWORD write.
+
+Ack
+
+> 
+> > +       if (pcie_aspm_policy_override(pdev))
+> > +               pci_info(pdev, "Unable of override ASPM policy\n");
+> 
+> s/Unable of/Unable to/
+> 
+> I think we might need a message about when we *do* override the
+> policy.  A note in dmesg might be useful for debugging.  I'm worried
+> about the LTR programming because I really don't understand how we
+> should be doing that.
+
+Sure.
+
+> 
+> > +       return 0;
+> > +}
+> > +
+> >  static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+> >  {
+> >         struct pci_sysdata *sd = &vmd->sysdata;
+> > @@ -807,6 +839,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+> >         pci_scan_child_bus(vmd->bus);
+> >         pci_assign_unassigned_bus_resources(vmd->bus);
+> >  
+> > +       pci_walk_bus(vmd->bus, vmd_enable_aspm, &features);
+> 
+> Do you support hotplug under VMD?  This will not happen for hot-added
+> devices.
+
+That I don't know. Nirmal, Jonathan?
+
+David
+
+> 
+> >         /*
+> >          * VMD root buses are virtual and don't return true on pci_is_pcie()
+> >          * and will fail pcie_bus_configure_settings() early. It can instead be
+> > @@ -948,15 +982,18 @@ static const struct pci_device_id vmd_ids[] = {
+> >         {PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x467f),
+> >                 .driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> >                                 VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> > -                               VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> > +                               VMD_FEAT_OFFSET_FIRST_VECTOR |
+> > +                               VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
+> >         {PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x4c3d),
+> >                 .driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> >                                 VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> > -                               VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> > +                               VMD_FEAT_OFFSET_FIRST_VECTOR |
+> > +                               VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
+> >         {PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
+> >                 .driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+> >                                 VMD_FEAT_HAS_BUS_RESTRICTIONS |
+> > -                               VMD_FEAT_OFFSET_FIRST_VECTOR,},
+> > +                               VMD_FEAT_OFFSET_FIRST_VECTOR |
+> > +                               VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
+> >         {0,}
+> >  };
+> >  MODULE_DEVICE_TABLE(pci, vmd_ids);
+> > -- 
+> > 2.25.1
+> > 
+
+

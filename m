@@ -2,133 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A24AC476C46
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFC8476C4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235061AbhLPIzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 03:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
+        id S235069AbhLPI44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 03:56:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbhLPIzp (ORCPT
+        with ESMTP id S229533AbhLPI4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 03:55:45 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61945C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:55:45 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id c4so42799749wrd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:55:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=SOuxRFXySPzshUyGC5iL0C2CvH+JBhvny1eTkHaCuAk=;
-        b=C3+lWk3b0y78VVa5eWSCceWoMVKh8OoLiXVo7+b6aykRMYMZS84tnO1iY3ilDuL+9S
-         kNFtEfRVtO639culhM0FpOo4Y5s9vMHKmSsjGZuezi40pU5i8mpnOQ3RS+oeaRMH3hl9
-         pPN24fNaNFy0a9PsTywZjzg/vJ29iwzznOpSkfNmKYcxwRecN9Ii8967W2bG+MsJYOzd
-         zipVfIzveylYNsmoBr6s3JwYXRZnmQ2MZdQL4HlJjlJcy9Yugxhwqe9D+SjsSbm+OJ0B
-         hqYQy30NATx1d4buHLlzpvm/LnePURXPW/Ml0FrbTWnDlmXYjVLLhwVt0JIVC5anZtg1
-         swTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SOuxRFXySPzshUyGC5iL0C2CvH+JBhvny1eTkHaCuAk=;
-        b=uLsUfQ/yZf6Pi8BW9pdhe+8sj3gxQHwIUHQWDLGJ/9KXhnuJvN1MmSPPyoIBuZIMvy
-         aAza8Gx/ClzUy0ta3VIULOxaQgrg9lbm/QRDQA+13tvmIDkEVIsUmLEQpnB6b0F/SiHc
-         L7+K2TqilDRexUGSbIxr77l68goaWz4JrCG+KyIblNY058reUExuvmhQ8wFClrYkCK5I
-         76r7KCdDOnOeY+io8LEQ0k7dUDRwh+9QbX/DhxL9H97N7AlXzvSWq7BaRi1DIk4ULMl5
-         Gvvw2xoahjM6GRy0rhFRynzIV4i9lmLw47GbD0ELhXOMsYOQjxR9I1FysgfBqCZ/dQeL
-         QR9Q==
-X-Gm-Message-State: AOAM533ypz/UnsrUbNsX7i48BD9cWPW2DUf3J7E7Dlcw7O+skstNORpr
-        t2SYRyuHVdF71+J62q1vre8=
-X-Google-Smtp-Source: ABdhPJwbtAMNBx3u2dBIsPqwFJsMFEOrlFqylkByzKob5f0kf3vZdqodg/kqdagKi6U3S/JWjAH3Vg==
-X-Received: by 2002:adf:a18b:: with SMTP id u11mr7678332wru.397.1639644943821;
-        Thu, 16 Dec 2021 00:55:43 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id w15sm4090586wrk.77.2021.12.16.00.55.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 00:55:42 -0800 (PST)
-Date:   Thu, 16 Dec 2021 09:55:39 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     joro@8bytes.org, will@kernel.org, iommu@lists.linux-foundation.org,
-        suravee.suthikulpanit@amd.com, baolu.lu@linux.intel.com,
-        willy@infradead.org, linux-kernel@vger.kernel.org,
-        john.garry@huawei.com, linux-mm@kvack.org,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 03/11] drm/tegra: vic: Fix DMA API misuse
-Message-ID: <Ybr/C+GNFPDPgLnF@orome>
-References: <cover.1639157090.git.robin.murphy@arm.com>
- <6b86f6e530b504a5eee864af10e2ae1570d7b645.1639157090.git.robin.murphy@arm.com>
+        Thu, 16 Dec 2021 03:56:55 -0500
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A748C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:56:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
+        In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=hc8PniX1O3m43JAUOFyo2+ZL/GfkioFBwhdYGbPz2cI=; b=TiNt5FDJ7CE2zVSDNr9aQlu1dg
+        Q1sQgcMp3w8M7wH9QAX/Il5DEQ4S7KNu/+y4D9VsahWfKExgvDQQ/4rIt4gW6AAiS6s5xXiY2v5Z0
+        B/A6VUhPOsU62/w8MG+sF7g/Pfvf/uunGaipLkgpmIxNt0DQR2DadU5kRbD25sPE6nmB8Q8MeO7QT
+        NRSGwR46KSfzM9UhwIrCo2fqN92VYjGkIsR9sYnjmrE2qTvwSNGmNxJWTd5ec0oWIT0jfpbDL+KjR
+        4z26lRmka4LJ14FBb1VExMkYLm2dYfx0Vg0kdSIXyXRYiQ5c3e4POzbjfDxMI0ixgJbJQAs+KlhMp
+        sFl34JXw==;
+Received: from webng-gw.kapsi.fi ([91.232.154.200] helo=roundcube.kapsi.fi)
+        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <jyri.sarha@iki.fi>)
+        id 1mxmZB-00069V-2u; Thu, 16 Dec 2021 10:56:45 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="xaI96K7vWbm32g6g"
-Content-Disposition: inline
-In-Reply-To: <6b86f6e530b504a5eee864af10e2ae1570d7b645.1639157090.git.robin.murphy@arm.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+Date:   Thu, 16 Dec 2021 10:56:42 +0200
+From:   Jyri Sarha <jyri.sarha@iki.fi>
+To:     Xiang wangx <wangxiang@cdjrlc.com>
+Cc:     tomba@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/tilcdc: add const to of_device_id
+In-Reply-To: <202112160411.sNrSELAY-lkp@intel.com>
+References: <20211215161803.5900-1-wangxiang@cdjrlc.com>
+ <202112160411.sNrSELAY-lkp@intel.com>
+Message-ID: <44cf76aa7bc28df08a7a40a9a454c40a@iki.fi>
+X-Sender: jyri.sarha@iki.fi
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 91.232.154.200
+X-SA-Exim-Mail-From: jyri.sarha@iki.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Please fix the bellow error and I will review and merge this. But in 
+future, please at least compile test you changes with relevant 
+configurations or alldefconfig before sending them to upstream!
 
---xaI96K7vWbm32g6g
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Best regards,
+Jyri
 
-On Fri, Dec 10, 2021 at 05:54:44PM +0000, Robin Murphy wrote:
-> Upon failure, dma_alloc_coherent() returns NULL. If that does happen,
-> passing some uninitialised stack contents to dma_mapping_error() - which
-> belongs to a different API in the first place - has precious little
-> chance of detecting it.
->=20
-> Also include the correct header, because the fragile transitive
-> inclusion currently providing it is going to break soon.
->=20
-> Fixes: 20e7dce255e9 ("drm/tegra: Remove memory allocation from Falcon lib=
-rary")
-> CC: Thierry Reding <thierry.reding@gmail.com>
-> CC: Mikko Perttunen <mperttunen@nvidia.com>
-> CC: dri-devel@lists.freedesktop.org
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
->=20
+On 2021-12-15 22:35, kernel test robot wrote:
+> Hi Xiang,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on drm/drm-next]
+> [also build test ERROR on v5.16-rc5 next-20211214]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:
+> https://github.com/0day-ci/linux/commits/Xiang-wangx/drm-tilcdc-add-const-to-of_device_id/20211216-002326
+> base:   git://anongit.freedesktop.org/drm/drm drm-next
+> config: arm-randconfig-c002-20211214
+> (https://download.01.org/0day-ci/archive/20211216/202112160411.sNrSELAY-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget
+> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+> -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         #
+> https://github.com/0day-ci/linux/commit/5698eadb76d94a4fc5298f5bea88b839399ddef0
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review
+> Xiang-wangx/drm-tilcdc-add-const-to-of_device_id/20211216-002326
+>         git checkout 5698eadb76d94a4fc5298f5bea88b839399ddef0
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0
+> make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+> drivers/gpu/drm/tilcdc/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> drivers/gpu/drm/tilcdc/tilcdc_drv.c:590:34: error: conflicting types 
+>>> for 'tilcdc_of_match'; have 'const struct of_device_id[]'
+>      590 | static const struct of_device_id tilcdc_of_match[] = {
+>          |                                  ^~~~~~~~~~~~~~~
+>    drivers/gpu/drm/tilcdc/tilcdc_drv.c:63:28: note: previous
+> declaration of 'tilcdc_of_match' with type 'struct of_device_id[]'
+>       63 | static struct of_device_id tilcdc_of_match[];
+>          |                            ^~~~~~~~~~~~~~~
+>    drivers/gpu/drm/tilcdc/tilcdc_drv.c:63:28: error: array
+> 'tilcdc_of_match' assumed to have one element [-Werror]
+>>> drivers/gpu/drm/tilcdc/tilcdc_drv.c:63:28: error: 'tilcdc_of_match' 
+>>> defined but not used [-Werror=unused-variable]
+>    cc1: all warnings being treated as errors
+> 
+> 
+> vim +590 drivers/gpu/drm/tilcdc/tilcdc_drv.c
+> 
+>    589
+>  > 590	static const struct of_device_id tilcdc_of_match[] = {
+>    591			{ .compatible = "ti,am33xx-tilcdc", },
+>    592			{ .compatible = "ti,da850-tilcdc", },
+>    593			{ },
+>    594	};
+>    595	MODULE_DEVICE_TABLE(of, tilcdc_of_match);
+>    596
+> 
 > ---
->=20
-> It also doesn't appear to handle failure of the tegra_drm_alloc() path
-> either, but that's a loose thread I have no desire to pull on... ;)
->=20
-> v2: Resend as part of the series, originally posted separately here:
->=20
-> https://lore.kernel.org/dri-devel/2703882439344010e33bf21ecd63cf9e5e6dc00=
-d.1637781007.git.robin.murphy@arm.com/
->=20
->  drivers/gpu/drm/tegra/vic.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-
-Applied, thanks. I've also fixed up the missing failure handling for
-tegra_drm_alloc(), which was actually quite trivial to do.
-
-Thierry
-
---xaI96K7vWbm32g6g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG6/wsACgkQ3SOs138+
-s6G5Ng//YzfjTiVGwWVICqHpvgQHCcZ8oVaca2ULy6V9X+H0OOwBsrnOOsQRNQPN
-bhUymR2MvtF7CGkWXSLcLBInR683ccLJefYom3K7kd/Lf1bptAbYsIIR6mEU/iHF
-dgk52WgEANXqXpjIkny9hIQdmgjL4ilBS9vwZnBniFIfNTAER2fEy3CsfvoQnkC6
-0ZoB9zaj+a+PBUy2oGB0K51wzoYWglCG5sbD94eeztUwdZtnWcFz8FpYWLVZQgvb
-OH7mgLECdjDiu6ZJ+/h57xcO2gR0NhEPOlq5fhyWd6M2OMcqmwE4xEmH14zyq1RS
-maeLK89xm8X7BCEneOai8B70OH2nzW7dHYMFT33WWJOVzvfX9jBzTn5aMxif8T1x
-NYoJew1GJDCvc0hE1SQyWLqfomvVE9Ctod8pgR18us9XMn0jhQZ9+9frVE661g7C
-0ATJ+ekU7msdPeQGG+gIgOoBI1nxVlhMyaeiEA5ZUI7jaa118EAS5o7RFHGW55yu
-YTmw+ZiJ1Oqtm+sJIco6G4z30Su+rsAo99K0lALgJ0op2uBibF49yGyoDvfM/k62
-7fgmTjnj2tA/V4isGVdH8/JjF8gvferm8YCBh2PZlArczHEUTOh1hIoNwxGOGIG7
-y02bpMz2KLrRaOdf+ut96A/t1b+aUMiwgnH1cOyt1cy7SuBVvjU=
-=+ED4
------END PGP SIGNATURE-----
-
---xaI96K7vWbm32g6g--
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

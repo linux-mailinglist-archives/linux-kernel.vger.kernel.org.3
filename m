@@ -2,129 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5A7477738
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:11:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB75B47772E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235572AbhLPQK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:10:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24978 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239032AbhLPQK5 (ORCPT
+        id S239044AbhLPQKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:10:14 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:35205 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S239032AbhLPQKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:10:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639671056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sutZgL9X30MGJK6zq3yqN4N3QXbscUdjoQ7h6zXochA=;
-        b=Mm0BxNxK1gwGsd3Uywc5MFvJ5q8Y9DWsmlOoy0pXrJn5+UiLz0g9cMlpVIeCKqvy4j5Pj2
-        RKV2s2OJGZ9ZqR/fQU0AMrkapD4vXSvldxeCC0eydC23UyjMAyJQvdDSkVHTe4TikTPzds
-        bw6PtR0zVvhc/pbWt7MpEM/873c4eGc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-443-tf_i_P8ROLmG4OY4shUnHA-1; Thu, 16 Dec 2021 11:10:53 -0500
-X-MC-Unique: tf_i_P8ROLmG4OY4shUnHA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7482B1853020;
-        Thu, 16 Dec 2021 16:10:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1907FE2F0;
-        Thu, 16 Dec 2021 16:10:07 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v3 16/68] fscache: Add a function for a cache backend to note
- an I/O error
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 16 Dec 2021 16:10:07 +0000
-Message-ID: <163967100721.1823006.16435671567428949398.stgit@warthog.procyon.org.uk>
-In-Reply-To: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
-References: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        Thu, 16 Dec 2021 11:10:11 -0500
+Received: (qmail 819159 invoked by uid 1000); 16 Dec 2021 11:10:10 -0500
+Date:   Thu, 16 Dec 2021 11:10:10 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: uhci: Use platform_get_irq() to get the interrupt
+Message-ID: <Ybtk4qqN2NYQSZKP@rowland.harvard.edu>
+References: <20211215225203.1991003-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215225203.1991003-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a function to the backend API to note an I/O error in a cache.
+On Wed, Dec 15, 2021 at 04:52:03PM -0600, Rob Herring wrote:
+> Accessing platform device resources directly has long been deprecated for
+> DT as IRQ resources may not be available at device creation time. Drivers
+> continuing to use static IRQ resources is blocking removing the static setup
+> from the DT core code.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/163819598741.215744.891281275151382095.stgit@warthog.procyon.org.uk/ # v1
-Link: https://lore.kernel.org/r/163906901316.143852.15225412215771586528.stgit@warthog.procyon.org.uk/ # v2
----
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
- fs/fscache/cache.c            |   20 ++++++++++++++++++++
- include/linux/fscache-cache.h |    2 ++
- 2 files changed, 22 insertions(+)
-
-diff --git a/fs/fscache/cache.c b/fs/fscache/cache.c
-index bbd102be91c4..25eac61f1c29 100644
---- a/fs/fscache/cache.c
-+++ b/fs/fscache/cache.c
-@@ -321,6 +321,26 @@ void fscache_end_cache_access(struct fscache_cache *cache, enum fscache_access_t
- 		wake_up_var(&cache->n_accesses);
- }
- 
-+/**
-+ * fscache_io_error - Note a cache I/O error
-+ * @cache: The record describing the cache
-+ *
-+ * Note that an I/O error occurred in a cache and that it should no longer be
-+ * used for anything.  This also reports the error into the kernel log.
-+ *
-+ * See Documentation/filesystems/caching/backend-api.rst for a complete
-+ * description.
-+ */
-+void fscache_io_error(struct fscache_cache *cache)
-+{
-+	if (fscache_set_cache_state_maybe(cache,
-+					  FSCACHE_CACHE_IS_ACTIVE,
-+					  FSCACHE_CACHE_GOT_IOERROR))
-+		pr_err("Cache '%s' stopped due to I/O error\n",
-+		       cache->name);
-+}
-+EXPORT_SYMBOL(fscache_io_error);
-+
- /**
-  * fscache_withdraw_cache - Withdraw a cache from the active service
-  * @cache: The cache cookie
-diff --git a/include/linux/fscache-cache.h b/include/linux/fscache-cache.h
-index a10b66ca3544..936ef731bbc7 100644
---- a/include/linux/fscache-cache.h
-+++ b/include/linux/fscache-cache.h
-@@ -73,6 +73,8 @@ extern int fscache_add_cache(struct fscache_cache *cache,
- extern void fscache_withdraw_cache(struct fscache_cache *cache);
- extern void fscache_withdraw_volume(struct fscache_volume *volume);
- 
-+extern void fscache_io_error(struct fscache_cache *cache);
-+
- extern void fscache_end_volume_access(struct fscache_volume *volume,
- 				      struct fscache_cookie *cookie,
- 				      enum fscache_access_trace why);
-
-
+>  drivers/usb/host/uhci-platform.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
+> index 70dbd95c3f06..b854699e9e4e 100644
+> --- a/drivers/usb/host/uhci-platform.c
+> +++ b/drivers/usb/host/uhci-platform.c
+> @@ -132,7 +132,11 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+>  		goto err_rmr;
+>  	}
+>  
+> -	ret = usb_add_hcd(hcd, pdev->resource[1].start, IRQF_SHARED);
+> +	ret = platform_get_irq(pdev, 0);
+> +	if (ret < 0)
+> +		goto err_clk;
+> +
+> +	ret = usb_add_hcd(hcd, ret, IRQF_SHARED);
+>  	if (ret)
+>  		goto err_clk;
+>  
+> -- 
+> 2.32.0
+> 

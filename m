@@ -2,139 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 012D4476951
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 06:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 544B2476952
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 06:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbhLPFB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 00:01:59 -0500
-Received: from mail-dm3nam07on2077.outbound.protection.outlook.com ([40.107.95.77]:40992
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231639AbhLPFB6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 00:01:58 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g6NylE3BijHR/gHhOkn1m+uUlmE8oBegtHLjHPXt4uhdSy0ACfHHh1Wo8TAVEAsCXDFHJkz02/X0F6RbAQwDAgyBB2SQMzAMmYWMGJLsv0sB5KnYLBcompFMTgqMp72C3Gv81T/+mTiRnp5CoPmEIVerD1sSppHoPq+MKmT4ehzhd586RS/wZ841aeqWIDAFj8PuttTYef7oNJF5xNXMDfIgKKtDxReSRq9j441rUHl3KmH9hBEWr15UzwDbz+vdNnbNkqk7awJdlQM4G9jMT/nwfNhLdaFjUQS5JX1/VT2I43wBpKv8k8EyMWjOEbfvTf+ULoj9ZivPZ/RDtzYGOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RQlVUKsZI8CAPfhHxTvXFio+ueQReA9gardyVilNz40=;
- b=ki5jiXSaxZb4Di+WvJGv5QLuM8oUiIqTnCrazdRGvULP+Cq1/B5zidkr6bxMQvOc3p6NTSEtAO1kjf6Cu35J8lDwpZYREIEnF/kjXCu2pTZ3yjC+5GnzgryVrRRWXn7wmj3zd9LlwDarQzIZ/dyZSEJKqLRjgIVY2LR6D3ovsCFMsCqiDh60GIoaGOtM6Y6ytMdVkCUxrfxwQcHNM9/8He8oVGX+yMJXClYDi7mKx294qt8ZEx924yUJZN/fC/WWeMtq0AX+ai+Nn1UVlFYXkU72+3PrzzlnB7inS0HvQAKytPMgGaVj8yutgw3cn+cIMpNDtUXtnrgsRwugct3cyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RQlVUKsZI8CAPfhHxTvXFio+ueQReA9gardyVilNz40=;
- b=Dbfis2cW6adG/eLHoHs97SOcZdbqrqY7LuRwM98WHVvUVDJvqwHB2hiRgvQJfo5qLZ6by/EgzU10dMgaveZzmAz8AFxLpwHsiKlJYQ9rSQ9Q1OJ8UnFw5BfSv66Tk5lIp6sf83rnM15H8PYnuhqsjDs9jXS82++faxT69+8BX4reIX9AIX/Q1WsGPwC/tzcghAyOduFS5pKJltKuuv1Lvls/3Mhp96dvSQ8LzvJevg6XOBR3L/uus8RYAq1dLx0DnE8yJR7vpJCAfO3+VZft/BiHIGL9nHW9FCU0NpUxnIrPD3IogC4spXdh6a8btz38i6/97yzK7NOh/gWU4kfdHg==
-Received: from DM5PR06CA0045.namprd06.prod.outlook.com (2603:10b6:3:5d::31) by
- CY4PR12MB1943.namprd12.prod.outlook.com (2603:10b6:903:11b::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4801.14; Thu, 16 Dec 2021 05:01:56 +0000
-Received: from DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:5d:cafe::dc) by DM5PR06CA0045.outlook.office365.com
- (2603:10b6:3:5d::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14 via Frontend
- Transport; Thu, 16 Dec 2021 05:01:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- DM6NAM11FT032.mail.protection.outlook.com (10.13.173.93) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 05:01:55 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 16 Dec
- 2021 05:01:54 +0000
-Received: from nvdebian.localnet (172.20.187.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9; Wed, 15 Dec 2021
- 21:01:50 -0800
-From:   Alistair Popple <apopple@nvidia.com>
-To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Peter Xu <peterx@redhat.com>
-CC:     Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Jerome Glisse <jglisse@redhat.com>,
-        "Matthew Wilcox" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH v6 03/23] mm: Check against orig_pte for finish_fault()
-Date:   Thu, 16 Dec 2021 16:01:47 +1100
-Message-ID: <6260997.DYpkEd5BTb@nvdebian>
-In-Reply-To: <20211115075522.73795-4-peterx@redhat.com>
-References: <20211115075522.73795-1-peterx@redhat.com> <20211115075522.73795-4-peterx@redhat.com>
+        id S233676AbhLPFCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 00:02:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231639AbhLPFCv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 00:02:51 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B54C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 21:02:51 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 200so13152919pgg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 21:02:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pfDndh5e7Tg9q69/YQCj2DgRuK6iAt8tciGnd8xjSmI=;
+        b=mQ60iAZHmviFhEZtFnaYnuwg7xBPRGJJ8/24Gz5sxtDAv4ZjLaJWmxB+KO0MAA13tO
+         Qd1nmvYJFU8zT5YOa1qI7rWVU4gKTR3/dJHiPA7L7fdo2Wjfu2vHT7klLTbcde6k8HVX
+         2009CeKdaus3+e1oCfWW3eZDD1BwKTMVXB3+foDdqUGH+nbAyjyQbo5I7KliLtVRCRkA
+         +Cn8geXx9lHF5vZv6SepQssTvui2xIxZSOEU4EFH+kg+7OfgAROubebzmmfGsOQo/hSq
+         ivD92P1tFRDCCukstrweUvb/gdLH3WJ0jK/fA990hefh/eT/yV6CSscXz3DBV0Qnc+OW
+         Asaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pfDndh5e7Tg9q69/YQCj2DgRuK6iAt8tciGnd8xjSmI=;
+        b=2zm2DCjKA8V8n9lM5gkYTBoVRB6gNoDKdH792Y1/T9OXn1t2LPwaZvYu2YlM7TwgqI
+         5RgSSsh2oP9Fw6sSZC/UHdxaa1v/UedMbvdfRHzVkIomYK7ntxQR6htJuVibewnEh3XT
+         7Qvap3i55u3G/oTZCM/4gCkCKoIUev4suCSN/D9lawj/LdJYJ8BY7ufFxzfC24x6KxTY
+         0e3zdotU6XE/+UTijwrYYZXtTW0+r7fVuyyYj6p/JS7d7t8z34l6V4ir4EqUULlV4CJw
+         KPFYmUdyKbILwT3fDusPFSx0J0/r8eqgsq57aQ1qrIQ+8qPgNConRzjd/MB5LhAUtV7L
+         YFPA==
+X-Gm-Message-State: AOAM532wVzHNV/8B9jQfHNbodMSUBq2ODCzcJ0xcLl3EJmjm6JcymN2m
+        6ua+/p3XvIWZIBSGmZ5+v4eHcw==
+X-Google-Smtp-Source: ABdhPJwVq8Jr3aN71SKClzCOk34eBWZvVcMoOmFxHXjyNBwML3uULOKbn6p3eon3jHFwIvPuypS/8w==
+X-Received: by 2002:a63:5a18:: with SMTP id o24mr10519774pgb.459.1639630970703;
+        Wed, 15 Dec 2021 21:02:50 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:af33:9cc2:c307:ce8c])
+        by smtp.gmail.com with ESMTPSA id j22sm4599968pfj.130.2021.12.15.21.02.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 21:02:50 -0800 (PST)
+Date:   Thu, 16 Dec 2021 13:02:47 +0800
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     Trevor Wu <trevor.wu@mediatek.com>
+Cc:     broonie@kernel.org, tiwai@suse.com, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, alsa-devel@alsa-project.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, jiaxin.yu@mediatek.com,
+        shumingf@realtek.com
+Subject: Re: [PATCH 1/2] ASoC: mediatek: mt8195: update control for RT5682
+ series
+Message-ID: <YbrId5gnJSjeT1Ni@google.com>
+References: <20211215065835.3074-1-trevor.wu@mediatek.com>
+ <YbmlT+OSwpGuylsx@google.com>
+ <0b99c46f84c98c56e8fc99b2e103f52f756b5bf9.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [172.20.187.6]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2d04085f-5d24-4990-6907-08d9c0512ede
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1943:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB19432E91E2FD3E595844F115DF779@CY4PR12MB1943.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1uVSSVedQY6FxwdpgI74s9RIKtbJ52komoe/ihFHRHmhG/DypdJSj5wJB+ZhRSFaO4yvR5/0SyWXQEPeZbxBBRFTL8cNtGBY45Gn3vbYqnx0kTHNeVp7cjjIqyCX+ElEgGSKRZHz+5KoLMbhystlrhwzAfo8oGfCjiPpACOPPkcYxpbDcVhrz5+JB4hZbCiIRxLK8jxaadyXIHqqqlqr9JFr8O11ygGBnCon51JAoJBLshCbxIoEKkp5MOH0Sq7GUa/1CIOL1LwM4d+QsCz/MOzNRhP8FqpdAqR+RktayRpV3mPtUNIpMXv3BuxGGhkDDWl758ZP6Adf+H9zHtFcpRTq03sJgGOQQJoIsPTi93Rahp+5OfGMTJdtQmY8Deyn3jGI2XI4A9zgbDi2DGE/VUzEytZLzeXA2Mzznnos3lpPm7Albq7ttQXxHkdsa+8A5IgKusyChOJ2NE2IRkRiJI42R6ScyCeaqZ37Gs8hNaC3H6CiK50g63g3OhVBoNyo+JfIaH3Fy1B3TEhdH0d8XJjyrP3kxSYuZZqAEzf0UqB8NDCV8tJUt/kjQ3wNRiOgbHuCeAwHL+I+SrKOeYRdv+owwo6v4Fxg7wFDcMdWEG7Zo7gnN/1vG7GSt5UG/NUxwZCt6tK+sMaHlBYtLwBFJxMcoLXdSzPhIXGnhb73Lhgm9fcq++tOlKJ6HAUwbvdEYkr5VIjUixOoOQ/pmTVwnNOo1AX6AVOwdfsQx8OJebHUQ0ojExQF6ITCtm/oAIrgGrrQBRtefOSrFoiEcxjfclVimpUzR6SOuMxyycsKZkUWOmrVMZA8nBov86n5w3ABHBlD79HXbUc8IAhnLFFrbwKtE5XhlS1ejOpEqptKWEUbbvOyQQLzYnGdnsvH+Swm
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(6666004)(7416002)(36860700001)(86362001)(9686003)(70586007)(70206006)(356005)(81166007)(2906002)(5660300002)(4326008)(40460700001)(83380400001)(26005)(8676002)(110136005)(54906003)(33716001)(316002)(508600001)(9576002)(34020700004)(186003)(82310400004)(426003)(47076005)(336012)(16526019)(8936002)(39026012)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 05:01:55.9597
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d04085f-5d24-4990-6907-08d9c0512ede
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1943
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b99c46f84c98c56e8fc99b2e103f52f756b5bf9.camel@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday, 15 November 2021 6:55:02 PM AEDT Peter Xu wrote:
-> We used to check against none pte and in those cases orig_pte should always be
-> none pte anyway.
-
-Is that always true? From what I can see in handle_pte_fault() orig_pte only
-gets initialised in the !pmd_none() case so might not be pte_none.
-
-> This change prepares us to be able to call do_fault() on !none ptes.  For
-> example, we should allow that to happen for pte marker so that we can restore
-> information out of the pte markers.
+On Thu, Dec 16, 2021 at 11:37:34AM +0800, Trevor Wu wrote:
+> On Wed, 2021-12-15 at 16:20 +0800, Tzung-Bi Shih wrote:
+> > On Wed, Dec 15, 2021 at 02:58:34PM +0800, Trevor Wu wrote:
+> > > @@ -1072,6 +1119,19 @@ static int
+> > > mt8195_mt6359_rt1011_rt5682_dev_probe(struct platform_device *pdev)
+> > >  		return -EINVAL;
+> > >  	}
+> > >  
+> > > +	priv->i2so1_mclk = devm_clk_get(&pdev->dev, "i2so1_mclk");
+> > > +	if (IS_ERR(priv->i2so1_mclk)) {
+> > > +		ret = PTR_ERR(priv->i2so1_mclk);
+> > > +		if (ret == -ENOENT) {
+> > > +			dev_dbg(&pdev->dev,
+> > > +				"Failed to get i2so1_mclk, defer
+> > > probe\n");
+> > > +			return -EPROBE_DEFER;
+> > > +		}
+> > 
+> > Does devm_clk_get_optional() could make the block more concise?
 > 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  mm/memory.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 04662b010005..d5966d9e24c3 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4052,7 +4052,7 @@ vm_fault_t finish_fault(struct vm_fault *vmf)
->  				      vmf->address, &vmf->ptl);
->  	ret = 0;
->  	/* Re-check under ptl */
-> -	if (likely(pte_none(*vmf->pte)))
-> +	if (likely(pte_same(*vmf->pte, vmf->orig_pte)))
->  		do_set_pte(vmf, page, vmf->address);
->  	else
->  		ret = VM_FAULT_NOPAGE;
-> 
+> Even though we use devm_clk_get_optional, we still have to handle the
+> (-ENOENT) case in probe function. In my opinion, original
+> implementation could be kept.
 
-
-
-
+I am neutral to my original suggestion but devm_clk_get_optional() returns NULL if -ENONENT.

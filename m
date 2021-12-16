@@ -2,126 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3D247742B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63202477432
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbhLPOOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:14:47 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:38567 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231689AbhLPOOp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:14:45 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 279435803CE;
-        Thu, 16 Dec 2021 09:14:45 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 16 Dec 2021 09:14:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=fm3; bh=g
-        ed4FFFcjgkDifJUOgGUJxm7AfG60QGrUaKolzmkI0U=; b=j/csWXJ1a0PG4YIjQ
-        7Fo5/UCcZ+Jn28Bw+X92ieVCWMB7AO/74KBDJX6/E8Q+gZk7JnqGGzqWGnF85NNj
-        4+UpajIu4IH5ofLVISUQhUpQXESwa9gnONzFXdLASk3chybsCju3ncvMgps3aQf8
-        TOUFgXQcmnOAm/822cZsJ3xSItevLe0SyW1uA4r7AQxVNDf2FO7zmhIKKIMcTcFD
-        3jH8ELCBW0/YeeTy9mqcb3Belo3+pfgzQZ+vVbtxe9stYB+jhNEHUf3WW1Resbfs
-        FTDFQYtBxna7nfrvyrQJYBAekOybN2XrBTU2nc93I0nVx+cryeOjkAEMvzhWtjcC
-        BfFrQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=ged4FFFcjgkDifJUOgGUJxm7AfG60QGrUaKolzmkI
-        0U=; b=oMjhjF/h1ANMDRtirtEtzDg196wI9FCctYYydOCn6virKHb3kTnFMVmoN
-        9t3UoEgtSNexmL+lvYvQXh5ZePU4dwVokGIxmZrtliLzhxGxr/+F2DA1GZA3E5E5
-        waWUmXTRD6AvmoxE7+yktY+EIqpIil0gO4pbjZG9d3hxmIgg+7DwdA16K5DJ+agq
-        Hi/jhuTVkoY8hGCIeNMmM8vyKy7x7DMg4sEnZtG5wpchF3upPJrJUf+3WDh61Q7Z
-        wH5diJEwadwufMwvof/bqk8FqX9Y/cNRpD35JE+XURfnAP6TVhrBXyJQwpZj2jGR
-        +i6dp85kU8Q0+7+4vFCmCLvh6EjeA==
-X-ME-Sender: <xms:1Em7YSfmDVhcckYI-Nehx2HLmo2IQpKLwJJY5SvmFqtH3PrkN2IZ6g>
-    <xme:1Em7YcMknEAhMYP-iSSrP48EH7uVeQrc1cmBiCqElx1q6Ere9O4gMIcaFjAlNQD5w
-    dO4cqZvDZPTGGe7ve4>
-X-ME-Received: <xmr:1Em7YTgxp8AkcNdCSNtJoiW-BwYwtHLNp6A2FpiItIGC_4DCHsUOQAfThoJKRU4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeggdeifecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepheeiuddvvefhkeejfedttdekieethfdukedvieeuueelgfelieej
-    geehvdekudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:1Em7Yf-w63GwbcnFA0WMRF65ZgFNE24NH9iUZMIl7cnJUwwOyRW6JQ>
-    <xmx:1Em7Yes6t8uRE7dH6irMC_jDDF8yOVjQoiJXHeTz8s6E8sCaWAgTqA>
-    <xmx:1Em7YWHUffelw9yQ3Q6d510NVrZtcMXYzNsdNx9WNp-VNlUTSdBvpQ>
-    <xmx:1Um7YTP7ekTUDANke-bm6pE4fI5FbfusEHm7TSNvrIsrmSGfJdxTdg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Dec 2021 09:14:42 -0500 (EST)
-Message-ID: <bfdfb7b3-1322-573d-eddc-1d337c4616e6@flygoat.com>
-Date:   Thu, 16 Dec 2021 14:14:41 +0000
+        id S234661AbhLPOP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:15:29 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:49698 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229612AbhLPOP2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 09:15:28 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAAnvqbgSbthnnSfAw--.52579S2;
+        Thu, 16 Dec 2021 22:14:56 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] serial: pch_uart: potential dereference of null pointer
+Date:   Thu, 16 Dec 2021 22:14:54 +0800
+Message-Id: <20211216141454.423333-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific
- 'pci_remap_iospace()'
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Xi Ruoyao <xry111@mengyan1223.wang>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
- <20210925203224.10419-6-sergio.paracuellos@gmail.com>
- <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
- <6ee31420-ef67-471e-a924-a0158b4a9428@www.fastmail.com>
- <CAK8P3a2i6eW8JunE_6h6OTCa51eHfPahQQhaGHGWePX+r4ybww@mail.gmail.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <CAK8P3a2i6eW8JunE_6h6OTCa51eHfPahQQhaGHGWePX+r4ybww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAAnvqbgSbthnnSfAw--.52579S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw4UuF4fXF4fWF48Jw1DZFb_yoW5GF4xpa
+        1jyrZ8A3yYq3Z3KF18Ar47Xr4avwn3CFy7KrW7KwnIyr9rtr1UCF15t3s0vrn5JrWxKryF
+        vw4qyF45uF48taDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xryl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU6WlgUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The return value of dma_alloc_coherent() needs to be checked.
+To avoid dereference of null pointer in case of the failure of alloc.
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
+v2 -> v3
 
-在 2021/12/16 13:50, Arnd Bergmann 写道:
-> On Thu, Dec 16, 2021 at 2:07 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->> 在2021年12月16日十二月 上午11:44，Xi Ruoyao写道：
->> Another way could be keeping a linked list about PIO->PHYS mapping instead of using the single io_port_base variable.
-> I think that would add a lot of complexity that isn't needed here. Not
-> sure if all MIPS CPUs
-> can do it, but the approach used on Arm is what fits in best with the
-> PCI drivers, these
-> reserve a virtual address range for the ports, and ioremap the
-> physical addresses into
-> the PIO range according to the mapping.
+*Change 1. Remove dev_err.
+*Change 2. Change the return type of pch_request_dma to int.
+*Change 3. Return -ENOMEM when dma_alloc_coherent() failed and 0 the
+others.
+*Change 4. Check return value of dma_alloc_coherent().
+---
+ drivers/tty/serial/pch_uart.c | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
 
-Yes, the Arm way was my previous approach when introducing PCI IO map
-for Loongson.
+diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
+index f0351e6f0ef6..cfad5592010c 100644
+--- a/drivers/tty/serial/pch_uart.c
++++ b/drivers/tty/serial/pch_uart.c
+@@ -698,7 +698,7 @@ static bool filter(struct dma_chan *chan, void *slave)
+ 	}
+ }
+ 
+-static void pch_request_dma(struct uart_port *port)
++static int pch_request_dma(struct uart_port *port)
+ {
+ 	dma_cap_mask_t mask;
+ 	struct dma_chan *chan;
+@@ -723,7 +723,7 @@ static void pch_request_dma(struct uart_port *port)
+ 	if (!chan) {
+ 		dev_err(priv->port.dev, "%s:dma_request_channel FAILS(Tx)\n",
+ 			__func__);
+-		return;
++		return 0;
+ 	}
+ 	priv->chan_tx = chan;
+ 
+@@ -739,13 +739,20 @@ static void pch_request_dma(struct uart_port *port)
+ 			__func__);
+ 		dma_release_channel(priv->chan_tx);
+ 		priv->chan_tx = NULL;
+-		return;
++		return 0;
+ 	}
+ 
+ 	/* Get Consistent memory for DMA */
+ 	priv->rx_buf_virt = dma_alloc_coherent(port->dev, port->fifosize,
+ 				    &priv->rx_buf_dma, GFP_KERNEL);
++	if (!priv->rx_buf_virt) {
++		dma_release_channel(priv->chan_tx);
++		priv->chan_tx = NULL;
++		return -ENOMEM;
++	}
++
+ 	priv->chan_rx = chan;
++	return 0;
+ }
+ 
+ static void pch_dma_rx_complete(void *arg)
+@@ -1321,8 +1328,11 @@ static int pch_uart_startup(struct uart_port *port)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (priv->use_dma)
+-		pch_request_dma(port);
++	if (priv->use_dma) {
++		ret = pch_request_dma(port);
++		if (ret)
++			return ret;
++	}
+ 
+ 	priv->start_rx = 1;
+ 	pch_uart_hal_enable_interrupt(priv, PCH_UART_HAL_RX_INT |
+@@ -1469,6 +1479,7 @@ static int pch_uart_verify_port(struct uart_port *port,
+ 				struct serial_struct *serinfo)
+ {
+ 	struct eg20t_port *priv;
++	int ret;
+ 
+ 	priv = container_of(port, struct eg20t_port, port);
+ 	if (serinfo->flags & UPF_LOW_LATENCY) {
+@@ -1483,7 +1494,9 @@ static int pch_uart_verify_port(struct uart_port *port,
+ 		return -EOPNOTSUPP;
+ #endif
+ 		if (!priv->use_dma) {
+-			pch_request_dma(port);
++			ret = pch_request_dma(port);
++			if (ret)
++				return ret;
+ 			if (priv->chan_rx)
+ 				priv->use_dma = 1;
+ 		}
+-- 
+2.25.1
 
-It got refactored by this patch as TLB entries are expensive on MIPS,
-also the size of IO range doesn't always fits a page.
-
->
-> For the loongson case specifically, that's not even needed though, as
-> the two buses
-> have physically contiguous I/O port ranges, the code just needs to
-> detect this special
-> case.
-
-We have MIPS Boston board (from imgtec) which has discontinuous IO
-range.
-
-Thanks.
-
->
->          Arnd
-- Jiaxun

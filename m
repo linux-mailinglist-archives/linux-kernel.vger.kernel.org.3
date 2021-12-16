@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3708A477326
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6439477329
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237551AbhLPNax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:30:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
+        id S237561AbhLPNa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:30:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234536AbhLPNav (ORCPT
+        with ESMTP id S234536AbhLPNa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:30:51 -0500
+        Thu, 16 Dec 2021 08:30:57 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F73C061574;
-        Thu, 16 Dec 2021 05:30:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F2CC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 05:30:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FBAF61DE1;
-        Thu, 16 Dec 2021 13:30:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EC6DC36AE0;
-        Thu, 16 Dec 2021 13:30:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639661450;
-        bh=DFkxvtxMqMUzTPeD8ypKgs/NOnPrlmnUQy5+INh5uY8=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A4B561DEF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 13:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE70C36AE5;
+        Thu, 16 Dec 2021 13:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639661456;
+        bh=49Z6wFi4YNUCTmFU5vkrqttrjiblP0wsp+lNNiakJQk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Buf8GtMlIjHdecx15IQgRj57NJaf2KpSeoYgXshUpjhmzB3RbVPB6W1HRxUvh0oS9
-         S2xjsEbZnKoocxKrcBZQY3FGz+CMBvXZCp+2qrCFUzjDmIdhb2vOMMLJAwGDbaAxwk
-         TNUTYwPS9hftZA+9Z4RzoMGT5fwBksq8e8STjIDU=
-Date:   Thu, 16 Dec 2021 14:30:47 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Cai Huoqing <caihuoqing@baidu.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spdx@vger.kernel.org
-Subject: Re: [PATCH v3] LICENSES/LGPL-2.1: Add LGPL-2.1-or-later as valid
- identifiers
-Message-ID: <Ybs/h3WAY3FFVC4/@kroah.com>
-References: <12f38ebde4dcd8b1ecbd37df1b6ce2018426f6dd.1639657049.git.mchehab+huawei@kernel.org>
- <20211216123014.GA286@LAPTOP-UKSR4ENP.internal.baidu.com>
- <Ybs8eJOBwxw/Tj3o@kroah.com>
- <CAKXUXMwsxiUncxS4Fip=7iK-xrUZSXY61jNcO61bgMyQ0DYp6A@mail.gmail.com>
+        b=QHi+UViioPPW6PNkWMgsBFoBf/ETYKdd3BMxkIZCdufE5LSGQGS4otPLLq9NPDtwD
+         +xapfBSoXDYcbsdIrzzXwcUwlrlv135Q+2ezM3ibIwKImjoa0UENpi8NC3HgjJ2/R3
+         MUD/m7UzZnBZHkyiOq+bmgEiuLoIeDLcgQzNfgu6RDsgMrkkoco2FWh/Uw32UVcgEE
+         nPz/Q1jF2xS84IcAWLQPIPqJ5GLMJ9wgUVEChh2Fj+QcvaNWUlXsuUoMjD2zaqmpp7
+         Ptcx1QEZBYzaRR5kbdQG6PSv0RTJeIhuko+s05GOuKse/NL9UtCLJCUyI59eyUaUa0
+         dczhfrGJu0cQA==
+Date:   Thu, 16 Dec 2021 13:30:51 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+Cc:     alsa-devel@alsa-project.org, Vijendar.Mukunda@amd.com,
+        Alexander.Deucher@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: max98357a: Add mixer control to mute/unmute speaker
+Message-ID: <Ybs/i3Lg9VN0d4kg@sirena.org.uk>
+References: <20211208185850.1555996-1-AjitKumar.Pandey@amd.com>
+ <YbETxcwa83U8WXTO@sirena.org.uk>
+ <YbEYVq+uvIcoxqko@sirena.org.uk>
+ <3ec805fc-07cc-6091-551a-771dffe459d0@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="v2TZdMJ+b8CyeONp"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKXUXMwsxiUncxS4Fip=7iK-xrUZSXY61jNcO61bgMyQ0DYp6A@mail.gmail.com>
+In-Reply-To: <3ec805fc-07cc-6091-551a-771dffe459d0@amd.com>
+X-Cookie: No solicitors.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 02:28:10PM +0100, Lukas Bulwahn wrote:
-> On Thu, Dec 16, 2021 at 2:17 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Dec 16, 2021 at 08:30:14PM +0800, Cai Huoqing wrote:
-> > > On 16 12月 21 13:17:35, Mauro Carvalho Chehab wrote:
-> > > > Some files have been flagged with the new LGPL-2.1-or-later
-> > > > identifier which replace the original LGPL-2.1+ in the SPDX license
-> > > > identifier specification, but the identifiers are not mentioned as
-> > > > valid in the LGPL-2.1 license file.
-> > > >
-> > > > Add it, together with the LGPL-2.1-only at the the license file.
-> > > >
-> > > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > > > ---
-> > > >  LICENSES/preferred/LGPL-2.1 | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > > >
-> > > > diff --git a/LICENSES/preferred/LGPL-2.1 b/LICENSES/preferred/LGPL-2.1
-> > > > index 27bb4342a3e8..b73f9b6230f5 100644
-> > > > --- a/LICENSES/preferred/LGPL-2.1
-> > > > +++ b/LICENSES/preferred/LGPL-2.1
-> > > > @@ -1,5 +1,7 @@
-> > > >  Valid-License-Identifier: LGPL-2.1
-> > > > +Valid-License-Identifier: LGPL-2.1-only
-> > > >  Valid-License-Identifier: LGPL-2.1+
-> > > > +Valid-License-Identifier: LGPL-2.1-or-later
-> > > >  SPDX-URL: https://spdx.org/licenses/LGPL-2.1.html
-> > > The URL is deprecated, do we need to update it together.
-> >
-> > No.
-> >
-> > > The same, GPL-2.0, LGPL-2.0
-> >
-> > Again, no.  We are using an older version of the SPDX specification,
-> > this is fine.
-> >
-> 
-> Mauro's patch just makes sure that spdxcheck.py does not complain
-> about the SPDX License Identifiers from SPDX spec v2 and from v3. It
-> really does not deprecate anything or implies that everything in the
-> kernel needs to move to v3 (which might really be some crazy
-> disturbing refactoring effort without a lot of gain), but it allows
-> developers that want to use the tags from SPDX spec v3 can do so.
-> 
-> I would assume making the kernel/a tool in the kernel supporting
-> something more while being backwards-compatible is the standard way we
-> work... So, Greg, this patch is fine to be included, right?
 
-Yes, this patch is fine, I will queue it up in a bit, thanks!
+--v2TZdMJ+b8CyeONp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-greg k-h
+On Thu, Dec 16, 2021 at 05:54:45PM +0530, Ajit Kumar Pandey wrote:
+
+> Thanks for suggestion. We tried using SND_SOC_DAPM_PIN_SWITCH() for the
+> speaker widget and it invoke dapm_event callback based on switch i.e
+> max98357a_sdmode_event() but codec driver isn't enabling/disabling gpios in
+> such event callback instead they are doing that in dai_ops trigger callback.
+> In our platform single I2S controller instance (cpu-dai) is connected to two
+> different endpoints with a single PCM device, hence we want to switch or
+> enable/disable output based on Machine driver controls only.
+
+DAPM should cope perfectly fine with this setup...
+
+> Initially we thought to configure gpio within sdmode_event callback but
+> there was some pop noise issue reported in one platform with that change
+> hence reverted. Check https://patchwork.kernel.org/project/alsa-devel/patch/20200721114232.2812254-1-tzungbi@google.com/#23502085
+> So we thought of exposing a mixer control to enable/disable amp from UCM
+> in our platform without breaking existing functionality. Please let us
+> know any other alternative way if possible.
+
+Whatever is going on this should be managed from the driver rather than
+having a direct control, especially given the issues I mentioned with
+there being zero coordination between this and the management that the
+driver already does.  You could have DAPM controls set a variable and
+coordinate with whatever you're doing in the pcm_ops, I'm not clear what
+the use case is for having the manual control TBH.
+
+--v2TZdMJ+b8CyeONp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG7P4oACgkQJNaLcl1U
+h9BGLgf/QrD75IeSRsyIplUF5g81WOZxgP3BPYqnddbQW7NMYJtmvJ4hlDTs4uHt
+26td84vJTxIlDxNfXLVilgTDtt3SSP5lcFwh61S/reqVz2GLNXKkMzF1MX70O/ti
+FGiNQefrG+EcB4EWMqbb/327+cC4nPDRx0Axt8FVdrxnMWL50vFHlo+U80FFGsP/
+xAt3TGWjLdQO3AYLk4rF/OLoCWGg297Xk/7JLT84oo98h5VPChyVKLLDHqiqNaa2
+X23TfiGxK8+Vfe4WLfVpFGSaFXkTWcCQmBGybSfZY8Y6PN0gm483m3VE+Y6R0JY6
+oVBaIJ7yNcKkPTk59SEgHCzqzLQi5g==
+=wPBI
+-----END PGP SIGNATURE-----
+
+--v2TZdMJ+b8CyeONp--

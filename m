@@ -2,107 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B62476B80
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABC2476B83
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbhLPIMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 03:12:32 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:36439 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbhLPIMb (ORCPT
+        id S234749AbhLPIMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 03:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232292AbhLPIMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 03:12:31 -0500
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MBBCI-1mnIH51hMs-00ChmN; Thu, 16 Dec 2021 09:12:29 +0100
-Received: by mail-wr1-f53.google.com with SMTP id t26so6292350wrb.4;
-        Thu, 16 Dec 2021 00:12:29 -0800 (PST)
-X-Gm-Message-State: AOAM532jBxpQm9ksWTOw8+xqpY5m8BYgCXecQ+hPxaINLRGRn96+9Vb4
-        UjgK+glJtyv4jFSi1K90GrZ5dwGUEj9knRmzBwM=
-X-Google-Smtp-Source: ABdhPJwYtMqPfFg9GzXhBmcOdn3sobd8196nSbV6WVDDL6Nge+uAQIhproVVltF/DqDDBiffqjQeaiRNaadsUjb/qKo=
-X-Received: by 2002:a5d:6989:: with SMTP id g9mr653391wru.12.1639642348958;
- Thu, 16 Dec 2021 00:12:28 -0800 (PST)
+        Thu, 16 Dec 2021 03:12:48 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329FDC06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:12:48 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id np3so19844762pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:12:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J4t2sTur9cdYHU8TKnZYEXhAtiC9kU7TYZgtM8sv6Rw=;
+        b=kbZ8GxDI9i+HZI9ASpifM7l0aRUElJris8YuH+giRnwSq6EDfXGUkagqhxuZEsCH6X
+         9r4pTp7vs3bU2MES3TRlFxZOWXPB+O4rQxK3qq32ajle6uCPktn9ltWFfLFLJVTVIu6D
+         f9x0cCeTMJT7jpWx1ML6xikojKG9M7saPnhud9MXrv4G8VSBGJVVjsCvxplc1wcB3R9c
+         GrUJxGa+kdcDSocgtljrUWP0sYdh8P8eBlFe8s536hFG6W7zTEdMage+gWmHUqlrsuTU
+         N47LoYjuMEIl95oUW9GCWg+ihbVWzCDJjMrAzrV3d1ub/rsXWNV7RYRD40UdG8Ik9mXW
+         V8bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J4t2sTur9cdYHU8TKnZYEXhAtiC9kU7TYZgtM8sv6Rw=;
+        b=g0ZNs/wCqoUYoYsaimspHimtqPqQ9DH4dopMts5tIe789rzs0fkf3glRxf8tZzgiaR
+         q247uuEoqfbIzJhQ4Cn2SAAIsOJUDbIoYeqNm4CnCUasjh8KeDMZbGPxk812z2EIp87s
+         cuOFax1Ki38rLxUK62n2XeUkQ/mjWCGRqLuTmnfwGe8JdX+Gkum5KdMHBTIttqJtj9xq
+         F6ihYRJL4D0FKnXGZqUHjNcNYCUR8HJDGrLCNsEl/mdTgC4dO4iG3Cm9IMGddIVKHSBc
+         uHEuppGMRQMly40ep0iU25y3wfA2hdjbLoaMQRbBG3WKLlcKhzGRVJw4indtV9RLpPj0
+         gMtg==
+X-Gm-Message-State: AOAM533h4LbBkI6i4T6NWITuhjrSBnqsXiJFc8eXar+coSaZwy9eYVVU
+        zRsEnA+q7cLgeauF2i8bfqm2
+X-Google-Smtp-Source: ABdhPJyHWdGgvQkASnf5ZsiqmTjN/rK+5bFAS+5TkzGnUj9Dcl3B4b/FmP8XAbwTm0cQ0zTVsSFXYQ==
+X-Received: by 2002:a17:903:1247:b0:143:b9b9:52a2 with SMTP id u7-20020a170903124700b00143b9b952a2mr15367789plh.35.1639642367470;
+        Thu, 16 Dec 2021 00:12:47 -0800 (PST)
+Received: from localhost.localdomain ([117.193.208.121])
+        by smtp.gmail.com with ESMTPSA id u38sm326835pfg.4.2021.12.16.00.12.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 00:12:47 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     mhi@lists.linux.dev, hemantk@codeaurora.org, bbhatt@codeaurora.org,
+        loic.poulain@linaro.org, thomas.perrot@bootlin.com,
+        aleksander@aleksander.es, slark_xiao@163.com,
+        christophe.jaillet@wanadoo.fr, keescook@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 00/10] MHI patches for v5.17
+Date:   Thu, 16 Dec 2021 13:42:17 +0530
+Message-Id: <20211216081227.237749-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1639560427.git.qinjian@cqplus1.com>
-In-Reply-To: <cover.1639560427.git.qinjian@cqplus1.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 16 Dec 2021 09:12:13 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1Doh8GY9iFZsvmd6wASHoPqyR+roXx0G5XidnmHNkGaA@mail.gmail.com>
-Message-ID: <CAK8P3a1Doh8GY9iFZsvmd6wASHoPqyR+roXx0G5XidnmHNkGaA@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] Add Sunplus SP7021 SoC Support
-To:     Qin Jian <qinjian@cqplus1.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:VHBQGMx5BnEGZ2O1OFfBBwmcuSZLc/m3GiIghGM6bV3Mcn9QVnM
- SskyLOGbhEPurF0ZNNk8H3dVvLIV4lIRAiy0AnzWvbuAtSP/AM/lRuSp8nnfyzTbnWW+qR4
- pDlpsFoGU0yPLE4tdFCU1juXj1dOBv3veKT+iqmd7hP7HH0F0s8CcWRMxBqgoDiBqzdkJVE
- Cx6sm0kycPDxbBK8X3udA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ABBbp6E+X8c=:W/6H1wkZsMHq2Nvgw57WMQ
- Lap7/jmIIS5gC1LMYiEtRAY1T0WaMOijuZZJ2sQdvcl3bWyfDDcrwyXwTy4Xlwffkj87d+oWd
- qxTMPF30w/l8JjA3stM4ayXDRuAz6GbHA7JT8Sd4Rb/FnAwVQAdTeZquPP9R8Kcs7O6C6XoTl
- 4j2wTWt07IOJp8EGFN+M8r9t0K749IDX5CLeQ9Qq4QmUA90Z2IzLGG6ueYa485aP0f4864KG9
- gBRPEdTSnd4Y0FC69ZkQpJKadYF5N24B6Lf7pl+//WLLKNh3Yme33ZvyPO5KVzynv7RhKjn78
- 5bLtp3PNBlOb7ctv9b5UMG1nVjLhEdZ7siG2QNYW0GbB33HkBNwz7adXslzNSm38tcHwOQy8d
- Ux4O6r1bBL5R6aTdiAcStWiD86kTTaplZ6OpOEhxS9ofbQKcxBwOq1hVmcXSh45wECCwB7A90
- bx8I0CP7n65c8NSMslaAcyHvKE3tu4WVx/sUUJ0WVwvapwM2b1Y7pIBdMR+VEHunrKvEBuJj1
- Cen4NzM406ad639kOpcWaWrc8IhkbVNAN43dnYeav1vgZGn/av7ojiuzTv9dhvDKiqwoT2hFa
- 99RkQD+YSi6EFVvJ4obyLuq1VHTRkg2g152updp7UkpZpOhktBXZm4ByuA+e6gIccHayDOoXk
- RnlFX+SxrgC/HB/eUGDvNoKoTbBRLEJnkuDK7kocjWwtMfRRcH5R69elyVs7zqvMOWMuNX+bi
- SJOIfOykiweIM7v0/z6gLdAV8wJj910DDvdrKoWHDa3Hf+pLeDjLA6JAxEG1Iixm6+dugRRnI
- Jw1dU2Elc9IBRLMh4R+W+ok4YHI6aX6pK8DmALbBvMBMhemr38=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 8:08 AM Qin Jian <qinjian@cqplus1.com> wrote:
->
-> This patch series add Sunplus SP7021 SoC support.
->
-> Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
-> peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
-> single chip. It is designed for industrial control.
->
-> SP7021 consists of two chips (dies) in a package. One is called C-chip
-> (computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
-> process (22 nm) for high performance computing. The other is called P-
-> chip (peripheral chip). It has many peripherals and an ARM A926 added
-> especially for real-time control. P-chip is made for customers. It adopts
-> low-level process (ex: 0.11 um) to reduce cost.
->
-> Refer to (for documentations):
-> https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
->
-> Refer to (applications):
-> https://tibbo.com/store/plus1.html
->
-> Refer to (applications):
-> http://www.sinovoip.com.cn/ecp_view.asp?id=586
+Hi Greg,
 
-This looks all good to me now, it just needs a review for the clk,
-reset  and irqchip drivers. I'll won't be pulling any further branches
-after the 23rd for this release, so it appears unlikely to still make it
-into v5.17, but please keep going anyway. Either Olof will be able
-to take the series when I'm gone, or we can do it early for v5.18.
+Here are the MHI patches for v5.17 cycle.
 
-Ideally this should come as a pull request to soc@kernel.org once
-you have the remaining Reviewed-by tags, with the text above copied
-into the (signed) tag description. If you send it as patches, I'd suggest
-adding the text to the description of patch 9/10 instead, where
-you add the board code. This way it still becomes part of the git
-history for reference.
+Patchset summary:
 
-        Arnd
+1. Added support for a new PCI Foxconn modem based on Qualcomm SDX55 chipset.
+This device is named as "T99W175" which was already supported but this one
+seems to be using a new modem build and Foxconn is selling it as a new product
+with a different PID.
+
+2. MHI PCI generic driver now gracefully shutsdown the modem during system
+freeze.
+
+3. Used macros to identify the MHI Execution Environment (EE).
+
+4. Fixed the comment and style issues detected by checkpatch.
+
+5. Used dma_set_mask_and_coherent() API to simplify the code in MHI PCI generic
+driver.
+
+6. Fixed reading the "wake-capable" entry while parsing the channel
+configuration structure from controller drivers.
+
+7. Fixed the SYS_ERR handling while powering up the device. This fixes the
+bootup issue with Sierra Wireless EM919X modems based on SDX55.
+
+8. Introduced a new API for automatically queueing the buffers for the DL
+channel. This patch touches QRTR driver that's under networking subsystem.
+Hence, collected Ack from Jakub.
+
+9. Used the "unsigned long" argument for find_last_bit() API. This is done to
+avoid the warning with "-Warray-bounds" GCC flag.
+
+10. Finally, added support for the Sierra Wireless EM919X modems based on
+Qualcomm SDX55 chipset.
+
+Thanks,
+Mani
+
+Bhaumik Bhatt (2):
+  bus: mhi: core: Use macros for execution environment features
+  bus: mhi: core: Fix reading wake_capable channel configuration
+
+Christophe JAILLET (1):
+  bus: mhi: pci_generic: Simplify code and axe the use of a deprecated
+    API
+
+Kees Cook (1):
+  bus: mhi: core: Use correctly sized arguments for bit field
+
+Loic Poulain (1):
+  bus: mhi: pci_generic: Graceful shutdown on freeze
+
+Manivannan Sadhasivam (3):
+  bus: mhi: core: Minor style and comment fixes
+  bus: mhi: core: Fix race while handling SYS_ERR at power up
+  bus: mhi: core: Add an API for auto queueing buffers for DL channel
+
+Slark Xiao (1):
+  bus: mhi: pci_generic: Add new device ID support for T99W175
+
+Thomas Perrot (1):
+  bus: mhi: pci_generic: Introduce Sierra EM919X support
+
+ drivers/bus/mhi/core/boot.c     |  2 +-
+ drivers/bus/mhi/core/init.c     |  4 ++-
+ drivers/bus/mhi/core/internal.h |  9 ++++--
+ drivers/bus/mhi/core/main.c     | 24 +++++++++++---
+ drivers/bus/mhi/core/pm.c       | 39 +++++++++--------------
+ drivers/bus/mhi/pci_generic.c   | 56 ++++++++++++++++++++++++++++-----
+ include/linux/mhi.h             | 21 ++++++++++---
+ net/qrtr/mhi.c                  |  2 +-
+ 8 files changed, 109 insertions(+), 48 deletions(-)
+
+-- 
+2.25.1
+

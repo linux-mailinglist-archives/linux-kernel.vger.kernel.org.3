@@ -2,168 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB28477CD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F420477CDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241110AbhLPTwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 14:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S241127AbhLPTxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 14:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbhLPTwT (ORCPT
+        with ESMTP id S229909AbhLPTxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 14:52:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15518C061574;
-        Thu, 16 Dec 2021 11:52:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7D12B82619;
-        Thu, 16 Dec 2021 19:52:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD53C36AE7;
-        Thu, 16 Dec 2021 19:52:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639684335;
-        bh=1wo4/ak8o23KqAWrQI+B/0IYAI6XmaqSFJPZ7O5ZzDg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YCyh58ux9JZ75uHsUL8ZLNaxO1aPznjxO6QySL+dd4MWk/x/P02Ep5uFTp+3Usu40
-         P2Watpgg2ZiKq4t/f2F06UHBZLv2Xbk+5wtDf3Zoy2xBjs+Xt0UZFklzbjgN75/kOt
-         /vTJALWEryYYm6sSTmQUxvDw7nCW1E60sg75zZb0CbKUXIBR5imWT4DW3iA/dxz/TA
-         YKZoejwk6+WS2YPzc/OBWC+Vn6LBDJQ2sC1iadjlP7nQfHnq4m2YyMSX4RvqFjzljZ
-         ubyOg2+zGH54sQtAclVvCHAKHZShbwxJ/0yBhqI2a/eQN28/e/8B7p9VjUrSwNsf+X
-         7vn3zD14MxUzg==
-Received: by mail-ed1-f50.google.com with SMTP id o20so91297639eds.10;
-        Thu, 16 Dec 2021 11:52:15 -0800 (PST)
-X-Gm-Message-State: AOAM530fzOc1VRKPUhOtc9tw89Kf/Nuks9mwcwaAK7dUMCPU1HSZUSEM
-        Ruktnk7WoPGp4+hMPZ/nKUimF1R0X5gGCIwb2A==
-X-Google-Smtp-Source: ABdhPJzdxLKqe4cLLckTiahQqVEOKCAcqB5i0Q1vQ+jpuMsdwWIRe6s/TC20LSMlEHytIJyfHJ8Kcp6w4X2bY1ffWhg=
-X-Received: by 2002:a05:6402:84f:: with SMTP id b15mr22106468edz.342.1639684333732;
- Thu, 16 Dec 2021 11:52:13 -0800 (PST)
+        Thu, 16 Dec 2021 14:53:02 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505BDC061574;
+        Thu, 16 Dec 2021 11:53:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FagIrzHZaoI8LWtumL9lv327gd26yRzP0j0dqHS0OxY=; b=4JMTfcWA8xrUg+VnFM+gd6L24Y
+        S002yVPcfeycj4gXrMKaafnpFeS61tYeSOAFlokpby/ybB/ulBY/ZxhiVlQniLG5qfF2iPVfi4V5J
+        YCDPelyw0E5k+MzwdeVtZcFy4MRkIorzS9dZiyXzp4QmKIWeTD5RMk9IRFVIqv4a4yhZKoPpP2uLO
+        S1Mlouil/VgCrPJyCKaw3AntOVYd8A5gFNJpGR+iZSfnEp5sYBlr1InlKG5TkjZ8qZO5FlEZLjnoC
+        3Cg64b9cAoytCo/k7jVZDyRjCjvF5d2DV9Cx0LTj+UsVx2VQ3D85+dmf2xQIMx0c9KqYx7TrRnbGs
+        D9DPR8Lw==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxwo1-007OH4-Rb; Thu, 16 Dec 2021 19:52:46 +0000
+Message-ID: <f0b4eddc2cdb3aae190bacd0a5285c393e4f8ea3.camel@infradead.org>
+Subject: Re: [PATCH v3 0/9] Parallel CPU bringup for x86_64
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
+Date:   Thu, 16 Dec 2021 19:52:41 +0000
+In-Reply-To: <761c1552-0ca0-403b-3461-8426198180d0@amd.com>
+References: <20211215145633.5238-1-dwmw2@infradead.org>
+         <761c1552-0ca0-403b-3461-8426198180d0@amd.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-jbZxvCR5TRk+ktacvQYp"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-References: <cover.1639558366.git.mchehab+huawei@kernel.org> <9c3a3ff59408fcb60f7a5817a6f5d5f3053367fc.1639558366.git.mchehab+huawei@kernel.org>
-In-Reply-To: <9c3a3ff59408fcb60f7a5817a6f5d5f3053367fc.1639558366.git.mchehab+huawei@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 16 Dec 2021 13:52:01 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+Nvruuajk1m_za3WVroLhv=i_0YFtfdDbjhjM58dmJ8g@mail.gmail.com>
-Message-ID: <CAL_Jsq+Nvruuajk1m_za3WVroLhv=i_0YFtfdDbjhjM58dmJ8g@mail.gmail.com>
-Subject: Re: [PATCH RESEND 1/7] dt-bindings: misc: add schema for USB hub on
- Kirin devices
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Wei Xu <xuwei5@hisilicon.com>, Yu Chen <chenyu56@huawei.com>,
-        John Stultz <john.stultz@linaro.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 2:54 AM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
->
-> From: Yu Chen <chenyu56@huawei.com>
->
-> This patch adds binding documentation to support USB HUB and
-> USB data role switch of HiSilicon HiKey960 and HiKey970 boards.
 
-I don't see the point in reviewing this given a driver was already
-merged anyways, I can't imagine that plugging in one USB port causing
-others to disconnect is a USB compliant design, and there are few
-boards and fewer users that care.
+--=-jbZxvCR5TRk+ktacvQYp
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> [mchehab: updated OF schema and added HiKey970 example]
-> Signed-off-by: Yu Chen <chenyu56@huawei.com>
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH RESEND 0/7] at: https://lore.kernel.org/all/cover.1639558366.git.mchehab+huawei@kernel.org/
->
->  .../bindings/misc/hisilicon,hikey-usb.yaml    | 87 +++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/hisilicon,hikey-usb.yaml
->
-> diff --git a/Documentation/devicetree/bindings/misc/hisilicon,hikey-usb.yaml b/Documentation/devicetree/bindings/misc/hisilicon,hikey-usb.yaml
-> new file mode 100644
-> index 000000000000..761ab686121a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/hisilicon,hikey-usb.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2019 Linaro Ltd.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/misc/hisilicon,hikey-usb.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: HiKey960/970 onboard USB GPIO Hub
-> +
-> +maintainers:
-> +  - John Stultz <john.stultz@linaro.org>
-> +
-> +description: |
-> +  Supports the onboard USB GPIO hubs found on HiKey960/970.
-> +  Such hubs require a power supply for the USB I/O. Depending on the
-> +  exact hub model, after USB I/O is powered up, a reset should be needed.
-> +
-> +  It also acts as a role-switch intermediary to detect the state of
-> +  the USB-C port, to switch the hub into dual-role USB-C or host mode,
-> +  which enables and powers up the onboard USB-A host ports.
-> +
-> +  Schematics about such hubs can be found here:
-> +    https://github.com/96boards/documentation/raw/master/consumer/hikey/hikey960/hardware-docs/HiKey960_Schematics.pdf
-> +    https://www.96boards.org/documentation/consumer/hikey/hikey970/hardware-docs/files/hikey970-schematics.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - hisilicon,usbhub
-> +
-> +  typec-vbus-gpios:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: phandle to the typec-vbus gpio
-> +
-> +  otg-switch-gpios:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: phandle to the otg-switch gpio
-> +
-> +  hub-reset-en-gpios:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: phandle to the hub reset gpio
-> +
-> +  usb-role-switch:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: Support role switch.
-> +
-> +  hub-vdd-supply:
-> +    description: regulator for hub power
-> +
-> +  port:
-> +    description: |
-> +      describe hadware connections between USB endpoints.
+On Thu, 2021-12-16 at 10:27 -0600, Tom Lendacky wrote:
+> On 12/15/21 8:56 AM, David Woodhouse wrote:
+>=20
+> > Doing the INIT/SIPI/SIPI in parallel for all APs and *then* waiting for
+> > them shaves about 80% off the AP bringup time on a 96-thread socket
+> > Skylake box (EC2 c5.metal) =E2=80=94 from about 500ms to 100ms.
+> >=20
+> > There are more wins to be had with further parallelisation, but this is
+> > the simple part.
+>=20
+> I applied this series and began booting a regular non-SEV guest and hit a=
+=20
+> failure at 39 vCPUs. No panic or warning, just a reset and OVMF was=20
+> executing again. I'll try to debug what's going, but not sure how quickly=
+=20
+> I'll arrive at anything.
 
-USB endpoints? That's a s/w construct.
+I've pushed the SEV-ES fix to
+https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/paralle=
+l-5.16
+and in doing so I've moved the 'no_parallel_bringup' command line
+argument earlier in the series, to Thomas's "Support parallel startup
+of secondary CPUs" commit (now 191f0899757). It would be interesting to
+see if you can reproduce with just that much, both with and with
+no_parallel_bringup. And then whether the subsequent commit that
+actually enables the parallel INIT/SIPI/SIPI actually makes the
+difference?
 
-> +      Two ports are supported: the first being the endpoint that will
+Thanks!
 
-'port' means exactly 1 port.
+--=-jbZxvCR5TRk+ktacvQYp
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-> +      be notified by this driver, and the second being the endpoint
-> +      that notifies this driver of a role switch.
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
+ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
+OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
+RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
+cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
+uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
+Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
+Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
+xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
+YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
+nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
+PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
+7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
+Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
+MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
+NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
+AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
+/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
+0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
+vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
+ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
+ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
+CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
+BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
+aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
+bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
+bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
+LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
+CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
+W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
+vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
+gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
+RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
+jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
+b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
+AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
+BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
++bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
+WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
+aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
+CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
+u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
+RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
+QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
+b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
+cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
+SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
+0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
+KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
+E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
+M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
+jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
+yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
+gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
+R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
+ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
+MjE2MTk1MjQxWjAvBgkqhkiG9w0BCQQxIgQgBS5Xx8+RofROhLb9iQ2hbv2XLGiyFy0ajsOFPLwX
+Wgswgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
+PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
+aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
+DQEBAQUABIIBAGiffsGq5OJv8q6fxRE2sZy6DcdXY4lo4/SGBSvfTN2TYYTs9xbrFulrGzoSfNfa
+G+ul2B9FQbXljf/QQO7+6VMvowIYcRJWeKoyPuLbZCENfP0re+p+Y7fz8p5Bwp07VcGy1Sz0MExf
+3GDVoDTzfEKMiyxPd7IeJtqNqIiEj61bsKcFm+wwbcC5hCpw1TFw9mhQr/5bUXl/RJ2xE4QjZTnW
+Iw6u4CzQ7zTsrW/JGab6tdPDyDRDLj55qYUA/LMI777KDn2Tl6R6cl03USKy+V7CDEC0cxFS1muK
+9F7/SG2coHeHlhUvU5wTsV1o5Is74J9A2vWXUOKgJ9WcpXdeUEMAAAAAAAA=
 
-IMO, this node should represent the HS switch. I would expect an input
-port connected to the USB host and an output port with 2 endpoints
-connected to USB-C connector and the hub.
 
-host(HS port) -> (port@0)Switch(port@1)+--endpoint@0 -> USB-C connector
-                                       |--endpoint@1 -> 2.0 hub
+--=-jbZxvCR5TRk+ktacvQYp--
 
-Then there's what does the hub look like which has been discussed
-separately and is still not upstream I think.
-
-But again, given this is devboard with limited use, I would just make
-using USB-C vs. USB host connectors a fixed boot time configuration
-with some one time setup and move on...
-
-Rob

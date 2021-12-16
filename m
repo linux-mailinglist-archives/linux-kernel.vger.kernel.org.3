@@ -2,226 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D465477955
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F41FA477964
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbhLPQis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
+        id S233452AbhLPQjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbhLPQir (ORCPT
+        with ESMTP id S233361AbhLPQjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:38:47 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B17DC061574;
-        Thu, 16 Dec 2021 08:38:47 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id o13so45169010wrs.12;
-        Thu, 16 Dec 2021 08:38:47 -0800 (PST)
+        Thu, 16 Dec 2021 11:39:22 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C37AC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 08:39:22 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id j18so1953081wrd.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 08:39:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=EP3xb+L2xQ/6dsIM4CEwcEiPmw14nHoll6jOIGKWqPA=;
-        b=TzPuFWV24wtWEhXxZJK40D4ieK3a7qzqWSIapU1CFCnakNH5USfJdAE69OCM6lgAjh
-         sdjugSHia6pAzbLfDz+vlcAX3fcfvOQm+RsGHiHPu8uuOiGPZpswMq7Z2ZOmcq0mI5OA
-         4DfJtIPbSKCSZQnP/sh7rmVH2Lx4SV0WAVN6mmcNVl7xL/qa3zupA4/PlKPB0r//vLps
-         X1L5EjaRQhoOF6neQwkdmFfFL/ekhPyaWwrj1DLc3kif9epgfJWqhZ5sMRdPpOCuKbJb
-         zyC6H/pJseZK965PTe01kdvlfGg/AuQyDxPADhBYoT0kUQEeSd2vflz+tXhNyQ54GBqS
-         O6oQ==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=kK2E/MMuR3TkQFzlN1U/zL0lQXThXaSDf+DSACr+ZJQ=;
+        b=AfZce4hj/OyMTPFe9m4P1A9oJgKDVJr02gvJWBgrr9mxCzJy6ziMLD54MRyS6YJtoa
+         tVRUzAvcIBZVrrcbCJt0TNeXIqNi7YZYl2iq/E4Wr5DKYTNT1gZ5GowODw2mZiI36ZKA
+         F4B05jb/YWyYD3a1Xpju8YcBzJfiIVJcaRtkKWKGokh5/My2h/YuyhucwAiQ3sjSfMkm
+         cAU+NeYYMMfS4JMKyZEvfsMRkVGjlB8bgb5PcsKm66iNo+/rOUb1+FSM3zhIivmr5hv2
+         epTvTu+9MFHnJ9UKkaKI800srEM49bWICIEnW7KS1ePCABv3QdHlBFypOntEYI4lrqii
+         LOLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=EP3xb+L2xQ/6dsIM4CEwcEiPmw14nHoll6jOIGKWqPA=;
-        b=hURW4Tx/sFC/Xdm7bIzrGunqqHtNjllkP1J6UMy4WGZvnwvU16AO/30ahKD5b+uUZU
-         BskD1cHGsd05nSN754PQfV7G7vRPxsqSvGp/eIxWyWwIuog6T8x19D4cBmdGoNOfXtdk
-         7bP0nfRGQfBBZp24WjzW/aWniFu6a7wYvwOwF2CZYtThp2S0L9W9Sf2t+bHBYh0YDr0U
-         KjcMXwe6ICrBmvA/INBs1jTgvQ2L2oFC2eGx2IzKM9X21d09SNSIuwHWybacmT2dHTsu
-         4hM3GTSwVZVAHJJkRWbBMuiVGmhhbQ26xdGYW80Bbjb7sPdNV9JMSQLoTSsXn/qazxTC
-         uwSA==
-X-Gm-Message-State: AOAM5301xpRgZE0phX09CsZEz2u94pp4aatlq7bpXDNWUIkTrF3b95d5
-        ok+UDFk5xa/2x/NrbXYxwJAtLqfFSXiGaA==
-X-Google-Smtp-Source: ABdhPJxSn97MDh2IXVe4MI7nWPHDfEm3gKt2P6E6PmGP9AT9pQEnrTpqaClaoo+RYs2k+5XaAQitdg==
-X-Received: by 2002:a5d:4575:: with SMTP id a21mr9850468wrc.193.1639672725778;
-        Thu, 16 Dec 2021 08:38:45 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id z11sm5402253wmf.9.2021.12.16.08.38.43
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=kK2E/MMuR3TkQFzlN1U/zL0lQXThXaSDf+DSACr+ZJQ=;
+        b=k6muyIKQufGInktqZefbFLo8ek3dk9gb0za6sMRj5NZOY2ECFGeCz9AsCUn+r80B/H
+         v+MsZbr35w2DGjUkF1Yh0xNSOI5SUraSqQV6m72IfM7lJdjQVWpER16meAI6QXQeEtZ5
+         cWgCazaZjDPvTQD126bA8amDHjKoSOKCvcro2Btc+9QBISRtWhjTyj1nj0B4iHSfWr+e
+         /D7+WU8nz5V388mYFTqEY7JL56TNX1tGf5Hh0n3pMXB2sUgIjmzhgWHvCb8sL9jbuDZl
+         ZpfzPZ/MSLbod4V0NUTBhvLkHOeYlZeoWJDUfMFtiO8U5JRVAGslR16xzmY9528t1oZt
+         T1yA==
+X-Gm-Message-State: AOAM531CKt+TQvoWxZiE/qW4Jv+2kPuuxVnVlzFscQQ1V5a2ZuWPBf9I
+        LcBElaS2/V1aaSzP1vXDeawKWQ==
+X-Google-Smtp-Source: ABdhPJwMMy984oVm1mzrWQj70JbEAsHknbyrmdCszQIgnW+xBEUUUWPhHof6vdXHQHq9GGuCuifOFw==
+X-Received: by 2002:a5d:5181:: with SMTP id k1mr9883578wrv.681.1639672760937;
+        Thu, 16 Dec 2021 08:39:20 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id y3sm3050806wrq.12.2021.12.16.08.39.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 08:38:44 -0800 (PST)
-Date:   Thu, 16 Dec 2021 17:38:41 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, bbasu@nvidia.com, vsethi@nvidia.com,
-        jsequeira@nvidia.com
-Subject: Re: [Patch Resend v1 5/8] dt-bindings: arm: tegra: Add NVIDIA
- Tegra234 CBB2.0 binding
-Message-ID: <YbtrkcMMwjipgkZf@orome>
-References: <20211209172206.17778-1-sumitg@nvidia.com>
- <20211209172206.17778-6-sumitg@nvidia.com>
- <YbsjZDc8tt3fMUQt@orome>
- <321bfcdf-2aa3-0d0a-2096-972b5cf0297a@nvidia.com>
+        Thu, 16 Dec 2021 08:39:20 -0800 (PST)
+Date:   Thu, 16 Dec 2021 16:39:15 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>,
+        network dev <netdev@vger.kernel.org>
+Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
+Message-ID: <Ybtrs56tSBbmyt5c@google.com>
+References: <20211214215732.1507504-1-lee.jones@linaro.org>
+ <20211214215732.1507504-2-lee.jones@linaro.org>
+ <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JSShQrnBNGx5c7H6"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <321bfcdf-2aa3-0d0a-2096-972b5cf0297a@nvidia.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 16 Dec 2021, Xin Long wrote:
 
---JSShQrnBNGx5c7H6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed, Dec 15, 2021 at 8:48 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> >
+> > On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
+> > > The cause of the resultant dump_stack() reported below is a
+> > > dereference of a freed pointer to 'struct sctp_endpoint' in
+> > > sctp_sock_dump().
+> > >
+> > > This race condition occurs when a transport is cached into its
+> > > associated hash table followed by an endpoint/sock migration to a new
+> > > association in sctp_assoc_migrate() prior to their subsequent use in
+> > > sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
+> > > table calling into sctp_sock_dump() where the dereference occurs.
 
-On Thu, Dec 16, 2021 at 08:36:11PM +0530, Sumit Gupta wrote:
-> Hi Thierry,
->=20
-> > On Thu, Dec 09, 2021 at 10:52:03PM +0530, Sumit Gupta wrote:
-> > > Add device-tree binding documentation to represent CBB2.0 (Control
-> > > Backbone) error handling driver. The driver prints debug information
-> > > about failed transaction on receiving interrupt from CBB2.0.
-> > >=20
-> > > Signed-off-by: Sumit Gupta<sumitg@nvidia.com>
-> > > ---
-> > >   .../arm/tegra/nvidia,tegra234-cbb.yaml        | 80 ++++++++++++++++=
-+++
-> > >   1 file changed, 80 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvid=
-ia,tegra234-cbb.yaml
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra=
-234-cbb.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-=
-cbb.yaml
-> > > new file mode 100644
-> > > index 000000000000..ad8177255e6c
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb=
-=2Eyaml
-> > > @@ -0,0 +1,80 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +
-> > > +$id:"http://devicetree.org/schemas/arm/tegra/tegra23_cbb.yaml#"
-> > > +$schema:"http://devicetree.org/meta-schemas/core.yaml#"
-> > > +
-> > > +title: NVIDIA Tegra CBB2.0 Error handling driver device tree bindings
-> > > +
-> > > +maintainers:
-> > > +  - Sumit Gupta<sumitg@nvidia.com>
-> > > +
-> > > +description: |+
-> > > +  Control Backbone (CBB) comprises of the physical path from an
-> > > +  initiator to a target's register configuration space.
-> > > +  CBB2.0 consists of multiple sub-blocks connected to each other
-> > > +  to create a topology.
-> > > +  Tegra234 SOC has different fabrics based on CBB2.0 architecture
-> > > +  which include cluster fabrics BPMP, AON, PSC, SCE, RCE, DCE, FSI
-> > > +  and "CBB central fabric".
-> > > +
-> > > +  In CBB2.0, each initiator which can issue transactions connects to
-> > > +  a Root Master Node (MN) before it connects to any other element of
-> > > +  the fabric. Each Root MN contains a Error Monitor (EM) which detec=
-ts
-> > > +  and logs error. Interrupts from various EM blocks are collated by
-> > > +  Error Notifier (EN) which is per fabric and presents a single
-> > > +  interrupt from fabric to the SOC interrupt controller.
-> > > +
-> > > +  The driver handles errors from CBB due to illegal register accesses
-> > > +  and prints debug information about failed transaction on receiving
-> > > +  the interrupt from EN. Debug information includes Error Code, Error
-> > > +  Description, MasterID, Fabric, SlaveID, Address, Cache, Protection,
-> > > +  Security Group etc on receiving error notification.
-> > > +
-> > > +  If the Error Response Disable (ERD) is set/enabled for an initiato=
-r,
-> > > +  then SError or Data abort exception error response is masked and an
-> > > +  interrupt is used for reporting errors due to illegal accesses from
-> > > +  that initiator. The value returned on read failures is '0xFFFFFFFF'
-> > > +  for compatibility with PCIE.
-> > > +
-> > > +properties:
-> > > +  $nodename:
-> > > +    pattern: "^[a-f]+-en@[0-9a-f]+$"
-> > > +
-> > > +  compatible:
-> > > +    enum:
-> > > +      - nvidia,tegra234-aon-fabric
-> > > +      - nvidia,tegra234-bpmp-fabric
-> > > +      - nvidia,tegra234-cbb-fabric
-> > > +      - nvidia,tegra234-dce-fabric
-> > > +      - nvidia,tegra234-rce-fabric
-> > > +      - nvidia,tegra234-sce-fabric
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +    items:
-> > > +      - description: secure interrupt from error notifier.
-> > > +
-> > > +  nvidia,err-notifier-base:
-> > > +    description: address of error notifier inside a fabric.
-> > > +
-> > > +  nvidia,off-mask-erd:
-> > > +    description: offset of register having ERD bit.
-> > I was wondering about these two properties. Do we really need them? I
-> > see that they are set on a per-SoC basic and they only differ between
-> > the various fabrics. If they don't need to be configured on a per-board
-> > basis, then I don't think we need to specify these explicitly. Instead I
-> > think we could derive them from the compatible string
-> The CBB 2.0 based fabric's error handling driver remains same across
-> different SOC's and their variants. Only these fields change.
-> e.g: "off-mask-erd" value is different for T23x SOC variants.
-> "err-notifier-base" also changed multiple times during simulator stage.
-> So, keeping them in DT to avoid changing the driver code for different
-> variants of an SOC and to change them during bring up stages with DT chan=
-ge
-> only.
+> in sctp_sock_dump():
+>         struct sock *sk = ep->base.sk;
+>         ... <--[1]
+>         lock_sock(sk);
+> 
+> Do you mean in [1], the sk is peeled off and gets freed elsewhere?
 
-For different SoC variants I would expect this to be implied by a new
-compatible string. A hypothetical Tegra235 SoC that is largely the same
-as Tegra234 but required slight changes in these values would also get a
-different set of compatible strings. So the fabrics in that case would
-be called:
+'ep' and 'sk' are both switched out for new ones in sctp_sock_migrate().
 
-	- nvidia,tegra235-aon-fabric
-	- nvidia,tegra235-bpmp-fabric
-	- nvidia,tegra235-cbb-fabric
-	...
+> if that's true, it's still late to do sock_hold(sk) in your this patch.
 
-and then that new value can be derived from that new compatible string.
-In general we only want to provide data in device tree if it can't be
-implied from the compatible string. Most of the time that's only for
-things that are somehow dependent on the board design. Data that is
-fixed for a given SoC can be derived from the compatible string.
+No, that's not right.
 
-Thierry
+The schedule happens *inside* the lock_sock() call.
 
---JSShQrnBNGx5c7H6
-Content-Type: application/pgp-signature; name="signature.asc"
+So if you take the reference before it, you're good.
 
------BEGIN PGP SIGNATURE-----
+> I talked with Marcelo about this before, if the possible UAF in [1] exists,
+> the problem also exists in the main RX path sctp_rcv().
+> 
+> > >
+> > >   BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
+> > >   Call trace:
+> > >    dump_backtrace+0x0/0x2dc
+> > >    show_stack+0x20/0x2c
+> > >    dump_stack+0x120/0x144
+> > >    print_address_description+0x80/0x2f4
+> > >    __kasan_report+0x174/0x194
+> > >    kasan_report+0x10/0x18
+> > >    __asan_load8+0x84/0x8c
+> > >    sctp_sock_dump+0xa8/0x438 [sctp_diag]
+> > >    sctp_for_each_transport+0x1e0/0x26c [sctp]
+> > >    sctp_diag_dump+0x180/0x1f0 [sctp_diag]
+> > >    inet_diag_dump+0x12c/0x168
+> > >    netlink_dump+0x24c/0x5b8
+> > >    __netlink_dump_start+0x274/0x2a8
+> > >    inet_diag_handler_cmd+0x224/0x274
+> > >    sock_diag_rcv_msg+0x21c/0x230
+> > >    netlink_rcv_skb+0xe0/0x1bc
+> > >    sock_diag_rcv+0x34/0x48
+> > >    netlink_unicast+0x3b4/0x430
+> > >    netlink_sendmsg+0x4f0/0x574
+> > >    sock_write_iter+0x18c/0x1f0
+> > >    do_iter_readv_writev+0x230/0x2a8
+> > >    do_iter_write+0xc8/0x2b4
+> > >    vfs_writev+0xf8/0x184
+> > >    do_writev+0xb0/0x1a8
+> > >    __arm64_sys_writev+0x4c/0x5c
+> > >    el0_svc_common+0x118/0x250
+> > >    el0_svc_handler+0x3c/0x9c
+> > >    el0_svc+0x8/0xc
+> > >
+> > > To prevent this from happening we need to take a references to the
+> > > to-be-used/dereferenced 'struct sock' and 'struct sctp_endpoint's
+> > > until such a time when we know it can be safely released.
+> > >
+> > > When KASAN is not enabled, a similar, but slightly different NULL
+> > > pointer derefernce crash occurs later along the thread of execution in
+> > > inet_sctp_diag_fill() this time.
+> Are you able to reproduce this issue?
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG7a5EACgkQ3SOs138+
-s6H9rRAAs+Bg4hTGhnbQAODadcjtWiBSRBzHGhRfk/G6gN2dRh8dDSz0T36/85Cn
-/jiklDbeK3M+IMlQm+vQDF+h5rOpiSP6k4EWb3HHI9fetkWmdlwi/XH16pweAfTB
-gi8M70wv0GlsI7OqeDZ2ECEykO13VBnfdV+AGtEFcv3T0uYDtDa9HcBp0ZUGNne8
-rTA9Qtn4qJlfbCEoES6lCxqtW8CDnuPrnomGHOs7nL5dNwT4F82ZkYT2CuXhZ4PS
-JfHqia25jyf1cgvqfj+FNcNdt/X2EjBpNSqvS7g3qCDltvpeDRgz85K71ZpTeSzB
-+6VN3aWK+ViAoBPmiMvPCXejvuPjZV+G9ZEkbLsWlrZA7dPtHSXE+2A7Llcd4Vgz
-TR/3uydaKkyE85owW9X9ZrwrmEZ5uy8EJcS1I9v0UAMZY5hHEGTjJCltXMSLOrLQ
-CIug97VshHKiZmRPKN1IqUrcBsKDrjkSeylQpoSKEgI9OyNRyQZ2iNuIf3qADg4p
-td0cKYbi4x/8Ox50PDoQE9n0T6fau0QhBx/KpHYbOspcqr/AOevR9xqI7ARMnedp
-Nn00MIeI1LzC2IOzin/X+f1jD43nt1tH1uPkCt8JlCz0JQeTTxX239lN3SITZRpk
-mA0t3HKOIQrPGJb4Bz98mUHlo3hIzNGUD3c54h3rJWpkj9kR5FM=
-=ZqLg
------END PGP SIGNATURE-----
+Yes 100% of the time without this patch.
 
---JSShQrnBNGx5c7H6--
+0% of the time with it applied.
+
+> What I'm thinking is to fix it by freeing sk in call_rcu() by
+> sock_set_flag(sock->sk, SOCK_RCU_FREE),
+> and add rcu_read_lock() in sctp_sock_dump().
+> 
+> Thanks.
+> 
+> >
+> > Are you able to identify where the bug was introduced? Fixes tag would
+> > be good to have here.
+
+It's probably been there since the code was introduced.
+
+I'll see how far back we have to go.
+
+> > You should squash the two patches together.
+
+I generally like patches to encapsulate functional changes.
+
+This one depends on the other, but they are not functionally related.
+
+You're the boss though - I'll squash them if you insist.
+
+> > > diff --git a/net/sctp/diag.c b/net/sctp/diag.c
+> > > index 760b367644c12..2029b240b6f24 100644
+> > > --- a/net/sctp/diag.c
+> > > +++ b/net/sctp/diag.c
+> > > @@ -301,6 +301,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+> > >       struct sctp_association *assoc;
+> > >       int err = 0;
+> > >
+> > > +     sctp_endpoint_hold(ep);
+> > > +     sock_hold(sk);
+> > >       lock_sock(sk);
+> > >       list_for_each_entry(assoc, &ep->asocs, asocs) {
+> > >               if (cb->args[4] < cb->args[1])
+> > > @@ -341,6 +343,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+> > >       cb->args[4] = 0;
+> > >  release:
+> > >       release_sock(sk);
+> > > +     sock_put(sk);
+> > > +     sctp_endpoint_put(ep);
+> > >       return err;
+> > >  }
+> > >
+> >
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

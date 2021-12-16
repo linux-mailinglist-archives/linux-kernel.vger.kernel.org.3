@@ -2,225 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4104777D8
+	by mail.lfdr.de (Postfix) with ESMTP id 750274777D9
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239280AbhLPQQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:16:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30932 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239265AbhLPQQP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:16:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639671374;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BBwIw/5wh4SX4dnDaQAfkvHtPxRejp6odw5C8Pt903U=;
-        b=FKUGBHFjFfiJ5VFw4gq8jaBOda8kn+J0+PjxwVV/CwhLWTnB01OHbFsKtloM6UAc5IQWCa
-        Df5uvl7P8zEqGf3n8ObvAbPpefk+ov+TS4mwTdzJEC3oIuscJGzfx5SO1g+Y5zhv2uHjOc
-        IB18lLBipo4IrGd9VvWh4SLltrs8XJU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-x0PbYvL_P2K131SM3KRAww-1; Thu, 16 Dec 2021 11:16:09 -0500
-X-MC-Unique: x0PbYvL_P2K131SM3KRAww-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 56D861926DA1;
-        Thu, 16 Dec 2021 16:16:06 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C88DB78DA0;
-        Thu, 16 Dec 2021 16:15:54 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v3 33/68] cachefiles: Add a couple of tracepoints for logging
- errors
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 16 Dec 2021 16:15:53 +0000
-Message-ID: <163967135390.1823006.2512120406360156424.stgit@warthog.procyon.org.uk>
-In-Reply-To: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
-References: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        id S239283AbhLPQQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:16:20 -0500
+Received: from foss.arm.com ([217.140.110.172]:45626 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239276AbhLPQQQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 11:16:16 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D04DB1435;
+        Thu, 16 Dec 2021 08:16:15 -0800 (PST)
+Received: from e122027.arm.com (unknown [10.57.5.127])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 515D83F73B;
+        Thu, 16 Dec 2021 08:16:14 -0800 (PST)
+From:   Steven Price <steven.price@arm.com>
+To:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Steven Price <steven.price@arm.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH] drm/panfrost: Avoid user size passed to kvmalloc()
+Date:   Thu, 16 Dec 2021 16:16:03 +0000
+Message-Id: <20211216161603.983711-1-steven.price@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add two trace points to log errors, one for vfs operations like mkdir or
-create, and one for I/O operations, like read, write or truncate.
+panfrost_copy_in_sync() takes the number of fences from user space
+(in_sync_count) and used to kvmalloc() an array to hold that number of
+fences before processing them. This provides an easy method for user
+space to trigger the OOM killer (by temporarily allocating large amounts
+of kernel memory) or hit the WARN_ONCE() added by 7661809d493b ("mm:
+don't allow oversized kvmalloc() calls").
 
-Also add the beginnings of a struct that is going to represent a data file
-and place a debugging ID in it for the tracepoints to record.
+Since we don't expect there to be a large number of fences we can
+instead iterate over the fences one-by-one and avoid the temporary
+allocation altogether. This also makes the code simpler.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/163819625632.215744.17907340966178411033.stgit@warthog.procyon.org.uk/ # v1
-Link: https://lore.kernel.org/r/163906926297.143852.18267924605548658911.stgit@warthog.procyon.org.uk/ # v2
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Steven Price <steven.price@arm.com>
 ---
+ drivers/gpu/drm/panfrost/panfrost_drv.c | 44 ++++++++-----------------
+ 1 file changed, 14 insertions(+), 30 deletions(-)
 
- fs/cachefiles/internal.h          |    1 
- include/trace/events/cachefiles.h |   94 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 95 insertions(+)
-
-diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index 1f2fea902d3e..b51146a29aca 100644
---- a/fs/cachefiles/internal.h
-+++ b/fs/cachefiles/internal.h
-@@ -62,6 +62,7 @@ struct cachefiles_cache {
- 	char				*tag;		/* cache binding tag */
- };
+diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+index 96bb5a465627..12ab55e5782c 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_drv.c
++++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+@@ -186,47 +186,31 @@ panfrost_copy_in_sync(struct drm_device *dev,
+ 		  struct drm_panfrost_submit *args,
+ 		  struct panfrost_job *job)
+ {
+-	u32 *handles;
+-	int ret = 0;
+-	int i, in_fence_count;
+-
+-	in_fence_count = args->in_sync_count;
+-
+-	if (!in_fence_count)
+-		return 0;
+-
+-	handles = kvmalloc_array(in_fence_count, sizeof(u32), GFP_KERNEL);
+-	if (!handles) {
+-		ret = -ENOMEM;
+-		DRM_DEBUG("Failed to allocate incoming syncobj handles\n");
+-		goto fail;
+-	}
++	int i;
++	u32 __user *user_handles = u64_to_user_ptr(args->in_syncs);
  
-+#include <trace/events/cachefiles.h>
+-	if (copy_from_user(handles,
+-			   (void __user *)(uintptr_t)args->in_syncs,
+-			   in_fence_count * sizeof(u32))) {
+-		ret = -EFAULT;
+-		DRM_DEBUG("Failed to copy in syncobj handles\n");
+-		goto fail;
+-	}
+-
+-	for (i = 0; i < in_fence_count; i++) {
++	for (i = 0; i < args->in_sync_count; i++) {
+ 		struct dma_fence *fence;
++		u32 handle;
++		int ret;
++
++		ret = copy_from_user(&handle, user_handles + i,
++				     sizeof(handle));
++		if (ret)
++			return -EFAULT;
  
- /*
-  * error_inject.c
-diff --git a/include/trace/events/cachefiles.h b/include/trace/events/cachefiles.h
-index 5ee0aabb20be..9bd5a8a60801 100644
---- a/include/trace/events/cachefiles.h
-+++ b/include/trace/events/cachefiles.h
-@@ -18,11 +18,49 @@
- #ifndef __CACHEFILES_DECLARE_TRACE_ENUMS_ONCE_ONLY
- #define __CACHEFILES_DECLARE_TRACE_ENUMS_ONCE_ONLY
+-		ret = drm_syncobj_find_fence(file_priv, handles[i], 0, 0,
++		ret = drm_syncobj_find_fence(file_priv, handle, 0, 0,
+ 					     &fence);
+ 		if (ret)
+-			goto fail;
++			return ret;
  
-+enum cachefiles_error_trace {
-+	cachefiles_trace_fallocate_error,
-+	cachefiles_trace_getxattr_error,
-+	cachefiles_trace_link_error,
-+	cachefiles_trace_lookup_error,
-+	cachefiles_trace_mkdir_error,
-+	cachefiles_trace_notify_change_error,
-+	cachefiles_trace_open_error,
-+	cachefiles_trace_read_error,
-+	cachefiles_trace_remxattr_error,
-+	cachefiles_trace_rename_error,
-+	cachefiles_trace_seek_error,
-+	cachefiles_trace_setxattr_error,
-+	cachefiles_trace_statfs_error,
-+	cachefiles_trace_tmpfile_error,
-+	cachefiles_trace_trunc_error,
-+	cachefiles_trace_unlink_error,
-+	cachefiles_trace_write_error,
-+};
-+
- #endif
+ 		ret = drm_sched_job_add_dependency(&job->base, fence);
  
- /*
-  * Define enum -> string mappings for display.
-  */
-+#define cachefiles_error_traces						\
-+	EM(cachefiles_trace_fallocate_error,	"fallocate")		\
-+	EM(cachefiles_trace_getxattr_error,	"getxattr")		\
-+	EM(cachefiles_trace_link_error,		"link")			\
-+	EM(cachefiles_trace_lookup_error,	"lookup")		\
-+	EM(cachefiles_trace_mkdir_error,	"mkdir")		\
-+	EM(cachefiles_trace_notify_change_error, "notify_change")	\
-+	EM(cachefiles_trace_open_error,		"open")			\
-+	EM(cachefiles_trace_read_error,		"read")			\
-+	EM(cachefiles_trace_remxattr_error,	"remxattr")		\
-+	EM(cachefiles_trace_rename_error,	"rename")		\
-+	EM(cachefiles_trace_seek_error,		"seek")			\
-+	EM(cachefiles_trace_setxattr_error,	"setxattr")		\
-+	EM(cachefiles_trace_statfs_error,	"statfs")		\
-+	EM(cachefiles_trace_tmpfile_error,	"tmpfile")		\
-+	EM(cachefiles_trace_trunc_error,	"trunc")		\
-+	EM(cachefiles_trace_unlink_error,	"unlink")		\
-+	E_(cachefiles_trace_write_error,	"write")
+ 		if (ret)
+-			goto fail;
++			return ret;
+ 	}
  
+-fail:
+-	kvfree(handles);
+-	return ret;
++	return 0;
+ }
  
- /*
-@@ -33,6 +71,8 @@
- #define EM(a, b) TRACE_DEFINE_ENUM(a);
- #define E_(a, b) TRACE_DEFINE_ENUM(a);
- 
-+cachefiles_error_traces;
-+
- /*
-  * Now redefine the EM() and E_() macros to map the enums to the strings that
-  * will be printed in the output.
-@@ -43,6 +83,60 @@
- #define E_(a, b)	{ a, b }
- 
- 
-+TRACE_EVENT(cachefiles_vfs_error,
-+	    TP_PROTO(struct cachefiles_object *obj, struct inode *backer,
-+		     int error, enum cachefiles_error_trace where),
-+
-+	    TP_ARGS(obj, backer, error, where),
-+
-+	    TP_STRUCT__entry(
-+		    __field(unsigned int,			obj	)
-+		    __field(unsigned int,			backer	)
-+		    __field(enum cachefiles_error_trace,	where	)
-+		    __field(short,				error	)
-+			     ),
-+
-+	    TP_fast_assign(
-+		    __entry->obj	= obj ? obj->debug_id : 0;
-+		    __entry->backer	= backer->i_ino;
-+		    __entry->error	= error;
-+		    __entry->where	= where;
-+			   ),
-+
-+	    TP_printk("o=%08x b=%08x %s e=%d",
-+		      __entry->obj,
-+		      __entry->backer,
-+		      __print_symbolic(__entry->where, cachefiles_error_traces),
-+		      __entry->error)
-+	    );
-+
-+TRACE_EVENT(cachefiles_io_error,
-+	    TP_PROTO(struct cachefiles_object *obj, struct inode *backer,
-+		     int error, enum cachefiles_error_trace where),
-+
-+	    TP_ARGS(obj, backer, error, where),
-+
-+	    TP_STRUCT__entry(
-+		    __field(unsigned int,			obj	)
-+		    __field(unsigned int,			backer	)
-+		    __field(enum cachefiles_error_trace,	where	)
-+		    __field(short,				error	)
-+			     ),
-+
-+	    TP_fast_assign(
-+		    __entry->obj	= obj ? obj->debug_id : 0;
-+		    __entry->backer	= backer->i_ino;
-+		    __entry->error	= error;
-+		    __entry->where	= where;
-+			   ),
-+
-+	    TP_printk("o=%08x b=%08x %s e=%d",
-+		      __entry->obj,
-+		      __entry->backer,
-+		      __print_symbolic(__entry->where, cachefiles_error_traces),
-+		      __entry->error)
-+	    );
-+
- #endif /* _TRACE_CACHEFILES_H */
- 
- /* This part must be outside protection */
-
+ static int panfrost_ioctl_submit(struct drm_device *dev, void *data,
+-- 
+2.30.2
 

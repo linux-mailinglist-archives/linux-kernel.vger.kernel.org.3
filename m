@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D5D477358
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F13B47735C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237628AbhLPNkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:40:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
+        id S237630AbhLPNlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbhLPNki (ORCPT
+        with ESMTP id S229821AbhLPNla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:40:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D101C061574;
-        Thu, 16 Dec 2021 05:40:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98A1661DEB;
-        Thu, 16 Dec 2021 13:40:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF470C36AE0;
-        Thu, 16 Dec 2021 13:40:30 +0000 (UTC)
-Date:   Thu, 16 Dec 2021 14:40:27 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Subject: Re: [PATCH v7 10/14] securityfs: Extend securityfs with namespacing
- support
-Message-ID: <20211216134027.33sprdmhol2tbctf@wittgenstein>
-References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
- <20211216054323.1707384-11-stefanb@linux.vnet.ibm.com>
+        Thu, 16 Dec 2021 08:41:30 -0500
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F606C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 05:41:28 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:d13f:527c:5504:a743])
+        by baptiste.telenet-ops.be with bizsmtp
+        id X1hT26009250X30011hTeh; Thu, 16 Dec 2021 14:41:27 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mxr0g-005QFc-MA; Thu, 16 Dec 2021 14:41:26 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mxr0g-009y1P-33; Thu, 16 Dec 2021 14:41:26 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH v2 0/2] dt-bindings: interrupt-controller: sifive,plic: Miscellaneous improvements
+Date:   Thu, 16 Dec 2021 14:41:20 +0100
+Message-Id: <cover.1639661878.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211216054323.1707384-11-stefanb@linux.vnet.ibm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 12:43:19AM -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> Extend 'securityfs' for support of IMA namespacing so that each
-> IMA (user) namespace can have its own front-end for showing the currently
-> active policy, the measurement list, number of violations and so on.
-> 
-> Drop the addition dentry reference to enable simple cleanup of dentries
-> upon umount.
-> 
-> Prevent mounting of an instance of securityfs in another user namespace
-> than it belongs to. Also, prevent accesses to directories when another
-> user namespace is active than the one that the instance of securityfs
-> belongs to.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> ---
->  security/inode.c | 37 ++++++++++++++++++++++++++++++++++---
->  1 file changed, 34 insertions(+), 3 deletions(-)
-> 
-> diff --git a/security/inode.c b/security/inode.c
-> index fee01ff4d831..a0d9f086e3d5 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -26,6 +26,29 @@
->  static struct vfsmount *init_securityfs_mount;
->  static int init_securityfs_mount_count;
->  
-> +static int securityfs_permission(struct user_namespace *mnt_userns,
-> +				 struct inode *inode, int mask)
-> +{
-> +	int err;
-> +
-> +	err = generic_permission(&init_user_ns, inode, mask);
-> +	if (!err) {
-> +		if (inode->i_sb->s_user_ns != current_user_ns())
-> +			err = -EACCES;
+	Hi all,
 
-I really think the correct semantics is to grant all callers access
-whose user namespace is the same as or an ancestor of the securityfs
-userns. It's weird to deny access to callers who are located in an
-ancestor userns.
+This patch series contains two improvements for the SiFive PLIC DT
+bindings.
 
-For example, a privileged process on the host should be allowed to setns
-to the userns of an unprivileged container and inspect its securityfs
-instance.
+Changes compared to v1[1]:
+  - Split in two patches,
+  - Improve patch description and document limit rationale.
 
-We're mostly interested to block such as scenarios where two sibling
-unprivileged containers are created in the initial userns and an fd
-proxy or something funnels a file descriptor from one sibling container
-to the another one and the receiving sibling container can use readdir()
-or openat() on this fd. (I'm not even convinced that this is actually a
-problem but stricter semantics at the beginning can't hurt. We can
-always relax this later.)
+Thanks!
+
+[1] https://lore.kernel.org/r/20211125152233.162868-1-geert@linux-m68k.org
+
+Geert Uytterhoeven (2):
+  dt-bindings: interrupt-controller: sifive,plic: Fix number of
+    interrupts
+  dt-bindings: interrupt-controller: sifive,plic: Group interrupt tuples
+
+ .../interrupt-controller/sifive,plic-1.0.0.yaml      | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+-- 
+2.25.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds

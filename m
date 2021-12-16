@@ -2,80 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD64476E5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B84476E64
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233484AbhLPJ4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 04:56:08 -0500
-Received: from smtpbg127.qq.com ([109.244.180.96]:64739 "EHLO smtpbg.qq.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233454AbhLPJ4E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:56:04 -0500
-X-QQ-mid: bizesmtp46t1639648546t1eiuno4
-Received: from localhost.localdomain (unknown [182.148.14.255])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Thu, 16 Dec 2021 17:55:42 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000C00A0000000
-X-QQ-FEAT: +FcubzMZu+TnobKZkdDu+fxyIxHuYmZYeBOhSMi1C8hoANf/t1LVAaRCWFSj+
-        uMXtU+o568Prhwpg1dYeBW2Tft0KUciqB4A4gJvPR3gF5GnWuaJzjXJCfofR8JGXnC/nL7j
-        /6u8m7riB8v6MF59mRMGQ46ei8sMFqA7xXlvR2BXEBASVD8rgkoFWcbfIXfn2ZonkI+vptP
-        9Ely+lPXfoeA5rEuvf7iyPft3aD6UNtgPded5whqLyEXUHT5v/w78rirE3KPJD5So4HC8rj
-        DbDxHv1bWYlFIxApuXAcbjc+yd1prXfTLW27OT3yg759mYDJJ9YZOCQMFJA6bqRtIbi9kJz
-        iTG9x2JysuFyY0hQJMC9OWqmHY2LlrcTnhEJuba
-X-QQ-GoodBg: 0
-From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     jyri.sarha@iki.fi
-Cc:     tomba@kernel.org, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH v3] drm/tilcdc: add const to of_device_id
-Date:   Thu, 16 Dec 2021 17:55:36 +0800
-Message-Id: <20211216095536.58577-1-wangxiang@cdjrlc.com>
-X-Mailer: git-send-email 2.34.1
+        id S233498AbhLPJ5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 04:57:10 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:48664 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233520AbhLPJ5G (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 04:57:06 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1F4391F3D5;
+        Thu, 16 Dec 2021 09:57:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639648625; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/qs9vdN+xRjPf2KjM847rLgFEPvaZLOMDkaNcOmQ168=;
+        b=haZVP4CwUHJ6qfUYg0HrUuEPBdwSchA8MxUm6At5ZqNNeXFuxcmTm1dKf9fMOAjTK1n+xy
+        yb3RVjJX0tR5iCchP78Zu0s/UmYUQtldRdK+ffJc+Ifq0v1UTsdQWX3L9rU/BjkQsZQfED
+        y/t55etkmRccGf0VvRtpSkwQ5BWLxkI=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C15032C1D2;
+        Thu, 16 Dec 2021 09:57:04 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 10:57:04 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     David Vernet <void@manifault.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, jpoimboe@redhat.com, jikos@kernel.org,
+        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
+Subject: Re: [PATCH v2] Documentation: livepatch: Add livepatch API page
+Message-ID: <YbsNcAKzRCxGqXUA@alley>
+References: <20211215174659.2332589-1-void@manifault.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215174659.2332589-1-void@manifault.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct of_device_id should normally be const.
+On Wed 2021-12-15 09:47:00, David Vernet wrote:
+> The livepatch subsystem has several exported functions and objects with
+> kerneldoc comments. Though the livepatch documentation contains
+> handwritten descriptions of all of these exported functions, they are
+> currently not pulled into the docs build using the kernel-doc directive.
+> 
+> Note that all of the handwritten API descriptions were left alone with
+> the exception of Documentation/livepatch/system-state.rst, which was
+> updated to allow the cross-referencing to work correctly. The file now
+> follows the cross-referencing formatting guidance specified in
+> Documentation/doc-guide/kernel-doc.rst. Furthermore, some comments
+> around klp_shadow_free_all() were updated to say <obj, id> rather than
+> <*, id> to match the rest of the file, and to prevent the docs build
+> from emitting an "Inline emphasis start-string without end string"
+> error.
+> 
+> --- a/kernel/livepatch/shadow.c
+> +++ b/kernel/livepatch/shadow.c
+> @@ -272,12 +272,12 @@ void klp_shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor)
+>  EXPORT_SYMBOL_GPL(klp_shadow_free);
+>  
+>  /**
+> - * klp_shadow_free_all() - detach and free all <*, id> shadow variables
+> + * klp_shadow_free_all() - detach and free all <obj, id> shadow variables
 
-Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
----
+This change is not good. The function releases all existing shadow
+variables with the given @id for any @obj. And it is not longer clear.
 
-Changes since v1
-* add const in line 63
+I guess that the primary motivation was to remove  "Inline emphasis
+start-string without end string" mentioned in the commit message.
 
-Changes since v2
-* removed line 63
+A solution would be replace '*' with something else, for example, < , id>.
+Another solution would be to describe it another way, for example:
 
- drivers/gpu/drm/tilcdc/tilcdc_drv.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ * klp_shadow_free_all() - detach and free all <obj, id> shadow variables
+ *		with the given @id.
 
-diff --git a/drivers/gpu/drm/tilcdc/tilcdc_drv.c b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-index 3ddb7c710a3d..cc567c87057d 100644
---- a/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-@@ -60,8 +60,6 @@ void tilcdc_module_cleanup(struct tilcdc_module *mod)
- 	list_del(&mod->list);
- }
- 
--static struct of_device_id tilcdc_of_match[];
--
- static int tilcdc_atomic_check(struct drm_device *dev,
- 			       struct drm_atomic_state *state)
- {
-@@ -587,7 +585,7 @@ static int tilcdc_pdev_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static struct of_device_id tilcdc_of_match[] = {
-+static const struct of_device_id tilcdc_of_match[] = {
- 		{ .compatible = "ti,am33xx-tilcdc", },
- 		{ .compatible = "ti,da850-tilcdc", },
- 		{ },
--- 
-2.34.1
+>   * @id:		data identifier
+>   * @dtor:	custom callback that can be used to unregister the variable
+>   *		and/or free data that the shadow variable points to (optional)
+>   *
+> - * This function releases the memory for all <*, id> shadow variable
+> + * This function releases the memory for all <obj, id> shadow variable
 
+Same here.
+
+>   * instances, callers should stop referencing them accordingly.
+>   */
+>  void klp_shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor)
+> @@ -288,7 +288,7 @@ void klp_shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor)
+>  
+>  	spin_lock_irqsave(&klp_shadow_lock, flags);
+>  
+> -	/* Delete all <*, id> from hash */
+> +	/* Delete all <obj, id> from hash */
+
+and here
+
+>  	hash_for_each(klp_shadow_hash, i, shadow, node) {
+>  		if (klp_shadow_match(shadow, shadow->obj, id))
+>  			klp_shadow_free_struct(shadow, dtor);
+
+BTW: There is likely the same problem in Documentation/livepatch/shadow-vars.rst.
+     I see <*, id> there as well.
+
+
+Otherwise, the patch looks fine to me.
+
+Best Regards,
+Petr

@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8CA4780D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C1D4780DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbhLPXwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:52:15 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:56274 "EHLO
+        id S229939AbhLPXwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:52:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:56316 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbhLPXwO (ORCPT
+        with ESMTP id S229914AbhLPXwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:52:14 -0500
+        Thu, 16 Dec 2021 18:52:35 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 23A2C1F37E;
-        Thu, 16 Dec 2021 23:52:13 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 89E8A1F3A1;
+        Thu, 16 Dec 2021 23:52:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639698733; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1639698754; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BrMW3JyWaNdMJ0Haf3gWky2KOkmwQPIMXLocO6ojo8o=;
-        b=DfXO/ARWHnOSgkR04rVeYWiJ00Np51WduldO55NRZGcnXX65SMlD74kOss6zNofHODwDgA
-        9lvaiLCv9vqHR8B9coVRJmVsJV4hrpsvFAI+ZRD8oySU+GPGwFbk2Sfi3fjxe611RZX2sy
-        JJ58RW5XYx5L6c36qlay8m26Fik9QZg=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F0tABiaZQk9B5WXZcUDiE47XPd+0Z5cOdU9e2/lma0U=;
+        b=KZSwyyuWY2VWvIvcGn7LPjf7u5kF+as1hgafoHApqb8TZij/gCuDcHnOrqNxf4dj9KzGQO
+        hS1mjVQL+/Xytno7nBdjSb1t77v9Df73wvzlVNEPUS6+ZXU/rj7+hWHHYH6VXmyoZ7uaS4
+        sN6qeUEEmgBiDSHl+rBnJ2X/3O7629M=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639698733;
+        s=susede2_ed25519; t=1639698754;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BrMW3JyWaNdMJ0Haf3gWky2KOkmwQPIMXLocO6ojo8o=;
-        b=6hWDofoY++geU4rja8Ev6OXOahSMjRP23VYgJmDPJZuctOB7qpBjTDQv6xmt0cSPnEqJjA
-        nJp1F5+SG8xxooBw==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F0tABiaZQk9B5WXZcUDiE47XPd+0Z5cOdU9e2/lma0U=;
+        b=0qMSxxYEfOQW5SiOR1a3Dnhzh13qBxtxIBrYxfHWzD6RFMuDAHw9EOwbCpkuTxM3+gfVlt
+        Fx9Nb/8ydBgKN9Bg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F1B5113EFD;
-        Thu, 16 Dec 2021 23:52:09 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 92E1B13EFD;
+        Thu, 16 Dec 2021 23:52:31 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id XNGLKSnRu2EvWwAAMHmgww
-        (envelope-from <neilb@suse.de>); Thu, 16 Dec 2021 23:52:09 +0000
-Subject: [PATCH 00/18 V2] Repair SWAP-over-NFS
+        id 4DHbEz/Ru2FSWwAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 16 Dec 2021 23:52:31 +0000
+Subject: [PATCH 03/18] MM: use ->swap_rw for reads from SWP_FS_OPS swap-space
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -56,7 +58,9 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Fri, 17 Dec 2021 10:48:22 +1100
-Message-ID: <163969801519.20885.3977673503103544412.stgit@noble.brown>
+Message-ID: <163969850289.20885.1044395970457169316.stgit@noble.brown>
+In-Reply-To: <163969801519.20885.3977673503103544412.stgit@noble.brown>
+References: <163969801519.20885.3977673503103544412.stgit@noble.brown>
 User-Agent: StGit/0.23
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -65,102 +69,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-swap-over-NFS currently has a variety of problems.
+To submit an async read with ->swap_rw() we need to allocate
+a structure to hold the kiocb and other details.  swap_readpage() cannot
+handle transient failure, so create a mempool to provide the structures.
 
-swap writes call generic_write_checks(), which always fails on a swap
-file, so it completely fails.
-Even without this, various deadlocks are possible - largely due to
-improvements in NFS memory allocation (using NOFS instead of ATOMIC)
-which weren't tested against swap-out.
-
-NFS is the only filesystem that has supported fs-based swap IO, and it
-hasn't worked for several releases, so now is a convenient time to clean
-up the swap-via-filesystem interfaces - we cannot break anything !
-
-So the first few patches here clean up and improve various parts of the
-swap-via-filesystem code.  ->activate_swap() is given a cleaner
-interface, a new ->swap_rw is introduced instead of burdening
-->direct_IO, etc.
-
-Current swap-to-filesystem code only ever submits single-page reads and
-writes.  These patches change that to allow multi-page IO when adjacent
-requests are submitted.  Writes are also changed to be async rather than
-sync.  This substantially speeds up write throughput for swap-over-NFS.
-
-Some of the NFS patches can land independently of the MM patches.  A few
-require the MM patches to land first.
-
-Thanks,
-NeilBrown
-
-
+Signed-off-by: NeilBrown <neilb@suse.de>
 ---
+ mm/page_io.c  |   58 +++++++++++++++++++++++++++++++++++++++++++++++++++------
+ mm/swap.h     |    1 +
+ mm/swapfile.c |    5 +++++
+ 3 files changed, 58 insertions(+), 6 deletions(-)
 
-NeilBrown (18):
-      Structural cleanup for filesystem-based swap
-      MM: create new mm/swap.h header file.
-      MM: use ->swap_rw for reads from SWP_FS_OPS swap-space
-      MM: perform async writes to SWP_FS_OPS swap-space
-      MM: reclaim mustn't enter FS for SWP_FS_OPS swap-space
-      MM: submit multipage reads for SWP_FS_OPS swap-space
-      MM: submit multipage write for SWP_FS_OPS swap-space
-      MM: Add AS_CAN_DIO mapping flag
-      NFS: rename nfs_direct_IO and use as ->swap_rw
-      NFS: swap IO handling is slightly different for O_DIRECT IO
-      SUNRPC/call_alloc: async tasks mustn't block waiting for memory
-      SUNRPC/auth: async tasks mustn't block waiting for memory
-      SUNRPC/xprt: async tasks mustn't block waiting for memory
-      SUNRPC: remove scheduling boost for "SWAPPER" tasks.
-      NFS: discard NFS_RPC_SWAPFLAGS and RPC_TASK_ROOTCREDS
-      SUNRPC: improve 'swap' handling: scheduling and PF_MEMALLOC
-      NFSv4: keep state manager thread active if swap is enabled
-      NFS: swap-out must always use STABLE writes.
+diff --git a/mm/page_io.c b/mm/page_io.c
+index a9fe5de5dc32..47d7e7866e33 100644
+--- a/mm/page_io.c
++++ b/mm/page_io.c
+@@ -283,6 +283,23 @@ static void bio_associate_blkg_from_page(struct bio *bio, struct page *page)
+ #define bio_associate_blkg_from_page(bio, page)		do { } while (0)
+ #endif /* CONFIG_MEMCG && CONFIG_BLK_CGROUP */
+ 
++struct swap_iocb {
++	struct kiocb		iocb;
++	struct bio_vec		bvec;
++};
++static mempool_t *sio_pool;
++
++int sio_pool_init(void)
++{
++	if (!sio_pool)
++		sio_pool = mempool_create_kmalloc_pool(
++			SWAP_CLUSTER_MAX, sizeof(struct swap_iocb));
++	if (sio_pool)
++		return 0;
++	else
++		return -ENOMEM;
++}
++
+ int __swap_writepage(struct page *page, struct writeback_control *wbc,
+ 		bio_end_io_t end_write_func)
+ {
+@@ -353,6 +370,23 @@ int __swap_writepage(struct page *page, struct writeback_control *wbc,
+ 	return 0;
+ }
+ 
++static void sio_read_complete(struct kiocb *iocb, long ret)
++{
++	struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
++	struct page *page = sio->bvec.bv_page;
++
++	if (ret != 0 && ret != PAGE_SIZE) {
++		SetPageError(page);
++		ClearPageUptodate(page);
++		pr_alert_ratelimited("Read-error on swap-device\n");
++	} else {
++		SetPageUptodate(page);
++		count_vm_event(PSWPIN);
++	}
++	unlock_page(page);
++	mempool_free(sio, sio_pool);
++}
++
+ int swap_readpage(struct page *page, bool synchronous)
+ {
+ 	struct bio *bio;
+@@ -378,13 +412,25 @@ int swap_readpage(struct page *page, bool synchronous)
+ 	}
+ 
+ 	if (data_race(sis->flags & SWP_FS_OPS)) {
+-		//struct file *swap_file = sis->swap_file;
+-		//struct address_space *mapping = swap_file->f_mapping;
++		struct file *swap_file = sis->swap_file;
++		struct address_space *mapping = swap_file->f_mapping;
++		struct iov_iter from;
++		struct swap_iocb *sio;
++		loff_t pos = page_file_offset(page);
++
++		sio = mempool_alloc(sio_pool, GFP_KERNEL);
++		init_sync_kiocb(&sio->iocb, swap_file);
++		sio->iocb.ki_pos = pos;
++		sio->iocb.ki_complete = sio_read_complete;
++		sio->bvec.bv_page = page;
++		sio->bvec.bv_len = PAGE_SIZE;
++		sio->bvec.bv_offset = 0;
++
++		iov_iter_bvec(&from, READ, &sio->bvec, 1, PAGE_SIZE);
++		ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
++		if (ret != -EIOCBQUEUED)
++			sio_read_complete(&sio->iocb, ret);
+ 
+-		/* This needs to use ->swap_rw() */
+-		ret = -EINVAL;
+-		if (!ret)
+-			count_vm_event(PSWPIN);
+ 		goto out;
+ 	}
+ 
+diff --git a/mm/swap.h b/mm/swap.h
+index 13e72a5023aa..128a1d3e5558 100644
+--- a/mm/swap.h
++++ b/mm/swap.h
+@@ -3,6 +3,7 @@
+ #include <linux/blk_types.h> /* for bio_end_io_t */
+ 
+ /* linux/mm/page_io.c */
++int sio_pool_init(void);
+ int swap_readpage(struct page *page, bool do_poll);
+ int swap_writepage(struct page *page, struct writeback_control *wbc);
+ void end_swap_bio_write(struct bio *bio);
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index f23d9ff21cf8..43539be38e68 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -2401,6 +2401,11 @@ static int setup_swap_extents(struct swap_info_struct *sis, sector_t *span)
+ 		if (ret < 0)
+ 			return ret;
+ 		sis->flags |= SWP_ACTIVATED;
++		if ((sis->flags & SWP_FS_OPS) &&
++		    sio_pool_init() != 0) {
++			destroy_swap_extents(sis);
++			return -ENOMEM;
++		}
+ 		return ret;
+ 	}
+ 
 
-
- drivers/block/loop.c            |   4 +-
- fs/fcntl.c                      |   5 +-
- fs/inode.c                      |   3 +
- fs/nfs/direct.c                 |  56 ++++++----
- fs/nfs/file.c                   |  25 +++--
- fs/nfs/inode.c                  |   1 +
- fs/nfs/nfs4_fs.h                |   1 +
- fs/nfs/nfs4proc.c               |  20 ++++
- fs/nfs/nfs4state.c              |  39 ++++++-
- fs/nfs/read.c                   |   4 -
- fs/nfs/write.c                  |   2 +
- fs/open.c                       |   2 +-
- fs/overlayfs/file.c             |  10 +-
- include/linux/fs.h              |   2 +-
- include/linux/nfs_fs.h          |  11 +-
- include/linux/nfs_xdr.h         |   2 +
- include/linux/pagemap.h         |   3 +-
- include/linux/sunrpc/auth.h     |   1 +
- include/linux/sunrpc/sched.h    |   1 -
- include/linux/swap.h            | 121 --------------------
- include/linux/writeback.h       |   7 ++
- include/trace/events/sunrpc.h   |   1 -
- mm/madvise.c                    |   9 +-
- mm/memory.c                     |   3 +-
- mm/mincore.c                    |   1 +
- mm/page_alloc.c                 |   1 +
- mm/page_io.c                    | 189 ++++++++++++++++++++++++++------
- mm/shmem.c                      |   1 +
- mm/swap.h                       | 140 +++++++++++++++++++++++
- mm/swap_state.c                 |  32 ++++--
- mm/swapfile.c                   |   6 +
- mm/util.c                       |   1 +
- mm/vmscan.c                     |  31 +++++-
- net/sunrpc/auth.c               |   8 +-
- net/sunrpc/auth_gss/auth_gss.c  |   6 +-
- net/sunrpc/auth_unix.c          |  10 +-
- net/sunrpc/clnt.c               |   7 +-
- net/sunrpc/sched.c              |  29 +++--
- net/sunrpc/xprt.c               |  19 ++--
- net/sunrpc/xprtrdma/transport.c |  10 +-
- net/sunrpc/xprtsock.c           |   8 ++
- 41 files changed, 558 insertions(+), 274 deletions(-)
- create mode 100644 mm/swap.h
-
---
-Signature
 

@@ -2,37 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4D647753F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 768D9477542
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238224AbhLPPBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:01:41 -0500
+        id S238239AbhLPPBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:01:46 -0500
 Received: from mga02.intel.com ([134.134.136.20]:18774 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232565AbhLPPBk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:01:40 -0500
+        id S238229AbhLPPBp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 10:01:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639666900; x=1671202900;
-  h=from:to:cc:subject:date:message-id;
-  bh=mjCvYYPweWor1hTfJAHZ7Ke1fpQNjdFPojo+gum/cvc=;
-  b=VGoGFQZDlhZ4woRAt14FRYTlvw+xRiRLL8cOYXRtPCtTaF/rXdYg4LBq
-   2S5xsl1/hGBtzghljN+I7YmHnNKMFKkkQm0klUcl/9P0/RUrXzp3YDrJg
-   o8rLym819ST+n96tKWzgebmpuMDg/pW35v6SyRcgQqrSjTYJ3BqYXImi5
-   MgtlN//eOkwF89MusBsFvGhd5RJeroXvpIPKyIS5ATueacHsbpj1VFX1J
-   oL23mTLDCsid/YcyfPhay+d69TvIn/raUS0535khwGuFkcS1EmGFy0AgU
-   ptpW+RNKsm7O5QkyQM0di8c4CpZP3u24/XLDyng0dr8CMtC7bkaLc9jHB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226796781"
+  t=1639666905; x=1671202905;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=KvCUyEQ55/i6nDdTLLmDG5tQ+sd+hr5mYW5ErXdnTBE=;
+  b=JgW1iq19z8VtmeRQuTk8Ye+D9t0lkkoymHPkb1ajkpjaLnPMP12YPTmr
+   IGHk9xjHOLjWmyDp6ZMeBR/34CyWxjojIRDHqWfN6DnuAsSTQQoEh5AvL
+   Y/PXgn9dRwJ5eRQci61fZQVpMRt4CzESiFdMkLs712ZFx4DcUs8wyuXP0
+   0ZwF9NcgG2p0REIIxtxJsuy0gyworGBsZqZGI5ddW89yBf/NzkKwjdzG1
+   pZJp2V3zv/igC4LMunpy0S9dR/G1IuGMTzBj+lhCO59Qq3CckHqxTWJqs
+   /kGll0RWZineuCwzhfnfw/MyCXfMUvWVlhpRaCfYsPDiOM1v2JNCjGE/M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226796805"
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="226796781"
+   d="scan'208";a="226796805"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 07:01:04 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 07:01:08 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="519282679"
+   d="scan'208";a="519282698"
 Received: from inlubt0316.iind.intel.com ([10.191.20.213])
-  by orsmga008.jf.intel.com with ESMTP; 16 Dec 2021 07:01:01 -0800
+  by orsmga008.jf.intel.com with ESMTP; 16 Dec 2021 07:01:04 -0800
 From:   lakshmi.sowjanya.d@intel.com
 To:     linus.walleij@linaro.org
 Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
@@ -40,60 +41,172 @@ Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         andriy.shevchenko@linux.intel.com, tamal.saha@intel.com,
         pandith.n@intel.com, kenchappa.demakkanavar@intel.com,
         lakshmi.sowjanya.d@intel.com
-Subject: [PATCH v3 0/2] Add pinctrl support for Intel Thunder Bay SoC
-Date:   Thu, 16 Dec 2021 20:30:58 +0530
-Message-Id: <20211216150100.21171-1-lakshmi.sowjanya.d@intel.com>
+Subject: [PATCH v3 1/2] dt-bindings: pinctrl: Add bindings for Intel Thunderbay pinctrl driver
+Date:   Thu, 16 Dec 2021 20:30:59 +0530
+Message-Id: <20211216150100.21171-2-lakshmi.sowjanya.d@intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211216150100.21171-1-lakshmi.sowjanya.d@intel.com>
+References: <20211216150100.21171-1-lakshmi.sowjanya.d@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
 
-Hi,
+Add Device Tree bindings documentation and an entry in MAINTAINERS file
+for Intel Thunder Bay SoC's pin controller.
 
-This patch set enables the support for the integrated pin controller in
-the Intel Thunder Bay SoC.
-
-Patch 1 holds the relevant Device Tree bindings documentation and an
-entry in MAINTAINERS file.
-Patch 2 holds the implementation of pinctrl driver.
-
-Keem Bay and Thunder Bay platforms doesn't provide identical feature set
-and register interfaces. There is no successor platform after Keem Bay
-and Thunder Bay. So, having a uniform framework for different IP will
-not give much advantage in this case and we prefer to have this
-implementation for Thunder Bay platform as a separate driver.
-
-Added reference to pincfg-node.yaml in the patternProperties.
-
-Please help to review this patch set.
-
-Thanks,
-Sowjanya
-
-Changes from v1:
- - Removed hw specific configurations.
- - Add set_config.
- - Removed gpiochip_add_pin_range and added the same in device tree.
- - Add gpio-ranges property in yaml file.
-
-Changes from v2:
- - Add ref to pincfg-node.yaml in thunderbay.yaml file.
-
-Lakshmi Sowjanya D (2):
-  dt-bindings: pinctrl: Add bindings for Intel Thunderbay pinctrl driver
-  pinctrl: Add Intel Thunder Bay pinctrl driver
-
- .../pinctrl/intel,pinctrl-thunderbay.yaml     |  122 ++
- MAINTAINERS                                   |    5 +
- drivers/pinctrl/Kconfig                       |   19 +
- drivers/pinctrl/Makefile                      |    1 +
- drivers/pinctrl/pinctrl-thunderbay.c          | 1322 +++++++++++++++++
- 5 files changed, 1469 insertions(+)
+Signed-off-by: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+---
+ .../pinctrl/intel,pinctrl-thunderbay.yaml     | 122 ++++++++++++++++++
+ MAINTAINERS                                   |   5 +
+ 2 files changed, 127 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/pinctrl/intel,pinctrl-thunderbay.yaml
- create mode 100644 drivers/pinctrl/pinctrl-thunderbay.c
 
+diff --git a/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-thunderbay.yaml b/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-thunderbay.yaml
+new file mode 100644
+index 000000000000..528f0d8445dd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/intel,pinctrl-thunderbay.yaml
+@@ -0,0 +1,122 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/intel,pinctrl-thunderbay.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Intel Thunder Bay pin controller Device Tree Bindings
++
++maintainers:
++  - Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
++
++description: |
++  Intel Thunder Bay SoC integrates a pin controller which enables control
++  of pin directions, input/output values and configuration
++  for a total of 67 pins.
++
++properties:
++  compatible:
++    const: intel,thunderbay-pinctrl
++
++  reg:
++    maxItems: 1
++
++  gpio-controller: true
++
++  '#gpio-cells':
++    const: 2
++
++  gpio-ranges:
++    maxItems: 1
++
++  interrupts:
++    description:
++      Specifies the interrupt lines to be used by the controller.
++    maxItems: 2
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    const: 2
++
++patternProperties:
++  '^gpio@[0-9a-f]*$':
++    type: object
++
++    description:
++      Child nodes can be specified to contain pin configuration information,
++      which can then be utilized by pinctrl client devices.
++      The following properties are supported.
++    $ref: pincfg-node.yaml#
++
++    properties:
++      pins:
++        description: |
++          The name(s) of the pins to be configured in the child node.
++          Supported pin names are "GPIO0" up to "GPIO66".
++
++      bias-disable: true
++
++      bias-pull-down: true
++
++      bias-pull-up: true
++
++      drive-strength:
++        description: Drive strength for the pad.
++        enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
++
++      bias-bus-hold:
++        type: boolean
++
++      input-schmitt-enable:
++        type: boolean
++
++      slew-rate:
++        description: GPIO slew rate control.
++                      0 - Slow
++                      1 - Fast
++        enum: [0, 1]
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - gpio-controller
++  - '#gpio-cells'
++  - gpio-ranges
++  - interrupts
++  - interrupt-controller
++  - '#interrupt-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    // Example 1
++    pinctrl0: gpio@0 {
++        compatible = "intel,thunderbay-pinctrl";
++        reg = <0x600b0000 0x88>;
++        gpio-controller;
++        #gpio-cells = <0x2>;
++        gpio-ranges = <&pinctrl0 0 0 67>;
++        interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++    };
++
++    // Example 2
++    pinctrl1: gpio@1 {
++        compatible = "intel,thunderbay-pinctrl";
++        reg = <0x600c0000 0x88>;
++        gpio-controller;
++        #gpio-cells = <0x2>;
++        gpio-ranges = <&pinctrl1 0 0 53>;
++        interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 13f9a84a617e..db744ba259e4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15127,6 +15127,11 @@ L:	linux-omap@vger.kernel.org
+ S:	Maintained
+ F:	drivers/pinctrl/pinctrl-single.c
+ 
++PIN CONTROLLER - THUNDERBAY
++M:	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
++S:	Supported
++F:	drivers/pinctrl/pinctrl-thunderbay.c
++
+ PKTCDVD DRIVER
+ M:	linux-block@vger.kernel.org
+ S:	Orphan
 -- 
 2.17.1
 

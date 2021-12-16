@@ -2,145 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A56C2478042
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CB6478045
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:04:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236691AbhLPXD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S236941AbhLPXEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:04:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236223AbhLPXD5 (ORCPT
+        with ESMTP id S236531AbhLPXEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:03:57 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BD9C06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:03:56 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id z7so1005452edc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:03:56 -0800 (PST)
+        Thu, 16 Dec 2021 18:04:50 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA275C06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:04:50 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id s144so395905vkb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:04:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4XGBi9AWqlgW2iEFwQL1/1nQ3YHkq178Ji39UpQv5Mc=;
-        b=5Z/zpo/llfSzl3vtey+5DTAVBphRj7/CDJ9pOYMjp3eqjbJXmr/AEdLxoqB69mFv5j
-         ZpwLQI2rHW7KiiUd8nvbKYaBDF7hBvG1sITJkCnUq2r3HhLPikA52eYtnpIS8WB94HPh
-         K5++om3EAiuvbLWowQ4mrDzb6BJQUbeomwO4G5kkrc/hm8MyeVdr3IdRfWVlRIHsBnB0
-         SZDB77wt9U079h1sU4FLwKwQ2VBgNHae7A/yaW8mYjJy5az1ZTi8VDdO1vC9woQKGaFc
-         bM2PAcIX0LN3bauj8SGE+llAKBWqtX8LLgNyFd3MnoXhKqBccaqVcOp90/uwWN21dVsC
-         tW1A==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=62Uz9CtJjse1+mi3hhz9xxMLxgwHg1IYiyqR2g0WvAA=;
+        b=oPpXX7fgyAeN9ysmwYzwz32+GFqY/Iii0AaKKKG+n0F9HkkkErU2yygWDqsaUCYycZ
+         PcNZbJ12SXX3b3Ku2pVI0MO8fMqE5E7ZnTAgG8m/oSqCbVuVnCwPSgHfCP6PtW8k3QeN
+         m640crZ1dsbJ0nS1wTE0RVThYDu93z94C8BXBYq4A1y+1pujPBnx/afeq5nwSzcA1aMU
+         BbuSP5Mr1hR29FbnlS+jkOci7VnaFa2W/yi17LxpDiKDriiemUVO/gNl2Bc4Ewf8hLog
+         NqD1KMoJHN4h8hcOO/JPmJzzFbg6N1ey9V8xhj7D87bcKMvi/NEsMJOKW7LmZbiMbR32
+         8VHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4XGBi9AWqlgW2iEFwQL1/1nQ3YHkq178Ji39UpQv5Mc=;
-        b=s9bZAFVeLRUT9Q1BvbrCeWuHuf/MoiY2UQbgN4/CGYyAR67KeXuOHjb5vhgev8qL+i
-         85lY96RAnOes1niyh+Xm22bj75cfiOFB7O6f/o0hWC7wsfRLaq4O0k+vt9zVvTBBfY7y
-         ZSpqGRC5zXa/JWb9e8pMgHbQUdzikwe5ZqEE9ZhKIb+4lX9f1+TLVFYgecrC5R4sP+Zq
-         ofKNcrCjRAdDmsuNewsDaYRD5CMhyD8GCWjkgvjsdIr3S0rZgNzz4RiyR6HvAU31Os7l
-         0IrdVIx+i9dey0Hwc9w+xkWPwNmw9as/vZXu6eIsEp5HDdcJHS6EVc9sg23C9xumBCuw
-         zeLQ==
-X-Gm-Message-State: AOAM530nmToxjqOF7sM7Tfgahpiku3mDWkQu8Gs/T1O8U8JyXzalj3PO
-        ZLmSckFaSjCrREZzVu7ifyrMvXKOu2qZRoZgBXNCig==
-X-Google-Smtp-Source: ABdhPJwik5gP8WcxT/LlRWowNvewmqUiNaIiabdowVwZ57bu4+JUk4W5a8admDXC7cAvMFqmgEIUFgnO/YFxPYict7s=
-X-Received: by 2002:a17:907:9608:: with SMTP id gb8mr243974ejc.301.1639695835285;
- Thu, 16 Dec 2021 15:03:55 -0800 (PST)
+         :message-id:subject:to;
+        bh=62Uz9CtJjse1+mi3hhz9xxMLxgwHg1IYiyqR2g0WvAA=;
+        b=Prq6GmTXXusR4rx+wwd7SZyCQIzbX/MYEWG7xT5OYNWVUclFFhefbJ+5DDsyY6XEX9
+         Ct/Nr57HxZhTXQ+yKyxdBGV11zLHh06zexcDaji0s12i2hWfLu6+Vuqg7JkQBraL7WTk
+         t+e498+60s6wqc6ddoBQj5nY4UwKGck4JmeWACQg3g9AcJesljoR8ECvrMJgAd+llDkO
+         1K5pHz/Nkolk7YB/rQVDxRlTzGiCFJiQfzKWmb+NM8T1ciD3a5/9bHdGaYOS6eHVqZID
+         t97q78Eiunf1dQXqsF9Db7cKWaDfp05VU5kNQo6Vz1YZhIfoZGqqYX1fPCHt0UQZGXvx
+         Spzw==
+X-Gm-Message-State: AOAM532XWIVXcVfJMXvkhVlXQH+wtEKCV/kaTI00kZsZVor/x9DMPvpj
+        yOIIqytlHOKEnC+7piuTNzRsw/vX4EqupngSJBLSig==
+X-Google-Smtp-Source: ABdhPJw2TfUn4th8xuwGPyMcVF2I9HdXvfjfdX6cQIhp0D9opZOAXKvCtBGcWZWf6KrSbEYAnCgWoautwgTD+eidIEM=
+X-Received: by 2002:a05:6122:c9b:: with SMTP id ba27mr176340vkb.14.1639695889846;
+ Thu, 16 Dec 2021 15:04:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20211216111256.2362683-1-aford173@gmail.com> <20211216111256.2362683-9-aford173@gmail.com>
- <YbuqpayfYVPp1dTe@robh.at.kernel.org> <CAHCN7xLGeu4=CwqCv8BBowuQQ5t9iFDQV0adPNmy9dufW8soAg@mail.gmail.com>
-In-Reply-To: <CAHCN7xLGeu4=CwqCv8BBowuQQ5t9iFDQV0adPNmy9dufW8soAg@mail.gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Thu, 16 Dec 2021 20:03:43 -0300
-Message-ID: <CAAEAJfCNQJ+fQzTMM27usxaHhVNa5ime62UKvvbn1U=LSFNg_A@mail.gmail.com>
-Subject: Re: [PATCH V2 08/10] dt-bindings: media: nxp,imx8mq-vpu: Add support
- for G1 and G2 on imx8mm
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
+References: <20211212181057.20210-1-semen.protsenko@linaro.org> <YbuuFztynhVUcyTM@kunai>
+In-Reply-To: <YbuuFztynhVUcyTM@kunai>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 17 Dec 2021 01:04:38 +0200
+Message-ID: <CAPLW+4mB5=ZfVPBAyV+yMr6xZif_kqtPTwO_8dMmVXyntE-4yg@mail.gmail.com>
+Subject: Re: [PATCH] i2c: exynos5: Fix getting the optional clock
+To:     Wolfram Sang <wsa@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
-
-On Thu, 16 Dec 2021 at 18:21, Adam Ford <aford173@gmail.com> wrote:
+On Thu, 16 Dec 2021 at 23:22, Wolfram Sang <wsa@kernel.org> wrote:
 >
-> On Thu, Dec 16, 2021 at 3:07 PM Rob Herring <robh@kernel.org> wrote:
+> On Sun, Dec 12, 2021 at 08:10:57PM +0200, Sam Protsenko wrote:
+> > "hsi2c_pclk" clock is optional and may not be present for some SoCs
+> > supported by this driver. Nevertheless, in case the clock is provided
+> > but some error happens during its getting, that error should be handled
+> > properly. Use devm_clk_get_optional() API for that. Also report possible
+> > errors using dev_err_probe() to handle properly -EPROBE_DEFER error (if
+> > clock provider is not ready by the time I2C probe function is executed).
 > >
-> > On Thu, Dec 16, 2021 at 05:12:53AM -0600, Adam Ford wrote:
-> > > The i.MX8M mini appears to have a similar G1 and G2 decoder but the
-> > > post-procesing isn't present, so different compatible flags are requred.
-> >
-> > post-processing
-> >
-> > > Since all the other parameters are the same with imx8mq, just add
-> > > the new compatible flags to nxp,imx8mq-vpu.yaml.
-> > >
-> > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> > > index c1e157251de7..b1f24c48c73b 100644
-> > > --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> > > +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> > > @@ -5,7 +5,7 @@
-> > >  $id: "http://devicetree.org/schemas/media/nxp,imx8mq-vpu.yaml#"
-> > >  $schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > >
-> > > -title: Hantro G1/G2 VPU codecs implemented on i.MX8MQ SoCs
-> > > +title: Hantro G1/G2 VPU codecs implemented on i.MX8MQ/i.MX8MM SoCs
-> >
-> > Just 'i.MX8' so we don't have to change this everytime?
+> > Fixes: c93ac09df2a8 ("i2c: exynos5: Add bus clock support")
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 >
-> Are you OK with i.MX8M?  8MQ, 8MM, and 8MP all appear to have G1 and
-> G2 decoders.  The i.MX8 is different.
-> >
-> > >
-> > >  maintainers:
-> > >    - Philipp Zabel <p.zabel@pengutronix.de>
-> > > @@ -20,6 +20,8 @@ properties:
-> > >          deprecated: true
-> > >        - const: nxp,imx8mq-vpu-g1
-> > >        - const: nxp,imx8mq-vpu-g2
-> > > +      - const: nxp,imx8mm-vpu-g1
-> > > +      - const: nxp,imx8mm-vpu-g2
-> >
-> > Not compatible with the imx8mq variants?
->
-> No, the structures associated with these compatible flags telling the
-> driver what features are available have options for the post-processor
-> in the 8MQ which are not present in the 8MM.
+> Applied to for-next, thanks! But I needed to fix the Fixes tag?
 >
 
-Just as G1 and G2 are different blocks, their "post-processor"
-features are really different too.
-
-The G2 core typically produces a tiled format, NV12_4L4,
-and it an inline post-processor to convert that to linear NV12.
-
-How does this work on the 8MM? What pixel format does it
-produce natively?
-
-It's hard to imagine the G2 block doesn't do linear NV12,
-so I'm inclined to think it has that post-processing feature.
-
-Thanks,
-Ezequiel
+Ah, sorry about that! I probably looked at some other tree. Thanks for applying!

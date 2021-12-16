@@ -2,127 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAB5477BFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23739477C00
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237339AbhLPSwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:52:49 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:38319 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236404AbhLPSws (ORCPT
+        id S238106AbhLPSxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:53:19 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:38002 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234132AbhLPSxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:52:48 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFLpR0X0tz4xbd;
-        Fri, 17 Dec 2021 05:52:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639680767;
-        bh=JcA6rBDWH7m1IIVYFKTnEzPJgaAJKfG/8CKZ4GroV6Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tmgRB7iwnr10U7s6thG0ztlDXZKc615Smbht4SBXRQRnKzv4h42KXvTp45trYrufA
-         2U7ah7VnRYZCr9My/E2oh3aCuYWIZw9VYGmclCUZdpF07Ly3Ymgb+xqzxPS4u/qtB9
-         /DMNXXPDbuVFwSD9GhXgvb0oMRPL8adbbqAhNkTHXBHBgWLv3eFo75pILAw/6+SizH
-         lfp2B4ycwMVLOgiZisYTq+v4N/XIQX9JCXVBkkoiqSr/ELmTnGnUDO5qEVCaXUkIK9
-         k8m60Ta7ZUW/I4oZoZxLO54yISukGv0ebWN9m3zpNIGxg6KIM5vwQ5AAB9Eu3dSqk/
-         LlXC0pYgi2O1w==
-Date:   Fri, 17 Dec 2021 05:52:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the kvm tree
-Message-ID: <20211217055246.2e5fdf11@canb.auug.org.au>
+        Thu, 16 Dec 2021 13:53:18 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BGIqwr1038969;
+        Thu, 16 Dec 2021 12:52:58 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1639680778;
+        bh=Kt++jYH6T4k4HcW+Vzc/u+Ene+izPR3bx5dnQKR0r5Y=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=meBizeFsaCrRe83Rfm+VjfYFCgklCnXlb9wfP9lmJQfAIx6ABBq663/69oI3AesxO
+         e61R5TWihCimtgxl1s5lUO0d90AfTGyDNdBsREdUrz8kFt+H1dMSWR0mBnnq4UdgKj
+         X1CU2Bb12ZPxdErdXR1Sf8tbr1tgaLi0Dnw9qQDE=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BGIqwe5096585
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 16 Dec 2021 12:52:58 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 16
+ Dec 2021 12:52:57 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 16 Dec 2021 12:52:57 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BGIquSl115696;
+        Thu, 16 Dec 2021 12:52:57 -0600
+Date:   Fri, 17 Dec 2021 00:22:56 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] mtd: spi-nor: micron-st: make mt25ql02g/mt25qu02g
+ match more specific, add 4B opcodes
+Message-ID: <20211216185254.pt3quvb4wkzou6wh@ti.com>
+References: <a69181ccf225424a8bd11349aad0df7face9715e.1633607826.git.matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9x+=96Rt4RXq83Eda9F21Uw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <a69181ccf225424a8bd11349aad0df7face9715e.1633607826.git.matthias.schiffer@ew.tq-group.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/9x+=96Rt4RXq83Eda9F21Uw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Matthias,
 
-Hi all,
+On 07/10/21 02:08PM, Matthias Schiffer wrote:
+> Change the mt25ql02g/mt25qu02g entries to include SPI_NOR_4B_OPCODES. In
+> addition, the SPI_NOR_DUAL_READ flag is added to mt25ql02g; this seems
+> to have been an accidental omission, as mt25ql02g and mt25qu02g should
+> support the same features.
 
-Commits
+The way flags are specified are changed a bit. See [0]. Please re-roll 
+your patch to use the new flag types. If this flash supports SFDP you 
+should ideally just need to set the sfdp flag to true and the core 
+should take care of the rest. Test reports with the new changes would be 
+much appreciated :-)
 
-  244893fa2859 ("KVM: Dynamically allocate "new" memslots from the get-go")
-  0f9bdef3d933 ("KVM: Wait 'til the bitter end to initialize the "new" mems=
-lot")
-  44401a204734 ("KVM: Optimize overlapping memslots check")
-  f4209439b522 ("KVM: Optimize gfn lookup in kvm_zap_gfn_range()")
-  bcb63dcde829 ("KVM: Call kvm_arch_flush_shadow_memslot() on the old slot =
-in kvm_invalidate_memslot()")
-  a54d806688fe ("KVM: Keep memslots in tree-based structures instead of arr=
-ay-based ones")
-  6a656832aa75 ("KVM: s390: Introduce kvm_s390_get_gfn_end()")
-  ed922739c919 ("KVM: Use interval tree to do fast hva lookup in memslots")
-  26b8345abc75 ("KVM: Resolve memslot ID via a hash table instead of via a =
-static array")
-  1e8617d37fc3 ("KVM: Move WARN on invalid memslot index to update_memslots=
-()")
-  c928bfc2632f ("KVM: Integrate gfn_to_memslot_approx() into search_memslot=
-s()")
-  f5756029eef5 ("KVM: x86: Use nr_memslot_pages to avoid traversing the mem=
-slots array")
-  e0c2b6338ac8 ("KVM: x86: Don't call kvm_mmu_change_mmu_pages() if the cou=
-nt hasn't changed")
-  7cd08553ab10 ("KVM: Don't make a full copy of the old memslot in __kvm_se=
-t_memory_region()")
-  ec5c86976674 ("KVM: s390: Skip gfn/size sanity checks on memslot DELETE o=
-r FLAGS_ONLY")
-  77aedf26fe5d ("KVM: x86: Don't assume old/new memslots are non-NULL at me=
-mslot commit")
-  07921665a651 ("KVM: Use prepare/commit hooks to handle generic memslot me=
-tadata updates")
-  6a99c6e3f52a ("KVM: Stop passing kvm_userspace_memory_region to arch mems=
-lot hooks")
-  d01495d4cffb ("KVM: RISC-V: Use "new" memslot instead of userspace memory=
- region")
-  9d7d18ee3f48 ("KVM: x86: Use "new" memslot instead of userspace memory re=
-gion")
-  cf5b486922dc ("KVM: s390: Use "new" memslot instead of userspace memory r=
-egion")
-  eaaaed137ecc ("KVM: PPC: Avoid referencing userspace memory region in mem=
-slot updates")
-  3b1816177bfe ("KVM: MIPS: Drop pr_debug from memslot commit to avoid usin=
-g "mem"")
-  509c594ca2dc ("KVM: arm64: Use "new" memslot instead of userspace memory =
-region")
-  537a17b31493 ("KVM: Let/force architectures to deal with arch specific me=
-mslot data")
-  ce5f0215620c ("KVM: Use "new" memslot's address space ID instead of dedic=
-ated param")
-  4e4d30cb9b87 ("KVM: Resync only arch fields when slots_arch_lock gets rea=
-cquired")
-  47ea7d900b1c ("KVM: Open code kvm_delete_memslot() into its only caller")
-  afa319a54a8c ("KVM: Require total number of memslot pages to fit in an un=
-signed long")
+> 
+> In addition, the entries are made more specific by matching on the mt25q
+> extended ID, like it is already done for the smaller n25q derivatives.
+> It is unclear whether n25q derivatives with 2Gbit exist that do not
+> support 4B opcodes (like it is the case for sizes up to 512MBit), so we
+> do not have a match for such variants anymore (as we wouldn't even know
+> how to name such hypothetical models).
 
-are missing a Signed-off-by from their committer.
+Sounds good to me.
 
---=20
-Cheers,
-Stephen Rothwell
+> 
+> The changes were tested with a mt25qu01g, which should support the same
+> features as the mt25ql02g/mt25qu02g.
+> 
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> ---
+> 
 
---Sig_/9x+=96Rt4RXq83Eda9F21Uw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+[0] https://patchwork.ozlabs.org/project/linux-mtd/list/?series=275622&state=%2A&archive=both
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG7iv4ACgkQAVBC80lX
-0GyyxAgAjMYQyhJDpbj9lb8bGG/WW+K+6sJjOP3xx0yFjZvL/O32Tf23WMe+jlRb
-FcxYwV62qku7qaIN89SuWf2Y4ev2B8RMl0UTcF6MyUWLh9erG/VSZmAH8ihz3X2i
-6MncshPdmhq5m0ZBgDbIhdFvMqcRC0Y6ZPCxyt1MwFjSRTFQkupVaUpDcPhS9QkE
-9wRMcWIAptRfIjiCZSdCd0F+3UVXiI6qrXx3xdEdgGX0ffEgT6YOjtFt59U52lMh
-kDH78gGoI9XfVN1+l4zTotxM0fubK+fb8spOnfFtGZgd/cstx62tf14jkshZ45L9
-nAKmAkBEGzyU3UZeqdhtGdsRtFU79w==
-=3u6B
------END PGP SIGNATURE-----
-
---Sig_/9x+=96Rt4RXq83Eda9F21Uw--
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

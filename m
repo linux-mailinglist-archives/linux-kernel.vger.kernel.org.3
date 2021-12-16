@@ -2,113 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1B5477A07
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FC7477A0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239950AbhLPRKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235904AbhLPRKV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:10:21 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D12C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:10:20 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so2226592wmj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:10:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/875UjIeI/WJ8vJETC0FE0YD/vlu8AvDtauH40Y2gWE=;
-        b=csjFl4i8BgqLJ6vlmytOL5VCujMEkqZNZj36sscCD18vuWsyVxWvMjokPjes9slSh3
-         ZyaTE3U0f/e3NkKCvueAgEv7lARIYj6+ASipSy3lkt5UndutsAMsL+dOU5TYkIRwOP0j
-         yDodkrZ2UIDnL+oDG+ELW21SrhVF1ZL0cUQRL1AcF8P+o3tDHHe35CQOP4hAsTpPJbSt
-         7INU0Lx/o3U/M9js0v5Oe1V9BnJfuNVItL/kUlWLf72Ip2ZIndtQOBMSXdb+lU2J5QmS
-         XtExVQxpsLKj6abUuEtV+Jt7kDDiHZoVAHswLoVH4BHb+Jl4+qGzl9NDmv0KGuWOApHu
-         GxOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/875UjIeI/WJ8vJETC0FE0YD/vlu8AvDtauH40Y2gWE=;
-        b=llETjU+gbpdwj2gKy2J3IXni1NZmKTDW9TV3a2QTz5G7JiSrRpFlEh1r6FrluEwlk1
-         /sszElf+0NqdrxLoMDTmlwCCgFk+4SgvM5FRcq+VTHq56yR9pvqRYOiVSaADVXzs7oef
-         gkD2njeln1jHU3E8wptLyQDTmniN/iSm7jvzt9nKuDIR4GQkKr/xPOL8HbIIrBc9k3hi
-         MU1XRIR0/x4uB7SU/KsmbimUQ5r4kF55syfPN5zHMGNHAjCV1GqDHHRgRr9AqL1SWr9D
-         fZ+3rNW0T3dZ9KJyvkEEGPgzxK4C5kT5bmwY6CtH3IgZqOpw0d+RiHwTW4JsPKgXYCVE
-         EiLg==
-X-Gm-Message-State: AOAM5316Jn2BU1t+yuYW7PYf+OAHxquxPje3A5gkY9RRpN6ucPjXE6+1
-        1Ff7fsBYXAmGoVo9DdQ8M9Fn7A==
-X-Google-Smtp-Source: ABdhPJxjxNIeJB6nYaZJ8T7V31trycXob0pijctG1UTk/tVAxm08sBb0CYmIcG8LFq7+Y/4oikmC6Q==
-X-Received: by 2002:a05:600c:a06:: with SMTP id z6mr5902582wmp.9.1639674619142;
-        Thu, 16 Dec 2021 09:10:19 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id e12sm6808415wrq.20.2021.12.16.09.10.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 09:10:18 -0800 (PST)
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/cma-helper: Describe what a "contiguous chunk" actually means
-Date:   Thu, 16 Dec 2021 17:10:04 +0000
-Message-Id: <20211216171004.18166-1-daniel.thompson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        id S239961AbhLPRML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:12:11 -0500
+Received: from mail-bn8nam12on2075.outbound.protection.outlook.com ([40.107.237.75]:28608
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235791AbhLPRMK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 12:12:10 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NydutdDru7aC8w2P2/TtFV8EDVjexVF+ccBkd4ewo+j2JIJQnfjZ2HhuZPfmIuuEblwlpFNLUMdG2GGPAp7RGKCHKymH5J7rT61EgeJ1l6z8msSdc9IfoiELA1A3xk8Fi0BmmXPBOxizDJrt6i38DJr6YvKMk2O90oa4ZbZFKKDfjslK9FqH/bwxM8xO3F729PwROImfZH5HPFvBrssiaHhvZ7Hpb84/w7wUSE6goQmyH6HvF/NIkW1sVKmZvb3cJ845AYqBs4KFKMtyVfHHve4EIR7iCZm3EK+vnON/6Fp30Y3IqtW+sO6BvpuYTEITQh1svLUdCGHOkLsl6ceTlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KsZFi+p/kXxFzG00boegc4Wg46eq3NY0ldvychoVGpw=;
+ b=XFXq8C06edwUZdrZuOI0KzgkXOtPflp0P5GkMHA800z8ZlkY5IBCfXJ6STjb/WgcdvNfuWYnivp/th3xHUs9vpDMG/rZyO42ev/pgF6Kf6wEpYA60psPZ79Zvd6lKP425OnGkDnDpJNj29g1xuPhNYO/YY9IXBEQpICJ362el3Bk0+Bs+BKbjfh8A9rIp5n6HOar2dzmQ+LOGTrnNuYT6tVinfFqMqqZLSAcKaItjTXUcHwrxnnrO852F8onRHaQD0FyifmvXDZOrTv9sYS/OawKGoeQnjvwerYIuxQAk7dWUonl2WX8v1Q/nm8qJEdowHySSedhCWQ5GnmggI8Psg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KsZFi+p/kXxFzG00boegc4Wg46eq3NY0ldvychoVGpw=;
+ b=RifDZnEhcFDjN/szSWtCGBejDivbbWx2nOkWg33r5jgSxrYUmyQCxbaNrNOWOPfxskLxkFF6bANifVpNaxo5WBkMxvzhSwgznLiafgHeqALoIJ+3A721Dd7Tvw0hg8dFXWCF0S1r5mjTOAPSnk3sJmhd/MaUDjsfZxf3LNa2jrGeKH3f1wLwXgblGfUmnhIvwjblVFRsz14hg9PIJr3SnS5pCOWNzBxRNtj1HNQdXnT09ocsu/6M/pJ7Sw/hOIV+Dy38P7huaKDll4a8YcQhtSEre+vY1nEExIB6Sb48unMuuUQKsVWrVB1G7xgf/dd+NxRhR4qqO3TKXB2U4JfFIQ==
+Received: from MWHPR2201CA0059.namprd22.prod.outlook.com
+ (2603:10b6:301:16::33) by DM6PR12MB4827.namprd12.prod.outlook.com
+ (2603:10b6:5:1d6::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Thu, 16 Dec
+ 2021 17:12:06 +0000
+Received: from CO1NAM11FT026.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:301:16:cafe::77) by MWHPR2201CA0059.outlook.office365.com
+ (2603:10b6:301:16::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14 via Frontend
+ Transport; Thu, 16 Dec 2021 17:12:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ CO1NAM11FT026.mail.protection.outlook.com (10.13.175.67) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 17:12:06 +0000
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 16 Dec
+ 2021 17:12:05 +0000
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 16 Dec
+ 2021 17:12:05 +0000
+Received: from kyarlagadda-linux.nvidia.com (172.20.187.6) by mail.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Thu, 16 Dec 2021 17:12:01 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <dan.j.williams@intel.com>, <devicetree@vger.kernel.org>,
+        <dmaengine@vger.kernel.org>, <jonathanh@nvidia.com>,
+        <kyarlagadda@nvidia.com>, <ldewangan@nvidia.com>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <p.zabel@pengutronix.de>, <rgumasta@nvidia.com>,
+        <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
+        <vkoul@kernel.org>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH v15 0/4] Add NVIDIA Tegra GPC-DMA driver
+Date:   Thu, 16 Dec 2021 22:41:56 +0530
+Message-ID: <1639674720-18930-1-git-send-email-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ff2c07bc-7728-4999-57db-08d9c0b72ffd
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4827:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB482786B4B596437E8117482FC0779@DM6PR12MB4827.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?cDSje8vHy94hm09tVcHlbcL2dubLI1ePtnpCU0ApjTGGybAEHPegs/n6IwIi?=
+ =?us-ascii?Q?T1r2TjFEew5WGiQh85lVCJYCfmT8eVjlFTiVInohWfDO1k4HHSMEabTCWVYf?=
+ =?us-ascii?Q?0q282Zh5jayX0S7N0QusL0TDKjgIHescHyiw0ckg74pGm4A4UUyfmTpVmAU9?=
+ =?us-ascii?Q?b0HNxunsx+huRhAhhrycV98PULxYNYI8scPOiHJvvnaXB++/Aik0spr1mdED?=
+ =?us-ascii?Q?ldnSCse04v3wWHMa7HvYMhddOA1ll/Ba5OqW4qMKdgZOMRA/W+DVhWVCZg5I?=
+ =?us-ascii?Q?AkWrtwqd75Pf4KC4Nl0YogZ4rH3OU3I1ugJ1LsFwJ1AM84QerqOyXCYB/f9R?=
+ =?us-ascii?Q?OiYjhAp/U10+rttOYVFnHKTekfmKdxFMUt39tRKZioQ9NXGyqATF+mQzVoz7?=
+ =?us-ascii?Q?SND16NGbZBhwM7AD14XLHjx69kSykSWpZ2cHNpxX5tYWHzXVlpc0dVBqfJOh?=
+ =?us-ascii?Q?+wdRei+Q5E/UKoMeE+NQuTj0Z/8zzgv8Me83IhngdZUUD10oI8k2+Gbc5XDZ?=
+ =?us-ascii?Q?VHVax07P93O7hhCQNMK3OmA1B+u1UqHNCvksHd15D6bLeacp3PleoecVlVDH?=
+ =?us-ascii?Q?QUrStuemciD0BfJs9LChVDTvBcbxq1hOHc8OFRhgZw/USEOOajPunDel2lUn?=
+ =?us-ascii?Q?9Sp1RtbcrxH+4+ZgMLo7Cmha90cMRWx+6AYtTGLgDA6kaPUL3zoeX73VGBRW?=
+ =?us-ascii?Q?0af7ATxWfTS7mLow9Y4l5JQyuYjIrA8qYAKCWkUn78MnPRrxwiM9fQsV+o+F?=
+ =?us-ascii?Q?cssPi+8SRy153Eq8wQfjv3+lJZYKLx5Oe2jyQtBxaIfRl8ydlBsdsRlR7IEW?=
+ =?us-ascii?Q?IkbbAXw79ToctAHRNAbS92iZk/3Ns/g6dRIugyQ8VmX+c5eXAhrxe1fINgqa?=
+ =?us-ascii?Q?9ETfE3L4WqLLeEDiB+0NvjQhyV1d7Kc+he0ksLevcJI4nBIpeZjF2eBSwNCk?=
+ =?us-ascii?Q?635z/EaX3lXahVFGUJOnR5fWHVEnVhK+xgXejZCEEHo=3D?=
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(4326008)(356005)(36756003)(2906002)(110136005)(40460700001)(36860700001)(5660300002)(2616005)(86362001)(70206006)(7696005)(107886003)(4744005)(70586007)(316002)(966005)(82310400004)(34020700004)(81166007)(508600001)(426003)(26005)(8936002)(47076005)(921005)(186003)(8676002)(336012)(6666004)(83380400001)(2101003)(83996005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 17:12:06.4910
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff2c07bc-7728-4999-57db-08d9c0b72ffd
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT026.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4827
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since it's inception in 2012 it has been understood that the DRM GEM CMA
-helpers do not depend on CMA as the backend allocator. In fact the first
-bug fix to ensure the cma-helpers work correctly with an IOMMU backend
-appeared in 2014. However currently the documentation for
-drm_gem_cma_create() talks about "a contiguous chunk of memory" without
-making clear which address space it will be a contiguous part of.
-Additionally the CMA introduction is actively misleading because it only
-contemplates the CMA backend.
+Add support for NVIDIA Tegra general purpose DMA driver for
+Tegra186 and Tegra194 platform.
 
-This matters because when the device accesses the bus through an IOMMU
-(and don't use the CMA backend) then the allocated memory is contiguous
-only in the IOVA space. This is a significant difference compared to the
-CMA bankend and the behaviour can be a surprise even to someone who does
-a reasonable level of code browsing (but doesn't find all the relevant
-function pointers ;-) ).
+v14 -> v15:
+  * Removed late suspend.
+  * Removed unneeded prototype
+  * Updated kfree to free tdc->vc instead of tdc->dma_desc.
+  * Updated Kconfig to use ARCH_TEGRA instead of specific chips.
 
-Improve the kernel doc comments accordingly.
+v14 - https://lkml.org/lkml/2021/12/6/370
 
-Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
----
- drivers/gpu/drm/drm_gem_cma_helper.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Akhil R (4):
+  dt-bindings: dmaengine: Add doc for tegra gpcdma
+  dmaengine: tegra: Add tegra gpcdma driver
+  arm64: defconfig: tegra: Enable GPCDMA
+  arm64: tegra: Add GPCDMA node for tegra186 and tegra194
 
-diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
-index 8467783e92f3..81d7181deebd 100644
---- a/drivers/gpu/drm/drm_gem_cma_helper.c
-+++ b/drivers/gpu/drm/drm_gem_cma_helper.c
-@@ -32,10 +32,10 @@
-  *
-  * For devices the access the memory bus through an (external) IOMMU then
-  * the buffer objects can be scattered in physical memory but linearized
-- * in the IOVA space by the MMU.
-+ * in the IOVA space by the IOMMU.
-  *
-  * For other devices we must rely on the Contiguous Memory Allocator to
-- * reserve a pool of memory at early boot that is used to service requests
-+ * reserve a pool of memory at early boot. This is then used to service requests
-  * for large blocks of physically contiguous memory.
-  */
+ .../bindings/dma/nvidia,tegra186-gpc-dma.yaml      |  110 ++
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi           |   42 +
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi           |   43 +
+ arch/arm64/configs/defconfig                       |    1 +
+ drivers/dma/Kconfig                                |   11 +
+ drivers/dma/Makefile                               |    1 +
+ drivers/dma/tegra186-gpc-dma.c                     | 1281 ++++++++++++++++++++
+ 7 files changed, 1489 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
+ create mode 100644 drivers/dma/tegra186-gpc-dma.c
 
-
-base-commit: 2585cf9dfaaddf00b069673f27bb3f8530e2039c
-prerequisite-patch-id: bfcd9122d2546ec77e0bd987663777192002bc91
---
-2.34.1
+-- 
+2.7.4
 

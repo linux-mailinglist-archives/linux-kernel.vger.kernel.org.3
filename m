@@ -2,122 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7176476D13
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1B2476D6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233057AbhLPJMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 04:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbhLPJMb (ORCPT
+        id S235436AbhLPJ3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 04:29:19 -0500
+Received: from bosmailout07.eigbox.net ([66.96.185.7]:40863 "EHLO
+        bosmailout07.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235412AbhLPJ3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:12:31 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2A4C06173E;
-        Thu, 16 Dec 2021 01:12:31 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id a9so42887306wrr.8;
-        Thu, 16 Dec 2021 01:12:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=x4k1zI3iK8DOJhhJ2DmMVfZXMtCAnERs0JGKLaP5zks=;
-        b=g7B5mwruW7SaPK3YRN0vN1C4bg9zqB9Ywk1YaN1ZHC+C4M2xe5bcvX2h8HaZaIZhBp
-         LGEjbMupndL+W7AnOtC1K0bnqTtZ38dkmRj5vaDJFyXIReAGosUh9/t5aTkWy+6PW8ep
-         cQeJy5kTpMdVr2MsYex0AyAE3xFP+iB5oKMD7o8PmA/aL1IDyW1QbOJ5pqNYJgSJm8av
-         t0DrQTB/p9rAC9X1jshQ/krBxgAuM2oI//I7Qui5F/KmTWU2cVWKil0zoXLZOBvudhda
-         CzlVPhoiA6s0+R8K1GX4Jql16UYlDvKvo/RXW6kLGiJiN335cO1bEKcPSVItYxLx5cxO
-         W0MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x4k1zI3iK8DOJhhJ2DmMVfZXMtCAnERs0JGKLaP5zks=;
-        b=SabAZiJ3XhqXwPJZEaBZroLcjmZk4h/3b50LD57PabgP2MOPw7y2fU+Qzfy0xEG9x5
-         wEsiwwFlQQnUnMw5vjviUw7Q8sE1/UEOu8YwBW1zBH2xRVvZeb6IWKnIa5XAcFCvOi4H
-         esgzpnW/DQy4ol6hry/2MaD/bA5lYD1bQcRO6Y0SL3uGCznjAW6X6GgSgI16dQt0a6Ud
-         91GlRyxmSyxuS6znOp/plX+XoFuFil59U0/QFRqNIKlC7dl2+r2depSbkPTggMhCIGdr
-         GhXYmrNeNXD4YjpWBJCHPRK3S8R5hDf5sPvZi+53Mw4JV0kQu9FsBi9CjdZNLAPxduc6
-         AMzQ==
-X-Gm-Message-State: AOAM531hHVSZXOGM93uRzrlZELKvra0BG8TDPnQPSHy67ajXsJywVpho
-        SkF+GmMCyuu0W+pWvVCnRC8=
-X-Google-Smtp-Source: ABdhPJyJAX5eTdhQft6rbyMCvlaLfw/tuoiMzMaSKhEPruM32RpV2ndbiE23NWpVs+J19vPeJ/k2+A==
-X-Received: by 2002:adf:c146:: with SMTP id w6mr8274090wre.541.1639645950098;
-        Thu, 16 Dec 2021 01:12:30 -0800 (PST)
-Received: from [192.168.0.18] (81.172.62.207.dyn.user.ono.com. [81.172.62.207])
-        by smtp.gmail.com with ESMTPSA id l6sm4444640wmg.3.2021.12.16.01.12.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 01:12:29 -0800 (PST)
-Message-ID: <5c9d87cd-2d11-6272-ee40-e0c3aad15e1e@gmail.com>
-Date:   Wed, 15 Dec 2021 20:31:21 +0100
+        Thu, 16 Dec 2021 04:29:17 -0500
+X-Greylist: delayed 1835 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Dec 2021 04:29:16 EST
+Received: from bosmailscan01.eigbox.net ([10.20.15.1])
+        by bosmailout07.eigbox.net with esmtp (Exim)
+        id 1mxmb1-0002Bn-Bd; Thu, 16 Dec 2021 03:58:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ewhac.org;
+         s=dkim; h=Sender:In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+        :Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=bHYYfQ4Cj+cqneseigspjoQQhJPicbxi/z8SoMuQsiE=; b=xPlYxW7uM7xjoJlpWF94xb/El/
+        8YwQg1jrjp8FrFecBKoVGho7F+vE/3HbWDlD+eSuwZz8/RZWwAe0YMmxW6a1QVt2m4BgwO0ZpAs9c
+        6flnC6PVc07gmelquGjpoa6uWBniE/BdEokbz2rs1mg2Gx06zlMSStQlAtsPiEAg4ZrA4+8ndrolQ
+        YPEbY+zI+TQgaPfWj2kRmwOJYv4ffUFcl2Xnwz0Xacj1+C+eBjBDiWubey1Jzc1NmzW7K6uXAfvpV
+        +iIY9s7czIMwpUNDo0DgjRo8n9h2HZPZpNgplv7u7w2dBEuROKrmRthlkeaOV+m7g2BvgiTcE7zaY
+        SEqYSaIA==;
+Received: from [10.115.3.33] (helo=bosimpout13)
+        by bosmailscan01.eigbox.net with esmtp (Exim)
+        id 1mxmb0-00053n-W8; Thu, 16 Dec 2021 03:58:39 -0500
+Received: from bosauthsmtp19.yourhostingaccount.com ([10.20.18.19])
+        by bosimpout13 with 
+        id Wwyb260090QhFXN01wyeyX; Thu, 16 Dec 2021 03:58:38 -0500
+X-Authority-Analysis: v=2.3 cv=RNUo47q+ c=1 sm=1 tr=0
+ a=9UqFsMnAB6EOkiq4MrOclQ==:117 a=lOZ7gjDonWBvovu+dU3iMA==:17
+ a=kj9zAlcOel0A:10 a=IOMw9HtfNCkA:10 a=ltsmEuTAGloA:10 a=fmD_JHji_u0A:10
+ a=fYNHH8dQZQOtrz4ChQEA:9 a=CjuIK1q_8ugA:10 a=Ixuhb_GfD2BeaOSowo0a:22
+ a=HH7FIXwXL_sUf1zzYxQd:22
+Received: from [135.180.175.56] (port=34520 helo=walkies.ewhac.org)
+        by bosauthsmtp19.eigbox.net with esmtpa (Exim)
+        id 1mxmax-0008Ou-Oa; Thu, 16 Dec 2021 03:58:35 -0500
+Received: from ewhac by walkies.ewhac.org with local (Exim 4.95)
+        (envelope-from <ewhac@ewhac.org>)
+        id 1mxmaw-001eaX-I0;
+        Thu, 16 Dec 2021 00:58:34 -0800
+Date:   Thu, 16 Dec 2021 00:58:34 -0800
+From:   "Leo L. Schwab" <ewhac@ewhac.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: spaceball - fix parsing of movement data packets
+Message-ID: <Ybr/uvSVd/TSwuNM@ewhac.org>
+References: <20210727040625.2159196-1-ewhac@ewhac.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v8 1/2] dt-bindings: arm64: dts: mediatek: Add mt7986
- series
-Content-Language: en-US
-To:     Sam Shih <sam.shih@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     John Crispin <john@phrozen.org>, Ryder Lee <Ryder.Lee@mediatek.com>
-References: <20211122123222.8016-1-sam.shih@mediatek.com>
- <20211122123222.8016-2-sam.shih@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20211122123222.8016-2-sam.shih@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210727040625.2159196-1-ewhac@ewhac.org>
+X-EN-UserInfo: a76222b247b80e113a63936ffdc903eb:931c98230c6409dcc37fa7e93b490c27
+X-EN-AuthUser: ewhac@ewhac.org
+Sender:  "Leo L. Schwab" <ewhac@ewhac.org>
+X-EN-OrigIP: 135.180.175.56
+X-EN-OrigHost: unknown
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 26, 2021 at 09:06:24PM -0700, Leo L. Schwab wrote:
+> The spaceball.c module was not properly parsing the movement reports
+> coming from the device.  [ ... ]
 
+	Um...  Ping?  This issue still exists, and it's been around a really
+long time.  I've been using this patch to successfully fly around QuakeWorld
+for several months now.
 
-On 22/11/2021 13:32, Sam Shih wrote:
-> MT7986 series is Mediatek's new 4-core SoC, which is mainly
-> for wifi-router application. The difference between mt7986a and mt7986b
-> is that some pins do not exist on mt7986b.
-> 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> 
-
-Applied to v5.16-next/dts64
-
-> ---
-> v6: separate basic part into a single patch series
-> 
-> Original thread:
-> https://lore.kernel.org/all/315d7823aa108c909a3d36464fe54763b76ab2f4.camel@mediatek.com/
-> 
-> v3: changed 'MT7986' to 'MT7986 series' in the commit message
-> v2: added an Acked-by tag
-> ---
->   Documentation/devicetree/bindings/arm/mediatek.yaml | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> index 80a05f6fee85..a9a778269684 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
-> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
-> @@ -76,6 +76,14 @@ properties:
->             - enum:
->                 - mediatek,mt7629-rfb
->             - const: mediatek,mt7629
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt7986a-rfb
-> +          - const: mediatek,mt7986a
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt7986b-rfb
-> +          - const: mediatek,mt7986b
->         - items:
->             - enum:
->                 - mediatek,mt8127-moose
-> 
+					Schwab

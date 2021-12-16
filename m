@@ -2,175 +2,424 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A563B476A33
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 07:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CDB476A3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 07:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233982AbhLPGCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 01:02:46 -0500
-Received: from mail-mw2nam08on2105.outbound.protection.outlook.com ([40.107.101.105]:63073
-        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233934AbhLPGCm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 01:02:42 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z6nlwhKqqndzLJSU1hiAmXW1SugHX6jvSC4owmQwTGMCDLfVY/dvAWu2ZTB9365lE2DOvuXv7ZLMfZsqskk21JTLL7TJhPI835lPo5f6/wuSVlrVZcAaEWngxBffgv5IdggB/LiSUImpiJK0RZFtyaiug4aem0Kwc3xO1WcdDXT/IfXK21zeqMtXKLQN30+YZnauQewwddK8kwfWvbvq7abW4fVTY9k1au1YWvgPvkOSZrOFKT1kTDp8FM0ZQ8WvDfS6b62sWYZhIrkROm3OuY3bnmFpm7ZEi+O0arziqF+9kN54ouQVD8XREIBIiL56Mcu5+nWVHCJAm/3hWOd5Vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XCv4CL0PYnN6GtuoR3e6uLguRMn0oBDZ1lxCJngFaMg=;
- b=LU2C6AG4Y4gltnmy6XV4dJuN0MhopGPIvK5uPAEZFAmFBS0chY1WOmDuFPtScf6m0Glnmkwi4YTllXcKg7s0JVXGKhEikykuOdMOpIPnPYDW303gnCnzWyIsJoJvFM5UqJ2HNx92cYMrlFoEmlkyCBEsTF0IEmKnIhSS1u2NAy699sfzMAVPJZzYHkIp3KIpeDDbndHw71A0Jq7hzy4j9ZQq9kHAQFesRA0BrcbUBu9dvskIrKbK+dq0oQB76eQIi96I3jdu8p7w5qVB70Fgd2vMSBXziQgYhIaE4+RW6/ONbRGP/X81P+6izeYm5Z3IyOFOqyTD+HSLp2JKNNkElw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        id S233995AbhLPGNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 01:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233971AbhLPGM7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 01:12:59 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AA0C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 22:12:58 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id o1so45261564uap.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 22:12:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XCv4CL0PYnN6GtuoR3e6uLguRMn0oBDZ1lxCJngFaMg=;
- b=jFoIDA7UiBZKx+Ot5spXZ78EX3iUZLbTaZziSUY2+REwr945tbyqg36LxrXIiAC9bO8tWV2b/Opuu+7Yolbof7/ndlPnYrD4q3Aw/6L/dVZAqAmTYxWnC2BvV5J4RvDTKk1zYmEr1Ulp1qTslLW9xIq5RtaUJEJ1ZSvYHb7zYtA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
- DM6PR01MB5579.prod.exchangelabs.com (2603:10b6:5:150::12) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4778.17; Thu, 16 Dec 2021 06:02:40 +0000
-Received: from DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::38e1:cab:501d:6b96]) by DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::38e1:cab:501d:6b96%4]) with mapi id 15.20.4778.017; Thu, 16 Dec 2021
- 06:02:40 +0000
-Date:   Wed, 15 Dec 2021 22:02:32 -0800 (PST)
-From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
-X-X-Sender: ikoskine@ubuntu200401
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        patches@amperecomputing.com, scott@os.amperecomputing.com,
-        darren@os.amperecomputing.com
-Subject: Re: [PATCH v2 1/2] ACPI: AGDI: Add AGDI tables to drivers/acpi
-In-Reply-To: <CAJZ5v0jiLfL0k12y5RZ+9LjLqiBMPqRHrqNQGqQ5Le2yOv7QWQ@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2112152159220.6791@ubuntu200401>
-References: <20211214044036.48245-1-ilkka@os.amperecomputing.com> <20211214044036.48245-2-ilkka@os.amperecomputing.com> <CAJZ5v0jiLfL0k12y5RZ+9LjLqiBMPqRHrqNQGqQ5Le2yOv7QWQ@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-ClientProxiedBy: MW2PR16CA0014.namprd16.prod.outlook.com (2603:10b6:907::27)
- To DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25)
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gKArbi4JmQ7HgsJwRvobSPgSICt0EDcKFpTtDmZAA9E=;
+        b=S0d7CmX0mceNeN8qWFvZJHGLZld5ocjcJBGPJGAF4vKSFcl4CBrhbNBdqiCKB1FDbi
+         4qHdL0HQJqE5qiHGl67wKC+9GfO8kRDFGy9Wzpfy2pasSZ5Knf3iTxsp66nxdD1nOL2a
+         CXvqeFzu2mb0oFfkcVuz/P7Zf6xs9B5POFQX7jov1YtjsvOFoBHNqmW5dGyhCMtar9FA
+         wbbkp0zi+a2m11tNHFpNS2RnXskc3JGGHkZt+D7hpPxvJbZUWymRdzzRolBDu/sdKp2J
+         NC+zY/t6XmE99jHwqukcHIWs3w3e4vDhZ3UWshDSccVrPlk2tQo1/qnCFtaa1p1dxq+7
+         76ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gKArbi4JmQ7HgsJwRvobSPgSICt0EDcKFpTtDmZAA9E=;
+        b=vimCwVxXBDKfjyQksYTAwcE9agubLs8zuq3wuNY8vhuVY+3vN10BnC9JN/s9WwAVtY
+         o+rqsqzgfTLJb4sabKY5XC+LKgE1bj1wH08IjMoOSNLGUB0jqB81+lYbCTbkitXsnmYT
+         Jq/dBlhp6OLsXX5ClGCqeSeus0shPtb/dLtiAwmTc5DWDa/CSfATnP9u2jvyG2sGEu0l
+         eG7Nu/apRjKbd1XgfsIdF3uOMLhLbOheoSZgCV1+tZX8wNLLG5Sr1Rw2Weg0iwnuHxZJ
+         VBw3k7YPEj8Ud8ZWEUfcf5hmmqSdTLbuftRvEcLx1yr/SXw4jSlQuazubTYvf+xePNB1
+         ysPw==
+X-Gm-Message-State: AOAM533yY0cvDI4KdvmXGIkfXeltl8D+HEtiiXn3NS5NZOehVfRd4iSL
+        m4NX6h1tsIXUELPS0qOad9RdbJ5/H4drSZLNMVdL+Q==
+X-Google-Smtp-Source: ABdhPJyMTcXEsvKJ7ODqUHreWDuzrZi8uvaiohaoy6MyfvvKizeUoiM1ZnE+tRJFoqJAZm09KNvxCx9Eaq/TSUYeNJQ=
+X-Received: by 2002:a67:446:: with SMTP id 67mr353454vse.38.1639635177617;
+ Wed, 15 Dec 2021 22:12:57 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cfccaf70-b2b5-414d-0a4d-08d9c059aaeb
-X-MS-TrafficTypeDiagnostic: DM6PR01MB5579:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR01MB55790859DD93EB626922EDF19D779@DM6PR01MB5579.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3E9u3LJ5f2ampvyJj2AkjH+m6BHIT/1k1BkV81DmiL03NM5s4gkflsV6yRuWNkGHli0X8LqhM8AFoIL6I5V/BQooYUNc7sVQyaqQPX+U2okF+1K6/XZ3a1liTnczZ4wNRO2PJaSh78do91EIm9IPEsEwn768j+wA9s5ZLwhWbc4UeKp8lmPHlo+5VYzgERJ7NYiePvjkF0XNXVRLwyVOILFsg8JEp6tbFlA3fE1m4dy0L7GdT2OdQtKJ0DPKvcz9O9LjgczcBFmQx5NY7y6MaNa3RUciH3dUo8iqLzg6YU8E+YrcDwIRiZrJ/xkVGMJZNS9FSPXDN55cJzlobYxNVahbxR/vQGwxfQ+H0g4Gi6whk7GXHqGP5+u1GoZmNZC3XdRTywaAzSKix8boq6Uxc+E5uNTelFfK7Lo9BvXyAzxrdLmW9s0zloQ+KX/WolZmtL3Uel9z9I6SJL4fbDRwe+hDttfttWkg+CS0kL39UTDDpvFlUN4F7SB0RAfhU0u+n5qhMnRUuZDqVPiyXCr2K5hAaKHqzxx5t8p3yOqy+D8B6JUYFmXbKSlV9cIWRhqCD3inhgL1CXDBDNgjqKWCqhZG9tlaR6TYD31lzYF1PhPZQr4u4aVGzsK5AT6wNoCgLblm8dEWkxQHXRfdYW2FBXlSLQqPv6EhICvtPEmDnytb1mBS55I9u9f7/WJk0qWkvWo/px9gCoE2GVdQY7HA0mEDlprUjeo5+yKExidPKu9KCnRGnVYP2Ll6j2f7qi1dIlp3Ga1e1JBnn3KJAXNGMig1Szuz1WunDKaFJWIhxfc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(53546011)(4326008)(6506007)(38350700002)(6512007)(7416002)(66946007)(86362001)(8936002)(9686003)(52116002)(66476007)(8676002)(66556008)(2906002)(508600001)(33716001)(6666004)(26005)(54906003)(6486002)(83380400001)(966005)(316002)(107886003)(186003)(6916009)(5660300002)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XLlkb5LJWpuzZSdx0Lr42JcxLt/xZtjZ0PJJ9eLhgs9Yue2uHYKWTZWAWR1W?=
- =?us-ascii?Q?5xslVJLXjqwLgYoatTxoq1T177i2+9LXLyNpnpWCCjdAxl2ZVGn3dqULa5nX?=
- =?us-ascii?Q?HBpaGT6CU2cY075iGaLGoDQo8ZuNoj01TL4geQX9+Rrcy3/P7ipI0sOq8FUx?=
- =?us-ascii?Q?UKgvtajg+wA3z0UbLTvKNBjl5ZQ8hGt22/RVQvGcn0h9I4dNPo8Ta6DeeW+n?=
- =?us-ascii?Q?Od1J+gaig3e7s227qfGCzf5m8oAAAWsM3OcuzRi4QnCPfKwa+hqgeQir2r7N?=
- =?us-ascii?Q?WuCJ1g0Tk+Cb5A2UUKBiR85poY/JMHmtY2ijzz99CwhBl3qT/u4cC1/WDRYH?=
- =?us-ascii?Q?tpETupIFIFLrDsbcLfARdXtyg+0PhFcZYRsfaB8is5uayTodhHLuhgE3byKB?=
- =?us-ascii?Q?TulKeMVrZ9D76ZNerqtRF2t5h6+DJFO1vIp6CXs4QNO07qRnCpoqybiWCOzJ?=
- =?us-ascii?Q?Ls2QUQCl0dnzKUMPXhZ8NMAAOQSRZGDNnHUa9lvfVdTms0lvJgtYuq16vbFY?=
- =?us-ascii?Q?b8+ECwU54Ll+O0YmBBtCL3meYo/kdQHXPeRtzGJ7Yr+G1MZGeoabuKGdXzwN?=
- =?us-ascii?Q?KVA730ILZN5XvfPqZ6PwkyvIiiY1EwuQWN/viZX30MeNTmoNxQzEJB0eq8k5?=
- =?us-ascii?Q?HLxFqftDVhUGN1pdRJzdsSuXqYshUnX6E02MyHeteNRIV3Ha5OiB10y+mW5B?=
- =?us-ascii?Q?AVMW7AMq5NU8+5tLermWvdpq4ljQybdYORSaDiSPycLiJej2jAAGsRrUcyaR?=
- =?us-ascii?Q?Ib7r8lB3StwRsi8gEgZuzqbv8hxuP4jgnUeeCtY9UXvInD3v59QyaQNmSemY?=
- =?us-ascii?Q?5XRSSY0Jut4WsZ6hbKtu1OwTxOgCtvdBgzRewRw9E21G1HAkoSyD4xRZqzrM?=
- =?us-ascii?Q?o/+g/Cz5597ww8uZKbIN5Z1Pc2B4CsrYbB1UkbKY1ciTkxCRKTetCJPI6dhT?=
- =?us-ascii?Q?CWYLOiirznnd20DZQ3ZBu1aF7c1+mhniEBTfLsayRbRGvco0n0OPEzNZ3kGj?=
- =?us-ascii?Q?dCjDNoHGlzlLaqyeFl7c3AjbWotnFBEdvppOF4tdmnEUr/mIIjVCVmYAj/JP?=
- =?us-ascii?Q?F65PT1WlsWq0+NpY6K2jGgb74ETQwwO5rczRh92iPCO+eGgmzcgONGVXfPws?=
- =?us-ascii?Q?kyCVvBkFgZ8/sG9D1puKsiL6+XbjVWvyvLgBVjgq1WpCevUQPkbowgpXvfCt?=
- =?us-ascii?Q?g36jJvL7qO6lDbR0LGdPmrzr7or/0hoCX8wbfLNI1oGK4fV3TBNPFDPOmC3x?=
- =?us-ascii?Q?3pfhFk/JElyDyGBcOnBSANwgRsMI6F9EKh3EH5S08ZDJ6PSA49uiwwGMMoi/?=
- =?us-ascii?Q?SGMdbSJc7FRLObSPXJ1ASYu9hgAWB1Umd+rZrQw40igQxqCgYQBk3JBWajGF?=
- =?us-ascii?Q?S2xLFuRl0o6Emlr2qZWc+hu3pOQla1UJYaXVoJnL4wdRNHBBsu7nu0s0GR3A?=
- =?us-ascii?Q?MuPeYUXKrAyKfaYmCyNaNenTtOp4jmrzIVGIln+1pCFWxaOOfnJFoOKrXX7V?=
- =?us-ascii?Q?WLrnFWATBpWGVmZN3sAWSVn7+a0yuKnGUbQhLK3n/xyatD5h3qonpnMX7odf?=
- =?us-ascii?Q?zTgovSeCydasPKTzQaXqvnvCQZL3Wut7dal856yVs3yMm2RHuSYBzeVAW2iV?=
- =?us-ascii?Q?lsG3L72Foo9o2LpTvussgullo09/UDnLL35yIzhDqmoilg3zZCiUpWRlmklg?=
- =?us-ascii?Q?QcKQLKYTeVxzSEu/z8LyzkaNgZh/fHLq1mcZiEVj+BcwGr/NHBoV6n0q7AIn?=
- =?us-ascii?Q?HlG4C6UzyA=3D=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfccaf70-b2b5-414d-0a4d-08d9c059aaeb
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 06:02:40.4600
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Uq69BsvwVC1DjwFV+chU5i/dc1t/OdmnRQUxvTcQ4KKjLkMtgY6mpPMK1BhDI5zzfD6CIe3SMEwalknDlnLpT2zdq6KsiDcD9u3c6XzgLhlCIor5daN6tVdk9I/d4A1e
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB5579
+References: <20211207054019.1455054-1-sharinder@google.com>
+ <20211207054019.1455054-4-sharinder@google.com> <CANpmjNORiy0Zq7T=C-izJSZjwhisATDQiv1+fBs1iEnHcx0WQw@mail.gmail.com>
+In-Reply-To: <CANpmjNORiy0Zq7T=C-izJSZjwhisATDQiv1+fBs1iEnHcx0WQw@mail.gmail.com>
+From:   Harinder Singh <sharinder@google.com>
+Date:   Thu, 16 Dec 2021 11:42:46 +0530
+Message-ID: <CAHLZCaGUNgxW=f23gF6xoU=LUvbdNvR2L7jUrrUeT7C22tFwjg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] Documentation: KUnit: Added KUnit Architecture
+To:     Marco Elver <elver@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org,
+        corbet@lwn.net, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tim.Bird@sony.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Marco,
 
+See my comments below.
 
-On Wed, 15 Dec 2021, Rafael J. Wysocki wrote:
-
-> On Tue, Dec 14, 2021 at 5:41 AM Ilkka Koskinen
-> <ilkka@os.amperecomputing.com> wrote:
->>
->> ACPI for Arm Components 1.1 Platform Design Document v1.1 [0] specifices
->> Arm Generic Diagnostic Device Interface (AGDI). It allows an admin to
->> issue diagnostic dump and reset via an SDEI event or an interrupt. This
->> patch adds support to ACPI/AGDI tables.
->>
->> [0] https://developer.arm.com/documentation/den0093/latest/
->>
->> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
->> ---
->>  drivers/acpi/tables.c |  2 +-
->>  include/acpi/actbl2.h | 20 ++++++++++++++++++++
->>  2 files changed, 21 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
->> index 71419eb16e09..5e3169bcb9fb 100644
->> --- a/drivers/acpi/tables.c
->> +++ b/drivers/acpi/tables.c
->> @@ -500,7 +500,7 @@ static const char table_sigs[][ACPI_NAMESEG_SIZE] __initconst = {
->>         ACPI_SIG_WDDT, ACPI_SIG_WDRT, ACPI_SIG_DSDT, ACPI_SIG_FADT,
->>         ACPI_SIG_PSDT, ACPI_SIG_RSDT, ACPI_SIG_XSDT, ACPI_SIG_SSDT,
->>         ACPI_SIG_IORT, ACPI_SIG_NFIT, ACPI_SIG_HMAT, ACPI_SIG_PPTT,
->> -       ACPI_SIG_NHLT };
->> +       ACPI_SIG_NHLT, ACPI_SIG_AGDI };
->>
->>  #define ACPI_HEADER_SIZE sizeof(struct acpi_table_header)
->>
->> diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
->> index 71ca090fd61b..66ca85b9f5fe 100644
->> --- a/include/acpi/actbl2.h
->> +++ b/include/acpi/actbl2.h
+On Sat, Dec 11, 2021 at 4:38 AM Marco Elver <elver@google.com> wrote:
 >
-> The changes in actbl2.h are ACPICA material and so they need to be
-> routed through the upstream ACPICA project.
+> On Tue, 7 Dec 2021 at 06:41, 'Harinder Singh' via KUnit Development
+> <kunit-dev@googlegroups.com> wrote:
+> >
+> > Describe the components of KUnit and how the kernel mode parts
+> > interact with kunit_tool.
+> >
+> > Signed-off-by: Harinder Singh <sharinder@google.com>
+> > ---
 >
-> Moreover, you have already submitted a pull request with them to the
-> upstream: https://github.com/acpica/acpica/pull/737/commits/cf36a6d658ca5aa8c329c2edfc3322c095ffd844
+> You are including several external links to kernel sources via
+> elixir.bootlin.com. This should be avoided, where kernel.org
+> alternatives exist.
 >
-> Please wait until this gets integrated and repost the rest of the
-> patches as incremental changes on top of that.
+> See one of my comments below which gives an example how you can avoid
+> this, either by providing a kernel.org link, or better, rendering the
+> kernel-doc in ReST where appropriate. You should be able to test this
+> with "make htmldocs".
+>
+I used kernel-doc directive where I thought it made sense. Elsewhere I
+replaced Elixir links with git.kernel.org links.
+Please see follow up patches.
 
-Thanks for clarifying the process, that makes sense to me. I'll wait until
-the patch gets merged into the kernel and submit what's left from the
-patchset as v3 then.
+> >  .../dev-tools/kunit/architecture.rst          | 206 ++++++++++++++++++
+> >  Documentation/dev-tools/kunit/index.rst       |   2 +
+> >  .../kunit/kunit_suitememorydiagram.png        | Bin 0 -> 24174 bytes
+> >  Documentation/dev-tools/kunit/start.rst       |   1 +
+> >  4 files changed, 209 insertions(+)
+> >  create mode 100644 Documentation/dev-tools/kunit/architecture.rst
+> >  create mode 100644 Documentation/dev-tools/kunit/kunit_suitememorydiag=
+ram.png
+> >
+> > diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documenta=
+tion/dev-tools/kunit/architecture.rst
+> > new file mode 100644
+> > index 000000000000..bb0fb3e3ed01
+> > --- /dev/null
+> > +++ b/Documentation/dev-tools/kunit/architecture.rst
+> > @@ -0,0 +1,206 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +KUnit Architecture
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +The KUnit architecture can be divided into two parts:
+> > +
+> > +- Kernel testing library
+> > +- kunit_tool (Command line test harness)
+> > +
+> > +In-Kernel Testing Framework
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> > +
+> > +The kernel testing library supports KUnit tests written in C using
+> > +KUnit. KUnit tests are kernel code. KUnit does several things:
+> > +
+> > +- Organizes tests
+> > +- Reports test results
+> > +- Provides test utilities
+> > +
+> > +Test Cases
+> > +----------
+> > +
+> > +The fundamental unit in KUnit is the test case. The KUnit test cases a=
+re
+> > +grouped into KUnit suites. A KUnit test case is a function with type
+> > +signature ``void (*)(struct kunit *test)``.
+> > +These test case functions are wrapped in a struct called
+> > +``struct kunit_case``. For code, see:
+> > +https://elixir.bootlin.com/linux/latest/source/include/kunit/test.h#L1=
+45
+> > +
+> > +It includes:
+> > +
+> > +- ``run_case``: the function implementing the actual test case.
+> > +- ``name``: the test case name.
+> > +- ``generate_params``: the parameterized tests generator function. Thi=
+s
+> > +  is optional for non-parameterized tests.
+> > +
+> > +Each KUnit test case gets a ``struct kunit`` context
+> > +object passed to it that tracks a running test. The KUnit assertion
+> > +macros and other KUnit utilities use the ``struct kunit`` context
+> > +object. As an exception, there are two fields:
+> > +
+> > +- ``->priv``: The setup functions can use it to store arbitrary test
+> > +  user data.
+> > +
+> > +- ``->param_value``: It contains the parameter value which can be
+> > +  retrieved in the parameterized tests.
+> > +
+> > +Test Suites
+> > +-----------
+> > +
+> > +A KUnit suite includes a collection of test cases. The KUnit suites
+> > +are represented by the ``struct kunit_suite``. For example:
+> > +
+> > +.. code-block:: c
+> > +
+> > +       static struct kunit_case example_test_cases[] =3D {
+> > +               KUNIT_CASE(example_test_foo),
+> > +               KUNIT_CASE(example_test_bar),
+> > +               KUNIT_CASE(example_test_baz),
+> > +               {}
+> > +       };
+> > +
+> > +       static struct kunit_suite example_test_suite =3D {
+> > +               .name =3D "example",
+> > +               .init =3D example_test_init,
+> > +               .exit =3D example_test_exit,
+> > +               .test_cases =3D example_test_cases,
+> > +       };
+> > +       kunit_test_suite(example_test_suite);
+> > +
+> > +In the above example, the test suite ``example_test_suite``, runs the
+> > +test cases ``example_test_foo``, ``example_test_bar``, and
+> > +``example_test_baz``. Before running the test, the ``example_test_init=
+``
+> > +is called and after running the test, ``example_test_exit`` is called.
+> > +The ``kunit_test_suite(example_test_suite)`` registers the test suite
+> > +with the KUnit test framework.
+> > +
+> > +Executor
+> > +--------
+> > +
+> > +The KUnit executor can list and run built-in KUnit tests on boot.
+> > +The Test suites are stored in a linker section
+> > +called ``.kunit_test_suites``. For code, see:
+> > +https://elixir.bootlin.com/linux/v5.12/source/include/asm-generic/vmli=
+nux.lds.h#L918.
+> > +The linker section consists of an array of pointers to
+> > +``struct kunit_suite``, and is populated by the ``kunit_test_suites()`=
+`
+> > +macro. To run all tests compiled into the kernel, the KUnit executor
+> > +iterates over the linker section array.
+> > +
+> > +.. kernel-figure:: kunit_suitememorydiagram.png
+> > +       :alt:   KUnit Suite Memory
+> > +
+> > +       KUnit Suite Memory Diagram
+> > +
+> > +On the kernel boot, the KUnit executor uses the start and end addresse=
+s
+> > +of this section to iterate over and run all tests. For code, see:
+> > +https://elixir.bootlin.com/linux/latest/source/lib/kunit/executor.c
+> > +
+> > +When built as a module, the ``kunit_test_suites()`` macro defines a
+> > +``module_init()`` function, which runs all the tests in the compilatio=
+n
+> > +unit instead of utilizing the executor.
+> > +
+> > +In KUnit tests, some error classes do not affect other tests
+> > +or parts of the kernel, each KUnit case executes in a separate thread
+> > +context. For code, see:
+> > +https://elixir.bootlin.com/linux/latest/source/lib/kunit/try-catch.c#L=
+58
+> > +
+> > +Assertion Macros
+> > +----------------
+> > +
+> > +KUnit tests verify state using expectations/assertions.
+> > +All expectations/assertions are formatted as:
+> > +``KUNIT_{EXPECT|ASSERT}_<op>[_MSG](kunit, property[, message])``
+> > +
+> > +- ``{EXPECT|ASSERT}`` determines whether the check is an assertion or =
+an
+> > +  expectation.
+> > +
+> > +       - For an expectation, if the check fails, marks the test as fai=
+led
+> > +         and logs the failure.
+> > +
+> > +       - An assertion, on failure, causes the test case to terminate
+> > +         immediately.
+> > +
+> > +               - Assertions call function:
+> > +                 ``void __noreturn kunit_abort(struct kunit *)``.
+> > +
+> > +               - ``kunit_abort`` calls function:
+> > +                 ``void __noreturn kunit_try_catch_throw(struct kunit_=
+try_catch *try_catch)``.
+> > +
+> > +               - ``kunit_try_catch_throw`` calls function:
+> > +                 ``void complete_and_exit(struct completion *, long) _=
+_noreturn;``
+> > +                 and terminates the special thread context.
+> > +
+> > +- ``<op>`` denotes a check with options: ``TRUE`` (supplied property
+> > +  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied =
+properties are
+> > +  equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does n=
+ot
+> > +  contain an =E2=80=9Cerr=E2=80=9D value).
+> > +
+> > +- ``[_MSG]`` prints a custom message on failure.
+> > +
+> > +Test Result Reporting
+> > +---------------------
+> > +KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
+> > +https://github.com/isaacs/testanything.github.io/blob/tap14/tap-versio=
+n-14-specification.md.
+> > +KTAP (yet to be standardized format) works with KUnit and Kselftest.
+> > +The KUnit executor prints KTAP results to dmesg, and debugfs
+> > +(if configured).
+> > +
+> > +Parameterized Tests
+> > +-------------------
+> > +
+> > +Each KUnit parameterized test is associated with a collection of
+> > +parameters. The test is invoked multiple times, once for each paramete=
+r
+> > +value and the parameter is stored in the ``param_value`` field.
+> > +The test case includes a ``KUNIT_CASE_PARAM()`` macro that accepts a
+> > +generator function.
+> > +The generator function returns the next parameter given to the
+> > +previous parameter in parameterized tests. It also provides a macro to
+> > +generate common-case generators based on arrays.
+> > +
+> > +For code, see:
+> > +https://elixir.bootlin.com/linux/v5.12/source/include/kunit/test.h#L17=
+83
+>
+> This is a link to an external mirror of the kernel, which should not
+> be used. If you must point to a specific version and line of the
+> kernel, use a kernel.org link:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/i=
+nclude/kunit/test.h?h=3Dv5.15#n1872
+>
+> and ideally using a ReST link.
+>
+> Furthermore, ReST actually lets you select to inline certain
+> documentation, which would be appropriate in this case. This can be
+> done via the ".. kernel-doc: <file>" directive, and you can select
+> which identifier you want to render in the final document. See
+> https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html#includin=
+g-kernel-doc-comments
+>
+> > +
+> > +kunit_tool (Command Line Test Harness)
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
+> > +that can be used to configure, build, exec, parse and run (runs other
+> > +commands in order) test results. You can either run KUnit tests using
+> > +kunit_tool or can include KUnit in kernel and parse manually.
+> > +
+> > +- ``configure`` command generates the kernel ``.config`` from a
+> > +  ``.kunitconfig`` file (and any architecture-specific options).
+> > +  For some architectures, additional config options are specified in t=
+he
+> > +  ``qemu_config`` Python script
+> > +  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
+> > +  It parses both the existing ``.config`` and the ``.kunitconfig`` fil=
+es
+> > +  and ensures that ``.config`` is a superset of ``.kunitconfig``.
+> > +  If this is not the case, it will combine the two and run
+> > +  ``make olddefconfig`` to regenerate the ``.config`` file. It then
+> > +  verifies that ``.config`` is now a superset. This checks if all
+> > +  Kconfig dependencies are correctly specified in ``.kunitconfig``.
+> > +  ``kunit_config.py`` includes the parsing Kconfigs code. The code whi=
+ch
+> > +  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
+> > +  invoke this command via: ``./tools/testing/kunit/kunit.py config`` a=
+nd
+> > +  generate a ``.config`` file.
+> > +- ``build`` runs ``make`` on the kernel tree with required options
+> > +  (depends on the architecture and some options, for example: build_di=
+r)
+> > +  and reports any errors.
+> > +  To build a KUnit kernel from the current ``.config``, you can use th=
+e
+> > +  ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
+> > +- ``exec`` command executes kernel results either directly (using
+> > +  User-mode Linux configuration), or via an emulator such
+> > +  as QEMU. It reads results from the log via standard
+> > +  output (stdout), and passes them to ``parse`` to be parsed.
+> > +  If you already have built a kernel with built-in KUnit tests,
+> > +  you can run the kernel and display the test results with the ``exec`=
+`
+> > +  argument: ``./tools/testing/kunit/kunit.py exec``.
+> > +- ``parse`` extracts the KTAP output from a kernel log, parses
+> > +  the test results, and prints a summary. For failed tests, any
+> > +  diagnostic output will be included.
+> > diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/de=
+v-tools/kunit/index.rst
+> > index ebf4bffaa1ca..75e4ae85adbb 100644
+> > --- a/Documentation/dev-tools/kunit/index.rst
+> > +++ b/Documentation/dev-tools/kunit/index.rst
+> > @@ -9,6 +9,7 @@ KUnit - Linux Kernel Unit Testing
+> >         :caption: Contents:
+> >
+> >         start
+> > +       architecture
+> >         usage
+> >         kunit-tool
+> >         api/index
+> > @@ -96,6 +97,7 @@ How do I use it?
+> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> >  *   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
+> > +*   Documentation/dev-tools/kunit/architecture.rst - KUnit architectur=
+e.
+> >  *   Documentation/dev-tools/kunit/usage.rst - KUnit features.
+> >  *   Documentation/dev-tools/kunit/tips.rst - best practices with
+> >      examples.
+> > diff --git a/Documentation/dev-tools/kunit/kunit_suitememorydiagram.png=
+ b/Documentation/dev-tools/kunit/kunit_suitememorydiagram.png
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..a1aa7c3b0f63edfea83eb1c=
+ef3e2257b47b5ca7b
+> > GIT binary patch
+>
+> I think adding binary blobs like this is quite unusual.
+>
+> There currently are no .png files in the kernel repo, and this would
+> be the first.
+>
+> How difficult is it to create an ascii diagram?
+>
+There are a lot of .svg files in the documentation. I think it is fine
+to add .png files. We are not creating a new president here.
+I do not have experience of creating ASCII diagrams. This diagram is
+somewhat complicated. We can try that in a follow up patch. Is this
+ok?
+
+> > diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/de=
+v-tools/kunit/start.rst
+> > index 55f8df1abd40..5dd2c88fa2bd 100644
+> > --- a/Documentation/dev-tools/kunit/start.rst
+> > +++ b/Documentation/dev-tools/kunit/start.rst
+> > @@ -240,6 +240,7 @@ Congrats! You just wrote your first KUnit test.
+> >  Next Steps
+> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > +*   Documentation/dev-tools/kunit/architecture.rst - KUnit architectur=
+e.
+> >  *   Documentation/dev-tools/kunit/usage.rst - KUnit features.
+> >  *   Documentation/dev-tools/kunit/tips.rst - best practices with
+> >      examples.
+> > --
+> > 2.34.1.400.ga245620fadb-goog
+> >
+> > --
+> > You received this message because you are subscribed to the Google Grou=
+ps "KUnit Development" group.
+> > To unsubscribe from this group and stop receiving emails from it, send =
+an email to kunit-dev+unsubscribe@googlegroups.com.
+> > To view this discussion on the web visit https://groups.google.com/d/ms=
+gid/kunit-dev/20211207054019.1455054-4-sharinder%40google.com.
 
 Thanks,
-Ilkka
-
+Harinder Singh

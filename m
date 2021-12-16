@@ -2,335 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD431476812
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 03:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D245C476823
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 03:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbhLPCcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 21:32:12 -0500
-Received: from mga18.intel.com ([134.134.136.126]:62503 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232940AbhLPCbu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 21:31:50 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226245783"
-X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
-   d="scan'208";a="226245783"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 18:31:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
-   d="scan'208";a="611153181"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Dec 2021 18:31:49 -0800
-Received: from debox1-desk4.intel.com (unknown [10.209.86.221])
-        by linux.intel.com (Postfix) with ESMTP id 03D23580D6F;
-        Wed, 15 Dec 2021 18:31:48 -0800 (PST)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     lee.jones@linaro.org, hdegoede@redhat.com,
-        david.e.box@linux.intel.com, bhelgaas@google.com,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, mgross@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH V4 6/6] selftests: sdsi: test sysfs setup
-Date:   Wed, 15 Dec 2021 18:31:46 -0800
-Message-Id: <20211216023146.2361174-7-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211216023146.2361174-1-david.e.box@linux.intel.com>
-References: <20211216023146.2361174-1-david.e.box@linux.intel.com>
+        id S230197AbhLPCeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 21:34:11 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:54512 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229972AbhLPCeJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 21:34:09 -0500
+X-UUID: 2645b85d949c4af4a8a6da26b151cd62-20211216
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Llo3GNG3LefL9fq8uRh9hI0WF+b/t4xEI+BOfK4DeHc=;
+        b=HMgEGaV9Han0/KxGAR7ODIaZNrIu14oy5fs0Fui+RN0059hw6ekKTN5X+UxCAkTodbosAJZb6lPyTzOA5tpdhCBOUKdXAqi9DNyk4KjkE/Z6883SxcuQdLm5bRT6sN7C6036BJzlgMbVxSvBqaHH6rxT+EKWmwmics4D31ok7CU=;
+X-UUID: 2645b85d949c4af4a8a6da26b151cd62-20211216
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 245205377; Thu, 16 Dec 2021 10:34:05 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 16 Dec 2021 10:34:04 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 16 Dec 2021 10:34:03 +0800
+Message-ID: <151fc4556ba03703dffa30aeb8f24aee489c855c.camel@mediatek.com>
+Subject: Re: [PATCH net-next v9 6/6] net: dt-bindings: dwmac: add support
+ for mt8195
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
+Date:   Thu, 16 Dec 2021 10:34:04 +0800
+In-Reply-To: <YbpobIscSDPKuxxY@robh.at.kernel.org>
+References: <20211215021652.7270-1-biao.huang@mediatek.com>
+         <20211215021652.7270-7-biao.huang@mediatek.com>
+         <YbpobIscSDPKuxxY@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tests file configuration and error handling of the Intel Software
-Defined Silicon sysfs ABI.
-
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
-V4
-  - No changes.
-V3
-  - Add tests to check PCI device removal handling and to check for
-    driver memory leaks.
-V2
-  - New patch.
-
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/drivers/sdsi/sdsi.sh  |  18 ++
- .../selftests/drivers/sdsi/sdsi_test.py       | 226 ++++++++++++++++++
- 3 files changed, 245 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/sdsi/sdsi.sh
- create mode 100644 tools/testing/selftests/drivers/sdsi/sdsi_test.py
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 500b49e6958a..a0d550f5bfdc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9788,6 +9788,7 @@ M:	David E. Box <david.e.box@linux.intel.com>
- S:	Supported
- F:	drivers/platform/x86/intel/sdsi.c
- F:	tools/arch/x86/intel_sdsi/
-+F:	tools/testing/selftests/drivers/sdsi/
- 
- INTEL SKYLAKE INT3472 ACPI DEVICE DRIVER
- M:	Daniel Scally <djrscally@gmail.com>
-diff --git a/tools/testing/selftests/drivers/sdsi/sdsi.sh b/tools/testing/selftests/drivers/sdsi/sdsi.sh
-new file mode 100755
-index 000000000000..8db71961d164
---- /dev/null
-+++ b/tools/testing/selftests/drivers/sdsi/sdsi.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Runs tests for the intel_sdsi driver
-+
-+if ! /sbin/modprobe -q -r intel_sdsi; then
-+	echo "drivers/sdsi: [SKIP]"
-+	exit 77
-+fi
-+
-+if /sbin/modprobe -q intel_sdsi; then
-+	python3 -m pytest sdsi_test.py
-+	/sbin/modprobe -q -r intel_sdsi
-+
-+	echo "drivers/sdsi: ok"
-+else
-+	echo "drivers/sdsi: [FAIL]"
-+	exit 1
-+fi
-diff --git a/tools/testing/selftests/drivers/sdsi/sdsi_test.py b/tools/testing/selftests/drivers/sdsi/sdsi_test.py
-new file mode 100644
-index 000000000000..4922edfe461f
---- /dev/null
-+++ b/tools/testing/selftests/drivers/sdsi/sdsi_test.py
-@@ -0,0 +1,226 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from struct import pack
-+from time import sleep
-+
-+import errno
-+import glob
-+import os
-+import subprocess
-+
-+try:
-+    import pytest
-+except ImportError:
-+    print("Unable to import pytest python module.")
-+    print("\nIf not already installed, you may do so with:")
-+    print("\t\tpip3 install pytest")
-+    exit(1)
-+
-+SOCKETS = glob.glob('/sys/bus/auxiliary/devices/intel_vsec.sdsi.*')
-+NUM_SOCKETS = len(SOCKETS)
-+
-+MODULE_NAME = 'sdsi'
-+DEV_PREFIX = 'intel_vsec.sdsi'
-+CLASS_DIR = '/sys/bus/auxiliary/devices'
-+GUID = "0x6dd191"
-+
-+def read_bin_file(file):
-+    with open(file, mode='rb') as f:
-+        content = f.read()
-+    return content
-+
-+def get_dev_file_path(socket, file):
-+    return CLASS_DIR + '/' + DEV_PREFIX + '.' + str(socket) + '/' + file
-+
-+def kmemleak_enabled():
-+    kmemleak = "/sys/kernel/debug/kmemleak"
-+    return os.path.isfile(kmemleak)
-+
-+class TestSDSiDriver:
-+    def test_driver_loaded(self):
-+        lsmod_p = subprocess.Popen(('lsmod'), stdout=subprocess.PIPE)
-+        result = subprocess.check_output(('grep', '-q', MODULE_NAME), stdin=lsmod_p.stdout)
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSDSiFilesClass:
-+
-+    def read_value(self, file):
-+        f = open(file, "r")
-+        value = f.read().strip("\n")
-+        return value
-+
-+    def get_dev_folder(self, socket):
-+        return CLASS_DIR + '/' + DEV_PREFIX + '.' + str(socket) + '/'
-+
-+    def test_sysfs_files_exist(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        print (folder)
-+        assert os.path.isfile(folder + "guid") == True
-+        assert os.path.isfile(folder + "provision_akc") == True
-+        assert os.path.isfile(folder + "provision_cap") == True
-+        assert os.path.isfile(folder + "state_certificate") == True
-+        assert os.path.isfile(folder + "registers") == True
-+
-+    def test_sysfs_file_permissions(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        mode = os.stat(folder + "guid").st_mode & 0o777
-+        assert mode == 0o444    # Read all
-+        mode = os.stat(folder + "registers").st_mode & 0o777
-+        assert mode == 0o400    # Read owner
-+        mode = os.stat(folder + "provision_akc").st_mode & 0o777
-+        assert mode == 0o200    # Read owner
-+        mode = os.stat(folder + "provision_cap").st_mode & 0o777
-+        assert mode == 0o200    # Read owner
-+        mode = os.stat(folder + "state_certificate").st_mode & 0o777
-+        assert mode == 0o400    # Read owner
-+
-+    def test_sysfs_file_ownership(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        st = os.stat(folder + "guid")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "registers")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "provision_akc")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "provision_cap")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+        st = os.stat(folder + "state_certificate")
-+        assert st.st_uid == 0
-+        assert st.st_gid == 0
-+
-+    def test_sysfs_file_sizes(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        if self.read_value(folder + "guid") == GUID:
-+            st = os.stat(folder + "registers")
-+            assert st.st_size == 72
-+
-+        st = os.stat(folder + "provision_akc")
-+        assert st.st_size == 1024
-+
-+        st = os.stat(folder + "provision_cap")
-+        assert st.st_size == 1024
-+
-+        st = os.stat(folder + "state_certificate")
-+        assert st.st_size == 4096
-+
-+    def test_no_seek_allowed(self, socket):
-+        folder = self.get_dev_folder(socket)
-+        rand_file = bytes(os.urandom(8))
-+
-+        f = open(folder + "provision_cap", "wb", 0)
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+        f = open(folder + "provision_akc", "wb", 0)
-+        f.seek(1)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ESPIPE
-+        f.close()
-+
-+    def test_registers_seek(self, socket):
-+        folder = self.get_dev_folder(socket)
-+
-+        # Check that the value read from an offset of the entire
-+        # file is none-zero and the same as the value read
-+        # from seeking to the same location
-+        f = open(folder + "registers", "rb")
-+        data = f.read()
-+        f.seek(64)
-+        id = f.read()
-+        assert id != bytes(0)
-+        assert data[64:] == id
-+        f.close()
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSDSiMailboxCmdsClass:
-+    def test_provision_akc_eoverflow_1017_bytes(self, socket):
-+
-+        # The buffer for writes is 1k, of with 8 bytes must be
-+        # reserved for the command, leaving 1016 bytes max.
-+        # Check that we get an overflow error for 1017 bytes.
-+        node = get_dev_file_path(socket, "provision_akc")
-+        rand_file = bytes(os.urandom(1017))
-+
-+        f = open(node, 'wb', 0)
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.EOVERFLOW
-+        f.close()
-+
-+@pytest.mark.parametrize('socket', range(0, NUM_SOCKETS))
-+class TestSdsiDriverLocksClass:
-+    def test_enodev_when_pci_device_removed(self, socket):
-+        node = get_dev_file_path(socket, "provision_akc")
-+        dev_name = DEV_PREFIX + '.' + str(socket)
-+        driver_dir = CLASS_DIR + '/' + dev_name + "/driver/"
-+        rand_file = bytes(os.urandom(8))
-+
-+        f = open(node, 'wb', 0)
-+        g = open(node, 'wb', 0)
-+
-+        with open(driver_dir + 'unbind', 'w') as k:
-+            print(dev_name, file = k)
-+
-+        with pytest.raises(OSError) as error:
-+            f.write(rand_file)
-+        assert error.value.errno == errno.ENODEV
-+
-+        with pytest.raises(OSError) as error:
-+            g.write(rand_file)
-+        assert error.value.errno == errno.ENODEV
-+
-+        f.close()
-+        g.close()
-+
-+        # Short wait needed to allow file to close before pulling driver
-+        sleep(1)
-+
-+        p = subprocess.Popen(('modprobe', '-r', 'intel_sdsi'))
-+        p.wait()
-+        p = subprocess.Popen(('modprobe', '-r', 'intel_vsec'))
-+        p.wait()
-+        p = subprocess.Popen(('modprobe', 'intel_vsec'))
-+        p.wait()
-+
-+        # Short wait needed to allow driver time to get inserted
-+        # before continuing tests
-+        sleep(1)
-+
-+    def test_memory_leak(self, socket):
-+        if not kmemleak_enabled:
-+            pytest.skip("kmemleak not enabled in kernel")
-+
-+        dev_name = DEV_PREFIX + '.' + str(socket)
-+        driver_dir = CLASS_DIR + '/' + dev_name + "/driver/"
-+
-+        with open(driver_dir + 'unbind', 'w') as k:
-+            print(dev_name, file = k)
-+
-+        sleep(1)
-+
-+        subprocess.check_output(('modprobe', '-r', 'intel_sdsi'))
-+        subprocess.check_output(('modprobe', '-r', 'intel_vsec'))
-+
-+        with open('/sys/kernel/debug/kmemleak', 'w') as f:
-+            print('scan', file = f)
-+        sleep(5)
-+
-+        assert os.stat('/sys/kernel/debug/kmemleak').st_size == 0
-+
-+        subprocess.check_output(('modprobe', 'intel_vsec'))
-+        sleep(1)
--- 
-2.25.1
+RGVhciBSb2IsDQoJVGhhbmtzIGZvciB5b3VyIGNvbW1lbnRzfg0KT24gV2VkLCAyMDIxLTEyLTE1
+IGF0IDE2OjEzIC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4gT24gV2VkLCBEZWMgMTUsIDIw
+MjEgYXQgMTA6MTY6NTJBTSArMDgwMCwgQmlhbyBIdWFuZyB3cm90ZToNCj4gPiBBZGQgYmluZGlu
+ZyBkb2N1bWVudCBmb3IgdGhlIGV0aGVybmV0IG9uIG10ODE5NS4NCj4gPiANCj4gPiBTaWduZWQt
+b2ZmLWJ5OiBCaWFvIEh1YW5nIDxiaWFvLmh1YW5nQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4g
+PiAgLi4uL2JpbmRpbmdzL25ldC9tZWRpYXRlay1kd21hYy55YW1sICAgICAgICAgIHwgNDIgKysr
+KysrKysrKysrKystDQo+ID4gLS0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMzIgaW5zZXJ0aW9u
+cygrKSwgMTAgZGVsZXRpb25zKC0pDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRp
+b24vZGV2aWNldHJlZS9iaW5kaW5ncy9uZXQvbWVkaWF0ZWstDQo+ID4gZHdtYWMueWFtbCBiL0Rv
+Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9uZXQvbWVkaWF0ZWstDQo+ID4gZHdtYWMu
+eWFtbA0KPiA+IGluZGV4IDhhZDZlMTk2NjFiOC4uNDRkNTUxNDZkZWY0IDEwMDY0NA0KPiA+IC0t
+LSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9uZXQvbWVkaWF0ZWstZHdtYWMu
+eWFtbA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9uZXQvbWVk
+aWF0ZWstZHdtYWMueWFtbA0KPiA+IEBAIC0xOSw2ICsxOSw3IEBAIHNlbGVjdDoNCj4gPiAgICAg
+ICAgY29udGFpbnM6DQo+ID4gICAgICAgICAgZW51bToNCj4gPiAgICAgICAgICAgIC0gbWVkaWF0
+ZWssbXQyNzEyLWdtYWMNCj4gPiArICAgICAgICAgIC0gbWVkaWF0ZWssbXQ4MTk1LWdtYWMNCj4g
+PiAgICByZXF1aXJlZDoNCj4gPiAgICAgIC0gY29tcGF0aWJsZQ0KPiA+ICANCj4gPiBAQCAtMjcs
+MjYgKzI4LDM3IEBAIGFsbE9mOg0KPiA+ICANCj4gPiAgcHJvcGVydGllczoNCj4gPiAgICBjb21w
+YXRpYmxlOg0KPiA+IC0gICAgaXRlbXM6DQo+ID4gLSAgICAgIC0gZW51bToNCj4gPiAtICAgICAg
+ICAgIC0gbWVkaWF0ZWssbXQyNzEyLWdtYWMNCj4gPiAtICAgICAgLSBjb25zdDogc25wcyxkd21h
+Yy00LjIwYQ0KPiA+ICsgICAgb25lT2Y6DQo+ID4gKyAgICAgIC0gaXRlbXM6DQo+ID4gKyAgICAg
+ICAgICAtIGVudW06DQo+ID4gKyAgICAgICAgICAgICAgLSBtZWRpYXRlayxtdDI3MTItZ21hYw0K
+PiA+ICsgICAgICAgICAgLSBjb25zdDogc25wcyxkd21hYy00LjIwYQ0KPiA+ICsgICAgICAtIGl0
+ZW1zOg0KPiA+ICsgICAgICAgICAgLSBlbnVtOg0KPiA+ICsgICAgICAgICAgICAgIC0gbWVkaWF0
+ZWssbXQ4MTk1LWdtYWMNCj4gPiArICAgICAgICAgIC0gY29uc3Q6IHNucHMsZHdtYWMtNS4xMGEN
+Cj4gPiAgDQo+ID4gICAgY2xvY2tzOg0KPiA+ICsgICAgbWluSXRlbXM6IDUNCj4gDQo+IEFzIGJl
+Zm9yZSwgeW91IG5lZWQgJ21pbkl0ZW1zOiA0JyBpbiB0aGUgcHJldmlvdXMgcGF0Y2guDQo+IA0K
+PiBJZiB5b3UgYXJlbid0IGNsZWFyIHdoYXQncyBuZWVkZWQsIHJ1biAnbWFrZSBkdGJzX2NoZWNr
+cycgeW91cnNlbGYgDQo+IGJlZm9yZSBzdWJtaXR0aW5nIGFnYWluLg0KDQpCdXQgYXMgbW9kaWZp
+ZWQgaW4gIltQQVRDSCBuZXQtbmV4dCB2OSAzLzZdIGFybTY0OiBkdHM6IG10MjcxMjogdXBkYXRl
+DQpldGhlcm5ldCBkZXZpY2Ugbm9kZSIsIHdlIGV4cGVjdCAibWluSXRlbXM6IDUiLg0KDQpydW4g
+J21ha2UgZHRic19jaGVja3MnIHdpdGggIltQQVRDSCBuZXQtbmV4dCB2OSAzLzZdIGFybTY0OiBk
+dHM6DQptdDI3MTI6IHVwZGF0ZSBldGhlcm5ldCBkZXZpY2Ugbm9kZSIgYXBwbGllZCwgd2lsbCBu
+b3QgcmVwb3J0IGxvZ3Mgc3VjaA0KYXMgImV0aGVybmV0QDExMDFjMDAwOiBjbG9jay1uYW1lczog
+WydheGknLCAnYXBiJywgJ21hY19tYWluJywNCidwdHBfcmVmJ10gaXMgdG9vIHNob3J0Ii4NCg0K
+U2hvdWxkIGl0IGJlIGZpbmUgaWYgSSBrZWVwICJtaW5JdGVtczo1Ij8NCj4gDQo+ID4gICAgICBp
+dGVtczoNCj4gPiAgICAgICAgLSBkZXNjcmlwdGlvbjogQVhJIGNsb2NrDQo+ID4gICAgICAgIC0g
+ZGVzY3JpcHRpb246IEFQQiBjbG9jaw0KPiA+ICAgICAgICAtIGRlc2NyaXB0aW9uOiBNQUMgTWFp
+biBjbG9jaw0KPiA+ICAgICAgICAtIGRlc2NyaXB0aW9uOiBQVFAgY2xvY2sNCj4gPiAgICAgICAg
+LSBkZXNjcmlwdGlvbjogUk1JSSByZWZlcmVuY2UgY2xvY2sgcHJvdmlkZWQgYnkgTUFDDQo+ID4g
+KyAgICAgIC0gZGVzY3JpcHRpb246IE1BQyBjbG9jayBnYXRlDQo+ID4gIA0KPiA+ICAgIGNsb2Nr
+LW5hbWVzOg0KPiA+IC0gICAgaXRlbXM6DQo+ID4gLSAgICAgIC0gY29uc3Q6IGF4aQ0KPiA+IC0g
+ICAgICAtIGNvbnN0OiBhcGINCj4gPiAtICAgICAgLSBjb25zdDogbWFjX21haW4NCj4gPiAtICAg
+ICAgLSBjb25zdDogcHRwX3JlZg0KPiA+IC0gICAgICAtIGNvbnN0OiBybWlpX2ludGVybmFsDQo+
+ID4gKyAgICBtaW5JdGVtczogNQ0KPiA+ICsgICAgbWF4SXRlbXM6IDYNCj4gPiArICAgIGNvbnRh
+aW5zOg0KPiANCj4gTm8sIHlvdSBqdXN0IHRocmV3IG91dCB0aGUgb3JkZXIgcmVxdWlyZW1lbnRz
+LiBBbmQgdGhpcyBzY2hlbWEgd2lsbA0KPiBiZSANCj4gdHJ1ZSB3aXRoIGp1c3QgMSBvZiB0aGUg
+c3RyaW5ncyBiZWxvdyBwbHVzIGFueSBvdGhlciBzdHJpbmdzLiBGb3IgDQo+IGV4YW1wbGUsIHRo
+aXMgd2lsbCBwYXNzOg0KPiANCj4gY2xvY2stbmFtZXMgPSAiZm9vIiwgImJhciIsICJheGkiLCAi
+YmF6IiwgInJvYiI7DQpJIG1pc3VuZGVyc3Rvb2QgdGhpcyBzY2hlbWEsIA0KYW5kIGhvdyBhYm91
+dCB0aGUgZm9sbG93aW5nIGRlc2NyaXB0aW9uOg0KDQpjbG9jay1uYW1lczoNCiAgbWluSXRlbXM6
+IDUNCiAgbWF4SXRlbXM6IDYNCiAgaXRlbXM6DQogICAgLSBjb25zdDogYXhpDQogICAgLSBjb25z
+dDogYXBiDQogICAgLSBjb25zdDogbWFjX21haW4NCiAgICAtIGNvbnN0OiBwdHBfcmVmDQogICAg
+LSBjb25zdDogcm1paV9pbnRlcm5hbA0KICAgIC0gY29uc3Q6IG1hY19jZw0KDQpSZWdhcmRzIQ0K
+PiANCj4gPiArICAgICAgZW51bToNCj4gPiArICAgICAgICAtIGF4aQ0KPiA+ICsgICAgICAgIC0g
+YXBiDQo+ID4gKyAgICAgICAgLSBtYWNfbWFpbg0KPiA+ICsgICAgICAgIC0gcHRwX3JlZg0KPiA+
+ICsgICAgICAgIC0gcm1paV9pbnRlcm5hbA0KPiA+ICsgICAgICAgIC0gbWFjX2NnDQo+ID4gIA0K
+PiA+ICAgIG1lZGlhdGVrLHBlcmljZmc6DQo+ID4gICAgICAkcmVmOiAvc2NoZW1hcy90eXBlcy55
+YW1sIy9kZWZpbml0aW9ucy9waGFuZGxlDQo+ID4gQEAgLTYxLDYgKzczLDggQEAgcHJvcGVydGll
+czoNCj4gPiAgICAgICAgb3Igd2lsbCByb3VuZCBkb3duLiBSYW5nZSAwfjMxKjE3MC4NCj4gPiAg
+ICAgICAgRm9yIE1UMjcxMiBSTUlJL01JSSBpbnRlcmZhY2UsIEFsbG93ZWQgdmFsdWUgbmVlZCB0
+byBiZSBhDQo+ID4gbXVsdGlwbGUgb2YgNTUwLA0KPiA+ICAgICAgICBvciB3aWxsIHJvdW5kIGRv
+d24uIFJhbmdlIDB+MzEqNTUwLg0KPiA+ICsgICAgICBGb3IgTVQ4MTk1IFJHTUlJL1JNSUkvTUlJ
+IGludGVyZmFjZSwgQWxsb3dlZCB2YWx1ZSBuZWVkIHRvDQo+ID4gYmUgYSBtdWx0aXBsZSBvZiAy
+OTAsDQo+ID4gKyAgICAgIG9yIHdpbGwgcm91bmQgZG93bi4gUmFuZ2UgMH4zMSoyOTAuDQo+ID4g
+IA0KPiA+ICAgIG1lZGlhdGVrLHJ4LWRlbGF5LXBzOg0KPiA+ICAgICAgZGVzY3JpcHRpb246DQo+
+ID4gQEAgLTY5LDYgKzgzLDggQEAgcHJvcGVydGllczoNCj4gPiAgICAgICAgb3Igd2lsbCByb3Vu
+ZCBkb3duLiBSYW5nZSAwfjMxKjE3MC4NCj4gPiAgICAgICAgRm9yIE1UMjcxMiBSTUlJL01JSSBp
+bnRlcmZhY2UsIEFsbG93ZWQgdmFsdWUgbmVlZCB0byBiZSBhDQo+ID4gbXVsdGlwbGUgb2YgNTUw
+LA0KPiA+ICAgICAgICBvciB3aWxsIHJvdW5kIGRvd24uIFJhbmdlIDB+MzEqNTUwLg0KPiA+ICsg
+ICAgICBGb3IgTVQ4MTk1IFJHTUlJL1JNSUkvTUlJIGludGVyZmFjZSwgQWxsb3dlZCB2YWx1ZSBu
+ZWVkIHRvDQo+ID4gYmUgYSBtdWx0aXBsZQ0KPiA+ICsgICAgICBvZiAyOTAsIG9yIHdpbGwgcm91
+bmQgZG93bi4gUmFuZ2UgMH4zMSoyOTAuDQo+ID4gIA0KPiA+ICAgIG1lZGlhdGVrLHJtaWktcnhj
+Og0KPiA+ICAgICAgdHlwZTogYm9vbGVhbg0KPiA+IEBAIC0xMDIsNiArMTE4LDEyIEBAIHByb3Bl
+cnRpZXM6DQo+ID4gICAgICAgIDMuIHRoZSBpbnNpZGUgY2xvY2ssIHdoaWNoIGJlIHNlbnQgdG8g
+TUFDLCB3aWxsIGJlIGludmVyc2VkDQo+ID4gaW4gUk1JSSBjYXNlIHdoZW4NCj4gPiAgICAgICAg
+ICAgdGhlIHJlZmVyZW5jZSBjbG9jayBpcyBmcm9tIE1BQy4NCj4gPiAgDQo+ID4gKyAgbWVkaWF0
+ZWssbWFjLXdvbDoNCj4gPiArICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArICAgIGRlc2NyaXB0aW9u
+Og0KPiA+ICsgICAgICBJZiBwcmVzZW50LCBpbmRpY2F0ZXMgdGhhdCBNQUMgc3VwcG9ydHMgV09M
+KFdha2UtT24tTEFOKSwNCj4gPiBhbmQgTUFDIFdPTCB3aWxsIGJlIGVuYWJsZWQuDQo+ID4gKyAg
+ICAgIE90aGVyd2lzZSwgUEhZIFdPTCBpcyBwZXJmZXJyZWQuDQo+ID4gKw0KPiA+ICByZXF1aXJl
+ZDoNCj4gPiAgICAtIGNvbXBhdGlibGUNCj4gPiAgICAtIHJlZw0KPiA+IC0tIA0KPiA+IDIuMjUu
+MQ0KPiA+IA0KPiA+IA0K
 

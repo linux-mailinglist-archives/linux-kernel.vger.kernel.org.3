@@ -2,97 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FAA477447
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE6E47744D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237840AbhLPOTH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Dec 2021 09:19:07 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:60973 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbhLPOTH (ORCPT
+        id S237850AbhLPOTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:19:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229583AbhLPOTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:19:07 -0500
-Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MCsDe-1mp6Aj1WF6-008vRY; Thu, 16 Dec 2021 15:19:05 +0100
-Received: by mail-wr1-f49.google.com with SMTP id e5so11065576wrc.5;
-        Thu, 16 Dec 2021 06:19:05 -0800 (PST)
-X-Gm-Message-State: AOAM532Og1NAamdQ4IykJsrGX5en4sWA919JvtSJzq74nhr5o0GvmUir
-        dHY5M61u632Bkn2nif7CbB9QpMIFr4KpamBoBJc=
-X-Google-Smtp-Source: ABdhPJxmplO/8wUtDmbZb8q9bqy7ZOfHV5yg368TQTzX4lBN+OEsoFiUjwpCE3vTs4ls9wlTx+wNiOOu6o9NNRcFeqQ=
-X-Received: by 2002:a05:6000:52:: with SMTP id k18mr9356273wrx.192.1639664344795;
- Thu, 16 Dec 2021 06:19:04 -0800 (PST)
+        Thu, 16 Dec 2021 09:19:11 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7554C061574;
+        Thu, 16 Dec 2021 06:19:10 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id t3so3560708lfe.12;
+        Thu, 16 Dec 2021 06:19:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FHZhtH3DW7AMrBjP8iVuxcvAkwhLC1m6PQhYldA9iJU=;
+        b=kfQna7lwKWEWNyGl0m+WM04u4GvDzlfWdVJpaVjT3VLpr11FElsgNikURpISaLmqEB
+         gSnfcAyYPclS/JMQBjs4BWeC4liYjwwJhGaI2CLj9zwVCtQp20VEezdXRdvXOfU+rQv+
+         cvdiG+BIckrRWvJ5LmWc6gi1KqhH5V1mE4tW41nr4+IFwNca4fR7ttL4xlWwn74TndKS
+         G0whMZLLYcMsAAhjjKd4W8N2DSbx8f8iAVMtBkeyqMXniFfccMFxE6qkDTG53a+wbF/W
+         fUHDrFY0WxEr+0Me59Iq1ISBYx2DSYnRx5jkh9GCiG6ldF+F7h4CTLIk/j1S9Ue9eW4l
+         GW3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FHZhtH3DW7AMrBjP8iVuxcvAkwhLC1m6PQhYldA9iJU=;
+        b=EKww2pebI/8EdJ2mCFlg0xUlm5l1n0Sv0XJDK0pCnBHi/RVg6O18cKNBrrcUKaxS+Q
+         7KC2rm/YnIR+aHINg09IfFWdfD/agGbk9uMQesP1eOh1sJ3u62oS0M4lqoqC+bYBLqII
+         j4jAw0amS7Wjpbp1IY4Z5eIdrb+S1o/NTJ7A209n4BW6QIu25LA/UfCQN6TBwwwNl2gx
+         HdGpQkWNT5FqNMYOxI8ffFYbS1xyj/5U3bu02eiw7XjgzGvCLdQeWOsxPfraIuDYZFom
+         UQ58Tx1zCdMGzquE12BygpWzosJgyTe4nAHJgqVi0csXSuGzDG6c1FVEfM+yMwW8WvD8
+         VgPQ==
+X-Gm-Message-State: AOAM531y0OcgijHp5GgxhVXHW4hga+7QtuR2ZKpuBuJB6iBE/lXiJEaP
+        IKNyvDXGrI3RuEZ5ThhVzEA=
+X-Google-Smtp-Source: ABdhPJwTCLw6X+g8WZv+7SknvWAEs+qjM7J+ZiSnSsKS4sTnaSQels7ZUzqMKyR6w73ajpLDsSHcBA==
+X-Received: by 2002:a19:8c48:: with SMTP id i8mr14971511lfj.179.1639664349109;
+        Thu, 16 Dec 2021 06:19:09 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id k14sm1148653ljk.57.2021.12.16.06.19.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 06:19:08 -0800 (PST)
+Subject: Re: [PATCH v16 00/40] NVIDIA Tegra power management patches for 5.17
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
+References: <20211130232347.950-1-digetx@gmail.com> <YboP9IFMUrUnEzrU@orome>
+ <6baf6013-fbb2-b42f-5b26-2d10a2ca9374@gmail.com> <Ybs7zKQY1uJCJ2f3@orome>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <f4ba1201-e3f4-d0cc-17df-9645783dee04@gmail.com>
+Date:   Thu, 16 Dec 2021 17:19:07 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
- <20210925203224.10419-6-sergio.paracuellos@gmail.com> <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
- <6ee31420-ef67-471e-a924-a0158b4a9428@www.fastmail.com> <CAK8P3a2i6eW8JunE_6h6OTCa51eHfPahQQhaGHGWePX+r4ybww@mail.gmail.com>
- <bfdfb7b3-1322-573d-eddc-1d337c4616e6@flygoat.com>
-In-Reply-To: <bfdfb7b3-1322-573d-eddc-1d337c4616e6@flygoat.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 16 Dec 2021 15:18:49 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2iQhxckn0MfLyLpKmyKN_MwAJ0t2yh6DLsS0MvdreYNA@mail.gmail.com>
-Message-ID: <CAK8P3a2iQhxckn0MfLyLpKmyKN_MwAJ0t2yh6DLsS0MvdreYNA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific 'pci_remap_iospace()'
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Xi Ruoyao <xry111@mengyan1223.wang>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:IgD0XB8DIUQjREsvuF1C3HD3944VUT61B2OriSnVMbiFXOdkvap
- O1lFdYUXI7kaNNJMBs5ZtyZHev1LquHSgazOunDmIgdwooZ8FOabTNhviJpzn22oMbsh7ga
- VVSOzehekRPVU1ka/2LvuUIFyd5YuBwuHQySwRtbWoBe3xLMwcQOnXW5AG+kZX3PIDA/IYT
- NqkgirYoJpAoN2Rmkj9mA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lDzxYfROAWU=:V6SAkS6NSz6czEHRo1NFM5
- zbjpP9ugIGMv1E9M3UMxd5h3U6u2E3INp75GevJKkI1k/BnSRBvuPQp1TVQShMu6tPjgvqwkl
- Meyriy3oznMWAfJEPJPF+WO8MmUxS4ObmkoDSPANtquK8/PwOTaY1AAeLOqf/Wy4C6/er9JYy
- A+K/kSllzzRWMgh0KEAERE42kAz/JrNGqvJbAZBXI0wGClFrM9wOPmp579BFFG+8iNUwwWlPP
- 4tQREkhLITgAmWg8FGgLpLenuuppNvx7LBKzKrXZHvO494/4VkNKkzKF8ZCrQKo2egOEEUtNU
- AQdI5PfG+J2xIOC+yEo71xW7v28uP8vkTkdu2C5f3pLNWj3F4TANAfTZjxDzYFW5g7e6fHVgq
- ONACbz6HJN/y7WGxRiOtTTQxg+0zzUCWhNeep5D1Ott12q5GgwdkUXSjKkXSNA41wgGofV1X4
- qAXRE1ybP43WGnishkx+WeMKZ4NwJDL3OAqQSVclinp79bxWRmNzgexSVM5bNg1cWlxO7B2fo
- Ve4RNfQtvFlWp7RZKebYJabTSdu3jvAden6RRutoiFzDeYMwNZpzyRiMqXd2HPIoZeWniqjXB
- EEMVCNimWGDP+MBw1nfRwHph0f8hSI6+ERToDZiQkCMZhBgMZ+KvEDz7GQtfvFw9sQA5nn6f4
- 7DGoa71ER1og0ReN/c4q23ttyLUk2ZtaXeuB7qCkSpJpI2HkMRHgAytLRiAQXuzfyYEFZURUZ
- 9MWb7XzknP4mPQx3mzTZVG6EbPhsGJH0NCdZtCBNXimulHGkfFMjqqRX+/uE+Sh3x3s+70SZ9
- Gn2/eFbWhgG1O4DDc+crRCuyvhlfbH5CR9lVIXVXFtT+1lTLSg=
+In-Reply-To: <Ybs7zKQY1uJCJ2f3@orome>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 3:14 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> 在 2021/12/16 13:50, Arnd Bergmann 写道:
-> > On Thu, Dec 16, 2021 at 2:07 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> >> 在2021年12月16日十二月 上午11:44，Xi Ruoyao写道：
-> >> Another way could be keeping a linked list about PIO->PHYS mapping instead of using the single io_port_base variable.
-> > I think that would add a lot of complexity that isn't needed here. Not
-> > sure if all MIPS CPUs
-> > can do it, but the approach used on Arm is what fits in best with the
-> > PCI drivers, these
-> > reserve a virtual address range for the ports, and ioremap the
-> > physical addresses into
-> > the PIO range according to the mapping.
->
-> Yes, the Arm way was my previous approach when introducing PCI IO map
-> for Loongson.
->
-> It got refactored by this patch as TLB entries are expensive on MIPS,
-> also the size of IO range doesn't always fits a page.
+16.12.2021 16:14, Thierry Reding пишет:
+> On Wed, Dec 15, 2021 at 07:11:53PM +0300, Dmitry Osipenko wrote:
+>> 15.12.2021 18:55, Thierry Reding пишет:
+>>> On Wed, Dec 01, 2021 at 02:23:07AM +0300, Dmitry Osipenko wrote:
+>>>> This series adds runtime PM support to Tegra drivers and enables core
+>>>> voltage scaling for Tegra20/30 SoCs, resolving overheating troubles.
+>>>>
+>>>> All patches in this series are interdependent and should go via Tegra tree
+>>>> for simplicity.
+>>>
+>>> So these can be applied in any order without breaking anything?
+>>
+>> Please notice that the word is *inter* dependent, not *in* dependent.
+>>
+>> There is a build dependency for the patches. The first two "soc/tegra"
+>> must be applied first.
+> 
+> Okay, so I've separated the first two patches out into a separate stable
+> branch that I can share between the Tegra and drm/tegra trees to pull in
+> the build dependency and then I've applied the driver patches to those
+> two trees and I've verified that the two branches build correctly. I've
+> not done any runtime testing, but I'll trust you on that.
 
-Are PIO accesses common enough that the TLB entry makes a difference?
-I would imagine that on most systems with a PCI bus, there is not even
-a single device that exposes an I/O resource, and even on those devices that
-do, the kernel drivers tend to pick MMIO whenever both are available.
+I only compile-tested VIC and NVDEC drivers, but they should be okay,
+and thus, everything should be good.
 
-      Arnd
+>> The "soc/tegra: pmc: Enable core domain support for Tegra20 and Tegra30"
+>> *must* be the last applied patch if we want to preserve bisectability.
+>> The core voltage scaling can be enabled only once all the drivers got
+>> the power management support.
+>>
+>> The rest could be applied out-of-order.
+> 
+> One last remaining question: I don't think I can apply that one patch if
+> it requires that all the others are enabled first because it would
+> basically create a circular dependency.
+> 
+> Can I pick up the final 7 patches (the DT ones) independently of that
+> one patch without things breaking? If so, one option we could try is to
+> wait for both Tegra and drm/tegra trees to get merged into v5.17-rc1 and
+> then send that one patch (which is only a 4-line diff) right after
+> v5.17-rc1 so that it makes it into v5.17-rc2. That avoids the circular
+> dependency and should get everything enabled for v5.17.
+> 
+> Do you see any problems with that?
+Deferring that one patch till v5.17-rc2 will work, thank you.

@@ -2,139 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6223C476786
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A3247678F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbhLPBsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 20:48:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35312 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhLPBsV (ORCPT
+        id S232677AbhLPBvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 20:51:40 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59630 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229555AbhLPBvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 20:48:21 -0500
+        Wed, 15 Dec 2021 20:51:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DCC861B65;
-        Thu, 16 Dec 2021 01:48:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9940C36AE1;
-        Thu, 16 Dec 2021 01:48:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBCE4B8226F;
+        Thu, 16 Dec 2021 01:51:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96AD3C36AE1;
+        Thu, 16 Dec 2021 01:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639619300;
-        bh=9nSl+p6c7ECaJOl+DQXpI//VnRBSFhMh+RaPVD0BS58=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sAwc/VuBezb6B3udkJsdyOxTnFNsqTZ6ziwFi6SYftmKTrNeQwgmz5ZGm8x1jCLk2
-         j2vvgXTqEvycD+w2fyxhLtzGp81COyHRDPsONsYTmg/z5xHv7gbeR8/EIfggS5DKVE
-         EE/uibNZ+FiRXjCw9cKuKvJCBjzxv/mbY1ueex3dSxr1qvsbsimjNfniIJGq5OHWUN
-         VOhKg+Hydj4fnzVO4NpsWMK/gSMs3Ts5t6i6Kp2SG3sr1/0Eqy74LCOEgy+vDZBwYB
-         D6bowAfr6K2/B76xoumzdcau0uMj7e/+lHOULnDVIHr9UbyCvcsWVwgLwid/qJqUde
-         G+n934l6cHJ4Q==
-Date:   Wed, 15 Dec 2021 17:48:18 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        lksctp developers <linux-sctp@vger.kernel.org>,
-        "H.P. Yarroll" <piggy@acm.org>,
-        Karl Knutson <karl@athena.chicago.il.us>,
-        Jon Grimm <jgrimm@us.ibm.com>,
-        Xingang Guo <xingang.guo@intel.com>,
-        Hui Huang <hui.huang@nokia.com>,
-        Sridhar Samudrala <sri@us.ibm.com>,
-        Daisy Chang <daisyc@us.ibm.com>,
-        Ryan Layer <rmlayer@us.ibm.com>,
-        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org,
-        Xin Long <lucien.xin@gmail.com>
-Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible
- UAF
-Message-ID: <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211214215732.1507504-2-lee.jones@linaro.org>
-References: <20211214215732.1507504-1-lee.jones@linaro.org>
-        <20211214215732.1507504-2-lee.jones@linaro.org>
+        s=k20201202; t=1639619496;
+        bh=KK2PCJcQ7/7Byemi7xyIPz+xoe33j+VFfkbiyGQPARM=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=f3defKgWisUy4hgonbQccfiHiru2wDolSQZ2lMO8IcXbwKS0CzlFONzt1DKwkTkOe
+         sAzE/ZUhiOKvVGpR/T0TS6TAyrXIfIlAss5DjPcgWRsNxqM2AifybPhY2rFWpuq7r4
+         GcMpj50E/eqc47U5+AltRcSpdxtKQXMEsnwoZ9ppabM/LMHoI+efFG2N8huqB5HIug
+         9e+GBheH/SmbuMesh8dBVaQekajmGqSC473a1yfeVljWZtQCBbsW9CN5lxxr7FLVZa
+         sLT5KfNY2X376yjhQbAg3ZOqKoMYkC3F1NBB8vRanWcFK/cigst/XT+qweb6MZzSPF
+         8d9cP3mlkupqw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211203035601.3505780-1-bjorn.andersson@linaro.org>
+References: <20211203035601.3505780-1-bjorn.andersson@linaro.org>
+Subject: Re: [PATCH] clk: qcom: rcg2: Cache rate changes for parked RCGs
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Amit Nischal <anischal@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>
+Date:   Wed, 15 Dec 2021 17:51:35 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211216015136.96AD3C36AE1@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
-> The cause of the resultant dump_stack() reported below is a
-> dereference of a freed pointer to 'struct sctp_endpoint' in
-> sctp_sock_dump().
-> 
-> This race condition occurs when a transport is cached into its
-> associated hash table followed by an endpoint/sock migration to a new
-> association in sctp_assoc_migrate() prior to their subsequent use in
-> sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
-> table calling into sctp_sock_dump() where the dereference occurs.
-> 
->   BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
->   Call trace:
->    dump_backtrace+0x0/0x2dc
->    show_stack+0x20/0x2c
->    dump_stack+0x120/0x144
->    print_address_description+0x80/0x2f4
->    __kasan_report+0x174/0x194
->    kasan_report+0x10/0x18
->    __asan_load8+0x84/0x8c
->    sctp_sock_dump+0xa8/0x438 [sctp_diag]
->    sctp_for_each_transport+0x1e0/0x26c [sctp]
->    sctp_diag_dump+0x180/0x1f0 [sctp_diag]
->    inet_diag_dump+0x12c/0x168
->    netlink_dump+0x24c/0x5b8
->    __netlink_dump_start+0x274/0x2a8
->    inet_diag_handler_cmd+0x224/0x274
->    sock_diag_rcv_msg+0x21c/0x230
->    netlink_rcv_skb+0xe0/0x1bc
->    sock_diag_rcv+0x34/0x48
->    netlink_unicast+0x3b4/0x430
->    netlink_sendmsg+0x4f0/0x574
->    sock_write_iter+0x18c/0x1f0
->    do_iter_readv_writev+0x230/0x2a8
->    do_iter_write+0xc8/0x2b4
->    vfs_writev+0xf8/0x184
->    do_writev+0xb0/0x1a8
->    __arm64_sys_writev+0x4c/0x5c
->    el0_svc_common+0x118/0x250
->    el0_svc_handler+0x3c/0x9c
->    el0_svc+0x8/0xc
-> 
-> To prevent this from happening we need to take a references to the
-> to-be-used/dereferenced 'struct sock' and 'struct sctp_endpoint's
-> until such a time when we know it can be safely released.
-> 
-> When KASAN is not enabled, a similar, but slightly different NULL
-> pointer derefernce crash occurs later along the thread of execution in
-> inet_sctp_diag_fill() this time.
+Quoting Bjorn Andersson (2021-12-02 19:56:01)
+> As GDSCs are turned on and off some associated clocks are momentarily
+> enabled for house keeping purposes. Failure to enable these clocks seems
+> to have been silently ignored in the past, but starting in SM8350 this
+> failure will prevent the GDSC to turn on.
+>=20
+> At least on SM8350 this operation will enable the RCG per the
+> configuration in CFG_REG. This means that the current model where the
+> current configuration is written back to CF_REG immediately after
+> parking the RCG doesn't work.
 
-Are you able to identify where the bug was introduced? Fixes tag would
-be good to have here. 
+Just to clarify, is the RCG off and "parked" at XO with the config
+register dirty and set to the desired frequency and then the RCG is
+turned on by the GDSC?
 
-You should squash the two patches together.
+>=20
+> Instead, keep track of the currently requested rate of the clock and
+> upon enabling the clock reapply the configuration per the saved rate.
 
-> diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-> index 760b367644c12..2029b240b6f24 100644
-> --- a/net/sctp/diag.c
-> +++ b/net/sctp/diag.c
-> @@ -301,6 +301,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
->  	struct sctp_association *assoc;
->  	int err = 0;
->  
-> +	sctp_endpoint_hold(ep);
-> +	sock_hold(sk);
->  	lock_sock(sk);
->  	list_for_each_entry(assoc, &ep->asocs, asocs) {
->  		if (cb->args[4] < cb->args[1])
-> @@ -341,6 +343,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
->  	cb->args[4] = 0;
->  release:
->  	release_sock(sk);
-> +	sock_put(sk);
-> +	sctp_endpoint_put(ep);
->  	return err;
+We already keep track of the requested rate and reapply it on enable,
+just we're lazy and stash that information in the hardware and not the
+software. I didn't think the gdsc would be turned on and ruin that all,
+but it's fair.
+
+>=20
+> Fixes: 7ef6f11887bd ("clk: qcom: Configure the RCGs to a safe source as n=
+eeded")
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/clk/qcom/clk-rcg.h  |  2 ++
+>  drivers/clk/qcom/clk-rcg2.c | 32 +++++++++++++++++---------------
+>  2 files changed, 19 insertions(+), 15 deletions(-)
+>=20
+> diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
+> index 99efcc7f8d88..6939f4e62768 100644
+> --- a/drivers/clk/qcom/clk-rcg.h
+> +++ b/drivers/clk/qcom/clk-rcg.h
+> @@ -139,6 +139,7 @@ extern const struct clk_ops clk_dyn_rcg_ops;
+>   * @freq_tbl: frequency table
+>   * @clkr: regmap clock handle
+>   * @cfg_off: defines the cfg register offset from the CMD_RCGR + CFG_REG
+> + * @current_rate: cached rate for parked RCGs
+>   */
+>  struct clk_rcg2 {
+>         u32                     cmd_rcgr;
+> @@ -149,6 +150,7 @@ struct clk_rcg2 {
+>         const struct freq_tbl   *freq_tbl;
+>         struct clk_regmap       clkr;
+>         u8                      cfg_off;
+> +       unsigned long           current_rate;
+>  };
+> =20
+>  #define to_clk_rcg2(_hw) container_of(to_clk_regmap(_hw), struct clk_rcg=
+2, clkr)
+> diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+> index e1b1b426fae4..b574b38dcbd5 100644
+> --- a/drivers/clk/qcom/clk-rcg2.c
+> +++ b/drivers/clk/qcom/clk-rcg2.c
+> @@ -167,6 +167,7 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long=
+ parent_rate)
+>  {
+>         struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
+>         u32 cfg, hid_div, m =3D 0, n =3D 0, mode =3D 0, mask;
+> +       unsigned long rate;
+> =20
+>         regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
+> =20
+> @@ -186,7 +187,11 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned lon=
+g parent_rate)
+>         hid_div =3D cfg >> CFG_SRC_DIV_SHIFT;
+>         hid_div &=3D mask;
+> =20
+> -       return calc_rate(parent_rate, m, n, mode, hid_div);
+> +       rate =3D calc_rate(parent_rate, m, n, mode, hid_div);
+> +       if (!rcg->current_rate)
+> +               rcg->current_rate =3D rate;
+
+Instead of doing this in recalc_rate, all the time, why not make an init
+clk op that does it once during registration? The other problem I see is
+that the rate we calculate may be wrong if the parent is registered
+after this clk. I think this came up originally when the patch this is
+fixing was discussed.
+
+So instead of saving the current_rate can we save the cfg register value
+(or however many registers we need) to put back the frequency of the clk
+to what we want on enable? The other thing is that we made recalc_rate()
+work "seamlessly" here by stashing the frequency into the register but
+leaving it uncommitted until enable. We may need to now look at the
+software copy of the registers in the shared rcg recalc rate operation
+to figure out what the frequency is.
+
+> +
+> +       return rate;
 >  }
->  
+> =20
+>  static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq=
+_tbl *f,
+> @@ -968,12 +973,14 @@ static int clk_rcg2_shared_set_rate(struct clk_hw *=
+hw, unsigned long rate,
+>         if (!f)
+>                 return -EINVAL;
+> =20
+> +       rcg->current_rate =3D rate;
+> +
+>         /*
+> -        * In case clock is disabled, update the CFG, M, N and D registers
+> -        * and don't hit the update bit of CMD register.
+> +        * In the case that the shared RCG is parked, current_rate will be
+> +        * applied as the clock is unparked again, so just return here.
+>          */
+>         if (!__clk_is_enabled(hw->clk))
+> -               return __clk_rcg2_configure(rcg, f);
+> +               return 0;
+> =20
+>         return clk_rcg2_shared_force_enable_clear(hw, f);
+>  }
+> @@ -987,8 +994,13 @@ static int clk_rcg2_shared_set_rate_and_parent(struc=
+t clk_hw *hw,
+>  static int clk_rcg2_shared_enable(struct clk_hw *hw)
+>  {
+>         struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
+> +       const struct freq_tbl *f =3D NULL;
 
+Do not assign a value to a variable
+
+>         int ret;
+> =20
+> +       f =3D qcom_find_freq(rcg->freq_tbl, rcg->current_rate);
+
+and then assign it again without testing it before.
+
+> +       if (!f)
+> +               return -EINVAL;
+> +
+>         /*
+>          * Set the update bit because required configuration has already

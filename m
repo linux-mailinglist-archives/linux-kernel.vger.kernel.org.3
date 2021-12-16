@@ -2,123 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BA447805B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D870047805F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237106AbhLPXOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234434AbhLPXOq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:14:46 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3508BC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:14:46 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id b7so1182021edd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:14:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=leN4ToUWeqVpg13p/IoYSSc9DyWGdv7mnjoOFy505fA=;
-        b=COuDndAPNxF03xXqhgRDDWsGpGVwE98zlgUtoZag+Bvzj95HCbj01dkwIw4vwaq6Ga
-         N90PFU8P57pDst3A16Zcjrgo4vCie/DI4eGMjE6d8Yz7eednpxuVTAwOpZT5P4Mm5gtS
-         FZasthLCwD2sDJi9uHxz6z7IxY1oGo92UTBL4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=leN4ToUWeqVpg13p/IoYSSc9DyWGdv7mnjoOFy505fA=;
-        b=q0eWLRzM7MZSgcSIBVy2YHKjGtTsq6hu0//nuI+z9CJiQVp1PgIX2WwGuZ2dmRKByf
-         lR3s+ZxujYDg0easm2la+01NKVrFYArDDetWKYTaO8JcmrafRIfLdNj42Pe1oCpnuBzo
-         wTDC+v8intqkmTsEnyZB3hkL+XqPnEF5KLjkX+r5yaO2uqdamGA17u9+P3HU1at0OhGF
-         zAy/75ln78Pa/yatvCuyFifKKQTHnzmLjSC2e91D1CiBxgjqNaHQJySuq0jK9YLNDNEL
-         RZQ5KK1sIjkw6q8c6RTadm4kVvHr0iWEfFaPkbawdWidtnywJIx/VBApkploygRONk10
-         lwdQ==
-X-Gm-Message-State: AOAM530WKX5uNruofskb9xvC719+25tPcx3+SMzQkohbEyo7/SOWB1pW
-        tdWc6nZ3E5QT8nIU6y1X9sX6BxyvEk+EvRahrOg=
-X-Google-Smtp-Source: ABdhPJyjFETYhLYXncrRXlNzGKzWrnMsgLBK1N7nF4SJnOldHvIhy3V0+Ng0UEob5xNxoU8FNf3wRQ==
-X-Received: by 2002:a17:907:3e22:: with SMTP id hp34mr314054ejc.58.1639696484674;
-        Thu, 16 Dec 2021 15:14:44 -0800 (PST)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id o22sm2847884edw.50.2021.12.16.15.14.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 15:14:44 -0800 (PST)
-Received: by mail-wm1-f48.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso489302wme.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:14:44 -0800 (PST)
-X-Received: by 2002:a05:600c:1d97:: with SMTP id p23mr157474wms.144.1639696483940;
- Thu, 16 Dec 2021 15:14:43 -0800 (PST)
+        id S235840AbhLPXPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:15:22 -0500
+Received: from ms.lwn.net ([45.79.88.28]:50988 "EHLO ms.lwn.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234193AbhLPXPV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 18:15:21 -0500
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 1A254740;
+        Thu, 16 Dec 2021 23:15:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 1A254740
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1639696521; bh=FlCJxGsmxYNRH17rhgTDBHDYYRmcu2pB+y7gOjFT7Es=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=tFMv9Ym7GPZaAy0FfW5IGPQ1m+pmQ4txtqqkyphlHXq4WZvA9ri76U9T7hJV2qRUQ
+         Ut7ah15RfqiFC/aAwwJruzhX67a99lMwHr0nS7AZI8wKcovbx/vhln5IJg0tvIzCbA
+         OK5n99kO08cRwjp0pIvSlPMbxQmYt4PNE/HeTbzLLZ+dz5iTLQL2m3fSGEvXjVOfEh
+         oidu+f1bqs0o2MVzyzKJypQa9fWEwGrsJ6FrExtBgknU9D3XLM4xgmT9I3OFu/d5X8
+         lngz+Ran6AjDMvJe8cvBHuntSisEBlc0LewgkadCuKVUT+i6GdIoR6RxOC79MFdLsA
+         rYEXdGAHS9B7g==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Marco Elver <elver@google.com>,
+        Harinder Singh <sharinder@google.com>
+Cc:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tim.Bird@sony.com
+Subject: Re: [PATCH v4 3/7] Documentation: KUnit: Added KUnit Architecture
+In-Reply-To: <CANpmjNOGaVgP25xNOSGOyjcA9Lmk4uFmU=f6RrRNJBP_CMEVrQ@mail.gmail.com>
+References: <20211216055958.634097-1-sharinder@google.com>
+ <20211216055958.634097-4-sharinder@google.com>
+ <CANpmjNOGaVgP25xNOSGOyjcA9Lmk4uFmU=f6RrRNJBP_CMEVrQ@mail.gmail.com>
+Date:   Thu, 16 Dec 2021 16:15:20 -0700
+Message-ID: <87czlwcfav.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20211216213207.839017-1-kuba@kernel.org>
-In-Reply-To: <20211216213207.839017-1-kuba@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 16 Dec 2021 15:14:27 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whayMx6-Z7j7H1eAquy0Svv93Tyt7Wq6Efaogw8W+WpoQ@mail.gmail.com>
-Message-ID: <CAHk-=whayMx6-Z7j7H1eAquy0Svv93Tyt7Wq6Efaogw8W+WpoQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Networking for 5.16-rc6
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Kalle Valo <kvalo@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 1:32 PM Jakub Kicinski <kuba@kernel.org> wrote:
+Marco Elver <elver@google.com> writes:
+
+> In response to the other email: Adding binary blobs just creates
+> problems, for comparing different versions, and general bloating the
+> whole repo, where better alternatives exist.
 >
-> Relatively large batches of fixes from BPF and the WiFi stack,
-> calm in general networking.
-
-Hmm. I get a very different diffstat, and also a different shortlog
-than the one you quote.
-
-I do get the top commit you claim:
-
->   git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc6
+> I suppose an ASCII diagram is a bit primitive. :-)
 >
-> for you to fetch changes up to 0c3e2474605581375d808bb3b9ce0927ed3eef70:
+> However, SVG files on the other hand are not binary blobs, they are
+> text-markup based (XML), and e.g. diffing them often provides useful
+> information about what changed. SVG also has the benefit of being
+> vector graphics, and not being limited to one resolution.
 >
->   Merge https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf (2021-12-16 13:06:49 -0800)
+> Looking at the diagram you added, I think this can easily be turned
+> into vector graphics, and most likely will not use up 24KiB as a
+> result.
 
-But your shortlog doesn't contain
+I agree with all of this; we shouldn't be adding binary images to the
+docs, and we've decided at other times that SVG is generally the best
+compromise there.
 
-  Alexei Starovoitov (3):
-        bpf: Fix extable fixup offset.
-        bpf: Fix extable address check.
-        selftest/bpf: Add a test that reads various addresses.
+Thanks, Marco, for pointing this out and producing an alternative.
 
-  Daniel Borkmann (7):
-        bpf: Fix kernel address leakage in atomic fetch
-        bpf, selftests: Add test case for atomic fetch on spilled pointer
-        bpf: Fix kernel address leakage in atomic cmpxchg's r0 aux reg
-        bpf, selftests: Update test case for atomic cmpxchg on r0 with pointer
-        bpf: Fix signed bounds propagation after mov32
-        bpf: Make 32->64 bounds propagation slightly more robust
-        bpf, selftests: Add test case trying to taint map value pointer
+Once this is all settled, do you want it to go through the docs tree?
 
-  Kumar Kartikeya Dwivedi (1):
-        selftests/bpf: Fix OOB write in test_verifier
-
-  Magnus Karlsson (1):
-        xsk: Do not sleep in poll() when need_wakeup set
-
-  Paul Chaignon (2):
-        bpf: Fix incorrect state pruning for <8B spill/fill
-        selftests/bpf: Tests for state pruning with u32 spill/fill
-
-and that seems to be the missing diffstat contents also.
-
-It looks like your pull request was done without that last merge, even
-though you do mention it as being the top of tree.
-
-I've pulled this, because that last merge looks fine and intentional,
-but I'd like you to double-check your workflow to see what happened to
-give a stale diffstat and shortlog...
-
-              Linus
+jon

@@ -2,74 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85903477525
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A04477548
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238182AbhLPO7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:59:37 -0500
-Received: from mail.wizzup.org ([95.217.97.174]:44582 "EHLO wizzup.org"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238173AbhLPO7f (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:59:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
-        s=mail; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:
-        To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=DjXxSvbpnfZWTB8la9pvej64oJM3C+QTUUElIiq87ao=; b=TSSAkwA6pQ/NlDPpVQ1i4T2A3W
-        IjjcU1YI7v18WTw0BShCnbAWjAVurXGahHA7Hy6xTVYPTvhPqHm/Z6USHxDGazVVJF9cbMmJoskSq
-        edNuFu/Y03bjT+6tOVwFqB7pI5blIIO/pBtMRKGGpmyarmO/CQ46WgYdih8Jr5vi9iNVHUZn/6oJS
-        c/D2kk2VKzPWlUblZVj7qsOpezvXySZ99Ja5naYXuxjKasFJgJc76X/Qn/tAjtVQAVcHPAxtbTgLQ
-        OGElxntYaxl8gQzBV6lSjNS9BLv5mSHGS0WRYhNSYuWcPQiiGk5qoT517pMuZimT4boiUNIeUy/sf
-        zXieq3eQ==;
-Received: from [45.83.235.159] (helo=gentoo-x13.fritz.box)
-        by wizzup.org with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <merlijn@wizzup.org>)
-        id 1mxsE7-0004VS-Pv; Thu, 16 Dec 2021 14:59:23 +0000
-From:   Merlijn Wajer <merlijn@wizzup.org>
-To:     merlijn@wizzup.org
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        Dev Null <devnull@uvos.xyz>, Tony Lindgren <tony@atomide.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-omap@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: omap2plus_defconfig: enable TLV320AIC3X
-Date:   Thu, 16 Dec 2021 16:05:06 +0100
-Message-Id: <20211216150506.31163-1-merlijn@wizzup.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S238248AbhLPPCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238184AbhLPPCj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 10:02:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302D2C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:02:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC1FB61E50
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:02:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9BABC36AE4;
+        Thu, 16 Dec 2021 15:02:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639666958;
+        bh=+ymRfnMDzS4Q00ODy6O0GETDfu0WUzcmTTTVopGCNyY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Pdufl+BNvm172d5N0T+EA45nB4IdQFjhQUgRlEJ6jU+ntmlgzYQl1V3VYxUmiHgVi
+         Au5Xm5Kmj62x5srcRdhwsWniho1cf4p5Mckrs956HQdYoX1Xg1Vys7cSYo8FsWwaz+
+         9MfHjN+y7UvY8+l3nx6oCWO099nVzwPCKeqXa1FwvNpbOeWHmB5FwghVC3X3TgVHt4
+         6f9q1Upridr8mzw4eSqusQodsnJHO1XIr/dAaVDrIzZcnUMuzUhVXlrs5vFwtJkZy7
+         bfJQVMZEkCOwIMg7sJ6FXMfSEucSTV5QtuEH7G1eXiL2I9dzRRY2u+6AX6nQ/NfAxF
+         e2Yksm8G3og7g==
+Date:   Fri, 17 Dec 2021 00:02:34 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mingo@redhat.com,
+        zanussi@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH v6 3/5] trace/README: Document objtrace trigger
+ syntax
+Message-Id: <20211217000234.46a613cf12d8402176c49322@kernel.org>
+In-Reply-To: <20211129164951.220511-4-xiehuan09@gmail.com>
+References: <20211129164951.220511-1-xiehuan09@gmail.com>
+        <20211129164951.220511-4-xiehuan09@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit a96d2ba2d824 ("ASoC: codecs: tlv320aic3x: move I2C to separated
-file") split the driver into SPI and I2C code and also provided a
-separate configuration option for it.
+Hi Jeff,
 
-The RX51 audio fails to probe since this commit, so let's add this
-non-obvious configuration option to the defconfig.
+On Tue, 30 Nov 2021 00:49:49 +0800
+Jeff Xie <xiehuan09@gmail.com> wrote:
 
-Signed-off-by: Merlijn Wajer <merlijn@wizzup.org>
----
- arch/arm/configs/omap2plus_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+> Add a short description of the use of objtrace trigger.
 
-diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
-index 7a41e9cbcc7b..5c916e92068e 100644
---- a/arch/arm/configs/omap2plus_defconfig
-+++ b/arch/arm/configs/omap2plus_defconfig
-@@ -566,6 +566,8 @@ CONFIG_SND_SOC_OMAP_HDMI=m
- CONFIG_SND_SOC_CPCAP=m
- CONFIG_SND_SOC_MOTMDM=m
- CONFIG_SND_SOC_TLV320AIC23_I2C=m
-+CONFIG_SND_SOC_TLV320AIC3X=m
-+CONFIG_SND_SOC_TLV320AIC3X_I2C=m
- CONFIG_SND_SIMPLE_CARD=m
- CONFIG_SND_AUDIO_GRAPH_CARD=m
- CONFIG_HID_GENERIC=m
+Please merge this into the [1/5] and [2/5], because the changes of
+"a new feature" and "the existance of the feature which
+kernel indicates" must be atomic.
+
+My recommendation is
+
+- add following line in the first patch
+
+	"\t            objtrace:add:obj[:count][if <filter>]\n"
+
+- and update it as following in the next patch according to the changes
+
+	"\t            objtrace:add:obj[,offset][:type][:count][if <filter>]\n"
+
+
+Thank you!
+
+
+> 
+> Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
+> ---
+>  kernel/trace/trace.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index 88de94da596b..a84b6813769e 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -5590,6 +5590,9 @@ static const char readme_msg[] =
+>  	"\t            enable_hist:<system>:<event>\n"
+>  	"\t            disable_hist:<system>:<event>\n"
+>  #endif
+> +#ifdef CONFIG_TRACE_OBJECT
+> +	"\t            objtrace:add:obj[,offset][:type][:count][if <filter>]\n"
+> +#endif
+>  #ifdef CONFIG_STACKTRACE
+>  	"\t\t    stacktrace\n"
+>  #endif
+> -- 
+> 2.25.1
+> 
+
+
 -- 
-2.32.0
-
+Masami Hiramatsu <mhiramat@kernel.org>

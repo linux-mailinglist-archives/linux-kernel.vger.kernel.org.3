@@ -2,143 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D58A3476935
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 05:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1C347693A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 05:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233626AbhLPEnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 23:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
+        id S233635AbhLPEpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 23:45:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233601AbhLPEnW (ORCPT
+        with ESMTP id S233601AbhLPEpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 23:43:22 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51260C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 20:43:22 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so27466383oto.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 20:43:22 -0800 (PST)
+        Wed, 15 Dec 2021 23:45:32 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90664C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 20:45:31 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id a23so17353335pgm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 20:45:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=3RzaaearIYbFOPasrtZL1Qn4CGShYarsAAtoS7FS/Og=;
-        b=Q7z6pT0v4hCeNK/JGdecfC+0v3mIIP71W56G1Cmgtw13ONjyj5+7R9dleoPXl+kO6h
-         1ZCyiZOsr2W3+Jh6O2Xn4LFVmwEn3rIZS/FW5/A6AhhCoxmS9iX6kLKr1vvmHhTkfN5/
-         jpMg1ISamVNsoqnLytvY9mb9PUrVUJVExTbmQ=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LVKfSXvPtNRhzT9A26cLOBfb/g0z4KWXTgdrUcPD/9s=;
+        b=XthdiZ60GyuaG/zkmkCjse0tAWN5fiEApAnABL6cV7N+H7mhWXUOEGXWM0Y9LGGms5
+         xsYQshkYoZ0zm+PqAad558SiTpfU+7JS2feO0u/cX9Qk23Tin740HEzU2z/j62Ow1QiC
+         hkMGfXKqjNovCtPfSgNgP+Mc4tuvLueISvj5I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=3RzaaearIYbFOPasrtZL1Qn4CGShYarsAAtoS7FS/Og=;
-        b=PUXA7S/42KoeXsaK/2a1Hy3jshTYAIE4x1A4JMoKEsA1gVbxnqAm8aBdQncc9sNt2T
-         F7dDuP79qYCbmO1/ECexTzjjDDwgan8Cbq3ViPBSU8JDJ8lQvYJvWe0VvKq/TJRvyMuZ
-         S4TFhvu9YR0oEasglQThzApA3uMahitrOVsUBLmBEgfz37YIhdewGMq7a796iDRygew4
-         j+pfWUekSOLms3EH+s36d14zw89xL7SRcA8Z0oMWmMK2hUjYSXCfMdMdR2GqqxQApRL/
-         1w1Jg1CLFTuSYEYqd4Rzv+mbLFgteTBqvOBBGZp9DubokQ6ZQUdiGj1FbUjWjKtkSGGf
-         X7tQ==
-X-Gm-Message-State: AOAM533APgP0NysOvNeZ8f/tv48Qq+bcMacGzHE09plXyj5qHZi9hsab
-        sz9y0NegLDrd+Snw8gNKPLceKOKFfR6g7hSzlCxofA==
-X-Google-Smtp-Source: ABdhPJw7dtlv5FG/2hQWJ7GKk0B3PVmNniDqy4RqxdhspboPfH7npUG2cFrqS7aBKnFZFSKqIA/OGtC13xtvHmaNuGs=
-X-Received: by 2002:a9d:2243:: with SMTP id o61mr11377458ota.126.1639629801696;
- Wed, 15 Dec 2021 20:43:21 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 15 Dec 2021 20:43:21 -0800
-MIME-Version: 1.0
-In-Reply-To: <YbqlDQogwdi52FpK@google.com>
-References: <20211215003639.386460-1-swboyd@chromium.org> <YbqlDQogwdi52FpK@google.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LVKfSXvPtNRhzT9A26cLOBfb/g0z4KWXTgdrUcPD/9s=;
+        b=Xxhw53W0g8mmEPL5q3aEFmfOhX3OkI5Sl45Oj3gmKuHRVH2mTXVWD/4ffvCBiCODgb
+         So6RCRd6ajrsljTyfUjTLkidXlduRi7Ru5tuiHMnvK3KpWV6ySv+9g9MZcxN3/xZWfx+
+         dNIXbLAQpB//A/ACxQKY/hO4K8WbjI7hu/5jT4s1vG5pf9/ra0+E06puj9AyJkweTsnq
+         gp50IUNVCzOVX4BMzv+Kcrpo9tVgVIJhKUNuKsIsyckR0Wll3Aio7uZ1H3IUXRGPKrq0
+         +sVlfjoBgFNjVBEjvRxmZH2K+ypJllhNjmu9aEE4GiBQyKoMTyXMhtXdIpL0j+FJHiCB
+         +jGw==
+X-Gm-Message-State: AOAM530vJHUQHsMLdx5J8tfmal/O33Tg3mgTyfduLqWth3NoCoE/OOPB
+        i2zp+8VkMDR76+s6+7lJhAbBKQ==
+X-Google-Smtp-Source: ABdhPJw1RTTEubweIfnVdMk11v7BeieG9shZJ3SUcPcflRiH39Tu2KaA8KvZqAQFZWcCotV0CXAdWg==
+X-Received: by 2002:a63:88c8:: with SMTP id l191mr511784pgd.522.1639629931082;
+        Wed, 15 Dec 2021 20:45:31 -0800 (PST)
+Received: from smtp.gmail.com ([2620:15c:202:201:6c0f:9060:1bc2:315])
+        by smtp.gmail.com with ESMTPSA id mv22sm3727720pjb.36.2021.12.15.20.45.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 20:45:30 -0800 (PST)
 From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 15 Dec 2021 20:43:21 -0800
-Message-ID: <CAE-0n53z=CVMx=zmh6Up57E-yVG7iU3oMiM7cLPfsQwriM=+=w@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: sc7180: Add board regulators for MIPI camera
- trogdor boards
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH v2] arm64: dts: sc7180: Add board regulators for MIPI camera trogdor boards
+Date:   Wed, 15 Dec 2021 20:45:29 -0800
+Message-Id: <20211216044529.733652-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Matthias Kaehlcke (2021-12-15 18:31:41)
-> On Tue, Dec 14, 2021 at 04:36:38PM -0800, Stephen Boyd wrote:
-> > diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> > index d4f4441179fc..1dd8e35093a8 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> > @@ -113,6 +113,40 @@ src_vph_pwr: src-vph-pwr-regulator {
-> >               vin-supply = <&ppvar_sys>;
-> >       };
-> >
-> > +     pp1800_uf_cam: pp1800-uf-cam-regulator {
-> > +             compatible = "regulator-fixed";
-> > +             regulator-name = "pp1800_uf_cam";
-> > +             status = "disabled";
-> > +
-> > +             regulator-min-microvolt = <1800000>;
-> > +             regulator-max-microvolt = <1800000>;
-> > +
-> > +             gpio = <&tlmm 6 GPIO_ACTIVE_HIGH>;
-> > +             enable-active-high;
-> > +             pinctrl-names = "default";
-> > +             pinctrl-0 = <&uf_cam_en>;
-> > +
-> > +             vin-supply = <&pp1800_ldo>;
-> > +             regulator-enable-ramp-delay = <1000>;
-> > +     };
-> > +
-> > +     pp1800_wf_cam: pp1800-wf-cam-regulator {
-> > +             compatible = "regulator-fixed";
-> > +             regulator-name = "pp1800_wf_cam";
-> > +             status = "disabled";
-> > +
-> > +             regulator-min-microvolt = <1800000>;
-> > +             regulator-max-microvolt = <1800000>;
-> > +
-> > +             gpio = <&tlmm 7 GPIO_ACTIVE_HIGH>;
-> > +             enable-active-high;
-> > +             pinctrl-names = "default";
-> > +             pinctrl-0 = <&wf_cam_en>;
-> > +
-> > +             vin-supply = <&pp1800_ldo>;
-> > +             regulator-enable-ramp-delay = <1000>;
-> > +     };
-> > +
->
-> Shouldn't 'pp1800_ldo' be defined before these ("FIXED REGULATORS
-> - parents above children")?
+Some trogdor boards have on-board regulators for the MIPI camera
+components. Add nodes describing these regulators so boards with these
+supplies can consume them.
 
-Good catch! Fixed it.
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
 
->
-> I suggest to move these two below the top level regulators, i.e.
-> somwhere after pp3300_a (probably pp3300_a and pp5000_a should be
-> swapped, but that's beyond the scope of this patch).
->
-> >       pp5000_a: pp5000-a-regulator {
-> >               compatible = "regulator-fixed";
-> >               regulator-name = "pp5000_a";
-> > @@ -1517,4 +1611,32 @@ pinconf-sd-cd {
-> >                       drive-strength = <2>;
-> >               };
-> >       };
-> > +
-> > +     uf_cam_en: uf-cam-en {
-> > +             pinmux {
-> > +                     pins = "gpio6";
-> > +                     function = "gpio";
-> > +             };
-> > +
-> > +             pinconf {
-> > +                     pins = "gpio6";
-> > +                     drive-strength = <2>;
-> > +                     /* External pull down */
->
-> Is there actually an external pull down?
+Changes from v1 (https://lore.kernel.org/r/20211215003639.386460-1-swboyd@chromium.org):
+ * Swapped order of regulators
 
-My understanding is that there's an internal pull down in the LDO so
-while it isn't exactly "external" in the sense there's a pull down on
-the net via a resistor, there's still a pull down that you can't see in
-the schematic in the IC.
+ .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |  16 +++
+ .../dts/qcom/sc7180-trogdor-homestar.dtsi     |  16 +++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 122 ++++++++++++++++++
+ 3 files changed, 154 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+index 14ed09f30a73..c81805ef2250 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+@@ -142,6 +142,22 @@ skin-temp-thermistor@1 {
+ 	};
+ };
+ 
++&pp1800_uf_cam {
++	status = "okay";
++};
++
++&pp1800_wf_cam {
++	status = "okay";
++};
++
++&pp2800_uf_cam {
++	status = "okay";
++};
++
++&pp2800_wf_cam {
++	status = "okay";
++};
++
+ &pp3300_dx_edp {
+ 	gpio = <&tlmm 67 GPIO_ACTIVE_HIGH>;
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+index 4ab890b2a1d4..9110fed291c4 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+@@ -149,6 +149,22 @@ skin-temp-thermistor@1 {
+ 	};
+ };
+ 
++&pp1800_uf_cam {
++	status = "okay";
++};
++
++&pp1800_wf_cam {
++	status = "okay";
++};
++
++&pp2800_uf_cam {
++	status = "okay";
++};
++
++&pp2800_wf_cam {
++	status = "okay";
++};
++
+ &pp3300_dx_edp {
+ 	gpio = <&tlmm 67 GPIO_ACTIVE_HIGH>;
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index d4f4441179fc..261339094b3c 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -144,6 +144,100 @@ pp3300_a: pp3300-a-regulator {
+ 		vin-supply = <&ppvar_sys>;
+ 	};
+ 
++	pp1800_ec:
++	pp1800_sensors:
++	pp1800_ldo: pp1800-ldo-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "pp1800_ldo";
++
++		/* EC turns on with hibernate_l; always on for AP */
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++
++		/*
++		 * Actually should be pp1800_h1 but we don't have any need to
++		 * model that so we use the parent of pp1800_h1.
++		 */
++		vin-supply = <&pp3300_a>;
++	};
++
++	pp1800_uf_cam: pp1800-uf-cam-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "pp1800_uf_cam";
++		status = "disabled";
++
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++
++		gpio = <&tlmm 6 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&uf_cam_en>;
++
++		vin-supply = <&pp1800_ldo>;
++		regulator-enable-ramp-delay = <1000>;
++	};
++
++	pp1800_wf_cam: pp1800-wf-cam-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "pp1800_wf_cam";
++		status = "disabled";
++
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++
++		gpio = <&tlmm 7 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&wf_cam_en>;
++
++		vin-supply = <&pp1800_ldo>;
++		regulator-enable-ramp-delay = <1000>;
++	};
++
++	pp2800_uf_cam: pp2800-uf-cam-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "pp2800_uf_cam";
++		status = "disabled";
++
++		regulator-min-microvolt = <2850000>;
++		regulator-max-microvolt = <2850000>;
++
++		gpio = <&tlmm 6 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		/*
++		 * The pinconf can only be referenced once so we put it on the
++		 * first regulator and comment it out here.
++		 * pinctrl-names = "default";
++		 * pinctrl-0 = <&uf_cam_en>;
++		 */
++
++		vin-supply = <&pp3300_a>;
++	};
++
++	pp2800_vcm_wf_cam:
++	pp2800_wf_cam: pp2800-wf-cam-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "pp2800_wf_cam";
++		status = "disabled";
++
++		regulator-min-microvolt = <2850000>;
++		regulator-max-microvolt = <2850000>;
++
++		gpio = <&tlmm 7 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		/*
++		 * The pinconf can only be referenced once so we put it on the
++		 * first regulator and comment it out here.
++		 * pinctrl-names = "default";
++		 * pinctrl-0 = <&wf_cam_en>;
++		 */
++
++		vin-supply = <&pp3300_a>;
++	};
++
+ 	pp3300_audio:
+ 	pp3300_codec: pp3300-codec-regulator {
+ 		compatible = "regulator-fixed";
+@@ -1517,4 +1611,32 @@ pinconf-sd-cd {
+ 			drive-strength = <2>;
+ 		};
+ 	};
++
++	uf_cam_en: uf-cam-en {
++		pinmux {
++			pins = "gpio6";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio6";
++			drive-strength = <2>;
++			/* External pull down */
++			bias-disable;
++		};
++	};
++
++	wf_cam_en: wf-cam-en {
++		pinmux {
++			pins = "gpio7";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio7";
++			drive-strength = <2>;
++			/* External pull down */
++			bias-disable;
++		};
++	};
+ };
+
+base-commit: 136057256686de39cc3a07c2e39ef6bc43003ff6
+-- 
+https://chromeos.dev
+

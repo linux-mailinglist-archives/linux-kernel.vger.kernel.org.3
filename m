@@ -2,102 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A5A476F48
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952D0476F4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236306AbhLPKz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:55:59 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:38056 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230379AbhLPKz6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:55:58 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0932B1EC01FC;
-        Thu, 16 Dec 2021 11:55:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639652153;
+        id S236309AbhLPK5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:57:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55139 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230379AbhLPK5E (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 05:57:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639652223;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=QuJ+5R6db1fiDExetCde8WgEzLmMC9GPFO7ooWuFUoc=;
-        b=ABphLkGBVLji3yXgCnlhYPLoL/Kb44kkyTebp+C9k0SZC3hpRa920k2N8+J6ST2rMAabCA
-        PN6F+YmOUBbI48i03dnWEAEWRo3xLHRg0JL+NRYfxJDx4yJDuKpT19d1A0jEa1sLjIIJI6
-        9v6iWuq2TriWabYhcqsvIRxsvM10aQQ=
-Date:   Thu, 16 Dec 2021 11:55:55 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-Subject: Re: [PATCH v17 03/10] x86: kdump: use macro CRASH_ADDR_LOW_MAX in
- functions reserve_crashkernel()
-Message-ID: <YbsbO1XnrzLAIBEu@zn.tnic>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-4-thunder.leizhen@huawei.com>
- <YbntdtQo2jfbO4cO@zn.tnic>
- <20211216011040.GG3023@MiWiFi-R3L-srv>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MC2gvHGYmh9g6Raca53bij6uBB+XqUqBeIAACH6kGiw=;
+        b=K0tlO4kHiCTrYj/Jj6x0sLl4ETeFdI3vXUJztlbQty4xTeoEhL72Xaf0ihSeHarbOnrrMs
+        9AXHj/JJdb/Jwg3T1lLNuBrkkVUOzCt/g8LhNMM0JDsMkJnsElHeLebqaiwkXqrZssOzRe
+        n5HJVUqyH0HRvt4SeMLywWKJPVLY/Po=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-466-PEDkX0yLPw-1olOYo4HO7w-1; Thu, 16 Dec 2021 05:57:02 -0500
+X-MC-Unique: PEDkX0yLPw-1olOYo4HO7w-1
+Received: by mail-wr1-f70.google.com with SMTP id j26-20020adfb31a000000b001a2356afd4fso884880wrd.21
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:57:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=MC2gvHGYmh9g6Raca53bij6uBB+XqUqBeIAACH6kGiw=;
+        b=KSGuw814CXRs5kEjIJbmZHGRHQrtXRvZJlaLCUFbx2xNo4hNQMchYdrakOQbg8ZHU3
+         Uhk3Z8R7PfmoBhYLUHLLwb/G/TyMEezjoYNS3mAX9B/5U+SUqGGVrn1fTQN+NBzaftRs
+         XpX02dcuvrb0yuD9J8U7mfhhZEgCrYGkXQEVDybs8ACtlwCru8OCEjHWnEjVcUFpjlT0
+         +AyOErifVc2+kq2SSSs9pTFUwVBxxzlbEoPSCEvisB5b0lnMkcLhyxKDg3EI0RwEen93
+         nzA+IeTXadaQmMGWrL9qMJaNeT5bUfuYjD2uszKvLnxvHXxNyIIWJGg3kid8iepuAEK3
+         yl2A==
+X-Gm-Message-State: AOAM532aBrowwvBQ6ji4jbs4ylNaiMHoheHRul7v9X0ue1e/0TmzVnyJ
+        bOb9jU+DSlrfmren0c4tdfloOeIwapcLQ0UUdbaYvdcbOmCP1w6+XRfgclbu/+eBz8dGCTPCuCY
+        MclNLhG68t7eOtexZrFcTv55/
+X-Received: by 2002:a1c:f60a:: with SMTP id w10mr4356541wmc.53.1639652221412;
+        Thu, 16 Dec 2021 02:57:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxDhJG49j5IOXlecqEpDnxZnmchZDhLcRCk8gk+wn9LsO6KsDIg1HPa3zDdFSpqHP48eaZL7A==
+X-Received: by 2002:a1c:f60a:: with SMTP id w10mr4356526wmc.53.1639652221231;
+        Thu, 16 Dec 2021 02:57:01 -0800 (PST)
+Received: from [192.168.3.132] (p4ff23dcd.dip0.t-ipconnect.de. [79.242.61.205])
+        by smtp.gmail.com with ESMTPSA id g198sm5057299wme.23.2021.12.16.02.57.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 02:57:00 -0800 (PST)
+Message-ID: <7d9b7e5f-a6c0-2079-90e7-c02aaeb1f4c0@redhat.com>
+Date:   Thu, 16 Dec 2021 11:56:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211216011040.GG3023@MiWiFi-R3L-srv>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/2] mm: cma: fix allocation may fail sometimes
+Content-Language: en-US
+To:     Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dongas86@gmail.com" <dongas86@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Jason Liu <jason.hui.liu@nxp.com>, Leo Li <leoyang.li@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "lecopzer.chen@mediatek.com" <lecopzer.chen@mediatek.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Shijie Qin <shijie.qin@nxp.com>
+References: <20211215080242.3034856-1-aisheng.dong@nxp.com>
+ <20211215080242.3034856-2-aisheng.dong@nxp.com>
+ <783f64f5-3a55-6c42-a740-19a12c2c7321@redhat.com>
+ <DB9PR04MB84777DDC63F5D2D995F7F5E980779@DB9PR04MB8477.eurprd04.prod.outlook.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <DB9PR04MB84777DDC63F5D2D995F7F5E980779@DB9PR04MB8477.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 09:10:40AM +0800, Baoquan He wrote:
-> reserve_crashkernel_low() always return 0 on x86_32, so the not equivalent
-> transformation for x86_32 doesn't matter, I think.
+On 16.12.21 03:54, Aisheng Dong wrote:
+>> From: David Hildenbrand <david@redhat.com>
+>> Sent: Wednesday, December 15, 2021 8:31 PM
+>>
+>> On 15.12.21 09:02, Dong Aisheng wrote:
+>>> We met dma_alloc_coherent() fail sometimes when doing 8 VPU decoder
+>>> test in parallel on a MX6Q SDB board.
+>>>
+>>> Error log:
+>>> cma: cma_alloc: linux,cma: alloc failed, req-size: 148 pages, ret: -16
+>>> cma: number of available pages:
+>>>
+>> 3@125+20@172+12@236+4@380+32@736+17@2287+23@2473+20@3607
+>> 6+99@40477+108
+>>> @40852+44@41108+20@41196+108@41364+108@41620+
+>>>
+>> 108@42900+108@43156+483@44061+1763@45341+1440@47712+20@49
+>> 324+20@49388+
+>>> 5076@49452+2304@55040+35@58141+20@58220+20@58284+
+>>> 7188@58348+84@66220+7276@66452+227@74525+6371@75549=>
+>> 33161 free of
+>>> 81920 total pages
+>>>
+>>> When issue happened, we saw there were still 33161 pages (129M) free
+>>> CMA memory and a lot available free slots for 148 pages in CMA bitmap
+>>> that we want to allocate.
+>>>
+>>> If dumping memory info, we found that there was also ~342M normal
+>>> memory, but only 1352K CMA memory left in buddy system while a lot of
+>>> pageblocks were isolated.
+>>>
+>>> Memory info log:
+>>> Normal free:351096kB min:30000kB low:37500kB high:45000kB
+>> reserved_highatomic:0KB
+>>> 	    active_anon:98060kB inactive_anon:98948kB active_file:60864kB
+>> inactive_file:31776kB
+>>> 	    unevictable:0kB writepending:0kB present:1048576kB
+>> managed:1018328kB mlocked:0kB
+>>> 	    bounce:0kB free_pcp:220kB local_pcp:192kB free_cma:1352kB
+>>> lowmem_reserve[]: 0 0 0
+>>> Normal: 78*4kB (UECI) 1772*8kB (UMECI) 1335*16kB (UMECI) 360*32kB
+>> (UMECI) 65*64kB (UMCI)
+>>> 	36*128kB (UMECI) 16*256kB (UMCI) 6*512kB (EI) 8*1024kB (UEI)
+>> 4*2048kB (MI) 8*4096kB (EI)
+>>> 	8*8192kB (UI) 3*16384kB (EI) 8*32768kB (M) = 489288kB
+>>>
+>>> The root cause of this issue is that since commit a4efc174b382
+>>> ("mm/cma.c: remove redundant cma_mutex lock"), CMA supports
+>> concurrent
+>>> memory allocation. It's possible that the pageblock process A try to
+>>> alloc has already been isolated by the allocation of process B during
+>>> memory migration.
+>>>
+>>> When there're multi process allocating CMA memory in parallel, it's
+>>> likely that other the remain pageblocks may have also been isolated,
+>>> then CMA alloc fail finally during the first round of scanning of the
+>>> whole available CMA bitmap.
+>>
+>> I already raised in different context that we should most probably convert that
+>> -EBUSY to -EAGAIN --  to differentiate an actual migration problem from a
+>> simple "concurrent allocations that target the same MAX_ORDER -1 range".
+>>
+> 
+> Thanks for the info. Is there a patch under review?
 
-That is, of course, very obvious... not!
+No, and I was too busy for now to send it out.
 
-Why is that function parsing crashkernel=XM, and crashkernel=X,high,
-then it attempts some low memory reservation too? Why isn't
-crashkernel=Y,low parsed there too?
+> BTW i wonder that probably makes no much difference for my patch since we may
+> prefer retry the next pageblock rather than busy waiting on the same isolated pageblock.
 
-I guess this alludes to why:
-
-        crashkernel=size[KMG],low
-                        [KNL, X86-64] range under 4G. When crashkernel=X,high
-                        is passed, kernel could allocate physical memory region
-                        above 4G, that cause second kernel crash on system
-                        that require some amount of low memory, e.g. swiotlb
-                        requires at least 64M+32K low memory, also enough extra
-                        low memory is needed to make sure DMA buffers for 32-bit
-                        devices won't run out.
-
-So, before this is going anywhere, I'd like to see this function
-documented properly. I see Documentation/admin-guide/kdump/kdump.rst
-explains the crashkernel= options too so you can refer to it in the
-comments so that when someone looks at that code, someone can follow why
-it is doing what it is doing.
-
-Then, as a future work, all that parsing of crashkernel= cmdline options
-should be concentrated at the beginning and once it is clear what the
-user requests, the reservations should be done.
-
-As it is, reserve_crashkernel() is pretty unwieldy and hard to read.
-
-Thx.
+Makes sense. BUT as of now we isolate not only a pageblock but a
+MAX_ORDER -1 page (e.g., 2 pageblocks on x86-64 (!) ). So you'll have
+the same issue in that case.
 
 -- 
-Regards/Gruss,
-    Boris.
+Thanks,
 
-https://people.kernel.org/tglx/notes-about-netiquette
+David / dhildenb
+

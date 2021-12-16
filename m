@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A09847798F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A99477995
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238700AbhLPQrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:47:35 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44028
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232590AbhLPQre (ORCPT
+        id S239727AbhLPQru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:47:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:39897 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239675AbhLPQrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:47:34 -0500
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 16 Dec 2021 11:47:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639673268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H4QQrv5yHw8uvREotMjEQW9H2R0fBtaao4kUBQhmBFY=;
+        b=auNVdRF6pboxYXCb3pvPQEgy0GMZY3rfdCfGDmZMFrzS8bfjsFn2PbRxfgNb8R2uQQm5On
+        Yn5nER/+JUaqi+P6UOihpGnhVkDh/7Wajsy2hD1xiqz2ZRSBO/EC1Qg6jdIRZRNV3cgxEQ
+        WZIfrufsTtL29eQDEIog7r1okVL7llE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-263-6-Ukhu7bM6ieiGRqMNkqew-1; Thu, 16 Dec 2021 11:47:42 -0500
+X-MC-Unique: 6-Ukhu7bM6ieiGRqMNkqew-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 665853F044
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 16:47:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639673253;
-        bh=UJoL1Inyw8vu/KLNbBVbc+OxgIDQlc0M+xAVjgBLGQY=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=awLkskXEYJwxNobBKbVfCvLmy3SUvIJybvaCyYBqqHOsWv2nZQhrygy95qPrJlzUj
-         u7gmjpPdvOqBGtTJDUgI9OjUgmZovHf15QVZLfTra+8h8IJshnJciMvX5idWX/M1wk
-         o4RDVee1gh5RJa2Qmkk3hTK6defRdIbtIzHoWoyoODbxSnq3VrD/nRC0ruI6eCudCq
-         xzQEIUlCwzvtG4GhX15FmeiWvBtXXzI5Oo56Kk9onSQC8sEVhxkue9QeJFJq27RUw4
-         tBKcMihcTP0om/56LaXAqpBvCQLhs+wg0BX77Tm7frb9w0QW8sOAthDSLvaHfvqDuA
-         hLTF1fd0W/kPw==
-Received: by mail-wm1-f72.google.com with SMTP id 205-20020a1c00d6000000b003335d1384f1so1536262wma.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 08:47:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UJoL1Inyw8vu/KLNbBVbc+OxgIDQlc0M+xAVjgBLGQY=;
-        b=5YIOBwBwuqNzQioyTP8H7Dg7je4bbXeCzU6Hibbgy/1JnZ1pNWVqub5aCdbBY3rkWO
-         Rfp1fWTnD5QIVIEz3+FWOF9ZMthDE8DK2ndNVYBkZ3glJAFgWUT0ZUWaOOn+OXbfxXEj
-         blsgYWdlb3vUiPCeTg/ZAyTb+p751YnwWXUqt5ePvq3es/tv/fsR9leFRapniRrMN5fn
-         lv45Ns2jIVSTM9+Nb2UgQj5IJlS9YOaKSNVaNBwl8RAPQgI3dF19wDx1mS9l9VSK/Iv4
-         B2wzL9KThD/PrPI0gRjshsrFRpP/ji2P0Iq7Ssix0Mh7W1LjrCAKXWcoBlnw3lvIp3Bm
-         aTKQ==
-X-Gm-Message-State: AOAM531Oz/KbjU8rxfvpR9fOynAMUJWSItGGgl6C0CdTfmXXoqzARiJ6
-        daba3VekegOgZMSYBHfzZgmixNmrfMFTln6Xnvx9M72yTk4/e/5kcY8ZsrZ5XDvSyTGSBJeQbbE
-        Dg6i2/Sbx6yWUh5uDHzMJI98Cbbf6ggi+j7ThC7Ibdw==
-X-Received: by 2002:a05:600c:1d97:: with SMTP id p23mr5888866wms.186.1639673253057;
-        Thu, 16 Dec 2021 08:47:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwSS7rjab89jQAa03AtLuhGWfMnnTjqjL82jdXNrlyrN8nt24cOgkR/2XukFsqAxO08PB4brA==
-X-Received: by 2002:a05:600c:1d97:: with SMTP id p23mr5888850wms.186.1639673252902;
-        Thu, 16 Dec 2021 08:47:32 -0800 (PST)
-Received: from alex.home (lfbn-gre-1-195-1.w90-112.abo.wanadoo.fr. [90.112.158.1])
-        by smtp.gmail.com with ESMTPSA id t8sm5323151wrv.30.2021.12.16.08.47.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 08:47:32 -0800 (PST)
-From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
-To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Subject: [PATCH] Documentation: bindings: Warn about yamllint and dt-schema before submitting patches
-Date:   Thu, 16 Dec 2021 17:47:27 +0100
-Message-Id: <20211216164727.2888916-1-alexandre.ghiti@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 75392801ADC;
+        Thu, 16 Dec 2021 16:47:39 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8E6B51037F51;
+        Thu, 16 Dec 2021 16:47:33 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wi0H5vmka1_iWe0+Yc6bwtgWn_bEEHCMYsPHYtNJKZHCQ@mail.gmail.com>
+References: <CAHk-=wi0H5vmka1_iWe0+Yc6bwtgWn_bEEHCMYsPHYtNJKZHCQ@mail.gmail.com> <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk> <163967169723.1823006.2868573008412053995.stgit@warthog.procyon.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Jeff Layton <jlayton@kernel.org>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 56/68] afs: Handle len being extending over page end in write_begin/write_end
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1828148.1639673252.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 16 Dec 2021 16:47:32 +0000
+Message-ID: <1828149.1639673252@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure people know that yamllint must be installed and dt-schema up
-to date before they submit device tree bindings patches.
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
----
- Documentation/devicetree/bindings/submitting-patches.rst | 4 ++++
- 1 file changed, 4 insertions(+)
+> > With transparent huge pages, in the future, write_begin() and write_en=
+d()
+> > may be passed a length parameter that, in combination with the offset =
+into
+> > the page, exceeds the length of that page.  This allows
+> > grab_cache_page_write_begin() to better choose the size of THP to allo=
+cate.
+> =
 
-diff --git a/Documentation/devicetree/bindings/submitting-patches.rst b/Documentation/devicetree/bindings/submitting-patches.rst
-index 36a17b250ccc..3553e90bef5a 100644
---- a/Documentation/devicetree/bindings/submitting-patches.rst
-+++ b/Documentation/devicetree/bindings/submitting-patches.rst
-@@ -25,6 +25,10 @@ I. For patch submitters
- 
-        make dt_binding_check
- 
-+     Make sure yamllint is installed and dt-schema is up to date::
-+
-+       pip3 install dtschema --upgrade
-+
-      See Documentation/devicetree/bindings/writing-schema.rst for more details
-      about schema and tools setup.
- 
--- 
-2.32.0
+> I still think this is a fundamental bug in the caller. That
+> "explanation" is weak, and the whole concept smells like week-old fish
+> to me.
+
+You really should ask Willy about this as it's multipage folio-related.
+
+AIUI, because the page/folio may be allocated inside ->write_begin(),
+generic_perform_write() tells the filesystem how much it has been asked to
+write and then the folio allocation can be made to fit that.
+
+However, at this time, ->write_begin() and ->write_end() have a page point=
+er
+(or pointer-to-pointer), not a folio pointer, in their signature, so the
+filesystem has to convert between them.
+
+I'm working on write helpers for netfslib that absorb this out of the
+filesystems that use it into its own take on generic_perform_write(), ther=
+eby
+eliminating the need for ->write_begin and ->write_end.  I have this kind =
+of
+working for afs and 9p at the moment and am looking at ceph, but there's a=
+ way
+to go yet.  I believe iomap does the same for block-based filesystems that=
+ use
+it (such as xfs).
+
+I think Willy's aim is to get rid of ->write_begin and ->write_end entirel=
+y.
+
+David
 

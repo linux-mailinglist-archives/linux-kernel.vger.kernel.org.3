@@ -2,114 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9BB4774C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2384774D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238062AbhLPOiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:38:04 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:34213 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238054AbhLPOh6 (ORCPT
+        id S238104AbhLPOk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232369AbhLPOkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:37:58 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E80D85804DD;
-        Thu, 16 Dec 2021 09:37:57 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 16 Dec 2021 09:37:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=fm3; bh=Y
-        WDS6KaFoXhTaIfpyazc6NB71xdSLFFPrMeuUZ1+uUY=; b=mDm79uDf5S/92VNn3
-        I/gJocJKIrKQl0vNWIKhzbYRFkcX7ZPvy3yOsuxK+jc1UV9Dq1GOUVIHixjZ7MNv
-        dFfZIwBrHzxRiz/RDWSTLOi2OfuQ7fXoD4J0CewcHCGbnnFRP9u7oOTbmccpIWIl
-        PrzQtV0O+yD/YrmxBcT+sahrRLMx68b+BkrRmikulXDj4fMb5alFiHOVMty8hpjr
-        SFus3iRogxrLbgICGjZf1skBr7TrWeSFkOjYi4gPHEkVIZJsxOQMtWH9XwvD0YlR
-        xv6tleDg0mQjtHMmEw4tYurd4wEhrve0pElL9Ii635d0znAbn76U2kBxXoMX2NO4
-        FHdYw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=YWDS6KaFoXhTaIfpyazc6NB71xdSLFFPrMeuUZ1+u
-        UY=; b=Z25W6JhU/mDJaPrOSWYTH9nOrzcCRqJOEx0edmmxN1azhhCUyBkD8Hq8l
-        VWO/rJqirbF+6DCQNf1oT1Emg9PmYAWWCtDwLxXir7TWfdGxQR63By0+GySZVWt9
-        KsLhvk4+qfieUhHqFrf8wgieNXejD1xd6ouo5gjCeZwM5mYsx3popd8KBX/hb5rM
-        IUmo1AytjOjvyIP16NZQAOh9MYYbAXjb4+5tIr6rD/w7AWPD1pMVa6U+Xs1138Te
-        KA10Z413ydL2hJctX64xqx8R3OOGgNMUUq1H8aBo4yd/R/3zr9kTQP4Rv/HqWsDk
-        muiEwtLTGihwR4cOH87Q/NxPSG+Ag==
-X-ME-Sender: <xms:RU-7YZWwJ4Y81LeiSnn_PQkBHdyyKFOnVXloOMUGWuTiZCXrWwWZfw>
-    <xme:RU-7YZkp3g5cvvI6Xv8C2XbHhbAO3GBWUJmWThuXXDCeVAiKIf1yW5JDZDcZLHTxk
-    bGbY7h07u979qhNCJU>
-X-ME-Received: <xmr:RU-7YVaEY-zneuTJDxrnSwGzY9wHwdQQKU1NbLjfoKyL0oFGBkqs-CUWIaXU8Sc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeggdeikecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepheeiuddvvefhkeejfedttdekieethfdukedvieeuueelgfelieej
-    geehvdekudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:RU-7YcUIcOe6qTP-cxW4CVbp2prOuzOecNHfb1HHRpwJ-6j_POSRHQ>
-    <xmx:RU-7YTl-dFpWYav34ZVNTqmO1kzYfeszluGsW6t5vgRNT8mafGqWoA>
-    <xmx:RU-7YZeQc3gEQc6pZyJnjCf_O7xtxFFczpfg65BUf5_E7mrWyi1kCg>
-    <xmx:RU-7Ydkex1nVmKjTuRtOWb8TUNOsZkp2pFRiCbBdVne3IURLSVzSlg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Dec 2021 09:37:56 -0500 (EST)
-Message-ID: <4e33446d-fbe6-e2c6-c579-672339862c23@flygoat.com>
-Date:   Thu, 16 Dec 2021 14:37:55 +0000
+        Thu, 16 Dec 2021 09:40:23 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD372C061574;
+        Thu, 16 Dec 2021 06:40:22 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id t5so87596520edd.0;
+        Thu, 16 Dec 2021 06:40:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7Os6s1NmcWdadYy3WvTCfCU61qwcymHUj3Z04MGXTuI=;
+        b=pG4QU7yUyjNjGbkDkh3nNMBIJ9HxblK1cY6w8XvnM0K5G9YQDDoE/GmVJhMj/tuIoE
+         qfW1M802ZWevHAbYukyZShAQ4cPR77ymBiVIBF3pTtJplKVrksmLSHpky6k/HfgjRt32
+         f+lEhsE0SYeaG8eu2TSspGc/aKhM5E8xpMYP8qITvfZUBLTSSKlOKxHwRpU0GJ3zzcD0
+         wviUvHIo7PQiltZDqOMqTg9vHlliptxBinki7S1o6xlyf4u/jHd4CN27bzAKEkWtBBx1
+         o3R7drIHOrGJcCvLUgtcmreRLp4lHVP34TiAVHXetGKw2Kk6xkYU+Ev2bQqU9qHFfvQg
+         1Zaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Os6s1NmcWdadYy3WvTCfCU61qwcymHUj3Z04MGXTuI=;
+        b=gj9t04FRJGk47CxlVsfeMLOxcCIXlqQ4vGR4jC3AsngJN1/Qv4J+RTFJIcpvaSLim/
+         43AExQuYNX/htnF4wj92uFkmbLwsvNb95868o3aGNgMltBMaqpu3whqkDFot6RviT+ZE
+         Hnsf0DkI655gR8u7bXR5T332osi2H/sPbU6JHuhkfMDHHSoLnEj65yQN7Ljq4wdr3tmq
+         7oD71pP1z1/cBiUQOKKdn4KgTYbm/kwYheE9EANZ1LEh+a32Z0v8DnZXk4jZDJMSUDyp
+         dllQyJspsiS/4LrNrHb2xBdl+84uWtioGvcnVU6R9aoZAxzbWAM08qPNBznrlAv1GG3D
+         /YYg==
+X-Gm-Message-State: AOAM531XysvT3GP2wrSq9i12fE70j8Lp7HfLRgfO/bembkN7rpmPgc8K
+        2EhH5tEGeX9VokXZ6Ni3mjwordQpXdlBks4ZGsI=
+X-Google-Smtp-Source: ABdhPJwdDpS+ipR7n6OxR+8cz83068lG1xJWRu+5XbSn01J69xOCeONv5WDOGDbgkPCyc+YILRfBNJa3fhRNy8xxVS8=
+X-Received: by 2002:a05:6402:270c:: with SMTP id y12mr20762654edd.258.1639665621353;
+ Thu, 16 Dec 2021 06:40:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific
- 'pci_remap_iospace()'
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Xi Ruoyao <xry111@mengyan1223.wang>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+References: <1639660402-31207-1-git-send-email-akhilrajeev@nvidia.com> <1639660402-31207-2-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1639660402-31207-2-git-send-email-akhilrajeev@nvidia.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 16 Dec 2021 16:38:52 +0200
+Message-ID: <CAHp75VdXw_XvDN=T3fOmNOWsdfQ_xm2090z9uAq77oADPRcMzw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] device property: Add device_irq_get_byname
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
- <20210925203224.10419-6-sergio.paracuellos@gmail.com>
- <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
- <6ee31420-ef67-471e-a924-a0158b4a9428@www.fastmail.com>
- <CAK8P3a2i6eW8JunE_6h6OTCa51eHfPahQQhaGHGWePX+r4ybww@mail.gmail.com>
- <bfdfb7b3-1322-573d-eddc-1d337c4616e6@flygoat.com>
- <CAK8P3a2iQhxckn0MfLyLpKmyKN_MwAJ0t2yh6DLsS0MvdreYNA@mail.gmail.com>
- <88d1835f-cee5-0fb2-f7de-7fc06e8e671d@flygoat.com>
- <CAK8P3a1nozEpQ_9Q+NhocWZDsrfLmDibrkmoX8ph63wYaFxvjg@mail.gmail.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <CAK8P3a1nozEpQ_9Q+NhocWZDsrfLmDibrkmoX8ph63wYaFxvjg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 16, 2021 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+>
+> Get interrupt by name from ACPI table as well.
 
+the interrupt resource
 
-在 2021/12/16 14:32, Arnd Bergmann 写道:
-> On Thu, Dec 16, 2021 at 3:27 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->> 在 2021/12/16 14:18, Arnd Bergmann 写道:
-<...>
->> Ah, right. It makes a lot of sense that anything based on ISA PC peripherals
->> would need it, regardless of the PCI support.
+> Add option to use 'interrupt-names' in _DSD which can map to interrupt by
+> index. The implementation is similar to 'interrupt-names' in devicetree.
+> Also add a common routine to get irq by name from devicetree and ACPI
+> table.
+>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  drivers/base/property.c  | 35 +++++++++++++++++++++++++++++++++++
+>  include/linux/property.h |  3 +++
+>  2 files changed, 38 insertions(+)
+>
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index cbe4fa2..7acf4fc 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -920,6 +920,41 @@ int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
+>  EXPORT_SYMBOL(fwnode_irq_get);
+>
+>  /**
+> + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
+> + * @fwnode:    Pointer to the firmware node
+> + * @index:     IRQ name
+> + *
 
-I'll draft a RFC patch with linked list approach later on.
-For now Tiezhu's 09d97da660ff ("MIPS: Only define pci_remap_iospace() 
-for Ralink")
-seems working.
+Needs a description to explain how the name is described.
 
-Thanks.
+> + * Returns Linux IRQ number on success, errno otherwise.
+> + */
+> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+> +{
+> +       int index;
+> +
+> +       if (unlikely(!name))
+> +               return -EINVAL;
+> +
+> +       index = fwnode_property_match_string(fwnode, "interrupt-names",  name);
+> +       if (index < 0)
+> +               return index;
 
->>
->>         Arnd
-- Jiaxun
+This property ise needs to be described in the ACPI documentation:
+https://www.kernel.org/doc/html/latest/firmware-guide/acpi/enumeration.html
+
+Perhaps after the DMA section.
+
+> +       return fwnode_irq_get(fwnode, index);
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko

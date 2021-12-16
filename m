@@ -2,72 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BC3476B7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B62476B80
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234746AbhLPIK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 03:10:56 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47314 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbhLPIKy (ORCPT
+        id S232272AbhLPIMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 03:12:32 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:36439 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229947AbhLPIMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 03:10:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DC1261C7B;
-        Thu, 16 Dec 2021 08:10:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 292D4C36AE4;
-        Thu, 16 Dec 2021 08:10:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639642253;
-        bh=Fiuiji4pBps1Qhzw2rF+T8tIH7RQWsYMKKFFg9hAkhU=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=Gl/W8pqQC9hHrV3lyvkZNRB1fsMwdtqfByHWRUxs3offZnX9HkW9ix+xx6ysO/gWy
-         wPC7NNyeP0HUSgME17YSCbAhH0omxZFUM1cPqYMppb5NnhG5yM3VbbRKk+Tb20e7hz
-         3Z03W0/aITkhiAwaDDi6Z06eaovzCiG5lFRC135ylXigYFdlvSWdMFGkZNqVkvFvGN
-         EOCFvkJDw8I9W5dwbRc0lQPutnuynFyWxJWVWaVzKRxrNNowabAY1rHSniYxcMf4Zf
-         F4A3IAxWfo7app/bZJBodo8wbfa+eSpJcB+vAmuzf2/M0va8GWTv2EhFO/s9eiFQUA
-         wS8JvziTwn5UQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     David Mosberger-Tang <davidm@egauge.net>
-Cc:     Claudiu.Beznea@microchip.com, Ajay.Kathat@microchip.com,
-        adham.abozaeid@microchip.com, davem@davemloft.net,
-        devicetree@vger.kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v5 1/2] wilc1000: Add reset/enable GPIO support to SPI driver
-References: <20211215030501.3779911-1-davidm@egauge.net>
-        <20211215030501.3779911-2-davidm@egauge.net>
-        <d55a2558-b05d-5995-b0f0-f234cb3b50aa@microchip.com>
-        <9cfbcc99f8a70ba2c03a9ad99f273f12e237e09f.camel@egauge.net>
-Date:   Thu, 16 Dec 2021 10:10:48 +0200
-In-Reply-To: <9cfbcc99f8a70ba2c03a9ad99f273f12e237e09f.camel@egauge.net>
-        (David Mosberger-Tang's message of "Wed, 15 Dec 2021 07:59:05 -0700")
-Message-ID: <87zgp1c6lz.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 16 Dec 2021 03:12:31 -0500
+Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MBBCI-1mnIH51hMs-00ChmN; Thu, 16 Dec 2021 09:12:29 +0100
+Received: by mail-wr1-f53.google.com with SMTP id t26so6292350wrb.4;
+        Thu, 16 Dec 2021 00:12:29 -0800 (PST)
+X-Gm-Message-State: AOAM532jBxpQm9ksWTOw8+xqpY5m8BYgCXecQ+hPxaINLRGRn96+9Vb4
+        UjgK+glJtyv4jFSi1K90GrZ5dwGUEj9knRmzBwM=
+X-Google-Smtp-Source: ABdhPJwYtMqPfFg9GzXhBmcOdn3sobd8196nSbV6WVDDL6Nge+uAQIhproVVltF/DqDDBiffqjQeaiRNaadsUjb/qKo=
+X-Received: by 2002:a5d:6989:: with SMTP id g9mr653391wru.12.1639642348958;
+ Thu, 16 Dec 2021 00:12:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <cover.1639560427.git.qinjian@cqplus1.com>
+In-Reply-To: <cover.1639560427.git.qinjian@cqplus1.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 16 Dec 2021 09:12:13 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1Doh8GY9iFZsvmd6wASHoPqyR+roXx0G5XidnmHNkGaA@mail.gmail.com>
+Message-ID: <CAK8P3a1Doh8GY9iFZsvmd6wASHoPqyR+roXx0G5XidnmHNkGaA@mail.gmail.com>
+Subject: Re: [PATCH v6 00/10] Add Sunplus SP7021 SoC Support
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:VHBQGMx5BnEGZ2O1OFfBBwmcuSZLc/m3GiIghGM6bV3Mcn9QVnM
+ SskyLOGbhEPurF0ZNNk8H3dVvLIV4lIRAiy0AnzWvbuAtSP/AM/lRuSp8nnfyzTbnWW+qR4
+ pDlpsFoGU0yPLE4tdFCU1juXj1dOBv3veKT+iqmd7hP7HH0F0s8CcWRMxBqgoDiBqzdkJVE
+ Cx6sm0kycPDxbBK8X3udA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ABBbp6E+X8c=:W/6H1wkZsMHq2Nvgw57WMQ
+ Lap7/jmIIS5gC1LMYiEtRAY1T0WaMOijuZZJ2sQdvcl3bWyfDDcrwyXwTy4Xlwffkj87d+oWd
+ qxTMPF30w/l8JjA3stM4ayXDRuAz6GbHA7JT8Sd4Rb/FnAwVQAdTeZquPP9R8Kcs7O6C6XoTl
+ 4j2wTWt07IOJp8EGFN+M8r9t0K749IDX5CLeQ9Qq4QmUA90Z2IzLGG6ueYa485aP0f4864KG9
+ gBRPEdTSnd4Y0FC69ZkQpJKadYF5N24B6Lf7pl+//WLLKNh3Yme33ZvyPO5KVzynv7RhKjn78
+ 5bLtp3PNBlOb7ctv9b5UMG1nVjLhEdZ7siG2QNYW0GbB33HkBNwz7adXslzNSm38tcHwOQy8d
+ Ux4O6r1bBL5R6aTdiAcStWiD86kTTaplZ6OpOEhxS9ofbQKcxBwOq1hVmcXSh45wECCwB7A90
+ bx8I0CP7n65c8NSMslaAcyHvKE3tu4WVx/sUUJ0WVwvapwM2b1Y7pIBdMR+VEHunrKvEBuJj1
+ Cen4NzM406ad639kOpcWaWrc8IhkbVNAN43dnYeav1vgZGn/av7ojiuzTv9dhvDKiqwoT2hFa
+ 99RkQD+YSi6EFVvJ4obyLuq1VHTRkg2g152updp7UkpZpOhktBXZm4ByuA+e6gIccHayDOoXk
+ RnlFX+SxrgC/HB/eUGDvNoKoTbBRLEJnkuDK7kocjWwtMfRRcH5R69elyVs7zqvMOWMuNX+bi
+ SJOIfOykiweIM7v0/z6gLdAV8wJj910DDvdrKoWHDa3Hf+pLeDjLA6JAxEG1Iixm6+dugRRnI
+ Jw1dU2Elc9IBRLMh4R+W+ok4YHI6aX6pK8DmALbBvMBMhemr38=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Mosberger-Tang <davidm@egauge.net> writes:
-
->> > +       } else {
->> > +               gpiod_set_value(gpios->reset, 1);       /* assert RESET */
->> > +               gpiod_set_value(gpios->enable, 0);      /* deassert ENABLE */
->> 
->> I don't usually see comments near the code line in kernel. Maybe move them
->> before the actual code line or remove them at all as the code is impler enough?
+On Thu, Dec 16, 2021 at 8:08 AM Qin Jian <qinjian@cqplus1.com> wrote:
 >
-> You're kidding, right?
+> This patch series add Sunplus SP7021 SoC support.
+>
+> Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
+> peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
+> single chip. It is designed for industrial control.
+>
+> SP7021 consists of two chips (dies) in a package. One is called C-chip
+> (computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
+> process (22 nm) for high performance computing. The other is called P-
+> chip (peripheral chip). It has many peripherals and an ARM A926 added
+> especially for real-time control. P-chip is made for customers. It adopts
+> low-level process (ex: 0.11 um) to reduce cost.
+>
+> Refer to (for documentations):
+> https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+>
+> Refer to (applications):
+> https://tibbo.com/store/plus1.html
+>
+> Refer to (applications):
+> http://www.sinovoip.com.cn/ecp_view.asp?id=586
 
-I agree with Claudiu, the comments are not really providing more
-information from what can be seen from the code. And the style of having
-the comment in the same line is not commonly used in upstream.
+This looks all good to me now, it just needs a review for the clk,
+reset  and irqchip drivers. I'll won't be pulling any further branches
+after the 23rd for this release, so it appears unlikely to still make it
+into v5.17, but please keep going anyway. Either Olof will be able
+to take the series when I'm gone, or we can do it early for v5.18.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Ideally this should come as a pull request to soc@kernel.org once
+you have the remaining Reviewed-by tags, with the text above copied
+into the (signed) tag description. If you send it as patches, I'd suggest
+adding the text to the description of patch 9/10 instead, where
+you add the board code. This way it still becomes part of the git
+history for reference.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+        Arnd

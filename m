@@ -2,79 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2C8477705
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF956477712
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235546AbhLPQI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:08:56 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53468 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238943AbhLPQIv (ORCPT
+        id S238970AbhLPQJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:09:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31055 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238938AbhLPQJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:08:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 16 Dec 2021 11:09:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639670951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q+iKU69IT25RM6o5WTQDb1UWmOocmYU/sPQf/xqyKt4=;
+        b=JHovQzlq0457D5RDMJ94sFNhPncgX+vz7CoVBq4YcDcPXEDF6dGz5oNa8o6WYg/xh5gSuy
+        Ooq/cYeeybcPcXj58atMazKecR2j8WBmhQCBlRhSBmfXMLwiKsvknNa1o5Uq35di8TCOPA
+        92Ca7AZQls3/KHRc91ApTq7QC8vMJQ4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607-GyT_b4ctOFC6pOGhfQMQPQ-1; Thu, 16 Dec 2021 11:09:07 -0500
+X-MC-Unique: GyT_b4ctOFC6pOGhfQMQPQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E820B61E8D;
-        Thu, 16 Dec 2021 16:08:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11C0FC36AE4;
-        Thu, 16 Dec 2021 16:08:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639670930;
-        bh=3KxkF/ZqZ4ahlQR47wiwqxVbEXQUbtGMU5LaCAgj8KA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pnrbd9u1FSZzygZRQMPGwZQ3Clb8DjT1qiICVXwOZ0P+87+M/mma4ERq6ebVuFG4z
-         qpNcCMU6EmCyakpissutysLfXHS2ROI6CzCFqZsA/40vDv0TmxgC1hmmWg0vU2NpIs
-         WtGLlTASTy0bXMznE6ijVStIdYj8TF5UOhqEACZxEjd8HEK7SXdJSKlzpD/e2NhcEX
-         14rpvj/1SNS8W7ZxBt+qgPtzF8zQ1AcS1C+jgmVrsoWoPX6mDYuqYbQPu14bLiDlrI
-         98fV2qD5tT6XiX/8I4T22cklVZfMN5ZIcwCjSKMCMFKOGlBjBx6lOCbcWzEcFiIj9K
-         zrZHsxGewagrg==
-Date:   Thu, 16 Dec 2021 08:08:49 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>
-Cc:     netdev@vger.kernel.org, jhs@mojatatu.com, mickeyr@marvell.com,
-        serhiy.pshyk@plvision.eu, taras.chornyi@plvision.eu,
-        Volodymyr Mytnyk <vmytnyk@marvell.com>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2] net: prestera: flower template support
-Message-ID: <20211216080849.714c3707@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <1639562850-24140-1-git-send-email-volodymyr.mytnyk@plvision.eu>
-References: <1639562850-24140-1-git-send-email-volodymyr.mytnyk@plvision.eu>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0E08286A062;
+        Thu, 16 Dec 2021 16:09:05 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A0EDD5BE3B;
+        Thu, 16 Dec 2021 16:09:00 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v3 11/68] fscache: Implement cache-level access helpers
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 16 Dec 2021 16:08:59 +0000
+Message-ID: <163967093977.1823006.6967886507023056409.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
+References: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Dec 2021 12:07:30 +0200 Volodymyr Mytnyk wrote:
-> From: Volodymyr Mytnyk <vmytnyk@marvell.com>
-> 
-> Add user template explicit support. At this moment, max
-> TCAM rule size is utilized for all rules, doesn't matter
-> which and how much flower matches are provided by user. It
-> means that some of TCAM space is wasted, which impacts
-> the number of filters that can be offloaded.
-> 
-> Introducing the template, allows to have more HW offloaded
-> filters by specifying the template explicitly.
-> 
-> Example:
->   tc qd add dev PORT clsact
->   tc chain add dev PORT ingress protocol ip \
->     flower dst_ip 0.0.0.0/16
->   tc filter add dev PORT ingress protocol ip \
->     flower skip_sw dst_ip 1.2.3.4/16 action drop
-> 
-> NOTE: chain 0 is the default chain id for "tc chain" & "tc filter"
->       command, so it is omitted in the example above.
-> 
-> This patch adds only template support for default chain 0 suppoerted
-> by prestera driver at this moment. Chains are not supported yet,
-> and will be added later.
-> 
-> Signed-off-by: Volodymyr Mytnyk <vmytnyk@marvell.com>
+Add a pair of functions to pin/unpin a cache that we're wanting to do a
+high-level access to (such as creating or removing a volume):
 
-This was applied to net-next.
+	bool fscache_begin_cache_access(struct fscache_cache *cache,
+					enum fscache_access_trace why);
+	void fscache_end_cache_access(struct fscache_cache *cache,
+				      enum fscache_access_trace why);
+
+The way the access gate works/will work is:
+
+ (1) If the cache tests as not live (state is not FSCACHE_CACHE_IS_ACTIVE),
+     then we return false to indicate access was not permitted.
+
+ (2) If the cache tests as live, then we increment the n_accesses count and
+     then recheck the liveness, ending the access if it ceased to be live.
+
+ (3) When we end the access, we decrement n_accesses and wake up the any
+     waiters if it reaches 0.
+
+ (4) Whilst the cache is caching, n_accesses is kept artificially
+     incremented to prevent wakeups from happening.
+
+ (5) When the cache is taken offline, the state is changed to prevent new
+     accesses, n_accesses is decremented and we wait for n_accesses to
+     become 0.
+
+Note that some of this is implemented in a later patch.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/163819593239.215744.7537428720603638088.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/163906893368.143852.14164004598465617981.stgit@warthog.procyon.org.uk/ # v2
+---
+
+ fs/fscache/cache.c             |   62 ++++++++++++++++++++++++++++++++++++++++
+ fs/fscache/internal.h          |    2 +
+ fs/fscache/main.c              |    2 +
+ include/trace/events/fscache.h |   41 ++++++++++++++++++++++++++
+ 4 files changed, 107 insertions(+)
+
+diff --git a/fs/fscache/cache.c b/fs/fscache/cache.c
+index 8db77bb9f8e2..e867cff53a70 100644
+--- a/fs/fscache/cache.c
++++ b/fs/fscache/cache.c
+@@ -216,6 +216,68 @@ void fscache_relinquish_cache(struct fscache_cache *cache)
+ }
+ EXPORT_SYMBOL(fscache_relinquish_cache);
+ 
++/**
++ * fscache_begin_cache_access - Pin a cache so it can be accessed
++ * @cache: The cache-level cookie
++ * @why: An indication of the circumstances of the access for tracing
++ *
++ * Attempt to pin the cache to prevent it from going away whilst we're
++ * accessing it and returns true if successful.  This works as follows:
++ *
++ *  (1) If the cache tests as not live (state is not FSCACHE_CACHE_IS_ACTIVE),
++ *      then we return false to indicate access was not permitted.
++ *
++ *  (2) If the cache tests as live, then we increment the n_accesses count and
++ *      then recheck the liveness, ending the access if it ceased to be live.
++ *
++ *  (3) When we end the access, we decrement n_accesses and wake up the any
++ *      waiters if it reaches 0.
++ *
++ *  (4) Whilst the cache is caching, n_accesses is kept artificially
++ *      incremented to prevent wakeups from happening.
++ *
++ *  (5) When the cache is taken offline, the state is changed to prevent new
++ *      accesses, n_accesses is decremented and we wait for n_accesses to
++ *      become 0.
++ */
++bool fscache_begin_cache_access(struct fscache_cache *cache, enum fscache_access_trace why)
++{
++	int n_accesses;
++
++	if (!fscache_cache_is_live(cache))
++		return false;
++
++	n_accesses = atomic_inc_return(&cache->n_accesses);
++	smp_mb__after_atomic(); /* Reread live flag after n_accesses */
++	trace_fscache_access_cache(cache->debug_id, refcount_read(&cache->ref),
++				   n_accesses, why);
++	if (!fscache_cache_is_live(cache)) {
++		fscache_end_cache_access(cache, fscache_access_unlive);
++		return false;
++	}
++	return true;
++}
++
++/**
++ * fscache_end_cache_access - Unpin a cache at the end of an access.
++ * @cache: The cache-level cookie
++ * @why: An indication of the circumstances of the access for tracing
++ *
++ * Unpin a cache after we've accessed it.  The @why indicator is merely
++ * provided for tracing purposes.
++ */
++void fscache_end_cache_access(struct fscache_cache *cache, enum fscache_access_trace why)
++{
++	int n_accesses;
++
++	smp_mb__before_atomic();
++	n_accesses = atomic_dec_return(&cache->n_accesses);
++	trace_fscache_access_cache(cache->debug_id, refcount_read(&cache->ref),
++				   n_accesses, why);
++	if (n_accesses == 0)
++		wake_up_var(&cache->n_accesses);
++}
++
+ #ifdef CONFIG_PROC_FS
+ static const char fscache_cache_states[NR__FSCACHE_CACHE_STATE] = "-PAEW";
+ 
+diff --git a/fs/fscache/internal.h b/fs/fscache/internal.h
+index 71c897757d44..be29816b37ef 100644
+--- a/fs/fscache/internal.h
++++ b/fs/fscache/internal.h
+@@ -23,6 +23,8 @@
+ #ifdef CONFIG_PROC_FS
+ extern const struct seq_operations fscache_caches_seq_ops;
+ #endif
++bool fscache_begin_cache_access(struct fscache_cache *cache, enum fscache_access_trace why);
++void fscache_end_cache_access(struct fscache_cache *cache, enum fscache_access_trace why);
+ struct fscache_cache *fscache_lookup_cache(const char *name, bool is_cache);
+ void fscache_put_cache(struct fscache_cache *cache, enum fscache_cache_trace where);
+ 
+diff --git a/fs/fscache/main.c b/fs/fscache/main.c
+index ae493e9ca1c9..876f4bee5840 100644
+--- a/fs/fscache/main.c
++++ b/fs/fscache/main.c
+@@ -21,6 +21,8 @@ module_param_named(debug, fscache_debug, uint,
+ MODULE_PARM_DESC(fscache_debug,
+ 		 "FS-Cache debugging mask");
+ 
++EXPORT_TRACEPOINT_SYMBOL(fscache_access_cache);
++
+ struct workqueue_struct *fscache_wq;
+ EXPORT_SYMBOL(fscache_wq);
+ 
+diff --git a/include/trace/events/fscache.h b/include/trace/events/fscache.h
+index 9286e1c4b2ac..734966bc49e1 100644
+--- a/include/trace/events/fscache.h
++++ b/include/trace/events/fscache.h
+@@ -62,6 +62,12 @@ enum fscache_cookie_trace {
+ 	fscache_cookie_see_work,
+ };
+ 
++enum fscache_access_trace {
++	fscache_access_cache_pin,
++	fscache_access_cache_unpin,
++	fscache_access_unlive,
++};
++
+ #endif
+ 
+ /*
+@@ -107,6 +113,11 @@ enum fscache_cookie_trace {
+ 	EM(fscache_cookie_see_withdraw,		"-   x-wth")		\
+ 	E_(fscache_cookie_see_work,		"-   work ")
+ 
++#define fscache_access_traces		\
++	EM(fscache_access_cache_pin,		"PIN   cache  ")	\
++	EM(fscache_access_cache_unpin,		"UNPIN cache  ")	\
++	E_(fscache_access_unlive,		"END   unlive ")
++
+ /*
+  * Export enum symbols via userspace.
+  */
+@@ -118,6 +129,7 @@ enum fscache_cookie_trace {
+ fscache_cache_traces;
+ fscache_volume_traces;
+ fscache_cookie_traces;
++fscache_access_traces;
+ 
+ /*
+  * Now redefine the EM() and E_() macros to map the enums to the strings that
+@@ -204,6 +216,35 @@ TRACE_EVENT(fscache_cookie,
+ 		      __entry->ref)
+ 	    );
+ 
++TRACE_EVENT(fscache_access_cache,
++	    TP_PROTO(unsigned int cache_debug_id,
++		     int ref,
++		     int n_accesses,
++		     enum fscache_access_trace why),
++
++	    TP_ARGS(cache_debug_id, ref, n_accesses, why),
++
++	    TP_STRUCT__entry(
++		    __field(unsigned int,		cache		)
++		    __field(int,			ref		)
++		    __field(int,			n_accesses	)
++		    __field(enum fscache_access_trace,	why		)
++			     ),
++
++	    TP_fast_assign(
++		    __entry->cache	= cache_debug_id;
++		    __entry->ref	= ref;
++		    __entry->n_accesses	= n_accesses;
++		    __entry->why	= why;
++			   ),
++
++	    TP_printk("C=%08x %s r=%d a=%d",
++		      __entry->cache,
++		      __print_symbolic(__entry->why, fscache_access_traces),
++		      __entry->ref,
++		      __entry->n_accesses)
++	    );
++
+ TRACE_EVENT(fscache_acquire,
+ 	    TP_PROTO(struct fscache_cookie *cookie),
+ 
+
+

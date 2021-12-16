@@ -2,277 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E6A477B42
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAD1477B46
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240542AbhLPSFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39772 "EHLO
+        id S240548AbhLPSGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:06:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240231AbhLPSFG (ORCPT
+        with ESMTP id S233302AbhLPSF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:05:06 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EC7C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:05:05 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id n14-20020a7bcbce000000b00332f4abf43fso1816818wmi.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:05:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=co1FoCzjJObyRRqgwQ4hd10/dV+3xFk2/Vyzp/U6U8Y=;
-        b=4rL5g7iMfhBnyq3oDe2cbKJ1AVHW2MbbuyOBdgmqq4WGMI3gm36d3+sQ2mUuf51fo5
-         UOQMzLWc0WvSYN4YWKMPZH5KfjK4/AidzMRQpnV01lrkf0yFPn16pfsUAMyqRa4Iewmy
-         myJYDzsOm3NwQyK4hbYkmeBA3vk5CQm1deWt6O3yMhCQB26EZFAACEpTOJY9xvUloNlZ
-         f03kZ1tWHKThP4IaXn0qqu48wWHhVCsfVd3sfDbQNVbgf1oCVry2Mht0MvoQCFEP/CQj
-         lD6kt5JKMkUPGBKd8fV2u9eKgcHh7K/KVA9KmclSdtDBr4oqlrq9HsszR0cvhXYP5Vsk
-         b50g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=co1FoCzjJObyRRqgwQ4hd10/dV+3xFk2/Vyzp/U6U8Y=;
-        b=fRkALGI70dn8ZyoNaFitZJwRzwuluB2F0RwvZnQ2V8kZgIybW0LlFhZRe3pPS9XkKB
-         YJskeKL0BJ3ymzacI9NM65yDK56cMuI2E8tLMHhrZ8fKoL9fFzBgnf94Ix03s28szhJF
-         yNuOFT+IMqXHRmflCc4uANLZxqJ44U4O5kG7E3jK5LwZUKdCU9+QKo/OuWpZpUp2xBiR
-         bdfmOuGQDSg6eVm6OlgFRPIks4o9+/bKc0oNs9+8L7PfWctnB3dJ86sXQaihzyjWGijZ
-         RZpEI5MbjFcD4QhiISy67I79CWTiGJluHu94FGBJnlm+Jk+CVI911ve5oIsq4/IHs89i
-         30/g==
-X-Gm-Message-State: AOAM530/KEvxdYrlGszg6PimRyc9a4Noh9YdqAvEOuNH3lGFjpdhQDS4
-        HUYbdVeZXsoCpnmK/mqd5cpwBQ==
-X-Google-Smtp-Source: ABdhPJwKCAq4Y81w93DjKzMmQ2q9xLrcZZX5N0qYJ0dmvnTQJGHIpusVLT03xewyFmcfoqeHuMsIOw==
-X-Received: by 2002:a05:600c:a06:: with SMTP id z6mr6131453wmp.9.1639677904126;
-        Thu, 16 Dec 2021 10:05:04 -0800 (PST)
-Received: from ?IPv6:2a02:6b6d:f804:0:3624:2649:255a:1e32? ([2a02:6b6d:f804:0:3624:2649:255a:1e32])
-        by smtp.gmail.com with ESMTPSA id g13sm6387228wri.102.2021.12.16.10.05.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 10:05:03 -0800 (PST)
-Subject: Re: [PATCH] x86/purgatory: provide config to disable purgatory
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        tglx@linutronix.de, Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        fam.zheng@bytedance.com
-References: <20211123150508.3397898-1-usama.arif@bytedance.com>
- <YZ0HkaOiKfmgN8zl@zn.tnic> <YaTd4ZID7O+bVRXT@redhat.com>
- <79517d3c-3674-cc21-fbdc-b26946809756@bytedance.com>
- <87o862c396.fsf@email.froward.int.ebiederm.org>
- <433e69ec-3079-b905-b07f-b9c7a910be4f@bytedance.com>
- <33d9b711-288c-e5f4-0cc8-365c01861da5@bytedance.com>
-Message-ID: <c74fa6ef-1b55-1f60-39c5-4b26efbabddc@bytedance.com>
-Date:   Thu, 16 Dec 2021 18:05:02 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 16 Dec 2021 13:05:58 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BF1C061574;
+        Thu, 16 Dec 2021 10:05:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ypq5FRmGowIxm2o88iZsyAK7sTnww+wg511WNtyrzrQ=; b=KljhWFv81b6HZVatcxcIHWln4r
+        IvZwjPA+kIJDI/KKIWMsI7wnFWqwRBavKlWt5xlOU52xrNtbPbfwJzIaDT1Pobv0FwdRUy6hHZJU9
+        2ZsqApGWzlu2GYsMsyGyEKHrc+Awf4eQ7lW9MRBv+zffWtDPjqlyBRX0cVRzd3GVVH/J60Oda8/I/
+        EZl2j7Xc1/WuUvfypDfnnwSoke/qGh1GeRFUEe43ZKNzYotoG4FVjWSNvEwqM8ynKxCP+CQS2mnzI
+        nNq1Qyh7baif8Qmzeopp215emy/hMm0W6kMamcVgGls0CldCKB4E5h/cjj6+oapmHKxVJK9up9+Ac
+        SuU8H9hw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56328)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mxv8U-0008Bg-7v; Thu, 16 Dec 2021 18:05:46 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mxv8O-0005bI-Cm; Thu, 16 Dec 2021 18:05:40 +0000
+Date:   Thu, 16 Dec 2021 18:05:40 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Jose Abreu <Jose.Abreu@synopsys.com>, Andrew Lunn <andrew@lunn.ch>,
+        linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH] net: phylink: Pass state to pcs_config
+Message-ID: <Ybt/9Kc+XJYYecQF@shell.armlinux.org.uk>
+References: <20211214233450.1488736-1-sean.anderson@seco.com>
+ <YbkshnqgXP7Gd188@shell.armlinux.org.uk>
+ <de1f7214-58c8-cdc6-1d29-08c979ce68f1@seco.com>
+ <Ybk7iuxdin69MjTo@shell.armlinux.org.uk>
+ <YblA4E/InIAa0U1U@shell.armlinux.org.uk>
+ <1a9de385-1eb9-510b-25f5-d970adfb124b@seco.com>
+ <Ybt2syzCpjVDGQy7@shell.armlinux.org.uk>
+ <9ce793d7-8361-be07-e6b9-1ecc4e3ff8e5@seco.com>
 MIME-Version: 1.0
-In-Reply-To: <33d9b711-288c-e5f4-0cc8-365c01861da5@bytedance.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9ce793d7-8361-be07-e6b9-1ecc4e3ff8e5@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Just wanted to check again if there were any comments on my responses 
-below or the v3 of the patch at 
-https://lore.kernel.org/lkml/20211206164724.2125489-1-usama.arif@bytedance.com/.
-
-Thanks!
-Usama
-
-On 06/12/2021 16:51, Usama Arif wrote:
-> Hi,
+On Thu, Dec 16, 2021 at 12:51:33PM -0500, Sean Anderson wrote:
+> On 12/16/21 12:26 PM, Russell King (Oracle) wrote:
+> > On Thu, Dec 16, 2021 at 12:02:55PM -0500, Sean Anderson wrote:
+> > > On 12/14/21 8:12 PM, Russell King (Oracle) wrote:
+> > > > On Wed, Dec 15, 2021 at 12:49:14AM +0000, Russell King (Oracle) wrote:
+> > > > > On Tue, Dec 14, 2021 at 07:16:53PM -0500, Sean Anderson wrote:
+> > > > > > Ok, so let me clarify my understanding. Perhaps this can be eliminated
+> > > > > > through a different approach.
+> > > > > >
+> > > > > > When I read the datasheet for mvneta (which hopefully has the same
+> > > > > > logic here, since I could not find a datasheet for an mvpp2 device), I
+> > > > > > noticed that the Pause_Adv bit said
+> > > > > >
+> > > > > > > It is valid only if flow control mode is defined by Auto-Negotiation
+> > > > > > > (as defined by the <AnFcEn> bit).
+> > > > > >
+> > > > > > Which I interpreted to mean that if AnFcEn was clear, then no flow
+> > > > > > control was advertised. But perhaps it instead means that the logic is
+> > > > > > something like
+> > > > > >
+> > > > > > if (AnFcEn)
+> > > > > > 	Config_Reg.PAUSE = Pause_Adv;
+> > > > > > else
+> > > > > > 	Config_Reg.PAUSE = SetFcEn;
+> > > > > >
+> > > > > > which would mean that we can just clear AnFcEn in link_up if the
+> > > > > > autonegotiated pause settings are different from the configured pause
+> > > > > > settings.
+> > > > >
+> > > > > Having actually played with this hardware quite a bit and observed what
+> > > > > it sends, what it implements for advertising is:
+> > > > >
+> > > > > 	Config_Reg.PAUSE = Pause_Adv;
+> > > 
+> > > So the above note from the datasheet about Pause_Adv not being valid is
+> > > incorrect?
+> > > 
+> > > > > Config_Reg gets sent over the 1000BASE-X link to the link partner, and
+> > > > > we receive Remote_Reg from the link partner.
+> > > > >
+> > > > > Then, the hardware implements:
+> > > > >
+> > > > > 	if (AnFcEn)
+> > > > > 		MAC_PAUSE = Config_Reg.PAUSE & Remote_Reg.PAUSE;
+> > > > > 	else
+> > > > > 		MAC_PAUSE = SetFcEn;
+> > > > >
+> > > > > In otherwords, AnFcEn controls whether the result of autonegotiation
+> > > > > or the value of SetFcEn controls whether the MAC enables symmetric
+> > > > > pause mode.
+> > > >
+> > > > I should also note that in the Port Status register,
+> > > >
+> > > > 	TxFcEn = RxFcEn = MAC_PAUSE;
+> > > >
+> > > > So, the status register bits follow SetFcEn when AnFcEn is disabled.
+> > > >
+> > > > However, these bits are the only way to report the result of the
+> > > > negotiation, which is why we use them to report back whether flow
+> > > > control was enabled in mvneta_pcs_get_state(). These bits will be
+> > > > ignored by phylink when ethtool -A has disabled pause negotiation,
+> > > > and in that situation there is no way as I said to be able to read
+> > > > the negotiation result.
+> > > 
+> > > Ok, how about
+> > > 
+> > > diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> > > index b1cce4425296..9b41d8ee71fb 100644
+> > > --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> > > +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> > > @@ -6226,8 +6226,7 @@ static int mvpp2_gmac_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
+> > >                          * automatically or the bits in MVPP22_GMAC_CTRL_4_REG
+> > >                          * manually controls the GMAC pause modes.
+> > >                          */
+> > > -                       if (permit_pause_to_mac)
+> > > -                               val |= MVPP2_GMAC_FLOW_CTRL_AUTONEG;
+> > > +                       val |= MVPP2_GMAC_FLOW_CTRL_AUTONEG;
+> > > 
+> > >                         /* Configure advertisement bits */
+> > >                         mask |= MVPP2_GMAC_FC_ADV_EN | MVPP2_GMAC_FC_ADV_ASM_EN;
+> > > @@ -6525,6 +6524,9 @@ static void mvpp2_mac_link_up(struct phylink_config *config,
+> > >                 }
+> > >         } else {
+> > >                 if (!phylink_autoneg_inband(mode)) {
+> > > +                       bool cur_tx_pause, cur_rx_pause;
+> > > +                       u32 status0 = readl(port->base + MVPP2_GMAC_STATUS0);
+> > > +
+> > >                         val = MVPP2_GMAC_FORCE_LINK_PASS;
+> > > 
+> > >                         if (speed == SPEED_1000 || speed == SPEED_2500)
+> > > @@ -6535,11 +6537,18 @@ static void mvpp2_mac_link_up(struct phylink_config *config,
+> > >                         if (duplex == DUPLEX_FULL)
+> > >                                 val |= MVPP2_GMAC_CONFIG_FULL_DUPLEX;
+> > > 
+> > > +                       cur_tx_pause = status0 & MVPP2_GMAC_STATUS0_TX_PAUSE;
+> > > +                       cur_rx_pause = status0 & MVPP2_GMAC_STATUS0_RX_PAUSE;
+> > 
+> > I think you haven't understood everything I've said. These status bits
+> > report what the MAC is doing. They do not reflect what was negotiated
+> > _unless_ MVPP2_GMAC_FLOW_CTRL_AUTONEG was set.
+> > 
+> > So, if we clear MVPP2_GMAC_FLOW_CTRL_AUTONEG, these bits will follow
+> > MVPP22_XLG_CTRL0_TX_FLOW_CTRL_EN and MVPP22_XLG_CTRL0_RX_FLOW_CTRL_EN.
+> > 
+> > Let's say we apply this patch. tx/rx pause are negotiated and enabled.
+> > So cur_tx_pause and cur_rx_pause are both true.
+> > 
+> > We change the pause settings, forcing tx pause only. This causes
+> > pcs_config to be called which sets MVPP2_GMAC_FLOW_CTRL_AUTONEG, and
+> > then link_up gets called with the differing settings. We clear
+> > MVPP2_GMAC_FLOW_CTRL_AUTONEG and force the pause settings. We now
+> > have the status register containing MVPP2_GMAC_STATUS0_TX_PAUSE set
+> > but MVPP2_GMAC_STATUS0_RX_PAUSE clear.
+> > 
+> > The link goes down e.g. because the remote end has changed and comes
+> > back. We read the status register and see MVPP2_GMAC_STATUS0_TX_PAUSE
+> > is set and MVPP2_GMAC_STATUS0_RX_PAUSE is still clear. tx_pause is
+> > true and rx_pause is false. These agree with the settings, so we
+> > then set MVPP2_GMAC_FLOW_CTRL_AUTONEG.
+> > 
+> > If the link goes down and up again, then this cycle repeats - the
+> > status register will now have both MVPP2_GMAC_STATUS0_TX_PAUSE and
+> > MVPP2_GMAC_STATUS0_RX_PAUSE set, so we clear
+> > MVPP2_GMAC_FLOW_CTRL_AUTONEG. If the link goes down/up again, we flip
+> > back to re-enabling MVPP2_GMAC_FLOW_CTRL_AUTONEG.
 > 
-> I have sent a v3 of the patch with a much clearer commit message, please
-> let me know if there are any comments for the v3 patch or my responses 
-> below.
+> The toggling is not really a problem, since we always correct the pause
+> mode as soon as we notice.
+
+When do we "notice" ? We don't regularly poll on these platforms, we
+rely on interrupts.
+
+> The real issue would be if we don't notice
+> because the link went down and back up in between calls to
+> phylink_resolve.
+
+Err no. If the link goes down and back up, one of the things the code
+is structured to ensure is that phylink_resolve gets called, _and_ that
+we will see a link-down-link-up.
+
+The only time that isn't guaranteed is when using a polled driver where
+the link state does not latched-fail (or where the hardware does
+latch-fail but someone has decided "let's double-read the status
+register to get the current state".)
+
+> That could be fixed by verifying that the result of
+> pcs_get_state matches what was configured.
+
+So we need to introduce mvneta and mvpp2 specific code into phylink to
+do that, because for everything else, what we get from pcs_get_state
+is the _resolved_ information.
+
+> But perhaps the solution is to move this parameter to mac_link_up. That
+> would eliminate this toggling. And this parameter really is about the
+> MAC in the first case.
+
+Maybe, but we still have this parameter.
+
+> > I don't like having it either, but I've thought about it for a long
+> > time and haven't found any other acceptable solution.
+> > 
+> > To me, the parameter name describes _exactly_ what it's about. It's
+> > about the PCS being permitted to forward the pause status to the MAC.
+> > Hence "permit" "pause" "to" "mac" and the PCS context comes from the
+> > fact that this is a PCS function. I really don't see what could be
+> > clearer about the name... and I get the impression this is a bit of
+> > a storm in a tea cup.
 > 
-> Thanks,
-> Usama
-> 
-> On 01/12/2021 10:29, Usama Arif wrote:
->> Hi,
->>
->> (Resending the reply as my email client had updated and inserted html 
->> code and caused a bounceback from the mailing list, sorry about that.)
->>
->> Thanks for your reply, I have responded with further 
->> comments/questions inline below, and also have provided some context 
->> for the patch at the start:
->>
->> The patch is not introducing a new CONFIG option, as can be seen in 
->> the v2 patch diff. It is converting an existing CONFIG option that 
->> only enabled purgatory for specific architectures in which it has been 
->> implemented (x86, powerpc and s390) to an option that can that allow 
->> purgatory to be disabled (with default enabled) and only provides code 
->> to disable purgatory for x86 only. From what i see, purgatory is 
->> currently not yet implemented in other architectures like arm64 
->> kexec_file case and riscv, so this would on a high level,
->> provide only the option to make kexec on x86 similar to other the 
->> other architectures.
->>
->> As a background to the discussion, the usecase we are aiming is to 
->> update the host kernel with kexec in servers which is managing 
->> multiple VMs, to cut down the downtime of servers as much as possible 
->> so that its not noticeable to VMs. The patch is aimed at x86 purgatory 
->> code specifically. We are targetting other optimizations as well in 
->> other areas in boot path to cut down the 600ms time much further, so 
->> that cut down of 200ms downtime is significant in the usecase 
->> described. I did have a few comments/questions about your reply, 
->> please see my responses below:
->>
->>
->> On 29/11/2021 16:53, Eric W. Biederman wrote:
->>> Usama Arif <usama.arif@bytedance.com> writes:
->>>
->>>> Hi,
->>>>
->>>> Thanks for your replies. I have submitted a v2 of the patch with a
->>>> much more detailed commit message including reason for the patch and 
->>>> timing values.
->>>>
->>>> The time taken from reboot to running init process was measured
->>>> with both purgatory enabled and disabled over 20 runs and the
->>>> averages are:
->>>> Purgatory disabled:
->>>> - TSC = 3908766161 cycles
->>>> - ktime = 606.8 ms
->>>> Purgatory enabled:
->>>> - TSC = 5005811885 cycles (28.1% worse)
->>>> - ktime = 843.1 ms (38.9% worse)
->>>>
->>>>
->>>> Our reason for this patch is that it helps reduce the downtime of 
->>>> servers when
->>>> the host kernel managing multiple VMs needs to be updated via kexec,
->>>> but it makes reboot with kexec much faster so should be a general 
->>>> improvement in
->>>> boot time if purgatory is not needed and could have other usecases 
->>>> as well.
->>>> I believe only x86, powerpc and s390 have purgatory supported, other 
->>>> platforms
->>>> like arm64 dont have it implemented yet, so with the reboot time 
->>>> improvement seen,
->>>> it would be a good idea to have the option to disable purgatory 
->>>> completely but set default to y.
->>>> We also have the CONFIG_KEXEC_BZIMAGE_VERIFY_SIG which can be 
->>>> enabled to verify the next
->>>> kernel image to be booted and purgatory can be completely skipped if
->>>> not required.
->>>
->>> CONFIG_KEXEC_BZIMAGE_VERIFY_SIG is something totally and completely
->>> different.  It's job is to verify that the kernel to be booted comes
->>> from a trusted source.   The sha256 verification in purgatory's job
->>> is to verify that memory the kernel cares about was not corrupted
->>> during the kexec process.
->>>
->>
->> Thanks, acknowledged.
->>
->>> I believe when you say purgatory you are really talking about that
->>> sha256 checksum.  It really is not possible to disable all of
->>> the code that runs between kernels, as the old and the new kernel may
->>> run at the same addresses.  Anything that runs between the two kernels
->>> is what is referred to as purgatory.  Even if it is just a small
->>> assembly stub.
->>>
->>  >
->>
->> With this patch, i am trying to give an option (with default purgatory 
->> enabled)to disable purgatory completely on x86 only, i.e. no code 
->> running between 2 kernels on x86. From my understanding there is no 
->> purgatory in arm64 kexec_file case, in riscv and in some other archs 
->> as well, so I am not sure why its not possible to disable purgatory 
->> (all code running between 2 kernels) in x86? Unless i misunderstood 
->> something about the working of other platforms? In x86 case, from what 
->> i see relocate_kernel is still part of the older kernel and not 
->> purgatory, and with my patch, purgatory.ro is not built and kexec does 
->> execute successfully with purgatory disabled.
->>
->> About your point for the old and the new kernel may run at the same 
->> addresses,i dont think that can happen as in bzImage64_load function 
->> its loaded using the kbuf struct. This doesnt happen in other 
->> architectures (for e.g. arm64) that dont implement purgatory and any 
->> of the tests I conducted with the patch applied due to the use of kbuf 
->> struct.
->>
->>  From what i see in the code, purgatory in x86 specifically, has 2 
->> main functions, sha256 verification and loading the %rsi register for 
->> bootparam_load_addr. In this patch purgatory was disabled, which 
->> resulted in sha256 verification disabled and bootparam_load_addr moved 
->> to relocate_kernel. Our analysis revealed that most of the time is 
->> spent in the sha256 verification, so I would be ok to reformat the patch
->> to make the sha verification optional and keep purgatory enabled if 
->> thats preferred? Although in my opinion the current patch of only 
->> providing an option to disable purgatory seems much better.
->>
->>
->>> That sha256 verification is always needed for kexec on panic, there are
->>> by the nature of a kernel panic too many unknowns to have any confidence
->>> the new kernel will not be corrupted in the process of kexec before it
->>> gets started.
->>>
->>> For an ordinary kexec it might be possible to say that you have a
->>> reliable kernel shutdown process and you know for a fact that something
->>> won't come along and corrupt the kernel.  I find that a questionable
->>> assertion.  I haven't seen anyone yet whose focus when getting an
->>> ordinary kexec to work as anything other than making certain all of the
->>> drivers are shutdown properly.
->>>
->>> I have seen countless times when a network packet comes in a the wrong
->>> time and the target kernel's memory is corrupted before it gets far
->>> enough to initialize the network driver. >
->>
->> I agree that when doing testing and research, there are things that can
->> go wrong during kexec process, but i assume that the expectation is that
->> in production environment, when for e.g. updating a kernel with kexec 
->> in servers,the expectation is that kexec will execute successfully as 
->> long as there is nothing wrong in the old kernel and the new kernel.
->>
->> Maybe I didn't understand this correctly, but if a network packet 
->> comes in and corrupts the kernel memory, wont it also cause a problem 
->> even when purgatory is enabled? I agree that issue like these would be 
->> caught earlier with purgatory, but then if something like this breaks 
->> the kexec process in a production environment where the old and new 
->> kernel are well tested, trusted and expected to work, wouldn't there 
->> be a much more fundamental issue with the reliability of the current 
->> kexec process.
->>
->>> For a 0.2s speed up you are talking about disabling all of the safety
->>> checks in a very dangerous situation.  How much can you can in
->>> performance by optimizing the sha256 implementation instead of using
->>> what is essentially a reference implementation in basic C that I copied
->>> from somewhere long ago.
->>>
->>> Optimize the sha256 implementation and the memory copy loop and then
->>> show how the tiny bit of time that is left is on a mission critical path
->>> and must be removed.  Then we can reasonably talk about a config option
->>> for disabling the sha256 implementation in the kexec in not-panic case.
->>>
->> Thanks for this, I assume that over here you are suggesting for e.g. 
->> in x86 to replace the existing sha verification implementation in 
->> purgatory with the one in arch/x86/crypto/sha256_ssse3_glue.c? Also 
->> could you point to the memory copy loop to optimize? I can have a look 
->> at these 2 options.
->>
->> Even with these optimizations, i think the v2 patch should still be 
->> considered. The patch in the end is providing only an option to 
->> disable purgatory on x86 only, with the default value of keeping it 
->> enabled and not changing kexec behaviour. The CONFIG already existed, 
->> it is just renamed and now provides user the option to select to 
->> disable purgatory for x86, rather than it being architecture dependent.
->>
->> Thanks again for the review and comments,
->> Usama
->>
->>
->>> That sha256 implementation in part so that we can all sleep at night
->>> because we don't have to deal with very very strange heizenbugs.
->>>
->>> Eric
->>>
+> Well first off, the PCS typically has no ability to delegate/permit
+> anything to the MAC. So it is already unclear what the verb is.
+
+In the classical model of ethernet that is completely true - there is
+no coupling that communicates the link parameters between the PCS and
+MAC. mvpp2 and mvneta annoyingly do not implement the classical model
+though.
+
+> Next,
+> since this is pcs_config, one would think this has something to do with
+> pause advertisement. But in fact it has nothing to do with it. In fact,
+> this parameter only has an effect once mac_link_up comes around. I
+> suggest something like use_autonegotiated_pause. This makes it clear
+> that this is about the result of autonegotation.
+
+I could be devils advocate here and claim that
+"use_autonegotiated_pause" is meaningless to a MAC because in the
+classical model, the MAC doesn't have any way to know what the
+negotiated pause was. So where does this "pause" come from.
+
+So it's just the same problem, doesn't solve anything, and we just have
+a different opinion on naming and where something should be.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

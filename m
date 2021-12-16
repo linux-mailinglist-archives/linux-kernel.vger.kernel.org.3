@@ -2,138 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EC2478106
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 858AA478108
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbhLPX5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S230110AbhLQAAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 19:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbhLPX5O (ORCPT
+        with ESMTP id S229723AbhLPX77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:57:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0555FC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:57:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 987F061C27
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 23:57:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07FB5C36AE7;
-        Thu, 16 Dec 2021 23:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639699033;
-        bh=JZJfoLbTC68aZv89phVexMv9cz0WBCcce9mqpglW4ls=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=dei2kj6qoIXZieLVpZDbgEeWOGTk4byT0tWhqLqA3cppgcwYT6mnE2/ae/bCVqihC
-         wcT5W3PM1MebJaYJ2sqp2NbNMhLAXfIH74uBeU1ugpFEuy+dgR1DGVzPaoEa//CxyU
-         6gwmzVoD2omFgLVL2U6JEXD3D4SQ48rRBmJqZ6tnfmUkY3aT3/d4mMSXPqNCCXCyp3
-         V5k2WBFP6T71zdNzQXJEYErTkk1s7vd5A1t3uqPXkH0i7XQeDJE4mk2fv/SImGTpQL
-         C/O1fkdzWmDI6bo7TD9O6J9FpXutd/FwI5MafVwKfC3h9WcPVDd5hnIscF01xwQQz5
-         RzNXPdilw+tOw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B3B995C0556; Thu, 16 Dec 2021 15:57:12 -0800 (PST)
-Date:   Thu, 16 Dec 2021 15:57:12 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     mingo@kernel.org
-Cc:     peterz@infradead.org, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        kernel-team@fb.com, elver@google.com, glider@google.com
-Subject: [GIT PULL kcsan] KCSAN commits for v5.17
-Message-ID: <20211216235712.GA2991567@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        Thu, 16 Dec 2021 18:59:59 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74607C06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:59:59 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id z9so1471481edb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:59:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tMmdLqelQfDN42AiWuSsuO5C5WxV1INjNhnA3TXmgXs=;
+        b=D2bVxUtgCXf3EO+5SZJTPlrFwTIPjBvYHWyaJpZVktccybzd2cbdmNVcqd5D1CqltC
+         36mF98z811mqhITWlSu7Y7cpuL5ZAZhdTVt6nB9O3K9PsoLX6tmFCOVOvczsorTaFUZx
+         nDDPByXFcEFcGlNs3+jszwoFf771ZpToNAcS8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tMmdLqelQfDN42AiWuSsuO5C5WxV1INjNhnA3TXmgXs=;
+        b=HRTqnh6sAxs/i8ECKafeRfCH8uSjhpUqR9uRUeg34hkZ+90yc2nQcu9clt+GSCrRr+
+         rOqaZAKdsgcUeqwQnzOr2168kObbliV0xtXEhcId61YyAuYrJW1wKa77197aTVxxwmPe
+         AnOZeCrGqmohVA1B7JahUU0mFnik36GD3QvY4iSH8jp+DbUGG29N2W8cWKD1oTBVCgln
+         mQvAvMmjb/8LE9AteKgjp3c7HFdUvKF9BbPAx/qKTbPCSkP/e01Elhubty/63FB7yALQ
+         o9k8Sjop3fsA7BsSvbRgh8CcExNPzbbLa9a/7HreVo3rW0hr9t2qshB5hmmMpsjE3XV/
+         aIeA==
+X-Gm-Message-State: AOAM533XqOyfdmvcct98Sz+QqXNI92frQbvNHOWR5Xx3NpG2lxmKrabb
+        QphCkoAAWwiwkigktrC+u+uyfyidDFNZCLo/+pY=
+X-Google-Smtp-Source: ABdhPJzJaCJCogGXdpy1E7xRe15kIRvs8rQxTTuXN/0cbNNH+3mlm3TrrTlE9V7pvnK1jprmLyVYAw==
+X-Received: by 2002:a05:6402:27cd:: with SMTP id c13mr338158ede.57.1639699197686;
+        Thu, 16 Dec 2021 15:59:57 -0800 (PST)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id dt13sm1051803ejc.157.2021.12.16.15.59.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 15:59:57 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so2876836wmj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:59:56 -0800 (PST)
+X-Received: by 2002:a05:600c:4e07:: with SMTP id b7mr7190294wmq.8.1639699196732;
+ Thu, 16 Dec 2021 15:59:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20211216213207.839017-1-kuba@kernel.org> <CAHk-=whayMx6-Z7j7H1eAquy0Svv93Tyt7Wq6Efaogw8W+WpoQ@mail.gmail.com>
+ <20211216154324.5adcd94d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211216154324.5adcd94d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 16 Dec 2021 15:59:40 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi6GaYPTHHAaNEUtg6m=L6L0qjmJoPiKA5gOWKtdcOt-A@mail.gmail.com>
+Message-ID: <CAHk-=wi6GaYPTHHAaNEUtg6m=L6L0qjmJoPiKA5gOWKtdcOt-A@mail.gmail.com>
+Subject: Re: [GIT PULL] Networking for 5.16-rc6
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Ingo,
+On Thu, Dec 16, 2021 at 3:43 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> Very strange, I didn't fix it up, redo or anything, push the tree,
+> tag, push the tag, git request-pull >> email. And request-pull did
+> not complain about anything.
 
-This pull request contains updates for the Kernel concurrency sanitizer
-(KCSAN).  Perhaps the most notable addition is added support for weak
-memory ordering, as described here: https://lwn.net/Articles/877200/
+You hadn't pushed the previous case by any chance? 'git request-pull'
+does actually end up going off to check the remote end, and maybe it
+saw a stale state (because the mirroring to the public side isn't
+immediate)?
 
-These updats have been posted on LKML:
+> While I have you - I see that you drop my SoB at the end of the merge
+> message, usually. Should I not put it there?  I put it there because
+> of something I read in Documentation/process/...
 
-https://lore.kernel.org/all/20211214220356.GA2236323@paulmck-ThinkPad-P17-Gen-1/
+No, I actually like seeing the sign-off from remote pulls -
+particularly in the signed tags where they get saved in the git tree
+anyway (you won't _see_ them with a normal 'git log', but you can see
+how it's saved off if you do
 
-These changes are based on v5.16-rc1, have been exposed to -next and to
-kbuild test robot, and are available in the Git repository at:
+    git cat-file commit 180f3bcfe3622bb78307dcc4fe1f8f4a717ee0ba
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git kcsan
+to see the raw commit data).
 
-for you to fetch changes up to b473a3891c46393e9c4ccb4e3197d7fb259c7100:
+But I edit them out from the merge message because we haven't
+standardized on a format for them, and I end up trying to make my
+merges look fairly consistent (I edit just about all merge messages
+for whitespace and formatting, as you've probably noticed).
 
-  kcsan: Only test clear_bit_unlock_is_negative_byte if arch defines it (2021-12-09 16:42:29 -0800)
+Maybe we should standardize on sign-off messages for merges too, but
+they really don't have much practical use.
 
-If I don't hear from you by Friday of the week prior to the merge window
-opening, I will assume that you would prefer that I push this directly
-to Linus.
+For a patch, the sign-off chain is really important for when some
+patch trouble happens, so that we can cc all the people involved in
+merging the patch. And there's obviously the actual copyright part of
+the sign-off too.
 
-Have a great holiday season!
+For a merge? Neither of those are really issues. The merge itself
+doesn't add any new code - the sign-offs should be on the individual
+commits that do. And if there is a merge problem, the blame for the
+merge is solidly with the person who merged it, not some kind of
+"merge chain".
 
-----------------------------------------------------------------
-Alexander Potapenko (1):
-      compiler_attributes.h: Add __disable_sanitizer_instrumentation
+So all the real meat is in the history, and the merge commit is about
+explaining the high-level "what's going on".
 
-Marco Elver (28):
-      kcsan: Refactor reading of instrumented memory
-      kcsan: Remove redundant zero-initialization of globals
-      kcsan: Avoid checking scoped accesses from nested contexts
-      kcsan: Add core support for a subset of weak memory modeling
-      kcsan: Add core memory barrier instrumentation functions
-      kcsan, kbuild: Add option for barrier instrumentation only
-      kcsan: Call scoped accesses reordered in reports
-      kcsan: Show location access was reordered to
-      kcsan: Document modeling of weak memory
-      kcsan: test: Match reordered or normal accesses
-      kcsan: test: Add test cases for memory barrier instrumentation
-      kcsan: Ignore GCC 11+ warnings about TSan runtime support
-      kcsan: selftest: Add test case to check memory barrier instrumentation
-      locking/barriers, kcsan: Add instrumentation for barriers
-      locking/barriers, kcsan: Support generic instrumentation
-      locking/atomics, kcsan: Add instrumentation for barriers
-      asm-generic/bitops, kcsan: Add instrumentation for barriers
-      x86/barriers, kcsan: Use generic instrumentation for non-smp barriers
-      x86/qspinlock, kcsan: Instrument barrier of pv_queued_spin_unlock()
-      mm, kcsan: Enable barrier instrumentation
-      sched, kcsan: Enable memory barrier instrumentation
-      objtool, kcsan: Add memory barrier instrumentation to whitelist
-      objtool, kcsan: Remove memory barrier instrumentation from noinstr
-      kcsan: Support WEAK_MEMORY with Clang where no objtool support exists
-      kcsan: Make barrier tests compatible with lockdep
-      kcsan: Turn barrier instrumentation into macros
-      kcsan: Avoid nested contexts reading inconsistent reorder_access
-      kcsan: Only test clear_bit_unlock_is_negative_byte if arch defines it
+End result: unlike a regular commit, there's not a lot of point for
+posterity to have a sign-off chain (which would always be just the two
+ends of the merge anyway). End result: I don't see much real reason to
+keep the sign-offs in the merge log.
 
- Documentation/dev-tools/kcsan.rst                |  76 +++-
- arch/x86/include/asm/barrier.h                   |  10 +-
- arch/x86/include/asm/qspinlock.h                 |   1 +
- include/asm-generic/barrier.h                    |  54 ++-
- include/asm-generic/bitops/instrumented-atomic.h |   3 +
- include/asm-generic/bitops/instrumented-lock.h   |   3 +
- include/linux/atomic/atomic-instrumented.h       | 135 ++++++-
- include/linux/compiler_attributes.h              |  18 +
- include/linux/compiler_types.h                   |  13 +-
- include/linux/kcsan-checks.h                     |  83 ++++-
- include/linux/kcsan.h                            |  11 +-
- include/linux/sched.h                            |   3 +
- include/linux/spinlock.h                         |   2 +-
- init/init_task.c                                 |   5 -
- kernel/kcsan/Makefile                            |   2 +
- kernel/kcsan/core.c                              | 347 +++++++++++++++---
- kernel/kcsan/kcsan_test.c                        | 426 +++++++++++++++++++++--
- kernel/kcsan/report.c                            |  51 +--
- kernel/kcsan/selftest.c                          | 143 ++++++++
- kernel/sched/Makefile                            |   7 +-
- lib/Kconfig.kcsan                                |  20 ++
- mm/Makefile                                      |   2 +
- scripts/Makefile.kcsan                           |  15 +-
- scripts/Makefile.lib                             |   5 +
- scripts/atomic/gen-atomic-instrumented.sh        |  41 ++-
- tools/objtool/check.c                            |  41 ++-
- tools/objtool/include/objtool/elf.h              |   2 +-
- 27 files changed, 1347 insertions(+), 172 deletions(-)
+But I _do_ like seeing them in the pull request, because there it's
+kind of the "super-sign-off" for the commits that I pull, if you see
+what I mean...
+
+Logical? I don't know. But hopefully the above explains my thinking.
+
+                   Linus

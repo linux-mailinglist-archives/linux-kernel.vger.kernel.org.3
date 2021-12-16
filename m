@@ -2,756 +2,559 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E714A477698
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7682D4776AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238782AbhLPQEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:04:46 -0500
-Received: from mga12.intel.com ([192.55.52.136]:28482 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237369AbhLPQEp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:04:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639670685; x=1671206685;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Buu0F16i5nlfWpWP8+skgIBREnjSvlSTx9MOK6fyUz8=;
-  b=KTbW6Vgh9zlUf+0yzK7JmRsjvtXdAPQJYFzO1d/nx1a5CMB1T7ZhoEJf
-   LQ9s515jBQCjHOIi8mDFezVi82eSygntIoFG8vyG86RcE3QSAwGcQ3Mgt
-   MdsRnKOTlhidZvjqn2naU6Y+kkd0WSghQ1E6ZiJXPfJGTzNbv5MID6Hhq
-   JftkUUk2tmFzXzrRCcY0OGWk95kSlqS3DxIdTtam9H2HsyK9YmQZa+VW1
-   GdHE8iQ+8+fOcESsvnJ94K2y/ES+AAoCHDPjwrxYXEk5wgwvoQYdJdfKs
-   J2zEDd2fEOtNktgHUe3gM8XCx7KpoYokW1huWTBya3Rl/Kpxc3LyUqhJX
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="219541465"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="219541465"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 08:04:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="662493613"
-Received: from chenyu-desktop.sh.intel.com ([10.239.158.186])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Dec 2021 08:04:38 -0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     linux-acpi@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Mike Rapoport <rppt@kernel.org>, Chen Yu <yu.c.chen@intel.com>,
-        linux-kernel@vger.kernel.org, Robert Moore <robert.moore@intel.com>
-Subject: [PATCH v12 4/4] tools: Introduce power/acpi/tools/pfrut
-Date:   Fri, 17 Dec 2021 00:04:14 +0800
-Message-Id: <91084d52f15fc85d00551f83925f268279b57017.1639669829.git.yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1639669829.git.yu.c.chen@intel.com>
-References: <cover.1639669829.git.yu.c.chen@intel.com>
+        id S238809AbhLPQFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:05:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57277 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238794AbhLPQFy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 11:05:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639670753;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2StRxbNizX8Gdbhg2udTDHkaxelaPX07LE/YtJGTHRE=;
+        b=LcuUfRuoZ5tuHO3NtNfaLD51puGEVVnLxATAJonPSq6vw89wF6+t9xOMdM7b+Zdua4ubod
+        gQK7vE3QQ9NdRv+p0pg2hF29rQLH/puJDp8N20vDvrfYUBlfTxG08Ce8cDtKHUrF2QERgG
+        E2MSPIogkKkrr5+Fmhu9CyHfj891iQY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-500-Gq2BU7HzNJK2OpTzbFpsoA-1; Thu, 16 Dec 2021 11:05:50 -0500
+X-MC-Unique: Gq2BU7HzNJK2OpTzbFpsoA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DC2388710FC;
+        Thu, 16 Dec 2021 16:05:45 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 096035BE32;
+        Thu, 16 Dec 2021 16:05:39 +0000 (UTC)
+Subject: [PATCH v3 00/68] fscache, cachefiles: Rewrite
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     v9fs-developer@lists.sourceforge.net,
+        Matthew Wilcox <willy@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-afs@lists.infradead.org,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Dave Wysochanski <dwysocha@redhat.com>,
+        Steve French <sfrench@samba.org>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 16 Dec 2021 16:05:39 +0000
+Message-ID: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a user space tool to make use of the interface exposed by
-Platform Firmware Runtime Update and Telemetry drivers. The users
-can use this tool to do firmware code injection, driver update and
-to retrieve the telemetry data.
 
-Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Ashok Raj <ashok.raj@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Len Brown <lenb@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
-v12:Rename tool name from pfru to pfrut, and adjust all
-    corresponding naming.(Rafael J. Wysocki)
-    Add what interfaces are used by this tool at the
-    beginning of the source code.
-    (Rafael J. Wysocki)
-v11:No change since v10.
-v10:No change since v9.
-v9: Add this tool into tools/power/acpi build infrastructure.
-    (Andy Shevchenko)
-v8: Print the length of OEM information if requested.
-v7: No change since v6.
-v6: Simplify the userspace tool to use while loop for getopt_long().
-    (Andy Shevchenko)
-v5: Replace the read() with mmap() so that the userspace
-    could mmap once, and read multiple times. (Greg Kroah-Hartman)
----
- tools/power/acpi/.gitignore           |   1 +
- tools/power/acpi/Makefile             |  16 +-
- tools/power/acpi/Makefile.rules       |   2 +-
- tools/power/acpi/man/pfrut.8          | 137 +++++++++
- tools/power/acpi/tools/pfrut/Makefile |  23 ++
- tools/power/acpi/tools/pfrut/pfrut.c  | 424 ++++++++++++++++++++++++++
- 6 files changed, 594 insertions(+), 9 deletions(-)
- create mode 100644 tools/power/acpi/man/pfrut.8
- create mode 100644 tools/power/acpi/tools/pfrut/Makefile
- create mode 100644 tools/power/acpi/tools/pfrut/pfrut.c
+Here's a set of patches implements a rewrite of the fscache driver and a
+matching rewrite of the cachefiles driver, significantly simplifying the
+code compared to what's upstream, removing the complex operation scheduling
+and object state machine in favour of something much smaller and simpler.
 
-diff --git a/tools/power/acpi/.gitignore b/tools/power/acpi/.gitignore
-index 0b319fc8bb17..eada0297ef88 100644
---- a/tools/power/acpi/.gitignore
-+++ b/tools/power/acpi/.gitignore
-@@ -2,4 +2,5 @@
- /acpidbg
- /acpidump
- /ec
-+/pfrut
- /include/
-diff --git a/tools/power/acpi/Makefile b/tools/power/acpi/Makefile
-index a249c50ebf55..5ff1d9c864d0 100644
---- a/tools/power/acpi/Makefile
-+++ b/tools/power/acpi/Makefile
-@@ -9,18 +9,18 @@ include ../../scripts/Makefile.include
+The patchset is structured such that the first few patches disable fscache
+use by the network filesystems using it, remove the cachefiles driver
+entirely and as much of the fscache driver as can be got away with without
+causing build failures in the network filesystems.  The patches after that
+recreate fscache and then cachefiles, attempting to add the pieces in a
+logical order.  Finally, the filesystems are reenabled and then the very
+last patch changes the documentation.
+
+
+WHY REWRITE?
+============
+
+Fscache's operation scheduling API was intended to handle sequencing of
+cache operations, which were all required (where possible) to run
+asynchronously in parallel with the operations being done by the network
+filesystem, whilst allowing the cache to be brought online and offline and
+to interrupt service for invalidation.
+
+With the advent of the tmpfile capacity in the VFS, however, an opportunity
+arises to do invalidation much more simply, without having to wait for I/O
+that's actually in progress: Cachefiles can simply create a tmpfile, cut
+over the file pointer for the backing object attached to a cookie and
+abandon the in-progress I/O, dismissing it upon completion.
+
+Future work here would involve using Omar Sandoval's vfs_link() with
+AT_LINK_REPLACE[1] to allow an extant file to be displaced by a new hard
+link from a tmpfile as currently I have to unlink the old file first.
+
+These patches can also simplify the object state handling as I/O operations
+to the cache don't all have to be brought to a stop in order to invalidate
+a file.  To that end, and with an eye on to writing a new backing cache
+model in the future, I've taken the opportunity to simplify the indexing
+structure.
+
+I've separated the index cookie concept from the file cookie concept by C
+type now.  The former is now called a "volume cookie" (struct
+fscache_volume) and there is a container of file cookies.  There are then
+just the two levels.  All the index cookie levels are collapsed into a
+single volume cookie, and this has a single printable string as a key.  For
+instance, an AFS volume would have a key of something like
+"afs,example.com,1000555", combining the filesystem name, cell name and
+volume ID.  This is freeform, but must not have '/' chars in it.
+
+I've also eliminated all pointers back from fscache into the network
+filesystem.  This required the duplication of a little bit of data in the
+cookie (cookie key, coherency data and file size), but it's not actually
+that much.  This gets rid of problems with making sure we keep netfs data
+structures around so that the cache can access them.
+
+These patches mean that most of the code that was in the drivers before is
+simply gone and those drivers are now almost entirely new code.  That being
+the case, there doesn't seem any particular reason to try and maintain
+bisectability across it.  Further, there has to be a point in the middle
+where things are cut over as there's a single point everything has to go
+through (ie. /dev/cachefiles) and it can't be in use by two drivers at
+once.
+
+
+ISSUES YET OUTSTANDING
+======================
+
+There are some issues still outstanding, unaddressed by this patchset, that
+will need fixing in future patchsets, but that don't stop this series from
+being usable:
+
+ (1) The cachefiles driver needs to stop using the backing filesystem's
+     metadata to store information about what parts of the cache are
+     populated.  This is not reliable with modern extent-based filesystems.
+
+     Fixing this is deferred to a separate patchset as it involves
+     negotiation with the network filesystem and the VM as to how much data
+     to download to fulfil a read - which brings me on to (2)...
+
+ (2) NFS and CIFS do not take account of how the cache would like I/O to be
+     structured to meet its granularity requirements.  Previously, the
+     cache used page granularity, which was fine as the network filesystems
+     also dealt in page granularity, and the backing filesystem (ext4, xfs
+     or whatever) did whatever it did out of sight.  However, we now have
+     folios to deal with and the cache will now have to store its own
+     metadata to track its contents.
+
+     The change I'm looking at making for cachefiles is to store content
+     bitmaps in one or more xattrs and making a bit in the map correspond
+     to something like a 256KiB block.  However, the size of an xattr and
+     the fact that they have to be read/updated in one go means that I'm
+     looking at covering 1GiB of data per 512-byte map and storing each map
+     in an xattr.  Cachefiles has the potential to grow into a fully
+     fledged filesystem of its very own if I'm not careful.
+
+     However, I'm also looking at changing things even more radically and
+     going to a different model of how the cache is arranged and managed -
+     one that's more akin to the way, say, openafs does things - which
+     brings me on to (3)...
+
+ (3) The way cachefilesd does culling is very inefficient for large caches
+     and it would be better to move it into the kernel if I can as
+     cachefilesd has to keep asking the kernel if it can cull a file.
+     Changing the way the backend works would allow this to be addressed.
+
+
+BITS THAT MAY BE CONTROVERSIAL
+==============================
+
+There are some bits I've added that may be controversial:
+
+ (1) I've provided a flag, S_KERNEL_FILE, that cachefiles uses to check if
+     a files is already being used by some other kernel service (e.g. a
+     duplicate cachefiles cache in the same directory) and reject it if it
+     is.  This isn't entirely necessary, but it helps prevent accidental
+     data corruption.
+
+     I don't want to use S_SWAPFILE as that has other effects, but quite
+     possibly swapon() should set S_KERNEL_FILE too.
+
+     Note that it doesn't prevent userspace from interfering, though
+     perhaps it should.  (I have made it prevent a marked directory from
+     being rmdir-able).
+
+ (2) Cachefiles wants to keep the backing file for a cookie open whilst we
+     might need to write to it from network filesystem writeback.  The
+     problem is that the network filesystem unuses its cookie when its file
+     is closed, and so we have nothing pinning the cachefiles file open and
+     it will get closed automatically after a short time to avoid
+     EMFILE/ENFILE problems.
+
+     Reopening the cache file, however, is a problem if this is being done
+     due to writeback triggered by exit().  Some filesystems will oops if
+     we try to open a file in that context because they want to access
+     current->fs or suchlike.
+
+     To get around this, I added the following:
+
+     (A) An inode flag, I_PINNING_FSCACHE_WB, to be set on a network
+     	 filesystem inode to indicate that we have a usage count on the
+     	 cookie caching that inode.
+
+     (B) A flag in struct writeback_control, unpinned_fscache_wb, that is
+     	 set when __writeback_single_inode() clears the last dirty page
+     	 from i_pages - at which point it clears I_PINNING_FSCACHE_WB and
+     	 sets this flag.
+
+	 This has to be done here so that clearing I_PINNING_FSCACHE_WB can
+	 be done atomically with the check of PAGECACHE_TAG_DIRTY that
+	 clears I_DIRTY_PAGES.
+
+     (C) A function, fscache_set_page_dirty(), which if it is not set, sets
+     	 I_PINNING_FSCACHE_WB and calls fscache_use_cookie() to pin the
+     	 cache resources.
+
+     (D) A function, fscache_unpin_writeback(), to be called by
+     	 ->write_inode() to unuse the cookie.
+
+     (E) A function, fscache_clear_inode_writeback(), to be called when the
+     	 inode is evicted, before clear_inode() is called.  This cleans up
+     	 any lingering I_PINNING_FSCACHE_WB.
+
+     The network filesystem can then use these tools to make sure that
+     fscache_write_to_cache() can write locally modified data to the cache
+     as well as to the server.
+
+     For the future, I'm working on write helpers for netfs lib that should
+     allow this facility to be removed by keeping track of the dirty
+     regions separately - but that's incomplete at the moment and is also
+     going to be affected by folios, one way or another, since it deals
+     with pages.
+
+
+These patches can be found also on:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-rewrite
+
+David
+
+
+Changes
+=======
+ver #3:
+ - Fixed a race in the cookie state machine between LRU discard and
+   relinquishment[4].
+ - Fixed up the hashing to make it portable[5].
+ - Fixed up some netfs coherency data to make it portable.
+ - Fixed some missing NFS_FSCACHE=n fallback functions in nfs[6].
+ - Added a patch to store volume coherency data in an xattr.
+ - Added a check that the cookie is unhashed before being freed.
+ - Fixed fscache to use remove_proc_subtree() to remove /proc/fs/fscache/.
+
+ver #2:
+ - Fix an unused-var warning due to CONFIG_9P_FSCACHE=n.
+ - Use gfpflags_allow_blocking() rather than using flag directly.
+ - Fixed some error logging in a couple of cachefiles functions.
+ - Fixed an error check in the fscache volume allocation.
+ - Need to unmark an inode we've moved to the graveyard before unlocking.
+ - Upgraded to -rc4 to allow for upstream changes to cifs.
+ - Should only change to inval state if can get access to cache.
+ - Don't hold n_accesses elevated whilst cache is bound to a cookie, but
+   rather add a flag that prevents the state machine from being queued when
+   n_accesses reaches 0.
+ - Remove the unused cookie pointer field from the fscache_acquire
+   tracepoint. 
+ - Added missing transition to LRU_DISCARDING state.
+ - Added two ceph patches from Jeff Layton[2].
+ - Remove NFS_INO_FSCACHE as it's no longer used.
+ - In NFS, need to unuse a cookie on file-release, not inode-clear.
+ - Filled in the NFS cache I/O routines, borrowing from the previously posted
+   fallback I/O code[3].
  
- .NOTPARALLEL:
- 
--all: acpidbg acpidump ec
--clean: acpidbg_clean acpidump_clean ec_clean
--install: acpidbg_install acpidump_install ec_install
--uninstall: acpidbg_uninstall acpidump_uninstall ec_uninstall
-+all: acpidbg acpidump ec pfrut
-+clean: acpidbg_clean acpidump_clean ec_clean pfrut_clean
-+install: acpidbg_install acpidump_install ec_install pfrut_install
-+uninstall: acpidbg_uninstall acpidump_uninstall ec_uninstall pfrut_uninstall
- 
--acpidbg acpidump ec: FORCE
-+acpidbg acpidump ec pfrut: FORCE
- 	$(call descend,tools/$@,all)
--acpidbg_clean acpidump_clean ec_clean:
-+acpidbg_clean acpidump_clean ec_clean pfrut_clean:
- 	$(call descend,tools/$(@:_clean=),clean)
--acpidbg_install acpidump_install ec_install:
-+acpidbg_install acpidump_install ec_install pfrut_install:
- 	$(call descend,tools/$(@:_install=),install)
--acpidbg_uninstall acpidump_uninstall ec_uninstall:
-+acpidbg_uninstall acpidump_uninstall ec_uninstall pfrut_uninstall:
- 	$(call descend,tools/$(@:_uninstall=),uninstall)
- 
- .PHONY: FORCE
-diff --git a/tools/power/acpi/Makefile.rules b/tools/power/acpi/Makefile.rules
-index 1d7616f5d0ae..b71aada77688 100644
---- a/tools/power/acpi/Makefile.rules
-+++ b/tools/power/acpi/Makefile.rules
-@@ -9,7 +9,7 @@ objdir := $(OUTPUT)tools/$(TOOL)/
- toolobjs := $(addprefix $(objdir),$(TOOL_OBJS))
- $(OUTPUT)$(TOOL): $(toolobjs) FORCE
- 	$(ECHO) "  LD      " $(subst $(OUTPUT),,$@)
--	$(QUIET) $(LD) $(CFLAGS) $(LDFLAGS) $(toolobjs) -L$(OUTPUT) -o $@
-+	$(QUIET) $(LD) $(CFLAGS) $(toolobjs) $(LDFLAGS) -L$(OUTPUT) -o $@
- 	$(ECHO) "  STRIP   " $(subst $(OUTPUT),,$@)
- 	$(QUIET) $(STRIPCMD) $@
- 
-diff --git a/tools/power/acpi/man/pfrut.8 b/tools/power/acpi/man/pfrut.8
-new file mode 100644
-index 000000000000..3db574770e8d
---- /dev/null
-+++ b/tools/power/acpi/man/pfrut.8
-@@ -0,0 +1,137 @@
-+.TH "PFRUT" "8" "October 2021" "pfrut 1.0" ""
-+.hy
-+.SH Name
-+.PP
-+pfrut \- Platform Firmware Runtime Update and Telemetry tool
-+.SH SYNOPSIS
-+.PP
-+\f[B]pfrut\f[R] [\f[I]Options\f[R]]
-+.SH DESCRIPTION
-+.PP
-+The PFRUT(Platform Firmware Runtime Update and Telemetry) kernel interface is designed
-+to
-+.PD 0
-+.P
-+.PD
-+interact with the platform firmware interface defined in the
-+.PD 0
-+.P
-+.PD
-+Management Mode Firmware Runtime
-+Update (https://uefi.org/sites/default/files/resources/Intel_MM_OS_Interface_Spec_Rev100.pdf)
-+.PD 0
-+.P
-+.PD
-+\f[B]pfrut\f[R] is the tool to interact with the kernel interface.
-+.PD 0
-+.P
-+.PD
-+.SH OPTIONS
-+.TP
-+.B \f[B]\-h\f[R], \f[B]\-\-help\f[R]
-+Display helper information.
-+.TP
-+.B \f[B]\-l\f[R], \f[B]\-\-load\f[R]
-+Load the capsule file into the system.
-+To be more specific, the capsule file will be copied to the
-+communication buffer.
-+.TP
-+.B \f[B]\-s\f[R], \f[B]\-\-stage\f[R]
-+Stage the capsule image from communication buffer into Management Mode
-+and perform authentication.
-+.TP
-+.B \f[B]\-a\f[R], \f[B]\-\-activate\f[R]
-+Activate a previous staged capsule image.
-+.TP
-+.B \f[B]\-u\f[R], \f[B]\-\-update\f[R]
-+Perform both stage and activation actions.
-+.TP
-+.B \f[B]\-q\f[R], \f[B]\-\-query\f[R]
-+Query the update capability.
-+.TP
-+.B \f[B]\-d\f[R], \f[B]\-\-setrev\f[R]
-+Set the revision ID of code injection/driver update.
-+.TP
-+.B \f[B]\-D\f[R], \f[B]\-\-setrevlog\f[R]
-+Set the revision ID of telemetry.
-+.TP
-+.B \f[B]\-G\f[R], \f[B]\-\-getloginfo\f[R]
-+Get telemetry log information and print it out.
-+.TP
-+.B \f[B]\-T\f[R], \f[B]\-\-type\f[R]
-+Set the telemetry log data type.
-+.TP
-+.B \f[B]\-L\f[R], \f[B]\-\-level\f[R]
-+Set the telemetry log level.
-+.TP
-+.B \f[B]\-R\f[R], \f[B]\-\-read\f[R]
-+Read all the telemetry data and print it out.
-+.SH EXAMPLES
-+.PP
-+\f[B]pfrut \-G\f[R]
-+.PP
-+log_level:4
-+.PD 0
-+.P
-+.PD
-+log_type:0
-+.PD 0
-+.P
-+.PD
-+log_revid:2
-+.PD 0
-+.P
-+.PD
-+max_data_size:65536
-+.PD 0
-+.P
-+.PD
-+chunk1_size:0
-+.PD 0
-+.P
-+.PD
-+chunk2_size:1401
-+.PD 0
-+.P
-+.PD
-+rollover_cnt:0
-+.PD 0
-+.P
-+.PD
-+reset_cnt:4
-+.PP
-+\f[B]pfru \-q\f[R]
-+.PP
-+code injection image type:794bf8b2\-6e7b\-454e\-885f\-3fb9bb185402
-+.PD 0
-+.P
-+.PD
-+fw_version:0
-+.PD 0
-+.P
-+.PD
-+code_rt_version:1
-+.PD 0
-+.P
-+.PD
-+driver update image type:0e5f0b14\-f849\-7945\-ad81\-bc7b6d2bb245
-+.PD 0
-+.P
-+.PD
-+drv_rt_version:0
-+.PD 0
-+.P
-+.PD
-+drv_svn:0
-+.PD 0
-+.P
-+.PD
-+platform id:39214663\-b1a8\-4eaa\-9024\-f2bb53ea4723
-+.PD 0
-+.P
-+.PD
-+oem id:a36db54f\-ea2a\-e14e\-b7c4\-b5780e51ba3d
-+.PP
-+\f[B]pfrut \-l yours.cap \-u \-T 1 \-L 4\f[R]
-+.SH AUTHORS
-+Chen Yu.
-diff --git a/tools/power/acpi/tools/pfrut/Makefile b/tools/power/acpi/tools/pfrut/Makefile
-new file mode 100644
-index 000000000000..61c1a96fd433
---- /dev/null
-+++ b/tools/power/acpi/tools/pfrut/Makefile
-@@ -0,0 +1,23 @@
-+# SPDX-License-Identifier: GPL-2.0+
-+
-+include ../../Makefile.config
-+
-+TOOL = pfrut
-+EXTRA_INSTALL = install-man
-+EXTRA_UNINSTALL = uninstall-man
-+
-+CFLAGS += -Wall -O2
-+CFLAGS += -DPFRUT_HEADER='"../../../../../include/uapi/linux/pfrut.h"'
-+LDFLAGS += -luuid
-+
-+TOOL_OBJS = \
-+	pfrut.o
-+
-+include ../../Makefile.rules
-+
-+install-man: $(srctree)/man/pfrut.8
-+	$(ECHO) "  INST    " pfrut.8
-+	$(QUIET) $(INSTALL_DATA) -D $< $(DESTDIR)$(mandir)/man8/pfrut.8
-+uninstall-man:
-+	$(ECHO) "  UNINST  " pfrut.8
-+	$(QUIET) rm -f $(DESTDIR)$(mandir)/man8/pfrut.8
-diff --git a/tools/power/acpi/tools/pfrut/pfrut.c b/tools/power/acpi/tools/pfrut/pfrut.c
-new file mode 100644
-index 000000000000..d79c335594b2
---- /dev/null
-+++ b/tools/power/acpi/tools/pfrut/pfrut.c
-@@ -0,0 +1,424 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Platform Firmware Runtime Update tool to do Management
-+ * Mode code injection/driver update and telemetry retrieval.
-+ *
-+ * This tool uses the interfaces provided by pfr_update and
-+ * pfr_telemetry drivers. These interfaces are exposed via
-+ * /dev/pfr_update and /dev/pfr_telemetry. Write operation
-+ * on the /dev/pfr_update is to load the EFI capsule into
-+ * kernel space. Mmap/read operations on /dev/pfr_telemetry
-+ * could be used to read the telemetry data to user space.
-+ */
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include <getopt.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <uuid/uuid.h>
-+#include PFRUT_HEADER
-+
-+char *capsule_name;
-+int action, query_cap, log_type, log_level, log_read, log_getinfo,
-+	revid, log_revid;
-+int set_log_level, set_log_type,
-+	set_revid, set_log_revid;
-+
-+char *progname;
-+
-+#define LOG_ERR		0
-+#define LOG_WARN	1
-+#define LOG_INFO	2
-+#define LOG_VERB	4
-+#define LOG_EXEC_IDX	0
-+#define LOG_HISTORY_IDX	1
-+#define REVID_1		1
-+#define REVID_2		2
-+
-+static int valid_log_level(int level)
-+{
-+	return level == LOG_ERR || level == LOG_WARN ||
-+	       level == LOG_INFO || level == LOG_VERB;
-+}
-+
-+static int valid_log_type(int type)
-+{
-+	return type == LOG_EXEC_IDX || type == LOG_HISTORY_IDX;
-+}
-+
-+static inline int valid_log_revid(int id)
-+{
-+	return id == REVID_1 || id == REVID_2;
-+}
-+
-+static void help(void)
-+{
-+	fprintf(stderr,
-+		"usage: %s [OPTIONS]\n"
-+		" code injection:\n"
-+		"  -l, --load\n"
-+		"  -s, --stage\n"
-+		"  -a, --activate\n"
-+		"  -u, --update [stage and activate]\n"
-+		"  -q, --query\n"
-+		"  -d, --revid update\n"
-+		" telemetry:\n"
-+		"  -G, --getloginfo\n"
-+		"  -T, --type(0:execution, 1:history)\n"
-+		"  -L, --level(0, 1, 2, 4)\n"
-+		"  -R, --read\n"
-+		"  -D, --revid log\n",
-+		progname);
-+}
-+
-+char *option_string = "l:sauqd:GT:L:RD:h";
-+static struct option long_options[] = {
-+	{"load", required_argument, 0, 'l'},
-+	{"stage", no_argument, 0, 's'},
-+	{"activate", no_argument, 0, 'a'},
-+	{"update", no_argument, 0, 'u'},
-+	{"query", no_argument, 0, 'q'},
-+	{"getloginfo", no_argument, 0, 'G'},
-+	{"type", required_argument, 0, 'T'},
-+	{"level", required_argument, 0, 'L'},
-+	{"read", no_argument, 0, 'R'},
-+	{"setrev", required_argument, 0, 'd'},
-+	{"setrevlog", required_argument, 0, 'D'},
-+	{"help", no_argument, 0, 'h'},
-+	{}
-+};
-+
-+static void parse_options(int argc, char **argv)
-+{
-+	int option_index = 0;
-+	char *pathname;
-+	int opt;
-+
-+	pathname = strdup(argv[0]);
-+	progname = basename(pathname);
-+
-+	while ((opt = getopt_long_only(argc, argv, option_string,
-+				       long_options, &option_index)) != -1) {
-+		switch (opt) {
-+		case 'l':
-+			capsule_name = optarg;
-+			break;
-+		case 's':
-+			action = 1;
-+			break;
-+		case 'a':
-+			action = 2;
-+			break;
-+		case 'u':
-+			action = 3;
-+			break;
-+		case 'q':
-+			query_cap = 1;
-+			break;
-+		case 'G':
-+			log_getinfo = 1;
-+			break;
-+		case 'T':
-+			log_type = atoi(optarg);
-+			set_log_type = 1;
-+			break;
-+		case 'L':
-+			log_level = atoi(optarg);
-+			set_log_level = 1;
-+			break;
-+		case 'R':
-+			log_read = 1;
-+			break;
-+		case 'd':
-+			revid = atoi(optarg);
-+			set_revid = 1;
-+			break;
-+		case 'D':
-+			log_revid = atoi(optarg);
-+			set_log_revid = 1;
-+			break;
-+		case 'h':
-+			help();
-+			exit(0);
-+		default:
-+			break;
-+		}
-+	}
-+}
-+
-+void print_cap(struct pfru_update_cap_info *cap)
-+{
-+	char *uuid;
-+
-+	uuid = malloc(37);
-+	if (!uuid) {
-+		perror("Can not allocate uuid buffer\n");
-+		exit(1);
-+	}
-+
-+	uuid_unparse(cap->code_type, uuid);
-+	printf("code injection image type:%s\n", uuid);
-+	printf("fw_version:%d\n", cap->fw_version);
-+	printf("code_rt_version:%d\n", cap->code_rt_version);
-+
-+	uuid_unparse(cap->drv_type, uuid);
-+	printf("driver update image type:%s\n", uuid);
-+	printf("drv_rt_version:%d\n", cap->drv_rt_version);
-+	printf("drv_svn:%d\n", cap->drv_svn);
-+
-+	uuid_unparse(cap->platform_id, uuid);
-+	printf("platform id:%s\n", uuid);
-+	uuid_unparse(cap->oem_id, uuid);
-+	printf("oem id:%s\n", uuid);
-+	printf("oem information length:%d\n", cap->oem_info_len);
-+
-+	free(uuid);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int fd_update, fd_update_log, fd_capsule;
-+	struct pfrt_log_data_info data_info;
-+	struct pfrt_log_info info;
-+	struct pfru_update_cap_info cap;
-+	void *addr_map_capsule;
-+	struct stat st;
-+	char *log_buf;
-+	int ret = 0;
-+
-+	if (getuid() != 0) {
-+		printf("Please run the tool as root - Exiting.\n");
-+		return 1;
-+	}
-+
-+	parse_options(argc, argv);
-+
-+	fd_update = open("/dev/acpi_pfr_update0", O_RDWR);
-+	if (fd_update < 0) {
-+		printf("PFRU device not supported - Quit...\n");
-+		return 1;
-+	}
-+
-+	fd_update_log = open("/dev/acpi_pfr_telemetry0", O_RDWR);
-+	if (fd_update_log < 0) {
-+		printf("PFRT device not supported - Quit...\n");
-+		return 1;
-+	}
-+
-+	if (query_cap) {
-+		ret = ioctl(fd_update, PFRU_IOC_QUERY_CAP, &cap);
-+		if (ret)
-+			perror("Query Update Capability info failed.");
-+		else
-+			print_cap(&cap);
-+
-+		close(fd_update);
-+		close(fd_update_log);
-+
-+		return ret;
-+	}
-+
-+	if (log_getinfo) {
-+		ret = ioctl(fd_update_log, PFRT_LOG_IOC_GET_DATA_INFO, &data_info);
-+		if (ret) {
-+			perror("Get telemetry data info failed.");
-+			close(fd_update);
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		ret = ioctl(fd_update_log, PFRT_LOG_IOC_GET_INFO, &info);
-+		if (ret) {
-+			perror("Get telemetry info failed.");
-+			close(fd_update);
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		printf("log_level:%d\n", info.log_level);
-+		printf("log_type:%d\n", info.log_type);
-+		printf("log_revid:%d\n", info.log_revid);
-+		printf("max_data_size:%d\n", data_info.max_data_size);
-+		printf("chunk1_size:%d\n", data_info.chunk1_size);
-+		printf("chunk2_size:%d\n", data_info.chunk2_size);
-+		printf("rollover_cnt:%d\n", data_info.rollover_cnt);
-+		printf("reset_cnt:%d\n", data_info.reset_cnt);
-+
-+		return 0;
-+	}
-+
-+	info.log_level = -1;
-+	info.log_type = -1;
-+	info.log_revid = -1;
-+
-+	if (set_log_level) {
-+		if (!valid_log_level(log_level)) {
-+			printf("Invalid log level %d\n",
-+			       log_level);
-+		} else {
-+			info.log_level = log_level;
-+		}
-+	}
-+
-+	if (set_log_type) {
-+		if (!valid_log_type(log_type)) {
-+			printf("Invalid log type %d\n",
-+			       log_type);
-+		} else {
-+			info.log_type = log_type;
-+		}
-+	}
-+
-+	if (set_log_revid) {
-+		if (!valid_log_revid(log_revid)) {
-+			printf("Invalid log revid %d, unchanged.\n",
-+			       log_revid);
-+		} else {
-+			info.log_revid = log_revid;
-+		}
-+	}
-+
-+	ret = ioctl(fd_update_log, PFRT_LOG_IOC_SET_INFO, &info);
-+	if (ret) {
-+		perror("Log information set failed.(log_level, log_type, log_revid)");
-+		close(fd_update);
-+		close(fd_update_log);
-+
-+		return 1;
-+	}
-+
-+	if (set_revid) {
-+		ret = ioctl(fd_update, PFRU_IOC_SET_REV, &revid);
-+		if (ret) {
-+			perror("pfru update revid set failed");
-+			close(fd_update);
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		printf("pfru update revid set to %d\n", revid);
-+	}
-+
-+	if (capsule_name) {
-+		fd_capsule = open(capsule_name, O_RDONLY);
-+		if (fd_capsule < 0) {
-+			perror("Can not open capsule file...");
-+			close(fd_update);
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		if (fstat(fd_capsule, &st) < 0) {
-+			perror("Can not fstat capsule file...");
-+			close(fd_capsule);
-+			close(fd_update);
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		addr_map_capsule = mmap(NULL, st.st_size, PROT_READ, MAP_SHARED,
-+					fd_capsule, 0);
-+		if (addr_map_capsule == MAP_FAILED) {
-+			perror("Failed to mmap capsule file.");
-+			close(fd_capsule);
-+			close(fd_update);
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		ret = write(fd_update, (char *)addr_map_capsule, st.st_size);
-+		printf("Load %d bytes of capsule file into the system\n",
-+		       ret);
-+
-+		if (ret == -1) {
-+			perror("Failed to load capsule file");
-+			close(fd_capsule);
-+			close(fd_update);
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		munmap(addr_map_capsule, st.st_size);
-+		close(fd_capsule);
-+		printf("Load done.\n");
-+	}
-+
-+	if (action) {
-+		if (action == 1) {
-+			ret = ioctl(fd_update, PFRU_IOC_STAGE, NULL);
-+		} else if (action == 2) {
-+			ret = ioctl(fd_update, PFRU_IOC_ACTIVATE, NULL);
-+		} else if (action == 3) {
-+			ret = ioctl(fd_update, PFRU_IOC_STAGE_ACTIVATE, NULL);
-+		} else {
-+			close(fd_update);
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+		printf("Update finished, return %d\n", ret);
-+	}
-+
-+	close(fd_update);
-+
-+	if (log_read) {
-+		void *p_mmap;
-+		int max_data_sz;
-+
-+		ret = ioctl(fd_update_log, PFRT_LOG_IOC_GET_DATA_INFO, &data_info);
-+		if (ret) {
-+			perror("Get telemetry data info failed.");
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		max_data_sz = data_info.max_data_size;
-+		if (!max_data_sz) {
-+			printf("No telemetry data available.\n");
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		log_buf = malloc(max_data_sz + 1);
-+		if (!log_buf) {
-+			perror("log_buf allocate failed.");
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		p_mmap = mmap(NULL, max_data_sz, PROT_READ, MAP_SHARED, fd_update_log, 0);
-+		if (p_mmap == MAP_FAILED) {
-+			perror("mmap error.");
-+			close(fd_update_log);
-+
-+			return 1;
-+		}
-+
-+		memcpy(log_buf, p_mmap, max_data_sz);
-+		log_buf[max_data_sz] = '\0';
-+		printf("%s\n", log_buf);
-+		free(log_buf);
-+
-+		munmap(p_mmap, max_data_sz);
-+	}
-+
-+	close(fd_update_log);
-+
-+	return 0;
-+}
--- 
-2.25.1
+
+Link: https://lore.kernel.org/r/cover.1580251857.git.osandov@fb.com/ [1]
+Link: https://lore.kernel.org/r/20211207134451.66296-1-jlayton@kernel.org/ [2]
+Link: https://lore.kernel.org/r/163189108292.2509237.12615909591150927232.stgit@warthog.procyon.org.uk/ [3]
+Link: https://lore.kernel.org/r/599331.1639410068@warthog.procyon.org.uk/ [4]
+Link: https://lore.kernel.org/r/CAHk-=whtkzB446+hX0zdLsdcUJsJ=8_-0S1mE_R+YurThfUbLA@mail.gmail.com [5]
+Link: https://lore.kernel.org/r/61b90f3d.H1IkoeQfEsGNhvq9%lkp@intel.com/ [6]
+
+References
+==========
+
+These patches have been published for review before, firstly as part of a
+larger set:
+
+Link: https://lore.kernel.org/r/158861203563.340223.7585359869938129395.stgit@warthog.procyon.org.uk/
+
+Link: https://lore.kernel.org/r/159465766378.1376105.11619976251039287525.stgit@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/159465784033.1376674.18106463693989811037.stgit@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/159465821598.1377938.2046362270225008168.stgit@warthog.procyon.org.uk/
+
+Link: https://lore.kernel.org/r/160588455242.3465195.3214733858273019178.stgit@warthog.procyon.org.uk/
+
+Then as a cut-down set:
+
+Link: https://lore.kernel.org/r/161118128472.1232039.11746799833066425131.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/161161025063.2537118.2009249444682241405.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/161340385320.1303470.2392622971006879777.stgit@warthog.procyon.org.uk/ # v3
+Link: https://lore.kernel.org/r/161539526152.286939.8589700175877370401.stgit@warthog.procyon.org.uk/ # v4
+Link: https://lore.kernel.org/r/161653784755.2770958.11820491619308713741.stgit@warthog.procyon.org.uk/ # v5
+
+I split out a set to just restructure the I/O, which got merged back in to
+this one:
+
+Link: https://lore.kernel.org/r/163363935000.1980952.15279841414072653108.stgit@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/163189104510.2509237.10805032055807259087.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/163363935000.1980952.15279841414072653108.stgit@warthog.procyon.org.uk/ # v3
+Link: https://lore.kernel.org/r/163551653404.1877519.12363794970541005441.stgit@warthog.procyon.org.uk/ # v4
+
+... and a larger set to do the conversion, also merged back into this one:
+
+Link: https://lore.kernel.org/r/163456861570.2614702.14754548462706508617.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/163492911924.1038219.13107463173777870713.stgit@warthog.procyon.org.uk/ # v2
+
+Older versions of this one:
+
+Link: https://lore.kernel.org/r/163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/163906878733.143852.5604115678965006622.stgit@warthog.procyon.org.uk/ # v2
+
+Proposals/information about the design have been published here:
+
+Link: https://lore.kernel.org/r/24942.1573667720@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/2758811.1610621106@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/1441311.1598547738@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/160655.1611012999@warthog.procyon.org.uk/
+
+And requests for information:
+
+Link: https://lore.kernel.org/r/3326.1579019665@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/4467.1579020509@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/3577430.1579705075@warthog.procyon.org.uk/
+
+I've posted partial patches to try and help 9p and cifs along:
+
+Link: https://lore.kernel.org/r/1514086.1605697347@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/1794123.1605713481@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/241017.1612263863@warthog.procyon.org.uk/
+Link: https://lore.kernel.org/r/270998.1612265397@warthog.procyon.org.uk/
+
+---
+Dave Wysochanski (1):
+      nfs: Convert to new fscache volume/cookie API
+
+David Howells (65):
+      fscache, cachefiles: Disable configuration
+      cachefiles: Delete the cachefiles driver pending rewrite
+      fscache: Remove the contents of the fscache driver, pending rewrite
+      netfs: Display the netfs inode number in the netfs_read tracepoint
+      netfs: Pass a flag to ->prepare_write() to say if there's no alloc'd space
+      fscache: Introduce new driver
+      fscache: Implement a hash function
+      fscache: Implement cache registration
+      fscache: Implement volume registration
+      fscache: Implement cookie registration
+      fscache: Implement cache-level access helpers
+      fscache: Implement volume-level access helpers
+      fscache: Implement cookie-level access helpers
+      fscache: Implement functions add/remove a cache
+      fscache: Provide and use cache methods to lookup/create/free a volume
+      fscache: Add a function for a cache backend to note an I/O error
+      fscache: Implement simple cookie state machine
+      fscache: Implement cookie user counting and resource pinning
+      fscache: Implement cookie invalidation
+      fscache: Provide a means to begin an operation
+      fscache: Count data storage objects in a cache
+      fscache: Provide read/write stat counters for the cache
+      fscache: Provide a function to let the netfs update its coherency data
+      netfs: Pass more information on how to deal with a hole in the cache
+      fscache: Implement raw I/O interface
+      fscache: Implement higher-level write I/O interface
+      vfs, fscache: Implement pinning of cache usage for writeback
+      fscache: Provide a function to note the release of a page
+      fscache: Provide a function to resize a cookie
+      cachefiles: Introduce rewritten driver
+      cachefiles: Define structs
+      cachefiles: Add some error injection support
+      cachefiles: Add a couple of tracepoints for logging errors
+      cachefiles: Add cache error reporting macro
+      cachefiles: Add security derivation
+      cachefiles: Register a miscdev and parse commands over it
+      cachefiles: Provide a function to check how much space there is
+      vfs, cachefiles: Mark a backing file in use with an inode flag
+      cachefiles: Implement a function to get/create a directory in the cache
+      cachefiles: Implement cache registration and withdrawal
+      cachefiles: Implement volume support
+      cachefiles: Add tracepoints for calls to the VFS
+      cachefiles: Implement object lifecycle funcs
+      cachefiles: Implement key to filename encoding
+      cachefiles: Implement metadata/coherency data storage in xattrs
+      cachefiles: Mark a backing file in use with an inode flag
+      cachefiles: Implement culling daemon commands
+      cachefiles: Implement backing file wrangling
+      cachefiles: Implement begin and end I/O operation
+      cachefiles: Implement cookie resize for truncate
+      cachefiles: Implement the I/O routines
+      fscache, cachefiles: Store the volume coherency data
+      cachefiles: Allow cachefiles to actually function
+      fscache, cachefiles: Display stats of no-space events
+      fscache, cachefiles: Display stat of culling events
+      afs: Handle len being extending over page end in write_begin/write_end
+      afs: Fix afs_write_end() to handle len > page size
+      afs: Convert afs to use the new fscache API
+      afs: Copy local writes to the cache when writing to the server
+      afs: Skip truncation on the server of data we haven't written yet
+      9p: Use fscache indexing rewrite and reenable caching
+      9p: Copy local writes to the cache when writing to the server
+      nfs: Implement cache I/O by accessing the cache directly
+      cifs: Support fscache indexing rewrite (untested)
+      fscache: Rewrite documentation
+
+Jeff Layton (2):
+      ceph: conversion to new fscache API
+      ceph: add fscache writeback support
+
+
+ .../filesystems/caching/backend-api.rst       |  850 ++++------
+ .../filesystems/caching/cachefiles.rst        |    6 +-
+ Documentation/filesystems/caching/fscache.rst |  525 ++----
+ Documentation/filesystems/caching/index.rst   |    4 +-
+ .../filesystems/caching/netfs-api.rst         | 1136 ++++---------
+ Documentation/filesystems/caching/object.rst  |  313 ----
+ .../filesystems/caching/operations.rst        |  210 ---
+ Documentation/filesystems/netfs_library.rst   |   16 +-
+ fs/9p/Kconfig                                 |    2 +-
+ fs/9p/cache.c                                 |  195 +--
+ fs/9p/cache.h                                 |   25 +-
+ fs/9p/v9fs.c                                  |   17 +-
+ fs/9p/v9fs.h                                  |   13 +-
+ fs/9p/vfs_addr.c                              |   56 +-
+ fs/9p/vfs_dir.c                               |   13 +
+ fs/9p/vfs_file.c                              |    3 +-
+ fs/9p/vfs_inode.c                             |   26 +-
+ fs/9p/vfs_inode_dotl.c                        |    3 +-
+ fs/9p/vfs_super.c                             |    3 +
+ fs/afs/Kconfig                                |    2 +-
+ fs/afs/Makefile                               |    3 -
+ fs/afs/cache.c                                |   68 -
+ fs/afs/cell.c                                 |   12 -
+ fs/afs/file.c                                 |   37 +-
+ fs/afs/inode.c                                |  101 +-
+ fs/afs/internal.h                             |   37 +-
+ fs/afs/main.c                                 |   14 -
+ fs/afs/super.c                                |    1 +
+ fs/afs/volume.c                               |   29 +-
+ fs/afs/write.c                                |  100 +-
+ fs/cachefiles/Kconfig                         |    7 +
+ fs/cachefiles/Makefile                        |    6 +-
+ fs/cachefiles/bind.c                          |  278 ----
+ fs/cachefiles/cache.c                         |  378 +++++
+ fs/cachefiles/daemon.c                        |  180 +--
+ fs/cachefiles/error_inject.c                  |   46 +
+ fs/cachefiles/interface.c                     |  747 ++++-----
+ fs/cachefiles/internal.h                      |  270 ++--
+ fs/cachefiles/io.c                            |  330 +++-
+ fs/cachefiles/key.c                           |  201 ++-
+ fs/cachefiles/main.c                          |   22 +-
+ fs/cachefiles/namei.c                         | 1223 ++++++--------
+ fs/cachefiles/rdwr.c                          |  972 -----------
+ fs/cachefiles/security.c                      |    2 +-
+ fs/cachefiles/volume.c                        |  139 ++
+ fs/cachefiles/xattr.c                         |  425 +++--
+ fs/ceph/Kconfig                               |    2 +-
+ fs/ceph/addr.c                                |  101 +-
+ fs/ceph/cache.c                               |  218 +--
+ fs/ceph/cache.h                               |   97 +-
+ fs/ceph/caps.c                                |    3 +-
+ fs/ceph/file.c                                |   13 +-
+ fs/ceph/inode.c                               |   22 +-
+ fs/ceph/super.c                               |   10 +-
+ fs/ceph/super.h                               |    3 +-
+ fs/cifs/Kconfig                               |    2 +-
+ fs/cifs/Makefile                              |    2 +-
+ fs/cifs/cache.c                               |  105 --
+ fs/cifs/cifsfs.c                              |   11 +-
+ fs/cifs/cifsglob.h                            |    5 +-
+ fs/cifs/connect.c                             |   12 -
+ fs/cifs/file.c                                |   64 +-
+ fs/cifs/fscache.c                             |  333 +---
+ fs/cifs/fscache.h                             |  126 +-
+ fs/cifs/inode.c                               |   36 +-
+ fs/fs-writeback.c                             |    8 +
+ fs/fscache/Makefile                           |    6 +-
+ fs/fscache/cache.c                            |  618 +++----
+ fs/fscache/cookie.c                           | 1433 +++++++++--------
+ fs/fscache/fsdef.c                            |   98 --
+ fs/fscache/internal.h                         |  317 +---
+ fs/fscache/io.c                               |  376 ++++-
+ fs/fscache/main.c                             |  147 +-
+ fs/fscache/netfs.c                            |   74 -
+ fs/fscache/object.c                           | 1125 -------------
+ fs/fscache/operation.c                        |  633 --------
+ fs/fscache/page.c                             | 1242 --------------
+ fs/fscache/proc.c                             |   47 +-
+ fs/fscache/stats.c                            |  293 +---
+ fs/fscache/volume.c                           |  517 ++++++
+ fs/namei.c                                    |    3 +-
+ fs/netfs/read_helper.c                        |   10 +-
+ fs/nfs/Kconfig                                |    2 +-
+ fs/nfs/Makefile                               |    2 +-
+ fs/nfs/client.c                               |    4 -
+ fs/nfs/direct.c                               |    2 +
+ fs/nfs/file.c                                 |   13 +-
+ fs/nfs/fscache-index.c                        |  140 --
+ fs/nfs/fscache.c                              |  490 ++----
+ fs/nfs/fscache.h                              |  179 +-
+ fs/nfs/inode.c                                |   11 +-
+ fs/nfs/nfstrace.h                             |    1 -
+ fs/nfs/read.c                                 |   25 +-
+ fs/nfs/super.c                                |   28 +-
+ fs/nfs/write.c                                |    8 +-
+ include/linux/fs.h                            |    4 +
+ include/linux/fscache-cache.h                 |  614 ++-----
+ include/linux/fscache.h                       | 1022 +++++-------
+ include/linux/netfs.h                         |   15 +-
+ include/linux/nfs_fs.h                        |    1 -
+ include/linux/nfs_fs_sb.h                     |    9 +-
+ include/linux/writeback.h                     |    1 +
+ include/trace/events/cachefiles.h             |  527 ++++--
+ include/trace/events/fscache.h                |  626 ++++---
+ include/trace/events/netfs.h                  |    5 +-
+ 105 files changed, 7356 insertions(+), 13531 deletions(-)
+ delete mode 100644 Documentation/filesystems/caching/object.rst
+ delete mode 100644 Documentation/filesystems/caching/operations.rst
+ delete mode 100644 fs/afs/cache.c
+ delete mode 100644 fs/cachefiles/bind.c
+ create mode 100644 fs/cachefiles/cache.c
+ create mode 100644 fs/cachefiles/error_inject.c
+ delete mode 100644 fs/cachefiles/rdwr.c
+ create mode 100644 fs/cachefiles/volume.c
+ delete mode 100644 fs/cifs/cache.c
+ delete mode 100644 fs/fscache/fsdef.c
+ delete mode 100644 fs/fscache/netfs.c
+ delete mode 100644 fs/fscache/object.c
+ delete mode 100644 fs/fscache/operation.c
+ delete mode 100644 fs/fscache/page.c
+ create mode 100644 fs/fscache/volume.c
+ delete mode 100644 fs/nfs/fscache-index.c
+
 

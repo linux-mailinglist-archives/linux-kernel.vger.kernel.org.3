@@ -2,168 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B8E4775E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6CB4775EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238528AbhLPP3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:29:34 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:42715 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbhLPP3c (ORCPT
+        id S238534AbhLPPac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238533AbhLPPab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:29:32 -0500
-Received: by mail-ot1-f42.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so29339037otv.9;
-        Thu, 16 Dec 2021 07:29:32 -0800 (PST)
+        Thu, 16 Dec 2021 10:30:31 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0576FC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:30:31 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id c3so35684744iob.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:30:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=egauge.net; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :organization:user-agent:mime-version:content-transfer-encoding;
+        bh=jGnQ+OPrwZnzJ8pyH0xcyxgi+zeh7zrbZx5puPpeqp0=;
+        b=QVklmRMQ0JGDggaCYuzwfz1eEj0x1VCMw8SWiA4SxuTg7pcKLnX1ZDEt12qAVXZB6x
+         cNL6PrMlUuJgbVvUDaE+pMbp6+fXmYgmJ11Fjo4lqDWj81gSjwurjg2k1rCLeDAPj7XG
+         66X5CKzvdT7SxpluJPG9/sfFU3zAFlVaT3ilubedOHkRJRZW5GCy8GuEvyVXL4KVsbS6
+         VaXpFl47Llvp6ZuaveGZpC3DqjaVC3TRv3MmcjV8Kv0h7bJ5DorpTY4dKDEQQQ8C4aLn
+         cnrW1ZiTmmS+WfoPBFRuPPpQ79p4XUIRynHaW4zkAnThOoTBAsfGgv4OTH5WTTvQyoMq
+         /K+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nd0xNoxLdpMIETPTqt7EOTZuURPFhkkV6DEMEZNnfsY=;
-        b=dxcHcIHz5LNrvLJ0cYk6A19BLsA9FLDW2QFrKojP3bGuc2mXHSwxeo/WbUZdKHuwS1
-         52qXsQh53ECh7irK6EDhdLz6h7sCg8UhALOD62jPjl1D9HneT6eSjl3eTkKDyqEuxi+N
-         Yru4J0aHWTcu+eTqCjWPprrR1JxDBYDjTcYhNjgWsLLAjDtd4R4WFD1wlHgZUfu2C9vc
-         lB0rAU0tx99L3w7wTzPshvoOncdL94vd3iJVd57mhqBt+s9JK3ufcnZZfhifNfJ1zt4q
-         ML8aiARsKeSxKLg+SACLHKhnrMBlRXl11y363c3NXXiRbc9A0wBjA2qF7klaQMWTe5/6
-         OuYA==
-X-Gm-Message-State: AOAM530dOKKYsNJpnbLhRObAcJ76alONMYJhNDvQoFaFvXfDFFmaaC5M
-        TSNmXamBm4bjuGkCAfUsmw==
-X-Google-Smtp-Source: ABdhPJxkmQtefEO2GB4IesaVw1R5Cx1RYgQ2YBifPAlnsoTenbd4aeBi77x3cWkw+Dtx8+aTJgXrNw==
-X-Received: by 2002:a9d:6a56:: with SMTP id h22mr12884867otn.135.1639668571810;
-        Thu, 16 Dec 2021 07:29:31 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id q9sm1078070oti.32.2021.12.16.07.29.30
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=jGnQ+OPrwZnzJ8pyH0xcyxgi+zeh7zrbZx5puPpeqp0=;
+        b=mvkljE30A5U+lWneaWWiUmAIEyjMzRJARPCrmZS1EKtJoyk/cStfmdvZAust7iADH1
+         I/Px+d8/DZBfLPq9KGInsMiOmzMb5ZYCjP4amZ7ZaOlT5DYSc1cWjloQWpIcoEaF69XW
+         vjB7I8U5xGelKF2wuMxGR5twJWpUKPFKxO7/WiOkmZESy3zkcZrR9yYBkvFhDBNNJEO8
+         ciK1v8hmXSL/6yE5eSaVZGfFZgvgUqvKTKhHmUCsaWfzCyKyYXF8Dwn0TKcZl9xsG7bH
+         QexHtSdf69DLWNz3Gqayb0C0FyQe5//nrYs8Qmu3/T5YGv3qeVLwEqs3Y9IYZULyJxqt
+         +Ncg==
+X-Gm-Message-State: AOAM530A8ixyM3rq19C0s5CJCeDV+aT9a2sU4CuHcnSYnMT46uVq1psf
+        SuxZyEy6ON6N3w/J9YoDip6L
+X-Google-Smtp-Source: ABdhPJwSNxt4l43qiKVjKknNIohi54ACnOdcombw2k7cHxehnYilM+rc/JX0noSMD8O0Ufbh0WUvdw==
+X-Received: by 2002:a05:6602:27cc:: with SMTP id l12mr9797623ios.59.1639668630279;
+        Thu, 16 Dec 2021 07:30:30 -0800 (PST)
+Received: from bixby.lan (c-73-181-115-211.hsd1.co.comcast.net. [73.181.115.211])
+        by smtp.gmail.com with ESMTPSA id x11sm2829669iop.55.2021.12.16.07.30.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 07:29:31 -0800 (PST)
-Received: (nullmailer pid 251708 invoked by uid 1000);
-        Thu, 16 Dec 2021 15:29:30 -0000
-Date:   Thu, 16 Dec 2021 09:29:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dejia Shang <dejia.shang@armchina.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        toby.shang@armchina.com
-Subject: Re: [PATCH 3/4] dt-bindings: add vendor-prefix and documentation for
- Zhouyi NPU
-Message-ID: <YbtbWh2dhMhMHMfX@robh.at.kernel.org>
-References: <20211215103609.9268-1-dejia.shang@armchina.com>
- <20211215103609.9268-4-dejia.shang@armchina.com>
+        Thu, 16 Dec 2021 07:30:29 -0800 (PST)
+Message-ID: <523698d845e0b235e4cbb2a0f3cfaa0f5ed98ec0.camel@egauge.net>
+Subject: Re: [PATCH] wilc1000: Allow setting power_save before driver is
+ initialized
+From:   David Mosberger-Tang <davidm@egauge.net>
+To:     Ajay.Kathat@microchip.com
+Cc:     Claudiu.Beznea@microchip.com, kvalo@codeaurora.org,
+        davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 16 Dec 2021 08:30:28 -0700
+In-Reply-To: <49a5456d-6a63-652e-d356-9678f6a9b266@microchip.com>
+References: <20211212011835.3719001-1-davidm@egauge.net>
+         <6fc9f00aa0b0867029fb6406a55c1e72d4c13af6.camel@egauge.net>
+         <5378e756-8173-4c63-1f0d-e5836b235a48@microchip.com>
+         <31d5e7447e4574d0fcfc46019d7ca96a3db4ecb6.camel@egauge.net>
+         <49a5456d-6a63-652e-d356-9678f6a9b266@microchip.com>
+Organization: eGauge Systems LLC
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211215103609.9268-4-dejia.shang@armchina.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 06:36:08PM +0800, Dejia Shang wrote:
-> To enable this NPU IP in Arm-Linux system, SoC vendors should
-> write devicetree files as documented.
+On Thu, 2021-12-16 at 13:01 +0000, Ajay.Kathat@microchip.com wrote:
+> On 16/12/21 11:07, David Mosberger-Tang wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On Wed, 2021-12-15 at 13:01 +0000, Ajay.Kathat@microchip.com wrote:
+> > > On 13/12/21 02:50, David Mosberger-Tang wrote:
+> > > > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > > > 
+> > > > Unfortunately, this patch doesn't seem to be sufficient.  From what I
+> > > > can tell, if power-save mode is turned on before a station is
+> > > > associated with an access-point, there is no actual power savings.  If
+> > > > I issue the command after the station is associated, it works perfectly
+> > > > fine.
+> > > > 
+> > > > Ajay, does this make sense to you?
+> > > 
+> > >   <snip>
+> > > Power-save mode is allowed to be enabled irrespective of station
+> > > association state. Before association, the power consumption should be
+> > > less with PSM enabled compared to PSM disabled. The WLAN automatic power
+> > > save delivery gets enabled after the association with AP.
+> > > 
+> > > To check the power measurement before association,  test without
+> > > wpa_supplicant.
+> > > 
+> > > 
+> > > Steps:
+> > > - load the module
+> > > - ifconfig wlan0 up
+> > > - iw dev wlan0 set power_save off (check the pwr measurement after PS
+> > > mode disabled)
+> > > - iw dev wlan0 set power_save on (check the pwr measurement after PS
+> > > mode enable)
+> > 
+> > It appears wpa_supplicant consistently renders PSM ineffective:
+> > 
+> >                                 (current draw, 1 min avg):
+> > ------------------------------  --------------------------
+> > - base case (no module loaded): 16.8 mA
+> > - module loaded & PSM on      : 16.8 mA
+> > - wpa_supplicant started      : 19.6 mA
+> > - PSM on                      : 19.6 mA (no change)
+> > - PSM off                     : 19.6 mA (no change)
+> > - PSM on                      : 15.4 mA
+>  
+> From the above data, it looks like there is no difference with or without PSM
+> in your setup. I am not sure if the values are captured correctly. Did you use
+> power measurement ports in WILC extension for the current measurements.
+
+Oh, no, not at all!  There is a nice power savings when PSM actually takes hold.
+ Current drops from 19.6mA to 15.4mA as shown by the last two lines.
+
+This is average current draw at 120V for the entire board, as my board is not
+set up to measure chip current draw alone.
+
 > 
-> Signed-off-by: Dejia Shang <dejia.shang@armchina.com>
-> ---
->  .../bindings/misc/armchina,zhouyi-npu.yaml    | 57 +++++++++++++++++++
->  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
->  2 files changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml
+> > What's strange is when I try this sequence a couple of times in a row,
+> > the device gets into a state where after starting wpa_supplicant, no
+> > amount of PSM on/off commands will get it to enter power-savings mode
+> > any more.  When in that state, only removing wilc1000-spi.ko and adding
+> > it back gets it out of that state.  A power-cycle does not.  Very
+> > confusing.
 > 
-> diff --git a/Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml b/Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml
-> new file mode 100644
-> index 000000000000..d3fdea101114
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml
-> @@ -0,0 +1,57 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/misc/armchina,zhouyi-npu.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: ArmChina Zhouyi NPU bindings
-> +
-> +maintainers:
-> +  - Dejia Shang <dejia.shang@armchina.com>
-> +
-> +description: |
-> +  Armchina AI accelerator IP - Zhouyi NPU
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: armchina,zhouyi-v1
-> +      - const: armchina,zhouyi-v2
-> +      - const: armchina,zhouyi
-
-This says compatible must be a list of all 3 of these.
-
-Where do v1 and v2 come from? We don't do version numbers in DT usually 
-unless they correspond to h/w revision registers or h/w documentation. I 
-would assume the h/w follows the Arm rXpY form?
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  memory-region:
-> +    maxItems: 2
-
-What is each region?
-
-This requires 2 entries, but the example only has 1.
-
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    reserved-memory {
-> +                #address-cells = <2>;
-> +                #size-cells = <2>;
-> +                ranges;
-> +
-> +                aipu_ddr_reserved: aipu-shmem@0xA0000000 {
-
-aipu-shmem@a0000000
-
-> +                        compatible = "shared-dma-pool";
-> +                        no-map;
-> +                        reg = <0x0 0xA0000000 0x0 0x4000000>;
-> +                };
-> +    };
-> +
-> +    aipu0@0x64000000 {
-
-Drop '0x'
-
-> +                compatible = "armchina,zhouyi";
-> +                reg = <0x0 0x64000000 0x0 0x1000>;
-> +                memory-region=<&aipu_ddr_reserved>;
-> +                interrupts = <0 168 1>;
-> +    };
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 66d6432fd781..4b1865d92455 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -123,6 +123,8 @@ patternProperties:
->      description: ARM Ltd.
->    "^armadeus,.*":
->      description: ARMadeus Systems SARL
-> +  "^armchina,.*":
-> +    description: Arm Technology (China) Co., Ltd.
->    "^arrow,.*":
->      description: Arrow Electronics
->    "^artesyn,.*":
-> --
-> 2.17.1
+> Btw, I did a quick test to verify current measurement with PS mode off/on and observed numbers like below
 > 
-> IMPORTANT NOTICE: The contents of this email and any attachments may be privileged and confidential. If you are not the intended recipient, please delete the email immediately. It is strictly prohibited to disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you. ©Arm Technology (China) Co., Ltd copyright and reserve all rights. 重要提示：本邮件（包括任何附件）可能含有专供明确的个人或目的使用的机密信息，并受法律保护。如果您并非该收件人，请立即删除此邮件。严禁通过任何渠道，以任何目的，向任何人披露、储存或复制邮件信息或者据此采取任何行动。感谢您的配合。 ©安谋科技（中国）有限公司 版权所有并保留一切权利。
+> Tested by making the interface up(ifconfig wlan0 up) then issued 'iw' command to enable/disable PS mode. 
 > 
+>                               (current draw)
+> ------------------------------------------------------
+> - PSM off                    : 75.5 mA
+> - PSM on                     : 1.28 mA
+> 
+> 
+> I have verified for SPI module with the setup mentioned in link[1] and used power debugger[2]
+> 
+> 1. https://ww1.microchip.com/downloads/en/Appnotes/ATWILC1000-Power-Measurement-for-Wi-Fi-Link-Controller-00002797A.pdf
+> 2. https://www.microchip.com/en-us/development-tool/ATPOWERDEBUGGER
+
+Sure, I assume your measurements are at 3.3V for the chip alone.
+
+But the question is: what happens once you start wpa_supplicant?
+
+  --david
+
+

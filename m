@@ -2,75 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C51478034
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80733478038
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbhLPWzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 17:55:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S236755AbhLPW6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 17:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbhLPWzW (ORCPT
+        with ESMTP id S231903AbhLPW6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 17:55:22 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20466C061574;
-        Thu, 16 Dec 2021 14:55:22 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id C43A435F;
-        Thu, 16 Dec 2021 22:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C43A435F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1639695321; bh=MpwRUi9k2UEzBE3OFTmt5qE2hRxURjOtpNoV1ny62D0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=SW6xMqTPp9Y4ywMwg/fe06Ylj7H5y8foqrc0wSMIb71NGAqUlBT164daaNyXSAlPw
-         5NqFGQKyMUlqHuJxmtfVpPQCpNNyBbR+J6kWSGJRIOX8d3xK12pn0YVZjjnp5bCt6i
-         8tBy82LY7FBwYInXKtF8wIyZ62OrlEPL4WgAD8gcjMv+UZMC2RhTpMDebsz6Z58JQf
-         kWtFmUTQNzGmllGNLYBAZ39yZy9r1+fShJ1aJdMGRExqvcX7kGg9UPFD1+ZijVELnB
-         CjDGw4vKRrHfFjk+nlDeYvdmHqqILhlzyOFnL7+R6/Z9hs0EYueKHE6DycmBn1VGiD
-         UZHlsd4LrtqQA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        =?utf-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
-        <nfraprado@protonmail.com>, Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH 0/2] Fix some issues with DOCS_CSS and DOCS_THEME
-In-Reply-To: <cover.1639212812.git.mchehab+huawei@kernel.org>
-References: <cover.1639212812.git.mchehab+huawei@kernel.org>
-Date:   Thu, 16 Dec 2021 15:55:21 -0700
-Message-ID: <87y24kcg86.fsf@meer.lwn.net>
+        Thu, 16 Dec 2021 17:58:52 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF45C061574;
+        Thu, 16 Dec 2021 14:58:51 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id m12so326012ild.0;
+        Thu, 16 Dec 2021 14:58:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U0m4Q3hGlzYdyBIUPzHCZSSuAjneWrkCoYtGboZy5fY=;
+        b=ma4JKiyDAeTftIR5xYKRx+/AMah3OImnO4fn4pBnKhulZ9PrilolWzhqyXoBqphaOQ
+         ub6N0wmjl+phIPjmgRGBb4as0YxuRm8E+MrnYMYJLzmhyIr8cVtzBMbMQ8qwJX4WyuHj
+         +k6WI52JtgCaMWj+ZVGIKO/VlUp1FrUwNUqUUnCPMGSJ2BOUaULXeityBNlVY3YqtX4B
+         doBqkU0N+lX+1wx4IPfMgkv/7thqAJpcr5F98fKU1viFhkyyX5m0vLzgbmCUpwOxQYmn
+         0YAhrmbGvVitmJunkHN0zJUgaJ/EXEzGRAbMJI9pGMIueRJV9ftGV74RM7L8KyB32c8z
+         jmvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U0m4Q3hGlzYdyBIUPzHCZSSuAjneWrkCoYtGboZy5fY=;
+        b=dUYdIv3FE5XpT9KQ8G+WD2H3qbQT6hcdiRmPDpI9yCwrf1vXRXOevcEqi8gzkl/xYL
+         hfxDDykWdYzdaY462BoPss4C7VYiwLBHEDhqkbCoIKcXNaVJlK82+CGhyhlDEjwfDbd8
+         a+rz/SsUGV0S7v9MdviMdkvkbTyMMoVhVs27CPAzoh+EL0XgyKHC+mAYwnneca9Ath86
+         mU4BklTO1teB6yZMY54YpWwsnUxL3KbgV7cTTx7CrM31N+tdUpOT2dfnTbCsN2kKJBKt
+         oXgJuRG0Sgvcta0nvhUz8+T48jIAD5wPr8oJuQnzHEG8aRXuTBxE9+tIiYVe8rXur824
+         95Fg==
+X-Gm-Message-State: AOAM531Iz8akkd6kj0VLtRMp6aGxcvQUi9pLFmTb2s/CBnAVzJA4Il1b
+        6mR+chDK6vMofIoKqIwddtLx6YXQQuTvioHd+GoECYSZVFRZ3PTjtrc=
+X-Google-Smtp-Source: ABdhPJzNrq2MAGYiMRpet+HvO8uSMEKpVsvMvcHfLSLDsglmds6TCDUSSHydXYQN4lgW68iqs1F3nnsCzHVPqtCLz30=
+X-Received: by 2002:a05:6e02:1445:: with SMTP id p5mr121952ilo.164.1639695531309;
+ Thu, 16 Dec 2021 14:58:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20211216205303.768991-1-eugene.shalygin@gmail.com>
+ <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com> <20211217000424.41da446e@netbook-debian>
+In-Reply-To: <20211217000424.41da446e@netbook-debian>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Thu, 16 Dec 2021 23:58:40 +0100
+Message-ID: <CAB95QAQs5=t37UTv2r=ewj1QaaD5LQckGXG1zL+wWYxYTgBdtA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+Hi Denis,
 
-> Hi Jon,
+On Thu, 16 Dec 2021 at 23:04, Denis Pauk <pauk.denis@gmail.com> wrote:
 >
-> Randy pointed a couple of issues with the DOCS_CSS and DOCS_THEME patchset.
-> The two patches in this series address them.
+> Hi Eugene,
 >
-> Patch 1 fix the usage of "make O=<dir>".
-> Patch 2 fix some documentation issues (a typo and whitespace issues).
->            
-> Randy, thanks for reporting those!
->
-> Regards,
-> Mauro
->
-> Mauro Carvalho Chehab (2):
->   docs: Makefile: use the right path for DOCS_CSS
->   docs: address some text issues with css/theme support
->
->  Documentation/Makefile             | 6 +++---
->  Documentation/doc-guide/sphinx.rst | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> Have you found some issues with idea of usage ACPI WMI methods as
+> failback solution, like in case when ASUS will release some BIOS with
+> different mutex path or different motherboard where will be same WMI
+> methods but fully different internal logic?
 
-Set applied, thanks.
+Not direct ones, but yes. First of all, I still don't understand what
+causes the big slowdown in ec_read() calls. I learned that Fedora and
+Arch kernel configs result in the slowdown, while my custom minimal
+kernel does not (well, it is still slow but nevertheless). I tried to
+unload all the modules I do not have in my custom kernel, I tried to
+disable every option which is related to ACPI in the Fedora config,
+but the slowdown did not disappear. Then it is not that simple to
+gather information from other users, because one needs the ec_sys
+module to measure ec_read() performance, but it is not available in
+many distribution kernels it seems.
 
-jon
+Instead of that I've changed data structures for board description to
+include the mutex path there, so that we can handle various paths or
+version dependent paths for each motherboard. I can add code to select
+the mutex path based on the BIOS version for the next iteration. Also
+considering adding a module parameter to override that path. I think
+that will be maintainable and give users a way for a local fix while
+waiting for kernel update. Would you agree?
+
+That way, I believe, the WMI fallback is rendered barely useful and I
+decided to drop it.
+
+Best regards,
+Eugene

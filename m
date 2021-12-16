@@ -2,197 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E689647688C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F393B47688F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbhLPDO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 22:14:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S233296AbhLPDP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 22:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233289AbhLPDOY (ORCPT
+        with ESMTP id S230396AbhLPDP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 22:14:24 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E8FC061574;
-        Wed, 15 Dec 2021 19:14:24 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id c32so46956938lfv.4;
-        Wed, 15 Dec 2021 19:14:23 -0800 (PST)
+        Wed, 15 Dec 2021 22:15:58 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE507C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 19:15:57 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id t23so34545179oiw.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 19:15:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=E8ckiiPMBvsnpYvn/PbmVfcEnddoPyMOCAfOlq+kQHA=;
-        b=c0FhMJVjEAcd5oUSI1BgUaNEPxuKnBfQDjzdaiyLy50G3qa3PrT/nNfzjz2gUAErpv
-         gzkvUufdQVXXHdjE5uQU19clz18PQZPhXNoAxhLjblgsuvUMDy8GK4/mS9FJn6Le1MYj
-         kT84I6gpMgwBWg1CEHVAtUAJgeWsnPyvjabQR3yZ9W1yhuFy57UmTP7zjt4ka17ZeXWy
-         EfA4fvJUG5y+rqx7fWP9I3Qp3l7ZT8B9M7TdCgT6pcRxsdiVvothSCXAymSYRfUItRCf
-         mlzE/U71njG9tNk7BtwjriOBiUDo0W4YpdY4pJ980aNORSeT0vVWABrNIUa3vW/IRDeE
-         nZ4g==
+        bh=/vd1l1da4L+56BdRKicFSLYhUH5s+2oK991AO1O0D3Q=;
+        b=Moen/dDt2GL4Pm5rmYm0JJ3sp/Do+Jim7fbwzHPF2v5FUXZoyBZgT3fc0Ow5Z53o2G
+         g8fg9wXMeZ1KhGqFOYfscFqPiLypIfavXYMHRX7bVFWbzdpqXNP92nzQqZsRze/mGdCb
+         bMaXmFx4Syr7qlY+dSUDNSHfXg11kCN1uRmjxX/dwrMITGBCUxH+KFbVGQ3ZkYnezKaT
+         BrPQmJZ9C9e4cMzG+mCxOQqzzruQUlCtJ63XomrZ6AyAuohoBjw36jOHGrzwUkoMJ+dz
+         YlEXnFLr0KFmlh9PkhLFtdesYi5Xq1GmiywP5rXHeofRYMmJ5iwiz6wy98eWBjoKUlN7
+         hmbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=E8ckiiPMBvsnpYvn/PbmVfcEnddoPyMOCAfOlq+kQHA=;
-        b=CuXeWT6h12c+zJgLoJfBBURoNlj5fIkVXE/XfVEvYxgm608r0K7UZERrwkZnT5HJYK
-         5jRZPXTeFjbLA3oBJG0oRnNC/EgfKN6nlTiOHn3BMp0d3W2bF2xLd+LpgasA7ttlSY/h
-         9LRK8FaKrQ1f4zymtm8MTrqcptz0mCeRozUK0nkwhv6A9Sz9fPrqQlA871lFaBhvQhC6
-         Y1QX/Y9FgA3DvxMGxH9msNp4c4ZIjxUCL07XlY6iO+6tSfG0oUX5fYkhlw/4Z/TAilhv
-         F/u2h1reo/lzeCBwygR3NkXZVWA0NuBBIVfZgB7JzOhSE4LWufCjz6tqs2fO+4G/MpwM
-         E0pg==
-X-Gm-Message-State: AOAM5300qpiFabOR/mcuo03j/WfwgsjGPuaH5wMX+wI5+TGUJ/zh8oiU
-        cCXksZ2E6DOB4wHmrj/ciuEnE1TveV6nuOe+C+w=
-X-Google-Smtp-Source: ABdhPJw1LAVcHOFwVzqutxZmdR6XrjWaQemxTXaA+zKjydgsC60bObDWCRvTFnL3ehHrR/un2fAyFPJzUzxSI36qucM=
-X-Received: by 2002:a19:770a:: with SMTP id s10mr13668232lfc.234.1639624462078;
- Wed, 15 Dec 2021 19:14:22 -0800 (PST)
+        bh=/vd1l1da4L+56BdRKicFSLYhUH5s+2oK991AO1O0D3Q=;
+        b=cjEcoGhbCe7YzxqKSVbw53+o7oFRlXQnmJTfVKkIcmnG+6s02FfFXHMJu1NxRnKs69
+         D204xQ2Rrrr17ljCC4TgeqXt8NpqoG/TvloNfmye+VwUFxIKXX0RV47wHC2GwVeQzgny
+         fDn99cs2w880Ql/ytls7ck12SwCcFjqJ9UamToi06I0Wm1dW/jK9jRZS4XUDVGjhUvAP
+         7TNU4QoHkxUTsNTFYcBDMtDWanDlCOtTc69zWwV1KyZd0HttMEB4euWpIKpMWCiuvGos
+         2Rbzk85ZGzAjjQLJE3nf5ki2iIDBMrH22xPks0qw193qzKRkTZF0uvmMBQHGEAufNnLy
+         n5KQ==
+X-Gm-Message-State: AOAM531s4tv9t9VHPg6H5xKNE5JMb2eRMCUBWJeGA/bPGpKmfr1uQMfO
+        sPKV+PS52ET5Ii+cHrY2WiNWulql3O7BxPr3GmB60Q==
+X-Google-Smtp-Source: ABdhPJwoPFQNRTk2WxXDFzdGoMtLJK2aSsDgN54l1FfDsqBiFYUMUWemWa48WFy7s+s/gDXbdor2ZgQIn40RGUQvw0U=
+X-Received: by 2002:aca:120f:: with SMTP id 15mr2603584ois.132.1639624557318;
+ Wed, 15 Dec 2021 19:15:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20211215030831.24058-1-trbecker@gmail.com> <CAGvGhF4y4ydeuQg9CmTF5OrrVmXG6D05PtBCWHb-EFmY8Y4zOA@mail.gmail.com>
-In-Reply-To: <CAGvGhF4y4ydeuQg9CmTF5OrrVmXG6D05PtBCWHb-EFmY8Y4zOA@mail.gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 15 Dec 2021 21:14:11 -0600
-Message-ID: <CAH2r5msjUiD_4YUm-sJbmNC0ARk+qDd0JoY7c7f2Wm1qNJ6K2w@mail.gmail.com>
-Subject: Re: [PATCH 1/1] cifs: sanitize multiple delimiters in prepath
-To:     Leif Sahlberg <lsahlber@redhat.com>
-Cc:     Thiago Rafael Becker <trbecker@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Steve French <sfrench@samba.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="000000000000a10ae705d33ad1b5"
+References: <20211215095808.621716-1-fabien.dessenne@foss.st.com>
+In-Reply-To: <20211215095808.621716-1-fabien.dessenne@foss.st.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 16 Dec 2021 04:15:46 +0100
+Message-ID: <CACRpkdb4_zm8ywUsDUm=ZMG4jL=t-3gQx1sPEWQaFpBr_rRxGw@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: stm32: consider the GPIO offset to expose all
+ the GPIO lines
+To:     Fabien Dessenne <fabien.dessenne@foss.st.com>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-gpio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Christoph Fritz <chf.fritz@googlemail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a10ae705d33ad1b5
-Content-Type: text/plain; charset="UTF-8"
+On Wed, Dec 15, 2021 at 10:58 AM Fabien Dessenne
+<fabien.dessenne@foss.st.com> wrote:
 
-fixed various whitespace problems (pointed out by checkpatch), added
-the suggested Acked-by, Fixes etc.
-and tentatively merged into cifs-2.6.git for-next pending testing
-
-See attached.
-
-On Wed, Dec 15, 2021 at 1:49 PM Leif Sahlberg <lsahlber@redhat.com> wrote:
+> Consider the GPIO controller offset (from "gpio-ranges") to compute the
+> maximum GPIO line number.
+> This fixes an issue where gpio-ranges uses a non-null offset.
+>   e.g.: gpio-ranges = <&pinctrl 6 86 10>
+>         In that case the last valid GPIO line is not 9 but 15 (6 + 10 - 1)
 >
-> Steve,
->
-> Acked-by: me
-> Steve, we should have this in stable
->
->     Fixes: 24e0a1eff9e2 ("cifs: switch to new mount api")
->     Cc: stable@vger.kernel.org # 5.11+
->
->
-> On Wed, Dec 15, 2021 at 1:09 PM Thiago Rafael Becker <trbecker@gmail.com> wrote:
-> >
-> > mount.cifs can pass a device with multiple delimiters in it. This will
-> > cause rename(2) to fail with ENOENT.
-> >
-> > BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=2031200
-> > Signed-off-by: Thiago Rafael Becker <trbecker@gmail.com>
-> > ---
-> >  fs/cifs/fs_context.c | 30 ++++++++++++++++++++++++++++++
-> >  1 file changed, 30 insertions(+)
-> >
-> > diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
-> > index 6a179ae753c1..4ce8a7df3a02 100644
-> > --- a/fs/cifs/fs_context.c
-> > +++ b/fs/cifs/fs_context.c
-> > @@ -434,6 +434,34 @@ int smb3_parse_opt(const char *options, const char *key, char **val)
-> >         return rc;
-> >  }
-> >
-> > +/*
-> > + * remove duplicate path delimiters. Windows is supposed to do that
-> > + * but there are some bugs that prevent rename from working if there are
-> > + * multiple delimiters.
-> > + */
-> > +void sanitize_path(char *path) {
-> > +        char *pos = path, last = *path;
-> > +        unsigned int offset = 0;
-> > +
-> > +        while(*(++pos)) {
-> > +                if ((*pos == '/' || *pos == '\\') && (last == '/' || last == '\\')) {
-> > +                        offset++;
-> > +                        continue;
-> > +                }
-> > +
-> > +                last = *pos;
-> > +                *(pos - offset) = *pos;
-> > +        }
-> > +
-> > +        pos = pos - offset - 1;
-> > +
-> > +        /* At this point, there should be only zero or one delimiter at the end of the string */
-> > +        if (*pos != '/' && *pos != '\\')
-> > +                pos++;
-> > +
-> > +        *pos = '\0';
-> > +}
-> > +
-> >  /*
-> >   * Parse a devname into substrings and populate the ctx->UNC and ctx->prepath
-> >   * fields with the result. Returns 0 on success and an error otherwise
-> > @@ -497,6 +525,8 @@ smb3_parse_devname(const char *devname, struct smb3_fs_context *ctx)
-> >         if (!ctx->prepath)
-> >                 return -ENOMEM;
-> >
-> > +       sanitize_path(ctx->prepath);
-> > +
-> >         return 0;
-> >  }
-> >
-> > --
-> > 2.31.1
-> >
->
+> Fixes: 67e2996f72c7 ("pinctrl: stm32: fix the reported number of GPIO lines per bank")
+> Reported-by: Christoph Fritz <chf.fritz@googlemail.com>
+> Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
 
+Patch applied for fixes and tagged for stable.
 
--- 
-Thanks,
-
-Steve
-
---000000000000a10ae705d33ad1b5
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-cifs-sanitize-multiple-delimiters-in-prepath.patch"
-Content-Disposition: attachment; 
-	filename="0001-cifs-sanitize-multiple-delimiters-in-prepath.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kx8e1v3z0>
-X-Attachment-Id: f_kx8e1v3z0
-
-RnJvbSA4NTkwNTdjYzk3Y2M5NDliMDA5N2NkMWU3NzZhNjcwOGIzNjdlOTljIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBUaGlhZ28gUmFmYWVsIEJlY2tlciA8dHJiZWNrZXJAZ21haWwu
-Y29tPgpEYXRlOiBXZWQsIDE1IERlYyAyMDIxIDAwOjA4OjMxIC0wMzAwClN1YmplY3Q6IFtQQVRD
-SF0gY2lmczogc2FuaXRpemUgbXVsdGlwbGUgZGVsaW1pdGVycyBpbiBwcmVwYXRoCgptb3VudC5j
-aWZzIGNhbiBwYXNzIGEgZGV2aWNlIHdpdGggbXVsdGlwbGUgZGVsaW1pdGVycyBpbiBpdC4gVGhp
-cyB3aWxsCmNhdXNlIHJlbmFtZSgyKSB0byBmYWlsIHdpdGggRU5PRU5ULgoKQnVnTGluazogaHR0
-cHM6Ly9idWd6aWxsYS5yZWRoYXQuY29tL3Nob3dfYnVnLmNnaT9pZD0yMDMxMjAwCkZpeGVzOiAy
-NGUwYTFlZmY5ZTIgKCJjaWZzOiBzd2l0Y2ggdG8gbmV3IG1vdW50IGFwaSIpCkNjOiBzdGFibGVA
-dmdlci5rZXJuZWwub3JnICMgNS4xMSsKQWNrZWQtYnk6IFJvbm5pZSBTYWhsYmVyZyA8bHNhaGxi
-ZXJAcmVkaGF0LmNvbT4KU2lnbmVkLW9mZi1ieTogVGhpYWdvIFJhZmFlbCBCZWNrZXIgPHRyYmVj
-a2VyQGdtYWlsLmNvbT4KU2lnbmVkLW9mZi1ieTogU3RldmUgRnJlbmNoIDxzdGZyZW5jaEBtaWNy
-b3NvZnQuY29tPgotLS0KIGZzL2NpZnMvZnNfY29udGV4dC5jIHwgMzAgKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgMzAgaW5zZXJ0aW9ucygrKQoKZGlmZiAt
-LWdpdCBhL2ZzL2NpZnMvZnNfY29udGV4dC5jIGIvZnMvY2lmcy9mc19jb250ZXh0LmMKaW5kZXgg
-NmExNzlhZTc1M2MxLi40Y2U4YTdkZjNhMDIgMTAwNjQ0Ci0tLSBhL2ZzL2NpZnMvZnNfY29udGV4
-dC5jCisrKyBiL2ZzL2NpZnMvZnNfY29udGV4dC5jCkBAIC00MzQsNiArNDM0LDM0IEBAIGludCBz
-bWIzX3BhcnNlX29wdChjb25zdCBjaGFyICpvcHRpb25zLCBjb25zdCBjaGFyICprZXksIGNoYXIg
-Kip2YWwpCiAJcmV0dXJuIHJjOwogfQogCisvKgorICogcmVtb3ZlIGR1cGxpY2F0ZSBwYXRoIGRl
-bGltaXRlcnMuIFdpbmRvd3MgaXMgc3VwcG9zZWQgdG8gZG8gdGhhdAorICogYnV0IHRoZXJlIGFy
-ZSBzb21lIGJ1Z3MgdGhhdCBwcmV2ZW50IHJlbmFtZSBmcm9tIHdvcmtpbmcgaWYgdGhlcmUgYXJl
-CisgKiBtdWx0aXBsZSBkZWxpbWl0ZXJzLgorICovCit2b2lkIHNhbml0aXplX3BhdGgoY2hhciAq
-cGF0aCkKK3sKKwljaGFyICpwb3MgPSBwYXRoLCBsYXN0ID0gKnBhdGg7CisJdW5zaWduZWQgaW50
-IG9mZnNldCA9IDA7CisKKwl3aGlsZSAoKigrK3BvcykpIHsKKwkJaWYgKCgqcG9zID09ICcvJyB8
-fCAqcG9zID09ICdcXCcpICYmIChsYXN0ID09ICcvJyB8fCBsYXN0ID09ICdcXCcpKSB7CisJCQlv
-ZmZzZXQrKzsKKwkJCWNvbnRpbnVlOworCQl9CisJCWxhc3QgPSAqcG9zOworCQkqKHBvcyAtIG9m
-ZnNldCkgPSAqcG9zOworCX0KKworCXBvcyA9IHBvcyAtIG9mZnNldCAtIDE7CisKKwkvKiBBdCB0
-aGlzIHBvaW50LCB0aGVyZSBzaG91bGQgYmUgb25seSB6ZXJvIG9yIG9uZSBkZWxpbWl0ZXIgYXQg
-dGhlIGVuZCBvZiB0aGUgc3RyaW5nICovCisJaWYgKCpwb3MgIT0gJy8nICYmICpwb3MgIT0gJ1xc
-JykKKwkJcG9zKys7CisKKwkqcG9zID0gJ1wwJzsKK30KKwogLyoKICAqIFBhcnNlIGEgZGV2bmFt
-ZSBpbnRvIHN1YnN0cmluZ3MgYW5kIHBvcHVsYXRlIHRoZSBjdHgtPlVOQyBhbmQgY3R4LT5wcmVw
-YXRoCiAgKiBmaWVsZHMgd2l0aCB0aGUgcmVzdWx0LiBSZXR1cm5zIDAgb24gc3VjY2VzcyBhbmQg
-YW4gZXJyb3Igb3RoZXJ3aXNlCkBAIC00OTcsNiArNTI1LDggQEAgc21iM19wYXJzZV9kZXZuYW1l
-KGNvbnN0IGNoYXIgKmRldm5hbWUsIHN0cnVjdCBzbWIzX2ZzX2NvbnRleHQgKmN0eCkKIAlpZiAo
-IWN0eC0+cHJlcGF0aCkKIAkJcmV0dXJuIC1FTk9NRU07CiAKKwlzYW5pdGl6ZV9wYXRoKGN0eC0+
-cHJlcGF0aCk7CisKIAlyZXR1cm4gMDsKIH0KIAotLSAKMi4zMi4wCgo=
---000000000000a10ae705d33ad1b5--
+Yours,
+Linus Walleij

@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C0D4768F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 05:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566E94768F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 05:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbhLPEGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 23:06:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
+        id S231680AbhLPEIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 23:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbhLPEGh (ORCPT
+        with ESMTP id S231303AbhLPEIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 23:06:37 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B810C061574;
-        Wed, 15 Dec 2021 20:06:37 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id x32so60955410ybi.12;
-        Wed, 15 Dec 2021 20:06:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3OChzfLXWJUKSc6lAArF7YrO3Lj8rLF54C6O9wKrR48=;
-        b=L6Fbif68sn2Q2slnFz+6Xj+dLgFjqTIMUS8mgtpg2GXGiQpDPWBgMNycw+PqCayK0F
-         9hm1P2dCASVP+ArjqsvCEF6SHPeBlvIROTbdOXQVTifDE2ZIDIWc34UVvHL71P69mgWn
-         z/d5rakfuWbVPRNi31dPwBNgW6YzEhncmngXWPfJYxIn8JDxqnuA44JxmSA/iq50pZ5F
-         pmgKIyataAHI9Vm/yABz8Bzt9964COeGKH6Uu3GiNyj14j1eqmIF6HdyT9BOckmakYep
-         BsO22/GMytmnndDdIxKoFLLVvyHeaHQqEdazvQyJhg489TFLGSowuMpQD279FK0SHV8v
-         RkFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3OChzfLXWJUKSc6lAArF7YrO3Lj8rLF54C6O9wKrR48=;
-        b=49iCCiSiAfcCJ1wOcmjB7QUK7C3mZSQY3QyV/PQFAtoE52NLtq8LTP43ECwS+yij3b
-         93AGirRytRHoLjG3WtW7QD7/s4FK/CuWKPxi+qO2pwwssEVj1IAaS4fdnMLf1+7zHi4c
-         FXfMiYQe7ckjV1sLGopnO20hZAPmIhOFcWzWqkUYjR2KBKPw4EpEH7ZKn0lqfIKKhvjA
-         zkVZ73vXsv6udP8uc38P+zfaU4+bFwsmvDnH3f1spa+7xlcjoarjE1jlRfdzyMOZ2mmO
-         IP5Tg6mvbpx3Zgij9HrO9gcbjftpdZr3F4gILaYMD8rgdqR6k75eLs7UH8dfFeCw5BDN
-         BuUQ==
-X-Gm-Message-State: AOAM531zVhRotN/HsPGwlaTLkk8DKROFVEhJgihhGlYgqFu9bWLO9Cew
-        rqSMMA+9DX0VcC18RnOgSA7EqPnTLrmGD907GwQ=
-X-Google-Smtp-Source: ABdhPJwU23HHgeDAXxPP2z19rK3WDqzJheAQL1/Ob4GmrEk8pheviCFvLPIBsS9hQv1InPm0GsBSafoCjgljC+ueGgg=
-X-Received: by 2002:a25:e90a:: with SMTP id n10mr10274669ybd.180.1639627596650;
- Wed, 15 Dec 2021 20:06:36 -0800 (PST)
+        Wed, 15 Dec 2021 23:08:31 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA45C061574;
+        Wed, 15 Dec 2021 20:08:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=tfRydSG9UvslEfDaf+mltZ2vp8UyubsrzsjWaUyNOdQ=; b=MeE7Jb2LioOmOnHPBRtEgJO9xb
+        awtEVX5KC8x0c9K06Es1tt1udMIB1Yr03WLuRawFzv0TrQNOnSh6yVC/u4QvZaTg8z2hCvWs/6CiZ
+        BcffeAHQnukzxHfKchGT8iCg/09HP1DID45VvLT+Tfqy/kmmNv2hCys32BTBfkzd3vng+UhMc5jCS
+        chmrdZpquLWq19E5mEfz9gGgxx/jqyoHomlBIl/sNj57QLhWblZ6yyqTtJpMLFOeRbifKlE7zH1OW
+        cINxzdO1dnax4V47wOJGn/emuOz4jKumMzBpfTBRIhBB0gBIJP5iWAGyd1ilMSoIudNsaeyvvrKZ5
+        oP+OF7yA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxi3t-001d8z-1q; Thu, 16 Dec 2021 04:08:09 +0000
+Message-ID: <42b7c12f-659b-409a-f4e3-c7a0560b3ce6@infradead.org>
+Date:   Wed, 15 Dec 2021 20:08:04 -0800
 MIME-Version: 1.0
-References: <20211214135555.125348-1-pulehui@huawei.com>
-In-Reply-To: <20211214135555.125348-1-pulehui@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 15 Dec 2021 20:06:25 -0800
-Message-ID: <CAEf4BzaQcHV3iY5XqEbt3ptw+KejVVEZ8gSmW7u46=xHnsTaPA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
- userspace pt_regs
-To:     Pu Lehui <pulehui@huawei.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH -next] HID: intel-ish-hid: ishtp-fw-loader: Fix a
+ kernel-doc formatting issue
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>,
+        srinivas.pandruvada@linux.intel.com
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20211216040146.89075-1-yang.lee@linux.alibaba.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20211216040146.89075-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 5:54 AM Pu Lehui <pulehui@huawei.com> wrote:
->
-> When building bpf selftests on arm64, the following error will occur:
->
-> progs/loop2.c:20:7: error: incomplete definition of type 'struct
-> user_pt_regs'
->
-> Some archs, like arm64 and riscv, use userspace pt_regs in
-> bpf_tracing.h, which causes build failure when bpf prog use
-> macro in bpf_tracing.h. So let's use vmlinux.h directly.
+Hi,
 
-We could probably also extend bpf_tracing.h to work with
-kernel-defined pt_regs, just like we do for x86 (see __KERNEL__ and
-__VMLINUX_H__ checks). It's more work, but will benefit other end
-users, not just selftests.
+On 12/15/21 20:01, Yang Li wrote:
+> This function had kernel-doc that not used a hash to separate
 
->
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+                               that did not use a dash or hyphen to separate
+
+Patch looks good. Thanks.
+
+> the function name from the one line description.
+> 
+> The warning was found by running scripts/kernel-doc, which is
+> caused by using 'make W=1'.
+> 
+> drivers/hid/intel-ish-hid/ishtp-fw-loader.c:271: warning: This comment
+> starts with '/**', but isn't a kernel-doc comment. Refer
+> Documentation/doc-guide/kernel-doc.rst
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > ---
->  tools/testing/selftests/bpf/progs/loop1.c     |  8 ++------
->  tools/testing/selftests/bpf/progs/loop2.c     |  8 ++------
->  tools/testing/selftests/bpf/progs/loop3.c     |  8 ++------
->  tools/testing/selftests/bpf/progs/loop6.c     | 20 ++++++-------------
->  .../selftests/bpf/progs/test_overhead.c       |  8 ++------
->  .../selftests/bpf/progs/test_probe_user.c     |  6 +-----
->  6 files changed, 15 insertions(+), 43 deletions(-)
->
+>  drivers/hid/intel-ish-hid/ishtp-fw-loader.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hid/intel-ish-hid/ishtp-fw-loader.c b/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
+> index 0e1183e96147..e24988586710 100644
+> --- a/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
+> +++ b/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
+> @@ -268,7 +268,8 @@ static int get_firmware_variant(struct ishtp_cl_data *client_data,
+>  }
+>  
+>  /**
+> - * loader_cl_send()	Send message from host to firmware
+> + * loader_cl_send() - Send message from host to firmware
+> + *
+>   * @client_data:	Client data instance
+>   * @out_msg:		Message buffer to be sent to firmware
+>   * @out_size:		Size of out going message
+> 
 
-[...]
+-- 
+~Randy

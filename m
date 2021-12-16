@@ -2,86 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDD1477415
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65DC047741F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237832AbhLPOMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237816AbhLPOMM (ORCPT
+        id S234840AbhLPOM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:12:57 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:54752 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237813AbhLPOMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:12:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F0BC061401;
-        Thu, 16 Dec 2021 06:12:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBFB661E17;
-        Thu, 16 Dec 2021 14:12:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A67A8C36AE0;
-        Thu, 16 Dec 2021 14:12:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639663931;
-        bh=CV8c399RTrExelFrEwbgFJTuCfFII5DqSO6iqus7l4I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p0EOzlO6VbOwU7cfmNloVeMYrCu2ylYD4KKycrGkc8FIsOGsa6wIgaH7mJQYiS43d
-         pHdmPLkKH30pxLJitVVjDqkGmOh0DvV5x9q6qG2hV6IU3SR07DAlYAcvDfRDloNCoi
-         4f8YmUnSr/BWjm3ieZFvQbd6p8dzIZibAoKfVLzQJNvSdVc30b85Ps10ILfNRAfJ76
-         uXc+iyrGNMG+M/1WScP87U5rdjAoHaD+4qmdvhN8CltTs2C8G/U/a4CMXJ/16zxcZb
-         7njIMDLdtpK7MIJfmCffLQJO3yHTWoAcCiXLq5T3RfLk5FhmckesdjVV1imdOq5Y5w
-         IbDHeUM8LxYdA==
-Date:   Thu, 16 Dec 2021 22:12:03 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: chipidea: Set the DT node on the child device
-Message-ID: <20211216141203.GA6025@Peter>
-References: <20211215225646.1997946-1-robh@kernel.org>
+        Thu, 16 Dec 2021 09:12:55 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639663973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2wY+CAEJAUwckZ4JP8ztzEAXZBMnZfuK1dsJI9iW3q8=;
+        b=FYg/+/2whs/bC58ZLt166FzhUqUu+5bC/y4ISVw/xulKhKFSLjKETK6KTaqz/cNMNnJlzs
+        fBEnRGgALWUF39NgPbJcgve9h5H4ay1QKNCm4kdXyJXlgTjDCTTdGBtZ8CSPb/Wkb5ZmNh
+        CNspG69mszOwLmVFO5EZre74Y7OT6H8TeZ6vZqfknvhS956zhpOs4fAIH78PxFVGphP9vj
+        5K+YDLDJ6iVurRHsd0OppkQqHIHEuJ/hUOm7XgT2GrPDmPjWXtWGpMxolEJrKmtH/c+U03
+        /oFTck1u5bMvu2qvjcjg6KEgi/olf4BfiSyzzKJE592FVsevBrBcoauq9ugH9A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639663973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2wY+CAEJAUwckZ4JP8ztzEAXZBMnZfuK1dsJI9iW3q8=;
+        b=RL6Sn1ZH2WSL8SKDU61iH/J8qZ95Lyj7rEAO8+kA6bPcenXQdFiLRmz9BZsZQAFso3XExt
+        Ki4MgZxwcPauviDA==
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "quintela@redhat.com" <quintela@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Jing Liu <jing2.liu@linux.intel.com>,
+        "Zhong, Yang" <yang.zhong@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>
+Subject: RE: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
+In-Reply-To: <BN9PR11MB52761B401F752514B22A23768C779@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20211214022825.563892248@linutronix.de>
+ <20211214024948.048572883@linutronix.de>
+ <854480525e7f4f3baeba09ec6a864b80@intel.com> <87zgp3ry8i.ffs@tglx>
+ <b3ac7ba45c984cf39783e33e0c25274d@intel.com> <87r1afrrjx.ffs@tglx>
+ <87k0g7qa3t.fsf@secure.mitica> <87k0g7rkwj.ffs@tglx>
+ <878rwm7tu8.fsf@secure.mitica>
+ <afeba57f71f742b88aac3f01800086f9@intel.com> <878rwmrxgb.ffs@tglx>
+ <a4fbf9f8-8876-f58c-d2b6-15add35bedd0@redhat.com>
+ <BN9PR11MB5276E2165EB86520520D54FD8C779@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <87fsqslwph.ffs@tglx>
+ <BN9PR11MB52761B401F752514B22A23768C779@BN9PR11MB5276.namprd11.prod.outlook.com>
+Date:   Thu, 16 Dec 2021 15:12:53 +0100
+Message-ID: <8735msljtm.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215225646.1997946-1-robh@kernel.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-12-15 16:56:46, Rob Herring wrote:
-> The ChipIdea glue drivers just copy the glue resources to the "ci_hdrc"
-> child device. Instead, set the child device's DT node pointer to the
-> parent device's node so that platform_get_irq() can find the IRQ
-> resources in the DT. This removes the need for statically populating the
-> IRQ resources from the DT which has been deprecated for some time.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Thu, Dec 16 2021 at 09:59, Kevin Tian wrote:
+>> From: Thomas Gleixner <tglx@linutronix.de>
+>> This can be done simply with the MSR entry/exit controls. No trap
+>> required neither for #NM for for XFD_ERR.
+>> 
+>> VMENTER loads guest state. VMEXIT saves guest state and loads host state
+>> (0)
+>
+> This implies three MSR operations for every vm-exit.
+>
+> With trap we only need one RDMSR in host #NM handler, one 
+> RDMSR/one WRMSR exit in guest #NM handler, which are both rare.
+> plus one RDMSR/one WRMSR per vm-exit only if saved xfd_err is 
+> non-zero which is again rare.
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+Fair enough.
 
-> ---
->  drivers/usb/chipidea/core.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-> index a56f06368d14..5359b2a2e4d2 100644
-> --- a/drivers/usb/chipidea/core.c
-> +++ b/drivers/usb/chipidea/core.c
-> @@ -864,6 +864,7 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
->  	}
->  
->  	pdev->dev.parent = dev;
-> +	device_set_of_node_from_dev(&pdev->dev, dev);
->  
->  	ret = platform_device_add_resources(pdev, res, nres);
->  	if (ret)
-> -- 
-> 2.32.0
-> 
+>> XFD:     Always guest state
+>> 
+>> So VMENTER does nothing and VMEXIT either saves guest state and the sync
+>> function uses the automatically saved value or you keep the sync
+>> function which does the rdmsrl() as is.
+>> 
+>
+> Yes, this is the 3rd open that I asked in another reply. The only restriction
+> with this approach is that the sync cost is added also for legacy OS which
+> doesn't touch xfd at all. 
 
--- 
+You still can make that conditional on the guest XCR0. If guest never
+enables the extended bit then neither the #NM trap nor the XFD sync
+are required.
+
+But yes, there are too many moving parts here :)
 
 Thanks,
-Peter Chen
 
+        tglx

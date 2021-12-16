@@ -2,188 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0FD476F91
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C6D476F94
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233737AbhLPLLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 06:11:00 -0500
-Received: from mga11.intel.com ([192.55.52.93]:65516 "EHLO mga11.intel.com"
+        id S236462AbhLPLMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 06:12:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:42122 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231410AbhLPLK7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 06:10:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639653059; x=1671189059;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qPGjuuJ2jSEJKch9c2WpV+j8nzgiGOo1U3ylZb6CvZ8=;
-  b=JqpmRWMza+zzj4vqNkoQxyr/vhsx7B1JTMY4S7w3uQYE5dBMeSOfi0Gi
-   lMISxy/jQjL9ohmMPCJEAfyEeMLsT9+RGdeHDb2gSJMvS7ZKoyfwbDwxM
-   4aBCAai+swb4zvGGKgoEPgVqPCIqkPLXeT2dhSugyVVoHY8Byn7Ce7E+2
-   RikoLgHzcS5s61ZIhevlZs+ff3rCVfEYK/sUDQYCcfsekykevXaX65Kz0
-   V70Ti15M1j75FivXVrKB6VESpamzNmo4ZdimFov8pjsqBSYlIfoU0PxSp
-   2cUOT+iWfDvC0UavOAbVTW2SBqUveaONh4/iBAYxiyiFnlC/ej/6wHDSw
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="237003219"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="237003219"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 03:10:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="615113836"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 03:10:57 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxof3-00033L-3G; Thu, 16 Dec 2021 11:10:57 +0000
-Date:   Thu, 16 Dec 2021 19:10:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream 127/152] arch/x86/kvm/vmx/tdx_stubs.c:29:5:
- warning: no previous prototype for 'tdx_smi_allowed'
-Message-ID: <202112161904.IbwmZ3eU-lkp@intel.com>
+        id S231372AbhLPLL6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 06:11:58 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B14291474;
+        Thu, 16 Dec 2021 03:11:57 -0800 (PST)
+Received: from [10.57.5.180] (unknown [10.57.5.180])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8237F3F774;
+        Thu, 16 Dec 2021 03:11:55 -0800 (PST)
+Subject: Re: [PATCH v2] perf arm-spe: Synthesize SPE instruction events
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20211215184605.92787-1-german.gomez@arm.com>
+ <CAM9d7ch1eotRphCwFi_ryQdWD8DPNsZUN+aW7kaxovWtmCJcMQ@mail.gmail.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <3df80677-1894-54c3-6383-94902c6e9ee8@arm.com>
+Date:   Thu, 16 Dec 2021 11:11:44 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAM9d7ch1eotRphCwFi_ryQdWD8DPNsZUN+aW7kaxovWtmCJcMQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream
-head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
-commit: 11f826bfb08f30839cadce9dd9ee8bddaaf97e9f [127/152] KVM: TDX: silently discard SMI request
-config: x86_64-randconfig-m001-20211216 (https://download.01.org/0day-ci/archive/20211216/202112161904.IbwmZ3eU-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/11f826bfb08f30839cadce9dd9ee8bddaaf97e9f
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream
-        git checkout 11f826bfb08f30839cadce9dd9ee8bddaaf97e9f
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+Hi Namhyung, thanks for your comments.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 16/12/2021 01:18, Namhyung Kim wrote:
+> Hello,
+>
+> On Wed, Dec 15, 2021 at 10:46 AM German Gomez <german.gomez@arm.com> wrote:
+>> Synthesize instruction events per every decoded ARM SPE record.
+>>
+>> Because Arm SPE implements a hardware-based sample period, and perf
+>> implements a software-based one that gets applied on top, also add a
+>> warning to make the user aware.
+>>
+>> Signed-off-by: German Gomez <german.gomez@arm.com>
+>> ---
+>> Changes since v1 [https://lore.kernel.org/all/20211117142833.226629-1-german.gomez@arm.com]
+>>   - Generate events with "--itrace=i" instead of "--itrace=o".
+>>   - Generate events with virt_addr, phys_addr, and data_src values.
+>> ---
+>>  tools/perf/util/arm-spe.c | 58 +++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 58 insertions(+)
+>>
+>> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+>> index fccac06b573a..879583822c8f 100644
+>> --- a/tools/perf/util/arm-spe.c
+>> +++ b/tools/perf/util/arm-spe.c
+>> @@ -58,6 +58,8 @@ struct arm_spe {
+>>         u8                              sample_branch;
+>>         u8                              sample_remote_access;
+>>         u8                              sample_memory;
+>> +       u8                              sample_instructions;
+>> +       u64                             instructions_sample_period;
+>>
+>>         u64                             l1d_miss_id;
+>>         u64                             l1d_access_id;
+>> @@ -68,6 +70,7 @@ struct arm_spe {
+>>         u64                             branch_miss_id;
+>>         u64                             remote_access_id;
+>>         u64                             memory_id;
+>> +       u64                             instructions_id;
+>>
+>>         u64                             kernel_start;
+>>
+>> @@ -90,6 +93,7 @@ struct arm_spe_queue {
+>>         u64                             time;
+>>         u64                             timestamp;
+>>         struct thread                   *thread;
+>> +       u64                             period_instructions;
+>>  };
+>>
+>>  static void arm_spe_dump(struct arm_spe *spe __maybe_unused,
+>> @@ -202,6 +206,7 @@ static struct arm_spe_queue *arm_spe__alloc_queue(struct arm_spe *spe,
+>>         speq->pid = -1;
+>>         speq->tid = -1;
+>>         speq->cpu = -1;
+>> +       speq->period_instructions = 0;
+>>
+>>         /* params set */
+>>         params.get_trace = arm_spe_get_trace;
+>> @@ -351,6 +356,33 @@ static int arm_spe__synth_branch_sample(struct arm_spe_queue *speq,
+>>         return arm_spe_deliver_synth_event(spe, speq, event, &sample);
+>>  }
+>>
+>> +static int arm_spe__synth_instruction_sample(struct arm_spe_queue *speq,
+>> +                                            u64 spe_events_id, u64 data_src)
+>> +{
+>> +       struct arm_spe *spe = speq->spe;
+>> +       struct arm_spe_record *record = &speq->decoder->record;
+>> +       union perf_event *event = speq->event_buf;
+>> +       struct perf_sample sample = { .ip = 0, };
+>> +
+>> +       /*
+>> +        * Handles perf instruction sampling period.
+>> +        */
+>> +       speq->period_instructions++;
+>> +       if (speq->period_instructions < spe->instructions_sample_period)
+>> +               return 0;
+>> +       speq->period_instructions = 0;
+>> +
+>> +       arm_spe_prep_sample(spe, speq, event, &sample);
+>> +
+>> +       sample.id = spe_events_id;
+>> +       sample.stream_id = spe_events_id;
+>> +       sample.addr = record->virt_addr;
+>> +       sample.phys_addr = record->phys_addr;
+>> +       sample.data_src = data_src;
+> I think it should set sample.period to spe->instructions_sample_period.
 
-All warnings (new ones prefixed by >>):
+Ack!
 
-   arch/x86/kvm/vmx/tdx_stubs.c:4:13: warning: no previous prototype for 'tdx_pre_kvm_init' [-Wmissing-prototypes]
-       4 | void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
-         |             ^~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:6:12: warning: no previous prototype for 'tdx_hardware_setup' [-Wmissing-prototypes]
-       6 | int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
-         |            ^~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:7:6: warning: no previous prototype for 'tdx_hardware_enable' [-Wmissing-prototypes]
-       7 | void tdx_hardware_enable(void) {}
-         |      ^~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:8:6: warning: no previous prototype for 'tdx_hardware_disable' [-Wmissing-prototypes]
-       8 | void tdx_hardware_disable(void) {}
-         |      ^~~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:10:5: warning: no previous prototype for 'tdx_vcpu_create' [-Wmissing-prototypes]
-      10 | int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
-         |     ^~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:11:6: warning: no previous prototype for 'tdx_vcpu_free' [-Wmissing-prototypes]
-      11 | void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
-         |      ^~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:12:6: warning: no previous prototype for 'tdx_vcpu_reset' [-Wmissing-prototypes]
-      12 | void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
-         |      ^~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:13:6: warning: no previous prototype for 'tdx_inject_nmi' [-Wmissing-prototypes]
-      13 | void tdx_inject_nmi(struct kvm_vcpu *vcpu) {}
-         |      ^~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:14:12: warning: no previous prototype for 'tdx_vcpu_run' [-Wmissing-prototypes]
-      14 | fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
-         |            ^~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:15:6: warning: no previous prototype for 'tdx_vcpu_load' [-Wmissing-prototypes]
-      15 | void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
-         |      ^~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:16:6: warning: no previous prototype for 'tdx_vcpu_put' [-Wmissing-prototypes]
-      16 | void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
-         |      ^~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:17:6: warning: no previous prototype for 'tdx_prepare_switch_to_guest' [-Wmissing-prototypes]
-      17 | void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:18:6: warning: no previous prototype for 'tdx_handle_exit_irqoff' [-Wmissing-prototypes]
-      18 | void tdx_handle_exit_irqoff(struct kvm_vcpu *vcpu) {}
-         |      ^~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:19:5: warning: no previous prototype for 'tdx_handle_exit' [-Wmissing-prototypes]
-      19 | int tdx_handle_exit(struct kvm_vcpu *vcpu,
-         |     ^~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:21:6: warning: no previous prototype for 'tdx_is_emulated_msr' [-Wmissing-prototypes]
-      21 | bool tdx_is_emulated_msr(u32 index, bool write) { return false; }
-         |      ^~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:22:5: warning: no previous prototype for 'tdx_get_msr' [-Wmissing-prototypes]
-      22 | int tdx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
-         |     ^~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:23:5: warning: no previous prototype for 'tdx_set_msr' [-Wmissing-prototypes]
-      23 | int tdx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr) { return 1; }
-         |     ^~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:25:6: warning: no previous prototype for 'tdx_apicv_post_state_restore' [-Wmissing-prototypes]
-      25 | void tdx_apicv_post_state_restore(struct kvm_vcpu *vcpu) {}
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:26:5: warning: no previous prototype for 'tdx_deliver_posted_interrupt' [-Wmissing-prototypes]
-      26 | int tdx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector) { return 0; }
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:27:6: warning: no previous prototype for 'tdx_get_exit_info' [-Wmissing-prototypes]
-      27 | void tdx_get_exit_info(struct kvm_vcpu *vcpu, u32 *reason,
-         |      ^~~~~~~~~~~~~~~~~
->> arch/x86/kvm/vmx/tdx_stubs.c:29:5: warning: no previous prototype for 'tdx_smi_allowed' [-Wmissing-prototypes]
-      29 | int tdx_smi_allowed(struct kvm_vcpu *vcpu, bool for_injection) { return false; }
-         |     ^~~~~~~~~~~~~~~
->> arch/x86/kvm/vmx/tdx_stubs.c:30:5: warning: no previous prototype for 'tdx_enter_smm' [-Wmissing-prototypes]
-      30 | int tdx_enter_smm(struct kvm_vcpu *vcpu, char *smstate) { return 0; }
-         |     ^~~~~~~~~~~~~
->> arch/x86/kvm/vmx/tdx_stubs.c:31:5: warning: no previous prototype for 'tdx_leave_smm' [-Wmissing-prototypes]
-      31 | int tdx_leave_smm(struct kvm_vcpu *vcpu, const char *smstate) { return 0; }
-         |     ^~~~~~~~~~~~~
->> arch/x86/kvm/vmx/tdx_stubs.c:32:6: warning: no previous prototype for 'tdx_enable_smi_window' [-Wmissing-prototypes]
-      32 | void tdx_enable_smi_window(struct kvm_vcpu *vcpu) {}
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:34:5: warning: no previous prototype for 'tdx_dev_ioctl' [-Wmissing-prototypes]
-      34 | int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
-         |     ^~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:35:5: warning: no previous prototype for 'tdx_vm_ioctl' [-Wmissing-prototypes]
-      35 | int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
-         |     ^~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:36:5: warning: no previous prototype for 'tdx_vcpu_ioctl' [-Wmissing-prototypes]
-      36 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
-         |     ^~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c: In function 'tdx_vcpu_ioctl':
-   arch/x86/kvm/vmx/tdx_stubs.c:36:72: error: 'ENOPNOTSUPP' undeclared (first use in this function); did you mean 'EOPNOTSUPP'?
-      36 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
-         |                                                                        ^~~~~~~~~~~
-         |                                                                        EOPNOTSUPP
-   arch/x86/kvm/vmx/tdx_stubs.c:36:72: note: each undeclared identifier is reported only once for each function it appears in
-   arch/x86/kvm/vmx/tdx_stubs.c: At top level:
-   arch/x86/kvm/vmx/tdx_stubs.c:38:6: warning: no previous prototype for 'tdx_flush_tlb' [-Wmissing-prototypes]
-      38 | void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
-         |      ^~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:39:6: warning: no previous prototype for 'tdx_load_mmu_pgd' [-Wmissing-prototypes]
-      39 | void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
-         |      ^~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c: In function 'tdx_vcpu_ioctl':
-   arch/x86/kvm/vmx/tdx_stubs.c:36:85: error: control reaches end of non-void function [-Werror=return-type]
-      36 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
-         |                                                                                     ^
-   cc1: some warnings being treated as errors
+>
+> Also it can set sample.weight but I think we lost my patch
 
+I forgot to apply your latency patch first. I will add it.
 
-vim +/tdx_smi_allowed +29 arch/x86/kvm/vmx/tdx_stubs.c
+Thanks,
+German
 
-    24	
-    25	void tdx_apicv_post_state_restore(struct kvm_vcpu *vcpu) {}
-    26	int tdx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector) { return 0; }
-    27	void tdx_get_exit_info(struct kvm_vcpu *vcpu, u32 *reason,
-    28			u64 *info1, u64 *info2, u32 *intr_info, u32 *error_code) {}
-  > 29	int tdx_smi_allowed(struct kvm_vcpu *vcpu, bool for_injection) { return false; }
-  > 30	int tdx_enter_smm(struct kvm_vcpu *vcpu, char *smstate) { return 0; }
-  > 31	int tdx_leave_smm(struct kvm_vcpu *vcpu, const char *smstate) { return 0; }
-  > 32	void tdx_enable_smi_window(struct kvm_vcpu *vcpu) {}
-    33	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+>   https://lore.kernel.org/r/20211201220855.1260688-1-namhyung@kernel.org
+>
+> Arnaldo, can you please take a look?
+>
+>> +
+>> +       return arm_spe_deliver_synth_event(spe, speq, event, &sample);
+>> +}
+>> +
+>>  #define SPE_MEM_TYPE   (ARM_SPE_L1D_ACCESS | ARM_SPE_L1D_MISS | \
+>>                          ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS | \
+>>                          ARM_SPE_REMOTE_ACCESS)
+>> @@ -480,6 +512,12 @@ static int arm_spe_sample(struct arm_spe_queue *speq)
+>>                         return err;
+>>         }
+>>
+>> +       if (spe->sample_instructions) {
+>> +               err = arm_spe__synth_instruction_sample(speq, spe->instructions_id, data_src);
+>> +               if (err)
+>> +                       return err;
+>> +       }
+>> +
+>>         return 0;
+>>  }
+>>
+>> @@ -1107,6 +1145,26 @@ arm_spe_synth_events(struct arm_spe *spe, struct perf_session *session)
+>>                         return err;
+>>                 spe->memory_id = id;
+>>                 arm_spe_set_event_name(evlist, id, "memory");
+>> +               id += 1;
+>> +       }
+>> +
+>> +       if (spe->synth_opts.instructions) {
+>> +               if (spe->synth_opts.period_type != PERF_ITRACE_PERIOD_INSTRUCTIONS)
+>> +                       return -EINVAL;
+>> +
+>> +               if (spe->synth_opts.period > 1)
+>> +                       pr_warning("Arm SPE has a hardware-based sample period.\n"
+>> +                                  "More instruction events will be discarded by --itrace\n");
+>> +
+>> +               spe->sample_instructions = true;
+>> +               attr.config = PERF_COUNT_HW_INSTRUCTIONS;
+>> +               attr.sample_period = spe->synth_opts.period;
+>> +               spe->instructions_sample_period = attr.sample_period;
+>> +               err = arm_spe_synth_event(session, &attr, id);
+>> +               if (err)
+>> +                       return err;
+>> +               spe->instructions_id = id;
+>> +               arm_spe_set_event_name(evlist, id, "instructions");
+> Yeah, I think it's a better name than "all". :)
+>
+> Thanks,
+> Namhyung
+>
+>
+>>         }
+>>
+>>         return 0;
+>> --
+>> 2.25.1
+>>

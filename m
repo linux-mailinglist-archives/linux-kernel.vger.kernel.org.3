@@ -2,229 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD75476A12
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 07:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF867476A18
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 07:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbhLPF7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 00:59:42 -0500
-Received: from mga17.intel.com ([192.55.52.151]:39981 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231468AbhLPF7m (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 00:59:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639634382; x=1671170382;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ccssznjGs/rg8GgfK3KuhTo2j9qFQEYFQksqf9RAL0w=;
-  b=SqJvofLz819+3L6YgsHg42KnEDMsyxemLi+0FCPFN6d7ISYrPEYwSr81
-   22DlTjvKlT1UvH72/NIM4LNrE8JmHxXSXM8mybTUNEgPJBfTwhDelvKST
-   BJ5cWIzPXr10O2KSaH0ZBqUIM2HuQDp0S5GmGX0BgdMAsAXwcJJVHYO9u
-   1KLZ791VW0sEJenEneb/CIM6YbZk4q9+c5ISTO2CRnOK6hJ2c2wc7aAft
-   OCuULmRkgvz2SEEsLZ30yAw7dPyEvBsEyz0p/lFbfSthj9kaznfzfEtc1
-   qd0U8hoeZnR8UnlgECPwc2iC9sOf+LCdjuFxYLi8iC8W7nYWJFh/Aqd5z
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="220092273"
-X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
-   d="scan'208";a="220092273"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 21:59:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
-   d="scan'208";a="662334733"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Dec 2021 21:59:40 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxjnn-0002oU-Hg; Thu, 16 Dec 2021 05:59:39 +0000
-Date:   Thu, 16 Dec 2021 13:59:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/msi] BUILD SUCCESS
- 91f7d2dbf952f54442fa81bb62f78ee023179bf9
-Message-ID: <61bad5c1.VgM3riPO/pHsQNwc%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S233838AbhLPGAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 01:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233796AbhLPGAI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 01:00:08 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEB9C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 22:00:08 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id q198-20020a25d9cf000000b005f7a6a84f9fso47225983ybg.6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 22:00:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=aJH+lCrCj/FCAEAw+OVjC7PHR7hNdrehYFIH6GhhY+M=;
+        b=tTH+FDKL8a6uXwQeRiZm+e98anzVyUEmmbJ85hLHy0yEamPt1ILynrqX7bBviubDUW
+         CJrXHlBabCSqhC9Y0Sm/eYfnazJOiTNojza5XgXMP6coyedocU6Kp9A5odccaktcalwY
+         11kjaNz8I6JdFmobMTgcYlwvyL5dnV0SqXfYSix0LWGDVqOqMLrfD14CE2c0nHSTT+ID
+         C4dtENcSFk0tmJzf/uGyBkKLfabT8TuR3FRPQgwrpgDeWFKfqQTYB5Ti3E4hIAJhJpE5
+         NiWkxNcFRVixa8BJkRIlSQR2dDrnIcWHW+uD6OilQ/ZpPeUgTX9W1ck6NrJGBTKyzkvW
+         tzHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=aJH+lCrCj/FCAEAw+OVjC7PHR7hNdrehYFIH6GhhY+M=;
+        b=toue2nnrTiq+656Gq+HhQ26cUavak+1sbUCCsFCO4zjyEXd8wMk+dSLYyLc/LigIRK
+         2dzJXfVelJRCSx4F2qxUplm2iwy4JNQ9h/SU7NN995A1oshmlk9lz//I4IMxBK72ao90
+         QrxKgn5nYs4WEilTJM76FMoRtSfK/Yn1bJH4dHHJUpVCqp6YTwfrWJyC9+tNdlctIlVa
+         8rftv1IbOKhZ0ypzGys7MTj+EsGECMeRt5iZhub5KC786Ic8JEXkdHD6b7lt4dXoNfRQ
+         +x9FO0Kjx4aH53vcssomVT7zShzOAfKkQkcCZlX1HQJqzVO27h6nLGxgpzmKnSP/oMRC
+         JeEw==
+X-Gm-Message-State: AOAM530U2z07gBmklYY+IeO1Sj0Xbg42I94pQdZuSgSwwq0nxVwZvB0D
+        5S2OCuuoGBaw7D5XxLNqmrJhYDEEaxN7q68=
+X-Google-Smtp-Source: ABdhPJwccA/YgCl1BpryK2Vgg3slqBUEr5qAZLGb0+zAVgYeDO0W6rN/qSt16FDkdUFy247/dyGGY1r+7c/Kp2Y=
+X-Received: from sharinder.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:c73])
+ (user=sharinder job=sendgmr) by 2002:a25:ac06:: with SMTP id
+ w6mr12338192ybi.85.1639634407935; Wed, 15 Dec 2021 22:00:07 -0800 (PST)
+Date:   Thu, 16 Dec 2021 05:59:51 +0000
+Message-Id: <20211216055958.634097-1-sharinder@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH v4 0/7] Documentation: KUnit: Rework KUnit documentation
+From:   Harinder Singh <sharinder@google.com>
+To:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
+        corbet@lwn.net
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tim.bird@sony.com, elver@google.com,
+        Harinder Singh <sharinder@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/msi
-branch HEAD: 91f7d2dbf952f54442fa81bb62f78ee023179bf9  x86/xen: Use correct #ifdef guard for xen_initdom_restore_msi()
+The KUnit documentation was not very organized. There was little
+information related to KUnit architecture and the importance of unit
+testing.
 
-elapsed time: 728m
+Add some new pages, expand and reorganize the existing documentation.
+Reword pages to make information and style more consistent.
 
-configs tested: 158
-configs skipped: 3
+Changes since v3:
+https://lore.kernel.org/linux-kselftest/20211210052812.1998578-1-sharinder@google.com/T/#m0a85e6a36f13c66470844d92553d19c19239ebed
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+--Reworded sentences as per comments
+--Replaced Elixir links with kernel.org links or kernel-doc references
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-arm                              allyesconfig
-mips                 randconfig-c004-20211214
-i386                 randconfig-c001-20211214
-m68k                          hp300_defconfig
-arm                        clps711x_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                     tqm8540_defconfig
-sh                          rsk7203_defconfig
-arm                          moxart_defconfig
-arm                      footbridge_defconfig
-mips                            gpr_defconfig
-sh                     magicpanelr2_defconfig
-arm                         s3c6400_defconfig
-arm                           stm32_defconfig
-powerpc                       ppc64_defconfig
-powerpc                 mpc837x_mds_defconfig
-arm                          lpd270_defconfig
-m68k                        mvme16x_defconfig
-arm                            hisi_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arc                          axs103_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                   sh7770_generic_defconfig
-arm                         palmz72_defconfig
-mips                          rb532_defconfig
-arm                          exynos_defconfig
-sh                         apsh4a3a_defconfig
-arm                        mvebu_v5_defconfig
-um                                  defconfig
-sh                                  defconfig
-sh                        edosk7760_defconfig
-mips                          ath79_defconfig
-arc                        vdk_hs38_defconfig
-powerpc                      pcm030_defconfig
-sh                             espt_defconfig
-mips                 decstation_r4k_defconfig
-sparc                               defconfig
-powerpc                      katmai_defconfig
-riscv             nommu_k210_sdcard_defconfig
-mips                           ci20_defconfig
-arm                              alldefconfig
-powerpc                      tqm8xx_defconfig
-arm                          gemini_defconfig
-mips                         tb0226_defconfig
-sh                              ul2_defconfig
-arm                            zeus_defconfig
-nios2                         10m50_defconfig
-powerpc                      arches_defconfig
-xtensa                              defconfig
-m68k                        stmark2_defconfig
-powerpc                 mpc836x_rdk_defconfig
-m68k                        m5407c3_defconfig
-powerpc                          g5_defconfig
-mips                     loongson1c_defconfig
-sh                   rts7751r2dplus_defconfig
-h8300                       h8s-sim_defconfig
-arm                           h3600_defconfig
-powerpc                 mpc8313_rdb_defconfig
-sh                               j2_defconfig
-arm                        keystone_defconfig
-sh                        edosk7705_defconfig
-mips                         tb0287_defconfig
-powerpc                     powernv_defconfig
-arc                      axs103_smp_defconfig
-arm                         orion5x_defconfig
-sh                          lboxre2_defconfig
-arm                  randconfig-c002-20211214
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20211214
-x86_64               randconfig-a005-20211214
-x86_64               randconfig-a001-20211214
-x86_64               randconfig-a002-20211214
-x86_64               randconfig-a003-20211214
-x86_64               randconfig-a004-20211214
-i386                 randconfig-a001-20211214
-i386                 randconfig-a002-20211214
-i386                 randconfig-a005-20211214
-i386                 randconfig-a003-20211214
-i386                 randconfig-a006-20211214
-i386                 randconfig-a004-20211214
-x86_64               randconfig-a006-20211216
-x86_64               randconfig-a005-20211216
-x86_64               randconfig-a001-20211216
-x86_64               randconfig-a002-20211216
-x86_64               randconfig-a003-20211216
-x86_64               randconfig-a004-20211216
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
 
-clang tested configs:
-arm                  randconfig-c002-20211215
-x86_64               randconfig-c007-20211215
-riscv                randconfig-c006-20211215
-mips                 randconfig-c004-20211215
-i386                 randconfig-c001-20211215
-s390                 randconfig-c005-20211215
-powerpc              randconfig-c003-20211215
-x86_64               randconfig-a011-20211214
-x86_64               randconfig-a014-20211214
-x86_64               randconfig-a012-20211214
-x86_64               randconfig-a013-20211214
-x86_64               randconfig-a016-20211214
-x86_64               randconfig-a015-20211214
-hexagon              randconfig-r045-20211214
-s390                 randconfig-r044-20211214
-riscv                randconfig-r042-20211214
-hexagon              randconfig-r041-20211214
-hexagon              randconfig-r045-20211216
-s390                 randconfig-r044-20211216
-riscv                randconfig-r042-20211216
-hexagon              randconfig-r041-20211216
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20211207054019.1455054-1-sharinder@google.com/T/
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--Reworded sentences as per comments
+--Expanded the explaination in usage.rst for accessing the current test example
+--Standardized on US english in style.rst
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20211203042437.740255-1-sharinder@google.com/
+
+--Fixed spelling mistakes
+--Restored paragraph about kunit_tool introduction
+--Added note about CONFIG_KUNIT_ALL_TESTS (Thanks Tim Bird for review
+comments)
+-- Miscellaneous changes
+
+Harinder Singh (7):
+  Documentation: KUnit: Rewrite main page
+  Documentation: KUnit: Rewrite getting started
+  Documentation: KUnit: Added KUnit Architecture
+  Documentation: kunit: Reorganize documentation related to running
+    tests
+  Documentation: KUnit: Rework writing page to focus on writing tests
+  Documentation: KUnit: Restyle Test Style and Nomenclature page
+  Documentation: KUnit: Restyled Frequently Asked Questions
+
+ .../dev-tools/kunit/architecture.rst          | 204 +++++++
+ Documentation/dev-tools/kunit/faq.rst         |  73 ++-
+ Documentation/dev-tools/kunit/index.rst       | 172 +++---
+ .../kunit/kunit_suitememorydiagram.png        | Bin 0 -> 24174 bytes
+ Documentation/dev-tools/kunit/run_manual.rst  |  57 ++
+ Documentation/dev-tools/kunit/run_wrapper.rst | 247 ++++++++
+ Documentation/dev-tools/kunit/start.rst       | 198 +++---
+ Documentation/dev-tools/kunit/style.rst       | 105 ++--
+ Documentation/dev-tools/kunit/usage.rst       | 578 ++++++++----------
+ 9 files changed, 1047 insertions(+), 587 deletions(-)
+ create mode 100644 Documentation/dev-tools/kunit/architecture.rst
+ create mode 100644 Documentation/dev-tools/kunit/kunit_suitememorydiagram.png
+ create mode 100644 Documentation/dev-tools/kunit/run_manual.rst
+ create mode 100644 Documentation/dev-tools/kunit/run_wrapper.rst
+
+
+base-commit: 4c388a8e740d3235a194f330c8ef327deef710f6
+-- 
+2.34.1.173.g76aa8bc2d0-goog
+

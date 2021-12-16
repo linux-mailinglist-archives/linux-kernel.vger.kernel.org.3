@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3C6477F55
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CB9477F45
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242276AbhLPVmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242038AbhLPVlE (ORCPT
+        id S242140AbhLPVly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:41:54 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:57202 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241892AbhLPVkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:41:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17552C061784;
-        Thu, 16 Dec 2021 13:40:46 -0800 (PST)
-Date:   Thu, 16 Dec 2021 21:40:43 -0000
+        Thu, 16 Dec 2021 16:40:46 -0500
+Date:   Thu, 16 Dec 2021 21:40:44 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690844;
+        s=2020; t=1639690845;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=meoLzoK4WXrv/3nWab7SMN3ydNlXAQaDndy6kUP00rs=;
-        b=sor5ghSjMex8+pHGwmZ3nfcKp5qfEzprWVVfaqDFpx28HmV664rL1IjahmHRQV9gO9/Q0n
-        DLbiBqYfB1btrq/8HEBSx5N550C4fl1vbvqnvIj4Pskb4Rjoi45NHyQXfcouPYEipUtANy
-        HPNqHqL7DM+yM2PUZg46XadOEtrPbVN78WdCVpjvt8hmW3YYrHndA35SYiFJ6ueDf6fcIn
-        wJJmPReSF0XnrPzTWDyvTSoW4lWtX2VP7xOHP2Pxw3Axgfzjih1rpTsr4VFdnetQilrdcj
-        Uubnb1K+SIp2XO9o6tsLTYDFBjiJukFpt72m1iphWFvxVIPuuCH7BKXK3WZHtQ==
+        bh=awyRjiNQJLr50vKC8nDD3caVgAOHQOVPNRO3MmfUmxw=;
+        b=jM8cJWOmEwodimTXHHc2yWzfJBaVyfJEzCZAOofEuAP0zd6V29WzJfWLXutyvU2KCsJ9Z2
+        V5prG+qPqruqti/DCl7tC940rOeZ6zdyK4tlGhDARmBNX+iaiA8GXbfqIQMXV6kDdIE3gL
+        elHIOFfL+1Bc/L7PUr+4nexNTz4t8uwIyIaqv471B85CdW0LNcCLXfhcFa+WcyVgfNso9D
+        ezzt8WqFfSHBpTYJXraZFK2dPSW05zybX41HAEQUAxAVaHYhY979YuvSO46scvoAppY2ZZ
+        FOC0xGkS1E9IfnTuUiKThlBXU3Tr003hIlFgIha4NIiLDCVZBTrZxg8nwvq7/Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690844;
+        s=2020e; t=1639690845;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=meoLzoK4WXrv/3nWab7SMN3ydNlXAQaDndy6kUP00rs=;
-        b=6k+pcIFuxeHd3LI/5nYNnkxQbxTy4DZACHFh0L2U4w8iAq8LK866roSAa80NuZYimPX7z5
-        QI9p7CbTYUvB46BA==
+        bh=awyRjiNQJLr50vKC8nDD3caVgAOHQOVPNRO3MmfUmxw=;
+        b=LLycbAFtRL4n6/+S624cqLxwMPBrMkA+c1akH0+T7zvgKZLr9cI9N8oMhfRPuwWPkqFJO2
+        lg1dg30unWes+6BA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] genirq/msi: Add mutex for MSI list protection
+Subject: [tip: irq/msi] genirq/msi: Move descriptor list to struct msi_device_data
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Michael Kelley <mikelley@microsoft.com>,
-        Nishanth Menon <nm@ti.com>, Jason Gunthorpe <jgg@nvidia.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211206210747.708877269@linutronix.de>
-References: <20211206210747.708877269@linutronix.de>
+        Nishanth Menon <nm@ti.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211206210747.650487479@linutronix.de>
+References: <20211206210747.650487479@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969084377.23020.16547898685316963450.tip-bot2@tip-bot2>
+Message-ID: <163969084459.23020.4713051114932735681.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,99 +61,114 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     b5f687f97d1e112493fe0447a1fb09fbd93c334b
-Gitweb:        https://git.kernel.org/tip/b5f687f97d1e112493fe0447a1fb09fbd93c334b
+Commit-ID:     125282cd4f33ecd53a24ae4807409da0e5e90fd4
+Gitweb:        https://git.kernel.org/tip/125282cd4f33ecd53a24ae4807409da0e5e90fd4
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 06 Dec 2021 23:51:05 +01:00
+AuthorDate:    Mon, 06 Dec 2021 23:51:04 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 16 Dec 2021 22:22:17 +01:00
+CommitterDate: Thu, 16 Dec 2021 22:22:16 +01:00
 
-genirq/msi: Add mutex for MSI list protection
+genirq/msi: Move descriptor list to struct msi_device_data
 
-For upcoming runtime extensions of MSI-X interrupts it's required to
-protect the MSI descriptor list. Add a mutex to struct msi_device_data and
-provide lock/unlock functions.
+It's only required when MSI is in use.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
 Tested-by: Nishanth Menon <nm@ti.com>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211206210747.708877269@linutronix.de
+Link: https://lore.kernel.org/r/20211206210747.650487479@linutronix.de
 
 ---
- include/linux/msi.h |  5 +++++
- kernel/irq/msi.c    | 21 +++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ drivers/base/core.c    | 3 ---
+ include/linux/device.h | 4 ----
+ include/linux/msi.h    | 4 +++-
+ kernel/irq/msi.c       | 5 ++++-
+ 4 files changed, 7 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index f26c668..f898786 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2874,9 +2874,6 @@ void device_initialize(struct device *dev)
+ 	INIT_LIST_HEAD(&dev->devres_head);
+ 	device_pm_init(dev);
+ 	set_dev_node(dev, NUMA_NO_NODE);
+-#ifdef CONFIG_GENERIC_MSI_IRQ
+-	INIT_LIST_HEAD(&dev->msi_list);
+-#endif
+ 	INIT_LIST_HEAD(&dev->links.consumers);
+ 	INIT_LIST_HEAD(&dev->links.suppliers);
+ 	INIT_LIST_HEAD(&dev->links.defer_sync);
+diff --git a/include/linux/device.h b/include/linux/device.h
+index f0033cd..9345972 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -423,7 +423,6 @@ struct dev_msi_info {
+  * @pins:	For device pin management.
+  *		See Documentation/driver-api/pin-control.rst for details.
+  * @msi:	MSI related data
+- * @msi_list:	Hosts MSI descriptors
+  * @numa_node:	NUMA node this device is close to.
+  * @dma_ops:    DMA mapping operations for this device.
+  * @dma_mask:	Dma mask (if dma'ble device).
+@@ -519,9 +518,6 @@ struct device {
+ 	struct dev_pin_info	*pins;
+ #endif
+ 	struct dev_msi_info	msi;
+-#ifdef CONFIG_GENERIC_MSI_IRQ
+-	struct list_head	msi_list;
+-#endif
+ #ifdef CONFIG_DMA_OPS
+ 	const struct dma_map_ops *dma_ops;
+ #endif
 diff --git a/include/linux/msi.h b/include/linux/msi.h
-index 4223e47..2cf6c53 100644
+index 7593fc3..4223e47 100644
 --- a/include/linux/msi.h
 +++ b/include/linux/msi.h
-@@ -3,6 +3,7 @@
- #define LINUX_MSI_H
- 
- #include <linux/cpumask.h>
-+#include <linux/mutex.h>
- #include <linux/list.h>
- #include <asm/msi.h>
- 
-@@ -145,17 +146,21 @@ struct msi_desc {
+@@ -144,11 +144,13 @@ struct msi_desc {
+  * @properties:		MSI properties which are interesting to drivers
   * @attrs:		Pointer to the sysfs attribute group
   * @platform_data:	Platform-MSI specific data
-  * @list:		List of MSI descriptors associated to the device
-+ * @mutex:		Mutex protecting the MSI list
++ * @list:		List of MSI descriptors associated to the device
   */
  struct msi_device_data {
  	unsigned long			properties;
  	const struct attribute_group    **attrs;
  	struct platform_msi_priv_data	*platform_data;
- 	struct list_head		list;
-+	struct mutex			mutex;
++	struct list_head		list;
  };
  
  int msi_setup_device_data(struct device *dev);
- 
- unsigned int msi_get_virq(struct device *dev, unsigned int index);
-+void msi_lock_descs(struct device *dev);
-+void msi_unlock_descs(struct device *dev);
+@@ -157,7 +159,7 @@ unsigned int msi_get_virq(struct device *dev, unsigned int index);
  
  /* Helpers to hide struct msi_desc implementation details */
  #define msi_desc_to_dev(desc)		((desc)->dev)
+-#define dev_to_msi_list(dev)		(&(dev)->msi_list)
++#define dev_to_msi_list(dev)		(&(dev)->msi.data->list)
+ #define first_msi_entry(dev)		\
+ 	list_first_entry(dev_to_msi_list((dev)), struct msi_desc, list)
+ #define for_each_msi_entry(desc, dev)	\
 diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index c66787d..97ec245 100644
+index ab5e83f..c66787d 100644
 --- a/kernel/irq/msi.c
 +++ b/kernel/irq/msi.c
-@@ -103,12 +103,33 @@ int msi_setup_device_data(struct device *dev)
+@@ -75,7 +75,9 @@ EXPORT_SYMBOL_GPL(get_cached_msi_msg);
+ 
+ static void msi_device_data_release(struct device *dev, void *res)
+ {
+-	WARN_ON_ONCE(!list_empty(&dev->msi_list));
++	struct msi_device_data *md = res;
++
++	WARN_ON_ONCE(!list_empty(&md->list));
+ 	dev->msi.data = NULL;
+ }
+ 
+@@ -100,6 +102,7 @@ int msi_setup_device_data(struct device *dev)
+ 	if (!md)
  		return -ENOMEM;
  
- 	INIT_LIST_HEAD(&md->list);
-+	mutex_init(&md->mutex);
++	INIT_LIST_HEAD(&md->list);
  	dev->msi.data = md;
  	devres_add(dev, md);
  	return 0;
- }
- 
- /**
-+ * msi_lock_descs - Lock the MSI descriptor storage of a device
-+ * @dev:	Device to operate on
-+ */
-+void msi_lock_descs(struct device *dev)
-+{
-+	mutex_lock(&dev->msi.data->mutex);
-+}
-+EXPORT_SYMBOL_GPL(msi_lock_descs);
-+
-+/**
-+ * msi_unlock_descs - Unlock the MSI descriptor storage of a device
-+ * @dev:	Device to operate on
-+ */
-+void msi_unlock_descs(struct device *dev)
-+{
-+	mutex_unlock(&dev->msi.data->mutex);
-+}
-+EXPORT_SYMBOL_GPL(msi_unlock_descs);
-+
-+/**
-  * msi_get_virq - Return Linux interrupt number of a MSI interrupt
-  * @dev:	Device to operate on
-  * @index:	MSI interrupt index to look for (0-based)

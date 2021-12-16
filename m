@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EB4477F5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B4E477F64
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241865AbhLPVmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:42:36 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:57100 "EHLO
+        id S242702AbhLPVmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:42:50 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:57088 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241866AbhLPVlG (ORCPT
+        with ESMTP id S241792AbhLPVlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:41:06 -0500
+        Thu, 16 Dec 2021 16:41:05 -0500
 Date:   Thu, 16 Dec 2021 21:41:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690865;
+        s=2020; t=1639690864;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IfpouTZ5uNZJuWBVkyTJCJnnP+TtyHcXjApBri0DXXg=;
-        b=r3BaeUKu8X5s4O5THmi+mZ69tccgiBZDGpgYezWOTL1Ou3iSwmS/msmwe6a66mw0KplSW6
-        dY+VbKVHLDpv3teHOAKUQvXu17A2qWKbu7onkiSYvQZF7GA6KDTDt7ISFa5vJ7v2ZrnlOb
-        dC5Og4V/eMddi7IZ0FUbY8gb6kgLfYqXz0UcB8Zk8AnVA6HPCoTwRBLYr1AOzngW4M9vEz
-        b+LXa8bRL0PIGxFJX7YDZEFZCkJnZSzo0bxMh+6OZ4B/o70J32htYiJJEghmSqid8iQaSq
-        jTuTlS28iwrD20mV8aOF48AK8DBHeot9G4a89uQ4ZO/QhO8I3BGyzG+SuAwKrA==
+        bh=laeDUp6ULIbwtEO/TcddrqRLEJKftYmbGLXbSpNIqUU=;
+        b=28AB3JqKs+cNll9z09EaDC5kVC8sTUg9UbrOyUzYbbS15oUIfLHKqQHEo/LxCwLyVCdxCR
+        AVY0lq/XI3FpCu64yNlsqwpvL0MdL6MtxgGDOT+7/Sp798H5lJif8t4TKODqTJl9SnkzwB
+        qmjP2NiZS2alwGDFl4Cs9soGcCiKdpPzAgloFzENQ+tbF32Kwr7+xVCTMyTIuXtBIXSOKV
+        N0DT1nrQ693kRU1XL07QnlaGuza0gLnfRGhF8+HR76T41Ptz/PS9EKlhBYrAAMG+u0naJM
+        r0RgxtyD+9/LzUJl7rv5q8+JTngBivXEJKtEo8NUYXRf5DXm1yPoWx6qqewR3A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690865;
+        s=2020e; t=1639690864;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IfpouTZ5uNZJuWBVkyTJCJnnP+TtyHcXjApBri0DXXg=;
-        b=qj6b5HpZ9SgGCWOXYDvW4aeLrrT56ET6Gr//WWHY2+kMxCVNMnimvVDrITX1+Vjp7X9dOO
-        ylNoWid12rTskWCw==
+        bh=laeDUp6ULIbwtEO/TcddrqRLEJKftYmbGLXbSpNIqUU=;
+        b=MVDQKZwn9HzFfgjWsIcZG1XqLuKgJed0XM5Rfv66oeaxZJkOVMbicwx5784iSdC8L7rSUW
+        KHiD6mThS7uNexCw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] genirq/msi: Provide msi_device_populate/destroy_sysfs()
+Subject: [tip: irq/msi] PCI/MSI: Let the irq code handle sysfs groups
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Michael Kelley <mikelley@microsoft.com>,
         Nishanth Menon <nm@ti.com>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211210221813.988659194@linutronix.de>
-References: <20211210221813.988659194@linutronix.de>
+In-Reply-To: <20211210221814.048612053@linutronix.de>
+References: <20211210221814.048612053@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969086400.23020.12194266729832138041.tip-bot2@tip-bot2>
+Message-ID: <163969086316.23020.5798765956546581612.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,127 +62,137 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     bf6e054e0e3fbc9614355b760e18c8a14f952a4e
-Gitweb:        https://git.kernel.org/tip/bf6e054e0e3fbc9614355b760e18c8a14f952a4e
+Commit-ID:     ffd84485e6beb9cad3e5a133d88201b995298c33
+Gitweb:        https://git.kernel.org/tip/ffd84485e6beb9cad3e5a133d88201b995298c33
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 10 Dec 2021 23:19:03 +01:00
+AuthorDate:    Fri, 10 Dec 2021 23:19:05 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 16 Dec 2021 22:16:39 +01:00
 
-genirq/msi: Provide msi_device_populate/destroy_sysfs()
+PCI/MSI: Let the irq code handle sysfs groups
 
-Add new allocation functions which can be activated by domain info
-flags. They store the groups pointer in struct msi_device_data.
+Set the domain info flag which makes the core code handle sysfs groups and
+put an explicit invocation into the legacy code.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
 Tested-by: Nishanth Menon <nm@ti.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211210221813.988659194@linutronix.de
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Link: https://lore.kernel.org/r/20211210221814.048612053@linutronix.de
 
 ---
- include/linux/msi.h |  4 ++++
- kernel/irq/msi.c    | 42 ++++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 44 insertions(+), 2 deletions(-)
+ drivers/pci/msi/irqdomain.c |  2 +-
+ drivers/pci/msi/legacy.c    |  6 +++++-
+ drivers/pci/msi/msi.c       | 23 -----------------------
+ include/linux/pci.h         |  1 -
+ 4 files changed, 6 insertions(+), 26 deletions(-)
 
-diff --git a/include/linux/msi.h b/include/linux/msi.h
-index 7e4c8fd..1b96dc4 100644
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -56,6 +56,8 @@ struct irq_data;
- struct msi_desc;
- struct pci_dev;
- struct platform_msi_priv_data;
-+struct attribute_group;
-+
- void __get_cached_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
- #ifdef CONFIG_GENERIC_MSI_IRQ
- void get_cached_msi_msg(unsigned int irq, struct msi_msg *msg);
-@@ -174,9 +176,11 @@ struct msi_desc {
- /**
-  * msi_device_data - MSI per device data
-  * @properties:		MSI properties which are interesting to drivers
-+ * @attrs:		Pointer to the sysfs attribute group
-  */
- struct msi_device_data {
- 	unsigned long			properties;
-+	const struct attribute_group    **attrs;
- };
+diff --git a/drivers/pci/msi/irqdomain.c b/drivers/pci/msi/irqdomain.c
+index a554690..26b23a1 100644
+--- a/drivers/pci/msi/irqdomain.c
++++ b/drivers/pci/msi/irqdomain.c
+@@ -159,7 +159,7 @@ struct irq_domain *pci_msi_create_irq_domain(struct fwnode_handle *fwnode,
+ 	if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
+ 		pci_msi_domain_update_chip_ops(info);
  
- int msi_setup_device_data(struct device *dev);
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 6bca6ad..dd65e67 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -200,6 +200,20 @@ error_attrs:
- }
+-	info->flags |= MSI_FLAG_ACTIVATE_EARLY;
++	info->flags |= MSI_FLAG_ACTIVATE_EARLY | MSI_FLAG_DEV_SYSFS;
+ 	if (IS_ENABLED(CONFIG_GENERIC_IRQ_RESERVATION_MODE))
+ 		info->flags |= MSI_FLAG_MUST_REACTIVATE;
  
- /**
-+ * msi_device_populate_sysfs - Populate msi_irqs sysfs entries for a device
-+ * @dev:	The device (PCI, platform etc) which will get sysfs entries
-+ */
-+int msi_device_populate_sysfs(struct device *dev)
-+{
-+	const struct attribute_group **group = msi_populate_sysfs(dev);
-+
-+	if (IS_ERR(group))
-+		return PTR_ERR(group);
-+	dev->msi.data->attrs = group;
-+	return 0;
-+}
-+
-+/**
-  * msi_destroy_sysfs - Destroy msi_irqs sysfs entries for devices
-  * @dev:		The device(PCI, platform etc) who will remove sysfs entries
-  * @msi_irq_groups:	attribute_group for device msi_irqs entries
-@@ -225,6 +239,17 @@ void msi_destroy_sysfs(struct device *dev, const struct attribute_group **msi_ir
- 		kfree(msi_irq_groups);
- 	}
- }
-+
-+/**
-+ * msi_device_destroy_sysfs - Destroy msi_irqs sysfs entries for a device
-+ * @dev:		The device (PCI, platform etc) for which to remove
-+ *			sysfs entries
-+ */
-+void msi_device_destroy_sysfs(struct device *dev)
-+{
-+	msi_destroy_sysfs(dev, dev->msi.data->attrs);
-+	dev->msi.data->attrs = NULL;
-+}
- #endif
- 
- #ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-@@ -672,8 +697,19 @@ int msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev,
+diff --git a/drivers/pci/msi/legacy.c b/drivers/pci/msi/legacy.c
+index d52cff1..773f351 100644
+--- a/drivers/pci/msi/legacy.c
++++ b/drivers/pci/msi/legacy.c
+@@ -70,10 +70,14 @@ int pci_msi_legacy_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
  {
- 	struct msi_domain_info *info = domain->host_data;
- 	struct msi_domain_ops *ops = info->ops;
-+	int ret;
-+
-+	ret = ops->domain_alloc_irqs(domain, dev, nvec);
-+	if (ret)
-+		return ret;
-+
-+	if (!(info->flags & MSI_FLAG_DEV_SYSFS))
-+		return 0;
+ 	int ret = arch_setup_msi_irqs(dev, nvec, type);
  
--	return ops->domain_alloc_irqs(domain, dev, nvec);
-+	ret = msi_device_populate_sysfs(dev);
-+	if (ret)
-+		msi_domain_free_irqs(domain, dev);
+-	return pci_msi_setup_check_result(dev, type, ret);
++	ret = pci_msi_setup_check_result(dev, type, ret);
++	if (!ret)
++		ret = msi_device_populate_sysfs(&dev->dev);
 +	return ret;
  }
  
- void __msi_domain_free_irqs(struct irq_domain *domain, struct device *dev)
-@@ -712,7 +748,9 @@ void msi_domain_free_irqs(struct irq_domain *domain, struct device *dev)
- 	struct msi_domain_info *info = domain->host_data;
- 	struct msi_domain_ops *ops = info->ops;
- 
--	return ops->domain_free_irqs(domain, dev);
-+	if (info->flags & MSI_FLAG_DEV_SYSFS)
-+		msi_device_destroy_sysfs(dev);
-+	ops->domain_free_irqs(domain, dev);
+ void pci_msi_legacy_teardown_msi_irqs(struct pci_dev *dev)
+ {
++	msi_device_destroy_sysfs(&dev->dev);
+ 	arch_teardown_msi_irqs(dev);
  }
+diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+index 369e3c5..76c15be 100644
+--- a/drivers/pci/msi/msi.c
++++ b/drivers/pci/msi/msi.c
+@@ -233,11 +233,6 @@ static void free_msi_irqs(struct pci_dev *dev)
+ 			for (i = 0; i < entry->nvec_used; i++)
+ 				BUG_ON(irq_has_action(entry->irq + i));
  
- /**
+-	if (dev->msi_irq_groups) {
+-		msi_destroy_sysfs(&dev->dev, dev->msi_irq_groups);
+-		dev->msi_irq_groups = NULL;
+-	}
+-
+ 	pci_msi_teardown_msi_irqs(dev);
+ 
+ 	list_for_each_entry_safe(entry, tmp, msi_list, list) {
+@@ -455,7 +450,6 @@ static int msi_verify_entries(struct pci_dev *dev)
+ static int msi_capability_init(struct pci_dev *dev, int nvec,
+ 			       struct irq_affinity *affd)
+ {
+-	const struct attribute_group **groups;
+ 	struct msi_desc *entry;
+ 	int ret;
+ 
+@@ -486,14 +480,6 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
+ 	if (ret)
+ 		goto err;
+ 
+-	groups = msi_populate_sysfs(&dev->dev);
+-	if (IS_ERR(groups)) {
+-		ret = PTR_ERR(groups);
+-		goto err;
+-	}
+-
+-	dev->msi_irq_groups = groups;
+-
+ 	/* Set MSI enabled bits	*/
+ 	pci_intx_for_msi(dev, 0);
+ 	pci_msi_set_enable(dev, 1);
+@@ -622,7 +608,6 @@ static void msix_mask_all(void __iomem *base, int tsize)
+ static int msix_capability_init(struct pci_dev *dev, struct msix_entry *entries,
+ 				int nvec, struct irq_affinity *affd)
+ {
+-	const struct attribute_group **groups;
+ 	void __iomem *base;
+ 	int ret, tsize;
+ 	u16 control;
+@@ -664,14 +649,6 @@ static int msix_capability_init(struct pci_dev *dev, struct msix_entry *entries,
+ 
+ 	msix_update_entries(dev, entries);
+ 
+-	groups = msi_populate_sysfs(&dev->dev);
+-	if (IS_ERR(groups)) {
+-		ret = PTR_ERR(groups);
+-		goto out_free;
+-	}
+-
+-	dev->msi_irq_groups = groups;
+-
+ 	/* Disable INTX */
+ 	pci_intx_for_msi(dev, 0);
+ 
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index a09736d..0a7b6b2 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -476,7 +476,6 @@ struct pci_dev {
+ #ifdef CONFIG_PCI_MSI
+ 	void __iomem	*msix_base;
+ 	raw_spinlock_t	msi_lock;
+-	const struct attribute_group **msi_irq_groups;
+ #endif
+ 	struct pci_vpd	vpd;
+ #ifdef CONFIG_PCIE_DPC

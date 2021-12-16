@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B82477394
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DB5477395
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbhLPNus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:50:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42256 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236139AbhLPNug (ORCPT
+        id S236900AbhLPNux convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Dec 2021 08:50:53 -0500
+Received: from mout.kundenserver.de ([212.227.126.134]:49341 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236472AbhLPNup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:50:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DEF3B8242A;
-        Thu, 16 Dec 2021 13:50:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 714ACC36AE8;
-        Thu, 16 Dec 2021 13:50:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639662633;
-        bh=AbhvMEHMWIrh7e9CWfIY2JYFJ5gwFAB2jgOuFsthmyo=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=TKA/FRmozr/tU9ROOvxVLYg3DipKuXOctyxmMbr+Y00XEedVcaedz+AU3/dozv3sZ
-         q/M2W8KveteIB15BVbsnZLQ6iMY1tlu0jZWs9oQSP5GS5wJE9aMLirA8VC7YaohsLa
-         rH6wpHX2MzlsX0T1V5qucjcz0zP91IkE3JwYNgWOis9h3wBVm8qRhejoeolUgVIfDy
-         PcKZ0bByGv1gqQ23Cu+HhYblN5jtReKBHx9BIKLqwRXj17EKkW5WJsaHOYmSCyQEsr
-         XkXQuKDFrinrS6WR7DTFRLraLADZUOa5Prd6/wxzbNH9cYLsziwhiZA9bILnWhCl/r
-         /Dz/zMWeaYFDw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-hardening@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/17] ath11k: Use memset_startat() for clearing queue descriptors
-References: <20211213223331.135412-1-keescook@chromium.org>
-        <20211213223331.135412-9-keescook@chromium.org>
-        <87v8zriv1c.fsf@codeaurora.org> <877dc7i3zc.fsf@codeaurora.org>
-        <202112140904.2D64E570@keescook>
-Date:   Thu, 16 Dec 2021 15:50:25 +0200
-In-Reply-To: <202112140904.2D64E570@keescook> (Kees Cook's message of "Tue, 14
-        Dec 2021 09:05:37 -0800")
-Message-ID: <875yrod5ge.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 16 Dec 2021 08:50:45 -0500
+Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M8yPu-1mu1On3Sqc-0068yT; Thu, 16 Dec 2021 14:50:43 +0100
+Received: by mail-wm1-f45.google.com with SMTP id p18so18935567wmq.5;
+        Thu, 16 Dec 2021 05:50:43 -0800 (PST)
+X-Gm-Message-State: AOAM530sNw3bTznSxlxdOI0VhrIfdsD1XyYijLOz1yP3mS2m/Vu6FI/T
+        9heHIAuP3aEiYaMJlXWgGa6ZBUfm4EHyalehKx4=
+X-Google-Smtp-Source: ABdhPJxCd/5MpFbOtsFJckUJOZrM9UCRFM6hiyz1bgYXaPUV/X3iHVLNzmr2Do1QRYr3DDtCk0coUfAVZdKdklRM2bE=
+X-Received: by 2002:a7b:c448:: with SMTP id l8mr5023776wmi.173.1639662643472;
+ Thu, 16 Dec 2021 05:50:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
+ <20210925203224.10419-6-sergio.paracuellos@gmail.com> <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
+ <6ee31420-ef67-471e-a924-a0158b4a9428@www.fastmail.com>
+In-Reply-To: <6ee31420-ef67-471e-a924-a0158b4a9428@www.fastmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 16 Dec 2021 14:50:27 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2i6eW8JunE_6h6OTCa51eHfPahQQhaGHGWePX+r4ybww@mail.gmail.com>
+Message-ID: <CAK8P3a2i6eW8JunE_6h6OTCa51eHfPahQQhaGHGWePX+r4ybww@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific 'pci_remap_iospace()'
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Xi Ruoyao <xry111@mengyan1223.wang>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Liviu Dudau <Liviu.Dudau@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:80Pym4TEwciI8AFXL+DnTsQX0Q/Xoj13+3T+GeEtE7Z+QQKJQ72
+ aAtfMrv/GmlJGVB/4HHezvqzEuWQAwqqpuphykCYCryJ3TZqZ8myyTdnEEOBJwz0Q+RcUOJ
+ qXQyfa7SJgpAjnzUlvZAZbhUNpLfxDD+acqXCUOKSxWgg+knGUTuK97mbugMdcW3EW3JVDb
+ hTX5Sg9xKxeN7kNbfQ/tA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cQlJAIfGIjU=:5/EWPlfnvfCXCShInG+yRd
+ ByIY2MmV5ngpwFFRbIIZDXF6zjzp+skhgntbfTHIHdDERW/rPB2hZEfwxtuYURwUozI42bEqc
+ ZL0MquQkpXWIrzMSUN0DQZ6WpfwvdKxmTyMTDnk2FYapFuIyK3pEEuVAsuMiaDC2AqzcX2Tt8
+ xOVXzjv7nkuk2r7pdnnpH6slFYfIEZop5JuFcK0QRl4zA+jbLuf2nQ29ZgLfm+kppnx1cW6Oz
+ BUNdeMdE22csk9GfvCJHv2QsmVpbfwRjVMIXH0W7DI+V+2dtkmmAgeAHsKRzPFpe1OlPAn+ck
+ if3JACp0LafLuaw9IRRmBiY5qu29EQnZslS3uoDea3LZfLAkPXfUFMny3hbpTjFXIaVaeLN9L
+ ZxENR/LboNdg6MAD9z0vmPfKnrS0hILS8RP0pQcd6/QGsRpbv7L4hK7zsBLTb8A0ez3OOvn9S
+ FBK3pcyY750PIAEtNm28WsRMOdNo7UlGbCYse7ZxQ5b9mf+pe7JQszaUJ+a+T0HN6cmvq/maa
+ SY9tQOHfAnaNSrJMCH/2W+EP7CcMBThPMizko99nPFni4tz1r0pj/UctxigkkmCEDdv5nqppP
+ inS5ZcHMas4MR4Is0HhjP1c3fVJxFzTGK90Y5phEpZ8dXR8FA/UKWaZua+9pfWqzCxUL2y7z5
+ iaiMoSdeq7L+OjHy+q4YJGOIZkB3Yjr4hfQPoHXmy+sF8jfu3IUtn2+47D9kkg5FabYR9WF8V
+ xnOoEY7M8QD5YH8UB5zfLMNmHCjpEyz58eYbZvTKyKgFmiZFKX4fSCo0Kd2oaw8Vwf/D2L5iN
+ vb0/JCIicQIi/hA3kjVIaSH7996xjBClFT/MAZTQzAwCfz6CYM=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+On Thu, Dec 16, 2021 at 2:07 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> 在2021年12月16日十二月 上午11:44，Xi Ruoyao写道：
 
-> On Tue, Dec 14, 2021 at 05:46:31PM +0200, Kalle Valo wrote:
->> Kalle Valo <kvalo@kernel.org> writes:
->> 
->> > Kees Cook <keescook@chromium.org> writes:
->> >
->> >> In preparation for FORTIFY_SOURCE performing compile-time and run-time
->> >> field bounds checking for memset(), avoid intentionally writing across
->> >> neighboring fields.
->> >>
->> >> Use memset_startat() so memset() doesn't get confused about writing
->> >> beyond the destination member that is intended to be the starting point
->> >> of zeroing through the end of the struct. Additionally split up a later
->> >> field-spanning memset() so that memset() can reason about the size.
->> >>
->> >> Cc: Kalle Valo <kvalo@codeaurora.org>
->> >> Cc: "David S. Miller" <davem@davemloft.net>
->> >> Cc: Jakub Kicinski <kuba@kernel.org>
->> >> Cc: ath11k@lists.infradead.org
->> >> Cc: linux-wireless@vger.kernel.org
->> >> Cc: netdev@vger.kernel.org
->> >> Signed-off-by: Kees Cook <keescook@chromium.org>
->> >
->> > What's the plan for this patch? I would like to take this via my ath
->> > tree to avoid conflicts.
->> 
->> Actually this has been already applied:
->> 
->> https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?h=ath-next&id=d5549e9a6b86
->> 
->> Why are you submitting the same patch twice?
->
-> These are all part of a topic branch, and the cover letter mentioned
-> that a set of them have already been taken but haven't appeared in -next
-> (which was delayed).
+> Another way could be keeping a linked list about PIO->PHYS mapping instead of using the single io_port_base variable.
 
-Do note that some wireless drivers (at least ath, mt76 and iwlwifi) are
-maintained in separate trees, so don't be surprised if it takes several
-weeks before they are visible in linux-next.
+I think that would add a lot of complexity that isn't needed here. Not
+sure if all MIPS CPUs
+can do it, but the approach used on Arm is what fits in best with the
+PCI drivers, these
+reserve a virtual address range for the ports, and ioremap the
+physical addresses into
+the PIO range according to the mapping.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+For the loongson case specifically, that's not even needed though, as
+the two buses
+have physically contiguous I/O port ranges, the code just needs to
+detect this special
+case.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+        Arnd

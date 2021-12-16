@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 065D2477F05
+	by mail.lfdr.de (Postfix) with ESMTP id 539BD477F06
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241926AbhLPVku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:40:50 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:56996 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241700AbhLPVk0 (ORCPT
+        id S241954AbhLPVkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241740AbhLPVk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:40:26 -0500
-Date:   Thu, 16 Dec 2021 21:40:24 -0000
+        Thu, 16 Dec 2021 16:40:28 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA7DC06173E;
+        Thu, 16 Dec 2021 13:40:27 -0800 (PST)
+Date:   Thu, 16 Dec 2021 21:40:25 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690825;
+        s=2020; t=1639690826;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BIIHXt8Tfbk9UrqyUeDEzql0H21S4J8ZAgpYWPiUGys=;
-        b=cjjtxaUN7rrNFYVw6iCCAfXAfqsePPehSGNA1+YuWlA7vLifXI8/q0W3Qd1e8mw3OLVvKS
-        M6MS6eLi+u1sVTPPsvbopF2SN3nzPdq0Aqcdt9CoXRZ+CJulGLeP6Zn8k5yh9eb9VJ1Nul
-        lHCGS9W5T5RQ1kueBywk/V1x7fLfIr7uU1R4PCRFXxV89JBSIv4VqFDGxYLOtza5TRZH1B
-        sLHLZNSIaIxV1VRr8/C5eG0oeijlr86VKbOxil5/4gcukdPJLuHKreNv9Hwb23MdGPJ5mg
-        e00ynLmbiaiUa0Jbe05jgjFJ5p725ZPRESh9jyjqnfOnOHHfPwZfHjUHyAs/2g==
+        bh=GJUs8N2lCbwA44n/pmFlUhqjL6PgKnoju5cqVkNQ4AY=;
+        b=E6dkcsfi8ViT6612pm61BUR1vW17O9NLwm2OOblow6mI9SYbJQOqe4d9/X6GC3aNyWrMVY
+        rXbait45WQei/qSPARZ3yST+I9IaMHY/WeFSownxHis5DxoKYmzgCWgRgrRsInhSoGdVeo
+        2g4tg+GICp8Uq7SJO8TloboBxJJhar2JYIdYOoLB2YGRrdTOiQbS4v8aDiK+Mlbf3/Z4G2
+        HAr69sj3TQc/JSGLH7Rg+QLkd4kIcfbOZIBzIss930tDyyG3KDDSfP0kf8pII0gX9nVgrT
+        ZbPoniKAcE+SGVw2/qd9Q0lJnVqKfSpRCj9Ze9GJUkxnBV698GtPOtWrgrDEuw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690825;
+        s=2020e; t=1639690826;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BIIHXt8Tfbk9UrqyUeDEzql0H21S4J8ZAgpYWPiUGys=;
-        b=XCkLZLJG/JoYREMCqGMjGEY9ns7wDp/+G36I14lICk/jCmqrN8gt57fqmIaWLXZe+waqS7
-        sl0heUMADR8nQNAw==
+        bh=GJUs8N2lCbwA44n/pmFlUhqjL6PgKnoju5cqVkNQ4AY=;
+        b=KTaHMACh6oP/4jfgmZji253bBBzP1JWOndZcEV2GTjWXbDleLNDhksWRGmZT6ABTIZLYF+
+        wpLllUnDluJmvNCA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] platform-msi: Let core code handle MSI descriptors
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Nishanth Menon <nm@ti.com>,
+Subject: [tip: irq/msi] bus: fsl-mc-msi: Simplify MSI descriptor handling
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211206210748.903173257@linutronix.de>
-References: <20211206210748.903173257@linutronix.de>
+In-Reply-To: <20211206210748.847219474@linutronix.de>
+References: <20211206210748.847219474@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969082474.23020.16753725289318118811.tip-bot2@tip-bot2>
+Message-ID: <163969082559.23020.3944046336169427078.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,178 +61,122 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     653b50c5f96918238e0b51e783b291f6e9e692f9
-Gitweb:        https://git.kernel.org/tip/653b50c5f96918238e0b51e783b291f6e9e692f9
+Commit-ID:     e8604b1447b4a0c178019bdf809a4d52e1c235b6
+Gitweb:        https://git.kernel.org/tip/e8604b1447b4a0c178019bdf809a4d52e1c235b6
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 06 Dec 2021 23:51:41 +01:00
+AuthorDate:    Mon, 06 Dec 2021 23:51:39 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 16 Dec 2021 22:22:19 +01:00
 
-platform-msi: Let core code handle MSI descriptors
+bus: fsl-mc-msi: Simplify MSI descriptor handling
 
-Use the core functionality for platform MSI interrupt domains. The platform
-device MSI interrupt domains will be converted in a later step.
+Let the MSI irq domain code handle descriptor allocation and free.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Nishanth Menon <nm@ti.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211206210748.903173257@linutronix.de
+Link: https://lore.kernel.org/r/20211206210748.847219474@linutronix.de
 
 ---
- drivers/base/platform-msi.c | 112 +++++++++++++++--------------------
- 1 file changed, 48 insertions(+), 64 deletions(-)
+ drivers/bus/fsl-mc/fsl-mc-msi.c | 61 ++------------------------------
+ 1 file changed, 4 insertions(+), 57 deletions(-)
 
-diff --git a/drivers/base/platform-msi.c b/drivers/base/platform-msi.c
-index 88bdc4b..01c897c 100644
---- a/drivers/base/platform-msi.c
-+++ b/drivers/base/platform-msi.c
-@@ -107,57 +107,6 @@ static void platform_msi_update_chip_ops(struct msi_domain_info *info)
- 		info->flags &= ~MSI_FLAG_LEVEL_CAPABLE;
+diff --git a/drivers/bus/fsl-mc/fsl-mc-msi.c b/drivers/bus/fsl-mc/fsl-mc-msi.c
+index 4823947..5e0e439 100644
+--- a/drivers/bus/fsl-mc/fsl-mc-msi.c
++++ b/drivers/bus/fsl-mc/fsl-mc-msi.c
+@@ -170,6 +170,7 @@ struct irq_domain *fsl_mc_msi_create_irq_domain(struct fwnode_handle *fwnode,
+ 		fsl_mc_msi_update_dom_ops(info);
+ 	if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
+ 		fsl_mc_msi_update_chip_ops(info);
++	info->flags |= MSI_FLAG_ALLOC_SIMPLE_MSI_DESCS | MSI_FLAG_FREE_MSI_DESCS;
+ 
+ 	domain = msi_create_irq_domain(fwnode, info, parent);
+ 	if (domain)
+@@ -210,45 +211,7 @@ struct irq_domain *fsl_mc_find_msi_domain(struct device *dev)
+ 	return msi_domain;
  }
  
--static void platform_msi_free_descs(struct device *dev, int base, int nvec)
+-static void fsl_mc_msi_free_descs(struct device *dev)
 -{
 -	struct msi_desc *desc, *tmp;
 -
 -	list_for_each_entry_safe(desc, tmp, dev_to_msi_list(dev), list) {
--		if (desc->msi_index >= base &&
--		    desc->msi_index < (base + nvec)) {
--			list_del(&desc->list);
--			free_msi_entry(desc);
+-		list_del(&desc->list);
+-		free_msi_entry(desc);
+-	}
+-}
+-
+-static int fsl_mc_msi_alloc_descs(struct device *dev, unsigned int irq_count)
+-
+-{
+-	unsigned int i;
+-	int error;
+-	struct msi_desc *msi_desc;
+-
+-	for (i = 0; i < irq_count; i++) {
+-		msi_desc = alloc_msi_entry(dev, 1, NULL);
+-		if (!msi_desc) {
+-			dev_err(dev, "Failed to allocate msi entry\n");
+-			error = -ENOMEM;
+-			goto cleanup_msi_descs;
 -		}
--	}
--}
 -
--static int platform_msi_alloc_descs_with_irq(struct device *dev, int virq,
--					     int nvec)
--{
--	struct msi_desc *desc;
--	int i, base = 0;
--
--	if (!list_empty(dev_to_msi_list(dev))) {
--		desc = list_last_entry(dev_to_msi_list(dev),
--				       struct msi_desc, list);
--		base = desc->msi_index + 1;
--	}
--
--	for (i = 0; i < nvec; i++) {
--		desc = alloc_msi_entry(dev, 1, NULL);
--		if (!desc)
--			break;
--
--		desc->msi_index = base + i;
--		desc->irq = virq ? virq + i : 0;
--
--		list_add_tail(&desc->list, dev_to_msi_list(dev));
--	}
--
--	if (i != nvec) {
--		/* Clean up the mess */
--		platform_msi_free_descs(dev, base, nvec);
--
--		return -ENOMEM;
+-		msi_desc->msi_index = i;
+-		INIT_LIST_HEAD(&msi_desc->list);
+-		list_add_tail(&msi_desc->list, dev_to_msi_list(dev));
 -	}
 -
 -	return 0;
+-
+-cleanup_msi_descs:
+-	fsl_mc_msi_free_descs(dev);
+-	return error;
 -}
 -
--static int platform_msi_alloc_descs(struct device *dev, int nvec)
--{
--	return platform_msi_alloc_descs_with_irq(dev, 0, nvec);
--}
--
- /**
-  * platform_msi_create_irq_domain - Create a platform MSI interrupt domain
-  * @fwnode:		Optional fwnode of the interrupt controller
-@@ -180,7 +129,8 @@ struct irq_domain *platform_msi_create_irq_domain(struct fwnode_handle *fwnode,
- 		platform_msi_update_dom_ops(info);
- 	if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
- 		platform_msi_update_chip_ops(info);
--	info->flags |= MSI_FLAG_DEV_SYSFS;
-+	info->flags |= MSI_FLAG_DEV_SYSFS | MSI_FLAG_ALLOC_SIMPLE_MSI_DESCS |
-+		       MSI_FLAG_FREE_MSI_DESCS;
- 
- 	domain = msi_create_irq_domain(fwnode, info, parent);
- 	if (domain)
-@@ -262,20 +212,10 @@ int platform_msi_domain_alloc_irqs(struct device *dev, unsigned int nvec,
- 	if (err)
- 		return err;
- 
--	err = platform_msi_alloc_descs(dev, nvec);
--	if (err)
--		goto out_free_priv_data;
--
- 	err = msi_domain_alloc_irqs(dev->msi.domain, dev, nvec);
- 	if (err)
--		goto out_free_desc;
--
--	return 0;
-+		platform_msi_free_priv_data(dev);
- 
--out_free_desc:
--	platform_msi_free_descs(dev, 0, nvec);
--out_free_priv_data:
--	platform_msi_free_priv_data(dev);
- 	return err;
- }
- EXPORT_SYMBOL_GPL(platform_msi_domain_alloc_irqs);
-@@ -287,7 +227,6 @@ EXPORT_SYMBOL_GPL(platform_msi_domain_alloc_irqs);
- void platform_msi_domain_free_irqs(struct device *dev)
+-int fsl_mc_msi_domain_alloc_irqs(struct device *dev,
+-				 unsigned int irq_count)
++int fsl_mc_msi_domain_alloc_irqs(struct device *dev,  unsigned int irq_count)
  {
- 	msi_domain_free_irqs(dev->msi.domain, dev);
--	platform_msi_free_descs(dev, 0, MAX_DEV_MSIS);
- 	platform_msi_free_priv_data(dev);
- }
- EXPORT_SYMBOL_GPL(platform_msi_domain_free_irqs);
-@@ -361,6 +300,51 @@ free_priv:
- 	return NULL;
+ 	struct irq_domain *msi_domain;
+ 	int error;
+@@ -261,28 +224,17 @@ int fsl_mc_msi_domain_alloc_irqs(struct device *dev,
+ 	if (error)
+ 		return error;
+ 
+-	if (!list_empty(dev_to_msi_list(dev)))
++	if (msi_first_desc(dev, MSI_DESC_ALL))
+ 		return -EINVAL;
+ 
+-	error = fsl_mc_msi_alloc_descs(dev, irq_count);
+-	if (error < 0)
+-		return error;
+-
+ 	/*
+ 	 * NOTE: Calling this function will trigger the invocation of the
+ 	 * its_fsl_mc_msi_prepare() callback
+ 	 */
+ 	error = msi_domain_alloc_irqs(msi_domain, dev, irq_count);
+ 
+-	if (error) {
++	if (error)
+ 		dev_err(dev, "Failed to allocate IRQs\n");
+-		goto cleanup_msi_descs;
+-	}
+-
+-	return 0;
+-
+-cleanup_msi_descs:
+-	fsl_mc_msi_free_descs(dev);
+ 	return error;
  }
  
-+static void platform_msi_free_descs(struct device *dev, int base, int nvec)
-+{
-+	struct msi_desc *desc, *tmp;
-+
-+	list_for_each_entry_safe(desc, tmp, dev_to_msi_list(dev), list) {
-+		if (desc->msi_index >= base &&
-+		    desc->msi_index < (base + nvec)) {
-+			list_del(&desc->list);
-+			free_msi_entry(desc);
-+		}
-+	}
-+}
-+
-+static int platform_msi_alloc_descs_with_irq(struct device *dev, int virq,
-+					     int nvec)
-+{
-+	struct msi_desc *desc;
-+	int i, base = 0;
-+
-+	if (!list_empty(dev_to_msi_list(dev))) {
-+		desc = list_last_entry(dev_to_msi_list(dev),
-+				       struct msi_desc, list);
-+		base = desc->msi_index + 1;
-+	}
-+
-+	for (i = 0; i < nvec; i++) {
-+		desc = alloc_msi_entry(dev, 1, NULL);
-+		if (!desc)
-+			break;
-+
-+		desc->msi_index = base + i;
-+		desc->irq = virq + i;
-+
-+		list_add_tail(&desc->list, dev_to_msi_list(dev));
-+	}
-+
-+	if (i != nvec) {
-+		/* Clean up the mess */
-+		platform_msi_free_descs(dev, base, nvec);
-+		return -ENOMEM;
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * platform_msi_device_domain_free - Free interrupts associated with a platform-msi
-  *				     device domain
+@@ -295,9 +247,4 @@ void fsl_mc_msi_domain_free_irqs(struct device *dev)
+ 		return;
+ 
+ 	msi_domain_free_irqs(msi_domain, dev);
+-
+-	if (list_empty(dev_to_msi_list(dev)))
+-		return;
+-
+-	fsl_mc_msi_free_descs(dev);
+ }

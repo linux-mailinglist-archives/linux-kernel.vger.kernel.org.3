@@ -2,194 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A15477D43
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 21:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C95477D46
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 21:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241268AbhLPUTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 15:19:24 -0500
-Received: from mga04.intel.com ([192.55.52.120]:4252 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241251AbhLPUTX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 15:19:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639685963; x=1671221963;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VTdoDwSUbN5lrtrPO+GfCfJckY90GqN6n0VQaWAYodQ=;
-  b=Ab2gtzcmoN3K5yi+rsJ7JCLezKUq5UfFgNrNliMY1yFpEDp+HpxvXNWo
-   V01B7Qe5VdBfitTLuNHlwdWU1Q0T2untHBlFfUaKiKr2oMXA70zpea8Db
-   5v/BOrygVZUaruNB94cvAXezU36BmZ7MCRux7mgt+2igDFGzKpWfiliRJ
-   MfsShDCmHm3zCNCC/4mKuS6q5vBcWHr+hIwOImgLnn+EbcN1dyHEiYIXn
-   nMwx/r327WgHG3XUkaKIXFivd3u8PfX7na/K4l0MOzE8jXfQrRRMl8d5N
-   cTAPUuSIiti9cusmIbKGun4GM4GvYmQQdOyNYHrq9DXdSE8XRR+PTTZr4
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="238330523"
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="238330523"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 12:19:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="519409957"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 16 Dec 2021 12:19:21 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxxDl-0003lf-2G; Thu, 16 Dec 2021 20:19:21 +0000
-Date:   Fri, 17 Dec 2021 04:18:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 52979a8e8b591cdceb61190f3eeebc2399828510
-Message-ID: <61bb9f1d.k5Oc616bZSjVF7Ss%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S241289AbhLPUTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 15:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241282AbhLPUTd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 15:19:33 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDAEC06173E;
+        Thu, 16 Dec 2021 12:19:33 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id e3so92239270edu.4;
+        Thu, 16 Dec 2021 12:19:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=72vtUg8lpD9RmmoMvh+ZH1I3XqbPfTU1qYPquUy7V7s=;
+        b=gUE44e4FrDWAyGq5iIqAX6DcfeBlUxL6cVhanO8XzP04xxyEYbZF4PPGzTeq9jktDD
+         2jb4gf3O1Lalx6Knx1ZVKQ7wbYHjJ49OtfTLmaieQIngKmtmAAC7srcaeaPHz8d2IxUS
+         QgVP8MwVwfQ5Xi8lz3cDbQp4CDFFAQ5bzwihbOkJICofkOAuoD3+5jzH6Ng37g4isotN
+         0fxSiyygj2dLsJZx8y238rNVVJz3wswQp5KMqt0MTQshXYPWBVw9e7rkVarCE8WNCpoG
+         z3BbW2BCWap6vmNI1VV64fdWytHivFOcW2JaSmV3vDM8ru9TjpPOUAPvxFP6/RRyOJFh
+         GzyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=72vtUg8lpD9RmmoMvh+ZH1I3XqbPfTU1qYPquUy7V7s=;
+        b=TmLVZloqtDPe5vaMP7fOQi4LgT5JUXhgLM60VRADFVDNC0JKDf6uPczYxUzl8jilZA
+         4D6+qcPQy+hmSMSZhYX/SeuYuDF5Fz6ko41J9oBrWVJtMzk9jMsxP035xTgGZdXnGRU6
+         orgb637FQkILRSnX04hcwCORlpLqXD7qrveY4LM/ze2hUW3J4QCxRLIkhPf7HhYZK7N7
+         GwrAaZfBvn93Px2p6QHxmjBIspZ768/Vo10F7rv0GzMcJlRBpfrdWlymsnNsYw63Wvv7
+         1vsc5ZCh4J8nKaK0ZrVchdMbmcilmlIhCbnjRy148xvBJ3O38zx310YKWbMLzqj2/Gcx
+         H4vA==
+X-Gm-Message-State: AOAM533aP6DyYZH0h1N7CIVx6+x3l9z1VGgYDRzmWWODvX76WsR/Y+4M
+        HLaojNPwKmbjbZKQnsI6aKNQR0L7ULTGP7Vn6TbfAiI6VaaTTzX98c4=
+X-Google-Smtp-Source: ABdhPJzle6kPZJq6DVHDycIk891CMZBBF39xWduDs+8JvG3epYSRRZ/PQ2+wkVGsp6ZOvLoElqu94t5I+gFeaZ9FmX4=
+X-Received: by 2002:a17:906:30da:: with SMTP id b26mr17533409ejb.497.1639685971950;
+ Thu, 16 Dec 2021 12:19:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <1639660402-31207-1-git-send-email-akhilrajeev@nvidia.com>
+ <1639660402-31207-3-git-send-email-akhilrajeev@nvidia.com>
+ <CAHp75VcvrM0qLQE-04UZEkxbAvkE-MNSN7RGC7mPxj+1hoUyTw@mail.gmail.com> <BN9PR12MB52732B801C0D15BBBA71B8DDC0779@BN9PR12MB5273.namprd12.prod.outlook.com>
+In-Reply-To: <BN9PR12MB52732B801C0D15BBBA71B8DDC0779@BN9PR12MB5273.namprd12.prod.outlook.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 16 Dec 2021 22:18:54 +0200
+Message-ID: <CAHp75VfQpgWhKXM=1oRg8d_ntZvxkSArQv=6eaq7tyU6-KvJjg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] i2c: smbus: Use device_ functions instead of of_
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Suresh Mangipudi <smangipudi@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 52979a8e8b591cdceb61190f3eeebc2399828510  rcu: Mark ->expmask access in synchronize_rcu_expedited_wait()
+On Thu, Dec 16, 2021 at 6:08 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+> > On Thu, Dec 16, 2021 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
 
-elapsed time: 866m
+...
 
-configs tested: 123
-configs skipped: 3
+> > > -       irq = of_property_match_string(adapter->dev.of_node, "interrupt-
+> > names",
+> > > -                                      "smbus_alert");
+> > > +       irq = device_property_match_string(adapter->dev.parent, "interrupt-
+> > names",
+> > > +                                          "smbus_alert");
+> >
+> > Hmm... Adapter device node is not the same as the node for its parent.
+> > Do you have some code that propagates of_node from parent to child?
+> Adapter device does not have an of_node unless the adapter driver
+> sets it, I guess. I see all the adapter drivers add the of_node and
+> parent for adapter. Also, there are many places in i2c-core-base and
+> i2c-core-acpi where adapter->dev.parent is referred to as the adapter
+> driver device.
+>
+> Basically, adapter->dev.parent and adapter->dev.of_node would
+> ultimately refer to the same device (or the of_node of that device),
+> as far as I understand.
+> >
+> > I.o.w. I would expect to see
+> >
+> >        irq = device_property_match_string(&adapter->dev, "interrupt-names",
+> >
+> > here.
+> It would then require adding the fw_node as well from the adapter driver.
+> I felt it made more sense to refer adapter->dev.parent here as most of the
+> (or rather all of the) adapter drivers already sets it.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Is this
+https://elixir.bootlin.com/linux/latest/source/drivers/i2c/i2c-core-base.c#L1047
+what you are looking for?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211216
-m68k                          hp300_defconfig
-arm                        clps711x_defconfig
-arc                    vdk_hs38_smp_defconfig
-um                             i386_defconfig
-powerpc                     tqm8540_defconfig
-arm                       cns3420vb_defconfig
-arm                            dove_defconfig
-arm                        trizeps4_defconfig
-arc                          axs103_defconfig
-mips                           mtx1_defconfig
-arm                       netwinder_defconfig
-sh                        dreamcast_defconfig
-powerpc                        cell_defconfig
-powerpc                      makalu_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arm                     davinci_all_defconfig
-ia64                          tiger_defconfig
-arm                         s3c2410_defconfig
-powerpc                 mpc837x_mds_defconfig
-arm                        neponset_defconfig
-arm                       omap2plus_defconfig
-sh                          rsk7203_defconfig
-arc                            hsdk_defconfig
-powerpc                     pseries_defconfig
-xtensa                              defconfig
-sh                                  defconfig
-sh                        edosk7760_defconfig
-mips                          ath79_defconfig
-sparc                               defconfig
-powerpc                      katmai_defconfig
-riscv             nommu_k210_sdcard_defconfig
-arm                          lpd270_defconfig
-mips                           ci20_defconfig
-arm                              alldefconfig
-sh                           se7722_defconfig
-sh                   secureedge5410_defconfig
-mips                        qi_lb60_defconfig
-arm                        keystone_defconfig
-powerpc                      ppc40x_defconfig
-h8300                       h8s-sim_defconfig
-arm                           h3600_defconfig
-powerpc                 mpc8313_rdb_defconfig
-sh                               j2_defconfig
-sh                        edosk7705_defconfig
-nios2                               defconfig
-m68k                       m5275evb_defconfig
-microblaze                          defconfig
-arm                  randconfig-c002-20211216
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a006-20211216
-x86_64               randconfig-a005-20211216
-x86_64               randconfig-a001-20211216
-x86_64               randconfig-a002-20211216
-x86_64               randconfig-a003-20211216
-x86_64               randconfig-a004-20211216
-i386                 randconfig-a001-20211216
-i386                 randconfig-a002-20211216
-i386                 randconfig-a005-20211216
-i386                 randconfig-a003-20211216
-i386                 randconfig-a006-20211216
-i386                 randconfig-a004-20211216
-arc                  randconfig-r043-20211216
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+...
 
-clang tested configs:
-x86_64               randconfig-a011-20211216
-x86_64               randconfig-a014-20211216
-x86_64               randconfig-a012-20211216
-x86_64               randconfig-a013-20211216
-x86_64               randconfig-a016-20211216
-x86_64               randconfig-a015-20211216
-hexagon              randconfig-r045-20211216
-s390                 randconfig-r044-20211216
-riscv                randconfig-r042-20211216
-hexagon              randconfig-r041-20211216
+> > >         if (irq == -EINVAL || irq == -ENODATA)
+> > >                 return 0;
+> > >         else if (irq < 0)
+> >
+> > TBH the entire code smells. "Interesting" way of getting an optional named
+> > interrupt.
+> I felt it useful to have it this way as it would remain agnostic to device tree and
+> the ACPI. We would not have to add redundant codes in adapter drivers that
+> are using ACPI table.
+>
+> Named interrupts for the ACPI as well, I feel would be a useful addition that can
+> prove to be of value more than this change; I believe.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Me too. My comment was about current state of affairs, and not to your change.
+
+-- 
+With Best Regards,
+Andy Shevchenko

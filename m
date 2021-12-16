@@ -2,75 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B717E477C86
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BDB477C8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234962AbhLPT1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 14:27:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52720 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbhLPT1o (ORCPT
+        id S238301AbhLPT3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 14:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232560AbhLPT32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 14:27:44 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7104261F56
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 19:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0D6AC36AE7;
-        Thu, 16 Dec 2021 19:27:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639682863;
-        bh=y9pmpG/GpQhywg0oyPjfAOSC0w9MurmFDyL8vwRPxdQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MtTytv3KtLulXsc5BdJ2vK0Vq2DfIPyfF7uY6lJc2e//Z1J3bTD7+eQDqxmgy8MFH
-         Ix2pYTZecI7tdxbAKQ8ZBY621IzmQlhaVdrrDhs5PBDzoxH7N9Vy4NvxQTSmD+8qD2
-         kSx0qI44oFplBGf3ER3NIuFGCOb1zZOWHCHbmKqkr7vIRMw/MRC4qyGpyI/k9haSKU
-         ADMOI/auT7tegII6s8t+z0DLlopY4+oDBoPGHSU60uo/N0THauoJdHG4Ot5EkZvbPU
-         y5T/DXclQ/oOvM8V5oprN4GNjpXAHc0Oj4rMZRbfDKX/r3znLPEHkPEXfFiDWiCDnE
-         wuBiA79X1lRAw==
-Date:   Thu, 16 Dec 2021 11:27:42 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] f2fs: Simplify bool conversion
-Message-ID: <YbuTLr/HJO3IMI6u@google.com>
-References: <20211215023858.33303-1-yang.lee@linux.alibaba.com>
+        Thu, 16 Dec 2021 14:29:28 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9922BC061574;
+        Thu, 16 Dec 2021 11:29:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=N9CxEizcUKUMKe7tygLAy2SKNqVIaZunBZQhmUvlaCo=; b=TfIC8wH+3iPtFaTNNHTiwoOSwz
+        Bpsoi/K/YScFLbzdHHr0K8D4ikaBbFc/WqSk3CClQHeadtbcZldeGLW1OWzKGfUrcONUURVgJ3AKW
+        7vvwE7ExhcmC69CTT6pe0i9JUhRALDvQ/XpthdOB/NXqZHs1AuyGOUHNH/oNkTuSwVfvAjuIfuhGC
+        Y605ibUw+jfKHeuEPoHslvWaMnVjItExifSdcTybxLgeV5XJXC9PJB18n9KIcEQwZFGm02AaimUXN
+        XxcV0oSs+Qu5b4zlqfrJAGknSX+Z66iNgHKFBxEBI2dGXXpHL/POwbDa64BswFZhhWynw0aJMTSGl
+        MNr1Gg0w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxwQj-00Ft6U-EP; Thu, 16 Dec 2021 19:28:41 +0000
+Date:   Thu, 16 Dec 2021 19:28:41 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com,
+        Jeff Layton <jlayton@kernel.org>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 56/68] afs: Handle len being extending over page end
+ in write_begin/write_end
+Message-ID: <YbuTaRbNUAJx5xOA@casper.infradead.org>
+References: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
+ <163967169723.1823006.2868573008412053995.stgit@warthog.procyon.org.uk>
+ <CAHk-=wi0H5vmka1_iWe0+Yc6bwtgWn_bEEHCMYsPHYtNJKZHCQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215023858.33303-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <CAHk-=wi0H5vmka1_iWe0+Yc6bwtgWn_bEEHCMYsPHYtNJKZHCQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15, Yang Li wrote:
-> Fix the following coccicheck warning:
-> ./fs/f2fs/sysfs.c:491:41-46: WARNING: conversion to bool not needed here
+On Thu, Dec 16, 2021 at 08:31:19AM -0800, Linus Torvalds wrote:
+> On Thu, Dec 16, 2021 at 8:22 AM David Howells <dhowells@redhat.com> wrote:
+> >
+> > With transparent huge pages, in the future, write_begin() and write_end()
+> > may be passed a length parameter that, in combination with the offset into
+> > the page, exceeds the length of that page.  This allows
+> > grab_cache_page_write_begin() to better choose the size of THP to allocate.
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  fs/f2fs/sysfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> index 9e1cf44642ae..530c36b89bf1 100644
-> --- a/fs/f2fs/sysfs.c
-> +++ b/fs/f2fs/sysfs.c
-> @@ -488,7 +488,7 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
->  
->  	if (!strcmp(a->attr.name, "gc_urgent_high_remaining")) {
->  		spin_lock(&sbi->gc_urgent_high_lock);
-> -		sbi->gc_urgent_high_limited = t == 0 ? false : true;
-> +		sbi->gc_urgent_high_limited = t != 0;
+> I still think this is a fundamental bug in the caller. That
+> "explanation" is weak, and the whole concept smells like week-old fish
+> to me.
 
-Why not this?
-		sbi->gc_urgent_high_limited = t;
+You're right that  ->write_end can't be called with more bytes than fit
+in the folio.  That makes no sense at all.
 
->  		sbi->gc_urgent_high_remaining = t;
->  		spin_unlock(&sbi->gc_urgent_high_lock);
->  
-> -- 
-> 2.20.1.7.g153144c
+I haven't finished fully fleshing this out yet (and as a result we still
+only create PAGE_SIZE folios on writes), but my basic plan was:
+
+generic_perform_write:
+-	bytes = min_t(unsigned long, PAGE_SIZE - offset,
++	bytes = min_t(unsigned long, FOLIO_MAX_PAGE_CACHE_SIZE - offset,
+ 					iov_iter_count(i));
+...
+                status = a_ops->write_begin(file, mapping, pos, bytes, flags,
+-                                               &page, &fsdata);
++                                               &folio, &fsdata);
+
++		offset = offset_in_folio(folio, pos);
++		bytes = folio_size(folio - offset);
+...
+                status = a_ops->write_end(file, mapping, pos, bytes, copied,
+-                                               page, fsdata);
++                                               folio, fsdata);
+
+Since ->write_begin is the place where we actually create folios, it
+needs to know what size folio to create.  Unless you'd rather we do
+something to actually create the folio before calling ->write_begin?

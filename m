@@ -2,140 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3C34780C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DC14780CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbhLPXjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:39:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbhLPXjk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:39:40 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B02C06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:39:40 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id d38so1191985lfv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:39:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m/LjgsVegt/HRyKkkM2n6c0UK9wyNwAZfK1yqCRibBE=;
-        b=ZjNYT24fop4NBsOLESN28pcPFI76P21GY15lEKVa1tKR8Y6MixFR71XXHM7GhfF9Om
-         Mic+/EDIsAL+Oy0aBQJNKwWOjgm51UPxF4cZ/YnojHbYK5t7OKs/w0RJ0fMV/Jty5UP3
-         GD7cR728r/nXnJAOmo8UvAJPlaoac5Lt5ox6J43oGgiSlI+tzAmdbkGHwKtBLR6b03CD
-         7oHTeGaKYJVODZhzKZPRa/GHySInjAASy4QEqvKVn6IABK89mCJ8zObuLFxxpFd4M9oY
-         nNbcSS9gTr2YJoL93pnZ4nD3gzT76+OThD67D+uVZQJZKT64KbSwJ1kM4lJaQvROfOCD
-         Mpsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m/LjgsVegt/HRyKkkM2n6c0UK9wyNwAZfK1yqCRibBE=;
-        b=BKN0XDU9C6oRcspNqC3IEmhQrj5AVUCGQcq9F9JIoHRtMF813K+w58yDHIPLJkcdHg
-         E5S1JvKVHBPlzsGNJzZM0FkjWd3XWq9DB9+M1ZUL81Yh8/MNO2t5l96olMDP57WIfvoX
-         Lpx3c6pfKr+4d7jLC/ylVQpg8nLu+HXtkcNjepSWt4EPOXL6izHDzaoUL0mBwMLVQzzX
-         4kZqGquNXqVPkhdz32XPtHo1jgMRB+uKS+0py9ol+qww+1MUc+vg9GZbeAYf2/ITtCCz
-         n7RdvCFenFP2FfSychBwqHKhqz5S0B1NEl+LJXebPRI4rAwidnD9akhFr884fpEwdGdy
-         UNyQ==
-X-Gm-Message-State: AOAM53191hso4ImvlT/If3TJG47dR5q4RgaQ1TDBB+o07qGCJIU0tyvq
-        ZFx10XCuuuqJuz9XjKBMuiNFZFVbLrtRMiZLAeCP8g==
-X-Google-Smtp-Source: ABdhPJzJ3Ag+Yv1KTmSJebYEdW20IHyaYIzqo6gVs4G5mbbZ7dHZUudFFNmxFE9zK8L0+gvaxQYp82IZFk5AQAuq/rc=
-X-Received: by 2002:a05:6512:1324:: with SMTP id x36mr432363lfu.495.1639697978059;
- Thu, 16 Dec 2021 15:39:38 -0800 (PST)
+        id S229712AbhLPXmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:42:20 -0500
+Received: from foss.arm.com ([217.140.110.172]:49936 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229511AbhLPXmT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 18:42:19 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 479E012FC;
+        Thu, 16 Dec 2021 15:42:19 -0800 (PST)
+Received: from bogus (unknown [10.57.33.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B62073F73B;
+        Thu, 16 Dec 2021 15:42:11 -0800 (PST)
+Date:   Thu, 16 Dec 2021 23:42:08 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Tyler Baicar <baicar@amperemail.onmicrosoft.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Darren Hart <darren@os.amperecomputing.com>,
+        lorenzo.pieralisi@arm.com, guohanjun@huawei.com,
+        Tyler Baicar <baicar@os.amperecomputing.com>,
+        patches@amperecomputing.com, abdulhamid@os.amperecomputing.com,
+        catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com,
+        alexandru.elisei@arm.com, suzuki.poulose@arm.com,
+        rafael@kernel.org, lenb@kernel.org, tony.luck@intel.com,
+        bp@alien8.de, mark.rutland@arm.com, anshuman.khandual@arm.com,
+        vincenzo.frascino@arm.com, tabba@google.com, marcan@marcan.st,
+        keescook@chromium.org, masahiroy@kernel.org,
+        samitolvanen@google.com, john.garry@huawei.com,
+        daniel.lezcano@linaro.org, gor@linux.ibm.com,
+        zhangshaokun@hisilicon.com, tmricht@linux.ibm.com,
+        dchinner@redhat.com, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-acpi@vger.kernel.org,
+        linux-edac@vger.kernel.org, ishii.shuuichir@fujitsu.com,
+        Vineeth.Pillai@microsoft.com
+Subject: Re: [PATCH 1/2] ACPI/AEST: Initial AEST driver
+Message-ID: <20211216234208.hszjx5lpurdjmftj@bogus>
+References: <20211124170708.3874-1-baicar@os.amperecomputing.com>
+ <20211124170708.3874-2-baicar@os.amperecomputing.com>
+ <87czmpcto5.wl-maz@kernel.org>
+ <YaU6eyGM+bX/bEhG@fedora>
+ <87h7bum0xh.wl-maz@kernel.org>
+ <YaZUL+cftvNYgx1j@fedora>
+ <addaf134-d5c0-65de-62ca-76950d6460ab@amperemail.onmicrosoft.com>
 MIME-Version: 1.0
-References: <20211210154332.11526-1-brijesh.singh@amd.com> <20211210154332.11526-9-brijesh.singh@amd.com>
- <YbugbgXhApv9ECM2@dt>
-In-Reply-To: <YbugbgXhApv9ECM2@dt>
-From:   Mikolaj Lisik <lisik@google.com>
-Date:   Thu, 16 Dec 2021 15:39:26 -0800
-Message-ID: <CADtC8PX_bEk3rQR1sonbp-rX7rAG4fdbM41r3YLhfj3qWvqJrw@mail.gmail.com>
-Subject: Re: [PATCH v8 08/40] x86/sev: Check the vmpl level
-To:     Venu Busireddy <venu.busireddy@oracle.com>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <addaf134-d5c0-65de-62ca-76950d6460ab@amperemail.onmicrosoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 12:24 PM Venu Busireddy
-<venu.busireddy@oracle.com> wrote:
->
-> On 2021-12-10 09:43:00 -0600, Brijesh Singh wrote:
-> > Virtual Machine Privilege Level (VMPL) feature in the SEV-SNP architecture
-> > allows a guest VM to divide its address space into four levels. The level
-> > can be used to provide the hardware isolated abstraction layers with a VM.
-> > The VMPL0 is the highest privilege, and VMPL3 is the least privilege.
-> > Certain operations must be done by the VMPL0 software, such as:
-> >
-> > * Validate or invalidate memory range (PVALIDATE instruction)
-> > * Allocate VMSA page (RMPADJUST instruction when VMSA=1)
-> >
-> > The initial SEV-SNP support requires that the guest kernel is running on
-> > VMPL0. Add a check to make sure that kernel is running at VMPL0 before
-> > continuing the boot. There is no easy method to query the current VMPL
-> > level, so use the RMPADJUST instruction to determine whether the guest is
-> > running at the VMPL0.
-> >
-> > Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> > ---
-> >  arch/x86/boot/compressed/sev.c    | 34 ++++++++++++++++++++++++++++---
-> >  arch/x86/include/asm/sev-common.h |  1 +
-> >  arch/x86/include/asm/sev.h        | 16 +++++++++++++++
-> >  3 files changed, 48 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> > index a0708f359a46..9be369f72299 100644
-> > --- a/arch/x86/boot/compressed/sev.c
-> > +++ b/arch/x86/boot/compressed/sev.c
-> > @@ -212,6 +212,31 @@ static inline u64 rd_sev_status_msr(void)
-> >       return ((high << 32) | low);
-> >  }
-> >
-> > +static void enforce_vmpl0(void)
-> > +{
-> > +     u64 attrs;
-> > +     int err;
-> > +
-> > +     /*
-> > +      * There is no straightforward way to query the current VMPL level. The
-> > +      * simplest method is to use the RMPADJUST instruction to change a page
-> > +      * permission to a VMPL level-1, and if the guest kernel is launched at
-> > +      * a level <= 1, then RMPADJUST instruction will return an error.
->
-> Perhaps a nit. When you say "level <= 1", do you mean a level lower than or
-> equal to 1 semantically, or numerically?
+On Thu, Dec 16, 2021 at 05:05:15PM -0500, Tyler Baicar wrote:
+> -Moved ACPI for ARM64 maintainers to "to:"
+> 
+> Hi Marc, Darren,
+> 
+> On 11/30/2021 11:41 AM, Darren Hart wrote:
+> > On Tue, Nov 30, 2021 at 09:45:46AM +0000, Marc Zyngier wrote:
+> > > Hi Darren,
+> > > 
+> > > On Mon, 29 Nov 2021 20:39:23 +0000,
+> > > Darren Hart <darren@os.amperecomputing.com> wrote:
+> > > > On Wed, Nov 24, 2021 at 06:09:14PM +0000, Marc Zyngier wrote:
+> > > > > On Wed, 24 Nov 2021 17:07:07 +0000,
+> > > > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > > > index 5250298d2817..aa0483726606 100644
+> > > > > > --- a/MAINTAINERS
+> > > > > > +++ b/MAINTAINERS
+> > > > > > @@ -382,6 +382,7 @@ ACPI FOR ARM64 (ACPI/arm64)
+> > > > > >   M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > > > > >   M:	Hanjun Guo <guohanjun@huawei.com>
+> > > > > >   M:	Sudeep Holla <sudeep.holla@arm.com>
+> > > > > > +R:	Tyler Baicar <baicar@os.amperecomputing.com>
+> > > > > >   L:	linux-acpi@vger.kernel.org
+> > > > > >   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> > > > > >   S:	Maintained
+> > > > > Isn't this a bit premature? This isn't even mentioned in the commit
+> > > > > message, only in passing in the cover letter.
+> > > > > 
+> > > > Hi Marc,
+> > > > 
+> > > > This was something I encouraged Tyler to add during internal review,
+> > > > both in response to the checkpatch.pl warning about adding new drivers
+> > > > as well as our interest in reviewing any future changes to the aest
+> > > > driver. Since refactoring is common, this level made sense to me - but
+> > > > would it be preferable to add a new entry for just the new driver Tyler
+> > > > added?
+> > > Adding someone as the co-maintainer/co-reviewer of a whole subsystem
+> > > (ACPI/arm64 in this case) comes, IMO, with a number of pre-requisites:
+> > > has the proposed co-{maintainer,reviewer} contributed and/or reviewed
+> > > a significant number of patches to that subsystem and/or actively
+> > > participated in the public discussions on the design and the
+> > > maintenance of the subsystem, so that their reviewing is authoritative
+> > > enough? I won't be judge of this, but it is definitely something to
+> > > consider.
+> > Hi Marc,
+> > 
+> > Agreed. I applied similar criteria when considering sub maintainers for
+> > the platform/x86 subsystem while I maintained it.
+> > 
+> > > I don't think preemptively adding someone to the MAINTAINERS entry to
+> > > indicate an interest in a whole subsystem is the right way to do it.
+> > > One could argue that this is what a mailing list is for! ;-) On the
+> > > other hand, an active participation to the review process is the
+> > > perfect way to engage with fellow developers and to grow a profile. It
+> > > is at this stage that adding oneself as an upstream reviewer makes a
+> > > lot of sense.
+> > Also generally agree. In this specific case, our interest was in the
+> > driver itself, and we had to decide between the whole subsystem or
+> > adding another F: entry in MAINTAINERS for the specific driver. Since
+> > drivers/acpi/arm64 only has 3 .c files in it, adding another entry
+> > seemed premature and overly granular. Certainly a subjective thing and
+> > we have no objection to adding the extra line if that's preferred. This
+> > should have been noted in the commit message.
+> 
+> Thank you for the feedback here, I will make sure to add this to the commit
+> message and cover letter in the next version.
+
+Hi Marc,
+
+Thanks for responding and providing all the necessary details.
+
+> 
+> Hi Lorenzo, Hanjun, Sudeep,
+> 
+> As for adding myself as a reviewer under ACPI for ARM64 or adding another F:
+> entry, do you have a preference or guidance on what I should do here?
 >
 
-+1 to this. Additionally I found the "level-1" confusing which I
-interpreted as "level minus one".
+I prefer to start with an entry specific to the $subject driver for all
+the reasons Marc has already stated. It may also add confusion and provide
+misleading reference to others who want to maintain specific drivers like
+this in the future. Further it will result in this list to grow even though
+not all in that will be interested in reviewing or maintaining ARM64
+ACPI subsystem if we take the approach in this patch and more confusion
+to the developers.
 
-Perhaps phrasing it as "level one", or "level=1" would be more explicit?
+Ofcourse if you are interested and get engaged in the review of ARM64
+ACPI in the future we can always revisit and update accordingly.
+
+Hope this helps and provides clarification you are looking for.
+
+-- 
+Regards,
+Sudeep

@@ -2,104 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AB9477513
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0666C477515
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:56:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238074AbhLPO4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:56:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235010AbhLPO4N (ORCPT
+        id S238124AbhLPO40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:56:26 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:48366 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235010AbhLPO4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:56:13 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A015C06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:56:13 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id i22so14897942wrb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:56:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lEKwqd+P6M5z2q9L1KzIcsLzPQ6E9+XoNcECGYamWLU=;
-        b=l0GxtIkjdm8Ww9Au3npk9ADCgQCkTpDdNjUNvvwMhOBP3W61Qbpa+bpRwt0OO6vvLD
-         nH5Vz8FyWxoq5wLhAEFoi7Flg+92JwZi6ogYgTRz2pn00nkAPF/Pbj1p2CT1DkIFg63v
-         q+FTIFzEb74PGNBO0EyOE2Bxu/ECO9OqUOECI7pNecTZHZ81pJlqVm6UWpwYFdJlMrOd
-         OzM24zvzj83ODO/xwJQz6hJJmgdFxSDKDry6rcMd1jkzwr6zPlp+lUUMzjC68bdSNm/B
-         Tg8Y0so7bAG0XsV3i5O0ODU81S/tu8hfNma88XG/bKSIzd0sexWo8h7njdtGIEO141jH
-         OqMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lEKwqd+P6M5z2q9L1KzIcsLzPQ6E9+XoNcECGYamWLU=;
-        b=i52FzSLGXhYyRrKjC5pKLmNRJ4JpyEOVV3mNzTf75cSaTlSpTq3EE15AVyHBt/FFTH
-         Kj3TCEFYotaRn2j8IoITnnOUHbKj3mg6nmxNR+2GsnVRKJHuaoUR1UvfNSfb5T0hpkIU
-         fNIJNJ71UgHBpGT+NHVZ5tsksoxqCV0zGF8gIu3PiFkcLe/LWFvWL6PGbeV5UIZOqj8F
-         ysCJOCp5vYfcbLZW9tGjNbd2YZC2rRIjhly7U4dMbvMnIfgY367DRD0egik5OLOmodJQ
-         J5nhgN+1l4vkDPgvXhI53pDLCMLaLmkx4vQYSQ0BF4XF7AcvaGXBCUeft67a0EIKYWUs
-         E5NA==
-X-Gm-Message-State: AOAM53114gfX1s9YX2qi+8ujcgbsfA1ONdXOs1fnkxpw//yeJTt4BzBp
-        gioKFKxNkrklqibAbzblCB5JV+xJUBVq30Wsvh257A==
-X-Google-Smtp-Source: ABdhPJwz5SQ8BFTI+xqrVpJmwSx1HU86pipbexlpLTz/OYDV3a3xu9NfnWVMyoXgs9gzyFp3NsO83Z2Odfe4yokpKsE=
-X-Received: by 2002:a5d:4acb:: with SMTP id y11mr9448459wrs.64.1639666572079;
- Thu, 16 Dec 2021 06:56:12 -0800 (PST)
+        Thu, 16 Dec 2021 09:56:25 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id CF9EB1F3A7;
+        Thu, 16 Dec 2021 14:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1639666584; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QbZMjTq3ApjfLH9PBdmydkALxgQfnfuGHo8ADc744ws=;
+        b=ixA/hc43S2j+Avp9MS5rg4UuuMPRSifbcDC/BPOpBVFnzJjMPF8RElcCSRhTORRlWQI7uI
+        P2qZRaOuwMZHIs4Txdrh0/hQi3oufQmgz0IgayuFJRKUhSZSQVimaa/CNJ5IA+EEaSuZNd
+        2JZWaxSWW2v0+Oe5vQeY00D4bP9UDQ8=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id AD4E2A3B83;
+        Thu, 16 Dec 2021 14:56:24 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 15:56:23 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scripts/gdb: lx-dmesg: read records individually
+Message-ID: <YbtTl4zU4U8prj90@alley>
+References: <874k79c3a9.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-References: <20211215092501.1861229-1-jens.wiklander@linaro.org> <YbnlFf8930RuLkU8@kroah.com>
-In-Reply-To: <YbnlFf8930RuLkU8@kroah.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Thu, 16 Dec 2021 15:56:01 +0100
-Message-ID: <CAHUa44GqvZS1AY-C45K7kvHxryUu-hUEuCnR3z14BKE0iu34Qw@mail.gmail.com>
-Subject: Re: [PATCH v2] tee: handle lookup of shm with reference count 0
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Sumit Garg <sumit.garg@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Rijo Thomas <Rijo-john.Thomas@amd.com>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        stable@vger.kernel.org, Lars Persson <larper@axis.com>,
-        Patrik Lantz <Patrik.Lantz@axis.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874k79c3a9.fsf@jogness.linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 1:52 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Dec 15, 2021 at 10:25:01AM +0100, Jens Wiklander wrote:
-> > Since the tee subsystem does not keep a strong reference to its idle
-> > shared memory buffers, it races with other threads that try to destroy a
-> > shared memory through a close of its dma-buf fd or by unmapping the
-> > memory.
-> >
-> > In tee_shm_get_from_id() when a lookup in teedev->idr has been
-> > successful, it is possible that the tee_shm is in the dma-buf teardown
-> > path, but that path is blocked by the teedev mutex. Since we don't have
-> > an API to tell if the tee_shm is in the dma-buf teardown path or not we
-> > must find another way of detecting this condition.
-> >
-> > Fix this by doing the reference counting directly on the tee_shm using a
-> > new refcount_t refcount field. dma-buf is replaced by using
-> > anon_inode_getfd() instead, this separates the life-cycle of the
-> > underlying file from the tee_shm. tee_shm_put() is updated to hold the
-> > mutex when decreasing the refcount to 0 and then remove the tee_shm from
-> > teedev->idr before releasing the mutex. This means that the tee_shm can
-> > never be found unless it has a refcount larger than 0.
-> >
-> > Fixes: 967c9cca2cc5 ("tee: generic TEE subsystem")
-> > Cc: stable@vger.kernel.org
-> > Reviewed-by: Lars Persson <larper@axis.com>
-> > Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-> > Reported-by: Patrik Lantz <patrik.lantz@axis.com>
-> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > ---
-> > v1->v2
-> > * fix copyright years in drivers/tee/tee_shm.c
-> > * update kerneldoc comment for struct tee_shm with the reference counter
->
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Wed 2021-12-15 16:16:22, John Ogness wrote:
+> For the gdb command lx-dmesg, the entire descriptor, info, and text
+> data regions are read into memory before printing any records. For
+> large kernel log buffers, this not only causes a huge delay before
+> seeing any records, but it may also lead to python errors of too
+> much memory allocation.
+> 
+> Rather than reading in all these regions in advance, read them as
+> needed and only read the regions for the particular record that is
+> being printed.
+> 
+> The gdb macro "dmesg" in Documentation/admin-guide/kdump/gdbmacros.txt
+> already prints out the kernel log buffer like this.
+> 
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-I'm picking up this now.
+Looks good to me.
 
-Thanks for reviewing,
-Jens
+The patch has been committed into printk/linux.git, branch for-5.17.
+
+Best Regards,
+Petr

@@ -2,58 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFBE4767DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 03:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48C04767DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 03:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbhLPCV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 21:21:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbhLPCVZ (ORCPT
+        id S232905AbhLPCVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 21:21:34 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50664 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230105AbhLPCV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 21:21:25 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4CBC061574;
-        Wed, 15 Dec 2021 18:21:25 -0800 (PST)
+        Wed, 15 Dec 2021 21:21:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C62D1CE1FD2;
-        Thu, 16 Dec 2021 02:21:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E83FC36AE1;
-        Thu, 16 Dec 2021 02:21:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9861761BCE;
+        Thu, 16 Dec 2021 02:21:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 340A9C36AE1;
+        Thu, 16 Dec 2021 02:21:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639621282;
-        bh=De1MrH3eP1ytxROVw6moLHf969b21GpHp9ByMYABKSI=;
+        s=k20201202; t=1639621287;
+        bh=WPhsqfedMB8Cyx3EEl+Ru9ABU6XVEDXjkCEr6Qxk1qE=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=MUDfEyeYXedtPQZrd2Exfczu0ZFYL9AgssxE/0zw+dbRG1tR3gWlGND0YsdGqhcan
-         UcWHxYDRN13oaOnj9cbF8NAjLlmz3WgP6EckyLbumR41aRQGKj1Bi6hCPEcrYcGC0y
-         HstW1EnQeHTeS30nxCLAjWsAlS2OrLIpAE3X7BBA95xCTj1StpKTf8dQw7/ArpIXnr
-         U94dQiVmvpVOFOQPzn1lAGDSkDhSp2elbZmwnw47/DlF2u54VpI0o9TKvzTb9xzR9r
-         1/arHeRInG8RvgNBmBgNXeZaVQ8RpG3Rh05V0f3ryMl/QWIQw0DrQVIc0srb2zJSjb
-         lVvHB0Rm57i9w==
+        b=dwMhf9YTfmBY2X7bKpYFDwmtxjLed+jwXk+t6bsiutDlhSlU832xFAsxhsJvds2Qm
+         LGRLTr9C3fjkSxbA9fWJAz0NARYEu2pO6TXpudteTfFVpVrGUaWjQYQH3FNMLcm8JJ
+         zJDrG0EBsPrKJqrXLO2KWdUQ31veZHFXruTwb4hxRxfCHKpIVb4BusU1Qy03lGGI0x
+         cci1xZavagvVAU/5r+zDWUesY/jKOn0FQChHOEs4lXvxTV/fIUZjB0ZK4EoKFpwMcT
+         hpX6YYKUV8E2FXkG6C/ZOzweTbEf6Kq36eO/9/8SkLrQupDT8PxhQoFvQAJdChC+6F
+         2HVbNZcImeZEQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Wolfram Sang <wsa@the-dreams.de>, Stephen Boyd <sboyd@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andy@infradead.org>
-Cc:     Len Brown <lenb@kernel.org>, Kate Hsuan <hpa@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-clk@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-media@vger.kernel.org, platform-driver-x86@vger.kernel.org
-In-Reply-To: <20211203102857.44539-1-hdegoede@redhat.com>
-References: <20211203102857.44539-1-hdegoede@redhat.com>
-Subject: Re: (subset) [PATCH v7 00/14] Add support for X86/ACPI camera sensor/PMIC setup with clk and regulator platform data
-Message-Id: <163962127796.2075461.6086847444730016805.b4-ty@kernel.org>
-Date:   Thu, 16 Dec 2021 02:21:17 +0000
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>, robh+dt@kernel.org
+Cc:     linux-spi@vger.kernel.org, nicolas.ferre@microchip.com,
+        ludovic.desroches@microchip.com,
+        linux-arm-kernel@lists.infradead.org,
+        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211209122939.339810-1-tudor.ambarus@microchip.com>
+References: <20211209122939.339810-1-tudor.ambarus@microchip.com>
+Subject: Re: [PATCH 0/2] dt-bindings: spi: atmel,quadspi: Define sama7g5 QSPI
+Message-Id: <163962128492.2075495.3678727080606971257.b4-ty@kernel.org>
+Date:   Thu, 16 Dec 2021 02:21:24 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -61,26 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 11:28:43 +0100, Hans de Goede wrote:
-> Here is v7 of my patch-set adding support for camera sensor connected to a
-> TPS68470 PMIC on x86/ACPI devices.
+On Thu, 9 Dec 2021 14:29:37 +0200, Tudor Ambarus wrote:
+> Convert the Atmel QuadSPI controller Device Tree binding documentation
+> to json-schema. Define sama7g5 QSPI.
 > 
-> Changes in v7:
-> - Drop "platform/x86: int3472: Enable I2c daisy chain" this workaround is
->   no longer necessary (the regulator code now takes care of this)
-> - Fix using PTR_ERR(data->clk) instead of PTR_ERR(rdev) to log an error
->   code in "regulator: Introduce tps68470-regulator driver"
+> After the conversion to yaml, make dtbs_check reavealed a problem
+> that was fixed with:
+> https://lore.kernel.org/lkml/20211209102542.254153-1-tudor.ambarus@microchip.com/
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[05/14] regulator: Introduce tps68470-regulator driver
-        commit: 0fc31d8f1a8ad17224f6423e3ed6234507375d48
+[1/2] dt-bindings: spi: atmel,quadspi: Convert to json-schema
+      commit: 001a41d2a7061694fa31accdbc2013bb5c5d83b5
+[2/2] dt-bindings: spi: atmel,quadspi: Define sama7g5 QSPI
+      commit: 77850bda360dd9b389d5064c64b79467d613c3d6
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

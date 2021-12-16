@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8634780ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0384B4780F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbhLPXxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:53:40 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:47206 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbhLPXxj (ORCPT
+        id S230140AbhLPXyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:54:03 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:56442 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230096AbhLPXyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:53:39 -0500
+        Thu, 16 Dec 2021 18:54:02 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4D7EA212C8;
-        Thu, 16 Dec 2021 23:53:38 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 901371F37F;
+        Thu, 16 Dec 2021 23:54:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639698818; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1639698841; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uJLgBSr+4ac2HtnFPf6KLC0wSgPyRK3wpQcub+LxsjE=;
-        b=B5BZGrGhS1sLx+jn04Rr1MuE1ChyurPGtdI+nwDT/Hr/0+QXFKuZRtGCvuCRNoIkwlwyKP
-        9BfV/qhMuMbcQqDMBat4fq1Wo0xQWckKo0jCjlYNMmPl0tfn2JBp9hUPp/dnjydtCifmiB
-        8RRyHATryW0Fh+YgaDAS7VV2qTL3pAI=
+        bh=ca/QMA9b8aSP2XqDNpzMoh70WOqFOvfMXBDfQmXLg8g=;
+        b=19YUlHlfjO2QpfANVsRzxJPbr0h1bUHEseqyROPWtZ/VjA5U6gv0cvqAOrj+gttp94HTBs
+        V5rtgIC8rAPe3iyroPRtPsl0NcdpundBZIEPRhSfqhadZo1UOpl7iYBZrIywKwBFfaOwiG
+        9wTAFDdx96KBwjcXLZwYYTzJauGvr10=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639698818;
+        s=susede2_ed25519; t=1639698841;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uJLgBSr+4ac2HtnFPf6KLC0wSgPyRK3wpQcub+LxsjE=;
-        b=+QQyfMGX2CvZGYolzHHLcWwYdfeq3Mk7+x940MXnO+mysULhS3FXrt8AFWVVKGMrMf+WAT
-        O4p/XR+Idp/HN7CA==
+        bh=ca/QMA9b8aSP2XqDNpzMoh70WOqFOvfMXBDfQmXLg8g=;
+        b=M8fxrnSDJclwnSF/zdJmRf2hyHg3cUDn49eSKtK9IZmabY2ypSbW+uGwm8NPjUsGtLUAAI
+        uTp02/fM6dkiJVBA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 564E413EFD;
-        Thu, 16 Dec 2021 23:53:35 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B129213EFD;
+        Thu, 16 Dec 2021 23:53:58 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id qkUhBX/Ru2GpWwAAMHmgww
-        (envelope-from <neilb@suse.de>); Thu, 16 Dec 2021 23:53:35 +0000
-Subject: [PATCH 11/18] SUNRPC/call_alloc: async tasks mustn't block waiting
- for memory
+        id mCvWG5bRu2HBWwAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 16 Dec 2021 23:53:58 +0000
+Subject: [PATCH 14/18] SUNRPC: remove scheduling boost for "SWAPPER" tasks.
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -59,7 +58,7 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Fri, 17 Dec 2021 10:48:23 +1100
-Message-ID: <163969850317.20885.3872948365489724355.stgit@noble.brown>
+Message-ID: <163969850330.20885.12926885798126849542.stgit@noble.brown>
 In-Reply-To: <163969801519.20885.3977673503103544412.stgit@noble.brown>
 References: <163969801519.20885.3977673503103544412.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -70,56 +69,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When memory is short, new worker threads cannot be created and we depend
-on the minimum one rpciod thread to be able to handle everything.
-So it must not block waiting for memory.
+Currently, tasks marked as "swapper" tasks get put to the front of
+non-priority rpc_queues, and are sorted earlier than non-swapper tasks on
+the transport's ->xmit_queue.
 
-mempools are particularly a problem as memory can only be released back
-to the mempool by an async rpc task running.  If all available
-workqueue threads are waiting on the mempool, no thread is available to
-return anything.
+This is pointless as currently *all* tasks for a mount that has swap
+enabled on *any* file are marked as "swapper" tasks.  So the net result
+is that the non-priority rpc_queues are reverse-ordered (LIFO).
 
-rpc_malloc() can block, and this might cause deadlocks.
-So check RPC_IS_ASYNC(), rather than RPC_IS_SWAPPER() to determine if
-blocking is acceptable.
+This scheduling boost is not necessary to avoid deadlocks, and hurts
+fairness, so remove it.  If there were a need to expedite some requests,
+the tk_priority mechanism is a more appropriate tool.
 
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- net/sunrpc/sched.c              |    4 +++-
- net/sunrpc/xprtrdma/transport.c |    4 +++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ net/sunrpc/sched.c |    7 -------
+ net/sunrpc/xprt.c  |   11 -----------
+ 2 files changed, 18 deletions(-)
 
 diff --git a/net/sunrpc/sched.c b/net/sunrpc/sched.c
-index e2c835482791..d5b6e897f5a5 100644
+index d5b6e897f5a5..256302bf6557 100644
 --- a/net/sunrpc/sched.c
 +++ b/net/sunrpc/sched.c
-@@ -1023,8 +1023,10 @@ int rpc_malloc(struct rpc_task *task)
- 	struct rpc_buffer *buf;
- 	gfp_t gfp = GFP_NOFS;
+@@ -186,11 +186,6 @@ static void __rpc_add_wait_queue_priority(struct rpc_wait_queue *queue,
  
-+	if (RPC_IS_ASYNC(task))
-+		gfp = GFP_NOWAIT | __GFP_NOWARN;
- 	if (RPC_IS_SWAPPER(task))
--		gfp = __GFP_MEMALLOC | GFP_NOWAIT | __GFP_NOWARN;
-+		gfp |= __GFP_MEMALLOC;
- 
- 	size += sizeof(struct rpc_buffer);
- 	if (size <= RPC_BUFFER_MAXSIZE)
-diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
-index 16e5696314a4..a52277115500 100644
---- a/net/sunrpc/xprtrdma/transport.c
-+++ b/net/sunrpc/xprtrdma/transport.c
-@@ -574,8 +574,10 @@ xprt_rdma_allocate(struct rpc_task *task)
- 	gfp_t flags;
- 
- 	flags = RPCRDMA_DEF_GFP;
-+	if (RPC_IS_ASYNC(task))
-+		flags = GFP_NOWAIT | __GFP_NOWARN;
- 	if (RPC_IS_SWAPPER(task))
--		flags = __GFP_MEMALLOC | GFP_NOWAIT | __GFP_NOWARN;
-+		flags |= __GFP_MEMALLOC;
- 
- 	if (!rpcrdma_check_regbuf(r_xprt, req->rl_sendbuf, rqst->rq_callsize,
- 				  flags))
+ /*
+  * Add new request to wait queue.
+- *
+- * Swapper tasks always get inserted at the head of the queue.
+- * This should avoid many nasty memory deadlocks and hopefully
+- * improve overall performance.
+- * Everyone else gets appended to the queue to ensure proper FIFO behavior.
+  */
+ static void __rpc_add_wait_queue(struct rpc_wait_queue *queue,
+ 		struct rpc_task *task,
+@@ -199,8 +194,6 @@ static void __rpc_add_wait_queue(struct rpc_wait_queue *queue,
+ 	INIT_LIST_HEAD(&task->u.tk_wait.timer_list);
+ 	if (RPC_IS_PRIORITY(queue))
+ 		__rpc_add_wait_queue_priority(queue, task, queue_priority);
+-	else if (RPC_IS_SWAPPER(task))
+-		list_add(&task->u.tk_wait.list, &queue->tasks[0]);
+ 	else
+ 		list_add_tail(&task->u.tk_wait.list, &queue->tasks[0]);
+ 	task->tk_waitqueue = queue;
+diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
+index 47d207e416ab..a0a2583fe941 100644
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -1354,17 +1354,6 @@ xprt_request_enqueue_transmit(struct rpc_task *task)
+ 				INIT_LIST_HEAD(&req->rq_xmit2);
+ 				goto out;
+ 			}
+-		} else if (RPC_IS_SWAPPER(task)) {
+-			list_for_each_entry(pos, &xprt->xmit_queue, rq_xmit) {
+-				if (pos->rq_cong || pos->rq_bytes_sent)
+-					continue;
+-				if (RPC_IS_SWAPPER(pos->rq_task))
+-					continue;
+-				/* Note: req is added _before_ pos */
+-				list_add_tail(&req->rq_xmit, &pos->rq_xmit);
+-				INIT_LIST_HEAD(&req->rq_xmit2);
+-				goto out;
+-			}
+ 		} else if (!req->rq_seqno) {
+ 			list_for_each_entry(pos, &xprt->xmit_queue, rq_xmit) {
+ 				if (pos->rq_task->tk_owner != task->tk_owner)
 
 

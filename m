@@ -2,177 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B062D477627
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D8447762B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238606AbhLPPly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:41:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54152 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232607AbhLPPlw (ORCPT
+        id S238614AbhLPPml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:42:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232616AbhLPPmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:41:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639669310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ns7kDMEcoaKNGUL81oUCnFc8/9AieN/OkLMyVTe3m3I=;
-        b=dzvFCdBJPLHjRFLrHNGG1s8lZ9/Qdkzz2KDb5ikiFh+a8SELSG2Bsf6phuTMQRbJdq7anF
-        92qUPmYE6E19PrhfLlkjzMrtdOVgtutLqra8MfQHzPgjfRr9+GB0A6QbNVnwepinSKa4wl
-        hBfbE2jZsVmo1U2xyTp/pgUtJ3KdF2w=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-46-2sCapa5TPI-vCUiV_a7VpA-1; Thu, 16 Dec 2021 10:41:49 -0500
-X-MC-Unique: 2sCapa5TPI-vCUiV_a7VpA-1
-Received: by mail-ed1-f71.google.com with SMTP id v10-20020aa7d9ca000000b003e7bed57968so23558796eds.23
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:41:49 -0800 (PST)
+        Thu, 16 Dec 2021 10:42:40 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970E9C06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:42:40 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id gn2so1617011pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:42:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/HgC/51puoTDP7Sz4M6t3CwJhJDN9anfOwtdGH1jt60=;
+        b=EZEwxVEb8Hl/hFm+bSg8gRmOe175UalkvX4GD1zqhytcHdk9px8OhlWAzGQZ+NF+3k
+         ChjNCvM3FzBBHR5tzKdff7nufYeelHSAgD7lBcbNQrEpax+1sRXiFpN9mSqQ6KZ7URCF
+         Q6ZNmgiGKlEM5NksnqZSChRpaznoaiVv79IfPvRcnJOHInPZjZX6FrL7SfC+5oGnjfiR
+         18UrdSGGd+Ck+EZPLPa7bwshBcgoK/mNo021VTtUwemg1GCNX/pJfxqvDZG3D3M0JUtF
+         tVCiDu9OQEvQeZFsqSgAXfqCs31HD6EkAVCjWO48Zplx0pj04AmZXTZkx+2KnBBq4vlB
+         NWPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ns7kDMEcoaKNGUL81oUCnFc8/9AieN/OkLMyVTe3m3I=;
-        b=RUHijjNYJ46Hqm226VfwQjhX89FkgKkG43yxbkvgD78aRCbR+bQpmmV4Rw4j2Ong/d
-         Ca+oLGv/WzT8gTfBZJC/ehY869CfBK3fURqWkzAmJT2OhtbkkeMB+Ons6MkK5dP5qFZt
-         k0+oEi5ov+J0SZ0RXFDxi1jBc0D+DXk+Fi/qxmLlIwKYvVM6/RF84XygxqqDTcHC17xH
-         Bovb5/0mw9i1WlFb0nDsX45IOioe5PAYq3KbqLqNSFYJ8GfOqbjkumwY6vzhT4Z1/ydN
-         ULzhZbfyAqpMYEVu2QMd8Zd4GZ0sq6WUJ07nap/YcsQl953DwXrsuEUqlxNjibv+3fu8
-         0SOA==
-X-Gm-Message-State: AOAM532i7lESIZBpCyvDDpUfRV3Kyue8pFcYIQDTeU3/klxqWsfRs+nm
-        Ca/QEvShSEzqBbO44I9MSrkwV8YKmE8DeV3NrXKXazhLwZ/QGwJdCoWSo7OdKexeHqTq9RZzhBr
-        ufWRg15aJrKOViTCKOi7Evzpt
-X-Received: by 2002:a17:906:730d:: with SMTP id di13mr7423021ejc.557.1639669308382;
-        Thu, 16 Dec 2021 07:41:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw1hty/NqPgPOCvuZBByYKKfw+FS2DPD3jcu2pyAp6MB4tRgVw73vipf1LyB4LBXvx9BUiuUQ==
-X-Received: by 2002:a17:906:730d:: with SMTP id di13mr7422994ejc.557.1639669308104;
-        Thu, 16 Dec 2021 07:41:48 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id 23sm1937056ejg.213.2021.12.16.07.41.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 07:41:47 -0800 (PST)
-Message-ID: <0a2a0f82-b914-e9fe-97a3-13a9608f2dde@redhat.com>
-Date:   Thu, 16 Dec 2021 16:41:45 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/HgC/51puoTDP7Sz4M6t3CwJhJDN9anfOwtdGH1jt60=;
+        b=hpAoZ3q35o3UOFyadrrp+sY02TgCah/4shC9qnjdGfDmbDhZwGTFpPiUmt4D2QNpTf
+         jTKe2i91RZFcxSGqzuNwpSSs8dwO2BOi0fI0VqqSW39TQhrPggTONqrU9zi4WfaHx/8u
+         RVLXHEia9PpvlMWHxdo1KeL8N+9Su5Wp1fND7X+W0POWP94lH5ycyHL1VyjyMeaCW050
+         oA7+UcKGf4DtG6H1mAqIWB7VrCn+1pvklMYw6skLhzh43lCNAc4jwjQSOMkRPsroFJqP
+         aZXypVJCjf7veZ5XuhkEIXrgUA9P/tn4QpmKriSVUBD6x/vPkMOILBPGoMScJwvGLyQD
+         nTqg==
+X-Gm-Message-State: AOAM533oVLQL2SSa8DMad3brCgLTj3XjNxvTR6QYhfT/ZicQJRFKgbbq
+        UnlBuEFWwD5X10QkgmDLwzSxbQ==
+X-Google-Smtp-Source: ABdhPJxb8j4O8CektzK4fHnZSpK4WpQQ9oZfAlyqSw/6OzoEoWaaDSfGs/zUXrUxZcY+RB8uCvxEkw==
+X-Received: by 2002:a17:902:7089:b0:148:b897:daef with SMTP id z9-20020a170902708900b00148b897daefmr5711702plk.61.1639669359554;
+        Thu, 16 Dec 2021 07:42:39 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p30sm2371272pfq.119.2021.12.16.07.42.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 07:42:38 -0800 (PST)
+Date:   Thu, 16 Dec 2021 15:42:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>
+Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Gonglei (Arei)" <arei.gonglei@huawei.com>,
+        Huangzhichao <huangzhichao@huawei.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: The vcpu won't be wakened for a long time
+Message-ID: <Ybtea42RxZ9aVzCh@google.com>
+References: <73d46f3cc46a499c8e39fdf704b2deaf@huawei.com>
+ <YbjWFTtNo9Ap7kDp@google.com>
+ <9e5aef1ae0c141e49c2b1d19692b9295@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 0/4] power: supply: add charge_behaviour property
- (force-discharge, inhibit-charge)
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
-Cc:     linux-pm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        linux-kernel@vger.kernel.org, linrunner@gmx.net, bberg@redhat.com,
-        hadess@hadess.net, markpearson@lenovo.com,
-        nicolopiazzalunga@gmail.com, njoshi1@lenovo.com, smclt30p@gmail.com
-References: <20211123232704.25394-1-linux@weissschuh.net>
- <20211203213305.dfjedjj3b25ftj2z@earth.universe>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20211203213305.dfjedjj3b25ftj2z@earth.universe>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e5aef1ae0c141e49c2b1d19692b9295@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/3/21 22:33, Sebastian Reichel wrote:
-> Hi,
+On Thu, Dec 16, 2021, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
+> > What kernel version?  There have been a variety of fixes/changes in the
+> > area in recent kernels.
 > 
-> On Wed, Nov 24, 2021 at 12:27:00AM +0100, Thomas Weißschuh wrote:
->> This series adds support for the charge_behaviour property to the power
->> subsystem and thinkpad_acpi driver.
->>
->> As thinkpad_acpi has to use the 'struct power_supply' created by the generic
->> ACPI driver it has to rely on custom sysfs attributes instead of proper
->> power_supply properties to implement this property.
->>
->> Patch 1: Adds the power_supply documentation and basic public API
->> Patch 2: Adds helpers to power_supply core to help drivers implement the
->>   charge_behaviour attribute
->> Patch 3: Adds support for force-discharge to thinkpad_acpi.
->> Patch 4: Adds support for inhibit-discharge to thinkpad_acpi.
->>
->> Patch 3 and 4 are largely taken from other patches and adapted to the new API.
->> (Links are in the patch trailer)
->>
->> Ognjen Galic:
->>
->> Your S-o-b is on the original inhibit_charge and force_discharge patches.
->> I would like to add you as Co-developed-by but to do that it will also require
->> your S-o-b. Could you give your sign-offs for the new patches, so you can be
->> properly attributed?
->>
->> Sebastian Reichel:
->>
->> Currently the series does not actually support the property as a proper
->> powersupply property handled fully by power_supply_sysfs.c because there would
->> be no user for this property.
+> The kernel version is 4.18, and it seems the latest kernel also has this problem.
 > 
-> I'm not too happy how the acpi-battery hooks work, but that's not
-> your fault and this patchset does not really make the situation
-> worse. So:
+> The following code can fixes this bug, I've tested it on 4.18.
 > 
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> (4.18)
+> 
+> @@ -3944,6 +3944,11 @@ static void vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
+>         if (pi_test_and_set_on(&vmx->pi_desc))
+>                 return;
+>  
+> +       if (swq_has_sleeper(kvm_arch_vcpu_wq(vcpu))) {
+> +               kvm_vcpu_kick(vcpu);
+> +               return;
+> +       }
+> +
+>         if (vcpu != kvm_get_running_vcpu() &&
+>                 !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
+>                 kvm_vcpu_kick(vcpu);
+> 
+> 
+> (latest)
+> 
+> @@ -3959,6 +3959,11 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
+>         if (pi_test_and_set_on(&vmx->pi_desc))
+>                 return 0;
+>  
+> +       if (rcuwait_active(&vcpu->wait)) {
+> +               kvm_vcpu_kick(vcpu);
+> +               return 0;
+> +       }
+> +
+>         if (vcpu != kvm_get_running_vcpu() &&
+>             !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
+>                 kvm_vcpu_kick(vcpu);
+> 
+> Do you have any suggestions ?
 
-Sebastian, what is the plan for taking this upstream ? Does your ack mean that
-you are ok with me taking the entire series upstream through the pdx86 tree?
+Hmm, that strongly suggests the "vcpu != kvm_get_running_vcpu()" is at fault.
+Can you try running with the below commit?  It's currently sitting in kvm/queue,
+but not marked for stable because I didn't think it was possible for the check
+to a cause a missed wake event in KVM's current code base.
 
-Or do you plan to apply patches 1-2 through linux-power-supply.git; and in that
-case can you provide an inmmutable branch with those patches for me to merge
-into pdx86/for-next so that I can then apply patches 3 + 4 there ?
+commit 6a8110fea2c1b19711ac1ef718680dfd940363c6
+Author: Sean Christopherson <seanjc@google.com>
+Date:   Wed Dec 8 01:52:27 2021 +0000
 
-Note merging everything through the linux-power-supply.git tree is non ideal
-in this case because the thinkpad_acpi.c code already has a lot of changes
-in pdx86/for-next.
+    KVM: VMX: Wake vCPU when delivering posted IRQ even if vCPU == this vCPU
 
-Regards,
+    Drop a check that guards triggering a posted interrupt on the currently
+    running vCPU, and more importantly guards waking the target vCPU if
+    triggering a posted interrupt fails because the vCPU isn't IN_GUEST_MODE.
+    The "do nothing" logic when "vcpu == running_vcpu" works only because KVM
+    doesn't have a path to ->deliver_posted_interrupt() from asynchronous
+    context, e.g. if apic_timer_expired() were changed to always go down the
+    posted interrupt path for APICv, or if the IN_GUEST_MODE check in
+    kvm_use_posted_timer_interrupt() were dropped, and the hrtimer fired in
+    kvm_vcpu_block() after the final kvm_vcpu_check_block() check, the vCPU
+    would be scheduled() out without being awakened, i.e. would "miss" the
+    timer interrupt.
 
-Hans
+    One could argue that invoking kvm_apic_local_deliver() from (soft) IRQ
+    context for the current running vCPU should be illegal, but nothing in
+    KVM actually enforces that rules.  There's also no strong obvious benefit
+    to making such behavior illegal, e.g. checking IN_GUEST_MODE and calling
+    kvm_vcpu_wake_up() is at worst marginally more costly than querying the
+    current running vCPU.
 
+    Lastly, this aligns the non-nested and nested usage of triggering posted
+    interrupts, and will allow for additional cleanups.
 
->> Previous discussions about the API:
->>
->> https://lore.kernel.org/platform-driver-x86/20211108192852.357473-1-linux@weissschuh.net/
->> https://lore.kernel.org/platform-driver-x86/21569a89-8303-8573-05fb-c2fec29983d1@gmail.com/
->>
->> v1: https://lore.kernel.org/lkml/20211113104225.141333-1-linux@weissschuh.net/
->> v1 -> v2:
->>
->> * Use sysfs_emit-APIs instead of plain sprintf
->> * More cecks for actual feature availability
->> * Validation of the written values
->> * Read inhibit-charge via BICG instead of PSSG (peak shift state)
->> * Don't mangle error numbers in charge_behaviour_store()
->>
->> Open points:
->>
->> Thomas Koch has observed that on a T450s with two batteries
->> inhibit-charge on BAT0 will affect both batteries and for BAT1 it is ignored
->> entirely, this seems to be a bug in the EC.
->> On my T460s with two batteries it works correctly.
->>
->> Thomas Weißschuh (4):
->>   power: supply: add charge_behaviour attributes
->>   power: supply: add helpers for charge_behaviour sysfs
->>   platform/x86: thinkpad_acpi: support force-discharge
->>   platform/x86: thinkpad_acpi: support inhibit-charge
->>
->>  Documentation/ABI/testing/sysfs-class-power |  14 ++
->>  drivers/platform/x86/thinkpad_acpi.c        | 191 +++++++++++++++++++-
->>  drivers/power/supply/power_supply_sysfs.c   |  51 ++++++
->>  include/linux/power_supply.h                |  16 ++
->>  4 files changed, 268 insertions(+), 4 deletions(-)
->>
->>
->> base-commit: 66f4beaa6c1d28161f534471484b2daa2de1dce0
->> -- 
->> 2.34.0
->>
+    Signed-off-by: Sean Christopherson <seanjc@google.com>
+    Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+    Message-Id: <20211208015236.1616697-18-seanjc@google.com>
+    Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 38749063da0e..f61a6348cffd 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -3995,8 +3995,7 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
+         * guaranteed to see PID.ON=1 and sync the PIR to IRR if triggering a
+         * posted interrupt "fails" because vcpu->mode != IN_GUEST_MODE.
+         */
+-       if (vcpu != kvm_get_running_vcpu() &&
+-           !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
++       if (!kvm_vcpu_trigger_posted_interrupt(vcpu, false))
+                kvm_vcpu_wake_up(vcpu);
+
+        return 0;

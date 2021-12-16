@@ -2,157 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D27476E9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B352F476E9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235808AbhLPKOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:14:00 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:36210 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbhLPKN7 (ORCPT
+        id S235821AbhLPKOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:14:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230269AbhLPKOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:13:59 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E2F16212B6;
-        Thu, 16 Dec 2021 10:13:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639649637; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C9zkuW4vj62cZydLruN2DlMZ0uP/pbPyOAEvv0x7Vto=;
-        b=XgDdaZaRgPQe0myadPEBt03inLUaM4d6UkSmYbqefe0d6NDTRj4H/RFJKYf2X/wwa1RrAK
-        g46jV7m36MN/a36jvw28h4h0AWsn9dn5I7lpIoB8cLzT1ot+XlXdedTcgj6IwTKWjEZswP
-        xx18SsWCjjwQ/1LX7UpOtK2bxGtvPw0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639649637;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C9zkuW4vj62cZydLruN2DlMZ0uP/pbPyOAEvv0x7Vto=;
-        b=IVC3mUjMjeQ2HsojqMFI0rqOxH35Qu2UsG+XbTzPRWkLGi/CGqjYD9qkhwYFn/mGfL168e
-        +zzritYMgg/rUKBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A535C13DF8;
-        Thu, 16 Dec 2021 10:13:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zvhCJ2URu2FjGgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 16 Dec 2021 10:13:57 +0000
-Message-ID: <1c7fc6c4-7941-682d-9675-425b04605f7f@suse.de>
-Date:   Thu, 16 Dec 2021 11:13:57 +0100
+        Thu, 16 Dec 2021 05:14:39 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F80EC061574;
+        Thu, 16 Dec 2021 02:14:39 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so22192383pjb.1;
+        Thu, 16 Dec 2021 02:14:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=fe0hGKbwgdoyA8YYOpCWaXMJg1AN70Y0guzCKM5koz0=;
+        b=UIl6jb/SOCzH0dQ5jPBW9lankZ5zFMkGJ3ozf+2i0cIcmnqjo9+FX00xrSLh4VsAiC
+         H7ELjjLIvx03VR8Ip8TBD4La8DRqrpOg2BuMhWAM+9XEuyKwG0KcFqr4W/GY97KwmrIY
+         aO0CnaJSvenSCYBYsJmkWJonAAWedU4uN+NhwDKcYw+pIKUvB3Y/j9wohfg9zvxH8yOX
+         z+TIkL0VsUfG+Kyb8nsCz3Z5aB4lMqblueez++jwMYD1CK2xh2K4YHG6a+nrN3OGy2rZ
+         oj3CAawlbrAd7CRE5KHrkPD+8ZkUCsQd8kzOwzQSWPSNLkiQaKwC4j7h/WCsBiox/f7G
+         XnNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=fe0hGKbwgdoyA8YYOpCWaXMJg1AN70Y0guzCKM5koz0=;
+        b=VHNaE6m7vpeWwgJVnt7UDiQKzPtc+3BpvV07zb4w9Bqwvh4val/GpeoCDTk68y9kPC
+         gQKjHGgRWEXZ4ExbzBJa/OP4vy3N5uMlCGbz2N4lc/LOIoaqzMpUcXf9NqDR2m6su8EC
+         oTSYychp+DvLjk0jp/30jCxZpcCyr0Ki89C2w2t/JZ/tzG2yEGFODCcG8Zdv67vqXTdG
+         6vwiSwDfedYECzd+wubCa34o8vX4LOlRQPb7KR4MJ67HgvtIzsfKwY1qsyRIP7Z49HLD
+         iNuhP2oNHCtu5Z1CGOK6qg5E/lhr4fsHa1VBxoXP9xbKCFp2F8mHPHiQpVjVNBTGtqt4
+         nXWQ==
+X-Gm-Message-State: AOAM532OxlPjX5mav6QMV2VBos/1CMAVivnnHyYUnNtqNyklCHs2EKcw
+        WRe1oBGByRj3wHU/WbPou00=
+X-Google-Smtp-Source: ABdhPJxXW8oN+6p4ZgPi69Ebug5Du1mAsPlRaVKmfyaRaTRTAFYYoohVcABFwIuT63igGB3blyIOBw==
+X-Received: by 2002:a17:90b:1b4a:: with SMTP id nv10mr5213963pjb.118.1639649678747;
+        Thu, 16 Dec 2021 02:14:38 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id b19sm5739126pfv.63.2021.12.16.02.14.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 02:14:38 -0800 (PST)
+Message-ID: <2527a359-eaad-9e7f-bc9a-bf2732997afd@gmail.com>
+Date:   Thu, 16 Dec 2021 18:14:30 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3 0/3] drm/simpledrm: Apple M1 / DT platform support
- fixes
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH v2 0/6] KVM: x86/pmu: Count two basic events for emulated
+ instructions
 Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     Hector Martin <marcan@marcan.st>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-References: <20211212062407.138309-1-marcan@marcan.st>
- <4d16ff4b-4060-49df-805f-66d293ffa186@suse.de>
-In-Reply-To: <4d16ff4b-4060-49df-805f-66d293ffa186@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------eYF1iziI7aQX0irnmnJKm7vw"
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+References: <20211130074221.93635-1-likexu@tencent.com>
+ <3118559d-8d4e-e080-2849-b526917969eb@redhat.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <3118559d-8d4e-e080-2849-b526917969eb@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------eYF1iziI7aQX0irnmnJKm7vw
-Content-Type: multipart/mixed; boundary="------------Z62ztZl0jHcNjlkYd7K00At9";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Hector Martin <marcan@marcan.st>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>,
- Hans de Goede <hdegoede@redhat.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org,
- Javier Martinez Canillas <javier@dowhile0.org>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Message-ID: <1c7fc6c4-7941-682d-9675-425b04605f7f@suse.de>
-Subject: Re: [PATCH v3 0/3] drm/simpledrm: Apple M1 / DT platform support
- fixes
-References: <20211212062407.138309-1-marcan@marcan.st>
- <4d16ff4b-4060-49df-805f-66d293ffa186@suse.de>
-In-Reply-To: <4d16ff4b-4060-49df-805f-66d293ffa186@suse.de>
+On 10/12/2021 3:30 am, Paolo Bonzini wrote:
+> On 11/30/21 08:42, Like Xu wrote:
+>> Hi,
+>>
+>> [ Jim is on holiday, so I'm here to continue this work. ]
+>>
+>> Some cloud customers need accurate virtualization of two
+>> basic PMU events on x86 hardware: "instructions retired" and
+>> "branch instructions retired". The existing PMU virtualization code
+>> fails to account for instructions (e.g, CPUID) that are emulated by KVM.
+>>
+>> Accurately virtualizing all PMU events for all microarchitectures is a
+>> herculean task, let's just stick to the two events covered by this set.
+>>
+>> Eric Hankland wrote this code originally, but his plate is full, so Jim
+>> and I volunteered to shepherd the changes through upstream acceptance.
+>>
+>> Thanks,
+>>
+>> v1 -> v2 Changelog:
+>> - Include the patch set [1] and drop the intel_find_fixed_event(); [Paolo]
+>>    (we will fix the misleading Intel CPUID events in another patch set)
+>> - Drop checks for pmc->perf_event or event state or event type;
+>> - Increase a counter once its umask bits and the first 8 select bits are matched;
+>> - Rewrite kvm_pmu_incr_counter() with a less invasive approach to the host perf;
+>> - Rename kvm_pmu_record_event to kvm_pmu_trigger_event;
+>> - Add counter enable check for kvm_pmu_trigger_event();
+>> - Add vcpu CPL check for kvm_pmu_trigger_event(); [Jim]
+>>
+>> Previous:
+>> https://lore.kernel.org/kvm/20211112235235.1125060-2-jmattson@google.com/
+>>
+>> [1] https://lore.kernel.org/kvm/20211119064856.77948-1-likexu@tencent.com/
+>>
+>> Jim Mattson (1):
+>>    KVM: x86: Update vPMCs when retiring branch instructions
+>>
+>> Like Xu (5):
+>>    KVM: x86/pmu: Setup pmc->eventsel for fixed PMCs
+>>    KVM: x86/pmu: Refactoring find_arch_event() to pmc_perf_hw_id()
+>>    KVM: x86/pmu: Reuse pmc_perf_hw_id() and drop find_fixed_event()
+>>    KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()
+>>    KVM: x86: Update vPMCs when retiring instructions
+>>
+>>   arch/x86/include/asm/kvm_host.h |   1 +
+>>   arch/x86/kvm/emulate.c          |  55 ++++++++------
+>>   arch/x86/kvm/kvm_emulate.h      |   1 +
+>>   arch/x86/kvm/pmu.c              | 128 ++++++++++++++++++++++----------
+>>   arch/x86/kvm/pmu.h              |   5 +-
+>>   arch/x86/kvm/svm/pmu.c          |  19 ++---
+>>   arch/x86/kvm/vmx/nested.c       |   7 +-
+>>   arch/x86/kvm/vmx/pmu_intel.c    |  44 ++++++-----
+>>   arch/x86/kvm/x86.c              |   5 ++
+>>   9 files changed, 167 insertions(+), 98 deletions(-)
+>>
+> 
+> Queued patches 1-4, thanks.
+> 
+> Paolo
+> 
 
---------------Z62ztZl0jHcNjlkYd7K00At9
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Hi Paolo,
 
-SGkNCg0KQW0gMTUuMTIuMjEgdW0gMTQ6Mjkgc2NocmllYiBUaG9tYXMgWmltbWVybWFubjoN
-Cj4gSGkNCj4gDQo+IEFtIDEyLjEyLjIxIHVtIDA3OjI0IHNjaHJpZWIgSGVjdG9yIE1hcnRp
-bjoNCj4+IEhpIERSTSBmb2xrcywNCj4+DQo+PiBUaGlzIHNob3J0IHNlcmllcyBtYWtlcyBz
-aW1wbGVkcm0gd29yayBvbiBBcHBsZSBNMSAoaW5jbHVkaW5nIFByby9NYXgpDQo+PiBwbGF0
-Zm9ybXMgdGhlIHdheSBzaW1wbGVmYiBhbHJlYWR5IGRvZXMsIGJ5IGFkZGluZyBYUkdCMjEw
-MTAxMCBzdXBwb3J0DQo+PiBhbmQgbWFraW5nIGl0IGJpbmQgdG8gZnJhbWVidWZmZXJzIGlu
-IC9jaG9zZW4gdGhlIHNhbWUgd2F5IHNpbXBsZWZiDQo+PiBkb2VzLg0KPj4NCj4+IFRoaXMg
-YXZvaWRzIGJyZWFraW5nIHRoZSBib290bG9hZGVyLXByb3ZpZGVkIGZyYW1lYnVmZmVyIGNv
-bnNvbGUgd2hlbg0KPj4gc2ltcGxlZHJtIGlzIHNlbGVjdGVkIHRvIHJlcGxhY2Ugc2ltcGxl
-ZmIsIGFzIHRoZXNlIEZCcyBhbHdheXMgc2VlbSB0bw0KPj4gYmUgMTAtYml0IChhdCBsZWFz
-dCB3aGVuIGEgcmVhbCBzY3JlZW4gaXMgYXR0YWNoZWQpLg0KPiANCj4gSWYgdGhlcmUgYXJl
-IG5vIGZ1cnRoZXIgY29tbWVudHMsIEknbSBnb2luZyB0byBhcHBseSB0aGUgc2VyaWVzIHRv
-IA0KPiBkcm0tbWlzYy1uZXh0Lg0KDQpJJ3ZlIGFkZGVkIHRoZSBzZXJpZXMuDQoNCkJlc3Qg
-cmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IEJlc3QgcmVnYXJkcw0KPiBUaG9tYXMNCj4gDQo+
-Pg0KPj4gQ2hhbmdlcyBzaW5jZSB2MjoNCj4+IC0gTWFkZSAxMC1iaXQgY29udmVyc2lvbiBj
-b2RlIGZpbGwgdGhlIExTQnMNCj4+IC0gQWRkZWQgQVJHQjIxMDEwMTAgdG8gc3VwcG9ydGVk
-IGZvcm1hdHMgbGlzdA0KPj4gLSBTaW1wbGlmaWVkIE9GIGNvcmUgY29kZSBwZXIgcmV2aWV3
-IGZlZWRiYWNrDQo+PiBIZWN0b3IgTWFydGluICgzKToNCj4+IMKgwqAgb2Y6IE1vdmUgc2lt
-cGxlLWZyYW1lYnVmZmVyIGRldmljZSBoYW5kbGluZyBmcm9tIHNpbXBsZWZiIHRvIG9mDQo+
-PiDCoMKgIGRybS9mb3JtYXQtaGVscGVyOiBBZGQgZHJtX2ZiX3hyZ2I4ODg4X3RvX3hyZ2Iy
-MTAxMDEwX3RvaW8oKQ0KPj4gwqDCoCBkcm0vc2ltcGxlZHJtOiBBZGQgW0FYXVJHQjIxMDEw
-MTAgZm9ybWF0cw0KPj4NCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZm9ybWF0X2hlbHBl
-ci5jIHwgNjQgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4+IMKgIGRyaXZlcnMv
-Z3B1L2RybS90aW55L3NpbXBsZWRybS5jwqDCoMKgIHzCoCA0ICstDQo+PiDCoCBkcml2ZXJz
-L29mL3BsYXRmb3JtLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCA0ICsrDQo+
-PiDCoCBkcml2ZXJzL3ZpZGVvL2ZiZGV2L3NpbXBsZWZiLmPCoMKgwqDCoMKgIHwgMjEgKy0t
-LS0tLS0tLQ0KPj4gwqAgaW5jbHVkZS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuaMKgwqDCoMKg
-IHzCoCAzICsrDQo+PiDCoCA1IGZpbGVzIGNoYW5nZWQsIDc0IGluc2VydGlvbnMoKyksIDIy
-IGRlbGV0aW9ucygtKQ0KPj4NCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBo
-aWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkg
-R21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2
-ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+do we miss the fourth patch in the kvm/queue tree or are there
+any new ideas or comments that we don't take it on board ?
 
---------------Z62ztZl0jHcNjlkYd7K00At9--
+Actually, the motivation is that the v11 pebs is rebased w/ first four patches.
 
---------------eYF1iziI7aQX0irnmnJKm7vw
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmG7EWUFAwAAAAAACgkQlh/E3EQov+DD
-iQ//XUN/4mfxi9I+9sLedCoShvZeOFabZFjAcpa8LR9fKKetE5ZED9Obch0FBQUxuF/JwLY7sp8m
-VZ+7cmN35w7JbsOjM3p0Vr4fm1E+1WfQo34XKknt+PMjZLonVtF53MAkFjkU4Oo/OKNmXCXVkTB/
-4vMsonxEo3/xaY7NBjWFimoTDHg3RPBFadyyxp2rUvFeC/hMCJxaFaLijQk+NBHMq3PMv4ez6qIa
-cSwYui652L8sQzFXYdD+FTZasrD0hGOz0CcuWf4DPpDtkwC+3s5RyYFw4ox+ol+r+d5ie+WV4Ga+
-A4Zk3cIZn7ZogkLVFp8It+um/LeCtRfoIESYQETQCFFdvWTExLaQnCh2+4WOVTj4TI6sUzKOd37d
-A6yLSIm0xm7rxBtoq90GrjvLu5CdmxeSZknYPtLi+Spibf0e1CqDEpTe+dUApbFFxjTqDOUsAQXw
-up5dPd8mVIivygm5ttjWoT3aGSlQFrqX5qVf4uFgo3yKBe8Kh9P+cuJ+UZ3nFrF3HhxsBfzWp9iN
-wcos4uMnwmKTmOOoEnct3ffOZMUGlEM3y2w0lM1hNWmXD1sZyLzOh6S+1fC2EXNoEZ1rgS721FUt
-cdbWqXdlZ2CEUwHD7nLG2xb8MlcGczEd1ty3fKBii6JvpKgQf+tBSw4b/0NJjDC2Z1J2ZR6IdfdF
-BRg=
-=5jtR
------END PGP SIGNATURE-----
-
---------------eYF1iziI7aQX0irnmnJKm7vw--
+Thanks,
+Like Xu

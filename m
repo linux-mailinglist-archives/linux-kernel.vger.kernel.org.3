@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CD5477CC9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3587C477CCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241074AbhLPTtT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Dec 2021 14:49:19 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:37554 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236738AbhLPTtS (ORCPT
+        id S241086AbhLPTuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 14:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236738AbhLPTuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 14:49:18 -0500
-Received: by mail-oi1-f175.google.com with SMTP id bj13so442934oib.4;
-        Thu, 16 Dec 2021 11:49:18 -0800 (PST)
+        Thu, 16 Dec 2021 14:50:00 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6056C061574;
+        Thu, 16 Dec 2021 11:50:00 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id x32so57913ybi.12;
+        Thu, 16 Dec 2021 11:50:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jv80TOkfa7cxx7XtLHqEOE19yIthxc/CjcWKoC88WJc=;
+        b=lv9bgpCr+4ebulx465pm0uZU9BGzdf/8ag2oZ10Aymwf5hX2aexEyLHi2lo4YY4zca
+         9Tq51VJ8biOUJ1QRqad4QWxpDZ9LRs0oWFS4VF4xWr3vKkantBPu3Aki/vjdpHD+hStk
+         3YvkHnd8paOvU7GrzQJ/+EPM1p5dDtqoY9Du6JZ/Il5PbIbu30yfNZmLE4NzM5kSIy43
+         sUHnq9BD7TpR3u7BT4OIf7WvZeh3A7m7w/9hEwO6+48pqwh2ugQ7hMrpcZGyPLkHpqAG
+         W0p/6KEkqtecDPvw++oDkLnujyUFYqd5WP1Pr8skyooT56PyxbXpONNQkrlSRNDOqfSU
+         ksMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=K9YSig+dSH4wLkJkl1f3TD0qsdd765YDc+vqhCt6/IA=;
-        b=IlxemNFQZneKAOxvFi4+BvdnnM962XjF7LV+R+TaMBjBCrfXKxERHGtGobv4bbmPL8
-         nPXw7rfAy9wMbC8j/bDAOG34/q4EQfjzxN4HpdKC88Ld9OyPz8eegQCKljNktHAWL7Vb
-         /2gnqKaiMM8Qj5zQFHTDxn/QKE5ugCQhigywuLz7iJ2HnsA3LO0J1En6ub67iHmQoySg
-         s4JCjjipFjDxVnVUgshNcERL6o8TJYD461uYA7uMVml1nj4soRS3uzUc4NnxmwEdFOHb
-         KNhpiJ/VkLYQoUmfcc/hHRqacNTh0SO1N8bfX3Pa+wE+49gvlNpKlCobtHIpfYLwPKoO
-         MFVw==
-X-Gm-Message-State: AOAM5321DqQKiDqi9R8VV5MjjPpPAPsUFHTGn9jjmXZ8TutA0GffrRYW
-        H2obUHdpgJR7Td5/rjpGekdGPh+r6RrGl99d8Y8=
-X-Google-Smtp-Source: ABdhPJylmJtuBFAfte6BXy9loWt6kt1insGu4s4RTJz4lr0j03s/TjeCqwB3oNwKq1FuMpV80rjGXzr3g5OS66RLx+0=
-X-Received: by 2002:aca:eb0b:: with SMTP id j11mr5394026oih.51.1639684157589;
- Thu, 16 Dec 2021 11:49:17 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=jv80TOkfa7cxx7XtLHqEOE19yIthxc/CjcWKoC88WJc=;
+        b=Mv/Ve2VTtilNtTvhp+/ihFbeOt8kXwtHnlDCFa43hJmf+cNKYc6F4xtBGweS3sbL7G
+         Fuulxp5jqGUHVJhVq9wdsWrAEId+FtknuhkpcrXuRJ1rZP8+8bPkpuJ83tc2aMfvtGWj
+         wuHvuuG6zBWYqMMGafEJhcCREdk5GM7rC5V9dE0XwXpFt8R6K28cg7iTsZiQPsjfetU6
+         6/X4+R7p+wrcUKVq6QYRfZ1ys/lNKs2wGyhNHfzwRDMM8GNteDe/5bf3r3nbiK+EkF0+
+         2an4mR5TNYbD98UUbNMn1M+sGfWZzjRrzzy9yoK7OvKDMnFT/0SBhLlqrMlemIAnOiQe
+         gnrw==
+X-Gm-Message-State: AOAM531LUUqJLwRc41hBMQ9tlytShYETtKGIwSWDRFIp799bubpwkUzc
+        Z/d3IY1lsiMeYpugAJbrL8q1OMVjgA9CeoNFwuk=
+X-Google-Smtp-Source: ABdhPJy28KtyL7QdNhV9aqLFvTdbBWZnj/mKsowyxeyKartXME6iWc860Tz3q3cQtEdxCyUDeP6V97DNK+Jssflkmus=
+X-Received: by 2002:a25:ab6c:: with SMTP id u99mr15913664ybi.188.1639684199906;
+ Thu, 16 Dec 2021 11:49:59 -0800 (PST)
 MIME-Version: 1.0
-References: <4717160.31r3eYUQgx@kreacher> <b9d06e6378a7c3b0e0b2561ab2a971c8fa1ff3e9.camel@linux.intel.com>
-In-Reply-To: <b9d06e6378a7c3b0e0b2561ab2a971c8fa1ff3e9.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 16 Dec 2021 20:49:06 +0100
-Message-ID: <CAJZ5v0ha5oimVv6i-yW=Dt8Fzf07+06V4b7xUyN3mY45yBvVbQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: sleep: Fix error handling in dpm_prepare()
-To:     =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
+References: <20211216044839.v9.1.Ic0a40b84dee3825302890aaea690e73165c71820@changeid>
+ <20211216044839.v9.3.If37d23d1dd8b765d8a6c8eca71ac1c29df591565@changeid>
+In-Reply-To: <20211216044839.v9.3.If37d23d1dd8b765d8a6c8eca71ac1c29df591565@changeid>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Thu, 16 Dec 2021 11:49:49 -0800
+Message-ID: <CABBYNZKaD95hQcGJyUKiBrokbnjD6h4BUhm0cpm7HntVtQOG+A@mail.gmail.com>
+Subject: Re: [PATCH v9 3/3] bluetooth: mgmt: Fix sizeof in mgmt_device_found()
+To:     Manish Mandlik <mmandlik@google.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        ChromeOS Bluetooth Upstreaming 
+        <chromeos-bluetooth-upstreaming@chromium.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 8:44 PM Thomas Hellström
-<thomas.hellstrom@linux.intel.com> wrote:
+Hi Manish,
+
+On Thu, Dec 16, 2021 at 4:50 AM Manish Mandlik <mmandlik@google.com> wrote:
 >
-> On Thu, 2021-12-16 at 20:30 +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Commit 2aa36604e824 ("PM: sleep: Avoid calling put_device() under
-> > dpm_list_mtx") forgot to update the while () loop termination
-> > condition to also break the loop if error is nonzero, which
-> > causes the loop to become infinite if device_prepare() returns
-> > an error for one device.
-> >
-> > Add the missing !error check.
-> >
-> > Fixes: 2aa36604e824 ("PM: sleep: Avoid calling put_device() under
-> > dpm_list_mtx")
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> Use correct sizeof() parameter while allocating skb.
 >
-> Was this meant to be a Reported-by:?
-
-Yes, it was, sorry.
-
-> Also Cc stable? IIRC 2aa36604e824 was.
-
-That gets added later and -stable can figure it out.
-
-> In any case,
-> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-
-Thanks!
-
-> > ---
-> >  drivers/base/power/main.c |    2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > Index: linux-pm/drivers/base/power/main.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/base/power/main.c
-> > +++ linux-pm/drivers/base/power/main.c
-> > @@ -1902,7 +1902,7 @@ int dpm_prepare(pm_message_t state)
-> >         device_block_probing();
-> >
-> >         mutex_lock(&dpm_list_mtx);
-> > -       while (!list_empty(&dpm_list)) {
-> > +       while (!list_empty(&dpm_list) && !error) {
-> >                 struct device *dev = to_device(dpm_list.next);
-> >
-> >                 get_device(dev);
-> >
-> >
-> >
+> Signed-off-by: Manish Mandlik <mmandlik@google.com>
+> ---
 >
+> (no changes since v8)
 >
+> Changes in v8:
+> - New patch in the series.
+>
+>  net/bluetooth/mgmt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+> index c65247b5896c..5fd29bd399f1 100644
+> --- a/net/bluetooth/mgmt.c
+> +++ b/net/bluetooth/mgmt.c
+> @@ -9709,7 +9709,7 @@ void mgmt_device_found(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
+>
+>         /* Allocate skb. The 5 extra bytes are for the potential CoD field */
+>         skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND,
+> -                            sizeof(ev) + eir_len + scan_rsp_len + 5);
+> +                            sizeof(*ev) + eir_len + scan_rsp_len + 5);
+>         if (!skb)
+>                 return;
+>
+> --
+> 2.34.1.173.g76aa8bc2d0-goog
+
+There is already a patch addressing this:
+
+https://patchwork.kernel.org/project/bluetooth/patch/20211213212650.2067066-1-luiz.dentz@gmail.com/
+
+Please use that instead and if that works for you reply adding Tested-by.
+
+
+-- 
+Luiz Augusto von Dentz

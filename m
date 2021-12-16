@@ -2,93 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 566E94768F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 05:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E8D4768FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 05:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbhLPEIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 23:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbhLPEIb (ORCPT
+        id S233493AbhLPEKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 23:10:30 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:34764 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231300AbhLPEKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 23:08:31 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA45C061574;
-        Wed, 15 Dec 2021 20:08:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=tfRydSG9UvslEfDaf+mltZ2vp8UyubsrzsjWaUyNOdQ=; b=MeE7Jb2LioOmOnHPBRtEgJO9xb
-        awtEVX5KC8x0c9K06Es1tt1udMIB1Yr03WLuRawFzv0TrQNOnSh6yVC/u4QvZaTg8z2hCvWs/6CiZ
-        BcffeAHQnukzxHfKchGT8iCg/09HP1DID45VvLT+Tfqy/kmmNv2hCys32BTBfkzd3vng+UhMc5jCS
-        chmrdZpquLWq19E5mEfz9gGgxx/jqyoHomlBIl/sNj57QLhWblZ6yyqTtJpMLFOeRbifKlE7zH1OW
-        cINxzdO1dnax4V47wOJGn/emuOz4jKumMzBpfTBRIhBB0gBIJP5iWAGyd1ilMSoIudNsaeyvvrKZ5
-        oP+OF7yA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mxi3t-001d8z-1q; Thu, 16 Dec 2021 04:08:09 +0000
-Message-ID: <42b7c12f-659b-409a-f4e3-c7a0560b3ce6@infradead.org>
-Date:   Wed, 15 Dec 2021 20:08:04 -0800
+        Wed, 15 Dec 2021 23:10:30 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BG4AJD4068197;
+        Wed, 15 Dec 2021 22:10:19 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1639627819;
+        bh=bqNJ7doLGaZDzl+Yqf7PFn8b5z/KOgogWZZb9M1PXJc=;
+        h=From:To:CC:Subject:Date;
+        b=vyFl1XzTzuafX0TqLUh50bydivJSpQoN9JPyI8RGH/MY5r5tgzPoaA/BN880wMMUf
+         dLVTrfdLfSnMKKREYmp+uiCaboziXjGKKkSFRrMRqXlHGzThJA2Y50RNas2oSL2DdL
+         w/0KfdlL/SKOUTXn1tL1MX02++7QZjivwSHTXHPE=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BG4AJYO079702
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 15 Dec 2021 22:10:19 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 15
+ Dec 2021 22:10:19 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 15 Dec 2021 22:10:19 -0600
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BG4AEOJ093350;
+        Wed, 15 Dec 2021 22:10:15 -0600
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     Aswath Govindraju <a-govindraju@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/2] CAN: Add support for setting mux
+Date:   Thu, 16 Dec 2021 09:40:10 +0530
+Message-ID: <20211216041012.16892-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH -next] HID: intel-ish-hid: ishtp-fw-loader: Fix a
- kernel-doc formatting issue
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>,
-        srinivas.pandruvada@linux.intel.com
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20211216040146.89075-1-yang.lee@linux.alibaba.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20211216040146.89075-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The following series of patches add support for setting
+muxes to route signals from CAN controller to transceiver
+by reading the property mux-states from the device tree
+node
 
-On 12/15/21 20:01, Yang Li wrote:
-> This function had kernel-doc that not used a hash to separate
+The following series of patches are dependent on,
+- https://lkml.org/lkml/2021/12/2/423
 
-                               that did not use a dash or hyphen to separate
+Changes since v2:
+- Fixed the bindings removing the description about
+  the arguments in mux-states property
 
-Patch looks good. Thanks.
+Changes since v1:
+- Fixed the description for mux-states property in bindings
+  file
+- appended declaration of variable ret in the end
 
-> the function name from the one line description.
-> 
-> The warning was found by running scripts/kernel-doc, which is
-> caused by using 'make W=1'.
-> 
-> drivers/hid/intel-ish-hid/ishtp-fw-loader.c:271: warning: This comment
-> starts with '/**', but isn't a kernel-doc comment. Refer
-> Documentation/doc-guide/kernel-doc.rst
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/hid/intel-ish-hid/ishtp-fw-loader.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/intel-ish-hid/ishtp-fw-loader.c b/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
-> index 0e1183e96147..e24988586710 100644
-> --- a/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
-> +++ b/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
-> @@ -268,7 +268,8 @@ static int get_firmware_variant(struct ishtp_cl_data *client_data,
->  }
->  
->  /**
-> - * loader_cl_send()	Send message from host to firmware
-> + * loader_cl_send() - Send message from host to firmware
-> + *
->   * @client_data:	Client data instance
->   * @out_msg:		Message buffer to be sent to firmware
->   * @out_size:		Size of out going message
-> 
+Aswath Govindraju (2):
+  dt-bindings: phy: ti,tcan104x-can: Document mux-states property
+  phy: phy-can-transceiver: Add support for setting mux
+
+ .../bindings/phy/ti,tcan104x-can.yaml         |  7 ++++++
+ drivers/phy/Kconfig                           |  1 +
+ drivers/phy/phy-can-transceiver.c             | 24 ++++++++++++++++++-
+ 3 files changed, 31 insertions(+), 1 deletion(-)
 
 -- 
-~Randy
+2.17.1
+

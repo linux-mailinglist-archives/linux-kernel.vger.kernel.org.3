@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72941477D53
+	by mail.lfdr.de (Postfix) with ESMTP id 067AF477D52
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 21:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241355AbhLPUUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 15:20:22 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:32856 "EHLO
+        id S241375AbhLPUUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 15:20:18 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:33392 "EHLO
         mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241309AbhLPUUE (ORCPT
+        by vger.kernel.org with ESMTP id S229521AbhLPUUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Dec 2021 15:20:04 -0500
 Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BGIneKF005124;
-        Thu, 16 Dec 2021 20:19:51 GMT
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BGInWvN005091;
+        Thu, 16 Dec 2021 20:19:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=corp-2021-07-09;
- bh=86Vkf+S0G49l4Yf6tvaDhr/WaBZmMpAS1bpWFBKg2GY=;
- b=WwDlWFVucq8Dxu2lCWAYnjrRJx0w2MprCK3yp3DEkL0jFFoIwfGfTfOvqlPDE10Psu97
- XV+ZN3yqnma2EQEjbQFIVfTsIpv5+OwpyaevYITw7/rJUCLEbkY0p7R3oRtNoCVNu1rg
- 44zomA4puoLBnM2Ty5JrQVp6+Pocnw3GP+NTheHlLAd0Escx3V2X1pHGN4k+7czSfPOC
- Iro4X3YX5HlGWy9t36y9m6hxy+GhOtojsp0inm0tpzpi32jSduAdC4DlZ75ac6Y5isMQ
- L9SyUxX/Tq5apkGudkAE4KDDgUfJP73lJa7Nu87KGHYkWBHdDzjgeoyhap/Lz3l/Klwg yA== 
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version;
+ s=corp-2021-07-09; bh=fdoVdxf6gDSe9Z0aQq/l4ni0Hbq7nNmEB5szE8POLEI=;
+ b=tGSIWMPxA8f1Vjx3c7FdfO6uLc+gB7q4ak3lUrKdpz/zbanLIP9mpLjAEGLrVe8r6Kph
+ a7EHVVP0LRm1rXh2UEnvhaUxi2VKVqjlNiZrT6ryidZJqwEfSw7y6iPcSr7kIeZh9w9a
+ 4QUzb+OUNpq2ZcnbFyGfIxIPjNbwv0e4B/6hsbNXTFzXxrHXHet7a8A+FchzyWgKpuTE
+ cch1ghzlR2F9tu5iU0Fb99jsOi/ZR6rVVQYC9D0oP1at3BIWnALUITpyysODaC40Pm3k
+ nIiyzqheAgfmDqMbzL8zLwgBUQRGz96eDEdqBgB7etr2LWYW9VfMVsU/U241ro3W9qpo fg== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cyknrkvas-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cyknrkvau-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Dec 2021 20:19:51 +0000
+        Thu, 16 Dec 2021 20:19:52 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BGKGD95123962;
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BGKGD96123962;
         Thu, 16 Dec 2021 20:19:50 GMT
 Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
-        by aserp3030.oracle.com with ESMTP id 3cyjuae09p-1
+        by aserp3030.oracle.com with ESMTP id 3cyjuae09p-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Dec 2021 20:19:49 +0000
+        Thu, 16 Dec 2021 20:19:50 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SLcSZW439eKbO6y0qxhPVTSuEWWvy8YR+DwFJVeG0WEzOSYopEgdxCxBFM3s5/mH72RDz9Kq+yhDdFhxFqw2yyjNDL+KR6SsUPgRY2KtjKlInf2FMbDJmvWsvIZiEDb+jAd0pOPHLNoByYlQ/p5+/6FOIBB61L+bHc3twJTRI/k1WFXWrgSPqUFm+ijlHE6lBbmhlAcekKCZrdlchw3YrNTwQMHaSFCBrybjdPoNb7/fcD16jMC4FXkad5siGqUd2kfmQ8uYkRqYu8VC0wjuQ9x/eLTRNeW01ndPSI/ALIWNZqYIRJ/iQWnxNwFVvWL5bVA2ZNSaeZRuqCnuJIA/xA==
+ b=WPwZFC5V4tCnZEHI4IcLX4fosKYOyUHr/tODay9pc1BpRIGATBkWbzof8Y9kPjAP2WA8OWb0rRJcI6+m7fHEXJJE1X29ZdqqoRqfAtd9cKH+iLN1p9/hIudMZj4B1ekYM38Uw85ty6RULCYHezZxzieZYlpudokCKvww8mm8YenFOhkLMl/uD1Z4+2ghkv38W5l95XH9c+A325KUOWI88L2Weybfmme68Aj/y7JJKSfqQEvhP86bUmQ2jQXSeUYE6Gsv0Vu5sxb6qnOjJzuXiyZdmHYzVtPSgJkDcKS3vR6iin9w1pRZm70o/83ZqeRruiopQO31ppZS5pK4h5vzVg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=86Vkf+S0G49l4Yf6tvaDhr/WaBZmMpAS1bpWFBKg2GY=;
- b=UeMBv/f9ERk01jHoM+dQZxst1o9dgq+XnUUNqUpkQZVDfHcB9QNQFxKwHIHk3bJfFhb8aphpNcb4w1xIf5fFKAHswcKrs1JZj7uHooCphJHKtCXdpRig4J9kXf+QBblLa9a01rQGxlVb3HrPCFD9QoYQmObznemtChyji99IjaX9/VnULRL1CHgQGq1eOe6U0gcSmwj2eG+APg08Q/MqnfyUxN/hVOGZnRZjFyz52jjxrn8fMoP4uCPgfdw/K2+oc5JUPYDbpuD6FnHBvyXVsATOo8kpLlVHvH1In4STjX4fJdJ81MmC5nZA3hsDqhBGSpGTcC2bNjB0r++jhwgrQQ==
+ bh=fdoVdxf6gDSe9Z0aQq/l4ni0Hbq7nNmEB5szE8POLEI=;
+ b=hlMgCBqP/oJI85P1CxuhzTMQIdMjWIHAcYzzsoKRBKxwiQWQzG3bB1dGu3mUt7llhzxK1/31EnlEWGFDl4ER2EzY+V3Fp65dhsjDLKBqvbs1uoEFrQb1zGBH2ZKwLKvm5RM49EWZtfA2vxI+GIwabG6IP3AM+GF9uLdJki2A3A+zTsplQ+kMKheUf6mJxrUEjHA9XRohZOeCgCkb/p8c57mgKnnhqhkPQHgauE3CWczo6BnoaTnj/gSx/Vp4O1I9jjh0nwL6N5MIcVTSgBthf/KDaALhaH04rGE1nAi7huc5ZXJIY3EctzGX55tabL+5pkqHb3xGKA4nPdXaGLiH2A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=86Vkf+S0G49l4Yf6tvaDhr/WaBZmMpAS1bpWFBKg2GY=;
- b=WB1pgRbZDJgNbBIlifo2Z16OMkV+rz5xIqdj07vWuhbQmeu3/hYXplGzfOAIpROipZPC3eHLPHbcqyzSy+TXtpOC3ZILaypQwjcp2QFYIgv+JFxZPssl6PD+lSlcjuNm5kpMSiSDfzYii07I29iPr/fjTrWOk61rAt8trZxXyI0=
+ bh=fdoVdxf6gDSe9Z0aQq/l4ni0Hbq7nNmEB5szE8POLEI=;
+ b=nzza5DNwuztVuGfMAvp9anzwWkZ8Z6w5NKkQo1T2d5oqSPItKz2Gh3lVsCt1bufqOimrvWwc1kFEqbEUMda4hzBsICWmEiJ/RrAFz8IE/4J2MFA0Iq/jiCgcsIYxb+NEFqynnm58TycL466j0cea3XYCcH0WQuf7l4FeWGbE8uo=
 Received: from SA2PR10MB4715.namprd10.prod.outlook.com (2603:10b6:806:fb::10)
  by SN6PR10MB2541.namprd10.prod.outlook.com (2603:10b6:805:44::28) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Thu, 16 Dec
- 2021 20:19:47 +0000
+ 2021 20:19:48 +0000
 Received: from SA2PR10MB4715.namprd10.prod.outlook.com
  ([fe80::c873:a8b4:278e:939e]) by SA2PR10MB4715.namprd10.prod.outlook.com
  ([fe80::c873:a8b4:278e:939e%7]) with mapi id 15.20.4801.015; Thu, 16 Dec 2021
- 20:19:47 +0000
+ 20:19:48 +0000
 From:   Nick Alcock <nick.alcock@oracle.com>
 To:     jeyu@kernel.org, masahiroy@kernel.org
 Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
         kris.van.hees@oracle.com
-Subject: [PING PATCH v7] kallsyms: new /proc/kallmodsyms with builtin modules
-Date:   Thu, 16 Dec 2021 20:19:12 +0000
-Message-Id: <20211216201919.234994-1-nick.alcock@oracle.com>
+Subject: [PATCH v7 1/7] kbuild: bring back tristate.conf
+Date:   Thu, 16 Dec 2021 20:19:13 +0000
+Message-Id: <20211216201919.234994-2-nick.alcock@oracle.com>
 X-Mailer: git-send-email 2.34.0.258.gc900572c39
+In-Reply-To: <20211216201919.234994-1-nick.alcock@oracle.com>
+References: <20211216201919.234994-1-nick.alcock@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: LO4P123CA0095.GBRP123.PROD.OUTLOOK.COM
@@ -75,354 +77,209 @@ X-ClientProxiedBy: LO4P123CA0095.GBRP123.PROD.OUTLOOK.COM
  (2603:10b6:806:fb::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6869f345-4186-4796-7b1b-08d9c0d167ba
+X-MS-Office365-Filtering-Correlation-Id: e9ec893e-00f2-46de-590a-08d9c0d168b7
 X-MS-TrafficTypeDiagnostic: SN6PR10MB2541:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR10MB2541DB1C64A7A05D2ACA6A678B779@SN6PR10MB2541.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Microsoft-Antispam-PRVS: <SN6PR10MB2541EA3A49A222614EF64AF28B779@SN6PR10MB2541.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +tFtnR42XiKoxtC2CccM+HQUCsJ+6U1KDtJHYhvyPgxQVQcFl66bpkzjltIsaGdZdmvOgu4eHyIwrDc7VGvkdJRcps+KsiD82DWMxNsM4RTLwuXhAQfixAIsTMZ5gCfB1TNap3rhb0ivNnOWa6UFEg2jLB0PRqLsG5d+Y0Rhx4B6BlwZRaxjj74tcfrNy/XUJ0J7YwGprWgpC95qogJV7YzodFEgy4d8HVADHWLVl0iM115mWghJX0gcvsPDRK0mgzuOW/CgUiyVLWxBcMi8TjIzfd3HR3qRSBWX6LdnghMw6TlI0AAigXj7YLDns4MSfml4pTYxYHgVfWttGcpKvcxy7lpcUhDAchvyQ03urIlarLf2C4YtQXeZBylNkOBPd8HrMRONBZwvthbu434e4hyNbyKQk8oIZLmZ/WL/nB04m+QD8ilqqCyQKS2Zf/z/LXpTIWkbWlfE+LVBE6Y0JJ2Kws7jIJ0cl79n2sd/UoF14N7PFvpwCqyWPzecSDNwBOD9lMvS4YuhykwyRX4Iery3mpEltINdAZIXR5Bt7Aal3gxQVf/1qGAxalelKuEuuAn4QzejqIC0Z+mg/8tHHVHhk83rFAkpgifpXf4bNpWh7YSGzIC5RZhFAIYvE1vieJ35hlbYjlmweoL1YrLEXA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR10MB4715.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(30864003)(83380400001)(52116002)(38100700002)(86362001)(44832011)(36756003)(5660300002)(1076003)(2616005)(6506007)(508600001)(6666004)(66946007)(66556008)(66476007)(186003)(8676002)(316002)(107886003)(6486002)(2906002)(8936002)(4326008)(6512007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Jkf4OqrbhvRv4cAR65cY8gjko2kA9ujF+jmrFW2o0BVmwsqOlBgN83J6AWeRFgl1RKWrX3T8iw4CauimELGvYlNyEtddPGkltqMv6KvlxLdA3Cnw8VSXIhQXLAe0Yhl5D/Yn88GTT0J8e0JrH/nkeQGU9yNbVYRSCOTHpRlg90vGdY7lnnvyiPP5b+ct5FTX2yDzThlfWH53VR8UUVL8Vt2tuc4cSGL/PXj+IEqCnujdC5Uq4PXvlYb6k6LrVExRptFlt1PtYuGmKGmbqsyBeesoMDnfkdMcFJ2JBe5hTYv3Y9Edv5bwyZsMSRc5gHV1v5uZe3lfgoCYGjXwmQ/LVbhZZe8h3P0vm2E8Vd4lQGOGdyXLgVJBhqgblKmgK7/d5bE4PEddnlRrp7ftt7dMVyNAIizd5Z76JfvGtwM5jNiVtxD0Chde+elTuZ3580iSRyWqcGSUO7NFVN/7KcbAG520/XewxW2Ab5zSouUI5KYc0N/9jME7g0izB0+GRC8NXY9gYmniPfR+5Dibg4DdDAvypLIerPF+RIKIN8+fhHJ1rzAPuOcWyZ5P2wOFofxh128HgNFha1MxW3JEk0N+U7RizrcvNAA6m5fqE7eeZKHzRK4aAkJsC0kc3UNnwBk+rU8iknxhUAun16SHgGT3ig==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR10MB4715.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(83380400001)(52116002)(38100700002)(86362001)(44832011)(36756003)(5660300002)(1076003)(2616005)(6506007)(508600001)(6666004)(66946007)(66556008)(66476007)(186003)(8676002)(316002)(107886003)(6486002)(2906002)(8936002)(4326008)(6512007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8LQLKILHjO1LkFhCa3dYMw8bDb1uKwi+OdWTedgTsVsLezRnexjwfjfWdI3q?=
- =?us-ascii?Q?0qWiPtETi6h78+VRfA5YHJkZhGpUDIUYo9ZsUHVK3cBuweQ8aYu2OQkdRcFZ?=
- =?us-ascii?Q?hjrMgnnN4KUXSbRN4rDxCvgvpe4nhsUl7NzAaEybjI9sy8eycW13rCIUNB02?=
- =?us-ascii?Q?sD/5Jke44WZDX8pIZ+mjZX9vNgzdDZTecmqTTv10sbegWc+9mqYfotna3H1c?=
- =?us-ascii?Q?jPMKrk4r8sr6dRGN51GhP74EuZ8WdckSth+l+ttLfzG2bZoHcgkf9Xs6S7IM?=
- =?us-ascii?Q?WHRlxdEFHXo9PNfPOredNWwCT76TUV4eVgJGPpYUS6CuilODuGlbVoyK74Ye?=
- =?us-ascii?Q?DyXIV1ObgGWU+i2zbKMbilyNwZIQkYEFfP67gzGsoaQ53ds7obsEA1YjoQf2?=
- =?us-ascii?Q?kubq6sJOKKm+a6onLs8mIbq0Q5RM/xd8SrFZVoWbtollwIhaSxj/zqVeH6SE?=
- =?us-ascii?Q?VIzklk8RsUd4Ow9tKA/S/b9q7CM5ZQIrCrDv/9xUyt5THF1kMbh8dMafNND2?=
- =?us-ascii?Q?dknUtYbov2fIY7pPZ3gvM9S+/MFICGE2Z8bYme6uBnPkdwrsFf9zDF20862H?=
- =?us-ascii?Q?3q5vI4LnBBw4T5u3PPfHaejG/HotesX7vxcjHVw3XJg0vAEGn32wzMnMBxHq?=
- =?us-ascii?Q?toZBVOAb9fjZrveJIoFrYDra4rkC4nMnn9WpTMdr9kz1zLapebTlqvLlF4QV?=
- =?us-ascii?Q?sydPGxLROwWWSU6O/9xJOGG/h9WsBA3NunJOzUcLr/Yp6jzzvxC9P3LX7jYM?=
- =?us-ascii?Q?p1IaZF5jspj18G6QiSCCegWAbGywD8hPNu2CjkmO7j+qzqtkIMmFIKN8exct?=
- =?us-ascii?Q?RAIRf9HiyXYywc2GXBNYEIFEHrtclfMSszQQcFAM/nDHMPYd4DvbYOvGGqHM?=
- =?us-ascii?Q?V46Uu2e+eFggD7+vzVbxflA1RMvIysvP8PzLEja3J92xwqABM4608+flRKCY?=
- =?us-ascii?Q?09gtQ/Yc+RfB7t2zcBLYLD1Dp8HGIsBgQVphwO3oIF4uj23/CWlIEmJxIyA9?=
- =?us-ascii?Q?U+Mi6fQ3qdu9ieXnTlclmcOuHgrf607J95C3xkhasn8d3fOMlzqTmlJ3U3ui?=
- =?us-ascii?Q?qvXSU1VQEEvBOM6EAaXJwE5aw0+8VAVpl7em7oRtZ2JRRT3Yv8DdFsUTaAM6?=
- =?us-ascii?Q?xtycKoompP4molvucCMA9MemPZXRa/FsJMsAoiCfMmFMMr6QbZ7qBlMg4Ba2?=
- =?us-ascii?Q?oP3fKNEnjmndf8CXD0CJPeyFJH5msoJsZqDAowQHz2fn6mYlF17bh/grOpiz?=
- =?us-ascii?Q?6BDGEpYp7Ek6nqHGtEg55RcnDo6Fy3Q8cEST2YKl9bhrVD5ezflWrlOdJ5Cp?=
- =?us-ascii?Q?i0IYFooZ5AjsLMgykAAyfJ4F5uWPoUapyau4/GQlCAa14+9/cfUe+k6tuPHK?=
- =?us-ascii?Q?q8AjuBSvqLw7dVYnp7nFwoCDcSY8yDjoHEMXvRjPfdaIJG4ZY5eNUDeo2lxZ?=
- =?us-ascii?Q?klBZ3NzbYFmmNRuR2IpRm56Wa74wYZTcxcszYBYowWSm0jhBECOW1v7g5UEh?=
- =?us-ascii?Q?+zsV0PXijMekVC8aOXRqhSbzcfTU8X4rqqmuMyBid6UnYyRecJPu7xxY13HU?=
- =?us-ascii?Q?IWVcU7B8OQkdddFQs+nBC9hHUphhvd7x/kFwMzCg6gb26K/4ez3MEIz6WjYg?=
- =?us-ascii?Q?z+DNrqf42vTCT5pCXw/I78rf5FUAOauQMggjRFDpWtAL?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tGkqpck4vik8X7QNbOvS7JUZw9impNjqBqQQ0JMFTZ0zTNPROBVsLgrLuady?=
+ =?us-ascii?Q?ZXooHZcnPuYt5sqTr2zpBr27FGamR/w/OBm2zJS9tYaje6O0ny5NkqsNVVKd?=
+ =?us-ascii?Q?Sf8AT4AD42YckPs+e8qL3qOLAUyHKg90eOvjUKJHV2ArOgKwTlL6P1WWtObj?=
+ =?us-ascii?Q?++6WkDUzeNih3oKel24paQWCemr8C2wrxiuhJXxghVMpYAdTo861rIG6+eDm?=
+ =?us-ascii?Q?Jjh6xtEfQwDGfj5agv+N5Vj72S8NecqQRl4PFlU4fZNd/EdzD2x6n96O4dMt?=
+ =?us-ascii?Q?hIc+z8tl/9xyla0g92nm2R4HAmHk455IYSeb9UNByLLGFKqde/XueUogqBT6?=
+ =?us-ascii?Q?BNvRn4I4O1y7IcNp8pBk5MZP+0ReYVzr5HRDKPUYAJT5jTdexN+Vk8fgCBNB?=
+ =?us-ascii?Q?n3vK/4PFkuv99cQLUEA1QMnl9I6hfrz7BfClMr3dfrKaL98iyzY0qYTF6ncs?=
+ =?us-ascii?Q?0tNt4/Z9yQBsK5p/LpAuxgKOy7chc+pbjaRHm5injxr8fe7u0m+zopWjbzHb?=
+ =?us-ascii?Q?Wgu3c+hH9nnn5N96B7WNvIXMfhD4gbzgbKXUUjp3sGVbmF4CJxUr2fGde4Ld?=
+ =?us-ascii?Q?g0sCvePKmTmlw4PSVzb4Xelm7eHF/XQ+pS0vOdwA7wEhL7X0Di2TEDqZ/gs5?=
+ =?us-ascii?Q?06A+XKlYx9PPugTKn0QkPCaXlaExizRkiT54m7Ems0FrLNXnCJNs7wEJRtDI?=
+ =?us-ascii?Q?iN0JrqTw82T44/U7o/WYNrGtbTBQiySQY4w18QTCcAYoFw81QQN88uxT3MO9?=
+ =?us-ascii?Q?TR9oRULNKeu/COlQj6ksOYB9Fs2ohXyERNwVileunWd1N51VUh8llqdyEWS0?=
+ =?us-ascii?Q?bM//NaMU28VDNDGN7UmtoHeRXVfgoXvU/OjxipAYD1IVzorEgtJSV5lMQa2K?=
+ =?us-ascii?Q?oJ+ZQMOR5ZCwqPrDpDaZm0jqYt44E14Q7q5weiEBhImHWC5U322BzXei46ju?=
+ =?us-ascii?Q?54UkgNUG0je5CpXEOQ8AVAXeygiTfkGYb2TWta0NnVFCqtJ9+Qhj0DkPXQgz?=
+ =?us-ascii?Q?3vhtxDiOy7UbsRDL46IjggIUy/Dmj0wfA1GQsYdP1MmHsyEEKuffwQo9F74m?=
+ =?us-ascii?Q?vHCh3WparrHmXsONPgQcGBa0fje0gjADlT9p5Z+5C0NdLIUQPajqb25G+po9?=
+ =?us-ascii?Q?6SHSz2umByzUhY0kD4iRWeZBUDxakcihSnOT3/WTvvm9OGYpDj9Hojd78at7?=
+ =?us-ascii?Q?pxu+8ms7kAcjRracq23PQKWLXi0ny5P7JRyuqOqrjZY8+Q91SVdkC+V4jKA3?=
+ =?us-ascii?Q?+rR+QArKRuVfXOmUXkSqtMNWpnofJuhGwz5KUkAu0734TrdCDAHovwcm4cS+?=
+ =?us-ascii?Q?iHemdXppCcOsiNO32WxHRo36ou9aVBCYtnUz3vJem6Lye9XpgsKyHAJBLQeR?=
+ =?us-ascii?Q?akaqAxWUmtP9V23p6E50QO4jXpGYfp00CRZyM34hvyKquZVVsWWNXEfN33Xl?=
+ =?us-ascii?Q?lxlSdKg3hMTtls+GYBb44ddmcY7tnhp7JjdDVX4fasPGr1KQoDUbihvLqYax?=
+ =?us-ascii?Q?4Dc3s/kHw/YPr7vpSAjSbmHDLvLWbgAcM4K9872ZhqVqQWp/xQJb95pdYuly?=
+ =?us-ascii?Q?rbPRhEjbrBCzLQD8pc6DIhRsT6Vz3Hj+R6NVlhEEr6HkXO9ApSCZzAomVsb9?=
+ =?us-ascii?Q?L0f2LylPnHxqMrHXa0EdDrx9z98chg4QXmOm5MWj2f+d?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6869f345-4186-4796-7b1b-08d9c0d167ba
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9ec893e-00f2-46de-590a-08d9c0d168b7
 X-MS-Exchange-CrossTenant-AuthSource: SA2PR10MB4715.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 20:19:47.2650
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 20:19:48.8273
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zUVFhKRcU9NmCzMkHXmW+AkbvtU9tp2Joe7Pp4LUlh9BVVPz+Ug5VqneHErzaPI/MUEMm7NN2XegTTT9Ra0riQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8EEF/Eru4kQ5FwCu0ExttJC2jYwSHmG2KpyIi5b4CKp07gqxmK763zd30eZ5+MKSX7CuntPBrDso9dgYH63+xg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2541
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10200 signatures=668683
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
  spamscore=0 mlxscore=0 adultscore=0 bulkscore=0 suspectscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2112160110
-X-Proofpoint-ORIG-GUID: kLEfeXDOHXpXq6ONlCRyl_Atn400M47b
-X-Proofpoint-GUID: kLEfeXDOHXpXq6ONlCRyl_Atn400M47b
+X-Proofpoint-ORIG-GUID: MpVCiALNpVDKyUzrV0fT_EymCDgnYy9H
+X-Proofpoint-GUID: MpVCiALNpVDKyUzrV0fT_EymCDgnYy9H
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-/proc/kallsyms is very useful for tracers and other tools that need to
-map kernel symbols to addresses.
+tristate.conf was dropped because it is not needed to build a
+modules.builtin (although dropping it introduces a few false positives
+into modules.builtin support), and doing so avoids one round of
+recursion through the build tree to build it.  But kallmodsyms support
+requires building a mapping from object file name to built-in module
+name for all builtin modules: this seems to me impossible to accomplish
+without parsing all makefiles under the influence of tristate.conf,
+since the makefiles are the only place this mapping is recorded.
 
-It would be useful if there were a mapping between kernel symbol and module
-name that only changed when the kernel source code is changed.  This mapping
-should not change simply because a module becomes built into the kernel, so
-that it's not broken by changes in user configuration.  (DTrace for Linux
-already uses the approach in this patch for this purpose.)
-
-It might also be useful if there were reliable symbol size information to
-determine whether an address is within a symbol or outside it, especially
-given that there could be huge gaps between symbols.
-
-Fix this by introducing a new config parameter CONFIG_KALLMODSYMS, which
-when set results in output in /proc/kallmodsyms that looks like this:
-
-ffffffff8b013d20 409 t pt_buffer_setup_aux
-ffffffff8b014130 11f T intel_pt_interrupt
-ffffffff8b014250 2d T cpu_emergency_stop_pt
-ffffffff8b014280 13a t rapl_pmu_event_init      [intel_rapl_perf]
-ffffffff8b0143c0 bb t rapl_event_update [intel_rapl_perf]
-ffffffff8b014480 10 t rapl_pmu_event_read       [intel_rapl_perf]
-ffffffff8b014490 a3 t rapl_cpu_offline  [intel_rapl_perf]
-ffffffff8b014540 24 t __rapl_event_show [intel_rapl_perf]
-ffffffff8b014570 f2 t rapl_pmu_event_stop       [intel_rapl_perf]
-
-This is emitted even if intel_rapl_perf is built into the kernel.
-
-Further down, we see what happens when object files are reused by
-multiple modules, all of which are built in to the kernel:
-
-ffffffffa22b3aa0 ab t handle_timestamp  [liquidio]
-ffffffffa22b3b50 4a t free_netbuf       [liquidio]
-ffffffffa22b3ba0 8d t liquidio_ptp_settime      [liquidio]
-ffffffffa22b3c30 b3 t liquidio_ptp_adjfreq      [liquidio]
-[...]
-ffffffffa22b9490 203 t lio_vf_rep_create        [liquidio]
-ffffffffa22b96a0 16b t lio_vf_rep_destroy       [liquidio]
-ffffffffa22b9810 1f t lio_vf_rep_modinit        [liquidio]
-ffffffffa22b9830 1f t lio_vf_rep_modexit        [liquidio]
-ffffffffa22b9850 d2 t lio_ethtool_get_channels   [liquidio] [liquidio_vf]
-ffffffffa22b9930 9c t lio_ethtool_get_ringparam  [liquidio] [liquidio_vf]
-ffffffffa22b99d0 11 t lio_get_msglevel   [liquidio] [liquidio_vf]
-ffffffffa22b99f0 11 t lio_vf_set_msglevel        [liquidio] [liquidio_vf]
-ffffffffa22b9a10 2b t lio_get_pauseparam         [liquidio] [liquidio_vf]
-ffffffffa22b9a40 738 t lio_get_ethtool_stats     [liquidio] [liquidio_vf]
-ffffffffa22ba180 368 t lio_vf_get_ethtool_stats  [liquidio] [liquidio_vf]
-ffffffffa22ba4f0 37 t lio_get_regs_len   [liquidio] [liquidio_vf]
-ffffffffa22ba530 18 t lio_get_priv_flags         [liquidio] [liquidio_vf]
-ffffffffa22ba550 2e t lio_set_priv_flags         [liquidio] [liquidio_vf]
-ffffffffa22ba580 69 t lio_set_fecparam   [liquidio] [liquidio_vf]
-ffffffffa22ba5f0 92 t lio_get_fecparam   [liquidio] [liquidio_vf]
-[...]
-ffffffffa22cbd10 175 t liquidio_set_mac [liquidio_vf]
-ffffffffa22cbe90 ab t handle_timestamp  [liquidio_vf]
-ffffffffa22cbf40 4a t free_netbuf       [liquidio_vf]
-ffffffffa22cbf90 2b t octnet_link_status_change [liquidio_vf]
-ffffffffa22cbfc0 7e t liquidio_vxlan_port_command.constprop.0   [liquidio_vf]
-
-Much more detail and information on the (nearly nonexistent) memory usage
-impact below.
-
-
-We have to do several things to make this work, to figure out which
-object files are in which modules, then which address ranges correspond
-to these object files, then turn this into per-symbol output.
-
-First, generate a file "modules_thick.builtin" that maps from the thin
-archives that make up built-in modules to their constituent object files.
-(This reintroduces the machinery that used to be used to generate
-modules.builtin.  I am not wedded to this mechanism: if someone can figure
-out a mechanism that does not require recursing over the entire build tree,
-I'm happy to use it, but I suspect that no such mechanism exists, since the
-only place the mapping from object file to module exists is in the makefiles
-themselves.  Regardless, this is fairly cheap, adding less than a second to
-a typical hot-cache build of a large enterprise kernel.  This is true even
-though it needs to be run unconditionally whenever the .config changes.)
-
-Generate a linker map ".tmp_vmlinux.map", converting it into a new file
-".tmp_vmlinux.ranges", mapping address ranges to object files.
-
-Have scripts/kallsyms read these two new files to map symbol addresses
-to built-in-module names and then write a mapping from object file
-address to module name to the *.s output file.
-
-The mapping consists of three new symbols:
-
- - kallsyms_module_addresses/kallsyms_module_offsets encodes the
-   address/offset of each object file (derived from the linker map), in
-   exactly the same way as kallsyms_addresses/kallsyms_offsets does
-   for symbols.  There is no size: instead, the object files are
-   assumed to tile the address space.  (This is slightly more
-   space-efficient than using a size).  Non-text-section addresses are
-   skipped: for now, all the users of this interface only need
-   module/non-module information for instruction pointer addresses, not
-   absolute-addressed symbols and the like.  This restriction can
-   easily be lifted in future.  (For why this isn't called
-   kallsyms_objfiles, see two entries below.)
-
- - kallsyms_module_names encodes the name of each module in a modified
-   form of strtab: notably, if an object file appears in *multiple*
-   modules, all of which are built in, this is encoded via a zero byte,
-   a one-byte module count, then a series of that many null-terminated
-   strings.  Object files which appear in only one module in such a
-   multi-module list are redirected to point inside that list, so that
-   modules which contain some object files shared with other modules
-   and some object files exclusive to them do not double up the module
-   name.  (There might still be some duplication between multiple
-   multi-module lists, but this is an extremely marginal size effect,
-   and resolving it would require an extra layer of lookup tables which
-   would be even more complex, and incompressible to boot).  As a
-   special case, the table starts with a single zero byte which does
-   *not* represent the start of a multi-module list.
-
- - kallsyms_modules connects the two, encoding a table associated 1:1
-   with kallsyms_module_addresses / kallsyms_module_offsets, pointing
-   at an offset in kallsyms_module_names describing which module (or
-   modules, for a multi-module list) the code occupying this address
-   range is part of.  If an address range is part of no module (always
-   built-in) it points at 0 (the null byte at the start of the
-   kallsyms_module_names list).  Entries in this list that would
-   contain the same value are fused together, along with their
-   corresponding kallsyms_module_addresses/offsets entries.  Due to
-   this fusion process, and because object files can be split apart into
-   multiple parts by the linker for hot/cold partitioning and the like,
-   entries in here do not really correspond to an object file, but more
-   to some contiguous range of addresses which are guaranteed to belong
-   to a single built-in module: so it seems best to call the symbols
-   kallsyms_modules*.  (The generator has a data structure that does
-   correspond more closely to object files, from which kallsyms_modules
-   is generated, and that does use 'objfiles' terminology.)
-
-Emit a new /proc/kallmodsyms file akin to /proc/kallsyms but with built-in
-module names, using a new kallsyms_builtin_module_address() almost identical
-to kallsyms_sym_address() to get the address corresponding to a given
-.kallsyms_modules index, and a new get_builtin_module_idx quite similar to
-get_symbol_pos to determine the index in the .kallsyms_modules array that
-relates to a given address.  Save a little time by exploiting the fact that
-all callers will only ever traverse this list from start to end by allowing
-them to pass in the previous index returned from this function as a hint:
-thus very few bsearches are actually needed.  (In theory this could change
-to just walk straight down kallsyms_module_addresses/offsets and not bother
-bsearching at all, but doing it this way is hardly any slower and much more
-robust.)
-
-The display process is complicated a little by the weird format of the
-.kallsyms_module_names table: we have to look for multimodule entries
-and print them as space-separated lists of module names.
-
-Like /proc/kallsyms, the output is driven by address, so keeps the
-curious property of /proc/kallsyms that symbols (like free_netbuf above)
-may appear repeatedly with different addresses: but now, unlike in
-/proc/kallsyms, we can see that those symbols appear repeatedly because
-they are *different symbols* that ultimately belong to different
-modules, all of which are built in to the kernel.
-
-Those symbols that come from object files that are genuinely reused and
-that appear only once in meory get a /proc/kallmodsyms line with
-[multiple] [modules] on it: consumers will have to be ready to handle
-such lines.
-
-Also, kernel symbols for built-in modules will probably appear
-interspersed with other symbols that are part of different modules and
-non-modular always-built-in symbols, which, as usual, have no
-square-bracketed module denotation.
-
-As with /proc/kallsyms, non-root usage produces addresses that are
-all zero.
-
-I am open to changing the name and/or format of /proc/kallmodsyms, but felt
-it best to split it out of /proc/kallsyms to avoid breaking existing
-kallsyms parsers.  Another possible syntax might be to use {curly brackets}
-or something to denote built-in modules: it might be possible to drop
-/proc/kallmodsyms and make /proc/kallsyms emit things in this format.
-(Equally, now kallmodsyms data uses very little space, the
-CONFIG_KALLMODSYMS config option might be something people don't want to
-bother with.)
-
-
-The size impact of all of this is minimal: for the case above, the
-kallsyms2.S file went from 14107772 to 14137245 bytes, a gain of 29743
-bytes, or 0.16%: vmlinux gained 10824 bytes, a gain of .017%, and the
-compressed vmlinux only 7552 bytes, a gain of .08%: though the latter two
-values are very configuration-dependent, they seem likely to scale roughly
-with the kernel they are part of.
-
-
-The last patch is an RFC to see if the idea is considered to be worth
-spending more time optimizing the representation, which adds a new
-kallsyms_sizes section that gives the size of each symbol, and uses this
-info to report reliable symbol sizes to in-kernel users, and (via a new
-column in /proc/kallmodsyms) to out-of-kernel users too.  Having reliable
-size info lets us identify inter-symbol gaps and sort symbols so that
-start/end-marker and overlapping symbols are consistently ordered with
-respect to the symbols they overlap.  This certainly uses too much space
-right now, 200KiB--1MiB: a better representation is certainly needed.  One
-that springs to mind is making the table sparse (pairs of symbol
-index/size), and recording explicit sizes only for those symbols that
-are not immediately followed by a subsequent symbol.
-
-Differences from v6, November:
-
- - Adjust for rewrite of confdata machinery in v5.16 (tristate.conf
-   handling is now more of a rewrite than a reversion)
-
-Differences from v5, October:
-
- - Fix generation of mapfiles under UML
-
-Differences from v4, September:
-
- - Fix building of tristate.conf if missing (usually concealed by the
-   syncconfig being run for other reasons, but not always: the kernel
-   test robot spotted it).
- - Forward-port atop v5.15-rc3.
-
-Differences from v3, August:
-
- - Fix a kernel test robot warning in get_ksymbol_core (possible
-   use of uninitialized variable if kallmodsyms was wanted but
-   kallsyms_module_offsets was not present, which is most unlikely).
-
-Differences from v2, June:
-
- - Split the series up.  In particular, the size impact of the table
-   optimizer is now quantified, and the symbol-size patch is split out and
-   turned into an RFC patch, with the /proc/kallmodsyms format before that
-   patch lacking a size column.  Some speculation on how to make the symbol
-   sizes less space-wasteful is added (but not yet implemented).
-
- - Drop a couple of unnecessary #includes, one unnecessarily exported
-   symbol, and a needless de-staticing.
-
-Differences from v1, a year or so back:
-
- - Move from a straight symbol->module name mapping to a mapping from
-   address-range to TU to module name list, bringing major space savings
-   over the previous approach and support for object files used by many
-   built-in modules at the same time, at the cost of a slightly more complex
-   approach (unavoidably so, I think, given that we have to merge three data
-   sources together: the link map in .tmp_vmlinux.ranges, the nm output on
-   stdin, and the mapping from TU name to module names in
-   modules_thick.builtin).
-
-   We do opportunistic merging of TUs if they cite the same modules and
-   reuse module names where doing so is simple: see optimize_obj2mod
-   below. I considered more extensive searches for mergeable entries and
-   more intricate encodings of the module name list allowing TUs that are
-   used by overlapping sets of modules to share their names, but such
-   modules are rare enough (and such overlapping sharings are vanishingly
-   rare) that it seemed likely to save only a few bytes at the cost of much
-   more hard-to-test code. This is doubly true now that the tables needed
-   are only a few kilobytes in length.
+So bring it back for this purpose.  (Thanks to the refactoring in
+the 5.16 timeframe, this is basically a reimplementation of commit
+8b41fc4454e36fbfdbb23f940d023d4dece2de29 rather than a simple
+reversion.)
 
 Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-Signed-off-by: Eugene Loh <eugene.loh@oracle.com>
-Reviewed-by: Kris Van Hees <kris.van.hees@oracle.com>
+---
 
-Nick Alcock (7):
-  kbuild: bring back tristate.conf
-  kbuild: add modules_thick.builtin
-  kbuild: generate an address ranges map at vmlinux link time
-  kallsyms: introduce sections needed to map symbols to built-in modules
-  kallsyms: optimize .kallsyms_modules*
-  kallsyms: add /proc/kallmodsyms
-  kallsyms: add reliable symbol size info
+Notes:
+    v7: rewrite in terms of the new confdata refactoring
 
- .gitignore                       |   1 +
- Documentation/dontdiff           |   1 +
- Documentation/kbuild/kconfig.rst |   5 +
- Makefile                         |  23 +-
- include/linux/module.h           |   7 +-
- init/Kconfig                     |   8 +
- kernel/kallsyms.c                | 304 ++++++++++++---
- kernel/module.c                  |   4 +-
- scripts/Kbuild.include           |   6 +
- scripts/Makefile                 |   6 +
- scripts/Makefile.modbuiltin      |  56 +++
- scripts/kallsyms.c               | 642 ++++++++++++++++++++++++++++++-
- scripts/kconfig/confdata.c       |  36 +-
- scripts/link-vmlinux.sh          |  22 +-
- scripts/modules_thick.c          | 200 ++++++++++
- scripts/modules_thick.h          |  48 +++
- 16 files changed, 1298 insertions(+), 71 deletions(-)
- create mode 100644 scripts/Makefile.modbuiltin
- create mode 100644 scripts/modules_thick.c
- create mode 100644 scripts/modules_thick.h
+ Documentation/kbuild/kconfig.rst |  5 +++++
+ Makefile                         |  2 +-
+ scripts/kconfig/confdata.c       | 36 +++++++++++++++++++++++++++-----
+ 3 files changed, 37 insertions(+), 6 deletions(-)
 
+diff --git a/Documentation/kbuild/kconfig.rst b/Documentation/kbuild/kconfig.rst
+index 5967c79c3baa..e2c78760d442 100644
+--- a/Documentation/kbuild/kconfig.rst
++++ b/Documentation/kbuild/kconfig.rst
+@@ -162,6 +162,11 @@ KCONFIG_AUTOCONFIG
+ This environment variable can be set to specify the path & name of the
+ "auto.conf" file.  Its default value is "include/config/auto.conf".
+ 
++KCONFIG_TRISTATE
++----------------
++This environment variable can be set to specify the path & name of the
++"tristate.conf" file.  Its default value is "include/config/tristate.conf".
++
+ KCONFIG_AUTOHEADER
+ ------------------
+ This environment variable can be set to specify the path & name of the
+diff --git a/Makefile b/Makefile
+index 765115c99655..879066d1af4b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -727,7 +727,7 @@ $(KCONFIG_CONFIG):
+ #
+ # Do not use $(call cmd,...) here. That would suppress prompts from syncconfig,
+ # so you cannot notice that Kconfig is waiting for the user input.
+-%/config/auto.conf %/config/auto.conf.cmd %/generated/autoconf.h: $(KCONFIG_CONFIG)
++%/config/auto.conf %/config/auto.conf.cmd %/generated/autoconf.h %/tristate.conf: $(KCONFIG_CONFIG)
+ 	$(Q)$(kecho) "  SYNC    $@"
+ 	$(Q)$(MAKE) -f $(srctree)/Makefile syncconfig
+ else # !may-sync-config
+diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
+index 42bc56ee238c..1d30faff6984 100644
+--- a/scripts/kconfig/confdata.c
++++ b/scripts/kconfig/confdata.c
+@@ -216,6 +216,13 @@ static const char *conf_get_autoheader_name(void)
+ 	return name ? name : "include/generated/autoconf.h";
+ }
+ 
++static const char *conf_get_tristate_name(void)
++{
++	char *name = getenv("KCONFIG_TRISTATE");
++
++	return name ? name : "include/config/tristate.conf";
++}
++
+ static int conf_set_sym_val(struct symbol *sym, int def, int def_flags, char *p)
+ {
+ 	char *p2;
+@@ -666,7 +673,8 @@ static char *escape_string_value(const char *in)
+ enum output_n { OUTPUT_N, OUTPUT_N_AS_UNSET, OUTPUT_N_NONE };
+ 
+ static void __print_symbol(FILE *fp, struct symbol *sym, enum output_n output_n,
+-			   bool escape_string)
++			   bool escape_string, bool upcase_string,
++			   bool tristate_only)
+ {
+ 	const char *val;
+ 	char *escaped = NULL;
+@@ -674,6 +682,9 @@ static void __print_symbol(FILE *fp, struct symbol *sym, enum output_n output_n,
+ 	if (sym->type == S_UNKNOWN)
+ 		return;
+ 
++	if (sym->type != S_TRISTATE && tristate_only)
++		return;
++
+ 	val = sym_get_string_value(sym);
+ 
+ 	if ((sym->type == S_BOOLEAN || sym->type == S_TRISTATE) &&
+@@ -688,24 +699,32 @@ static void __print_symbol(FILE *fp, struct symbol *sym, enum output_n output_n,
+ 		val = escaped;
+ 	}
+ 
+-	fprintf(fp, "%s%s=%s\n", CONFIG_, sym->name, val);
++	if (upcase_string)
++		fprintf(fp, "%s%s=%c\n", CONFIG_, sym->name, (char)toupper(*val));
++	else
++		fprintf(fp, "%s%s=%s\n", CONFIG_, sym->name, val);
+ 
+ 	free(escaped);
+ }
+ 
+ static void print_symbol_for_dotconfig(FILE *fp, struct symbol *sym)
+ {
+-	__print_symbol(fp, sym, OUTPUT_N_AS_UNSET, true);
++	__print_symbol(fp, sym, OUTPUT_N_AS_UNSET, true, false, false);
+ }
+ 
+ static void print_symbol_for_autoconf(FILE *fp, struct symbol *sym)
+ {
+-	__print_symbol(fp, sym, OUTPUT_N_NONE, true);
++	__print_symbol(fp, sym, OUTPUT_N_NONE, true, false, false);
++}
++
++static void print_symbol_for_tristate(FILE *fp, struct symbol *sym)
++{
++	__print_symbol(fp, sym, OUTPUT_N_NONE, true, true, true);
+ }
+ 
+ void print_symbol_for_listconfig(struct symbol *sym)
+ {
+-	__print_symbol(stdout, sym, OUTPUT_N, true);
++	__print_symbol(stdout, sym, OUTPUT_N, true, false, false);
+ }
+ 
+ static void print_symbol_for_c(FILE *fp, struct symbol *sym)
+@@ -1129,6 +1148,13 @@ int conf_write_autoconf(int overwrite)
+ 	if (ret)
+ 		return ret;
+ 
++
++	ret = __conf_write_autoconf(conf_get_tristate_name(),
++				    print_symbol_for_tristate,
++				    &comment_style_pound);
++	if (ret)
++		return ret;
++
+ 	/*
+ 	 * Create include/config/auto.conf. This must be the last step because
+ 	 * Kbuild has a dependency on auto.conf and this marks the successful
 -- 
 2.34.0.258.gc900572c39
 

@@ -2,194 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9AC477A2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D77E477A56
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235509AbhLPRN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:13:57 -0500
-Received: from mail-eopbgr90055.outbound.protection.outlook.com ([40.107.9.55]:65221
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        id S240136AbhLPRRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:17:04 -0500
+Received: from mail-dm6nam10on2054.outbound.protection.outlook.com ([40.107.93.54]:25958
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235517AbhLPRNu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:13:50 -0500
+        id S233283AbhLPRRD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 12:17:03 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OEqp8ZH72botkhizLMNNguM9Evarsh/rIUHUyS9CmTjJdoOTkYbSPQGylUPNshtSSGV08cysLNXnmLNw3MlZOAVah9ViPsxxnfJC539VrYTs3F+T84M2F3qsRXDIwPIrJCtoIodzNg+k5QIfDpMBPrjy2hYo+gLGrfK9vYyXcOWXCucsaeNzL3mFv7/2jOyoKaMR4zVRzLHJAKkux2HL02R7qum1Ndz5BPLN+vzuxjFLhDECzqZUXPRc0/H/vQ5NqfYL64l11A/IROBXbWCmRVeyLf/LWZi64wreRmyVTujRMqOIVwl8wodH8J8TVzy74aCsvYVCAk7NNaQRvohQlw==
+ b=eOgUPdARqR3CCMZ2NFZpSus4YnYjRe6m0mMGy0Td5hZjKEUG1AgF+w23RL98+MMTcqfmrNGY4RZUDtZO4sKBlFNsIKsSOv1fr60X4eGvwXsyraxMB/9UizL9IYQRivVKw7dCYpFOcsnz5nlAGJe1CttMyvE92a/c9GHEeehZwbmiO37Wc1+UKl1EHjPTpDryJoEgAjvaE5oYQNipwqWOpAvPSD3DxLuShbNk984pzee1XdvnDcTTuC9gkYO4lVkBKBBoJVlP+WkmqLfJTmXIXc09HPny+E2Z5bmtACr3CHxehviUmNI0cA7ZJRfAuYGTOUuwyyg1eUt/gLMhlro/Tw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/AA5A1o0q5404uN/5Bkw4XAA05/0yWV77QN06VNPc8U=;
- b=jMN4WOpKL56jl0tyPdkHD5EwjhwrM1HuduUR7Oenu3uSKsbMOdYqQLfnUeURps9cSVPW3QKfqTMJ6D9MRiUjXCWJeK3hkKxIXzAl9HvJoQvgEHz1tyfcNmLcRZSpcljmVYY3pDWGSjlcqrWz+ZlvsrdbGoe+Vk+jH4IThnh5x31+3xE1Dyqouo3tUbFX6xBiO4czzRA7uKI23r33yYYsdQMPM5exw8WU1F94hNWV4hhLT9PaKRfrEmLkn1y2UYNNw2tUOpjhn/cOQxRKRtF8Zf4qJz43yZYq+RQxheXvdPwnz0OcMr33fLG/2Bnp2xsWuphvzMSWWrDbiNaMd9Oj2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB2628.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:39::8) with
+ bh=WN81HV8SdQNgNqPIixWndaGlHszTU/Vp03emVWp2ygo=;
+ b=Ch90mjDjnV7sjG1ck2rTkwM+iql1gQCWVAWQNJFxWFZM5R3yzepte5DhwV1bgu67GW/ubqxJ9r42tWbpRfKr8MRsn6cjBUpUDCK83AuJses0kRA9ePPzMj+L1ZKFEiTJYp5dzPrMbeSpQ0XScK1S6b/+0fqrmo9KGKwL8UWH9ZEqXIuYOjS5aqeLw72DyiPAF1ODD3Iq98jZp9NunaPB3+eY27uvbEPvY50ge9VPRe4esdHtIfgPHR6waUmI/KH4Kfzh61yg/2nNqo3eBZwdNpMpJwXhTQPDoF9CtybrqkaaRfiLtXy/k47c/92V3OOv8ESCHvehbAAI/asNVV4yhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WN81HV8SdQNgNqPIixWndaGlHszTU/Vp03emVWp2ygo=;
+ b=Q5BBq4Pajmj0vDnNCBCSVF3Y8V1UJFzZ4pTbXmcDpESS8E5+OuqT7C2LaEZNF1w2omQpQYAHZMNeGsEf8ltI2e6aJn3EUTzIqh3+8Kd2H1H9Fx4BgbqTYHF7N1EmoK9DkMwJVc5vQ2vOA6KJmXkPBK32mNH9IpG1SKVf9fvixxM=
+Received: from MW4PR03CA0124.namprd03.prod.outlook.com (2603:10b6:303:8c::9)
+ by CH0PR12MB5026.namprd12.prod.outlook.com (2603:10b6:610:e1::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Thu, 16 Dec
- 2021 17:13:47 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::f0ef:856d:b0de:e85d%5]) with mapi id 15.20.4801.014; Thu, 16 Dec 2021
- 17:13:47 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        "alex@ghiti.fr" <alex@ghiti.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Steve Capper <steve.capper@arm.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v4 07/10] powerpc/mm: Use
- generic_hugetlb_get_unmapped_area()
-Thread-Topic: [PATCH v4 07/10] powerpc/mm: Use
- generic_hugetlb_get_unmapped_area()
-Thread-Index: AQHX7FeZBU3PIhmcjU6PaLYrRJLsx6wp7vGAgAt48QA=
-Date:   Thu, 16 Dec 2021 17:13:47 +0000
-Message-ID: <5393b7d1-33e0-2f5c-f2fb-84e6319698c9@csgroup.eu>
-References: <cover.1638976228.git.christophe.leroy@csgroup.eu>
- <f292a83707b64c73fcb02a8708f18f09422f7eea.1638976229.git.christophe.leroy@csgroup.eu>
- <1639043741.e2zqhea1ix.astroid@bobo.none>
-In-Reply-To: <1639043741.e2zqhea1ix.astroid@bobo.none>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f34728fb-a066-457f-9a6f-08d9c0b76bf0
-x-ms-traffictypediagnostic: MR1P264MB2628:EE_
-x-microsoft-antispam-prvs: <MR1P264MB262893DBA84A0D3A383A5B41ED779@MR1P264MB2628.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:3631;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: L4csXOK/yA36/41bYujMozHK7v+7uENhGpiochkGzC/hsmxTHRdAC2kTIqcOXU/IYZe/5jkSN6yWVBRKr64D9EETVi/Y7+S1y4GI9fGnKPTCTQPk5uSx9xaad1/p3Bym9+kZQWu8sWgotVTXKVs8SXGYykhoKmGOI+gzOnveERWJaNvZyPuQp8bO42ovl11JtbOFeZX/Z6KtmqqmYGauWNiUguNIvA7Dc+jCfvtNNfnB61M6Zs7obMWpF2kezZACUEfxIMHAaCSek+lxXT6RozwPD+/trzdvk2mlDgN4IK5ujJS+cMT+L8AQX8UqauS3fkQV52nMOWYwkNKlw41+rlfQ4NkAKHfe8eLwKrugGNysE8wEVAafvpDOR1pQfObOSOPgL8fKzRAP0C+5wWMhdkpXMnYCGxchZ4IVAhmwxzXP04Y1kFbqmYe3zsvCEnhJy7f4hEkTjpqtB4vWt6Wd3gPGHJsIkkgJtmMmZJY9SpehXXL39AyynniuSw+3//Rc+mnFN7o7RkmWXfNB3TXC5zK1fk6RSMyPmOYewwILPowdsyHs9CLQxywL8v4/t8VBZORWyND1mLCFahIHktndffPaNEs8rcufLaN7HFmVh6jQknfKZ5s8etAJrG8XnIPPsSSG64hyz+Rq5aSGj8FlFqEPxgFQU/zcZFKEHe5VZh6V0rpDH6nZPX742A4ZbRh6ncNgp9BEveCgvH3NXJjKQlWCeLxp4Q395MefuKeSmosNSRmhDvLGvr925PUy61vqLY5vyh6yzEzpn3CavV2XLo3FTr6of7XuYIZGOZPlDeA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(71200400001)(7416002)(8676002)(38070700005)(186003)(66946007)(31686004)(76116006)(26005)(91956017)(64756008)(66446008)(66556008)(66476007)(44832011)(31696002)(4326008)(38100700002)(316002)(83380400001)(110136005)(54906003)(36756003)(6506007)(2906002)(66574015)(6512007)(6486002)(508600001)(2616005)(8936002)(5660300002)(86362001)(122000001)(41533002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ekMrZzNrYU8rMERreGtsM3dtejFCQ2xJZTJZNjJiamQ4dThYZjdHQS9meDNV?=
- =?utf-8?B?V3gzZFZIQVROajF6czF2V3FTRllkZytEU2E2L0NrZnlIVU4zU0lKZXlPc1kw?=
- =?utf-8?B?b1dHbEFIa0hRNTBjbVJSWW9XbzZKTDl1MTFHUHFoUW5yRmg5eWI4NDBKdVhS?=
- =?utf-8?B?cmsvZVRPaEJEaXBuR29IUmFuSFRFSDFmWXZPcWlubldhbURTb3RxRkRMTEl1?=
- =?utf-8?B?WFZIVHFJZlVoZkVLdEpJS1FXUUtveUd1QW1NNk9yNzQxZnhEV2JpUXk4SUNx?=
- =?utf-8?B?cVBTTjNxRTZ5dmNIV3ZjdU42NkZBbjM1dGFLUEZBb2RkS3lFMWJ2OWNXMUV1?=
- =?utf-8?B?alJsRk5NNWdJaUo3a3ZoZHdDME1BTHJHSHNzQmV6SmZoVWluZDRjekZ4ek8v?=
- =?utf-8?B?TDNoUDhNVGRRbVppNlY1VFRZUTNsTkUyc3E3OUQrWkpVbkVtQUpDK0Iwb2pz?=
- =?utf-8?B?djd5TE1IcTVyNkhvbE1DZ1FGMVdJK2Z1cEVrVTh1aFQvbkNjK2VwVnMyZkwv?=
- =?utf-8?B?c1FwY2tFek9ISy85dzAyUWNScnA1K3FhK0FhN0t5L1Bra1JkZHk3RTdhbW5B?=
- =?utf-8?B?OXIzUFZFaXRWVzdwVG5XeU9QWGw4dnBZVFJEckpGMHdaanFDN1hFOU0yUXFs?=
- =?utf-8?B?L2xxNC9RZUFhSjBZMm5UUU9YaU1pZkk4eXZ6ck9uRWlJQ2xlcElWbXZyNEh5?=
- =?utf-8?B?VkNiQjdydFFoc2hXaG1nL3luOS9nODZUell4NlBXcjBESS9yMmREeitPVmRh?=
- =?utf-8?B?b0MxSnRPY0E0K0tDMnhDRmdCdW5CajVKc2pQeHFLOGFmQ1QrSlF4RmpJUCtM?=
- =?utf-8?B?V240WElpT3c5WXo4RU5Ua0Q3SmNCdlRnbzVpRlRKcXlsNnF1dyt0QkZscXp6?=
- =?utf-8?B?cHRrbXFXN0xSanZpdXpGU2ViOUxCTjlpSDNPdTl5Y2JycC9NdHl2QUQrTEpv?=
- =?utf-8?B?SzE2ZDRXZXdPVytwd3VJMmUyM2JLYmFWeW5ZQ3lyRENad2ZRZVAwNXRUblpN?=
- =?utf-8?B?aUNkaG0zc2hDT0YraEFQbUNtVk01eE9LV3Zyc0QvcTZ4REtYaFlvVDZHdGR5?=
- =?utf-8?B?UWswOVU2dEVqSG9IY2hFbUw4SUNCNEYzaUJYRFJxdkp4cXRYSllMVU9ROXV4?=
- =?utf-8?B?R0xRK2VBc29zUmFPbmhPSHJXZ1NacktDcnlsUC82R0RLUkhYaE14NDU3MDRv?=
- =?utf-8?B?STd0UTlmR2xTTG1VSXNWV0pYWnZnWmhmcmVtYmV4ZnZ2ZTZDY09TVXVWcTZU?=
- =?utf-8?B?WnQ3MDVmM2IyM0dtcWViZFJPUjZWMENvUUU0S01UbFN4dlZJNUtNR2dPNkYz?=
- =?utf-8?B?Y0VXVXNEVW1uMnpDLzZ5ZjFIMVZFMHF3RW9OM1h1ZnExdkRTQzlEby9memJP?=
- =?utf-8?B?VURkdVZkVlhDbVV2WHR2SEpzNGhCTWluQnJWZzl5SXhCeW5CSFR5cDZYVnNy?=
- =?utf-8?B?ODc2MzBObUpRQmNZTEgxNjBnb3ByYVBYZFpzL0RieU9pSFFHVUhvUlBPbk1x?=
- =?utf-8?B?V3RTTEFKWXRxNHZ2bWNKcjFUR2RvZVNLYW51anF2dHEzanVhM21qeEMvVmZ6?=
- =?utf-8?B?TEluTUZITElLa3l6azdmY2tmNlphTE56anJwcmMzVzUrSnIxZ2RVNlJXUk1n?=
- =?utf-8?B?aEhjbE5Gb2lrVjI5VzJQQ1VuUno2K1l2K1ZxS0VBK0R4T283SzVkYm1yZDJ1?=
- =?utf-8?B?UHJGcEo1UzAvYm15dDZMUWY1SWhOT1cyOGFHNDZvZWJwRVBIRGlpV2hUYVNq?=
- =?utf-8?B?MHVCSE1VNDBWRldybEpyMElkTzhHUUlHYVU2aVU2Q1ExcnZkVGlLUDltc3J6?=
- =?utf-8?B?SUtjdHBVeDFzTnZpSzlxY0RjOVV6ODhweGUyV2NOckp5MkQ2ZFIyNmZld0J6?=
- =?utf-8?B?REdEOTJWc1YyR3dTeWlpbjBTdkhWQ2hyKzNmbGNucEtoQXJpbDVKYUNOV2g0?=
- =?utf-8?B?ZnUyVkNtbGpoRDdPQ3BDdnRlVnRxckdKME1OL0hHQS9rUTRaODBuaGYycFh3?=
- =?utf-8?B?dGdYcWZ5L05WREltaUFZOVFnYnJsb1J5NUFEOEJJWi9Cb1pXSWR0RXdudWph?=
- =?utf-8?B?N3lYa2lxZWFpMG1QYTJuVXFoVTArMDdTUjVxbjZzSEdFbTg1U2orQUNGVzFP?=
- =?utf-8?B?TjRza0JiWlVrQXZBWDhjSWpDZ25TN2NqMmFnSTBPSmRjdVBybENpZDRXb2hL?=
- =?utf-8?B?UWJ3NEV6U1ZpeTZKOEZ0ZGVNT3FYWjE3N1RkcUEraDBtZk1URC9DK3BmRHpO?=
- =?utf-8?Q?DPAO2n/U7ZFsSXGNHWMqoke93BvAfxw0XHjyH3DhMo=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4ED89247153BDA4BB30313DEA125B81F@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Thu, 16 Dec
+ 2021 17:17:00 +0000
+Received: from CO1NAM11FT058.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8c:cafe::66) by MW4PR03CA0124.outlook.office365.com
+ (2603:10b6:303:8c::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14 via Frontend
+ Transport; Thu, 16 Dec 2021 17:17:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT058.mail.protection.outlook.com (10.13.174.164) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 17:17:00 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 16 Dec
+ 2021 11:16:58 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     <linux-kselftest@vger.kernel.org>
+CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>, Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        "Steve Rutherford" <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "David Woodhouse" <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        "Jim Mattson" <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Peter Gonda <pgonda@google.com>
+Subject: [PATCH v2 02/13] KVM: selftests: sparsebit: add const where appropriate
+Date:   Thu, 16 Dec 2021 11:13:47 -0600
+Message-ID: <20211216171358.61140-3-michael.roth@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211216171358.61140-1-michael.roth@amd.com>
+References: <20211216171358.61140-1-michael.roth@amd.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: f34728fb-a066-457f-9a6f-08d9c0b76bf0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Dec 2021 17:13:47.1489
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
+ (10.181.40.144)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 56b53823-4f75-4c21-9b99-08d9c0b7df07
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5026:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB502663FE9CE0A316E65CBCB795779@CH0PR12MB5026.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wiMwX0RiLJEKOwuW0qLkIz58pr9skZ4QafhtVh9GnK9gaBrJ1fFA7ofySvyKezIATPXBLSQTtC8E4pjrqRS5/tY5HKwqEu7YQGEGxSZ5DCmOEChLvNevSXvT5tfUf/xx2qmP0+JNSBauZjs1KKFll17+zLTcElflzHEwpmXqBC/lSYh3D7Ag3LcN1aZrMYwzmMOlSuazRBAVtL20S0lqJD/pv4Ge8L3s69TaG/CurwdG/QayG8PEh2+UkqsIwhY0DOK2Tud39yOWHbkK+12RdxAnheDaou815ejsi737LRtRaYSQoRE4yw7ByUppoRg9FF9qLZ1FGDkNCeeKElCm2x7SuDQ7CBufL2W1Bg/i55hlsljBqD960kQTUVUVuYq9pgk9sPqogTCWv1qVKuhsoFQtigNyAGV1hIfeFO+Es8pHKTA5Rgh1h0VoDxsYuL6b1LIJnveKNdGp5/e6LIW2ln6sYL35t9QRE8SkLE9VFtkMzlKeBlIOA2b2fULgFer7xEJopmi72opcPgp+UjJ31NchUBedieZqp0NLDqLcnc13cFOUy5UnhfGwA7uOIRWgNFXlA6C83NwD2/s7KYRMV6WhhwmBRUknWY7BcZCXz1MeHt8XvRUrqixyEA8s3og3GEGKJqJQZB9bUS/kJOHSgtmN6xd/IvOq28+6uhaH/+8KZc+jAcR5A0MeUwjY8KkfCxxfKhO3Jp/RJYkq+02s0a4iKsf+YFmJRLBLuNLmoMajbSAOw0RX1l6KmkcqmEj1/fulXXY8G2TfvdNCZH4EtY8ongxHrIsG5ODgRqw1YQk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(4326008)(508600001)(36860700001)(6666004)(6916009)(81166007)(70586007)(26005)(7416002)(186003)(316002)(54906003)(83380400001)(70206006)(30864003)(86362001)(36756003)(16526019)(336012)(44832011)(426003)(47076005)(8676002)(1076003)(2616005)(356005)(2906002)(8936002)(40460700001)(5660300002)(82310400004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 17:17:00.1439
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MHmeCBEvYDH0Ep7M5mG3P51k8K43xk0Z0vNxu58pVVK58IEhKltvSU0XUjyhrjvsMvMpD7nTs31b0HBiWF8TWh391M+UpmUuHCzA4hooIs0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2628
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56b53823-4f75-4c21-9b99-08d9c0b7df07
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT058.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5026
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA5LzEyLzIwMjEgw6AgMTE6MDIsIE5pY2hvbGFzIFBpZ2dpbiBhIMOpY3JpdMKgOg0K
-PiBFeGNlcnB0cyBmcm9tIENocmlzdG9waGUgTGVyb3kncyBtZXNzYWdlIG9mIERlY2VtYmVyIDks
-IDIwMjEgMzoxOCBhbToNCj4+IFVzZSB0aGUgZ2VuZXJpYyB2ZXJzaW9uIG9mIGFyY2hfaHVnZXRs
-Yl9nZXRfdW5tYXBwZWRfYXJlYSgpDQo+PiB3aGljaCBpcyBub3cgYXZhaWxhYmxlIGF0IGFsbCB0
-aW1lLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IENocmlzdG9waGUgTGVyb3kgPGNocmlzdG9waGUu
-bGVyb3lAY3Nncm91cC5ldT4NCj4+IC0tLQ0KPj4gICBhcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20v
-Ym9vazNzLzY0L2h1Z2V0bGIuaCB8ICA0IC0tDQo+PiAgIGFyY2gvcG93ZXJwYy9tbS9ib29rM3M2
-NC9yYWRpeF9odWdldGxicGFnZS5jIHwgNTUgLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4+ICAgYXJj
-aC9wb3dlcnBjL21tL2h1Z2V0bGJwYWdlLmMgICAgICAgICAgICAgICAgfCAgNCArLQ0KPj4gICAz
-IGZpbGVzIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCA2MiBkZWxldGlvbnMoLSkNCj4+DQo+PiBk
-aWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXNtL2Jvb2szcy82NC9odWdldGxiLmgg
-Yi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vYm9vazNzLzY0L2h1Z2V0bGIuaA0KPj4gaW5kZXgg
-MTJlMTUwZTYxNWI3Li5iMzdhMjhmNjJjZjYgMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3Bvd2VycGMv
-aW5jbHVkZS9hc20vYm9vazNzLzY0L2h1Z2V0bGIuaA0KPj4gKysrIGIvYXJjaC9wb3dlcnBjL2lu
-Y2x1ZGUvYXNtL2Jvb2szcy82NC9odWdldGxiLmgNCj4+IEBAIC04LDEwICs4LDYgQEANCj4+ICAg
-ICovDQo+PiAgIHZvaWQgcmFkaXhfX2ZsdXNoX2h1Z2V0bGJfcGFnZShzdHJ1Y3Qgdm1fYXJlYV9z
-dHJ1Y3QgKnZtYSwgdW5zaWduZWQgbG9uZyB2bWFkZHIpOw0KPj4gICB2b2lkIHJhZGl4X19sb2Nh
-bF9mbHVzaF9odWdldGxiX3BhZ2Uoc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsIHVuc2lnbmVk
-IGxvbmcgdm1hZGRyKTsNCj4+IC1leHRlcm4gdW5zaWduZWQgbG9uZw0KPj4gLXJhZGl4X19odWdl
-dGxiX2dldF91bm1hcHBlZF9hcmVhKHN0cnVjdCBmaWxlICpmaWxlLCB1bnNpZ25lZCBsb25nIGFk
-ZHIsDQo+PiAtCQkJCXVuc2lnbmVkIGxvbmcgbGVuLCB1bnNpZ25lZCBsb25nIHBnb2ZmLA0KPj4g
-LQkJCQl1bnNpZ25lZCBsb25nIGZsYWdzKTsNCj4+ICAgDQo+PiAgIGV4dGVybiB2b2lkIHJhZGl4
-X19odWdlX3B0ZXBfbW9kaWZ5X3Byb3RfY29tbWl0KHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1h
-LA0KPj4gICAJCQkJCQl1bnNpZ25lZCBsb25nIGFkZHIsIHB0ZV90ICpwdGVwLA0KPj4gZGlmZiAt
-LWdpdCBhL2FyY2gvcG93ZXJwYy9tbS9ib29rM3M2NC9yYWRpeF9odWdldGxicGFnZS5jIGIvYXJj
-aC9wb3dlcnBjL21tL2Jvb2szczY0L3JhZGl4X2h1Z2V0bGJwYWdlLmMNCj4+IGluZGV4IDIzZDNl
-MDg5MTFkMy4uZDJmYjc3NmZlYmI0IDEwMDY0NA0KPj4gLS0tIGEvYXJjaC9wb3dlcnBjL21tL2Jv
-b2szczY0L3JhZGl4X2h1Z2V0bGJwYWdlLmMNCj4+ICsrKyBiL2FyY2gvcG93ZXJwYy9tbS9ib29r
-M3M2NC9yYWRpeF9odWdldGxicGFnZS5jDQo+PiBAQCAtNDEsNjEgKzQxLDYgQEAgdm9pZCByYWRp
-eF9fZmx1c2hfaHVnZXRsYl90bGJfcmFuZ2Uoc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsIHVu
-c2lnbmVkIGxvbmcgc3QNCj4+ICAgCQlyYWRpeF9fZmx1c2hfdGxiX3JhbmdlX3BzaXplKHZtYS0+
-dm1fbW0sIHN0YXJ0LCBlbmQsIHBzaXplKTsNCj4+ICAgfQ0KPj4gICANCj4+IC0vKg0KPj4gLSAq
-IEEgdmFpcmFudCBvZiBodWdldGxiX2dldF91bm1hcHBlZF9hcmVhIGRvaW5nIHRvcGRvd24gc2Vh
-cmNoDQo+PiAtICogRklYTUUhISBzaG91bGQgd2UgZG8gYXMgeDg2IGRvZXMgb3Igbm9uIGh1Z2V0
-bGIgYXJlYSBkb2VzID8NCj4+IC0gKiBpZSwgdXNlIHRvcGRvd24gb3Igbm90IGJhc2VkIG9uIG1t
-YXBfaXNfbGVnYWN5IGNoZWNrID8NCj4+IC0gKi8NCj4+IC11bnNpZ25lZCBsb25nDQo+PiAtcmFk
-aXhfX2h1Z2V0bGJfZ2V0X3VubWFwcGVkX2FyZWEoc3RydWN0IGZpbGUgKmZpbGUsIHVuc2lnbmVk
-IGxvbmcgYWRkciwNCj4+IC0JCQkJdW5zaWduZWQgbG9uZyBsZW4sIHVuc2lnbmVkIGxvbmcgcGdv
-ZmYsDQo+PiAtCQkJCXVuc2lnbmVkIGxvbmcgZmxhZ3MpDQo+PiAtew0KPj4gLQlzdHJ1Y3QgbW1f
-c3RydWN0ICptbSA9IGN1cnJlbnQtPm1tOw0KPj4gLQlzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZt
-YTsNCj4+IC0Jc3RydWN0IGhzdGF0ZSAqaCA9IGhzdGF0ZV9maWxlKGZpbGUpOw0KPj4gLQlpbnQg
-Zml4ZWQgPSAoZmxhZ3MgJiBNQVBfRklYRUQpOw0KPj4gLQl1bnNpZ25lZCBsb25nIGhpZ2hfbGlt
-aXQ7DQo+PiAtCXN0cnVjdCB2bV91bm1hcHBlZF9hcmVhX2luZm8gaW5mbzsNCj4+IC0NCj4+IC0J
-aGlnaF9saW1pdCA9IERFRkFVTFRfTUFQX1dJTkRPVzsNCj4+IC0JaWYgKGFkZHIgPj0gaGlnaF9s
-aW1pdCB8fCAoZml4ZWQgJiYgKGFkZHIgKyBsZW4gPiBoaWdoX2xpbWl0KSkpDQo+PiAtCQloaWdo
-X2xpbWl0ID0gVEFTS19TSVpFOw0KPiANCj4gSSB3b25kZXIgaWYgZ2VuZXJpYyBodWdldGxiX2dl
-dF91bm1hcHBlZF9hcmVhIG5lZWRzIHRvIGhhdmUgdGhlDQo+IGFyY2hfZ2V0X21tYXBfZW5kKCkg
-YWRkZWQuDQo+IA0KPiBhcm02NCBoYXMgYXJjaF9nZXRfbW1hcF9lbmQoKSBhbmQgIUhBVkVfQVJD
-SF9IVUdFVExCX1VOTUFQUEVEX0FSRUEgc28NCj4gaXQgbG9va3MgbGlrZSBpdCBoYXMgYnJva2Vu
-IGxhcmdlIGFkZHJlc3MgaGludCBsb2dpYyBmb3IgaHVnZXRsYmZzDQo+IG1hcHBpbmdzPyB4ODYt
-NjQgZGVmaW5lcyB0aGVpciBvd24gYW5kIGRvZXMgdGhlIHNhbWUgaGludGluZyBmb3INCj4gbm9y
-bWFsIGFuZCBodWdldGxiZnMgbW1hcC4NCj4gDQo+IElmIHdlIGhhZCB0aGF0IGFuZCBkZWZpZWQg
-YXJjaF9nZXRfbW1hcF9lbmQoKSwgdGhlbiB0aGlzIHBhdGNoIHNob3VsZA0KPiB3b3JrLg0KPiAN
-Cg0KQXMgZmFyIGFzIEkgY2FuIHNlZSwgaHVnZXRsYl9nZXRfdW5tYXBwZWRfYXJlYSgpIHZhcmlh
-bnRzIHVzZWQgdG8gYmUgDQp2ZXJ5IHNpbWlsYXIgdG8gZ2V0X3VubWFwcGVkX2FyZWEoKSB1bnRp
-bCBjb21taXQgMWJlNzEwN2ZiZTE4ICgibW06IA0KbGFyZ2VyIHN0YWNrIGd1YXJkIGdhcCwgYmV0
-d2VlbiB2bWFzIikgYW5kIGNvbW1pdCBmNjc5NTA1M2RhYzggKCJtbTogDQptbWFwOiBBbGxvdyBm
-b3IgImhpZ2giIHVzZXJzcGFjZSBhZGRyZXNzZXMiKQ0KDQpJIHNlZSBubyByZWFzb24gd2h5IHRo
-b3NlIGNoYW5nZXMgY291bGRuJ3QgYXBwbHkgdG8gDQpodWdldGxiX2dldF91bm1hcHBlZF9hcmVh
-KCkgYXMgd2VsbC4NCg0KTmVlZCB0byBrbm93IHdoYXQgQVJNNjQgdGhpbmsgYWJvdXQgaXQgdGhv
-dWdodC4gV2lsbCwgQ2F0YWxpbiwgYW55IG9waW5pb24gPw0KDQpDaHJpc3RvcGhl
+Subsequent patches will introduce an encryption bitmap in kvm_util that
+would be useful to allow tests to access in read-only fashion. This
+will be done via a const sparsebit*. To avoid warnings or the need to
+add casts everywhere, add const to the various sparsebit functions that
+are applicable for read-only usage of sparsebit.
+
+Signed-off-by: Michael Roth <michael.roth@amd.com>
+---
+ .../testing/selftests/kvm/include/sparsebit.h | 36 +++++++-------
+ tools/testing/selftests/kvm/lib/sparsebit.c   | 48 +++++++++----------
+ 2 files changed, 42 insertions(+), 42 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/include/sparsebit.h b/tools/testing/selftests/kvm/include/sparsebit.h
+index 12a9a4b9cead..fb5170d57fcb 100644
+--- a/tools/testing/selftests/kvm/include/sparsebit.h
++++ b/tools/testing/selftests/kvm/include/sparsebit.h
+@@ -30,26 +30,26 @@ typedef uint64_t sparsebit_num_t;
+ 
+ struct sparsebit *sparsebit_alloc(void);
+ void sparsebit_free(struct sparsebit **sbitp);
+-void sparsebit_copy(struct sparsebit *dstp, struct sparsebit *src);
++void sparsebit_copy(struct sparsebit *dstp, const struct sparsebit *src);
+ 
+-bool sparsebit_is_set(struct sparsebit *sbit, sparsebit_idx_t idx);
+-bool sparsebit_is_set_num(struct sparsebit *sbit,
++bool sparsebit_is_set(const struct sparsebit *sbit, sparsebit_idx_t idx);
++bool sparsebit_is_set_num(const struct sparsebit *sbit,
+ 			  sparsebit_idx_t idx, sparsebit_num_t num);
+-bool sparsebit_is_clear(struct sparsebit *sbit, sparsebit_idx_t idx);
+-bool sparsebit_is_clear_num(struct sparsebit *sbit,
++bool sparsebit_is_clear(const struct sparsebit *sbit, sparsebit_idx_t idx);
++bool sparsebit_is_clear_num(const struct sparsebit *sbit,
+ 			    sparsebit_idx_t idx, sparsebit_num_t num);
+-sparsebit_num_t sparsebit_num_set(struct sparsebit *sbit);
+-bool sparsebit_any_set(struct sparsebit *sbit);
+-bool sparsebit_any_clear(struct sparsebit *sbit);
+-bool sparsebit_all_set(struct sparsebit *sbit);
+-bool sparsebit_all_clear(struct sparsebit *sbit);
+-sparsebit_idx_t sparsebit_first_set(struct sparsebit *sbit);
+-sparsebit_idx_t sparsebit_first_clear(struct sparsebit *sbit);
+-sparsebit_idx_t sparsebit_next_set(struct sparsebit *sbit, sparsebit_idx_t prev);
+-sparsebit_idx_t sparsebit_next_clear(struct sparsebit *sbit, sparsebit_idx_t prev);
+-sparsebit_idx_t sparsebit_next_set_num(struct sparsebit *sbit,
++sparsebit_num_t sparsebit_num_set(const struct sparsebit *sbit);
++bool sparsebit_any_set(const struct sparsebit *sbit);
++bool sparsebit_any_clear(const struct sparsebit *sbit);
++bool sparsebit_all_set(const struct sparsebit *sbit);
++bool sparsebit_all_clear(const struct sparsebit *sbit);
++sparsebit_idx_t sparsebit_first_set(const struct sparsebit *sbit);
++sparsebit_idx_t sparsebit_first_clear(const struct sparsebit *sbit);
++sparsebit_idx_t sparsebit_next_set(const struct sparsebit *sbit, sparsebit_idx_t prev);
++sparsebit_idx_t sparsebit_next_clear(const struct sparsebit *sbit, sparsebit_idx_t prev);
++sparsebit_idx_t sparsebit_next_set_num(const struct sparsebit *sbit,
+ 				       sparsebit_idx_t start, sparsebit_num_t num);
+-sparsebit_idx_t sparsebit_next_clear_num(struct sparsebit *sbit,
++sparsebit_idx_t sparsebit_next_clear_num(const struct sparsebit *sbit,
+ 					 sparsebit_idx_t start, sparsebit_num_t num);
+ 
+ void sparsebit_set(struct sparsebit *sbitp, sparsebit_idx_t idx);
+@@ -62,9 +62,9 @@ void sparsebit_clear_num(struct sparsebit *sbitp,
+ 			 sparsebit_idx_t start, sparsebit_num_t num);
+ void sparsebit_clear_all(struct sparsebit *sbitp);
+ 
+-void sparsebit_dump(FILE *stream, struct sparsebit *sbit,
++void sparsebit_dump(FILE *stream, const struct sparsebit *sbit,
+ 		    unsigned int indent);
+-void sparsebit_validate_internal(struct sparsebit *sbit);
++void sparsebit_validate_internal(const struct sparsebit *sbit);
+ 
+ #ifdef __cplusplus
+ }
+diff --git a/tools/testing/selftests/kvm/lib/sparsebit.c b/tools/testing/selftests/kvm/lib/sparsebit.c
+index 50e0cf41a7dd..6777a5b1fbd2 100644
+--- a/tools/testing/selftests/kvm/lib/sparsebit.c
++++ b/tools/testing/selftests/kvm/lib/sparsebit.c
+@@ -202,7 +202,7 @@ static sparsebit_num_t node_num_set(struct node *nodep)
+ /* Returns a pointer to the node that describes the
+  * lowest bit index.
+  */
+-static struct node *node_first(struct sparsebit *s)
++static struct node *node_first(const struct sparsebit *s)
+ {
+ 	struct node *nodep;
+ 
+@@ -216,7 +216,7 @@ static struct node *node_first(struct sparsebit *s)
+  * lowest bit index > the index of the node pointed to by np.
+  * Returns NULL if no node with a higher index exists.
+  */
+-static struct node *node_next(struct sparsebit *s, struct node *np)
++static struct node *node_next(const struct sparsebit *s, struct node *np)
+ {
+ 	struct node *nodep = np;
+ 
+@@ -244,7 +244,7 @@ static struct node *node_next(struct sparsebit *s, struct node *np)
+  * highest index < the index of the node pointed to by np.
+  * Returns NULL if no node with a lower index exists.
+  */
+-static struct node *node_prev(struct sparsebit *s, struct node *np)
++static struct node *node_prev(const struct sparsebit *s, struct node *np)
+ {
+ 	struct node *nodep = np;
+ 
+@@ -273,7 +273,7 @@ static struct node *node_prev(struct sparsebit *s, struct node *np)
+  * subtree and duplicates the bit settings to the newly allocated nodes.
+  * Returns the newly allocated copy of subtree.
+  */
+-static struct node *node_copy_subtree(struct node *subtree)
++static struct node *node_copy_subtree(const struct node *subtree)
+ {
+ 	struct node *root;
+ 
+@@ -307,7 +307,7 @@ static struct node *node_copy_subtree(struct node *subtree)
+  * index is within the bits described by the mask bits or the number of
+  * contiguous bits set after the mask.  Returns NULL if there is no such node.
+  */
+-static struct node *node_find(struct sparsebit *s, sparsebit_idx_t idx)
++static struct node *node_find(const struct sparsebit *s, sparsebit_idx_t idx)
+ {
+ 	struct node *nodep;
+ 
+@@ -393,7 +393,7 @@ static struct node *node_add(struct sparsebit *s, sparsebit_idx_t idx)
+ }
+ 
+ /* Returns whether all the bits in the sparsebit array are set.  */
+-bool sparsebit_all_set(struct sparsebit *s)
++bool sparsebit_all_set(const struct sparsebit *s)
+ {
+ 	/*
+ 	 * If any nodes there must be at least one bit set.  Only case
+@@ -776,7 +776,7 @@ static void node_reduce(struct sparsebit *s, struct node *nodep)
+ /* Returns whether the bit at the index given by idx, within the
+  * sparsebit array is set or not.
+  */
+-bool sparsebit_is_set(struct sparsebit *s, sparsebit_idx_t idx)
++bool sparsebit_is_set(const struct sparsebit *s, sparsebit_idx_t idx)
+ {
+ 	struct node *nodep;
+ 
+@@ -922,7 +922,7 @@ static inline sparsebit_idx_t node_first_clear(struct node *nodep, int start)
+  * used by test cases after they detect an unexpected condition, as a means
+  * to capture diagnostic information.
+  */
+-static void sparsebit_dump_internal(FILE *stream, struct sparsebit *s,
++static void sparsebit_dump_internal(FILE *stream, const struct sparsebit *s,
+ 	unsigned int indent)
+ {
+ 	/* Dump the contents of s */
+@@ -970,7 +970,7 @@ void sparsebit_free(struct sparsebit **sbitp)
+  * sparsebit_alloc().  It can though already have bits set, which
+  * if different from src will be cleared.
+  */
+-void sparsebit_copy(struct sparsebit *d, struct sparsebit *s)
++void sparsebit_copy(struct sparsebit *d, const struct sparsebit *s)
+ {
+ 	/* First clear any bits already set in the destination */
+ 	sparsebit_clear_all(d);
+@@ -982,7 +982,7 @@ void sparsebit_copy(struct sparsebit *d, struct sparsebit *s)
+ }
+ 
+ /* Returns whether num consecutive bits starting at idx are all set.  */
+-bool sparsebit_is_set_num(struct sparsebit *s,
++bool sparsebit_is_set_num(const struct sparsebit *s,
+ 	sparsebit_idx_t idx, sparsebit_num_t num)
+ {
+ 	sparsebit_idx_t next_cleared;
+@@ -1006,14 +1006,14 @@ bool sparsebit_is_set_num(struct sparsebit *s,
+ }
+ 
+ /* Returns whether the bit at the index given by idx.  */
+-bool sparsebit_is_clear(struct sparsebit *s,
++bool sparsebit_is_clear(const struct sparsebit *s,
+ 	sparsebit_idx_t idx)
+ {
+ 	return !sparsebit_is_set(s, idx);
+ }
+ 
+ /* Returns whether num consecutive bits starting at idx are all cleared.  */
+-bool sparsebit_is_clear_num(struct sparsebit *s,
++bool sparsebit_is_clear_num(const struct sparsebit *s,
+ 	sparsebit_idx_t idx, sparsebit_num_t num)
+ {
+ 	sparsebit_idx_t next_set;
+@@ -1042,13 +1042,13 @@ bool sparsebit_is_clear_num(struct sparsebit *s,
+  * value.  Use sparsebit_any_set(), instead of sparsebit_num_set() > 0,
+  * to determine if the sparsebit array has any bits set.
+  */
+-sparsebit_num_t sparsebit_num_set(struct sparsebit *s)
++sparsebit_num_t sparsebit_num_set(const struct sparsebit *s)
+ {
+ 	return s->num_set;
+ }
+ 
+ /* Returns whether any bit is set in the sparsebit array.  */
+-bool sparsebit_any_set(struct sparsebit *s)
++bool sparsebit_any_set(const struct sparsebit *s)
+ {
+ 	/*
+ 	 * Nodes only describe set bits.  If any nodes then there
+@@ -1071,20 +1071,20 @@ bool sparsebit_any_set(struct sparsebit *s)
+ }
+ 
+ /* Returns whether all the bits in the sparsebit array are cleared.  */
+-bool sparsebit_all_clear(struct sparsebit *s)
++bool sparsebit_all_clear(const struct sparsebit *s)
+ {
+ 	return !sparsebit_any_set(s);
+ }
+ 
+ /* Returns whether all the bits in the sparsebit array are set.  */
+-bool sparsebit_any_clear(struct sparsebit *s)
++bool sparsebit_any_clear(const struct sparsebit *s)
+ {
+ 	return !sparsebit_all_set(s);
+ }
+ 
+ /* Returns the index of the first set bit.  Abort if no bits are set.
+  */
+-sparsebit_idx_t sparsebit_first_set(struct sparsebit *s)
++sparsebit_idx_t sparsebit_first_set(const struct sparsebit *s)
+ {
+ 	struct node *nodep;
+ 
+@@ -1098,7 +1098,7 @@ sparsebit_idx_t sparsebit_first_set(struct sparsebit *s)
+ /* Returns the index of the first cleared bit.  Abort if
+  * no bits are cleared.
+  */
+-sparsebit_idx_t sparsebit_first_clear(struct sparsebit *s)
++sparsebit_idx_t sparsebit_first_clear(const struct sparsebit *s)
+ {
+ 	struct node *nodep1, *nodep2;
+ 
+@@ -1152,7 +1152,7 @@ sparsebit_idx_t sparsebit_first_clear(struct sparsebit *s)
+ /* Returns index of next bit set within s after the index given by prev.
+  * Returns 0 if there are no bits after prev that are set.
+  */
+-sparsebit_idx_t sparsebit_next_set(struct sparsebit *s,
++sparsebit_idx_t sparsebit_next_set(const struct sparsebit *s,
+ 	sparsebit_idx_t prev)
+ {
+ 	sparsebit_idx_t lowest_possible = prev + 1;
+@@ -1245,7 +1245,7 @@ sparsebit_idx_t sparsebit_next_set(struct sparsebit *s,
+ /* Returns index of next bit cleared within s after the index given by prev.
+  * Returns 0 if there are no bits after prev that are cleared.
+  */
+-sparsebit_idx_t sparsebit_next_clear(struct sparsebit *s,
++sparsebit_idx_t sparsebit_next_clear(const struct sparsebit *s,
+ 	sparsebit_idx_t prev)
+ {
+ 	sparsebit_idx_t lowest_possible = prev + 1;
+@@ -1301,7 +1301,7 @@ sparsebit_idx_t sparsebit_next_clear(struct sparsebit *s,
+  * and returns the index of the first sequence of num consecutively set
+  * bits.  Returns a value of 0 of no such sequence exists.
+  */
+-sparsebit_idx_t sparsebit_next_set_num(struct sparsebit *s,
++sparsebit_idx_t sparsebit_next_set_num(const struct sparsebit *s,
+ 	sparsebit_idx_t start, sparsebit_num_t num)
+ {
+ 	sparsebit_idx_t idx;
+@@ -1336,7 +1336,7 @@ sparsebit_idx_t sparsebit_next_set_num(struct sparsebit *s,
+  * and returns the index of the first sequence of num consecutively cleared
+  * bits.  Returns a value of 0 of no such sequence exists.
+  */
+-sparsebit_idx_t sparsebit_next_clear_num(struct sparsebit *s,
++sparsebit_idx_t sparsebit_next_clear_num(const struct sparsebit *s,
+ 	sparsebit_idx_t start, sparsebit_num_t num)
+ {
+ 	sparsebit_idx_t idx;
+@@ -1584,7 +1584,7 @@ static size_t display_range(FILE *stream, sparsebit_idx_t low,
+  * contiguous bits.  This is done because '-' is used to specify command-line
+  * options, and sometimes ranges are specified as command-line arguments.
+  */
+-void sparsebit_dump(FILE *stream, struct sparsebit *s,
++void sparsebit_dump(FILE *stream, const struct sparsebit *s,
+ 	unsigned int indent)
+ {
+ 	size_t current_line_len = 0;
+@@ -1682,7 +1682,7 @@ void sparsebit_dump(FILE *stream, struct sparsebit *s,
+  * s.  On error, diagnostic information is printed to stderr and
+  * abort is called.
+  */
+-void sparsebit_validate_internal(struct sparsebit *s)
++void sparsebit_validate_internal(const struct sparsebit *s)
+ {
+ 	bool error_detected = false;
+ 	struct node *nodep, *prev = NULL;
+-- 
+2.25.1
+

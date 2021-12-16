@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 306FF476875
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3015D476878
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbhLPDHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 22:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbhLPDHY (ORCPT
+        id S233222AbhLPDIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 22:08:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46600 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230176AbhLPDIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 22:07:24 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591DBC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 19:07:24 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id bj13so34528736oib.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 19:07:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NejVyBoDRKTUQRXdaYR9tb6ltwN/AStdGjjkwn7Uk+s=;
-        b=g1TkbmDI6gWDQloHqmRvrNzoPup+e9nPlXTQlcH3FHLl0wYvsDFEb+ZCSaKPIKjfsf
-         sJZaqNXFMA4jwNod8u4R0l7ssP/b1T74+HUBguxOb9TVRjoqPx19+YBqrHyblm0NCbvj
-         i207pxhYDX+RxDOnX4DQqbeQl+XtyJ0EjOAQP+mXroVqQGRM9wF3HfPCdj/QSsfpIY7r
-         4ClrTaYkzcj0cMCOvzH0ZFlXQLKoHFTEnpv93YqDwXnv6stNmgWDxVzz7DrpBaVFxwbA
-         hQjiTqsIBcn1CtDw2ra4dnGmKJ3h1HjfFd6E5oufWDyDQslDfgOaS+jyGlAHm21yUv0V
-         97LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NejVyBoDRKTUQRXdaYR9tb6ltwN/AStdGjjkwn7Uk+s=;
-        b=ur9t/I16CEI1HS+R0miLAK7BPdyvuOpjo+PoCGsuLV6QPoR7HrbRkhh8dFtxj+V6hM
-         2UexizjB+yrt5bWP3pOzIfrfN0HPYHE0za7JJnR4fiBF2kNXps7AVvK183QLrgNATntN
-         q9oDEiMDthh3omEw8rMyiNo7cqFmlmHyhKvZQIE7YVbswvwXQ5ogBFXmHPxSDSItbgQ7
-         9T4lyxiYkZTpRF4HZZoxEQ7dBPPB9AyJIcalCt103JJhxuEb2j98PM1lirnafQFks9rO
-         gDj/zVKq1KmYokSxRGAYIyjie5xxRUIZzPFDsYjvG2ntEmxLjDWijI6Qqx0Hy6TPAs2Q
-         QbFA==
-X-Gm-Message-State: AOAM531suKGqteHPmdRoc6EVOUSs04+Un96uf16PPtsCjlmXmChP+HHg
-        iZYE2zDBOESSCK0LGxnvDAtKBxNmZpFN/U3bwuU/Xw==
-X-Google-Smtp-Source: ABdhPJyFv/0gs+gd1B7jD6sYmT25ancZcI2AisMb3GlzN5/ccXwB1QAb+QehAyr2L7NYhy8E6V8IB/cXvagiRXpPicY=
-X-Received: by 2002:aca:120f:: with SMTP id 15mr2584692ois.132.1639624043631;
- Wed, 15 Dec 2021 19:07:23 -0800 (PST)
+        Wed, 15 Dec 2021 22:08:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE1E661BEA;
+        Thu, 16 Dec 2021 03:08:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A4CC36AE0;
+        Thu, 16 Dec 2021 03:08:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639624120;
+        bh=TXBIFGc25Qw13VvCSpXb5l6XQy5Lk9QgDInhZ1JSPxs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U0btZ2F/JmvVDA6I1p+rmUiHpmddV+nwOeVu7UTej/X1evMDLHwurBwFoRA7JgURf
+         VFSIUFPc9hONPzQUfTZQOaa+yd52wn4byeB7eXz4Ms/9xKSD2h4C7THnUj/BJRjTnU
+         I/CB/K+nL32H11kDV8v8dMD78F+Axv491BBs1t6t8vfOww8MDFjsd0Ornlgegdeb8G
+         0DjMEZ2Pg8JIMq4MjZtPZBf+zmukKWjufRvw+oqTSefmFbxQEHd51PYwQBL/SYV695
+         Oi26xJv4Up+VTzp5f+p7FK4tI1NyNp5jKU82hAI4RaST9vKWIbpdq2bJUKxYazChMu
+         q/ziOVEihrjHg==
+Date:   Thu, 16 Dec 2021 11:08:33 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Alistair Francis <alistair@alistair23.me>
+Cc:     s.hauer@pengutronix.de, dmitry.torokhov@gmail.com,
+        benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-kernel@vger.kernel.org, alistair23@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        Jason.Gerecke@wacom.com, linux-imx@nxp.com, Ping.Cheng@wacom.com,
+        devicetree@vger.kernel.org, martin.chen@wacom.com,
+        tatsunosuke.tobita@wacom.com
+Subject: Re: [PATCH v16 3/3] ARM: dts: imx7d: remarkable2: add wacom
+ digitizer device
+Message-ID: <20211216030833.GQ4216@dragon>
+References: <20211208124045.61815-1-alistair@alistair23.me>
+ <20211208124045.61815-4-alistair@alistair23.me>
 MIME-Version: 1.0
-References: <20211215174821.21668-1-zajec5@gmail.com>
-In-Reply-To: <20211215174821.21668-1-zajec5@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 16 Dec 2021 04:07:12 +0100
-Message-ID: <CACRpkdarh1N+NwYgDR31T=eESF20AgWJd=PTyv321jTdpH8PsA@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: add one more "const" for generic function groups
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208124045.61815-4-alistair@alistair23.me>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 6:48 PM Rafa=C5=82 Mi=C5=82ecki <zajec5@gmail.com> =
-wrote:
+On Wed, Dec 08, 2021 at 10:40:45PM +1000, Alistair Francis wrote:
+> Add Wacom I2C support for the reMarkable 2 eInk tablet using the
+> generic I2C HID framework.
+> 
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
 
-> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
->
-> Generic code doesn't modify those strings and .get_function_groups
-> callback has that extra "const" as well. This allows more flexibility in
-> GENERIC_PINMUX_FUNCTIONS users.
->
-> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+I updated the subject prefix like below.
 
-I really like const-correctness and I'm a fan of this patch.
+ ARM: dts: imx7d-remarkable2:
 
-It seems some users need to be modified as well though,
-the test robot is unhappy.
-
-Yours,
-Linus Walleij
+Applied, thanks!

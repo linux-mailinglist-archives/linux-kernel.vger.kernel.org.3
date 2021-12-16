@@ -2,144 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1388C477A75
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D40477A77
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240188AbhLPRXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240040AbhLPRXY (ORCPT
+        id S240198AbhLPRXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:23:35 -0500
+Received: from mail-oo1-f49.google.com ([209.85.161.49]:46757 "EHLO
+        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240040AbhLPRXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:23:24 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3566AC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:23:24 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id d10so66574481ybn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:23:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KOfddnRBlgrRNJUcJFAYmMl+H47vzBbmtc2FFUjJ1No=;
-        b=Yc6wnk82blHZiFBHSFBOZCsbU33ZtmS7OnOP25JEBdLn3pzapUEBPO+ZR+Y5w481i/
-         l3Mmya+tO61fJof7XmePit0QMOfUw9bYKVhdflL8+bklYF2rpvn1RMBuLjK34LYSximm
-         6+pmof4aUNAinh1CzukO8E4JXiOvIGWxrcU95SWQh1J2wb0fPhVkUNl1Ncc8+eW2crWJ
-         /5rRohpENH/kVlLx6PGD3yaPGL1SL712hbmhi8FTZoWjUd8SrSqLphfCnRfb0oPmdhZg
-         mL3uvNQRTYEocGJ+kUyNoDRh0G1qL+I9M8d758aBElqO0hsZo0a699PSJLYwxq+CQ7HA
-         HlrA==
+        Thu, 16 Dec 2021 12:23:34 -0500
+Received: by mail-oo1-f49.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso7104886ood.13;
+        Thu, 16 Dec 2021 09:23:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KOfddnRBlgrRNJUcJFAYmMl+H47vzBbmtc2FFUjJ1No=;
-        b=ErwVUTE7Sbf+5Jj1HVDskbR+v5APtlh9kIeRIz4B/9saSmFKF0dRSiyZmm00oEnTrz
-         gxa0HVYT+T7AjbYop9kEGdgnpl0+U2K+p7/sTE4tJYbwAoRVemkcPOGndNn3pgK726ft
-         hkZI3VM40aMWgNF0KVUMqpR6419XaqnGLs6atBmKExtPiz4TE6hR395/yp1FXcm6nXa+
-         Jos/+bdvJEQ4aPScNgpGdnYOiVRHnrr8NCVlk4OHcrrBo8zGNW6tjcswfbcM3bN7qn2T
-         K6yZIyxroh4J6l9u5ombg7YnSPUv1HRAc38XYMr8gVvTiiuApLUQg/cHYpgHSqHzoJtY
-         RGXA==
-X-Gm-Message-State: AOAM531HG0AmrH9yHjQArPiRIMFjgHDqySsaUILtEmk5R2mAQ1vhpfkB
-        Pvhp34BYVdOcGWd4RugIgv1Fss/7ZKZ0HMnmK4W9Zg==
-X-Google-Smtp-Source: ABdhPJwWv5HgWT/NNBKfZuIQk87EsF7CJpgNK4d7YTR8OVigJcUEq9iqCvp4TdlUeADUbnwvUnXcZWCoCH0NCwZ7+uM=
-X-Received: by 2002:a25:a448:: with SMTP id f66mr14255921ybi.225.1639675403013;
- Thu, 16 Dec 2021 09:23:23 -0800 (PST)
+        bh=+vKc+5ynUW/RqMivEfMUNCzsckin4rmupLQy56q5oCo=;
+        b=2oFKaArKECzfaaHcUIJUGeDGZURVCCK4oFtGhLWYmY4xUl1awyxqrFb5Z6/jwbkSEs
+         2/7oPd1ptWno22Fc1zvbsDE0KqxIk2KDCDklCVdtlReUH8EhUsLwy42oHsPtvh8l8fRB
+         SuHSafbKt2HgiWmlrdf6qYxWaj527qp/wdzgTmaP3SD2C0Oakxt47cs4J5ybVGcRCeHG
+         eGPwmh8/T2MpLJyd6HKCc1m/Yn6EmF/tjYhvnMgnM9NQNq3YXedFU6/HdNtX8Mx7SL4E
+         pufSoZC3qy6PHewa3mBWNrft/a6+b5VLLEeM6eg56NKK0uv2wBGp2o2cBovyQhBxEKX/
+         U82w==
+X-Gm-Message-State: AOAM532oGUO5PNl2nsVRVmRuNkpN6NkyRNiWVNGI1wdFp3vPkW0MrHGT
+        7KnpFiUDZdhCDh8LR2oJW8hfWZJHNI0QwGaNHVI=
+X-Google-Smtp-Source: ABdhPJwDVaUcCbXoxitPK9nB9bQUTuneJ9vgXaxyawtLvYgD2LMUSkV9lRaN0tRCXrfQiVmVDG/Wq7DJe0bQi2zsE6s=
+X-Received: by 2002:a05:6820:388:: with SMTP id r8mr11828209ooj.0.1639675413880;
+ Thu, 16 Dec 2021 09:23:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20211208212211.2860249-1-surenb@google.com> <YbHIaq9a0CtqRulE@dhcp22.suse.cz>
- <CAJuCfpHwNS8RFPF9nzaSB8Br8Jah5_dcnQeatRZp60vmX5n6Vg@mail.gmail.com>
- <YbIzOR13uPOI5EMB@dhcp22.suse.cz> <CAJuCfpHs_25TQ7pHDhPXghA46jmXa5N2OOeBByE-sn+dQ-aM2w@mail.gmail.com>
- <CAJuCfpHZOojVXCDXPOA7kgrZqNWw_BzRmbKQXz3FOCHwa-LopQ@mail.gmail.com> <Ybsn2hJZXRofwuv+@cmpxchg.org>
-In-Reply-To: <Ybsn2hJZXRofwuv+@cmpxchg.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 16 Dec 2021 09:23:12 -0800
-Message-ID: <CAJuCfpGMTcyVikNrQR7Y1E54JAjgs5zFBry=DTDidJmD1YWpUg@mail.gmail.com>
-Subject: Re: [PATCH 4/3] mm: drop MMF_OOM_SKIP from exit_mmap
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        rientjes@google.com, willy@infradead.org, guro@fb.com,
-        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
-        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
-        oleg@redhat.com, david@redhat.com, jannh@google.com,
-        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
-        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
+References: <20211130123641.1449041-1-ray.huang@amd.com> <20211130123641.1449041-3-ray.huang@amd.com>
+In-Reply-To: <20211130123641.1449041-3-ray.huang@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 16 Dec 2021 18:23:22 +0100
+Message-ID: <CAJZ5v0i_nE_LnpgkeFLscoR5fGtzCxrV8Zdon7y=Kod_SuFqtw@mail.gmail.com>
+Subject: Re: [PATCH v5 02/22] x86/msr: add AMD CPPC MSR definitions
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 3:49 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+On Tue, Nov 30, 2021 at 1:37 PM Huang Rui <ray.huang@amd.com> wrote:
 >
-> On Wed, Dec 15, 2021 at 06:26:11PM -0800, Suren Baghdasaryan wrote:
-> > On Thu, Dec 9, 2021 at 9:06 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> > >
-> > > On Thu, Dec 9, 2021 at 8:47 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Thu 09-12-21 08:24:04, Suren Baghdasaryan wrote:
-> > > > > On Thu, Dec 9, 2021 at 1:12 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > >
-> > > > > > Do we want this on top?
-> > > > >
-> > > > > As we discussed in this thread
-> > > > > https://lore.kernel.org/all/YY4snVzZZZYhbigV@dhcp22.suse.cz,
-> > > > > __oom_reap_task_mm in exit_mmap allows oom-reaper/process_mrelease to
-> > > > > unmap pages in parallel with exit_mmap without blocking each other.
-> > > > > Removal of __oom_reap_task_mm from exit_mmap prevents this parallelism
-> > > > > and has a negative impact on performance. So the conclusion of that
-> > > > > thread I thought was to keep that part. My understanding is that we
-> > > > > also wanted to remove MMF_OOM_SKIP as a follow-up patch but
-> > > > > __oom_reap_task_mm would stay.
-> > > >
-> > > > OK, then we were talking past each other, I am afraid. I really wanted
-> > > > to get rid of this oom specific stuff from exit_mmap. It was there out
-> > > > of necessity. With a proper locking we can finally get rid of the crud.
-> > > > As I've said previously oom reaping has never been a hot path.
-> > > >
-> > > > If we really want to optimize this path then I would much rather see a
-> > > > generic solution which would allow to move the write lock down after
-> > > > unmap_vmas. That would require oom reaper to be able to handle mlocked
-> > > > memory.
-> > >
-> > > Ok, let's work on that and when that's done we can get rid of the oom
-> > > stuff in exit_mmap. I'll look into this over the weekend and will
-> > > likely be back with questions.
-> >
-> > As promised, I have a question:
-> > Any particular reason why munlock_vma_pages_range clears VM_LOCKED
-> > before unlocking pages and not after (see:
-> > https://elixir.bootlin.com/linux/latest/source/mm/mlock.c#L424)? Seems
-> > to me if VM_LOCKED was reset at the end (with proper ordering) then
-> > __oom_reap_task_mm would correctly skip VM_LOCKED vmas.
-> > https://lore.kernel.org/lkml/20180514064824.534798031@linuxfoundation.org/
-> > has this explanation:
-> >
-> > "Since munlock_vma_pages_range() depends on clearing VM_LOCKED from
-> > vm_flags before actually doing the munlock to determine if any other
-> > vmas are locking the same memory, the check for VM_LOCKED in the oom
-> > reaper is racy."
-> >
-> > but "to determine if any other vmas are locking the same memory"
-> > explanation eludes me... Any insights?
+> AMD CPPC (Collaborative Processor Performance Control) function uses MSR
+> registers to manage the performance hints. So add the MSR register macro
+> here.
 >
-> A page's mlock state is determined by whether any of the vmas that map
-> it are mlocked. The munlock code does:
->
-> vma->vm_flags &= VM_LOCKED_CLEAR_MASK
-> TestClearPageMlocked()
-> isolate_lru_page()
-> __munlock_isolated_page()
->   page_mlock()
->     rmap_walk() # for_each_vma()
->       page_mlock_one()
->         (vma->vm_flags & VM_LOCKED) && TestSetPageMlocked()
->
-> If we didn't clear the VM_LOCKED flag first, racing threads could
-> re-lock pages under us because they see that flag and think our vma
-> wants those pages mlocked when we're in the process of munlocking.
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
 
-Thanks for the explanation Johannes!
-So far I didn't find an easy way to let __oom_reap_task_mm() run
-concurrently with unlock_range(). Will keep exploring.
+I guess I can take this one if there are no objections from the x86
+maintainers, but it would be nice to receive an ACK from one of them.
 
+> ---
+>  arch/x86/include/asm/msr-index.h | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> index 01e2650b9585..e7945ef6a8df 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -486,6 +486,23 @@
+>
+>  #define MSR_AMD64_VIRT_SPEC_CTRL       0xc001011f
+>
+> +/* AMD Collaborative Processor Performance Control MSRs */
+> +#define MSR_AMD_CPPC_CAP1              0xc00102b0
+> +#define MSR_AMD_CPPC_ENABLE            0xc00102b1
+> +#define MSR_AMD_CPPC_CAP2              0xc00102b2
+> +#define MSR_AMD_CPPC_REQ               0xc00102b3
+> +#define MSR_AMD_CPPC_STATUS            0xc00102b4
+> +
+> +#define CAP1_LOWEST_PERF(x)    (((x) >> 0) & 0xff)
+> +#define CAP1_LOWNONLIN_PERF(x) (((x) >> 8) & 0xff)
+> +#define CAP1_NOMINAL_PERF(x)   (((x) >> 16) & 0xff)
+> +#define CAP1_HIGHEST_PERF(x)   (((x) >> 24) & 0xff)
+> +
+> +#define REQ_MAX_PERF(x)                (((x) & 0xff) << 0)
+> +#define REQ_MIN_PERF(x)                (((x) & 0xff) << 8)
+> +#define REQ_DES_PERF(x)                (((x) & 0xff) << 16)
+> +#define REQ_ENERGY_PERF_PREF(x)        (((x) & 0xff) << 24)
+> +
+>  /* Fam 17h MSRs */
+>  #define MSR_F17H_IRPERF                        0xc00000e9
+>
+> --
+> 2.25.1
 >

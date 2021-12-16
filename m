@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E982477F73
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707C1477F78
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242841AbhLPVnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:43:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S242884AbhLPVn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237019AbhLPVlX (ORCPT
+        with ESMTP id S242192AbhLPVlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:41:23 -0500
+        Thu, 16 Dec 2021 16:41:24 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7EDC061399;
-        Thu, 16 Dec 2021 13:40:55 -0800 (PST)
-Date:   Thu, 16 Dec 2021 21:40:52 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79047C06139A;
+        Thu, 16 Dec 2021 13:40:56 -0800 (PST)
+Date:   Thu, 16 Dec 2021 21:40:54 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690854;
+        s=2020; t=1639690855;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wFg+3q9lRM05hipiDAu8mCDaKfAFEJSpxgkEVZ2dC0E=;
-        b=OZ7c+a9QRyB2vCfcltF86/CdXu6ma/RpoID6lzS48tQNDShm8UMNPXIdwJA8oNEPeyDbi7
-        84JSasqL2C3vpOzcAeysux2kSXzJUppsiCK8mQFCxKbtZeiWchqBstnikfoWOVbSLl/Ay/
-        b09HaSybe29lZm5JGM5rotNkoUYvkw1brWYwisrJhX6T9ePxuoJmhs6Uz3/8OfpF9pZlvB
-        dugtuIeRFQGaHpvtH0RQb4ekl4oaLH9j9FXgdxqwCxfiyjCiWZEtY69Osg1Y+L+TJQeI6d
-        80zwqg9B9ZxYK41h7xFhIQXJ3kX0ZrNjkrRRi9gFKsZUY3wZ/3XFm8zwe5XpsA==
+        bh=4mBZzOKtj5z6Kz2SF8Dr3KS2c5w0Ji2obm41l12ciSs=;
+        b=byViaRYlQacC/gM+i1/pCo9QPLBq4nqr4LtRxr9OBIXUxROniHFeovMcazeBx8Wl310UX6
+        dAtECooBtkxd3Z1IUEkcUXzaHl6Im/y8pT3QrjY3tVe8M1v7NfxwiBhkv1GNjoYtVN1VOo
+        HW8wrSU+e9XE1UEaY3n2CIh6tuW/bCACLLVMWbpu7c2Tcfm6lMpby3Ixm5BP+A8o6FJY/w
+        We7FOX+vvtmumHVYFmmhea46l7Hpwc+/6wXmLXCG6XpUFghdpYgYGUq0Yk7Qqi7Tuy5xL2
+        WhnHhc+RH5YZzI9W79ED5RZ5UUgT8WWVHG073FmpJ8zspiDv9Y4P2imjInUMmw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690854;
+        s=2020e; t=1639690855;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wFg+3q9lRM05hipiDAu8mCDaKfAFEJSpxgkEVZ2dC0E=;
-        b=Za+gOToS2nyzjGPI+z+DQJqs86xxCAbsT4eKhUq3tjuz6FZ6xiZO6hLHIkA7ZpnEg6lLWr
-        2p/6ThFW1Qj/gaAQ==
+        bh=4mBZzOKtj5z6Kz2SF8Dr3KS2c5w0Ji2obm41l12ciSs=;
+        b=APuyRlcwgpGhN5ZI8BdhaEliDaMbUQxC0vFXZqOPKFtxQumacyJ/Lnla/WmLmOWx1kZGbn
+        CmEs6P5hJFpArlBw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] genirq/msi: Provide interface to retrieve Linux
- interrupt number
+Subject: [tip: irq/msi] powerpc/pseries/msi: Let core code check for
+ contiguous entries
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Nishanth Menon <nm@ti.com>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
         Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211210221814.780824745@linutronix.de>
-References: <20211210221814.780824745@linutronix.de>
+In-Reply-To: <20211210221814.720998720@linutronix.de>
+References: <20211210221814.720998720@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969085282.23020.8815870939650114358.tip-bot2@tip-bot2>
+Message-ID: <163969085402.23020.1746302325426674592.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,90 +63,84 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     cf15f43acaad31dabb2646cef170a506a1d663eb
-Gitweb:        https://git.kernel.org/tip/cf15f43acaad31dabb2646cef170a506a1d663eb
+Commit-ID:     651b39c48813acac2b77850014390f4062a4835d
+Gitweb:        https://git.kernel.org/tip/651b39c48813acac2b77850014390f4062a4835d
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 10 Dec 2021 23:19:23 +01:00
+AuthorDate:    Fri, 10 Dec 2021 23:19:22 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 16 Dec 2021 22:16:40 +01:00
 
-genirq/msi: Provide interface to retrieve Linux interrupt number
+powerpc/pseries/msi: Let core code check for contiguous entries
 
-This allows drivers to retrieve the Linux interrupt number instead of
-fiddling with MSI descriptors.
-
-msi_get_virq() returns the Linux interrupt number or 0 in case that there
-is no entry for the given MSI index.
+Set the domain info flag and remove the check.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
-Tested-by: Nishanth Menon <nm@ti.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211210221814.780824745@linutronix.de
+Link: https://lore.kernel.org/r/20211210221814.720998720@linutronix.de
+
 
 ---
- include/linux/msi.h |  2 ++
- kernel/irq/msi.c    | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
+ arch/powerpc/platforms/pseries/msi.c | 33 ++++++---------------------
+ 1 file changed, 8 insertions(+), 25 deletions(-)
 
-diff --git a/include/linux/msi.h b/include/linux/msi.h
-index d206239..7593fc3 100644
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -153,6 +153,8 @@ struct msi_device_data {
- 
- int msi_setup_device_data(struct device *dev);
- 
-+unsigned int msi_get_virq(struct device *dev, unsigned int index);
-+
- /* Helpers to hide struct msi_desc implementation details */
- #define msi_desc_to_dev(desc)		((desc)->dev)
- #define dev_to_msi_list(dev)		(&(dev)->msi_list)
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 8e433f1..ab5e83f 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -105,6 +105,42 @@ int msi_setup_device_data(struct device *dev)
- 	return 0;
+diff --git a/arch/powerpc/platforms/pseries/msi.c b/arch/powerpc/platforms/pseries/msi.c
+index 27cd1fb..fb2919f 100644
+--- a/arch/powerpc/platforms/pseries/msi.c
++++ b/arch/powerpc/platforms/pseries/msi.c
+@@ -321,27 +321,6 @@ out:
+ 	return request;
  }
  
-+/**
-+ * msi_get_virq - Return Linux interrupt number of a MSI interrupt
-+ * @dev:	Device to operate on
-+ * @index:	MSI interrupt index to look for (0-based)
-+ *
-+ * Return: The Linux interrupt number on success (> 0), 0 if not found
+-static int check_msix_entries(struct pci_dev *pdev)
+-{
+-	struct msi_desc *entry;
+-	int expected;
+-
+-	/* There's no way for us to express to firmware that we want
+-	 * a discontiguous, or non-zero based, range of MSI-X entries.
+-	 * So we must reject such requests. */
+-
+-	expected = 0;
+-	for_each_pci_msi_entry(entry, pdev) {
+-		if (entry->msi_index != expected) {
+-			pr_debug("rtas_msi: bad MSI-X entries.\n");
+-			return -EINVAL;
+-		}
+-		expected++;
+-	}
+-
+-	return 0;
+-}
+-
+ static void rtas_hack_32bit_msi_gen2(struct pci_dev *pdev)
+ {
+ 	u32 addr_hi, addr_lo;
+@@ -380,9 +359,6 @@ static int rtas_prepare_msi_irqs(struct pci_dev *pdev, int nvec_in, int type,
+ 	if (quota && quota < nvec)
+ 		return quota;
+ 
+-	if (type == PCI_CAP_ID_MSIX && check_msix_entries(pdev))
+-		return -EINVAL;
+-
+ 	/*
+ 	 * Firmware currently refuse any non power of two allocation
+ 	 * so we round up if the quota will allow it.
+@@ -529,9 +505,16 @@ static struct irq_chip pseries_pci_msi_irq_chip = {
+ 	.irq_write_msi_msg	= pseries_msi_write_msg,
+ };
+ 
++
++/*
++ * Set MSI_FLAG_MSIX_CONTIGUOUS as there is no way to express to
++ * firmware to request a discontiguous or non-zero based range of
++ * MSI-X entries. Core code will reject such setup attempts.
 + */
-+unsigned int msi_get_virq(struct device *dev, unsigned int index)
-+{
-+	struct msi_desc *desc;
-+	bool pcimsi;
-+
-+	if (!dev->msi.data)
-+		return 0;
-+
-+	pcimsi = dev_is_pci(dev) ? to_pci_dev(dev)->msi_enabled : false;
-+
-+	for_each_msi_entry(desc, dev) {
-+		/* PCI-MSI has only one descriptor for multiple interrupts. */
-+		if (pcimsi) {
-+			if (desc->irq && index < desc->nvec_used)
-+				return desc->irq + index;
-+			break;
-+		}
-+
-+		/*
-+		 * PCI-MSIX and platform MSI use a descriptor per
-+		 * interrupt.
-+		 */
-+		if (desc->msi_index == index)
-+			return desc->irq;
-+	}
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(msi_get_virq);
-+
- #ifdef CONFIG_SYSFS
- static ssize_t msi_mode_show(struct device *dev, struct device_attribute *attr,
- 			     char *buf)
+ static struct msi_domain_info pseries_msi_domain_info = {
+ 	.flags = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
+-		  MSI_FLAG_MULTI_PCI_MSI  | MSI_FLAG_PCI_MSIX),
++		  MSI_FLAG_MULTI_PCI_MSI  | MSI_FLAG_PCI_MSIX |
++		  MSI_FLAG_MSIX_CONTIGUOUS),
+ 	.ops   = &pseries_pci_msi_domain_ops,
+ 	.chip  = &pseries_pci_msi_irq_chip,
+ };

@@ -2,187 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A3247678F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825D1476795
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbhLPBvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 20:51:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59630 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhLPBvj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 20:51:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBCE4B8226F;
-        Thu, 16 Dec 2021 01:51:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96AD3C36AE1;
-        Thu, 16 Dec 2021 01:51:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639619496;
-        bh=KK2PCJcQ7/7Byemi7xyIPz+xoe33j+VFfkbiyGQPARM=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=f3defKgWisUy4hgonbQccfiHiru2wDolSQZ2lMO8IcXbwKS0CzlFONzt1DKwkTkOe
-         sAzE/ZUhiOKvVGpR/T0TS6TAyrXIfIlAss5DjPcgWRsNxqM2AifybPhY2rFWpuq7r4
-         GcMpj50E/eqc47U5+AltRcSpdxtKQXMEsnwoZ9ppabM/LMHoI+efFG2N8huqB5HIug
-         9e+GBheH/SmbuMesh8dBVaQekajmGqSC473a1yfeVljWZtQCBbsW9CN5lxxr7FLVZa
-         sLT5KfNY2X376yjhQbAg3ZOqKoMYkC3F1NBB8vRanWcFK/cigst/XT+qweb6MZzSPF
-         8d9cP3mlkupqw==
-Content-Type: text/plain; charset="utf-8"
+        id S232694AbhLPBxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 20:53:30 -0500
+Received: from mga04.intel.com ([192.55.52.120]:43294 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229555AbhLPBx3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 20:53:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639619609; x=1671155609;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xRq3bqkwSKIsz/l6tNtXKEQ7PCG+HVHMTN9P2wqmeBI=;
+  b=aUyeWTizHZ4A6cEUzRzu4VBxi3bVoDtlGLc+DOew5iImt2UzzeR/eYlh
+   MPNU4nQ6kI23dcYB5dm5GMdVul/LCMbrxT5A9B7fp6QHoUitn5cYAj5FG
+   9acMHRbPjOgXp+nlSuBEef4h5ShbRGoPPdLaLxWDObSEEze61VvDQNuLm
+   /4kev3tT5fC+YcxkGk8MNBwZsA54wr8yL6fCUsS6THq9RTBabXoDi179v
+   vBJp42DnIzCIAXBwHxPqPMbY0ss//wkz954fAbX1MNWPvL1LJpt4Dtwyz
+   3jedQkrxuQ784spnSzjQCMnk7j5eQvHLlJIU2Fg2MWpZL4Ffq3TiUw9GE
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="238118870"
+X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
+   d="scan'208";a="238118870"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 17:53:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
+   d="scan'208";a="519028576"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 15 Dec 2021 17:53:27 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxfxW-0002bQ-UW; Thu, 16 Dec 2021 01:53:26 +0000
+Date:   Thu, 16 Dec 2021 09:52:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 2f5b3514c33fecad4003ce0f22ca9691492d310b
+Message-ID: <61ba9bd9.xxMhy3qFrbLgv5L4%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211203035601.3505780-1-bjorn.andersson@linaro.org>
-References: <20211203035601.3505780-1-bjorn.andersson@linaro.org>
-Subject: Re: [PATCH] clk: qcom: rcg2: Cache rate changes for parked RCGs
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Amit Nischal <anischal@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>
-Date:   Wed, 15 Dec 2021 17:51:35 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20211216015136.96AD3C36AE1@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Bjorn Andersson (2021-12-02 19:56:01)
-> As GDSCs are turned on and off some associated clocks are momentarily
-> enabled for house keeping purposes. Failure to enable these clocks seems
-> to have been silently ignored in the past, but starting in SM8350 this
-> failure will prevent the GDSC to turn on.
->=20
-> At least on SM8350 this operation will enable the RCG per the
-> configuration in CFG_REG. This means that the current model where the
-> current configuration is written back to CF_REG immediately after
-> parking the RCG doesn't work.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 2f5b3514c33fecad4003ce0f22ca9691492d310b  x86/boot: Move EFI range reservation after cmdline parsing
 
-Just to clarify, is the RCG off and "parked" at XO with the config
-register dirty and set to the desired frequency and then the RCG is
-turned on by the GDSC?
+elapsed time: 720m
 
->=20
-> Instead, keep track of the currently requested rate of the clock and
-> upon enabling the clock reapply the configuration per the saved rate.
+configs tested: 174
+configs skipped: 67
 
-We already keep track of the requested rate and reapply it on enable,
-just we're lazy and stash that information in the hardware and not the
-software. I didn't think the gdsc would be turned on and ruin that all,
-but it's fair.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->=20
-> Fixes: 7ef6f11887bd ("clk: qcom: Configure the RCGs to a safe source as n=
-eeded")
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  drivers/clk/qcom/clk-rcg.h  |  2 ++
->  drivers/clk/qcom/clk-rcg2.c | 32 +++++++++++++++++---------------
->  2 files changed, 19 insertions(+), 15 deletions(-)
->=20
-> diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-> index 99efcc7f8d88..6939f4e62768 100644
-> --- a/drivers/clk/qcom/clk-rcg.h
-> +++ b/drivers/clk/qcom/clk-rcg.h
-> @@ -139,6 +139,7 @@ extern const struct clk_ops clk_dyn_rcg_ops;
->   * @freq_tbl: frequency table
->   * @clkr: regmap clock handle
->   * @cfg_off: defines the cfg register offset from the CMD_RCGR + CFG_REG
-> + * @current_rate: cached rate for parked RCGs
->   */
->  struct clk_rcg2 {
->         u32                     cmd_rcgr;
-> @@ -149,6 +150,7 @@ struct clk_rcg2 {
->         const struct freq_tbl   *freq_tbl;
->         struct clk_regmap       clkr;
->         u8                      cfg_off;
-> +       unsigned long           current_rate;
->  };
-> =20
->  #define to_clk_rcg2(_hw) container_of(to_clk_regmap(_hw), struct clk_rcg=
-2, clkr)
-> diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-> index e1b1b426fae4..b574b38dcbd5 100644
-> --- a/drivers/clk/qcom/clk-rcg2.c
-> +++ b/drivers/clk/qcom/clk-rcg2.c
-> @@ -167,6 +167,7 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long=
- parent_rate)
->  {
->         struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
->         u32 cfg, hid_div, m =3D 0, n =3D 0, mode =3D 0, mask;
-> +       unsigned long rate;
-> =20
->         regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> =20
-> @@ -186,7 +187,11 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned lon=
-g parent_rate)
->         hid_div =3D cfg >> CFG_SRC_DIV_SHIFT;
->         hid_div &=3D mask;
-> =20
-> -       return calc_rate(parent_rate, m, n, mode, hid_div);
-> +       rate =3D calc_rate(parent_rate, m, n, mode, hid_div);
-> +       if (!rcg->current_rate)
-> +               rcg->current_rate =3D rate;
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm                              allyesconfig
+i386                 randconfig-c001-20211214
+mips                 randconfig-c004-20211214
+i386                 randconfig-c001-20211215
+powerpc                   bluestone_defconfig
+arm                          pcm027_defconfig
+mips                           rs90_defconfig
+h8300                            alldefconfig
+powerpc                     mpc512x_defconfig
+sh                          rsk7203_defconfig
+arm                          moxart_defconfig
+arm                      footbridge_defconfig
+mips                            gpr_defconfig
+sh                     magicpanelr2_defconfig
+arm                            zeus_defconfig
+s390                             allyesconfig
+powerpc                      ppc64e_defconfig
+arm                         lpc32xx_defconfig
+m68k                          multi_defconfig
+powerpc                      pasemi_defconfig
+powerpc                    gamecube_defconfig
+powerpc64                        alldefconfig
+arm                         s3c6400_defconfig
+arm                           stm32_defconfig
+powerpc                       ppc64_defconfig
+powerpc                 mpc837x_mds_defconfig
+arm                          lpd270_defconfig
+m68k                        mvme16x_defconfig
+arm                            hisi_defconfig
+powerpc                mpc7448_hpc2_defconfig
+arc                          axs103_defconfig
+powerpc                 mpc832x_rdb_defconfig
+sh                   sh7770_generic_defconfig
+arm                         palmz72_defconfig
+mips                          rb532_defconfig
+arm                          exynos_defconfig
+sh                         apsh4a3a_defconfig
+arm                        mvebu_v5_defconfig
+um                                  defconfig
+mips                         rt305x_defconfig
+arm                           sama5_defconfig
+ia64                        generic_defconfig
+arm                          pxa910_defconfig
+powerpc                 mpc837x_rdb_defconfig
+sh                          r7780mp_defconfig
+csky                             alldefconfig
+arm                   milbeaut_m10v_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc                      makalu_defconfig
+arm                      jornada720_defconfig
+m68k                        m5407c3_defconfig
+mips                           jazz_defconfig
+powerpc                     asp8347_defconfig
+m68k                        mvme147_defconfig
+xtensa                  nommu_kc705_defconfig
+xtensa                    xip_kc705_defconfig
+powerpc                 mpc832x_mds_defconfig
+arc                        vdk_hs38_defconfig
+powerpc                      pcm030_defconfig
+sh                             espt_defconfig
+mips                          ath79_defconfig
+mips                 decstation_r4k_defconfig
+powerpc                      tqm8xx_defconfig
+arm                          gemini_defconfig
+mips                         tb0226_defconfig
+sh                              ul2_defconfig
+powerpc                 linkstation_defconfig
+parisc                generic-32bit_defconfig
+arm                        neponset_defconfig
+nios2                         10m50_defconfig
+powerpc                      arches_defconfig
+xtensa                              defconfig
+m68k                        stmark2_defconfig
+mips                     cu1000-neo_defconfig
+powerpc                     rainier_defconfig
+powerpc                        cell_defconfig
+powerpc                 mpc836x_rdk_defconfig
+sparc                               defconfig
+powerpc                          g5_defconfig
+mips                     loongson1c_defconfig
+sh                   rts7751r2dplus_defconfig
+arm                       omap2plus_defconfig
+mips                          rm200_defconfig
+powerpc                        warp_defconfig
+powerpc                         wii_defconfig
+mips                    maltaup_xpa_defconfig
+powerpc                       eiger_defconfig
+powerpc                     kmeter1_defconfig
+arm                  randconfig-c002-20211214
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20211214
+x86_64               randconfig-a005-20211214
+x86_64               randconfig-a001-20211214
+x86_64               randconfig-a002-20211214
+x86_64               randconfig-a003-20211214
+x86_64               randconfig-a004-20211214
+i386                 randconfig-a001-20211214
+i386                 randconfig-a002-20211214
+i386                 randconfig-a005-20211214
+i386                 randconfig-a003-20211214
+i386                 randconfig-a006-20211214
+i386                 randconfig-a004-20211214
+x86_64               randconfig-a011-20211215
+x86_64               randconfig-a014-20211215
+x86_64               randconfig-a012-20211215
+x86_64               randconfig-a013-20211215
+x86_64               randconfig-a016-20211215
+x86_64               randconfig-a015-20211215
+i386                 randconfig-a013-20211215
+i386                 randconfig-a011-20211215
+i386                 randconfig-a016-20211215
+i386                 randconfig-a014-20211215
+i386                 randconfig-a015-20211215
+i386                 randconfig-a012-20211215
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-Instead of doing this in recalc_rate, all the time, why not make an init
-clk op that does it once during registration? The other problem I see is
-that the rate we calculate may be wrong if the parent is registered
-after this clk. I think this came up originally when the patch this is
-fixing was discussed.
+clang tested configs:
+x86_64               randconfig-a011-20211214
+x86_64               randconfig-a014-20211214
+x86_64               randconfig-a012-20211214
+x86_64               randconfig-a013-20211214
+x86_64               randconfig-a016-20211214
+x86_64               randconfig-a015-20211214
+hexagon              randconfig-r045-20211214
+s390                 randconfig-r044-20211214
+riscv                randconfig-r042-20211214
+hexagon              randconfig-r041-20211214
 
-So instead of saving the current_rate can we save the cfg register value
-(or however many registers we need) to put back the frequency of the clk
-to what we want on enable? The other thing is that we made recalc_rate()
-work "seamlessly" here by stashing the frequency into the register but
-leaving it uncommitted until enable. We may need to now look at the
-software copy of the registers in the shared rcg recalc rate operation
-to figure out what the frequency is.
-
-> +
-> +       return rate;
->  }
-> =20
->  static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq=
-_tbl *f,
-> @@ -968,12 +973,14 @@ static int clk_rcg2_shared_set_rate(struct clk_hw *=
-hw, unsigned long rate,
->         if (!f)
->                 return -EINVAL;
-> =20
-> +       rcg->current_rate =3D rate;
-> +
->         /*
-> -        * In case clock is disabled, update the CFG, M, N and D registers
-> -        * and don't hit the update bit of CMD register.
-> +        * In the case that the shared RCG is parked, current_rate will be
-> +        * applied as the clock is unparked again, so just return here.
->          */
->         if (!__clk_is_enabled(hw->clk))
-> -               return __clk_rcg2_configure(rcg, f);
-> +               return 0;
-> =20
->         return clk_rcg2_shared_force_enable_clear(hw, f);
->  }
-> @@ -987,8 +994,13 @@ static int clk_rcg2_shared_set_rate_and_parent(struc=
-t clk_hw *hw,
->  static int clk_rcg2_shared_enable(struct clk_hw *hw)
->  {
->         struct clk_rcg2 *rcg =3D to_clk_rcg2(hw);
-> +       const struct freq_tbl *f =3D NULL;
-
-Do not assign a value to a variable
-
->         int ret;
-> =20
-> +       f =3D qcom_find_freq(rcg->freq_tbl, rcg->current_rate);
-
-and then assign it again without testing it before.
-
-> +       if (!f)
-> +               return -EINVAL;
-> +
->         /*
->          * Set the update bit because required configuration has already
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

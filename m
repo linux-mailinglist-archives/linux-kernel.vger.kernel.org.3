@@ -2,306 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EDD476A67
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 07:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E10476A6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 07:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbhLPGe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 01:34:29 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33550 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbhLPGe2 (ORCPT
+        id S234128AbhLPGfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 01:35:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51581 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229747AbhLPGfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 01:34:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5650CB8229B;
-        Thu, 16 Dec 2021 06:34:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6313C36AE2;
-        Thu, 16 Dec 2021 06:34:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639636466;
-        bh=Gt+BZtczzJb/Dny3RcnKDn17J9ysbZaBLlG0bXroAfE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vM6Nd/tOhVZKcPnSqFEgSG0ahjioaW0+Zili52Tw4oDE/SS9MZFgBBIMWABR92w2Y
-         JK+FfRX2jPcc9l46ArdVp+/dlwZhwwE9Av1cio8z8Lsvn0mvkUkw9f3Ha0kJyjI6xE
-         THJ/JatMTPLILGVvgg2Zz/4hVHxIUkh8uXMA9sZtYKnye/ZAh1q6QtMx002+WRgfrJ
-         5JT6D1X+R+Uyz8Gr2AS46D6o+ZyobAIgSeAJDoEpGyW+SYhga/ykU5UUnhjr18Wo+y
-         zYtemdIXd8fepgkxlwx94LizH8sLMczUY9eaIz7G4sb0/YlPbtJJv4nCz671LcTtFJ
-         bxCrMAExqH9vQ==
-Date:   Thu, 16 Dec 2021 12:04:21 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, quic_abhinavk@quicinc.com,
-        aravindh@codeaurora.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kishon@ti.com, p.zabel@pengutronix.de,
-        Kuogee Hsieh <khsieh@codeaurora.org>
-Subject: Re: [PATCH v8] phy: qcom-qmp: add display port v4 voltage and
- pre-emphasis swing tables
-Message-ID: <Ybrd7WJpnmd6Wxle@matsya>
-References: <1639439228-11430-1-git-send-email-quic_khsieh@quicinc.com>
+        Thu, 16 Dec 2021 01:35:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639636511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xtjxk7vbEoRGCIi4LCQQtU/KJOvEczYA81RP/eWBh9Y=;
+        b=NIcDvFtwSkcNozntoKA9AMHjfTAYLr+983ITlY8XPgH0UXKDZaPiApvr50NFs9h36gg7rQ
+        Y70J6u0wQnE3MBKy0VN5s3YgyK+NwJBrDemsR2zzUGewXBWcZDpWjPbbCAtEgON/hRno0v
+        nkHgQzXnA8pnYWIUjipF4DsXAUw+9zM=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-20-hhxO7WB2M0-Zs4KRyZiaKg-1; Thu, 16 Dec 2021 01:35:10 -0500
+X-MC-Unique: hhxO7WB2M0-Zs4KRyZiaKg-1
+Received: by mail-ed1-f72.google.com with SMTP id z14-20020a05640235ce00b003f7e90c32b6so3864203edc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 22:35:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Xtjxk7vbEoRGCIi4LCQQtU/KJOvEczYA81RP/eWBh9Y=;
+        b=IgKpkrkUeCDgl9xzm833LbHZwKe1hysDefZ8p6Rg5twQUjKKvNFh7fqz5N6G+0UFeJ
+         ETEG21WV5sjEzrOz/UB94PPuhSk4L2/HZNXjjqRnjJPjcSSUrXUj5c+8XQgOvRZm4OlN
+         4Fgwkz7ujA/pgFCUlV7B7KSLJpvyi+/+zJEYIJitzoVC9bWmLo+2cdXYFBCNLvyxIoW8
+         1MEW1/h/bcnhaZkpQzFAY7YGvRrZnaRf+W1790tzYPr/JS5jaDdMQApHT/hA9683pqAZ
+         8UnphrNwe5MlwpllVS5gMG11uaZVb9lR7Fob5nkiH9aoxdaFNRKtTCrh2iO4SETs1k5Z
+         QwIQ==
+X-Gm-Message-State: AOAM530UV6kXNRtfT2Bo7U+mFwQWWv9ZYqjfI4k5hoTou26ZRy9sRu/k
+        n6yJ4cfidFp4YBdgOxOmA9+cxa970TvMLc3Hhvk6EXQRSmKMA1go5L9W70eaID26lC93C8aLc2R
+        n4TSbj9i89nSoUY6vAnifla4e
+X-Received: by 2002:a05:6402:11c7:: with SMTP id j7mr18802919edw.83.1639636508834;
+        Wed, 15 Dec 2021 22:35:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwWCUmlRiKevknUPqmIQUHsZ+5y6PNB1J0axe2lqls/B6DVNAlfPTQH5R9PundfbCHdLNAHzQ==
+X-Received: by 2002:a05:6402:11c7:: with SMTP id j7mr18802899edw.83.1639636508514;
+        Wed, 15 Dec 2021 22:35:08 -0800 (PST)
+Received: from redhat.com ([2.55.22.18])
+        by smtp.gmail.com with ESMTPSA id hv13sm1441483ejc.75.2021.12.15.22.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 22:35:07 -0800 (PST)
+Date:   Thu, 16 Dec 2021 01:35:04 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Si-Wei Liu <si-wei.liu@oracle.com>
+Cc:     Jason Wang <jasowang@redhat.com>, Eli Cohen <elic@nvidia.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: vdpa legacy guest support (was Re: [PATCH] vdpa/mlx5:
+ set_features should allow reset to zero)
+Message-ID: <20211216013403-mutt-send-email-mst@kernel.org>
+References: <178f8ea7-cebd-0e81-3dc7-10a058d22c07@redhat.com>
+ <c9a0932f-a6d7-a9df-38ba-97e50f70c2b2@oracle.com>
+ <20211212042311-mutt-send-email-mst@kernel.org>
+ <ba9df703-29af-98a9-c554-f303ff045398@oracle.com>
+ <20211214000245-mutt-send-email-mst@kernel.org>
+ <4fc43d0f-da9e-ce16-1f26-9f0225239b75@oracle.com>
+ <CACGkMEsttnFEKGK-aKdCZeXkUnZJg1uaqYzFqpv-g5TobHGSzQ@mail.gmail.com>
+ <6eaf672c-cc86-b5bf-5b74-c837affeb6e1@oracle.com>
+ <20211215162917-mutt-send-email-mst@kernel.org>
+ <71d2a69c-94a7-76b5-2971-570026760bf0@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1639439228-11430-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <71d2a69c-94a7-76b5-2971-570026760bf0@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kuogee,
-
-On 13-12-21, 15:47, Kuogee Hsieh wrote:
-> From: Kuogee Hsieh <khsieh@codeaurora.org>
-
-The patch is sent by Kuogee Hsieh <quic_khsieh@quicinc.com>, the patch
-author is Kuogee Hsieh <khsieh@codeaurora.org> and s-o-b Kuogee Hsieh
-<quic_khsieh@quicinc.com>.
-
-Sorry but they need to match before I can pick this.
-(Hint: git commit --amend --reset-author would do so provided gitconfig
-has your correct email)
-
-> The previous patch from Fixes 'aff188feb5e1 ("phy: qcom-qmp: add support
-> for sm8250-usb3-dp phy")' added functions to support V4 of the PHY, But
-
-Pls rephrase to:
-Commit aff188feb5e1 ("phy: qcom-qmp: add support for sm8250-usb3-dp
-phy")' added functions to support V4 of the PHY, but it did not update
-voltage and pre-emphasis tables accordingly.
-
-> it did not update voltage and pre-emphasis tables accordingly.
-
-Empty line here
-
-> This patch add v4 voltage and pre-emphasis swing tables to complete v4
-> phy implementation. Both voltage and pre-emphasis swing level are set
-> during link training negotiation between host and sink. There are totally
-> four tables added.  A voltage swing table for both hbr and hbr1, a voltage
-> table for both hbr2 and hbr3, a pre-emphasis table for both hbr and hbr1
-> and a pre-emphasis table for both hbr2 and hbr3.
-
-Add one more empty line here
-
-> In addition, write 0x0a
-> to TX_TX_POL_INV is added to complete the sequence of configure dp phy
-> base on the hardware documentation.
+On Wed, Dec 15, 2021 at 06:01:55PM -0800, Si-Wei Liu wrote:
 > 
-> Fixes: aff188feb5e1 ("phy: qcom-qmp: add support for sm8250-usb3-dp phy")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp.c | 112 +++++++++++++++++++++++++-----------
->  1 file changed, 77 insertions(+), 35 deletions(-)
 > 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> index 456a59d..d41e30c 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> @@ -4255,40 +4255,50 @@ static void qcom_qmp_v3_phy_dp_aux_init(struct qmp_phy *qphy)
->  	       qphy->pcs + QSERDES_V3_DP_PHY_AUX_INTERRUPT_MASK);
->  }
->  
-> -static const u8 qmp_dp_v3_pre_emphasis_hbr3_hbr2[4][4] = {
-> +#define MAX_SWING_LEVEL 4
-> +#define MAX_VOLTAGE_LEVEL 4
-> +#define MAX_EMPHASIS_LEVEL 4
-> +
-> +static const u8 qmp_dp_v3_pre_emphasis_hbr3_hbr2[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
->  	{ 0x00, 0x0c, 0x15, 0x1a },
->  	{ 0x02, 0x0e, 0x16, 0xff },
->  	{ 0x02, 0x11, 0xff, 0xff },
->  	{ 0x04, 0xff, 0xff, 0xff }
->  };
->  
-> -static const u8 qmp_dp_v3_voltage_swing_hbr3_hbr2[4][4] = {
-> +static const u8 qmp_dp_v3_voltage_swing_hbr3_hbr2[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
->  	{ 0x02, 0x12, 0x16, 0x1a },
->  	{ 0x09, 0x19, 0x1f, 0xff },
->  	{ 0x10, 0x1f, 0xff, 0xff },
->  	{ 0x1f, 0xff, 0xff, 0xff }
->  };
->  
-> -static const u8 qmp_dp_v3_pre_emphasis_hbr_rbr[4][4] = {
-> +static const u8 qmp_dp_v3_pre_emphasis_hbr_rbr[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
->  	{ 0x00, 0x0c, 0x14, 0x19 },
->  	{ 0x00, 0x0b, 0x12, 0xff },
->  	{ 0x00, 0x0b, 0xff, 0xff },
->  	{ 0x04, 0xff, 0xff, 0xff }
->  };
->  
-> -static const u8 qmp_dp_v3_voltage_swing_hbr_rbr[4][4] = {
-> +static const u8 qmp_dp_v3_voltage_swing_hbr_rbr[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
->  	{ 0x08, 0x0f, 0x16, 0x1f },
->  	{ 0x11, 0x1e, 0x1f, 0xff },
->  	{ 0x19, 0x1f, 0xff, 0xff },
->  	{ 0x1f, 0xff, 0xff, 0xff }
->  };
->  
-> -static int qcom_qmp_phy_configure_dp_swing(struct qmp_phy *qphy,
-> -		unsigned int drv_lvl_reg, unsigned int emp_post_reg)
-> +static int __qcom_qmp_phy_configure_dp_swing
-> +			(struct qmp_phy *qphy,
-> +			unsigned int drv_lvl_reg,
-> +			unsigned int emp_post_reg,
-> +			const u8 voltage_swing_hbr_rbr[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL],
-> +			const u8 pre_emphasis_hbr_rbr[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL],
-> +			const u8 voltage_swing_hbr3_hbr2[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL],
-> +			const u8 pre_emphasis_hbr3_hbr2[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL])
->  {
->  	const struct phy_configure_opts_dp *dp_opts = &qphy->dp_opts;
->  	unsigned int v_level = 0, p_level = 0;
-> -	u8 voltage_swing_cfg, pre_emphasis_cfg;
-> +	u8 voltage, emphasis;
->  	int i;
->  
->  	for (i = 0; i < dp_opts->lanes; i++) {
-> @@ -4297,26 +4307,25 @@ static int qcom_qmp_phy_configure_dp_swing(struct qmp_phy *qphy,
->  	}
->  
->  	if (dp_opts->link_rate <= 2700) {
-> -		voltage_swing_cfg = qmp_dp_v3_voltage_swing_hbr_rbr[v_level][p_level];
-> -		pre_emphasis_cfg = qmp_dp_v3_pre_emphasis_hbr_rbr[v_level][p_level];
-> +		voltage = voltage_swing_hbr_rbr[v_level][p_level];
-> +		emphasis = pre_emphasis_hbr_rbr[v_level][p_level];
->  	} else {
-> -		voltage_swing_cfg = qmp_dp_v3_voltage_swing_hbr3_hbr2[v_level][p_level];
-> -		pre_emphasis_cfg = qmp_dp_v3_pre_emphasis_hbr3_hbr2[v_level][p_level];
-> +		voltage = voltage_swing_hbr3_hbr2[v_level][p_level];
-> +		emphasis = pre_emphasis_hbr3_hbr2[v_level][p_level];
->  	}
->  
->  	/* TODO: Move check to config check */
-> -	if (voltage_swing_cfg == 0xFF && pre_emphasis_cfg == 0xFF)
-> +	if (voltage == 0xFF && emphasis == 0xFF)
->  		return -EINVAL;
->  
->  	/* Enable MUX to use Cursor values from these registers */
-> -	voltage_swing_cfg |= DP_PHY_TXn_TX_DRV_LVL_MUX_EN;
-> -	pre_emphasis_cfg |= DP_PHY_TXn_TX_EMP_POST1_LVL_MUX_EN;
-> -
-> -	writel(voltage_swing_cfg, qphy->tx + drv_lvl_reg);
-> -	writel(pre_emphasis_cfg, qphy->tx + emp_post_reg);
-> -	writel(voltage_swing_cfg, qphy->tx2 + drv_lvl_reg);
-> -	writel(pre_emphasis_cfg, qphy->tx2 + emp_post_reg);
-> +	voltage |= DP_PHY_TXn_TX_DRV_LVL_MUX_EN;
-> +	emphasis |= DP_PHY_TXn_TX_EMP_POST1_LVL_MUX_EN;
->  
-> +	writel(voltage, qphy->tx + drv_lvl_reg);
-> +	writel(emphasis, qphy->tx + emp_post_reg);
-> +	writel(voltage, qphy->tx2 + drv_lvl_reg);
-> +	writel(emphasis, qphy->tx2 + emp_post_reg);
->  	return 0;
->  }
->  
-> @@ -4325,9 +4334,14 @@ static void qcom_qmp_v3_phy_configure_dp_tx(struct qmp_phy *qphy)
->  	const struct phy_configure_opts_dp *dp_opts = &qphy->dp_opts;
->  	u32 bias_en, drvr_en;
->  
-> -	if (qcom_qmp_phy_configure_dp_swing(qphy,
-> -				QSERDES_V3_TX_TX_DRV_LVL,
-> -				QSERDES_V3_TX_TX_EMP_POST1_LVL) < 0)
-> +	if (__qcom_qmp_phy_configure_dp_swing
-> +			(qphy,
-> +			QSERDES_V3_TX_TX_DRV_LVL,
-> +			QSERDES_V3_TX_TX_EMP_POST1_LVL,
-> +			qmp_dp_v3_voltage_swing_hbr_rbr,
-> +			qmp_dp_v3_pre_emphasis_hbr_rbr,
-> +			qmp_dp_v3_voltage_swing_hbr3_hbr2,
-> +			qmp_dp_v3_pre_emphasis_hbr3_hbr2) < 0)
->  		return;
->  
->  	if (dp_opts->lanes == 1) {
-> @@ -4465,6 +4479,35 @@ static int qcom_qmp_v3_dp_phy_calibrate(struct qmp_phy *qphy)
->  	return 0;
->  }
->  
-> +/* The values in these tables are given without MUX_EN (0x20) bit set */
-> +static const u8 qmp_dp_v4_pre_emphasis_hbr3_hbr2[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
-> +	{ 0x00, 0x0c, 0x15, 0x1b },
-> +	{ 0x02, 0x0e, 0x16, 0xff },
-> +	{ 0x02, 0x11, 0xff, 0xff },
-> +	{ 0x04, 0xff, 0xff, 0xff }
-> +};
-> +
-> +static const u8 qmp_dp_v4_voltage_swing_hbr3_hbr2[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
-> +	{ 0x02, 0x12, 0x16, 0x1a },
-> +	{ 0x09, 0x19, 0x1f, 0xff },
-> +	{ 0x10, 0x1f, 0xff, 0xff },
-> +	{ 0x1f, 0xff, 0xff, 0xff }
-> +};
-> +
-> +static const u8 qmp_dp_v4_pre_emphasis_hbr_rbr[MAX_SWING_LEVEL][MAX_EMPHASIS_LEVEL] = {
-> +	{ 0x00, 0x0e, 0x15, 0x1b },
-> +	{ 0x00, 0x0e, 0x15, 0xff },
-> +	{ 0x00, 0x0e, 0xff, 0xff },
-> +	{ 0x04, 0xff, 0xff, 0xff }
-> +};
-> +
-> +static const u8 qmp_dp_v4_voltage_swing_hbr_rbr[MAX_SWING_LEVEL][MAX_VOLTAGE_LEVEL] = {
-> +	{ 0x08, 0x0f, 0x16, 0x1f },
-> +	{ 0x11, 0x1e, 0x1f, 0xff },
-> +	{ 0x16, 0x1f, 0xff, 0xff },
-> +	{ 0x1f, 0xff, 0xff, 0xff }
-> +};
-> +
->  static void qcom_qmp_v4_phy_dp_aux_init(struct qmp_phy *qphy)
->  {
->  	writel(DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_PSR_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
-> @@ -4494,16 +4537,14 @@ static void qcom_qmp_v4_phy_dp_aux_init(struct qmp_phy *qphy)
->  
->  static void qcom_qmp_v4_phy_configure_dp_tx(struct qmp_phy *qphy)
->  {
-> -	/* Program default values before writing proper values */
-> -	writel(0x27, qphy->tx + QSERDES_V4_TX_TX_DRV_LVL);
-> -	writel(0x27, qphy->tx2 + QSERDES_V4_TX_TX_DRV_LVL);
-> -
-> -	writel(0x20, qphy->tx + QSERDES_V4_TX_TX_EMP_POST1_LVL);
-> -	writel(0x20, qphy->tx2 + QSERDES_V4_TX_TX_EMP_POST1_LVL);
-> -
-> -	qcom_qmp_phy_configure_dp_swing(qphy,
-> +	__qcom_qmp_phy_configure_dp_swing
-> +			(qphy,
->  			QSERDES_V4_TX_TX_DRV_LVL,
-> -			QSERDES_V4_TX_TX_EMP_POST1_LVL);
-> +			QSERDES_V4_TX_TX_EMP_POST1_LVL,
-> +			qmp_dp_v4_voltage_swing_hbr_rbr,
-> +			qmp_dp_v4_pre_emphasis_hbr_rbr,
-> +			qmp_dp_v4_voltage_swing_hbr3_hbr2,
-> +			qmp_dp_v4_pre_emphasis_hbr3_hbr2);
->  }
->  
->  static int qcom_qmp_v4_phy_configure_dp_phy(struct qmp_phy *qphy)
-> @@ -4622,6 +4663,9 @@ static int qcom_qmp_v4_phy_configure_dp_phy(struct qmp_phy *qphy)
->  	writel(drvr1_en, qphy->tx2 + QSERDES_V4_TX_HIGHZ_DRVR_EN);
->  	writel(bias1_en, qphy->tx2 + QSERDES_V4_TX_TRANSCEIVER_BIAS_EN);
->  
-> +	writel(0x0a, qphy->tx + QSERDES_V4_TX_TX_POL_INV);
-> +	writel(0x0a, qphy->tx2 + QSERDES_V4_TX_TX_POL_INV);
-> +
->  	writel(0x18, qphy->pcs + QSERDES_DP_PHY_CFG);
->  	udelay(2000);
->  	writel(0x19, qphy->pcs + QSERDES_DP_PHY_CFG);
-> @@ -4633,11 +4677,9 @@ static int qcom_qmp_v4_phy_configure_dp_phy(struct qmp_phy *qphy)
->  			10000))
->  		return -ETIMEDOUT;
->  
-> -	writel(0x0a, qphy->tx + QSERDES_V4_TX_TX_POL_INV);
-> -	writel(0x0a, qphy->tx2 + QSERDES_V4_TX_TX_POL_INV);
->  
-> -	writel(0x27, qphy->tx + QSERDES_V4_TX_TX_DRV_LVL);
-> -	writel(0x27, qphy->tx2 + QSERDES_V4_TX_TX_DRV_LVL);
-> +	writel(0x22, qphy->tx + QSERDES_V4_TX_TX_DRV_LVL);
-> +	writel(0x22, qphy->tx2 + QSERDES_V4_TX_TX_DRV_LVL);
->  
->  	writel(0x20, qphy->tx + QSERDES_V4_TX_TX_EMP_POST1_LVL);
->  	writel(0x20, qphy->tx2 + QSERDES_V4_TX_TX_EMP_POST1_LVL);
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
+> On 12/15/2021 1:33 PM, Michael S. Tsirkin wrote:
+> > On Wed, Dec 15, 2021 at 12:52:20PM -0800, Si-Wei Liu wrote:
+> > > 
+> > > On 12/14/2021 6:06 PM, Jason Wang wrote:
+> > > > On Wed, Dec 15, 2021 at 9:05 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
+> > > > > 
+> > > > > On 12/13/2021 9:06 PM, Michael S. Tsirkin wrote:
+> > > > > > On Mon, Dec 13, 2021 at 05:59:45PM -0800, Si-Wei Liu wrote:
+> > > > > > > On 12/12/2021 1:26 AM, Michael S. Tsirkin wrote:
+> > > > > > > > On Fri, Dec 10, 2021 at 05:44:15PM -0800, Si-Wei Liu wrote:
+> > > > > > > > > Sorry for reviving this ancient thread. I was kinda lost for the conclusion
+> > > > > > > > > it ended up with. I have the following questions,
+> > > > > > > > > 
+> > > > > > > > > 1. legacy guest support: from the past conversations it doesn't seem the
+> > > > > > > > > support will be completely dropped from the table, is my understanding
+> > > > > > > > > correct? Actually we're interested in supporting virtio v0.95 guest for x86,
+> > > > > > > > > which is backed by the spec at
+> > > > > > > > > https://urldefense.com/v3/__https://ozlabs.org/*rusty/virtio-spec/virtio-0.9.5.pdf__;fg!!ACWV5N9M2RV99hQ!dTKmzJwwRsFM7BtSuTDu1cNly5n4XCotH0WYmidzGqHSXt40i7ZU43UcNg7GYxZg$ . Though I'm not sure
+> > > > > > > > > if there's request/need to support wilder legacy virtio versions earlier
+> > > > > > > > > beyond.
+> > > > > > > > I personally feel it's less work to add in kernel than try to
+> > > > > > > > work around it in userspace. Jason feels differently.
+> > > > > > > > Maybe post the patches and this will prove to Jason it's not
+> > > > > > > > too terrible?
+> > > > > > > I suppose if the vdpa vendor does support 0.95 in the datapath and ring
+> > > > > > > layout level and is limited to x86 only, there should be easy way out.
+> > > > > > Note a subtle difference: what matters is that guest, not host is x86.
+> > > > > > Matters for emulators which might reorder memory accesses.
+> > > > > > I guess this enforcement belongs in QEMU then?
+> > > > > Right, I mean to get started, the initial guest driver support and the
+> > > > > corresponding QEMU support for transitional vdpa backend can be limited
+> > > > > to x86 guest/host only. Since the config space is emulated in QEMU, I
+> > > > > suppose it's not hard to enforce in QEMU.
+> > > > It's more than just config space, most devices have headers before the buffer.
+> > > The ordering in datapath (data VQs) would have to rely on vendor's support.
+> > > Since ORDER_PLATFORM is pretty new (v1.1), I guess vdpa h/w vendor nowadays
+> > > can/should well support the case when ORDER_PLATFORM is not acked by the
+> > > driver (actually this feature is filtered out by the QEMU vhost-vdpa driver
+> > > today), even with v1.0 spec conforming and modern only vDPA device. The
+> > > control VQ is implemented in software in the kernel, which can be easily
+> > > accommodated/fixed when needed.
+> > > 
+> > > > > QEMU can drive GET_LEGACY,
+> > > > > GET_ENDIAN et al ioctls in advance to get the capability from the
+> > > > > individual vendor driver. For that, we need another negotiation protocol
+> > > > > similar to vhost_user's protocol_features between the vdpa kernel and
+> > > > > QEMU, way before the guest driver is ever probed and its feature
+> > > > > negotiation kicks in. Not sure we need a GET_MEMORY_ORDER ioctl call
+> > > > > from the device, but we can assume weak ordering for legacy at this
+> > > > > point (x86 only)?
+> > > > I'm lost here, we have get_features() so:
+> > > I assume here you refer to get_device_features() that Eli just changed the
+> > > name.
+> > > > 1) VERSION_1 means the device uses LE if provided, otherwise natvie
+> > > > 2) ORDER_PLATFORM means device requires platform ordering
+> > > > 
+> > > > Any reason for having a new API for this?
+> > > Are you going to enforce all vDPA hardware vendors to support the
+> > > transitional model for legacy guest? meaning guest not acknowledging
+> > > VERSION_1 would use the legacy interfaces captured in the spec section 7.4
+> > > (regarding ring layout, native endianness, message framing, vq alignment of
+> > > 4096, 32bit feature, no features_ok bit in status, IO port interface i.e.
+> > > all the things) instead? Noted we don't yet have a set_device_features()
+> > > that allows the vdpa device to tell whether it is operating in transitional
+> > > or modern-only mode. For software virtio, all support for the legacy part in
+> > > a transitional model has been built up there already, however, it's not easy
+> > > for vDPA vendors to implement all the requirements for an all-or-nothing
+> > > legacy guest support (big endian guest for example). To these vendors, the
+> > > legacy support within a transitional model is more of feature to them and
+> > > it's best to leave some flexibility for them to implement partial support
+> > > for legacy. That in turn calls out the need for a vhost-user protocol
+> > > feature like negotiation API that can prohibit those unsupported guest
+> > > setups to as early as backend_init before launching the VM.
+> > Right. Of note is the fact that it's a spec bug which I
+> > hope yet to fix, though due to existing guest code the
+> > fix won't be complete.
+> I thought at one point you pointed out to me that the spec does allow config
+> space read before claiming features_ok, and only config write before
+> features_ok is prohibited. I haven't read up the full thread of Halil's
+> VERSION_1 for transitional big endian device yet, but what is the spec bug
+> you hope to fix?
 
--- 
-~Vinod
+Allowing config space reads before features_ok seemed useful years ago
+but in practice is only causing bugs and complicating device design.
+
+> 
+> > 
+> > WRT ioctls, One thing we can do though is abuse set_features
+> > where it's called by QEMU early on with just the VERSION_1
+> > bit set, to distinguish between legacy and modern
+> > interface. This before config space accesses and FEATURES_OK.
+> > 
+> > Halil has been working on this, pls take a look and maybe help him out.
+> Interesting thread, am reading now and see how I may leverage or help there.
+> 
+> > > > > > > I
+> > > > > > > checked with Eli and other Mellanox/NVDIA folks for hardware/firmware level
+> > > > > > > 0.95 support, it seems all the ingredient had been there already dated back
+> > > > > > > to the DPDK days. The only major thing limiting is in the vDPA software that
+> > > > > > > the current vdpa core has the assumption around VIRTIO_F_ACCESS_PLATFORM for
+> > > > > > > a few DMA setup ops, which is virtio 1.0 only.
+> > > > > > > 
+> > > > > > > > > 2. suppose some form of legacy guest support needs to be there, how do we
+> > > > > > > > > deal with the bogus assumption below in vdpa_get_config() in the short term?
+> > > > > > > > > It looks one of the intuitive fix is to move the vdpa_set_features call out
+> > > > > > > > > of vdpa_get_config() to vdpa_set_config().
+> > > > > > > > > 
+> > > > > > > > >             /*
+> > > > > > > > >              * Config accesses aren't supposed to trigger before features are
+> > > > > > > > > set.
+> > > > > > > > >              * If it does happen we assume a legacy guest.
+> > > > > > > > >              */
+> > > > > > > > >             if (!vdev->features_valid)
+> > > > > > > > >                     vdpa_set_features(vdev, 0);
+> > > > > > > > >             ops->get_config(vdev, offset, buf, len);
+> > > > > > > > > 
+> > > > > > > > > I can post a patch to fix 2) if there's consensus already reached.
+> > > > > > > > > 
+> > > > > > > > > Thanks,
+> > > > > > > > > -Siwei
+> > > > > > > > I'm not sure how important it is to change that.
+> > > > > > > > In any case it only affects transitional devices, right?
+> > > > > > > > Legacy only should not care ...
+> > > > > > > Yes I'd like to distinguish legacy driver (suppose it is 0.95) against the
+> > > > > > > modern one in a transitional device model rather than being legacy only.
+> > > > > > > That way a v0.95 and v1.0 supporting vdpa parent can support both types of
+> > > > > > > guests without having to reconfigure. Or are you suggesting limit to legacy
+> > > > > > > only at the time of vdpa creation would simplify the implementation a lot?
+> > > > > > > 
+> > > > > > > Thanks,
+> > > > > > > -Siwei
+> > > > > > I don't know for sure. Take a look at the work Halil was doing
+> > > > > > to try and support transitional devices with BE guests.
+> > > > > Hmmm, we can have those endianness ioctls defined but the initial QEMU
+> > > > > implementation can be started to support x86 guest/host with little
+> > > > > endian and weak memory ordering first. The real trick is to detect
+> > > > > legacy guest - I am not sure if it's feasible to shift all the legacy
+> > > > > detection work to QEMU, or the kernel has to be part of the detection
+> > > > > (e.g. the kick before DRIVER_OK thing we have to duplicate the tracking
+> > > > > effort in QEMU) as well. Let me take a further look and get back.
+> > > > Michael may think differently but I think doing this in Qemu is much easier.
+> > > I think the key is whether we position emulating legacy interfaces in QEMU
+> > > doing translation on top of a v1.0 modern-only device in the kernel, or we
+> > > allow vdpa core (or you can say vhost-vdpa) and vendor driver to support a
+> > > transitional model in the kernel that is able to work for both v0.95 and
+> > > v1.0 drivers, with some slight aid from QEMU for
+> > > detecting/emulation/shadowing (for e.g CVQ, I/O port relay). I guess for the
+> > > former we still rely on vendor for a performant data vqs implementation,
+> > > leaving the question to what it may end up eventually in the kernel is
+> > > effectively the latter).
+> > > 
+> > > Thanks,
+> > > -Siwei
+> > 
+> > My suggestion is post the kernel patches, and we can evaluate
+> > how much work they are.
+> Thanks for the feedback. I will take some read then get back, probably after
+> the winter break. Stay tuned.
+> 
+> Thanks,
+> -Siwei
+> 
+> > 
+> > > > Thanks
+> > > > 
+> > > > 
+> > > > 
+> > > > > Meanwhile, I'll check internally to see if a legacy only model would
+> > > > > work. Thanks.
+> > > > > 
+> > > > > Thanks,
+> > > > > -Siwei
+> > > > > 
+> > > > > 
+> > > > > > > > > On 3/2/2021 2:53 AM, Jason Wang wrote:
+> > > > > > > > > > On 2021/3/2 5:47 下午, Michael S. Tsirkin wrote:
+> > > > > > > > > > > On Mon, Mar 01, 2021 at 11:56:50AM +0800, Jason Wang wrote:
+> > > > > > > > > > > > On 2021/3/1 5:34 上午, Michael S. Tsirkin wrote:
+> > > > > > > > > > > > > On Wed, Feb 24, 2021 at 10:24:41AM -0800, Si-Wei Liu wrote:
+> > > > > > > > > > > > > > > Detecting it isn't enough though, we will need a new ioctl to notify
+> > > > > > > > > > > > > > > the kernel that it's a legacy guest. Ugh :(
+> > > > > > > > > > > > > > Well, although I think adding an ioctl is doable, may I
+> > > > > > > > > > > > > > know what the use
+> > > > > > > > > > > > > > case there will be for kernel to leverage such info
+> > > > > > > > > > > > > > directly? Is there a
+> > > > > > > > > > > > > > case QEMU can't do with dedicate ioctls later if there's indeed
+> > > > > > > > > > > > > > differentiation (legacy v.s. modern) needed?
+> > > > > > > > > > > > > BTW a good API could be
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > #define VHOST_SET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
+> > > > > > > > > > > > > #define VHOST_GET_ENDIAN _IOW(VHOST_VIRTIO, ?, int)
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > we did it per vring but maybe that was a mistake ...
+> > > > > > > > > > > > Actually, I wonder whether it's good time to just not support
+> > > > > > > > > > > > legacy driver
+> > > > > > > > > > > > for vDPA. Consider:
+> > > > > > > > > > > > 
+> > > > > > > > > > > > 1) It's definition is no-normative
+> > > > > > > > > > > > 2) A lot of budren of codes
+> > > > > > > > > > > > 
+> > > > > > > > > > > > So qemu can still present the legacy device since the config
+> > > > > > > > > > > > space or other
+> > > > > > > > > > > > stuffs that is presented by vhost-vDPA is not expected to be
+> > > > > > > > > > > > accessed by
+> > > > > > > > > > > > guest directly. Qemu can do the endian conversion when necessary
+> > > > > > > > > > > > in this
+> > > > > > > > > > > > case?
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Thanks
+> > > > > > > > > > > > 
+> > > > > > > > > > > Overall I would be fine with this approach but we need to avoid breaking
+> > > > > > > > > > > working userspace, qemu releases with vdpa support are out there and
+> > > > > > > > > > > seem to work for people. Any changes need to take that into account
+> > > > > > > > > > > and document compatibility concerns.
+> > > > > > > > > > Agree, let me check.
+> > > > > > > > > > 
+> > > > > > > > > > 
+> > > > > > > > > > >       I note that any hardware
+> > > > > > > > > > > implementation is already broken for legacy except on platforms with
+> > > > > > > > > > > strong ordering which might be helpful in reducing the scope.
+> > > > > > > > > > Yes.
+> > > > > > > > > > 
+> > > > > > > > > > Thanks
+> > > > > > > > > > 
+> > > > > > > > > > 
+

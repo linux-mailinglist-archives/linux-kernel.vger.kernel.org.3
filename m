@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 539BD477F06
+	by mail.lfdr.de (Postfix) with ESMTP id A2C5D477F07
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241954AbhLPVkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:40:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241740AbhLPVk2 (ORCPT
+        id S241994AbhLPVlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:41:00 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:56996 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241733AbhLPVk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Dec 2021 16:40:28 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA7DC06173E;
-        Thu, 16 Dec 2021 13:40:27 -0800 (PST)
-Date:   Thu, 16 Dec 2021 21:40:25 -0000
+Date:   Thu, 16 Dec 2021 21:40:26 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690826;
+        s=2020; t=1639690827;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GJUs8N2lCbwA44n/pmFlUhqjL6PgKnoju5cqVkNQ4AY=;
-        b=E6dkcsfi8ViT6612pm61BUR1vW17O9NLwm2OOblow6mI9SYbJQOqe4d9/X6GC3aNyWrMVY
-        rXbait45WQei/qSPARZ3yST+I9IaMHY/WeFSownxHis5DxoKYmzgCWgRgrRsInhSoGdVeo
-        2g4tg+GICp8Uq7SJO8TloboBxJJhar2JYIdYOoLB2YGRrdTOiQbS4v8aDiK+Mlbf3/Z4G2
-        HAr69sj3TQc/JSGLH7Rg+QLkd4kIcfbOZIBzIss930tDyyG3KDDSfP0kf8pII0gX9nVgrT
-        ZbPoniKAcE+SGVw2/qd9Q0lJnVqKfSpRCj9Ze9GJUkxnBV698GtPOtWrgrDEuw==
+        bh=tJD8piY4azqgRPi03hp10BzntzYzzzYvUNiwR6YZCHQ=;
+        b=dyfl/Dh9tShEkzj1TJ6kHj6tPuWGzJn90owWkoayUSEQ45GNyz1VAtPO9ejZWqR2LkuSE5
+        S+PZYpYcRyPibBag69qQtbzLy0H4ZwqGt6NsapJB4jVKucIO0RxBJandoZ/kpfu/6IJ9VI
+        8AcWv8mO+qS2eoJ9WIYsJ2alB1D+i013Zd1tTjknuAjNFIWF9p3OwUMMXwRigUa3L8fHV3
+        3aUkW7x7ORoL7YZF58C7n6lddL2BJojdNBrzekqt7k/pk4zHwrFv0kmwZQFjV2R4lUUwMe
+        P0lEpnjh95nJh189gVhkD8c5WdF68LlnImw6twG6PDeITmnfueXFUK7kQoio4w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690826;
+        s=2020e; t=1639690827;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GJUs8N2lCbwA44n/pmFlUhqjL6PgKnoju5cqVkNQ4AY=;
-        b=KTaHMACh6oP/4jfgmZji253bBBzP1JWOndZcEV2GTjWXbDleLNDhksWRGmZT6ABTIZLYF+
-        wpLllUnDluJmvNCA==
+        bh=tJD8piY4azqgRPi03hp10BzntzYzzzYvUNiwR6YZCHQ=;
+        b=0J8jSJeO9PkBE8+OANW/m7oyz4u+PhxRotM19FKDOlSV7VOlMu7c93iNPNNlqO1UBofDGF
+        WaabkfND3u8EOJDw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] bus: fsl-mc-msi: Simplify MSI descriptor handling
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+Subject: [tip: irq/msi] soc: ti: ti_sci_inta_msi: Remove
+ ti_sci_inta_msi_domain_free_irqs()
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Nishanth Menon <nm@ti.com>,
         Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211206210748.847219474@linutronix.de>
-References: <20211206210748.847219474@linutronix.de>
+In-Reply-To: <20211206210748.793119155@linutronix.de>
+References: <20211206210748.793119155@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969082559.23020.3944046336169427078.tip-bot2@tip-bot2>
+Message-ID: <163969082644.23020.17438999235756320428.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,122 +59,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     e8604b1447b4a0c178019bdf809a4d52e1c235b6
-Gitweb:        https://git.kernel.org/tip/e8604b1447b4a0c178019bdf809a4d52e1c235b6
+Commit-ID:     7ad321a5eadb52b4af1c577dda51783e08235ea7
+Gitweb:        https://git.kernel.org/tip/7ad321a5eadb52b4af1c577dda51783e08235ea7
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 06 Dec 2021 23:51:39 +01:00
+AuthorDate:    Mon, 06 Dec 2021 23:51:37 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 16 Dec 2021 22:22:19 +01:00
 
-bus: fsl-mc-msi: Simplify MSI descriptor handling
+soc: ti: ti_sci_inta_msi: Remove ti_sci_inta_msi_domain_free_irqs()
 
-Let the MSI irq domain code handle descriptor allocation and free.
+The function has no users and is pointless now that the core frees the MSI
+descriptors, which means potential users can just use msi_domain_free_irqs().
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Nishanth Menon <nm@ti.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211206210748.847219474@linutronix.de
+Link: https://lore.kernel.org/r/20211206210748.793119155@linutronix.de
 
 ---
- drivers/bus/fsl-mc/fsl-mc-msi.c | 61 ++------------------------------
- 1 file changed, 4 insertions(+), 57 deletions(-)
+ drivers/soc/ti/ti_sci_inta_msi.c       | 6 ------
+ include/linux/soc/ti/ti_sci_inta_msi.h | 1 -
+ 2 files changed, 7 deletions(-)
 
-diff --git a/drivers/bus/fsl-mc/fsl-mc-msi.c b/drivers/bus/fsl-mc/fsl-mc-msi.c
-index 4823947..5e0e439 100644
---- a/drivers/bus/fsl-mc/fsl-mc-msi.c
-+++ b/drivers/bus/fsl-mc/fsl-mc-msi.c
-@@ -170,6 +170,7 @@ struct irq_domain *fsl_mc_msi_create_irq_domain(struct fwnode_handle *fwnode,
- 		fsl_mc_msi_update_dom_ops(info);
- 	if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
- 		fsl_mc_msi_update_chip_ops(info);
-+	info->flags |= MSI_FLAG_ALLOC_SIMPLE_MSI_DESCS | MSI_FLAG_FREE_MSI_DESCS;
- 
- 	domain = msi_create_irq_domain(fwnode, info, parent);
- 	if (domain)
-@@ -210,45 +211,7 @@ struct irq_domain *fsl_mc_find_msi_domain(struct device *dev)
- 	return msi_domain;
+diff --git a/drivers/soc/ti/ti_sci_inta_msi.c b/drivers/soc/ti/ti_sci_inta_msi.c
+index 3139911..991c78b 100644
+--- a/drivers/soc/ti/ti_sci_inta_msi.c
++++ b/drivers/soc/ti/ti_sci_inta_msi.c
+@@ -122,9 +122,3 @@ unlock:
+ 	return ret;
  }
- 
--static void fsl_mc_msi_free_descs(struct device *dev)
+ EXPORT_SYMBOL_GPL(ti_sci_inta_msi_domain_alloc_irqs);
+-
+-void ti_sci_inta_msi_domain_free_irqs(struct device *dev)
 -{
--	struct msi_desc *desc, *tmp;
--
--	list_for_each_entry_safe(desc, tmp, dev_to_msi_list(dev), list) {
--		list_del(&desc->list);
--		free_msi_entry(desc);
--	}
+-	msi_domain_free_irqs(dev->msi.domain, dev);
 -}
--
--static int fsl_mc_msi_alloc_descs(struct device *dev, unsigned int irq_count)
--
--{
--	unsigned int i;
--	int error;
--	struct msi_desc *msi_desc;
--
--	for (i = 0; i < irq_count; i++) {
--		msi_desc = alloc_msi_entry(dev, 1, NULL);
--		if (!msi_desc) {
--			dev_err(dev, "Failed to allocate msi entry\n");
--			error = -ENOMEM;
--			goto cleanup_msi_descs;
--		}
--
--		msi_desc->msi_index = i;
--		INIT_LIST_HEAD(&msi_desc->list);
--		list_add_tail(&msi_desc->list, dev_to_msi_list(dev));
--	}
--
--	return 0;
--
--cleanup_msi_descs:
--	fsl_mc_msi_free_descs(dev);
--	return error;
--}
--
--int fsl_mc_msi_domain_alloc_irqs(struct device *dev,
--				 unsigned int irq_count)
-+int fsl_mc_msi_domain_alloc_irqs(struct device *dev,  unsigned int irq_count)
- {
- 	struct irq_domain *msi_domain;
- 	int error;
-@@ -261,28 +224,17 @@ int fsl_mc_msi_domain_alloc_irqs(struct device *dev,
- 	if (error)
- 		return error;
- 
--	if (!list_empty(dev_to_msi_list(dev)))
-+	if (msi_first_desc(dev, MSI_DESC_ALL))
- 		return -EINVAL;
- 
--	error = fsl_mc_msi_alloc_descs(dev, irq_count);
--	if (error < 0)
--		return error;
--
- 	/*
- 	 * NOTE: Calling this function will trigger the invocation of the
- 	 * its_fsl_mc_msi_prepare() callback
- 	 */
- 	error = msi_domain_alloc_irqs(msi_domain, dev, irq_count);
- 
--	if (error) {
-+	if (error)
- 		dev_err(dev, "Failed to allocate IRQs\n");
--		goto cleanup_msi_descs;
--	}
--
--	return 0;
--
--cleanup_msi_descs:
--	fsl_mc_msi_free_descs(dev);
- 	return error;
- }
- 
-@@ -295,9 +247,4 @@ void fsl_mc_msi_domain_free_irqs(struct device *dev)
- 		return;
- 
- 	msi_domain_free_irqs(msi_domain, dev);
--
--	if (list_empty(dev_to_msi_list(dev)))
--		return;
--
--	fsl_mc_msi_free_descs(dev);
- }
+-EXPORT_SYMBOL_GPL(ti_sci_inta_msi_domain_free_irqs);
+diff --git a/include/linux/soc/ti/ti_sci_inta_msi.h b/include/linux/soc/ti/ti_sci_inta_msi.h
+index 25ea78a..4dba2f2 100644
+--- a/include/linux/soc/ti/ti_sci_inta_msi.h
++++ b/include/linux/soc/ti/ti_sci_inta_msi.h
+@@ -18,5 +18,4 @@ struct irq_domain
+ 				   struct irq_domain *parent);
+ int ti_sci_inta_msi_domain_alloc_irqs(struct device *dev,
+ 				      struct ti_sci_resource *res);
+-void ti_sci_inta_msi_domain_free_irqs(struct device *dev);
+ #endif /* __INCLUDE_LINUX_IRQCHIP_TI_SCI_INTA_H */

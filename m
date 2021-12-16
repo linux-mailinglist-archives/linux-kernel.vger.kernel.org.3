@@ -2,158 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE4C4772FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5D5477308
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237466AbhLPNSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S237474AbhLPNWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234573AbhLPNSK (ORCPT
+        with ESMTP id S232110AbhLPNWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:18:10 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095B3C061574;
-        Thu, 16 Dec 2021 05:18:10 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id j2so64413000ybg.9;
-        Thu, 16 Dec 2021 05:18:09 -0800 (PST)
+        Thu, 16 Dec 2021 08:22:05 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1A4C061574;
+        Thu, 16 Dec 2021 05:22:05 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id x15so87838339edv.1;
+        Thu, 16 Dec 2021 05:22:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4ZPqCPeKkF5/1MPYiuOGy4JgZ/F6BznknqA4rnfWZkI=;
-        b=ahY1UDGTLwLl0X7LxleqPM1c/pjUKL+DAViFxHjNO9mU2FeRmBt8QX37I3se6mS+gB
-         EZI/ZcoRmhfUE0IWvWS6Ou15q/5BHq5FA2JUh+d7EsZn10TxUShun0zrEoR95guAKGDd
-         X++TWK44N+lFUw3iqNpN+UvNsYE5fBwImD8wTuIbxUlCvskH17iYwzUUHigsqaaB2Vo1
-         pQzRuGZact0tfxZwYbTG39ve2gYv+TFFSpy3qzWy19SogaqzEB1oo+dtOGaEm0ofKi2a
-         JsDs9ks+yzCz8tuM9/sy9useY/8afoqsBHefJIVpF40nxTIP8gLLm/o+qpBI3iprR7UR
-         eX6w==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=60XSf9cHzUxT6ZkrcHjpgYMJcYBfPDQTULwlGLQzSnM=;
+        b=kCx+JYRzpt9IsbUnF/BkdXilxvx4imVH7NBWYFmU9VtfhpKLH1EM4q0RvV1irbcAt2
+         4OUo4eyzE7sMOK6tRXsc4xLVv/qtM792nz5NtADQWBjrap89Y/9E/DZxSBIHu7325r/R
+         hIC/sGcS9qEiPwBXZAW5NovkyMWfLumPUtQmunPWnVoQUBiERx3rk/VkbLYBfkwVGO9y
+         EsKuunqOtjcdR6HyMyyx/bPiRPdWzMwghOLxbC9p5Js1T6rGt75sjMvVBIJB63A2ZgLe
+         5aMLTapxYRh8oYTA1blPPWVmnTomQhw8jhKlzJ1REvymCEuTgBEiSQF+CTWuRXtm5xsl
+         2mGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4ZPqCPeKkF5/1MPYiuOGy4JgZ/F6BznknqA4rnfWZkI=;
-        b=sWfJ4eKbcFjYwrPvGAgZ315aK2AJbsL4sh0Lm5qTr7kxxwclbnkJadzMDkcd8Z5mdB
-         v5eI9IYNMPz+LySBK8fprpq4j/A7713dVJrqYffRa3t6G4RDGBBouTe+KyeDsg56IB8V
-         g9I3eU7yoZ9grg3f4Rb3wvMgXUP/0uEamCRgd3ptA14hg3V67ehryF5UxlhhBl5Za9g0
-         mlgoyvntCG/FF7V264GS7ndAixFDWTfIs/NMLypVjtnf2dIgDtPNa82IenJ1fwkYvi/5
-         Wgrr9lnqUf6FnuypNfxbk6oeakbTV64XBwFuQHdN424CZIB0zN3+ix6eyuujiAGuho+2
-         e+iw==
-X-Gm-Message-State: AOAM532AYCI41+7yNZChZACktNOB+2fkjm4uYRYtvt6jaCKipa5JjnMm
-        Tjsh+IM4dlq852LDAaGbpD4Oq18B5tV2Ambf1xT78p1dZwI=
-X-Google-Smtp-Source: ABdhPJx+q2LUYLRFLsp4KRRdV3c8S9ru3NDUyZ+gyniTmQpgOReqb9DYNfRD1VRB/+X3evUVojBN+2fCqcf8P1rtVfc=
-X-Received: by 2002:a25:dfd1:: with SMTP id w200mr12467763ybg.359.1639660689172;
- Thu, 16 Dec 2021 05:18:09 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=60XSf9cHzUxT6ZkrcHjpgYMJcYBfPDQTULwlGLQzSnM=;
+        b=3F5Tup9UV2RED/P0mk5FA7AM5/ufsoxvyuKPjqylUTbFn7Mvgx82LG+2wzoJT/mKXo
+         xDMWxl0QgvNOnbc64WYV/5YdqLzYmrsfLpXo+lhV5hX03c0dcR3Yxujbj0DgwWwxvZKJ
+         kseEn2OxP+g0ThWs4gMx8USbqhAgmkFahl+GwNPRIWa8WGiC6ktBAHl41hgDpxNhO9f4
+         0D6ZoEzKYRKso9r2uktbC00fLcQOCjQ7v56MiXShu7AJNShQPRuPXOa5FSK0gd+XrfB+
+         SZ/2zYSVA6gPJHuPx/GzTevqvUZIcPRuCUTldA01u4qAKUXph+X2MwQVKMjOl/nDb9od
+         5Iyg==
+X-Gm-Message-State: AOAM533jfoUxBFP7DXZji6SqJrP5NcF3es96+NI9fuG40Mkfl6FJZvPU
+        opTYy7h01uH4MqaUfUcCfvs=
+X-Google-Smtp-Source: ABdhPJzNKXQY5diG8Cxb9pHPRUB7F1RD08f1ZucgR2b3lGFQEqnZF+Gahv7l9l3FM9jf/FfHySZvDQ==
+X-Received: by 2002:a05:6402:1768:: with SMTP id da8mr20810877edb.252.1639660923591;
+        Thu, 16 Dec 2021 05:22:03 -0800 (PST)
+Received: from [192.168.8.198] ([185.69.144.117])
+        by smtp.gmail.com with ESMTPSA id sd2sm1857108ejc.22.2021.12.16.05.22.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 05:22:02 -0800 (PST)
+Message-ID: <7ca623df-73ed-9191-bec7-a4728f2f95e6@gmail.com>
+Date:   Thu, 16 Dec 2021 13:21:26 +0000
 MIME-Version: 1.0
-References: <20211216103132.8087-1-lukas.bulwahn@gmail.com>
- <20211216122311.0c9d154e@coco.lan> <Ybsrdll5sqIakINT@kroah.com> <20211216131522.4e7b148d@coco.lan>
-In-Reply-To: <20211216131522.4e7b148d@coco.lan>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Thu, 16 Dec 2021 14:17:59 +0100
-Message-ID: <CAKXUXMwoMV_QrZjDtkjLMfsJAFN39ZQsZi3sh_iFsE8szEKTtQ@mail.gmail.com>
-Subject: Re: [PATCH] media: prefer generic SPDX-License expression to
- deprecated one
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-spdx@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
+ <Yboc/G18R1Vi1eQV@google.com>
+ <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
+ <Ybom69OyOjsR7kmZ@google.com>
+ <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
+ <Yboy2WwaREgo95dy@google.com>
+ <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
+ <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com>
+ <92f69969-42dc-204a-4138-16fdaaebb78d@gmail.com>
+ <CAKH8qBuZxBen871AWDK1eDcxJenK7UkSQCZQsHCPhk6nk9e=Ng@mail.gmail.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAKH8qBuZxBen871AWDK1eDcxJenK7UkSQCZQsHCPhk6nk9e=Ng@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 1:15 PM Mauro Carvalho Chehab
-<mchehab@kernel.org> wrote:
->
-> Em Thu, 16 Dec 2021 13:05:10 +0100
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> escreveu:
->
-> > On Thu, Dec 16, 2021 at 12:23:11PM +0100, Mauro Carvalho Chehab wrote:
-> > > Em Thu, 16 Dec 2021 11:31:32 +0100
-> > > Lukas Bulwahn <lukas.bulwahn@gmail.com> escreveu:
-> > >
-> > > > Commit 8d395ce6f04b ("media: dvb-core: Convert to SPDX identifier") and
-> > > > commit e67219b0496b ("media: b2c2: flexcop: Convert to SPDX identifier")
-> > > > introduce the SPDX-License expression LGPL-2.1-or-later for some files.
-> > > >
-> > > > The command ./scripts/spdxcheck.py warns:
-> > > >
-> > > >   drivers/media/dvb-core/dmxdev.c: 1:28 Invalid License ID: LGPL-2.1-or-later
-> > > >   drivers/media/dvb-core/dvb_demux.c: 1:28 Invalid License ID: LGPL-2.1-or-later
-> > > >   drivers/media/dvb-core/dvbdev.c: 1:28 Invalid License ID: LGPL-2.1-or-later
-> > > >   drivers/media/common/b2c2/flexcop.c: 1:28 Invalid License ID: LGPL-2.1-or-later
-> > > >
-> > > > The preferred SPDX expression for LGPL-2.1 or any later version is with
-> > > > the more generic "+"-extension for "any later version", so: LGPL-2.1+
-> > > >
-> > > > This makes spdxcheck happy again.
-> > >
-> > > It doesn't sound right to apply such patch.
-> > >
-> > > See, the latest SPDX version uses LGPL-2.1-or-later:
-> > >
-> > >     https://spdx.org/licenses/LGPL-2.1-or-later.html
-> > >
-> > > And it deprecated LGPL-2.1+:
-> > >
-> > >     https://spdx.org/licenses/LGPL-2.1+.html
-> > >
-> > > So, those files are perfectly fine with regards to SPDX, and are
-> > > adherent to its latest specs. We do need the latest specs on media,
-> > > as our documentation is under GFDL-1.1-no-invariants-or-later, which
-> > > only exists on newer SPDX versions.
-> > >
-> > > So, the right thing to do here seems to fix spdxcheck.py, letting it
-> > > either allow both variants (as we probably don't want to replace it
-> > > everywhere) or to emit a warning if the deprecated ones are used.
-> >
-> > No, we are not going to add a "warning" for older SPDX versions like
-> > that, otherwise the majority of the kernel will start spitting out
-> > warnings.
-> >
-> > Let's worry about actually fixing all of the files that do NOT have SPDX
-> > tags before even considering to move to a newer version of the spec.  We
-> > started this work before the FSF made the crazy change to their tags,
-> > let's not worry about any deprecated issues at the moment.
->
-> Yeah, agreed.
->
+On 12/15/21 22:07, Stanislav Fomichev wrote:
+> On Wed, Dec 15, 2021 at 11:55 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> On 12/15/21 19:15, Stanislav Fomichev wrote:
+>>> On Wed, Dec 15, 2021 at 10:54 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>>>
+>>>> On 12/15/21 18:24, sdf@google.com wrote:
+[...]
+>>>>> I can probably do more experiments on my side once your patch is
+>>>>> accepted. I'm mostly concerned with getsockopt(TCP_ZEROCOPY_RECEIVE).
+>>>>> If you claim there is visible overhead for a direct call then there
+>>>>> should be visible benefit to using CGROUP_BPF_TYPE_ENABLED there as
+>>>>> well.
+>>>>
+>>>> Interesting, sounds getsockopt might be performance sensitive to
+>>>> someone.
+>>>>
+>>>> FWIW, I forgot to mention that for testing tx I'm using io_uring
+>>>> (for both zc and not) with good submission batching.
+>>>
+>>> Yeah, last time I saw 2-3% as well, but it was due to kmalloc, see
+>>> more details in 9cacf81f8161, it was pretty visible under perf.
+>>> That's why I'm a bit skeptical of your claims of direct calls being
+>>> somehow visible in these 2-3% (even skb pulls/pushes are not 2-3%?).
+>>
+>> migrate_disable/enable together were taking somewhat in-between
+>> 1% and 1.5% in profiling, don't remember the exact number. The rest
+>> should be from rcu_read_lock/unlock() in BPF_PROG_RUN_ARRAY_CG_FLAGS()
+>> and other extra bits on the way.
+> 
+> You probably have a preemptiple kernel and preemptible rcu which most
+> likely explains why you see the overhead and I won't (non-preemptible
+> kernel in our env, rcu_read_lock is essentially a nop, just a compiler
+> barrier).
 
-Sorry, I first read the section Deprecated License Identifiers on
-https://spdx.org/licenses/, where it stated:
+Right. For reference tried out non-preemptible, perf shows the function
+taking 0.8% with a NIC and 1.2% with a dummy netdev.
 
-Release 2.0 of the SPDX Specification introduced License Expressions
-that supports the ability to identify common variations of
-SPDX-identified licenses without the need to define each potential
-variation as a distinct license on the SPDX License List. This new
-syntax supports the ability to declare an SPDX-identified license
-exception using the "WITH" operator (e.g. GPL-2.0-or-later WITH
-Autoconf-exception-2.0), as well as the ability to use a simple "+"
-operator after a license short identifier to indicate "or later
-version". SPDX has defined a list of license exceptions to use after
-the "WITH" operator. As a result, a number of licenses formerly
-included on the SPDX License List have been deprecated, and correct
-usage employs the License Expression syntax as of v2.0.
 
-So, I assumed the "+" operator is the right thing...
+>> I'm skeptical I'll be able to measure inlining one function,
+>> variability between boots/runs is usually greater and would hide it.
+> 
+> Right, that's why I suggested to mirror what we do in set/getsockopt
+> instead of the new extra CGROUP_BPF_TYPE_ENABLED. But I'll leave it up
+> to you, Martin and the rest.
 
-But, if I would have just read the next sentence; I would have noticed
-that SPDX did a flip backwards on GNU licenses:
-
-Release 3.0 replaced previous Identifiers for GNU licenses with more
-explicit Identifiers to reflect the "this version only" or "any later
-version" option specific to those licenses. As such, the previously
-used Identifiers for those licenses are deprecated as of v3.0.
-
-Now, I did some more digging into this whole SPDX spec evolution...
-And in the section Allowing later versions of a license on
-https://spdx.dev/ids/, it explains that this later version aspect is
-different for GNU and non-GNU Licenses... with a rationale from the
-GNU blog... I got it now.
-
-So, sorry for the noise. This patch can be ignored.
-
-Lukas
+-- 
+Pavel Begunkov

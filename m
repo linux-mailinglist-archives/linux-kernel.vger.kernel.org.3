@@ -2,176 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B14477236
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098E147723C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236961AbhLPMul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:50:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44688 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbhLPMuk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:50:40 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36222B8240E;
-        Thu, 16 Dec 2021 12:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3E8C36AEB;
-        Thu, 16 Dec 2021 12:50:31 +0000 (UTC)
-Date:   Thu, 16 Dec 2021 13:50:27 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v7 00/14] ima: Namespace IMA with audit support in IMA-ns
-Message-ID: <20211216125027.fte6625wu5vxkjpi@wittgenstein>
-References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
+        id S236981AbhLPMvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:51:45 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:40766 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234278AbhLPMvo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 07:51:44 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAD3_wNKNrthqy92Aw--.53328S2;
+        Thu, 16 Dec 2021 20:51:22 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] serial: pch_uart: potential dereference of null pointer
+Date:   Thu, 16 Dec 2021 20:51:21 +0800
+Message-Id: <20211216125121.399938-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAD3_wNKNrthqy92Aw--.53328S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKry5XFW8Gr4xJw4ftrWDJwb_yoWkGFb_C3
+        Z7Xwnxur1qva9Yy3ZrJry5Gryav3yfZFs5uFn2ga9xXFW5XF1kJ34qqr9xJw47Gr4DArZx
+        t3srWrySkr4DujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5JwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjSfO5UUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 12:43:09AM -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> The goal of this series of patches is to start with the namespacing of
-> IMA and support auditing within an IMA namespace (IMA-ns) as the first
-> step.
-> 
-> In this series the IMA namespace is piggy backing on the user namespace
-> and therefore an IMA namespace gets created when a user namespace is
-> created. The advantage of this is that the user namespace can provide
-> the keys infrastructure that IMA appraisal support will need later on.
-> 
-> We chose the goal of supporting auditing within an IMA namespace since it
-> requires the least changes to IMA. Following this series, auditing within
-> an IMA namespace can be activated by a user running the following lines
-> that rely on a statically linked busybox to be installed on the host for
-> execution within the minimal container environment:
-> 
-> mkdir -p rootfs/{bin,mnt,proc}
-> cp /sbin/busybox rootfs/bin
-> cp /sbin/busybox rootfs/bin/busybox2
-> echo >> rootfs/bin/busybox2
-> PATH=/bin unshare --user --map-root-user --mount-proc --pid --fork \
->   --root rootfs busybox sh -c \
->  "busybox mount -t securityfs /mnt /mnt; \
->   busybox echo 'audit func=BPRM_CHECK mask=MAY_EXEC' > /mnt/ima/policy; \
->   busybox2 cat /mnt/ima/policy"
-> 
-> [busybox2 is used to demonstrate 2 measurements; see below]
-> 
-> Following the audit log on the host the last line cat'ing the IMA policy
-> inside the namespace would have been audited. Unfortunately the auditing
-> line is not distinguishable from one stemming from actions on the host.
-> The hope here is that Richard Brigg's container id support for auditing
-> would help resolve the problem.
-> 
-> The following lines added to a suitable IMA policy on the host would
-> cause the execution of the commands inside the container (by uid 1000)
-> to be measured and audited as well on the host, thus leading to two
-> auditing messages for the 'busybox2 cat' above and log entries in IMA's
-> system log.
-> 
-> echo -e "measure func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
->         "audit func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
->     > /sys/kernel/security/ima/policy
-> 
-> The goal of supporting measurement and auditing by the host, of actions
-> occurring within IMA namespaces, is that users, particularly root,
-> should not be able to evade the host's IMA policy just by spawning
-> new IMA namespaces, running programs there, and discarding the namespaces
-> again. This is achieved through 'hierarchical processing' of file
-> accesses that are evaluated against the policy of the namespace where
-> the action occurred and against all namespaces' and their policies leading
-> back to the root IMA namespace (init_ima_ns).
+The return value of dma_alloc_coherent() needs to be checked.
+To avoid dereference of null pointer in case of the failure of alloc.
 
-Note that your worst-case is 32 levels (maximum supported userns
-nesting) where each ima namespace defines a separate policy.
+Fixes: ab4382d27412 ("tty: move drivers/serial/ to drivers/tty/serial/")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-So make sure you don't run into locking issues when hierarchically
-processing rules. So far I think it's fine since the locks aren't held
-across the hierarchial walk but are dropped and reaqcuired for each
-level.
+v1 -> v2
 
-But that could still mean a lot of contention on iint->mutex since this
-lock is global, i.e. in this context: for all ima namespaces. You might
-want to consider coming up with some rough ideas for how to solve this
-_if_ this becomes a problem in the future.
+*Change 1. Add the dev_err when dma_alloc_coherent failed.
+---
+ drivers/tty/serial/pch_uart.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> 
-> The patch series adds support for a virtualized SecurityFS with a few
-> new API calls that are used by IMA namespacing. Only the data relevant
-> to the IMA namespace are shown. The files and directories of other
-> security subsystems (TPM, evm, Tomoyo, safesetid) are not showing
-> up when secruityfs is mounted inside a user namespace.
-> 
-> Much of the code leading up to the virtualization of SecurityFS deals
-> with moving IMA's variables from various files into the IMA namespace
-> structure called 'ima_namespace'. When it comes to determining the
-> current IMA namespace I took the approach to get the current IMA
-> namespace (get_current_ns()) on the top level and pass the pointer all
-> the way down to those functions that now need access to the ima_namespace
-> to get to their variables. This later on comes in handy once hierarchical
-> processing is implemented in this series where we walk the list of
-> namespaces backwards and again need to pass the pointer into functions.
+diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
+index f0351e6f0ef6..d19ed7da24fa 100644
+--- a/drivers/tty/serial/pch_uart.c
++++ b/drivers/tty/serial/pch_uart.c
+@@ -745,6 +745,14 @@ static void pch_request_dma(struct uart_port *port)
+ 	/* Get Consistent memory for DMA */
+ 	priv->rx_buf_virt = dma_alloc_coherent(port->dev, port->fifosize,
+ 				    &priv->rx_buf_dma, GFP_KERNEL);
++	if (!priv->rx_buf_virt) {
++		dev_err(priv->port.dev, "%s:dma_alloc_coherent FAILS(Rx)\n",
++			__func__);
++		dma_release_channel(priv->chan_tx);
++		priv->chan_tx = NULL;
++		return;
++	}
++
+ 	priv->chan_rx = chan;
+ }
+ 
+-- 
+2.25.1
 
-Just to repeat the point from earlier reviews, all those functions need
-to be guaranteed to call from syscall context. Functions that operate on
-files have different semantics.
-
-> 
-> This patch also introduces usage of CAP_MAC_ADMIN to allow access to the
-> IMA policy via reduced capabilities. We would again later on use this
-> capability to allow users to set file extended attributes for IMA appraisal
-> support.
-> 
-> My tree with these patches is here:
-> 
-> git fetch https://github.com/stefanberger/linux-ima-namespaces v5.15+imans.v7.posted 
-> 
-> Regards,
->    Stefan
-> 
-> v7:
->  - Dropped 2 patches related to key queues; using &init_ima_ns for all calls
->    from functions related to key queues where calls need ima_namespace
->  - Moved ima_namespace to security/integrity/ima/ima.h
->  - Extended API descriptions with ns parameter where needed
->  - Using init_ima_ns in functions related to appraisal and xattrs
->  - SecurityFS: Using ima_ns_from_file() to get ns pointer 
->  - Reformatted to 80 columns per line
-
-Since we're starting to be fairly along I would ask you to please write
-detailed commit messages for the next revision.
-
-I would also like to see all links for prior versions of this patchset
-in the commit message since the discussion has been fairly extensive so
-for this series it makes a lot of sense. So something like:
-
-Link: https://lore.kernel.org/r/$MSGID (v1)
-Link: https://lore.kernel.org/r/$MSGID (v2)
-Link: https://lore.kernel.org/r/$MSGID (v3)
-Link: https://lore.kernel.org/r/$MSGID (v4)
-Link: https://lore.kernel.org/r/$MSGID (v5)
-Link: https://lore.kernel.org/r/$MSGID (v6)
-Link: https://lore.kernel.org/r/$MSGID (v7)
-Signed-off-by: meh
-Signed-off-by: mih
-Signed-off-by: muh
-
-I find that extremely pleasant in case we need to revisit things later.
-(Technically you can get the same by searching lore via the final link
-but I find it be pretty pleasing to just copy+paste directly from the
-commit message to the discussion for the earlier patch.)

@@ -2,165 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C80F34768BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C274768C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233399AbhLPDgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 22:36:13 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:47973 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229905AbhLPDgM (ORCPT
+        id S233400AbhLPDhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 22:37:40 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:40510 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229905AbhLPDhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 22:36:12 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jkchen@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V-mPlDd_1639625769;
-Received: from 30.225.24.96(mailfrom:jkchen@linux.alibaba.com fp:SMTPD_---0V-mPlDd_1639625769)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 16 Dec 2021 11:36:10 +0800
-Message-ID: <ad1ebcc9-dc2f-fda7-ae7a-88725a2d4ebb@linux.alibaba.com>
-Date:   Thu, 16 Dec 2021 11:36:09 +0800
+        Wed, 15 Dec 2021 22:37:39 -0500
+X-UUID: bb65dc2f54a443e99c7702d40a2cf28c-20211216
+X-UUID: bb65dc2f54a443e99c7702d40a2cf28c-20211216
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <trevor.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 107822264; Thu, 16 Dec 2021 11:37:36 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 16 Dec 2021 11:37:35 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 16 Dec 2021 11:37:35 +0800
+Message-ID: <0b99c46f84c98c56e8fc99b2e103f52f756b5bf9.camel@mediatek.com>
+Subject: Re: [PATCH 1/2] ASoC: mediatek: mt8195: update control for RT5682
+ series
+From:   Trevor Wu <trevor.wu@mediatek.com>
+To:     Tzung-Bi Shih <tzungbi@google.com>
+CC:     <broonie@kernel.org>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <jiaxin.yu@mediatek.com>, <shumingf@realtek.com>
+Date:   Thu, 16 Dec 2021 11:37:34 +0800
+In-Reply-To: <YbmlT+OSwpGuylsx@google.com>
+References: <20211215065835.3074-1-trevor.wu@mediatek.com>
+         <YbmlT+OSwpGuylsx@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [RFC PATCH] irqchip/gic-v4.1:fix the kdump GIC ITS RAS error for
- ITS BASER2
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        zhangliguang@linux.alibaba.com,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-References: <20211214064716.21407-1-jkchen@linux.alibaba.com>
- <87h7bbk05r.wl-maz@kernel.org>
-From:   Jiankang Chen <jkchen@linux.alibaba.com>
-In-Reply-To: <87h7bbk05r.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc
+Hi Tzung-Bi,
+Thanks for your reviewing,
 
-     we get a ras error in our new arm platform:
+On Wed, 2021-12-15 at 16:20 +0800, Tzung-Bi Shih wrote:
+> On Wed, Dec 15, 2021 at 02:58:34PM +0800, Trevor Wu wrote:
+> > --- a/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1011-rt5682.c
+> > +++ b/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1011-rt5682.c
+> 
+> [...]
+> > +static int mt8195_set_bias_level_post(struct snd_soc_card *card,
+> > +	struct snd_soc_dapm_context *dapm, enum snd_soc_bias_level
+> > level)
+> > +{
+> > +	struct snd_soc_component *component = dapm->component;
+> > +	struct mt8195_mt6359_rt1011_rt5682_priv *priv =
+> > +		snd_soc_card_get_drvdata(card);
+> > +	int ret = 0;
+> 
+> ret doesn't need to be initialized.
+> 
+Originally, I initailize "ret", because it will be returned at the end
+of the function. To be concise, I will return 0 directly and remove the
+initialization.
 
+> > +	/*
+> > +	 * It's required to control mclk directly in the
+> > set_bias_level_post
+> > +	 * function for rt5682 and rt5682s codec, or the unexpected pop
+> > happens
+> > +	 * at the end of playback.
+> > +	 */
+> > +	if (!component ||
+> > +	    (strcmp(component->name, RT5682_DEV0_NAME) &&
+> > +	    strcmp(component->name, RT5682S_DEV0_NAME)))
+> > +		return 0;
+> > +
+> > +	if (IS_ERR(priv->i2so1_mclk))
+> > +		return 0;
+> 
+> I doubt if it needs to check priv->i2so1_mclk.  In other words, if
+> IS_ERR(priv->i2so1_mclk) is true in _probe, does
+> mt8195_set_bias_level_post() get called?
+> 
 
-INFO:    err_gst:8000000
-INFO:      - Found: Uncorrected software error in ITS
-INFO:    RAS reg:
-INFO:      fr = a1
-INFO:      status = 64300101
-INFO:        V = 1
-INFO:        UE = 1
-INFO:        MV = 1
-INFO:        UET(Uncorrected Error Type) = 3
-INFO:        IERR = 1
-INFO:        SERR = 1
-INFO:      addr = 0
-INFO:      misc0 = 12051
-INFO:      misc1 = 0
-CPU RAS mm handler: EventId=C4000049
-ERROR:   sdei_dispatch_event(327) ret:-1
+Now, i2so1_mclk is a required property.
+I will remove the condition in v2.
 
+> > +	switch (level) {
+> > +	case SND_SOC_BIAS_OFF:
+> > +		if (!__clk_is_enabled(priv->i2so1_mclk))
+> > +			return 0;
+> > +
+> > +		dev_dbg(card->dev, "Disable i2so1");
+> > +		clk_disable_unprepare(priv->i2so1_mclk);
+> 
+> I would suggest move dev_dbg() later than clk_disable_unprepare()
+> which means "Disable i2so1" is done.
+> 
+OK.
 
-在 2021/12/14 17:26, Marc Zyngier 写道:
-> [+ Lorenzo, just in case...]
->
-> Hi Jay,
->
-> Thanks for this.
->
-> On Tue, 14 Dec 2021 06:47:16 +0000,
-> Jay Chen <jkchen@linux.alibaba.com> wrote:
->> We encounter a GIC RAS Error in below flow:
->> (1) Configure ITS related register (including
->> 	GITS_BASER2, GITS_BASER2.valid = 1'b1)
->> (2) Configure GICR related register (including
->> 	GICR_VPROPBASER, GICR_VPROPBASER.valid = 1'b1)
->> The common settings in above 2 register are the same
->> and currently everything is OK
->> (3) Kernel panic and os start the kdump flow.And then os
->> reconfigure ITS related register (including GITS_BASER2,
->> GITS_BASER2.valid = 1'b1). But at this time, gicr_vpropbaser
->> is not initialized, so it is still an old value. At this point,
->> the new value of its_baser2 and the old value of gicr_vpropbaser is
->> different, resulting in its RAS error.
->>
->> https://bugzilla.kernel.org/show_bug.cgi?id=215327
-> I'm sorry, but I don't have any access to this. Please add all the
-> relevant details to the commit message and drop the link.
->
-> Could you please detail what HW this is on? The architecture
-> specification for GICv4.1 doesn't make any mention of RAS error
-> conditions, so this must be implementation specific. A reference to
-> the TRM of the IP would certainly help.
->
-> Now, I think you have identified something interesting, but I'm not
-> convinced by the implementation, see below.
->
->> Signed-off-by: Jay Chen <jkchen@linux.alibaba.com>
->> ---
->>   drivers/irqchip/irq-gic-v3-its.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
->> index eb0882d15366..c340bbf4427b 100644
->> --- a/drivers/irqchip/irq-gic-v3-its.c
->> +++ b/drivers/irqchip/irq-gic-v3-its.c
->> @@ -2623,6 +2623,12 @@ static int its_alloc_tables(struct its_node *its)
->>   			return err;
->>   		}
->>   
->> +		if ((i == 2) && is_kdump_kernel() && is_v4_1(its)) {
->> +			val = its_read_baser(its, baser);
->> +			val &= ~GITS_BASER_VALID;
->> +			its_write_baser(its, baser, val);
->> +		}
-> This looks like a very odd way to address the issue. You are silently
-> disabling the Base Register containing the VPE table, and carry on as
-> if nothing happened. What happen if someone starts a guest using
-> direct injection at this point? A kdump kernel still is a full fledged
-> kernel, and I don't expect it to behave differently.
->
-> If we are to make this work, we need to either disable the v4.1
-> extension altogether or sanitise the offending registers so that we
-> don't leave things in a bad state. My preference is of course the
-> latter.
->
-> Could you please give this patch a go and let me know if it helps?
->
-> Thanks,
->
-> 	M.
->
-> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-> index daec3309b014..cb339ace5046 100644
-> --- a/drivers/irqchip/irq-gic-v3.c
-> +++ b/drivers/irqchip/irq-gic-v3.c
-> @@ -920,6 +920,15 @@ static int __gic_update_rdist_properties(struct redist_region *region,
->   {
->   	u64 typer = gic_read_typer(ptr + GICR_TYPER);
->   
-> +	/* Boot-time cleanup */
-> +	if ((typer & GICR_TYPER_VLPIS) && (typer & GICR_TYPER_RVPEID)) {
-> +		u64 val;
-> +
-> +		val = gicr_read_vpropbaser(ptr + SZ_128K + GICR_VPROPBASER);
-> +		val &= ~GICR_VPROPBASER_4_1_VALID;
-> +		gicr_write_vpropbaser(val, ptr + SZ_128K + GICR_VPROPBASER);
-> +	}
-> +
+> > +		break;
+> > +	case SND_SOC_BIAS_ON:
+> > +		dev_dbg(card->dev, "Enable i2so1");
+> > +		ret = clk_prepare_enable(priv->i2so1_mclk);
+> > +		if (ret) {
+> > +			dev_err(card->dev, "Can't enable mclk, err:
+> > %d\n", ret);
+> 
+> The error message can be more specific.  "Cannot enable i2so1" for
+> example.
+> 
+OK.
 
-     Thank you for your solution, this approach looks better. Through 
-our actual tests, this approach can solve the problem.
+> > +			return ret;
+> > +		}
+> 
+> Also, I would suggest move dev_dbg() later than
+> clk_prepare_enable().  Otherwise, it could fail to prepare or enable
+> but still can see "Enable i2so1" message.
+> 
+Yes, that's correct.
+I will move it to a proper position.
 
-     Judging from the GIC code, modifying vpropbaser or baser2 can solve 
-the problem, but obviously your modification method is better, thank you;
+> > +		break;
+> > +	default:
+> > +		break;
+> > +	}
+> > +
+> > +	return ret;
+> 
+> The function doesn't use any gotos.  To be concise, "return 0;".
+OK.
 
+> 
+> > @@ -1072,6 +1119,19 @@ static int
+> > mt8195_mt6359_rt1011_rt5682_dev_probe(struct platform_device *pdev)
+> >  		return -EINVAL;
+> >  	}
+> >  
+> > +	priv->i2so1_mclk = devm_clk_get(&pdev->dev, "i2so1_mclk");
+> > +	if (IS_ERR(priv->i2so1_mclk)) {
+> > +		ret = PTR_ERR(priv->i2so1_mclk);
+> > +		if (ret == -ENOENT) {
+> > +			dev_dbg(&pdev->dev,
+> > +				"Failed to get i2so1_mclk, defer
+> > probe\n");
+> > +			return -EPROBE_DEFER;
+> > +		}
+> 
+> Does devm_clk_get_optional() could make the block more concise?
 
->   	gic_data.rdists.has_vlpis &= !!(typer & GICR_TYPER_VLPIS);
->   
->   	/* RVPEID implies some form of DirectLPI, no matter what the doc says... :-/ */
->
-Tks
+Even though we use devm_clk_get_optional, we still have to handle the
+(-ENOENT) case in probe function. In my opinion, original
+implementation could be kept.
 
-Jay
+> 
+> > +
+> > +		dev_err(&pdev->dev, "Failed to get i2so1_mclk,
+> > err:%d\n", ret);
+> 
+> If devm_clk_get() is possible to return -EPROBE_DEFER too, use
+> dev_err_probe().
+Ok.
+
+> 
+> > --- a/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c
+> > +++ b/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c
+> 
+> [...]
+> > +static int mt8195_set_bias_level_post(struct snd_soc_card *card,
+> > +	struct snd_soc_dapm_context *dapm, enum snd_soc_bias_level
+> > level)
+> > +{
+> > +	struct snd_soc_component *component = dapm->component;
+> > +	struct mt8195_mt6359_rt1019_rt5682_priv *priv =
+> > +		snd_soc_card_get_drvdata(card);
+> > +	int ret = 0;
+> 
+> Ditto, see comments above.
+> 
+OK.
+
+> > +
+> > +	/*
+> > +	 * It's required to control mclk directly in the
+> > set_bias_level_post
+> > +	 * function for rt5682 and rt5682s codec, or the unexpected pop
+> > happens
+> > +	 * at the end of playback.
+> > +	 */
+> > +	if (!component ||
+> > +	    (strcmp(component->name, RT5682_DEV0_NAME) &&
+> > +	    strcmp(component->name, RT5682S_DEV0_NAME)))
+> > +		return 0;
+> > +
+> > +	if (IS_ERR(priv->i2so1_mclk))
+> > +		return 0;
+> 
+> Ditto, see comments above.
+> 
+OK.
+
+> > +
+> > +	switch (level) {
+> > +	case SND_SOC_BIAS_OFF:
+> > +		if (!__clk_is_enabled(priv->i2so1_mclk))
+> > +			return 0;
+> > +
+> > +		dev_dbg(card->dev, "Disable i2so1");
+> > +		clk_disable_unprepare(priv->i2so1_mclk);
+> > +		break;
+> > +	case SND_SOC_BIAS_ON:
+> > +		dev_dbg(card->dev, "Enable i2so1");
+> > +		ret = clk_prepare_enable(priv->i2so1_mclk);
+> > +		if (ret) {
+> > +			dev_err(card->dev, "Can't enable mclk, err:
+> > %d\n", ret);
+> > +			return ret;
+> > +		}
+> > +		break;
+> > +	default:
+> > +		break;
+> > +	}
+> 
+> Ditto, see comments above for the block.
+> 
+OK.
+
+> > +
+> > +	return ret;
+> 
+> Ditto, see comments above.
+> 
+OK.
+
+> > @@ -1285,6 +1326,19 @@ static int
+> > mt8195_mt6359_rt1019_rt5682_dev_probe(struct platform_device *pdev)
+> >  		return -EINVAL;
+> >  	}
+> >  
+> > +	priv->i2so1_mclk = devm_clk_get(&pdev->dev, "i2so1_mclk");
+> > +	if (IS_ERR(priv->i2so1_mclk)) {
+> > +		ret = PTR_ERR(priv->i2so1_mclk);
+> > +		if (ret == -ENOENT) {
+> > +			dev_dbg(&pdev->dev,
+> > +				"Failed to get i2so1_mclk, defer
+> > probe\n");
+> > +			return -EPROBE_DEFER;
+> > +		}
+> > +
+> > +		dev_err(&pdev->dev, "Failed to get i2so1_mclk,
+> > err:%d\n", ret);
+> > +		return ret;
+> > +	}
+> 
+> Ditto, see comments above for the block.
+OK.
 
 

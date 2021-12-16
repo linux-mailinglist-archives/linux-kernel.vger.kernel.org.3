@@ -2,142 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC5547677F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6223C476786
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbhLPBqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 20:46:33 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:45046 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbhLPBqc (ORCPT
+        id S232651AbhLPBsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 20:48:22 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35312 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229555AbhLPBsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 20:46:32 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BG1jRfh031919;
-        Wed, 15 Dec 2021 19:45:27 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639619127;
-        bh=x5y0W7NcQu8KFCCs6SOY3R1ieqDIaIpGqjfY0/mf1aE=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=J5phN9h68zO6NinAKtCP/hmHaPgLgmqEGVPSbOywTVyespzsahOYEMGicemzLRq2Y
-         21pPWpguPw6fDybn84tKdvQctjmv68Dr1n2Jr/sg63dZkF5qXYf/uErtLqrDj5vXPI
-         1ZEaLuHXnc4osJDl09QfWl3URXAzeFJSZ4FNP8zc=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BG1jRfp012888
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Dec 2021 19:45:27 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 15
- Dec 2021 19:45:27 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 15 Dec 2021 19:45:27 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BG1jRLZ081996;
-        Wed, 15 Dec 2021 19:45:27 -0600
-Date:   Wed, 15 Dec 2021 19:45:27 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        <xen-devel@lists.xenproject.org>, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Vinod Koul <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        <iommu@lists.linux-foundation.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>,
-        <linux-wireless@vger.kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
-Message-ID: <20211216014527.5d3sqs2klrqjmm2k@lunacy>
-References: <20211213182958.ytj4m6gsg35u77cv@detonator>
- <87fsqvttfv.ffs@tglx>
- <20211214162247.ocjm7ihg5oi7uiuv@slider>
- <87wnk7rvnz.ffs@tglx>
- <87tufbrudl.ffs@tglx>
- <87mtl3rli1.ffs@tglx>
- <20211214205626.lrnddha6bd6d6es5@possibly>
- <87h7basx36.ffs@tglx>
- <87zgp1rge4.ffs@tglx>
- <87wnk5rfkt.ffs@tglx>
+        Wed, 15 Dec 2021 20:48:21 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DCC861B65;
+        Thu, 16 Dec 2021 01:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9940C36AE1;
+        Thu, 16 Dec 2021 01:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639619300;
+        bh=9nSl+p6c7ECaJOl+DQXpI//VnRBSFhMh+RaPVD0BS58=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sAwc/VuBezb6B3udkJsdyOxTnFNsqTZ6ziwFi6SYftmKTrNeQwgmz5ZGm8x1jCLk2
+         j2vvgXTqEvycD+w2fyxhLtzGp81COyHRDPsONsYTmg/z5xHv7gbeR8/EIfggS5DKVE
+         EE/uibNZ+FiRXjCw9cKuKvJCBjzxv/mbY1ueex3dSxr1qvsbsimjNfniIJGq5OHWUN
+         VOhKg+Hydj4fnzVO4NpsWMK/gSMs3Ts5t6i6Kp2SG3sr1/0Eqy74LCOEgy+vDZBwYB
+         D6bowAfr6K2/B76xoumzdcau0uMj7e/+lHOULnDVIHr9UbyCvcsWVwgLwid/qJqUde
+         G+n934l6cHJ4Q==
+Date:   Wed, 15 Dec 2021 17:48:18 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>, netdev@vger.kernel.org,
+        Xin Long <lucien.xin@gmail.com>
+Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible
+ UAF
+Message-ID: <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211214215732.1507504-2-lee.jones@linaro.org>
+References: <20211214215732.1507504-1-lee.jones@linaro.org>
+        <20211214215732.1507504-2-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <87wnk5rfkt.ffs@tglx>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
+> The cause of the resultant dump_stack() reported below is a
+> dereference of a freed pointer to 'struct sctp_endpoint' in
+> sctp_sock_dump().
+> 
+> This race condition occurs when a transport is cached into its
+> associated hash table followed by an endpoint/sock migration to a new
+> association in sctp_assoc_migrate() prior to their subsequent use in
+> sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
+> table calling into sctp_sock_dump() where the dereference occurs.
+> 
+>   BUG: KASAN: use-after-free in sctp_sock_dump+0xa8/0x438 [sctp_diag]
+>   Call trace:
+>    dump_backtrace+0x0/0x2dc
+>    show_stack+0x20/0x2c
+>    dump_stack+0x120/0x144
+>    print_address_description+0x80/0x2f4
+>    __kasan_report+0x174/0x194
+>    kasan_report+0x10/0x18
+>    __asan_load8+0x84/0x8c
+>    sctp_sock_dump+0xa8/0x438 [sctp_diag]
+>    sctp_for_each_transport+0x1e0/0x26c [sctp]
+>    sctp_diag_dump+0x180/0x1f0 [sctp_diag]
+>    inet_diag_dump+0x12c/0x168
+>    netlink_dump+0x24c/0x5b8
+>    __netlink_dump_start+0x274/0x2a8
+>    inet_diag_handler_cmd+0x224/0x274
+>    sock_diag_rcv_msg+0x21c/0x230
+>    netlink_rcv_skb+0xe0/0x1bc
+>    sock_diag_rcv+0x34/0x48
+>    netlink_unicast+0x3b4/0x430
+>    netlink_sendmsg+0x4f0/0x574
+>    sock_write_iter+0x18c/0x1f0
+>    do_iter_readv_writev+0x230/0x2a8
+>    do_iter_write+0xc8/0x2b4
+>    vfs_writev+0xf8/0x184
+>    do_writev+0xb0/0x1a8
+>    __arm64_sys_writev+0x4c/0x5c
+>    el0_svc_common+0x118/0x250
+>    el0_svc_handler+0x3c/0x9c
+>    el0_svc+0x8/0xc
+> 
+> To prevent this from happening we need to take a references to the
+> to-be-used/dereferenced 'struct sock' and 'struct sctp_endpoint's
+> until such a time when we know it can be safely released.
+> 
+> When KASAN is not enabled, a similar, but slightly different NULL
+> pointer derefernce crash occurs later along the thread of execution in
+> inet_sctp_diag_fill() this time.
 
-On 17:35-20211215, Thomas Gleixner wrote:
->    git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v4.2-part-3
+Are you able to identify where the bug was introduced? Fixes tag would
+be good to have here. 
 
-As you helped offline, summarizing the details on part3 of the series:
+You should squash the two patches together.
 
-I was seeing failure[1] of NFS(DMA) on all TI K3 platforms:
+> diff --git a/net/sctp/diag.c b/net/sctp/diag.c
+> index 760b367644c12..2029b240b6f24 100644
+> --- a/net/sctp/diag.c
+> +++ b/net/sctp/diag.c
+> @@ -301,6 +301,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+>  	struct sctp_association *assoc;
+>  	int err = 0;
+>  
+> +	sctp_endpoint_hold(ep);
+> +	sock_hold(sk);
+>  	lock_sock(sk);
+>  	list_for_each_entry(assoc, &ep->asocs, asocs) {
+>  		if (cb->args[4] < cb->args[1])
+> @@ -341,6 +343,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+>  	cb->args[4] = 0;
+>  release:
+>  	release_sock(sk);
+> +	sock_put(sk);
+> +	sctp_endpoint_put(ep);
+>  	return err;
+>  }
+>  
 
-[    1.013258] ti-bcdma 485c0100.dma-controller: Number of rings: 68
-[    1.019963] ti-bcdma 485c0100.dma-controller: Failed to allocate IRQs -28
-[    1.026938] ti-bcdma 485c0100.dma-controller: Failed to allocate MSI interrupts
-
-Rationale as you explained:
-"
--28 is ENOSPC, which is returned when the interrupt allocation in the
- MSI domain fails. Fix below.
-"
-
-Which turned out to be the fixup[2] you suggested and I confirm that
-fixes the problem for me.
-
-With the fixup in place:
-
-Tested-by: Nishanth Menon <nm@ti.com>
-
-for part 3 of the series as well.
-
-Thanks once again for your help. Hope we can roll in the fixes for
-part3.
-
-[1] https://gist.github.com/nmenon/5971ab27aa626c022e276cc946e4b6c3
-[2]
---- a/drivers/soc/ti/ti_sci_inta_msi.c
-+++ b/drivers/soc/ti/ti_sci_inta_msi.c
-@@ -68,6 +68,7 @@ static int ti_sci_inta_msi_alloc_descs(s
- 	int set, i, count = 0;
- 
- 	memset(&msi_desc, 0, sizeof(msi_desc));
-+	msi_desc.nvec_used = 1;
- 
- 	for (set = 0; set < res->sets; set++) {
- 		for (i = 0; i < res->desc[set].num; i++, count++) {
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

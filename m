@@ -2,242 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8E8477109
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71366477114
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233004AbhLPLrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 06:47:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S233267AbhLPLtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 06:49:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbhLPLrl (ORCPT
+        with ESMTP id S230062AbhLPLtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 06:47:41 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A2EC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 03:47:41 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id r11so85039469edd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 03:47:41 -0800 (PST)
+        Thu, 16 Dec 2021 06:49:49 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001A5C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 03:49:48 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id o13so43614902wrs.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 03:49:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XCEmBcYZzRIN6OKtRB2AeETTwqwp1B43Rh6YS4Pk4vI=;
-        b=PhysAmhygWwuOaltk3bjYqbLTNmswu5AMbRzCMWACHlOOBITfhxJySZBYqBiP/AsMK
-         oBq3ZkNpwhS5ZGMJKqvOj6q8AYq+kok+unZSgwKtIhtlkLKg+TT9Akuyt5KsPTEgB30Z
-         0dJWlq7I+2OZ+b2bol5qLpC+uGQj8aYs9NVsrFXOZ9tj055OOFPcBrrspzAwa9+1YRNJ
-         0P5u+xDPybN2X6ZsqItfAYxCot6zTyPvX8/+N9DkzCof4NZKxGrXeRLhYwyIs4JEVZV5
-         6LRMQBxCGje0oJLVO0Xe7V889kik6s7ARvhV43AAjXkh/PtIMeAK2DWvSGpEiStGFMo+
-         WCgQ==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xMPK5FXNG3vuM/72Q175/4nzKlGRl+AzmP2l2hg14BA=;
+        b=gN8dNYwP4jmxrcG00NeWvls3mRXMNXMD4BZXPsHik9ZSgLEArKuBCTlHzlN31t4MLN
+         9NZehuKx3KyNS9qzT6TEmkIIW3niwzlUonqE3HmyRTI4Cl5Nw+sLSMZDwWguwxno5Dx3
+         zl+VFEAUFuX7tzbMUpPFBd9b4pWJlFL5QtyrmyVMNeWAmTY7zmCHUWSLZc6aJFRGeFdC
+         G0TVPAWow66YOP1xHWYpWJ+U2qGSaNZQTAbAVAM92DmRl0TXsCJtXmbJhJvx6EdGjaI+
+         mwJAAoXPvZlgK5X75auSVlkSdXdUWnvYvhLYMf6FUv587QYacq7MLoLgyxSdJrrjjkN+
+         VUfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XCEmBcYZzRIN6OKtRB2AeETTwqwp1B43Rh6YS4Pk4vI=;
-        b=Ig73KL4PeeoYnz8Ufvr3dyedHDPcrMxEJtlpiKvCnnFeg6FXBEjCzgH+A205EVwRkg
-         kzTJ6ad2NW4YQ0eqHMmW0yLoBAUvNClvoCU9lWunO9xQRFClIUTzY7EnzpxzRFYtFPHN
-         1noKqtY6ZxJQrtFozCua+Cz4uhQdT2G2SrEEtBc6+ojUThTL12TZ3h3WxdVVsb7JQ4Dt
-         3uIYoEZ0SQnwLLII57UWwzxuqYmi0ApqDA20s0zxTJY1pCoWdrb0crwLLw32uDcR0Q9g
-         JXATqk8GN7OZ93020Q4gziKuEeflGJb+G8xI0RSz/Wu7AnZiJAcIqj+OXMUm5yIhfGWR
-         UXxw==
-X-Gm-Message-State: AOAM5306tHTI+/5xLiZtKc+ocd3bjPL3gTwekjtdhEu4mj+A1D5ebfvN
-        zoYOsgm9zgEETgjIzUh9PDjMrFczb1wblXGX9Kw62g==
-X-Google-Smtp-Source: ABdhPJx5kmU4qZesErWYNPX7/IQcqg6D/B158M+8r1cIhF6jaNBYxPV2Xe8KP9eAmwRQBUEZnFIvlgtUZ5C1SM01mpY=
-X-Received: by 2002:a17:907:7da5:: with SMTP id oz37mr15895831ejc.586.1639655259747;
- Thu, 16 Dec 2021 03:47:39 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xMPK5FXNG3vuM/72Q175/4nzKlGRl+AzmP2l2hg14BA=;
+        b=BvZ7pT431SmsUUgOEMRAp5t8SL/lDWBcTG7ms1RSBDbOMBAVEa/MK9sLtgZCJR/PqJ
+         5a9BvGS2Wp5k7HvJKCakZDYEi2Rms7bk3xNNzfCyg7NFHW3vcjpjUXDmruVRWN1GMD9w
+         1vcOwKA0TUweI6/b5eot0quRYxXu3SIWZOdmF9mCDtu4VnXYMC59NFyH7Dtqi+3nbZ9r
+         g14VxAIRKbssFsdr9+A1wQrcnYfO5dNLODCYhApm2igNHODIwguRrzrmnxcDEdoA5hvc
+         YA0vidYSAov293zN3fEkdrxGSYMK9dd2loSkEDRffoaPaoyNjiyg6xK5xqmZHyOMppaT
+         J2eA==
+X-Gm-Message-State: AOAM530ClSehXL3Y9m3bnGd7p74fpDKnlv5/A/SV4Ep4MgyNKpAjuZUv
+        S+QHVUFDEV+1s3IqiHis7tWD8Q==
+X-Google-Smtp-Source: ABdhPJxVV9eNB2hO0s67S/kINf4gnqUHNG34R8ojjkrIhYoyEE7Oy6B2+ooZUgswMppmHhultEQp6Q==
+X-Received: by 2002:a5d:5051:: with SMTP id h17mr5968393wrt.222.1639655387577;
+        Thu, 16 Dec 2021 03:49:47 -0800 (PST)
+Received: from localhost ([2a02:8070:41c8:c700:3d3f:77af:d3f0:b7f0])
+        by smtp.gmail.com with ESMTPSA id b10sm5267943wrt.36.2021.12.16.03.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 03:49:47 -0800 (PST)
+Date:   Thu, 16 Dec 2021 12:49:46 +0100
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        rientjes@google.com, willy@infradead.org, guro@fb.com,
+        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
+        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH 4/3] mm: drop MMF_OOM_SKIP from exit_mmap
+Message-ID: <Ybsn2hJZXRofwuv+@cmpxchg.org>
+References: <20211208212211.2860249-1-surenb@google.com>
+ <YbHIaq9a0CtqRulE@dhcp22.suse.cz>
+ <CAJuCfpHwNS8RFPF9nzaSB8Br8Jah5_dcnQeatRZp60vmX5n6Vg@mail.gmail.com>
+ <YbIzOR13uPOI5EMB@dhcp22.suse.cz>
+ <CAJuCfpHs_25TQ7pHDhPXghA46jmXa5N2OOeBByE-sn+dQ-aM2w@mail.gmail.com>
+ <CAJuCfpHZOojVXCDXPOA7kgrZqNWw_BzRmbKQXz3FOCHwa-LopQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211215172022.795825673@linuxfoundation.org>
-In-Reply-To: <20211215172022.795825673@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 16 Dec 2021 17:17:28 +0530
-Message-ID: <CA+G9fYt=myg0Xpxn5NqjRvL23oFKYsbsqvVPSi_c-2kqsRuSUA@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/18] 5.4.166-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpHZOojVXCDXPOA7kgrZqNWw_BzRmbKQXz3FOCHwa-LopQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Dec 2021 at 22:56, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.166 release.
-> There are 18 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.166-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Wed, Dec 15, 2021 at 06:26:11PM -0800, Suren Baghdasaryan wrote:
+> On Thu, Dec 9, 2021 at 9:06 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Thu, Dec 9, 2021 at 8:47 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Thu 09-12-21 08:24:04, Suren Baghdasaryan wrote:
+> > > > On Thu, Dec 9, 2021 at 1:12 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > > >
+> > > > > Do we want this on top?
+> > > >
+> > > > As we discussed in this thread
+> > > > https://lore.kernel.org/all/YY4snVzZZZYhbigV@dhcp22.suse.cz,
+> > > > __oom_reap_task_mm in exit_mmap allows oom-reaper/process_mrelease to
+> > > > unmap pages in parallel with exit_mmap without blocking each other.
+> > > > Removal of __oom_reap_task_mm from exit_mmap prevents this parallelism
+> > > > and has a negative impact on performance. So the conclusion of that
+> > > > thread I thought was to keep that part. My understanding is that we
+> > > > also wanted to remove MMF_OOM_SKIP as a follow-up patch but
+> > > > __oom_reap_task_mm would stay.
+> > >
+> > > OK, then we were talking past each other, I am afraid. I really wanted
+> > > to get rid of this oom specific stuff from exit_mmap. It was there out
+> > > of necessity. With a proper locking we can finally get rid of the crud.
+> > > As I've said previously oom reaping has never been a hot path.
+> > >
+> > > If we really want to optimize this path then I would much rather see a
+> > > generic solution which would allow to move the write lock down after
+> > > unmap_vmas. That would require oom reaper to be able to handle mlocked
+> > > memory.
+> >
+> > Ok, let's work on that and when that's done we can get rid of the oom
+> > stuff in exit_mmap. I'll look into this over the weekend and will
+> > likely be back with questions.
+> 
+> As promised, I have a question:
+> Any particular reason why munlock_vma_pages_range clears VM_LOCKED
+> before unlocking pages and not after (see:
+> https://elixir.bootlin.com/linux/latest/source/mm/mlock.c#L424)? Seems
+> to me if VM_LOCKED was reset at the end (with proper ordering) then
+> __oom_reap_task_mm would correctly skip VM_LOCKED vmas.
+> https://lore.kernel.org/lkml/20180514064824.534798031@linuxfoundation.org/
+> has this explanation:
+> 
+> "Since munlock_vma_pages_range() depends on clearing VM_LOCKED from
+> vm_flags before actually doing the munlock to determine if any other
+> vmas are locking the same memory, the check for VM_LOCKED in the oom
+> reaper is racy."
+> 
+> but "to determine if any other vmas are locking the same memory"
+> explanation eludes me... Any insights?
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+A page's mlock state is determined by whether any of the vmas that map
+it are mlocked. The munlock code does:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+vma->vm_flags &= VM_LOCKED_CLEAR_MASK
+TestClearPageMlocked()
+isolate_lru_page()
+__munlock_isolated_page()
+  page_mlock()
+    rmap_walk() # for_each_vma()
+      page_mlock_one()
+        (vma->vm_flags & VM_LOCKED) && TestSetPageMlocked()
 
-## Build
-* kernel: 5.4.166-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.4.y
-* git commit: b780ab989d6045e3a7f03d21348c50a4ac4fb2c5
-* git describe: v5.4.165-19-gb780ab989d60
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-65-19-gb780ab989d60
+If we didn't clear the VM_LOCKED flag first, racing threads could
+re-lock pages under us because they see that flag and think our vma
+wants those pages mlocked when we're in the process of munlocking.
 
-## No Test Regressions (compared to v5.4.164-89-gc50f1e613033)
-
-## No Test Fixes (compared to v5.4.164-89-gc50f1e613033)
-
-## Test result summary
-total: 82641, pass: 68845, fail: 666, skip: 12220, xfail: 910
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 258 total, 254 passed, 4 failed
-* arm64: 36 total, 31 passed, 5 failed
-* dragonboard-410c: 2 total, 1 passed, 1 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 20 total, 20 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 48 passed, 4 failed
-* riscv: 24 total, 24 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 36 total, 36 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

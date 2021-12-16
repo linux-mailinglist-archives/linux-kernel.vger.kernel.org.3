@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF6B476F30
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B59476F33
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236266AbhLPKw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
+        id S236267AbhLPKxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:53:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbhLPKwz (ORCPT
+        with ESMTP id S236268AbhLPKw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:52:55 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E479C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:52:55 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id r34-20020a17090a43a500b001b0f0837ce8so2202263pjg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:52:55 -0800 (PST)
+        Thu, 16 Dec 2021 05:52:57 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A19C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:52:57 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id j11so22752864pgs.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:52:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=0x0f.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VISxCt6uNVlSXPrOg0qtSxETrJeGne9ub26tyDD42ME=;
-        b=jSRozYOCvi0no2PTPRdH1uAwBQ1bMEWSTfOcWWE193wMj9ECqkb2dHQ2I++Zdn+cMd
-         BeEKWZE0Z2z3KlAz73W6Nb/ay0K7B0Rfmf/6ohuJoN8KOUPBWg4GHUwTdEhO+yzvUrtp
-         zOHdAS9T9fJ2KuyQEtYLUsYxdOlPy9vKbzWT0=
+        bh=HHCAIkkjnYG+QqH4U5QFRVuGcCXWTh4NCazW14YQbL0=;
+        b=u7Uml0ZVO2+FUpIAYBB2QHQYwKiyUPEarmGh7x/wn90lKG765ovbbcJ7MHMiILcH9l
+         UlhK0xwClUG9XqaeGjyhdJjVVXY9ork5v91s7O2VOq5ZhmWXTJ7VIT1JQkFxmxC2p25v
+         kQWQiRKYbm2AO0OSc1lV0ONFWCRusrZo3siKg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VISxCt6uNVlSXPrOg0qtSxETrJeGne9ub26tyDD42ME=;
-        b=IJfkh4ro05IqyiGhdIVH8zmGu7XcKS/gV6yeUIcPrsqx7Djiw1k+uVN0a+7KCMXszk
-         6WanpRT9DWv10Nx/N3xoKkbTlnSo2S/+fdGw+t6UXpZiTpjdrGiFFRB43bC+KAxJ4xOB
-         4NWCJyuDeDIHFjtBW7AK9EYA4SeOwN0qmrronDeWmv7TthcRqVtvoJ5q1wmfYhpc+Jjq
-         AKcqR/6bTGQg8+zXWUWXfRgsnYtATAI5zUPqTq2L0t8BW86ZKZSsTJwI1UiCJM+X84cL
-         BhGT5dcia2Wj2g7VMdrBQhkwStfUSHvCaxaeGW/9L70g5ZRu2hGAAV/0ONGC50l2qeBf
-         pBYA==
-X-Gm-Message-State: AOAM5331eCCmBqOXLXymHW1ZYYo+X1ZnMTH8ieYpDVWNrtE/jVIUl36W
-        mX9DyfyLARRfFTNW2XzFYOOWjg==
-X-Google-Smtp-Source: ABdhPJwMM6UUiGaZqGGwoI1XbPc1TId9Q5ruqmBSAwlCGK5WR0Dt3/tT3wiL5rzTFiuP6tKl6tQN/g==
-X-Received: by 2002:a17:902:c78a:b0:142:1b7a:930 with SMTP id w10-20020a170902c78a00b001421b7a0930mr16197185pla.8.1639651974796;
-        Thu, 16 Dec 2021 02:52:54 -0800 (PST)
+        bh=HHCAIkkjnYG+QqH4U5QFRVuGcCXWTh4NCazW14YQbL0=;
+        b=lk0ap/IPhMySw9iX9RVY+EHYRDSbdb5NsqcUP8Cxr3KjOtnR41rhMI71zMbdsjrPMd
+         Coy75MvSsrTBkL7d0t3F68Vst0yemX2uVAfAYjfbBSkFiToIeSDKW/2BurIxQPIqj0Lm
+         8B2rOLAaNI184siGy0QMgfTUWlb4Eg398nv4VOgtSBOR8cfGR6W5K5IlEVVA0//sJy9x
+         W49Or8dfJUG536201wTcwgbfHN8TR8zNalCQ8TjbZs6xTJCDAyei4fKig38AtwS3gKNa
+         b9Ly0alRxoN0nus3anT2h4kTMF+a+x0ckaucoR9fDEXnNNE1SJ7qqFmDn8nv/RNLg6ky
+         kuXw==
+X-Gm-Message-State: AOAM533eJ3n3uui12je8ViKRUYyMw95d2lrOacS8d3uISab5hqi+3h2C
+        Q37SkUaqrfS1BORE3BbP10Fv+A==
+X-Google-Smtp-Source: ABdhPJw9cG1Bil/h0qCvGJKeAlidwqTyEqrjNPSkCufq1z8LNYjswcOtt+5UhITlcCVaFee+i1o7vg==
+X-Received: by 2002:a63:6806:: with SMTP id d6mr11713525pgc.68.1639651976921;
+        Thu, 16 Dec 2021 02:52:56 -0800 (PST)
 Received: from shiro.work (p864106-ipngn200510sizuokaden.shizuoka.ocn.ne.jp. [180.9.58.106])
-        by smtp.googlemail.com with ESMTPSA id w19sm4986142pjh.10.2021.12.16.02.52.53
+        by smtp.googlemail.com with ESMTPSA id w19sm4986142pjh.10.2021.12.16.02.52.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 02:52:54 -0800 (PST)
+        Thu, 16 Dec 2021 02:52:56 -0800 (PST)
 From:   Daniel Palmer <daniel@0x0f.com>
 To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         robh+dt@kernel.org
 Cc:     linux-kernel@vger.kernel.org, romain.perier@gmail.com,
-        Daniel Palmer <daniel@0x0f.com>
-Subject: [PATCH v2 1/3] dt-bindings: vendor-prefixes: Add prefix for Miyoo
-Date:   Thu, 16 Dec 2021 19:52:44 +0900
-Message-Id: <20211216105246.3548133-2-daniel@0x0f.com>
+        Daniel Palmer <daniel@0x0f.com>, Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 2/3] dt-bindings: arm: mstar: Add compatible for Miyoo Mini
+Date:   Thu, 16 Dec 2021 19:52:45 +0900
+Message-Id: <20211216105246.3548133-3-daniel@0x0f.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211216105246.3548133-1-daniel@0x0f.com>
 References: <20211216105246.3548133-1-daniel@0x0f.com>
@@ -62,28 +62,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a prefix for "miyoo". The only details I can find about
-the company is their aliexpress store "miyoo global store":
-https://www.aliexpress.com/store/912663639
+The Miyoo Mini is a SigmaStar SSD202D based retro emulation
+device.
+
+Add a compatible for it to the list of infinity2m devices.
 
 Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+Link: http://linux-chenxing.org/infinity2/miyoomini/
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/arm/mstar/mstar.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 66d6432fd781..3fe6117eac42 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -757,6 +757,8 @@ patternProperties:
-     description: MiraMEMS Sensing Technology Co., Ltd.
-   "^mitsubishi,.*":
-     description: Mitsubishi Electric Corporation
-+  "^miyoo,.*":
-+    description: Miyoo
-   "^mntre,.*":
-     description: MNT Research GmbH
-   "^modtronix,.*":
+diff --git a/Documentation/devicetree/bindings/arm/mstar/mstar.yaml b/Documentation/devicetree/bindings/arm/mstar/mstar.yaml
+index a316eef1b728..8e1a0e99a60b 100644
+--- a/Documentation/devicetree/bindings/arm/mstar/mstar.yaml
++++ b/Documentation/devicetree/bindings/arm/mstar/mstar.yaml
+@@ -25,6 +25,7 @@ properties:
+           - enum:
+               - honestar,ssd201htv2 # Honestar SSD201_HT_V2 devkit
+               - m5stack,unitv2 # M5Stack UnitV2
++              - miyoo,miyoo-mini # Miyoo Mini
+           - const: mstar,infinity2m
+ 
+       - description: infinity3 boards
 -- 
 2.34.1
 

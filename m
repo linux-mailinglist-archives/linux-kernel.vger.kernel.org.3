@@ -2,119 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B73C7477156
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A185547715F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234933AbhLPMHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbhLPMHI (ORCPT
+        id S234977AbhLPMIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:08:46 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:29135 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234017AbhLPMIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:07:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11B6C061574;
-        Thu, 16 Dec 2021 04:07:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70FC261D72;
-        Thu, 16 Dec 2021 12:07:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5432DC36AE4;
-        Thu, 16 Dec 2021 12:07:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639656426;
-        bh=Lpngu9hFJGunkQpcmdN1SxSLmcV8j4YsPPU4i9XXEWM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EjWdqhQZhclnPTkWgSmGu5Mkcbemwe10wI1QbiUIB42e6he47+GcB0/BEMw4Y3bEE
-         vdzTKEdl3P2rApVIH0mwFx/y2GCbJ9A8+Q0RjgDdBxitzP0gwy1ETvmRSTIBhMSXYV
-         9rVruAPbvNBmC+4USrqqCY0agN38SwXRDjelq3I4=
-Date:   Thu, 16 Dec 2021 13:07:04 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-media@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        linux-spdx@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: prefer generic SPDX-License expression to
- deprecated one
-Message-ID: <Ybsr6H4/lbzCZBle@kroah.com>
-References: <20211216103132.8087-1-lukas.bulwahn@gmail.com>
+        Thu, 16 Dec 2021 07:08:45 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JF9mj4jm8z1DJs8;
+        Thu, 16 Dec 2021 20:05:41 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 16 Dec 2021 20:08:42 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 16 Dec 2021 20:08:41 +0800
+Subject: Re: [PATCH v17 03/10] x86: kdump: use macro CRASH_ADDR_LOW_MAX in
+ functions reserve_crashkernel()
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Baoquan He <bhe@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
+        Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>
+References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
+ <20211210065533.2023-4-thunder.leizhen@huawei.com> <YbntdtQo2jfbO4cO@zn.tnic>
+ <20211216011040.GG3023@MiWiFi-R3L-srv>
+ <9513d74c-d4c7-babd-f823-8999e195d96d@huawei.com> <YbseAX6X1VHUF12f@zn.tnic>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <35810a61-604e-9b90-2a7f-cfca6ae042ac@huawei.com>
+Date:   Thu, 16 Dec 2021 20:08:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216103132.8087-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <YbseAX6X1VHUF12f@zn.tnic>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 11:31:32AM +0100, Lukas Bulwahn wrote:
-> Commit 8d395ce6f04b ("media: dvb-core: Convert to SPDX identifier") and
-> commit e67219b0496b ("media: b2c2: flexcop: Convert to SPDX identifier")
-> introduce the SPDX-License expression LGPL-2.1-or-later for some files.
-> 
-> The command ./scripts/spdxcheck.py warns:
-> 
->   drivers/media/dvb-core/dmxdev.c: 1:28 Invalid License ID: LGPL-2.1-or-later
->   drivers/media/dvb-core/dvb_demux.c: 1:28 Invalid License ID: LGPL-2.1-or-later
->   drivers/media/dvb-core/dvbdev.c: 1:28 Invalid License ID: LGPL-2.1-or-later
->   drivers/media/common/b2c2/flexcop.c: 1:28 Invalid License ID: LGPL-2.1-or-later
-> 
-> The preferred SPDX expression for LGPL-2.1 or any later version is with
-> the more generic "+"-extension for "any later version", so: LGPL-2.1+
-> 
-> This makes spdxcheck happy again.
-> 
-> Fixes: 8d395ce6f04b ("media: dvb-core: Convert to SPDX identifier")
-> Fixes: e67219b0496b ("media: b2c2: flexcop: Convert to SPDX identifier")
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  drivers/media/common/b2c2/flexcop.c | 2 +-
->  drivers/media/dvb-core/dmxdev.c     | 2 +-
->  drivers/media/dvb-core/dvb_demux.c  | 2 +-
->  drivers/media/dvb-core/dvbdev.c     | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/common/b2c2/flexcop.c b/drivers/media/common/b2c2/flexcop.c
-> index e7a88a2d248c..38c300da3fc2 100644
-> --- a/drivers/media/common/b2c2/flexcop.c
-> +++ b/drivers/media/common/b2c2/flexcop.c
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: LGPL-2.1-or-later
-> +// SPDX-License-Identifier: LGPL-2.1+
->  /*
->   * Linux driver for digital TV devices equipped with B2C2 FlexcopII(b)/III
->   * flexcop.c - main module part
-> diff --git a/drivers/media/dvb-core/dmxdev.c b/drivers/media/dvb-core/dmxdev.c
-> index f6ee678107d3..2b4fb2ec1efd 100644
-> --- a/drivers/media/dvb-core/dmxdev.c
-> +++ b/drivers/media/dvb-core/dmxdev.c
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: LGPL-2.1-or-later
-> +// SPDX-License-Identifier: LGPL-2.1+
->  /*
->   * dmxdev.c - DVB demultiplexer device
->   *
-> diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-> index 83cc32ad7e12..35bf76b0425c 100644
-> --- a/drivers/media/dvb-core/dvb_demux.c
-> +++ b/drivers/media/dvb-core/dvb_demux.c
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: LGPL-2.1-or-later
-> +// SPDX-License-Identifier: LGPL-2.1+
->  /*
->   * dvb_demux.c - DVB kernel demux API
->   *
-> diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-> index 675d877a67b2..861559e8b4c9 100644
-> --- a/drivers/media/dvb-core/dvbdev.c
-> +++ b/drivers/media/dvb-core/dvbdev.c
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: LGPL-2.1-or-later
-> +// SPDX-License-Identifier: LGPL-2.1+
 
-No, the existing tags are fine.
 
-thanks,
+On 2021/12/16 19:07, Borislav Petkov wrote:
+> On Thu, Dec 16, 2021 at 10:46:12AM +0800, Leizhen (ThunderTown) wrote:
+>> The original value (1ULL << 32) is inaccurate
+> 
+> I keep asking *why*?
+> 
+>> and it enlarged the CRASH_ADDR_LOW upper limit.
+> 
+> $ git grep -E "CRASH_ADDR_LOW\W"
+> $
+> 
+> I have no clue what you mean here.
 
-greg k-h
+#ifdef CONFIG_X86_32
+# define CRASH_ADDR_LOW_MAX     SZ_512M
+# define CRASH_ADDR_HIGH_MAX    SZ_512M
+#endif
+
+		if (!high)
+(1)                     crash_base = memblock_phys_alloc_range(crash_size,
+                                                CRASH_ALIGN, CRASH_ALIGN,
+                                                CRASH_ADDR_LOW_MAX);
+                if (!crash_base)
+(2)                     crash_base = memblock_phys_alloc_range(crash_size,
+                                                CRASH_ALIGN, CRASH_ALIGN,
+                                                CRASH_ADDR_HIGH_MAX);
+
+-	if (crash_base >= (1ULL << 32) && reserve_crashkernel_low())
++(3)	if (crash_base >= CRASH_ADDR_LOW_MAX && reserve_crashkernel_low())
+
+If the memory of 'crash_base' is successfully allocated at (1), because the last
+parameter CRASH_ADDR_LOW_MAX is the upper bound, so we can sure that
+"crash_base < CRASH_ADDR_LOW_MAX". So that, reserve_crashkernel_low() will not be
+invoked at (3). That's why I said (1ULL << 32) is inaccurate and enlarge the CRASH_ADDR_LOW
+upper limit.
+
+If the memory of 'crash_base' is successfully allocated at (2), you see,
+CRASH_ADDR_HIGH_MAX = CRASH_ADDR_LOW_MAX = SZ_512M, the same as (1). In fact,
+"crashkernel=high," may not be recommended on X86_32.
+
+Is it possible that (CRASH_ADDR_HIGH_MAX >= 4G) and (CRASH_ADDR_LOW_MAX < 4G)?
+In this case, the memory allocated at (2) maybe over 4G. But why shouldn't
+CRASH_ADDR_LOW_MAX be equal to 4G at this point?
+
+
+> 
+>> This is because when the memory is allocated from the low end, the
+>> address cannot exceed CRASH_ADDR_LOW_MAX, see "if (!high)" branch.
+> 
+>> If
+>> the memory is allocated from the high end, 'crash_base' is greater than or
+>> equal to (1ULL << 32), and naturally, it is greater than CRASH_ADDR_LOW_MAX.
+>>
+>> I think I should update the description, thanks.
+> 
+> I think you should explain why is (1ULL << 32) wrong.
+> 
+> It came from:
+> 
+>   eb6db83d1059 ("x86/setup: Do not reserve crashkernel high memory if low reservation failed")
+> 
+> which simply frees the high memory portion when the low reservation
+> fails. And the test for that is, is crash base > 4G. So that makes
+> perfect sense to me.
+> 
+> So your change is a NOP on 64-bit and it is a NOP on 32-bit by virtue of
+> the _low() variant always returning 0 on 32-bit.
+> 

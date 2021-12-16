@@ -2,212 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA84477142
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6E2477147
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234380AbhLPMDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:03:06 -0500
-Received: from mga17.intel.com ([192.55.52.151]:14858 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234285AbhLPMDA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:03:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639656180; x=1671192180;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iqFtp2U83/P0+3k00NjhK/l7028RUN72TSeB0sy3bG0=;
-  b=nKqE7GUfpjLtO0EX60NIveXTEJyeynEE6G4qoozpjJwlhWOOj1Sgjz1Q
-   L0v8mLYkGwiv6kQ1viedH3hjd7RFXzVsAmbgH3i7E8MLp5pUtd5TiyjEw
-   4HlJ2XCIkqM1ZVWoAJtObxDXiEfEiVtcU52udTiJlMsxYlE/PI8BM9FnD
-   uzs5ek05K+36Uqcvt/le9psCMKnz/+p0hJ2qDqr2x5JbETIhoiC7rFSBo
-   rHZ4lIlDnFpwc8RcpzXPPOZ810oqmSV38PSTjm5JcwY9et8bFCAM6PV2s
-   ZjIecDsiEgw40fMoMgmFgqDu3ALZ+SZDS5RvkxEqzYhHBubbkcBKvH00j
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="220151167"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="220151167"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:03:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="682919096"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 16 Dec 2021 04:02:58 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxpTN-00035k-RS; Thu, 16 Dec 2021 12:02:57 +0000
-Date:   Thu, 16 Dec 2021 20:02:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:repair-symlink-swapext 323/325]
- fs/xfs/libxfs/xfs_symlink_remote.c:311:1: warning: no previous prototype for
- function 'xfs_symlink_write_target'
-Message-ID: <202112161930.6u4fjfND-lkp@intel.com>
+        id S234488AbhLPMDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:03:52 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:28323 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234285AbhLPMDv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 07:03:51 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JF9kB1hZdzbj7K;
+        Thu, 16 Dec 2021 20:03:30 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 16 Dec 2021 20:03:49 +0800
+Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
+ (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 16 Dec
+ 2021 20:03:47 +0800
+Subject: Re: [Question] About SECCOMP issue for ILP32
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+To:     Yury Norov <yury.norov@gmail.com>
+CC:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Heiko Carstens" <heiko.carstens@de.ibm.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Joseph Myers <joseph@codesourcery.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Steve Ellcey <sellcey@caviumnetworks.com>,
+        Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
+        Andreas Schwab <schwab@suse.de>,
+        Alexander Graf <agraf@suse.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Bamvor Zhangjian <bamv2005@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Adam Borowski <kilobyte@angband.pl>,
+        Manuel Montezelo <manuel.montezelo@gmail.com>,
+        James Hogan <james.hogan@imgtec.com>,
+        "Chris Metcalf" <cmetcalf@mellanox.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Pinski <pinskia@gmail.com>,
+        Lin Yongting <linyongting@huawei.com>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        <bobo.shaobowang@huawei.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Nathan_Lynch <Nathan_Lynch@mentor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Christoph Muellner <christoph.muellner@theobroma-systems.com>
+References: <30b491ad-a7e1-f7b5-26b8-2cfffc81a080@huawei.com>
+ <CAAH8bW_p3LJPgOoJgUHt6O0run+LB2RbjnAVpeLn_KCAZKNR+A@mail.gmail.com>
+ <695fc573-25ce-b2e5-e61c-140d9ee241e2@huawei.com>
+Message-ID: <a4688336-f6ab-a662-f1b0-d6e95d4aebd5@huawei.com>
+Date:   Thu, 16 Dec 2021 20:03:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <695fc573-25ce-b2e5-e61c-140d9ee241e2@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.5]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git repair-symlink-swapext
-head:   851df07d9599471df909c4ff0e3cf33f4b9619f0
-commit: 90d15e3e9dcd303fbb36e9a54e7c36457ff9a254 [323/325] xfs: move symlink target write function to libxfs
-config: riscv-randconfig-r042-20211216 (https://download.01.org/0day-ci/archive/20211216/202112161930.6u4fjfND-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=90d15e3e9dcd303fbb36e9a54e7c36457ff9a254
-        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
-        git fetch --no-tags djwong-xfs repair-symlink-swapext
-        git checkout 90d15e3e9dcd303fbb36e9a54e7c36457ff9a254
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/xfs/
+Hi Yury,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 2020/9/1 19:40, Xiongfeng Wang wrote:
+> 
+> 
+> On 2020/9/1 2:15, Yury Norov wrote:
+>> On Mon, Aug 31, 2020 at 5:48 AM Xiongfeng Wang
+>> <wangxiongfeng2@huawei.com> wrote:
+>>>
+>>> Hi Yury,
+>>>
+>>
+>> Hi Xiongfeng,
+>>
+>> [restore CC list]
+>>
+>> Haven't seen this before. What kernel / glibc / ltp do you use?
+> 
+> The kernel version is 4.19. I applied the ILP32 patches from
+> https://github.com/norov/linux.git. The glibc version is 2.28 and I applyed the
+> ILP32 patches.
+> The ltp testsuite is from https://github.com/linux-test-project/ltp. I build it
+> with '-mabi=ilp32'.
+> 
+>>
+>>> We were testing the ILP32 feature and came accross a problem. Very apperaciate
+>>> it if you could give us some help !
+>>>
+>>> We compile the LTP testsuite with '-mabi=ilp32' and run it on a machine with
+>>> kernel and glibc applied with ILP32 patches. But we failed on one testcase,
+>>> prctl04. It print the following error info.
+>>> 'prctl04.c:199: FAIL: SECCOMP_MODE_STRICT doesn't permit read(2) write(2) and
+>>> _exit(2)'
+>>>
+>>> The testcase is like below, syscall 'prctl' followed by a syscall 'write'.
+>>> prctl(PR_SET_SECCOMP, SECCOMP_MODE_STRICT);
+>>> SAFE_WRITE(1, fd, "a", 1);
+>>>
+>>> When we execute syscall 'write', we receive a SIGKILL. It's not as expected.
+>>> We track the kernel and found out it is because we failed the syscall_whitelist
+>>> check in '__secure_computing_strict'. Because flag 'TIF_32BIT_AARCH64' is set,
+>>> we falls into the 'in_compat_syscall()' branch. We compare the parameter
+>>> 'this_syscall' with return value of 'get_compat_model_syscalls()'
+>>> The syscall number of '__NR_write' for ilp32 application is 64, but it is 4 for
+>>> 'model_syscalls_32' returned from 'get_compat_model_syscalls()'
+>>> So '__secure_computing_strict' retuned with 'do_exit(SIGKILL)'. We have a
+>>> modification like below, but I am not sure if it correct or not.
+>>>
+>>> --- a/kernel/seccomp.c
+>>> +++ b/kernel/seccomp.c
+>>> @@ -618,7 +618,7 @@ static void __secure_computing_strict(int this_syscall)
+>>>  {
+>>>         const int *syscall_whitelist = mode1_syscalls;
+>>>  #ifdef CONFIG_COMPAT
+>>> -       if (in_compat_syscall())
+>>> +       if (is_a32_compat_task())
+>>>                 syscall_whitelist = get_compat_mode1_syscalls();
+>>
+>> It calls the arch function from generic code. It may break build for
+>> other arches.
+>> This also looks dangerous because it treats ILP32 execution as non-compat.
+>>
+>> The right approach would be implementing arch-specific
+>> get_compat_mode1_syscalls()
+>> in arch/arm64/include/asm/seccomp.h that returns an appropriate table.
+>> Refer MIPS
+>> code for this: arch/mips/include/asm/seccomp.h
+> 
+> Thanks for your advice. Thanks a lot.
+> I have written another version according to your advice.
+> 
+> --- a/arch/arm64/include/asm/seccomp.h
+> +++ b/arch/arm64/include/asm/seccomp.h
+> @@ -20,6 +20,36 @@
+>  #define __NR_seccomp_sigreturn_32      __NR_compat_rt_sigreturn
+>  #endif /* CONFIG_COMPAT */
+> 
+> +#ifdef CONFIG_COMPAT
+> +#ifndef __COMPAT_SYSCALL_NR
+> +
+> +static inline const int *get_compat_mode1_syscalls(void)
+> +{
+> +#ifdef CONFIG_AARCH32_EL0
+> +       static const int mode1_syscalls_a32[] = {
+> +               __NR_compat_read, __NR_compat_write,
+> +               __NR_compat_read, __NR_compat_sigreturn,
 
-All warnings (new ones prefixed by >>):
+A little fix here. It should be
+  __NR_compat_exit, __NR_compat_sigreturn,
+Sorry, my fault.
 
-   fs/xfs/libxfs/xfs_symlink_remote.c:28:1: warning: no previous prototype for function 'xfs_symlink_blocks' [-Wmissing-prototypes]
-   xfs_symlink_blocks(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:27:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   fs/xfs/libxfs/xfs_symlink_remote.c:38:1: warning: no previous prototype for function 'xfs_symlink_hdr_set' [-Wmissing-prototypes]
-   xfs_symlink_hdr_set(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:37:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   fs/xfs/libxfs/xfs_symlink_remote.c:68:1: warning: no previous prototype for function 'xfs_symlink_hdr_ok' [-Wmissing-prototypes]
-   xfs_symlink_hdr_ok(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:67:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool
-   ^
-   static 
-   fs/xfs/libxfs/xfs_symlink_remote.c:167:1: warning: no previous prototype for function 'xfs_symlink_local_to_remote' [-Wmissing-prototypes]
-   xfs_symlink_local_to_remote(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:166:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void
-   ^
-   static 
-   fs/xfs/libxfs/xfs_symlink_remote.c:206:1: warning: no previous prototype for function 'xfs_symlink_shortform_verify' [-Wmissing-prototypes]
-   xfs_symlink_shortform_verify(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:205:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   xfs_failaddr_t
-   ^
-   static 
-   fs/xfs/libxfs/xfs_symlink_remote.c:239:1: warning: no previous prototype for function 'xfs_symlink_remote_read' [-Wmissing-prototypes]
-   xfs_symlink_remote_read(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:238:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
->> fs/xfs/libxfs/xfs_symlink_remote.c:311:1: warning: no previous prototype for function 'xfs_symlink_write_target' [-Wmissing-prototypes]
-   xfs_symlink_write_target(
-   ^
-   fs/xfs/libxfs/xfs_symlink_remote.c:310:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   7 warnings generated.
+Thanks,
+Xiongfeng
 
-
-vim +/xfs_symlink_write_target +311 fs/xfs/libxfs/xfs_symlink_remote.c
-
-   236	
-   237	/* Read a remote symlink target into the buffer. */
-   238	int
- > 239	xfs_symlink_remote_read(
-   240		struct xfs_inode	*ip,
-   241		char			*link)
-   242	{
-   243		struct xfs_mount	*mp = ip->i_mount;
-   244		struct xfs_bmbt_irec	mval[XFS_SYMLINK_MAPS];
-   245		struct xfs_buf		*bp;
-   246		xfs_daddr_t		d;
-   247		char			*cur_chunk;
-   248		int			pathlen = ip->i_disk_size;
-   249		int			nmaps = XFS_SYMLINK_MAPS;
-   250		int			byte_cnt;
-   251		int			n;
-   252		int			error = 0;
-   253		int			fsblocks = 0;
-   254		int			offset;
-   255	
-   256		ASSERT(xfs_isilocked(ip, XFS_ILOCK_SHARED | XFS_ILOCK_EXCL));
-   257	
-   258		fsblocks = xfs_symlink_blocks(mp, pathlen);
-   259		error = xfs_bmapi_read(ip, 0, fsblocks, mval, &nmaps, 0);
-   260		if (error)
-   261			goto out;
-   262	
-   263		offset = 0;
-   264		for (n = 0; n < nmaps; n++) {
-   265			d = XFS_FSB_TO_DADDR(mp, mval[n].br_startblock);
-   266			byte_cnt = XFS_FSB_TO_B(mp, mval[n].br_blockcount);
-   267	
-   268			error = xfs_buf_read(mp->m_ddev_targp, d, BTOBB(byte_cnt), 0,
-   269					&bp, &xfs_symlink_buf_ops);
-   270			if (error)
-   271				return error;
-   272			byte_cnt = XFS_SYMLINK_BUF_SPACE(mp, byte_cnt);
-   273			if (pathlen < byte_cnt)
-   274				byte_cnt = pathlen;
-   275	
-   276			cur_chunk = bp->b_addr;
-   277			if (xfs_has_crc(mp)) {
-   278				if (!xfs_symlink_hdr_ok(ip->i_ino, offset,
-   279								byte_cnt, bp)) {
-   280					xfs_inode_mark_sick(ip, XFS_SICK_INO_SYMLINK);
-   281					error = -EFSCORRUPTED;
-   282					xfs_alert(mp,
-   283	"symlink header does not match required off/len/owner (0x%x/Ox%x,0x%llx)",
-   284						offset, byte_cnt, ip->i_ino);
-   285					xfs_buf_relse(bp);
-   286					goto out;
-   287	
-   288				}
-   289	
-   290				cur_chunk += sizeof(struct xfs_dsymlink_hdr);
-   291			}
-   292	
-   293			memcpy(link + offset, cur_chunk, byte_cnt);
-   294	
-   295			pathlen -= byte_cnt;
-   296			offset += byte_cnt;
-   297	
-   298			xfs_buf_relse(bp);
-   299		}
-   300		ASSERT(pathlen == 0);
-   301	
-   302		link[ip->i_disk_size] = '\0';
-   303		error = 0;
-   304	
-   305	 out:
-   306		return error;
-   307	}
-   308	
-   309	/* Write the symlink target into the inode. */
-   310	int
- > 311	xfs_symlink_write_target(
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +               0, /* null terminated */
+> +       };
+> +#endif
+> +       static const int mode1_syscalls_ilp32[] = {
+> +               __NR_read, __NR_write,
+> +               __NR_exit, __NR_rt_sigreturn,
+> +               0, /* null terminated */
+> +       };
+> +
+> +       if (is_ilp32_compat_task())
+> +               return mode1_syscalls_ilp32;
+> +#ifdef CONFIG_AARCH32_EL0
+> +       return mode1_syscalls_a32;
+> +#endif
+> +}
+> +
+> +#define get_compat_mode1_syscalls get_compat_mode1_syscalls
+> +
+> +#endif
+> +#endif
+> +
+>  #include <asm-generic/seccomp.h>
+> 
+>  #endif /* _ASM_SECCOMP_H */
+> 
+> 
+> Thanks,
+> Xiongfeng
+> 
+>>
+>> Thanks,
+>> Yury
+>>
+>>>  #endif
+>>>         do {
+>>>
+>>>
+>>> Thanks,
+>>> Xiongfeng
+>>>
+>>
+>> .
+>>
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
+> .
+> 

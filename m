@@ -2,291 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A704780B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8DE4780BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbhLPXeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S229797AbhLPXiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbhLPXeJ (ORCPT
+        with ESMTP id S229755AbhLPXiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:34:09 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1426C061746
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:34:08 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id r26so1155750oiw.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:34:08 -0800 (PST)
+        Thu, 16 Dec 2021 18:38:16 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945A4C061574;
+        Thu, 16 Dec 2021 15:38:15 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z29so1297669edl.7;
+        Thu, 16 Dec 2021 15:38:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=wVN9Cdst75YteBeeIFGNl0na8PJu1PxWjHvdKRsuLNo=;
-        b=HjENK0B9HW76vw8xIIFcJA0IC3D9n2s3W+qR5y0bHYRZNJwAQgqyMg67KQ5oX7Cjpk
-         1tBi7NGzC/4YJI3ThIywLGGClCUcnzfkZSq+I0Rs9bz5/xCcm6jl5jr2lPIgSCLbaH2u
-         vEl+/iaypGo/qxv816XdLF0aZrgkDlf1X/ADKXOTzwPBCF3n81iMJk0ICHzh1CHFIFir
-         W34nfJiJYW+G2E8AA3TI7ZIJNttLnhX7gI2xABw9PaJbkjv/GkYmXEVE77DyRlnyw6dA
-         iY2iwcSoDGPe6FyQBPMym3RozkZZbmucrUF21orOEGPqNfx1EdygBBdHg0iFDR+y+yvY
-         VAYQ==
+        bh=jNeLCUag3zDQhC8g4uWlCYmA+rDqEKe64Wii3N+wdVY=;
+        b=Oqepd5U53mJgxnAU+aGwIrEqrZFnV21tc63s2tHpIdc5PlQ3tte44yYsjKJ5/qKF7v
+         uWbO46GfTpTIzFQvbmlZ+wmWcUVV/Nt3a8mQSz5SOHPv8QD7zD7Shzg1e6JLv8XVTbV+
+         8e8+O3D2UMMnxZ8mPguI1G0h7XyaLUckmRq4pbV3Z4pshPHN9Dj/gdnynuQzlabSHiOI
+         jeynE1Om1hl5u7g6sqCnFBvxjSHbAbJoLimcXIw6DLgiO1ZufWipz7pTUbqim1JSzpGn
+         owD6OSWJZaYuzB00DjtF6IAyg1yJIj2X04F63szWk8Y4hmoKtKqmZRyXhAUULjE5VO8R
+         h5mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=wVN9Cdst75YteBeeIFGNl0na8PJu1PxWjHvdKRsuLNo=;
-        b=J6n9FmQcqvlLeer+pGDLes300UaCgzFTyB8fzw1Nz8ZJwuS+gGokHa1tfB1XJrA/Wy
-         n0yOeEkgbhjW2nkPXUwbJ0ejXOhqoi2IgufK9Z2PhP7rXcCFIVh8zWFZgtdltbX1sOB+
-         hGgay0Hgvx2R0HXU41l1TR2/rtGv8Z2J+GV9jopb8vYUElr8HvUFNk0oV2NRyS5otUnh
-         nnIp05JyuR0vaAXxyL5+wqPO+UeGBknc3RugVe1Ny/oTo6GAle92haxUBrwc8TnZKKOH
-         aX4uEv0plk4Yp4MhAJrMO/CZ/c3Trum5NiSlKizAywxXZxiNGtEgA7HK5BNiGC2wVTQf
-         FtDw==
-X-Gm-Message-State: AOAM532DunKChOdomwxjKVaKyn7Usq3h7/mfDiWe1JxRXVIUHF13eaXA
-        gWd2sGCYxX/PnRokabD3XL5Rqg==
-X-Google-Smtp-Source: ABdhPJzVmPPYwv1YIcyUN6xIib5xQXy6q7OQQrigQ9KAdWSJxAYxjsL16fUSS1c0ugQMQ/lxpItSOQ==
-X-Received: by 2002:a05:6808:1597:: with SMTP id t23mr173283oiw.24.1639697648165;
-        Thu, 16 Dec 2021 15:34:08 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id bi20sm1431910oib.29.2021.12.16.15.34.07
+        bh=jNeLCUag3zDQhC8g4uWlCYmA+rDqEKe64Wii3N+wdVY=;
+        b=ftMyHQ899f0yClIVWYC0BOEK7T0JH4QtKN18WFsfGvlSVqFo7chZuD4RBUJTAfgWrI
+         SzEDa4u2ymBvtdiWttSs+hEPFEoaMPkOH1oAQv2Btfcw4g7WiJ0JFfNxDwJXspCbr0vj
+         /hOvIbd2PPg3w/5EILDznxrpwlfRO9FxmuCwslxjxRRyMLv+FtvPRb8qCMrMxyq77Per
+         Klwxl6IcCvOwRXTGW8aSugiKWiHGhO6bQtRsq1b5MbZX3CZS7K2GtqGtOVjfd5qCqB6m
+         A3Vuo5BA2tRc+ft63Ltsul/YkHSdn6UMX8dElF8617rGnSDqXCHRTNaeS97Io5/ndzlu
+         Q+nQ==
+X-Gm-Message-State: AOAM531W9YFfVcP7SskkOZc4CpHntTveDP4AsOhnrYyyGLQIbv4PG/C/
+        iFP0OBjAEsf9IZPftqHAVo43iKtxhVI=
+X-Google-Smtp-Source: ABdhPJxBuqjKO2LwfkeBQbcTGWxeqIGxxo3WTzm0SK02HUrtohSpL6LIyKpWnsW8Xor1daKg071q2A==
+X-Received: by 2002:a17:906:730d:: with SMTP id di13mr308048ejc.557.1639697893987;
+        Thu, 16 Dec 2021 15:38:13 -0800 (PST)
+Received: from skbuf ([188.25.173.50])
+        by smtp.gmail.com with ESMTPSA id g15sm2308327ejt.10.2021.12.16.15.38.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 15:34:07 -0800 (PST)
-Date:   Thu, 16 Dec 2021 15:35:23 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     quic_vamslank@quicinc.com
-Cc:     agross@kernel.org, linus.walleij@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v6 1/2] dt-bindings: pinctrl: qcom: Add SDX65 pinctrl
- bindings
-Message-ID: <YbvNO8uS/x5qFqx8@ripper>
-References: <cover.1639696427.git.quic_vamslank@quicinc.com>
- <ff9abf953c274a1e34f59114642f67ecf02acb6f.1639696427.git.quic_vamslank@quicinc.com>
+        Thu, 16 Dec 2021 15:38:13 -0800 (PST)
+Date:   Fri, 17 Dec 2021 01:38:12 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH RFC v6 00/16] Add support for qca8k mdio rw in
+ Ethernet packet
+Message-ID: <20211216233812.rpalegklcrd4ifzs@skbuf>
+References: <20211214224409.5770-1-ansuelsmth@gmail.com>
+ <20211215102629.75q6odnxetitfl3w@skbuf>
+ <61ba1928.1c69fb81.4ef9.360b@mx.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ff9abf953c274a1e34f59114642f67ecf02acb6f.1639696427.git.quic_vamslank@quicinc.com>
+In-Reply-To: <61ba1928.1c69fb81.4ef9.360b@mx.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 16 Dec 15:18 PST 2021, quic_vamslank@quicinc.com wrote:
-
-> From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+On Wed, Dec 15, 2021 at 05:34:45PM +0100, Ansuel Smith wrote:
+> > > I tested this with multicpu port and with port6 set as the unique port and
+> > > it's sad.
+> > > It seems they implemented this feature in a bad way and this is only
+> > > supported with cpu port0. When cpu port6 is the unique port, the switch
+> > > doesn't send ack packet. With multicpu port, packet ack are not duplicated
+> > > and only cpu port0 sends them. This is the same for the MIB counter.
+> > > For this reason this feature is enabled only when cpu port0 is enabled and
+> > > operational.
+> > 
+> > Let's discuss this a bit (not the hardware limitation, that one is what
+> > it is). When DSA has multiple CPU ports, right now both host-side
+> > Ethernet ports are set up as DSA masters. By being a DSA master, I mean
+> > that dev->dsa_ptr is a non-NULL pointer, so these interfaces expect to
+> > receive packets that are trapped by the DSA packet_type handlers.
+> > But due to the way in which dsa_tree_setup_default_cpu() is written,
+> > by default only the first CPU port will be used. So the host port
+> > attached to the second CPU port will be a DSA master technically, but it
+> > will be an inactive one and won't be anyone's master (no dp->cpu_dp will
+> > point to this master's dev->dsa_ptr). My idea of DSA support for
+> > multiple CPU ports would be to be able to change the dp->cpu_dp mapping
+> > through rtnetlink, on a per user port basis (yes, this implies we don't
+> > have a solution for DSA ports).
 > 
-> Add device tree binding Documentation details for Qualcomm SDX65
-> pinctrl driver.
+> I have a similar implementation that was proposed as RFC many times ago.
+
+Yes, well, how to assign a user port to a CPU port seems not to be the
+biggest problem that needs to be solved before support for multiple CPU
+ports can fully go in.
+
+> > My second observation is based on the fact that some switches support a
+> > single CPU port, yet they are wired using two Ethernet ports towards the
+> > host. The Felix and Seville switches are structured this way. I think
+> > some Broadcom switches too.
+> > Using the rtnetlink user API, a user could be able to migrate all user
+> > ports between one CPU port and the other, and as long as the
+> > configuration is valid, the switch driver should accept this (we perform
+> > DSA master changing while all ports are down, and we could refuse going
+> > up if e.g. some user ports are assigned to CPU port A and some user
+> > ports to CPU port B). Nonetheless, the key point is that when a single
+> > CPU port is used, the other CPU port kinda sits there doing nothing. So
+> > I also have some patches that make the host port attached to this other
+> > CPU port be a normal interface (not a DSA master).
+> > The switch side of things is still a CPU port (not a user port, since
+> > there still isn't any net device registered for it), but nonetheless, it
+> > is a CPU port with no DSA tagging over it, hence the reason why the host
+> > port isn't a DSA master. The patch itself that changes this behavior
+> > sounds something like "only set up a host port as a DSA master if some
+> > user ports are assigned to it".
+> > As to why I'm doing it this way: the device tree should be fixed, and I
+> > do need to describe the connection between the switch CPU ports and the
+> > DSA masters via the 'ethernet = <&phandle>;' property. From a hardware
+> > perspective, both switch ports A and B are CPU ports, equally. But this
+> > means that DSA won't create a user port for the CPU port B, which would
+> > be the more natural way to use it.
+> > Now why this pertains to you: Vivien's initial stab at management over
+> > Ethernet wanted to decouple a bit the concept of a DSA master (used for
+> > the network stack) from the concept of a host port used for in-band
+> > management (used for register access). Whereas our approach here is to
+> > keep the two coupled, due to us saying "hey, if there's a direct
+> > connection to the switch, this is a DSA master anyway, is it not?".
+> > Well, here's one thing which you wouldn't be able to do if I pursue my
+> > idea with lazy DSA master setup: if you decide to move all your user
+> > ports using rtnetlink to CPU port 6, then the DSA master of CPU port 0
+> > will cease to be a DSA master. So that will also prevent the management
+> > protocol from working.
 > 
-> Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  .../bindings/pinctrl/qcom,sdx65-pinctrl.yaml  | 191 ++++++++++++++++++
->  1 file changed, 191 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
+> About the migration problem, wonder if we can just use a refcount that
+> would represent the user of the master port. The port won't be DSA
+> master anymore if no user are connected. A switch can increase this ref
+> if the port is mandatory for some operation. (qca8k on state change
+> operational would increase the ref and decrease and then the port can be
+> removed from a DSA master) That should handle all the other switch and
+> still permit a driver to ""bypass"" this behaviour.
+
+Maybe. Although not quite like the way in which you propose. Remember
+that the idea is for a DSA master to be a regular interface until it
+gains a user. So there's the chicken and egg problem if you want to
+become a user on ->master_state_change()... because it's not a master.
+You'd have to specify upfront.
+
+> > I don't want to break your use case, but then again, I'm wondering what
+> > we could do to support the second CPU port working without DSA tagging,
+> > without changing the device trees to declare it as a user port (which in
+> > itself isn't bad, it's just that we need to support all use cases with a
+> > single, unified device tree).
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..cdfcf29dffee
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
-> @@ -0,0 +1,191 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/qcom,sdx65-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Technologies, Inc. SDX65 TLMM block
-> +
-> +maintainers:
-> +  - Vamsi krishna Lanka <quic_vamslank@quicinc.com>
-> +
-> +description:
-> +  This binding describes the Top Level Mode Multiplexer block found in the
-> +  SDX65 platform.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,sdx65-tlmm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    description: Specifies the PIN numbers and Flags, as defined in
-> +      include/dt-bindings/interrupt-controller/irq.h
-> +    const: 2
-> +
-> +  gpio-controller: true
-> +
-> +  '#gpio-cells':
-> +    description: Specifying the pin number and flags, as defined in
-> +      include/dt-bindings/gpio/gpio.h
-> +    const: 2
-> +
-> +  gpio-ranges:
-> +    maxItems: 1
-> +
-> +  gpio-reserved-ranges:
-> +    maxItems: 1
-> +
-> +#PIN CONFIGURATION NODES
-> +patternProperties:
-> +  '-state$':
-> +    oneOf:
-> +      - $ref: "#/$defs/qcom-sdx65-tlmm-state"
-> +      - patternProperties:
-> +          ".*":
-> +            $ref: "#/$defs/qcom-sdx65-tlmm-state"
-> +'$defs':
-> +  qcom-sdx65-tlmm-state:
+> Just some info about the secondary CPU port.
+> From Documentation the second cpu port in sgmii mode can be used also for
+> other task so yes we should understand how to handle this. (base-x, mac
+> and phy) This mode is set based on the phy mode and if the dsa port is a
+> cpu port. Device tree changes can be accepted as AFAIK due to DSA not
+> supporting multi cpu, CPU port 6 was never used/defined. (But I'm
+> not sure... that is the case for all the device we have on openwrt)
 
-Thanks.
+What do you mean exactly by "other tasks"?
 
-This looks good now.
+> Considering that introducing multicpu port would require a
+> bit of rework, wonder if we should introduce some new bindings/node and
+> fallback to a legacy (aka force first cpu port as the unique cpu port
+> and ignore others) in the absence of this new implementation. (Hoping I
+> didn't get all wrong with the main problem here)
 
-Regards,
-Bjorn
+The defaults would stay the same. (I've no idea why we would introduce
+new device tree bindings? the only device tree change IMO would be to
+declare the link between the second CPU port and its DSA master, if you
+haven't done that already) But my key point was that, to some extent,
+some change to the current behavior will still be required. Like right
+now, a kernel 5.15 when it sees a device tree with 2 CPU ports will have
+2 DSA masters. Maybe kernel 5.17 will only start off with the first port
+as a DSA master, and the other just a candidate. I'm hoping this won't
+change observable behavior for the worse for anyone, because device
+trees are supposed to be there to stay, not change on a whim. My hope is
+based on the fact that as far as I can see, that second DSA master is
+effectively useless. Which in fact creates the second problem: exactly
+because the second host port is useless with the current code structure,
+I can see people describing it as a user rather than CPU port in current
+device trees, just to make some use out of it. But that restricts the
+potential user base (and therefore appeal) of my change of behavior or
+of multi-CPU port support in general, and this is a bit sad. I think we
+should be all spending a bit more time with current-generation kernels
+on "updated" device trees with multiple CPU ports defined, and see
+what's broken and what could be improved, because otherwise we could be
+leaving behind a huge mess when the device trees get updated, and we
+need to run the occasional old kernel on them.
 
-> +    type: object
-> +    description:
-> +      Pinctrl node's client devices use subnodes for desired pin configuration.
-> +      Client device subnodes use below standard properties.
-> +    $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
-> +
-> +    properties:
-> +      pins:
-> +        description:
-> +          List of gpio pins affected by the properties specified in this subnode.
-> +        items:
-> +          oneOf:
-> +            - pattern: "^gpio([0-9]|[1-9][0-9]|10[0-7])$"
-> +            - enum: [ ufs_reset, sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk, sdc2_cmd, sdc2_data, sdc1_rclk ]
-> +        minItems: 1
-> +        maxItems: 150
-> +
-> +      function:
-> +        description:
-> +          Specify the alternative function to be configured for the specified
-> +          pins. Functions are only valid for gpio pins.
-> +        enum: [ blsp_uart1, blsp_spi1, blsp_i2c1, blsp_uim1, atest_tsens,
-> +                bimc_dte1, dac_calib0, blsp_spi8, blsp_uart8, blsp_uim8,
-> +                qdss_cti_trig_out_b, bimc_dte0, dac_calib1, qdss_cti_trig_in_b,
-> +                dac_calib2, atest_tsens2, atest_usb1, blsp_spi10, blsp_uart10,
-> +                blsp_uim10, atest_bbrx1, atest_usb13, atest_bbrx0, atest_usb12,
-> +                mdp_vsync, edp_lcd, blsp_i2c10, atest_gpsadc1, atest_usb11,
-> +                atest_gpsadc0, edp_hot, atest_usb10, m_voc, dac_gpio, atest_char,
-> +                cam_mclk, pll_bypassnl, qdss_stm7, blsp_i2c8, qdss_tracedata_b,
-> +                pll_reset, qdss_stm6, qdss_stm5, qdss_stm4, atest_usb2, cci_i2c,
-> +                qdss_stm3, dac_calib3, atest_usb23, atest_char3, dac_calib4,
-> +                qdss_stm2, atest_usb22, atest_char2, qdss_stm1, dac_calib5,
-> +                atest_usb21, atest_char1, dbg_out, qdss_stm0, dac_calib6,
-> +                atest_usb20, atest_char0, dac_calib10, qdss_stm10,
-> +                qdss_cti_trig_in_a, cci_timer4, blsp_spi6, blsp_uart6, blsp_uim6,
-> +                blsp2_spi, qdss_stm9, qdss_cti_trig_out_a, dac_calib11,
-> +                qdss_stm8, cci_timer0, qdss_stm13, dac_calib7, cci_timer1,
-> +                qdss_stm12, dac_calib8, cci_timer2, blsp1_spi, qdss_stm11,
-> +                dac_calib9, cci_timer3, cci_async, dac_calib12, blsp_i2c6,
-> +                qdss_tracectl_a, dac_calib13, qdss_traceclk_a, dac_calib14,
-> +                dac_calib15, hdmi_rcv, dac_calib16, hdmi_cec, pwr_modem,
-> +                dac_calib17, hdmi_ddc, pwr_nav, dac_calib18, pwr_crypto,
-> +                dac_calib19, hdmi_hot, dac_calib20, dac_calib21, pci_e0,
-> +                dac_calib22, dac_calib23, dac_calib24, tsif1_sync, dac_calib25,
-> +                sd_write, tsif1_error, blsp_spi2, blsp_uart2, blsp_uim2,
-> +                qdss_cti, blsp_i2c2, blsp_spi3, blsp_uart3, blsp_uim3, blsp_i2c3,
-> +                uim3, blsp_spi9, blsp_uart9, blsp_uim9, blsp10_spi, blsp_i2c9,
-> +                blsp_spi7, blsp_uart7, blsp_uim7, qdss_tracedata_a, blsp_i2c7,
-> +                qua_mi2s, gcc_gp1_clk_a, ssc_irq, uim4, blsp_spi11, blsp_uart11,
-> +                blsp_uim11, gcc_gp2_clk_a, gcc_gp3_clk_a, blsp_i2c11, cri_trng0,
-> +                cri_trng1, cri_trng, qdss_stm18, pri_mi2s, qdss_stm17, blsp_spi4,
-> +                blsp_uart4, blsp_uim4, qdss_stm16, qdss_stm15, blsp_i2c4,
-> +                qdss_stm14, dac_calib26, spkr_i2s, audio_ref, lpass_slimbus,
-> +                isense_dbg, tsense_pwm1, tsense_pwm2, btfm_slimbus, ter_mi2s,
-> +                qdss_stm22, qdss_stm21, qdss_stm20, qdss_stm19, gcc_gp1_clk_b,
-> +                sec_mi2s, blsp_spi5, blsp_uart5, blsp_uim5, gcc_gp2_clk_b,
-> +                gcc_gp3_clk_b, blsp_i2c5, blsp_spi12, blsp_uart12, blsp_uim12,
-> +                qdss_stm25, qdss_stm31, blsp_i2c12, qdss_stm30, qdss_stm29,
-> +                tsif1_clk, qdss_stm28, tsif1_en, tsif1_data, sdc4_cmd, qdss_stm27,
-> +                qdss_traceclk_b, tsif2_error, sdc43, vfr_1, qdss_stm26, tsif2_clk,
-> +                sdc4_clk, qdss_stm24, tsif2_en, sdc42, qdss_stm23, qdss_tracectl_b,
-> +                sd_card, tsif2_data, sdc41, tsif2_sync, sdc40, mdp_vsync_p_b,
-> +                ldo_en, mdp_vsync_s_b, ldo_update, blsp11_uart_tx_b, blsp11_uart_rx_b,
-> +                blsp11_i2c_sda_b, prng_rosc, blsp11_i2c_scl_b, uim2, uim1, uim_batt,
-> +                pci_e2, pa_indicator, adsp_ext, ddr_bist, qdss_tracedata_11,
-> +                qdss_tracedata_12, modem_tsync, nav_dr, nav_pps, pci_e1, gsm_tx,
-> +                qspi_cs, ssbi2, ssbi1, mss_lte, qspi_clk, qspi0, qspi1, qspi2, qspi3,
-> +                gpio ]
-> +
-> +      drive-strength:
-> +        enum: [2, 4, 6, 8, 10, 12, 14, 16]
-> +        default: 2
-> +        description:
-> +          Selects the drive strength for the specified pins, in mA.
-> +
-> +      bias-pull-down: true
-> +
-> +      bias-pull-up: true
-> +
-> +      bias-disable: true
-> +
-> +      output-high: true
-> +
-> +      output-low: true
-> +
-> +    required:
-> +      - pins
-> +      - function
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-controller
-> +  - '#interrupt-cells'
-> +  - gpio-controller
-> +  - '#gpio-cells'
-> +  - gpio-ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    tlmm: pinctrl@f100000 {
-> +        compatible = "qcom,sdx65-tlmm";
-> +        reg = <0x03000000 0xdc2000>;
-> +        gpio-controller;
-> +        #gpio-cells = <2>;
-> +        gpio-ranges = <&tlmm 0 0 109>;
-> +        interrupt-controller;
-> +        #interrupt-cells = <2>;
-> +        interrupts = <GIC_SPI 212 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +        gpio-wo-subnode-state {
-> +            pins = "gpio1";
-> +            function = "gpio";
-> +        };
-> +
-> +        uart-w-subnodes-state {
-> +            rx {
-> +                pins = "gpio4";
-> +                function = "blsp_uart1";
-> +                bias-pull-up;
-> +            };
-> +
-> +            tx {
-> +                pins = "gpio5";
-> +                function = "blsp_uart1";
-> +                bias-disable;
-> +            };
-> +        };
-> +    };
-> +...
-> -- 
-> 2.33.1
-> 
+> But if I'm not wrong there was at the start some years ago an idea of a
+> node used to declare master port separate from the generic port node but
+> it was rejected?
+
+I don't know anything about this.

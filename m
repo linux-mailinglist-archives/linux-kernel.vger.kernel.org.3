@@ -2,127 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A835477B4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB71B477B51
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240550AbhLPSKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:10:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
+        id S240571AbhLPSMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbhLPSKq (ORCPT
+        with ESMTP id S231582AbhLPSMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:10:46 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D73C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:10:46 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id p4so44679oia.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:10:46 -0800 (PST)
+        Thu, 16 Dec 2021 13:12:33 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19ABC061574;
+        Thu, 16 Dec 2021 10:12:32 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id q25so160596oiw.0;
+        Thu, 16 Dec 2021 10:12:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YOWchjxbT8awDrzH+EQqczwYeehzrW37icFRbxVUkAQ=;
-        b=diXUSroxW+klhen5e0aokPbRc6MtELRydGsQVcg5QPpNB3jlbh0BFbgVOpUV1B2N2k
-         rsIl+sIaORXmHUJfDXR8IxDUBwlxj/sEUQFQRs7uQc3P2Ife/tqMsmwynTNzkAX8bmsh
-         DQxLlSI6nJBK211xfep8+kEqLaulBRXIjREtQ=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=uAqIgqpgAc1PNcQxs6Z1Q9KRR9I+nC8P1ZUS5oFDdMo=;
+        b=RowhSE9yVrp0J4do2S5MlxnCudbS7JjDCSk8ikVrsxRhYEpBAk+RLvP0ph51nS3OrZ
+         96YveMixUItM99ua9/UwGMebN18D7ESKeKWElWT9cWUG9MDzDXWsxodsGXtKUWpThgxN
+         PT2J7AiTyKT+07WoO7bCmeXIExbAb97uxh+7JJyMM9xyR60Or4sOI1LCiBe2Rcsp54fn
+         fneXEA0itNVnX6sxJo7hEqXxEmfD4KN8TyXL2CyN7qT42Y33cIB//6RfelwSs1n4Pua8
+         EAvX+bL8vVz3egz8mKSw4XQRt1WxXwOrRCZq+LkEBMTf3gd5fZ6fqpEsU6WXXyBV//Sh
+         +hrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YOWchjxbT8awDrzH+EQqczwYeehzrW37icFRbxVUkAQ=;
-        b=AEVTdyFT2SqVDd8miUiY6OK/+dBhwEvwC6RkWcYX9/YRcVshSGe8BBqB6WrpNrDeVW
-         Cfbc6gqXoKdB4PbRYsSxsy0Yre3dQ1G9xkz5ftqn3MvY8rntwtPDWQkIaC+nUcsTs3n3
-         WWoVIZk5LCo03wB8fVRvjgDulgtpYU5+uX44XFDq5B9oV25o9q2Wutmg8Hr06vpbuF+v
-         IVxU0whjE34/FsZusEyvT7S2W8vzo+9VVR4eLHUgRnF7KUSheN0S/2h0z4gvt0wS6rRs
-         lE0mjOiyuE/OeFQ1UL0JrrkYDdtfhoV0wVYWx3a1KbqwVTEgxlWhbmDevqGLhBDBCn5X
-         Z0bA==
-X-Gm-Message-State: AOAM533gR7nN+ojB2OFziu2Pf6uUPh0NJbhdcrtTwn128EK1bcRqdcLB
-        zD4IFViZdfRvxPSqYoBMt4zKrpmm1cWDmg==
-X-Google-Smtp-Source: ABdhPJx2fKN9YY9yNoLvXf036wIVClUK3bH3oOQsgdrBK9lUanEYFkKcTyh/Gl45yxnUxnTTrQDysg==
-X-Received: by 2002:aca:ab87:: with SMTP id u129mr5105520oie.42.1639678245749;
-        Thu, 16 Dec 2021 10:10:45 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c3sm1190110oiw.8.2021.12.16.10.10.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 10:10:45 -0800 (PST)
-Subject: Re: [PATCH] docs/vm: fix Unexpected indentation warns in page_owner
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     akpm@linux-foundation.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211215001929.47866-1-skhan@linuxfoundation.org>
- <e3acf716-edd2-91d5-24c9-02c547f0d168@gmail.com>
- <f41c83f7-95f9-fd70-aa19-60887e7c4039@linuxfoundation.org>
- <ef40c328-78a7-3aeb-0dd5-8ccbd7279e53@linuxfoundation.org>
- <049f7d02-932c-b49c-4af3-10d0f3e8fdb7@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <4036edad-fd8f-6499-96d1-2ae12ddb73e9@linuxfoundation.org>
-Date:   Thu, 16 Dec 2021 11:10:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uAqIgqpgAc1PNcQxs6Z1Q9KRR9I+nC8P1ZUS5oFDdMo=;
+        b=rpTjv2p44Z5lZC8tluXj6dW5LZTwcqjW95OdwI2FJRSa0I5Li7y4ZI1b6Cxg6kLg+6
+         DKpIw33F6wpSDUrjEMD8VaIfHk4cc4BxIJAiXMPW4tytIaoZlq+fWTtujzEdupD+cAsd
+         0l2reYJmZCYfSmqKHdyhJyV93qpoNPqZ4NnA2thEaadQ6E78KA4/ixb29cr2GcysHRCj
+         NFhhTsjaulekkiYKm/5voOVALJcQvvxLPMj8uqEYLUg5wsqdiLQyS0vR0lqLVFQL81ov
+         4PMytwDJXaZmAb4QIu5HC5367i2RGAQD/wF01KZ7pwRXaCUkK9I/REzoTwaYu/NMTzQ7
+         X4VA==
+X-Gm-Message-State: AOAM532meUllkeEbocIVZN+QcEnEF/qQLpVxOl/NvPjRvbNBBhh1lSko
+        75W3HGiAb3asr0bh9Mo1XuwN9KnZeuJ1Na55mSg=
+X-Google-Smtp-Source: ABdhPJy7hj1K0C16CO5y+Is33GX1gjQQeIjqo2Oeema6LapZX7efpwR08jsn6Yi1jRP6OvaCkDmGnBYinuwkZ+tZQCc=
+X-Received: by 2002:a05:6808:10c9:: with SMTP id s9mr4994126ois.23.1639678351895;
+ Thu, 16 Dec 2021 10:12:31 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <049f7d02-932c-b49c-4af3-10d0f3e8fdb7@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211214215732.1507504-1-lee.jones@linaro.org>
+ <20211214215732.1507504-2-lee.jones@linaro.org> <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
+ <Ybtrs56tSBbmyt5c@google.com> <CADvbK_cBBDkGt8XLJo6N5TX2YQATS+udVWm8_=8f96=0B9tnTA@mail.gmail.com>
+ <Ybtzr5ZmD/IKjycz@google.com> <Ybtz/0gflbkG5Q/0@google.com>
+In-Reply-To: <Ybtz/0gflbkG5Q/0@google.com>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Thu, 16 Dec 2021 13:12:20 -0500
+Message-ID: <CADvbK_cexKiVATn=dPrWqoS0qM-bM0UcSkx8Xqz5ibEKQizDVg@mail.gmail.com>
+Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>,
+        network dev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/21 8:00 AM, Akira Yokosawa wrote:
-> On Thu, 16 Dec 2021 07:45:50 -0700, Shuah Khan wrote:
->> On 12/15/21 8:10 AM, Shuah Khan wrote:
->>> On 12/14/21 6:05 PM, Akira Yokosawa wrote:
->>>> Hi,
->>>>
->>>> On Tue, 14 Dec 2021 17:19:29 -0700, Shuah Khan wrote:
->>>>> Fix Unexpected indentation warns in page_owner:
->>>>>
->>>>> Documentation/vm/page_owner.rst:92: WARNING: Unexpected indentation.
->>>>> Documentation/vm/page_owner.rst:96: WARNING: Unexpected indentation.
->>>>> Documentation/vm/page_owner.rst:107: WARNING: Unexpected indentation.
->>>>
->>>> I guess these outputs should have been literal blocks.
->>>> Then Sphinx wouldn't complain about indentations.
->>>
->>> Good point. I will take a look and send v2.
->>>
->>
->> This is already in a literal block. A few of the lines in a literal block
->> are missing indentations - this patch is good as is.
-> 
-> Well, to show the context, embedding from current page_owner.rst.
-> My comment is on the line starting with "#".
-> 
-> -----8<------
-> 4) Analyze information from page owner::
-> 
-> 	cat /sys/kernel/debug/page_owner > page_owner_full.txt
-> 	./page_owner_sort page_owner_full.txt sorted_page_owner.txt
-> 
->     The general output of ``page_owner_full.txt`` is as follows:
-> #  ^^^ this unindent to the level of "Analyze" above ends the literal block,
-> #  so the final ":" needs to be "::".
-> 	Page allocated via order XXX, ...
-> 	PFN XXX ...
-> 	 // Detailed stack
-> 
-> 	Page allocated via order XXX, ...
-> 	PFN XXX ...
-> 	 // Detailed stack
-> -----8<------
->   
+On Thu, Dec 16, 2021 at 12:14 PM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Thu, 16 Dec 2021, Lee Jones wrote:
+>
+> > On Thu, 16 Dec 2021, Xin Long wrote:
+> >
+> > > On Thu, Dec 16, 2021 at 11:39 AM Lee Jones <lee.jones@linaro.org> wro=
+te:
+> > > >
+> > > > On Thu, 16 Dec 2021, Xin Long wrote:
+> > > >
+> > > > > On Wed, Dec 15, 2021 at 8:48 PM Jakub Kicinski <kuba@kernel.org> =
+wrote:
+> > > > > >
+> > > > > > On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
+> > > > > > > The cause of the resultant dump_stack() reported below is a
+> > > > > > > dereference of a freed pointer to 'struct sctp_endpoint' in
+> > > > > > > sctp_sock_dump().
+> > > > > > >
+> > > > > > > This race condition occurs when a transport is cached into it=
+s
+> > > > > > > associated hash table followed by an endpoint/sock migration =
+to a new
+> > > > > > > association in sctp_assoc_migrate() prior to their subsequent=
+ use in
+> > > > > > > sctp_diag_dump() which uses sctp_for_each_transport() to walk=
+ the hash
+> > > > > > > table calling into sctp_sock_dump() where the dereference occ=
+urs.
+> > > >
+> > > > > in sctp_sock_dump():
+> > > > >         struct sock *sk =3D ep->base.sk;
+> > > > >         ... <--[1]
+> > > > >         lock_sock(sk);
+> > > > >
+> > > > > Do you mean in [1], the sk is peeled off and gets freed elsewhere=
+?
+> > > >
+> > > > 'ep' and 'sk' are both switched out for new ones in sctp_sock_migra=
+te().
+> > > >
+> > > > > if that's true, it's still late to do sock_hold(sk) in your this =
+patch.
+> > > >
+> > > > No, that's not right.
+> > > >
+> > > > The schedule happens *inside* the lock_sock() call.
+> > > Sorry, I don't follow this.
+> > > We can't expect when the schedule happens, why do you think this
+> > > can never be scheduled before the lock_sock() call?
+> >
+> > True, but I've had this running for hours and it hasn't reproduced.
+I understand, but it's a crash, we shouldn't take any risk that it
+will never happen.
+you may try to add a usleep() before the lock_sock call to reproduce it.
 
-Yes. I understood you comment and made the exact change. What I wasn't
-sure about is the flow of the text in the document and if the literal
-block was just missed or the entire text is supposed to be in a single
-block.
+> >
+> > Without this patch, I can reproduce this in around 2 seconds.
+> >
+> > The C-repro for this is pretty intense!
+> >
+> > If you want to be *sure* that a schedule will never happen, we can
+> > take a reference directly with:
+> >
+> >      ep =3D sctp_endpoint_hold(tsp->asoc->ep);
+> >      sk =3D sock_hold(ep->base.sk);
+> >
+> > Which was my original plan before I soak tested this submitted patch
+> > for hours without any sign of reproducing the issue.
+we tried to not export sctp_obj_hold/put(), that's why we had
+sctp_for_each_transport().
 
-I now have a real example text from /sys/kernel/debug/page_owner to
-use a real example and fix the warn at the same time.
+ep itself holds a reference of sk when it's alive, so it's weird to do
+these 2 together.
 
-thanks,
--- Shuah
+> >
+> > > If the sock is peeled off or is being freed, we shouldn't dump this s=
+ock,
+> > > and it's better to skip it.
+> >
+> > I guess we can do that too.
+> >
+> > Are you suggesting sctp_sock_migrate() as the call site?
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index 85ac2e901ffc..56ea7a0e2add 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -9868,6 +9868,7 @@ static int sctp_sock_migrate(struct sock *oldsk,
+struct sock *newsk,
+                inet_sk_set_state(newsk, SCTP_SS_ESTABLISHED);
+        }
 
++       sock_set_flag(oldsk, SOCK_RCU_FREE);
+        release_sock(newsk);
 
+        return 0;
+
+SOCK_RCU_FREE is set to the previous sk, so that this sk will not
+be freed between rcu_read_lock() and rcu_read_unlock().
+
+>
+> Also, when are you planning on testing the flag?
+SOCK_RCU_FREE flag is used when freeing sk in sk_destruct(),
+and if it's set, it will be freed in the next grace period of RCU.
+
+>
+> Won't that suffer with the same issue(s)?
+diff --git a/net/sctp/diag.c b/net/sctp/diag.c
+index 7970d786c4a2..b4c4acd9e67e 100644
+--- a/net/sctp/diag.c
++++ b/net/sctp/diag.c
+@@ -309,16 +309,21 @@ static int sctp_tsp_dump_one(struct
+sctp_transport *tsp, void *p)
+
+ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+ {
+-       struct sctp_endpoint *ep =3D tsp->asoc->ep;
+        struct sctp_comm_param *commp =3D p;
+-       struct sock *sk =3D ep->base.sk;
+        struct sk_buff *skb =3D commp->skb;
+        struct netlink_callback *cb =3D commp->cb;
+        const struct inet_diag_req_v2 *r =3D commp->r;
+        struct sctp_association *assoc;
++       struct sctp_endpoint *ep;
++       struct sock *sk;
+        int err =3D 0;
+
++       rcu_read_lock();
++       ep =3D tsp->asoc->ep;
++       sk =3D ep->base.sk;
+        lock_sock(sk);
++       if (tsp->asoc->ep !=3D ep)
++               goto release;
+        list_for_each_entry(assoc, &ep->asocs, asocs) {
+                if (cb->args[4] < cb->args[1])
+                        goto next;
+@@ -358,6 +363,7 @@ static int sctp_sock_dump(struct sctp_transport
+*tsp, void *p)
+        cb->args[4] =3D 0;
+ release:
+        release_sock(sk);
++       rcu_read_unlock();
+        return err;
+ }
+
+rcu_read_lock() will make sure sk from tsp->asoc->ep->base.sk will not
+be freed until rcu_read_unlock().
+
+That's all I have. Do you see any other way to fix this?
+
+Thanks.
+
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+> Senior Technical Lead - Developer Services
+> Linaro.org =E2=94=82 Open source software for Arm SoCs
+> Follow Linaro: Facebook | Twitter | Blog

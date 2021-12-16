@@ -2,202 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94874476C0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AF8476BB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234934AbhLPIep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 03:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbhLPIej (ORCPT
+        id S229521AbhLPIPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 03:15:13 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:61323 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229471AbhLPIPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 03:34:39 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41A8C06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:34:38 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id b22so3623780lfb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:34:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kempniu.pl; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qwPD1oVoFMF1xKkNcH8JUWEtU0QdLAHfHEEI/7F8aYs=;
-        b=kuSV+mGPbS8eFy6r2iWUhUbWbv7aYfipqFVAu0qdsjtK16/kUISpJXaqm2zT5lmpYP
-         ywVZiFfLgZjgz+uoLgaTovuG8o6zFid7nhx6NfZf+zsq6NPPvxAU73tNN6UFssA69rOD
-         tTk+HJsco+i092uvMLHhr9ZXWVqyGG761JsgI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qwPD1oVoFMF1xKkNcH8JUWEtU0QdLAHfHEEI/7F8aYs=;
-        b=H9eD9gq3HaPumeACs3Ql6yyqnHWneBjAVVQkBgxERLQ3TR3CTFb4HGtc7MjXJnJXku
-         e4SzonYlXW/ap7UsNJACNSaxLJRemrjsneKxl5GFJViws5kPLZx4nCymBVQ4gOyOLCGJ
-         VQi7DyWixF/wy75SAAItjpH2JMXJS53ZLKIpq9jAAnhP0s5Jlb9X6lUo/jDAPojHkG3s
-         o8mmrqjEhOCDD4JDaHTyaw07PxUSAKlxbOU8ZlnRCIPeWk0mXiruaGdlfcLPWIXDfYvX
-         qtmkf6pG++06gQjh4IDLoehHy/GrU9UCXVvHlzHLhqxI2ywkWlstXnuTpSe4mcmmw9eA
-         RYng==
-X-Gm-Message-State: AOAM530qc4dRaKCTvs7MNdKcAutavk4zjCo0JCXxMndOcqOG40IJkQcc
-        NgWeGqB1tdb/Pa+ptA85Z2Q1yA==
-X-Google-Smtp-Source: ABdhPJzOFC29Fkjce3PbS8M3TLJIzWi4sdkId0NcfoQej12qB3XgRav1dnZstsrb/rUGigQkcVljew==
-X-Received: by 2002:ac2:4c55:: with SMTP id o21mr13343931lfk.408.1639643675579;
-        Thu, 16 Dec 2021 00:34:35 -0800 (PST)
-Received: from larwa.hq.kempniu.pl ([2001:470:64df:111::e02])
-        by smtp.gmail.com with ESMTPSA id c2sm985679ljf.50.2021.12.16.00.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 00:34:35 -0800 (PST)
-From:   =?UTF-8?q?Micha=C5=82=20K=C4=99pie=C5=84?= <kernel@kempniu.pl>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] mtdchar: extend MEMREAD ioctl to return ECC statistics
-Date:   Thu, 16 Dec 2021 09:34:18 +0100
-Message-Id: <20211216083418.13512-6-kernel@kempniu.pl>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211216083418.13512-1-kernel@kempniu.pl>
-References: <20211216083418.13512-1-kernel@kempniu.pl>
+        Thu, 16 Dec 2021 03:15:11 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20211216081510epoutp02b391dc3d35fc1acf882cb154cffd569e~BLiz7KZs11317913179epoutp02P
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 08:15:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20211216081510epoutp02b391dc3d35fc1acf882cb154cffd569e~BLiz7KZs11317913179epoutp02P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1639642510;
+        bh=LMoxrbyqzv20TkTPVfqQqFh9NWqqZbffNlA4jYTh2xI=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=QXK1YQUzXSwT0C5++zF5V7T1d30lDcmHSp+QHcBq5Jhgpo/gWrn2ht67eWOEm/FT9
+         ptD19txcKzwtemDkTw0PF2upP+RW1IGYep8efIsCY+LK1MIoLmaZ1XS3/SrJFP1wgp
+         r9GvR+c4dIHe3OovoFwwy4PaaEy6OvXYbZkcdkFk=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20211216081509epcas1p1e9ead12c5b6fa306927d4bf12bbed6a6~BLizYNhSK1324013240epcas1p1i;
+        Thu, 16 Dec 2021 08:15:09 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.234]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4JF4fc61kVz4x9Q6; Thu, 16 Dec
+        2021 08:15:04 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3F.5F.28648.885FAB16; Thu, 16 Dec 2021 17:15:04 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20211216081504epcas1p3ebfe072845fe7cfd4833b2b57199a701~BLiuqPFcm3128431284epcas1p3S;
+        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211216081504epsmtrp28351954c144e9d5dabafad852521baff~BLiupWzCX0525305253epsmtrp2h;
+        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
+X-AuditID: b6c32a39-813e6a8000006fe8-49-61baf588bc05
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E7.97.29871.785FAB16; Thu, 16 Dec 2021 17:15:03 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20211216081504epsmtip2961137dfcc552c1938690c9107d01b63~BLiuUkrE02233122331epsmtip29;
+        Thu, 16 Dec 2021 08:15:04 +0000 (GMT)
+Subject: Re: [PATCH v2] extcon: fix extcon_get_extcon_dev() error handling
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <c8d18573-5dc1-4d45-f134-2a1dbb7590b6@samsung.com>
+Date:   Thu, 16 Dec 2021 17:38:04 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211216080558.GE1978@kadam>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHJsWRmVeSWpSXmKPExsWy7bCmvm7H112JBpcOa1gca3vCbvH633QW
+        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
+        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
+        5AI4o7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4BO
+        V1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBboFSfmFpfmpevlpZZYGRoYGJkC
+        FSZkZ3Rfm8JWcICv4tHNy6wNjGe5uxg5OSQETCQu3OhlB7GFBHYwSpxc79vFyAVkf2KUuPbs
+        BSOE841RYv2tOewwHZu7trNDJPYySmz7sIwJwnnPKPHx4UNGkCphAS+JrtmH2EBsEQEdicud
+        P8A6mAWuM0v0nd/NBJJgE9CS2P/iBlgRv4CixNUfj8GaeQXsJF7/eQQWZxFQlZjW08QKYosK
+        hEmc3NYCVSMocXLmExYQmxNozpe9h8HizALiEreezGeCsOUltr+dwwyyWELgCYfE/mvX2CB+
+        cJFYP7sP6h9hiVfHt0DZUhKf3+1lg2hYxijxa3InE4SznlHi5axOZogqY4n9SycDJTiAVmhK
+        rN+lDxFWlNj5ey7UFXwS7772sIKUSAjwSnS0CUGUKEtcfnCXCcKWlFjc3sk2gVFpFpJ/ZiH5
+        YRaSH2YhLFvAyLKKUSy1oDg3PbXYsMAUHt/J+bmbGMEJW8tyB+P0tx/0DjEycTAeYpTgYFYS
+        4X0SsStRiDclsbIqtSg/vqg0J7X4EKMpMIQnMkuJJucDc0ZeSbyhiaWBiZmRsYmFoZmhkjjv
+        c//piUIC6YklqdmpqQWpRTB9TBycUg1MXh2CPy6/N76yW0rA7OwSl819SQdEJaKnd1+Xc/2a
+        uytYbIH1KzPN6R+eMt5xcsj8EXDu7b7Nql9XXDkYtqst9rpT/FURLpFPJ67sDtjw8nS3e2Us
+        x4xZ+/bMyrDdte/11+cPv3TrRO8OvTTn+KKgB/Xx4ucXGBw990Oipo/pfUB335pG/slzL1qc
+        5v7r5xlforZqQ+Vr2TvM0fovbHWVpr5fn1XwWImn32xOWtV8O2P2gjMx9vl+/0Tvr3zEeyLs
+        Q7Th/Y2GK38uS5z8zG/y9RfSStE5t/W+yUVsu75EqUGj3nvexL8Cq876vTHavjfFIFgpM7HZ
+        W3LpX+3DBya1F/as0BOZruI0c0fczw9/xZVYijMSDbWYi4oTASnbrTthBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBIsWRmVeSWpSXmKPExsWy7bCSvG77112JBnOPm1sca3vCbvH633QW
+        i+bF69ks3hyfzmTRtXoni8XWW9IWl3fNYbOYvaSfxeJz7xFGi0XLWpktniw8w2Rxu3EFm8Xp
+        3SUWPw+dZ3Lg89jwaDWrx6ZVnWwe804Geuyfu4bd4+PTWywe7/ddZfPY+b2B3aNvyypGj8+b
+        5AI4o7hsUlJzMstSi/TtErgyuq9NYSs4wFfx6OZl1gbGs9xdjJwcEgImEpu7trN3MXJxCAns
+        ZpQ4MXkrK0RCUmLaxaPMXYwcQLawxOHDxRA1b4FqzqwDqxEW8JLomn2IDcQWEdCRuNz5A2wQ
+        s8BtZommY0+YITqWMUkcWLWDGaSKTUBLYv+LG2Ad/AKKEld/PGYEsXkF7CRe/3kEFmcRUJWY
+        1tMEtkFUIExi55LHTBA1ghInZz5hAbE5geZ82XsYrJdZQF3iz7xLzBC2uMStJ/OZIGx5ie1v
+        5zBPYBSehaR9FpKWWUhaZiFpWcDIsopRMrWgODc9t9iwwDAvtVyvODG3uDQvXS85P3cTIzhy
+        tTR3MG5f9UHvECMTB+MhRgkOZiUR3icRuxKFeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkv
+        JJCeWJKanZpakFoEk2Xi4JRqYLIxX61gsu2MvXvbvtg0gcMfTu7VPeP3TqWmwt6oqEjwf97l
+        hQp9idnslRIl334smlWgP3/fXgGno985qyzzCs78lOR2UJ1cbRjFFr+9RNXe5rPhN8nbZx8Y
+        KE3jnqAnUv5EUkVJvNlD+3rr+Rr31ykWO2I1710VcHn0smHqy/N1V6uO6tjbnnGRcClm2Ffb
+        nVJ/qmDVXvPPT/mnOUc7iqyv2r5tk22Rmq2A0Jv34kI8JxM7nC956VzLbbz/YGJzpv1Sy8sN
+        G+03WE/OTVm6TFzsUupZ/lRz28dPEkr9F0cpfZxieXtPwNavGaKT2uu4f91Ml0nacfcIy6Rt
+        hbtnm3V8jNvbyr/9I+fWzPXPlFiKMxINtZiLihMBlgKyGEsDAAA=
+X-CMS-MailID: 20211216081504epcas1p3ebfe072845fe7cfd4833b2b57199a701
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211123084357epcas1p14833147710153f9606f14941ac8b0d96
+References: <CGME20211123084357epcas1p14833147710153f9606f14941ac8b0d96@epcas1p1.samsung.com>
+        <20211123083925.GA3277@kili>
+        <562b12ff-e395-c818-787e-7fd6ee6d53fb@samsung.com>
+        <20211216075233.GD1978@kadam>
+        <b4d0c326-3122-c5f9-f376-b122f263d92c@samsung.com>
+        <20211216080558.GE1978@kadam>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While returning -EUCLEAN or -EBADMSG is a valid signal for user space
-that the ECC algorithm detected errors during a read operation, that
-signal is not granular enough to cover all use cases.  For example,
-knowing the maximum number of bitflips detected in a single ECC step
-during a read operation performed on a given page may be useful when
-dealing with an MTD partition whose ECC layout varies across pages (e.g.
-a partition consisting of a bootloader area using a "custom" ECC layout
-followed by data pages using a "standard" ECC layout).
+On 12/16/21 5:05 PM, Dan Carpenter wrote:
+> On Thu, Dec 16, 2021 at 05:24:30PM +0900, Chanwoo Choi wrote:
+>> On 12/16/21 4:52 PM, Dan Carpenter wrote:
+>>> On Thu, Dec 16, 2021 at 03:39:46PM +0900, Chanwoo Choi wrote:
+>>>> Hi Dan,
+>>>>
+>>>> First of all,  sorry for late reply.
+>>>>
+>>>> There is one issue. About this issue, I already discussed on patch[1]
+>>>> [1] https://lore.kernel.org/lkml/5BEB63C3.1020504@samsung.com/  
+>>>>
+>>>> extcon_get_extcon_dev() is used for anywhere except for probe step.
+>>>> But EPROBE_DEFER is only used on probe step.
+>>>>
+>>>> So that it is not clear to return EPROBE_DEFER from extcon_get_extcon_dev()
+>>>> because extcon_get_extcon_dev() never know either call it on probe function
+>>>> or not.
+>>>
+>>> Currently extcon_get_extcon_dev() is only called from probe so it's not
+>>> an issue.
+>>
+>> Even if extcon_get_extcon_dev() is used on probe until now,
+>> it is possible to use on anywhere as I commented.
+>>
+>> It is difficult to agree this approach without any other solution.
+>>
+>> Basically, the subsystem core never know either probe time or not.
+>> It means that this issue should be handled in each device driver.
+>>
+> 
+> To be honest, I'm not sure how this differs from other functions which
+> return -EPROBE_DEFER.  How do other functions guarantee they will only
+> be called from probe()?
 
-Extend struct mtd_read_req with a newly introduced struct
-mtd_read_req_ecc_stats and set the fields of that structure in
-mtdchar_read_ioctl().  Use ECC statistics to ensure the error code
-returned by the MEMREAD ioctl accounts for all ECC errors detected
-during the read operation.
+If it is possible to know extcon_get_extcon_dev() will be only callled on probe,
+it is no problem. But, it is not able to guarantee that extcon_get_extcon_dev()
+is called on probe. Because of this reason, this issue should be handled in each device driver.
 
-Link: https://www.infradead.org/pipermail/linux-mtd/2016-April/067085.html
+-EPROBE_DEFER is only for probe step. If return -EPROBE_DEFER except for probe,
+it is wrong return value.
 
-Suggested-by: Boris Brezillon <boris.brezillon@collabora.com>
-Signed-off-by: Michał Kępień <kernel@kempniu.pl>
----
- drivers/mtd/mtdchar.c      | 26 ++++++++++++++++++++++++++
- include/uapi/mtd/mtd-abi.h | 21 +++++++++++++++++++++
- 2 files changed, 47 insertions(+)
 
-diff --git a/drivers/mtd/mtdchar.c b/drivers/mtd/mtdchar.c
-index 6ad59c9eed2f..68cc91d82a5d 100644
---- a/drivers/mtd/mtdchar.c
-+++ b/drivers/mtd/mtdchar.c
-@@ -714,6 +714,10 @@ static int mtdchar_read_ioctl(struct mtd_info *mtd,
- 	if (!usr_oob)
- 		req.ooblen = 0;
- 
-+	req.ecc_stats.uncorrectable_errors = 0;
-+	req.ecc_stats.corrected_bitflips = 0;
-+	req.ecc_stats.max_bitflips = 0;
-+
- 	if (req.start + req.len > mtd->size) {
- 		ret = -EINVAL;
- 		goto out;
-@@ -738,12 +742,14 @@ static int mtdchar_read_ioctl(struct mtd_info *mtd,
- 	}
- 
- 	while (req.len > 0 || (!usr_data && req.ooblen > 0)) {
-+		struct mtd_req_stats stats;
- 		struct mtd_oob_ops ops = {
- 			.mode = req.mode,
- 			.len = min_t(size_t, req.len, datbuf_len),
- 			.ooblen = min_t(size_t, req.ooblen, oobbuf_len),
- 			.datbuf = datbuf,
- 			.oobbuf = oobbuf,
-+			.stats = &stats,
- 		};
- 
- 		/*
-@@ -757,6 +763,13 @@ static int mtdchar_read_ioctl(struct mtd_info *mtd,
- 			ops.len -= mtd_mod_by_ws(req.start + ops.len, mtd);
- 
- 		ret = mtd_read_oob(mtd, (loff_t)req.start, &ops);
-+
-+		req.ecc_stats.uncorrectable_errors +=
-+			stats.uncorrectable_errors;
-+		req.ecc_stats.corrected_bitflips += stats.corrected_bitflips;
-+		req.ecc_stats.max_bitflips =
-+			max(req.ecc_stats.max_bitflips, stats.max_bitflips);
-+
- 		if (ret && !mtd_is_bitflip_or_eccerr(ret))
- 			break;
- 
-@@ -774,6 +787,19 @@ static int mtdchar_read_ioctl(struct mtd_info *mtd,
- 		usr_oob += ops.oobretlen;
- 	}
- 
-+	/*
-+	 * As multiple iterations of the above loop (and therefore multiple
-+	 * mtd_read_oob() calls) may be necessary to complete the read request,
-+	 * adjust the final return code to ensure it accounts for all detected
-+	 * ECC errors.
-+	 */
-+	if (!ret || mtd_is_bitflip(ret)) {
-+		if (req.ecc_stats.uncorrectable_errors > 0)
-+			ret = -EBADMSG;
-+		else if (req.ecc_stats.corrected_bitflips > 0)
-+			ret = -EUCLEAN;
-+	}
-+
- out:
- 	req.len = orig_len - req.len;
- 	req.ooblen = orig_ooblen - req.ooblen;
-diff --git a/include/uapi/mtd/mtd-abi.h b/include/uapi/mtd/mtd-abi.h
-index 337e6e597fad..bc68f266c174 100644
---- a/include/uapi/mtd/mtd-abi.h
-+++ b/include/uapi/mtd/mtd-abi.h
-@@ -91,6 +91,25 @@ struct mtd_write_req {
- 	__u8 padding[7];
- };
- 
-+/**
-+ * struct mtd_read_req_ecc_stats - ECC statistics for a read operation
-+ *
-+ * @uncorrectable_errors: the number of uncorrectable errors that happened
-+ *			  during the read operation
-+ * @corrected_bitflips: the number of bitflips corrected during the read
-+ *			operation
-+ * @max_bitflips: the maximum number of bitflips detected in any single ECC
-+ *		  step for the data read during the operation; this information
-+ *		  can be used to decide whether the data stored in a specific
-+ *		  region of the MTD device should be moved somewhere else to
-+ *		  avoid data loss.
-+ */
-+struct mtd_read_req_ecc_stats {
-+	__u32 uncorrectable_errors;
-+	__u32 corrected_bitflips;
-+	__u32 max_bitflips;
-+};
-+
- /**
-  * struct mtd_read_req - data structure for requesting a read operation
-  *
-@@ -101,6 +120,7 @@ struct mtd_write_req {
-  * @usr_oob:	user-provided OOB buffer
-  * @mode:	MTD mode (see "MTD operation modes")
-  * @padding:	reserved, must be set to 0
-+ * @ecc_stats:	ECC statistics for the read operation
-  *
-  * This structure supports ioctl(MEMREAD) operations, allowing data and/or OOB
-  * reads in various modes. To read from OOB-only, set @usr_data == NULL, and to
-@@ -115,6 +135,7 @@ struct mtd_read_req {
- 	__u64 usr_oob;
- 	__u8 mode;
- 	__u8 padding[7];
-+	struct mtd_read_req_ecc_stats ecc_stats;
- };
- 
- #define MTD_ABSENT		0
+
+> 
+> regards,
+> dan carpenter
+> 
+> 
+> 
+
+
 -- 
-2.34.1
-
+Best Regards,
+Chanwoo Choi
+Samsung Electronics

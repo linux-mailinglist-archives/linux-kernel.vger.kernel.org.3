@@ -2,88 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9318476E85
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5017476E81
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235688AbhLPKIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:08:15 -0500
-Received: from mx1.cqplus1.com ([113.204.237.245]:34932 "EHLO test.cqplus1.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233509AbhLPKIN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:08:13 -0500
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(4800:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Thu, 16 Dec 2021 18:06:36 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 16 Dec 2021 18:06:28 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2375.017; Thu, 16 Dec 2021 18:06:28 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "stefan.wahren@i2se.com" <stefan.wahren@i2se.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: RE: [PATCH v6 08/10] irqchip: Add Sunplus SP7021 interrupt controller
- driver
-Thread-Topic: [PATCH v6 08/10] irqchip: Add Sunplus SP7021 interrupt
- controller driver
-Thread-Index: AQHX8kzEkLzYBdbKnUiMsYSthxYJfqw0SZIAgACaTVA=
-Date:   Thu, 16 Dec 2021 10:06:27 +0000
-Message-ID: <e150f340a98b49a2b6958bc0f0530214@cqplus1.com>
-References: <cover.1639560427.git.qinjian@cqplus1.com>
-        <677ce3dd9b4650521968d6cb50999608b5136ddd.1639560427.git.qinjian@cqplus1.com>
- <87tuf9vso3.wl-maz@kernel.org>
-In-Reply-To: <87tuf9vso3.wl-maz@kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S235661AbhLPKHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:07:00 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:35738 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233509AbhLPKG7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 05:06:59 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 159D121135;
+        Thu, 16 Dec 2021 10:06:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639649218; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VpOyYPzrJPViyp7lDRITLnqget4cWYYPOCSwbQb88eE=;
+        b=m7081hmRSBuK4ZT+cuP0DfyDYG3Lp1S8lxpUU0AN75s1jXLJia9tiCruyVstehA5cvZN0G
+        rNBMSo5h6LYMe2Dv9uaAIlGksuqp4OyR5F31fxgkF7MfMyH77tw0Z6ePd+33MnCmUAQeaB
+        vcz6TbiEgai+N51hEjNl93mQ0veqfVA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639649218;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VpOyYPzrJPViyp7lDRITLnqget4cWYYPOCSwbQb88eE=;
+        b=owc3G8Ef750eWTt6rRdVwABygi8DF9CA0i4zdRT0cbH0kk/UJo8Q2HyRDP210HRmq4Q7dt
+        ea6mQG7cgYdxU7CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DCF2E13DF8;
+        Thu, 16 Dec 2021 10:06:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id z9PmNcEPu2FjFwAAMHmgww
+        (envelope-from <bp@suse.de>); Thu, 16 Dec 2021 10:06:57 +0000
+Date:   Thu, 16 Dec 2021 11:06:59 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Yin Fengwei <fengwei.yin@intel.com>
+Cc:     Carel Si <beibei.si@intel.com>, Joerg Roedel <jroedel@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        lkp@lists.01.org, lkp@intel.com
+Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
+ BUG:kernel_reboot-without-warning_in_boot_stage
+Message-ID: <YbsPwyLnejLQMbTb@zn.tnic>
+References: <20211209144141.GC25654@xsang-OptiPlex-9020>
+ <YbjIoewxGaodXHKF@zn.tnic>
+ <20211215070012.GA26582@linux.intel.com>
+ <Ybm96seTxl+pWjTX@zn.tnic>
+ <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBNYXJjIFp5bmdpZXIgPG1hekBrZXJuZWwub3JnPg0KPiBTZW50OiBUaHVyc2RheSwg
-RGVjZW1iZXIgMTYsIDIwMjEgNDo1MiBQTQ0KPiBUbzogcWluamlhblvopoPlgaVdIDxxaW5qaWFu
-QGNxcGx1czEuY29tPg0KPiBDYzogcm9iaCtkdEBrZXJuZWwub3JnOyBtdHVycXVldHRlQGJheWxp
-YnJlLmNvbTsgc2JveWRAa2VybmVsLm9yZzsgdGdseEBsaW51dHJvbml4LmRlOyBwLnphYmVsQHBl
-bmd1dHJvbml4LmRlOw0KPiBsaW51eEBhcm1saW51eC5vcmcudWs7IGJyb29uaWVAa2VybmVsLm9y
-ZzsgYXJuZEBhcm5kYi5kZTsgc3RlZmFuLndhaHJlbkBpMnNlLmNvbTsgbGludXgtYXJtLWtlcm5l
-bEBsaXN0cy5pbmZyYWRlYWQub3JnOw0KPiBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGlu
-dXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXgtY2xrQHZnZXIua2VybmVsLm9yZzsgV2Vs
-bHMgTHUg5ZGC6Iqz6aiwIDx3ZWxscy5sdUBzdW5wbHVzLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQ
-QVRDSCB2NiAwOC8xMF0gaXJxY2hpcDogQWRkIFN1bnBsdXMgU1A3MDIxIGludGVycnVwdCBjb250
-cm9sbGVyIGRyaXZlcg0KPiANCj4gT24gVGh1LCAxNiBEZWMgMjAyMSAwNzowODoxMCArMDAwMCwN
-Cj4gUWluIEppYW4gPHFpbmppYW5AY3FwbHVzMS5jb20+IHdyb3RlOg0KPiA+DQo+ID4gQWRkIGlu
-dGVycnVwdCBjb250cm9sbGVyIGRyaXZlciBmb3IgU3VucGx1cyBTUDcwMjEgU29DLg0KPiA+DQo+
-ID4gVGhpcyBpcyB0aGUgaW50ZXJydXB0IGNvbnRyb2xsZXIgaW4gUC1jaGlwIHdoaWNoIGNvbGxl
-Y3RzIGFsbCBpbnRlcnJ1cHQNCj4gPiBzb3VyY2VzIGluIFAtY2hpcCBhbmQgcm91dGVzIHRoZW0g
-dG8gcGFyZW50IGludGVycnVwdCBjb250cm9sbGVyIGluIEMtY2hpcC4NCj4gPg0KPiA+IFNpZ25l
-ZC1vZmYtYnk6IFFpbiBKaWFuIDxxaW5qaWFuQGNxcGx1czEuY29tPg0KPiA+IC0tLQ0KPiA+IEZp
-eCB0aGUgY29tbWVudHMgZnJvbSBNYXJjLg0KPiANCj4gTm8sIHlvdSBkaWRuJ3QuDQo+IA0KPiA+
-ICt2b2lkIHNwX2ludGNfc2V0X2V4dCh1MzIgaHdpcnEsIGludCBleHRfbnVtKQ0KPiA+ICt7DQo+
-ID4gKwlzcF9pbnRjX2Fzc2lnbl9iaXQoaHdpcnEsIFJFR19JTlRSX1BSSU9SSVRZLCAhZXh0X251
-bSk7DQo+ID4gK30NCj4gPiArRVhQT1JUX1NZTUJPTF9HUEwoc3BfaW50Y19zZXRfZXh0KTsNCj4g
-DQo+IEkgYWxyZWFkeSBjb21tZW50ZWQgb24gdGhpcy4gSW4gY2FzZSBpdCB3YXNuJ3QgY2xlYXIs
-IHRoaXMgaXMgYSBzdHJvbmcNCj4gTkFLIHRvIHJhbmRvbSBsb3ctbGV2ZWwgaGFja3MgbGlrZSB0
-aGlzLg0KPiANCg0KWWVzLCBJIGp1c3QgZm9yZ290IGRlbGV0ZSB0aGlzLg0KU29ycnkgZm9yIG15
-IG1pc3Rha2UsIEknbGwgZml4IGl0IG9uIG5leHQgY29tbWl0Lg0K
+On Thu, Dec 16, 2021 at 03:04:16PM +0800, Yin Fengwei wrote:
+> The testing was with Qemu.
+
+This is hardly what I asked for.
+
+> And we found that the hang is related with clang-14.
+
+I saw that already.
+
+> The original report showed the kernel is built with clang-14:
+>         # build kernel
+> 	cd linux
+> 	cp config-5.16.0-rc3-00003-gf154f290855b .config
+> 	make HOSTCC=clang-14 CC=clang-14 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+> 	make HOSTCC=clang-14 CC=clang-14 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+
+I saw that too.
+
+> Looks like KASAN related stub generated by clang-14 (KASAN_SHADOW_OFFSET and asan_report).
+> This function is early function called before kasan_init.
+> 
+> Looks like we need to disable KASAN_SANITIZE for arch/x86/kernel/cpu/common.c. So clang-14 will
+> be happy with this kind of early TLB flush? Thanks.
+
+Ok, I don't understand: I asked for how exactly to reproduce and whether
+you can send me your vmlinux you built with your clang-14. What I get is
+some possible explanation about what might be happening.
+
+So what do you expect me to do? Say, "oh, sure, you're right, send me a
+patch" without even being able to see for myself what the root cause is?
+
+What if it is not the kernel's fault but clang-14 is miscompiling crap
+as in so many other cases?
+
+I built clang-14 and built with your .config and it works here fine. So
+why does yours fail?
+
+Or what's the point of all this?
+
+I mean, if you cannot send me what I ask for, you can say so. Then I can
+ignore this whole report altogether and waste my time somewhere else.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

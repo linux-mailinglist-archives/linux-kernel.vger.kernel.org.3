@@ -2,138 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 168B8477433
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C86E477436
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbhLPOQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:16:10 -0500
-Received: from mga03.intel.com ([134.134.136.65]:18329 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229612AbhLPOQJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:16:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639664169; x=1671200169;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=621safIb6bZUJucghAaAXD0yFhuNm0A5U0sV7yFBEhU=;
-  b=UhuLWU0CQ9+5wqBDn+PndRUoHthqAtzpX4KQORNXtsDvrPOpzNQwRDwE
-   5/LjedFOO/EiLemFPO5dJ5QvQxu+NAv9FOo3zoVwdg0LjqO9hjEPcz6B2
-   gctfSnYzKCRIXaJ0IqqDo+6Qf1Zl6YHgzNr+Lfam8eo8fW+5oDljrPGi8
-   c4JLx/U98S1cA4ELfNsWAD6Vu8IlMZMhIlj0sowCz5kPJPpPwPxnP+MZD
-   ZWRH9MW/+hjU+VDtgajjIpRDyDhqrwX7hux3PN1vrzBGCAK+8Gi051Zyo
-   mYWd8K2JDklJkLPhVN5rMmTxRPvN+OCBPn5wJm3ddTHoGnNLXSAhmRRL3
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="239450345"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="239450345"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 06:16:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="605535019"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Dec 2021 06:16:07 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxrYE-0003JX-R5; Thu, 16 Dec 2021 14:16:06 +0000
-Date:   Thu, 16 Dec 2021 22:15:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lauri Kasanen <cand@gmx.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/lib/uncached.c:50 run_uncached() warn: always true
- condition '(sp >= (9223372036854775808 | ((0) << 59) | (0))) =>
- (s64min-s64max >= s64min)'
-Message-ID: <202112162231.WVjq5Lh3-lkp@intel.com>
+        id S234922AbhLPOR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:17:28 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:37760
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229792AbhLPOR2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 09:17:28 -0500
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EC75D3FFD9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 14:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639664246;
+        bh=hXcKig2BTgNYlsnaKeNaeezzj0lAoxAXYJuGyAPXer0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=tATwKonCqcd9rCmNOWVVvMgx/DZLUwWeMkhoVI9TkSV9VOH50u7t0PwKR5Hb3vvR2
+         QYun/xsgaMt6MUO5RmjEoGB6bk9A+uvkRe1ejxI8A1rwn9zTCXu/+DNgI2FH7itrwD
+         /LmXVr8M+2PHUBy+Gl1TcRbt1fobxxKbwuk4DxVZV8Sxe5z5etG32gJh1ugqHWk7H0
+         5HM5sAIXOf0PsJrPRylDs8Fz1f0dO76ZBRFh/VwSa/kHPMdHfGcy3jgEfFRr2qqkY6
+         t1s0Bg6SF8SkZBcC8O8YaaSAoPqUSy8DdM2QP4yaA+uZCuewF1XuppPraDfqp0yzYR
+         G4kli7fXlyhKA==
+Received: by mail-wm1-f69.google.com with SMTP id j71-20020a1c234a000000b00342f418ae7cso1343229wmj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:17:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hXcKig2BTgNYlsnaKeNaeezzj0lAoxAXYJuGyAPXer0=;
+        b=gdoiQ9kzu4BY6e38fcuCC2FqG0ff0oSFM94b4ob9i2wkJgf5Wx3OSvGvmyOAdLhXTa
+         EPLdHteaJRpfe//adQojmZDbS3ow54/GByd37okw+vwnZ2gYniInHKEvgZKxyvqHh4RG
+         KyvexUKkCGs2YopcPZ/64XuQLpCwl/6+9XtT00LkWDVCslFcJ0BNQ0+9Z/KL4V7iu6lc
+         ah8mVR9s2R7Ulz5OVTFvrW/dC/XBnhIe0vZ7siRgQJ0mKMFec7fb93zEBEZQPguC3FsS
+         WTU3Ids7GI1BbgqZ7AFuHxUhsyK7rRNFmSSBxOWtQDyUsskomu6LSmS/UNeIxecSTDMR
+         Kb9Q==
+X-Gm-Message-State: AOAM531Fqtb57CW/XcBCugIjq25gPwznpJ+n2pe95es+tWo/NBSUslva
+        znvBReq87RgKS/za2ougvbwempK9ERA739EBYbtUglgY+dvKlrRBkRIZ8VpI/mQrNOZNqv8x+Cl
+        xDfa69On4awWli8nJ+ibb6+a8MzGAkIiXKigzV5s5TA==
+X-Received: by 2002:adf:f04d:: with SMTP id t13mr9316094wro.324.1639664246526;
+        Thu, 16 Dec 2021 06:17:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyQzaGzh5uSvdXoD/U0jonieRUBkngZQxVU6MeqdFjuxxNDCLX8Dbfju2GouOfAFj1rfc6n9A==
+X-Received: by 2002:adf:f04d:: with SMTP id t13mr9316079wro.324.1639664246280;
+        Thu, 16 Dec 2021 06:17:26 -0800 (PST)
+Received: from [192.168.123.55] (ip-88-152-144-157.hsi03.unitymediagroup.de. [88.152.144.157])
+        by smtp.gmail.com with ESMTPSA id o2sm3822032wru.109.2021.12.16.06.17.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 06:17:25 -0800 (PST)
+Message-ID: <fd40010f-f2ec-b32a-6850-1e054af43725@canonical.com>
+Date:   Thu, 16 Dec 2021 15:17:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/1] riscv: default to CONFIG_RISCV_SBI_V01=n
+Content-Language: en-US
+To:     Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211216123538.175087-1-heinrich.schuchardt@canonical.com>
+ <BC1B38E7-1170-4C05-948A-D18E80AC49E7@jrtc27.com>
+From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+In-Reply-To: <BC1B38E7-1170-4C05-948A-D18E80AC49E7@jrtc27.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lauri,
+On 12/16/21 14:49, Jessica Clarke wrote:
+> On 16 Dec 2021, at 12:35, Heinrich Schuchardt <heinrich.schuchardt@canonical.com> wrote:
+>>
+>> The SBI 0.1 specification is obsolete. The current version is 0.3.
+>> Hence we should not rely by default on SBI 0.1 being implemented.
+> 
+> It’s what BBL implements, and some people are still using it,
+> especially given early hardware shipped before OpenSBI grew in
+> popularity.
+> 
+> Jess
+> 
 
-First bad commit (maybe != root cause):
+Do you mean BBL is not developed anymore?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2b14864acbaaf03d9c01982e243a84632524c3ac
-commit: baec970aa5ba11099ad7a91773350c91fb2113f0 mips: Add N64 machine type
-date:   11 months ago
-config: mips-randconfig-m031-20211216 (https://download.01.org/0day-ci/archive/20211216/202112162231.WVjq5Lh3-lkp@intel.com/config)
-compiler: mips64-linux-gcc (GCC) 11.2.0
+Some people may still be using a 0.1 SBI. But that minority stuck on an 
+outdated software stack does not justify defaulting to deprecated 
+settings in future Linux releases.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Best regards
 
-New smatch warnings:
-arch/mips/lib/uncached.c:50 run_uncached() warn: always true condition '(sp >= (9223372036854775808 | ((0) << 59) | (0))) => (s64min-s64max >= s64min)'
-arch/mips/lib/uncached.c:62 run_uncached() warn: always true condition '(lfunc >= (9223372036854775808 | ((0) << 59) | (0))) => (s64min-s64max >= s64min)'
-arch/mips/kernel/unaligned.c:347 emulate_load_store_insn() warn: ignoring unreachable code.
-arch/mips/kernel/unaligned.c:1136 emulate_load_store_microMIPS() warn: ignoring unreachable code.
-arch/mips/kernel/unaligned.c:1402 emulate_load_store_MIPS16e() warn: ignoring unreachable code.
-arch/mips/math-emu/dsemul.c:264 mips_dsemul() warn: 'break_math' 33685517 can't fit into 65535 '*(_badinst.halfword[1])'
-kernel/bpf/ringbuf.c:334 __bpf_ringbuf_reserve() error: uninitialized symbol 'flags'.
-
-Old smatch warnings:
-arch/mips/kernel/unaligned.c:370 emulate_load_store_insn() warn: ignoring unreachable code.
-arch/mips/kernel/unaligned.c:433 emulate_load_store_insn() warn: ignoring unreachable code.
-arch/mips/kernel/unaligned.c:1158 emulate_load_store_microMIPS() warn: ignoring unreachable code.
-arch/mips/kernel/unaligned.c:1200 emulate_load_store_microMIPS() warn: ignoring unreachable code.
-arch/mips/kernel/unaligned.c:1426 emulate_load_store_MIPS16e() warn: ignoring unreachable code.
-arch/mips/kernel/unaligned.c:1474 emulate_load_store_MIPS16e() warn: ignoring unreachable code.
-
-vim +50 arch/mips/lib/uncached.c
-
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  22  
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  23  /*
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  24   * FUNC is executed in one of the uncached segments, depending on its
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  25   * original address as follows:
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  26   *
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  27   * 1. If the original address is in CKSEG0 or CKSEG1, then the uncached
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  28   *    segment used is CKSEG1.
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  29   * 2. If the original address is in XKPHYS, then the uncached segment
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  30   *    used is XKPHYS(2).
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  31   * 3. Otherwise it's a bug.
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  32   *
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  33   * The same remapping is done with the stack pointer.  Stack handling
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  34   * works because we don't handle stack arguments or more complex return
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  35   * values, so we can avoid sharing the same stack area between a cached
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  36   * and the uncached mode.
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  37   */
-078a55fc824c16 Paul Gortmaker 2013-06-18  38  unsigned long run_uncached(void *func)
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  39  {
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  40  	register long ret __asm__("$2");
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  41  	long lfunc = (long)func, ufunc;
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  42  	long usp;
-5b058973d32055 Anders Roxell  2020-12-11  43  	long sp;
-5b058973d32055 Anders Roxell  2020-12-11  44  
-5b058973d32055 Anders Roxell  2020-12-11  45  	__asm__("move %0, $sp" : "=r" (sp));
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  46  
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  47  	if (sp >= (long)CKSEG0 && sp < (long)CKSEG2)
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  48  		usp = CKSEG1ADDR(sp);
-c55197eb549dc0 Yoichi Yuasa   2007-02-06  49  #ifdef CONFIG_64BIT
-48ef2626aeecac Andrew Sharp   2007-10-31 @50  	else if ((long long)sp >= (long long)PHYS_TO_XKPHYS(0, 0) &&
-48ef2626aeecac Andrew Sharp   2007-10-31  51  		 (long long)sp < (long long)PHYS_TO_XKPHYS(8, 0))
-48ef2626aeecac Andrew Sharp   2007-10-31  52  		usp = PHYS_TO_XKPHYS(K_CALG_UNCACHED,
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  53  				     XKPHYS_TO_PHYS((long long)sp));
-c55197eb549dc0 Yoichi Yuasa   2007-02-06  54  #endif
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  55  	else {
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  56  		BUG();
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  57  		usp = sp;
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  58  	}
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  59  	if (lfunc >= (long)CKSEG0 && lfunc < (long)CKSEG2)
-ba5187dbb4b2ea Thiemo Seufer  2005-04-25  60  		ufunc = CKSEG1ADDR(lfunc);
-c55197eb549dc0 Yoichi Yuasa   2007-02-06  61  #ifdef CONFIG_64BIT
-48ef2626aeecac Andrew Sharp   2007-10-31 @62  	else if ((long long)lfunc >= (long long)PHYS_TO_XKPHYS(0, 0) &&
-
-:::::: The code at line 50 was first introduced by commit
-:::::: 48ef2626aeecac3b160d1aee38ac46d6c3540122 [MIPS] Put cast inside macro instead of all the callers
-
-:::::: TO: Andrew Sharp <andy.sharp@onstor.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Heinrich

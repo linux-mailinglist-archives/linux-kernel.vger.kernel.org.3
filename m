@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E28DD477592
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5F547759B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238380AbhLPPQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S238385AbhLPPRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:17:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbhLPPQo (ORCPT
+        with ESMTP id S232605AbhLPPRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:16:44 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35861C061574;
-        Thu, 16 Dec 2021 07:16:44 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id v11so44769194wrw.10;
-        Thu, 16 Dec 2021 07:16:44 -0800 (PST)
+        Thu, 16 Dec 2021 10:17:32 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF64CC061574;
+        Thu, 16 Dec 2021 07:17:31 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id a9so44803583wrr.8;
+        Thu, 16 Dec 2021 07:17:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=YY9FZgJmPcsrvv1dDjxqyVtz1nIgdkKk67xLM0ZtgAc=;
-        b=GZcyGrESDUijhcGlmAgDyEACRWE72v4x7GWiBc6yS2aH74dRCA1Y3+gZd+icRAsgk/
-         jbEcpMe5d5KSkMbBICkq/rqdm7In9kQza4dIWoDlt2lPrFbK3yY4LA8oGN5UKwJqj1Dt
-         YaxYzweyskLjTCLMPGTDmov4lCKWtXsCmBnQys9ei1xj2X9jFCDK3SYckJ5caCREGz2L
-         z7W9HEj7osEIDxJl8Qr9dzT/KRzzkF56K6qj+GTSCbZsWklb/NK/uE5WFRQj5QHUK0CB
-         hrYBrYek82ZOp7Zf8HpnFsJWo3rPyNWJDYBbyQ0wWfUJnyWKH5PEwcujoLmeJqg5pNPt
-         P1Wg==
+        bh=d6dLbnkWK7wNE8BZGENwCf0S7oFVX0y+/nWXJ0NqB44=;
+        b=OIj/txpPhui1n8Zu81sY/T4F6cuXcTDjXRyO2n5RabwA9LcJji2dGTyK5EuuLhyfcn
+         4KKS8gyGDDsyNp4o3Bej4bqOKKeEwGZK61rfen/XabhIE2j2VhoYv+zGzn9xOn77a0Tk
+         RExON7YRNsIeK/LuVD1jqDobD8HroRDYZsQY0dzXVwICINp8HFXfih3X7DvLKGr4a8Hg
+         xg/Ps7RcQenDfXHyb02SkCv+xcvfm6uZ7EE4iK/qzKzX9shIYSwZcek0pwE0z2R0yTFT
+         q3QOP8R13xQBTSSr+H/lvevRYEHT0x6oAt+sPxll4s6NMcosb3wmLF6i5HMCN8j2kulq
+         e9xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YY9FZgJmPcsrvv1dDjxqyVtz1nIgdkKk67xLM0ZtgAc=;
-        b=c5wY8CbMD9wUVw/682owvz07gkv3nf1wLcmVfbO7Nmv7Y8cNAvp5vP0Rv2cO8SDOnO
-         O43xyZqR3qDTlTmLWDZ2bEKTApQJ/kwj6gw3vC6lFMAg24zsE6MzplVRrDInZ9pVUyn9
-         Ifply1YD+CAZVkp9TTL388spwEXbQeP+Rm2yKMQdQrfpq5xLs+bwf0ZXdbC2cWJDwxdP
-         6VwKgl9P5ROiKhqciFiS7TFUg+BiHxh3st2g+Od0f4hTtnWTLWnWB1JgGiNYp8vpUQf1
-         LgSx0Sc+Mxg/k9vGyjuVBuH9UHXq/7r7SQsryFeDwsPrViSMCOIQPKNzZmZcxCiYZbe2
-         fXrQ==
-X-Gm-Message-State: AOAM533PcWxZUMqEz9UzpyqbBzLncYwBSKoXK4rn/jY8naigbJbfPXqy
-        4EN1JsgpjlvHTtR63FSoflTdDYbHwljfnw==
-X-Google-Smtp-Source: ABdhPJxBH32FXzbEF9kfDCQM7O3XzmCGCPyYvwo7dy80ekk+7njHTBz0zzBJAx5/tRWBcopUFGXr/g==
-X-Received: by 2002:adf:f189:: with SMTP id h9mr9495198wro.463.1639667802831;
-        Thu, 16 Dec 2021 07:16:42 -0800 (PST)
+        bh=d6dLbnkWK7wNE8BZGENwCf0S7oFVX0y+/nWXJ0NqB44=;
+        b=n7MLkgvs2rr1Psl7p+yx86Kh2q09ycjOABN/zTpHnfeUIuU/VdQ8LtsKZF0jczeAqX
+         favHLHnhnSCs8C3KLzTWEfcpXC0q5aH1pGQg1GBRjwhipMG+NDZnaXi0a8QGFSTeB9w/
+         HTMv7VtHPgIFuzrLIvYUTcAsYlcW8oZTmX8A5ZBP1Jg+EvwAWmGlN8aMgS3UvufKBUx5
+         Ij1Pfil4bC8rN4L61ym4IH8vcyAOH9OEd/pQsVYRwpFLN4sydxd7SNMtGUjU+ZUINgOU
+         wguZhtghkdhXvOkny9UwwhkfRc4Anzxf0wyoF8NNBa3Ft+bbRFy3qaH6QANeHPrRo2lH
+         KEPg==
+X-Gm-Message-State: AOAM531ws0jA916bjc9B50AFAg02xkVMDgYjx9j9uN+3n8jgpfFUyafy
+        Cr7V/ZTFXEyOdWbr2GBwb3Y=
+X-Google-Smtp-Source: ABdhPJzd1jZbXWBpkRK3RaJ+dWeSpECIxOBJmwQ33RK5mfrBb45RfR3elrOFN3Tu9n7HBjiNf+iOfg==
+X-Received: by 2002:adf:d1a6:: with SMTP id w6mr6055630wrc.274.1639667850594;
+        Thu, 16 Dec 2021 07:17:30 -0800 (PST)
 Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id b132sm4989939wmd.38.2021.12.16.07.16.40
+        by smtp.gmail.com with ESMTPSA id f13sm48343wri.51.2021.12.16.07.17.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 07:16:41 -0800 (PST)
-Date:   Thu, 16 Dec 2021 16:16:38 +0100
+        Thu, 16 Dec 2021 07:17:29 -0800 (PST)
+Date:   Thu, 16 Dec 2021 16:17:26 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
@@ -60,69 +60,55 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v4 06/22] ASoC: tegra20-spdif: stop setting slave_id
-Message-ID: <YbtYVss3y8lgK1Z3@orome>
+Subject: Re: [PATCH v4 07/22] ASoC: tegra20: spdif: Support device-tree
+Message-ID: <YbtYhhvse0sxhKxe@orome>
 References: <20211204143725.31646-1-digetx@gmail.com>
- <20211204143725.31646-7-digetx@gmail.com>
+ <20211204143725.31646-8-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="f5K+xSKWjsvh7cW7"
+        protocol="application/pgp-signature"; boundary="uzk6upfeauAzdoAz"
 Content-Disposition: inline
-In-Reply-To: <20211204143725.31646-7-digetx@gmail.com>
+In-Reply-To: <20211204143725.31646-8-digetx@gmail.com>
 User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---f5K+xSKWjsvh7cW7
+--uzk6upfeauAzdoAz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Dec 04, 2021 at 05:37:09PM +0300, Dmitry Osipenko wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Sat, Dec 04, 2021 at 05:37:10PM +0300, Dmitry Osipenko wrote:
+> Tegra20 S/PDIF driver was added in a pre-DT era and was never used since
+> that time. Revive driver by adding device-tree support.
 >=20
-> The DMA resource is never set up anywhere, and passing this as slave_id
-> has not been the proper procedure in a long time.
->=20
-> As a preparation for removing all slave_id references from the ALSA code,
-> remove this one.
->=20
-> According to Dmitry Osipenko, this driver has never been used and
-> the mechanism for configuring DMA would not work as it is implemented,
-> so this part will get rewritten when the driver gets put into use
-> again in the future.
->=20
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  sound/soc/tegra/tegra20_spdif.c | 1 -
->  1 file changed, 1 deletion(-)
-
-In case you want to pick this up into the ASoC tree and Vinod removes it
-=66rom the DMA tree:
+>  sound/soc/tegra/tegra20_spdif.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
 
 Acked-by: Thierry Reding <treding@nvidia.com>
 
---f5K+xSKWjsvh7cW7
+--uzk6upfeauAzdoAz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG7WFYACgkQ3SOs138+
-s6Hi7A//WvSC6HaD4dz2sE4APvQvLcrg7UUf4Q12zWYMoso91uXcLGSE4K7y12yD
-bkRiCDYCsAmW2VCzapWMjLeTvpoUvVQPVDnZyXT/iY53m8GThFqnhNUZV+SUu4hx
-oYuH2I7i+2frmjS9b7HglTBshVz6ALvn+vCmS7sXzYbGVsv4BYc338j2P5s6R0NT
-AcoYb6/pav05eUTHLq086ipVUz9FxstCDhqq4A0x/7SJcY7TvVTzel9aqD6nfEiF
-LGzc7df6QzFkTkhu91FPKi0RiumCbQw4d4Gdm7c3wk3f6s6dLJoZ90HCCmxT9I+Y
-jUPPIjpmZl70RNDoWByu884ySe3b02sSGY1a5oLcOuBYx/M34rMo0mj71zHEKdQi
-IrD1Ayniv0NRnwNwkR7CwGJtMjB2mO15h8uEL5ujqWFHAqkwd3pNOx8m3DPo8pP0
-hpgHdTy0ogufgEy+Zs/V+w17WQVH/++zlxRJHvjfjWaAmJgBIP5jDJKpOtsZFxjd
-YLY35vN7331mQkzZZPfYyCna7q1qHEOm3UwRNzyVp0fuozZHl0GQBRQDB8q7emQB
-RROAE/QWJd7we/mF85Wfs8nKfYinG/iLM22oMZ6ZHIa81CoIiAXV7Ao89pDxCHcX
-A8b8dTnu42raqD/1R1Pb549QpdaPaIRHl6d43FzCPuETRCMIbpk=
-=o3sP
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG7WIYACgkQ3SOs138+
+s6GK9A//Y7Tw6WHpypYImYoTs7lxJ39hjjAQ1y3UpH/iunNkSxkFtezdQ9Fivimn
+1ypvgQTPgGhT77FCiLUAizaw0Z/5tyBZEr4lALU/l+uhH1WAbf7NgqFvY+TyoGRL
+a//yFoxqGafUCEmE3cduDo/2BsdxeJ4crpht/T/oyCJkFzDzFzvFBRZ8CjlcOO7H
+eho0IEHSusZk5lZlj1xLAPBnEQRheEFid0xmYObmS16Dt2ZrgmXQc8xsI9NoJFnV
+5VPF8uhvdncyM810Z7hQT7wDM4Tyj7RnQYhJ/zcoBFgB7ujP/i4FttWKBdhFjElN
+ZqHUhQcTaQBiV2dgDYhZo+l3S0g8bZrvntQ5Aedjn+bprfZ9MpEMoJP9MdW3ynem
+6zaEzul5jF6R2rPk/4XtkVjTFUzHKatocrIsOOJR10vFravNus2g7Pd2G5JuIXok
+iZGGPWuX3UvVPtkWsfsUQ0SwKUkY8sB9RlCiDxB2jh61ikc1aPy5Z21Qpwd1pWSq
+ma1fOp00317zZkLkCNMGgd3vEx7mbqt9E53hK42n0pSp73ggVfkKsNLskIRHYa1+
+YHSIdA5GAtXjaQ+2kRFPo3H9OQkEMGTCEYoJsaHZR8+EcVTXvAJtVwNtbPyyqMuX
+oaV6IXZcOEPoQVa68Lanf2Xm/kqnxGaAgqrhGZX5eTeZjJ76qv0=
+=G20c
 -----END PGP SIGNATURE-----
 
---f5K+xSKWjsvh7cW7--
+--uzk6upfeauAzdoAz--

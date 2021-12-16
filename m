@@ -2,110 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF09477556
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2094A477568
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238285AbhLPPHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S238317AbhLPPJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:09:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235074AbhLPPHu (ORCPT
+        with ESMTP id S235169AbhLPPJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:07:50 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3596CC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:07:50 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id b19so37155264ljr.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:07:50 -0800 (PST)
+        Thu, 16 Dec 2021 10:09:26 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0097EC061574;
+        Thu, 16 Dec 2021 07:09:26 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id l7so38997740lja.2;
+        Thu, 16 Dec 2021 07:09:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=9X0RjBHPLivbiVNAdZyiLl4+pNiD7DUVjNDWx5AeBbc=;
-        b=Zdsgu9qsJq4qcchiaa3E8O8yDJy0sQTGRNh42sfeTfhjLAjueKtQnNHRh5QkVdz85e
-         fGApJ31vD8zYtCewzZCXSG9w8C+hkCCjUbc7f/eFIQeyiNL7zbrp8YI1mOx50tpKTRKf
-         ecogXo0Dt4Ki2/0HdDQRRpteZNVkQqO0wDIlkrXxOmeH3F28gKDFra9gTxDAk1JuUXjM
-         iriUD9JMRFJgjRBGx4y5C/y+u4sJjNvu7Oly3+kzAUp5+Frf7xDPouMpxawk9Y7BGdwb
-         S6bLzvgYLGCkx3fXikDS9nYXsEMm+HSMJKB+ATNcph0YjEZVoRzdcAYxxYwBWmkIs5Bu
-         Awxw==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1qfd395IYWj+B/UdbiFiPVdCXFHwSx1zWwQl0BrdIvo=;
+        b=Ztghiy1SxXBJ21k5EHGfOxtkLitrM3pminuWlLG7d35vrjB9Ud0njt3RXd7DzwIITZ
+         9R0EkJ7CKk02W2fvI21ouo0VeL6rB583kIEbWMEJRVT8A0/t+WPpMSzI3xaPKP35qMpZ
+         JA7LtaXd3Oyb5P3Aemn/pGmzOhomhGHP5nEzGdUjqx1vfeu9WJzgBTXxK8wSx9CgzlkL
+         Foj6WyQjz8rD+0rl31WtPDh2E8RXfdQJrk1/o3HRcZ00MmtPLClv2KN61TS7NOqsRuXG
+         HCL+NipbTzGoPbcY/ZkN0ILJZx1FSSQeRvrURn3C/Jo2USIuwwi6BZXYvHDckU/wkwlx
+         hufA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=9X0RjBHPLivbiVNAdZyiLl4+pNiD7DUVjNDWx5AeBbc=;
-        b=BzUO1DdcROi8bwpKwxK9kF9jR0fl1pPIbkOIQV+G/516CJOfl2PRwcx7LHkqkotF6k
-         BlbLEjGF3blf7iKwKRbQ9M25YbBGwAJDxauH4dsaxVCgKPALu45/g8oPKZvehAIHzNWt
-         034J/VT45iv10aO3uJQBy8Vb64MMy4QgQgTfwE8zk8QsZlNwXI+QWwKyvlqM5U7/6qXI
-         6LWgsjq0FJvvhQ7wVTkbLLpUl8jAeqeEP9BjduS/ZBPkqVMMcitpaabQTkHsDK2Vt+1+
-         bhaBt5n9v6JZHp05Tb+ONlpbwLD+Hblyc+VsjT2+fazQ3CirlNGDyYknJ7LargigqjIV
-         Xz1Q==
-X-Gm-Message-State: AOAM530BQzgHararQYFayCsvbo0qFizGKGp6atZmXF3cJkdh9ymz+eLO
-        JtVZ71oMumlxEMbSQHYFvrgUpg==
-X-Google-Smtp-Source: ABdhPJx98BP9clojgv/CDFJocfhgP1byE1E+a6NOGsae8EetpchJRYkFFgaCcK1kf4if7RGsFK0eJA==
-X-Received: by 2002:a2e:b5b7:: with SMTP id f23mr15447783ljn.244.1639667268258;
-        Thu, 16 Dec 2021 07:07:48 -0800 (PST)
-Received: from jade (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id l20sm912682lfj.36.2021.12.16.07.07.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 07:07:47 -0800 (PST)
-Date:   Thu, 16 Dec 2021 16:07:45 +0100
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     arm@kernel.org, soc@kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] TEE and OP-TEE fixes for v5.16
-Message-ID: <20211216150745.GA3347954@jade>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1qfd395IYWj+B/UdbiFiPVdCXFHwSx1zWwQl0BrdIvo=;
+        b=W3i5/E/lOYlp9eIE9AkPZRaANeOLCLoTwLx5ySavQNpwnEkBHBwog4ZQ4CSWmtfeQC
+         XvwGLwl8/2u49JLUrU2aitmjiPCzv4O7iDoeQA1xF6p+hGwW+zRO5oGjkxZhJLFhriHL
+         7zy8hi6M4/5Rq6Iw0oPtjJ1s9gbl/fN517KJSQON1jAtKjOA6JM7u1tfDwUW3hSZmFwX
+         nkZCvmCQ8DqxIdfGO+w337p23aE0EtIwxqbmkU0i+z+lDWuL24iDb7y2FMlao5YLTsn4
+         5PJXmaiURjhe96F/aqsfil6c6xeqE6Uugtq9S0ocvQlP2aYVV4QS+8oZ7JzGpcxmpKCT
+         v4dg==
+X-Gm-Message-State: AOAM531GHy5cCbqW+kgIJE0hLkR0MsMTEHsEAzKPe6UhLGKySoc4yhUH
+        S44gUpx02LNAD7MA+Thx0Lw=
+X-Google-Smtp-Source: ABdhPJzSYtr+35JjMyfwDiGDowXvrdjIoh3vwsMwh7YTEgoBMb3070lHBDEXydaKeMXVufN4FZEHmw==
+X-Received: by 2002:a05:651c:b11:: with SMTP id b17mr15513775ljr.272.1639667364213;
+        Thu, 16 Dec 2021 07:09:24 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id s9sm910898lfr.304.2021.12.16.07.09.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 07:09:23 -0800 (PST)
+Subject: Re: [PATCH v4 00/22] Support HDMI audio on NVIDIA Tegra20
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Agneli <poczt@protonmail.ch>, linux-tegra@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20211204143725.31646-1-digetx@gmail.com>
+ <Ybo6tsnQM6OacoZs@sirena.org.uk>
+ <26af30a6-9606-72d0-9258-cf9627ddfe77@gmail.com> <YbtFXcteESF0nLZz@orome>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <03ede0df-e86e-798e-e2c7-c0ed3dc81fca@gmail.com>
+Date:   Thu, 16 Dec 2021 18:09:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <YbtFXcteESF0nLZz@orome>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello arm-soc maintainers,
+16.12.2021 16:55, Thierry Reding пишет:
+> On Wed, Dec 15, 2021 at 10:19:07PM +0300, Dmitry Osipenko wrote:
+>> 15.12.2021 21:57, Mark Brown пишет:
+>>> On Sat, Dec 04, 2021 at 05:37:03PM +0300, Dmitry Osipenko wrote:
+>>>
+>>>> I based S/PDIF patches on Arnd's Bergmann patch from a separate series [1]
+>>>> that removes obsolete slave_id. This eases merging of the patches by
+>>>> removing the merge conflict. This is a note for Mark Brown.
+>>>
+>>> That's not in my tree so I'll need either a pull request with the series
+>>> or a resend after the merge window.
+>>
+>> This patch is included as a part of this series, please see the patch #6.
+>>
+>> I saw that Vinod Koul already merged it into his DMA tree [1] a day ago,
+>> but there is no stable branch there.
+>>
+>> [1]
+>> https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git/log/?h=next
+>>
+>>>  It's also not clear what to do
+>>> about the DRM bits, I guess it's probably easiest to just apply them
+>>> along with the ASoC patches.
+>>
+>> I already asked Thierry Reding to take a look at this patchset. He will
+>> let to you know how the DRM bits should be handled. Hopefully this
+>> should happen tomorrow.
+>>
+>> We will know how to move forward if Vinod and Thierry will reply ASAP.
+>> Otherwise this series will have to wait for the next cycle.
+> 
+> I've applied the DRM patches to the drm/tegra tree and pulled in the ARM
+> device tree changes into the Tegra tree. I think the rest can go through
+> ASoC. Well, provided you can sort out the patch 6 issue with Vinod.
 
-Please pull these TEE subsystem and OP-TEE driver fixes which by coincident
-all are concerning memory shared with secure world.
-
-There's one in particular nasty race fixed when a tee_shm is about to be
-teared down.
-
-Thanks,
-Jens
-
-The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
-
-  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
-
-are available in the Git repository at:
-
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/fixes-for-v5.16
-
-for you to fetch changes up to 6add87fdae9bcb1d20b4503df5bd02ce5246cc8b:
-
-  optee: Suppress false positive kmemleak report in optee_handle_rpc() (2021-12-16 15:32:48 +0100)
-
-----------------------------------------------------------------
-TEE and OP-TEE fixes for v5.16
-
-- Fixes a race when a tee_shm reaches reference count 0 and is about to
-  be teared down
-- Fixes an incorrect page free bug in an error path of the OP-TEE shared
-  memory pool handling
-- Suppresses a false positive kmemleak report when allocating driver
-  private shared memory buffers for OP-TEE
-
-----------------------------------------------------------------
-Jens Wiklander (1):
-      tee: handle lookup of shm with reference count 0
-
-Sumit Garg (1):
-      tee: optee: Fix incorrect page free bug
-
-Xiaolei Wang (1):
-      optee: Suppress false positive kmemleak report in optee_handle_rpc()
-
- drivers/tee/optee/core.c    |   6 +-
- drivers/tee/optee/smc_abi.c |   2 +
- drivers/tee/tee_shm.c       | 174 +++++++++++++++++---------------------------
- include/linux/tee_drv.h     |   4 +-
- 4 files changed, 72 insertions(+), 114 deletions(-)
+Thank you!

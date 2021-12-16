@@ -2,87 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA8F477338
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A1C47733F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237487AbhLPNdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbhLPNde (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:33:34 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5FDC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 05:33:34 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id ke6so1115022qvb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 05:33:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DioPzCu1zsCkrV4YGIzTyYHRCTuSei+k8/YBOQlCxpM=;
-        b=eupZD4nbfs0lstONzI8kde9vq/qFmZxaclh3UZ2DRXV+leRJ1q3/qzJ2FzWrksujCC
-         /G03Ytbm4EAWYj3tSyucid7zXeBuASV4KUA5zkMiDh/NdY3pXZRS/fhhvZ7EtomXw9jD
-         dIBKsfyDv8WkQpFs1OkR/oc7g0wDww5uP3/DqejBqfdvsACeUWTDXQ0CFhFH8r5mnF00
-         25Wi1BCHkNPHqtOxWU7KLTCKLt3JnZXbpTutzdr1wJMUwTyEOc3gQMvM/JghPHP38ZAd
-         EOrPWar5wjv0qVECyhqxOocAg5WeooxizqSKvAj9wD2EbXpdPfdiCIGCuG6FhDXM6xvI
-         idow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DioPzCu1zsCkrV4YGIzTyYHRCTuSei+k8/YBOQlCxpM=;
-        b=CD2oyjcruqCLvwZ0Bv2xlQaisW1nCHX2VX5CvrbQpgjlz/X6Et2xJnyI98JNSnfSXq
-         ZaZO8UNVbCumRzLt5VHnervzmpzLFlE0RVIX4VhnmMbW2Crb8X9UJ9xcNbVeRzyo7LQ9
-         CVb+MPHJjJQHwerXzl3bF2zhRhqI1KgeIurAqXke5Wmy7Ut596SunkdLu6LKRMAgS97D
-         fVChQgiMdnYv+7BFc8Zff3Ts8l9mvf4npPdDYvtQgsp7J2Z8TX/Z5iwmU7dMnW0/EIxt
-         MxqjCtlPLdQ3DIqRgB3GUyfOwMT9jxzYxMeRE2zYwo/3CSUPnYi9qvXjC82SLVA7e5zZ
-         Hd9g==
-X-Gm-Message-State: AOAM530YlzTc/Cr0+HBHcTiuO8OrsvA/09+zcCVxQh+2JbAhTb3gV6N0
-        XUr+Dd7e8vTDN84OQgalOSgYiXSbTmRK0L5BFTixbg==
-X-Google-Smtp-Source: ABdhPJxDNmr1/1QKYZKCAhbtGAMuT8bLAdalv8abIR5jCYVZhKLGloBSXVp0pXLbFIEiyeH5K7tuMDS8XgfONT0BMxw=
-X-Received: by 2002:a05:6214:5190:: with SMTP id kl16mr15576473qvb.36.1639661612968;
- Thu, 16 Dec 2021 05:33:32 -0800 (PST)
+        id S237612AbhLPNfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:35:08 -0500
+Received: from mga05.intel.com ([192.55.52.43]:36621 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232211AbhLPNfF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 08:35:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639661705; x=1671197705;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xR924ioZNz+ZaYeB6olyR9xJzBJPxwGYcCZKA58ApSE=;
+  b=A13FGx/e4Hn3prxpyGf4AEBp7hTveMgW0IrL8QE9kFNtQKZ02ohjVf7z
+   Be0t4F5TFkYyNX1oFPj5kmy9aQ6oASVtN3EV1/8ri6S6bS0sobcokfVGB
+   OIOQm9q6E920RS2to/59KEqNw4ASVgFzRs9jeU50D9dUce8JMRJ7yg49M
+   2nk19NBZ/sGC8JDR2pLrUT9K6OID3aNppa43cJkeFecmubO2qRSPRc0SJ
+   3Mkr9eycBcwpg4OkSf9saf5kUDTHHiljPfcjC4VdHBEx1CiFW5Au6UXXp
+   j2LomLUll4FkJ3NK5Fm4H5oZrXKRUIdn6+7JkrN3pmPuyMjKiofpILyfV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="325772543"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="325772543"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 05:35:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="466068760"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 16 Dec 2021 05:35:03 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxquU-0003DW-TE; Thu, 16 Dec 2021 13:35:02 +0000
+Date:   Thu, 16 Dec 2021 21:34:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: drivers/watchdog/mtx-1_wdt.c:184:27: sparse: sparse: incorrect type
+ in initializer (incompatible argument 2 (different address spaces))
+Message-ID: <202112162138.CtaUacXU-lkp@intel.com>
 MIME-Version: 1.0
-References: <cover.1639432170.git.andreyknvl@google.com> <fa64826c55c90d29f8ce2f71b588591fb9cfc23e.1639432170.git.andreyknvl@google.com>
-In-Reply-To: <fa64826c55c90d29f8ce2f71b588591fb9cfc23e.1639432170.git.andreyknvl@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 16 Dec 2021 14:32:56 +0100
-Message-ID: <CAG_fn=VVnpsiAP5zpOZVjUYSoVgFZtrPCkN8fzx1t-5OEGhcMQ@mail.gmail.com>
-Subject: Re: [PATCH mm v3 09/38] kasan, page_alloc: refactor init checks in post_alloc_hook
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 10:52 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Separate code for zeroing memory from the code clearing tags in
-> post_alloc_hook().
->
-> This patch is not useful by itself but makes the simplifications in
-> the following patches easier to follow.
->
-> This patch does no functional changes.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
+Hi Randy,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2b14864acbaaf03d9c01982e243a84632524c3ac
+commit: 76215889be9d2cd388207545424bbbe3bf80e1ea watchdog: mtx-1: drop au1000.h header file
+date:   6 months ago
+config: mips-randconfig-s032-20211216 (https://download.01.org/0day-ci/archive/20211216/202112162138.CtaUacXU-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=76215889be9d2cd388207545424bbbe3bf80e1ea
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 76215889be9d2cd388207545424bbbe3bf80e1ea
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/watchdog/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   command-line: note: in included file:
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
+   builtin:0:0: sparse: this was the original definition
+   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
+   builtin:0:0: sparse: this was the original definition
+>> drivers/watchdog/mtx-1_wdt.c:184:27: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected long ( *write )( ... ) @@     got long ( * )( ... ) @@
+   drivers/watchdog/mtx-1_wdt.c:184:27: sparse:     expected long ( *write )( ... )
+   drivers/watchdog/mtx-1_wdt.c:184:27: sparse:     got long ( * )( ... )
+
+vim +184 drivers/watchdog/mtx-1_wdt.c
+
+04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  177  
+b47a166ed0baaa drivers/watchdog/mtx-1_wdt.c      Jan Engelhardt   2008-01-22  178  static const struct file_operations mtx1_wdt_fops = {
+04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  179  	.owner		= THIS_MODULE,
+04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  180  	.llseek		= no_llseek,
+ed78c2da149247 drivers/watchdog/mtx-1_wdt.c      Alan Cox         2008-05-19  181  	.unlocked_ioctl	= mtx1_wdt_ioctl,
+b6dfb2477fb0bf drivers/watchdog/mtx-1_wdt.c      Arnd Bergmann    2019-06-03  182  	.compat_ioctl	= compat_ptr_ioctl,
+04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  183  	.open		= mtx1_wdt_open,
+04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06 @184  	.write		= mtx1_wdt_write,
+7944d3a5a70ee5 drivers/watchdog/mtx-1_wdt.c      Wim Van Sebroeck 2008-08-06  185  	.release	= mtx1_wdt_release,
+04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  186  };
+04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  187  
+04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  188  
+
+:::::: The code at line 184 was first introduced by commit
+:::::: 04bf3b4f5fc033adf921f2e57d034ddbebef5fe7 [WATCHDOG] MTX-1 Watchdog driver
+
+:::::: TO: Florian Fainelli <florian.fainelli@int-evry.fr>
+:::::: CC: Wim Van Sebroeck <wim@iguana.be>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

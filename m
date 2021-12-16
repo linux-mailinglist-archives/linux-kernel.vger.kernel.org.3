@@ -2,147 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A71F2476758
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E73C9476760
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbhLPBOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 20:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbhLPBOk (ORCPT
+        id S232554AbhLPBTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 20:19:07 -0500
+Received: from mail-lj1-f182.google.com ([209.85.208.182]:44822 "EHLO
+        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229548AbhLPBTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 20:14:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74ACEC061574;
-        Wed, 15 Dec 2021 17:14:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F6BAB8226B;
-        Thu, 16 Dec 2021 01:14:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AEC8C36AE3;
-        Thu, 16 Dec 2021 01:14:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639617278;
-        bh=7PNDRZJ4FbAVuHjGSTVy+l4yWgjIoYFTFZdR4hDgoqc=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=n6+Eu11oVtWPj4FndZxqhf2r3AegHuwckCYwjrLiKemrQrttqenJzXVsUrPYOLTyB
-         lUShMxsFYqp1dc2PJuoEgdCvxDodqUgBEvKnBOMlL2E2/VDOfN++5ifte5NEVykHoM
-         2I0lzoyWYvL3jBoBDTk1EzcJzV8r/zn9YlQ4wectmSkwwUQoXglpInUaPsNpHQPqQo
-         X97OJ6pluiKrP8IRrA9KUh4J/BhEUAOGpua2L7W+qR9gFFHS0tFsE6HCRRuTcWQFF3
-         viLq+BKkQMz3GRCLEdJAf3VwEX0N3s4x+TyrcLNkgSxNboQJ9f//FA+dCes6pDpGWN
-         hdSWy6zCUTTAw==
-Received: by mail-oi1-f173.google.com with SMTP id q25so34306437oiw.0;
-        Wed, 15 Dec 2021 17:14:37 -0800 (PST)
-X-Gm-Message-State: AOAM532FwMGqsJu1dJ4iPG0oY7ClqsgsAw4Ry3K1U25zBPiaf5YJmrqs
-        Xql7GDA8sNg+e6fKpJYgp5sKWW+u1zTJzLXleC8=
-X-Google-Smtp-Source: ABdhPJxm0JeQTmsX1Ge9ZJeaUSWSnRjuqWebegLGsOj1aQTLNLzLJo/0ZjqC/uoKtnAyPNjCeAmM1Z2/tcbK2kx2c64=
-X-Received: by 2002:a05:6808:a8f:: with SMTP id q15mr2281978oij.65.1639617277171;
- Wed, 15 Dec 2021 17:14:37 -0800 (PST)
+        Wed, 15 Dec 2021 20:19:07 -0500
+Received: by mail-lj1-f182.google.com with SMTP id 13so35872768ljj.11;
+        Wed, 15 Dec 2021 17:19:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mZKUn3GCBDz2WpYjOXh7PtPogJCr66ag+GjS2ceVRcg=;
+        b=s3nw8yGh71XjV7Bv/D1I7Y57D4xyApq0GboGiTOVAVscfCHoq5OqmMW3S08UiKXjtL
+         a4o0HDqrN+4ybOD2fFbDPL7Ba7KD24jJ0htOEun4RX7JMdL/B7ukJb4AUKhvhxka/eOG
+         6psp1POWoiQOy2JByvix/n9WMzVj0KxAe0KKI2k05eux4t51Dc8WqEFoUa+b5quAmVU3
+         cVea990apie7l48lUYIt81UPL/psu6dRye4In0Xnj5VxXJLkW5D1j5NiKbiaf958Dt5s
+         yo3PAMiq2yq/hWoC3YvDgsI2HYVGYWjWBkSOJgQRtnHHdsTDIpa/pl7HjVSWbULdhqK8
+         7mDw==
+X-Gm-Message-State: AOAM533iZa2+klxK2lyOoFqS5X7Sgym2lTcurazWEq90SqlNTlJFKTVk
+        Z/ANvjHmvnmeBtoVy18BUT6Wr77D9cf6gx/r+s0=
+X-Google-Smtp-Source: ABdhPJyAZS7YytXVOSC49P1V1k0PMVprK59J8sBgkcMw95YIgHWtwjydy/ft8xsQVeG/2oqWXh36kBYP7t28bPRxJY4=
+X-Received: by 2002:a2e:b88c:: with SMTP id r12mr12273119ljp.204.1639617545518;
+ Wed, 15 Dec 2021 17:19:05 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ac9:428a:0:0:0:0:0 with HTTP; Wed, 15 Dec 2021 17:14:36
- -0800 (PST)
-In-Reply-To: <20211216003119.1609352-1-marcos@orca.pet>
-References: <20211216003119.1609352-1-marcos@orca.pet>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Thu, 16 Dec 2021 10:14:36 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-r14FNB-jKfCS+v69dgjxPBNdm109jRQ7BKxngN_qWTg@mail.gmail.com>
-Message-ID: <CAKYAXd-r14FNB-jKfCS+v69dgjxPBNdm109jRQ7BKxngN_qWTg@mail.gmail.com>
-Subject: Re: [PATCH] ksmbd: disable SMB2_GLOBAL_CAP_ENCRYPTION for SMB 3.1.1
-To:     Marcos Del Sol Vives <marcos@orca.pet>
-Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211215184605.92787-1-german.gomez@arm.com>
+In-Reply-To: <20211215184605.92787-1-german.gomez@arm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 15 Dec 2021 17:18:54 -0800
+Message-ID: <CAM9d7ch1eotRphCwFi_ryQdWD8DPNsZUN+aW7kaxovWtmCJcMQ@mail.gmail.com>
+Subject: Re: [PATCH v2] perf arm-spe: Synthesize SPE instruction events
+To:     German Gomez <german.gomez@arm.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2021-12-16 9:31 GMT+09:00, Marcos Del Sol Vives <marcos@orca.pet>:
-> According to the official Microsoft MS-SMB2 document section 3.3.5.4, this
-> flag should be used only for 3.0 and 3.0.2 dialects. Setting it for 3.1.1
-> is a violation of the specification.
+Hello,
+
+On Wed, Dec 15, 2021 at 10:46 AM German Gomez <german.gomez@arm.com> wrote:
 >
-> This causes my Windows 10 client to detect an anomaly in the negotiation,
-> and disable encryption entirely despite being explicitly enabled in ksmbd,
-> causing all data transfers to go in plain text.
+> Synthesize instruction events per every decoded ARM SPE record.
 >
-> Signed-off-by: Marcos Del Sol Vives <marcos@orca.pet>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Namjae Jeon <linkinjeon@kernel.org>
+> Because Arm SPE implements a hardware-based sample period, and perf
+> implements a software-based one that gets applied on top, also add a
+> warning to make the user aware.
+>
+> Signed-off-by: German Gomez <german.gomez@arm.com>
 > ---
->  fs/ksmbd/smb2ops.c |  3 ---
->  fs/ksmbd/smb2pdu.c | 25 +++++++++++++++++++++----
->  2 files changed, 21 insertions(+), 7 deletions(-)
+> Changes since v1 [https://lore.kernel.org/all/20211117142833.226629-1-german.gomez@arm.com]
+>   - Generate events with "--itrace=i" instead of "--itrace=o".
+>   - Generate events with virt_addr, phys_addr, and data_src values.
+> ---
+>  tools/perf/util/arm-spe.c | 58 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
 >
-> diff --git a/fs/ksmbd/smb2ops.c b/fs/ksmbd/smb2ops.c
-> index 0a5d8450e835..02a44d28bdaf 100644
-> --- a/fs/ksmbd/smb2ops.c
-> +++ b/fs/ksmbd/smb2ops.c
-> @@ -271,9 +271,6 @@ int init_smb3_11_server(struct ksmbd_conn *conn)
->  	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_LEASES)
->  		conn->vals->capabilities |= SMB2_GLOBAL_CAP_LEASING;
+> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+> index fccac06b573a..879583822c8f 100644
+> --- a/tools/perf/util/arm-spe.c
+> +++ b/tools/perf/util/arm-spe.c
+> @@ -58,6 +58,8 @@ struct arm_spe {
+>         u8                              sample_branch;
+>         u8                              sample_remote_access;
+>         u8                              sample_memory;
+> +       u8                              sample_instructions;
+> +       u64                             instructions_sample_period;
 >
-> -	if (conn->cipher_type)
-> -		conn->vals->capabilities |= SMB2_GLOBAL_CAP_ENCRYPTION;
-> -
->  	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB3_MULTICHANNEL)
->  		conn->vals->capabilities |= SMB2_GLOBAL_CAP_MULTI_CHANNEL;
+>         u64                             l1d_miss_id;
+>         u64                             l1d_access_id;
+> @@ -68,6 +70,7 @@ struct arm_spe {
+>         u64                             branch_miss_id;
+>         u64                             remote_access_id;
+>         u64                             memory_id;
+> +       u64                             instructions_id;
 >
-> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-> index 49c9da37315c..6193d5a1d653 100644
-> --- a/fs/ksmbd/smb2pdu.c
-> +++ b/fs/ksmbd/smb2pdu.c
-> @@ -915,6 +915,25 @@ static void decode_encrypt_ctxt(struct ksmbd_conn
-> *conn,
->  	}
+>         u64                             kernel_start;
+>
+> @@ -90,6 +93,7 @@ struct arm_spe_queue {
+>         u64                             time;
+>         u64                             timestamp;
+>         struct thread                   *thread;
+> +       u64                             period_instructions;
+>  };
+>
+>  static void arm_spe_dump(struct arm_spe *spe __maybe_unused,
+> @@ -202,6 +206,7 @@ static struct arm_spe_queue *arm_spe__alloc_queue(struct arm_spe *spe,
+>         speq->pid = -1;
+>         speq->tid = -1;
+>         speq->cpu = -1;
+> +       speq->period_instructions = 0;
+>
+>         /* params set */
+>         params.get_trace = arm_spe_get_trace;
+> @@ -351,6 +356,33 @@ static int arm_spe__synth_branch_sample(struct arm_spe_queue *speq,
+>         return arm_spe_deliver_synth_event(spe, speq, event, &sample);
 >  }
 >
-> +/**
-> + * should_encrypt() - checks if connection should be encrypted
-> + * @conn:	smb connection
-> + *
-> + * Return:	true if should be encrypted, else false
-> + */
-> +static bool should_encrypt(struct ksmbd_conn *conn)
-Can you change function name to smb3_encryption_negotiated() ?
-And need to update function description also.
-
-Thanks for your patch!
+> +static int arm_spe__synth_instruction_sample(struct arm_spe_queue *speq,
+> +                                            u64 spe_events_id, u64 data_src)
 > +{
-> +	if (!conn->ops->generate_encryptionkey)
-> +		return false;
+> +       struct arm_spe *spe = speq->spe;
+> +       struct arm_spe_record *record = &speq->decoder->record;
+> +       union perf_event *event = speq->event_buf;
+> +       struct perf_sample sample = { .ip = 0, };
 > +
-> +	/*
-> +	 * SMB 3.0 and 3.0.2 dialects use the SMB2_GLOBAL_CAP_ENCRYPTION flag.
-> +	 * SMB 3.1.1 uses the cipher_type field.
-> +	 */
-> +	return (conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION) ||
-> +	    conn->cipher_type;
+> +       /*
+> +        * Handles perf instruction sampling period.
+> +        */
+> +       speq->period_instructions++;
+> +       if (speq->period_instructions < spe->instructions_sample_period)
+> +               return 0;
+> +       speq->period_instructions = 0;
+> +
+> +       arm_spe_prep_sample(spe, speq, event, &sample);
+> +
+> +       sample.id = spe_events_id;
+> +       sample.stream_id = spe_events_id;
+> +       sample.addr = record->virt_addr;
+> +       sample.phys_addr = record->phys_addr;
+> +       sample.data_src = data_src;
+
+I think it should set sample.period to spe->instructions_sample_period.
+
+Also it can set sample.weight but I think we lost my patch
+
+  https://lore.kernel.org/r/20211201220855.1260688-1-namhyung@kernel.org
+
+Arnaldo, can you please take a look?
+
+> +
+> +       return arm_spe_deliver_synth_event(spe, speq, event, &sample);
 > +}
 > +
->  static void decode_compress_ctxt(struct ksmbd_conn *conn,
->  				 struct smb2_compression_capabilities_context *pneg_ctxt)
->  {
-> @@ -1469,8 +1488,7 @@ static int ntlm_authenticate(struct ksmbd_work *work)
->  		    (req->SecurityMode & SMB2_NEGOTIATE_SIGNING_REQUIRED))
->  			sess->sign = true;
+>  #define SPE_MEM_TYPE   (ARM_SPE_L1D_ACCESS | ARM_SPE_L1D_MISS | \
+>                          ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS | \
+>                          ARM_SPE_REMOTE_ACCESS)
+> @@ -480,6 +512,12 @@ static int arm_spe_sample(struct arm_spe_queue *speq)
+>                         return err;
+>         }
 >
-> -		if (conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION &&
-> -		    conn->ops->generate_encryptionkey &&
-> +		if (should_encrypt(conn) &&
->  		    !(req->Flags & SMB2_SESSION_REQ_FLAG_BINDING)) {
->  			rc = conn->ops->generate_encryptionkey(sess);
->  			if (rc) {
-> @@ -1559,8 +1577,7 @@ static int krb5_authenticate(struct ksmbd_work *work)
->  	    (req->SecurityMode & SMB2_NEGOTIATE_SIGNING_REQUIRED))
->  		sess->sign = true;
+> +       if (spe->sample_instructions) {
+> +               err = arm_spe__synth_instruction_sample(speq, spe->instructions_id, data_src);
+> +               if (err)
+> +                       return err;
+> +       }
+> +
+>         return 0;
+>  }
 >
-> -	if ((conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION) &&
-> -	    conn->ops->generate_encryptionkey) {
-> +	if (should_encrypt(conn)) {
->  		retval = conn->ops->generate_encryptionkey(sess);
->  		if (retval) {
->  			ksmbd_debug(SMB,
+> @@ -1107,6 +1145,26 @@ arm_spe_synth_events(struct arm_spe *spe, struct perf_session *session)
+>                         return err;
+>                 spe->memory_id = id;
+>                 arm_spe_set_event_name(evlist, id, "memory");
+> +               id += 1;
+> +       }
+> +
+> +       if (spe->synth_opts.instructions) {
+> +               if (spe->synth_opts.period_type != PERF_ITRACE_PERIOD_INSTRUCTIONS)
+> +                       return -EINVAL;
+> +
+> +               if (spe->synth_opts.period > 1)
+> +                       pr_warning("Arm SPE has a hardware-based sample period.\n"
+> +                                  "More instruction events will be discarded by --itrace\n");
+> +
+> +               spe->sample_instructions = true;
+> +               attr.config = PERF_COUNT_HW_INSTRUCTIONS;
+> +               attr.sample_period = spe->synth_opts.period;
+> +               spe->instructions_sample_period = attr.sample_period;
+> +               err = arm_spe_synth_event(session, &attr, id);
+> +               if (err)
+> +                       return err;
+> +               spe->instructions_id = id;
+> +               arm_spe_set_event_name(evlist, id, "instructions");
+
+Yeah, I think it's a better name than "all". :)
+
+Thanks,
+Namhyung
+
+
+>         }
+>
+>         return 0;
 > --
 > 2.25.1
->
 >

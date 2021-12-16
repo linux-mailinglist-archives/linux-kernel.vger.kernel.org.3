@@ -2,425 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7E5477C36
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 122E3477C53
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240892AbhLPTIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 14:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
+        id S240902AbhLPTVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 14:21:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240854AbhLPTIQ (ORCPT
+        with ESMTP id S232973AbhLPTVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 14:08:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE9FC06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 11:08:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE9C161F3F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 19:08:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124C8C36AE7;
-        Thu, 16 Dec 2021 19:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639681695;
-        bh=eqkT2Xb9WpfHKciFfIgbcxLqfxAgeRWZBTenSV8dEP0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HqBksZBZlBo03KDe/WvBLC4Jsa4fTLblT2mvRqhQGQ26KnU5ojhmUS93NvEPOp6cr
-         rdI5GpTSflnV3bJNOixDabSLf6HM4aA10koAMm3S96QypOCOf/9pdSItAaztMqPZms
-         CAA/BykTuK3dPTgQJmBI9uOqw+t1WW24EO6xm2360WecT8tcWekLJ2oFYnl3uuRdag
-         as7G89f6/DOI/MHzTbQAeRgQWW16YevBFTGw8VpQJvItvDtdzPb2pIalPiRkFXyG9F
-         59MI+YTXAhFLkZwfFpw0y4ROur9sIwV6RwCpRrV3G1fHvACuxUGpFNpfVJrRvAlOYv
-         HOKQ7+uINnzmQ==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     David Collins <quic_collinsd@quicinc.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] spmi: spmi-pmic-arb: fix irq_set_type race condition
-Date:   Thu, 16 Dec 2021 11:08:12 -0800
-Message-Id: <20211216190812.1574801-7-sboyd@kernel.org>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-In-Reply-To: <20211216190812.1574801-1-sboyd@kernel.org>
-References: <20211216190812.1574801-1-sboyd@kernel.org>
+        Thu, 16 Dec 2021 14:21:17 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF55EC061574;
+        Thu, 16 Dec 2021 11:21:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/zSsJvbx138/k5jm0hV5yqkFOYtq99WfAJC/54IF1a0=; b=4g6rO0OXhkwvqdsMMxTZW0b2AS
+        eK3WwFHb8Yk8IXZbUGznUwRhsTZ3allaLeGfVK+UtASNHjttuhfbdfGvWFWZb8TZ9E4U4KwPIIGE5
+        IA3NyrYXtjy7eNsGt05UGiSqUHfFjUuYuyPYDmRDRloyPFh6hpP94BLA9rYPkT5UwAssdD13Rzdjz
+        MTSVhwayPAmu9cP9ipRvRYfKBT/6LJ/ueMnnHBjZkhXjIt3Ym16Qr+uxsNMjHOmPDMIQhpf36+rtI
+        H1Pd5e9bmtE2D0ZXZwRpmrXGTGAR6QX51RlhkOc3q3pdKTFgvIOK15LvcziaifhsPUvGKH7kugvB4
+        dYbGFe1Q==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxwJI-007L08-Lo; Thu, 16 Dec 2021 19:21:01 +0000
+Message-ID: <e742473935bf81be84adea6fa8061ce0846cc630.camel@infradead.org>
+Subject: Re: [PATCH v3 6/9] x86/smpboot: Support parallel startup of
+ secondary CPUs
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "mimoja@mimoja.de" <mimoja@mimoja.de>,
+        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
+        "hushiyuan@huawei.com" <hushiyuan@huawei.com>,
+        "luolongjun@huawei.com" <luolongjun@huawei.com>,
+        "hejingxian@huawei.com" <hejingxian@huawei.com>,
+        Joerg Roedel <joro@8bytes.org>
+Date:   Thu, 16 Dec 2021 19:20:55 +0000
+In-Reply-To: <3d8e2d0d-1830-48fb-bc2d-995099f39ef0@amd.com>
+References: <20211215145633.5238-1-dwmw2@infradead.org>
+         <20211215145633.5238-7-dwmw2@infradead.org>
+         <d10f529e-b1ee-6220-c6fc-80435f0061ee@amd.com>
+         <f25c6ad00689fee6ce3e294393c13f3dcdd5985f.camel@infradead.org>
+         <3d8e2d0d-1830-48fb-bc2d-995099f39ef0@amd.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-WWkmIz+fMWLrlrRAP/wf"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Collins <quic_collinsd@quicinc.com>
 
-The qpnpint_irq_set_type() callback function configures the type
-(edge vs level) and polarity (high, low, or both) of a particular
-PMIC interrupt within a given peripheral.  To do this, it reads
-the three consecutive IRQ configuration registers, modifies the
-specified IRQ bit within the register values, and finally writes
-the three modified register values back to the PMIC.  While a
-spinlock is used to provide mutual exclusion on the SPMI bus
-during the register read and write calls, there is no locking
-around the overall read, modify, write sequence.  This opens up
-the possibility of a race condition if two tasks set the type of
-a PMIC IRQ within the same peripheral simultaneously.
+--=-WWkmIz+fMWLrlrRAP/wf
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When the race condition is encountered, both tasks will read the
-old value of the registers and IRQ bits set by one of the tasks
-will be dropped upon the register write of the other task.  This
-then leads to PMIC IRQs being enabled with an incorrect type and
-polarity configured.  Such misconfiguration can lead to an IRQ
-storm that overwhelms the system and causes it to crash.
+On Thu, 2021-12-16 at 13:00 -0600, Tom Lendacky wrote:
+> On 12/16/21 12:24 PM, David Woodhouse wrote:
+> > On Thu, 2021-12-16 at 08:24 -0600, Tom Lendacky wrote:
+> >=20
+> > > This will break an SEV-ES guest because CPUID will generate a #VC and=
+ a
+> > > #VC handler has not been established yet.
+> > >=20
+> > > I guess for now, you can probably just not enable parallel startup fo=
+r
+> > > SEV-ES guests.
+> >=20
+> > OK, thanks. I'll expand it to allow 24 bits of (physical) APIC ID then,
+> > since it's no longer limited to CPUs without X2APIC. Then we can
+> > refrain from doing parallel bringup for SEV-ES guests, as you suggest.
+> >=20
+> > What precisely is the check I should be using for that?
+>=20
+> Calling cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT) will return true for=
+=20
+> an SEV-ES guest.
 
-This race condition and IRQ storm have been observed when using
-a pair of pm8941-pwrkey devices to handle PMK8350 pwrkey and
-resin interrupts.  The independent devices probe asynchronously
-in parallel and can simultaneously request and configure PMIC
-IRQs in the same PMIC peripheral.
+Thanks. Incremental patch (which I'll roll into Thomas's patch) looks a
+bit like this. Testing it now...
 
-For a good case, the IRQ configuration calls end up serialized
-due to timing deltas and the register read/write sequence looks
-like this:
 
-1. pwrkey probe: SPMI  read(0x1311): 0x00, 0x00, 0x00
-2. pwrkey probe: SPMI write(0x1311): 0x80, 0x80, 0x80
-3. resin probe:  SPMI  read(0x1311): 0x80, 0x80, 0x80
-4. resin probe:  SPMI write(0x1311): 0xC0, 0xC0, 0xC0
-
-The final register states after both devices have requested and
-enabled their respective IRQs is thus:
-
-0x1311: 0xC0
-0x1312: 0xC0
-0x1313: 0xC0
-0x1314: 0x00
-0x1315: 0xC0
-
-For a bad case, the IRQ configuration calls end up occurring
-simultaneously and the race condition is encountered.  The
-register read/write sequence then looks like this:
-
-1. pwrkey probe: SPMI  read(0x1311): 0x00, 0x00, 0x00
-2. resin probe:  SPMI  read(0x1311): 0x00, 0x00, 0x00
-3. pwrkey probe: SPMI write(0x1311): 0x80, 0x80, 0x80
-4. resin probe:  SPMI write(0x1311): 0x40, 0x40, 0x40
-
-In this case, the final register states after both devices have
-requested and enabled their respective IRQs is thus:
-
-0x1311: 0x40
-0x1312: 0x40
-0x1313: 0x40
-0x1314: 0x00
-0x1315: 0xC0
-
-This corresponds to the resin IRQ being configured for both
-rising and falling edges, as expected.  However, the pwrkey IRQ
-is misconfigured as level type with both polarity high and low
-set to disabled.  The PMIC IRQ triggering hardware treats this
-particular register configuration as if level low triggering is
-enabled.
-
-The raw pwrkey IRQ signal is low when the power key is not being
-pressed.  Thus, the pwrkey IRQ begins firing continuously in an
-IRQ storm.
-
-Fix the race condition by holding the spmi-pmic-arb spinlock for
-the duration of the read, modify, write sequence performed in the
-qpnpint_irq_set_type() function.  Split the pmic_arb_read_cmd()
-and pmic_arb_write_cmd() functions each into three parts so that
-hardware register IO is decoupled from spinlock locking.  This
-allows a new function pmic_arb_masked_write() to be added which
-locks the spinlock and then calls register IO functions to
-perform SPMI read and write commands in a single atomic
-operation.
-
-Signed-off-by: David Collins <quic_collinsd@quicinc.com>
-Link: https://lore.kernel.org/r/20211118034719.28971-1-quic_collinsd@quicinc.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/spmi/spmi-pmic-arb.c | 176 ++++++++++++++++++++++++++++-------
- 1 file changed, 140 insertions(+), 36 deletions(-)
-
-diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
-index e397c2532c8d..2113be40b5a9 100644
---- a/drivers/spmi/spmi-pmic-arb.c
-+++ b/drivers/spmi/spmi-pmic-arb.c
-@@ -334,24 +334,20 @@ static int pmic_arb_cmd(struct spmi_controller *ctrl, u8 opc, u8 sid)
- 	return pmic_arb->ver_ops->non_data_cmd(ctrl, opc, sid);
- }
- 
--static int pmic_arb_read_cmd(struct spmi_controller *ctrl, u8 opc, u8 sid,
--			     u16 addr, u8 *buf, size_t len)
-+static int pmic_arb_fmt_read_cmd(struct spmi_pmic_arb *pmic_arb, u8 opc, u8 sid,
-+				 u16 addr, size_t len, u32 *cmd, u32 *offset)
- {
--	struct spmi_pmic_arb *pmic_arb = spmi_controller_get_drvdata(ctrl);
--	unsigned long flags;
- 	u8 bc = len - 1;
--	u32 cmd;
- 	int rc;
--	u32 offset;
- 
- 	rc = pmic_arb->ver_ops->offset(pmic_arb, sid, addr,
- 				       PMIC_ARB_CHANNEL_OBS);
- 	if (rc < 0)
- 		return rc;
- 
--	offset = rc;
-+	*offset = rc;
- 	if (bc >= PMIC_ARB_MAX_TRANS_BYTES) {
--		dev_err(&ctrl->dev, "pmic-arb supports 1..%d bytes per trans, but:%zu requested",
-+		dev_err(&pmic_arb->spmic->dev, "pmic-arb supports 1..%d bytes per trans, but:%zu requested",
- 			PMIC_ARB_MAX_TRANS_BYTES, len);
- 		return  -EINVAL;
- 	}
-@@ -366,14 +362,24 @@ static int pmic_arb_read_cmd(struct spmi_controller *ctrl, u8 opc, u8 sid,
- 	else
- 		return -EINVAL;
- 
--	cmd = pmic_arb->ver_ops->fmt_cmd(opc, sid, addr, bc);
-+	*cmd = pmic_arb->ver_ops->fmt_cmd(opc, sid, addr, bc);
-+
-+	return 0;
-+}
-+
-+static int pmic_arb_read_cmd_unlocked(struct spmi_controller *ctrl, u32 cmd,
-+				      u32 offset, u8 sid, u16 addr, u8 *buf,
-+				      size_t len)
-+{
-+	struct spmi_pmic_arb *pmic_arb = spmi_controller_get_drvdata(ctrl);
-+	u8 bc = len - 1;
-+	int rc;
- 
--	raw_spin_lock_irqsave(&pmic_arb->lock, flags);
- 	pmic_arb_set_rd_cmd(pmic_arb, offset + PMIC_ARB_CMD, cmd);
- 	rc = pmic_arb_wait_for_done(ctrl, pmic_arb->rd_base, sid, addr,
- 				    PMIC_ARB_CHANNEL_OBS);
- 	if (rc)
--		goto done;
-+		return rc;
- 
- 	pmic_arb_read_data(pmic_arb, buf, offset + PMIC_ARB_RDATA0,
- 		     min_t(u8, bc, 3));
-@@ -381,30 +387,44 @@ static int pmic_arb_read_cmd(struct spmi_controller *ctrl, u8 opc, u8 sid,
- 	if (bc > 3)
- 		pmic_arb_read_data(pmic_arb, buf + 4, offset + PMIC_ARB_RDATA1,
- 					bc - 4);
-+	return 0;
-+}
- 
--done:
-+static int pmic_arb_read_cmd(struct spmi_controller *ctrl, u8 opc, u8 sid,
-+			     u16 addr, u8 *buf, size_t len)
-+{
-+	struct spmi_pmic_arb *pmic_arb = spmi_controller_get_drvdata(ctrl);
-+	unsigned long flags;
-+	u32 cmd, offset;
-+	int rc;
-+
-+	rc = pmic_arb_fmt_read_cmd(pmic_arb, opc, sid, addr, len, &cmd,
-+				   &offset);
-+	if (rc)
-+		return rc;
-+
-+	raw_spin_lock_irqsave(&pmic_arb->lock, flags);
-+	rc = pmic_arb_read_cmd_unlocked(ctrl, cmd, offset, sid, addr, buf, len);
- 	raw_spin_unlock_irqrestore(&pmic_arb->lock, flags);
-+
- 	return rc;
- }
- 
--static int pmic_arb_write_cmd(struct spmi_controller *ctrl, u8 opc, u8 sid,
--			u16 addr, const u8 *buf, size_t len)
-+static int pmic_arb_fmt_write_cmd(struct spmi_pmic_arb *pmic_arb, u8 opc,
-+				  u8 sid, u16 addr, size_t len, u32 *cmd,
-+				  u32 *offset)
- {
--	struct spmi_pmic_arb *pmic_arb = spmi_controller_get_drvdata(ctrl);
--	unsigned long flags;
- 	u8 bc = len - 1;
--	u32 cmd;
- 	int rc;
--	u32 offset;
- 
- 	rc = pmic_arb->ver_ops->offset(pmic_arb, sid, addr,
- 					PMIC_ARB_CHANNEL_RW);
- 	if (rc < 0)
- 		return rc;
- 
--	offset = rc;
-+	*offset = rc;
- 	if (bc >= PMIC_ARB_MAX_TRANS_BYTES) {
--		dev_err(&ctrl->dev, "pmic-arb supports 1..%d bytes per trans, but:%zu requested",
-+		dev_err(&pmic_arb->spmic->dev, "pmic-arb supports 1..%d bytes per trans, but:%zu requested",
- 			PMIC_ARB_MAX_TRANS_BYTES, len);
- 		return  -EINVAL;
- 	}
-@@ -421,10 +441,19 @@ static int pmic_arb_write_cmd(struct spmi_controller *ctrl, u8 opc, u8 sid,
- 	else
- 		return -EINVAL;
- 
--	cmd = pmic_arb->ver_ops->fmt_cmd(opc, sid, addr, bc);
-+	*cmd = pmic_arb->ver_ops->fmt_cmd(opc, sid, addr, bc);
-+
-+	return 0;
-+}
-+
-+static int pmic_arb_write_cmd_unlocked(struct spmi_controller *ctrl, u32 cmd,
-+				      u32 offset, u8 sid, u16 addr,
-+				      const u8 *buf, size_t len)
-+{
-+	struct spmi_pmic_arb *pmic_arb = spmi_controller_get_drvdata(ctrl);
-+	u8 bc = len - 1;
- 
- 	/* Write data to FIFOs */
--	raw_spin_lock_irqsave(&pmic_arb->lock, flags);
- 	pmic_arb_write_data(pmic_arb, buf, offset + PMIC_ARB_WDATA0,
- 				min_t(u8, bc, 3));
- 	if (bc > 3)
-@@ -433,8 +462,62 @@ static int pmic_arb_write_cmd(struct spmi_controller *ctrl, u8 opc, u8 sid,
- 
- 	/* Start the transaction */
- 	pmic_arb_base_write(pmic_arb, offset + PMIC_ARB_CMD, cmd);
--	rc = pmic_arb_wait_for_done(ctrl, pmic_arb->wr_base, sid, addr,
--				    PMIC_ARB_CHANNEL_RW);
-+	return pmic_arb_wait_for_done(ctrl, pmic_arb->wr_base, sid, addr,
-+				      PMIC_ARB_CHANNEL_RW);
-+}
-+
-+static int pmic_arb_write_cmd(struct spmi_controller *ctrl, u8 opc, u8 sid,
-+			      u16 addr, const u8 *buf, size_t len)
-+{
-+	struct spmi_pmic_arb *pmic_arb = spmi_controller_get_drvdata(ctrl);
-+	unsigned long flags;
-+	u32 cmd, offset;
-+	int rc;
-+
-+	rc = pmic_arb_fmt_write_cmd(pmic_arb, opc, sid, addr, len, &cmd,
-+				    &offset);
-+	if (rc)
-+		return rc;
-+
-+	raw_spin_lock_irqsave(&pmic_arb->lock, flags);
-+	rc = pmic_arb_write_cmd_unlocked(ctrl, cmd, offset, sid, addr, buf,
-+					 len);
-+	raw_spin_unlock_irqrestore(&pmic_arb->lock, flags);
-+
-+	return rc;
-+}
-+
-+static int pmic_arb_masked_write(struct spmi_controller *ctrl, u8 sid, u16 addr,
-+				 const u8 *buf, const u8 *mask, size_t len)
-+{
-+	struct spmi_pmic_arb *pmic_arb = spmi_controller_get_drvdata(ctrl);
-+	u32 read_cmd, read_offset, write_cmd, write_offset;
-+	u8 temp[PMIC_ARB_MAX_TRANS_BYTES];
-+	unsigned long flags;
-+	int rc, i;
-+
-+	rc = pmic_arb_fmt_read_cmd(pmic_arb, SPMI_CMD_EXT_READL, sid, addr, len,
-+				   &read_cmd, &read_offset);
-+	if (rc)
-+		return rc;
-+
-+	rc = pmic_arb_fmt_write_cmd(pmic_arb, SPMI_CMD_EXT_WRITEL, sid, addr,
-+				    len, &write_cmd, &write_offset);
-+	if (rc)
-+		return rc;
-+
-+	raw_spin_lock_irqsave(&pmic_arb->lock, flags);
-+	rc = pmic_arb_read_cmd_unlocked(ctrl, read_cmd, read_offset, sid, addr,
-+					temp, len);
-+	if (rc)
-+		goto done;
-+
-+	for (i = 0; i < len; i++)
-+		temp[i] = (temp[i] & ~mask[i]) | (buf[i] & mask[i]);
-+
-+	rc = pmic_arb_write_cmd_unlocked(ctrl, write_cmd, write_offset, sid,
-+					 addr, temp, len);
-+done:
- 	raw_spin_unlock_irqrestore(&pmic_arb->lock, flags);
- 
- 	return rc;
-@@ -483,6 +566,23 @@ static void qpnpint_spmi_read(struct irq_data *d, u8 reg, void *buf, size_t len)
- 				    d->irq);
- }
- 
-+static int qpnpint_spmi_masked_write(struct irq_data *d, u8 reg,
-+				     const void *buf, const void *mask,
-+				     size_t len)
-+{
-+	struct spmi_pmic_arb *pmic_arb = irq_data_get_irq_chip_data(d);
-+	u8 sid = hwirq_to_sid(d->hwirq);
-+	u8 per = hwirq_to_per(d->hwirq);
-+	int rc;
-+
-+	rc = pmic_arb_masked_write(pmic_arb->spmic, sid, (per << 8) + reg, buf,
-+				   mask, len);
-+	if (rc)
-+		dev_err_ratelimited(&pmic_arb->spmic->dev, "failed irqchip transaction on %x rc=%d\n",
-+				    d->irq, rc);
-+	return rc;
-+}
-+
- static void cleanup_irq(struct spmi_pmic_arb *pmic_arb, u16 apid, int id)
- {
- 	u16 ppid = pmic_arb->apid_data[apid].ppid;
-@@ -601,18 +701,18 @@ static void qpnpint_irq_unmask(struct irq_data *d)
- 
- static int qpnpint_irq_set_type(struct irq_data *d, unsigned int flow_type)
- {
--	struct spmi_pmic_arb_qpnpint_type type;
-+	struct spmi_pmic_arb_qpnpint_type type = {0};
-+	struct spmi_pmic_arb_qpnpint_type mask;
- 	irq_flow_handler_t flow_handler;
--	u8 irq = hwirq_to_irq(d->hwirq);
--
--	qpnpint_spmi_read(d, QPNPINT_REG_SET_TYPE, &type, sizeof(type));
-+	u8 irq_bit = BIT(hwirq_to_irq(d->hwirq));
-+	int rc;
- 
- 	if (flow_type & (IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING)) {
--		type.type |= BIT(irq);
-+		type.type = irq_bit;
- 		if (flow_type & IRQF_TRIGGER_RISING)
--			type.polarity_high |= BIT(irq);
-+			type.polarity_high = irq_bit;
- 		if (flow_type & IRQF_TRIGGER_FALLING)
--			type.polarity_low  |= BIT(irq);
-+			type.polarity_low = irq_bit;
- 
- 		flow_handler = handle_edge_irq;
+diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
+index 0b6012fd3e55..1ac33ce1d60e 100644
+--- a/arch/x86/include/asm/smp.h
++++ b/arch/x86/include/asm/smp.h
+@@ -199,7 +199,6 @@ extern unsigned int smpboot_control;
+ #endif /* !__ASSEMBLY__ */
+=20
+ /* Control bits for startup_64 */
+-#define	STARTUP_USE_APICID	0x10000
+-#define	STARTUP_USE_CPUID_0B	0x20000
++#define	STARTUP_PARALLEL	0x80000000
+=20
+ #endif /* _ASM_X86_SMP_H */
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index 0249212e23d2..3e4c3c416bce 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -189,11 +189,10 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L=
+_GLOBAL)
+ 	 * Secondary CPUs find out the offsets via the APIC ID. For parallel
+ 	 * boot the APIC ID is retrieved from CPUID, otherwise it's encoded
+ 	 * in smpboot_control:
+-	 * Bit 0-15	APICID if STARTUP_USE_CPUID_0B is not set
+-	 * Bit 16 	Secondary boot flag
+-	 * Bit 17	Parallel boot flag
++	 * Bit 0-30	APIC ID if STARTUP_PARALLEL is not set
++	 * Bit 31	Parallel boot flag (use CPUID leaf 0x0b for APIC ID).
+ 	 */
+-	testl	$STARTUP_USE_CPUID_0B, %eax
++	testl	$STARTUP_PARALLEL, %eax
+ 	jz	.Lsetup_AP
+=20
+ 	mov	$0x0B, %eax
+@@ -203,7 +202,6 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_G=
+LOBAL)
+=20
+ .Lsetup_AP:
+ 	/* EAX contains the APICID of the current CPU */
+-	andl	$0xFFFF, %eax
+ 	xorl	%ecx, %ecx
+ 	leaq	cpuid_to_apicid(%rip), %rbx
+=20
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 725fede281ac..acfb22ce8d4f 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1125,13 +1125,10 @@ static int do_boot_cpu(int apicid, int cpu, struct =
+task_struct *idle,
+ 	if (IS_ENABLED(CONFIG_X86_32)) {
+ 		early_gdt_descr.address =3D (unsigned long)get_cpu_gdt_rw(cpu);
+ 		initial_stack  =3D idle->thread.sp;
+-	} else if (boot_cpu_data.cpuid_level < 0x0B) {
+-		/* Anything with X2APIC should have CPUID leaf 0x0B */
+-		if (WARN_ON_ONCE(x2apic_mode) && apicid > 0xffff)
+-			return -EIO;
+-		smpboot_control =3D apicid | STARTUP_USE_APICID;
++	} else if (do_parallel_bringup) {
++		smpboot_control =3D STARTUP_PARALLEL;
  	} else {
-@@ -620,19 +720,23 @@ static int qpnpint_irq_set_type(struct irq_data *d, unsigned int flow_type)
- 		    (flow_type & (IRQF_TRIGGER_LOW)))
- 			return -EINVAL;
- 
--		type.type &= ~BIT(irq); /* level trig */
- 		if (flow_type & IRQF_TRIGGER_HIGH)
--			type.polarity_high |= BIT(irq);
-+			type.polarity_high = irq_bit;
- 		else
--			type.polarity_low  |= BIT(irq);
-+			type.polarity_low = irq_bit;
- 
- 		flow_handler = handle_level_irq;
+-		smpboot_control =3D STARTUP_USE_CPUID_0B;
++		smpboot_control =3D apicid;
  	}
- 
--	qpnpint_spmi_write(d, QPNPINT_REG_SET_TYPE, &type, sizeof(type));
-+	mask.type = irq_bit;
-+	mask.polarity_high = irq_bit;
-+	mask.polarity_low = irq_bit;
-+
-+	rc = qpnpint_spmi_masked_write(d, QPNPINT_REG_SET_TYPE, &type, &mask,
-+				       sizeof(type));
- 	irq_set_handler_locked(d, flow_handler);
- 
--	return 0;
-+	return rc;
- }
- 
- static int qpnpint_irq_set_wake(struct irq_data *d, unsigned int on)
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+=20
+ 	/* Enable the espfix hack for this CPU */
+@@ -1553,9 +1550,11 @@ void __init native_smp_prepare_cpus(unsigned int max=
+_cpus)
+=20
+ 	/*
+ 	 * We can do 64-bit AP bringup in parallel if the CPU reports its
+-	 * APIC ID in CPUID leaf 0x0B. Otherwise it's too hard.
++	 * APIC ID in CPUID leaf 0x0B. Otherwise it's too hard. And not
++	 * for SEV-ES guests because they can't use CPUID that early.
+ 	 */
+-	if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 0x0B)
++	if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 0x0B ||
++	    cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
+ 		do_parallel_bringup =3D false;
+=20
+ 	if (do_parallel_bringup)
+
+--=-WWkmIz+fMWLrlrRAP/wf
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
+ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
+OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
+RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
+cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
+uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
+Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
+Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
+xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
+YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
+nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
+PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
+7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
+Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
+MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
+NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
+AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
+/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
+0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
+vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
+ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
+ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
+CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
+BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
+aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
+bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
+bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
+LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
+CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
+W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
+vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
+gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
+RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
+jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
+b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
+AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
+BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
++bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
+WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
+aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
+CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
+u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
+RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
+QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
+b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
+cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
+SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
+0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
+KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
+E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
+M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
+jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
+yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
+gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
+R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
+ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
+MjE2MTkyMDU1WjAvBgkqhkiG9w0BCQQxIgQggIkKAUld+Fk1xZ68ZWinxKJwQvj7pkbSJCKaKK6L
+4mcwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
+PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
+aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
+DQEBAQUABIIBADAvDSrAmtJJNknjzlOKKny2lLdg8Ec+yV8mydwckDiZ/7rq2hHsOiMMb1H5alCP
+9hU3JU3/HYCnOVVEdlX2uqGvld0UL/YHdCg9FaiGuFXWbp730ziLq06LHBEDAmyxMai8i+NYZOQO
+oQIG0Iu1JkshXnd8Eim0xPsmptgY+71DxQA4ZM8c2GWCfnYYf8JrjHsGU9PLgM9fSPQJoqvIx70j
+SX7MVJy0i1+luB9jGByCYg4S/hi0I7VoHmYNPzz4ykjIFq+c/2YumVnO1j5FfFjIUiXSlkNZ+/SK
+FnJMONaGbQ0Xlmdz5iMtuYMWtIj8UWkJ6yjL+AnWzBo7jkSvGU8AAAAAAAA=
+
+
+--=-WWkmIz+fMWLrlrRAP/wf--
 

@@ -2,130 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5D5477308
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0449947730C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237474AbhLPNWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbhLPNWF (ORCPT
+        id S237486AbhLPNXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:23:15 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8104 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232110AbhLPNXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:22:05 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1A4C061574;
-        Thu, 16 Dec 2021 05:22:05 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id x15so87838339edv.1;
-        Thu, 16 Dec 2021 05:22:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=60XSf9cHzUxT6ZkrcHjpgYMJcYBfPDQTULwlGLQzSnM=;
-        b=kCx+JYRzpt9IsbUnF/BkdXilxvx4imVH7NBWYFmU9VtfhpKLH1EM4q0RvV1irbcAt2
-         4OUo4eyzE7sMOK6tRXsc4xLVv/qtM792nz5NtADQWBjrap89Y/9E/DZxSBIHu7325r/R
-         hIC/sGcS9qEiPwBXZAW5NovkyMWfLumPUtQmunPWnVoQUBiERx3rk/VkbLYBfkwVGO9y
-         EsKuunqOtjcdR6HyMyyx/bPiRPdWzMwghOLxbC9p5Js1T6rGt75sjMvVBIJB63A2ZgLe
-         5aMLTapxYRh8oYTA1blPPWVmnTomQhw8jhKlzJ1REvymCEuTgBEiSQF+CTWuRXtm5xsl
-         2mGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=60XSf9cHzUxT6ZkrcHjpgYMJcYBfPDQTULwlGLQzSnM=;
-        b=3F5Tup9UV2RED/P0mk5FA7AM5/ufsoxvyuKPjqylUTbFn7Mvgx82LG+2wzoJT/mKXo
-         xDMWxl0QgvNOnbc64WYV/5YdqLzYmrsfLpXo+lhV5hX03c0dcR3Yxujbj0DgwWwxvZKJ
-         kseEn2OxP+g0ThWs4gMx8USbqhAgmkFahl+GwNPRIWa8WGiC6ktBAHl41hgDpxNhO9f4
-         0D6ZoEzKYRKso9r2uktbC00fLcQOCjQ7v56MiXShu7AJNShQPRuPXOa5FSK0gd+XrfB+
-         SZ/2zYSVA6gPJHuPx/GzTevqvUZIcPRuCUTldA01u4qAKUXph+X2MwQVKMjOl/nDb9od
-         5Iyg==
-X-Gm-Message-State: AOAM533jfoUxBFP7DXZji6SqJrP5NcF3es96+NI9fuG40Mkfl6FJZvPU
-        opTYy7h01uH4MqaUfUcCfvs=
-X-Google-Smtp-Source: ABdhPJzNKXQY5diG8Cxb9pHPRUB7F1RD08f1ZucgR2b3lGFQEqnZF+Gahv7l9l3FM9jf/FfHySZvDQ==
-X-Received: by 2002:a05:6402:1768:: with SMTP id da8mr20810877edb.252.1639660923591;
-        Thu, 16 Dec 2021 05:22:03 -0800 (PST)
-Received: from [192.168.8.198] ([185.69.144.117])
-        by smtp.gmail.com with ESMTPSA id sd2sm1857108ejc.22.2021.12.16.05.22.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 05:22:02 -0800 (PST)
-Message-ID: <7ca623df-73ed-9191-bec7-a4728f2f95e6@gmail.com>
-Date:   Thu, 16 Dec 2021 13:21:26 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
-Content-Language: en-US
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
-References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
- <Yboc/G18R1Vi1eQV@google.com>
- <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
- <Ybom69OyOjsR7kmZ@google.com>
- <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
- <Yboy2WwaREgo95dy@google.com>
- <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
- <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com>
- <92f69969-42dc-204a-4138-16fdaaebb78d@gmail.com>
- <CAKH8qBuZxBen871AWDK1eDcxJenK7UkSQCZQsHCPhk6nk9e=Ng@mail.gmail.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAKH8qBuZxBen871AWDK1eDcxJenK7UkSQCZQsHCPhk6nk9e=Ng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 16 Dec 2021 08:23:14 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BGAhMrY038697;
+        Thu, 16 Dec 2021 13:23:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=C60u5fgQwrqkI/S3ecNj2qnPkL6oMzGVTZ1CXYGQmPI=;
+ b=ZBdT6uo+fQzyRgBxCIn/XrtnphSlI71kwQhBEYN5FF/qSMWcxRp1M3w2uEM3teaOhVKI
+ RMHLfuRQEMb+iouObqxucsYlNerjOdNZDX9lzgfX4KEf1Ltf8NM0F/eIjOHRJaTDpz0A
+ hF6/I4sEFQZdGT5cwPYSHROtnfArVWw6BXXDHDKCxvQwXh0UAxFiMDr5WmklX9oiAbEm
+ Z520QrEti5YSX9tlylNicWzkPnlivo97tzx3zb/9lauLc64ndcg30EZRrkfEb0Hj+WQj
+ eRZenyLsWYb4AcFO2yjJp2o3SbwySXOcUOJQUKehZEZ3DrsfMA772gtcEwT+J5tjtpkM lw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cymkw5xb6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 13:23:04 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BGDN4jV020625;
+        Thu, 16 Dec 2021 13:23:04 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cymkw5xa8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 13:23:03 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BGDIU21029147;
+        Thu, 16 Dec 2021 13:23:01 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03fra.de.ibm.com with ESMTP id 3cy7k9ekkj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 13:23:01 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BGDMwWi14877060
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Dec 2021 13:22:58 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A8669AE053;
+        Thu, 16 Dec 2021 13:22:58 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A9E19AE04D;
+        Thu, 16 Dec 2021 13:22:57 +0000 (GMT)
+Received: from sig-9-65-93-34.ibm.com (unknown [9.65.93.34])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 16 Dec 2021 13:22:57 +0000 (GMT)
+Message-ID: <72b57e7f22a593ea7fe38e340ba11de944658554.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fix undefined arch_ima_get_secureboot() and co
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     joeyli <jlee@suse.com>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Date:   Thu, 16 Dec 2021 08:22:56 -0500
+In-Reply-To: <20211216043212.GG3786@linux-l9pv.suse>
+References: <20211213161145.3447-1-tiwai@suse.de>
+         <d99fc78005d8a245449dd6ca0158cf9e2a897465.camel@linux.ibm.com>
+         <s5hpmpz9o08.wl-tiwai@suse.de> <20211215160345.GF3786@linux-l9pv.suse>
+         <a54f7de463853f9c3b7404739793d2f690aa317e.camel@linux.ibm.com>
+         <20211216043212.GG3786@linux-l9pv.suse>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AWs_xyAFMNpQnf6ETQvsFhZgLU4prfqw
+X-Proofpoint-ORIG-GUID: sUnBR6dCTZ_YliRkNsmqGLItsiUglCtY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-16_04,2021-12-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ clxscore=1015 lowpriorityscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112160073
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 22:07, Stanislav Fomichev wrote:
-> On Wed, Dec 15, 2021 at 11:55 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>
->> On 12/15/21 19:15, Stanislav Fomichev wrote:
->>> On Wed, Dec 15, 2021 at 10:54 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>>>
->>>> On 12/15/21 18:24, sdf@google.com wrote:
-[...]
->>>>> I can probably do more experiments on my side once your patch is
->>>>> accepted. I'm mostly concerned with getsockopt(TCP_ZEROCOPY_RECEIVE).
->>>>> If you claim there is visible overhead for a direct call then there
->>>>> should be visible benefit to using CGROUP_BPF_TYPE_ENABLED there as
->>>>> well.
->>>>
->>>> Interesting, sounds getsockopt might be performance sensitive to
->>>> someone.
->>>>
->>>> FWIW, I forgot to mention that for testing tx I'm using io_uring
->>>> (for both zc and not) with good submission batching.
->>>
->>> Yeah, last time I saw 2-3% as well, but it was due to kmalloc, see
->>> more details in 9cacf81f8161, it was pretty visible under perf.
->>> That's why I'm a bit skeptical of your claims of direct calls being
->>> somehow visible in these 2-3% (even skb pulls/pushes are not 2-3%?).
->>
->> migrate_disable/enable together were taking somewhat in-between
->> 1% and 1.5% in profiling, don't remember the exact number. The rest
->> should be from rcu_read_lock/unlock() in BPF_PROG_RUN_ARRAY_CG_FLAGS()
->> and other extra bits on the way.
+On Thu, 2021-12-16 at 12:32 +0800, joeyli wrote:
+> On Wed, Dec 15, 2021 at 01:16:48PM -0500, Mimi Zohar wrote:
+> > [Cc'ing Eric Snowberg, Jarkko]
+> > 
+> > Hi Joey,
+> > 
+> > On Thu, 2021-12-16 at 00:03 +0800, joeyli wrote:
+> > > Hi Takashi, Mimi,
+> > > 
+> > > On Tue, Dec 14, 2021 at 04:58:47PM +0100, Takashi Iwai wrote:
+> > > > On Tue, 14 Dec 2021 16:31:21 +0100,
+> > > > Mimi Zohar wrote:
+> > > > > 
+> > > > > Hi Takashi,
+> > > > > 
+> > > > > On Mon, 2021-12-13 at 17:11 +0100, Takashi Iwai wrote:
+> > > > > > Currently arch_ima_get_secureboot() and arch_get_ima_policy() are
+> > > > > > defined only when CONFIG_IMA is set, and this makes the code calling
+> > > > > > those functions without CONFIG_IMA failing.  Although there is no such
+> > > > > > in-tree users, but the out-of-tree users already hit it.
+> > > > > > 
+> > > > > > Move the declaration and the dummy definition of those functions
+> > > > > > outside ifdef-CONFIG_IMA block for fixing the undefined symbols.
+> > > > > > 
+> > > > > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> > > > > 
+> > > > > Before lockdown was upstreamed, we made sure that IMA and lockdown
+> > > > > could co-exist.  This patch makes the stub functions available even
+> > > > > when IMA is not configured.  Do the remaining downstream patches
+> > > > > require IMA to be disabled or can IMA co-exist?
+> > > > 
+> > > > I guess Joey (Cc'ed) can explain this better.  AFAIK, currently it's
+> > > > used in a part of MODSIGN stuff in SUSE kernels, and it's calling
+> > > > unconditionally this function for checking whether the system is with
+> > > > the Secure Boot or not.
+> > > >
+> > > 
+> > > Actually in downstream code, I used arch_ima_get_secureboot() in
+> > > load_uefi_certs() to prevent the mok be loaded when secure boot is
+> > > disabled. Because the security of MOK relies on secure boot.
+> > > 
+> > > The downstream code likes this:
+> > > 
+> > > /* the MOK and MOKx can not be trusted when secure boot is disabled */
+> > > -      if (!efi_enabled(EFI_SECURE_BOOT))
+> > > +      if (!arch_ima_get_secureboot())
+> > > 		return 0;
+> > > 
+> > > The old EFI_SECURE_BOOT bit can only be available on x86_64, so I switch
+> > > the code to to arch_ima_get_secureboot() for cross-architectures and sync
+> > > with upstream api.
+> > > 
+> > > The load_uefi.c depends on CONFIG_INTEGRITY but not CONFIG_IMA. So
+> > > load_uefi.c still be built when CONFIG_INTEGRITY=y and CONFIG_IMA=n.
+> > > Then "implicit declaration of function 'arch_ima_get_secureboot'" is
+> > > happened.
+> > 
+> > The existing upstream code doesn't require secureboot to load the
+> > MOK/MOKx keys.  Why is your change being made downstream?
+> >
+> Because the security of MOK relies on secure boot. When secure boot is
+> disabled, EFI firmware will not verify binary code. So arbitrary efi
+> binary code can modify MOK when rebooting.
 > 
-> You probably have a preemptiple kernel and preemptible rcu which most
-> likely explains why you see the overhead and I won't (non-preemptible
-> kernel in our env, rcu_read_lock is essentially a nop, just a compiler
-> barrier).
-
-Right. For reference tried out non-preemptible, perf shows the function
-taking 0.8% with a NIC and 1.2% with a dummy netdev.
-
-
->> I'm skeptical I'll be able to measure inlining one function,
->> variability between boots/runs is usually greater and would hide it.
+> When user disabled secure boot, a hacker can just replace shim.efi then
+> reboot for enrolling new MOK without any interactive. Or hacker can just
+> replace shim.efi and wait user to reboot their machine. A hacker's MOK can
+> also be enrolled by hacked shim. User can't perceive. 
+>  
+> > Are you aware of Eric Snowberg's "Enroll kernel keys thru MOK" patch
+> > set?  When INTEGRITY_MACHINE_KEYRING is enabled and new UEFI variables
+> > are enabled,  instead of loading the MOK keys onto the .platform
+> > keyring, they're loaded onto a new keyring name ".machine", which is
+> > linked to the secondary keyring.
+> > 
+> > Eric's patchset doesn't add a new check either to make sure secure boot
+> > is enabled before loading the MOK/MOKx keys.
+> >
 > 
-> Right, that's why I suggested to mirror what we do in set/getsockopt
-> instead of the new extra CGROUP_BPF_TYPE_ENABLED. But I'll leave it up
-> to you, Martin and the rest.
+> Kernel doesn't know how was a MOK enrolled. Kernel can only detect the
+> state of secure boot. If kernel doesn't want to check the state of secure
+> boot before loading MOK, then user should understands that they can not disable
+> secure boot when using MOK. 
 
--- 
-Pavel Begunkov
+Thanks, Joey, for the detailed explained.  I was agreeing with you that
+MOK/MOKx keys should only be loaded when secure boot is enabled.  A
+better way for me to have phrased the questions would have been, why
+are you making this change downstream and not upstream?
+
+thanks,
+
+Mimi
+

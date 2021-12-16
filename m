@@ -2,225 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1E9477163
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D16547716F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235069AbhLPMJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235005AbhLPMJg (ORCPT
+        id S235295AbhLPMNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:13:36 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:41310 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233971AbhLPMNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:09:36 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDFFC06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:09:36 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id z9so25147237qtj.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:09:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=27iVM0aKdAv+JiQsBY26McdFr1qGDMbXj62yl//SmdI=;
-        b=EjgfyGJxxUe0zKPwlPZuWE1t0SOucWDWFeCaHtd9CtTjvYD8KEvoSGADHu9gyNPb0w
-         JWQPYcVpFoMLCKxKe917EAK3rQhm9rqbvanX8/9tJipQjxDtiQrgd9Cyi+m8psvEwL07
-         PriJRFI5nVCSe2OHRbYWLOhhpLhYbXN1zyMtuHe9ubzsaCm6FuB5gxGs1deiCaaqsuIS
-         7SNZge5tLLcsnLVmrsCRRGJLbd0V8yjk0WMx3srgHenZpyaQN39xjSVUVhEL9GRNyEiG
-         C/FPjhJYYMzHEq3sI8Gnz+D8pqXEECyYqYbePLztZIJ0168ItbNPW6z/qUz4JZ9EcVMP
-         xe9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=27iVM0aKdAv+JiQsBY26McdFr1qGDMbXj62yl//SmdI=;
-        b=lFitTxK9N9P5EiH5DXDeCw8fwasGq8zyYuenJt/882/m5XkOwfyQspg8Bsq9bNu//M
-         tp13gJ3gF/cXkje0KOlOx3cXw0j6Ciw5ZEteBUxSbNBR2X4ESoI6+URodMv0hkI5Id1c
-         hia5f0V1rZ4pc0jJymi9DqIghQPmZ2AIB+5D0HvQJ/T0nDfq1k+AkfNBHf56c6WzJfqG
-         kSXrcZ8MTDosSXN2kh/N6DKGjwIwj5PNcn/5DFb3NkE3SHYHYpUPO8A+jdOaYPO3veYJ
-         LiC+sP5dBt6GYuMWeF+ExctIiCYCbEZPP2FA+gfTQgpaAdQXFXpvVEYSGzw0k2V6OHlH
-         jN4w==
-X-Gm-Message-State: AOAM532h3HIS3zTEbOjulqBtLCXah2BzbknET3kEy8cAf7Z1HSscpyF/
-        KZwdB6Y70148tPw6Uboa8XSGdw==
-X-Google-Smtp-Source: ABdhPJzK5axWJi3teF0QGvKpI/4LKnG7d8mowHvrhT9SMBZNmCvwXv/NOOVc4korY3W6ostQo3hcsw==
-X-Received: by 2002:a05:622a:1902:: with SMTP id w2mr16510679qtc.93.1639656575105;
-        Thu, 16 Dec 2021 04:09:35 -0800 (PST)
-Received: from eze-laptop ([2803:9800:98c2:8470:9f4:8e2a:88e5:ec01])
-        by smtp.gmail.com with ESMTPSA id k9sm4220397qta.48.2021.12.16.04.09.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 04:09:33 -0800 (PST)
-Date:   Thu, 16 Dec 2021 09:09:26 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-media@vger.kernel.org, abel.vesa@nxp.com,
-        aford@beaconembedded.com, benjamin.gaignard@collabora.com,
-        hverkuil-cisco@xs4all.nl, Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH V2 05/10] media: hantro: Allow i.MX8MQ G1 and G2 to run
- independently
-Message-ID: <YbssdkOvCR3UMtKQ@eze-laptop>
-References: <20211216111256.2362683-1-aford173@gmail.com>
- <20211216111256.2362683-6-aford173@gmail.com>
+        Thu, 16 Dec 2021 07:13:35 -0500
+X-UUID: e6031b54c83246198f5d03cca87adb32-20211216
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=JsBeYaZYeXLVXHzQMc7eN1VR8gvo5vkunK6fwqeNtL4=;
+        b=T/1nG0WuT18kRCDoDRUatg1nfJTohaClXY7BUkVHIdQ2NTcO74EoDOZsCJjuQ/0Ik2gag24eCVoXYLczQLUa/wUn2k4qS7u7CrOkDhbBvV91TIo0HtEG+j6YoV+P1r9PnmhoS8r1GMfwUcTvYJ2SJdtKRfOY75fTH1C7ISxET94=;
+X-UUID: e6031b54c83246198f5d03cca87adb32-20211216
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <xiayu.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1278258318; Thu, 16 Dec 2021 20:13:33 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 16 Dec 2021 20:13:31 +0800
+Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
+ mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Thu, 16 Dec 2021 20:13:30 +0800
+Message-ID: <0e7b0e3d5796bb13d5243df34163849f32e8dfb3.camel@mediatek.com>
+Subject: Re: [PATCH] Add Multiple TX/RX Queues Support for WWAN Network
+ Device
+From:   Xiayu Zhang <xiayu.zhang@mediatek.com>
+To:     Sergey Ryazanov <ryazanov.s.a@gmail.com>
+CC:     Loic Poulain <loic.poulain@linaro.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Haijun Liu =?UTF-8?Q?=28=E5=88=98=E6=B5=B7=E5=86=9B=29?=" 
+        <haijun.liu@mediatek.com>,
+        Zhaoping Shu =?UTF-8?Q?=28=E8=88=92=E5=8F=AC=E5=B9=B3=29?= 
+        <Zhaoping.Shu@mediatek.com>,
+        HW He =?UTF-8?Q?=28=E4=BD=95=E4=BC=9F=29?= <HW.He@mediatek.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>
+Date:   Thu, 16 Dec 2021 20:13:30 +0800
+In-Reply-To: <CAHNKnsTWkiaKPmOghn_ztLDOcTbci8w4wkWhQ_EZPMNu0dRy3Q@mail.gmail.com>
+References: <20211208040414.151960-1-xiayu.zhang@mediatek.com>
+         <CAHNKnsRZpYsiWORgAejYwQqP5P=PSt-V7_i73G1yfh-UR2zFjw@mail.gmail.com>
+         <6f4ae1d8b1b53cf998eaa14260d93fd3f4c8d5ad.camel@mediatek.com>
+         <CAHNKnsQ6qLcUTiTiPEAp+rmoVtrGOjoY98nQFsrwSWUu-v7wYQ@mail.gmail.com>
+         <76bc0c0174edc3a0c89bb880a237c844d44ac46b.camel@mediatek.com>
+         <CAHNKnsTWkiaKPmOghn_ztLDOcTbci8w4wkWhQ_EZPMNu0dRy3Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216111256.2362683-6-aford173@gmail.com>
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
+SGkgU2VyZ2V5IGFuZCBMb2ljLA0KDQpSZWFsbHkgdGhhbmsgeW91IGZvciB0aGVzZSBpbmZvcm1h
+dGlvbi4NCg0KSXQgc2VlbXMgdGhhdCBJIG5lZWQgdG8gc3VibWl0IGFub3RoZXIgcGF0Y2ggZm9y
+IGRpc2N1c3Npb24uDQoNCkF0IHRoZSBtZWFudGltZSwgSSBoYXZlIHNvbWUgcXVlc3Rpb25zIGJl
+bG93IGFuZCBob3BlIHlvdSBjb3VsZCBkbyBtZSBhDQpmYXZvci4NCg0KT24gV2VkLCAyMDIxLTEy
+LTE1IGF0IDIyOjE2ICswODAwLCBTZXJnZXkgUnlhemFub3Ygd3JvdGU6DQoNCj4gVGhlcmUgYXJl
+IHR3byB0aGluZ3MgdGhhdCB0cmlnZ2VyIHRoZSBkaXNjdXNzaW9uOg0KPiAxKSBhYnNlbmNlIG9m
+IHVzZXJzIG9mIHRoZSBuZXcgQVBJOw0KDQpDYW4gSSBjaG9vc2UgV1dBTiBkZXZpY2Ugc2ltdWxh
+dG9yICh3d2FuX2h3c2ltLmMpIGFzIHRoZSBpbi10cmVlIHVzZXINCmZvciB0aGVzZSBuZXcgQVBJ
+cz8gQW5kLCBDYW4gSSBzdWJtaXQgbmV3IEFQSXMgYW5kIGNoYW5nZXMgZm9yIHRoZSB1c2VyDQpk
+cml2ZXIgaW4gYSBzaW5nbGUgcGF0Y2g/DQoNCj4gMikgYW4gYXR0ZW1wdCB0byBzaWxlbnRseSBj
+b3JyZWN0IGEgdXNlciBjaG9pY2UgaW5zdGVhZCBvZiBleHBsaWNpdA0KPiByZWplY3Rpb24gb2Yg
+YSB3cm9uZyB2YWx1ZS4NCg0KSSB3aWxsIHRyeSB0byBmb2xsb3cgdGhpczoNCiAgIGEuIElmIHVz
+ZXIgZG9lc24ndCBzcGVjaWZ5IGEgbnVtYmVyLCB1c2UgV1dBTiBkcml2ZXIncyBkZWZhdWx0DQog
+ICBudW1iZXIuDQogICBiLiBJZiB1c2VyIHNwZWNpZmllcyBhbiBpbXByb3BlciB2YWx1ZSwgcmVq
+ZWN0IGl0IGV4cGxpY2l0bHkuDQo=
 
-On Thu, Dec 16, 2021 at 05:12:50AM -0600, Adam Ford wrote:
-> The VPU in the i.MX8MQ is really the combination of Hantro G1 and
-> Hantro G2. With the updated vpu-blk-ctrl, the power domains system
-> can enable and disable them separately as well as pull them out of
-> reset. This simplifies the code and lets them run independently
-> while still retaining backwards compatibility with older device
-> trees for those using G1.
-> 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> 
-> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> index ab2467998d29..e7afda388ee5 100644
-> --- a/drivers/staging/media/hantro/hantro_drv.c
-> +++ b/drivers/staging/media/hantro/hantro_drv.c
-> @@ -609,6 +609,7 @@ static const struct of_device_id of_hantro_match[] = {
->  #endif
->  #ifdef CONFIG_VIDEO_HANTRO_IMX8M
->  	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
-> +	{ .compatible = "nxp,imx8mq-vpu-g1", .data = &imx8mq_vpu_g1_variant },
->  	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
->  #endif
->  #ifdef CONFIG_VIDEO_HANTRO_SAMA5D4
-> diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-> index cff817ca8d22..96b14b43a4af 100644
-> --- a/drivers/staging/media/hantro/hantro_hw.h
-> +++ b/drivers/staging/media/hantro/hantro_hw.h
-> @@ -299,6 +299,7 @@ enum hantro_enc_fmt {
->  	ROCKCHIP_VPU_ENC_FMT_UYVY422 = 3,
->  };
->  
-> +extern const struct hantro_variant imx8mq_vpu_g1_variant;
->  extern const struct hantro_variant imx8mq_vpu_g2_variant;
->  extern const struct hantro_variant imx8mq_vpu_variant;
->  extern const struct hantro_variant px30_vpu_variant;
-> diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> index 1a43f6fceef9..4925f2a07d4c 100644
-> --- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> +++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> @@ -223,13 +223,6 @@ static void imx8m_vpu_g1_reset(struct hantro_ctx *ctx)
->  	imx8m_soft_reset(vpu, RESET_G1);
->  }
->  
-> -static void imx8m_vpu_g2_reset(struct hantro_ctx *ctx)
-> -{
-> -	struct hantro_dev *vpu = ctx->dev;
-> -
-> -	imx8m_soft_reset(vpu, RESET_G2);
-> -}
-> -
->  /*
->   * Supported codec ops.
->   */
-> @@ -255,17 +248,33 @@ static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
->  	},
->  };
->  
-> +static const struct hantro_codec_ops imx8mq_vpu_g1_codec_ops[] = {
-> +	[HANTRO_MODE_MPEG2_DEC] = {
-> +		.run = hantro_g1_mpeg2_dec_run,
-> +		.init = hantro_mpeg2_dec_init,
-> +		.exit = hantro_mpeg2_dec_exit,
-> +	},
-> +	[HANTRO_MODE_VP8_DEC] = {
-> +		.run = hantro_g1_vp8_dec_run,
-> +		.init = hantro_vp8_dec_init,
-> +		.exit = hantro_vp8_dec_exit,
-> +	},
-> +	[HANTRO_MODE_H264_DEC] = {
-> +		.run = hantro_g1_h264_dec_run,
-> +		.init = hantro_h264_dec_init,
-> +		.exit = hantro_h264_dec_exit,
-> +	},
-> +};
-> +
->  static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
->  	[HANTRO_MODE_HEVC_DEC] = {
->  		.run = hantro_g2_hevc_dec_run,
-> -		.reset = imx8m_vpu_g2_reset,
->  		.init = hantro_hevc_dec_init,
->  		.exit = hantro_hevc_dec_exit,
->  	},
->  	[HANTRO_MODE_VP9_DEC] = {
->  		.run = hantro_g2_vp9_dec_run,
->  		.done = hantro_g2_vp9_dec_done,
-> -		.reset = imx8m_vpu_g2_reset,
->  		.init = hantro_vp9_dec_init,
->  		.exit = hantro_vp9_dec_exit,
->  	},
-> @@ -285,6 +294,10 @@ static const struct hantro_irq imx8mq_g2_irqs[] = {
->  
->  static const char * const imx8mq_clk_names[] = { "g1", "g2", "bus" };
->  static const char * const imx8mq_reg_names[] = { "g1", "g2", "ctrl" };
-> +static const char * const imx8mq_g1_clk_names[] = { "g1" };
-> +static const char * const imx8mq_g1_reg_names[] = { "g1" };
-> +static const char * const imx8mq_g2_clk_names[] = { "g2" };
-> +static const char * const imx8mq_g2_reg_names[] = { "g2" };
->  
-
-I believe the g1 and g2 _reg_names are now unused?
-
-Thanks,
-Ezequiel
-
->  const struct hantro_variant imx8mq_vpu_variant = {
->  	.dec_fmts = imx8m_vpu_dec_fmts,
-> @@ -305,6 +318,21 @@ const struct hantro_variant imx8mq_vpu_variant = {
->  	.num_regs = ARRAY_SIZE(imx8mq_reg_names)
->  };
->  
-> +const struct hantro_variant imx8mq_vpu_g1_variant = {
-> +	.dec_fmts = imx8m_vpu_dec_fmts,
-> +	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_dec_fmts),
-> +	.postproc_fmts = imx8m_vpu_postproc_fmts,
-> +	.num_postproc_fmts = ARRAY_SIZE(imx8m_vpu_postproc_fmts),
-> +	.postproc_ops = &hantro_g1_postproc_ops,
-> +	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
-> +		 HANTRO_H264_DECODER,
-> +	.codec_ops = imx8mq_vpu_g1_codec_ops,
-> +	.irqs = imx8mq_irqs,
-> +	.num_irqs = ARRAY_SIZE(imx8mq_irqs),
-> +	.clk_names = imx8mq_g1_clk_names,
-> +	.num_clocks = ARRAY_SIZE(imx8mq_g1_clk_names),
-> +};
-> +
->  const struct hantro_variant imx8mq_vpu_g2_variant = {
->  	.dec_offset = 0x0,
->  	.dec_fmts = imx8m_vpu_g2_dec_fmts,
-> @@ -314,10 +342,8 @@ const struct hantro_variant imx8mq_vpu_g2_variant = {
->  	.postproc_ops = &hantro_g2_postproc_ops,
->  	.codec = HANTRO_HEVC_DECODER | HANTRO_VP9_DECODER,
->  	.codec_ops = imx8mq_vpu_g2_codec_ops,
-> -	.init = imx8mq_vpu_hw_init,
-> -	.runtime_resume = imx8mq_runtime_resume,
->  	.irqs = imx8mq_g2_irqs,
->  	.num_irqs = ARRAY_SIZE(imx8mq_g2_irqs),
-> -	.clk_names = imx8mq_clk_names,
-> -	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
-> +	.clk_names = imx8mq_g2_clk_names,
-> +	.num_clocks = ARRAY_SIZE(imx8mq_g2_clk_names),
->  };
-> -- 
-> 2.32.0
-> 

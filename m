@@ -2,75 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 762A6477A39
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB86477A35
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240062AbhLPROz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbhLPROx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S240046AbhLPROx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 16 Dec 2021 12:14:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F743C061574;
-        Thu, 16 Dec 2021 09:14:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42C3561EAF;
-        Thu, 16 Dec 2021 17:14:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9FFEC36AE7;
-        Thu, 16 Dec 2021 17:14:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639674891;
-        bh=we7yz9zt7KnHuiNIIROegupjlifBVTWfkUUGxXRDoMA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QzjxhS04DOak1Q9EQORzoXemhUUkI7tYoOhDoPUjMeGSRwaaeGVLu7G8miBhwR7kp
-         iyqbqtv5kFkhrEcfJJlaTFH89X5w7CGqQIy4FQBCgz4pphnQfWBnLHIIXBjZC8N/mh
-         mZEl/XlMHCzHkJONHO8nnYYREJsMV/8hodtcekBi42MxeQEI+I2qNLxGSX2WLzo55y
-         1JcGwkEj1y8ezdEGGTmyXA2DKJ6GP+tWKMZL1d+6X3X2//vOUlFjt+WvHRuyulUFud
-         1nvnikD+97o0hNNt/xXkuSDvS0Zbqs3vdo8ZmKBgFgFkGlCBypW+yhxQfK7Yjnwwpw
-         udnFwm/qKUf6w==
-Received: by mail-wr1-f42.google.com with SMTP id v11so45395105wrw.10;
-        Thu, 16 Dec 2021 09:14:51 -0800 (PST)
-X-Gm-Message-State: AOAM530z5+f1PniFDBtiZP2v2mCovvKoQCcS2eKQxQoVU0fdAgiroWkJ
-        dYywek1sM1+kRRwz6bKRazV0mvGVqqtvjVWOTaM=
-X-Google-Smtp-Source: ABdhPJy78M1um7N5cIvFUityihbq/ys0BTr8bYLECyzu+z++PpYpJYkwRJWorPoWDAVVB4433T+DwlpYx0qOqbqUDsI=
-X-Received: by 2002:adf:dc44:: with SMTP id m4mr9929207wrj.550.1639674890091;
- Thu, 16 Dec 2021 09:14:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20211210143009.4770-1-andriy.shevchenko@linux.intel.com> <YbtVNKdrIKFsbIAc@smile.fi.intel.com>
-In-Reply-To: <YbtVNKdrIKFsbIAc@smile.fi.intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 16 Dec 2021 18:14:38 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF-badBtZj0Uf=g4RnxHYgv-zrPsG1Z3xAqWokZ0zhLtA@mail.gmail.com>
-Message-ID: <CAMj1kXF-badBtZj0Uf=g4RnxHYgv-zrPsG1Z3xAqWokZ0zhLtA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] crypto: Replace kernel.h with the necessary inclusions
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Eric Biggers <ebiggers@google.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235539AbhLPROw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 12:14:52 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016C7C06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:14:51 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id v11so45395190wrw.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:14:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uRjKljc4yegWQqkyxyBTI2kdTqp33hVgEMBiYfg4ycs=;
+        b=FtSpZqr3rOHmoBKZ4ZfkLwOaza92prXpwUv+tFaqSiZ4sEDE9mn8TfkXoonODUlMzn
+         i9cVgLcwRI79RJw7w3EmJ+WDYYGMHu2PjZq8UHyDFVtRthlGYuWWa4+l5+wAeAN2ZLNK
+         b+C3HarIuF6L/vpLkoAbpOqfeeczy01X5glxcZohQ6BNZJ4SV3LJ+D8GvLe7k1+OCjHA
+         Aq6wksyDY0eYc2I0Wrxqs+52yXkbLmbWV2hC8ZYZT30tpVWVJzH3zPZnF3Vvm9qKTEel
+         9cZh/CGF8pvLXsApDQ56r5mYsgnMvAq05Oq8IXjkV5dwnXI0jqlZzcT/xdYCquGLS0Ov
+         HxaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uRjKljc4yegWQqkyxyBTI2kdTqp33hVgEMBiYfg4ycs=;
+        b=l/121uNoujFV0C6NRA+Xtjoh+Qafc9oOFUhRK1KTMXmLmzlnhwlZzmIcU6xLqWjdoz
+         XEgdp7kehmSf6022HYFuoty8uKi3gZRnmUWC1AXdqBdZBSHBRRhrAY8emOGkqH05V0oH
+         Gb+zzdzG3Hima8PyTR6QX3ti4BnKEqONVBxzwDqnVhqGG1XhUAwx5hzihIpjveiwrWY7
+         v3FOnj75HrIPiH8bV2Z8MrUhChcyWcKpQxZrZQAYRbkVvJUp/txWyV5boKXcHHXH3+7B
+         LViwaIGEj3V/ipplA4upQ5yayKcVss2WALLREk7XJwKqW++9vjzpTyOiPMRizCkHolEO
+         gINQ==
+X-Gm-Message-State: AOAM532XbQAKzJhJeNl8OEQ9k4rymZvgwcft3PIRW7qQgjM93JLSoW/6
+        cYO9baKqUkd/pGuS2jSc5DV8FA==
+X-Google-Smtp-Source: ABdhPJz/qjRnGER3BMfsfcmhXY5XY5zjqFD9zwyEULhTIE6CMZcXzUI1L45GjBzAPwU6YIM725tNug==
+X-Received: by 2002:adf:dd8d:: with SMTP id x13mr1280778wrl.401.1639674890505;
+        Thu, 16 Dec 2021 09:14:50 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id e12sm6821826wrq.20.2021.12.16.09.14.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 09:14:50 -0800 (PST)
+Date:   Thu, 16 Dec 2021 17:14:39 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Content-Type: text/plain; charset="UTF-8"
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>,
+        network dev <netdev@vger.kernel.org>
+Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
+Message-ID: <Ybtz/0gflbkG5Q/0@google.com>
+References: <20211214215732.1507504-1-lee.jones@linaro.org>
+ <20211214215732.1507504-2-lee.jones@linaro.org>
+ <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
+ <Ybtrs56tSBbmyt5c@google.com>
+ <CADvbK_cBBDkGt8XLJo6N5TX2YQATS+udVWm8_=8f96=0B9tnTA@mail.gmail.com>
+ <Ybtzr5ZmD/IKjycz@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ybtzr5ZmD/IKjycz@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 at 16:05, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Dec 10, 2021 at 04:30:09PM +0200, Andy Shevchenko wrote:
-> > When kernel.h is used in the headers it adds a lot into dependency hell,
-> > especially when there are circular dependencies are involved.
-> >
-> > Replace kernel.h inclusion with the list of what is really being used.
->
-> Any comments on this?
->
+On Thu, 16 Dec 2021, Lee Jones wrote:
 
-I am not crazy about the need for forward declarations of struct
-scatterlist and struct device. Other than that, I think this is an
-improvement
+> On Thu, 16 Dec 2021, Xin Long wrote:
+> 
+> > On Thu, Dec 16, 2021 at 11:39 AM Lee Jones <lee.jones@linaro.org> wrote:
+> > >
+> > > On Thu, 16 Dec 2021, Xin Long wrote:
+> > >
+> > > > On Wed, Dec 15, 2021 at 8:48 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> > > > >
+> > > > > On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
+> > > > > > The cause of the resultant dump_stack() reported below is a
+> > > > > > dereference of a freed pointer to 'struct sctp_endpoint' in
+> > > > > > sctp_sock_dump().
+> > > > > >
+> > > > > > This race condition occurs when a transport is cached into its
+> > > > > > associated hash table followed by an endpoint/sock migration to a new
+> > > > > > association in sctp_assoc_migrate() prior to their subsequent use in
+> > > > > > sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
+> > > > > > table calling into sctp_sock_dump() where the dereference occurs.
+> > >
+> > > > in sctp_sock_dump():
+> > > >         struct sock *sk = ep->base.sk;
+> > > >         ... <--[1]
+> > > >         lock_sock(sk);
+> > > >
+> > > > Do you mean in [1], the sk is peeled off and gets freed elsewhere?
+> > >
+> > > 'ep' and 'sk' are both switched out for new ones in sctp_sock_migrate().
+> > >
+> > > > if that's true, it's still late to do sock_hold(sk) in your this patch.
+> > >
+> > > No, that's not right.
+> > >
+> > > The schedule happens *inside* the lock_sock() call.
+> > Sorry, I don't follow this.
+> > We can't expect when the schedule happens, why do you think this
+> > can never be scheduled before the lock_sock() call?
+> 
+> True, but I've had this running for hours and it hasn't reproduced.
+> 
+> Without this patch, I can reproduce this in around 2 seconds.
+> 
+> The C-repro for this is pretty intense!
+> 
+> If you want to be *sure* that a schedule will never happen, we can
+> take a reference directly with:
+> 
+>      ep = sctp_endpoint_hold(tsp->asoc->ep);
+>      sk = sock_hold(ep->base.sk);
+> 
+> Which was my original plan before I soak tested this submitted patch
+> for hours without any sign of reproducing the issue.
+> 
+> > If the sock is peeled off or is being freed, we shouldn't dump this sock,
+> > and it's better to skip it.
+> 
+> I guess we can do that too.
+> 
+> Are you suggesting sctp_sock_migrate() as the call site?
+
+Also, when are you planning on testing the flag?
+
+Won't that suffer with the same issue(s)?
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,73 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C0E4767CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 03:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8A64767CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 03:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbhLPCSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 21:18:48 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:39898 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229955AbhLPCSr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 21:18:47 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowABH4kDwobphfstgAw--.43200S2;
-        Thu, 16 Dec 2021 10:18:24 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     bskeggs@redhat.com, airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] drm/nouveau/acr: potential dereference of null pointer
-Date:   Thu, 16 Dec 2021 10:18:23 +0800
-Message-Id: <20211216021823.281472-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S232824AbhLPCTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 21:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229955AbhLPCTX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 21:19:23 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09372C061574;
+        Wed, 15 Dec 2021 18:19:23 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id f125so21748649pgc.0;
+        Wed, 15 Dec 2021 18:19:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jQV7FfPG/i8kPxltYpwfNsq8SB4s3/l4Q6kb1p2cVFA=;
+        b=iQgjLSKvkj+yHSVeQJYFXpzEAQWq+NPItDT4Wa4q3FxXVdzZd8OeKVjESiF66O9c+I
+         1dtSLL4On4zLRLYxrPbVlTEBqVPCYFjjdvzW+UCqLBoH2k2pQJmZRAH/8T4b9Kbw8pEX
+         m2JhUnz2I2FuKTp57+2VNzjs3cCTwBKpmKrfcWrYC075O0BkKBE62kEomHdvEk3qf75B
+         lww/R3Ac8YDvV8tKHdfANXdF6miPn6T0hprvgdFVmL2F1oMb3DpaSGFcsfuflYmhtuGV
+         jOx8+S+P6hkiARNSlWh7AaJjuXJuFBPMfRLh8D+ntNkhHKqRjCb8r1eTng7lFzFlXCRP
+         aMQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jQV7FfPG/i8kPxltYpwfNsq8SB4s3/l4Q6kb1p2cVFA=;
+        b=tPCC9Ooc2nWuGzAabpCHRVo69+ireA6c5xRL2tED3kRCZPv0FQu50757kX4Lo8tIGa
+         2HDd7GtipRPzPf2UjnuPm5VGrbi2HJ2lIC4WhoxC+NWajQwRfsfNmFXSLoo2Uwakph1W
+         DM6VR+UASgnx73Fg78T6WKFEdAqhHEP+MDVUFoD7dIAqklLwhLSwxT11jfKdJFCEZac3
+         3iQ6giCLcjZYlzP+0fuYpMNPdUWO/rrFiQsRYXNpRocAaAt4ilcEIKLXuZ6fIZyH3+zl
+         2gy5x6nPSSXk+9IJQ8q+27oAXcOsGSzZfa1pw/KD33FFalnMZWE1DjmtV3GAuHByJH8p
+         swEw==
+X-Gm-Message-State: AOAM531xgAnRDRbNrAp08+2CI2gmPqNCJfIkBVA8Gj2usodOyZqlShRm
+        bgy/7/2B5OFOfqqZNca/7szSJP9LX3ICCg==
+X-Google-Smtp-Source: ABdhPJz/ovzEFvbLSkyH78y2230v4/B2RolhcPGN89OcTDMllxm3WHSMK0CFDx2x3Tesff+0UGyxBA==
+X-Received: by 2002:a65:6895:: with SMTP id e21mr9995968pgt.546.1639621162188;
+        Wed, 15 Dec 2021 18:19:22 -0800 (PST)
+Received: from localhost ([198.11.176.14])
+        by smtp.gmail.com with ESMTPSA id i67sm3853845pfg.189.2021.12.15.18.19.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Dec 2021 18:19:21 -0800 (PST)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Lai Jiangshan <laijs@linux.alibaba.com>
+Subject: [PATCH 0/3] KVM: x86: Fixes for kvm/queue
+Date:   Thu, 16 Dec 2021 10:19:35 +0800
+Message-Id: <20211216021938.11752-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowABH4kDwobphfstgAw--.43200S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw4xtryxJr4xuFWfur45ZFb_yoWDAFc_Cw
-        48ZrZxGF4fCF1j9anrCr1rZ342k3ykuFnFvrnaqa43Jw47Jr93Xry7Wr1SgrWDJFyxCFyD
-        Aa1qqF98GFyUujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gr1l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUO_MaUUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of kmalloc() needs to be checked.
-To avoid use in memcpy() in case of the failure of alloc.
+From: Lai Jiangshan <laijs@linux.alibaba.com>
 
-Fixes: 22dcda45a3d1 ("drm/nouveau/acr: implement new subdev to replace "secure boot"")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c | 3 +++
- 1 file changed, 3 insertions(+)
+Patch 1 and patch 2 are updated version of the original patches with
+the same title.  The original patches need to be dequeued.  (Paolo has
+sent the reverting patches to the mail list and done the work, but I
+haven't seen the original patches dequeued or reverted in the public
+kvm tree.  I need to learn a bit more how patches are managed in kvm
+tree.)
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
-index 667fa016496e..776573e77988 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
-@@ -143,6 +143,9 @@ nvkm_acr_hsfw_load_bl(struct nvkm_acr *acr, const char *name, int ver,
- 	hsfw->imem_size = desc->code_size;
- 	hsfw->imem_tag = desc->start_tag;
- 	hsfw->imem = kmalloc(desc->code_size, GFP_KERNEL);
-+	if (!hsfw->imem)
-+		return -ENOMEM;
-+
- 	memcpy(hsfw->imem, data + desc->code_off, desc->code_size);
- 
- 	nvkm_firmware_put(fw);
+Patch 3 fixes for commit c62c7bd4f95b ("KVM: VMX: Update vmcs.GUEST_CR3
+only when the guest CR3 is dirty").  Patch 3 is better to be reordered
+to before the commit since the commit has not yet into Linus' tree.
+
+
+Lai Jiangshan (3):
+  KVM: VMX: Save HOST_CR3 in vmx_prepare_switch_to_guest()
+  KVM: X86: Ensure pae_root to be reconstructed for shadow paging if the
+    guest PDPTEs is changed
+  KVM: VMX: Mark VCPU_EXREG_CR3 dirty when !CR0_PG -> CR0_PG if EPT +
+    !URG
+
+ arch/x86/kvm/vmx/nested.c | 11 +++--------
+ arch/x86/kvm/vmx/vmx.c    | 28 ++++++++++++++++++----------
+ arch/x86/kvm/vmx/vmx.h    |  5 +++--
+ arch/x86/kvm/x86.c        |  7 +++++++
+ 4 files changed, 31 insertions(+), 20 deletions(-)
+
 -- 
-2.25.1
+2.19.1.6.gb485710b
 

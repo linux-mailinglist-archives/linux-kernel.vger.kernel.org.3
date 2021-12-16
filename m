@@ -2,77 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E430476D62
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B226A476D5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235357AbhLPJ2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 04:28:39 -0500
-Received: from smtpbg126.qq.com ([106.55.201.22]:33660 "EHLO smtpbg587.qq.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232844AbhLPJ2g (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:28:36 -0500
-X-QQ-mid: bizesmtp37t1639646878tmz4uqv7
-Received: from localhost.localdomain (unknown [182.148.14.255])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Thu, 16 Dec 2021 17:27:09 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: d4aHnNlt5vwRWrdWAtjrWAKNCTgm9j9yYuHUnhqKgnCbEOWR+X75l8+YzZXHx
-        ADCyePQrpwVF4Jivy9jZJa1W38pL/8/rn69CKPMjCnL6nTacpnOG8ft3wt1z3CL/iu7VMb7
-        1HLGVUPLJjBnpB24td7YnsXR1b7BXIpo4PZblSItWSp8bq0l5wYjSWdXTJhvX9lZPKdY+f9
-        nVApjcbbQgGdTJZ92oD7rTqHquB3UDV1VlrtxMjLmnNcD2mdWqosjpJukSTFOHPbTSFPP4Y
-        UGXLf6B3U4anuKWBdFVx9WWKZ5G8rxzatRc/du2pF8cXn1t2Nkc2upnADqSBrDMOX6b+iL0
-        NH6q+5ofJSgrqoJUG8tdUaTxMm/N9G7E2H7GUrE
-X-QQ-GoodBg: 0
-From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     jyri.sarha@iki.fi
-Cc:     tomba@kernel.org, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH v2] drm/tilcdc: add const to of_device_id
-Date:   Thu, 16 Dec 2021 17:26:52 +0800
-Message-Id: <20211216092652.33414-1-wangxiang@cdjrlc.com>
-X-Mailer: git-send-email 2.34.1
+        id S235321AbhLPJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 04:27:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43664 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235134AbhLPJ1L (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 04:27:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CAE4FB8226E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:27:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8885C36AE4;
+        Thu, 16 Dec 2021 09:27:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639646829;
+        bh=pRLQOsDoyJxHWykiP4JKcqFGZO/3CTBX6BBhg60R6mo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JtYRcCt0Q1dD82ZTE8kFtDQ+LE/bHDZCAYCgDZm3GQrAa0sbIu25GkAPf6qR6HpjA
+         aGQDjClC/Re+Ti3sGLfrCtP4RBr/V3MIW1GmDf62pq09B1Bg7vnBU3eIzxro830B3j
+         IW85jtKtZNxJSH6YR3p1uBj8Hwuj9h53BHBzJiay64Fk/hwcWJNkGF8JPIKy4kA9KL
+         sWY4jFEZmHQXzmZZfm3VtjeURDBRRBMQLnSEXhgCksiO/jMkweNjmdZDtbsqX0KaDj
+         3m4S2teG+/r5zMi3TG6gilMZYeYKgufPQPx0NEDVi4+yd4xoGpN+aloXsK/1XnJrDj
+         kmUm8mbyqa/zA==
+Date:   Thu, 16 Dec 2021 17:27:05 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pankaj Gupta <pankaj.gupta@nxp.com>
+Subject: Re: [PATCH v3 03/10] arm64: dts: lx2160a: add optee-tz node
+Message-ID: <20211216092704.GD4216@dragon>
+References: <20211214072342.22692-1-leoyang.li@nxp.com>
+ <20211214072342.22692-4-leoyang.li@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214072342.22692-4-leoyang.li@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct of_device_id should normally be const.
+On Tue, Dec 14, 2021 at 01:23:35AM -0600, Li Yang wrote:
+> From: Pankaj Gupta <pankaj.gupta@nxp.com>
+> 
+> Disabled by default in SoC dtsi and enables in board dts files.
+> 
+> Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
 
-Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
----
-
-Changes since v1
-* add const in line 63
-
- drivers/gpu/drm/tilcdc/tilcdc_drv.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/tilcdc/tilcdc_drv.c b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-index 3ddb7c710a3d..7c36ecd82ebc 100644
---- a/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-@@ -60,7 +60,7 @@ void tilcdc_module_cleanup(struct tilcdc_module *mod)
- 	list_del(&mod->list);
- }
- 
--static struct of_device_id tilcdc_of_match[];
-+static const struct of_device_id tilcdc_of_match[];
- 
- static int tilcdc_atomic_check(struct drm_device *dev,
- 			       struct drm_atomic_state *state)
-@@ -587,7 +587,7 @@ static int tilcdc_pdev_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static struct of_device_id tilcdc_of_match[] = {
-+static const struct of_device_id tilcdc_of_match[] = {
- 		{ .compatible = "ti,am33xx-tilcdc", },
- 		{ .compatible = "ti,da850-tilcdc", },
- 		{ },
--- 
-2.34.1
-
+Applied, thanks!

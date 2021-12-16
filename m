@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6FC477D67
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 21:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCF1477D6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 21:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbhLPUVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 15:21:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58718 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233586AbhLPUVy (ORCPT
+        id S234646AbhLPUWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 15:22:25 -0500
+Received: from 82-65-109-163.subs.proxad.net ([82.65.109.163]:46668 "EHLO
+        luna.linkmauve.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234079AbhLPUWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 15:21:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639686113;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4jNVvkqs0Rpz1daVHHfDUsDlVwoDvruQypySygjyOd8=;
-        b=PZrRqMrrRLLKE9wCFTsLEmZaq8G262bV1KP+5vzEtGV0lFR2ZiiqSJc0QZQtPMEJ6timNt
-        JI94rq8Uv50ocEWttK2ZthtUyKkP8TGfICor7G2WxZ+Zjy19RYJ7DQ3xsbVZtQtGUvGeDd
-        O6pUQFvpWedabl25DviQIIiHXFOBMwo=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-296-zzJ3WoY5PE-9AlO7xkopnA-1; Thu, 16 Dec 2021 15:21:51 -0500
-X-MC-Unique: zzJ3WoY5PE-9AlO7xkopnA-1
-Received: by mail-ed1-f72.google.com with SMTP id w4-20020aa7cb44000000b003e7c0f7cfffso24302218edt.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 12:21:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4jNVvkqs0Rpz1daVHHfDUsDlVwoDvruQypySygjyOd8=;
-        b=THwApSub+Lg6iXXgsCMWnMWuJWvpGQUJupA6prO1YX2mv/yET54ZPAT4FEQZsSl3nm
-         sW+mnGMhrOQUad+8+c9+e/mhUq5MgOEoKWPJ2S2WrkCRjiZm20y5o5ao6fM5s6ImMhUt
-         9Ani6LyK8pQUq0gKlNesgZdKY4IwoDWTj0kx49vqK8qGwxwLFkSxkBXknuwLtR0Mk/tT
-         EbJaM6nRZtzTl276o7aOvjhRLDnaJzSmS2GqsLEQlqVsrTPimDsqJWDMbX558ufrxorg
-         ccaJFM5ll2OcnmG6hz5DXXQcKI/+e1EZ8Xzii0K5B1eIuQmiFDBo5RCTzXwPhdMWjVBX
-         GF9A==
-X-Gm-Message-State: AOAM5327POsg7YXKuCYePgWI9ovpMcqiaIsVy2OZALhSXS0R69V0oJUp
-        O/ZDOsIXyW5RC6cNPnvms/U4orRtrS9tKR3U8lgFwD2T+A/szz3OdmLi+tICyDLfIMJgaAHZHh+
-        8Sd2W4qGwr/0olYDorDG69AHxFd0kFqeqv2nwCUR9
-X-Received: by 2002:a17:906:d54e:: with SMTP id cr14mr4585123ejc.724.1639686110604;
-        Thu, 16 Dec 2021 12:21:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz5TrBQDhec5S8MpqrzjB+uugBOSGONH0FwNYWw86mCaVHMpLi8Qk2TWqknosMRVZK6sy//lsKyzlgelaA3h2k=
-X-Received: by 2002:a17:906:d54e:: with SMTP id cr14mr4585114ejc.724.1639686110406;
- Thu, 16 Dec 2021 12:21:50 -0800 (PST)
+        Thu, 16 Dec 2021 15:22:24 -0500
+Received: by luna.linkmauve.fr (Postfix, from userid 1000)
+        id B941FF40EA4; Thu, 16 Dec 2021 21:22:20 +0100 (CET)
+Date:   Thu, 16 Dec 2021 21:22:20 +0100
+From:   Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.ne@posteo.net>,
+        linux-rtc@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Ash Logan <ash@heyquark.com>,
+        rw-r-r-0644 <r.r.qwertyuiop.r.r@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [PATCH v3 0/5] rtc: nintendo: Add a RTC driver for the GameCube,
+ Wii and Wii U
+Message-ID: <20211216202220.y6rctd2k72yuya5w@luna>
+Jabber-ID: linkmauve@linkmauve.fr
+References: <20211027223516.2031-1-linkmauve@linkmauve.fr>
+ <20211215175501.6761-1-linkmauve@linkmauve.fr>
+ <163964813197.6786.14005810276404182021.b4-ty@bootlin.com>
 MIME-Version: 1.0
-References: <20211213123737.9147-1-wander@redhat.com> <20211213123737.9147-3-wander@redhat.com>
- <YbohEio+66fyFo6D@linutronix.de> <20211215123116.622da7ef@gandalf.local.home> <2f3300ba-0879-ad7d-8d44-bb8d8b17d7e2@kernel.dk>
-In-Reply-To: <2f3300ba-0879-ad7d-8d44-bb8d8b17d7e2@kernel.dk>
-From:   Wander Costa <wcosta@redhat.com>
-Date:   Thu, 16 Dec 2021 17:21:39 -0300
-Message-ID: <CAAq0SUn=j3bQoDLO6muGs776seGwhugf=OU7rEMRM2vFK6djpw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] blktrace: switch trace spinlock to a raw spinlock
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Wander Lairson Costa <wander@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-rt-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xjgfe6sy2p6qs4uc"
+Content-Disposition: inline
+In-Reply-To: <163964813197.6786.14005810276404182021.b4-ty@bootlin.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 4:34 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 12/15/21 10:31 AM, Steven Rostedt wrote:
-> > On Wed, 15 Dec 2021 18:08:34 +0100
-> > Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
-> >
-> >> On 2021-12-13 09:37:37 [-0300], Wander Lairson Costa wrote:
-> >> =E2=80=A6
-> >>> To avoid this bug, we switch the trace lock to a raw spinlock.
-> >>
-> >> Steven, do you think this is a good idea?
-> >>
-> >
-> > blktrace is actually maintained by Jens.
->
-> Looks like there are two patches, and none were CC'ed linux-block.
-> Please resend.
->
-Ok, I am going to do it, thanks.
 
-> --
-> Jens Axboe
->
+--xjgfe6sy2p6qs4uc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Dec 16, 2021 at 10:49:44AM +0100, Alexandre Belloni wrote:
+> On Wed, 15 Dec 2021 18:54:56 +0100, Emmanuel Gil Peyrot wrote:
+> > These three consoles share a device, the MX23L4005, which contains a
+> > clock and 64=C2=A0bytes of SRAM storage, and is exposed on the EXI bus
+> > (similar to SPI) on channel 0, device 1.  This driver allows it to be
+> > used as a Linux RTC device, where time can be read and set.
+> >=20
+> > The hardware also exposes two timers, one which shuts down the console
+> > and one which powers it on, but these aren=E2=80=99t supported currentl=
+y.
+> >=20
+> > [...]
+>=20
+> Applied, thanks!
+>=20
+> [1/5] rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U
+>       commit: 86559400b3ef9de93ba50523cffe767c35cd531a
+> [2/5] rtc: gamecube: Report low battery as invalid data
+>       commit: 322539a014bcd24cbb9281832c09b24e07912237
+> [3/5] powerpc: wii.dts: Expose HW_SRNPROT on this platform
+>       commit: 5479618e1e2641dd57352a73b7b7b2f6908fbeee
+> [4/5] powerpc: gamecube_defconfig: Enable the RTC driver
+>       commit: 57bd7d356506b713d0df8d8e42da7810a18864df
+> [5/5] powerpc: wii_defconfig: Enable the RTC driver
+>       commit: 69e8ba80ddda4db31e59facbf2db19773ad3785b
+>=20
+> This one didn't apply ceanly but I believe I did the right thing. Can you=
+ check?
+
+I believe you didn=E2=80=99t, at least that commit[1] seems to have one =E2=
+=80=9C+=E2=80=9D too
+many in the modified line, whereas the previous one[2] doesn=E2=80=99t.
+
+But thanks for applying them!
+
+>=20
+>=20
+> Best regards,
+> --=20
+> Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git/comm=
+it/?id=3D69e8ba80dd
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git/comm=
+it/?id=3D57bd7d3565
+
+--=20
+Emmanuel Gil Peyrot
+
+--xjgfe6sy2p6qs4uc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEjrVT1SzTln43kCLJOWgfYkb2LpAFAmG7n/kACgkQOWgfYkb2
+LpC5TggAi5VOpJA1g7QxHH22JVQUoOoi2gh+8iLJUAXipFMNAcQ3ehzzpA47P7pF
+QvCjk8aywr3VNj2+mzVz4CsgFHI2EyxqvHVzuEETddZe/bbd4PjS3Q39jMFP2bzG
+oHtt8C0/z2XTBgPHC0VtT8cI9cliiadPzsDCYQRdZHWYCnckWZmo51BzH4cmZzC1
+ECD/VgEunDre1ATXcefh7gRAEsQH+1FjkhukL/jNKUONeTpyr9r8D81R5lFyrLGK
+e5NXNykw2kdkpzv29CnQnIpc9y/AqX6U9WpY6P39xzlpaudSI8VEOKGFunJjXxI8
+O8Bp+trQO2iCKZX1EyABFUKkuF+QXA==
+=lj83
+-----END PGP SIGNATURE-----
+
+--xjgfe6sy2p6qs4uc--

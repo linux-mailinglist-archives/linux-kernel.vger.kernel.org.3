@@ -2,266 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 015AD477B74
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D765B477B7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236254AbhLPSYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:24:21 -0500
-Received: from mga05.intel.com ([192.55.52.43]:2201 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231451AbhLPSYU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:24:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639679060; x=1671215060;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=5VHFdCZDZRZLVNJk5MfCdvonI2VBNJye0MsbohGpRwI=;
-  b=SeSIDa7SVBUe9P3+fYuOXGzgCd4J+qpOptpkEj7lRAUiTPsGeyVtpnTm
-   ES7dp64MsbXTutLTOSyN93xaha43gg08H4l+AvY6mBcUGexL+2FtdXtax
-   Yi2tDvUJHhDPVM4o3FM3JxCqlcjs3Rto9edHS04a/FQc9Y5SLUVa5rVMD
-   D2gf9HpQT7748Zvyqv7JG+R73Mv03GoUB9nViLBpJfxI4hYPM+aYLQVEb
-   2hEehzqMsMcyfCNigDi57UiDE7YweRWugxjYUh3IPCK/q0PGS1nSzonKV
-   sv99WgV1yqNjOtX9NOQOEmVT26EnZkk0bced6iey4wqHEWdQl/LSqG2M1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="325848913"
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="325848913"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 10:24:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="506402597"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 10:24:20 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 16 Dec 2021 10:24:19 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Thu, 16 Dec 2021 10:24:19 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.174)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Thu, 16 Dec 2021 10:24:19 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zf1wyOG9n+bP900m2tOpgpakQhoCeJzQZA/Lf8MhG7R0e8rZoZNnKbF6R6Ra36cuAEedjAuQ0dy/JoYIU3icObQNGXgN8maSRwXYEZjRzUSj4C6MbwjRjvuuL0SMg0u4zrjiaXfZp/wx0Rc0RUWFyEacmh4UaC1AnAefX98HXgDJsNl3kfBk+V7Glk9J+ggKGZSs3WymKiIj+VYZqqhV2hVVc56/h8KbW41BOD+gQiCGupiDBmEjpre0abAoGW6O1vSVZpUEmgZBqBizIwg/tvh0KTxnLfvo3DZgQ8oBid6bsa4pOeFOYMmYqkoZW21UDdDtxXJSo0rFBXkycaxWog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HyFgzYkI5rNXiybTHPdW+akhRjNjHONwhHjfRZPMo2M=;
- b=ZCCowKhbB007kM1iezbiDWEWLMYS1Zg1C6CxpzChhnfrU3nHKhqUU3iyzG3datfCqN+Z1FNpd/AUOhaEmVk3A5+jKD+kMo3toDoG7h6GtBS5+vcwROkH92UJi55ldJZjaHX5HpmstIgRbAwTJip71zwPrjDIMS/rC2bhhiyRTvoyJsp+vYVxtMbsEjwn3EvModNMgksfgJulKl9ySim2SG54/cgkF4NScMI+kAebWhFO/Ma0CNutXtsq93T/cArU7cOt3B46NyCtmFVVz3rbdXBv9iroLMmnGv0/iaigPdp/7oRL0yRCKR80YWcQZLLh6yOVDc8g6AakMQ9+zWwVKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
- by MWHPR11MB1245.namprd11.prod.outlook.com (2603:10b6:300:28::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.18; Thu, 16 Dec
- 2021 18:24:18 +0000
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::7542:60f3:e73a:be5a]) by MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::7542:60f3:e73a:be5a%8]) with mapi id 15.20.4801.014; Thu, 16 Dec 2021
- 18:24:18 +0000
-Message-ID: <ffc7e137-8c0a-2151-cfb6-b41ae53cadf2@intel.com>
-Date:   Thu, 16 Dec 2021 19:24:13 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.4.0
-Subject: Re: [PATCH] PM: sleep: Avoid calling put_device() under dpm_list_mtx
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>
-References: <77c95e21-747a-87d8-4145-f37f75e76e18@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
- 173, 80-298 Gdansk
-In-Reply-To: <77c95e21-747a-87d8-4145-f37f75e76e18@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0053.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:48::17) To MW5PR11MB5810.namprd11.prod.outlook.com
- (2603:10b6:303:192::22)
+        id S240642AbhLPSYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:24:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236282AbhLPSYv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 13:24:51 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D071DC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:24:50 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id ke6so111170qvb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:24:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S3bQug7Q3Y8bGfDQ90oiL7YlAL/sesqoY0B+mdgASAE=;
+        b=ihLB1h+Rgl72xRpn+k9ZhT1kdNXT+Nqs4XGJHZ7OaLplnDAJe3aNTJ15nJd5m8VUmW
+         Wh1NoK7hOl/+m7vRS0rM3Ij/VbmElam8MPFWKTU5DMSYtWGozNwzKPoaGDR2duRt7UqG
+         mlATVlZmF1FM9zA8EwGpFzZG7TKPf3zCHULt4U6d8PGBKNsmXonALM5Q6QvNmHxbn31g
+         Db7ogFshTMtcoCF3OB2ohrUkCYJEs37POuMpJ5eiDyUwWG2t0niKCxQ0qk1TKj6cuuPu
+         BrdbI5MgXIRD5XP4giDSFdrjtsT3BcNMA9U2DMHRn5KnsyfSjIk047tb9taXZCBpBkSf
+         A/gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S3bQug7Q3Y8bGfDQ90oiL7YlAL/sesqoY0B+mdgASAE=;
+        b=oRuEIVOuNw4wkgYv34C28m2SKRK7uV59uT0q+tX97BLW4b8dCBtfbPZ7AUckEpYKrs
+         l4Ug24ehUztKZqIkZir/2kxg1Qn/nrGm3F1zSIbb1CS3AP1+aKtTjZ1NvFkYNy1oc5BT
+         iGKpuac6MewtucIvuvdvE93rK604f+/dEQ4xogmd6guZFLahCC+4ioHwqNFQ4a57qYrQ
+         riVQyl58ozPrh1DXyQALtYRHbQOmwePtGDVv0VmwVF4zeu6Ekz01Ok7N3+++aBBSl/Bk
+         Te2YT3rMdqvVNdYZidMwbtVooIyM7V0mpfVdiHzMX3mgwg9uoUPDxrTU4KU0JbOEGgCd
+         wHBQ==
+X-Gm-Message-State: AOAM530Be+0kAdAwv7GgSN2u7b+ctbJOBpmKdTfZ4Y9OUONozWqSwXME
+        nLQ96EJeAmwTGiuq2dDbDh+g2Rna84XH6eOvbalN8A==
+X-Google-Smtp-Source: ABdhPJxmfD/HFoD7QRvwBZ38fcHdjZTFJJJt0+kkFuzoNVWsCXU+XmZlr3QxbwmDKkh25oZF5D6rr6K+FVIIqjnvfD4=
+X-Received: by 2002:a05:6214:d88:: with SMTP id e8mr7230680qve.80.1639679089762;
+ Thu, 16 Dec 2021 10:24:49 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a32cead6-1212-4105-04c7-08d9c0c145c7
-X-MS-TrafficTypeDiagnostic: MWHPR11MB1245:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR11MB124512AD718567BD8786EBB5CB779@MWHPR11MB1245.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6TXcM3jCH45KrdMUss8IIIPch5kzdnAaLIk91HFrhXSBzvZBYllr1DkwzZ+y3Iki197WQEVlLZCMJ/Glyn84CX2RFod93keEjqq4IuaeKfV5Iy1hE5t4rIbOM/8k+435bA5eY6dKcY4rassOqcyoqiaQyyNro69qSt9E3LzRLL/bxnvzwKWTPSIRurYbVrEyk8q/b+GoiOp2EviI4bQDO0a0OsSp9MkIH15+Ph5Rh9oLindB3RGsYRc28hhXBrnu0VUyNVMIHrnXrCjmusEp6y4mMfYhn7J1orToZvW0qeZqEIpg7IDFdKsEQx1nrcViXJfikmZjjyhX1s3LWmbJI7wt8X70OvBvZRjKgRhcWT5mulmRFB9FyM5DYQcSCeHRZQ8J8K8TCCDantsJwx/B+7k16OGo3UlbWqa3EsAQsDWMdFppLBW1ODLz5D+itOCmbHZR/9mpVmcetY9R2ufcy6aV0TBl1hHNAUxf0qw/eoFSeXihvWSHqLgaZwTehJwnB/zIdNnFn8Ld4UWJhLDk5ECwP0CPsjsULPi/+Jyj4MqHqClCpOMtfkxrvdScqzng/iCz/HFGYv5+Fol56z5ki+p0IRh0q1qnWk0sxY2V4jiPszI58NIpbcn8APkR83C3e/lSIFnyXb6vcMJ9QOP+2cy1sWTuV4zeWNkoyyl970kf62N9qDhCdYtOZnixcOOHOSVTNRAcXE5QK035n2AH9G4/Tp3GbClzQxAXcvI9cxIc0DJBFHny5dhxCwsXPORt
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6506007)(4326008)(8936002)(53546011)(26005)(186003)(6916009)(66556008)(36916002)(5660300002)(31696002)(82960400001)(508600001)(38100700002)(86362001)(66574015)(6666004)(36756003)(8676002)(66946007)(316002)(66476007)(54906003)(6512007)(2906002)(2616005)(6486002)(31686004)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OUtmN1BjNWM1Z053OVlGU29IajRTS0lNeXRHSUF6L1hFNWpONmYyazZxVEJM?=
- =?utf-8?B?YXhlOXU3Y0xWYjVURm1yUFdmN095cFIwMno4V216STNpS2M0TzNTZjgvUnBn?=
- =?utf-8?B?WnYzUk9LaVZBVkM1RFBTL3U4aE9icEpkSXcxYWNpVDFuaWlMaWJ5ZzFJU0Z4?=
- =?utf-8?B?Qy8xM3JmVTA0dDRHeEFxSXU3NFpxMnJhL0VUdDdDRUNuMEphTXNsbk80azdw?=
- =?utf-8?B?VEJsZ01LV2k3OE0yMklLazRNWk5uZnZTRkErckFCYTJFTHlKc1I3VENjczZQ?=
- =?utf-8?B?WnZDZEJza0Q0dy82WFR2cW83L05VUnMzb0dINGVHdWxEeWlBcjZtYlYvMUxs?=
- =?utf-8?B?ZWFKQmZZcHA4QWl0bWlJZGZuZWN1SEY4TWxjSWlOczY1TDFWbWo1Zy82MXh0?=
- =?utf-8?B?YU1PRDBFS3p1R1R5Wnh0RGNxMWJHaHNpZXAxRmJaVHk0K0k1N1Z0MU1HWnFG?=
- =?utf-8?B?ZGFXUmtkdHJFS0l4aWVHUEZkU21JZnFzeUMvSjB4NGMvUXY4Ukh3MjkvMGZp?=
- =?utf-8?B?SlcveUlrb3RyS3piR25RQW10ZG1xTFUxZ2dBTlJ5Y3BBNzQrVW1idWxLRTFq?=
- =?utf-8?B?M3hpRjlDSysxU3hQMStEWStFV3pMVjNZa3ZTcnFMamRKbUtIdk5ZVnJ1VGhn?=
- =?utf-8?B?T0F5Z0ZKZDZENThRbzQxRFpEUWN3MXBZMit6cC83czgyWHJzdGVORE80ZTYx?=
- =?utf-8?B?OEZ6enl6Z09zMzVyaTBkOVFiUXhWUjNaU3RveC9oS0tCOTFKN2EzR0tURjdw?=
- =?utf-8?B?NDhHcjkzclhoY2VkV0xQalRLSUQwWmphQ3ZDcFdGQ09MK1pzM0h1cmtCdk5P?=
- =?utf-8?B?L1NIQSt0aFFtK0hNekdGeWRFbFh1YWVteU5wNEQ0eW82UWRtQ1lIeWNWYkh6?=
- =?utf-8?B?bEtleHpwdklzK05yaGFBRERSdUs2Q3JTZWJTK2huVnBFajVpN2RPeVJrWi8y?=
- =?utf-8?B?YXp1bm91RldnM1ZVZHR1alVFSXZwRTQxelRncWpDSWkyQ0VzOTMzMHhOZTJO?=
- =?utf-8?B?WDZVZnN6SFBGTmxMcTQwR2o3RmVvRTNteEZUV0JQSzYvZzZ0cFlDcHlsei9t?=
- =?utf-8?B?cjNzaVZMSm9HejdmbVVEM204c2M5Um0xa1hvcjNCNVJVVVI3ckc4UmZXWFdK?=
- =?utf-8?B?dHZLdmVQRVpFRnl1OFBLYzEvMkluZENVSE4yTXJGSk04aGwwWGxhQnB6TEpz?=
- =?utf-8?B?eXMxN0hUNUw3Y3ArTzNxNWVCazJnaEk5VmwwK2NNUFl0T3VhbEtPS1lLRENi?=
- =?utf-8?B?U0tEQ3UwSWtJMnlrVWtrZXFEdVpoYlY1OUtJTGI0aHhCN2FxaW9BR2NLU3FP?=
- =?utf-8?B?T0FGbUFkZmlQc2FiUkdsODNGWVpEcFM5b1B2RkQzTGdYc0M4Mlozem9RekNQ?=
- =?utf-8?B?ajlkZkRvOXJ6aE1jZ1dBdnNmZFBjaWNpWmliam9pRHdXSFJjUFpOa3JEb3d3?=
- =?utf-8?B?bGd3U1pTTGhsNXY1WC9CS2c0dTNQVE1TOXFHWGxpamR1RDN1OTdRSXFIZzJ0?=
- =?utf-8?B?dWlLMjkyZVRhdzRWaEJLcmZLTmlYYlIvUktreFZzNER2R1luUTBHQndrbDdq?=
- =?utf-8?B?czFaZk1ZcWZ2Q2EvRnFZbFQvZkQ3TUR1TnNOSEthSVlRaFpmd1ZKWjBXL1kx?=
- =?utf-8?B?ZjIrdzBIQWVlWlkyZHB5OVVYeXVrSHhHQnFwWVE5WFFBZ0ttejFNMXcvT1ND?=
- =?utf-8?B?ditVa0UzZ3pxSnp2RFNRajJkMmR1MFpTd3NtOW84d3A4TndRa3BVUXoxVVhX?=
- =?utf-8?B?TThkUG9mT3NvZ3pNTCswRW1VN1BxVGoxeFhSTVRFeXZCSlU5NlFjTnRYVXcr?=
- =?utf-8?B?VlRON1dOSElmS2t4ak9wV1JBYTd4TkRSZnJmdDdvcUtHWUxZTE5IcTFtRzVC?=
- =?utf-8?B?bXVaSTV4Rms1WFpVaW44UzdPam9NOWlMbTJDeVArUjl6eDVOR1QwSmpvUTE3?=
- =?utf-8?B?WllQQks2Tzc1bzhsVUdRYXhpSVFsNGhzeHB4UHdtMnhNQ0pRcDN2MHpwTTMw?=
- =?utf-8?B?QUdiem1kMHlFdGR6c0xvTTNKS1lvakRyNUNXendEQUQzZnhJcThaZGUvZ3Bt?=
- =?utf-8?B?eWtsTXhuRXpqWVc1YkF5anJPd0hUSzAwK1RBVlVWRE5yOHpubENwckxSRU1n?=
- =?utf-8?B?R2NjOVphbzZPcFF1L21rVlN4aFlYakR3UEIzbldibXVlRzEvdnFKakdhdUJP?=
- =?utf-8?B?M0hCTVd2UHZwaWExdjB0MkE5UmxkeWxxMGVzakJaQmdnanQvRzhOUklDWlRV?=
- =?utf-8?Q?pTGwGW8dPcCebGh+42f0NEluld5PDkXy0Ru5aiw46w=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a32cead6-1212-4105-04c7-08d9c0c145c7
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 18:24:18.3967
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R7NENlIP+/XeQ5V8zQzdfTAX/+7MQz8IzY/SVc8SJysdHLAAu3ysJaZ7S5IwNRl+JUxfu+7CuoCDcSHToSR1qL4WIHDVkXick4vQRTE1tqQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1245
-X-OriginatorOrg: intel.com
+References: <Yboc/G18R1Vi1eQV@google.com> <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
+ <Ybom69OyOjsR7kmZ@google.com> <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
+ <Yboy2WwaREgo95dy@google.com> <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
+ <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com>
+ <92f69969-42dc-204a-4138-16fdaaebb78d@gmail.com> <CAKH8qBuZxBen871AWDK1eDcxJenK7UkSQCZQsHCPhk6nk9e=Ng@mail.gmail.com>
+ <7ca623df-73ed-9191-bec7-a4728f2f95e6@gmail.com> <20211216181449.p2izqxgzmfpknbsw@kafai-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20211216181449.p2izqxgzmfpknbsw@kafai-mbp.dhcp.thefacebook.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Thu, 16 Dec 2021 10:24:38 -0800
+Message-ID: <CAKH8qBuAZoVQddMUkyhur=WyQO5b=z9eom1RAwgwraXg2WTj5w@mail.gmail.com>
+Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/2021 2:27 PM, Thomas Hellström wrote:
-> Hi, Rafael,
+On Thu, Dec 16, 2021 at 10:14 AM Martin KaFai Lau <kafai@fb.com> wrote:
 >
-> On 11/4/21 18:26, Rafael J. Wysocki wrote:
->> It is generally unsafe to call put_device() with dpm_list_mtx held,
->> because the given device's release routine may carry out an action
->> depending on that lock which then may deadlock, so modify the
->> system-wide suspend and resume of devices to always drop dpm_list_mtx
->> before calling put_device() (and adjust white space somewhat while
->> at it).
->>
->> For instance, this prevents the following splat from showing up in
->> the kernel log after a system resume in certain configurations:
+> On Thu, Dec 16, 2021 at 01:21:26PM +0000, Pavel Begunkov wrote:
+> > On 12/15/21 22:07, Stanislav Fomichev wrote:
+> > > On Wed, Dec 15, 2021 at 11:55 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+> > > >
+> > > > On 12/15/21 19:15, Stanislav Fomichev wrote:
+> > > > > On Wed, Dec 15, 2021 at 10:54 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+> > > > > >
+> > > > > > On 12/15/21 18:24, sdf@google.com wrote:
+> > [...]
+> > > > > > > I can probably do more experiments on my side once your patch is
+> > > > > > > accepted. I'm mostly concerned with getsockopt(TCP_ZEROCOPY_RECEIVE).
+> > > > > > > If you claim there is visible overhead for a direct call then there
+> > > > > > > should be visible benefit to using CGROUP_BPF_TYPE_ENABLED there as
+> > > > > > > well.
+> > > > > >
+> > > > > > Interesting, sounds getsockopt might be performance sensitive to
+> > > > > > someone.
+> > > > > >
+> > > > > > FWIW, I forgot to mention that for testing tx I'm using io_uring
+> > > > > > (for both zc and not) with good submission batching.
+> > > > >
+> > > > > Yeah, last time I saw 2-3% as well, but it was due to kmalloc, see
+> > > > > more details in 9cacf81f8161, it was pretty visible under perf.
+> > > > > That's why I'm a bit skeptical of your claims of direct calls being
+> > > > > somehow visible in these 2-3% (even skb pulls/pushes are not 2-3%?).
+> > > >
+> > > > migrate_disable/enable together were taking somewhat in-between
+> > > > 1% and 1.5% in profiling, don't remember the exact number. The rest
+> > > > should be from rcu_read_lock/unlock() in BPF_PROG_RUN_ARRAY_CG_FLAGS()
+> > > > and other extra bits on the way.
+> > >
+> > > You probably have a preemptiple kernel and preemptible rcu which most
+> > > likely explains why you see the overhead and I won't (non-preemptible
+> > > kernel in our env, rcu_read_lock is essentially a nop, just a compiler
+> > > barrier).
+> >
+> > Right. For reference tried out non-preemptible, perf shows the function
+> > taking 0.8% with a NIC and 1.2% with a dummy netdev.
+> >
+> >
+> > > > I'm skeptical I'll be able to measure inlining one function,
+> > > > variability between boots/runs is usually greater and would hide it.
+> > >
+> > > Right, that's why I suggested to mirror what we do in set/getsockopt
+> > > instead of the new extra CGROUP_BPF_TYPE_ENABLED. But I'll leave it up
+> > > to you, Martin and the rest.
+> I also suggested to try to stay with one way for fullsock context in v2
+> but it is for code readability reason.
 >
->
-> <snip>
->
->
->> @@ -1748,21 +1769,27 @@ int dpm_suspend(pm_message_t state)
->>           struct device *dev = to_device(dpm_prepared_list.prev);
->>             get_device(dev);
->> +
->>           mutex_unlock(&dpm_list_mtx);
->>             error = device_suspend(dev);
->>             mutex_lock(&dpm_list_mtx);
->> +
->>           if (error) {
->>               pm_dev_err(dev, state, "", error);
->>               dpm_save_failed_dev(dev_name(dev));
->> -            put_device(dev);
->> -            break;
->> -        }
->> -        if (!list_empty(&dev->power.entry))
->> +        } else if (!list_empty(&dev->power.entry)) {
->>               list_move(&dev->power.entry, &dpm_suspended_list);
->> +        }
->> +
->> +        mutex_unlock(&dpm_list_mtx);
->> +
->>           put_device(dev);
->> -        if (async_error)
->> +
->> +        mutex_lock(&dpm_list_mtx);
->> +
->> +        if (error || async_error)
->>               break;
->>       }
->>       mutex_unlock(&dpm_list_mtx);
->> @@ -1879,6 +1906,7 @@ int dpm_prepare(pm_message_t state)
->>           struct device *dev = to_device(dpm_list.next);
->>             get_device(dev);
->> +
->>           mutex_unlock(&dpm_list_mtx);
->>             trace_device_pm_callback_start(dev, "", state.event);
->> @@ -1886,21 +1914,23 @@ int dpm_prepare(pm_message_t state)
->>           trace_device_pm_callback_end(dev, error);
->>             mutex_lock(&dpm_list_mtx);
->> -        if (error) {
->> -            if (error == -EAGAIN) {
->> -                put_device(dev);
->> -                error = 0;
->> -                continue;
->> -            }
->> +
->> +        if (!error) {
->> +            dev->power.is_prepared = true;
->> +            if (!list_empty(&dev->power.entry))
->> +                list_move_tail(&dev->power.entry, &dpm_prepared_list);
->> +        } else if (error == -EAGAIN) {
->> +            error = 0;
->> +        } else {
->>               dev_info(dev, "not prepared for power transition: code 
->> %d\n",
->>                    error);
->> -            put_device(dev);
->> -            break;
->
-> It appears the above break disappeared.
->
->
->>           }
->> -        dev->power.is_prepared = true;
->> -        if (!list_empty(&dev->power.entry))
->> -            list_move_tail(&dev->power.entry, &dpm_prepared_list);
->> +
->> +        mutex_unlock(&dpm_list_mtx);
->> +
->>           put_device(dev);
->
-> Should be
->
->                  if (error)
->
->                         break;
->
-> Here?
->
-Looks like that.
+> How about calling CGROUP_BPF_TYPE_ENABLED() just next to cgroup_bpf_enabled()
+> in BPF_CGROUP_RUN_PROG_*SOCKOPT_*() instead ?
 
+SG!
 
-> Symptoms is if we return an error from the device prepare callback, we 
-> end up spinning forever with little clue what's going on.
+> It is because both cgroup_bpf_enabled() and CGROUP_BPF_TYPE_ENABLED()
+> want to check if there is bpf to run before proceeding everything else
+> and then I don't need to jump to the non-inline function itself to see
+> if there is other prog array empty check.
 >
->
->> +
->> +        mutex_lock(&dpm_list_mtx);
->>       }
->>       mutex_unlock(&dpm_list_mtx);
->>       trace_suspend_resume(TPS("dpm_prepare"), state.event, false);
->
-I'll have a look, thanks for the report!
+> Stan, do you have concern on an extra inlined sock_cgroup_ptr()
+> when there is bpf prog to run for set/getsockopt()?  I think
+> it should be mostly noise from looking at
+> __cgroup_bpf_run_filter_*sockopt()?
 
-
+Yeah, my concern is also mostly about readability/consistency. Either
+__cgroup_bpf_prog_array_is_empty everywhere or this new
+CGROUP_BPF_TYPE_ENABLED everywhere. I'm slightly leaning towards
+__cgroup_bpf_prog_array_is_empty because I don't believe direct
+function calls add any visible overhead and macros are ugly :-) But
+either way is fine as long as it looks consistent.

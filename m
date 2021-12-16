@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E09F476E42
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46596476E51
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbhLPJut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 04:50:49 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:34295 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbhLPJus (ORCPT
+        id S233444AbhLPJxJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Dec 2021 04:53:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231915AbhLPJxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:50:48 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 7102024000D;
-        Thu, 16 Dec 2021 09:50:45 +0000 (UTC)
-Date:   Thu, 16 Dec 2021 10:50:44 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        rw-r-r-0644 <r.r.qwertyuiop.r.r@gmail.com>,
-        Ash Logan <ash@heyquark.com>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.ne@posteo.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 0/5] rtc: nintendo: Add a RTC driver for the GameCube,
- Wii and Wii U
-Message-ID: <YbsL9C6qjo/8SgjU@piout.net>
-References: <20211027223516.2031-1-linkmauve@linkmauve.fr>
- <20211215175501.6761-1-linkmauve@linkmauve.fr>
- <87tuf9kv6c.fsf@mpe.ellerman.id.au>
+        Thu, 16 Dec 2021 04:53:08 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F04C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 01:53:08 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mxnR9-0006Iz-Ek; Thu, 16 Dec 2021 10:52:31 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mxnR6-0004Ru-Hc; Thu, 16 Dec 2021 10:52:28 +0100
+Message-ID: <24b70c5a2fc2c475525f678d6c45a0d2c0c590a6.camel@pengutronix.de>
+Subject: Re: [PATCH v6 04/10] reset: Add Sunplus SP7021 reset driver
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Qin Jian <qinjian@cqplus1.com>, robh+dt@kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
+        maz@kernel.org, linux@armlinux.org.uk, broonie@kernel.org,
+        arnd@arndb.de, stefan.wahren@i2se.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        wells.lu@sunplus.com
+Date:   Thu, 16 Dec 2021 10:52:28 +0100
+In-Reply-To: <9e081c98039518b36cf9a93d4aca66dc2efecdb2.1639560427.git.qinjian@cqplus1.com>
+References: <cover.1639560427.git.qinjian@cqplus1.com>
+         <9e081c98039518b36cf9a93d4aca66dc2efecdb2.1639560427.git.qinjian@cqplus1.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tuf9kv6c.fsf@mpe.ellerman.id.au>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 2021-12-16 at 15:08 +0800, Qin Jian wrote:
+> Add reset driver for Sunplus SP7021 SoC.
+> 
+> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> ---
+> Fix the comments from Philipp.
 
-On 16/12/2021 15:52:59+1100, Michael Ellerman wrote:
-> > Emmanuel Gil Peyrot (5):
-> >   rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U
-> >   rtc: gamecube: Report low battery as invalid data
-> >   powerpc: wii.dts: Expose HW_SRNPROT on this platform
-> >   powerpc: gamecube_defconfig: Enable the RTC driver
-> >   powerpc: wii_defconfig: Enable the RTC driver
-> >
-> >  drivers/rtc/Kconfig                     |  11 +
-> >  drivers/rtc/Makefile                    |   1 +
-> >  drivers/rtc/rtc-gamecube.c              | 377 ++++++++++++++++++++++++
-> 
-> This is basically an rtc series as far as I'm concerned.
-> 
-> >  arch/powerpc/boot/dts/wii.dts           |   5 +
-> >  arch/powerpc/configs/gamecube_defconfig |   2 +-
-> >  arch/powerpc/configs/wii_defconfig      |   2 +-
-> 
-> I have nothing queued in the powerpc tree that touches any of those
-> files, so conflicts are unlikely.
-> 
-> So I'm happy for this to go via the rtc tree whenever it's ready.
-> 
-> Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+Looks good to me now,
 
-That's done, thanks.
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+regards
+Philipp

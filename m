@@ -2,135 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31732477938
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAAA47794B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239575AbhLPQeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:34:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239652AbhLPQeO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:34:14 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CF7C06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 08:34:14 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id g14so88034196edb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 08:34:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=YIxQQ6KDBZhBgpCjwTDT7xZgLL24q7Pq/WYlBcp43Wc=;
-        b=P4zJ4MdxI3Nrq2mTejPtTAUCz2UTy2xuQFXkgZ51A3KEZY3c8BbN2FMPLzvgbMKG/q
-         2CS3yZFEyqHxMzPI6X1GpdoEf7/MOX2c3YmQETBCmfW78pISipn2xqcOZbdiJgvCNJiw
-         3VJ2atCKDqhYMLBfQPRzc95ji4OpWuWcZG6iYnojd5q6N19g6zvgS20ZcXYBq+xz3uM+
-         Ror14fJKf1hGgsQL8KDApaQr3lj8beuTP3xEei2gF56D1gL6W7lmSjr0NrbQP3GXVzpm
-         FAY4tBJcjTbSjdm3thtN8R96q5Qt/7rsyyynLkRfFW7fF8ZlcPnfDkvN3Y1lE37hmhOW
-         Zkzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=YIxQQ6KDBZhBgpCjwTDT7xZgLL24q7Pq/WYlBcp43Wc=;
-        b=afjyNnrxs1vteqRPOmb8Nlo26NpeMJczNcN2uOzd8+e5Lr6l9ocSpZY95Tel+ayUcz
-         KgIrKZc0+RLgxatwNDFtdnuitsfHEHPOdSZOXtH7T6JKGRHsvKslLCUAEUDbzjzqIlgn
-         ThVaKy11eFziWzuh7LnGqAGscMAaD6XqWA21ox7roiS+ED6D13ymlnbOqzDTyMppMNTx
-         GgLJ5883WwYY8jsDTN4/eOaT/J+9X+uC/4pqA8uC22UD52ki1MxVZX0jCQ2AgVs2OXWk
-         Q87NGadJ6Wgzw+AsZMtNB1JMyGBhqNW01ckYNPaSYcjWmcQMQDhKjMuzn2v3oDkpWpIL
-         Whww==
-X-Gm-Message-State: AOAM533u1I96a7AQwq4ijlyv8ORMXAV2KDx4Zr6LQOuxmhWeq+kX6ArG
-        grQNIKknSmat3m3ZAZu5SEURhxfZXryfDQ==
-X-Google-Smtp-Source: ABdhPJzF8h8sUsqhmrPvbnHY0/fmYX/iET/VxwEtCPRcQ1Dc0xW/7REFzhZEkkq+0vwLjwhjjvUEIA==
-X-Received: by 2002:a17:906:c7c9:: with SMTP id dc9mr6960432ejb.559.1639672448083;
-        Thu, 16 Dec 2021 08:34:08 -0800 (PST)
-Received: from [192.168.1.5] (net-93-70-85-238.cust.vodafonedsl.it. [93.70.85.238])
-        by smtp.gmail.com with ESMTPSA id 8sm1956208ejb.9.2021.12.16.08.34.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 16 Dec 2021 08:34:07 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH RFC 9/9] block, bfq: decrease
- 'num_groups_with_pending_reqs' earlier
-From:   Paolo Valente <paolo.valente@linaro.org>
-In-Reply-To: <4765e7f8-48b7-3bc6-5eb6-1dc0a569233d@huawei.com>
-Date:   Thu, 16 Dec 2021 17:34:06 +0100
-Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+        id S233079AbhLPQgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:36:37 -0500
+Received: from mout.gmx.net ([212.227.17.21]:40631 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231209AbhLPQgg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 11:36:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639672581;
+        bh=/AbJGsc+dkLlG/Crdoxg/i9h2UZPWSTdX2g4mIfzJC0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=QZvaS/2vp2wvumNwP2p9GDMS+WhVLLMLj4RIy5PkU+HQTNwp6X1P+yMarmZG3a+2h
+         G2vMcFahcME2KyBe63Zx7N3NRLVPAcMzHutuij8PhinoViECjEVnFG1No/FvMUMXrG
+         E3Xb49u5QpPUxpR5/bA/FVVO/H+By7XBnnfJTKck=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.157.8] ([217.61.157.8]) by web-mail.gmx.net
+ (3c-app-gmx-bap16.server.lan [172.19.172.86]) (via HTTP); Thu, 16 Dec 2021
+ 17:36:21 +0100
+MIME-Version: 1.0
+Message-ID: <trinity-18dddf5d-bc73-453d-a9eb-954de1ab7cc7-1639672581601@3c-app-gmx-bap16>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Aw: Re: [PATCH 1/2] mfd: rk808: add reboot support to rk808 pmic
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 16 Dec 2021 17:36:21 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <fe895d71-5f1f-daf0-bde8-c8ab5f4c0128@arm.com>
+References: <20211215213300.4778-1-linux@fw-web.de>
+ <20211215213300.4778-2-linux@fw-web.de>
+ <fe895d71-5f1f-daf0-bde8-c8ab5f4c0128@arm.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:S5uDaFlDscxRzpQVDFb8E4cYXWI5fyFsA/fFhQaFn8DZ1YSZI4MQXF5quP6Gs9iaCmCyT
+ RMrb00sUuIikMWruGhu4sYBfyugHMa0nLO4WE7oYJ3UbluBUU6ugyvEIgrQUqY/I6BU4tn025DfW
+ N9QzHY+S7Plh5rSUMzNtZ6RBpZYBJzTeSIqjDVKy+EoS8jmB5/nFsT5SWXtuA4fBC7l3Aw1Eardt
+ DdI4MpNhV3lRbcucRlpg9wtA9dnqz52/dj1LLSdb9noEj6jBe+RtEa2SOIFpU8hpx77WHkUsX5qI
+ Vc=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Nfl6KFGRvEA=:F/5Flh65VOiCs5gOrs6dQy
+ EH/LIyOl2NqGYk9gH7mK/G32o4WCzqEXPzcpud/HY3ILAvYyeae+BKc9CeVd9ZVEg6U5reStM
+ zWpE7iuUmoue5Hy/CyOtRQT9mbwDP/yyvA9cS2q2ipkvKeEjDdz5BRmz3bXiYRE50FSkRinbo
+ sJSOMr+ISJsPHOSNcm8lFogda5rSUkXPDqND9bHoobVJONd0QZyKtp2eKvWVIdJdYuWlXS8zp
+ GJFAMmuA5Uq9kyR4hw+eJGiIMSHvy5GjnBT7cgF/KHBbxEQHpsewXeNbIKag0Y7poDMU5GlCp
+ fje0m7ZtnOwrajTouCbDFir1a1W8R+mDBBUJiXuwtyuWNeOjGwG2Dfdno1aZj2KdgrnVjgSdZ
+ Md7qBTNVgNyM2KSgbmjuLqyl6180ivBUrFLYeczeNLdY41BOw9RK2K2fBVAow0WWQRp6ynt1v
+ zZLret2aY8Y+ALoCzjfp0AxxFrsEHL0ynvilKs305FUVg3T53Pto2qxAel4lXOq26F5h3T7VC
+ I8d7S8YjtWZstUwxxTSEAXMUI6Wwz9aXSFetNlH5sy7UQE9wsbka9E/so4bZbgraH/Zqus27u
+ I8pYIFR40LMIeCvmG8UEQjRNdObBz9q167wP3KhA80+58W1Wf/jHgu4YpGjR+JlKWyP2IOmyJ
+ L4CuESmPeuqImO0+ePEMkUxikI+rWZJFJf0ImJCVOWgIFMLcfV/KmTEt7XMM8s9DVERDlNsZY
+ 1n+j2JZkcCLnXCiKYPIgI+M6f9NqjTWE/Jr9dW1dAzf+SWJ6yQtoox7bn3i3VWFiUp6Vi6Wy5
+ jttfB72
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <B5C2B1F6-4DF9-4657-AFF4-D53DD04A65DC@linaro.org>
-References: <20211127101132.486806-1-yukuai3@huawei.com>
- <20211127101132.486806-10-yukuai3@huawei.com>
- <AA66019E-FD14-4821-B53D-0C56EEC38828@linaro.org>
- <4765e7f8-48b7-3bc6-5eb6-1dc0a569233d@huawei.com>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-X-Mailer: Apple Mail (2.3445.104.11)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Robin
 
+thanks for your review
 
-> Il giorno 11 dic 2021, alle ore 03:10, yukuai (C) <yukuai3@huawei.com> =
-ha scritto:
->=20
-> =E5=9C=A8 2021/12/10 18:21, Paolo Valente =E5=86=99=E9=81=93:
->>> Il giorno 27 nov 2021, alle ore 11:11, Yu Kuai<yukuai3@huawei.com>  =
-ha scritto:
->>>=20
->>> Currently 'num_groups_with_pending_reqs' won't be decreased when
->>> the group doesn't have any pending requests, while any child group
->>> have any pending requests. The decrement is delayed to when all the
->>> child groups doesn't have any pending requests.
->>>=20
->>> For example:
->>> 1) t1 issue sync io on root group, t2 and t3 issue sync io on the =
-same
->>> child group. num_groups_with_pending_reqs is 2 now.
->>> 2) t1 stopped, num_groups_with_pending_reqs is still 2. io from t2 =
-and
->>> t3 still can't be handled concurrently.
->>>=20
->>> Fix the problem by decreasing 'num_groups_with_pending_reqs'
->>> immediately upon the deactivation of last entity of the group.
->>>=20
->> I don't understand this patch clearly.
->> I understand your proposal not to count a group as with pending =
-requests, in case no child process of the group has IO, but only its =
-child groups have pending requests.
->> So, entities here are only queues for this patch?
->> If they are only queues, I think it is still incorrect to remove the =
-group from the count of groups with pending IO when all its child queues =
-are deactivated, because there may still be unfinished IO for those =
-queues.
->=20
-> Hi, Paolo
->=20
-> bfq_weights_tree_remove() will be called when all requests are =
-completed
-> in bfq_queue, thus I recored how many queues have pending requests
-> through weights tree insertion and removal.(Details in patch 7)
->=20
-> Thus when calling bfq_weights_tree_remove() for bfqq, I can check if
-> there are no queues have pending requests for parent bfqg:
->=20
-> if (!bfqg->num_entities_with_pending_reqs && -> no queues with pending =
-reqs
->    entity->in_groups_with_pending_reqs) {   -> the group is counted
->=20
+> Gesendet: Donnerstag, 16. Dezember 2021 um 14:17 Uhr
+> Von: "Robin Murphy" <robin.murphy@arm.com>
 
-Ok, I got confused because you use the term deactivation.  Yet you
-seem to decrement the counter at the right time.  Maybe fix that term,
-in commit messages and comments.
+> > +	dev_err(&rk808_i2c_client->dev, "poweroff device!\n");
+>
+> This is not an error.
 
-Thanks,
-Paolo
+ack, we can change to dev_dbg/dev_info or drop completely
+
+> > @@ -552,6 +554,7 @@ static void rk808_pm_power_off(void)
+> >   		bit =3D DEV_OFF;
+> >   		break;
+> >   	default:
+> > +		dev_err(&rk808_i2c_client->dev, "poweroff device not supported!\n")=
+;
+>
+> If we really don't support power off for the present PMIC then we should
+> avoid registering the power off handler in the first place. These
+> default cases should mostly just serve to keep static checkers happy.
+
+currently we had added all device-ids supported by probe. Before my Patch =
+(Part2) rk809 was missing.
+It is not registered for (currently) unsupported IDs as probe exits with -=
+EINVAL for unsupported IDs before.
+
+If anyone adds init-code in future but not poweroff/restart part we ran in=
+to this. So i would leave this message.
+
+registering handler depending on supported devices (for poweroff/restart f=
+unction) imho makes code less readable.
+
+> > @@ -559,6 +562,44 @@ static void rk808_pm_power_off(void)
+> >   		dev_err(&rk808_i2c_client->dev, "Failed to shutdown device!\n");
+> >   }
+> >
+> > +static int rk808_restart_notify(struct notifier_block *this, unsigned=
+ long mode, void *cmd)
+> > +{
+> > +	int ret;
+> > +	unsigned int reg, bit;
+> > +	struct rk808 *rk808 =3D i2c_get_clientdata(rk808_i2c_client);
+> > +
+> > +	switch (rk808->variant) {
+> > +	case RK805_ID:
+> > +		reg =3D RK805_DEV_CTRL_REG;
+> > +		bit =3D DEV_OFF_RST;
+> > +		break;
+> > +	case RK808_ID:
+> > +		reg =3D RK808_DEVCTRL_REG,
+> > +		bit =3D DEV_OFF;
+>
+> Is that right? The RK808 datasheet does say that this bit resets itself
+> once the OFF state is reached, but there doesn't seem to be any obvious
+> guarantee of a power-on condition being present to automatically
+> transition back to ACTIVE.
+
+i think you're right...imho it should be DEV_OFF_RST in restart_notify and=
+ DEV_OFF in poweroff
+
+> > @@ -727,6 +768,13 @@ static int rk808_probe(struct i2c_client *client,
+> >   	if (of_property_read_bool(np, "rockchip,system-power-controller")) =
+{
+> >   		rk808_i2c_client =3D client;
+> >   		pm_power_off =3D rk808_pm_power_off;
+> > +		rk808->nb =3D &rk808_restart_handler;
+>
+> The handler just relies on the global rk808_i2c_client anyway, so does
+> this serve any purpose?
+
+i guess
+
+ret =3D register_restart_handler(&rk808_restart_handler);
+
+is better here too.
+
+i cannot figure out why storing the function-pointer in rk808->nb too as t=
+his seems not to be used anywhere else
+
+> > +
+> > +		dev_warn(&client->dev, "register restart handler\n");
+>
+> Don't scream a warning about normal and expected operation.
+
+ack
 
 > Thanks,
-> Kuai
->> Am I missing something?
->> Thanks,
->> Paolo
+> Robin.
 
+@Peter, what do you think?
+
+regards Frank

@@ -2,255 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 563CE477C7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D18477C7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241022AbhLPTYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 14:24:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
+        id S241032AbhLPTZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 14:25:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236559AbhLPTYJ (ORCPT
+        with ESMTP id S231376AbhLPTZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 14:24:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE5FC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 11:24:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1AD761F36
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 19:24:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AC0C36AE3;
-        Thu, 16 Dec 2021 19:24:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639682648;
-        bh=+TVFAZTxInxw7zmpBcgQuQXT3yhZJYDamcGAgDcufWw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dggFc5BJG1I5wNzZqpeqpnMRyQvHU7PdvqWygJsMQAJ03q9u8TLGolycgdzSbHmad
-         YBb+bMRFMvedROs97+ouc/ZIaBB/q2D0YAQKxDA8LeU6lIgx+av16b7SGTr5o7Qp+Z
-         q3bnuuJRQd6GQtqFLx0nqLY/m1UEJae1s2jVXG3BM16Qt9xIFCF1pAiethgWw1wlzA
-         WuGhGQrzIOdB05+VhQMDKAKi4dNsk3vsf+RIRtB3WDjXv+ujU0z0J37+OXt2W64/Ys
-         MtHfEyOGjlv5vjkww9lpFwJGQoxrd3fo8AOb+IZtHhnu9W8U90bmWWcBswiS9XNeMm
-         8LWYuJ2D/Q6Zw==
-Date:   Thu, 16 Dec 2021 11:24:06 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] f2fs: fix to reserve space for IO align feature
-Message-ID: <YbuSVvznvVB6Zxr+@google.com>
-References: <20211211132736.5283-1-chao@kernel.org>
- <bc4b6836-38de-3890-69f7-e9587af8a7c2@kernel.org>
+        Thu, 16 Dec 2021 14:25:22 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDD5C061574;
+        Thu, 16 Dec 2021 11:25:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=nw+QyVmvoeztudKCPr7lg9PgQJIVm8glncAr2T+hc8k=; b=YbPTvuBHTFRiwIbsm09Yh+hEtI
+        vHQWG88ab465nk6HMhQAvhTkI/37kficvHXgb67iIKT3/cID3xmEiFfjFfuVLSIms8NtlwRVSUIpA
+        BecdoteOR2XxZHxgd2YccqZxdZKmpLeaQCyGmj71FjCbjRfx/PXVlUfJ92X+zDRapJ0gRz1xAJQo9
+        InjfLU/YCAbTLxnEvkSHCySjI5pIYOv/9HCc+h/zmbGgeSaBU0Q32YcxX+XdtO9B0oPFyeF0iwV2E
+        kqfvOhpxvf/AblGjMzKYz4QkLSfjtzeECyZv0oBfv1eHt6RGjSA/ZmerFy+kTJfuhPZfc5dLA9LOZ
+        TP2rL60A==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxwNB-007LRh-I0; Thu, 16 Dec 2021 19:25:01 +0000
+Message-ID: <ca0751c864570015ffe4d8cccdc94e0a5ef3086d.camel@infradead.org>
+Subject: Re: [PATCH v3 0/9] Parallel CPU bringup for x86_64
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com
+Date:   Thu, 16 Dec 2021 19:24:56 +0000
+In-Reply-To: <761c1552-0ca0-403b-3461-8426198180d0@amd.com>
+References: <20211215145633.5238-1-dwmw2@infradead.org>
+         <761c1552-0ca0-403b-3461-8426198180d0@amd.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-5RF9FfvqskXvLvB+S+1Q"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bc4b6836-38de-3890-69f7-e9587af8a7c2@kernel.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16, Chao Yu wrote:
-> On 2021/12/11 21:27, Chao Yu wrote:
-> > https://bugzilla.kernel.org/show_bug.cgi?id=204137
-> > 
-> > With below script, we will hit panic during new segment allocation:
-> > 
-> > DISK=bingo.img
-> > MOUNT_DIR=/mnt/f2fs
-> > 
-> > dd if=/dev/zero of=$DISK bs=1M count=105
-> > mkfs.f2fe -a 1 -o 19 -t 1 -z 1 -f -q $DISK
-> > 
-> > mount -t f2fs $DISK $MOUNT_DIR -o "noinline_dentry,flush_merge,noextent_cache,mode=lfs,io_bits=7,fsync_mode=strict"
-> > 
-> > for (( i = 0; i < 4096; i++ )); do
-> > 	name=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 10`
-> > 	mkdir $MOUNT_DIR/$name
-> > done
-> > 
-> > umount $MOUNT_DIR
-> > rm $DISK
-> > 
-> > --- Core dump ---
-> 
-> Jaegeuk,
-> 
-> I guess below commit message was missed during applying patch due
-> to above "---" string before "Core dump", could you please add them
-> manually in the patch? or should I send a new version?
 
-Updated. Thanks.
+--=-5RF9FfvqskXvLvB+S+1Q
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Thanks,
-> 
-> > Call Trace:
-> >   allocate_segment_by_default+0x9d/0x100 [f2fs]
-> >   f2fs_allocate_data_block+0x3c0/0x5c0 [f2fs]
-> >   do_write_page+0x62/0x110 [f2fs]
-> >   f2fs_outplace_write_data+0x43/0xc0 [f2fs]
-> >   f2fs_do_write_data_page+0x386/0x560 [f2fs]
-> >   __write_data_page+0x706/0x850 [f2fs]
-> >   f2fs_write_cache_pages+0x267/0x6a0 [f2fs]
-> >   f2fs_write_data_pages+0x19c/0x2e0 [f2fs]
-> >   do_writepages+0x1c/0x70
-> >   __filemap_fdatawrite_range+0xaa/0xe0
-> >   filemap_fdatawrite+0x1f/0x30
-> >   f2fs_sync_dirty_inodes+0x74/0x1f0 [f2fs]
-> >   block_operations+0xdc/0x350 [f2fs]
-> >   f2fs_write_checkpoint+0x104/0x1150 [f2fs]
-> >   f2fs_sync_fs+0xa2/0x120 [f2fs]
-> >   f2fs_balance_fs_bg+0x33c/0x390 [f2fs]
-> >   f2fs_write_node_pages+0x4c/0x1f0 [f2fs]
-> >   do_writepages+0x1c/0x70
-> >   __writeback_single_inode+0x45/0x320
-> >   writeback_sb_inodes+0x273/0x5c0
-> >   wb_writeback+0xff/0x2e0
-> >   wb_workfn+0xa1/0x370
-> >   process_one_work+0x138/0x350
-> >   worker_thread+0x4d/0x3d0
-> >   kthread+0x109/0x140
-> >   ret_from_fork+0x25/0x30
-> > 
-> > The root cause here is, with IO alignment feature enables, in worst
-> > case, we need F2FS_IO_SIZE() free blocks space for single one 4k write
-> > due to IO alignment feature will fill dummy pages to make IO being
-> > aligned.
-> > 
-> > So we will easily run out of free segments during non-inline directory's
-> > data writeback, even in process of foreground GC.
-> > 
-> > In order to fix this issue, I just propose to reserve additional free
-> > space for IO alignment feature to handle worst case of free space usage
-> > ratio during FGGC.
-> > 
-> > Fixes: 0a595ebaaa6b ("f2fs: support IO alignment for DATA and NODE writes")
-> > Signed-off-by: Chao Yu <chao@kernel.org>
-> > ---
-> > v3:
-> > - rebase the codes.
-> >   fs/f2fs/f2fs.h    | 11 +++++++++++
-> >   fs/f2fs/segment.h |  3 ++-
-> >   fs/f2fs/super.c   | 44 ++++++++++++++++++++++++++++++++++++++++++++
-> >   fs/f2fs/sysfs.c   |  4 +++-
-> >   4 files changed, 60 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > index 5da592286721..d2d3b2332e79 100644
-> > --- a/fs/f2fs/f2fs.h
-> > +++ b/fs/f2fs/f2fs.h
-> > @@ -1023,6 +1023,7 @@ struct f2fs_sm_info {
-> >   	unsigned int segment_count;	/* total # of segments */
-> >   	unsigned int main_segments;	/* # of segments in main area */
-> >   	unsigned int reserved_segments;	/* # of reserved segments */
-> > +	unsigned int additional_reserved_segments;/* reserved segs for IO align feature */
-> >   	unsigned int ovp_segments;	/* # of overprovision segments */
-> >   	/* a threshold to reclaim prefree segments */
-> > @@ -2200,6 +2201,11 @@ static inline int inc_valid_block_count(struct f2fs_sb_info *sbi,
-> >   	if (!__allow_reserved_blocks(sbi, inode, true))
-> >   		avail_user_block_count -= F2FS_OPTION(sbi).root_reserved_blocks;
-> > +
-> > +	if (F2FS_IO_ALIGNED(sbi))
-> > +		avail_user_block_count -= sbi->blocks_per_seg *
-> > +				SM_I(sbi)->additional_reserved_segments;
-> > +
-> >   	if (unlikely(is_sbi_flag_set(sbi, SBI_CP_DISABLED))) {
-> >   		if (avail_user_block_count > sbi->unusable_block_count)
-> >   			avail_user_block_count -= sbi->unusable_block_count;
-> > @@ -2446,6 +2452,11 @@ static inline int inc_valid_node_count(struct f2fs_sb_info *sbi,
-> >   	if (!__allow_reserved_blocks(sbi, inode, false))
-> >   		valid_block_count += F2FS_OPTION(sbi).root_reserved_blocks;
-> > +
-> > +	if (F2FS_IO_ALIGNED(sbi))
-> > +		valid_block_count += sbi->blocks_per_seg *
-> > +				SM_I(sbi)->additional_reserved_segments;
-> > +
-> >   	user_block_count = sbi->user_block_count;
-> >   	if (unlikely(is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
-> >   		user_block_count -= sbi->unusable_block_count;
-> > diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-> > index 46fde9f3f28e..0291cd55cf09 100644
-> > --- a/fs/f2fs/segment.h
-> > +++ b/fs/f2fs/segment.h
-> > @@ -538,7 +538,8 @@ static inline unsigned int free_segments(struct f2fs_sb_info *sbi)
-> >   static inline unsigned int reserved_segments(struct f2fs_sb_info *sbi)
-> >   {
-> > -	return SM_I(sbi)->reserved_segments;
-> > +	return SM_I(sbi)->reserved_segments +
-> > +			SM_I(sbi)->additional_reserved_segments;
-> >   }
-> >   static inline unsigned int free_sections(struct f2fs_sb_info *sbi)
-> > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> > index 9acd76ea09ca..666dc9aed262 100644
-> > --- a/fs/f2fs/super.c
-> > +++ b/fs/f2fs/super.c
-> > @@ -328,6 +328,46 @@ static inline void limit_reserve_root(struct f2fs_sb_info *sbi)
-> >   					   F2FS_OPTION(sbi).s_resgid));
-> >   }
-> > +static inline int adjust_reserved_segment(struct f2fs_sb_info *sbi)
-> > +{
-> > +	unsigned int sec_blks = sbi->blocks_per_seg * sbi->segs_per_sec;
-> > +	unsigned int avg_vblocks;
-> > +	unsigned int wanted_reserved_segments;
-> > +	block_t avail_user_block_count;
-> > +
-> > +	if (!F2FS_IO_ALIGNED(sbi))
-> > +		return 0;
-> > +
-> > +	/* average valid block count in section in worst case */
-> > +	avg_vblocks = sec_blks / F2FS_IO_SIZE(sbi);
-> > +
-> > +	/*
-> > +	 * we need enough free space when migrating one section in worst case
-> > +	 */
-> > +	wanted_reserved_segments = (F2FS_IO_SIZE(sbi) / avg_vblocks) *
-> > +						reserved_segments(sbi);
-> > +	wanted_reserved_segments -= reserved_segments(sbi);
-> > +
-> > +	avail_user_block_count = sbi->user_block_count -
-> > +				sbi->current_reserved_blocks -
-> > +				F2FS_OPTION(sbi).root_reserved_blocks;
-> > +
-> > +	if (wanted_reserved_segments * sbi->blocks_per_seg >
-> > +					avail_user_block_count) {
-> > +		f2fs_err(sbi, "IO align feature can't grab additional reserved segment: %u, available segments: %u",
-> > +			wanted_reserved_segments,
-> > +			avail_user_block_count >> sbi->log_blocks_per_seg);
-> > +		return -ENOSPC;
-> > +	}
-> > +
-> > +	SM_I(sbi)->additional_reserved_segments = wanted_reserved_segments;
-> > +
-> > +	f2fs_info(sbi, "IO align feature needs additional reserved segment: %u",
-> > +			 wanted_reserved_segments);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static inline void adjust_unusable_cap_perc(struct f2fs_sb_info *sbi)
-> >   {
-> >   	if (!F2FS_OPTION(sbi).unusable_cap_perc)
-> > @@ -4181,6 +4221,10 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
-> >   		goto free_nm;
-> >   	}
-> > +	err = adjust_reserved_segment(sbi);
-> > +	if (err)
-> > +		goto free_nm;
-> > +
-> >   	/* For write statistics */
-> >   	sbi->sectors_written_start = f2fs_get_sectors_written(sbi);
-> > diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> > index 55a7df17d5f3..c22bee84c8ec 100644
-> > --- a/fs/f2fs/sysfs.c
-> > +++ b/fs/f2fs/sysfs.c
-> > @@ -424,7 +424,9 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
-> >   	if (a->struct_type == RESERVED_BLOCKS) {
-> >   		spin_lock(&sbi->stat_lock);
-> >   		if (t > (unsigned long)(sbi->user_block_count -
-> > -				F2FS_OPTION(sbi).root_reserved_blocks)) {
-> > +				F2FS_OPTION(sbi).root_reserved_blocks -
-> > +				sbi->blocks_per_seg *
-> > +				SM_I(sbi)->additional_reserved_segments)) {
-> >   			spin_unlock(&sbi->stat_lock);
-> >   			return -EINVAL;
-> >   		}
+On Thu, 2021-12-16 at 10:27 -0600, Tom Lendacky wrote:
+> On 12/15/21 8:56 AM, David Woodhouse wrote:
+> > Doing the INIT/SIPI/SIPI in parallel for all APs and *then* waiting for
+> > them shaves about 80% off the AP bringup time on a 96-thread socket
+> > Skylake box (EC2 c5.metal) =E2=80=94 from about 500ms to 100ms.
+> >=20
+> > There are more wins to be had with further parallelisation, but this is
+> > the simple part.
+>=20
+> I applied this series and began booting a regular non-SEV guest and hit a=
+=20
+> failure at 39 vCPUs. No panic or warning, just a reset and OVMF was=20
+> executing again. I'll try to debug what's going, but not sure how quickly=
+=20
+> I'll arrive at anything.
+
+Thanks for testing. This is working for me with BIOS and EFI boots in
+qemu and real hardware but it's mostly been Intel so far. I'll try
+harder on an AMD box.
+
+Anything else special about your setup, kernel config or qemu
+invocation that might help me reproduce?
+
+If it can repro without KVM, 'qemu -d in_asm' can be extremely useful
+for this kind of thing btw.
+
+--=-5RF9FfvqskXvLvB+S+1Q
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
+ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
+OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
+RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
+cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
+uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
+Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
+Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
+xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
+YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
+nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
+PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
+7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
+Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
+MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
+NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
+AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
+/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
+0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
+vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
+ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
+ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
+CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
+BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
+aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
+bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
+bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
+LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
+CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
+W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
+vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
+gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
+RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
+jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
+b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
+AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
+BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
++bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
+WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
+aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
+CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
+u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
+RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
+QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
+b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
+cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
+SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
+0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
+KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
+E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
+M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
+jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
+yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
+gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
+R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
+ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
+MjE2MTkyNDU2WjAvBgkqhkiG9w0BCQQxIgQgRt1fP3lsUxUvwoTuTXcyBI8X6e2aKRHzWYznmguN
+50kwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
+PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
+aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
+DQEBAQUABIIBABCo7osHNaWKVYblPXBHH6ToLgYxAkgirh5nNXfOeTsuBxBS9cuSe6cmdAi/ch7Z
+glHdhNBkL+8NNi1pCYVVny/6xb2WdJyUrliSLM6ZmuzcwovTm7x4MGmrwTIbDPvKtAtKsNKmklIG
+en30qr4Ek8zmqs0Slu0Mq6wjvuxUEZtI06LUtpIbObv2lBuxk3cwJmRcJaF4sL94WOZhz+cxjZRX
+UHENmzSi3b1W3MeZCVtk9bghwSI9GuRlUd+NwMwQHOZ8NxDhQHmue3rKmzo/R6WwMReYl1ZBCd2i
+PuMDG2K1lBHjMNc4FD85NaScLbfVt3uH/cvWbNxLkmiiPW/xBrgAAAAAAAA=
+
+
+--=-5RF9FfvqskXvLvB+S+1Q--
+

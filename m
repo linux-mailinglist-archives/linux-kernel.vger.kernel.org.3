@@ -2,386 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1630B47713E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C86B47713A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234280AbhLPMBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:01:17 -0500
-Received: from mga18.intel.com ([134.134.136.126]:62892 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230525AbhLPMBQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:01:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639656076; x=1671192076;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=r6pyZ88VE1TDFKPwvgY0HtK7BcFHOnSwsMuQn+PV2+k=;
-  b=Ga95xuQU30o+yda/PJQAlNhPFXsMNKvmckN6R7jV9LxlqF8k/Z2/wsye
-   3Aqv9h8nxIAJ6Yw56XPeSqfEfb8AbJmqZQmFbcIBUmmkOb4zhWQccINcI
-   PyUm2CcMOx3t98PGY/PgaXh232z5Bx/cSHIRZYffBzRFXPlsj/a0JqtCY
-   JEd4Ix6Q8VGB/ZdtmJ47wcXF4T2gPAsZiP6VV1EsRSOAEcGsHOYFt64IX
-   CrWfYGkzj8Pjk8/bZB49Gl8ioYOEB6GuI9gspSGJw2hPVydQwOxKldegq
-   SdM9hodpywn1r3ckGgCQU655W3xL8qTrH0dMga5z5VpsceSb5YoERF+3M
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226332283"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="226332283"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:01:16 -0800
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="519219497"
-Received: from carel.sh.intel.com (HELO linux.intel.com) ([10.239.158.92])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:01:13 -0800
-Date:   Thu, 16 Dec 2021 19:58:40 +0800
-From:   Carel Si <beibei.si@intel.com>
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Yin Fengwei <fengwei.yin@intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        lkp@lists.01.org, lkp@intel.com
-Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
- BUG:kernel_reboot-without-warning_in_boot_stage
-Message-ID: <20211216115838.GA23522@linux.intel.com>
-References: <20211209144141.GC25654@xsang-OptiPlex-9020>
- <YbjIoewxGaodXHKF@zn.tnic>
- <20211215070012.GA26582@linux.intel.com>
- <Ybm96seTxl+pWjTX@zn.tnic>
- <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
- <YbsPwyLnejLQMbTb@zn.tnic>
+        id S234251AbhLPL7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 06:59:25 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:46796 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234158AbhLPL7Y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 06:59:24 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 806BF21119;
+        Thu, 16 Dec 2021 11:59:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1639655963; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=nJzarjRsFddzwj2POsEoacem5ANxTsZ7S2fzYT8eUEo=;
+        b=id2nOCfIN3woA+W6cfxxG04CE9jJOi6pd1WUKwGSFmLWkCoBNKC21a1tfjBb3RMKQrhTzx
+        RiMhc1SGx7/Uz3RhzZt50PLUAZ6GzbXG6VwYUQoZCo8DvPZucC6MN/3S5/f3QiqozrPwBW
+        FQsgjCptBaVsWp/u5aXxJgzb0Ddv6WU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1639655963;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=nJzarjRsFddzwj2POsEoacem5ANxTsZ7S2fzYT8eUEo=;
+        b=AWRA95QQqS0lxqTdvV3H+Znip1FnbOHjyzfP5/a7gXNmyhFVl4AdA/WvXZif8XQ4fG6j3B
+        qrF7s/DNHLelaxAQ==
+Received: from localhost.localdomain (unknown [10.100.201.122])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 32E6BA3B84;
+        Thu, 16 Dec 2021 11:59:23 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     jani.nikula@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH] drm/i915: remove circ_buf.h includes
+Date:   Thu, 16 Dec 2021 12:59:20 +0100
+Message-Id: <20211216115920.15981-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="OXfL5xGRrasGEqWY"
-Content-Disposition: inline
-In-Reply-To: <YbsPwyLnejLQMbTb@zn.tnic>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The last user of macros from that include was removed in 2018 by the
+commit below.
 
---OXfL5xGRrasGEqWY
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 6cc42152b02b ("drm/i915: Remove support for legacy debugfs crc interface")
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: intel-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+---
+ drivers/gpu/drm/i915/display/intel_pipe_crc.c | 1 -
+ drivers/gpu/drm/i915/i915_irq.c               | 1 -
+ 2 files changed, 2 deletions(-)
 
-Hi Boris,
+diff --git a/drivers/gpu/drm/i915/display/intel_pipe_crc.c b/drivers/gpu/drm/i915/display/intel_pipe_crc.c
+index 8ac263f471be..9070935b0443 100644
+--- a/drivers/gpu/drm/i915/display/intel_pipe_crc.c
++++ b/drivers/gpu/drm/i915/display/intel_pipe_crc.c
+@@ -24,7 +24,6 @@
+  *
+  */
+ 
+-#include <linux/circ_buf.h>
+ #include <linux/ctype.h>
+ #include <linux/debugfs.h>
+ #include <linux/seq_file.h>
+diff --git a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
+index 5b98fb0532b5..e77f644d41e8 100644
+--- a/drivers/gpu/drm/i915/i915_irq.c
++++ b/drivers/gpu/drm/i915/i915_irq.c
+@@ -28,7 +28,6 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+-#include <linux/circ_buf.h>
+ #include <linux/slab.h>
+ #include <linux/sysrq.h>
+ 
+-- 
+2.34.1
 
-On Thu, Dec 16, 2021 at 11:06:59AM +0100, Borislav Petkov wrote:
-> On Thu, Dec 16, 2021 at 03:04:16PM +0800, Yin Fengwei wrote:
-> > The testing was with Qemu.
->=20
-> This is hardly what I asked for.
->=20
-> > And we found that the hang is related with clang-14.
->=20
-> I saw that already.
->=20
-> > The original report showed the kernel is built with clang-14:
-> >         # build kernel
-> > 	cd linux
-> > 	cp config-5.16.0-rc3-00003-gf154f290855b .config
-> > 	make HOSTCC=3Dclang-14 CC=3Dclang-14 ARCH=3Dx86_64 olddefconfig prepar=
-e modules_prepare bzImage modules
-> > 	make HOSTCC=3Dclang-14 CC=3Dclang-14 ARCH=3Dx86_64 INSTALL_MOD_PATH=3D=
-<mod-install-dir> modules_install
->=20
-> I saw that too.
->=20
-> > Looks like KASAN related stub generated by clang-14 (KASAN_SHADOW_OFFSE=
-T and asan_report).
-> > This function is early function called before kasan_init.
-> >=20
-> > Looks like we need to disable KASAN_SANITIZE for arch/x86/kernel/cpu/co=
-mmon.c. So clang-14 will
-> > be happy with this kind of early TLB flush? Thanks.
->=20
-> Ok, I don't understand: I asked for how exactly to reproduce and whether
-> you can send me your vmlinux you built with your clang-14. What I get is
-> some possible explanation about what might be happening.
->=20
-> So what do you expect me to do? Say, "oh, sure, you're right, send me a
-> patch" without even being able to see for myself what the root cause is?
->=20
-> What if it is not the kernel's fault but clang-14 is miscompiling crap
-> as in so many other cases?
->=20
-> I built clang-14 and built with your .config and it works here fine. So
-> why does yours fail?
->=20
-> Or what's the point of all this?
->=20
-> I mean, if you cannot send me what I ask for, you can say so. Then I can
-> ignore this whole report altogether and waste my time somewhere else.
-
-We have uploaded vmlinuz, modules.cgz, config as well as other related file=
- to:
-https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-randconfig-a013-2=
-0211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/
-
-Machine types can refer to:
-https://zerobin.net/?e107cf7b56495d80#MQLh14wUT9Osv1tWCwiQx/okkAN48Nq+drVPE=
-0PiNPw=3D
-
-If there's any other msg needed, pls feel free to propose, thanks.
-
-Below are our full steps to reproduce the issue:
-
-# download lkp-tests
-$ git clone https://github.com/intel/lkp-tests.git
-
-$ cd lkp-tests/
-
-# download vmlinuz
-$ wget https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-randconfig=
--a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/vmlinuz-5.=
-16.0-rc3-00003-gf154f290855b
-
-# dowmload modules.cgz
-$ wget https://download.01.org/0day-ci/lkp-qemu/pkg/linux/x86_64-randconfig=
--a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/modules.cgz
-
-# download job-script which is attached
-
-# run lkp qemu
-lkp-tests$ sudo bin/lkp qemu -k vmlinuz-5.16.0-rc3-00003-gf154f290855b -m m=
-odules.cgz job-script
-
-~/lkp-tests/pkg/lkp-src ~/lkp-tests
-x86_64
-=3D=3D> Making package: lkp-src 0-1 (Thu 16 Dec 2021 07:26:22 PM CST)
-=3D=3D> Checking runtime dependencies...
-=3D=3D> Checking buildtime dependencies...
-=3D=3D> WARNING: Using existing $srcdir/ tree
-=3D=3D> Removing existing $pkgdir/ directory...
-=3D=3D> Starting build()...
-make: Entering directory '/home/carel/lkp-tests/bin/event'
-klcc  -D_FORTIFY_SOURCE=3D2  -c -o wakeup.o wakeup.c
-klcc  -Wl,-O1,--sort-common,--as-needed,-z,relro -static -o wakeup wakeup.o
-rm -f wakeup.o
-strip wakeup
-make: Leaving directory '/home/carel/lkp-tests/bin/event'
-=3D=3D> Entering fakeroot environment...
-x86_64
-=3D=3D> Starting package()...
-=3D=3D> Creating package "lkp-src"...
-103987 blocks
-renamed '/home/carel/.lkp/cache/lkp-x86_64.cgz.tmp' -> '/home/carel/.lkp/ca=
-che/lkp-x86_64.cgz'
-=3D=3D> Leaving fakeroot environment.
-=3D=3D> Finished making: lkp-src 0-1 (Thu 16 Dec 2021 07:26:24 PM CST)
-~/lkp-tests
-12 blocks
-result_root: /home/carel/.lkp//result/boot/1/vm-snb/debian-10.4-x86_64-2020=
-0603.cgz/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad=
-253c0ef8a9337bb/0
-downloading initrds ...
-use local modules: /home/carel/.lkp/cache/modules.cgz
-/usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 http=
-://0day.sh.intel.com:80/~lkp/osimage/debian/debian-10.4-x86_64-20200603.cgz=
- -N -P /home/carel/.lkp/cache/osimage/debian
-440459 blocks
-/usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 http=
-://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603.cgz/r=
-un-ipconfig_20200608.cgz -N -P /home/carel/.lkp/cache/osimage/deps/debian-1=
-0.4-x86_64-20200603.cgz
-1773 blocks
-/usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 http=
-://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603.cgz/l=
-kp_20210707.cgz -N -P /home/carel/.lkp/cache/osimage/deps/debian-10.4-x86_6=
-4-20200603.cgz
-2321 blocks
-/usr/bin/wget -q --timeout=3D1800 --tries=3D1 --local-encoding=3DUTF-8 http=
-://0day.sh.intel.com:80/~lkp/osimage/deps/debian-10.4-x86_64-20200603.cgz/r=
-sync-rootfs_20200608.cgz -N -P /home/carel/.lkp/cache/osimage/deps/debian-1=
-0.4-x86_64-20200603.cgz
-6856 blocks
-exec command: qemu-system-x86_64 -enable-kvm -fsdev local,id=3Dtest_dev,pat=
-h=3D/home/carel/.lkp//result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/=
-x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a=
-9337bb/0,security_model=3Dnone -device virtio-9p-pci,fsdev=3Dtest_dev,mount=
-_tag=3D9p/virtfs_mount -kernel vmlinuz-5.16.0-rc3-00003-gf154f290855b -appe=
-nd root=3D/dev/ram0 user=3Dlkp job=3D/lkp/jobs/scheduled/vm-snb-192/boot-1-=
-debian-10.4-x86_64-20200603.cgz-f154f290855b070cc94dd44ad253c0ef8a9337bb-20=
-211208-23538-lnvkeg-5.yaml ARCH=3Dx86_64 kconfig=3Dx86_64-randconfig-a013-2=
-0211207 branch=3Dtip/x86/mm commit=3Df154f290855b070cc94dd44ad253c0ef8a9337=
-bb BOOT_IMAGE=3D/pkg/linux/x86_64-randconfig-a013-20211207/clang-14/f154f29=
-0855b070cc94dd44ad253c0ef8a9337bb/vmlinuz-5.16.0-rc3-00003-gf154f290855b vm=
-alloc=3D128M initramfs_async=3D0 page_owner=3Don max_uptime=3D600 RESULT_RO=
-OT=3D/result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfi=
-g-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/3 LKP_LOC=
-AL_RUN=3D1 selinux=3D0 debug apic=3Ddebug sysrq_always_enabled rcupdate.rcu=
-_cpu_stall_timeout=3D100 net.ifnames=3D0 printk.devkmsg=3Don panic=3D-1 sof=
-tlockup_panic=3D1 nmi_watchdog=3Dpanic oops=3Dpanic load_ramdisk=3D2 prompt=
-_ramdisk=3D0 drbd.minor_count=3D8 systemd.log_level=3Derr ignore_loglevel c=
-onsole=3Dtty0 earlyprintk=3DttyS0,115200 console=3DttyS0,115200 vga=3Dnorma=
-l rw  ip=3Ddhcp result_service=3D9p/virtfs_mount -initrd /home/carel/.lkp/c=
-ache/final_initrd -smp 2 -m 3144M -no-reboot -watchdog i6300esb -rtc base=
-=3Dlocaltime -device e1000,netdev=3Dnet0 -netdev user,id=3Dnet0 -display no=
-ne -monitor null -serial stdio
-early console in setup code
-early console in extract_kernel
-input_data: 0x0000000006ffc2e0
-input_len: 0x000000000260cb2b
-output: 0x0000000001000000
-output_len: 0x00000000079e7da4
-kernel_total_size: 0x0000000008a2c000
-needed_size: 0x0000000008c00000
-trampoline_32bit: 0x000000000009d000
-Physical KASLR using RDTSC...
-Virtual KASLR using RDTSC...
-
-Decompressing Linux... Parsing ELF... Performing relocations... done.
-Booting the kernel.
-
->=20
-> --=20
-> Regards/Gruss,
->     Boris.
->=20
-> SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG N=FCrn=
-berg
-
---OXfL5xGRrasGEqWY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename=job-script
-
-#!/bin/sh
-
-export_top_env()
-{
-	export suite='boot'
-	export testcase='boot'
-	export category='functional'
-	export timeout='10m'
-	export job_origin='boot.yaml'
-	export queue_cmdline_keys='branch
-commit
-queue_at_least_once'
-	export queue='validate'
-	export testbox='vm-snb-192'
-	export tbox_group='vm-snb'
-	export branch='tip/x86/mm'
-	export commit='f154f290855b070cc94dd44ad253c0ef8a9337bb'
-	export kconfig='x86_64-randconfig-a013-20211207'
-	export repeat_to=6
-	export nr_vm=160
-	export submit_id='61b0b1ba6033575bf2dd6891'
-	export job_file='/lkp/jobs/scheduled/vm-snb-192/boot-1-debian-10.4-x86_64-20200603.cgz-f154f290855b070cc94dd44ad253c0ef8a9337bb-20211208-23538-lnvkeg-5.yaml'
-	export id='f7fba8ffd432f1208eb1518f4a9090af53d90c47'
-	export queuer_version='/lkp-src'
-	export model='qemu-system-x86_64 -enable-kvm -cpu SandyBridge'
-	export nr_cpu=2
-	export memory='16G'
-	export need_kconfig=\{\"KVM_GUEST\"\=\>\"y\"\}
-	export ssh_base_port=23032
-	export kernel_cmdline='vmalloc=128M initramfs_async=0 page_owner=on'
-	export rootfs='debian-10.4-x86_64-20200603.cgz'
-	export compiler='clang-14'
-	export enqueue_time='2021-12-08 21:23:06 +0800'
-	export _id='61b0b1ba6033575bf2dd6893'
-	export _rt='/result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb'
-	export user='lkp'
-	export LKP_LOCAL_RUN=1
-	export result_root='/result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/3'
-	export scheduler_version='/lkp/lkp/.src-20211208-134658'
-	export arch='x86_64'
-	export max_uptime=600
-	export initrd='/osimage/debian/debian-10.4-x86_64-20200603.cgz'
-	export bootloader_append='root=/dev/ram0
-user=lkp
-job=/lkp/jobs/scheduled/vm-snb-192/boot-1-debian-10.4-x86_64-20200603.cgz-f154f290855b070cc94dd44ad253c0ef8a9337bb-20211208-23538-lnvkeg-5.yaml
-ARCH=x86_64
-kconfig=x86_64-randconfig-a013-20211207
-branch=tip/x86/mm
-commit=f154f290855b070cc94dd44ad253c0ef8a9337bb
-BOOT_IMAGE=/pkg/linux/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/vmlinuz-5.16.0-rc3-00003-gf154f290855b
-vmalloc=128M initramfs_async=0 page_owner=on
-max_uptime=600
-RESULT_ROOT=/result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/3
-LKP_LOCAL_RUN=1
-selinux=0
-debug
-apic=debug
-sysrq_always_enabled
-rcupdate.rcu_cpu_stall_timeout=100
-net.ifnames=0
-printk.devkmsg=on
-panic=-1
-softlockup_panic=1
-nmi_watchdog=panic
-oops=panic
-load_ramdisk=2
-prompt_ramdisk=0
-drbd.minor_count=8
-systemd.log_level=err
-ignore_loglevel
-console=tty0
-earlyprintk=ttyS0,115200
-console=ttyS0,115200
-vga=normal
-rw'
-	export modules_initrd='/pkg/linux/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/modules.cgz'
-	export bm_initrd='/osimage/deps/debian-10.4-x86_64-20200603.cgz/run-ipconfig_20200608.cgz,/osimage/deps/debian-10.4-x86_64-20200603.cgz/lkp_20210707.cgz,/osimage/deps/debian-10.4-x86_64-20200603.cgz/rsync-rootfs_20200608.cgz'
-	export lkp_initrd='/osimage/user/lkp/lkp-x86_64.cgz'
-	export site='inn'
-	export LKP_CGI_PORT=80
-	export LKP_CIFS_PORT=139
-	export schedule_notify_address=
-	export queue_at_least_once=1
-	export kernel='/pkg/linux/x86_64-randconfig-a013-20211207/clang-14/f154f290855b070cc94dd44ad253c0ef8a9337bb/vmlinuz-5.16.0-rc3-00003-gf154f290855b'
-	export dequeue_time='2021-12-08 21:23:48 +0800'
-	export job_initrd='/lkp/jobs/scheduled/vm-snb-192/boot-1-debian-10.4-x86_64-20200603.cgz-f154f290855b070cc94dd44ad253c0ef8a9337bb-20211208-23538-lnvkeg-5.cgz'
-
-	[ -n "$LKP_SRC" ] ||
-	export LKP_SRC=/lkp/${user:-lkp}/src
-}
-
-run_job()
-{
-	echo $$ > $TMP/run-job.pid
-
-	. $LKP_SRC/lib/http.sh
-	. $LKP_SRC/lib/job.sh
-	. $LKP_SRC/lib/env.sh
-
-	export_top_env
-
-	run_monitor $LKP_SRC/monitors/one-shot/wrapper boot-slabinfo
-	run_monitor $LKP_SRC/monitors/one-shot/wrapper boot-meminfo
-	run_monitor $LKP_SRC/monitors/one-shot/wrapper memmap
-	run_monitor $LKP_SRC/monitors/no-stdout/wrapper boot-time
-	run_monitor $LKP_SRC/monitors/wrapper kmsg
-	run_monitor $LKP_SRC/monitors/wrapper heartbeat
-	run_monitor $LKP_SRC/monitors/wrapper meminfo
-	run_monitor $LKP_SRC/monitors/wrapper oom-killer
-	run_monitor $LKP_SRC/monitors/plain/watchdog
-
-	run_test $LKP_SRC/tests/wrapper sleep 1
-}
-
-extract_stats()
-{
-	export stats_part_begin=
-	export stats_part_end=
-
-	$LKP_SRC/stats/wrapper boot-slabinfo
-	$LKP_SRC/stats/wrapper boot-meminfo
-	$LKP_SRC/stats/wrapper memmap
-	$LKP_SRC/stats/wrapper boot-memory
-	$LKP_SRC/stats/wrapper boot-time
-	$LKP_SRC/stats/wrapper kernel-size
-	$LKP_SRC/stats/wrapper kmsg
-	$LKP_SRC/stats/wrapper sleep
-	$LKP_SRC/stats/wrapper meminfo
-
-	$LKP_SRC/stats/wrapper time sleep.time
-	$LKP_SRC/stats/wrapper dmesg
-	$LKP_SRC/stats/wrapper kmsg
-	$LKP_SRC/stats/wrapper last_state
-	$LKP_SRC/stats/wrapper stderr
-	$LKP_SRC/stats/wrapper time
-}
-
-"$@"
-
---OXfL5xGRrasGEqWY--

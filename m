@@ -2,375 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56AD8476AB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 07:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D09476A7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 07:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234251AbhLPG4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 01:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbhLPG4e (ORCPT
+        id S234160AbhLPGlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 01:41:01 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:26402 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234142AbhLPGk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 01:56:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E44C06173E;
-        Wed, 15 Dec 2021 22:56:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FC3DB822E2;
-        Thu, 16 Dec 2021 06:56:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2ACFC36AE2;
-        Thu, 16 Dec 2021 06:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639637791;
-        bh=Opzm7PgrSNHQ/1vmgVHT+1J/KheON2cr3gBjqEDBahs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lz5lLVvEieicDp4OmIzaL7/Nd+VP3jT5fXGJBcryY+OyZ61Z3I0Z6aXcmpQW0gwQq
-         z9H7UiM3aBNXHOp36HyrPMCpiQjql52iAZo8r/VMGgmFzRbX6AvPlCq635+B8nJoTm
-         rn1TfWLozQtssL7nQSJdRuBxFA3jaHY3OW4jWVywJGyK5/3jyZWYo7NKsJvdtdoY4a
-         ocx8r8juurSHqDGuPaCptlE1yRYvfncNKO4EPjl13I+fyX6G3U2E2XOlODV6DVR8bh
-         mx9VN4gko4mvg3tNsl0ykc1JtxI4qzmjFXLjw6YHt8iEs7d7L1qCG+0bl6E63xcwmJ
-         cEvq8zX6WjV0Q==
-Date:   Thu, 16 Dec 2021 14:56:26 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Yunus Bas <y.bas@phytec.de>
-Cc:     robh+dt@kernel.org, s.hauer@pengutronix.de,
-        devicetree@vger.kernel.org, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] ARM: dts: imx6: phytec: Add PEB-WLBT-05 support
-Message-ID: <20211216065625.GY4216@dragon>
-References: <20211213123833.3011525-1-y.bas@phytec.de>
- <20211213123833.3011525-3-y.bas@phytec.de>
+        Thu, 16 Dec 2021 01:40:59 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20211216064057epoutp04d4e242518c83dbe8c55065754e259611~BKQj_PHpx0708007080epoutp04Q
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:40:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20211216064057epoutp04d4e242518c83dbe8c55065754e259611~BKQj_PHpx0708007080epoutp04Q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1639636857;
+        bh=nAHGqscdFUMOEW0iIXOUAUSvjOgus9DqNRapTfxaXbk=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=rQ6cmJwGwKExg0bkJyWwl+JEKfKAFbtUr6486JJBcBOdi0pbJs6Bx7bfz/UdbBZN2
+         5Mu5oIPwNaPGZP5GlkWTmZjlgd/3bZ3UixepftVeyyi1/Dpp4GAAnv0nEL1Zv2SZSi
+         M6EUUbY+Qs7zBLdXZHTu9JseDmyirCE3LyV5n6SY=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20211216064057epcas1p4ecca1ba50bc92eed8ae8cfa9c78fcea0~BKQjfpPLL1716217162epcas1p4d;
+        Thu, 16 Dec 2021 06:40:57 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.38.231]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4JF2Yt64sCz4x9QG; Thu, 16 Dec
+        2021 06:40:50 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A7.94.21932.D1FDAB16; Thu, 16 Dec 2021 15:39:25 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20211216064041epcas1p160472ab8a4b8a64ca074db85844bb1c3~BKQVGDeCY2043620436epcas1p1s;
+        Thu, 16 Dec 2021 06:40:41 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211216064041epsmtrp263fdc7108d08ee6489234973cce136ac~BKQVEATVL1529315293epsmtrp2y;
+        Thu, 16 Dec 2021 06:40:41 +0000 (GMT)
+X-AuditID: b6c32a38-93fff700000255ac-7a-61badf1db537
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F9.ED.29871.96FDAB16; Thu, 16 Dec 2021 15:40:41 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20211216064041epsmtip236a8879ff754e1914b69e5ecb20dea91~BKQUw1W9Y3224732247epsmtip2b;
+        Thu, 16 Dec 2021 06:40:41 +0000 (GMT)
+Subject: Re: [PATCH 1/7] dt-bindings: clock: exynos850: Add bindings for
+ Exynos850 sysreg clocks
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <c9e6210b-3eda-c05c-abfb-e4432cf3b83d@samsung.com>
+Date:   Thu, 16 Dec 2021 16:03:42 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213123833.3011525-3-y.bas@phytec.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20211215160906.17451-2-semen.protsenko@linaro.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xbdRTH/d3bF4xu147Jjy4IXINxLGUtK+yHg4UpuLKhkhin0yC70JuC
+        9GVv63BxjkURynhayLYKQekeplEZhTGoIhtDGcwMCErIBIqDBRmv8VqIq2jbO5X/Puf8vuec
+        3/f87hXgors8sSBHa6QNWkpN8vw5LTd2SCQhLiclrarfiwY7dqK2y9V8VNd1m4ta87u4qHFu
+        DUNV7ksYckwMcdFiyRgXDTpreOhs3w8YGuhNRgXtXXx0Y7aQi9aHGjloqsyTtzvdAHUvTABk
+        u7bETxQp1pocuGJhuICvsOaX8hRt1lG+wmE38xQjQ9/zFE3nTyrKmu1Asex4Os3vrdz4bJpS
+        0oYwWpulU+ZoVQnkodcyXsyIiZXKJLI4tIcM01IaOoFMSk2TvJSj9tghw96n1CZPKo1iGHLX
+        vniDzmSkw7J1jDGBpPVKtT5GH8VQGsakVUVpaePzMqk0OsYjPJqbfbmnnK+f35y30lTGyQdl
+        AcXATwAJOey1uPBi4C8QEa0AOpxfYWywBOCthW4uGzwEsKdkyXMi8JX0LVJsvh3Ajtom3NtK
+        RCwAWFv9kZe3EplwpqHO1zaQcALY3vmZL8CJUg60XJnnelU8IhJ2/DHM8/IWIhz+ujYBvCwk
+        9sFOV52vK4eIgG3lN328jTgMe1o+eax5Evacm+R42Y9IhH9fWOd7GSeC4J3JOozlUHh1rsY3
+        GBKFfnC6+B7Guk6CDyrNHJa3wvvdzXyWxXB5vp3HFlwE8E+LGWODBgCnrWacVe2GHRcsvmXg
+        xA7Y4NzFpsNh26NawE7eDOdXS7jsvoSw6FMRK3kGDo6PPr5DMLQVmnkVgLRu8GPd4MG6wYP1
+        /2FfAI4dPEXrGY2KZmR6+X/vnaXTOIDvY49EraB27kFUJ8AEoBNAAU4GCiffdFIioZL64Dht
+        0GUYTGqa6QQxng1X4uJtWTrP36I1ZsjkcVJ5bPRuOZLFysgg4dSrZygRoaKMdC5N62nDv3WY
+        wE+cjwkj2sK3tygnUkYEoV3X76uIOCCe1l4cM2yxr+w9lvLctwdPDleTyDryLLym5k7V1PbN
+        uW//XsKvfjkx4Mh7g0clpwLumPVJr8w88bbkVPmmm7KHX28K+tjUbFstCj+xemZMzLiKks9T
+        4R/a3ojrTy3+8bT8p/0RV4H7mFvjP5psvlLKTz+neCf/F2W9qyov95svZ2eq3h0Q9t8Kqaig
+        j6SsnT2oChwPkVhmD4vg1PX6zzUH9h8XB3f3x0evD4CfkzOVXenCF9Ljgr+TyjLn91xqPHTi
+        0WJAqMncEGhy9y1X5TWvvF5xWjsELTOVd90HuncW/Nb7F+Yat90jZyQ9qfXbm0kOk03JInED
+        Q/0D9sYm9HUEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDIsWRmVeSWpSXmKPExsWy7bCSvG7m/V2JBhdXallc3q9tsXPDVHaL
+        +UfOsVrsaDjCarHx7Q8miyl/ljNZbHp8jdXiY889VovLu+awWcw4v4/J4uIpV4vWvUfYLQ6/
+        aWe1+HdtI4vF8z6g+Kpdfxgtjr9/zGix+MAndgchjx+bNzF7vL/Ryu4xq6GXzWPnrLvsHptW
+        dbJ53Lm2h81j85J6j74tqxg9Pm+SC+CM4rJJSc3JLEst0rdL4MrYcLKfveAdX8WXzX0sDYx9
+        PF2MHBwSAiYS5z8mdjFycQgJ7GaUmLHkIUsXIydQXFJi2sWjzBA1whKHDxdD1LxllFi75S4j
+        SI2wQJLE6/XzmUESIgK7GCVOv/vPDuIwC/SzSBxd/48VouUko8TvxiXsIC1sAloS+1/cYAOx
+        +QUUJa7+eAw2ilfATuLQfZBRnBwsAqoSO/tPgNmiAmESO5c8ZoKoEZQ4OfMJ2HmcAg4S/5f+
+        A5vJLKAu8WfeJWYIW1zi1pP5TBC2vMT2t3OYJzAKz0LSPgtJyywkLbOQtCxgZFnFKJlaUJyb
+        nltsWGCYl1quV5yYW1yal66XnJ+7iREc4VqaOxi3r/qgd4iRiYPxEKMEB7OSCO+TiF2JQrwp
+        iZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJITyxJzU5NLUgtgskycXBKNTBtyZ5/S9jyq3P+
+        uVN+TwI9T6Z28JQtS1INzRSam/HUQCZ1Q7RtyVftWVnaBhz8J5pS1fK+Tnp51WqLmfSBxUzO
+        L7vivWb476hjDJ/vk6DwlKX/vs7+Is7PBZMbw6dbrWaY/VNzUXr7L0OGHqGCP1Z5F/qPnJC/
+        /2C9j3ryldvl2xgXXdELZPs5NVZYxfHoN1sLnrrfc7bxrpBkYi44zykjfe37/esb78ZfvX/2
+        qPIXSde/HdNqXlyTabneEbDfVN27/XC/vlakv1jPL+4pZuvXVdklVF8+zd7WVjGDz3PavgqR
+        nOT5N2/aHRXZULFwiXqxXcKyy0pFH9XsZZxXuCU4frdQ7f3Wyr5318eUp0osxRmJhlrMRcWJ
+        AB7DPkpfAwAA
+X-CMS-MailID: 20211216064041epcas1p160472ab8a4b8a64ca074db85844bb1c3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211215160912epcas1p25e6c9a95aee33d6de8c73c892e524220
+References: <20211215160906.17451-1-semen.protsenko@linaro.org>
+        <CGME20211215160912epcas1p25e6c9a95aee33d6de8c73c892e524220@epcas1p2.samsung.com>
+        <20211215160906.17451-2-semen.protsenko@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 01:38:33PM +0100, Yunus Bas wrote:
-> The PEB-WLBT-05 is equipped with a Sterling-LWB radio module, which is
-> capable of Wi-Fi 802.11 b/g/n and Bluetooth 4.2.
+On 12/16/21 1:09 AM, Sam Protsenko wrote:
+> System Register is used to configure system behavior, like USI protocol,
+> etc. SYSREG clocks should be provided to corresponding syscon nodes, to
+> make it possible to modify SYSREG registers.
 > 
-> Signed-off-by: Yunus Bas <y.bas@phytec.de>
+> While at it, add also missing PMU and GPIO clocks, which looks necessary
+> and might be needed for corresponding Exynos850 features soon.
+> 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 > ---
-> Changes in v2:
-> - Changed node-name underscores to hyphens
-> ---
->  .../boot/dts/imx6dl-phytec-mira-rdk-nand.dts  |  1 +
->  .../boot/dts/imx6q-phytec-mira-rdk-emmc.dts   |  1 +
->  .../boot/dts/imx6q-phytec-mira-rdk-nand.dts   |  1 +
->  .../dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi  | 82 +++++++++++++++++
->  .../boot/dts/imx6qp-phytec-mira-rdk-nand.dts  |  1 +
->  .../dts/imx6ul-phytec-segin-ff-rdk-nand.dts   |  1 +
->  .../dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi  | 87 +++++++++++++++++++
->  .../dts/imx6ull-phytec-segin-ff-rdk-nand.dts  |  1 +
->  .../dts/imx6ull-phytec-segin-lc-rdk-nand.dts  |  1 +
->  .../dts/imx6ull-phytec-segin-peb-wlbt-05.dtsi | 19 ++++
->  10 files changed, 195 insertions(+)
->  create mode 100644 arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi
->  create mode 100644 arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi
->  create mode 100644 arch/arm/boot/dts/imx6ull-phytec-segin-peb-wlbt-05.dtsi
+>  include/dt-bindings/clock/exynos850.h | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dts b/arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dts
-> index 8165fae2b1d1..d906a7f05aaa 100644
-> --- a/arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dts
-> +++ b/arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dts
-> @@ -10,6 +10,7 @@
->  #include "imx6qdl-phytec-mira.dtsi"
->  #include "imx6qdl-phytec-mira-peb-eval-01.dtsi"
->  #include "imx6qdl-phytec-mira-peb-av-02.dtsi"
-> +#include "imx6qdl-phytec-mira-peb-wlbt-05.dtsi"
+> diff --git a/include/dt-bindings/clock/exynos850.h b/include/dt-bindings/clock/exynos850.h
+> index 8aa5e82af0d3..0b6a3c6a7c90 100644
+> --- a/include/dt-bindings/clock/exynos850.h
+> +++ b/include/dt-bindings/clock/exynos850.h
+> @@ -82,7 +82,10 @@
+>  #define CLK_GOUT_I3C_PCLK		19
+>  #define CLK_GOUT_I3C_SCLK		20
+>  #define CLK_GOUT_SPEEDY_PCLK		21
+> -#define APM_NR_CLK			22
+> +#define CLK_GOUT_GPIO_ALIVE_PCLK	22
+> +#define CLK_GOUT_PMU_ALIVE_PCLK		23
+> +#define CLK_GOUT_SYSREG_APM_PCLK	24
+> +#define APM_NR_CLK			25
 >  
->  / {
->  	model = "PHYTEC phyBOARD-Mira DualLite/Solo Carrier-Board with NAND";
-> diff --git a/arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dts b/arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dts
-> index bbf5097ca974..322f071d972f 100644
-> --- a/arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dts
-> +++ b/arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dts
-> @@ -10,6 +10,7 @@
->  #include "imx6qdl-phytec-mira.dtsi"
->  #include "imx6qdl-phytec-mira-peb-eval-01.dtsi"
->  #include "imx6qdl-phytec-mira-peb-av-02.dtsi"
-> +#include "imx6qdl-phytec-mira-peb-wlbt-05.dtsi"
+>  /* CMU_CMGP */
+>  #define CLK_RCO_CMGP			1
+> @@ -99,7 +102,8 @@
+>  #define CLK_GOUT_CMGP_USI0_PCLK		12
+>  #define CLK_GOUT_CMGP_USI1_IPCLK	13
+>  #define CLK_GOUT_CMGP_USI1_PCLK		14
+> -#define CMGP_NR_CLK			15
+> +#define CLK_GOUT_SYSREG_CMGP_PCLK	15
+> +#define CMGP_NR_CLK			16
 >  
->  / {
->  	model = "PHYTEC phyBOARD-Mira Quad Carrier-Board with eMMC";
-> diff --git a/arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dts b/arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dts
-> index 95051e18324f..3f13726c8058 100644
-> --- a/arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dts
-> +++ b/arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dts
-> @@ -10,6 +10,7 @@
->  #include "imx6qdl-phytec-mira.dtsi"
->  #include "imx6qdl-phytec-mira-peb-eval-01.dtsi"
->  #include "imx6qdl-phytec-mira-peb-av-02.dtsi"
-> +#include "imx6qdl-phytec-mira-peb-wlbt-05.dtsi"
+>  /* CMU_HSI */
+>  #define CLK_MOUT_HSI_BUS_USER		1
+> @@ -167,7 +171,9 @@
+>  #define CLK_GOUT_MMC_EMBD_SDCLKIN	10
+>  #define CLK_GOUT_SSS_ACLK		11
+>  #define CLK_GOUT_SSS_PCLK		12
+> -#define CORE_NR_CLK			13
+> +#define CLK_GOUT_GPIO_CORE_PCLK		13
+> +#define CLK_GOUT_SYSREG_CORE_PCLK	14
+> +#define CORE_NR_CLK			15
 >  
->  / {
->  	model = "PHYTEC phyBOARD-Mira Quad Carrier-Board with NAND";
-> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi
-> new file mode 100644
-> index 000000000000..0abf3e1e1f62
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi
-> @@ -0,0 +1,82 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (C) 2021 PHYTEC Messtechnik GmbH
-> + * Author: Yunus Bas <y.bas@phytec.de>
-> + */
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +/ {
-> +	reg_wl_en: regulator-wl-en {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "wlan_en";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_wl>;
-> +		gpio = <&gpio5 2 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +		startup-delay-us = <100>;
-> +		status = "disabled";
-> +	};
-> +};
-> +
-> +&uart3 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart3_bt>;
-> +	uart-has-rtscts;
-> +
-> +	bluetooth {
-> +		compatible = "brcm,bcm43438-bt";
-> +		shutdown-gpios = <&gpio7 0 GPIO_ACTIVE_HIGH>;
-> +		device-wakeup-gpios = <&gpio7 1 GPIO_ACTIVE_HIGH>;
-> +		host-wakeup-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH>;
-> +		status = "disabled";
-> +	};
-> +};
-> +
-> +&usdhc3 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_usdhc3_wl>;
-> +	vmmc-supply = <&reg_wl_en>;
-> +	bus-width = <4>;
-> +	non-removable;
-> +	no-1-8-v;
-> +	status = "disabled";
-> +
-> +	brmcf: wifi@1 {
-> +		compatible = "brcm,bcm4329-fmac";
-
-Shouldn't we have a 'reg' property matching the unit-address in the node
-name?
-
-Shawn
-
-> +	};
-> +};
-> +
-> +&iomuxc {
-> +	pinctrl_uart3_bt: uart3grp-bt {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_EIM_D25__UART3_RX_DATA	0x1b0b1
-> +			MX6QDL_PAD_EIM_D24__UART3_TX_DATA	0x1b0b1
-> +			MX6QDL_PAD_EIM_EB3__UART3_RTS_B		0x1b0b1
-> +			MX6QDL_PAD_EIM_D23__UART3_CTS_B		0x1b0b1
-> +			MX6QDL_PAD_SD3_DAT5__GPIO7_IO00		0xb0b1	/* BT ENABLE */
-> +			MX6QDL_PAD_SD3_DAT4__GPIO7_IO01		0xb0b1	/* DEV WAKEUP */
-> +			MX6QDL_PAD_CSI0_DAT8__GPIO5_IO26	0xb0b1  /* HOST WAKEUP */
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_wl: usdhc3grp-wl {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_SD3_CMD__SD3_CMD		0x17059
-> +			MX6QDL_PAD_SD3_CLK__SD3_CLK		0x10059
-> +			MX6QDL_PAD_SD3_DAT0__SD3_DATA0		0x17059
-> +			MX6QDL_PAD_SD3_DAT1__SD3_DATA1		0x17059
-> +			MX6QDL_PAD_SD3_DAT2__SD3_DATA2		0x17059
-> +			MX6QDL_PAD_SD3_DAT3__SD3_DATA3		0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_wl: wlgrp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_EIM_A25__GPIO5_IO02      0xb0b1	/* WLAN ENABLE */
-> +		>;
-> +	};
-> +};
-> diff --git a/arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dts b/arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dts
-> index 343639cb035c..a18266598d39 100644
-> --- a/arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dts
-> +++ b/arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dts
-> @@ -10,6 +10,7 @@
->  #include "imx6qdl-phytec-mira.dtsi"
->  #include "imx6qdl-phytec-mira-peb-eval-01.dtsi"
->  #include "imx6qdl-phytec-mira-peb-av-02.dtsi"
-> +#include "imx6qdl-phytec-mira-peb-wlbt-05.dtsi"
->  
->  / {
->  	model = "PHYTEC phyBOARD-Mira QuadPlus Carrier-Board with NAND";
-> diff --git a/arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dts b/arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dts
-> index bff98e676980..607eddc5030f 100644
-> --- a/arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dts
-> +++ b/arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dts
-> @@ -10,6 +10,7 @@
->  #include "imx6ul-phytec-segin.dtsi"
->  #include "imx6ul-phytec-segin-peb-eval-01.dtsi"
->  #include "imx6ul-phytec-segin-peb-av-02.dtsi"
-> +#include "imx6ul-phytec-segin-peb-wlbt-05.dtsi"
->  
->  / {
->  	model = "PHYTEC phyBOARD-Segin i.MX6 UltraLite Full Featured with NAND";
-> diff --git a/arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi b/arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi
-> new file mode 100644
-> index 000000000000..4a75745d6030
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi
-> @@ -0,0 +1,87 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (C) 2021 PHYTEC Messtechnik GmbH
-> + * Author: Yunus Bas <y.bas@phytec.de>
-> + */
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +/ {
-> +	reg_wl_en: regulator-wl-en {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "wlan_en";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_wl>;
-> +		gpio = <&gpio5 9 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +		startup-delay-us = <100>;
-> +		status = "disabled";
-> +	};
-> +};
-> +
-> +&iomuxc {
-> +	pinctrl_bt: btgrp {
-> +		fsl,pins = <
-> +			MX6UL_PAD_GPIO1_IO01__GPIO1_IO01	0x3031	/* BT ENABLE */
-> +			MX6UL_PAD_GPIO1_IO03__GPIO1_IO03	0x3031	/* HOST WAKEUP */
-> +			MX6UL_PAD_JTAG_MOD__GPIO1_IO10		0x3031	/* DEV WAKEUP */
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart2_bt: uart2grp-bt {
-> +		fsl,pins = <
-> +			MX6UL_PAD_UART2_TX_DATA__UART2_DCE_TX   0x17059
-> +			MX6UL_PAD_UART2_RX_DATA__UART2_DCE_RX   0x17059
-> +			MX6UL_PAD_UART2_CTS_B__UART2_DCE_CTS    0x17059
-> +			MX6UL_PAD_UART2_RTS_B__UART2_DCE_RTS    0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2_wl: usdhc2grp-wl {
-> +		fsl,pins = <
-> +			MX6UL_PAD_LCD_DATA18__USDHC2_CMD    0x10051
-> +			MX6UL_PAD_LCD_DATA19__USDHC2_CLK    0x10061
-> +			MX6UL_PAD_LCD_DATA20__USDHC2_DATA0  0x10051
-> +			MX6UL_PAD_LCD_DATA21__USDHC2_DATA1  0x10051
-> +			MX6UL_PAD_LCD_DATA22__USDHC2_DATA2  0x10051
-> +			MX6UL_PAD_LCD_DATA23__USDHC2_DATA3  0x10051
-> +		>;
-> +	};
-> +
-> +	pinctrl_wl: wlgrp {
-> +		fsl,pins = <
-> +			MX6UL_PAD_SNVS_TAMPER9__GPIO5_IO09  0x3031	/* WLAN ENABLE */
-> +		>;
-> +	};
-> +};
-> +
-> +&uart2 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart2_bt &pinctrl_bt>;
-> +	uart-has-rtscts;
-> +	status = "disabled";
-> +
-> +	bluetooth {
-> +		compatible = "brcm,bcm43438-bt";
-> +		shutdown-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
-> +		device-wakeup-gpios = <&gpio1 10 GPIO_ACTIVE_HIGH>;
-> +		host-wakeup-gpios = <&gpio1 3 GPIO_ACTIVE_HIGH>;
-> +	};
-> +};
-> +
-> +&usdhc2 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_usdhc2_wl>;
-> +	vmmc-supply = <&reg_wl_en>;
-> +	bus-width = <4>;
-> +	non-removable;
-> +	no-1-8-v;
-> +	status = "disabled";
-> +
-> +	brmcf: wifi@1 {
-> +		compatible = "brcm,bcm4329-fmac";
-> +	};
-> +};
-> diff --git a/arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dts b/arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dts
-> index c8d3eff9ed4b..1d7362b5ac91 100644
-> --- a/arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dts
-> +++ b/arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dts
-> @@ -10,6 +10,7 @@
->  #include "imx6ull-phytec-segin.dtsi"
->  #include "imx6ull-phytec-segin-peb-eval-01.dtsi"
->  #include "imx6ull-phytec-segin-peb-av-02.dtsi"
-> +#include "imx6ull-phytec-segin-peb-wlbt-05.dtsi"
->  
->  / {
->  	model = "PHYTEC phyBOARD-Segin i.MX6 ULL Full Featured with NAND";
-> diff --git a/arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dts b/arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dts
-> index e168494e0a6d..4bcbae024d8d 100644
-> --- a/arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dts
-> +++ b/arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dts
-> @@ -9,6 +9,7 @@
->  #include "imx6ull-phytec-phycore-som.dtsi"
->  #include "imx6ull-phytec-segin.dtsi"
->  #include "imx6ull-phytec-segin-peb-eval-01.dtsi"
-> +#include "imx6ull-phytec-segin-peb-wlbt-05.dtsi"
->  
->  / {
->  	model = "PHYTEC phyBOARD-Segin i.MX6 ULL Low Cost with NAND";
-> diff --git a/arch/arm/boot/dts/imx6ull-phytec-segin-peb-wlbt-05.dtsi b/arch/arm/boot/dts/imx6ull-phytec-segin-peb-wlbt-05.dtsi
-> new file mode 100644
-> index 000000000000..df25814a3371
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/imx6ull-phytec-segin-peb-wlbt-05.dtsi
-> @@ -0,0 +1,19 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (C) 2021 PHYTEC Messtechnik GmbH
-> + * Author: Yunus Bas <y.bas@phytec.de>
-> + */
-> +
-> +#include "imx6ul-phytec-segin-peb-wlbt-05.dtsi"
-> +
-> +&iomuxc {
-> +	/delete-node/ wlgrp;
-> +};
-> +
-> +&iomuxc_snvs {
-> +	pinctrl_wl: wlgrp {
-> +		fsl,pins = <
-> +			MX6ULL_PAD_SNVS_TAMPER9__GPIO5_IO09	0x3031
-> +		>;
-> +	};
-> +};
-> -- 
-> 2.25.1
+>  /* CMU_DPU */
+>  #define CLK_MOUT_DPU_USER		1
 > 
+
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics

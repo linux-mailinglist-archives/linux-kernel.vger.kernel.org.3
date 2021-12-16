@@ -2,156 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20305478051
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BA447805B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237027AbhLPXMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:12:17 -0500
-Received: from ms.lwn.net ([45.79.88.28]:50986 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234434AbhLPXMQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:12:16 -0500
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 0D3A8740;
-        Thu, 16 Dec 2021 23:12:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0D3A8740
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1639696336; bh=XtoOzlOc3FwUPRLRpqRjlKNoegAHtXMtnWsx8Gomyj8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Dmm9ZeV9ZyNhIs1mOucim28WHzFmN1iMHHgDXn5+QAnT0alRcAA3UzKCFGu4iaq0F
-         A3wJrfAhwt2K6cUuslN50jQWhdiUAWwJIAreG/bn7jYJaMvNqpajws6BSrrkBwOBXs
-         7RP4lzh1pW2bZ8uhk+d5fxHqXfPpXnF28tJdCLOgxBY8PU/uIYRrwTA5ErTyWOmynO
-         ExCIA64sabrKANjdcwa92fcZZKhGIqkVrrjEVMtYqePB+toI/El++6EW3bjbZilDd+
-         /h+tvaGv7cCEw6Hdj90etpzia3xC7C5yE2mzvE5qkdXzBh6TVs9fXzrj/l9Y53imn6
-         iw5NLvDAkWM2g==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Tomasz =?utf-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
-Cc:     Tomasz =?utf-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scripts: kernel-doc: transform documentation into POD
-In-Reply-To: <20211209225549.69010-1-tomasz.warniello@gmail.com>
-References: <20211209225549.69010-1-tomasz.warniello@gmail.com>
-Date:   Thu, 16 Dec 2021 16:12:15 -0700
-Message-ID: <87h7b8cfg0.fsf@meer.lwn.net>
+        id S237106AbhLPXOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234434AbhLPXOq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 18:14:46 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3508BC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:14:46 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id b7so1182021edd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:14:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=leN4ToUWeqVpg13p/IoYSSc9DyWGdv7mnjoOFy505fA=;
+        b=COuDndAPNxF03xXqhgRDDWsGpGVwE98zlgUtoZag+Bvzj95HCbj01dkwIw4vwaq6Ga
+         N90PFU8P57pDst3A16Zcjrgo4vCie/DI4eGMjE6d8Yz7eednpxuVTAwOpZT5P4Mm5gtS
+         FZasthLCwD2sDJi9uHxz6z7IxY1oGo92UTBL4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=leN4ToUWeqVpg13p/IoYSSc9DyWGdv7mnjoOFy505fA=;
+        b=q0eWLRzM7MZSgcSIBVy2YHKjGtTsq6hu0//nuI+z9CJiQVp1PgIX2WwGuZ2dmRKByf
+         lR3s+ZxujYDg0easm2la+01NKVrFYArDDetWKYTaO8JcmrafRIfLdNj42Pe1oCpnuBzo
+         wTDC+v8intqkmTsEnyZB3hkL+XqPnEF5KLjkX+r5yaO2uqdamGA17u9+P3HU1at0OhGF
+         zAy/75ln78Pa/yatvCuyFifKKQTHnzmLjSC2e91D1CiBxgjqNaHQJySuq0jK9YLNDNEL
+         RZQ5KK1sIjkw6q8c6RTadm4kVvHr0iWEfFaPkbawdWidtnywJIx/VBApkploygRONk10
+         lwdQ==
+X-Gm-Message-State: AOAM530WKX5uNruofskb9xvC719+25tPcx3+SMzQkohbEyo7/SOWB1pW
+        tdWc6nZ3E5QT8nIU6y1X9sX6BxyvEk+EvRahrOg=
+X-Google-Smtp-Source: ABdhPJyjFETYhLYXncrRXlNzGKzWrnMsgLBK1N7nF4SJnOldHvIhy3V0+Ng0UEob5xNxoU8FNf3wRQ==
+X-Received: by 2002:a17:907:3e22:: with SMTP id hp34mr314054ejc.58.1639696484674;
+        Thu, 16 Dec 2021 15:14:44 -0800 (PST)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id o22sm2847884edw.50.2021.12.16.15.14.44
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 15:14:44 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso489302wme.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:14:44 -0800 (PST)
+X-Received: by 2002:a05:600c:1d97:: with SMTP id p23mr157474wms.144.1639696483940;
+ Thu, 16 Dec 2021 15:14:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20211216213207.839017-1-kuba@kernel.org>
+In-Reply-To: <20211216213207.839017-1-kuba@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 16 Dec 2021 15:14:27 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whayMx6-Z7j7H1eAquy0Svv93Tyt7Wq6Efaogw8W+WpoQ@mail.gmail.com>
+Message-ID: <CAHk-=whayMx6-Z7j7H1eAquy0Svv93Tyt7Wq6Efaogw8W+WpoQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Networking for 5.16-rc6
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.com> writes:
-
-> The only change in the script execution flow is the replacement
-> of the 'usage' function with the native core Perl 'pod2usage'.
+On Thu, Dec 16, 2021 at 1:32 PM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> This entails:
-> - an overall documentation restructuring
-> - addition of a synopsis
+> Relatively large batches of fixes from BPF and the WiFi stack,
+> calm in general networking.
+
+Hmm. I get a very different diffstat, and also a different shortlog
+than the one you quote.
+
+I do get the top commit you claim:
+
+>   git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc6
 >
-> Otherwise my intervention is minimal:
-> - a few tiny language, formatting and spacing corrections
-> - a few missing bits added in the command syntax description
-> - adding subsections in the "FORMAT OF COMMENTS" section
-> - alphabetical sorting within OPTIONS subections
-
-So I think that this is generally a good thing, but I do have some
-quibbles.  Starting with the above, which is a pretty clear violation of
-the "each patch does one thing" rule.  Please separate out your changes
-into separate patches so that they are more easily reviewed.
-
-A few other things below...
-
-> Finally, the TODO stub evolves into a section:
-> - perldoc request removed
-> - undocumented options added
+> for you to fetch changes up to 0c3e2474605581375d808bb3b9ce0927ed3eef70:
 >
-> Run `kernel-doc -h` to see the full doc.
->
-> The TODO suggestion is ancient, thus I can't address its author with
-> a "Suggested-by" tag.
->
-> Signed-off-by: Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.com>
-> ---
->  scripts/kernel-doc | 613 ++++++++++++++++++++++++++++++---------------
->  1 file changed, 413 insertions(+), 200 deletions(-)
->
-> diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-> index 3106b7536b89..00c0c7f5ff58 100755
-> --- a/scripts/kernel-doc
-> +++ b/scripts/kernel-doc
-> @@ -4,46 +4,33 @@
->  use warnings;
->  use strict;
->=20=20
-> -## Copyright (c) 1998 Michael Zucchi, All Rights Reserved        ##
-> -## Copyright (C) 2000, 1  Tim Waugh <twaugh@redhat.com>          ##
-> -## Copyright (C) 2001  Simon Huggins                             ##
-> -## Copyright (C) 2005-2012  Randy Dunlap                         ##
-> -## Copyright (C) 2012  Dan Luedtke                               ##
-> -## 								 ##
-> -## #define enhancements by Armin Kuster <akuster@mvista.com>	 ##
-> -## Copyright (c) 2000 MontaVista Software, Inc.			 ##
+>   Merge https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf (2021-12-16 13:06:49 -0800)
 
-My immediate reaction is that you shouldn't be removing copyright lines,
-though I did see that you put them back later.  I think, though, that
-the copyright assertions should remain at the top of the file; they
-don't need to be part of the help text that the program emits.  So leave
-them here, please.
+But your shortlog doesn't contain
 
-(I guess I should add one of my own, assuming I want any part of this
-file actually associated with my name...:)
+  Alexei Starovoitov (3):
+        bpf: Fix extable fixup offset.
+        bpf: Fix extable address check.
+        selftest/bpf: Add a test that reads various addresses.
 
-> -## This software falls under the GNU General Public License.     ##
-> -## Please read the COPYING file for more information             ##
+  Daniel Borkmann (7):
+        bpf: Fix kernel address leakage in atomic fetch
+        bpf, selftests: Add test case for atomic fetch on spilled pointer
+        bpf: Fix kernel address leakage in atomic cmpxchg's r0 aux reg
+        bpf, selftests: Update test case for atomic cmpxchg on r0 with pointer
+        bpf: Fix signed bounds propagation after mov32
+        bpf: Make 32->64 bounds propagation slightly more robust
+        bpf, selftests: Add test case trying to taint map value pointer
 
-This could come out, though; that's what the SPDX line is for.
+  Kumar Kartikeya Dwivedi (1):
+        selftests/bpf: Fix OOB write in test_verifier
 
-> -# 18/01/2001 - 	Cleanups
-> -# 		Functions prototyped as foo(void) same as foo()
-> -# 		Stop eval'ing where we don't need to.
-> -# -- huggie@earth.li
-> -
-> -# 27/06/2001 -  Allowed whitespace after initial "/**" and
-> -#               allowed comments before function declarations.
-> -# -- Christian Kreibich <ck@whoop.org>
-> -
-> -# Still to do:
-> -# 	- add perldoc documentation
-> -# 	- Look more closely at some of the scarier bits :)
-> -
-> -# 26/05/2001 - 	Support for separate source and object trees.
-> -#		Return error code.
-> -# 		Keith Owens <kaos@ocs.com.au>
-> -
-> -# 23/09/2001 - Added support for typedefs, structs, enums and unions
-> -#              Support for Context section; can be terminated using empt=
-y line
-> -#              Small fixes (like spaces vs. \s in regex)
-> -# -- Tim Jansen <tim@tjansen.de>
-> -
-> -# 25/07/2012 - Added support for HTML5
-> -# -- Dan Luedtke <mail@danrl.de>
+  Magnus Karlsson (1):
+        xsk: Do not sleep in poll() when need_wakeup set
 
-These, too, should come out; that's what the git log is for.
+  Paul Chaignon (2):
+        bpf: Fix incorrect state pruning for <8B spill/fill
+        selftests/bpf: Tests for state pruning with u32 spill/fill
 
-[...]
+and that seems to be the missing diffstat contents also.
 
->  my $kernelversion;
-> @@ -468,7 +306,7 @@ while ($ARGV[0] =3D~ m/^--?(.*)/) {
->      } elsif ($cmd eq "Werror") {
->  	$Werror =3D 1;
->      } elsif (($cmd eq "h") || ($cmd eq "help")) {
-> -	usage();
-> +			pod2usage(-exitval =3D> 0, -verbose =3D> 2);
+It looks like your pull request was done without that last merge, even
+though you do mention it as being the top of tree.
 
-Why the strange indentation here?  This file is far from pretty, but
-that makes it worse.  (Other places too).
+I've pulled this, because that last merge looks fine and intentional,
+but I'd like you to double-check your workflow to see what happened to
+give a stale diffstat and shortlog...
 
-[...]
-
-Thanks,
-
-jon
+              Linus

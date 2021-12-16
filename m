@@ -2,176 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF55D477FC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2537477FC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237376AbhLPWC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 17:02:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
+        id S237577AbhLPWEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 17:04:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234459AbhLPWC6 (ORCPT
+        with ESMTP id S237406AbhLPWEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 17:02:58 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B8CC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 14:02:58 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id j18so548043wrd.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 14:02:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=jr113sD2CvAYYaqrKJ2RFq/931IUT0YAFGFLLTKtGbE=;
-        b=Wcjg5ik9dcrXPAnVnn3yL9Bzo7AhRdMp/iBvZY/qIPLoLk0v9w99kx9EylPs7yiEcO
-         gN5SJkXEjUIU0/YQQNVUOt5vP7MJDNicq9qK02n7Yx0MYOJS4+xPGHMvKvqsy9y8iaeY
-         bzxVUdYKKjnC6brqYUd+odEP6YA8pKLE6pF0aS5sF8TLkcnxBj/bQfJMcf1nXcHnE8kq
-         d6ZoaxYAK5vekUNNjYV0gXS1Q4qLDRVZ8NzR9rQFJCmOCZtKwd44V8Lc1HbMopSw/eik
-         URiF7PqdwOSfwNWHeLxuM3Dqa4aEEspEjK8BZsIysbbbhY66h5CAqODUm0g6XMFYR8um
-         pI8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=jr113sD2CvAYYaqrKJ2RFq/931IUT0YAFGFLLTKtGbE=;
-        b=42bYVYN/x3iPHfdaYY5MI7HukkcWOkBWGWfKrRTYGcG5RocvkWWR299thk1WAyiAOi
-         hGUOrb2cb4ED4ipJQnkfO5nqT1KmGwiGDiP5x1+hTVVsu8nhKdf0KLIFdB5EFVWDBWUE
-         BC6Who3Y73Bp451T7CL0qyQ9ZV0hQYd+BzdxCx6fFjgjggM/oC0iCdpKcZRU8Ye89c1i
-         ICG8myMaec3RGJmth2r3v4p2TExFFgvUS9Eh3q4JQbx644FGjvnZ/QM9OzwfhpwBDVDa
-         QL3/9KTvDuhn8uQ+g66kYAXFY53H6wJtVx0fYlwiOaVozAZBqhmnYNjqwEObXssMhNq1
-         AjqQ==
-X-Gm-Message-State: AOAM530w/a8/FccQGTB4p2YRQ8hfFC8YpwDWn3Q5dcv/KMklEok4Lz2G
-        rfnaNOV12qxouyS53csh9KuszSMLCoU=
-X-Google-Smtp-Source: ABdhPJy46xui0iaw81h/rHG30m0c96KJf69/+cIlCYxG4WAy2Gr4Rhla2NZ9aAZgaym0KofijEzPXA==
-X-Received: by 2002:a5d:456e:: with SMTP id a14mr26199wrc.256.1639692173852;
-        Thu, 16 Dec 2021 14:02:53 -0800 (PST)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id d2sm5543428wmb.31.2021.12.16.14.02.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 14:02:53 -0800 (PST)
-Subject: Re: [PATCH V4 0/6] xen: Add support of extended regions (safe ranges)
- on Arm
-From:   Oleksandr <olekstysh@gmail.com>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Julien Grall <julien@xen.org>,
-        Bertrand Marquis <bertrand.marquis@arm.com>,
-        Wei Chen <Wei.Chen@arm.com>, Henry Wang <Henry.Wang@arm.com>,
-        Kaly Xin <Kaly.Xin@arm.com>, Jiamei Xie <Jiamei.Xie@arm.com>
-References: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
-Message-ID: <1428a0be-b80c-f996-1f72-6545dd66c1bf@gmail.com>
-Date:   Fri, 17 Dec 2021 00:02:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 16 Dec 2021 17:04:08 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E96EC061574;
+        Thu, 16 Dec 2021 14:04:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WAO9hZDcRjB3YCaMlbfdToabQWYt+lhc7ogLYgYfO5A=; b=BWGZ6AuNjpRoC8kgaS6A7mi51K
+        YFPoVwlchEV30CCdSpYhu0huiVuYRRrZu0SADS2YdW3szrKx1THYtThkjR/aEZ3h78wQP+KeDkTiS
+        IAMLKNAjPtvKgsFYD2nggsPLjR0pF9NF6UThOYDcwJXp9Nwtr19GplvwXs8TOWcMpGOYkWA1cU+DO
+        v/CiyT1lUk4WN98ka624Fur6Sh8EWIjiEkXTPUVEffDNXJmaMpfGItLmg21h5Y6JvX3Y4sJYy0EQi
+        HaE4FYPYXGaM9Xd0/85bCmNV0kzRKE9WL4LmNpCCQkDYeBGxevc6fdGDEeu4KZMiYmkjzBTBz0mCM
+        BWmglKEQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxyr2-00G00R-Sb; Thu, 16 Dec 2021 22:04:00 +0000
+Date:   Thu, 16 Dec 2021 22:04:00 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        efi@lists.einval.com,
+        debian-kernel <debian-kernel@lists.debian.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: Re: [PATCH] builddeb: Support signing kernels with a Machine Owner
+ Key
+Message-ID: <Ybu30C6Nc7Mbo8MQ@casper.infradead.org>
+References: <20211013200536.1851070-1-willy@infradead.org>
+ <CAMj1kXEJ+RThJ83H2VNAmOKkVdhTAUCUF61u9JTv6ccc9uVTDw@mail.gmail.com>
+ <CAK7LNASfr4pxmXWO8WLPM4j1NiJ6+dAO_QyUmRREzJUXJNozFw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNASfr4pxmXWO8WLPM4j1NiJ6+dAO_QyUmRREzJUXJNozFw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 04, 2021 at 06:28:40PM +0900, Masahiro Yamada wrote:
+> On Thu, Oct 14, 2021 at 6:47 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Wed, 13 Oct 2021 at 22:07, Matthew Wilcox (Oracle)
+> > <willy@infradead.org> wrote:
+> > >
+> > > If the config file specifies a signing key, use it to sign
+> > > the kernel so that machines with SecureBoot enabled can boot.
+> > > See https://wiki.debian.org/SecureBoot
+> > >
+> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> >
+> > For the change itself
+> >
+> > Acked-by: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > although I'd suggest to fix the subject not to refer to Machine Owner
+> > Keys, as I don't see anything shim related here (i.e., if you sign
+> > using a key that is listed in db, it should also work)
+> >
+> >
+> > > ---
+> > >  scripts/package/builddeb | 10 +++++++++-
+> > >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/scripts/package/builddeb b/scripts/package/builddeb
+> > > index 91a502bb97e8..4fa6ff2b5cac 100755
+> > > --- a/scripts/package/builddeb
+> > > +++ b/scripts/package/builddeb
+> > > @@ -147,7 +147,15 @@ else
+> > >         cp System.map "$tmpdir/boot/System.map-$version"
+> > >         cp $KCONFIG_CONFIG "$tmpdir/boot/config-$version"
+> > >  fi
+> > > -cp "$($MAKE -s -f $srctree/Makefile image_name)" "$tmpdir/$installed_image_path"
+> > > +
+> > > +vmlinux=$($MAKE -s -f $srctree/Makefile image_name)
+> > > +if is_enabled CONFIG_MODULE_SIG; then
+> > > +       cert=$srctree/$(grep ^CONFIG_MODULE_SIG_KEY= include/config/auto.conf | cut -d\" -f2)
+> > > +       key=${cert%pem}priv
+> > > +       sbsign --key $key --cert $cert "$vmlinux" --output "$tmpdir/$installed_image_path"
+> > > +else
+> > > +       cp "$vmlinux" "$tmpdir/$installed_image_path"
+> > > +fi
+> > >
+> > >  if is_enabled CONFIG_OF_EARLY_FLATTREE; then
+> > >         # Only some architectures with OF support have this target
+> > > --
+> > > 2.32.0
+> > >
+> 
+> How to compile this patch?
+> 
+> "make  bindeb-pkg" fails with
+> Can't load key from file './certs/signing_key.priv'
 
-On 09.12.21 22:05, Oleksandr Tyshchenko wrote:
+I'm sorry; I missed this email.
 
+I don't know why you're seeing this error, exactly.  I'm just trying to
+automate the step here:
 
-Hello Juergen, Boris
+https://wiki.debian.org/SecureBoot#Using_your_key_to_sign_your_kernel
 
+Have you followed the other steps on that page; ie do you have:
+signing_key.priv, signing_key.der and signing_key.pem files?
 
-May I please ask, are you happy (or otherwise) with current patch series 
-(I assume, especially with commits #3-4)?
+> 
+> Also, sbsign emits "Invalid DOS header magic" error
+> if CONFIG_EFI_STUB is not set.
+> 
+> The CONFIG name might depend on arch.
+> CONFIG_EFI for ARCH=arm64, but CONFIG_EFI_STUB for ARCH=x86.
+> 
+> 
+> If you require sbsign, you need to update Build-Depends ?
 
-For the convenience:
+It looks like we should add a few extra checks before running sbsign ...
 
-   1. xen/unpopulated-alloc: Drop check for virt_addr_valid() in fill_list()
-- Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+> sh ./scripts/package/builddeb
+> Can't load key from file './certs/signing_key.priv'
+> 139999825022720:error:02001002:system library:fopen:No such file or
+> directory:../crypto/bio/bss_file.c:69:fopen('./certs/signing_key.priv','r')
+> 139999825022720:error:2006D080:BIO routines:BIO_new_file:no such
+> file:../crypto/bio/bss_file.c:76:
+> make[4]: *** [scripts/Makefile.package:87: intdeb-pkg] Error 1
+> make[3]: *** [Makefile:1539: intdeb-pkg] Error 2
+> make[2]: *** [debian/rules:13: binary-arch] Error 2
+> dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+> make[1]: *** [scripts/Makefile.package:83: bindeb-pkg] Error 2
+> make: *** [Makefile:1539: bindeb-pkg] Error 2
 
-   2. arm/xen: Switch to use gnttab_setup_auto_xlat_frames() for DT
-- Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
-
-   3. xen/balloon: Bring alloc(free)_xenballooned_pages helpers back
-- Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
-
-   4. xen/unpopulated-alloc: Add mechanism to use Xen resource
-- Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
-
-   5. arm/xen: Read extended regions from DT and init Xen resource
-- Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
-
-   6. dt-bindings: xen: Clarify "reg" purpose
-- Reviewed-by: Bertrand Marquis <bertrand.marquis@arm.com>
-- Acked-by: Rob Herring <robh@kernel.org>
-- Acked-by: Stefano Stabellini <sstabellini@kernel.org>
-
-
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->
-> Hello all.
->
-> You can find the RFC-V3 patch series at [1],[2] and [3].
->
-> The corresponding Xen support (for both Dom0 and DomU) is already committed and
-> is available in mainline Xen since the following commit:
-> 57f87857dc2de452a796d6bad4f476510efd2aba libxl/arm: Add handling of extended regions for DomU
->
-> The extended region (safe range) is a region of guest physical address space
-> which is unused and could be safely used to create grant/foreign mappings instead
-> of ballooning out real RAM pages to obtain a physical address space for creating
-> these mappings (which simply results in wasting domain memory and shattering super
-> pages in P2M table).
->
-> The problem is that we cannot follow Linux advise which memory ranges are unused
-> on Arm as there might be some identity mappings in P2M table (stage 2) the guest is not
-> aware of or not all device I/O regions might be known (registered) by the time the guest
-> starts creating grant/foreign mappings. This is why we need some hints from the hypervisor
-> which knows all details in advance to be able to choose extended regions (which won't
-> clash with other resources).
->
-> The extended regions are chosen at the domain creation time and advertised to it via
-> "reg" property under hypervisor node in the guest device-tree [4]. As region 0 is reserved
-> for grant table space (always present), the indexes for extended regions are 1...N.
-> No device tree bindings update is needed, guest infers the presence of extended regions
-> from the number of regions in "reg" property.
->
-> Please note the following:
-> - The ACPI case is not covered for now
-> - patch series was created in a way to retain existing behavior on x86
->
-> The patch series is based on v5.16-rc3 and also available at [5], it was fully
-> tested on Arm64 and only compile tested on x86.
->
-> [1] https://lore.kernel.org/all/1627490656-1267-1-git-send-email-olekstysh@gmail.com/
->      https://lore.kernel.org/all/1627490656-1267-2-git-send-email-olekstysh@gmail.com/
-> [2] https://lore.kernel.org/all/1635264312-3796-1-git-send-email-olekstysh@gmail.com/
-> [3] https://lore.kernel.org/all/1637787223-21129-1-git-send-email-olekstysh@gmail.com/
-> [4] https://xenbits.xen.org/gitweb/?p=xen.git;a=blob_plain;f=docs/misc/arm/device-tree/guest.txt;hb=refs/heads/master
-> [5] https://github.com/otyshchenko1/linux/commits/map_opt_ml7
->
-> Oleksandr Tyshchenko (6):
->    xen/unpopulated-alloc: Drop check for virt_addr_valid() in fill_list()
->    arm/xen: Switch to use gnttab_setup_auto_xlat_frames() for DT
->    xen/balloon: Bring alloc(free)_xenballooned_pages helpers back
->    xen/unpopulated-alloc: Add mechanism to use Xen resource
->    arm/xen: Read extended regions from DT and init Xen resource
->    dt-bindings: xen: Clarify "reg" purpose
->
->   Documentation/devicetree/bindings/arm/xen.txt |  14 +--
->   arch/arm/xen/enlighten.c                      | 132 ++++++++++++++++++++++++--
->   drivers/xen/Kconfig                           |   2 +-
->   drivers/xen/balloon.c                         |  20 ++--
->   drivers/xen/unpopulated-alloc.c               |  87 ++++++++++++++++-
->   include/xen/balloon.h                         |   3 +
->   include/xen/xen.h                             |  16 ++++
->   7 files changed, 245 insertions(+), 29 deletions(-)
->
--- 
-Regards,
-
-Oleksandr Tyshchenko
 

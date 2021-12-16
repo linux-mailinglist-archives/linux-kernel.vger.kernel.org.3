@@ -2,111 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE75B47706F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1431477074
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbhLPLlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 06:41:00 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:39940 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229845AbhLPLk7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 06:40:59 -0500
-Received: from [10.180.13.92] (unknown [10.180.13.92])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxHNy8JbthNGwBAA--.3500S2;
-        Thu, 16 Dec 2021 19:40:45 +0800 (CST)
-Subject: Re: [PATCH v1 1/2] HID: usbhid: enable remote wakeup function for
- usbhid device
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
-        Thinh.Nguyen@synopsys.com, mathias.nyman@linux.intel.com,
-        stern@rowland.harvard.edu, rajatja@google.com,
-        chris.chiu@canonical.com, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuyinbo@loongson.cn, Thinh.Nguyen@synopsys.com,
-        mathias.nyman@linux.intel.com, stern@rowland.harvard.edu,
-        rajatja@google.com, chris.chiu@canonical.com,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
- <YbCdTaGSKak1cdSh@kroah.com>
- <cc535d3d-6dcd-e69c-24e7-df54ce63c381@loongson.cn>
- <YbMvyK111M/ZVRJG@kroah.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <fd08de9d-ab77-bec0-eb30-31803563ac42@loongson.cn>
-Date:   Thu, 16 Dec 2021 19:40:44 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S231706AbhLPLmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 06:42:01 -0500
+Received: from mga17.intel.com ([192.55.52.151]:13399 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232861AbhLPLmA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 06:42:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639654920; x=1671190920;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EYNC8PMElkTDktdIWtkkjEzXScJVQFi4qPkxLSq1DyY=;
+  b=F0VT5kyQ+0g1iEVQI8I39Qs1o33S5JrrtvTzAvy0CaBgdJIra2uq42KP
+   KudMSZxiN0H3L9wKvPkQsbLmA1bvFpofZ2DkpDfP6YcQXUF8A7cOs4A7E
+   bZdWeaPb11qU16uXFbTp+raw1TUbrn5gishvTNPQhe6xXnhe8osb7HmNI
+   +hg7DHOVhHr6yXyfZcQxUq+Kh+t3L2B7plkJwMeAJqY+hglv085ibKom7
+   /X0HsSjh5jTrh/gFZC41rtVdHfAwmyeyixUxxvBgp0mihvugyUvadD0Cy
+   0QhOYzWp03bcZSPe+6fwNJcNSjTjElkV5jIMmZPal1WPxf5ZoPx3jjsx3
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="220148419"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="220148419"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 03:42:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="615121937"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 03:41:58 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxp93-00034n-GW; Thu, 16 Dec 2021 11:41:57 +0000
+Date:   Thu, 16 Dec 2021 19:41:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jakub Jelinek <jakub@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: arch/mips/mm/tlbex.c:2599 check_pabits() warn: always true condition
+ '(fillbits >= ((__builtin_constant_p(0)) ?(((0) < 2) ?0:63 -
+ __builtin_clzll(0)):((4 <= 4)) ?__ilog2_u32(0):__ilog2_u64(0))) => (0-u32max
+ >= 0)'
+Message-ID: <202112161929.ccx97Im9-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YbMvyK111M/ZVRJG@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxHNy8JbthNGwBAA--.3500S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw45Xw17Kr4rur17tFyxXwb_yoW8Xr4xp3
-        y8A3Z7Kr4DAr9a9wnavr18Kw1ayr4kZ34fZr18A340k3s0va4SyrZ3KFZ8ua4DXr4fXF15
-        Xw4jgry3Za4rAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOmhFUUUUU
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2b14864acbaaf03d9c01982e243a84632524c3ac
+commit: 2f78788b55baa3410b1ec91a576286abe1ad4d6a ilog2: improve ilog2 for constant arguments
+date:   1 year ago
+config: mips-randconfig-m031-20211216 (https://download.01.org/0day-ci/archive/20211216/202112161929.ccx97Im9-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 11.2.0
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-在 2021/12/10 下午6:45, Greg Kroah-Hartman 写道:
-> On Fri, Dec 10, 2021 at 05:54:33PM +0800, zhuyinbo wrote:
->>
->>
->> 在 2021/12/8 下午7:55, Greg Kroah-Hartman 写道:
->>> On Wed, Dec 08, 2021 at 05:39:50PM +0800, Yinbo Zhu wrote:
->>>> The remote wake-up function is a regular function on usb hid device
->>>> and I think keeping it enabled by default will make usb application
->>>> more convenient. This patch is to enable remote wakeup function for
->>>> usb hid device.
->>>
->>> How many devices did you test this on?
->>>
->>> As Oliver said, this will cause problems, there's a reason no operating
->>> system does this :(
->>>
->>> sorry,
->>>
->>> greg k-h
->> Hi greg,
->>
->> About that oliver said that I had expained, and I add this change was
->> according that usb device whether support remote wakeup and if it support
->> wakeup then to enabled it so I think it should be okay for all hid device.
-> 
-> Again, what devices did you test this on?
-Hi greg k-h
+New smatch warnings:
+arch/mips/mm/tlbex.c:2599 check_pabits() warn: always true condition '(fillbits >= ((__builtin_constant_p(0)) ?(((0) < 2) ?0:63 - __builtin_clzll(0)):((4 <= 4)) ?__ilog2_u32(0):__ilog2_u64(0))) => (0-u32max >= 0)'
 
-mouse device and keyboard device. in hid code that keyboad was enabled 
-on wakeup node by default.
-> 
-> And look at other operating systems, as I said, there is a reason that
-> no one does this.
-System should be do that. otherwise that lid open event was no make 
-sense.  and you need know the order that after lid open then system will 
-be wakeup then system will accept lid open event by input subsystem .
+Old smatch warnings:
+arch/mips/mm/tlbex.c:1681 iPTE_LW() warn: curly braces intended?
+arch/mips/mm/tlbex.c:1713 iPTE_SW() warn: inconsistent indenting
 
-in addition, whatever that usb wakeup was disabled in bios by default 
-even though after apply my patch.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+vim +2599 arch/mips/mm/tlbex.c
 
+c5b367835cfc7a Steven J. Hill 2015-02-26  2569  
+00bf1c691d082c Paul Burton    2015-09-22  2570  static void check_pabits(void)
+00bf1c691d082c Paul Burton    2015-09-22  2571  {
+00bf1c691d082c Paul Burton    2015-09-22  2572  	unsigned long entry;
+00bf1c691d082c Paul Burton    2015-09-22  2573  	unsigned pabits, fillbits;
+00bf1c691d082c Paul Burton    2015-09-22  2574  
+00bf1c691d082c Paul Burton    2015-09-22  2575  	if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
+00bf1c691d082c Paul Burton    2015-09-22  2576  		/*
+00bf1c691d082c Paul Burton    2015-09-22  2577  		 * We'll only be making use of the fact that we can rotate bits
+00bf1c691d082c Paul Burton    2015-09-22  2578  		 * into the fill if the CPU supports RIXI, so don't bother
+00bf1c691d082c Paul Burton    2015-09-22  2579  		 * probing this for CPUs which don't.
+00bf1c691d082c Paul Burton    2015-09-22  2580  		 */
+00bf1c691d082c Paul Burton    2015-09-22  2581  		return;
+00bf1c691d082c Paul Burton    2015-09-22  2582  	}
+00bf1c691d082c Paul Burton    2015-09-22  2583  
+00bf1c691d082c Paul Burton    2015-09-22  2584  	write_c0_entrylo0(~0ul);
+00bf1c691d082c Paul Burton    2015-09-22  2585  	back_to_back_c0_hazard();
+00bf1c691d082c Paul Burton    2015-09-22  2586  	entry = read_c0_entrylo0();
+00bf1c691d082c Paul Burton    2015-09-22  2587  
+00bf1c691d082c Paul Burton    2015-09-22  2588  	/* clear all non-PFN bits */
+00bf1c691d082c Paul Burton    2015-09-22  2589  	entry &= ~((1 << MIPS_ENTRYLO_PFN_SHIFT) - 1);
+00bf1c691d082c Paul Burton    2015-09-22  2590  	entry &= ~(MIPS_ENTRYLO_RI | MIPS_ENTRYLO_XI);
+00bf1c691d082c Paul Burton    2015-09-22  2591  
+00bf1c691d082c Paul Burton    2015-09-22  2592  	/* find a lower bound on PABITS, and upper bound on fill bits */
+00bf1c691d082c Paul Burton    2015-09-22  2593  	pabits = fls_long(entry) + 6;
+00bf1c691d082c Paul Burton    2015-09-22  2594  	fillbits = max_t(int, (int)BITS_PER_LONG - pabits, 0);
+00bf1c691d082c Paul Burton    2015-09-22  2595  
+00bf1c691d082c Paul Burton    2015-09-22  2596  	/* minus the RI & XI bits */
+00bf1c691d082c Paul Burton    2015-09-22  2597  	fillbits -= min_t(unsigned, fillbits, 2);
+00bf1c691d082c Paul Burton    2015-09-22  2598  
+00bf1c691d082c Paul Burton    2015-09-22 @2599  	if (fillbits >= ilog2(_PAGE_NO_EXEC))
+00bf1c691d082c Paul Burton    2015-09-22  2600  		fill_includes_sw_bits = true;
+00bf1c691d082c Paul Burton    2015-09-22  2601  
+00bf1c691d082c Paul Burton    2015-09-22  2602  	pr_debug("Entry* registers contain %u fill bits\n", fillbits);
+00bf1c691d082c Paul Burton    2015-09-22  2603  }
+00bf1c691d082c Paul Burton    2015-09-22  2604  
+
+:::::: The code at line 2599 was first introduced by commit
+:::::: 00bf1c691d082c1945fdba032c03a9a82e9e7e61 MIPS: tlbex: Avoid placing software PTE bits in Entry* PFN fields
+
+:::::: TO: Paul Burton <paul.burton@imgtec.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

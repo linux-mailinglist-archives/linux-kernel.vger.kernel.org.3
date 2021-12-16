@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F144477411
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14235477417
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237829AbhLPOLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:11:46 -0500
+        id S237878AbhLPOLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:11:50 -0500
 Received: from esa.microchip.iphmx.com ([68.232.154.123]:4047 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237784AbhLPOLn (ORCPT
+        with ESMTP id S237813AbhLPOLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:11:43 -0500
+        Thu, 16 Dec 2021 09:11:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639663904; x=1671199904;
+  t=1639663906; x=1671199906;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=b86IW3HhpJSwbuz3dLx8QLN49UnEtkntajIQOuJgw18=;
-  b=KNKRgoNYiMEbvJrErdDXRUc+Chg3NQG2c/HgKWPzHtyCQHto8Fimyeu+
-   0Dml4ckGeUz4/QtoKzxNc7Hf/UFKgouM9Zt/lRTxaa44nI2rt+hBwZKqT
-   P/TDbdi26G1GYD3HoX2Nd9L9U4x8BaePhNpNcZhGgfXhDROLHXJqqloKQ
-   X0xPZSAbzbxi3/ezjXQw8a/Tiw25n5L1PTAV3CbRscdZRbUfrqZfpHLQB
-   2/bpFxIFTZn7LP/csUc2glJUJZrv35/VqLLHqK9rGQnJwdY/edU5B/vwG
-   VtmLg/PSL/WiEkA/JSOwFwUlOo+FkcvlySDd/zWy2FGMKn20P6Of5MkIO
-   w==;
-IronPort-SDR: 9ctn6o75rxKVBswj4J1ADDaZ7J4ktratHfBAsa3OzQUYv6sB3FD4P3BfMC0mWiv7HxoDTTQC/b
- Vg+QavkO9KgrlGbnO1QcXVs98Hr1l++1W19dHcV6OtSvKIdMr15x4307fenf5gHObVrOV2eeTU
- 2LUVJoJ4+VPN1aI48IKDsi16UCGrNNkLKUDktIJ6Xjya4YyifPlEa2F/NEgPwb/NOh8Y0zOrFC
- JBO3Kk7ae8olR803aeHfZc4o8R0dn2Gt82FOn39sifG+EYfvjhshbah4ini7Mka9bBfuEq1TmN
- 5Sf3d7L4Jtxg0fxY6gdiM7Zf
+  bh=bDlilDU1skIyaD7A5u8m29rcVwAwQx5M9HD/l01CDFo=;
+  b=2h8IEagDuIP+YAmQBVuVuhoRVsPViN3wKoww4x24HkUpcV9ZlDJ7zqVE
+   f5EgddEQZWgF//yOURevxVaDp17ahE7KxDzuTftA4iiHgheexIwPMHybR
+   OcuD0/0vgHsdTGksV9QzTi+gd2ZQWFfgHJBjCjSN4oL/QZA3WHfGnCqIz
+   k5l/iXA5II8gqdV+scTza5tZT7D3JniQZYDsJOAj6FLE7PGg0mLn/VaFY
+   n7QYO+AdRyBher/HvA1W28e65ripyEpYsBfmePtEQd2eB8NNdGGe5tnOx
+   yeiYWEgdI9eM6nLUd9Vlj+8B4NEHvHlPVxIaCoRF3osc74q81EgurACOw
+   Q==;
+IronPort-SDR: eM/06ULGCldEpyhKxPqQqdAsZix0AjjC2Y3P5O+I+Y+qxDYacdBwZs3LutVsq1cGs/t4zKfcL/
+ UMvlAfe4qycGtFXYIGQu5usTBOtWlrh+plQtKfyL/1CV1E6RaE9pyp5nTWF7FpwycvpxWKHSYJ
+ nkyXOteL/RBw7cKpdtgf9+4bIZnNBxaBqttbAhjuTc441zTRvbfAeD1kQJHttJV/3fWVse2FLO
+ EpBcPk4mfXoxzYYLPmFFA4N4jMrxdRxwEDVApp6RmcUPStgmSYg2ValieLrnxc0kf8QHcdg83R
+ HSkBvvqyJMbAsZpEEk0LU4Bz
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="142638405"
+   d="scan'208";a="142638419"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2021 07:11:42 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Dec 2021 07:11:45 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 16 Dec 2021 07:11:42 -0700
+ 15.1.2375.17; Thu, 16 Dec 2021 07:11:45 -0700
 Received: from rob-dk-mpu02.microchip.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 16 Dec 2021 07:11:39 -0700
+ 15.1.2375.17 via Frontend Transport; Thu, 16 Dec 2021 07:11:42 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
         <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 6/8] ARM: dts: at91: sama7g5: add opps
-Date:   Thu, 16 Dec 2021 16:13:36 +0200
-Message-ID: <20211216141338.35144-7-claudiu.beznea@microchip.com>
+Subject: [PATCH 7/8] ARM: configs: at91: sama7: enable cpu idle
+Date:   Thu, 16 Dec 2021 16:13:37 +0200
+Message-ID: <20211216141338.35144-8-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211216141338.35144-1-claudiu.beznea@microchip.com>
 References: <20211216141338.35144-1-claudiu.beznea@microchip.com>
@@ -61,61 +61,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add OPPs for SAMA7G5 along with clock for CPU.
+Enable CPU idle support for SAMA7 config.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- arch/arm/boot/dts/sama7g5.dtsi | 37 ++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ arch/arm/configs/sama7_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
-index 7039311bf678..22352ef5bc72 100644
---- a/arch/arm/boot/dts/sama7g5.dtsi
-+++ b/arch/arm/boot/dts/sama7g5.dtsi
-@@ -30,6 +30,43 @@ cpu0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a7";
- 			reg = <0x0>;
-+			clocks = <&pmc PMC_TYPE_CORE PMC_CPUPLL>;
-+			clock-names = "cpu";
-+			operating-points-v2 = <&cpu_opp_table>;
-+		};
-+	};
-+
-+	cpu_opp_table: opp-table {
-+		compatible = "operating-points-v2";
-+
-+		opp-90000000 {
-+			opp-hz = /bits/ 64 <90000000>;
-+			opp-microvolt = <1050000 1050000 1225000>;
-+			clock-latency-ns = <320000>;
-+		};
-+
-+		opp-250000000 {
-+			opp-hz = /bits/ 64 <250000000>;
-+			opp-microvolt = <1050000 1050000 1225000>;
-+			clock-latency-ns = <320000>;
-+		};
-+
-+		opp-600000000 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-microvolt = <1050000 1050000 1225000>;
-+			clock-latency-ns = <320000>;
-+		};
-+
-+		opp-800000000 {
-+			opp-hz = /bits/ 64 <800000000>;
-+			opp-microvolt = <1150000 1125000 1225000>;
-+			clock-latency-ns = <320000>;
-+		};
-+
-+		opp-1000000002 {
-+			opp-hz = /bits/ 64 <1000000002>;
-+			opp-microvolt = <1250000 1225000 1300000>;
-+			clock-latency-ns = <320000>;
- 		};
- 	};
- 
+diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+index 938aae4bd80b..95c2a7ed4816 100644
+--- a/arch/arm/configs/sama7_defconfig
++++ b/arch/arm/configs/sama7_defconfig
+@@ -26,6 +26,7 @@ CONFIG_FORCE_MAX_ZONEORDER=15
+ CONFIG_UACCESS_WITH_MEMCPY=y
+ # CONFIG_ATAGS is not set
+ CONFIG_CMDLINE="console=ttyS0,115200 earlyprintk ignore_loglevel"
++CONFIG_CPU_IDLE=y
+ CONFIG_VFP=y
+ CONFIG_NEON=y
+ CONFIG_KERNEL_MODE_NEON=y
+@@ -33,7 +34,6 @@ CONFIG_MODULES=y
+ CONFIG_MODULE_FORCE_LOAD=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_MODULE_FORCE_UNLOAD=y
+-# CONFIG_BLK_DEV_BSG is not set
+ CONFIG_PARTITION_ADVANCED=y
+ # CONFIG_EFI_PARTITION is not set
+ # CONFIG_COREDUMP is not set
+@@ -90,6 +90,7 @@ CONFIG_BLK_DEV_RAM_SIZE=8192
+ CONFIG_EEPROM_AT24=y
+ CONFIG_SCSI=y
+ CONFIG_BLK_DEV_SD=y
++# CONFIG_BLK_DEV_BSG is not set
+ CONFIG_NETDEVICES=y
+ CONFIG_MACB=y
+ CONFIG_MICREL_PHY=y
 -- 
 2.32.0
 

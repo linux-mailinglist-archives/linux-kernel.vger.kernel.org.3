@@ -2,81 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 525784774AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA03C4774A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238002AbhLPOa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S237994AbhLPO33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237137AbhLPOa0 (ORCPT
+        with ESMTP id S237712AbhLPO33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:30:26 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D3EC061574;
-        Thu, 16 Dec 2021 06:30:25 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id b7so28377295edd.6;
-        Thu, 16 Dec 2021 06:30:25 -0800 (PST)
+        Thu, 16 Dec 2021 09:29:29 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F997C061574;
+        Thu, 16 Dec 2021 06:29:28 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id 13so38668910ljj.11;
+        Thu, 16 Dec 2021 06:29:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Zyz6+SeIOSQpRQFeqW/jl3kpfCV7scubV1qfNlvUGW8=;
-        b=T2h/q+j0Fhb4j4mST1mvsmpvduhyEyyO62tQ/qn75YiGGaJXvpH+eBKoxvzGMM+3jm
-         +STU02p47WKVCS4oqjOpjPQ2lqbYp37OuY1K5IqM7KPyWksU1mjIUMSkNvQviHstaC1W
-         U+KeNesene1w5vO4URMf815cFZa48IA+8U0opVjos0UTDTLSlNrh8W6/DsR30sTRAXRE
-         YZaj17EKg8bjfcqvZyvQ2xSsPq8V/AV6l5bTtOvOFc/4yWMYgMsDqsAl3luO8dOEY+RX
-         lZIgaLVEFsrKPtQ4/Ei0g/O7CzceM6VsYfDMjfZeH2/FSUNP7RE/9OQcg10RMjokEwK9
-         6iMA==
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jmTSSpcNWtwfnBOzQ4SXDAvbSBKcOFTBcwOus93VJW4=;
+        b=PG2xS2vLUFH54ArG56D+Q342pRiH3jdFwS4K/6S4B/nw7Y2ox89atjJk4nUylobM1w
+         NrHXA+Tp2PDubHrme4IATwGXahvbiRKJuyOVxiVfbp5OAZ1zmFUCcW6ZTHCAOPDO5KlI
+         DxcIaap5F+3oy943AsuTQKyhGmbBEC2vAL9N9Jd51tukt9puT+E1/DGPgWx+TlMEKCDN
+         5YgH36A3+Qtej4UaSRMEuzvcu3V528Qz5qi2f7ql7nGF8SNkDPSArnuPKmx4B69FToTJ
+         sRGISFsX6sRbqbBLyA6brQjtFl6WHtcyGZxxs/CGupN+c+fr/VXwcQJizLEipEpvTTOx
+         GTHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zyz6+SeIOSQpRQFeqW/jl3kpfCV7scubV1qfNlvUGW8=;
-        b=c09W74xeEi0cdgEIYdP35wyH5e0WQ3YVnZd7ueGPQTazJMI1+6uOfFwvzKcJewB4E1
-         ozheHKt4LEjcs+nFookCBASWV1QC42QHbwduK6PbXbyFqFphpefqxWe8MY6s0o6Ljwzw
-         3ny3vH79hm0EbuQ2bwtw/PO5+G8Jd9z9c+pFgle+/KeJ9eaGy5QcseO+QrbO7//SG/Oa
-         lMfBsDdq3J/IaN3qGo4sTivRyIpfcp1uDrl28SmUoFWPdvbtenxCyVeQT7R1ncgoYQwW
-         bDLqpJC0Nwvj5n8tTTt/n7s8GiNIy97zKbS0STqgq8WprmNx6PowHO+EL8CleZX01wL7
-         oLAg==
-X-Gm-Message-State: AOAM531ZQ6XfY5cCzNlAQ1reCxxsZ24ytPLoFvT3yBHImziU1WLVsUfz
-        mIDDNZZUNqoJCXY7ppBDW75R6VOCqfErleNRJSs=
-X-Google-Smtp-Source: ABdhPJww9DNdDNu0vk0vZXFbGdrhr+pzPK2m2gNSPePV7PzOmPXKijxWGR49cZnA6Vt3yHTKvtePsTC16lV3svMsZsE=
-X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr8028998ejj.636.1639665024183;
- Thu, 16 Dec 2021 06:30:24 -0800 (PST)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jmTSSpcNWtwfnBOzQ4SXDAvbSBKcOFTBcwOus93VJW4=;
+        b=PhZy9sY3Oiz0DuiuZH1FS+wBfWwDXZnJMV7LMwFWEhcUvNUbZ3q9yZJ2fEEJh1vzDK
+         jVbLIDh0pl3MuzXJ6oIi475QwGCKXjElRAcQRKie8fyv8Pv/ecgXZfKQuHGdhGCH8nzR
+         MQKcMVHb6WaIp/28j8+8mqC92bI/i5ZKuHOOkPJo9xmIEnY9zBeRNLGAO5dGJC8J3WGP
+         wVu/xNBHBndSb0gO2K8aXKcv5Xr3YW0PrAtcYfm5xVubFgLqeev+FBlRgIpzdGwHpdX7
+         rw1FujjnVJ4kCVJM+DMq7CMDO/KiLsYgVzRyqxmufOlK7J/N1K17pt+Hf0djiZxOb6mG
+         WHLQ==
+X-Gm-Message-State: AOAM531KZJdURwU0WnzmSDnUOpWY/W1qvddwfwzAf/ZBbGbEGwmgNlmA
+        yI0TFfl/yaHrzn7aMgiL5xg=
+X-Google-Smtp-Source: ABdhPJwHopng7TTn6djyhWoM581vIPB/7Ea84WYzSp8kNNJXVSzEf+3IcwroTLJc3Wygi8UzwwagkQ==
+X-Received: by 2002:a2e:8e88:: with SMTP id z8mr15090638ljk.197.1639664966914;
+        Thu, 16 Dec 2021 06:29:26 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id d10sm898153lfv.114.2021.12.16.06.29.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 06:29:26 -0800 (PST)
+Subject: Re: [PATCH v4 00/22] Support HDMI audio on NVIDIA Tegra20
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Agneli <poczt@protonmail.ch>, linux-tegra@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20211204143725.31646-1-digetx@gmail.com>
+ <Ybo6tsnQM6OacoZs@sirena.org.uk>
+ <26af30a6-9606-72d0-9258-cf9627ddfe77@gmail.com>
+Message-ID: <7179a409-d838-0e9e-4600-785e69c3e3a6@gmail.com>
+Date:   Thu, 16 Dec 2021 17:29:25 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211214142739.60071-1-andriy.shevchenko@linux.intel.com>
- <20211214142739.60071-2-andriy.shevchenko@linux.intel.com> <20211215202736.GC28336@duo.ucw.cz>
-In-Reply-To: <20211215202736.GC28336@duo.ucw.cz>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 16 Dec 2021 16:28:55 +0200
-Message-ID: <CAHp75Vf05OW3bLLP+vCAvrh=YUOF_1BDLBt2LwAtGLxOABhhRw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] leds: lgm-sso: Get rid of duplicate of_node assignment
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Amireddy Mallikarjuna reddy 
-        <mallikarjunax.reddy@linux.intel.com>,
-        Yihao Han <hanyihao@vivo.com>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <26af30a6-9606-72d0-9258-cf9627ddfe77@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 12:29 AM Pavel Machek <pavel@ucw.cz> wrote:
-> On Tue 2021-12-14 16:27:39, Andy Shevchenko wrote:
-> > GPIO library does copy the of_node from the parent device of
-> > the GPIO chip, there is no need to repeat this in the individual
-> > drivers. Remove assignment here.
-> >
-> > For the details one may look into the of_gpio_dev_init()
-> implementation.
->
-> Thank you, applied the series.
+15.12.2021 22:19, Dmitry Osipenko пишет:
+> 15.12.2021 21:57, Mark Brown пишет:
+>> On Sat, Dec 04, 2021 at 05:37:03PM +0300, Dmitry Osipenko wrote:
+>>
+>>> I based S/PDIF patches on Arnd's Bergmann patch from a separate series [1]
+>>> that removes obsolete slave_id. This eases merging of the patches by
+>>> removing the merge conflict. This is a note for Mark Brown.
+>> That's not in my tree so I'll need either a pull request with the series
+>> or a resend after the merge window.
+> This patch is included as a part of this series, please see the patch #6.
+> 
+> I saw that Vinod Koul already merged it into his DMA tree [1] a day ago,
+> but there is no stable branch there.
+> 
+> [1]
+> https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git/log/?h=next
+> 
 
-Thanks!
+Vinod, will you be a able to create immutable branch for us with the
+"dmaengine: kill off dma_slave_config->slave_id" patches [1]?
 
--- 
-With Best Regards,
-Andy Shevchenko
+[1] https://lore.kernel.org/all/20211122222203.4103644-1-arnd@kernel.org/

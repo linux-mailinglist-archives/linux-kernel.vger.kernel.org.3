@@ -2,166 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B7F477630
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B547477642
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238627AbhLPPn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:43:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        id S238647AbhLPPqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbhLPPn2 (ORCPT
+        with ESMTP id S231948AbhLPPqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:43:28 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E3FC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:43:27 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id n15-20020a17090a394f00b001b0f6d6468eso2940822pjf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:43:27 -0800 (PST)
+        Thu, 16 Dec 2021 10:46:02 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCD4C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:46:02 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id k6-20020a17090a7f0600b001ad9d73b20bso23042420pjl.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:46:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=DvAPGtEpiVuU2kvz5o3dTRnY8wThKOHqUQeQ2z/x2nI=;
-        b=TDw2lsfmLNMlPpF/QUBVtH96UAWZMsN2GODesQ5HklEqtoo0QugXSDaDPwbEd4RnWy
-         8eDBR1nDxvH2lPAMAWSabqcQU12Rvhfw7X2c6voSULc6AiieTCIJBIA9yydPw92UdAe2
-         +adEr8c4TaqyrlVHL0zY6KGeGEeBAghwQMMWeSfwK9f3NwUwE00h+PFpdPRlQUHWiepY
-         0HY8aT7QWedjpygs9ZDS+GzVpWEtN78WlRyCyHkTGO94sMuCghojbVHhHnq0be/wa8Ws
-         d5MMQpkOu2xeFC90SUHL4e7DBwx83a0qDVrNGDcc1NwFymh2OqM4/GvnCM4uOi4U194a
-         LnQQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dBNwy6JmI5LlG8Ycy4IPBbB/eEua42BeOhgPlNQAOyo=;
+        b=nIi0FFB2Y7Fla3mKWA7uAzUn8+ecRT8lHYGvg6TkkROKiPz+ClDphKYDx8oCaDTKRt
+         ykJx+BwiHPCE9MOeYcCexgT6huXA7KtR5MomX7yW1WMQey5sH5eocU79bQMsZ5pI2w4x
+         iwnL9Dzkno6ohXpwUJAKA18KtJDlHd+B3iDNWADfxvqTSJGlYrNLfs17dbN1sUDCrN60
+         NXXn0jN8I3td1IvRXDS08gKg+tsyo8oxwzl8Cflo1kX1HlLEoA+AgRqGieDb9qNkbou4
+         /pJm6q/xTnbijS5eEq5esO5VO+ne4FJrIMIwdr1IDAHQqwk5QICuoFj8HozzIHxLsfwo
+         m9qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DvAPGtEpiVuU2kvz5o3dTRnY8wThKOHqUQeQ2z/x2nI=;
-        b=fULMfkUVr6pO6jHH0UHOgC7hDVXWGeYgXmYJfq2DIO0WssWvDs5of7+PFCqtmCqASQ
-         JMKiibyodTd6inPJcsobHUHvYV0PxF8W3lpQVA9qXTIH9+TSh46UiDf/ksNkqQpRe/7A
-         ZlXDHZIjzTcXqMw+7XMDx56ezk6+S9sKRSczq80+jNYxGFfKtxOJfBEwrp/0Pt1vFyEa
-         kBZMFS7gJqedGOmtbgQrArh2J3vNgiEkUPKK11LGo7Q4IrNjMMLBFWd1eiN2WfETyHZA
-         xIa93C2mQENnCGBDGyd2kiVM0d5DqVfrDEX4dg4O749pzQ7TTLe8aogqAiNERqjlma5x
-         mDYQ==
-X-Gm-Message-State: AOAM531SvbhKMeHNvr/uJ8jSGXvhlN/Ct26NM7Cad8PFb2X9MZA2pvVw
-        wpu4MPVRmc1T8Moos59D6Cjtcnasi5fN4A==
-X-Google-Smtp-Source: ABdhPJw9xZUGD7sedtpr2wZO0uk5qeTLPkVOD4gbQBdsF2irncVIbC4KF0hJQDMYHvMkGBrFf32Buw==
-X-Received: by 2002:a17:90a:b103:: with SMTP id z3mr6719356pjq.23.1639669407379;
-        Thu, 16 Dec 2021 07:43:27 -0800 (PST)
-Received: from [10.255.28.103] ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id j1sm6944895pfu.47.2021.12.16.07.43.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 07:43:27 -0800 (PST)
-Message-ID: <917bb0a2-acb5-f2af-317b-73f1fa60f22d@bytedance.com>
-Date:   Thu, 16 Dec 2021 23:43:23 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dBNwy6JmI5LlG8Ycy4IPBbB/eEua42BeOhgPlNQAOyo=;
+        b=g1PJjk16KoTrcaP0fbay/NvjAL4L+Jegw4VJxrEdecLGMROaTRBLLSGc7XLYEgEo2O
+         P66dmWoYWtZxh+9lh23DHtZuTNOi8VhoNwvNFZxb0/vGhstnlUu/gEI18nyXR79PLMVH
+         Iz6PJsAMT7PZqlO/kush1qqN45GmyZQdP0+nCRnQP92wPQIPacca4Sji3B96mMZKmkTe
+         afkP0kRDOPcgSJYZhNGWEflhZTYDoQticD5GlP9gUgT+Oqhc5YXLOueIap5ldQbbygwC
+         harGKRXmA6nzYRUtSk3y3r85D9r0cwIFNgjRQQUtpteeZ4OWjDRQpu6yjeFHdTuk/e7h
+         81Ew==
+X-Gm-Message-State: AOAM533gw5T30og7xxZREoClkj5cxHw0V0YNYEhoL+u1YRm4RVI8AdN5
+        NLNtlPUHz5LDIcyczuUy5FnOyQ==
+X-Google-Smtp-Source: ABdhPJychtCuZ6yu/JvyLXz+PjPk9S7u3FuVFYWbPENnVBOnHjdLFaZN9JDJ3qnQiVaSob+E9Dl8LA==
+X-Received: by 2002:a17:902:6b05:b0:142:83f9:6e29 with SMTP id o5-20020a1709026b0500b0014283f96e29mr17436144plk.32.1639669561310;
+        Thu, 16 Dec 2021 07:46:01 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id m2sm247122pjh.36.2021.12.16.07.46.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 07:46:00 -0800 (PST)
+Date:   Thu, 16 Dec 2021 15:45:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Aili Yao <yaoaili126@gmail.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yaoaili@kingsoft.com
+Subject: Re: [PATCH v2] KVM: LAPIC: Per vCPU control over
+ kvm_can_post_timer_interrupt
+Message-ID: <YbtfNVVtLlvxE2YB@google.com>
+References: <20211124125409.6eec3938@gmail.com>
+ <Ya/s17QDlGZi9COR@google.com>
+ <20211216162303.230dbdaa@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH 1/2] mm: add MemAvailable to per-node meminfo
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     akpm@linux-foundation.org, rafael@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com
-References: <20211216124655.32247-1-zhengqi.arch@bytedance.com>
- <20211216124655.32247-2-zhengqi.arch@bytedance.com>
- <Ybs8P3WcPtShi15o@kroah.com>
- <34cc2f26-9fba-f7c6-5dae-d21498ccbe2d@bytedance.com>
- <YbtdIpJal3keEWf8@kroah.com>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <YbtdIpJal3keEWf8@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216162303.230dbdaa@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 16, 2021, Aili Yao wrote:
+> On Tue, 7 Dec 2021 23:23:03 +0000
+> Sean Christopherson <seanjc@google.com> wrote:
+> > On Tue, Nov 23, 2021 at 10:00 PM Wanpeng Li <kernellwp@gmail.com> wrote:
+> > > ---
+> > >  arch/x86/kvm/lapic.c | 5 ++---
+> > >  1 file changed, 2 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > > index 759952dd1222..8257566d44c7 100644
+> > > --- a/arch/x86/kvm/lapic.c
+> > > +++ b/arch/x86/kvm/lapic.c
+> > > @@ -113,14 +113,13 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
+> > >
+> > >  static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
+> > >  {
+> > > -       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
+> > > +       return pi_inject_timer && kvm_mwait_in_guest(vcpu->kvm) && kvm_vcpu_apicv_active(vcpu);  
+> > 
+> > As Aili's changelog pointed out, MWAIT may not be advertised to the guest. 
+> > 
+> > So I think we want this?  With a non-functional, opinionated refactoring of
+> > kvm_can_use_hv_timer() because I'm terrible at reading !(a || b).
+> > 
+> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > index 40270d7bc597..c77cb386d03d 100644
+> > --- a/arch/x86/kvm/lapic.c
+> > +++ b/arch/x86/kvm/lapic.c
+> > @@ -113,14 +113,25 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
+> > 
+> >  static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
+> >  {
+> > -       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
+> > +       return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
+> > +              (kvm_mwait_in_guest(vcpu) || kvm_hlt_in_guest(vcpu));
+> >  }
+> > 
+> >  bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
+> >  {
+> > -       return kvm_x86_ops.set_hv_timer
+> > -              && !(kvm_mwait_in_guest(vcpu->kvm) ||
+> > -                   kvm_can_post_timer_interrupt(vcpu));
+> > +       /*
+> > +        * Don't use the hypervisor timer, a.k.a. VMX Preemption Timer, if the
+> > +        * guest can execute MWAIT without exiting as the timer will stop
+> > +        * counting if the core enters C3 or lower.  HLT in the guest is ok as
+> > +        * HLT is effectively C1 and the timer counts in C0, C1, and C2.
+> > +        *
+> > +        * Don't use the hypervisor timer if KVM can post a timer interrupt to
+> > +        * the guest since posted the timer avoids taking an extra a VM-Exit
+> > +        * when the timer expires.
+> > +        */
+> > +       return kvm_x86_ops.set_hv_timer &&
+> > +              !kvm_mwait_in_guest(vcpu->kvm) &&
+> > +              !kvm_can_post_timer_interrupt(vcpu));
+> >  }
+> >  EXPORT_SYMBOL_GPL(kvm_can_use_hv_timer);
+> > 
+> 
+> It seems Sean and Wanpeng are busy with some other more important issues;
+> So Please let me try to merge Sean, Wanpeng's ideas and suggestions together,also including my opinions
+> into one possible approach and get it reviewed, Only if others are OK with this;
+> 
+> I will post a new patch for this later today or tomorrow.
 
+Sorry, I was waiting for someone to say "this works", but never actually said as
+much.
 
-On 12/16/21 11:37 PM, Greg KH wrote:
-> On Thu, Dec 16, 2021 at 11:31:36PM +0800, Qi Zheng wrote:
->>
->>
->> On 12/16/21 9:16 PM, Greg KH wrote:
->>> On Thu, Dec 16, 2021 at 08:46:54PM +0800, Qi Zheng wrote:
->>>> In /proc/meminfo, we can show the sum of all the available memory
->>>> as "MemAvailable". Add the same counter also to per-node meminfo
->>>> under /sys.
->>>>
->>>> With this counter, some processes that bind nodes can make some
->>>> decisions by reading the "MemAvailable" of the corresponding nodes
->>>> directly.
->>>>
->>>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->>>> ---
->>>>    drivers/base/node.c    |  4 ++++
->>>>    include/linux/mm.h     |  1 +
->>>>    include/linux/mmzone.h |  5 +++++
->>>>    mm/page_alloc.c        | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
->>>>    4 files changed, 59 insertions(+)
->>>>
->>>> diff --git a/drivers/base/node.c b/drivers/base/node.c
->>>> index 87acc47e8951..deb2a7965ae4 100644
->>>> --- a/drivers/base/node.c
->>>> +++ b/drivers/base/node.c
->>>> @@ -375,8 +375,10 @@ static ssize_t node_read_meminfo(struct device *dev,
->>>>    	struct sysinfo i;
->>>>    	unsigned long sreclaimable, sunreclaimable;
->>>>    	unsigned long swapcached = 0;
->>>> +	long available;
->>>>    	si_meminfo_node(&i, nid);
->>>> +	available = si_mem_available_node(&i, nid);
->>>>    	sreclaimable = node_page_state_pages(pgdat, NR_SLAB_RECLAIMABLE_B);
->>>>    	sunreclaimable = node_page_state_pages(pgdat, NR_SLAB_UNRECLAIMABLE_B);
->>>>    #ifdef CONFIG_SWAP
->>>> @@ -386,6 +388,7 @@ static ssize_t node_read_meminfo(struct device *dev,
->>>>    			    "Node %d MemTotal:       %8lu kB\n"
->>>>    			    "Node %d MemFree:        %8lu kB\n"
->>>>    			    "Node %d MemUsed:        %8lu kB\n"
->>>> +			    "Node %d MemAvailable:   %8lu kB\n"
->>>
->>> You just changed a user/kernel api without documenting it anywhere, or
->>> ensuring that you did not just break anything.
->>
->> Hi greg k-h,
->>
->> The MemAvailable has long existed in the /proc/meminfo, it's meaning
->> has been described in the Documentation/filesystems/proc.rst. Since
->> the semantics of per-node MemAvailable has not changed, so I did not
->> add a new document description.
-> 
-> This is not a proc file, it is in sysfs.
-> 
-> And it violates all of the sysfs rules, and has all of the problems that
-> proc files have.  So the worst of both worlds :(
-> 
->>> Also, this api is crazy, and not ok, please never add anything new to
->>> it, it is broken as-is.
->>
->> The consideration of adding per-node MemAvailable is that some processes
->> that bind nodes need this information to do some decisions.
->>
->> Now their approach is to read other information in per-node meminfo
->> and /proc/sys/vm/watermark_scale_factor, and then approximate this
->> value. With this counter, they can directly read
->> /sys/devices/system/node/node*/meminfo to get the MemAvailable
->> information of each node.
->>
->> And MemTotal, MemFree and SReclaimable(etc.) all have corresponding
->> per-node versions, so I think that adding per-node MemAvailable might
->> also make sense. :)
-> 
-> Please no, I do not want new things added to this file, as you might
-> break parsers of this file.
-
-OK, Got it.
-
-Thank,
-Qi
-
-> 
-> Also, again, you did not document this at all in Documentation/ABI/ so
-> for that reason alone it is not ok.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
--- 
-Thanks,
-Qi
+Does the above change address your use case?  If not, what's missing?

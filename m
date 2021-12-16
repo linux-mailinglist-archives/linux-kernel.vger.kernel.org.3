@@ -2,68 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9544771EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EF64771D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236856AbhLPMfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:35:46 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:47160
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236577AbhLPMfq (ORCPT
+        id S234460AbhLPMbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229452AbhLPMbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:35:46 -0500
-Received: from workstation5.fritz.box (ip-88-152-144-157.hsi03.unitymediagroup.de [88.152.144.157])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id BB6C73FFD8;
-        Thu, 16 Dec 2021 12:35:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639658145;
-        bh=onBIMAuw6mLm03QoeN/nW0ZWBvVmeZ7hMRD9CvUNps0=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=OLpjXtShMiRPjeMzVNhApo+LTBy2HkwCP9A/24L1WUusYWpN0tRjlYFAtVduXnLpT
-         1nMlwpSUl++weEhyqtNv8cEwjW3Iy2FbziViUWWCR8/4xAHfSDBWMX9zYJ4wxLX4ub
-         JJ++OBcn4MIDsC7+aaKXrp7dTdchoN7eNZ8dNZ8mqfBlPyFdlMtaF8PMXY+3Jo+8Sp
-         3uALn1f5PslC6COrjhpPHe2l7mvYqzTODyBq2hhncoQFnT6j15//6uUM0qGUllGg81
-         9Mb+YzvyCkStZN8GQOUhjfKgV+YkdJesGN4FCtzGPW6eRt5I0mRxpnyCfjEwg525Wp
-         0AGR4Lz20bE2g==
-From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Subject: [PATCH 1/1] riscv: default to CONFIG_RISCV_SBI_V01=n
-Date:   Thu, 16 Dec 2021 13:35:38 +0100
-Message-Id: <20211216123538.175087-1-heinrich.schuchardt@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 16 Dec 2021 07:31:18 -0500
+X-Greylist: delayed 1231 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Dec 2021 04:31:18 PST
+Received: from haggis.mythic-beasts.com (haggis.mythic-beasts.com [IPv6:2a00:1098:0:86:1000:0:2:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50128C061574;
+        Thu, 16 Dec 2021 04:31:18 -0800 (PST)
+Received: from [81.101.6.87] (port=52570 helo=jic23-huawei)
+        by haggis.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <jic23@jic23.retrosnub.co.uk>)
+        id 1mxpuh-0005Cz-Dz; Thu, 16 Dec 2021 12:31:11 +0000
+Date:   Thu, 16 Dec 2021 12:36:27 +0000
+From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] iio: stmpe-adc: Use correctly sized arguments for bit
+ field
+Message-ID: <20211216123615.3e311c2b@jic23-huawei>
+In-Reply-To: <20211215232513.2070158-1-keescook@chromium.org>
+References: <20211215232513.2070158-1-keescook@chromium.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-BlackCat-Spam-Score: 19
+X-Spam-Status: No, score=1.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SBI 0.1 specification is obsolete. The current version is 0.3.
-Hence we should not rely by default on SBI 0.1 being implemented.
+On Wed, 15 Dec 2021 15:25:13 -0800
+Kees Cook <keescook@chromium.org> wrote:
 
-Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
----
- arch/riscv/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+> The find.h APIs are designed to be used only on unsigned long arguments.
+> This can technically result in a over-read, but it is harmless in this
+> case. Regardless, fix it to avoid the warning seen under -Warray-bounds,
+> which we'd like to enable globally:
+> 
+> In file included from ./include/linux/bitmap.h:9,
+>                  from ./include/linux/cpumask.h:12,
+>                  from ./arch/x86/include/asm/cpumask.h:5,
+>                  from ./arch/x86/include/asm/msr.h:11,
+>                  from ./arch/x86/include/asm/processor.h:22,
+>                  from ./arch/x86/include/asm/cpufeature.h:5,
+>                  from ./arch/x86/include/asm/thread_info.h:53,
+>                  from ./include/linux/thread_info.h:60,
+>                  from ./arch/x86/include/asm/preempt.h:7,
+>                  from ./include/linux/preempt.h:78,
+>                  from ./include/linux/spinlock.h:55,
+>                  from ./include/linux/swait.h:7,
+>                  from ./include/linux/completion.h:12,
+>                  from drivers/iio/adc/stmpe-adc.c:10:
+> drivers/iio/adc/stmpe-adc.c: In function 'stmpe_adc_probe':
+> ./include/linux/find.h:98:23: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'u32[1]' {aka 'unsigned int[1]'} [-Warray-bounds]
+>    98 |                 val = *addr | ~GENMASK(size - 1, offset);
+>       |                       ^~~~~
+> drivers/iio/adc/stmpe-adc.c:258:13: note: while referencing 'norequest_mask'
+>   258 |         u32 norequest_mask = 0;
+>       |             ^~~~~~~~~~~~~~
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 09abf62ae0ad..f177ad3bee0f 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -396,7 +396,6 @@ source "kernel/Kconfig.hz"
- 
- config RISCV_SBI_V01
- 	bool "SBI v0.1 support"
--	default y
- 	depends on RISCV_SBI
- 	help
- 	  This config allows kernel to use SBI v0.1 APIs. This will be
--- 
-2.32.0
+Applied to the togreg branch of iio.git and pushed out as testing to let
+0-day have a first poke at it.
+
+I took the view this one was trivial, but if anyone else wants to add
+tags there will be a few days before this goes out in a form I'm not happy
+to rebase.
+
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/iio/adc/stmpe-adc.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/stmpe-adc.c b/drivers/iio/adc/stmpe-adc.c
+> index fba659bfdb40..d2d405388499 100644
+> --- a/drivers/iio/adc/stmpe-adc.c
+> +++ b/drivers/iio/adc/stmpe-adc.c
+> @@ -256,6 +256,7 @@ static int stmpe_adc_probe(struct platform_device *pdev)
+>  	struct stmpe_adc *info;
+>  	struct device_node *np;
+>  	u32 norequest_mask = 0;
+> +	unsigned long bits;
+>  	int irq_temp, irq_adc;
+>  	int num_chan = 0;
+>  	int i = 0;
+> @@ -309,8 +310,8 @@ static int stmpe_adc_probe(struct platform_device *pdev)
+>  
+>  	of_property_read_u32(np, "st,norequest-mask", &norequest_mask);
+>  
+> -	for_each_clear_bit(i, (unsigned long *) &norequest_mask,
+> -			   (STMPE_ADC_LAST_NR + 1)) {
+> +	bits = norequest_mask;
+> +	for_each_clear_bit(i, &bits, (STMPE_ADC_LAST_NR + 1)) {
+>  		stmpe_adc_voltage_chan(&info->stmpe_adc_iio_channels[num_chan], i);
+>  		num_chan++;
+>  	}
 

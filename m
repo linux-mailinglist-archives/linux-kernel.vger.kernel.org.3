@@ -2,112 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B384775E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B8E4775E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238520AbhLPP2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:28:11 -0500
-Received: from mga12.intel.com ([192.55.52.136]:24827 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229868AbhLPP2K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:28:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639668490; x=1671204490;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Mlc1tvWUn8N2JZncy/tcTNtvBYQmnIND+ttf4+3eQ/k=;
-  b=S3Bm9hdrNdnN+85M4a8cd77Ni6jSq7/hkirhZHtZtVAeSlReCBy6Gh3H
-   0gP+sj0shNEcp8HsAYlLBBkIcIKG3r/soUvoLoV9UGs5+evNMtpEWXGuQ
-   tQmadWZXfuErGt5lrWzCDSIuVoBZbX3UaSI/hZ6Qbbo6AWHgz/tabdpZG
-   yWQssHuPaJ/616kz8rM8QMRn0lf+vykKT3BKjykv7pIRFQ5gqwTZYdwSg
-   O6f7VfjdW04wWcK50GMYwNIYo7pGR19+dmBueS6XBKp61iOcj6lsqVtJ+
-   /PV1GI6zAUF5BvTWmevPs4T3QUwFqoy5MauN54+KqXRv0C6On7RQR+D3H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="219533152"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="219533152"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 07:28:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="615190586"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 07:28:08 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxsfw-0003O3-12; Thu, 16 Dec 2021 15:28:08 +0000
-Date:   Thu, 16 Dec 2021 23:27:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream 80/152] arch/x86/kvm/vmx/tdx_stubs.c:10:5:
- error: no previous prototype for 'tdx_vcpu_create'
-Message-ID: <202112162335.xw8SJ3xA-lkp@intel.com>
+        id S238528AbhLPP3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:29:34 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:42715 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229868AbhLPP3c (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 10:29:32 -0500
+Received: by mail-ot1-f42.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so29339037otv.9;
+        Thu, 16 Dec 2021 07:29:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=nd0xNoxLdpMIETPTqt7EOTZuURPFhkkV6DEMEZNnfsY=;
+        b=dxcHcIHz5LNrvLJ0cYk6A19BLsA9FLDW2QFrKojP3bGuc2mXHSwxeo/WbUZdKHuwS1
+         52qXsQh53ECh7irK6EDhdLz6h7sCg8UhALOD62jPjl1D9HneT6eSjl3eTkKDyqEuxi+N
+         Yru4J0aHWTcu+eTqCjWPprrR1JxDBYDjTcYhNjgWsLLAjDtd4R4WFD1wlHgZUfu2C9vc
+         lB0rAU0tx99L3w7wTzPshvoOncdL94vd3iJVd57mhqBt+s9JK3ufcnZZfhifNfJ1zt4q
+         ML8aiARsKeSxKLg+SACLHKhnrMBlRXl11y363c3NXXiRbc9A0wBjA2qF7klaQMWTe5/6
+         OuYA==
+X-Gm-Message-State: AOAM530dOKKYsNJpnbLhRObAcJ76alONMYJhNDvQoFaFvXfDFFmaaC5M
+        TSNmXamBm4bjuGkCAfUsmw==
+X-Google-Smtp-Source: ABdhPJxkmQtefEO2GB4IesaVw1R5Cx1RYgQ2YBifPAlnsoTenbd4aeBi77x3cWkw+Dtx8+aTJgXrNw==
+X-Received: by 2002:a9d:6a56:: with SMTP id h22mr12884867otn.135.1639668571810;
+        Thu, 16 Dec 2021 07:29:31 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q9sm1078070oti.32.2021.12.16.07.29.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 07:29:31 -0800 (PST)
+Received: (nullmailer pid 251708 invoked by uid 1000);
+        Thu, 16 Dec 2021 15:29:30 -0000
+Date:   Thu, 16 Dec 2021 09:29:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dejia Shang <dejia.shang@armchina.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        toby.shang@armchina.com
+Subject: Re: [PATCH 3/4] dt-bindings: add vendor-prefix and documentation for
+ Zhouyi NPU
+Message-ID: <YbtbWh2dhMhMHMfX@robh.at.kernel.org>
+References: <20211215103609.9268-1-dejia.shang@armchina.com>
+ <20211215103609.9268-4-dejia.shang@armchina.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211215103609.9268-4-dejia.shang@armchina.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream
-head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
-commit: bd5ba6a8b26525834dfa3bc5ade2dc2726b73468 [80/152] KVM: TDX: allocate/free TDX vcpu structure
-config: i386-randconfig-m021-20211216 (https://download.01.org/0day-ci/archive/20211216/202112162335.xw8SJ3xA-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/bd5ba6a8b26525834dfa3bc5ade2dc2726b73468
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream
-        git checkout bd5ba6a8b26525834dfa3bc5ade2dc2726b73468
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Wed, Dec 15, 2021 at 06:36:08PM +0800, Dejia Shang wrote:
+> To enable this NPU IP in Arm-Linux system, SoC vendors should
+> write devicetree files as documented.
+> 
+> Signed-off-by: Dejia Shang <dejia.shang@armchina.com>
+> ---
+>  .../bindings/misc/armchina,zhouyi-npu.yaml    | 57 +++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+>  2 files changed, 59 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml b/Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml
+> new file mode 100644
+> index 000000000000..d3fdea101114
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/armchina,zhouyi-npu.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/misc/armchina,zhouyi-npu.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: ArmChina Zhouyi NPU bindings
+> +
+> +maintainers:
+> +  - Dejia Shang <dejia.shang@armchina.com>
+> +
+> +description: |
+> +  Armchina AI accelerator IP - Zhouyi NPU
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: armchina,zhouyi-v1
+> +      - const: armchina,zhouyi-v2
+> +      - const: armchina,zhouyi
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This says compatible must be a list of all 3 of these.
 
-All errors (new ones prefixed by >>):
+Where do v1 and v2 come from? We don't do version numbers in DT usually 
+unless they correspond to h/w revision registers or h/w documentation. I 
+would assume the h/w follows the Arm rXpY form?
 
-   arch/x86/kvm/vmx/tdx_stubs.c:4:13: error: no previous prototype for 'tdx_pre_kvm_init' [-Werror=missing-prototypes]
-       4 | void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
-         |             ^~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:6:12: error: no previous prototype for 'tdx_hardware_setup' [-Werror=missing-prototypes]
-       6 | int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
-         |            ^~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:7:6: error: no previous prototype for 'tdx_hardware_enable' [-Werror=missing-prototypes]
-       7 | void tdx_hardware_enable(void) {}
-         |      ^~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:8:6: error: no previous prototype for 'tdx_hardware_disable' [-Werror=missing-prototypes]
-       8 | void tdx_hardware_disable(void) {}
-         |      ^~~~~~~~~~~~~~~~~~~~
->> arch/x86/kvm/vmx/tdx_stubs.c:10:5: error: no previous prototype for 'tdx_vcpu_create' [-Werror=missing-prototypes]
-      10 | int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
-         |     ^~~~~~~~~~~~~~~
->> arch/x86/kvm/vmx/tdx_stubs.c:11:6: error: no previous prototype for 'tdx_vcpu_free' [-Werror=missing-prototypes]
-      11 | void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
-         |      ^~~~~~~~~~~~~
->> arch/x86/kvm/vmx/tdx_stubs.c:12:6: error: no previous prototype for 'tdx_vcpu_reset' [-Werror=missing-prototypes]
-      12 | void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
-         |      ^~~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:14:5: error: no previous prototype for 'tdx_dev_ioctl' [-Werror=missing-prototypes]
-      14 | int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
-         |     ^~~~~~~~~~~~~
-   arch/x86/kvm/vmx/tdx_stubs.c:15:5: error: no previous prototype for 'tdx_vm_ioctl' [-Werror=missing-prototypes]
-      15 | int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
-         |     ^~~~~~~~~~~~
-   cc1: all warnings being treated as errors
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  memory-region:
+> +    maxItems: 2
 
+What is each region?
 
-vim +/tdx_vcpu_create +10 arch/x86/kvm/vmx/tdx_stubs.c
+This requires 2 entries, but the example only has 1.
 
-     9	
-  > 10	int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
-  > 11	void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
-  > 12	void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
-    13	
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    reserved-memory {
+> +                #address-cells = <2>;
+> +                #size-cells = <2>;
+> +                ranges;
+> +
+> +                aipu_ddr_reserved: aipu-shmem@0xA0000000 {
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+aipu-shmem@a0000000
+
+> +                        compatible = "shared-dma-pool";
+> +                        no-map;
+> +                        reg = <0x0 0xA0000000 0x0 0x4000000>;
+> +                };
+> +    };
+> +
+> +    aipu0@0x64000000 {
+
+Drop '0x'
+
+> +                compatible = "armchina,zhouyi";
+> +                reg = <0x0 0x64000000 0x0 0x1000>;
+> +                memory-region=<&aipu_ddr_reserved>;
+> +                interrupts = <0 168 1>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 66d6432fd781..4b1865d92455 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -123,6 +123,8 @@ patternProperties:
+>      description: ARM Ltd.
+>    "^armadeus,.*":
+>      description: ARMadeus Systems SARL
+> +  "^armchina,.*":
+> +    description: Arm Technology (China) Co., Ltd.
+>    "^arrow,.*":
+>      description: Arrow Electronics
+>    "^artesyn,.*":
+> --
+> 2.17.1
+> 
+> IMPORTANT NOTICE: The contents of this email and any attachments may be privileged and confidential. If you are not the intended recipient, please delete the email immediately. It is strictly prohibited to disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you. ©Arm Technology (China) Co., Ltd copyright and reserve all rights. 重要提示：本邮件（包括任何附件）可能含有专供明确的个人或目的使用的机密信息，并受法律保护。如果您并非该收件人，请立即删除此邮件。严禁通过任何渠道，以任何目的，向任何人披露、储存或复制邮件信息或者据此采取任何行动。感谢您的配合。 ©安谋科技（中国）有限公司 版权所有并保留一切权利。
+> 

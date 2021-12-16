@@ -2,188 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41EF476D2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2F2476D36
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235150AbhLPJPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 04:15:15 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:44052 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbhLPJPN (ORCPT
+        id S235178AbhLPJRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 04:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235164AbhLPJRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:15:13 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1D8491F45C;
-        Thu, 16 Dec 2021 09:15:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1639646112; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iCJETPFpLo2gcZMngHj4lclPO1rxr+YH1Y2lzIAxUxo=;
-        b=bqDupYBuHiSglmKWfbAuI53QPCMraLxGb66kuE5EVlQU2lFuTUqxpEe89/3qBWfqHque3Z
-        QrhYmBqNl9XnX7PrVil/DaEIimUWbNS6Okmnl7QRH0dJ2Kcx8p0vxd1czrgjaZezd9b3bF
-        vYjNcORZO1A73HjCIKnL0EHpt+HC2C0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1639646112;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iCJETPFpLo2gcZMngHj4lclPO1rxr+YH1Y2lzIAxUxo=;
-        b=qvFUb4hBEpa5h3nlZb+lT0W9Vomy99O/PPTUryk/C8Ns1oM1lxgcFLP+CMHTnZYekcKqB8
-        TNkWaAHs6EpXLZDw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 7C9E4A3B8C;
-        Thu, 16 Dec 2021 09:15:07 +0000 (UTC)
-Date:   Thu, 16 Dec 2021 10:15:11 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     Petr Mladek <pmladek@suse.com>, jikos@kernel.org,
-        joe.lawrence@redhat.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] livepatch: Allow user to specify functions to
- search for on a stack
-In-Reply-To: <20211215184707.e3iagidkvnpx2fb4@treble>
-Message-ID: <alpine.LSU.2.21.2112161002340.7559@pobox.suse.cz>
-References: <20211210124449.21537-1-mbenes@suse.cz> <20211210124449.21537-2-mbenes@suse.cz> <20211213190008.r4rjeytfz5ycbstb@treble> <alpine.LSU.2.21.2112140857570.20187@pobox.suse.cz> <YbiNsVfoCPCJmOKj@alley> <Ybi6252hKwUM4KrP@alley> <20211214234836.3x3clp45ut6gtol6@treble>
- <Ybn9piT9Z83SKaCK@alley> <20211215184707.e3iagidkvnpx2fb4@treble>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Thu, 16 Dec 2021 04:17:20 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DE2C06173E;
+        Thu, 16 Dec 2021 01:17:20 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id d21so15414552qkl.3;
+        Thu, 16 Dec 2021 01:17:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WqQ0KJAV/sB2BrhVHdi1jGSeQPiM2L9NcTy4hRpXIq0=;
+        b=Q2NlOsPmRia8fogvyzJ8O4+S8/SSoC6qKL9pzJ1EQ2wRmeDAT57E4upsdqTBFu3Tot
+         uD4H5vaYO2GGxyBYP7ioeA1TggvRw1G5dOiTDltaho8fmhkh+VcuDjjLzjGILGgu0+hp
+         GoV426LwXjnVGgUICOxOZligXJ8C1cnSBLwrk1gOusU+ml5tsZKefiNgSkOFwunUFZtm
+         4Wy/5wszIqkC1ElWMWYbNYSYoXY3PxQium5u08Yxo3Qx2c7fUyNFyIj2C/qfo7gaXQG1
+         XQwL+LFtDBOU7ozXqnslibgwRXa9mwf+4KTVHiYV89F0I4TDO0wMWUEp8AskytLsScuZ
+         44lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WqQ0KJAV/sB2BrhVHdi1jGSeQPiM2L9NcTy4hRpXIq0=;
+        b=3PqdDfNHZRhNGb8v7AnusiyqaxuVZQ0nSXYfO0buhz4B4jJkGYC9X9IgwDglB1zeaS
+         sT3qqe1j4g4yz+iGNpOb8YLi0bvjeK4woOBcQYTP5V9ECtqHGkN5Ki1Gcm+avuRpZuw1
+         t3v3SLn8WOdvsc2E8Mg00MiaK1tzCzy7u+yswGPDmqLrB7P6fQUgkl7n1pXkVnPp+I8W
+         Yd7eOzkylQps9Y/K9JyswBIFZJ88qTsTCOP31vZD9Abo7tHn5TX4fe9vQ1BRyg9B/bL5
+         dAwtCsP26efeNqSMfofpsrGTI/vIhh0gYzRg8+2seoqa/OFeR4gqsguXab1O3H3o8I63
+         PX8w==
+X-Gm-Message-State: AOAM530BUDwiPUz7f9h1c04Fa/OJzrWeIeoyS2LZ99vfJr08VH9irE8C
+        VI7EobgtylAEFvKFNx4aAlk=
+X-Google-Smtp-Source: ABdhPJxQez2uKtCH1lS2Qr4sSt/5Q8RcxuKhMKuo/J5SeEmcu2wcApDpVIrZMbuwRV/bxX+tkrNyAA==
+X-Received: by 2002:a05:620a:4045:: with SMTP id i5mr11266578qko.592.1639646239514;
+        Thu, 16 Dec 2021 01:17:19 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id o10sm3698169qtx.33.2021.12.16.01.17.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 01:17:19 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     ajay.kathat@microchip.com
+Cc:     claudiu.beznea@microchip.com, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] wilc1000: use min() to make code cleaner
+Date:   Thu, 16 Dec 2021 09:17:13 +0000
+Message-Id: <20211216091713.449841-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Dec 2021, Josh Poimboeuf wrote:
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-> On Wed, Dec 15, 2021 at 03:37:26PM +0100, Petr Mladek wrote:
-> > > Hm, this is different than how I understand it.
-> > > 
-> > > In the past I referred to the "parent" as the function which jumps to
-> > > the cold ("child") function.  So maybe we're getting confused by
-> > > different terminology.  But here I'll go with the naming from your
-> > > example.
-> > 
-> > I think that I was primary confused by the selftest where "child"
-> > function is livepatched and "parent" is defined as stack_only.
-> 
-> Ah, I guess I didn't look too closely at the selftest.
+Use min() in order to make code cleaner.
 
-The selftest really does not help in understanding the problem. It is 
-artificial just for the purpose of testing the API.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ drivers/net/wireless/microchip/wilc1000/spi.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-And as the discussion shows, there may be different scenarios in which the 
-stack_only entries could be used. That does not help either.
-
-Anyway...
+diff --git a/drivers/net/wireless/microchip/wilc1000/spi.c b/drivers/net/wireless/microchip/wilc1000/spi.c
+index 6e7fd18c14e7..629ba5d7a7df 100644
+--- a/drivers/net/wireless/microchip/wilc1000/spi.c
++++ b/drivers/net/wireless/microchip/wilc1000/spi.c
+@@ -675,10 +675,7 @@ static int wilc_spi_dma_rw(struct wilc *wilc, u8 cmd, u32 adr, u8 *b, u32 sz)
+ 		int nbytes;
+ 		u8 rsp;
  
-> > > Instead I was thinking child_func.cold() should be stack_only.
-> > > 
-> > > e.g.:
-> > > 
-> > > static struct klp_func funcs[] = {
-> > > 	{
-> > > 		.old_name = "child_func",
-> > > 		.new_func = livepatch_child_func,
-> > > 	},
-> > > 	{
-> > > 		.old_name = "child_func.cold",
-> > > 		.new_name = "livepatch_child_func.cold",
-> > > 		.stack_only = true,
-> > > 	},
-> > > 
-> > > Any reason why that wouldn't work?
-> > 
-> > Yes, it should work in the given example. I am just curious how this
-> > would work in practice:
-> > 
-> > 
-> >   1. The compiler might optimize the new code another way and there
-> >      need not be 1:1 relation.
-> >
-> >      We might need another set of stack_only functions checked when
-> >      the livepatch is enabled. And another set of functions checked
-> >      when the livepatch gets disabled.
-> 
-> Regardless I'm thinking the above approach should be flexible enough.
-
-Agreed. I think it is the best idea so far.
+-		if (sz <= DATA_PKT_SZ)
+-			nbytes = sz;
+-		else
+-			nbytes = DATA_PKT_SZ;
++		nbytes = min(sz, DATA_PKT_SZ);
  
-> If the patched child_func no longer has .cold, set 'new_name' to NULL in
-> the stack_only entry.
-> 
-> If the original child_func doesn't have .cold, but patched child_func
-> does, set 'old_name' to NULL in the stack_only entry.
-> 
-> If there were ever more than one of such "sub-functions" (which I
-> believe currently doesn't happen), the author could create multiple
-> stack_only entries.
+ 		/*
+ 		 * Data Response header
+-- 
+2.25.1
 
-All makes sense.
-
-> >   2. The names of "child_func.cold" functions are generated by
-> >      the compiler. I mean that the names are "strange" ;-)
-> > 
-> >      It is likely easier with the kPatch approach that creates glue
-> >      around already compiled symbols. It is more tricky when preparing
-> >      the livepatch from sources. Well, it is doable.
-> 
-> kpatch-build has checks for symbols with ".cold" substring.  I'm
-> thinking it would be easy enough for you to do something similar since
-> you're already checking for other compiler optimizations.
-
-Yes, it should not be a problem.
-
-> > BTW: livepatch_child_func.cold function must be checked on the stack
-> >      also when the livepatch is replaced by another livepatch.
-> > 
-> >      I mean that we need to check two sets of stack only functions
-> >      when replacing one livepatch with another one:
-> > 
-> > 	+ "new_name" functions from to-be-replaced livepatch (like when disabling)
-> > 	+ "old_name" functions from new livepatch (like when enabling)
-> 
-> Urgh, this is starting to give me a headache.
-
-Haha, it is always like this, isn't it? We come up with something which 
-seems to be quite simple at the beginning and then all these different 
-live patching features start to re-appear :D. I admit that it has already 
-given me headaches.
-
-> Could we put the cold funcs in a klp_ops func_stack to make this work
-> automatically?
-
-Maybe. It would definitely be nice to solve it for "almost free" somehow.
-
-> Alternatively we could link the .cold functions to their non-cold
-> counterparts somehow.  So when checking a function's stack, also check
-> it's linked counterpart.  It could even be part of the original
-> function's klp_func struct somehow, rather than having a dedicated
-> klp_func struct for the stack_only thing.
-
-On the other hand, we would lose an opportunity to have a solution also 
-for non .cold cases. As Joe mentioned, he had to introduce artificial nops 
-to functions just to have them in a final live patch. But yes, maybe it 
-will end up as a too ambitious goal.
-
-> Or we could just give up trying to abstract this entirely, and go back
-> to Peter's suggestion to just always look for a ".cold" version of every
-> function in klp_check_stack_func() :-)
-
-No, not yet.
-
-> I dunno...
-
-I will prepare v3 and we will see then.
-
-> > Note that I do not have any strong opinion about any approach at the
-> > moment. I primary want to be sure that I understand the problem correctly :-)
-> 
-> Same here.
-
-Thanks for the discussion. It definitely helps. I cannot say I 
-understand the problem completely but it definitely helps :)
-
-Miroslav

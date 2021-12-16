@@ -2,82 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 370F7476879
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 429E447687B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbhLPDIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 22:08:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
+        id S233242AbhLPDJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 22:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbhLPDIy (ORCPT
+        with ESMTP id S233235AbhLPDJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 22:08:54 -0500
-Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60C83C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 19:08:53 -0800 (PST)
+        Wed, 15 Dec 2021 22:09:08 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EC2C06173E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 19:09:08 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id y12so80736636eda.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 19:09:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=w1vsd7Ganf
-        bTXy86A2IeFU7xbgNKpgAWPzP/c6CKamE=; b=g2kIdfjkrZ5wS6F0JaJfzCMcxq
-        3otmN4Vji2nZ1yida2pXjtGnIO9FFmpg5KJ078Y51mmDe83sFic/tinCVokU4FVZ
-        KYI07Ptwsct6hyCwMiP3BbT36Z/6C+00KgmNrO0a9S3haE9JamMYHeuhtAf+kW2w
-        WB8Mpl9lANQOhGaPs=
-Received: from localhost.localdomain (unknown [106.11.196.156])
-        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygCXn2+2rbphTDl6AA--.300S4;
-        Thu, 16 Dec 2021 11:08:39 +0800 (CST)
-From:   zhuxinran <zhuran@mail.ustc.edu.cn>
-To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        zhuxinran <zhuran@mail.ustc.edu.cn>
-Subject: [PATCH] virtio: fix spelling error
-Date:   Thu, 16 Dec 2021 11:08:36 +0800
-Message-Id: <20211216030836.81989-1-zhuran@mail.ustc.edu.cn>
-X-Mailer: git-send-email 2.33.1
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Lje1M8fEo6DqmEjhXATqFrYTjHDX9JBJwkV0ixZ0v6E=;
+        b=FAUv9zoKznXIp7awZ/uqRKrLIRSM8nur5nQRTRyRFx8ZmquDKh/nEX60ONsbGorfmx
+         pX2ZUz3Rka/cfIHYor3Vsv11i/wpAw/S2ZvfoyduHMz+XZYi2ZvjeBdpR7RiTaLPehcd
+         23fDLdkjeYQgWjDvILCv3VgRccaH7/pu5txhn637qqCdKlBH+xchTQ5LTOHmebUE6zzr
+         DDFOJMnWk95UnHYzihj7scHnGDDAh8WTTv/91IpYepbkbEnhUXY+wPb8Y2T8DxllysSF
+         fndMqhSisvC0+ewZT04HCqFl+5mmc8f2WA6b19WSVqUBbbSaoV8bqhcOj9EkQX1Icr0b
+         xkVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Lje1M8fEo6DqmEjhXATqFrYTjHDX9JBJwkV0ixZ0v6E=;
+        b=g+48mXI4ry+jP5vLuGTsFA0cySYw5lMRrzu36zEENFQzYCpeljYtiprbQ4zmIROl19
+         cMG8ae8vgTroeXBIfuESRvsVUPbVeVZArqIxjHEzMn/2pMhoD0bv3DF52b4Q4zUQoabi
+         +qGWlB690BbwCTJbJCPU0eGiMgb+uCqs7Vq7nxAJM5toPoeESb3DmxneFsTyt/r6bMVm
+         2V/81B/mMsCZgQBToX/0XwmiDgn+2sFX5cI8to/Uc3jImN/UmUraMwdurpXUXEqpVMih
+         Ub2sAhRxSL81A1RwDk/A8Dcshk8x0Rcdb+HkWcaN3nTUQGokkZTa/xRGeGI5N4PmFYns
+         rw8g==
+X-Gm-Message-State: AOAM531GblpDP4pxIKYCy36cvkCCsQ2kehX43AsBxgf0Qg6+LK6QAeip
+        m4xFY8xbXybM+pW55QGAvpe/2RcnAngqIEh4tb1dHw==
+X-Google-Smtp-Source: ABdhPJyfHFoXy1YWOa3VK2Y8/3+RovqmxRBexdslZV2/xHao/xtCdqp2Ds3ZXOjZu77elDmPSipWcLmstLo43Keh+2M=
+X-Received: by 2002:a17:906:9b92:: with SMTP id dd18mr14227394ejc.425.1639624146472;
+ Wed, 15 Dec 2021 19:09:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LkAmygCXn2+2rbphTDl6AA--.300S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7JF1xur4Uur4UZrW5ArWfuFg_yoWfCwbEka
-        48X39Fvr1UAFW3CrWUCw4rXrn2kw4xWa1UX39xKayI934DXFs8W3ykKr9xX3W8Wr4DCrn7
-        tFWDXrn0vw13ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbwkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
-        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-        xKx2IYs7xG6r4j6FyUMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
-        wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
-X-CM-SenderInfo: x2kx2t3q6ptxnoox23vfohv3gofq/
+References: <20211215172026.641863587@linuxfoundation.org>
+In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 16 Dec 2021 08:38:55 +0530
+Message-ID: <CA+G9fYt79R7iH6YCZpc=UcFXWJD4xZU4mY6Cq=UPi-gLFVxuhQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/42] 5.15.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-start my first kernel patch commit
+On Wed, 15 Dec 2021 at 22:52, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.9 release.
+> There are 42 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.9-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: zhuxinran <zhuran@mail.ustc.edu.cn>
----
- net/9p/trans_virtio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/net/9p/trans_virtio.c b/net/9p/trans_virtio.c
-index bd5a89c4960d..f7dc561ca516 100644
---- a/net/9p/trans_virtio.c
-+++ b/net/9p/trans_virtio.c
-@@ -648,7 +648,7 @@ static int p9_virtio_probe(struct virtio_device *vdev)
-  * @args: args passed from sys_mount() for per-transport options (unused)
-  *
-  * This sets up a transport channel for 9p communication.  Right now
-- * we only match the first available channel, but eventually we couldlook up
-+ * we only match the first available channel, but eventually we could look up
-  * alternate channels by matching devname versus a virtio_config entry.
-  * We use a simple reference count mechanism to ensure that only a single
-  * mount has a channel open at a time.
--- 
-2.33.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.15.9-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 1388dadc57b7c1ac72c57901d99babdf578e5e73
+* git describe: v5.15.8-43-g1388dadc57b7
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.8-43-g1388dadc57b7
 
+## No Test Regressions (compared to v5.15.7-171-ge18bff95c819)
+
+## No Test Fixes (compared to v5.15.7-171-ge18bff95c819)
+
+## Test result summary
+total: 99807, pass: 84746, fail: 1229, skip: 12858, xfail: 974
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 255 passed, 4 failed
+* arm64: 37 total, 37 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 36 total, 36 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 30 passed, 4 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* riscv: 24 total, 16 passed, 8 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 37 total, 37 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

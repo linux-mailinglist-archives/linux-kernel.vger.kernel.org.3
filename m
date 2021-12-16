@@ -2,95 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD219476747
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E5F476752
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbhLPBLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 20:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S232511AbhLPBMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 20:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbhLPBLL (ORCPT
+        with ESMTP id S229548AbhLPBMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 20:11:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9587C061574;
-        Wed, 15 Dec 2021 17:11:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6896561B8A;
-        Thu, 16 Dec 2021 01:11:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1179C36AE0;
-        Thu, 16 Dec 2021 01:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639617070;
-        bh=O5wbkmfaan7+aEG5Q8QCevqGxxIFLUqB6wy+7SqPZyo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tSUn/K3jQ6YOx4Q/U9xEkCJZBB92pf46s1dLfpg3aGvZH4eesqFvHtK+69BIK8StE
-         1brdtlsPGL+38Ls0PTvrvGdl3f+GHAmB2IZ8jTnaGZMmjqjqCaUcj0hn3RNAaKrPZA
-         bAAvDtiTVq0Y/Zn2fgep5QkPeLSA9yiXTgEWZ+Bmnf4jap6bngiRomupPFyLDX3Tnb
-         JGzToJFuRfcusA54mljXMSY9lEbOLRjG5u4rY8PRVlQbe0hxUwcVBUmaZQSnFA8S3j
-         KIJ/nMOJHElAu5qdMUC86rp4DJ3k5PrrtD0Zr/xltumsXUmyKPjfXOiT+fEyJXl+Jq
-         DwEnlDBysj1Fw==
-Received: by mail-ed1-f50.google.com with SMTP id r11so80063967edd.9;
-        Wed, 15 Dec 2021 17:11:10 -0800 (PST)
-X-Gm-Message-State: AOAM531FPFM5sxVtfy5uKEQfwE+PN6To+PxfkHAXSGMOqbmuVzt4Fuhm
-        juqvcuq4yxOlGOdcR5SuUXhPBYJIlqpXp5Phog==
-X-Google-Smtp-Source: ABdhPJxO/PLxW71C9IoE+8QCxnCUUOHY6hiwFdc4jnLHohXaZR+NlWFK6RpEDFsAtd2JCTLMDG79wsDzsl8OeOqF9tk=
-X-Received: by 2002:a17:907:9256:: with SMTP id kb22mr12916123ejb.423.1639617069136;
- Wed, 15 Dec 2021 17:11:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20211215144500.64284-1-david@ixit.cz>
-In-Reply-To: <20211215144500.64284-1-david@ixit.cz>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 15 Dec 2021 19:10:57 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJMMCBnukFZLJ8X14s1PwqT=VEwKjDVj8mm4h55pZpcuw@mail.gmail.com>
-Message-ID: <CAL_JsqJMMCBnukFZLJ8X14s1PwqT=VEwKjDVj8mm4h55pZpcuw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: timer: add #size-cells 2 for ARM
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Caleb Connolly <caleb@connolly.tech>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 15 Dec 2021 20:12:22 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D2FC061574;
+        Wed, 15 Dec 2021 17:12:21 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id n15-20020a17090a394f00b001b0f6d6468eso866430pjf.3;
+        Wed, 15 Dec 2021 17:12:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=udXZAQy4E0Faqhl32LNiPMBQIiDIHS8mQ2zOfVP9VxQ=;
+        b=REdkhUvTNyU0AcmAdgv/UT5WJ6BEAy8e5t2CPPr8oh1ul/2ckLIGcRiUvGQ16e0gZb
+         a+t6YrjTlD2urpuqybwe99EAgFr7Q9iLAGToMWJnyMs1oOg0/DpOPzEkpjN148UFBol2
+         LclUlhxQbvFezJkizYIZCuasBwKTgmWWC9LtP44blnySktHi9RT508gtOJw2EQfgEwfG
+         eKcWA8fF8Mbcw1MyDdTPXwZVfIwTTOgSG+tSgBMGRN3HZInqYmb3zUztn600QMBi7hAY
+         Jqc6zanIoGc4octznLTStjcKXWAlQdDR82UctYWfobVhTuTMI7848V+WzuCdrpawytYO
+         G03A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=udXZAQy4E0Faqhl32LNiPMBQIiDIHS8mQ2zOfVP9VxQ=;
+        b=EhFaYh5KN9GFpe4W+wOzG+HLvoOz7AMdqkuCEvD185ioKwpjvKU7zGTMzBtpkcF7Hg
+         m698AJMxxvfdmjlOdnquIIw/k9RDAGCLzYgTJbRg054B7LK4N9P3uxTVcEoe4Lp3Mg2k
+         Ak07v/FLN7hDA4D7MezJtwwIMmELxk4q+iaU+4cqXTGZxXcibO7Ms7d5NkOPmuYXTj0z
+         aMeTI+dmYhpb2R4VXdfWFBgsXZ6EMxSKl/gTCfCM2r6kyr52wlgUvz1b8A/YQjm7vNCd
+         i8KD3EiTmZz+yDj/TOKollc4Z4mgiAwoppjQ4NfgOMkYAjAoAVQtud1vjzufDwmE8Sak
+         ej+A==
+X-Gm-Message-State: AOAM532lkcMOy6mLFnbXML5No9P1bWmiWKRx1cX5OHPIX/guyqU52mcS
+        foMIUqgbjs9qIxNWfkjYrEQZ5BW+uV46kV/kTGE=
+X-Google-Smtp-Source: ABdhPJyjew+HCIxrWGu6UJL7DSRx3OB8g54R+wvS1o+LSihBTLiULJ05Ppvo7m/5HpEGH/SbhKyoGg==
+X-Received: by 2002:a17:90a:6d23:: with SMTP id z32mr3040587pjj.144.1639617140735;
+        Wed, 15 Dec 2021 17:12:20 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id j7sm7428363pjf.41.2021.12.15.17.12.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 17:12:20 -0800 (PST)
+Message-ID: <61ba9274.1c69fb81.62ec3.4c04@mx.google.com>
+Date:   Wed, 15 Dec 2021 17:12:20 -0800 (PST)
+X-Google-Original-Date: Thu, 16 Dec 2021 01:12:18 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 00/33] 5.10.86-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 8:45 AM David Heidelberg <david@ixit.cz> wrote:
->
-> It's already widely used by dt-schemas, so I blindly assume it's correct.
->
-> Fixes warnings as:
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: timer@17c90000: #size-cells:0:0: 1 was expected
->         From schema: Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
+On Wed, 15 Dec 2021 18:20:58 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.86 release.
+> There are 33 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.86-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-That's somewhat on purpose. There's no reason the timer needs >32-bits
-of address or size. Sadly, QCom has ignored the warnings and just
-copy-n-pasted the same thing over and over.
+5.10.86-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
->
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml          | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml b/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
-> index cd2176cad53a..c061bb90b8e7 100644
-> --- a/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
-> +++ b/Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
-> @@ -30,7 +30,7 @@ properties:
->      enum: [1, 2]
->
->    '#size-cells':
-> -    const: 1
-> +    enum: [1, 2]
->
->    ranges: true
->
-> --
-> 2.34.1
->

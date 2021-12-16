@@ -2,222 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2570478088
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 837754780A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237287AbhLPXbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235555AbhLPXbU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:31:20 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F138EC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:31:19 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso747146otj.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:31:19 -0800 (PST)
+        id S229590AbhLPXdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:33:19 -0500
+Received: from mail-bn1nam07on2104.outbound.protection.outlook.com ([40.107.212.104]:17383
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229470AbhLPXdS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 18:33:18 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c5aTp5oPfqEDzjC3pvVFm6nBIBdSceoxzYzFnVSlDT4aCADxSDayEUBIVphxRWxpxL7+QHDURxGh3VRRb7kYsv0GiTM4wxZVUQt0MuEw8AZW9jSse9Y7BFtIsUlGxBzp4F5v5pn0cbERMCkWsdki1AxZLOZDuTqO3SWvq8AgFfnZ7iCqW1/w+fwJjfUDqmH++cweqF/mcT6i4NoykIJa1yEveEuvyXEnxWBSn21yOA/Ozd3x7Vkc2205wNJd21XyZH9HfBrMVhlTKp5Sk4f31b58sXhjXsgNk6FinQ5KRqf25L2nHzk5mTe3hcVTNyeaz78+3dvs17Iz4Z6A/0+BCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ibAQDggaQVso1YbpDoD8grnwzd+2xLbMe/l0oh+qJ0Q=;
+ b=On0ff5G/zevPWvEYClZjuL+LWcmwAUHF4Z95/Q09wZ0xN1lO4j+XiGSm2+2T7b6j88aM31l92pcvaipNeFi7UIHaUuaqytvdn54NYcldq/xf5D/dLylazAdRdGBJRwhVU/UFoLk0oorgfXrDVZz5Edtvi17DcgJjAO8CUmHCnL4IAqiAmri4LRo1SsgCkH6tG645F8Cm+uS9kCiIoWjYdV6H8lPQBI8rNbuMIZZ4vSNZh7wXLnubNMofqwgj1CsINIVYHWcP4xojTqS9oRajou2fnQy11zejRWsKB4l2eKBJhm15Bf71K52Brj1R6wQPp6w0SkEIfu5UexLEUtTsKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=amperemail.onmicrosoft.com; dkim=pass
+ header.d=amperemail.onmicrosoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NXP5aZIeipXTUi98du3BOF/PkToplyAfCgzX8CANNdQ=;
-        b=zFKdJmuecI72DotbzBckf7qeXzkcTKD+nGjYIEKibmNcyUgZxg+6KuEFFZcd+do1MC
-         44PNU6KqyaSlhEL7ew/u3e91AJFyCaBBnZeToKl4PrD0reR/1dCnRpTDQlAoRdpfN1Z+
-         LiSXhmO24W1NyyNSHQWI8lU5LnhkEqTaVI1woRGfzG6OOV9rKc+cwGR7EF8Z0wBf3Lc/
-         hFOgtUxWcfJnuY1kM/vbo+/yx1V7ikqFdQ1YPhUrHluDgJ9S2eIffby7X0Wc5v/dgvfX
-         BjTrWikZ59iRC8yX2nJ+LYR4WvJg76RE0qLI4u82mKoF8kRkysN5HhPnnW5Akn79gFLI
-         evug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NXP5aZIeipXTUi98du3BOF/PkToplyAfCgzX8CANNdQ=;
-        b=xW13C1pHr8W/DM2CHozBb9Xuhx0D4U+ygexhS/DydqRl/ZSZ6YTpQkUWNRPzbGGBkk
-         u2lSDIEz7NOByu7679jdgSfs0etSPvKL3H19JAiKy/ecY1WhxOWChz4GegOAWPvgqNGC
-         wgsNUbJDLlnIBDS+jl9umL2cAWhfp4QVuTvApVd84Vsh12aVN1rxbnqCaNZDDiQgRSy+
-         a7MF6Cgm6xBHXEHpRFrB80sPPat9PGmJhuCoSqbX8CLm7f17aQprGOUQtkv17Sj6xUHt
-         dQ8xqQtbI25yu2xRggg3e/8NuHpIiLkTtqUsGMywZ+kjAMW2WymDtXHIsBORmVeESwWM
-         bLuQ==
-X-Gm-Message-State: AOAM530laUAfIxyYWPwai0gZNFPkJlknnAV5cwa/24CoeBoLAr/+Dkp2
-        1gfTx/CIKx+Po7nT71eO5caeoA==
-X-Google-Smtp-Source: ABdhPJx/NpkKAmabEITTnvIJ5WsOnzArrDjDEsBnlWblCgVJ+Hxk8mVhpGbmPRyJrNWtK6Oodd0Xrg==
-X-Received: by 2002:a9d:7548:: with SMTP id b8mr338973otl.92.1639697479143;
-        Thu, 16 Dec 2021 15:31:19 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id g17sm1266613oiy.14.2021.12.16.15.31.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 15:31:18 -0800 (PST)
-Date:   Thu, 16 Dec 2021 15:32:32 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Amit Nischal <anischal@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>, dmitry.baryshkov@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: qcom: rcg2: Cache rate changes for parked RCGs
-Message-ID: <YbvMkIhdsGdCfvFV@ripper>
-References: <20211203035601.3505780-1-bjorn.andersson@linaro.org>
- <20211216015136.96AD3C36AE1@smtp.kernel.org>
- <Ybqo+wUv6lNT75tJ@ripper>
- <20211216185856.27406C36AE2@smtp.kernel.org>
+ d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ibAQDggaQVso1YbpDoD8grnwzd+2xLbMe/l0oh+qJ0Q=;
+ b=HhhYUx9DSnXvpGkhWCYp3vmfgSlOJ57Jw5hMIfTWGVYKq9jMqkKRjQbPI4jNVmM1viTUnzSxd/2DFL86JGM4clYkmA2TXke5dP3GgU+oPIV8c/w2sBFH+WFmTHrniY4+rSJD7ZFdiUhtmUJK2Sfwlus3ET1aLQI0QjAzkEk4W2Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
+Received: from CH0PR01MB7033.prod.exchangelabs.com (2603:10b6:610:107::16) by
+ CH0PR01MB6889.prod.exchangelabs.com (2603:10b6:610:102::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4778.16; Thu, 16 Dec 2021 23:33:16 +0000
+Received: from CH0PR01MB7033.prod.exchangelabs.com
+ ([fe80::c8fb:e830:d7e5:bdf7]) by CH0PR01MB7033.prod.exchangelabs.com
+ ([fe80::c8fb:e830:d7e5:bdf7%9]) with mapi id 15.20.4778.018; Thu, 16 Dec 2021
+ 23:33:16 +0000
+Message-ID: <9330bbfb-d016-0283-a5ed-e2f4d5446759@amperemail.onmicrosoft.com>
+Date:   Thu, 16 Dec 2021 18:33:11 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/2] ACPI/AEST: Initial AEST driver
+Content-Language: en-US
+To:     "ishii.shuuichir@fujitsu.com" <ishii.shuuichir@fujitsu.com>,
+        'Tyler Baicar' <baicar@os.amperecomputing.com>,
+        "patches@amperecomputing.com" <patches@amperecomputing.com>,
+        "abdulhamid@os.amperecomputing.com" 
+        <abdulhamid@os.amperecomputing.com>,
+        "darren@os.amperecomputing.com" <darren@os.amperecomputing.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "guohanjun@huawei.com" <guohanjun@huawei.com>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "vincenzo.frascino@arm.com" <vincenzo.frascino@arm.com>,
+        "tabba@google.com" <tabba@google.com>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "jthierry@redhat.com" <jthierry@redhat.com>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "john.garry@huawei.com" <john.garry@huawei.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "zhangshaokun@hisilicon.com" <zhangshaokun@hisilicon.com>,
+        "tmricht@linux.ibm.com" <tmricht@linux.ibm.com>,
+        "dchinner@redhat.com" <dchinner@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Vineeth.Pillai@microsoft.com" <Vineeth.Pillai@microsoft.com>
+References: <20211124170708.3874-1-baicar@os.amperecomputing.com>
+ <20211124170708.3874-2-baicar@os.amperecomputing.com>
+ <TYCPR01MB6160D05580A6E8C9510D25A5E9709@TYCPR01MB6160.jpnprd01.prod.outlook.com>
+From:   Tyler Baicar <baicar@amperemail.onmicrosoft.com>
+In-Reply-To: <TYCPR01MB6160D05580A6E8C9510D25A5E9709@TYCPR01MB6160.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0PR03CA0415.namprd03.prod.outlook.com
+ (2603:10b6:610:11b::26) To CH0PR01MB7033.prod.exchangelabs.com
+ (2603:10b6:610:107::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216185856.27406C36AE2@smtp.kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 48bdbc92-aff1-4976-15ac-08d9c0ec6eff
+X-MS-TrafficTypeDiagnostic: CH0PR01MB6889:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR01MB688961AB48AB9A38CCC1FEACE3779@CH0PR01MB6889.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QAkvjVMQO7xkxa6wkLFzQNbV5wSdO0AAypyrL14/wBAUWHP/SU1QPwG0afUH8Zmga4/5PGyzI64fnUMICROFU1Jm6FP58katyDh+BeY8xE3/jfU3+QxIuU5iLMWZEKmEL875UgjbfIAlZJWdujbW/BXTANqdJNjY5vv3xvjj2z8rewkTYbkAG2ueCi9Cj48AH+4CuAUX5xN8f1kfOW7xqVgraWRdaXROxhLN1lnrCiKHXJZsWJ3uhZFDvGk+2bA/PlBxYEbEdldaWjZpZ7rBHs3L4rwtrs3rmiXThOtvyh6YWc83yIElbpuFWmTHfIRIeT6f5zBhtKCp5v64tiQ8mqJKqvtjp2aammLnKjNOwLVTETaCNhjKmjkCTCV4CfugtoaLIY6d5PVeiSdYkiDVZkXw0+28mvF9ECajE3WYOsy9t2Olb4h+fw5IOYyWCkP0MY7S9gEygdgeG9pD0C5kdSP0Wceb4a9K/gu77Nu8A1Ap7CIPrX86dsw8QmQX2j1QwO5bqtu0kXyp7JzKKdiTi2LqjtZiHzT4ld+Zh8GADuAxMQ23VTevJdp1PjghWCgk6Y4b/aho0FwXp21tDAlyXreXxFCuyVyQ7nuBvNW7bPtYrfCtkTvVCN/IfoMdwe6qUr4KiWHgdjreenrwxJFKVuINwL+xYDkWc8rHj+WOufYo4M731wkMu+JkPuXyByh6EkOhI0YFc4DQgS7QzgrM1Pcd6zJpDEEc4NxO5lN+T2Qb0rPD6rkrjNaJa2VIZxeP
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR01MB7033.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66556008)(5660300002)(2616005)(26005)(38100700002)(83380400001)(66946007)(6506007)(921005)(6512007)(38350700002)(53546011)(6486002)(83170400001)(110136005)(31686004)(66476007)(2906002)(316002)(8936002)(6666004)(8676002)(52116002)(7416002)(186003)(31696002)(508600001)(42882007)(7406005)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHphYXRmdjdPYTBGVWw2c1dwdFJkWlBhc3JiSGFnYWxrRDVSdlhVVGtmSk1h?=
+ =?utf-8?B?MTlHWnVyQUJkcys3bjJKenZuS0NNNlhzSVFKWEZGVmdma1lIOGViM1VMWkpM?=
+ =?utf-8?B?c3oyY1E0Qk5YR3pRZi9kRFpSM1UvcnRJaitCeGdLZC83enl1MkV0bmc1azkx?=
+ =?utf-8?B?b0k4UGFpaHNHeHkzQUpzSkdOWFpGOUZVVm9WemlhZXJhaVdkK3JRcFJmOEJv?=
+ =?utf-8?B?ZkhVU3E1cXFHbHpTaERUS2VtczFROVlXZDVyaVg4Z2RJeEFmQWVVcDV4TEND?=
+ =?utf-8?B?SFl4bVgybldaZW9HZjMwVit4ZENjM1Rpcy84bDVSbmxEODQ0K1pjZml5dVc2?=
+ =?utf-8?B?MkFRN2dqdnUyaWhQRkhJaFY0RHJsdzF0cUdtNFRvOWU0aFh1SDJ2WFNXV0tL?=
+ =?utf-8?B?cDR2dVV1Qk9Dc1Ztdy9vMVNFWE1hVmFoYVkxMlNwTU1Hb1ZDS1JUSXpZU3Fa?=
+ =?utf-8?B?WjRVVjBVbVRnbEQ5TTJuNFFldC9EZkoxVHYrWDNYanA1eklvVjk5WU1RUHFw?=
+ =?utf-8?B?emE1aEFYb2Uxc3h2SlNxcUcycFpnd3hVdkVrdWxIcmlUNU0rM042bndoajc5?=
+ =?utf-8?B?N0FOK1U4TGVici8vSDR2MmNiRmh1NlRqN09PaTduV0ZRSDlhNU95b1hTdHIx?=
+ =?utf-8?B?WlUwT3ZQL1VhYjIxVW84Um5iZWRSWVk4SkllNlVJd0xsaG9jeEc3dStLc2dG?=
+ =?utf-8?B?ZUU0R1o4UGgreXZha2FrMWlzZ01ndytjeDdDRFgzU0ZLOXZHL0VscXRnTzRM?=
+ =?utf-8?B?b3FValRNcDJoZ0lNbnhsSGhtcFpZaHpIMCtadkdJTHdFZHozbzc1Y0kxNTVx?=
+ =?utf-8?B?VjUzOEFWNlJNRVE4UFBuQ0hyd0h0ZWZLSGhSRmZJNlNqSkJGSml5NmxOV3FO?=
+ =?utf-8?B?eWQ3cjVzV2VnYVpVQjZMMGx6VnVmSEJnL1RLUXQxNGNyeEk5dS93RnBJYzlK?=
+ =?utf-8?B?YW81cFFQSGpNUjBPTTBlWVJHUHFwUlIvWk1pWHNUYjFUQyt2djdLUmE5NWtw?=
+ =?utf-8?B?OFJNL3RNeGhGUXp4cm85Y3NVVTJNUDBIeHp3YzdqdUltOTNPb1ZXZWptM1Bz?=
+ =?utf-8?B?dHUzL0RNS1Z6bEF6QjJBRTdvb0drSnlpMnYwNjNCVWUzb1JOUEg1ajlEZjRp?=
+ =?utf-8?B?RW1tOGpNN05va09pUG5OZ3ZGU3BTV3RSMjJrWlpENTI0S0ZVWmdRZ210dWVL?=
+ =?utf-8?B?alI4dU1CdG1RMmJ2cUFZeDN4eW5Tb1Z5TU5STzJLUHdsc3pmNndDZllrV0Jv?=
+ =?utf-8?B?dXNnYzFZUTFBN3pLZFlJWXROSnFLWVZhNGp2dDR1SDk0QnA4djcvcGE0d1Rv?=
+ =?utf-8?B?NWtKMVpNb1RyMmcwUmUza0hQaXE3VDZVK0JqYmlvZzlFUkxxVkJDVXg5Qnds?=
+ =?utf-8?B?WnhuZnNFTnUrdWNFVWdCNStXV1I5elVFQkRUb3hnQXVnbHdnbFN0U0ZYaExN?=
+ =?utf-8?B?R09KR1dQVnpabld2WW41WWlzNmVIclZZcDgvMkdoOVJpRDQ5U21BckN1bTN1?=
+ =?utf-8?B?cEZWaHZTeDJpUWVtUkt1cXQ5RVJoZDFIV0dEZGhVSWswQlJOM21YWm1HQ3VH?=
+ =?utf-8?B?LzhId1F0a2FxZzlsTlJ5TlFEb2VFYWI2N1ZkYmk3Z2tnOWJqRWxSckJGVmt0?=
+ =?utf-8?B?VnkwN0VTMDhNdFR3cmkzUW9ISzhCLzNwREE2Zi9GWVp1VFBYSnRidjFEVW12?=
+ =?utf-8?B?NnBzYWpsWVE0RFNWMUJyMTZPVE9RbnFySVYwVTlxTDNseEM5Y2lJa0hUOFBY?=
+ =?utf-8?B?cXJLeCtJQk5KTHI0MTlldHRCK2JkYWtPK0M4Y3BUYlhWMEI4ZXdkY2g4U0No?=
+ =?utf-8?B?b0dGKzcrME1hamxURUJtS2g5azgwMExNRWZ0aW1uWnpad3R1VkVUVGRWL0My?=
+ =?utf-8?B?M1pVdFg0d2ZGajREclRzME1ZQThTU2RpMElhQ3diSUh6WDBwQzg3VUlmeWRt?=
+ =?utf-8?B?Y1NSZWdhb2dUbkEzTCtxZXQwNVFvVW82YjE0eG43ZVpzOTkxKzBwUmtFbVdh?=
+ =?utf-8?B?YUo2TnlsVElXb2hsT0U1RGx0VTNUZlRucUFkOHJMb0wrbFN5TzNabUVlTGZC?=
+ =?utf-8?B?TndxYTdwMFkzTDhxcVBiTlVqbWNPNGhQa20yV0g2UGU3UzZJd1hEZURZNTht?=
+ =?utf-8?B?aEJkWlBVMW1IZzVmSndTdC83dVl6UVk5RHA4TjlVTW5KVjN5aTVoQURXa3J4?=
+ =?utf-8?B?ZUllVGJKcFBuQWdubHBsLzRYeVBjbGFOOE13VUtaNWVVTXYycEpPUVh3Z2Ex?=
+ =?utf-8?B?dXh1WEg1V3hmNjduS09OSSt4MVFwZ3VlQTRMcVdqRFZqRWlDRE4xWGtoQThL?=
+ =?utf-8?B?SWwvMitnMzBRYnM2WmpHc2I2UFBDVXYvdGpkbElndHB3SlVKMXhGZz09?=
+X-OriginatorOrg: amperemail.onmicrosoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 48bdbc92-aff1-4976-15ac-08d9c0ec6eff
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR01MB7033.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 23:33:15.9344
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8rD4Rtnw0ekXcbHIh4lAeDZzJf5YUtgw8bbeHn2t0EupLtfHrLDf8x6/TmxGojWeQ7GvS7FC9VwFBgJ4uJIPRORlJECsow4RQhD/TNrF6kliJaw90SjcUMrCqxvEFHN3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB6889
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 16 Dec 10:58 PST 2021, Stephen Boyd wrote:
+Hi Shuuichirou,
 
-> Quoting Bjorn Andersson (2021-12-15 18:48:27)
-> > On Wed 15 Dec 17:51 PST 2021, Stephen Boyd wrote:
-> > 
-> > > Quoting Bjorn Andersson (2021-12-02 19:56:01)
-> > > > As GDSCs are turned on and off some associated clocks are momentarily
-> > > > enabled for house keeping purposes. Failure to enable these clocks seems
-> > > > to have been silently ignored in the past, but starting in SM8350 this
-> > > > failure will prevent the GDSC to turn on.
-> > > > 
-> > > > At least on SM8350 this operation will enable the RCG per the
-> > > > configuration in CFG_REG. This means that the current model where the
-> > > > current configuration is written back to CF_REG immediately after
-> > > > parking the RCG doesn't work.
-> > > 
-> > > Just to clarify, is the RCG off and "parked" at XO with the config
-> > > register dirty and set to the desired frequency and then the RCG is
-> > > turned on by the GDSC?
-> > > 
-> > 
-> > Correct, that's exactly what I'm observing.
-> 
-> Cool can you add that detail to the commit message?
-> 
+Thank you for your feedback!
 
-Sure.
+On 12/9/2021 3:10 AM, ishii.shuuichir@fujitsu.com wrote:
+> Hi, Tyler.
+>
+> We would like to make a few comments.
+>
+>> -----Original Message-----
+>> From: Tyler Baicar <baicar@os.amperecomputing.com>
+>> Sent: Thursday, November 25, 2021 2:07 AM
+>> To: patches@amperecomputing.com; abdulhamid@os.amperecomputing.com;
+>> darren@os.amperecomputing.com; catalin.marinas@arm.com; will@kernel.org;
+>> maz@kernel.org; james.morse@arm.com; alexandru.elisei@arm.com;
+>> suzuki.poulose@arm.com; lorenzo.pieralisi@arm.com; guohanjun@huawei.com;
+>> sudeep.holla@arm.com; rafael@kernel.org; lenb@kernel.org;
+>> tony.luck@intel.com; bp@alien8.de; mark.rutland@arm.com;
+>> anshuman.khandual@arm.com; vincenzo.frascino@arm.com;
+>> tabba@google.com; marcan@marcan.st; keescook@chromium.org;
+>> jthierry@redhat.com; masahiroy@kernel.org; samitolvanen@google.com;
+>> john.garry@huawei.com; daniel.lezcano@linaro.org; gor@linux.ibm.com;
+>> zhangshaokun@hisilicon.com; tmricht@linux.ibm.com; dchinner@redhat.com;
+>> tglx@linutronix.de; linux-kernel@vger.kernel.org;
+>> linux-arm-kernel@lists.infradead.org; kvmarm@lists.cs.columbia.edu;
+>> linux-acpi@vger.kernel.org; linux-edac@vger.kernel.org; Ishii, Shuuichirou/石井
+>> 周一郎 <ishii.shuuichir@fujitsu.com>; Vineeth.Pillai@microsoft.com
+>> Cc: Tyler Baicar <baicar@os.amperecomputing.com>
+>> Subject: [PATCH 1/2] ACPI/AEST: Initial AEST driver
+>>
+>> Add support for parsing the ARM Error Source Table and basic handling of
+>> errors reported through both memory mapped and system register interfaces.
+>>
+>> Assume system register interfaces are only registered with private
+>> peripheral interrupts (PPIs); otherwise there is no guarantee the
+>> core handling the error is the core which took the error and has the
+>> syndrome info in its system registers.
+>>
+>> Add logging for all detected errors and trigger a kernel panic if there is
+>> any uncorrected error present.
+>>
+>> Signed-off-by: Tyler Baicar <baicar@os.amperecomputing.com>
+>> ---
+> [...]
+>
+>> +static int __init aest_init_node(struct acpi_aest_hdr *node)
+>> +{
+>> +	union acpi_aest_processor_data *proc_data;
+>> +	union aest_node_spec *node_spec;
+>> +	struct aest_node_data *data;
+>> +	int ret;
+>> +
+>> +	data = kzalloc(sizeof(struct aest_node_data), GFP_KERNEL);
+>> +	if (!data)
+>> +		return -ENOMEM;
+>> +
+>> +	data->node_type = node->type;
+>> +
+>> +	node_spec = ACPI_ADD_PTR(union aest_node_spec, node,
+>> node->node_specific_offset);
+>> +
+>> +	switch (node->type) {
+>> +	case ACPI_AEST_PROCESSOR_ERROR_NODE:
+>> +		memcpy(&data->data, node_spec, sizeof(struct
+>> acpi_aest_processor));
+>> +		break;
+>> +	case ACPI_AEST_MEMORY_ERROR_NODE:
+>> +		memcpy(&data->data, node_spec, sizeof(struct
+>> acpi_aest_memory));
+>> +		break;
+>> +	case ACPI_AEST_SMMU_ERROR_NODE:
+>> +		memcpy(&data->data, node_spec, sizeof(struct
+>> acpi_aest_smmu));
+>> +		break;
+>> +	case ACPI_AEST_VENDOR_ERROR_NODE:
+>> +		memcpy(&data->data, node_spec, sizeof(struct
+>> acpi_aest_vendor));
+>> +		break;
+>> +	case ACPI_AEST_GIC_ERROR_NODE:
+>> +		memcpy(&data->data, node_spec, sizeof(struct
+>> acpi_aest_gic));
+>> +		break;
+>> +	default:
+>> +		kfree(data);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	if (node->type == ACPI_AEST_PROCESSOR_ERROR_NODE) {
+>> +		proc_data = ACPI_ADD_PTR(union acpi_aest_processor_data,
+>> node_spec,
+>> +					 sizeof(acpi_aest_processor));
+>> +
+>> +		switch (data->data.processor.resource_type) {
+>> +		case ACPI_AEST_CACHE_RESOURCE:
+>> +			memcpy(&data->proc_data, proc_data,
+>> +			       sizeof(struct acpi_aest_processor_cache));
+>> +			break;
+>> +		case ACPI_AEST_TLB_RESOURCE:
+>> +			memcpy(&data->proc_data, proc_data,
+>> +			       sizeof(struct acpi_aest_processor_tlb));
+>> +			break;
+>> +		case ACPI_AEST_GENERIC_RESOURCE:
+>> +			memcpy(&data->proc_data, proc_data,
+>> +			       sizeof(struct acpi_aest_processor_generic));
+>> +			break;
+>> +		}
+>> +	}
+>> +
+>> +	ret = aest_init_interface(node, data);
+>> +	if (ret) {
+>> +		kfree(data);
+>> +		return ret;
+>> +	}
+>> +
+>> +	return aest_init_interrupts(node, data);
+> If aest_init_interrupts() failed, is it necessary to release
+> the data pointer acquired by kzalloc?
+aest_init_interrupts() returns an error if any of the interrupts in the 
+interrupt list fails, but it's possible that some interrupts in the list 
+registered successfully. So we attempt to keep chugging along in that 
+scenario because some interrupts may be enabled and registered with the 
+interface successfully. If any interrupt registration fails, there will 
+be a print notifying that there was a failure when initializing that node.
+>> +}
+>> +
+>> +static void aest_count_ppi(struct acpi_aest_hdr *node)
+>> +{
+>> +	struct acpi_aest_node_interrupt *interrupt;
+>> +	int i;
+>> +
+>> +	interrupt = ACPI_ADD_PTR(struct acpi_aest_node_interrupt, node,
+>> +				 node->node_interrupt_offset);
+>> +
+>> +	for (i = 0; i < node->node_interrupt_count; i++, interrupt++) {
+>> +		if (interrupt->gsiv >= 16 && interrupt->gsiv < 32)
+>> +			num_ppi++;
+>> +	}
+>> +}
+>> +
+>> +static int aest_starting_cpu(unsigned int cpu)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i < num_ppi; i++)
+>> +		enable_percpu_irq(ppi_irqs[i], IRQ_TYPE_NONE);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int aest_dying_cpu(unsigned int cpu)
+>> +{
+> Wouldn't it be better to execute disable_percpu_irq(), which is paired
+> with enable_percpu_irq(), in aest_dying_cpu()?
 
-> > 
-> > > > 
-> > > > Instead, keep track of the currently requested rate of the clock and
-> > > > upon enabling the clock reapply the configuration per the saved rate.
-> > > 
-> > > We already keep track of the requested rate and reapply it on enable,
-> > > just we're lazy and stash that information in the hardware and not the
-> > > software. I didn't think the gdsc would be turned on and ruin that all,
-> > > but it's fair.
-> > > 
-> > 
-> > Up until SM8350 I see no evidence that this has been a problem, but now
-> > it is. So there's likely some changes in the hardware there...
-> > 
-> > > > 
-> > > > Fixes: 7ef6f11887bd ("clk: qcom: Configure the RCGs to a safe source as needed")
-> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > ---
-> > > >  drivers/clk/qcom/clk-rcg.h  |  2 ++
-> > > >  drivers/clk/qcom/clk-rcg2.c | 32 +++++++++++++++++---------------
-> > > >  2 files changed, 19 insertions(+), 15 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-> > > > index 99efcc7f8d88..6939f4e62768 100644
-> > > > --- a/drivers/clk/qcom/clk-rcg.h
-> > > > +++ b/drivers/clk/qcom/clk-rcg.h
-> > > > @@ -139,6 +139,7 @@ extern const struct clk_ops clk_dyn_rcg_ops;
-> > > >   * @freq_tbl: frequency table
-> > > >   * @clkr: regmap clock handle
-> > > >   * @cfg_off: defines the cfg register offset from the CMD_RCGR + CFG_REG
-> > > > + * @current_rate: cached rate for parked RCGs
-> > > >   */
-> > > >  struct clk_rcg2 {
-> > > >         u32                     cmd_rcgr;
-> > > > @@ -149,6 +150,7 @@ struct clk_rcg2 {
-> > > >         const struct freq_tbl   *freq_tbl;
-> > > >         struct clk_regmap       clkr;
-> > > >         u8                      cfg_off;
-> > > > +       unsigned long           current_rate;
-> > > >  };
-> > > >  
-> > > >  #define to_clk_rcg2(_hw) container_of(to_clk_regmap(_hw), struct clk_rcg2, clkr)
-> > > > diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-> > > > index e1b1b426fae4..b574b38dcbd5 100644
-> > > > --- a/drivers/clk/qcom/clk-rcg2.c
-> > > > +++ b/drivers/clk/qcom/clk-rcg2.c
-> > > > @@ -167,6 +167,7 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> > > >  {
-> > > >         struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> > > >         u32 cfg, hid_div, m = 0, n = 0, mode = 0, mask;
-> > > > +       unsigned long rate;
-> > > >  
-> > > >         regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> > > >  
-> > > > @@ -186,7 +187,11 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> > > >         hid_div = cfg >> CFG_SRC_DIV_SHIFT;
-> > > >         hid_div &= mask;
-> > > >  
-> > > > -       return calc_rate(parent_rate, m, n, mode, hid_div);
-> > > > +       rate = calc_rate(parent_rate, m, n, mode, hid_div);
-> > > > +       if (!rcg->current_rate)
-> > > > +               rcg->current_rate = rate;
-> > > 
-> > > Instead of doing this in recalc_rate, all the time, why not make an init
-> > > clk op that does it once during registration? The other problem I see is
-> > > that the rate we calculate may be wrong if the parent is registered
-> > > after this clk. I think this came up originally when the patch this is
-> > > fixing was discussed.
-> > > 
-> > 
-> > I would need to go back and reproduce the issue I saw, but I had to add
-> > this because I ended up in clk_rcg2_shared_enable() with current_rate =
-> > 0, which I think would be equally bad to just committing the dirty
-> > configuration.
-> 
-> Alright.
-> 
-> > 
-> > > So instead of saving the current_rate can we save the cfg register value
-> > > (or however many registers we need) to put back the frequency of the clk
-> > > to what we want on enable? The other thing is that we made recalc_rate()
-> > > work "seamlessly" here by stashing the frequency into the register but
-> > > leaving it uncommitted until enable. We may need to now look at the
-> > > software copy of the registers in the shared rcg recalc rate operation
-> > > to figure out what the frequency is.
-> > > 
-> > 
-> > I made an attempt at this, the problem I had was to come up within
-> > something sane for how to deal with set_rate on parked clocks; because
-> > we need to re-generate the register contents, without writing out the
-> > value - and that got messy.
-> 
-> Looking back on the introduction of this code[1] I see that it's not
-> about the rate but more about the parent. i.e. we park the clk on the XO
-> parent but don't care about the m/n values or pre divider because it
-> doesn't really matter if the clk is running slowly. So nothing needs to
-> be saved except for the cfg register, and we can do that in software
-> with a single u32 instead of using a rate and looking it up and then
-> reprogramming the other values. We should be able to cache the register
-> content with an init clk_op.
-> 
+Good point. I will add that in the next version.
 
-So you're suggesting that, in clk_rcg2_shared_set_rate(), when the RCG
-is found to be disabled, I should write out M, N, D and calculate a new
-cfg value which I stash until the next enable?
+Thanks,
 
-Looks a little bit messy, but I will give it a try.
+Tyler
 
-> > 
-> > So stashing the frequency turned out to be much cleaner. I believe that
-> > this is also what they do downstream...
-> > 
-> 
-> Downstream doing something isn't a great reason.
-> 
-
-:)
-
-> [1] https://lore.kernel.org/r/07dbf890975c1178bc4cc2360c25526a@codeaurora.org
-
-Regards,
-Bjorn

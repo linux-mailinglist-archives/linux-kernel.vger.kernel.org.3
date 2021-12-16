@@ -2,81 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C92C0477530
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB27A477533
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238190AbhLPPAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238029AbhLPPAc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:00:32 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE5BC061574;
-        Thu, 16 Dec 2021 07:00:32 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id y12so87067029eda.12;
-        Thu, 16 Dec 2021 07:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=L049ONQywJ6H/KZx9A7zcZi3+9QPQbN67lLTXpZqhJg=;
-        b=Y0CCyIX577ItMuVjdK7JK8S3erVUlwtSe05Y/0yfQu00Xox2RQ34Mft3N3Tvv+HHf2
-         Tg9+wMomgiknz17BgjyK9WQKsfa48pSUcZmkf1FL8h9JQHUlPqYlC+HvM4Q7UixtljTV
-         U3Mh5WLIFcM6YMuP8Y8ZxqwLEKhRvrOAWL/VuUDsnRFLV9fIw5vFpOws/UPwE24VbR18
-         MlaWMbitpIIpuBtTIY9/Bn9PKJo0teb7IdnF4KVYCQyI83FSHHW2KTAZywmFIkfTuMxK
-         0amWx/yCFeJSIkRZl3A1qGZBNggfeUqJ6x3zHy3augRwPGfIY1eGo/GqKI11YlqXhPqO
-         7Zow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=L049ONQywJ6H/KZx9A7zcZi3+9QPQbN67lLTXpZqhJg=;
-        b=KdYhrtfozbtsAoWY2m0FHJq5eD9uNSvJtPJ7G0O7/yFtbA8hXfI76Mg6Vvvg8eBqSD
-         LLEgPvkfQgDIiS6Ipm6TXfefLdTBcVz4fBUIQgdbBAMznhoH2Q1QsxMh3ACahlMLRtyf
-         0SXsJ6JRTN7w0JH1zTVCQpivvzh2iZ5U23eNDMl9COrpNutKs8s/7DTt1N18+WL5BMRx
-         rLlnFhJXzmONrk2jP4+PgX7d+DvT66OPYlRwl9f3p/nwPMM3NfDcs17O13UDEcSD3/7S
-         wvoja2AdpEtyd6QOrxvvGSfWVahk7Pk7w2WzTAbBNdkHC467FuTRQy2otW0nUaGndQQe
-         KEEQ==
-X-Gm-Message-State: AOAM532NPmR9g9wQEGl0wSeL2lLsymduxoSBtxBbW5FNKI0TmhanwRRX
-        kRh5mrqt4xCNOWfCt+aQowM=
-X-Google-Smtp-Source: ABdhPJwM22q+zKYOW3oqdNbMsAG8SeJf3yN12RL90IIq1gsRVgdIJQLHi/OKiuYN6ZUGrAXAyTlQ6Q==
-X-Received: by 2002:a17:907:7211:: with SMTP id dr17mr14718856ejc.204.1639666826368;
-        Thu, 16 Dec 2021 07:00:26 -0800 (PST)
-Received: from zenorus.myxoz.lan (81-224-108-56-no2390.tbcn.telia.com. [81.224.108.56])
-        by smtp.gmail.com with ESMTPSA id n3sm2473969edw.58.2021.12.16.07.00.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 07:00:26 -0800 (PST)
-Date:   Thu, 16 Dec 2021 16:00:21 +0100
-From:   Miko Larsson <mikoxyzzz@gmail.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
-        axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: Re: [PATCH 2/2] zram: zram_drv: replace strlcpy with strscpy
-Message-ID: <20211216160021.1b9e6d87@zenorus.myxoz.lan>
-In-Reply-To: <YbsRlDYT2BfgrXRX@infradead.org>
-References: <20211215192128.108967-1-mikoxyzzz@gmail.com>
-        <20211215192128.108967-3-mikoxyzzz@gmail.com>
-        <YbsRlDYT2BfgrXRX@infradead.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        id S238200AbhLPPAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:00:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:44790 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238197AbhLPPAi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 10:00:38 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5B081435;
+        Thu, 16 Dec 2021 07:00:36 -0800 (PST)
+Received: from [10.1.26.143] (e127744.cambridge.arm.com [10.1.26.143])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB3F93F73B;
+        Thu, 16 Dec 2021 07:00:34 -0800 (PST)
+Subject: Re: [PATCH v2] perf arm-spe: Synthesize SPE instruction events
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20211215184605.92787-1-german.gomez@arm.com>
+ <20211216111157.GA27239@leoy-ThinkPad-X240s>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <76953319-ec86-02b9-75c3-6e62c15b7f11@arm.com>
+Date:   Thu, 16 Dec 2021 15:00:23 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20211216111157.GA27239@leoy-ThinkPad-X240s>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 02:14:44 -0800
-Christoph Hellwig <hch@infradead.org> wrote:
+Hi Leo,
 
-> On Wed, Dec 15, 2021 at 08:21:28PM +0100, Miko Larsson wrote:
-> > strlcpy shouldn't be used; strscpy should be used instead.
-> 
-> I think the proper API to use here would be kmemdup_nul.
+Thanks for your comments. I'll send a revised patch shortly.
 
-Thanks for the heads-up! That only seems to apply to the assignment of
-'file_name'. The usage of strscpy seems to be correct in the other two
-cases, though (since they're char arrays.) I suspect I might be wrong
-though, since my knowledge of C is shabby at best.
+Thanks,
+German
+
+On 16/12/2021 11:11, Leo Yan wrote:
+> Hi German,
+>
+> On Wed, Dec 15, 2021 at 06:46:05PM +0000, German Gomez wrote:
+>> Synthesize instruction events per every decoded ARM SPE record.
+>>
+>> Because Arm SPE implements a hardware-based sample period, and perf
+>> implements a software-based one that gets applied on top, also add a
+>> warning to make the user aware.
+>>
+>> Signed-off-by: German Gomez <german.gomez@arm.com>
+>> ---
+>> Changes since v1 [https://lore.kernel.org/all/20211117142833.226629-1-german.gomez@arm.com]
+>>   - Generate events with "--itrace=i" instead of "--itrace=o".
+>>   - Generate events with virt_addr, phys_addr, and data_src values.
+>> ---
+>>  tools/perf/util/arm-spe.c | 58 +++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 58 insertions(+)
+>>
+>> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+>> index fccac06b573a..879583822c8f 100644
+>> --- a/tools/perf/util/arm-spe.c
+>> +++ b/tools/perf/util/arm-spe.c
+>> @@ -58,6 +58,8 @@ struct arm_spe {
+>>  	u8				sample_branch;
+>>  	u8				sample_remote_access;
+>>  	u8				sample_memory;
+>> +	u8				sample_instructions;
+>> +	u64				instructions_sample_period;
+>>  
+>>  	u64				l1d_miss_id;
+>>  	u64				l1d_access_id;
+>> @@ -68,6 +70,7 @@ struct arm_spe {
+>>  	u64				branch_miss_id;
+>>  	u64				remote_access_id;
+>>  	u64				memory_id;
+>> +	u64				instructions_id;
+>>  
+>>  	u64				kernel_start;
+>>  
+>> @@ -90,6 +93,7 @@ struct arm_spe_queue {
+>>  	u64				time;
+>>  	u64				timestamp;
+>>  	struct thread			*thread;
+>> +	u64				period_instructions;
+>>  };
+>>  
+>>  static void arm_spe_dump(struct arm_spe *spe __maybe_unused,
+>> @@ -202,6 +206,7 @@ static struct arm_spe_queue *arm_spe__alloc_queue(struct arm_spe *spe,
+>>  	speq->pid = -1;
+>>  	speq->tid = -1;
+>>  	speq->cpu = -1;
+>> +	speq->period_instructions = 0;
+>>  
+>>  	/* params set */
+>>  	params.get_trace = arm_spe_get_trace;
+>> @@ -351,6 +356,33 @@ static int arm_spe__synth_branch_sample(struct arm_spe_queue *speq,
+>>  	return arm_spe_deliver_synth_event(spe, speq, event, &sample);
+>>  }
+>>  
+>> +static int arm_spe__synth_instruction_sample(struct arm_spe_queue *speq,
+>> +					     u64 spe_events_id, u64 data_src)
+>> +{
+>> +	struct arm_spe *spe = speq->spe;
+>> +	struct arm_spe_record *record = &speq->decoder->record;
+>> +	union perf_event *event = speq->event_buf;
+>> +	struct perf_sample sample = { .ip = 0, };
+>> +
+>> +	/*
+>> +	 * Handles perf instruction sampling period.
+>> +	 */
+>> +	speq->period_instructions++;
+>> +	if (speq->period_instructions < spe->instructions_sample_period)
+>> +		return 0;
+>> +	speq->period_instructions = 0;
+>> +
+>> +	arm_spe_prep_sample(spe, speq, event, &sample);
+>> +
+>> +	sample.id = spe_events_id;
+>> +	sample.stream_id = spe_events_id;
+>> +	sample.addr = record->virt_addr;
+>> +	sample.phys_addr = record->phys_addr;
+>> +	sample.data_src = data_src;
+>> +
+>> +	return arm_spe_deliver_synth_event(spe, speq, event, &sample);
+>> +}
+>> +
+>>  #define SPE_MEM_TYPE	(ARM_SPE_L1D_ACCESS | ARM_SPE_L1D_MISS | \
+>>  			 ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS | \
+>>  			 ARM_SPE_REMOTE_ACCESS)
+>> @@ -480,6 +512,12 @@ static int arm_spe_sample(struct arm_spe_queue *speq)
+>>  			return err;
+>>  	}
+>>  
+>> +	if (spe->sample_instructions) {
+>> +		err = arm_spe__synth_instruction_sample(speq, spe->instructions_id, data_src);
+>> +		if (err)
+>> +			return err;
+>> +	}
+>> +
+>>  	return 0;
+>>  }
+>>  
+>> @@ -1107,6 +1145,26 @@ arm_spe_synth_events(struct arm_spe *spe, struct perf_session *session)
+>>  			return err;
+>>  		spe->memory_id = id;
+>>  		arm_spe_set_event_name(evlist, id, "memory");
+>> +		id += 1;
+>> +	}
+>> +
+>> +	if (spe->synth_opts.instructions) {
+>> +		if (spe->synth_opts.period_type != PERF_ITRACE_PERIOD_INSTRUCTIONS)
+>> +			return -EINVAL;
+> Will this break some perf commands, like "perf report" or other perf
+> report commands?
+>
+> See the the function arm_spe_process_auxtrace_info(), it invokes [1]:
+>
+>     itrace_synth_opts__set_default(&spe->synth_opts, false);
+>
+> So synth_opts.instructions is initialized to true,
+> synth_opts.period_type is set to PERF_ITRACE_DEFAULT_PERIOD_TYPE (2),
+> so the perf tool will directly bail out when synth_opts.period_type is
+> not equal to PERF_ITRACE_PERIOD_INSTRUCTIONS.
+>
+> If we only support period type PERF_ITRACE_PERIOD_INSTRUCTIONS at
+> current stage, I think we use the checking like below:
+>
+>   if (spe->synth_opts.instructions &&
+>       (spe->synth_opts.period_type == PERF_ITRACE_PERIOD_INSTRUCTIONS)) {
+>
+>      ...
+>   }
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/perf/util/arm-spe.c#n1180
+>
+>> +
+>> +		if (spe->synth_opts.period > 1)
+>> +			pr_warning("Arm SPE has a hardware-based sample period.\n"
+>> +				   "More instruction events will be discarded by --itrace\n");
+> Okay, Since Arm SPE is statistical profiling, so this is the right thing to
+> do.
+>
+> Please also address Namhyung's two comments, the rest of this patch looks
+> good to me.
+>
+> Thanks,
+> Leo
+>
+>> +
+>> +		spe->sample_instructions = true;
+>> +		attr.config = PERF_COUNT_HW_INSTRUCTIONS;
+>> +		attr.sample_period = spe->synth_opts.period;
+>> +		spe->instructions_sample_period = attr.sample_period;
+>> +		err = arm_spe_synth_event(session, &attr, id);
+>> +		if (err)
+>> +			return err;
+>> +		spe->instructions_id = id;
+>> +		arm_spe_set_event_name(evlist, id, "instructions");
+>>  	}
+>>  
+>>  	return 0;
+>> -- 
+>> 2.25.1
+>>

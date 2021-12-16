@@ -2,91 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90138476D67
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9254E476D6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235420AbhLPJ2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 04:28:44 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:60974 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235360AbhLPJ2k (ORCPT
+        id S232923AbhLPJ3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 04:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230171AbhLPJ3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:28:40 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 16 Dec 2021 04:29:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0980DC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 01:29:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E869621135;
-        Thu, 16 Dec 2021 09:28:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639646918; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fGxktS/Uc4QdkNKSXK/IVadOzTG1ebMs/QUmVV6nIcE=;
-        b=Eh2Wx8s9jDwfC6jxKZuaZRo24mG2IrIk9796h9H2/iwEim4E06TJFI8j6yq9/wyc9rjpJo
-        396WeJCIzR7D9qq7Fr4tJgnwzwqPCQ6m9OgWHc/zxKAv52j9ARDUZxGkKQjCS636XLM66F
-        Tp76ek5AjK/Gkf8uXf/sx+eEV3Povs0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AABE813C1F;
-        Thu, 16 Dec 2021 09:28:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Y/wQKcYGu2FtYQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 16 Dec 2021 09:28:38 +0000
-Date:   Thu, 16 Dec 2021 10:28:37 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v9 3/7] cgroup/cpuset: Refining features and constraints
- of a partition
-Message-ID: <20211216092837.GB46450@blackbody.suse.cz>
-References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-4-longman@redhat.com>
- <20211215144944.GE16798@blackbody.suse.cz>
- <98887e63-51de-f5ad-8fb8-56269aaf4bcf@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC9B0B82319
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:29:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA47C36AE4;
+        Thu, 16 Dec 2021 09:29:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639646953;
+        bh=wYZaZmq3IBeC5Gbj02uBtH5ax5/iy+aj7QBVSw1iftU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JoqlUn3AGhLcUEuEk78r9FONMbPX6ns+sjj/3VlqnwKCgMNsKMxQ/Srt89CGPejFW
+         ecPChnSvkDMiNnF7FwJmyZ0XQxuW7UwrFSquBba4ddyL1yCjMq2JgmGKuFvWTh9nTa
+         MRBA+ZEZWxi3QUPBv4xbBJOxo+QdHVDvbt8qXX6liUc7N7iY4mGJROVVjosI9fHKkl
+         nTGcVza+7Hrg1J80H6wuY4YMAfu8Yd0cI+p9cDwhoGNfw8f/VtlHZ3ZqS2VxbeVM1l
+         2bwYFTldaDCmLcXZut8kmVsadH7GiWbRndZm8FomEL4lMyibonyE2/8OE1qzvd99+r
+         yIMsJc35EWThA==
+Date:   Thu, 16 Dec 2021 17:29:09 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yangbo Lu <yangbo.lu@nxp.com>
+Subject: Re: [PATCH v3 09/10] arm64: dts: lx2162a-qds: support SD UHS-I and
+ eMMC HS400 modes
+Message-ID: <20211216092908.GG4216@dragon>
+References: <20211214072342.22692-1-leoyang.li@nxp.com>
+ <20211214072342.22692-10-leoyang.li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <98887e63-51de-f5ad-8fb8-56269aaf4bcf@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211214072342.22692-10-leoyang.li@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 11:29:41AM -0500, Waiman Long <longman@redhat.com> wrote:
-> There are additional checks for the member to partition transition which
-> requires that the target cpuset shouldn't have child cpuset.
+On Tue, Dec 14, 2021 at 01:23:41AM -0600, Li Yang wrote:
+> From: Yangbo Lu <yangbo.lu@nxp.com>
+> 
+> The default NXP SDHC adapter cards for LX2162AQDS are SD 2.0/3.0
+> adapter card for eSDHC1, and eMMC 5.1 adapter card for eSDHC2.
+> Add speed modes properties supported by the two adapters in device
+> tree node.
+> 
+> Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
 
-Ah, I forgot the transition condition no. 4 will apply here. Clear.
-
-So, currently full bottom up + top down walk is needed in (rare?) case
-the switch from root partition to member and back.
-
-> That prevents the recovering of a invalid partition root under a
-> member cpuset. We could certainly remove that restriction by adding
-> additional code as well as additional tests to verify it works. I
-> haven't done that simply to avoid adding more complexity to the
-> current code.
-
-I agree this restriction can be lifted later independently when the rest
-settles.  (It's not so different from controllers disabling on the
-unified hierarchy after all.)
-
-
-Thanks,
-Michal
-
+Applied, thanks!

@@ -2,104 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3CD477B8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D40CF477B8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240642AbhLPSbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:31:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49032 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233409AbhLPSba (ORCPT
+        id S240680AbhLPSch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:32:37 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:35394 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231582AbhLPScg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:31:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639679490;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n1bFBT5IB/gpnuuiEdK1jZq3mJoWjFnaUGhMpk4YpP0=;
-        b=h0XfPzXVtt0Dl9CuWTR+ea1Ug3gVbwONMCCkVF1/zEwlo7eC4VbqPNvvtAHO9zFEds1ia5
-        xfjHDVZvDT78o1bIpjGOsRhW8r59VukgP9UnoqCkfV6jcB/nI5npz9YIA1ZDFJIEYORgeh
-        EDovfY4CfxZEHVbMeRGdslafIPmRYfI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-80-EqnyuIOYP4Ku2VG9jSpmOA-1; Thu, 16 Dec 2021 13:31:26 -0500
-X-MC-Unique: EqnyuIOYP4Ku2VG9jSpmOA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B26D4801B0C;
-        Thu, 16 Dec 2021 18:31:24 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.17.223])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 509D7E2C6;
-        Thu, 16 Dec 2021 18:31:21 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     "Andy Lutomirski" <luto@kernel.org>
-Cc:     linux-arch@vger.kernel.org,
-        "Linux API" <linux-api@vger.kernel.org>,
-        linux-x86_64@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        linux-mm@kvack.org, "the arch/x86 maintainers" <x86@kernel.org>,
-        musl@lists.openwall.com,
-        "Dave Hansen via Libc-alpha" <libc-alpha@sourceware.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Kees Cook" <keescook@chromium.org>
-Subject: Re: [PATCH] x86: Implement arch_prctl(ARCH_VSYSCALL_LOCKOUT) to
- disable vsyscall
-References: <87h7bzjaer.fsf@oldenburg.str.redhat.com>
-        <4728eeae-8f1b-4541-b05a-4a0f35a459f7@www.fastmail.com>
-        <87lf1ais27.fsf@oldenburg.str.redhat.com>
-        <9641b76e-9ae0-4c26-97b6-76ecde34f0ef@www.fastmail.com>
-        <878rxaik09.fsf@oldenburg.str.redhat.com>
-        <3b5fb404-7228-48d6-a290-9dd1d6095325@www.fastmail.com>
-Date:   Thu, 16 Dec 2021 19:31:19 +0100
-In-Reply-To: <3b5fb404-7228-48d6-a290-9dd1d6095325@www.fastmail.com> (Andy
-        Lutomirski's message of "Sat, 27 Nov 2021 20:45:23 -0800")
-Message-ID: <87czlwieq0.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Thu, 16 Dec 2021 13:32:36 -0500
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 1BGIWEir011373
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 13:32:15 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 9C0CE15C00C8; Thu, 16 Dec 2021 13:32:14 -0500 (EST)
+Date:   Thu, 16 Dec 2021 13:32:14 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Lukas Czerner <lczerner@redhat.com>
+Cc:     Jan Kara <jack@suse.cz>, "Darrick J. Wong" <djwong@kernel.org>,
+        =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
+Subject: Re: [PATCH v2] ext4: set csum seed in tmp inode while migrating to
+ extents
+Message-ID: <YbuGLsQy6TSM2xOl@mit.edu>
+References: <20211214175058.19511-1-lhenriques@suse.de>
+ <20211215004945.GD69182@magnolia>
+ <20211215112852.GM14044@quack2.suse.cz>
+ <20211215141237.lrymhbebgjunh4n2@work>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215141237.lrymhbebgjunh4n2@work>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andy Lutomirski:
+On Wed, Dec 15, 2021 at 03:12:37PM +0100, Lukas Czerner wrote:
+> > Run fsck of course! And then recover from backups :) I know this is sad but
+> > the situation is that our migration code just is not crash-safe (if we
+> > crash we are going to free blocks that are still used by the migrated
+> > inode) and Luis makes it work in case we do not crash (which should be
+> > hopefully more common) and documents it does not work in case we crash.
+> > So overall I'd call it a win.
+> > 
+> > But maybe we should just remove this online-migration functionality
+> > completely from the kernel? That would be also a fine solution for me. I
+> > was thinking whether we could somehow make the inode migration crash-safe
+> > but I didn't think of anything which would not require on-disk format
+> > change...
+> 
+> Since this is not something that anyone can honestly recommend doing
+> without a prior backup and a word of warning I personaly would be in favor
+> of removing it.
 
-> This could possibly be much more generic: have a mask of legacy
-> features to disable and a separate mask of lock bits.
+So there are a couple options that we could pursue:
 
-Is that really necessary?  Adding additional ARCH_* constants does not
-seem to be particularly onerous and helps with detection of kernel
-support.
+1) We could change the migrate code to stop putting the orphan inode
+on the orphan list.  If we do this, an crash in the middle of the
+migrate will, in the worst case (when the migration isn't completed
+within a single jbd2 transaction) result in a leaked inode.  That's
+not ideal, but it won't lead user data loss, and e2fsck will recover
+the situation by cloning the blocks, and leaving the inode in
+lost+found.
 
->> I can turn this into a toggle, and we could probably default our builds
->> to vsyscalls=xonly.  Given the userspace ABI impact, we'd still have to
->> upstream the toggle.  Do you see a chance of a patch a long these lines
->> going in at all, given that it's an incomplete solution for
->> vsyscall=emulate?
->
-> There is basically no reason for anyone to use vsyscall=emulate any
-> more.  I'm aware of exactly one use case, and it's quite bizarre and
-> involves instrumenting an outdated binary with an outdated
-> instrumentation tool.  If either one is recent (last few years),
-> vsyscall=xonly is fine.
+2) We could try to ensure migration happens all within a single
+transaction, if they all fit inside a the inode structure, we allocate
+a tmp inode for all of the indirect blocks, attach the blocks to the
+tmp inode, place the tmp inode on the orphan list, and put all of that
+on a single handle, and then in a second handle, truncate the tmp
+inode to release the indirect blocks.  If we need to allocate extent
+tree blocks, then all of that would need to fit in a single
+transaction, and it's a bit more complicated, but it is doable.
 
-Yeah, we plan to stick to vsyscall=xonly.  This means that the toggle is
-easier to implement, of course.
+3) We can simply remove the inode migration feature by removing
+EXT4_EXTENTS_FL from EXT4_FL_USER_MODIFIABLE, and changing the
+implementation of the EXT4_IOC_MIGRATE ioctl to return EOPNOTSUPP, and
+then cleaning up the code paths that are now unreachable.
 
->> Hmm.  But only for vsyscall=xonly, right?  With vsyscall=emulate,
->> reading at those addresses will still succeed.
->
-> IMO if vsyscall is disabled for a process, reads and executes should
-> both fail.  This is trivial in xonly mode.
+The migration feature is clearly less compelling than it was ten years
+ago, when ext4 was first introduced --- and most enterprise distros
+have never supported the feature even when it has existed.  Also on
+the plus side, we've never shipped a program to globally migrate a
+file system by using ioctl interface.
 
-Right, I'll document this as a glitch for now.
+On the other hand, there may have been user shell scripts that have
+done something like "find /mntpt -type f -print0 | xargs -0 chattr +e {} \;"
+And so option #3 could be construed as "breaking userspace", especially
+without a deprecation window.
 
-I've got a v2 (with the toggle rather than pure lockout) and will sent
-it out shortly.
+Furthermore, Option #1 is pretty simple to implement, and chances of a
+migration getting spread across two jbd2 commits is not actually
+pretty low.  And if it does happen, there would only be a single inode
+that would get its blocks cloned and attached to lost+found.
 
-Thanks,
-Florian
+Thats being said, if we *did* option #1, in the long run we'd want to
+land a complete solution, which would either be something like option
+#2, or allocating a flag to give a hint to e2fsprogs that if it does
+find an leaked inode with with the flag set on the on-disk inode, that
+all it needs to do is to zero out the inode and be done with it.
 
+So the question is, is it worth it to continue supporting the migrate
+feature, or should we just delete all of the migration code, and risk
+users complaining that we've broken their use case?  The chances of
+that happening is admittedly low, and Linus's rule that "it's only
+breaking userspace if a user complains" means we might very well get
+away with it.  :-)
+
+						- Ted

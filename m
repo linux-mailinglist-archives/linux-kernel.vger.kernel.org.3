@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96EC9477F20
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D57477F26
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241979AbhLPVlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:41:21 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:57082 "EHLO
+        id S242196AbhLPVlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:41:24 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:57088 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241835AbhLPVkf (ORCPT
+        with ESMTP id S236876AbhLPVkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:40:35 -0500
-Date:   Thu, 16 Dec 2021 21:40:33 -0000
+        Thu, 16 Dec 2021 16:40:37 -0500
+Date:   Thu, 16 Dec 2021 21:40:34 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690834;
+        s=2020; t=1639690835;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GZLyKE0FfX9aLv0WitD4olNtIgzyAHzJRFMpGfNRrTo=;
-        b=doNnQcSdjyfDSeN3d7b86B3Dvs4onf0xHkXWjD/scjCq6HOTNn7PvTE0glN5IrdWAfCLsd
-        kzzWbd2iJ8N80sYiPB91ST3RiWcOdghzxN2//2BKWusdYAr/VXKFTq3Tw2+1h8qUkKUmRa
-        jaLZTC6VMAFtqQ82P44voq36KPhlfsXPmiIke3sgtAGQTCKwqQPsdbIvRCT3H8LjbPDbvT
-        O3o8DmQnUQWG5zf3tH/8E+LmfyD6COqR89lcfgmK2fXZ4IoXGgXaMIQBOOsnxjFnzt4NwE
-        w3VQLFU3HODhak5Cbpv/NLUkn/ltE31RBH/sfCVLNKdo4gMIvKp43RrHXzvexA==
+        bh=eYyMpkEIDe2+ctgRgNJ9cRRAZ1ABsgBY8um3aUdhmHo=;
+        b=y5zLbTfyog6MCYmSFMVl2cxlYuVf/zNPBXrKahHCesNok7r/fK9DlYSDPHIHSRFHXxk6Fq
+        kFvQkbvK7iay1X6s0Y7mAougS12WZQ6SC5vqIGcvOqKfT3B68yaRXhNGc+S+cR0weZ/JNF
+        BMSHjIm4NfT2AqAQOxE5ShGlG7sbu6Jz1yHdH0iPYPfc7+dy1dkKendZOfviNCGAgh45ZY
+        Iu+nFPC9Nvyb+FXh1oTw88J7dCE3dVJlb5ufJ/YxwC31vC1NuAfXMfTaw2bEHA1nQYgwCP
+        03nQ9BH5kH3HU2PXJxtrIy+VezbV03CRhlrlPc+ZkSE+baUQB2iv6OuFfsmnPg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690834;
+        s=2020e; t=1639690835;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GZLyKE0FfX9aLv0WitD4olNtIgzyAHzJRFMpGfNRrTo=;
-        b=ig84dqRimuAw+evs3zkFuyVzmxuy4Y2OvS2Ysp9sSMhshaKF9AwsHin7q3BDdX9pcb48Q+
-        TqKIUQZ8gCmlo0DA==
+        bh=eYyMpkEIDe2+ctgRgNJ9cRRAZ1ABsgBY8um3aUdhmHo=;
+        b=Yp3eoeWbdF1opmKCKs7eb2GpSYDUFdfomKhlWGf7au+Zy4iNa/EcXYIwgWPpHfziJmn1dX
+        vhdtRBxu/0nmK2Dw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] powerpc/4xx/hsta: Rework MSI handling
+Subject: [tip: irq/msi] s390/pci: Rework MSI descriptor walk
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
         Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211206210748.359766435@linutronix.de>
-References: <20211206210748.359766435@linutronix.de>
+In-Reply-To: <20211206210748.305656158@linutronix.de>
+References: <20211206210748.305656158@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969083365.23020.10894305121701316976.tip-bot2@tip-bot2>
+Message-ID: <163969083456.23020.12131963221718612050.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,47 +59,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     85dabc2f72b65d1aa52ac8214b1112f141d17b91
-Gitweb:        https://git.kernel.org/tip/85dabc2f72b65d1aa52ac8214b1112f141d17b91
+Commit-ID:     2ca5e908d0f4cde61d9d3595e8314adca5d914a1
+Gitweb:        https://git.kernel.org/tip/2ca5e908d0f4cde61d9d3595e8314adca5d914a1
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 06 Dec 2021 23:51:25 +01:00
+AuthorDate:    Mon, 06 Dec 2021 23:51:23 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 16 Dec 2021 22:22:18 +01:00
 
-powerpc/4xx/hsta: Rework MSI handling
+s390/pci: Rework MSI descriptor walk
 
 Replace the about to vanish iterators and make use of the filtering.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211206210748.359766435@linutronix.de
+Acked-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Link: https://lore.kernel.org/r/20211206210748.305656158@linutronix.de
 
 ---
- arch/powerpc/platforms/4xx/hsta_msi.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ arch/s390/pci/pci_irq.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/powerpc/platforms/4xx/hsta_msi.c b/arch/powerpc/platforms/4xx/hsta_msi.c
-index c950fed..fee430e 100644
---- a/arch/powerpc/platforms/4xx/hsta_msi.c
-+++ b/arch/powerpc/platforms/4xx/hsta_msi.c
-@@ -47,7 +47,7 @@ static int hsta_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
- 		return -EINVAL;
- 	}
+diff --git a/arch/s390/pci/pci_irq.c b/arch/s390/pci/pci_irq.c
+index 2beb8a0..0975ff3 100644
+--- a/arch/s390/pci/pci_irq.c
++++ b/arch/s390/pci/pci_irq.c
+@@ -303,7 +303,7 @@ int arch_setup_msi_irqs(struct pci_dev *pdev, int nvec, int type)
  
--	for_each_pci_msi_entry(entry, dev) {
-+	msi_for_each_desc(entry, &dev->dev, MSI_DESC_NOTASSOCIATED) {
- 		irq = msi_bitmap_alloc_hwirqs(&ppc4xx_hsta_msi.bmp, 1);
- 		if (irq < 0) {
- 			pr_debug("%s: Failed to allocate msi interrupt\n",
-@@ -105,10 +105,7 @@ static void hsta_teardown_msi_irqs(struct pci_dev *dev)
- 	struct msi_desc *entry;
- 	int irq;
+ 	/* Request MSI interrupts */
+ 	hwirq = bit;
+-	for_each_pci_msi_entry(msi, pdev) {
++	msi_for_each_desc(msi, &pdev->dev, MSI_DESC_NOTASSOCIATED) {
+ 		rc = -EIO;
+ 		if (hwirq - bit >= msi_vecs)
+ 			break;
+@@ -362,9 +362,7 @@ void arch_teardown_msi_irqs(struct pci_dev *pdev)
+ 		return;
  
--	for_each_pci_msi_entry(entry, dev) {
--		if (!entry->irq)
+ 	/* Release MSI interrupts */
+-	for_each_pci_msi_entry(msi, pdev) {
+-		if (!msi->irq)
 -			continue;
--
-+	msi_for_each_desc(entry, &dev->dev, MSI_DESC_ASSOCIATED) {
- 		irq = hsta_find_hwirq_offset(entry->irq);
- 
- 		/* entry->irq should always be in irq_map */
++	msi_for_each_desc(msi, &pdev->dev, MSI_DESC_ASSOCIATED) {
+ 		irq_set_msi_desc(msi->irq, NULL);
+ 		irq_free_desc(msi->irq);
+ 		msi->msg.address_lo = 0;

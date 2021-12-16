@@ -2,85 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A02F8477247
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9EC47724A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237015AbhLPMzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237001AbhLPMzE (ORCPT
+        id S237028AbhLPMzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:55:25 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:34021 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232067AbhLPMzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:55:04 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAEBC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:55:03 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id z9so25265697qtj.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:55:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gUxka4JklTkkHlOcWoZDOb37rmiSUPCIVM2O4zND04I=;
-        b=F0qVsIO485bGLYv/b0H+BHfow1NEFXYFa4xznk+NJ9vnBFzB3VqwTeqW4Tl4FX1+Wy
-         /jyXLeSrra6mZbWo9VzAHNcGmAVSIrMOaIXlM4WLvpG/tqE7jsbiDofcJzkFVCV5urjC
-         aWKZ14D/SOnl1cnjW1EqRl1Rq9u0ESEygvc6+9pZ3qnwBFZEAHkx8U31pxhuxjy8oi2H
-         B3yfMm2fLGiZuzpMs/Tk0Rue4230bTfsmiXBUK6gyb5tobZoZwWSClUbsfF7djSTT1gv
-         QD1h5ple1ME10se7n/7PzGdr8We/16leHdr3w52flS1DgAvkFBLUoBLIZhemlrlpfXTJ
-         Ocsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gUxka4JklTkkHlOcWoZDOb37rmiSUPCIVM2O4zND04I=;
-        b=1KJmvSnFiL0WHwouK6mUnYN1mz8rD8sMsyCk96lszzDimQWh52DqpcLp9TgI08LH3p
-         DIrQeVhJAi5qeW8x2f/LiIKdyF4xOsJZuTAV4mlioz8PWBYVC5OnkV1pAkf0J5nUAq7l
-         bhCWk3jrKdgTcHPryF8bzVSWKF00VrXWeFwZa6jMGHrmm2Rboo52Bb+uzMpxWtHGEL6I
-         1EHskf5sqvnc3V1k08v04DC9g0qcd5BxuHBEv7oIjTpKU2YOoIJgRoV4Ll/H1jzoON9i
-         1al6/y1TDQOBhku2DtZOUIUuolM1ZbCraI8Hd5AkYJAW9xORu7PRJVqbHFnyMB1nsZAV
-         zVbA==
-X-Gm-Message-State: AOAM5310YY+RurvyqE51Z/yonv7g58aFM1HXGJf48+lh//qkasDREWdb
-        m60djbef5Ev/yhyD/jKNWMMCMzpea+0gJVi2e3ebfQ==
-X-Google-Smtp-Source: ABdhPJyCxq7QwcfJ3icCH/lpOTeUERcb0ysKCPTY5axpJVOqxNOTOTI7BrI9JGYTsDADA/pLk5Y0IrO2eLQ80uHg2jE=
-X-Received: by 2002:ac8:7fc5:: with SMTP id b5mr16915979qtk.492.1639659302910;
- Thu, 16 Dec 2021 04:55:02 -0800 (PST)
+        Thu, 16 Dec 2021 07:55:24 -0500
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MAOVx-1mlzNZ2kV1-00BsAi; Thu, 16 Dec 2021 13:55:22 +0100
+Received: by mail-wr1-f50.google.com with SMTP id i22so14247484wrb.13;
+        Thu, 16 Dec 2021 04:55:22 -0800 (PST)
+X-Gm-Message-State: AOAM530pawN72ypZWEbCYeHsrrrI8SzVJ3p+7BeT4qqPvJaMLnvpRKwA
+        Ow9aYWyoQSCy85JjR9Cb2fRRr4VtNi133pXMVso=
+X-Google-Smtp-Source: ABdhPJxqiJNKIPDPxQiAYD/ADzEnUGacnfrfwb+mwnEiDpqRpaRAA43q41TWNAdS96RDEsxEkkrg/T9kHUnFSTm357Y=
+X-Received: by 2002:adf:a352:: with SMTP id d18mr4393837wrb.317.1639659322216;
+ Thu, 16 Dec 2021 04:55:22 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1639432170.git.andreyknvl@google.com> <4b39d778ac71937325641c3d7a36889b37fb3242.1639432170.git.andreyknvl@google.com>
-In-Reply-To: <4b39d778ac71937325641c3d7a36889b37fb3242.1639432170.git.andreyknvl@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 16 Dec 2021 13:54:26 +0100
-Message-ID: <CAG_fn=VfGP7JT6ZJshsh_+rA4MR3gSM67CXCF7uhEQ6WGia6Dg@mail.gmail.com>
-Subject: Re: [PATCH mm v3 04/38] kasan, page_alloc: simplify
- kasan_poison_pages call site
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
+ <20210925203224.10419-6-sergio.paracuellos@gmail.com> <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
+In-Reply-To: <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 16 Dec 2021 13:55:06 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3R67D+0KLrTncr+SiHg79itRkxbG9caDo6YsHKzRwwkA@mail.gmail.com>
+Message-ID: <CAK8P3a3R67D+0KLrTncr+SiHg79itRkxbG9caDo6YsHKzRwwkA@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific 'pci_remap_iospace()'
+To:     Xi Ruoyao <xry111@mengyan1223.wang>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
+        Liviu Dudau <Liviu.Dudau@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:k+dzuHUBnxmp237dTZgU2vdCf9nLIyQgN0u/kJd9ELDeLol0Xex
+ oV4FQGnqqG6j0hjc75YGtmVtDhFTaZVTgGF4I2Z5rPrc6yooEf+AwPt/gHqdVgNRZwFz3i1
+ vwaEEDimGLrIMDxuanD+JbkO/0bC7nOK7reDhNR7HGzuVx6M1GYYqIBnBkDL5ogqGfmWzBd
+ /yaID8wU/3lb3sZ7ywHSg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AWZt9FKW1SM=:77i+za3GB8YmkKaN10J2ac
+ uW3uAUxFoptCsMT/t3ARo2B/u/ylFW01dODUFD2Z97W5d8uC9EZYo3IwBQb42ajjegQ2G3BcP
+ /TckwGBgJVbnn/SFU3iYr8TNqFcqC5evqExqlha8KP+s8KtwL9zhJrCpnTZ3FRgIBFoPC8Jiu
+ loZgI2+a+KTUIYMDAuwPYISVbEA0rHDVDrKBH3kYlBqFxqZSxS6CRE55gobAin2yVqsLRNefK
+ Y/KPUuG6WX7xTqn5L1jpXda5ot0m1qpECNjDtXyTU+5QuK5NXK38dSzAUuCT5zJbM2P5CeRmI
+ vkfb+E8vJyU1PgW6OoH2wqv/3pmLRW0sHkpJAzGIzDonEYvV//pUBBjWpPfIzrJQICyD3MHKi
+ JWOi0wHoTDWQkT8RhdweHPvf6z7tlgJkTXVCPmdZJltXguC3BpuHRkW+Vgcbi+Del0WqTI5Ux
+ +cBKfyCEnsui/zi010OlUUcGQgWHKJmRI5E+dc7srXW+ckjDyOY2fQEGkHZL+DVYrDUEErpE9
+ RFPTqZy35KEmH4r4qcRMHX8C1ViRoXg++cYdNKhXO+Ix+XEd+/SNZwfymhDZCrJ14UyXDoMiO
+ FypaXu4DnQlzMhStP/drcslgnak1Pf6VS8J4Pb4hFEyVd8a5y4cjqNDAoiHgD8BOAXgFmnyqv
+ SUHsKIyzM8q79Ei7rKnujDx8OQO2b3ZvbPBlkCIKPVPzSWujjfiIzPJh32LEdp/IEGL0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 10:52 PM <andrey.konovalov@linux.dev> wrote:
+On Thu, Dec 16, 2021 at 12:44 PM Xi Ruoyao <xry111@mengyan1223.wang> wrote:
 >
-> From: Andrey Konovalov <andreyknvl@google.com>
+> On Sat, 2021-09-25 at 22:32 +0200, Sergio Paracuellos wrote:
+> > To make PCI IO work we need to properly virtually map IO cpu physical address
+> > and set this virtual address as the address of the first PCI IO port which
+> > is set using function 'set_io_port_base()'.
+> >
+> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 >
-> Simplify the code around calling kasan_poison_pages() in
-> free_pages_prepare().
+> Hi,
 >
-> This patch does no functional changes.
+> the change is causing a WARNING on loongson64g-4core-ls7a:
 >
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
+> [    0.105781] loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff ->
+>  0x0000020000
+> [    0.105792] loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff ->
+>  0x0040000000
+> [    0.105801] ------------[ cut here ]------------
+> [    0.105804] WARNING: CPU: 0 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x80/0x88
+> [    0.105815] resource start address is not zero
+>
+> I'm not sure how to fix this one.
+
+It looks like this machine has two I/O spaces, one for ISA at 0x18000000/0x00000
+and one for PCI at 0x18020000/0x20000, but the implementation assumes there
+is only one. If you want to use pci_remap_iospace() on this platform,
+it needs to
+be extended to allow more than one such space.
+
+       Arnd

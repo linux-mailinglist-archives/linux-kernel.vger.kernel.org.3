@@ -2,203 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAF4477168
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0893247718D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbhLPMKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:10:18 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15747 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235151AbhLPMKR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:10:17 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JF9pV1gFjzZdLq;
-        Thu, 16 Dec 2021 20:07:14 +0800 (CST)
-Received: from localhost.localdomain (10.175.127.227) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Thu, 16 Dec 2021 20:10:15 +0800
-From:   Zhang Wensheng <zhangwensheng5@huawei.com>
-To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next v3] bfq: fix use-after-free in bfq_dispatch_request
-Date:   Thu, 16 Dec 2021 20:21:57 +0800
-Message-ID: <20211216122157.672159-1-zhangwensheng5@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        id S235993AbhLPMXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:23:02 -0500
+Received: from mga05.intel.com ([192.55.52.43]:30906 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231923AbhLPMXB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 07:23:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639657381; x=1671193381;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P6w5PzE/wKkHWUiFzuGoywg6zD0gv2/BkztHy9dzsX8=;
+  b=oImsTsccssRGGP5pRuFm2ylcDzv4MQte1PjQXSYWzJrFnnsdnqBh/ara
+   MoqmDUQoSeRSk8n/YqdmSIqHU7FwpUET4wTK6N3Vy0FjZ2lZC8gmVx/cE
+   +P7ng/A1LmIjVaKkUKBCJeHS6dvylOE5bUsBcx3pNJ8ox01ax/eQ08i6L
+   xVkrcbkdwKigRUKHuX+KGlDwAcneuLkCABPVdtN53N8LT4GVcdE3WKyxu
+   P3/Iv8IhlyRrYciDc98rgLuEjXWI4x7hYwvqwSi8kJ9VIqnPA0x7qZabV
+   Q3AR1Y61drRurq4CKAptt88HOI41gDS9HF+6pbXpw7e6/sAS8zmyilKxO
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="325755122"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="325755122"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:23:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="615130967"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 04:22:59 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxpmk-000372-7d; Thu, 16 Dec 2021 12:22:58 +0000
+Date:   Thu, 16 Dec 2021 20:22:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:repair-symlink-swapext 323/325]
+ fs/xfs/libxfs/xfs_symlink_remote.c:311:1: warning: no previous prototype for
+ 'xfs_symlink_write_target'
+Message-ID: <202112162006.medrsrAU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KASAN reports a use-after-free report when doing normal scsi-mq test
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git repair-symlink-swapext
+head:   851df07d9599471df909c4ff0e3cf33f4b9619f0
+commit: 90d15e3e9dcd303fbb36e9a54e7c36457ff9a254 [323/325] xfs: move symlink target write function to libxfs
+config: m68k-randconfig-r006-20211214 (https://download.01.org/0day-ci/archive/20211216/202112162006.medrsrAU-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=90d15e3e9dcd303fbb36e9a54e7c36457ff9a254
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs repair-symlink-swapext
+        git checkout 90d15e3e9dcd303fbb36e9a54e7c36457ff9a254
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash fs/xfs/
 
-[69832.239032] ==================================================================
-[69832.241810] BUG: KASAN: use-after-free in bfq_dispatch_request+0x1045/0x44b0
-[69832.243267] Read of size 8 at addr ffff88802622ba88 by task kworker/3:1H/155
-[69832.244656]
-[69832.245007] CPU: 3 PID: 155 Comm: kworker/3:1H Not tainted 5.10.0-10295-g576c6382529e #8
-[69832.246626] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[69832.249069] Workqueue: kblockd blk_mq_run_work_fn
-[69832.250022] Call Trace:
-[69832.250541]  dump_stack+0x9b/0xce
-[69832.251232]  ? bfq_dispatch_request+0x1045/0x44b0
-[69832.252243]  print_address_description.constprop.6+0x3e/0x60
-[69832.253381]  ? __cpuidle_text_end+0x5/0x5
-[69832.254211]  ? vprintk_func+0x6b/0x120
-[69832.254994]  ? bfq_dispatch_request+0x1045/0x44b0
-[69832.255952]  ? bfq_dispatch_request+0x1045/0x44b0
-[69832.256914]  kasan_report.cold.9+0x22/0x3a
-[69832.257753]  ? bfq_dispatch_request+0x1045/0x44b0
-[69832.258755]  check_memory_region+0x1c1/0x1e0
-[69832.260248]  bfq_dispatch_request+0x1045/0x44b0
-[69832.261181]  ? bfq_bfqq_expire+0x2440/0x2440
-[69832.262032]  ? blk_mq_delay_run_hw_queues+0xf9/0x170
-[69832.263022]  __blk_mq_do_dispatch_sched+0x52f/0x830
-[69832.264011]  ? blk_mq_sched_request_inserted+0x100/0x100
-[69832.265101]  __blk_mq_sched_dispatch_requests+0x398/0x4f0
-[69832.266206]  ? blk_mq_do_dispatch_ctx+0x570/0x570
-[69832.267147]  ? __switch_to+0x5f4/0xee0
-[69832.267898]  blk_mq_sched_dispatch_requests+0xdf/0x140
-[69832.268946]  __blk_mq_run_hw_queue+0xc0/0x270
-[69832.269840]  blk_mq_run_work_fn+0x51/0x60
-[69832.278170]  process_one_work+0x6d4/0xfe0
-[69832.278984]  worker_thread+0x91/0xc80
-[69832.279726]  ? __kthread_parkme+0xb0/0x110
-[69832.280554]  ? process_one_work+0xfe0/0xfe0
-[69832.281414]  kthread+0x32d/0x3f0
-[69832.282082]  ? kthread_park+0x170/0x170
-[69832.282849]  ret_from_fork+0x1f/0x30
-[69832.283573]
-[69832.283886] Allocated by task 7725:
-[69832.284599]  kasan_save_stack+0x19/0x40
-[69832.285385]  __kasan_kmalloc.constprop.2+0xc1/0xd0
-[69832.286350]  kmem_cache_alloc_node+0x13f/0x460
-[69832.287237]  bfq_get_queue+0x3d4/0x1140
-[69832.287993]  bfq_get_bfqq_handle_split+0x103/0x510
-[69832.289015]  bfq_init_rq+0x337/0x2d50
-[69832.289749]  bfq_insert_requests+0x304/0x4e10
-[69832.290634]  blk_mq_sched_insert_requests+0x13e/0x390
-[69832.291629]  blk_mq_flush_plug_list+0x4b4/0x760
-[69832.292538]  blk_flush_plug_list+0x2c5/0x480
-[69832.293392]  io_schedule_prepare+0xb2/0xd0
-[69832.294209]  io_schedule_timeout+0x13/0x80
-[69832.295014]  wait_for_common_io.constprop.1+0x13c/0x270
-[69832.296137]  submit_bio_wait+0x103/0x1a0
-[69832.296932]  blkdev_issue_discard+0xe6/0x160
-[69832.297794]  blk_ioctl_discard+0x219/0x290
-[69832.298614]  blkdev_common_ioctl+0x50a/0x1750
-[69832.304715]  blkdev_ioctl+0x470/0x600
-[69832.305474]  block_ioctl+0xde/0x120
-[69832.306232]  vfs_ioctl+0x6c/0xc0
-[69832.306877]  __se_sys_ioctl+0x90/0xa0
-[69832.307629]  do_syscall_64+0x2d/0x40
-[69832.308362]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[69832.309382]
-[69832.309701] Freed by task 155:
-[69832.310328]  kasan_save_stack+0x19/0x40
-[69832.311121]  kasan_set_track+0x1c/0x30
-[69832.311868]  kasan_set_free_info+0x1b/0x30
-[69832.312699]  __kasan_slab_free+0x111/0x160
-[69832.313524]  kmem_cache_free+0x94/0x460
-[69832.314367]  bfq_put_queue+0x582/0x940
-[69832.315112]  __bfq_bfqd_reset_in_service+0x166/0x1d0
-[69832.317275]  bfq_bfqq_expire+0xb27/0x2440
-[69832.318084]  bfq_dispatch_request+0x697/0x44b0
-[69832.318991]  __blk_mq_do_dispatch_sched+0x52f/0x830
-[69832.319984]  __blk_mq_sched_dispatch_requests+0x398/0x4f0
-[69832.321087]  blk_mq_sched_dispatch_requests+0xdf/0x140
-[69832.322225]  __blk_mq_run_hw_queue+0xc0/0x270
-[69832.323114]  blk_mq_run_work_fn+0x51/0x60
-[69832.323942]  process_one_work+0x6d4/0xfe0
-[69832.324772]  worker_thread+0x91/0xc80
-[69832.325518]  kthread+0x32d/0x3f0
-[69832.326205]  ret_from_fork+0x1f/0x30
-[69832.326932]
-[69832.338297] The buggy address belongs to the object at ffff88802622b968
-[69832.338297]  which belongs to the cache bfq_queue of size 512
-[69832.340766] The buggy address is located 288 bytes inside of
-[69832.340766]  512-byte region [ffff88802622b968, ffff88802622bb68)
-[69832.343091] The buggy address belongs to the page:
-[69832.344097] page:ffffea0000988a00 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88802622a528 pfn:0x26228
-[69832.346214] head:ffffea0000988a00 order:2 compound_mapcount:0 compound_pincount:0
-[69832.347719] flags: 0x1fffff80010200(slab|head)
-[69832.348625] raw: 001fffff80010200 ffffea0000dbac08 ffff888017a57650 ffff8880179fe840
-[69832.354972] raw: ffff88802622a528 0000000000120008 00000001ffffffff 0000000000000000
-[69832.356547] page dumped because: kasan: bad access detected
-[69832.357652]
-[69832.357970] Memory state around the buggy address:
-[69832.358926]  ffff88802622b980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[69832.360358]  ffff88802622ba00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[69832.361810] >ffff88802622ba80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-[69832.363273]                       ^
-[69832.363975]  ffff88802622bb00: fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc
-[69832.375960]  ffff88802622bb80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-[69832.377405] ==================================================================
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-In bfq_dispatch_requestfunction, it may have function call:
+All warnings (new ones prefixed by >>):
 
-bfq_dispatch_request
-	__bfq_dispatch_request
-		bfq_select_queue
-			bfq_bfqq_expire
-				__bfq_bfqd_reset_in_service
-					bfq_put_queue
-						kmem_cache_free
-In this function call, in_serv_queue has beed expired and meet
-the conditions to free. In the function bfq_dispatch_request,
-the address of in_serv_queue pointing to has been released. For
-getting the value of idle_timer_disabled, it will get flags
-value from the address which in_serv_queue pointing to, then
-the problem of use-after-free happens;
+   fs/xfs/libxfs/xfs_symlink_remote.c:28:1: warning: no previous prototype for 'xfs_symlink_blocks' [-Wmissing-prototypes]
+      28 | xfs_symlink_blocks(
+         | ^~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_symlink_remote.c:38:1: warning: no previous prototype for 'xfs_symlink_hdr_set' [-Wmissing-prototypes]
+      38 | xfs_symlink_hdr_set(
+         | ^~~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_symlink_remote.c:68:1: warning: no previous prototype for 'xfs_symlink_hdr_ok' [-Wmissing-prototypes]
+      68 | xfs_symlink_hdr_ok(
+         | ^~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_symlink_remote.c:167:1: warning: no previous prototype for 'xfs_symlink_local_to_remote' [-Wmissing-prototypes]
+     167 | xfs_symlink_local_to_remote(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_symlink_remote.c:206:1: warning: no previous prototype for 'xfs_symlink_shortform_verify' [-Wmissing-prototypes]
+     206 | xfs_symlink_shortform_verify(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_symlink_remote.c:239:1: warning: no previous prototype for 'xfs_symlink_remote_read' [-Wmissing-prototypes]
+     239 | xfs_symlink_remote_read(
+         | ^~~~~~~~~~~~~~~~~~~~~~~
+>> fs/xfs/libxfs/xfs_symlink_remote.c:311:1: warning: no previous prototype for 'xfs_symlink_write_target' [-Wmissing-prototypes]
+     311 | xfs_symlink_write_target(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~
 
-Fix the problem by check in_serv_queue == bfqd->in_service_queue,
-to get the value of idle_timer_disabled if in_serve_queue is equel
-to bfqd->in_service_queue. If the space of in_serv_queue pointing
-has been released, this judge will aviod use-after-free problem.
-And if in_serv_queue may be expired but it still exists, this judge
-may have little effects on the function bfqg_stats_update_idle_time
-in bfq_update_dispatch_stats.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
+vim +/xfs_symlink_write_target +311 fs/xfs/libxfs/xfs_symlink_remote.c
+
+   308	
+   309	/* Write the symlink target into the inode. */
+   310	int
+ > 311	xfs_symlink_write_target(
+
 ---
- block/bfq-iosched.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index fec18118dc30..97533634b99e 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -5061,7 +5061,7 @@ static struct request *bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
- 	struct bfq_data *bfqd = hctx->queue->elevator->elevator_data;
- 	struct request *rq;
- 	struct bfq_queue *in_serv_queue;
--	bool waiting_rq, idle_timer_disabled;
-+	bool waiting_rq, idle_timer_disabled = false;
- 
- 	spin_lock_irq(&bfqd->lock);
- 
-@@ -5070,9 +5070,10 @@ static struct request *bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
- 
- 	rq = __bfq_dispatch_request(hctx);
- 
--	idle_timer_disabled =
--		waiting_rq && !bfq_bfqq_wait_request(in_serv_queue);
--
-+	if (in_serv_queue == bfqd->in_service_queue) {
-+		idle_timer_disabled =
-+			waiting_rq && !bfq_bfqq_wait_request(in_serv_queue);
-+	}
- 	spin_unlock_irq(&bfqd->lock);
- 
- 	bfq_update_dispatch_stats(hctx->queue, rq, in_serv_queue,
--- 
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

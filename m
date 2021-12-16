@@ -2,74 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEDC247687E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C16476886
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbhLPDLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 22:11:10 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:50959 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233223AbhLPDLJ (ORCPT
+        id S233274AbhLPDMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 22:12:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233259AbhLPDMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 22:11:09 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V-m4t3W_1639624265;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V-m4t3W_1639624265)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 16 Dec 2021 11:11:05 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     robdclark@gmail.com
-Cc:     sean@poorly.run, quic_abhinavk@quicinc.com, airlied@linux.ie,
-        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
-        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] drm/msm: remove variable set but not used
-Date:   Thu, 16 Dec 2021 11:11:03 +0800
-Message-Id: <20211216031103.34146-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 15 Dec 2021 22:12:45 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B9FC061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 19:12:45 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id a11-20020a17090a854b00b001b11aae38d6so1805556pjw.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 19:12:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dBM19LcQ01EOL1teiqLVNHuwJHdfmzghxMPx2TADl7I=;
+        b=OP3oyNjPWr8trMDrWnkDU+KR7+tT1Od1ZsR8zIVi042GshUO1hw+MVnNpKz8oYDYYy
+         j2rAXpYp3GBUagy+biiiXk88h7WmHleCqjBvGWddtOnPonCFYr0NUx09ew6Wk9D1AvkB
+         gFnGZ28j+fqHEiV8wMeXrI/CkZaPoHJuZ0Jabuu4m1uisO3sYbevEoPjjv3zLWyS7hHY
+         1YKyBI9vN6lhMgsBdrk9+RYvFXSjSY03X2nh5VP0QPycERWRiVJqSX6DVdpShpIy/+X9
+         9A4zBm6I0O4qXXvmpgOzIVutPCO0SyLe5cjMuOeOtQJsHWI+gINn3N9foI5jgWP2jpaB
+         zQfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dBM19LcQ01EOL1teiqLVNHuwJHdfmzghxMPx2TADl7I=;
+        b=H+mcBgvRf+2VABvVZAlY++zeDiPpc4KbczqFGlKwsnBZHWrASSoo29g1K7OwUVXDVA
+         YplhWek+oDWU30CawyXMFbIAsiiJWtmYralHyo1bykINIEP8VeIAVNkPcl5SEvdt0/a2
+         YsUKTXfhfA+2revCG/1JedSoNY8sXLCAdw+X8bv4So/djIkYF79rh/pooEqrCg9duqpN
+         mIq/IFFdY+Y80v++RdMdVLzMajtcqZDXiTbA/bHGHue00uxk/CVBGb6+Epe2e79bqGkp
+         ecRm4GU3rMMJ3/8VAigj9y6DWfgziEc5TXHxPV7iy0hbKnRc/fFPFcFLTynLgqF34eRw
+         gh0g==
+X-Gm-Message-State: AOAM531icoT0AwXwV5SdfIWdmj3+OKK6cEi7wjfP+JAFh53mdZMpio1w
+        8nai0ERCavbfiEAiNjcXSOmrog==
+X-Google-Smtp-Source: ABdhPJyLtXGTudGYZIMvvzM5tjz/tVxh+mNzS7Uy0YKouhZVbCQJ7m6zFXkRoCWaCABWI5CtPSVfmA==
+X-Received: by 2002:a17:902:bb87:b0:148:a2e7:fb52 with SMTP id m7-20020a170902bb8700b00148a2e7fb52mr7613675pls.147.1639624364736;
+        Wed, 15 Dec 2021 19:12:44 -0800 (PST)
+Received: from debian.bytedance.net ([61.120.150.72])
+        by smtp.gmail.com with ESMTPSA id p49sm3777823pfw.43.2021.12.15.19.12.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 19:12:44 -0800 (PST)
+From:   Wenliang Wang <wangwenliang.1995@bytedance.com>
+To:     mst@redhat.com, jasowang@redhat.com, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wenliang Wang <wangwenliang.1995@bytedance.com>
+Subject: [PATCH] virtio_net: fix rx_drops stat for small pkts
+Date:   Thu, 16 Dec 2021 11:11:35 +0800
+Message-Id: <20211216031135.3182660-1-wangwenliang.1995@bytedance.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code that uses variable mdss has been removed, So the declaration 
-and assignment of the variable can be removed.
+We found the stat of rx drops for small pkts does not increment when
+build_skb fail, it's not coherent with other mode's rx drops stat.
 
-Eliminate the following clang warning:
-drivers/gpu/drm/msm/msm_drv.c:513:19: warning: variable 'mdss' set but
-not used [-Wunused-but-set-variable]
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Fixes: 2027e5b3413d ("drm/msm: Initialize MDSS irq domain at probe time")
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
 ---
- drivers/gpu/drm/msm/msm_drv.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/net/virtio_net.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index ad35a5d94053..59e30192cdf6 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -510,7 +510,6 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
- 	struct msm_drm_private *priv = dev_get_drvdata(dev);
- 	struct drm_device *ddev;
- 	struct msm_kms *kms;
--	struct msm_mdss *mdss;
- 	int ret, i;
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 55db6a336f7e..b107835242ad 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -733,7 +733,7 @@ static struct sk_buff *receive_small(struct net_device *dev,
+ 		pr_debug("%s: rx error: len %u exceeds max size %d\n",
+ 			 dev->name, len, GOOD_PACKET_LEN);
+ 		dev->stats.rx_length_errors++;
+-		goto err_len;
++		goto err;
+ 	}
  
- 	ddev = drm_dev_alloc(drv, dev);
-@@ -521,8 +520,6 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
- 	ddev->dev_private = priv;
- 	priv->dev = ddev;
+ 	if (likely(!vi->xdp_enabled)) {
+@@ -825,10 +825,8 @@ static struct sk_buff *receive_small(struct net_device *dev,
  
--	mdss = priv->mdss;
--
- 	priv->wq = alloc_ordered_workqueue("msm", 0);
- 	priv->hangcheck_period = DRM_MSM_HANGCHECK_DEFAULT_PERIOD;
+ skip_xdp:
+ 	skb = build_skb(buf, buflen);
+-	if (!skb) {
+-		put_page(page);
++	if (!skb)
+ 		goto err;
+-	}
+ 	skb_reserve(skb, headroom - delta);
+ 	skb_put(skb, len);
+ 	if (!xdp_prog) {
+@@ -839,13 +837,12 @@ static struct sk_buff *receive_small(struct net_device *dev,
+ 	if (metasize)
+ 		skb_metadata_set(skb, metasize);
  
+-err:
+ 	return skb;
+ 
+ err_xdp:
+ 	rcu_read_unlock();
+ 	stats->xdp_drops++;
+-err_len:
++err:
+ 	stats->drops++;
+ 	put_page(page);
+ xdp_xmit:
 -- 
-2.20.1.7.g153144c
+2.30.2
 

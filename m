@@ -2,404 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5BF477FCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A56C477FCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237695AbhLPWEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 17:04:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237406AbhLPWEa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 17:04:30 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA6EC061574;
-        Thu, 16 Dec 2021 14:04:30 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id z7so640715lfi.11;
-        Thu, 16 Dec 2021 14:04:30 -0800 (PST)
+        id S238284AbhLPWF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 17:05:28 -0500
+Received: from mail-bn8nam12on2109.outbound.protection.outlook.com ([40.107.237.109]:8320
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236958AbhLPWF0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 17:05:26 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IGH9dtRjbOxsC2JFrjE9o1oP2S0aSmwuCtcGM1BQXk8wCcZaRbZtay0LuwX0BP1znPyM/hfPhbtE0Z6oztbNWlP3YoF70GZXw80svDo3+T7D/ZUWaD6pkiJOoAN4zVg6qjnBx8SUjlLaUIQjTPtQYUtRgau4/FYU1InIltzKMcKIG/etpwypDqbWT0VRV1/SvYFOJhSeMIFLhCcqGzK/G6gIyW5EufHlgWBm1oPk+Af3EMadPrm7BkyVldZcYlkdyZyWxPaKWAPw6BH1y6i5doXf310Ro6zcok+L/kI2cKPG0cOVSdFTyucl0yPq1BBFwOGwspWklhO1xerPGjgyHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IWS6uHSJXacYRHNgeCP5729XcNNQ730ntu/Zo5Lw9t4=;
+ b=OMBnGDtsitDCR8/y/MYmbCRR5B0dozKoKD1ip/hIe0sc1jck2m23EpkjVyvj+444pSQ76EaoPxWEd2uQcaWZFIvyggVnALMH1YE1Gk+b3b6GLOirnIAC74g82ZjN9CzuDSjjvIeNngdo1Z/RL1ht2dm6B5L6e0XpzBPIB+/4c6daQfBlxQtgTE1T3VqRHsqHPnVePuleWcJSjnXISP1QGDWWAE02T6KEYYJLuqfCEbOLzWZtBqX0fDWO106piOCrYV3N7142ic6bImO6Yyoeji39AKHyuPW43BdikcELBLsFxwP0qzSBefojRUaqzA8ABziWzCBBITwaQPFmL/7nCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=amperemail.onmicrosoft.com; dkim=pass
+ header.d=amperemail.onmicrosoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JTg6bT+BtI80nm3srF/7OYobTVkKIW4xhlRUkah0JXg=;
-        b=q7WPqmW5TwQ+cC7KSbAHIvU4jSpl35285+gnvDwgh0++c7n8ejgpOt94TyQmk3Y06d
-         GKqJ+HL1+WC/+KuSQWzJ+v5TvRVGndYU1tPnuruiIq67uTaaRNeTslgy7DDZSp6InEL8
-         r5zZoGNi2/mR2Kb7meltKUPJUkSMVZ4w2EmAODzia0EZq26E71c8Irt+o6+MdpsT1GET
-         X0C3cwzyjFjlAV21usnTG4n8HF6ma89D2RcdWLVAQDPygzg2QhBNeGFFVIG4Fm/KHCyo
-         q4n4nXew+ch8yiLNVRWMt2EkiY8evq3KPVXA54KRscLnz+rdAMdjcGtiFd5ghy+p3pGR
-         Lojg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JTg6bT+BtI80nm3srF/7OYobTVkKIW4xhlRUkah0JXg=;
-        b=b47IuVKW2j1Ln5lA8cincVSht1qhZeiY/p1KHeesvYOLFmCh+aRE0SY8d45mj7pCyd
-         LNN9DuD21+DSljQARAzCL+1/8vTBxp1uB3lvlsmkjZ2YVLxDSg4w406x7/hAjea4m/RO
-         UH5FVnaM2M1Hy1jj6JRo80HCCSL+TwEln3+Z4ASXhooil+uxoMjtUbgr6/pglCwbpY8G
-         14nRajIciYdBYuYTPMHKnCnaCZmec+5T9x/7o+tIfT9Ol+7fXzaOyOJ5uq7Q5V7luFRZ
-         0NbvmBUbvVdaQSecHhqk9ogvzRFt+l+XvQ8as/w0rD3Qq4SzgHJ4pVBmuBAGkSj2x3Uj
-         jNBA==
-X-Gm-Message-State: AOAM5334CSbjkhyKqTtd2DJUpVGT6XFrqFxLiPFXeekQPG+ySo9sfTF8
-        yezyTj5oTgvO8L7WK+776qI=
-X-Google-Smtp-Source: ABdhPJxQS8KW2aRnYmuJ1HxngugOcHiliPvNzHLzvlK1bTIqr6niL47dVFzYRRLuTNmMNVAESmJv3w==
-X-Received: by 2002:a05:6512:a92:: with SMTP id m18mr172616lfu.306.1639692268255;
-        Thu, 16 Dec 2021 14:04:28 -0800 (PST)
-Received: from netbook-debian (55-2-94-178.pool.ukrtel.net. [178.94.2.55])
-        by smtp.gmail.com with ESMTPSA id e21sm1062892lfc.229.2021.12.16.14.04.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 14:04:28 -0800 (PST)
-Date:   Fri, 17 Dec 2021 00:04:24 +0200
-From:   Denis Pauk <pauk.denis@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
-Message-ID: <20211217000424.41da446e@netbook-debian>
-In-Reply-To: <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com>
-References: <20211216205303.768991-1-eugene.shalygin@gmail.com>
-        <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IWS6uHSJXacYRHNgeCP5729XcNNQ730ntu/Zo5Lw9t4=;
+ b=uPpJWmjTCbPI1henuPUSvp4s4HFYTmPH4arN/ogzS6/7r/+bz2LEg59tgFTFFbHAZ3QgOqmCm7sJV44KRRwPV2Qkv/qjcrhxJ5TppXg5Oh/d6sg6jNOGH3KpZ2L8orXWLjxTZ93GPfMhcDrK91I8TlkHixNSjrn42SFVSTujEGM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
+Received: from CH0PR01MB7033.prod.exchangelabs.com (2603:10b6:610:107::16) by
+ CH2PR01MB6039.prod.exchangelabs.com (2603:10b6:610:43::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4778.15; Thu, 16 Dec 2021 22:05:21 +0000
+Received: from CH0PR01MB7033.prod.exchangelabs.com
+ ([fe80::c8fb:e830:d7e5:bdf7]) by CH0PR01MB7033.prod.exchangelabs.com
+ ([fe80::c8fb:e830:d7e5:bdf7%9]) with mapi id 15.20.4778.018; Thu, 16 Dec 2021
+ 22:05:21 +0000
+Message-ID: <addaf134-d5c0-65de-62ca-76950d6460ab@amperemail.onmicrosoft.com>
+Date:   Thu, 16 Dec 2021 17:05:15 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/2] ACPI/AEST: Initial AEST driver
+Content-Language: en-US
+To:     Darren Hart <darren@os.amperecomputing.com>,
+        Marc Zyngier <maz@kernel.org>, lorenzo.pieralisi@arm.com,
+        guohanjun@huawei.com, sudeep.holla@arm.com
+Cc:     Tyler Baicar <baicar@os.amperecomputing.com>,
+        patches@amperecomputing.com, abdulhamid@os.amperecomputing.com,
+        catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com,
+        alexandru.elisei@arm.com, suzuki.poulose@arm.com,
+        rafael@kernel.org, lenb@kernel.org, tony.luck@intel.com,
+        bp@alien8.de, mark.rutland@arm.com, anshuman.khandual@arm.com,
+        vincenzo.frascino@arm.com, tabba@google.com, marcan@marcan.st,
+        keescook@chromium.org, masahiroy@kernel.org,
+        samitolvanen@google.com, john.garry@huawei.com,
+        daniel.lezcano@linaro.org, gor@linux.ibm.com,
+        zhangshaokun@hisilicon.com, tmricht@linux.ibm.com,
+        dchinner@redhat.com, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-acpi@vger.kernel.org,
+        linux-edac@vger.kernel.org, ishii.shuuichir@fujitsu.com,
+        Vineeth.Pillai@microsoft.com
+References: <20211124170708.3874-1-baicar@os.amperecomputing.com>
+ <20211124170708.3874-2-baicar@os.amperecomputing.com>
+ <87czmpcto5.wl-maz@kernel.org> <YaU6eyGM+bX/bEhG@fedora>
+ <87h7bum0xh.wl-maz@kernel.org> <YaZUL+cftvNYgx1j@fedora>
+From:   Tyler Baicar <baicar@amperemail.onmicrosoft.com>
+In-Reply-To: <YaZUL+cftvNYgx1j@fedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR04CA0010.namprd04.prod.outlook.com
+ (2603:10b6:610:76::15) To CH0PR01MB7033.prod.exchangelabs.com
+ (2603:10b6:610:107::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ac015fab-da78-4097-a25f-08d9c0e02750
+X-MS-TrafficTypeDiagnostic: CH2PR01MB6039:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR01MB603987CFC4F118063D4FEE55E3779@CH2PR01MB6039.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1OCWa3xx8gONdgywxLHhei2ncrDm+Mw9KxHsYCq5KaibRSAZzRs5XUy1N4NW9RbCGan8wQ0vsk7qfqo01GVGRGz4P1Be6sscRvSpbqaBs0XWq8e3vkybiZyZ3fMtMxAPA9OOD1VKpCKLDbQJes+wdE4MenPu/tstjHcaptruige4vv5mUZ9DZOgZvV+ZL80OJFy8UqhefwcBeV4Ih4TurrPm9V1y3jY6BTtGIH6DyyVDZ2zVkP97tKHsdiSqUkaWg5dsrzUQwK4Okc7T/WGEwFK6lxIxEB5wDklJ+kClresi3Ylz/SrLTy5hhYpVnzVDV5y4fDsueN3Cu88Vpj2r8s0llmWKZdZp72ZlDbjJGVK/a3P47cNZ4mdezo0spmuZJvXbB/46YByR5wsrerI1ajoigpQZml0id7Wuuscq2jFl0bEuhBcTQnuPIWSIow8wC/F/ooWDmvaKD8bcgmJl9940ZUP6OKBbTwRwXcOr9b+9K9XGkI6KkD23M4gkOCdgojLtF41GzpqC+zSqmZ6bZkWe8COtygIoAWnry93AM0F4A32MiUuAVJbv+sXzG54T91ycto88+26tpUQ40CfuExJ+vPdWH/Hz7ZRWrILQDFoSnOBY1BQ+tPW4akJc/oGY5Jag0wIqiY1Iul0vs5LlpjcsryptkvUUdFb0f5QWwqh4G1yqYBaKcAgKE5+fDjcSOevyNy4PbmCK6Hm60WtghU/eE/ydIt28KLzsS52Y1Ir9kmFDAU9eU0z3wt5ZToTQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR01MB7033.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(66476007)(4326008)(6666004)(38350700002)(186003)(6512007)(2616005)(52116002)(8676002)(6506007)(26005)(8936002)(31686004)(53546011)(508600001)(38100700002)(83170400001)(7406005)(31696002)(2906002)(66556008)(7416002)(6486002)(5660300002)(316002)(42882007)(66946007)(110136005)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?LzlxamdqWlhPSnJwUGswRFZHL0l6TU5CYTFSRW11Z1ZYNlVwTjlQSGt3N0Nh?=
+ =?utf-8?B?ZE1LZlNlaG8rV3ZuUVRJZUNrZnBVUTVCZlFvRzQzNVB1NG54VTdmZHZvemwy?=
+ =?utf-8?B?RThuaVdjR2xIdndBZEN1N0lIU2NYV3Mvb2VVVEZ1bWtVZU13MkttNlhOSTlJ?=
+ =?utf-8?B?Qlh0cnBEYlFIeVdwMlhuVWJ2RjFFcGlReFJucGNTYjRlQ3AzaTBwaDB2cTIx?=
+ =?utf-8?B?ZG1pNjdDSnFLdHY2UnE0czBDQ2hnV0JFaFcvWE9Zdi9CK0duOVk5Z1FRMTJ5?=
+ =?utf-8?B?T3RPcnBaQlJpb2pTUVlVdWNNTVpnNUc4eko5SDB0LzBVcEtJeEg5WEhYUVZ3?=
+ =?utf-8?B?V0Z0c3BOU2drbnlreG01V05RSVZtb0NlZXVtS3hHVEtBN00zZ2JYa2xsVU5Z?=
+ =?utf-8?B?aThZMVJRTEVsa0t5T0pHdFhpQTBvYldyRFhzWmh6c3p3U3VhdVA0N2tmcExo?=
+ =?utf-8?B?K0p4aGtEdHl5WTllazdER2lRbEZQUnVPcnU2M0I5akhwcHNhSjVtOUNFbVor?=
+ =?utf-8?B?N3ZBVzZGMXlhcHdycVI2NHBWZUlXcGRRUDRTM2VRcDVpUHVXZW0rN3A3VWxn?=
+ =?utf-8?B?N2VybUNwM0JmN2JaQWNDV0JqQ0xPb05Hb1Y3aGVJUGNUL0FBTWZlay9TaVJp?=
+ =?utf-8?B?dnI5VVZUTjJaSWRkUlVNUWFpNUhrVjFoQmh4bkhMRGxoQ0ZsUHBuU1NDZzhX?=
+ =?utf-8?B?Ykdxd0RXSW9JTC9vd3ZxT2VmNmlTTmRCZzJPRVNEeHgrM215bkFIK3EzUGdw?=
+ =?utf-8?B?aCtCOXdQOVZPV2V2bVFmTExpSzlmd0hRMVFKQUhOdEloaHIwYWdqVUtSejZ5?=
+ =?utf-8?B?blp0bkVkSnROc2EvdDB2MCs3bjNZUEEyREpWR0hPb2VGdW9jZHhYcUlvWHNQ?=
+ =?utf-8?B?WUwwUnNYVWprSldCdU9pV3YrYzdLTlp5TzV2QUUxL0x1SkFxL3U3dUNmeU9x?=
+ =?utf-8?B?MUhLRmVuZFpqZU1DY2g1bVhmVXlaZUI5ZDdUT1JqRmt4bnV1eUFmR01VRGtl?=
+ =?utf-8?B?eklzTGdWTUg3V0VUNW9XU3U1WFBXM203WHNkUWpsU0pLOUozcjVyS084RldZ?=
+ =?utf-8?B?cXlTdU44NkZrR1JZK1FrK0c1c21yZWxzQmE3RU42L3VXQ05tV0hKSWlWVVBP?=
+ =?utf-8?B?eDQ5M2doMmF4ejcxNTgrQ3M0bTlETHhMV2xEQkpEU0VWOERZYWEzeHIrYlVJ?=
+ =?utf-8?B?aVJWdlJUeHNxWHhoOWpVYy95eE1LcXRlYWlhUTZ3TWk2M0UyTElnN1FUd0dy?=
+ =?utf-8?B?Z1JuRmsvbnZMTGZvTDJnWlJMM0VOa3R4eGRVUFhETDM0dGVlMi8vUDdjWGIw?=
+ =?utf-8?B?cEhyRmI5ZzNHcFVtWVNsSStyUEVOT3dKT0s4UWE0eFhoSXg4K3NaSjc2OUFQ?=
+ =?utf-8?B?TE9GZ29DaG9lYjFIdWFQalBDeno0TmdXb2lKaHd6Tmc1d1dkTzM4SU56ZExQ?=
+ =?utf-8?B?cHNIWVNXa01qeXh1MUpXcVVlNUVOS0VPRHFadWlxZ0pMT0swYnBsL00xN3Vi?=
+ =?utf-8?B?aHV4UmRhd3BRbXk3U085U1hrVXFnZ2Ivb0VlYy84ZXg2ZWdRd2d2M2VLQ1dm?=
+ =?utf-8?B?NnhxK2VTWFlsemlBTUtxS28xMTE5cEovRlU2Z2I2UXJ1ZVlNUjRXajRIYjh2?=
+ =?utf-8?B?ZmNFSFFzQXlLSWJxQ1FlZ3N2YzBXMzgzTGNDVlJFQWtvYldDa29zelo0NGJ5?=
+ =?utf-8?B?STYzMWl2MTh3aVRRTVJmTTdIRnRWeU9wUjB1UzVuYjQ5WW1MU2ZIbGgzV0pH?=
+ =?utf-8?B?TmFEWUozblRsZ01UdXg2eVRxcGY2Qkk1QkR1SUkwSTFpTFRmcDlJbGRqaXdF?=
+ =?utf-8?B?d0V2YjJ5ZjUydW5BMGlBY1hVME5FdUIyai90cHdWUzF6c2MzRGl5SHZqTy8y?=
+ =?utf-8?B?NGRSSDM2MlVMR2ZkOVJYcGRCQmR2cFhnenJyTHRYZ1pXMDVnYWJET1V0V1hE?=
+ =?utf-8?B?THgwSWFHSWpxcFlRdVlEKzA1bDlRcDZJU1lQdUdGWGxKNnovYVZkNHdQRFZi?=
+ =?utf-8?B?empmSXZxL2dmbjZ1bUx3L045dWNsRExSZ0p4dzk3WlZjTFNUTUpFaFd3Zlkx?=
+ =?utf-8?B?NVlBQU0vNE5GdTlZdmtPMXM1UFk3Ly94Q0JYUHdBNE05ZXUwaE1VM01OMEhS?=
+ =?utf-8?B?QUlzWFN0Q29UWWRTc1NndFlXRDVVeHhmUkl4aVg3NG1RcW5FdXkydE5EcEtE?=
+ =?utf-8?B?U2lOUWZ6cDlHdGVHam9LVXY0b2E5dVhrUVkxcUhaWm95djVYY3hMT2FDSDZy?=
+ =?utf-8?B?d2lGOEFzcnNxMXYxZjVzQ0VCSlowZnpCT0VqdHFGODlPcjEvczJ2ZjlGK09O?=
+ =?utf-8?B?dkxTaldYTzFsYXFDY0NycWlSRVJBczdBblg3RlpSaVB3Zkhtb0xsUT09?=
+X-OriginatorOrg: amperemail.onmicrosoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac015fab-da78-4097-a25f-08d9c0e02750
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR01MB7033.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 22:05:21.7563
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1i7FfdJfryjmneEQpSuZMaEBYxYixbtcKimg9v6lPSCnD+A+9yu4uso9wFzo6216VhT4lMz4Sxt2EXGAI7keA/IcINQsb+azh7+9H1btFWc08vd41FVkUGW7elP0ELsg
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR01MB6039
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eugene,
+-Moved ACPI for ARM64 maintainers to "to:"
 
-Have you found some issues with idea of usage ACPI WMI methods as
-failback solution, like in case when ASUS will release some BIOS with
-different mutex path or different motherboard where will be same WMI
-methods but fully different internal logic?
-  =20
-On Thu, 16 Dec 2021 23:27:52 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+Hi Marc, Darren,
 
-> On Thu, Dec 16, 2021 at 10:53 PM Eugene Shalygin
-> <eugene.shalygin@gmail.com> wrote:
-> >
-> > This driver provides the same data as the asus_wmi_ec_sensors driver
-> > (and gets it from the same source) but does not use WMI, polling
-> > the ACPI EC directly.
-> >
-> > That provides two enhancements: sensor reading became quicker (on
-> > some systems or kernel configuration it took almost a full second
-> > to read all the sensors, that transfers less than 15 bytes of
-> > data), the driver became more fexible. The driver now relies on
-> > ACPI mutex to lock access =20
->=20
-> flexible
->=20
-> > to the EC, in the same way as the WMI DSDT code does. =20
->=20
-> How do you know that this way there is no race with any of ACPI code?
->=20
-> ...
->=20
-> > +config SENSORS_ASUS_EC
-> > +       tristate "ASUS EC Sensors" =20
->=20
-> > +       depends on ACPI =20
->=20
-> No need to duplicate. See (1) below.
->=20
-> > +       help
-> > +         If you say yes here you get support for the ACPI embedded
-> > controller
-> > +         hardware monitoring interface found in ASUS motherboards.
-> > The driver
-> > +         currently supports B550/X570 boards, although other ASUS
-> > boards might
-> > +         provide this monitoring interface as well.
-> > +
-> > +         This driver can also be built as a module. If so, the
-> > module
-> > +         will be called asus_ec_sensors.
-> > +
-> >  endif # ACPI =20
->=20
-> (1)
->=20
-> ...
->=20
-> > +/*
-> > + * HWMON driver for ASUS motherboards that publish some sensor
-> > values
-> > + * via the embedded controller registers =20
->=20
-> Missed grammatical period.
->=20
-> > + * =20
->=20
-> > + */ =20
->=20
-> ...
->=20
-> > +#define ASUS_EC_BANK_REGISTER 0xff /* Writing to this EC register
-> > switches EC bank */ =20
->=20
-> Can you put comment before the definition?
->=20
-> ...
->=20
-> > +#define SENSOR_LABEL_LEN 0x10 =20
->=20
-> Why in hex?
->=20
-> Missed blank line here.
->=20
-> > +/*
-> > + * Arbitrary set max. allowed bank number. Required for sorting
-> > banks and
-> > + * currently is overkill with just 2 banks used at max, but for
-> > the sake
-> > + * of alignment let's set it to a higher value =20
->=20
-> Check grammar everywhere, again missed period (at least).
->=20
-> > + */ =20
->=20
-> ...
->=20
-> > +#define ACPI_DELAY_MSEC_LOCK   500     /* Wait for 0.5 s max. to
-> > acquire the lock */ =20
->=20
-> _LOCK_DELAY_MS and drop useless comment
->=20
-> I think I gave the very same comments before. Maybe you can check the
-> reviews of another driver?
->=20
-> ...
->=20
->=20
-> > +#define MAKE_SENSOR_ADDRESS(size, bank, index)
-> >             \
-> > +       {
-> >            \
-> > +               .value =3D (size << 16) + (bank << 8) + index
-> >            \ =20
->=20
-> Leave comma here and everywhere else in the structure entries.
->=20
-> > +       } =20
->=20
-> Besides that, would it be better to have it defined as a compound
-> literal?
->=20
-> ...
->=20
-> > +enum known_ec_sensor {
-> > +       SENSOR_TEMP_CHIPSET     =3D 1 <<  0, /* chipset temperature
-> > [=E2=84=83] */
-> > +       SENSOR_TEMP_CPU         =3D 1 <<  1, /* CPU temperature [=E2=84=
-=83] */
-> > +       SENSOR_TEMP_MB          =3D 1 <<  2, /* motherboard
-> > temperature [=E2=84=83] */
-> > +       SENSOR_TEMP_T_SENSOR    =3D 1 <<  3, /* "T_Sensor"
-> > temperature sensor reading [=E2=84=83] */
-> > +       SENSOR_TEMP_VRM         =3D 1 <<  4, /* VRM temperature [=E2=84=
-=83] */
-> > +       SENSOR_FAN_CPU_OPT      =3D 1 <<  5, /* CPU_Opt fan [RPM] */
-> > +       SENSOR_FAN_VRM_HS       =3D 1 <<  6, /* VRM heat sink fan
-> > [RPM] */
-> > +       SENSOR_FAN_CHIPSET      =3D 1 <<  7, /* chipset fan [RPM] */
-> > +       SENSOR_FAN_WATER_FLOW   =3D 1 <<  8, /* water flow sensor
-> > reading [RPM] */
-> > +       SENSOR_CURR_CPU         =3D 1 <<  9, /* CPU current [A] */
-> > +       SENSOR_TEMP_WATER_IN    =3D 1 << 10, /* "Water_In"
-> > temperature sensor reading [=E2=84=83] */
-> > +       SENSOR_TEMP_WATER_OUT   =3D 1 << 11, /* "Water_Out"
-> > temperature sensor reading [=E2=84=83] */ =20
->=20
-> Perhaps kernel doc and use of BIT()?
->=20
-> > +       SENSOR_END
-> > +}; =20
->=20
-> ...
->=20
-> > +static const struct ec_sensor_info known_ec_sensors[] =3D {
-> > +       EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a), /*
-> > SENSOR_TEMP_CHIPSET */
-> > +       EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b), /*
-> > SENSOR_TEMP_CPU */
-> > +       EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c), /*
-> > SENSOR_TEMP_MB */
-> > +       EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d), /*
-> > SENSOR_TEMP_T_SENSOR */
-> > +       EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e), /*
-> > SENSOR_TEMP_VRM */
-> > +       EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0), /*
-> > SENSOR_FAN_CPU_OPT */
-> > +       EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2), /*
-> > SENSOR_FAN_VRM_HS */
-> > +       EC_SENSOR("Chipset", hwmon_fan, 2, 0x00, 0xb4), /*
-> > SENSOR_FAN_CHIPSET */
-> > +       EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xbc), /*
-> > SENSOR_FAN_WATER_FLOW */
-> > +       EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4), /*
-> > SENSOR_CURR_CPU */
-> > +       EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00), /*
-> > SENSOR_TEMP_WATER_IN */
-> > +       EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01), /*
-> > SENSOR_TEMP_WATER_OUT */ =20
->=20
-> Instead of comments, use form of
->=20
->   [FOO] =3D BAR(...),
->=20
-> > +}; =20
->=20
-> ...
->=20
-> > +static struct asus_ec_board_info board_P_X570_P =3D {
-> > +       .sensors =3D SENSOR_TEMP_CHIPSET | SENSOR_TEMP_CPU |
-> > SENSOR_TEMP_MB | SENSOR_TEMP_VRM
-> > +                | SENSOR_FAN_CHIPSET, =20
->=20
-> It's a bit long and better to leave ' |' on the previous line(s).
->=20
-> > +       .acpi_mutex_path =3D ASUS_HW_ACCESS_MUTEX_ASMX =20
->=20
-> + Comma.
->=20
-> > +}; =20
->=20
-> Ditto for all other similar cases.
->=20
-> ...
->=20
-> > +#define DMI_EXACT_MATCH_BOARD(vendor, name, sensors) {
-> >             \
-> > +               .matches =3D {
-> >            \
-> > +                       DMI_EXACT_MATCH(DMI_BOARD_VENDOR, vendor),
-> >            \
-> > +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, name),
-> >            \
-> > +               },
-> >            \
-> > +               .driver_data =3D sensors
-> >            \ =20
->=20
-> + Comma.
->=20
-> > +       } =20
->=20
-> ...
->=20
-> > +struct ec_sensors_data {
-> > +       const struct asus_ec_board_info *board;
-> > +       struct ec_sensor *sensors;
-> > +       /* EC registers to read from */
-> > +       u16 *registers;
-> > +       u8 *read_buffer;
-> > +       /* sorted list of unique register banks */
-> > +       u8 banks[ASUS_EC_MAX_BANK];
-> > +       unsigned long last_updated; /* in jiffies */
-> > +       acpi_handle aml_mutex;
-> > +       u8 nr_sensors; /* number of board EC sensors */
-> > +       /* number of EC registers to read (sensor might span more
-> > than 1 register) */
-> > +       u8 nr_registers;
-> > +       u8 nr_banks; /* number of unique register banks */
-> > +}; =20
->=20
-> Kernel doc?
->=20
-> ...
->=20
-> > +static u8 register_bank(u16 reg)
-> > +{
-> > +       return (reg & 0xff00) >> 8; =20
->=20
-> ' & 0xff00' part is redundant.
->=20
-> > +} =20
->=20
-> ...
->=20
-> > +static struct ec_sensors_data *get_sensor_data(struct device *pdev)
-> > +{
-> > +       return dev_get_drvdata(pdev);
-> > +} =20
->=20
-> Useless wrapper. It adds no value.
->=20
-> ...
->=20
-> > +       unsigned int i;
-> > +
-> > +       for (i =3D 0; i < ec->nr_sensors; ++i) {
-> > +               if (get_sensor_info(ec, i)->type =3D=3D type) {
-> > +                       if (channel =3D=3D 0)
-> > +                               return i; =20
->=20
-> > +                       --channel; =20
->=20
-> What's wrong with post-decrement, and I think I already commented on
-> this. So, I stopped here until you go and enforce all comments given
-> against previous incarnation of this driver.
->=20
-> > +               }
-> > +       }
-> > +       return -ENOENT;
-> > +} =20
->=20
-> ...
->=20
-> > +       for (i =3D 1; i < SENSOR_END; i <<=3D 1) {
-> > +               if ((i & ec->board->sensors) =3D=3D 0
-> > +                       continue; =20
->=20
-> Interesting way of NIH for_each_set_bit().
->=20
-> ...
->=20
-> > +               for (j =3D 0; j < si->addr.components.size; ++j,
-> > ++register_idx) { =20
->=20
-> Why pre-increments?
->=20
-> > +                       ec->registers[register_idx] =3D
-> > +                               (si->addr.components.bank << 8) +
-> > +                               si->addr.components.index + j;
-> > +               }
-> > +       }
-> > +} =20
->=20
-> ...
->=20
-> > +       acpi_handle res; =20
->=20
-> > +       acpi_status status =3D acpi_get_handle(
-> > +               NULL, (acpi_string)state->board->acpi_mutex_path,
-> > &res); =20
->=20
-> It looks awful (indentation), Have you run checkpatch?
->=20
-> > +       if (ACPI_FAILURE(status)) {
-> > +               dev_err(dev, "Could not get hardware access guard
-> > mutex: error %d", status);
-> > +               return NULL;
-> > +       } =20
->=20
-> ...
->=20
-> > +static struct hwmon_chip_info asus_wmi_chip_info =3D {
-> > +       .ops =3D &asus_ec_hwmon_ops, =20
->=20
-> > +       .info =3D NULL, =20
->=20
-> Redundant.
->=20
-> > +}; =20
->=20
+On 11/30/2021 11:41 AM, Darren Hart wrote:
+> On Tue, Nov 30, 2021 at 09:45:46AM +0000, Marc Zyngier wrote:
+>> Hi Darren,
+>>
+>> On Mon, 29 Nov 2021 20:39:23 +0000,
+>> Darren Hart <darren@os.amperecomputing.com> wrote:
+>>> On Wed, Nov 24, 2021 at 06:09:14PM +0000, Marc Zyngier wrote:
+>>>> On Wed, 24 Nov 2021 17:07:07 +0000,
+>>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>>> index 5250298d2817..aa0483726606 100644
+>>>>> --- a/MAINTAINERS
+>>>>> +++ b/MAINTAINERS
+>>>>> @@ -382,6 +382,7 @@ ACPI FOR ARM64 (ACPI/arm64)
+>>>>>   M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+>>>>>   M:	Hanjun Guo <guohanjun@huawei.com>
+>>>>>   M:	Sudeep Holla <sudeep.holla@arm.com>
+>>>>> +R:	Tyler Baicar <baicar@os.amperecomputing.com>
+>>>>>   L:	linux-acpi@vger.kernel.org
+>>>>>   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>>>>>   S:	Maintained
+>>>> Isn't this a bit premature? This isn't even mentioned in the commit
+>>>> message, only in passing in the cover letter.
+>>>>
+>>> Hi Marc,
+>>>
+>>> This was something I encouraged Tyler to add during internal review,
+>>> both in response to the checkpatch.pl warning about adding new drivers
+>>> as well as our interest in reviewing any future changes to the aest
+>>> driver. Since refactoring is common, this level made sense to me - but
+>>> would it be preferable to add a new entry for just the new driver Tyler
+>>> added?
+>> Adding someone as the co-maintainer/co-reviewer of a whole subsystem
+>> (ACPI/arm64 in this case) comes, IMO, with a number of pre-requisites:
+>> has the proposed co-{maintainer,reviewer} contributed and/or reviewed
+>> a significant number of patches to that subsystem and/or actively
+>> participated in the public discussions on the design and the
+>> maintenance of the subsystem, so that their reviewing is authoritative
+>> enough? I won't be judge of this, but it is definitely something to
+>> consider.
+> Hi Marc,
+>
+> Agreed. I applied similar criteria when considering sub maintainers for
+> the platform/x86 subsystem while I maintained it.
+>
+>> I don't think preemptively adding someone to the MAINTAINERS entry to
+>> indicate an interest in a whole subsystem is the right way to do it.
+>> One could argue that this is what a mailing list is for! ;-) On the
+>> other hand, an active participation to the review process is the
+>> perfect way to engage with fellow developers and to grow a profile. It
+>> is at this stage that adding oneself as an upstream reviewer makes a
+>> lot of sense.
+> Also generally agree. In this specific case, our interest was in the
+> driver itself, and we had to decide between the whole subsystem or
+> adding another F: entry in MAINTAINERS for the specific driver. Since
+> drivers/acpi/arm64 only has 3 .c files in it, adding another entry
+> seemed premature and overly granular. Certainly a subjective thing and
+> we have no objection to adding the extra line if that's preferred. This
+> should have been noted in the commit message.
 
+Thank you for the feedback here, I will make sure to add this to the 
+commit message and cover letter in the next version.
 
+Hi Lorenzo, Hanjun, Sudeep,
 
-Best regards,
-             Denis.
+As for adding myself as a reviewer under ACPI for ARM64 or adding 
+another F: entry, do you have a preference or guidance on what I should 
+do here?
+
+Thanks,
+
+Tyler
+
+>> Alternatively, adding a MAINTAINERS entry for a specific driver is
+>> definitely helpful and will certainly result in the listed maintainer
+>> to be Cc'd on changes affecting it. But I would really like this
+>> maintainer to actively engage with upstream, rather than simply be on
+>> the receiving end of a stream of changes.
+> Agree for subsystems. For individual drivers, I think having the author
+> as a reviewer is appropriate and should result in more patch reviews,
+> which moves us in the direction of more community participation which we
+> all want to see.
+>
+> Thanks,
+

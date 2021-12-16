@@ -2,195 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F0F47764D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BDF47764F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238673AbhLPPrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        id S238685AbhLPPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:47:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbhLPPrw (ORCPT
+        with ESMTP id S232741AbhLPPrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:47:52 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9299C061574;
-        Thu, 16 Dec 2021 07:47:51 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0A6E51EC01A2;
-        Thu, 16 Dec 2021 16:47:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639669666;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=w2zw5w9zdbclGVjd2mcfzFrzgn7sBAWZNCdTsQYykhk=;
-        b=HOSNWrPkxPtVrP+QzbncJoQNAqagO6/nOkVG3sXbVKWfE/24GyfWge5/8230enJQIghU91
-        CeCqrdvkWGJYi0yOX1vOhtgg49xfGrdlGoiWDGDG64jPbOh+vwbdb5cViWyGbFySlIelWH
-        iebgN19BrUYcG6qBiaDh42Sp3lSWbhI=
-Date:   Thu, 16 Dec 2021 16:47:46 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 06/40] x86/sev: Check SEV-SNP features support
-Message-ID: <Ybtfon70/+lG63BP@zn.tnic>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-7-brijesh.singh@amd.com>
+        Thu, 16 Dec 2021 10:47:55 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D30C06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:47:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=m8Imnupy9DCgTMxOF7vL/jVXbid1w7fM/mxpS0AUg+s=; b=JzxgUh5fve8WsO+XfVTOzA1r7T
+        ggInYoWAeCNA68UhSJZaOMYUyspdF4m50HaAvqv8dwzuXrWCTN4KIAclk0hrtY1ZKjUQnlnI268Pc
+        LRt6dWotCWyQvmmOuy6uwdQQ2XzsStDkC0EhUqZEQXU0fiMvX78omXqNDoKsUS0zyJutYGvnQYICw
+        KCLxj9huFbPgicl1ZvWGd5USYYn1iVr8SyRoroaqrI+DUgb45I0IRu2WgL1ehYxK8ZOr5FeXU+XOY
+        rg0iEyDSDpW0WVTSnt5PBaikontnB4cZ2P+xqwZnZgfcAOZNYSon34iDwKgGj6cGGxEndIjepWdUZ
+        pD12uv4g==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:55318 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1mxsz1-00026Q-H7; Thu, 16 Dec 2021 16:47:51 +0100
+Message-ID: <4059e488-38fe-2b79-191c-6e921f262c9f@tronnes.org>
+Date:   Thu, 16 Dec 2021 16:47:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211210154332.11526-7-brijesh.singh@amd.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 11/60] drm/gud: Add support for the nomodeset kernel
+ parameter
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20211215010008.2545520-1-javierm@redhat.com>
+ <20211215010008.2545520-12-javierm@redhat.com>
+ <5b1d9578-1f74-a808-c4d4-6e8c38dd57fc@tronnes.org>
+ <041430de-c0a0-d0eb-81d5-eeee3204ce23@suse.de>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <041430de-c0a0-d0eb-81d5-eeee3204ce23@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:42:58AM -0600, Brijesh Singh wrote:
-> Version 2 of the GHCB specification added the advertisement of features
-> that are supported by the hypervisor. If hypervisor supports the SEV-SNP
-> then it must set the SEV-SNP features bit to indicate that the base
-> SEV-SNP is supported.
+
+
+Den 16.12.2021 09.20, skrev Thomas Zimmermann:
+> Hi
 > 
-> Check the SEV-SNP feature while establishing the GHCB, if failed,
-> terminate the guest.
+> Am 15.12.21 um 22:37 schrieb Noralf Trønnes:
+>>
+>>
+>> Den 15.12.2021 01.59, skrev Javier Martinez Canillas:
+>>> According to disable Documentation/admin-guide/kernel-parameters.txt,
+>>> this
+>>> parameter can be used to disable kernel modesetting.
+>>>
+>>> DRM drivers will not perform display-mode changes or accelerated
+>>> rendering
+>>> and only the systewm system framebuffer will be available if it was
+>>> set-up.
+>>>
+>>> But only a few DRM drivers currently check for nomodeset, make this
+>>> driver
+>>> to also support the command line parameter.
+>>>
+>>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+>>> ---
+>>>
+>>
+>> I don't understand why this is applicable to USB drivers, there's no way
+>> the firmware can setup a framebuffer and continue pushing pixels over
+>> USB when Linux has been given control over the USB bus?
+>>
+>> The same argument goes for the SPI drivers in drm/tiny/ as well.
 > 
-> Version 2 of GHCB specification adds several new NAEs, most of them are
-> optional except the hypervisor feature. Now that hypervisor feature NAE
-> is implemented, so bump the GHCB maximum support protocol version.
+> The intended semantics of the option is to disable every display output
+> except for the buffer provided by the firmware.
 > 
-> While at it, move the GHCB protocol negotitation check from VC exception
 
-Unknown word [negotitation] in commit message, suggestions:
-        ['negotiation', 'negotiator', 'negotiate', 'abnegation', 'vegetation']
+If that's the case this patch is:
 
-> handler to sev_enable() so that all feature detection happens before
-> the first VC exception.
+Acked-by: Noralf Trønnes <noralf@tronnes.org>
+
+> With USB it still would still disable the driver. That's useful if only
+> for debugging. There are also systems with hard-wired USB displays where
+> one cannot just unplug the adapter.
 > 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  arch/x86/boot/compressed/sev.c    | 21 ++++++++++++++++-----
->  arch/x86/include/asm/sev-common.h |  6 ++++++
->  arch/x86/include/asm/sev.h        |  2 +-
->  arch/x86/include/uapi/asm/svm.h   |  2 ++
->  arch/x86/kernel/sev-shared.c      | 20 ++++++++++++++++++++
->  arch/x86/kernel/sev.c             | 16 ++++++++++++++++
->  6 files changed, 61 insertions(+), 6 deletions(-)
+> Admittedly, USB graphics is a bit of an odd use case, but neither is it
+> too far fetched IMHO.
 > 
-> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> index 0b6cc6402ac1..a0708f359a46 100644
-> --- a/arch/x86/boot/compressed/sev.c
-> +++ b/arch/x86/boot/compressed/sev.c
-> @@ -119,11 +119,8 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
->  /* Include code for early handlers */
->  #include "../../kernel/sev-shared.c"
->  
-> -static bool early_setup_sev_es(void)
-> +static bool early_setup_ghcb(void)
->  {
-> -	if (!sev_es_negotiate_protocol())
-> -		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_PROT_UNSUPPORTED);
-> -
->  	if (set_page_decrypted((unsigned long)&boot_ghcb_page))
->  		return false;
->  
-> @@ -174,7 +171,7 @@ void do_boot_stage2_vc(struct pt_regs *regs, unsigned long exit_code)
->  	struct es_em_ctxt ctxt;
->  	enum es_result result;
->  
-> -	if (!boot_ghcb && !early_setup_sev_es())
-> +	if (!boot_ghcb && !early_setup_ghcb())
->  		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
-
-Can you setup the GHCB in sev_enable() too, after the protocol version
-negotiation succeeds?
-
->  	vc_ghcb_invalidate(boot_ghcb);
-> @@ -247,5 +244,19 @@ void sev_enable(struct boot_params *bp)
->  	if (!(sev_status & MSR_AMD64_SEV_ENABLED))
->  		return;
->  
-> +	/* Negotiate the GHCB protocol version */
-> +	if (sev_status & MSR_AMD64_SEV_ES_ENABLED)
-> +		if (!sev_es_negotiate_protocol())
-> +			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_PROT_UNSUPPORTED);
-> +
-> +	/*
-> +	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
-> +	 * features. If SEV-SNP is enabled, then check if the hypervisor supports
-> +	 * the SEV-SNP features.
-> +	 */
-> +	if (sev_status & MSR_AMD64_SEV_SNP_ENABLED && !(get_hv_features() & GHCB_HV_FT_SNP))
-> +		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
-> +
-> +
-^ Superfluous newline.
-
->  	sme_me_mask = BIT_ULL(ebx & 0x3f);
-
-...
-
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index 19ad09712902..a0cada8398a4 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -43,6 +43,10 @@ static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
->   */
->  static struct ghcb __initdata *boot_ghcb;
->  
-> +/* Bitmap of SEV features supported by the hypervisor */
-> +static u64 sev_hv_features;
-
-__ro_after_init
-
-> +
-> +
->  /* #VC handler runtime per-CPU data */
->  struct sev_es_runtime_data {
->  	struct ghcb ghcb_page;
-> @@ -766,6 +770,18 @@ void __init sev_es_init_vc_handling(void)
->  	if (!sev_es_check_cpu_features())
->  		panic("SEV-ES CPU Features missing");
->  
-> +	/*
-> +	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
-> +	 * features. If SEV-SNP is enabled, then check if the hypervisor supports
-
-s/SEV-SNP/SNP/g
-
-And please do that everywhere in sev-specific files.
-
-This file is called sev.c and there's way too many acronyms flying
-around so the simpler the better.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> Best regards
+> Thomas
+> 
+>>
+>> Noralf.
+>>
+>>>   drivers/gpu/drm/gud/gud_drv.c | 3 +++
+>>>   1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/gud/gud_drv.c
+>>> b/drivers/gpu/drm/gud/gud_drv.c
+>>> index 3f9d4b9a1e3d..4d253d249512 100644
+>>> --- a/drivers/gpu/drm/gud/gud_drv.c
+>>> +++ b/drivers/gpu/drm/gud/gud_drv.c
+>>> @@ -446,6 +446,9 @@ static int gud_probe(struct usb_interface *intf,
+>>> const struct usb_device_id *id)
+>>>       u32 *formats;
+>>>       int ret, i;
+>>>   +    if (drm_firmware_drivers_only())
+>>> +        return -ENODEV;
+>>> +
+>>>       ret = usb_find_bulk_out_endpoint(intf->cur_altsetting, &bulk_out);
+>>>       if (ret)
+>>>           return ret;
+>>>
+> 

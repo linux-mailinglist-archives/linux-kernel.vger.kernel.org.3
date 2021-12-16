@@ -2,82 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D807147697B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 06:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3835247699E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 06:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbhLPFZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 00:25:08 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:59851 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbhLPFZH (ORCPT
+        id S233713AbhLPFZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 00:25:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231415AbhLPFZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 00:25:07 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 16 Dec 2021 00:25:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184FBC061574;
+        Wed, 15 Dec 2021 21:25:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JF0tT4XpDz4xdH;
-        Thu, 16 Dec 2021 16:25:05 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1639632306;
-        bh=BUuBGepxpfQOwRLp6b3oZcygupgxcbj+B8KJaOO8HHs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=f03p67UHHg/l3mM2iZaDxV5HKrY6lAvFcMxx8MX592LnJIJIIc5xbOSzTiS4cpQT6
-         XS6mhT64eXav/BcnmR/g6T920w+hY/0oppLhTMwTJIZUR1/HMcmsLKb/dDtCnS0uQ+
-         j/z2aRQrh06hbavwH2KmhAsfMj6SuoWUVJXp+755OG3isY6Dp+oUP14UCXJDIT+WW+
-         f2PZPSz/A+ln5VgPkudUM2/EnhFqi9p9mz1tuNKFrKbyB0KCrWJNodMDK7zwW0Bwv0
-         GYOgHXYjMWCv6LMsDhmyOc9eaoqQiRw93sipTaeMWzyUCWsCcrk5koAIUWSzMyLWjm
-         y3lG11tl6YWsw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        lkft-triage@lists.linaro.org
-Subject: Re: [next] powerpc: book3s_hv.c:4591:27: error: 'struct kvm_vcpu'
- has no member named 'wait'
-In-Reply-To: <CA+G9fYua-LEU7u3OA0=c8HnBjoU6WENh9Avc18GGLg8Dbf9ZAw@mail.gmail.com>
-References: <CA+G9fYua-LEU7u3OA0=c8HnBjoU6WENh9Avc18GGLg8Dbf9ZAw@mail.gmail.com>
-Date:   Thu, 16 Dec 2021 16:25:05 +1100
-Message-ID: <87o85hktou.fsf@mpe.ellerman.id.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D283FB82232;
+        Thu, 16 Dec 2021 05:25:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D90C36AE2;
+        Thu, 16 Dec 2021 05:25:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639632353;
+        bh=+eJtz//5cGB7b9ENlk4d9Q+wDotc77DfxSWMK6U3Dwk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qfj9zuny/Ijd19+ICpHntStcMtSC1zYpyPwnNCUjXs9/rNvV90gurIYOItvqYiaCr
+         mCQO9rrijE9HGEmDdnBfcApYhR9CnryQL12Ml8jPY4Oi9OecwDN+mRl9iD6U+NcvkO
+         4HODK/ElklFB2tgVGmQECPbNkDtx8bLZR3brfzcUNqmHe7J5aN0Y3KdGLGB+Tj9NDl
+         XTFwpzx12t3eAjqBvCewf4lqa7qLFLCHWy4iqNlrre8fgx1yR2obB6y5R0VBljsWjJ
+         V2pvp1YGo4akwGVM1/N4vHyvp7NmGNMoG3BGcDXH0ycq8IV6zwzs/DCTBcbTP2idbX
+         cQXo+8YxTsZkQ==
+Date:   Thu, 16 Dec 2021 10:55:45 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Hemant Kumar <hemantk@codeaurora.org>,
+        Bhaumik Bhatt <quic_bbhatt@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Carl Huang <cjhuang@codeaurora.org>,
+        Carl Yin <carl.yin@quectel.com>, linux-kernel@vger.kernel.org,
+        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] bus: mhi: core: Use correctly sized arguments for bit
+ field
+Message-ID: <20211216052545.GA42608@thinkpad>
+References: <20211215232446.2069794-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215232446.2069794-1-keescook@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Naresh Kamboju <naresh.kamboju@linaro.org> writes:
-> [ Please ignore this email if it is already reported ]
->
-> While building Linux next 20211214 powerpc defconfig with gcc-8/9/10/11
-> following warnings / errors noticed.
->
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=powerpc
-> CROSS_COMPILE=powerpc64le-linux-gnu- 'CC=sccache
-> powerpc64le-linux-gnu-gcc' 'HOSTCC=sccache gcc'
-> arch/powerpc/kvm/book3s_hv.c: In function 'kvmhv_run_single_vcpu':
-> arch/powerpc/kvm/book3s_hv.c:4591:27: error: 'struct kvm_vcpu' has no
-> member named 'wait'
->    prepare_to_rcuwait(&vcpu->wait);
->                            ^~
-> arch/powerpc/kvm/book3s_hv.c:4608:23: error: 'struct kvm_vcpu' has no
-> member named 'wait'
->    finish_rcuwait(&vcpu->wait);
->                        ^~
-> make[3]: *** [scripts/Makefile.build:289: arch/powerpc/kvm/book3s_hv.o] Error 1
->
-> meta data:
-> -----------
->     git describe: next-20211214
+On Wed, Dec 15, 2021 at 03:24:46PM -0800, Kees Cook wrote:
+> The find.h APIs are designed to be used only on unsigned long arguments.
+> This can technically result in a over-read, but it is harmless in this
+> case. Regardless, fix it to avoid the warning seen under -Warray-bounds,
+> which we'd like to enable globally:
+> 
+> In file included from ./include/linux/bitmap.h:9,
+>                  from ./include/linux/cpumask.h:12,
+>                  from ./arch/x86/include/asm/cpumask.h:5,
+>                  from ./arch/x86/include/asm/msr.h:11,
+>                  from ./arch/x86/include/asm/processor.h:22,
+>                  from ./arch/x86/include/asm/cpufeature.h:5,
+>                  from ./arch/x86/include/asm/thread_info.h:53,
+>                  from ./include/linux/thread_info.h:60,
+>                  from ./arch/x86/include/asm/preempt.h:7,
+>                  from ./include/linux/preempt.h:78,
+>                  from ./include/linux/spinlock.h:55,
+>                  from ./include/linux/wait.h:9,
+>                  from ./include/linux/wait_bit.h:8,
+>                  from ./include/linux/fs.h:6,
+>                  from ./include/linux/debugfs.h:15,
+>                  from drivers/bus/mhi/core/init.c:7:
+> drivers/bus/mhi/core/init.c: In function 'to_mhi_pm_state_str':
+> ./include/linux/find.h:187:37: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'enum mhi_pm_state[1]' [-Warray-bounds]
+>   187 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
+>       |                                     ^~~~~
+> drivers/bus/mhi/core/init.c:80:51: note: while referencing 'state'
+>    80 | const char *to_mhi_pm_state_str(enum mhi_pm_state state)
+>       |                                 ~~~~~~~~~~~~~~~~~~^~~~~
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Should be fixed in next-20211215 by:
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-  63fa47ba886b ("KVM: PPC: Book3S HV P9: Use kvm_arch_vcpu_get_wait() to get rcuwait object")
+A small nit pick below but I'll fix it up while applying.
 
-cheers
+Thanks,
+Mani
+
+> ---
+>  drivers/bus/mhi/core/init.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
+> index f1ec34417592..b91f75fff962 100644
+> --- a/drivers/bus/mhi/core/init.c
+> +++ b/drivers/bus/mhi/core/init.c
+> @@ -79,7 +79,8 @@ static const char * const mhi_pm_state_str[] = {
+>  
+>  const char *to_mhi_pm_state_str(enum mhi_pm_state state)
+>  {
+> -	int index = find_last_bit((unsigned long *)&state, 32);
+> +	unsigned long bits = state;
+
+Variable "bits" could be changed to "pm_state".
+
+> +	int index = find_last_bit(&bits, 32);
+>  
+>  	if (index >= ARRAY_SIZE(mhi_pm_state_str))
+>  		return "Invalid State";
+> -- 
+> 2.30.2
+> 

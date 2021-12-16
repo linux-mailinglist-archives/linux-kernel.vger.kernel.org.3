@@ -2,123 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F13C4769AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 06:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 051DB4769AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 06:38:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbhLPFiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 00:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbhLPFiA (ORCPT
+        id S233751AbhLPFir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 00:38:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23113 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229543AbhLPFiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 00:38:00 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D511AC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 21:37:59 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id x6so33414213iol.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 21:37:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=egauge.net; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :organization:user-agent:mime-version:content-transfer-encoding;
-        bh=6ScHdtKJBGLpSH1WCw4x7edbvBY4BLhz9TD1CTHUesQ=;
-        b=Rh1PMORQrWW3aNlpNq0Dm8K/gqfuz9eVKKNKV9XJrSPwONwKc6wvmSCpga9KxTHtIF
-         0zDQRp6e8rMAEsJPfx741s7DnmOiBbsRW6YAwEvrSELddQ0gyRxldzbAKmnTO0Kb9YT8
-         6Kx2cyY3ga33KeHXyXdWjd1LfbSrm1VNQT9KpJU4rU01YrhOXfvEiNreKw/IH71FwRpx
-         dQ14wH+ka46Xrt2Is05w0nkCxr6kj4oh7q4DKZn5rtUWC+sheS73CS/qYMhogfpxDXgP
-         Mvrf78K602or907qFpG4PZCIM5sauwUzH09VJGPDH9GDmE3E1QtdNV1bghGbJYoBB2Vl
-         58AA==
+        Thu, 16 Dec 2021 00:38:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639633125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qrBEElh5/4hAbc/6jTGVDH5c4ghjYxLIGLQd5AjrjwY=;
+        b=S+g/JS8Q5hysNpXgGr37/tF/WHGIbzgsXXF8BRi64SAo9TOMLygb+KapD4lwh7KhmqegqI
+        0vwgi8oza4VWMG+k8I0JkxkazTUo8FFQESIS0QoOipriURuRw6mR9c5SndQj1xMKJ7kMxW
+        gXqtJf8gy+s353UIu+lVZTJ+M5BFAPw=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-428-sBAU0IrGMUGFv79s0JVthw-1; Thu, 16 Dec 2021 00:38:43 -0500
+X-MC-Unique: sBAU0IrGMUGFv79s0JVthw-1
+Received: by mail-wm1-f71.google.com with SMTP id k25-20020a05600c1c9900b00332f798ba1dso758059wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 21:38:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=6ScHdtKJBGLpSH1WCw4x7edbvBY4BLhz9TD1CTHUesQ=;
-        b=jyRPh8ofHw2v+lmh0m9sDwAILLl6zQI20WuSWLcj8IIn5DAg351zXn3YK4IT1qOAUL
-         o41RHUvsrXIDT0GlPZ8KDdp5KCEXJT0T02klpY7s96KR9DMVsXNoc8TTG5eSBfZgOqHz
-         llILM9ja+T0GakKP9VPAhCuiQlJ9aIVBAA9VubyFwXLaovhURVIUsn8eLjFAvVVl1Kni
-         9WmW9b0etdV8JlzJIjmoVQ9aLQHVaMTOnjaO8uaxGyKLjrrMRd1FsI9HeeIhsvKO7AlG
-         gXI3g4SxRrRuH4xfzXxru8+98ocqbc2MzYAm1XIw+pRljIjs8Eq12/LLX0BKogKbvIEn
-         9/AQ==
-X-Gm-Message-State: AOAM533KgZJdCK7/nljJAxt9GSii/8dEC3w7tOuwL8LMTCCiVbbMGi6K
-        ZKulzCIykjQqGH4IwpQFW6ty
-X-Google-Smtp-Source: ABdhPJwbhQHP0Lg2aI7V08adPfvImhPuENbAA3IxvfP5uS1vgnq3nu6gVTlG7wLNi6vDhA77D5jRzg==
-X-Received: by 2002:a05:6638:38a6:: with SMTP id b38mr8269875jav.233.1639633079157;
-        Wed, 15 Dec 2021 21:37:59 -0800 (PST)
-Received: from ?IPv6:2601:281:8300:4e0:2ba9:697d:eeec:13b? ([2601:281:8300:4e0:2ba9:697d:eeec:13b])
-        by smtp.gmail.com with ESMTPSA id l12sm2263692iow.23.2021.12.15.21.37.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qrBEElh5/4hAbc/6jTGVDH5c4ghjYxLIGLQd5AjrjwY=;
+        b=7TFmLVJ1vp7Wllv82mI5SY7eXdE0WiGGyB85r4sZlh6Rhkv/G8KQdTFc41HS99feYD
+         GrpSA5fysVPJ2hOulAluwumR13vOixJ1K0+7FoaChhA1R0/V9ZWJXEehAp4c8Y0OdJxt
+         ARhmVu1LHxCsAPxH3OpsSOXf/aN+dgyrWWaCw+jh6BHXjNmKAPsH51CvJVZAyC/hbAFX
+         QP9enfBk5B7uEwjqeX7G1REPyFsGTUslhnnhwxLaLIje8IZG60GXunDcwhTPVb8o4RtY
+         wUZVnIsJ7HVfdbcZg873ZuXdfG3knNPNatBCatx74tNNhgq8wIEfVCsg9gvmj4f/wQLY
+         G4Mw==
+X-Gm-Message-State: AOAM532wLYp33kou6QLmKWGxKnnoh+VGo8gwTqv3IxXhsZ5nWwqm4vqA
+        O41X3NVpkVJH0gW3G3ZB7VsSw7Ls6TvQk5TZA9BsxGYzQrZdCbQ3ZzDLRCLoUHF3fwU7hwmIvQ/
+        EBKgYzwANa+7yOn9x4ljEIjPr
+X-Received: by 2002:a5d:47a4:: with SMTP id 4mr1205794wrb.180.1639633122454;
+        Wed, 15 Dec 2021 21:38:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwqQ37OdEvGxFLS+2BX/bA8SD4YT3AcsowKwMM8wl7jpWe3zWiGOeyYUH+9wrL53x86/SZLbw==
+X-Received: by 2002:a5d:47a4:: with SMTP id 4mr1205778wrb.180.1639633122061;
+        Wed, 15 Dec 2021 21:38:42 -0800 (PST)
+Received: from xz-m1.local ([64.64.123.12])
+        by smtp.gmail.com with ESMTPSA id h5sm3426758wrz.63.2021.12.15.21.38.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 21:37:58 -0800 (PST)
-Message-ID: <31d5e7447e4574d0fcfc46019d7ca96a3db4ecb6.camel@egauge.net>
-Subject: Re: [PATCH] wilc1000: Allow setting power_save before driver is
- initialized
-From:   David Mosberger-Tang <davidm@egauge.net>
-To:     Ajay.Kathat@microchip.com
-Cc:     Claudiu.Beznea@microchip.com, kvalo@codeaurora.org,
-        davem@davemloft.net, kuba@kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 15 Dec 2021 22:37:47 -0700
-In-Reply-To: <5378e756-8173-4c63-1f0d-e5836b235a48@microchip.com>
-References: <20211212011835.3719001-1-davidm@egauge.net>
-         <6fc9f00aa0b0867029fb6406a55c1e72d4c13af6.camel@egauge.net>
-         <5378e756-8173-4c63-1f0d-e5836b235a48@microchip.com>
-Organization: eGauge Systems LLC
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 15 Dec 2021 21:38:41 -0800 (PST)
+Date:   Thu, 16 Dec 2021 13:38:33 +0800
+From:   Peter Xu <peterx@redhat.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH v6 03/23] mm: Check against orig_pte for finish_fault()
+Message-ID: <YbrQ2bsEYsfHrIIV@xz-m1.local>
+References: <20211115075522.73795-1-peterx@redhat.com>
+ <20211115075522.73795-4-peterx@redhat.com>
+ <6260997.DYpkEd5BTb@nvdebian>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6260997.DYpkEd5BTb@nvdebian>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-15 at 13:01 +0000, Ajay.Kathat@microchip.com wrote:
-> On 13/12/21 02:50, David Mosberger-Tang wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+On Thu, Dec 16, 2021 at 04:01:47PM +1100, Alistair Popple wrote:
+> On Monday, 15 November 2021 6:55:02 PM AEDT Peter Xu wrote:
+> > We used to check against none pte and in those cases orig_pte should always be
+> > none pte anyway.
+> 
+> Is that always true? From what I can see in handle_pte_fault() orig_pte only
+> gets initialised in the !pmd_none() case so might not be pte_none.
+
+I believe it's true, otherwise I must have overlooked.
+
+IMHO it's not "when we set orig_pte" that matters - note that finish_fault()
+(that this patch modifies) is only called for file-backed memories, and it's
+only called in do_fault() where the pte is not mapped at all.
+
+DAX seems to call it too, but still DAX comes from do_fault() too, afaict.
+
+The pte will not be mapped in two cases in handle_pte_fault():
+
+  - When pmd_none
+
+  - When !pmd_none, however if we find that pte_none==true, that's:
+
+        if (pte_none(vmf->orig_pte)) {
+                pte_unmap(vmf->pte);
+                vmf->pte = NULL;
+        }
+
+So when we're already in do_fault(), afaict, orig_pte must be pte_none().
+Another side note is that, IIUC pte_none() is a looser check than the
+pte_val()==0 and it should be arch dependent.
+
+Thanks,
+
+> 
+> > This change prepares us to be able to call do_fault() on !none ptes.  For
+> > example, we should allow that to happen for pte marker so that we can restore
+> > information out of the pte markers.
 > > 
-> > Unfortunately, this patch doesn't seem to be sufficient.  From what I
-> > can tell, if power-save mode is turned on before a station is
-> > associated with an access-point, there is no actual power savings.  If
-> > I issue the command after the station is associated, it works perfectly
-> > fine.
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >  mm/memory.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > > 
-> > Ajay, does this make sense to you?
->   <snip>
-> Power-save mode is allowed to be enabled irrespective of station 
-> association state. Before association, the power consumption should be 
-> less with PSM enabled compared to PSM disabled. The WLAN automatic power 
-> save delivery gets enabled after the association with AP.
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index 04662b010005..d5966d9e24c3 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -4052,7 +4052,7 @@ vm_fault_t finish_fault(struct vm_fault *vmf)
+> >  				      vmf->address, &vmf->ptl);
+> >  	ret = 0;
+> >  	/* Re-check under ptl */
+> > -	if (likely(pte_none(*vmf->pte)))
+> > +	if (likely(pte_same(*vmf->pte, vmf->orig_pte)))
+> >  		do_set_pte(vmf, page, vmf->address);
+> >  	else
+> >  		ret = VM_FAULT_NOPAGE;
+> > 
 > 
-> To check the power measurement before association,  test without 
-> wpa_supplicant.
 > 
 > 
-> Steps:
-> - load the module
-> - ifconfig wlan0 up
-> - iw dev wlan0 set power_save off (check the pwr measurement after PS 
-> mode disabled)
-> - iw dev wlan0 set power_save on (check the pwr measurement after PS 
-> mode enable)
+> 
 
-It appears wpa_supplicant consistently renders PSM ineffective:
-
-                                (current draw, 1 min avg):
-------------------------------  --------------------------
-- base case (no module loaded): 16.8 mA
-- module loaded & PSM on      : 16.8 mA
-- wpa_supplicant started      : 19.6 mA
-- PSM on                      : 19.6 mA (no change)
-- PSM off                     : 19.6 mA (no change)
-- PSM on                      : 15.4 mA
-
-What's strange is when I try this sequence a couple of times in a row,
-the device gets into a state where after starting wpa_supplicant, no
-amount of PSM on/off commands will get it to enter power-savings mode
-any more.  When in that state, only removing wilc1000-spi.ko and adding
-it back gets it out of that state.  A power-cycle does not.  Very
-confusing.
-
-  --david
-
+-- 
+Peter Xu
 

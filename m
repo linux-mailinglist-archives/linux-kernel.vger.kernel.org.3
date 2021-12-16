@@ -2,92 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE724774E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F814774E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbhLPOpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
+        id S235755AbhLPOqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbhLPOpw (ORCPT
+        with ESMTP id S229979AbhLPOqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:45:52 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B3EC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:45:52 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id 14so35304731ioe.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:45:52 -0800 (PST)
+        Thu, 16 Dec 2021 09:46:11 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E02EC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:46:11 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id c6so751148plg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:46:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/m5IjU8cEr4hhVbp6UPYr7O2aRXlpDEgmWqofIxjBW0=;
-        b=DSRTGLZ6KlenlEJ57G+hFZrDf+Uy0YIUrLrkUnDz4zHJjOlqJJ8hVjWQNMe1eIHnXS
-         Gio2YlVn9I8DDDB18P0CER4KCayZzPviR2c/UYG6Crczf328txP6Lda3Bk8t1MzGVSL3
-         jCSJRbEV70kIWj0Bf2zdMFz9OH5SQm3Tl+TAI=
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CYu6jkE9mC5EqzWSMs0sHWtkpkosTO/wJoYnnIHVS8s=;
+        b=yKO91YT+/Jc+If7nShBSGfZaIBlXosKfX6YRmEZnVXerxEYn1Ytd072EpSQppbKtk+
+         IGwO3/h2chGq1ABTbQbnDvqVjp2ibQdtF0QkHEja1FDzx9G/u3/5TrBGYoGp0t1lsD5W
+         nkZ5RzA2kwSNQpiH0xfxUDae9cvYZbsbl5mMrgt6mNUnHPqV6L3rt20tELK2GRcnZzxL
+         YfChhlrSCw0mcug8o/lZ+KxcQnc+tFFkGAbwuojl241BtMef/riTpW6/t6RBX75tVbHj
+         mDQGmEpq215upL3smcctREVFv5rLthDJnllAlqUqDQhHvC4Dg3N2aUrgr3n2IspynJgq
+         eXuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/m5IjU8cEr4hhVbp6UPYr7O2aRXlpDEgmWqofIxjBW0=;
-        b=DnHg4R3R6hq5g2AVKXynRRPKl8APoYC7SF0u3LYlSi+7BJjcxo6so4f+QEoC1XdjII
-         l1osJDNLHGdoQ9Zb5KMfwzjUgrSR38wO954C0NLdx4hyoZDlGzoNe5v01JBUjD1uUV3K
-         Sbq8UShCOHn0NDeAgFVjsNJKIBX3ZTRAhfnerG+5OgpF4ZC/cOdS0uC/OO0u7MTPwifb
-         fjFAQUHYMOczcntGvuolhFLnBO/Rq3IcxHd1C4cL+D/CtZAafsc1BRj5ShU3C1c4LT/F
-         Pn0jqDFtf0oaYYNSnAJ+rI7FlgJ3lB/oLUHWXzJ72te7s0XkqA7/bvqMt8/MbF0DBOMO
-         OWJA==
-X-Gm-Message-State: AOAM531hr6jJfdPE2wa6U58iqaEEoUb6tdC0AH+gL4akYeRLVC3Xai/U
-        0pW5mK4BIVzfg309P5g0sLq5AUthUEmYgA==
-X-Google-Smtp-Source: ABdhPJyWe6wBFOOv0X5wiGcnL6hlp/oNiGKu2EMOU0xpIlaZKKd7mJee0N7j0MmhHMsNCE/i/AfRSw==
-X-Received: by 2002:a05:6638:3590:: with SMTP id v16mr10113512jal.159.1639665951446;
-        Thu, 16 Dec 2021 06:45:51 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id j6sm3545139ils.77.2021.12.16.06.45.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 06:45:51 -0800 (PST)
-Subject: Re: [PATCH] docs/vm: fix Unexpected indentation warns in page_owner
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     akpm@linux-foundation.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211215001929.47866-1-skhan@linuxfoundation.org>
- <e3acf716-edd2-91d5-24c9-02c547f0d168@gmail.com>
- <f41c83f7-95f9-fd70-aa19-60887e7c4039@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ef40c328-78a7-3aeb-0dd5-8ccbd7279e53@linuxfoundation.org>
-Date:   Thu, 16 Dec 2021 07:45:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=CYu6jkE9mC5EqzWSMs0sHWtkpkosTO/wJoYnnIHVS8s=;
+        b=49mhI8aKq/Wczi8eyFn9MCAWZbf62lkiyx5cz1r4IOhiKKrfKXxDmlv6Z248T5w+O0
+         2pfSEGeOLi4SNfNmQnksBaQ0emxnvL123/Hqq95RId1Pw4YpwAZv5YJpYbBGMKaDhCkG
+         4q8UE4izMQQSa9c2nqWHvEbnd5OueaBb9sUlVJYzQzi9F1mQVgkgdJ3c0ijfpGRsYDk5
+         1T+SjX0ncTBiuJWGcWRPJ2kQJ6Tbv6QqwpPxinyeCSSfakDuiNbHtUHeZ78dd6f8Jlr/
+         KHo3CNdl+Qs5Bebx1OAh0EFcDcbVI12nA8opXRmd6ExYBNO7XhwAPk+7YmOytaYT163e
+         0nsA==
+X-Gm-Message-State: AOAM5330pnhIABNbiDeK6nHeQ6xBFwuwjqn8fLriSytNYAJiD9JhU4h4
+        8ThKyAPsHD6xTKuI8CC2elcGK+icbRPP/g==
+X-Google-Smtp-Source: ABdhPJxqqQakxgtZ4jCpo+kNykWtVaxdYFQj/nfy5ZBD6qwDzxx30KkbRJKudiAzKAxMbXTz8FwrmA==
+X-Received: by 2002:a17:90b:1e0e:: with SMTP id pg14mr6319635pjb.143.1639665970759;
+        Thu, 16 Dec 2021 06:46:10 -0800 (PST)
+Received: from localhost.localdomain ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id p2sm5642735pja.55.2021.12.16.06.46.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 Dec 2021 06:46:10 -0800 (PST)
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+To:     miklos@szeredi.hu
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xieyongji@bytedance.com,
+        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Subject: [PATCH] fuse: fix deadlock between O_TRUNC open() and non-O_TRUNC open()
+Date:   Thu, 16 Dec 2021 22:45:58 +0800
+Message-Id: <20211216144558.63931-1-zhangjiachen.jaycee@bytedance.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <f41c83f7-95f9-fd70-aa19-60887e7c4039@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 8:10 AM, Shuah Khan wrote:
-> On 12/14/21 6:05 PM, Akira Yokosawa wrote:
->> Hi,
->>
->> On Tue, 14 Dec 2021 17:19:29 -0700, Shuah Khan wrote:
->>> Fix Unexpected indentation warns in page_owner:
->>>
->>> Documentation/vm/page_owner.rst:92: WARNING: Unexpected indentation.
->>> Documentation/vm/page_owner.rst:96: WARNING: Unexpected indentation.
->>> Documentation/vm/page_owner.rst:107: WARNING: Unexpected indentation.
->>
->> I guess these outputs should have been literal blocks.
->> Then Sphinx wouldn't complain about indentations.
-> 
-> Good point. I will take a look and send v2.
-> 
+fuse_finish_open() will be called with FUSE_NOWRITE set in case of atomic
+O_TRUNC open(), so commit 76224355db75 ("fuse: truncate pagecache on
+atomic_o_trunc") replaced invalidate_inode_pages2() by truncate_pagecache()
+in such a case to avoid the A-A deadlock. However, we found another A-B-B-A
+deadlock related to the case above, which will cause the xfstests
+generic/464 testcase hung in our virtio-fs test environment.
 
-This is already in a literal block. A few of the lines in a literal block
-are missing indentations - this patch is good as is.
+Consider two processes concurrently open one same file, one with O_TRUNC
+and another without O_TRUNC. The deadlock case is described below, if
+open(O_TRUNC) is already set_nowrite(acquired A), and is trying to lock
+a page (acquiring B), open() could have held the page lock (acquired B),
+and waiting on the page writeback (acquiring A). This would lead to
+deadlocks.
 
-thanks,
--- Shuah
+This commit tries to fix it by locking inode in fuse_open_common() even
+if O_TRUNC is not set. This introduces a lock C to protect the area with
+A-B-B-A the deadlock rick.
+
+open(O_TRUNC)
+----------------------------------------------------------------
+fuse_open_common
+  lock_inode		[C acquire]
+  fuse_set_nowrite	[A acquire]
+
+  fuse_finish_open
+    truncate_pagecache
+      lock_page		[B acquire]
+      truncate_inode_page
+      unlock_page	[B release]
+
+  fuse_release_nowrite	[A release]
+  unlock_inode		[C release]
+----------------------------------------------------------------
+
+open()
+----------------------------------------------------------------
+fuse_open_common
+  (lock_inode)		[C acquire, introduced by this commit]
+
+  fuse_finish_open
+    invalidate_inode_pages2
+      lock_page		[B acquire]
+        fuse_launder_page
+          fuse_wait_on_page_writeback [A acquire]
+      unlock_page	[B release]
+
+  (unlock_inode)	[C release, introduced by this commit]
+----------------------------------------------------------------
+
+Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+---
+ fs/fuse/file.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+index 829094451774..73fec30e0a37 100644
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@ -229,8 +229,10 @@ int fuse_open_common(struct inode *inode, struct file *file, bool isdir)
+ 	bool is_wb_truncate = (file->f_flags & O_TRUNC) &&
+ 			  fc->atomic_o_trunc &&
+ 			  fc->writeback_cache;
+-	bool dax_truncate = (file->f_flags & O_TRUNC) &&
++	bool is_dax_truncate = (file->f_flags & O_TRUNC) &&
+ 			  fc->atomic_o_trunc && FUSE_IS_DAX(inode);
++	bool may_truncate = fc->atomic_o_trunc &&
++			  (fc->writeback_cache || FUSE_IS_DAX(inode));
+ 
+ 	if (fuse_is_bad(inode))
+ 		return -EIO;
+@@ -239,12 +241,12 @@ int fuse_open_common(struct inode *inode, struct file *file, bool isdir)
+ 	if (err)
+ 		return err;
+ 
+-	if (is_wb_truncate || dax_truncate) {
++	if (may_truncate)
+ 		inode_lock(inode);
++	if (is_wb_truncate || is_dax_truncate)
+ 		fuse_set_nowrite(inode);
+-	}
+ 
+-	if (dax_truncate) {
++	if (is_dax_truncate) {
+ 		filemap_invalidate_lock(inode->i_mapping);
+ 		err = fuse_dax_break_layouts(inode, 0, 0);
+ 		if (err)
+@@ -256,13 +258,13 @@ int fuse_open_common(struct inode *inode, struct file *file, bool isdir)
+ 		fuse_finish_open(inode, file);
+ 
+ out:
+-	if (dax_truncate)
++	if (is_dax_truncate)
+ 		filemap_invalidate_unlock(inode->i_mapping);
+ 
+-	if (is_wb_truncate | dax_truncate) {
++	if (is_wb_truncate | is_dax_truncate)
+ 		fuse_release_nowrite(inode);
++	if (may_truncate)
+ 		inode_unlock(inode);
+-	}
+ 
+ 	return err;
+ }
+-- 
+2.20.1
 

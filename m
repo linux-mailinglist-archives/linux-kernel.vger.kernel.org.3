@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C86E477436
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FAA477447
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234922AbhLPOR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:17:28 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:37760
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229792AbhLPOR2 (ORCPT
+        id S237840AbhLPOTH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Dec 2021 09:19:07 -0500
+Received: from mout.kundenserver.de ([217.72.192.74]:60973 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229583AbhLPOTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:17:28 -0500
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EC75D3FFD9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 14:17:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639664246;
-        bh=hXcKig2BTgNYlsnaKeNaeezzj0lAoxAXYJuGyAPXer0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=tATwKonCqcd9rCmNOWVVvMgx/DZLUwWeMkhoVI9TkSV9VOH50u7t0PwKR5Hb3vvR2
-         QYun/xsgaMt6MUO5RmjEoGB6bk9A+uvkRe1ejxI8A1rwn9zTCXu/+DNgI2FH7itrwD
-         /LmXVr8M+2PHUBy+Gl1TcRbt1fobxxKbwuk4DxVZV8Sxe5z5etG32gJh1ugqHWk7H0
-         5HM5sAIXOf0PsJrPRylDs8Fz1f0dO76ZBRFh/VwSa/kHPMdHfGcy3jgEfFRr2qqkY6
-         t1s0Bg6SF8SkZBcC8O8YaaSAoPqUSy8DdM2QP4yaA+uZCuewF1XuppPraDfqp0yzYR
-         G4kli7fXlyhKA==
-Received: by mail-wm1-f69.google.com with SMTP id j71-20020a1c234a000000b00342f418ae7cso1343229wmj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:17:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hXcKig2BTgNYlsnaKeNaeezzj0lAoxAXYJuGyAPXer0=;
-        b=gdoiQ9kzu4BY6e38fcuCC2FqG0ff0oSFM94b4ob9i2wkJgf5Wx3OSvGvmyOAdLhXTa
-         EPLdHteaJRpfe//adQojmZDbS3ow54/GByd37okw+vwnZ2gYniInHKEvgZKxyvqHh4RG
-         KyvexUKkCGs2YopcPZ/64XuQLpCwl/6+9XtT00LkWDVCslFcJ0BNQ0+9Z/KL4V7iu6lc
-         ah8mVR9s2R7Ulz5OVTFvrW/dC/XBnhIe0vZ7siRgQJ0mKMFec7fb93zEBEZQPguC3FsS
-         WTU3Ids7GI1BbgqZ7AFuHxUhsyK7rRNFmSSBxOWtQDyUsskomu6LSmS/UNeIxecSTDMR
-         Kb9Q==
-X-Gm-Message-State: AOAM531Fqtb57CW/XcBCugIjq25gPwznpJ+n2pe95es+tWo/NBSUslva
-        znvBReq87RgKS/za2ougvbwempK9ERA739EBYbtUglgY+dvKlrRBkRIZ8VpI/mQrNOZNqv8x+Cl
-        xDfa69On4awWli8nJ+ibb6+a8MzGAkIiXKigzV5s5TA==
-X-Received: by 2002:adf:f04d:: with SMTP id t13mr9316094wro.324.1639664246526;
-        Thu, 16 Dec 2021 06:17:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyQzaGzh5uSvdXoD/U0jonieRUBkngZQxVU6MeqdFjuxxNDCLX8Dbfju2GouOfAFj1rfc6n9A==
-X-Received: by 2002:adf:f04d:: with SMTP id t13mr9316079wro.324.1639664246280;
-        Thu, 16 Dec 2021 06:17:26 -0800 (PST)
-Received: from [192.168.123.55] (ip-88-152-144-157.hsi03.unitymediagroup.de. [88.152.144.157])
-        by smtp.gmail.com with ESMTPSA id o2sm3822032wru.109.2021.12.16.06.17.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 06:17:25 -0800 (PST)
-Message-ID: <fd40010f-f2ec-b32a-6850-1e054af43725@canonical.com>
-Date:   Thu, 16 Dec 2021 15:17:25 +0100
+        Thu, 16 Dec 2021 09:19:07 -0500
+Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MCsDe-1mp6Aj1WF6-008vRY; Thu, 16 Dec 2021 15:19:05 +0100
+Received: by mail-wr1-f49.google.com with SMTP id e5so11065576wrc.5;
+        Thu, 16 Dec 2021 06:19:05 -0800 (PST)
+X-Gm-Message-State: AOAM532Og1NAamdQ4IykJsrGX5en4sWA919JvtSJzq74nhr5o0GvmUir
+        dHY5M61u632Bkn2nif7CbB9QpMIFr4KpamBoBJc=
+X-Google-Smtp-Source: ABdhPJxmplO/8wUtDmbZb8q9bqy7ZOfHV5yg368TQTzX4lBN+OEsoFiUjwpCE3vTs4ls9wlTx+wNiOOu6o9NNRcFeqQ=
+X-Received: by 2002:a05:6000:52:: with SMTP id k18mr9356273wrx.192.1639664344795;
+ Thu, 16 Dec 2021 06:19:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/1] riscv: default to CONFIG_RISCV_SBI_V01=n
-Content-Language: en-US
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211216123538.175087-1-heinrich.schuchardt@canonical.com>
- <BC1B38E7-1170-4C05-948A-D18E80AC49E7@jrtc27.com>
-From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-In-Reply-To: <BC1B38E7-1170-4C05-948A-D18E80AC49E7@jrtc27.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
+ <20210925203224.10419-6-sergio.paracuellos@gmail.com> <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
+ <6ee31420-ef67-471e-a924-a0158b4a9428@www.fastmail.com> <CAK8P3a2i6eW8JunE_6h6OTCa51eHfPahQQhaGHGWePX+r4ybww@mail.gmail.com>
+ <bfdfb7b3-1322-573d-eddc-1d337c4616e6@flygoat.com>
+In-Reply-To: <bfdfb7b3-1322-573d-eddc-1d337c4616e6@flygoat.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 16 Dec 2021 15:18:49 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2iQhxckn0MfLyLpKmyKN_MwAJ0t2yh6DLsS0MvdreYNA@mail.gmail.com>
+Message-ID: <CAK8P3a2iQhxckn0MfLyLpKmyKN_MwAJ0t2yh6DLsS0MvdreYNA@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific 'pci_remap_iospace()'
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Xi Ruoyao <xry111@mengyan1223.wang>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Liviu Dudau <Liviu.Dudau@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:IgD0XB8DIUQjREsvuF1C3HD3944VUT61B2OriSnVMbiFXOdkvap
+ O1lFdYUXI7kaNNJMBs5ZtyZHev1LquHSgazOunDmIgdwooZ8FOabTNhviJpzn22oMbsh7ga
+ VVSOzehekRPVU1ka/2LvuUIFyd5YuBwuHQySwRtbWoBe3xLMwcQOnXW5AG+kZX3PIDA/IYT
+ NqkgirYoJpAoN2Rmkj9mA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lDzxYfROAWU=:V6SAkS6NSz6czEHRo1NFM5
+ zbjpP9ugIGMv1E9M3UMxd5h3U6u2E3INp75GevJKkI1k/BnSRBvuPQp1TVQShMu6tPjgvqwkl
+ Meyriy3oznMWAfJEPJPF+WO8MmUxS4ObmkoDSPANtquK8/PwOTaY1AAeLOqf/Wy4C6/er9JYy
+ A+K/kSllzzRWMgh0KEAERE42kAz/JrNGqvJbAZBXI0wGClFrM9wOPmp579BFFG+8iNUwwWlPP
+ 4tQREkhLITgAmWg8FGgLpLenuuppNvx7LBKzKrXZHvO494/4VkNKkzKF8ZCrQKo2egOEEUtNU
+ AQdI5PfG+J2xIOC+yEo71xW7v28uP8vkTkdu2C5f3pLNWj3F4TANAfTZjxDzYFW5g7e6fHVgq
+ ONACbz6HJN/y7WGxRiOtTTQxg+0zzUCWhNeep5D1Ott12q5GgwdkUXSjKkXSNA41wgGofV1X4
+ qAXRE1ybP43WGnishkx+WeMKZ4NwJDL3OAqQSVclinp79bxWRmNzgexSVM5bNg1cWlxO7B2fo
+ Ve4RNfQtvFlWp7RZKebYJabTSdu3jvAden6RRutoiFzDeYMwNZpzyRiMqXd2HPIoZeWniqjXB
+ EEMVCNimWGDP+MBw1nfRwHph0f8hSI6+ERToDZiQkCMZhBgMZ+KvEDz7GQtfvFw9sQA5nn6f4
+ 7DGoa71ER1og0ReN/c4q23ttyLUk2ZtaXeuB7qCkSpJpI2HkMRHgAytLRiAQXuzfyYEFZURUZ
+ 9MWb7XzknP4mPQx3mzTZVG6EbPhsGJH0NCdZtCBNXimulHGkfFMjqqRX+/uE+Sh3x3s+70SZ9
+ Gn2/eFbWhgG1O4DDc+crRCuyvhlfbH5CR9lVIXVXFtT+1lTLSg=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/21 14:49, Jessica Clarke wrote:
-> On 16 Dec 2021, at 12:35, Heinrich Schuchardt <heinrich.schuchardt@canonical.com> wrote:
->>
->> The SBI 0.1 specification is obsolete. The current version is 0.3.
->> Hence we should not rely by default on SBI 0.1 being implemented.
-> 
-> It’s what BBL implements, and some people are still using it,
-> especially given early hardware shipped before OpenSBI grew in
-> popularity.
-> 
-> Jess
-> 
+On Thu, Dec 16, 2021 at 3:14 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> 在 2021/12/16 13:50, Arnd Bergmann 写道:
+> > On Thu, Dec 16, 2021 at 2:07 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> >> 在2021年12月16日十二月 上午11:44，Xi Ruoyao写道：
+> >> Another way could be keeping a linked list about PIO->PHYS mapping instead of using the single io_port_base variable.
+> > I think that would add a lot of complexity that isn't needed here. Not
+> > sure if all MIPS CPUs
+> > can do it, but the approach used on Arm is what fits in best with the
+> > PCI drivers, these
+> > reserve a virtual address range for the ports, and ioremap the
+> > physical addresses into
+> > the PIO range according to the mapping.
+>
+> Yes, the Arm way was my previous approach when introducing PCI IO map
+> for Loongson.
+>
+> It got refactored by this patch as TLB entries are expensive on MIPS,
+> also the size of IO range doesn't always fits a page.
 
-Do you mean BBL is not developed anymore?
+Are PIO accesses common enough that the TLB entry makes a difference?
+I would imagine that on most systems with a PCI bus, there is not even
+a single device that exposes an I/O resource, and even on those devices that
+do, the kernel drivers tend to pick MMIO whenever both are available.
 
-Some people may still be using a 0.1 SBI. But that minority stuck on an 
-outdated software stack does not justify defaulting to deprecated 
-settings in future Linux releases.
-
-Best regards
-
-Heinrich
+      Arnd

@@ -2,101 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64ED747714C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73059477151
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234549AbhLPMFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:05:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
+        id S234678AbhLPMGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234285AbhLPMFO (ORCPT
+        with ESMTP id S234285AbhLPMF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:05:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713E8C061574;
-        Thu, 16 Dec 2021 04:05:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10F9661D7A;
-        Thu, 16 Dec 2021 12:05:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED18C36AE4;
-        Thu, 16 Dec 2021 12:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639656313;
-        bh=xnAVQ4r+VQvlqTGC/jY1NEPm3UtZVMG2RXgN8eve8aI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fg++ln0VLp60KAI5xSjOihbQGXru+Pmqy2duMxqezESEV9xgjv+PAQENFvNAu+x74
-         7rkyGzyCCYJH6pE7HbZXHi097iGuZp2ioLwPh16KwH4hXYNI2U7y0xvFtHxpLTHjWQ
-         prOt3GSCy+2py6nVhM3nNKHrsV6jsvsDHM9hIU1M=
-Date:   Thu, 16 Dec 2021 13:05:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-media@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        linux-spdx@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: prefer generic SPDX-License expression to
- deprecated one
-Message-ID: <Ybsrdll5sqIakINT@kroah.com>
-References: <20211216103132.8087-1-lukas.bulwahn@gmail.com>
- <20211216122311.0c9d154e@coco.lan>
+        Thu, 16 Dec 2021 07:05:57 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E33C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:05:57 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id n8so19285005plf.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:05:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/H9EMWcxNE3MmWqEWI7uZzzhhZUDkalTYtdIjgNw5Dc=;
+        b=teae7+Rhl19M4VEPLx685yvVeu8Acpi1N/Q35d7UqM35OMBXKsYtbOvxs/oPnKEPHA
+         uU2ND/nWUiX7tr+jD35MeS4paRLxt/v6E2Exr0ipkKMPiXYpRjTeUGF0zBUERw8i+Rph
+         oofYWwiuh7mvVbrDLrID0c93OHC/yIAZZceQsrsBXfy+NZmvUgRQh/exOrnDfs06Zk7I
+         grzU/3eXm1NKpr0mwckRW0DBxad1qY+XU6UkjXsn4QTIMqHv24vUdt7GgisQJG0Tlbdo
+         DKM15Q7K9WSwX1WcCQIhs0UVI+MUpdwcRLJ6A7uZvlQS9MlsanqeM5W22oVrIrI9swQQ
+         ecCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/H9EMWcxNE3MmWqEWI7uZzzhhZUDkalTYtdIjgNw5Dc=;
+        b=COidWA7yKF7Y8WyLZq2fLVqFqV5Z0nrzLpbcRSRjd4yrs0ALr4YFl+njsR3P/ISpAQ
+         Y/LbJNMZgZTCE7U7eoQiGZXntaR5+Emzi07Yv00O1F21eaD8rsTFzKRn4Zhi+GslDdOP
+         X20brthzr3C91QmObN32aJasCuNsAsTefgiq1JOtjXULTxKCdFsFsnIXVL00QQqH2mr4
+         AL5zU9x4+3XmWPT1jJzB6aqSBKKO/aOY7s9NEm3X+vWb9gQjdIp/1hwPMzxfl7zweRO6
+         WBgbD8lv0LY3Lk8un/N9B+ZLDnwehdQ56np3sDPIxstJyIqGb4EfA8DjksJJCSwcgHDO
+         EHDg==
+X-Gm-Message-State: AOAM5335EcCQqY6HSigmruon8atxq4aaHpOUvTtMWDbMh47m++kA4e7o
+        ahn/rBGXTIxd/LVmWNACSOBShB75yDBqfvhGQcbGag==
+X-Google-Smtp-Source: ABdhPJxt4oYy09frB9H5orpzx03e+FHCldURdWKv5OSg4sNb7f/HwpftIGM+WCx1aCNgmg4+AiDJcZ04o+hK2r1rFk0=
+X-Received: by 2002:a17:90b:4a05:: with SMTP id kk5mr5723305pjb.232.1639656357229;
+ Thu, 16 Dec 2021 04:05:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216122311.0c9d154e@coco.lan>
+References: <20211215002529.382383-1-swboyd@chromium.org>
+In-Reply-To: <20211215002529.382383-1-swboyd@chromium.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Thu, 16 Dec 2021 13:05:45 +0100
+Message-ID: <CAG3jFysdAbHYXWv_87vB87Wf75Hev=bpjpNppdhcapb0_-dAfQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Set max register for regmap
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 12:23:11PM +0100, Mauro Carvalho Chehab wrote:
-> Em Thu, 16 Dec 2021 11:31:32 +0100
-> Lukas Bulwahn <lukas.bulwahn@gmail.com> escreveu:
-> 
-> > Commit 8d395ce6f04b ("media: dvb-core: Convert to SPDX identifier") and
-> > commit e67219b0496b ("media: b2c2: flexcop: Convert to SPDX identifier")
-> > introduce the SPDX-License expression LGPL-2.1-or-later for some files.
-> > 
-> > The command ./scripts/spdxcheck.py warns:
-> > 
-> >   drivers/media/dvb-core/dmxdev.c: 1:28 Invalid License ID: LGPL-2.1-or-later
-> >   drivers/media/dvb-core/dvb_demux.c: 1:28 Invalid License ID: LGPL-2.1-or-later
-> >   drivers/media/dvb-core/dvbdev.c: 1:28 Invalid License ID: LGPL-2.1-or-later
-> >   drivers/media/common/b2c2/flexcop.c: 1:28 Invalid License ID: LGPL-2.1-or-later
-> > 
-> > The preferred SPDX expression for LGPL-2.1 or any later version is with
-> > the more generic "+"-extension for "any later version", so: LGPL-2.1+
-> > 
-> > This makes spdxcheck happy again.
-> 
-> It doesn't sound right to apply such patch.
-> 
-> See, the latest SPDX version uses LGPL-2.1-or-later:
-> 
-> 	https://spdx.org/licenses/LGPL-2.1-or-later.html
-> 
-> And it deprecated LGPL-2.1+:
-> 
-> 	https://spdx.org/licenses/LGPL-2.1+.html
-> 
-> So, those files are perfectly fine with regards to SPDX, and are
-> adherent to its latest specs. We do need the latest specs on media,
-> as our documentation is under GFDL-1.1-no-invariants-or-later, which
-> only exists on newer SPDX versions.
-> 
-> So, the right thing to do here seems to fix spdxcheck.py, letting it
-> either allow both variants (as we probably don't want to replace it
-> everywhere) or to emit a warning if the deprecated ones are used.
+Hi Stephen,
 
-No, we are not going to add a "warning" for older SPDX versions like
-that, otherwise the majority of the kernel will start spitting out
-warnings.
+Thanks for submitting this fix.
 
-Let's worry about actually fixing all of the files that do NOT have SPDX
-tags before even considering to move to a newer version of the spec.  We
-started this work before the FSF made the crazy change to their tags,
-let's not worry about any deprecated issues at the moment.
+On Wed, 15 Dec 2021 at 01:25, Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Set the maximum register to 0xff so we can dump the registers for this
+> device in debugfs.
+>
+> Fixes: a095f15c00e2 ("drm/bridge: add support for sn65dsi86 bridge driver")
+> Cc: Rob Clark <robdclark@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> index 6154bed0af5b..83d06c16d4d7 100644
+> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+> @@ -188,6 +188,7 @@ static const struct regmap_config ti_sn65dsi86_regmap_config = {
+>         .val_bits = 8,
+>         .volatile_table = &ti_sn_bridge_volatile_table,
+>         .cache_type = REGCACHE_NONE,
+> +       .max_register = 0xFF,
+>  };
+>
+>  static void ti_sn65dsi86_write_u16(struct ti_sn65dsi86 *pdata,
+>
+> base-commit: 136057256686de39cc3a07c2e39ef6bc43003ff6
+> --
+> https://chromeos.dev
+>
 
-thanks,
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 
-greg k-h
+Applied to drm-misc-next

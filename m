@@ -2,81 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BF3477244
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02F8477247
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237002AbhLPMyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:54:22 -0500
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:42992 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236990AbhLPMyV (ORCPT
+        id S237015AbhLPMzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237001AbhLPMzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:54:21 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V-oyp.9_1639659256;
-Received: from 30.240.114.88(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V-oyp.9_1639659256)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 16 Dec 2021 20:54:18 +0800
-Message-ID: <74ea4177-b8b7-d60a-d468-d317b389aedd@linux.alibaba.com>
-Date:   Thu, 16 Dec 2021 20:54:16 +0800
+        Thu, 16 Dec 2021 07:55:04 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAEBC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:55:03 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id z9so25265697qtj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:55:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gUxka4JklTkkHlOcWoZDOb37rmiSUPCIVM2O4zND04I=;
+        b=F0qVsIO485bGLYv/b0H+BHfow1NEFXYFa4xznk+NJ9vnBFzB3VqwTeqW4Tl4FX1+Wy
+         /jyXLeSrra6mZbWo9VzAHNcGmAVSIrMOaIXlM4WLvpG/tqE7jsbiDofcJzkFVCV5urjC
+         aWKZ14D/SOnl1cnjW1EqRl1Rq9u0ESEygvc6+9pZ3qnwBFZEAHkx8U31pxhuxjy8oi2H
+         B3yfMm2fLGiZuzpMs/Tk0Rue4230bTfsmiXBUK6gyb5tobZoZwWSClUbsfF7djSTT1gv
+         QD1h5ple1ME10se7n/7PzGdr8We/16leHdr3w52flS1DgAvkFBLUoBLIZhemlrlpfXTJ
+         Ocsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gUxka4JklTkkHlOcWoZDOb37rmiSUPCIVM2O4zND04I=;
+        b=1KJmvSnFiL0WHwouK6mUnYN1mz8rD8sMsyCk96lszzDimQWh52DqpcLp9TgI08LH3p
+         DIrQeVhJAi5qeW8x2f/LiIKdyF4xOsJZuTAV4mlioz8PWBYVC5OnkV1pAkf0J5nUAq7l
+         bhCWk3jrKdgTcHPryF8bzVSWKF00VrXWeFwZa6jMGHrmm2Rboo52Bb+uzMpxWtHGEL6I
+         1EHskf5sqvnc3V1k08v04DC9g0qcd5BxuHBEv7oIjTpKU2YOoIJgRoV4Ll/H1jzoON9i
+         1al6/y1TDQOBhku2DtZOUIUuolM1ZbCraI8Hd5AkYJAW9xORu7PRJVqbHFnyMB1nsZAV
+         zVbA==
+X-Gm-Message-State: AOAM5310YY+RurvyqE51Z/yonv7g58aFM1HXGJf48+lh//qkasDREWdb
+        m60djbef5Ev/yhyD/jKNWMMCMzpea+0gJVi2e3ebfQ==
+X-Google-Smtp-Source: ABdhPJyCxq7QwcfJ3icCH/lpOTeUERcb0ysKCPTY5axpJVOqxNOTOTI7BrI9JGYTsDADA/pLk5Y0IrO2eLQ80uHg2jE=
+X-Received: by 2002:ac8:7fc5:: with SMTP id b5mr16915979qtk.492.1639659302910;
+ Thu, 16 Dec 2021 04:55:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-Subject: Re: [PATCH v2 0/3] ghes_edac: refactor memory error reporting to
- avoid code duplication
-To:     mchehab@kernel.org, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, rric@kernel.org, ardb@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Cc:     zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
-Content-Language: en-US
-In-Reply-To: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <cover.1639432170.git.andreyknvl@google.com> <4b39d778ac71937325641c3d7a36889b37fb3242.1639432170.git.andreyknvl@google.com>
+In-Reply-To: <4b39d778ac71937325641c3d7a36889b37fb3242.1639432170.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 16 Dec 2021 13:54:26 +0100
+Message-ID: <CAG_fn=VfGP7JT6ZJshsh_+rA4MR3gSM67CXCF7uhEQ6WGia6Dg@mail.gmail.com>
+Subject: Re: [PATCH mm v3 04/38] kasan, page_alloc: simplify
+ kasan_poison_pages call site
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
-
-On 2021/12/10 PM9:40, Shuai Xue wrote:
-> ghes_edac_report_mem_error() in ghes_edac.c is Long Method and have
-> Duplicated Code with cper_mem_err_location(), cper_dimm_err_location(), and
-> cper_mem_err_type_str() in drivers/firmware/efi/cper.c. In addition, the
-> cper_print_mem() in drivers/firmware/efi/cper.c only reports the error
-> status and misses its description.
-> 
-> This patch set is to refactor ghes_edac_report_mem_error with:
-> 
-> - Patch 01 is to unify memory error report format with cper;
-> - Patch 02 is to introduces cper_*(), into ghes_edac_report_mem_error(),
->   this can avoid bunch of duplicate code lines;
-> - Patch 02 is to wrap up error status decoding logics and reuse it in
->     cper_print_mem().
-> 
-> Changes since v1:
-> https://lore.kernel.org/all/20211207031905.61906-2-xueshuai@linux.alibaba.com/
-> 
-> - add a new patch to unify ghes and cper before removing duplication.
-> - document the changes in patch description
-> - add EXPORT_SYMBOL_GPL()s for cper_*()
-> - document and the dependency and add UEFI_CPER dependency explicitly
-> Thanks Robert Richter for review comments.
-> 
-> Shuai Xue (3):
->   ghes_edac: unify memory error report format with cper
->   ghes_edac: refactor memory error location processing
->   ghes_edac: refactor error status fields decoding
-> 
->  drivers/edac/Kconfig        |   1 +
->  drivers/edac/ghes_edac.c    | 196 +++++++-----------------------------
->  drivers/firmware/efi/cper.c |  86 ++++++++++++----
->  include/linux/cper.h        |   3 +
->  4 files changed, 105 insertions(+), 181 deletions(-)
-> 
-
-I am wondering if you have any comments on this series of patches?
-
-Best Regards,
-Shuai
+On Mon, Dec 13, 2021 at 10:52 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Simplify the code around calling kasan_poison_pages() in
+> free_pages_prepare().
+>
+> This patch does no functional changes.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>

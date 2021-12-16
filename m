@@ -2,105 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6439477329
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D71447732C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237561AbhLPNa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:30:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234536AbhLPNa5 (ORCPT
+        id S237564AbhLPNb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:31:27 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:53962 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232125AbhLPNb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:30:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F2CC06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 05:30:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A4B561DEF
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 13:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE70C36AE5;
-        Thu, 16 Dec 2021 13:30:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639661456;
-        bh=49Z6wFi4YNUCTmFU5vkrqttrjiblP0wsp+lNNiakJQk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QHi+UViioPPW6PNkWMgsBFoBf/ETYKdd3BMxkIZCdufE5LSGQGS4otPLLq9NPDtwD
-         +xapfBSoXDYcbsdIrzzXwcUwlrlv135Q+2ezM3ibIwKImjoa0UENpi8NC3HgjJ2/R3
-         MUD/m7UzZnBZHkyiOq+bmgEiuLoIeDLcgQzNfgu6RDsgMrkkoco2FWh/Uw32UVcgEE
-         nPz/Q1jF2xS84IcAWLQPIPqJ5GLMJ9wgUVEChh2Fj+QcvaNWUlXsuUoMjD2zaqmpp7
-         Ptcx1QEZBYzaRR5kbdQG6PSv0RTJeIhuko+s05GOuKse/NL9UtCLJCUyI59eyUaUa0
-         dczhfrGJu0cQA==
-Date:   Thu, 16 Dec 2021 13:30:51 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
-Cc:     alsa-devel@alsa-project.org, Vijendar.Mukunda@amd.com,
-        Alexander.Deucher@amd.com, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: max98357a: Add mixer control to mute/unmute speaker
-Message-ID: <Ybs/i3Lg9VN0d4kg@sirena.org.uk>
-References: <20211208185850.1555996-1-AjitKumar.Pandey@amd.com>
- <YbETxcwa83U8WXTO@sirena.org.uk>
- <YbEYVq+uvIcoxqko@sirena.org.uk>
- <3ec805fc-07cc-6091-551a-771dffe459d0@amd.com>
+        Thu, 16 Dec 2021 08:31:27 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E0C93212B6;
+        Thu, 16 Dec 2021 13:31:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1639661485;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kgZ85dUi7/e3j0iGpbKX5ecZJklujz7goJ8ufzL4EwQ=;
+        b=g6l/e8OathTxSfK/o4gjPdcbPGVSDKTfXEAaTBJr2BOCeuMG0VySYJruKvDRpfWWcr2lcf
+        vBsENDzbjCNZtKkdnHlH/jckuI6TiAJCRLYdOz/aC2aFmODVdtM8RepdEc3JiFfyOZPck2
+        YAeeJ0tEFcAGgPHvL7F2WafHC9ZPsJM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1639661485;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kgZ85dUi7/e3j0iGpbKX5ecZJklujz7goJ8ufzL4EwQ=;
+        b=MtkaLr33AdSjZbT4xyhb6ghvUDwSAqefFvCAtkk6+u1k0V9L9GGMdSsFrsWyKlXXIyqSvN
+        sc7cpjG6XlOKf3Bw==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id B6EBFA3B81;
+        Thu, 16 Dec 2021 13:31:25 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 6795BDA781; Thu, 16 Dec 2021 14:31:06 +0100 (CET)
+Date:   Thu, 16 Dec 2021 14:31:06 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] btrfs: Fix kernel-doc formatting issues
+Message-ID: <20211216133106.GE28560@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Yang Li <yang.lee@linux.alibaba.com>,
+        clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20211216070813.28183-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v2TZdMJ+b8CyeONp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3ec805fc-07cc-6091-551a-771dffe459d0@amd.com>
-X-Cookie: No solicitors.
+In-Reply-To: <20211216070813.28183-1-yang.lee@linux.alibaba.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 16, 2021 at 03:08:13PM +0800, Yang Li wrote:
+> Add function names to the kernel-doc of some functions and upgrade
+> descriptions of some parameters in it.
+> 
+> The warnings were found by running scripts/kernel-doc, which is
+> caused by using 'make W=1'.
 
---v2TZdMJ+b8CyeONp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Dec 16, 2021 at 05:54:45PM +0530, Ajit Kumar Pandey wrote:
-
-> Thanks for suggestion. We tried using SND_SOC_DAPM_PIN_SWITCH() for the
-> speaker widget and it invoke dapm_event callback based on switch i.e
-> max98357a_sdmode_event() but codec driver isn't enabling/disabling gpios in
-> such event callback instead they are doing that in dai_ops trigger callback.
-> In our platform single I2S controller instance (cpu-dai) is connected to two
-> different endpoints with a single PCM device, hence we want to switch or
-> enable/disable output based on Machine driver controls only.
-
-DAPM should cope perfectly fine with this setup...
-
-> Initially we thought to configure gpio within sdmode_event callback but
-> there was some pop noise issue reported in one platform with that change
-> hence reverted. Check https://patchwork.kernel.org/project/alsa-devel/patch/20200721114232.2812254-1-tzungbi@google.com/#23502085
-> So we thought of exposing a mixer control to enable/disable amp from UCM
-> in our platform without breaking existing functionality. Please let us
-> know any other alternative way if possible.
-
-Whatever is going on this should be managed from the driver rather than
-having a direct control, especially given the issues I mentioned with
-there being zero coordination between this and the management that the
-driver already does.  You could have DAPM controls set a variable and
-coordinate with whatever you're doing in the pcm_ops, I'm not clear what
-the use case is for having the manual control TBH.
-
---v2TZdMJ+b8CyeONp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG7P4oACgkQJNaLcl1U
-h9BGLgf/QrD75IeSRsyIplUF5g81WOZxgP3BPYqnddbQW7NMYJtmvJ4hlDTs4uHt
-26td84vJTxIlDxNfXLVilgTDtt3SSP5lcFwh61S/reqVz2GLNXKkMzF1MX70O/ti
-FGiNQefrG+EcB4EWMqbb/327+cC4nPDRx0Axt8FVdrxnMWL50vFHlo+U80FFGsP/
-xAt3TGWjLdQO3AYLk4rF/OLoCWGg297Xk/7JLT84oo98h5VPChyVKLLDHqiqNaa2
-X23TfiGxK8+Vfe4WLfVpFGSaFXkTWcCQmBGybSfZY8Y6PN0gm483m3VE+Y6R0JY6
-oVBaIJ7yNcKkPTk59SEgHCzqzLQi5g==
-=wPBI
------END PGP SIGNATURE-----
-
---v2TZdMJ+b8CyeONp--
+Thanks, we care only about the argument list that the kdoc format and
+script can verify, the rest is not really useful for internal functions
+and makes it less pleasant to read.  The script will report that though
+but we won't fix it, rather would like to see the script updated to
+skip that.

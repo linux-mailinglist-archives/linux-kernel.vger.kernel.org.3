@@ -2,114 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC1B4775C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2C54775D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238451AbhLPPXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:23:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbhLPPXE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:23:04 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C882C061574;
-        Thu, 16 Dec 2021 07:23:04 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id q16so4046704wrg.7;
-        Thu, 16 Dec 2021 07:23:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=CYj9Ti5Fz1gBasjmZUChCljCufoB/S9vsIkoqPg2LeM=;
-        b=LTLemxb1FP6iTpX0FqdTf3ZYAFXDEKAFY3uo8UJCQMrttG/8H7/bHoWOa5rx/i8ld4
-         r804GELD1w7olXyG9qg7spLjZRAGYdp7rs0zeumICvoYw/jLahaXrBpuV7HmQKrqd3LM
-         3YgbqKpqYKUJhYhrsxEwEiHvb4Dm4MQcQxYe0mr4nXhrBSifXn4b74yl0uo7LfOlrHCz
-         NECYqvVTYi18n35vAZ/o1tuBvNIiY+Q3Cb16sojfs0TBmt9DKxzN0I6xxNnNWr9KIJsE
-         esincN1Za8oR0rR431bpTe5wvUy8NC8L5dAnRels1yuHPrdRfccZebHaoZK3632u92pB
-         /upA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CYj9Ti5Fz1gBasjmZUChCljCufoB/S9vsIkoqPg2LeM=;
-        b=xem66zmJg7P8dKqZua0jh29eL78Us/U2JPXVGh9yt4PLOKMRn4tUgGo+Xrk+L9ruM7
-         WlkE6LPKdWwfTn29l1Ksz1E8Kl7mSUYtzgQ2etqhHhXnuImrtTXHSzEGMA6aiB3qWbee
-         Abed16lySUUO6tDRJhuBDO632N9wyKIVT1WU4ibS8vkyTxzfoHVPvNlyeX1Di8w4jb+z
-         pcz5dc0Kfff1gV4JRU0RlS6NT+P6PYqWr6TiGLWwBHJS2wDBgtzA1p753WZGfJfJycTq
-         f5JCP3e4t8yOGAag1Mpy/4PipYFliHia9D5SCvmUlslwu9jd6OFLw2j7mckFioOOB067
-         Me7A==
-X-Gm-Message-State: AOAM53133KwBYsViseQ9sr3H5yXcoyDofab4H08XZrOaV0RJzlDS5zMy
-        ISjTHpJ8/Jr0GYqm6J/8zjbCjg9xYCyI2Q==
-X-Google-Smtp-Source: ABdhPJydZjy551Whm5yD/fZHgAm5UZMb55oNe8NHznW7CKu4C9s4F8KgAmJ0kEUxEqaJ/o6UmVqTFg==
-X-Received: by 2002:a5d:62cf:: with SMTP id o15mr4025559wrv.651.1639668182811;
-        Thu, 16 Dec 2021 07:23:02 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id y11sm6477355wry.70.2021.12.16.07.22.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 07:23:00 -0800 (PST)
-Date:   Thu, 16 Dec 2021 16:22:57 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Agneli <poczt@protonmail.ch>, linux-tegra@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v4 11/22] ASoC: tegra20: spdif: Support system suspend
-Message-ID: <YbtZ0V4wt2HKPazO@orome>
-References: <20211204143725.31646-1-digetx@gmail.com>
- <20211204143725.31646-12-digetx@gmail.com>
+        id S238519AbhLPPY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:24:56 -0500
+Received: from foss.arm.com ([217.140.110.172]:45084 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238499AbhLPPYy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 10:24:54 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 918E81435;
+        Thu, 16 Dec 2021 07:24:53 -0800 (PST)
+Received: from ip-10-252-15-108.eu-west-1.compute.internal (unknown [10.252.15.108])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8018E3F73B;
+        Thu, 16 Dec 2021 07:24:51 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     German Gomez <german.gomez@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3] perf arm-spe: Synthesize SPE instruction events
+Date:   Thu, 16 Dec 2021 15:24:04 +0000
+Message-Id: <20211216152404.52474-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9NVu7ZJ+lp3JPxD0"
-Content-Disposition: inline
-In-Reply-To: <20211204143725.31646-12-digetx@gmail.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Synthesize instruction events for every ARM SPE record.
 
---9NVu7ZJ+lp3JPxD0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Arm SPE implements a hardware-based sample period, and perf implements a
+software-based one. Add a warning message to inform the user of this.
 
-On Sat, Dec 04, 2021 at 05:37:14PM +0300, Dmitry Osipenko wrote:
-> Support system suspend by enforcing runtime PM suspend/resume.
-> Now there is no doubt that h/w is indeed stopped during suspend
-> and that h/w state will be properly restored after resume.
->=20
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  sound/soc/tegra/tegra20_spdif.c | 2 ++
->  1 file changed, 2 insertions(+)
+Signed-off-by: German Gomez <german.gomez@arm.com>
+---
+Changes since v2
+  - Rebase patch on top of https://lore.kernel.org/r/20211201220855.1260688-1-namhyung@kernel.org
+  - Don't error out when using unsupported sample period type.
+  - Store instructions_sample_period into samples.
+Changes since v1 [https://lore.kernel.org/all/20211117142833.226629-1-german.gomez@arm.com]
+  - Generate events with "--itrace=i" instead of "--itrace=o".
+  - Generate events with virt_addr, phys_addr, and data_src values.
+---
+ tools/perf/util/arm-spe.c | 62 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+index 8a3828f86901..d2b64e3f588b 100644
+--- a/tools/perf/util/arm-spe.c
++++ b/tools/perf/util/arm-spe.c
+@@ -58,6 +58,8 @@ struct arm_spe {
+ 	u8				sample_branch;
+ 	u8				sample_remote_access;
+ 	u8				sample_memory;
++	u8				sample_instructions;
++	u64				instructions_sample_period;
+ 
+ 	u64				l1d_miss_id;
+ 	u64				l1d_access_id;
+@@ -68,6 +70,7 @@ struct arm_spe {
+ 	u64				branch_miss_id;
+ 	u64				remote_access_id;
+ 	u64				memory_id;
++	u64				instructions_id;
+ 
+ 	u64				kernel_start;
+ 
+@@ -90,6 +93,7 @@ struct arm_spe_queue {
+ 	u64				time;
+ 	u64				timestamp;
+ 	struct thread			*thread;
++	u64				period_instructions;
+ };
+ 
+ static void arm_spe_dump(struct arm_spe *spe __maybe_unused,
+@@ -202,6 +206,7 @@ static struct arm_spe_queue *arm_spe__alloc_queue(struct arm_spe *spe,
+ 	speq->pid = -1;
+ 	speq->tid = -1;
+ 	speq->cpu = -1;
++	speq->period_instructions = 0;
+ 
+ 	/* params set */
+ 	params.get_trace = arm_spe_get_trace;
+@@ -353,6 +358,35 @@ static int arm_spe__synth_branch_sample(struct arm_spe_queue *speq,
+ 	return arm_spe_deliver_synth_event(spe, speq, event, &sample);
+ }
+ 
++static int arm_spe__synth_instruction_sample(struct arm_spe_queue *speq,
++					     u64 spe_events_id, u64 data_src)
++{
++	struct arm_spe *spe = speq->spe;
++	struct arm_spe_record *record = &speq->decoder->record;
++	union perf_event *event = speq->event_buf;
++	struct perf_sample sample = { .ip = 0, };
++
++	/*
++	 * Handles perf instruction sampling period.
++	 */
++	speq->period_instructions++;
++	if (speq->period_instructions < spe->instructions_sample_period)
++		return 0;
++	speq->period_instructions = 0;
++
++	arm_spe_prep_sample(spe, speq, event, &sample);
++
++	sample.id = spe_events_id;
++	sample.stream_id = spe_events_id;
++	sample.addr = record->virt_addr;
++	sample.phys_addr = record->phys_addr;
++	sample.data_src = data_src;
++	sample.period = spe->instructions_sample_period;
++	sample.weight = record->latency;
++
++	return arm_spe_deliver_synth_event(spe, speq, event, &sample);
++}
++
+ #define SPE_MEM_TYPE	(ARM_SPE_L1D_ACCESS | ARM_SPE_L1D_MISS | \
+ 			 ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS | \
+ 			 ARM_SPE_REMOTE_ACCESS)
+@@ -482,6 +516,12 @@ static int arm_spe_sample(struct arm_spe_queue *speq)
+ 			return err;
+ 	}
+ 
++	if (spe->sample_instructions) {
++		err = arm_spe__synth_instruction_sample(speq, spe->instructions_id, data_src);
++		if (err)
++			return err;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -1110,7 +1150,29 @@ arm_spe_synth_events(struct arm_spe *spe, struct perf_session *session)
+ 			return err;
+ 		spe->memory_id = id;
+ 		arm_spe_set_event_name(evlist, id, "memory");
++		id += 1;
++	}
++
++	if (spe->synth_opts.instructions) {
++		if (spe->synth_opts.period_type != PERF_ITRACE_PERIOD_INSTRUCTIONS) {
++			pr_warning("Only instruction-based sampling period is currently supported by Arm SPE.\n");
++			goto synth_instructions_out;
++		}
++		if (spe->synth_opts.period > 1)
++			pr_warning("Arm SPE has a hardware-based sample period.\n"
++				   "Additional instruction events will be discarded by --itrace\n");
++
++		spe->sample_instructions = true;
++		attr.config = PERF_COUNT_HW_INSTRUCTIONS;
++		attr.sample_period = spe->synth_opts.period;
++		spe->instructions_sample_period = attr.sample_period;
++		err = arm_spe_synth_event(session, &attr, id);
++		if (err)
++			return err;
++		spe->instructions_id = id;
++		arm_spe_set_event_name(evlist, id, "instructions");
+ 	}
++synth_instructions_out:
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
 
---9NVu7ZJ+lp3JPxD0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG7WdEACgkQ3SOs138+
-s6EKCRAAkaJkIFGe+TIGDvf3VgojxAnoy/xehj12RZkWXIHCSj2L8Uxnkd2xS+Xh
-ban5ECkhc2qCrux3ywGTAp6WR+DRZRF6uMm0MCMY98MCBAAhvLm4edllsC2ksiVI
-rruKcqjeuD690pyKmVxpG43jJjmEqeDuwuOPtBIDWWcU0jym5v+X3T3Dae7TE1nm
-jwvBQ3kpBaOb1eCEYI/JNv402M/e4KO1MJUAfKCoxDDgB7Zijv3jnRYMyT7AJtwQ
-tk8eLpkI56pro+A89npTVm/YF/whi+RBd/fACHFHIVLWzih0i/g4v+mqRPzchT9+
-7NfuCuRPiH1UUTLiXP0Yq3GW6jOiHAcdVFSTFpgmYxL/wXCK+CWYBIt0oN+clwqY
-x1UxyL03y7+jcpp8JGA4qNe4fqZ8srIiEZQMNHFjto+SaCx34LNJ3PRp68iY55Ji
-ITEgIoIIza5Ss6G1J+oZpEpYqg+qkx+1krv0BhramziMfvQTdd7Bdq23XRMj/Rwc
-tAEe1oS2HiXt6u33K/Ft9pxxUhE1k7AhwqACUt97ekKT44wKEYYil9+eWBy/dR8u
-kO2Q7ODb8Jarb6GrNG1OUtcnftrAngx0JzMH2WVoqPRLumrCLPUiiM1CCg3VLc2P
-UNTrRK3LrBZsHznR2J05vCm/VVAWljBW5T4/dsxPf1oUTw5T+YE=
-=8OvB
------END PGP SIGNATURE-----
-
---9NVu7ZJ+lp3JPxD0--

@@ -2,168 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D8447762B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14F047762F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238614AbhLPPml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
+        id S238621AbhLPPm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbhLPPmk (ORCPT
+        with ESMTP id S232616AbhLPPm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:42:40 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970E9C06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:42:40 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id gn2so1617011pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:42:40 -0800 (PST)
+        Thu, 16 Dec 2021 10:42:56 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA1AC061574;
+        Thu, 16 Dec 2021 07:42:56 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b40so50415576lfv.10;
+        Thu, 16 Dec 2021 07:42:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/HgC/51puoTDP7Sz4M6t3CwJhJDN9anfOwtdGH1jt60=;
-        b=EZEwxVEb8Hl/hFm+bSg8gRmOe175UalkvX4GD1zqhytcHdk9px8OhlWAzGQZ+NF+3k
-         ChjNCvM3FzBBHR5tzKdff7nufYeelHSAgD7lBcbNQrEpax+1sRXiFpN9mSqQ6KZ7URCF
-         Q6ZNmgiGKlEM5NksnqZSChRpaznoaiVv79IfPvRcnJOHInPZjZX6FrL7SfC+5oGnjfiR
-         18UrdSGGd+Ck+EZPLPa7bwshBcgoK/mNo021VTtUwemg1GCNX/pJfxqvDZG3D3M0JUtF
-         tVCiDu9OQEvQeZFsqSgAXfqCs31HD6EkAVCjWO48Zplx0pj04AmZXTZkx+2KnBBq4vlB
-         NWPg==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xT/SiTniM/eQ/R5+rML11O3ecWALbJayKGmVc/zKnAs=;
+        b=eDUAjQFU4pujVpoke1B2Ce2DlcWwNzL17RKV9V6JUts6HbLEXAMq2STRc4kzJ8boUz
+         B7R9RJQgQtdt7cf6pcTPa16ZtGntHnvNS/J6bkb4xkNIuPZNWGESjob6LMV/pMuHyICu
+         nYzW3fRQ53vO+WuuHmtrmiiniG4zHgvBLTejeiJoYfInfvBfY2GGSwa6AlrJab6TdBbC
+         7Ma5VKLSWQKxuaEiwraTPfbJu7DGXNjBlvp/0ApwrqiRRK42WF5XjYMh5X0odMOZEQqy
+         KgbIV7sRQsbC0b5IsQmdPRAE3kB3j11KRct2kNJRRrY7oSoKUemT9npq2rI/I/jytwJo
+         op4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/HgC/51puoTDP7Sz4M6t3CwJhJDN9anfOwtdGH1jt60=;
-        b=hpAoZ3q35o3UOFyadrrp+sY02TgCah/4shC9qnjdGfDmbDhZwGTFpPiUmt4D2QNpTf
-         jTKe2i91RZFcxSGqzuNwpSSs8dwO2BOi0fI0VqqSW39TQhrPggTONqrU9zi4WfaHx/8u
-         RVLXHEia9PpvlMWHxdo1KeL8N+9Su5Wp1fND7X+W0POWP94lH5ycyHL1VyjyMeaCW050
-         oA7+UcKGf4DtG6H1mAqIWB7VrCn+1pvklMYw6skLhzh43lCNAc4jwjQSOMkRPsroFJqP
-         aZXypVJCjf7veZ5XuhkEIXrgUA9P/tn4QpmKriSVUBD6x/vPkMOILBPGoMScJwvGLyQD
-         nTqg==
-X-Gm-Message-State: AOAM533oVLQL2SSa8DMad3brCgLTj3XjNxvTR6QYhfT/ZicQJRFKgbbq
-        UnlBuEFWwD5X10QkgmDLwzSxbQ==
-X-Google-Smtp-Source: ABdhPJxb8j4O8CektzK4fHnZSpK4WpQQ9oZfAlyqSw/6OzoEoWaaDSfGs/zUXrUxZcY+RB8uCvxEkw==
-X-Received: by 2002:a17:902:7089:b0:148:b897:daef with SMTP id z9-20020a170902708900b00148b897daefmr5711702plk.61.1639669359554;
-        Thu, 16 Dec 2021 07:42:39 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p30sm2371272pfq.119.2021.12.16.07.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 07:42:38 -0800 (PST)
-Date:   Thu, 16 Dec 2021 15:42:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Gonglei (Arei)" <arei.gonglei@huawei.com>,
-        Huangzhichao <huangzhichao@huawei.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: The vcpu won't be wakened for a long time
-Message-ID: <Ybtea42RxZ9aVzCh@google.com>
-References: <73d46f3cc46a499c8e39fdf704b2deaf@huawei.com>
- <YbjWFTtNo9Ap7kDp@google.com>
- <9e5aef1ae0c141e49c2b1d19692b9295@huawei.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xT/SiTniM/eQ/R5+rML11O3ecWALbJayKGmVc/zKnAs=;
+        b=72r10DjQxS6P3avX+vHvXgvErI8VZS/XDPKELALZA0IuGv3iOxMkPSBzydqptYgr/c
+         tL/KbFigAc0/7XI3NzXF+1MVxqNk/YspuNxhXr4aMVTGcnCE/44w3h64i8qQhLVbOgai
+         YgwaLa+9LT232dRkjr2rg3Phhqpr3kxtBp3qe4Llwpy3EJ0cnicMhIISggyqsvxgyW33
+         qyo3J2XbWG5jDA9763uNnM09Voy7My69l7HTOF6paFOXw8hPewz7ixS9IWITx4mz6z8/
+         T/UpcsobT/ZHLrH+8kygbK7x4NfTLcsIdHNJ/CG6RNjQzBaRlFjhNaLiu5vsnWNaSmfm
+         7xnA==
+X-Gm-Message-State: AOAM531oNnxipyxIm6cUXYzxWe/Gi7g8scjRxT8gOjYVhtV+QzaXexhM
+        /gWLFsaXLO+lcNQsbLweo5tgJBt/vBU=
+X-Google-Smtp-Source: ABdhPJzrTLDA1Jn72VfYP7tscsKDTD/B1+9QqstauFMJLrAGBEUP0kWlPKjLAbc2kgKzJNPD0OB4zg==
+X-Received: by 2002:a05:6512:682:: with SMTP id t2mr14590038lfe.503.1639669374608;
+        Thu, 16 Dec 2021 07:42:54 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id o19sm1184608ljp.124.2021.12.16.07.42.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 07:42:54 -0800 (PST)
+Subject: Re: [PATCH v2] dt-bindings: sound: nvidia,tegra-audio: Convert
+ multiple txt bindings to yaml
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     David Heidelberg <david@ixit.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        ~okias/devicetree@lists.sr.ht, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211211224946.79875-1-david@ixit.cz>
+ <a84213cb-272a-f1b2-338f-ed8ed0bf133d@gmail.com> <YbtC2I49D0pdcyLY@orome>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <75214d23-3b5f-48d7-be80-8ea17637f3ac@gmail.com>
+Date:   Thu, 16 Dec 2021 18:42:53 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9e5aef1ae0c141e49c2b1d19692b9295@huawei.com>
+In-Reply-To: <YbtC2I49D0pdcyLY@orome>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
-> > What kernel version?  There have been a variety of fixes/changes in the
-> > area in recent kernels.
+16.12.2021 16:44, Thierry Reding пишет:
+> On Thu, Dec 16, 2021 at 05:52:12AM +0300, Dmitry Osipenko wrote:
+>> 12.12.2021 01:49, David Heidelberg пишет:
+>>> +unevaluatedProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    sound {
+>>> +        compatible = "nvidia,tegra-audio-rt5677-ryu",
+>>> +                     "nvidia,tegra-audio-rt5677";
+>>> +        nvidia,model = "NVIDIA Tegra Ryu";
+>>> +
+>>> +        nvidia,audio-routing =
+>>> +                "Headphone", "LOUT2",
+>>> +                "Headphone", "LOUT1",
+>>> +                "Headset Mic", "MICBIAS1",
+>>> +                "IN1P", "Headset Mic",
+>>> +                "IN1N", "Headset Mic",
+>>> +                "DMIC L1", "Internal Mic 1",
+>>> +                "DMIC R1", "Internal Mic 1",
+>>> +                "DMIC L2", "Internal Mic 2",
+>>> +                "DMIC R2", "Internal Mic 2",
+>>> +                "Speaker", "PDM1L",
+>>> +                "Speaker", "PDM1R";
+>>> +
+>>> +        nvidia,i2s-controller = <&tegra_i2s1>;
+>>> +        nvidia,audio-codec = <&rt5677>;
+>>> +
+>>> +        nvidia,hp-det-gpios = <&gpio 143 0>;
+>>> +        nvidia,mic-present-gpios = <&gpio 132 1>;
+>>> +        nvidia,hp-en-gpios = <&rt5677 1 0>;
+>>> +        nvidia,dmic-clk-en-gpios = <&rt5677 2 1>;
+>>
+>> I spotted that nvidia,dmic-clk-en-gpios is undocumented, but DTs and
+>> binding are passing the validation. We will make another patch to fix it.
+>>
+>> Rob, could you please tell whether this is because unevaluatedProperties
+>> doesn't work yet or we're missing something?
 > 
-> The kernel version is 4.18, and it seems the latest kernel also has this problem.
+> If you update dt-schema.git to the latest "main" branch you should have
+> most of what's needed to make unevaluatedProperties work. However, there
+> seems to be an issue with some $referenced schemas setting
+> additionalProperties to true and then that gets propogated to the schema
+> that included it.
 > 
-> The following code can fixes this bug, I've tested it on 4.18.
+> Rob came up with the patch below to fix that:
 > 
-> (4.18)
+> --- >8 ---
+> diff --git a/dtschema/lib.py b/dtschema/lib.py
+> index 3cc5e428b0eb..a0f22aab935a 100644
+> --- a/dtschema/lib.py
+> +++ b/dtschema/lib.py
+> @@ -367,6 +367,9 @@ def fixup_sub_schema(schema, is_prop):
+>      if not isinstance(schema, dict):
+>          return
 > 
-> @@ -3944,6 +3944,11 @@ static void vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
->         if (pi_test_and_set_on(&vmx->pi_desc))
->                 return;
->  
-> +       if (swq_has_sleeper(kvm_arch_vcpu_wq(vcpu))) {
-> +               kvm_vcpu_kick(vcpu);
-> +               return;
-> +       }
+> +    if 'additionalProperties' in schema and schema['additionalProperties'] == True:
+> +        schema.pop('additionalProperties', None)
 > +
->         if (vcpu != kvm_get_running_vcpu() &&
->                 !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
->                 kvm_vcpu_kick(vcpu);
+>      schema.pop('description', None)
+>      fixup_interrupts(schema)
+>      if is_prop:
+> --- >8 ---
 > 
-> 
-> (latest)
-> 
-> @@ -3959,6 +3959,11 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
->         if (pi_test_and_set_on(&vmx->pi_desc))
->                 return 0;
->  
-> +       if (rcuwait_active(&vcpu->wait)) {
-> +               kvm_vcpu_kick(vcpu);
-> +               return 0;
-> +       }
-> +
->         if (vcpu != kvm_get_running_vcpu() &&
->             !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
->                 kvm_vcpu_kick(vcpu);
-> 
-> Do you have any suggestions ?
+> I'm currently running the tools based on that and it's indeed been
+> flagging some properties as unevaluated that weren't there before.
 
-Hmm, that strongly suggests the "vcpu != kvm_get_running_vcpu()" is at fault.
-Can you try running with the below commit?  It's currently sitting in kvm/queue,
-but not marked for stable because I didn't think it was possible for the check
-to a cause a missed wake event in KVM's current code base.
-
-commit 6a8110fea2c1b19711ac1ef718680dfd940363c6
-Author: Sean Christopherson <seanjc@google.com>
-Date:   Wed Dec 8 01:52:27 2021 +0000
-
-    KVM: VMX: Wake vCPU when delivering posted IRQ even if vCPU == this vCPU
-
-    Drop a check that guards triggering a posted interrupt on the currently
-    running vCPU, and more importantly guards waking the target vCPU if
-    triggering a posted interrupt fails because the vCPU isn't IN_GUEST_MODE.
-    The "do nothing" logic when "vcpu == running_vcpu" works only because KVM
-    doesn't have a path to ->deliver_posted_interrupt() from asynchronous
-    context, e.g. if apic_timer_expired() were changed to always go down the
-    posted interrupt path for APICv, or if the IN_GUEST_MODE check in
-    kvm_use_posted_timer_interrupt() were dropped, and the hrtimer fired in
-    kvm_vcpu_block() after the final kvm_vcpu_check_block() check, the vCPU
-    would be scheduled() out without being awakened, i.e. would "miss" the
-    timer interrupt.
-
-    One could argue that invoking kvm_apic_local_deliver() from (soft) IRQ
-    context for the current running vCPU should be illegal, but nothing in
-    KVM actually enforces that rules.  There's also no strong obvious benefit
-    to making such behavior illegal, e.g. checking IN_GUEST_MODE and calling
-    kvm_vcpu_wake_up() is at worst marginally more costly than querying the
-    current running vCPU.
-
-    Lastly, this aligns the non-nested and nested usage of triggering posted
-    interrupts, and will allow for additional cleanups.
-
-    Signed-off-by: Sean Christopherson <seanjc@google.com>
-    Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-    Message-Id: <20211208015236.1616697-18-seanjc@google.com>
-    Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 38749063da0e..f61a6348cffd 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -3995,8 +3995,7 @@ static int vmx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector)
-         * guaranteed to see PID.ON=1 and sync the PIR to IRR if triggering a
-         * posted interrupt "fails" because vcpu->mode != IN_GUEST_MODE.
-         */
--       if (vcpu != kvm_get_running_vcpu() &&
--           !kvm_vcpu_trigger_posted_interrupt(vcpu, false))
-+       if (!kvm_vcpu_trigger_posted_interrupt(vcpu, false))
-                kvm_vcpu_wake_up(vcpu);
-
-        return 0;
+Thank you! The unevaluatedProperties indeed works properly using this patch.

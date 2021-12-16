@@ -2,99 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C86B47713A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA84477142
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234251AbhLPL7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 06:59:25 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:46796 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234158AbhLPL7Y (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 06:59:24 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 806BF21119;
-        Thu, 16 Dec 2021 11:59:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1639655963; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=nJzarjRsFddzwj2POsEoacem5ANxTsZ7S2fzYT8eUEo=;
-        b=id2nOCfIN3woA+W6cfxxG04CE9jJOi6pd1WUKwGSFmLWkCoBNKC21a1tfjBb3RMKQrhTzx
-        RiMhc1SGx7/Uz3RhzZt50PLUAZ6GzbXG6VwYUQoZCo8DvPZucC6MN/3S5/f3QiqozrPwBW
-        FQsgjCptBaVsWp/u5aXxJgzb0Ddv6WU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1639655963;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=nJzarjRsFddzwj2POsEoacem5ANxTsZ7S2fzYT8eUEo=;
-        b=AWRA95QQqS0lxqTdvV3H+Znip1FnbOHjyzfP5/a7gXNmyhFVl4AdA/WvXZif8XQ4fG6j3B
-        qrF7s/DNHLelaxAQ==
-Received: from localhost.localdomain (unknown [10.100.201.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 32E6BA3B84;
-        Thu, 16 Dec 2021 11:59:23 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     jani.nikula@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH] drm/i915: remove circ_buf.h includes
-Date:   Thu, 16 Dec 2021 12:59:20 +0100
-Message-Id: <20211216115920.15981-1-jslaby@suse.cz>
-X-Mailer: git-send-email 2.34.1
+        id S234380AbhLPMDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:03:06 -0500
+Received: from mga17.intel.com ([192.55.52.151]:14858 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234285AbhLPMDA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 07:03:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639656180; x=1671192180;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iqFtp2U83/P0+3k00NjhK/l7028RUN72TSeB0sy3bG0=;
+  b=nKqE7GUfpjLtO0EX60NIveXTEJyeynEE6G4qoozpjJwlhWOOj1Sgjz1Q
+   L0v8mLYkGwiv6kQ1viedH3hjd7RFXzVsAmbgH3i7E8MLp5pUtd5TiyjEw
+   4HlJ2XCIkqM1ZVWoAJtObxDXiEfEiVtcU52udTiJlMsxYlE/PI8BM9FnD
+   uzs5ek05K+36Uqcvt/le9psCMKnz/+p0hJ2qDqr2x5JbETIhoiC7rFSBo
+   rHZ4lIlDnFpwc8RcpzXPPOZ810oqmSV38PSTjm5JcwY9et8bFCAM6PV2s
+   ZjIecDsiEgw40fMoMgmFgqDu3ALZ+SZDS5RvkxEqzYhHBubbkcBKvH00j
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="220151167"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="220151167"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:03:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="682919096"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 16 Dec 2021 04:02:58 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxpTN-00035k-RS; Thu, 16 Dec 2021 12:02:57 +0000
+Date:   Thu, 16 Dec 2021 20:02:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:repair-symlink-swapext 323/325]
+ fs/xfs/libxfs/xfs_symlink_remote.c:311:1: warning: no previous prototype for
+ function 'xfs_symlink_write_target'
+Message-ID: <202112161930.6u4fjfND-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The last user of macros from that include was removed in 2018 by the
-commit below.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git repair-symlink-swapext
+head:   851df07d9599471df909c4ff0e3cf33f4b9619f0
+commit: 90d15e3e9dcd303fbb36e9a54e7c36457ff9a254 [323/325] xfs: move symlink target write function to libxfs
+config: riscv-randconfig-r042-20211216 (https://download.01.org/0day-ci/archive/20211216/202112161930.6u4fjfND-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=90d15e3e9dcd303fbb36e9a54e7c36457ff9a254
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs repair-symlink-swapext
+        git checkout 90d15e3e9dcd303fbb36e9a54e7c36457ff9a254
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/xfs/
 
-Fixes: 6cc42152b02b ("drm/i915: Remove support for legacy debugfs crc interface")
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: intel-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   fs/xfs/libxfs/xfs_symlink_remote.c:28:1: warning: no previous prototype for function 'xfs_symlink_blocks' [-Wmissing-prototypes]
+   xfs_symlink_blocks(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:27:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   fs/xfs/libxfs/xfs_symlink_remote.c:38:1: warning: no previous prototype for function 'xfs_symlink_hdr_set' [-Wmissing-prototypes]
+   xfs_symlink_hdr_set(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:37:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   fs/xfs/libxfs/xfs_symlink_remote.c:68:1: warning: no previous prototype for function 'xfs_symlink_hdr_ok' [-Wmissing-prototypes]
+   xfs_symlink_hdr_ok(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:67:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool
+   ^
+   static 
+   fs/xfs/libxfs/xfs_symlink_remote.c:167:1: warning: no previous prototype for function 'xfs_symlink_local_to_remote' [-Wmissing-prototypes]
+   xfs_symlink_local_to_remote(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:166:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   fs/xfs/libxfs/xfs_symlink_remote.c:206:1: warning: no previous prototype for function 'xfs_symlink_shortform_verify' [-Wmissing-prototypes]
+   xfs_symlink_shortform_verify(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:205:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   xfs_failaddr_t
+   ^
+   static 
+   fs/xfs/libxfs/xfs_symlink_remote.c:239:1: warning: no previous prototype for function 'xfs_symlink_remote_read' [-Wmissing-prototypes]
+   xfs_symlink_remote_read(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:238:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+>> fs/xfs/libxfs/xfs_symlink_remote.c:311:1: warning: no previous prototype for function 'xfs_symlink_write_target' [-Wmissing-prototypes]
+   xfs_symlink_write_target(
+   ^
+   fs/xfs/libxfs/xfs_symlink_remote.c:310:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   7 warnings generated.
+
+
+vim +/xfs_symlink_write_target +311 fs/xfs/libxfs/xfs_symlink_remote.c
+
+   236	
+   237	/* Read a remote symlink target into the buffer. */
+   238	int
+ > 239	xfs_symlink_remote_read(
+   240		struct xfs_inode	*ip,
+   241		char			*link)
+   242	{
+   243		struct xfs_mount	*mp = ip->i_mount;
+   244		struct xfs_bmbt_irec	mval[XFS_SYMLINK_MAPS];
+   245		struct xfs_buf		*bp;
+   246		xfs_daddr_t		d;
+   247		char			*cur_chunk;
+   248		int			pathlen = ip->i_disk_size;
+   249		int			nmaps = XFS_SYMLINK_MAPS;
+   250		int			byte_cnt;
+   251		int			n;
+   252		int			error = 0;
+   253		int			fsblocks = 0;
+   254		int			offset;
+   255	
+   256		ASSERT(xfs_isilocked(ip, XFS_ILOCK_SHARED | XFS_ILOCK_EXCL));
+   257	
+   258		fsblocks = xfs_symlink_blocks(mp, pathlen);
+   259		error = xfs_bmapi_read(ip, 0, fsblocks, mval, &nmaps, 0);
+   260		if (error)
+   261			goto out;
+   262	
+   263		offset = 0;
+   264		for (n = 0; n < nmaps; n++) {
+   265			d = XFS_FSB_TO_DADDR(mp, mval[n].br_startblock);
+   266			byte_cnt = XFS_FSB_TO_B(mp, mval[n].br_blockcount);
+   267	
+   268			error = xfs_buf_read(mp->m_ddev_targp, d, BTOBB(byte_cnt), 0,
+   269					&bp, &xfs_symlink_buf_ops);
+   270			if (error)
+   271				return error;
+   272			byte_cnt = XFS_SYMLINK_BUF_SPACE(mp, byte_cnt);
+   273			if (pathlen < byte_cnt)
+   274				byte_cnt = pathlen;
+   275	
+   276			cur_chunk = bp->b_addr;
+   277			if (xfs_has_crc(mp)) {
+   278				if (!xfs_symlink_hdr_ok(ip->i_ino, offset,
+   279								byte_cnt, bp)) {
+   280					xfs_inode_mark_sick(ip, XFS_SICK_INO_SYMLINK);
+   281					error = -EFSCORRUPTED;
+   282					xfs_alert(mp,
+   283	"symlink header does not match required off/len/owner (0x%x/Ox%x,0x%llx)",
+   284						offset, byte_cnt, ip->i_ino);
+   285					xfs_buf_relse(bp);
+   286					goto out;
+   287	
+   288				}
+   289	
+   290				cur_chunk += sizeof(struct xfs_dsymlink_hdr);
+   291			}
+   292	
+   293			memcpy(link + offset, cur_chunk, byte_cnt);
+   294	
+   295			pathlen -= byte_cnt;
+   296			offset += byte_cnt;
+   297	
+   298			xfs_buf_relse(bp);
+   299		}
+   300		ASSERT(pathlen == 0);
+   301	
+   302		link[ip->i_disk_size] = '\0';
+   303		error = 0;
+   304	
+   305	 out:
+   306		return error;
+   307	}
+   308	
+   309	/* Write the symlink target into the inode. */
+   310	int
+ > 311	xfs_symlink_write_target(
+
 ---
- drivers/gpu/drm/i915/display/intel_pipe_crc.c | 1 -
- drivers/gpu/drm/i915/i915_irq.c               | 1 -
- 2 files changed, 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/display/intel_pipe_crc.c b/drivers/gpu/drm/i915/display/intel_pipe_crc.c
-index 8ac263f471be..9070935b0443 100644
---- a/drivers/gpu/drm/i915/display/intel_pipe_crc.c
-+++ b/drivers/gpu/drm/i915/display/intel_pipe_crc.c
-@@ -24,7 +24,6 @@
-  *
-  */
- 
--#include <linux/circ_buf.h>
- #include <linux/ctype.h>
- #include <linux/debugfs.h>
- #include <linux/seq_file.h>
-diff --git a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
-index 5b98fb0532b5..e77f644d41e8 100644
---- a/drivers/gpu/drm/i915/i915_irq.c
-+++ b/drivers/gpu/drm/i915/i915_irq.c
-@@ -28,7 +28,6 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
--#include <linux/circ_buf.h>
- #include <linux/slab.h>
- #include <linux/sysrq.h>
- 
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

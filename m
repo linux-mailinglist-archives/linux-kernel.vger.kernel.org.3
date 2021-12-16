@@ -2,135 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E004766EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 01:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A7B4766EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 01:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbhLPAYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 19:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S232341AbhLPA0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 19:26:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbhLPAYj (ORCPT
+        with ESMTP id S229517AbhLPA0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 19:24:39 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B03C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 16:24:39 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3A6173F6;
-        Thu, 16 Dec 2021 01:24:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1639614275;
-        bh=jluRvkznhFHQAEudwl6chNVc4AtO829dsSTMAFxI34o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cviJ20aoht5w/BMK49EwlMpGgioG0ErkirGWvjTxg0fDBDNJcRre7ulVmKEVzBYii
-         wQlZIlVvsOhBvhNCQoah91L4MF+KINUFx129SgaGMssdrgDAqk2iZyE6qAxlMMDjSm
-         gmjQZN3KylbyHCYzrmYFjaAi4Ut+Ggv6xhcWlqGU=
-Date:   Thu, 16 Dec 2021 02:24:32 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        "James (Qian) Wang" <james.qian.wang@arm.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Alexey Brodkin <abrodkin@synopsys.com>,
-        Alison Wang <alison.wang@nxp.com>,
-        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Brian Starkey <brian.starkey@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        David Lechner <david@lechnology.com>,
-        Deepak Rawat <drawat.floss@gmail.com>,
-        Edmund Dea <edmund.j.dea@intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Erico Nunes <nunes.erico@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        Inki Dae <inki.dae@samsung.com>, Joel Stanley <joel@jms.id.au>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Marek Vasut <marex@denx.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Russell King <linux@armlinux.org.uk>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sandy Huang <hjc@rock-chips.com>, Sean Paul <sean@poorly.run>,
-        Stefan Agner <stefan@agner.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Yannick Fertre <yannick.fertre@foss.st.com>
-Subject: Re: [PATCH 00/60] drm: Make all drivers to honour the nomodeset
- parameter
-Message-ID: <YbqHQAFtwvTvYddZ@pendragon.ideasonboard.com>
-References: <20211215010008.2545520-1-javierm@redhat.com>
- <Ybp7qDs1p3x5GzNJ@pendragon.ideasonboard.com>
- <91c6b455-62cd-cec7-8445-e93c99230a03@redhat.com>
+        Wed, 15 Dec 2021 19:26:49 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0C9C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 16:26:49 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id q16so227798wrg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 16:26:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=RK0Wa24zJKwk5quUGozV++HBEKFCPNKHXTOwrcloRnk=;
+        b=O7NH+d2xIRKChymtRwwi1teZm/WYQ1OyIT48huVzdNzMFb4dSSCEONs9JYU9ocLAJK
+         gxtpXGKWb5iM9c3OlYoMvY0E6mHbzm3jd0Lg1OgauZKfrtPtjxQoXeWyDMPDFFUcguCq
+         7mjMRvI3bptblJIbF/VGK5sGeS/H569a40sr2jM1BdG+Pa0SWwRVVhRynn+Farw6MZOc
+         uZ0G8UE4zolYm7Y7j9MBGBM1AKjSXwQeg6hD1dEjOW85Y6cBvZi590CapQIRtoG3O2E2
+         dZpy80BHYU6tLTJBlC1o8AwUZkDMw5JsO+UMfKOPTVWRy3OpS9raI+z8AZA5bsr+F73e
+         XGng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=RK0Wa24zJKwk5quUGozV++HBEKFCPNKHXTOwrcloRnk=;
+        b=ZIYvk9LaQaNL5Sod7nlYeoZkRxyI1EX8vvzV78mjGsuYoPcI/yxIKkO/+W1hbjQfSg
+         N1jwV8rfvd3/MfH5PJdvpeNS+Y/OXTMy0Rof3+o7ND1ohdoxBCI7mz0cqZUH990zofE0
+         EbYsOr/GjT1SUaBvdihAB3vPgh7Qc6i8MbCl6ApGRodQsQUYXkw8JNHB7RYxDNpEesXl
+         Fnzk7onemW/ssh32X/R0N76u95FfM/Hxaa6py+5cgk6qCe7H8hiu4Ly/jV5gyR4vRYPZ
+         rdndbKw6q7ULeqTbMKsmbBoWyhlWr9LeDqZD+lQInZW97yCkRYYi0i/iTYzGL7oXKV/1
+         hvtw==
+X-Gm-Message-State: AOAM530z23ZW6WuZFaAkYOQDyXUUPtJhXsuZ9ITcr9wrkUD+aZ0t8hAh
+        hr++CqGpwF/LIZIiGNsp24hmCe2ERTvnieoKvpA=
+X-Google-Smtp-Source: ABdhPJzsZjbImPgI6WQTEFGwtJtq5vZmhw0O0D82k1s+ZKd6pRmfqiXa0EpUg1j9C5fj+UAYLRJvs9Z9ehv8uD8z8hE=
+X-Received: by 2002:a5d:5589:: with SMTP id i9mr6663423wrv.49.1639614407737;
+ Wed, 15 Dec 2021 16:26:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <91c6b455-62cd-cec7-8445-e93c99230a03@redhat.com>
+Received: by 2002:a1c:c901:0:0:0:0:0 with HTTP; Wed, 15 Dec 2021 16:26:47
+ -0800 (PST)
+Reply-To: hervebizzotto@mail.com
+From:   Herve Bizzotto <drkodjomenam20@gmail.com>
+Date:   Thu, 16 Dec 2021 00:26:47 +0000
+Message-ID: <CAAO_58tG096gPaL2+sDTwft+kFX7d_FRYMS6r2e_p0Z-3NF4WQ@mail.gmail.com>
+Subject: Hello My Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
-
-On Thu, Dec 16, 2021 at 01:13:56AM +0100, Javier Martinez Canillas wrote:
-> Hello Laurent,
-> 
-> On 12/16/21 00:35, Laurent Pinchart wrote:
-> 
-> [snip]
-> 
-> >>
-> >> I've built tested with 'make allmodconfig && make M=drivers/gpu/drm/', but
-> >> only booted in a few devices with and without nomodeset in the cmdline. So
-> >> testing and reviewing for all the drivers would be highly appreciated.
-> > 
-> > The fact that the series is so big makes me think it would be better to
-> > handle this in the DRM core. Is there any way we could do so ? Otherwise
-> > we'll chase this issue forever in new drivers, and will be plagued with
-> > cargo cult problems.
-> > 
-> 
-> Yes, what Thomas suggested is to add a set of drm_module_{pci,platform}_driver()
-> macros in include/drm/drm_drv.h, that will just check whether the driver should
-> be registered or not and call the {pci,platform}_register_driver() functions.
-> 
-> That way the change in the drivers would just be something like the following:
-> 
-> -module_platform_driver(malidp_platform_driver);
-> +drm_module_platform_driver(malidp_platform_driver);
-> 
-> There are some drivers that still need a custom module init functions for various
-> reasons (e.g: register a set of devices/drivers, need to be a late init call, etc)
-> but at least for most drivers this should be handled transparently as long as they
-> use these drm_*_register_driver() macros.
-
-Another option could be to return an error from drm_dev_alloc(). That
-may avoid changes in the drivers.
-
-> So just ignore this series and I'll post a v2 soon.
-
 -- 
-Regards,
+Wishing you the best.
 
-Laurent Pinchart
+Please confirm if you receive my previous message.
+
+I'll be waiting for your answer.
+
+My regards,
+Wishing you the best.

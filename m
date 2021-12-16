@@ -2,148 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9465A477191
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4808D477192
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbhLPMXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:23:47 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:33858 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhLPMXq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:23:46 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JFB992pRrzcbvh;
-        Thu, 16 Dec 2021 20:23:25 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 16 Dec 2021 20:23:43 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 16 Dec 2021 20:23:42 +0800
-Subject: Re: [PATCH v17 03/10] x86: kdump: use macro CRASH_ADDR_LOW_MAX in
- functions reserve_crashkernel()
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Baoquan He <bhe@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-        Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-4-thunder.leizhen@huawei.com> <YbntdtQo2jfbO4cO@zn.tnic>
- <20211216011040.GG3023@MiWiFi-R3L-srv>
- <9513d74c-d4c7-babd-f823-8999e195d96d@huawei.com> <YbseAX6X1VHUF12f@zn.tnic>
- <35810a61-604e-9b90-2a7f-cfca6ae042ac@huawei.com>
-Message-ID: <20d765ff-59bb-7bb3-df06-9f02eada3cb0@huawei.com>
-Date:   Thu, 16 Dec 2021 20:23:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S236071AbhLPMXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:23:50 -0500
+Received: from mga17.intel.com ([192.55.52.151]:16303 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236002AbhLPMXs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 07:23:48 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="220154325"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="220154325"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:23:47 -0800
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="482803947"
+Received: from emnevill-mobl.ger.corp.intel.com (HELO localhost) ([10.252.20.65])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:23:44 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/i915: remove circ_buf.h includes
+In-Reply-To: <20211216115920.15981-1-jslaby@suse.cz>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211216115920.15981-1-jslaby@suse.cz>
+Date:   Thu, 16 Dec 2021 14:23:41 +0200
+Message-ID: <871r2c4u2a.fsf@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <35810a61-604e-9b90-2a7f-cfca6ae042ac@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 16 Dec 2021, Jiri Slaby <jslaby@suse.cz> wrote:
+> The last user of macros from that include was removed in 2018 by the
+> commit below.
+>
+> Fixes: 6cc42152b02b ("drm/i915: Remove support for legacy debugfs crc interface")
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: intel-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
 
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
 
-On 2021/12/16 20:08, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2021/12/16 19:07, Borislav Petkov wrote:
->> On Thu, Dec 16, 2021 at 10:46:12AM +0800, Leizhen (ThunderTown) wrote:
->>> The original value (1ULL << 32) is inaccurate
->>
->> I keep asking *why*?
->>
->>> and it enlarged the CRASH_ADDR_LOW upper limit.
->>
->> $ git grep -E "CRASH_ADDR_LOW\W"
->> $
->>
->> I have no clue what you mean here.
-> 
-> #ifdef CONFIG_X86_32
-> # define CRASH_ADDR_LOW_MAX     SZ_512M
-> # define CRASH_ADDR_HIGH_MAX    SZ_512M
-> #endif
-> 
-> 		if (!high)
-> (1)                     crash_base = memblock_phys_alloc_range(crash_size,
->                                                 CRASH_ALIGN, CRASH_ALIGN,
->                                                 CRASH_ADDR_LOW_MAX);
->                 if (!crash_base)
-> (2)                     crash_base = memblock_phys_alloc_range(crash_size,
->                                                 CRASH_ALIGN, CRASH_ALIGN,
->                                                 CRASH_ADDR_HIGH_MAX);
-> 
-> -	if (crash_base >= (1ULL << 32) && reserve_crashkernel_low())
-> +(3)	if (crash_base >= CRASH_ADDR_LOW_MAX && reserve_crashkernel_low())
-> 
-> If the memory of 'crash_base' is successfully allocated at (1), because the last
-> parameter CRASH_ADDR_LOW_MAX is the upper bound, so we can sure that
-> "crash_base < CRASH_ADDR_LOW_MAX". So that, reserve_crashkernel_low() will not be
-> invoked at (3). That's why I said (1ULL << 32) is inaccurate and enlarge the CRASH_ADDR_LOW
-> upper limit.
-> 
-> If the memory of 'crash_base' is successfully allocated at (2), you see,
-> CRASH_ADDR_HIGH_MAX = CRASH_ADDR_LOW_MAX = SZ_512M, the same as (1). In fact,
-> "crashkernel=high," may not be recommended on X86_32.
-> 
-> Is it possible that (CRASH_ADDR_HIGH_MAX >= 4G) and (CRASH_ADDR_LOW_MAX < 4G)?
-> In this case, the memory allocated at (2) maybe over 4G. But why shouldn't
-> CRASH_ADDR_LOW_MAX be equal to 4G at this point?
+> ---
+>  drivers/gpu/drm/i915/display/intel_pipe_crc.c | 1 -
+>  drivers/gpu/drm/i915/i915_irq.c               | 1 -
+>  2 files changed, 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/display/intel_pipe_crc.c b/drivers/gpu/drm/i915/display/intel_pipe_crc.c
+> index 8ac263f471be..9070935b0443 100644
+> --- a/drivers/gpu/drm/i915/display/intel_pipe_crc.c
+> +++ b/drivers/gpu/drm/i915/display/intel_pipe_crc.c
+> @@ -24,7 +24,6 @@
+>   *
+>   */
+>  
+> -#include <linux/circ_buf.h>
+>  #include <linux/ctype.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/seq_file.h>
+> diff --git a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
+> index 5b98fb0532b5..e77f644d41e8 100644
+> --- a/drivers/gpu/drm/i915/i915_irq.c
+> +++ b/drivers/gpu/drm/i915/i915_irq.c
+> @@ -28,7 +28,6 @@
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>  
+> -#include <linux/circ_buf.h>
+>  #include <linux/slab.h>
+>  #include <linux/sysrq.h>
 
-We divide two memory areas: low memory area and high memory area. The doc told us:
-at least 256MB memory should be reserved at low memory area. So that if
-"crash_base >= CRASH_ADDR_LOW_MAX" is true at (3), that means we have not reserved
-any memory at low memory area, so we should call reserve_crashkernel_low().
-The low memory area is not equivalent to <=4G, I think. So replace (1ULL << 32) with
-CRASH_ADDR_LOW_MAX is logically correct.
-
-> 
-> 
->>
->>> This is because when the memory is allocated from the low end, the
->>> address cannot exceed CRASH_ADDR_LOW_MAX, see "if (!high)" branch.
->>
->>> If
->>> the memory is allocated from the high end, 'crash_base' is greater than or
->>> equal to (1ULL << 32), and naturally, it is greater than CRASH_ADDR_LOW_MAX.
->>>
->>> I think I should update the description, thanks.
->>
->> I think you should explain why is (1ULL << 32) wrong.
->>
->> It came from:
->>
->>   eb6db83d1059 ("x86/setup: Do not reserve crashkernel high memory if low reservation failed")
->>
->> which simply frees the high memory portion when the low reservation
->> fails. And the test for that is, is crash base > 4G. So that makes
->> perfect sense to me.
->>
->> So your change is a NOP on 64-bit and it is a NOP on 32-bit by virtue of
->> the _low() variant always returning 0 on 32-bit.
->>
+-- 
+Jani Nikula, Intel Open Source Graphics Center

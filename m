@@ -2,126 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E755D4767E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 03:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825D84767B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 03:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbhLPC0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 21:26:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbhLPC0X (ORCPT
+        id S232777AbhLPCHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 21:07:11 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:56708 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232770AbhLPCHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 21:26:23 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FBAC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 18:26:23 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id d10so60635754ybn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 18:26:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tB3x6NAjs5//RJkL9LMXnECDkkVJovad/BmtOHFhMgE=;
-        b=fPk6aeZcvhGgQMP5Y03xNjGjJYJABGhLOrJVnFi9+ZvcXhIcWKvVkEfKBl7jDpc6di
-         ff+uoIGdSTKZLedzJTuoM4I7SC7XEuuRhEs93ePqu2pkv8+q4cT1Gb5bsI3++G+P0HNN
-         LUD5Jp+hEu6t8yoMZjv0zAKmhbudXDM3QQnnFliEej81XBXHZThAXL482gvmbmHuQKQ0
-         uhM0EUChCHju/cRcILqqDz0CHjvKxP2oPBn9AiIr2wf0gCdS4O6adX+dDtFiPoOw9J40
-         CrkwSvaJeGbdRaj+PsOd2AtHzCGd+5Pngc9N3CzZ6vn8dLJ7kjHH/+1sOAI5VLEodzzr
-         dzHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tB3x6NAjs5//RJkL9LMXnECDkkVJovad/BmtOHFhMgE=;
-        b=QfWFCuq3UiDSFvRhMY3pl7urPu2cEwuUgHAFWvtng+jDoITJR28iH5v/tLcjfk6LEr
-         H2o5uEMiLdg2RAJI9praQmbLBATirZnc4N+XzYwL+fKKrCXoiUWETXZVkDRplB0w0URm
-         4slxaPnt0FCfy7zGYZWex2LsN3rive3Y+Ol73n+9R0zHs9UusvkG3/AqCIzJtX2/hwGy
-         L7lE9GI/6It2UaPXUq6E6MMLzI0fkdSHDQ2xrHuaoEssUKbLX5xZL7qVGqVTkTiswWI9
-         dkqKOkc5wH5YvWaxvRN3tR4ZdO/UbpkyQ4F3/+zQDa9C2NctU+hJE6gStF1375JGFssy
-         SPNw==
-X-Gm-Message-State: AOAM531ZdY2Y4q+0IX8fa2kYFFMt6ZwSLoBfFK5zmS/bEsN0/KVBWQ2E
-        9XYFvt1jmOPuKWQJCO9WqbdGsOspHqFtIoEfzaQSew==
-X-Google-Smtp-Source: ABdhPJwxIGY4qVilnFG1zpsGyTqW5GuliNGeCUyhjN2AlwBqSAYaCnd/YG4ATFeHWCMVH3TuYpiGU0f+oiUNlNnoNpE=
-X-Received: by 2002:a5b:c0b:: with SMTP id f11mr10660172ybq.488.1639621582596;
- Wed, 15 Dec 2021 18:26:22 -0800 (PST)
+        Wed, 15 Dec 2021 21:07:10 -0500
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20211216020708epoutp014039a23d0bc47d2bf7c1bb777b05d3d1~BGhfJ4O-X3190031900epoutp01k
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:07:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20211216020708epoutp014039a23d0bc47d2bf7c1bb777b05d3d1~BGhfJ4O-X3190031900epoutp01k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1639620428;
+        bh=mI74+lYrCIoVgqdKUWVKTn7G5egS/5n/Se/dnL91UTw=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=D5qIHzPKVmNxDZMDvQeDbgh8Sm64gktHecOZ5oVA0aPjqvaGNj4WpK1Xy7ZxTlFDT
+         dqNKgtvRFs+ijh0Y4cTybcs2rI8Z1+VZf0V0UEg2MAF+eGTWFYuwaqy7Z8rPI+XPiw
+         AJrJgM1eVwxd8pankUCJ+Z+2oPhji8EPfoDkmeS4=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20211216020708epcas1p161eab40748a79555c4b1ebd10a0f1372~BGhe2qLWS1738817388epcas1p1b;
+        Thu, 16 Dec 2021 02:07:08 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.233]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4JDwTz176sz4x9Pr; Thu, 16 Dec
+        2021 02:07:03 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        96.3B.64085.F3F9AB16; Thu, 16 Dec 2021 11:06:55 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20211216020653epcas1p4710b50224fca7fec1947e7847edaa91f~BGhRWdxG31146211462epcas1p4H;
+        Thu, 16 Dec 2021 02:06:53 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20211216020653epsmtrp173cf683b51f9552468bca2e5e145f06b~BGhRVoCtW1982819828epsmtrp1k;
+        Thu, 16 Dec 2021 02:06:53 +0000 (GMT)
+X-AuditID: b6c32a35-9adff7000000fa55-28-61ba9f3fdb94
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D7.5F.08738.D3F9AB16; Thu, 16 Dec 2021 11:06:53 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20211216020653epsmtip17f4e1355c753882be13279aee8373a37~BGhRI2NW11715217152epsmtip1V;
+        Thu, 16 Dec 2021 02:06:53 +0000 (GMT)
+Subject: Re: [PATCH] PM / devfreq: sun8i: addd COMMON_CLK dependency
+To:     Arnd Bergmann <arnd@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dong Aisheng <aisheng.dong@nxp.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <a56dbd34-cd89-63a7-e24c-6f45487aa129@samsung.com>
+Date:   Thu, 16 Dec 2021 11:29:54 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-References: <20211208212211.2860249-1-surenb@google.com> <YbHIaq9a0CtqRulE@dhcp22.suse.cz>
- <CAJuCfpHwNS8RFPF9nzaSB8Br8Jah5_dcnQeatRZp60vmX5n6Vg@mail.gmail.com>
- <YbIzOR13uPOI5EMB@dhcp22.suse.cz> <CAJuCfpHs_25TQ7pHDhPXghA46jmXa5N2OOeBByE-sn+dQ-aM2w@mail.gmail.com>
-In-Reply-To: <CAJuCfpHs_25TQ7pHDhPXghA46jmXa5N2OOeBByE-sn+dQ-aM2w@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 15 Dec 2021 18:26:11 -0800
-Message-ID: <CAJuCfpHZOojVXCDXPOA7kgrZqNWw_BzRmbKQXz3FOCHwa-LopQ@mail.gmail.com>
-Subject: Re: [PATCH 4/3] mm: drop MMF_OOM_SKIP from exit_mmap
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, rientjes@google.com,
-        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
-        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
-        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
-        oleg@redhat.com, david@redhat.com, jannh@google.com,
-        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
-        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211215140523.481425-1-arnd@kernel.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMJsWRmVeSWpSXmKPExsWy7bCmnq79/F2JBg/apSy+TN3FbPF30jF2
+        i21bNrFanG16w25xedccNovPvUcYLW43rmCzeP6ok82Bw+P3r0mMHptWdbJ5bHy3g8mjb8sq
+        Ro9XX+cyenzeJBfAFpVtk5GamJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr
+        5OIToOuWmQN0kJJCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLRArzgxt7g0L10v
+        L7XEytDAwMgUqDAhO2PT8wbGglaeikend7A3MM7n6mLk5JAQMJG4uH8LaxcjF4eQwA5GifWT
+        trKBJIQEPjFKzG2pg0h8ZpRo2HaKEaZj0vN7jBCJXUBFq98zQzjvGSU6Hixh72Lk4BAWcJFY
+        MYcJJC4isJBRYvqlnWDdzAINQB3ttiA2m4CWxP4XN8DW8QsoSlz98RishlfATmLB2wfMIDaL
+        gKrErsMLWEFsUYEwiZPbWqBqBCVOznzCAmJzCphJ9D3dzwQxX1zi1pP5ULa8xPa3c8COkxBY
+        ySHx/9xtdogXXCRO/9jODGELS7w6vgUqLiXxsr+NHaJhGaPEr8mdTBDOekaJl7M6oTqMJfYv
+        ncwE8iazgKbE+l36EGFFiZ2/50J9ySfx7msPK0iJhACvREebEESJssTlB3eZIGxJicXtnWwT
+        GJVmIflnFpIfZiH5YRbCsgWMLKsYxVILinPTU4sNCwzh0Z2cn7uJEZxatUx3ME58+0HvECMT
+        B+MhRgkOZiUR3icRuxKFeFMSK6tSi/Lji0pzUosPMZoCQ3gis5Rocj4wueeVxBuaWBqYmBkZ
+        m1gYmhkqifO+8J+eKCSQnliSmp2aWpBaBNPHxMEp1cAUdDR5s6ppnYBuWQ2ro1DTCtsV9zIW
+        bmTq2BbOqTXPm7VY2y9H44lVvUd1mlsVv3Ox/KugDwu1/85++CbGWyjipWmJoaf5xK+zZe30
+        Olk1Lb/ercoM0MsM7fQ42ZU3PfrmJsvtl3SEypjZI4o+ZfEGzzoRZsNu7/x2Z1X4T67Dck9T
+        X1qwaSXb/0i+YtX21v2wnPxriRkylUnLL6juUNPq4rDMWJQ1R1jiSsWsOdzBPbtmLzTRkpZ/
+        HBmyu/hBaqhWW2XP5T1MMhde963mcTm2sNRVXln+Of+Mfv8T78W8q+aY7nd95tCosf6mG0ty
+        yfZT98pj9vhPbhNpSFrZrFrktOC21M8OR0/JWZOVWIozEg21mIuKEwHJy/+nNgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42LZdlhJTtd2/q5Eg01P1Sy+TN3FbPF30jF2
+        i21bNrFanG16w25xedccNovPvUcYLW43rmCzeP6ok82Bw+P3r0mMHptWdbJ5bHy3g8mjb8sq
+        Ro9XX+cyenzeJBfAFsVlk5Kak1mWWqRvl8CVsel5A2NBK0/Fo9M72BsY53N1MXJySAiYSEx6
+        fo+xi5GLQ0hgB6PE1eZ5zBAJSYlpF48C2RxAtrDE4cPFEDVvGSUWrf3ADhIXFnCRWDGHCSQu
+        IrCQUWLb9n1gg5gFGhglJhw4BjZISKCTUWLHVH4Qm01AS2L/ixtsIDa/gKLE1R+PGUFsXgE7
+        iQVvH4DVswioSuw6vIAVxBYVCJPYueQxE0SNoMTJmU9YQGxOATOJvqf7weLMAuoSf+ZdYoaw
+        xSVuPZkPFZeX2P52DvMERuFZSNpnIWmZhaRlFpKWBYwsqxglUwuKc9Nziw0LjPJSy/WKE3OL
+        S/PS9ZLzczcxgmNMS2sH455VH/QOMTJxMB5ilOBgVhLhfRKxK1GINyWxsiq1KD++qDQntfgQ
+        ozQHi5I474Wuk/FCAumJJanZqakFqUUwWSYOTqkGpoQWt/IfyiZuM521JHiqPG4suHSx29sx
+        LDBV+7xc/3ppUw+VlbcP2XxI6q322ie1qWdb0auuO0+DV5xYWpl2N+Raa6SRUu9cIUFjV16+
+        Up0H/6fsYL0l+bE8fmPS24VdwhuuHU6/LtX82TKm+MCuiObwZ9vZNocv/Oy0ykBNrdvuK0eP
+        3xO9dr3NB7JUCncrJ2j+FPhusP3w20Nx+5+1lte/iDu5KXPD5TCWJ/fuflC7/7dIRSi64PoZ
+        LhY+vpetsmqvIlIbWid1HbjI0z+1r5TtiEtm7hadDn+XOTrPWUPPZb/sc9/HMEuv/Nmyl/4J
+        liJyjzsNzCP2nFfd8fKeZ+LDqzFqB6Mv/whb/clCiaU4I9FQi7moOBEA2rCPVyADAAA=
+X-CMS-MailID: 20211216020653epcas1p4710b50224fca7fec1947e7847edaa91f
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211215140534epcas1p4a39eed46b3bd0e8582837321d1f279e6
+References: <CGME20211215140534epcas1p4a39eed46b3bd0e8582837321d1f279e6@epcas1p4.samsung.com>
+        <20211215140523.481425-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 9, 2021 at 9:06 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Thu, Dec 9, 2021 at 8:47 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Thu 09-12-21 08:24:04, Suren Baghdasaryan wrote:
-> > > On Thu, Dec 9, 2021 at 1:12 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > Do we want this on top?
-> > >
-> > > As we discussed in this thread
-> > > https://lore.kernel.org/all/YY4snVzZZZYhbigV@dhcp22.suse.cz,
-> > > __oom_reap_task_mm in exit_mmap allows oom-reaper/process_mrelease to
-> > > unmap pages in parallel with exit_mmap without blocking each other.
-> > > Removal of __oom_reap_task_mm from exit_mmap prevents this parallelism
-> > > and has a negative impact on performance. So the conclusion of that
-> > > thread I thought was to keep that part. My understanding is that we
-> > > also wanted to remove MMF_OOM_SKIP as a follow-up patch but
-> > > __oom_reap_task_mm would stay.
-> >
-> > OK, then we were talking past each other, I am afraid. I really wanted
-> > to get rid of this oom specific stuff from exit_mmap. It was there out
-> > of necessity. With a proper locking we can finally get rid of the crud.
-> > As I've said previously oom reaping has never been a hot path.
-> >
-> > If we really want to optimize this path then I would much rather see a
-> > generic solution which would allow to move the write lock down after
-> > unmap_vmas. That would require oom reaper to be able to handle mlocked
-> > memory.
->
-> Ok, let's work on that and when that's done we can get rid of the oom
-> stuff in exit_mmap. I'll look into this over the weekend and will
-> likely be back with questions.
+On 12/15/21 11:03 PM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Compile-testing the driver without CONFIG_COMMON_CLK causes
+> a link failure:
+> 
+> arm-linux-gnueabi-ld: drivers/devfreq/sun8i-a33-mbus.o: in function `sun8i_a33_mbus_remove':
+> sun8i-a33-mbus.c:(.text+0x450): undefined reference to `clk_rate_exclusive_put'
+> arm-linux-gnueabi-ld: sun8i-a33-mbus.c:(.text+0x460): undefined reference to `clk_rate_exclusive_put'
+> arm-linux-gnueabi-ld: drivers/devfreq/sun8i-a33-mbus.o: in function `sun8i_a33_mbus_probe':
+> sun8i-a33-mbus.c:(.text+0x85c): undefined reference to `clk_rate_exclusive_get'
+> arm-linux-gnueabi-ld: sun8i-a33-mbus.c:(.text+0x878): undefined reference to `clk_rate_exclusive_get'
+> 
+> Fixes: 8bfd4858b4bb ("PM / devfreq: Add a driver for the sun8i/sun50i MBUS")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/devfreq/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> index b94eb04761f6..87eb2b837e68 100644
+> --- a/drivers/devfreq/Kconfig
+> +++ b/drivers/devfreq/Kconfig
+> @@ -135,6 +135,7 @@ config ARM_RK3399_DMC_DEVFREQ
+>  config ARM_SUN8I_A33_MBUS_DEVFREQ
+>  	tristate "sun8i/sun50i MBUS DEVFREQ Driver"
+>  	depends on ARCH_SUNXI || COMPILE_TEST
+> +	depends on COMMON_CLK
+>  	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+>  	help
+>  	  This adds the DEVFREQ driver for the MBUS controller in some
+> 
 
-As promised, I have a question:
-Any particular reason why munlock_vma_pages_range clears VM_LOCKED
-before unlocking pages and not after (see:
-https://elixir.bootlin.com/linux/latest/source/mm/mlock.c#L424)? Seems
-to me if VM_LOCKED was reset at the end (with proper ordering) then
-__oom_reap_task_mm would correctly skip VM_LOCKED vmas.
-https://lore.kernel.org/lkml/20180514064824.534798031@linuxfoundation.org/
-has this explanation:
 
-"Since munlock_vma_pages_range() depends on clearing VM_LOCKED from
-vm_flags before actually doing the munlock to determine if any other
-vmas are locking the same memory, the check for VM_LOCKED in the oom
-reaper is racy."
+Thanks. Applied it.
 
-but "to determine if any other vmas are locking the same memory"
-explanation eludes me... Any insights?
-Thanks,
-Suren.
-
-> Thanks!
->
-> > --
-> > Michal Hocko
-> > SUSE Labs
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics

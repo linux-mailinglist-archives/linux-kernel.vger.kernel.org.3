@@ -2,65 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA42477BAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC38477BB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbhLPSmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbhLPSmo (ORCPT
+        id S232589AbhLPSnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:43:20 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:60973 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229532AbhLPSnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:42:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158B6C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:42:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 16 Dec 2021 13:43:19 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63224B825F2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 18:42:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D89DC36AE0;
-        Thu, 16 Dec 2021 18:42:40 +0000 (UTC)
-Date:   Thu, 16 Dec 2021 18:42:37 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] arm64 fixes for 5.16-rc6
-Message-ID: <YbuInd5ccML4yOMP@arm.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFLbV1zSyz4xRC;
+        Fri, 17 Dec 2021 05:43:18 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639680198;
+        bh=dQJSvdmNGsE7TZTWfD5000m7y9ZDvqEBJYgKBseryxM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ee8rUx/0ZOdG0bkBn6RBJ88wBJSupF1IJtvgBtTO2lksgnsdqGql6qBj7/TYAhAfn
+         0s+qspqwp1TTU+9vtmOyUyqpJrXU7ME3C5Fvutcp5yCt/eS2OEg36Wllfrz1PjdrVU
+         1sxJdOVy68DZUXL63invjY7g5RyY6Cz0OnNONaWF6Pt4qBuWaikN+KXJ5a/zVAiJjQ
+         tM3gDXrGa33NaHPOud3f4RRGcHmOMNz04+/7Q1KmH9S1eUEHUDVYENcpUWOUgenQoD
+         +lMnI5zj5wiOuas3Q6oUmVusRTIpzK5YBXFQ5jd4Ps5T6QnV6dT9s1wMmieCUk1N6z
+         GIA+1jO3iiwhw==
+Date:   Fri, 17 Dec 2021 05:43:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Dario Binacchi <dariobin@libero.it>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the input tree
+Message-ID: <20211217054317.130ae2b7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/signed; boundary="Sig_/XRC89kKUq0mz4dh.wvj8L2j";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+--Sig_/XRC89kKUq0mz4dh.wvj8L2j
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Please pull the arm64 fix below. Thanks.
+Hi all,
 
-The following changes since commit 35b6b28e69985eafb20b3b2c7bd6eca452b56b53:
+In commit
 
-  arm64: ftrace: add missing BTIs (2021-12-02 10:18:32 +0000)
+  61368d5cd2d2 ("Input: ti_am335x_tsc - fix STEPCONFIG setup for Z2")
 
-are available in the Git repository at:
+Fixes tag
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
+  Fixes: 8c896308fea ("input: ti_am335x_adc: use only FIFO0 and clean up a =
+little")
 
-for you to fetch changes up to 9c5d89bc10551f1aecd768b00fca3339a7b8c8ee:
+has these problem(s):
 
-  arm64: kexec: Fix missing error code 'ret' warning in load_other_segments() (2021-12-16 17:44:58 +0000)
+  - SHA1 should be at least 12 digits long
 
-----------------------------------------------------------------
-Fix missing error code on kexec failure path.
+In commit
 
-----------------------------------------------------------------
-Lakshmi Ramasubramanian (1):
-      arm64: kexec: Fix missing error code 'ret' warning in load_other_segments()
+  9d941aace809 ("Input: ti_am335x_tsc - set ADCREFM for X configuration")
 
- arch/arm64/kernel/machine_kexec_file.c | 1 +
- 1 file changed, 1 insertion(+)
+Fixes tag
 
--- 
-Catalin
+  Fixes: 1b8be32e691 ("Input: add support for TI Touchscreen controller")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+For the future, these can be fixed by setting core.abbrev to 12 (or more)
+or (for git v2.11 or later) just making sure it is not set (or set to
+"auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XRC89kKUq0mz4dh.wvj8L2j
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG7iMUACgkQAVBC80lX
+0GxojQgAgWiPZZGYwN0419zQvYSew6l8VnnVGELAbJni9c81W7wfOd9W0JOMznZs
+z6uROA07jXThPEIrpnMv7cr60/huRuVM+7KQf8E+lm5lflDjhhBL6B96c7RdlqBR
+I5B55PrlHno9MOwn/3MV5+23drhL9Gqjs7ZVBhjuDs0TQ7+qcNcMHSoyQ+YySlfp
+t/bnpSv26DujyHQGvI9RrZcbj+ObgdXhJdwMRzfETut+iZJzb9DU1t9e4meFueQl
+Vela5NERNQMyxMoEryCIKMnBOGzPaQEp7mDsjlWw+WD/jaiRZCpCmijDELPClTce
+NjQuqf3tH/ygrrpDIJsvKroliqaeEA==
+=Lm2p
+-----END PGP SIGNATURE-----
+
+--Sig_/XRC89kKUq0mz4dh.wvj8L2j--

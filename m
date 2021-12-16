@@ -2,322 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B8A477C22
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1716D477C26
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240819AbhLPTC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 14:02:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S240809AbhLPTDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 14:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236487AbhLPTC1 (ORCPT
+        with ESMTP id S233828AbhLPTDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 14:02:27 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B5DC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 11:02:27 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id co15so43392pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 11:02:27 -0800 (PST)
+        Thu, 16 Dec 2021 14:03:10 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180A2C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 11:03:10 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so112273wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 11:03:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yIzDAfP89KkAwrI/b9ZoIMiMvCVPqRfqsQV1ykh2dB8=;
-        b=g+6SveIgq/Y7Ee+1oPbFEDf/jKfvb+BNqpwnoSdcNhu04ZQslM7AmyBbwvV7lWXq7Z
-         GpqjXFaXmdNz0xcIpPR69YIiZvZU+9W+xCNANibXLJn7ozIRkBm2y6BHFKIwszmw/IPL
-         pdoBKIybePWLo0NJxcJXD81u0abs9MGasVfhKbU4o3zgla5w2hWKTrxH4VhSmueW4moo
-         8Vs451MYjv3o97mufnhgt4jH5XKK/M/Sjn1QVCdt+zWncd1bdKdG2SBv3PlUlYfdI0aB
-         wzvwm4WiAC4xfaMHqVaO4YhbfhF7VaFFDDk7PVLmhmrq7RMk5NGzSdEbFwsLprz+iSz9
-         JcbQ==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=HXI05E/6oOg8+zg3Xq8L/JMKsTmaYdkr5+qDutJzX9A=;
+        b=EYeWtODbLiOL5AupEALW8HJ4Y03vVeyYo/Js74DLkEbhWjU4XZyXlZpdvaKk9Sks7N
+         OB/hfxuZ56LN+bSUw0vK4JMzNx9gPKwh774wcO2ZOm6MRzrgnIXrq+13dIXSNC7SzpT1
+         PE+sf16p+qpjItyeNdvs5DnjcPePZjWS/E9Jo3bpllb5LQLJouXM/wV3PeTGm2H/sewZ
+         MdvS3wCJJSwGb3BmrCOsAUweTA+tqpd35jiX/ioWhl7LQ0vTbOcL4bPKf69oyk/1DECO
+         S36VZHWRigowZv+qYEhCTMgiLgZjQK8hJcOcNuRYiVsn3QV5aO0u576OWbqfJsV18dKG
+         Uvdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yIzDAfP89KkAwrI/b9ZoIMiMvCVPqRfqsQV1ykh2dB8=;
-        b=dvEiLSOYvP0sOXxTC0fPesig0frwXQ5WTxHs6hB6nzpFtmci/FQ+0MF142ekUTHAT/
-         KUkfeYxRC/vNR1befXbf/hVUW5X3pgW5fFu6gCszsHjHTsDThrxkM6DI6sEqejU4vH7T
-         LpuAZEyxbl11WiPQ4aAQeG2qau58N0ehDIE+iUUWyZJ4XQagf6kXsqN2bgdcKL2dCwzV
-         KcoKeaAwHq9pbM79drMJCB0fMBydBcwPAdE/bFr3X+m+b/omnl4K4pkw7JwkGm/b0Fvv
-         s3yxy3r5XhJPzYmjXOqxYEuPMXHNE73GSzgi7f+hRvlZTEZc9N4zMdsivg/Cg1+3RUAN
-         OE2w==
-X-Gm-Message-State: AOAM533n40PYiwXZFgIgEZ1bQdxQzws+xyW6rbQbzKMt4FhhcLqQ6PzE
-        pvTRE3y8llQMnfEVnQ2WbznaIg==
-X-Google-Smtp-Source: ABdhPJxpM+Mu84KTIECOB8X6rqlODeutOxWReh3Vnm7lSgUBDhcXn3GTq+QkhR0pE6T1yObZxuQY2w==
-X-Received: by 2002:a17:902:e5c3:b0:148:a51b:d044 with SMTP id u3-20020a170902e5c300b00148a51bd044mr10282217plf.93.1639681346377;
-        Thu, 16 Dec 2021 11:02:26 -0800 (PST)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id c19sm7858186pjr.2.2021.12.16.11.02.24
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=HXI05E/6oOg8+zg3Xq8L/JMKsTmaYdkr5+qDutJzX9A=;
+        b=Wb0WBFIDiJDUoR1L20LsJQIZct5AvXTs6E69jW1lCN/L+KFUil+p8ayjppv7KTmlbV
+         Y+LrMi+RS7B7jVXRbAZsXDOOGF3yDxZxKMk2lEJzs6/FI6lcHXk4mZQk+AhcEbWF/vcH
+         Ujr3CNG+scS9retdt9iTOdrW0L4J/87IyOCMPsslSXSfty8cR3BeHAkkHlz5KmSsvh/a
+         R2HXeJLqLMXE0G4JnXTsmZQOOmPPG/ScVsJuuRA9EVeA8tLdqVGKMqShopDX9lQ0F0Q7
+         CuFgAXNZbkRvNoslHBi8haBFsBqf2eMWp10OQk1PWx7ie281aWwfp88b7NaQjEgzdI1I
+         URcg==
+X-Gm-Message-State: AOAM533x3pkZ+R0VBilE9QwTFa30wz9Wra56eSLeMF5ZsKGyG6eH9TP2
+        hdd8EoorkcHJw2qSsGuBm3JV1g==
+X-Google-Smtp-Source: ABdhPJwA5U0MGzpPuGgwV+mDNNPBbqJPJbvSTOkd0ZSRVhraJiiWQ6boXP4LJfkzRnRKugRYEbnplw==
+X-Received: by 2002:a05:600c:4153:: with SMTP id h19mr6471922wmm.142.1639681388621;
+        Thu, 16 Dec 2021 11:03:08 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id g13sm7475908wrd.57.2021.12.16.11.03.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 11:02:25 -0800 (PST)
-Date:   Thu, 16 Dec 2021 12:02:23 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 2/9] Coresight: Add coresight TPDM source driver
-Message-ID: <20211216190223.GA78825@p14s>
-References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
- <20211209141543.21314-3-quic_jinlmao@quicinc.com>
- <20211214185714.GB1549991@p14s>
- <85ad17fb-c885-831d-d841-4c6f10920355@quicinc.com>
- <CAJ9a7Vh2d79Ro72ZDsbQSVS8VrH3c+X+xo8849yGS4Z73+yq_w@mail.gmail.com>
+        Thu, 16 Dec 2021 11:03:08 -0800 (PST)
+Date:   Thu, 16 Dec 2021 19:03:02 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Xin Long <lucien.xin@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        lksctp developers <linux-sctp@vger.kernel.org>,
+        "H.P. Yarroll" <piggy@acm.org>,
+        Karl Knutson <karl@athena.chicago.il.us>,
+        Jon Grimm <jgrimm@us.ibm.com>,
+        Xingang Guo <xingang.guo@intel.com>,
+        Hui Huang <hui.huang@nokia.com>,
+        Sridhar Samudrala <sri@us.ibm.com>,
+        Daisy Chang <daisyc@us.ibm.com>,
+        Ryan Layer <rmlayer@us.ibm.com>,
+        Kevin Gao <kevin.gao@intel.com>,
+        network dev <netdev@vger.kernel.org>
+Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
+Message-ID: <YbuNZtV/pjDszTad@google.com>
+References: <20211214215732.1507504-1-lee.jones@linaro.org>
+ <20211214215732.1507504-2-lee.jones@linaro.org>
+ <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
+ <Ybtrs56tSBbmyt5c@google.com>
+ <CADvbK_cBBDkGt8XLJo6N5TX2YQATS+udVWm8_=8f96=0B9tnTA@mail.gmail.com>
+ <Ybtzr5ZmD/IKjycz@google.com>
+ <Ybtz/0gflbkG5Q/0@google.com>
+ <CADvbK_cexKiVATn=dPrWqoS0qM-bM0UcSkx8Xqz5ibEKQizDVg@mail.gmail.com>
+ <CADvbK_cxMbYwkuN_ZUvHY-7ahc9ff+jbuPkKn6CA=yqMk=SKVw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJ9a7Vh2d79Ro72ZDsbQSVS8VrH3c+X+xo8849yGS4Z73+yq_w@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADvbK_cxMbYwkuN_ZUvHY-7ahc9ff+jbuPkKn6CA=yqMk=SKVw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
+On Thu, 16 Dec 2021, Xin Long wrote:
 
-> > >> +
-> > >> +static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
-> > >> +{
-> > >> +    static int traceid = TPDM_TRACE_ID_START;
-> > >> +
-> > >> +    drvdata->traceid = traceid++;
-> > >> +}
-> > > I have been specific on how to properly do this in the last revision.  Given the
-> > > above about the MAINTAINERS file, I am not sure that I will continue reviewing this set.
+> (
+> 
+> On Thu, Dec 16, 2021 at 1:12 PM Xin Long <lucien.xin@gmail.com> wrote:
+> >
+> > On Thu, Dec 16, 2021 at 12:14 PM Lee Jones <lee.jones@linaro.org> wrote:
 > > >
-> > > There is also no need to rush another revision as I won't have the bandwidth to
-> > > process it before the holidays.
+> > > On Thu, 16 Dec 2021, Lee Jones wrote:
 > > >
-> > > Thanks,
-> > > Mathieu
+> > > > On Thu, 16 Dec 2021, Xin Long wrote:
+> > > >
+> > > > > On Thu, Dec 16, 2021 at 11:39 AM Lee Jones <lee.jones@linaro.org> wrote:
+> > > > > >
+> > > > > > On Thu, 16 Dec 2021, Xin Long wrote:
+> > > > > >
+> > > > > > > On Wed, Dec 15, 2021 at 8:48 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> > > > > > > >
+> > > > > > > > On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
+> > > > > > > > > The cause of the resultant dump_stack() reported below is a
+> > > > > > > > > dereference of a freed pointer to 'struct sctp_endpoint' in
+> > > > > > > > > sctp_sock_dump().
+> > > > > > > > >
+> > > > > > > > > This race condition occurs when a transport is cached into its
+> > > > > > > > > associated hash table followed by an endpoint/sock migration to a new
+> > > > > > > > > association in sctp_assoc_migrate() prior to their subsequent use in
+> > > > > > > > > sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
+> > > > > > > > > table calling into sctp_sock_dump() where the dereference occurs.
+> > > > > >
+> > > > > > > in sctp_sock_dump():
+> > > > > > >         struct sock *sk = ep->base.sk;
+> > > > > > >         ... <--[1]
+> > > > > > >         lock_sock(sk);
+> > > > > > >
+> > > > > > > Do you mean in [1], the sk is peeled off and gets freed elsewhere?
+> > > > > >
+> > > > > > 'ep' and 'sk' are both switched out for new ones in sctp_sock_migrate().
+> > > > > >
+> > > > > > > if that's true, it's still late to do sock_hold(sk) in your this patch.
+> > > > > >
+> > > > > > No, that's not right.
+> > > > > >
+> > > > > > The schedule happens *inside* the lock_sock() call.
+> > > > > Sorry, I don't follow this.
+> > > > > We can't expect when the schedule happens, why do you think this
+> > > > > can never be scheduled before the lock_sock() call?
+> > > >
+> > > > True, but I've had this running for hours and it hasn't reproduced.
+> > I understand, but it's a crash, we shouldn't take any risk that it
+> > will never happen.
+> > you may try to add a usleep() before the lock_sock call to reproduce it.
 > >
-> > Hi Mathieu,
+> > > >
+> > > > Without this patch, I can reproduce this in around 2 seconds.
+> > > >
+> > > > The C-repro for this is pretty intense!
+> > > >
+> > > > If you want to be *sure* that a schedule will never happen, we can
+> > > > take a reference directly with:
+> > > >
+> > > >      ep = sctp_endpoint_hold(tsp->asoc->ep);
+> > > >      sk = sock_hold(ep->base.sk);
+> > > >
+> > > > Which was my original plan before I soak tested this submitted patch
+> > > > for hours without any sign of reproducing the issue.
+> > we tried to not export sctp_obj_hold/put(), that's why we had
+> > sctp_for_each_transport().
 > >
-> > Sorry, not addressed your previous comments here.
+> > ep itself holds a reference of sk when it's alive, so it's weird to do
+> > these 2 together.
 > >
-> > For the trace id, each coresight component has 7 bits to store the trace
-> > id. So the trace id should be from 1 to 127 as 0 is invalid.
-> 
-> IDs 0x70 - 0x7F (`112 - 127 ) are reserved - see the ARM Coresight
-> Architecture specification v3.0
-> 
-
-Correct
-
+> > > >
+> > > > > If the sock is peeled off or is being freed, we shouldn't dump this sock,
+> > > > > and it's better to skip it.
+> > > >
+> > > > I guess we can do that too.
+> > > >
+> > > > Are you suggesting sctp_sock_migrate() as the call site?
+> > diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> > index 85ac2e901ffc..56ea7a0e2add 100644
+> > --- a/net/sctp/socket.c
+> > +++ b/net/sctp/socket.c
+> > @@ -9868,6 +9868,7 @@ static int sctp_sock_migrate(struct sock *oldsk,
+> > struct sock *newsk,
+> >                 inet_sk_set_state(newsk, SCTP_SS_ESTABLISHED);
+> >         }
 > >
-> > Apart from TPDMs/STM/ETMs, we also have other coresight components in
-> > our internal device. About 80 ids are already used.
+> > +       sock_set_flag(oldsk, SOCK_RCU_FREE);
+> >         release_sock(newsk);
 > >
-> > Some components have fixed trace id in HW. If we use functions below to
-> > count the trace id, there will be conflict to other components.
+> >         return 0;
 > >
-> > Can we use 1-15 for etm trace ids  and 16 - 127 for other coresight
-> > components ? And handle trace ids in its' own driver ?
+> > SOCK_RCU_FREE is set to the previous sk, so that this sk will not
+> > be freed between rcu_read_lock() and rcu_read_unlock().
 > >
-> 
-> This will limit systems to 15 cores - some have more!
-> 
-
-Correct
-
-> 
+> > >
+> > > Also, when are you planning on testing the flag?
+> > SOCK_RCU_FREE flag is used when freeing sk in sk_destruct(),
+> > and if it's set, it will be freed in the next grace period of RCU.
 > >
-> > static inline int coresight_get_system_trace_id(int id)
-> > {
-> >          /* Start system IDs above the highest per CPU trace ID. */
-> >          return coresigth_get_trace_id(cpumask_last(cpu_possible_mask) + 1);
-> > }
-
-Looking at my own suggestion again this won't work since it returns the same traceID
-when called multiple times.
-
-For this patchset and _without_ taking into account internal devices that have
-their traceID set in HW:
-
-1. Define a bitmask that is 7 bit wide.
-2. By default, set bits under 0x10 and between 0x70 - 0x7F. 
-3. In coresight_get_system_trace_id(), drop the @id parameter and allocate the
-first available bit after cpumask_last(cpu_possible_mask) + 1.
-4. Define a new function called coresight_put_system_trace_id(int id) that
-clears the bit in the mask corresponding to @id.
-
-For now that should work.
-
+> > >
+> > > Won't that suffer with the same issue(s)?
+> > diff --git a/net/sctp/diag.c b/net/sctp/diag.c
+> > index 7970d786c4a2..b4c4acd9e67e 100644
+> > --- a/net/sctp/diag.c
+> > +++ b/net/sctp/diag.c
+> > @@ -309,16 +309,21 @@ static int sctp_tsp_dump_one(struct
+> > sctp_transport *tsp, void *p)
 > >
-> > static inline int coresight_get_trace_id(int cpu)
-> > {
-> >      /*
-> >       * A trace ID of value 0 is invalid, so let's start at some
-> >       * random value that fits in 7 bits and go from there.  Since
-> >       * the common convention is to have data trace IDs be I(N) + 1,
-> >       * set instruction trace IDs as a function of the CPU number.
-> >       */
-> >      return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
-> > }
+> >  static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
+> >  {
+> > -       struct sctp_endpoint *ep = tsp->asoc->ep;
+> >         struct sctp_comm_param *commp = p;
+> > -       struct sock *sk = ep->base.sk;
+> >         struct sk_buff *skb = commp->skb;
+> >         struct netlink_callback *cb = commp->cb;
+> >         const struct inet_diag_req_v2 *r = commp->r;
+> >         struct sctp_association *assoc;
+> > +       struct sctp_endpoint *ep;
+> > +       struct sock *sk;
+> >         int err = 0;
 > >
-> 
-> This fixed relationship between cpu and trace ID is used in the perf
-> tooling to populate the elements in the perf.data file to correctly
-> allow association between CPU and trace data, and thus allow correct
-> trace decode.
+> > +       rcu_read_lock();
+> > +       ep = tsp->asoc->ep;
+> > +       sk = ep->base.sk;
+> >         lock_sock(sk);
+> Unfortunately, this isn't going to work, as lock_sock() may sleep,
+> and is not allowed to be called understand rcu_read_lock() :(
 
-TraceIDs associated to CPUs are communicated to the perf tooling by way of the
-perf header - theoretically we should be able to change the allocation scheme
-without impacting the decoding process.
+Ah!
 
-> 
-> It should be possible to create another more dynamic mapping scheme -
-> but this must include a way to support the perf requirements too.
->
+How about my original solution of taking:
 
-TraceIDs have been a lurking problem for as long as the subsystem has existed.
-For now what I have suggested above should be sufficient to provide an
-in-between solution that doesn't hold back this patchset.
+  tsp->asoc->ep
 
-That being said, we need to start thinking about the best way to do this.  I
-will put a patchset together in the new year that aims in that direction.
+... directly?
 
-> Regards
-> 
-> Mike
-> 
-> > Thanks
-> >
-> > Jinlong Mao
-> >
-> > >> +
-> > >> +static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
-> > >> +{
-> > >> +    struct device *dev = &adev->dev;
-> > >> +    struct coresight_platform_data *pdata;
-> > >> +    struct tpdm_drvdata *drvdata;
-> > >> +    struct coresight_desc desc = { 0 };
-> > >> +
-> > >> +    desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
-> > >> +    if (!desc.name)
-> > >> +            return -ENOMEM;
-> > >> +    pdata = coresight_get_platform_data(dev);
-> > >> +    if (IS_ERR(pdata))
-> > >> +            return PTR_ERR(pdata);
-> > >> +    adev->dev.platform_data = pdata;
-> > >> +
-> > >> +    drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-> > >> +    if (!drvdata)
-> > >> +            return -ENOMEM;
-> > >> +    drvdata->dev = &adev->dev;
-> > >> +    dev_set_drvdata(dev, drvdata);
-> > >> +
-> > >> +    drvdata->base = devm_ioremap_resource(dev, &adev->res);
-> > >> +    if (!drvdata->base)
-> > >> +            return -ENOMEM;
-> > >> +
-> > >> +    mutex_init(&drvdata->lock);
-> > >> +
-> > >> +    desc.type = CORESIGHT_DEV_TYPE_SOURCE;
-> > >> +    desc.subtype.source_subtype = CORESIGHT_DEV_SUBTYPE_SOURCE_SYS;
-> > >> +    desc.ops = &tpdm_cs_ops;
-> > >> +    desc.pdata = adev->dev.platform_data;
-> > >> +    desc.dev = &adev->dev;
-> > >> +    drvdata->csdev = coresight_register(&desc);
-> > >> +    if (IS_ERR(drvdata->csdev))
-> > >> +            return PTR_ERR(drvdata->csdev);
-> > >> +
-> > >> +    tpdm_init_default_data(drvdata);
-> > >> +    pm_runtime_put(&adev->dev);
-> > >> +
-> > >> +    return 0;
-> > >> +}
-> > >> +
-> > >> +static void __exit tpdm_remove(struct amba_device *adev)
-> > >> +{
-> > >> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
-> > >> +
-> > >> +    coresight_unregister(drvdata->csdev);
-> > >> +}
-> > >> +
-> > >> +static struct amba_id tpdm_ids[] = {
-> > >> +    {
-> > >> +            .id = 0x000f0e00,
-> > >> +            .mask = 0x000fff00,
-> > >> +    },
-> > >> +    { 0, 0},
-> > >> +};
-> > >> +
-> > >> +static struct amba_driver tpdm_driver = {
-> > >> +    .drv = {
-> > >> +            .name   = "coresight-tpdm",
-> > >> +            .owner  = THIS_MODULE,
-> > >> +            .suppress_bind_attrs = true,
-> > >> +    },
-> > >> +    .probe          = tpdm_probe,
-> > >> +    .id_table       = tpdm_ids,
-> > >> +};
-> > >> +
-> > >> +module_amba_driver(tpdm_driver);
-> > >> +
-> > >> +MODULE_LICENSE("GPL v2");
-> > >> +MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Monitor driver");
-> > >> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-> > >> new file mode 100644
-> > >> index 000000000000..980ae90ff1c8
-> > >> --- /dev/null
-> > >> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-> > >> @@ -0,0 +1,31 @@
-> > >> +/* SPDX-License-Identifier: GPL-2.0 */
-> > >> +/*
-> > >> + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
-> > >> + */
-> > >> +
-> > >> +#ifndef _CORESIGHT_CORESIGHT_TPDM_H
-> > >> +#define _CORESIGHT_CORESIGHT_TPDM_H
-> > >> +
-> > >> +/* Default value of the traceid */
-> > >> +#define TPDM_TRACE_ID_START 128
-> > >> +
-> > >> +/**
-> > >> + * struct tpdm_drvdata - specifics associated to an TPDM component
-> > >> + * @base:       memory mapped base address for this component.
-> > >> + * @dev:        The device entity associated to this component.
-> > >> + * @csdev:      component vitals needed by the framework.
-> > >> + * @lock:       lock for the enable value.
-> > >> + * @enable:     enable status of the component.
-> > >> + * @traceid:    value of the current ID for this component.
-> > >> + */
-> > >> +
-> > >> +struct tpdm_drvdata {
-> > >> +    void __iomem            *base;
-> > >> +    struct device           *dev;
-> > >> +    struct coresight_device *csdev;
-> > >> +    struct mutex            lock;
-> > >> +    bool                    enable;
-> > >> +    int                     traceid;
-> > >> +};
-> > >> +
-> > >> +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
-> > >> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-> > >> index 93a2922b7653..e48d463be63b 100644
-> > >> --- a/include/linux/coresight.h
-> > >> +++ b/include/linux/coresight.h
-> > >> @@ -65,6 +65,7 @@ enum coresight_dev_subtype_source {
-> > >>      CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
-> > >>      CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
-> > >>      CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
-> > >> +    CORESIGHT_DEV_SUBTYPE_SOURCE_SYS,
-> > >>   };
-> > >>
-> > >>   enum coresight_dev_subtype_helper {
-> > >> --
-> > >> 2.17.1
-> > >>
-> 
-> 
-> 
-> -- 
-> Mike Leach
-> Principal Engineer, ARM Ltd.
-> Manchester Design Centre. UK
+If it already holds the sk, we should be golden?
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

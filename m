@@ -2,161 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC324477F6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41941477F85
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242433AbhLPVnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:43:09 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:57558 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241941AbhLPVlR (ORCPT
+        id S241930AbhLPVpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242309AbhLPVod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:41:17 -0500
-Date:   Thu, 16 Dec 2021 21:41:15 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690876;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ehjucClV0RZ8wwaHaSh0N8JcgLZ8rROkpZNSYCo1SI0=;
-        b=tHNL2nf7vcPU0/JCUqL3Z85vwBTWvZVFn0RZWqNyhc0yBMHmk7l3FZNjhn6xNR32GZgMLO
-        nzJlPGcNo2n6kpv73s877LUg2DlSMqc29v/Bhz1Yt6GHv3etZhdC0CoLEjSrjwlN+kgAVK
-        r6Ec3NTZEWNO9vUjeyRn9SP8UOGz+pAz0qCKVxYD0zUP8f0CpUE1mY0VWKgHh0QBH6aVo0
-        PnrQuesX5mTiwhgil29ezdDdwXMG2CxogxoqzyFSq7wmRtPNCtEaKdfhNlK44csxVYHR0S
-        OHfpLsMKV3gKDj8Eo/ZdYMyfhLPZ0uXKu9/1BPiM41ct2833v1kmDUpYbyCeLg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690876;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ehjucClV0RZ8wwaHaSh0N8JcgLZ8rROkpZNSYCo1SI0=;
-        b=EGCCEI+nf5qqcbPj7ROSwklzv39qNFxlPLKMTUko5zBI48uwr2RbKPNdZ+Ff5WYUooCkOn
-        MG+nmIrTJZO7QJAA==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] PCI/MSI: Set pci_dev::msi[x]_enabled early
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Nishanth Menon <nm@ti.com>, Jason Gunthorpe <jgg@nvidia.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211210221813.250049810@linutronix.de>
-References: <20211210221813.250049810@linutronix.de>
+        Thu, 16 Dec 2021 16:44:33 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D00C08E7B1;
+        Thu, 16 Dec 2021 13:43:25 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id e136so920719ybc.4;
+        Thu, 16 Dec 2021 13:43:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MCvRIN88cvRRyNaT6C9m3J4R8+HA36mI5cyJE+PFjmo=;
+        b=gtdSaMh94TK8rrahc+3/8Nzu5QLzB2HC011WXA3oIa3M0p1zxNKfqgvbde25n1EPUI
+         +fwrquEQmW+6xEOkCBYPpzJuQXvsXsBwGxgNuw5vu96xcgD1GZZzqQRU9mzXuKnqrj4D
+         lSNLvnGg4FnqG+OaMAI/CbTBZZmk+3156jFpOkUgjvtXml0ZH4AJNcUmABkCqUJNAnLH
+         kSu8WRMV/imP0v6bxPHVwcaDeir8N1FL3pxwRWHMaUFkpoXzxKE8p0b4tstYMSuzMTOs
+         sVeU7bVANKvCopp7gesCK5gcGLv+c3bf6owL5WNkSx9Of0VCnkoGRKo13JRO6fvb3YC1
+         JhjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MCvRIN88cvRRyNaT6C9m3J4R8+HA36mI5cyJE+PFjmo=;
+        b=c5eSlwYwLEyvke0ly+SYzSQYfxfitYQ7AHD02be0Wzw9Evv0Oj5PABsLZJLwd7i2u/
+         gGibdeolmZX8i8+QteTOyv9DTLpA7U03A8rH7ymDnJjVwljm/9jPgw1OwfXrsOH+rOAS
+         +T/Z7pMRnhjsN93LxtDnr0Ppu8t2E8KP/AdJty8AxJUvQMmqlJYf5bDd/rhpjTrIdEhY
+         0KvsrYoI+e4/6GkqlRSgmLHEhROnDyC+Pn28o9ODwoWHO9PsAupbfTRyeN2mq9wTawXd
+         jKaHF4UgNv39xakrInkHWh5SVEjKsBmRZajOySlZyK7ZC93Fv3MfXOP6Y41S8oCGXcNQ
+         u8Vg==
+X-Gm-Message-State: AOAM533+119miqu7uTfNIBouGqQyyxxU4hEj/VskaoMRDCXIHeAXvyrk
+        1QgPkmVmMHZzMYfHoStg97b/Fr8D65qLSKt94jX4a8QthGA=
+X-Google-Smtp-Source: ABdhPJwKu2cVmo3f5Ohp0DqRDtIJ5E4ZlhFFBipbvdQZt0VyPsDlrQmuE461BA/8qJGBmqJ/msZlaDDfjoki4wAKUXw=
+X-Received: by 2002:a25:abe3:: with SMTP id v90mr15572ybi.315.1639691004872;
+ Thu, 16 Dec 2021 13:43:24 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <163969087559.23020.12079408218134390263.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <20211216183639.7710-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <3733aa67-8606-58de-69cb-f7a167713da4@roeck-us.net>
+In-Reply-To: <3733aa67-8606-58de-69cb-f7a167713da4@roeck-us.net>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 16 Dec 2021 21:42:58 +0000
+Message-ID: <CA+V-a8v6-zO6rYDHyFsPZ15YyjVaoP9A=WWNLXaVfY=Kkgrr+g@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: s3c2410: Use platform_get_irq() to get the interrupt
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/msi branch of tip:
+Hi Guenter,
 
-Commit-ID:     c7ecb95ca6a80b29af0f41cc28c58e542637fbc6
-Gitweb:        https://git.kernel.org/tip/c7ecb95ca6a80b29af0f41cc28c58e542637fbc6
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 10 Dec 2021 23:18:44 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 16 Dec 2021 22:16:37 +01:00
+Thank you for the review.
 
-PCI/MSI: Set pci_dev::msi[x]_enabled early
+On Thu, Dec 16, 2021 at 7:01 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 12/16/21 10:36 AM, Lad Prabhakar wrote:
+> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > allocation of IRQ resources in DT core code, this causes an issue
+> > when using hierarchical interrupt domains using "interrupts" property
+> > in the node as this bypassed the hierarchical setup and messed up the
+> > irq chaining.
+> >
+> > In preparation for removal of static setup of IRQ resource from DT core
+> > code use platform_get_irq().
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >   drivers/watchdog/s3c2410_wdt.c | 13 ++++++-------
+> >   1 file changed, 6 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> > index 2395f353e52d..f5aced344b7b 100644
+> > --- a/drivers/watchdog/s3c2410_wdt.c
+> > +++ b/drivers/watchdog/s3c2410_wdt.c
+> > @@ -513,9 +513,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+> >   {
+> >       struct device *dev = &pdev->dev;
+> >       struct s3c2410_wdt *wdt;
+> > -     struct resource *wdt_irq;
+> >       unsigned int wtcon;
+> >       int started = 0;
+> > +     int wdt_irq;
+> >       int ret;
+> >
+> >       wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+> > @@ -536,10 +536,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+> >               }
+> >       }
+> >
+> > -     wdt_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> > -     if (wdt_irq == NULL) {
+> > -             dev_err(dev, "no irq resource specified\n");
+> > -             ret = -ENOENT;
+> > +     wdt_irq = platform_get_irq(pdev, 0);
+> > +     if (wdt_irq < 0) {
+> > +             ret = wdt_irq;
+> >               goto err;
+>
+> All those "goto err;" statements in this function are pointless since they
+> just return ret. Since this is the first of those goto statements, please
+> replace it with "return wdt_irq;".
+>
+Sure will do and post a v2.
 
-There are quite some places which retrieve the first MSI descriptor to
-evaluate whether the setup is for MSI or MSI-X. That's required because
-pci_dev::msi[x]_enabled is only set when the setup completed successfully.
-
-There is no real reason why msi[x]_enabled can't be set at the beginning of
-the setup sequence and cleared in case of a failure.
-
-Implement that so the MSI descriptor evaluations can be converted to simple
-property queries.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
-Tested-by: Nishanth Menon <nm@ti.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211210221813.250049810@linutronix.de
-
----
- drivers/pci/msi/msi.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
-index eb917fe..5af8d9b 100644
---- a/drivers/pci/msi/msi.c
-+++ b/drivers/pci/msi/msi.c
-@@ -421,11 +421,18 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
- 	struct msi_desc *entry;
- 	int ret;
- 
--	pci_msi_set_enable(dev, 0);	/* Disable MSI during set up */
-+	/*
-+	 * Disable MSI during setup in the hardware, but mark it enabled
-+	 * so that setup code can evaluate it.
-+	 */
-+	pci_msi_set_enable(dev, 0);
-+	dev->msi_enabled = 1;
- 
- 	entry = msi_setup_entry(dev, nvec, affd);
--	if (!entry)
--		return -ENOMEM;
-+	if (!entry) {
-+		ret = -ENOMEM;
-+		goto fail;
-+	}
- 
- 	/* All MSIs are unmasked by default; mask them all */
- 	pci_msi_mask(entry, msi_multi_mask(entry));
-@@ -452,7 +459,6 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
- 	/* Set MSI enabled bits	*/
- 	pci_intx_for_msi(dev, 0);
- 	pci_msi_set_enable(dev, 1);
--	dev->msi_enabled = 1;
- 
- 	pcibios_free_irq(dev);
- 	dev->irq = entry->irq;
-@@ -461,6 +467,8 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
- err:
- 	pci_msi_unmask(entry, msi_multi_mask(entry));
- 	free_msi_irqs(dev);
-+fail:
-+	dev->msi_enabled = 0;
- 	return ret;
- }
- 
-@@ -589,6 +597,9 @@ static int msix_capability_init(struct pci_dev *dev, struct msix_entry *entries,
- 	pci_msix_clear_and_set_ctrl(dev, 0, PCI_MSIX_FLAGS_MASKALL |
- 				    PCI_MSIX_FLAGS_ENABLE);
- 
-+	/* Mark it enabled so setup functions can query it */
-+	dev->msix_enabled = 1;
-+
- 	pci_read_config_word(dev, dev->msix_cap + PCI_MSIX_FLAGS, &control);
- 	/* Request & Map MSI-X table region */
- 	tsize = msix_table_size(control);
-@@ -623,9 +634,8 @@ static int msix_capability_init(struct pci_dev *dev, struct msix_entry *entries,
- 
- 	dev->msi_irq_groups = groups;
- 
--	/* Set MSI-X enabled bits and unmask the function */
-+	/* Disable INTX */
- 	pci_intx_for_msi(dev, 0);
--	dev->msix_enabled = 1;
- 
- 	/*
- 	 * Ensure that all table entries are masked to prevent
-@@ -645,6 +655,7 @@ out_free:
- 	free_msi_irqs(dev);
- 
- out_disable:
-+	dev->msix_enabled = 0;
- 	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_MASKALL | PCI_MSIX_FLAGS_ENABLE, 0);
- 
- 	return ret;
+> Thanks,
+> Guenter
+>
+> >       }
+> >
+> > @@ -592,8 +591,8 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+> >                       dev_info(dev, "default timer value is out of range, cannot start\n");
+> >       }
+> >
+> > -     ret = devm_request_irq(dev, wdt_irq->start, s3c2410wdt_irq, 0,
+> > -                             pdev->name, pdev);
+> > +     ret = devm_request_irq(dev, wdt_irq, s3c2410wdt_irq, 0,
+> > +                            pdev->name, pdev);
+> >       if (ret != 0) {
+> >               dev_err(dev, "failed to install irq (%d)\n", ret);
+> >               goto err_cpufreq;
+> >
+>
+Cheers,
+Prabhakar

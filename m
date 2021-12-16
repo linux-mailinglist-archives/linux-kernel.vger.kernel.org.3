@@ -2,121 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC76476F21
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FC7476F24
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236234AbhLPKtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:49:17 -0500
-Received: from mx24.baidu.com ([111.206.215.185]:48176 "EHLO baidu.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236195AbhLPKtP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:49:15 -0500
-Received: from BC-Mail-HQEX01.internal.baidu.com (unknown [172.31.51.57])
-        by Forcepoint Email with ESMTPS id BC2246EA63F6B8BE0EB7;
-        Thu, 16 Dec 2021 18:49:07 +0800 (CST)
-Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
- BC-Mail-HQEX01.internal.baidu.com (172.31.51.57) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Thu, 16 Dec 2021 18:49:06 +0800
-Received: from localhost (172.31.63.8) by BJHW-MAIL-EX27.internal.baidu.com
- (10.127.64.42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.20; Thu, 16
- Dec 2021 18:49:00 +0800
-Date:   Thu, 16 Dec 2021 18:48:59 +0800
-From:   Cai Huoqing <caihuoqing@baidu.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-spdx@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] media: prefer generic SPDX-License expression to
- deprecated one
-Message-ID: <20211216104859.GA238@LAPTOP-UKSR4ENP.internal.baidu.com>
-References: <20211216103132.8087-1-lukas.bulwahn@gmail.com>
+        id S236243AbhLPKuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:50:00 -0500
+Received: from mga01.intel.com ([192.55.52.88]:5365 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236224AbhLPKt7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 05:49:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639651799; x=1671187799;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=A9czJ+VeUqfwq83fnKcH+RDr3yuDTjI8hwynIr+PedE=;
+  b=S48wKLr7qLFXz5X4zii68GozJPOd9T7IBomf2UlEzJBBw6onVYrZFrNp
+   IbgO7XAFOrgBZXhInue3vfS+iUyXe9YIbt0d1M6fR/J6sgSzi57YuJRuE
+   PbDqgQt6+6T77aeobPVWv6n9+b74SyGiFESdmSTw/nDumVXsqTumn8BEf
+   A3fxoGgfnUhdozqMHYLHf17l+YsaW+1s/69DDSDg4XxL54wFgGjGekKw0
+   5vAAtQMSVQ4ECgfBczKJw/eZsXNQiHfpBgMy+285s/jjyJh01QzY5dGJT
+   TdIp5CGRqXgmlcQ9+/hoO1I7SkAJy6ao5AcCcUlFD0BQDo/Vt5MYEjbP4
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="263621361"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="263621361"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 02:49:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="506227852"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 02:49:57 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxoKi-000321-MD; Thu, 16 Dec 2021 10:49:56 +0000
+Date:   Thu, 16 Dec 2021 18:49:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:repair-symlink-swapext 322/325]
+ fs/xfs/libxfs/xfs_symlink_remote.c:239:1: warning: no previous prototype for
+ 'xfs_symlink_remote_read'
+Message-ID: <202112161839.YK3WPzl5-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211216103132.8087-1-lukas.bulwahn@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [172.31.63.8]
-X-ClientProxiedBy: BC-Mail-Ex22.internal.baidu.com (172.31.51.16) To
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16 12月 21 11:31:32, Lukas Bulwahn wrote:
-> Commit 8d395ce6f04b ("media: dvb-core: Convert to SPDX identifier") and
-> commit e67219b0496b ("media: b2c2: flexcop: Convert to SPDX identifier")
-> introduce the SPDX-License expression LGPL-2.1-or-later for some files.
-> 
-> The command ./scripts/spdxcheck.py warns:
-> 
->   drivers/media/dvb-core/dmxdev.c: 1:28 Invalid License ID: LGPL-2.1-or-later
->   drivers/media/dvb-core/dvb_demux.c: 1:28 Invalid License ID: LGPL-2.1-or-later
->   drivers/media/dvb-core/dvbdev.c: 1:28 Invalid License ID: LGPL-2.1-or-later
->   drivers/media/common/b2c2/flexcop.c: 1:28 Invalid License ID: LGPL-2.1-or-later
-> 
-> The preferred SPDX expression for LGPL-2.1 or any later version is with
-> the more generic "+"-extension for "any later version", so: LGPL-2.1+
-> 
-> This makes spdxcheck happy again.
-> 
-> Fixes: 8d395ce6f04b ("media: dvb-core: Convert to SPDX identifier")
-> Fixes: e67219b0496b ("media: b2c2: flexcop: Convert to SPDX identifier")
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  drivers/media/common/b2c2/flexcop.c | 2 +-
->  drivers/media/dvb-core/dmxdev.c     | 2 +-
->  drivers/media/dvb-core/dvb_demux.c  | 2 +-
->  drivers/media/dvb-core/dvbdev.c     | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/common/b2c2/flexcop.c b/drivers/media/common/b2c2/flexcop.c
-> index e7a88a2d248c..38c300da3fc2 100644
-> --- a/drivers/media/common/b2c2/flexcop.c
-> +++ b/drivers/media/common/b2c2/flexcop.c
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: LGPL-2.1-or-later
-> +// SPDX-License-Identifier: LGPL-2.1+
->  /*
->   * Linux driver for digital TV devices equipped with B2C2 FlexcopII(b)/III
->   * flexcop.c - main module part
-> diff --git a/drivers/media/dvb-core/dmxdev.c b/drivers/media/dvb-core/dmxdev.c
-> index f6ee678107d3..2b4fb2ec1efd 100644
-> --- a/drivers/media/dvb-core/dmxdev.c
-> +++ b/drivers/media/dvb-core/dmxdev.c
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: LGPL-2.1-or-later
-> +// SPDX-License-Identifier: LGPL-2.1+
->  /*
->   * dmxdev.c - DVB demultiplexer device
->   *
-> diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-> index 83cc32ad7e12..35bf76b0425c 100644
-> --- a/drivers/media/dvb-core/dvb_demux.c
-> +++ b/drivers/media/dvb-core/dvb_demux.c
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: LGPL-2.1-or-later
-> +// SPDX-License-Identifier: LGPL-2.1+
->  /*
->   * dvb_demux.c - DVB kernel demux API
->   *
-> diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-> index 675d877a67b2..861559e8b4c9 100644
-> --- a/drivers/media/dvb-core/dvbdev.c
-> +++ b/drivers/media/dvb-core/dvbdev.c
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: LGPL-2.1-or-later
-> +// SPDX-License-Identifier: LGPL-2.1+
-Looks good to me.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git repair-symlink-swapext
+head:   851df07d9599471df909c4ff0e3cf33f4b9619f0
+commit: b0cad080048a93ceeae93b51a0cab55c85c5a7ec [322/325] xfs: move remote symlink target read function to libxfs
+config: m68k-randconfig-r006-20211214 (https://download.01.org/0day-ci/archive/20211216/202112161839.YK3WPzl5-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=b0cad080048a93ceeae93b51a0cab55c85c5a7ec
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs repair-symlink-swapext
+        git checkout b0cad080048a93ceeae93b51a0cab55c85c5a7ec
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash fs/xfs/
 
-Reviewed-by: Cai Huoqing <caihuoqing@baidu.com>
->  /*
->   * dvbdev.c
->   *
-> -- 
-> 2.17.1
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   fs/xfs/libxfs/xfs_symlink_remote.c:28:1: warning: no previous prototype for 'xfs_symlink_blocks' [-Wmissing-prototypes]
+      28 | xfs_symlink_blocks(
+         | ^~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_symlink_remote.c:38:1: warning: no previous prototype for 'xfs_symlink_hdr_set' [-Wmissing-prototypes]
+      38 | xfs_symlink_hdr_set(
+         | ^~~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_symlink_remote.c:68:1: warning: no previous prototype for 'xfs_symlink_hdr_ok' [-Wmissing-prototypes]
+      68 | xfs_symlink_hdr_ok(
+         | ^~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_symlink_remote.c:167:1: warning: no previous prototype for 'xfs_symlink_local_to_remote' [-Wmissing-prototypes]
+     167 | xfs_symlink_local_to_remote(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_symlink_remote.c:206:1: warning: no previous prototype for 'xfs_symlink_shortform_verify' [-Wmissing-prototypes]
+     206 | xfs_symlink_shortform_verify(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/xfs/libxfs/xfs_symlink_remote.c:239:1: warning: no previous prototype for 'xfs_symlink_remote_read' [-Wmissing-prototypes]
+     239 | xfs_symlink_remote_read(
+         | ^~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/xfs_symlink_remote_read +239 fs/xfs/libxfs/xfs_symlink_remote.c
+
+   236	
+   237	/* Read a remote symlink target into the buffer. */
+   238	int
+ > 239	xfs_symlink_remote_read(
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,107 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D40477A77
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418D2477A79
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240198AbhLPRXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:23:35 -0500
-Received: from mail-oo1-f49.google.com ([209.85.161.49]:46757 "EHLO
-        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240040AbhLPRXe (ORCPT
+        id S240217AbhLPRXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240040AbhLPRXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:23:34 -0500
-Received: by mail-oo1-f49.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso7104886ood.13;
-        Thu, 16 Dec 2021 09:23:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+vKc+5ynUW/RqMivEfMUNCzsckin4rmupLQy56q5oCo=;
-        b=2oFKaArKECzfaaHcUIJUGeDGZURVCCK4oFtGhLWYmY4xUl1awyxqrFb5Z6/jwbkSEs
-         2/7oPd1ptWno22Fc1zvbsDE0KqxIk2KDCDklCVdtlReUH8EhUsLwy42oHsPtvh8l8fRB
-         SuHSafbKt2HgiWmlrdf6qYxWaj527qp/wdzgTmaP3SD2C0Oakxt47cs4J5ybVGcRCeHG
-         eGPwmh8/T2MpLJyd6HKCc1m/Yn6EmF/tjYhvnMgnM9NQNq3YXedFU6/HdNtX8Mx7SL4E
-         pufSoZC3qy6PHewa3mBWNrft/a6+b5VLLEeM6eg56NKK0uv2wBGp2o2cBovyQhBxEKX/
-         U82w==
-X-Gm-Message-State: AOAM532oGUO5PNl2nsVRVmRuNkpN6NkyRNiWVNGI1wdFp3vPkW0MrHGT
-        7KnpFiUDZdhCDh8LR2oJW8hfWZJHNI0QwGaNHVI=
-X-Google-Smtp-Source: ABdhPJwDVaUcCbXoxitPK9nB9bQUTuneJ9vgXaxyawtLvYgD2LMUSkV9lRaN0tRCXrfQiVmVDG/Wq7DJe0bQi2zsE6s=
-X-Received: by 2002:a05:6820:388:: with SMTP id r8mr11828209ooj.0.1639675413880;
- Thu, 16 Dec 2021 09:23:33 -0800 (PST)
+        Thu, 16 Dec 2021 12:23:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAEEC061574;
+        Thu, 16 Dec 2021 09:23:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2A2561EED;
+        Thu, 16 Dec 2021 17:23:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE79AC36AE0;
+        Thu, 16 Dec 2021 17:23:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639675421;
+        bh=LqK5qOVnaql7Fj5llN4nlA9Kh7e/Z7C4n3v0Z+Jl7bM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gf6qzF8nj81pIJ0P/SIEylCa5W7J1vHYnEI0VOEL6L3e69MyBGXwsY3ayWlnWtuqY
+         Px7o0cCpUphGQXUTBb5CmJ4iSCvW+kCz+rVXHTjCnBqkOYEay32sh5hYFnO7TPdLU6
+         WT2G1mmz7G879B1AOZV8PuC4x2/8A5S7VC26wtQFTv0IRVmaLLEIfAu2ubSfL2kWpf
+         2ecomR/SGetxXGeh0gLUXLZK+o5Wq/7MlculXx5Lc29oM3lQNbDi3kTzyjA0BlI17w
+         8Ss5gow17960+JSoN7ufwi3LWazB/Odp+GYM1H6c6TYCAumjuK7Oh+IIUTkyXSasEd
+         uLeuU2vuYutnA==
+Date:   Thu, 16 Dec 2021 19:23:34 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Quentin Perret <qperret@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>
+Subject: Re: [PATCH v3] of/fdt: Don't worry about non-memory region overlap
+ for no-map
+Message-ID: <Ybt2FlgxnuNdZV68@kernel.org>
+References: <20211215195354.634746-1-swboyd@chromium.org>
 MIME-Version: 1.0
-References: <20211130123641.1449041-1-ray.huang@amd.com> <20211130123641.1449041-3-ray.huang@amd.com>
-In-Reply-To: <20211130123641.1449041-3-ray.huang@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 16 Dec 2021 18:23:22 +0100
-Message-ID: <CAJZ5v0i_nE_LnpgkeFLscoR5fGtzCxrV8Zdon7y=Kod_SuFqtw@mail.gmail.com>
-Subject: Re: [PATCH v5 02/22] x86/msr: add AMD CPPC MSR definitions
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215195354.634746-1-swboyd@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 1:37 PM Huang Rui <ray.huang@amd.com> wrote:
->
-> AMD CPPC (Collaborative Processor Performance Control) function uses MSR
-> registers to manage the performance hints. So add the MSR register macro
-> here.
->
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
+On Wed, Dec 15, 2021 at 11:53:54AM -0800, Stephen Boyd wrote:
+> In commit 8a5a75e5e9e5 ("of/fdt: Make sure no-map does not remove
+> already reserved regions") we returned -EBUSY when trying to mark
+> regions as no-map when they're in the reserved memory node. This if
+> condition will still trigger though if the DT has a /memreserve/ that
+> completely subsumes the no-map memory carveouts in the reserved memory
+> node. Let's only consider this to be a problem if we're trying to mark a
+> region as no-map and it is actually memory. If it isn't memory,
+> presumably it was removed from the memory map via /memreserve/ and thus
+> can't be mapped anyway.
 
-I guess I can take this one if there are no objections from the x86
-maintainers, but it would be nice to receive an ACK from one of them.
+I don't see /memreserve/ removing memory from anywhere. What do you
+mean here?
 
+> This silences a warning seen at boot on sc7180-trogdor.dtsi boards that
+> have /memreserve/ populated by the bootloader where those reserved
+> regions overlap with the reserved-memory carveouts that we have in DT
+> for other purposes like communicating with remote processors.
+> 
+> For example in sc7180.dtsi we have the following reserved-memory
+> node:
+> 
+> 	smem_mem: memory@80900000 {
+> 		reg = <0x0 0x80900000 0x0 0x200000>;
+> 		no-map;
+> 	};
+> 
+> and the memreserve injected by the bootloader is
+> 
+> 	/memreserve/ 0x80800000 0x400000;
+> 
+> so the reserved memory region overlaps with the no-map carveouts and we
+> get the following warning message printed at boot:
+> 
+>  OF: fdt: Reserved memory: failed to reserve memory for node 'memory@80900000': base 0x0000000080900000, size 2 MiB
+> 
+> Everything keeps working, just the no-map property is being ignored in
+> __reserved_mem_reserve_reg() because the region we're trying to avoid
+> mapping has already been removed from the memory via the memreserve.
+> 
+> Cc: Mike Rapoport <rppt@kernel.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Nicolas Boichat <drinkcat@chromium.org>
+> Cc: Quentin Perret <qperret@google.com>
+> Cc: Jan Kiszka <jan.kiszka@siemens.com>
+> Fixes: 8a5a75e5e9e5 ("of/fdt: Make sure no-map does not remove already reserved regions")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 > ---
->  arch/x86/include/asm/msr-index.h | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 01e2650b9585..e7945ef6a8df 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -486,6 +486,23 @@
->
->  #define MSR_AMD64_VIRT_SPEC_CTRL       0xc001011f
->
-> +/* AMD Collaborative Processor Performance Control MSRs */
-> +#define MSR_AMD_CPPC_CAP1              0xc00102b0
-> +#define MSR_AMD_CPPC_ENABLE            0xc00102b1
-> +#define MSR_AMD_CPPC_CAP2              0xc00102b2
-> +#define MSR_AMD_CPPC_REQ               0xc00102b3
-> +#define MSR_AMD_CPPC_STATUS            0xc00102b4
-> +
-> +#define CAP1_LOWEST_PERF(x)    (((x) >> 0) & 0xff)
-> +#define CAP1_LOWNONLIN_PERF(x) (((x) >> 8) & 0xff)
-> +#define CAP1_NOMINAL_PERF(x)   (((x) >> 16) & 0xff)
-> +#define CAP1_HIGHEST_PERF(x)   (((x) >> 24) & 0xff)
-> +
-> +#define REQ_MAX_PERF(x)                (((x) & 0xff) << 0)
-> +#define REQ_MIN_PERF(x)                (((x) & 0xff) << 8)
-> +#define REQ_DES_PERF(x)                (((x) & 0xff) << 16)
-> +#define REQ_ENERGY_PERF_PREF(x)        (((x) & 0xff) << 24)
-> +
->  /* Fam 17h MSRs */
->  #define MSR_F17H_IRPERF                        0xc00000e9
->
-> --
-> 2.25.1
->
+> 
+> Changes from v2 (https://lore.kernel.org/r/20211215072011.496998-1-swboyd@chromium.org):
+>  * More details in commit text
+> 
+> Changes from v1 (https://lore.kernel.org/r/20210520012731.3731314-1-swboyd@chromium.org):
+>  * Use memblock_overlaps_region instead of memblock_is_region_memory()
+>  * Add more details to commit text 
+> 
+>  drivers/of/fdt.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index bdca35284ceb..c736e5bcc2f6 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -482,9 +482,11 @@ static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
+>  	if (nomap) {
+>  		/*
+>  		 * If the memory is already reserved (by another region), we
+> -		 * should not allow it to be marked nomap.
+> +		 * should not allow it to be marked nomap, but don't worry
+> +		 * if the region isn't memory as it won't be mapped.
+>  		 */
+> -		if (memblock_is_region_reserved(base, size))
+> +		if (memblock_overlaps_region(&memblock.memory, base, size) &&
+> +		    memblock_is_region_reserved(base, size))
+
+Apparently I'm missing something, but sc7180.dtsi has memory @80000000 and I
+cannot find anything that calls memblock_remove() in DT processing.
+
+How is that memory@80900000 does not overlap with memblock.memory?
+
+>  			return -EBUSY;
+>  
+>  		return memblock_mark_nomap(base, size);
+> 
+> base-commit: 136057256686de39cc3a07c2e39ef6bc43003ff6
+> -- 
+> https://chromeos.dev
+> 
+
+-- 
+Sincerely yours,
+Mike.

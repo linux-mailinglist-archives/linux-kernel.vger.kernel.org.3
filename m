@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A40D47806B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F248147806F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237163AbhLPXTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:19:06 -0500
+        id S237195AbhLPXTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:19:08 -0500
 Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:48561 "EHLO
         alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234193AbhLPXTF (ORCPT
+        by vger.kernel.org with ESMTP id S234193AbhLPXTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:19:05 -0500
+        Thu, 16 Dec 2021 18:19:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1639696745; x=1671232745;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=r5gDvMoc92iDL10QJcM/tNCFOMSxMcUv+DruqpznXEQ=;
-  b=a8YI4Jru9DJ4ePaj/UU6k9Q3R0INP3HQ+II3ALqliqCqA6q/rkQ9rRoj
-   Gx54L+cp1aQtGKt5Xfy5KtEm4o3NiILhiLwAAfQqJ6FZd5cHearTyvL7H
-   rpIJGDw2Nv2INufiSHq9LajLIJcb10VuozkZGTC9r68wSSv3PizeW67Eg
-   4=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Dec 2021 15:19:05 -0800
+  t=1639696747; x=1671232747;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=1rSW/DQQsQoDsNhrOoKXvUHwQwclSfnQRVTbGO0TyWs=;
+  b=GDH6ege7zrJhMZ77EGWvkxrKo4ig1AkuTfefsJ2j9rob1ApDyr57BBnJ
+   FMLrGzOOFA7pqKZWSSgIXrwJdmp2fVIEbHYNTeVfRpmQxrJAC8ljpSDXS
+   /9VGsLSxlNmmfgnQzrTPAxh1cq6PmuvhsN1iiXTRkBgSfL0O7md9zrp34
+   w=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Dec 2021 15:19:07 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 15:19:04 -0800
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 15:19:06 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 16 Dec 2021 15:19:03 -0800
+ 15.2.922.19; Thu, 16 Dec 2021 15:19:06 -0800
 Received: from hu-vamslank-sd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 16 Dec 2021 15:19:03 -0800
+ 15.2.922.19; Thu, 16 Dec 2021 15:19:05 -0800
 From:   <quic_vamslank@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <linus.walleij@linaro.org>, <robh+dt@kernel.org>
@@ -42,10 +42,12 @@ CC:     <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <manivannan.sadhasivam@linaro.org>,
         Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-Subject: [PATCH v6 0/2] Add pinctrl support for SDX65 
-Date:   Thu, 16 Dec 2021 15:18:44 -0800
-Message-ID: <cover.1639696427.git.quic_vamslank@quicinc.com>
+Subject: [PATCH v6 1/2] dt-bindings: pinctrl: qcom: Add SDX65 pinctrl bindings
+Date:   Thu, 16 Dec 2021 15:18:45 -0800
+Message-ID: <ff9abf953c274a1e34f59114642f67ecf02acb6f.1639696427.git.quic_vamslank@quicinc.com>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1639696427.git.quic_vamslank@quicinc.com>
+References: <cover.1639696427.git.quic_vamslank@quicinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -58,54 +60,213 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
 
-Hello,
+Add device tree binding Documentation details for Qualcomm SDX65
+pinctrl driver.
 
-Changes from v5:
- - Fixed pinctrl dt_binding comments from Bjorn and Rob 
-
-Changes from v4:
- - Fixed dt_binding check errors
-
-Changes from v3:
- - Addressed comments, fixed dt_binding check errors and collected reviewed
-   by from Bjorn
- - Rebased on top of v5.16-rc1
-
-Changes from v2:
- - Addressed comments from Bjorn
- - Collected Reviewed-by for the patches
-
-Changes from v1:
- - Addressed all Bjorn's comments
-
-This patch series adds pinctrl bindings and tlmm support for SDX65.
-
-Thanks,
-Vamsi
-
-Vamsi Krishna Lanka (2):
-  dt-bindings: pinctrl: qcom: Add SDX65 pinctrl bindings
-  pinctrl: qcom: Add SDX65 pincontrol driver
-
- .../bindings/pinctrl/qcom,sdx65-pinctrl.yaml  | 191 ++++
- drivers/pinctrl/qcom/Kconfig                  |   9 +
- drivers/pinctrl/qcom/Makefile                 |   1 +
- drivers/pinctrl/qcom/pinctrl-sdx65.c          | 967 ++++++++++++++++++
- 4 files changed, 1168 insertions(+)
+Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ .../bindings/pinctrl/qcom,sdx65-pinctrl.yaml  | 191 ++++++++++++++++++
+ 1 file changed, 191 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
- create mode 100644 drivers/pinctrl/qcom/pinctrl-sdx65.c
 
-
-base-commit: 58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
-prerequisite-patch-id: 93a6639086d56aaaf0c5d0e108a7a7690d39967f
-prerequisite-patch-id: 889196dd8ff26aaa113c94ac27b67f708301cd22
-prerequisite-patch-id: bca9c19611da01ed598f8645e6be49f8def4d683
-prerequisite-patch-id: ba1594c6d524ae889dd4325d0912848f5542633b
-prerequisite-patch-id: 6efd062dc77400d108f3f4a0c66010c69759d64a
-prerequisite-patch-id: fb27c240bc512176c822e6f1c7cb5b8d65633c56
-prerequisite-patch-id: 8125f49031bb5d9ebca1ca3e622080d6d3683bfb
-prerequisite-patch-id: e6ecff6bfb4016b9118b2b25f4077355a1448220
-prerequisite-patch-id: ba2f7d61be224484482d4910116ea69f1f5200ea
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
+new file mode 100644
+index 000000000000..cdfcf29dffee
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
+@@ -0,0 +1,191 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/qcom,sdx65-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Technologies, Inc. SDX65 TLMM block
++
++maintainers:
++  - Vamsi krishna Lanka <quic_vamslank@quicinc.com>
++
++description:
++  This binding describes the Top Level Mode Multiplexer block found in the
++  SDX65 platform.
++
++properties:
++  compatible:
++    const: qcom,sdx65-tlmm
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    description: Specifies the PIN numbers and Flags, as defined in
++      include/dt-bindings/interrupt-controller/irq.h
++    const: 2
++
++  gpio-controller: true
++
++  '#gpio-cells':
++    description: Specifying the pin number and flags, as defined in
++      include/dt-bindings/gpio/gpio.h
++    const: 2
++
++  gpio-ranges:
++    maxItems: 1
++
++  gpio-reserved-ranges:
++    maxItems: 1
++
++#PIN CONFIGURATION NODES
++patternProperties:
++  '-state$':
++    oneOf:
++      - $ref: "#/$defs/qcom-sdx65-tlmm-state"
++      - patternProperties:
++          ".*":
++            $ref: "#/$defs/qcom-sdx65-tlmm-state"
++'$defs':
++  qcom-sdx65-tlmm-state:
++    type: object
++    description:
++      Pinctrl node's client devices use subnodes for desired pin configuration.
++      Client device subnodes use below standard properties.
++    $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
++
++    properties:
++      pins:
++        description:
++          List of gpio pins affected by the properties specified in this subnode.
++        items:
++          oneOf:
++            - pattern: "^gpio([0-9]|[1-9][0-9]|10[0-7])$"
++            - enum: [ ufs_reset, sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk, sdc2_cmd, sdc2_data, sdc1_rclk ]
++        minItems: 1
++        maxItems: 150
++
++      function:
++        description:
++          Specify the alternative function to be configured for the specified
++          pins. Functions are only valid for gpio pins.
++        enum: [ blsp_uart1, blsp_spi1, blsp_i2c1, blsp_uim1, atest_tsens,
++                bimc_dte1, dac_calib0, blsp_spi8, blsp_uart8, blsp_uim8,
++                qdss_cti_trig_out_b, bimc_dte0, dac_calib1, qdss_cti_trig_in_b,
++                dac_calib2, atest_tsens2, atest_usb1, blsp_spi10, blsp_uart10,
++                blsp_uim10, atest_bbrx1, atest_usb13, atest_bbrx0, atest_usb12,
++                mdp_vsync, edp_lcd, blsp_i2c10, atest_gpsadc1, atest_usb11,
++                atest_gpsadc0, edp_hot, atest_usb10, m_voc, dac_gpio, atest_char,
++                cam_mclk, pll_bypassnl, qdss_stm7, blsp_i2c8, qdss_tracedata_b,
++                pll_reset, qdss_stm6, qdss_stm5, qdss_stm4, atest_usb2, cci_i2c,
++                qdss_stm3, dac_calib3, atest_usb23, atest_char3, dac_calib4,
++                qdss_stm2, atest_usb22, atest_char2, qdss_stm1, dac_calib5,
++                atest_usb21, atest_char1, dbg_out, qdss_stm0, dac_calib6,
++                atest_usb20, atest_char0, dac_calib10, qdss_stm10,
++                qdss_cti_trig_in_a, cci_timer4, blsp_spi6, blsp_uart6, blsp_uim6,
++                blsp2_spi, qdss_stm9, qdss_cti_trig_out_a, dac_calib11,
++                qdss_stm8, cci_timer0, qdss_stm13, dac_calib7, cci_timer1,
++                qdss_stm12, dac_calib8, cci_timer2, blsp1_spi, qdss_stm11,
++                dac_calib9, cci_timer3, cci_async, dac_calib12, blsp_i2c6,
++                qdss_tracectl_a, dac_calib13, qdss_traceclk_a, dac_calib14,
++                dac_calib15, hdmi_rcv, dac_calib16, hdmi_cec, pwr_modem,
++                dac_calib17, hdmi_ddc, pwr_nav, dac_calib18, pwr_crypto,
++                dac_calib19, hdmi_hot, dac_calib20, dac_calib21, pci_e0,
++                dac_calib22, dac_calib23, dac_calib24, tsif1_sync, dac_calib25,
++                sd_write, tsif1_error, blsp_spi2, blsp_uart2, blsp_uim2,
++                qdss_cti, blsp_i2c2, blsp_spi3, blsp_uart3, blsp_uim3, blsp_i2c3,
++                uim3, blsp_spi9, blsp_uart9, blsp_uim9, blsp10_spi, blsp_i2c9,
++                blsp_spi7, blsp_uart7, blsp_uim7, qdss_tracedata_a, blsp_i2c7,
++                qua_mi2s, gcc_gp1_clk_a, ssc_irq, uim4, blsp_spi11, blsp_uart11,
++                blsp_uim11, gcc_gp2_clk_a, gcc_gp3_clk_a, blsp_i2c11, cri_trng0,
++                cri_trng1, cri_trng, qdss_stm18, pri_mi2s, qdss_stm17, blsp_spi4,
++                blsp_uart4, blsp_uim4, qdss_stm16, qdss_stm15, blsp_i2c4,
++                qdss_stm14, dac_calib26, spkr_i2s, audio_ref, lpass_slimbus,
++                isense_dbg, tsense_pwm1, tsense_pwm2, btfm_slimbus, ter_mi2s,
++                qdss_stm22, qdss_stm21, qdss_stm20, qdss_stm19, gcc_gp1_clk_b,
++                sec_mi2s, blsp_spi5, blsp_uart5, blsp_uim5, gcc_gp2_clk_b,
++                gcc_gp3_clk_b, blsp_i2c5, blsp_spi12, blsp_uart12, blsp_uim12,
++                qdss_stm25, qdss_stm31, blsp_i2c12, qdss_stm30, qdss_stm29,
++                tsif1_clk, qdss_stm28, tsif1_en, tsif1_data, sdc4_cmd, qdss_stm27,
++                qdss_traceclk_b, tsif2_error, sdc43, vfr_1, qdss_stm26, tsif2_clk,
++                sdc4_clk, qdss_stm24, tsif2_en, sdc42, qdss_stm23, qdss_tracectl_b,
++                sd_card, tsif2_data, sdc41, tsif2_sync, sdc40, mdp_vsync_p_b,
++                ldo_en, mdp_vsync_s_b, ldo_update, blsp11_uart_tx_b, blsp11_uart_rx_b,
++                blsp11_i2c_sda_b, prng_rosc, blsp11_i2c_scl_b, uim2, uim1, uim_batt,
++                pci_e2, pa_indicator, adsp_ext, ddr_bist, qdss_tracedata_11,
++                qdss_tracedata_12, modem_tsync, nav_dr, nav_pps, pci_e1, gsm_tx,
++                qspi_cs, ssbi2, ssbi1, mss_lte, qspi_clk, qspi0, qspi1, qspi2, qspi3,
++                gpio ]
++
++      drive-strength:
++        enum: [2, 4, 6, 8, 10, 12, 14, 16]
++        default: 2
++        description:
++          Selects the drive strength for the specified pins, in mA.
++
++      bias-pull-down: true
++
++      bias-pull-up: true
++
++      bias-disable: true
++
++      output-high: true
++
++      output-low: true
++
++    required:
++      - pins
++      - function
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-controller
++  - '#interrupt-cells'
++  - gpio-controller
++  - '#gpio-cells'
++  - gpio-ranges
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    tlmm: pinctrl@f100000 {
++        compatible = "qcom,sdx65-tlmm";
++        reg = <0x03000000 0xdc2000>;
++        gpio-controller;
++        #gpio-cells = <2>;
++        gpio-ranges = <&tlmm 0 0 109>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++        interrupts = <GIC_SPI 212 IRQ_TYPE_LEVEL_HIGH>;
++
++        gpio-wo-subnode-state {
++            pins = "gpio1";
++            function = "gpio";
++        };
++
++        uart-w-subnodes-state {
++            rx {
++                pins = "gpio4";
++                function = "blsp_uart1";
++                bias-pull-up;
++            };
++
++            tx {
++                pins = "gpio5";
++                function = "blsp_uart1";
++                bias-disable;
++            };
++        };
++    };
++...
 -- 
 2.33.1
 

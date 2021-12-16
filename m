@@ -2,149 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4D0476A04
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 06:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4FA476A08
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 06:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233760AbhLPFxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 00:53:53 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:53150 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231682AbhLPFxm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 00:53:42 -0500
-X-UUID: 76fa4987f77848d68c39d489cd265db8-20211216
-X-UUID: 76fa4987f77848d68c39d489cd265db8-20211216
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1177963592; Thu, 16 Dec 2021 13:53:39 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 16 Dec 2021 13:53:37 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkcas10.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 16 Dec 2021 13:53:36 +0800
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
-Subject: [PATCH net-next v10 6/6] net: dt-bindings: dwmac: add support for mt8195
-Date:   Thu, 16 Dec 2021 13:53:28 +0800
-Message-ID: <20211216055328.15953-7-biao.huang@mediatek.com>
+        id S231624AbhLPF4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 00:56:07 -0500
+Received: from mga05.intel.com ([192.55.52.43]:1908 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231509AbhLPF4G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 00:56:06 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="325691356"
+X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
+   d="scan'208";a="325691356"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 21:56:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
+   d="scan'208";a="568219972"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Dec 2021 21:56:01 -0800
+Received: from debox1-desk4.intel.com (unknown [10.209.86.221])
+        by linux.intel.com (Postfix) with ESMTP id AA555580D42;
+        Wed, 15 Dec 2021 21:56:00 -0800 (PST)
+From:   "David E. Box" <david.e.box@linux.intel.com>
+To:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, david.e.box@linux.intel.com,
+        michael.a.bottini@linux.intel.com, rafael@kernel.org,
+        me@adhityamohan.in
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V4 1/2] PCI/ASPM: Add ASPM BIOS override function
+Date:   Wed, 15 Dec 2021 21:55:59 -0800
+Message-Id: <20211216055600.2425362-1-david.e.box@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211216055328.15953-1-biao.huang@mediatek.com>
-References: <20211216055328.15953-1-biao.huang@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding document for the ethernet on mt8195.
+From: Michael Bottini <michael.a.bottini@linux.intel.com>
 
-Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+Devices that appear under the Intel VMD host bridge are not visible to BIOS
+and therefore not programmed by BIOS with ASPM settings. For these devices,
+it is necessary for the driver to configure ASPM. Since ASPM settings are
+adjustable at runtime by module parameter, use the same mechanism to allow
+drivers to override the default (in this case never configured) BIOS policy
+to ASPM_STATE_ALL. Then, reconfigure ASPM on the link. Do not override if
+ASPM control is disabled.
+
+Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
+Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 ---
- .../bindings/net/mediatek-dwmac.yaml          | 29 ++++++++++++++++---
- 1 file changed, 25 insertions(+), 4 deletions(-)
+V4
+ - No changes.
+V3
+ - Fix missing semicolon in static inline function.
 
-diff --git a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-index 8ad6e19661b8..a12f822a9ded 100644
---- a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-@@ -19,6 +19,7 @@ select:
-       contains:
-         enum:
-           - mediatek,mt2712-gmac
-+          - mediatek,mt8195-gmac
-   required:
-     - compatible
+V2
+ - Change return type to int so caller can determine if override was
+   successful.
+ - Return immediately if link is not found so that lock it not
+   unecessarily taken, suggested by kw@linux.com.
+ - Don't override if aspm_disabled is true.
+
+ drivers/pci/pci.h       |  2 ++
+ drivers/pci/pcie/aspm.c | 19 +++++++++++++++++++
+ 2 files changed, 21 insertions(+)
+
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index 3d60cabde1a1..c9c55d43cd8a 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -562,11 +562,13 @@ void pcie_aspm_init_link_state(struct pci_dev *pdev);
+ void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+ void pcie_aspm_pm_state_change(struct pci_dev *pdev);
+ void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
++int pcie_aspm_policy_override(struct pci_dev *dev);
+ #else
+ static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
+ static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
+ static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev) { }
+ static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
++static inline int pcie_aspm_policy_override(struct pci_dev *dev) { return -EINVAL; }
+ #endif
  
-@@ -27,26 +28,36 @@ allOf:
+ #ifdef CONFIG_PCIE_ECRC
+diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+index 52c74682601a..e2c61e14e724 100644
+--- a/drivers/pci/pcie/aspm.c
++++ b/drivers/pci/pcie/aspm.c
+@@ -1140,6 +1140,25 @@ int pci_disable_link_state(struct pci_dev *pdev, int state)
+ }
+ EXPORT_SYMBOL(pci_disable_link_state);
  
- properties:
-   compatible:
--    items:
--      - enum:
--          - mediatek,mt2712-gmac
--      - const: snps,dwmac-4.20a
-+    oneOf:
-+      - items:
-+          - enum:
-+              - mediatek,mt2712-gmac
-+          - const: snps,dwmac-4.20a
-+      - items:
-+          - enum:
-+              - mediatek,mt8195-gmac
-+          - const: snps,dwmac-5.10a
- 
-   clocks:
-+    minItems: 5
-     items:
-       - description: AXI clock
-       - description: APB clock
-       - description: MAC Main clock
-       - description: PTP clock
-       - description: RMII reference clock provided by MAC
-+      - description: MAC clock gate
- 
-   clock-names:
-+    minItems: 5
-+    maxItems: 6
-     items:
-       - const: axi
-       - const: apb
-       - const: mac_main
-       - const: ptp_ref
-       - const: rmii_internal
-+      - const: mac_cg
- 
-   mediatek,pericfg:
-     $ref: /schemas/types.yaml#/definitions/phandle
-@@ -61,6 +72,8 @@ properties:
-       or will round down. Range 0~31*170.
-       For MT2712 RMII/MII interface, Allowed value need to be a multiple of 550,
-       or will round down. Range 0~31*550.
-+      For MT8195 RGMII/RMII/MII interface, Allowed value need to be a multiple of 290,
-+      or will round down. Range 0~31*290.
- 
-   mediatek,rx-delay-ps:
-     description:
-@@ -69,6 +82,8 @@ properties:
-       or will round down. Range 0~31*170.
-       For MT2712 RMII/MII interface, Allowed value need to be a multiple of 550,
-       or will round down. Range 0~31*550.
-+      For MT8195 RGMII/RMII/MII interface, Allowed value need to be a multiple
-+      of 290, or will round down. Range 0~31*290.
- 
-   mediatek,rmii-rxc:
-     type: boolean
-@@ -102,6 +117,12 @@ properties:
-       3. the inside clock, which be sent to MAC, will be inversed in RMII case when
-          the reference clock is from MAC.
- 
-+  mediatek,mac-wol:
-+    type: boolean
-+    description:
-+      If present, indicates that MAC supports WOL(Wake-On-LAN), and MAC WOL will be enabled.
-+      Otherwise, PHY WOL is perferred.
++int pcie_aspm_policy_override(struct pci_dev *pdev)
++{
++	struct pcie_link_state *link = pcie_aspm_get_link(pdev);
 +
- required:
-   - compatible
-   - reg
++	if (!link || aspm_disabled)
++		return -EINVAL;
++
++	down_read(&pci_bus_sem);
++	mutex_lock(&aspm_lock);
++	link->aspm_default = ASPM_STATE_ALL;
++	pcie_config_aspm_link(link, policy_to_aspm_state(link));
++	pcie_set_clkpm(link, policy_to_clkpm_state(link));
++	mutex_unlock(&aspm_lock);
++	up_read(&pci_bus_sem);
++
++	return 0;
++}
++EXPORT_SYMBOL(pcie_aspm_policy_override);
++
+ static int pcie_aspm_set_policy(const char *val,
+ 				const struct kernel_param *kp)
+ {
 -- 
 2.25.1
 

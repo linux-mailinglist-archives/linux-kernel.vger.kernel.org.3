@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7404780FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8634780ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbhLPXyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:54:37 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:56504 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbhLPXyg (ORCPT
+        id S230071AbhLPXxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:53:40 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:47206 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230050AbhLPXxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:54:36 -0500
+        Thu, 16 Dec 2021 18:53:39 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C4E1B1F37F;
-        Thu, 16 Dec 2021 23:54:35 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4D7EA212C8;
+        Thu, 16 Dec 2021 23:53:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639698875; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1639698818; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UN33ikAoXajq5CI0zBofFyR8XobeBM2LQz3kaqJLOi8=;
-        b=MMSyLL6EF220adA5CA7TM22/UFSkJZQp7lQ587G2eUT03U+MWSVZSJyHVvp8XRqgvDsAtw
-        XA+OKQsqNAtxoMxbnWkGTNbrzvSlwjaLb3+NhHC8ivAno2ISM0cBHfsW0lUnJ7McAof59g
-        VvXnaleXzF5dNuLkqYvN4cgISEnzPDQ=
+        bh=uJLgBSr+4ac2HtnFPf6KLC0wSgPyRK3wpQcub+LxsjE=;
+        b=B5BZGrGhS1sLx+jn04Rr1MuE1ChyurPGtdI+nwDT/Hr/0+QXFKuZRtGCvuCRNoIkwlwyKP
+        9BfV/qhMuMbcQqDMBat4fq1Wo0xQWckKo0jCjlYNMmPl0tfn2JBp9hUPp/dnjydtCifmiB
+        8RRyHATryW0Fh+YgaDAS7VV2qTL3pAI=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639698875;
+        s=susede2_ed25519; t=1639698818;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UN33ikAoXajq5CI0zBofFyR8XobeBM2LQz3kaqJLOi8=;
-        b=typf5Kg/zxn17ZRHbU5b5gPIy954GXSE/v+Cgz6k3Ej6zydN26iNuVGaNYCcRxa8wo7Pu+
-        3xBdXpDQJ8itDmBQ==
+        bh=uJLgBSr+4ac2HtnFPf6KLC0wSgPyRK3wpQcub+LxsjE=;
+        b=+QQyfMGX2CvZGYolzHHLcWwYdfeq3Mk7+x940MXnO+mysULhS3FXrt8AFWVVKGMrMf+WAT
+        O4p/XR+Idp/HN7CA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6180A13EFD;
-        Thu, 16 Dec 2021 23:54:32 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 564E413EFD;
+        Thu, 16 Dec 2021 23:53:35 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0EWWB7jRu2EXXAAAMHmgww
-        (envelope-from <neilb@suse.de>); Thu, 16 Dec 2021 23:54:32 +0000
-Subject: [PATCH 18/18] NFS: swap-out must always use STABLE writes.
+        id qkUhBX/Ru2GpWwAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 16 Dec 2021 23:53:35 +0000
+Subject: [PATCH 11/18] SUNRPC/call_alloc: async tasks mustn't block waiting
+ for memory
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -58,7 +59,7 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Fri, 17 Dec 2021 10:48:23 +1100
-Message-ID: <163969850347.20885.5566025433915169963.stgit@noble.brown>
+Message-ID: <163969850317.20885.3872948365489724355.stgit@noble.brown>
 In-Reply-To: <163969801519.20885.3977673503103544412.stgit@noble.brown>
 References: <163969801519.20885.3977673503103544412.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -69,63 +70,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit handling code is not safe against memory-pressure deadlocks
-when writing to swap.  In particular, nfs_commitdata_alloc() blocks
-indefinitely waiting for memory, and this can consume all available
-workqueue threads.
+When memory is short, new worker threads cannot be created and we depend
+on the minimum one rpciod thread to be able to handle everything.
+So it must not block waiting for memory.
 
-swap-out most likely uses STABLE writes anyway as COND_STABLE indicates
-that a stable write should be used if the write fits in a single
-request, and it normally does.  However if we ever swap with a small
-wsize, or gather unusually large numbers of pages for a single write,
-this might change.
+mempools are particularly a problem as memory can only be released back
+to the mempool by an async rpc task running.  If all available
+workqueue threads are waiting on the mempool, no thread is available to
+return anything.
 
-For safety, make it explicit in the code that direct writes used for swap
-must always use FLUSH_COND_STABLE.
+rpc_malloc() can block, and this might cause deadlocks.
+So check RPC_IS_ASYNC(), rather than RPC_IS_SWAPPER() to determine if
+blocking is acceptable.
 
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- fs/nfs/direct.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ net/sunrpc/sched.c              |    4 +++-
+ net/sunrpc/xprtrdma/transport.c |    4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/fs/nfs/direct.c b/fs/nfs/direct.c
-index eeff1b4e1a7c..1317465150a6 100644
---- a/fs/nfs/direct.c
-+++ b/fs/nfs/direct.c
-@@ -790,7 +790,7 @@ static const struct nfs_pgio_completion_ops nfs_direct_write_completion_ops = {
-  */
- static ssize_t nfs_direct_write_schedule_iovec(struct nfs_direct_req *dreq,
- 					       struct iov_iter *iter,
--					       loff_t pos)
-+					       loff_t pos, int ioflags)
- {
- 	struct nfs_pageio_descriptor desc;
- 	struct inode *inode = dreq->inode;
-@@ -798,7 +798,7 @@ static ssize_t nfs_direct_write_schedule_iovec(struct nfs_direct_req *dreq,
- 	size_t requested_bytes = 0;
- 	size_t wsize = max_t(size_t, NFS_SERVER(inode)->wsize, PAGE_SIZE);
+diff --git a/net/sunrpc/sched.c b/net/sunrpc/sched.c
+index e2c835482791..d5b6e897f5a5 100644
+--- a/net/sunrpc/sched.c
++++ b/net/sunrpc/sched.c
+@@ -1023,8 +1023,10 @@ int rpc_malloc(struct rpc_task *task)
+ 	struct rpc_buffer *buf;
+ 	gfp_t gfp = GFP_NOFS;
  
--	nfs_pageio_init_write(&desc, inode, FLUSH_COND_STABLE, false,
-+	nfs_pageio_init_write(&desc, inode, ioflags, false,
- 			      &nfs_direct_write_completion_ops);
- 	desc.pg_dreq = dreq;
- 	get_dreq(dreq);
-@@ -904,6 +904,7 @@ ssize_t nfs_file_direct_write(struct kiocb *iocb, struct iov_iter *iter,
- 	struct nfs_direct_req *dreq;
- 	struct nfs_lock_context *l_ctx;
- 	loff_t pos, end;
-+	int ioflags = swap ? FLUSH_COND_STABLE : FLUSH_STABLE;
++	if (RPC_IS_ASYNC(task))
++		gfp = GFP_NOWAIT | __GFP_NOWARN;
+ 	if (RPC_IS_SWAPPER(task))
+-		gfp = __GFP_MEMALLOC | GFP_NOWAIT | __GFP_NOWARN;
++		gfp |= __GFP_MEMALLOC;
  
- 	dfprintk(FILE, "NFS: direct write(%pD2, %zd@%Ld)\n",
- 		file, iov_iter_count(iter), (long long) iocb->ki_pos);
-@@ -946,7 +947,7 @@ ssize_t nfs_file_direct_write(struct kiocb *iocb, struct iov_iter *iter,
- 	if (!swap)
- 		nfs_start_io_direct(inode);
+ 	size += sizeof(struct rpc_buffer);
+ 	if (size <= RPC_BUFFER_MAXSIZE)
+diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
+index 16e5696314a4..a52277115500 100644
+--- a/net/sunrpc/xprtrdma/transport.c
++++ b/net/sunrpc/xprtrdma/transport.c
+@@ -574,8 +574,10 @@ xprt_rdma_allocate(struct rpc_task *task)
+ 	gfp_t flags;
  
--	requested = nfs_direct_write_schedule_iovec(dreq, iter, pos);
-+	requested = nfs_direct_write_schedule_iovec(dreq, iter, pos, ioflags);
+ 	flags = RPCRDMA_DEF_GFP;
++	if (RPC_IS_ASYNC(task))
++		flags = GFP_NOWAIT | __GFP_NOWARN;
+ 	if (RPC_IS_SWAPPER(task))
+-		flags = __GFP_MEMALLOC | GFP_NOWAIT | __GFP_NOWARN;
++		flags |= __GFP_MEMALLOC;
  
- 	if (mapping->nrpages) {
- 		invalidate_inode_pages2_range(mapping,
+ 	if (!rpcrdma_check_regbuf(r_xprt, req->rl_sendbuf, rqst->rq_callsize,
+ 				  flags))
 
 

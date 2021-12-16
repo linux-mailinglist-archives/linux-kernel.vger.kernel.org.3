@@ -2,158 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB86477A35
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8F3477A05
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240046AbhLPROx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:14:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S239943AbhLPRJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235539AbhLPROw (ORCPT
+        with ESMTP id S235904AbhLPRJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:14:52 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016C7C06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:14:51 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id v11so45395190wrw.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:14:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=uRjKljc4yegWQqkyxyBTI2kdTqp33hVgEMBiYfg4ycs=;
-        b=FtSpZqr3rOHmoBKZ4ZfkLwOaza92prXpwUv+tFaqSiZ4sEDE9mn8TfkXoonODUlMzn
-         i9cVgLcwRI79RJw7w3EmJ+WDYYGMHu2PjZq8UHyDFVtRthlGYuWWa4+l5+wAeAN2ZLNK
-         b+C3HarIuF6L/vpLkoAbpOqfeeczy01X5glxcZohQ6BNZJ4SV3LJ+D8GvLe7k1+OCjHA
-         Aq6wksyDY0eYc2I0Wrxqs+52yXkbLmbWV2hC8ZYZT30tpVWVJzH3zPZnF3Vvm9qKTEel
-         9cZh/CGF8pvLXsApDQ56r5mYsgnMvAq05Oq8IXjkV5dwnXI0jqlZzcT/xdYCquGLS0Ov
-         HxaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=uRjKljc4yegWQqkyxyBTI2kdTqp33hVgEMBiYfg4ycs=;
-        b=l/121uNoujFV0C6NRA+Xtjoh+Qafc9oOFUhRK1KTMXmLmzlnhwlZzmIcU6xLqWjdoz
-         XEgdp7kehmSf6022HYFuoty8uKi3gZRnmUWC1AXdqBdZBSHBRRhrAY8emOGkqH05V0oH
-         Gb+zzdzG3Hima8PyTR6QX3ti4BnKEqONVBxzwDqnVhqGG1XhUAwx5hzihIpjveiwrWY7
-         v3FOnj75HrIPiH8bV2Z8MrUhChcyWcKpQxZrZQAYRbkVvJUp/txWyV5boKXcHHXH3+7B
-         LViwaIGEj3V/ipplA4upQ5yayKcVss2WALLREk7XJwKqW++9vjzpTyOiPMRizCkHolEO
-         gINQ==
-X-Gm-Message-State: AOAM532XbQAKzJhJeNl8OEQ9k4rymZvgwcft3PIRW7qQgjM93JLSoW/6
-        cYO9baKqUkd/pGuS2jSc5DV8FA==
-X-Google-Smtp-Source: ABdhPJz/qjRnGER3BMfsfcmhXY5XY5zjqFD9zwyEULhTIE6CMZcXzUI1L45GjBzAPwU6YIM725tNug==
-X-Received: by 2002:adf:dd8d:: with SMTP id x13mr1280778wrl.401.1639674890505;
-        Thu, 16 Dec 2021 09:14:50 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id e12sm6821826wrq.20.2021.12.16.09.14.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 09:14:50 -0800 (PST)
-Date:   Thu, 16 Dec 2021 17:14:39 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        lksctp developers <linux-sctp@vger.kernel.org>,
-        "H.P. Yarroll" <piggy@acm.org>,
-        Karl Knutson <karl@athena.chicago.il.us>,
-        Jon Grimm <jgrimm@us.ibm.com>,
-        Xingang Guo <xingang.guo@intel.com>,
-        Hui Huang <hui.huang@nokia.com>,
-        Sridhar Samudrala <sri@us.ibm.com>,
-        Daisy Chang <daisyc@us.ibm.com>,
-        Ryan Layer <rmlayer@us.ibm.com>,
-        Kevin Gao <kevin.gao@intel.com>,
-        network dev <netdev@vger.kernel.org>
-Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
-Message-ID: <Ybtz/0gflbkG5Q/0@google.com>
-References: <20211214215732.1507504-1-lee.jones@linaro.org>
- <20211214215732.1507504-2-lee.jones@linaro.org>
- <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
- <Ybtrs56tSBbmyt5c@google.com>
- <CADvbK_cBBDkGt8XLJo6N5TX2YQATS+udVWm8_=8f96=0B9tnTA@mail.gmail.com>
- <Ybtzr5ZmD/IKjycz@google.com>
+        Thu, 16 Dec 2021 12:09:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AA3C061574;
+        Thu, 16 Dec 2021 09:09:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DEABB82365;
+        Thu, 16 Dec 2021 17:09:42 +0000 (UTC)
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp.kernel.org (Postfix) with ESMTPSA id 51364C36AE4;
+        Thu, 16 Dec 2021 17:09:39 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 17:15:04 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Cc:     <robh+dt@kernel.org>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 3/3] Documentation:ABI:testing:admv1013: add ABI docs
+Message-ID: <20211216171504.382214ee@jic23-huawei>
+In-Reply-To: <20211206154845.268445-3-antoniu.miclaus@analog.com>
+References: <20211206154845.268445-1-antoniu.miclaus@analog.com>
+        <20211206154845.268445-3-antoniu.miclaus@analog.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ybtzr5ZmD/IKjycz@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021, Lee Jones wrote:
+On Mon, 6 Dec 2021 17:48:45 +0200
+Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
 
-> On Thu, 16 Dec 2021, Xin Long wrote:
+> Add documentation for the use of the Local Oscillator Feedthrough Offset
+> calibration.
 > 
-> > On Thu, Dec 16, 2021 at 11:39 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > >
-> > > On Thu, 16 Dec 2021, Xin Long wrote:
-> > >
-> > > > On Wed, Dec 15, 2021 at 8:48 PM Jakub Kicinski <kuba@kernel.org> wrote:
-> > > > >
-> > > > > On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
-> > > > > > The cause of the resultant dump_stack() reported below is a
-> > > > > > dereference of a freed pointer to 'struct sctp_endpoint' in
-> > > > > > sctp_sock_dump().
-> > > > > >
-> > > > > > This race condition occurs when a transport is cached into its
-> > > > > > associated hash table followed by an endpoint/sock migration to a new
-> > > > > > association in sctp_assoc_migrate() prior to their subsequent use in
-> > > > > > sctp_diag_dump() which uses sctp_for_each_transport() to walk the hash
-> > > > > > table calling into sctp_sock_dump() where the dereference occurs.
-> > >
-> > > > in sctp_sock_dump():
-> > > >         struct sock *sk = ep->base.sk;
-> > > >         ... <--[1]
-> > > >         lock_sock(sk);
-> > > >
-> > > > Do you mean in [1], the sk is peeled off and gets freed elsewhere?
-> > >
-> > > 'ep' and 'sk' are both switched out for new ones in sctp_sock_migrate().
-> > >
-> > > > if that's true, it's still late to do sock_hold(sk) in your this patch.
-> > >
-> > > No, that's not right.
-> > >
-> > > The schedule happens *inside* the lock_sock() call.
-> > Sorry, I don't follow this.
-> > We can't expect when the schedule happens, why do you think this
-> > can never be scheduled before the lock_sock() call?
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> ---
+> changes in v6:
+>  - update iio channels
+>  - remove frequency mode
+>  .../testing/sysfs-bus-iio-frequency-admv1013  | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013
 > 
-> True, but I've had this running for hours and it hasn't reproduced.
-> 
-> Without this patch, I can reproduce this in around 2 seconds.
-> 
-> The C-repro for this is pretty intense!
-> 
-> If you want to be *sure* that a schedule will never happen, we can
-> take a reference directly with:
-> 
->      ep = sctp_endpoint_hold(tsp->asoc->ep);
->      sk = sock_hold(ep->base.sk);
-> 
-> Which was my original plan before I soak tested this submitted patch
-> for hours without any sign of reproducing the issue.
-> 
-> > If the sock is peeled off or is being freed, we shouldn't dump this sock,
-> > and it's better to skip it.
-> 
-> I guess we can do that too.
-> 
-> Are you suggesting sctp_sock_migrate() as the call site?
+> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013 b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013
+> new file mode 100644
+> index 000000000000..3be68dd54ed4
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013
+> @@ -0,0 +1,38 @@
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0-1_i_phase
 
-Also, when are you planning on testing the flag?
+> +KernelVersion:
 
-Won't that suffer with the same issue(s)?
+Please fill these in. We might need to update them, but better to be out by one cycle
+rather than have them blank I think.
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> +Contact:	linux-iio@vger.kernel.org
+> +Description:
+> +		Read/write value for the Local Oscillatior path quadrature I phase shift.
+
+As per patch 1 review.  The open issue here is phase has defined units as radians
+but we don't know what the scaling of this is beyond vague hints in the datasheet.
+So maybe we need to expand the ABI to allow for calibphase?  Much like calibbias in
+general we'd assume that was of unknown scaling...
+
+I'm fully open to other suggestions as I'm not particularly happy with any options
+I've thought of for this.
+
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0-1_i_phase
+> +KernelVersion:
+> +Contact:	linux-iio@vger.kernel.org
+> +Description:
+> +		Read/write value for the Local Oscillatior path quadrature Q phase shift.
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_calibbias
+> +KernelVersion:
+> +Contact:	linux-iio@vger.kernel.org
+> +Description:
+> +		Read/write value for the Local Oscillatior Feedthrough Offset Calibration I Positive
+> +		side.
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_calibbias
+> +KernelVersion:
+> +Contact:	linux-iio@vger.kernel.org
+> +Description:
+> +		Read/write value for the Local Oscillatior Feedthrough Offset Calibration Q Positive side.
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage1_i_calibbias
+> +KernelVersion:
+> +Contact:	linux-iio@vger.kernel.org
+> +Description:
+> +		Read/write raw value for the Local Oscillatior Feedthrough Offset Calibration I Negative
+> +		side.
+> +
+> +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage1_q_calibbias
+> +KernelVersion:
+> +Contact:	linux-iio@vger.kernel.org
+> +Description:
+> +		Read/write raw value for the Local Oscillatior Feedthrough Offset Calibration Q Negative
+> +		side.
+

@@ -2,153 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 137B9476F2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51745476F35
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236246AbhLPKwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:52:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42173 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231342AbhLPKwb (ORCPT
+        id S236291AbhLPKxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:53:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236273AbhLPKxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:52:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639651951;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K8uTzGYoOBRJY7w+8Ql8RIVF0k5wL483NDOt+n6WV+4=;
-        b=K0yjGxetYG0wi3kMZYwWL1tsYpqw/t/wa81aXTVYmvy2LtiwAEUjaGsAS4zRG9WOrLhiCL
-        gJUQxLmfBQAIkabdD1SG/t487PmCt5EMnbWl/EyS7Hrq7loKoV2HGqDfT/M6ENYbWaIdt0
-        DluTJC5KEjO0VYPVncPbXhrkfYG6rCk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-278-MYZTv_cEMBeNGInN_flzbg-1; Thu, 16 Dec 2021 05:52:29 -0500
-X-MC-Unique: MYZTv_cEMBeNGInN_flzbg-1
-Received: by mail-wr1-f69.google.com with SMTP id x20-20020adfbb54000000b001a0d044e20fso2513640wrg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:52:29 -0800 (PST)
+        Thu, 16 Dec 2021 05:53:07 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4698BC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:53:07 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id a11so22879279qkh.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:53:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6Z1eZM6laZOzleTxsTd2Yd1uJMPVObidWq6Pg28q0B8=;
+        b=YwL+7Ov0F9P8hlFfI4+8VXPE1f0fi+LhoVaqVgJXb5YybMSw//S+7sZE0eAMf+OEKN
+         HK4XnzaUrJIcaz5iVHHssarFwBcZvqJfwIkFqX4ASqFjix/Q4UQ+so6x2e5L7SiGfmav
+         MhlVzfrKR4E81MGDAyD789gE4TNgqcGoMmooiQeKw9ZWS3b1foRuq/t7WktCxd/schbT
+         CijZBqsgqvSVbedJc1+G8tbTQgPd0+fXku8PQLS7ixGfyVBDrUQ6Mo3stkHpKGh/v7BW
+         48H2/1wn6zMAfSDQqfJWvlYNr4pJ/dJ2XguLBGsdflzN+z/SSim6abHH0DsfslOHYQgh
+         YIyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=K8uTzGYoOBRJY7w+8Ql8RIVF0k5wL483NDOt+n6WV+4=;
-        b=Vhx9NLXnvi8TGgOX1yz0jOebsVp7+DLTHhLQJ7DkWA2KebdY9sEEudKmjukDDFPp4o
-         l4PVaw2ma70de30zX7CVPpd1uHcrGee+bfM3hJnMACRpgI0idpZV/FvQYKN2j3HAjhBA
-         h7l0WSrFUv1vMJ76GFuqXYrLxCI/Z0A8YOnqMHruMiJgPIvolWwVgrNax1hHf+LoZJ8e
-         ZePP9Lumc+1EexBi1lzcTs3Je/1IGZmNdvkk6fiMav/G1COiT/vrBWlUOp5Aezwk9gZg
-         NMELORzHrAaUVT27mjebfcWDqqd01KylF4uhMrmA0wmmjANExJpRblmVi9xbFEEdUdx3
-         zZdA==
-X-Gm-Message-State: AOAM531fHFreFag74DWCsZrlEPDryOfzoNhzazXID5STww8vm08k/sVj
-        aaieGCdCsPzje83CBcbNDGTgp2b+eb28qE3Rmiz0HU0w81aNpPDD2BPgsi4yR1C4SJm6hg9SjAn
-        WL+SZ4fBXvbDSrT2ONTs5ZlPG
-X-Received: by 2002:a5d:6b81:: with SMTP id n1mr8498336wrx.56.1639651948619;
-        Thu, 16 Dec 2021 02:52:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyHuwZkDO7xDTGVXnkIzmCOOqyhEHNs5qWSXjlASQ9huiT2CqWmGIwoAlwyq1QAUc8hqk8taw==
-X-Received: by 2002:a5d:6b81:: with SMTP id n1mr8498324wrx.56.1639651948362;
-        Thu, 16 Dec 2021 02:52:28 -0800 (PST)
-Received: from [192.168.3.132] (p4ff23dcd.dip0.t-ipconnect.de. [79.242.61.205])
-        by smtp.gmail.com with ESMTPSA id e11sm5582137wrq.28.2021.12.16.02.52.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 02:52:27 -0800 (PST)
-Message-ID: <0091b689-54b6-7cc9-d5ee-ae12a2f8376d@redhat.com>
-Date:   Thu, 16 Dec 2021 11:52:27 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6Z1eZM6laZOzleTxsTd2Yd1uJMPVObidWq6Pg28q0B8=;
+        b=OptVcSt16a0ERKdUpUdbrgGQop585oVu/gi97UuCfMvZxl6DnDiyB40Bl06UXBWcBk
+         wRg3Y/Fpct2j4lN4eIezaT1h0LT0q3sbJFp3gtL92XGsuGqdOF7mrJtaoaxzgftxa0VI
+         Ok6AUdRtK82tjNEbhypfH1AhkKySaDXiWs3FWcejMfkjlgWgwwhuO806QGlh9/Cnhw5o
+         YkMr6UwvHZ7xsueZFKl16KlQNelnbMbMIHMEk5Aim3/Xaceh4s2LWMbhabp+D71e4q63
+         PXoS5OrMOwWqwYofTsmLGu8Yutx6y3Ck9ILW/AofjPYCcVqhBmJbKGAdm9zgM51Dojuy
+         MVdw==
+X-Gm-Message-State: AOAM5318bD/H4bN+ye0+fKVFWn4/u7O2s3aSy1R7Do9583tYAnOvFpAR
+        d+3BJUWPX5Qt/q8tp5hRaro6ITlOhH/dW3mBltwcoA==
+X-Google-Smtp-Source: ABdhPJwfx+YQqnle2PZIvmsDdgqby2XPINbWo7FHmc3PDptq2jz4xj+tpFna/PKxz2fndVE64sWMnTJ77kCK15Ng3Dw=
+X-Received: by 2002:a05:620a:e0c:: with SMTP id y12mr11446382qkm.109.1639651986199;
+ Thu, 16 Dec 2021 02:53:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v3 3/5] mm_zone: add function to check if managed dma zone
- exists
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@lst.de,
-        cl@linux.com, John.p.donnelly@oracle.com,
-        kexec@lists.infradead.org, stable@vger.kernel.org
-References: <20211213122712.23805-1-bhe@redhat.com>
- <20211213122712.23805-4-bhe@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20211213122712.23805-4-bhe@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <cover.1639432170.git.andreyknvl@google.com> <e82b75533a93a5fc85e24b782c6177457af0755d.1639432170.git.andreyknvl@google.com>
+In-Reply-To: <e82b75533a93a5fc85e24b782c6177457af0755d.1639432170.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 16 Dec 2021 11:52:30 +0100
+Message-ID: <CAG_fn=U8LjS4yH=mGgvJu+AUOV=DgHaPDbTBFtf1LjxexWB8hg@mail.gmail.com>
+Subject: Re: [PATCH mm v3 15/38] kasan: clean up metadata byte definitions
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.12.21 13:27, Baoquan He wrote:
-> In some places of the current kernel, it assumes that dma zone must have
-> managed pages if CONFIG_ZONE_DMA is enabled. While this is not always true.
-> E.g in kdump kernel of x86_64, only low 1M is presented and locked down
-> at very early stage of boot, so that there's no managed pages at all in
-> DMA zone. This exception will always cause page allocation failure if page
-> is requested from DMA zone.
-> 
-> Here add function has_managed_dma() and the relevant helper functions to
-> check if there's DMA zone with managed pages. It will be used in later
-> patches.
-> 
-> Fixes: 6f599d84231f ("x86/kdump: Always reserve the low 1M when the crashkernel option is specified")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> ---
-> v2->v3:
->  Rewrite has_managed_dma() in a simpler and more efficient way which is
->  sugggested by DavidH. 
-> 
->  include/linux/mmzone.h |  9 +++++++++
->  mm/page_alloc.c        | 15 +++++++++++++++
->  2 files changed, 24 insertions(+)
-> 
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index 58e744b78c2c..6e1b726e9adf 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -1046,6 +1046,15 @@ static inline int is_highmem_idx(enum zone_type idx)
->  #endif
->  }
->  
-> +#ifdef CONFIG_ZONE_DMA
-> +bool has_managed_dma(void);
-> +#else
-> +static inline bool has_managed_dma(void)
-> +{
-> +	return false;
-> +}
-> +#endif
-> +
->  /**
->   * is_highmem - helper function to quickly check if a struct zone is a
->   *              highmem zone or not.  This is an attempt to keep references
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index c5952749ad40..7c7a0b5de2ff 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -9460,3 +9460,18 @@ bool take_page_off_buddy(struct page *page)
->  	return ret;
->  }
->  #endif
-> +
-> +#ifdef CONFIG_ZONE_DMA
-> +bool has_managed_dma(void)
-> +{
-> +	struct pglist_data *pgdat;
-> +
-> +	for_each_online_pgdat(pgdat) {
-> +		struct zone *zone = &pgdat->node_zones[ZONE_DMA];
-> +
-> +		if (managed_zone(zone))
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +#endif /* CONFIG_ZONE_DMA */
-> 
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
-
+On Mon, Dec 13, 2021 at 10:53 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Most of the metadata byte values are only used for Generic KASAN.
+>
+> Remove KASAN_KMALLOC_FREETRACK definition for !CONFIG_KASAN_GENERIC
+> case, and put it along with other metadata values for the Generic
+> mode under a corresponding ifdef.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>

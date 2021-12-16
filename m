@@ -2,123 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 750274777D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 588A24777DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239283AbhLPQQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:16:20 -0500
-Received: from foss.arm.com ([217.140.110.172]:45626 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239276AbhLPQQQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:16:16 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D04DB1435;
-        Thu, 16 Dec 2021 08:16:15 -0800 (PST)
-Received: from e122027.arm.com (unknown [10.57.5.127])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 515D83F73B;
-        Thu, 16 Dec 2021 08:16:14 -0800 (PST)
-From:   Steven Price <steven.price@arm.com>
-To:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-        Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Steven Price <steven.price@arm.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH] drm/panfrost: Avoid user size passed to kvmalloc()
-Date:   Thu, 16 Dec 2021 16:16:03 +0000
-Message-Id: <20211216161603.983711-1-steven.price@arm.com>
-X-Mailer: git-send-email 2.25.1
+        id S239302AbhLPQQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:16:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54002 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239275AbhLPQQW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 11:16:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639671381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DTFADvxW6K+uploxHCYf16/vP1e4p++hJtQZL543b5Q=;
+        b=IOL0JMB7EfoY6nzytB4/GdaGzHRaB4zVTlIZzYnvgs0v4y1Hp57VYlFmH30vwJwfTSgHkY
+        5TYR7H25Oeb/4QBfAGIoY06u/GduvtthIK8efrYQwnrEuwPSfuUQm3nE5DD1F3EHlNq7vI
+        Mt5d9JCoMa3bFh8KZrwdjhampSZ6CAU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-PbNwcjW-MKqqPH9Ujk3EHw-1; Thu, 16 Dec 2021 11:16:18 -0500
+X-MC-Unique: PbNwcjW-MKqqPH9Ujk3EHw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 25CD2100CC89;
+        Thu, 16 Dec 2021 16:16:16 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CA0F55ED42;
+        Thu, 16 Dec 2021 16:16:12 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v3 34/68] cachefiles: Add cache error reporting macro
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 16 Dec 2021 16:16:11 +0000
+Message-ID: <163967137158.1823006.2065038830569321335.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
+References: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-panfrost_copy_in_sync() takes the number of fences from user space
-(in_sync_count) and used to kvmalloc() an array to hold that number of
-fences before processing them. This provides an easy method for user
-space to trigger the OOM killer (by temporarily allocating large amounts
-of kernel memory) or hit the WARN_ONCE() added by 7661809d493b ("mm:
-don't allow oversized kvmalloc() calls").
+Add a macro to report a cache I/O error and to tell fscache that the cache
+is in trouble.
 
-Since we don't expect there to be a large number of fences we can
-instead iterate over the fences one-by-one and avoid the temporary
-allocation altogether. This also makes the code simpler.
+Also add a pointer to the fscache cache cookie from the cachefiles_cache
+struct as we need that to pass to fscache_io_error().
 
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Steven Price <steven.price@arm.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/163819626562.215744.1503690975344731661.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/163906927235.143852.13694625647880837563.stgit@warthog.procyon.org.uk/ # v2
 ---
- drivers/gpu/drm/panfrost/panfrost_drv.c | 44 ++++++++-----------------
- 1 file changed, 14 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-index 96bb5a465627..12ab55e5782c 100644
---- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-@@ -186,47 +186,31 @@ panfrost_copy_in_sync(struct drm_device *dev,
- 		  struct drm_panfrost_submit *args,
- 		  struct panfrost_job *job)
- {
--	u32 *handles;
--	int ret = 0;
--	int i, in_fence_count;
--
--	in_fence_count = args->in_sync_count;
--
--	if (!in_fence_count)
--		return 0;
--
--	handles = kvmalloc_array(in_fence_count, sizeof(u32), GFP_KERNEL);
--	if (!handles) {
--		ret = -ENOMEM;
--		DRM_DEBUG("Failed to allocate incoming syncobj handles\n");
--		goto fail;
--	}
-+	int i;
-+	u32 __user *user_handles = u64_to_user_ptr(args->in_syncs);
- 
--	if (copy_from_user(handles,
--			   (void __user *)(uintptr_t)args->in_syncs,
--			   in_fence_count * sizeof(u32))) {
--		ret = -EFAULT;
--		DRM_DEBUG("Failed to copy in syncobj handles\n");
--		goto fail;
--	}
--
--	for (i = 0; i < in_fence_count; i++) {
-+	for (i = 0; i < args->in_sync_count; i++) {
- 		struct dma_fence *fence;
-+		u32 handle;
-+		int ret;
-+
-+		ret = copy_from_user(&handle, user_handles + i,
-+				     sizeof(handle));
-+		if (ret)
-+			return -EFAULT;
- 
--		ret = drm_syncobj_find_fence(file_priv, handles[i], 0, 0,
-+		ret = drm_syncobj_find_fence(file_priv, handle, 0, 0,
- 					     &fence);
- 		if (ret)
--			goto fail;
-+			return ret;
- 
- 		ret = drm_sched_job_add_dependency(&job->base, fence);
- 
- 		if (ret)
--			goto fail;
-+			return ret;
- 	}
- 
--fail:
--	kvfree(handles);
--	return ret;
-+	return 0;
+ fs/cachefiles/internal.h |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
+index b51146a29aca..b2adcb59b4ce 100644
+--- a/fs/cachefiles/internal.h
++++ b/fs/cachefiles/internal.h
+@@ -30,6 +30,7 @@ struct cachefiles_object {
+  * Cache files cache definition
+  */
+ struct cachefiles_cache {
++	struct fscache_cache		*cache;		/* Cache cookie */
+ 	struct vfsmount			*mnt;		/* mountpoint holding the cache */
+ 	struct file			*cachefilesd;	/* manager daemon handle */
+ 	const struct cred		*cache_cred;	/* security override for accessing cache */
+@@ -103,6 +104,16 @@ static inline int cachefiles_inject_remove_error(void)
+ 	return cachefiles_error_injection_state & 2 ? -EIO : 0;
  }
  
- static int panfrost_ioctl_submit(struct drm_device *dev, void *data,
--- 
-2.30.2
++/*
++ * Error handling
++ */
++#define cachefiles_io_error(___cache, FMT, ...)		\
++do {							\
++	pr_err("I/O Error: " FMT"\n", ##__VA_ARGS__);	\
++	fscache_io_error((___cache)->cache);		\
++	set_bit(CACHEFILES_DEAD, &(___cache)->flags);	\
++} while (0)
++
+ 
+ /*
+  * Debug tracing
+
 

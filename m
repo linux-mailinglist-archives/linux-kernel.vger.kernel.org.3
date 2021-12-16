@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB62477E1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C06477E1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241541AbhLPVG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:06:27 -0500
-Received: from mga01.intel.com ([192.55.52.88]:63243 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231656AbhLPVG0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:06:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639688786; x=1671224786;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qFbQSudabPxmnP54k4ksYMpla7q7UpjMq/8TvBCKsxk=;
-  b=SMOb6PAhMNWbMKtKPDilWDFwAJN6aR8BWX8mAKJZFozUWcVE/8Wkb1pz
-   2G0ewlZ+JpPTeaGqmY4lajQLkXNPAF+L5Wk1F6bN76bi33eeHYD6c+y8a
-   WujceDtlHvbq64DkGTuSbEiF43FdE6BWBl8bGvlue0bOWHl9hpdweOGqi
-   LZ9n2JvuCZfXQaKltTA4JzsVI+551aHHXK9KOOB23YxuwOWBP/LGmP5z3
-   G5S2KXw6sN3TfhFwTLbsnelGQ7a7IOahBAjiBDhAg0GoUvcQczXUncQdw
-   Wd/hvGf0nDlW3B18Zv2G1tQcMh6UEUT3PKhLmhiz06/UpPjKCBHPBP4Jx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="263769295"
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="263769295"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 13:06:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="568699916"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Dec 2021 13:06:22 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxxxG-0003om-4s; Thu, 16 Dec 2021 21:06:22 +0000
-Date:   Fri, 17 Dec 2021 05:05:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: Re: [PATCH 2/2] mm: reimplement si_mem_available()
-Message-ID: <202112170401.UyUM1wQ5-lkp@intel.com>
-References: <20211216124655.32247-3-zhengqi.arch@bytedance.com>
+        id S241558AbhLPVHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231656AbhLPVHU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 16:07:20 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909A2C061574;
+        Thu, 16 Dec 2021 13:07:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=eopyKE4k2XeTajA356L1MfJ+TGRn08rwtoWo6zNEjPA=; b=HmohCdjvgCsB3u/7t72y0Pnuh5
+        BguTcTUmOvDPhuY0wco1NY4bKL+mgJAVOLL2zNu3F9nT4kZQXwCSQxSJmlOSpQkGMUETKAkOI0IR2
+        Eh0Pla1qoz/soS4Sn3GviyJat9zlF8lpAKVj1aCOHsqra+GW5ih5kiVXWz8PW4ywFozArAJHL/710
+        l5ncbZ6akbSjDPxfEhZ3sliwOZXJA5DNtz0xRlkVK2rO45tou4aJJ9lGJ1tWcp/h18fxJHxNmOwG/
+        j/h/p3WSTEvPglsrGYOL5iTMyQYGycYcf7gO8woeub8/mnxcb2zS7v9fWrX6YR04MCjjtVIruJ8xm
+        7ag+AK9A==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxxyA-00Fx34-Sv; Thu, 16 Dec 2021 21:07:18 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/25] iomap/xfs folio patches
+Date:   Thu, 16 Dec 2021 21:06:50 +0000
+Message-Id: <20211216210715.3801857-1-willy@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216124655.32247-3-zhengqi.arch@bytedance.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qi,
+This patchset converts XFS & iomap to use folios, and gets them to a
+state where they can handle multi-page folios.  Applying these patches
+is not yet sufficient to actually start using multi-page folios for
+XFS; more page cache changes are needed.  I don't anticipate needing to
+touch XFS again until we're at the point where we want to convert the
+aops to be type-safe.  It completes an xfstests run with no unexpected
+failures.
 
-Thank you for the patch! Yet something to improve:
+I think everything here has been posted before, but I want to get
+acks/reviews on patch 15 in particular.  I'll send a pull request
+for these patches tomorrow.
 
-[auto build test ERROR on hnaz-mm/master]
-[also build test ERROR on driver-core/driver-core-testing linux/master linus/master v5.16-rc5 next-20211215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+v3:
+ - Rebased to -rc5, which removes the first four patches from v2.
+ - Fixed passing lengths > PAGE_SIZE to iomap_write_begin().
+v2:
+ - Added review tags from Jens, Darrick & Christoph (thanks!)
+ - Added folio_zero_* wrappers around zero_user_*()
+ - Added a patch to rename AS_THP_SUPPORT
+ - Added a patch to convert __block_write_begin_int() to take a folio
+ - Split the iomap_add_to_ioend() patch into three
+ - Updated changelog of bio_add_folio() (Jens)
+ - Adjusted whitespace of bio patches (Christoph, Jens)
+ - Improved changelog of readahead conversion to explain why the put_page()
+   disappeared (Christoph)
+ - Add a patch to zero an entire folio at a time, instead of limiting to
+   a page
+ - Switch pos & end_pos back to being u64 from loff_t
+ - Call block_write_end() and ->page_done with the head page of the folio,
+   as that's what those functions expect.
 
-url:    https://github.com/0day-ci/linux/commits/Qi-Zheng/add-MemAvailable-to-per-node-meminfo/20211216-204828
-base:   https://github.com/hnaz/linux-mm master
-config: arc-randconfig-r043-20211216 (https://download.01.org/0day-ci/archive/20211217/202112170401.UyUM1wQ5-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/7980664f23d619d15a3931fe1ab7d1dbafad7c88
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Qi-Zheng/add-MemAvailable-to-per-node-meminfo/20211216-204828
-        git checkout 7980664f23d619d15a3931fe1ab7d1dbafad7c88
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+Matthew Wilcox (Oracle) (25):
+  block: Add bio_add_folio()
+  block: Add bio_for_each_folio_all()
+  fs/buffer: Convert __block_write_begin_int() to take a folio
+  iomap: Convert to_iomap_page to take a folio
+  iomap: Convert iomap_page_create to take a folio
+  iomap: Convert iomap_page_release to take a folio
+  iomap: Convert iomap_releasepage to use a folio
+  iomap: Add iomap_invalidate_folio
+  iomap: Pass the iomap_page into iomap_set_range_uptodate
+  iomap: Convert bio completions to use folios
+  iomap: Use folio offsets instead of page offsets
+  iomap: Convert iomap_read_inline_data to take a folio
+  iomap: Convert readahead and readpage to use a folio
+  iomap: Convert iomap_page_mkwrite to use a folio
+  iomap: Allow iomap_write_begin() to be called with the full length
+  iomap: Convert __iomap_zero_iter to use a folio
+  iomap: Convert iomap_write_begin() and iomap_write_end() to folios
+  iomap: Convert iomap_write_end_inline to take a folio
+  iomap,xfs: Convert ->discard_page to ->discard_folio
+  iomap: Simplify iomap_writepage_map()
+  iomap: Simplify iomap_do_writepage()
+  iomap: Convert iomap_add_to_ioend() to take a folio
+  iomap: Convert iomap_migrate_page() to use folios
+  iomap: Support large folios in invalidatepage
+  xfs: Support large folios
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+ Documentation/core-api/kernel-api.rst |   1 +
+ block/bio.c                           |  22 ++
+ fs/buffer.c                           |  23 +-
+ fs/internal.h                         |   2 +-
+ fs/iomap/buffered-io.c                | 518 +++++++++++++-------------
+ fs/xfs/xfs_aops.c                     |  24 +-
+ fs/xfs/xfs_icache.c                   |   2 +
+ include/linux/bio.h                   |  56 ++-
+ include/linux/iomap.h                 |   3 +-
+ 9 files changed, 373 insertions(+), 278 deletions(-)
 
-All errors (new ones prefixed by >>):
+-- 
+2.33.0
 
-   arc-elf-ld: mm/page_alloc.o: in function `si_mem_available':
->> (.text+0x8248): undefined reference to `si_meminfo_node'
->> arc-elf-ld: (.text+0x8248): undefined reference to `si_meminfo_node'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

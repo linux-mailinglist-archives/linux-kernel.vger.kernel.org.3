@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF12A477AB9
+	by mail.lfdr.de (Postfix) with ESMTP id 86081477AB8
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240418AbhLPRfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:35:34 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:54486 "EHLO
+        id S240407AbhLPRfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:35:33 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:54484 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240293AbhLPRfR (ORCPT
+        with ESMTP id S240296AbhLPRfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Dec 2021 12:35:17 -0500
 Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 879EF20B718B;
+        by linux.microsoft.com (Postfix) with ESMTPSA id B923420B718C;
         Thu, 16 Dec 2021 09:35:16 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 879EF20B718B
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B923420B718C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1639676116;
-        bh=cHrPHvRIUAhoaavMDauRURJviUeV54iL+Ecc/W8xVU0=;
+        bh=QKPQGa+eFq628DLx62JwzghSxVlty9vjx2fhMmXJvrA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jHpHA65nlY2I21q7igwyq52gEogsRWARZY9ccIEiDy4z7DXPANrUyuu49iG/mH8N2
-         j7NbB3t8PSIP68Bt0jCgD5oXsoCg76kdhWWdMQ9nJ4JqzCZkzvT5lrlJn52aRLOpSW
-         7vMI7xpLyIk1yCr06EHSrfbFbWLPbbxo5O5CQ0kA=
+        b=e5Q+XQd+24qRxmP24A6jsBwYZPwyhFjCl2e2uPW1V3pjP+whigr9hd9aqnUQtNOGM
+         9CiIP35a25u/oV2u8o8JITw3/IZYtaMoRy2CE6TuVWujHVAlKoStIXrABP5GjHa4kn
+         gDe/tEQPJ18c3/AMz9e3uWIB4z656nV/jYI0Yk7c=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org
 Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         beaub@linux.microsoft.com
-Subject: [PATCH v8 08/12] user_events: Optimize writing events by only copying data once
-Date:   Thu, 16 Dec 2021 09:35:07 -0800
-Message-Id: <20211216173511.10390-9-beaub@linux.microsoft.com>
+Subject: [PATCH v8 09/12] user_events: Add documentation file
+Date:   Thu, 16 Dec 2021 09:35:08 -0800
+Message-Id: <20211216173511.10390-10-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211216173511.10390-1-beaub@linux.microsoft.com>
 References: <20211216173511.10390-1-beaub@linux.microsoft.com>
@@ -37,218 +37,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pass iterator through to probes to allow copying data directly to the
-probe buffers instead of taking multiple copies. Enables eBPF user and
-raw iterator types out to programs for no-copy scenarios.
+Add a documentation file about user_events with example code, etc.
+explaining how it may be used.
 
 Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 ---
- kernel/trace/trace_events_user.c | 113 +++++++++++++++++++++++--------
- 1 file changed, 85 insertions(+), 28 deletions(-)
+ Documentation/trace/index.rst       |   1 +
+ Documentation/trace/user_events.rst | 195 ++++++++++++++++++++++++++++
+ 2 files changed, 196 insertions(+)
+ create mode 100644 Documentation/trace/user_events.rst
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index cc30d1fcbb63..fa3e26281fc3 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -41,6 +41,9 @@
- #define MAX_FIELD_ARRAY_SIZE 1024
- #define MAX_FIELD_ARG_NAME 256
- 
-+#define MAX_BPF_COPY_SIZE PAGE_SIZE
-+#define MAX_STACK_BPF_DATA 512
+diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
+index 3769b9b7aed8..3a47aa8341c6 100644
+--- a/Documentation/trace/index.rst
++++ b/Documentation/trace/index.rst
+@@ -30,3 +30,4 @@ Linux Tracing Technologies
+    stm
+    sys-t
+    coresight/index
++   user_events
+diff --git a/Documentation/trace/user_events.rst b/Documentation/trace/user_events.rst
+new file mode 100644
+index 000000000000..36104b537476
+--- /dev/null
++++ b/Documentation/trace/user_events.rst
+@@ -0,0 +1,195 @@
++=========================================
++user_events: User-based Event Tracing
++=========================================
 +
- static char *register_page_data;
- 
- static DEFINE_MUTEX(reg_mutex);
-@@ -78,8 +81,7 @@ struct user_event_refs {
- 	struct user_event *events[];
- };
- 
--typedef void (*user_event_func_t) (struct user_event *user,
--				   void *data, u32 datalen,
-+typedef void (*user_event_func_t) (struct user_event *user, struct iov_iter *i,
- 				   void *tpdata);
- 
- static int user_event_parse(char *name, char *args, char *flags,
-@@ -90,6 +92,20 @@ static u32 user_event_key(char *name)
- 	return jhash(name, strlen(name), 0);
- }
- 
-+static __always_inline __must_check
-+size_t copy_nofault(void *addr, size_t bytes, struct iov_iter *i)
-+{
-+	size_t ret;
++:Author: Beau Belgrave
 +
-+	pagefault_disable();
++Overview
++--------
++User based trace events allow user processes to create events and trace data
++that can be viewed via existing tools, such as ftrace, perf and eBPF.
++To enable this feature, build your kernel with CONFIG_USER_EVENTS=y.
 +
-+	ret = copy_from_iter_nocache(addr, bytes, i);
++Programs can view status of the events via
++/sys/kernel/debug/tracing/user_events_status and can both register and write
++data out via /sys/kernel/debug/tracing/user_events_data.
 +
-+	pagefault_enable();
++Programs can also use /sys/kernel/debug/tracing/dynamic_events to register and
++delete user based events via the u: prefix. The format of the command to
++dynamic_events is the same as the ioctl with the u: prefix applied.
 +
-+	return ret;
-+}
++Typically programs will register a set of events that they wish to expose to
++tools that can read trace_events (such as ftrace and perf). The registration
++process gives back two ints to the program for each event. The first int is the
++status index. This index describes which byte in the
++/sys/kernel/debug/tracing/user_events_status file represents this event. The
++second int is the write index. This index describes the data when a write() or
++writev() is called on the /sys/kernel/debug/tracing/user_events_data file.
 +
- static struct list_head *user_event_get_fields(struct trace_event_call *call)
- {
- 	struct user_event *user = (struct user_event *)call->data;
-@@ -524,7 +540,7 @@ static struct user_event *find_user_event(char *name, u32 *outkey)
- /*
-  * Writes the user supplied payload out to a trace file.
-  */
--static void user_event_ftrace(struct user_event *user, void *data, u32 datalen,
-+static void user_event_ftrace(struct user_event *user, struct iov_iter *i,
- 			      void *tpdata)
- {
- 	struct trace_event_file *file;
-@@ -540,41 +556,85 @@ static void user_event_ftrace(struct user_event *user, void *data, u32 datalen,
- 
- 	/* Allocates and fills trace_entry, + 1 of this is data payload */
- 	entry = trace_event_buffer_reserve(&event_buffer, file,
--					   sizeof(*entry) + datalen);
-+					   sizeof(*entry) + i->count);
- 
- 	if (unlikely(!entry))
- 		return;
- 
--	memcpy(entry + 1, data, datalen);
-+	if (unlikely(!copy_nofault(entry + 1, i->count, i))) {
-+		__trace_event_discard_commit(event_buffer.buffer,
-+					     event_buffer.event);
-+		return;
-+	}
- 
- 	trace_event_buffer_commit(&event_buffer);
- }
- 
- #ifdef CONFIG_PERF_EVENTS
-+static void user_event_bpf(struct user_event *user, struct iov_iter *i)
-+{
-+	struct user_bpf_context context;
-+	struct user_bpf_iter bpf_i;
-+	char fast_data[MAX_STACK_BPF_DATA];
-+	void *temp = NULL;
++The structures referenced in this document are contained with the
++/include/uap/linux/user_events.h file in the source tree.
 +
-+	if ((user->flags & FLAG_BPF_ITER) && iter_is_iovec(i)) {
-+		/* Raw iterator */
-+		context.data_type = USER_BPF_DATA_ITER;
-+		context.data_len = i->count;
-+		context.iter = &bpf_i;
++**NOTE:** *Both user_events_status and user_events_data are under the tracefs
++filesystem and may be mounted at different paths than above.*
 +
-+		bpf_i.iov_offset = i->iov_offset;
-+		bpf_i.iov = i->iov;
-+		bpf_i.nr_segs = i->nr_segs;
-+	} else if (i->nr_segs == 1 && iter_is_iovec(i)) {
-+		/* Single buffer from user */
-+		context.data_type = USER_BPF_DATA_USER;
-+		context.data_len = i->count;
-+		context.udata = i->iov->iov_base + i->iov_offset;
-+	} else {
-+		/* Multi buffer from user */
-+		struct iov_iter copy = *i;
-+		size_t copy_size = min_t(size_t, i->count, MAX_BPF_COPY_SIZE);
++Registering
++-----------
++Registering within a user process is done via ioctl() out to the
++/sys/kernel/debug/tracing/user_events_data file. The command to issue is
++DIAG_IOCSREG. This command takes a struct user_reg as an argument.
 +
-+		context.data_type = USER_BPF_DATA_KERNEL;
-+		context.kdata = fast_data;
++The struct user_reg requires two values, the first is the size of the structure
++to ensure forward and backward compatibility. The second is the command string
++to issue for registering.
 +
-+		if (unlikely(copy_size > sizeof(fast_data))) {
-+			temp = kmalloc(copy_size, GFP_NOWAIT);
++User based events show up under tracefs like any other event under the
++subsystem named "user_events". This means tools that wish to attach to the
++events need to use /sys/kernel/debug/tracing/events/user_events/[name]/enable
++or perf record -e user_events:[name] when attaching/recording.
 +
-+			if (temp)
-+				context.kdata = temp;
-+			else
-+				copy_size = sizeof(fast_data);
-+		}
++**NOTE:** *The write_index returned is only valid for the FD that was used*
 +
-+		context.data_len = copy_nofault(context.kdata,
-+						copy_size, &copy);
-+	}
++Command Format
++^^^^^^^^^^^^^^
++The command string format is as follows::
 +
-+	trace_call_bpf(&user->call, &context);
++  name[:FLAG1[,FLAG2...]] [Field1[;Field2...]]
 +
-+	kfree(temp);
-+}
++Supported Flags
++^^^^^^^^^^^^^^^
++**BPF_ITER** - EBPF programs attached to this event will get the raw iovec
++struct instead of any data copies for max performance.
 +
- /*
-  * Writes the user supplied payload out to perf ring buffer or eBPF program.
-  */
--static void user_event_perf(struct user_event *user, void *data, u32 datalen,
-+static void user_event_perf(struct user_event *user, struct iov_iter *i,
- 			    void *tpdata)
- {
- 	struct hlist_head *perf_head;
- 
--	if (bpf_prog_array_valid(&user->call)) {
--		struct user_bpf_context context = {0};
--
--		context.data_len = datalen;
--		context.data_type = USER_BPF_DATA_KERNEL;
--		context.kdata = data;
--
--		trace_call_bpf(&user->call, &context);
--	}
-+	if (bpf_prog_array_valid(&user->call))
-+		user_event_bpf(user, i);
- 
- 	perf_head = this_cpu_ptr(user->call.perf_events);
- 
- 	if (perf_head && !hlist_empty(perf_head)) {
- 		struct trace_entry *perf_entry;
- 		struct pt_regs *regs;
--		size_t size = sizeof(*perf_entry) + datalen;
-+		size_t size = sizeof(*perf_entry) + i->count;
- 		int context;
- 
- 		perf_entry = perf_trace_buf_alloc(ALIGN(size, 8),
-@@ -585,7 +645,10 @@ static void user_event_perf(struct user_event *user, void *data, u32 datalen,
- 
- 		perf_fetch_caller_regs(regs);
- 
--		memcpy(perf_entry + 1, data, datalen);
-+		if (unlikely(!copy_nofault(perf_entry + 1, i->count, i))) {
-+			perf_swevent_put_recursion_context(context);
-+			return;
-+		}
- 
- 		perf_trace_buf_submit(perf_entry, size, context,
- 				      user->call.event.type, 1, regs,
-@@ -1018,16 +1081,11 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
- 	if (likely(atomic_read(&tp->key.enabled) > 0)) {
- 		struct tracepoint_func *probe_func_ptr;
- 		user_event_func_t probe_func;
-+		struct iov_iter copy;
- 		void *tpdata;
--		void *kdata;
--		u32 datalen;
--
--		kdata = kmalloc(i->count, GFP_KERNEL);
- 
--		if (unlikely(!kdata))
--			return -ENOMEM;
--
--		datalen = copy_from_iter(kdata, i->count, i);
-+		if (unlikely(iov_iter_fault_in_readable(i, i->count)))
-+			return -EFAULT;
- 
- 		rcu_read_lock_sched();
- 
-@@ -1035,15 +1093,14 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
- 
- 		if (probe_func_ptr) {
- 			do {
-+				copy = *i;
- 				probe_func = probe_func_ptr->func;
- 				tpdata = probe_func_ptr->data;
--				probe_func(user, kdata, datalen, tpdata);
-+				probe_func(user, &copy, tpdata);
- 			} while ((++probe_func_ptr)->func);
- 		}
- 
- 		rcu_read_unlock_sched();
--
--		kfree(kdata);
- 	}
- 
- 	return ret;
++Field Format
++^^^^^^^^^^^^
++::
++
++  type name [size]
++
++Basic types are supported (__data_loc, u32, u64, int, char, char[20], etc).
++User programs are encouraged to use clearly sized types like u32.
++
++**NOTE:** *Long is not supported since size can vary between user and kernel.*
++
++The size is only valid for types that start with a struct prefix.
++This allows user programs to describe custom structs out to tools, if required.
++
++For example, a struct in C that looks like this::
++
++  struct mytype {
++    char data[20];
++  };
++
++Would be represented by the following field::
++
++  struct mytype myname 20
++
++Status
++------
++When tools attach/record user based events the status of the event is updated
++in realtime. This allows user programs to only incur the cost of the write() or
++writev() calls when something is actively attached to the event.
++
++User programs call mmap() on /sys/kernel/debug/tracing/user_events_status to
++check the status for each event that is registered. The byte to check in the
++file is given back after the register ioctl() via user_reg.status_index.
++Currently the size of user_events_status is a single page, however, custom
++kernel configurations can change this size to allow more user based events. In
++all cases the size of the file is a multiple of a page size.
++
++For example, if the register ioctl() gives back a status_index of 3 you would
++check byte 3 of the returned mmap data to see if anything is attached to that
++event.
++
++Administrators can easily check the status of all registered events by reading
++the user_events_status file directly via a terminal. The output is as follows::
++
++  Byte:Name [# Comments]
++  ...
++
++  Active: ActiveCount
++  Busy: BusyCount
++  Max: MaxCount
++
++For example, on a system that has a single event the output looks like this::
++
++  1:test
++
++  Active: 1
++  Busy: 0
++  Max: 4096
++
++If a user enables the user event via ftrace, the output would change to this::
++
++  1:test # Used by ftrace
++
++  Active: 1
++  Busy: 1
++  Max: 4096
++
++**NOTE:** *A status index of 0 will never be returned. This allows user
++programs to have an index that can be used on error cases.*
++
++Status Bits
++^^^^^^^^^^^
++The byte being checked will be non-zero if anything is attached. Programs can
++check specific bits in the byte to see what mechanism has been attached.
++
++The following values are defined to aid in checking what has been attached:
++
++**EVENT_STATUS_FTRACE** - Bit set if ftrace has been attached (Bit 0).
++
++**EVENT_STATUS_PERF** - Bit set if perf/eBPF has been attached (Bit 1).
++
++Writing Data
++------------
++After registering an event the same fd that was used to register can be used
++to write an entry for that event. The write_index returned must be at the start
++of the data, then the remaining data is treated as the payload of the event.
++
++For example, if write_index returned was 1 and I wanted to write out an int
++payload of the event. Then the data would have to be 8 bytes (2 ints) in size,
++with the first 4 bytes being equal to 1 and the last 4 bytes being equal to the
++value I want as the payload.
++
++In memory this would look like this::
++
++  int index;
++  int payload;
++
++User programs might have well known structs that they wish to use to emit out
++as payloads. In those cases writev() can be used, with the first vector being
++the index and the following vector(s) being the actual event payload.
++
++For example, if I have a struct like this::
++
++  struct payload {
++        int src;
++        int dst;
++        int flags;
++  };
++
++It's advised for user programs to do the following::
++
++  struct iovec io[2];
++  struct payload e;
++
++  io[0].iov_base = &write_index;
++  io[0].iov_len = sizeof(write_index);
++  io[1].iov_base = &e;
++  io[1].iov_len = sizeof(e);
++
++  writev(fd, (const struct iovec*)io, 2);
++
++**NOTE:** *The write_index is not emitted out into the trace being recorded.*
++
++EBPF
++----
++EBPF programs that attach to a user-based event tracepoint are given a pointer
++to a struct user_bpf_context. The bpf context contains the data type (which can
++be a user or kernel buffer, or can be a pointer to the iovec) and the data
++length that was emitted (minus the write_index).
++
++Example Code
++------------
++See sample code in samples/user_events.
 -- 
 2.17.1
 

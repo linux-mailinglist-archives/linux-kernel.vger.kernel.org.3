@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D57477F26
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 883E3477F23
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242196AbhLPVlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:41:24 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:57088 "EHLO
+        id S242182AbhLPVlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:41:23 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:57092 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236876AbhLPVkh (ORCPT
+        with ESMTP id S241854AbhLPVkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Dec 2021 16:40:37 -0500
-Date:   Thu, 16 Dec 2021 21:40:34 -0000
+Date:   Thu, 16 Dec 2021 21:40:35 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690835;
+        s=2020; t=1639690836;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eYyMpkEIDe2+ctgRgNJ9cRRAZ1ABsgBY8um3aUdhmHo=;
-        b=y5zLbTfyog6MCYmSFMVl2cxlYuVf/zNPBXrKahHCesNok7r/fK9DlYSDPHIHSRFHXxk6Fq
-        kFvQkbvK7iay1X6s0Y7mAougS12WZQ6SC5vqIGcvOqKfT3B68yaRXhNGc+S+cR0weZ/JNF
-        BMSHjIm4NfT2AqAQOxE5ShGlG7sbu6Jz1yHdH0iPYPfc7+dy1dkKendZOfviNCGAgh45ZY
-        Iu+nFPC9Nvyb+FXh1oTw88J7dCE3dVJlb5ufJ/YxwC31vC1NuAfXMfTaw2bEHA1nQYgwCP
-        03nQ9BH5kH3HU2PXJxtrIy+VezbV03CRhlrlPc+ZkSE+baUQB2iv6OuFfsmnPg==
+        bh=R45C5Oa2oE6RvYKauLv9BzOpyPrMnp/kM02JT3mXhbc=;
+        b=VVe0k8IKjwP5+uxnMyIh3L0YSq6g0iuTo1ufxHPavCuZ1T5Nt7plX52pVu//a01zGcSjLx
+        eNjIwlzi79p3cbYcd8vsHlYYeft3q0Dvy50XW50B59NTjf1gTY21JDyVaLokcJk88Tuxff
+        brok9v865bOFDGzNjzntTKH33FM3qMACbq5rpTQOlwqZfDi6biq55WoU3t9At+W0l3zD0I
+        w6N+JTBFKbC5yIke/c7FkM/VzrWEsrLvD4rHnJfBroyhcAxT/eElKbmuVBd0NYzER9mJYm
+        IQMZc8A0dJ1j5ZhdHAGunbsEA2C3gmTRSFBF+UIx32aKXQTXVu2rDe9b/72ytA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690835;
+        s=2020e; t=1639690836;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eYyMpkEIDe2+ctgRgNJ9cRRAZ1ABsgBY8um3aUdhmHo=;
-        b=Yp3eoeWbdF1opmKCKs7eb2GpSYDUFdfomKhlWGf7au+Zy4iNa/EcXYIwgWPpHfziJmn1dX
-        vhdtRBxu/0nmK2Dw==
+        bh=R45C5Oa2oE6RvYKauLv9BzOpyPrMnp/kM02JT3mXhbc=;
+        b=4tm+u2zkvGkILflf4KTz2W8TFUIjBZ08awuxw4vEna0h0fbia3/yt+NoErZR9PPztvVqdI
+        aBs5/hpRcEoNmvBg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] s390/pci: Rework MSI descriptor walk
+Subject: [tip: irq/msi] xen/pcifront: Rework MSI handling
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
         Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211206210748.305656158@linutronix.de>
-References: <20211206210748.305656158@linutronix.de>
+In-Reply-To: <20211206210748.251752714@linutronix.de>
+References: <20211206210748.251752714@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969083456.23020.12131963221718612050.tip-bot2@tip-bot2>
+Message-ID: <163969083546.23020.14543072738697106683.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,48 +58,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     2ca5e908d0f4cde61d9d3595e8314adca5d914a1
-Gitweb:        https://git.kernel.org/tip/2ca5e908d0f4cde61d9d3595e8314adca5d914a1
+Commit-ID:     3d31bbd39aa5c7467a34e8202a983e81b696a883
+Gitweb:        https://git.kernel.org/tip/3d31bbd39aa5c7467a34e8202a983e81b696a883
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 06 Dec 2021 23:51:23 +01:00
+AuthorDate:    Mon, 06 Dec 2021 23:51:21 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 16 Dec 2021 22:22:18 +01:00
 
-s390/pci: Rework MSI descriptor walk
+xen/pcifront: Rework MSI handling
 
-Replace the about to vanish iterators and make use of the filtering.
+Replace the about to vanish iterators.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Acked-by: Niklas Schnelle <schnelle@linux.ibm.com>
-Link: https://lore.kernel.org/r/20211206210748.305656158@linutronix.de
+Link: https://lore.kernel.org/r/20211206210748.251752714@linutronix.de
 
 ---
- arch/s390/pci/pci_irq.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/pci/xen-pcifront.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/s390/pci/pci_irq.c b/arch/s390/pci/pci_irq.c
-index 2beb8a0..0975ff3 100644
---- a/arch/s390/pci/pci_irq.c
-+++ b/arch/s390/pci/pci_irq.c
-@@ -303,7 +303,7 @@ int arch_setup_msi_irqs(struct pci_dev *pdev, int nvec, int type)
+diff --git a/drivers/pci/xen-pcifront.c b/drivers/pci/xen-pcifront.c
+index bacf511..d2a7b9f 100644
+--- a/drivers/pci/xen-pcifront.c
++++ b/drivers/pci/xen-pcifront.c
+@@ -262,7 +262,7 @@ static int pci_frontend_enable_msix(struct pci_dev *dev,
+ 	}
  
- 	/* Request MSI interrupts */
- 	hwirq = bit;
--	for_each_pci_msi_entry(msi, pdev) {
-+	msi_for_each_desc(msi, &pdev->dev, MSI_DESC_NOTASSOCIATED) {
- 		rc = -EIO;
- 		if (hwirq - bit >= msi_vecs)
- 			break;
-@@ -362,9 +362,7 @@ void arch_teardown_msi_irqs(struct pci_dev *pdev)
- 		return;
- 
- 	/* Release MSI interrupts */
--	for_each_pci_msi_entry(msi, pdev) {
--		if (!msi->irq)
--			continue;
-+	msi_for_each_desc(msi, &pdev->dev, MSI_DESC_ASSOCIATED) {
- 		irq_set_msi_desc(msi->irq, NULL);
- 		irq_free_desc(msi->irq);
- 		msi->msg.address_lo = 0;
+ 	i = 0;
+-	for_each_pci_msi_entry(entry, dev) {
++	msi_for_each_desc(entry, &dev->dev, MSI_DESC_NOTASSOCIATED) {
+ 		op.msix_entries[i].entry = entry->msi_index;
+ 		/* Vector is useless at this point. */
+ 		op.msix_entries[i].vector = -1;

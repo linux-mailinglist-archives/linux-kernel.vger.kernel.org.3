@@ -2,575 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F81477B2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FEE477B2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbhLPR7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:59:49 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:42675 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbhLPR7s (ORCPT
+        id S240533AbhLPSAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240154AbhLPSAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:59:48 -0500
-Received: by mail-ot1-f51.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so29856756otv.9;
-        Thu, 16 Dec 2021 09:59:47 -0800 (PST)
+        Thu, 16 Dec 2021 13:00:12 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1788FC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:00:12 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id v16so7992981pjn.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:00:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1fPT1fxMD4M41ep+YbnYY0HQb7OLtTBScUVmQTagGoI=;
+        b=U/D1E2Z3OM+/yCH/xNkD7RSmGqCThzwjuSxJMQkJAUs1geWML30QUUPboI/6qyyNVR
+         JIeYzCHvZOLMLZfHy1RCHOt20aJwNHIha8E3K0dLd7CRmy7MuHvSgfQq3Krv4K+gGOG+
+         as6GPVCzvEA9Nt2CM4OmBDGSKJpu9cDq3+4nE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t9QRDWJp98igMU75XMiyRusCUGK6PuqRldDJLFIjNEE=;
-        b=p9qCHIBFAKojHue5zHetae/i63j9wnwBqTjbQvP+D1H43c1+3c8fHi/BJrf71uEkK+
-         McsY4SOpnaC9gcVzYluXVTeaN6mT1hRGQRTnyHCzRUru8VUlWoT8r3WX2TXsfZpB2mTB
-         vnxWCZuZ2SEmF0/1pvtI4l5M2RllZxHTnNkvTYPdsOgfMqxTCYNOQ5OdJr2V/UNKGxf6
-         waQpzKkKEUh0/T1wmwQz1TxpMXFJXbeyTtCW6KVfatzYAeXVctuFqi9O6pZgkMuiTaZh
-         LJ2W2D2skBYetfvZk4cSxcr/0VUsMqyribmlPeW6f2S+GNE8YDvICPNyC63AufJBduC9
-         y+yw==
-X-Gm-Message-State: AOAM531V6SCOpDlxf+Cf0K6/S/ekxW9r2gJ+JBYRuj54PZ6Co8T6pqLM
-        9ouzLALGX2ynvAwYTce3qxkZ4d8+UADvxxg6yus=
-X-Google-Smtp-Source: ABdhPJzOeh+0tghsZ/dD3BT8BtzG8aDx1luyLNNkCwe3NlD7QjPWL9O04sBxn1lCjjPNZdAfi5gdgFVxeIaVQ9Id+ok=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr13831793otu.254.1639677586726;
- Thu, 16 Dec 2021 09:59:46 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1fPT1fxMD4M41ep+YbnYY0HQb7OLtTBScUVmQTagGoI=;
+        b=GIqgBlqL5N1AXAUNQJuC6uggwMO0xFLWEzw9Zmjdl97CN9ZTpRW37jdXth7c4gkqos
+         SYmK/dK+NoU9mMPLBW2vsIHZN5GxhmdHDFp8MGKaAEZ8sxO+YssYf+I9hHXC37+/Jmpm
+         /MZUBeU6IdebSq7NWp1ENnFBOaOqOSVsEhGP3yIWYAwmQDGYIumIT9Lua56RuWw3n90h
+         Eu5n+l6MhWGvYFQWiLGubZqpYfLJaTW2zA84a30PWLsYlnahIMnlQI16XALZcZwWbEor
+         3stPnNugPZ2qL1MRcoMIKbZDXbGtSvFUGEmt3xpMkE4qcwVgieqOwkF2vH4zlzZZo1CP
+         +W2g==
+X-Gm-Message-State: AOAM531tXlkJDBP3DDIaMhrMnVPAL0Zv3aUZSYq40V4FjMm/fgu0GFsm
+        J1tLcOke5jZiwDN6R2D+uhgqP4wXLwgD3g==
+X-Google-Smtp-Source: ABdhPJw7nwSjZ+xcHGQtrWqYIbiv59UD24ERoOUO8c+Ozl5SJ7AJDXHx+hQFrQfOIPGG/kpIjbWrvA==
+X-Received: by 2002:a17:902:9a8a:b0:148:d8aa:16ae with SMTP id w10-20020a1709029a8a00b00148d8aa16aemr208554plp.139.1639677611298;
+        Thu, 16 Dec 2021 10:00:11 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w7sm5956977pgo.56.2021.12.16.10.00.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 10:00:10 -0800 (PST)
+Date:   Thu, 16 Dec 2021 10:00:09 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/17] fortify: Detect struct member overflows in
+ memcpy() at compile-time
+Message-ID: <202112160942.01254B408@keescook>
+References: <20211213223331.135412-1-keescook@chromium.org>
+ <20211213223331.135412-7-keescook@chromium.org>
+ <YbseKuBwHEfvzykO@FVFF77S0Q05N>
 MIME-Version: 1.0
-References: <20211130123641.1449041-1-ray.huang@amd.com> <20211130123641.1449041-7-ray.huang@amd.com>
-In-Reply-To: <20211130123641.1449041-7-ray.huang@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 16 Dec 2021 18:59:35 +0100
-Message-ID: <CAJZ5v0gxVTJ8KffVpcLUZ=KPVRwinV6Wdq+-s3RO_cv6bevxXQ@mail.gmail.com>
-Subject: Re: [PATCH v5 06/22] cpufreq: amd: introduce a new amd pstate driver
- to support future processors
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Steven Noonan <steven@valvesoftware.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbseKuBwHEfvzykO@FVFF77S0Q05N>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 1:37 PM Huang Rui <ray.huang@amd.com> wrote:
->
-> amd-pstate is the AMD CPU performance scaling driver that introduces a
-> new CPU frequency control mechanism on AMD Zen based CPU series in Linux
-> kernel. The new mechanism is based on Collaborative processor
-> performance control (CPPC) which is finer grain frequency management
-> than legacy ACPI hardware P-States. Current AMD CPU platforms are using
-> the ACPI P-states driver to manage CPU frequency and clocks with
-> switching only in 3 P-states. AMD P-States is to replace the ACPI
-> P-states controls, allows a flexible, low-latency interface for the
-> Linux kernel to directly communicate the performance hints to hardware.
->
-> "amd-pstate" leverages the Linux kernel governors such as *schedutil*,
-> *ondemand*, etc. to manage the performance hints which are provided by CPPC
-> hardware functionality. The first version for amd-pstate is to support one
-> of the Zen3 processors, and we will support more in future after we verify
-> the hardware and SBIOS functionalities.
->
-> There are two types of hardware implementations for amd-pstate: one is full
-> MSR support and another is shared memory support. It can use
-> X86_FEATURE_CPPC feature flag to distinguish the different types.
->
-> Using the new AMD P-States method + kernel governors (*schedutil*,
-> *ondemand*, ...) to manage the frequency update is the most appropriate
-> bridge between AMD Zen based hardware processor and Linux kernel, the
-> processor is able to adjust to the most efficiency frequency according to
-> the kernel scheduler loading.
->
-> Please check the detailed CPU feature and MSR register description in
-> Processor Programming Reference (PPR) for AMD Family 19h Model 51h,
-> Revision A1 Processors:
->
-> https://www.amd.com/system/files/TechDocs/56569-A1-PUB.zip
->
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
-> ---
->  drivers/cpufreq/Kconfig.x86  |  17 ++
->  drivers/cpufreq/Makefile     |   1 +
->  drivers/cpufreq/amd-pstate.c | 398 +++++++++++++++++++++++++++++++++++
->  3 files changed, 416 insertions(+)
->  create mode 100644 drivers/cpufreq/amd-pstate.c
->
-> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-> index 92701a18bdd9..21837eb1698b 100644
-> --- a/drivers/cpufreq/Kconfig.x86
-> +++ b/drivers/cpufreq/Kconfig.x86
-> @@ -34,6 +34,23 @@ config X86_PCC_CPUFREQ
->
->           If in doubt, say N.
->
-> +config X86_AMD_PSTATE
-> +       tristate "AMD Processor P-State driver"
-> +       depends on X86
-> +       select ACPI_PROCESSOR if ACPI
-> +       select ACPI_CPPC_LIB if X86_64 && ACPI
-> +       select CPU_FREQ_GOV_SCHEDUTIL if SMP
-> +       help
-> +         This driver adds a CPUFreq driver which utilizes a fine grain
-> +         processor performance frequency control range instead of legacy
-> +         performance levels. This driver supports the AMD processors with
-> +         _CPC object in the SBIOS.
+On Thu, Dec 16, 2021 at 11:08:26AM +0000, Mark Rutland wrote:
+> On Mon, Dec 13, 2021 at 02:33:20PM -0800, Kees Cook wrote:
+> > memcpy() is dead; long live memcpy()
+> > 
+> > tl;dr: In order to eliminate a large class of common buffer overflow
+> > flaws that continue to persist in the kernel, have memcpy() (under
+> > CONFIG_FORTIFY_SOURCE) perform bounds checking of the destination struct
+> > member when they have a known size. This would have caught all of the
+> > memcpy()-related buffer write overflow flaws identified in at least the
+> > last three years.
+> > 
+> 
+> Hi Kees,
+> 
+> Since there's a *lot* of context below, it's very easy to miss some key details
+> (e.g. that the compile-time warnings are limited to W=1 builds). It would be
+> really nice if the summary above could say something like:
 
-Well, _CPC needs to be present in the ACPI tables of the system.
+Hm, I do need to write a better summary! I think there's still some
+misunderstanding, and I will attempt some clarity here... :)
 
-> +
-> +         For details, take a look at:
-> +         <file:Documentation/admin-guide/pm/amd-pstate.rst>.
-> +
-> +         If in doubt, say N.
-> +
->  config X86_ACPI_CPUFREQ
->         tristate "ACPI Processor P-States driver"
->         depends on ACPI_PROCESSOR
-> diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-> index 48ee5859030c..c8d307010922 100644
-> --- a/drivers/cpufreq/Makefile
-> +++ b/drivers/cpufreq/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_CPUFREQ_DT_PLATDEV)      += cpufreq-dt-platdev.o
->  # speedstep-* is preferred over p4-clockmod.
->
->  obj-$(CONFIG_X86_ACPI_CPUFREQ)         += acpi-cpufreq.o
-> +obj-$(CONFIG_X86_AMD_PSTATE)           += amd-pstate.o
->  obj-$(CONFIG_X86_POWERNOW_K8)          += powernow-k8.o
->  obj-$(CONFIG_X86_PCC_CPUFREQ)          += pcc-cpufreq.o
->  obj-$(CONFIG_X86_POWERNOW_K6)          += powernow-k6.o
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> new file mode 100644
-> index 000000000000..20ffbc30118f
-> --- /dev/null
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -0,0 +1,398 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * amd-pstate.c - AMD Processor P-state Frequency Driver
-> + *
-> + * Copyright (C) 2021 Advanced Micro Devices, Inc. All Rights Reserved.
-> + *
-> + * Author: Huang Rui <ray.huang@amd.com>
+> 
+>   This patch makes it possible to detect when memcpy() of a struct member may
+>   go past the bounds of that member. When CONFIG_FORTIFY_SOURCE=y, runtime
+>   checks are always emitted where the compiler cannot guarantee a memcpy() is
+>   safely bounded, and compile-time warnings are enabled for W=1 builds.
 
-Given the lack of other documentation, it would be nice to provide at
-least a brief description of the driver here.
+For GCC and Clang 14, compile-time _write_ overflow warnings are meant
+to be emitted under FORTIFY_SOURCE. _read_ overflow warnings are meant
+to be emitted under FORTIFY_SOURCE + W=1 (or when the same statement
+also has a write overflow).
 
-> + */
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/smp.h>
-> +#include <linux/sched.h>
-> +#include <linux/cpufreq.h>
-> +#include <linux/compiler.h>
-> +#include <linux/dmi.h>
-> +#include <linux/slab.h>
-> +#include <linux/acpi.h>
-> +#include <linux/io.h>
-> +#include <linux/delay.h>
-> +#include <linux/uaccess.h>
-> +#include <linux/static_call.h>
-> +
-> +#include <acpi/processor.h>
-> +#include <acpi/cppc_acpi.h>
-> +
-> +#include <asm/msr.h>
-> +#include <asm/processor.h>
-> +#include <asm/cpufeature.h>
-> +#include <asm/cpu_device_id.h>
-> +
-> +#define AMD_PSTATE_TRANSITION_LATENCY  0x20000
-> +#define AMD_PSTATE_TRANSITION_DELAY    500
-> +
-> +static struct cpufreq_driver amd_pstate_driver;
-> +
-> +struct amd_cpudata {
-> +       int     cpu;
-> +
-> +       struct freq_qos_request req[2];
-> +
-> +       u64     cppc_req_cached;
-> +
-> +       u32     highest_perf;
-> +       u32     nominal_perf;
-> +       u32     lowest_nonlinear_perf;
-> +       u32     lowest_perf;
-> +
-> +       u32     max_freq;
-> +       u32     min_freq;
-> +       u32     nominal_freq;
-> +       u32     lowest_nonlinear_freq;
-> +};
+> 
+>   This catches a large class of common buffer overflow flaws, and would have
+>   caught all of the memcpy()-related buffer write overflow flaws identified in
+>   the last three years.
+> 
+> As an aside, since W=1 is chock-full of (IMO useless) warnings, is there any
+> way to enable *just* the FORTIFY_SOURCE warnings?
 
-Please describe the fields of this structure, preferably in a kerneldoc comment.
+To see them all (i.e. not shove some into W=1), you can remove the "W=1
+or write overflow" part of the read overflow test in fortify-string.h.
+e.g.:
 
-> +
-> +static inline int pstate_enable(bool enable)
-> +{
-> +       return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
-> +}
-> +
-> +DEFINE_STATIC_CALL(amd_pstate_enable, pstate_enable);
+-                if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
+-                    q_size_field < size)
++                if (q_size_field < size)
 
-Why do you need a static call here?
+> I had a go at testing this on arm64, and could get build-time warnings from GCC
+> 11.1.0, but not from Clang 13.0.0.
 
-It doesn't get updated anywhere below.
+This is correct and expected due to Clang 13's lack of support for
+compiletime_warning().
 
-> +
-> +static inline int amd_pstate_enable(bool enable)
-> +{
-> +       return static_call(amd_pstate_enable)(enable);
-> +}
-> +
-> +static int pstate_init_perf(struct amd_cpudata *cpudata)
-> +{
-> +       u64 cap1;
-> +
-> +       int ret = rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
-> +                                    &cap1);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /*
-> +        * TODO: Introduce AMD specific power feature.
-> +        *
-> +        * CPPC entry doesn't indicate the highest performance in some ASICs.
-> +        */
-> +       WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
-> +
-> +       WRITE_ONCE(cpudata->nominal_perf, CAP1_NOMINAL_PERF(cap1));
-> +       WRITE_ONCE(cpudata->lowest_nonlinear_perf, CAP1_LOWNONLIN_PERF(cap1));
-> +       WRITE_ONCE(cpudata->lowest_perf, CAP1_LOWEST_PERF(cap1));
-> +
-> +       return 0;
-> +}
-> +
-> +DEFINE_STATIC_CALL(amd_pstate_init_perf, pstate_init_perf);
+> No relevant warnings, but code was generated for runtime warnings:
+> 
+> | 0000000000000000 <foo_copy>:
+> |    0:   d503233f        paciasp
+> |    4:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
+> |    8:   910003fd        mov     x29, sp
+> |    c:   52800080        mov     w0, #0x4                        // #4
+> |   10:   52800101        mov     w1, #0x8                        // #8
+> |   14:   94000000        bl      0 <__write_overflow_field>
+> |   18:   52800080        mov     w0, #0x4                        // #4
+> |   1c:   52800101        mov     w1, #0x8                        // #8
+> |   20:   94000000        bl      0 <__read_overflow2_field>
+> |   24:   90000008        adrp    x8, 8 <foo_copy+0x8>
+> |   28:   f9400108        ldr     x8, [x8]
+> |   2c:   90000009        adrp    x9, 0 <foo_copy>
+> |   30:   f9000128        str     x8, [x9]
+> |   34:   a8c17bfd        ldp     x29, x30, [sp], #16
+> |   38:   d50323bf        autiasp
+> |   3c:   d65f03c0        ret
+> 
+> Have I misunderstood how that's meant to work, or am I doing something wrong?
 
-And same here.
+The generally stated requirement from Linus for these kinds of
+kernel changes was to never break the build (i.e. we cannot use
+compiletime_error() -- which Clang 13 falls back to with a link-time
+failure).
 
-> +
-> +static inline int amd_pstate_init_perf(struct amd_cpudata *cpudata)
-> +{
-> +       return static_call(amd_pstate_init_perf)(cpudata);
-> +}
-> +
-> +static void pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
-> +                              u32 des_perf, u32 max_perf, bool fast_switch)
-> +{
-> +       if (fast_switch)
-> +               wrmsrl(MSR_AMD_CPPC_REQ, READ_ONCE(cpudata->cppc_req_cached));
-> +       else
-> +               wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ,
-> +                             READ_ONCE(cpudata->cppc_req_cached));
-> +}
-> +
-> +DEFINE_STATIC_CALL(amd_pstate_update_perf, pstate_update_perf);
+Since this phase of the series is only compile-time warnings (not the
+run-time warnings), it's rather a no-op for Clang 13. However, the final
+patch in the series brings the earlier ("mode 0") FORTIFY behaviors to
+Clang finally.
 
-Same here.
+Clang 14 implements compiletime_warning(), so in that situation, the
+warnings appear.
 
-> +
-> +static inline void amd_pstate_update_perf(struct amd_cpudata *cpudata,
-> +                                         u32 min_perf, u32 des_perf,
-> +                                         u32 max_perf, bool fast_switch)
-> +{
-> +       static_call(amd_pstate_update_perf)(cpudata, min_perf, des_perf,
-> +                                           max_perf, fast_switch);
-> +}
-> +
-> +static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
-> +                             u32 des_perf, u32 max_perf, bool fast_switch)
-> +{
-> +       u64 prev = READ_ONCE(cpudata->cppc_req_cached);
-> +       u64 value = prev;
-> +
-> +       value &= ~REQ_MIN_PERF(~0L);
-> +       value |= REQ_MIN_PERF(min_perf);
-> +
-> +       value &= ~REQ_DES_PERF(~0L);
-> +       value |= REQ_DES_PERF(des_perf);
-> +
-> +       value &= ~REQ_MAX_PERF(~0L);
-> +       value |= REQ_MAX_PERF(max_perf);
-> +
-> +       if (value == prev)
-> +               return;
-> +
-> +       WRITE_ONCE(cpudata->cppc_req_cached, value);
-> +
-> +       amd_pstate_update_perf(cpudata, min_perf, des_perf,
-> +                              max_perf, fast_switch);
-> +}
-> +
-> +static int amd_pstate_verify(struct cpufreq_policy_data *policy)
-> +{
-> +       cpufreq_verify_within_cpu_limits(policy);
-> +
-> +       return 0;
-> +}
-> +
-> +static int amd_pstate_target(struct cpufreq_policy *policy,
-> +                            unsigned int target_freq,
-> +                            unsigned int relation)
-> +{
-> +       struct cpufreq_freqs freqs;
-> +       struct amd_cpudata *cpudata = policy->driver_data;
-> +       unsigned long max_perf, min_perf, des_perf, cap_perf;
-> +
-> +       if (!cpudata->max_freq)
-> +               return -ENODEV;
-> +
-> +       cap_perf = READ_ONCE(cpudata->highest_perf);
-> +       min_perf = READ_ONCE(cpudata->lowest_nonlinear_perf);
-> +       max_perf = cap_perf;
-> +
-> +       freqs.old = policy->cur;
-> +       freqs.new = target_freq;
-> +
-> +       des_perf = DIV_ROUND_CLOSEST(target_freq * cap_perf,
-> +                                    cpudata->max_freq);
-> +
-> +       cpufreq_freq_transition_begin(policy, &freqs);
-> +       amd_pstate_update(cpudata, min_perf, des_perf,
-> +                         max_perf, false);
-> +       cpufreq_freq_transition_end(policy, &freqs, false);
-> +
-> +       return 0;
-> +}
-> +
-> +static int amd_get_min_freq(struct amd_cpudata *cpudata)
-> +{
-> +       struct cppc_perf_caps cppc_perf;
-> +
-> +       int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* Switch to khz */
-> +       return cppc_perf.lowest_freq * 1000;
-> +}
-> +
-> +static int amd_get_max_freq(struct amd_cpudata *cpudata)
-> +{
-> +       struct cppc_perf_caps cppc_perf;
-> +       u32 max_perf, max_freq, nominal_freq, nominal_perf;
-> +       u64 boost_ratio;
-> +
-> +       int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> +       if (ret)
-> +               return ret;
-> +
-> +       nominal_freq = cppc_perf.nominal_freq;
-> +       nominal_perf = READ_ONCE(cpudata->nominal_perf);
-> +       max_perf = READ_ONCE(cpudata->highest_perf);
-> +
-> +       boost_ratio = div_u64(max_perf << SCHED_CAPACITY_SHIFT,
-> +                             nominal_perf);
-> +
-> +       max_freq = nominal_freq * boost_ratio >> SCHED_CAPACITY_SHIFT;
-> +
-> +       /* Switch to khz */
-> +       return max_freq * 1000;
-> +}
-> +
-> +static int amd_get_nominal_freq(struct amd_cpudata *cpudata)
-> +{
-> +       struct cppc_perf_caps cppc_perf;
-> +
-> +       int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* Switch to khz */
-> +       return cppc_perf.nominal_freq * 1000;
-> +}
-> +
-> +static int amd_get_lowest_nonlinear_freq(struct amd_cpudata *cpudata)
-> +{
-> +       struct cppc_perf_caps cppc_perf;
-> +       u32 lowest_nonlinear_freq, lowest_nonlinear_perf,
-> +           nominal_freq, nominal_perf;
-> +       u64 lowest_nonlinear_ratio;
-> +
-> +       int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> +       if (ret)
-> +               return ret;
-> +
-> +       nominal_freq = cppc_perf.nominal_freq;
-> +       nominal_perf = READ_ONCE(cpudata->nominal_perf);
-> +
-> +       lowest_nonlinear_perf = cppc_perf.lowest_nonlinear_perf;
-> +
-> +       lowest_nonlinear_ratio = div_u64(lowest_nonlinear_perf << SCHED_CAPACITY_SHIFT,
-> +                                        nominal_perf);
-> +
-> +       lowest_nonlinear_freq = nominal_freq * lowest_nonlinear_ratio >> SCHED_CAPACITY_SHIFT;
-> +
-> +       /* Switch to khz */
-> +       return lowest_nonlinear_freq * 1000;
-> +}
-> +
-> +static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
-> +{
-> +       int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
-> +       struct device *dev;
-> +       struct amd_cpudata *cpudata;
-> +
-> +       dev = get_cpu_device(policy->cpu);
-> +       if (!dev)
-> +               return -ENODEV;
-> +
-> +       cpudata = kzalloc(sizeof(*cpudata), GFP_KERNEL);
-> +       if (!cpudata)
-> +               return -ENOMEM;
-> +
-> +       cpudata->cpu = policy->cpu;
-> +
-> +       ret = amd_pstate_init_perf(cpudata);
-> +       if (ret)
-> +               goto free_cpudata1;
-> +
-> +       min_freq = amd_get_min_freq(cpudata);
-> +       max_freq = amd_get_max_freq(cpudata);
-> +       nominal_freq = amd_get_nominal_freq(cpudata);
-> +       lowest_nonlinear_freq = amd_get_lowest_nonlinear_freq(cpudata);
-> +
-> +       if (min_freq < 0 || max_freq < 0 || min_freq > max_freq) {
-> +               dev_err(dev, "min_freq(%d) or max_freq(%d) value is incorrect\n",
-> +                       min_freq, max_freq);
-> +               ret = -EINVAL;
-> +               goto free_cpudata1;
-> +       }
-> +
-> +       policy->cpuinfo.transition_latency = AMD_PSTATE_TRANSITION_LATENCY;
-> +       policy->transition_delay_us = AMD_PSTATE_TRANSITION_DELAY;
-> +
-> +       policy->min = min_freq;
-> +       policy->max = max_freq;
-> +
-> +       policy->cpuinfo.min_freq = min_freq;
-> +       policy->cpuinfo.max_freq = max_freq;
-> +
-> +       /* It will be updated by governor */
-> +       policy->cur = policy->cpuinfo.min_freq;
+It's a pretty wacky Venn Diagram, and I will attempt to include some
+sort of illustration for it, as the behavioral differences are complex.
 
-The freq_qos requests below are never updated in this file.  What are they for?
+-Kees
 
-> +
-> +       ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
-> +                                  FREQ_QOS_MIN, policy->cpuinfo.min_freq);
-> +       if (ret < 0) {
-> +               dev_err(dev, "Failed to add min-freq constraint (%d)\n", ret);
-> +               goto free_cpudata1;
-> +       }
-> +
-> +       ret = freq_qos_add_request(&policy->constraints, &cpudata->req[1],
-> +                                  FREQ_QOS_MAX, policy->cpuinfo.max_freq);
-> +       if (ret < 0) {
-> +               dev_err(dev, "Failed to add max-freq constraint (%d)\n", ret);
-> +               goto free_cpudata2;
-> +       }
-> +
-> +       /* Initial processor data capability frequencies */
-> +       cpudata->max_freq = max_freq;
-> +       cpudata->min_freq = min_freq;
-> +       cpudata->nominal_freq = nominal_freq;
-> +       cpudata->lowest_nonlinear_freq = lowest_nonlinear_freq;
-> +
-> +       policy->driver_data = cpudata;
-> +
-> +       return 0;
-> +
-> +free_cpudata2:
-> +       freq_qos_remove_request(&cpudata->req[0]);
-> +free_cpudata1:
-> +       kfree(cpudata);
-> +       return ret;
-> +}
-> +
-> +static int amd_pstate_cpu_exit(struct cpufreq_policy *policy)
-> +{
-> +       struct amd_cpudata *cpudata;
-> +
-> +       cpudata = policy->driver_data;
-> +
-> +       freq_qos_remove_request(&cpudata->req[1]);
-> +       freq_qos_remove_request(&cpudata->req[0]);
-> +       kfree(cpudata);
-> +
-> +       return 0;
-> +}
-> +
-> +static struct cpufreq_driver amd_pstate_driver = {
-> +       .flags          = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
-> +       .verify         = amd_pstate_verify,
-> +       .target         = amd_pstate_target,
-> +       .init           = amd_pstate_cpu_init,
-> +       .exit           = amd_pstate_cpu_exit,
-> +       .name           = "amd-pstate",
-> +};
-> +
-> +static int __init amd_pstate_init(void)
-> +{
-> +       int ret;
-> +
-> +       if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-> +               return -ENODEV;
-> +
-> +       if (!acpi_cpc_valid()) {
-> +               pr_debug("the _CPC object is not present in SBIOS\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       /* don't keep reloading if cpufreq_driver exists */
-> +       if (cpufreq_get_current_driver())
-> +               return -EEXIST;
-> +
-> +       /* capability check */
-> +       if (!boot_cpu_has(X86_FEATURE_CPPC)) {
-> +               pr_debug("AMD CPPC MSR based functionality is not supported\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       /* enable amd pstate feature */
-> +       ret = amd_pstate_enable(true);
-> +       if (ret) {
-> +               pr_err("failed to enable amd-pstate with return %d\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       ret = cpufreq_register_driver(&amd_pstate_driver);
-> +       if (ret)
-> +               pr_err("failed to register amd_pstate_driver with return %d\n",
-> +                      ret);
-> +
-> +       return ret;
-> +}
-> +
-> +static void __exit amd_pstate_exit(void)
-> +{
-> +       cpufreq_unregister_driver(&amd_pstate_driver);
-> +
-> +       amd_pstate_enable(false);
-> +}
-> +
-> +module_init(amd_pstate_init);
-> +module_exit(amd_pstate_exit);
-> +
-> +MODULE_AUTHOR("Huang Rui <ray.huang@amd.com>");
-> +MODULE_DESCRIPTION("AMD Processor P-state Frequency Driver");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.25.1
->
+-- 
+Kees Cook

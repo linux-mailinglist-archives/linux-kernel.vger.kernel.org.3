@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89EB64780F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 387864780F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbhLPXxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:53:48 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:47236 "EHLO
+        id S230152AbhLPXyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:54:11 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:47258 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbhLPXxq (ORCPT
+        with ESMTP id S230096AbhLPXyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:53:46 -0500
+        Thu, 16 Dec 2021 18:54:10 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 21B742111A;
-        Thu, 16 Dec 2021 23:53:45 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BB5B42111A;
+        Thu, 16 Dec 2021 23:54:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639698825; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1639698849; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/Xf0wQNVm3xiMoEph9xuiX0w4MC4SZqJ4flfzelN2po=;
-        b=HvkZQeCMFZCPSVQFUK/PUY7B7v+NLZpUF/m3Yj4xJKsbEa2leGoz9gqvwpHJBag+WefWI6
-        0VBcdl08xnIcY9vXn22pP/IeYzRGO28wyAsDZqf87G24s8KrbkeUDwXMNDYgmtPjvbHcDh
-        qpdO8NC1Q9cEMZN1/U1R1NMXfhuVzC0=
+        bh=CDOSHbb3cCHR/Wvsf3Dv/Q3+pqM/Z1sApkeWL3yPdmA=;
+        b=iZeNAv29PjQn6MX3D30qEOwbbGRbKdljvGl7O2FDh/D1Ag/7JsP/cNzRO8ED1jhDtvylBz
+        1BR6p151QwShGB5UAXtTFlx7nME3ze7DAxBS964FzJCfwjplb3UmVzILM3jHwMnSkT7ddN
+        vY1HFMPXTPsVRa9Wv6KIxwlcodTSXyc=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639698825;
+        s=susede2_ed25519; t=1639698849;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/Xf0wQNVm3xiMoEph9xuiX0w4MC4SZqJ4flfzelN2po=;
-        b=vZy0FnDUXHJwQKOG4m/0/p1GY8oOwPXQ5ScsZz3bmlnHvp6t/QmB/UuBmIoCdt7YEvO6Gw
-        uqEETfQGhz4AvEAg==
+        bh=CDOSHbb3cCHR/Wvsf3Dv/Q3+pqM/Z1sApkeWL3yPdmA=;
+        b=R9FXTSaA1m7h0cmZRDVZmblZ/AwfUnuQZJZKPm6EJ960BqMU94yab6AoBrD6cPJnUX3h64
+        S8cvKTw5ET5ojfDQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2C84913EFD;
-        Thu, 16 Dec 2021 23:53:41 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A0B0713EFD;
+        Thu, 16 Dec 2021 23:54:06 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id RrWdNoXRu2GtWwAAMHmgww
-        (envelope-from <neilb@suse.de>); Thu, 16 Dec 2021 23:53:41 +0000
-Subject: [PATCH 12/18] SUNRPC/auth: async tasks mustn't block waiting for
- memory
+        id tzqYFp7Ru2HNWwAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 16 Dec 2021 23:54:06 +0000
+Subject: [PATCH 15/18] NFS: discard NFS_RPC_SWAPFLAGS and RPC_TASK_ROOTCREDS
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -59,7 +58,7 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Fri, 17 Dec 2021 10:48:23 +1100
-Message-ID: <163969850320.20885.16756746953092069326.stgit@noble.brown>
+Message-ID: <163969850333.20885.17464715871688147966.stgit@noble.brown>
 In-Reply-To: <163969801519.20885.3977673503103544412.stgit@noble.brown>
 References: <163969801519.20885.3977673503103544412.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -70,124 +69,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When memory is short, new worker threads cannot be created and we depend
-on the minimum one rpciod thread to be able to handle everything.  So it
-must not block waiting for memory.
+NFS_RPC_SWAPFLAGS is only used for READ requests.
+It sets RPC_TASK_SWAPPER which gives some memory-allocation priority to
+requests.  This is not needed for swap READ - though it is for writes
+where it is set via a different mechanism.
 
-mempools are particularly a problem as memory can only be released back
-to the mempool by an async rpc task running.  If all available workqueue
-threads are waiting on the mempool, no thread is available to return
-anything.
+RPC_TASK_ROOTCREDS causes the 'machine' credential to be used.
+This is not needed as the root credential is saved when the swap file is
+opened, and this is used for all IO.
 
-lookup_cred() can block on a mempool or kmalloc - and this can cause
-deadlocks.  So add a new RPCAUTH_LOOKUP flag for async lookups and don't
-block on memory.  If the -ENOMEM gets back to call_refreshresult(), wait
-a short while and try again.  HZ>>4 is chosen as it is used elsewhere
-for -ENOMEM retries.
+So NFS_RPC_SWAPFLAGS isn't needed, and as it is the only user of
+RPC_TASK_ROOTCREDS, that isn't needed either.
+
+Remove both.
 
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- include/linux/sunrpc/auth.h    |    1 +
- net/sunrpc/auth.c              |    6 +++++-
- net/sunrpc/auth_gss/auth_gss.c |    6 +++++-
- net/sunrpc/auth_unix.c         |   10 ++++++++--
- net/sunrpc/clnt.c              |    3 +++
- 5 files changed, 22 insertions(+), 4 deletions(-)
+ fs/nfs/read.c                 |    4 ----
+ include/linux/nfs_fs.h        |    5 -----
+ include/linux/sunrpc/sched.h  |    1 -
+ include/trace/events/sunrpc.h |    1 -
+ net/sunrpc/auth.c             |    2 +-
+ 5 files changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/include/linux/sunrpc/auth.h b/include/linux/sunrpc/auth.h
-index 98da816b5fc2..3e6ce288a7fc 100644
---- a/include/linux/sunrpc/auth.h
-+++ b/include/linux/sunrpc/auth.h
-@@ -99,6 +99,7 @@ struct rpc_auth_create_args {
+diff --git a/fs/nfs/read.c b/fs/nfs/read.c
+index d11af2a9299c..a8f2b884306c 100644
+--- a/fs/nfs/read.c
++++ b/fs/nfs/read.c
+@@ -194,10 +194,6 @@ static void nfs_initiate_read(struct nfs_pgio_header *hdr,
+ 			      const struct nfs_rpc_ops *rpc_ops,
+ 			      struct rpc_task_setup *task_setup_data, int how)
+ {
+-	struct inode *inode = hdr->inode;
+-	int swap_flags = IS_SWAPFILE(inode) ? NFS_RPC_SWAPFLAGS : 0;
+-
+-	task_setup_data->flags |= swap_flags;
+ 	rpc_ops->read_setup(hdr, msg);
+ 	trace_nfs_initiate_read(hdr);
+ }
+diff --git a/include/linux/nfs_fs.h b/include/linux/nfs_fs.h
+index 3a210478f665..5dce9129fe64 100644
+--- a/include/linux/nfs_fs.h
++++ b/include/linux/nfs_fs.h
+@@ -45,11 +45,6 @@
+  */
+ #define NFS_MAX_TRANSPORTS 16
  
- /* Flags for rpcauth_lookupcred() */
- #define RPCAUTH_LOOKUP_NEW		0x01	/* Accept an uninitialised cred */
-+#define RPCAUTH_LOOKUP_ASYNC		0x02	/* Don't block waiting for memory */
- 
+-/*
+- * These are the default flags for swap requests
+- */
+-#define NFS_RPC_SWAPFLAGS		(RPC_TASK_SWAPPER|RPC_TASK_ROOTCREDS)
+-
  /*
-  * Client authentication ops
+  * Size of the NFS directory verifier
+  */
+diff --git a/include/linux/sunrpc/sched.h b/include/linux/sunrpc/sched.h
+index db964bb63912..56710f8056d3 100644
+--- a/include/linux/sunrpc/sched.h
++++ b/include/linux/sunrpc/sched.h
+@@ -124,7 +124,6 @@ struct rpc_task_setup {
+ #define RPC_TASK_MOVEABLE	0x0004		/* nfs4.1+ rpc tasks */
+ #define RPC_TASK_NULLCREDS	0x0010		/* Use AUTH_NULL credential */
+ #define RPC_CALL_MAJORSEEN	0x0020		/* major timeout seen */
+-#define RPC_TASK_ROOTCREDS	0x0040		/* force root creds */
+ #define RPC_TASK_DYNAMIC	0x0080		/* task was kmalloc'ed */
+ #define	RPC_TASK_NO_ROUND_ROBIN	0x0100		/* send requests on "main" xprt */
+ #define RPC_TASK_SOFT		0x0200		/* Use soft timeouts */
+diff --git a/include/trace/events/sunrpc.h b/include/trace/events/sunrpc.h
+index 3a99358c262b..141dc34a450e 100644
+--- a/include/trace/events/sunrpc.h
++++ b/include/trace/events/sunrpc.h
+@@ -311,7 +311,6 @@ TRACE_EVENT(rpc_request,
+ 		{ RPC_TASK_MOVEABLE, "MOVEABLE" },			\
+ 		{ RPC_TASK_NULLCREDS, "NULLCREDS" },			\
+ 		{ RPC_CALL_MAJORSEEN, "MAJORSEEN" },			\
+-		{ RPC_TASK_ROOTCREDS, "ROOTCREDS" },			\
+ 		{ RPC_TASK_DYNAMIC, "DYNAMIC" },			\
+ 		{ RPC_TASK_NO_ROUND_ROBIN, "NO_ROUND_ROBIN" },		\
+ 		{ RPC_TASK_SOFT, "SOFT" },				\
 diff --git a/net/sunrpc/auth.c b/net/sunrpc/auth.c
-index a9f0d17fdb0d..6bfa19f9fa6a 100644
+index 6bfa19f9fa6a..682fcd24bf43 100644
 --- a/net/sunrpc/auth.c
 +++ b/net/sunrpc/auth.c
-@@ -615,6 +615,8 @@ rpcauth_bind_root_cred(struct rpc_task *task, int lookupflags)
- 	};
- 	struct rpc_cred *ret;
- 
-+	if (RPC_IS_ASYNC(task))
-+		lookupflags |= RPCAUTH_LOOKUP_ASYNC;
- 	ret = auth->au_ops->lookup_cred(auth, &acred, lookupflags);
- 	put_cred(acred.cred);
- 	return ret;
-@@ -631,6 +633,8 @@ rpcauth_bind_machine_cred(struct rpc_task *task, int lookupflags)
- 
- 	if (!acred.principal)
- 		return NULL;
-+	if (RPC_IS_ASYNC(task))
-+		lookupflags |= RPCAUTH_LOOKUP_ASYNC;
- 	return auth->au_ops->lookup_cred(auth, &acred, lookupflags);
- }
- 
-@@ -654,7 +658,7 @@ rpcauth_bindcred(struct rpc_task *task, const struct cred *cred, int flags)
- 	};
- 
- 	if (flags & RPC_TASK_ASYNC)
--		lookupflags |= RPCAUTH_LOOKUP_NEW;
-+		lookupflags |= RPCAUTH_LOOKUP_NEW | RPCAUTH_LOOKUP_ASYNC;
- 	if (task->tk_op_cred)
- 		/* Task must use exactly this rpc_cred */
- 		new = get_rpccred(task->tk_op_cred);
-diff --git a/net/sunrpc/auth_gss/auth_gss.c b/net/sunrpc/auth_gss/auth_gss.c
-index 5f42aa5fc612..df72d6301f78 100644
---- a/net/sunrpc/auth_gss/auth_gss.c
-+++ b/net/sunrpc/auth_gss/auth_gss.c
-@@ -1341,7 +1341,11 @@ gss_hash_cred(struct auth_cred *acred, unsigned int hashbits)
- static struct rpc_cred *
- gss_lookup_cred(struct rpc_auth *auth, struct auth_cred *acred, int flags)
- {
--	return rpcauth_lookup_credcache(auth, acred, flags, GFP_NOFS);
-+	gfp_t gfp = GFP_NOFS;
-+
-+	if (flags & RPCAUTH_LOOKUP_ASYNC)
-+		gfp = GFP_NOWAIT | __GFP_NOWARN;
-+	return rpcauth_lookup_credcache(auth, acred, flags, gfp);
- }
- 
- static struct rpc_cred *
-diff --git a/net/sunrpc/auth_unix.c b/net/sunrpc/auth_unix.c
-index e7df1f782b2e..e5819265dd1b 100644
---- a/net/sunrpc/auth_unix.c
-+++ b/net/sunrpc/auth_unix.c
-@@ -43,8 +43,14 @@ unx_destroy(struct rpc_auth *auth)
- static struct rpc_cred *
- unx_lookup_cred(struct rpc_auth *auth, struct auth_cred *acred, int flags)
- {
--	struct rpc_cred *ret = mempool_alloc(unix_pool, GFP_NOFS);
--
-+	gfp_t gfp = GFP_NOFS;
-+	struct rpc_cred *ret;
-+
-+	if (flags & RPCAUTH_LOOKUP_ASYNC)
-+		gfp = GFP_NOWAIT | __GFP_NOWARN;
-+	ret = mempool_alloc(unix_pool, gfp);
-+	if (!ret)
-+		return ERR_PTR(-ENOMEM);
- 	rpcauth_init_cred(ret, acred, auth, &unix_credops);
- 	ret->cr_flags = 1UL << RPCAUTH_CRED_UPTODATE;
- 	return ret;
-diff --git a/net/sunrpc/clnt.c b/net/sunrpc/clnt.c
-index a312ea2bc440..238b2ef5491f 100644
---- a/net/sunrpc/clnt.c
-+++ b/net/sunrpc/clnt.c
-@@ -1745,6 +1745,9 @@ call_refreshresult(struct rpc_task *task)
- 		task->tk_cred_retry--;
- 		trace_rpc_retry_refresh_status(task);
- 		return;
-+	case -ENOMEM:
-+		rpc_delay(task, HZ >> 4);
-+		return;
- 	}
- 	trace_rpc_refresh_status(task);
- 	rpc_call_rpcerror(task, status);
+@@ -670,7 +670,7 @@ rpcauth_bindcred(struct rpc_task *task, const struct cred *cred, int flags)
+ 	/* If machine cred couldn't be bound, try a root cred */
+ 	if (new)
+ 		;
+-	else if (cred == &machine_cred || (flags & RPC_TASK_ROOTCREDS))
++	else if (cred == &machine_cred)
+ 		new = rpcauth_bind_root_cred(task, lookupflags);
+ 	else if (flags & RPC_TASK_NULLCREDS)
+ 		new = authnull_ops.lookup_cred(NULL, NULL, 0);
 
 

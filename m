@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF60A4773AC
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0F74773AA
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237251AbhLPNxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:53:13 -0500
-Received: from mail-oo1-f42.google.com ([209.85.161.42]:43007 "EHLO
-        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237025AbhLPNxJ (ORCPT
+        id S237040AbhLPNxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:53:10 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:45777 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229453AbhLPNxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:53:09 -0500
-Received: by mail-oo1-f42.google.com with SMTP id x1-20020a4aea01000000b002c296d82604so6928765ood.9;
-        Thu, 16 Dec 2021 05:53:09 -0800 (PST)
+        Thu, 16 Dec 2021 08:53:07 -0500
+Received: by mail-oi1-f169.google.com with SMTP id 7so36515154oip.12;
+        Thu, 16 Dec 2021 05:53:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=B88CYCFjwbaWOV3vKfQzOmcTf0Xm8Ner9hfCDTZa+HE=;
-        b=NhS9WWhux7zSbGnd4Iea3XGwiaR5Bz4gYyTIweGiblvgObOHxGLVKZs/1WXVzsW7Xw
-         Cpq8OBVT9qVT5nVKSjCm/sZl+uk9+7tbzFTm3s5DfwThE4PRMl9vDOpt8qPCC2KE9Tw8
-         9CoFMWcSfCfmPv84fEEYD++0fOwzilnbn9J78nkBzXdB0JnqM1ZBGyO+ilJ/1fWzV8i2
-         WjCjGkVKMLE6XslKY0WHqaFLwAjVj2qJ2+beRwFyTgs7KNBeLk9KjFlobRqOm//55fLH
-         lkHxpcX0Fnzh9l7pXrLZDbJj8NifYmU57qQoaDeXGqM/44GIeb/1jVxEziPn9ATklEDY
-         ipnA==
-X-Gm-Message-State: AOAM530a1DIUTBjW89IPBTnprjK4uDuGbRpmh2RwaxEChFyuDOeyvNjt
-        ibpAiLPcge005wwrQilfzg==
-X-Google-Smtp-Source: ABdhPJwrH3DI4/PnTg5MUfd+8UPsCHqVPUfNp95zLksVPxxuQvXT1eDHD1ytbHjBZzQhv38LlZDOiQ==
-X-Received: by 2002:a4a:5a43:: with SMTP id v64mr11106831ooa.26.1639662789088;
-        Thu, 16 Dec 2021 05:53:09 -0800 (PST)
+        bh=6fkUBesEK+ljm2rlPJZWtYPxz7Qh1jlpFH5iXSMcGv8=;
+        b=UVf6FCLqJBxFQFiqz41n97REGIYbL6r/AXZv2jRg7zV0RcaPQ+IKZW2VTNRZNM3It1
+         nS/yVTnTY9m2vLqoorvl16A3PdPzs1hewHYHeerv8LUzpZ4CcLiu581V8zWML7dPvwNZ
+         cS+ZKEUv2++iUNKS7yduZPI0fNPFy/oel/bjvBhyVo7j0xPrQPQ7WUKsH40cQbC/i6Vu
+         7u9IPNlTyAwrBUv8pNBHRmkL0zXgRJdeJMC1su87l3lGbwGg6VRODrdjbcfrgSCn3EAZ
+         Esll5yFmDrnqeRrvCC7cRAIkns2Op5pfva7qidbo3ebp1Us6zt3B26WLvJMkbjID67Q2
+         k31Q==
+X-Gm-Message-State: AOAM531Bk2vu34PeSeSETCm9WLoPqC+g1KW3LXLi6b13Zq/QS8VB1m82
+        EmEGzyhuTRIhFOu+pbb7W4O+W9evnQ==
+X-Google-Smtp-Source: ABdhPJw5upVfoScoQm9JMcGvL7W6litpwZZt9iGYREg40ouAGdsEx1RNm5o/nQz8hQBdqefWZlPU/w==
+X-Received: by 2002:aca:c650:: with SMTP id w77mr4205603oif.8.1639662787205;
+        Thu, 16 Dec 2021 05:53:07 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id p10sm1034054otp.53.2021.12.16.05.53.07
+        by smtp.gmail.com with ESMTPSA id i3sm1041907ooq.39.2021.12.16.05.53.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 05:53:08 -0800 (PST)
-Received: (nullmailer pid 4004887 invoked by uid 1000);
+        Thu, 16 Dec 2021 05:53:06 -0800 (PST)
+Received: (nullmailer pid 4004891 invoked by uid 1000);
         Thu, 16 Dec 2021 13:53:03 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-rockchip@lists.infradead.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        benjamin.gaignard@collabora.com,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        aford@beaconembedded.com, Lucas Stach <l.stach@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-staging@lists.linux.dev,
+To:     Biao Huang <biao.huang@mediatek.com>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, srv_heupstream@mediatek.com,
+        macpaul.lin@mediatek.com, davem@davemloft.net,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         linux-arm-kernel@lists.infradead.org,
-        Fabio Estevam <festevam@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        abel.vesa@nxp.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>, hverkuil-cisco@xs4all.nl
-In-Reply-To: <20211216111256.2362683-5-aford173@gmail.com>
-References: <20211216111256.2362683-1-aford173@gmail.com> <20211216111256.2362683-5-aford173@gmail.com>
-Subject: Re: [PATCH V2 04/10] dt-bindings: media: nxp,imx8mq-vpu: Split G1 and G2 nodes
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Jose Abreu <joabreu@synopsys.com>,
+        linux-mediatek@lists.infradead.org, dkirjanov@suse.de,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        angelogioacchino.delregno@collabora.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>
+In-Reply-To: <20211216055328.15953-5-biao.huang@mediatek.com>
+References: <20211216055328.15953-1-biao.huang@mediatek.com> <20211216055328.15953-5-biao.huang@mediatek.com>
+Subject: Re: [PATCH net-next v10 4/6] net: dt-bindings: dwmac: Convert mediatek-dwmac to DT schema
 Date:   Thu, 16 Dec 2021 07:53:03 -0600
-Message-Id: <1639662783.022719.4004886.nullmailer@robh.at.kernel.org>
+Message-Id: <1639662783.037495.4004890.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 05:12:49 -0600, Adam Ford wrote:
-> The G1 and G2 are separate decoder blocks that are enabled by the
-> vpu-blk-ctrl power-domain controller, which now has a proper driver.
-> Update the bindings to support separate nodes for the G1 and G2
-> decoders with vpu-blk-ctrl power-domain support.
+On Thu, 16 Dec 2021 13:53:26 +0800, Biao Huang wrote:
+> Convert mediatek-dwmac to DT schema, and delete old mediatek-dwmac.txt.
+> And there are some changes in .yaml than .txt, others almost keep the same:
+>   1. compatible "const: snps,dwmac-4.20".
+>   2. delete "snps,reset-active-low;" in example, since driver remove this
+>      property long ago.
+>   3. add "snps,reset-delay-us = <0 10000 10000>" in example.
+>   4. the example is for rgmii interface, keep related properties only.
 > 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
+> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> ---
+>  .../bindings/net/mediatek-dwmac.txt           |  91 ----------
+>  .../bindings/net/mediatek-dwmac.yaml          | 155 ++++++++++++++++++
+>  2 files changed, 155 insertions(+), 91 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/mediatek-dwmac.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml:18:6: [warning] wrong indentation: expected 4 but found 5 (indentation)
-./Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml:19:7: [warning] wrong indentation: expected 7 but found 6 (indentation)
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
+Full log is available here: https://patchwork.ozlabs.org/patch/1568901
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1569050
+ethernet@1101c000: clock-names: ['axi', 'apb', 'mac_main', 'ptp_ref'] is too short
+	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+ethernet@1101c000: clocks: [[27, 34], [27, 37], [6, 154], [6, 155]] is too short
+	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+ethernet@1101c000: compatible: ['mediatek,mt2712-gmac'] does not contain items matching the given schema
+	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
 
-pip3 install dtschema --upgrade
+ethernet@1101c000: compatible: ['mediatek,mt2712-gmac'] is too short
+	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
 
-Please check and re-submit.
+ethernet@1101c000: Unevaluated properties are not allowed ('compatible', 'reg', 'interrupts', 'interrupt-names', 'mac-address', 'clock-names', 'clocks', 'power-domains', 'snps,axi-config', 'snps,mtl-rx-config', 'snps,mtl-tx-config', 'snps,txpbl', 'snps,rxpbl', 'clk_csr', 'phy-mode', 'phy-handle', 'snps,reset-gpio', 'mdio' were unexpected)
+	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
 

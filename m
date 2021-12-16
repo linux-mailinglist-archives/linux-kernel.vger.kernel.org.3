@@ -2,66 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F4A476E94
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCABC476E99
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235755AbhLPKMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
+        id S235796AbhLPKNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbhLPKMv (ORCPT
+        with ESMTP id S235768AbhLPKN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:12:51 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58230C061574;
-        Thu, 16 Dec 2021 02:12:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EIBXUtYOu0an3Nhkb+uz6c/cbOpjGo8AWJj9AI3J6Jo=; b=YgP9RYSD9DNckXKfHcgRHR+Qz4
-        Fhp/OGAC8pZItqz8p/bmO71pkDDXzz/o/cSJAjtNVfDnBAtxQvZNS/9oPgXUKTT35do4llJaolDW7
-        AQEG9V4Ze3UqBOfFBn+c3XFMNngEso3VkoTLFUKMFjUFcAZPkbUcBH4jgVSqcHOX37ONPfFJOY6QZ
-        Qu/it3MITvWRZCInKMYX4g+vBj+2K2+eyjqhIDyw1QDDz7dIfnLQcmoQ0nC7MO//7VWkG42mf52iZ
-        CMbgvApo3K2rxO3CWqiI28yxf+50fFSm4M1n+BjIGgOhGrAFIJHUIgWwRuDdXqwIuv9WtmV9g+SDH
-        qaWXe9lQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mxnkk-004lp1-Lv; Thu, 16 Dec 2021 10:12:46 +0000
-Date:   Thu, 16 Dec 2021 02:12:46 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Miko Larsson <mikoxyzzz@gmail.com>
-Cc:     minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
-        axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: Re: [PATCH 1/2] zram: zram_drv: add SPDX license identifiers
-Message-ID: <YbsRHkJ6PGauazXk@infradead.org>
-References: <20211215192128.108967-1-mikoxyzzz@gmail.com>
- <20211215192128.108967-2-mikoxyzzz@gmail.com>
+        Thu, 16 Dec 2021 05:13:29 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F72C06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:13:29 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id t11so24907958qtw.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:13:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YRNyvvMx0D6cmoATqQzVllabSh/sAVBFjHpHuEs3K98=;
+        b=QP5fMqjj2HERTi9+wi+qJlnEfdulm9t0JMh0e3fxdFg1Eptn92K/EJRkxC+dymhP1k
+         rDgAGl9zjJiJy9Z2CLiM1aizonlBf8p4dYx8YPJOsMLDa2CtFG0KgjcUo/D/MpmW/Lfu
+         E+y0YzFu6MrvdOrCWw1M+DOOVTvuWp2IKjjkf/hmk4SVjZuBczcjSDavSFfIJtyfp35V
+         Gk4GCY/9fc4684sjRRdi1uVL3BVTL7yPcVOqrC5Fz/rzT/vBsyErQfuaCdNAfmtKskb9
+         WF1IZa6maksSZ1RTQ16ie08YUAXwm3MzxFerPjTDYyrDPC/lZsZGY7ZL//NangtkxY0A
+         raMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YRNyvvMx0D6cmoATqQzVllabSh/sAVBFjHpHuEs3K98=;
+        b=l7YyTi5yVerD+QHaGIf39jhRvUpw8wWvPdyRsN38ah07GiHhbpNcKtTvplwhGFG0Qj
+         JhXcgAYDd+3XqSZ5eQ3CL8SubpJ/3x243vk/973tZe45/6KIVgENDV1R50QkPSggN7Dx
+         wWcIZVvWpMFdIwP40jPLc4/gsh525iQjFwMdyJURaWdLJnEhZk93y6hRrtGn537FBnu4
+         17Egyhf0Tz2krRu0O/ihDEFHwHWieDLMUkWSLjn0VZ11TLkBac6H352f3vjIPI1t8yWm
+         2rWOumGOyd+b3lv1qfpsk13bGcnlLgStcVy8Kw3Gn+90zF7fLhXJDbV+pfh0DcSZmoXG
+         3XEg==
+X-Gm-Message-State: AOAM533R5TbD9sYwkGrg6wtLDhHkct2VrOyQZ2MKhMHd8K+PJn538/U8
+        4ArmNQJnM934t6hIdO09gBSNH7EpIH1dj/+N/+fskA==
+X-Google-Smtp-Source: ABdhPJxFhNQBI4hw6cIRpJ3Bn2gy/Dy3Dn3EXkPsiZJ6PPFBQxKOA/co/dhObm1iQVeZPt6w2zfFhE/oIx5W4j8ixtU=
+X-Received: by 2002:ac8:4e56:: with SMTP id e22mr16491312qtw.72.1639649608437;
+ Thu, 16 Dec 2021 02:13:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215192128.108967-2-mikoxyzzz@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20211214162050.660953-1-glider@google.com> <YbjIHa/1Qr/v8Q8J@kroah.com>
+In-Reply-To: <YbjIHa/1Qr/v8Q8J@kroah.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 16 Dec 2021 11:12:52 +0100
+Message-ID: <CAG_fn=Ub57GfJwUuuKqfc0rhFOdRF9e=vgb4fwm_bXYziraFMA@mail.gmail.com>
+Subject: Re: [PATCH 00/43] Add KernelMemorySanitizer infrastructure
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 08:21:27PM +0100, Miko Larsson wrote:
-> zram_drv lacks an SPDX license identifier in both its source and in its
-> header, so we should add a license identifiers based on the copyright
-> info provided by the initial comment block.
-> 
-> Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
-> ---
->  drivers/block/zram/zram_drv.c | 2 ++
->  drivers/block/zram/zram_drv.h | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-> index 25071126995b..464ef53adcbc 100644
-> --- a/drivers/block/zram/zram_drv.c
-> +++ b/drivers/block/zram/zram_drv.c
-> @@ -1,3 +1,5 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+On Tue, Dec 14, 2021 at 5:36 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Dec 14, 2021 at 05:20:07PM +0100, Alexander Potapenko wrote:
+> > KernelMemorySanitizer (KMSAN) is a detector of errors related to uses o=
+f
+> > uninitialized memory. It relies on compile-time Clang instrumentation
+> > (similar to MSan in the userspace [1]) and tracks the state of every bi=
+t
+> > of kernel memory, being able to report an error if uninitialized value =
+is
+> > used in a condition, dereferenced, or escapes to userspace, USB or DMA.
+>
+> Why is USB unique here?
 
-Please drop the free form license boilerplate when adding SPDX tags.
+syzkaller just happens to be good at fuzzing USB drivers, so it was
+fairly easy to implement and test USB support for KMSAN.
+This should give the maintainers of other buses an idea of how this
+could be done :)
+
+ What about serial data?  i2c?  spi?  w1?  We
+> have a lot of different I/O bus types :)
+
+We hope to cover those after KMSAN hits upstream.
+
+>
+> And how is DMA checked given that the kernel shouldn't be seeing dma
+> memory?
+
+Before writing a buffer to DMA, that buffer's contents are checked by
+KMSAN. If there are uninitialized bytes, those will be reported.
+After reading a buffer from DMA, it is marked as initialized to avoid
+false positives.
+We do not track DMA memory itself.
+
+> thanks,
+>
+> greg k-h
+
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

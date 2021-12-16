@@ -2,93 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E19DD476CEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FBE476CF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbhLPJKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 04:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232837AbhLPJK3 (ORCPT
+        id S232887AbhLPJLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 04:11:10 -0500
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:43373 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232874AbhLPJLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:10:29 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CFEC061574;
-        Thu, 16 Dec 2021 01:10:29 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id 193so22678220qkh.10;
-        Thu, 16 Dec 2021 01:10:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aGt13vD1itn5sjXw+H86cmDVBqoGT4H1e/3JbiAwhwo=;
-        b=KGgdeC09Ut/4WVGRjUouF1X1fmV294IJcLMVJr6i7JbPH3Yz27oN21IEoQDk30t4aQ
-         8iRpXgQfQVRDjvvG5BveyRPbaADJJkOXB/Rz/EyN+oEFD8TEuX1s8P6/oH/HK7f+KEd8
-         Gh2nPCaUUPMXy2ofQ2F88tqnycdkaoA9aI8lDzPW9hqKz1EQS+whtWtBoRwkCxbulhns
-         M8Nw+Z9I3x/LwVw6LTAbqHSj6phAtAhByjW2rX1bmU0QMJtcKqhdWys9wIqW700C6FxG
-         MJsynPx2CbIuNG5i39yUx4ViGsnjY8fRHD4ObxQXG0Pl1aEShOiWVECa6AEmwtiKRhrd
-         i3tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aGt13vD1itn5sjXw+H86cmDVBqoGT4H1e/3JbiAwhwo=;
-        b=DwnC+2viKH0Dr34Fh4mbFkgBSFxHMifNuzce7Q5z3s6TK5kqG8BmwnAzT1gdGcHXpc
-         B80U3FATSMu82fpQThro4XU9chsr/jwnihaBWiS1s/tCp8Vx+3h+k2qr5kRbL0OOsWYV
-         MUSh39U+bKufARMCI+X/sBcK5NuBfbXPK45lHZF5mIRwdZnHHi3IPf0l0hAzq4OsEbrL
-         HcVLrRPugKlDEhWW9uPkiHI4v0pd3tuI/PrS37zLmnnZL9n+vxsgCiBpA/9e0CY4/jrF
-         U4zhsILxk93sEc3COzSDOz5WXFKwDEYC4q9uxiKt8wnFw2ukbakWHDwlehvstMV43c/Y
-         gNNg==
-X-Gm-Message-State: AOAM533Y3KlkJ2AosCXKazdzGRXNvlI+xajYMpRV7uFgVnod4DX5Qnyn
-        /ewNgt2zF3kBS1J5z0XM4Z3Zu6HLxuw=
-X-Google-Smtp-Source: ABdhPJz/amnbn14+QmT0cNiOb8u0k7LTCAe+7BpnQEh1bZGJs5Uiw3zEm3Apu9g3WU3ev4XszLfz9w==
-X-Received: by 2002:a05:620a:2589:: with SMTP id x9mr11050764qko.325.1639645828233;
-        Thu, 16 Dec 2021 01:10:28 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id o4sm2411924qkh.107.2021.12.16.01.10.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 01:10:27 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     tytso@mit.edu
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        Thu, 16 Dec 2021 04:11:07 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V-oH6cw_1639645859;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V-oH6cw_1639645859)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 16 Dec 2021 17:11:05 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     paulmck@kernel.org
+Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ext4: use min() to make code cleaner
-Date:   Thu, 16 Dec 2021 09:10:22 +0000
-Message-Id: <20211216091022.449364-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] rcu/nocb: clean up some inconsistent indenting
+Date:   Thu, 16 Dec 2021 17:10:57 +0800
+Message-Id: <20211216091057.28675-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+Eliminate the follow smatch warning:
 
-Use min() in order to make code cleaner.
+kernel/rcu/tree_nocb.h:1262 rcu_spawn_cpu_nocb_kthread() warn:
+inconsistent indenting.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- fs/ext4/super.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ kernel/rcu/tree_nocb.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 5ec5a1c3b364..d0c50e0e787d 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -6922,8 +6922,7 @@ static ssize_t ext4_quota_read(struct super_block *sb, int type, char *data,
- 		len = i_size-off;
- 	toread = len;
- 	while (toread > 0) {
--		tocopy = sb->s_blocksize - offset < toread ?
--				sb->s_blocksize - offset : toread;
-+		tocopy = min(sb->s_blocksize - offset, toread);
- 		bh = ext4_bread(NULL, inode, blk, 0);
- 		if (IS_ERR(bh))
- 			return PTR_ERR(bh);
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index dd4753219dca..936badfffcee 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1259,7 +1259,8 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
+ 		}
+ 		WRITE_ONCE(rdp_gp->nocb_gp_kthread, t);
+ 	}
+-	 mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
++
++	mutex_unlock(&rdp_gp->nocb_gp_kthread_mutex);
+ 
+ 	/* Spawn the kthread for this CPU. */
+ 	t = kthread_run(rcu_nocb_cb_kthread, rdp,
 -- 
-2.25.1
+2.20.1.7.g153144c
 

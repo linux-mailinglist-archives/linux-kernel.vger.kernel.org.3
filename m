@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C55478032
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B65047802C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236730AbhLPWxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 17:53:48 -0500
-Received: from foss.arm.com ([217.140.110.172]:49506 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236651AbhLPWxq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 17:53:46 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 704851515;
-        Thu, 16 Dec 2021 14:53:46 -0800 (PST)
-Received: from e107158-lin.cambridge.arm.com (unknown [10.1.197.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 04DFB3F73B;
-        Thu, 16 Dec 2021 14:53:44 -0800 (PST)
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Beata Michalska <Beata.Michalska@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Qais Yousef <qais.yousef@arm.com>
-Subject: [PATCH 2/2] sched/uclamp: Fix iowait boost escaping uclamp restriction
-Date:   Thu, 16 Dec 2021 22:53:20 +0000
-Message-Id: <20211216225320.2957053-3-qais.yousef@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211216225320.2957053-1-qais.yousef@arm.com>
-References: <20211216225320.2957053-1-qais.yousef@arm.com>
+        id S236524AbhLPWxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 17:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231652AbhLPWxh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 17:53:37 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5838C061574;
+        Thu, 16 Dec 2021 14:53:37 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 70C6A740;
+        Thu, 16 Dec 2021 22:53:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 70C6A740
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1639695217; bh=NXX/Lz87ap+4ILofsJe99zKcovJCoPqQXL8CAuKOyb4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=PK05iQ/ApujTC8PKEUMIWI/pVWRhUdMyk9tueHxP1MMTKS1iuXhCk0QPd5vn3MWJn
+         0BMfXOAUhuYoq+DRx6RSUyXXjbznFHuAF4G2ye2UhLEW8U/+W6bqsUZQU3xgRxt9Ez
+         e/IgWU8lXPxj+h+xCO3VyeR0DBT3LADQyccBt6nnzVYn2KkV1jrUVvwIMAbXfIYPw6
+         cLTnoReMj6QuhIO7V2zzXOCAQjDaCOwMeOmyc6a40v6rOu5XCBoECQBlqlYP+4boU/
+         P/IglGYjx0LK5G/0q7wp77XCU58gz8+GLSgzExnPgyD5mbgm7T2jhD7wpUmhCYjgGk
+         7oOXk3s2NOExQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Anssi Hannula <anssi.hannula@iki.fi>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] docs/vm: clarify overcommit amount sysctl behavior
+In-Reply-To: <f964967d-dd47-f509-33c3-abd6f8593710@redhat.com>
+References: <20211211194159.3137362-1-anssi.hannula@iki.fi>
+ <YbUkdvFBayRwV6ax@casper.infradead.org>
+ <f964967d-dd47-f509-33c3-abd6f8593710@redhat.com>
+Date:   Thu, 16 Dec 2021 15:53:36 -0700
+Message-ID: <8735msduvj.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iowait_boost signal is applied independently of util and doesn't take
-into account uclamp settings of the rq. An io heavy task that is capped
-by uclamp_max could still request higher frequency because
-sugov_iowait_apply() doesn't clamp the boost via uclamp_rq_util_with()
-like effective_cpu_util() does.
+David Hildenbrand <david@redhat.com> writes:
 
-Make sure that iowait_boost honours uclamp requests by calling
-uclamp_rq_util_with() when applying the boost.
+> On 11.12.21 23:21, Matthew Wilcox wrote:
+>> On Sat, Dec 11, 2021 at 09:41:59PM +0200, Anssi Hannula wrote:
+>>> Documentation/vm/overcommit-accounting.rst says that the overcommit
+>>> amount can be set via vm.overcommit_ratio and vm.overcommit_kbytes.
+>>>
+>>> Add a clarification that those only take effect in overcommit handling
+>>> mode 2 ("Don't overcommit"), i.e. they do not act as an "additional"
+>>> limit that is always enforced.
+>>>
+>>> Signed-off-by: Anssi Hannula <anssi.hannula@iki.fi>
+>>> ---
+>> 
+>> Simple and clear improvement, IMO.  Cc'ing linux-mm to get more eyes on
+>> it.
+>
+> As I had the same idea to just make this clearer in the context of
+> advanced documentation for virtio-mem, so I approve :)
+>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Fixes: 982d9cdc22c9 ("sched/cpufreq, sched/uclamp: Add clamps for FAIR and RT tasks")
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
----
- kernel/sched/cpufreq_schedutil.c | 1 +
- 1 file changed, 1 insertion(+)
+Applied, thanks.
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 48327970552a..93dcea233c65 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -289,6 +289,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
- 	 * into the same scale so we can compare.
- 	 */
- 	boost = (sg_cpu->iowait_boost * sg_cpu->max) >> SCHED_CAPACITY_SHIFT;
-+	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
- 	if (sg_cpu->util < boost)
- 		sg_cpu->util = boost;
- }
--- 
-2.25.1
-
+jon

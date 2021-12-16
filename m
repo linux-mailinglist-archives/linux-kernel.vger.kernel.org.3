@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D18476B15
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 08:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6028476B1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 08:38:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbhLPHgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 02:36:13 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:40568 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229664AbhLPHgK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 02:36:10 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowAB3fVlW7LphnmY9Aw--.50137S2;
-        Thu, 16 Dec 2021 15:35:50 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     jiasheng@iscas.ac.cn
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] lib/mpi: potential dereference of null pointer
-Date:   Thu, 16 Dec 2021 15:35:48 +0800
-Message-Id: <20211216073548.305145-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S232241AbhLPHiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 02:38:14 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:45664
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232228AbhLPHiN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 02:38:13 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 723A23F1B0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639640291;
+        bh=6XFRqSMdUPXz3BmHUNLepdt3XO5NwJG7CC0ys/8y//o=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=HNSMQxenY0j+HlqhsKwCfchyzWImIxIsAJ98dOJczBe4qrtBdcZ3hWr1SpTdCbDqt
+         oPDoTE3w+hy5QsFwBBUOJ3hFimvs4+v5v3ntIR41SSoQOTGnHJnDoxjydEH4th5Hes
+         YjRj7fTT1qh8O6yuDZYqK8qPFqIzbgZ0ohmjOZWWRnq0saw4hqUmBY3Z2CPqc03ssk
+         b/tHqd5n2K92PqCzc4EGtqegKRxbZEQtmfMUa7FHwhkBl+s0UHdSc7M/hPGOUkWW6z
+         8bxI4QuyKGqkz+J6AjLd9g2gCmbGbrWQsZ4RPa5xlwhmUdnirYihy4BHGN16hx3+it
+         CJj+i8CpaihNg==
+Received: by mail-lj1-f197.google.com with SMTP id h18-20020a05651c159200b0021cf7c089d0so8202960ljq.21
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 23:38:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6XFRqSMdUPXz3BmHUNLepdt3XO5NwJG7CC0ys/8y//o=;
+        b=EMCbNHZAUxCU5SHwfCTomfg/DLNVN7VqTpptdSS96WD0ZnPcF/dxBu+mC3EYCQJKzD
+         xfL+wszxL2jo2wH/vskzGRP4u3RRP5tudKjEvyCmHVe26a3vJ8hbjSEhKTPE2vphg+LZ
+         U8iOUVvMyMqhJ6DCXv9t9zCYLhQyoXvtkc9agng6Nd899SJUYL5WdC+ckZQSQ/tTCMcq
+         Fsbn+qTTKJGOSb5HPbdadPU9+1Dq5nyevNh5Fv3kzOZatcMJGRizvb31lC4Kr4c5vkMX
+         oxk7I5VL+E0HQqzvbWXmA1URuEljTaYDdxH4hIbCwzivyZGptYQw1+2cWVIF4B3enqcM
+         thZQ==
+X-Gm-Message-State: AOAM531gM0r4lQJhGnGwbtO5jj3Mj2mGNa4Irqe+INcHP47QEUNwNPlb
+        Av19lDJ/KlwLm/UJp2Zb6ueHSutDhumCNmE1FbcPFhk/nGixjb3uBdXvCvujPw/2JvSX85VbklP
+        5sxEnGjWXxrI+YsxrFp6zuIE7HlSWGHqYa3FoatDpUw==
+X-Received: by 2002:a05:6512:340c:: with SMTP id i12mr1545520lfr.442.1639640289539;
+        Wed, 15 Dec 2021 23:38:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw6D4M3milSj9T6RMMugHsSByLIVmvgCptY8KQLkssmSHA/cG6m1PV3kpo4dpmAQxiZhglncA==
+X-Received: by 2002:a05:6512:340c:: with SMTP id i12mr1545502lfr.442.1639640289312;
+        Wed, 15 Dec 2021 23:38:09 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id s10sm955828ljd.75.2021.12.15.23.38.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 23:38:08 -0800 (PST)
+Message-ID: <b432dfba-2388-5a22-d319-e03ddbdf1a47@canonical.com>
+Date:   Thu, 16 Dec 2021 08:38:07 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAB3fVlW7LphnmY9Aw--.50137S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr45AFW5Zr4ftF4kJrWrZrb_yoWxAFg_Ca
-        yvgr1UWry29F1S9F45KrWYkrWFy3WkGFWFgw1fK343K3sxAryfWr9rXr95tFW3CrWj9rs8
-        ua1qkay3tw13ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF4l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUh4SOUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] usb: ohci-s3c2410: Use platform_get_irq() to get the
+ interrupt
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211215225358.1993774-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211215225358.1993774-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of kcalloc() needs to be checked.
-To avoid dereference of null pointer in case of the failure of alloc.
+On 15/12/2021 23:53, Rob Herring wrote:
+> Accessing platform device resources directly has long been deprecated for
+> DT as IRQ resources may not be available at device creation time. Drivers
+> relying on the static IRQ resources is blocking removing the static setup
+> from the DT core code.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  drivers/usb/host/ohci-s3c2410.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
 
-Fixes: a8ea8bdd9df9 ("lib/mpi: Extend the MPI library")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- lib/mpi/mpi-mod.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/lib/mpi/mpi-mod.c b/lib/mpi/mpi-mod.c
-index 47bc59edd4ff..54fcc01564d9 100644
---- a/lib/mpi/mpi-mod.c
-+++ b/lib/mpi/mpi-mod.c
-@@ -40,6 +40,8 @@ mpi_barrett_t mpi_barrett_init(MPI m, int copy)
- 
- 	mpi_normalize(m);
- 	ctx = kcalloc(1, sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return NULL;
- 
- 	if (copy) {
- 		ctx->m = mpi_copy(m);
--- 
-2.25.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
+
+Best regards,
+Krzysztof

@@ -2,98 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9EC47724A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07351477259
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237028AbhLPMzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:55:25 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:34021 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbhLPMzY (ORCPT
+        id S237067AbhLPM5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237042AbhLPM5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:55:24 -0500
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MAOVx-1mlzNZ2kV1-00BsAi; Thu, 16 Dec 2021 13:55:22 +0100
-Received: by mail-wr1-f50.google.com with SMTP id i22so14247484wrb.13;
-        Thu, 16 Dec 2021 04:55:22 -0800 (PST)
-X-Gm-Message-State: AOAM530pawN72ypZWEbCYeHsrrrI8SzVJ3p+7BeT4qqPvJaMLnvpRKwA
-        Ow9aYWyoQSCy85JjR9Cb2fRRr4VtNi133pXMVso=
-X-Google-Smtp-Source: ABdhPJxqiJNKIPDPxQiAYD/ADzEnUGacnfrfwb+mwnEiDpqRpaRAA43q41TWNAdS96RDEsxEkkrg/T9kHUnFSTm357Y=
-X-Received: by 2002:adf:a352:: with SMTP id d18mr4393837wrb.317.1639659322216;
- Thu, 16 Dec 2021 04:55:22 -0800 (PST)
+        Thu, 16 Dec 2021 07:57:05 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E584C06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:57:03 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id d10so64488660ybe.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:57:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=biYeWwH5pOPzMNJkloFSKISWZUVhTjLo4qMJtwrAr2s=;
+        b=IWyGT8xnMvMxUvLvHbL9sBDVZ3xrOZPGGqtIdcts54iWV/rv5gaJ3XgQYDNqDd2zhI
+         4N2oJ0CHkbhYC0u0TFnqEz9J0WmAEa4YuyrvvXewRVevtr/eLkLCPRFOH+3m5dAHTUFa
+         CF0k4/2VLFCiToj9ChF+2zZgEpmKKP34HcLsyTJS8PrdrOEp+Ak3bpdwMOgBRg/fqAhV
+         RnIoiMZ+2dDGjZOnQ7fVC69xPY582Kw45GReckrOJQUFLvT0GPwzYvo9mBGEOVoutRHm
+         CM7WbaGdQO1kGVNmyahfFS2aOA2gI9Tj2Wf4f+fYqbC/Jv5RnYpHPsNSBOuXshbaUcYs
+         X6Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=biYeWwH5pOPzMNJkloFSKISWZUVhTjLo4qMJtwrAr2s=;
+        b=77gmv3RgKdojo4ANUe0W4qLxBHOpA4uLYZbijG4LrbD7Be4TzPjUgxxdhuFO4cOhcz
+         S6V9zymar1t8HoO5YgSnPaikajvpjEu68RhI4XhQiUQA0HD7eggIFSLXqlUEIRYpy7m0
+         quRr+fP1euGng8aZrMsJUIr1p2YG9S6E8gx13NZi51OLKcns7ok1Jl84w/7MrqjFUxTb
+         indRjqsPSZ+tI8PfN9BjWIMvTiQ6ZGKbKUlV5TIMbSPdlmOS+3JbICba+tkIzeGU7XAh
+         fXhzHO/DA5LVgMY2hEe7G8CARQjXzQlI0aLS1pvsVGcA4b6TKtqdyrdugND1PXKlnALM
+         n/5A==
+X-Gm-Message-State: AOAM532d4UFbLq7nrItOurDo8Atj40QsR1f3vsbtR5Zl0zBMysW96+i7
+        BJ3/yodnFpLVcPXapwfod9JHOEeFl336bXfrpoE=
+X-Google-Smtp-Source: ABdhPJxWtjV9w6el0ReUJTBesdGj1Bpauj/5jrxJQTOfqpnTfVjy0u9QjMb5DsUd4/27Kp5krDyPVrMek8p4sXN9Tqw=
+X-Received: by 2002:a5b:904:: with SMTP id a4mr12732889ybq.727.1639659422757;
+ Thu, 16 Dec 2021 04:57:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
- <20210925203224.10419-6-sergio.paracuellos@gmail.com> <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
-In-Reply-To: <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 16 Dec 2021 13:55:06 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3R67D+0KLrTncr+SiHg79itRkxbG9caDo6YsHKzRwwkA@mail.gmail.com>
-Message-ID: <CAK8P3a3R67D+0KLrTncr+SiHg79itRkxbG9caDo6YsHKzRwwkA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific 'pci_remap_iospace()'
-To:     Xi Ruoyao <xry111@mengyan1223.wang>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Received: by 2002:a05:6918:790b:b0:6e:28d:4c00 with HTTP; Thu, 16 Dec 2021
+ 04:57:02 -0800 (PST)
+Reply-To: marvinphillip002@gmail.com
+From:   marvin phillip <hellooffic685@gmail.com>
+Date:   Thu, 16 Dec 2021 12:57:02 +0000
+Message-ID: <CAEg9HJE-cLLv_xfYVagA=-YhPV=DXUbf-qBetieHPBdhgmPv=w@mail.gmail.com>
+Subject: RE
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:k+dzuHUBnxmp237dTZgU2vdCf9nLIyQgN0u/kJd9ELDeLol0Xex
- oV4FQGnqqG6j0hjc75YGtmVtDhFTaZVTgGF4I2Z5rPrc6yooEf+AwPt/gHqdVgNRZwFz3i1
- vwaEEDimGLrIMDxuanD+JbkO/0bC7nOK7reDhNR7HGzuVx6M1GYYqIBnBkDL5ogqGfmWzBd
- /yaID8wU/3lb3sZ7ywHSg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:AWZt9FKW1SM=:77i+za3GB8YmkKaN10J2ac
- uW3uAUxFoptCsMT/t3ARo2B/u/ylFW01dODUFD2Z97W5d8uC9EZYo3IwBQb42ajjegQ2G3BcP
- /TckwGBgJVbnn/SFU3iYr8TNqFcqC5evqExqlha8KP+s8KtwL9zhJrCpnTZ3FRgIBFoPC8Jiu
- loZgI2+a+KTUIYMDAuwPYISVbEA0rHDVDrKBH3kYlBqFxqZSxS6CRE55gobAin2yVqsLRNefK
- Y/KPUuG6WX7xTqn5L1jpXda5ot0m1qpECNjDtXyTU+5QuK5NXK38dSzAUuCT5zJbM2P5CeRmI
- vkfb+E8vJyU1PgW6OoH2wqv/3pmLRW0sHkpJAzGIzDonEYvV//pUBBjWpPfIzrJQICyD3MHKi
- JWOi0wHoTDWQkT8RhdweHPvf6z7tlgJkTXVCPmdZJltXguC3BpuHRkW+Vgcbi+Del0WqTI5Ux
- +cBKfyCEnsui/zi010OlUUcGQgWHKJmRI5E+dc7srXW+ckjDyOY2fQEGkHZL+DVYrDUEErpE9
- RFPTqZy35KEmH4r4qcRMHX8C1ViRoXg++cYdNKhXO+Ix+XEd+/SNZwfymhDZCrJ14UyXDoMiO
- FypaXu4DnQlzMhStP/drcslgnak1Pf6VS8J4Pb4hFEyVd8a5y4cjqNDAoiHgD8BOAXgFmnyqv
- SUHsKIyzM8q79Ei7rKnujDx8OQO2b3ZvbPBlkCIKPVPzSWujjfiIzPJh32LEdp/IEGL0=
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 12:44 PM Xi Ruoyao <xry111@mengyan1223.wang> wrote:
->
-> On Sat, 2021-09-25 at 22:32 +0200, Sergio Paracuellos wrote:
-> > To make PCI IO work we need to properly virtually map IO cpu physical address
-> > and set this virtual address as the address of the first PCI IO port which
-> > is set using function 'set_io_port_base()'.
-> >
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->
-> Hi,
->
-> the change is causing a WARNING on loongson64g-4core-ls7a:
->
-> [    0.105781] loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff ->
->  0x0000020000
-> [    0.105792] loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff ->
->  0x0040000000
-> [    0.105801] ------------[ cut here ]------------
-> [    0.105804] WARNING: CPU: 0 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x80/0x88
-> [    0.105815] resource start address is not zero
->
-> I'm not sure how to fix this one.
-
-It looks like this machine has two I/O spaces, one for ISA at 0x18000000/0x00000
-and one for PCI at 0x18020000/0x20000, but the implementation assumes there
-is only one. If you want to use pci_remap_iospace() on this platform,
-it needs to
-be extended to allow more than one such space.
-
-       Arnd
+Bun=C4=83 ziua, V=C4=83 rug=C4=83m s=C4=83 fi=C8=9Bi informat c=C4=83 acest=
+ e-mail care a ajuns la
+c=C4=83su=C8=9Ba dvs. po=C8=99tal=C4=83 nu este o eroare, ci v-a fost adres=
+at =C3=AEn mod
+special pentru a fi luat =C3=AEn considerare. Am o propunere de
+(7.500.000,00 USD) l=C4=83sat=C4=83 de regretatul meu client, Inginerul Car=
+los,
+care poart=C4=83 acela=C8=99i nume cu tine, care obi=C8=99nuia s=C4=83 lucr=
+eze =C8=99i a locuit
+aici, =C3=AEn Lome, Togo. R=C4=83posatul meu client =C8=99i familia au fost=
+ implica=C8=9Bi
+=C3=AEntr-un accident de ma=C8=99in=C4=83 care le-a luat via=C8=9Ba. . V=C4=
+=83 contactez =C3=AEn
+calitate de rud=C4=83 apropiat=C4=83 a defunctului, astfel =C3=AEnc=C3=A2t =
+s=C4=83 pute=C8=9Bi primi
+fondurile =C3=AEn cazul cererilor. Dup=C4=83 r=C4=83spunsul dvs. rapid, v=
+=C4=83 voi
+informa modalit=C4=83=C8=9Bile de executare a acestui leg=C4=83m=C3=A2nt, c=
+ontacta=C8=9Bi-m=C4=83 pe
+acest e-mail (marvinphillip002@gmail.com)

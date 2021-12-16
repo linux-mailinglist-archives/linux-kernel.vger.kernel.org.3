@@ -2,159 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E27CB477C89
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E96477C94
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236852AbhLPT3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 14:29:04 -0500
-Received: from finn.gateworks.com ([108.161.129.64]:36086 "EHLO
-        finn.localdomain" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232560AbhLPT3D (ORCPT
+        id S239747AbhLPTaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 14:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232560AbhLPTaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 14:29:03 -0500
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1mxwQy-0093O5-0a; Thu, 16 Dec 2021 19:28:56 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Adam Ford <aford173@gmail.com>,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH] arm64: dts: imx8mm-venice-gw73xx-0x: add dt overlay for imx219 rpi v2 camera
-Date:   Thu, 16 Dec 2021 11:28:54 -0800
-Message-Id: <20211216192854.26427-1-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 16 Dec 2021 14:30:14 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D05EC061574;
+        Thu, 16 Dec 2021 11:30:14 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id y68so124418ybe.1;
+        Thu, 16 Dec 2021 11:30:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vBq/AIjoYwp53RAGyy2WVyA7H7oGamWg7hkUDS5jhZc=;
+        b=eChcv9h6UQyg6fZiNcX5tvhyN9alMPHXiZnA9LIry3iilpyveWARl7XZ6V0SAr2/np
+         QE+/WTc+yD5qr4kuAscG5VgUbdTpUuZ2FAEsARchaNb9236f34jgzXDT6/kTjW8IKFgP
+         L+/BNX9paBcDi43esbhII2sSY8GO7aXFY9w0yOQGphFKqVlZEzG5iKj0uq6go5fKFvIP
+         q0XFgnHH6q2Oo1SNg9qonU0JUofBXzmawmZceezmsFXcPtxIiimTorh+8S+lYQAQ+HYF
+         51l0F3FQojJKpb1tp0jNMLmmqfOdJRG7zxIYHbRfjWMyRiUOsAewnpWGNIZOKQKM1ST+
+         U1/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vBq/AIjoYwp53RAGyy2WVyA7H7oGamWg7hkUDS5jhZc=;
+        b=7gJf9L1Q9ATL6pR30iOPUyzmsohK+K33b4wCGh+0oKmm0yG8/p/vRSbud2WSwDdySm
+         NHFhBh79lOyazj6bhqV5w5YSCIKXNPwi+4ntRGwsMyyF6cTCTzEe9r3+fcmHW5mYzA+O
+         aljCb6S4gOPmIWmAOs8QHDRm2DarPBe0Bt5ZKXdOCv3tLMFqEb9Aql6DQ/kLcEMHA+qj
+         w0jFCfpt1jhWegWWfswz+xIKBIcjsoYgMTQmPdTqhUfyEYRhmy47fOkXrd+eW9QxLqtK
+         qIrSMJV/epmpAyMeC/QmJIEZyFGoe2DP8sB5FKLfoJr+Sub+aIOekhJB7s6+WC6VGdCW
+         TGRw==
+X-Gm-Message-State: AOAM531Hew1+aQUKRxh+hvtQpe5NfmFa5PamrNcKFI/ndsvB7jaLKVej
+        lgm/bj9YSrz9H1CDrP9KsDePcyY/nf6hnqQaedA=
+X-Google-Smtp-Source: ABdhPJzJlt1GSC0aOS1XabcCyDX17a23mLFqWmYFQH5e7ix/HymjdWC09/g/yYCOtjr4mQ0MC+YCLVWhrdXpKCVDUek=
+X-Received: by 2002:a25:e90a:: with SMTP id n10mr14717023ybd.180.1639683013244;
+ Thu, 16 Dec 2021 11:30:13 -0800 (PST)
+MIME-Version: 1.0
+References: <20211210173433.13247-1-skhan@linuxfoundation.org>
+ <CAADnVQ+Fnn-NuGoLq1ZYbHM=kR_W01GB1DCFOnQTHhgfDOrnaA@mail.gmail.com>
+ <d367441f-bba0-30eb-787a-89b0c06a65dd@linuxfoundation.org>
+ <CAEf4BzahZhCEroeMWNTu-kGsuFCDaNCvbkiFW7ci0EUOWTwmqQ@mail.gmail.com> <d3c1b7f4-5363-c23e-4837-5eaf07f63ebc@linuxfoundation.org>
+In-Reply-To: <d3c1b7f4-5363-c23e-4837-5eaf07f63ebc@linuxfoundation.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 16 Dec 2021 11:30:01 -0800
+Message-ID: <CAEf4BzYKnoD_x7fZ4Fwp0Kg-wT6HMXOG0CMRSG4U+qQ0R27yzQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the RaspberryPi Camera v2 which is an IMX219 8MP module:
- - https://datasheets.raspberrypi.com/camera/camera-v2-schematics.pdf
- - has its own on-board 24MHz osc so no clock required from baseboard
- - pin 11 enables 1.8V and 2.8V LDO which is connected to
-   GW73xx MIPI_GPIO4 (IMX8MM GPIO1_IO1) so we use this as a gpio
-   controlled regulator enable.
+On Thu, Dec 16, 2021 at 6:42 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 12/15/21 9:04 PM, Andrii Nakryiko wrote:
+> > On Tue, Dec 14, 2021 at 12:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >>
+> >> On 12/11/21 6:53 PM, Alexei Starovoitov wrote:
+> >>> On Fri, Dec 10, 2021 at 9:34 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >>>>
+> >>>> ARRAY_SIZE is defined in multiple test files. Remove the definitions
+> >>>> and include header file for the define instead.
+> >>>>
+> >>>> Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
+> >>>> define.
+> >>>>
+> >>>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> >>>> ---
+> >>>>    tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
+> >>>>    tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
+> >>>>    tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
+> >>>>    tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
+> >>>>    tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
+> >>>>    5 files changed, 5 insertions(+), 19 deletions(-)
+> >>>>
+> >>>> diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+> >>>> index 1d8918dfbd3f..7a5ebd330689 100644
+> >>>> --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+> >>>> +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+> >>>> @@ -5,6 +5,7 @@
+> >>>>    #include <bpf/bpf_helpers.h>
+> >>>>    #include <bpf/bpf_tracing.h>
+> >>>>    #include <bpf/bpf_core_read.h>
+> >>>> +#include <bpf/bpf_util.h>
+> >>>
+> >>> It doesn't look like you've built it.
+> >>>
+> >>> progs/test_sysctl_prog.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
+> >>> #include <bpf/bpf_util.h>
+> >>>            ^~~~~~~~~~~~~~~~
+> >>>     CLNG-BPF [test_maps] socket_cookie_prog.o
+> >>> progs/test_sysctl_loop2.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
+> >>> #include <bpf/bpf_util.h>
+> >>>            ^~~~~~~~~~~~~~~~
+> >>> 1 error generated.
+> >>> In file included from progs/profiler2.c:6:
+> >>> progs/profiler.inc.h:7:10: fatal error: 'bpf/bpf_util.h' file not found
+> >>> #include <bpf/bpf_util.h>
+> >>>            ^~~~~~~~~~~~~~~~
+> >>>
+> >>
+> >> Sorry about that. I built it - I think something is wrong in my env. Build
+> >> fails complaining about not finding vmlinux - I overlooked that the failure
+> >> happened before it got to progs.
+> >>
+> >> Error: failed to load BTF from .../vmlinux: No such file or directory
+> >
+> > Please make sure that you build vmlinux before you build selftests,
+> > BPF selftests use vmlinux to generate vmlinux.h with all kernel types
+> > (among other things). So please also make sure that all the setting in
+> > selftests/bpf/config were used in your Kconfig.
+> >
+> >>
+>
+> The problem in my env. is that I don't have CONFIG_DEBUG_INFO_BTF in
+> my config and then don't have the dwarves and llvm-strip on my system.
+> Pains of upgrading.
+>
+> I am all set now. On the other hand the vmlinux.h is a mess. It has
+> no guards for defines and including stdio.h and this generated
+> vmlinux.h causes all sorts of problems.
 
-Support is added via a device-tree overlay.
+It does have
 
-The IMX219 supports RAW8/RAW10 image formats.
+#ifndef __VMLINUX_H__
+#define __VMLINUX_H__
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
----
- arch/arm64/boot/dts/freescale/Makefile        |  1 +
- .../imx8mm-venice-gw73xx-0x-imx219.dts        | 84 +++++++++++++++++++
- 2 files changed, 85 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts
+Are we talking about the same vmlinux.h here?
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 5ec8d59347b6..eb9fe81ce61e 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -44,6 +44,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-var-som-symphony.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw71xx-0x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-imx219.dtbo
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs422.dtbo
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs485.dtbo
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts
-new file mode 100644
-index 000000000000..2b76c3201ad6
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2021 Gateworks Corporation
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+
-+#include "imx8mm-pinfunc.h"
-+
-+/dts-v1/;
-+/plugin/;
-+
-+&{/} {
-+	compatible = "gw,imx8mm-gw73xx-0x", "fsl,imx8mm";
-+
-+	reg_cam: regulator-cam {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_cam>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "reg_cam";
-+		gpio = <&gpio1 1 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	cam24m: cam24m {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <24000000>;
-+		clock-output-names = "cam24m";
-+	};
-+};
-+
-+&csi {
-+	status = "okay";
-+};
-+
-+&i2c3 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	imx219: sensor@10 {
-+		compatible = "sony,imx219";
-+		reg = <0x10>;
-+		clocks = <&cam24m>;
-+		VDIG-supply = <&reg_cam>;
-+
-+		port {
-+			/* MIPI CSI-2 bus endpoint */
-+			imx219_to_mipi_csi2: endpoint {
-+				remote-endpoint = <&imx8mm_mipi_csi_in>;
-+				clock-lanes = <0>;
-+				data-lanes = <1 2>;
-+				link-frequencies = /bits/ 64 <456000000>;
-+			};
-+		};
-+	};
-+};
-+
-+&mipi_csi {
-+	status = "okay";
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@0 {
-+			reg = <0>;
-+			imx8mm_mipi_csi_in: endpoint {
-+				remote-endpoint = <&imx219_to_mipi_csi2>;
-+				data-lanes = <1 2>;
-+			};
-+		};
-+	};
-+};
-+
-+&iomuxc {
-+	pinctrl_reg_cam: regcamgrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_GPIO1_IO01_GPIO1_IO1	0x41
-+		>;
-+	};
-+};
--- 
-2.17.1
+As for stdio.h. vmlinux.h doesn't co-exist with other headers well,
+it's a known inconvenience we are trying to fix at Clang side. But
+stdio.h makes no sense as vmlinux.h is supposed to be used only from
+the BPF program side, where stdio.h never worked. So not sure what you
+are trying to do, but vmlinux.h works fine for cases it was created
+for.
 
+>
+> thanks,
+> -- Shuah

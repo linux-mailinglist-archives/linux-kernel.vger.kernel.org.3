@@ -2,238 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2CA477A88
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A9E477A8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240000AbhLPR1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240277AbhLPR1B (ORCPT
+        id S240078AbhLPR3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:29:15 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:43945 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235619AbhLPR3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:27:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19D6C061574;
-        Thu, 16 Dec 2021 09:27:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81ABD61ECD;
-        Thu, 16 Dec 2021 17:27:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E4DC36AE4;
-        Thu, 16 Dec 2021 17:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639675619;
-        bh=RxcIcwqtEtoh6b33m/mJM5c7KZEkU6Tcf4H5rd+1/mk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=OunuMfCzpz7zaAb3tXW9Sqx7kb4RMGodaoh0+QMNvKZU4lU6+YNWN8YSmfTiiVwko
-         DJpB988cRMtP2ciiv4KU9gvSYJt5yy6664RWK1AooAyjI64SQYWSdTbvypPQXQo9Yz
-         iQrZPvaEOI65tWPbS+FIz5gepH3Of+9iaYDV2CzvmrRnkYL8Nki8eMaYs+tWh2SV3Z
-         JUWqp9hYpRon+xhpo1nzqskU7H15lqJrBH40hzwIoPWbqWsbZyZK0brHkv9vnxIdcP
-         ya9JNqnXLqTP5pEafYaFxZ6eGG9Bz1FoYqwoAnvq7c29+zGsftY86aG8YSHzrRG3zV
-         HvAwEG2EOrBuw==
-Date:   Thu, 16 Dec 2021 11:26:58 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com,
-        michael.a.bottini@linux.intel.com, rafael@kernel.org,
-        me@adhityamohan.in, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rajat Jain <rajatja@google.com>
-Subject: Re: [PATCH V4 2/2] PCI: vmd: Override ASPM on TGL/ADL VMD devices
-Message-ID: <20211216172658.GA770781@bhelgaas>
+        Thu, 16 Dec 2021 12:29:14 -0500
+Received: by mail-oi1-f176.google.com with SMTP id w64so3479508oif.10;
+        Thu, 16 Dec 2021 09:29:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BGDKRwosuspfYWxZApqXKSNZ+F/8DLGm7NO/ffPXmr0=;
+        b=LDERC2TzyuqcTGa6DhOCgTQYW5upMvrizhHTexUW3dJsQ2FgKBELIdmvdAUJ8yqZjn
+         pUxsHoh0KJTCYomQ9qlpTb71DrqcHyURLUPxfBP0703koIPqM7qcs3O2YIIk81inAXlr
+         1efDFNQKpIwmeJ42cA6Ujy1Jn1A/t+FLSq7dmw/WQ/OYCQ6Yz9C4qAvKwPBtZFgPgzG6
+         UY1VG+ZsePnK9Rm+cJYvDBCIBD5AskiAocoLAbg7z/Dfw0FvNLmWEptzR1xb5pcxj12j
+         EBoOza79JHyKb4cyefYR6SPpg69YbZeCjSP7I+XJCtSnWXDJ7xR/Io2GQHoqIRDNtLEB
+         ORWg==
+X-Gm-Message-State: AOAM530rmPSvXS6eI7MGHfFndt5say2lLGknvH32llGsYa0EOODjxxI1
+        0S8Jm2zm9HZRa8O1JF56ew==
+X-Google-Smtp-Source: ABdhPJzpIdbfDFxlf+VQ8oNO/3zvGLjwEQsh7u9aVYPQ0hfaH6c6G98GZZ3yZtc9iElIOJF/los3iw==
+X-Received: by 2002:a05:6808:1a02:: with SMTP id bk2mr4936718oib.52.1639675754325;
+        Thu, 16 Dec 2021 09:29:14 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id e26sm1102831oog.46.2021.12.16.09.29.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 09:29:13 -0800 (PST)
+Received: (nullmailer pid 430626 invoked by uid 1000);
+        Thu, 16 Dec 2021 17:29:12 -0000
+Date:   Thu, 16 Dec 2021 11:29:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-media@vger.kernel.org, abel.vesa@nxp.com,
+        aford@beaconembedded.com, benjamin.gaignard@collabora.com,
+        hverkuil-cisco@xs4all.nl,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH V2 04/10] dt-bindings: media: nxp,imx8mq-vpu: Split G1
+ and G2 nodes
+Message-ID: <Ybt3aHfscuKMM0ie@robh.at.kernel.org>
+References: <20211216111256.2362683-1-aford173@gmail.com>
+ <20211216111256.2362683-5-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211216055600.2425362-2-david.e.box@linux.intel.com>
+In-Reply-To: <20211216111256.2362683-5-aford173@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Rajat for LTR max latency write]
+On Thu, Dec 16, 2021 at 05:12:49AM -0600, Adam Ford wrote:
+> The G1 and G2 are separate decoder blocks that are enabled by the
+> vpu-blk-ctrl power-domain controller, which now has a proper driver.
+> Update the bindings to support separate nodes for the G1 and G2
+> decoders with vpu-blk-ctrl power-domain support.
 
-On Wed, Dec 15, 2021 at 09:56:00PM -0800, David E. Box wrote:
-> From: Michael Bottini <michael.a.bottini@linux.intel.com>
+You could expand this a bit more with Lucas' explanation and being 
+explicit on the compatibility implications.
+
+Otherwise, with that and indentation fixed:
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
 > 
-> On Tiger Lake and Alder Lake platforms, VMD controllers do not have ASPM
-> enabled nor LTR values set by BIOS. This leads high power consumption on
-> these platforms when VMD is enabled as reported in bugzilla [1].  Enable
-> these features in the VMD driver using pcie_aspm_policy_override() to set
-> the ASPM policy for the root ports.
-
-s/leads high/leads to high/
-
-Does this depend on "Tiger Lake and Alder Lake platforms"
-specifically, or does it depend on a BIOS design choice, i.e., "don't
-configure ASPM or LTR for devices below a VMD"?
-
-The subject says "override ASPM on VMD devices," but it looks like
-this affects the ASPM configuration of devices *below* the VMD, not of
-the VMD itself.
-
-It looks like this only affects *NVMe* devices, since
-vmd_enable_aspm() checks for PCI_CLASS_STORAGE_EXPRESS.  Why is that?
-Is there something special about NVMe?  I'd think you would want to do
-this for *all* devices below a VMD.
-
-Since it only affects PCI_CLASS_STORAGE_EXPRESS devices, I don't think
-it actually "sets ASPM policy for the root ports".  vmd_enable_aspm()
-calls pcie_aspm_policy_override() on endpoints.  It's true that the
-link ASPM state happens to be attached to the upstream end of the
-link, but that's an ASPM implementation detail.
-
-This all needs to be clear in the subject and commit log.
-
-> To do this, add an additional flag in VMD features to specify devices that
-> must have their respective policies overridden.
-
-I'm not clear on why you want this to apply to only certain VMDs and
-not others.  Do some BIOSes configure ASPM for devices below some
-VMDs?
-
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=213717
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 > 
-> Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> Tested-by: Adhitya Mohan <me@adhityamohan.in>
-> ---
-> V4
->  - Refactor vmd_enable_apsm() to exit early, making the lines shorter
->    and more readable. Suggested by Christoph.
-> V3
->  - No changes
-> V2
->  - Use return status to print pci_info message if ASPM cannot be enabled.
->  - Add missing static declaration, caught by lkp@intel.com
-> 
->  drivers/pci/controller/vmd.c | 43 +++++++++++++++++++++++++++++++++---
->  1 file changed, 40 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index a45e8e59d3d4..880afd450a14 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -20,6 +20,8 @@
+> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> index 762be3f96ce9..c1e157251de7 100644
+> --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> @@ -15,33 +15,20 @@ description:
 >  
->  #include <asm/irqdomain.h>
+>  properties:
+>    compatible:
+> -    const: nxp,imx8mq-vpu
+> +     oneOf:
+> +      - const: nxp,imx8mq-vpu
+> +        deprecated: true
+> +      - const: nxp,imx8mq-vpu-g1
+> +      - const: nxp,imx8mq-vpu-g2
 >  
-> +#include "../pci.h"
-> +
->  #define VMD_CFGBAR	0
->  #define VMD_MEMBAR1	2
->  #define VMD_MEMBAR2	4
-> @@ -67,6 +69,12 @@ enum vmd_features {
->  	 * interrupt handling.
->  	 */
->  	VMD_FEAT_CAN_BYPASS_MSI_REMAP		= (1 << 4),
-> +
-> +	/*
-> +	 * Device must have ASPM policy overridden, as its default policy is
-> +	 * incorrect.
-> +	 */
-> +	VMD_FEAT_QUIRK_OVERRIDE_ASPM		= (1 << 5),
-
-I think you specifically want to *enable* some ASPM link states, not
-just "override the default policy."  "Override" tells us nothing about
-whether you are enabling or disabling ASPM.  Applies to subject line
-as well.
-
->  };
+>    reg:
+> -    maxItems: 3
+> -
+> -  reg-names:
+> -    items:
+> -      - const: g1
+> -      - const: g2
+> -      - const: ctrl
+> +    maxItems: 1
 >  
->  static DEFINE_IDA(vmd_instance_ida);
-> @@ -661,6 +669,30 @@ static int vmd_alloc_irqs(struct vmd_dev *vmd)
->  	return 0;
->  }
+>    interrupts:
+> -    maxItems: 2
+> -
+> -  interrupt-names:
+> -    items:
+> -      - const: g1
+> -      - const: g2
+> +    maxItems: 1
 >  
-> +/*
-> + * Override the BIOS ASPM policy and set the LTR value for PCI storage
-> + * devices on the VMD bride.
-
-I don't think there's any BIOS "policy" here.  At this point BIOS is
-no longer involved at all, so all that's left is whatever ASPM config
-the BIOS did or did not do.
-
-Why only storage?
-
-s/bride/bridge/
-
-> + */
-> +static int vmd_enable_aspm(struct pci_dev *pdev, void *userdata)
-> +{
-> +	int features = *(int *)userdata, pos;
-> +
-> +	if (!(features & VMD_FEAT_QUIRK_OVERRIDE_ASPM) ||
-> +	    pdev->class != PCI_CLASS_STORAGE_EXPRESS)
-> +		return 0;
-> +
-> +	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
-> +	if (!pos)
-> +		return 0;
-> +
-> +	pci_write_config_word(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, 0x1003);
-> +	pci_write_config_word(pdev, pos + PCI_LTR_MAX_NOSNOOP_LAT, 0x1003);
-
-1) Where did this magic 0x1003 value come from?  Does that depend on
-the VMD device?  The endpoint?  The circuit design?  The path between
-endpoint and VMD?  What if there are switches in the path?
-
-2) There exist broken devices where WORD config accesses don't work:
-https://lore.kernel.org/all/20211208000948.487820-1-rajatja@google.com/
-
-We might need a way to quirk config accesses to those devices, but we
-don't have one yet.  So for now this needs to be a single DWORD write.
-
-> +	if (pcie_aspm_policy_override(pdev))
-> +		pci_info(pdev, "Unable of override ASPM policy\n");
-
-s/Unable of/Unable to/
-
-I think we might need a message about when we *do* override the
-policy.  A note in dmesg might be useful for debugging.  I'm worried
-about the LTR programming because I really don't understand how we
-should be doing that.
-
-> +	return 0;
-> +}
-> +
->  static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->  {
->  	struct pci_sysdata *sd = &vmd->sysdata;
-> @@ -807,6 +839,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->  	pci_scan_child_bus(vmd->bus);
->  	pci_assign_unassigned_bus_resources(vmd->bus);
+>    clocks:
+> -    maxItems: 3
+> -
+> -  clock-names:
+> -    items:
+> -      - const: g1
+> -      - const: g2
+> -      - const: bus
+> +    maxItems: 1
 >  
-> +	pci_walk_bus(vmd->bus, vmd_enable_aspm, &features);
-
-Do you support hotplug under VMD?  This will not happen for hot-added
-devices.
-
->  	/*
->  	 * VMD root buses are virtual and don't return true on pci_is_pcie()
->  	 * and will fail pcie_bus_configure_settings() early. It can instead be
-> @@ -948,15 +982,18 @@ static const struct pci_device_id vmd_ids[] = {
->  	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x467f),
->  		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
->  				VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
-> +				VMD_FEAT_OFFSET_FIRST_VECTOR |
-> +				VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
->  	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x4c3d),
->  		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
->  				VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
-> +				VMD_FEAT_OFFSET_FIRST_VECTOR |
-> +				VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
->  	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
->  		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
->  				VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> -				VMD_FEAT_OFFSET_FIRST_VECTOR,},
-> +				VMD_FEAT_OFFSET_FIRST_VECTOR |
-> +				VMD_FEAT_QUIRK_OVERRIDE_ASPM,},
->  	{0,}
->  };
->  MODULE_DEVICE_TABLE(pci, vmd_ids);
+>    power-domains:
+>      maxItems: 1
+> @@ -49,31 +36,33 @@ properties:
+>  required:
+>    - compatible
+>    - reg
+> -  - reg-names
+>    - interrupts
+> -  - interrupt-names
+>    - clocks
+> -  - clock-names
+>  
+>  additionalProperties: false
+>  
+>  examples:
+>    - |
+>          #include <dt-bindings/clock/imx8mq-clock.h>
+> +        #include <dt-bindings/power/imx8mq-power.h>
+> +        #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +        vpu_g1: video-codec@38300000 {
+> +                compatible = "nxp,imx8mq-vpu-g1";
+> +                reg = <0x38300000 0x10000>;
+> +                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +                clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>;
+> +                power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G1>;
+> +        };
+> +  - |
+> +        #include <dt-bindings/clock/imx8mq-clock.h>
+> +        #include <dt-bindings/power/imx8mq-power.h>
+>          #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  
+> -        vpu: video-codec@38300000 {
+> -                compatible = "nxp,imx8mq-vpu";
+> -                reg = <0x38300000 0x10000>,
+> -                      <0x38310000 0x10000>,
+> -                      <0x38320000 0x10000>;
+> -                reg-names = "g1", "g2", "ctrl";
+> -                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> -                             <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> -                interrupt-names = "g1", "g2";
+> -                clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
+> -                         <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
+> -                         <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
+> -                clock-names = "g1", "g2", "bus";
+> -                power-domains = <&pgc_vpu>;
+> +        vpu_g2: video-codec@38300000 {
+> +                compatible = "nxp,imx8mq-vpu-g2";
+> +                reg = <0x38310000 0x10000>;
+> +                interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> +                clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
+> +                power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G2>;
+>          };
 > -- 
-> 2.25.1
+> 2.32.0
+> 
 > 

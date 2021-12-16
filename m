@@ -2,120 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E1547711D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8E8477109
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbhLPLw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 06:52:56 -0500
-Received: from mengyan1223.wang ([89.208.246.23]:34498 "EHLO mengyan1223.wang"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230062AbhLPLw4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 06:52:56 -0500
-X-Greylist: delayed 521 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Dec 2021 06:52:55 EST
-Received: from localhost.localdomain (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@mengyan1223.wang)
-        by mengyan1223.wang (Postfix) with ESMTPSA id C8EF966017;
-        Thu, 16 Dec 2021 06:44:10 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mengyan1223.wang;
-        s=mail; t=1639655054;
-        bh=e2cVfczo/NWYtUht5KxKMRgux99OifWmOFSqZcDHraQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=h8j4HiuSPpak/mb7Eyxq49DwQVKHPjpPl5bicGMbqeiH4Q3NSN5G9c/NnjsrEBbLD
-         2L8layQi7skSL6jlyGNr9dhtvtYkjAckfpdDOhjGefRZW20gTtYgR0Z+gJMsqLzSBJ
-         moZzY3B5Dx7aXb8vT315/co9e3/3F+6vx4I79SSfuchW15GG81K6RwnCNNU4jP5kDT
-         /eIrgx+JO6wAChK4KZemxGIqp86fyPcdt4FwSWi2ZleCpZlXe2uid3V6VJryDEgXoe
-         tg8qT8J8uxNRI8o3x1NefSweHW2IX5lX/VSrS6myWH4Xy1i4byJth278OO+/s5d6o2
-         o8zxrErGXUaqA==
-Message-ID: <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
-Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific
- 'pci_remap_iospace()'
-From:   Xi Ruoyao <xry111@mengyan1223.wang>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        tsbogend@alpha.franken.de
-Cc:     robh@kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-        Liviu.Dudau@arm.com, bhelgaas@google.com, matthias.bgg@gmail.com,
-        gregkh@linuxfoundation.org, linux-mips@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-staging@lists.linux.dev,
-        neil@brown.name, linux-kernel@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date:   Thu, 16 Dec 2021 19:44:06 +0800
-In-Reply-To: <20210925203224.10419-6-sergio.paracuellos@gmail.com>
-References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
-         <20210925203224.10419-6-sergio.paracuellos@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 
+        id S233004AbhLPLrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 06:47:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231608AbhLPLrl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 06:47:41 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A2EC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 03:47:41 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id r11so85039469edd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 03:47:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XCEmBcYZzRIN6OKtRB2AeETTwqwp1B43Rh6YS4Pk4vI=;
+        b=PhysAmhygWwuOaltk3bjYqbLTNmswu5AMbRzCMWACHlOOBITfhxJySZBYqBiP/AsMK
+         oBq3ZkNpwhS5ZGMJKqvOj6q8AYq+kok+unZSgwKtIhtlkLKg+TT9Akuyt5KsPTEgB30Z
+         0dJWlq7I+2OZ+b2bol5qLpC+uGQj8aYs9NVsrFXOZ9tj055OOFPcBrrspzAwa9+1YRNJ
+         0P5u+xDPybN2X6ZsqItfAYxCot6zTyPvX8/+N9DkzCof4NZKxGrXeRLhYwyIs4JEVZV5
+         6LRMQBxCGje0oJLVO0Xe7V889kik6s7ARvhV43AAjXkh/PtIMeAK2DWvSGpEiStGFMo+
+         WCgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XCEmBcYZzRIN6OKtRB2AeETTwqwp1B43Rh6YS4Pk4vI=;
+        b=Ig73KL4PeeoYnz8Ufvr3dyedHDPcrMxEJtlpiKvCnnFeg6FXBEjCzgH+A205EVwRkg
+         kzTJ6ad2NW4YQ0eqHMmW0yLoBAUvNClvoCU9lWunO9xQRFClIUTzY7EnzpxzRFYtFPHN
+         1noKqtY6ZxJQrtFozCua+Cz4uhQdT2G2SrEEtBc6+ojUThTL12TZ3h3WxdVVsb7JQ4Dt
+         3uIYoEZ0SQnwLLII57UWwzxuqYmi0ApqDA20s0zxTJY1pCoWdrb0crwLLw32uDcR0Q9g
+         JXATqk8GN7OZ93020Q4gziKuEeflGJb+G8xI0RSz/Wu7AnZiJAcIqj+OXMUm5yIhfGWR
+         UXxw==
+X-Gm-Message-State: AOAM5306tHTI+/5xLiZtKc+ocd3bjPL3gTwekjtdhEu4mj+A1D5ebfvN
+        zoYOsgm9zgEETgjIzUh9PDjMrFczb1wblXGX9Kw62g==
+X-Google-Smtp-Source: ABdhPJx5kmU4qZesErWYNPX7/IQcqg6D/B158M+8r1cIhF6jaNBYxPV2Xe8KP9eAmwRQBUEZnFIvlgtUZ5C1SM01mpY=
+X-Received: by 2002:a17:907:7da5:: with SMTP id oz37mr15895831ejc.586.1639655259747;
+ Thu, 16 Dec 2021 03:47:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211215172022.795825673@linuxfoundation.org>
+In-Reply-To: <20211215172022.795825673@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 16 Dec 2021 17:17:28 +0530
+Message-ID: <CA+G9fYt=myg0Xpxn5NqjRvL23oFKYsbsqvVPSi_c-2kqsRuSUA@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/18] 5.4.166-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2021-09-25 at 22:32 +0200, Sergio Paracuellos wrote:
-> To make PCI IO work we need to properly virtually map IO cpu physical address
-> and set this virtual address as the address of the first PCI IO port which
-> is set using function 'set_io_port_base()'.
-> 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+On Wed, 15 Dec 2021 at 22:56, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.166 release.
+> There are 18 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.166-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Hi,
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-the change is causing a WARNING on loongson64g-4core-ls7a:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-[    0.105781] loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff ->
- 0x0000020000
-[    0.105792] loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff ->
- 0x0040000000
-[    0.105801] ------------[ cut here ]------------
-[    0.105804] WARNING: CPU: 0 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x80/0x88
-[    0.105815] resource start address is not zero
+## Build
+* kernel: 5.4.166-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.4.y
+* git commit: b780ab989d6045e3a7f03d21348c50a4ac4fb2c5
+* git describe: v5.4.165-19-gb780ab989d60
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+65-19-gb780ab989d60
 
-I'm not sure how to fix this one.
+## No Test Regressions (compared to v5.4.164-89-gc50f1e613033)
 
-> ---
->  arch/mips/include/asm/pci.h |  2 ++
->  arch/mips/pci/pci-generic.c | 14 ++++++++++++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
-> index 9ffc8192adae..35270984a5f0 100644
-> --- a/arch/mips/include/asm/pci.h
-> +++ b/arch/mips/include/asm/pci.h
-> @@ -20,6 +20,8 @@
->  #include <linux/list.h>
->  #include <linux/of.h>
->  
-> +#define pci_remap_iospace pci_remap_iospace
-> +
->  #ifdef CONFIG_PCI_DRIVERS_LEGACY
->  
->  /*
-> diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
-> index 95b00017886c..18eb8a453a86 100644
-> --- a/arch/mips/pci/pci-generic.c
-> +++ b/arch/mips/pci/pci-generic.c
-> @@ -46,3 +46,17 @@ void pcibios_fixup_bus(struct pci_bus *bus)
->  {
->         pci_read_bridge_bases(bus);
->  }
-> +
-> +int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
-> +{
-> +       unsigned long vaddr;
-> +
-> +       if (res->start != 0) {
-> +               WARN_ONCE(1, "resource start address is not zero\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       vaddr = (unsigned long)ioremap(phys_addr, resource_size(res));
-> +       set_io_port_base(vaddr);
-> +       return 0;
-> +}
+## No Test Fixes (compared to v5.4.164-89-gc50f1e613033)
 
--- 
-Xi Ruoyao <xry111@mengyan1223.wang>
-School of Aerospace Science and Technology, Xidian University
+## Test result summary
+total: 82641, pass: 68845, fail: 666, skip: 12220, xfail: 910
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 258 total, 254 passed, 4 failed
+* arm64: 36 total, 31 passed, 5 failed
+* dragonboard-410c: 2 total, 1 passed, 1 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 20 total, 20 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 34 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* riscv: 24 total, 24 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 36 total, 36 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

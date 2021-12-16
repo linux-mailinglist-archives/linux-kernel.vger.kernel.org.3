@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4851477536
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4D647753F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238209AbhLPPAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:00:44 -0500
-Received: from mail-qt1-f171.google.com ([209.85.160.171]:38726 "EHLO
-        mail-qt1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238151AbhLPPAn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:00:43 -0500
-Received: by mail-qt1-f171.google.com with SMTP id 8so25687128qtx.5;
-        Thu, 16 Dec 2021 07:00:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5oSY/vy26QicgktViTKXbYxC1IX5RdpXzoBLbf2PyRY=;
-        b=Tp6wLDqa+igVznXFFWQ2M5nlws1YiF5bMxs2pjpY/fujveqDwFOVuH1Dyw1VUdg86s
-         EqsGYJTvgqJYplJFMhBQuNg43F6K8J6coRJWehS1BWbNcom428cErOX3OPK7oWi5JZrQ
-         FfL7S3rfj2Dci+jS6GVIGPr2Zpyk1lz+9dBhZ1ipHCb41qqY37UNlry26utOf27kLKnb
-         bItGqOFTXGiifFeDf2CDF2d3ppoCoIn5Tf4TZkVpsXiuvQgErO7XJVLCVxvy8S4rkvt8
-         NmC5qiV0kA59rjilXMFATTh3D/7VwR+cc+w8VSBmuKKpmdHYwYfDGnWUKcX1YX346EhA
-         FKCw==
-X-Gm-Message-State: AOAM533m5IaIo8s2nyWdTk4yMyB1U2AGMI3NNfNcQPUYcj0wgVfv+kO9
-        AWXY4pzPI8MO3cc2MX2APuI=
-X-Google-Smtp-Source: ABdhPJyGbHPlJk0cycMNtJA/NhQqtXs4W8loZWOEuIHC+Z1fiSUyJa4Pb793SWa4rTfqODxZtga2JA==
-X-Received: by 2002:a05:622a:1484:: with SMTP id t4mr17109961qtx.57.1639666840544;
-        Thu, 16 Dec 2021 07:00:40 -0800 (PST)
-Received: from dev0025.ash9.facebook.com (fwdproxy-ash-000.fbsv.net. [2a03:2880:20ff::face:b00c])
-        by smtp.gmail.com with ESMTPSA id y15sm2909764qko.74.2021.12.16.07.00.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 07:00:40 -0800 (PST)
-Date:   Thu, 16 Dec 2021 07:00:38 -0800
-From:   David Vernet <void@manifault.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, jpoimboe@redhat.com, jikos@kernel.org,
-        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
-Subject: Re: [PATCH v2] Documentation: livepatch: Add livepatch API page
-Message-ID: <YbtUlkaWSQf4yCIb@dev0025.ash9.facebook.com>
-References: <20211215174659.2332589-1-void@manifault.com>
- <YbsNcAKzRCxGqXUA@alley>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbsNcAKzRCxGqXUA@alley>
+        id S238224AbhLPPBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:01:41 -0500
+Received: from mga02.intel.com ([134.134.136.20]:18774 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232565AbhLPPBk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 10:01:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639666900; x=1671202900;
+  h=from:to:cc:subject:date:message-id;
+  bh=mjCvYYPweWor1hTfJAHZ7Ke1fpQNjdFPojo+gum/cvc=;
+  b=VGoGFQZDlhZ4woRAt14FRYTlvw+xRiRLL8cOYXRtPCtTaF/rXdYg4LBq
+   2S5xsl1/hGBtzghljN+I7YmHnNKMFKkkQm0klUcl/9P0/RUrXzp3YDrJg
+   o8rLym819ST+n96tKWzgebmpuMDg/pW35v6SyRcgQqrSjTYJ3BqYXImi5
+   MgtlN//eOkwF89MusBsFvGhd5RJeroXvpIPKyIS5ATueacHsbpj1VFX1J
+   oL23mTLDCsid/YcyfPhay+d69TvIn/raUS0535khwGuFkcS1EmGFy0AgU
+   ptpW+RNKsm7O5QkyQM0di8c4CpZP3u24/XLDyng0dr8CMtC7bkaLc9jHB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226796781"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="226796781"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 07:01:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="519282679"
+Received: from inlubt0316.iind.intel.com ([10.191.20.213])
+  by orsmga008.jf.intel.com with ESMTP; 16 Dec 2021 07:01:01 -0800
+From:   lakshmi.sowjanya.d@intel.com
+To:     linus.walleij@linaro.org
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        bgolaszewski@baylibre.com, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, tamal.saha@intel.com,
+        pandith.n@intel.com, kenchappa.demakkanavar@intel.com,
+        lakshmi.sowjanya.d@intel.com
+Subject: [PATCH v3 0/2] Add pinctrl support for Intel Thunder Bay SoC
+Date:   Thu, 16 Dec 2021 20:30:58 +0530
+Message-Id: <20211216150100.21171-1-lakshmi.sowjanya.d@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Petr Mladek <pmladek@suse.com> wrote on Thu [2021-Dec-16 10:57:04 +0100]:
+From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
 
-> This change is not good. The function releases all existing shadow
-> variables with the given @id for any @obj. And it is not longer clear.
+Hi,
 
-Good point. I'll address that in v3.
+This patch set enables the support for the integrated pin controller in
+the Intel Thunder Bay SoC.
 
-> I guess that the primary motivation was to remove  "Inline emphasis
-> start-string without end string" mentioned in the commit message.
+Patch 1 holds the relevant Device Tree bindings documentation and an
+entry in MAINTAINERS file.
+Patch 2 holds the implementation of pinctrl driver.
 
-Yes, this was the primary and only motivation. <*, id> is much clearer and I'm
-with you on finding a better alternative.
+Keem Bay and Thunder Bay platforms doesn't provide identical feature set
+and register interfaces. There is no successor platform after Keem Bay
+and Thunder Bay. So, having a uniform framework for different IP will
+not give much advantage in this case and we prefer to have this
+implementation for Thunder Bay platform as a separate driver.
 
-> A solution would be replace '*' with something else, for example, < , id>.
+Added reference to pincfg-node.yaml in the patternProperties.
 
-I think this is better than just obj, but in my opinion this may be confusing
-for readers and look like a typo. I think I prefer your second suggestion,
-though obj really makes more sense in the case where we're actually passing an
-@obj to the function. I'll probably (deservedly?) get lambasted for suggesting
-this, but what about taking a page out of rust's book and doing something like
-this:
+Please help to review this patch set.
 
-  * klp_shadow_free_all() - detach and free all <_, id> shadow variables
-  *		with the given @id.
+Thanks,
+Sowjanya
 
-to indicate that in this case we don't care about the obj. Even for a reader
-unfamiliar with rust, hopefully it would get the point across.
+Changes from v1:
+ - Removed hw specific configurations.
+ - Add set_config.
+ - Removed gpiochip_add_pin_range and added the same in device tree.
+ - Add gpio-ranges property in yaml file.
 
-> Another solution would be to describe it another way, for example:
-> 
->  * klp_shadow_free_all() - detach and free all <obj, id> shadow variables
->  *		with the given @id.
+Changes from v2:
+ - Add ref to pincfg-node.yaml in thunderbay.yaml file.
 
-I'm fine with this as well. Let me know what you think about <_, id> vs. what
-you suggested, and I'll send out the v3 patch with your preference.
+Lakshmi Sowjanya D (2):
+  dt-bindings: pinctrl: Add bindings for Intel Thunderbay pinctrl driver
+  pinctrl: Add Intel Thunder Bay pinctrl driver
 
-> BTW: There is likely the same problem in Documentation/livepatch/shadow-vars.rst.
->      I see <*, id> there as well.
+ .../pinctrl/intel,pinctrl-thunderbay.yaml     |  122 ++
+ MAINTAINERS                                   |    5 +
+ drivers/pinctrl/Kconfig                       |   19 +
+ drivers/pinctrl/Makefile                      |    1 +
+ drivers/pinctrl/pinctrl-thunderbay.c          | 1322 +++++++++++++++++
+ 5 files changed, 1469 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/intel,pinctrl-thunderbay.yaml
+ create mode 100644 drivers/pinctrl/pinctrl-thunderbay.c
 
-Indeed you're correct. There's no warning in the build system because there
-happen to be two <*, id> ... <*, id> in a row, so rst happily italicizes what's
-between them without question. I'll fix this in the v3 of the patch as well.
+-- 
+2.17.1
 
-> Otherwise, the patch looks fine to me.
-
-Thanks for taking a look and for the helpful suggestions.
-
-- David

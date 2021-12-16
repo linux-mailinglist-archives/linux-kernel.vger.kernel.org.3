@@ -2,177 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BE54772B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9C44772B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237305AbhLPNII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:08:08 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:45687 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234696AbhLPNIH (ORCPT
+        id S237296AbhLPNHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:07:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234696AbhLPNHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:08:07 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 60EBC580689;
-        Thu, 16 Dec 2021 08:08:06 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute5.internal (MEProxy); Thu, 16 Dec 2021 08:08:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type:content-transfer-encoding; s=fm3; bh=lZxEZ
-        oJEwcfSAdLDjCkroRP5fyKVBPGJT3N9TvVpHx0=; b=McMxPjqnXzi7GmzdFlDIZ
-        il6I1fNyXQnjVvh2saCcID8TtgUbFDz1CGXVmFJBm5o72R0N0IVLo48qTBylIn5t
-        j0l4O4E6kV9Y3P9QhS9m51buJz0eHAQ4AC0x1a1cOIf+ONfH3eHvRNtxRNaT5U/J
-        05qW8Gsoyv/can8/iXRjuDPN1Tk68raN7M7VgrygnLdsQP8unXegnYn1lVYSYnDF
-        PtjRJsOaVHQAwSi7dCoHRowkzejIjVIxxVBS1imT7SmgTz06wqdVZbnw1epBLXno
-        1MmpHls8oN7aB97qu6QAIChhbDSC3aTgCUawEdyCKvY+SMWjBgPPL3wH6JWXW2LL
-        g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=lZxEZoJEwcfSAdLDjCkroRP5fyKVBPGJT3N9TvVpH
-        x0=; b=Sdkat6LvDH169I/f4YjFYs3UXcnfR2uq1GNjVW2LHm+t7SXFRy8/ZFv1V
-        K9d8ugTZmdGIC+CAI/02uuItqCBXIKB1xFx9ab3kMaCjgNI7NNX+ep7JCZWmn1ZS
-        kROd/5NtFrc2qoAaHQKyDghPXOnPqQHUQ5/Z7nGW643grLns8jLG20r91hC/9lNy
-        Z25Yy54m+s40Uz8UbheQRxf4JN/PPo8tLa9a/Ko+Zm8UqdDl5VE8PHcoR4TMKwp+
-        uNfepfDWaZ7USfFRAmSIGnsaVCfUGjCVcGAijbXEke9c69m+5qxxJ3tn1KzG4nuy
-        RwyAKl4jPmxm0kIhAIfLzXFXd5p3A==
-X-ME-Sender: <xms:NTq7YYyW4mJNfkzjn44YJBgdiPriC4KgFUnrX1XKScOTDa43ZCI18A>
-    <xme:NTq7YcT9wSbyDlxHyzgGK50SnFkX2rBvgIePvsRX_MWMwID--auUZfjqwc9pSaFfN
-    7_hTzCl2Gp67YRaLAY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeggdeglecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdflihgr
-    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeefteegkeevfeethffgudehgedvueduvdeifedvvdelhfef
-    heekteefueektdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:NTq7YaV8p6oEASGHejvLsw_r94XlS-GxfBTEfLcNZVVmjBXFOAu-uw>
-    <xmx:NTq7YWi8S2ZTOkTIvZz76z6_rx3j8miG8olSuEPJz0yf69BmrWP8sA>
-    <xmx:NTq7YaBsqLUPNiejKiZtHuFvAp5kwlEuH9eruiEJQbPy4Sq80GnW7w>
-    <xmx:Njq7YW4-8aSA_bX9neSAhMd1uql52Q5FW0-hARmnb4o5hZ0dHHGZug>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 70D94FA0AA6; Thu, 16 Dec 2021 08:08:05 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4524-g5e5d2efdba-fm-20211214.001-g5e5d2efd
-Mime-Version: 1.0
-Message-Id: <6ee31420-ef67-471e-a924-a0158b4a9428@www.fastmail.com>
-In-Reply-To: <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
-References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
- <20210925203224.10419-6-sergio.paracuellos@gmail.com>
- <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
-Date:   Thu, 16 Dec 2021 13:07:43 +0000
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Xi Ruoyao" <xry111@mengyan1223.wang>,
-        "Sergio Paracuellos" <sergio.paracuellos@gmail.com>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc:     robh@kernel.org, "Arnd Bergmann" <arnd@arndb.de>,
-        catalin.marinas@arm.com, Liviu.Dudau@arm.com,
-        "Bjorn Helgaas" <bhelgaas@google.com>, matthias.bgg@gmail.com,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-staging@lists.linux.dev, neil@brown.name,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific 'pci_remap_iospace()'
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Thu, 16 Dec 2021 08:07:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D0FC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 05:07:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC25B82404
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 13:07:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5438C36AE0;
+        Thu, 16 Dec 2021 13:07:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639660071;
+        bh=tVxJs3qFlFqEz+NpongiLGAAImVHztVGXRZ9WOX/eaw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AJX2I9B9OPdfRadrxGrh10XCoEWrJmzSgXk2fBpYpES7RPeP0RoENWPlOZGtqlgnh
+         9gIMIUmB0jkRy1XBNQKeSeuDlljC2CSjyqzFqSyrAZVpoGsXUMIesLPubAV+uyh02l
+         UGbGO9DKzeD4jbIRvWd/gpCLH/bcjKks3NCHDmeBknYbcoNUIfrDy/qraMToaymknR
+         zfC0iB3QNK26yDJK2IHFE9EFIsSfjEa/MFijqqWb6PlKTayqzODTPSXIejXqSSufBr
+         XJHwqNhzvXSZypr+MdmQOTZK0ankTPx9lEmL66LaskGbfRhPm6IcEMTlB0j67ztPFq
+         sIcoJKNuKnASQ==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=hot-poop.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mxqU9-00CWrF-PT; Thu, 16 Dec 2021 13:07:49 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        James Morse <james.morse@arm.com>
+Cc:     linux-kernel@vger.kernel.org, qwandor@google.com,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 00/14] KVM: arm64: Introduce kvm_{un}share_hyp()
+Date:   Thu, 16 Dec 2021 13:07:47 +0000
+Message-Id: <163966005889.1498341.15615109686112796585.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211215161232.1480836-1-qperret@google.com>
+References: <20211215161232.1480836-1-qperret@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: suzuki.poulose@arm.com, catalin.marinas@arm.com, alexandru.elisei@arm.com, will@kernel.org, qperret@google.com, james.morse@arm.com, linux-kernel@vger.kernel.org, qwandor@google.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 15 Dec 2021 16:12:17 +0000, Quentin Perret wrote:
+> This is v4 of the series previously posted here:
+> 
+>   https://lore.kernel.org/kvmarm/20211201170411.1561936-1-qperret@google.com/
+> 
+> This series implements an unshare hypercall at EL2 in nVHE protected
+> mode, and makes use of it to unmmap guest-specific data-structures from
+> EL2 stage-1 during guest tear-down. Crucially, the implementation of the
+> share and unshare routines use page refcounts in the host kernel to
+> avoid accidentally unmapping data-structures that overlap a common page.
+> 
+> [...]
+
+Applied to next, thanks!
+
+[01/14] KVM: arm64: Provide {get,put}_page() stubs for early hyp allocator
+        commit: 1fac3cfb9cc60d71b66ee5127b2bc5b5f9f79df8
+[02/14] KVM: arm64: Refcount hyp stage-1 pgtable pages
+        commit: 2ea2ff91e82293909d4879b0b4c6c94b02d52b7e
+[03/14] KVM: arm64: Fixup hyp stage-1 refcount
+        commit: d6b4bd3f4897f3b60ac9e8c9e2f0300e739b3392
+[04/14] KVM: arm64: Hook up ->page_count() for hypervisor stage-1 page-table
+        commit: 34ec7cbf1ee0c45e66a0c24311bcd5b83b7109f5
+[05/14] KVM: arm64: Implement kvm_pgtable_hyp_unmap() at EL2
+        commit: 82bb02445de57bb3072052705f6f5dea9465592e
+[06/14] KVM: arm64: Introduce kvm_share_hyp()
+        commit: 3f868e142c0bb052a1c15fd3ceca1391604e2e69
+[07/14] KVM: arm64: pkvm: Refcount the pages shared with EL2
+        commit: a83e2191b7f1894dd0b4b3816ceb9caf4e0cd7e5
+[08/14] KVM: arm64: Extend pkvm_page_state enumeration to handle absent pages
+        commit: 3d467f7b8c0a179a10aa4e9f17cd2d3c3b7e5403
+[09/14] KVM: arm64: Introduce wrappers for host and hyp spin lock accessors
+        commit: 61d99e33e757a21b47b8b130e49dcbdfaa5d2b1c
+[10/14] KVM: arm64: Implement do_share() helper for sharing memory
+        commit: e82edcc75c4e2389a3d7223c4ef1737bd9a07e5d
+[11/14] KVM: arm64: Implement __pkvm_host_share_hyp() using do_share()
+        commit: 1ee32109fd78720259f7431740897d37ebcd84f6
+[12/14] KVM: arm64: Implement do_unshare() helper for unsharing memory
+        commit: 376a240f037959c2b9a2486e53bcd8d388cbec17
+[13/14] KVM: arm64: Expose unshare hypercall to the host
+        commit: b8cc6eb5bded7078f796b2ebf548f79850281eb6
+[14/14] KVM: arm64: pkvm: Unshare guest structs during teardown
+        commit: 52b28657ebd7cd20e931ce71190f235d0fa018a6
+
+Cheers,
+
+	M.
+-- 
+Without deviation from the norm, progress is not possible.
 
 
-=E5=9C=A82021=E5=B9=B412=E6=9C=8816=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =
-=E4=B8=8A=E5=8D=8811:44=EF=BC=8CXi Ruoyao=E5=86=99=E9=81=93=EF=BC=9A
-> On Sat, 2021-09-25 at 22:32 +0200, Sergio Paracuellos wrote:
->> To make PCI IO work we need to properly virtually map IO cpu physical=
- address
->> and set this virtual address as the address of the first PCI IO port =
-which
->> is set using function 'set_io_port_base()'.
->>=20
->> Acked-by: Arnd Bergmann <arnd@arndb.de>
->> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->
-> Hi,
->
-> the change is causing a WARNING on loongson64g-4core-ls7a:
->
-> [    0.105781] loongson-pci 1a000000.pci:       IO=20
-> 0x0018020000..0x001803ffff ->
->  0x0000020000
-> [    0.105792] loongson-pci 1a000000.pci:      MEM=20
-> 0x0040000000..0x007fffffff ->
->  0x0040000000
-> [    0.105801] ------------[ cut here ]------------
-> [    0.105804] WARNING: CPU: 0 PID: 1 at arch/mips/pci/pci-generic.c:5=
-5=20
-> pci_remap_iospace+0x80/0x88
-> [    0.105815] resource start address is not zero
->
-> I'm not sure how to fix this one.
->
->> ---
->> =C2=A0arch/mips/include/asm/pci.h |=C2=A0 2 ++
->> =C2=A0arch/mips/pci/pci-generic.c | 14 ++++++++++++++
->> =C2=A02 files changed, 16 insertions(+)
->>=20
->> diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
->> index 9ffc8192adae..35270984a5f0 100644
->> --- a/arch/mips/include/asm/pci.h
->> +++ b/arch/mips/include/asm/pci.h
->> @@ -20,6 +20,8 @@
->> =C2=A0#include <linux/list.h>
->> =C2=A0#include <linux/of.h>
->> =C2=A0
->> +#define pci_remap_iospace pci_remap_iospace
->> +
->> =C2=A0#ifdef CONFIG_PCI_DRIVERS_LEGACY
->> =C2=A0
->> =C2=A0/*
->> diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
->> index 95b00017886c..18eb8a453a86 100644
->> --- a/arch/mips/pci/pci-generic.c
->> +++ b/arch/mips/pci/pci-generic.c
->> @@ -46,3 +46,17 @@ void pcibios_fixup_bus(struct pci_bus *bus)
->> =C2=A0{
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pci_read_bridge_bases=
-(bus);
->> =C2=A0}
->> +
->> +int pci_remap_iospace(const struct resource *res, phys_addr_t phys_a=
-ddr)
->> +{
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned long vaddr;
->> +
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (res->start !=3D 0) {
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0WARN_ONCE(1, "resource start address is not zero\n"=
-);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return -ENODEV;
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
->> +
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vaddr =3D (unsigned long)i=
-oremap(phys_addr, resource_size(res));
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0set_io_port_base(vaddr);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
->> +}
-
-Hi all,
-
-Another way could be keeping a linked list about PIO->PHYS mapping inste=
-ad of using the single io_port_base variable.
-
-Thanks.
-
->
-> --=20
-> Xi Ruoyao <xry111@mengyan1223.wang>
-> School of Aerospace Science and Technology, Xidian University
-
---=20
-- Jiaxun

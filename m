@@ -2,179 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C534477B77
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 015AD477B74
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240382AbhLPSYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:24:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236244AbhLPSYc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:24:32 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82368C061574;
-        Thu, 16 Dec 2021 10:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CP98qaI5/42iM7Qs7rIC2UfqpT/EFgiOPymFBs82E1k=; b=PAKogZleaezsfag//1vssTAQnz
-        YZ626RCWv8k/cgzoD3wex2dtAAmD2rx5Vugr/1LRps4hyqR9wZLTJuwxFCD4I4UQbLB3G6PqeDOmq
-        0erA3QxhKnmg0NME6MAjmD3ADWdhqkq6Bx0EEaB7iLKs/AIQBbV7i1zX1wIOWo9LhWiu8f26pdWhL
-        m6Ie7nj9YNWQCxF3FRnjGV5BNlyVmxl/8ZxKc9ITgTrWaXDQPfMMRIvetHTkmNtMhJoAqYdYKgOG/
-        w1bx5cQYCCQuDZ0epGX4Q+Ecl1sbpv/YOkmh2OEBf0eK2mtuVmwJNlv0x/pv8S7KjkaNuRQWQqhlp
-        ZCVGuZgw==;
-Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mxvQL-0076oF-Cw; Thu, 16 Dec 2021 18:24:13 +0000
-Message-ID: <f25c6ad00689fee6ce3e294393c13f3dcdd5985f.camel@infradead.org>
-Subject: Re: [PATCH v3 6/9] x86/smpboot: Support parallel startup of
- secondary CPUs
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com,
-        Joerg Roedel <joro@8bytes.org>
-Date:   Thu, 16 Dec 2021 18:24:08 +0000
-In-Reply-To: <d10f529e-b1ee-6220-c6fc-80435f0061ee@amd.com>
-References: <20211215145633.5238-1-dwmw2@infradead.org>
-         <20211215145633.5238-7-dwmw2@infradead.org>
-         <d10f529e-b1ee-6220-c6fc-80435f0061ee@amd.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-PLDM26HphlgQCZVdBKhl"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S236254AbhLPSYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:24:21 -0500
+Received: from mga05.intel.com ([192.55.52.43]:2201 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231451AbhLPSYU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 13:24:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639679060; x=1671215060;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=5VHFdCZDZRZLVNJk5MfCdvonI2VBNJye0MsbohGpRwI=;
+  b=SeSIDa7SVBUe9P3+fYuOXGzgCd4J+qpOptpkEj7lRAUiTPsGeyVtpnTm
+   ES7dp64MsbXTutLTOSyN93xaha43gg08H4l+AvY6mBcUGexL+2FtdXtax
+   Yi2tDvUJHhDPVM4o3FM3JxCqlcjs3Rto9edHS04a/FQc9Y5SLUVa5rVMD
+   D2gf9HpQT7748Zvyqv7JG+R73Mv03GoUB9nViLBpJfxI4hYPM+aYLQVEb
+   2hEehzqMsMcyfCNigDi57UiDE7YweRWugxjYUh3IPCK/q0PGS1nSzonKV
+   sv99WgV1yqNjOtX9NOQOEmVT26EnZkk0bced6iey4wqHEWdQl/LSqG2M1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="325848913"
+X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
+   d="scan'208";a="325848913"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 10:24:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
+   d="scan'208";a="506402597"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 10:24:20 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 16 Dec 2021 10:24:19 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Thu, 16 Dec 2021 10:24:19 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.174)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Thu, 16 Dec 2021 10:24:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zf1wyOG9n+bP900m2tOpgpakQhoCeJzQZA/Lf8MhG7R0e8rZoZNnKbF6R6Ra36cuAEedjAuQ0dy/JoYIU3icObQNGXgN8maSRwXYEZjRzUSj4C6MbwjRjvuuL0SMg0u4zrjiaXfZp/wx0Rc0RUWFyEacmh4UaC1AnAefX98HXgDJsNl3kfBk+V7Glk9J+ggKGZSs3WymKiIj+VYZqqhV2hVVc56/h8KbW41BOD+gQiCGupiDBmEjpre0abAoGW6O1vSVZpUEmgZBqBizIwg/tvh0KTxnLfvo3DZgQ8oBid6bsa4pOeFOYMmYqkoZW21UDdDtxXJSo0rFBXkycaxWog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HyFgzYkI5rNXiybTHPdW+akhRjNjHONwhHjfRZPMo2M=;
+ b=ZCCowKhbB007kM1iezbiDWEWLMYS1Zg1C6CxpzChhnfrU3nHKhqUU3iyzG3datfCqN+Z1FNpd/AUOhaEmVk3A5+jKD+kMo3toDoG7h6GtBS5+vcwROkH92UJi55ldJZjaHX5HpmstIgRbAwTJip71zwPrjDIMS/rC2bhhiyRTvoyJsp+vYVxtMbsEjwn3EvModNMgksfgJulKl9ySim2SG54/cgkF4NScMI+kAebWhFO/Ma0CNutXtsq93T/cArU7cOt3B46NyCtmFVVz3rbdXBv9iroLMmnGv0/iaigPdp/7oRL0yRCKR80YWcQZLLh6yOVDc8g6AakMQ9+zWwVKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
+ by MWHPR11MB1245.namprd11.prod.outlook.com (2603:10b6:300:28::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.18; Thu, 16 Dec
+ 2021 18:24:18 +0000
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::7542:60f3:e73a:be5a]) by MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::7542:60f3:e73a:be5a%8]) with mapi id 15.20.4801.014; Thu, 16 Dec 2021
+ 18:24:18 +0000
+Message-ID: <ffc7e137-8c0a-2151-cfb6-b41ae53cadf2@intel.com>
+Date:   Thu, 16 Dec 2021 19:24:13 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.0
+Subject: Re: [PATCH] PM: sleep: Avoid calling put_device() under dpm_list_mtx
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>
+References: <77c95e21-747a-87d8-4145-f37f75e76e18@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+In-Reply-To: <77c95e21-747a-87d8-4145-f37f75e76e18@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0053.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:48::17) To MW5PR11MB5810.namprd11.prod.outlook.com
+ (2603:10b6:303:192::22)
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a32cead6-1212-4105-04c7-08d9c0c145c7
+X-MS-TrafficTypeDiagnostic: MWHPR11MB1245:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR11MB124512AD718567BD8786EBB5CB779@MWHPR11MB1245.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6TXcM3jCH45KrdMUss8IIIPch5kzdnAaLIk91HFrhXSBzvZBYllr1DkwzZ+y3Iki197WQEVlLZCMJ/Glyn84CX2RFod93keEjqq4IuaeKfV5Iy1hE5t4rIbOM/8k+435bA5eY6dKcY4rassOqcyoqiaQyyNro69qSt9E3LzRLL/bxnvzwKWTPSIRurYbVrEyk8q/b+GoiOp2EviI4bQDO0a0OsSp9MkIH15+Ph5Rh9oLindB3RGsYRc28hhXBrnu0VUyNVMIHrnXrCjmusEp6y4mMfYhn7J1orToZvW0qeZqEIpg7IDFdKsEQx1nrcViXJfikmZjjyhX1s3LWmbJI7wt8X70OvBvZRjKgRhcWT5mulmRFB9FyM5DYQcSCeHRZQ8J8K8TCCDantsJwx/B+7k16OGo3UlbWqa3EsAQsDWMdFppLBW1ODLz5D+itOCmbHZR/9mpVmcetY9R2ufcy6aV0TBl1hHNAUxf0qw/eoFSeXihvWSHqLgaZwTehJwnB/zIdNnFn8Ld4UWJhLDk5ECwP0CPsjsULPi/+Jyj4MqHqClCpOMtfkxrvdScqzng/iCz/HFGYv5+Fol56z5ki+p0IRh0q1qnWk0sxY2V4jiPszI58NIpbcn8APkR83C3e/lSIFnyXb6vcMJ9QOP+2cy1sWTuV4zeWNkoyyl970kf62N9qDhCdYtOZnixcOOHOSVTNRAcXE5QK035n2AH9G4/Tp3GbClzQxAXcvI9cxIc0DJBFHny5dhxCwsXPORt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6506007)(4326008)(8936002)(53546011)(26005)(186003)(6916009)(66556008)(36916002)(5660300002)(31696002)(82960400001)(508600001)(38100700002)(86362001)(66574015)(6666004)(36756003)(8676002)(66946007)(316002)(66476007)(54906003)(6512007)(2906002)(2616005)(6486002)(31686004)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OUtmN1BjNWM1Z053OVlGU29IajRTS0lNeXRHSUF6L1hFNWpONmYyazZxVEJM?=
+ =?utf-8?B?YXhlOXU3Y0xWYjVURm1yUFdmN095cFIwMno4V216STNpS2M0TzNTZjgvUnBn?=
+ =?utf-8?B?WnYzUk9LaVZBVkM1RFBTL3U4aE9icEpkSXcxYWNpVDFuaWlMaWJ5ZzFJU0Z4?=
+ =?utf-8?B?Qy8xM3JmVTA0dDRHeEFxSXU3NFpxMnJhL0VUdDdDRUNuMEphTXNsbk80azdw?=
+ =?utf-8?B?VEJsZ01LV2k3OE0yMklLazRNWk5uZnZTRkErckFCYTJFTHlKc1I3VENjczZQ?=
+ =?utf-8?B?WnZDZEJza0Q0dy82WFR2cW83L05VUnMzb0dINGVHdWxEeWlBcjZtYlYvMUxs?=
+ =?utf-8?B?ZWFKQmZZcHA4QWl0bWlJZGZuZWN1SEY4TWxjSWlOczY1TDFWbWo1Zy82MXh0?=
+ =?utf-8?B?YU1PRDBFS3p1R1R5Wnh0RGNxMWJHaHNpZXAxRmJaVHk0K0k1N1Z0MU1HWnFG?=
+ =?utf-8?B?ZGFXUmtkdHJFS0l4aWVHUEZkU21JZnFzeUMvSjB4NGMvUXY4Ukh3MjkvMGZp?=
+ =?utf-8?B?SlcveUlrb3RyS3piR25RQW10ZG1xTFUxZ2dBTlJ5Y3BBNzQrVW1idWxLRTFq?=
+ =?utf-8?B?M3hpRjlDSysxU3hQMStEWStFV3pMVjNZa3ZTcnFMamRKbUtIdk5ZVnJ1VGhn?=
+ =?utf-8?B?T0F5Z0ZKZDZENThRbzQxRFpEUWN3MXBZMit6cC83czgyWHJzdGVORE80ZTYx?=
+ =?utf-8?B?OEZ6enl6Z09zMzVyaTBkOVFiUXhWUjNaU3RveC9oS0tCOTFKN2EzR0tURjdw?=
+ =?utf-8?B?NDhHcjkzclhoY2VkV0xQalRLSUQwWmphQ3ZDcFdGQ09MK1pzM0h1cmtCdk5P?=
+ =?utf-8?B?L1NIQSt0aFFtK0hNekdGeWRFbFh1YWVteU5wNEQ0eW82UWRtQ1lIeWNWYkh6?=
+ =?utf-8?B?bEtleHpwdklzK05yaGFBRERSdUs2Q3JTZWJTK2huVnBFajVpN2RPeVJrWi8y?=
+ =?utf-8?B?YXp1bm91RldnM1ZVZHR1alVFSXZwRTQxelRncWpDSWkyQ0VzOTMzMHhOZTJO?=
+ =?utf-8?B?WDZVZnN6SFBGTmxMcTQwR2o3RmVvRTNteEZUV0JQSzYvZzZ0cFlDcHlsei9t?=
+ =?utf-8?B?cjNzaVZMSm9HejdmbVVEM204c2M5Um0xa1hvcjNCNVJVVVI3ckc4UmZXWFdK?=
+ =?utf-8?B?dHZLdmVQRVpFRnl1OFBLYzEvMkluZENVSE4yTXJGSk04aGwwWGxhQnB6TEpz?=
+ =?utf-8?B?eXMxN0hUNUw3Y3ArTzNxNWVCazJnaEk5VmwwK2NNUFl0T3VhbEtPS1lLRENi?=
+ =?utf-8?B?U0tEQ3UwSWtJMnlrVWtrZXFEdVpoYlY1OUtJTGI0aHhCN2FxaW9BR2NLU3FP?=
+ =?utf-8?B?T0FGbUFkZmlQc2FiUkdsODNGWVpEcFM5b1B2RkQzTGdYc0M4Mlozem9RekNQ?=
+ =?utf-8?B?ajlkZkRvOXJ6aE1jZ1dBdnNmZFBjaWNpWmliam9pRHdXSFJjUFpOa3JEb3d3?=
+ =?utf-8?B?bGd3U1pTTGhsNXY1WC9CS2c0dTNQVE1TOXFHWGxpamR1RDN1OTdRSXFIZzJ0?=
+ =?utf-8?B?dWlLMjkyZVRhdzRWaEJLcmZLTmlYYlIvUktreFZzNER2R1luUTBHQndrbDdq?=
+ =?utf-8?B?czFaZk1ZcWZ2Q2EvRnFZbFQvZkQ3TUR1TnNOSEthSVlRaFpmd1ZKWjBXL1kx?=
+ =?utf-8?B?ZjIrdzBIQWVlWlkyZHB5OVVYeXVrSHhHQnFwWVE5WFFBZ0ttejFNMXcvT1ND?=
+ =?utf-8?B?ditVa0UzZ3pxSnp2RFNRajJkMmR1MFpTd3NtOW84d3A4TndRa3BVUXoxVVhX?=
+ =?utf-8?B?TThkUG9mT3NvZ3pNTCswRW1VN1BxVGoxeFhSTVRFeXZCSlU5NlFjTnRYVXcr?=
+ =?utf-8?B?VlRON1dOSElmS2t4ak9wV1JBYTd4TkRSZnJmdDdvcUtHWUxZTE5IcTFtRzVC?=
+ =?utf-8?B?bXVaSTV4Rms1WFpVaW44UzdPam9NOWlMbTJDeVArUjl6eDVOR1QwSmpvUTE3?=
+ =?utf-8?B?WllQQks2Tzc1bzhsVUdRYXhpSVFsNGhzeHB4UHdtMnhNQ0pRcDN2MHpwTTMw?=
+ =?utf-8?B?QUdiem1kMHlFdGR6c0xvTTNKS1lvakRyNUNXendEQUQzZnhJcThaZGUvZ3Bt?=
+ =?utf-8?B?eWtsTXhuRXpqWVc1YkF5anJPd0hUSzAwK1RBVlVWRE5yOHpubENwckxSRU1n?=
+ =?utf-8?B?R2NjOVphbzZPcFF1L21rVlN4aFlYakR3UEIzbldibXVlRzEvdnFKakdhdUJP?=
+ =?utf-8?B?M0hCTVd2UHZwaWExdjB0MkE5UmxkeWxxMGVzakJaQmdnanQvRzhOUklDWlRV?=
+ =?utf-8?Q?pTGwGW8dPcCebGh+42f0NEluld5PDkXy0Ru5aiw46w=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a32cead6-1212-4105-04c7-08d9c0c145c7
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 18:24:18.3967
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R7NENlIP+/XeQ5V8zQzdfTAX/+7MQz8IzY/SVc8SJysdHLAAu3ysJaZ7S5IwNRl+JUxfu+7CuoCDcSHToSR1qL4WIHDVkXick4vQRTE1tqQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1245
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---=-PLDM26HphlgQCZVdBKhl
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, 2021-12-16 at 08:24 -0600, Tom Lendacky wrote:
-
-> This will break an SEV-ES guest because CPUID will generate a #VC and a=
-=20
-> #VC handler has not been established yet.
->=20
-> I guess for now, you can probably just not enable parallel startup for=
-=20
-> SEV-ES guests.
-
-OK, thanks. I'll expand it to allow 24 bits of (physical) APIC ID then,
-since it's no longer limited to CPUs without X2APIC. Then we can
-refrain from doing parallel bringup for SEV-ES guests, as you suggest.
-
-What precisely is the check I should be using for that?
-
---=-PLDM26HphlgQCZVdBKhl
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
-ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
-OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
-RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
-cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
-uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
-Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
-Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
-xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
-BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
-dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
-LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
-Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
-Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
-KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
-YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
-nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
-PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
-7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
-Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
-MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
-NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
-AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
-/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
-0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
-vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
-ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
-ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
-CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
-BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
-aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
-bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
-bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
-LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
-CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
-W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
-vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
-gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
-RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
-jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
-b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
-AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
-BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
-+bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
-WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
-aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
-CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
-u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
-RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
-QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
-b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
-cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
-SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
-0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
-KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
-E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
-M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
-jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
-yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
-gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
-R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
-BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
-BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
-ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
-ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
-MjE2MTgyNDA4WjAvBgkqhkiG9w0BCQQxIgQgOF6vqZz6J4aAEOdGPkqKtLKibr4eEr/Das2lKnM4
-SuIwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
-TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
-PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
-aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
-A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
-bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
-DQEBAQUABIIBABYGQK5rBbqSklzvwd9Bg/6zE3IZBly24TJt4ww5Iff0dKGkCPSN6kwZd8lqnGKO
-O0yBbmv4uED33EO1sjKdnpChHCkETBgztj9BvuWhFHR3VOwSvPKMiq2N2HAPmfgDF4nPu/AyY+UM
-yNF+D5WRM2jGnqx20UonLtisShxJVFUdsM+A7i48gbjh8w3Ur9g4oIfbytkUHhhLLIbq1qCf8S2V
-BSV5j5Q+2cnAIuonJLVxWl1pS9owwEFcy3rm8gFwtf+jvhuElz2VmGL6V8rhvz06DiDnuneuqAXX
-8XNjN9n1zMwUFvSQ6nppseJDs3NI9WCOo74RRoh5n7/VVSsHybMAAAAAAAA=
+On 12/16/2021 2:27 PM, Thomas Hellström wrote:
+> Hi, Rafael,
+>
+> On 11/4/21 18:26, Rafael J. Wysocki wrote:
+>> It is generally unsafe to call put_device() with dpm_list_mtx held,
+>> because the given device's release routine may carry out an action
+>> depending on that lock which then may deadlock, so modify the
+>> system-wide suspend and resume of devices to always drop dpm_list_mtx
+>> before calling put_device() (and adjust white space somewhat while
+>> at it).
+>>
+>> For instance, this prevents the following splat from showing up in
+>> the kernel log after a system resume in certain configurations:
+>
+>
+> <snip>
+>
+>
+>> @@ -1748,21 +1769,27 @@ int dpm_suspend(pm_message_t state)
+>>           struct device *dev = to_device(dpm_prepared_list.prev);
+>>             get_device(dev);
+>> +
+>>           mutex_unlock(&dpm_list_mtx);
+>>             error = device_suspend(dev);
+>>             mutex_lock(&dpm_list_mtx);
+>> +
+>>           if (error) {
+>>               pm_dev_err(dev, state, "", error);
+>>               dpm_save_failed_dev(dev_name(dev));
+>> -            put_device(dev);
+>> -            break;
+>> -        }
+>> -        if (!list_empty(&dev->power.entry))
+>> +        } else if (!list_empty(&dev->power.entry)) {
+>>               list_move(&dev->power.entry, &dpm_suspended_list);
+>> +        }
+>> +
+>> +        mutex_unlock(&dpm_list_mtx);
+>> +
+>>           put_device(dev);
+>> -        if (async_error)
+>> +
+>> +        mutex_lock(&dpm_list_mtx);
+>> +
+>> +        if (error || async_error)
+>>               break;
+>>       }
+>>       mutex_unlock(&dpm_list_mtx);
+>> @@ -1879,6 +1906,7 @@ int dpm_prepare(pm_message_t state)
+>>           struct device *dev = to_device(dpm_list.next);
+>>             get_device(dev);
+>> +
+>>           mutex_unlock(&dpm_list_mtx);
+>>             trace_device_pm_callback_start(dev, "", state.event);
+>> @@ -1886,21 +1914,23 @@ int dpm_prepare(pm_message_t state)
+>>           trace_device_pm_callback_end(dev, error);
+>>             mutex_lock(&dpm_list_mtx);
+>> -        if (error) {
+>> -            if (error == -EAGAIN) {
+>> -                put_device(dev);
+>> -                error = 0;
+>> -                continue;
+>> -            }
+>> +
+>> +        if (!error) {
+>> +            dev->power.is_prepared = true;
+>> +            if (!list_empty(&dev->power.entry))
+>> +                list_move_tail(&dev->power.entry, &dpm_prepared_list);
+>> +        } else if (error == -EAGAIN) {
+>> +            error = 0;
+>> +        } else {
+>>               dev_info(dev, "not prepared for power transition: code 
+>> %d\n",
+>>                    error);
+>> -            put_device(dev);
+>> -            break;
+>
+> It appears the above break disappeared.
+>
+>
+>>           }
+>> -        dev->power.is_prepared = true;
+>> -        if (!list_empty(&dev->power.entry))
+>> -            list_move_tail(&dev->power.entry, &dpm_prepared_list);
+>> +
+>> +        mutex_unlock(&dpm_list_mtx);
+>> +
+>>           put_device(dev);
+>
+> Should be
+>
+>                  if (error)
+>
+>                         break;
+>
+> Here?
+>
+Looks like that.
 
 
---=-PLDM26HphlgQCZVdBKhl--
+> Symptoms is if we return an error from the device prepare callback, we 
+> end up spinning forever with little clue what's going on.
+>
+>
+>> +
+>> +        mutex_lock(&dpm_list_mtx);
+>>       }
+>>       mutex_unlock(&dpm_list_mtx);
+>>       trace_suspend_resume(TPS("dpm_prepare"), state.event, false);
+>
+I'll have a look, thanks for the report!
+
 

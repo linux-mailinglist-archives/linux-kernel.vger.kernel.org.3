@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 186374775D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA464775D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbhLPPYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:24:47 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:55034 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238459AbhLPPYq (ORCPT
+        id S238494AbhLPPYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238477AbhLPPYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:24:46 -0500
-Date:   Thu, 16 Dec 2021 15:24:44 -0000
+        Thu, 16 Dec 2021 10:24:49 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA56C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:24:49 -0800 (PST)
+Date:   Thu, 16 Dec 2021 15:24:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639668285;
+        s=2020; t=1639668286;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tXpK23GM89Ckoxuom2UdFWBubM5aTHj6Ntz/J/6EPOU=;
-        b=l2uJLUlxpSZdnxmHHjWKMWwdKr/1ah8DRJFDwrloLJGjF+OwhO4y4+k7uCky531lFLfOVY
-        2UK8E8zyWE+SOX5/SFLCKSpadEJOQQD9Dz9wCvkN7/pSNQYQA9wosXqiJKeOb3Sbp6vDJX
-        uAMQZAc2ZGrEYyb0qqzYesrACkRtQI2xXliUGIlh0U2a6guHyYoR2GvItIUV+kLW5rv+MH
-        STNNKyKVvU3pyA0k4+5bbDUcCaXlUQ4vt4xDVkYDKzMAEFh9beYQicP0pBbJECyfOr25Ch
-        G0PUJ+jbfzKNUR20TFgdaXgQaU9aGTVDB++a3hD9Z+IR2GBHY14cA7W8Y5NnJg==
+        bh=vjLXsh3ztZre6Ju+lHpJrtIskfrW2pPutzxiVHHx5io=;
+        b=ilW/DVcXqKWVWZltDHUvY3XV5EmzMJotWeY5EbBEgunQr+fKjSNqWGOdtkKBR1K45RMane
+        PlpNjBObSjgJnjq3BptmESPrT/Zpf++wy+l+ntYcVaXpJBTiqXCQ7u2mnuXP+dqZxOd0pS
+        soe4WzIfxDrGDwrj/ZFYLZul7Xwz5ffLbVE6qcXPRpnQmxuy1Jv1LI3IUPyN/O7pELAtQf
+        ucxVWWqDOMAnNX6nvwxGGp/1wzZDgTD9XPFk0+/tlJ+V7LxtqvV0FNhV3ri8iKDEjac/Ok
+        S8pevweiuHrUoZHWCDrgE8LCt46HRsfKRRcWh9miaAga1QkJBIqTYYq4bq5cmQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639668285;
+        s=2020e; t=1639668286;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tXpK23GM89Ckoxuom2UdFWBubM5aTHj6Ntz/J/6EPOU=;
-        b=nvGs6TB0J4xQ9LGoZz/kagXqMGjax/jDIRiLPS1ljmIz15MPOvMzVnKa3ZMEB27B6GCay9
-        AgMa1qZKsxhh3LCg==
-From:   "irqchip-bot for Kees Cook" <tip-bot2@linutronix.de>
+        bh=vjLXsh3ztZre6Ju+lHpJrtIskfrW2pPutzxiVHHx5io=;
+        b=parLqWK92LVf/MsVY+rrGu/mQoGhm3uaGzocL0SnqVb6e2UDDlEB1bFlc2m/FSVST3q0hh
+        uxl8wDvaeUdMSWDQ==
+From:   "irqchip-bot for Xiang wangx" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/ingenic-tcu: Use correctly sized
- arguments for bit field
-Cc:     Kees Cook <keescook@chromium.org>, Marc Zyngier <maz@kernel.org>,
+Subject: [irqchip: irq/irqchip-next] irqchip/gic-v2m: Add const to of_device_id
+Cc:     Xiang wangx <wangxiang@cdjrlc.com>, Marc Zyngier <maz@kernel.org>,
         tglx@linutronix.de
-In-Reply-To: <20211215232457.2069969-1-keescook@chromium.org>
-References: <20211215232457.2069969-1-keescook@chromium.org>
+In-Reply-To: <20211209132453.25623-1-wangxiang@cdjrlc.com>
+References: <20211209132453.25623-1-wangxiang@cdjrlc.com>
 MIME-Version: 1.0
-Message-ID: <163966828445.23020.15326391211470190643.tip-bot2@tip-bot2>
+Message-ID: <163966828526.23020.11939992630000758407.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,63 +60,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     0859bbb07d06d1357734496ff198319f9bfcf1bf
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/0859bbb07d06d1357734496ff198319f9bfcf1bf
-Author:        Kees Cook <keescook@chromium.org>
-AuthorDate:    Wed, 15 Dec 2021 15:24:57 -08:00
+Commit-ID:     c10f2f8b5d8027c1ea77f777f2d16cb9043a6c09
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/c10f2f8b5d8027c1ea77f777f2d16cb9043a6c09
+Author:        Xiang wangx <wangxiang@cdjrlc.com>
+AuthorDate:    Thu, 09 Dec 2021 21:24:53 +08:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Thu, 16 Dec 2021 15:19:52 
 
-irqchip/ingenic-tcu: Use correctly sized arguments for bit field
+irqchip/gic-v2m: Add const to of_device_id
 
-The find.h APIs are designed to be used only on unsigned long arguments.
-This can technically result in a over-read, but it is harmless in this
-case. Regardless, fix it to avoid the warning seen under -Warray-bounds,
-which we'd like to enable globally:
+struct of_device_id should normally be const.
 
-In file included from ./include/linux/bitmap.h:9,
-                 from ./include/linux/cpumask.h:12,
-                 from ./include/linux/smp.h:13,
-                 from ./include/linux/lockdep.h:14,
-                 from ./include/linux/mutex.h:17,
-                 from ./include/linux/notifier.h:14,
-                 from ./include/linux/clk.h:14,
-                 from drivers/irqchip/irq-ingenic-tcu.c:7:
-drivers/irqchip/irq-ingenic-tcu.c: In function 'ingenic_tcu_intc_cascade':
-./include/linux/find.h:40:23: warning: array subscript 'long unsigned int[0]' is partly outside array bounds of 'uint32_t[1]' {aka 'unsigned int[1]'} [-Warray-bounds]
-   40 |                 val = *addr & GENMASK(size - 1, offset);
-      |                       ^~~~~
-drivers/irqchip/irq-ingenic-tcu.c:30:18: note: while referencing 'irq_reg'
-   30 |         uint32_t irq_reg, irq_mask;
-      |                  ^~~~~~~
-
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211215232457.2069969-1-keescook@chromium.org
+Link: https://lore.kernel.org/r/20211209132453.25623-1-wangxiang@cdjrlc.com
 ---
- drivers/irqchip/irq-ingenic-tcu.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-gic-v2m.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-ingenic-tcu.c b/drivers/irqchip/irq-ingenic-tcu.c
-index 34a7d26..3363f83 100644
---- a/drivers/irqchip/irq-ingenic-tcu.c
-+++ b/drivers/irqchip/irq-ingenic-tcu.c
-@@ -28,6 +28,7 @@ static void ingenic_tcu_intc_cascade(struct irq_desc *desc)
- 	struct irq_chip_generic *gc = irq_get_domain_generic_chip(domain, 0);
- 	struct regmap *map = gc->private;
- 	uint32_t irq_reg, irq_mask;
-+	unsigned long bits;
- 	unsigned int i;
+diff --git a/drivers/irqchip/irq-gic-v2m.c b/drivers/irqchip/irq-gic-v2m.c
+index 9349fc6..f2d252d 100644
+--- a/drivers/irqchip/irq-gic-v2m.c
++++ b/drivers/irqchip/irq-gic-v2m.c
+@@ -405,7 +405,7 @@ err_free_v2m:
+ 	return ret;
+ }
  
- 	regmap_read(map, TCU_REG_TFR, &irq_reg);
-@@ -36,8 +37,9 @@ static void ingenic_tcu_intc_cascade(struct irq_desc *desc)
- 	chained_irq_enter(irq_chip, desc);
- 
- 	irq_reg &= ~irq_mask;
-+	bits = irq_reg;
- 
--	for_each_set_bit(i, (unsigned long *)&irq_reg, 32)
-+	for_each_set_bit(i, &bits, 32)
- 		generic_handle_domain_irq(domain, i);
- 
- 	chained_irq_exit(irq_chip, desc);
+-static struct of_device_id gicv2m_device_id[] = {
++static const struct of_device_id gicv2m_device_id[] = {
+ 	{	.compatible	= "arm,gic-v2m-frame",	},
+ 	{},
+ };

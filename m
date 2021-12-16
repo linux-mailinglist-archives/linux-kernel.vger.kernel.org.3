@@ -2,80 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2A3477967
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEF947796D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbhLPQj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:39:56 -0500
-Received: from mail-yb1-f171.google.com ([209.85.219.171]:34679 "EHLO
-        mail-yb1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbhLPQj4 (ORCPT
+        id S233484AbhLPQkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:40:45 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:43778
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232241AbhLPQko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:39:56 -0500
-Received: by mail-yb1-f171.google.com with SMTP id y68so66158695ybe.1;
-        Thu, 16 Dec 2021 08:39:55 -0800 (PST)
+        Thu, 16 Dec 2021 11:40:44 -0500
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EB3A34068E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 16:40:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639672842;
+        bh=wzGK8JrM0qK5K+9nNV1QJqS+dRB/4uLBgfT0d3ILjG4=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=U2sp5KY4LwJyJPo2WsS22N4c9IBud9s0QcqI7kjM/V7cBBYAulcPgWl/51eYpS3Ev
+         3XnyUh00sg70248URVsL4bKpxTnrpWGdLfCknFN/Qv4xhQwxwoWvM3A1tzlAqfF6Np
+         0H2GJYf75gbNt2PHqltdLULrxNw+H2fmhje8v3hQLv9LfI6OFF0QS52fMoo2SNlbpb
+         cArMHm//e8JFE5He/68sJ0cmPf9h4cuNJ5GFUtIKWYmoQEwwVnd7MopJPHB+usuGbg
+         4MMqAQZeMojffegdVK0dPN6+Mp8SH3SNinNnPdIw60NgZw0E0bilRgDFfBAWfMCNQ4
+         hpCPWJvxDOZ/w==
+Received: by mail-wm1-f72.google.com with SMTP id v62-20020a1cac41000000b0033719a1a714so14001029wme.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 08:40:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eEPEGGb1aR8D1SabPjTY1nd05keyniIz1b6jYSVPbm0=;
-        b=Hj3A+K0LD6lFKlpqKBfbSF22UO2VLWDi7JcluQ5EIHi/s1C1UTsWd7A/Y+sOQ1bsRx
-         4VmN+RyWsMkJv25JbjlktQyYZvzDxnVof8Q9/RHWI5dkkaTMYxYf/kEkOSBSPLgP9SEc
-         Kgmd+Odp8yTDu7eIJzcBzjBoZ+htaT78R8ckZWRvSpPgkujBUgQ39mX6pqxWXf7eIoz+
-         khFZlUgtsdkCQmf7czWBpokCIjtkZ5tydmjE55hHM3pyyymWBj5J3dgr5LsAHLPD/GJJ
-         kwouqmiXhbVUd3ySGWUhaKwu6pzXBm23P98n001WctGNCQO7iQa7WLqornEi0Xb+8U+7
-         JC9A==
-X-Gm-Message-State: AOAM531Kj4kJ8SPOYz9RpZFLomI5nJiRjvf2ua+KfO1nw2inpZys29r/
-        Zd5J5Zmzbea4BFBmSGmkpTH9lQCQeCPPgzA6v0Rf5x4q
-X-Google-Smtp-Source: ABdhPJx3uhMKaoI0zA68RqhtsVYo8vhXs4JKxCyeBDG0Ckx6tNJ0VMLxa38S05bvKO+VTn+5h4V0Wbnh5eLsqL1lciE=
-X-Received: by 2002:a25:f305:: with SMTP id c5mr4313857ybs.194.1639672795013;
- Thu, 16 Dec 2021 08:39:55 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wzGK8JrM0qK5K+9nNV1QJqS+dRB/4uLBgfT0d3ILjG4=;
+        b=ZsaR6a0HbasNg4fJuiDysFhLGNxqFzt+lJh6jukO9WgUq0utYCuQoGEUrMFPWLth9c
+         jzyQrzYxeNCE/JrF3MM4ZMQrcsJroBMlPXbYSGsJiK5FEiAXI8KBlhOzZuER/pqnn556
+         jISfe1FeXxU0SLIhqhKxnII8bjXoXQrrWo2MVeKKKD9F8H6wTlaRazCOXZ8YZ/SJUYah
+         Vc21QtrfHmGqZPM8U6YMdC8cNPjfnalt2XJ3SygHGIh4MswXKD6dNlATWQNY65RQHmeu
+         Clacw2cgJt5ZEoSMXS2uOjKSE3fgBqdKiUNGASJpz0b5isg4t8kCRFOwr9BvgV6tNAVA
+         lEMg==
+X-Gm-Message-State: AOAM531aEyebxnQR963XKFtO4UUYvUJN6it7k3bNM9cApjAC2zRYHaQd
+        Yvdyc+ez1rS+EK6L+PqtLjzXl1iKB7FuHinO/qJ4KHklMfnjNWly8s1L8l7AHqm9m3kWtqWI5Lw
+        X+pExLqYt5QfPdxa7YHRi7BGvsrayPcm9n/kjir6wWw==
+X-Received: by 2002:adf:eb4c:: with SMTP id u12mr4157667wrn.707.1639672842472;
+        Thu, 16 Dec 2021 08:40:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwMEaAfgUDbbHkpgBFCHapS6AIPsW5OiAs1LX+6oRtRz2kYhV8oYHhxxQZU7b3y6qvplc2a+w==
+X-Received: by 2002:adf:eb4c:: with SMTP id u12mr4157652wrn.707.1639672842269;
+        Thu, 16 Dec 2021 08:40:42 -0800 (PST)
+Received: from alex.home (lfbn-gre-1-195-1.w90-112.abo.wanadoo.fr. [90.112.158.1])
+        by smtp.gmail.com with ESMTPSA id o4sm3938290wmc.43.2021.12.16.08.40.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 08:40:41 -0800 (PST)
+From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Subject: [PATCH v2 1/2] dt-bindings: mfd: Fix typo "DA9093" -> "DA9063"
+Date:   Thu, 16 Dec 2021 17:40:36 +0100
+Message-Id: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <tencent_CE0F8701456CB89F92C73F28480EF3552E06@qq.com>
-In-Reply-To: <tencent_CE0F8701456CB89F92C73F28480EF3552E06@qq.com>
-From:   Anna Schumaker <anna.schumaker@netapp.com>
-Date:   Thu, 16 Dec 2021 11:39:39 -0500
-Message-ID: <CAFX2Jfk-gH5V2PL3UkSw=QLDDuzSgbKuzUeh8-ir-VpO0BzMpg@mail.gmail.com>
-Subject: Re: [PATCH] nfs: nfs4clinet: check the return value of kstrdup()
-To:     Xiaoke Wang <xkernel.wang@foxmail.com>
-Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiaoke,
+The device described is the "DA9063", not "DA9093", so fix this typo.
 
-On Mon, Dec 13, 2021 at 2:54 AM Xiaoke Wang <xkernel.wang@foxmail.com> wrote:
->
-> kstrdup() returns NULL when some internal memory errors happen, it is
-> better to check the return value of it so to catch the memory error in
-> time.
->
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-> ---
->  fs/nfs/nfs4client.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/fs/nfs/nfs4client.c b/fs/nfs/nfs4client.c
-> index af57332..89f13e0 100644
-> --- a/fs/nfs/nfs4client.c
-> +++ b/fs/nfs/nfs4client.c
-> @@ -1372,5 +1372,8 @@ int nfs4_update_server(struct nfs_server *server, const char *hostname,
->                 server->nfs_client->cl_hostname = kstrdup(hostname, GFP_KERNEL);
->         nfs_server_insert_lists(server);
->
-> +       if (server->nfs_client->cl_hostname == NULL)
-> +               return -ENOMEM;
-> +
+Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+---
+ Documentation/devicetree/bindings/mfd/da9063.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Checking the return of kstrdup() makes sense, but I think this should
-right after the kstrdup() call and still under that if block.
+diff --git a/Documentation/devicetree/bindings/mfd/da9063.txt b/Documentation/devicetree/bindings/mfd/da9063.txt
+index 8da879935c59..91b79a21d403 100644
+--- a/Documentation/devicetree/bindings/mfd/da9063.txt
++++ b/Documentation/devicetree/bindings/mfd/da9063.txt
+@@ -1,6 +1,6 @@
+ * Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
+ 
+-DA9093 consists of a large and varied group of sub-devices (I2C Only):
++DA9063 consists of a large and varied group of sub-devices (I2C Only):
+ 
+ Device                   Supply Names    Description
+ ------                   ------------    -----------
+-- 
+2.32.0
 
-Anna
-
->         return nfs_probe_destination(server);
->  }
-> --

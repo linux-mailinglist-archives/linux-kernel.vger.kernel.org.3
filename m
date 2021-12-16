@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A97C0476CE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19DD476CEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbhLPJIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 04:08:49 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:52250 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232758AbhLPJIn (ORCPT
+        id S232861AbhLPJKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 04:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232837AbhLPJK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:08:43 -0500
-Received: from [77.244.183.192] (port=64410 helo=[192.168.178.41])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mxmki-000Cvk-Ud; Thu, 16 Dec 2021 10:08:41 +0100
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH 1/2] PCI: dra7xx: Fix link removal on probe error
-To:     Rob Herring <robh@kernel.org>
-Cc:     PCI <linux-pci@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sekhar Nori <nsekhar@ti.com>
-References: <20211214221450.589884-1-luca@lucaceresoli.net>
- <CAL_Jsq+GQTcx1EGKHug2ZcDZufrKM-4k6PB0vQeTCTG42MHzvA@mail.gmail.com>
-Message-ID: <59a23c89-0810-eb28-acd9-7051ac34d438@lucaceresoli.net>
-Date:   Thu, 16 Dec 2021 10:08:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 16 Dec 2021 04:10:29 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CFEC061574;
+        Thu, 16 Dec 2021 01:10:29 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id 193so22678220qkh.10;
+        Thu, 16 Dec 2021 01:10:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aGt13vD1itn5sjXw+H86cmDVBqoGT4H1e/3JbiAwhwo=;
+        b=KGgdeC09Ut/4WVGRjUouF1X1fmV294IJcLMVJr6i7JbPH3Yz27oN21IEoQDk30t4aQ
+         8iRpXgQfQVRDjvvG5BveyRPbaADJJkOXB/Rz/EyN+oEFD8TEuX1s8P6/oH/HK7f+KEd8
+         Gh2nPCaUUPMXy2ofQ2F88tqnycdkaoA9aI8lDzPW9hqKz1EQS+whtWtBoRwkCxbulhns
+         M8Nw+Z9I3x/LwVw6LTAbqHSj6phAtAhByjW2rX1bmU0QMJtcKqhdWys9wIqW700C6FxG
+         MJsynPx2CbIuNG5i39yUx4ViGsnjY8fRHD4ObxQXG0Pl1aEShOiWVECa6AEmwtiKRhrd
+         i3tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aGt13vD1itn5sjXw+H86cmDVBqoGT4H1e/3JbiAwhwo=;
+        b=DwnC+2viKH0Dr34Fh4mbFkgBSFxHMifNuzce7Q5z3s6TK5kqG8BmwnAzT1gdGcHXpc
+         B80U3FATSMu82fpQThro4XU9chsr/jwnihaBWiS1s/tCp8Vx+3h+k2qr5kRbL0OOsWYV
+         MUSh39U+bKufARMCI+X/sBcK5NuBfbXPK45lHZF5mIRwdZnHHi3IPf0l0hAzq4OsEbrL
+         HcVLrRPugKlDEhWW9uPkiHI4v0pd3tuI/PrS37zLmnnZL9n+vxsgCiBpA/9e0CY4/jrF
+         U4zhsILxk93sEc3COzSDOz5WXFKwDEYC4q9uxiKt8wnFw2ukbakWHDwlehvstMV43c/Y
+         gNNg==
+X-Gm-Message-State: AOAM533Y3KlkJ2AosCXKazdzGRXNvlI+xajYMpRV7uFgVnod4DX5Qnyn
+        /ewNgt2zF3kBS1J5z0XM4Z3Zu6HLxuw=
+X-Google-Smtp-Source: ABdhPJz/amnbn14+QmT0cNiOb8u0k7LTCAe+7BpnQEh1bZGJs5Uiw3zEm3Apu9g3WU3ev4XszLfz9w==
+X-Received: by 2002:a05:620a:2589:: with SMTP id x9mr11050764qko.325.1639645828233;
+        Thu, 16 Dec 2021 01:10:28 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id o4sm2411924qkh.107.2021.12.16.01.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 01:10:27 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     tytso@mit.edu
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] ext4: use min() to make code cleaner
+Date:   Thu, 16 Dec 2021 09:10:22 +0000
+Message-Id: <20211216091022.449364-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAL_Jsq+GQTcx1EGKHug2ZcDZufrKM-4k6PB0vQeTCTG42MHzvA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-thanks for the quick feedback!
+Use min() in order to make code cleaner.
 
-On 14/12/21 23:42, Rob Herring wrote:
-> On Tue, Dec 14, 2021 at 4:15 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>
->> If a devm_phy_get() calls fails with phy_count==N (N > 0), then N links
->> have already been added by device_link_add() and won't be deleted by
->> device_link_del() because the code calls 'return' and not 'goto err_link'.
->>
->> Fix in a very simple way by doing all the devm_phy_get() calls before all
->> the device_link_add() calls.
->>
->> Fixes: 7a4db656a635 ("PCI: dra7xx: Create functional dependency between PCIe and PHY")
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> ---
->>  drivers/pci/controller/dwc/pci-dra7xx.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
->> index f7f1490e7beb..2ccc53869e13 100644
->> --- a/drivers/pci/controller/dwc/pci-dra7xx.c
->> +++ b/drivers/pci/controller/dwc/pci-dra7xx.c
->> @@ -757,7 +757,9 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
->>                 phy[i] = devm_phy_get(dev, name);
->>                 if (IS_ERR(phy[i]))
->>                         return PTR_ERR(phy[i]);
->> +       }
->>
->> +       for (i = 0; i < phy_count; i++) {
->>                 link[i] = device_link_add(dev, &phy[i]->dev, DL_FLAG_STATELESS);
-> 
-> I think this should happen automatically now with fw_devlink being
-> enabled by default. Can you try?
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ fs/ext4/super.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Do you mean removal should be done automatically? I think they are not
-due to the DL_FLAG_STATELESS flag.
-
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 5ec5a1c3b364..d0c50e0e787d 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -6922,8 +6922,7 @@ static ssize_t ext4_quota_read(struct super_block *sb, int type, char *data,
+ 		len = i_size-off;
+ 	toread = len;
+ 	while (toread > 0) {
+-		tocopy = sb->s_blocksize - offset < toread ?
+-				sb->s_blocksize - offset : toread;
++		tocopy = min(sb->s_blocksize - offset, toread);
+ 		bh = ext4_bread(NULL, inode, blk, 0);
+ 		if (IS_ERR(bh))
+ 			return PTR_ERR(bh);
 -- 
-Luca
+2.25.1
+

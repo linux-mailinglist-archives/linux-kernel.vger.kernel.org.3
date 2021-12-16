@@ -2,64 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46596476E51
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD64476E5F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233444AbhLPJxJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Dec 2021 04:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbhLPJxI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:53:08 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F04C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 01:53:08 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mxnR9-0006Iz-Ek; Thu, 16 Dec 2021 10:52:31 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mxnR6-0004Ru-Hc; Thu, 16 Dec 2021 10:52:28 +0100
-Message-ID: <24b70c5a2fc2c475525f678d6c45a0d2c0c590a6.camel@pengutronix.de>
-Subject: Re: [PATCH v6 04/10] reset: Add Sunplus SP7021 reset driver
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Qin Jian <qinjian@cqplus1.com>, robh+dt@kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
-        maz@kernel.org, linux@armlinux.org.uk, broonie@kernel.org,
-        arnd@arndb.de, stefan.wahren@i2se.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        wells.lu@sunplus.com
-Date:   Thu, 16 Dec 2021 10:52:28 +0100
-In-Reply-To: <9e081c98039518b36cf9a93d4aca66dc2efecdb2.1639560427.git.qinjian@cqplus1.com>
-References: <cover.1639560427.git.qinjian@cqplus1.com>
-         <9e081c98039518b36cf9a93d4aca66dc2efecdb2.1639560427.git.qinjian@cqplus1.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        id S233484AbhLPJ4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 04:56:08 -0500
+Received: from smtpbg127.qq.com ([109.244.180.96]:64739 "EHLO smtpbg.qq.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233454AbhLPJ4E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 04:56:04 -0500
+X-QQ-mid: bizesmtp46t1639648546t1eiuno4
+Received: from localhost.localdomain (unknown [182.148.14.255])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Thu, 16 Dec 2021 17:55:42 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000C00A0000000
+X-QQ-FEAT: +FcubzMZu+TnobKZkdDu+fxyIxHuYmZYeBOhSMi1C8hoANf/t1LVAaRCWFSj+
+        uMXtU+o568Prhwpg1dYeBW2Tft0KUciqB4A4gJvPR3gF5GnWuaJzjXJCfofR8JGXnC/nL7j
+        /6u8m7riB8v6MF59mRMGQ46ei8sMFqA7xXlvR2BXEBASVD8rgkoFWcbfIXfn2ZonkI+vptP
+        9Ely+lPXfoeA5rEuvf7iyPft3aD6UNtgPded5whqLyEXUHT5v/w78rirE3KPJD5So4HC8rj
+        DbDxHv1bWYlFIxApuXAcbjc+yd1prXfTLW27OT3yg759mYDJJ9YZOCQMFJA6bqRtIbi9kJz
+        iTG9x2JysuFyY0hQJMC9OWqmHY2LlrcTnhEJuba
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     jyri.sarha@iki.fi
+Cc:     tomba@kernel.org, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH v3] drm/tilcdc: add const to of_device_id
+Date:   Thu, 16 Dec 2021 17:55:36 +0800
+Message-Id: <20211216095536.58577-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-16 at 15:08 +0800, Qin Jian wrote:
-> Add reset driver for Sunplus SP7021 SoC.
-> 
-> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
-> ---
-> Fix the comments from Philipp.
+struct of_device_id should normally be const.
 
-Looks good to me now,
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+---
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Changes since v1
+* add const in line 63
 
+Changes since v2
+* removed line 63
 
-regards
-Philipp
+ drivers/gpu/drm/tilcdc/tilcdc_drv.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/tilcdc/tilcdc_drv.c b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
+index 3ddb7c710a3d..cc567c87057d 100644
+--- a/drivers/gpu/drm/tilcdc/tilcdc_drv.c
++++ b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
+@@ -60,8 +60,6 @@ void tilcdc_module_cleanup(struct tilcdc_module *mod)
+ 	list_del(&mod->list);
+ }
+ 
+-static struct of_device_id tilcdc_of_match[];
+-
+ static int tilcdc_atomic_check(struct drm_device *dev,
+ 			       struct drm_atomic_state *state)
+ {
+@@ -587,7 +585,7 @@ static int tilcdc_pdev_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static struct of_device_id tilcdc_of_match[] = {
++static const struct of_device_id tilcdc_of_match[] = {
+ 		{ .compatible = "ti,am33xx-tilcdc", },
+ 		{ .compatible = "ti,da850-tilcdc", },
+ 		{ },
+-- 
+2.34.1
+

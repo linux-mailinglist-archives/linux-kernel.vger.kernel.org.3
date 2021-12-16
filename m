@@ -2,82 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B9C477E9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34C0477EA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbhLPVSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:18:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37811 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235005AbhLPVSD (ORCPT
+        id S236820AbhLPVVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229459AbhLPVVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:18:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639689482;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Szv2WCpyhjVjn4Fey8iXx2Wp1kssTkyePEeP3VFIu8g=;
-        b=Wqhz+1VjysPv6qtGeVkqx5q7QkXamXrvEH2bo8u2fCb2MwiB+sFFHmtVwbaM5PZTGZ/v5Y
-        HGGKLh8SKSu8/5nGGZFXPTeKBoAbYfb1AQ0kgSxeINo3qn3aRcIdWj/rrst3sIQi2Qplia
-        l5lOOHvRaSEPgDiCrGfOWeNIvkkmImo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-65-9OVE1SGIPOa1lU4pLKOZTQ-1; Thu, 16 Dec 2021 16:17:57 -0500
-X-MC-Unique: 9OVE1SGIPOa1lU4pLKOZTQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 91DAA1937FC0;
-        Thu, 16 Dec 2021 21:17:54 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 85D2C6E96B;
-        Thu, 16 Dec 2021 21:17:48 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wh2dr=NgVSVj0sw-gSuzhxhLRV5FymfPS146zGgF4kBjA@mail.gmail.com>
-References: <CAHk-=wh2dr=NgVSVj0sw-gSuzhxhLRV5FymfPS146zGgF4kBjA@mail.gmail.com> <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk> <163967169723.1823006.2868573008412053995.stgit@warthog.procyon.org.uk> <CAHk-=wi0H5vmka1_iWe0+Yc6bwtgWn_bEEHCMYsPHYtNJKZHCQ@mail.gmail.com> <YbuTaRbNUAJx5xOA@casper.infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        linux-cachefs@redhat.com, Jeff Layton <jlayton@kernel.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 56/68] afs: Handle len being extending over page end in write_begin/write_end
+        Thu, 16 Dec 2021 16:21:31 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4D7C061574;
+        Thu, 16 Dec 2021 13:21:31 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z29so352605edl.7;
+        Thu, 16 Dec 2021 13:21:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y4P5wy6iix7HfpBAPgE+l0TDwUWAk0zjGM03BbiTQsw=;
+        b=P8Z7C13ZdPu+qAQpnBOAeCbP5gMwD7ydNMb9fH1tHtsh2kJc7ibH4bhB9n6SSttNEt
+         vEEmkYmz1t6Wm9/57Wpyql1gY0lukX/tq7xgtngawV31lXiyIPiGdLlXzIBBpOnQ/pNU
+         l8TY+90t1LjC9Ts43pf+0L3t6Cq68GW0mMKuPmHBlsyYPUEBjqZHsJ8O0Uy21wTlkTut
+         DkYw3nq5oS+YsuqCdF7sZUGi6ZaY6WUqsUowfAES53fFq8ONWXmRQXBRmsakgmTB4xiK
+         lcxLsvwMVZyq/6SKHFurTYHOEqmmqbVonYppG/FJLvW5oRfRzsPSbaJYXXnR9qD6yz3J
+         794g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y4P5wy6iix7HfpBAPgE+l0TDwUWAk0zjGM03BbiTQsw=;
+        b=eUhqwu1rTl4PJyJzE4EtPzn0XjC9MEvxJDbPGsxklM0fPTCaZdHBtUOHFGbHrHvV/F
+         R0B74hI71eoWXQgYNWWoBRjaBHEidb2uxw40y7HCCynpx6AZh5p7Vav5JAviemta9poM
+         3ToIuk1oYK0qf3MoauXlAkn5lMgAWjs6pNAnl3lsZg33BfNFKFvJK4g+cmN3mysw6+aM
+         ycwU+Sa1CrciOs4hTpCJWORuPrju2b9VSiUwX2yj0D1G9yUGL1G7O5J5AdTs1YbY7JM7
+         qyvN8D+Q0H40qGF3Iym2b2C8kIwc7NUuD+d+zKXwvKShBOpwm5Oksd1qSQaU47YMi0YG
+         4B8w==
+X-Gm-Message-State: AOAM530ZzSWUxP2ixQrv6fOaZkx9lOkIC0LykjR8Qla1RnVNv1MypA2T
+        dOuhoWiwC+DyKMo8bvXULFfT/IvPxKqh8DSmZB8=
+X-Google-Smtp-Source: ABdhPJwsfak5UbIcc8yFH8Rwdwqg3PnBpr0/RxL71FTeqrqpj/OhkfEuzEX2FvqtqvCKNpPM2N8yXgEq/ke4MwvehrM=
+X-Received: by 2002:a17:906:6dce:: with SMTP id j14mr9377078ejt.305.1639689689489;
+ Thu, 16 Dec 2021 13:21:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1840346.1639689467.1@warthog.procyon.org.uk>
-Date:   Thu, 16 Dec 2021 21:17:47 +0000
-Message-ID: <1840347.1639689467@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <20211216111256.2362683-1-aford173@gmail.com> <20211216111256.2362683-9-aford173@gmail.com>
+ <YbuqpayfYVPp1dTe@robh.at.kernel.org>
+In-Reply-To: <YbuqpayfYVPp1dTe@robh.at.kernel.org>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Thu, 16 Dec 2021 15:21:18 -0600
+Message-ID: <CAHCN7xLGeu4=CwqCv8BBowuQQ5t9iFDQV0adPNmy9dufW8soAg@mail.gmail.com>
+Subject: Re: [PATCH V2 08/10] dt-bindings: media: nxp,imx8mq-vpu: Add support
+ for G1 and G2 on imx8mm
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-media <linux-media@vger.kernel.org>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        "open list:HANTRO VPU CODEC DRIVER" 
+        <linux-rockchip@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Thu, Dec 16, 2021 at 3:07 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Dec 16, 2021 at 05:12:53AM -0600, Adam Ford wrote:
+> > The i.MX8M mini appears to have a similar G1 and G2 decoder but the
+> > post-procesing isn't present, so different compatible flags are requred.
+>
+> post-processing
+>
+> > Since all the other parameters are the same with imx8mq, just add
+> > the new compatible flags to nxp,imx8mq-vpu.yaml.
+> >
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> > index c1e157251de7..b1f24c48c73b 100644
+> > --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> > +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> > @@ -5,7 +5,7 @@
+> >  $id: "http://devicetree.org/schemas/media/nxp,imx8mq-vpu.yaml#"
+> >  $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> >
+> > -title: Hantro G1/G2 VPU codecs implemented on i.MX8MQ SoCs
+> > +title: Hantro G1/G2 VPU codecs implemented on i.MX8MQ/i.MX8MM SoCs
+>
+> Just 'i.MX8' so we don't have to change this everytime?
 
-> So I will NAK these patches by David, because they are fundamentally
-> wrong, whichever way we turn. Any "write in bigger chunks" patch will
-> be something else entirely.
+Are you OK with i.MX8M?  8MQ, 8MM, and 8MP all appear to have G1 and
+G2 decoders.  The i.MX8 is different.
+>
+> >
+> >  maintainers:
+> >    - Philipp Zabel <p.zabel@pengutronix.de>
+> > @@ -20,6 +20,8 @@ properties:
+> >          deprecated: true
+> >        - const: nxp,imx8mq-vpu-g1
+> >        - const: nxp,imx8mq-vpu-g2
+> > +      - const: nxp,imx8mm-vpu-g1
+> > +      - const: nxp,imx8mm-vpu-g2
+>
+> Not compatible with the imx8mq variants?
 
-I'll just drop patches 56 and 57 for now, then.  I think the problem only
-manifests if I set the flag saying the filesystem/inode/whatever supports
-multipage folios.
+No, the structures associated with these compatible flags telling the
+driver what features are available have options for the post-processor
+in the 8MQ which are not present in the 8MM.
 
-David
+>
+> >
+> >    reg:
+> >      maxItems: 1
+> > @@ -66,3 +68,27 @@ examples:
+> >                  clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
+> >                  power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G2>;
+> >          };
+> > +  - |
+> > +        #include <dt-bindings/clock/imx8mm-clock.h>
+> > +        #include <dt-bindings/power/imx8mm-power.h>
+> > +        #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +
+> > +        vpu_g1: video-codec@38300000 {
+> > +                compatible = "nxp,imx8mm-vpu-g1";
+> > +                reg = <0x38300000 0x10000>;
+> > +                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> > +                clocks = <&clk IMX8MM_CLK_VPU_G1_ROOT>;
+> > +                power-domains = <&vpu_blk_ctrl IMX8MM_VPUBLK_PD_G1>;
+> > +        };
+> > +  - |
+> > +        #include <dt-bindings/clock/imx8mm-clock.h>
+> > +        #include <dt-bindings/power/imx8mm-power.h>
+> > +        #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +
+> > +        vpu_g2: video-codec@38300000 {
+> > +                compatible = "nxp,imx8mm-vpu-g2";
+> > +                reg = <0x38310000 0x10000>;
+> > +                interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> > +                clocks = <&clk IMX8MM_CLK_VPU_G2_ROOT>;
+> > +                power-domains = <&vpu_blk_ctrl IMX8MM_VPUBLK_PD_G2>;
+> > +        };
+>
+> No point in more examples just for a different compatible.
 
+No problem.
+>
+> > --
+> > 2.32.0
+> >
+> >

@@ -2,228 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF007477FA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF55D477FC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 23:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237211AbhLPV5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:57:11 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:59250 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234459AbhLPV5K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:57:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=qQ2/GAJNApZFHJGvqhKZNxRu6RFm8epoh3iYjRz+zFM=; b=bhMhIuenPbSciuR7s8n23M6Fkf
-        KBdRg8NcPF4gbdnHciY9noS3hS9Gp3NqxRUmSQmKSRUkLILm4/v77ayfperbkV0UooiBKuGfu8wQR
-        wLpkfmaCaPZfzDgjWLbo29NolviolTVeeJWivGxV0yJJZYCpWYPgfhZ1d+oYanCWXYeo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mxyk7-00GmM2-Nf; Thu, 16 Dec 2021 22:56:51 +0100
-Date:   Thu, 16 Dec 2021 22:56:51 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Joseph CHAMG <josright123@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6, 2/2] net: Add dm9051 driver
-Message-ID: <Ybu2I1iaSejwuMpI@lunn.ch>
-References: <20211216093246.23738-1-josright123@gmail.com>
- <20211216093246.23738-3-josright123@gmail.com>
+        id S237376AbhLPWC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 17:02:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234459AbhLPWC6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 17:02:58 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B8CC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 14:02:58 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id j18so548043wrd.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 14:02:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=jr113sD2CvAYYaqrKJ2RFq/931IUT0YAFGFLLTKtGbE=;
+        b=Wcjg5ik9dcrXPAnVnn3yL9Bzo7AhRdMp/iBvZY/qIPLoLk0v9w99kx9EylPs7yiEcO
+         gN5SJkXEjUIU0/YQQNVUOt5vP7MJDNicq9qK02n7Yx0MYOJS4+xPGHMvKvqsy9y8iaeY
+         bzxVUdYKKjnC6brqYUd+odEP6YA8pKLE6pF0aS5sF8TLkcnxBj/bQfJMcf1nXcHnE8kq
+         d6ZoaxYAK5vekUNNjYV0gXS1Q4qLDRVZ8NzR9rQFJCmOCZtKwd44V8Lc1HbMopSw/eik
+         URiF7PqdwOSfwNWHeLxuM3Dqa4aEEspEjK8BZsIysbbbhY66h5CAqODUm0g6XMFYR8um
+         pI8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=jr113sD2CvAYYaqrKJ2RFq/931IUT0YAFGFLLTKtGbE=;
+        b=42bYVYN/x3iPHfdaYY5MI7HukkcWOkBWGWfKrRTYGcG5RocvkWWR299thk1WAyiAOi
+         hGUOrb2cb4ED4ipJQnkfO5nqT1KmGwiGDiP5x1+hTVVsu8nhKdf0KLIFdB5EFVWDBWUE
+         BC6Who3Y73Bp451T7CL0qyQ9ZV0hQYd+BzdxCx6fFjgjggM/oC0iCdpKcZRU8Ye89c1i
+         ICG8myMaec3RGJmth2r3v4p2TExFFgvUS9Eh3q4JQbx644FGjvnZ/QM9OzwfhpwBDVDa
+         QL3/9KTvDuhn8uQ+g66kYAXFY53H6wJtVx0fYlwiOaVozAZBqhmnYNjqwEObXssMhNq1
+         AjqQ==
+X-Gm-Message-State: AOAM530w/a8/FccQGTB4p2YRQ8hfFC8YpwDWn3Q5dcv/KMklEok4Lz2G
+        rfnaNOV12qxouyS53csh9KuszSMLCoU=
+X-Google-Smtp-Source: ABdhPJy46xui0iaw81h/rHG30m0c96KJf69/+cIlCYxG4WAy2Gr4Rhla2NZ9aAZgaym0KofijEzPXA==
+X-Received: by 2002:a5d:456e:: with SMTP id a14mr26199wrc.256.1639692173852;
+        Thu, 16 Dec 2021 14:02:53 -0800 (PST)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id d2sm5543428wmb.31.2021.12.16.14.02.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 14:02:53 -0800 (PST)
+Subject: Re: [PATCH V4 0/6] xen: Add support of extended regions (safe ranges)
+ on Arm
+From:   Oleksandr <olekstysh@gmail.com>
+To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Julien Grall <julien@xen.org>,
+        Bertrand Marquis <bertrand.marquis@arm.com>,
+        Wei Chen <Wei.Chen@arm.com>, Henry Wang <Henry.Wang@arm.com>,
+        Kaly Xin <Kaly.Xin@arm.com>, Jiamei Xie <Jiamei.Xie@arm.com>
+References: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
+Message-ID: <1428a0be-b80c-f996-1f72-6545dd66c1bf@gmail.com>
+Date:   Fri, 17 Dec 2021 00:02:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216093246.23738-3-josright123@gmail.com>
+In-Reply-To: <1639080336-26573-1-git-send-email-olekstysh@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 05:32:46PM +0800, Joseph CHAMG wrote:
-> Add davicom dm9051 spi ethernet driver, The driver work with the
-> device platform's spi master
-> 
-> remove the redundant code that phylib has support,
-> adjust to be the reasonable sequence,
-> fine tune comments, add comments for pause function support
-> 
-> Tested with raspberry pi 4. Test for netwroking function, CAT5
-> cable unplug/plug and also ethtool detect for link state, and
-> all are ok.
 
-You have been asked two or three times now to include a list of what
-you changed relative to the previous version. This is expected for
-kernel patches, just look at other submissions.
+On 09.12.21 22:05, Oleksandr Tyshchenko wrote:
 
-> +/* spi low level code */
-> +static int
-> +dm9051_xfer(struct board_info *db, u8 cmdphase, u8 *txb, u8 *rxb, unsigned int len)
-> +{
-> +	struct device *dev = &db->spidev->dev;
-> +	int ret = 0;
-> +
-> +	db->cmd[0] = cmdphase;
-> +	db->spi_xfer2[0].tx_buf = &db->cmd[0];
-> +	db->spi_xfer2[0].rx_buf = NULL;
-> +	db->spi_xfer2[0].len = 1;
-> +	if (!rxb) {
-> +		db->spi_xfer2[1].tx_buf = txb;
-> +		db->spi_xfer2[1].rx_buf = NULL;
-> +		db->spi_xfer2[1].len = len;
-> +	} else {
-> +		db->spi_xfer2[1].tx_buf = txb;
-> +		db->spi_xfer2[1].rx_buf = rxb;
-> +		db->spi_xfer2[1].len = len;
-> +	}
-> +	ret = spi_sync(db->spidev, &db->spi_msg2);
-> +	if (ret < 0)
-> +		dev_err(dev, "dm9Err spi burst cmd 0x%02x, ret=%d\n", cmdphase, ret);
-> +	return ret;
-> +}
-> +
-> +static u8 dm9051_ior(struct board_info *db, unsigned int reg)
-> +{
-> +	u8 rxb[1];
-> +
-> +	dm9051_xfer(db, DM_SPI_RD | reg, NULL, rxb, 1);
 
-dm9051_xfer() returns an error code. You should pass it up the call
-stack. We want to know about errors.
+Hello Juergen, Boris
 
-> +/* basic read/write to phy
-> + */
-> +static int dm_phy_read(struct board_info *db, int reg)
 
-Does this comment have any value? From the function name i can see
-this is a PHY read.
+May I please ask, are you happy (or otherwise) with current patch series 
+(I assume, especially with commits #3-4)?
 
-And you still don't have consistent prefix of dm9051_
+For the convenience:
 
-> +{
-> +	int ret;
-> +	u8 check_val;
-> +
-> +	dm9051_iow(db, DM9051_EPAR, DM9051_PHY | reg);
-> +	dm9051_iow(db, DM9051_EPCR, EPCR_ERPRR | EPCR_EPOS);
-> +	ret = read_poll_timeout(dm9051_ior, check_val, !(check_val & EPCR_ERRE), 100, 10000,
-> +				true, db, DM9051_EPCR);
-> +	dm9051_iow(db, DM9051_EPCR, 0x0);
-> +	if (ret) {
-> +		netdev_err(db->ndev, "timeout read phy register\n");
-> +		return DM9051_PHY_NULLVALUE;
+   1. xen/unpopulated-alloc: Drop check for virt_addr_valid() in fill_list()
+- Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 
-No, return whatever read_poll_timeout() returned, probably
--ETIMEDOUT. You need to report the error all the way up the call
-stack.
+   2. arm/xen: Switch to use gnttab_setup_auto_xlat_frames() for DT
+- Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
 
-> +	}
-> +	ret = (dm9051_ior(db, DM9051_EPDRH) << 8) | dm9051_ior(db, DM9051_EPDRL);
-> +	return ret;
-> +}
-> +
-> +static void dm_phy_write(struct board_info *db, int reg, int value)
-> +{
-> +	int ret;
-> +	u8 check_val;
-> +
-> +	dm9051_iow(db, DM9051_EPAR, DM9051_PHY | reg);
-> +	dm9051_iow(db, DM9051_EPDRL, value);
-> +	dm9051_iow(db, DM9051_EPDRH, value >> 8);
-> +	dm9051_iow(db, DM9051_EPCR, EPCR_EPOS | EPCR_ERPRW);
-> +	ret = read_poll_timeout(dm9051_ior, check_val, !(check_val & EPCR_ERRE), 100, 10000,
-> +				true, db, DM9051_EPCR);
-> +	dm9051_iow(db, DM9051_EPCR, 0x0);
-> +	if (ret)
-> +		netdev_err(db->ndev, "timeout write phy register\n");
+   3. xen/balloon: Bring alloc(free)_xenballooned_pages helpers back
+- Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
 
-And you need to return ret to the caller.
+   4. xen/unpopulated-alloc: Add mechanism to use Xen resource
+- Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
 
-> +static int dm9051_mdio_read(struct mii_bus *mdiobus, int phy_id, int reg)
-> +{
-> +	struct board_info *db = mdiobus->priv;
-> +	int val;
-> +
-> +	if (phy_id == DM9051_PHY_ID) {
-> +		mutex_lock(&db->addr_lock);
-> +		val = dm_phy_read(db, reg);
-> +		mutex_unlock(&db->addr_lock);
-> +		return val;
-> +	}
-> +
-> +	return DM9051_PHY_NULLVALUE;
+   5. arm/xen: Read extended regions from DT and init Xen resource
+- Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
 
-Please just use 0xffff. Don't hide it.
+   6. dt-bindings: xen: Clarify "reg" purpose
+- Reviewed-by: Bertrand Marquis <bertrand.marquis@arm.com>
+- Acked-by: Rob Herring <robh@kernel.org>
+- Acked-by: Stefano Stabellini <sstabellini@kernel.org>
 
-The MDIO bus has a pull up on the data line. So if you try to read
-from a device which does not exist, you get all 1s returned. Registers
-are 16 bit wide, so you get 0xffff. When the MDIO is registered the
-bus will be probed, and when the read returns 0xffff it knows there is
-no device at that address. This is the only time you should use
-0xffff. It is not an error, it simply indicates there is no device
-there.
 
-> +
-> +/* read chip id
-> + */
-> +static unsigned int dm9051_chipid(struct board_info *db)
+> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>
+> Hello all.
+>
+> You can find the RFC-V3 patch series at [1],[2] and [3].
+>
+> The corresponding Xen support (for both Dom0 and DomU) is already committed and
+> is available in mainline Xen since the following commit:
+> 57f87857dc2de452a796d6bad4f476510efd2aba libxl/arm: Add handling of extended regions for DomU
+>
+> The extended region (safe range) is a region of guest physical address space
+> which is unused and could be safely used to create grant/foreign mappings instead
+> of ballooning out real RAM pages to obtain a physical address space for creating
+> these mappings (which simply results in wasting domain memory and shattering super
+> pages in P2M table).
+>
+> The problem is that we cannot follow Linux advise which memory ranges are unused
+> on Arm as there might be some identity mappings in P2M table (stage 2) the guest is not
+> aware of or not all device I/O regions might be known (registered) by the time the guest
+> starts creating grant/foreign mappings. This is why we need some hints from the hypervisor
+> which knows all details in advance to be able to choose extended regions (which won't
+> clash with other resources).
+>
+> The extended regions are chosen at the domain creation time and advertised to it via
+> "reg" property under hypervisor node in the guest device-tree [4]. As region 0 is reserved
+> for grant table space (always present), the indexes for extended regions are 1...N.
+> No device tree bindings update is needed, guest infers the presence of extended regions
+> from the number of regions in "reg" property.
+>
+> Please note the following:
+> - The ACPI case is not covered for now
+> - patch series was created in a way to retain existing behavior on x86
+>
+> The patch series is based on v5.16-rc3 and also available at [5], it was fully
+> tested on Arm64 and only compile tested on x86.
+>
+> [1] https://lore.kernel.org/all/1627490656-1267-1-git-send-email-olekstysh@gmail.com/
+>      https://lore.kernel.org/all/1627490656-1267-2-git-send-email-olekstysh@gmail.com/
+> [2] https://lore.kernel.org/all/1635264312-3796-1-git-send-email-olekstysh@gmail.com/
+> [3] https://lore.kernel.org/all/1637787223-21129-1-git-send-email-olekstysh@gmail.com/
+> [4] https://xenbits.xen.org/gitweb/?p=xen.git;a=blob_plain;f=docs/misc/arm/device-tree/guest.txt;hb=refs/heads/master
+> [5] https://github.com/otyshchenko1/linux/commits/map_opt_ml7
+>
+> Oleksandr Tyshchenko (6):
+>    xen/unpopulated-alloc: Drop check for virt_addr_valid() in fill_list()
+>    arm/xen: Switch to use gnttab_setup_auto_xlat_frames() for DT
+>    xen/balloon: Bring alloc(free)_xenballooned_pages helpers back
+>    xen/unpopulated-alloc: Add mechanism to use Xen resource
+>    arm/xen: Read extended regions from DT and init Xen resource
+>    dt-bindings: xen: Clarify "reg" purpose
+>
+>   Documentation/devicetree/bindings/arm/xen.txt |  14 +--
+>   arch/arm/xen/enlighten.c                      | 132 ++++++++++++++++++++++++--
+>   drivers/xen/Kconfig                           |   2 +-
+>   drivers/xen/balloon.c                         |  20 ++--
+>   drivers/xen/unpopulated-alloc.c               |  87 ++++++++++++++++-
+>   include/xen/balloon.h                         |   3 +
+>   include/xen/xen.h                             |  16 ++++
+>   7 files changed, 245 insertions(+), 29 deletions(-)
+>
+-- 
+Regards,
 
-Don't you think we can work out this function reads the chip id from
-the name of the function. Please only have comments if they are
-actually useful.
+Oleksandr Tyshchenko
 
-Useful comments tend to explain why something is being done, not what
-is being done.
-
-> +static void dm9051_fifo_reset(struct board_info *db)
-> +{
-> +	db->bc.DO_FIFO_RST_counter++;
-> +
-> +	dm9051_iow(db, DM9051_FCR, FCR_FLOW_ENABLE); /* FlowCtrl */
-> +	dm9051_iow(db, DM9051_PPCR, PPCR_PAUSE_COUNT); /* Pause Pkt Count */
-> +	dm9051_iow(db, DM9051_LMCR, db->lcr_all); /* LEDMode1 */
-> +	dm9051_iow(db, DM9051_INTCR, INTCR_POL_LOW); /* INTCR */
-> +}
-
-> +static void dm_handle_link_change(struct net_device *ndev)
-> +{
-> +	/* MAC and phy are integrated together, such as link state, speed,
-> +	 * and Duplex are sync inside
-> +	 */
-
-What about Pause?
-
-dm9051_fifo_reset() does:
-	dm9051_iow(db, DM9051_FCR, FCR_FLOW_ENABLE); /* FlowCtrl */
-
-Is this enabling Pause processing? Do you need to disable it if
-autoneg decided it is not wanted?
-
-> +static int dm9051_probe(struct spi_device *spi)
-> +{
-> +	struct device *dev = &spi->dev;
-> +	struct net_device *ndev;
-> +	struct board_info *db;
-> +	unsigned int id;
-> +	int ret = 0;
-> +
-> +	ndev = devm_alloc_etherdev(dev, sizeof(struct board_info));
-> +	if (!ndev)
-> +		return -ENOMEM;
-> +
-> +	SET_NETDEV_DEV(ndev, dev);
-> +	dev_set_drvdata(dev, ndev);
-> +	db = netdev_priv(ndev);
-> +	memset(db, 0, sizeof(struct board_info));
-
-No need to use memset. If you look at how
-
-devm_alloc_etherdev() is implemented you end up here:
-
-https://elixir.bootlin.com/linux/v5.16-rc5/source/net/core/dev.c#L10801
-
-The z in kvzalloc() means zero.
-
-    Andrew

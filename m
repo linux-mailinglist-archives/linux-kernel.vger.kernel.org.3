@@ -2,168 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7D1477CFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 21:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 667BF477D01
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 21:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241193AbhLPUEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 15:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbhLPUEK (ORCPT
+        id S241199AbhLPUF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 15:05:57 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:47496 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229835AbhLPUF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 15:04:10 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9CCC061574;
-        Thu, 16 Dec 2021 12:04:09 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id d10so325505ybe.3;
-        Thu, 16 Dec 2021 12:04:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GdDT7fgaRT12dHtkLlXU8bb/jY5+OF81ewRwhn48r6k=;
-        b=cDV3WjRyiOm+kOhD5xF5xysuN2erCnSE/CV+ORT/DW+K3FBLLGY6NpxSHHPB5EmrNq
-         TBwPXsoat88ZSzGdCzQ94co1mqOz/6AF3ugwmwGiATib2jS5qTTwtQgsBrText0WhmmH
-         b1VJhGjGSJxhg9nbBn+zuNnmoNS+3cQwGiLFY1nF/M7sxqZ3MnPkyzDOrduLihk+kfYh
-         1yoSHYMGQbQbcbnICVG77YO8XHoPu6CFmCCrHBvkFWPt47oOOjZVmSl9131UhpsgXtbm
-         KFLG3xKuTZtkq+FNkhmX7qE97WmEgAcpAvGzbawo8SldtYryUsN7kKcZHFKTXwH+UhP3
-         t2vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GdDT7fgaRT12dHtkLlXU8bb/jY5+OF81ewRwhn48r6k=;
-        b=an9vZX0r7Yhna0Sn2qmiGKtgaGJ6FELGX2c9C1CrEBr8QsEHYcQzWCbXBeJsqJg3aP
-         O8ZVTZECNtV94RxDpccncP9dXZBTQSK9CdI56arPSV7w2LnQuBXjJ0ZUPwxxVWdREbE7
-         mo10wuKaPbnEDqE0K890rBnsY6p9YTGh8LH4R0O1TQW/Ryi8eIUOEtp2QQvRb8VGaz04
-         Rb9h8P1jzfEVPCMTZdidSZacDNboANXzAFfBFkudUg+gmkW3BmcizLoBqgD5WvUuVp2R
-         EtipT9YSttZ2oppZ22fPkFk+0k5dG3PrNu8yGQ162h00aEGB81cZbZTuF3R25id++wZv
-         LYkw==
-X-Gm-Message-State: AOAM531o3/WWQpuqVKNDDM2vb3UJlbakoTB55+ESrQezIdMEqTPN80x7
-        cKrMagjCWtRMVie67Ri0IBjktj+t3cMWoPYYBRg=
-X-Google-Smtp-Source: ABdhPJya9BM+Mcmy7aJRR+XGyA5T2i3+ELM7RIX4XCVoURcpUHy4KSU6X0TqMTnlxvzQSQy6D25MfEBYnihj93grjfY=
-X-Received: by 2002:a25:37cb:: with SMTP id e194mr15740944yba.449.1639685049006;
- Thu, 16 Dec 2021 12:04:09 -0800 (PST)
+        Thu, 16 Dec 2021 15:05:56 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BGK5dVK057700;
+        Thu, 16 Dec 2021 14:05:39 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1639685139;
+        bh=wrQp1fnJ6mOn8LdRMHRJtFOxR0DVxqVmRrbvc0vm4Is=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=ZYSxDOmA/sNo2/rutgMHvwkpgpu9M+mOGYySXrBZVXtqakaeKsedI+vFRPCmE/djC
+         /YUpVYNBN2BvkWOldNXeYJvxDEuu54yAD/6Sy18rf1sbLzT5H3UE6kPDWZaFsD3Pzy
+         IXLu5w3n6IZRe3exH6LaUrQPliV5P5gjqjPb4cgU=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BGK5dZv113468
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 16 Dec 2021 14:05:39 -0600
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 16
+ Dec 2021 14:05:38 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 16 Dec 2021 14:05:38 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BGK5cml118318;
+        Thu, 16 Dec 2021 14:05:38 -0600
+Date:   Fri, 17 Dec 2021 01:35:37 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>
+CC:     <linux-mtd@lists.infradead.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] mtd: spi-nor: Introduce erase_proto
+Message-ID: <20211216200535.jikqd42nohr4477n@ti.com>
+References: <20211209100813.61713-1-alexander.sverdlin@nokia.com>
 MIME-Version: 1.0
-References: <20211210173433.13247-1-skhan@linuxfoundation.org>
- <CAADnVQ+Fnn-NuGoLq1ZYbHM=kR_W01GB1DCFOnQTHhgfDOrnaA@mail.gmail.com>
- <d367441f-bba0-30eb-787a-89b0c06a65dd@linuxfoundation.org>
- <CAEf4BzahZhCEroeMWNTu-kGsuFCDaNCvbkiFW7ci0EUOWTwmqQ@mail.gmail.com>
- <d3c1b7f4-5363-c23e-4837-5eaf07f63ebc@linuxfoundation.org>
- <CAEf4BzYKnoD_x7fZ4Fwp0Kg-wT6HMXOG0CMRSG4U+qQ0R27yzQ@mail.gmail.com> <53490dba-b7fd-a3f8-6574-5736c83aa90d@linuxfoundation.org>
-In-Reply-To: <53490dba-b7fd-a3f8-6574-5736c83aa90d@linuxfoundation.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 16 Dec 2021 12:03:57 -0800
-Message-ID: <CAEf4BzYA1h2kVF3945hxdcR8gf08GFpLiN1OwjedzTrzaAparA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20211209100813.61713-1-alexander.sverdlin@nokia.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 11:51 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 12/16/21 12:30 PM, Andrii Nakryiko wrote:
-> > On Thu, Dec 16, 2021 at 6:42 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>
-> >> On 12/15/21 9:04 PM, Andrii Nakryiko wrote:
-> >>> On Tue, Dec 14, 2021 at 12:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>>>
-> >>>> On 12/11/21 6:53 PM, Alexei Starovoitov wrote:
-> >>>>> On Fri, Dec 10, 2021 at 9:34 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>>>>>
-> >>>>>> ARRAY_SIZE is defined in multiple test files. Remove the definitions
-> >>>>>> and include header file for the define instead.
-> >>>>>>
-> >>>>>> Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
-> >>>>>> define.
-> >>>>>>
-> >>>>>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> >>>>>> ---
-> >>>>>>     tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
-> >>>>>>     tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
-> >>>>>>     tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
-> >>>>>>     tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
-> >>>>>>     tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
-> >>>>>>     5 files changed, 5 insertions(+), 19 deletions(-)
-> >>>>>>
-> >>>>>> diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> >>>>>> index 1d8918dfbd3f..7a5ebd330689 100644
-> >>>>>> --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> >>>>>> +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> >>>>>> @@ -5,6 +5,7 @@
-> >>>>>>     #include <bpf/bpf_helpers.h>
-> >>>>>>     #include <bpf/bpf_tracing.h>
-> >>>>>>     #include <bpf/bpf_core_read.h>
-> >>>>>> +#include <bpf/bpf_util.h>
-> >>>>>
-> >>>>> It doesn't look like you've built it.
-> >>>>>
-> >>>>> progs/test_sysctl_prog.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
-> >>>>> #include <bpf/bpf_util.h>
-> >>>>>             ^~~~~~~~~~~~~~~~
-> >>>>>      CLNG-BPF [test_maps] socket_cookie_prog.o
-> >>>>> progs/test_sysctl_loop2.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
-> >>>>> #include <bpf/bpf_util.h>
-> >>>>>             ^~~~~~~~~~~~~~~~
-> >>>>> 1 error generated.
-> >>>>> In file included from progs/profiler2.c:6:
-> >>>>> progs/profiler.inc.h:7:10: fatal error: 'bpf/bpf_util.h' file not found
-> >>>>> #include <bpf/bpf_util.h>
-> >>>>>             ^~~~~~~~~~~~~~~~
-> >>>>>
-> >>>>
-> >>>> Sorry about that. I built it - I think something is wrong in my env. Build
-> >>>> fails complaining about not finding vmlinux - I overlooked that the failure
-> >>>> happened before it got to progs.
-> >>>>
-> >>>> Error: failed to load BTF from .../vmlinux: No such file or directory
-> >>>
-> >>> Please make sure that you build vmlinux before you build selftests,
-> >>> BPF selftests use vmlinux to generate vmlinux.h with all kernel types
-> >>> (among other things). So please also make sure that all the setting in
-> >>> selftests/bpf/config were used in your Kconfig.
-> >>>
-> >>>>
-> >>
-> >> The problem in my env. is that I don't have CONFIG_DEBUG_INFO_BTF in
-> >> my config and then don't have the dwarves and llvm-strip on my system.
-> >> Pains of upgrading.
-> >>
-> >> I am all set now. On the other hand the vmlinux.h is a mess. It has
-> >> no guards for defines and including stdio.h and this generated
-> >> vmlinux.h causes all sorts of problems.
-> >
-> > It does have
-> >
-> > #ifndef __VMLINUX_H__
-> > #define __VMLINUX_H__
-> >
-> > Are we talking about the same vmlinux.h here?
-> >
->
-> Yes we are. The guard it has works when vmlinux.h is included
-> twice. It defines a lot of common defines which are the problem.
-> Unless you add guards around each one of them, including vmlinux.h
-> is problematic if you also include other standard includes.
->
-> You can try to include bpf_util.h for example from one of the
-> test in progs to see the problem.
+Hi Alexander,
 
-bpf_util.h is a user-space header, it's not going to work from the BPF
-program side. If you look at any of progs/*.c (all of which are BPF
-program-side source code), not a single one is including bpf_util.h.
+On 09/12/21 11:08AM, Alexander A Sverdlin wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> 
+> I've been looking into non-working erase on mt25qu256a and pinpointed it to
+> be write_proto 1-4-4 selected from SFDP while the chip only supports 1-1-0
+> erase.
+> 
+> For now just introduce the separate protocol without functional change and
+> leave the real fix for the following patch.
+> 
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
+> ---
+>  drivers/mtd/spi-nor/core.c  | 9 ++++++---
+>  include/linux/mtd/spi-nor.h | 4 +++-
+>  2 files changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 2e21d5a..dcd02ea 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -177,7 +177,7 @@ static int spi_nor_controller_ops_write_reg(struct spi_nor *nor, u8 opcode,
+>  
+>  static int spi_nor_controller_ops_erase(struct spi_nor *nor, loff_t offs)
+>  {
+> -	if (spi_nor_protocol_is_dtr(nor->write_proto))
+> +	if (spi_nor_protocol_is_dtr(nor->erase_proto))
+>  		return -EOPNOTSUPP;
+>  
+>  	return nor->controller_ops->erase(nor, offs);
+> @@ -1186,7 +1186,7 @@ static int spi_nor_erase_chip(struct spi_nor *nor)
+>  				   SPI_MEM_OP_NO_DUMMY,
+>  				   SPI_MEM_OP_NO_DATA);
+>  
+> -		spi_nor_spimem_setup_op(nor, &op, nor->write_proto);
+> +		spi_nor_spimem_setup_op(nor, &op, nor->erase_proto);
+>  
+>  		ret = spi_mem_exec_op(nor->spimem, &op);
+>  	} else {
+> @@ -1331,7 +1331,7 @@ int spi_nor_erase_sector(struct spi_nor *nor, u32 addr)
+>  				   SPI_MEM_OP_NO_DUMMY,
+>  				   SPI_MEM_OP_NO_DATA);
+>  
+> -		spi_nor_spimem_setup_op(nor, &op, nor->write_proto);
+> +		spi_nor_spimem_setup_op(nor, &op, nor->erase_proto);
+>  
+>  		return spi_mem_exec_op(nor->spimem, &op);
+>  	} else if (nor->controller_ops->erase) {
+> @@ -2727,6 +2727,9 @@ static void spi_nor_late_init_params(struct spi_nor *nor)
+>  	 */
+>  	if (nor->flags & SNOR_F_HAS_LOCK && !nor->params->locking_ops)
+>  		spi_nor_init_default_locking_ops(nor);
+> +
+> +	if (!nor->erase_proto)
+> +		nor->erase_proto = nor->write_proto;
 
->
-> thanks,
-> -- Shuah
+I get that you are trying to not break any existing flashes with this, 
+but I don't quite like it. We should keep the same initialization flow 
+with erase_proto as with write_proto, read_proto, etc. That is, 
+initialize it to SNOR_PROTO_1_1_1 in spi_nor_scan() and then let the 
+initialization procedure change it as needed.
+
+The problem with this is of course that it could break some flashes by 
+selecting the wrong erase. I would expect _most_ flashes to use 
+erase_proto as 1-1-1 but I of course haven't went and looked at every 
+single flash to point out the exceptions.
+
+I would like to hear from others if they think it is okay to do this.
+
+>  }
+>  
+>  /**
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

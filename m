@@ -2,132 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C13D476F11
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB297476EFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236194AbhLPKoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:44:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbhLPKoF (ORCPT
+        id S236139AbhLPKiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:38:16 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:37496 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236122AbhLPKiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:44:05 -0500
-X-Greylist: delayed 382 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Dec 2021 02:44:05 PST
-Received: from forward101p.mail.yandex.net (forward101p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84823C061574;
-        Thu, 16 Dec 2021 02:44:05 -0800 (PST)
-Received: from sas1-0a2be8f95474.qloud-c.yandex.net (sas1-0a2be8f95474.qloud-c.yandex.net [IPv6:2a02:6b8:c08:f21f:0:640:a2b:e8f9])
-        by forward101p.mail.yandex.net (Yandex) with ESMTP id 8081159CCE00;
-        Thu, 16 Dec 2021 13:37:39 +0300 (MSK)
-Received: from sas8-b61c542d7279.qloud-c.yandex.net (sas8-b61c542d7279.qloud-c.yandex.net [2a02:6b8:c1b:2912:0:640:b61c:542d])
-        by sas1-0a2be8f95474.qloud-c.yandex.net (mxback/Yandex) with ESMTP id BJmvtfpYM5-bdeuFB9F;
-        Thu, 16 Dec 2021 13:37:39 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orca.pet; s=mail; t=1639651059;
-        bh=Nf3LvXH5AXN+JC9P+ix28xro/gBL7qkBplUcuybM6lA=;
-        h=Date:Subject:To:From:Message-Id:Cc;
-        b=U+s/h9l0u5kShf3mXigHbGHjM2XStxiGACPEiXDq/1xYLN6NoBuEOIFTTiRc9h9Tb
-         ppwWBZ2ABxjbG2NUigdE4EKBCfRWZ4KLB2NgQ+V+3NhRBATMeNO9Fga7Jun7CbOBbg
-         cg5nWy+Qh6StKns5Gs0/j8sK+d0yn3yIFPhJ4vT0=
-Authentication-Results: sas1-0a2be8f95474.qloud-c.yandex.net; dkim=pass header.i=@orca.pet
-Received: by sas8-b61c542d7279.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id TkkqXHcr21-bbPqYmKS;
-        Thu, 16 Dec 2021 13:37:38 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 2
-From:   Marcos Del Sol Vives <marcos@orca.pet>
-To:     linux-cifs@vger.kernel.org
-Cc:     Marcos Del Sol Vives <marcos@orca.pet>,
-        linux-kernel@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH v2] ksmbd: disable SMB2_GLOBAL_CAP_ENCRYPTION for SMB 3.1.1
-Date:   Thu, 16 Dec 2021 11:37:22 +0100
-Message-Id: <20211216103721.1686600-1-marcos@orca.pet>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 16 Dec 2021 05:38:15 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V-oKOd2_1639651092;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V-oKOd2_1639651092)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 16 Dec 2021 18:38:13 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     sj@kernel.org, akpm@linux-foundation.org
+Cc:     baolin.wang@linux.alibaba.com, mike.kravetz@oracle.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] mm/damon: Add access checking for hugetlb pages
+Date:   Thu, 16 Dec 2021 18:38:03 +0800
+Message-Id: <6afcbd1fda5f9c7c24f320d26a98188c727ceec3.1639623751.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the official Microsoft MS-SMB2 document section 3.3.5.4, this
-flag should be used only for 3.0 and 3.0.2 dialects. Setting it for 3.1.1
-is a violation of the specification.
+The process's VMAs can be mapped by hugetlb page, but now the DAMON
+did not implement the access checking for hugetlb pte, so we can not
+get the actual access count like below if a process VMAs were mapped
+by hugetlb.
 
-This causes my Windows 10 client to detect an anomaly in the negotiation,
-and disable encryption entirely despite being explicitly enabled in ksmbd,
-causing all data transfers to go in plain text.
+damon_aggregated: target_id=18446614368406014464
+nr_regions=12 4194304-5476352: 0 545
+damon_aggregated: target_id=18446614368406014464
+nr_regions=12 140662370467840-140662372970496: 0 545
+damon_aggregated: target_id=18446614368406014464
+nr_regions=12 140662372970496-140662375460864: 0 545
+damon_aggregated: target_id=18446614368406014464
+nr_regions=12 140662375460864-140662377951232: 0 545
+damon_aggregated: target_id=18446614368406014464
+nr_regions=12 140662377951232-140662380449792: 0 545
+damon_aggregated: target_id=18446614368406014464
+nr_regions=12 140662380449792-140662382944256: 0 545
+......
 
-Signed-off-by: Marcos Del Sol Vives <marcos@orca.pet>
-Cc: linux-kernel@vger.kernel.org
-Cc: Namjae Jeon <linkinjeon@kernel.org>
+Thus this patch adds hugetlb access checking support, with this patch
+we can see below VMA mapped by hugetlb access count.
+
+damon_aggregated: target_id=18446613056935405824
+nr_regions=12 140296486649856-140296489914368: 1 3
+damon_aggregated: target_id=18446613056935405824
+nr_regions=12 140296489914368-140296492978176: 1 3
+damon_aggregated: target_id=18446613056935405824
+nr_regions=12 140296492978176-140296495439872: 1 3
+damon_aggregated: target_id=18446613056935405824
+nr_regions=12 140296495439872-140296498311168: 1 3
+damon_aggregated: target_id=18446613056935405824
+nr_regions=12 140296498311168-140296501198848: 1 3
+damon_aggregated: target_id=18446613056935405824
+nr_regions=12 140296501198848-140296504320000: 1 3
+damon_aggregated: target_id=18446613056935405824
+nr_regions=12 140296504320000-140296507568128: 1 2
+......
+
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 ---
- fs/ksmbd/smb2ops.c |  3 ---
- fs/ksmbd/smb2pdu.c | 25 +++++++++++++++++++++----
- 2 files changed, 21 insertions(+), 7 deletions(-)
+Changes from v1:
+ - Move damon_hugetlb_mkold() to vaddr.c file.
+ - Move some assignments in the variables definitions.
+---
+ mm/damon/vaddr.c | 96 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 96 insertions(+)
 
-diff --git a/fs/ksmbd/smb2ops.c b/fs/ksmbd/smb2ops.c
-index 0a5d8450e835..02a44d28bdaf 100644
---- a/fs/ksmbd/smb2ops.c
-+++ b/fs/ksmbd/smb2ops.c
-@@ -271,9 +271,6 @@ int init_smb3_11_server(struct ksmbd_conn *conn)
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB2_LEASES)
- 		conn->vals->capabilities |= SMB2_GLOBAL_CAP_LEASING;
- 
--	if (conn->cipher_type)
--		conn->vals->capabilities |= SMB2_GLOBAL_CAP_ENCRYPTION;
--
- 	if (server_conf.flags & KSMBD_GLOBAL_FLAG_SMB3_MULTICHANNEL)
- 		conn->vals->capabilities |= SMB2_GLOBAL_CAP_MULTI_CHANNEL;
- 
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 49c9da37315c..049fa81281b4 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -915,6 +915,25 @@ static void decode_encrypt_ctxt(struct ksmbd_conn *conn,
- 	}
+diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+index 78ff2bc..69c436b 100644
+--- a/mm/damon/vaddr.c
++++ b/mm/damon/vaddr.c
+@@ -386,8 +386,65 @@ static int damon_mkold_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 	return 0;
  }
  
-+/**
-+ * smb3_encryption_negotiated() - checks if server and client agreed on enabling encryption
-+ * @conn:	smb connection
-+ *
-+ * Return:	true if connection should be encrypted, else false
-+ */
-+static bool smb3_encryption_negotiated(struct ksmbd_conn *conn)
++#ifdef CONFIG_HUGETLB_PAGE
++static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
++				struct vm_area_struct *vma, unsigned long addr)
 +{
-+	if (!conn->ops->generate_encryptionkey)
-+		return false;
++	bool referenced = false;
++	struct hstate *h = hstate_vma(vma);
++	pte_t entry = huge_ptep_get(pte);
++	struct page *page = pte_page(entry);
 +
-+	/*
-+	 * SMB 3.0 and 3.0.2 dialects use the SMB2_GLOBAL_CAP_ENCRYPTION flag.
-+	 * SMB 3.1.1 uses the cipher_type field.
-+	 */
-+	return (conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION) ||
-+	    conn->cipher_type;
++	if (!page)
++		return;
++
++	get_page(page);
++
++	if (pte_young(entry)) {
++		referenced = true;
++		entry = pte_mkold(entry);
++		huge_ptep_set_access_flags(vma, addr, pte, entry,
++					   vma->vm_flags & VM_WRITE);
++	}
++
++#ifdef CONFIG_MMU_NOTIFIER
++	if (mmu_notifier_clear_young(mm, addr, addr + huge_page_size(h)))
++		referenced = true;
++#endif /* CONFIG_MMU_NOTIFIER */
++
++	if (referenced)
++		set_page_young(page);
++
++	set_page_idle(page);
++	put_page(page);
 +}
 +
- static void decode_compress_ctxt(struct ksmbd_conn *conn,
- 				 struct smb2_compression_capabilities_context *pneg_ctxt)
- {
-@@ -1469,8 +1488,7 @@ static int ntlm_authenticate(struct ksmbd_work *work)
- 		    (req->SecurityMode & SMB2_NEGOTIATE_SIGNING_REQUIRED))
- 			sess->sign = true;
++static int damon_mkold_hugetlb_entry(pte_t *pte, unsigned long hmask,
++				     unsigned long addr, unsigned long end,
++				     struct mm_walk *walk)
++{
++	struct hstate *h = hstate_vma(walk->vma);
++	spinlock_t *ptl;
++	pte_t entry;
++
++	ptl = huge_pte_lock(h, walk->mm, pte);
++	entry = huge_ptep_get(pte);
++	if (!pte_present(entry))
++		goto out;
++
++	damon_hugetlb_mkold(pte, walk->mm, walk->vma, addr);
++
++out:
++	spin_unlock(ptl);
++	return 0;
++}
++#else
++#define damon_mkold_hugetlb_entry NULL
++#endif
++
+ static const struct mm_walk_ops damon_mkold_ops = {
+ 	.pmd_entry = damon_mkold_pmd_entry,
++	.hugetlb_entry = damon_mkold_hugetlb_entry,
+ };
  
--		if (conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION &&
--		    conn->ops->generate_encryptionkey &&
-+		if (smb3_encryption_negotiated(conn) &&
- 		    !(req->Flags & SMB2_SESSION_REQ_FLAG_BINDING)) {
- 			rc = conn->ops->generate_encryptionkey(sess);
- 			if (rc) {
-@@ -1559,8 +1577,7 @@ static int krb5_authenticate(struct ksmbd_work *work)
- 	    (req->SecurityMode & SMB2_NEGOTIATE_SIGNING_REQUIRED))
- 		sess->sign = true;
+ static void damon_va_mkold(struct mm_struct *mm, unsigned long addr)
+@@ -482,8 +539,47 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 	return 0;
+ }
  
--	if ((conn->vals->capabilities & SMB2_GLOBAL_CAP_ENCRYPTION) &&
--	    conn->ops->generate_encryptionkey) {
-+	if (smb3_encryption_negotiated(conn)) {
- 		retval = conn->ops->generate_encryptionkey(sess);
- 		if (retval) {
- 			ksmbd_debug(SMB,
++#ifdef CONFIG_HUGETLB_PAGE
++static int damon_young_hugetlb_entry(pte_t *pte, unsigned long hmask,
++				     unsigned long addr, unsigned long end,
++				     struct mm_walk *walk)
++{
++	struct damon_young_walk_private *priv = walk->private;
++	struct hstate *h = hstate_vma(walk->vma);
++	struct page *page;
++	spinlock_t *ptl;
++	pte_t entry;
++
++	ptl = huge_pte_lock(h, walk->mm, pte);
++	entry = huge_ptep_get(pte);
++	if (!pte_present(entry))
++		goto out;
++
++	page = pte_page(entry);
++	if (!page)
++		goto out;
++
++	get_page(page);
++
++	if (pte_young(entry) || !page_is_idle(page) ||
++	    mmu_notifier_test_young(walk->mm, addr)) {
++		*priv->page_sz = huge_page_size(h);
++		priv->young = true;
++	}
++
++	put_page(page);
++
++out:
++	spin_unlock(ptl);
++	return 0;
++}
++#else
++#define damon_young_hugetlb_entry NULL
++#endif
++
+ static const struct mm_walk_ops damon_young_ops = {
+ 	.pmd_entry = damon_young_pmd_entry,
++	.hugetlb_entry = damon_young_hugetlb_entry,
+ };
+ 
+ static bool damon_va_young(struct mm_struct *mm, unsigned long addr,
 -- 
-2.25.1
+1.8.3.1
 

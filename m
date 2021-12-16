@@ -2,201 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FAB477A99
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94921477AA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240227AbhLPRaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:30:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52242 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240213AbhLPRa1 (ORCPT
+        id S240255AbhLPRdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:33:38 -0500
+Received: from smtpweb146.aruba.it ([62.149.158.146]:33337 "EHLO
+        smtpweb146.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230217AbhLPRdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:30:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D86ECB82551;
-        Thu, 16 Dec 2021 17:30:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8BDC36AE5;
-        Thu, 16 Dec 2021 17:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639675824;
-        bh=repGJGrbWDB32mgCMbp5RDwBf22fgEisX5KUEIO8s/Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J4WxF6XlJCLPZ+qK824T+8sTJnkSymr+EuUc43akcb8yUTw1CkL/Q/HKTWIfKFkOk
-         z9YBFf2d3s+i7ltbLmG7hBL5WmuVCz4+ikSEHNdkYfppZlyometlCg2fDVUKN9Jn2S
-         y5Ine8/MXpwRmGzmnhk2rolhnoZKVdg7mBA0y5jDnsGoSs8H77WBPGKH6yZK43Fc7D
-         KpgsxHn1l1IF+6iVsgYeitqtnIVPde89OI2ASeBgm729U5J1QV/QfDvwwaQR8gRxw5
-         it8iwY7uKpG+z4+jtpoiscpRG54J0p2JcNCUHG9pSwinIA5G0V9XDuoouqCvmR+e+W
-         Vb4BYldBxDxPQ==
-Received: by mail-wm1-f47.google.com with SMTP id b186-20020a1c1bc3000000b00345734afe78so1245200wmb.0;
-        Thu, 16 Dec 2021 09:30:24 -0800 (PST)
-X-Gm-Message-State: AOAM531NbD/Su7+YVFFqdWW01L5AiYdKRfo2HWGCx8O48Yvu69IOO90g
-        jOfdNlCgthj/ND37RhEu5gS8v5qb9ltr4NH5idE=
-X-Google-Smtp-Source: ABdhPJwenX5HAlLyEor5+roBp4TZkrVgW/ElEqvdHFhJRuzDYedw6L0BNWivKo8sOYN5IPOdBMfDvWREw1QLCiCzIPQ=
-X-Received: by 2002:a1c:8:: with SMTP id 8mr6003308wma.106.1639675823044; Thu,
- 16 Dec 2021 09:30:23 -0800 (PST)
+        Thu, 16 Dec 2021 12:33:37 -0500
+Received: from [192.168.50.18] ([146.241.138.59])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id xudJmDZ2Fcwd9xudKmYmm2; Thu, 16 Dec 2021 18:33:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1639676015; bh=A8eMZCtxOA9Ba5uPd7vUcY0GtY/sLZiclhzdTw82N8Q=;
+        h=Subject:To:From:Date:MIME-Version:Content-Type;
+        b=S/vw1/ZNYB91iYK4VSL1R4rTuOK3zASjeHdT6Q+hTKNqx65Y4v0QxkyefjnZtl4JN
+         Q1juvDREmGhO7JHYaYUOPYE628c42o6Tl1KzmnUgwDuyBq1kQlIbghCIFM3ubPvvGT
+         UmbKUzQTUk7DC2/ORtrwQBQD+x0msqTDCR8oLuBfgXQC6H2amlg8WZEXWYodXrLIgU
+         XD6ENrq5f4DXFS/+E3KfaxDIT7Pmm3impjViha/r9CRqH1qgK/gF5qOpasyEYqKCFI
+         0zdEkWfzqODSdHYJQX5lQQktUrZzkVd0sVgA82g2KvGej9Aq/np8eY8PY997G7Rc53
+         p2WGB+cRBQQyA==
+Subject: [RESEND in plain-test] Re: [PATCH v5 0/9] Add initial support for the
+ i.MXRTxxxx SoC family starting from i.IMXRT1050 SoC.
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Jesse Taube <mr.bossman075@gmail.com>
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+References: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
+ <CAK8P3a29tzgd_4WncippZBEJra9n0bQTysBkPBp_WA0sb28gTg@mail.gmail.com>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <1360c4fe-4a09-a8a1-3224-7f1d4af59f6f@benettiengineering.com>
+Date:   Thu, 16 Dec 2021 18:33:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211110104613.23881-1-baskov@ispras.ru> <CAMj1kXGzdMfj0bdNFODFZ8jfo0iMaZ5SOfueciwtY7Y4V5G2JQ@mail.gmail.com>
- <1b013e77ec3d4c6288408b3caff093ef@ispras.ru>
-In-Reply-To: <1b013e77ec3d4c6288408b3caff093ef@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 16 Dec 2021 18:30:11 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHuYSMFfth8W=0YzvroBf8t5z-rAgE9JJA4zonFgS1TPQ@mail.gmail.com>
-Message-ID: <CAMj1kXHuYSMFfth8W=0YzvroBf8t5z-rAgE9JJA4zonFgS1TPQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/5] Handle UEFI NX-restricted page tables
-To:     Baskov Evgeniy <baskov@ispras.ru>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAK8P3a29tzgd_4WncippZBEJra9n0bQTysBkPBp_WA0sb28gTg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfAKLbP6Es9h/dlQpArqdvaYAmRkL+39EPSYjSfBt4bKPMLTLfg/QQqj4PLOESjv/btMzHCOslpjxEiyQIp9bnudTd5MLSzGt5nna0qdrnDKPfDA1Wu5D
+ TG5iaTdC2iIplr+Or/i7Qz2cpFSyIA5My6HqtBQ8mGcCIm9bzdzTkhy0k2c2hJLBz/KpuDdDmHoYzZXTobfjRV2ZVTG4xtUKfIzgYm/fzaFuusNZFR0356Gv
+ dFr0lCxPG6XFU/2Yi72xA9SOwFzrs6pIsvd6Ru+93WD5DCOfLaJ3XWRmptmbNe+FLFEwo/tL/Bge41BlGenDru2BWjrCYj4gaYpSIcK/hgxGt7UmOivsMVCd
+ nmFHYK5sVz8XSZBwbqf8/JwHOA4v26vCAEOLGdNsxrKjmG3OD+7YMofPLkKgl++eNkEq381tXi4Z2g94yvmmwJCXNU4r2P11fSYyZYfoCprAOCW2z1InGLN2
+ 3cHbNYuvz4QfvPqhttat3bK/lFhYD9bwsYMzVUnyiSvpNx0XG+7PaVrPqgkn8T294miP9eQjAWd9Psm5C37obMSC06cwPWViFFG9ZPv2oqsd6HqtguYUNoIQ
+ MC9a5BFtUNpptAwy6o430bIFdVANiaIlqlpsgLsfZwedfDKqCQK6qVrNS/C2ng+oEqNUB3+vtWypssp48tRPqqsxuL/ypuPV9rdjnO+VLwil3YeNVghkfGqc
+ h4he/yBBxlkWH2YuXkvwuLfxJ4AXNeIutJU6wQsOYG1Gxd86RvTp7wsAu2eBYujeWEsPwXSapIId/aj7aGdZ1gqUgiMXGXnHNb59Hb1n/DvCWHi57XWcZ6Z2
+ nF2dxo4eQ9UTY4LGojYmpHVy2C4vn/DcgwGvNxE3TumDVzEnyLK8M2Hpg9Psdq6gpaZdkAhDy/1D8M30lJ1UZJzAvRpkTSYu45GMrdauscaz2HKzjjj6rE1+
+ cF2kRMmb4Zc2FEYQ+Y3LX1KvMpVscIe7UI180M2omrBwKSw1DCGpCBRSB8pp2kkbKuvRjBZCGukk7pyxWPoFnH21C+REKFN1XW27+iuKhNthGfPXH/j/fRmz
+ XGfvqgAAfY6uMJdQtzA8wnODk26IcmRMoxvAfcmAlbMgRWhz9RFie2/+VfFNa53GPnEnpW+8S7eY4iWuL3asQLMqR0h+PeZomys=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Nov 2021 at 08:36, <baskov@ispras.ru> wrote:
->
->
-> Hello,
->
-> I apologize for delayed reply.
->
+Hi Arnd, Jesse, All,
 
-No worries.
+sorry for previous HTML e-mail(I was on mobile phone),
+
+On 16/12/21 09:26, Arnd Bergmann wrote:
+> On Wed, Dec 15, 2021 at 11:05 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+>>
+>> This patchset contains:
+>> - i.MXRT10xx family infrastructure
+>> - i.MXRT1050 pinctrl driver adaption
+>> - i.MXRT1050 clock driver adaption
+>> - i.MXRT1050 sd-card driver adaption
+>> - i.MXRT1050 uart driver adaption
+>> - i.MXRT1050-evk basic support
+>>
+>> The i.MXRTxxxx family that could have support by Linux actually spreads
+>> from i.MXRT1020 to i.MXRT1170 with the first one supporting 1 USB OTG &
+>> 100M ethernet with a cortex-M7@500Mhz up to the latter with i.MXRT1170
+>> with cortex-M7@1Ghz and cortex-M4@400Mhz, 2MB of internal SRAM, 2D GPU,
+>> 2x 1Gb and 1x 100Mb ENET. The i.MXRT family is NXP's answer to
+>> STM32F7XX, as it uses only simple SDRAM, it gives the chance of a 4 or
+>> less layer PCBs. Seeing that these chips are comparable to the
+>> STM32F7XXs which have linux ported to them it seems reasonable to add
+>> support for them.
+>>
+>> Giving Linux support to this family should ease the development process,
+>> instead of using a RTOS they could use Embedded Linux allowing for more
+>> portability, ease of design and will broaden the scope of people using
+>> embedded linux.
+>>
+>> The EVK has very little SDRAM, generally 32MB starting from
+>> i.MXRT1020(the lowest P/N), although the i.MXRT1160/70 provide instead
+>> 64MB of SDRAM for more functionality.
+>>
+>> At the moment we do not support XIP for either u-boot or Linux but it
+>> should be done in the future. XIP will also save SDRAM.
+>>
+>> Another interesting fact is the amount of internal SRAM, as the P/N
+>> increases the SRAM will reach up to 2MB(some could be for cache and
+>> some would be for video).
+>>
+>> Also, some parts have embed flash of 4MB that can be used for
+>> u-boot/Linux, if both correctly sized it will leave the SDRAM free.
+>>
+>> External flash can be Quad SPI and HyperFlash, so throughput would be
+>> decent.
+>>
+>> The i.MXRT11xx series supports MIPI interface too.
+>>
+>> The family in general provide CAN bus, audio I/O, 1 or more
+>> USB(otg/host), 1 or more 100Mb/1Gb ethernet, camera interface, sd-card.
+>>
+>> All this can be used for simple GUIs, web-servers, point-of-sale
+>> stations, etc.
+> 
+> This looks all good to me now, but the drivers need to be reviewed by the
+> respective subsystem maintainers before we can merge it into the soc
+> tree. As with other new SoCs, I'm happy to merge the support as a combined
+> pull request that includes the drivers provided that the driver subsystem
+> maintainers have reviewed them.
+> 
+> Ideally the i.MX maintainers would pick up your series into a separate
+> branch and send that to soc@kernel.org the same way as the other topic
+> branches that are usually split out between DT, drivers, soc code etc.
+> 
+> With the Christmas break coming up, the timing may not be sufficient
+> before I'm off next week, so it may end up too late for 5.17 but should
+> be fine for 5.18.
+> 
+> As a more general comment, it's always nice to see newly added SoC
+> platforms, especially when they are this well implemented and done
+> by hobbyists. However, I do think you are being overly optimistic
+> as to how useful this is going to be to other people: interest in NOMMU
+> ARM platforms has dropped a lot over the past 5 years, and as far as I
+> can tell, it is only being kept alive for existing stm32 customers
+> as the economics do not favor Linux on Cortex-M for new products
+> compare to Linux on Cortex-A or some RTOS on Cortex-M.
+> 
+> The existing users will inevitably stop updating their kernels at some
+> point, and then it's most likely just you and Vladimir Murzin that care.
 
 
-> The system in question runs in a firmware that tries to achieve
-> complete W^X protection. Both loader code and loader data
-> are not executable, so the suggested approach does not work.
-> If you would like to test this, you can set
-> the PcdDxeNxMemoryProtectionPolicy in any firmware available to you.
->
+About this will you accept support for the other SoCs in the family?
+We would like to add in the near future:
+- i.MXRT1020(uboot support is already upstreamed)
+- i.MXRT1024(almost equal to 1020)
+- i.MXRT1060(almost equal to 1050)
+- i.MXRT1064(almost equal to 1060)
+And
+- i.MXRT1160/70 new family with faster core clock(1Ghz) and a cortex M4
 
-The PCD in question has the following note:
+We need to add missing lcd(uboot upstreamed), usb(uboot upstreamed), 
+ethernet(wip) supports for i.MXRT10xx family.
 
-# NOTE: User must NOT set NX protection for EfiLoaderCode /
-EfiBootServicesCode / EfiRuntimeServicesCode. <BR>
+This is to organize with Jesse also about buying evaluation boards and 
+timing.
 
-Any idea whether this is easily reproducible with OVMF? Restricting
-the loader from creating executable regions seems rather daft, so we
-should at least report this, and preferably fix it in EDK2.
+We’ve meant this porting also as an exercise to deal with Linux deeper 
+for us and for the other newbies.
 
-> As a justification for the approach itself, I can use the fact that
-> UEFI specification says nothing about the ability to execute
-> self-allocated EfiLoaderCode or any other types besides the areas
-> allocated by the firmware for UEFI Images. In fact, Table 7-5
-> explicitly states that EfiLoaderCode is used for:
->
-> > The code portions of a loaded UEFI application.
->
+We’ve been also asked about a possible support for s32s(quad cortex-R52) 
+on initial emails but it has no mmu too.
+While I’m seeing that some cortex-R is landing inside Linux.
+Would it be interesting anyway?
 
-Fair enough. So EfiLoaderCode is not the right type.
-
-> While we do not think it should be interpreted as one cannot allocate
-> such areas at all, it is clear that there are no guarantees about the
-> other use cases and permissions of the allocations of this type besides
-> those stated by 2.3.4:
->
-> > Paging mode is enabled and any memory space defined by the UEFI memory
-> > map is identity mapped (virtual address equals physical address),
-> > although the attributes of certain regions may not have all read,
-> > write, and execute attributes or be unmarked for purposes of platform
-> > protection.
->
-> Long story short, the kernel is not allowed to allocate such areas and
-> assume they are executable,
-
-OK
-
-> it should do paging itself,
-
-Now you're going too fast. One does not necessarily imply the other.
-
-> and the changes
-> here address that. For the reference, Windows adheres to this convention
-> and works fine on the target system.
->
-
-Given that this issue is specific to EDK2 based firmwares, would it be
-possible to fix this using DXE services instead? In particular, could
-we use
-
-gDS->SetMemorySpaceAttributes()
-
-to ensure that the regions have executable permissions?
-
-
-
-
-
->
-> On 2021-11-10 14:11, Ard Biesheuvel wrote:
-> > On Wed, 10 Nov 2021 at 11:56, Baskov Evgeniy <baskov@ispras.ru> wrote:
-> >>
-> >> Note, that this patch series is RFC, since it is yet untested
-> >> and possibly incompatible with AMD SEV and related extensions.
-> >>
-> >> The UEFI specification states that certain memory regions may
-> >> not have every permission, i.e. may not be writable or executable.
-> >>
-> >> Furthermore there exist some implementations (at least on i386/x86_64)
-> >> that restrict execution of memory regions expected by the kernel to
-> >> be executable. E.g. first megabyte of address space, where trampoline
-> >> for switching between 4/5 level paging is placed and memory regions,
-> >> allocated as loader data.
-> >>
-> >> This patch series allows Linux kernel to boot on such UEFI
-> >> implementations on i386 and x86_64.
-> >>
-> >> The simplest way to achieve that on i386 is to disable paging
-> >> before jumping to potentially relocated code.
-> >>
-> >> x86_64, on the other hand, does not allow disabling paging so it
-> >> is required to build temporary page tables containing memory regions
-> >> required for Linux kernel to boot with appropriate access permissions.
-> >>
-> >
-> > Hello Baskov,
-> >
-> > To be honest, I am truly not a fan of this approach.
-> >
-> > Which systems is this issue occurring on? Did you try something like
-> > the below to allocate executable memory explicitly?
-> >
-> >
-> > diff --git a/drivers/firmware/efi/libstub/relocate.c
-> > b/drivers/firmware/efi/libstub/relocate.c
-> > index 8ee9eb2b9039..b73012a7bcdc 100644
-> > --- a/drivers/firmware/efi/libstub/relocate.c
-> > +++ b/drivers/firmware/efi/libstub/relocate.c
-> > @@ -80,7 +80,7 @@ efi_status_t efi_low_alloc_above(unsigned long size,
-> > unsigned long align,
-> >                         continue;
-> >
-> >                 status = efi_bs_call(allocate_pages,
-> > EFI_ALLOCATE_ADDRESS,
-> > -                                    EFI_LOADER_DATA, nr_pages,
-> > &start);
-> > +                                    EFI_LOADER_CODE, nr_pages,
-> > &start);
-> >                 if (status == EFI_SUCCESS) {
-> >                         *addr = start;
-> >                         break;
-> > @@ -146,7 +146,7 @@ efi_status_t efi_relocate_kernel(unsigned long
-> > *image_addr,
-> >          */
-> >         nr_pages = round_up(alloc_size, EFI_ALLOC_ALIGN) /
-> > EFI_PAGE_SIZE;
-> >         status = efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS,
-> > -                            EFI_LOADER_DATA, nr_pages, &efi_addr);
-> > +                            EFI_LOADER_CODE, nr_pages, &efi_addr);
-> >         new_addr = efi_addr;
-> >         /*
-> >          * If preferred address allocation failed allocate as low as
->
->
+Best regards
+—-
+Giulio Benetti
+Benetti Engineering sas

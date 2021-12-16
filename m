@@ -2,115 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A99477995
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C414F47799C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239727AbhLPQru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:47:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:39897 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239675AbhLPQrt (ORCPT
+        id S239724AbhLPQtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:49:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45534 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232590AbhLPQtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:47:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639673268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H4QQrv5yHw8uvREotMjEQW9H2R0fBtaao4kUBQhmBFY=;
-        b=auNVdRF6pboxYXCb3pvPQEgy0GMZY3rfdCfGDmZMFrzS8bfjsFn2PbRxfgNb8R2uQQm5On
-        Yn5nER/+JUaqi+P6UOihpGnhVkDh/7Wajsy2hD1xiqz2ZRSBO/EC1Qg6jdIRZRNV3cgxEQ
-        WZIfrufsTtL29eQDEIog7r1okVL7llE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-263-6-Ukhu7bM6ieiGRqMNkqew-1; Thu, 16 Dec 2021 11:47:42 -0500
-X-MC-Unique: 6-Ukhu7bM6ieiGRqMNkqew-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 16 Dec 2021 11:49:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 75392801ADC;
-        Thu, 16 Dec 2021 16:47:39 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8E6B51037F51;
-        Thu, 16 Dec 2021 16:47:33 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wi0H5vmka1_iWe0+Yc6bwtgWn_bEEHCMYsPHYtNJKZHCQ@mail.gmail.com>
-References: <CAHk-=wi0H5vmka1_iWe0+Yc6bwtgWn_bEEHCMYsPHYtNJKZHCQ@mail.gmail.com> <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk> <163967169723.1823006.2868573008412053995.stgit@warthog.procyon.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Jeff Layton <jlayton@kernel.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 56/68] afs: Handle len being extending over page end in write_begin/write_end
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70D9C61EBB;
+        Thu, 16 Dec 2021 16:49:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 084F6C36AE4;
+        Thu, 16 Dec 2021 16:49:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639673347;
+        bh=1Cn/YaBA1mXDfkWjv49bj322yFYnapcjg344B018UkQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GKBo/uDHNX4zOxMt+onveypXwa9GFl5ANDl+OHlA43ytPl4lDYMFAv3+/HAcR4zz4
+         yePSYt+psIebVP7KeGQvupZL4sVL3/hTRa0zgkmYkhzegu1ICEO3SVVl/z+pjyi0uG
+         BZhT0uLNHUG3OezGLCGGFw6Kh0PtcuvsAYNWkCf93RGKPXhnjiD/c3hOSjd8PKbjbG
+         K4bpXnY4XhBeuDF2CmCM7DB1TnxtD364e/HlKXFSFHH6VhLDtWVWPQY/BSTFydHJDM
+         ETKvk59O5w11yJAKYGQstCpdOWTIxZjWjbszhZx5PitFxpG/wUpVFaOj6MhYSnWlGW
+         FdT6rFbUotVEg==
+Date:   Thu, 16 Dec 2021 16:49:00 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: Migrate DA9063 text bindings to YAML
+Message-ID: <Ybtt/DEpZfuLmbK4@sirena.org.uk>
+References: <20211216164037.2888316-1-alexandre.ghiti@canonical.com>
+ <20211216164037.2888316-2-alexandre.ghiti@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1828148.1639673252.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 16 Dec 2021 16:47:32 +0000
-Message-ID: <1828149.1639673252@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7UPpL9eSKpRqGuyR"
+Content-Disposition: inline
+In-Reply-To: <20211216164037.2888316-2-alexandre.ghiti@canonical.com>
+X-Cookie: No solicitors.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-> > With transparent huge pages, in the future, write_begin() and write_en=
-d()
-> > may be passed a length parameter that, in combination with the offset =
-into
-> > the page, exceeds the length of that page.  This allows
-> > grab_cache_page_write_begin() to better choose the size of THP to allo=
-cate.
-> =
+--7UPpL9eSKpRqGuyR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> I still think this is a fundamental bug in the caller. That
-> "explanation" is weak, and the whole concept smells like week-old fish
-> to me.
+On Thu, Dec 16, 2021 at 05:40:37PM +0100, Alexandre Ghiti wrote:
+> DA9063 devices bindings used text format, so migrate those bindings to YAML
+> format before adding any new bindings.
 
-You really should ask Willy about this as it's multipage folio-related.
+Acked-by: Mark Brown <broonie@kernel.org>
 
-AIUI, because the page/folio may be allocated inside ->write_begin(),
-generic_perform_write() tells the filesystem how much it has been asked to
-write and then the folio allocation can be made to fit that.
+--7UPpL9eSKpRqGuyR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-However, at this time, ->write_begin() and ->write_end() have a page point=
-er
-(or pointer-to-pointer), not a folio pointer, in their signature, so the
-filesystem has to convert between them.
+-----BEGIN PGP SIGNATURE-----
 
-I'm working on write helpers for netfslib that absorb this out of the
-filesystems that use it into its own take on generic_perform_write(), ther=
-eby
-eliminating the need for ->write_begin and ->write_end.  I have this kind =
-of
-working for afs and 9p at the moment and am looking at ceph, but there's a=
- way
-to go yet.  I believe iomap does the same for block-based filesystems that=
- use
-it (such as xfs).
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG7bfsACgkQJNaLcl1U
+h9AU4wf+NQMl2BzpsI732uzQnsyi7tWtsifci5XFZQKXDbrG+O49GavA7WWKttTs
+hfQAcN7IH/OkUlomNNzudjYA4fNXA7ssYYibtMMYl2XHp65Z5oaWUs7pn8HFbek1
+iP6Ycb2NL8zGP9AHv0hvnjAOGB0LCPHl1AmjE8KjWtu6sAuHX4rkY5b60SOxfHQw
+AKRQ0o10LcHHouIYYbZMfkuZNsKbn1DQCs2bS3ZrrZjoaZ11XirIzZmukL1upU8x
+Kiuz4sReSR4XVd9I0RdkJ//XH73bgLKB2/ftU8JQjsGRIViccgNYtOb8Xe2lOGyj
+jIlD/BGjBvv/SBwpTRVK9ByivuDYCA==
+=ZZh+
+-----END PGP SIGNATURE-----
 
-I think Willy's aim is to get rid of ->write_begin and ->write_end entirel=
-y.
-
-David
-
+--7UPpL9eSKpRqGuyR--

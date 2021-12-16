@@ -2,193 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E36DA477044
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FB5477046
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 12:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236761AbhLPLaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 06:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbhLPLau (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 06:30:50 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D68CC061574;
-        Thu, 16 Dec 2021 03:30:49 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id p18so18674895wmq.5;
-        Thu, 16 Dec 2021 03:30:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kkKYFdWW6UCJzSdQqJXxaaYA3bsQkl9FlH/GOA+i1Yc=;
-        b=UoOLDVzd2Z7MeM0G4GorBmBwofg4ukS3hyY1S1lsoXvl16VQqDJwISRk3xaJbP/5AK
-         IJfXaSMlAbZVtIW8GDpmhPi3fs5uyXxDTyXGg51BHCeGmBNwsEGqtWNBZRkrF2vedRBc
-         gOFchM7VSi5Vj1dekR70jIfvyq5DKZfbUx94LReShDVIsG6Bm5r7jdCRJle7YUH2PbGd
-         5k+Fh5oC2KUh2UcwvyuR4u2XeDwxgL5CLqEzvc8kvO/9XzQ5GF7pxKFWkykdtkRI1Elf
-         T/LlmZ9mNGarHGy/C6qLZfBXh7ETHhWPq4woQZp3zL0rZLVxpDtCsvL2J6rktrtKZe37
-         gQ1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kkKYFdWW6UCJzSdQqJXxaaYA3bsQkl9FlH/GOA+i1Yc=;
-        b=F/q9l4DR/AgCx9+Jb5wQHmj8yIOc9s2pPgaA2bnkOqsYXa0c33ozxgMDme+Kd2igLR
-         UQKdJEBy/KRaNPQ9xUjhv/aSx1zZ9aP6F1/x3WVvcTd+Bxux2pWGf2SFXtu+UCixyqGT
-         UlqtGNb0peU9m8LHo7EOm392D3v2suazHdWaISXffWCnMWuLYhO+FGI6Y8cT5mOI7yH+
-         NURZSTg/r/W75D38ZAx4YMr/naw7AXzL5NyDLAE73nm5HUyFTV83dHJ/TSR1Ta1xXoVA
-         zLP9xH/INYP0ru8GINT884gfFiI45jQmIcsNGFrF/YzIzwtZgk7r/t9O+eO51NELvowU
-         4NoA==
-X-Gm-Message-State: AOAM533Aj47/4Xm1uMUhcAZ74nZEQAXKjWTAeKkETJiE2u7X5qdnJev/
-        mYUc1mFlUKotGyXWo7WVxE8=
-X-Google-Smtp-Source: ABdhPJx63rpTL/bdCiuPeeXe27cBb+BoXyDlOVw2g7opXpmXsbzI1Ulj9Ru3/UsvVRsRHarz4wrntA==
-X-Received: by 2002:a05:600c:3d94:: with SMTP id bi20mr4551005wmb.71.1639654247975;
-        Thu, 16 Dec 2021 03:30:47 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id c11sm1156319wmq.48.2021.12.16.03.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 03:30:47 -0800 (PST)
-Date:   Thu, 16 Dec 2021 12:30:44 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, bbasu@nvidia.com, vsethi@nvidia.com,
-        jsequeira@nvidia.com
-Subject: Re: [Patch Resend v1 5/8] dt-bindings: arm: tegra: Add NVIDIA
- Tegra234 CBB2.0 binding
-Message-ID: <YbsjZDc8tt3fMUQt@orome>
-References: <20211209172206.17778-1-sumitg@nvidia.com>
- <20211209172206.17778-6-sumitg@nvidia.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kDnqfaHImAnj07sS"
+        id S236775AbhLPLbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 06:31:09 -0500
+Received: from mail-zr0che01on2116.outbound.protection.outlook.com ([40.107.24.116]:62688
+        "EHLO CHE01-ZR0-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229996AbhLPLbH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 06:31:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dzDJXWWqr1zyX20kNd3tiMBNwCzKh4jNKww/tc40ZoNqk2KaztgIR+dXR9FKmRwV8pcyd4F6QKlA4rKikcAtSXduOkSLFwi0H1jF6jC1UZ+5YmEEnByGBb6DSW/AsXp1FvI8ACHL7woKayzC7v675ORVa3RPk5Dan7i7N/V0Iw4vE8SOj2DtwejiNYmiz8w2noEBBxQRimMnGc66G2xcqwBYolLcI1BXFZiAOyXjWPpQ55bfO5kRB/NsNlNJH7dqEpDw180lTf96qkVC8W8jUPXwLyqd97e+c7QGya2+gTpbZv6xICbBuQmDndOIql7akxi1BT5MBJn61s/vShNmyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4o80wvUBKcgbYzLp+0GZ720X97Yhtr28NPdigoyrWbE=;
+ b=l5SzmZK6MRDvhREQlL0Aiw852EcgsNCD0I+dkhlvmG38YGJ7G/K4oU19PVFLe+MvWAd2jjCx6DaPMgwcNFT+pNlD37+J3kwh5AlswMXAS15HxNTU/x6HT4AGVM3NnG8oqjMrzMoYXw5bobd49HTsZ2rm1XfEXw8cp/rcl/tKlAB/goHPlh+xV+njpOTWwZN8MRJ2DRO/Zg876CVct7z+aIdRT59RDcn/Vo16MQ4PgA9w6XwomDrze9zFGqR+lWIA5pf3elDIu+vFlUxqDozK67ICyUmf5k7ngs/MNbZkfhRmcmvU1ykCAROErfMwGOpi4YZ7QHkzQKbgi4Sp/qoT9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
+ dkim=pass header.d=toradex.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4o80wvUBKcgbYzLp+0GZ720X97Yhtr28NPdigoyrWbE=;
+ b=H2ARqK3+SwkO+rzvDoUPwt6O2neNNJgiVYaRaktrCuLn/TCBDYzvYMgRgaA6zHM6rtjI7bnmH9FrP04CKhiAvBdD92L1ltTynnPPLPOXz0FL0/yWxXweMK519sRDvI9b0mJPW7FU/UwhRxSfXXspQfDz4X3d7P7wxYZrwmmpCOI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=toradex.com;
+Received: from ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3d::11)
+ by ZR0P278MB0123.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:19::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Thu, 16 Dec
+ 2021 11:31:05 +0000
+Received: from ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::d837:7398:e400:25f0]) by ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::d837:7398:e400:25f0%2]) with mapi id 15.20.4801.014; Thu, 16 Dec 2021
+ 11:31:05 +0000
+Date:   Thu, 16 Dec 2021 12:31:04 +0100
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 3/3] net: fec: reset phy on resume after power-up
+Message-ID: <20211216113104.GC4190@francesco-nb.int.toradex.com>
+References: <DB8PR04MB679570A356B655A5D6BFE818E6769@DB8PR04MB6795.eurprd04.prod.outlook.com>
+ <YbnDc/snmb1WYVCt@shell.armlinux.org.uk>
+ <Ybm3NDeq96TSjh+k@lunn.ch>
+ <20211215110139.GA64001@francesco-nb.int.toradex.com>
+ <DB8PR04MB67951CB5217193E4CBF73B26E6779@DB8PR04MB6795.eurprd04.prod.outlook.com>
+ <20211216075216.GA4190@francesco-nb.int.toradex.com>
+ <YbsT2G5oMoe4baCJ@lunn.ch>
+ <20211216112433.GB4190@francesco-nb.int.toradex.com>
+ <Ybsi00/CAd7oVl17@lunn.ch>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211209172206.17778-6-sumitg@nvidia.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+In-Reply-To: <Ybsi00/CAd7oVl17@lunn.ch>
+X-ClientProxiedBy: GV0P278CA0007.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:710:26::17) To ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:3d::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e374c254-b4af-427d-8b6a-08d9c0878bd8
+X-MS-TrafficTypeDiagnostic: ZR0P278MB0123:EE_
+X-Microsoft-Antispam-PRVS: <ZR0P278MB0123A5F2737F5AFC85520B99E2779@ZR0P278MB0123.CHEP278.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gDrG6zNTj8UiNsDn2dKh03/QW8vzjhMmQbqvrlw4W8FeI9HkN5fy31TJdTRHV0NM1mA67hdguzMbBSU1AgXUkuS0FsYkKQ8hcINme5T21zAxX5TKP6VV+9STCMijuQo7fDX+rMHFlDdEVuLXDwLASVFtpvYVWokEIWR831OBLoXz6aLOeWvG4ItdE2RqOC/SExmFSpdAFExRJJJbRH3MjdSkOBnWKn7uT6IbA+BTEa4rrTLuWsSuksvYhR/hRZ79V7ira50BUCWiredw+gxFzdRm+myJiDE7Oc+3twN8pMeugWDxmnKI4gK0+ru6CfdPpdO8ENSWQLx6sRHKrgJJF/CtQq5Z1aj/ee8Pq8bvdC3sktEdH4zUoPET96AsHfXv1tiRVXMfMvJeo0iNoMQoFzruB5qhYSMQ8qcAGBFVaFaMm+5bChaHlR44k+88W1y1vRQBa7+KfbC2P04lf4tP2188T1vl37sBu/ipFgjkUmRZQMmOrIkA78UNvX7wqyud8e0kRWmgQLiVg0NRdLY9R+7y3r2WfhdD/7NEW2hOKuN+jOW8tSDbT600cUw8o5zOUrNNlUi+ZmrLPp7FT7CmihN20/e1RjW8oJpWB6hRuSrq6Fvs6RprIfcPIq5F2Tl7qha8EWL3iXrEGn2oV+SSkwXSL+KgMbi6DIS0ZQzHbUh1TOaIT4UloeYXZzu6sR4e1gh8FJZrGy8jPF3iaZF90Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(376002)(366004)(136003)(39850400004)(396003)(346002)(316002)(66946007)(26005)(33656002)(54906003)(6486002)(52116002)(8676002)(8936002)(186003)(66556008)(6512007)(66476007)(38350700002)(38100700002)(44832011)(6506007)(2906002)(4744005)(1076003)(508600001)(4326008)(5660300002)(6916009)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jq5G2oCWo8vrh8dVuhu7GMlmPCWgdvib6P3mia7ifeDEeSBeDCwx7zdCmjnc?=
+ =?us-ascii?Q?sPFBXVHimbDpKlSnsijdXBdgX/NMcQff3lnIaN1Io9df8G1TvwX4ZXU+Rvq/?=
+ =?us-ascii?Q?endumYAL3AglrCaFSPxQ8WLOkIAdjE+wRb4GzdCQR0rOKsm5ZZrqoiC3t4Eg?=
+ =?us-ascii?Q?U4jIzBAnQlgi3aJfIWT85edRojySEh6JsD/+1+UUN2uv/d7oW/Tl1m2yuNOs?=
+ =?us-ascii?Q?vThCzUsJ/WvCiRImeQ/PKh5F/PnIEthzL1WuA7QWYUYDQJa1m0UGnGU2jLVS?=
+ =?us-ascii?Q?iSQ6jtjjkTqdoPHU2wrNn+bOi47d07qcOoEp26PgGTqORXUvA2GQbmfM2sWq?=
+ =?us-ascii?Q?Q5HdXKrD1lWWsBhkad2htdWoMVazLm7yNfx07JqByQ/5PtIdNz77UCsDF3Sx?=
+ =?us-ascii?Q?O1PExl2L4i7U9bvcxQ0BqdeiRU3l4k+u5T4xjtiBOVPDmwQigpGWPSWRPSzA?=
+ =?us-ascii?Q?3Vg8eG4uK/tYd7SQfAakCk1VNSb8Y+OF5T8Kl1bc/8tXkuWDlWhpt1MZRW1p?=
+ =?us-ascii?Q?xllh/C83jPSV/1BSZN2lx0PBBLbfm/1i9HNlamaQ3zZpMsbCoPPOF4hmRp+s?=
+ =?us-ascii?Q?tmXFyC88T+5XkNVYfkDRhADvWvRcGu45egmpMgp7+KzNYzp1pHmMic73SiW4?=
+ =?us-ascii?Q?jGXNHpjP418LoAQR12oVPPv+DAXwiOJUaAD0hXV5HOJ8RHVFTMfd0EMQrs4P?=
+ =?us-ascii?Q?djWcej+OG+HP9t7kNejtqusEd/vnoh5tc+W4XPxLkW+uy8IVDPyB/72Wz3RY?=
+ =?us-ascii?Q?KaQbAn/EA3rluTW+ahsgxrFpuKTFev/lVw0duUNOMoO2I9UeHzvjec+UMRXe?=
+ =?us-ascii?Q?GvvCY2gymYCJur+ONRJuihH03thEuRzSK9l8Zw62mkmdnoaxgcB2Ac2xKvBL?=
+ =?us-ascii?Q?2V5qunDAjt+FOdfg6kTWUKvV+t79urjZ+Bbe6Epwmr0MksQJLZldjs8d1PN3?=
+ =?us-ascii?Q?deiM7HcjIPCqGIFek5u6lUuQ33ABxem824Q/KqkyKAkpn8E8XF7rg3wUUdhG?=
+ =?us-ascii?Q?RLjwdjB7mm8mvrWvidP1a0Ok/rrUK05avE4jlqO7vcjGNa84SlTwtQbIUlhI?=
+ =?us-ascii?Q?lOmdHmsV8F6uAmRxw8r/Vqwdxgn3LWFmcRnFcpnDHuYyRMZAl+sjZ0q2bb9J?=
+ =?us-ascii?Q?8gza5jOL/T72eW41snReNTGns8YzK35++E793kzhjbgeFvO14M7g0SdKe+LE?=
+ =?us-ascii?Q?neyB9H/uJXCPf6JWolujXz87Sf811GasRAV03Uu7s4LXR5hKIIj3CYidgeE2?=
+ =?us-ascii?Q?WXanEsgwkL9pPkIzcSSCTbSFFZKNdYMxFCidrJkryzuXq5+HbaA+3jlH+zX4?=
+ =?us-ascii?Q?YcyTWrbSif94OQx9jikVrtzW0sFhJDx76qaZijBhhORWqu2hxY3mBL0avsdk?=
+ =?us-ascii?Q?gsaHO2I1wHArPDADg2UyrrSlt3kADt0moQe9Nr1r4f107CkIa9u7BlmLmXqH?=
+ =?us-ascii?Q?f8nd0hsXHthPBT4knDYhkQUIV2Oae4pVU7oapuhLYzW5bnSert0FbOyCqNKn?=
+ =?us-ascii?Q?wCr8nNu7uJc80TbNvJ4R5ZGBp1KtaunpQP2YT7PqKGhDnGJMgt2FtjD3xiu1?=
+ =?us-ascii?Q?wyk79zg34g+PMq3OGr+WjFit2t/fmhRrEJ13hceDDqGd/tdTAgfTJDpIhIcm?=
+ =?us-ascii?Q?f4vdxksl8tgm/G0OCX9m2LbSgCNaGb8qBnmh2XM9MELi9w5pm/SN63wafUwU?=
+ =?us-ascii?Q?1DHgLsYwIuIKJ0BIsC509+1m0o4=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e374c254-b4af-427d-8b6a-08d9c0878bd8
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0642.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 11:31:04.9575
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: s8c5qTDOxknQIiugbIIIUMArkqQza27vb9fbi4cAzvskHeeN4fCYPgkf3MRXuF7wVgCDEtLVrAwfYPcMQe2ueGD89ZrXVbcIqI4YAWHHVMI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0123
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 16, 2021 at 12:28:19PM +0100, Andrew Lunn wrote:
+> On Thu, Dec 16, 2021 at 12:24:33PM +0100, Francesco Dolcini wrote:
+> > On Thu, Dec 16, 2021 at 11:24:24AM +0100, Andrew Lunn wrote:
+> > > I think you need to move the regulator into phylib, so the PHY driver
+> > > can do the right thing. It is really the only entity which knows what
+> > > is the correct thing to do.
+> 
+> > Do you believe that the right place is the phylib and not the phy driver?
+> > Is this generic enough?
+> 
+> It is split. phylib can do the lookup in DT, get the regulator and
+> provide a helper to enable/disable it. So very similar to the reset.
+Sounds good.
 
---kDnqfaHImAnj07sS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Can we safely assume that we do have at most one regulator for the phy?
 
-On Thu, Dec 09, 2021 at 10:52:03PM +0530, Sumit Gupta wrote:
-> Add device-tree binding documentation to represent CBB2.0 (Control
-> Backbone) error handling driver. The driver prints debug information
-> about failed transaction on receiving interrupt from CBB2.0.
->=20
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  .../arm/tegra/nvidia,tegra234-cbb.yaml        | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,te=
-gra234-cbb.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-=
-cbb.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.=
-yaml
-> new file mode 100644
-> index 000000000000..ad8177255e6c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: "http://devicetree.org/schemas/arm/tegra/tegra23_cbb.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: NVIDIA Tegra CBB2.0 Error handling driver device tree bindings
-> +
-> +maintainers:
-> +  - Sumit Gupta <sumitg@nvidia.com>
-> +
-> +description: |+
-> +  Control Backbone (CBB) comprises of the physical path from an
-> +  initiator to a target's register configuration space.
-> +  CBB2.0 consists of multiple sub-blocks connected to each other
-> +  to create a topology.
-> +  Tegra234 SOC has different fabrics based on CBB2.0 architecture
-> +  which include cluster fabrics BPMP, AON, PSC, SCE, RCE, DCE, FSI
-> +  and "CBB central fabric".
-> +
-> +  In CBB2.0, each initiator which can issue transactions connects to
-> +  a Root Master Node (MN) before it connects to any other element of
-> +  the fabric. Each Root MN contains a Error Monitor (EM) which detects
-> +  and logs error. Interrupts from various EM blocks are collated by
-> +  Error Notifier (EN) which is per fabric and presents a single
-> +  interrupt from fabric to the SOC interrupt controller.
-> +
-> +  The driver handles errors from CBB due to illegal register accesses
-> +  and prints debug information about failed transaction on receiving
-> +  the interrupt from EN. Debug information includes Error Code, Error
-> +  Description, MasterID, Fabric, SlaveID, Address, Cache, Protection,
-> +  Security Group etc on receiving error notification.
-> +
-> +  If the Error Response Disable (ERD) is set/enabled for an initiator,
-> +  then SError or Data abort exception error response is masked and an
-> +  interrupt is used for reporting errors due to illegal accesses from
-> +  that initiator. The value returned on read failures is '0xFFFFFFFF'
-> +  for compatibility with PCIE.
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^[a-f]+-en@[0-9a-f]+$"
-> +
-> +  compatible:
-> +    enum:
-> +      - nvidia,tegra234-aon-fabric
-> +      - nvidia,tegra234-bpmp-fabric
-> +      - nvidia,tegra234-cbb-fabric
-> +      - nvidia,tegra234-dce-fabric
-> +      - nvidia,tegra234-rce-fabric
-> +      - nvidia,tegra234-sce-fabric
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    items:
-> +      - description: secure interrupt from error notifier.
-> +
-> +  nvidia,err-notifier-base:
-> +    description: address of error notifier inside a fabric.
-> +
-> +  nvidia,off-mask-erd:
-> +    description: offset of register having ERD bit.
+Francesco
 
-I was wondering about these two properties. Do we really need them? I
-see that they are set on a per-SoC basic and they only differ between
-the various fabrics. If they don't need to be configured on a per-board
-basis, then I don't think we need to specify these explicitly. Instead I
-think we could derive them from the compatible string.
-
-Thierry
-
---kDnqfaHImAnj07sS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG7I2EACgkQ3SOs138+
-s6G0RQ//QsTrAYxPZSsjpqcT32TaiYNtCdwarmMkxl8hueLKxMW5Lp9Kbd500Nyg
-hMrIJxrN0P/iBx14FLBs/Oik8x91ADhLst+gcsOH23ibM0nk2CcokcT29mBnsLTe
-E2ADcNbLO6H1795RKde/KjgkfEHS/6bdRwk555/WMZSKJyUwVIn15+HY+9hrBcXj
-Elu77lebBY5ac4xI/UCxbHZk1nMBBznpLDdDbCnvmtnRX4jZ3IQML6/8VgIiauOU
-TJwSIwgrUmxFfJJAIzHf4ijNXcKItar3NpA68vFuQGqJVccC00wemYUa4P+2HFMy
-Je1PbtGORUPBidYzv0GDSeLwKM7HqHXFOaKgGw8RHj4X5HOlMlrUXeUn1dXD3aDC
-Kv+VlogVhkoZRpMJm/4u0BWdW+pDgDiwDFHQXo7o6H/lx8MSu6eQa2svNhKiSw17
-Byn1O+A3m5SyrMmmtzkrwYNp1v5PZphPkq2FpdPwoODUhrblTv08OrQ7Oy30hwH1
-O/9QDKwRXceNDVumcQWmc18/amLI3fK0qeoCmoI1Q/tkS0rQo9B7/tO4knF1jScS
-NW1vzGS6YmZzSMH26UVzLHr1y41Ihzw0Si2jyqH7YDZyV1grnZbe42pYoZ93dhsy
-MoaiOqHxCW+d4NMgS/Tc4q0kE4Nr1hrwmn9Fp2RpQ57qigZjBEU=
-=brHz
------END PGP SIGNATURE-----
-
---kDnqfaHImAnj07sS--

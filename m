@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 537BE477BAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13AD477BAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbhLPSmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:42:22 -0500
-Received: from mga03.intel.com ([134.134.136.65]:45858 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229532AbhLPSmV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S231334AbhLPSmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 16 Dec 2021 13:42:21 -0500
+Received: from mga09.intel.com ([134.134.136.24]:32677 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229532AbhLPSmU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 13:42:20 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639680141; x=1671216141;
+  t=1639680140; x=1671216140;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pCFBMB/YyMpu1gKlti3F42W5/YLXsD3/okNzNquS0kI=;
-  b=WtSlTfFJ7IYUyQeIKESttLDZG1uOoOQbIMyfehIjShUqVnll66c0k3PW
-   +dR8ha8htmjBb/1Co0DT2QKwMUV+Ft8Asw1qjCP34fxXdPwgyiEu38RHl
-   wkxj5PXaZHJH/Gx2azXnlYSMhsr+s53reWzFsDI66eL65wKBjhkwfazoc
-   JNiF73T/tnYWVzq6EDTl+7Lx6yCLAD4ZMBgPNl/L6VjZiTLHGTD/M2XR2
-   z42xCrAoi3yxM+smhX6yFiOwLdTCnyYIdCmu9WExDd2kBgz78UazrQu5i
-   xph5n97yL+oqiXFfVNfffdFSXuYkGHzbBAN6x/J5vCnKLUmK/oyNzDpqA
+  bh=I2u8Ov4z2MnL2sdFgtJR0ir+PYSdjsaZAhJ1yyB7jlE=;
+  b=c0Ck9NNWazsjDPsdozHnKB1FiTegR8k4rCFgNUempilxu2nhTafQsiM/
+   jmbqpnr+6o7KD+IID5Vzy7FSVl+C1UZuIHvFm8F8VN79p6YUwtvnFCxWS
+   HO9ubEia06GZ/6UTMiDF5JdXwcbndabDRQBrEoUabSYkXIZn1+vw+Q8Bw
+   LsEgIwA5ZD1yjpNeH7EnKnLozRBvnfH5TzZsDFLu+EecPQNRzBKw3iucs
+   n6A+62zMKWhkVWDeDicypufBzOL1q8NKTYsC40CMDYkEeAMsSzvhnDka1
+   VzBYqmS30Y/jPrnjJ/Kb2jttowZxQjcUiOQfRiKdvwtpVkrxlsSTLdNvR
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="239517331"
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="239380771"
 X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="239517331"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 10:42:20 -0800
+   d="scan'208";a="239380771"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 10:42:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,212,1635231600"; 
-   d="scan'208";a="615267633"
+   d="scan'208";a="506416646"
 Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 10:42:18 -0800
+  by orsmga007.jf.intel.com with ESMTP; 16 Dec 2021 10:42:18 -0800
 Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mxvhp-0003g5-Qn; Thu, 16 Dec 2021 18:42:17 +0000
-Date:   Fri, 17 Dec 2021 02:42:06 +0800
+        id 1mxvhp-0003g3-QU; Thu, 16 Dec 2021 18:42:17 +0000
+Date:   Fri, 17 Dec 2021 02:42:08 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Liu Yi L <yi.l.liu@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [luxis1999-iommufd:iommufd-v5.16-rc3 23/25]
- drivers/iommu/iommufd/io_pagetable.c:1535:6: warning: comparison of distinct
- pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length
- - 1) *' (aka 'unsigned int *'))
-Message-ID: <202112170238.6pX2L0DT-lkp@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream 101/152] arch/x86/kvm/vmx/tdx_stubs.c:18:6:
+ error: no previous prototype for 'tdx_flush_tlb'
+Message-ID: <202112170219.WrvsVXKQ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -54,131 +51,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.16-rc3
-head:   21c1bb93447d6cced2f486cdb68b92d11f2e664d
-commit: 4aa75d972a71aafba6e3b57ca91f6a04bdd37611 [23/25] vfio/pci: Add bind_iommufd() support
-config: i386-randconfig-r013-20211216 (https://download.01.org/0day-ci/archive/20211217/202112170238.6pX2L0DT-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+tree:   https://github.com/intel/tdx.git kvm-upstream
+head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
+commit: dbf2e415a636bba18795eea694e38ea0f1d595a6 [101/152] KVM: TDX: Implement TLB flush operation for TDX
+config: i386-randconfig-m021-20211216 (https://download.01.org/0day-ci/archive/20211217/202112170219.WrvsVXKQ-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/luxis1999/iommufd/commit/4aa75d972a71aafba6e3b57ca91f6a04bdd37611
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.16-rc3
-        git checkout 4aa75d972a71aafba6e3b57ca91f6a04bdd37611
+        # https://github.com/intel/tdx/commit/dbf2e415a636bba18795eea694e38ea0f1d595a6
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream
+        git checkout dbf2e415a636bba18795eea694e38ea0f1d595a6
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iommu/iommufd/
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iommu/iommufd/io_pagetable.c:1535:6: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-           if (check_add_overflow(iova, length - 1, &last_iova))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   drivers/iommu/iommufd/io_pagetable.c:1595:14: warning: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-               WARN_ON(check_add_overflow(iova, length - 1, &last_iova)))
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
-           (void) (&__a == &__b);                  \
-                   ~~~~ ^  ~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   2 warnings generated.
+   arch/x86/kvm/vmx/tdx_stubs.c:4:13: error: no previous prototype for 'tdx_pre_kvm_init' [-Werror=missing-prototypes]
+       4 | void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+         |             ^~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:6:12: error: no previous prototype for 'tdx_hardware_setup' [-Werror=missing-prototypes]
+       6 | int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+         |            ^~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:7:6: error: no previous prototype for 'tdx_hardware_enable' [-Werror=missing-prototypes]
+       7 | void tdx_hardware_enable(void) {}
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:8:6: error: no previous prototype for 'tdx_hardware_disable' [-Werror=missing-prototypes]
+       8 | void tdx_hardware_disable(void) {}
+         |      ^~~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:10:5: error: no previous prototype for 'tdx_vcpu_create' [-Werror=missing-prototypes]
+      10 | int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+         |     ^~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:11:6: error: no previous prototype for 'tdx_vcpu_free' [-Werror=missing-prototypes]
+      11 | void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+         |      ^~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:12:6: error: no previous prototype for 'tdx_vcpu_reset' [-Werror=missing-prototypes]
+      12 | void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+         |      ^~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:14:5: error: no previous prototype for 'tdx_dev_ioctl' [-Werror=missing-prototypes]
+      14 | int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+         |     ^~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:15:5: error: no previous prototype for 'tdx_vm_ioctl' [-Werror=missing-prototypes]
+      15 | int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+         |     ^~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:16:5: error: no previous prototype for 'tdx_vcpu_ioctl' [-Werror=missing-prototypes]
+      16 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+         |     ^~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c: In function 'tdx_vcpu_ioctl':
+   arch/x86/kvm/vmx/tdx_stubs.c:16:72: error: 'ENOPNOTSUPP' undeclared (first use in this function); did you mean 'EOPNOTSUPP'?
+      16 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+         |                                                                        ^~~~~~~~~~~
+         |                                                                        EOPNOTSUPP
+   arch/x86/kvm/vmx/tdx_stubs.c:16:72: note: each undeclared identifier is reported only once for each function it appears in
+   arch/x86/kvm/vmx/tdx_stubs.c: At top level:
+>> arch/x86/kvm/vmx/tdx_stubs.c:18:6: error: no previous prototype for 'tdx_flush_tlb' [-Werror=missing-prototypes]
+      18 | void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
+         |      ^~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:19:6: error: no previous prototype for 'tdx_load_mmu_pgd' [-Werror=missing-prototypes]
+      19 | void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
+         |      ^~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c: In function 'tdx_vcpu_ioctl':
+   arch/x86/kvm/vmx/tdx_stubs.c:16:85: error: control reaches end of non-void function [-Werror=return-type]
+      16 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+         |                                                                                     ^
+   cc1: all warnings being treated as errors
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for IOMMUFD
-   Depends on IOMMU_SUPPORT
-   Selected by
-   - VFIO_PCI_CORE && VFIO && PCI && MMU
 
+vim +/tdx_flush_tlb +18 arch/x86/kvm/vmx/tdx_stubs.c
 
-vim +1535 drivers/iommu/iommufd/io_pagetable.c
-
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1509  
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1510  /**
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1511  * iopt_access_pages - Return a list of pages under the iova
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1512  *
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1513  * Reads @npages starting at iova and returns the struct page * pointers. These
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1514  * can be kmap'd by the caller for CPU access.
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1515  *
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1516  * The caller must perform iopt_unaccess_pages() when done to balance this.
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1517  *
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1518  * iova can be unaligned from PAGE_SIZE. The first returned byte starts at
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1519  * page_to_phys(out_pages[0]) + (iova % PAGE_SIZE). The caller promises not
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1520  * to touch memory outside the requested iova subslice.
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1521  *
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1522  * FIXME: callers that need a DMA mapping via a sgl should create another
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1523  * interface to build the SGL efficiently
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1524  */
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1525  int iopt_access_pages(struct io_pagetable *iopt, unsigned long iova,
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1526  		      size_t length, struct page **out_pages, bool write)
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1527  {
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1528  	unsigned long cur_iova = iova;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1529  	unsigned long last_iova;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1530  	struct iopt_area *area;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1531  	int rc;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1532  
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1533  	if (!length)
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1534  		return -EINVAL;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11 @1535  	if (check_add_overflow(iova, length - 1, &last_iova))
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1536  		return -EOVERFLOW;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1537  
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1538  	down_read(&iopt->rwsem);
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1539  	for (area = iopt_area_iter_first(iopt, iova, last_iova); area;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1540  	     area = iopt_area_iter_next(area, iova, last_iova)) {
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1541  		unsigned long last = min(last_iova, iopt_area_last_iova(area));
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1542  		unsigned long last_index;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1543  		unsigned long index;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1544  
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1545  		/* Need contiguous areas in the access */
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1546  		if (iopt_area_iova(area) < cur_iova) {
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1547  			rc = -EINVAL;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1548  			goto out_remove;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1549  		}
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1550  
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1551  		index = iopt_iova_to_index(area, cur_iova);
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1552  		last_index = iopt_iova_to_index(area, last);
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1553  		rc = iopt_pages_add_user(area->pages, index, last_index,
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1554  					 out_pages, write);
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1555  		if (rc)
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1556  			goto out_remove;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1557  		if (last == last_iova)
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1558  			break;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1559  		/*
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1560  		 * Can't cross areas that are not aligned to the system page
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1561  		 * size with this API.
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1562  		 */
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1563  		if (cur_iova % PAGE_SIZE) {
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1564  			rc = -EINVAL;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1565  			goto out_remove;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1566  		}
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1567  		cur_iova = last + 1;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1568  		out_pages += last_index - index;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1569  		atomic_inc(&area->num_users);
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1570  	}
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1571  
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1572  	up_read(&iopt->rwsem);
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1573  	return 0;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1574  
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1575  out_remove:
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1576  	if (cur_iova != iova)
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1577  		iopt_unaccess_pages(iopt, iova, cur_iova - iova);
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1578  	return rc;
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1579  }
-b1baa437fe5478 Jason Gunthorpe 2021-11-11  1580  
-
-:::::: The code at line 1535 was first introduced by commit
-:::::: b1baa437fe5478bf8f79e53f49409b2f413ea27e iommufd: Data structure to provide IOVA to PFN mapping
-
-:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
-:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
+    17	
+  > 18	void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

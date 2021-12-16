@@ -2,83 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C9F477520
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4775047753C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238169AbhLPO6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:58:55 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:47026 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238162AbhLPO6y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:58:54 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 36B691EC04F0;
-        Thu, 16 Dec 2021 15:58:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1639666729;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=bPnAfUL2qkg60kOkbc+GvUrWe3FV49Ti78cms0TCCaw=;
-        b=MsnqJn8uFOT1pz6SXU7T5EbdN02f263mcrgw0HXXo8/ioME2lLYT/8tKVhpgrtQn064RF3
-        kq0sPjdT1z068sHqWT4pHNiGE8QLCu71aLh7dCkVAIDzqdXcOf5UkmOINkKqu6qCmy2V86
-        Rt9veDHrpc3QwC1xLsn6Zfaf82ZrDI4=
-Date:   Thu, 16 Dec 2021 15:58:56 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-Subject: Re: [PATCH v17 03/10] x86: kdump: use macro CRASH_ADDR_LOW_MAX in
- functions reserve_crashkernel()
-Message-ID: <YbtUME6fjjHjy3Kr@zn.tnic>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-4-thunder.leizhen@huawei.com>
- <YbntdtQo2jfbO4cO@zn.tnic>
- <20211216011040.GG3023@MiWiFi-R3L-srv>
- <YbsbO1XnrzLAIBEu@zn.tnic>
- <20211216141115.GA18773@MiWiFi-R3L-srv>
+        id S238218AbhLPPBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232565AbhLPPBV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 10:01:21 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CB5C061574;
+        Thu, 16 Dec 2021 07:01:20 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z5so88676990edd.3;
+        Thu, 16 Dec 2021 07:01:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9zj1pfsGNIVw4QzFbgPaYaMCLDHK2SPvXFEllDH8Wrk=;
+        b=gxniatxv2cejxITlqQ0p4l2KDDXvkNLHmK0a7hEp5FHaqs+t7PX2OMCZ8zLOp5MyZC
+         oqB7FGtopXz0zW5LwIhoTGmh0HR/bf+DEBVXlHAB3NR25PyAZpNWCxRGHXxyxxkKgS/E
+         HRpsLTkDea0EdJKRUyuyYWNDafCPvK53SzbLQQ6if0nGO5jknVFHU6ggR9346+Gp3SaQ
+         ZGlQVKjlo6cqks7QCLGxw3ASGTrNWREChQAXVN82JGvqnjaaDXl0RtO196xXeiq3izqM
+         XVob9dTWuAhqMa3hwWrpNSSD6BN8WMmiCAY1vw/Poh59mDFW56UD034cLLnn21OcE6XM
+         STzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9zj1pfsGNIVw4QzFbgPaYaMCLDHK2SPvXFEllDH8Wrk=;
+        b=3phGbL37m6lVwDjmdGqOT1XROeW4rK0ta/68k4rKS7FBzPyIH+a+VzIDuIZwkl53kv
+         GwGa4iINEt+O7Cri/UeEyQ3r6e8583tBZlssygpo5b1PbR0Hk7bFXPmddjPK2DhewWxr
+         gYc2XEo39frwUzLT3LQrkJEniXtBFDsHXhuBVZ9ZsK5/TBWuWqRhIV9c7VoMgtEe+Ry7
+         3EVum2IwarhHjbpNLAX258GyAwacVo92bh9H+zCkP4R0AwHC3RQoSqYN+gULiVJHkI2N
+         gmS3rhzdQwtPpJKPwDsYe5HO0fhZmjzqYtCrA3qhD3ZTnyiMMgBCkl7IGqlKOrYDQIzU
+         vOzQ==
+X-Gm-Message-State: AOAM5332VtzOBkRaxBga33REC7itLWU20E7Z4Ur87tQEZSZGIRhgWwrW
+        GgYCORvl3NWrixBmwNHXFsLnR0RkuMSzezpSePQ=
+X-Google-Smtp-Source: ABdhPJyQATRoSClS0GBPB5Utozlk9jX6Ai7xTg7PRs2485NEJpUMVlVa7oVsKEk6kXHQwomnvUcGvvMrzx5gfikZlmw=
+X-Received: by 2002:aa7:cd75:: with SMTP id ca21mr4288962edb.242.1639666873565;
+ Thu, 16 Dec 2021 07:01:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211216141115.GA18773@MiWiFi-R3L-srv>
+References: <1639660402-31207-1-git-send-email-akhilrajeev@nvidia.com> <1639660402-31207-3-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1639660402-31207-3-git-send-email-akhilrajeev@nvidia.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 16 Dec 2021 16:59:44 +0200
+Message-ID: <CAHp75VcvrM0qLQE-04UZEkxbAvkE-MNSN7RGC7mPxj+1hoUyTw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] i2c: smbus: Use device_ functions instead of of_
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 10:11:15PM +0800, Baoquan He wrote:
->  As for the code refactoring, it can be done in another patchset.
+On Thu, Dec 16, 2021 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+>
+> Change of_ functions to device_ for firmware agnostic usage.
 
-Well, I said "future work" before having seen where this patchset is
-going. So no, in that case, the usual kernel development process is:
-cleanups/fixes first - new features later.
+of_*()
+device_*()
 
-You can see for yourself that piling more crap on what is an already
-unreadable mess is only going to make it worse. So, in order to avoid
-the maintenance nightmare, we clean up, streamline, document and then
-add the new feature and all is shiny.
+> This allows to have smbus_alert interrupt without any changes
+> in the controller drivers using ACPI table.
 
-Thx.
+...
+
+> -       irq = of_property_match_string(adapter->dev.of_node, "interrupt-names",
+> -                                      "smbus_alert");
+> +       irq = device_property_match_string(adapter->dev.parent, "interrupt-names",
+> +                                          "smbus_alert");
+
+Hmm... Adapter device node is not the same as the node for its parent.
+Do you have some code that propagates of_node from parent to child?
+
+I.o.w. I would expect to see
+
+       irq = device_property_match_string(&adapter->dev, "interrupt-names",
+
+here.
+
+>         if (irq == -EINVAL || irq == -ENODATA)
+>                 return 0;
+>         else if (irq < 0)
+
+TBH the entire code smells. "Interesting" way of getting an optional
+named interrupt.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+With Best Regards,
+Andy Shevchenko

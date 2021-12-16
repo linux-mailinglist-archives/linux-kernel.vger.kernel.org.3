@@ -2,307 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6984780C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3C34780C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbhLPXjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
+        id S229676AbhLPXjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbhLPXjQ (ORCPT
+        with ESMTP id S229820AbhLPXjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:39:16 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733C6C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:39:16 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id m185so446644vkm.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:39:16 -0800 (PST)
+        Thu, 16 Dec 2021 18:39:40 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B02C06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:39:40 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id d38so1191985lfv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:39:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=43o4wlr1IkiAU6zQKaIE6WugMg6KsgM5BbH78Jvij0o=;
-        b=HB+qq10OML7ZwC1o7HMfLZN4yFllE4yDSe5F+YbzSPwkzJUex9pTjIxPjVSlJAXR+R
-         TGqgohg+ALvNQ5TX22/tFkra8T1/GBsvqrb60u/rDp9rmJElzb6mtmSsg6txYChGvGST
-         2ZYWCdrEKaMsT+2oXmvQVUEZ9HxlWogkJ2TQ/BpWE/mO6e3mBF9ryAV007njMT0kQdN0
-         XIw05SsDe/5f6d9UboYjwepxBFgw+VpX3dpBZeWubuceQFVVLITQ0PxEdg8PMQcY6SHp
-         jBg2qSTT6ckdin2YAr6YphjH5MnBR5AVolzlGOb5KYjOlMXu99GdQw2GDMB92WPasGUT
-         sspw==
+        bh=m/LjgsVegt/HRyKkkM2n6c0UK9wyNwAZfK1yqCRibBE=;
+        b=ZjNYT24fop4NBsOLESN28pcPFI76P21GY15lEKVa1tKR8Y6MixFR71XXHM7GhfF9Om
+         Mic+/EDIsAL+Oy0aBQJNKwWOjgm51UPxF4cZ/YnojHbYK5t7OKs/w0RJ0fMV/Jty5UP3
+         GD7cR728r/nXnJAOmo8UvAJPlaoac5Lt5ox6J43oGgiSlI+tzAmdbkGHwKtBLR6b03CD
+         7oHTeGaKYJVODZhzKZPRa/GHySInjAASy4QEqvKVn6IABK89mCJ8zObuLFxxpFd4M9oY
+         nNbcSS9gTr2YJoL93pnZ4nD3gzT76+OThD67D+uVZQJZKT64KbSwJ1kM4lJaQvROfOCD
+         Mpsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=43o4wlr1IkiAU6zQKaIE6WugMg6KsgM5BbH78Jvij0o=;
-        b=rXoQDZOiua2+4YaM00U2KujZ06v6bhkcL/FhwlonPURqU+IjzwSTNLIC5K7gvtGs20
-         lWaaKurPHg48hGE/EFr3vFL0iPqb5Os8XlebGwuBrQimr0UA6SGdcTGwY+JTbv41HiQ3
-         AstaFCQiMEm+2ubiizqaU1QM86iNqwC4fVX6eciojLfjIBPC+F1hHzz9U6FqyxRhE5PA
-         zetTr0AHHW+VZru12P+fHyAk7xfrdR5mmDXFmxWhJUMGC3+4ypanRBF454rAj0ddFcHU
-         WRwzvB5ndz/UcQwZgWRdrf08zO5fW/LFluL26xEzpJwn/v+dk8ydwXxrZhTDZEPDAQ4e
-         DLaw==
-X-Gm-Message-State: AOAM533/4Ir/UqQagQyD+e/1VfScn0pTSTogZE6N4Ve5Qf459SfRH5VD
-        Ke7T7fvaasKtEH3fQ5RPY4163lPRbfz2z6d4jcDZuw==
-X-Google-Smtp-Source: ABdhPJzp16pmobRMKBbx935rBJUh4NWI//WbgPPhjLN9j6aWH5GwJmzTWm6uqTBPwfplsvBVNP362rJ+P+2ebgD0jtQ=
-X-Received: by 2002:a05:6122:2158:: with SMTP id m24mr173726vkd.1.1639697955495;
- Thu, 16 Dec 2021 15:39:15 -0800 (PST)
+        bh=m/LjgsVegt/HRyKkkM2n6c0UK9wyNwAZfK1yqCRibBE=;
+        b=BKN0XDU9C6oRcspNqC3IEmhQrj5AVUCGQcq9F9JIoHRtMF813K+w58yDHIPLJkcdHg
+         E5S1JvKVHBPlzsGNJzZM0FkjWd3XWq9DB9+M1ZUL81Yh8/MNO2t5l96olMDP57WIfvoX
+         Lpx3c6pfKr+4d7jLC/ylVQpg8nLu+HXtkcNjepSWt4EPOXL6izHDzaoUL0mBwMLVQzzX
+         4kZqGquNXqVPkhdz32XPtHo1jgMRB+uKS+0py9ol+qww+1MUc+vg9GZbeAYf2/ITtCCz
+         n7RdvCFenFP2FfSychBwqHKhqz5S0B1NEl+LJXebPRI4rAwidnD9akhFr884fpEwdGdy
+         UNyQ==
+X-Gm-Message-State: AOAM53191hso4ImvlT/If3TJG47dR5q4RgaQ1TDBB+o07qGCJIU0tyvq
+        ZFx10XCuuuqJuz9XjKBMuiNFZFVbLrtRMiZLAeCP8g==
+X-Google-Smtp-Source: ABdhPJzJ3Ag+Yv1KTmSJebYEdW20IHyaYIzqo6gVs4G5mbbZ7dHZUudFFNmxFE9zK8L0+gvaxQYp82IZFk5AQAuq/rc=
+X-Received: by 2002:a05:6512:1324:: with SMTP id x36mr432363lfu.495.1639697978059;
+ Thu, 16 Dec 2021 15:39:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20211215160906.17451-1-semen.protsenko@linaro.org>
- <20211215160906.17451-8-semen.protsenko@linaro.org> <239e30fa-7994-fcb2-5b83-27ae00ca8cbc@canonical.com>
-In-Reply-To: <239e30fa-7994-fcb2-5b83-27ae00ca8cbc@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 17 Dec 2021 01:39:03 +0200
-Message-ID: <CAPLW+4m1PsbpOUpAEtdNkGX76aO7oN4TRjnQ89ocd3u2DZDL5Q@mail.gmail.com>
-Subject: Re: [PATCH 7/7] arm64: dts: exynos: Add initial E850-96 board support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Hao Fang <fanghao11@huawei.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20211210154332.11526-1-brijesh.singh@amd.com> <20211210154332.11526-9-brijesh.singh@amd.com>
+ <YbugbgXhApv9ECM2@dt>
+In-Reply-To: <YbugbgXhApv9ECM2@dt>
+From:   Mikolaj Lisik <lisik@google.com>
+Date:   Thu, 16 Dec 2021 15:39:26 -0800
+Message-ID: <CADtC8PX_bEk3rQR1sonbp-rX7rAG4fdbM41r3YLhfj3qWvqJrw@mail.gmail.com>
+Subject: Re: [PATCH v8 08/40] x86/sev: Check the vmpl level
+To:     Venu Busireddy <venu.busireddy@oracle.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Dec 2021 at 19:01, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
+On Thu, Dec 16, 2021 at 12:24 PM Venu Busireddy
+<venu.busireddy@oracle.com> wrote:
 >
-> On 15/12/2021 17:09, Sam Protsenko wrote:
-> > E850-96 is a 96boards development board manufactured by WinLink. It
-> > incorporates Samsung Exynos850 SoC, and is compatible with 96boards
-> > mezzanine boards [1], as it follows 96boards standards.
+> On 2021-12-10 09:43:00 -0600, Brijesh Singh wrote:
+> > Virtual Machine Privilege Level (VMPL) feature in the SEV-SNP architecture
+> > allows a guest VM to divide its address space into four levels. The level
+> > can be used to provide the hardware isolated abstraction layers with a VM.
+> > The VMPL0 is the highest privilege, and VMPL3 is the least privilege.
+> > Certain operations must be done by the VMPL0 software, such as:
 > >
-> > This patch adds minimal support for E850-96 board. Next features are
-> > enabled in board dts file and verified with minimal BusyBox rootfs:
+> > * Validate or invalidate memory range (PVALIDATE instruction)
+> > * Allocate VMSA page (RMPADJUST instruction when VMSA=1)
 > >
-> >  * User buttons
-> >  * LEDs
-> >  * Serial console
-> >  * Watchdog timers
-> >  * RTC
-> >  * eMMC
+> > The initial SEV-SNP support requires that the guest kernel is running on
+> > VMPL0. Add a check to make sure that kernel is running at VMPL0 before
+> > continuing the boot. There is no easy method to query the current VMPL
+> > level, so use the RMPADJUST instruction to determine whether the guest is
+> > running at the VMPL0.
 > >
-> > [1] https://www.96boards.org/products/mezzanine/
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 > > ---
-> >  arch/arm64/boot/dts/exynos/Makefile           |   3 +-
-> >  .../boot/dts/exynos/exynos850-e850-96.dts     | 157 ++++++++++++++++++
-> >  2 files changed, 159 insertions(+), 1 deletion(-)
-> >  create mode 100644 arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
+> >  arch/x86/boot/compressed/sev.c    | 34 ++++++++++++++++++++++++++++---
+> >  arch/x86/include/asm/sev-common.h |  1 +
+> >  arch/x86/include/asm/sev.h        | 16 +++++++++++++++
+> >  3 files changed, 48 insertions(+), 3 deletions(-)
 > >
-> > diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
-> > index b41e86df0a84..803548ccc537 100644
-> > --- a/arch/arm64/boot/dts/exynos/Makefile
-> > +++ b/arch/arm64/boot/dts/exynos/Makefile
-> > @@ -3,4 +3,5 @@ dtb-$(CONFIG_ARCH_EXYNOS) += \
-> >       exynos5433-tm2.dtb      \
-> >       exynos5433-tm2e.dtb     \
-> >       exynos7-espresso.dtb    \
-> > -     exynosautov9-sadk.dtb
-> > +     exynosautov9-sadk.dtb   \
-> > +     exynos850-e850-96.dtb
->
-> Alphabetical order please, so before autov9.
->
-> > diff --git a/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts b/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
-> > new file mode 100644
-> > index 000000000000..fd611906d81c
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
-> > @@ -0,0 +1,157 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * WinLink E850-96 board device tree source
-> > + *
-> > + * Copyright (C) 2018 Samsung Electronics Co., Ltd.
-> > + * Copyright (C) 2021 Linaro Ltd.
-> > + *
-> > + * Device tree source file for WinLink's E850-96 board which is based on
-> > + * Samsung Exynos850 SoC.
-> > + */
+> > diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+> > index a0708f359a46..9be369f72299 100644
+> > --- a/arch/x86/boot/compressed/sev.c
+> > +++ b/arch/x86/boot/compressed/sev.c
+> > @@ -212,6 +212,31 @@ static inline u64 rd_sev_status_msr(void)
+> >       return ((high << 32) | low);
+> >  }
+> >
+> > +static void enforce_vmpl0(void)
+> > +{
+> > +     u64 attrs;
+> > +     int err;
 > > +
-> > +/dts-v1/;
-> > +
-> > +#include "exynos850.dtsi"
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/input/input.h>
-> > +
-> > +#define BOARD_ID     0x0
-> > +#define BOARD_REV    0x2
+> > +     /*
+> > +      * There is no straightforward way to query the current VMPL level. The
+> > +      * simplest method is to use the RMPADJUST instruction to change a page
+> > +      * permission to a VMPL level-1, and if the guest kernel is launched at
+> > +      * a level <= 1, then RMPADJUST instruction will return an error.
 >
-> No need for define for single-used constant.
->
-> > +
-> > +/ {
-> > +     model = "WinLink E850-96 board";
-> > +     compatible = "winlink,e850-96", "samsung,exynos850";
-> > +     board_id = <BOARD_ID>;
-> > +     board_rev = <BOARD_REV>;
->
-> Unknown properties. They need dtschema.
+> Perhaps a nit. When you say "level <= 1", do you mean a level lower than or
+> equal to 1 semantically, or numerically?
 >
 
-Those are not really needed in case of upstream linux (only one board
-revision is added and no dtbo to merge in bootloader). Will remove
-those in v2.
++1 to this. Additionally I found the "level-1" confusing which I
+interpreted as "level minus one".
 
-> > +
-> > +     chosen {
-> > +             stdout-path = &serial_0;
-> > +     };
-> > +
-> > +     gpio-keys {
-> > +             compatible = "gpio-keys";
-> > +             pinctrl-names = "default";
-> > +             pinctrl-0 = <&key_voldown_pins &key_volup_pins>;
-> > +
-> > +             volume-down-key {
-> > +                     label = "Volume Down";
-> > +                     linux,code = <KEY_VOLUMEDOWN>;
-> > +                     gpios = <&gpa1 0 GPIO_ACTIVE_LOW>;
-> > +             };
-> > +
-> > +             volume-up-key {
-> > +                     label = "Volume Up";
-> > +                     linux,code = <KEY_VOLUMEUP>;
-> > +                     gpios = <&gpa0 7 GPIO_ACTIVE_LOW>;
-> > +             };
-> > +     };
-> > +
-> > +     leds {
-> > +             compatible = "gpio-leds";
-> > +
-> > +             /* HEART_BEAT_LED */
-> > +             user_led1: led-1 {
-> > +                     label = "yellow:user1";
->
-> Add where applicable:
-> 1. function, e.g. LED_FUNCTION_HEARTBEAT, LED_FUNCTION_WLAN, etc,
-> 2. color constants.
->
-
-I actually had those defined initially :) But then specifically
-decided to remove those, as those are not very helpful when "label"
-and "linux,default-trigger" are already defined (and not many other
-boards seem to provide it). But ok, I'll pull those back in v2.
-
-> > +                     gpios = <&gpg2 2 GPIO_ACTIVE_HIGH>;
-> > +                     linux,default-trigger = "heartbeat";
-> > +             };
-> > +
-> > +             /* eMMC_LED */
-> > +             user_led2: led-2 {
-> > +                     label = "yellow:user2";
-> > +                     gpios = <&gpg2 3 GPIO_ACTIVE_HIGH>;
-> > +                     linux,default-trigger = "mmc0";
-> > +             };
-> > +
-> > +             /* SD_LED */
-> > +             user_led3: led-3 {
-> > +                     label = "white:user3";
-> > +                     gpios = <&gpg2 4 GPIO_ACTIVE_HIGH>;
-> > +                     linux,default-trigger = "mmc2";
-> > +             };
-> > +
-> > +             /* WIFI_LED */
-> > +             wlan_active_led: led-4 {
-> > +                     label = "yellow:wlan";
-> > +                     gpios = <&gpg2 6 GPIO_ACTIVE_HIGH>;
-> > +                     linux,default-trigger = "phy0tx";
-> > +                     default-state = "off";
-> > +             };
-> > +
-> > +             /* BLUETOOTH_LED */
-> > +             bt_active_led: led-5 {
-> > +                     label = "blue:bt";
-> > +                     gpios = <&gpg2 7 GPIO_ACTIVE_HIGH>;
-> > +                     linux,default-trigger = "hci0rx";
-> > +                     default-state = "off";
-> > +             };
-> > +     };
-> > +};
-> > +
-> > +&oscclk {> + clock-frequency = <26000000>;
-> > +};
-> > +
-> > +&rtcclk {
-> > +     clock-frequency = <32768>;
-> > +};
-> > +
-> > +&usi_uart {
-> > +     samsung,clkreq-on; /* needed for UART mode */
-> > +     status = "okay";
-> > +};
-> > +
-> > +&serial_0 {
->
-> Order all phandle overrides by phandle name, so:
-> &oscclk
-> &rtcclk
-> &serial_0
-> &usi_uart
-> ...
->
-> > +     status = "okay";
-> > +     pinctrl-names = "default";
-> > +     pinctrl-0 = <&uart1_pins>;
-> > +};
-> > +
-> > +&watchdog_cl0 {
-> > +     status = "okay";
-> > +};
-> > +
-> > +&watchdog_cl1 {
-> > +     status = "okay";
-> > +};
-> > +
-> > +&rtc {
-> > +     status = "okay";
-> > +};
-> > +
-> > +&mmc_0 {
-> > +     status = "okay";
-> > +     mmc-hs200-1_8v;
-> > +     mmc-hs400-1_8v;
-> > +     cap-mmc-highspeed;
-> > +     non-removable;
-> > +     broken-cd;
->
-> Is it correct to have non-removable (typical for eMMC) and broken CD?
->
-
-Nice catch, not sure how I missed that. It's just ignored in dw_mmc
-driver in case of "non-removable", but that property just doesn't make
-any sense here.
-
-This and all above comments will be addressed in v2.
-
-> > +     mmc-hs400-enhanced-strobe;
-> > +     card-detect-delay = <200>;
-> > +     clock-frequency = <800000000>;
-> > +     bus-width = <8>;
-> > +     samsung,dw-mshc-ciu-div = <3>;
-> > +     samsung,dw-mshc-sdr-timing = <0 4>;
-> > +     samsung,dw-mshc-ddr-timing = <2 4>;
-> > +     samsung,dw-mshc-hs400-timing = <0 2>;
-> > +
-> > +     pinctrl-names = "default";
-> > +     pinctrl-0 = <&sd0_clk_pins &sd0_cmd_pins &sd0_rdqs_pins &sd0_nreset_pins
-> > +                  &sd0_bus1_pins &sd0_bus4_pins &sd0_bus8_pins>;
-> > +};
-> > +
->
->
-> Best regards,
-> Krzysztof
+Perhaps phrasing it as "level one", or "level=1" would be more explicit?

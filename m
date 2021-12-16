@@ -2,136 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A185547715F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1E9477163
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234977AbhLPMIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:08:46 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:29135 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234017AbhLPMIp (ORCPT
+        id S235069AbhLPMJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235005AbhLPMJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:08:45 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JF9mj4jm8z1DJs8;
-        Thu, 16 Dec 2021 20:05:41 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 16 Dec 2021 20:08:42 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 16 Dec 2021 20:08:41 +0800
-Subject: Re: [PATCH v17 03/10] x86: kdump: use macro CRASH_ADDR_LOW_MAX in
- functions reserve_crashkernel()
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Baoquan He <bhe@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-        Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+        Thu, 16 Dec 2021 07:09:36 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDFFC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:09:36 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id z9so25147237qtj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:09:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=27iVM0aKdAv+JiQsBY26McdFr1qGDMbXj62yl//SmdI=;
+        b=EjgfyGJxxUe0zKPwlPZuWE1t0SOucWDWFeCaHtd9CtTjvYD8KEvoSGADHu9gyNPb0w
+         JWQPYcVpFoMLCKxKe917EAK3rQhm9rqbvanX8/9tJipQjxDtiQrgd9Cyi+m8psvEwL07
+         PriJRFI5nVCSe2OHRbYWLOhhpLhYbXN1zyMtuHe9ubzsaCm6FuB5gxGs1deiCaaqsuIS
+         7SNZge5tLLcsnLVmrsCRRGJLbd0V8yjk0WMx3srgHenZpyaQN39xjSVUVhEL9GRNyEiG
+         C/FPjhJYYMzHEq3sI8Gnz+D8pqXEECyYqYbePLztZIJ0168ItbNPW6z/qUz4JZ9EcVMP
+         xe9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=27iVM0aKdAv+JiQsBY26McdFr1qGDMbXj62yl//SmdI=;
+        b=lFitTxK9N9P5EiH5DXDeCw8fwasGq8zyYuenJt/882/m5XkOwfyQspg8Bsq9bNu//M
+         tp13gJ3gF/cXkje0KOlOx3cXw0j6Ciw5ZEteBUxSbNBR2X4ESoI6+URodMv0hkI5Id1c
+         hia5f0V1rZ4pc0jJymi9DqIghQPmZ2AIB+5D0HvQJ/T0nDfq1k+AkfNBHf56c6WzJfqG
+         kSXrcZ8MTDosSXN2kh/N6DKGjwIwj5PNcn/5DFb3NkE3SHYHYpUPO8A+jdOaYPO3veYJ
+         LiC+sP5dBt6GYuMWeF+ExctIiCYCbEZPP2FA+gfTQgpaAdQXFXpvVEYSGzw0k2V6OHlH
+         jN4w==
+X-Gm-Message-State: AOAM532h3HIS3zTEbOjulqBtLCXah2BzbknET3kEy8cAf7Z1HSscpyF/
+        KZwdB6Y70148tPw6Uboa8XSGdw==
+X-Google-Smtp-Source: ABdhPJzK5axWJi3teF0QGvKpI/4LKnG7d8mowHvrhT9SMBZNmCvwXv/NOOVc4korY3W6ostQo3hcsw==
+X-Received: by 2002:a05:622a:1902:: with SMTP id w2mr16510679qtc.93.1639656575105;
+        Thu, 16 Dec 2021 04:09:35 -0800 (PST)
+Received: from eze-laptop ([2803:9800:98c2:8470:9f4:8e2a:88e5:ec01])
+        by smtp.gmail.com with ESMTPSA id k9sm4220397qta.48.2021.12.16.04.09.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 04:09:33 -0800 (PST)
+Date:   Thu, 16 Dec 2021 09:09:26 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-media@vger.kernel.org, abel.vesa@nxp.com,
+        aford@beaconembedded.com, benjamin.gaignard@collabora.com,
+        hverkuil-cisco@xs4all.nl, Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
- <20211210065533.2023-4-thunder.leizhen@huawei.com> <YbntdtQo2jfbO4cO@zn.tnic>
- <20211216011040.GG3023@MiWiFi-R3L-srv>
- <9513d74c-d4c7-babd-f823-8999e195d96d@huawei.com> <YbseAX6X1VHUF12f@zn.tnic>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <35810a61-604e-9b90-2a7f-cfca6ae042ac@huawei.com>
-Date:   Thu, 16 Dec 2021 20:08:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH V2 05/10] media: hantro: Allow i.MX8MQ G1 and G2 to run
+ independently
+Message-ID: <YbssdkOvCR3UMtKQ@eze-laptop>
+References: <20211216111256.2362683-1-aford173@gmail.com>
+ <20211216111256.2362683-6-aford173@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <YbseAX6X1VHUF12f@zn.tnic>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216111256.2362683-6-aford173@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Adam,
 
+On Thu, Dec 16, 2021 at 05:12:50AM -0600, Adam Ford wrote:
+> The VPU in the i.MX8MQ is really the combination of Hantro G1 and
+> Hantro G2. With the updated vpu-blk-ctrl, the power domains system
+> can enable and disable them separately as well as pull them out of
+> reset. This simplifies the code and lets them run independently
+> while still retaining backwards compatibility with older device
+> trees for those using G1.
+> 
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> 
+> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+> index ab2467998d29..e7afda388ee5 100644
+> --- a/drivers/staging/media/hantro/hantro_drv.c
+> +++ b/drivers/staging/media/hantro/hantro_drv.c
+> @@ -609,6 +609,7 @@ static const struct of_device_id of_hantro_match[] = {
+>  #endif
+>  #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+>  	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+> +	{ .compatible = "nxp,imx8mq-vpu-g1", .data = &imx8mq_vpu_g1_variant },
+>  	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
+>  #endif
+>  #ifdef CONFIG_VIDEO_HANTRO_SAMA5D4
+> diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+> index cff817ca8d22..96b14b43a4af 100644
+> --- a/drivers/staging/media/hantro/hantro_hw.h
+> +++ b/drivers/staging/media/hantro/hantro_hw.h
+> @@ -299,6 +299,7 @@ enum hantro_enc_fmt {
+>  	ROCKCHIP_VPU_ENC_FMT_UYVY422 = 3,
+>  };
+>  
+> +extern const struct hantro_variant imx8mq_vpu_g1_variant;
+>  extern const struct hantro_variant imx8mq_vpu_g2_variant;
+>  extern const struct hantro_variant imx8mq_vpu_variant;
+>  extern const struct hantro_variant px30_vpu_variant;
+> diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> index 1a43f6fceef9..4925f2a07d4c 100644
+> --- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> +++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+> @@ -223,13 +223,6 @@ static void imx8m_vpu_g1_reset(struct hantro_ctx *ctx)
+>  	imx8m_soft_reset(vpu, RESET_G1);
+>  }
+>  
+> -static void imx8m_vpu_g2_reset(struct hantro_ctx *ctx)
+> -{
+> -	struct hantro_dev *vpu = ctx->dev;
+> -
+> -	imx8m_soft_reset(vpu, RESET_G2);
+> -}
+> -
+>  /*
+>   * Supported codec ops.
+>   */
+> @@ -255,17 +248,33 @@ static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
+>  	},
+>  };
+>  
+> +static const struct hantro_codec_ops imx8mq_vpu_g1_codec_ops[] = {
+> +	[HANTRO_MODE_MPEG2_DEC] = {
+> +		.run = hantro_g1_mpeg2_dec_run,
+> +		.init = hantro_mpeg2_dec_init,
+> +		.exit = hantro_mpeg2_dec_exit,
+> +	},
+> +	[HANTRO_MODE_VP8_DEC] = {
+> +		.run = hantro_g1_vp8_dec_run,
+> +		.init = hantro_vp8_dec_init,
+> +		.exit = hantro_vp8_dec_exit,
+> +	},
+> +	[HANTRO_MODE_H264_DEC] = {
+> +		.run = hantro_g1_h264_dec_run,
+> +		.init = hantro_h264_dec_init,
+> +		.exit = hantro_h264_dec_exit,
+> +	},
+> +};
+> +
+>  static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
+>  	[HANTRO_MODE_HEVC_DEC] = {
+>  		.run = hantro_g2_hevc_dec_run,
+> -		.reset = imx8m_vpu_g2_reset,
+>  		.init = hantro_hevc_dec_init,
+>  		.exit = hantro_hevc_dec_exit,
+>  	},
+>  	[HANTRO_MODE_VP9_DEC] = {
+>  		.run = hantro_g2_vp9_dec_run,
+>  		.done = hantro_g2_vp9_dec_done,
+> -		.reset = imx8m_vpu_g2_reset,
+>  		.init = hantro_vp9_dec_init,
+>  		.exit = hantro_vp9_dec_exit,
+>  	},
+> @@ -285,6 +294,10 @@ static const struct hantro_irq imx8mq_g2_irqs[] = {
+>  
+>  static const char * const imx8mq_clk_names[] = { "g1", "g2", "bus" };
+>  static const char * const imx8mq_reg_names[] = { "g1", "g2", "ctrl" };
+> +static const char * const imx8mq_g1_clk_names[] = { "g1" };
+> +static const char * const imx8mq_g1_reg_names[] = { "g1" };
+> +static const char * const imx8mq_g2_clk_names[] = { "g2" };
+> +static const char * const imx8mq_g2_reg_names[] = { "g2" };
+>  
 
-On 2021/12/16 19:07, Borislav Petkov wrote:
-> On Thu, Dec 16, 2021 at 10:46:12AM +0800, Leizhen (ThunderTown) wrote:
->> The original value (1ULL << 32) is inaccurate
-> 
-> I keep asking *why*?
-> 
->> and it enlarged the CRASH_ADDR_LOW upper limit.
-> 
-> $ git grep -E "CRASH_ADDR_LOW\W"
-> $
-> 
-> I have no clue what you mean here.
+I believe the g1 and g2 _reg_names are now unused?
 
-#ifdef CONFIG_X86_32
-# define CRASH_ADDR_LOW_MAX     SZ_512M
-# define CRASH_ADDR_HIGH_MAX    SZ_512M
-#endif
+Thanks,
+Ezequiel
 
-		if (!high)
-(1)                     crash_base = memblock_phys_alloc_range(crash_size,
-                                                CRASH_ALIGN, CRASH_ALIGN,
-                                                CRASH_ADDR_LOW_MAX);
-                if (!crash_base)
-(2)                     crash_base = memblock_phys_alloc_range(crash_size,
-                                                CRASH_ALIGN, CRASH_ALIGN,
-                                                CRASH_ADDR_HIGH_MAX);
-
--	if (crash_base >= (1ULL << 32) && reserve_crashkernel_low())
-+(3)	if (crash_base >= CRASH_ADDR_LOW_MAX && reserve_crashkernel_low())
-
-If the memory of 'crash_base' is successfully allocated at (1), because the last
-parameter CRASH_ADDR_LOW_MAX is the upper bound, so we can sure that
-"crash_base < CRASH_ADDR_LOW_MAX". So that, reserve_crashkernel_low() will not be
-invoked at (3). That's why I said (1ULL << 32) is inaccurate and enlarge the CRASH_ADDR_LOW
-upper limit.
-
-If the memory of 'crash_base' is successfully allocated at (2), you see,
-CRASH_ADDR_HIGH_MAX = CRASH_ADDR_LOW_MAX = SZ_512M, the same as (1). In fact,
-"crashkernel=high," may not be recommended on X86_32.
-
-Is it possible that (CRASH_ADDR_HIGH_MAX >= 4G) and (CRASH_ADDR_LOW_MAX < 4G)?
-In this case, the memory allocated at (2) maybe over 4G. But why shouldn't
-CRASH_ADDR_LOW_MAX be equal to 4G at this point?
-
-
-> 
->> This is because when the memory is allocated from the low end, the
->> address cannot exceed CRASH_ADDR_LOW_MAX, see "if (!high)" branch.
-> 
->> If
->> the memory is allocated from the high end, 'crash_base' is greater than or
->> equal to (1ULL << 32), and naturally, it is greater than CRASH_ADDR_LOW_MAX.
->>
->> I think I should update the description, thanks.
-> 
-> I think you should explain why is (1ULL << 32) wrong.
-> 
-> It came from:
-> 
->   eb6db83d1059 ("x86/setup: Do not reserve crashkernel high memory if low reservation failed")
-> 
-> which simply frees the high memory portion when the low reservation
-> fails. And the test for that is, is crash base > 4G. So that makes
-> perfect sense to me.
-> 
-> So your change is a NOP on 64-bit and it is a NOP on 32-bit by virtue of
-> the _low() variant always returning 0 on 32-bit.
+>  const struct hantro_variant imx8mq_vpu_variant = {
+>  	.dec_fmts = imx8m_vpu_dec_fmts,
+> @@ -305,6 +318,21 @@ const struct hantro_variant imx8mq_vpu_variant = {
+>  	.num_regs = ARRAY_SIZE(imx8mq_reg_names)
+>  };
+>  
+> +const struct hantro_variant imx8mq_vpu_g1_variant = {
+> +	.dec_fmts = imx8m_vpu_dec_fmts,
+> +	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_dec_fmts),
+> +	.postproc_fmts = imx8m_vpu_postproc_fmts,
+> +	.num_postproc_fmts = ARRAY_SIZE(imx8m_vpu_postproc_fmts),
+> +	.postproc_ops = &hantro_g1_postproc_ops,
+> +	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
+> +		 HANTRO_H264_DECODER,
+> +	.codec_ops = imx8mq_vpu_g1_codec_ops,
+> +	.irqs = imx8mq_irqs,
+> +	.num_irqs = ARRAY_SIZE(imx8mq_irqs),
+> +	.clk_names = imx8mq_g1_clk_names,
+> +	.num_clocks = ARRAY_SIZE(imx8mq_g1_clk_names),
+> +};
+> +
+>  const struct hantro_variant imx8mq_vpu_g2_variant = {
+>  	.dec_offset = 0x0,
+>  	.dec_fmts = imx8m_vpu_g2_dec_fmts,
+> @@ -314,10 +342,8 @@ const struct hantro_variant imx8mq_vpu_g2_variant = {
+>  	.postproc_ops = &hantro_g2_postproc_ops,
+>  	.codec = HANTRO_HEVC_DECODER | HANTRO_VP9_DECODER,
+>  	.codec_ops = imx8mq_vpu_g2_codec_ops,
+> -	.init = imx8mq_vpu_hw_init,
+> -	.runtime_resume = imx8mq_runtime_resume,
+>  	.irqs = imx8mq_g2_irqs,
+>  	.num_irqs = ARRAY_SIZE(imx8mq_g2_irqs),
+> -	.clk_names = imx8mq_clk_names,
+> -	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
+> +	.clk_names = imx8mq_g2_clk_names,
+> +	.num_clocks = ARRAY_SIZE(imx8mq_g2_clk_names),
+>  };
+> -- 
+> 2.32.0
 > 

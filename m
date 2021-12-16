@@ -2,130 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D934768E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 05:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A42B34768EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 05:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbhLPEAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 23:00:04 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:43622 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233453AbhLPEAD (ORCPT
+        id S233482AbhLPEBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 23:01:07 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7906 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233477AbhLPEBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 23:00:03 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BG3xfjK095343;
-        Wed, 15 Dec 2021 21:59:41 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639627181;
-        bh=zpoz48vU+NXpI5ORSUjCOhF7WIek5PewEa1fLnVl0qY=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=hX1iA9eZte85v8Sa4IDZm2x8B5SveNUrCqkMl65eojXE2f7tlOyeRtCMtAfS83IN3
-         BcgG/BIxXO4StRNj+0nbi2mqdGxrKFV6NFqUsrmc0mZ3pnysostfeWDlZuzGjzrfNc
-         HrtNmsbpn6H0ydi9WRnbI2FXi2Nb5iaalh4H1jfY=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BG3xfUr055793
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Dec 2021 21:59:41 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 15
- Dec 2021 21:59:40 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 15 Dec 2021 21:59:40 -0600
-Received: from [10.250.232.185] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BG3xbJp049787;
-        Wed, 15 Dec 2021 21:59:37 -0600
-Subject: Re: [PATCH v2 1/2] dt-bindings: phy: ti,tcan104x-can: Document
- mux-states property
-To:     Rob Herring <robh@kernel.org>
-CC:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, <linux-can@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211214142908.27940-1-a-govindraju@ti.com>
- <20211214142908.27940-2-a-govindraju@ti.com>
- <YbpSy0+x/SnTYUzb@robh.at.kernel.org>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <71c926f5-7dd5-b2c3-d31c-fbc7a3d553c4@ti.com>
-Date:   Thu, 16 Dec 2021 09:29:36 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 15 Dec 2021 23:01:06 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BG2x1WA009235;
+        Thu, 16 Dec 2021 04:00:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=HGlFMHQUYMi3K48qUYXxEF2y7afN4tqLAJEZgMrV43s=;
+ b=kjBAP3cHde8lRc9CcYeGMcJTVnLM0WvwjePrdiBIj68TbasDOSaM9naCo0HyILot/12l
+ KD6agrjOdMOFqYU1qtO93c7h3aWetkVONeTXgpXfaZjEhb4gyIDLnoo0HA4tGYio7zlW
+ TRDeh0yHN/6lBuD0AQKGEnGgAmifekyGOzh12PAtj3ALqxuSuDopN+GxL08AGco/qr2h
+ 68iEm/xeo8Yr7wYkgmdhjqiff+aO4oKxQ6JXysN4OOf8CUJqzFZ/w8oRKYiG0Hg93T7F
+ 7cqqR5vEpTd8V5EjMV5UuYVaj2Jonraol47m9I7YZjEWpc0bPVRDLUIpIIuzpYqfsi2O hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cypc6ge58-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 04:00:53 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BG3xsxX003340;
+        Thu, 16 Dec 2021 04:00:52 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cypc6ge4s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 04:00:52 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BG3uoEQ012452;
+        Thu, 16 Dec 2021 04:00:51 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma01dal.us.ibm.com with ESMTP id 3cy7e3qrwr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 04:00:50 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BG40gJU25297208
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Dec 2021 04:00:42 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 07D83124052;
+        Thu, 16 Dec 2021 04:00:42 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B8E3E124054;
+        Thu, 16 Dec 2021 04:00:41 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 16 Dec 2021 04:00:41 +0000 (GMT)
+Message-ID: <6a2573d1-6bea-45b0-3105-2d2dc21b503b@linux.ibm.com>
+Date:   Wed, 15 Dec 2021 23:00:41 -0500
 MIME-Version: 1.0
-In-Reply-To: <YbpSy0+x/SnTYUzb@robh.at.kernel.org>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v6 02/17] ima: Define ns_status for storing namespaced
+ iint data
 Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Mehmet Kayaalp <mkayaalp@linux.vnet.ibm.com>
+References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
+ <20211210194736.1538863-3-stefanb@linux.ibm.com>
+ <7586b43739f121041b294d9bea60bf9b1bd71f7c.camel@linux.ibm.com>
+ <29381ebc-0bf7-59c5-6d16-16958e2dfcb1@linux.ibm.com>
+ <7cd23e2c058752a97f04c23a4a5243a3471e2cd6.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <7cd23e2c058752a97f04c23a4a5243a3471e2cd6.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CjikH6Vj6CDvEM50aMG1z7McDINsEnQy
+X-Proofpoint-GUID: nhwh-cR5eEGoX5bxjFnJdoCZndx_pxTy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-16_01,2021-12-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 spamscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
+ phishscore=0 impostorscore=0 bulkscore=0 suspectscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112160022
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
 
-On 16/12/21 2:10 am, Rob Herring wrote:
-> On Tue, Dec 14, 2021 at 07:59:07PM +0530, Aswath Govindraju wrote:
->> On some boards, for routing CAN signals from controller to transceivers,
->> muxes might need to be set. This can be implemented using mux-states
->> property. Therefore, document the same in the respective bindings.
->>
->> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->> ---
->>  .../devicetree/bindings/phy/ti,tcan104x-can.yaml       | 10 ++++++++++
->>  1 file changed, 10 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
->> index 6107880e5246..7b9216e43b58 100644
->> --- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
->> +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
->> @@ -37,6 +37,15 @@ properties:
->>        max bit rate supported in bps
->>      minimum: 1
->>  
->> +  mux-states:
->> +    description:
->> +      mux controller node to route the signals from controller to
->> +      transceiver. Two arguments can be present depending on the
->> +      mux chip. If one argument is used then it represents the state
->> +      to be set on the mux-chip. If there are two arguments then the
->> +      first argument is the control line and the second argument is
->> +      its corresponding state to be set, on the mux-chip.
->> +
-> 
-> You are still describing how the mux-states works. What the cells 
-> contain and how many are opaque to this binding. Here you need to 
-> describe how many muxes you have and what they are controlling as that 
-> is what is specific to this binding. If there is only one, this boils 
-> down to 'maxItems: 1'. It's just like reg, interrupts, clocks, etc.
-> 
+On 12/15/21 22:53, Mimi Zohar wrote:
+> On Wed, 2021-12-15 at 21:37 -0500, Stefan Berger wrote:
+>
+>>> before it is re-used.
+>> KMEM_CACHE + kmem_cache_alloc/zalloc() are pretty common. What kind of
+>> comment would be helpful here?
+> The original reason for using kmem_cache_create() with init_once and
+> deferring memory cleanup to free was for performance.  Using
+> KMEM_CACHE() and kmem_cache_zalloc() instead could be for simplicity.
+> The comment should note the change.
+
+/* use KMEM_CACHE for simplicity */ ?
 
 
-Got it. Thank you for the clarification. Amending the description to the
-following,
-
-  mux-states:
-    description:
-      mux controller node to route the signals from controller to
-      transceiver.
-    maxItems: 1
-
-Thanks,
-Aswath
-
->>  required:
->>    - compatible
->>    - '#phy-cells'
->> @@ -53,4 +62,5 @@ examples:
->>        max-bitrate = <5000000>;
->>        standby-gpios = <&wakeup_gpio1 16 GPIO_ACTIVE_LOW>;
->>        enable-gpios = <&main_gpio1 67 GPIO_ACTIVE_HIGH>;
->> +      mux-states = <&mux0 1>;
->>      };
->> -- 
->> 2.17.1
->>
->>
-
+>
+> Mimi
+>

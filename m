@@ -2,161 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EA44776EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E134776E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238961AbhLPQHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:07:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57206 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238900AbhLPQHe (ORCPT
+        id S238883AbhLPQHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:07:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232999AbhLPQHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:07:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639670853;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8cVDM4m7qKmPze8bGHm4yprEqrDfzWMR6SSFZENqonM=;
-        b=QUHL7Hnr/tonppnFpvlwWIF+FctKCd4z7xC5Bo4zD+TP0fdF7b05zP9/EaJE+ByXw7z8Ke
-        d7YTT0HD7wcPvuI+T9AFznFYZAPJXu5Dy+qXnpKmpqvriaMmLXgw1T12T/lwQWDYCbWqBk
-        55HGPDIuyQ/YXDbm/dQ8MoXUaBrbvEY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-223-Azwk_V2yPdu-9WZF3rmTRg-1; Thu, 16 Dec 2021 11:07:28 -0500
-X-MC-Unique: Azwk_V2yPdu-9WZF3rmTRg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 926E3801AAB;
-        Thu, 16 Dec 2021 16:07:25 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 562395BD06;
-        Thu, 16 Dec 2021 16:07:04 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v3 07/68] fscache: Implement a hash function
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 16 Dec 2021 16:07:03 +0000
-Message-ID: <163967082342.1823006.8915671045444488742.stgit@warthog.procyon.org.uk>
-In-Reply-To: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
-References: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        Thu, 16 Dec 2021 11:07:22 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F213C061574;
+        Thu, 16 Dec 2021 08:07:22 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id k23so39295172lje.1;
+        Thu, 16 Dec 2021 08:07:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cOgP4Q0MS5pImnSQTIGont9oTNeBxvtKf955mAYz/RY=;
+        b=mO/bNRXG0+RTO/ybItEyiIbpQWytEzVeRh2Q/4MI2VNIf+DrwqW48H/aDySegPjs3x
+         huP3hgeW2fpFiA2AaY9q2shAY9gvbXD/u1CcL3XtxsOPeiLXBPk+TWXooQOFpDXZHciS
+         edoV4uDO9Uxj1n8UJAQm+5r6HEJQEOzjVCy0VQMicthuIfae7pClMTRtWk671AJmbL6a
+         JXmA+8Eev6+yLJKccJLQ49XBq8N+MgAxeu8+pp569+tseQwtJrB0vE6IiWx/NPwYowmV
+         B5q7JTzoxDIHaAMF09bGdRvPHiegBScXqe5HnWvGPiZnc/Cq6G62k0Td/bxJT4fEdVQa
+         p9KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cOgP4Q0MS5pImnSQTIGont9oTNeBxvtKf955mAYz/RY=;
+        b=vGlCd9Rhk0vvdDoNlAjH45gyNL5Jqy+MavRv9RcAw1Xrb0fMPG/5u2oFsyJHVvjYyU
+         yM1Yk43yfprRldoum1M012+RJnPxh5o0njSDrKXbeT/HgpmNrHB6u57VmK26St93ArSN
+         0crn4HLKHkMlzfQgaiIuvTl8FjzPjbhryz6NtFeDZRc/aEUrAof0RR+cJB10l5/IaNJ5
+         RBY/1g7dyk4HY7BxLeRmvVVupWkc4jz12LZrwL4nZEpWcqtOMxYbVUazT+LYQhTI0fPG
+         24wF4T+soqPBZ4dywlrzw951XafoQLj8OMcoPUv36DdWKHAs1xO6jnpYKN6ycW3g2bmV
+         9K6g==
+X-Gm-Message-State: AOAM531H/eu+xdJqLjhpISbIs7RqTebWwS6cWPDEXmsXuYzWnxKhBtWc
+        Ny4pNr/koncpCy9e3giBFqbLdi/L8So=
+X-Google-Smtp-Source: ABdhPJyKZHnVDuXQoo4x5waxnM20Tpj5I+Lw2AfKI8XqZCi/GZbnt/+slbF1J3HFIj/PcvtGiqfuXQ==
+X-Received: by 2002:a2e:a409:: with SMTP id p9mr15940699ljn.412.1639670840394;
+        Thu, 16 Dec 2021 08:07:20 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id f19sm934794lfm.119.2021.12.16.08.07.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 08:07:20 -0800 (PST)
+Subject: Re: [PATCH v1] dt-bindings: sound: tegra-audio-rt5677: Correct
+ example
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        David Heidelberg <david@ixit.cz>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20211216160229.17049-1-digetx@gmail.com>
+Message-ID: <df97dc4f-175f-738b-1670-303113dd58c7@gmail.com>
+Date:   Thu, 16 Dec 2021 19:07:19 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <20211216160229.17049-1-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement a function to generate hashes.  It needs to be stable over time
-and endianness-independent as the hashes will appear on disk in future
-patches.  It can assume that its input is a multiple of four bytes in size
-and alignment.
+16.12.2021 19:02, Dmitry Osipenko пишет:
+> Remove non-existent properties from the example of the binding. These
+> properties were borrower from the old txt binding, but they were never
+> used in practice and aren't documented in the new binding. They aren't
+> reported by the binding checker because dtschema needs extra patch that
+> hasn't been upstreamed yet to make unevaluatedProperties work properly.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../devicetree/bindings/sound/nvidia,tegra-audio-rt5677.yaml   | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5677.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5677.yaml
+> index 03ff691c26c8..a49997d6028b 100644
+> --- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5677.yaml
+> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5677.yaml
+> @@ -92,9 +92,6 @@ examples:
+>          nvidia,audio-codec = <&rt5677>;
+>  
+>          nvidia,hp-det-gpios = <&gpio 143 0>;
+> -        nvidia,mic-present-gpios = <&gpio 132 1>;
+> -        nvidia,hp-en-gpios = <&rt5677 1 0>;
+> -        nvidia,dmic-clk-en-gpios = <&rt5677 2 1>;
+>  
+>          clocks = <&clk 216>,
+>                   <&clk 217>,
+> 
 
-This is borrowed from the VFS and simplified.  le32_to_cpu() is added to
-make it endianness-independent.
-
-Changes
-=======
-ver #3:
- - Read the data being hashed in an endianness-independent way[1].
- - Change the size parameter to be in bytes rather than words.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-cachefs@redhat.com
-Link: https://lore.kernel.org/r/CAHk-=whtkzB446+hX0zdLsdcUJsJ=8_-0S1mE_R+YurThfUbLA@mail.gmail.com [1]
-Link: https://lore.kernel.org/r/163819586113.215744.1699465806130102367.stgit@warthog.procyon.org.uk/ # v1
-Link: https://lore.kernel.org/r/163906888735.143852.10944614318596881429.stgit@warthog.procyon.org.uk/ # v2
----
-
- fs/fscache/internal.h |    2 ++
- fs/fscache/main.c     |   40 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 42 insertions(+)
-
-diff --git a/fs/fscache/internal.h b/fs/fscache/internal.h
-index ea52f8594a77..f345bdb018ba 100644
---- a/fs/fscache/internal.h
-+++ b/fs/fscache/internal.h
-@@ -22,6 +22,8 @@
-  */
- extern unsigned fscache_debug;
- 
-+extern unsigned int fscache_hash(unsigned int salt, const void *data, size_t len);
-+
- /*
-  * proc.c
-  */
-diff --git a/fs/fscache/main.c b/fs/fscache/main.c
-index 819de2ee1276..687b34903d5b 100644
---- a/fs/fscache/main.c
-+++ b/fs/fscache/main.c
-@@ -24,6 +24,46 @@ MODULE_PARM_DESC(fscache_debug,
- struct workqueue_struct *fscache_wq;
- EXPORT_SYMBOL(fscache_wq);
- 
-+/*
-+ * Mixing scores (in bits) for (7,20):
-+ * Input delta: 1-bit      2-bit
-+ * 1 round:     330.3     9201.6
-+ * 2 rounds:   1246.4    25475.4
-+ * 3 rounds:   1907.1    31295.1
-+ * 4 rounds:   2042.3    31718.6
-+ * Perfect:    2048      31744
-+ *            (32*64)   (32*31/2 * 64)
-+ */
-+#define HASH_MIX(x, y, a)	\
-+	(	x ^= (a),	\
-+	y ^= x,	x = rol32(x, 7),\
-+	x += y,	y = rol32(y,20),\
-+	y *= 9			)
-+
-+static inline unsigned int fold_hash(unsigned long x, unsigned long y)
-+{
-+	/* Use arch-optimized multiply if one exists */
-+	return __hash_32(y ^ __hash_32(x));
-+}
-+
-+/*
-+ * Generate a hash.  This is derived from full_name_hash(), but we want to be
-+ * sure it is arch independent and that it doesn't change as bits of the
-+ * computed hash value might appear on disk.  The caller must guarantee that
-+ * the source data is a multiple of four bytes in size.
-+ */
-+unsigned int fscache_hash(unsigned int salt, const void *data, size_t len)
-+{
-+	const __le32 *p = data;
-+	unsigned int a, x = 0, y = salt, n = len / sizeof(__le32);
-+
-+	for (; n; n--) {
-+		a = le32_to_cpu(*p++);
-+		HASH_MIX(x, y, a);
-+	}
-+	return fold_hash(x, y);
-+}
-+
- /*
-  * initialise the fs caching module
-  */
-
-
+Interestingly, I can't find any Tegra device-tree that uses this rt5677
+binding. Maybe we should remove it?

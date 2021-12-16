@@ -2,98 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FE6477572
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F57947757A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238190AbhLPPNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbhLPPNU (ORCPT
+        id S238346AbhLPPOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:14:31 -0500
+Received: from mail-qv1-f41.google.com ([209.85.219.41]:38887 "EHLO
+        mail-qv1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232782AbhLPPOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:13:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4E6C061574;
-        Thu, 16 Dec 2021 07:13:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 825ABB8247F;
-        Thu, 16 Dec 2021 15:13:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B56AC36AE4;
-        Thu, 16 Dec 2021 15:13:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639667597;
-        bh=REimS41qgBurbspSIkR1kMxD0grK0fDoyp2v8fHLvWU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=la1Nva7CY5Jjwk/Wm8lWv3aYBjlUl57ZAfIlbsOFzuOmJSPuKLopP/GuXByjC/AxG
-         d8FYa3Cmbcy/Oncgw2P12FORplfl01xThQnV8jXaFWhGL25GidA2g8k+ManOQFoc6j
-         2F+cH8UL49wJ8NB4ZXlyoHdZTi6aEKZgK9+U7WrEXbLuLIlLZdlk2gbt6H/RyH7/CX
-         CQ8ZHrKOLJiH/rt4doqQ3JgqXTP2C/ix1yRkUCJNYrJm2Qapx2frWlRH0A5ZcMfOap
-         zPq992A0r6cmcuhnAFlsqwmf3nGPeRJCwyKLLDEBzZvGY+fLYhDo6HiTeJwdsq/1FI
-         8sMVox38pRHdw==
-Received: by mail-ed1-f44.google.com with SMTP id t5so87989858edd.0;
-        Thu, 16 Dec 2021 07:13:17 -0800 (PST)
-X-Gm-Message-State: AOAM530WkSW5Q9FIvG2B8LoHvgKPTBhsY4NIWj0WWsuSxYTLMRfQvDhk
-        dDhTl0rmpTAZMpx7E+0Cnt5WUu6xr+510aAySw==
-X-Google-Smtp-Source: ABdhPJzaSjcXBqry8QmxPjHdP9FMmSwW8YKfAtjQEf0G8hozeKwYCJ5n4IhU9jxoGpU1d4mPc88zqtdZC7Q7FuBNpgY=
-X-Received: by 2002:a05:6402:4251:: with SMTP id g17mr20936069edb.89.1639667595626;
- Thu, 16 Dec 2021 07:13:15 -0800 (PST)
+        Thu, 16 Dec 2021 10:14:30 -0500
+Received: by mail-qv1-f41.google.com with SMTP id o10so3193636qvc.5;
+        Thu, 16 Dec 2021 07:14:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bgrHajWI1E3M+PmnYwKwkGRt8FZTO6H90ocP/ndri7g=;
+        b=l4/TQy7Mj6dZViQX7nuX7IGxDo14fv08yEdtRQUDDtCROBIhbaQFG4kzBxPZs5Xsfl
+         jTUCIHP0BB6mF5tTsIE3S9gTKeZUmQf+i02csTuX0oqvXYMN3mNEAPqTWyNtWXyKPl5/
+         dhz8lm1Ldml5a/uGIPF3+qBa8fQmQ80lSnpTb25K+nTNvFXSGKR23VY7tMGnmGG1diGd
+         jmd5tb/++S2w8s0UTQ2gNSCoa3BFRCekWlVN8Oqip5Q66o2hu+nlSbIgVUljYCHxcbe3
+         9RAh9vIBtlZThkyEDVYHsX/GBOIwseUau2aF+dZKQid/B+pe1Gv3sCJM2dTcot2ERtvR
+         Qckw==
+X-Gm-Message-State: AOAM530yP/raaw0wdCeNCgDmFCs03qI8LIgxZovqiy5MHslXIWU7jQc2
+        dorKYaPu+VYu6qIAZZuy2BI=
+X-Google-Smtp-Source: ABdhPJw6GiedDkWdRX6nQO/Lqr8qnOaiR3jLCXF/GKgiSqYuvi6bzOzmdpTW1OoFQLVgoyIknYzdwg==
+X-Received: by 2002:a05:6214:c47:: with SMTP id r7mr16349557qvj.51.1639667669658;
+        Thu, 16 Dec 2021 07:14:29 -0800 (PST)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-027.fbsv.net. [2a03:2880:20ff:1b::face:b00c])
+        by smtp.gmail.com with ESMTPSA id j22sm2892324qko.68.2021.12.16.07.14.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 07:14:29 -0800 (PST)
+Date:   Thu, 16 Dec 2021 07:14:27 -0800
+From:   David Vernet <void@manifault.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miroslav Benes <mbenes@suse.cz>, linux-doc@vger.kernel.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, jikos@kernel.org, joe.lawrence@redhat.com,
+        corbet@lwn.net, yhs@fb.com, songliubraving@fb.com
+Subject: Re: [PATCH] livepatch: Fix leak on klp_init_patch_early failure path
+Message-ID: <YbtX088SeDWaEih1@dev0025.ash9.facebook.com>
+References: <20211213191734.3238783-1-void@manifault.com>
+ <YbhZwVocHDX9ZBAc@alley>
+ <alpine.LSU.2.21.2112141012090.20187@pobox.suse.cz>
+ <Ybi3qcA5ySDYpyib@dev0025.ash9.facebook.com>
+ <Ybi9NzbvWU7ka8m1@kroah.com>
+ <YbmlL0ZyfSuek9OB@alley>
+ <YboLPAmOc8/6khu2@kroah.com>
+ <YbtJzonSJjcUaUwh@alley>
 MIME-Version: 1.0
-References: <20211215152712.72502-1-david@ixit.cz>
-In-Reply-To: <20211215152712.72502-1-david@ixit.cz>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 16 Dec 2021 09:13:03 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLyMr+apgqn31V7QPfqqxhJ1ro258WsDP=CO37zfyxVNw@mail.gmail.com>
-Message-ID: <CAL_JsqLyMr+apgqn31V7QPfqqxhJ1ro258WsDP=CO37zfyxVNw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: display: bridge: document Toshiba TC358768
- cells and panel node
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        devicetree@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ~okias/devicetree@lists.sr.ht,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbtJzonSJjcUaUwh@alley>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 9:38 AM David Heidelberg <david@ixit.cz> wrote:
->
-> Properties #address-cells and #size-cells are valid.
-> The bridge node can also contains panel node.
->
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../bindings/display/bridge/toshiba,tc358768.yaml      | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
-> index eacfe7165083..3186d9dffd98 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
-> @@ -69,6 +69,16 @@ properties:
->        - port@0
->        - port@1
->
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +patternProperties:
-> +  "^panel@[0-3]$":
-> +    $ref: ../panel/panel-common.yaml
+Petr Mladek <pmladek@suse.com> wrote on Thu [2021-Dec-16 15:14:38 +0100]:
+> > Now it does.  In the past, I think we did create some memory.  I know
+> > when we hook debugobjects up to kobjects (there's an external patch for
+> > that floating around somewhere), that is one reason to keep the
+> > kobject_put() rule, and there might have been other reasons in the past
+> > 20+ years as well.
+> > 
+> > So yes, while you are correct today, the "normal" reference counted
+> > object model patern is "after the object is initialized, it MUST only be
+> > freed by handling its reference count."  So let's stick to that rule for
+> > now.
+> 
+> Good point.
 
-It's possible to attach something that doesn't use panel-common.yaml
-and if it did, it would be applied by that schema.
+Thanks for the discussion all. I think we've landed on the fact that this
+is a refcounting bug that needs to be fixed, but isn't a leak in how the
+kobject implementation exists today.
 
-What you need is to just reference dsi-controller.yaml at the top level.
+Petr - are you OK with me sending out a v3 of the patch with the following
+changes:
+  - The patch description is updated to not claim that a leak is being
+    fixed, but rather that a kobject reference counting bug is being fixed.
+  - All of the NULL checking in klp_init_patch_early() is brought into
+    klp_enable_patch(), and klp_init_patch_early() is updated to be void,
+    per Josh's suggestion. This would address the refcounting issue and IMO
+    also simplifies and improves the code. I know you were onboard with
+    moving try_module_get() into klp_enable_patch(), but I don't think we
+    ever resolved the point about moving the rest of the NULL checking out
+    as well.
 
-Rob
+Regards,
+David

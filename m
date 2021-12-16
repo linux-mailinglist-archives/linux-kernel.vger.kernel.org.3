@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75791477696
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21244477707
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238778AbhLPQEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:04:05 -0500
-Received: from mga01.intel.com ([192.55.52.88]:32406 "EHLO mga01.intel.com"
+        id S238904AbhLPQI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:08:59 -0500
+Received: from mga05.intel.com ([192.55.52.43]:51266 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233098AbhLPQEE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:04:04 -0500
+        id S235569AbhLPQI6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 11:08:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639670644; x=1671206644;
+  t=1639670938; x=1671206938;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=u9UUBTj11zXg+0FSOav58zW0wsC7bSnSGet2rRCMNoY=;
-  b=BOsgUgZAjIeSrpQx5vatrBYnPE2wceq+UzGyIDmZlFd6Fyx2Lp2aIE+n
-   TBStsb7fsBEFtVGG6CI8pdoBC9qKXc9Dt3hljVwbBxgygwGirru/8JUCS
-   773qwzNe03nvj42yEB+VmdZuny+dHOf7ccbLCzeJxoJCUwjUvDAmA2Uyn
-   IhrN1RO+MZ+gcstAynhZsxB5ngEeaWSxImlBqlxBAs9qDbMImbvN3VFWZ
-   v4/HWBDn+OxT0ip4ZAmuyIgVjxmXHOVEOHP9xK4QZKxmLab+TViv5HJh0
-   CCIuq7YUmhO6a/QL7rGizMuWvlIAnfm0zpl/aftICViSnc0ztNhW+yQzh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="263691941"
+  bh=FCROYnN62jOyPs4rZH98CpAUhYkUP3MTXj8W7HH+QcQ=;
+  b=l3Umww06Uw4rXSkaq15DQqBhLS4KkHMUnAB7gFTnYFGbizWlgFOtgadf
+   iVI//l2dLKOOi76iFL9GMADJi8ypw2Cf+tyjRl87vxw3/uBPeZmJAweNS
+   kkqu0EApEaemgzYmLlZToFx2XyqzIMOQLecvCFCSD3FbEbA2kXuVhHiYz
+   6K4WlwaHO5U1wOtwNLsk1dm0NpsEj3hSyYi9VIU0GPUO4kni29WT9JTFL
+   yO8YMlszMP6vOy+2IHKqg0VN9WaWWaft+Fw1nQgL3f/2ziEdYCMkoInpo
+   C4uGxBYSlV6YGSacME04McfSxunO3iyegD91eKLxImReE0PBlIMuz8Sfg
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="325812009"
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="263691941"
+   d="scan'208";a="325812009"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 08:03:26 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 08:03:45 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="662492975"
+   d="scan'208";a="662493153"
 Received: from chenyu-desktop.sh.intel.com ([10.239.158.186])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Dec 2021 08:03:21 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 16 Dec 2021 08:03:42 -0800
 From:   Chen Yu <yu.c.chen@intel.com>
 To:     linux-acpi@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -43,9 +43,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andy Shevchenko <andriy.shevchenko@intel.com>,
         Mike Rapoport <rppt@kernel.org>, Chen Yu <yu.c.chen@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v12 2/4] drivers/acpi: Introduce Platform Firmware Runtime Update device driver
-Date:   Fri, 17 Dec 2021 00:03:02 +0800
-Message-Id: <11441d3b36608e0840c46eb45e6d75ffc1c020ec.1639669829.git.yu.c.chen@intel.com>
+Subject: [PATCH v12 3/4] drivers/acpi: Introduce Platform Firmware Runtime Telemetry
+Date:   Fri, 17 Dec 2021 00:03:16 +0800
+Message-Id: <dfdcec2a7a0150620796f786d350767c068d9050.1639669829.git.yu.c.chen@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1639669829.git.yu.c.chen@intel.com>
 References: <cover.1639669829.git.yu.c.chen@intel.com>
@@ -55,24 +55,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce the pfr_update driver which can be used for Platform Firmware
-Runtime code injection and driver update [1]. The user is expected to
-provide the EFI capsule, and pass it to the driver by writing the capsule
-to a device special file. The capsule is transferred by the driver to the
-platform firmware with the help of an ACPI _DSM method under the special
-ACPI Platform Firmware Runtime Update device (INTC1080), and the actual
-firmware update is carried out by the low-level Management Mode code in
-the platform firmware.
+This driver allows user space to fetch telemetry data from the
+firmware with the help of the Platform Firmware Runtime Telemetry
+interface.
 
-This patch allows certain pieces of the platform firmware to be
-updated on the fly while the system is running (runtime) without the
-need to restart it, which is key in the cases when the system needs to
-be available 100% of the time and it cannot afford the downtime related
-to restarting it, or when the work carried out by the system is
-particularly important, so it cannot be interrupted, and it is not
-practical to wait until it is complete.
+Both PFRU and PFRT are based on ACPI _DSM interfaces located under
+special device objects in the ACPI Namespace, but these interfaces are
+different from each other, so it is better to provide a separate
+driver from each of them. However, they share some common definitions
+and naming conventions.
 
-Link: https://uefi.org/sites/default/files/resources/Intel_MM_OS_Interface_Spec_Rev100.pdf # [1]
 Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
 Cc: Ard Biesheuvel <ardb@kernel.org>
 Cc: Ashok Raj <ashok.raj@intel.com>
@@ -82,159 +74,74 @@ Cc: Mike Rapoport <rppt@kernel.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 ---
-v12:Rename the driver from pfru_update to pfr_update, and the
-    telemetry parr to pfr_telementry for symmetry.
+v12:Change the subject to "Introduce Platform Firmware Runtime
+    Telemetry", because there is no "update" part in it.
     (Rafael J. Wysocki)
-    Rename the "capsule file" to "EFI capsule".
+    Revise the commit log.(Rafael J. Wysocki)
+    Move pfr_update.c and pfr_telemetry.c) directly in drivers/acpi/
     (Rafael J. Wysocki)
-    Revise the commit log. (Rafael J. Wysocki)
-    Add the reason in the commit log that explains why it is
-    a good idea to add this driver to the kernel.
+    Update Kconfig with the information regarding PFRT
     (Rafael J. Wysocki)
-    Rename pfru.h to pfrut.h (Rafael J. Wysocki)
-    Rename the CONFIG_ACPI_PFRU to CONFIG_ACPI_PFRUT
+    Describe the driver briefly at the beginning of the source code
     (Rafael J. Wysocki)
-    Rename the Kconfig name to "ACPI Platform Firmware Runtime
-    Update and Telemetry"
+    Replace all PFRU prefix with PFRT.(Rafael J. Wysocki)
+    Rename pfru_log_device to pfrt_log_device(Rafael J. Wysocki)
+    Rename pfru_log_ida to pfrt_log_ida(Rafael J. Wysocki)
+    Replace pfru with pfrt prefix for all function names.
     (Rafael J. Wysocki)
-    Revise the Kconfig help message (Rafael J. Wysocki)
-    Describe what the driver is for briefly in the beginning of
-    the source code file.
+    Use blank lines to separate the cases visually from each
+    other.(Rafael J. Wysocki)
+    Replace pfru_telemetry%d with pfrt%d, and
+    acpi_pfru_telemetry%d to acpi_pfr_telemetry.
     (Rafael J. Wysocki)
-    Ddd a comment pointing to the definitions of the GUIDs and
-    explain briefly what they are for.
-    (Rafael J. Wysocki)
-    Reduce redundant memory updates by doing all of the checks
-    upfront. (Rafael J. Wysocki)
-    Rename valid_version() to applicable_image(), and revise the
-    comment.(Rafael J. Wysocki)
-    Remove Redundant else in applicable_image().(Rafael J. Wysocki)
-    Rename dump_update_result() to print_ipdate_debug_info().
-    (Rafael J. Wysocki)
-    Rename start_acpi_update() to start_update()(Rafael J. Wysocki)
-    Add a blank line before each "case xxx:"(Rafael J. Wysocki)
-    Move status check into query_capability() and returns -EBUSY if
-    fails(Rafael J. Wysocki)
-    Rename the device node name from "acpi_pfru%d" to "acpi_pfr_update%d"
-    (Rafael J. Wysocki)
-    Rename the drive name from "pfru_update" to "pfr_update"
-    (Rafael J. Wysocki)
-    Rename PFRU_MAGIC_FOR_IOCTL to PFRUT_IOCTL_MAGIC(Rafael J. Wysocki)
-    Fix grammar errors in the comments.(Rafael J. Wysocki)
-v11:Revise the comment to explain why version check is introduced
-    in kernel rather than letting Management Mode to do it.
-    (Rafael J. Wysocki)
+v11:No change since v10.
 v10:Remove the explicit assignment of the last item of enum.
     (Andy Shevchenko)
 v9: Use GUID_INIT() instead of guid_parse() during boot up.
     (Andy Shevchenko)
-    Drop uuid, code_uuid, drv_uuid in struct pfru_device as they
-    are not needed. (Andy Shevchenko)
-    Drop type casting from void * in valid_version().
-    (Andy Shevchenko)
+    Drop uuid from struct pfru_log_device.(Andy Shevchenko)
     Use kfree() instead of ACPI_FREE() in non-ACPICA usage.
-    (Andy Shevchenko)
-    Use sizeof(rev) instead of sizeof(u32) in copy_from_user().
-    (Andy Shevchenko)
-    Generate physical address from MSB part to LSB.
     (Andy Shevchenko)
     Use devm_add_action_or_reset() to add ida release into dev resource
     management. (Andy Shevchenko)
     Use devm_kasprintf() instead of kasprintf() to format the
-    pfru_dev name.(Andy Shevchenko)
-    Remove redundant 0 in acpi_pfru_ids. (Andy Shevchenko)
-    Adjust the order of included headers in pfru.h.
-    (Andy Shevchenko)
-    Replace PFRU_MAGIC with PFRU_MAGIC_FOR_IOCTL in uapi file.
-    (Andy Shevchenko)
-v8: Remove the variable-length array in struct pfru_update_cap_info, and
-    copy the non-variable-length struct pfru_update_cap_info to userspace
-    directly. (Greg Kroah-Hartman)
-    Change the type of rev_id from int to u32, because this data will
-    be copied between kernel and userspace. (Greg Kroah-Hartman)
-    Add a prefix for dev in struct pfru_device to parent_dev, so as
-    to indicate that this filed is the parent of the created miscdev.
-    (Greg Kroah-Hartman)
-    Use blank lines between different macro sections. (Greg Kroah-Hartman)
-    Illusatrate the possible errno for each ioctl interface.
-    (Greg Kroah-Hartman)
-    Remove pfru_valid_revid() from uapi header to avoid poluting the global
-    namespace.(Greg Kroah-Hartman)
-    Assign the value to the enum type explicitly.(Greg Kroah-Hartman)
-    Change the guid_t to efi_guid_t when parsing image header in get_image_type()
-    (Greg Kroah-Hartman)
-    Remove the void * to other type casting in valid_version(). (Andy Shevchenko)
-    Combined the assignment of variables with definitions. (Andy Shevchenko)
-    Define this magic for revision ID. (Andy Shevchenko)
-    Make the labeling consistent for error handling. (Andy Shevchenko)
-    Replace the UUID_SIZE in uapi with 16 directly. (Andy Shevchenko)
-    Add blank line between generic include header and uapi header.
+    pfru_log_dev name.(Andy Shevchenko)
+    Remove redundant 0 in acpi_pfru_log_ids. (Andy Shevchenko)
+v8: Add blank line between generic include header and uapi header.
     (Andy Shevchenko)
     Arrange the order between devm_kzalloc() and normal allocation in
-    acpi_pfru_probe() that, the former should always be ahead of the
+    acpi_pfru_log_probe() that, the former should always be ahead of the
     latter. (Andy Shevchenko)
-    Move the UUID from uapi header to the c file. (Andy Shevchenko)
+    Amend commit message to elaborate the reason why PFRU and PRFU_Telemetry
+    drivers look the same. (Andy Shevchenko)
 v7: Use ida_alloc() to allocate a ID, and release the ID when
     device is removed. (Greg Kroah-Hartman)
     Check the _DSM method at early stage, before allocate or parse
-    anything in acpi_pfru_probe(). (Greg Kroah-Hartman)
+    anything in acpi_pfru_log_probe(). (Greg Kroah-Hartman)
     Set the parent of the misc device. (Greg Kroah-Hartman)
     Use module_platform_driver() instead of platform_driver_register()
     in module_init(). Separate pfru driver and pfru_telemetry driver
     to two files. (Greg Kroah-Hartman) 
-v6: Use Link: tag to add the specification download address.
+v6: Remove linux/uuid.h and use raw buffers to contain uuid.
     (Andy Shevchenko)
-    Remove linux/uuid.h and use raw buffers to contain uuid.
+    Include types.h in pfru.h. (Andy Shevchenko)
+    Use __u8[16] instead of uuid_t. (Andy Shevchenko)
+    Replace enum in pfru.h with __u32 as enum size is not the
+    same on all possible architectures.
     (Andy Shevchenko)
-    Drop comma for each terminator entry in the enum structure.
+    Directly return results from the switch cases in pfru_log_ioctl().
     (Andy Shevchenko)
-    Remove redundant 'else' in get_image_type().
-    (Andy Shevchenko)
-    Directly return results from the switch cases in adjust_efi_size()
-    and pfru_ioctl().(Andy Shevchenko)
-    Keep comment style consistent by removing the period for
-    one line comment.
-    (Andy Shevchenko)
-    Remove devm_kfree() if .probe() failed. 
-    (Andy Shevchenko)
-v5: Remove Documentation/ABI/pfru, and move the content to kernel doc
-    in include/uapi/linux/pfru.h (Greg Kroah-Hartman)
-    Shrink the range of ioctl numbers declared in
-    Documentation/userspace-api/ioctl/ioctl-number.rst
-    from 16 to 8. (Greg Kroah-Hartman)
-    Change global variable struct pfru_device *pfru_dev to
-    per ACPI device. (Greg Kroah-Hartman)
-    Unregister the misc device in acpi_pfru_remove().
+v5: Remove the log output sample in commit log. (Greg Kroah-Hartman)
+    Add link for corresponding userspace tool in the commit log.
     (Greg Kroah-Hartman)
-    Convert the kzalloc() to devm_kzalloc() in the driver so
-    as to avoid freeing the memory. (Greg Kroah-Hartman)
-    Fix the compile error by declaring the pfru_log_ioctl() as
+    Replace the telemetry .read() with .mmap() so that the userspace
+    could mmap once, and read multiple times. (Greg Kroah-Hartman)
+    Fix the compile warning by declaring the pfru_log_ioctl() as
     static. (kernel test robot LKP)
-    Change to global variable misc_device to per ACPI device.
-    (Greg Kroah-Hartman)
-v4: Replace all pr_err() with dev_dbg() (Greg Kroah-Hartman,
-    Rafael J. Wysocki)
-    Returns ENOTTY rather than ENOIOCTLCMD if invalid ioctl command
-    is provided. (Greg Kroah-Hartman)
-    Remove compat ioctl. (Greg Kroah-Hartman)
-    Rename /dev/pfru/pfru_update to /dev/acpi_pfru (Greg Kroah-Hartman)
-    Simplify the check for element of the package in query_capability()
-    (Rafael J. Wysocki)
-    Remove the loop in query_capability(), query_buffer() and query
-    the package elemenet directly. (Rafael J. Wysocki)
-    Check the the number of elements in case the number of package
-    elements is too small. (Rafael J. Wysocki)
-    Doing the assignment as initialization in get_image_type().
-    Meanwhile, returns the type or a negative error code in
-    get_image_type(). (Rafael J. Wysocki)
-    Put the comments inside the function. (Rafael J. Wysocki)
-    Returns the size or a negative error code in adjust_efi_size()
-    (Rafael J. Wysocki)
-    Fix the return value from EFAULT to EINVAL if pfru_valid_revid()
-    does not pass. (Rafael J. Wysocki)
-    Change the write() to be the code injection/update, the read() to
+v4: Change the write() to be the code injection/update, the read() to
     be telemetry retrieval and all of the rest to be ioctl()s under
     one special device file.(Rafael J. Wysocki)
+    Remove redundant parens. (Rafael J. Wysocki)
     Putting empty code lines after an if () statement that is not
     followed by a block. (Rafael J. Wysocki)
     Remove "goto" tags to make the code more readable. (Rafael J. Wysocki)
@@ -242,111 +149,79 @@ v3: Use __u32 instead of int and __64 instead of unsigned long
     in include/uapi/linux/pfru.h (Greg Kroah-Hartman)
     Rename the structure in uapi to start with a prefix pfru so as
     to avoid confusing in the global namespace. (Greg Kroah-Hartman)
-v2: Add sanity check for duplicated instance of ACPI device.
-    Update the driver to work with allocated pfru_device objects.
+v2: Do similar clean up as pfru_update driver:
+    Add sanity check for duplicated instance of ACPI device.
+    Update the driver to work with allocated telem_device objects.
     (Mike Rapoport)
     For each switch case pair, get rid of the magic case numbers
     and add a default clause with the error handling.
     (Mike Rapoport)
-    Move the obj->type checks outside the switch to reduce redundancy.
-    (Mike Rapoport)
-    Parse the code_inj_id and drv_update_id at driver initialization time
-    to reduce the re-parsing at runtime.(Mike Rapoport)
-    Explain in detail how the size needs to be adjusted when doing
-    version check.(Mike Rapoport)
-    Rename parse_update_result() to dump_update_result()(Mike Rapoport)
-    Remove redundant return.(Mike Rapoport)
-    Do not expose struct capsulate_buf_info to uapi, since it is
-    not needed in userspace.(Mike Rapoport)
 ---
- .../userspace-api/ioctl/ioctl-number.rst      |   1 +
- drivers/acpi/Kconfig                          |  18 +
- drivers/acpi/Makefile                         |   1 +
- drivers/acpi/pfr_update.c                     | 558 ++++++++++++++++++
- include/uapi/linux/pfrut.h                    | 174 ++++++
- 5 files changed, 752 insertions(+)
- create mode 100644 drivers/acpi/pfr_update.c
- create mode 100644 include/uapi/linux/pfrut.h
+ drivers/acpi/Kconfig         |   8 +-
+ drivers/acpi/Makefile        |   2 +-
+ drivers/acpi/pfr_telemetry.c | 433 +++++++++++++++++++++++++++++++++++
+ include/uapi/linux/pfrut.h   |  88 +++++++
+ 4 files changed, 528 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/acpi/pfr_telemetry.c
 
-diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
-index cfe6cccf0f44..687efcf245c1 100644
---- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-+++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-@@ -367,6 +367,7 @@ Code  Seq#    Include File                                           Comments
-                                                                      <mailto:aherrman@de.ibm.com>
- 0xE5  00-3F  linux/fuse.h
- 0xEC  00-01  drivers/platform/chrome/cros_ec_dev.h                   ChromeOS EC driver
-+0xEE  00-09  uapi/linux/pfrut.h                                      Platform Firmware Runtime Update and Telemetry
- 0xF3  00-3F  drivers/usb/misc/sisusbvga/sisusb.h                     sisfb (in development)
-                                                                      <mailto:thomas@winischhofer.net>
- 0xF6  all                                                            LTTng Linux Trace Toolkit Next Generation
 diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-index cdbdf68bd98f..d0b3ca9d4a97 100644
+index d0b3ca9d4a97..91f1da16934d 100644
 --- a/drivers/acpi/Kconfig
 +++ b/drivers/acpi/Kconfig
-@@ -517,6 +517,24 @@ config ACPI_CONFIGFS
- 	  userspace. The configurable ACPI groups will be visible under
- 	  /config/acpi, assuming configfs is mounted under /config.
+@@ -532,8 +532,12 @@ config ACPI_PFRUT
+ 	  The existing firmware code can be modified (driver update) or
+ 	  extended by adding new code to the firmware (code injection).
  
-+config ACPI_PFRUT
-+	tristate "ACPI Platform Firmware Runtime Update and Telemetry"
-+	depends on 64BIT
-+	help
-+	  This mechanism allows certain pieces of the platform firmware
-+	  to be updated on the fly while the system is running (runtime)
-+	  without the need to restart it, which is key in the cases when
-+	  the system needs to be available 100% of the time and it cannot
-+	  afford the downtime related to restarting it, or when the work
-+	  carried out by the system is particularly important, so it cannot
-+	  be interrupted, and it is not practical to wait until it is complete.
+-	  To compile this driver as module, choose M here:
+-	  the module will be called pfr_update.
++	  Besides, the telemetry driver allows user space to fetch telemetry
++	  data from the firmware with the help of the Platform Firmware Runtime
++	  Telemetry interface.
 +
-+	  The existing firmware code can be modified (driver update) or
-+	  extended by adding new code to the firmware (code injection).
-+
-+	  To compile this driver as module, choose M here:
-+	  the module will be called pfr_update.
-+
++	  To compile the drivers as modules, choose M here:
++	  the modules will be called pfr_update and pfr_telemetry.
+ 
  if ARM64
  source "drivers/acpi/arm64/Kconfig"
- 
 diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index 3018714e87d9..2ad2e821cc08 100644
+index 2ad2e821cc08..d3dc79298ce3 100644
 --- a/drivers/acpi/Makefile
 +++ b/drivers/acpi/Makefile
-@@ -102,6 +102,7 @@ obj-$(CONFIG_ACPI_CPPC_LIB)	+= cppc_acpi.o
+@@ -102,7 +102,7 @@ obj-$(CONFIG_ACPI_CPPC_LIB)	+= cppc_acpi.o
  obj-$(CONFIG_ACPI_SPCR_TABLE)	+= spcr.o
  obj-$(CONFIG_ACPI_DEBUGGER_USER) += acpi_dbg.o
  obj-$(CONFIG_ACPI_PPTT) 	+= pptt.o
-+obj-$(CONFIG_ACPI_PFRUT)	+= pfr_update.o
+-obj-$(CONFIG_ACPI_PFRUT)	+= pfr_update.o
++obj-$(CONFIG_ACPI_PFRUT)	+= pfr_update.o pfr_telemetry.o
  
  # processor has its own "processor." module_param namespace
  processor-y			:= processor_driver.o
-diff --git a/drivers/acpi/pfr_update.c b/drivers/acpi/pfr_update.c
+diff --git a/drivers/acpi/pfr_telemetry.c b/drivers/acpi/pfr_telemetry.c
 new file mode 100644
-index 000000000000..e1ddfc17f93f
+index 000000000000..27a16c190434
 --- /dev/null
-+++ b/drivers/acpi/pfr_update.c
-@@ -0,0 +1,558 @@
++++ b/drivers/acpi/pfr_telemetry.c
+@@ -0,0 +1,433 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * ACPI Platform Firmware Runtime Update Device driver
++ * ACPI Platform Firmware Runtime Telemetry driver
 + *
 + * Copyright (C) 2021 Intel Corporation
 + * Author: Chen Yu <yu.c.chen@intel.com>
 + *
-+ * pfr_update driver is used for Platform Firmware Runtime
-+ * Update, which includes the code injection and driver update.
++ * This driver allows user space to fetch telemetry data from the
++ * firmware with the help of the Platform Firmware Runtime Telemetry
++ * interface.
 + */
 +#include <linux/acpi.h>
 +#include <linux/device.h>
-+#include <linux/efi.h>
 +#include <linux/err.h>
 +#include <linux/errno.h>
 +#include <linux/file.h>
 +#include <linux/fs.h>
-+#include <linux/idr.h>
 +#include <linux/miscdevice.h>
 +#include <linux/module.h>
++#include <linux/mm.h>
 +#include <linux/platform_device.h>
 +#include <linux/string.h>
 +#include <linux/uaccess.h>
@@ -355,305 +230,61 @@ index 000000000000..e1ddfc17f93f
 +
 +#include <uapi/linux/pfrut.h>
 +
-+#define PFRU_FUNC_STANDARD_QUERY	0
-+#define PFRU_FUNC_QUERY_UPDATE_CAP	1
-+#define PFRU_FUNC_QUERY_BUF		2
-+#define PFRU_FUNC_START		3
++#define PFRT_LOG_EXEC_IDX	0
++#define PFRT_LOG_HISTORY_IDX	1
 +
-+#define PFRU_CODE_INJECT_TYPE	1
-+#define PFRU_DRIVER_UPDATE_TYPE	2
++#define PFRT_LOG_ERR		0
++#define PFRT_LOG_WARN	1
++#define PFRT_LOG_INFO	2
++#define PFRT_LOG_VERB	4
 +
-+#define PFRU_REVID_1		1
-+#define PFRU_REVID_2		2
-+#define PFRU_DEFAULT_REV_ID	PFRU_REVID_1
++#define PFRT_FUNC_SET_LEV		1
++#define PFRT_FUNC_GET_LEV		2
++#define PFRT_FUNC_GET_DATA		3
 +
-+enum cap_index {
-+	CAP_STATUS_IDX = 0,
-+	CAP_UPDATE_IDX = 1,
-+	CAP_CODE_TYPE_IDX = 2,
-+	CAP_FW_VER_IDX = 3,
-+	CAP_CODE_RT_VER_IDX = 4,
-+	CAP_DRV_TYPE_IDX = 5,
-+	CAP_DRV_RT_VER_IDX = 6,
-+	CAP_DRV_SVN_IDX = 7,
-+	CAP_PLAT_ID_IDX = 8,
-+	CAP_OEM_ID_IDX = 9,
-+	CAP_OEM_INFO_IDX = 10,
-+	CAP_NR_IDX
++#define PFRT_REVID_1		1
++#define PFRT_REVID_2		2
++#define PFRT_DEFAULT_REV_ID	PFRT_REVID_1
++
++enum log_index {
++	LOG_STATUS_IDX = 0,
++	LOG_EXT_STATUS_IDX = 1,
++	LOG_MAX_SZ_IDX = 2,
++	LOG_CHUNK1_LO_IDX = 3,
++	LOG_CHUNK1_HI_IDX = 4,
++	LOG_CHUNK1_SZ_IDX = 5,
++	LOG_CHUNK2_LO_IDX = 6,
++	LOG_CHUNK2_HI_IDX = 7,
++	LOG_CHUNK2_SZ_IDX = 8,
++	LOG_ROLLOVER_CNT_IDX = 9,
++	LOG_RESET_CNT_IDX = 10,
++	LOG_NR_IDX
 +};
 +
-+enum buf_index {
-+	BUF_STATUS_IDX = 0,
-+	BUF_EXT_STATUS_IDX = 1,
-+	BUF_ADDR_LOW_IDX = 2,
-+	BUF_ADDR_HI_IDX = 3,
-+	BUF_SIZE_IDX = 4,
-+	BUF_NR_IDX
-+};
-+
-+enum update_index {
-+	UPDATE_STATUS_IDX = 0,
-+	UPDATE_EXT_STATUS_IDX = 1,
-+	UPDATE_AUTH_TIME_LOW_IDX = 2,
-+	UPDATE_AUTH_TIME_HI_IDX = 3,
-+	UPDATE_EXEC_TIME_LOW_IDX = 4,
-+	UPDATE_EXEC_TIME_HI_IDX = 5,
-+	UPDATE_NR_IDX
-+};
-+
-+enum pfru_start_action {
-+	START_STAGE = 0,
-+	START_ACTIVATE = 1,
-+	START_STAGE_ACTIVATE = 2,
-+};
-+
-+struct pfru_device {
-+	u32 rev_id, index;
++struct pfrt_log_device {
++	int index;
++	struct pfrt_log_info info;
 +	struct device *parent_dev;
 +	struct miscdevice miscdev;
 +};
 +
-+static DEFINE_IDA(pfru_ida);
++/* pfrt_guid is the parameter for _DSM method */
++static const guid_t pfrt_log_guid =
++	GUID_INIT(0x75191659, 0x8178, 0x4D9D, 0xB8, 0x8F, 0xAC, 0x5E,
++		  0x5E, 0x93, 0xE8, 0xBF);
 +
-+/*
-+ * Manual reference:
-+ * https://uefi.org/sites/default/files/resources/Intel_MM_OS_Interface_Spec_Rev100.pdf
-+ *
-+ * pfru_guid is the parameter for _DSM method
-+ */
-+static const guid_t pfru_guid =
-+	GUID_INIT(0xECF9533B, 0x4A3C, 0x4E89, 0x93, 0x9E, 0xC7, 0x71,
-+		  0x12, 0x60, 0x1C, 0x6D);
++static DEFINE_IDA(pfrt_log_ida);
 +
-+/* pfru_code_inj_guid is the UUID to identify code injection EFI capsule file */
-+static const guid_t pfru_code_inj_guid =
-+	GUID_INIT(0xB2F84B79, 0x7B6E, 0x4E45, 0x88, 0x5F, 0x3F, 0xB9,
-+		  0xBB, 0x18, 0x54, 0x02);
-+
-+/* pfru_drv_update_guid is the UUID to identify driver update EFI capsule file */
-+static const guid_t pfru_drv_update_guid =
-+	GUID_INIT(0x4569DD8C, 0x75F1, 0x429A, 0xA3, 0xD6, 0x24, 0xDE,
-+		  0x80, 0x97, 0xA0, 0xDF);
-+
-+static inline int pfru_valid_revid(u32 id)
++static inline struct pfrt_log_device *to_pfrt_log_dev(struct file *file)
 +{
-+	return id == PFRU_REVID_1 || id == PFRU_REVID_2;
++	return container_of(file->private_data, struct pfrt_log_device, miscdev);
 +}
 +
-+static inline struct pfru_device *to_pfru_dev(struct file *file)
++static int get_pfrt_log_data_info(struct pfrt_log_data_info *data_info,
++				  struct pfrt_log_device *pfrt_log_dev)
 +{
-+	return container_of(file->private_data, struct pfru_device, miscdev);
-+}
-+
-+static int query_capability(struct pfru_update_cap_info *cap_hdr,
-+			    struct pfru_device *pfru_dev)
-+{
-+	acpi_handle handle = ACPI_HANDLE(pfru_dev->parent_dev);
-+	union acpi_object *out_obj;
-+	int ret = -EINVAL;
-+
-+	out_obj = acpi_evaluate_dsm_typed(handle, &pfru_guid,
-+					  pfru_dev->rev_id,
-+					  PFRU_FUNC_QUERY_UPDATE_CAP,
-+					  NULL, ACPI_TYPE_PACKAGE);
-+	if (!out_obj)
-+		return ret;
-+
-+	if (out_obj->package.count < CAP_NR_IDX ||
-+	    out_obj->package.elements[CAP_STATUS_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[CAP_UPDATE_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[CAP_CODE_TYPE_IDX].type != ACPI_TYPE_BUFFER ||
-+	    out_obj->package.elements[CAP_FW_VER_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[CAP_CODE_RT_VER_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[CAP_DRV_TYPE_IDX].type != ACPI_TYPE_BUFFER ||
-+	    out_obj->package.elements[CAP_DRV_RT_VER_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[CAP_DRV_SVN_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[CAP_PLAT_ID_IDX].type != ACPI_TYPE_BUFFER ||
-+	    out_obj->package.elements[CAP_OEM_ID_IDX].type != ACPI_TYPE_BUFFER ||
-+	    out_obj->package.elements[CAP_OEM_INFO_IDX].type != ACPI_TYPE_BUFFER)
-+		goto free_acpi_buffer;
-+
-+	cap_hdr->status = out_obj->package.elements[CAP_STATUS_IDX].integer.value;
-+	if (cap_hdr->status != DSM_SUCCEED) {
-+		ret = -EBUSY;
-+		goto free_acpi_buffer;
-+	}
-+
-+	cap_hdr->update_cap = out_obj->package.elements[CAP_UPDATE_IDX].integer.value;
-+	memcpy(&cap_hdr->code_type,
-+	       out_obj->package.elements[CAP_CODE_TYPE_IDX].buffer.pointer,
-+	       out_obj->package.elements[CAP_CODE_TYPE_IDX].buffer.length);
-+	cap_hdr->fw_version =
-+		out_obj->package.elements[CAP_FW_VER_IDX].integer.value;
-+	cap_hdr->code_rt_version =
-+		out_obj->package.elements[CAP_CODE_RT_VER_IDX].integer.value;
-+	memcpy(&cap_hdr->drv_type,
-+	       out_obj->package.elements[CAP_DRV_TYPE_IDX].buffer.pointer,
-+	       out_obj->package.elements[CAP_DRV_TYPE_IDX].buffer.length);
-+	cap_hdr->drv_rt_version =
-+		out_obj->package.elements[CAP_DRV_RT_VER_IDX].integer.value;
-+	cap_hdr->drv_svn =
-+		out_obj->package.elements[CAP_DRV_SVN_IDX].integer.value;
-+	memcpy(&cap_hdr->platform_id,
-+	       out_obj->package.elements[CAP_PLAT_ID_IDX].buffer.pointer,
-+	       out_obj->package.elements[CAP_PLAT_ID_IDX].buffer.length);
-+	memcpy(&cap_hdr->oem_id,
-+	       out_obj->package.elements[CAP_OEM_ID_IDX].buffer.pointer,
-+	       out_obj->package.elements[CAP_OEM_ID_IDX].buffer.length);
-+	cap_hdr->oem_info_len =
-+		out_obj->package.elements[CAP_OEM_INFO_IDX].buffer.length;
-+
-+	ret = 0;
-+
-+free_acpi_buffer:
-+	kfree(out_obj);
-+
-+	return ret;
-+}
-+
-+static int query_buffer(struct pfru_com_buf_info *info,
-+			struct pfru_device *pfru_dev)
-+{
-+	acpi_handle handle = ACPI_HANDLE(pfru_dev->parent_dev);
-+	union acpi_object *out_obj;
-+	int ret = -EINVAL;
-+
-+	out_obj = acpi_evaluate_dsm_typed(handle, &pfru_guid,
-+					  pfru_dev->rev_id, PFRU_FUNC_QUERY_BUF,
-+					  NULL, ACPI_TYPE_PACKAGE);
-+	if (!out_obj)
-+		return ret;
-+
-+	if (out_obj->package.count < BUF_NR_IDX ||
-+	    out_obj->package.elements[BUF_STATUS_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[BUF_EXT_STATUS_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[BUF_ADDR_LOW_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[BUF_ADDR_HI_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[BUF_SIZE_IDX].type != ACPI_TYPE_INTEGER)
-+		goto free_acpi_buffer;
-+
-+	info->status = out_obj->package.elements[BUF_STATUS_IDX].integer.value;
-+	info->ext_status =
-+		out_obj->package.elements[BUF_EXT_STATUS_IDX].integer.value;
-+	info->addr_lo =
-+		out_obj->package.elements[BUF_ADDR_LOW_IDX].integer.value;
-+	info->addr_hi =
-+		out_obj->package.elements[BUF_ADDR_HI_IDX].integer.value;
-+	info->buf_size = out_obj->package.elements[BUF_SIZE_IDX].integer.value;
-+
-+	ret = 0;
-+
-+free_acpi_buffer:
-+	kfree(out_obj);
-+
-+	return ret;
-+}
-+
-+static int get_image_type(const struct efi_manage_capsule_image_header *img_hdr,
-+			  struct pfru_device *pfru_dev)
-+{
-+	const efi_guid_t *image_type_id = &img_hdr->image_type_id;
-+
-+	/* check whether this is a code injection or driver update */
-+	if (guid_equal(image_type_id, &pfru_code_inj_guid))
-+		return PFRU_CODE_INJECT_TYPE;
-+
-+	if (guid_equal(image_type_id, &pfru_drv_update_guid))
-+		return PFRU_DRIVER_UPDATE_TYPE;
-+
-+	return -EINVAL;
-+}
-+
-+static int adjust_efi_size(const struct efi_manage_capsule_image_header *img_hdr,
-+			   int size)
-+{
-+	/*
-+	 * The (u64 hw_ins) was introduced in UEFI spec version 2,
-+	 * and (u64 capsule_support) was introduced in version 3.
-+	 * The size needs to be adjusted accordingly. That is to
-+	 * say, version 1 should subtract the size of hw_ins+capsule_support,
-+	 * and version 2 should sbstract the size of capsule_support.
-+	 */
-+	size += sizeof(struct efi_manage_capsule_image_header);
-+	switch (img_hdr->ver) {
-+	case 1:
-+		return size - 2 * sizeof(u64);
-+
-+	case 2:
-+		return size - sizeof(u64);
-+
-+	default:
-+		/* only support version 1 and 2 */
-+		return -EINVAL;
-+	}
-+}
-+
-+static bool applicable_image(const void *data, struct pfru_update_cap_info *cap,
-+			     struct pfru_device *pfru_dev)
-+{
-+	struct pfru_payload_hdr *payload_hdr;
-+	const efi_capsule_header_t *cap_hdr = data;
-+	const struct efi_manage_capsule_header *m_hdr;
-+	const struct efi_manage_capsule_image_header *m_img_hdr;
-+	const struct efi_image_auth *auth;
-+	int type, size;
-+
-+	/*
-+	 * If the code in the capsule is older than the current
-+	 * firmware code, the update will be rejected by the firmware,
-+	 * so check the version of it upfront without engaging the
-+	 * Management Mode update mechanism which may be costly.
-+	 */
-+	size = cap_hdr->headersize;
-+	m_hdr = data + size;
-+	/*
-+	 * Current data structure size plus variable array indicated
-+	 * by number of (emb_drv_cnt + payload_cnt)
-+	 */
-+	size += offsetof(struct efi_manage_capsule_header, offset_list) +
-+		(m_hdr->emb_drv_cnt + m_hdr->payload_cnt) * sizeof(u64);
-+	m_img_hdr = data + size;
-+
-+	type = get_image_type(m_img_hdr, pfru_dev);
-+	if (type < 0)
-+		return false;
-+
-+	size = adjust_efi_size(m_img_hdr, size);
-+	if (size < 0)
-+		return false;
-+
-+	auth = data + size;
-+	size += sizeof(u64) + auth->auth_info.hdr.len;
-+	payload_hdr = (struct pfru_payload_hdr *)(data + size);
-+
-+	/* finally compare the version */
-+	if (type == PFRU_CODE_INJECT_TYPE)
-+		return payload_hdr->rt_ver >= cap->code_rt_version;
-+
-+	return payload_hdr->rt_ver >= cap->drv_rt_version;
-+}
-+
-+static void print_update_debug_info(struct pfru_updated_result *result,
-+				    struct pfru_device *pfru_dev)
-+{
-+	dev_dbg(pfru_dev->parent_dev, "Update result:\n");
-+	dev_dbg(pfru_dev->parent_dev, "Status:%d\n", result->status);
-+	dev_dbg(pfru_dev->parent_dev, "Extended Status:%d\n", result->ext_status);
-+	dev_dbg(pfru_dev->parent_dev, "Authentication Time Low:%lld\n",
-+		result->low_auth_time);
-+	dev_dbg(pfru_dev->parent_dev, "Authentication Time High:%lld\n",
-+		result->high_auth_time);
-+	dev_dbg(pfru_dev->parent_dev, "Execution Time Low:%lld\n",
-+		result->low_exec_time);
-+	dev_dbg(pfru_dev->parent_dev, "Execution Time High:%lld\n",
-+		result->high_exec_time);
-+}
-+
-+static int start_update(int action, struct pfru_device *pfru_dev)
-+{
++	acpi_handle handle = ACPI_HANDLE(pfrt_log_dev->parent_dev);
 +	union acpi_object *out_obj, in_obj, in_buf;
-+	struct pfru_updated_result update_result;
-+	acpi_handle handle;
 +	int ret = -EINVAL;
 +
 +	memset(&in_obj, 0, sizeof(in_obj));
@@ -662,38 +293,50 @@ index 000000000000..e1ddfc17f93f
 +	in_obj.package.count = 1;
 +	in_obj.package.elements = &in_buf;
 +	in_buf.type = ACPI_TYPE_INTEGER;
-+	in_buf.integer.value = action;
++	in_buf.integer.value = pfrt_log_dev->info.log_type;
 +
-+	handle = ACPI_HANDLE(pfru_dev->parent_dev);
-+	out_obj = acpi_evaluate_dsm_typed(handle, &pfru_guid,
-+					  pfru_dev->rev_id, PFRU_FUNC_START,
++	out_obj = acpi_evaluate_dsm_typed(handle, &pfrt_log_guid,
++					  pfrt_log_dev->info.log_revid, PFRT_FUNC_GET_DATA,
 +					  &in_obj, ACPI_TYPE_PACKAGE);
 +	if (!out_obj)
 +		return ret;
 +
-+	if (out_obj->package.count < UPDATE_NR_IDX ||
-+	    out_obj->package.elements[UPDATE_STATUS_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[UPDATE_EXT_STATUS_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[UPDATE_AUTH_TIME_LOW_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[UPDATE_AUTH_TIME_HI_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[UPDATE_EXEC_TIME_LOW_IDX].type != ACPI_TYPE_INTEGER ||
-+	    out_obj->package.elements[UPDATE_EXEC_TIME_HI_IDX].type != ACPI_TYPE_INTEGER)
++	if (out_obj->package.count < LOG_NR_IDX ||
++	    out_obj->package.elements[LOG_STATUS_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_EXT_STATUS_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_MAX_SZ_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK1_LO_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK1_HI_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK1_SZ_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK2_LO_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK2_HI_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_CHUNK2_SZ_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_ROLLOVER_CNT_IDX].type != ACPI_TYPE_INTEGER ||
++	    out_obj->package.elements[LOG_RESET_CNT_IDX].type != ACPI_TYPE_INTEGER)
 +		goto free_acpi_buffer;
 +
-+	update_result.status =
-+		out_obj->package.elements[UPDATE_STATUS_IDX].integer.value;
-+	update_result.ext_status =
-+		out_obj->package.elements[UPDATE_EXT_STATUS_IDX].integer.value;
-+	update_result.low_auth_time =
-+		out_obj->package.elements[UPDATE_AUTH_TIME_LOW_IDX].integer.value;
-+	update_result.high_auth_time =
-+		out_obj->package.elements[UPDATE_AUTH_TIME_HI_IDX].integer.value;
-+	update_result.low_exec_time =
-+		out_obj->package.elements[UPDATE_EXEC_TIME_LOW_IDX].integer.value;
-+	update_result.high_exec_time =
-+		out_obj->package.elements[UPDATE_EXEC_TIME_HI_IDX].integer.value;
++	data_info->status = out_obj->package.elements[LOG_STATUS_IDX].integer.value;
++	data_info->ext_status =
++		out_obj->package.elements[LOG_EXT_STATUS_IDX].integer.value;
++	data_info->max_data_size =
++		out_obj->package.elements[LOG_MAX_SZ_IDX].integer.value;
++	data_info->chunk1_addr_lo =
++		out_obj->package.elements[LOG_CHUNK1_LO_IDX].integer.value;
++	data_info->chunk1_addr_hi =
++		out_obj->package.elements[LOG_CHUNK1_HI_IDX].integer.value;
++	data_info->chunk1_size =
++		out_obj->package.elements[LOG_CHUNK1_SZ_IDX].integer.value;
++	data_info->chunk2_addr_lo =
++		out_obj->package.elements[LOG_CHUNK2_LO_IDX].integer.value;
++	data_info->chunk2_addr_hi =
++		out_obj->package.elements[LOG_CHUNK2_HI_IDX].integer.value;
++	data_info->chunk2_size =
++		out_obj->package.elements[LOG_CHUNK2_SZ_IDX].integer.value;
++	data_info->rollover_cnt =
++		out_obj->package.elements[LOG_ROLLOVER_CNT_IDX].integer.value;
++	data_info->reset_cnt =
++		out_obj->package.elements[LOG_RESET_CNT_IDX].integer.value;
 +
-+	print_update_debug_info(&update_result, pfru_dev);
 +	ret = 0;
 +
 +free_acpi_buffer:
@@ -702,125 +345,230 @@ index 000000000000..e1ddfc17f93f
 +	return ret;
 +}
 +
-+static long pfru_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
++static int set_pfrt_log_level(int level, struct pfrt_log_device *pfrt_log_dev)
 +{
-+	struct pfru_update_cap_info cap_hdr;
-+	struct pfru_device *pfru_dev = to_pfru_dev(file);
-+	void __user *p = (void __user *)arg;
-+	u32 rev;
-+	int ret;
++	acpi_handle handle = ACPI_HANDLE(pfrt_log_dev->parent_dev);
++	union acpi_object *out_obj, *obj, in_obj, in_buf;
++	enum pfru_dsm_status status;
++	int ret = -EINVAL;
++
++	memset(&in_obj, 0, sizeof(in_obj));
++	memset(&in_buf, 0, sizeof(in_buf));
++	in_obj.type = ACPI_TYPE_PACKAGE;
++	in_obj.package.count = 1;
++	in_obj.package.elements = &in_buf;
++	in_buf.type = ACPI_TYPE_INTEGER;
++	in_buf.integer.value = level;
++
++	out_obj = acpi_evaluate_dsm_typed(handle, &pfrt_log_guid,
++					  pfrt_log_dev->info.log_revid, PFRT_FUNC_SET_LEV,
++					  &in_obj, ACPI_TYPE_PACKAGE);
++	if (!out_obj)
++		return -EINVAL;
++
++	obj = &out_obj->package.elements[0];
++	status = obj->integer.value;
++	if (status)
++		goto free_acpi_buffer;
++
++	obj = &out_obj->package.elements[1];
++	status = obj->integer.value;
++	if (status)
++		goto free_acpi_buffer;
++
++	ret = 0;
++
++free_acpi_buffer:
++	kfree(out_obj);
++
++	return ret;
++}
++
++static int get_pfrt_log_level(struct pfrt_log_device *pfrt_log_dev)
++{
++	acpi_handle handle = ACPI_HANDLE(pfrt_log_dev->parent_dev);
++	union acpi_object *out_obj, *obj;
++	enum pfru_dsm_status status;
++	int ret = -EINVAL;
++
++	out_obj = acpi_evaluate_dsm_typed(handle, &pfrt_log_guid,
++					  pfrt_log_dev->info.log_revid, PFRT_FUNC_GET_LEV,
++					  NULL, ACPI_TYPE_PACKAGE);
++	if (!out_obj)
++		return -EINVAL;
++
++	obj = &out_obj->package.elements[0];
++	if (obj->type != ACPI_TYPE_INTEGER)
++		goto free_acpi_buffer;
++
++	status = obj->integer.value;
++	if (status)
++		goto free_acpi_buffer;
++
++	obj = &out_obj->package.elements[1];
++	if (obj->type != ACPI_TYPE_INTEGER)
++		goto free_acpi_buffer;
++
++	status = obj->integer.value;
++	if (status)
++		goto free_acpi_buffer;
++
++	obj = &out_obj->package.elements[2];
++	if (obj->type != ACPI_TYPE_INTEGER)
++		goto free_acpi_buffer;
++
++	ret = obj->integer.value;
++
++free_acpi_buffer:
++	kfree(out_obj);
++
++	return ret;
++}
++
++static int valid_log_level(u32 level)
++{
++	return level == PFRT_LOG_ERR || level == PFRT_LOG_WARN ||
++	       level == PFRT_LOG_INFO || level == PFRT_LOG_VERB;
++}
++
++static int valid_log_type(u32 type)
++{
++	return type == PFRT_LOG_EXEC_IDX || type == PFRT_LOG_HISTORY_IDX;
++}
++
++static inline int valid_log_revid(u32 id)
++{
++	return id == PFRT_REVID_1 || id == PFRT_REVID_2;
++}
++
++static long pfrt_log_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
++{
++	struct pfrt_log_device *pfrt_log_dev = to_pfrt_log_dev(file);
++	struct pfrt_log_data_info data_info;
++	struct pfrt_log_info info;
++	void __user *p;
++	int ret = 0;
++
++	p = (void __user *)arg;
 +
 +	switch (cmd) {
-+	case PFRU_IOC_QUERY_CAP:
-+		ret = query_capability(&cap_hdr, pfru_dev);
++	case PFRT_LOG_IOC_SET_INFO:
++		if (copy_from_user(&info, p, sizeof(info)))
++			return -EFAULT;
++
++		if (valid_log_revid(info.log_revid))
++			pfrt_log_dev->info.log_revid = info.log_revid;
++
++		if (valid_log_level(info.log_level)) {
++			ret = set_pfrt_log_level(info.log_level, pfrt_log_dev);
++			if (ret < 0)
++				return ret;
++
++			pfrt_log_dev->info.log_level = info.log_level;
++		}
++
++		if (valid_log_type(info.log_type))
++			pfrt_log_dev->info.log_type = info.log_type;
++
++		return 0;
++
++	case PFRT_LOG_IOC_GET_INFO:
++		info.log_level = get_pfrt_log_level(pfrt_log_dev);
++		if (ret < 0)
++			return ret;
++
++		info.log_type = pfrt_log_dev->info.log_type;
++		info.log_revid = pfrt_log_dev->info.log_revid;
++		if (copy_to_user(p, &info, sizeof(info)))
++			return -EFAULT;
++
++		return 0;
++
++	case PFRT_LOG_IOC_GET_DATA_INFO:
++		ret = get_pfrt_log_data_info(&data_info, pfrt_log_dev);
 +		if (ret)
 +			return ret;
 +
-+		if (copy_to_user(p, &cap_hdr, sizeof(cap_hdr)))
++		if (copy_to_user(p, &data_info, sizeof(struct pfrt_log_data_info)))
 +			return -EFAULT;
 +
 +		return 0;
-+
-+	case PFRU_IOC_SET_REV:
-+		if (copy_from_user(&rev, p, sizeof(rev)))
-+			return -EFAULT;
-+
-+		if (!pfru_valid_revid(rev))
-+			return -EINVAL;
-+
-+		pfru_dev->rev_id = rev;
-+
-+		return 0;
-+
-+	case PFRU_IOC_STAGE:
-+		return start_update(START_STAGE, pfru_dev);
-+
-+	case PFRU_IOC_ACTIVATE:
-+		return start_update(START_ACTIVATE, pfru_dev);
-+
-+	case PFRU_IOC_STAGE_ACTIVATE:
-+		return start_update(START_STAGE_ACTIVATE, pfru_dev);
 +
 +	default:
 +		return -ENOTTY;
 +	}
 +}
 +
-+static ssize_t pfru_write(struct file *file, const char __user *buf,
-+			  size_t len, loff_t *ppos)
++static int
++pfrt_log_mmap(struct file *file, struct vm_area_struct *vma)
 +{
-+	struct pfru_device *pfru_dev = to_pfru_dev(file);
-+	struct pfru_update_cap_info cap;
-+	struct pfru_com_buf_info buf_info;
-+	phys_addr_t phy_addr;
-+	struct iov_iter iter;
-+	struct iovec iov;
-+	char *buf_ptr;
++	struct pfrt_log_device *pfrt_log_dev;
++	struct pfrt_log_data_info info;
++	unsigned long psize, vsize;
++	phys_addr_t base_addr;
 +	int ret;
 +
-+	ret = query_buffer(&buf_info, pfru_dev);
++	if (vma->vm_flags & VM_WRITE)
++		return -EROFS;
++
++	/* changing from read to write with mprotect is not allowed */
++	vma->vm_flags &= ~VM_MAYWRITE;
++
++	pfrt_log_dev = to_pfrt_log_dev(file);
++
++	ret = get_pfrt_log_data_info(&info, pfrt_log_dev);
 +	if (ret)
 +		return ret;
 +
-+	if (len > buf_info.buf_size)
++	base_addr = (phys_addr_t)((info.chunk2_addr_hi << 32) | info.chunk2_addr_lo);
++	/* pfrt update has not been launched yet */
++	if (!base_addr)
++		return -ENODEV;
++
++	psize = info.max_data_size;
++	/* base address and total buffer size must be page aligned */
++	if (!PAGE_ALIGNED(base_addr) || !PAGE_ALIGNED(psize))
++		return -ENODEV;
++
++	vsize = vma->vm_end - vma->vm_start;
++	if (vsize > psize)
 +		return -EINVAL;
 +
-+	iov.iov_base = (void __user *)buf;
-+	iov.iov_len = len;
-+	iov_iter_init(&iter, WRITE, &iov, 1, len);
-+
-+	/* map the communication buffer */
-+	phy_addr = (phys_addr_t)((buf_info.addr_hi << 32) | buf_info.addr_lo);
-+	buf_ptr = memremap(phy_addr, buf_info.buf_size, MEMREMAP_WB);
-+	if (IS_ERR(buf_ptr))
-+		return PTR_ERR(buf_ptr);
-+
-+	if (!copy_from_iter_full(buf_ptr, len, &iter)) {
-+		ret = -EINVAL;
-+		goto unmap;
-+	}
-+
-+	/* check if the capsule header has a valid version number */
-+	ret = query_capability(&cap, pfru_dev);
-+	if (ret)
-+		goto unmap;
-+
-+	if (!applicable_image(buf_ptr, &cap, pfru_dev))
-+		ret = -EINVAL;
-+
-+unmap:
-+	memunmap(buf_ptr);
-+
-+	return ret ?: len;
-+}
-+
-+static const struct file_operations acpi_pfru_fops = {
-+	.owner		= THIS_MODULE,
-+	.write		= pfru_write,
-+	.unlocked_ioctl = pfru_ioctl,
-+	.llseek		= noop_llseek,
-+};
-+
-+static int acpi_pfru_remove(struct platform_device *pdev)
-+{
-+	struct pfru_device *pfru_dev = platform_get_drvdata(pdev);
-+
-+	misc_deregister(&pfru_dev->miscdev);
++	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
++	if (io_remap_pfn_range(vma, vma->vm_start, PFN_DOWN(base_addr),
++			       vsize, vma->vm_page_prot))
++		return -EAGAIN;
 +
 +	return 0;
 +}
 +
-+static void pfru_put_idx(void *data)
-+{
-+	struct pfru_device *pfru_dev = data;
++static const struct file_operations acpi_pfrt_log_fops = {
++	.owner		= THIS_MODULE,
++	.mmap		= pfrt_log_mmap,
++	.unlocked_ioctl = pfrt_log_ioctl,
++	.llseek		= noop_llseek,
++};
 +
-+	ida_free(&pfru_ida, pfru_dev->index);
++static int acpi_pfrt_log_remove(struct platform_device *pdev)
++{
++	struct pfrt_log_device *pfrt_log_dev = platform_get_drvdata(pdev);
++
++	misc_deregister(&pfrt_log_dev->miscdev);
++
++	return 0;
 +}
 +
-+static int acpi_pfru_probe(struct platform_device *pdev)
++static void pfrt_log_put_idx(void *data)
++{
++	struct pfrt_log_device *pfrt_log_dev = data;
++
++	ida_free(&pfrt_log_ida, pfrt_log_dev->index);
++}
++
++static int acpi_pfrt_log_probe(struct platform_device *pdev)
 +{
 +	acpi_handle handle = ACPI_HANDLE(&pdev->dev);
-+	struct pfru_device *pfru_dev;
++	struct pfrt_log_device *pfrt_log_dev;
 +	int ret;
 +
 +	if (!acpi_has_method(handle, "_DSM")) {
@@ -828,243 +576,162 @@ index 000000000000..e1ddfc17f93f
 +		return -ENODEV;
 +	}
 +
-+	pfru_dev = devm_kzalloc(&pdev->dev, sizeof(*pfru_dev), GFP_KERNEL);
-+	if (!pfru_dev)
++	pfrt_log_dev = devm_kzalloc(&pdev->dev, sizeof(*pfrt_log_dev), GFP_KERNEL);
++	if (!pfrt_log_dev)
 +		return -ENOMEM;
 +
-+	ret = ida_alloc(&pfru_ida, GFP_KERNEL);
++	ret = ida_alloc(&pfrt_log_ida, GFP_KERNEL);
 +	if (ret < 0)
 +		return ret;
 +
-+	pfru_dev->index = ret;
-+	ret = devm_add_action_or_reset(&pdev->dev, pfru_put_idx, pfru_dev);
++	pfrt_log_dev->index = ret;
++	ret = devm_add_action_or_reset(&pdev->dev, pfrt_log_put_idx, pfrt_log_dev);
 +	if (ret)
 +		return ret;
 +
-+	pfru_dev->rev_id = PFRU_DEFAULT_REV_ID;
-+	pfru_dev->parent_dev = &pdev->dev;
++	pfrt_log_dev->info.log_revid = PFRT_DEFAULT_REV_ID;
++	pfrt_log_dev->parent_dev = &pdev->dev;
 +
-+	pfru_dev->miscdev.minor = MISC_DYNAMIC_MINOR;
-+	pfru_dev->miscdev.name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
-+						"pfru%d", pfru_dev->index);
-+	if (!pfru_dev->miscdev.name)
++	pfrt_log_dev->miscdev.minor = MISC_DYNAMIC_MINOR;
++	pfrt_log_dev->miscdev.name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
++						    "pfrt%d",
++						    pfrt_log_dev->index);
++	if (!pfrt_log_dev->miscdev.name)
 +		return -ENOMEM;
 +
-+	pfru_dev->miscdev.nodename = devm_kasprintf(&pdev->dev, GFP_KERNEL,
-+						    "acpi_pfr_update%d", pfru_dev->index);
-+	if (!pfru_dev->miscdev.nodename)
++	pfrt_log_dev->miscdev.nodename = devm_kasprintf(&pdev->dev, GFP_KERNEL,
++							"acpi_pfr_telemetry%d",
++							pfrt_log_dev->index);
++	if (!pfrt_log_dev->miscdev.nodename)
 +		return -ENOMEM;
 +
-+	pfru_dev->miscdev.fops = &acpi_pfru_fops;
-+	pfru_dev->miscdev.parent = &pdev->dev;
++	pfrt_log_dev->miscdev.fops = &acpi_pfrt_log_fops;
++	pfrt_log_dev->miscdev.parent = &pdev->dev;
 +
-+	ret = misc_register(&pfru_dev->miscdev);
++	ret = misc_register(&pfrt_log_dev->miscdev);
 +	if (ret)
 +		return ret;
 +
-+	platform_set_drvdata(pdev, pfru_dev);
++	platform_set_drvdata(pdev, pfrt_log_dev);
 +
 +	return 0;
 +}
 +
-+static const struct acpi_device_id acpi_pfru_ids[] = {
-+	{"INTC1080"},
++static const struct acpi_device_id acpi_pfrt_log_ids[] = {
++	{"INTC1081"},
 +	{}
 +};
-+MODULE_DEVICE_TABLE(acpi, acpi_pfru_ids);
++MODULE_DEVICE_TABLE(acpi, acpi_pfrt_log_ids);
 +
-+static struct platform_driver acpi_pfru_driver = {
++static struct platform_driver acpi_pfrt_log_driver = {
 +	.driver = {
-+		.name = "pfr_update",
-+		.acpi_match_table = acpi_pfru_ids,
++		.name = "pfrt_telemetry",
++		.acpi_match_table = acpi_pfrt_log_ids,
 +	},
-+	.probe = acpi_pfru_probe,
-+	.remove = acpi_pfru_remove,
++	.probe = acpi_pfrt_log_probe,
++	.remove = acpi_pfrt_log_remove,
 +};
-+module_platform_driver(acpi_pfru_driver);
++module_platform_driver(acpi_pfrt_log_driver);
 +
-+MODULE_DESCRIPTION("Platform Firmware Runtime Update device driver");
++MODULE_DESCRIPTION("Platform Firmware Runtime Update Telemetry driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/include/uapi/linux/pfrut.h b/include/uapi/linux/pfrut.h
-new file mode 100644
-index 000000000000..fa97e80a93b7
---- /dev/null
+index fa97e80a93b7..42fa15f8310d 100644
+--- a/include/uapi/linux/pfrut.h
 +++ b/include/uapi/linux/pfrut.h
-@@ -0,0 +1,174 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * Platform Firmware Runtime Update header
-+ *
-+ * Copyright(c) 2021 Intel Corporation. All rights reserved.
-+ */
-+#ifndef __PFRUT_H__
-+#define __PFRUT_H__
-+
-+#include <linux/ioctl.h>
-+#include <linux/types.h>
-+
-+#define PFRUT_IOCTL_MAGIC 0xEE
-+
+@@ -171,4 +171,92 @@ struct pfru_updated_result {
+ 	__u64 high_exec_time;
+ };
+ 
 +/**
-+ * PFRU_IOC_SET_REV - _IOW(PFRUT_IOCTL_MAGIC, 0x01, unsigned int)
-+ *
-+ * Return:
-+ * * 0			- success
-+ * * -EFAULT		- fail to read the revision id
-+ * * -EINVAL		- user provides an invalid revision id
-+ *
-+ * Set the Revision ID for Platform Firmware Runtime Update.
-+ */
-+#define PFRU_IOC_SET_REV _IOW(PFRUT_IOCTL_MAGIC, 0x01, unsigned int)
-+
-+/**
-+ * PFRU_IOC_STAGE - _IOW(PFRUT_IOCTL_MAGIC, 0x02, unsigned int)
-+ *
-+ * Return:
-+ * * 0			- success
-+ * * -EINVAL		- stage phase returns invalid result
-+ *
-+ * Stage a capsule image from communication buffer and perform authentication.
-+ */
-+#define PFRU_IOC_STAGE _IOW(PFRUT_IOCTL_MAGIC, 0x02, unsigned int)
-+
-+/**
-+ * PFRU_IOC_ACTIVATE - _IOW(PFRUT_IOCTL_MAGIC, 0x03, unsigned int)
-+ *
-+ * Return:
-+ * * 0			- success
-+ * * -EINVAL		- activate phase returns invalid result
-+ *
-+ * Activate a previously staged capsule image.
-+ */
-+#define PFRU_IOC_ACTIVATE _IOW(PFRUT_IOCTL_MAGIC, 0x03, unsigned int)
-+
-+/**
-+ * PFRU_IOC_STAGE_ACTIVATE - _IOW(PFRUT_IOCTL_MAGIC, 0x04, unsigned int)
-+ *
-+ * Return:
-+ * * 0			- success
-+ * * -EINVAL		- stage/activate phase returns invalid result.
-+ *
-+ * Perform both stage and activation action.
-+ */
-+#define PFRU_IOC_STAGE_ACTIVATE _IOW(PFRUT_IOCTL_MAGIC, 0x04, unsigned int)
-+
-+/**
-+ * PFRU_IOC_QUERY_CAP - _IOR(PFRUT_IOCTL_MAGIC, 0x05,
-+ *			     struct pfru_update_cap_info)
-+ *
-+ * Return:
-+ * * 0			- success
-+ * * -EINVAL		- query phase returns invalid result
-+ * * -EFAULT		- the result fails to be copied to userspace
-+ *
-+ * Retrieve information on the Platform Firmware Runtime Update capability.
-+ * The information is a struct pfru_update_cap_info.
-+ */
-+#define PFRU_IOC_QUERY_CAP _IOR(PFRUT_IOCTL_MAGIC, 0x05, struct pfru_update_cap_info)
-+
-+/**
-+ * struct pfru_payload_hdr - Capsule file payload header.
-+ *
-+ * @sig: Signature of this capsule file.
-+ * @hdr_version: Revision of this header structure.
-+ * @hdr_size: Size of this header, including the OemHeader bytes.
-+ * @hw_ver: The supported firmware version.
-+ * @rt_ver: Version of the code injection image.
-+ * @platform_id: A platform specific GUID to specify the platform what
-+ *               this capsule image support.
-+ */
-+struct pfru_payload_hdr {
-+	__u32 sig;
-+	__u32 hdr_version;
-+	__u32 hdr_size;
-+	__u32 hw_ver;
-+	__u32 rt_ver;
-+	__u8 platform_id[16];
-+};
-+
-+enum pfru_dsm_status {
-+	DSM_SUCCEED = 0,
-+	DSM_FUNC_NOT_SUPPORT = 1,
-+	DSM_INVAL_INPUT = 2,
-+	DSM_HARDWARE_ERR = 3,
-+	DSM_RETRY_SUGGESTED = 4,
-+	DSM_UNKNOWN = 5,
-+	DSM_FUNC_SPEC_ERR = 6,
-+};
-+
-+/**
-+ * struct pfru_update_cap_info - Runtime update capability information.
-+ *
-+ * @status: Indicator of whether this query succeed.
-+ * @update_cap: Bitmap to indicate whether the feature is supported.
-+ * @code_type: A buffer containing an image type GUID.
-+ * @fw_version: Platform firmware version.
-+ * @code_rt_version: Code injection runtime version for anti-rollback.
-+ * @drv_type: A buffer containing an image type GUID.
-+ * @drv_rt_version: The version of the driver update runtime code.
-+ * @drv_svn: The secure version number(SVN) of the driver update runtime code.
-+ * @platform_id: A buffer containing a platform ID GUID.
-+ * @oem_id: A buffer containing an OEM ID GUID.
-+ * @oem_info_len: Length of the buffer containing the vendor specific information.
-+ */
-+struct pfru_update_cap_info {
-+	__u32 status;
-+	__u32 update_cap;
-+
-+	__u8 code_type[16];
-+	__u32 fw_version;
-+	__u32 code_rt_version;
-+
-+	__u8 drv_type[16];
-+	__u32 drv_rt_version;
-+	__u32 drv_svn;
-+
-+	__u8 platform_id[16];
-+	__u8 oem_id[16];
-+
-+	__u32 oem_info_len;
-+};
-+
-+/**
-+ * struct pfru_com_buf_info - Communication buffer information.
-+ *
-+ * @status: Indicator of whether this query succeed.
-+ * @ext_status: Implementation specific query result.
-+ * @addr_lo: Low 32bit physical address of the communication buffer to hold
-+ *           a runtime update package.
-+ * @addr_hi: High 32bit physical address of the communication buffer to hold
-+ *           a runtime update package.
-+ * @buf_size: Maximum size in bytes of the communication buffer.
-+ */
-+struct pfru_com_buf_info {
-+	__u32 status;
-+	__u32 ext_status;
-+	__u64 addr_lo;
-+	__u64 addr_hi;
-+	__u32 buf_size;
-+};
-+
-+/**
-+ * struct pfru_updated_result - Platform firmware runtime update result information.
++ * struct pfrt_log_data_info - Log Data from telemetry service.
 + * @status: Indicator of whether this update succeed.
 + * @ext_status: Implementation specific update result.
-+ * @low_auth_time: Low 32bit value of image authentication time in nanosecond.
-+ * @high_auth_time: High 32bit value of image authentication time in nanosecond.
-+ * @low_exec_time: Low 32bit value of image execution time in nanosecond.
-+ * @high_exec_time: High 32bit value of image execution time in nanosecond.
++ * @chunk1_addr_lo: Low 32bit physical address of the telemetry data chunk1
++ *                  starting address.
++ * @chunk1_addr_hi: High 32bit physical address of the telemetry data chunk1
++ *                  starting address.
++ * @chunk2_addr_lo: Low 32bit physical address of the telemetry data chunk2
++ *                  starting address.
++ * @chunk2_addr_hi: High 32bit physical address of the telemetry data chunk2
++ *                  starting address.
++ * @max_data_size: Maximum supported size of data of all data chunks combined.
++ * @chunk1_size: Data size in bytes of the telemetry data chunk1 buffer.
++ * @chunk2_size: Data size in bytes of the telemetry data chunk2 buffer.
++ * @rollover_cnt: Number of times telemetry data buffer is overwritten
++ *                since telemetry buffer reset.
++ * @reset_cnt: Number of times telemetry services resets that results in
++ *             rollover count and data chunk buffers are reset.
 + */
-+struct pfru_updated_result {
++struct pfrt_log_data_info {
 +	__u32 status;
 +	__u32 ext_status;
-+	__u64 low_auth_time;
-+	__u64 high_auth_time;
-+	__u64 low_exec_time;
-+	__u64 high_exec_time;
++	__u64 chunk1_addr_lo;
++	__u64 chunk1_addr_hi;
++	__u64 chunk2_addr_lo;
++	__u64 chunk2_addr_hi;
++	__u32 max_data_size;
++	__u32 chunk1_size;
++	__u32 chunk2_size;
++	__u32 rollover_cnt;
++	__u32 reset_cnt;
 +};
 +
-+#endif /* __PFRUT_H__ */
++/**
++ * struct pfrt_log_info - Telemetry log information.
++ * @log_level: The telemetry log level.
++ * @log_type: The telemetry log type(history and execution).
++ * @log_revid: The telemetry log revision id.
++ */
++struct pfrt_log_info {
++	__u32 log_level;
++	__u32 log_type;
++	__u32 log_revid;
++};
++
++/**
++ * PFRT_LOG_IOC_SET_INFO - _IOW(PFRUT_IOCTL_MAGIC, 0x06,
++ *				struct pfrt_log_info)
++ *
++ * Return:
++ * * 0			- success
++ * * -EFAULT		- fail to get the setting parameter
++ * * -EINVAL		- fail to set the log level
++ *
++ * Set the PFRT log level and log type. The input information is
++ * a struct pfrt_log_info.
++ */
++#define PFRT_LOG_IOC_SET_INFO _IOW(PFRUT_IOCTL_MAGIC, 0x06, struct pfrt_log_info)
++
++/**
++ * PFRT_LOG_IOC_GET_INFO - _IOR(PFRUT_IOCTL_MAGIC, 0x07,
++ *				struct pfrt_log_info)
++ *
++ * Return:
++ * * 0			- success
++ * * -EINVAL		- fail to get the log level
++ * * -EFAULT		- fail to copy the result back to userspace
++ *
++ * Retrieve log level and log type of the telemetry. The information is
++ * a struct pfrt_log_info.
++ */
++#define PFRT_LOG_IOC_GET_INFO _IOR(PFRUT_IOCTL_MAGIC, 0x07, struct pfrt_log_info)
++
++/**
++ * PFRT_LOG_IOC_GET_DATA_INFO - _IOR(PFRUT_IOCTL_MAGIC, 0x08,
++ *				     struct pfrt_log_data_info)
++ *
++ * Return:
++ * * 0			- success
++ * * -EINVAL		- fail to get the log buffer information
++ * * -EFAULT		- fail to copy the log buffer information to userspace
++ *
++ * Retrieve data information about the telemetry. The information
++ * is a struct pfrt_log_data_info.
++ */
++#define PFRT_LOG_IOC_GET_DATA_INFO _IOR(PFRUT_IOCTL_MAGIC, 0x08, struct pfrt_log_data_info)
++
+ #endif /* __PFRUT_H__ */
 -- 
 2.25.1
 

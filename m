@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D37476BA8
+	by mail.lfdr.de (Postfix) with ESMTP id EC7A7476BA9
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234877AbhLPINs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 03:13:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234823AbhLPINm (ORCPT
+        id S229909AbhLPINu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 03:13:50 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40418 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234856AbhLPINn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 03:13:42 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86400C06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:13:42 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id z6so22993963pfe.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Abkw9MpZJDVgj/07ebB528CKEEcNXbkOFZr/WZxAfZQ=;
-        b=UhBopMewwWO/L2FDJKLSvlmHuz1ZR1y1w2l9SJoi0yacgw97RM7gkzKmpTYhmbcYhz
-         Vrcapj9393TYBWEzS5XX7eq1vUdI0ilGxjVQv0KGQiQejvJRHmSFv4o7BNU0WfL7I9wc
-         4ORu+giosQYPeFT+46L0bJMy9XPezcs9DofjgiA/IkEZ5N+UJMNaORun6+Yq0HKSC5kj
-         VpM4Z6VPYRyh6cFw9jSs1C1ejL1IOBp/ooleacSPsRxIn4bUdESkparVVAnzAiYCvXTw
-         rwu3OvfUiKhC375gr/bWVrXZjtql2CUobPeH2GbqJOT0X7Q3E6eXCymUfre4xIqzsC3K
-         b+fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Abkw9MpZJDVgj/07ebB528CKEEcNXbkOFZr/WZxAfZQ=;
-        b=jyApx8N73Wi1t1yHRU1UgC2pSExN6NCdPhgqYGcRHRzXk93f8qmWxq6WF/g6ahZred
-         dbi3ScCOu6LmPhJuvQSM4ZqHDN26zYYonXPdg/2unB1f2i0SoTUlcSUgU0zg6Af5jWLB
-         HmruBj4NW+lUFdVlBMiqc3blkDMCuVqEEV36fTN6pRKj9RqNfwJJTXbeD8gkj/V5mWip
-         9tCPzm3ivcG/qtLF71lfOkEtARBY1C17glAO4j+Yc0/CfeOvvKE0QFy1CnIUoHk/1HW7
-         lMNSu7tLk9yi7sGvJ2azQwDsWpdloIn09gtDlZJHRfH5m0L9kXlqFiswBk7E0uP1NY6X
-         C8IA==
-X-Gm-Message-State: AOAM532zbURW46dwNxscJxhVYRgyu8yqpQPvvGF6YZfZY9OyzRy13UjH
-        tMRelLTLs40qYpyd9bDPk67n
-X-Google-Smtp-Source: ABdhPJwux8mhduJxxxQTYn1hOULcyk0X2qXUvMCSXSzIK9j3ATjyNco6/rIJOpfoQ54yuZbBMAcauw==
-X-Received: by 2002:a05:6a00:15c7:b0:49f:f48b:f96e with SMTP id o7-20020a056a0015c700b0049ff48bf96emr12888994pfu.65.1639642422021;
-        Thu, 16 Dec 2021 00:13:42 -0800 (PST)
-Received: from localhost.localdomain ([117.193.208.121])
-        by smtp.gmail.com with ESMTPSA id u38sm326835pfg.4.2021.12.16.00.13.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 00:13:41 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     mhi@lists.linux.dev, hemantk@codeaurora.org, bbhatt@codeaurora.org,
-        loic.poulain@linaro.org, thomas.perrot@bootlin.com,
-        aleksander@aleksander.es, slark_xiao@163.com,
-        christophe.jaillet@wanadoo.fr, keescook@chromium.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 10/10] bus: mhi: pci_generic: Introduce Sierra EM919X support
-Date:   Thu, 16 Dec 2021 13:42:27 +0530
-Message-Id: <20211216081227.237749-11-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211216081227.237749-1-manivannan.sadhasivam@linaro.org>
-References: <20211216081227.237749-1-manivannan.sadhasivam@linaro.org>
+        Thu, 16 Dec 2021 03:13:43 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9506AB82307;
+        Thu, 16 Dec 2021 08:13:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB1CAC36AE5;
+        Thu, 16 Dec 2021 08:13:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639642421;
+        bh=MWfwDw61qroOu7PD7C3GULUlsy0m/JWpZu3G4dcOn6w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cCtZ5se0Do5GJQP64NVOWcuHE3oJR4eL3M1coFHMYbLi++FqmNao+iYvFpBUWoxLu
+         /t8bp4X/MOpmjoUQDfadLjEkMG+1zh/0goL4UDqWrJ9n11djiYuIN21wqxHS1kNhmu
+         40u2Uw0Wil+G/1LuaX+WDE9biR2TdWUclLgx8qOE=
+Date:   Thu, 16 Dec 2021 09:13:38 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     "Rantala, Tommi T. (Nokia - FI/Espoo)" <tommi.t.rantala@nokia.com>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "fw@strlen.de" <fw@strlen.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: LTS "Warning: file conntrack_vrf.sh is not executable, correct
+ this."
+Message-ID: <Ybr1MgpKlNlVHMPq@kroah.com>
+References: <234d7a6a81664610fdf21ac72730f8bd10d3f46f.camel@nokia.com>
+ <YbrzsZf/arqfZ3DT@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbrzsZf/arqfZ3DT@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Perrot <thomas.perrot@bootlin.com>
+On Thu, Dec 16, 2021 at 09:07:13AM +0100, gregkh@linuxfoundation.org wrote:
+> On Thu, Dec 16, 2021 at 08:00:30AM +0000, Rantala, Tommi T. (Nokia - FI/Espoo) wrote:
+> > Hi Greg,
+> > 
+> > Incorrect 0644 in LTS for new selftest file, seen in 5.4.165 since
+> > "selftests: netfilter: add a vrf+conntrack testcase" was added to LTS.
+> > It's correct 755 in upstream, but somehow messed up in LTS :-(
+> 
+> That is because quilt/git can not set modes of files.
+> 
+> > linux-5.4.y
+> > ===========
+> > commit 8d3563ecbca3526fcc6639065c9fb11b2f234706
+> > Author: Florian Westphal <fw@strlen.de>
+> > Date:   Mon Oct 18 14:38:13 2021 +0200
+> > 
+> >     selftests: netfilter: add a vrf+conntrack testcase
+> >     
+> >     commit 33b8aad21ac175eba9577a73eb62b0aa141c241c upstream.
+> > 
+> > [...]    
+> > diff --git a/tools/testing/selftests/netfilter/conntrack_vrf.sh b/tools/testing/selftests/netfilter/conntrack_vrf.sh
+> > new file mode 100644           <----------------
+> > 
+> > 
+> > linux-5.15.y
+> > ============
+> > commit cffab968e94e513bdcef25e11402243ce2919803
+> > [...]
+> > new file mode 100644           <----------------
+> > 
+> > 
+> > upstream
+> > ========
+> > $ git show 33b8aad21ac175eba9577a73eb62b0aa141c241c
+> > 
+> > commit 33b8aad21ac175eba9577a73eb62b0aa141c241c
+> > Author: Florian Westphal <fw@strlen.de>
+> > Date:   Mon Oct 18 14:38:13 2021 +0200
+> > 
+> >     selftests: netfilter: add a vrf+conntrack testcase
+> >     
+> > [...]
+> > diff --git a/tools/testing/selftests/netfilter/conntrack_vrf.sh b/tools/testing/selftests/netfilter/conntrack_vrf.sh
+> > new file mode 100755          <-----------------------
+> > 
+> > 
+> > -Tommi
+> > 
+> 
+> What about the 5.10.y tree?  Does it need this change as well?
 
-Add support for EM919X modems, this modem series is based on SDX55
-qcom chip.
+To answer my own question, yes, it is an issue there too.  I'll go do a
+release right now with the mode changed.
 
-It is mandatory to use the same ring for control+data and diag events.
+thanks,
 
-Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
-Tested-by: Aleksander Morgado <aleksander@aleksander.es>
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-Link: https://lore.kernel.org/r/20211123081541.648426-1-thomas.perrot@bootlin.com
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/bus/mhi/pci_generic.c | 43 +++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
-
-diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
-index 9ef41354237c..29607f7bc8da 100644
---- a/drivers/bus/mhi/pci_generic.c
-+++ b/drivers/bus/mhi/pci_generic.c
-@@ -403,7 +403,50 @@ static const struct mhi_pci_dev_info mhi_mv31_info = {
- 	.dma_data_width = 32,
- };
- 
-+static const struct mhi_channel_config mhi_sierra_em919x_channels[] = {
-+	MHI_CHANNEL_CONFIG_UL_SBL(2, "SAHARA", 32, 0),
-+	MHI_CHANNEL_CONFIG_DL_SBL(3, "SAHARA", 256, 0),
-+	MHI_CHANNEL_CONFIG_UL(4, "DIAG", 32, 0),
-+	MHI_CHANNEL_CONFIG_DL(5, "DIAG", 32, 0),
-+	MHI_CHANNEL_CONFIG_UL(12, "MBIM", 128, 0),
-+	MHI_CHANNEL_CONFIG_DL(13, "MBIM", 128, 0),
-+	MHI_CHANNEL_CONFIG_UL(14, "QMI", 32, 0),
-+	MHI_CHANNEL_CONFIG_DL(15, "QMI", 32, 0),
-+	MHI_CHANNEL_CONFIG_UL(32, "DUN", 32, 0),
-+	MHI_CHANNEL_CONFIG_DL(33, "DUN", 32, 0),
-+	MHI_CHANNEL_CONFIG_HW_UL(100, "IP_HW0", 512, 1),
-+	MHI_CHANNEL_CONFIG_HW_DL(101, "IP_HW0", 512, 2),
-+};
-+
-+static struct mhi_event_config modem_sierra_em919x_mhi_events[] = {
-+	/* first ring is control+data and DIAG ring */
-+	MHI_EVENT_CONFIG_CTRL(0, 2048),
-+	/* Hardware channels request dedicated hardware event rings */
-+	MHI_EVENT_CONFIG_HW_DATA(1, 2048, 100),
-+	MHI_EVENT_CONFIG_HW_DATA(2, 2048, 101)
-+};
-+
-+static const struct mhi_controller_config modem_sierra_em919x_config = {
-+	.max_channels = 128,
-+	.timeout_ms = 24000,
-+	.num_channels = ARRAY_SIZE(mhi_sierra_em919x_channels),
-+	.ch_cfg = mhi_sierra_em919x_channels,
-+	.num_events = ARRAY_SIZE(modem_sierra_em919x_mhi_events),
-+	.event_cfg = modem_sierra_em919x_mhi_events,
-+};
-+
-+static const struct mhi_pci_dev_info mhi_sierra_em919x_info = {
-+	.name = "sierra-em919x",
-+	.config = &modem_sierra_em919x_config,
-+	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
-+	.dma_data_width = 32,
-+	.sideband_wake = false,
-+};
-+
- static const struct pci_device_id mhi_pci_id_table[] = {
-+	/* EM919x (sdx55), use the same vid:pid as qcom-sdx55m */
-+	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, 0x18d7, 0x0200),
-+		.driver_data = (kernel_ulong_t) &mhi_sierra_em919x_info },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0306),
- 		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx55_info },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
--- 
-2.25.1
-
+greg k-h

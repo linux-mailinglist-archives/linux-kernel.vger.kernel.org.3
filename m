@@ -2,179 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9808547766E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4BD477672
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbhLPP6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:58:09 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:38501 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbhLPP6I (ORCPT
+        id S238442AbhLPP66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:58:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238021AbhLPP65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:58:08 -0500
-Received: by mail-oi1-f169.google.com with SMTP id r26so37017582oiw.5;
-        Thu, 16 Dec 2021 07:58:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+fzbfD0CHCHcZI8DY35QBo25aGSKtXHSKqSLSMk0x8w=;
-        b=uc7xpUmocjS3gvRMwY9H5w7HnnYfokVjLuAIUPyVuFBT1u+XCd8oqzYaC2JLQdioEs
-         lhDy9KEIAeCeGOTxetg/NL/iWTsHNDjokcJVD1fy4QNwGwgdj+m1lobQW0XNJS5ZcycM
-         qKYIXnFvv/VycfmwIUo8XhLQQ1m+BTT1Jrr2uUvrieoZOZzCgOLArW/tjVgjA0uPIwmo
-         Kirx83pn6WNiyAWXWUp3UEI/1qPH93tH9FAFkbIdWVKaC1n2RI2Qb2vf/5PPFsjaWbri
-         SzpT4nQvCOQe4wrSuA4ESyDIJXav27ZSCCFN+rLN6qTReNqEMClUy82sQr0qhJno93UT
-         XEYQ==
-X-Gm-Message-State: AOAM5337I1duHd2B3VX9BzK8Io89EPaev/KSlen1eVpVH/4C3sbOfaSo
-        eBGkZLCzElNZkk3mCWw31Q==
-X-Google-Smtp-Source: ABdhPJwR/W9c0idlUUFwTUnVK1aHR+vR6mP87PEAo+XWvtX5jqFfuKZ69KQePrNkBHEO052l92GdjA==
-X-Received: by 2002:a05:6808:15a:: with SMTP id h26mr4515968oie.123.1639670287583;
-        Thu, 16 Dec 2021 07:58:07 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e14sm1027527oie.7.2021.12.16.07.58.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 07:58:06 -0800 (PST)
-Received: (nullmailer pid 293314 invoked by uid 1000);
-        Thu, 16 Dec 2021 15:58:05 -0000
-Date:   Thu, 16 Dec 2021 09:58:05 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     linux-imx@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
-        stefan@agner.ch, linus.walleij@linaro.org,
-        gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net,
-        soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com,
-        adrian.hunter@intel.com, jirislaby@kernel.org,
-        giulio.benetti@benettiengineering.com,
-        nobuhiro1.iwamatsu@toshiba.co.jp, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v5 4/9] dt-bindings: clock: imx: Add documentation for
- i.MXRT1050 clock
-Message-ID: <YbtiDa3CpVmiCkto@robh.at.kernel.org>
-References: <20211215220538.4180616-1-Mr.Bossman075@gmail.com>
- <20211215220538.4180616-5-Mr.Bossman075@gmail.com>
+        Thu, 16 Dec 2021 10:58:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC531C061574;
+        Thu, 16 Dec 2021 07:58:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68326B8247B;
+        Thu, 16 Dec 2021 15:58:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6326C36AE0;
+        Thu, 16 Dec 2021 15:58:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639670334;
+        bh=yjju0W3t13Dxgiw22aXO5ZrCo2gj5Ng17Z78/prb7d4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RQNUlTJoc9XcMOuZkd1CvWNyuU1KsobMcb/YnFjJJtQsmb4el9EUj7pgpLPnkc20Y
+         kP+Ja+w2OnHCCwEKp/n6X5AZ7Cjm2GFE+D/nd7M3lkQLEsBVOVTsCI0ufUQtMgB44c
+         2tSeKL6rbVhTSRqC/nWNzbQ6eyoHyj+JU+dMsGlA85shvNOBM1fdJ3nlFcBGmE90/t
+         ceFEJe8+SFnyTCsLLRsBmv4hCgRfo/v3r8zV3MYPsIAlenpIOCB0kyP2Tddi7GPcdw
+         ygSyM7Jmyd5Ce18ArUtoNxhSrRnBXaiBnyOF26u3A0Br93JjM9FGtR5L3HW2eKUd+s
+         wpBz8T/CotBKQ==
+Date:   Thu, 16 Dec 2021 07:58:53 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Wenliang Wang <wangwenliang.1995@bytedance.com>
+Cc:     mst@redhat.com, jasowang@redhat.com, davem@davemloft.net,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio_net: fix rx_drops stat for small pkts
+Message-ID: <20211216075853.758c27a7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211216031135.3182660-1-wangwenliang.1995@bytedance.com>
+References: <20211216031135.3182660-1-wangwenliang.1995@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215220538.4180616-5-Mr.Bossman075@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 05:05:33PM -0500, Jesse Taube wrote:
-> From: Jesse Taube <mr.bossman075@gmail.com>
-> 
-> Add DT binding documentation for i.MXRT1050 clock driver.
-> 
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> ---
-> V1->V2:
-> * Replace macros with values
-> V2->V3:
-> * Remove anatop
-> * Use lpuart not gpt
-> * include imxrt1050-clock.h
-> * 2 space tabs to 4
-> * Remove oneOf enum
-> * Change maxItems to 2
-> V3->V4:
-> * Nothing done
-> V4->V5:
-> * Remove extra newline
-> * Rename ccm to clock-controller
-> * Change minItems to const
-> * Change minItems to description
-> * Rename file to add 1050
-> * Change commit description to just 1050
-> ---
->  .../bindings/clock/imxrt1050-clock.yaml       | 66 +++++++++++++++++++
->  1 file changed, 66 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml b/Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml
-> new file mode 100644
-> index 000000000000..8caf0572733b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml
-> @@ -0,0 +1,66 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/imxrt1050-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Clock bindings for Freescale i.MXRT
-> +
-> +maintainers:
-> +  - Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +  - Jesse Taube <Mr.Bossman075@gmail.com>
-> +
-> +description: |
-> +  The clock consumer should specify the desired clock by having the clock
-> +  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imxrt*-clock.h
-> +  for the full list of i.MXRT clock IDs.
-> +
-> +properties:
-> +  compatible:
-> +    const: fsl,imxrt1050-ccm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 2
-> +
-> +  clocks:
-> +    description: 24m osc
+On Thu, 16 Dec 2021 11:11:35 +0800 Wenliang Wang wrote:
+> We found the stat of rx drops for small pkts does not increment when
+> build_skb fail, it's not coherent with other mode's rx drops stat.
 
-maxItems: 1
-
-With that,
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-
-> +
-> +  clock-names:
-> +    const: osc
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/imxrt1050-clock.h>
-> +
-> +    clks: clock-controller@400fc000 {
-> +        compatible = "fsl,imxrt1050-ccm";
-> +        reg = <0x400fc000 0x4000>;
-> +        interrupts = <95>, <96>;
-> +        clocks = <&osc>;
-> +        clock-names = "osc";
-> +        #clock-cells = <1>;
-> +    };
-> +
-> +    lpuart1: serial@40184000 {
-> +        compatible = "fsl,imxrt1050-lpuart";
-> +        reg = <0x40184000 0x4000>;
-> +        interrupts = <20>;
-> +        clocks = <&clks IMXRT1050_CLK_LPUART1>;
-> +        clock-names = "ipg";
-> +    };
-> -- 
-> 2.34.1
-> 
-> 
+Appears to had been applied to net, thanks!

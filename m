@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEC8477F27
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA48477F32
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242223AbhLPVl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:41:26 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:57126 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241665AbhLPVkk (ORCPT
+        id S242301AbhLPVlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:41:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236887AbhLPVkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:40:40 -0500
-Date:   Thu, 16 Dec 2021 21:40:38 -0000
+        Thu, 16 Dec 2021 16:40:42 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE07C061751;
+        Thu, 16 Dec 2021 13:40:41 -0800 (PST)
+Date:   Thu, 16 Dec 2021 21:40:39 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690839;
+        s=2020; t=1639690840;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=be6ctVg8AEDZ96z82fGMrS7t0k/POhNFN2p7wo1kKD4=;
-        b=Za3QfO3L4k8O/ideTwK9Gg9IzwzIbNtZFtJHw2iDpHm7xjLR61MGyVO6u6ofDp0gN1yzKj
-        zYUPQxTRGVCn+Tp2LHHBiytlqkOVImHghPtp9UnUd4t8iA3DRFW/qzmeL04P5h+HRQHII0
-        OCDkv4FgjVoFBnBIjiofvszetevIoL/lZl6NYhB3i7e4lRcqrTw3kc2byKyI6FNQSc41uP
-        9aFU5T6qxGkqmD81ZNoMFFVM2ePLJ8yJEIJvfUs5AiAjT4i+AhaxLxQ4LRC38Ud9j09WP4
-        RBFqtm1ZJ1/h9/PVHOxxb7ueNCw4PdOxDqyRjE/sSDkXBr11lgda5o+6eMibJA==
+        bh=YYGsgTJC9nArnHdMfGmXATyZJNDFiY8SNNDV76l2NDk=;
+        b=0O0b5TKeLTJudxeQfXilsnCf/j/jqxEmima4K5GsMeqa11nrRmPyzzMGXPA0w0S+R79HKe
+        B2KrvK1sJhAScD/Mj5hMQafE79yg7Avm9/gZ0695jrcrV85QHR1GVFpoZt82pmPw/yFThB
+        +zgUTp18bA/dnv8QkG1LbGd0TfTvSa+1FwcxQKbXfHhUpGKppdNrfcymDIZA8DAPgoXvvy
+        7dVAQYUnavSUa45hhm5TySmbKtbfUn34iuZzgPCm8hh5R6wLlIQi7kvydT/ojcTUf/1qjz
+        cypu6QMl/kknGDyfUBKze/57ZCYgHGan1IPZfucadRbvrTX/GFztju70I+MSrg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690839;
+        s=2020e; t=1639690840;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=be6ctVg8AEDZ96z82fGMrS7t0k/POhNFN2p7wo1kKD4=;
-        b=9be5MQ1QgTPprhckOglo3WKyPJtgU/VPQ1VW1GK8rErcCW7euOETUWYSP/w3P8chQUBDSl
-        +Y6YhB4Pl1SOv/Dw==
+        bh=YYGsgTJC9nArnHdMfGmXATyZJNDFiY8SNNDV76l2NDk=;
+        b=UFENEms/LDGGso0LzaPsN0aSiEPTVZweBsyiBmVDEzuzzmIX1kaLBzXe17k3hznvK+OeF3
+        NdiGeQrHXrdaB6Dw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] PCI/MSI: Let core code free MSI descriptors
+Subject: [tip: irq/msi] PCI/MSI: Use msi_add_msi_desc()
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Michael Kelley <mikelley@microsoft.com>,
         Nishanth Menon <nm@ti.com>, Jason Gunthorpe <jgg@nvidia.com>,
         Bjorn Helgaas <bhelgaas@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211206210748.089085131@linutronix.de>
-References: <20211206210748.089085131@linutronix.de>
+In-Reply-To: <20211206210748.035348646@linutronix.de>
+References: <20211206210748.035348646@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969083831.23020.2399935873964483697.tip-bot2@tip-bot2>
+Message-ID: <163969083904.23020.17702666548705646068.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,80 +63,194 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     9fb9eb4b59acc607e978288c96ac7efa917153d4
-Gitweb:        https://git.kernel.org/tip/9fb9eb4b59acc607e978288c96ac7efa917153d4
+Commit-ID:     71020a3c0dff4a00d96922a4a95a067f524a7dcb
+Gitweb:        https://git.kernel.org/tip/71020a3c0dff4a00d96922a4a95a067f524a7dcb
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 06 Dec 2021 23:51:16 +01:00
+AuthorDate:    Mon, 06 Dec 2021 23:51:15 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 16 Dec 2021 22:22:17 +01:00
 
-PCI/MSI: Let core code free MSI descriptors
+PCI/MSI: Use msi_add_msi_desc()
 
-Set the domain info flag which tells the core code to free the MSI
-descriptors from msi_domain_free_irqs() and add an explicit call to the
-core function into the legacy code.
+Simplify the allocation of MSI descriptors by using msi_add_msi_desc()
+which moves the storage handling to core code and prepares for dynamic
+extension of the MSI-X vector space.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
 Tested-by: Nishanth Menon <nm@ti.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Link: https://lore.kernel.org/r/20211206210748.089085131@linutronix.de
+Link: https://lore.kernel.org/r/20211206210748.035348646@linutronix.de
 
 ---
- drivers/pci/msi/irqdomain.c |  3 ++-
- drivers/pci/msi/legacy.c    |  1 +
- drivers/pci/msi/msi.c       | 14 --------------
- 3 files changed, 3 insertions(+), 15 deletions(-)
+ drivers/pci/msi/msi.c | 104 ++++++++++++++++++-----------------------
+ 1 file changed, 47 insertions(+), 57 deletions(-)
 
-diff --git a/drivers/pci/msi/irqdomain.c b/drivers/pci/msi/irqdomain.c
-index c81793a..3aab617 100644
---- a/drivers/pci/msi/irqdomain.c
-+++ b/drivers/pci/msi/irqdomain.c
-@@ -171,7 +171,8 @@ struct irq_domain *pci_msi_create_irq_domain(struct fwnode_handle *fwnode,
- 	if (info->flags & MSI_FLAG_USE_DEF_CHIP_OPS)
- 		pci_msi_domain_update_chip_ops(info);
- 
--	info->flags |= MSI_FLAG_ACTIVATE_EARLY | MSI_FLAG_DEV_SYSFS;
-+	info->flags |= MSI_FLAG_ACTIVATE_EARLY | MSI_FLAG_DEV_SYSFS |
-+		       MSI_FLAG_FREE_MSI_DESCS;
- 	if (IS_ENABLED(CONFIG_GENERIC_IRQ_RESERVATION_MODE))
- 		info->flags |= MSI_FLAG_MUST_REACTIVATE;
- 
-diff --git a/drivers/pci/msi/legacy.c b/drivers/pci/msi/legacy.c
-index 773f351..91c20a3 100644
---- a/drivers/pci/msi/legacy.c
-+++ b/drivers/pci/msi/legacy.c
-@@ -80,4 +80,5 @@ void pci_msi_legacy_teardown_msi_irqs(struct pci_dev *dev)
- {
- 	msi_device_destroy_sysfs(&dev->dev);
- 	arch_teardown_msi_irqs(dev);
-+	msi_free_msi_descs(&dev->dev);
- }
 diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
-index 4ee47ee..95db9c3 100644
+index c9a03f9..4ee47ee 100644
 --- a/drivers/pci/msi/msi.c
 +++ b/drivers/pci/msi/msi.c
-@@ -224,22 +224,8 @@ EXPORT_SYMBOL_GPL(pci_write_msi_msg);
+@@ -376,40 +376,41 @@ static int pci_setup_msi_context(struct pci_dev *dev)
+ 	return ret;
+ }
  
- static void free_msi_irqs(struct pci_dev *dev)
+-static struct msi_desc *
+-msi_setup_entry(struct pci_dev *dev, int nvec, struct irq_affinity_desc *masks)
++static int msi_setup_msi_desc(struct pci_dev *dev, int nvec,
++			      struct irq_affinity_desc *masks)
  {
--	struct list_head *msi_list = dev_to_msi_list(&dev->dev);
--	struct msi_desc *entry, *tmp;
--	int i;
--
--	for_each_pci_msi_entry(entry, dev)
--		if (entry->irq)
--			for (i = 0; i < entry->nvec_used; i++)
--				BUG_ON(irq_has_action(entry->irq + i));
--
- 	pci_msi_teardown_msi_irqs(dev);
+-	struct msi_desc *entry;
++	struct msi_desc desc;
+ 	u16 control;
  
--	list_for_each_entry_safe(entry, tmp, msi_list, list) {
--		list_del(&entry->list);
--		free_msi_entry(entry);
--	}
+ 	/* MSI Entry Initialization */
+-	entry = alloc_msi_entry(&dev->dev, nvec, masks);
+-	if (!entry)
+-		return NULL;
++	memset(&desc, 0, sizeof(desc));
+ 
+ 	pci_read_config_word(dev, dev->msi_cap + PCI_MSI_FLAGS, &control);
+ 	/* Lies, damned lies, and MSIs */
+ 	if (dev->dev_flags & PCI_DEV_FLAGS_HAS_MSI_MASKING)
+ 		control |= PCI_MSI_FLAGS_MASKBIT;
++	/* Respect XEN's mask disabling */
++	if (pci_msi_ignore_mask)
++		control &= ~PCI_MSI_FLAGS_MASKBIT;
+ 
+-	entry->pci.msi_attrib.is_64	= !!(control & PCI_MSI_FLAGS_64BIT);
+-	entry->pci.msi_attrib.can_mask	= !pci_msi_ignore_mask &&
+-					  !!(control & PCI_MSI_FLAGS_MASKBIT);
+-	entry->pci.msi_attrib.default_irq = dev->irq;
+-	entry->pci.msi_attrib.multi_cap	= (control & PCI_MSI_FLAGS_QMASK) >> 1;
+-	entry->pci.msi_attrib.multiple	= ilog2(__roundup_pow_of_two(nvec));
++	desc.nvec_used			= nvec;
++	desc.pci.msi_attrib.is_64	= !!(control & PCI_MSI_FLAGS_64BIT);
++	desc.pci.msi_attrib.can_mask	= !!(control & PCI_MSI_FLAGS_MASKBIT);
++	desc.pci.msi_attrib.default_irq	= dev->irq;
++	desc.pci.msi_attrib.multi_cap	= (control & PCI_MSI_FLAGS_QMASK) >> 1;
++	desc.pci.msi_attrib.multiple	= ilog2(__roundup_pow_of_two(nvec));
++	desc.affinity			= masks;
+ 
+ 	if (control & PCI_MSI_FLAGS_64BIT)
+-		entry->pci.mask_pos = dev->msi_cap + PCI_MSI_MASK_64;
++		desc.pci.mask_pos = dev->msi_cap + PCI_MSI_MASK_64;
+ 	else
+-		entry->pci.mask_pos = dev->msi_cap + PCI_MSI_MASK_32;
++		desc.pci.mask_pos = dev->msi_cap + PCI_MSI_MASK_32;
+ 
+ 	/* Save the initial mask status */
+-	if (entry->pci.msi_attrib.can_mask)
+-		pci_read_config_dword(dev, entry->pci.mask_pos, &entry->pci.msi_mask);
 -
- 	if (dev->msix_base) {
- 		iounmap(dev->msix_base);
- 		dev->msix_base = NULL;
++	if (desc.pci.msi_attrib.can_mask)
++		pci_read_config_dword(dev, desc.pci.mask_pos, &desc.pci.msi_mask);
+ 
+-	return entry;
++	return msi_add_msi_desc(&dev->dev, &desc);
+ }
+ 
+ static int msi_verify_entries(struct pci_dev *dev)
+@@ -459,17 +460,14 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
+ 		masks = irq_create_affinity_masks(nvec, affd);
+ 
+ 	msi_lock_descs(&dev->dev);
+-	entry = msi_setup_entry(dev, nvec, masks);
+-	if (!entry) {
+-		ret = -ENOMEM;
++	ret = msi_setup_msi_desc(dev, nvec, masks);
++	if (ret)
+ 		goto fail;
+-	}
+ 
+ 	/* All MSIs are unmasked by default; mask them all */
++	entry = first_pci_msi_entry(dev);
+ 	pci_msi_mask(entry, msi_multi_mask(entry));
+ 
+-	list_add_tail(&entry->list, dev_to_msi_list(&dev->dev));
+-
+ 	/* Configure MSI capability structure */
+ 	ret = pci_msi_setup_msi_irqs(dev, nvec, PCI_CAP_ID_MSI);
+ 	if (ret)
+@@ -519,48 +517,40 @@ static void __iomem *msix_map_region(struct pci_dev *dev,
+ 	return ioremap(phys_addr, nr_entries * PCI_MSIX_ENTRY_SIZE);
+ }
+ 
+-static int msix_setup_entries(struct pci_dev *dev, void __iomem *base,
+-			      struct msix_entry *entries, int nvec,
+-			      struct irq_affinity_desc *masks)
++static int msix_setup_msi_descs(struct pci_dev *dev, void __iomem *base,
++				struct msix_entry *entries, int nvec,
++				struct irq_affinity_desc *masks)
+ {
+-	int i, vec_count = pci_msix_vec_count(dev);
++	int ret = 0, i, vec_count = pci_msix_vec_count(dev);
+ 	struct irq_affinity_desc *curmsk;
+-	struct msi_desc *entry;
++	struct msi_desc desc;
+ 	void __iomem *addr;
+ 
+-	for (i = 0, curmsk = masks; i < nvec; i++) {
+-		entry = alloc_msi_entry(&dev->dev, 1, curmsk);
+-		if (!entry) {
+-			/* No enough memory. Don't try again */
+-			return -ENOMEM;
+-		}
+-
+-		entry->pci.msi_attrib.is_msix	= 1;
+-		entry->pci.msi_attrib.is_64	= 1;
++	memset(&desc, 0, sizeof(desc));
+ 
+-		if (entries)
+-			entry->msi_index = entries[i].entry;
+-		else
+-			entry->msi_index = i;
++	desc.nvec_used			= 1;
++	desc.pci.msi_attrib.is_msix	= 1;
++	desc.pci.msi_attrib.is_64	= 1;
++	desc.pci.msi_attrib.default_irq	= dev->irq;
++	desc.pci.mask_base		= base;
+ 
+-		entry->pci.msi_attrib.is_virtual = entry->msi_index >= vec_count;
++	for (i = 0, curmsk = masks; i < nvec; i++, curmsk++) {
++		desc.msi_index = entries ? entries[i].entry : i;
++		desc.affinity = masks ? curmsk : NULL;
++		desc.pci.msi_attrib.is_virtual = desc.msi_index >= vec_count;
++		desc.pci.msi_attrib.can_mask = !pci_msi_ignore_mask &&
++					       !desc.pci.msi_attrib.is_virtual;
+ 
+-		entry->pci.msi_attrib.can_mask	= !pci_msi_ignore_mask &&
+-						  !entry->pci.msi_attrib.is_virtual;
+-
+-		entry->pci.msi_attrib.default_irq	= dev->irq;
+-		entry->pci.mask_base			= base;
+-
+-		if (entry->pci.msi_attrib.can_mask) {
+-			addr = pci_msix_desc_addr(entry);
+-			entry->pci.msix_ctrl = readl(addr + PCI_MSIX_ENTRY_VECTOR_CTRL);
++		if (!desc.pci.msi_attrib.can_mask) {
++			addr = pci_msix_desc_addr(&desc);
++			desc.pci.msix_ctrl = readl(addr + PCI_MSIX_ENTRY_VECTOR_CTRL);
+ 		}
+ 
+-		list_add_tail(&entry->list, dev_to_msi_list(&dev->dev));
+-		if (masks)
+-			curmsk++;
++		ret = msi_add_msi_desc(&dev->dev, &desc);
++		if (ret)
++			break;
+ 	}
+-	return 0;
++	return ret;
+ }
+ 
+ static void msix_update_entries(struct pci_dev *dev, struct msix_entry *entries)
+@@ -598,7 +588,7 @@ static int msix_setup_interrupts(struct pci_dev *dev, void __iomem *base,
+ 		masks = irq_create_affinity_masks(nvec, affd);
+ 
+ 	msi_lock_descs(&dev->dev);
+-	ret = msix_setup_entries(dev, base, entries, nvec, masks);
++	ret = msix_setup_msi_descs(dev, base, entries, nvec, masks);
+ 	if (ret)
+ 		goto out_free;
+ 

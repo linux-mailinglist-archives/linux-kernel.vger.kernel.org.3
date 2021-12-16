@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48250477F70
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC324477F6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242811AbhLPVnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:43:13 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:57550 "EHLO
+        id S242433AbhLPVnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:43:09 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:57558 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242161AbhLPVlQ (ORCPT
+        with ESMTP id S241941AbhLPVlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:41:16 -0500
-Date:   Thu, 16 Dec 2021 21:41:14 -0000
+        Thu, 16 Dec 2021 16:41:17 -0500
+Date:   Thu, 16 Dec 2021 21:41:15 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690875;
+        s=2020; t=1639690876;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DTHLVnVNyxC3vAKl9mVWNy0jC97ohV0HRqRYHTFMce4=;
-        b=qGLjJfX6gNJsUJGlQReXgrM7PfcRJWNRTR0AXZvJrPfL15GlGSf5vAtR9gz0G3SbXWrTkI
-        S3qV/7sjuwj80rbt/DNzLrN03S9S+NszBqD5+CL2vQN2Q4Or03n41wwHnL9cTu1b1a8BFN
-        sy4LPDR/P2ts9El5Z01b80Je3qaUjrHukXKmCNdE1dLv+sNkSS/9WP9hMktXq9BJfjvsRo
-        IK2ytcC2uTN6aHvwf4UDuy2I+zKwcWiNewsuxikADsoQBmpcuG0KGMloWDlbwvzZZ1IXIQ
-        k1v39W5XuENyyl5zXORfjjNECjQ1l8+CF2IAdZdfBlyL2RjlS85amyDjhALAMQ==
+        bh=ehjucClV0RZ8wwaHaSh0N8JcgLZ8rROkpZNSYCo1SI0=;
+        b=tHNL2nf7vcPU0/JCUqL3Z85vwBTWvZVFn0RZWqNyhc0yBMHmk7l3FZNjhn6xNR32GZgMLO
+        nzJlPGcNo2n6kpv73s877LUg2DlSMqc29v/Bhz1Yt6GHv3etZhdC0CoLEjSrjwlN+kgAVK
+        r6Ec3NTZEWNO9vUjeyRn9SP8UOGz+pAz0qCKVxYD0zUP8f0CpUE1mY0VWKgHh0QBH6aVo0
+        PnrQuesX5mTiwhgil29ezdDdwXMG2CxogxoqzyFSq7wmRtPNCtEaKdfhNlK44csxVYHR0S
+        OHfpLsMKV3gKDj8Eo/ZdYMyfhLPZ0uXKu9/1BPiM41ct2833v1kmDUpYbyCeLg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690875;
+        s=2020e; t=1639690876;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DTHLVnVNyxC3vAKl9mVWNy0jC97ohV0HRqRYHTFMce4=;
-        b=38NwxVSMQJ+OiPlD38Ifqu1QbW3c6U/ZISqte04tYBkXSK+kRSGNJXdFykCpbv+B2RUCwS
-        /oe2Gy3fsTb/L3CQ==
+        bh=ehjucClV0RZ8wwaHaSh0N8JcgLZ8rROkpZNSYCo1SI0=;
+        b=EGCCEI+nf5qqcbPj7ROSwklzv39qNFxlPLKMTUko5zBI48uwr2RbKPNdZ+Ff5WYUooCkOn
+        MG+nmIrTJZO7QJAA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] x86/apic/msi: Use PCI device MSI property
+Subject: [tip: irq/msi] PCI/MSI: Set pci_dev::msi[x]_enabled early
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Michael Kelley <mikelley@microsoft.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211210221813.372357371@linutronix.de>
-References: <20211210221813.372357371@linutronix.de>
+        Nishanth Menon <nm@ti.com>, Jason Gunthorpe <jgg@nvidia.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211210221813.250049810@linutronix.de>
+References: <20211210221813.250049810@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969087411.23020.4064430322902380887.tip-bot2@tip-bot2>
+Message-ID: <163969087559.23020.12079408218134390263.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,41 +59,104 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     b3f82364117a0b7f666ce023195b636c4803c46c
-Gitweb:        https://git.kernel.org/tip/b3f82364117a0b7f666ce023195b636c4803c46c
+Commit-ID:     c7ecb95ca6a80b29af0f41cc28c58e542637fbc6
+Gitweb:        https://git.kernel.org/tip/c7ecb95ca6a80b29af0f41cc28c58e542637fbc6
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 10 Dec 2021 23:18:47 +01:00
+AuthorDate:    Fri, 10 Dec 2021 23:18:44 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 16 Dec 2021 22:16:37 +01:00
 
-x86/apic/msi: Use PCI device MSI property
+PCI/MSI: Set pci_dev::msi[x]_enabled early
 
-instead of fiddling with MSI descriptors.
+There are quite some places which retrieve the first MSI descriptor to
+evaluate whether the setup is for MSI or MSI-X. That's required because
+pci_dev::msi[x]_enabled is only set when the setup completed successfully.
+
+There is no real reason why msi[x]_enabled can't be set at the beginning of
+the setup sequence and cleared in case of a failure.
+
+Implement that so the MSI descriptor evaluations can be converted to simple
+property queries.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested-by: Nishanth Menon <nm@ti.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211210221813.372357371@linutronix.de
+Link: https://lore.kernel.org/r/20211210221813.250049810@linutronix.de
 
 ---
- arch/x86/kernel/apic/msi.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/pci/msi/msi.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kernel/apic/msi.c b/arch/x86/kernel/apic/msi.c
-index b270b70..7517eb0 100644
---- a/arch/x86/kernel/apic/msi.c
-+++ b/arch/x86/kernel/apic/msi.c
-@@ -160,11 +160,8 @@ static struct irq_chip pci_msi_controller = {
- int pci_msi_prepare(struct irq_domain *domain, struct device *dev, int nvec,
- 		    msi_alloc_info_t *arg)
- {
--	struct pci_dev *pdev = to_pci_dev(dev);
--	struct msi_desc *desc = first_pci_msi_entry(pdev);
--
- 	init_irq_alloc_info(arg, NULL);
--	if (desc->pci.msi_attrib.is_msix) {
-+	if (to_pci_dev(dev)->msix_enabled) {
- 		arg->type = X86_IRQ_ALLOC_TYPE_PCI_MSIX;
- 	} else {
- 		arg->type = X86_IRQ_ALLOC_TYPE_PCI_MSI;
+diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+index eb917fe..5af8d9b 100644
+--- a/drivers/pci/msi/msi.c
++++ b/drivers/pci/msi/msi.c
+@@ -421,11 +421,18 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
+ 	struct msi_desc *entry;
+ 	int ret;
+ 
+-	pci_msi_set_enable(dev, 0);	/* Disable MSI during set up */
++	/*
++	 * Disable MSI during setup in the hardware, but mark it enabled
++	 * so that setup code can evaluate it.
++	 */
++	pci_msi_set_enable(dev, 0);
++	dev->msi_enabled = 1;
+ 
+ 	entry = msi_setup_entry(dev, nvec, affd);
+-	if (!entry)
+-		return -ENOMEM;
++	if (!entry) {
++		ret = -ENOMEM;
++		goto fail;
++	}
+ 
+ 	/* All MSIs are unmasked by default; mask them all */
+ 	pci_msi_mask(entry, msi_multi_mask(entry));
+@@ -452,7 +459,6 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
+ 	/* Set MSI enabled bits	*/
+ 	pci_intx_for_msi(dev, 0);
+ 	pci_msi_set_enable(dev, 1);
+-	dev->msi_enabled = 1;
+ 
+ 	pcibios_free_irq(dev);
+ 	dev->irq = entry->irq;
+@@ -461,6 +467,8 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
+ err:
+ 	pci_msi_unmask(entry, msi_multi_mask(entry));
+ 	free_msi_irqs(dev);
++fail:
++	dev->msi_enabled = 0;
+ 	return ret;
+ }
+ 
+@@ -589,6 +597,9 @@ static int msix_capability_init(struct pci_dev *dev, struct msix_entry *entries,
+ 	pci_msix_clear_and_set_ctrl(dev, 0, PCI_MSIX_FLAGS_MASKALL |
+ 				    PCI_MSIX_FLAGS_ENABLE);
+ 
++	/* Mark it enabled so setup functions can query it */
++	dev->msix_enabled = 1;
++
+ 	pci_read_config_word(dev, dev->msix_cap + PCI_MSIX_FLAGS, &control);
+ 	/* Request & Map MSI-X table region */
+ 	tsize = msix_table_size(control);
+@@ -623,9 +634,8 @@ static int msix_capability_init(struct pci_dev *dev, struct msix_entry *entries,
+ 
+ 	dev->msi_irq_groups = groups;
+ 
+-	/* Set MSI-X enabled bits and unmask the function */
++	/* Disable INTX */
+ 	pci_intx_for_msi(dev, 0);
+-	dev->msix_enabled = 1;
+ 
+ 	/*
+ 	 * Ensure that all table entries are masked to prevent
+@@ -645,6 +655,7 @@ out_free:
+ 	free_msi_irqs(dev);
+ 
+ out_disable:
++	dev->msix_enabled = 0;
+ 	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_MASKALL | PCI_MSIX_FLAGS_ENABLE, 0);
+ 
+ 	return ret;

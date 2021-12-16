@@ -2,102 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A92476C1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F326476C1E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234985AbhLPInm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 03:43:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55958 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230071AbhLPInk (ORCPT
+        id S234993AbhLPIof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 03:44:35 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:21443 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229539AbhLPIoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 03:43:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639644219;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UfCZtz1ccK1G4KuhCQww9wOX9Yntwu2r9HaxdHV6uW0=;
-        b=HOquVJ0Itil4LDbZ8JmBKFUVLQnUHJzFZ7+IrXlD42sgHhe1GRL6E2RzhkZ8UBUdPNUyAx
-        ucxgeE9GhjMk6zLVtikx+EpAML9nVc9k9q2K3atVbf05EvkBtIyfDbaF28XSMbtMNIrlr1
-        JM/FlSHxBZSYCdKTQn/tu+waO+E14tc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-282-mMnn5J3YO22tFqJtLTsJrQ-1; Thu, 16 Dec 2021 03:43:36 -0500
-X-MC-Unique: mMnn5J3YO22tFqJtLTsJrQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1696981EE60;
-        Thu, 16 Dec 2021 08:43:35 +0000 (UTC)
-Received: from localhost (ovpn-12-63.pek2.redhat.com [10.72.12.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E525C84FF9;
-        Thu, 16 Dec 2021 08:43:27 +0000 (UTC)
-Date:   Thu, 16 Dec 2021 16:43:25 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>, prudo@redhat.com
-Cc:     Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>,
-        kexec@lists.infradead.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-kernel@vger.kernel.org,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Convert vmcore to use an iov_iter
-Message-ID: <20211216084325.GH3023@MiWiFi-R3L-srv>
-References: <20211213143927.3069508-1-willy@infradead.org>
+        Thu, 16 Dec 2021 03:44:34 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3AghyTsKuAycabnUMOTc9NlO09OufnVI9cMUV32f8?=
+ =?us-ascii?q?akzHdYEJGY0x3yjAbCDyAOPiNZzf8Ld4jOYW08xtTsMCEmNYxS1M//y9gHilAw?=
+ =?us-ascii?q?SbnLY7Hdx+vZUt+DSFioHpPtpxYMp+ZRCwNZie0SiyFb/6x/RGQ6YnSHuClUbS?=
+ =?us-ascii?q?dZHgoLeNZYHxJZSxLyrdRbrFA0YDR7zOl4bsekuWHULOX82cc3lE8t8pvnChSU?=
+ =?us-ascii?q?MHa41v0iLCRicdj5zcyn1FNZH4WyDrYw3HQGuG4FcbiLwrPIS3Qw4/Xw/stIov?=
+ =?us-ascii?q?NfrfTeUtMTKPQPBSVlzxdXK3Kbhpq/3R0i/hkcqFHLxo/ZzahxridzP1JtI6wS?=
+ =?us-ascii?q?AUoN6vklvkfUgVDDmd1OqguFLrveCHu6ZTIkBafG5fr67A0ZK0sBqUK6+RlEGM?=
+ =?us-ascii?q?UraRAAD8IZxGHwemxxdqTTuhqm9RmL8TxOo4bkm9vwCufDvs8R53HBaLQ6rdw2?=
+ =?us-ascii?q?DY2m9ALB/rbbuIHZjd1KhfNeRtCPhEQEp1WtOWniVHtcjBApRSerMIKD8L7pOB?=
+ =?us-ascii?q?q+OG1doOLJZrRHoMI9nt0b1nupwzRaiz2/vTGodZdzk+Ruw=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AQPNZ3aE5jUy7VCHbpLqEAseALOsnbusQ8zAX?=
+ =?us-ascii?q?P0AYc31om6uj5qeTdZUgpHnJYVkqKRIdcLy7V5VoIkmskaKdg7NhX4tKNTOO0A?=
+ =?us-ascii?q?DDQe1fBODZowEIdReRygck79YET0FhMqyLMXFKydb9/BKjE8sthP2O8KWTj+/Y?=
+ =?us-ascii?q?yHt3JDsaE51I3kNoDBqBCE1qSE1jDZo9LpCV4c1KvH6OYnISB/7LfUUtbqzSoc?=
+ =?us-ascii?q?HRjpL6bVojDx4j0gOHijSl8/rbPnGjr24jbw8=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,210,1635177600"; 
+   d="scan'208";a="119003731"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 16 Dec 2021 16:44:32 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id 13A134D146C3;
+        Thu, 16 Dec 2021 16:44:31 +0800 (CST)
+Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 16 Dec 2021 16:44:29 +0800
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 16 Dec 2021 16:44:31 +0800
+Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Thu, 16 Dec 2021 16:44:31 +0800
+From:   Li Zhijian <lizhijian@cn.fujitsu.com>
+To:     <zyjzyj2000@gmail.com>, <jgg@ziepe.ca>
+CC:     <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>
+Subject: [PATCH] IB/rxe: Get rid of redundant plus
+Date:   Thu, 16 Dec 2021 16:43:44 +0800
+Message-ID: <20211216084344.539-1-lizhijian@cn.fujitsu.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213143927.3069508-1-willy@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 13A134D146C3.AB0E4
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/21 at 02:39pm, Matthew Wilcox (Oracle) wrote:
-> For some reason several people have been sending bad patches to fix
-> compiler warnings in vmcore recently.  Here's how it should be done.
-> Compile-tested only on x86.  As noted in the first patch, s390 should
-> take this conversion a bit further, but I'm not inclined to do that
-> work myself.
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+---
+ drivers/infiniband/sw/rxe/rxe_opcode.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Add Philipp to the CC.
+diff --git a/drivers/infiniband/sw/rxe/rxe_opcode.c b/drivers/infiniband/sw/rxe/rxe_opcode.c
+index 3ef5a10a6efd..79122eeb4d82 100644
+--- a/drivers/infiniband/sw/rxe/rxe_opcode.c
++++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
+@@ -879,9 +879,9 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
+ 			[RXE_ATMETH]	= RXE_BTH_BYTES
+ 						+ RXE_RDETH_BYTES
+ 						+ RXE_DETH_BYTES,
+-			[RXE_PAYLOAD]	= RXE_BTH_BYTES +
++			[RXE_PAYLOAD]	= RXE_BTH_BYTES
+ 						+ RXE_ATMETH_BYTES
+-						+ RXE_DETH_BYTES +
++						+ RXE_DETH_BYTES
+ 						+ RXE_RDETH_BYTES,
+ 		}
+ 	},
+@@ -900,9 +900,9 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
+ 			[RXE_ATMETH]	= RXE_BTH_BYTES
+ 						+ RXE_RDETH_BYTES
+ 						+ RXE_DETH_BYTES,
+-			[RXE_PAYLOAD]	= RXE_BTH_BYTES +
++			[RXE_PAYLOAD]	= RXE_BTH_BYTES
+ 						+ RXE_ATMETH_BYTES
+-						+ RXE_DETH_BYTES +
++						+ RXE_DETH_BYTES
+ 						+ RXE_RDETH_BYTES,
+ 		}
+ 	},
+-- 
+2.33.0
 
-He used to work on s390 arch. Now he joins Redhat and will focus
-on kexec/kdump. See if he has any thoughts on the s390 part of work, or
-may reach out to s390 developer.
 
-> 
-> v3:
->  - Send the correct patches this time
-> v2:
->  - Removed unnecessary kernel-doc
->  - Included uio.h to fix compilation problems
->  - Made read_from_oldmem_iter static to avoid compile warnings during the
->    conversion
->  - Use iov_iter_truncate() (Christoph)
-> 
-> Matthew Wilcox (Oracle) (3):
->   vmcore: Convert copy_oldmem_page() to take an iov_iter
->   vmcore: Convert __read_vmcore to use an iov_iter
->   vmcore: Convert read_from_oldmem() to take an iov_iter
-> 
->  arch/arm/kernel/crash_dump.c     |  27 +------
->  arch/arm64/kernel/crash_dump.c   |  29 +------
->  arch/ia64/kernel/crash_dump.c    |  32 +-------
->  arch/mips/kernel/crash_dump.c    |  27 +------
->  arch/powerpc/kernel/crash_dump.c |  35 ++-------
->  arch/riscv/kernel/crash_dump.c   |  26 +------
->  arch/s390/kernel/crash_dump.c    |  13 ++--
->  arch/sh/kernel/crash_dump.c      |  29 ++-----
->  arch/x86/kernel/crash_dump_32.c  |  29 +------
->  arch/x86/kernel/crash_dump_64.c  |  48 ++++--------
->  fs/proc/vmcore.c                 | 129 +++++++++++++------------------
->  include/linux/crash_dump.h       |  19 ++---
->  12 files changed, 122 insertions(+), 321 deletions(-)
-> 
-> -- 
-> 2.33.0
-> 
 

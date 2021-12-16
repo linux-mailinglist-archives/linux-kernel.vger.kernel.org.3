@@ -2,180 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD2B4767C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 03:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 370664767C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 03:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbhLPCMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 21:12:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbhLPCMm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 21:12:42 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089F9C06173E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 18:12:41 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id a37so35042189ljq.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 18:12:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oN/BkkxAzh0TiMVlSBz5FLbx67Y+EoaSkeGmdT8a2+8=;
-        b=hqMjUvbseGgiGYDl5Qbaq4vQtnZIGaJQXqPHIq4tnU6P7v+h++jnmsE4PxuiA+AH8N
-         /VM9sAODroW2HZ09MIr5DM4idU9+EI/mt6VAl7mSUjvsoVI229LH2eqNkLZjCthCYotX
-         PXLS4Vro8Kmeox/ihgl55IUOWY6C263GJ0xqxHrp/5liDKyPqD5TI5AZmpxN0n4MBnJ8
-         75ioiYeFBomV0uBquc5/Y0QjNaBfNvzxDVt28p31WJNdlueFp739E2MpwaEs09V1Vi1f
-         3h9JzIHtOX48MibsEofJIAqAECm+1R6XVSGZZz0+O+ibY7pR5kwPrkM5Og3Ax+otckMJ
-         9c0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oN/BkkxAzh0TiMVlSBz5FLbx67Y+EoaSkeGmdT8a2+8=;
-        b=GUB2PdVKCqR+95nSpI3W6FMjbxz6kA09R7epFi/DSGDgc7TBrC4261KOdrr06XnNVu
-         ehLq2OfVnE3te88ELRSN8FhURlAVP2lrOArYDQjj10/zcBcoqL3pRe+DnoE8Oq8FECye
-         9vY4OTKHUJKEpH73RsjYiMNPTNStYyBEeWFYT728fp6t++Sgz8CWrS6OrHFzzvy+Alpi
-         ZsZZPweVHaE08y087BvghPGTCDbC0qdmeEr5aJy/GTWR4xL8/V77ofz7hjG8PScaIfne
-         2am0q9czEDw3NYpMCpo+12Dq+G4hV+lDTRDZxj5MqbnJfZ5guPVn/X8KFu0ZiwlDRs8e
-         H79A==
-X-Gm-Message-State: AOAM531gXxBdqR0BLVhqypYUvW4JQuWQzQ34mEth14sHWua8oMPMnYcJ
-        klawoAPPvNmo0O65FmbcJOA42w==
-X-Google-Smtp-Source: ABdhPJwFkqpGRH3//LQhIXXRkFcjQiigOlWwY/xfN/YQ/h/cjLG5rE/ffQ/Bqh+WemHQh9E+4OLXCw==
-X-Received: by 2002:a2e:b163:: with SMTP id a3mr13430601ljm.264.1639620760128;
-        Wed, 15 Dec 2021 18:12:40 -0800 (PST)
-Received: from ?IPV6:2001:470:dd84:abc0::8a5? ([2001:470:dd84:abc0::8a5])
-        by smtp.gmail.com with ESMTPSA id m3sm798052lji.112.2021.12.15.18.12.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Dec 2021 18:12:39 -0800 (PST)
-Message-ID: <ccd98cd9-f8c1-d4df-3849-3844e8b82e89@linaro.org>
-Date:   Thu, 16 Dec 2021 05:12:37 +0300
+        id S232804AbhLPCPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 21:15:13 -0500
+Received: from out0.migadu.com ([94.23.1.103]:57677 "EHLO out0.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229955AbhLPCPM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 21:15:12 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2 2/3] drm/msm/disp: Export helper for capturing snapshot
-Content-Language: en-GB
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20211215174524.1742389-1-robdclark@gmail.com>
- <20211215174524.1742389-3-robdclark@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20211215174524.1742389-3-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1639620910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k4phbJHuL8+tP9BmJgUGj0AvkreTd5WR5XGVGz/EErs=;
+        b=iEzd/CuZnr8rHBKTFUjSyuR/rpZbVLRe1uhQ+UFjq9Bx6exxgkyobtWJKXzEMpCuEs/Eng
+        9REM202CHRa91HhvCPgOCeGOumxa8pvHsNMvuhilguRaOkRRmM8C5me7NJfbEkM3Flsjwf
+        TPn9r7+elS4iwuwcdKNni4SFJilekvg=
+Date:   Thu, 16 Dec 2021 02:15:09 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   yajun.deng@linux.dev
+Message-ID: <3ed867e06f7f9bb9d89beaafc50905c8@linux.dev>
+Subject: Re: [PATCH] lib/raid6: fix abnormally high latency
+To:     "Song Liu" <song@kernel.org>
+Cc:     stockhausen@collogia.de,
+        "open list" <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        "linux-raid" <linux-raid@vger.kernel.org>, masahiroy@kernel.org,
+        williams@redhat.com
+In-Reply-To: <CAPhsuW6T_nqqfOtj_dVn9KV+iUbki2X3WU3pxfo25Ewj3i5ZjA@mail.gmail.com>
+References: <CAPhsuW6T_nqqfOtj_dVn9KV+iUbki2X3WU3pxfo25Ewj3i5ZjA@mail.gmail.com>
+ <20211214031553.16435-1-yajun.deng@linux.dev>
+ <CAPhsuW5X+zewpKoJLjMMGOUeSiJ1EYqD+0i1bA8y7SFtJLkMeg@mail.gmail.com>
+ <0d07e13a5454dfb03b22e5223d101a1b@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/12/2021 20:45, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> We'll re-use this for debugfs.
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->   drivers/gpu/drm/msm/disp/msm_disp_snapshot.c | 28 +++++++++++++++-----
->   drivers/gpu/drm/msm/disp/msm_disp_snapshot.h | 10 +++++++
->   2 files changed, 31 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/msm_disp_snapshot.c b/drivers/gpu/drm/msm/disp/msm_disp_snapshot.c
-> index a4a7cb06bc87..580ea01b13ab 100644
-> --- a/drivers/gpu/drm/msm/disp/msm_disp_snapshot.c
-> +++ b/drivers/gpu/drm/msm/disp/msm_disp_snapshot.c
-> @@ -28,29 +28,43 @@ static ssize_t __maybe_unused disp_devcoredump_read(char *buffer, loff_t offset,
->   	return count - iter.remain;
->   }
->   
-> -static void _msm_disp_snapshot_work(struct kthread_work *work)
-> +struct msm_disp_state *
-> +msm_disp_snapshot_state_sync(struct msm_kms *kms)
->   {
-> -	struct msm_kms *kms = container_of(work, struct msm_kms, dump_work);
->   	struct drm_device *drm_dev = kms->dev;
->   	struct msm_disp_state *disp_state;
-> -	struct drm_printer p;
-> +
-> +	WARN_ON(!mutex_is_locked(&kms->dump_mutex));
->   
->   	disp_state = kzalloc(sizeof(struct msm_disp_state), GFP_KERNEL);
->   	if (!disp_state)
-> -		return;
-> +		return ERR_PTR(-ENOMEM);
->   
->   	disp_state->dev = drm_dev->dev;
->   	disp_state->drm_dev = drm_dev;
->   
->   	INIT_LIST_HEAD(&disp_state->blocks);
->   
-> -	/* Serialize dumping here */
-> -	mutex_lock(&kms->dump_mutex);
-> -
->   	msm_disp_snapshot_capture_state(disp_state);
->   
-> +	return disp_state;
-> +}
-> +
-> +static void _msm_disp_snapshot_work(struct kthread_work *work)
-> +{
-> +	struct msm_kms *kms = container_of(work, struct msm_kms, dump_work);
-> +	struct drm_device *drm_dev = kms->dev;
-
-drivers/gpu/drm/msm/disp/msm_disp_snapshot.c:56:28: warning: unused 
-variable ‘drm_dev’ [-Wunused-variable]
-    56 |         struct drm_device *drm_dev = kms->dev;
-
-I will apply the fixup locally.
-
-> +	struct msm_disp_state *disp_state;
-> +	struct drm_printer p;
-> +
-> +	/* Serialize dumping here */
-> +	mutex_lock(&kms->dump_mutex);
-> +	disp_state = msm_disp_snapshot_state_sync(kms);
->   	mutex_unlock(&kms->dump_mutex);
->   
-> +	if (IS_ERR(disp_state))
-> +		return;
-> +
->   	if (MSM_DISP_SNAPSHOT_DUMP_IN_CONSOLE) {
->   		p = drm_info_printer(disp_state->drm_dev->dev);
->   		msm_disp_state_print(disp_state, &p);
-> diff --git a/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h b/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h
-> index 31ad68be3391..b5f452bd7ada 100644
-> --- a/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h
-> +++ b/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h
-> @@ -84,6 +84,16 @@ int msm_disp_snapshot_init(struct drm_device *drm_dev);
->    */
->   void msm_disp_snapshot_destroy(struct drm_device *drm_dev);
->   
-> +/**
-> + * msm_disp_snapshot_state_sync - synchronously snapshot display state
-> + * @kms:  the kms object
-> + *
-> + * Returns state or error
-> + *
-> + * Must be called with &kms->dump_mutex held
-> + */
-> +struct msm_disp_state *msm_disp_snapshot_state_sync(struct msm_kms *kms);
-> +
->   /**
->    * msm_disp_snapshot_state - trigger to dump the display snapshot
->    * @drm_dev:	handle to drm device
-> 
-
-
--- 
-With best wishes
-Dmitry
+December 16, 2021 12:52 AM, "Song Liu" <song@kernel.org> wrote:=0A=0A> On=
+ Tue, Dec 14, 2021 at 6:14 PM <yajun.deng@linux.dev> wrote:=0A> =0A>> Dec=
+ember 15, 2021 1:27 AM, "Song Liu" <song@kernel.org> wrote:=0A>> =0A>> On=
+ Mon, Dec 13, 2021 at 7:17 PM Yajun Deng <yajun.deng@linux.dev> wrote:=0A=
+>> =0A>> We found an abnormally high latency when executing modprobe raid=
+6_pq, the=0A>> latency is greater than 1.2s when CONFIG_PREEMPT_VOLUNTARY=
+=3Dy, greater than=0A>> 67ms when CONFIG_PREEMPT=3Dy, and greater than 16=
+ms when CONFIG_PREEMPT_RT=3Dy.=0A>> This is caused by disable the preempt=
+ion, this time is too long and=0A>> unreasonable. We just need to disable=
+ migration. so used migrate_disable()/=0A>> migrate_enable() instead of p=
+reempt_disable()/preempt_enable(). This is=0A>> beneficial for CONFIG_PRE=
+EMPT=3Dy or CONFIG_PREEMPT_RT=3Dy, but no effect for=0A>> CONFIG_PREEMPT_=
+VOLUNTARY=3Dy.=0A>> =0A>> Fixes: fe5cbc6e06c7 ("md/raid6 algorithms: delt=
+a syndrome functions")=0A>> Signed-off-by: Yajun Deng <yajun.deng@linux.d=
+ev>=0A>> =0A>> We measure the speed of different RAID algorithms.If we do=
+n't disable=0A>> preempt, the result may be inaccurate, right? IIUC, we o=
+nly disable preempt=0A>> for 16 jiffies. Why do we see 1.2 second delay?=
+=0A>> =0A>> Here are the command of my test=EF=BC=9A=0A>> Execute "sudo c=
+yclictest -S -p 95 -d 0 -i 1000 -D 24h -m" in one terminal and "sudo modp=
+robe=0A>> raid6_pq" in the other terminal.=0A>> =0A>> Here are the result=
+s of my test=EF=BC=9A=0A>> CONFIG_PREEMPT_VOLUNTARY=3Dy=EF=BC=8CCONFIG_HZ=
+_250=3Dy=0A>> T: 0 ( 3092) P:95 I:1000 C: 8514 Min: 1 Act: 2 Avg: 1 Max: =
+6=0A>> T: 1 ( 3093) P:95 I:1000 C: 8511 Min: 1 Act: 2 Avg: 1 Max: 14=0A> =
+=0A> I am not very familiar with the RT work, so please forgive me for so=
+me=0A> rookie questions.=0A> =0A> From the result, I think the CONFIG_PRE=
+EMPT_VOLUNTARY=3Dy and the=0A> CONFIG_PREEMPT=3Dy cases failed to preempt=
+ during the preempt enabled period in=0A> raid6_choose_gen(). Is this exp=
+ected?=0A> =0A=0ANo, This is due to disable preemption causing ksoftirqd =
+fail to schedule, we can use bcc tools see that.=0A=0A> OTOH, the 16ms la=
+tency with CONFIG_PREEMPT_RT=3Dy is more or less expected.=0A> Is this ac=
+ceptable? If not, is 1ms latency acceptable?=0A> =0A=0AHere are the test =
+results after adding patch=EF=BC=9A=0ACONFIG_PREEMPT=3Dy  or CONFIG_PREEM=
+PT_RT=3Dy=0AT: 0 ( 3167) P:95 I:1000 C:  13958 Min:      1 Act:    2 Avg:=
+    1 Max:       5=0AT: 1 ( 3168) P:95 I:1000 C:  13956 Min:      1 Act: =
+   2 Avg:    1 Max:       7=0AT: 2 ( 3169) P:95 I:1000 C:  13946 Min:    =
+  1 Act:    2 Avg:    1 Max:      12=0AT: 3 ( 3170) P:95 I:1000 C:  13951=
+ Min:      1 Act:    2 Avg:    1 Max:       5=0AT: 4 ( 3171) P:95 I:1000 =
+C:  13949 Min:      1 Act:    2 Avg:    1 Max:       3=0AT: 5 ( 3172) P:9=
+5 I:1000 C:  13947 Min:      1 Act:    2 Avg:    1 Max:      16=0AT: 6 ( =
+3173) P:95 I:1000 C:  13945 Min:      1 Act:    2 Avg:    2 Max:       7=
+=0AT: 7 ( 3174) P:95 I:1000 C:  13942 Min:      1 Act:    2 Avg:    1 Max=
+:       3=0AT: 8 ( 3175) P:95 I:1000 C:  13940 Min:      1 Act:    2 Avg:=
+    1 Max:       3=0AT: 9 ( 3176) P:95 I:1000 C:  13938 Min:      1 Act: =
+   1 Avg:    1 Max:       3=0AT:10 ( 3177) P:95 I:1000 C:  13936 Min:    =
+  1 Act:    2 Avg:    1 Max:       6=0AT:11 ( 3178) P:95 I:1000 C:  13933=
+ Min:      1 Act:    2 Avg:    1 Max:       3=0AT:12 ( 3179) P:95 I:1000 =
+C:  13931 Min:      1 Act:    2 Avg:    1 Max:       4=0AT:13 ( 3180) P:9=
+5 I:1000 C:  13929 Min:      1 Act:    2 Avg:    1 Max:       7=0AT:14 ( =
+3181) P:95 I:1000 C:  13927 Min:      1 Act:    2 Avg:    1 Max:       6=
+=0AT:15 ( 3182) P:95 I:1000 C:  13925 Min:      1 Act:    2 Avg:    1 Max=
+:       4=0AT:16 ( 3183) P:95 I:1000 C:  13923 Min:      1 Act:    2 Avg:=
+    1 Max:       5=0AT:17 ( 3184) P:95 I:1000 C:  13921 Min:      1 Act: =
+   2 Avg:    1 Max:       5=0AT:18 ( 3185) P:95 I:1000 C:  13919 Min:    =
+  1 Act:    2 Avg:    1 Max:       4=0AT:19 ( 3186) P:95 I:1000 C:  13916=
+ Min:      1 Act:    2 Avg:    1 Max:       4=0AT:20 ( 3187) P:95 I:1000 =
+C:  13914 Min:      1 Act:    2 Avg:    1 Max:       4=0AT:21 ( 3188) P:9=
+5 I:1000 C:  13912 Min:      1 Act:    2 Avg:    1 Max:      10=0AT:22 ( =
+3189) P:95 I:1000 C:  13910 Min:      1 Act:    2 Avg:    1 Max:       5=
+=0AT:23 ( 3190) P:95 I:1000 C:  13908 Min:      1 Act:    2 Avg:    1 Max=
+:       5=0AT:24 ( 3191) P:95 I:1000 C:  13906 Min:      1 Act:    2 Avg:=
+    1 Max:      18=0AT:25 ( 3192) P:95 I:1000 C:  13904 Min:      1 Act: =
+   2 Avg:    1 Max:       7=0AT:26 ( 3193) P:95 I:1000 C:  13902 Min:    =
+  1 Act:    2 Avg:    1 Max:       5=0AT:27 ( 3194) P:95 I:1000 C:  13900=
+ Min:      1 Act:    1 Avg:    1 Max:      11=0AT:28 ( 3195) P:95 I:1000 =
+C:  13898 Min:      1 Act:    2 Avg:    1 Max:       3=0AT:29 ( 3196) P:9=
+5 I:1000 C:  13896 Min:      1 Act:    2 Avg:    1 Max:       5=0AT:30 ( =
+3197) P:95 I:1000 C:  13894 Min:      1 Act:    2 Avg:    1 Max:       4=
+=0AT:31 ( 3198) P:95 I:1000 C:  13892 Min:      1 Act:    2 Avg:    1 Max=
+:       3=0A=0Awe can see the latency will not greater than 100us=EF=BC=
+=8Cso 1ms latency is also too long for CONFIG_PREEMPT=3Dy  or CONFIG_PREE=
+MPT_RT=3Dy.=0Ause migrate_disable()/migrate_enable() instead of preempt_d=
+isable()/preempt_enable() will not affect the speed of different RAID alg=
+orithms and the latency can be reduced to a reasonable range.=0A=0A=0A> T=
+hanks,=0A> Song=0A> =0A> [...]

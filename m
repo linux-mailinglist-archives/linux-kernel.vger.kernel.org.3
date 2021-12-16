@@ -2,104 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A04477548
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F0E477559
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 16:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238248AbhLPPCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 10:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238184AbhLPPCj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:02:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302D2C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 07:02:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC1FB61E50
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:02:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9BABC36AE4;
-        Thu, 16 Dec 2021 15:02:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639666958;
-        bh=+ymRfnMDzS4Q00ODy6O0GETDfu0WUzcmTTTVopGCNyY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Pdufl+BNvm172d5N0T+EA45nB4IdQFjhQUgRlEJ6jU+ntmlgzYQl1V3VYxUmiHgVi
-         Au5Xm5Kmj62x5srcRdhwsWniho1cf4p5Mckrs956HQdYoX1Xg1Vys7cSYo8FsWwaz+
-         9MfHjN+y7UvY8+l3nx6oCWO099nVzwPCKeqXa1FwvNpbOeWHmB5FwghVC3X3TgVHt4
-         6f9q1Upridr8mzw4eSqusQodsnJHO1XIr/dAaVDrIzZcnUMuzUhVXlrs5vFwtJkZy7
-         bfJQVMZEkCOwIMg7sJ6FXMfSEucSTV5QtuEH7G1eXiL2I9dzRRY2u+6AX6nQ/NfAxF
-         e2Yksm8G3og7g==
-Date:   Fri, 17 Dec 2021 00:02:34 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jeff Xie <xiehuan09@gmail.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mingo@redhat.com,
-        zanussi@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH v6 3/5] trace/README: Document objtrace trigger
- syntax
-Message-Id: <20211217000234.46a613cf12d8402176c49322@kernel.org>
-In-Reply-To: <20211129164951.220511-4-xiehuan09@gmail.com>
-References: <20211129164951.220511-1-xiehuan09@gmail.com>
-        <20211129164951.220511-4-xiehuan09@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S238300AbhLPPHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 10:07:55 -0500
+Received: from elvis.franken.de ([193.175.24.41]:50675 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235074AbhLPPHy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 10:07:54 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mxsMK-0001iD-00; Thu, 16 Dec 2021 16:07:52 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id E2724C0995; Thu, 16 Dec 2021 16:03:13 +0100 (CET)
+Date:   Thu, 16 Dec 2021 16:03:13 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Bert Vermeulen <bert@biot.com>
+Subject: Re: [PATCH] MIPS: drop selected EARLY_PRINTK configs for
+ MACH_REALTEK_RTL
+Message-ID: <20211216150313.GA15172@alpha.franken.de>
+References: <20211215200602.6546-1-sander@svanheule.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215200602.6546-1-sander@svanheule.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff,
-
-On Tue, 30 Nov 2021 00:49:49 +0800
-Jeff Xie <xiehuan09@gmail.com> wrote:
-
-> Add a short description of the use of objtrace trigger.
-
-Please merge this into the [1/5] and [2/5], because the changes of
-"a new feature" and "the existance of the feature which
-kernel indicates" must be atomic.
-
-My recommendation is
-
-- add following line in the first patch
-
-	"\t            objtrace:add:obj[:count][if <filter>]\n"
-
-- and update it as following in the next patch according to the changes
-
-	"\t            objtrace:add:obj[,offset][:type][:count][if <filter>]\n"
-
-
-Thank you!
-
-
+On Wed, Dec 15, 2021 at 09:06:02PM +0100, Sander Vanheule wrote:
+> MACH_REALTEK_RTL declares that the system supports early printk , but
+> this is not actually implemented as intended. The system is left with a
+> non-functional early0 console because the setup_8250_early_printk_port()
+> call provided for MIPS_GENERIC is never used to set this up. Generic
+> ns16550a earlycon works, so devices should use that for early output.
+> This means that SYS_HAS_EARLY_PRINTK and USE_GENERIC_EARLY_PRINTK_8250
+> do not need to be selected.
 > 
-> Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
+> Additionally, as reported by Lukas Bulwahn, the selected symbol
+> SYS_HAS_EARLY_PRINTK_8250 does not actually exist, so should also be
+> dropped.
+> 
+> Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Cc: Bert Vermeulen <bert@biot.com>
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
 > ---
->  kernel/trace/trace.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  arch/mips/Kconfig | 3 ---
+>  1 file changed, 3 deletions(-)
 > 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index 88de94da596b..a84b6813769e 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -5590,6 +5590,9 @@ static const char readme_msg[] =
->  	"\t            enable_hist:<system>:<event>\n"
->  	"\t            disable_hist:<system>:<event>\n"
->  #endif
-> +#ifdef CONFIG_TRACE_OBJECT
-> +	"\t            objtrace:add:obj[,offset][:type][:count][if <filter>]\n"
-> +#endif
->  #ifdef CONFIG_STACKTRACE
->  	"\t\t    stacktrace\n"
->  #endif
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 63eb66a22691..9a3a2330fc69 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -642,9 +642,6 @@ config MACH_REALTEK_RTL
+>  	select SYS_SUPPORTS_MIPS16
+>  	select SYS_SUPPORTS_MULTITHREADING
+>  	select SYS_SUPPORTS_VPE_LOADER
+> -	select SYS_HAS_EARLY_PRINTK
+> -	select SYS_HAS_EARLY_PRINTK_8250
+> -	select USE_GENERIC_EARLY_PRINTK_8250
+>  	select BOOT_RAW
+>  	select PINCTRL
+>  	select USE_OF
 > -- 
-> 2.25.1
-> 
+> 2.33.1
 
+applied to mips-next.
+
+Thomas.
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

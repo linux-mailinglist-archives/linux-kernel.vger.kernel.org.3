@@ -2,138 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E78477322
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3708A477326
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237568AbhLPNaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:30:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
+        id S237551AbhLPNax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237535AbhLPNaN (ORCPT
+        with ESMTP id S234536AbhLPNav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:30:13 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FB4C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 05:30:13 -0800 (PST)
-Date:   Thu, 16 Dec 2021 13:30:11 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639661412;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qGEZMbyth6Lskg+UXr7MdyWPPxE4VQV+SNzXAPyvEYU=;
-        b=ZwQd1KJ0pj9Tu0A/CRu5T1W4aVAdFyU9r4MLj/rP4tzbUPu7oSNr7DP0ouZNqJnOz18uzu
-        GQwWmHba6JFEhmOtLE/O/HUny086FXCTbkP8JdECnF0O06EFQ7vHaEI2ys+op5PYViwmVN
-        THhaNeemN2A800Js0jcYMeprPdA01AMQnxd03IMK9pjXaLbYMkIchctdM8Fo1PU+nDoMc8
-        6u8NQIHNyUEjLTsFiunJbDmerdOJe/D21Sg0j4Tr5iNeCh7RGwyckG+NinCXOELbTATk6S
-        afQgDisdRqdcq1kfhfnT2901pnZXurDRobW6mJXJf3VOSfmHUtkauvXM+y7YJA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639661412;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qGEZMbyth6Lskg+UXr7MdyWPPxE4VQV+SNzXAPyvEYU=;
-        b=797gVqZnaanjxUmaAwCvp6qCsw62Z6B3SzsWS1mDeCOTz5Qn3oc/xewQiZ5yTECceUeeXU
-        gdieAnlLxNJ/FhBg==
-From:   "irqchip-bot for Valentin Schneider" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/gic-v3-its: Give the percpu rdist
- struct its own flags field
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20211027151506.2085066-2-valentin.schneider@arm.com>
-References: <20211027151506.2085066-2-valentin.schneider@arm.com>
+        Thu, 16 Dec 2021 08:30:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F73C061574;
+        Thu, 16 Dec 2021 05:30:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FBAF61DE1;
+        Thu, 16 Dec 2021 13:30:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EC6DC36AE0;
+        Thu, 16 Dec 2021 13:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639661450;
+        bh=DFkxvtxMqMUzTPeD8ypKgs/NOnPrlmnUQy5+INh5uY8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Buf8GtMlIjHdecx15IQgRj57NJaf2KpSeoYgXshUpjhmzB3RbVPB6W1HRxUvh0oS9
+         S2xjsEbZnKoocxKrcBZQY3FGz+CMBvXZCp+2qrCFUzjDmIdhb2vOMMLJAwGDbaAxwk
+         TNUTYwPS9hftZA+9Z4RzoMGT5fwBksq8e8STjIDU=
+Date:   Thu, 16 Dec 2021 14:30:47 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Cai Huoqing <caihuoqing@baidu.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spdx@vger.kernel.org
+Subject: Re: [PATCH v3] LICENSES/LGPL-2.1: Add LGPL-2.1-or-later as valid
+ identifiers
+Message-ID: <Ybs/h3WAY3FFVC4/@kroah.com>
+References: <12f38ebde4dcd8b1ecbd37df1b6ce2018426f6dd.1639657049.git.mchehab+huawei@kernel.org>
+ <20211216123014.GA286@LAPTOP-UKSR4ENP.internal.baidu.com>
+ <Ybs8eJOBwxw/Tj3o@kroah.com>
+ <CAKXUXMwsxiUncxS4Fip=7iK-xrUZSXY61jNcO61bgMyQ0DYp6A@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <163966141130.23020.13254907219278053545.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKXUXMwsxiUncxS4Fip=7iK-xrUZSXY61jNcO61bgMyQ0DYp6A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+On Thu, Dec 16, 2021 at 02:28:10PM +0100, Lukas Bulwahn wrote:
+> On Thu, Dec 16, 2021 at 2:17 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Dec 16, 2021 at 08:30:14PM +0800, Cai Huoqing wrote:
+> > > On 16 12月 21 13:17:35, Mauro Carvalho Chehab wrote:
+> > > > Some files have been flagged with the new LGPL-2.1-or-later
+> > > > identifier which replace the original LGPL-2.1+ in the SPDX license
+> > > > identifier specification, but the identifiers are not mentioned as
+> > > > valid in the LGPL-2.1 license file.
+> > > >
+> > > > Add it, together with the LGPL-2.1-only at the the license file.
+> > > >
+> > > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > > > ---
+> > > >  LICENSES/preferred/LGPL-2.1 | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > >
+> > > > diff --git a/LICENSES/preferred/LGPL-2.1 b/LICENSES/preferred/LGPL-2.1
+> > > > index 27bb4342a3e8..b73f9b6230f5 100644
+> > > > --- a/LICENSES/preferred/LGPL-2.1
+> > > > +++ b/LICENSES/preferred/LGPL-2.1
+> > > > @@ -1,5 +1,7 @@
+> > > >  Valid-License-Identifier: LGPL-2.1
+> > > > +Valid-License-Identifier: LGPL-2.1-only
+> > > >  Valid-License-Identifier: LGPL-2.1+
+> > > > +Valid-License-Identifier: LGPL-2.1-or-later
+> > > >  SPDX-URL: https://spdx.org/licenses/LGPL-2.1.html
+> > > The URL is deprecated, do we need to update it together.
+> >
+> > No.
+> >
+> > > The same, GPL-2.0, LGPL-2.0
+> >
+> > Again, no.  We are using an older version of the SPDX specification,
+> > this is fine.
+> >
+> 
+> Mauro's patch just makes sure that spdxcheck.py does not complain
+> about the SPDX License Identifiers from SPDX spec v2 and from v3. It
+> really does not deprecate anything or implies that everything in the
+> kernel needs to move to v3 (which might really be some crazy
+> disturbing refactoring effort without a lot of gain), but it allows
+> developers that want to use the tags from SPDX spec v3 can do so.
+> 
+> I would assume making the kernel/a tool in the kernel supporting
+> something more while being backwards-compatible is the standard way we
+> work... So, Greg, this patch is fine to be included, right?
 
-Commit-ID:     c0cdc89072a3e1ae3981437f385de14b7bba8fd8
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/c0cdc89072a3e1ae3981437f385de14b7bba8fd8
-Author:        Valentin Schneider <valentin.schneider@arm.com>
-AuthorDate:    Wed, 27 Oct 2021 16:15:04 +01:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Thu, 16 Dec 2021 13:21:11 
+Yes, this patch is fine, I will queue it up in a bit, thanks!
 
-irqchip/gic-v3-its: Give the percpu rdist struct its own flags field
-
-Later patches will require tracking some per-rdist status. Reuse the bytes
-"lost" to padding within the __percpu rdist struct as a flags field, and
-re-encode ->lpi_enabled within said flags.
-
-No change in functionality intended.
-
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20211027151506.2085066-2-valentin.schneider@arm.com
----
- drivers/irqchip/irq-gic-v3-its.c   | 8 +++++---
- include/linux/irqchip/arm-gic-v3.h | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index eb0882d..74c2274 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -46,6 +46,8 @@
- #define RDIST_FLAGS_PROPBASE_NEEDS_FLUSHING	(1 << 0)
- #define RDIST_FLAGS_RD_TABLES_PREALLOCATED	(1 << 1)
- 
-+#define RD_LOCAL_LPI_ENABLED                    BIT(0)
-+
- static u32 lpi_id_bits;
- 
- /*
-@@ -3044,7 +3046,7 @@ static void its_cpu_init_lpis(void)
- 	phys_addr_t paddr;
- 	u64 val, tmp;
- 
--	if (gic_data_rdist()->lpi_enabled)
-+	if (gic_data_rdist()->flags & RD_LOCAL_LPI_ENABLED)
- 		return;
- 
- 	val = readl_relaxed(rbase + GICR_CTLR);
-@@ -3158,7 +3160,7 @@ static void its_cpu_init_lpis(void)
- 	/* Make sure the GIC has seen the above */
- 	dsb(sy);
- out:
--	gic_data_rdist()->lpi_enabled = true;
-+	gic_data_rdist()->flags |= RD_LOCAL_LPI_ENABLED;
- 	pr_info("GICv3: CPU%d: using %s LPI pending table @%pa\n",
- 		smp_processor_id(),
- 		gic_data_rdist()->pend_page ? "allocated" : "reserved",
-@@ -5138,7 +5140,7 @@ static int redist_disable_lpis(void)
- 	 *
- 	 * If running with preallocated tables, there is nothing to do.
- 	 */
--	if (gic_data_rdist()->lpi_enabled ||
-+	if ((gic_data_rdist()->flags & RD_LOCAL_LPI_ENABLED) ||
- 	    (gic_rdists->flags & RDIST_FLAGS_RD_TABLES_PREALLOCATED))
- 		return 0;
- 
-diff --git a/include/linux/irqchip/arm-gic-v3.h b/include/linux/irqchip/arm-gic-v3.h
-index 81cbf85..0dc34d7 100644
---- a/include/linux/irqchip/arm-gic-v3.h
-+++ b/include/linux/irqchip/arm-gic-v3.h
-@@ -615,7 +615,7 @@ struct rdists {
- 		void __iomem	*rd_base;
- 		struct page	*pend_page;
- 		phys_addr_t	phys_base;
--		bool		lpi_enabled;
-+		u64             flags;
- 		cpumask_t	*vpe_table_mask;
- 		void		*vpe_l1_base;
- 	} __percpu		*rdist;
+greg k-h

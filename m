@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 405FB477CC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CD5477CC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 20:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241071AbhLPTrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 14:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbhLPTrj (ORCPT
+        id S241074AbhLPTtT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Dec 2021 14:49:19 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:37554 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236738AbhLPTtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 14:47:39 -0500
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCAAC06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 11:47:39 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id e27so119095vkd.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 11:47:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NfeGz675bo0ZAQkD1KeicPK8T+9nudR2MVitSK3mkmI=;
-        b=BhowvOlsjQ0sC/mAtZEVQ7CqisgZvneuyURY5COLjoEiosEeHD1ityN8relL+yTQLk
-         ZEjTSThRMFuNWHSeB3mfAshATpgv28Kc2K8pVmszVrU8i5acbjAoHb0kqm0zZt025PWP
-         C4fZiW+LNLnmJ6Vami2sLJobvwEoNlminL2hYEYqgFhkpL0v501a4kp3Ph4sZaFn86mW
-         XZg3Dz9hiu4wUdavj+dRPc2q1F3SKPFsnC9jiziTveg2jW3OJxfx6UTPPPA6T321wZfg
-         3jVg0OXIszHSHEd3CfeeiWs4GkTd4NkrYTqzfBNTiCh0GAWcQDxXL+wTh3xA8VUFBJ2w
-         hf0g==
+        Thu, 16 Dec 2021 14:49:18 -0500
+Received: by mail-oi1-f175.google.com with SMTP id bj13so442934oib.4;
+        Thu, 16 Dec 2021 11:49:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NfeGz675bo0ZAQkD1KeicPK8T+9nudR2MVitSK3mkmI=;
-        b=zvV+1i93iFHYLv3nEwijz3ZwS1H20HwNajD3APNBugPC4RjfiLsgQS4+W+IZmKcbqf
-         qVwr37yGlWsaZemi07/EN/5JO/d2nf5xBa8XlOc+XhpUrgK8OH84obQZKlq7BZJUuTPV
-         L9/11bFDnYB6inv6v2dCjLAcSM+Ow/WTBV62gT1AcHPxiS6cMKNEvFdUNo+vUDkikn35
-         LM3or5oeLR+yCS9EYFFimjIfHzZiSqt4a8ZtItpUMnuh5aBmNfXpkBb7r0sVvrL+EIdx
-         nx/8AmlJCPYZD/IPThNCyns5AVKBnOjbbs4zXNB1vTWMmE+EVJoydaZaIZkXaURh3dnK
-         X+MQ==
-X-Gm-Message-State: AOAM531sYw2xrWqamt3WjBZfboCNdlOE8aIsB5DcbseuGbKKNqwYzCKG
-        grSI9REbSH6/boGUco8C9zo5Ka3cZ4J8s5zEZMR6qA==
-X-Google-Smtp-Source: ABdhPJwBOX7xYFt8nvx7Ihazb7tPaF6woxVxl6yfCpvjDeCk/qlAfPInPy5Imr/zr+u/k9vC932UVin83BVZ2WFqwnY=
-X-Received: by 2002:a05:6122:1306:: with SMTP id e6mr7233502vkp.13.1639684058230;
- Thu, 16 Dec 2021 11:47:38 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=K9YSig+dSH4wLkJkl1f3TD0qsdd765YDc+vqhCt6/IA=;
+        b=IlxemNFQZneKAOxvFi4+BvdnnM962XjF7LV+R+TaMBjBCrfXKxERHGtGobv4bbmPL8
+         nPXw7rfAy9wMbC8j/bDAOG34/q4EQfjzxN4HpdKC88Ld9OyPz8eegQCKljNktHAWL7Vb
+         /2gnqKaiMM8Qj5zQFHTDxn/QKE5ugCQhigywuLz7iJ2HnsA3LO0J1En6ub67iHmQoySg
+         s4JCjjipFjDxVnVUgshNcERL6o8TJYD461uYA7uMVml1nj4soRS3uzUc4NnxmwEdFOHb
+         KNhpiJ/VkLYQoUmfcc/hHRqacNTh0SO1N8bfX3Pa+wE+49gvlNpKlCobtHIpfYLwPKoO
+         MFVw==
+X-Gm-Message-State: AOAM5321DqQKiDqi9R8VV5MjjPpPAPsUFHTGn9jjmXZ8TutA0GffrRYW
+        H2obUHdpgJR7Td5/rjpGekdGPh+r6RrGl99d8Y8=
+X-Google-Smtp-Source: ABdhPJylmJtuBFAfte6BXy9loWt6kt1insGu4s4RTJz4lr0j03s/TjeCqwB3oNwKq1FuMpV80rjGXzr3g5OS66RLx+0=
+X-Received: by 2002:aca:eb0b:: with SMTP id j11mr5394026oih.51.1639684157589;
+ Thu, 16 Dec 2021 11:49:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20211215160906.17451-1-semen.protsenko@linaro.org>
- <20211215160906.17451-2-semen.protsenko@linaro.org> <Ybt78LP4KDYoQrDy@robh.at.kernel.org>
-In-Reply-To: <Ybt78LP4KDYoQrDy@robh.at.kernel.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Thu, 16 Dec 2021 21:47:26 +0200
-Message-ID: <CAPLW+4=z12N-WFDVfmyTZ2oj_X-+3gHTGaJ0CSTJ5JrM8fK2oA@mail.gmail.com>
-Subject: Re: [PATCH 1/7] dt-bindings: clock: exynos850: Add bindings for
- Exynos850 sysreg clocks
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        David Virag <virag.david003@gmail.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-clk@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org
+References: <4717160.31r3eYUQgx@kreacher> <b9d06e6378a7c3b0e0b2561ab2a971c8fa1ff3e9.camel@linux.intel.com>
+In-Reply-To: <b9d06e6378a7c3b0e0b2561ab2a971c8fa1ff3e9.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 16 Dec 2021 20:49:06 +0100
+Message-ID: <CAJZ5v0ha5oimVv6i-yW=Dt8Fzf07+06V4b7xUyN3mY45yBvVbQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: sleep: Fix error handling in dpm_prepare()
+To:     =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 at 19:48, Rob Herring <robh@kernel.org> wrote:
+On Thu, Dec 16, 2021 at 8:44 PM Thomas Hellström
+<thomas.hellstrom@linux.intel.com> wrote:
 >
-> On Wed, 15 Dec 2021 18:09:00 +0200, Sam Protsenko wrote:
-> > System Register is used to configure system behavior, like USI protocol,
-> > etc. SYSREG clocks should be provided to corresponding syscon nodes, to
-> > make it possible to modify SYSREG registers.
+> On Thu, 2021-12-16 at 20:30 +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > While at it, add also missing PMU and GPIO clocks, which looks necessary
-> > and might be needed for corresponding Exynos850 features soon.
+> > Commit 2aa36604e824 ("PM: sleep: Avoid calling put_device() under
+> > dpm_list_mtx") forgot to update the while () loop termination
+> > condition to also break the loop if error is nonzero, which
+> > causes the loop to become infinite if device_prepare() returns
+> > an error for one device.
 > >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > ---
-> >  include/dt-bindings/clock/exynos850.h | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > Add the missing !error check.
 > >
+> > Fixes: 2aa36604e824 ("PM: sleep: Avoid calling put_device() under
+> > dpm_list_mtx")
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Thomas Hellström <thomas.hellstrom@linux.intel.com>
 >
->
-> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> there's no need to repost patches *only* to add the tags. The upstream
-> maintainer will do that for acks received on the version they apply.
->
-> If a tag was not added on purpose, please state why and what changed.
->
+> Was this meant to be a Reported-by:?
 
-No malice intended, just forgot to do so, sorry. Already added all
-missing tags, will be present in v2 (gonna send it soon).
+Yes, it was, sorry.
+
+> Also Cc stable? IIRC 2aa36604e824 was.
+
+That gets added later and -stable can figure it out.
+
+> In any case,
+> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+
+Thanks!
+
+> > ---
+> >  drivers/base/power/main.c |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > Index: linux-pm/drivers/base/power/main.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/base/power/main.c
+> > +++ linux-pm/drivers/base/power/main.c
+> > @@ -1902,7 +1902,7 @@ int dpm_prepare(pm_message_t state)
+> >         device_block_probing();
+> >
+> >         mutex_lock(&dpm_list_mtx);
+> > -       while (!list_empty(&dpm_list)) {
+> > +       while (!list_empty(&dpm_list) && !error) {
+> >                 struct device *dev = to_device(dpm_list.next);
+> >
+> >                 get_device(dev);
+> >
+> >
+> >
+>
+>

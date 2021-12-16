@@ -2,323 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 837754780A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A704780B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbhLPXdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:33:19 -0500
-Received: from mail-bn1nam07on2104.outbound.protection.outlook.com ([40.107.212.104]:17383
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229470AbhLPXdS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:33:18 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c5aTp5oPfqEDzjC3pvVFm6nBIBdSceoxzYzFnVSlDT4aCADxSDayEUBIVphxRWxpxL7+QHDURxGh3VRRb7kYsv0GiTM4wxZVUQt0MuEw8AZW9jSse9Y7BFtIsUlGxBzp4F5v5pn0cbERMCkWsdki1AxZLOZDuTqO3SWvq8AgFfnZ7iCqW1/w+fwJjfUDqmH++cweqF/mcT6i4NoykIJa1yEveEuvyXEnxWBSn21yOA/Ozd3x7Vkc2205wNJd21XyZH9HfBrMVhlTKp5Sk4f31b58sXhjXsgNk6FinQ5KRqf25L2nHzk5mTe3hcVTNyeaz78+3dvs17Iz4Z6A/0+BCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ibAQDggaQVso1YbpDoD8grnwzd+2xLbMe/l0oh+qJ0Q=;
- b=On0ff5G/zevPWvEYClZjuL+LWcmwAUHF4Z95/Q09wZ0xN1lO4j+XiGSm2+2T7b6j88aM31l92pcvaipNeFi7UIHaUuaqytvdn54NYcldq/xf5D/dLylazAdRdGBJRwhVU/UFoLk0oorgfXrDVZz5Edtvi17DcgJjAO8CUmHCnL4IAqiAmri4LRo1SsgCkH6tG645F8Cm+uS9kCiIoWjYdV6H8lPQBI8rNbuMIZZ4vSNZh7wXLnubNMofqwgj1CsINIVYHWcP4xojTqS9oRajou2fnQy11zejRWsKB4l2eKBJhm15Bf71K52Brj1R6wQPp6w0SkEIfu5UexLEUtTsKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
+        id S229779AbhLPXeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229749AbhLPXeJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 18:34:09 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1426C061746
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:34:08 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id r26so1155750oiw.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:34:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ibAQDggaQVso1YbpDoD8grnwzd+2xLbMe/l0oh+qJ0Q=;
- b=HhhYUx9DSnXvpGkhWCYp3vmfgSlOJ57Jw5hMIfTWGVYKq9jMqkKRjQbPI4jNVmM1viTUnzSxd/2DFL86JGM4clYkmA2TXke5dP3GgU+oPIV8c/w2sBFH+WFmTHrniY4+rSJD7ZFdiUhtmUJK2Sfwlus3ET1aLQI0QjAzkEk4W2Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from CH0PR01MB7033.prod.exchangelabs.com (2603:10b6:610:107::16) by
- CH0PR01MB6889.prod.exchangelabs.com (2603:10b6:610:102::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4778.16; Thu, 16 Dec 2021 23:33:16 +0000
-Received: from CH0PR01MB7033.prod.exchangelabs.com
- ([fe80::c8fb:e830:d7e5:bdf7]) by CH0PR01MB7033.prod.exchangelabs.com
- ([fe80::c8fb:e830:d7e5:bdf7%9]) with mapi id 15.20.4778.018; Thu, 16 Dec 2021
- 23:33:16 +0000
-Message-ID: <9330bbfb-d016-0283-a5ed-e2f4d5446759@amperemail.onmicrosoft.com>
-Date:   Thu, 16 Dec 2021 18:33:11 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/2] ACPI/AEST: Initial AEST driver
-Content-Language: en-US
-To:     "ishii.shuuichir@fujitsu.com" <ishii.shuuichir@fujitsu.com>,
-        'Tyler Baicar' <baicar@os.amperecomputing.com>,
-        "patches@amperecomputing.com" <patches@amperecomputing.com>,
-        "abdulhamid@os.amperecomputing.com" 
-        <abdulhamid@os.amperecomputing.com>,
-        "darren@os.amperecomputing.com" <darren@os.amperecomputing.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "guohanjun@huawei.com" <guohanjun@huawei.com>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "vincenzo.frascino@arm.com" <vincenzo.frascino@arm.com>,
-        "tabba@google.com" <tabba@google.com>,
-        "marcan@marcan.st" <marcan@marcan.st>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "jthierry@redhat.com" <jthierry@redhat.com>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "john.garry@huawei.com" <john.garry@huawei.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "zhangshaokun@hisilicon.com" <zhangshaokun@hisilicon.com>,
-        "tmricht@linux.ibm.com" <tmricht@linux.ibm.com>,
-        "dchinner@redhat.com" <dchinner@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "Vineeth.Pillai@microsoft.com" <Vineeth.Pillai@microsoft.com>
-References: <20211124170708.3874-1-baicar@os.amperecomputing.com>
- <20211124170708.3874-2-baicar@os.amperecomputing.com>
- <TYCPR01MB6160D05580A6E8C9510D25A5E9709@TYCPR01MB6160.jpnprd01.prod.outlook.com>
-From:   Tyler Baicar <baicar@amperemail.onmicrosoft.com>
-In-Reply-To: <TYCPR01MB6160D05580A6E8C9510D25A5E9709@TYCPR01MB6160.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH0PR03CA0415.namprd03.prod.outlook.com
- (2603:10b6:610:11b::26) To CH0PR01MB7033.prod.exchangelabs.com
- (2603:10b6:610:107::16)
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wVN9Cdst75YteBeeIFGNl0na8PJu1PxWjHvdKRsuLNo=;
+        b=HjENK0B9HW76vw8xIIFcJA0IC3D9n2s3W+qR5y0bHYRZNJwAQgqyMg67KQ5oX7Cjpk
+         1tBi7NGzC/4YJI3ThIywLGGClCUcnzfkZSq+I0Rs9bz5/xCcm6jl5jr2lPIgSCLbaH2u
+         vEl+/iaypGo/qxv816XdLF0aZrgkDlf1X/ADKXOTzwPBCF3n81iMJk0ICHzh1CHFIFir
+         W34nfJiJYW+G2E8AA3TI7ZIJNttLnhX7gI2xABw9PaJbkjv/GkYmXEVE77DyRlnyw6dA
+         iY2iwcSoDGPe6FyQBPMym3RozkZZbmucrUF21orOEGPqNfx1EdygBBdHg0iFDR+y+yvY
+         VAYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wVN9Cdst75YteBeeIFGNl0na8PJu1PxWjHvdKRsuLNo=;
+        b=J6n9FmQcqvlLeer+pGDLes300UaCgzFTyB8fzw1Nz8ZJwuS+gGokHa1tfB1XJrA/Wy
+         n0yOeEkgbhjW2nkPXUwbJ0ejXOhqoi2IgufK9Z2PhP7rXcCFIVh8zWFZgtdltbX1sOB+
+         hGgay0Hgvx2R0HXU41l1TR2/rtGv8Z2J+GV9jopb8vYUElr8HvUFNk0oV2NRyS5otUnh
+         nnIp05JyuR0vaAXxyL5+wqPO+UeGBknc3RugVe1Ny/oTo6GAle92haxUBrwc8TnZKKOH
+         aX4uEv0plk4Yp4MhAJrMO/CZ/c3Trum5NiSlKizAywxXZxiNGtEgA7HK5BNiGC2wVTQf
+         FtDw==
+X-Gm-Message-State: AOAM532DunKChOdomwxjKVaKyn7Usq3h7/mfDiWe1JxRXVIUHF13eaXA
+        gWd2sGCYxX/PnRokabD3XL5Rqg==
+X-Google-Smtp-Source: ABdhPJzVmPPYwv1YIcyUN6xIib5xQXy6q7OQQrigQ9KAdWSJxAYxjsL16fUSS1c0ugQMQ/lxpItSOQ==
+X-Received: by 2002:a05:6808:1597:: with SMTP id t23mr173283oiw.24.1639697648165;
+        Thu, 16 Dec 2021 15:34:08 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id bi20sm1431910oib.29.2021.12.16.15.34.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 15:34:07 -0800 (PST)
+Date:   Thu, 16 Dec 2021 15:35:23 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     quic_vamslank@quicinc.com
+Cc:     agross@kernel.org, linus.walleij@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH v6 1/2] dt-bindings: pinctrl: qcom: Add SDX65 pinctrl
+ bindings
+Message-ID: <YbvNO8uS/x5qFqx8@ripper>
+References: <cover.1639696427.git.quic_vamslank@quicinc.com>
+ <ff9abf953c274a1e34f59114642f67ecf02acb6f.1639696427.git.quic_vamslank@quicinc.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 48bdbc92-aff1-4976-15ac-08d9c0ec6eff
-X-MS-TrafficTypeDiagnostic: CH0PR01MB6889:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR01MB688961AB48AB9A38CCC1FEACE3779@CH0PR01MB6889.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QAkvjVMQO7xkxa6wkLFzQNbV5wSdO0AAypyrL14/wBAUWHP/SU1QPwG0afUH8Zmga4/5PGyzI64fnUMICROFU1Jm6FP58katyDh+BeY8xE3/jfU3+QxIuU5iLMWZEKmEL875UgjbfIAlZJWdujbW/BXTANqdJNjY5vv3xvjj2z8rewkTYbkAG2ueCi9Cj48AH+4CuAUX5xN8f1kfOW7xqVgraWRdaXROxhLN1lnrCiKHXJZsWJ3uhZFDvGk+2bA/PlBxYEbEdldaWjZpZ7rBHs3L4rwtrs3rmiXThOtvyh6YWc83yIElbpuFWmTHfIRIeT6f5zBhtKCp5v64tiQ8mqJKqvtjp2aammLnKjNOwLVTETaCNhjKmjkCTCV4CfugtoaLIY6d5PVeiSdYkiDVZkXw0+28mvF9ECajE3WYOsy9t2Olb4h+fw5IOYyWCkP0MY7S9gEygdgeG9pD0C5kdSP0Wceb4a9K/gu77Nu8A1Ap7CIPrX86dsw8QmQX2j1QwO5bqtu0kXyp7JzKKdiTi2LqjtZiHzT4ld+Zh8GADuAxMQ23VTevJdp1PjghWCgk6Y4b/aho0FwXp21tDAlyXreXxFCuyVyQ7nuBvNW7bPtYrfCtkTvVCN/IfoMdwe6qUr4KiWHgdjreenrwxJFKVuINwL+xYDkWc8rHj+WOufYo4M731wkMu+JkPuXyByh6EkOhI0YFc4DQgS7QzgrM1Pcd6zJpDEEc4NxO5lN+T2Qb0rPD6rkrjNaJa2VIZxeP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR01MB7033.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66556008)(5660300002)(2616005)(26005)(38100700002)(83380400001)(66946007)(6506007)(921005)(6512007)(38350700002)(53546011)(6486002)(83170400001)(110136005)(31686004)(66476007)(2906002)(316002)(8936002)(6666004)(8676002)(52116002)(7416002)(186003)(31696002)(508600001)(42882007)(7406005)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHphYXRmdjdPYTBGVWw2c1dwdFJkWlBhc3JiSGFnYWxrRDVSdlhVVGtmSk1h?=
- =?utf-8?B?MTlHWnVyQUJkcys3bjJKenZuS0NNNlhzSVFKWEZGVmdma1lIOGViM1VMWkpM?=
- =?utf-8?B?c3oyY1E0Qk5YR3pRZi9kRFpSM1UvcnRJaitCeGdLZC83enl1MkV0bmc1azkx?=
- =?utf-8?B?b0k4UGFpaHNHeHkzQUpzSkdOWFpGOUZVVm9WemlhZXJhaVdkK3JRcFJmOEJv?=
- =?utf-8?B?ZkhVU3E1cXFHbHpTaERUS2VtczFROVlXZDVyaVg4Z2RJeEFmQWVVcDV4TEND?=
- =?utf-8?B?SFl4bVgybldaZW9HZjMwVit4ZENjM1Rpcy84bDVSbmxEODQ0K1pjZml5dVc2?=
- =?utf-8?B?MkFRN2dqdnUyaWhQRkhJaFY0RHJsdzF0cUdtNFRvOWU0aFh1SDJ2WFNXV0tL?=
- =?utf-8?B?cDR2dVV1Qk9Dc1Ztdy9vMVNFWE1hVmFoYVkxMlNwTU1Hb1ZDS1JUSXpZU3Fa?=
- =?utf-8?B?WjRVVjBVbVRnbEQ5TTJuNFFldC9EZkoxVHYrWDNYanA1eklvVjk5WU1RUHFw?=
- =?utf-8?B?emE1aEFYb2Uxc3h2SlNxcUcycFpnd3hVdkVrdWxIcmlUNU0rM042bndoajc5?=
- =?utf-8?B?N0FOK1U4TGVici8vSDR2MmNiRmh1NlRqN09PaTduV0ZRSDlhNU95b1hTdHIx?=
- =?utf-8?B?WlUwT3ZQL1VhYjIxVW84Um5iZWRSWVk4SkllNlVJd0xsaG9jeEc3dStLc2dG?=
- =?utf-8?B?ZUU0R1o4UGgreXZha2FrMWlzZ01ndytjeDdDRFgzU0ZLOXZHL0VscXRnTzRM?=
- =?utf-8?B?b3FValRNcDJoZ0lNbnhsSGhtcFpZaHpIMCtadkdJTHdFZHozbzc1Y0kxNTVx?=
- =?utf-8?B?VjUzOEFWNlJNRVE4UFBuQ0hyd0h0ZWZLSGhSRmZJNlNqSkJGSml5NmxOV3FO?=
- =?utf-8?B?eWQ3cjVzV2VnYVpVQjZMMGx6VnVmSEJnL1RLUXQxNGNyeEk5dS93RnBJYzlK?=
- =?utf-8?B?YW81cFFQSGpNUjBPTTBlWVJHUHFwUlIvWk1pWHNUYjFUQyt2djdLUmE5NWtw?=
- =?utf-8?B?OFJNL3RNeGhGUXp4cm85Y3NVVTJNUDBIeHp3YzdqdUltOTNPb1ZXZWptM1Bz?=
- =?utf-8?B?dHUzL0RNS1Z6bEF6QjJBRTdvb0drSnlpMnYwNjNCVWUzb1JOUEg1ajlEZjRp?=
- =?utf-8?B?RW1tOGpNN05va09pUG5OZ3ZGU3BTV3RSMjJrWlpENTI0S0ZVWmdRZ210dWVL?=
- =?utf-8?B?alI4dU1CdG1RMmJ2cUFZeDN4eW5Tb1Z5TU5STzJLUHdsc3pmNndDZllrV0Jv?=
- =?utf-8?B?dXNnYzFZUTFBN3pLZFlJWXROSnFLWVZhNGp2dDR1SDk0QnA4djcvcGE0d1Rv?=
- =?utf-8?B?NWtKMVpNb1RyMmcwUmUza0hQaXE3VDZVK0JqYmlvZzlFUkxxVkJDVXg5Qnds?=
- =?utf-8?B?WnhuZnNFTnUrdWNFVWdCNStXV1I5elVFQkRUb3hnQXVnbHdnbFN0U0ZYaExN?=
- =?utf-8?B?R09KR1dQVnpabld2WW41WWlzNmVIclZZcDgvMkdoOVJpRDQ5U21BckN1bTN1?=
- =?utf-8?B?cEZWaHZTeDJpUWVtUkt1cXQ5RVJoZDFIV0dEZGhVSWswQlJOM21YWm1HQ3VH?=
- =?utf-8?B?LzhId1F0a2FxZzlsTlJ5TlFEb2VFYWI2N1ZkYmk3Z2tnOWJqRWxSckJGVmt0?=
- =?utf-8?B?VnkwN0VTMDhNdFR3cmkzUW9ISzhCLzNwREE2Zi9GWVp1VFBYSnRidjFEVW12?=
- =?utf-8?B?NnBzYWpsWVE0RFNWMUJyMTZPVE9RbnFySVYwVTlxTDNseEM5Y2lJa0hUOFBY?=
- =?utf-8?B?cXJLeCtJQk5KTHI0MTlldHRCK2JkYWtPK0M4Y3BUYlhWMEI4ZXdkY2g4U0No?=
- =?utf-8?B?b0dGKzcrME1hamxURUJtS2g5azgwMExNRWZ0aW1uWnpad3R1VkVUVGRWL0My?=
- =?utf-8?B?M1pVdFg0d2ZGajREclRzME1ZQThTU2RpMElhQ3diSUh6WDBwQzg3VUlmeWRt?=
- =?utf-8?B?Y1NSZWdhb2dUbkEzTCtxZXQwNVFvVW82YjE0eG43ZVpzOTkxKzBwUmtFbVdh?=
- =?utf-8?B?YUo2TnlsVElXb2hsT0U1RGx0VTNUZlRucUFkOHJMb0wrbFN5TzNabUVlTGZC?=
- =?utf-8?B?TndxYTdwMFkzTDhxcVBiTlVqbWNPNGhQa20yV0g2UGU3UzZJd1hEZURZNTht?=
- =?utf-8?B?aEJkWlBVMW1IZzVmSndTdC83dVl6UVk5RHA4TjlVTW5KVjN5aTVoQURXa3J4?=
- =?utf-8?B?ZUllVGJKcFBuQWdubHBsLzRYeVBjbGFOOE13VUtaNWVVTXYycEpPUVh3Z2Ex?=
- =?utf-8?B?dXh1WEg1V3hmNjduS09OSSt4MVFwZ3VlQTRMcVdqRFZqRWlDRE4xWGtoQThL?=
- =?utf-8?B?SWwvMitnMzBRYnM2WmpHc2I2UFBDVXYvdGpkbElndHB3SlVKMXhGZz09?=
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48bdbc92-aff1-4976-15ac-08d9c0ec6eff
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR01MB7033.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 23:33:15.9344
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8rD4Rtnw0ekXcbHIh4lAeDZzJf5YUtgw8bbeHn2t0EupLtfHrLDf8x6/TmxGojWeQ7GvS7FC9VwFBgJ4uJIPRORlJECsow4RQhD/TNrF6kliJaw90SjcUMrCqxvEFHN3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB6889
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ff9abf953c274a1e34f59114642f67ecf02acb6f.1639696427.git.quic_vamslank@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shuuichirou,
+On Thu 16 Dec 15:18 PST 2021, quic_vamslank@quicinc.com wrote:
 
-Thank you for your feedback!
+> From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+> 
+> Add device tree binding Documentation details for Qualcomm SDX65
+> pinctrl driver.
+> 
+> Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  .../bindings/pinctrl/qcom,sdx65-pinctrl.yaml  | 191 ++++++++++++++++++
+>  1 file changed, 191 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..cdfcf29dffee
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
+> @@ -0,0 +1,191 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/qcom,sdx65-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Technologies, Inc. SDX65 TLMM block
+> +
+> +maintainers:
+> +  - Vamsi krishna Lanka <quic_vamslank@quicinc.com>
+> +
+> +description:
+> +  This binding describes the Top Level Mode Multiplexer block found in the
+> +  SDX65 platform.
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,sdx65-tlmm
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  '#interrupt-cells':
+> +    description: Specifies the PIN numbers and Flags, as defined in
+> +      include/dt-bindings/interrupt-controller/irq.h
+> +    const: 2
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    description: Specifying the pin number and flags, as defined in
+> +      include/dt-bindings/gpio/gpio.h
+> +    const: 2
+> +
+> +  gpio-ranges:
+> +    maxItems: 1
+> +
+> +  gpio-reserved-ranges:
+> +    maxItems: 1
+> +
+> +#PIN CONFIGURATION NODES
+> +patternProperties:
+> +  '-state$':
+> +    oneOf:
+> +      - $ref: "#/$defs/qcom-sdx65-tlmm-state"
+> +      - patternProperties:
+> +          ".*":
+> +            $ref: "#/$defs/qcom-sdx65-tlmm-state"
+> +'$defs':
+> +  qcom-sdx65-tlmm-state:
 
-On 12/9/2021 3:10 AM, ishii.shuuichir@fujitsu.com wrote:
-> Hi, Tyler.
->
-> We would like to make a few comments.
->
->> -----Original Message-----
->> From: Tyler Baicar <baicar@os.amperecomputing.com>
->> Sent: Thursday, November 25, 2021 2:07 AM
->> To: patches@amperecomputing.com; abdulhamid@os.amperecomputing.com;
->> darren@os.amperecomputing.com; catalin.marinas@arm.com; will@kernel.org;
->> maz@kernel.org; james.morse@arm.com; alexandru.elisei@arm.com;
->> suzuki.poulose@arm.com; lorenzo.pieralisi@arm.com; guohanjun@huawei.com;
->> sudeep.holla@arm.com; rafael@kernel.org; lenb@kernel.org;
->> tony.luck@intel.com; bp@alien8.de; mark.rutland@arm.com;
->> anshuman.khandual@arm.com; vincenzo.frascino@arm.com;
->> tabba@google.com; marcan@marcan.st; keescook@chromium.org;
->> jthierry@redhat.com; masahiroy@kernel.org; samitolvanen@google.com;
->> john.garry@huawei.com; daniel.lezcano@linaro.org; gor@linux.ibm.com;
->> zhangshaokun@hisilicon.com; tmricht@linux.ibm.com; dchinner@redhat.com;
->> tglx@linutronix.de; linux-kernel@vger.kernel.org;
->> linux-arm-kernel@lists.infradead.org; kvmarm@lists.cs.columbia.edu;
->> linux-acpi@vger.kernel.org; linux-edac@vger.kernel.org; Ishii, Shuuichirou/石井
->> 周一郎 <ishii.shuuichir@fujitsu.com>; Vineeth.Pillai@microsoft.com
->> Cc: Tyler Baicar <baicar@os.amperecomputing.com>
->> Subject: [PATCH 1/2] ACPI/AEST: Initial AEST driver
->>
->> Add support for parsing the ARM Error Source Table and basic handling of
->> errors reported through both memory mapped and system register interfaces.
->>
->> Assume system register interfaces are only registered with private
->> peripheral interrupts (PPIs); otherwise there is no guarantee the
->> core handling the error is the core which took the error and has the
->> syndrome info in its system registers.
->>
->> Add logging for all detected errors and trigger a kernel panic if there is
->> any uncorrected error present.
->>
->> Signed-off-by: Tyler Baicar <baicar@os.amperecomputing.com>
->> ---
-> [...]
->
->> +static int __init aest_init_node(struct acpi_aest_hdr *node)
->> +{
->> +	union acpi_aest_processor_data *proc_data;
->> +	union aest_node_spec *node_spec;
->> +	struct aest_node_data *data;
->> +	int ret;
->> +
->> +	data = kzalloc(sizeof(struct aest_node_data), GFP_KERNEL);
->> +	if (!data)
->> +		return -ENOMEM;
->> +
->> +	data->node_type = node->type;
->> +
->> +	node_spec = ACPI_ADD_PTR(union aest_node_spec, node,
->> node->node_specific_offset);
->> +
->> +	switch (node->type) {
->> +	case ACPI_AEST_PROCESSOR_ERROR_NODE:
->> +		memcpy(&data->data, node_spec, sizeof(struct
->> acpi_aest_processor));
->> +		break;
->> +	case ACPI_AEST_MEMORY_ERROR_NODE:
->> +		memcpy(&data->data, node_spec, sizeof(struct
->> acpi_aest_memory));
->> +		break;
->> +	case ACPI_AEST_SMMU_ERROR_NODE:
->> +		memcpy(&data->data, node_spec, sizeof(struct
->> acpi_aest_smmu));
->> +		break;
->> +	case ACPI_AEST_VENDOR_ERROR_NODE:
->> +		memcpy(&data->data, node_spec, sizeof(struct
->> acpi_aest_vendor));
->> +		break;
->> +	case ACPI_AEST_GIC_ERROR_NODE:
->> +		memcpy(&data->data, node_spec, sizeof(struct
->> acpi_aest_gic));
->> +		break;
->> +	default:
->> +		kfree(data);
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (node->type == ACPI_AEST_PROCESSOR_ERROR_NODE) {
->> +		proc_data = ACPI_ADD_PTR(union acpi_aest_processor_data,
->> node_spec,
->> +					 sizeof(acpi_aest_processor));
->> +
->> +		switch (data->data.processor.resource_type) {
->> +		case ACPI_AEST_CACHE_RESOURCE:
->> +			memcpy(&data->proc_data, proc_data,
->> +			       sizeof(struct acpi_aest_processor_cache));
->> +			break;
->> +		case ACPI_AEST_TLB_RESOURCE:
->> +			memcpy(&data->proc_data, proc_data,
->> +			       sizeof(struct acpi_aest_processor_tlb));
->> +			break;
->> +		case ACPI_AEST_GENERIC_RESOURCE:
->> +			memcpy(&data->proc_data, proc_data,
->> +			       sizeof(struct acpi_aest_processor_generic));
->> +			break;
->> +		}
->> +	}
->> +
->> +	ret = aest_init_interface(node, data);
->> +	if (ret) {
->> +		kfree(data);
->> +		return ret;
->> +	}
->> +
->> +	return aest_init_interrupts(node, data);
-> If aest_init_interrupts() failed, is it necessary to release
-> the data pointer acquired by kzalloc?
-aest_init_interrupts() returns an error if any of the interrupts in the 
-interrupt list fails, but it's possible that some interrupts in the list 
-registered successfully. So we attempt to keep chugging along in that 
-scenario because some interrupts may be enabled and registered with the 
-interface successfully. If any interrupt registration fails, there will 
-be a print notifying that there was a failure when initializing that node.
->> +}
->> +
->> +static void aest_count_ppi(struct acpi_aest_hdr *node)
->> +{
->> +	struct acpi_aest_node_interrupt *interrupt;
->> +	int i;
->> +
->> +	interrupt = ACPI_ADD_PTR(struct acpi_aest_node_interrupt, node,
->> +				 node->node_interrupt_offset);
->> +
->> +	for (i = 0; i < node->node_interrupt_count; i++, interrupt++) {
->> +		if (interrupt->gsiv >= 16 && interrupt->gsiv < 32)
->> +			num_ppi++;
->> +	}
->> +}
->> +
->> +static int aest_starting_cpu(unsigned int cpu)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < num_ppi; i++)
->> +		enable_percpu_irq(ppi_irqs[i], IRQ_TYPE_NONE);
->> +
->> +	return 0;
->> +}
->> +
->> +static int aest_dying_cpu(unsigned int cpu)
->> +{
-> Wouldn't it be better to execute disable_percpu_irq(), which is paired
-> with enable_percpu_irq(), in aest_dying_cpu()?
+Thanks.
 
-Good point. I will add that in the next version.
+This looks good now.
 
-Thanks,
+Regards,
+Bjorn
 
-Tyler
-
+> +    type: object
+> +    description:
+> +      Pinctrl node's client devices use subnodes for desired pin configuration.
+> +      Client device subnodes use below standard properties.
+> +    $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
+> +
+> +    properties:
+> +      pins:
+> +        description:
+> +          List of gpio pins affected by the properties specified in this subnode.
+> +        items:
+> +          oneOf:
+> +            - pattern: "^gpio([0-9]|[1-9][0-9]|10[0-7])$"
+> +            - enum: [ ufs_reset, sdc1_clk, sdc1_cmd, sdc1_data, sdc2_clk, sdc2_cmd, sdc2_data, sdc1_rclk ]
+> +        minItems: 1
+> +        maxItems: 150
+> +
+> +      function:
+> +        description:
+> +          Specify the alternative function to be configured for the specified
+> +          pins. Functions are only valid for gpio pins.
+> +        enum: [ blsp_uart1, blsp_spi1, blsp_i2c1, blsp_uim1, atest_tsens,
+> +                bimc_dte1, dac_calib0, blsp_spi8, blsp_uart8, blsp_uim8,
+> +                qdss_cti_trig_out_b, bimc_dte0, dac_calib1, qdss_cti_trig_in_b,
+> +                dac_calib2, atest_tsens2, atest_usb1, blsp_spi10, blsp_uart10,
+> +                blsp_uim10, atest_bbrx1, atest_usb13, atest_bbrx0, atest_usb12,
+> +                mdp_vsync, edp_lcd, blsp_i2c10, atest_gpsadc1, atest_usb11,
+> +                atest_gpsadc0, edp_hot, atest_usb10, m_voc, dac_gpio, atest_char,
+> +                cam_mclk, pll_bypassnl, qdss_stm7, blsp_i2c8, qdss_tracedata_b,
+> +                pll_reset, qdss_stm6, qdss_stm5, qdss_stm4, atest_usb2, cci_i2c,
+> +                qdss_stm3, dac_calib3, atest_usb23, atest_char3, dac_calib4,
+> +                qdss_stm2, atest_usb22, atest_char2, qdss_stm1, dac_calib5,
+> +                atest_usb21, atest_char1, dbg_out, qdss_stm0, dac_calib6,
+> +                atest_usb20, atest_char0, dac_calib10, qdss_stm10,
+> +                qdss_cti_trig_in_a, cci_timer4, blsp_spi6, blsp_uart6, blsp_uim6,
+> +                blsp2_spi, qdss_stm9, qdss_cti_trig_out_a, dac_calib11,
+> +                qdss_stm8, cci_timer0, qdss_stm13, dac_calib7, cci_timer1,
+> +                qdss_stm12, dac_calib8, cci_timer2, blsp1_spi, qdss_stm11,
+> +                dac_calib9, cci_timer3, cci_async, dac_calib12, blsp_i2c6,
+> +                qdss_tracectl_a, dac_calib13, qdss_traceclk_a, dac_calib14,
+> +                dac_calib15, hdmi_rcv, dac_calib16, hdmi_cec, pwr_modem,
+> +                dac_calib17, hdmi_ddc, pwr_nav, dac_calib18, pwr_crypto,
+> +                dac_calib19, hdmi_hot, dac_calib20, dac_calib21, pci_e0,
+> +                dac_calib22, dac_calib23, dac_calib24, tsif1_sync, dac_calib25,
+> +                sd_write, tsif1_error, blsp_spi2, blsp_uart2, blsp_uim2,
+> +                qdss_cti, blsp_i2c2, blsp_spi3, blsp_uart3, blsp_uim3, blsp_i2c3,
+> +                uim3, blsp_spi9, blsp_uart9, blsp_uim9, blsp10_spi, blsp_i2c9,
+> +                blsp_spi7, blsp_uart7, blsp_uim7, qdss_tracedata_a, blsp_i2c7,
+> +                qua_mi2s, gcc_gp1_clk_a, ssc_irq, uim4, blsp_spi11, blsp_uart11,
+> +                blsp_uim11, gcc_gp2_clk_a, gcc_gp3_clk_a, blsp_i2c11, cri_trng0,
+> +                cri_trng1, cri_trng, qdss_stm18, pri_mi2s, qdss_stm17, blsp_spi4,
+> +                blsp_uart4, blsp_uim4, qdss_stm16, qdss_stm15, blsp_i2c4,
+> +                qdss_stm14, dac_calib26, spkr_i2s, audio_ref, lpass_slimbus,
+> +                isense_dbg, tsense_pwm1, tsense_pwm2, btfm_slimbus, ter_mi2s,
+> +                qdss_stm22, qdss_stm21, qdss_stm20, qdss_stm19, gcc_gp1_clk_b,
+> +                sec_mi2s, blsp_spi5, blsp_uart5, blsp_uim5, gcc_gp2_clk_b,
+> +                gcc_gp3_clk_b, blsp_i2c5, blsp_spi12, blsp_uart12, blsp_uim12,
+> +                qdss_stm25, qdss_stm31, blsp_i2c12, qdss_stm30, qdss_stm29,
+> +                tsif1_clk, qdss_stm28, tsif1_en, tsif1_data, sdc4_cmd, qdss_stm27,
+> +                qdss_traceclk_b, tsif2_error, sdc43, vfr_1, qdss_stm26, tsif2_clk,
+> +                sdc4_clk, qdss_stm24, tsif2_en, sdc42, qdss_stm23, qdss_tracectl_b,
+> +                sd_card, tsif2_data, sdc41, tsif2_sync, sdc40, mdp_vsync_p_b,
+> +                ldo_en, mdp_vsync_s_b, ldo_update, blsp11_uart_tx_b, blsp11_uart_rx_b,
+> +                blsp11_i2c_sda_b, prng_rosc, blsp11_i2c_scl_b, uim2, uim1, uim_batt,
+> +                pci_e2, pa_indicator, adsp_ext, ddr_bist, qdss_tracedata_11,
+> +                qdss_tracedata_12, modem_tsync, nav_dr, nav_pps, pci_e1, gsm_tx,
+> +                qspi_cs, ssbi2, ssbi1, mss_lte, qspi_clk, qspi0, qspi1, qspi2, qspi3,
+> +                gpio ]
+> +
+> +      drive-strength:
+> +        enum: [2, 4, 6, 8, 10, 12, 14, 16]
+> +        default: 2
+> +        description:
+> +          Selects the drive strength for the specified pins, in mA.
+> +
+> +      bias-pull-down: true
+> +
+> +      bias-pull-up: true
+> +
+> +      bias-disable: true
+> +
+> +      output-high: true
+> +
+> +      output-low: true
+> +
+> +    required:
+> +      - pins
+> +      - function
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-controller
+> +  - '#interrupt-cells'
+> +  - gpio-controller
+> +  - '#gpio-cells'
+> +  - gpio-ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    tlmm: pinctrl@f100000 {
+> +        compatible = "qcom,sdx65-tlmm";
+> +        reg = <0x03000000 0xdc2000>;
+> +        gpio-controller;
+> +        #gpio-cells = <2>;
+> +        gpio-ranges = <&tlmm 0 0 109>;
+> +        interrupt-controller;
+> +        #interrupt-cells = <2>;
+> +        interrupts = <GIC_SPI 212 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +        gpio-wo-subnode-state {
+> +            pins = "gpio1";
+> +            function = "gpio";
+> +        };
+> +
+> +        uart-w-subnodes-state {
+> +            rx {
+> +                pins = "gpio4";
+> +                function = "blsp_uart1";
+> +                bias-pull-up;
+> +            };
+> +
+> +            tx {
+> +                pins = "gpio5";
+> +                function = "blsp_uart1";
+> +                bias-disable;
+> +            };
+> +        };
+> +    };
+> +...
+> -- 
+> 2.33.1
+> 

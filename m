@@ -2,110 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0B147673E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7ED47674B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 02:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbhLPBJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 20:09:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbhLPBJl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 20:09:41 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC4BC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 17:09:41 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id y13so80779487edd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 17:09:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FHIyIUHgABGRTpG8w7V67GIZKBgX3nHebqZRmIuJJJY=;
-        b=xZviC8IdrUmSlO817ivxgFljCM7DPxP71a+pj6RNWpAcJDq7U/W1OtAw7pzbHfr4Mr
-         EEo7yepTBLG6hHAPdgAHpv5oxct3PqaNyzAIlEBnjoGUMAKWTg54SH+iwWxSblIOPgBN
-         MLrpVdIVEcLzErvfAhNjanJCOA6kUsTsVMqQY8Oo6Xq0Ys4Xrh1dltPo7eEdRpqZuLVL
-         Un07rN7ToSrdssNbUFUHd2CitTECcv+Qd3EC0Qiu7QhJ9C1AEaJ9yv47RhHHpJnCfecc
-         64+qrXWe0ypE9Yvo/5um3Guype3ZY4pI1UnIBki/egbTrjfixsGbfnkwmkXhF7j5zoE8
-         w1bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FHIyIUHgABGRTpG8w7V67GIZKBgX3nHebqZRmIuJJJY=;
-        b=c1G6VUxf6/4XUKFAHAoboKbu1BQtQOSV7bY5QeSGC5Cv18sRfVcEYCRECj6ptm6GkN
-         DGDdcFNVBUU9QrWGgv1KcdiHywacfaA2RYNLIplWgwFl8T/iraJ6L69S0hMXnAEY6Fad
-         A3YSuie9ysYjsPZuMne7WjSM/pU2I9Vu6stW2d7JRdEraXavO121rxARuP6KMp6RiV9x
-         aUBP2DCVdjGJEuEdEtPQjHS+nSdAuMb+vOlJK1v+Wlj8kFS9mGI9aN+u5YGDvfl5UeLU
-         s3F8KlPQHeupg+r+9S+ZmIaw9eki46Q97qZY4lmZF1urg93qqI5wOSKFnWyOxkIRiDzt
-         Iy6w==
-X-Gm-Message-State: AOAM532HaK6aMumsTIFhw3ACase98dyHcNQZVFAy5Sq5Vlj2/ebY5YfG
-        SBYFEcELgM+vkLPMsb9MyKpnAA==
-X-Google-Smtp-Source: ABdhPJyPpOoG+ITA8Qth7yHRJ0UTqZ40dsEmeR20fRaqJI6zWCUv/9fRlYGxnAJU6IyVVjyjP3sWkg==
-X-Received: by 2002:a17:907:72cf:: with SMTP id du15mr13282231ejc.167.1639616979968;
-        Wed, 15 Dec 2021 17:09:39 -0800 (PST)
-Received: from leoy-ThinkPad-X240s ([104.245.96.202])
-        by smtp.gmail.com with ESMTPSA id s16sm1615656edt.30.2021.12.15.17.09.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 17:09:39 -0800 (PST)
-Date:   Thu, 16 Dec 2021 09:09:32 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        codalist@telemann.coda.cs.cmu.edu,
-        Jan Harkes <jaharkes@cs.cmu.edu>,
-        Leon Romanovsky <leon@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        netdev@vger.kernel.org, Balbir Singh <bsingharora@gmail.com>,
-        linux-kernel@vger.kernel.org, Eric Paris <eparis@redhat.com>,
-        coda@cs.cmu.edu, linux-audit@redhat.com,
-        coresight@lists.linaro.org, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org,
-        Mike Leach <mike.leach@linaro.org>
-Subject: Re: [PATCH v2 6/7] audit: Use task_is_in_init_pid_ns()
-Message-ID: <20211216010932.GA2313631@leoy-ThinkPad-X240s>
-References: <20211208083320.472503-1-leo.yan@linaro.org>
- <20211208083320.472503-7-leo.yan@linaro.org>
- <CAHC9VhThB=kDsXr8Uc_65+gePucSstAbrab2TpLxcBSd0k39pQ@mail.gmail.com>
- <20211215190912.GU1550715@madcap2.tricolour.ca>
+        id S232524AbhLPBLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 20:11:30 -0500
+Received: from mga01.intel.com ([192.55.52.88]:59278 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229548AbhLPBL3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Dec 2021 20:11:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639617089; x=1671153089;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rHEPCO6LZ+V6R2BwHMsCMN+KhkwkGiY/Ym87AnS93nk=;
+  b=kITuYToJU+X80/PMUVFawbwTQqHer4Cco3E29FSHloT0081L5WH+XsHi
+   Fsnbi9PaTIDQypBZhoh2zNaTPAMWOBbdb47Oe2LHmuPiEsvu4gFohke3U
+   tmfeznKlGe7CNNzOOidyj+5oj+yomv03aItEbxOhhjc+nS7VSAR7kfVag
+   TZRfH+vDeRyXBljWESeb+dFbhYosV7LOLly+AKnEA/sIumq5kPxRvYfcd
+   xBsVXBa/DjAOVSOphstievUI4Wgwwr0d+np0fnZyWeoETignrCYJBnr46
+   uybE+b3AKp1xMeTVk7y+uJTg2NzDD4PWH24YFGIIzigm/WUs9ztd/QTyd
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="263534742"
+X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
+   d="scan'208";a="263534742"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 17:11:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
+   d="scan'208";a="465844064"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 15 Dec 2021 17:11:26 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxfIr-0002YY-G8; Thu, 16 Dec 2021 01:11:25 +0000
+Date:   Thu, 16 Dec 2021 09:10:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vincent Shih <vincent.sunplus@gmail.com>,
+        srinivas.kandagatla@linaro.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com, vincent.shih@sunplus.com
+Cc:     kbuild-all@lists.01.org, Vincent Shih <vincent.sunplus@gmail.com>
+Subject: Re: [PATCH v3 1/2] nvmem: Add driver for OCOTP in Sunplus SP7021
+Message-ID: <202112160925.yTjMLuBB-lkp@intel.com>
+References: <1639568148-22872-2-git-send-email-vincent.sunplus@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215190912.GU1550715@madcap2.tricolour.ca>
+In-Reply-To: <1639568148-22872-2-git-send-email-vincent.sunplus@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 02:09:12PM -0500, Richard Guy Briggs wrote:
-> On 2021-12-14 17:35, Paul Moore wrote:
-> > On Wed, Dec 8, 2021 at 3:33 AM Leo Yan <leo.yan@linaro.org> wrote:
-> > >
-> > > Replace open code with task_is_in_init_pid_ns() for checking root PID
-> > > namespace.
-> > >
-> > > Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> > > ---
-> > >  kernel/audit.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > I'm not sure how necessary this is, but it looks correct to me.
-> 
-> I had the same thought.  I looks correct to me.  I could see the value
-> if it permitted init_pid_ns to not be global.
+Hi Vincent,
 
-Just for a background info, we need to check root PID namespace in some
-drivers [1], to avoid introducing more open codes, we decided to refactor
-with helper task_is_in_init_pid_ns().
+I love your patch! Perhaps something to improve:
 
-[1] https://lore.kernel.org/lkml/20211213121323.1887180-1-leo.yan@linaro.org/
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linux/master linus/master v5.16-rc5 next-20211214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> > Acked-by: Paul Moore <paul@paul-moore.com>
-> 
-> Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
+url:    https://github.com/0day-ci/linux/commits/Vincent-Shih/Add-driver-for-OCOTP-in-Sunplus-SP7021/20211215-193707
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20211216/202112160925.yTjMLuBB-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/c0a3142f164bb92fe79eafeb333050e7fcf42560
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Vincent-Shih/Add-driver-for-OCOTP-in-Sunplus-SP7021/20211215-193707
+        git checkout c0a3142f164bb92fe79eafeb333050e7fcf42560
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/nvmem/
 
-Thanks for review, Paul and Richard.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Leo
+All warnings (new ones prefixed by >>):
+
+   drivers/nvmem/sunplus-ocotp.c: In function 'sp_ocotp_probe':
+>> drivers/nvmem/sunplus-ocotp.c:158:37: warning: variable 'otp_data' set but not used [-Wunused-but-set-variable]
+     158 |         const struct sp_ocotp_data *otp_data;
+         |                                     ^~~~~~~~
+
+
+vim +/otp_data +158 drivers/nvmem/sunplus-ocotp.c
+
+   154	
+   155	static int sp_ocotp_probe(struct platform_device *pdev)
+   156	{
+   157		const struct of_device_id *match;
+ > 158		const struct sp_ocotp_data *otp_data;
+   159		struct device *dev = &pdev->dev;
+   160		struct nvmem_device *nvmem;
+   161		struct sp_ocotp_priv *otp;
+   162		struct resource *res;
+   163		int ret;
+   164	
+   165		match = of_match_device(dev->driver->of_match_table, dev);
+   166		if (match && match->data)
+   167			otp_data = match->data;
+   168	
+   169		otp = devm_kzalloc(dev, sizeof(*otp), GFP_KERNEL);
+   170		if (!otp)
+   171			return -ENOMEM;
+   172	
+   173		otp->dev = dev;
+   174	
+   175		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hb_gpio");
+   176		otp->base[HB_GPIO] = devm_ioremap_resource(dev, res);
+   177		if (IS_ERR(otp->base[HB_GPIO]))
+   178			return PTR_ERR(otp->base[HB_GPIO]);
+   179	
+   180		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "otprx");
+   181		otp->base[OTPRX] = devm_ioremap_resource(dev, res);
+   182		if (IS_ERR(otp->base[OTPRX]))
+   183			return PTR_ERR(otp->base[OTPRX]);
+   184	
+   185		otp->clk = devm_clk_get(&pdev->dev, NULL);
+   186		if (IS_ERR(otp->clk))
+   187			return dev_err_probe(&pdev->dev, PTR_ERR(otp->clk),
+   188							"devm_clk_get fail\n");
+   189	
+   190		ret = clk_prepare(otp->clk);
+   191		if (ret < 0) {
+   192			dev_err(dev, "failed to prepare clk: %d\n", ret);
+   193			return ret;
+   194		}
+   195	
+   196		sp_ocotp_nvmem_config.priv = otp;
+   197		sp_ocotp_nvmem_config.dev = dev;
+   198	
+   199		nvmem = devm_nvmem_register(dev, &sp_ocotp_nvmem_config);
+   200		if (IS_ERR(nvmem))
+   201			return dev_err_probe(&pdev->dev, PTR_ERR(nvmem),
+   202							"register nvmem device fail\n");
+   203	
+   204		platform_set_drvdata(pdev, nvmem);
+   205	
+   206		dev_dbg(dev, "banks:%d x wpb:%d x wsize:%d = %d",
+   207			QAC628_OTP_NUM_BANKS, OTP_WORDS_PER_BANK,
+   208			OTP_WORD_SIZE, QAC628_OTP_SIZE);
+   209	
+   210		dev_info(dev, "by Sunplus (C) 2020");
+   211	
+   212		return 0;
+   213	}
+   214	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

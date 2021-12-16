@@ -2,245 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE32F477B6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C534477B77
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240635AbhLPSWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:22:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
+        id S240382AbhLPSYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbhLPSWR (ORCPT
+        with ESMTP id S236244AbhLPSYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:22:17 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD06C061574;
-        Thu, 16 Dec 2021 10:22:17 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id bf8so111112oib.6;
-        Thu, 16 Dec 2021 10:22:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+/y/44R+5YxgMSzOe/nu0eMT5/71CNxaGar8eA8Nm/g=;
-        b=Gu6Yjm9T9BlEUP1BozNFLGnraX0pNby3F9uUxdR3PMpZcpViSdV1XmUsEcGJQu+L8V
-         o//pVimMeEGMMqYJ1QiXqK2p30al9ng6mdoR2lhbtmyuLQWx7bXxDw9SkTzqnuyzd0zD
-         J2UrUKTrRoQWde5x7va5rQa99Z5eF1Jl6LDJk2fd9h6+wJ/uYk+9yEKi3E1aAD7Xvmrv
-         2XleZY+b6XQ36wQr+CPMI/oi5GeWjfA0ltH1hFQ7chQGgRN5rwfXBkGVaGyYN5SRVGI+
-         OD3Rfvzjg2mMhjOwuOPS5CHdQ9pwBdLOz07TRXlqBwK7JOxi0SZyap4x53ntoGA2DOU0
-         YcLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+/y/44R+5YxgMSzOe/nu0eMT5/71CNxaGar8eA8Nm/g=;
-        b=phkNKUswFIgK2Bz8krezsZSryX/6l5ALOpZYeJF8ssBlTK5AMJXeSlShMzKViZl06v
-         jGv6AtWObxJKhv9Sgdv+VE/37OJj10+y3Ozs4IYED696Dx/vjfPn4H8O2qz7djhVIJzM
-         gOmRT/v5anOLg39UDUEfjCKCM3RxrNgdGfJY8LbFwxbUQFRf280CbipOlGFUn3vu7i/v
-         8zqhi+RSX3ot1ltiTYsnlcBgkWIPVYGjBPaGGZVnZ/KlYZ9u9x+39mIo+vIRSbt6QzRL
-         KUA4W/wLkaYlZMukYszqB3f4FMsd0fldyLJoUWzP8+HSNoTjXOiTaKcbkmuVD9mFutFB
-         P1qQ==
-X-Gm-Message-State: AOAM531oroWEhq1fhXGyb6kg3pT9IyQ/3kra5O99i6czv6qt/lIW2Dy7
-        klKGqvFDh8kPngjwIOkyIhGW6tWSgZKImUmUorg=
-X-Google-Smtp-Source: ABdhPJyuqku/PJcEaFhoUbjY9eGQTzngMM1pszlWG5TdzymHX4wb5mzqbyT6CsEgCbAiA68p93W8U2yrhA/LLntNcKE=
-X-Received: by 2002:a05:6808:10c9:: with SMTP id s9mr5031186ois.23.1639678936900;
- Thu, 16 Dec 2021 10:22:16 -0800 (PST)
+        Thu, 16 Dec 2021 13:24:32 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82368C061574;
+        Thu, 16 Dec 2021 10:24:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CP98qaI5/42iM7Qs7rIC2UfqpT/EFgiOPymFBs82E1k=; b=PAKogZleaezsfag//1vssTAQnz
+        YZ626RCWv8k/cgzoD3wex2dtAAmD2rx5Vugr/1LRps4hyqR9wZLTJuwxFCD4I4UQbLB3G6PqeDOmq
+        0erA3QxhKnmg0NME6MAjmD3ADWdhqkq6Bx0EEaB7iLKs/AIQBbV7i1zX1wIOWo9LhWiu8f26pdWhL
+        m6Ie7nj9YNWQCxF3FRnjGV5BNlyVmxl/8ZxKc9ITgTrWaXDQPfMMRIvetHTkmNtMhJoAqYdYKgOG/
+        w1bx5cQYCCQuDZ0epGX4Q+Ecl1sbpv/YOkmh2OEBf0eK2mtuVmwJNlv0x/pv8S7KjkaNuRQWQqhlp
+        ZCVGuZgw==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxvQL-0076oF-Cw; Thu, 16 Dec 2021 18:24:13 +0000
+Message-ID: <f25c6ad00689fee6ce3e294393c13f3dcdd5985f.camel@infradead.org>
+Subject: Re: [PATCH v3 6/9] x86/smpboot: Support parallel startup of
+ secondary CPUs
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com,
+        Joerg Roedel <joro@8bytes.org>
+Date:   Thu, 16 Dec 2021 18:24:08 +0000
+In-Reply-To: <d10f529e-b1ee-6220-c6fc-80435f0061ee@amd.com>
+References: <20211215145633.5238-1-dwmw2@infradead.org>
+         <20211215145633.5238-7-dwmw2@infradead.org>
+         <d10f529e-b1ee-6220-c6fc-80435f0061ee@amd.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-PLDM26HphlgQCZVdBKhl"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-References: <20211214215732.1507504-1-lee.jones@linaro.org>
- <20211214215732.1507504-2-lee.jones@linaro.org> <20211215174818.65f3af5e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CADvbK_emZsHVsBvNFk9B5kCZjmAQkMBAx1MtwusDJ-+vt0ukPA@mail.gmail.com>
- <Ybtrs56tSBbmyt5c@google.com> <CADvbK_cBBDkGt8XLJo6N5TX2YQATS+udVWm8_=8f96=0B9tnTA@mail.gmail.com>
- <Ybtzr5ZmD/IKjycz@google.com> <Ybtz/0gflbkG5Q/0@google.com> <CADvbK_cexKiVATn=dPrWqoS0qM-bM0UcSkx8Xqz5ibEKQizDVg@mail.gmail.com>
-In-Reply-To: <CADvbK_cexKiVATn=dPrWqoS0qM-bM0UcSkx8Xqz5ibEKQizDVg@mail.gmail.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Thu, 16 Dec 2021 13:22:05 -0500
-Message-ID: <CADvbK_cxMbYwkuN_ZUvHY-7ahc9ff+jbuPkKn6CA=yqMk=SKVw@mail.gmail.com>
-Subject: Re: [RESEND 2/2] sctp: hold cached endpoints to prevent possible UAF
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        lksctp developers <linux-sctp@vger.kernel.org>,
-        "H.P. Yarroll" <piggy@acm.org>,
-        Karl Knutson <karl@athena.chicago.il.us>,
-        Jon Grimm <jgrimm@us.ibm.com>,
-        Xingang Guo <xingang.guo@intel.com>,
-        Hui Huang <hui.huang@nokia.com>,
-        Sridhar Samudrala <sri@us.ibm.com>,
-        Daisy Chang <daisyc@us.ibm.com>,
-        Ryan Layer <rmlayer@us.ibm.com>,
-        Kevin Gao <kevin.gao@intel.com>,
-        network dev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(
 
-On Thu, Dec 16, 2021 at 1:12 PM Xin Long <lucien.xin@gmail.com> wrote:
->
-> On Thu, Dec 16, 2021 at 12:14 PM Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > On Thu, 16 Dec 2021, Lee Jones wrote:
-> >
-> > > On Thu, 16 Dec 2021, Xin Long wrote:
-> > >
-> > > > On Thu, Dec 16, 2021 at 11:39 AM Lee Jones <lee.jones@linaro.org> w=
-rote:
-> > > > >
-> > > > > On Thu, 16 Dec 2021, Xin Long wrote:
-> > > > >
-> > > > > > On Wed, Dec 15, 2021 at 8:48 PM Jakub Kicinski <kuba@kernel.org=
-> wrote:
-> > > > > > >
-> > > > > > > On Tue, 14 Dec 2021 21:57:32 +0000 Lee Jones wrote:
-> > > > > > > > The cause of the resultant dump_stack() reported below is a
-> > > > > > > > dereference of a freed pointer to 'struct sctp_endpoint' in
-> > > > > > > > sctp_sock_dump().
-> > > > > > > >
-> > > > > > > > This race condition occurs when a transport is cached into =
-its
-> > > > > > > > associated hash table followed by an endpoint/sock migratio=
-n to a new
-> > > > > > > > association in sctp_assoc_migrate() prior to their subseque=
-nt use in
-> > > > > > > > sctp_diag_dump() which uses sctp_for_each_transport() to wa=
-lk the hash
-> > > > > > > > table calling into sctp_sock_dump() where the dereference o=
-ccurs.
-> > > > >
-> > > > > > in sctp_sock_dump():
-> > > > > >         struct sock *sk =3D ep->base.sk;
-> > > > > >         ... <--[1]
-> > > > > >         lock_sock(sk);
-> > > > > >
-> > > > > > Do you mean in [1], the sk is peeled off and gets freed elsewhe=
-re?
-> > > > >
-> > > > > 'ep' and 'sk' are both switched out for new ones in sctp_sock_mig=
-rate().
-> > > > >
-> > > > > > if that's true, it's still late to do sock_hold(sk) in your thi=
-s patch.
-> > > > >
-> > > > > No, that's not right.
-> > > > >
-> > > > > The schedule happens *inside* the lock_sock() call.
-> > > > Sorry, I don't follow this.
-> > > > We can't expect when the schedule happens, why do you think this
-> > > > can never be scheduled before the lock_sock() call?
-> > >
-> > > True, but I've had this running for hours and it hasn't reproduced.
-> I understand, but it's a crash, we shouldn't take any risk that it
-> will never happen.
-> you may try to add a usleep() before the lock_sock call to reproduce it.
->
-> > >
-> > > Without this patch, I can reproduce this in around 2 seconds.
-> > >
-> > > The C-repro for this is pretty intense!
-> > >
-> > > If you want to be *sure* that a schedule will never happen, we can
-> > > take a reference directly with:
-> > >
-> > >      ep =3D sctp_endpoint_hold(tsp->asoc->ep);
-> > >      sk =3D sock_hold(ep->base.sk);
-> > >
-> > > Which was my original plan before I soak tested this submitted patch
-> > > for hours without any sign of reproducing the issue.
-> we tried to not export sctp_obj_hold/put(), that's why we had
-> sctp_for_each_transport().
->
-> ep itself holds a reference of sk when it's alive, so it's weird to do
-> these 2 together.
->
-> > >
-> > > > If the sock is peeled off or is being freed, we shouldn't dump this=
- sock,
-> > > > and it's better to skip it.
-> > >
-> > > I guess we can do that too.
-> > >
-> > > Are you suggesting sctp_sock_migrate() as the call site?
-> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> index 85ac2e901ffc..56ea7a0e2add 100644
-> --- a/net/sctp/socket.c
-> +++ b/net/sctp/socket.c
-> @@ -9868,6 +9868,7 @@ static int sctp_sock_migrate(struct sock *oldsk,
-> struct sock *newsk,
->                 inet_sk_set_state(newsk, SCTP_SS_ESTABLISHED);
->         }
->
-> +       sock_set_flag(oldsk, SOCK_RCU_FREE);
->         release_sock(newsk);
->
->         return 0;
->
-> SOCK_RCU_FREE is set to the previous sk, so that this sk will not
-> be freed between rcu_read_lock() and rcu_read_unlock().
->
-> >
-> > Also, when are you planning on testing the flag?
-> SOCK_RCU_FREE flag is used when freeing sk in sk_destruct(),
-> and if it's set, it will be freed in the next grace period of RCU.
->
-> >
-> > Won't that suffer with the same issue(s)?
-> diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-> index 7970d786c4a2..b4c4acd9e67e 100644
-> --- a/net/sctp/diag.c
-> +++ b/net/sctp/diag.c
-> @@ -309,16 +309,21 @@ static int sctp_tsp_dump_one(struct
-> sctp_transport *tsp, void *p)
->
->  static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
->  {
-> -       struct sctp_endpoint *ep =3D tsp->asoc->ep;
->         struct sctp_comm_param *commp =3D p;
-> -       struct sock *sk =3D ep->base.sk;
->         struct sk_buff *skb =3D commp->skb;
->         struct netlink_callback *cb =3D commp->cb;
->         const struct inet_diag_req_v2 *r =3D commp->r;
->         struct sctp_association *assoc;
-> +       struct sctp_endpoint *ep;
-> +       struct sock *sk;
->         int err =3D 0;
->
-> +       rcu_read_lock();
-> +       ep =3D tsp->asoc->ep;
-> +       sk =3D ep->base.sk;
->         lock_sock(sk);
-Unfortunately, this isn't going to work, as lock_sock() may sleep,
-and is not allowed to be called understand rcu_read_lock() :(
+--=-PLDM26HphlgQCZVdBKhl
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> +       if (tsp->asoc->ep !=3D ep)
-> +               goto release;
->         list_for_each_entry(assoc, &ep->asocs, asocs) {
->                 if (cb->args[4] < cb->args[1])
->                         goto next;
-> @@ -358,6 +363,7 @@ static int sctp_sock_dump(struct sctp_transport
-> *tsp, void *p)
->         cb->args[4] =3D 0;
->  release:
->         release_sock(sk);
-> +       rcu_read_unlock();
->         return err;
->  }
->
-> rcu_read_lock() will make sure sk from tsp->asoc->ep->base.sk will not
-> be freed until rcu_read_unlock().
->
-> That's all I have. Do you see any other way to fix this?
->
-> Thanks.
->
-> >
-> > --
-> > Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> > Senior Technical Lead - Developer Services
-> > Linaro.org =E2=94=82 Open source software for Arm SoCs
-> > Follow Linaro: Facebook | Twitter | Blog
+On Thu, 2021-12-16 at 08:24 -0600, Tom Lendacky wrote:
+
+> This will break an SEV-ES guest because CPUID will generate a #VC and a=
+=20
+> #VC handler has not been established yet.
+>=20
+> I guess for now, you can probably just not enable parallel startup for=
+=20
+> SEV-ES guests.
+
+OK, thanks. I'll expand it to allow 24 bits of (physical) APIC ID then,
+since it's no longer limited to CPUs without X2APIC. Then we can
+refrain from doing parallel bringup for SEV-ES guests, as you suggest.
+
+What precisely is the check I should be using for that?
+
+--=-PLDM26HphlgQCZVdBKhl
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
+ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
+OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
+RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
+cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
+uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
+Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
+Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
+xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
+YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
+nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
+PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
+7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
+Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
+MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
+NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
+AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
+/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
+0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
+vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
+ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
+ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
+CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
+BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
+aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
+bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
+bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
+LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
+CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
+W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
+vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
+gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
+RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
+jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
+b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
+AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
+BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
++bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
+WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
+aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
+CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
+u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
+RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
+QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
+b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
+cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
+SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
+0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
+KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
+E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
+M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
+jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
+yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
+gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
+R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
+ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
+MjE2MTgyNDA4WjAvBgkqhkiG9w0BCQQxIgQgOF6vqZz6J4aAEOdGPkqKtLKibr4eEr/Das2lKnM4
+SuIwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
+PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
+aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
+DQEBAQUABIIBABYGQK5rBbqSklzvwd9Bg/6zE3IZBly24TJt4ww5Iff0dKGkCPSN6kwZd8lqnGKO
+O0yBbmv4uED33EO1sjKdnpChHCkETBgztj9BvuWhFHR3VOwSvPKMiq2N2HAPmfgDF4nPu/AyY+UM
+yNF+D5WRM2jGnqx20UonLtisShxJVFUdsM+A7i48gbjh8w3Ur9g4oIfbytkUHhhLLIbq1qCf8S2V
+BSV5j5Q+2cnAIuonJLVxWl1pS9owwEFcy3rm8gFwtf+jvhuElz2VmGL6V8rhvz06DiDnuneuqAXX
+8XNjN9n1zMwUFvSQ6nppseJDs3NI9WCOo74RRoh5n7/VVSsHybMAAAAAAAA=
+
+
+--=-PLDM26HphlgQCZVdBKhl--
+

@@ -2,263 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B32476A84
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 07:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B281476ABF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 08:04:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234175AbhLPGlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 01:41:24 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:55954 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbhLPGlS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 01:41:18 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20211216064116epoutp013361c0928f435d8978c2e278e0028de6~BKQ1LF41w2859028590epoutp01b
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:41:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20211216064116epoutp013361c0928f435d8978c2e278e0028de6~BKQ1LF41w2859028590epoutp01b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1639636876;
-        bh=a4XZeIL7XpDOjQub5fg786w4iBykZg4P3o0YiBx9KT8=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=CY27L7R1kYoHIYXo+vVMvfzHavwwmzNGvoMJkWwPBUNbVe//Y0mLIB74j+ApPeohc
-         MKXaQv03He4wzffAN3TkLi4jAxWp8JM7SClBhzWaowz/CsMWS+Dd0HEhvRkSe11sE6
-         7H0B9DVMOPx2V28Ba8wkqhv73OUtnP/QVgC7ughQ=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20211216064115epcas1p4c36144a0233617c848adf997cd3f99ff~BKQ0kK5Zu1715117151epcas1p4E;
-        Thu, 16 Dec 2021 06:41:15 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.38.233]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4JF2ZG46fkz4x9QF; Thu, 16 Dec
-        2021 06:41:10 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        05.B4.21932.33FDAB16; Thu, 16 Dec 2021 15:39:48 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20211216064103epcas1p3bf39ff9adc5810403eab886ef579b3c7~BKQpmCJMf2655626556epcas1p3-;
-        Thu, 16 Dec 2021 06:41:03 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20211216064103epsmtrp14ac266aaa141ba4d80aefd6db104820d~BKQpkmVhf2023420234epsmtrp1k;
-        Thu, 16 Dec 2021 06:41:03 +0000 (GMT)
-X-AuditID: b6c32a38-93fff700000255ac-1e-61badf3367c4
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        74.BE.08738.F7FDAB16; Thu, 16 Dec 2021 15:41:03 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20211216064103epsmtip2f349661508f0fc437e2c8953bb06c995~BKQpT5mHW3173231732epsmtip2J;
-        Thu, 16 Dec 2021 06:41:03 +0000 (GMT)
-Subject: Re: [PATCH 2/7] clk: samsung: exynos850: Add missing sysreg clocks
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <31bbb0a6-0b46-b195-2376-a92a04666f0a@samsung.com>
-Date:   Thu, 16 Dec 2021 16:04:04 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <20211215160906.17451-3-semen.protsenko@linaro.org>
+        id S234296AbhLPHE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 02:04:28 -0500
+Received: from mga12.intel.com ([192.55.52.136]:63401 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231981AbhLPHE1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 02:04:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639638267; x=1671174267;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Y5zkdtd1k/L43hZDL5jc/VaiMmH+2/lIfrKkDroev8c=;
+  b=PQZn+AUl4v/2BeX3LyTTBjbByMwVBoOGj7um0+0yuXD8awytzuyaYYrP
+   zaYdfyYFjPVoOcYA5+8S9GaH9jZxwhAcDP6gv3nu0uHnAVA3B75sWyjXd
+   YYM6YDvRGwYvDy1W7dhMtJ/A/zIq3FUPhAVjYutR6H5IEksxSEoE6Tmg7
+   sErA/zBE1lIYxhR/tfjnVeUKIf964OjAVA4WZNv6joUPdka8m3PcoKnhK
+   Shc4wYBkGhAU/kx3q4/F3YlrUh7+KL98rEau1MmT6FnMlc+LKaqGp5AWF
+   JFdHaqGctFtDjbHln9BYMc9AnCQDuv5ayeBA5plowsBx7Sm38+nhL9P6O
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="219434511"
+X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
+   d="scan'208";a="219434511"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 23:04:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,210,1635231600"; 
+   d="scan'208";a="605406833"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Dec 2021 23:04:26 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 15 Dec 2021 23:04:26 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Wed, 15 Dec 2021 23:04:26 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.170)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Wed, 15 Dec 2021 23:04:26 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MHiQWJ8jcR+DmSgcugwWcV0uE0obKGkRpp3r7rUo5w0WnxDcrPQcD9utnzz4HRFN/N9Jm8H/th23o5NvJcdu7i/LZhawt7pJHa94e0h6kyZi6yjO+C37nHWHszIWLCgwyfqHwsBAzp2tI9QJLZOILYkWa/FltIiMHOd5z6EwJUkhwGQGfH01vLVlT5PbBKpLvYB4mK3c9MyTHrGYYG2LIE9RxratLLYfcZ5diHPXzu9Qe6VsCw7/Invxo9tUJZYg/mSCb6vK3/bZtgCUpbkxelkXr5gE+8gauO4nb46su6ykhf9cJBrPqYDI6ArWiobelQXCLQ+C38x9dRw5SRXx4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NXOHikBM0CYpDdgvvlWB3Yattt1wO8Y7fZ4hEPkWSx0=;
+ b=SegBclSsFfUUq1JNp41D5vkFQYGUjU0FsovFHsICC057ScA04VoH0F8oVCY3fqjD70rR7cpyzXdOxMWJtQHyjdYcL/3+s+GjdmkMXPqn0KQxUb1VTF2d++X1PRjqdkPCc3dMaYvnb99g+p2c28gH5k8vjQgQUm+/L0BHHcFvUBr8SLELhBi09nYOlPpKDr6ndXtKiyyO5xTbZ8hBdc6a+yVfbA36mv89m5hOTRZoum25KpB0fc3zSWJrG2P0fWCAkqB6SN225lo1nc+F5CN0bCWhuhIIEObzAkVZv4/O0aOi+hR6c77E+73diol4CrGZNHPIZ5ZvCC4+TOObiJQaSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ0PR11MB4831.namprd11.prod.outlook.com (2603:10b6:a03:2d2::20)
+ by BYAPR11MB3333.namprd11.prod.outlook.com (2603:10b6:a03:19::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Thu, 16 Dec
+ 2021 07:04:23 +0000
+Received: from SJ0PR11MB4831.namprd11.prod.outlook.com
+ ([fe80::2c45:151c:a37f:410a]) by SJ0PR11MB4831.namprd11.prod.outlook.com
+ ([fe80::2c45:151c:a37f:410a%9]) with mapi id 15.20.4778.018; Thu, 16 Dec 2021
+ 07:04:23 +0000
+Message-ID: <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
+Date:   Thu, 16 Dec 2021 15:04:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.0
+Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
+ BUG:kernel_reboot-without-warning_in_boot_stage
 Content-Language: en-US
+To:     Borislav Petkov <bp@suse.de>, Carel Si <beibei.si@intel.com>
+CC:     Joerg Roedel <jroedel@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        <lkp@lists.01.org>, <lkp@intel.com>
+References: <20211209144141.GC25654@xsang-OptiPlex-9020>
+ <YbjIoewxGaodXHKF@zn.tnic> <20211215070012.GA26582@linux.intel.com>
+ <Ybm96seTxl+pWjTX@zn.tnic>
+From:   Yin Fengwei <fengwei.yin@intel.com>
+In-Reply-To: <Ybm96seTxl+pWjTX@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfUxbVRjGPb3t7S2KuyswjojC7rLBQD5aCpxNwBnZuDLIIC5KmAlc6Q0g
-        0NZ+mGlcaLZBx0IHCJvSMFkEIeuMlcIQOhAHGGRhWxYUJwgqdBTY+NpswtyXbS9T/nve9/ze
-        8+Q5HwQm/gsPIAoVWlatYIop3IvfObAzKkL2h42JvnIEjfaFo+5vTwtR4+A1AerSDwpQ2+Ia
-        D9U9bOUh68yYAK1WTgnQqK0BR59f/56HblzZi8p6B4Vo4I5BgB6PtfGR45Srb7Y9BGhoeQag
-        ph/uCveI6bV2K0Yv3ywT0ia9Eae7TZNC2mquwOnfx3pwur25lD7VYQb0PevLGaLsooQClpGz
-        6mBWkaeUFyryE6n9b+W8kRMbFy2JkOxC8VSwgilhE6nktIyIfYXFrjRU8IdMsc7VymA0Gioq
-        KUGt1GnZ4AKlRptIsSp5sSpWFalhSjQ6RX6kgtXulkRHS2NdYG5RQeWdZaCalR4uu1bF14Nv
-        wk8CEQFJGVxpNQpOAi9CTHYB+GD4a+BeEJN3Aez88n1O3wNwdRw9HajWn+BxAzYAVy6PrxfL
-        APZ2nhG6KR9yP6xqrPZs6+umevs/xdwFRhr5sPbiksBN4WQY7Ju7ibv1JnIr/GVtxuPtTSZB
-        y60hvlvzye3w8vKsh/cj34bDncfXmc1wuN7uYUTkHljW3OJxxkh/OG5v5HE6CH632OAxhqRB
-        BB1TTUIuRDK8f/oCzmkfuDDUsd4PgPNV5UJuoAXAf2oreFxhAXDeVIFxVAzs+6rWtUC4LHZC
-        iy2Ka2+F3Q/OAs75ebjkrBS4EUh6wxPlYg7ZBkf/nORx+gXYZKjAqwFl2pDHtCGDaUMG0/9m
-        5wDfDLawKk1JPquRqGT/3XeessQKPG89DHWBs4srkf2AR4B+AAmM8vW2Z9kYsbec+ehjVq3M
-        UeuKWU0/iHWdcA0W4JendH0WhTZHItsVLYuTxsiQJE5C+Xs7DnzGiMl8RssWsayKVT+d4xGi
-        AD0vveO9hXdrn0k5FlqTPv1zyxaxXJp2IOsQIZjbl29uNl6yHlU1Hy0Jv5Bp9ncurI5MxBiW
-        dJc67/fEX523pB8OvD1yQxpzvdT8KqSu2mfaBw09vw6ceymzZ/r47R1H8Gx7r1dQlWg3NG2r
-        ORQ4PRVHbbL7ka1BxKPzq9kHgx/VFtG5U5l/T24OyUkJ+Q1Lm1CMpbbOEdasujr16wnnLzo/
-        qY8w0oFv0v6vJEuZhoMt1raQ8ndSV571+8my3WnpSfXdsegTlBiS6rD0AfGLmY9BbnWK1UDH
-        1zd80CzoALSTyHjy45mJkaS9r5nXvlDOqrXP6Y6ZfZUyLLS0/cmtUMcqxdcUMJIwTK1h/gWQ
-        DayxdAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLIsWRmVeSWpSXmKPExsWy7bCSvG79/V2JBrPazSwu79e22LlhKrvF
-        /CPnWC12NBxhtdj49geTxZQ/y5ksNj2+xmrxseceq8XlXXPYLGac38dkcfGUq0Xr3iPsFoff
-        tLNa/Lu2kcXieR9QfNWuP4wWx98/ZrRYfOATu4OQx4/Nm5g93t9oZfeY1dDL5rFz1l12j02r
-        Otk87lzbw+axeUm9R9+WVYwenzfJBXBGcdmkpOZklqUW6dslcGX0vHnPWPDMqKL1XD9LA+M6
-        7S5GTg4JAROJCQ0dTF2MXBxCAjsYJb4dW8oMkZCUmHbxKJDNAWQLSxw+XAxR85ZR4vz/VrAa
-        YQFvif75E1hBEiICuxglTr/7zw7iMAv0s0gcXf+PFaLlJKPEpF8X2EBa2AS0JPa/uAFm8wso
-        Slz98ZgRxOYVsJNY//Q4C4jNIqAqcfD9M1YQW1QgTGLnksdMEDWCEidnPgGr4RRwkGhdsowd
-        xGYWUJf4M+8SM4QtLnHryXwmCFteYvvbOcwTGIVnIWmfhaRlFpKWWUhaFjCyrGKUTC0ozk3P
-        LTYsMMpLLdcrTswtLs1L10vOz93ECI5xLa0djHtWfdA7xMjEwXiIUYKDWUmE90nErkQh3pTE
-        yqrUovz4otKc1OJDjNIcLErivBe6TsYLCaQnlqRmp6YWpBbBZJk4OKUamNbc3bRisqro0f+l
-        62euOyG0W5pXLl5HZc0n05/Kp6/l1bI/XxTs883//5bA2lWx910+T95T+6b5ng/7FOeUXYdM
-        mUI/J1xuLZiwZ9LF8wWiChGMESvn+Fl+dfngydi7SK/r0EGlZzttTf+/vT35erbROWfvnUeT
-        V/KoGf1u2dzTtu7Fc8cGf7aOyY2HeO2fffstZ5N7d3OakpnRQSuNpzoR5l29Ak8fbjF4HvR4
-        XpJZWqNI677+pYeZpqcZ8LDPl91y4+r85Jc3fQOXOBlyaGXdEGDdZRAyNf994llzWcZXPGF3
-        dhwPYRQ0q5DpfnFRsnTypSBt32bm2eFlEu5HM5e+D2rn+i5z91HwCoXaU0osxRmJhlrMRcWJ
-        ALpaYJFgAwAA
-X-CMS-MailID: 20211216064103epcas1p3bf39ff9adc5810403eab886ef579b3c7
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211215160914epcas1p3174efaa5d640dce5fc28158587565792
-References: <20211215160906.17451-1-semen.protsenko@linaro.org>
-        <CGME20211215160914epcas1p3174efaa5d640dce5fc28158587565792@epcas1p3.samsung.com>
-        <20211215160906.17451-3-semen.protsenko@linaro.org>
+X-ClientProxiedBy: HK0PR01CA0062.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::26) To SJ0PR11MB4831.namprd11.prod.outlook.com
+ (2603:10b6:a03:2d2::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b5c44a1d-c55a-405a-b07a-08d9c0624a40
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3333:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <BYAPR11MB33337FAD0B4C685FBE79924CEE779@BYAPR11MB3333.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5xk4qwfUGgSJ4r86WII2y/p0fuY3/0oPKoMlIMfCU7PBL7+INMh4eMHdfMObtIB50fAXff3EerOMRupOkYZNJEPkZFwbLzD+T2LHT3dh2lQ1wcOdPSM+llQO3GnXv3GpAonnP1EFm6qDapfcbww85y8KrwxNjYB8i3OImJ15mx+Aq58T08oBZeLUxJhxZK0uV4RS3wcGnvQTeYeQLth/dggsqLCmMz9k/XH6Jr4ScZ5yBohI3bt0HZneJQFAf3Q/mxNCP06MH4MfjpFBjLa4M7VLT5ExST+sYnuWtFjH8zGQy7e1UFow1Nv6QgW0zY+m7PoZbFqijDpNmNcMR1DJaTvrbCQf/W9gtAjeb1ckfMzMSK+h61uhLnZJWDkFIpUJhQiDP+14P6n65dJ5GVbmlhtPSbuRjUFzLvAvR5EjsZ2e81TDcDGUFih2PL+1msJjkd5BHp8onCB+NcuX4G6DN/jb5i+mW8CwuZVL9z84PzbBWt1oSXpAagczLDoNWcNKWWBHaZ7eLfqaP/QBMHszhWjin4NbEyLtGgASG8o2BzhuIGjG3LerCKxeDlpLkH4Vxswqnwq55dlJApfSoFShMXYvpo85rK8vFw2brqE2X3byinnquJFxZ74qrdxEYG1UUeuiJGSJnqauIiJo5r8kDE74EAJfEdu6Ggna7mpZD2kktJtCN1dwt5N5aGr3dU9cApB8y1kc7XL3FpVEITZhroRZ1g5R/3r0fnbjtvn2t2lbt5FwLZgk7tryxgWulk8zxdDvyPOZeZtFbGMQ/4xPfAywTSu9aFMCtFw3Lgy0Fy/bNLlKcBIOcTFdbNuT5p55KRqsi2wplzBiQRTYfQ/MzQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB4831.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(36756003)(66946007)(6486002)(54906003)(5660300002)(110136005)(508600001)(316002)(66556008)(966005)(2906002)(31696002)(2616005)(66476007)(186003)(26005)(8676002)(83380400001)(31686004)(107886003)(82960400001)(53546011)(4326008)(6636002)(86362001)(6512007)(6666004)(8936002)(6506007)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ckdITVV0VGZHSHpHTGRUdnlwZm01Q2ZoaUEybXVSNGdVeXdFWGtrQXN0V2g0?=
+ =?utf-8?B?ZFBrNnA2cTRaOTFmUjI2YnhEdVZUQ1JVeklDaWZEL2ZtODhmU1ZhUXBCVjRK?=
+ =?utf-8?B?VUxyQzJTM2ZVTHpaZVh2YTMraTBHNlVrNmpJK0tEUGdxK0k0WDVDL0dEM3li?=
+ =?utf-8?B?WFRCclpjNlovWDNyN2hyVlViUDcwUGpnd1lldGJBeDNhbE9hUWpDVFBmbWxZ?=
+ =?utf-8?B?d2RqZllUSEFwSkVvRmU5ZzYrQkxzYk1ieC9nUmRyYTgyL2tNK0xwc2prdUV0?=
+ =?utf-8?B?cnlBNWtZN2pacHRNeGVWT0c3MUF2T2pUd0FxRG0va1BDSmNXU2RIZ0tBOEp1?=
+ =?utf-8?B?VDg0UktPbzBLa25mMnVOeUkzZ09GMEt2Z1RNb25pckxlc3VXTzI3ZHA5eUU0?=
+ =?utf-8?B?djI1TEF3QnBlR3JQOUp5L1A1QWxQVFAyK1MxMFVtcUMwSFNOTWVWMmhNR2ha?=
+ =?utf-8?B?bmxmSHZqVzVaNGRYL2xJZ2xlS2JMMmE5ampPRUhEWHZIQjFYckRCWFJ2MkJC?=
+ =?utf-8?B?a0NHTXc2enBUMFBXVGNCZVNtQkJTOHVEVzVyb3BBL0N0VmhzSTE0dzVpdjV0?=
+ =?utf-8?B?RG5NczE5OXljcDlsa2lINHJTT2N3N0NxYWxEVFRGS1kwNWRpMUFLN25ZMHor?=
+ =?utf-8?B?c241YmwzR0xGdTBhQmdPaEljekpRUHFkc2dweVZFQzZXbWpOM3hqMWF1TU5k?=
+ =?utf-8?B?cUMzTlI1Slo2UWVVRWthOHhsNzk3eXBIT0NxeWlKQ01XZFpmSERBNmdHcVlI?=
+ =?utf-8?B?NndpOGNRWlJTSURwWWJsVGUrOVFISk92cW04VDZ3MFpWUW9lTjZtVXlUWTR6?=
+ =?utf-8?B?WHpRVWlheDhoZ0xoN2RTNnVkemNCRnZ6cld6Tlh3dEUwRmRvVHFIcHNHekhN?=
+ =?utf-8?B?N054TUxrOEplU2ZsbnBXY05kRHVaK3JvbzJTLy9PSWxCcko0aEFEVTg0cE82?=
+ =?utf-8?B?MkxLRFA5dUlva2VZOWNvd0dyWmtHNUVqb0V5SnBKQzRzbkZIWngzUTdHOUNS?=
+ =?utf-8?B?UjYxTHFOdDJkOUE5R3dwNGZZWks3NnhVLzk3akQ3anBXSUpHbWcrMDlCKzBW?=
+ =?utf-8?B?TkIzbUdXNHJRU0VlUWw2UFRUSjhoVTY4WDFZVzVoOVlDSTRhaTNRcXVoODVJ?=
+ =?utf-8?B?QU1QOWl1Vi80bDcvUnFyQmgvT01RaC9LdG1SSVB1WTlQajlocTJTbzNjd0pN?=
+ =?utf-8?B?cUNPbSswN016NmF2WWtmOWplUUNuMjRpUEdvaHczVW5qTUFETGwyYnVPTndF?=
+ =?utf-8?B?d1dCb25Jb1dWNUVlYW5adjRMUUpBUEkwTHMySFZXQkhpeWxJK0YxTjYzOTNa?=
+ =?utf-8?B?cXRNS3ZaY3hBL3FzWjJobVZNNkM2K090VTMxcHV6eU5DdUtCMXJ0Y29YMlhk?=
+ =?utf-8?B?OHcyRzVab2xVbmQ3VjIyeWJYRWlMVTRySEhCMC9PbXRjbEJaVlQyS1h6RGZ0?=
+ =?utf-8?B?ZEdlRVRFb0d2VFpOWFUxNDFGUjRJUDVEck15cnNDeFFybGZWRjl4ejg0QXJB?=
+ =?utf-8?B?cUNtcXRYQXFOakFBanJjL2dWT1l4TlMxdkc0R2JVK0RsOUdQNWlKYWtGRTgr?=
+ =?utf-8?B?L1hMdUkvQ0pIdEVOVU8xMTMrMlZMUU1mTEZ0UDRlakRJZTVLYTFrNUFRS2Y2?=
+ =?utf-8?B?RXpuQ0tMblF4cmMyeUZySlJ1U2ZSdkFwVkEyVUFWOUt4MHE4Mzd2WGhrVHJr?=
+ =?utf-8?B?YVg0d2hiUllOazZaak13WEd1V1V0RFhMdi9samM0ZU0zT2svMWhUTU1sL3R1?=
+ =?utf-8?B?ZWh3NFd4dWQ2UnUxOEs5UkZ1Zlo0aWpjRTBOSzdmMjVWT1ZhTzV5UlhmaS9l?=
+ =?utf-8?B?OGlDbHZzeTJBeFE0YUtLMUp6Mi9rek14djY1MDdGTmwxTWVjZkE2UXNnMnpU?=
+ =?utf-8?B?SnR5aHBvM2dqK2Nabnp3L1NiNUtzd1ZuLzVsTVdjbXh4YWZvMjVQMFJQQndI?=
+ =?utf-8?B?OHRHQUVSeHpubUgwRTFlLzZrYUlZVUo3Tk1Zd0Zrc2swdUZpdmUzSTBSY0xS?=
+ =?utf-8?B?Ky9pMUhRMXdKWEdVV1FncXVuRkxhWFJrTWpXMlM1ZXhqTTBtQUY3OG40Lzhh?=
+ =?utf-8?B?eDduUnJ4Sy9hVUZ1aVBWb05DNFhmSG13eHNRNCtCMTFjZ0F0SzdHSGhWb1Nv?=
+ =?utf-8?B?M0RBUmttakVyNGZncFBlN1VuTk5DWVAwNDlEMnRBOTcxUWJiZkJiVFV3akNC?=
+ =?utf-8?Q?pNuJHtqjZm7g6maIG5nwfAs=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5c44a1d-c55a-405a-b07a-08d9c0624a40
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB4831.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 07:04:23.7528
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jzCdk6NhIwFK/RzEJz4x+70WMLvvRrO+mk1C3FL73+FJwQ0oSdwXYF2K6WYQ3J9RHumrWQl643OX1hy6jPllhA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3333
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/16/21 1:09 AM, Sam Protsenko wrote:
-> System Register is used to configure system behavior, like USI protocol,
-> etc. SYSREG clocks should be provided to corresponding syscon nodes, to
-> make it possible to modify SYSREG registers.
-> 
-> While at it, add also missing PMU and GPIO clocks, which looks necessary
-> and might be needed for corresponding Exynos850 features soon.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  drivers/clk/samsung/clk-exynos850.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/drivers/clk/samsung/clk-exynos850.c b/drivers/clk/samsung/clk-exynos850.c
-> index 568ac97c8120..4799771d09bc 100644
-> --- a/drivers/clk/samsung/clk-exynos850.c
-> +++ b/drivers/clk/samsung/clk-exynos850.c
-> @@ -426,11 +426,14 @@ CLK_OF_DECLARE(exynos850_cmu_top, "samsung,exynos850-cmu-top",
->  #define CLK_CON_DIV_DIV_CLK_APM_I3C			0x1808
->  #define CLK_CON_GAT_CLKCMU_CMGP_BUS			0x2000
->  #define CLK_CON_GAT_GATE_CLKCMU_CHUB_BUS		0x2014
-> +#define CLK_CON_GAT_GOUT_APM_APBIF_GPIO_ALIVE_PCLK	0x2018
-> +#define CLK_CON_GAT_GOUT_APM_APBIF_PMU_ALIVE_PCLK	0x2020
->  #define CLK_CON_GAT_GOUT_APM_APBIF_RTC_PCLK		0x2024
->  #define CLK_CON_GAT_GOUT_APM_APBIF_TOP_RTC_PCLK		0x2028
->  #define CLK_CON_GAT_GOUT_APM_I3C_APM_PMIC_I_PCLK	0x2034
->  #define CLK_CON_GAT_GOUT_APM_I3C_APM_PMIC_I_SCLK	0x2038
->  #define CLK_CON_GAT_GOUT_APM_SPEEDY_APM_PCLK		0x20bc
-> +#define CLK_CON_GAT_GOUT_APM_SYSREG_APM_PCLK		0x20c0
->  
->  static const unsigned long apm_clk_regs[] __initconst = {
->  	PLL_CON0_MUX_CLKCMU_APM_BUS_USER,
-> @@ -445,11 +448,14 @@ static const unsigned long apm_clk_regs[] __initconst = {
->  	CLK_CON_DIV_DIV_CLK_APM_I3C,
->  	CLK_CON_GAT_CLKCMU_CMGP_BUS,
->  	CLK_CON_GAT_GATE_CLKCMU_CHUB_BUS,
-> +	CLK_CON_GAT_GOUT_APM_APBIF_GPIO_ALIVE_PCLK,
-> +	CLK_CON_GAT_GOUT_APM_APBIF_PMU_ALIVE_PCLK,
->  	CLK_CON_GAT_GOUT_APM_APBIF_RTC_PCLK,
->  	CLK_CON_GAT_GOUT_APM_APBIF_TOP_RTC_PCLK,
->  	CLK_CON_GAT_GOUT_APM_I3C_APM_PMIC_I_PCLK,
->  	CLK_CON_GAT_GOUT_APM_I3C_APM_PMIC_I_SCLK,
->  	CLK_CON_GAT_GOUT_APM_SPEEDY_APM_PCLK,
-> +	CLK_CON_GAT_GOUT_APM_SYSREG_APM_PCLK,
->  };
->  
->  /* List of parent clocks for Muxes in CMU_APM */
-> @@ -512,6 +518,14 @@ static const struct samsung_gate_clock apm_gate_clks[] __initconst = {
->  	     CLK_CON_GAT_GOUT_APM_I3C_APM_PMIC_I_SCLK, 21, 0, 0),
->  	GATE(CLK_GOUT_SPEEDY_PCLK, "gout_speedy_pclk", "dout_apm_bus",
->  	     CLK_CON_GAT_GOUT_APM_SPEEDY_APM_PCLK, 21, 0, 0),
-> +	/* TODO: Should be enabled in GPIO driver (or made CLK_IS_CRITICAL) */
-> +	GATE(CLK_GOUT_GPIO_ALIVE_PCLK, "gout_gpio_alive_pclk", "dout_apm_bus",
-> +	     CLK_CON_GAT_GOUT_APM_APBIF_GPIO_ALIVE_PCLK, 21, CLK_IGNORE_UNUSED,
-> +	     0),
-> +	GATE(CLK_GOUT_PMU_ALIVE_PCLK, "gout_pmu_alive_pclk", "dout_apm_bus",
-> +	     CLK_CON_GAT_GOUT_APM_APBIF_PMU_ALIVE_PCLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_SYSREG_APM_PCLK, "gout_sysreg_apm_pclk", "dout_apm_bus",
-> +	     CLK_CON_GAT_GOUT_APM_SYSREG_APM_PCLK, 21, 0, 0),
->  };
->  
->  static const struct samsung_cmu_info apm_cmu_info __initconst = {
-> @@ -541,6 +555,7 @@ static const struct samsung_cmu_info apm_cmu_info __initconst = {
->  #define CLK_CON_GAT_GOUT_CMGP_ADC_PCLK_S0	0x200c
->  #define CLK_CON_GAT_GOUT_CMGP_ADC_PCLK_S1	0x2010
->  #define CLK_CON_GAT_GOUT_CMGP_GPIO_PCLK		0x2018
-> +#define CLK_CON_GAT_GOUT_CMGP_SYSREG_CMGP_PCLK	0x2040
->  #define CLK_CON_GAT_GOUT_CMGP_USI_CMGP0_IPCLK	0x2044
->  #define CLK_CON_GAT_GOUT_CMGP_USI_CMGP0_PCLK	0x2048
->  #define CLK_CON_GAT_GOUT_CMGP_USI_CMGP1_IPCLK	0x204c
-> @@ -556,6 +571,7 @@ static const unsigned long cmgp_clk_regs[] __initconst = {
->  	CLK_CON_GAT_GOUT_CMGP_ADC_PCLK_S0,
->  	CLK_CON_GAT_GOUT_CMGP_ADC_PCLK_S1,
->  	CLK_CON_GAT_GOUT_CMGP_GPIO_PCLK,
-> +	CLK_CON_GAT_GOUT_CMGP_SYSREG_CMGP_PCLK,
->  	CLK_CON_GAT_GOUT_CMGP_USI_CMGP0_IPCLK,
->  	CLK_CON_GAT_GOUT_CMGP_USI_CMGP0_PCLK,
->  	CLK_CON_GAT_GOUT_CMGP_USI_CMGP1_IPCLK,
-> @@ -610,6 +626,9 @@ static const struct samsung_gate_clock cmgp_gate_clks[] __initconst = {
->  	GATE(CLK_GOUT_CMGP_USI1_PCLK, "gout_cmgp_usi1_pclk",
->  	     "gout_clkcmu_cmgp_bus",
->  	     CLK_CON_GAT_GOUT_CMGP_USI_CMGP1_PCLK, 21, 0, 0),
-> +	GATE(CLK_GOUT_SYSREG_CMGP_PCLK, "gout_sysreg_cmgp_pclk",
-> +	     "gout_clkcmu_cmgp_bus",
-> +	     CLK_CON_GAT_GOUT_CMGP_SYSREG_CMGP_PCLK, 21, 0, 0),
->  };
->  
->  static const struct samsung_cmu_info cmgp_cmu_info __initconst = {
-> @@ -910,10 +929,12 @@ CLK_OF_DECLARE(exynos850_cmu_peri, "samsung,exynos850-cmu-peri",
->  #define CLK_CON_DIV_DIV_CLK_CORE_BUSP		0x1800
->  #define CLK_CON_GAT_GOUT_CORE_CCI_550_ACLK	0x2038
->  #define CLK_CON_GAT_GOUT_CORE_GIC_CLK		0x2040
-> +#define CLK_CON_GAT_GOUT_CORE_GPIO_CORE_PCLK	0x2044
->  #define CLK_CON_GAT_GOUT_CORE_MMC_EMBD_I_ACLK	0x20e8
->  #define CLK_CON_GAT_GOUT_CORE_MMC_EMBD_SDCLKIN	0x20ec
->  #define CLK_CON_GAT_GOUT_CORE_SSS_I_ACLK	0x2128
->  #define CLK_CON_GAT_GOUT_CORE_SSS_I_PCLK	0x212c
-> +#define CLK_CON_GAT_GOUT_CORE_SYSREG_CORE_PCLK	0x2130
->  
->  static const unsigned long core_clk_regs[] __initconst = {
->  	PLL_CON0_MUX_CLKCMU_CORE_BUS_USER,
-> @@ -924,10 +945,12 @@ static const unsigned long core_clk_regs[] __initconst = {
->  	CLK_CON_DIV_DIV_CLK_CORE_BUSP,
->  	CLK_CON_GAT_GOUT_CORE_CCI_550_ACLK,
->  	CLK_CON_GAT_GOUT_CORE_GIC_CLK,
-> +	CLK_CON_GAT_GOUT_CORE_GPIO_CORE_PCLK,
->  	CLK_CON_GAT_GOUT_CORE_MMC_EMBD_I_ACLK,
->  	CLK_CON_GAT_GOUT_CORE_MMC_EMBD_SDCLKIN,
->  	CLK_CON_GAT_GOUT_CORE_SSS_I_ACLK,
->  	CLK_CON_GAT_GOUT_CORE_SSS_I_PCLK,
-> +	CLK_CON_GAT_GOUT_CORE_SYSREG_CORE_PCLK,
->  };
->  
->  /* List of parent clocks for Muxes in CMU_CORE */
-> @@ -972,6 +995,12 @@ static const struct samsung_gate_clock core_gate_clks[] __initconst = {
->  	     CLK_CON_GAT_GOUT_CORE_SSS_I_ACLK, 21, 0, 0),
->  	GATE(CLK_GOUT_SSS_PCLK, "gout_sss_pclk", "dout_core_busp",
->  	     CLK_CON_GAT_GOUT_CORE_SSS_I_PCLK, 21, 0, 0),
-> +	/* TODO: Should be enabled in GPIO driver (or made CLK_IS_CRITICAL) */
-> +	GATE(CLK_GOUT_GPIO_CORE_PCLK, "gout_gpio_core_pclk", "dout_core_busp",
-> +	     CLK_CON_GAT_GOUT_CORE_GPIO_CORE_PCLK, 21, CLK_IGNORE_UNUSED, 0),
-> +	GATE(CLK_GOUT_SYSREG_CORE_PCLK, "gout_sysreg_core_pclk",
-> +	     "dout_core_busp",
-> +	     CLK_CON_GAT_GOUT_CORE_SYSREG_CORE_PCLK, 21, 0, 0),
->  };
->  
->  static const struct samsung_cmu_info core_cmu_info __initconst = {
-> 
+Hi Boris,
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+On 12/15/2021 6:05 PM, Borislav Petkov wrote:
+> On Wed, Dec 15, 2021 at 03:00:13PM +0800, Carel Si wrote:
+>> We have verified by hand, still can reproduce this issue.
+> 
+> Ok, please give details how exactly you reproduce: host, guest, kernel
+> versions, configs, machine types, i.e., /proc/cpuinfo, dmesg, etc. I'd
+> like to see if I can find a similar machine here.
+> 
+> Also, would it be possible to upload your vmlinuz somewhere so that I
+> can download it for testing?
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+The testing was with Qemu. And we found that the hang is related with
+clang-14.
+
+The original report showed the kernel is built with clang-14:
+        # build kernel
+	cd linux
+	cp config-5.16.0-rc3-00003-gf154f290855b .config
+	make HOSTCC=clang-14 CC=clang-14 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+	make HOSTCC=clang-14 CC=clang-14 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+
+
+And the clang-14 generate different code comparing to clang-11. I pasted
+the native_write_cr4 assembly code generated with clang-14 and clang-11 to:
+https://zerobin.net/?ced930258536c677#U6et+H97oxbpdYclFvAX0F3ha0rCJctLE53mJjDKrgo=
+
+The extra code generated by clang-14 is like:
+
+ffffffff810b8784:       48 89 d8                mov    %rbx,%rax
+ffffffff810b8787:       48 c1 e8 03             shr    $0x3,%rax
+ffffffff810b878b:       48 b9 00 00 00 00 00    movabs $0xdffffc0000000000,%rcx
+ffffffff810b8792:       fc ff df
+ffffffff810b8795:       80 3c 08 00             cmpb   $0x0,(%rax,%rcx,1)
+                 --> Qemu reboot after this instruction from x86_64_start_kernel
+ffffffff810b8799:       74 08                   je     ffffffff810b87a3 <native_write_cr4+0x84>
+ffffffff810b879b:       48 89 df                mov    %rbx,%rdi
+ffffffff810b879e:       e8 cc 7c 64 00          callq  ffffffff8170046f <__asan_report_load8_noabort>
+ffffffff810b87a3:       48 ff 03                incq   (%rbx)
+ffffffff810b87a6:       5b                      pop    %rbx
+
+
+Looks like KASAN related stub generated by clang-14 (KASAN_SHADOW_OFFSET and asan_report).
+This function is early function called before kasan_init.
+
+Looks like we need to disable KASAN_SANITIZE for arch/x86/kernel/cpu/common.c. So clang-14 will
+be happy with this kind of early TLB flush? Thanks.
+
+
+Regards
+Yin, Fengwei
+
+> 
+> Thx.
+> 

@@ -2,101 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A935477EAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A586477EAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236849AbhLPVWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:22:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
+        id S236880AbhLPVWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbhLPVWh (ORCPT
+        with ESMTP id S235310AbhLPVWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:22:37 -0500
+        Thu, 16 Dec 2021 16:22:50 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3322C061574;
-        Thu, 16 Dec 2021 13:22:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0437FC061574;
+        Thu, 16 Dec 2021 13:22:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 808D4B82322;
-        Thu, 16 Dec 2021 21:22:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CF66C36AE2;
-        Thu, 16 Dec 2021 21:22:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8ACFB82641;
+        Thu, 16 Dec 2021 21:22:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F16DC36AEE;
+        Thu, 16 Dec 2021 21:22:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639689754;
-        bh=0kQfGM1RjxfYWvw20Tn73hc189zljonNHseVbqgTbXU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NawKA1i+IWMOt72tRl6CiCFVJ9g7ci2uwJmnnnhRwxp9oi1PWf3D+XOqSd5W2ju4s
-         lTVpnA+IrGBZtGDzns4vqH86j2VY+P6hzxDpDvSynkJw12plUoDVKk1mQKbqfBG/a7
-         Jj9KhpAr5SCjkdhYwO5nDaYdXZ9Y5iXAbTVfqlLQ0pYnmPpagXECe9jPWcZkDbx1b3
-         V4zFlp/3irinh9roalIKeKZd1dlViQBV+VPwjYrvminP1D15Qy9Bh7+3sVybC3FryZ
-         qvDRW3hOKeDhwSgEjmVtyzLviM2yDic+z2rTsZEWmMcW6UF0V1+guztEN9HAF2AMtQ
-         ctbx7QWfkWnFw==
-Date:   Thu, 16 Dec 2021 22:22:31 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: exynos5: Fix getting the optional clock
-Message-ID: <YbuuFztynhVUcyTM@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211212181057.20210-1-semen.protsenko@linaro.org>
+        s=k20201202; t=1639689767;
+        bh=Rby8wL1R+RjVFuXBREBzbt9S6XLeBNTp+vc8b4HLPZo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OMQH3hlrCyXS7AW2yFCYCI6gAMn6YU9jHcBYW75R6j7qIag52Lfkv6XdFE/Qe3F1c
+         +Fu8iIakEuAR0HFqo8GzKOu8zwz6zehyxzxEzi6nfSXCPqXtk+0WPg64W2FlILMyyV
+         vnMdeVnuK/usJad6qIbm5yYdzzS5wmgZ7DMgMXBwILVvOVoaifKPafcBsfRDBhZtJv
+         Ls0R0QM1C/vfTD2JNoxo3/BnTMdejA7gkS2K25rqC/3PK4towqfxbyhxR0l6lj9QeL
+         bLyf83gwnUhN+eKjGdkOh6B4KzIipP4L58Tp/vTAGi/xF1hYbiyiYTBSL7eUFvS6oC
+         J+jyY6oBigxNg==
+Received: by mail-qv1-f44.google.com with SMTP id ke6so561267qvb.1;
+        Thu, 16 Dec 2021 13:22:47 -0800 (PST)
+X-Gm-Message-State: AOAM532KeVJ6ndrtc3LeTI09rvUnNRXR8EBuSNMk0Yvh4vkokcXb7qk/
+        HxcOE8y8WQR7t/F75OAys+YWlCj3V56ZdJZKGg==
+X-Google-Smtp-Source: ABdhPJwCk6EQOFeg0DPodBptUy75vtieDV400ot205d73s7buJc0fLIKkr8OqR4T6zfPLrh/d90m8q4caiFdkY4YT3k=
+X-Received: by 2002:a0c:e54d:: with SMTP id n13mr86544qvm.16.1639689766539;
+ Thu, 16 Dec 2021 13:22:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LGkMuXw0gDA0VW0U"
-Content-Disposition: inline
-In-Reply-To: <20211212181057.20210-1-semen.protsenko@linaro.org>
+References: <20211215224832.1985402-1-robh@kernel.org> <Ybp8QMyoW+MxTgmJ@piout.net>
+In-Reply-To: <Ybp8QMyoW+MxTgmJ@piout.net>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 16 Dec 2021 15:22:35 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+QbqH3tsZPjJb-WUObpXos9TQ2b_aB5ih_KSPVQcYLLA@mail.gmail.com>
+Message-ID: <CAL_Jsq+QbqH3tsZPjJb-WUObpXos9TQ2b_aB5ih_KSPVQcYLLA@mail.gmail.com>
+Subject: Re: [PATCH] serial: atmel: Use platform_get_irq() to get the interrupt
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Richard Genoud <richard.genoud@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 15, 2021 at 5:37 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> Hello Rob,
+>
+> On 15/12/2021 16:48:31-0600, Rob Herring wrote:
+> > Accessing platform device resources directly has long been deprecated for
+> > DT as IRQ resources may not be available at device creation time. Drivers
+> > continuing to use static IRQ resources is blocking removing the static setup
+> > from the DT core code.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  drivers/tty/serial/atmel_serial.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+> > index 2c99a47a2535..9e57bfe523cf 100644
+> > --- a/drivers/tty/serial/atmel_serial.c
+> > +++ b/drivers/tty/serial/atmel_serial.c
+> > @@ -2479,7 +2479,7 @@ static int atmel_init_port(struct atmel_uart_port *atmel_port,
+> >       port->fifosize          = 1;
+> >       port->dev               = &pdev->dev;
+> >       port->mapbase           = mpdev->resource[0].start;
+>
+> Shouldn't you fix that one at the same time?
 
---LGkMuXw0gDA0VW0U
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sure, I'll make a 2nd patch as it has little to do with $subject.
 
-On Sun, Dec 12, 2021 at 08:10:57PM +0200, Sam Protsenko wrote:
-> "hsi2c_pclk" clock is optional and may not be present for some SoCs
-> supported by this driver. Nevertheless, in case the clock is provided
-> but some error happens during its getting, that error should be handled
-> properly. Use devm_clk_get_optional() API for that. Also report possible
-> errors using dev_err_probe() to handle properly -EPROBE_DEFER error (if
-> clock provider is not ready by the time I2C probe function is executed).
->=20
-> Fixes: c93ac09df2a8 ("i2c: exynos5: Add bus clock support")
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-
-Applied to for-next, thanks! But I needed to fix the Fixes tag?
-
-
---LGkMuXw0gDA0VW0U
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmG7rhcACgkQFA3kzBSg
-KbYuLg//V9a0VnkNuZFXzKPpM+/5MOfxH5zynk2LD1STaEvo0YaCaTI1W6JJ0pEI
-uUikJ9YyxnXgz7KuOVEl0yWavW3xm9v25OAHOCzuK9v4iVTLJZkY0/Ya21Hik4x5
-twOe282/lGfIGsmmZ5X8a+3Ul/1ZiIDi7c96MEwOwQpTQWK2UgTcswmKKsmUG2ps
-KUAmqnUf75IkjKtu2wNBCDl6CSkRpudKSSNslKv5Berg4O7R/NWVQl8FlDdwR5qP
-2zX1NUvZF9IREz6mKclsrXFeyi/Jfp0F/AfI4+ArSSIGMF5uFaxQGpYEpyokGpDd
-OLwK4YJ7ughim9FjdcMAIllFAEFtgSIdW+5zkV1U5m/KnM8zYA43hXYHB7191ekI
-2m1fg9aTV+EITF9Y9ErezNjHyr5LKC3jC805/AnvyDF+38mhHSRIJlUIg26hQ2tq
-2vSotv3yh9tqfvgR8kd1RM2LpoPu354TYFjOXGMyI0BNQkNKKTkzWl/8MGhEiCFc
-QqlySBDQ1Y57xjdTmHM1Uw+BYmLS6/Pqzh7tOPX29ocE1BZmiuzkwwCGuwCefgv5
-mxyTyyH9iR25lWm6KzYIFgx/fbBjLyv9n3z/GUCVQtvGVNIz1piTy0n168T/r3qM
-Q+MCKF7E7oLy9L+o/GIij734gan/g1pBatK7x+hNh8XClF/V16Q=
-=5alG
------END PGP SIGNATURE-----
-
---LGkMuXw0gDA0VW0U--
+>
+> > -     port->irq               = mpdev->resource[1].start;
+> > +     port->irq               = platform_get_irq(mpdev, 0);
+> >       port->rs485_config      = atmel_config_rs485;
+> >       port->iso7816_config    = atmel_config_iso7816;
+> >       port->membase           = NULL;
+> > --
+> > 2.32.0
+> >
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com

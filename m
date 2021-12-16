@@ -2,186 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AEF47790A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0A747790C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239121AbhLPQ24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:28:56 -0500
-Received: from mail-bn8nam11on2071.outbound.protection.outlook.com ([40.107.236.71]:32225
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S239136AbhLPQ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:29:23 -0500
+Received: from mail-bn8nam08on2050.outbound.protection.outlook.com ([40.107.100.50]:33952
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233854AbhLPQ2x (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:28:53 -0500
+        id S233799AbhLPQ3W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 11:29:22 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WXPkmwQbV9UgszPDMsW01F8QIBt2PdLSMI0xQ3q96HMmYXuE2JxnX1aEVrOOrkOOxzMDnHuvRd5wPOyyQEYLk7cyk1ZJBHsDlgeH7eEhseB/BSLjsXg7KGPTVWwvAp/JBSM0LVY2lj2c6tWVRV8tWNfkk2XE5QOUDoUUAEJ/h+nQErfR39MebzXsfCjPkY/KqIiTF7KnH8MujbLzzevV5vXlB42FklX8MkwMb6HUt0XmqPe/EI/VaiJ2aaprJ/wopeBM8DSSsLYuEKrKDU7D3iWXSaPBXOhzX130LJ0lD9lhknKT3Hs3jfWDXhQrNFj/MKuC9GTtM/5WWQyIV+Jmrw==
+ b=IkI9w5QSlIH8EDXhP3fZaSrwNuJpVdvKcYexiuIRkFkYcMCjOkkdNENjhoQAivL1gLduCClomJsf+HRBtAHaMdPCJ+dkmB4qB3KK6TF2R0aK23VVmAKX76I+0l10N9vRULP60Wy88XcEN4YypIj/HtIgFvW3w+61tWFp8CUlMfsDd++h1NNhcDhqCEn6CQRu/Q8HzA5PX6eQgyqZkMJ06wjxnDU2bq2VRmm0ng1yG6/NPf3rf9No5uDm7rlsq2G82ohVhxEZTwnPcyO+mShcuhYBeXh1qJVdZ7b5HtRpimmgFgmGMd23pAlKITOTyDGx7v7qyDioAtryVa30JKvNyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j7OhKhPHsQ5ychtqhgnYj+OJWkZfAGF52K7lrOqPGJo=;
- b=IwIGyR36c3YsdxodQ6Z3n1QhORLRG59vMchjo7Vjb9XGwK9MkfsjF5iP6RZ2t2wwsJrYqYcR0lRwxtrViDJFrwL1KqbA/zNM+/hbia4Sxq7UyZcA+Ltr47c0Vi2HF35owiPQoCP9VU7npKfIRzA3H6tUi9QeWwslmJsh7jLVLwVRpEYdcog1fz6kbx6ji9UvXJm2m8rFu9cqJBWW6mgE6tJYqkDp1pJkNFqpuvKGJtmkzMG8jFibbInxEtWqCrNMNOsu3pGMt7H8MLeZvjlX0k5IRRFouqSUS8bJ7QJ98BzsLuGdRUJd6KFDnMf2iTcK69Aip776QJf9FoS42CmSYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=2Ea/5TXLcJTTjKzQnKLgMwdXTGE3SKJ4H7R751Ax9Tc=;
+ b=daUg9vr+ZJxuGku3afmNtL2Or6H6S7fWKvM8hbVZf84QCUSttY64iHTb1F93T4E+XuTMbWF93D3RQElIlC/kQdetmMstL9wmkACdBfD9wPSruD4Q2yrJadz92EZHytWkJpFW+Ko6EvRjbWqzT2tqK9t//fhhZCnZiIFxyKLlSxA2Uk9hs2TNFxW9nz8qhKEnQKg6QUIjdNRG2i1DCkEN4GjmErWwRPM1fnhdilahijRuq0QFcEvp5WWPQGrt6SptI5y0KuXOFtBLwAsPzsAxAurWgI64B2Phd11ycihGdV3eweUgs+zYqtPHIWgkVvFklf2e4wp3ZoH42dsai36gHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j7OhKhPHsQ5ychtqhgnYj+OJWkZfAGF52K7lrOqPGJo=;
- b=mic58NHjPDFKV5K8dO325+f6CeDQQZMjgHNMLMm+USESo6+ufYLyupVrJWqVsrLHTcHFRG4bJfmExSjENBb3GMcjgRgYLXV3R6GWLn/dHdF3pxb3HvEsC7T1Jm4O+h4oLEDaWNMc4ZKXQIOjsQ6myHdygFP6CFyyXwByM/4+lOc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
- by SA0PR12MB4384.namprd12.prod.outlook.com (2603:10b6:806:9f::22) with
+ bh=2Ea/5TXLcJTTjKzQnKLgMwdXTGE3SKJ4H7R751Ax9Tc=;
+ b=tB3vODsbA8PywpzKUvck9nSGXFbYJZIhyvfXiSHiCzaORX1c7ZH8ZR6wvjEribOW/oFp5rOF2AgOTWonN3yK96mJ1BOl1yWGSr3mU5N7fx5P5wldTrmHleXtswattgA14T0STZ13eeB5/aDYcLGOlEF+Nhp2Hbayp6pb3k8Puds=
+Received: from MWHPR20CA0005.namprd20.prod.outlook.com (2603:10b6:300:13d::15)
+ by MN2PR12MB3967.namprd12.prod.outlook.com (2603:10b6:208:16c::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Thu, 16 Dec
- 2021 16:28:51 +0000
-Received: from SN6PR12MB2718.namprd12.prod.outlook.com
- ([fe80::35:281:b7f8:ed4c]) by SN6PR12MB2718.namprd12.prod.outlook.com
- ([fe80::35:281:b7f8:ed4c%6]) with mapi id 15.20.4778.018; Thu, 16 Dec 2021
- 16:28:51 +0000
-Cc:     brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 06/40] x86/sev: Check SEV-SNP features support
-To:     Borislav Petkov <bp@alien8.de>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-7-brijesh.singh@amd.com> <Ybtfon70/+lG63BP@zn.tnic>
-From:   Brijesh Singh <brijesh.singh@amd.com>
-Message-ID: <225fe4e5-02de-5e3e-06c8-d7af0f9dd161@amd.com>
-Date:   Thu, 16 Dec 2021 10:28:45 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <Ybtfon70/+lG63BP@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR07CA0028.namprd07.prod.outlook.com
- (2603:10b6:610:20::41) To SN6PR12MB2718.namprd12.prod.outlook.com
- (2603:10b6:805:6f::22)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.15; Thu, 16 Dec
+ 2021 16:29:19 +0000
+Received: from CO1NAM11FT050.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:13d:cafe::e5) by MWHPR20CA0005.outlook.office365.com
+ (2603:10b6:300:13d::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14 via Frontend
+ Transport; Thu, 16 Dec 2021 16:29:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT050.mail.protection.outlook.com (10.13.174.79) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 16:29:18 +0000
+Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 16 Dec
+ 2021 10:29:17 -0600
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     <linux-edac@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>,
+        <x86@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
+        <william.roche@oracle.com>, <alexander.deucher@amd.com>,
+        <mukul.joshi@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH v2 0/2] AMD SMCA Updates
+Date:   Thu, 16 Dec 2021 16:29:03 +0000
+Message-ID: <20211216162905.4132657-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
+ (10.181.40.144)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2febced1-6ea7-4c4a-184d-08d9c0b1249e
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4384:EE_
-X-Microsoft-Antispam-PRVS: <SA0PR12MB43848A8EEB5130A85DD2639FE5779@SA0PR12MB4384.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 8e1daeac-ddeb-4c5f-e50b-08d9c0b1357f
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3967:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3967296CD8682679F58A714AF8779@MN2PR12MB3967.namprd12.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A76Tjz2mI9VXobBu8vGONoY08sZA2AFJA3ul8nhyVBniPsNtzb+N7ryR8Uw4oCesFO7YZd7e0IxbXHS8jxdkGmh1j5mtcTZYfYcftBxmbjqBVz/wyvCDVHrZxFCXUOxrTcZQYzbh9xck+HmqByo65DF3aBUtm0ZVYwckKB2ULIjHbbljtO6xboqlaR0z9c304sKp1fl5mw3bUVqwjC2BEaN1L5w2z4560jrt9LBZS9D9bEef1cSQLZgLa4qH0nTiY7t4YnAja09r09HFgPR7Y69i84klRHFxVruyGx1i9V+0zxq8Wm0m5dlqzu/R8vLaQkQTpMAOM+/e2JW6oC4pKvP0gCCS+0Gt1uvI3TEEi/OwzZ50vbc8H2bQnNIi8OCZQnNI6kUHeWUQKKKsHz9FjG6QxLwdQSsFcpEBdqVT2K5TAKlrkogU2iCS8epn6cot5eV5Ky3qOj5ICo75yDPM3jEx4SPgiTzEkSBGJ82bvcIlA5Ey5vuy+zsr+xsDeubVmONdmq0MwPD7Gy0m8ZiIGiUumKSGX65Yiy/Mre2uFLfjjpaskgGCiwTBAyD1jGcvesfnm9nrGGbP4vSwZiICfLbplzVaWNNLUXKvBo+oNtJ32yvwxOU9t22b4MzWn3vqKXV3/J597DCXvqLkZACeKuV4NzrRg7EEDwZ1lq0WZBT/Ao93bkFl02pHlA/wJmUV/ktbLLWoklIk47cMej4fQnybRw1bEIqXrlhDgKFXXME=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(7416002)(66946007)(6506007)(7406005)(5660300002)(53546011)(44832011)(66476007)(4326008)(2616005)(6512007)(38100700002)(316002)(66556008)(186003)(86362001)(8936002)(31696002)(31686004)(508600001)(6916009)(8676002)(54906003)(26005)(6666004)(36756003)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bHd3M0UwMGVFUFlWY0hWL2t1Y1JmaEdrZ25YWFhZWmx4RktjMFBFVTI1dzlN?=
- =?utf-8?B?VFA3TkdZOGNVQmsyS2FHRVFLdllGZnkxK3lhYURRRTAyeER0ZEtFRUxpTldG?=
- =?utf-8?B?Z05PZlJzamNiRVJBdHU1TFdBSXhIMHZYVXBEbGFkaHVxZzNndEhHUnZqclg0?=
- =?utf-8?B?VWgwNmNYNktodG01YS9UTHdQQlBkNnNVU21WMEprbDFydmdldU1NRmNjK29X?=
- =?utf-8?B?cnhpakM3M3Q0TGhYajgxMDMySklueG03YU56bWF2WE14TXhOVlBkSnB2aHZ1?=
- =?utf-8?B?M01GUFRBY2R4cXNjWGVpYngvQ1BjM0dsZVpmUEZadUlvN3QvVWRYYW9VbEpy?=
- =?utf-8?B?YnA5c0thY3BTNFZYTEg5YU5CTXgyL3pOTzlTTWpGY1U2M00vTGxzTmtnWE10?=
- =?utf-8?B?emF3eFNxRy9ob1U4UEdDdFJCOXp4MDlrNzFCeGtmQmtCRHVaUHNMa0t0NXBQ?=
- =?utf-8?B?eG9yVnNNK0hkZnVHQTlTMFpBbWd1SG5WdWphOUNyNUZCUXBYSEhJbEVRVHo3?=
- =?utf-8?B?WFRJOFFwSDlBeTAvRTgvWnJ6bXBVNkVoSmlvbkM4QUJqTm55UjF0bE5OK1da?=
- =?utf-8?B?YkkwRmhhRXRoSFdxWnkrK21ZMGZGdnVpM0h6dGgyTW4zQit6cGRPcVJKeTNI?=
- =?utf-8?B?RCsvUjZDWmtMd01iU1RYOTgwVkRvaUlLM2lQZ3Eya3NBMEM3b01pUERlbFQr?=
- =?utf-8?B?S1Z5RGpvNmNLRVM0cEswY0dROENOajVQNGpycjRlYlZmanVLQXVZZDVvY1lq?=
- =?utf-8?B?UlNZWUg2TkNqQ3BjcE9UTTdnZ1R5N2VFb3pYNi9PWm1CWlBnWVkwT05jZzZm?=
- =?utf-8?B?N3FwaGpVZFoyRjZEK3FLeG1GWCt2bmROVU9vZmkxMjNTNHFTTWM5WTNONzFT?=
- =?utf-8?B?by9rRnBwczRraVRQbFUzaSthWmdTTDBuWDF0VWJxSFRzd2lUQ0lNZk1zek1v?=
- =?utf-8?B?K0tHTVFzZjF2SDVEZ2tpempHc2ZqOFpCTnRrQytoOFJUcWp5djhtSEZENXMz?=
- =?utf-8?B?ejJKVnMvVXJXaXRSYXhmOUFLcnBJck1zYjRIYlMvU1FsajVsdHpocXNHMGE5?=
- =?utf-8?B?RVRGckgrdDJ2SHRCRmlBeHgxSlUwYXhjN20xNmY2WFQyL2hXRDhTL1hSQzFC?=
- =?utf-8?B?KzZ1NWlOK2FVTFhZYUpHWE9BcW1Iekovb2ZDTlR2ZGhpSktKZFJ3N2pFOVkr?=
- =?utf-8?B?OUNkWUZjU2h4eGErUUFiTkxJdkxMRzBrQUlpeUJiRFpFSGkvMkNncFkzbU5H?=
- =?utf-8?B?aHR3LzV0V1Q1ZjVkTyt1d3BUNEZOaHZ6b2ZxM25mQ040NkI2dEdsMm01NTFV?=
- =?utf-8?B?bFFJR2IyaDFMQlBMeUd0ZWs2VDRheUNzcm5UR2FydjFQQlBmSHpDcTlyZlFR?=
- =?utf-8?B?QlhMWmtQNEIyYlVVY3lreWp2NDMxWFJ1SWVlbmU0NGd1THdvYmorejZKd0dq?=
- =?utf-8?B?enhvZE11RVQzci84RVhITTBaVWRtbE50WkJGc25pWUxVVDhHYkRJbmJyalFG?=
- =?utf-8?B?aFJtNVd3QnZ2bjVqU1JGbGdMRDZuVUFPZW1oUTc1TG1YSHJ0VXJKNTA2ZERx?=
- =?utf-8?B?VzgwM2hTT2RXU0xXanJrQUFZMStnYW9SZ2Y3M29pcEZ3elU5THM5ZjJTQW55?=
- =?utf-8?B?dENaMDA4MllNU1F6RjhMZ0RqbVpCYnErQWcwM2luVDNzTll5WHViNkpiYmh6?=
- =?utf-8?B?OUY5aHcxN2d5VkhWN0xSeVloc1dNYVdUeEQxQXlGV3h1YjN6ZXRwc1hnVC93?=
- =?utf-8?B?czNZZStoL3IzTXBLNWRoZ2o3bnF2Z2lUdFhOa2V1L21EYi9reFFrVjhac0tL?=
- =?utf-8?B?RVBNQlV3QURxR1Y0ckRKWStVUjBxVDZ3WFc4c2NWWFJUNm05WEVPNkFDT21L?=
- =?utf-8?B?RkhSaXBydVpBUkFFRWtFU1pFTFpTbS93NGxwK2tjOUNxb3UzUnlXY2cyTHd0?=
- =?utf-8?B?WDVicTJiYjE3aHhuVTdTK1VjWExxNm4rdlZBT3g0UmRTWTFTYmNGOTZnOGVq?=
- =?utf-8?B?dGh0dGY4dll0UkJKWG93OWppQ3YwN2Z1QUJDQ3NxR1hkZjM2TjRnTDhpVTJa?=
- =?utf-8?B?eXBDV1V3VW9TVDhGc0VwU3dhMWlrMmVrZHBERURRWE5iRnNtZmhnQUFxaXIz?=
- =?utf-8?B?a0hycUtCeEZLbnZWbjNoYldkY3lPcXhIK1pnMmRjd0FNcUxFcS9QbWoxRXdT?=
- =?utf-8?Q?PIiZPgX6+s9uzKZOLcPmvOQ=3D?=
+X-Microsoft-Antispam-Message-Info: GTbnXUOgEOIjCIo+c7lfJVMsMQ0333TdGuVUn8RInSgW6aPsYR6hIVO/xNUe0FL0AQadhCLLOqaD6wy7LNkeBKfgQfaCqn+pG18v6+Eh/FSEutEwNGS6zMHyeOO0ngJOUftk9mvSINJhlMFoHC+1/85rbMw4QyqMw8v+nBbtLvREK03qtRnwaMhZGFNR/1jmQxKXQaa+z8HeiVZa0T1AiZWPeg/61DO8UUA3sikgGL9TqXMLFevP4Xt2/RA2OJK35OA8BInXUDWNEkdCyY3Mq1thm3f9+W1+aX0LYpolZkZEH5NVS8E46LG18lmxR6hA8BMZe1HSf7zztoJYFcLecDduiupw9Hy8NdDD1zORKV6i+8sDTe2iTc5WmxdOgq7luwGe+FrgEInRRizaINNewkkNDmFg4CzIjtppzWY5bKJeJXSpm/h0NVatIlSYqKBciNePucKqgQFWWiMEzO9G2xgdSqj1KkjjTzVGrssqhM8De51M5rT0B62N4miV/EUTdz+pK3ZMzCA3gvQhh/UJH0AGPrPihKd85834JyuzszNBhHyrOwWmkl3yd2b6vihwGXU136t5aCCjp2v0RFxl+wJ3uAHCLPEG/HFvTmoqUwWqEi840VPEQC5CmLiTC4cQdZt7bPSnaTZK8vKLymqwgV2J7hmt5TRMTx0V7dSAbMYFUw+iTfHA8GIBDilfvxbSriSeNziRwGeGt6ClqwfYlNqybvBiWbJAK3iThxH1ZL4txrvCUHTlJtzgMI03TBOpTm0YN24BhzpqQNBrNWcH5AeUAuUBRqJxbWeO/EtJ5AgpQzb8GS3jrC6v7fxfKRF0oT31zT9PhyP46PW6WOfsFciG/+/cVKhbxO01Los5K5hov9D2yoQ1OyN8syvGJBLuA3Nufm6iPnL8b6LvpQ3j3fm6OuNm1P8vTaTnL2ExBlQ=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(7696005)(5660300002)(6666004)(4326008)(70586007)(47076005)(186003)(40460700001)(44832011)(2906002)(16526019)(83380400001)(2616005)(6916009)(336012)(356005)(26005)(8936002)(426003)(54906003)(15650500001)(316002)(82310400004)(70206006)(36756003)(81166007)(86362001)(1076003)(8676002)(36860700001)(966005)(508600001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2febced1-6ea7-4c4a-184d-08d9c0b1249e
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 16:28:50.9978
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 16:29:18.7235
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e1daeac-ddeb-4c5f-e50b-08d9c0b1357f
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6X0JeOm/yt296F8R6PE/GyJptm3ZKIstT6Tl0oqgRxTSLtv2ZaRjOuAraaMgwi+nxmIdazcPdJcS0pnDAdg6zw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4384
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT050.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3967
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
+This set adds supports for SMCA changes in future AMD systems.
 
-On 12/16/21 9:47 AM, Borislav Petkov wrote:
+Patch 1 adds new bank types and error descriptions used in future AMD
+systems.
 
->>   
->> -	if (!boot_ghcb && !early_setup_sev_es())
->> +	if (!boot_ghcb && !early_setup_ghcb())
->>   		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
-> 
-> Can you setup the GHCB in sev_enable() too, after the protocol version
-> negotiation succeeds?
+Patch 2 adjusts how SMCA bank information is cached. Future AMD systems
+will have different bank type layouts between logical CPUs. So having a
+single system-wide cache of the layout won't be correct.
 
-A good question; the GHCB page is needed only at the time of #VC.  If 
-the second stage VC handler is not called after the sev_enable() during 
-the decompression stage, setting up the GHC page in sev_enable() is a 
-waste. But in practice, the second stage VC handler will be called 
-during decompression. It also brings a similar question for the kernel 
-proper, should we do the same over there?
+Patch 1 from V1 was dropped from this set. I plan to send another set
+for the thresholding sysfs updates discussed here:
+https://lkml.kernel.org/r/20211203020017.728440-2-yazen.ghannam@amd.com
 
-Jorge did the initial ES support and may have other reasons he chose to 
-set up GHCB page in the handler. I was trying to avoid the flow change. 
-We can do this as a pre or post-SNP patch; let me know your thoughts?
+I expect there will be a few patches for adding the new interface,
+removing the old interface and stale data strucutures, and documenting
+the new interface.
 
+Thanks,
+Yazen
 
+Link:
+https://lkml.kernel.org/r/20211203020017.728440-1-yazen.ghannam@amd.com
 
+v1->v2:
+* Drop patch 1 from v1 set and rework the remaining patches.
 
+Yazen Ghannam (2):
+  x86/MCE/AMD, EDAC/mce_amd: Add new SMCA Bank Types
+  x86/MCE/AMD, EDAC/mce_amd: Support non-uniform MCA bank type
+    enumeration
 
->> +	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
->> +	 * features. If SEV-SNP is enabled, then check if the hypervisor supports
-> 
-> s/SEV-SNP/SNP/g
-> 
-> And please do that everywhere in sev-specific files.
-> 
-> This file is called sev.c and there's way too many acronyms flying
-> around so the simpler the better.
-> 
+ arch/x86/include/asm/mce.h              |  25 ++--
+ arch/x86/kernel/cpu/mce/amd.c           |  87 ++++++++++----
+ drivers/edac/mce_amd.c                  | 146 +++++++++++++++++++++---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c |   2 +-
+ 4 files changed, 202 insertions(+), 58 deletions(-)
 
-Noted.
+-- 
+2.25.1
 
-thanks

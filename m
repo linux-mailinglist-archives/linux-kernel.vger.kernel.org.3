@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CB9477F45
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED05477F4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242140AbhLPVly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:41:54 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:57202 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241892AbhLPVkq (ORCPT
+        id S236888AbhLPVmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242046AbhLPVlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:40:46 -0500
-Date:   Thu, 16 Dec 2021 21:40:44 -0000
+        Thu, 16 Dec 2021 16:41:04 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A8CC061785;
+        Thu, 16 Dec 2021 13:40:47 -0800 (PST)
+Date:   Thu, 16 Dec 2021 21:40:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690845;
+        s=2020; t=1639690846;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=awyRjiNQJLr50vKC8nDD3caVgAOHQOVPNRO3MmfUmxw=;
-        b=jM8cJWOmEwodimTXHHc2yWzfJBaVyfJEzCZAOofEuAP0zd6V29WzJfWLXutyvU2KCsJ9Z2
-        V5prG+qPqruqti/DCl7tC940rOeZ6zdyK4tlGhDARmBNX+iaiA8GXbfqIQMXV6kDdIE3gL
-        elHIOFfL+1Bc/L7PUr+4nexNTz4t8uwIyIaqv471B85CdW0LNcCLXfhcFa+WcyVgfNso9D
-        ezzt8WqFfSHBpTYJXraZFK2dPSW05zybX41HAEQUAxAVaHYhY979YuvSO46scvoAppY2ZZ
-        FOC0xGkS1E9IfnTuUiKThlBXU3Tr003hIlFgIha4NIiLDCVZBTrZxg8nwvq7/Q==
+        bh=PDMVcI0ALoAL2bZp03niToUbpaPHtm8qD96IAb+ePAE=;
+        b=N0HVCCFlF/eINc802zGURdZwioMMFErtZhL7q3NNv0Ekv2EolFZmzMXQ7IKNWTQp22KG+9
+        Qg2YGrI+i0OOlyMe+pHwHlrHxwDwU/cNO2Jo6CMdqIjQCndgF5Ku0lDVjC3nhos5rDEVG8
+        sNlIjF4Fn1Mzi8aIkNLrgNQV4Z1wK854SeJBLRzOkfLem5u+5WUP6gaOsyoed+3PH+oW1v
+        a9zEwEujQxexyErugzMhfKmJpWxqrsRPD8MlA9Yw33jfwW81vm6UPEnJH7jnzTtEruOamo
+        7eYEggZl/vRKNawDsHHDwa1i2tUXksNrK5VCSVuTJvXNHfGNkoeU1S5zMMMBFQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690845;
+        s=2020e; t=1639690846;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=awyRjiNQJLr50vKC8nDD3caVgAOHQOVPNRO3MmfUmxw=;
-        b=LLycbAFtRL4n6/+S624cqLxwMPBrMkA+c1akH0+T7zvgKZLr9cI9N8oMhfRPuwWPkqFJO2
-        lg1dg30unWes+6BA==
+        bh=PDMVcI0ALoAL2bZp03niToUbpaPHtm8qD96IAb+ePAE=;
+        b=nitnjTGDjj5WMW2cxfRtloRFwgEJ8nHW19Z3fUVVGuDz0rmhUqNb5iKj+2r3BCz5JgBpQe
+        HIG1M1MivxhpBfDA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] genirq/msi: Move descriptor list to struct msi_device_data
+Subject: [tip: irq/msi] dmaengine: qcom_hidma: Cleanup MSI handling
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Nishanth Menon <nm@ti.com>,
         "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211206210747.650487479@linutronix.de>
-References: <20211206210747.650487479@linutronix.de>
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sinan Kaya <okaya@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211210221815.329792721@linutronix.de>
+References: <20211210221815.329792721@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969084459.23020.4713051114932735681.tip-bot2@tip-bot2>
+Message-ID: <163969084549.23020.434956319338660207.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,114 +63,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     125282cd4f33ecd53a24ae4807409da0e5e90fd4
-Gitweb:        https://git.kernel.org/tip/125282cd4f33ecd53a24ae4807409da0e5e90fd4
+Commit-ID:     1900c962e2dcfacec894558eb34971bdc9c67443
+Gitweb:        https://git.kernel.org/tip/1900c962e2dcfacec894558eb34971bdc9c67443
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 06 Dec 2021 23:51:04 +01:00
+AuthorDate:    Fri, 10 Dec 2021 23:19:37 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 16 Dec 2021 22:22:16 +01:00
+CommitterDate: Thu, 16 Dec 2021 22:16:42 +01:00
 
-genirq/msi: Move descriptor list to struct msi_device_data
+dmaengine: qcom_hidma: Cleanup MSI handling
 
-It's only required when MSI is in use.
+There is no reason to walk the MSI descriptors to retrieve the interrupt
+number for a device. Use msi_get_virq() instead.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
-Tested-by: Nishanth Menon <nm@ti.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211206210747.650487479@linutronix.de
+Acked-by: Sinan Kaya <okaya@kernel.org>
+Acked-by: Vinod Koul <vkoul@kernel.org>
+Link: https://lore.kernel.org/r/20211210221815.329792721@linutronix.de
 
 ---
- drivers/base/core.c    | 3 ---
- include/linux/device.h | 4 ----
- include/linux/msi.h    | 4 +++-
- kernel/irq/msi.c       | 5 ++++-
- 4 files changed, 7 insertions(+), 9 deletions(-)
+ drivers/dma/qcom/hidma.c | 42 ++++++++++++++++-----------------------
+ 1 file changed, 18 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index f26c668..f898786 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2874,9 +2874,6 @@ void device_initialize(struct device *dev)
- 	INIT_LIST_HEAD(&dev->devres_head);
- 	device_pm_init(dev);
- 	set_dev_node(dev, NUMA_NO_NODE);
--#ifdef CONFIG_GENERIC_MSI_IRQ
--	INIT_LIST_HEAD(&dev->msi_list);
--#endif
- 	INIT_LIST_HEAD(&dev->links.consumers);
- 	INIT_LIST_HEAD(&dev->links.suppliers);
- 	INIT_LIST_HEAD(&dev->links.defer_sync);
-diff --git a/include/linux/device.h b/include/linux/device.h
-index f0033cd..9345972 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -423,7 +423,6 @@ struct dev_msi_info {
-  * @pins:	For device pin management.
-  *		See Documentation/driver-api/pin-control.rst for details.
-  * @msi:	MSI related data
-- * @msi_list:	Hosts MSI descriptors
-  * @numa_node:	NUMA node this device is close to.
-  * @dma_ops:    DMA mapping operations for this device.
-  * @dma_mask:	Dma mask (if dma'ble device).
-@@ -519,9 +518,6 @@ struct device {
- 	struct dev_pin_info	*pins;
- #endif
- 	struct dev_msi_info	msi;
--#ifdef CONFIG_GENERIC_MSI_IRQ
--	struct list_head	msi_list;
--#endif
- #ifdef CONFIG_DMA_OPS
- 	const struct dma_map_ops *dma_ops;
- #endif
-diff --git a/include/linux/msi.h b/include/linux/msi.h
-index 7593fc3..4223e47 100644
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -144,11 +144,13 @@ struct msi_desc {
-  * @properties:		MSI properties which are interesting to drivers
-  * @attrs:		Pointer to the sysfs attribute group
-  * @platform_data:	Platform-MSI specific data
-+ * @list:		List of MSI descriptors associated to the device
-  */
- struct msi_device_data {
- 	unsigned long			properties;
- 	const struct attribute_group    **attrs;
- 	struct platform_msi_priv_data	*platform_data;
-+	struct list_head		list;
- };
- 
- int msi_setup_device_data(struct device *dev);
-@@ -157,7 +159,7 @@ unsigned int msi_get_virq(struct device *dev, unsigned int index);
- 
- /* Helpers to hide struct msi_desc implementation details */
- #define msi_desc_to_dev(desc)		((desc)->dev)
--#define dev_to_msi_list(dev)		(&(dev)->msi_list)
-+#define dev_to_msi_list(dev)		(&(dev)->msi.data->list)
- #define first_msi_entry(dev)		\
- 	list_first_entry(dev_to_msi_list((dev)), struct msi_desc, list)
- #define for_each_msi_entry(desc, dev)	\
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index ab5e83f..c66787d 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -75,7 +75,9 @@ EXPORT_SYMBOL_GPL(get_cached_msi_msg);
- 
- static void msi_device_data_release(struct device *dev, void *res)
+diff --git a/drivers/dma/qcom/hidma.c b/drivers/dma/qcom/hidma.c
+index db8241b..65d054b 100644
+--- a/drivers/dma/qcom/hidma.c
++++ b/drivers/dma/qcom/hidma.c
+@@ -678,11 +678,13 @@ static void hidma_free_msis(struct hidma_dev *dmadev)
  {
--	WARN_ON_ONCE(!list_empty(&dev->msi_list));
-+	struct msi_device_data *md = res;
-+
-+	WARN_ON_ONCE(!list_empty(&md->list));
- 	dev->msi.data = NULL;
- }
+ #ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
+ 	struct device *dev = dmadev->ddev.dev;
+-	struct msi_desc *desc;
++	int i, virq;
  
-@@ -100,6 +102,7 @@ int msi_setup_device_data(struct device *dev)
- 	if (!md)
- 		return -ENOMEM;
+-	/* free allocated MSI interrupts above */
+-	for_each_msi_entry(desc, dev)
+-		devm_free_irq(dev, desc->irq, &dmadev->lldev);
++	for (i = 0; i < HIDMA_MSI_INTS; i++) {
++		virq = msi_get_virq(dev, i);
++		if (virq)
++			devm_free_irq(dev, virq, &dmadev->lldev);
++	}
  
-+	INIT_LIST_HEAD(&md->list);
- 	dev->msi.data = md;
- 	devres_add(dev, md);
- 	return 0;
+ 	platform_msi_domain_free_irqs(dev);
+ #endif
+@@ -692,45 +694,37 @@ static int hidma_request_msi(struct hidma_dev *dmadev,
+ 			     struct platform_device *pdev)
+ {
+ #ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
+-	int rc;
+-	struct msi_desc *desc;
+-	struct msi_desc *failed_desc = NULL;
++	int rc, i, virq;
+ 
+ 	rc = platform_msi_domain_alloc_irqs(&pdev->dev, HIDMA_MSI_INTS,
+ 					    hidma_write_msi_msg);
+ 	if (rc)
+ 		return rc;
+ 
+-	for_each_msi_entry(desc, &pdev->dev) {
+-		if (!desc->msi_index)
+-			dmadev->msi_virqbase = desc->irq;
+-
+-		rc = devm_request_irq(&pdev->dev, desc->irq,
++	for (i = 0; i < HIDMA_MSI_INTS; i++) {
++		virq = msi_get_virq(&pdev->dev, i);
++		rc = devm_request_irq(&pdev->dev, virq,
+ 				       hidma_chirq_handler_msi,
+ 				       0, "qcom-hidma-msi",
+ 				       &dmadev->lldev);
+-		if (rc) {
+-			failed_desc = desc;
++		if (rc)
+ 			break;
+-		}
++		if (!i)
++			dmadev->msi_virqbase = virq;
+ 	}
+ 
+ 	if (rc) {
+ 		/* free allocated MSI interrupts above */
+-		for_each_msi_entry(desc, &pdev->dev) {
+-			if (desc == failed_desc)
+-				break;
+-			devm_free_irq(&pdev->dev, desc->irq,
+-				      &dmadev->lldev);
++		for (--i; i >= 0; i--) {
++			virq = msi_get_virq(&pdev->dev, i);
++			devm_free_irq(&pdev->dev, virq, &dmadev->lldev);
+ 		}
++		dev_warn(&pdev->dev,
++			 "failed to request MSI irq, falling back to wired IRQ\n");
+ 	} else {
+ 		/* Add callback to free MSIs on teardown */
+ 		hidma_ll_setup_irq(dmadev->lldev, true);
+-
+ 	}
+-	if (rc)
+-		dev_warn(&pdev->dev,
+-			 "failed to request MSI irq, falling back to wired IRQ\n");
+ 	return rc;
+ #else
+ 	return -EINVAL;

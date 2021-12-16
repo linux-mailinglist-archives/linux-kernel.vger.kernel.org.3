@@ -2,80 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E26C0477310
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D87C477318
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237495AbhLPNYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:24:05 -0500
-Received: from mga04.intel.com ([192.55.52.120]:27070 "EHLO mga04.intel.com"
+        id S237503AbhLPN1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:27:35 -0500
+Received: from mga04.intel.com ([192.55.52.120]:27385 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231752AbhLPNYE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:24:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639661044; x=1671197044;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zboWqb90S4wzxS9Bv6e7DstXNtZxbkOG+qiSh7V3U3w=;
-  b=a1yRVt1rlZU09WjdoZWC4Wxs0HGSpmq3Y7nYjw7n4xX0v1W/yEJc4ZS2
-   TBYGnlymj9z1Hqp5yIBFrlfVCI80e3KeuXWR5aT0EGr+NwegS0ozn9gsW
-   sjB2tCkfAaJ3hDInoiBHfye5aXNl7C4CZxWqAEInwup7jABlRVyzhbrnf
-   Vzq0n8GcAEM0pfNIdph5hZlTKkKe5uqEa5+wYiPMooxYkRSzVI3/9Yh/r
-   R/Ehg4v5wgTsqzFIFxbRp93i/C3dhsA06W8hrajYZ0T+x6M76zIf7Bkaw
-   uH1G8G+rO+5BX7qQKI/11pGB2z0Gnb4tV6mDtM5H6utDDz1GwftEVXYIK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="238226335"
+        id S231685AbhLPN1e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 08:27:34 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="238227763"
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="238226335"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 05:24:04 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="238227763"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 05:27:34 -0800
 X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="615148914"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 05:24:02 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxqjq-0003CX-3P; Thu, 16 Dec 2021 13:24:02 +0000
-Date:   Thu, 16 Dec 2021 21:23:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin Botka <martin.botka@somainline.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [qcom:arm64-for-5.17 60/89] Error:
- arch/arm64/boot/dts/qcom/sm6125.dtsi:452.28-29 syntax error
-Message-ID: <202112162157.I3SOidyR-lkp@intel.com>
+   d="scan'208";a="519250371"
+Received: from jsarha-mobl.ger.corp.intel.com (HELO [10.249.254.10]) ([10.249.254.10])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 05:27:32 -0800
+Message-ID: <77c95e21-747a-87d8-4145-f37f75e76e18@linux.intel.com>
+Date:   Thu, 16 Dec 2021 14:27:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] PM: sleep: Avoid calling put_device() under dpm_list_mtx
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux arm64-for-5.17
-head:   bf0a257a9418ebcbe6ab2a73728f76969942e52a
-commit: 556a9f3ae17ef19deecac130fea38f258d5abeb2 [60/89] arm64: dts: qcom: sm6125: Add power domains to sdhc
-config: arm64-buildonly-randconfig-r001-20211216 (https://download.01.org/0day-ci/archive/20211216/202112162157.I3SOidyR-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?id=556a9f3ae17ef19deecac130fea38f258d5abeb2
-        git remote add qcom https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux
-        git fetch --no-tags qcom arm64-for-5.17
-        git checkout 556a9f3ae17ef19deecac130fea38f258d5abeb2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
+Hi, Rafael,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 11/4/21 18:26, Rafael J. Wysocki wrote:
+> It is generally unsafe to call put_device() with dpm_list_mtx held,
+> because the given device's release routine may carry out an action
+> depending on that lock which then may deadlock, so modify the
+> system-wide suspend and resume of devices to always drop dpm_list_mtx
+> before calling put_device() (and adjust white space somewhat while
+> at it).
+>
+> For instance, this prevents the following splat from showing up in
+> the kernel log after a system resume in certain configurations:
 
-All errors (new ones prefixed by >>):
 
->> Error: arch/arm64/boot/dts/qcom/sm6125.dtsi:452.28-29 syntax error
-   FATAL ERROR: Unable to parse input tree
+<snip>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+> @@ -1748,21 +1769,27 @@ int dpm_suspend(pm_message_t state)
+>   		struct device *dev = to_device(dpm_prepared_list.prev);
+>   
+>   		get_device(dev);
+> +
+>   		mutex_unlock(&dpm_list_mtx);
+>   
+>   		error = device_suspend(dev);
+>   
+>   		mutex_lock(&dpm_list_mtx);
+> +
+>   		if (error) {
+>   			pm_dev_err(dev, state, "", error);
+>   			dpm_save_failed_dev(dev_name(dev));
+> -			put_device(dev);
+> -			break;
+> -		}
+> -		if (!list_empty(&dev->power.entry))
+> +		} else if (!list_empty(&dev->power.entry)) {
+>   			list_move(&dev->power.entry, &dpm_suspended_list);
+> +		}
+> +
+> +		mutex_unlock(&dpm_list_mtx);
+> +
+>   		put_device(dev);
+> -		if (async_error)
+> +
+> +		mutex_lock(&dpm_list_mtx);
+> +
+> +		if (error || async_error)
+>   			break;
+>   	}
+>   	mutex_unlock(&dpm_list_mtx);
+> @@ -1879,6 +1906,7 @@ int dpm_prepare(pm_message_t state)
+>   		struct device *dev = to_device(dpm_list.next);
+>   
+>   		get_device(dev);
+> +
+>   		mutex_unlock(&dpm_list_mtx);
+>   
+>   		trace_device_pm_callback_start(dev, "", state.event);
+> @@ -1886,21 +1914,23 @@ int dpm_prepare(pm_message_t state)
+>   		trace_device_pm_callback_end(dev, error);
+>   
+>   		mutex_lock(&dpm_list_mtx);
+> -		if (error) {
+> -			if (error == -EAGAIN) {
+> -				put_device(dev);
+> -				error = 0;
+> -				continue;
+> -			}
+> +
+> +		if (!error) {
+> +			dev->power.is_prepared = true;
+> +			if (!list_empty(&dev->power.entry))
+> +				list_move_tail(&dev->power.entry, &dpm_prepared_list);
+> +		} else if (error == -EAGAIN) {
+> +			error = 0;
+> +		} else {
+>   			dev_info(dev, "not prepared for power transition: code %d\n",
+>   				 error);
+> -			put_device(dev);
+> -			break;
+
+It appears the above break disappeared.
+
+
+>   		}
+> -		dev->power.is_prepared = true;
+> -		if (!list_empty(&dev->power.entry))
+> -			list_move_tail(&dev->power.entry, &dpm_prepared_list);
+> +
+> +		mutex_unlock(&dpm_list_mtx);
+> +
+>   		put_device(dev);
+
+Should be
+
+                  if (error)
+
+                         break;
+
+Here?
+
+Symptoms is if we return an error from the device prepare callback, we 
+end up spinning forever with little clue what's going on.
+
+
+> +
+> +		mutex_lock(&dpm_list_mtx);
+>   	}
+>   	mutex_unlock(&dpm_list_mtx);
+>   	trace_suspend_resume(TPS("dpm_prepare"), state.event, false);
+
+Thanks,
+
+Thomas
+
+

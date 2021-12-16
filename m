@@ -2,203 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8DE4780BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6984780C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbhLPXiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
+        id S229809AbhLPXjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:39:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbhLPXiQ (ORCPT
+        with ESMTP id S229627AbhLPXjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:38:16 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945A4C061574;
-        Thu, 16 Dec 2021 15:38:15 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id z29so1297669edl.7;
-        Thu, 16 Dec 2021 15:38:15 -0800 (PST)
+        Thu, 16 Dec 2021 18:39:16 -0500
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733C6C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:39:16 -0800 (PST)
+Received: by mail-vk1-xa2b.google.com with SMTP id m185so446644vkm.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 15:39:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jNeLCUag3zDQhC8g4uWlCYmA+rDqEKe64Wii3N+wdVY=;
-        b=Oqepd5U53mJgxnAU+aGwIrEqrZFnV21tc63s2tHpIdc5PlQ3tte44yYsjKJ5/qKF7v
-         uWbO46GfTpTIzFQvbmlZ+wmWcUVV/Nt3a8mQSz5SOHPv8QD7zD7Shzg1e6JLv8XVTbV+
-         8e8+O3D2UMMnxZ8mPguI1G0h7XyaLUckmRq4pbV3Z4pshPHN9Dj/gdnynuQzlabSHiOI
-         jeynE1Om1hl5u7g6sqCnFBvxjSHbAbJoLimcXIw6DLgiO1ZufWipz7pTUbqim1JSzpGn
-         owD6OSWJZaYuzB00DjtF6IAyg1yJIj2X04F63szWk8Y4hmoKtKqmZRyXhAUULjE5VO8R
-         h5mw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=43o4wlr1IkiAU6zQKaIE6WugMg6KsgM5BbH78Jvij0o=;
+        b=HB+qq10OML7ZwC1o7HMfLZN4yFllE4yDSe5F+YbzSPwkzJUex9pTjIxPjVSlJAXR+R
+         TGqgohg+ALvNQ5TX22/tFkra8T1/GBsvqrb60u/rDp9rmJElzb6mtmSsg6txYChGvGST
+         2ZYWCdrEKaMsT+2oXmvQVUEZ9HxlWogkJ2TQ/BpWE/mO6e3mBF9ryAV007njMT0kQdN0
+         XIw05SsDe/5f6d9UboYjwepxBFgw+VpX3dpBZeWubuceQFVVLITQ0PxEdg8PMQcY6SHp
+         jBg2qSTT6ckdin2YAr6YphjH5MnBR5AVolzlGOb5KYjOlMXu99GdQw2GDMB92WPasGUT
+         sspw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jNeLCUag3zDQhC8g4uWlCYmA+rDqEKe64Wii3N+wdVY=;
-        b=ftMyHQ899f0yClIVWYC0BOEK7T0JH4QtKN18WFsfGvlSVqFo7chZuD4RBUJTAfgWrI
-         SzEDa4u2ymBvtdiWttSs+hEPFEoaMPkOH1oAQv2Btfcw4g7WiJ0JFfNxDwJXspCbr0vj
-         /hOvIbd2PPg3w/5EILDznxrpwlfRO9FxmuCwslxjxRRyMLv+FtvPRb8qCMrMxyq77Per
-         Klwxl6IcCvOwRXTGW8aSugiKWiHGhO6bQtRsq1b5MbZX3CZS7K2GtqGtOVjfd5qCqB6m
-         A3Vuo5BA2tRc+ft63Ltsul/YkHSdn6UMX8dElF8617rGnSDqXCHRTNaeS97Io5/ndzlu
-         Q+nQ==
-X-Gm-Message-State: AOAM531W9YFfVcP7SskkOZc4CpHntTveDP4AsOhnrYyyGLQIbv4PG/C/
-        iFP0OBjAEsf9IZPftqHAVo43iKtxhVI=
-X-Google-Smtp-Source: ABdhPJxBuqjKO2LwfkeBQbcTGWxeqIGxxo3WTzm0SK02HUrtohSpL6LIyKpWnsW8Xor1daKg071q2A==
-X-Received: by 2002:a17:906:730d:: with SMTP id di13mr308048ejc.557.1639697893987;
-        Thu, 16 Dec 2021 15:38:13 -0800 (PST)
-Received: from skbuf ([188.25.173.50])
-        by smtp.gmail.com with ESMTPSA id g15sm2308327ejt.10.2021.12.16.15.38.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 15:38:13 -0800 (PST)
-Date:   Fri, 17 Dec 2021 01:38:12 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH RFC v6 00/16] Add support for qca8k mdio rw in
- Ethernet packet
-Message-ID: <20211216233812.rpalegklcrd4ifzs@skbuf>
-References: <20211214224409.5770-1-ansuelsmth@gmail.com>
- <20211215102629.75q6odnxetitfl3w@skbuf>
- <61ba1928.1c69fb81.4ef9.360b@mx.google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=43o4wlr1IkiAU6zQKaIE6WugMg6KsgM5BbH78Jvij0o=;
+        b=rXoQDZOiua2+4YaM00U2KujZ06v6bhkcL/FhwlonPURqU+IjzwSTNLIC5K7gvtGs20
+         lWaaKurPHg48hGE/EFr3vFL0iPqb5Os8XlebGwuBrQimr0UA6SGdcTGwY+JTbv41HiQ3
+         AstaFCQiMEm+2ubiizqaU1QM86iNqwC4fVX6eciojLfjIBPC+F1hHzz9U6FqyxRhE5PA
+         zetTr0AHHW+VZru12P+fHyAk7xfrdR5mmDXFmxWhJUMGC3+4ypanRBF454rAj0ddFcHU
+         WRwzvB5ndz/UcQwZgWRdrf08zO5fW/LFluL26xEzpJwn/v+dk8ydwXxrZhTDZEPDAQ4e
+         DLaw==
+X-Gm-Message-State: AOAM533/4Ir/UqQagQyD+e/1VfScn0pTSTogZE6N4Ve5Qf459SfRH5VD
+        Ke7T7fvaasKtEH3fQ5RPY4163lPRbfz2z6d4jcDZuw==
+X-Google-Smtp-Source: ABdhPJzp16pmobRMKBbx935rBJUh4NWI//WbgPPhjLN9j6aWH5GwJmzTWm6uqTBPwfplsvBVNP362rJ+P+2ebgD0jtQ=
+X-Received: by 2002:a05:6122:2158:: with SMTP id m24mr173726vkd.1.1639697955495;
+ Thu, 16 Dec 2021 15:39:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61ba1928.1c69fb81.4ef9.360b@mx.google.com>
+References: <20211215160906.17451-1-semen.protsenko@linaro.org>
+ <20211215160906.17451-8-semen.protsenko@linaro.org> <239e30fa-7994-fcb2-5b83-27ae00ca8cbc@canonical.com>
+In-Reply-To: <239e30fa-7994-fcb2-5b83-27ae00ca8cbc@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 17 Dec 2021 01:39:03 +0200
+Message-ID: <CAPLW+4m1PsbpOUpAEtdNkGX76aO7oN4TRjnQ89ocd3u2DZDL5Q@mail.gmail.com>
+Subject: Re: [PATCH 7/7] arm64: dts: exynos: Add initial E850-96 board support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 05:34:45PM +0100, Ansuel Smith wrote:
-> > > I tested this with multicpu port and with port6 set as the unique port and
-> > > it's sad.
-> > > It seems they implemented this feature in a bad way and this is only
-> > > supported with cpu port0. When cpu port6 is the unique port, the switch
-> > > doesn't send ack packet. With multicpu port, packet ack are not duplicated
-> > > and only cpu port0 sends them. This is the same for the MIB counter.
-> > > For this reason this feature is enabled only when cpu port0 is enabled and
-> > > operational.
-> > 
-> > Let's discuss this a bit (not the hardware limitation, that one is what
-> > it is). When DSA has multiple CPU ports, right now both host-side
-> > Ethernet ports are set up as DSA masters. By being a DSA master, I mean
-> > that dev->dsa_ptr is a non-NULL pointer, so these interfaces expect to
-> > receive packets that are trapped by the DSA packet_type handlers.
-> > But due to the way in which dsa_tree_setup_default_cpu() is written,
-> > by default only the first CPU port will be used. So the host port
-> > attached to the second CPU port will be a DSA master technically, but it
-> > will be an inactive one and won't be anyone's master (no dp->cpu_dp will
-> > point to this master's dev->dsa_ptr). My idea of DSA support for
-> > multiple CPU ports would be to be able to change the dp->cpu_dp mapping
-> > through rtnetlink, on a per user port basis (yes, this implies we don't
-> > have a solution for DSA ports).
-> 
-> I have a similar implementation that was proposed as RFC many times ago.
+On Wed, 15 Dec 2021 at 19:01, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 15/12/2021 17:09, Sam Protsenko wrote:
+> > E850-96 is a 96boards development board manufactured by WinLink. It
+> > incorporates Samsung Exynos850 SoC, and is compatible with 96boards
+> > mezzanine boards [1], as it follows 96boards standards.
+> >
+> > This patch adds minimal support for E850-96 board. Next features are
+> > enabled in board dts file and verified with minimal BusyBox rootfs:
+> >
+> >  * User buttons
+> >  * LEDs
+> >  * Serial console
+> >  * Watchdog timers
+> >  * RTC
+> >  * eMMC
+> >
+> > [1] https://www.96boards.org/products/mezzanine/
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/exynos/Makefile           |   3 +-
+> >  .../boot/dts/exynos/exynos850-e850-96.dts     | 157 ++++++++++++++++++
+> >  2 files changed, 159 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
+> > index b41e86df0a84..803548ccc537 100644
+> > --- a/arch/arm64/boot/dts/exynos/Makefile
+> > +++ b/arch/arm64/boot/dts/exynos/Makefile
+> > @@ -3,4 +3,5 @@ dtb-$(CONFIG_ARCH_EXYNOS) += \
+> >       exynos5433-tm2.dtb      \
+> >       exynos5433-tm2e.dtb     \
+> >       exynos7-espresso.dtb    \
+> > -     exynosautov9-sadk.dtb
+> > +     exynosautov9-sadk.dtb   \
+> > +     exynos850-e850-96.dtb
+>
+> Alphabetical order please, so before autov9.
+>
+> > diff --git a/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts b/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
+> > new file mode 100644
+> > index 000000000000..fd611906d81c
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
+> > @@ -0,0 +1,157 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * WinLink E850-96 board device tree source
+> > + *
+> > + * Copyright (C) 2018 Samsung Electronics Co., Ltd.
+> > + * Copyright (C) 2021 Linaro Ltd.
+> > + *
+> > + * Device tree source file for WinLink's E850-96 board which is based on
+> > + * Samsung Exynos850 SoC.
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "exynos850.dtsi"
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/input/input.h>
+> > +
+> > +#define BOARD_ID     0x0
+> > +#define BOARD_REV    0x2
+>
+> No need for define for single-used constant.
+>
+> > +
+> > +/ {
+> > +     model = "WinLink E850-96 board";
+> > +     compatible = "winlink,e850-96", "samsung,exynos850";
+> > +     board_id = <BOARD_ID>;
+> > +     board_rev = <BOARD_REV>;
+>
+> Unknown properties. They need dtschema.
+>
 
-Yes, well, how to assign a user port to a CPU port seems not to be the
-biggest problem that needs to be solved before support for multiple CPU
-ports can fully go in.
+Those are not really needed in case of upstream linux (only one board
+revision is added and no dtbo to merge in bootloader). Will remove
+those in v2.
 
-> > My second observation is based on the fact that some switches support a
-> > single CPU port, yet they are wired using two Ethernet ports towards the
-> > host. The Felix and Seville switches are structured this way. I think
-> > some Broadcom switches too.
-> > Using the rtnetlink user API, a user could be able to migrate all user
-> > ports between one CPU port and the other, and as long as the
-> > configuration is valid, the switch driver should accept this (we perform
-> > DSA master changing while all ports are down, and we could refuse going
-> > up if e.g. some user ports are assigned to CPU port A and some user
-> > ports to CPU port B). Nonetheless, the key point is that when a single
-> > CPU port is used, the other CPU port kinda sits there doing nothing. So
-> > I also have some patches that make the host port attached to this other
-> > CPU port be a normal interface (not a DSA master).
-> > The switch side of things is still a CPU port (not a user port, since
-> > there still isn't any net device registered for it), but nonetheless, it
-> > is a CPU port with no DSA tagging over it, hence the reason why the host
-> > port isn't a DSA master. The patch itself that changes this behavior
-> > sounds something like "only set up a host port as a DSA master if some
-> > user ports are assigned to it".
-> > As to why I'm doing it this way: the device tree should be fixed, and I
-> > do need to describe the connection between the switch CPU ports and the
-> > DSA masters via the 'ethernet = <&phandle>;' property. From a hardware
-> > perspective, both switch ports A and B are CPU ports, equally. But this
-> > means that DSA won't create a user port for the CPU port B, which would
-> > be the more natural way to use it.
-> > Now why this pertains to you: Vivien's initial stab at management over
-> > Ethernet wanted to decouple a bit the concept of a DSA master (used for
-> > the network stack) from the concept of a host port used for in-band
-> > management (used for register access). Whereas our approach here is to
-> > keep the two coupled, due to us saying "hey, if there's a direct
-> > connection to the switch, this is a DSA master anyway, is it not?".
-> > Well, here's one thing which you wouldn't be able to do if I pursue my
-> > idea with lazy DSA master setup: if you decide to move all your user
-> > ports using rtnetlink to CPU port 6, then the DSA master of CPU port 0
-> > will cease to be a DSA master. So that will also prevent the management
-> > protocol from working.
-> 
-> About the migration problem, wonder if we can just use a refcount that
-> would represent the user of the master port. The port won't be DSA
-> master anymore if no user are connected. A switch can increase this ref
-> if the port is mandatory for some operation. (qca8k on state change
-> operational would increase the ref and decrease and then the port can be
-> removed from a DSA master) That should handle all the other switch and
-> still permit a driver to ""bypass"" this behaviour.
+> > +
+> > +     chosen {
+> > +             stdout-path = &serial_0;
+> > +     };
+> > +
+> > +     gpio-keys {
+> > +             compatible = "gpio-keys";
+> > +             pinctrl-names = "default";
+> > +             pinctrl-0 = <&key_voldown_pins &key_volup_pins>;
+> > +
+> > +             volume-down-key {
+> > +                     label = "Volume Down";
+> > +                     linux,code = <KEY_VOLUMEDOWN>;
+> > +                     gpios = <&gpa1 0 GPIO_ACTIVE_LOW>;
+> > +             };
+> > +
+> > +             volume-up-key {
+> > +                     label = "Volume Up";
+> > +                     linux,code = <KEY_VOLUMEUP>;
+> > +                     gpios = <&gpa0 7 GPIO_ACTIVE_LOW>;
+> > +             };
+> > +     };
+> > +
+> > +     leds {
+> > +             compatible = "gpio-leds";
+> > +
+> > +             /* HEART_BEAT_LED */
+> > +             user_led1: led-1 {
+> > +                     label = "yellow:user1";
+>
+> Add where applicable:
+> 1. function, e.g. LED_FUNCTION_HEARTBEAT, LED_FUNCTION_WLAN, etc,
+> 2. color constants.
+>
 
-Maybe. Although not quite like the way in which you propose. Remember
-that the idea is for a DSA master to be a regular interface until it
-gains a user. So there's the chicken and egg problem if you want to
-become a user on ->master_state_change()... because it's not a master.
-You'd have to specify upfront.
+I actually had those defined initially :) But then specifically
+decided to remove those, as those are not very helpful when "label"
+and "linux,default-trigger" are already defined (and not many other
+boards seem to provide it). But ok, I'll pull those back in v2.
 
-> > I don't want to break your use case, but then again, I'm wondering what
-> > we could do to support the second CPU port working without DSA tagging,
-> > without changing the device trees to declare it as a user port (which in
-> > itself isn't bad, it's just that we need to support all use cases with a
-> > single, unified device tree).
-> 
-> Just some info about the secondary CPU port.
-> From Documentation the second cpu port in sgmii mode can be used also for
-> other task so yes we should understand how to handle this. (base-x, mac
-> and phy) This mode is set based on the phy mode and if the dsa port is a
-> cpu port. Device tree changes can be accepted as AFAIK due to DSA not
-> supporting multi cpu, CPU port 6 was never used/defined. (But I'm
-> not sure... that is the case for all the device we have on openwrt)
+> > +                     gpios = <&gpg2 2 GPIO_ACTIVE_HIGH>;
+> > +                     linux,default-trigger = "heartbeat";
+> > +             };
+> > +
+> > +             /* eMMC_LED */
+> > +             user_led2: led-2 {
+> > +                     label = "yellow:user2";
+> > +                     gpios = <&gpg2 3 GPIO_ACTIVE_HIGH>;
+> > +                     linux,default-trigger = "mmc0";
+> > +             };
+> > +
+> > +             /* SD_LED */
+> > +             user_led3: led-3 {
+> > +                     label = "white:user3";
+> > +                     gpios = <&gpg2 4 GPIO_ACTIVE_HIGH>;
+> > +                     linux,default-trigger = "mmc2";
+> > +             };
+> > +
+> > +             /* WIFI_LED */
+> > +             wlan_active_led: led-4 {
+> > +                     label = "yellow:wlan";
+> > +                     gpios = <&gpg2 6 GPIO_ACTIVE_HIGH>;
+> > +                     linux,default-trigger = "phy0tx";
+> > +                     default-state = "off";
+> > +             };
+> > +
+> > +             /* BLUETOOTH_LED */
+> > +             bt_active_led: led-5 {
+> > +                     label = "blue:bt";
+> > +                     gpios = <&gpg2 7 GPIO_ACTIVE_HIGH>;
+> > +                     linux,default-trigger = "hci0rx";
+> > +                     default-state = "off";
+> > +             };
+> > +     };
+> > +};
+> > +
+> > +&oscclk {> + clock-frequency = <26000000>;
+> > +};
+> > +
+> > +&rtcclk {
+> > +     clock-frequency = <32768>;
+> > +};
+> > +
+> > +&usi_uart {
+> > +     samsung,clkreq-on; /* needed for UART mode */
+> > +     status = "okay";
+> > +};
+> > +
+> > +&serial_0 {
+>
+> Order all phandle overrides by phandle name, so:
+> &oscclk
+> &rtcclk
+> &serial_0
+> &usi_uart
+> ...
+>
+> > +     status = "okay";
+> > +     pinctrl-names = "default";
+> > +     pinctrl-0 = <&uart1_pins>;
+> > +};
+> > +
+> > +&watchdog_cl0 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&watchdog_cl1 {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&rtc {
+> > +     status = "okay";
+> > +};
+> > +
+> > +&mmc_0 {
+> > +     status = "okay";
+> > +     mmc-hs200-1_8v;
+> > +     mmc-hs400-1_8v;
+> > +     cap-mmc-highspeed;
+> > +     non-removable;
+> > +     broken-cd;
+>
+> Is it correct to have non-removable (typical for eMMC) and broken CD?
+>
 
-What do you mean exactly by "other tasks"?
+Nice catch, not sure how I missed that. It's just ignored in dw_mmc
+driver in case of "non-removable", but that property just doesn't make
+any sense here.
 
-> Considering that introducing multicpu port would require a
-> bit of rework, wonder if we should introduce some new bindings/node and
-> fallback to a legacy (aka force first cpu port as the unique cpu port
-> and ignore others) in the absence of this new implementation. (Hoping I
-> didn't get all wrong with the main problem here)
+This and all above comments will be addressed in v2.
 
-The defaults would stay the same. (I've no idea why we would introduce
-new device tree bindings? the only device tree change IMO would be to
-declare the link between the second CPU port and its DSA master, if you
-haven't done that already) But my key point was that, to some extent,
-some change to the current behavior will still be required. Like right
-now, a kernel 5.15 when it sees a device tree with 2 CPU ports will have
-2 DSA masters. Maybe kernel 5.17 will only start off with the first port
-as a DSA master, and the other just a candidate. I'm hoping this won't
-change observable behavior for the worse for anyone, because device
-trees are supposed to be there to stay, not change on a whim. My hope is
-based on the fact that as far as I can see, that second DSA master is
-effectively useless. Which in fact creates the second problem: exactly
-because the second host port is useless with the current code structure,
-I can see people describing it as a user rather than CPU port in current
-device trees, just to make some use out of it. But that restricts the
-potential user base (and therefore appeal) of my change of behavior or
-of multi-CPU port support in general, and this is a bit sad. I think we
-should be all spending a bit more time with current-generation kernels
-on "updated" device trees with multiple CPU ports defined, and see
-what's broken and what could be improved, because otherwise we could be
-leaving behind a huge mess when the device trees get updated, and we
-need to run the occasional old kernel on them.
-
-> But if I'm not wrong there was at the start some years ago an idea of a
-> node used to declare master port separate from the generic port node but
-> it was rejected?
-
-I don't know anything about this.
+> > +     mmc-hs400-enhanced-strobe;
+> > +     card-detect-delay = <200>;
+> > +     clock-frequency = <800000000>;
+> > +     bus-width = <8>;
+> > +     samsung,dw-mshc-ciu-div = <3>;
+> > +     samsung,dw-mshc-sdr-timing = <0 4>;
+> > +     samsung,dw-mshc-ddr-timing = <2 4>;
+> > +     samsung,dw-mshc-hs400-timing = <0 2>;
+> > +
+> > +     pinctrl-names = "default";
+> > +     pinctrl-0 = <&sd0_clk_pins &sd0_cmd_pins &sd0_rdqs_pins &sd0_nreset_pins
+> > +                  &sd0_bus1_pins &sd0_bus4_pins &sd0_bus8_pins>;
+> > +};
+> > +
+>
+>
+> Best regards,
+> Krzysztof

@@ -2,247 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E62477B20
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CB4477B41
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239989AbhLPRzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbhLPRzU (ORCPT
+        id S240536AbhLPSEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:04:24 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:35345 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240472AbhLPSEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:55:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE467C061574;
-        Thu, 16 Dec 2021 09:55:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A8A961ED1;
-        Thu, 16 Dec 2021 17:55:20 +0000 (UTC)
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id AFE40C36AE0;
-        Thu, 16 Dec 2021 17:55:16 +0000 (UTC)
-Date:   Thu, 16 Dec 2021 18:00:40 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Mihail Chindris <mihail.chindris@analog.com>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <lars@metafoo.de>, <Michael.Hennerich@analog.com>,
-        <nuno.sa@analog.com>, <dragos.bogdan@analog.com>,
-        <alexandru.ardelean@analog.com>
-Subject: Re: [PATCH v7 2/2] drivers:iio:dac: Add AD3552R driver support
-Message-ID: <20211216180040.3723a906@jic23-huawei>
-In-Reply-To: <20211213110825.244347-3-mihail.chindris@analog.com>
-References: <20211213110825.244347-1-mihail.chindris@analog.com>
-        <20211213110825.244347-3-mihail.chindris@analog.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        Thu, 16 Dec 2021 13:04:23 -0500
+Received: by mail-ot1-f51.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso29909674otr.2;
+        Thu, 16 Dec 2021 10:04:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F62NtJ5rcRnEPI6psAGJlNzQVCLa/hSvcbHDvPlgq/k=;
+        b=kpYR/QP4oeFBBzM8WgOy789DoHeRAoc6BNy70aOQ2ofU3c/Idj2+JSk3BFDAQlavVH
+         pr9Y1WCh1/yQo0MYoe+T7JkWX8JdMOGxlCxUq0pprxcebjXyAvshCIfL9YoQUTt5UHnK
+         6rxrNW7fHKuk/Kfi6VNyn2mC+P4lJ7PtKbc16Yv4eQqEQY8tT//swUWQS0EpejXUkqRn
+         NPZRia3456lbOrkwd9QzijQzW94XKyhTElftsJ7Tnut3g8SBA6+HmFAJ0Ht3OWRIHL+D
+         sVccIYXljjR3gGSlP/Um8hQXFttcnvWCZIbtw6D/LEm52RVckqsVzoo5YvLvBVLVGkxd
+         iMcg==
+X-Gm-Message-State: AOAM530fIpyru/FGf8IJANFfDTQcij04btbChkwTITue9CaoNPMHjQIf
+        +JA15y9YEaSJQqhAWpDjTp08y0Xz7+jt89ACkYI=
+X-Google-Smtp-Source: ABdhPJyX6mxbGB3zZlDlz2QTP+sYQp8M7EUTNdvEj+kfd3r2TD4M3asWg9P9SPDsI5mHV+CCwUg8Ry15/D4cdzG9Svs=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr13559702otf.198.1639677862392;
+ Thu, 16 Dec 2021 10:04:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211130123641.1449041-1-ray.huang@amd.com> <20211130123641.1449041-9-ray.huang@amd.com>
+In-Reply-To: <20211130123641.1449041-9-ray.huang@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 16 Dec 2021 19:04:11 +0100
+Message-ID: <CAJZ5v0g=VWRtBoxd-yX8W_F9QfV4OE9Ap_vxHicW_CGgizsw2A@mail.gmail.com>
+Subject: Re: [PATCH v5 08/22] cpufreq: amd: introduce the support for the
+ processors with shared memory solution
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Steven Noonan <steven@valvesoftware.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Dec 2021 11:08:25 +0000
-Mihail Chindris <mihail.chindris@analog.com> wrote:
-
-> The AD3552R-16 is a low drift ultrafast, 16-bit accuracy,
-> current output digital-to-analog converter (DAC) designed
-> to generate multiple output voltage span ranges.
-> The AD3552R-16 operates with a fixed 2.5V reference.
-> 
-> Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ad3552r.pdf
-> 
-> Signed-off-by: Mihail Chindris <mihail.chindris@analog.com>
-Hi Mihail,
-
-Found a few tiny things on final read though. I'll fix them whilst applying.
-
-
-Series applied to the togreg branch of iio.git and pushed out as testing for
-0-day to have a first poke at it.
-
-Nice driver,
-
-Thanks,
-
-Jonathan
-
-
-
+On Tue, Nov 30, 2021 at 1:38 PM Huang Rui <ray.huang@amd.com> wrote:
+>
+> In some of Zen2 and Zen3 based processors, they are using the shared
+> memory that exposed from ACPI SBIOS. In this kind of the processors,
+> there is no MSR support, so we add acpi cppc function as the backend for
+> them.
+>
+> It is using a module param (shared_mem) to enable related processors
+> manually. We will enable this by default once we address performance
+> issue on this solution.
+>
+> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 72 ++++++++++++++++++++++++++++++++++--
+>  1 file changed, 68 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index cab266b8bf35..68991c450fd5 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -35,6 +35,19 @@
+>  #define AMD_PSTATE_TRANSITION_LATENCY  0x20000
+>  #define AMD_PSTATE_TRANSITION_DELAY    500
+>
+> +/* TODO: We need more time to fine tune processors with shared memory solution
+> + * with community together.
+> + *
+> + * There are some performance drops on the CPU benchmarks which reports from
+> + * Suse. We are co-working with them to fine tune the shared memory solution. So
+> + * we disable it by default to go acpi-cpufreq on these processors and add a
+> + * module parameter to be able to enable it manually for debugging.
+> + */
+> +static bool shared_mem = false;
+> +module_param(shared_mem, bool, 0444);
+> +MODULE_PARM_DESC(shared_mem,
+> +                "enable amd-pstate on processors with shared memory solution (false = disabled (default), true = enabled)");
 > +
-> +static int ad3552r_write_raw(struct iio_dev *indio_dev,
-> +			     struct iio_chan_spec const *chan,
-> +			     int val,
-> +			     int val2,
-> +			     long mask)
+>  static struct cpufreq_driver amd_pstate_driver;
+>
+>  struct amd_cpudata {
+> @@ -60,6 +73,19 @@ static inline int pstate_enable(bool enable)
+>         return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
+>  }
+>
+> +static int cppc_enable(bool enable)
 > +{
-> +	struct ad3552r_desc *dac = iio_priv(indio_dev);
-> +	int err = 0;
-
-Set in all paths, so no need to initialize.
-
+> +       int cpu, ret = 0;
 > +
-> +	mutex_lock(&dac->lock);
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_RAW:
-> +		err = ad3552r_write_reg(dac,
-> +					AD3552R_REG_ADDR_CH_DAC_24B(chan->channel),
-> +					val);
-> +		break;
-> +	case IIO_CHAN_INFO_ENABLE:
-> +		err = ad3552r_set_ch_value(dac, AD3552R_CH_DAC_POWERDOWN,
-> +					   chan->channel, !val);
-> +		break;
-> +	default:
-> +		err = -EINVAL;
-> +		break;
-> +	}
-> +	mutex_unlock(&dac->lock);
+> +       for_each_online_cpu(cpu) {
+> +               ret = cppc_set_enable(cpu, enable);
+> +               if (ret)
+> +                       return ret;
+> +       }
 > +
-> +	return err;
+> +       return ret;
 > +}
 > +
-
-...
-
-> +static int ad3552r_configure_device(struct ad3552r_desc *dac)
+>  DEFINE_STATIC_CALL(amd_pstate_enable, pstate_enable);
+>
+>  static inline int amd_pstate_enable(bool enable)
+> @@ -90,6 +116,24 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
+>         return 0;
+>  }
+>
+> +static int cppc_init_perf(struct amd_cpudata *cpudata)
 > +{
-> +	struct device *dev = &dac->spi->dev;
-> +	struct fwnode_handle *child;
-> +	struct regulator *vref;
-> +	int err, cnt = 0, voltage, delta = 100000;
-> +	u32 vals[2], val, ch;
+> +       struct cppc_perf_caps cppc_perf;
 > +
-> +	dac->gpio_ldac = devm_gpiod_get_optional(dev, "ldac", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(dac->gpio_ldac))
-> +		return dev_err_probe(dev, PTR_ERR(dac->gpio_ldac),
-> +				     "Error getting gpio ldac");
+> +       int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+> +       if (ret)
+> +               return ret;
 > +
-> +	vref = devm_regulator_get_optional(dev, "vref");
-> +	if (IS_ERR(vref)) {
-> +		if (PTR_ERR(vref) != -ENODEV)
-> +			return dev_err_probe(dev, PTR_ERR(vref),
-> +					     "Error getting vref");
+> +       WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
 > +
-> +		if (device_property_read_bool(dev, "adi,vref-out-en"))
-> +			val = AD3552R_INTERNAL_VREF_PIN_2P5V;
-> +		else
-> +			val = AD3552R_INTERNAL_VREF_PIN_FLOATING;
-> +	} else {
-> +		err = regulator_enable(vref);
-> +		if (err) {
-> +			dev_err(dev, "Failed to enable external vref supply\n");
-> +			return err;
-> +		}
+> +       WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
+> +       WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+> +                  cppc_perf.lowest_nonlinear_perf);
+> +       WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
 > +
-> +		err = devm_add_action_or_reset(dev, ad3552r_reg_disable, vref);
-> +		if (err) {
-> +			regulator_disable(vref);
-> +			return err;
-> +		}
+> +       return 0;
+> +}
 > +
-> +		voltage = regulator_get_voltage(vref);
-> +		if (voltage > 2500000 + delta || voltage < 2500000 - delta) {
-> +			dev_warn(dev, "vref-supply must be 2.5V");
-> +			return -EINVAL;
-> +		}
-> +		val = AD3552R_EXTERNAL_VREF_PIN_INPUT;
-> +	}
+>  DEFINE_STATIC_CALL(amd_pstate_init_perf, pstate_init_perf);
+>
+>  static inline int amd_pstate_init_perf(struct amd_cpudata *cpudata)
+> @@ -107,6 +151,19 @@ static void pstate_update_perf(struct amd_cpudata *cpudata, u32 min_perf,
+>                               READ_ONCE(cpudata->cppc_req_cached));
+>  }
+>
+> +static void cppc_update_perf(struct amd_cpudata *cpudata,
+> +                            u32 min_perf, u32 des_perf,
+> +                            u32 max_perf, bool fast_switch)
+> +{
+> +       struct cppc_perf_ctrls perf_ctrls;
 > +
-> +	err = ad3552r_update_reg_field(dac,
-> +				       addr_mask_map[AD3552R_VREF_SELECT][0],
-> +				       addr_mask_map[AD3552R_VREF_SELECT][1],
-> +				       val);
-> +	if (err)
-> +		return err;
+> +       perf_ctrls.max_perf = max_perf;
+> +       perf_ctrls.min_perf = min_perf;
+> +       perf_ctrls.desired_perf = des_perf;
 > +
-> +	err = device_property_read_u32(dev, "adi,sdo-drive-strength", &val);
-> +	if (!err) {
-> +		if (val > 3) {
-> +			dev_err(dev, "adi,sdo-drive-strength must be less than 4\n");
-> +			return -EINVAL;
-> +		}
+> +       cppc_set_perf(cpudata->cpu, &perf_ctrls);
+> +}
 > +
-> +		err = ad3552r_update_reg_field(dac,
-> +					       addr_mask_map[AD3552R_SDO_DRIVE_STRENGTH][0],
-> +					       addr_mask_map[AD3552R_SDO_DRIVE_STRENGTH][1],
-> +					       val);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	dac->num_ch = device_get_child_node_count(dev);
-> +	if (!dac->num_ch) {
-> +		dev_err(dev, "No channels defined\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	device_for_each_child_node(dev, child) {
-> +		err = fwnode_property_read_u32(child, "reg", &ch);
-> +		if (err) {
-> +			dev_err(dev, "mandatory reg property missing\n");
-> +			goto put_child;
-> +		}
-> +		if (ch >= AD3552R_NUM_CH) {
-> +			dev_err(dev, "reg must be less than %d\n",
-> +				AD3552R_NUM_CH);
-> +			err = -EINVAL;
-> +			goto put_child;
-> +		}
-> +
-> +		if (fwnode_property_present(child, "adi,output-range-microvolt")) {
-> +			err = fwnode_property_read_u32_array(child,
-> +							     "adi,output-range-microvolt",
-> +							     vals,
-> +							     2);
-> +			if (err) {
-> +				dev_err(dev,
-> +					"mandatory adi,output-range-microvolt property missing\n");
+>  DEFINE_STATIC_CALL(amd_pstate_update_perf, pstate_update_perf);
+>
+>  static inline void amd_pstate_update_perf(struct amd_cpudata *cpudata,
+> @@ -326,7 +383,8 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+>         /* It will be updated by governor */
+>         policy->cur = policy->cpuinfo.min_freq;
+>
+> -       policy->fast_switch_possible = true;
+> +       if (boot_cpu_has(X86_FEATURE_CPPC))
+> +               policy->fast_switch_possible = true;
+>
+>         ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
+>                                    FREQ_QOS_MIN, policy->cpuinfo.min_freq);
+> @@ -376,7 +434,6 @@ static struct cpufreq_driver amd_pstate_driver = {
+>         .flags          = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
+>         .verify         = amd_pstate_verify,
+>         .target         = amd_pstate_target,
+> -       .adjust_perf    = amd_pstate_adjust_perf,
+>         .init           = amd_pstate_cpu_init,
+>         .exit           = amd_pstate_cpu_exit,
+>         .name           = "amd-pstate",
+> @@ -399,8 +456,15 @@ static int __init amd_pstate_init(void)
+>                 return -EEXIST;
+>
+>         /* capability check */
+> -       if (!boot_cpu_has(X86_FEATURE_CPPC)) {
+> -               pr_debug("AMD CPPC MSR based functionality is not supported\n");
+> +       if (boot_cpu_has(X86_FEATURE_CPPC)) {
+> +               pr_debug("AMD CPPC MSR based functionality is supported\n");
+> +               amd_pstate_driver.adjust_perf = amd_pstate_adjust_perf;
+> +       } else if (shared_mem) {
+> +               static_call_update(amd_pstate_enable, cppc_enable);
+> +               static_call_update(amd_pstate_init_perf, cppc_init_perf);
+> +               static_call_update(amd_pstate_update_perf, cppc_update_perf);
 
-Trivial but that comment doesn't make sense.  You know it it exists as you check that
-above, so failure here means something wrong with it. I'll tweak this if it's
-all I find in this round of review to something like "failed to parse adi,out..." 
+I would rather add the static call definitions in this patch,
+otherwise is somewhat cumbersome to review the series.
 
-> +				goto put_child;
-> +			}
-> +
-> +			err = ad3552r_find_range(dac->chip_id, vals);
-> +			if (err < 0) {
-> +				dev_err(dev,
-> +					"Invalid adi,output-range-microvolt value\n");
-> +				goto put_child;
-> +			}
-> +			val = err;
-> +			err = ad3552r_set_ch_value(dac,
-> +						   AD3552R_CH_OUTPUT_RANGE_SEL,
-> +						   ch, val);
-> +			if (err)
-> +				goto put_child;
-> +
-> +			dac->ch_data[ch].range = val;
-> +		} else if (dac->chip_id == AD3542R_ID) {
-> +			dev_err(dev,
-> +				"adi,output-range-microvolt is required for ad3542r\n");
-> +			err = -EINVAL;
-> +			goto put_child;
-> +		} else {
-> +			err = ad3552r_configure_custom_gain(dac, child, ch);
-> +			if (err)
-> +				goto put_child;
-> +		}
-> +
-> +		ad3552r_calc_gain_and_offset(dac, ch);
-> +		dac->enabled_ch |= BIT(ch);
-> +
-> +		err = ad3552r_set_ch_value(dac, AD3552R_CH_SELECT, ch, 1);
-> +		if (err < 0)
-> +			goto put_child;
-> +
-> +		dac->channels[cnt] = AD3552R_CH_DAC(ch);
-> +		++cnt;
-> +
-> +	}
-
+> +       } else {
+> +               pr_info("This processor supports shared memory solution, you can enable it with amd_pstate.shared_mem=1\n");
+>                 return -ENODEV;
+>         }
+>
+> --
+> 2.25.1
+>

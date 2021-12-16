@@ -2,67 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CE44772AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BE54772B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 14:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234626AbhLPNG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 08:06:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33166 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237272AbhLPNG1 (ORCPT
+        id S237305AbhLPNII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 08:08:08 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:45687 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234696AbhLPNIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:06:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 908D261DD9;
-        Thu, 16 Dec 2021 13:06:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04476C36AE4;
-        Thu, 16 Dec 2021 13:06:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639659987;
-        bh=Dk3cIUFGKT5Iy0oSxTMRuFaBsxedAAUL87EX758eInA=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=Ku9b4jmNmGvt56Csc51/q6aSUPA+j4G5EKRWjFatWRq+4N7wCSDjDIn1Kxfy2Sy5t
-         Xz9EKF63j0rtt8j07i6MS5rcKv9M+872ozC13DMMHUqiQy1lOiottT+vTm2g7k7rAj
-         4th7kCh7UjO/TJ8Nai3bD+CBOylO5n/bcSBHVqJswvqJeKuBdnxc4MZMdn9WznRPJ5
-         TnZBbPeo0hAlwu7uBtWgJINnZ4/ZBC7birJz+ztCREW095rAYnv4X7D7XPa2q8jNUA
-         oaaklRZd0ndX8ylrxqVxl1W14yBEfugoeoh/zMSBH6pPmBktbAILZOUWBOKi6/R7DY
-         9qSZf0+pVc7nw==
-Received: by mail-ot1-f43.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so28873756otg.4;
-        Thu, 16 Dec 2021 05:06:26 -0800 (PST)
-X-Gm-Message-State: AOAM5311s0m3Zz8m80u3q5+iLqgbwlwn2kqsR/Gk3LULsFSRu1U1x3oz
-        e1rhxU6vIaa0+/dl3pQsdR7Hl23mF/xOv8JE0Jw=
-X-Google-Smtp-Source: ABdhPJzVpCFPIskaH7m3fX6XtMkYH8eezWseVuqAasNRMtwHcsRegChxt44lHuNpLsnXg7R8FgbON3T1IQ8utZIUa4o=
-X-Received: by 2002:a9d:6653:: with SMTP id q19mr12829832otm.116.1639659986202;
- Thu, 16 Dec 2021 05:06:26 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ac9:428a:0:0:0:0:0 with HTTP; Thu, 16 Dec 2021 05:06:25
- -0800 (PST)
-In-Reply-To: <054301d7f1b6$e3d380f0$ab7a82d0$@samsung.com>
-References: <CGME20211215051307epcas1p30f013371a7f2e346ce5851b0157abedc@epcas1p3.samsung.com>
- <HK2PR04MB38919EB7F957C4BBB0B94C3781769@HK2PR04MB3891.apcprd04.prod.outlook.com>
- <054301d7f1b6$e3d380f0$ab7a82d0$@samsung.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Thu, 16 Dec 2021 22:06:25 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-XEx7iG8nhw8e3sMB65ABM5G_+n8BM3ObR7YHiBvhK0w@mail.gmail.com>
-Message-ID: <CAKYAXd-XEx7iG8nhw8e3sMB65ABM5G_+n8BM3ObR7YHiBvhK0w@mail.gmail.com>
-Subject: Re: [PATCH] exfat: remove argument 'sector' from exfat_get_dentry()
-To:     "Yuezhang.Mo" <Yuezhang.Mo@sony.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sungjong Seo <sj1557.seo@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 16 Dec 2021 08:08:07 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 60EBC580689;
+        Thu, 16 Dec 2021 08:08:06 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute5.internal (MEProxy); Thu, 16 Dec 2021 08:08:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type:content-transfer-encoding; s=fm3; bh=lZxEZ
+        oJEwcfSAdLDjCkroRP5fyKVBPGJT3N9TvVpHx0=; b=McMxPjqnXzi7GmzdFlDIZ
+        il6I1fNyXQnjVvh2saCcID8TtgUbFDz1CGXVmFJBm5o72R0N0IVLo48qTBylIn5t
+        j0l4O4E6kV9Y3P9QhS9m51buJz0eHAQ4AC0x1a1cOIf+ONfH3eHvRNtxRNaT5U/J
+        05qW8Gsoyv/can8/iXRjuDPN1Tk68raN7M7VgrygnLdsQP8unXegnYn1lVYSYnDF
+        PtjRJsOaVHQAwSi7dCoHRowkzejIjVIxxVBS1imT7SmgTz06wqdVZbnw1epBLXno
+        1MmpHls8oN7aB97qu6QAIChhbDSC3aTgCUawEdyCKvY+SMWjBgPPL3wH6JWXW2LL
+        g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=lZxEZoJEwcfSAdLDjCkroRP5fyKVBPGJT3N9TvVpH
+        x0=; b=Sdkat6LvDH169I/f4YjFYs3UXcnfR2uq1GNjVW2LHm+t7SXFRy8/ZFv1V
+        K9d8ugTZmdGIC+CAI/02uuItqCBXIKB1xFx9ab3kMaCjgNI7NNX+ep7JCZWmn1ZS
+        kROd/5NtFrc2qoAaHQKyDghPXOnPqQHUQ5/Z7nGW643grLns8jLG20r91hC/9lNy
+        Z25Yy54m+s40Uz8UbheQRxf4JN/PPo8tLa9a/Ko+Zm8UqdDl5VE8PHcoR4TMKwp+
+        uNfepfDWaZ7USfFRAmSIGnsaVCfUGjCVcGAijbXEke9c69m+5qxxJ3tn1KzG4nuy
+        RwyAKl4jPmxm0kIhAIfLzXFXd5p3A==
+X-ME-Sender: <xms:NTq7YYyW4mJNfkzjn44YJBgdiPriC4KgFUnrX1XKScOTDa43ZCI18A>
+    <xme:NTq7YcT9wSbyDlxHyzgGK50SnFkX2rBvgIePvsRX_MWMwID--auUZfjqwc9pSaFfN
+    7_hTzCl2Gp67YRaLAY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeggdeglecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdflihgr
+    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeefteegkeevfeethffgudehgedvueduvdeifedvvdelhfef
+    heekteefueektdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:NTq7YaV8p6oEASGHejvLsw_r94XlS-GxfBTEfLcNZVVmjBXFOAu-uw>
+    <xmx:NTq7YWi8S2ZTOkTIvZz76z6_rx3j8miG8olSuEPJz0yf69BmrWP8sA>
+    <xmx:NTq7YaBsqLUPNiejKiZtHuFvAp5kwlEuH9eruiEJQbPy4Sq80GnW7w>
+    <xmx:Njq7YW4-8aSA_bX9neSAhMd1uql52Q5FW0-hARmnb4o5hZ0dHHGZug>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 70D94FA0AA6; Thu, 16 Dec 2021 08:08:05 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4524-g5e5d2efdba-fm-20211214.001-g5e5d2efd
+Mime-Version: 1.0
+Message-Id: <6ee31420-ef67-471e-a924-a0158b4a9428@www.fastmail.com>
+In-Reply-To: <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
+References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
+ <20210925203224.10419-6-sergio.paracuellos@gmail.com>
+ <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
+Date:   Thu, 16 Dec 2021 13:07:43 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Xi Ruoyao" <xry111@mengyan1223.wang>,
+        "Sergio Paracuellos" <sergio.paracuellos@gmail.com>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc:     robh@kernel.org, "Arnd Bergmann" <arnd@arndb.de>,
+        catalin.marinas@arm.com, Liviu.Dudau@arm.com,
+        "Bjorn Helgaas" <bhelgaas@google.com>, matthias.bgg@gmail.com,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-staging@lists.linux.dev, neil@brown.name,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific 'pci_remap_iospace()'
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2021-12-15 22:23 GMT+09:00, Sungjong Seo <sj1557.seo@samsung.com>:
->> No any function uses argument 'sector', remove it.
->>
->> Signed-off-by: Yuezhang.Mo <Yuezhang.Mo@sony.com>
->> Reviewed-by: Andy.Wu <Andy.Wu@sony.com>
->> Reviewed-by: Aoyama, Wataru <wataru.aoyama@sony.com>
+
+
+=E5=9C=A82021=E5=B9=B412=E6=9C=8816=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =
+=E4=B8=8A=E5=8D=8811:44=EF=BC=8CXi Ruoyao=E5=86=99=E9=81=93=EF=BC=9A
+> On Sat, 2021-09-25 at 22:32 +0200, Sergio Paracuellos wrote:
+>> To make PCI IO work we need to properly virtually map IO cpu physical=
+ address
+>> and set this virtual address as the address of the first PCI IO port =
+which
+>> is set using function 'set_io_port_base()'.
+>>=20
+>> Acked-by: Arnd Bergmann <arnd@arndb.de>
+>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 >
-> Looks good!
-> Acked-by: Sungjong Seo <sj1557.seo@samsung.com>
-Applied, Thanks for your patch!
+> Hi,
+>
+> the change is causing a WARNING on loongson64g-4core-ls7a:
+>
+> [    0.105781] loongson-pci 1a000000.pci:       IO=20
+> 0x0018020000..0x001803ffff ->
+>  0x0000020000
+> [    0.105792] loongson-pci 1a000000.pci:      MEM=20
+> 0x0040000000..0x007fffffff ->
+>  0x0040000000
+> [    0.105801] ------------[ cut here ]------------
+> [    0.105804] WARNING: CPU: 0 PID: 1 at arch/mips/pci/pci-generic.c:5=
+5=20
+> pci_remap_iospace+0x80/0x88
+> [    0.105815] resource start address is not zero
+>
+> I'm not sure how to fix this one.
+>
+>> ---
+>> =C2=A0arch/mips/include/asm/pci.h |=C2=A0 2 ++
+>> =C2=A0arch/mips/pci/pci-generic.c | 14 ++++++++++++++
+>> =C2=A02 files changed, 16 insertions(+)
+>>=20
+>> diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
+>> index 9ffc8192adae..35270984a5f0 100644
+>> --- a/arch/mips/include/asm/pci.h
+>> +++ b/arch/mips/include/asm/pci.h
+>> @@ -20,6 +20,8 @@
+>> =C2=A0#include <linux/list.h>
+>> =C2=A0#include <linux/of.h>
+>> =C2=A0
+>> +#define pci_remap_iospace pci_remap_iospace
+>> +
+>> =C2=A0#ifdef CONFIG_PCI_DRIVERS_LEGACY
+>> =C2=A0
+>> =C2=A0/*
+>> diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
+>> index 95b00017886c..18eb8a453a86 100644
+>> --- a/arch/mips/pci/pci-generic.c
+>> +++ b/arch/mips/pci/pci-generic.c
+>> @@ -46,3 +46,17 @@ void pcibios_fixup_bus(struct pci_bus *bus)
+>> =C2=A0{
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pci_read_bridge_bases=
+(bus);
+>> =C2=A0}
+>> +
+>> +int pci_remap_iospace(const struct resource *res, phys_addr_t phys_a=
+ddr)
+>> +{
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned long vaddr;
+>> +
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (res->start !=3D 0) {
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0WARN_ONCE(1, "resource start address is not zero\n"=
+);
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return -ENODEV;
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+>> +
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vaddr =3D (unsigned long)i=
+oremap(phys_addr, resource_size(res));
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0set_io_port_base(vaddr);
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+>> +}
+
+Hi all,
+
+Another way could be keeping a linked list about PIO->PHYS mapping inste=
+ad of using the single io_port_base variable.
+
+Thanks.
+
+>
+> --=20
+> Xi Ruoyao <xry111@mengyan1223.wang>
+> School of Aerospace Science and Technology, Xidian University
+
+--=20
+- Jiaxun

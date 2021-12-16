@@ -2,471 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D9C47797A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2410A477981
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbhLPQmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:42:00 -0500
-Received: from finn.gateworks.com ([108.161.129.64]:36038 "EHLO
-        finn.localdomain" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232873AbhLPQl6 (ORCPT
+        id S238225AbhLPQmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232052AbhLPQmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:41:58 -0500
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1mxtpI-0093Ej-1C; Thu, 16 Dec 2021 16:41:52 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH] arm64: dts: imx8mm-venice*: add PCIe support
-Date:   Thu, 16 Dec 2021 08:41:49 -0800
-Message-Id: <20211216164149.13333-1-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 16 Dec 2021 11:42:43 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2ED9C061574;
+        Thu, 16 Dec 2021 08:42:42 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id b40so50755372lfv.10;
+        Thu, 16 Dec 2021 08:42:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Px7PCFothAOblRFvnJfWYF7NmmmFM8S9W6bLvLigRYg=;
+        b=TcVdm0T0058utnCm51/eiho4YTY2aa9FxA366Ntu+1FAFOcOrdyspRiNDM7PccwN2n
+         ZgeuYHgW/F1Nkmch1/aEDV6MhlXXt6CRzSTXO55EkmwbPWe+1EdcVorHhmikqDrEzRaX
+         BZ7ruscwf/ZsDxXXa0DK56Henrx0aep8LA9BsYj0Uflsvxt0jGVqA/2DmxjTNC9qL/oK
+         PR+PPwMbae0B/R/y31X6jGJIna0ReFiGRjpXiDDju3MQtvPatO1FaE5m2v2WH61auS7T
+         zr+jSXYFozziKBHkETlVzO1gqgDOuvj6a+mKu4shusgn6m+jntc+WiP0Q9k9nW121Q1T
+         QcMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Px7PCFothAOblRFvnJfWYF7NmmmFM8S9W6bLvLigRYg=;
+        b=k/aHh0WfQAK+gB8H54fsZi0adV1tHYbhrAtPHA83XgLMbh+A+cul3okB3kKCXlfeJE
+         fjPMCp5xAOWgsK8bzR5yYY7LxHdNgyR1wXzBIp0KXO675CfiKwtw3NWHZUnVWdCuEzcs
+         arjtybVsrflbHYTbuKKUS6vrLMyIgVsD4GHejysh1gsfr1vK+j/4NxLZcsW2DwlD80/Y
+         +2WiGADb3noTkDfTSqcf3EzDs1AxXS8TOWACmkdVQCOuhVGBTQlBMg3H1SHzVLy4udkj
+         xv9AlX8Kbp2Mngh4OIhZtr2AR4e1xrkc4yj2h8gEiawCQzfL0CphiWrZs14L0D6CiqhU
+         5U3w==
+X-Gm-Message-State: AOAM532iipImv4xZve6Z1emS3bZbuAKUomkkvtQjwbMrWcxJVJkbMPkq
+        PF+2+dfl5ge2PCNexTPU1HtmPEWecQw=
+X-Google-Smtp-Source: ABdhPJwQaYM3Od+uryTCmBX8+jPef7Rjl5kmnAIJ4aErjak2Z24Ruvt8b+xgWo0i7x4H1QyykexiuA==
+X-Received: by 2002:a19:f10a:: with SMTP id p10mr15240358lfh.487.1639672960919;
+        Thu, 16 Dec 2021 08:42:40 -0800 (PST)
+Received: from [192.168.2.145] (94-29-63-156.dynamic.spd-mgts.ru. [94.29.63.156])
+        by smtp.googlemail.com with ESMTPSA id u21sm1223943ljl.76.2021.12.16.08.42.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 08:42:40 -0800 (PST)
+Subject: Re: [PATCH] dt-bindings: display: bridge: document Toshiba TC358768
+ cells and panel node
+To:     Rob Herring <robh+dt@kernel.org>, David Heidelberg <david@ixit.cz>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        devicetree@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ~okias/devicetree@lists.sr.ht,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211215152712.72502-1-david@ixit.cz>
+ <CAL_JsqLyMr+apgqn31V7QPfqqxhJ1ro258WsDP=CO37zfyxVNw@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <63184edb-b758-6a3a-2eb8-9106b0ee0002@gmail.com>
+Date:   Thu, 16 Dec 2021 19:42:39 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <CAL_JsqLyMr+apgqn31V7QPfqqxhJ1ro258WsDP=CO37zfyxVNw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PCIe support to GW71xx/GW72xx/GW73xx/GW7901/GW7902
+16.12.2021 18:13, Rob Herring пишет:
+> On Wed, Dec 15, 2021 at 9:38 AM David Heidelberg <david@ixit.cz> wrote:
+>>
+>> Properties #address-cells and #size-cells are valid.
+>> The bridge node can also contains panel node.
+>>
+>> Signed-off-by: David Heidelberg <david@ixit.cz>
+>> ---
+>>  .../bindings/display/bridge/toshiba,tc358768.yaml      | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
+>> index eacfe7165083..3186d9dffd98 100644
+>> --- a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
+>> +++ b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
+>> @@ -69,6 +69,16 @@ properties:
+>>        - port@0
+>>        - port@1
+>>
+>> +  '#address-cells':
+>> +    const: 1
+>> +
+>> +  '#size-cells':
+>> +    const: 0
+>> +
+>> +patternProperties:
+>> +  "^panel@[0-3]$":
+>> +    $ref: ../panel/panel-common.yaml
+> 
+> It's possible to attach something that doesn't use panel-common.yaml
+> and if it did, it would be applied by that schema.
+> 
+> What you need is to just reference dsi-controller.yaml at the top level.
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
----
-This goes on top of the series recently applied to pci/dwc [1]:
-[PATCH v7 0/8] Add the imx8m pcie phy driver and imx8mm pcie support
-[1] -
-https://patchwork.kernel.org/project/linux-pci/list/?series=589031&state=*
+It works, thank you.
 
- .../dts/freescale/imx8mm-venice-gw71xx.dtsi   | 35 +++++++++++
- .../dts/freescale/imx8mm-venice-gw72xx.dtsi   | 62 +++++++++++++++++++
- .../dts/freescale/imx8mm-venice-gw73xx.dtsi   | 62 +++++++++++++++++++
- .../dts/freescale/imx8mm-venice-gw7901.dts    | 36 +++++++++++
- .../dts/freescale/imx8mm-venice-gw7902.dts    | 50 +++++++++++++++
- 5 files changed, 245 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
-index 28012279f6f6..506335efc391 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
-@@ -5,6 +5,7 @@
- 
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/leds/common.h>
-+#include <dt-bindings/phy/phy-imx8-pcie.h>
- 
- / {
- 	aliases {
-@@ -33,6 +34,12 @@
- 		};
- 	};
- 
-+	pcie0_refclk: pcie0-refclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+	};
-+
- 	pps {
- 		compatible = "pps-gpio";
- 		pinctrl-names = "default";
-@@ -87,6 +94,28 @@
- 	status = "okay";
- };
- 
-+&pcie_phy {
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-+	fsl,clkreq-unsupported;
-+	clocks = <&pcie0_refclk>;
-+	status = "okay";
-+};
-+
-+&pcie0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie0>;
-+	reset-gpio = <&gpio4 6 GPIO_ACTIVE_LOW>;
-+	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>, <&clk IMX8MM_CLK_PCIE1_AUX>,
-+		 <&pcie0_refclk>;
-+	clock-names = "pcie", "pcie_aux", "pcie_bus";
-+	assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
-+			  <&clk IMX8MM_CLK_PCIE1_CTRL>;
-+	assigned-clock-rates = <10000000>, <250000000>;
-+	assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_50M>,
-+				 <&clk IMX8MM_SYS_PLL2_250M>;
-+	status = "okay";
-+};
-+
- /* GPS */
- &uart1 {
- 	pinctrl-names = "default";
-@@ -148,6 +177,12 @@
- 		>;
- 	};
- 
-+	pinctrl_pcie0: pcie0grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SAI1_RXD4_GPIO4_IO6	0x41
-+		>;
-+	};
-+
- 	pinctrl_pps: ppsgrp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x41
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
-index 27afa46a253a..72a3a3aa8fcd 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
-@@ -5,9 +5,11 @@
- 
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/leds/common.h>
-+#include <dt-bindings/phy/phy-imx8-pcie.h>
- 
- / {
- 	aliases {
-+		ethernet1 = &eth1;
- 		usb0 = &usbotg1;
- 		usb1 = &usbotg2;
- 	};
-@@ -33,6 +35,12 @@
- 		};
- 	};
- 
-+	pcie0_refclk: pcie0-refclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+	};
-+
- 	pps {
- 		compatible = "pps-gpio";
- 		pinctrl-names = "default";
-@@ -106,6 +114,54 @@
- 	status = "okay";
- };
- 
-+&pcie_phy {
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-+	fsl,clkreq-unsupported;
-+	clocks = <&pcie0_refclk>;
-+	status = "okay";
-+};
-+
-+&pcie0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie0>;
-+	reset-gpio = <&gpio4 6 GPIO_ACTIVE_LOW>;
-+	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>, <&clk IMX8MM_CLK_PCIE1_AUX>,
-+		 <&pcie0_refclk>;
-+	clock-names = "pcie", "pcie_aux", "pcie_bus";
-+	assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
-+			  <&clk IMX8MM_CLK_PCIE1_CTRL>;
-+	assigned-clock-rates = <10000000>, <250000000>;
-+	assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_50M>,
-+				 <&clk IMX8MM_SYS_PLL2_250M>;
-+	status = "okay";
-+
-+	pcie@0,0 {
-+		reg = <0x0000 0 0 0 0>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pcie@1,0 {
-+			reg = <0x0000 0 0 0 0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			pcie@2,3 {
-+				reg = <0x1800 0 0 0 0>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				eth1: pcie@5,0 {
-+					reg = <0x0000 0 0 0 0>;
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					local-mac-address = [00 00 00 00 00 00];
-+				};
-+			};
-+		};
-+	};
-+};
-+
- /* off-board header */
- &sai3 {
- 	pinctrl-names = "default";
-@@ -198,6 +254,12 @@
- 		>;
- 	};
- 
-+	pinctrl_pcie0: pcie0grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SAI1_RXD4_GPIO4_IO6	0x41
-+		>;
-+	};
-+
- 	pinctrl_pps: ppsgrp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x41
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
-index a59e849c7be2..7b00b6b5bb38 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
-@@ -5,9 +5,11 @@
- 
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/leds/common.h>
-+#include <dt-bindings/phy/phy-imx8-pcie.h>
- 
- / {
- 	aliases {
-+		ethernet1 = &eth1;
- 		usb0 = &usbotg1;
- 		usb1 = &usbotg2;
- 	};
-@@ -33,6 +35,12 @@
- 		};
- 	};
- 
-+	pcie0_refclk: pcie0-refclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+	};
-+
- 	pps {
- 		compatible = "pps-gpio";
- 		pinctrl-names = "default";
-@@ -126,6 +134,54 @@
- 	status = "okay";
- };
- 
-+&pcie_phy {
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-+	fsl,clkreq-unsupported;
-+	clocks = <&pcie0_refclk>;
-+	status = "okay";
-+};
-+
-+&pcie0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie0>;
-+	reset-gpio = <&gpio4 6 GPIO_ACTIVE_LOW>;
-+	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>, <&clk IMX8MM_CLK_PCIE1_AUX>,
-+		 <&pcie0_refclk>;
-+	clock-names = "pcie", "pcie_aux", "pcie_bus";
-+	assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
-+			  <&clk IMX8MM_CLK_PCIE1_CTRL>;
-+	assigned-clock-rates = <10000000>, <250000000>;
-+	assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_50M>,
-+				 <&clk IMX8MM_SYS_PLL2_250M>;
-+	status = "okay";
-+
-+	pcie@0,0 {
-+		reg = <0x0000 0 0 0 0>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pcie@1,0 {
-+			reg = <0x0000 0 0 0 0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			pcie@2,4 {
-+				reg = <0x2000 0 0 0 0>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				eth1: pcie@6,0 {
-+					reg = <0x0000 0 0 0 0>;
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					local-mac-address = [00 00 00 00 00 00];
-+				};
-+			};
-+		};
-+	};
-+};
-+
- /* off-board header */
- &sai3 {
- 	pinctrl-names = "default";
-@@ -241,6 +297,12 @@
- 		>;
- 	};
- 
-+	pinctrl_pcie0: pcie0grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SAI1_RXD4_GPIO4_IO6	0x41
-+		>;
-+	};
-+
- 	pinctrl_pps: ppsgrp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x41
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-index 65ee72fc1487..4bf2b97b3ef5 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-@@ -8,6 +8,7 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/linux-event-codes.h>
- #include <dt-bindings/leds/common.h>
-+#include <dt-bindings/phy/phy-imx8-pcie.h>
- 
- #include "imx8mm.dtsi"
- 
-@@ -179,6 +180,12 @@
- 		};
- 	};
- 
-+	pcie0_refclk: pcie0-refclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+	};
-+
- 	reg_3p3v: regulator-3p3v {
- 		compatible = "regulator-fixed";
- 		regulator-name = "3P3V";
-@@ -644,6 +651,28 @@
- 	status = "okay";
- };
- 
-+&pcie_phy {
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-+	fsl,clkreq-unsupported;
-+	clocks = <&pcie0_refclk>;
-+	status = "okay";
-+};
-+
-+&pcie0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie0>;
-+	reset-gpio = <&gpio5 2 GPIO_ACTIVE_LOW>;
-+	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>, <&clk IMX8MM_CLK_PCIE1_AUX>,
-+		 <&pcie0_refclk>;
-+	clock-names = "pcie", "pcie_aux", "pcie_bus";
-+	assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
-+			  <&clk IMX8MM_CLK_PCIE1_CTRL>;
-+	assigned-clock-rates = <10000000>, <250000000>;
-+	assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_50M>,
-+				 <&clk IMX8MM_SYS_PLL2_250M>;
-+	status = "okay";
-+};
-+
- &pgc_gpu {
- 	status = "disabled";
- };
-@@ -820,6 +849,13 @@
- 		>;
- 	};
- 
-+	pinctrl_pcie0: pciegrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SAI3_TXFS_GPIO4_IO31	0x40000041 /* WDIS# */
-+			MX8MM_IOMUXC_SAI3_MCLK_GPIO5_IO2	0x41
-+		>;
-+	};
-+
- 	pinctrl_pmic: pmicgrp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_SAI5_RXC_GPIO3_IO20	0x41
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-index d52686f4c059..1b2aaf299b24 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-@@ -9,6 +9,7 @@
- #include <dt-bindings/input/linux-event-codes.h>
- #include <dt-bindings/leds/common.h>
- #include <dt-bindings/net/ti-dp83867.h>
-+#include <dt-bindings/phy/phy-imx8-pcie.h>
- 
- #include "imx8mm.dtsi"
- 
-@@ -17,6 +18,7 @@
- 	compatible = "gw,imx8mm-gw7902", "fsl,imx8mm";
- 
- 	aliases {
-+		ethernet1 = &eth1;
- 		usb0 = &usbotg1;
- 		usb1 = &usbotg2;
- 	};
-@@ -128,6 +130,12 @@
- 		};
- 	};
- 
-+	pcie0_refclk: pcie0-refclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+	};
-+
- 	pps {
- 		compatible = "pps-gpio";
- 		pinctrl-names = "default";
-@@ -547,6 +555,42 @@
- 	status = "okay";
- };
- 
-+&pcie_phy {
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-+	fsl,clkreq-unsupported;
-+	clocks = <&clk IMX8MM_CLK_DUMMY>;
-+	status = "okay";
-+};
-+
-+&pcie0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie0>;
-+	reset-gpio = <&gpio4 5 GPIO_ACTIVE_LOW>;
-+	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>, <&clk IMX8MM_CLK_PCIE1_AUX>,
-+		 <&clk IMX8MM_CLK_DUMMY>, <&pcie0_refclk>;
-+	clock-names = "pcie", "pcie_aux", "pcie_phy", "pcie_bus";
-+	assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
-+			  <&clk IMX8MM_CLK_PCIE1_CTRL>;
-+	assigned-clock-rates = <10000000>, <250000000>;
-+	assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_50M>,
-+				 <&clk IMX8MM_SYS_PLL2_250M>;
-+	status = "okay";
-+
-+	pcie@0,0 {
-+		reg = <0x0000 0 0 0 0>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		eth1: pcie@1,0 {
-+			reg = <0x0000 0 0 0 0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			local-mac-address = [00 00 00 00 00 00];
-+		};
-+	};
-+};
-+
- /* off-board header */
- &sai3 {
- 	pinctrl-names = "default";
-@@ -737,6 +781,12 @@
- 		>;
- 	};
- 
-+	pinctrl_pcie0: pciegrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SAI1_RXD3_GPIO4_IO5	0x41
-+		>;
-+	};
-+
- 	pinctrl_pmic: pmicgrp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_NAND_DATA02_GPIO3_IO8	0x41
--- 
-2.17.1
-
+Then we will also need to rename the "dsi-bridge" node to just "dsi" in
+the new ASUS TF700T device-tree since dsi-controller.yaml wants that name.

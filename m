@@ -2,93 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FABA477A7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CB1477A82
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240220AbhLPRXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:23:50 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:55632 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240204AbhLPRXo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:23:44 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639675422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ih3MOpW/yCW+x5F+uZuuVRHaDZ9exo66WfrPCFsrhAY=;
-        b=OMVjennJ3dIFrwVfMs8MzDcb41Xr30oKty6fkqZ9/dg2KPX2j01Itd6kvCYu1225sOnYuo
-        IeaHw/JoJkXrtGr3oWwJMzzEwGmbkJFG3vgu9mNytV1jkcv4dag6oBGHon+mbf9Ogyak6J
-        JF0hQ4F7JA1yDzHNDLmTJM8en1l9nh0l4RtyKkhJNdGp1qF+PkIKoY49IEUHTkOsVif77X
-        EDZmJYVvTSc9g7y9TRGoIHjKz9B63drgsnnIlXTKDk1IKqeYDrXtl+Qq6LpiQy1hqLdDie
-        mG/yWvrQXdNGXa7j6B8oNi6M8Sbe5B02MnwHdqWu6fekNoxcotWWNW+EPmJPkg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639675422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ih3MOpW/yCW+x5F+uZuuVRHaDZ9exo66WfrPCFsrhAY=;
-        b=KLmanqyVLTn1a9p7GzpJVoRlRAGdDGqehRu/zZHojbSx8/zpp5uAkFxpqxeluTK3IDEpyQ
-        hmWFXp91ZBiOKlBQ==
-To:     Nishanth Menon <nm@ti.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sinan Kaya <okaya@kernel.org>, linux-wireless@vger.kernel.org,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [patch V3 00/35] genirq/msi, PCI/MSI: Spring cleaning - Part 2
-In-Reply-To: <20211216014527.5d3sqs2klrqjmm2k@lunacy>
-References: <20211213182958.ytj4m6gsg35u77cv@detonator>
- <87fsqvttfv.ffs@tglx> <20211214162247.ocjm7ihg5oi7uiuv@slider>
- <87wnk7rvnz.ffs@tglx> <87tufbrudl.ffs@tglx> <87mtl3rli1.ffs@tglx>
- <20211214205626.lrnddha6bd6d6es5@possibly> <87h7basx36.ffs@tglx>
- <87zgp1rge4.ffs@tglx> <87wnk5rfkt.ffs@tglx>
- <20211216014527.5d3sqs2klrqjmm2k@lunacy>
-Date:   Thu, 16 Dec 2021 18:23:41 +0100
-Message-ID: <87wnk4cvky.ffs@tglx>
+        id S240087AbhLPRZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:25:06 -0500
+Received: from mga02.intel.com ([134.134.136.20]:34536 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235830AbhLPRZE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 12:25:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639675504; x=1671211504;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2nNZew6Z9ZNfBloxy8d/28ymfM5DvMdcScX6xoLtWB8=;
+  b=WL6MODUimiFDhFWO6VpPEjwsITgtq7p/fEDnHSMUwJcGFRWAe6juMHA8
+   rdaHeUKlCsVJJkqT/zNzqdRTwNiZFmUxWvTpxQo2qfsrw8MJu56IJJqpd
+   DL1qSb5ae3kx141UMhgdKAegomww9IDFGxSzCmy4mY3qe5x/JYUXMg6ck
+   dVLGD3eVjJ21pY5zsVP9E5Q0wjC69gV1DZtN0NQL7JAFultMdhW9w0DLm
+   LaBriacddGrUf4lx0N7inwzue7k62OEIKZWMdE5U3NhXfj/Az0mOhPAm/
+   rq4XVO45NOwRl4db6tCWnVzhu0cIq0Q3GkOAWE1efR9UwPHELv8FVhhr1
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226832914"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="226832914"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 09:24:37 -0800
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="519336265"
+Received: from agluck-desk2.sc.intel.com ([10.3.52.146])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 09:24:37 -0800
+From:   Tony Luck <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] x86/cpufeatures: Add fast-short-rep-movs check to copy_user_enhanced_fast_string()
+Date:   Thu, 16 Dec 2021 09:24:31 -0800
+Message-Id: <20211216172431.1396371-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nishanth,
+commit f444a5ff95dc ("x86/cpufeatures: Add support for fast short REP; MOVSB")
+fixed memmove() with an ALTERNATIVE that will use REP MOVSB for all
+string lengths.
 
-On Wed, Dec 15 2021 at 19:45, Nishanth Menon wrote:
-> On 17:35-20211215, Thomas Gleixner wrote:
-> Thanks once again for your help. Hope we can roll in the fixes for
-> part3.
+copy_user_enhanced_fast_string() has a similar run time check to avoid
+using REP MOVSB for copies less that 64 bytes.
 
-Sure, it's only the one-liner for ti sci. Got it folded already.
+Add an ALTERNATIVE to patch out the short length check and always use
+REP MOVSB on X86_FEATURE_FSRM CPUs.
 
-Thanks for your help and testing!
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+ arch/x86/lib/copy_user_64.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-       tglx
+diff --git a/arch/x86/lib/copy_user_64.S b/arch/x86/lib/copy_user_64.S
+index 2797e630b9b1..1c429f0489dd 100644
+--- a/arch/x86/lib/copy_user_64.S
++++ b/arch/x86/lib/copy_user_64.S
+@@ -200,8 +200,8 @@ EXPORT_SYMBOL(copy_user_generic_string)
+  */
+ SYM_FUNC_START(copy_user_enhanced_fast_string)
+ 	ASM_STAC
+-	cmpl $64,%edx
+-	jb .L_copy_short_string	/* less then 64 bytes, avoid the costly 'rep' */
++	/* CPUs without FSRM should avoid rep movsb for short copies */
++	ALTERNATIVE "cmpl $64, %edx; jb .L_copy_short_string", "", X86_FEATURE_FSRM
+ 	movl %edx,%ecx
+ 1:	rep
+ 	movsb
+-- 
+2.31.1
+

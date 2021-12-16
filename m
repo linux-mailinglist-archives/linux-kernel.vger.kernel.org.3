@@ -2,96 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB34477233
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B14477236
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237025AbhLPMuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236953AbhLPMuH (ORCPT
+        id S236961AbhLPMul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:50:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44688 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229781AbhLPMuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:50:07 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D442FC06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:50:06 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id t184-20020a2546c1000000b006008b13c80bso49499637yba.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 04:50:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=S1nY8qFye4VS7aI2Ex7vC+CRaOMsD5vumGdm2AeuvSo=;
-        b=eaQA7mpwTk0w1lXjaNNBuByro3X9DWSPaEGaCBrG2HEoWuHYnCO5SmYbRZ8Kxy0fQE
-         pkmO6NEQoTw1x9Z90TmxH9X6b+IlZf7qfOhS39tNwU5Rr2php84TMasxONNrr7GMQzss
-         VqNfTMoX5e3ZusQuLQU5VQ54SUFbLp0wPrWQW4FOCKEN866ij5pIEz260r6XGcin+wGI
-         eaQqy0bjo4uTKh1k4DvFa7FFtRUU0GU6y6qRzhu1wrSkCEU5GtCBYk6583AVq6IjC3Gl
-         q6E6Vc2n6AFCnH7KQkMVEGD0K5f4+kXf0lmaJxtnZersQrT7BLqL2VjsOFaI9o4NL64n
-         pDVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=S1nY8qFye4VS7aI2Ex7vC+CRaOMsD5vumGdm2AeuvSo=;
-        b=BKb/PoQW+YWmqU1vBdOODU24TNCXgDYueRjJQJjp7Kh6jQ7GzCtLz8i0XZkDMhoI7B
-         UlQfV5/dZI7TRPCfwPE1Ql1UlIdlH13mM5246NJAvtfimQmbqnrOGGBpXt9fx9CmQtw+
-         r8EZC90qsYEhCtvKDvEWIjlIKlLyzsRJtKZJOgOv6us1KW/n6s5uLdrkGJ8zMfLG+DNM
-         Nlbi3IH0iM8mAdsBhw9Wdq37/I5MiYsmTyxje9+7KcrP49nkXKzUKgdeKvMRHg2Zrf0G
-         k4lAzA8mSFZGOTWsBfmloktLmnZPCTyXiUHWB7Z16Opnjlg0NdaCTAwF1y3u7JTpwpZs
-         H6KA==
-X-Gm-Message-State: AOAM530Igrd5lj5hh3GZR4fD6hhVBEj5mILscupus32HGdLicJhN+hL5
-        aNrdMIDD2y555picR1ST93Esyzufz1zTTA==
-X-Google-Smtp-Source: ABdhPJzXci8bvwLqg5dOpNylp6qY3iTOWvjUI2Myi0SZDl+iOaJlDImmnRQk1rWVBvDLJuGK5qJ5tyqiNUkQlw==
-X-Received: from mmandlik.mtv.corp.google.com ([2620:15c:202:201:bfe1:d4f7:bb68:8aa6])
- (user=mmandlik job=sendgmr) by 2002:a05:6902:154c:: with SMTP id
- r12mr13928990ybu.374.1639659005967; Thu, 16 Dec 2021 04:50:05 -0800 (PST)
-Date:   Thu, 16 Dec 2021 04:49:56 -0800
-In-Reply-To: <20211216044839.v9.1.Ic0a40b84dee3825302890aaea690e73165c71820@changeid>
-Message-Id: <20211216044839.v9.3.If37d23d1dd8b765d8a6c8eca71ac1c29df591565@changeid>
-Mime-Version: 1.0
-References: <20211216044839.v9.1.Ic0a40b84dee3825302890aaea690e73165c71820@changeid>
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v9 3/3] bluetooth: mgmt: Fix sizeof in mgmt_device_found()
-From:   Manish Mandlik <mmandlik@google.com>
-To:     marcel@holtmann.org, luiz.dentz@gmail.com
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        linux-bluetooth@vger.kernel.org,
-        Manish Mandlik <mmandlik@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 16 Dec 2021 07:50:40 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36222B8240E;
+        Thu, 16 Dec 2021 12:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3E8C36AEB;
+        Thu, 16 Dec 2021 12:50:31 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 13:50:27 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v7 00/14] ima: Namespace IMA with audit support in IMA-ns
+Message-ID: <20211216125027.fte6625wu5vxkjpi@wittgenstein>
+References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use correct sizeof() parameter while allocating skb.
+On Thu, Dec 16, 2021 at 12:43:09AM -0500, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> The goal of this series of patches is to start with the namespacing of
+> IMA and support auditing within an IMA namespace (IMA-ns) as the first
+> step.
+> 
+> In this series the IMA namespace is piggy backing on the user namespace
+> and therefore an IMA namespace gets created when a user namespace is
+> created. The advantage of this is that the user namespace can provide
+> the keys infrastructure that IMA appraisal support will need later on.
+> 
+> We chose the goal of supporting auditing within an IMA namespace since it
+> requires the least changes to IMA. Following this series, auditing within
+> an IMA namespace can be activated by a user running the following lines
+> that rely on a statically linked busybox to be installed on the host for
+> execution within the minimal container environment:
+> 
+> mkdir -p rootfs/{bin,mnt,proc}
+> cp /sbin/busybox rootfs/bin
+> cp /sbin/busybox rootfs/bin/busybox2
+> echo >> rootfs/bin/busybox2
+> PATH=/bin unshare --user --map-root-user --mount-proc --pid --fork \
+>   --root rootfs busybox sh -c \
+>  "busybox mount -t securityfs /mnt /mnt; \
+>   busybox echo 'audit func=BPRM_CHECK mask=MAY_EXEC' > /mnt/ima/policy; \
+>   busybox2 cat /mnt/ima/policy"
+> 
+> [busybox2 is used to demonstrate 2 measurements; see below]
+> 
+> Following the audit log on the host the last line cat'ing the IMA policy
+> inside the namespace would have been audited. Unfortunately the auditing
+> line is not distinguishable from one stemming from actions on the host.
+> The hope here is that Richard Brigg's container id support for auditing
+> would help resolve the problem.
+> 
+> The following lines added to a suitable IMA policy on the host would
+> cause the execution of the commands inside the container (by uid 1000)
+> to be measured and audited as well on the host, thus leading to two
+> auditing messages for the 'busybox2 cat' above and log entries in IMA's
+> system log.
+> 
+> echo -e "measure func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
+>         "audit func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
+>     > /sys/kernel/security/ima/policy
+> 
+> The goal of supporting measurement and auditing by the host, of actions
+> occurring within IMA namespaces, is that users, particularly root,
+> should not be able to evade the host's IMA policy just by spawning
+> new IMA namespaces, running programs there, and discarding the namespaces
+> again. This is achieved through 'hierarchical processing' of file
+> accesses that are evaluated against the policy of the namespace where
+> the action occurred and against all namespaces' and their policies leading
+> back to the root IMA namespace (init_ima_ns).
 
-Signed-off-by: Manish Mandlik <mmandlik@google.com>
----
+Note that your worst-case is 32 levels (maximum supported userns
+nesting) where each ima namespace defines a separate policy.
 
-(no changes since v8)
+So make sure you don't run into locking issues when hierarchically
+processing rules. So far I think it's fine since the locks aren't held
+across the hierarchial walk but are dropped and reaqcuired for each
+level.
 
-Changes in v8:
-- New patch in the series.
+But that could still mean a lot of contention on iint->mutex since this
+lock is global, i.e. in this context: for all ima namespaces. You might
+want to consider coming up with some rough ideas for how to solve this
+_if_ this becomes a problem in the future.
 
- net/bluetooth/mgmt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> The patch series adds support for a virtualized SecurityFS with a few
+> new API calls that are used by IMA namespacing. Only the data relevant
+> to the IMA namespace are shown. The files and directories of other
+> security subsystems (TPM, evm, Tomoyo, safesetid) are not showing
+> up when secruityfs is mounted inside a user namespace.
+> 
+> Much of the code leading up to the virtualization of SecurityFS deals
+> with moving IMA's variables from various files into the IMA namespace
+> structure called 'ima_namespace'. When it comes to determining the
+> current IMA namespace I took the approach to get the current IMA
+> namespace (get_current_ns()) on the top level and pass the pointer all
+> the way down to those functions that now need access to the ima_namespace
+> to get to their variables. This later on comes in handy once hierarchical
+> processing is implemented in this series where we walk the list of
+> namespaces backwards and again need to pass the pointer into functions.
 
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index c65247b5896c..5fd29bd399f1 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -9709,7 +9709,7 @@ void mgmt_device_found(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
- 
- 	/* Allocate skb. The 5 extra bytes are for the potential CoD field */
- 	skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND,
--			     sizeof(ev) + eir_len + scan_rsp_len + 5);
-+			     sizeof(*ev) + eir_len + scan_rsp_len + 5);
- 	if (!skb)
- 		return;
- 
--- 
-2.34.1.173.g76aa8bc2d0-goog
+Just to repeat the point from earlier reviews, all those functions need
+to be guaranteed to call from syscall context. Functions that operate on
+files have different semantics.
 
+> 
+> This patch also introduces usage of CAP_MAC_ADMIN to allow access to the
+> IMA policy via reduced capabilities. We would again later on use this
+> capability to allow users to set file extended attributes for IMA appraisal
+> support.
+> 
+> My tree with these patches is here:
+> 
+> git fetch https://github.com/stefanberger/linux-ima-namespaces v5.15+imans.v7.posted 
+> 
+> Regards,
+>    Stefan
+> 
+> v7:
+>  - Dropped 2 patches related to key queues; using &init_ima_ns for all calls
+>    from functions related to key queues where calls need ima_namespace
+>  - Moved ima_namespace to security/integrity/ima/ima.h
+>  - Extended API descriptions with ns parameter where needed
+>  - Using init_ima_ns in functions related to appraisal and xattrs
+>  - SecurityFS: Using ima_ns_from_file() to get ns pointer 
+>  - Reformatted to 80 columns per line
+
+Since we're starting to be fairly along I would ask you to please write
+detailed commit messages for the next revision.
+
+I would also like to see all links for prior versions of this patchset
+in the commit message since the discussion has been fairly extensive so
+for this series it makes a lot of sense. So something like:
+
+Link: https://lore.kernel.org/r/$MSGID (v1)
+Link: https://lore.kernel.org/r/$MSGID (v2)
+Link: https://lore.kernel.org/r/$MSGID (v3)
+Link: https://lore.kernel.org/r/$MSGID (v4)
+Link: https://lore.kernel.org/r/$MSGID (v5)
+Link: https://lore.kernel.org/r/$MSGID (v6)
+Link: https://lore.kernel.org/r/$MSGID (v7)
+Signed-off-by: meh
+Signed-off-by: mih
+Signed-off-by: muh
+
+I find that extremely pleasant in case we need to revisit things later.
+(Technically you can get the same by searching lore via the final link
+but I find it be pretty pleasing to just copy+paste directly from the
+commit message to the discussion for the earlier patch.)

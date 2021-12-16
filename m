@@ -2,65 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3015D476878
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 370F7476879
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 04:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbhLPDIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 22:08:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46600 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbhLPDIl (ORCPT
+        id S233231AbhLPDIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 22:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233224AbhLPDIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 22:08:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE1E661BEA;
-        Thu, 16 Dec 2021 03:08:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A4CC36AE0;
-        Thu, 16 Dec 2021 03:08:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639624120;
-        bh=TXBIFGc25Qw13VvCSpXb5l6XQy5Lk9QgDInhZ1JSPxs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U0btZ2F/JmvVDA6I1p+rmUiHpmddV+nwOeVu7UTej/X1evMDLHwurBwFoRA7JgURf
-         VFSIUFPc9hONPzQUfTZQOaa+yd52wn4byeB7eXz4Ms/9xKSD2h4C7THnUj/BJRjTnU
-         I/CB/K+nL32H11kDV8v8dMD78F+Axv491BBs1t6t8vfOww8MDFjsd0Ornlgegdeb8G
-         0DjMEZ2Pg8JIMq4MjZtPZBf+zmukKWjufRvw+oqTSefmFbxQEHd51PYwQBL/SYV695
-         Oi26xJv4Up+VTzp5f+p7FK4tI1NyNp5jKU82hAI4RaST9vKWIbpdq2bJUKxYazChMu
-         q/ziOVEihrjHg==
-Date:   Thu, 16 Dec 2021 11:08:33 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     s.hauer@pengutronix.de, dmitry.torokhov@gmail.com,
-        benjamin.tissoires@redhat.com, jikos@kernel.org,
-        linux-kernel@vger.kernel.org, alistair23@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        Jason.Gerecke@wacom.com, linux-imx@nxp.com, Ping.Cheng@wacom.com,
-        devicetree@vger.kernel.org, martin.chen@wacom.com,
-        tatsunosuke.tobita@wacom.com
-Subject: Re: [PATCH v16 3/3] ARM: dts: imx7d: remarkable2: add wacom
- digitizer device
-Message-ID: <20211216030833.GQ4216@dragon>
-References: <20211208124045.61815-1-alistair@alistair23.me>
- <20211208124045.61815-4-alistair@alistair23.me>
+        Wed, 15 Dec 2021 22:08:54 -0500
+Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60C83C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Dec 2021 19:08:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=w1vsd7Ganf
+        bTXy86A2IeFU7xbgNKpgAWPzP/c6CKamE=; b=g2kIdfjkrZ5wS6F0JaJfzCMcxq
+        3otmN4Vji2nZ1yida2pXjtGnIO9FFmpg5KJ078Y51mmDe83sFic/tinCVokU4FVZ
+        KYI07Ptwsct6hyCwMiP3BbT36Z/6C+00KgmNrO0a9S3haE9JamMYHeuhtAf+kW2w
+        WB8Mpl9lANQOhGaPs=
+Received: from localhost.localdomain (unknown [106.11.196.156])
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygCXn2+2rbphTDl6AA--.300S4;
+        Thu, 16 Dec 2021 11:08:39 +0800 (CST)
+From:   zhuxinran <zhuran@mail.ustc.edu.cn>
+To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        zhuxinran <zhuran@mail.ustc.edu.cn>
+Subject: [PATCH] virtio: fix spelling error
+Date:   Thu, 16 Dec 2021 11:08:36 +0800
+Message-Id: <20211216030836.81989-1-zhuran@mail.ustc.edu.cn>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208124045.61815-4-alistair@alistair23.me>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LkAmygCXn2+2rbphTDl6AA--.300S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7JF1xur4Uur4UZrW5ArWfuFg_yoWfCwbEka
+        48X39Fvr1UAFW3CrWUCw4rXrn2kw4xWa1UX39xKayI934DXFs8W3ykKr9xX3W8Wr4DCrn7
+        tFWDXrn0vw13ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbwkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6r4j6FyUMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
+        wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
+X-CM-SenderInfo: x2kx2t3q6ptxnoox23vfohv3gofq/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 10:40:45PM +1000, Alistair Francis wrote:
-> Add Wacom I2C support for the reMarkable 2 eInk tablet using the
-> generic I2C HID framework.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+start my first kernel patch commit
 
-I updated the subject prefix like below.
+Signed-off-by: zhuxinran <zhuran@mail.ustc.edu.cn>
+---
+ net/9p/trans_virtio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- ARM: dts: imx7d-remarkable2:
+diff --git a/net/9p/trans_virtio.c b/net/9p/trans_virtio.c
+index bd5a89c4960d..f7dc561ca516 100644
+--- a/net/9p/trans_virtio.c
++++ b/net/9p/trans_virtio.c
+@@ -648,7 +648,7 @@ static int p9_virtio_probe(struct virtio_device *vdev)
+  * @args: args passed from sys_mount() for per-transport options (unused)
+  *
+  * This sets up a transport channel for 9p communication.  Right now
+- * we only match the first available channel, but eventually we couldlook up
++ * we only match the first available channel, but eventually we could look up
+  * alternate channels by matching devname versus a virtio_config entry.
+  * We use a simple reference count mechanism to ensure that only a single
+  * mount has a channel open at a time.
+-- 
+2.33.1
 
-Applied, thanks!
+

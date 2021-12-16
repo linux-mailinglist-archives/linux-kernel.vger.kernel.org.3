@@ -2,67 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D73477DEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 21:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35400477DF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 21:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235454AbhLPUyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 15:54:49 -0500
-Received: from mail-oo1-f54.google.com ([209.85.161.54]:39788 "EHLO
-        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbhLPUys (ORCPT
+        id S241521AbhLPU4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 15:56:10 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:43837 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234048AbhLPU4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 15:54:48 -0500
-Received: by mail-oo1-f54.google.com with SMTP id d1-20020a4a3c01000000b002c2612c8e1eso101987ooa.6;
-        Thu, 16 Dec 2021 12:54:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VWduBd8yA7MLyN55DR2no8XAq3/YF5372wZf2EIcheY=;
-        b=dDRqHQjVXluGlTymwYuS9bAZuoYdiSv0hn6QtMUcgt0cyHujdvHNe1EpnXCld7kobm
-         500Km0EcbgRFryCeptz4pVoSk5i5gy8j7F88ozZfWKNJgFAQD27zt14uAocbpuTx0CEv
-         bIPsKXUFGpueMVIZHC5Wwyvd68a4AuRa8YFFuldGBdsKGDwNRM8U8+zQ7NHYAKjMaa7X
-         Y/gx/WHh6AMy9tQp3Rmezl89f6B8P5lTfWAiWKRLM/PMnE9l65L61mc5zdmpTNMfr73e
-         ATrn2nsXDSYs+4sxM4Gzi+l585V9jF3Yr0QS67ar9Tfgb28roQ+LCVyQfBYQp2veRzrz
-         h2/Q==
-X-Gm-Message-State: AOAM532CZDj0MffXWRjpWFMHwIzQGLmGv7P8XeIiEezwKrD033QUcjYE
-        VYeo69YUAED4Jl67ux3ghA==
-X-Google-Smtp-Source: ABdhPJz6fVKw+I2jh8d/EGJsE4fSw1oN8qgYxuQWF1q7N6WqH3BbPHcxPnoj4qD8rq/124BLkx90cw==
-X-Received: by 2002:a4a:cb83:: with SMTP id y3mr12487646ooq.56.1639688087516;
-        Thu, 16 Dec 2021 12:54:47 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id k12sm1216115ots.77.2021.12.16.12.54.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 12:54:46 -0800 (PST)
-Received: (nullmailer pid 738874 invoked by uid 1000);
-        Thu, 16 Dec 2021 20:54:46 -0000
-Date:   Thu, 16 Dec 2021 14:54:46 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        romain.perier@gmail.com
-Subject: Re: [PATCH v2 1/3] dt-bindings: vendor-prefixes: Add prefix for Miyoo
-Message-ID: <YbunloPXw7qoxArZ@robh.at.kernel.org>
-References: <20211216105246.3548133-1-daniel@0x0f.com>
- <20211216105246.3548133-2-daniel@0x0f.com>
+        Thu, 16 Dec 2021 15:56:10 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 3749240004;
+        Thu, 16 Dec 2021 20:56:07 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 21:56:06 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.ne@posteo.net>,
+        linux-rtc@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Ash Logan <ash@heyquark.com>,
+        rw-r-r-0644 <r.r.qwertyuiop.r.r@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [PATCH v3 0/5] rtc: nintendo: Add a RTC driver for the GameCube,
+ Wii and Wii U
+Message-ID: <Ybun5qp6DH7qkAGy@piout.net>
+References: <20211027223516.2031-1-linkmauve@linkmauve.fr>
+ <20211215175501.6761-1-linkmauve@linkmauve.fr>
+ <163964813197.6786.14005810276404182021.b4-ty@bootlin.com>
+ <20211216202220.y6rctd2k72yuya5w@luna>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211216105246.3548133-2-daniel@0x0f.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211216202220.y6rctd2k72yuya5w@luna>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Dec 2021 19:52:44 +0900, Daniel Palmer wrote:
-> Add a prefix for "miyoo". The only details I can find about
-> the company is their aliexpress store "miyoo global store":
-> https://www.aliexpress.com/store/912663639
+On 16/12/2021 21:22:20+0100, Emmanuel Gil Peyrot wrote:
+> On Thu, Dec 16, 2021 at 10:49:44AM +0100, Alexandre Belloni wrote:
+> > On Wed, 15 Dec 2021 18:54:56 +0100, Emmanuel Gil Peyrot wrote:
+> > > These three consoles share a device, the MX23L4005, which contains a
+> > > clock and 64 bytes of SRAM storage, and is exposed on the EXI bus
+> > > (similar to SPI) on channel 0, device 1.  This driver allows it to be
+> > > used as a Linux RTC device, where time can be read and set.
+> > > 
+> > > The hardware also exposes two timers, one which shuts down the console
+> > > and one which powers it on, but these aren’t supported currently.
+> > > 
+> > > [...]
+> > 
+> > Applied, thanks!
+> > 
+> > [1/5] rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U
+> >       commit: 86559400b3ef9de93ba50523cffe767c35cd531a
+> > [2/5] rtc: gamecube: Report low battery as invalid data
+> >       commit: 322539a014bcd24cbb9281832c09b24e07912237
+> > [3/5] powerpc: wii.dts: Expose HW_SRNPROT on this platform
+> >       commit: 5479618e1e2641dd57352a73b7b7b2f6908fbeee
+> > [4/5] powerpc: gamecube_defconfig: Enable the RTC driver
+> >       commit: 57bd7d356506b713d0df8d8e42da7810a18864df
+> > [5/5] powerpc: wii_defconfig: Enable the RTC driver
+> >       commit: 69e8ba80ddda4db31e59facbf2db19773ad3785b
+> > 
+> > This one didn't apply ceanly but I believe I did the right thing. Can you check?
 > 
-> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> I believe you didn’t, at least that commit[1] seems to have one “+” too
+> many in the modified line, whereas the previous one[2] doesn’t.
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+I knew I needed you to check, this is fixed now.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git/commit/?id=c636783d594f6cfc95db51c796761719317ce5eb
+
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

@@ -2,143 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9C5476AF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 08:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31864476ACC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 08:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234504AbhLPHP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 02:15:28 -0500
-Received: from mx1.cqplus1.com ([113.204.237.245]:52158 "EHLO test.cqplus1.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234441AbhLPHPN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 02:15:13 -0500
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(4825:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Thu, 16 Dec 2021 15:08:26 +0800 (CST)
-From:   Qin Jian <qinjian@cqplus1.com>
-To:     robh+dt@kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
-        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
-        broonie@kernel.org, arnd@arndb.de, stefan.wahren@i2se.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        wells.lu@sunplus.com, Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v6 10/10] ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
-Date:   Thu, 16 Dec 2021 15:08:12 +0800
-Message-Id: <e88ae7d97d3c9f107cdb79d825eb79e6baa98f6d.1639560428.git.qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1639560427.git.qinjian@cqplus1.com>
-References: <cover.1639560427.git.qinjian@cqplus1.com>
+        id S234332AbhLPHIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 02:08:19 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:52018 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231839AbhLPHIS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 02:08:18 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V-nd84H_1639638494;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V-nd84H_1639638494)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 16 Dec 2021 15:08:16 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     clm@fb.com
+Cc:     josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] btrfs: Fix kernel-doc formatting issues
+Date:   Thu, 16 Dec 2021 15:08:13 +0800
+Message-Id: <20211216070813.28183-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add generic Sunplus SP7021 based board defconfig
+Add function names to the kernel-doc of some functions and upgrade
+descriptions of some parameters in it.
 
-Signed-off-by: Qin Jian <qinjian@cqplus1.com>
----
-Fix the comments from Arnd.
----
- MAINTAINERS                         |  1 +
- arch/arm/configs/multi_v7_defconfig |  1 +
- arch/arm/configs/sp7021_defconfig   | 61 +++++++++++++++++++++++++++++
- 3 files changed, 63 insertions(+)
- create mode 100644 arch/arm/configs/sp7021_defconfig
+The warnings were found by running scripts/kernel-doc, which is
+caused by using 'make W=1'.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0ae537a41..9340f8760 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2664,6 +2664,7 @@ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
- F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
- F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
-+F:	arch/arm/configs/sp7021_*defconfig
- F:	arch/arm/mach-sunplus/
- F:	drivers/clk/clk-sp7021.c
- F:	drivers/irqchip/irq-sp7021-intc.c
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index b4f74454f..585e3b5d3 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -87,6 +87,7 @@ CONFIG_MACH_SPEAR1310=y
- CONFIG_MACH_SPEAR1340=y
- CONFIG_ARCH_STI=y
- CONFIG_ARCH_STM32=y
-+CONFIG_ARCH_SUNPLUS=y
- CONFIG_ARCH_SUNXI=y
- CONFIG_ARCH_TEGRA=y
- CONFIG_ARCH_UNIPHIER=y
-diff --git a/arch/arm/configs/sp7021_defconfig b/arch/arm/configs/sp7021_defconfig
-new file mode 100644
-index 000000000..cda16d33a
---- /dev/null
-+++ b/arch/arm/configs/sp7021_defconfig
-@@ -0,0 +1,61 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
-+# CONFIG_RD_GZIP is not set
-+# CONFIG_RD_BZIP2 is not set
-+# CONFIG_RD_LZMA is not set
-+# CONFIG_RD_XZ is not set
-+# CONFIG_RD_LZO is not set
-+# CONFIG_RD_LZ4 is not set
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_PERF_EVENTS=y
-+CONFIG_SLAB=y
-+CONFIG_ARCH_SUNPLUS=y
-+# CONFIG_VDSO is not set
-+CONFIG_SMP=y
-+CONFIG_HAVE_ARM_ARCH_TIMER=y
-+CONFIG_THUMB2_KERNEL=y
-+CONFIG_FORCE_MAX_ZONEORDER=12
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_INPUT_SPARSEKMAP=y
-+CONFIG_INPUT_EVDEV=y
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+CONFIG_STAGING=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_RESET_CONTROLLER=y
-+CONFIG_EXT4_FS=y
-+# CONFIG_DNOTIFY is not set
-+CONFIG_FANOTIFY=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_DEFAULT_IOCHARSET="utf8"
-+CONFIG_EXFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DYNAMIC_DEBUG=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_DEBUG_USER=y
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ fs/btrfs/delalloc-space.c |  6 +++---
+ fs/btrfs/extent_io.c      | 15 ++++++++-------
+ fs/btrfs/space-info.c     | 10 +++++-----
+ fs/btrfs/zoned.c          |  2 +-
+ 4 files changed, 17 insertions(+), 16 deletions(-)
+
+diff --git a/fs/btrfs/delalloc-space.c b/fs/btrfs/delalloc-space.c
+index fb46a28f5065..1ca5f96fce66 100644
+--- a/fs/btrfs/delalloc-space.c
++++ b/fs/btrfs/delalloc-space.c
+@@ -194,7 +194,7 @@ void btrfs_free_reserved_data_space(struct btrfs_inode *inode,
+ }
+ 
+ /**
+- * Release any excessive reservation
++ * btrfs_inode_rsv_release() - Release any excessive reservation
+  *
+  * @inode:       the inode we need to release from
+  * @qgroup_free: free or convert qgroup meta. Unlike normal operation, qgroup
+@@ -366,7 +366,7 @@ int btrfs_delalloc_reserve_metadata(struct btrfs_inode *inode, u64 num_bytes)
+ }
+ 
+ /**
+- * Release a metadata reservation for an inode
++ * btrfs_delalloc_release_metadata() - Release a metadata reservation for an inode
+  *
+  * @inode: the inode to release the reservation for.
+  * @num_bytes: the number of bytes we are releasing.
+@@ -464,7 +464,7 @@ int btrfs_delalloc_reserve_space(struct btrfs_inode *inode,
+ }
+ 
+ /**
+- * Release data and metadata space for delalloc
++ * btrfs_delalloc_release_space() - Release data and metadata space for delalloc
+  *
+  * @inode:       inode we're releasing space for
+  * @reserved:    list of changed/reserved ranges
+diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+index 9234d96a7fd5..1b38c7e6c900 100644
+--- a/fs/btrfs/extent_io.c
++++ b/fs/btrfs/extent_io.c
+@@ -399,7 +399,7 @@ static struct rb_node *tree_insert(struct rb_root *root,
+ }
+ 
+ /**
+- * Search @tree for an entry that contains @offset. Such entry would have
++ * __etree_search() - Search @tree for an entry that contains @offset. Such entry would have
+  * entry->start <= offset && entry->end >= offset.
+  *
+  * @tree:       the tree to search
+@@ -1598,7 +1598,7 @@ int find_first_extent_bit(struct extent_io_tree *tree, u64 start,
+ }
+ 
+ /**
+- * Find a contiguous area of bits
++ * find_contiguous_extent_bit() - Find a contiguous area of bits
+  *
+  * @tree:      io tree to check
+  * @start:     offset to start the search from
+@@ -1636,7 +1636,8 @@ int find_contiguous_extent_bit(struct extent_io_tree *tree, u64 start,
+ }
+ 
+ /**
+- * Find the first range that has @bits not set. This range could start before
++ * find_first_clear_extent_bit() - Find the first range that has @bits not set.
++ *				   This range could start before.
+  * @start.
+  *
+  * @tree:      the tree to search
+@@ -3185,15 +3186,14 @@ struct bio *btrfs_bio_clone_partial(struct bio *orig, u64 offset, u64 size)
+ }
+ 
+ /**
+- * Attempt to add a page to bio
++ * btrfs_bio_add_page() - Attempt to add a page to bio
+  *
+- * @bio:	destination bio
++ * @bio_ctrl:	record both the bio, and its bio_flags
+  * @page:	page to add to the bio
+  * @disk_bytenr:  offset of the new bio or to check whether we are adding
+  *                a contiguous page to the previous one
+  * @pg_offset:	starting offset in the page
+  * @size:	portion of page that we want to write
+- * @prev_bio_flags:  flags of previous bio to see if we can merge the current one
+  * @bio_flags:	flags of the current bio to see if we can merge them
+  *
+  * Attempt to add a page to bio considering stripe alignment etc.
+@@ -4933,7 +4933,8 @@ int btree_write_cache_pages(struct address_space *mapping,
+ }
+ 
+ /**
+- * Walk the list of dirty pages of the given address space and write all of them.
++ * extent_write_cache_pages() - Walk the list of dirty pages of the given
++ *				address space and write all of them.
+  *
+  * @mapping: address space structure to write
+  * @wbc:     subtract the number of written pages from *@wbc->nr_to_write
+diff --git a/fs/btrfs/space-info.c b/fs/btrfs/space-info.c
+index dbf8bfb8fcb3..86da4310a07a 100644
+--- a/fs/btrfs/space-info.c
++++ b/fs/btrfs/space-info.c
+@@ -1362,7 +1362,7 @@ static void wait_reserve_ticket(struct btrfs_fs_info *fs_info,
+ }
+ 
+ /**
+- * Do the appropriate flushing and waiting for a ticket
++ * handle_reserve_ticket() - Do the appropriate flushing and waiting for a ticket
+  *
+  * @fs_info:    the filesystem
+  * @space_info: space info for the reservation
+@@ -1455,7 +1455,7 @@ static inline bool can_steal(enum btrfs_reserve_flush_enum flush)
+ }
+ 
+ /**
+- * Try to reserve bytes from the block_rsv's space
++ * __reserve_bytes() - Try to reserve bytes from the block_rsv's space
+  *
+  * @fs_info:    the filesystem
+  * @space_info: space info we want to allocate from
+@@ -1581,9 +1581,9 @@ static int __reserve_bytes(struct btrfs_fs_info *fs_info,
+ }
+ 
+ /**
+- * Trye to reserve metadata bytes from the block_rsv's space
++ * btrfs_reserve_metadata_bytes() - Trye to reserve metadata bytes from the block_rsv's space
+  *
+- * @root:       the root we're allocating for
++ * @fs_info:    the filesystem
+  * @block_rsv:  block_rsv we're allocating for
+  * @orig_bytes: number of bytes we want
+  * @flush:      whether or not we can flush to make our reservation
+@@ -1616,7 +1616,7 @@ int btrfs_reserve_metadata_bytes(struct btrfs_fs_info *fs_info,
+ }
+ 
+ /**
+- * Try to reserve data bytes for an allocation
++ * btrfs_reserve_data_bytes() - Try to reserve data bytes for an allocation
+  *
+  * @fs_info: the filesystem
+  * @bytes:   number of bytes we need
+diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
+index 6b3d7b65368b..cdc952bcfb9d 100644
+--- a/fs/btrfs/zoned.c
++++ b/fs/btrfs/zoned.c
+@@ -1781,7 +1781,7 @@ struct btrfs_device *btrfs_zoned_get_device(struct btrfs_fs_info *fs_info,
+ }
+ 
+ /**
+- * Activate block group and underlying device zones
++ * btrfs_zone_activate() - Activate block group and underlying device zones
+  *
+  * @block_group: the block group to activate
+  *
 -- 
-2.33.1
+2.20.1.7.g153144c
 

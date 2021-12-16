@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B491C476B96
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34763476B9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232386AbhLPINR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 03:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S234844AbhLPIN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 03:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234844AbhLPINO (ORCPT
+        with ESMTP id S234832AbhLPINU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 03:13:14 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CA3C061759
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:13:14 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id w24so6151303ply.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:13:14 -0800 (PST)
+        Thu, 16 Dec 2021 03:13:20 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85E9C061747
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:13:20 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id k6-20020a17090a7f0600b001ad9d73b20bso21900746pjl.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:13:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jORfXqfkT+AmZwZbRfSXnEcMFi32raPXjjq42kYwqXI=;
-        b=NyROb5UHfKELvGtaH6JLzZaZrCWR3OMKtVGLIxq1lNesb0I41GMDyDf2xYUtRSXr2R
-         8yiOvH7A98JR/I4q1RHTK6tZUn9g84Xik+VxwxNi0+Jc2lz/gw0sgYfpaEZnVDwjvMkN
-         iNemcrUv461reOylEuEZE/9u+8Svs9axsMQfm7mOayD1DUClXtF1zAtHWnSyK6Y6TJZl
-         S7z07C6mEh9GqE6HNXbkqpxA0u5AZLNPihKqJNN09JBg8QUlZ7FFHntvwWx2kAlxOE9B
-         XYkFIPve9HjA+6dbUlQzMnK3anVFI056k31Zgh6wsOUYjF7T3VRduqIqpqN/ptcCetha
-         3qpw==
+        bh=vC6zsX1z5vnUW+lKaZ0nR4WtPfovJbiEibZW3cAtkqE=;
+        b=qmODtu4fVv7iuTsPNb+bP9PC612zKiobeXGdkynk48IH+EWY/PdpuoHhHEgSGz5uuk
+         j26oJHztCG004ALOnTJRS2ECKPpIQpU9b5Cuxf8DPnCot8Va/tzpbt7OFa5WQxX8ugNx
+         QfKp/ZxWi5NcUiiKdJp9+Oz/EKbgkLlWTQ2yKm+Dg9czp7OLRMBzZEofKxhcKO/pndr2
+         G+62DRD0TiSoTJ4RAcI1Hpx5KR+HHYYLBQamYEHhq2z2xupObGpSXY2/HCCqRBThSB3E
+         pjxTuEynC9MgQJxZNCH60DxijLVS2wYhCwFYNugUTN+Ld+aTw7Ii/Qt4e8gsMNcx0LXX
+         8kiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jORfXqfkT+AmZwZbRfSXnEcMFi32raPXjjq42kYwqXI=;
-        b=2OPmC0ouhpnW85giXh1FZSQZV31EFvIKwLFmspEr2zehzO62lTW/idnwxyDPCZPH7R
-         VaOsMuOeG4MsHGr/T5wykQTYzyBB9xPhWrB6wGXz3j1e3RbgiwOWGPqiy8PXUQT4UYu/
-         fE+n7Rpc7G/XY9nMWd9GdXzXlMa7BffdlQn6wYL27meJB4ah6m7V5TqcfDJ5i2io0wnt
-         UIk8sUN+LrUqx59HN9nqfGJCt3gUfRXdW7EazLiVF5wT3mGKjlnHAaPa5Zp/EMIP3/Yn
-         h5M2rsnf1Nla80aKYBNblcMDOEUOhQtj5KZoD1mlOvbaHteIzejgAOx4qFjJAlzBUmmT
-         rG6g==
-X-Gm-Message-State: AOAM5337q7MpINOj9WMsEYIfu5zoEDdNgAhf9WIXGpF4Saf/Gx/0abA6
-        VI2B7zd1v1JelaWXpGFiJocN
-X-Google-Smtp-Source: ABdhPJxSBZxpt9vbJSz9OgvxQmS/MXnfDD2CMsEYXXlEenw0R6KqhonP8LmYH/RF56yror/Md0arcw==
-X-Received: by 2002:a17:902:d885:b0:148:a2e8:2c55 with SMTP id b5-20020a170902d88500b00148a2e82c55mr8633167plz.164.1639642394010;
-        Thu, 16 Dec 2021 00:13:14 -0800 (PST)
+        bh=vC6zsX1z5vnUW+lKaZ0nR4WtPfovJbiEibZW3cAtkqE=;
+        b=Qwu4EAkptZ/TuyLVwAvFCqVdxIHbVwDRlWSHPk4TsD7hXMZKFqBnzJ977zZS5BF2QP
+         CnYM5AP+KXgluTw1tNDI+dn7vvYw+OzreI5YFAgOb0MtGgrUmFL2gE/5uP1l56DRLyOd
+         09+vybkFTi63dASFJezJXd8f0Omds4nYj0EC8QVMvnPKl5c8BQXPZc8W9V8tRRWXCJKm
+         lHbpmHWnj+tzYxrodeayoOa2bRVHF38zrwLZfLYcsAzk4JOsic8RRTTjqEHQZ6DDpnpW
+         WX+ctNP9Pe7/5ajzZYyNbrk8ffELipg0Htji33YePwWuPV/jpF7PawW9IyJ2rYocVOH3
+         mSkA==
+X-Gm-Message-State: AOAM532YJnxmt2jIrWRtzXtcpQuMBqBtI7br0M3XuvghpTL9iMb11/3z
+        vDaJyskJVuvQCOESnyjIK2qO
+X-Google-Smtp-Source: ABdhPJwKNizbWzfhG5HbZ69FmunvbcaHaIOazuKTjzkxdGQMdMTcvK0dVXqJAngYfM52YIoh5gm6cw==
+X-Received: by 2002:a17:90b:3143:: with SMTP id ip3mr4688553pjb.34.1639642400135;
+        Thu, 16 Dec 2021 00:13:20 -0800 (PST)
 Received: from localhost.localdomain ([117.193.208.121])
-        by smtp.gmail.com with ESMTPSA id u38sm326835pfg.4.2021.12.16.00.13.08
+        by smtp.gmail.com with ESMTPSA id u38sm326835pfg.4.2021.12.16.00.13.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 00:13:13 -0800 (PST)
+        Thu, 16 Dec 2021 00:13:19 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     mhi@lists.linux.dev, hemantk@codeaurora.org, bbhatt@codeaurora.org,
@@ -55,11 +55,13 @@ Cc:     mhi@lists.linux.dev, hemantk@codeaurora.org, bbhatt@codeaurora.org,
         aleksander@aleksander.es, slark_xiao@163.com,
         christophe.jaillet@wanadoo.fr, keescook@chromium.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
+        netdev@vger.kernel.org, Bhaumik Bhatt <quic_bbhatt@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        stable@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 05/10] bus: mhi: pci_generic: Simplify code and axe the use of a deprecated API
-Date:   Thu, 16 Dec 2021 13:42:22 +0530
-Message-Id: <20211216081227.237749-6-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 06/10] bus: mhi: core: Fix reading wake_capable channel configuration
+Date:   Thu, 16 Dec 2021 13:42:23 +0530
+Message-Id: <20211216081227.237749-7-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211216081227.237749-1-manivannan.sadhasivam@linaro.org>
 References: <20211216081227.237749-1-manivannan.sadhasivam@linaro.org>
@@ -69,46 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Bhaumik Bhatt <quic_bbhatt@quicinc.com>
 
-The wrappers in include/linux/pci-dma-compat.h should go away.
+The 'wake-capable' entry in channel configuration is not set when
+parsing the configuration specified by the controller driver. Add
+the missing entry to ensure channel is correctly specified as a
+'wake-capable' channel.
 
-Replace 'pci_set_dma_mask/pci_set_consistent_dma_mask' by an equivalent
-and less verbose 'dma_set_mask_and_coherent()' call.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
+Fixes: 0cbf260820fa ("bus: mhi: core: Add support for registering MHI controllers")
+Signed-off-by: Bhaumik Bhatt <quic_bbhatt@quicinc.com>
 Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-Link: https://lore.kernel.org/r/bb3dc436fe142309a2334549db782c5ebb80a2be.1625718497.git.christophe.jaillet@wanadoo.fr
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/1638320491-13382-1-git-send-email-quic_bbhatt@quicinc.com
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/bus/mhi/pci_generic.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/bus/mhi/core/init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
-index 4f72bbcc53c9..9ef41354237c 100644
---- a/drivers/bus/mhi/pci_generic.c
-+++ b/drivers/bus/mhi/pci_generic.c
-@@ -532,18 +532,12 @@ static int mhi_pci_claim(struct mhi_controller *mhi_cntrl,
- 	mhi_cntrl->regs = pcim_iomap_table(pdev)[bar_num];
- 	mhi_cntrl->reg_len = pci_resource_len(pdev, bar_num);
+diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
+index 5aaca6d0f52b..f1ec34417592 100644
+--- a/drivers/bus/mhi/core/init.c
++++ b/drivers/bus/mhi/core/init.c
+@@ -788,6 +788,7 @@ static int parse_ch_cfg(struct mhi_controller *mhi_cntrl,
+ 		mhi_chan->offload_ch = ch_cfg->offload_channel;
+ 		mhi_chan->db_cfg.reset_req = ch_cfg->doorbell_mode_switch;
+ 		mhi_chan->pre_alloc = ch_cfg->auto_queue;
++		mhi_chan->wake_capable = ch_cfg->wake_capable;
  
--	err = pci_set_dma_mask(pdev, dma_mask);
-+	err = dma_set_mask_and_coherent(&pdev->dev, dma_mask);
- 	if (err) {
- 		dev_err(&pdev->dev, "Cannot set proper DMA mask\n");
- 		return err;
- 	}
- 
--	err = pci_set_consistent_dma_mask(pdev, dma_mask);
--	if (err) {
--		dev_err(&pdev->dev, "set consistent dma mask failed\n");
--		return err;
--	}
--
- 	pci_set_master(pdev);
- 
- 	return 0;
+ 		/*
+ 		 * If MHI host allocates buffers, then the channel direction
 -- 
 2.25.1
 

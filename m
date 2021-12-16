@@ -2,151 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DC14780CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2D44780CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbhLPXmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:42:20 -0500
-Received: from foss.arm.com ([217.140.110.172]:49936 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229511AbhLPXmT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:42:19 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 479E012FC;
-        Thu, 16 Dec 2021 15:42:19 -0800 (PST)
-Received: from bogus (unknown [10.57.33.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B62073F73B;
-        Thu, 16 Dec 2021 15:42:11 -0800 (PST)
-Date:   Thu, 16 Dec 2021 23:42:08 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Tyler Baicar <baicar@amperemail.onmicrosoft.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Darren Hart <darren@os.amperecomputing.com>,
-        lorenzo.pieralisi@arm.com, guohanjun@huawei.com,
-        Tyler Baicar <baicar@os.amperecomputing.com>,
-        patches@amperecomputing.com, abdulhamid@os.amperecomputing.com,
-        catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com,
-        alexandru.elisei@arm.com, suzuki.poulose@arm.com,
-        rafael@kernel.org, lenb@kernel.org, tony.luck@intel.com,
-        bp@alien8.de, mark.rutland@arm.com, anshuman.khandual@arm.com,
-        vincenzo.frascino@arm.com, tabba@google.com, marcan@marcan.st,
-        keescook@chromium.org, masahiroy@kernel.org,
-        samitolvanen@google.com, john.garry@huawei.com,
-        daniel.lezcano@linaro.org, gor@linux.ibm.com,
-        zhangshaokun@hisilicon.com, tmricht@linux.ibm.com,
-        dchinner@redhat.com, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-acpi@vger.kernel.org,
-        linux-edac@vger.kernel.org, ishii.shuuichir@fujitsu.com,
-        Vineeth.Pillai@microsoft.com
-Subject: Re: [PATCH 1/2] ACPI/AEST: Initial AEST driver
-Message-ID: <20211216234208.hszjx5lpurdjmftj@bogus>
-References: <20211124170708.3874-1-baicar@os.amperecomputing.com>
- <20211124170708.3874-2-baicar@os.amperecomputing.com>
- <87czmpcto5.wl-maz@kernel.org>
- <YaU6eyGM+bX/bEhG@fedora>
- <87h7bum0xh.wl-maz@kernel.org>
- <YaZUL+cftvNYgx1j@fedora>
- <addaf134-d5c0-65de-62ca-76950d6460ab@amperemail.onmicrosoft.com>
+        id S229843AbhLPXna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:43:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54490 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229782AbhLPXn2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 18:43:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98DADB8261B;
+        Thu, 16 Dec 2021 23:43:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2179CC36AE2;
+        Thu, 16 Dec 2021 23:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639698206;
+        bh=2TTjo7fVWWn1YFCwt4xaPzq9NafIyUjKp5x5kKoqI5k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qAz1cWM2frebuTegNT+pDYr9ChV4EBLmxPDRO4zPnT7Fyq8+RCPwpSRc+aYtFBrfr
+         n9QR6cxV4f3CoK/NImfMguGCZ6L+mWipWMcz1/r1gkpK4griBppCuoe37MjpR8LR7L
+         Pimo7U5f9Y7NA6j4RcMUzp86cTkRc1iD+23GsOmf0lvoRlNyQqkqhDzv2qxmcDDEbn
+         16+IELvUgJerpsxfstBxp/la++QERcPlejMhXLx2q09FrTc8C+G71f4BJm1Gs6MSAu
+         JZzcHlwvdvRHfLgByJaXVHX0IW3XQX0EevIWKNO+P6EDiqywJLDlZ5PRV4aBIRleaI
+         ioqzvhBImB1YQ==
+Date:   Thu, 16 Dec 2021 15:43:24 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@codeaurora.org>
+Subject: Re: [GIT PULL] Networking for 5.16-rc6
+Message-ID: <20211216154324.5adcd94d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CAHk-=whayMx6-Z7j7H1eAquy0Svv93Tyt7Wq6Efaogw8W+WpoQ@mail.gmail.com>
+References: <20211216213207.839017-1-kuba@kernel.org>
+        <CAHk-=whayMx6-Z7j7H1eAquy0Svv93Tyt7Wq6Efaogw8W+WpoQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <addaf134-d5c0-65de-62ca-76950d6460ab@amperemail.onmicrosoft.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 05:05:15PM -0500, Tyler Baicar wrote:
-> -Moved ACPI for ARM64 maintainers to "to:"
+On Thu, 16 Dec 2021 15:14:27 -0800 Linus Torvalds wrote:
+> On Thu, Dec 16, 2021 at 1:32 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> > Relatively large batches of fixes from BPF and the WiFi stack,
+> > calm in general networking.  
 > 
-> Hi Marc, Darren,
+> Hmm. I get a very different diffstat, and also a different shortlog
+> than the one you quote.
 > 
-> On 11/30/2021 11:41 AM, Darren Hart wrote:
-> > On Tue, Nov 30, 2021 at 09:45:46AM +0000, Marc Zyngier wrote:
-> > > Hi Darren,
-> > > 
-> > > On Mon, 29 Nov 2021 20:39:23 +0000,
-> > > Darren Hart <darren@os.amperecomputing.com> wrote:
-> > > > On Wed, Nov 24, 2021 at 06:09:14PM +0000, Marc Zyngier wrote:
-> > > > > On Wed, 24 Nov 2021 17:07:07 +0000,
-> > > > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > > > index 5250298d2817..aa0483726606 100644
-> > > > > > --- a/MAINTAINERS
-> > > > > > +++ b/MAINTAINERS
-> > > > > > @@ -382,6 +382,7 @@ ACPI FOR ARM64 (ACPI/arm64)
-> > > > > >   M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > > > > >   M:	Hanjun Guo <guohanjun@huawei.com>
-> > > > > >   M:	Sudeep Holla <sudeep.holla@arm.com>
-> > > > > > +R:	Tyler Baicar <baicar@os.amperecomputing.com>
-> > > > > >   L:	linux-acpi@vger.kernel.org
-> > > > > >   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> > > > > >   S:	Maintained
-> > > > > Isn't this a bit premature? This isn't even mentioned in the commit
-> > > > > message, only in passing in the cover letter.
-> > > > > 
-> > > > Hi Marc,
-> > > > 
-> > > > This was something I encouraged Tyler to add during internal review,
-> > > > both in response to the checkpatch.pl warning about adding new drivers
-> > > > as well as our interest in reviewing any future changes to the aest
-> > > > driver. Since refactoring is common, this level made sense to me - but
-> > > > would it be preferable to add a new entry for just the new driver Tyler
-> > > > added?
-> > > Adding someone as the co-maintainer/co-reviewer of a whole subsystem
-> > > (ACPI/arm64 in this case) comes, IMO, with a number of pre-requisites:
-> > > has the proposed co-{maintainer,reviewer} contributed and/or reviewed
-> > > a significant number of patches to that subsystem and/or actively
-> > > participated in the public discussions on the design and the
-> > > maintenance of the subsystem, so that their reviewing is authoritative
-> > > enough? I won't be judge of this, but it is definitely something to
-> > > consider.
-> > Hi Marc,
-> > 
-> > Agreed. I applied similar criteria when considering sub maintainers for
-> > the platform/x86 subsystem while I maintained it.
-> > 
-> > > I don't think preemptively adding someone to the MAINTAINERS entry to
-> > > indicate an interest in a whole subsystem is the right way to do it.
-> > > One could argue that this is what a mailing list is for! ;-) On the
-> > > other hand, an active participation to the review process is the
-> > > perfect way to engage with fellow developers and to grow a profile. It
-> > > is at this stage that adding oneself as an upstream reviewer makes a
-> > > lot of sense.
-> > Also generally agree. In this specific case, our interest was in the
-> > driver itself, and we had to decide between the whole subsystem or
-> > adding another F: entry in MAINTAINERS for the specific driver. Since
-> > drivers/acpi/arm64 only has 3 .c files in it, adding another entry
-> > seemed premature and overly granular. Certainly a subjective thing and
-> > we have no objection to adding the extra line if that's preferred. This
-> > should have been noted in the commit message.
+> I do get the top commit you claim:
 > 
-> Thank you for the feedback here, I will make sure to add this to the commit
-> message and cover letter in the next version.
-
-Hi Marc,
-
-Thanks for responding and providing all the necessary details.
-
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc6
+> >
+> > for you to fetch changes up to 0c3e2474605581375d808bb3b9ce0927ed3eef70:
+> >
+> >   Merge https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf (2021-12-16 13:06:49 -0800)  
 > 
-> Hi Lorenzo, Hanjun, Sudeep,
+> But your shortlog doesn't contain
+> [...]
+> and that seems to be the missing diffstat contents also.
 > 
-> As for adding myself as a reviewer under ACPI for ARM64 or adding another F:
-> entry, do you have a preference or guidance on what I should do here?
->
+> It looks like your pull request was done without that last merge, even
+> though you do mention it as being the top of tree.
 
-I prefer to start with an entry specific to the $subject driver for all
-the reasons Marc has already stated. It may also add confusion and provide
-misleading reference to others who want to maintain specific drivers like
-this in the future. Further it will result in this list to grow even though
-not all in that will be interested in reviewing or maintaining ARM64
-ACPI subsystem if we take the approach in this patch and more confusion
-to the developers.
+But you are able to get the bpf patches, from the tag, right?
 
-Ofcourse if you are interested and get engaged in the review of ARM64
-ACPI in the future we can always revisit and update accordingly.
+> I've pulled this, because that last merge looks fine and intentional,
+> but I'd like you to double-check your workflow to see what happened to
+> give a stale diffstat and shortlog...
 
-Hope this helps and provides clarification you are looking for.
+Very strange, I didn't fix it up, redo or anything, push the tree, 
+tag, push the tag, git request-pull >> email. And request-pull did 
+not complain about anything.
 
--- 
-Regards,
-Sudeep
+I will double check all the outputs next time, really not sure how this
+happened..
+
+While I have you - I see that you drop my SoB at the end of the merge
+message, usually. Should I not put it there?  I put it there because
+of something I read in Documentation/process/...

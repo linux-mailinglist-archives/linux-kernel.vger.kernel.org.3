@@ -2,117 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 055EB477A6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0135A477A73
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240182AbhLPRSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:18:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbhLPRSv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:18:51 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05800C061574;
-        Thu, 16 Dec 2021 09:18:51 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id z29so9355967edl.7;
-        Thu, 16 Dec 2021 09:18:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=31bykhqmr0M5/64+8ZN/KQ0RToq8F8e7rCshC7U5iiI=;
-        b=pmpM3t7hxLdaCmjZf08hGQDcCDpxeNw0i3UTJpMQqGWSObyLoiYkZeuTwLbfXDJDJP
-         vMEx3aMFVB9BGWSlD5KwiGEle4+nrN9/oLWBiUq7/bb/p8JXRWREVTseOFCLr9K05EI0
-         IK59LDrNjDNJ+2FgYwpKhyBSis3IToLu+UMYeDJT79qWozIRcLYCdarVO+8j413ncIit
-         tuZITaL7z3UU008AAYT7gGfL+gDaGiazeTLRKzB9Ax3hGKsszN6ts1/zBpBAB3/OMpEF
-         Yr5ytDEiFaAIMq+EhuZCJF/4YEo+McDzNWROHTiwSHjdtUnPqt/XmjVBiSKsRO6sagnf
-         eFvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=31bykhqmr0M5/64+8ZN/KQ0RToq8F8e7rCshC7U5iiI=;
-        b=OF2Cfh+fSi9sbiW3tsDoRnza/u/1efZW2aeNleZGM3+HRMUV80k73W33Q7ZGux25pu
-         YIqNLpo0bzQyYroAdNPfzghEsBoWhLc/YO5L96FCEpWzIiiSL6mkQgHXPGZFuXkcoeoF
-         3A0eNwEA4hdGco7GuDvTAz2DoCWNFoTDUEgJMckQ2ixDcqHZ1idttHtZuOhIiau4c5k+
-         lYxJx8HQzeeVyGIrDkoQFd7BAxXwlEYbeHHz+tfy21Q4lysr6GYFJFTJSTKkZI8Y+8xO
-         vtrnDBGpm1MFxPNDkzOj3rRLB+G2QxhRaG5h6f4LwMlSOBE93lZDua0+cflWrwOvkdAg
-         GtnA==
-X-Gm-Message-State: AOAM530PMCS52nicurkM5GVrcI9a5rjN5O2yB5m/lCje51Ypoz8jV0aB
-        AKVoBWVdDg4BSNhURJ4bjYSLgr7t/JA/1E/Nt20=
-X-Google-Smtp-Source: ABdhPJy3lurNLVOtpHxmxsno5k/on9qXZg/MWhbDTYrsr3jHZC83+9oERKpgEVNe+8ncRmYY5piVmD4tzRIpHCrFFSU=
-X-Received: by 2002:a05:6402:184c:: with SMTP id v12mr7081960edy.154.1639675128877;
- Thu, 16 Dec 2021 09:18:48 -0800 (PST)
+        id S240141AbhLPRUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:20:48 -0500
+Received: from mga03.intel.com ([134.134.136.65]:37418 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235933AbhLPRUr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 12:20:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639675247; x=1671211247;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Rd5PmsxPC54Sa9eaKvwKRUtIOQAvf8bjBEuVyN9CNdQ=;
+  b=bp/M2UYEK6E+OnAaGcNxJGcNwyXS6h65obtiKToPhVTBQYe6zoxREdqG
+   QmUaRRBIcS8toY0Qk/Icuk/VlMORAV9IAKKs0QBQyUDUQT1F1kdXp+z3y
+   UGOJTQRVahbbIEN5MZWi3qjNy3RS4App62RxGVIWRawgyM8ao+hBVb4zp
+   dYrHRQm5IeIlX6BMyqUqgWTy+xvo+h6G89zTsGayK8xHw1s8gWmdETM3C
+   m+MYU6sO69vKkWcEpcPxyW8oBF5r5AkEKqGojLcNafbZrvTCdsiovahJ2
+   u9bpuQ5cPsmMbL81NeM3n1zcIJsFSXn/kDZ96HrQN0Z0clNVA/VBH3FbQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="239496414"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="239496414"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 09:20:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="683022722"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 16 Dec 2021 09:20:13 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxuQO-0003WE-HK; Thu, 16 Dec 2021 17:20:12 +0000
+Date:   Fri, 17 Dec 2021 01:20:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream 99/152] arch/x86/kvm/vmx/tdx_stubs.c:18:6:
+ error: no previous prototype for 'tdx_load_mmu_pgd'
+Message-ID: <202112170142.ENwsI9A2-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211216165851.64708-1-reinhold.mueller@emtrion.com> <20211216165851.64708-3-reinhold.mueller@emtrion.com>
-In-Reply-To: <20211216165851.64708-3-reinhold.mueller@emtrion.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 16 Dec 2021 14:18:37 -0300
-Message-ID: <CAOMZO5C346Om3QS19RQB3EzPu9Ey2b1jt_V_hzOZCk6bEd9wtQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] arm64: dts: imx8mm: Add support for emtrion
- emCON-MX8M Mini
-To:     reinhold.mueller@emtrion.com
-Cc:     Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinhold,
+tree:   https://github.com/intel/tdx.git kvm-upstream
+head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
+commit: f1849f253c0fb86f0b08b979afc907b445858372 [99/152] KVM: TDX: Add load_mmu_pgd method for TDX
+config: i386-randconfig-m021-20211216 (https://download.01.org/0day-ci/archive/20211217/202112170142.ENwsI9A2-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/f1849f253c0fb86f0b08b979afc907b445858372
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream
+        git checkout f1849f253c0fb86f0b08b979afc907b445858372
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-On Thu, Dec 16, 2021 at 1:59 PM <reinhold.mueller@emtrion.com> wrote:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +       reserved-memory {
-> +               #address-cells = <2>;
-> +               #size-cells = <2>;
-> +               ranges;
-> +
-> +               rpmsg_reserved: rpmsg@b8000000 {
-> +                       no-map;
-> +                       reg = <0 0xb8000000 0 0x400000>;
-> +               };
-> +
-> +               loader_reserved: loader@bb700000 {
-> +                       no-map;
-> +                       reg = <0 0xbb700000 0x0 0x00100000>;
-> +               };
-> +
-> +               pci_reserved: pci@bb800000 {
-> +                       no-map;
-> +                       reg = <0 0xbb800000 0x0 0x00200000>;
-> +               };
-> +
-> +               ivshmem2_reserved: ivshmem2@bba00000 {
-> +                       no-map;
-> +                       reg = <0 0xbba00000 0x0 0x00100000>;
-> +               };
-> +
-> +               ivshmem_reserved: ivshmem@bbb00000 {
-> +                       no-map;
-> +                       reg = <0 0xbbb00000 0x0 0x00100000>;
-> +               };
-> +       };
+All errors (new ones prefixed by >>):
 
-Are these reserved nodes needed with mainline?
+   arch/x86/kvm/vmx/tdx_stubs.c:4:13: error: no previous prototype for 'tdx_pre_kvm_init' [-Werror=missing-prototypes]
+       4 | void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+         |             ^~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:6:12: error: no previous prototype for 'tdx_hardware_setup' [-Werror=missing-prototypes]
+       6 | int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+         |            ^~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:7:6: error: no previous prototype for 'tdx_hardware_enable' [-Werror=missing-prototypes]
+       7 | void tdx_hardware_enable(void) {}
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:8:6: error: no previous prototype for 'tdx_hardware_disable' [-Werror=missing-prototypes]
+       8 | void tdx_hardware_disable(void) {}
+         |      ^~~~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:10:5: error: no previous prototype for 'tdx_vcpu_create' [-Werror=missing-prototypes]
+      10 | int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+         |     ^~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:11:6: error: no previous prototype for 'tdx_vcpu_free' [-Werror=missing-prototypes]
+      11 | void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+         |      ^~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:12:6: error: no previous prototype for 'tdx_vcpu_reset' [-Werror=missing-prototypes]
+      12 | void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+         |      ^~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:14:5: error: no previous prototype for 'tdx_dev_ioctl' [-Werror=missing-prototypes]
+      14 | int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+         |     ^~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:15:5: error: no previous prototype for 'tdx_vm_ioctl' [-Werror=missing-prototypes]
+      15 | int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+         |     ^~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c:16:5: error: no previous prototype for 'tdx_vcpu_ioctl' [-Werror=missing-prototypes]
+      16 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+         |     ^~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c: In function 'tdx_vcpu_ioctl':
+   arch/x86/kvm/vmx/tdx_stubs.c:16:72: error: 'ENOPNOTSUPP' undeclared (first use in this function); did you mean 'EOPNOTSUPP'?
+      16 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+         |                                                                        ^~~~~~~~~~~
+         |                                                                        EOPNOTSUPP
+   arch/x86/kvm/vmx/tdx_stubs.c:16:72: note: each undeclared identifier is reported only once for each function it appears in
+   arch/x86/kvm/vmx/tdx_stubs.c: At top level:
+>> arch/x86/kvm/vmx/tdx_stubs.c:18:6: error: no previous prototype for 'tdx_load_mmu_pgd' [-Werror=missing-prototypes]
+      18 | void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
+         |      ^~~~~~~~~~~~~~~~
+   arch/x86/kvm/vmx/tdx_stubs.c: In function 'tdx_vcpu_ioctl':
+   arch/x86/kvm/vmx/tdx_stubs.c:16:85: error: control reaches end of non-void function [-Werror=return-type]
+      16 | int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+         |                                                                                     ^
+   cc1: all warnings being treated as errors
 
-Looks like they are remnants from NXP vendor BSP.
 
-> +&fec1 {
-> +       pinctrl-names = "default";
-> +       pinctrl-0 = <&pinctrl_fec1>;
-> +       phy-mode = "rgmii-id";
-> +       phy-reset-gpios = <&gpio1 9 0>;
+vim +/tdx_load_mmu_pgd +18 arch/x86/kvm/vmx/tdx_stubs.c
 
-phy-reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
+    13	
+    14	int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; }
+    15	int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+  > 16	int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -ENOPNOTSUPP; }
+    17	
+  > 18	void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
 
-Actually, phy-reset-gpios is considered deprecated.
-
-You could also add an mdio node as fec child and:
-add reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>; there.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

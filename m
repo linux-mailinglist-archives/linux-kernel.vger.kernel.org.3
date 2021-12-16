@@ -2,108 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F58477F80
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E96E6477F84
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237590AbhLPVpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
+        id S237679AbhLPVpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237631AbhLPVoZ (ORCPT
+        with ESMTP id S242246AbhLPVoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:44:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC2AC08E6DF;
-        Thu, 16 Dec 2021 13:43:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B8F161F9A;
-        Thu, 16 Dec 2021 21:43:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB210C36AE2;
-        Thu, 16 Dec 2021 21:43:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639690996;
-        bh=+OesseL9+8IhwYVrl5VuIRe5XfUosJ8w79J9FNaaKXk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SVD6AztPK7hK9N7qAbWvqRRQuaOpZEqldpPwoYClQfQku+aQvNZheTq3HyRFnj0mC
-         WPR0Bx/20rSossdAKJ9UPe3+rBzQWJw9Crm6+gpheRs3yZmoAnxY0A6vkJs8A1PVUn
-         A5syAIhxyqiuPWnMu3qo/H/rNFJGwjOiCMJHZKAOOYkR5IKqe/HFkkLOieLZnfyo99
-         bs2wMYZh2ad2yNPdNNgZRUDYRB5Tu562PRHWGCg8FsEuPM8G3fVM7oyDvEbNSeZly7
-         c0srGBES0CP0Jo6LLjz+j1Y8JNF3Tw7S12u7/1QAeY6bo4B69TQpCPvUsB1T4dOkPY
-         AY/llqietP2Pg==
-Date:   Thu, 16 Dec 2021 13:43:16 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 15/25] iomap: Allow iomap_write_begin() to be called
- with the full length
-Message-ID: <20211216214316.GE27664@magnolia>
-References: <20211216210715.3801857-1-willy@infradead.org>
- <20211216210715.3801857-16-willy@infradead.org>
+        Thu, 16 Dec 2021 16:44:32 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F6DC061B38
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 13:43:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=cw4xTspNzk37jZto/nd6zWgK67TtjV1uKtv91TG1+gg=; b=qQ9mC0ZF2w3cc3B2vjjeCGT3cC
+        CdBjjxhZaIGd/sajCsQRMu8ordDXZB8xfv43n1pyyL1FOfJP/le2wy5UtYDDuGo/+TsJCvQrLUnJ5
+        OEiPO5cots/k3x6XcFXrVi+AAlhjD1JWbxHR5cCxQvGc5g3/jcsuQORu+nfeXiEl5LRkZqyJieKdQ
+        q+IVXabNKzZiDx2SwLXu8ovD9nmOfU5+v0ogxQ8N+lEB+mhvxLOiYk/upPE/DDsUBZ4UJLbMMWPlF
+        KdUAc4/ZhvorBEKBHyA00/DevpCHTE/h/tE0fQBAyhMzhrdOzgvdGSJtqcfGL4TOaSrBlDn1I8PPi
+        GvKMGXMQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mxyX5-00Fz5o-Aj; Thu, 16 Dec 2021 21:43:23 +0000
+Date:   Thu, 16 Dec 2021 21:43:23 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [RFC] Add a 'tag' field to MAINTAINERS
+Message-ID: <Ybuy++k9sitvrem3@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211216210715.3801857-16-willy@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 09:07:05PM +0000, Matthew Wilcox (Oracle) wrote:
-> In the future, we want write_begin to know the entire length of the
-> write so that it can choose to allocate large folios.  Pass the full
-> length in from __iomap_zero_iter() and limit it where necessary.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+People find it hard to use the right tag when sending patches which
+affect a maintainer that they don't interact with often.  If we add
+a field to MAINTAINERS, perhaps a tool will be written some day that
+automatically adds it to patches.
 
-Seems reasonable,
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
---D
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0a1410d5a621..c6358fa58fed 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -81,6 +81,7 @@ Descriptions of section entries:
+ 	R: Designated reviewer: FullName <address@domain>
+ 	   These reviewers should be CCed on patches.
+ 	L: Mailing list that is relevant to this area
++	J: Prefix to use when sending a patch
+ 	W: Web-page with status/info
+ 	B: URI for where to file bugs. A web-page with detailed bug
+ 	   filing info, a direct bug tracker link, or a mailto: URI.
+@@ -2667,6 +2668,7 @@ F:	drivers/leds/leds-blinkm.c
+ BLOCK LAYER
+ M:	Jens Axboe <axboe@kernel.dk>
+ L:	linux-block@vger.kernel.org
++J:	block
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+ S:	Maintained
+ F:	block/
+@@ -14927,6 +14929,7 @@ M:	Pawel Osciak <pawel@osciak.com>
+ M:	Marek Szyprowski <m.szyprowski@samsung.com>
+ M:	Kyungmin Park <kyungmin.park@samsung.com>
+ L:	linux-media@vger.kernel.org
++J:	videobuf
+ S:	Maintained
+ F:	drivers/media/v4l2-core/videobuf2-*
+ F:	include/media/videobuf2-*
 
-> ---
->  fs/iomap/buffered-io.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
-> index 8d7a67655b60..b1ded5204d1c 100644
-> --- a/fs/iomap/buffered-io.c
-> +++ b/fs/iomap/buffered-io.c
-> @@ -619,6 +619,9 @@ static int iomap_write_begin(const struct iomap_iter *iter, loff_t pos,
->  	if (fatal_signal_pending(current))
->  		return -EINTR;
->  
-> +	if (!mapping_large_folio_support(iter->inode->i_mapping))
-> +		len = min_t(size_t, len, PAGE_SIZE - offset_in_page(pos));
-> +
->  	if (page_ops && page_ops->page_prepare) {
->  		status = page_ops->page_prepare(iter->inode, pos, len);
->  		if (status)
-> @@ -632,6 +635,8 @@ static int iomap_write_begin(const struct iomap_iter *iter, loff_t pos,
->  		goto out_no_page;
->  	}
->  	folio = page_folio(page);
-> +	if (pos + len > folio_pos(folio) + folio_size(folio))
-> +		len = folio_pos(folio) + folio_size(folio) - pos;
->  
->  	if (srcmap->type == IOMAP_INLINE)
->  		status = iomap_write_begin_inline(iter, page);
-> @@ -891,11 +896,13 @@ static s64 __iomap_zero_iter(struct iomap_iter *iter, loff_t pos, u64 length)
->  	struct page *page;
->  	int status;
->  	unsigned offset = offset_in_page(pos);
-> -	unsigned bytes = min_t(u64, PAGE_SIZE - offset, length);
-> +	unsigned bytes = min_t(u64, UINT_MAX, length);
->  
->  	status = iomap_write_begin(iter, pos, bytes, &page);
->  	if (status)
->  		return status;
-> +	if (bytes > PAGE_SIZE - offset)
-> +		bytes = PAGE_SIZE - offset;
->  
->  	zero_user(page, offset, bytes);
->  	mark_page_accessed(page);
-> -- 
-> 2.33.0
-> 

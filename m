@@ -2,99 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A51476C35
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C70C476C39
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbhLPIte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 03:49:34 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:54330 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229533AbhLPItd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 03:49:33 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowABHTlqA_bphQfc+Aw--.52062S2;
-        Thu, 16 Dec 2021 16:49:05 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] sfc: potential dereference of null pointer
-Date:   Thu, 16 Dec 2021 16:49:02 +0800
-Message-Id: <20211216084902.329009-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABHTlqA_bphQfc+Aw--.52062S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFWUAw17KFWxJr1xJF1rXrb_yoW8Cw1xpa
-        1xK347ur4ktw45Za4kCw4kZF9xJasxtFWxWrySk3yrZwn5AF15ZrsrtFW5ur4qyr4DWF12
-        yrWUZFsFyFs8JwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUeYLvDUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+        id S235034AbhLPIvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 03:51:55 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56616 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229533AbhLPIvz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 03:51:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AEBB3B82273;
+        Thu, 16 Dec 2021 08:51:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D6A2C36AE2;
+        Thu, 16 Dec 2021 08:51:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639644712;
+        bh=JPhSWycjfzHEYZAeL8Z+Ay7PDuPFKwvup/dAJX0d5FQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K0o94V/VyH+RZZ1Rh05/eX/2jfvpNpS6Pdsjk84V+ijmq2yaDcfOfK8gGw8gyjVVM
+         8A7MjMpdmGdkQUu9F4C5GfQVm5XwQvq661kcUIyV3ZsMv1cXNRx4zeQAY/+vcfdEc8
+         dSkNABV64mzpXiMX6+Q11jiDB1NX6c8wTvZM8vhnxFcTi/F3c1pJ370YWLOdJlEvnX
+         rSRDKPjayBPsp6uRUZWkoA06UK+2/yNzJa/huhSOC7mVp++9l4fQc3CkNYTYK4KJpg
+         bmvbTSA0eNdRGWqkRIcEv2JZNKZp3nzhfwkDfXajZXndE1SQtuL5gCDspqackP3fBR
+         hffer19QF4hGg==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mxmUQ-00CTDn-HD; Thu, 16 Dec 2021 08:51:50 +0000
+Date:   Thu, 16 Dec 2021 08:51:40 +0000
+Message-ID: <87tuf9vso3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        tglx@linutronix.de, p.zabel@pengutronix.de, linux@armlinux.org.uk,
+        broonie@kernel.org, arnd@arndb.de, stefan.wahren@i2se.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        wells.lu@sunplus.com
+Subject: Re: [PATCH v6 08/10] irqchip: Add Sunplus SP7021 interrupt controller driver
+In-Reply-To: <677ce3dd9b4650521968d6cb50999608b5136ddd.1639560427.git.qinjian@cqplus1.com>
+References: <cover.1639560427.git.qinjian@cqplus1.com>
+        <677ce3dd9b4650521968d6cb50999608b5136ddd.1639560427.git.qinjian@cqplus1.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: qinjian@cqplus1.com, robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de, p.zabel@pengutronix.de, linux@armlinux.org.uk, broonie@kernel.org, arnd@arndb.de, stefan.wahren@i2se.com, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, wells.lu@sunplus.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of kcalloc() needs to be checked.
-To avoid dereference of null pointer in case of the failure of alloc,
-such as efx_fini_rx_recycle_ring().
-Therefore, it should be better to change the definition of page_ptr_mask
-to signed int and then assign the page_ptr_mask to -1 when page_ring is
-NULL, in order to avoid the use in the loop in
-efx_fini_rx_recycle_ring().
+On Thu, 16 Dec 2021 07:08:10 +0000,
+Qin Jian <qinjian@cqplus1.com> wrote:
+> 
+> Add interrupt controller driver for Sunplus SP7021 SoC.
+> 
+> This is the interrupt controller in P-chip which collects all interrupt
+> sources in P-chip and routes them to parent interrupt controller in C-chip.
+> 
+> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> ---
+> Fix the comments from Marc.
 
-Fixes: 3d95b884392f ("sfc: move more rx code")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/net/ethernet/sfc/net_driver.h | 2 +-
- drivers/net/ethernet/sfc/rx_common.c  | 5 ++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+No, you didn't.
 
-diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
-index 9b4b25704271..beba3e0a6027 100644
---- a/drivers/net/ethernet/sfc/net_driver.h
-+++ b/drivers/net/ethernet/sfc/net_driver.h
-@@ -407,7 +407,7 @@ struct efx_rx_queue {
- 	unsigned int page_recycle_count;
- 	unsigned int page_recycle_failed;
- 	unsigned int page_recycle_full;
--	unsigned int page_ptr_mask;
-+	int page_ptr_mask;
- 	unsigned int max_fill;
- 	unsigned int fast_fill_trigger;
- 	unsigned int min_fill;
-diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
-index 68fc7d317693..d9d0a5805f1c 100644
---- a/drivers/net/ethernet/sfc/rx_common.c
-+++ b/drivers/net/ethernet/sfc/rx_common.c
-@@ -150,7 +150,10 @@ static void efx_init_rx_recycle_ring(struct efx_rx_queue *rx_queue)
- 					    efx->rx_bufs_per_page);
- 	rx_queue->page_ring = kcalloc(page_ring_size,
- 				      sizeof(*rx_queue->page_ring), GFP_KERNEL);
--	rx_queue->page_ptr_mask = page_ring_size - 1;
-+	if (!rx_queue->page_ring)
-+		rx_queue->page_ptr_mask = -1;
-+	else
-+		rx_queue->page_ptr_mask = page_ring_size - 1;
- }
- 
- static void efx_fini_rx_recycle_ring(struct efx_rx_queue *rx_queue)
+> +void sp_intc_set_ext(u32 hwirq, int ext_num)
+> +{
+> +	sp_intc_assign_bit(hwirq, REG_INTR_PRIORITY, !ext_num);
+> +}
+> +EXPORT_SYMBOL_GPL(sp_intc_set_ext);
+
+I already commented on this. In case it wasn't clear, this is a strong
+NAK to random low-level hacks like this.
+
+	M.
+
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.

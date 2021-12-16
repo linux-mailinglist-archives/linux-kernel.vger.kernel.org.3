@@ -2,111 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B05DB47718C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9465A477191
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 13:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235929AbhLPMXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 07:23:01 -0500
-Received: from mga05.intel.com ([192.55.52.43]:30906 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230214AbhLPMXA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:23:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639657380; x=1671193380;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DjLKCj5m+HM6AjP5ToVDgj+3YarUk3+o0Hd2+u3krQE=;
-  b=ccrRag6EyY3Zbu+nLm1WbNt4Dqejc/VSBtGYwtBYUS/fRuoIF2xXtiy7
-   aCzYOfs20V5j36ut98yapI0/2UARbMcrfnlg9jt3SrD/Ydio4UxTAkYCX
-   ncvxwaiWXzGWlTl+mPcpMOBMJZZ+ehKdSgLUGdX2+XkKzSmVTIXLLfXLU
-   +//txuLDp2vaeW2DxGDSokBoSFj97jMY/QhOCwkHP7AURDO/qna44wAQF
-   cQBZcU9NZnh977lJ+zu4hG9/jADn30lIhCi1q3IqOPSiphAKZBBvkCklQ
-   /mLbSbjcFv0Uqcrr/hUFFeSyug0nBgNXjkPSf02GX7a/4MnPJCz9U6Wwu
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="325755121"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="325755121"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:23:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="615130975"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 04:22:59 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxpmk-000374-82; Thu, 16 Dec 2021 12:22:58 +0000
-Date:   Thu, 16 Dec 2021 20:22:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream 73/152] arch/x86/kvm/vmx/main.c:25:14:
- error: lvalue required as left operand of assignment
-Message-ID: <202112162007.5fUQkqjb-lkp@intel.com>
+        id S235776AbhLPMXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 07:23:47 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:33858 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229470AbhLPMXq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 07:23:46 -0500
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JFB992pRrzcbvh;
+        Thu, 16 Dec 2021 20:23:25 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 16 Dec 2021 20:23:43 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 16 Dec 2021 20:23:42 +0800
+Subject: Re: [PATCH v17 03/10] x86: kdump: use macro CRASH_ADDR_LOW_MAX in
+ functions reserve_crashkernel()
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Baoquan He <bhe@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
+        Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>
+References: <20211210065533.2023-1-thunder.leizhen@huawei.com>
+ <20211210065533.2023-4-thunder.leizhen@huawei.com> <YbntdtQo2jfbO4cO@zn.tnic>
+ <20211216011040.GG3023@MiWiFi-R3L-srv>
+ <9513d74c-d4c7-babd-f823-8999e195d96d@huawei.com> <YbseAX6X1VHUF12f@zn.tnic>
+ <35810a61-604e-9b90-2a7f-cfca6ae042ac@huawei.com>
+Message-ID: <20d765ff-59bb-7bb3-df06-9f02eada3cb0@huawei.com>
+Date:   Thu, 16 Dec 2021 20:23:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <35810a61-604e-9b90-2a7f-cfca6ae042ac@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream
-head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
-commit: 3545bcde2d72e4b5b5f16571788aac0ddb5f49a5 [73/152] KVM: TDX: Add KVM TDX system-wide initialization and teardown
-config: i386-randconfig-m021-20211216 (https://download.01.org/0day-ci/archive/20211216/202112162007.5fUQkqjb-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/3545bcde2d72e4b5b5f16571788aac0ddb5f49a5
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream
-        git checkout 3545bcde2d72e4b5b5f16571788aac0ddb5f49a5
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/x86/kvm/vmx/main.c: In function 'vt_hardware_setup':
->> arch/x86/kvm/vmx/main.c:25:14: error: lvalue required as left operand of assignment
-      25 |   enable_tdx = false;
-         |              ^
---
-   arch/x86/kvm/vmx/tdx_stubs.c:4:13: error: no previous prototype for 'tdx_pre_kvm_init' [-Werror=missing-prototypes]
-       4 | void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
-         |             ^~~~~~~~~~~~~~~~
->> arch/x86/kvm/vmx/tdx_stubs.c:6:12: error: no previous prototype for 'tdx_hardware_setup' [-Werror=missing-prototypes]
-       6 | int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
-         |            ^~~~~~~~~~~~~~~~~~
->> arch/x86/kvm/vmx/tdx_stubs.c:7:6: error: no previous prototype for 'tdx_hardware_enable' [-Werror=missing-prototypes]
-       7 | void tdx_hardware_enable(void) {}
-         |      ^~~~~~~~~~~~~~~~~~~
->> arch/x86/kvm/vmx/tdx_stubs.c:8:6: error: no previous prototype for 'tdx_hardware_disable' [-Werror=missing-prototypes]
-       8 | void tdx_hardware_disable(void) {}
-         |      ^~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
 
 
-vim +25 arch/x86/kvm/vmx/main.c
+On 2021/12/16 20:08, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2021/12/16 19:07, Borislav Petkov wrote:
+>> On Thu, Dec 16, 2021 at 10:46:12AM +0800, Leizhen (ThunderTown) wrote:
+>>> The original value (1ULL << 32) is inaccurate
+>>
+>> I keep asking *why*?
+>>
+>>> and it enlarged the CRASH_ADDR_LOW upper limit.
+>>
+>> $ git grep -E "CRASH_ADDR_LOW\W"
+>> $
+>>
+>> I have no clue what you mean here.
+> 
+> #ifdef CONFIG_X86_32
+> # define CRASH_ADDR_LOW_MAX     SZ_512M
+> # define CRASH_ADDR_HIGH_MAX    SZ_512M
+> #endif
+> 
+> 		if (!high)
+> (1)                     crash_base = memblock_phys_alloc_range(crash_size,
+>                                                 CRASH_ALIGN, CRASH_ALIGN,
+>                                                 CRASH_ADDR_LOW_MAX);
+>                 if (!crash_base)
+> (2)                     crash_base = memblock_phys_alloc_range(crash_size,
+>                                                 CRASH_ALIGN, CRASH_ALIGN,
+>                                                 CRASH_ADDR_HIGH_MAX);
+> 
+> -	if (crash_base >= (1ULL << 32) && reserve_crashkernel_low())
+> +(3)	if (crash_base >= CRASH_ADDR_LOW_MAX && reserve_crashkernel_low())
+> 
+> If the memory of 'crash_base' is successfully allocated at (1), because the last
+> parameter CRASH_ADDR_LOW_MAX is the upper bound, so we can sure that
+> "crash_base < CRASH_ADDR_LOW_MAX". So that, reserve_crashkernel_low() will not be
+> invoked at (3). That's why I said (1ULL << 32) is inaccurate and enlarge the CRASH_ADDR_LOW
+> upper limit.
+> 
+> If the memory of 'crash_base' is successfully allocated at (2), you see,
+> CRASH_ADDR_HIGH_MAX = CRASH_ADDR_LOW_MAX = SZ_512M, the same as (1). In fact,
+> "crashkernel=high," may not be recommended on X86_32.
+> 
+> Is it possible that (CRASH_ADDR_HIGH_MAX >= 4G) and (CRASH_ADDR_LOW_MAX < 4G)?
+> In this case, the memory allocated at (2) maybe over 4G. But why shouldn't
+> CRASH_ADDR_LOW_MAX be equal to 4G at this point?
 
-    15	
-    16	static __init int vt_hardware_setup(void)
-    17	{
-    18		int ret;
-    19	
-    20		ret = vmx_hardware_setup();
-    21		if (ret)
-    22			return ret;
-    23	
-    24		if (enable_tdx && tdx_hardware_setup(&vt_x86_ops))
-  > 25			enable_tdx = false;
-    26		return 0;
-    27	}
-    28	
+We divide two memory areas: low memory area and high memory area. The doc told us:
+at least 256MB memory should be reserved at low memory area. So that if
+"crash_base >= CRASH_ADDR_LOW_MAX" is true at (3), that means we have not reserved
+any memory at low memory area, so we should call reserve_crashkernel_low().
+The low memory area is not equivalent to <=4G, I think. So replace (1ULL << 32) with
+CRASH_ADDR_LOW_MAX is logically correct.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> 
+>>
+>>> This is because when the memory is allocated from the low end, the
+>>> address cannot exceed CRASH_ADDR_LOW_MAX, see "if (!high)" branch.
+>>
+>>> If
+>>> the memory is allocated from the high end, 'crash_base' is greater than or
+>>> equal to (1ULL << 32), and naturally, it is greater than CRASH_ADDR_LOW_MAX.
+>>>
+>>> I think I should update the description, thanks.
+>>
+>> I think you should explain why is (1ULL << 32) wrong.
+>>
+>> It came from:
+>>
+>>   eb6db83d1059 ("x86/setup: Do not reserve crashkernel high memory if low reservation failed")
+>>
+>> which simply frees the high memory portion when the low reservation
+>> fails. And the test for that is, is crash base > 4G. So that makes
+>> perfect sense to me.
+>>
+>> So your change is a NOP on 64-bit and it is a NOP on 32-bit by virtue of
+>> the _low() variant always returning 0 on 32-bit.
+>>

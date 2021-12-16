@@ -2,169 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 952D0476F4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE8A476F50
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236309AbhLPK5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:57:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55139 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230379AbhLPK5E (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:57:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639652223;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MC2gvHGYmh9g6Raca53bij6uBB+XqUqBeIAACH6kGiw=;
-        b=K0tlO4kHiCTrYj/Jj6x0sLl4ETeFdI3vXUJztlbQty4xTeoEhL72Xaf0ihSeHarbOnrrMs
-        9AXHj/JJdb/Jwg3T1lLNuBrkkVUOzCt/g8LhNMM0JDsMkJnsElHeLebqaiwkXqrZssOzRe
-        n5HJVUqyH0HRvt4SeMLywWKJPVLY/Po=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-PEDkX0yLPw-1olOYo4HO7w-1; Thu, 16 Dec 2021 05:57:02 -0500
-X-MC-Unique: PEDkX0yLPw-1olOYo4HO7w-1
-Received: by mail-wr1-f70.google.com with SMTP id j26-20020adfb31a000000b001a2356afd4fso884880wrd.21
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:57:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=MC2gvHGYmh9g6Raca53bij6uBB+XqUqBeIAACH6kGiw=;
-        b=KSGuw814CXRs5kEjIJbmZHGRHQrtXRvZJlaLCUFbx2xNo4hNQMchYdrakOQbg8ZHU3
-         Uhk3Z8R7PfmoBhYLUHLLwb/G/TyMEezjoYNS3mAX9B/5U+SUqGGVrn1fTQN+NBzaftRs
-         XpX02dcuvrb0yuD9J8U7mfhhZEgCrYGkXQEVDybs8ACtlwCru8OCEjHWnEjVcUFpjlT0
-         +AyOErifVc2+kq2SSSs9pTFUwVBxxzlbEoPSCEvisB5b0lnMkcLhyxKDg3EI0RwEen93
-         nzA+IeTXadaQmMGWrL9qMJaNeT5bUfuYjD2uszKvLnxvHXxNyIIWJGg3kid8iepuAEK3
-         yl2A==
-X-Gm-Message-State: AOAM532aBrowwvBQ6ji4jbs4ylNaiMHoheHRul7v9X0ue1e/0TmzVnyJ
-        bOb9jU+DSlrfmren0c4tdfloOeIwapcLQ0UUdbaYvdcbOmCP1w6+XRfgclbu/+eBz8dGCTPCuCY
-        MclNLhG68t7eOtexZrFcTv55/
-X-Received: by 2002:a1c:f60a:: with SMTP id w10mr4356541wmc.53.1639652221412;
-        Thu, 16 Dec 2021 02:57:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxDhJG49j5IOXlecqEpDnxZnmchZDhLcRCk8gk+wn9LsO6KsDIg1HPa3zDdFSpqHP48eaZL7A==
-X-Received: by 2002:a1c:f60a:: with SMTP id w10mr4356526wmc.53.1639652221231;
-        Thu, 16 Dec 2021 02:57:01 -0800 (PST)
-Received: from [192.168.3.132] (p4ff23dcd.dip0.t-ipconnect.de. [79.242.61.205])
-        by smtp.gmail.com with ESMTPSA id g198sm5057299wme.23.2021.12.16.02.57.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 02:57:00 -0800 (PST)
-Message-ID: <7d9b7e5f-a6c0-2079-90e7-c02aaeb1f4c0@redhat.com>
-Date:   Thu, 16 Dec 2021 11:56:59 +0100
+        id S236319AbhLPK7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:59:34 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:58942 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229621AbhLPK7d (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 05:59:33 -0500
+Received: from [10.180.13.92] (unknown [10.180.13.92])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx7NwAHLthrWkBAA--.5917S2;
+        Thu, 16 Dec 2021 18:59:13 +0800 (CST)
+Subject: Re: [PATCH v1 1/2] HID: usbhid: enable remote wakeup function for
+ usbhid device
+To:     Oliver Neukum <oneukum@suse.com>, gregkh@linuxfoundation.org,
+        Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        mathias.nyman@linux.intel.com, stern@rowland.harvard.edu,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        mathias.nyman@linux.intel.com, stern@rowland.harvard.edu,
+        rajatja@google.com, chris.chiu@canonical.com,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1638956391-20149-1-git-send-email-zhuyinbo@loongson.cn>
+ <caf93951-4c63-d0f1-e3f4-d0d49dec6a47@suse.com>
+ <d2e4a97a-b89b-eaf4-5aaf-89af22227746@loongson.cn>
+ <654e90fb-2f04-1f87-f56c-792757e140a0@suse.com>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     rajatja@google.com, chris.chiu@canonical.com,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhuyinbo@loongson.cn
+Message-ID: <8ed3dbee-c51c-db54-37b7-182d5a75fff8@loongson.cn>
+Date:   Thu, 16 Dec 2021 18:59:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 1/2] mm: cma: fix allocation may fail sometimes
+In-Reply-To: <654e90fb-2f04-1f87-f56c-792757e140a0@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dongas86@gmail.com" <dongas86@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Jason Liu <jason.hui.liu@nxp.com>, Leo Li <leoyang.li@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "lecopzer.chen@mediatek.com" <lecopzer.chen@mediatek.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Shijie Qin <shijie.qin@nxp.com>
-References: <20211215080242.3034856-1-aisheng.dong@nxp.com>
- <20211215080242.3034856-2-aisheng.dong@nxp.com>
- <783f64f5-3a55-6c42-a740-19a12c2c7321@redhat.com>
- <DB9PR04MB84777DDC63F5D2D995F7F5E980779@DB9PR04MB8477.eurprd04.prod.outlook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <DB9PR04MB84777DDC63F5D2D995F7F5E980779@DB9PR04MB8477.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dx7NwAHLthrWkBAA--.5917S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFWDXr1rXFykAFykWw13XFb_yoW8CF1rpw
+        40yw109r1DZryrKrZFkwn7Jw1Yyr4vyanxCF95ArykJ3y7Aa409rs0qrZ8uanrZrs3Cr4Y
+        q3y2g348u3WqyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9C14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
+        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+        xVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
+        cIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.12.21 03:54, Aisheng Dong wrote:
->> From: David Hildenbrand <david@redhat.com>
->> Sent: Wednesday, December 15, 2021 8:31 PM
->>
->> On 15.12.21 09:02, Dong Aisheng wrote:
->>> We met dma_alloc_coherent() fail sometimes when doing 8 VPU decoder
->>> test in parallel on a MX6Q SDB board.
->>>
->>> Error log:
->>> cma: cma_alloc: linux,cma: alloc failed, req-size: 148 pages, ret: -16
->>> cma: number of available pages:
->>>
->> 3@125+20@172+12@236+4@380+32@736+17@2287+23@2473+20@3607
->> 6+99@40477+108
->>> @40852+44@41108+20@41196+108@41364+108@41620+
->>>
->> 108@42900+108@43156+483@44061+1763@45341+1440@47712+20@49
->> 324+20@49388+
->>> 5076@49452+2304@55040+35@58141+20@58220+20@58284+
->>> 7188@58348+84@66220+7276@66452+227@74525+6371@75549=>
->> 33161 free of
->>> 81920 total pages
->>>
->>> When issue happened, we saw there were still 33161 pages (129M) free
->>> CMA memory and a lot available free slots for 148 pages in CMA bitmap
->>> that we want to allocate.
->>>
->>> If dumping memory info, we found that there was also ~342M normal
->>> memory, but only 1352K CMA memory left in buddy system while a lot of
->>> pageblocks were isolated.
->>>
->>> Memory info log:
->>> Normal free:351096kB min:30000kB low:37500kB high:45000kB
->> reserved_highatomic:0KB
->>> 	    active_anon:98060kB inactive_anon:98948kB active_file:60864kB
->> inactive_file:31776kB
->>> 	    unevictable:0kB writepending:0kB present:1048576kB
->> managed:1018328kB mlocked:0kB
->>> 	    bounce:0kB free_pcp:220kB local_pcp:192kB free_cma:1352kB
->>> lowmem_reserve[]: 0 0 0
->>> Normal: 78*4kB (UECI) 1772*8kB (UMECI) 1335*16kB (UMECI) 360*32kB
->> (UMECI) 65*64kB (UMCI)
->>> 	36*128kB (UMECI) 16*256kB (UMCI) 6*512kB (EI) 8*1024kB (UEI)
->> 4*2048kB (MI) 8*4096kB (EI)
->>> 	8*8192kB (UI) 3*16384kB (EI) 8*32768kB (M) = 489288kB
->>>
->>> The root cause of this issue is that since commit a4efc174b382
->>> ("mm/cma.c: remove redundant cma_mutex lock"), CMA supports
->> concurrent
->>> memory allocation. It's possible that the pageblock process A try to
->>> alloc has already been isolated by the allocation of process B during
->>> memory migration.
->>>
->>> When there're multi process allocating CMA memory in parallel, it's
->>> likely that other the remain pageblocks may have also been isolated,
->>> then CMA alloc fail finally during the first round of scanning of the
->>> whole available CMA bitmap.
->>
->> I already raised in different context that we should most probably convert that
->> -EBUSY to -EAGAIN --  to differentiate an actual migration problem from a
->> simple "concurrent allocations that target the same MAX_ORDER -1 range".
->>
+
+
+在 2021/12/14 下午10:21, Oliver Neukum 写道:
 > 
-> Thanks for the info. Is there a patch under review?
+> On 10.12.21 10:50, zhuyinbo wrote:
+> Hi,
+>> system ask that must it must be accped a acpi lid open event then
+>> system will always into resume state for laptop, otherwise, eventhough
+>> that system be wakeuped by other event then system will continue into
+>> suspend.
+> Lid events are necesarily for the whole system.
+>>
+>> and for laptop usb wakeup that as general ask bios to enable usb
+>> wakeup then if need do more things to enable usb wakeup I think this
+>> usb wakeup function isn't friendly and inconveient, so enable it by
+>> default.
+>> after add this patch, if want to use usb wakeup function it only need
+>> enable bios configure it think it is appropriate.
+>>
+> No. If you wish your laptop to be resumed by USB events, that is one thing.
+> You can alter the system settings. That must work. But it is a different
+> issue
+Hi Oliver,
 
-No, and I was too busy for now to send it out.
+if you only talk about wakeup source you can think that usb-wakeup 
+source and acpi-lid wakeup source was different things. but if you talk 
+about laptop and distinguish lid and other event and you shoud know the 
+cannotation why system still continue sleep when lid closed then system 
+by other event wakeup. if you need test usb-wakeup for laptop and that 
+lid shouldn't be closed.
+> 
+> from the default.
+> 
+> In general any HID device must have wakeup capability to be usable for
+> selective suspend. You cannot draw conclusions from that.
+you still can has wakeup capability, but it should be keep enabled by 
+default. because the hid device should be convenient for human, if you 
+don't think so and I think HID definition is ridiculous.
 
-> BTW i wonder that probably makes no much difference for my patch since we may
-> prefer retry the next pageblock rather than busy waiting on the same isolated pageblock.
-
-Makes sense. BUT as of now we isolate not only a pageblock but a
-MAX_ORDER -1 page (e.g., 2 pageblocks on x86-64 (!) ). So you'll have
-the same issue in that case.
-
--- 
-Thanks,
-
-David / dhildenb
+In addition, I had said that laptop usb wakeup was disabled in system 
+bios by default and if user want enable usb wakeup that was only by 
+configure bios and doesn't need enable wakeup node if my patch was applied
+> 
+>      Regards
+>          Oliver
+> 
 

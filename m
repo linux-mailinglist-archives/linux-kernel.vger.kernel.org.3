@@ -2,171 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB30476F08
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF78476F12
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236176AbhLPKle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:41:34 -0500
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:38057 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbhLPKlc (ORCPT
+        id S236205AbhLPKoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:44:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48253 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236196AbhLPKoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:41:32 -0500
-Received: (Authenticated sender: alex@ghiti.fr)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 4B27D20003;
-        Thu, 16 Dec 2021 10:41:26 +0000 (UTC)
-Message-ID: <74995c52-dfd4-d07e-cc0f-1a934be9cc16@ghiti.fr>
-Date:   Thu, 16 Dec 2021 11:41:25 +0100
+        Thu, 16 Dec 2021 05:44:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639651452;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8DEb8MqXT+vRwhg8h6rjl02uHMel/Pw3PdEFDjnoCfk=;
+        b=jWeLnagDj3ZdmOep/euOvh2ZyNPT9c0rhym77OOUQ0BqR14wt9pkZAt+Iey4EZDz7vOkMO
+        lXJyRoDhHCVEYO4slu3tHzx2mQWdnn2SgdLV/azdXHZalESGUfaeP0S1fBtJQjHZk8Z19c
+        yN2HHo/wEJj9dff9O1rbH+AWfZ1P+IA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-150-E4OY7zS3OyCxhRAdD-s6cw-1; Thu, 16 Dec 2021 05:44:09 -0500
+X-MC-Unique: E4OY7zS3OyCxhRAdD-s6cw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A27C41006AA1;
+        Thu, 16 Dec 2021 10:44:07 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 42C1592A73;
+        Thu, 16 Dec 2021 10:44:07 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Harald Freudenberger <freude@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>, linux-s390@vger.kernel.org,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: Re: [RFC PATCH] s390: vfio-ap: Register the vfio_ap module for the
+ "ap" parent bus
+In-Reply-To: <80cf2be3-9b7e-896d-afc6-376b8f7f9414@linux.ibm.com>
+Organization: Red Hat GmbH
+References: <20211201141110.94636-1-thuth@redhat.com>
+ <8512bb0a-a34a-09b0-65f3-781f3d092364@linux.ibm.com>
+ <80cf2be3-9b7e-896d-afc6-376b8f7f9414@linux.ibm.com>
+User-Agent: Notmuch/0.34 (https://notmuchmail.org)
+Date:   Thu, 16 Dec 2021 11:44:04 +0100
+Message-ID: <87o85grfrf.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 2/5] riscv: mm: init: try best to use
- IS_ENABLED(CONFIG_64BIT) instead of #ifdef
-Content-Language: en-US
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211206150353.731-1-jszhang@kernel.org>
- <20211206150353.731-3-jszhang@kernel.org>
-From:   Alexandre ghiti <alex@ghiti.fr>
-In-Reply-To: <20211206150353.731-3-jszhang@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Jisheng,
+On Thu, Dec 16 2021, Harald Freudenberger <freude@linux.ibm.com> wrote:
 
-On 12/6/21 16:03, Jisheng Zhang wrote:
-> Try our best to replace the conditional compilation using
-> "#ifdef CONFIG_64BIT" by a check for "IS_ENABLED(CONFIG_64BIT)", to
-> simplify the code and to increase compile coverage.
->
-> Now we can also remove the __maybe_unused used in max_mapped_addr
-> declaration.
->
-> We also remove the BUG_ON check of mapping the last 4K bytes of the
-> addressable memory since this is always true for every kernel actually.
+> On 13.12.21 16:44, Harald Freudenberger wrote:
+>> On 01.12.21 15:11, Thomas Huth wrote:
+>>> The crypto devices that we can use with the vfio_ap module are sitting
+>>> on the "ap" bus, not on the "vfio_ap" bus that the module defines
+>>> itself. With this change, the vfio_ap module now gets automatically
+>>> loaded if a supported crypto adapter is available in the host.
+>>>
+>>> Signed-off-by: Thomas Huth <thuth@redhat.com>
+>>> ---
+>>>  Note: Marked as "RFC" since I'm not 100% sure about it ...
+>>>        please review carefully!
+>>>
+>>>  drivers/s390/crypto/vfio_ap_drv.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vf=
+io_ap_drv.c
+>>> index 4d2556bc7fe5..5580e40608a4 100644
+>>> --- a/drivers/s390/crypto/vfio_ap_drv.c
+>>> +++ b/drivers/s390/crypto/vfio_ap_drv.c
+>>> @@ -39,7 +39,7 @@ static struct ap_device_id ap_queue_ids[] =3D {
+>>>  	{ /* end of sibling */ },
+>>>  };
+>>>=20=20
+>>> -MODULE_DEVICE_TABLE(vfio_ap, ap_queue_ids);
+>>> +MODULE_DEVICE_TABLE(ap, ap_queue_ids);
+>>>=20=20
+>>>  /**
+>>>   * vfio_ap_queue_dev_probe:
+>> I had a chance to check this now.
+>> First I have to apologize about the dispute with vfio devices appearing =
+on the ap bus.
+>> That's not the case with this patch. As Connie states the MODULE_DEVICE_=
+TABLE() does not
+>> change the parent of a device and vfio_ap_drv is a driver for ap devices=
+ and thus
+>> belongs to the ap bus anyway.
+>> So what's left is that with this change the vfio_ap kernel module is aut=
+omatically loaded
+>> when an ap device type 10-13 is recognized by the ap bus. So the intenti=
+on of the patch
+>> is fulfilled.
+>> Yet another kernel module which may occupy memory but will never get use=
+d by most customers.
+>> This may not be a problem but I had a glance at the list of kernel modul=
+es loaded on my
+>> LPAR with and without the patch and the difference is:
+>> ...
+>> kvm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 512000=C2=A0 1 vfio_ap
+>> vfio_ap=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 28672=C2=A0 0
+>> ...
+>> So the vfio_ap module has a dependency to the biggest kernel module ever=
+ - kvm.
+>> Do I need to say something more?
+>>
+>> If this dependency is removed then I would not hesitate to accept this p=
+atch. However
+>> this is up to Tony as he is the maintainer of the vfio ap device driver.
+>>
+>>
+> I need to throw in another point: with building initrd with dracut the ke=
+rnel module
+> dependencies are evaluated. As of now this means that the zcrypt device d=
+river
+> zoo is required in case you need to have crypto support for an encrypted =
+root or
+> data disk at boot time. With vfio ap driver dependency enforced as requir=
+ement
+> from the AP bus there also comes the dependency to the kvm kernel module.
+> So the kvm kernel module needs to be part of the initrd now. I am not sur=
+e if this
+> is desired.
 
+Again, this simply means that the vfio-ap device needs to be
+blacklisted. Not sure if building the initrd is also honouring the stuff
+mentioned in man 5 modprobe.d, I'm not an expert there. But that is
+nothing that the kernel should decide.
 
-That could have been a different patch as this does not fit the patch 
-subject, but anyway:
-
-Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
-
-Thanks,
-
-Alex
-
-
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->   arch/riscv/mm/init.c | 43 ++++++++++++++++---------------------------
->   1 file changed, 16 insertions(+), 27 deletions(-)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 745f26a3b02e..4edf5600bea9 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -102,10 +102,9 @@ static void __init print_vm_layout(void)
->   		  (unsigned long)VMALLOC_END);
->   	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
->   		  (unsigned long)high_memory);
-> -#ifdef CONFIG_64BIT
-> -	print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
-> -		  (unsigned long)ADDRESS_SPACE_END);
-> -#endif
-> +	if (IS_ENABLED(CONFIG_64BIT))
-> +		print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
-> +			  (unsigned long)ADDRESS_SPACE_END);
->   }
->   #else
->   static void print_vm_layout(void) { }
-> @@ -163,7 +162,7 @@ static void __init setup_bootmem(void)
->   {
->   	phys_addr_t vmlinux_end = __pa_symbol(&_end);
->   	phys_addr_t vmlinux_start = __pa_symbol(&_start);
-> -	phys_addr_t __maybe_unused max_mapped_addr;
-> +	phys_addr_t max_mapped_addr;
->   	phys_addr_t phys_ram_end;
->   
->   #ifdef CONFIG_XIP_KERNEL
-> @@ -172,17 +171,16 @@ static void __init setup_bootmem(void)
->   
->   	memblock_enforce_memory_limit(memory_limit);
->   
-> -	/*
-> -	 * Reserve from the start of the kernel to the end of the kernel
-> -	 */
-> -#if defined(CONFIG_64BIT) && defined(CONFIG_STRICT_KERNEL_RWX)
->   	/*
->   	 * Make sure we align the reservation on PMD_SIZE since we will
->   	 * map the kernel in the linear mapping as read-only: we do not want
->   	 * any allocation to happen between _end and the next pmd aligned page.
->   	 */
-> -	vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
-> -#endif
-> +	if (IS_ENABLED(CONFIG_64BIT) && IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
-> +		vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
-> +	/*
-> +	 * Reserve from the start of the kernel to the end of the kernel
-> +	 */
->   	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
->   
->   
-> @@ -190,7 +188,6 @@ static void __init setup_bootmem(void)
->   #ifndef CONFIG_XIP_KERNEL
->   	phys_ram_base = memblock_start_of_DRAM();
->   #endif
-> -#ifndef CONFIG_64BIT
->   	/*
->   	 * memblock allocator is not aware of the fact that last 4K bytes of
->   	 * the addressable memory can not be mapped because of IS_ERR_VALUE
-> @@ -200,10 +197,11 @@ static void __init setup_bootmem(void)
->   	 * address space is occupied by the kernel mapping then this check must
->   	 * be done as soon as the kernel mapping base address is determined.
->   	 */
-> -	max_mapped_addr = __pa(~(ulong)0);
-> -	if (max_mapped_addr == (phys_ram_end - 1))
-> -		memblock_set_current_limit(max_mapped_addr - 4096);
-> -#endif
-> +	if (!IS_ENABLED(CONFIG_64BIT)) {
-> +		max_mapped_addr = __pa(~(ulong)0);
-> +		if (max_mapped_addr == (phys_ram_end - 1))
-> +			memblock_set_current_limit(max_mapped_addr - 4096);
-> +	}
->   
->   	min_low_pfn = PFN_UP(phys_ram_base);
->   	max_low_pfn = max_pfn = PFN_DOWN(phys_ram_end);
-> @@ -616,14 +614,6 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->   	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
->   	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
->   
-> -#ifdef CONFIG_64BIT
-> -	/*
-> -	 * The last 4K bytes of the addressable memory can not be mapped because
-> -	 * of IS_ERR_VALUE macro.
-> -	 */
-> -	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
-> -#endif
-> -
->   	pt_ops.alloc_pte = alloc_pte_early;
->   	pt_ops.get_pte_virt = get_pte_virt_early;
->   #ifndef __PAGETABLE_PMD_FOLDED
-> @@ -735,10 +725,9 @@ static void __init setup_vm_final(void)
->   		}
->   	}
->   
-> -#ifdef CONFIG_64BIT
->   	/* Map the kernel */
-> -	create_kernel_page_table(swapper_pg_dir, false);
-> -#endif
-> +	if (IS_ENABLED(CONFIG_64BIT))
-> +		create_kernel_page_table(swapper_pg_dir, false);
->   
->   	/* Clear fixmap PTE and PMD mappings */
->   	clear_fixmap(FIX_PTE);

@@ -2,99 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23739477C00
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9465477C05
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238106AbhLPSxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:53:19 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:38002 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234132AbhLPSxS (ORCPT
+        id S239073AbhLPSyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:54:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233598AbhLPSyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:53:18 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BGIqwr1038969;
-        Thu, 16 Dec 2021 12:52:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639680778;
-        bh=Kt++jYH6T4k4HcW+Vzc/u+Ene+izPR3bx5dnQKR0r5Y=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=meBizeFsaCrRe83Rfm+VjfYFCgklCnXlb9wfP9lmJQfAIx6ABBq663/69oI3AesxO
-         e61R5TWihCimtgxl1s5lUO0d90AfTGyDNdBsREdUrz8kFt+H1dMSWR0mBnnq4UdgKj
-         X1CU2Bb12ZPxdErdXR1Sf8tbr1tgaLi0Dnw9qQDE=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BGIqwe5096585
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 16 Dec 2021 12:52:58 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 16
- Dec 2021 12:52:57 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 16 Dec 2021 12:52:57 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BGIquSl115696;
-        Thu, 16 Dec 2021 12:52:57 -0600
-Date:   Fri, 17 Dec 2021 00:22:56 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] mtd: spi-nor: micron-st: make mt25ql02g/mt25qu02g
- match more specific, add 4B opcodes
-Message-ID: <20211216185254.pt3quvb4wkzou6wh@ti.com>
-References: <a69181ccf225424a8bd11349aad0df7face9715e.1633607826.git.matthias.schiffer@ew.tq-group.com>
+        Thu, 16 Dec 2021 13:54:20 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5DAC061574;
+        Thu, 16 Dec 2021 10:54:19 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFLrB1KPbz4xbd;
+        Fri, 17 Dec 2021 05:54:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639680858;
+        bh=rLK4SY40uEkvmL/uH6UGQ2pLfiEP4TAdDBOu9EJHYgo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GAMpsRxlze5WkPWtOutexbQya4q0PKWw/V5z2f1H8j8ehzXTqUjN+XbdPZjzsG1rS
+         f2GQNDd9OP5TQP5eju0ZDK+ruKOxuFxgzhC3pVrNKhlvNQslU+ph6UdJyvuyN7zCOF
+         uxJLF69y7XhNqa4Rah4ljSiamTyilpduuxgvHX6z6wkbjYuUjlo9L4NE1nJVKmLCnp
+         jVTQVpjsrfhAlIQXK/SS7iRFubUvcvnyAZgSsCXZJQp0cKlD+v+f7aR5yPlKaItAtJ
+         QrkUBpbqOeYF01FL0tPN2PtKQ27VQ23W/b3GHyk0YUfapgh/Yp2Qd4vVp1D9yss5Ff
+         Ah7E506QXbAxg==
+Date:   Fri, 17 Dec 2021 05:54:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the kvms390 tree
+Message-ID: <20211217055417.49872d28@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <a69181ccf225424a8bd11349aad0df7face9715e.1633607826.git.matthias.schiffer@ew.tq-group.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; boundary="Sig_/TgdSFJHLklbt7vqQE=jzBTe";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+--Sig_/TgdSFJHLklbt7vqQE=jzBTe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 07/10/21 02:08PM, Matthias Schiffer wrote:
-> Change the mt25ql02g/mt25qu02g entries to include SPI_NOR_4B_OPCODES. In
-> addition, the SPI_NOR_DUAL_READ flag is added to mt25ql02g; this seems
-> to have been an accidental omission, as mt25ql02g and mt25qu02g should
-> support the same features.
+Hi all,
 
-The way flags are specified are changed a bit. See [0]. Please re-roll 
-your patch to use the new flag types. If this flash supports SFDP you 
-should ideally just need to set the sfdp flag to true and the core 
-should take care of the rest. Test reports with the new changes would be 
-much appreciated :-)
+Commits
 
-> 
-> In addition, the entries are made more specific by matching on the mt25q
-> extended ID, like it is already done for the smaller n25q derivatives.
-> It is unclear whether n25q derivatives with 2Gbit exist that do not
-> support 4B opcodes (like it is the case for sizes up to 512MBit), so we
-> do not have a match for such variants anymore (as we wouldn't even know
-> how to name such hypothetical models).
+  697a708e3106 ("KVM: s390: gaccess: Cleanup access to guest pages")
+  7619a23b4788 ("KVM: s390: gaccess: Refactor access address range check")
+  782f8be3c167 ("KVM: s390: gaccess: Refactor gpa and length calculation")
 
-Sounds good to me.
+are missing a Signed-off-by from their committer.
 
-> 
-> The changes were tested with a mt25qu01g, which should support the same
-> features as the mt25ql02g/mt25qu02g.
-> 
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> ---
-> 
+--=20
+Cheers,
+Stephen Rothwell
 
-[0] https://patchwork.ozlabs.org/project/linux-mtd/list/?series=275622&state=%2A&archive=both
+--Sig_/TgdSFJHLklbt7vqQE=jzBTe
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG7i1kACgkQAVBC80lX
+0Gzu7Qf+KhAGIJocPFlEw9o88pefN6cFUUqgE8kek5sYXJFzsCG0ng+1XLWVg7HL
+2tvk8vZx44vo7QYjr/E1RM1OLkj/Taor3nkxznwPNSHOMSGgwxZdqS5Fl3rMyGk7
+8WRB0aWJpnF3V8BSjrN2gOixpGBpkX8s+0CvjBf9YZ0oT6yKVjZNTsLGHuS7gWLY
+iZiHooGmAczNZXF3V8hP8OrJD+TY3X0i0ogEfcP7yiIZemD9JiFk1TWL99NxOcMF
+BbUdV7TKQQXyCiOBa4+s7Lan2ZRAKOZgJVaCOF8rOWX918+F+RraXcsO8tDGZqQ3
+6K+qBFp0x98Fm2pJT1Uyhy+urRZqug==
+=GPCn
+-----END PGP SIGNATURE-----
+
+--Sig_/TgdSFJHLklbt7vqQE=jzBTe--

@@ -2,102 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9B6476D82
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E6F476D87
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 10:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235477AbhLPJei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 04:34:38 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:53466 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235443AbhLPJeh (ORCPT
+        id S235470AbhLPJiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 04:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232667AbhLPJip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:34:37 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639647275;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sdM5rwJ8tV2a2rlkyYIPTJmZdaZ06uAOCzzxfZokkLc=;
-        b=KHMaIHW1p4efob7oZloYA/FfyTfIKH0ZUsyv41I04+f6pnGhL/arvKnC5GldRMO4LYFnYY
-        y1/bwoeIl3rTPTlGwyqM7bZ/ABjTQk6e+zjTLxvFbsYhPBMwPR8cJTqALszR8a5QqcFAxp
-        m5Ap5soscNGtTi90wsK4htHzw3Kz9aDeisJS16/wb6LxjTIaFowPuUAQ/g5/goiWcvwAA2
-        BJMo5HCuFq6NT1HNiltYKJQ4EKSHltR7B8YnI2RKE4hn50B4m24G3T+5UaOxkh63fYecmz
-        x3aoOeCCmC4N/9cxteuBk1Nlru1wVTXtIPaCwhaclhErSSrzQI7DQAijZq6JDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639647275;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sdM5rwJ8tV2a2rlkyYIPTJmZdaZ06uAOCzzxfZokkLc=;
-        b=Mx+J3U37pylyHc/u43xVZojv3ZditZLDFgp6eah9dTzgHa/Hopb9EY418KsYnPMpvvrTYH
-        cvFm615v6W4XIcAQ==
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "quintela@redhat.com" <quintela@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Jing Liu <jing2.liu@linux.intel.com>,
-        "Zhong, Yang" <yang.zhong@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>
-Subject: RE: [patch 5/6] x86/fpu: Provide fpu_update_guest_xcr0/xfd()
-In-Reply-To: <BN9PR11MB5276E2165EB86520520D54FD8C779@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20211214022825.563892248@linutronix.de>
- <20211214024948.048572883@linutronix.de>
- <854480525e7f4f3baeba09ec6a864b80@intel.com> <87zgp3ry8i.ffs@tglx>
- <b3ac7ba45c984cf39783e33e0c25274d@intel.com> <87r1afrrjx.ffs@tglx>
- <87k0g7qa3t.fsf@secure.mitica> <87k0g7rkwj.ffs@tglx>
- <878rwm7tu8.fsf@secure.mitica>
- <afeba57f71f742b88aac3f01800086f9@intel.com> <878rwmrxgb.ffs@tglx>
- <a4fbf9f8-8876-f58c-d2b6-15add35bedd0@redhat.com>
- <BN9PR11MB5276E2165EB86520520D54FD8C779@BN9PR11MB5276.namprd11.prod.outlook.com>
-Date:   Thu, 16 Dec 2021 10:34:34 +0100
-Message-ID: <87fsqslwph.ffs@tglx>
+        Thu, 16 Dec 2021 04:38:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50181C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 01:38:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACE6761CF5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 09:38:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E02AC36AE4;
+        Thu, 16 Dec 2021 09:38:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639647524;
+        bh=6uDdUm7t8c9dr8lCSSGiV/upgQhtKF1tZAJg7RxaIGw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dfzaOZtlyFs0KE1rTqFkFQyMUNnq+g9DhLz9Wcax9qBV10ebeJ1QsHgK5oNSsja42
+         R7yyhkvBCBcEgxOjbYj2KbJx9Fi+r4h8i16s38NwSyj2M2pxdW30cfmM6GhlRy4pyC
+         6zzWNlM8fHln7JUoS+58lAkgylJkUuhhb8b8E3wSBmy4VU0mcRMP3lbxQPkeV7PLrN
+         /3qR6xIZNnINHFGJ2GGpl7sM4/dV8DG/T2DxY1gPERw5NM8DfSgxjkl+5nW3pH2YmC
+         oshxt9MXSGhwfpFhHzKgPyFszU+tcF1ruWdjBEgl6maVLN5SK7/FNCwSn1/rTOZ2ER
+         5k46mLUAZuZkQ==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH] habanalabs: fix endianness when reading cpld version
+Date:   Thu, 16 Dec 2021 11:38:39 +0200
+Message-Id: <20211216093839.1947031-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16 2021 at 01:04, Kevin Tian wrote:
->> From: Paolo Bonzini <paolo.bonzini@gmail.com> On Behalf Of Paolo Bonzini
->> Considering that in practice all Linux guests with AMX would have XFD
->> passthrough (because if there's no prctl, Linux keeps AMX disabled in
->> XFD), this removes the need to do all the #NM handling too.  Just make
->
-> #NM trap is for XFD_ERR thus still required.
->
->> XFD passthrough if it can ever be set to a nonzero value.  This costs an
->> RDMSR per vmexit even if neither the host nor the guest ever use AMX.
->
-> Well, we can still trap WRMSR(XFD) in the start and then disable interception
-> after the 1st trap.
+From: Ofir Bitton <obitton@habana.ai>
 
-If we go for buffer expansion at vcpu_create() or CPUID2 then I think
-you don't need a trap at all.
+Current sysfs implementation does not take endianness into
+consideration when dumping the cpld version.
 
-XFD_ERR:  Always 0 on the host. Guest state needs to be preserved on
-          VMEXIT and restored on VMENTER
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ drivers/misc/habanalabs/common/sysfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This can be done simply with the MSR entry/exit controls. No trap
-required neither for #NM for for XFD_ERR.
+diff --git a/drivers/misc/habanalabs/common/sysfs.c b/drivers/misc/habanalabs/common/sysfs.c
+index 2f6de734ce37..1af568e46f46 100644
+--- a/drivers/misc/habanalabs/common/sysfs.c
++++ b/drivers/misc/habanalabs/common/sysfs.c
+@@ -139,7 +139,7 @@ static ssize_t cpld_ver_show(struct device *dev, struct device_attribute *attr,
+ 	struct hl_device *hdev = dev_get_drvdata(dev);
+ 
+ 	return sprintf(buf, "0x%08x\n",
+-			hdev->asic_prop.cpucp_info.cpld_version);
++			le32_to_cpu(hdev->asic_prop.cpucp_info.cpld_version));
+ }
+ 
+ static ssize_t cpucp_kernel_ver_show(struct device *dev,
+-- 
+2.25.1
 
-VMENTER loads guest state. VMEXIT saves guest state and loads host state
-(0)
-
-XFD:     Always guest state
-
-So VMENTER does nothing and VMEXIT either saves guest state and the sync
-function uses the automatically saved value or you keep the sync
-function which does the rdmsrl() as is.
-
-Hmm?
-
-Thanks,
-
-        tglx

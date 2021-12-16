@@ -2,86 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B4E477B4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A835477B4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 19:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240561AbhLPSIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 13:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
+        id S240550AbhLPSKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 13:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbhLPSIb (ORCPT
+        with ESMTP id S231582AbhLPSKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 13:08:31 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA20C061574;
-        Thu, 16 Dec 2021 10:08:31 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id bk14so50409oib.7;
-        Thu, 16 Dec 2021 10:08:31 -0800 (PST)
+        Thu, 16 Dec 2021 13:10:46 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D73C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:10:46 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id p4so44679oia.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 10:10:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4kEk2jLX5JsaXaml6I3UCQ4HHgVw8B9AtP08glyOGfU=;
-        b=iDSPo33D2bBCAKu0XhgEf/A7HDsgQZ7+mD5iufpmn9WJYaD6fpLRvvmD9MTr6jESEA
-         RPwddOuud63ZlbsHcLxZaaWHVIc9t6/NoIV550c9DRXmEYkRoNo3oMNduMlg6zbIhxoo
-         Yj1WGyADJLpYBfss71h/xJS/nOPYPJHV+Zo8PL8PdMDGKnXlNrlbCZ7iRay+j7+L3ZMd
-         zRxpLVCORKXQo1hJUBg2ovQYqqC/ehXvDINxTDe2gLMMsrMryILhr/rr0d0o3xOSgiqF
-         q5lpVyi5F5U3el/lbWwAJGhiee/FAq9pDUtk+NGpl86UE1EARltGaiVgOR63kVRbzdpC
-         eLrQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YOWchjxbT8awDrzH+EQqczwYeehzrW37icFRbxVUkAQ=;
+        b=diXUSroxW+klhen5e0aokPbRc6MtELRydGsQVcg5QPpNB3jlbh0BFbgVOpUV1B2N2k
+         rsIl+sIaORXmHUJfDXR8IxDUBwlxj/sEUQFQRs7uQc3P2Ife/tqMsmwynTNzkAX8bmsh
+         DQxLlSI6nJBK211xfep8+kEqLaulBRXIjREtQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=4kEk2jLX5JsaXaml6I3UCQ4HHgVw8B9AtP08glyOGfU=;
-        b=uogE+oRAqnOwGtFDoe+8PT94DYBccAFR+1b4tA93U8WpII8Bs1Q4apJhwg/ttn96X1
-         Nnbog0pLqfDyGNJCz+KSu6TODR5ajsLIPfnReE85/86aapEiJcViUmX2tlyBugEGULXY
-         26NrLEtY7mmmXg36FeLW40A5ZGHKBEz113T7pvzXOUQT1o39JyQB+WpK8tHITXPsl4wr
-         A0Xp0KgEHqYyPWhAYdggoF1zvt3f5z7t/n1NUDF6n8ivZ/YuuioC2dBxBlVN3B/wKr8h
-         QE47RUl9WCa/lnzkYxPIT+qcYyAHeBRsyLL3YN/BFdQnfWsQeqXVHrbiUbas0NoptK/r
-         ++Tw==
-X-Gm-Message-State: AOAM532TgHQH2bpeepv+zoUIvJ2NGZ8Se80/O/gGJ5U1dDB5neZjvFS7
-        QnRMYMhYdrmolccfeCqGC94=
-X-Google-Smtp-Source: ABdhPJwZ5GAhmrhiS3mVSDQJX7x4nqUxmkRxia9sZSl0nOGdCgfjLhj+puLbBZ8FQYt/ct0Dlgkm3Q==
-X-Received: by 2002:aca:b843:: with SMTP id i64mr5115179oif.109.1639678110524;
-        Thu, 16 Dec 2021 10:08:30 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b1sm1153296otj.5.2021.12.16.10.08.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 10:08:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 16 Dec 2021 10:08:28 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 00/42] 5.15.9-rc1 review
-Message-ID: <20211216180828.GC1125270@roeck-us.net>
-References: <20211215172026.641863587@linuxfoundation.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YOWchjxbT8awDrzH+EQqczwYeehzrW37icFRbxVUkAQ=;
+        b=AEVTdyFT2SqVDd8miUiY6OK/+dBhwEvwC6RkWcYX9/YRcVshSGe8BBqB6WrpNrDeVW
+         Cfbc6gqXoKdB4PbRYsSxsy0Yre3dQ1G9xkz5ftqn3MvY8rntwtPDWQkIaC+nUcsTs3n3
+         WWoVIZk5LCo03wB8fVRvjgDulgtpYU5+uX44XFDq5B9oV25o9q2Wutmg8Hr06vpbuF+v
+         IVxU0whjE34/FsZusEyvT7S2W8vzo+9VVR4eLHUgRnF7KUSheN0S/2h0z4gvt0wS6rRs
+         lE0mjOiyuE/OeFQ1UL0JrrkYDdtfhoV0wVYWx3a1KbqwVTEgxlWhbmDevqGLhBDBCn5X
+         Z0bA==
+X-Gm-Message-State: AOAM533gR7nN+ojB2OFziu2Pf6uUPh0NJbhdcrtTwn128EK1bcRqdcLB
+        zD4IFViZdfRvxPSqYoBMt4zKrpmm1cWDmg==
+X-Google-Smtp-Source: ABdhPJx2fKN9YY9yNoLvXf036wIVClUK3bH3oOQsgdrBK9lUanEYFkKcTyh/Gl45yxnUxnTTrQDysg==
+X-Received: by 2002:aca:ab87:: with SMTP id u129mr5105520oie.42.1639678245749;
+        Thu, 16 Dec 2021 10:10:45 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id c3sm1190110oiw.8.2021.12.16.10.10.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Dec 2021 10:10:45 -0800 (PST)
+Subject: Re: [PATCH] docs/vm: fix Unexpected indentation warns in page_owner
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     akpm@linux-foundation.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211215001929.47866-1-skhan@linuxfoundation.org>
+ <e3acf716-edd2-91d5-24c9-02c547f0d168@gmail.com>
+ <f41c83f7-95f9-fd70-aa19-60887e7c4039@linuxfoundation.org>
+ <ef40c328-78a7-3aeb-0dd5-8ccbd7279e53@linuxfoundation.org>
+ <049f7d02-932c-b49c-4af3-10d0f3e8fdb7@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <4036edad-fd8f-6499-96d1-2ae12ddb73e9@linuxfoundation.org>
+Date:   Thu, 16 Dec 2021 11:10:44 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215172026.641863587@linuxfoundation.org>
+In-Reply-To: <049f7d02-932c-b49c-4af3-10d0f3e8fdb7@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 06:20:41PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.9 release.
-> There are 42 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 12/16/21 8:00 AM, Akira Yokosawa wrote:
+> On Thu, 16 Dec 2021 07:45:50 -0700, Shuah Khan wrote:
+>> On 12/15/21 8:10 AM, Shuah Khan wrote:
+>>> On 12/14/21 6:05 PM, Akira Yokosawa wrote:
+>>>> Hi,
+>>>>
+>>>> On Tue, 14 Dec 2021 17:19:29 -0700, Shuah Khan wrote:
+>>>>> Fix Unexpected indentation warns in page_owner:
+>>>>>
+>>>>> Documentation/vm/page_owner.rst:92: WARNING: Unexpected indentation.
+>>>>> Documentation/vm/page_owner.rst:96: WARNING: Unexpected indentation.
+>>>>> Documentation/vm/page_owner.rst:107: WARNING: Unexpected indentation.
+>>>>
+>>>> I guess these outputs should have been literal blocks.
+>>>> Then Sphinx wouldn't complain about indentations.
+>>>
+>>> Good point. I will take a look and send v2.
+>>>
+>>
+>> This is already in a literal block. A few of the lines in a literal block
+>> are missing indentations - this patch is good as is.
 > 
-> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
-> Anything received after that time might be too late.
+> Well, to show the context, embedding from current page_owner.rst.
+> My comment is on the line starting with "#".
 > 
+> -----8<------
+> 4) Analyze information from page owner::
+> 
+> 	cat /sys/kernel/debug/page_owner > page_owner_full.txt
+> 	./page_owner_sort page_owner_full.txt sorted_page_owner.txt
+> 
+>     The general output of ``page_owner_full.txt`` is as follows:
+> #  ^^^ this unindent to the level of "Analyze" above ends the literal block,
+> #  so the final ":" needs to be "::".
+> 	Page allocated via order XXX, ...
+> 	PFN XXX ...
+> 	 // Detailed stack
+> 
+> 	Page allocated via order XXX, ...
+> 	PFN XXX ...
+> 	 // Detailed stack
+> -----8<------
+>   
 
-Build results:
-	total: 154 pass: 154 fail: 0
-Qemu test results:
-	total: 480 pass: 480 fail: 0
+Yes. I understood you comment and made the exact change. What I wasn't
+sure about is the flow of the text in the document and if the literal
+block was just missed or the entire text is supposed to be in a single
+block.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+I now have a real example text from /sys/kernel/debug/page_owner to
+use a real example and fix the warn at the same time.
 
-Guenter
+thanks,
+-- Shuah
+
+

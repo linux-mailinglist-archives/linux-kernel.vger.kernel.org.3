@@ -2,90 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB4B47776B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D17FE47777B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239121AbhLPQMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:12:39 -0500
-Received: from finn.gateworks.com ([108.161.129.64]:36012 "EHLO
-        finn.localdomain" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238952AbhLPQMf (ORCPT
+        id S235571AbhLPQN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:13:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36672 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230500AbhLPQNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:12:35 -0500
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1mxtMr-0093Cq-N1; Thu, 16 Dec 2021 16:12:29 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Tim Harvey <tharvey@gateworks.com>, Adam Ford <aford173@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>
-Subject: [PATCH] arm64: dts: imx8mn-venice-gw7902: disable gpu
-Date:   Thu, 16 Dec 2021 08:12:27 -0800
-Message-Id: <20211216161227.31960-1-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 16 Dec 2021 11:13:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639671204;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZfEZtmmaw5JJQ7ii0AT2OTgmkRTAYnO5kVj9P9Pm5RY=;
+        b=g/IzewW4AVKJ1sEjDUvxu0IpAFfKz19lbGmkRlFOJMijnEiTFTEstSIw6hi/CNwl7p7NvX
+        UH9TBtoxfhJ4rFY4aR/rAywuPZPnWJpzv+zPS5RyXsK4d8aJrSu/cTy21cxdTfGVMcoBIe
+        zy3g/fneiuThFl5YYRKUiVJv30LJc5A=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-14-0JGJZMYWMEC-3sZXSwfZgQ-1; Thu, 16 Dec 2021 11:13:18 -0500
+X-MC-Unique: 0JGJZMYWMEC-3sZXSwfZgQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 03237802C96;
+        Thu, 16 Dec 2021 16:13:14 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D52E77A227;
+        Thu, 16 Dec 2021 16:12:58 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH v3 23/68] fscache: Provide a function to let the netfs update
+ its coherency data
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 16 Dec 2021 16:12:57 +0000
+Message-ID: <163967117795.1823006.7493373142653442595.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
+References: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 99aa29932271 ("arm64: dts: imx8mn: Enable GPU")
-imx8mn-venice-gw7902 will hang during kernel init because it uses
-a MIMX8MN5CVTI which does not have a GPU.
+Provide a function to let the netfs update its coherency data:
 
-Disable pgc_gpumix to work around this. We also disable the GPU devices
-that depend on the gpumix power domain and pgc_gpu to avoid them staying
-in a probe deferred state forever.
+	void fscache_update_cookie(struct fscache_cookie *cookie,
+				   const void *aux_data,
+				   const loff_t *object_size);
 
-Cc: Adam Ford <aford173@gmail.com>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+This will update the auxiliary data and/or the size of the object attached
+to a cookie if either pointer is not-NULL and flag that the disk needs to
+be updated.
+
+Note that fscache_unuse_cookie() also allows this to be done.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-cachefs@redhat.com
+Link: https://lore.kernel.org/r/163819610438.215744.4223265964131424954.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/163906913530.143852.18150303220217653820.stgit@warthog.procyon.org.uk/ # v2
 ---
- .../boot/dts/freescale/imx8mn-venice-gw7902.dts      | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-index 236f425e1570..2d58005d20e4 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-@@ -220,6 +220,10 @@
- 	};
- };
+ include/linux/fscache.h |   22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/include/linux/fscache.h b/include/linux/fscache.h
+index c4bb58eff7a3..9392812f10b7 100644
+--- a/include/linux/fscache.h
++++ b/include/linux/fscache.h
+@@ -339,6 +339,28 @@ void __fscache_update_cookie(struct fscache_cookie *cookie, const void *aux_data
+ 	set_bit(FSCACHE_COOKIE_NEEDS_UPDATE, &cookie->flags);
+ }
  
-+&disp_blk_ctrl {
-+	status = "disabled";
-+};
++/**
++ * fscache_update_cookie - Request that a cache object be updated
++ * @cookie: The cookie representing the cache object
++ * @aux_data: The updated auxiliary data for the cookie (may be NULL)
++ * @object_size: The current size of the object (may be NULL)
++ *
++ * Request an update of the index data for the cache object associated with the
++ * cookie.  The auxiliary data on the cookie will be updated first if @aux_data
++ * is set and the object size will be updated and the object possibly trimmed
++ * if @object_size is set.
++ *
++ * See Documentation/filesystems/caching/netfs-api.rst for a complete
++ * description.
++ */
++static inline
++void fscache_update_cookie(struct fscache_cookie *cookie, const void *aux_data,
++			   const loff_t *object_size)
++{
++	if (fscache_cookie_enabled(cookie))
++		__fscache_update_cookie(cookie, aux_data, object_size);
++}
 +
- /* off-board header */
- &ecspi2 {
- 	pinctrl-names = "default";
-@@ -251,6 +255,10 @@
- 	};
- };
- 
-+&gpu {
-+	status = "disabled";
-+};
-+
- &i2c1 {
- 	clock-frequency = <100000>;
- 	pinctrl-names = "default";
-@@ -546,6 +554,10 @@
- 	status = "okay";
- };
- 
-+&pgc_gpumix {
-+	status = "disabled";
-+};
-+
- /* off-board header */
- &sai3 {
- 	pinctrl-names = "default";
--- 
-2.17.1
+ /**
+  * fscache_invalidate - Notify cache that an object needs invalidation
+  * @cookie: The cookie representing the cache object
+
 

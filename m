@@ -2,242 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1F2476F3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE61E476F45
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 11:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233580AbhLPKyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 05:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
+        id S233647AbhLPKzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 05:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233518AbhLPKyW (ORCPT
+        with ESMTP id S230379AbhLPKzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:54:22 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CC7C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:54:21 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id z5so86101458edd.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:54:21 -0800 (PST)
+        Thu, 16 Dec 2021 05:55:43 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DB2C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:55:43 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id kk22so3433817qvb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 02:55:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NzMGgtHLVkL7Zoni4ZKWdaDDzYlWc7/QvgZKMJdK/Jg=;
-        b=nDIa1YIPfbmjy6W4A9M6vsAXp4t06DD3oIpi3i9W9ddrVZHdrism1eMnItOw5R4Nox
-         ThD5ZsDGQgtvjKavmlrkffj+c1WOLTVa+QSZ7ndgcvVk1WlplUaQ/cikHVeLIabjChzx
-         DwGzMrjSkegK3g5CERbpOA0VwtPQB4TrI7WWitsUN/EGRdgSvV+FgkxJEnhw/gLQ+Yng
-         EqBeJFtYHMnMdK2kOnfYvsLVPRE7YOKrYpGFSECgYu4kQNPvkuosPU3uPf7NaDFEIF7Q
-         vy4k1orwslb4Jo/hFYX0bCb94ELhB5kBq6ynsUGzHTZo04VIMiRATUmxLnoRHydT01TB
-         5X4g==
+         :cc;
+        bh=MrDCPm6/+BD3TmuHng5c6ao9ZVxI0GzI50LE4A+AUMk=;
+        b=kIH5AwPh1Jzb2L1vZczLuWHKjaFzVnM87XTRRiaEESJ615BrE9vzr28SyU6+m8xOKP
+         xHG6slm0qdH8TrZUj6bb+wjAz1XVe13xmL4E4EUVpOnAmBSA4iN69uU8Hiz2iM1ZmxzT
+         gO40Igwoe0Y4fNvCH5wjNLlDakJ86VrjBWsr8Ieb2dpMiCVj9WPUEf+yq7vBcxb1jzHx
+         pmBpiXXvj/CexoE37WRwyTLqJ21oXUJN2OGtZY7QzonzAFkPymr1QaCFdbvIxfSy2l1K
+         Xai8Cy/JGFY5EMB4VsX1YXYf6qdrC/ZxWr9VBLK9euOILhmxqFJYLJrGTldJn0jdqrd5
+         e4EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NzMGgtHLVkL7Zoni4ZKWdaDDzYlWc7/QvgZKMJdK/Jg=;
-        b=UBwJTJpPNJuTMk6drrEhs/7QqiGHckuVxnbBHU+axtW37oaKQMOTeGFAHzZDqTruqD
-         mOxulOIhSgS0Mx+Fb3zFbhxZzFF0X6vM7zj4g3mDwE4Cf0Bu4oDp3V3gr8OwT+uh57tj
-         g2E8vlddSB5W7Vh5dSa9UqtBuN2keUCP6jOLgGou2vhVFGBz3Nnmr1BHSgxGhcsoET8+
-         t2ePGefEjB4mOc4YJvVqxZ18OgzFS9tZPHP9THXASKb8UfU6gvG8C8DcSz9DLnjmm/qv
-         HQxo7+AhOPg3chTIuRXFjrDQotvH6cidRS51DVy+ulySULOzx5RIAbVGjYwZq/IMjnjT
-         oxDg==
-X-Gm-Message-State: AOAM531wwsKqvE+LDb1rAjtYbsvyITaEzwihFznTI3qI4HcRR5f06utH
-        9563ilcSYMr8LtxQJH+2+hJFuZUu9Mcj2p0VCBMRlg==
-X-Google-Smtp-Source: ABdhPJxpeX1sQ5t3tCT7e0duXvHHxHhGX/RvqKYXjPcACTyrPJdWCPx0iXiUqm/J/NKHrd1QnUJR6pQRZxWARoIMRnA=
-X-Received: by 2002:a05:6402:4b:: with SMTP id f11mr19626141edu.267.1639652060086;
- Thu, 16 Dec 2021 02:54:20 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=MrDCPm6/+BD3TmuHng5c6ao9ZVxI0GzI50LE4A+AUMk=;
+        b=d/6FF8iC0zbDR/jNN5WAiKS6bUJOmNH1Ka0d7JdGuh1B9BQgej2No4vAXjfD62m3oZ
+         Md9jOAZuCcYWW7CAafkH24RHeUXh16hGiZ75gVOxtfcju3UrAVMkMsmaeVeurybwgvzX
+         tKHzDXhQBBUYYP86cf+/cnK7j2bNmMhmLE000Hlr9CcDPNjFjvOEb+YcftkEt10XL4ga
+         Y7nNJJZ5sEFnVU/x/ovyQwkt3vOTbkjrZ5W7Ci6FF0gOBArDtOZQ5ILWX1HbDDsW4hnk
+         /H0OOYU46Ld87MSQvhKkocDF90U551Ogj2eRiciWUpbqahuTMdPbZaBCwjwO6MxgoyvC
+         l33w==
+X-Gm-Message-State: AOAM5329/enDD2BLZGhwZkbGaqAnoVAstiL9Xrw0X9OjRKRPTH2Ggjjv
+        JQjMXkx/r2TJuDJ0rlet2aZ8zkKVzpNNLGpwze7Sog==
+X-Google-Smtp-Source: ABdhPJyeF/DWSW1cUVTmYtBTUBs6LAsdIujY7Y5TWl9a/zYYRsaK5GIZ0VuiCnNbcuKpxfNAwA/td0G/I6sc1WiaeWI=
+X-Received: by 2002:a05:6214:411a:: with SMTP id kc26mr5554605qvb.113.1639652142455;
+ Thu, 16 Dec 2021 02:55:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20211215172024.787958154@linuxfoundation.org>
-In-Reply-To: <20211215172024.787958154@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 16 Dec 2021 16:24:08 +0530
-Message-ID: <CA+G9fYuTJdgN2MHPB3YSQobn5DMrczu_GOkPwv9NgxRnDfZvAA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/33] 5.10.86-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
+References: <cover.1639432170.git.andreyknvl@google.com> <15eeaed5bb807dba36e36d17a1d549df8e2b752e.1639432170.git.andreyknvl@google.com>
+In-Reply-To: <15eeaed5bb807dba36e36d17a1d549df8e2b752e.1639432170.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 16 Dec 2021 11:55:06 +0100
+Message-ID: <CAG_fn=W+FDpjxipKvBjovxzCxodasFD7W0vpv1sUbEM75J3Edg@mail.gmail.com>
+Subject: Re: [PATCH mm v3 19/38] kasan: reorder vmalloc hooks
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Dec 2021 at 22:54, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Mon, Dec 13, 2021 at 10:53 PM <andrey.konovalov@linux.dev> wrote:
 >
-> This is the start of the stable review cycle for the 5.10.86 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> From: Andrey Konovalov <andreyknvl@google.com>
 >
-> Responses should be made by Fri, 17 Dec 2021 17:20:14 +0000.
-> Anything received after that time might be too late.
+> Group functions that [de]populate shadow memory for vmalloc.
+> Group functions that [un]poison memory for vmalloc.
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.86-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
+> This patch does no functional changes but prepares KASAN code for
+> adding vmalloc support to HW_TAGS KASAN.
 >
-> thanks,
->
-> greg k-h
-
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.86-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: fb04daaadf03a67265eaa54966f45e30b83f1049
-* git describe: v5.10.85-34-gfb04daaadf03
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.85-34-gfb04daaadf03
-
-## No Test Regressions (compared to v5.10.84-128-g24961377099e)
-
-## No Test Fixes (compared to v5.10.84-128-g24961377099e)
-
-## Test result summary
-total: 91173, pass: 78137, fail: 562, skip: 11764, xfail: 710
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 255 passed, 4 failed
-* arm64: 37 total, 37 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 36 total, 36 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 30 passed, 4 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 46 passed, 6 failed
-* riscv: 24 total, 16 passed, 8 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 2 total, 1 passed, 1 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>

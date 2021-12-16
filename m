@@ -2,73 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D870047805F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A40D47806B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 00:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbhLPXPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 18:15:22 -0500
-Received: from ms.lwn.net ([45.79.88.28]:50988 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234193AbhLPXPV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:15:21 -0500
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 1A254740;
-        Thu, 16 Dec 2021 23:15:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 1A254740
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1639696521; bh=FlCJxGsmxYNRH17rhgTDBHDYYRmcu2pB+y7gOjFT7Es=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=tFMv9Ym7GPZaAy0FfW5IGPQ1m+pmQ4txtqqkyphlHXq4WZvA9ri76U9T7hJV2qRUQ
-         Ut7ah15RfqiFC/aAwwJruzhX67a99lMwHr0nS7AZI8wKcovbx/vhln5IJg0tvIzCbA
-         OK5n99kO08cRwjp0pIvSlPMbxQmYt4PNE/HeTbzLLZ+dz5iTLQL2m3fSGEvXjVOfEh
-         oidu+f1bqs0o2MVzyzKJypQa9fWEwGrsJ6FrExtBgknU9D3XLM4xgmT9I3OFu/d5X8
-         lngz+Ran6AjDMvJe8cvBHuntSisEBlc0LewgkadCuKVUT+i6GdIoR6RxOC79MFdLsA
-         rYEXdGAHS9B7g==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Marco Elver <elver@google.com>,
-        Harinder Singh <sharinder@google.com>
-Cc:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tim.Bird@sony.com
-Subject: Re: [PATCH v4 3/7] Documentation: KUnit: Added KUnit Architecture
-In-Reply-To: <CANpmjNOGaVgP25xNOSGOyjcA9Lmk4uFmU=f6RrRNJBP_CMEVrQ@mail.gmail.com>
-References: <20211216055958.634097-1-sharinder@google.com>
- <20211216055958.634097-4-sharinder@google.com>
- <CANpmjNOGaVgP25xNOSGOyjcA9Lmk4uFmU=f6RrRNJBP_CMEVrQ@mail.gmail.com>
-Date:   Thu, 16 Dec 2021 16:15:20 -0700
-Message-ID: <87czlwcfav.fsf@meer.lwn.net>
+        id S237163AbhLPXTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 18:19:06 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:48561 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234193AbhLPXTF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 18:19:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1639696745; x=1671232745;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=r5gDvMoc92iDL10QJcM/tNCFOMSxMcUv+DruqpznXEQ=;
+  b=a8YI4Jru9DJ4ePaj/UU6k9Q3R0INP3HQ+II3ALqliqCqA6q/rkQ9rRoj
+   Gx54L+cp1aQtGKt5Xfy5KtEm4o3NiILhiLwAAfQqJ6FZd5cHearTyvL7H
+   rpIJGDw2Nv2INufiSHq9LajLIJcb10VuozkZGTC9r68wSSv3PizeW67Eg
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 Dec 2021 15:19:05 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 15:19:04 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 16 Dec 2021 15:19:03 -0800
+Received: from hu-vamslank-sd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 16 Dec 2021 15:19:03 -0800
+From:   <quic_vamslank@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <linus.walleij@linaro.org>, <robh+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <manivannan.sadhasivam@linaro.org>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+Subject: [PATCH v6 0/2] Add pinctrl support for SDX65 
+Date:   Thu, 16 Dec 2021 15:18:44 -0800
+Message-ID: <cover.1639696427.git.quic_vamslank@quicinc.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marco Elver <elver@google.com> writes:
+From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
 
-> In response to the other email: Adding binary blobs just creates
-> problems, for comparing different versions, and general bloating the
-> whole repo, where better alternatives exist.
->
-> I suppose an ASCII diagram is a bit primitive. :-)
->
-> However, SVG files on the other hand are not binary blobs, they are
-> text-markup based (XML), and e.g. diffing them often provides useful
-> information about what changed. SVG also has the benefit of being
-> vector graphics, and not being limited to one resolution.
->
-> Looking at the diagram you added, I think this can easily be turned
-> into vector graphics, and most likely will not use up 24KiB as a
-> result.
+Hello,
 
-I agree with all of this; we shouldn't be adding binary images to the
-docs, and we've decided at other times that SVG is generally the best
-compromise there.
+Changes from v5:
+ - Fixed pinctrl dt_binding comments from Bjorn and Rob 
 
-Thanks, Marco, for pointing this out and producing an alternative.
+Changes from v4:
+ - Fixed dt_binding check errors
 
-Once this is all settled, do you want it to go through the docs tree?
+Changes from v3:
+ - Addressed comments, fixed dt_binding check errors and collected reviewed
+   by from Bjorn
+ - Rebased on top of v5.16-rc1
 
-jon
+Changes from v2:
+ - Addressed comments from Bjorn
+ - Collected Reviewed-by for the patches
+
+Changes from v1:
+ - Addressed all Bjorn's comments
+
+This patch series adds pinctrl bindings and tlmm support for SDX65.
+
+Thanks,
+Vamsi
+
+Vamsi Krishna Lanka (2):
+  dt-bindings: pinctrl: qcom: Add SDX65 pinctrl bindings
+  pinctrl: qcom: Add SDX65 pincontrol driver
+
+ .../bindings/pinctrl/qcom,sdx65-pinctrl.yaml  | 191 ++++
+ drivers/pinctrl/qcom/Kconfig                  |   9 +
+ drivers/pinctrl/qcom/Makefile                 |   1 +
+ drivers/pinctrl/qcom/pinctrl-sdx65.c          | 967 ++++++++++++++++++
+ 4 files changed, 1168 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sdx65.c
+
+
+base-commit: 58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
+prerequisite-patch-id: 93a6639086d56aaaf0c5d0e108a7a7690d39967f
+prerequisite-patch-id: 889196dd8ff26aaa113c94ac27b67f708301cd22
+prerequisite-patch-id: bca9c19611da01ed598f8645e6be49f8def4d683
+prerequisite-patch-id: ba1594c6d524ae889dd4325d0912848f5542633b
+prerequisite-patch-id: 6efd062dc77400d108f3f4a0c66010c69759d64a
+prerequisite-patch-id: fb27c240bc512176c822e6f1c7cb5b8d65633c56
+prerequisite-patch-id: 8125f49031bb5d9ebca1ca3e622080d6d3683bfb
+prerequisite-patch-id: e6ecff6bfb4016b9118b2b25f4077355a1448220
+prerequisite-patch-id: ba2f7d61be224484482d4910116ea69f1f5200ea
+-- 
+2.33.1
+

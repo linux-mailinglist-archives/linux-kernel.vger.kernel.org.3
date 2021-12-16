@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE3C477F75
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7B9477F74
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 22:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242474AbhLPVnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 16:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S242853AbhLPVnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 16:43:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242333AbhLPVlk (ORCPT
+        with ESMTP id S242335AbhLPVlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Dec 2021 16:41:40 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55C0C06137F;
-        Thu, 16 Dec 2021 13:41:15 -0800 (PST)
-Date:   Thu, 16 Dec 2021 21:41:13 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D6FC061190;
+        Thu, 16 Dec 2021 13:41:17 -0800 (PST)
+Date:   Thu, 16 Dec 2021 21:41:14 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639690874;
+        s=2020; t=1639690875;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tUEgL4fn1xU21cC1S+MnXGlxeMDcKKcE/lguXAiHQRg=;
-        b=Fc/7O7wazzeLIJw7W3zLgpVrdtz1nERQHGud7+T+Vi+RvUN4Va3yyknaTmALSCuUGH7MqR
-        FtFfK38vLKxH5FXJQJo0FTSqQ/+ZU41xyYub9wuJoL5f6m5vYeIqXj/XUsGvcPsxKy0RYN
-        KBipcLHfTFOgJYnmFOuxAxIlTHKwcjZPyIxcSRA3a4y4RMBLzAd1C+rLrplZ3Z4b4QvPrc
-        Q5Xy63pnbXyb2whJ4U38mXxtpstvQry4zi3xz+1c5v8XhyOxN0iwoplJ/dgGh3d/XwzY4P
-        tnK8OZYTFkjU1EDqiLscceub1TTqV+OLw7OKxK3CGON8YHWW3XiEMbipL4/Nww==
+        bh=FeP7FGh9hdIsqrdi0n3oxHXjUNz9Ry7Y0Xf30VyL2Rk=;
+        b=ty9jv6MSW9Dhd2kpbzCmMABFAO9cDSwhSeB1B9FfwbHajfwnqpqYom56S9RnsfT2p4zVhr
+        DW/NYampS3386wssjLzpYYAzJtRKfv0TpOOyAsjPT5dS7duDj+S9TbRjgMGP9FMuAjxxyR
+        EjObZDNTLTOJ101MuiQg9oQ97z/9XQFI1OnmHnX/Y6OGFp/2CWWvsrag34YvcK0IBlNrfV
+        l6lnOpLGLRI9SS4BKVvuifSc9T1U87gtvtZyZ/3v5PVa2J1e/7zweYfEwe6obafUFGNnoe
+        fsaCw42UnMxKmK27lz4zht5qy/CyDiAXTApBluABm1NyYnryRa2fAL9CB16Zhg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639690874;
+        s=2020e; t=1639690875;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tUEgL4fn1xU21cC1S+MnXGlxeMDcKKcE/lguXAiHQRg=;
-        b=UvWQN//t/odvi4JsfGu85ETy7jtXR2gSHF9pVg49zdOWgKgitYpppum9k25BxlfwoMS8cl
-        A/PyatGikCzLeOCQ==
+        bh=FeP7FGh9hdIsqrdi0n3oxHXjUNz9Ry7Y0Xf30VyL2Rk=;
+        b=ucrRUUCt8gKayo6vwx1Hv4W20MPp360bURcCifsPGBrqbJxRYT0vOpP3VCXvtWWWRwTmdh
+        APQtZfEZ9kEoVHDQ==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/msi] genirq/msi: Use PCI device property
+Subject: [tip: irq/msi] x86/pci/XEN: Use PCI device property
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Nishanth Menon <nm@ti.com>, Jason Gunthorpe <jgg@nvidia.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211210221813.434156196@linutronix.de>
-References: <20211210221813.434156196@linutronix.de>
+        Jason Gunthorpe <jgg@nvidia.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211210221813.311410967@linutronix.de>
+References: <20211210221813.311410967@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163969087336.23020.12641508664636515105.tip-bot2@tip-bot2>
+Message-ID: <163969087485.23020.2986020963049503586.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,53 +61,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/msi branch of tip:
 
-Commit-ID:     6ef7f771de0182141ef1a0863f27b12963e1d184
-Gitweb:        https://git.kernel.org/tip/6ef7f771de0182141ef1a0863f27b12963e1d184
+Commit-ID:     0bcfade920804d597888e4181bc315a3c500280d
+Gitweb:        https://git.kernel.org/tip/0bcfade920804d597888e4181bc315a3c500280d
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 10 Dec 2021 23:18:49 +01:00
+AuthorDate:    Fri, 10 Dec 2021 23:18:46 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 16 Dec 2021 22:16:37 +01:00
 
-genirq/msi: Use PCI device property
+x86/pci/XEN: Use PCI device property
 
-to determine whether this is MSI or MSIX instead of consulting MSI
-descriptors.
+instead of fiddling with MSI descriptors.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
-Tested-by: Nishanth Menon <nm@ti.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Link: https://lore.kernel.org/r/20211210221813.434156196@linutronix.de
+Link: https://lore.kernel.org/r/20211210221813.311410967@linutronix.de
 
 ---
- kernel/irq/msi.c | 17 ++---------------
- 1 file changed, 2 insertions(+), 15 deletions(-)
+ arch/x86/pci/xen.c |  9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 4a7a7f0..b3f73ef 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -77,21 +77,8 @@ EXPORT_SYMBOL_GPL(get_cached_msi_msg);
- static ssize_t msi_mode_show(struct device *dev, struct device_attribute *attr,
- 			     char *buf)
- {
--	struct msi_desc *entry;
--	bool is_msix = false;
--	unsigned long irq;
--	int retval;
--
--	retval = kstrtoul(attr->attr.name, 10, &irq);
--	if (retval)
--		return retval;
--
--	entry = irq_get_msi_desc(irq);
--	if (!entry)
--		return -ENODEV;
--
--	if (dev_is_pci(dev))
--		is_msix = entry->pci.msi_attrib.is_msix;
-+	/* MSI vs. MSIX is per device not per interrupt */
-+	bool is_msix = dev_is_pci(dev) ? to_pci_dev(dev)->msix_enabled : false;
+diff --git a/arch/x86/pci/xen.c b/arch/x86/pci/xen.c
+index a63d30a..bfd87b4 100644
+--- a/arch/x86/pci/xen.c
++++ b/arch/x86/pci/xen.c
+@@ -399,9 +399,7 @@ static void xen_teardown_msi_irqs(struct pci_dev *dev)
  
- 	return sysfs_emit(buf, "%s\n", is_msix ? "msix" : "msi");
+ static void xen_pv_teardown_msi_irqs(struct pci_dev *dev)
+ {
+-	struct msi_desc *msidesc = first_pci_msi_entry(dev);
+-
+-	if (msidesc->pci.msi_attrib.is_msix)
++	if (dev->msix_enabled)
+ 		xen_pci_frontend_disable_msix(dev);
+ 	else
+ 		xen_pci_frontend_disable_msi(dev);
+@@ -417,10 +415,7 @@ static int xen_msi_domain_alloc_irqs(struct irq_domain *domain,
+ 	if (WARN_ON_ONCE(!dev_is_pci(dev)))
+ 		return -EINVAL;
+ 
+-	if (first_msi_entry(dev)->pci.msi_attrib.is_msix)
+-		type = PCI_CAP_ID_MSIX;
+-	else
+-		type = PCI_CAP_ID_MSI;
++	type = to_pci_dev(dev)->msix_enabled ? PCI_CAP_ID_MSIX : PCI_CAP_ID_MSI;
+ 
+ 	return xen_msi_ops.setup_msi_irqs(to_pci_dev(dev), nvec, type);
  }

@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F062C477930
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1FD477904
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 17:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239496AbhLPQeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 11:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        id S236538AbhLPQ2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 11:28:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbhLPQeJ (ORCPT
+        with ESMTP id S229539AbhLPQ2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:34:09 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE7FC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 08:34:09 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id o20so89411283eds.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 08:34:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fkh9SA21WJAwLXrex3D5hDMvc6XDF8J0dz4irJ+Ae9Y=;
-        b=TZ91WtmX33bYGxQ28DYuwMlA4L/Ykfses9BBTD3iJ52Q9qh/2tU+S4awSqTTbNIEfO
-         NIVIGXtvrTssU7E/Ib+EszfgqaQI3Ug/c2E/ITq3PkTvuJKpkp8KHKAP+FyMLrxxfyHm
-         7LDKJiXUmfROJo2atlx1zLIBfA58BXXUjM6Yc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fkh9SA21WJAwLXrex3D5hDMvc6XDF8J0dz4irJ+Ae9Y=;
-        b=seCYh+u/a34wfgoBhZLGA44a9L6AgM//Hnf+fjoAcvOZBGjSRDP+bYVZFl7aTl3WnA
-         5N5jKMm6HCcVcoxmETc6ltuEF3puJDgtbEXs6pArJtYcORBTjhN6sKQ8VkjLmyPLkttL
-         COzGPxpfFIRqpGwTT2KtPgMs88hC1wLG+rDQMQcostGjvDivyxHJKQz5ubFSep7ecl02
-         2bqJpPBkeZshB8SNjCUT0dyoUj+47H3gcH3JuI5WCLKDBlNRXCzAmYpW8EEGjEFFIW6c
-         CyIgEfubZF9X1VJxryVMF//drnMGWl9ygxVuJa19enKybAzNnKe9VozQs04DtapbmzAQ
-         sasQ==
-X-Gm-Message-State: AOAM531hKS1NxnLT1yOwyowSnhU+qd8oEcIWudLa8yWr/W0X3u1vXk9c
-        ijvFzFgvNFCpziCB0yofRBBF2BJOvw5BR51P2RI=
-X-Google-Smtp-Source: ABdhPJyik2j+H54eF0+84PC48i61xqBWCCx71ffxtlGTAVav3ypIINIryLFv9Xkjad9RXPw9rKI3Aw==
-X-Received: by 2002:a05:6402:1d50:: with SMTP id dz16mr20783918edb.385.1639672447011;
-        Thu, 16 Dec 2021 08:34:07 -0800 (PST)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
-        by smtp.gmail.com with ESMTPSA id m6sm2725867edc.36.2021.12.16.08.34.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 08:34:06 -0800 (PST)
-Received: by mail-ed1-f49.google.com with SMTP id o20so89411139eds.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 08:34:06 -0800 (PST)
-X-Received: by 2002:a5d:6211:: with SMTP id y17mr9727999wru.97.1639672086343;
- Thu, 16 Dec 2021 08:28:06 -0800 (PST)
+        Thu, 16 Dec 2021 11:28:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EAAC061574;
+        Thu, 16 Dec 2021 08:28:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C04C0B82499;
+        Thu, 16 Dec 2021 16:28:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0945EC36AE4;
+        Thu, 16 Dec 2021 16:28:42 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 17:28:38 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: Re: [PATCH v7 10/14] securityfs: Extend securityfs with namespacing
+ support
+Message-ID: <20211216162838.pst35cnqlu36i7t6@wittgenstein>
+References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
+ <20211216054323.1707384-11-stefanb@linux.vnet.ibm.com>
+ <20211216134027.33sprdmhol2tbctf@wittgenstein>
 MIME-Version: 1.0
-References: <163967073889.1823006.12237147297060239168.stgit@warthog.procyon.org.uk>
- <163967172373.1823006.6118195970180365070.stgit@warthog.procyon.org.uk>
-In-Reply-To: <163967172373.1823006.6118195970180365070.stgit@warthog.procyon.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 16 Dec 2021 08:27:50 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjiba2VRKKjOYAiCZn1Tk9H1tiXcOvjekdo3wPHHmedyQ@mail.gmail.com>
-Message-ID: <CAHk-=wjiba2VRKKjOYAiCZn1Tk9H1tiXcOvjekdo3wPHHmedyQ@mail.gmail.com>
-Subject: Re: [PATCH v3 57/68] afs: Fix afs_write_end() to handle len > page size
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-cachefs@redhat.com, Jeff Layton <jlayton@kernel.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-afs@lists.infradead.org,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211216134027.33sprdmhol2tbctf@wittgenstein>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 8:22 AM David Howells <dhowells@redhat.com> wrote:
->
-> It is possible for the len argument to afs_write_end() to overrun the end
-> of the page (len is used to key the size of the page in afs_write_start()
-> when compound pages become a regular thing).
+On Thu, Dec 16, 2021 at 02:40:27PM +0100, Christian Brauner wrote:
+> On Thu, Dec 16, 2021 at 12:43:19AM -0500, Stefan Berger wrote:
+> > From: Stefan Berger <stefanb@linux.ibm.com>
+> > 
+> > Extend 'securityfs' for support of IMA namespacing so that each
+> > IMA (user) namespace can have its own front-end for showing the currently
+> > active policy, the measurement list, number of violations and so on.
+> > 
+> > Drop the addition dentry reference to enable simple cleanup of dentries
+> > upon umount.
+> > 
+> > Prevent mounting of an instance of securityfs in another user namespace
+> > than it belongs to. Also, prevent accesses to directories when another
+> > user namespace is active than the one that the instance of securityfs
+> > belongs to.
+> > 
+> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> > ---
+> >  security/inode.c | 37 ++++++++++++++++++++++++++++++++++---
+> >  1 file changed, 34 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/security/inode.c b/security/inode.c
+> > index fee01ff4d831..a0d9f086e3d5 100644
+> > --- a/security/inode.c
+> > +++ b/security/inode.c
+> > @@ -26,6 +26,29 @@
+> >  static struct vfsmount *init_securityfs_mount;
+> >  static int init_securityfs_mount_count;
+> >  
+> > +static int securityfs_permission(struct user_namespace *mnt_userns,
+> > +				 struct inode *inode, int mask)
+> > +{
+> > +	int err;
+> > +
+> > +	err = generic_permission(&init_user_ns, inode, mask);
+> > +	if (!err) {
+> > +		if (inode->i_sb->s_user_ns != current_user_ns())
+> > +			err = -EACCES;
+> 
+> I really think the correct semantics is to grant all callers access
+> whose user namespace is the same as or an ancestor of the securityfs
+> userns. It's weird to deny access to callers who are located in an
+> ancestor userns.
+> 
+> For example, a privileged process on the host should be allowed to setns
+> to the userns of an unprivileged container and inspect its securityfs
 
-This smells like a bug in the caller.
+s/userns/mntns/
 
-It's just insane to call "write_end()" with a range that doesn't
-actually fit in the page provided.
-
-Exactly how does that happen, and why should AFS deal with it, not
-whoever called write_end()?
-
-              Linus
+> instance.
+> 
+> We're mostly interested to block such as scenarios where two sibling
+> unprivileged containers are created in the initial userns and an fd
+> proxy or something funnels a file descriptor from one sibling container
+> to the another one and the receiving sibling container can use readdir()
+> or openat() on this fd. (I'm not even convinced that this is actually a
+> problem but stricter semantics at the beginning can't hurt. We can
+> always relax this later.)
+> 

@@ -2,194 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F4C476C42
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A24AC476C46
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 09:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235053AbhLPIzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 03:55:05 -0500
-Received: from mga11.intel.com ([192.55.52.93]:55284 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229533AbhLPIzE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 03:55:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639644904; x=1671180904;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wzwBpV7OlQLWz0V1iQuNEaldUK64ztj7NgFIJWRBpug=;
-  b=mCpIBpDAHL2SEp0kDitFbNcw0HszhV9t8ta4EoMWI8OMXiuVvE+du0vR
-   z9thh3xxGNef8NNmMifoTWZJ95jmAQFdEfFulFoD685l9IZDq2ezAqFtw
-   iAsfOPbgXQvdiXYFeelnpJn46/jYachkA3jE+sAADexTG4po60Rtg/3tE
-   We8L7IxX/IU1ofjk2rn6bk8AAncmceL8AIYd/OjQWFqMmQxnPilHkZ4pI
-   hCtXejclstpZnVF4S/grLz5iBwRzDzQVkuBYmsmASl2ZbzwywVfmI8IVq
-   rlCCNND8avI/+blzSAfT5oECKXyrrv7jiqGiuxY22hg6qNEuT05eiaovo
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="236980364"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="236980364"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 00:54:59 -0800
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="755799681"
-Received: from unknown (HELO [10.239.159.175]) ([10.239.159.175])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 00:54:56 -0800
-Message-ID: <bb691703-5f88-081e-9ac5-edd969343ead@intel.com>
-Date:   Thu, 16 Dec 2021 16:54:54 +0800
+        id S235061AbhLPIzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 03:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229533AbhLPIzp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 03:55:45 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61945C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:55:45 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id c4so42799749wrd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 00:55:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=SOuxRFXySPzshUyGC5iL0C2CvH+JBhvny1eTkHaCuAk=;
+        b=C3+lWk3b0y78VVa5eWSCceWoMVKh8OoLiXVo7+b6aykRMYMZS84tnO1iY3ilDuL+9S
+         kNFtEfRVtO639culhM0FpOo4Y5s9vMHKmSsjGZuezi40pU5i8mpnOQ3RS+oeaRMH3hl9
+         pPN24fNaNFy0a9PsTywZjzg/vJ29iwzznOpSkfNmKYcxwRecN9Ii8967W2bG+MsJYOzd
+         zipVfIzveylYNsmoBr6s3JwYXRZnmQ2MZdQL4HlJjlJcy9Yugxhwqe9D+SjsSbm+OJ0B
+         hqYQy30NATx1d4buHLlzpvm/LnePURXPW/Ml0FrbTWnDlmXYjVLLhwVt0JIVC5anZtg1
+         swTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=SOuxRFXySPzshUyGC5iL0C2CvH+JBhvny1eTkHaCuAk=;
+        b=uLsUfQ/yZf6Pi8BW9pdhe+8sj3gxQHwIUHQWDLGJ/9KXhnuJvN1MmSPPyoIBuZIMvy
+         aAza8Gx/ClzUy0ta3VIULOxaQgrg9lbm/QRDQA+13tvmIDkEVIsUmLEQpnB6b0F/SiHc
+         L7+K2TqilDRexUGSbIxr77l68goaWz4JrCG+KyIblNY058reUExuvmhQ8wFClrYkCK5I
+         76r7KCdDOnOeY+io8LEQ0k7dUDRwh+9QbX/DhxL9H97N7AlXzvSWq7BaRi1DIk4ULMl5
+         Gvvw2xoahjM6GRy0rhFRynzIV4i9lmLw47GbD0ELhXOMsYOQjxR9I1FysgfBqCZ/dQeL
+         QR9Q==
+X-Gm-Message-State: AOAM533ypz/UnsrUbNsX7i48BD9cWPW2DUf3J7E7Dlcw7O+skstNORpr
+        t2SYRyuHVdF71+J62q1vre8=
+X-Google-Smtp-Source: ABdhPJwbtAMNBx3u2dBIsPqwFJsMFEOrlFqylkByzKob5f0kf3vZdqodg/kqdagKi6U3S/JWjAH3Vg==
+X-Received: by 2002:adf:a18b:: with SMTP id u11mr7678332wru.397.1639644943821;
+        Thu, 16 Dec 2021 00:55:43 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id w15sm4090586wrk.77.2021.12.16.00.55.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 00:55:42 -0800 (PST)
+Date:   Thu, 16 Dec 2021 09:55:39 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     joro@8bytes.org, will@kernel.org, iommu@lists.linux-foundation.org,
+        suravee.suthikulpanit@amd.com, baolu.lu@linux.intel.com,
+        willy@infradead.org, linux-kernel@vger.kernel.org,
+        john.garry@huawei.com, linux-mm@kvack.org,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 03/11] drm/tegra: vic: Fix DMA API misuse
+Message-ID: <Ybr/C+GNFPDPgLnF@orome>
+References: <cover.1639157090.git.robin.murphy@arm.com>
+ <6b86f6e530b504a5eee864af10e2ae1570d7b645.1639157090.git.robin.murphy@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 4/4] coresight: etm3x: Don't trace PID for non-root PID
- namespace
-Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>, kernel test robot <lkp@intel.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org
-References: <20211213121323.1887180-5-leo.yan@linaro.org>
- <202112140344.viPmOWp6-lkp@intel.com>
- <20211214044628.GB1884193@leoy-ThinkPad-X240s>
-From:   Rong Chen <rong.a.chen@intel.com>
-In-Reply-To: <20211214044628.GB1884193@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xaI96K7vWbm32g6g"
+Content-Disposition: inline
+In-Reply-To: <6b86f6e530b504a5eee864af10e2ae1570d7b645.1639157090.git.robin.murphy@arm.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--xaI96K7vWbm32g6g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 12/14/21 12:46, Leo Yan wrote:
-> Hi,
->
-> On Tue, Dec 14, 2021 at 03:16:42AM +0800, kernel test robot wrote:
->> Hi Leo,
->>
->> I love your patch! Yet something to improve:
->>
->> [auto build test ERROR on linus/master]
->> [also build test ERROR on v5.16-rc5]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch]
->>
->> url:    https://github.com/0day-ci/linux/commits/Leo-Yan/coresight-etm-Correct-PID-tracing-for-non-root-namespace/20211213-201632
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2585cf9dfaaddf00b069673f27bb3f8530e2039c
->> config: arm-buildonly-randconfig-r003-20211213 (https://download.01.org/0day-ci/archive/20211214/202112140344.viPmOWp6-lkp@intel.com/config)
->> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b6a2ddb6c8ac29412b1361810972e15221fa021c)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install arm cross compiling tool for clang build
->>          # apt-get install binutils-arm-linux-gnueabi
->>          # https://github.com/0day-ci/linux/commit/81d5f47788c40d34c8159d64d4505eb485254e8f
->>          git remote add linux-review https://github.com/0day-ci/linux
->>          git fetch --no-tags linux-review Leo-Yan/coresight-etm-Correct-PID-tracing-for-non-root-namespace/20211213-201632
->>          git checkout 81d5f47788c40d34c8159d64d4505eb485254e8f
->>          # save the config file to linux build tree
->>          mkdir build_dir
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwtracing/coresight/
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>>> drivers/hwtracing/coresight/coresight-etm3x-core.c:344:7: error: implicit declaration of function 'task_is_in_init_pid_ns' [-Werror,-Wimplicit-function-declaration]
->>             if (!task_is_in_init_pid_ns(current))
->>                  ^
->>     1 error generated.
->>
->>
->> vim +/task_is_in_init_pid_ns +344 drivers/hwtracing/coresight/coresight-etm3x-core.c
->>
->>     301	
->>     302	#define ETM3X_SUPPORTED_OPTIONS (ETMCR_CYC_ACC | \
->>     303					 ETMCR_TIMESTAMP_EN | \
->>     304					 ETMCR_RETURN_STACK)
->>     305	
->>     306	static int etm_parse_event_config(struct etm_drvdata *drvdata,
->>     307					  struct perf_event *event)
->>     308	{
->>     309		struct etm_config *config = &drvdata->config;
->>     310		struct perf_event_attr *attr = &event->attr;
->>     311	
->>     312		if (!attr)
->>     313			return -EINVAL;
->>     314	
->>     315		/* Clear configuration from previous run */
->>     316		memset(config, 0, sizeof(struct etm_config));
->>     317	
->>     318		if (attr->exclude_kernel)
->>     319			config->mode = ETM_MODE_EXCL_KERN;
->>     320	
->>     321		if (attr->exclude_user)
->>     322			config->mode = ETM_MODE_EXCL_USER;
->>     323	
->>     324		/* Always start from the default config */
->>     325		etm_set_default(config);
->>     326	
->>     327		/*
->>     328		 * By default the tracers are configured to trace the whole address
->>     329		 * range.  Narrow the field only if requested by user space.
->>     330		 */
->>     331		if (config->mode)
->>     332			etm_config_trace_mode(config);
->>     333	
->>     334		/*
->>     335		 * At this time only cycle accurate, return stack  and timestamp
->>     336		 * options are available.
->>     337		 */
->>     338		if (attr->config & ~ETM3X_SUPPORTED_OPTIONS)
->>     339			return -EINVAL;
->>     340	
->>     341		config->ctrl = attr->config;
->>     342	
->>     343		/* Don't trace contextID when runs in non-root PID namespace */
->>   > 344		if (!task_is_in_init_pid_ns(current))
-> This patchset is based on another patchset [1], as described on the
-> cover letter patch.  This is why here reports for building failure.
->
-> To avoid the false positive reporting, if any better practice I can
-> follow up to resolve the dependency between two patchsets, please let
-> me know and I will do in next time.
+On Fri, Dec 10, 2021 at 05:54:44PM +0000, Robin Murphy wrote:
+> Upon failure, dma_alloc_coherent() returns NULL. If that does happen,
+> passing some uninitialised stack contents to dma_mapping_error() - which
+> belongs to a different API in the first place - has precious little
+> chance of detecting it.
+>=20
+> Also include the correct header, because the fragile transitive
+> inclusion currently providing it is going to break soon.
+>=20
+> Fixes: 20e7dce255e9 ("drm/tegra: Remove memory allocation from Falcon lib=
+rary")
+> CC: Thierry Reding <thierry.reding@gmail.com>
+> CC: Mikko Perttunen <mperttunen@nvidia.com>
+> CC: dri-devel@lists.freedesktop.org
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>=20
+> ---
+>=20
+> It also doesn't appear to handle failure of the tegra_drm_alloc() path
+> either, but that's a loose thread I have no desire to pull on... ;)
+>=20
+> v2: Resend as part of the series, originally posted separately here:
+>=20
+> https://lore.kernel.org/dri-devel/2703882439344010e33bf21ecd63cf9e5e6dc00=
+d.1637781007.git.robin.murphy@arm.com/
+>=20
+>  drivers/gpu/drm/tegra/vic.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 
-Hi Leo,
+Applied, thanks. I've also fixed up the missing failure handling for
+tegra_drm_alloc(), which was actually quite trivial to do.
 
-Sorry for the inconvenience, the bot doesn't support to parse the link 
-in cover letter yet,
-we suggest to use '--base' as documented 
-inhttps://git-scm.com/docs/git-format-patch
+Thierry
 
-Best Regards,
-Rong CHen
+--xaI96K7vWbm32g6g
+Content-Type: application/pgp-signature; name="signature.asc"
 
->
-> Thanks,
-> Leo
->
-> [1] https://lore.kernel.org/lkml/20211208083320.472503-1-leo.yan@linaro.org/
->
->>     345			config->ctrl &= ~ETMCR_CTXID_SIZE;
->>     346	
->>     347		/*
->>     348		 * Possible to have cores with PTM (supports ret stack) and ETM
->>     349		 * (never has ret stack) on the same SoC. So if we have a request
->>     350		 * for return stack that can't be honoured on this core then
->>     351		 * clear the bit - trace will still continue normally
->>     352		 */
->>     353		if ((config->ctrl & ETMCR_RETURN_STACK) &&
->>     354		    !(drvdata->etmccer & ETMCCER_RETSTACK))
->>     355			config->ctrl &= ~ETMCR_RETURN_STACK;
->>     356	
->>     357		return 0;
->>     358	}
->>     359	
->>
->> ---
->> 0-DAY CI Kernel Test Service, Intel Corporation
->> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG6/wsACgkQ3SOs138+
+s6G5Ng//YzfjTiVGwWVICqHpvgQHCcZ8oVaca2ULy6V9X+H0OOwBsrnOOsQRNQPN
+bhUymR2MvtF7CGkWXSLcLBInR683ccLJefYom3K7kd/Lf1bptAbYsIIR6mEU/iHF
+dgk52WgEANXqXpjIkny9hIQdmgjL4ilBS9vwZnBniFIfNTAER2fEy3CsfvoQnkC6
+0ZoB9zaj+a+PBUy2oGB0K51wzoYWglCG5sbD94eeztUwdZtnWcFz8FpYWLVZQgvb
+OH7mgLECdjDiu6ZJ+/h57xcO2gR0NhEPOlq5fhyWd6M2OMcqmwE4xEmH14zyq1RS
+maeLK89xm8X7BCEneOai8B70OH2nzW7dHYMFT33WWJOVzvfX9jBzTn5aMxif8T1x
+NYoJew1GJDCvc0hE1SQyWLqfomvVE9Ctod8pgR18us9XMn0jhQZ9+9frVE661g7C
+0ATJ+ekU7msdPeQGG+gIgOoBI1nxVlhMyaeiEA5ZUI7jaa118EAS5o7RFHGW55yu
+YTmw+ZiJ1Oqtm+sJIco6G4z30Su+rsAo99K0lALgJ0op2uBibF49yGyoDvfM/k62
+7fgmTjnj2tA/V4isGVdH8/JjF8gvferm8YCBh2PZlArczHEUTOh1hIoNwxGOGIG7
+y02bpMz2KLrRaOdf+ut96A/t1b+aUMiwgnH1cOyt1cy7SuBVvjU=
+=+ED4
+-----END PGP SIGNATURE-----
+
+--xaI96K7vWbm32g6g--

@@ -2,128 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 072534766CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 01:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6134766DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 01:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbhLPAAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Dec 2021 19:00:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbhLPAAk (ORCPT
+        id S232281AbhLPAQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Dec 2021 19:16:34 -0500
+Received: from esa6.hc3370-68.iphmx.com ([216.71.155.175]:64533 "EHLO
+        esa6.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230469AbhLPAQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Dec 2021 19:00:40 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5520C061574;
-        Wed, 15 Dec 2021 16:00:39 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id y12so79626186eda.12;
-        Wed, 15 Dec 2021 16:00:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MwNsU4vuy1PLTYMBDfOak+X8drCHZ+rnd53fyKk6+s4=;
-        b=qOIQMkNCGBRZZcaQf7oxV91r/PtoFdR0KxKYVIL1DWxhFw/1E+Ggv49R5NxgA7qUm+
-         msPFHA2vUXHblPS46znWF5bK53Y6UDwo2b+31QIPBviQWwAfhqiQe42Mp71itpq7UtT0
-         fNwXFPAsfxcexu5EaLaGEqxAjYmylALom4MItU5zqiXJPUMqAGOrNI5Vvd/sGBtArzqW
-         m/zqmkV+FFjeKGaNTOPjZcRJYuQS9k97ft0hD15Q0jZs22IroZcnx6CmcyT3Ww0HipQq
-         L1CmlqvYj73CMiObDe1IqnDQTgsE9A2Gzh/K4pVkuhLmmEtXQz4LY9UmLb5ACvB7+Ez9
-         q/Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MwNsU4vuy1PLTYMBDfOak+X8drCHZ+rnd53fyKk6+s4=;
-        b=qi7d+4L43MfNZKZK66mj0cfsyj5toMXSiIDhselGWHA+ssiDL+lBZdVO8RMjFHWkdl
-         4d3nJaWk4zeXchhAYLSu+9YAamQRWqmf4la0fzABBiC30dxcoZd6S6pVN/VXc2ptAA2S
-         xQSkHX1J0wzQ1Oy1B5gDm8FQO0WvCEY/cveHMEReqSjITj9U1LWZb3aEDMJx0EpH/La8
-         xi/3yfm7VUkzS9r+Fpi2oyed6hGLbIwG7JSu3K9Zkh5V8QAPhzFJjbDBDzF76cfB91C6
-         Cq+9ndgo7FivPbgO/5obLUYSU5WnwGvHOEJ9FJk2+uTkhKLejGoPr4n/kn3da80K8Qcp
-         RxEQ==
-X-Gm-Message-State: AOAM532Y8OWLRE5IBm0tWFsHnMWxGOwkNGPRtUD5rVdkRyWRdrIiYp2U
-        Asq/NCwALsbdlFdetiHGico=
-X-Google-Smtp-Source: ABdhPJz9V8YmaOGLVKnTMHbpExR5rLhBGNq3DW8NWylDLY98KK/UG6afVOZUL0gcEcA4f2RiLD6sEw==
-X-Received: by 2002:a05:6402:2547:: with SMTP id l7mr17578300edb.301.1639612838377;
-        Wed, 15 Dec 2021 16:00:38 -0800 (PST)
-Received: from Ansuel-xps. (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id oz20sm1161670ejc.60.2021.12.15.16.00.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 16:00:37 -0800 (PST)
-Message-ID: <61ba81a5.1c69fb81.354b7.4b14@mx.google.com>
-X-Google-Original-Message-ID: <YbqBoj/nn4WRLCRu@Ansuel-xps.>
-Date:   Thu, 16 Dec 2021 01:00:34 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH RFC v6 11/16] net: dsa: qca8k: add tracking
- state of master port
-References: <20211214224409.5770-1-ansuelsmth@gmail.com>
- <20211214224409.5770-12-ansuelsmth@gmail.com>
- <20211215095146.6awhx44lamojipoo@skbuf>
+        Wed, 15 Dec 2021 19:16:33 -0500
+X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Dec 2021 19:16:33 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1639613793;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=SZZJ//s3+3ZzTEDrC/sSOmJIyeW4tH8BdxhznJcFRm0=;
+  b=clSQ+WDUwHQAm7wF868OKOe8Lbfhj3r3kXFzFnbLUSEy2oOX/vLOaHwW
+   6kOW5DpVeOqMOeAtATGfXveoVsz5hdOSD+PwDPzinRLcHxbHtzmvoYKV4
+   iGj0CIG+rGuEvHQh40Gl5DFpIWFyy38zjx7XEYdY/59bs7UHMQW/cp8AJ
+   U=;
+Authentication-Results: esa6.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+IronPort-SDR: nWUtCjCISF4zFhLumypKeu8ZMpqd3jCOmjPIEFmFfl3KwTIiTWx+VVJqlX0a9AEAKARzibdm+/
+ PG/EzQ7JstRru8rvOUsL/FqBxpeNWmdbK2JmWdHhOBCrhOSwmyoTjEy1wUfjld7aHEEImSJigS
+ Dt8Lpte7fxIrhcmt8suWpfG+oyv+Cn8S46z45+8lreD/6CS3D+230lk8+sl77k7/CHZtuMvMFc
+ vUjx8gRi6o8Y59kwepPRJPuObLTY5k2cNpAurFEAe7e2J59Lnx+DIuRrfZ2opMMmhbbYaehoK7
+ s9OEiZUrSGpPuBGuo7LTscBA
+X-SBRS: 5.1
+X-MesageID: 60078440
+X-Ironport-Server: esa6.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.156.83
+X-Policy: $RELAYED
+IronPort-Data: A9a23:4YWQ+KPQwRuSpy/vrR0HkMFynXyQoLVcMsEvi/4bfWQNrUoqhjBVm
+ 2AcXD+GbqyNNmX2edpzbNizp0pUu8OBnd8wGgto+SlhQUwRpJueD7x1DKtR0wB+jCHnZBg6h
+ ynLQoCYdKjYdpJYz/uUGuCJQUNUjMlkfZKhTr6UUsxNbVU8En5400s+w7VRbrNA2rBVPSvc4
+ bsenOWHULOV82Yc3rU8sv/rRLtH5ZweiRtA1rAMTakjUGz2zhH5OKk3N6CpR0YUd6EPdgKMq
+ 0Qv+5nilo/R109F5tpICd8XeGVSKlLZFVDmZna7x8FOK/WNz8A/+v9TCRYSVatYoy+zjeI24
+ oVficfudRcAN52Vluc+FAYNRkmSPYUekFPGCX22sMjVxEzaaXr8hf5pCSnaP6VBpLwxWzsXs
+ 6VFdnZdNXhvhMrvqF6/YsBqit4uM4/AO4QHt2s75TrYEewnUdbIRKCiCdpwgm9o2ZASQa62i
+ 8wxUSBmZjGYb0V1IFIoJLU5mtr3wV7/WmgNwL6SjfVuuDWCpOBr65DhOcTYPNyDQ95YmG6cp
+ 2Tb7yL4BA0XMJqUzj/t2ni0rubLnC79CMQeGdWQ9uZjqE+C2msJThYRUDOTsannok2zQdRSL
+ woT4CVGhaE3/x31ZsLnVBP+pnOY1jYYWtxNA6g55RuLx678/QmUHC4HQyRHZdhgs9U5LRQv1
+ 1mGmPvzCDBvuaHTQnWYnp+IojeiESwUK3IefygCTBtD79SLnW0opkuRFJA5Svfz14CrX2Grq
+ 9yXkMQgr68pn/xM/fWpwQuZvyKFr6iQQA0WoRqCCwpJ8ThFTIKiYoWp733S4vBBMJuVQzG9g
+ ZQUpySNxLtQVM/QzURhVM1IRej0vKjdbFUwlHY2R8F5nwlB7UJPamy5DNtWAE5yevgJdjbyC
+ KM4kVMAvcQDVJdGgEIeXm5QNyjI5fSwfTgGfqqNBjarXnSXXFXdlM2JTRTPt10BaGB2zckC1
+ W6zKK5A90oyB6V91yaRTOwAy7ItzS1W7TqNHsGmnk/4gefEPCX9pVI53L2mNLpRAESs+lq9z
+ jqiH5HSl0U3vBPWPEE7DrL/3XhVdCNmVPgaWuRcd/KZIxoOJY3SI6S5/F/VQKQ8x/49vr6Rp
+ hmVAxYEoHKi1CWvAVjbMRhLNeKwNauTWFpmZETAy37zgCN9CWtuhY9CH6YKkU4PqLY+kKUqF
+ qZdIK1twJ1nE1z6xtjUVrGlxKQKSfhhrVLm0/ONbGdtcph+aRbO/9O4LALj+DNXVni8tNcko
+ q3m3QTeGMJRSwNnBcfQSfSu01Lu4iRNxLMsBxPFcotJZUHh0Il2MCit3PU5FN4BdEfYzTyA2
+ gfIXRpB/bvRo5U4+cXijLyfq9v7CPN3G0dXRjGJ7bu/OSTA0HCkxItMDLSBcTzHDTum86S+f
+ +RFifr7NaRfzlpNtoN9FZdtzL4/uISz9+MLkFw8ESySPVqxC75mLn2X5uV1t/VAlu1DpA+7e
+ kOT4d0Ga7+HD9zoTQwKLw0/Y+XdifxNwmvO7e44KVnR7TNs+ObVSl1bOhSBhXAPLLZxN495k
+ +4ttNRPtl66gxsudN2HkjpV5yKHKXlZC/crsZQTAYnKjAs3yw4dPcyAW3GuuJzfOc9RNkQKI
+ yOPgPuQjrtR8UPObn4vGCWfxuFan5kP5EhHwVJqy45lQTYZaivbBCFszAk=
+IronPort-HdrOrdr: A9a23:X0PHOK4W6bbzebDYZAPXwN7XdLJyesId70hD6qhwISY6TiX4rb
+ HIoB1173/JYVoqNE3I+urwXJVoI0mslqKdiLN5VdzJMTUO0FHYSb2KhrGC/9SPIULDH5ZmpM
+ VdT5Q=
+X-IronPort-AV: E=Sophos;i="5.88,209,1635220800"; 
+   d="scan'208";a="60078440"
+From:   Andrew Cooper <andrew.cooper3@citrix.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+CC:     <amc96@srcf.net>, Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
+Date:   Thu, 16 Dec 2021 00:08:56 +0000
+Message-ID: <20211216000856.4480-1-andrew.cooper3@citrix.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211215095146.6awhx44lamojipoo@skbuf>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 11:51:46AM +0200, Vladimir Oltean wrote:
-> On Tue, Dec 14, 2021 at 11:44:04PM +0100, Ansuel Smith wrote:
-> > MDIO/MIB Ethernet require the master port and the tagger availabale to
-> > correctly work. Use the new api master_state_change to track when master
-> > is operational or not and set a bool in qca8k_priv.
-> > We cache the first cached master available and we check if other cpu
-> > port are operational when the cached one goes down.
-> > This cached master will later be used by mdio read/write and mib request to
-> > correctly use the working function.
-> > 
-> > qca8k implementation for MDIO/MIB Ethernet is bad. CPU port0 is the only
-> > one that answers with the ack packet or sends MIB Ethernet packets. For
-> > this reason the master_state_change ignore CPU port6 and checkes only
-> > CPU port0 if it's operational and enables this mode.
-> 
-> CPU port 0 may not always be wired, it depends on board design, right?
-> So the Ethernet management protocol may or may not be available to all users.
->
+Both __pkru_allows_write() and arch_set_user_pkey_access() shift
+PKRU_WD_BIT (a signed constant) by up to 30 bits, hitting the sign bit.
 
-Out of 130 device we found only 2 device that had cpu 0 disconnected and
-were Xiaomi device (so not really top of following standard and advised
-config from qcom). Only qca833x supports the use of cpu port6 as an
-alternative port. qca8327 doesn't work with cpu port6 as the only cpu
-port and cpu0 port is mandatory.
-I also tested out of curiosity if mac swap handle this case and no luck,
-the switch still doesn't answer with ack packet.
-(config I tested was declaring only port6 as cpu port, forcing mac swap
-and test if this works. Every request timeouts. Normal connection works 
-and the tagger correctly works.)
+Use unsigned constants instead.
 
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> > diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
-> > index ab4a417b25a9..6edd6adc3063 100644
-> > --- a/drivers/net/dsa/qca8k.h
-> > +++ b/drivers/net/dsa/qca8k.h
-> > @@ -353,6 +353,7 @@ struct qca8k_priv {
-> >  	struct dsa_switch_ops ops;
-> >  	struct gpio_desc *reset_gpio;
-> >  	unsigned int port_mtu[QCA8K_NUM_PORTS];
-> > +	const struct net_device *master; /* Track if mdio/mib Ethernet is available */
-> 
-> Maybe "mgmt_master" would be a clearer naming scheme?
-> 
-> >  };
-> >  
-> >  struct qca8k_mib_desc {
-> > -- 
-> > 2.33.1
-> > 
-> 
+Clearly pkey 15 has not been used in combination with UBSAN yet.
 
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+---
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Borislav Petkov <bp@alien8.de>
+CC: Dave Hansen <dave.hansen@linux.intel.com>
+CC: x86@kernel.org
+CC: "H. Peter Anvin" <hpa@zytor.com>
+
+Noticed by code inspection only.  I can't actually provoke the compiler into
+generating incorrect logic as far as this shift is concerned, so haven't
+included a fixes tag.
+
+If wanted, it is:
+
+  Fixes: 33a709b25a76 ("mm/gup, x86/mm/pkeys: Check VMAs and PTEs for protection keys")
+
+except it will collide with the very recent code movement in 784a46618f634.
+---
+ arch/x86/include/asm/pkru.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/pkru.h b/arch/x86/include/asm/pkru.h
+index 4cd49afa0ca4..74f0a2d34ffd 100644
+--- a/arch/x86/include/asm/pkru.h
++++ b/arch/x86/include/asm/pkru.h
+@@ -4,8 +4,8 @@
+ 
+ #include <asm/cpufeature.h>
+ 
+-#define PKRU_AD_BIT 0x1
+-#define PKRU_WD_BIT 0x2
++#define PKRU_AD_BIT 0x1u
++#define PKRU_WD_BIT 0x2u
+ #define PKRU_BITS_PER_PKEY 2
+ 
+ #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
 -- 
-	Ansuel
+2.11.0
+

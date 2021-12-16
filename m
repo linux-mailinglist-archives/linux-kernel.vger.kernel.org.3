@@ -2,121 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8804A477AAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2CA477AB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 18:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240276AbhLPReg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 12:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235931AbhLPRef (ORCPT
+        id S240292AbhLPRfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 12:35:16 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:54454 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235740AbhLPRfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:34:35 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922C6C061574;
-        Thu, 16 Dec 2021 09:34:34 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id 30so48449815uag.13;
-        Thu, 16 Dec 2021 09:34:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1WwsvBOKb5aX+7eqWhUm/uoX6lfXr8RZdkxy0n4Fz4s=;
-        b=RDBvdE0bUi5JdAcMg1593mCZMzNOzbQ9WHJ8AcibwrfxBmy/azeOP9tq0sDkERkMnx
-         QPGqVKHBrwFMZsekIZSGb67J9U3WMjPaFf1m2SxArhunwy+LKTB+qkR/WFX0hz4uMNJA
-         Fz/7FZBXXCieMOxzVRYbYLuKJEgESwOSsRMH4/fB7Gspz/9Ay2SaxeSZkgZh9Xfogyvc
-         MQm6xF3dn1PcXKZV5hvyx0jN4SfrEfSeh2YLX8D6LOwDhpu5AInRzHr631xc1zpLXV2K
-         ltR5fAsLjR/uY9tspXhsdSpRISfRrh0XPtsqa9HS9Kg2jJIec++di4Z9yn/exj7S2pJ3
-         h01w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1WwsvBOKb5aX+7eqWhUm/uoX6lfXr8RZdkxy0n4Fz4s=;
-        b=0u9GdjpiT41daTvmGu9JQJIFaU/o3CPis8lx8oB26/3IKIZXNNvRJVZFwND+9b/veg
-         vaZAgcAf+Y13eEjl+fv+KR4XL7EtjyQ+WMWrHsYSZycdDlHdbZZYEM4KkSpGBulR4nBl
-         Gvp2+/51O5MbM3iCIsjdH9O3CcMJOz0FOADSc39fg8LviGLexAe2f7uQcHovkZFpr/2Y
-         HlbB6++B/z4f6PLhku97CmJjWJy14jZMNv1nK7O2J10Evckj00TI+5hiArCGv4ISOgN2
-         u9iLNaT2cMYx4x1F66bgULeecS8S+NayiHRMgxXAI1IRstIkpwQOYMNwhPWtvNVGXiae
-         TaNA==
-X-Gm-Message-State: AOAM531lpGUm4StIh52bE6tg9Zd4ktzf4mgcUG9cNrbAdh0uGX8F9gw2
-        09RchiXXffawRThPZuT6MmXKikTqJFguBtzL1sKci/omp3Q=
-X-Google-Smtp-Source: ABdhPJxGuxrBofPK+/tqhZ2EQUieRPUWmqtTJTpLaLexgWTODqhNlP5cHqIDWb8G61IzN89uQmQd9bwu8KOZUIjpMKw=
-X-Received: by 2002:a67:eb54:: with SMTP id x20mr6413005vso.18.1639676073726;
- Thu, 16 Dec 2021 09:34:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20211216105246.3548133-1-daniel@0x0f.com> <CABgxDoKJRc_qORcpFx=eNPS=bGV68hPrbeH0VtcQ2Jjx2ruqmg@mail.gmail.com>
- <CAFr9PX=AAssT1imCfpU_piGBOemD23RGBZzngznyia-4TXrK=g@mail.gmail.com>
-In-Reply-To: <CAFr9PX=AAssT1imCfpU_piGBOemD23RGBZzngznyia-4TXrK=g@mail.gmail.com>
-From:   Romain Perier <romain.perier@gmail.com>
-Date:   Thu, 16 Dec 2021 18:34:21 +0100
-Message-ID: <CABgxDoLuOoE5qzzymE-htYz68Nrh8TzZ4d=LgbuNhJs9geevZg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] ARM: mstar: Initial Miyoo Mini support
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 16 Dec 2021 12:35:15 -0500
+Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C523C20B7179;
+        Thu, 16 Dec 2021 09:35:14 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C523C20B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1639676114;
+        bh=oARjDRfZQWY3Cme8+4IVbUVjfvrWPS9qIDnFNjaj9kM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SGnYE798AcJmegirNcwtOPag1zPT/CG8JPFNw59StQftymVd9om+XjByExognvaA1
+         KObI+QeI09zUV9gMrQInjpCBb2Kh1pf5G+QZjnDZBpglbp27O3kOCY0q0COyDUafwb
+         NDFESm2VjIj8siLrqJDqfECEQTAwNJ/gEh0nvvUA=
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        beaub@linux.microsoft.com
+Subject: [PATCH v8 00/12] user_events: Enable user processes to create and write to trace events
+Date:   Thu, 16 Dec 2021 09:34:59 -0800
+Message-Id: <20211216173511.10390-1-beaub@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+User mode processes that wish to use trace events to get data into
+ftrace, perf, eBPF, etc are limited to uprobes today. The user events
+features enables an ABI for user mode processes to create and write to
+trace events that are isolated from kernel level trace events. This
+enables a faster path for tracing from user mode data as well as opens
+managed code to participate in trace events, where stub locations are
+dynamic.
+
+User processes often want to trace only when it's useful. To enable this
+a set of pages are mapped into the user process space that indicate the
+current state of the user events that have been registered. User
+processes can check if their event is hooked to a trace/probe, and if it
+is, emit the event data out via the write() syscall.
+
+Two new files are introduced into tracefs to accomplish this:
+user_events_status - This file is mmap'd into participating user mode
+processes to indicate event status.
+
+user_events_data - This file is opened and register/delete ioctl's are
+issued to create/open/delete trace events that can be used for tracing.
+
+The typical scenario is on process start to mmap user_events_status. Processes
+then register the events they plan to use via the REG ioctl. The ioctl reads
+and updates the passed in user_reg struct. The status_index of the struct is
+used to know the byte in the status page to check for that event. The
+write_index of the struct is used to describe that event when writing out to
+the fd that was used for the ioctl call. The data must always include this
+index first when writing out data for an event. Data can be written either by
+write() or by writev().
+
+For example, in memory:
+int index;
+char data[];
+
+Psuedo code example of typical usage:
+struct user_reg reg;
+
+int page_fd = open("user_events_status", O_RDWR);
+char *page_data = mmap(NULL, PAGE_SIZE, PROT_READ, MAP_SHARED, page_fd, 0);
+close(page_fd);
+
+int data_fd = open("user_events_data", O_RDWR);
+
+reg.size = sizeof(reg);
+reg.name_args = (__u64)"test";
+
+ioctl(data_fd, DIAG_IOCSREG, &reg);
+int status_id = reg.status_index;
+int write_id = reg.write_index;
+
+struct iovec io[2];
+io[0].iov_base = &write_id;
+io[0].iov_len = sizeof(write_id);
+io[1].iov_base = payload;
+io[1].iov_len = sizeof(payload);
+
+if (page_data[status_id])
+	writev(data_fd, io, 2);
+
+User events are also exposed via the dynamic_events tracefs file for
+both create and delete. Current status is exposed via the user_events_status
+tracefs file.
+
+Simple example to register a user event via dynamic_events:
+	echo u:test >> dynamic_events
+	cat dynamic_events
+	u:test
+
+If an event is hooked to a probe, the probe hooked shows up:
+	echo 1 > events/user_events/test/enable
+	cat user_events_status
+	1:test # Used by ftrace
+
+	Active: 1
+	Busy: 1
+	Max: 4096
+
+If an event is not hooked to a probe, no probe status shows up:
+	echo 0 > events/user_events/test/enable
+	cat user_events_status
+	1:test
+
+	Active: 1
+	Busy: 0
+	Max: 4096
+
+Users can describe the trace event format via the following format:
+	name[:FLAG1[,FLAG2...] [field1[;field2...]]
+
+Each field has the following format:
+	type name
+
+Example for char array with a size of 20 named msg:
+	echo 'u:detailed char[20] msg' >> dynamic_events
+	cat dynamic_events
+	u:detailed char[20] msg
+
+Data offsets are based on the data written out via write() and will be
+updated to reflect the correct offset in the trace_event fields. For dynamic
+data it is recommended to use the new __rel_loc data type. This type will be
+the same as __data_loc, but the offset is relative to this entry. This allows
+user_events to not worry about what common fields are being inserted before
+the data.
+
+The above format is valid for both the ioctl and the dynamic_events file.
+
+V2:
+Fixed kmalloc vs kzalloc for register_page.
+Renamed user_event_mmap to user_event_status.
+Renamed user_event prefix from ue to u.
+Added seq_* operations to user_event_status to enable cat output.
+Aligned field parsing to synth_events format (+ size specifier for
+custom/user types).
+Added uapi header user_events.h to align kernel and user ABI definitions.
+
+V3:
+Updated ABI to handle single FD into many events via an int header.
+Added iovec/writev support to enable int header without payload changes.
+Updated bpf context to describe if data is coming from user, kernel or
+raw iovec.
+Added flag support for registering event, allows forcing BPF to always
+recieve the direct iovecs for sensitive code paths that do not want
+copies.
+
+V4:
+Moved to struct user_reg for registering events via ioctl.
+Added unit tests for ftrace, dyn_events and perf integration.
+Added print_fmt generation and proper dyn_events matching statements.
+Reduced time in preemption disabled paths.
+Added documentation file.
+Pre-fault in data when preemption is enabled and use no-fault copy in probes.
+Fixed MIPs missing PAGE_READONLY define.
+
+V5:
+Rebase to linux-trace for-next branch.
+Added sample code into samples/user_events.
+Switched to str_has_prefix in various locations.
+Allow hex in array sizes and ensure reasonable sizes are used.
+Moved lifetime of name buffer when parsing to the caller for failure paths.
+Fixed documentation nits and index.
+Ensure event isn't busy before freeing through dyn_events.
+Properly handle failure case for ftrace and perf in fault cases for buffers.
+Ensure write data is over min size and null terminated for dynamic arrays.
+
+V6:
+Fixed endian issue with dyn loc decoding (use u32).
+Fixed size_t conversion warning on hexagon arch (min vs min_t).
+Handle cases for __get_str vs __get_rel_str in print_fmt generation.
+Add additional comments around various event member lifetimes.
+Reduced max field array size to 1K.
+
+V7:
+Acquire reg_mutex during release, ensure refs cannot change under any situation.
+Remove default n from Kconfig.
+Move from static 0644 mode to TRACE_MODE_WRITE.
+
+V8:
+Squashed UABI header into ftrace minimal patch thread.
+Moved pagefault_disable/enable into copy_nofault.
+Moved to strscpy vs custom copy when getting array size from type.
+Made patch bisect friendly by ensuring tests are split from kernel code.
+
+Beau Belgrave (12):
+  user_events: Add minimal support for trace_event into ftrace
+  user_events: Add print_fmt generation support for basic types
+  user_events: Handle matching arguments from dyn_events
+  user_events: Add basic perf and eBPF support
+  user_events: Add self-test for ftrace integration
+  user_events: Add self-test for dynamic_events integration
+  user_events: Add self-test for perf_event integration
+  user_events: Optimize writing events by only copying data once
+  user_events: Add documentation file
+  user_events: Add sample code for typical usage
+  user_events: Validate user payloads for size and null termination
+  user_events: Add self-test for validator boundaries
+
+ Documentation/trace/index.rst                 |    1 +
+ Documentation/trace/user_events.rst           |  195 ++
+ include/uapi/linux/user_events.h              |   71 +
+ kernel/trace/Kconfig                          |   14 +
+ kernel/trace/Makefile                         |    1 +
+ kernel/trace/trace_events_user.c              | 1618 +++++++++++++++++
+ samples/user_events/Makefile                  |    5 +
+ samples/user_events/example.c                 |   91 +
+ tools/testing/selftests/user_events/Makefile  |    9 +
+ .../testing/selftests/user_events/dyn_test.c  |  130 ++
+ .../selftests/user_events/ftrace_test.c       |  452 +++++
+ .../testing/selftests/user_events/perf_test.c |  168 ++
+ tools/testing/selftests/user_events/settings  |    1 +
+ 13 files changed, 2756 insertions(+)
+ create mode 100644 Documentation/trace/user_events.rst
+ create mode 100644 include/uapi/linux/user_events.h
+ create mode 100644 kernel/trace/trace_events_user.c
+ create mode 100644 samples/user_events/Makefile
+ create mode 100644 samples/user_events/example.c
+ create mode 100644 tools/testing/selftests/user_events/Makefile
+ create mode 100644 tools/testing/selftests/user_events/dyn_test.c
+ create mode 100644 tools/testing/selftests/user_events/ftrace_test.c
+ create mode 100644 tools/testing/selftests/user_events/perf_test.c
+ create mode 100644 tools/testing/selftests/user_events/settings
 
 
-Le jeu. 16 d=C3=A9c. 2021 =C3=A0 17:15, Daniel Palmer <daniel@0x0f.com> a =
-=C3=A9crit :
->
-> Hi Romain,
->
-> On Fri, 17 Dec 2021 at 00:53, Romain Perier <romain.perier@gmail.com> wro=
-te:
-> >
-> > Hi Daniel,
-> >
-> > Le jeu. 16 d=C3=A9c. 2021 =C3=A0 11:52, Daniel Palmer <daniel@0x0f.com>=
- a =C3=A9crit :
-> >>
-> >>   - I've left the link tags as-is as using them for linking
-> >>     to background info seems acceptable.
-> >
-> >
-> > https://www.kernel.org/doc/html/latest/maintainer/configure-git.html#cr=
-eating-commit-links-to-lore-kernel-org
->
-> The explanation of Link seem to have been updated recently in
-> 1f57bd42b77cdc4b8e05ba9f4417872a6691b66d
-> (https://www.kernel.org/doc/html/latest/process/submitting-patches.html#d=
-escribe-your-changes
-> a few paragraphs down).
->
-> My reading of the paragraph since that commit is: Explain what the
-> commit does in the commit message. If there is a bug that prompted the
-> change then link it. If there is some background for the commit then
-> link it.
->
-> If it needs to be changed around I'll do that but I personally think
-> it looks nicer. It seems like the right way to provide links to
-> datasheets etc without putting a bunch of long messy urls into the
-> commit message.
+base-commit: 67d4f6e3bf5dddced226fbf19704cdbbb0c98847
+-- 
+2.17.1
 
-Well, I agree it is confusing. So I have discussed privately about
-this with Arnd (on IRC):
-
-<rperier> What is the real usage of the "Link:" tag ? it is mainly
-used as background informations for referencing archives or patches on
-lore.k.o  , but it can also be used for referencing something else or
-not ?
-(like information for a board)
-[...]
-<arnd> right, it's pretty much never wrong to add a Link: tag for the
-patch submission that was picked up, but you can also add it for any
-other reference, e.g.issue trackers or datasheets that may be relevant
-
-----
-
-Which replies to the question, so it is okay for me ;)
-
-Romain

@@ -2,125 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D161477519
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F186477516
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Dec 2021 15:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238151AbhLPO5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 09:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbhLPO5O (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:57:14 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D9FC06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:57:14 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id d10so65386426ybe.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Dec 2021 06:57:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lulanwG+A5JAL3xQCFNVjbLKzAgLtNz5V19bludNqIs=;
-        b=SzdtLi0IuKeee2Yj0Oj0WYBvbxz5uRe7IzYpJ6iZnQ13r2w/wmamIlao1Pozbbhrck
-         LST2F1W1PoUbyv6I23z1SK3PbpESgDHB2ee8R9LgZ8TvjGVNB45gXYyGecpRsDqt/vFZ
-         gjb+oS7XpSDLMmqSOYmASK8ILCZD1aEqVdfcv37B5NHQwrobqA2cQrVWNP/B0V33nkIH
-         9wNeJUyj+SSL38KveDHJaz5cmAF5guNoMXZOA5wIRkqLal8xnb2LCluVYm59Q6ryfSYZ
-         z+nBIG+5AyXvRxVNt+bVaQXRL6JUlCMcFrWTrwIni82NoB0FyRCyZo8tGqSKAAUHM307
-         NORA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lulanwG+A5JAL3xQCFNVjbLKzAgLtNz5V19bludNqIs=;
-        b=nXM3+atxvl8qKBYmgSMfDLcGk2bjgj3C3Wl2oPNxyXtNZ6KszwWGRTszP5QTEJt94/
-         T3aMdeweDPU3xD2MytUkum6UDUGmC9OvZ4pn9J/WXazFIa2fkKXjdR+ASFTw2QPn7G8A
-         nabS1Yt66ujSqlfXZVJNDu/eoZDIUXIMQqfVH+f5w/p4zPxrk09vDR8qn3T5N2LsYaw9
-         tdf1vspjy53hu5X5WSBq65TLxth/CSSK+Etpn7ZO8fd443caH3AJHEUJ2h86hGK+Nl69
-         R5Cc3NmUsQjWXH178l/lf3YwnaeStv+msUzhgyEpy8ghDPuLR7jcSmOxNWCZkFg+3WFG
-         665A==
-X-Gm-Message-State: AOAM531SlhqxWbscIY3xK/Qxjema5nJy3eM0hN1omNm3zyptqOcuE0Sq
-        zgGqr0r9pzqZMgQpAuIqkW8vMzjA8uArXdDR6BMZRw==
-X-Google-Smtp-Source: ABdhPJzYeQMUUARZJBbO6PTOx54PIlWKKuY7ZV++iWN0NFXdp7DjEmoFpv1n1p0impJjhfvPCYi3Vhl4GJBy4iMFMuQ=
-X-Received: by 2002:a25:b285:: with SMTP id k5mr13984870ybj.132.1639666633294;
- Thu, 16 Dec 2021 06:57:13 -0800 (PST)
+        id S238146AbhLPO5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 09:57:10 -0500
+Received: from mga12.intel.com ([192.55.52.136]:21848 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235010AbhLPO5K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 09:57:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639666630; x=1671202630;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s42kfBRilTCxpdjntHYacwLfvf0+A7dAoeI1JfpZDok=;
+  b=oDejW4tkAUpyxZ2lZ81j4fJYS5oK5fLpymtJrYU9eJpXgJkQ7XOtjfW1
+   Y7vmfqImN81PRfk7BKAgtMXq+ibghyubwrH8CI51zDPF3BYUwUdcB/HUc
+   zlFIgXfuL5HPhann50VIABMcOvBPXzCSE0OUVdeVIUhs0UD3lenjlOCjr
+   Z6cjscVDlaYrvAkYlihkrz91Rmk0SRLyMnveiP8stHrfvpvh7rQJjjJ8m
+   xM7rclL3yhuF1vdxTck3RKUQDidtwsd7Uqs7yCwJlAVJ6GGPnonxvQEZR
+   nbTeiZSdA2aj/UB86SgCdozgKdWfBKd8c5yB23sFJ45+XbEehSAauPmQC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="219523976"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="219523976"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 06:57:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="615179031"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 06:57:08 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxsBv-0003MY-JO; Thu, 16 Dec 2021 14:57:07 +0000
+Date:   Thu, 16 Dec 2021 22:56:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [intel-tdx:kvm-upstream 73/152] arch/x86/kvm/vmx/tdx_stubs.c:6:12:
+ warning: no previous prototype for function 'tdx_hardware_setup'
+Message-ID: <202112162216.Lu7x1lPh-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211213165342.74704-12-songmuchun@bytedance.com> <20211216130102.GE10708@xsang-OptiPlex-9020>
-In-Reply-To: <20211216130102.GE10708@xsang-OptiPlex-9020>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Thu, 16 Dec 2021 22:56:36 +0800
-Message-ID: <CAMZfGtVgmudUJWtmA68h3fVD3ThHP_Rq70Dj7h7hGx74ZCUFcQ@mail.gmail.com>
-Subject: Re: [External] [mm] 86cda95957: BUG:sleeping_function_called_from_invalid_context_at_include/linux/sched/mm.h
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        lkp@lists.01.org, willy@infradead.org, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@kernel.org, vdavydov.dev@gmail.com,
-        shakeelb@google.com, guro@fb.com, shy828301@gmail.com,
-        alexs@kernel.org, richard.weiyang@gmail.com, david@fromorbit.com,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org, kari.argillander@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, zhengqi.arch@bytedance.com,
-        duanxiongchun@bytedance.com, fam.zheng@bytedance.com,
-        smuchun@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 9:01 PM kernel test robot <oliver.sang@intel.com> wrote:
->
->
->
-> Greeting,
->
-> FYI, we noticed the following commit (built with gcc-9):
->
-> commit: 86cda9595796e709c444b93df1f27a2343c5fa06 ("[PATCH v4 11/17] mm: list_lru: allocate list_lru_one only when needed")
-> url: https://github.com/0day-ci/linux/commits/Muchun-Song/Optimize-list-lru-memory-consumption/20211214-010208
-> base: https://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs.git dev-test
-> patch link: https://lore.kernel.org/linux-fsdevel/20211213165342.74704-12-songmuchun@bytedance.com
->
-> in testcase: xfstests
-> version: xfstests-x86_64-972d710-1_20211215
-> with following parameters:
->
->         disk: 4HDD
->         fs: xfs
->         test: xfs-reflink-25
->         ucode: 0x28
->
-> test-description: xfstests is a regression test suite for xfs and other files ystems.
-> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
->
->
-> on test machine: 8 threads 1 sockets Intel(R) Core(TM) i7-4790 v3 @ 3.60GHz with 6G memory
->
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
->
->
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
->
->
-> erial console /d[   14.815233][  T356] BUG: sleeping function called from invalid context at include/linux/sched/mm.h:230
-> [   14.827152][  T356] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 356, name: useradd
-> [   14.835607][  T356] preempt_count: 1, expected: 0
-> [   14.840274][  T356] CPU: 4 PID: 356 Comm: useradd Not tainted 5.16.0-rc1-00032-g86cda9595796 #1
-> ev/ttyS0
-> [   14.848903][  T356] Hardware name: Dell Inc. OptiPlex 9020/03CPWF, BIOS A11 04/01/2015
-> [   14.857606][  T356] Call Trace:
-> [   14.860732][  T356]  <TASK>
-> [ 14.863515][ T356] dump_stack_lvl (lib/dump_stack.c:107)
-> [ 14.867859][ T356] __might_resched.cold (kernel/sched/core.c:9543 kernel/sched/core.c:9496)
-> [ 14.872889][ T356] ? memcg_list_lru_alloc (include/linux/slab.h:598 mm/list_lru.c:354 mm/list_lru.c:586)
-> [ 14.878083][ T356] __kmalloc (include/linux/sched/mm.h:230 mm/slab.h:509 mm/slub.c:3148 mm/slub.c:3242 mm/slub.c:4433)
-> [ 14.882177][ T356] ? is_bpf_text_address (arch/x86/include/asm/preempt.h:85 include/linux/rcupdate.h:73 include/linux/rcupdate.h:720 kernel/bpf/core.c:717)
-> [ 14.887129][ T356] memcg_list_lru_alloc (include/linux/slab.h:598 mm/list_lru.c:354 mm/list_lru.c:586)
-> [ 14.892166][ T356] ? xas_alloc (lib/xarray.c:374)
-> [ 14.896421][ T356] kmem_cache_alloc_lru (include/linux/cgroup.h:403 mm/slab.h:295 mm/slab.h:514 mm/slub.c:3148 mm/slub.c:3242 mm/slub.c:3249 mm/slub.c:3266)
-> [ 14.901367][ T356] xas_alloc (lib/xarray.c:374)
+tree:   https://github.com/intel/tdx.git kvm-upstream
+head:   bdfe06c17daab60c196ff80c1d98467a1d3734fa
+commit: 3545bcde2d72e4b5b5f16571788aac0ddb5f49a5 [73/152] KVM: TDX: Add KVM TDX system-wide initialization and teardown
+config: x86_64-randconfig-a013-20211216 (https://download.01.org/0day-ci/archive/20211216/202112162216.Lu7x1lPh-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/3545bcde2d72e4b5b5f16571788aac0ddb5f49a5
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream
+        git checkout 3545bcde2d72e4b5b5f16571788aac0ddb5f49a5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
-Thanks for reporting this. It was caused when rebasing the code.
-Will fix.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   arch/x86/kvm/vmx/tdx_stubs.c:4:13: warning: no previous prototype for function 'tdx_pre_kvm_init' [-Wmissing-prototypes]
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+               ^
+   arch/x86/kvm/vmx/tdx_stubs.c:4:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:6:12: warning: no previous prototype for function 'tdx_hardware_setup' [-Wmissing-prototypes]
+   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+              ^
+   arch/x86/kvm/vmx/tdx_stubs.c:6:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:7:6: warning: no previous prototype for function 'tdx_hardware_enable' [-Wmissing-prototypes]
+   void tdx_hardware_enable(void) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_hardware_enable(void) {}
+   ^
+   static 
+>> arch/x86/kvm/vmx/tdx_stubs.c:8:6: warning: no previous prototype for function 'tdx_hardware_disable' [-Wmissing-prototypes]
+   void tdx_hardware_disable(void) {}
+        ^
+   arch/x86/kvm/vmx/tdx_stubs.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tdx_hardware_disable(void) {}
+   ^
+   static 
+   4 warnings generated.
+
+
+vim +/tdx_hardware_setup +6 arch/x86/kvm/vmx/tdx_stubs.c
+
+     3	
+     4	void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+     5				unsigned int *vcpu_align, unsigned int *vm_size) {}
+   > 6	int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -EOPNOTSUPP; }
+   > 7	void tdx_hardware_enable(void) {}
+   > 8	void tdx_hardware_disable(void) {}
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

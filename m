@@ -2,268 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D35C6479578
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D76479575
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 21:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240781AbhLQU27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 15:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240745AbhLQU24 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:28:56 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEBBC061746
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:28:55 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id j204-20020a2523d5000000b005c21574c704so6879677ybj.13
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 12:28:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=hG4ZnuxgGBUFxXxwDyVLqbjNwRWc8TyfZ/N8ZcihYgE=;
-        b=sJl/sdPGiXWSl8Dg24z4et8JM7fCrJrNaMVFBcVLbvfjIhApmeuL8LVy9JYmtHGs1H
-         kjrMLNnSqVldyToX8kePmJU8JiAhE8Q94q8MWVa22jakPoy5lhZLyOuFdHd46J/4dLis
-         lUqz7mETF9d6Dv5vQMVNeaAZxNjwhQgnXEAK3gnIRQOaPfUU6YYrmytIe7xYybVEb6+O
-         c3012/Yn8Lavs9JqfPOYPde4Sgk+Xi3OQ3pfy6ywkvUjUtvvrDT+YRfdyiIaf0Q4mTg2
-         A1Rn0q+MrI8nvMOCJub/wxFJ+mcFuTurOF7TTZ1EMzsDRlBGDDnoAkea4/ysXQdGw3jH
-         SI+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=hG4ZnuxgGBUFxXxwDyVLqbjNwRWc8TyfZ/N8ZcihYgE=;
-        b=lf/fZkqeQXS23G/bYdWgKPVzDXsckDTv3U8aUdWKlbJEMyrvxMVk6MeTx+tGMB3Lpm
-         lJGj6O66tvH0z1r8siKOt/LFEyXHwcUxqb1PKYimiegNyTDDKD8wpMwZISx0+bVJlzvA
-         qGXkUp6ctcXEvNuqpW2+6MOBeLMTjP56AqbdYGZaMHdFsC6+pdqzmidDCg3WLwrr4adq
-         DwKIXLdeWP4ykLlYcZT3Ebm7WdiTNu5HzspSxyLRkG9QQmabXW5WFTqhbxCi/kAEkzQF
-         qTH5lWBMeJA2SC7hLpsWvkds26QKF6aB41zjk+VGujQrsYGdFkOegp76SKghiE/4e6YA
-         7P1w==
-X-Gm-Message-State: AOAM532+MJogxZ1d6xEioRy1BZLePrmIIwiO15ePZWUhBT5MimGABx1K
-        ySb779FyrZoXs6D/n0gPdVG+IbxN8DEM
-X-Google-Smtp-Source: ABdhPJz4OF1BNEmrOoVJY/h7W/jYhTOZGKm/yEBShvJn6ah+cuVkUwOA9FzuFGtdq6KV1vTKqLWo+P+sxBfG
-X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:1bc7:219f:9362:ade9])
- (user=rajatja job=sendgmr) by 2002:a25:31d5:: with SMTP id
- x204mr6558872ybx.750.1639772935122; Fri, 17 Dec 2021 12:28:55 -0800 (PST)
-Date:   Fri, 17 Dec 2021 12:28:49 -0800
-Message-Id: <20211217202850.1967594-1-rajatja@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.307.g9b7440fafd-goog
-Subject: [PATCH v2 1/2] platform/chrome: Add driver for ChromeOS privacy-screen
-From:   Rajat Jain <rajatja@google.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Benson Leung <bleung@chromium.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        gwendal@google.com, seanpaul@google.com, marcheau@google.com,
-        dtor@google.com
-Cc:     Rajat Jain <rajatja@google.com>, rajatxjain@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+        id S240725AbhLQU2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 15:28:53 -0500
+Received: from foss.arm.com ([217.140.110.172]:34352 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235287AbhLQU2w (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 15:28:52 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6B61A12FC;
+        Fri, 17 Dec 2021 12:28:51 -0800 (PST)
+Received: from [192.168.122.166] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07A963F5A1;
+        Fri, 17 Dec 2021 12:28:51 -0800 (PST)
+Message-ID: <a6067bf9-5d68-8112-cf42-4928548d8f94@arm.com>
+Date:   Fri, 17 Dec 2021 14:28:50 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 2/6] cacheinfo: Set cache 'id' based on DT data
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morse <james.morse@arm.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, devicetree@vger.kernel.org,
+        "open list:ACPI FOR ARM64 (ACPI/arm64)" <linux-acpi@vger.kernel.org>
+References: <20211216233125.1130793-1-robh@kernel.org>
+ <20211216233125.1130793-3-robh@kernel.org>
+ <881f056d-d1ed-c6de-c09d-6e84d8b14530@arm.com>
+ <CAL_JsqKKx5-ep5=FVA5OHM+t=T-9GTuf6Sf9P6ZDUs7RD9=c8g@mail.gmail.com>
+ <20211217190345.kskfhnelqg3yx4j7@bogus>
+ <CAL_JsqJSz7D_KO_ueQum51erBHotMkAt+qJfTTctkxSvySWq1w@mail.gmail.com>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <CAL_JsqJSz7D_KO_ueQum51erBHotMkAt+qJfTTctkxSvySWq1w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the ACPI driver for the ChromeOS privacy screen that is
-present on some chromeos devices.
+Hi,
 
-Note that ideally, we'd want this privacy screen driver to be probed
-BEFORE the drm probe in order to avoid a drm probe deferral:
-https://hansdegoede.livejournal.com/25948.html
+On 12/17/21 13:26, Rob Herring wrote:
+> On Fri, Dec 17, 2021 at 1:03 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>>
+>> On Fri, Dec 17, 2021 at 12:14:22PM -0600, Rob Herring wrote:
+>>> On Fri, Dec 17, 2021 at 10:57 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>>>>
+>>>> Hi Rob,
+>>>>
+>>>> On 2021-12-16 23:31, Rob Herring wrote:
+>>>>> Use the minimum CPU h/w id of the CPUs associated with the cache for the
+>>>>> cache 'id'. This will provide a stable id value for a given system. As
+>>
+>> I am trying to follow the code. IIUC, the level one(I$ and D$) are skipped
+>> in this logic and the private unified cache if any will get the cpu hwid as
+>> the cache id which is all fine. But what happens if there are 2 levels of
+>> unified private cache ? I am assuming we only care about shared caches for
+>> MPAM and ignore private caches which sounds OK but I just wanted to confirm.
+> 
+> The cacheinfo 'id' is only unique to the level and type. It's the
+> type, level, and ID that gives a unique identifier:
+> 
+>   * struct cacheinfo - represent a cache leaf node
+>   * @id: This cache's id. It is unique among caches with the same (type, level).
+> 
+> Maybe ACPI's ID expects/allows globally unique cache IDs?
 
-In practise, I found that ACPI drivers are bound to their devices AFTER
-the drm probe on chromebooks. So on chromebooks with privacy-screen,
-this patch along with the next one in this series results in a probe
-deferral of about 250ms for i915 driver. However, it did not result in
-any user noticeable delay of splash screen in my personal experience.
+Yes, but the spec is IMHO written in a way that they may only be unique 
+for a subset of the caches! The rest might not have an ID at all, 
+particularly for !arm machines.
 
-In future if this probe deferral turns out to be an issue, we can
-consider turning this ACPI driver into something that is probed
-earlier than the drm drivers.
 
-Signed-off-by: Rajat Jain <rajatja@google.com>
----
-v2: * Reword the commit log
-    * Make the Kconfig into a tristate
-    * Reorder the patches in the series.
-
- drivers/platform/chrome/Kconfig              |   9 ++
- drivers/platform/chrome/Makefile             |   1 +
- drivers/platform/chrome/chromeos_priv_scrn.c | 132 +++++++++++++++++++
- 3 files changed, 142 insertions(+)
- create mode 100644 drivers/platform/chrome/chromeos_priv_scrn.c
-
-diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
-index ccc23d8686e8..d1c209a45a62 100644
---- a/drivers/platform/chrome/Kconfig
-+++ b/drivers/platform/chrome/Kconfig
-@@ -243,6 +243,15 @@ config CROS_USBPD_NOTIFY
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called cros_usbpd_notify.
- 
-+config CHROMEOS_PRIVACY_SCREEN
-+	tristate "ChromeOS Privacy Screen support"
-+	depends on ACPI
-+	depends on DRM
-+	select DRM_PRIVACY_SCREEN
-+	help
-+	  This driver provides the support needed for the in-built electronic
-+	  privacy screen that is present on some ChromeOS devices.
-+
- source "drivers/platform/chrome/wilco_ec/Kconfig"
- 
- endif # CHROMEOS_PLATFORMS
-diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
-index f901d2e43166..cfa0bb4e9e34 100644
---- a/drivers/platform/chrome/Makefile
-+++ b/drivers/platform/chrome/Makefile
-@@ -4,6 +4,7 @@
- CFLAGS_cros_ec_trace.o:=		-I$(src)
- 
- obj-$(CONFIG_CHROMEOS_LAPTOP)		+= chromeos_laptop.o
-+obj-$(CONFIG_CHROMEOS_PRIVACY_SCREEN)	+= chromeos_priv_scrn.o
- obj-$(CONFIG_CHROMEOS_PSTORE)		+= chromeos_pstore.o
- obj-$(CONFIG_CHROMEOS_TBMC)		+= chromeos_tbmc.o
- obj-$(CONFIG_CROS_EC)			+= cros_ec.o
-diff --git a/drivers/platform/chrome/chromeos_priv_scrn.c b/drivers/platform/chrome/chromeos_priv_scrn.c
-new file mode 100644
-index 000000000000..a4cbf5c79c2a
---- /dev/null
-+++ b/drivers/platform/chrome/chromeos_priv_scrn.c
-@@ -0,0 +1,132 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ *  chromeos_priv_scrn.c - ChromeOS Privacy Screen support
-+ *
-+ * Copyright (C) 2022 The Chromium OS Authors
-+ *
-+ */
-+
-+#include <linux/acpi.h>
-+#include <drm/drm_privacy_screen_driver.h>
-+
-+/*
-+ * The DSM (Define Specific Method) constants below are the agreed API with
-+ * the firmware team, on how to control privacy screen using ACPI methods.
-+ */
-+#define PRIV_SCRN_DSM_REVID		1	/* DSM version */
-+#define PRIV_SCRN_DSM_FN_GET_STATUS	1	/* Get privacy screen status */
-+#define PRIV_SCRN_DSM_FN_ENABLE		2	/* Enable privacy screen */
-+#define PRIV_SCRN_DSM_FN_DISABLE	3	/* Disable privacy screen */
-+
-+static const guid_t chromeos_priv_scrn_dsm_guid =
-+		    GUID_INIT(0xc7033113, 0x8720, 0x4ceb,
-+			      0x90, 0x90, 0x9d, 0x52, 0xb3, 0xe5, 0x2d, 0x73);
-+
-+static void
-+chromeos_priv_scrn_get_hw_state(struct drm_privacy_screen *drm_priv_scrn)
-+{
-+	union acpi_object *obj;
-+	acpi_handle handle;
-+	struct device *priv_scrn = drm_priv_scrn->dev.parent;
-+
-+	if (!priv_scrn)
-+		return;
-+
-+	handle = acpi_device_handle(to_acpi_device(priv_scrn));
-+	obj = acpi_evaluate_dsm(handle, &chromeos_priv_scrn_dsm_guid,
-+				PRIV_SCRN_DSM_REVID,
-+				PRIV_SCRN_DSM_FN_GET_STATUS, NULL);
-+	if (!obj) {
-+		dev_err(priv_scrn, "_DSM failed to get privacy-screen state\n");
-+		return;
-+	}
-+
-+	if (obj->type != ACPI_TYPE_INTEGER)
-+		dev_err(priv_scrn, "Bad _DSM to get privacy-screen state\n");
-+	else if (obj->integer.value == 1)
-+		drm_priv_scrn->hw_state = drm_priv_scrn->sw_state =
-+			PRIVACY_SCREEN_ENABLED;
-+	else
-+		drm_priv_scrn->hw_state = drm_priv_scrn->sw_state =
-+			PRIVACY_SCREEN_DISABLED;
-+
-+	ACPI_FREE(obj);
-+}
-+
-+static int
-+chromeos_priv_scrn_set_sw_state(struct drm_privacy_screen *drm_priv_scrn,
-+				enum drm_privacy_screen_status state)
-+{
-+	union acpi_object *obj = NULL;
-+	acpi_handle handle;
-+	struct device *priv_scrn = drm_priv_scrn->dev.parent;
-+
-+	if (!priv_scrn)
-+		return -ENODEV;
-+
-+	handle = acpi_device_handle(to_acpi_device(priv_scrn));
-+
-+	if (state == PRIVACY_SCREEN_DISABLED) {
-+		obj = acpi_evaluate_dsm(handle,	&chromeos_priv_scrn_dsm_guid,
-+					PRIV_SCRN_DSM_REVID,
-+					PRIV_SCRN_DSM_FN_DISABLE, NULL);
-+	} else if (state == PRIVACY_SCREEN_ENABLED) {
-+		obj = acpi_evaluate_dsm(handle,	&chromeos_priv_scrn_dsm_guid,
-+					PRIV_SCRN_DSM_REVID,
-+					PRIV_SCRN_DSM_FN_ENABLE, NULL);
-+	} else {
-+		dev_err(priv_scrn, "Bad attempt to set privacy-screen status\n");
-+		return -EINVAL;
-+	}
-+
-+	if (!obj) {
-+		dev_err(priv_scrn, "_DSM failed to set privacy-screen state\n");
-+		return -EIO;
-+	}
-+
-+	drm_priv_scrn->hw_state = drm_priv_scrn->sw_state = state;
-+	ACPI_FREE(obj);
-+	return 0;
-+}
-+
-+static const struct drm_privacy_screen_ops chromeos_priv_scrn_ops = {
-+	.get_hw_state = chromeos_priv_scrn_get_hw_state,
-+	.set_sw_state = chromeos_priv_scrn_set_sw_state,
-+};
-+
-+static int chromeos_priv_scrn_add(struct acpi_device *adev)
-+{
-+	struct drm_privacy_screen *drm_priv_scrn =
-+		drm_privacy_screen_register(&adev->dev, &chromeos_priv_scrn_ops);
-+
-+	if (IS_ERR(drm_priv_scrn)) {
-+		dev_err(&adev->dev, "Error registering privacy-screen\n");
-+		return PTR_ERR(drm_priv_scrn);
-+	}
-+
-+	dev_info(&adev->dev, "registered privacy-screen '%s'\n",
-+		 dev_name(&drm_priv_scrn->dev));
-+
-+	return 0;
-+}
-+
-+static const struct acpi_device_id chromeos_priv_scrn_device_ids[] = {
-+	{"GOOG0010", 0}, /* Google's electronic privacy screen for eDP-1 */
-+	{}
-+};
-+MODULE_DEVICE_TABLE(acpi, chromeos_priv_scrn_device_ids);
-+
-+static struct acpi_driver chromeos_priv_scrn_driver = {
-+	.name = "chromeos_priv_scrn_drvr",
-+	.class = "ChromeOS",
-+	.ids = chromeos_priv_scrn_device_ids,
-+	.ops = {
-+		.add = chromeos_priv_scrn_add,
-+	},
-+};
-+
-+module_acpi_driver(chromeos_priv_scrn_driver);
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("ChromeOS ACPI Privacy Screen driver");
-+MODULE_AUTHOR("Rajat Jain <rajatja@google.com>");
--- 
-2.34.1.307.g9b7440fafd-goog
+> 
+>>>>> we need to check all possible CPUs, we can't use the shared_cpu_map
+>>>>> which is just online CPUs. There's not a cache to CPUs mapping in DT, so
+>>>>> we have to walk all CPU nodes and then walk cache levels.
+>>
+>> I would have preferred to add the cache IDs in DT similar to ACPI but I see
+>> you have certain concerns with that which are valid as well.
+>>
+>>>>
+>>>> I believe another expected use of the cache ID exposed in sysfs is to
+>>>> program steering tags for cache stashing (typically in VFIO-based
+>>>> userspace drivers like DPDK so we can't realistically mediate it any
+>>>> other way). There were plans afoot last year to ensure that ACPI PPTT
+>>>> could provide the necessary ID values for arm64 systems which will
+>>>> typically be fairly arbitrary (but unique) due to reflecting underlying
+>>>> interconnect routing IDs. Assuming that there will eventually be some
+>>>> interest in cache stashing on DT-based systems too, we probably want to
+>>>> allow for an explicit ID property on DT cache nodes in a similar manner.
+>>>
+>>> If you have a suggestion for ID values that correspond to the h/w,
+>>> then we can add them. I'd like a bit more than just trusting that ID
+>>> is something real.
+>>>
+>>
+>> I agree, probably architecture must do better job at defining these. But
+>> generated IDs IMO might cause issues especial if we have to change the
+>> logic without breaking the backward compatibility.
+>>
+>>> While the ACPI folks may be willing to take an arbitrary index, it's
+>>> something we (mostly) avoid for DT.
+>>>
+>>
+>> Not sure if we can call that *arbitrary* 😄, in that case we can imagine
+>> the same at several places in the firmware.
+> 
+> By arbitrary, I mean made up by the binding/dts author or
+> documentation convention (UART0, UART1, etc.). Certainly things like
+> clock IDs are often made up number spaces, but I don't see how we
+> avoid that. DT had 'cell-index' which I still see attempted. But that
+> property traces back to h/w having a single power ctrl register and
+> cell-index was the bit index for the register. If only h/w was still
+> that simple.
+> 
+> Rob
+> 
 

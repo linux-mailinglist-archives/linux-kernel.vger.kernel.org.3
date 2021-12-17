@@ -2,163 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA7B478119
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05793478115
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 01:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbhLQAIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Dec 2021 19:08:42 -0500
-Received: from mx3.wp.pl ([212.77.101.10]:19085 "EHLO mx3.wp.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229710AbhLQAIl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Dec 2021 19:08:41 -0500
-Received: (wp-smtpd smtp.wp.pl 9914 invoked from network); 17 Dec 2021 01:08:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1639699719; bh=/Pv2URbWjPOQ4YmrI18eVOUSMMZPdrpJxRSFPgN2zJw=;
-          h=From:To:Cc:Subject;
-          b=S1AXpdX/EbEt09BDpqH3JbkemL1DXWbaOGNPBLXW+V0LRxMyNIGsbtkm7bvGloqxe
-           8bn9REnu2H9Qn4Fx1NZrQM1seOBeOZBSDxomBIZoa+UOKvKujm2JhReMEQ4mPJmQaq
-           ShgZFGE6kqaaEf6vOej+pxedj7ckNYvnab+ZXah8=
-Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <hauke@hauke-m.de>; 17 Dec 2021 01:08:39 +0100
-From:   Aleksander Jan Bajkowski <olek2@wp.pl>
-To:     hauke@hauke-m.de, davem@davemloft.net, kuba@kernel.org,
-        olek2@wp.pl, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thomas Nixon <tom@tomn.co.uk>
-Subject: [PATCH 1/1] net: lantiq_xrx200: increase buffer reservation
-Date:   Fri, 17 Dec 2021 01:07:40 +0100
-Message-Id: <20211217000740.683089-2-olek2@wp.pl>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211217000740.683089-1-olek2@wp.pl>
-References: <20211217000740.683089-1-olek2@wp.pl>
+        id S229576AbhLQAHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Dec 2021 19:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229436AbhLQAHx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Dec 2021 19:07:53 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414AAC061574;
+        Thu, 16 Dec 2021 16:07:53 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id s11so387497ilv.3;
+        Thu, 16 Dec 2021 16:07:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eMuIk+47x3s4KpscvxEDy8ls/dZRCTh3L6EHdqgxJeg=;
+        b=gfJzoNvxEql+KFUv6k/sKfVyqM+KFIQr4MCApsmE3qk3MS8GNbWhH/vwq86rRjTr1q
+         KgjeqWaRem0swd/Yuri6jvBETjjDtAhKpnIWnm/PrKXxBa8OyLxiNnPSfCvaLycPNmwV
+         UHmeH70TK9rxT5b3Kt4ApiMziZaSAC2vRVLIDIt6A0eHGk8dVNgls+aDVWoP/f8TC++V
+         PKQKa09eTh+9uEdbIL/yqj1BbovmozyQhUUih63162FhiHbfzkRrfKQ9fbiwjfSwRDy7
+         RbyvBDVhwiD9bn0ydRx9Qo8/tKBMRWBvPjMX1wpEDKYlz8s08dc/2IrbDsINYMHnvQiu
+         W8nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eMuIk+47x3s4KpscvxEDy8ls/dZRCTh3L6EHdqgxJeg=;
+        b=qP3o0jFXQVogRj3f1TDA42xbhKvwwg2Qt7NHlVn3QjW0AFt5PN/vvkvPsHjfsb8gAU
+         vBM947YXYyo1JKeuEpYReY2N8698gJ0leJzd0Vmtw4tdRezxCJs7BRTNkwawXHOZFPef
+         nKnYHeosSUVNNtOVqadub66eopo3DO67gjp27w+JRiVKKwZI+mTYzTfWKk74VeZUjQQ4
+         r5u2YsADlvOr2Wpoicv6A0eqPOteRh91gZBYsoR2o3JXKeUEbJef5NOCsGohgKjcYeCN
+         8pchVgyNhZFOASFAdyrZWRCoEnlF0Gsu6VlL9EMeTbUxfnO1RjwVl/P4oGfpvp+jovkp
+         /YQg==
+X-Gm-Message-State: AOAM530B1gsgbsX+3gn3VIzUCqvDuM6gRgiF28lurSHWDhJcscNms2sp
+        qJb+9ZM3m3BbYtjcAUv5ljWbt7DWm0h+cKZ+p2HopCUK3B6jk1De
+X-Google-Smtp-Source: ABdhPJyx8dEogaBaodh2Km2K02ZO+V29sTf/77eBOfXw11zwLkKc4rL+O5H9avz+ziDt/1OuQm3zeoumlaINai8H934=
+X-Received: by 2002:a05:6e02:1aa1:: with SMTP id l1mr100114ilv.187.1639699672540;
+ Thu, 16 Dec 2021 16:07:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 3c382ff735c7f68dc8acbbd0526cf950
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [8VM0]                               
+References: <20211216205303.768991-1-eugene.shalygin@gmail.com> <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com>
+In-Reply-To: <CAHp75VeERqjxrt7C4hrDnJpY1aCQPtF=CQ=MLY8e9Gik57P3DQ@mail.gmail.com>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Fri, 17 Dec 2021 01:07:41 +0100
+Message-ID: <CAB95QARFT8V-kMTtdRJHPAhXFk2BrF=5jxY2+CT0DvMrn6vKOg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: (asus-ec-sensors) add driver for ASUS EC
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Denis Pauk <pauk.denis@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the user sets a lower mtu on the CPU port than on the switch,
-then DMA inserts a few more bytes into the buffer than expected.
-In the worst case, it may exceed the size of the buffer. The
-experiments showed that the buffer should be a multiple of the
-burst length value. This patch rounds the length of the rx buffer
-upwards and fixes this bug. The reservation of FCS space in the
-buffer has been removed as PMAC strips the FCS.
+On Thu, 16 Dec 2021 at 22:28, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > to the EC, in the same way as the WMI DSDT code does.
+>
+> How do you know that this way there is no race with any of ACPI code?
 
-Fixes: 998ac358019e ("net: lantiq: add support for jumbo frames")
-Reported-by: Thomas Nixon <tom@tomn.co.uk>
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- drivers/net/ethernet/lantiq_xrx200.c | 34 ++++++++++++++++++++--------
- 1 file changed, 24 insertions(+), 10 deletions(-)
+Because this mutex is exactly what the ACPI code uses to avoid races.
 
-diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
-index 0da09ea81980..96bd6f2b21ed 100644
---- a/drivers/net/ethernet/lantiq_xrx200.c
-+++ b/drivers/net/ethernet/lantiq_xrx200.c
-@@ -71,6 +71,8 @@ struct xrx200_priv {
- 	struct xrx200_chan chan_tx;
- 	struct xrx200_chan chan_rx;
- 
-+	u16 rx_buf_size;
-+
- 	struct net_device *net_dev;
- 	struct device *dev;
- 
-@@ -97,6 +99,16 @@ static void xrx200_pmac_mask(struct xrx200_priv *priv, u32 clear, u32 set,
- 	xrx200_pmac_w32(priv, val, offset);
- }
- 
-+static int xrx200_max_frame_len(int mtu)
-+{
-+	return VLAN_ETH_HLEN + mtu;
-+}
-+
-+static int xrx200_buffer_size(int mtu)
-+{
-+	return round_up(xrx200_max_frame_len(mtu), 4 * XRX200_DMA_BURST_LEN);
-+}
-+
- /* drop all the packets from the DMA ring */
- static void xrx200_flush_dma(struct xrx200_chan *ch)
- {
-@@ -109,8 +121,7 @@ static void xrx200_flush_dma(struct xrx200_chan *ch)
- 			break;
- 
- 		desc->ctl = LTQ_DMA_OWN | LTQ_DMA_RX_OFFSET(NET_IP_ALIGN) |
--			    (ch->priv->net_dev->mtu + VLAN_ETH_HLEN +
--			     ETH_FCS_LEN);
-+			    ch->priv->rx_buf_size;
- 		ch->dma.desc++;
- 		ch->dma.desc %= LTQ_DESC_NUM;
- 	}
-@@ -158,21 +169,21 @@ static int xrx200_close(struct net_device *net_dev)
- 
- static int xrx200_alloc_skb(struct xrx200_chan *ch)
- {
--	int len = ch->priv->net_dev->mtu + VLAN_ETH_HLEN + ETH_FCS_LEN;
- 	struct sk_buff *skb = ch->skb[ch->dma.desc];
-+	struct xrx200_priv *priv = ch->priv;
- 	dma_addr_t mapping;
- 	int ret = 0;
- 
--	ch->skb[ch->dma.desc] = netdev_alloc_skb_ip_align(ch->priv->net_dev,
--							  len);
-+	ch->skb[ch->dma.desc] = netdev_alloc_skb_ip_align(priv->net_dev,
-+							  priv->rx_buf_size);
- 	if (!ch->skb[ch->dma.desc]) {
- 		ret = -ENOMEM;
- 		goto skip;
- 	}
- 
--	mapping = dma_map_single(ch->priv->dev, ch->skb[ch->dma.desc]->data,
--				 len, DMA_FROM_DEVICE);
--	if (unlikely(dma_mapping_error(ch->priv->dev, mapping))) {
-+	mapping = dma_map_single(priv->dev, ch->skb[ch->dma.desc]->data,
-+				 priv->rx_buf_size, DMA_FROM_DEVICE);
-+	if (unlikely(dma_mapping_error(priv->dev, mapping))) {
- 		dev_kfree_skb_any(ch->skb[ch->dma.desc]);
- 		ch->skb[ch->dma.desc] = skb;
- 		ret = -ENOMEM;
-@@ -184,7 +195,7 @@ static int xrx200_alloc_skb(struct xrx200_chan *ch)
- 	wmb();
- skip:
- 	ch->dma.desc_base[ch->dma.desc].ctl =
--		LTQ_DMA_OWN | LTQ_DMA_RX_OFFSET(NET_IP_ALIGN) | len;
-+		LTQ_DMA_OWN | LTQ_DMA_RX_OFFSET(NET_IP_ALIGN) | priv->rx_buf_size;
- 
- 	return ret;
- }
-@@ -356,6 +367,7 @@ xrx200_change_mtu(struct net_device *net_dev, int new_mtu)
- 	int ret = 0;
- 
- 	net_dev->mtu = new_mtu;
-+	priv->rx_buf_size = xrx200_buffer_size(new_mtu);
- 
- 	if (new_mtu <= old_mtu)
- 		return ret;
-@@ -375,6 +387,7 @@ xrx200_change_mtu(struct net_device *net_dev, int new_mtu)
- 		ret = xrx200_alloc_skb(ch_rx);
- 		if (ret) {
- 			net_dev->mtu = old_mtu;
-+			priv->rx_buf_size = xrx200_buffer_size(old_mtu);
- 			break;
- 		}
- 		dev_kfree_skb_any(skb);
-@@ -505,7 +518,8 @@ static int xrx200_probe(struct platform_device *pdev)
- 	net_dev->netdev_ops = &xrx200_netdev_ops;
- 	SET_NETDEV_DEV(net_dev, dev);
- 	net_dev->min_mtu = ETH_ZLEN;
--	net_dev->max_mtu = XRX200_DMA_DATA_LEN - VLAN_ETH_HLEN - ETH_FCS_LEN;
-+	net_dev->max_mtu = XRX200_DMA_DATA_LEN - xrx200_max_frame_len(0);
-+	priv->rx_buf_size = xrx200_buffer_size(ETH_DATA_LEN);
- 
- 	/* load the memory ranges */
- 	priv->pmac_reg = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
--- 
-2.30.2
+> _LOCK_DELAY_MS and drop useless comment
+>
+> I think I gave the very same comments before. Maybe you can check the
+> reviews of another driver?
 
+I understand your frustration, sorry. In all those similar reviews I
+must have missed some emails. I'll fix what I can.
+
+> > +static const struct ec_sensor_info known_ec_sensors[] = {
+> > +       EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a), /* SENSOR_TEMP_CHIPSET */
+> > +       EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b), /* SENSOR_TEMP_CPU */
+> > +       EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c), /* SENSOR_TEMP_MB */
+> > +       EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d), /* SENSOR_TEMP_T_SENSOR */
+> > +       EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e), /* SENSOR_TEMP_VRM */
+> > +       EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0), /* SENSOR_FAN_CPU_OPT */
+> > +       EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2), /* SENSOR_FAN_VRM_HS */
+> > +       EC_SENSOR("Chipset", hwmon_fan, 2, 0x00, 0xb4), /* SENSOR_FAN_CHIPSET */
+> > +       EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xbc), /* SENSOR_FAN_WATER_FLOW */
+> > +       EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4), /* SENSOR_CURR_CPU */
+> > +       EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00), /* SENSOR_TEMP_WATER_IN */
+> > +       EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01), /* SENSOR_TEMP_WATER_OUT */
+>
+> Instead of comments, use form of
+>
+>   [FOO] = BAR(...),
+
+Was unable do that because the SENSOR_ enum is a flag enum. But given
+this suggestion and the one about bit foreach loop, I will convert the
+enum to bitmap.
+
+> What's wrong with post-decrement, and I think I already commented on this.
+> So, I stopped here until you go and enforce all comments given against
+> previous incarnation of this driver.
+
+I missed these ones, sorry.
+
+> > +       for (i = 1; i < SENSOR_END; i <<= 1) {
+> > +               if ((i & ec->board->sensors) == 0
+> > +                       continue;
+>
+> Interesting way of NIH for_each_set_bit().
+
+Will convert to bitmap.
+
+> > +       acpi_status status = acpi_get_handle(
+> > +               NULL, (acpi_string)state->board->acpi_mutex_path, &res);
+>
+> It looks awful (indentation), Have you run checkpatch?
+
+Yes, but some warnings remained.
+
+Thanks,
+Eugene

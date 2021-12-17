@@ -2,148 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC521478E8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90150478E9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237609AbhLQOxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 09:53:49 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:36258
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237599AbhLQOxs (ORCPT
+        id S237633AbhLQOzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 09:55:17 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10888 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231971AbhLQOzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:53:48 -0500
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7FBFF40703
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:53:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1639752827;
-        bh=GqzX2VxzFw4eQfFWT0YAjK60guUkBXetROhM4dzVpro=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=KLPLLgBW60YBEviAdw/IUsGAqq7VS7v9iN136JUYF99xIijuRr3TOTpG5YSXlKhTl
-         eQ+UpdHZDzON5bkFvzpbjoWW69kT3+da6KnzSzvSgB8np6Nd5qwYSooKvwfOsZpATt
-         THyWaio5vBduQ5wDjFnB7pYvh2gqbF41BYd4zsBr70FzwRKKQ6AUJ+EfK8oh1z0bme
-         JnveN0ASKX2NB34mnZFf1X+/6aMjbNs86DGFl16Y/ekSSve+yNc2Hg38Zff8ZVqgl2
-         lBpenj5jdXK46dOx6bcHAEi0mn2G/eo3BJLp/Lsd/55F9Wg4tBN1vImZDcgux1KKrQ
-         qcN1VKB9sBdkw==
-Received: by mail-lj1-f197.google.com with SMTP id i123-20020a2e2281000000b0021cfde1fa8eso770080lji.7
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:53:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GqzX2VxzFw4eQfFWT0YAjK60guUkBXetROhM4dzVpro=;
-        b=k00e73fa0uu8WGnosIloneCBUlJtmzTclsW2fCNE/u93lZwZ551gGNex+rsI0NoBUd
-         b8Ec0tvhmKlv4GduseoyDVlvpi4nCyXMe7yBjmOGLH36kgcYkzmVNFEtNKagdw9xhhqW
-         nr41UNdXeRpteh/B2WlPsB9WzmbEnAJd/kB0tW4Mogc/LRAPk9nfjVcGPpoHJSL2acj3
-         blmsl8vuyXUSWi2iqIxXVpEfFZVceag/Gf+W6AyRO1IHso4iDqNSIAjBs2WcTJR3fXFC
-         /epToNifq3EIcFGc85XsNKS3BR1KpCdfIXkcM7MEkeDO3SxYQUA7L4oqVw1L5quzK0Dw
-         lbgA==
-X-Gm-Message-State: AOAM531LlEqIspa+WRVZTpPRtYz+md9AZ8Ax8m6UbEx1a9HXmiL8msYQ
-        jMV0j3wbOePnCuyNELWXOqk3a+OUYD+N96+bRBTtbbZew52u56Ky3INh0BsR5FfAb1Jc0YKJqDG
-        ybIgNQc/b27j/jdFRU33w2KQ710OpZem46fabaAMD7w==
-X-Received: by 2002:a05:6512:2250:: with SMTP id i16mr361844lfu.24.1639752826432;
-        Fri, 17 Dec 2021 06:53:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyWZAhKPzpNiuI3jFYeXfUrK3lYJtF2bSZiJkAI3tx170rbCKWelfdxX/kRZ9W0bjHvtpmAig==
-X-Received: by 2002:a05:6512:2250:: with SMTP id i16mr361809lfu.24.1639752826232;
-        Fri, 17 Dec 2021 06:53:46 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id 76sm1687531ljj.69.2021.12.17.06.53.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 06:53:45 -0800 (PST)
-Message-ID: <e59a60d5-4397-1f7f-66ab-3dd522e166a0@canonical.com>
-Date:   Fri, 17 Dec 2021 15:53:43 +0100
+        Fri, 17 Dec 2021 09:55:17 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHDaxFG022998;
+        Fri, 17 Dec 2021 14:55:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=jn+7vU3DeFwv40C/Xn8u61FAyk08AIabx42PwN2Qc20=;
+ b=kCKpv+yClD+BkC6ITtMnuH2kAQymlt+5UtAcFL1gxsQaJpfckIo7vvxmdnUzKdPNS+++
+ niiAC+Cpn3Srq/FWxfvPOzrO4bgiR2Imbyr0/iqxn1ES7LTA4TUtxt3aN8vxlLndAkae
+ wMGAqaLubw1zr1pYFIE4TosBfLqcNvLNqL7sHnDsH31H4b1ybPwiQnARkou0rS9IeYY5
+ vOyz3PNJ0Rub/rsY7rpVEZ5kla2sOJq0Pif4oiWeNoT1XdwU/djmit8mgwHiTfkqQRck
+ W9OitakvcE2LoYVWmzGF2cyINDRDZBHd/c+Y6Ya0H73iecqXmXkDxFGisXdZAziICI6q iA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d0pywyx5d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 14:55:16 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BHEX4VG007533;
+        Fri, 17 Dec 2021 14:55:16 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d0pywyx3x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 14:55:16 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BHEal4j009415;
+        Fri, 17 Dec 2021 14:55:13 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3cy7k3sawg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Dec 2021 14:55:13 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BHEtABG39452952
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 14:55:10 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F3ADF52050;
+        Fri, 17 Dec 2021 14:55:09 +0000 (GMT)
+Received: from [9.171.60.51] (unknown [9.171.60.51])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 102EA5204F;
+        Fri, 17 Dec 2021 14:55:09 +0000 (GMT)
+Message-ID: <5073966a-0e99-977b-dc97-e72f55ff7091@linux.ibm.com>
+Date:   Fri, 17 Dec 2021 15:55:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 06/17] dt-bindings: rng: add bindings for microchip
- mpfs rng
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 32/32] MAINTAINERS: additional files related kvm s390 pci
+ passthrough
 Content-Language: en-US
-To:     conor.dooley@microchip.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
-        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
-        ivan.griffin@microchip.com, atish.patra@wdc.com
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-7-conor.dooley@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211217093325.30612-7-conor.dooley@microchip.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org, alex.williamson@redhat.com
+Cc:     cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211207205743.150299-1-mjrosato@linux.ibm.com>
+ <20211207205743.150299-33-mjrosato@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20211207205743.150299-33-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: z7n_tkup5mnXNl0_WSrva9gAXKtIGLKC
+X-Proofpoint-ORIG-GUID: XeGCCKbsEKjIvCA7LCjSS-Iai_Io2P_s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-17_05,2021-12-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 adultscore=0
+ malwarescore=0 priorityscore=1501 suspectscore=0 impostorscore=0
+ spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112170084
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/12/2021 10:33, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+
+
+Am 07.12.21 um 21:57 schrieb Matthew Rosato:
+> Add entries from the s390 kvm subdirectory related to pci passthrough.
 > 
-> Add device tree bindings for the hardware rng device accessed via
-> the system services on the Microchip PolarFire SoC.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+
+Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
+
+Question for Alex. Shall I take these and future patches regarding KVM hw support for PCI passthru via my tree or via your vfio tree?
+
 > ---
->  .../bindings/rng/microchip,mpfs-rng.yaml      | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>   MAINTAINERS | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
-> new file mode 100644
-> index 000000000000..32cbc37c9292
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
-> @@ -0,0 +1,29 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/rng/microchip,mpfs-rng.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Microchip MPFS random number generator
-> +
-> +maintainers:
-> +  - Conor Dooley <conor.dooley@microchip.com>
-> +
-> +description: |
-> +  The hardware random number generator on the Polarfire SoC is
-> +  accessed via the mailbox interface provided by the system controller
-> +
-> +properties:
-> +  compatible:
-> +    const: microchip,mpfs-rng
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    hwrandom: hwrandom {
-
-Three topics:
-1. Node name (as most of others are using): rng
-2. skip the label, not helping in example.
-3. This looks very simple, so I wonder if the bindings are complete. No
-IO space/address... How is it going to be instantiated?
-
-> +        compatible = "microchip,mpfs-rng";
-> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 43007f2d29e0..a88f8e4f2c80 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16689,6 +16689,8 @@ M:	Eric Farman <farman@linux.ibm.com>
+>   L:	linux-s390@vger.kernel.org
+>   L:	kvm@vger.kernel.org
+>   S:	Supported
+> +F:	arch/s390/include/asm/kvm_pci.h
+> +F:	arch/s390/kvm/pci*
+>   F:	drivers/vfio/pci/vfio_pci_zdev.c
+>   F:	include/uapi/linux/vfio_zdev.h
+>   
 > 
-
-
-Best regards,
-Krzysztof

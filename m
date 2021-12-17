@@ -2,162 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9AF478DE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCF5478DF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 15:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237313AbhLQOiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 09:38:22 -0500
-Received: from foss.arm.com ([217.140.110.172]:58134 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230248AbhLQOiV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 09:38:21 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CACEE12FC;
-        Fri, 17 Dec 2021 06:38:18 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.67.184])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C3CA3F5A1;
-        Fri, 17 Dec 2021 06:38:17 -0800 (PST)
-Date:   Fri, 17 Dec 2021 14:38:14 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     maz <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        paulmck <paulmck@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        frederic <frederic@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
-Message-ID: <Ybyg1r/Q6EfeuXGV@FVFF77S0Q05N>
-References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
- <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
- <70f112072d9496d21901946ea82832d3ed3a8cb2.camel@redhat.com>
+        id S237333AbhLQOjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 09:39:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230248AbhLQOjx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 09:39:53 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160F2C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:39:53 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id u40so4772983uad.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 06:39:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=pOPPbcR2qV34Yko1uWDMcjVgVlmtgKTskEKD1tHYfveUCo/RZo+39ZaptW/Fm6Nh7E
+         dOvnzZaXXUCDbQyYcKutIlSt2FxfImnFh+X6m/CJiin0VLEOBNYBGW/H7yZLo6jx42eX
+         XyfKJ1/Q/4aX2Kjizdg6eLDsyL4M82MQCXN1ZBMZdz4tfyMoi3/2ztx1BSbLnGKCp64s
+         FzknK67y5n37dFYWNjrM8Wh4sXt4XgXNJdgQfxtLFeBxSCFqPzoUWCaHCQMTGQv76z1K
+         iBVK/mpOnj4F7seTfY6VeJ0DpnPk+sGBJWMrleo1M6Rf7HCT5jSahvXI8ZvlJ7RU03vk
+         w/oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=iQgWUMFYkjYqrGc6Ln2tBPTimxF3yzD6dcuCSF1P7mZ+tKVMgWwCJuawGnRWsr7xL8
+         DeelAMD1NFk+N0fgOMlJszakBvcGPaIzr3PWUsKYmkuHxks2cTMubjKc4epmZT487lbF
+         TNyTtIZ8TmyUXFhy9NEsBK+GQ0XDBO+4TMSvCJ5QN65Wmq+KpGiTZrdq84fD6zf1qvLc
+         Joh5YkrdY77PB9zq16taCrNr+cOsJzh0UyTOryhatqMPFcZ8S+DJG9wle/Zmr2FyhdCm
+         eDlrtpeiYADT2y4L9bjuZiLzZNLz1QzFBXff8YRjgo6LBDVneQN/lUfx1dYEbLtlG+3x
+         hlVw==
+X-Gm-Message-State: AOAM5307hmGuAol+R5QFzla9GamiQ+HeVoGYDsNeYqqVJHCWoZRt196Z
+        TAgIMwB/yD5pCqH1zgrJpbJaoLaF42UjgeXYCok=
+X-Google-Smtp-Source: ABdhPJyfiVpDFsjEuY4sCJxVVgORAJr49jJ/PbSq9N8OpVsSCk/hKnJcfOSf4NkPAcX5I9GPXMy6mFd5Qen3eIaVqrw=
+X-Received: by 2002:ab0:3e8:: with SMTP id 95mr1113768uau.26.1639751992103;
+ Fri, 17 Dec 2021 06:39:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <70f112072d9496d21901946ea82832d3ed3a8cb2.camel@redhat.com>
+Sender: aishagaddafi1056@gmail.com
+Received: by 2002:a59:755:0:b0:271:736b:41c7 with HTTP; Fri, 17 Dec 2021
+ 06:39:51 -0800 (PST)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Fri, 17 Dec 2021 14:39:51 +0000
+X-Google-Sender-Auth: MeUM17A0c4_4_KoiqIBSw9-RHC4
+Message-ID: <CANtwLy0Rqeh8hbm2ZsOj=aSK7CLYizz4Y7X9z=aKmVG2X0wr=w@mail.gmail.com>
+Subject: Calvary greetings.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 03:15:29PM +0100, Nicolas Saenz Julienne wrote:
-> On Fri, 2021-12-17 at 13:21 +0000, Mark Rutland wrote:
-> > On Fri, Dec 17, 2021 at 12:51:57PM +0100, Nicolas Saenz Julienne wrote:
-> > > Hi All,
-> > 
-> > Hi,
-> > 
-> > > arm64's guest entry code does the following:
-> > > 
-> > > int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
-> > > {
-> > > 	[...]
-> > > 
-> > > 	guest_enter_irqoff();
-> > > 
-> > > 	ret = kvm_call_hyp_ret(__kvm_vcpu_run, vcpu);
-> > > 
-> > > 	[...]
-> > > 
-> > > 	local_irq_enable();
-> > > 
-> > > 	/*
-> > > 	 * We do local_irq_enable() before calling guest_exit() so
-> > > 	 * that if a timer interrupt hits while running the guest we
-> > > 	 * account that tick as being spent in the guest.  We enable
-> > > 	 * preemption after calling guest_exit() so that if we get
-> > > 	 * preempted we make sure ticks after that is not counted as
-> > > 	 * guest time.
-> > > 	 */
-> > > 	guest_exit();
-> > > 	[...]
-> > > }
-> > > 
-> > > 
-> > > On a nohz-full CPU, guest_{enter,exit}() delimit an RCU extended quiescent
-> > > state (EQS). Any interrupt happening between local_irq_enable() and
-> > > guest_exit() should disable that EQS. Now, AFAICT all el0 interrupt handlers
-> > > do the right thing if trggered in this context, but el1's won't. Is it
-> > > possible to hit an el1 handler (for example __el1_irq()) there?
-> > 
-> > I think you're right that the EL1 handlers can trigger here and won't exit the
-> > EQS.
-> > 
-> > I'm not immediately sure what we *should* do here. What does x86 do for an IRQ
-> > taken from a guest mode? I couldn't spot any handling of that case, but I'm not
-> > familiar enough with the x86 exception model to know if I'm looking in the
-> > right place.
-> 
-> Well x86 has its own private KVM guest context exit function
-> 'kvm_guest_exit_irqoff()', which allows it to do the right thing (simplifying
-> things):
-> 
-> 	local_irq_disable();
-> 	kvm_guest_enter_irqoff() // Inform CT, enter EQS
-> 	__vmx_kvm_run()
-> 	kvm_guest_exit_irqoff() // Inform CT, exit EQS, task still marked with PF_VCPU
-> 
-> 	/*
-> 	 * Consume any pending interrupts, including the possible source of
-> 	 * VM-Exit on SVM and any ticks that occur between VM-Exit and now.
-> 	 * An instruction is required after local_irq_enable() to fully unblock
-> 	 * interrupts on processors that implement an interrupt shadow, the
-> 	 * stat.exits increment will do nicely.
-> 	 */
-> 	local_irq_enable();
-> 	++vcpu->stat.exits;
-> 	local_irq_disable();
-> 
-> 	/*
-> 	 * Wait until after servicing IRQs to account guest time so that any
-> 	 * ticks that occurred while running the guest are properly accounted
-> 	 * to the guest.  Waiting until IRQs are enabled degrades the accuracy
-> 	 * of accounting via context tracking, but the loss of accuracy is
-> 	 * acceptable for all known use cases.
-> 	 */
-> 	vtime_account_guest_exit(); // current->flags &= ~PF_VCPU
+Hello my dear,
 
-I see.
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina. Howley Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
-The abstraction's really messy here on x86, and the enter/exit sides aren't
-clearly balanced.
+I'm waiting for your immediate reply..
 
-For example kvm_guest_enter_irqoff() calls guest_enter_irq_off() which calls
-vtime_account_guest_enter(), but kvm_guest_exit_irqoff() doesn't call
-guest_exit_irq_off() and the call to vtime_account_guest_exit() is open-coded
-elsewhere. Also, guest_enter_irq_off() conditionally calls
-rcu_virt_note_context_switch(), but I can't immediately spot anything on the
-exit side that corresponded with that, which looks suspicious.
-
-> So I guess we should convert to x86's scheme, and maybe create another generic
-> guest_{enter,exit}() flavor for virtualization schemes that run with interrupts
-> disabled.
-
-I think we might need to do some preparatory refactoring here so that this is
-all clearly balanced even on x86, e.g. splitting the enter/exit steps into
-multiple phases.
-
-> > Note that the EL0 handlers *cannot* trigger for an exception taken from a
-> > guest. We use separate vectors while running a guest (for both VHE and nVHE
-> > modes), and from the main kernel's PoV we return from kvm_call_hyp_ret(). We
-> > can ony take IRQ from EL1 *after* that returns.
-> > 
-> > We *might* need to audit the KVM vector handlers to make sure they're not
-> > dependent on RCU protection (I assume they're not, but it's possible something
-> > has leaked into the VHE code).
-> 
-> IIUC in the window between local_irq_enable() and guest_exit() any driver
-> interrupt might trigger, isn't it?
-
-Yes, via the EL1 interrupt vectors, which I assume we'll fix in one go above.
-
-Here I was trying to point out that there's another potential issue here if we
-do anything in the context of the KVM exception vectors, as those can run C
-code in a shallow exeption context, and can either return back into the guest
-OR return to the caller of kvm_call_hyp_ret(__kvm_vcpu_run, vcpu).
-
-So even if we fix kvm_arch_vcpu_ioctl_run() we might need to also rework
-handlers that run in that shallow exception context, if they rely on RCU for
-something.
-
-Thanks,
-Mark.
+May God Bless you,
+Mrs. Dina. Howley Mckenna.

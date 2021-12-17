@@ -2,84 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F66479158
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD20A47915C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 17:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239050AbhLQQVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 11:21:42 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54892 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235272AbhLQQVl (ORCPT
+        id S239067AbhLQQWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 11:22:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57834 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239062AbhLQQWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:21:41 -0500
+        Fri, 17 Dec 2021 11:22:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E164B82965;
-        Fri, 17 Dec 2021 16:21:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E9D0C36AE1;
-        Fri, 17 Dec 2021 16:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639758099;
-        bh=huC7uz1dGwNTuzWeqgiNaG3sk3EcmBrJ63xBA1P61zw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=mxARPdYm02vkR1wXFYlvgPaemHFGDbK6rk8Q8VKGK2inUv6cF06cWgLjrlNCcE57P
-         k7NnlyE+Ps3w+SWlHxqIrKLJ6XKiQCWVG5XcLm/rHuNfTyMonUPDp8z1FClHNR2zK4
-         3js6fQKPxr2k1IwbKvO/i/1skiFSDdm388/qqWM80bXKWTJd8oHyGjJcLP4b5xTIiX
-         mUjkl5MXsfB+7cUKnej+WTSwJVFtBVZOY06cecM/ilXUM9YUdUidyUZcYFdDo6YE4y
-         Ohkr6d3W22cfQoYSrx3w/f2X/pL9xyeQC3zRKocib623SbWB4yqaT6yel7pSGgimjI
-         KeJ7pC5WHXPvw==
-Date:   Fri, 17 Dec 2021 10:21:37 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>, john@phrozen.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 09/14] dt-bindings: PCI: Add support for Airoha EN7532
-Message-ID: <20211217162137.GA894954@bhelgaas>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0910622DD;
+        Fri, 17 Dec 2021 16:22:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1454C36AE1;
+        Fri, 17 Dec 2021 16:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1639758154;
+        bh=zDKOA3xfyePxWIFvNh9DTwQIsyV3ekI3atL+Efr3sEk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rpMCbsdnqmVNs33nSCHT7BnZGqnYxG0QzS5ylgnKs3RkL3A7og9bvmkmUs6t+HMBs
+         ztZlziMazw/I305rYW8L/nT8Zm+ERrJu8HSMlpXdfIjqpVj5ieo1yygVrPkskxG276
+         +qMxK8UT+iLLcmoc4K8+OEWboDQL0LaOGwGP3Rq0=
+Date:   Fri, 17 Dec 2021 17:22:31 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 13/43] kmsan: add KMSAN runtime core
+Message-ID: <Yby5Rwr0jgAcK4th@kroah.com>
+References: <20211214162050.660953-1-glider@google.com>
+ <20211214162050.660953-14-glider@google.com>
+ <YbjHerrHit/ZqXYs@kroah.com>
+ <CAG_fn=XX3vbuo=cyG8C1Syv_JXiQ1rnfoffKqEc-N8uLei5T2A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217112345.14029-10-nbd@nbd.name>
+In-Reply-To: <CAG_fn=XX3vbuo=cyG8C1Syv_JXiQ1rnfoffKqEc-N8uLei5T2A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 12:23:39PM +0100, Felix Fietkau wrote:
-> From: John Crispin <john@phrozen.org>
+On Thu, Dec 16, 2021 at 11:33:56AM +0100, Alexander Potapenko wrote:
+> On Tue, Dec 14, 2021 at 5:34 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Dec 14, 2021 at 05:20:20PM +0100, Alexander Potapenko wrote:
+> > > This patch adds the core parts of KMSAN runtime and associated files:
+> > >
+> > >   - include/linux/kmsan-checks.h: user API to poison/unpoison/check
+> > >     the kernel memory;
+> > >   - include/linux/kmsan.h: declarations of KMSAN hooks to be referenced
+> > >     outside of KMSAN runtime;
+> > >   - lib/Kconfig.kmsan: CONFIG_KMSAN and related declarations;
+> > >   - Makefile, mm/Makefile, mm/kmsan/Makefile: boilerplate Makefile code;
+> > >   - mm/kmsan/annotations.c: non-inlineable implementation of KMSAN_INIT();
+> > >   - mm/kmsan/core.c: core functions that operate with shadow and origin
+> > >     memory and perform checks, utility functions;
+> > >   - mm/kmsan/hooks.c: KMSAN hooks for kernel subsystems;
+> > >   - mm/kmsan/init.c: KMSAN initialization routines;
+> > >   - mm/kmsan/instrumentation.c: functions called by KMSAN instrumentation;
+> > >   - mm/kmsan/kmsan.h: internal KMSAN declarations;
+> > >   - mm/kmsan/shadow.c: routines that encapsulate metadata creation and
+> > >     addressing;
+> > >   - scripts/Makefile.kmsan: CFLAGS_KMSAN
+> > >   - scripts/Makefile.lib: KMSAN_SANITIZE and KMSAN_ENABLE_CHECKS macros
+> >
+> >
+> > That's an odd way to write a changelog, don't you think?
 > 
-> EN7532 is an ARM based platform SoC integrating the same PCIe IP as
-> MT7622, add a binding for it.
+> Agreed. I'll try to concentrate on the functionality instead. Sorry about that.
 > 
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: John Crispin <john@phrozen.org>
+> > You need to describe what you are doing here and why you are doing it.
+> > Not a list of file names, we can see that in the diffstat.
+> >
+> > Also, you don't mention you are doing USB stuff here at all.  And why
+> > are you doing it here?  That should be added in a later patch.
+> 
+> You are right, USB is a good example of a stand-alone feature that can
+> be moved to a separate patch.
+> 
+> > Break this up into smaller, logical, pieces that add the infrastructure
+> > and build on it.  Don't just chop your patches up on a logical-file
+> > boundry, as you are adding stuff in this patch that you do not need for
+> > many more later on, which means it was not needed here.
+> 
+> Just to make sure I don't misunderstand - for example for "kmsan: mm:
+> call KMSAN hooks from SLUB code", would it be better to pull the code
+> in mm/kmsan/core.c implementing kmsan_slab_alloc() and
+> kmsan_slab_free() into that patch?
 
-Needs a sign-off from you, Felix:
+Yes.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?id=v5.14#n418
+> I thought maintainers would prefer to have patches to their code
+> separated from KMSAN code, but if it's not true, I can surely fix
+> that.
 
-> ---
->  Documentation/devicetree/bindings/pci/mediatek-pcie.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie.txt b/Documentation/devicetree/bindings/pci/mediatek-pcie.txt
-> index 57ae73462272..684227522267 100644
-> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie.txt
-> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie.txt
-> @@ -7,6 +7,7 @@ Required properties:
->  	"mediatek,mt7622-pcie"
->  	"mediatek,mt7623-pcie"
->  	"mediatek,mt7629-pcie"
-> +	"airoha,en7523-pcie"
->  - device_type: Must be "pci"
->  - reg: Base addresses and lengths of the root ports.
->  - reg-names: Names of the above areas to use during resource lookup.
-> -- 
-> 2.34.1
-> 
+As a maintainer, I want to know what the function call that you just
+added to my subsystem to call does.  Wouldn't you?  Put it all in the
+same patch.
+
+Think about submitting a patch series as telling a story.  You need to
+show the progression forward of the feature so that everyone can
+understand what is going on.  To just throw tiny snippets at us is
+impossible to follow along with what your goal is.
+
+You want reviewers to be able to easily see if the things you describe
+being done in the changelog actually are implemented in the diff.
+Dividing stuff up by files does not show that at all.
+
+thanks,
+
+greg k-h

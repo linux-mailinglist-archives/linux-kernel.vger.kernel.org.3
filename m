@@ -2,285 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A21247903E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 163B347904A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 16:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235885AbhLQPpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 10:45:55 -0500
-Received: from foss.arm.com ([217.140.110.172]:59354 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235790AbhLQPpw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 10:45:52 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 676171042;
-        Fri, 17 Dec 2021 07:45:52 -0800 (PST)
-Received: from ip-10-252-15-108.eu-west-1.compute.internal (unknown [10.252.15.108])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 370663F774;
-        Fri, 17 Dec 2021 07:45:50 -0800 (PST)
-From:   German Gomez <german.gomez@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     Alexandre Truong <alexandre.truong@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 6/6] perf arm64: inject missing frames if perf-record used "--call-graph=fp"
-Date:   Fri, 17 Dec 2021 15:45:20 +0000
-Message-Id: <20211217154521.80603-7-german.gomez@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211217154521.80603-1-german.gomez@arm.com>
-References: <20211217154521.80603-1-german.gomez@arm.com>
+        id S235821AbhLQPrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 10:47:51 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:40090
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235751AbhLQPru (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Dec 2021 10:47:50 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9D3474005A
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 15:47:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639756069;
+        bh=hhDHhyLf8ciLV/pb2fq9VsORYOGJ7hjmmAlIVCJH7WY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=XjONOVWYYp/UVokOY0Km3exypGUGk0tidx5T+DkHekOKV19pvC3qOGb/n/eVpPDMX
+         c+e6wRUkLeRiE75bnGDQHwE7qLln6sVXcqjkxrkKMV2vtTMqkI8EuVW9+y9d66tg7V
+         UBBF/4doTY9/JIlxVDfnFRl9mmBT9kwkYNKClQ7EZHNc7TguEVbSVd/5f7QeaArOfC
+         6eFfy8HcmCfr/ybFFOPufYucKT9pXJ1sYhJfVPYHc8PVpCyI68/hXIGOaiDhjQWOD4
+         /vKYHfP+wHE5OXevCuPoBMci7yD13ZNp3DBm74IIYQts4DvMFHzqm3JCAHE8e7b8/r
+         ZFaCfbIB/x24A==
+Received: by mail-lf1-f72.google.com with SMTP id o19-20020ac24c53000000b0042521e0675fso1056893lfk.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 07:47:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hhDHhyLf8ciLV/pb2fq9VsORYOGJ7hjmmAlIVCJH7WY=;
+        b=Mt/5caqwp4l/reBt4rPMi+QcURK2AwvFp7zU6G8gudtfK0lsbIstFfL0r2wwyJHb6o
+         TDHzhJwKrug+gHrjC1mZi8zSC7ZJuCkEReppW7gPSA09WS/lO4Ka+FwEwaV/UngBtFGV
+         UfYeJr1Ttt/N7FB4bvJ8HMAYronZbVQpsPccsP+9dxHomKBc+PjGuRxTXJbtdT4EequY
+         bim4TP7BLe19WdBXHmarV91R30opFKyNz00RU4nBvBUfBYWIADm5WdVXROv2NRn9dvGX
+         f/NajBeRw7puUnrx38qB2hM4c/gDch+EOP2rakpYGuDHsM8FJX7yGyGpHnRnmwoDWmAp
+         irIg==
+X-Gm-Message-State: AOAM533Co/MuxioL6PaxaP3uso2Gv+Q1VWe3ZkjTOL4VuaQX7ZT3B34m
+        jTJLYS9+95CysriqV2fsYnxO5K2+NMX3hiMvoU+Ve5hm3fEZ8DFOLmH5K2s81PQ+OUbXOc/2KQh
+        d9+fni9h8ovCckG7oKz3nJ2enabLPNBcrBUrbRird9w==
+X-Received: by 2002:a05:6512:2150:: with SMTP id s16mr3408763lfr.519.1639756059697;
+        Fri, 17 Dec 2021 07:47:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwt9tJHIq/B3JqqY9RpHltS5AsBubgidwCcIwxibp52U1LQxYs+vVjkCeSXk+SDsWN3QzhEUw==
+X-Received: by 2002:a05:6512:2150:: with SMTP id s16mr3408731lfr.519.1639756059505;
+        Fri, 17 Dec 2021 07:47:39 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id w25sm356919lfl.33.2021.12.17.07.47.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 07:47:39 -0800 (PST)
+Message-ID: <2e7588e5-9dc5-571f-d7e9-0ee5c89ab39e@canonical.com>
+Date:   Fri, 17 Dec 2021 16:47:36 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2 06/17] dt-bindings: rng: add bindings for microchip
+ mpfs rng
+Content-Language: en-US
+To:     Conor.Dooley@microchip.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
+        Lewis.Hanly@microchip.com, Daire.McNamara@microchip.com,
+        Ivan.Griffin@microchip.com, atish.patra@wdc.com
+References: <20211217093325.30612-1-conor.dooley@microchip.com>
+ <20211217093325.30612-7-conor.dooley@microchip.com>
+ <e59a60d5-4397-1f7f-66ab-3dd522e166a0@canonical.com>
+ <19cbe2ba-7df5-7c7c-289f-6dc419d9f477@canonical.com>
+ <422126ac-ce26-2940-5b4d-fe79a1fa89c5@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <422126ac-ce26-2940-5b4d-fe79a1fa89c5@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Truong <alexandre.truong@arm.com>
+On 17/12/2021 16:22, Conor.Dooley@microchip.com wrote:
+> On 17/12/2021 15:07, Krzysztof Kozlowski wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> On 17/12/2021 15:53, Krzysztof Kozlowski wrote:
+>>> On 17/12/2021 10:33, conor.dooley@microchip.com wrote:
+>>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>>
+>>>> Add device tree bindings for the hardware rng device accessed via
+>>>> the system services on the Microchip PolarFire SoC.
+>>>>
+>>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>>> ---
+>>>>   .../bindings/rng/microchip,mpfs-rng.yaml      | 29 +++++++++++++++++++
+>>>>   1 file changed, 29 insertions(+)
+>>>>   create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..32cbc37c9292
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+>>>> @@ -0,0 +1,29 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: "http://devicetree.org/schemas/rng/microchip,mpfs-rng.yaml#"
+>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>>>> +
+>>>> +title: Microchip MPFS random number generator
+>>>> +
+>>>> +maintainers:
+>>>> +  - Conor Dooley <conor.dooley@microchip.com>
+>>>> +
+>>>> +description: |
+>>>> +  The hardware random number generator on the Polarfire SoC is
+>>>> +  accessed via the mailbox interface provided by the system controller
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: microchip,mpfs-rng
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    hwrandom: hwrandom {
+>>>
+>>> Three topics:
+>>> 1. Node name (as most of others are using): rng
+>>> 2. skip the label, not helping in example.
+>>> 3. This looks very simple, so I wonder if the bindings are complete. No
+>>> IO space/address... How is it going to be instantiated?
+>>>
+>>
+>> OK, now I saw the usage in DTS. I have doubts this makes sense as
+>> separate bindings. It looks like integrated part of syscontroller, so
+>> maybe make it part of that binding? Or at least add ref to syscontroller
+>> bindings that such child is expected.
+> Acking the rest of this, re: adding the ref: is what is being done in 
+> patch 03/17 insufficient?
 
-When unwinding using frame pointers on ARM64, the return address of the
-current function may not have been pushed into the stack when a function
-was interrupted, which makes perf show an incorrect call graph to the
-user.
+Ops, I missed the 03/17. Yeah, it looks it is sufficient and in such
+case I think you do not need this patch. The compatible is documented in
+03/17. The same for sysserv.
 
-Consider the following example program:
 
-  void leaf() {
-      /* long computation */
-  }
-
-  void parent() {
-      // (1)
-      leaf();
-      // (2)
-  }
-
-  ... could be compiled into (using gcc -fno-inline -fno-omit-frame-pointer):
-
-  leaf:
-      /* long computation */
-      nop
-      ret
-  parent:
-      // (1)
-      stp     x29, x30, [sp, -16]!
-      mov     x29, sp
-      bl      parent
-      nop
-      ldp     x29, x30, [sp], 16
-      // (2)
-      ret
-
-If the program is interrupted at (1), (2), or any point in "leaf:", the
-call graph will skip the callers of the current function. We can unwind
-using the dwarf info and check if the return addr is the same as the LR
-register, and inject the missing frame into the call graph.
-
-Before this patch, the above example shows the following call-graph when
-recording using "--call-graph fp" mode in ARM64:
-
-  # Children      Self  Command   Shared Object     Symbol
-  # ........  ........  ........  ................  ......................
-  #
-      99.86%    99.86%  program3  program3          [.] leaf
-  	    |
-  	    ---_start
-  	       __libc_start_main
-  	       main
-  	       leaf
-
-As can be seen, the "parent" function is missing. This is specially
-problematic in "leaf" because for leaf functions the compiler may always
-omit pushing the return addr into the stack. After this patch, it shows
-the correct graph:
-
-  # Children      Self  Command   Shared Object     Symbol
-  # ........  ........  ........  ................  ......................
-  #
-      99.86%    99.86%  program3  program3          [.] leaf
-  	    |
-  	    ---_start
-  	       __libc_start_main
-  	       main
-  	       parent
-  	       leaf
-
-Signed-off-by: Alexandre Truong <alexandre.truong@arm.com>
-Signed-off-by: German Gomez <german.gomez@arm.com>
----
- tools/perf/util/Build                         |  1 +
- .../util/arm64-frame-pointer-unwind-support.c | 63 +++++++++++++++++++
- .../util/arm64-frame-pointer-unwind-support.h | 10 +++
- tools/perf/util/machine.c                     | 19 ++++--
- tools/perf/util/machine.h                     |  1 +
- 5 files changed, 89 insertions(+), 5 deletions(-)
- create mode 100644 tools/perf/util/arm64-frame-pointer-unwind-support.c
- create mode 100644 tools/perf/util/arm64-frame-pointer-unwind-support.h
-
-diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-index 2e5bfbb69960..03d4c647bd86 100644
---- a/tools/perf/util/Build
-+++ b/tools/perf/util/Build
-@@ -1,3 +1,4 @@
-+perf-y += arm64-frame-pointer-unwind-support.o
- perf-y += annotate.o
- perf-y += block-info.o
- perf-y += block-range.o
-diff --git a/tools/perf/util/arm64-frame-pointer-unwind-support.c b/tools/perf/util/arm64-frame-pointer-unwind-support.c
-new file mode 100644
-index 000000000000..4f5ecf51ed38
---- /dev/null
-+++ b/tools/perf/util/arm64-frame-pointer-unwind-support.c
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "arm64-frame-pointer-unwind-support.h"
-+#include "callchain.h"
-+#include "event.h"
-+#include "perf_regs.h" // SMPL_REG_MASK
-+#include "unwind.h"
-+
-+#define perf_event_arm_regs perf_event_arm64_regs
-+#include "../arch/arm64/include/uapi/asm/perf_regs.h"
-+#undef perf_event_arm_regs
-+
-+struct entries {
-+	u64 stack[2];
-+	size_t length;
-+};
-+
-+static bool get_leaf_frame_caller_enabled(struct perf_sample *sample)
-+{
-+	return callchain_param.record_mode == CALLCHAIN_FP && sample->user_regs.regs
-+		&& sample->user_regs.mask & SMPL_REG_MASK(PERF_REG_ARM64_LR);
-+}
-+
-+static int add_entry(struct unwind_entry *entry, void *arg)
-+{
-+	struct entries *entries = arg;
-+
-+	entries->stack[entries->length++] = entry->ip;
-+	return 0;
-+}
-+
-+u64 get_leaf_frame_caller_aarch64(struct perf_sample *sample, struct thread *thread, int usr_idx)
-+{
-+	int ret;
-+	struct entries entries = {};
-+	struct regs_dump old_regs = sample->user_regs;
-+
-+	if (!get_leaf_frame_caller_enabled(sample))
-+		return 0;
-+
-+	/*
-+	 * If PC and SP are not recorded, get the value of PC from the stack
-+	 * and set its mask. SP is not used when doing the unwinding but it
-+	 * still needs to be set to prevent failures.
-+	 */
-+
-+	if (!(sample->user_regs.mask & SMPL_REG_MASK(PERF_REG_ARM64_PC))) {
-+		sample->user_regs.cache_mask |= SMPL_REG_MASK(PERF_REG_ARM64_PC);
-+		sample->user_regs.cache_regs[PERF_REG_ARM64_PC] = sample->callchain->ips[usr_idx+1];
-+	}
-+
-+	if (!(sample->user_regs.mask & SMPL_REG_MASK(PERF_REG_ARM64_SP))) {
-+		sample->user_regs.cache_mask |= SMPL_REG_MASK(PERF_REG_ARM64_SP);
-+		sample->user_regs.cache_regs[PERF_REG_ARM64_SP] = 0;
-+	}
-+
-+	ret = unwind__get_entries(add_entry, &entries, thread, sample, 2);
-+	sample->user_regs = old_regs;
-+
-+	if (ret || entries.length != 2)
-+		return ret;
-+
-+	return callchain_param.order == ORDER_CALLER ? entries.stack[0] : entries.stack[1];
-+}
-diff --git a/tools/perf/util/arm64-frame-pointer-unwind-support.h b/tools/perf/util/arm64-frame-pointer-unwind-support.h
-new file mode 100644
-index 000000000000..32af9ce94398
---- /dev/null
-+++ b/tools/perf/util/arm64-frame-pointer-unwind-support.h
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __PERF_ARM_FRAME_POINTER_UNWIND_SUPPORT_H
-+#define __PERF_ARM_FRAME_POINTER_UNWIND_SUPPORT_H
-+
-+#include "event.h"
-+#include "thread.h"
-+
-+u64 get_leaf_frame_caller_aarch64(struct perf_sample *sample, struct thread *thread, int user_idx);
-+
-+#endif /* __PERF_ARM_FRAME_POINTER_UNWIND_SUPPORT_H */
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 3eddad009f78..a00fd6796b35 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -34,6 +34,7 @@
- #include "bpf-event.h"
- #include <internal/lib.h> // page_size
- #include "cgroup.h"
-+#include "arm64-frame-pointer-unwind-support.h"
- 
- #include <linux/ctype.h>
- #include <symbol/kallsyms.h>
-@@ -2710,10 +2711,13 @@ static int find_prev_cpumode(struct ip_callchain *chain, struct thread *thread,
- 	return err;
- }
- 
--static u64 get_leaf_frame_caller(struct perf_sample *sample __maybe_unused,
--		struct thread *thread __maybe_unused, int usr_idx __maybe_unused)
-+static u64 get_leaf_frame_caller(struct perf_sample *sample,
-+		struct thread *thread, int usr_idx)
- {
--	return 0;
-+	if (machine__normalize_is(thread->maps->machine, "arm64"))
-+		return get_leaf_frame_caller_aarch64(sample, thread, usr_idx);
-+	else
-+		return 0;
- }
- 
- static int thread__resolve_callchain_sample(struct thread *thread,
-@@ -3114,14 +3118,19 @@ int machine__set_current_tid(struct machine *machine, int cpu, pid_t pid,
- }
- 
- /*
-- * Compares the raw arch string. N.B. see instead perf_env__arch() if a
-- * normalized arch is needed.
-+ * Compares the raw arch string. N.B. see instead perf_env__arch() or
-+ * machine__normalize_is() if a normalized arch is needed.
-  */
- bool machine__is(struct machine *machine, const char *arch)
- {
- 	return machine && !strcmp(perf_env__raw_arch(machine->env), arch);
- }
- 
-+bool machine__normalize_is(struct machine *machine, const char *arch)
-+{
-+	return machine && !strcmp(perf_env__arch(machine->env), arch);
-+}
-+
- int machine__nr_cpus_avail(struct machine *machine)
- {
- 	return machine ? perf_env__nr_cpus_avail(machine->env) : 0;
-diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
-index a143087eeb47..665535153411 100644
---- a/tools/perf/util/machine.h
-+++ b/tools/perf/util/machine.h
-@@ -208,6 +208,7 @@ static inline bool machine__is_host(struct machine *machine)
- }
- 
- bool machine__is(struct machine *machine, const char *arch);
-+bool machine__normalize_is(struct machine *machine, const char *arch);
- int machine__nr_cpus_avail(struct machine *machine);
- 
- struct thread *__machine__findnew_thread(struct machine *machine, pid_t pid, pid_t tid);
--- 
-2.25.1
-
+Best regards,
+Krzysztof

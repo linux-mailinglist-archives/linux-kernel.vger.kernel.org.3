@@ -2,125 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E741478821
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C6F478828
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 10:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234470AbhLQJxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 04:53:54 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:53922 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbhLQJxx (ORCPT
+        id S234583AbhLQJyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 04:54:17 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:21043 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234577AbhLQJyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:53:53 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1BH9SGVA026175;
-        Fri, 17 Dec 2021 17:28:16 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 17 Dec
- 2021 17:53:46 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
-        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/4] media: aspeed: Use FIELD_GET to improve readability
-Date:   Fri, 17 Dec 2021 17:54:01 +0800
-Message-ID: <20211217095403.2618-3-jammy_huang@aspeedtech.com>
+        Fri, 17 Dec 2021 04:54:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639734855; x=1671270855;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wO2KKCXxlXStgs3eWnLuIPaVW795Idp5jp+RuEzWNIA=;
+  b=hWaiTf/4Z0WyqOZpVspLSwtGnALr0MXbgCc1+fRpBrg/qV+TKVr5iAnX
+   al9zV1IhD85rchRNZGDnjPsw8KdUoUhlMx8tGBS8nkAPTDmBxb1vYeQSp
+   JJytTa7QzwRUCIMYmBdb/wZLv0XcIiEBxqEhHiVvMl0EDF7iRGMXPDfLo
+   K3WK3zR37Fflq4ECAW4Wd6LkzRfBqpj9zl1PH4rQfTDnplHvP7tbssD87
+   glB8tAG1J7419Tgrg1ib5VsydrV7/4A0v9/evJ8e5Gq4TcoblcCxOIdly
+   dtNkmZ3CzgXP5+h9qvLpB80L8NVV1OhX+vfApB0HHhrhrAPzSlwuXbo+m
+   Q==;
+IronPort-SDR: /0TJOSSrtQL1XBs7Bi2sytRzWGwr9kW/PhQgCzTh20cizMmDuT92N2+w/KdB+wvtO+jZnrKpWd
+ fxXs36bGEgYmaXlfco7JVDbNq/fTIa98OgZLJB5EAZCvBuXYedvbaWBQaMr1RfQQ8i6rEq4W9N
+ OkQT990X8k4TFV+hVz4uDq7wlGoMJ80JcSsvFSqZB7WIdBg15bbLm77FYKzFzTe9U79wwWND4W
+ ou1kyaxQQb0uBUIo06EK44U2az/eqzLEgbXI/ma/P7/dQ+7Uziaj71SogL8abRfPmq6l6/uEmy
+ Eno+PY6x92meSW+s48EeDlCh
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="155858690"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Dec 2021 02:54:15 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 17 Dec 2021 02:54:15 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 17 Dec 2021 02:54:11 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>
+CC:     <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Eugen Hristev" <eugen.hristev@microchip.com>
+Subject: [PATCH] dt-bindings: iio: adc: atmel,sama5d2-adc: make atmel,trigger-edge-type non-mandatory
+Date:   Fri, 17 Dec 2021 11:54:01 +0200
+Message-ID: <20211217095401.583821-1-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211217095403.2618-1-jammy_huang@aspeedtech.com>
-References: <20211217095403.2618-1-jammy_huang@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1BH9SGVA026175
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the bitfield macro FIELD_GET, and GENMASK to do the shift and mask in
-one go for reg values.
+The atmel,trigger-edge-type was never imposed by the driver.
+Make things right and remove this property from the mandatory list.
+This will not break existing nodes because according to the binding they
+should have this property.
+However, the driver does not impose it and it works without it, the property
+selects the trigger type, and without it, the driver will have no trigger
+available, which is the case on some boards which do not have access
+to the trigger pin.
+This will avoid generating this warning for example:
 
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+*/arch/arm/boot/dts/at91-sama7g5ek.dt.yaml: adc@e1000000: 'atmel,trigger-edge-type' is a required property
+From schema: */Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml
+
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- drivers/media/platform/aspeed-video.c | 35 ++++++++++++---------------
- 1 file changed, 16 insertions(+), 19 deletions(-)
+ Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index d5f77b205175..581a4261f9b7 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -156,26 +156,22 @@
- #define  VE_SRC_LR_EDGE_DET_NO_H	BIT(13)
- #define  VE_SRC_LR_EDGE_DET_NO_DISP	BIT(14)
- #define  VE_SRC_LR_EDGE_DET_NO_CLK	BIT(15)
--#define  VE_SRC_LR_EDGE_DET_RT_SHF	16
--#define  VE_SRC_LR_EDGE_DET_RT		GENMASK(27, VE_SRC_LR_EDGE_DET_RT_SHF)
-+#define  VE_SRC_LR_EDGE_DET_RT		GENMASK(27, 16)
- #define  VE_SRC_LR_EDGE_DET_INTERLACE	BIT(31)
+diff --git a/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml b/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml
+index efed361215b4b..482d80dd43b5f 100644
+--- a/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/atmel,sama5d2-adc.yaml
+@@ -72,7 +72,6 @@ required:
+   - atmel,min-sample-rate-hz
+   - atmel,max-sample-rate-hz
+   - atmel,startup-time-ms
+-  - atmel,trigger-edge-type
  
- #define VE_SRC_TB_EDGE_DET		0x094
- #define  VE_SRC_TB_EDGE_DET_TOP		GENMASK(12, 0)
--#define  VE_SRC_TB_EDGE_DET_BOT_SHF	16
--#define  VE_SRC_TB_EDGE_DET_BOT		GENMASK(28, VE_SRC_TB_EDGE_DET_BOT_SHF)
-+#define  VE_SRC_TB_EDGE_DET_BOT		GENMASK(28, 16)
- 
- #define VE_MODE_DETECT_STATUS		0x098
- #define  VE_MODE_DETECT_H_PERIOD	GENMASK(11, 0)
--#define  VE_MODE_DETECT_V_LINES_SHF	16
--#define  VE_MODE_DETECT_V_LINES		GENMASK(27, VE_MODE_DETECT_V_LINES_SHF)
-+#define  VE_MODE_DETECT_V_LINES		GENMASK(27, 16)
- #define  VE_MODE_DETECT_STATUS_VSYNC	BIT(28)
- #define  VE_MODE_DETECT_STATUS_HSYNC	BIT(29)
- 
- #define VE_SYNC_STATUS			0x09c
- #define  VE_SYNC_STATUS_HSYNC		GENMASK(11, 0)
--#define  VE_SYNC_STATUS_VSYNC_SHF	16
--#define  VE_SYNC_STATUS_VSYNC		GENMASK(27, VE_SYNC_STATUS_VSYNC_SHF)
-+#define  VE_SYNC_STATUS_VSYNC		GENMASK(27, 16)
- 
- #define VE_H_TOTAL_PIXELS		0x0A0
- 
-@@ -988,23 +984,24 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 		sync = aspeed_video_read(video, VE_SYNC_STATUS);
- 		htotal = aspeed_video_read(video, VE_H_TOTAL_PIXELS);
- 
--		video->frame_bottom = (src_tb_edge & VE_SRC_TB_EDGE_DET_BOT) >>
--			VE_SRC_TB_EDGE_DET_BOT_SHF;
--		video->frame_top = src_tb_edge & VE_SRC_TB_EDGE_DET_TOP;
-+		video->frame_bottom = FIELD_GET(VE_SRC_TB_EDGE_DET_BOT,
-+						src_tb_edge);
-+		video->frame_top = FIELD_GET(VE_SRC_TB_EDGE_DET_TOP,
-+					     src_tb_edge);
- 		det->vfrontporch = video->frame_top;
--		det->vbackporch = ((mds & VE_MODE_DETECT_V_LINES) >>
--			VE_MODE_DETECT_V_LINES_SHF) - video->frame_bottom;
--		det->vsync = (sync & VE_SYNC_STATUS_VSYNC) >>
--			VE_SYNC_STATUS_VSYNC_SHF;
-+		det->vbackporch = FIELD_GET(VE_MODE_DETECT_V_LINES, mds) -
-+			video->frame_bottom;
-+		det->vsync = FIELD_GET(VE_SYNC_STATUS_VSYNC, sync);
- 		if (video->frame_top > video->frame_bottom)
- 			continue;
- 
--		video->frame_right = (src_lr_edge & VE_SRC_LR_EDGE_DET_RT) >>
--			VE_SRC_LR_EDGE_DET_RT_SHF;
--		video->frame_left = src_lr_edge & VE_SRC_LR_EDGE_DET_LEFT;
-+		video->frame_right = FIELD_GET(VE_SRC_LR_EDGE_DET_RT,
-+					       src_lr_edge);
-+		video->frame_left = FIELD_GET(VE_SRC_LR_EDGE_DET_LEFT,
-+					      src_lr_edge);
- 		det->hfrontporch = video->frame_left;
- 		det->hbackporch = htotal - video->frame_right;
--		det->hsync = sync & VE_SYNC_STATUS_HSYNC;
-+		det->hsync = FIELD_GET(VE_SYNC_STATUS_HSYNC, sync);
- 		if (video->frame_left > video->frame_right)
- 			continue;
- 
+ examples:
+   - |
 -- 
 2.25.1
 

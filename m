@@ -2,148 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAE2479749
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C2447974E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Dec 2021 23:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbhLQWl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Dec 2021 17:41:29 -0500
-Received: from whuk3.redbackinternet.net ([109.203.107.222]:41048 "EHLO
-        whuk3.redbackinternet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbhLQWlV (ORCPT
+        id S231261AbhLQWox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Dec 2021 17:44:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52041 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230461AbhLQWow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:41:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=fbautosys.co.uk; s=default; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nBqJvU+QjVOMnQkNNSC6UUYuOqmb6hhMZ9BHJgIXY8E=; b=G4ElTIMcSNnTVW4CG1Ob2MA+BH
-        AmU73BHc3LwucOQOd2gQGWOvCdORr3ENNI9iEPjChnZTRbKNVQQpjTF/kjSJ1hFfj/636iYViCxQ/
-        7TAzYSbfjhV5EWzKcqBZa2kwzT0CADawKNPhzbjRgR+ulm9ODhLdcwi7quFGYQOelkHvgnNVyppDs
-        s4HqqszI8kN3WzKiG6NP59oSaKoHlHc8Zg5DqNQ4FmQIY7rW5J9F0FzulhaC7l3xAauhq/UaNQgRY
-        YH7Uumm7ut0uwx3hpz3DezOIar1aGLYf8LAEHjOmVkwnKGBQ2T1393iQR2fW7gRvCIcVIb1aUkwp1
-        mD8MKbSg==;
-Received: from 24.54.187.81.in-addr.arpa ([81.187.54.24]:25991 helo=kernelcomp.corp.firebladeautomationsystems.co.uk)
-        by whuk3.redbackinternet.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <linuxkernel@fbautosys.co.uk>)
-        id 1myLug-000Dto-LN; Fri, 17 Dec 2021 22:41:19 +0000
-From:   linuxkernel@fbautosys.co.uk
-To:     linux-kernel@vger.kernel.org
-Cc:     broonie@kernel.org
-Subject: [RFC PATCH 5/5] regmap: Add parser for X_9 formats
-Date:   Fri, 17 Dec 2021 22:41:04 +0000
-Message-Id: <20211217224104.1747758-6-linuxkernel@fbautosys.co.uk>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211217224104.1747758-1-linuxkernel@fbautosys.co.uk>
-References: <20211217224104.1747758-1-linuxkernel@fbautosys.co.uk>
+        Fri, 17 Dec 2021 17:44:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639781091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2l3tv70qw5U/DFH1AeqC7MLWadTCO2kcG/3tbtkmi6M=;
+        b=htUrNS2cPU8QirVkWB2F3h21GXkJP8bTkj4VQHRxkuIEoLLZsqU4ka3aEVBmJ4s3tyyuDD
+        2I4ICoUxTHfacRiIA7pR0vB84a/jDmHC6GlCR62LPJkbmD7q+iBTSXZ11nNx6u3GtFcQ31
+        4i3C4SatbLrDSM9Y2lOnO2vj04M61mk=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-2-eG2hoCyeOPq43d22SjNKGQ-1; Fri, 17 Dec 2021 17:43:47 -0500
+X-MC-Unique: eG2hoCyeOPq43d22SjNKGQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 69-20020a1c0148000000b0033214e5b021so1283357wmb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Dec 2021 14:43:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=2l3tv70qw5U/DFH1AeqC7MLWadTCO2kcG/3tbtkmi6M=;
+        b=NyAroIGmm0zhvFr+LWu6rHTSsJUt1V3aGDkqi/VlxgL6pmgEH/sfDqCEEgpU6rT/yH
+         DYF+wJ4/I82rIbQGb8ql2pwFx84BImTpTIY++RmkDxUB/+99dNe9AQJUiCVHQIm9r0Pe
+         VmyWjkm/K2GTBjLbrCZJ+aiE39vi4VFNVoLCj7GBjC6nNNu4BisSmuBs58km1w7y4SBa
+         /nQiGrb848UNh4VqRkSR3w//RbIz/57eR2GgROeAwX2XTRoo9EwcM601/SN41QMS92gC
+         p+ZoOuF1sbWBgkoQ6Qf1tD+Bn1er6VNnQG7kmhQ5IhCz3JZyc4OUavbE7jmI1y/krL84
+         Ld5g==
+X-Gm-Message-State: AOAM532w0lFDRjrg8jziLh1BnjVeP5g1Iwi0Wyv/1M67YH8lKoaBksm6
+        x4jH+DDix/lstu73AL0VrRM/RS7tysNwXr5xh+KG/+M2Z58M4d8aPmUfQU9Wi2OLuImZN5cc6e8
+        OW73m+x8u7kPOtGOGoq+3bVGV
+X-Received: by 2002:adf:f48e:: with SMTP id l14mr4202085wro.88.1639781026622;
+        Fri, 17 Dec 2021 14:43:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwlsG6viaLqvbuV/wNUm4ZwQ7VL/P5e2xT8/kUZ9SE40GD4CaG/NiGfqmJpgjssvi9LApgTBw==
+X-Received: by 2002:adf:f48e:: with SMTP id l14mr4202074wro.88.1639781026429;
+        Fri, 17 Dec 2021 14:43:46 -0800 (PST)
+Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
+        by smtp.gmail.com with ESMTPSA id p5sm8945149wrd.13.2021.12.17.14.43.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 14:43:46 -0800 (PST)
+Message-ID: <f271bb98-dfdd-1126-d9b9-3103e4398e00@redhat.com>
+Date:   Fri, 17 Dec 2021 23:43:44 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - whuk3.redbackinternet.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - fbautosys.co.uk
-X-Get-Message-Sender-Via: whuk3.redbackinternet.net: authenticated_id: linuxkernel@fbautosys.co.uk
-X-Authenticated-Sender: whuk3.redbackinternet.net: linuxkernel@fbautosys.co.uk
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com>
+ <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
+ <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com>
+ <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
+ <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com>
+ <CAHk-=wiujJLsLdGQho8oSbEe2-B1k1tJg6pzePkbqZBqEZL56A@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+In-Reply-To: <CAHk-=wiujJLsLdGQho8oSbEe2-B1k1tJg6pzePkbqZBqEZL56A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christopher Tyerman <c.tyerman@firebladeautomationsystems.co.uk>
+On 17.12.21 23:18, Linus Torvalds wrote:
+> On Fri, Dec 17, 2021 at 1:47 PM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> For now I have not heard a compelling argument why the mapcount is
+>> dubious, I repeat:
+>>
+>> * mapcount can only increase due to fork()
+>> * mapcount can decrease due to unmap / zap
+> 
+> And to answer the "why is this dubious", let' sjust look at your
+> actual code that I reacted to:
+> 
+> +       vmf->page = vm_normal_page(vmf->vma, vmf->address, vmf->orig_pte);
+> +       if (vmf->page && PageAnon(vmf->page) && !PageKsm(vmf->page) &&
+> +           page_mapcount(vmf->page) > 1) {
+> 
+> Note how you don't just check page_mapcount(). Why not? Because
+> mapcount is completely immaterial if it's not a PageAnon page, so you
+> test for that.
+> 
+> So even when you do the mapcount read as one atomic thing, it's one
+> atomic thing that depends on _other_ things, and all these checks are
+> not atomic.
+> 
+> But a PageAnon() page can actually become a swap-backed page, and as
+> far as I can tell, your code doesn't have any locking to protect
+> against that.
 
-added 9 bit Parser functions
+The pages stay PageAnon(). swap-backed pages simply set a bit IIRC.
+mapcount still applies.
 
-these operate in same way as 16 bit parsers but mask out higher bits
+> 
+> So now you need not only the mmap_sem (to protect against fork), you
+> also need the page lock (to protect against rmap changing the type of
+> page).
 
-regmap_parse_9_be()
-regmap_parse_9_be_inplace()
-regmap_parse_9_le()
-regmap_parse_9_le_inplace()
-regmap_parse_9_native()
+No, I don't think so. But I'm happy to be proven wrong because I might
+just be missing something important.
 
-	modified:   drivers/base/regmap/regmap.c
+> 
+> I don't see you taking the page lock anywhere. Maybe the page table
+> lock ends up serializing sufficiently with the rmap code that it ends
+> up working
+> 
+> In the do_wp_page() path, we currently do those kinds of racy checks
+> too, but then we do a trylock_page, and re-do them. And at any time
+> there is any question about things, we fall back to copying - because
+> a copy is always safe.
 
-Signed-off-by: Christopher Tyerman <c.tyerman@firebladeautomationsystems.co.uk>
----
- drivers/base/regmap/regmap.c | 53 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+Yes, I studied that code in detail as well.
 
-diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index ea1664fa4c60..3f105e4266b4 100644
---- a/drivers/base/regmap/regmap.c
-+++ b/drivers/base/regmap/regmap.c
-@@ -365,6 +365,39 @@ static unsigned int regmap_parse_8(const void *buf)
- 	return b[0];
- }
- 
-+static unsigned int regmap_parse_9_be(const void *buf)
-+{
-+	return get_unaligned_be16(buf) & 0x1FF;
-+}
-+
-+static unsigned int regmap_parse_9_le(const void *buf)
-+{
-+
-+	return get_unaligned_le16(buf) & 0x1FF;
-+}
-+
-+static void regmap_parse_9_be_inplace(void *buf)
-+{
-+	u16 v = get_unaligned_be16(buf) & 0x1FF;
-+
-+	memcpy(buf, &v, sizeof(v));
-+}
-+
-+static void regmap_parse_9_le_inplace(void *buf)
-+{
-+	u16 v = get_unaligned_le16(buf) & 0x1FF;
-+
-+	memcpy(buf, &v, sizeof(v));
-+}
-+
-+static unsigned int regmap_parse_9_native(const void *buf)
-+{
-+	u16 v;
-+
-+	memcpy(&v, buf, sizeof(v));
-+	return v & 0x1FF;
-+}
-+
- static unsigned int regmap_parse_16_be(const void *buf)
- {
- 	return get_unaligned_be16(buf);
-@@ -1047,6 +1080,26 @@ struct regmap *__regmap_init(struct device *dev,
- 		map->format.parse_val = regmap_parse_8;
- 		map->format.parse_inplace = regmap_parse_inplace_noop;
- 		break;
-+	case 9:
-+		switch (val_endian) {
-+		case REGMAP_ENDIAN_BIG:
-+			//map->format.format_val = regmap_format_9_be;
-+			map->format.parse_val = regmap_parse_9_be;
-+			map->format.parse_inplace = regmap_parse_9_be_inplace;
-+			break;
-+		case REGMAP_ENDIAN_LITTLE:
-+			//map->format.format_val = regmap_format_9_le;
-+			map->format.parse_val = regmap_parse_9_le;
-+			map->format.parse_inplace = regmap_parse_9_le_inplace;
-+			break;
-+		case REGMAP_ENDIAN_NATIVE:
-+			//map->format.format_val = regmap_format_9_native;
-+			map->format.parse_val = regmap_parse_9_native;
-+			break;
-+		default:
-+			goto err_hwlock;
-+		}
-+		break;
- 	case 16:
- 		switch (val_endian) {
- 		case REGMAP_ENDIAN_BIG:
+> 
+> Well, it's always safe if we have the rule that "once we've pinned
+> things, we don't cause them to be COW again".
+
+We should also be handling FOLL_GET, but that's a completely different
+discussion.
+
+> 
+> But that "it's safe if" was exactly my (b) case.
+> 
+> That's why I much prefer the model I'm trying to push - it's
+> conceptually quite simple. I can literally explain mine at a
+> conceptual level with that "break pre-existing COW, make sure no
+> future COW" model.
+
+:)
+
+We really might be talking about the same thing just that my point is
+that the mapcount is the right thing to use for making the discussion
+whether to break COW -> triger unsharing.
+
+> 
+> In contrast, I look at your page_mapcount() code, and I go "there is
+> no conceptual rules here, and the actual implementation details look
+> dodgy".
+> 
+> I personally like having clear conceptual rules - as opposed to random
+> implementation details.
+
+Oh, don't get me wrong, me to. But for me it just all makes perfect.
+
+What we document is:
+
+"The fault is an unsharing request to unshare a shared anonymous page
+(-> mapped R/O). Does not apply to KSM."
+
+And the code checks for exactly that. And in that context the mapcount
+just expresses exactly what we want. Again, unless I am missing
+something important that you raise above.
+
+
+Anyhow, it's late in Germany. thanks for the discussion Linus!
+
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 
